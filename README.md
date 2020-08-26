@@ -56,12 +56,14 @@ info@simplexion.hu.
 
 [Credits](doc/misc/credits.md) to the projects we built on.
 
-## Distribution
+## Releases and Gradle dependency
 
-We provide only Kotlin 1.4+ multiplatform packages.
+We release only Kotlin 1.4+ multiplatform packages.
+
+During 2020 we publish a new release every Monday. They are as-is, just a build of that Monday morning. We use [continuous version numbers](./doc/misc/ContinuousVersions.md).
 
 Packages of Zakadabar Stack are available from GitHub Packages. To reference them
-from your project.
+from your project use the following Gradle setup.
 
 **It might be a better to use the [Zakadabar Template](https://github.com/spxbhuhb/zakadabar-template) or
 [Zakadabar Samples](https://github.com/spxbhuhb/zakadabar-samples) to start.**
