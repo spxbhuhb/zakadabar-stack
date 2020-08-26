@@ -1,0 +1,24 @@
+<!--
+  ~ Copyright © 2020, Simplexion, Hungary. All rights reserved.
+  ~
+  ~ This source code contains proprietary information; it is provided under a license agreement
+  ~ containing restrictions on use and distribution and are also protected by copyright, patent, and
+  ~ other intellectual and industrial property laws.
+  -->
+
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%-30thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="trace">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <logger name="org.eclipse.jetty" level="INFO"/>
+    <logger name="io.netty" level="INFO"/>
+    <logger name="com.zaxxer.hikari" level="INFO"/>
+    <logger name="Exposed" level="WARN"/>
+</configuration>

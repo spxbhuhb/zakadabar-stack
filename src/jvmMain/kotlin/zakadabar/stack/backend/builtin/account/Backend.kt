@@ -1,0 +1,146 @@
+/*
+ * Copyright © 2020, Simplexion, Hungary
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package zakadabar.stack.backend.builtin.account
+
+import org.jetbrains.exposed.sql.JoinType
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
+import zakadabar.stack.backend.builtin.account.data.AccountDao
+import zakadabar.stack.backend.builtin.account.data.AccountTable
+import zakadabar.stack.backend.builtin.account.data.AccountTable.toDto
+import zakadabar.stack.backend.builtin.entities.data.EntityDao
+import zakadabar.stack.backend.builtin.entities.data.EntityTable
+import zakadabar.stack.backend.extend.RestBackend
+import zakadabar.stack.data.entity.EntityStatus
+import zakadabar.stack.data.security.CommonAccountDto
+import zakadabar.stack.util.Executor
+
+object Backend : RestBackend<CommonAccountDto> {
+
+    override fun query(executor: Executor, id: Long?, parentId: Long?): List<CommonAccountDto> = transaction {
+
+        val condition = if (id == null) {
+            (EntityTable.parent eq parentId) and (EntityTable.type eq CommonAccountDto.type)
+        } else {
+            AccountTable.id eq id
+        }
+
+        AccountTable
+            .join(EntityTable, JoinType.INNER) {
+                EntityTable.id eq AccountTable.id
+            }
+            .select(condition)
+            .filter { EntityTable.readableBy(executor, it) }
+            .map(::toDto)
+    }
+
+    override fun create(executor: Executor, dto: CommonAccountDto) = transaction {
+
+        // ---- validate the account ---------
+
+        // FIXME duplication check
+
+        // ---- check the avatar ---------
+
+        val dtoAvatar = dto.avatar
+        val avatarDao = if (dtoAvatar == null) null else
+            EntityDao[dtoAvatar]
+                .requireControlFor(executor)
+                .requireStatus(EntityStatus.Pending)
+                .requireType("image/png", "image/jpeg")
+
+        // ---- create the entity record ---------
+
+        val edto = dto.entityDto?.requireType(CommonAccountDto.type) ?: throw IllegalArgumentException()
+
+        val edao = EntityDao.create(executor, edto) // performs authorization
+
+        // ---- move the avatar under the entity ---------
+
+        if (avatarDao != null) {
+            avatarDao.status = EntityStatus.Active
+            avatarDao.parent = edao
+        }
+
+        // ---- create the account record ---------
+
+        AccountTable.insert {
+            it[id] = edao.id
+            it[emailAddress] = dto.emailAddress
+            it[fullName] = dto.fullName
+            it[displayName] = dto.displayName
+            it[organizationName] = dto.organizationName
+            it[avatar] = avatarDao?.id
+        }
+
+        dto.copy(id = edao.id.value, entityDto = edao.toDto())
+    }
+
+    override fun update(executor: Executor, dto: CommonAccountDto) = transaction {
+
+        // validate the account
+
+        // FIXME duplication check
+
+        // check the avatar
+
+        val dtoAvatar = dto.avatar
+        val avatarDao = if (dtoAvatar == null) null else
+            EntityDao[dtoAvatar]
+                .requireControlFor(executor)
+                .requireType("image/png", "image/jpeg")
+                .requireStatus(EntityStatus.Pending, EntityStatus.Active)
+
+        // update the entity record
+
+        val entityDto = dto.entityDto?.requireId(dto.id) ?: throw IllegalArgumentException()
+
+        val entityDao = EntityDao.update(executor, entityDto) // performs authorization
+
+        // update the account record
+
+        val accountDao = AccountDao[dto.id]
+
+        accountDao.emailAddress = dto.emailAddress
+        accountDao.fullName = dto.fullName
+        accountDao.displayName = dto.displayName
+        accountDao.organizationName = dto.organizationName
+
+        // update the avatar if changed
+
+        if (avatarDao?.id != accountDao.avatar) {
+
+            val oldAvatar = accountDao.avatar
+            if (oldAvatar != null) {
+                EntityDao[oldAvatar].markForDelete(executor)
+            }
+
+            if (avatarDao != null) {
+                avatarDao.status = EntityStatus.Active
+                avatarDao.parent = entityDao
+            }
+
+            accountDao.avatar = avatarDao?.id
+        }
+
+        accountDao.toDto()
+    }
+}
