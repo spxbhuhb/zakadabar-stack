@@ -17,6 +17,7 @@
 package zakadabar.stack.frontend.elements
 
 import org.w3c.dom.DOMTokenList
+import org.w3c.dom.HTMLElement
 
 operator fun DOMTokenList.plusAssign(token: String?) {
     if (token != null) this.add(token)
@@ -28,4 +29,41 @@ operator fun DOMTokenList.plusAssign(tokens: Array<out String>) {
 
 operator fun DOMTokenList.minusAssign(token: String?) {
     if (token != null) this.remove(token)
+}
+
+ infix fun HTMLElement.marginRight(size: Any): HTMLElement {
+    this.style.marginRight = if (size is Int) "${size}px" else size.toString()
+    return this
+}
+
+ infix fun HTMLElement.marginBottom(size: Any): HTMLElement {
+    this.style.marginBottom = if (size is Int) "${size}px" else size.toString()
+    return this
+}
+
+ infix fun HTMLElement.width(value: Any): HTMLElement {
+    if (value == "100%") {
+        classList += CoreClasses.coreClasses.w100
+    } else {
+        this.style.width = value.toString()
+    }
+    return this
+}
+
+ infix fun HTMLElement.height(value: Any): HTMLElement {
+    if (value == "100%") {
+        classList += CoreClasses.coreClasses.h100
+    } else {
+        this.style.height = value.toString()
+    }
+    return this
+}
+
+ infix fun HTMLElement.flex(value: String): HTMLElement {
+    if (value == "grow") {
+        classList += CoreClasses.coreClasses.grow
+    } else {
+        throw RuntimeException("invalid flex value: $value")
+    }
+    return this
 }

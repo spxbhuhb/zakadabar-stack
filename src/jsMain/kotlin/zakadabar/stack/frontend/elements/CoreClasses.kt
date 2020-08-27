@@ -50,6 +50,13 @@ class CoreClasses(theme: Theme) : CssStyleSheet<CoreClasses>(theme) {
         alignItems = "flex-start"
     }
 
+    val contentColumn by cssClass {
+        width = "100%"
+        display = "flex"
+        flexDirection = "column"
+        alignItems = "center"
+    }
+
     val hidden by cssClass {
         display = "none !important"
     }
@@ -58,13 +65,6 @@ class CoreClasses(theme: Theme) : CssStyleSheet<CoreClasses>(theme) {
         width = "100%"
         display = "flex"
         flexDirection = "row"
-    }
-
-    val contentColumn by cssClass {
-        width = "100%"
-        display = "flex"
-        flexDirection = "column"
-        alignItems = "center"
     }
 
     val row by cssClass {
@@ -76,6 +76,8 @@ class CoreClasses(theme: Theme) : CssStyleSheet<CoreClasses>(theme) {
         display = "flex"
         flexDirection = "column"
     }
+
+    val column = col
 
     val grow by cssClass {
         flexGrow = 1

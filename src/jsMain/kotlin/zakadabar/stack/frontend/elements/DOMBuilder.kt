@@ -47,7 +47,6 @@ class DOMBuilder(
      */
     var current: HTMLElement,
     private val parentComplex: ComplexElement? = null,
-    private var currentComplex: ComplexElement? = parentComplex
 ) {
 
     /**
@@ -125,6 +124,15 @@ class DOMBuilder(
     /**
      * Creates an IMG with a source url. Use [DOMBuilder.current] to add attributes other than the source.
      *
+     * ```
+     *
+     *     with(current as HTMLImageElement) {
+     *         width = 100
+     *         height = 100
+     *     }
+     *
+     * ```
+     *
      * @param  src        Source URL.
      * @param  className  Additional CSS class. Optional.
      * @param  build      Builder function to manage the IMG tag added. Optional.
@@ -140,6 +148,15 @@ class DOMBuilder(
      * Adds an IMG to the current element with an entity id. Converts the entity id
      * into a Stack entity URL to use as source. Use [DOMBuilder.current] to add
      * attributes other than the source.
+     *
+     * ```
+     *
+     *     with(current as HTMLImageElement) {
+     *         width = 100
+     *         height = 100
+     *     }
+     *
+     * ```
      *
      * @param  entityId   Id of the image entity. Nothing will be added when null.
      * @param  className  Additional CSS class. Optional.
@@ -169,7 +186,7 @@ class DOMBuilder(
      * @param  listener  Event listener function.
      */
     fun on(type: String, listener: ((Event) -> Unit)?) {
-        currentComplex !!.on(type, listener)
+        parentComplex !!.on(type, listener)
     }
 
     /**
@@ -179,7 +196,7 @@ class DOMBuilder(
      * @param  listener  Event listener function.
      */
     fun on(type: String, listener: (() -> Unit)?) {
-        currentComplex !!.on(type, listener)
+        parentComplex !!.on(type, listener)
     }
 
     /**
@@ -189,7 +206,7 @@ class DOMBuilder(
      * @param  handler   The message handler function.
      */
     fun <T : Message> on(type: KClass<T>, handler: (T) -> Unit) {
-        currentComplex !!.on(type, handler)
+        parentComplex !!.on(type, handler)
     }
 
     /**
@@ -224,7 +241,7 @@ class DOMBuilder(
      * @param  build      Builder function.
      */
     infix fun HTMLElement.build(build: DOMBuilder.() -> Unit): HTMLElement {
-        val builder = DOMBuilder(this)
+        val builder = DOMBuilder(this, parentComplex)
         builder.build()
         return this
     }
