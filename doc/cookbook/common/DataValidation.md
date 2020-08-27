@@ -27,13 +27,17 @@ you usually don't have to worry much about it as a developer.
 // This is the DTO for a rabbit. It has a schema that checks the name.
 
 class RabbitDto(
-    val name : String
-) {
-    companion object {
-        val schema = DtoSchema.build {
-            + ::name max 20 min 2 notEquals "Caerbannog"
-        }
+    val id : Long,
+    var name : String
+) : DtoWithIdContract<RabbitDto> {
+
+    companion object : DtoWithIdCompanion<RabbitDto>()
+    
+    val schema = DtoSchema.build {
+        + ::name max 20 min 2 notEquals "Caerbannog"
     }
+    
+    override fun comm() = comm
 }
 ```
 
@@ -47,10 +51,10 @@ Also, standard form fields like ValidatedStringInput realize that there is a sch
 underneath and validate the data the user types in real-time, show errors to the user. 
 
 ```kotlin
-class RabbitEditor : ComplexElement() {
+class RabbitEditor(dto : RabbitDto) : ComplexElement() {
     override fun init() : RabbitEditor {
         build {
-            + form(RabbitDto.Companion) {
+            + form(dto) {
                 + RabbitDto::name
                 + Submit
             }
