@@ -10,6 +10,10 @@ The cookbook - surprise! - contains recipes:
 | ---- |
 | [Accounts](common/Accounts.md) |
 | [Entities](common/Entities.md) |
+| [Query Data](common/Data.md#Query-Data) |
+| [Defining a Query DTO](common/Data.md#Defining-a-Query-DTO) |
+| [Record Data](common/Data.md#Record-Data) |
+| [Defining a Record DTO](common/Data.md#Defining-a-Record-DTO) |
 | [Data Validation](common/Data.md#Data-Validation) |
 | [Writing a Schema](common/Data.md#Writing-a-Schema) |
 
@@ -28,6 +32,8 @@ The cookbook - surprise! - contains recipes:
 | [Icons Included in the Stack](frontend/Icons.md#Icons-Included-in-the-Stack) |
 | [Global Navigation on Click](frontend/Icons.md#Global-Navigation-on-Click) |
 | Data |
+| [Frontend for a Query DTO](common/Data.md#Frontend-for-a-Query-DTO) |
+| [Frontend for a Record DTO](common/Data.md#Frontend-for-a-Record-DTO) |
 | [Data Validation](common/Data.md#Data-Validation) |
 | [Using a Schema in a Form](common/Data.md#Using-a-Schema-in-a-Form) |
 | Views |
@@ -48,6 +54,8 @@ The cookbook - surprise! - contains recipes:
 | [Non REST routing](backend/Routing.md#Non-REST-routing) |
 | [WebSocket](backend/Routing.md#WebSocket) |
 | Data |
+| [Backend for a Query DTO](common/Data.md#Backend-for-a-Query-DTO) |
+| [Backend for a Record DTO](common/Data.md#Backend-for-a-Record-DTO) |
 | [Data Validation](common/Data.md#Data-Validation) |
 | [Validating data on the Backend](common/Data.md#Validating-data-on-the-Backend) |
 

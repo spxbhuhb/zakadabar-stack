@@ -119,7 +119,6 @@ object TemplateRecordBackend : RecordRestBackend<TemplateRecordDto> {
 }
 ```
 
-
 ### Frontend for a Record DTO
 
 To add a comm to a record DTO use RecordRestComm. The URL is important, it has to match with the URL on the backend.
