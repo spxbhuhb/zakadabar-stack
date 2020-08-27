@@ -18,10 +18,10 @@ package zakadabar.stack.frontend.extend
 
 import zakadabar.stack.data.entity.DtoWithEntityCompanion
 import zakadabar.stack.extend.DtoWithEntityContract
-import zakadabar.stack.extend.RestCommContract
+import zakadabar.stack.extend.EntityRestCommContract
 import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.icon.IconSource
-import zakadabar.stack.frontend.comm.rest.RestComm
+import zakadabar.stack.frontend.comm.rest.EntityRestComm
 import zakadabar.stack.util.UUID
 
 /**
@@ -31,7 +31,7 @@ import zakadabar.stack.util.UUID
  *
  * @param     module       The module that provides this entity type.
  * @property  companion    The companion object of the entity DTO.
- * @property  comm         The [RestComm] for the DTO (defaults to standard RestComm for the companion).
+ * @property  comm         The [EntityRestComm] for the DTO (defaults to standard RestComm for the companion).
  * @property  type         Type of the entity (defaults to [companion] type).
  * @property  displayName  Type name to display to the user.
  * @property  iconSource   Type icon to display to the user.
@@ -45,7 +45,7 @@ import zakadabar.stack.util.UUID
 class FrontendEntitySupport<T : DtoWithEntityContract<T>>(
     module: UUID,
     val companion: DtoWithEntityCompanion<T>,
-    val comm: RestCommContract<T>? = RestComm(companion.type, companion.serializer()),
+    val comm: EntityRestCommContract<T>? = EntityRestComm(companion.type, companion.serializer()),
     val type: String = companion.type,
     val displayName: String = t(companion.type, namespace = module),
     val iconSource: IconSource? = null,

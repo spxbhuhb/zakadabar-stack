@@ -21,7 +21,7 @@ import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.header.Header
 import zakadabar.stack.frontend.builtin.util.header.HeaderClasses.Companion.headerClasses
-import zakadabar.stack.frontend.comm.util.EntityCache
+import zakadabar.stack.frontend.comm.rest.EntityCache
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.util.launch
 

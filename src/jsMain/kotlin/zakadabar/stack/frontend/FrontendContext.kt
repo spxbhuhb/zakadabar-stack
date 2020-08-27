@@ -29,7 +29,7 @@ import zakadabar.stack.frontend.FrontendContext.scopedViews
 import zakadabar.stack.frontend.FrontendContext.stackSession
 import zakadabar.stack.frontend.FrontendContext.views
 import zakadabar.stack.frontend.builtin.dock.Dock
-import zakadabar.stack.frontend.comm.rest.CachedRestComm
+import zakadabar.stack.frontend.comm.rest.CachedEntityRestComm
 import zakadabar.stack.frontend.extend.*
 import zakadabar.stack.frontend.util.Dictionary
 import zakadabar.stack.frontend.util.defaultTheme
@@ -67,6 +67,7 @@ import kotlin.reflect.KClass
  */
 object FrontendContext {
 
+    @Suppress("MemberVisibilityCanBePrivate")
     lateinit var executor: CommonAccountDto
 
     private var defaultLanguage = window.navigator.language
@@ -94,7 +95,7 @@ object FrontendContext {
             .text().await()
             .toLong()
 
-        CommonAccountDto.comm = CachedRestComm(CommonAccountDto.type, CommonAccountDto.serializer())
+        CommonAccountDto.comm = CachedEntityRestComm(CommonAccountDto.type, CommonAccountDto.serializer())
 
         executor = CommonAccountDto.comm.get(id)
 

@@ -23,34 +23,16 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
-import zakadabar.stack.extend.DtoWithIdContract
-import zakadabar.stack.extend.RestCommContract
+import zakadabar.stack.extend.DtoWithRecordContract
+import zakadabar.stack.extend.RecordRestCommContract
 import zakadabar.stack.frontend.errors.FetchError
 import zakadabar.stack.frontend.errors.ensure
 import zakadabar.stack.frontend.util.json
 import zakadabar.stack.util.PublicApi
 
 /**
- * REST communication functions for objects that implement [DtoWithIdContract]
+ * REST communication functions for objects that implement [DtoWithRecordContract]
  *
- * ```kotlin
- *   // set up FolderDTO REST communication
- *
- *   FolderDTO.comm = RestComm("/apis/1a2b3c", FolderDTO.serializer)
- *
- *   // create a new folder (on the server)
- *
- *   val folder = FolderDTO(...).create()
- *
- *   // update the folder we've just crated (sends update server)
- *
- *   val updated = folder.copy(name = "bello").update()
- *
- *   // get a folder with id 12 from the server
- *
- *   val folder12 = FolderDTO.get(12L)
- *
- * ```
  *
  * @property  path  The path on which the server provides the REST
  *                  access to this data store, for example "/apis/1a2b3c".
@@ -59,10 +41,10 @@ import zakadabar.stack.util.PublicApi
  *                        sent/received.
  */
 @PublicApi
-open class RestComm<T : DtoWithIdContract<T>>(
-    private val path: String,
-    private val serializer: KSerializer<T>
-) : RestCommContract<T> {
+open class RecordRestComm<T : DtoWithRecordContract<T>>(
+    internal val path: String,
+    internal val serializer: KSerializer<T>
+) : RecordRestCommContract<T> {
 
     /**
      * Fetches an object.
@@ -97,29 +79,6 @@ open class RestComm<T : DtoWithIdContract<T>>(
      * @throws  FetchError
      */
     override suspend fun get(id: Long?) = if (id == null) null else get(id)
-
-    /**
-     * Fetches children of an object.
-     *
-     * @param  parentId  Id of the parent object.
-     *
-     * @return  The list of objects fetched.
-     *
-     * @throws  FetchError
-     */
-    @PublicApi
-    override suspend fun getChildren(parentId: Long?): List<T> {
-
-        val responsePromise = window.fetch("/api/" + if (parentId == null) path else "$path?parent=$parentId")
-        val response = responsePromise.await()
-
-        ensure(response.ok) { FetchError(response) }
-
-        val textPromise = response.text()
-        val text = textPromise.await()
-
-        return json.decodeFromString(ListSerializer(serializer), text)
-    }
 
     /**
      * Searches for object by the passes search parameters.

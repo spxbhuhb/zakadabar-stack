@@ -27,10 +27,12 @@ import zakadabar.stack.frontend.builtin.folder.NewFolder
 import zakadabar.stack.frontend.builtin.i18n
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.navigator.EntityNavigator
-import zakadabar.stack.frontend.comm.util.EntityCache
+import zakadabar.stack.frontend.comm.rest.EntityCache
 import zakadabar.stack.frontend.extend.FrontendEntitySupport
 import zakadabar.stack.frontend.extend.FrontendModule
+import zakadabar.stack.util.PublicApi
 
+@PublicApi
 object Module : FrontendModule() {
 
     override val uuid = Stack.uuid

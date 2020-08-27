@@ -17,18 +17,15 @@
 
 package zakadabar.stack.extend
 
-interface RestCommContract<T> {
+import kotlinx.serialization.KSerializer
 
-    suspend fun get(id: Long): T
+/**
+ * A contract for companion objects of classes with [DtoWithRecordContract].
+ */
+interface DtoWithRecordCompanionContract<T : DtoWithRecordContract<T>> {
 
-    suspend fun get(id: Long?): T?
+    var comm: RecordRestCommContract<T>
 
-    suspend fun getChildren(parentId: Long?): List<T>
-
-    suspend fun search(parameters: String): List<T>
-
-    suspend fun create(dto: T): T
-
-    suspend fun update(dto: T): T
+    fun serializer(): KSerializer<T>
 
 }

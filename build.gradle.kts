@@ -26,7 +26,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2020.8.27"
+version = "2020.8.28-SNAPSHOT"
 
 // common
 val ktorVersion = "1.4.0"

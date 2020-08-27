@@ -27,7 +27,7 @@ import zakadabar.stack.frontend.builtin.desktop.messages.GlobalNavigationEvent
 import zakadabar.stack.frontend.builtin.desktop.messages.GlobalNavigationRequest
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.header.HeaderClasses.Companion.headerClasses
-import zakadabar.stack.frontend.comm.util.EntityCache
+import zakadabar.stack.frontend.comm.rest.EntityCache
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.extend.ViewContract
 import zakadabar.stack.frontend.util.getElementId

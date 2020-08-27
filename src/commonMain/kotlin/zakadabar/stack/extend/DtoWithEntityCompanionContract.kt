@@ -26,7 +26,7 @@ interface DtoWithEntityCompanionContract<T : DtoWithEntityContract<T>> {
 
     val type: String
 
-    var comm: RestCommContract<T>
+    var comm: EntityRestCommContract<T>
 
     fun serializer(): KSerializer<T>
 

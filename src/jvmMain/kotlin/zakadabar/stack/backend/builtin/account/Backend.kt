@@ -28,12 +28,12 @@ import zakadabar.stack.backend.builtin.account.data.AccountTable
 import zakadabar.stack.backend.builtin.account.data.AccountTable.toDto
 import zakadabar.stack.backend.builtin.entities.data.EntityDao
 import zakadabar.stack.backend.builtin.entities.data.EntityTable
-import zakadabar.stack.backend.extend.RestBackend
+import zakadabar.stack.backend.extend.EntityRestBackend
 import zakadabar.stack.data.entity.EntityStatus
 import zakadabar.stack.data.security.CommonAccountDto
 import zakadabar.stack.util.Executor
 
-object Backend : RestBackend<CommonAccountDto> {
+object Backend : EntityRestBackend<CommonAccountDto> {
 
     override fun query(executor: Executor, id: Long?, parentId: Long?): List<CommonAccountDto> = transaction {
 

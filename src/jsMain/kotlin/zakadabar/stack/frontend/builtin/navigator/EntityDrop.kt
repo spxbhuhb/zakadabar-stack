@@ -20,7 +20,7 @@ package zakadabar.entity.browser.frontend.util
 import org.w3c.dom.DataTransfer
 import org.w3c.dom.get
 import org.w3c.files.File
-import zakadabar.stack.frontend.comm.util.EntityCache.launchCreateAndPush
+import zakadabar.stack.frontend.comm.rest.EntityCache.launchCreateAndPush
 
 class EntityDrop(
     private val parentId: Long?

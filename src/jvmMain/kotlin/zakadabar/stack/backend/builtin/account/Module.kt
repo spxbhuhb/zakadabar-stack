@@ -22,7 +22,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.builtin.account.data.AccountTable
 import zakadabar.stack.backend.extend.BackendModule
-import zakadabar.stack.backend.extend.restApi
+import zakadabar.stack.backend.extend.entityRestApi
 import zakadabar.stack.data.security.CommonAccountDto
 import zakadabar.stack.util.UUID
 
@@ -40,6 +40,8 @@ object Module : BackendModule() {
 
     }
 
-    override fun install(route: Route) = restApi(route, Backend, CommonAccountDto::class, CommonAccountDto.type)
+    override fun install(route: Route) {
+        entityRestApi(route, Backend, CommonAccountDto::class, CommonAccountDto.type)
+    }
 
 }

@@ -25,7 +25,7 @@ import zakadabar.stack.frontend.FrontendContext.entitySupports
 import zakadabar.stack.frontend.builtin.desktop.DesktopClasses.Companion.desktopClasses
 import zakadabar.stack.frontend.builtin.desktop.messages.GlobalNavigationEvent
 import zakadabar.stack.frontend.builtin.util.Slider
-import zakadabar.stack.frontend.comm.util.EntityCache
+import zakadabar.stack.frontend.comm.rest.EntityCache
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.extend.ViewContract

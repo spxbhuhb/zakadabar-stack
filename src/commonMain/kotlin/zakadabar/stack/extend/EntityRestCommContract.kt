@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors
+ * Copyright © 2020, Simplexion, Hungary
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.frontend.builtin.form
 
-import zakadabar.stack.extend.DtoWithRecordContract
-import zakadabar.stack.frontend.elements.ComplexElement
+package zakadabar.stack.extend
 
-class ValidatedForm<T>(val dto: DtoWithRecordContract<T>) : ComplexElement() {
+interface EntityRestCommContract<T> : RecordRestCommContract<T> {
+
+    suspend fun getChildrenOf(parentId: Long?): List<T>
 
 }

@@ -23,22 +23,20 @@ import zakadabar.stack.data.schema.DtoSchema
  * A contract for DTO classes that have an id.
  */
 @Suppress("UNCHECKED_CAST")
-interface DtoWithIdContract<T> {
+interface DtoWithRecordContract<T> {
 
     val id: Long
 
-    fun comm(): RestCommContract<T>
+    fun comm(): RecordRestCommContract<T>
+
+    fun schema() = DtoSchema.NO_VALIDATION
 
     suspend fun get(id: Long) = comm().get(id)
-
-    suspend fun getChildrenOf(parentId: Long?) = comm().getChildren(parentId)
 
     suspend fun search(parameters: String) = comm().search(parameters)
 
     suspend fun create() = comm().create(this as T)
 
     suspend fun update() = comm().update(this as T)
-
-    fun schema() = DtoSchema.NO_VALIDATION
 
 }

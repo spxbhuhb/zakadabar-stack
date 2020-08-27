@@ -19,7 +19,7 @@ package zakadabar.stack.backend.extend
 
 import zakadabar.stack.util.Executor
 
-interface RestBackend<T> {
+interface EntityRestBackend<T> {
 
     fun query(executor: Executor, id: Long? = null, parentId: Long? = null): List<T>
 

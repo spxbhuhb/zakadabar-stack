@@ -10,8 +10,8 @@ The cookbook - surprise! - contains recipes:
 | ---- |
 | [Accounts](common/Accounts.md) |
 | [Entities](common/Entities.md) |
-| [Data Validation](common/DataValidation.md) |
-| [Writing a Schema](common/DataValidation.md#Writing-a-Schema) |
+| [Data Validation](common/Data.md#Data-Validation) |
+| [Writing a Schema](common/Data.md#Writing-a-Schema) |
 
 ## Frontend
 
@@ -28,8 +28,8 @@ The cookbook - surprise! - contains recipes:
 | [Icons Included in the Stack](frontend/Icons.md#Icons-Included-in-the-Stack) |
 | [Global Navigation on Click](frontend/Icons.md#Global-Navigation-on-Click) |
 | Data |
-| [Data Validation](common/DataValidation.md) |
-| [Using a Schema in a Form](common/DataValidation.md#Using-a-Schema-in-a-Form) |
+| [Data Validation](common/Data.md#Data-Validation) |
+| [Using a Schema in a Form](common/Data.md#Using-a-Schema-in-a-Form) |
 | Views |
 | [Switch Views of the Same Content](frontend/SwitchViews.md) |
 | Dock |
@@ -48,6 +48,6 @@ The cookbook - surprise! - contains recipes:
 | [Non REST routing](backend/Routing.md#Non-REST-routing) |
 | [WebSocket](backend/Routing.md#WebSocket) |
 | Data |
-| [Data Validation](common/DataValidation.md) |
-| [Validating data on the Backend](common/DataValidation.md#Validating-data-on-the-Backend) |
+| [Data Validation](common/Data.md#Data-Validation) |
+| [Validating data on the Backend](common/Data.md#Validating-data-on-the-Backend) |
 

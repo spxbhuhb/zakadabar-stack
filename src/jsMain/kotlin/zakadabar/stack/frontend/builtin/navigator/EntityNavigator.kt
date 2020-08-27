@@ -35,7 +35,7 @@ import zakadabar.stack.frontend.builtin.util.droparea.DropArea
 import zakadabar.stack.frontend.builtin.util.status.Status
 import zakadabar.stack.frontend.builtin.util.status.StatusInfo
 import zakadabar.stack.frontend.builtin.util.status.StatusMessages
-import zakadabar.stack.frontend.comm.util.EntityCache
+import zakadabar.stack.frontend.comm.rest.EntityCache
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.extend.ViewContract
 import zakadabar.stack.frontend.util.getElementId
@@ -152,7 +152,7 @@ class EntityNavigator : ComplexElement() {
     // ---- Rendering ----------------------------------------------------
 
     private suspend fun render() {
-        val children = EntityCache.getChildren(currentEntityId)
+        val children = EntityCache.getChildrenOf(currentEntityId)
 
         if (children.isEmpty()) {
             statusInfo.update(Status.Empty).show()

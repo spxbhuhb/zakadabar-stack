@@ -22,11 +22,11 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.builtin.entities.data.EntityDao
 import zakadabar.stack.backend.builtin.entities.data.EntityTable
-import zakadabar.stack.backend.extend.RestBackend
+import zakadabar.stack.backend.extend.EntityRestBackend
 import zakadabar.stack.data.FolderDto
 import zakadabar.stack.util.Executor
 
-object Backend : RestBackend<FolderDto> {
+object Backend : EntityRestBackend<FolderDto> {
 
     override fun query(executor: Executor, id: Long?, parentId: Long?): List<FolderDto> =
         transaction {

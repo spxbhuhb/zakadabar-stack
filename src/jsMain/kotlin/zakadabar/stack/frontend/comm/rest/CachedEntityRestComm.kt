@@ -18,14 +18,14 @@
 package zakadabar.stack.frontend.comm.rest
 
 import kotlinx.serialization.KSerializer
-import zakadabar.stack.extend.DtoWithIdContract
+import zakadabar.stack.extend.DtoWithEntityContract
 import zakadabar.stack.util.PublicApi
 
 /**
- * A cache for objects accessed with a [RestComm]. This is basically a
- * wrapper around [RestComm], that caches objects on the fly.
+ * A cache for objects accessed with a [EntityRestComm]. This is basically a
+ * wrapper around [EntityRestComm], that caches objects on the fly.
  *
- * Be careful with this one, you should probably use a [RestComm].
+ * Be careful with this one, you should probably use a [EntityRestComm].
  *
  * Caching objects in general is not a good idea as it is very easy
  * to use up a lot of memory. However, sometimes it is very useful.
@@ -44,11 +44,10 @@ import zakadabar.stack.util.PublicApi
  *
  */
 @PublicApi
-open class CachedRestComm<T : DtoWithIdContract<T>>(
+open class CachedEntityRestComm<T : DtoWithEntityContract<T>>(
     path: String,
-    serializer: KSerializer<T>,
-    private val childInfo: Boolean = false
-) : RestComm<T>(path, serializer) {
+    serializer: KSerializer<T>
+) : EntityRestComm<T>(path, serializer) {
 
     private val cache = mutableMapOf<Long, T>()
 
@@ -69,11 +68,11 @@ open class CachedRestComm<T : DtoWithIdContract<T>>(
         return result
     }
 
-    override suspend fun getChildren(parentId: Long?): List<T> {
+    override suspend fun getChildrenOf(parentId: Long?): List<T> {
         val cached = children[parentId]
         if (cached != null) return cached
 
-        val result = super.getChildren(parentId)
+        val result = super.getChildrenOf(parentId)
         result.forEach { cache[it.id] = it }
         return result
     }

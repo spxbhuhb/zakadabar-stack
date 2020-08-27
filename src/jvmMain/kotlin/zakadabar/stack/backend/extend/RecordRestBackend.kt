@@ -15,5 +15,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package zakadabar.stack.extend
+package zakadabar.stack.backend.extend
 
+import zakadabar.stack.util.Executor
+
+interface RecordRestBackend<T> {
+
+    fun query(executor: Executor, id: Long? = null): List<T>
+
+    fun create(executor: Executor, dto: T): T
+
+    fun update(executor: Executor, dto: T): T
+
+}

@@ -8,23 +8,32 @@
 | DAO | A Data Access Object used on the backend that makes handling the data easier, the stack uses Exposed DAOs. |
 | DTO | A Data Transfer Object that we use to transfer data between the client and the frontend. |
 
-## Ways to handle the data
+## DTO Types
 
-There are three ways to handle data in the stack:
+There are three DTO types in the stack:
 
-* do everything yourself,
-* plain records with a Long id,
-* entity types for the entity tree.
+| Type | Use |
+| ---- | --- |
+| Query DTO | The backend sends the result of a complex query (joins etc.) to the frontend. |
+| Record DTO | Plain SQL tables with a Long id. Usually with standard REST API. |
+| Entity DTO | Entities in the entity tree (see below). These are meant to build a hierarchical structure, like folders and files. Standard REST API with hierarchy support. |
 
-### Plain DTOs
+### Query DTOs
 
-These are good old SQL records or composite data collected from the SQL tables.
+Used mostly for lists which contain just some parts of the actual data. Like tables which contain only the main
+field of the backing records.
 
-If your DTO implement the [DtoWithIdContract][zakadabar.stack.extend.DtoWithIdContract] 
-interface, you can add a [RestComm][zakadabar.stack.comm.rest.RestComm] to handle your
-data easily.
+Query DTOs are mostly read only, creation and update usually uses record and/or entity DTOs.
 
-Cookbook Recipe: [Plain SQL data](../cookbook/plain-sql-data.md)
+### Record DTOs
+
+These are good old SQL records of SQL tables.
+
+If your DTO implement the [DtoWithRecordContract](../../src/commonMain/kotlin/zakadabar/stack/extend/DtoWithRecordContract.kt)
+interface, you can use a [RecordRestComm](../../src/jsMain/kotlin/zakadabar/stack/frontend/comm/rest/RecordRestComm.kt)
+to handle your data easily.
+
+Cookbook: [Record Data](../cookbook/common/Data.md#Record-Data)
 
 ### Entity Types
 
@@ -52,4 +61,5 @@ That said, entities are very useful because they give you a well-defined and eas
 way to extend the system. After you define a new entity type most parts of the 
 application will automatically include it.
 
+Cookbook: [Entity Data](../cookbook/common/Data.md#Entity-Data)
 Cookbook Recipe: [Adding an Entity Type](../cookbook/common/Entities.md#Add-a-New-Entity-Type)
