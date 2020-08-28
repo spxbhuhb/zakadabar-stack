@@ -6,9 +6,9 @@ applications fast, easy and fun.
 Our aim is to have solutions for the everyday tasks we do as developers: build
 a frontend, upload a file, have a server, release an appliance etc. 
 
-As of now the stack is **in-development**. Things might change, it will need
-some time to mature. We actively use it in our own projects, and we predict that
-it will be production ready in general by the end of the year.
+As of now we publish the stack as **technology preview**. Many things are missing,
+interfaces, use patterns might change, it will need some time to mature.
+We actively use it in our own projects and add features as we need them.
 
 ## Highlights
 
@@ -28,12 +28,8 @@ it will be production ready in general by the end of the year.
 # Quick Start
  
 * clone the [Zakadabar Samples](https://github.com/spxbhuhb/zakadabar-samples) repository
-* choose a sample application to start with
+* choose a sample application to start with: [5 Ways to HTML](https://github.com/spxbhuhb/zakadabar-samples/tree/master/01-beginner/5-ways-to-html) or [Hello World](https://github.com/spxbhuhb/zakadabar-samples/tree/master/01-beginner/hello-world) is a good choice
 * follow the instructions from the README.md file
-
-## Credits and Dependency Licenses
-
-[Credits](doc/misc/credits.md) to the projects we built on.
 
 ## Releases and Gradle dependency
 
@@ -43,9 +39,6 @@ During 2020 we publish a new release every Monday. They are as-is, just a build 
 
 Packages of Zakadabar Stack are available from GitHub Packages. To reference them
 from your project use the following Gradle setup.
-
-**It might be a better to use the [Zakadabar Template](https://github.com/spxbhuhb/zakadabar-template) or
-[Zakadabar Samples](https://github.com/spxbhuhb/zakadabar-samples) to start.**
 
 ```kotlin
 repositories {
@@ -59,7 +52,7 @@ repositories {
     jcenter()
 }
 
-val stackVersion = "2020.8.26"
+val stackVersion = "2020.8.28"
 
 commonMain {
     dependencies {
@@ -77,7 +70,6 @@ commonMain {
 
 | Feature | Status | Details |
 | ------- | -------| --------|
-| Documentation - [Quick Start](doc/quick-start/README.md) | RW | |
 | Documentation - [The Cookbook](doc/cookbook/README.md) | --> | |
 | Documentation - [Knowledge Base](doc/knowledge-base/README.md) | --> | |
 | Documentation - [Developers Guide](doc/developers-guide/README.md) | --> | |
@@ -122,6 +114,10 @@ commonMain {
 | Backend - Backup and Restore | RW | |
 | Backend - Resilience | RW | PostgreSQL DB mirroring |
 | API - Command Line | --> | Zakadabar CLI a.k.a ZLI |
+
+## Credits and Dependency Licenses
+
+[Credits](doc/misc/credits.md) to the projects we built on.
 
 ## License
 

@@ -1,5 +1,12 @@
 # Knowledge Base
 
+## I can't find the CSS, HTML, JavaScript files, where are they?
+
+In the Stack, there are none. For all those things we use Kotlin based solutions. JavaScript is
+obvious, the Kotlin compiler takes care of that.
+
+CSS is handled by [CssStyleSheet](../../src/jsMain/kotlin/zakadabar/stack/frontend/util/css.kt).
+
 ## Running the Webpack devServer in Continuous Mode
 
 * Use the "jsBrowserRun" manually first.

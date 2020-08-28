@@ -1,6 +1,8 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
- */import java.util.*
+ */
+
+import java.util.*
 
 plugins {
     kotlin("multiplatform") version "1.4.0"
@@ -11,7 +13,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2020.8.28-SNAPSHOT"
+version = "2020.8.28"
 
 // common
 val ktorVersion = "1.4.0"
@@ -179,8 +181,8 @@ publishing {
             }
             licenses {
                 license {
-                    name.set("AGPL 3.0")
-                    url.set("https://www.gnu.org/licenses/agpl-3.0.txt")
+                    name.set("Apache 2.0")
+                    url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
                     distribution.set("repo")
                 }
             }

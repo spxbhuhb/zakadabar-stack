@@ -18,6 +18,7 @@ package zakadabar.stack.frontend.elements
 
 import kotlinx.browser.document
 import kotlinx.dom.appendText
+import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLImageElement
 import org.w3c.dom.events.Event
@@ -213,18 +214,19 @@ class DOMBuilder(
      * Creates a SPAN with [SimpleElement.innerHTML] set to the string passed.
      * The string is **not escaped**. You have to escape it yourself.
      */
-    operator fun String.not() {
+    operator fun String.not() : HTMLElement {
         val e = document.createElement("span")
         e.innerHTML = this
         current.append(e)
+        return e as HTMLElement
     }
 
     /**
      * Creates a text node using [HTMLElement.appendText] with the string passed as content.
      * No need for escape.
      */
-    operator fun String.unaryPlus() {
-        current.appendText(this)
+    operator fun String.unaryPlus() : Element {
+        return current.appendText(this)
     }
 
     /**
@@ -243,6 +245,16 @@ class DOMBuilder(
     infix fun HTMLElement.build(build: DOMBuilder.() -> Unit): HTMLElement {
         val builder = DOMBuilder(this, parentComplex)
         builder.build()
+        return this
+    }
+
+    /**
+     * Build a structure of elements inside this element.
+     *
+     * @param  build      Builder function.
+     */
+    infix fun Element.cssClass(className: String): Element {
+        this.classList += className
         return this
     }
 

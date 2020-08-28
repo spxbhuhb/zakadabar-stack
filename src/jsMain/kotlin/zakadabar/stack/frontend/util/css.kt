@@ -13,33 +13,33 @@ var defaultTheme = Theme()
 
 class Theme {
 
-    val darkestColor = "#0d5b28"
-    val darkColor = "#2e8d36"
-    val lightColor = "#43cd50"
-    val lightestColor = "#fff"
-    val darkestGray = "#7b7b7b"
-    val darkGray = "#acabab"
-    val gray = "#d9d9d9"
-    val lightGray = "#f5f5f5"
+    var darkestColor = "#0d5b28"
+    var darkColor = "#2e8d36"
+    var lightColor = "#43cd50"
+    var lightestColor = "#fff"
+    var darkestGray = "#7b7b7b"
+    var darkGray = "#acabab"
+    var gray = "#d9d9d9"
+    var lightGray = "#f5f5f5"
 
-    val infoColor = "#6f90e5"
-    val errorColor = "#D71313"
-    val approveColor = darkColor
-    val cancelColor = "#bfbe96"
-    val selectedColor = "#486cc7"
+    var infoColor = "#6f90e5"
+    var errorColor = "#D71313"
+    var approveColor = darkColor
+    var cancelColor = "#bfbe96"
+    var selectedColor = "#486cc7"
 
-    val headerBackground = "rgba(13,91,40,0.05)"
-    val headerForeground = "#0d5b28"
+    var headerBackground = "rgba(13,91,40,0.05)"
+    var headerForeground = "#0d5b28"
 
-    val fontFamily = "Roboto"
-    val fontSize = 12
+    var fontFamily = "Roboto"
+    var fontSize = 12
 
-    val borderRadius = 2
+    var borderRadius = 2
 
-    val margin = 8
+    var margin = 8
 
-    val contentWidth = 600
-    val headerHeight = 26
+    var contentWidth = 600
+    var headerHeight = 26
 }
 
 typealias RuleInit = CssStyleRule.(Theme) -> Unit
@@ -369,8 +369,8 @@ class CssStyleRule(val sheet: CssStyleSheet<*>, val cssClassName: String) {
             styles["margin-right"] = stringOrPx(value)
         }
 
-    var maxHeight
-        get() = styles["max-height"]?.toInt()
+    var maxHeight: Any?
+        get() = styles["max-height"]
         set(value) {
             styles["max-height"] = stringOrPx(value)
         }
