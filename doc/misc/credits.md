@@ -5,14 +5,6 @@ This is the list of third party software Zakadabar uses.
 We would like to say thank you for every person / organization who contributed
 to the software we include.
 
-As per [About Free Software](ABOUT_FREE_SOFTWARE.md) we are willing to support
-your project with a reasonable amount. Actually, we've already sent money 
-wherever possible, let us know if you recently opened a channel to receive.
-
-Except JetBrains, because we already do that with our recurring All Products Pack
-subscriptions. However, big thanks to you for creating IDEA and Kotlin. And yes,
-those prices are quite reasonable.
-
 *Multiplatform*
 
 * [Kotlin](https://kotlinlang.org)

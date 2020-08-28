@@ -11,10 +11,7 @@ I've shamelessly stolen the title from a climbing book I've read a few years ago
 ## Technical
 
 * [Margins](Margins.md)
-
-## Almost Technical
-
-* [Choosing the License](ChoosingTheLicense.md)
+* [SemanticVersioning](SemanticVersioning.md)
 
 ## Not So Technical
 

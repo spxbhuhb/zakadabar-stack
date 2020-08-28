@@ -18,7 +18,6 @@ it will be production ready in general by the end of the year.
 * Database: anything supported by Exposed, we use PostgreSQL
 * Development tools: IntelliJ IDEA, Gradle, Firefox
 * Documentation:
-  * [Quick Start](doc/quick-start/README.md)
   * [The Cookbook](doc/cookbook/README.md)
   * [Knowledge Base](doc/knowledge-base/README.md)
   * [Developers Guide](doc/developers-guide/README.md)
@@ -26,31 +25,11 @@ it will be production ready in general by the end of the year.
   * [Espresso Lessons](doc/espresso-lessons/README.md)
   * API as soon as Dokka doesn't crash (yay 1.4)
 
-## Licensing
-
-The Zakadabar Stack has dual licencing:
-
-* you may use AGPL 3.0
-  * OR
-* you may buy a business license.
-
-### AGPL 3.0
-
-AGPL 3.0 is pretty restrictive: it makes nearly impossible to use the stack
-in commercial projects.
-
-In layman's terms: when you write anything that use any parts of Zakadabar Stack
-you have to make the source code of your entire software public. Just one example: 
-you have to publish the source code of your SaaS system if you built it using
-parts of Zakadabar Stack. For the exact licensing terms check [LICENSE.txt](./LICENSE.txt).
-
-There is an [espresso lesson](doc/espresso-lessons/ChoosingTheLicense.md) about our journey of choosing the license.
-
-### Zakadabar Business License
-
-If you write closed source software using any parts of Zakadabar Stack you have
-to buy a Zakadabar Business License. To do so, please contact us on the address:
-info@simplexion.hu.
+# Quick Start
+ 
+* clone the [Zakadabar Samples](https://github.com/spxbhuhb/zakadabar-samples) repository
+* choose a sample application to start with
+* follow the instructions from the README.md file
 
 ## Credits and Dependency Licenses
 
@@ -143,3 +122,19 @@ commonMain {
 | Backend - Backup and Restore | RW | |
 | Backend - Resilience | RW | PostgreSQL DB mirroring |
 | API - Command Line | --> | Zakadabar CLI a.k.a ZLI |
+
+## License
+
+> Copyright (c) 2020 Simplexion Kft, Hungary and contributors
+>
+> Licensed under the Apache License, Version 2.0 (the "License");
+> you may not use this file except in compliance with the License.
+> You may obtain a copy of the License at
+>
+>    http://www.apache.org/licenses/LICENSE-2.0
+>
+> Unless required by applicable law or agreed to in writing, software
+> distributed under the License is distributed on an "AS IS" BASIS,
+> WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+> See the License for the specific language governing permissions and
+> limitations under the License.
