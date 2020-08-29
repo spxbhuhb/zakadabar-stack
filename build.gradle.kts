@@ -153,23 +153,26 @@ if (!isSnapshot) { // Signing Gradle Module Metadata is not supported for snapsh
 
 publishing {
 
-    val properties = Properties()
-    val propFile = File(project.findProperty("gpr.properties").toString())
+    val path = "spxbhuhb/zakadabar-stack"
 
-    if (propFile.exists()) {
+    if (isSnapshot) {
+        repositories {
+            mavenLocal()
+        }
+    } else {
+
+        val properties = Properties()
+        val propFile = File(project.findProperty("gpr.properties").toString())
+
         properties.load(propFile.inputStream())
 
         repositories {
-            if (project.version.toString().contains("SNAPSHOT")) {
-                mavenLocal()
-            } else {
-                maven {
-                    name = "GitHubPackages"
-                    url = uri("https://maven.pkg.github.com/spxbhuhb/zakadabar-stack")
-                    credentials {
-                        username = properties["user"].toString()
-                        password = properties["key"].toString()
-                    }
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/$path")
+                credentials {
+                    username = properties["user"].toString()
+                    password = properties["key"].toString()
                 }
             }
         }
@@ -180,11 +183,11 @@ publishing {
         pom {
             description.set("Kotlin/Ktor based web server and client")
             name.set("Zakadabar")
-            url.set("https://github.com/spxbhuhb/zakadabar-stack")
+            url.set("https://github.com/$path")
             scm {
-                url.set("https://github.com/spxbhuhb/zakadabar-stack")
-                connection.set("scm:git:git://github.com/spxbhuhb/zakadabar-stack.git")
-                developerConnection.set("scm:git:ssh://git@github.com/spxbhuhb/zakadabar-stack.git")
+                url.set("https://github.com/$path")
+                connection.set("scm:git:git://github.com/$path.git")
+                developerConnection.set("scm:git:ssh://git@github.com/$path.git")
             }
             licenses {
                 license {

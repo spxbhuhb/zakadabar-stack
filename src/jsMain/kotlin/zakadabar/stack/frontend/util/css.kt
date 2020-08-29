@@ -11,35 +11,35 @@ import kotlin.reflect.KProperty
 
 var defaultTheme = Theme()
 
-class Theme {
+open class Theme {
 
-    var darkestColor = "#0d5b28"
-    var darkColor = "#2e8d36"
-    var lightColor = "#43cd50"
-    var lightestColor = "#fff"
-    var darkestGray = "#7b7b7b"
-    var darkGray = "#acabab"
-    var gray = "#d9d9d9"
-    var lightGray = "#f5f5f5"
+    open var darkestColor = "#0d5b28"
+    open var darkColor = "#2e8d36"
+    open var lightColor = "#43cd50"
+    open var lightestColor = "#fff"
+    open var darkestGray = "#7b7b7b"
+    open var darkGray = "#acabab"
+    open var gray = "#d9d9d9"
+    open var lightGray = "#f5f5f5"
 
-    var infoColor = "#6f90e5"
-    var errorColor = "#D71313"
-    var approveColor = darkColor
-    var cancelColor = "#bfbe96"
-    var selectedColor = "#486cc7"
+    open var infoColor = "#6f90e5"
+    open var errorColor = "#D71313"
+    open var approveColor = darkColor
+    open var cancelColor = "#bfbe96"
+    open var selectedColor = "#486cc7"
 
-    var headerBackground = "rgba(13,91,40,0.05)"
-    var headerForeground = "#0d5b28"
+    open var headerBackground = "rgba(13,91,40,0.05)"
+    open var headerForeground = "#0d5b28"
 
-    var fontFamily = "Roboto"
-    var fontSize = 12
+    open var fontFamily = "Roboto"
+    open var fontSize = 12
 
-    var borderRadius = 2
+    open var borderRadius = 2
 
-    var margin = 8
+    open var margin = 8
 
-    var contentWidth = 600
-    var headerHeight = 26
+    open var contentWidth = 600
+    open var headerHeight = 26
 }
 
 typealias RuleInit = CssStyleRule.(Theme) -> Unit

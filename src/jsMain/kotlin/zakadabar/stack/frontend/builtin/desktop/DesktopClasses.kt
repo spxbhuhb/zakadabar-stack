@@ -23,7 +23,6 @@ class DesktopClasses(theme: Theme) : CssStyleSheet<DesktopClasses>(theme) {
         flexDirection = "column"
 
         borderRadius = 2
-        backgroundColor = it.headerBackground
     }
 
     val header by cssClass {
@@ -34,7 +33,7 @@ class DesktopClasses(theme: Theme) : CssStyleSheet<DesktopClasses>(theme) {
 
         height = 26
         alignItems = "center"
-        backgroundColor = "rgba(13,91,40,0.2)"
+        backgroundColor = it.headerBackground
     }
 
     val headerIcon by cssClass {
