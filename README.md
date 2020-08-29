@@ -7,7 +7,7 @@ Our aim is to have solutions for the everyday tasks we do as developers: build
 a frontend, upload a file, have a server, release an appliance etc. 
 
 As of now we publish the stack as **technology preview**. Many things are missing,
-interfaces, use patterns might change, it will need some time to mature.
+*might be broken*. Interfaces, use patterns might change, it will need some time to mature.
 We actively use it in our own projects and add features as we need them.
 
 ## Highlights
