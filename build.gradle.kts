@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2020.8.28"
+version = "2020.8.31-SNAPSHOT"
 
 // common
 val ktorVersion = "1.4.0"
@@ -151,18 +151,21 @@ publishing {
 
     val properties = Properties()
     val propFile = File(project.findProperty("gpr.properties").toString())
-    properties.load(propFile.inputStream())
 
-    repositories {
-        if (project.version.toString().contains("SNAPSHOT")) {
-            mavenLocal()
-        } else {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/spxbhuhb/zakadabar-stack")
-                credentials {
-                    username = properties["user"].toString()
-                    password = properties["key"].toString()
+    if (propFile.exists()) {
+        properties.load(propFile.inputStream())
+
+        repositories {
+            if (project.version.toString().contains("SNAPSHOT")) {
+                mavenLocal()
+            } else {
+                maven {
+                    name = "GitHubPackages"
+                    url = uri("https://maven.pkg.github.com/spxbhuhb/zakadabar-stack")
+                    credentials {
+                        username = properties["user"].toString()
+                        password = properties["key"].toString()
+                    }
                 }
             }
         }
