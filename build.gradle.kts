@@ -15,6 +15,8 @@ plugins {
 group = "hu.simplexion.zakadabar"
 version = "2020.8.31-SNAPSHOT"
 
+val isSnapshot = version.toString().contains("SNAPSHOT")
+
 // common
 val ktorVersion = "1.4.0"
 val coroutinesVersion = "1.3.9"
@@ -142,9 +144,11 @@ tasks.withType<Jar> {
 //    }
 //}
 
-signing {
-    useGpgCmd()
-    sign(publishing.publications)
+if (!isSnapshot) { // Signing Gradle Module Metadata is not supported for snapshot dependencies.
+    signing {
+        useGpgCmd()
+        sign(publishing.publications)
+    }
 }
 
 publishing {

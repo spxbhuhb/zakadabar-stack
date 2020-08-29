@@ -52,7 +52,7 @@ repositories {
     jcenter()
 }
 
-val stackVersion = "2020.8.28"
+val stackVersion = "2020.8.29"
 
 commonMain {
     dependencies {
@@ -84,10 +84,10 @@ commonMain {
 | Routing - Frontend - Entity Tree | --> | Navigation |
 | Data - Common - Serialization | stable | Kotlinx.serialization, CommArray |
 | Data - Common - Transfer | stable | Data Transfer Objects (DTOs) - in common code |
-| Data - Common - [Entities](doc/developers-guide/Data.md) | OK | Entity Tree, revisions, snapshots |
+| Data - Common - [Entities](doc/developers-guide/Data.md) | --> | Entity Tree, revisions, snapshots |
 | Data - Common - Files | stable | upload, download works both for REST and WebSocket |
 | Data - Common - Validation | --> | |
-| Data - Frontend - REST | stable | DTO, RestComm, CachedRestComm |
+| Data - Frontend - REST | --> | DTO, rest comms and cached rest comms |
 | Data - Frontend - WebSocket | stable | FrontendContext.transferSession |
 | Data - Backend - DAO, Tables | stable | Exposed, PostgreSQL, HikariCP |
 | Frontend - [Elements](doc/cookbook/frontend/Elements.md) | stable | easy and clean DOM handling |
