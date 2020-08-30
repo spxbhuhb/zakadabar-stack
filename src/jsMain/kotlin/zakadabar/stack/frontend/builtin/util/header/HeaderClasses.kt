@@ -7,57 +7,60 @@ import zakadabar.stack.frontend.FrontendContext
 import zakadabar.stack.frontend.util.CssStyleSheet
 import zakadabar.stack.frontend.util.Theme
 
-class HeaderClasses(theme: Theme) : CssStyleSheet<HeaderClasses>(theme) {
+open class HeaderClasses(theme: Theme) : CssStyleSheet<HeaderClasses>(theme) {
 
     companion object {
         val headerClasses = HeaderClasses(FrontendContext.theme).attach()
     }
 
-    val header by cssClass {
+    open val header by cssClass {
         display = "flex"
         flexDirection = "row"
         boxSizing = "border-box"
-        height = 26
+        height = theme.headerHeight
         alignItems = "center"
         backgroundColor = theme.headerBackground
-        // marginBottom= theme.margin
         overflow = "hidden"
     }
 
-    val headerIcon by cssClass {
+    open val headerIcon by cssClass {
         boxSizing = "border-box"
-        backgroundColor = theme.headerForeground
         padding = 6
-        height = 26
-        width = 26
-        fill = theme.lightestColor
+        height = theme.headerHeight
+        width = theme.headerHeight
+        backgroundColor = theme.headerIconBackground
+        fill = theme.headerIconFill
     }
 
-    val headerIcon18 by cssClass {
+    open val headerIcon18 by cssClass {
         boxSizing = "border-box"
         backgroundColor = theme.headerForeground
         padding = "5px 4px 4px 4px"
-        height = 26
-        fill = theme.lightestColor
+        height = theme.headerHeight
+        width = theme.headerHeight
+        backgroundColor = theme.headerIconBackground
+        fill = theme.headerIconFill
     }
 
-    val headerIcon20 by cssClass {
+    open val headerIcon20 by cssClass {
         boxSizing = "border-box"
         backgroundColor = theme.headerForeground
         padding = "4px 3px 3px 3px"
-        height = 26
-        fill = theme.lightestColor
+        height = theme.headerHeight
+        width = theme.headerHeight
+        backgroundColor = theme.headerIconBackground
+        fill = theme.headerIconFill
     }
 
-    val innerIcon by cssClass {
+    open val innerIcon by cssClass {
         boxSizing = "border-box"
         padding = "6px 0px 6px 6px"
         height = 26
-        fill = theme.darkestColor
+        fill = theme.headerForeground
         cursor = "pointer"
     }
 
-    val text by cssClass {
+    open val text by cssClass {
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
@@ -70,7 +73,7 @@ class HeaderClasses(theme: Theme) : CssStyleSheet<HeaderClasses>(theme) {
         textTransform = "uppercase"
     }
 
-    val extensions by cssClass {
+    open val extensions by cssClass {
         flexGrow = 1
         display = "flex"
         flexDirection = "row"
@@ -79,11 +82,12 @@ class HeaderClasses(theme: Theme) : CssStyleSheet<HeaderClasses>(theme) {
         paddingLeft = 8
     }
 
-    val extensionIcon by cssClass {
+    open val extensionIcon by cssClass {
         boxSizing = "border-box"
         padding = "6px 2px 2px 2px"
-        height = 26
-        fill = theme.darkColor
+        height = theme.headerHeight
+        backgroundColor = theme.headerToolBackground
+        fill = theme.headerToolFill
         strokeWidth = 2
         cursor = "pointer"
         userSelect = "none"
@@ -97,13 +101,13 @@ class HeaderClasses(theme: Theme) : CssStyleSheet<HeaderClasses>(theme) {
         }
     }
 
-
-    val extensionIcon16 by cssClass {
+    open val extensionIcon16 by cssClass {
         boxSizing = "border-box"
         padding = 5
-        height = 26
-        width = 26
-        fill = theme.darkColor
+        height = theme.headerHeight
+        width = theme.headerHeight
+        backgroundColor = theme.headerToolBackground
+        fill = theme.headerToolFill
         strokeWidth = 2
         cursor = "pointer"
         userSelect = "none"
@@ -113,12 +117,12 @@ class HeaderClasses(theme: Theme) : CssStyleSheet<HeaderClasses>(theme) {
         }
     }
 
-    val activeExtensionIcon by cssClass {
+    open val activeExtensionIcon by cssClass {
         backgroundColor = theme.selectedColor
         fill = theme.lightestColor
     }
 
-    val path by cssClass {
+    open val path by cssClass {
         position = "relative"
         top = 3
         fontFamily = theme.fontFamily
@@ -129,7 +133,7 @@ class HeaderClasses(theme: Theme) : CssStyleSheet<HeaderClasses>(theme) {
         color = theme.darkestColor
     }
 
-    val pathItem by cssClass {
+    open val pathItem by cssClass {
         textDecoration = "none"
         color = theme.darkestColor
         cursor = "pointer"

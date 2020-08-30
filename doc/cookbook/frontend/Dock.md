@@ -14,6 +14,19 @@ to remove them manually.
 Technically you can add any elements to the dock but there is a DockItem element 
 which covers minimize, maximize and close.
 
+## Add the Dock
+
+Usually there is one dock instance per frontend that is created **but not added** by
+`FrontendContext.init`.
+
+To add the dock modify `main.kt` in `jsMain`.
+
+```kotlin
+FrontendContext.init()
+
+document.body?.appendChild(FrontendContext.dock.element)
+```
+
 ## Dock an Element
 
 ```kotlin

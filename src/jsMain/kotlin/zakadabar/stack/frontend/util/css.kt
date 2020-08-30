@@ -30,6 +30,10 @@ open class Theme {
 
     open var headerBackground = "rgba(13,91,40,0.05)"
     open var headerForeground = "#0d5b28"
+    open var headerIconBackground = "0d5b28"
+    open var headerIconFill = "$43cd50"
+    open var headerToolBackground = "rgba(13,91,40,0.05)"
+    open var headerToolFill = "#2e8d36"
 
     open var fontFamily = "Roboto"
     open var fontSize = 12

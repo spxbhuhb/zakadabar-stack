@@ -1,10 +1,71 @@
 # Data
 
-## Query Data
+Examples:
 
-Example: [Query Data Example](https://github.com/spxbhuhb/zakadabar-samples/tree/master/01-beginner/query-data)
+* [Query Data Example - TODO](https://github.com/spxbhuhb/zakadabar-samples/tree/master/01-beginner/query-data)
+* [Record Data Example - TODO](https://github.com/spxbhuhb/zakadabar-samples/tree/master/01-beginner/record-data)
+* [Entity Data Example - TODO](https://github.com/spxbhuhb/zakadabar-samples/tree/master/01-beginner/entity-data)
 
-### Defining a Query DTO
+## Terminology
+
+| Generic Concept | Explanation |
+| ---- | ---- |
+| Table | An SQL table for persistence, the stack uses Exposed tables. |
+| DAO | A Data Access Object used on the backend that makes handling the data easier, the stack uses Exposed DAOs. |
+| DTO | A Data Transfer Object that we use to transfer data between the client and the frontend. |
+
+## DTO Types
+
+There are three DTO types in the stack:
+
+| Type | Use |
+| ---- | --- |
+| Query DTO | The backend sends the result of a complex query (joins etc.) to the frontend. |
+| Record DTO | Plain SQL tables with a Long id. Usually with standard REST API. |
+| Entity DTO | Entities in the entity tree (see below). These are meant to build a hierarchical structure, like folders and files. Standard REST API with hierarchy support. |
+
+### Query DTOs
+
+Used mostly for lists which contain just some parts of the actual data. Like tables which contain only the main
+field of the backing records.
+
+Query DTOs are mostly read only, creation and update usually uses record and/or entity DTOs.
+
+### Record DTOs
+
+These are good old SQL records of SQL tables.
+
+If your DTO implement the [DtoWithRecordContract](../../../src/commonMain/kotlin/zakadabar/stack/extend/DtoWithRecordContract.kt)
+interface, you can use a [RecordRestComm](../../../src/jsMain/kotlin/zakadabar/stack/frontend/comm/rest/RecordRestComm.kt)
+to handle your data easily.
+
+### Entity Types
+
+The stack maintains a so-called **Entity Tree**. The nodes and leaves are entities
+stored in the SQL table `t_3a8627_entities`. 
+
+Points of interest:
+
+* [EntityTable][zakadabar.stack.backend.components.entities.data.EntityTable]
+* [EntityDao][zakadabar.stack.backend.components.entities.data.EntityDao]
+* [EntityDto][zakadabar.stack.data.entity.EntityDto]
+
+Many stack functions revolve around these entities as the stack stores most of 
+its data as entities for example:
+
+* user accounts
+* access control objects (ACLs, roles, grants)
+* folders
+
+It is important, that the entity tree is not suitable for everything. For example:
+it is better to store order records outside of the tree as there are many, and 
+you will probably write a specific query API for it anyway.
+
+That said, entities are very useful because they give you a well-defined and easy
+way to extend the system. After you define a new entity type most parts of the 
+application will automatically include it.
+
+### Write a Query DTO
 
 As query DTOs are only used for getting data from the server we don't define a schema and a type.
 
@@ -28,11 +89,7 @@ data class QueryDto(
 
 ```
 
-## Record Data
-
-Example: [Zakadabar Module Template]()
-
-### Defining a Record DTO
+### Write a Record DTO
 
 ```kotlin
 @Serializable
@@ -137,9 +194,6 @@ object Module : FrontendModule() {
 }
 ```
 
-## Entities
-
-
 ## Data Validation
 
 Data validation uses DtoSchema definitions. Theoretically you want to validate data when
@@ -163,7 +217,7 @@ client that fails to validate on the server because you've already validated it 
 This of course does not free you from validation on the server side, it just means that
 you usually don't have to worry much about it as a developer.
 
-### Writing a Schema
+### Write a Schema
 
 ```kotlin
 // This is the DTO for a rabbit. It has a schema that checks the name.
@@ -179,7 +233,7 @@ class RabbitDto(
 }
 ```
 
-### Using a Schema in a Form
+### Use a Schema in a Form
 
 This is a frontend element that is basically form to edit the name of the rabbit.
 The form won't let the user click on the submit button before the validation by
@@ -201,7 +255,7 @@ class RabbitEditor : ComplexElement() {
 }
 ```
 
-### Validating data on the Backend
+### Validate data on the Backend
 
 DTOs have a few methods by default to check validation and get the validation result:
 

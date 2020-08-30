@@ -4,13 +4,13 @@
 package zakadabar.stack.frontend.builtin.desktop
 
 import zakadabar.stack.frontend.FrontendContext.theme
-import zakadabar.stack.frontend.util.CssStyleSheet
+import zakadabar.stack.frontend.builtin.util.header.HeaderClasses
 import zakadabar.stack.frontend.util.Theme
 
-class DesktopClasses(theme: Theme) : CssStyleSheet<DesktopClasses>(theme) {
+open class DesktopClasses(theme: Theme) : HeaderClasses(theme) {
 
     companion object {
-        val desktopClasses = DesktopClasses(theme).attach()
+        val desktopClasses = DesktopClasses(theme).attach() as DesktopClasses
     }
 
     val desktop by cssClass {
@@ -23,26 +23,6 @@ class DesktopClasses(theme: Theme) : CssStyleSheet<DesktopClasses>(theme) {
         flexDirection = "column"
 
         borderRadius = 2
-    }
-
-    val header by cssClass {
-        boxSizing = "border-box"
-
-        display = "flex"
-        flexDirection = "row"
-
-        height = 26
-        alignItems = "center"
-        backgroundColor = it.headerBackground
-    }
-
-    val headerIcon by cssClass {
-        boxSizing = "border-box"
-        backgroundColor = it.headerForeground
-        padding = 6
-        height = 26
-        width = 26
-        fill = it.lightestColor
     }
 
     val center by cssClass {
@@ -61,15 +41,15 @@ class DesktopClasses(theme: Theme) : CssStyleSheet<DesktopClasses>(theme) {
         alignItems = "center"
         boxSizing = "border-box"
         height = 24
-        fontFamily = it.fontFamily
-        fontSize = it.fontSize
-        borderRadius = it.borderRadius
-        backgroundColor = it.lightGray
+        fontFamily = theme.fontFamily
+        fontSize = theme.fontSize
+        borderRadius = theme.borderRadius
+        backgroundColor = theme.lightGray
     }
 
     val copyright by cssClass {
         paddingLeft = 16
-        color = it.darkestGray
+        color = theme.darkestGray
     }
 
 }

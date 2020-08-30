@@ -1,6 +1,6 @@
 # Backend Modules
 
-## Creating a Backend Module
+## Write a Backend Module
 
 1. Create a file named `Module` in your project. The convention is to place it in the package 
 `zakadabar.<module-package>.backend`.
