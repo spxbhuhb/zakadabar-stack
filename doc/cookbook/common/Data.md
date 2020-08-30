@@ -255,7 +255,7 @@ class RabbitEditor : ComplexElement() {
 }
 ```
 
-### Validate data on the Backend
+### Validate Data on the Backend
 
 DTOs have a few methods by default to check validation and get the validation result:
 

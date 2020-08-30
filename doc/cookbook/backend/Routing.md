@@ -8,10 +8,10 @@ All non-static backend routes are:
 * under `/api/<shid>/`
 * authenticated (see [Accounts](../common/Accounts.md) for more information) 
 
-## REST Routing for an Entity Type
+## Add REST Routing for an Entity Type
 
 To route REST requests for an entity type use the `restApi` helper function from 
-[restApi.kt](../../src/jvmMain/kotlin/zakadabar/stack/backend/extend/restApi.kt)
+[restApi.kt](../../../src/jvmMain/kotlin/zakadabar/stack/backend/extend/restApi.kt)
 in the [Module](Modules.md) file.
 
 ```kotlin
@@ -30,7 +30,7 @@ in the [Module](Modules.md) file.
 }
 ```
 
-## Non REST routing
+## Add Non REST Routing
 
 To route non-rest requests add a Ktor route like this. You may mix REST and non-REST routing.
 
@@ -55,7 +55,7 @@ information.
 
 }
 ```
-## WebSocket
+## Add WebSocket Routing
 
 For using WebSockets in Ktor check [WebSockets](https://ktor.io/servers/features/websockets.html).
 

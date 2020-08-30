@@ -6,9 +6,9 @@ applications fast, easy and fun.
 Our aim is to have solutions for the everyday tasks we do as developers: build
 a frontend, upload a file, have a server, release an appliance etc. 
 
-As of now we publish the stack as **technology preview**. Many things are missing,
-*might be broken*. Interfaces, use patterns might change, it will need some time to mature.
-We actively use it in our own projects and add features as we need them.
+As of now we publish the stack as **technology preview**. Many things are missing, **we might brake this and that with releases**.
+Interfaces, use patterns might change, it will need some time to mature. We actively use it in our own projects and add 
+features as we need them.
 
 ## Highlights
 
@@ -40,16 +40,23 @@ During 2020 we publish a new release every Monday. They are as-is, just a build 
 Packages of Zakadabar Stack are available from GitHub Packages. To reference them
 from your project use the following Gradle setup.
 
+Property values are from your `<HOME-DIRECTORY>/.gradle/gradle.properties` file. See [Authenticating to GitHub Packages](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-gradle-for-use-with-github-packages#authenticating-to-github-packages) 
+for more information.
+
 ```kotlin
 repositories {
+    mavenCentral()
+    jcenter()
     maven {
         url = uri("https://maven.pkg.github.com/spxbhuhb/zakadabar-stack")
         metadataSources {
             gradleMetadata()
         }
+        credentials {
+            username = properties["github.user"].toString()
+            password = properties["github.key"].toString()
+        }
     }
-    mavenCentral()
-    jcenter()
 }
 
 val stackVersion = "2020.8.29"
@@ -87,7 +94,7 @@ commonMain {
 | Data - Common - [Entities](doc/developers-guide/Data.md) | --> | Entity Tree, revisions, snapshots |
 | Data - Common - Files | stable | upload, download works both for REST and WebSocket |
 | Data - Common - Validation | --> | |
-| Data - Frontend - REST | --> | DTO, rest comms and cached rest comms |
+| Data - Frontend - REST | --> | query, record and entity communications are mostly OK, documentation is missing |
 | Data - Frontend - WebSocket | stable | FrontendContext.transferSession |
 | Data - Backend - DAO, Tables | stable | Exposed, PostgreSQL, HikariCP |
 | Frontend - [Elements](doc/cookbook/frontend/Elements.md) | stable | easy and clean DOM handling |
