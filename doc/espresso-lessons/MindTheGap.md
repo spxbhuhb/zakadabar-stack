@@ -7,12 +7,12 @@ Easy - I thought - and naively added a `gap` to add some extra space between the
 with (classes) {
     this@MyWelcome cssClass welcome build {
         + gap(height = "20%")
-        + div(welcomeTitle) { + ta("welcome") }
+        + div(welcomeTitle) { + t("welcome") }
     }
 }
 ```
 
-In Firefox this works well, but in Safari the gap disappears.
+In Firefox this worked well, but in Safari the gap disappeared.
 
 First, a word about why I want a gap in the first place. Why not a top margin or padding.
 The reason is that both would be linked to an element which has nothing to do with the gap itself.
