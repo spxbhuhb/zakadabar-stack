@@ -18,12 +18,7 @@ import zakadabar.stack.frontend.errors.FetchError
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.frontend.util.log
 import zakadabar.stack.util.PublicApi
-import kotlin.collections.List
-import kotlin.collections.emptyList
-import kotlin.collections.forEach
-import kotlin.collections.mutableMapOf
 import kotlin.collections.set
-import kotlin.collections.toTypedArray
 
 /**
  * A cache for entities.
@@ -94,7 +89,7 @@ object EntityCache : RecordRestComm<EntityDto>("${Stack.shid}/entities", EntityD
     @PublicApi
     fun launchCreateAndPush(parentId: Long?, file: File) {
         launch {
-            val dto = create(EntityDto.new(parentId, file.name, file.type))
+            val dto = create(EntityDto.new(parentId, file.type, file.name))
             pushBlob(dto.id, file)
         }
     }
