@@ -112,6 +112,9 @@ class DOMBuilder(
     /**
      * Creates "div" [HTMLElement] with height and width passed as parameters.
      *
+     * Be careful as Safari (and perhaps Chrome) collapses the gap when you
+     * use percent and the parent container is not sized properly.
+     *
      * @param  width   Width of the gap. String or Int. Defaults is "100%".
      * @param  height  Height of the gap. String or Int. Defaults is "100%".
      */
