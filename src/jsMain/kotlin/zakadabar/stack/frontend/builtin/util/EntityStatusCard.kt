@@ -33,11 +33,13 @@ open class EntityStatusCard(val entityDto: EntityDto) : ComplexElement() {
 
                 + column() cssClass coreClasses.smallInfo build {
 
+                    current.style.alignSelf = "center"
+
                     + row {
                         + t("modifiedBy")
                         + accountDto.displayName
                     }
-                    + div {
+                    + row {
                         + t("modifiedAt")
                         + SimpleDateTime(entityDto.modifiedAt)
                     }

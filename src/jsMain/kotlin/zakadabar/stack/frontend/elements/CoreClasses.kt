@@ -111,7 +111,7 @@ class CoreClasses(theme: Theme) : CssStyleSheet<CoreClasses>(theme) {
     }
 
     val smallInfo by cssClass {
-        fontSize = "80%"
+        fontSize = "70%"
         color = theme.darkGray
     }
 

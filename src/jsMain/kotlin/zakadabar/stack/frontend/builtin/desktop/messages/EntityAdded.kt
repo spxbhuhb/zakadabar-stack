@@ -7,10 +7,8 @@ import zakadabar.stack.data.entity.EntityDto
 import zakadabar.stack.messaging.Message
 
 /**
- * Sent when the list of children of the given entity are loaded from the backend.
+ * Indicates that the given entity has been added.
  */
-data class EntityChildrenLoaded(
-    val entityId: Long?,
-    val children: List<EntityDto>,
-    val error: String?
+data class EntityAdded(
+    val entityDto: EntityDto
 ) : Message

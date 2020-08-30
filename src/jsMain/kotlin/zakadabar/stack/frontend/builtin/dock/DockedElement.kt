@@ -11,6 +11,7 @@ import zakadabar.stack.frontend.FrontendContext.dock
 import zakadabar.stack.frontend.FrontendContext.theme
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.header.Header
+import zakadabar.stack.frontend.builtin.util.header.HeaderClasses.Companion.headerClasses
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.elements.SimpleElement
@@ -28,11 +29,12 @@ open class DockedElement(
     var content: SimpleElement? = null,
 ) : ComplexElement() {
 
-    protected val minimize = Icons.minimize.complex16(::onMinimize)
-    protected val maximize = Icons.maximize.complex16(::onMaximize)
-    protected val openInFull = Icons.openInFull.complex16(::onOpenInFullIcon)
-    protected val closeFullScreen = Icons.closeFullScreen.complex16(::onCloseFullScreen)
-    protected val close = Icons.close.complex16(::onClose)
+    protected val minimize = Icons.minimize.complex16(::onMinimize).withClass(headerClasses.extensionIcon)
+    protected val maximize = Icons.maximize.complex16(::onMaximize).withClass(headerClasses.extensionIcon)
+    protected val openInFull = Icons.openInFull.complex16(::onOpenInFullIcon).withClass(headerClasses.extensionIcon)
+    protected val closeFullScreen =
+        Icons.closeFullScreen.complex16(::onCloseFullScreen).withClass(headerClasses.extensionIcon)
+    protected val close = Icons.close.complex16(::onClose).withClass(headerClasses.extensionIcon)
 
     protected val header = Header(title, icon, tools = listOf(minimize, maximize, openInFull, closeFullScreen, close))
 

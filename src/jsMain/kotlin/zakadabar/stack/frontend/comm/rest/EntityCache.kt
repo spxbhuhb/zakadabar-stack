@@ -9,13 +9,33 @@ import zakadabar.stack.Stack
 import zakadabar.stack.data.entity.EntityDto
 import zakadabar.stack.extend.EntityRestCommContract
 import zakadabar.stack.frontend.FrontendContext
-import zakadabar.stack.frontend.builtin.desktop.messages.EntityChildrenLoaded
+import zakadabar.stack.frontend.builtin.desktop.messages.EntityAdded
+import zakadabar.stack.frontend.comm.rest.EntityCache.get
+import zakadabar.stack.frontend.comm.rest.EntityCache.getChildrenOf
+import zakadabar.stack.frontend.comm.rest.EntityCache.search
 import zakadabar.stack.frontend.comm.util.pushBlob
 import zakadabar.stack.frontend.errors.FetchError
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.frontend.util.log
 import zakadabar.stack.util.PublicApi
+import kotlin.collections.List
+import kotlin.collections.emptyList
+import kotlin.collections.forEach
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
+import kotlin.collections.toTypedArray
 
+/**
+ * A cache for entities.
+ *
+ * TODO Channel based synchronisation for EntityCache #2
+ *
+ * Methods [get], [getChildrenOf] and [search] should be send requests to a channel.
+ * A receiver on the other side of the channel should coalesce similar requests, so
+ * if two or more elements requests the same entity at the same time (which happens
+ * a lot) only one request would be sent to the server.
+ *
+ */
 @PublicApi
 object EntityCache : RecordRestComm<EntityDto>("${Stack.shid}/entities", EntityDto.serializer()),
     EntityRestCommContract<EntityDto> {
@@ -59,12 +79,14 @@ object EntityCache : RecordRestComm<EntityDto>("${Stack.shid}/entities", EntityD
     override suspend fun create(dto: EntityDto): EntityDto {
         val result = super.create(dto)
         cache[result.id] = result
+        FrontendContext.dispatcher.postSync { EntityAdded(dto) }
         return result
     }
 
     override suspend fun update(dto: EntityDto): EntityDto {
         val result = super.update(dto)
         cache[result.id] = result
+        FrontendContext.dispatcher.postSync { EntityAdded(result) }
         return result
     }
 
@@ -73,10 +95,7 @@ object EntityCache : RecordRestComm<EntityDto>("${Stack.shid}/entities", EntityD
     fun launchCreateAndPush(parentId: Long?, file: File) {
         launch {
             val dto = create(EntityDto.new(parentId, file.name, file.type))
-
             pushBlob(dto.id, file)
-
-            FrontendContext.dispatcher.postSync { EntityChildrenLoaded(parentId) }
         }
     }
 
@@ -84,34 +103,19 @@ object EntityCache : RecordRestComm<EntityDto>("${Stack.shid}/entities", EntityD
     fun launchCreateAndPush(parentId: Long?, name: String, type: String, byteArray: ByteArray) {
         launch {
             val dto = create(EntityDto.new(parentId, name, type))
-
             pushBlob(dto.id, Blob(byteArray.toTypedArray()))
-
-            FrontendContext.dispatcher.postSync { EntityChildrenLoaded(parentId) }
         }
     }
 
     @PublicApi
-    fun launchGetChildren(parentId: Long?) {
+    fun launchGetChildren(parentId: Long?, onFinish: (children: List<EntityDto>, error: String?) -> Unit) {
         launch {
-            if (children.containsKey(parentId)) {
-
-                FrontendContext.dispatcher.postSync { EntityChildrenLoaded(parentId) }
-
-                return@launch
-            }
-
             try {
-
-                getChildrenOf(parentId)
-
-                FrontendContext.dispatcher.postSync { EntityChildrenLoaded(parentId) }
-
+                onFinish(children[parentId] ?: getChildrenOf(parentId), null)
             } catch (ex: Throwable) {
                 log(ex)
                 val status = if (ex is FetchError) ex.response.status.toString() else "unknown"
-
-                FrontendContext.dispatcher.postSync { EntityChildrenLoaded(parentId, status) }
+                onFinish(emptyList(), status)
             }
         }
     }

@@ -105,7 +105,8 @@ class DesktopHeader : ComplexElement() {
 
             if (items.isNotEmpty()) {
                 items.reverse()
-                element.innerHTML = "&nbsp;/&nbsp;" + items.joinToString("&nbsp;/&nbsp;") { it.toHtml() }
+                val separator = "&nbsp;/&nbsp;"
+                element.innerHTML = separator + items.joinToString(separator) { it.toHtml() }
             } else {
                 element.clear()
             }

@@ -5,9 +5,7 @@ package zakadabar.stack.frontend.builtin.folder
 
 import zakadabar.stack.data.FolderDto
 import zakadabar.stack.data.entity.EntityDto
-import zakadabar.stack.frontend.FrontendContext
 import zakadabar.stack.frontend.FrontendContext.t
-import zakadabar.stack.frontend.builtin.desktop.messages.EntityChildrenLoaded
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.navigator.EntityNavigator
 import zakadabar.stack.frontend.builtin.navigator.NewEntity
@@ -38,8 +36,6 @@ class NewFolder(newEntity: NewEntity) : NewEntityItemWithName(newEntity) {
         val entityDto = FolderDto(id = 0, entityDto = EntityDto.new(parentId, FolderDto.type, name))
 
         entityDto.create()
-
-        FrontendContext.dispatcher.postSync { EntityChildrenLoaded(parentId) }
 
     }
 

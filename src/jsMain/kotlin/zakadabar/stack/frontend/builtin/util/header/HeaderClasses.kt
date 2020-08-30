@@ -130,12 +130,12 @@ open class HeaderClasses(theme: Theme) : CssStyleSheet<HeaderClasses>(theme) {
         fontWeight = 400
         height = 16
         textDecoration = "none"
-        color = theme.darkestColor
+        color = theme.headerForeground
     }
 
     open val pathItem by cssClass {
         textDecoration = "none"
-        color = theme.darkestColor
+        color = theme.headerForeground
         cursor = "pointer"
     }
 

@@ -8,13 +8,12 @@ import org.w3c.dom.DataTransfer
 import org.w3c.dom.events.Event
 import zakadabar.entity.browser.frontend.util.EntityDrop
 import zakadabar.stack.data.FolderDto
+import zakadabar.stack.data.entity.EntityDto
 import zakadabar.stack.frontend.FrontendContext.dispatcher
 import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.desktop.DesktopCenter
 import zakadabar.stack.frontend.builtin.desktop.DesktopCenter.Companion.regex
-import zakadabar.stack.frontend.builtin.desktop.messages.EntityChildrenLoaded
-import zakadabar.stack.frontend.builtin.desktop.messages.GlobalNavigationEvent
-import zakadabar.stack.frontend.builtin.desktop.messages.GlobalNavigationRequest
+import zakadabar.stack.frontend.builtin.desktop.messages.*
 import zakadabar.stack.frontend.builtin.navigator.NavigatorClasses.Companion.navigatorClasses
 import zakadabar.stack.frontend.builtin.navigator.messages.PreviewEntityIntent
 import zakadabar.stack.frontend.builtin.util.droparea.DropArea
@@ -50,6 +49,7 @@ class EntityNavigator : ComplexElement() {
     private val idPrefix = "${element.id}-item-"
 
     internal var currentEntityId: Long? = null
+    internal var currentEntityDto: EntityDto? = null
     private var selectedEntityId: Long? = null
 
     override fun init(): ComplexElement {
@@ -72,6 +72,11 @@ class EntityNavigator : ComplexElement() {
 
         on(GlobalNavigationRequest::class, ::onGlobalNavigationRequest)
         on(GlobalNavigationEvent::class, ::onGlobalNavigationEvent)
+
+        on(EntityAdded::class, ::onEntityAdded)
+        on(EntityRemoved::class, ::onEntityRemoved)
+        on(EntityUpdated::class, ::onEntityUpdated)
+
         on(EntityChildrenLoaded::class, ::onEntityChildrenLoaded)
 
         return this
@@ -82,8 +87,8 @@ class EntityNavigator : ComplexElement() {
 
     private fun onEntityChildrenLoaded(message: EntityChildrenLoaded) {
         if (message.entityId != currentEntityId) return
-        if (message.status != null) {
-            statusInfo.update(Status.CommError, message.status.toString()).show()
+        if (message.error != null) {
+            statusInfo.update(Status.CommError, message.error.toString()).show()
         } else {
             launch { render() }
         }
@@ -93,16 +98,32 @@ class EntityNavigator : ComplexElement() {
 
         val match = regex.matchEntire(message.location) ?: return
 
-        EntityCache.launchGetChildren(match.groupValues[3].toLongOrNull()) // this will send an EntityChildrenLoaded
+        val parentId = match.groupValues[3].toLongOrNull()
+
+        EntityCache.launchGetChildren(parentId) { children, error ->
+            dispatcher.postSync { EntityChildrenLoaded(parentId, children, error) }
+        }
 
         dispatcher.postSync { GlobalNavigationEvent(message.location) }
     }
 
     private fun onGlobalNavigationEvent(message: GlobalNavigationEvent) {
-
         val match = regex.matchEntire(message.location) ?: return
-
         currentEntityId = match.groupValues[3].toLongOrNull()
+    }
+
+    private fun onEntityAdded(message: EntityAdded) = refresh(message.entityDto.parentId)
+
+    private fun onEntityRemoved(message: EntityRemoved) = refresh(message.entityDto.parentId)
+
+    private fun onEntityUpdated(message: EntityUpdated) = refresh(message.entityDto.parentId)
+
+    private fun refresh(entityId: Long?) {
+        if (entityId != currentEntityId) return
+
+        EntityCache.launchGetChildren(currentEntityId) { children, error ->
+            dispatcher.postSync { EntityChildrenLoaded(currentEntityId, children, error) }
+        }
 
     }
 
@@ -138,6 +159,8 @@ class EntityNavigator : ComplexElement() {
     // ---- Rendering ----------------------------------------------------
 
     private suspend fun render() {
+        currentEntityDto = EntityCache.get(currentEntityId)
+
         val children = EntityCache.getChildrenOf(currentEntityId)
 
         if (children.isEmpty()) {
