@@ -24,7 +24,7 @@ with (classes) {
     this@MyWelcome cssClass welcome build {
         + div(welcomeTitle) { 
             current.style.marginTop = "20px"
-            + ta("welcome")
+            + t("welcome")
         }
     }
 }
@@ -37,11 +37,11 @@ Because just adding something is probably wrong:
 with (classes) {
     this@MyWelcome cssClass welcome build {
         
-        + ta("i want this first")
+        + t("i want this first")
 
         + div(welcomeTitle) { 
             current.style.marginTop = "20px"
-            + ta("welcome")
+            + t("welcome")
         }
     }
 }
@@ -54,7 +54,7 @@ use ... something, I don't exactly know what, but I guess it's close to zero (or
 
 I've changed the minHeight of the parent DIV and everything worked.
 
-```
+```kotlin
 val welcome by cssClass {
     display = "flex"
     flexDirection = "column"

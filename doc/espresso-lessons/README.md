@@ -12,7 +12,7 @@ I've shamelessly stolen the title from a climbing book I've read a few years ago
 
 * [Margins](Margins.md)
 * [Mind the Gap](MindTheGap.md)
-* [SemanticVersioning](SemanticVersioning.md)
+* [Semantic Versioning](SemanticVersioning.md)
 
 ## Not So Technical
 
