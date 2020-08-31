@@ -8,6 +8,7 @@
 * Data
     * [Write a Query DTO](common/Data.md#Write-a-Query-DTO)
     * [Write a Record DTO](common/Data.md#Write-a-Record-DTO)
+    * [Write an Entity DTO](common/Data.md#Write-an-Entity-DTO)
     * [Data Validation](common/Data.md#Data-Validation)
     * [Write a Schema](common/Data.md#Write-a-Schema)
 
@@ -30,6 +31,7 @@
 * Data
     * [Frontend for a Query DTO](common/Data.md#Frontend-for-a-Query-DTO)
     * [Frontend for a Record DTO](common/Data.md#Frontend-for-a-Record-DTO)
+    * [Get Entity Related URLs](common/Data.md#Get-Entity-Related-URLs)
     * [Use a Schema in a Form](common/Data.md#Use-a-Schema-in-a-Form)
 * Views
     * [Switch Views of the Same Content](frontend/SwitchViews.md)

@@ -39,16 +39,16 @@ If your DTO implement the [DtoWithRecordContract](../../../src/commonMain/kotlin
 interface, you can use a [RecordRestComm](../../../src/jsMain/kotlin/zakadabar/stack/frontend/comm/rest/RecordRestComm.kt)
 to handle your data easily.
 
-### Entity Types
+### Entity DTOs
 
 The stack maintains a so-called **Entity Tree**. The nodes and leaves are entities
 stored in the SQL table `t_3a8627_entities`. 
 
 Points of interest:
 
-* [EntityTable][zakadabar.stack.backend.components.entities.data.EntityTable]
-* [EntityDao][zakadabar.stack.backend.components.entities.data.EntityDao]
-* [EntityDto][zakadabar.stack.data.entity.EntityDto]
+* [EntityRecordDto](../../../src/commonMain/kotlin/zakadabar/stack/data/entity/EntityRecordDto.kt)
+* [EntityDao](../../../src/jvmMain/kotlin/zakadabar/stack/backend/builtin/entities/data/EntityDao.kt)
+* [EntityTable](../../../src/jvmMain/kotlin/zakadabar/stack/backend/builtin/entities/data/EntityDao.kt)
 
 Many stack functions revolve around these entities as the stack stores most of 
 its data as entities for example:
@@ -65,33 +65,7 @@ That said, entities are very useful because they give you a well-defined and eas
 way to extend the system. After you define a new entity type most parts of the 
 application will automatically include it.
 
-## Get URL for an Entity
-
-To get URL for the Entity DTO itself:
-
-```kotlin
-val url = EntityDto.dtoUrl(dto.id)
-```
-
-To get URL for the Entity DTO and a view:
-
-```kotlin
-val url = EntityDto.viewUrl(dto.id, "read")
-```
-
-To get URL for the last revision of the binary content of the entity:
-
-```kotlin
-val url = EntityDto.revisionUrl(dto.id)
-```
-
-To get URL for a given revision of the binary content of the entity:
-
-```kotlin
-val revisionNumber = 23
-val url = EntityDto.revisionUrl(dto.id, revisionNumber)
-```
-
+## Query DTOs
 
 ### Write a Query DTO
 
@@ -116,6 +90,8 @@ data class QueryDto(
 ```kotlin
 
 ```
+
+## Record DTOs
 
 ### Write a Record DTO
 
@@ -220,6 +196,75 @@ object Module : FrontendModule() {
     }
 
 }
+```
+
+## Entity DTOs
+
+### Write an Entity DTO
+
+```kotlin
+@Serializable
+data class TemplateEntityDto(
+
+    override val id: Long,
+    override val entityRecord: EntityRecordDto?,
+
+    val name: String,
+    val templateField1: String,
+    val templateField2: String,
+
+    ) : DtoWithEntityContract<TemplateEntityDto> {
+
+    companion object : DtoWithEntityCompanion<TemplateEntityDto>() {
+        override val type = "${Template.shid}/template-entity"
+    }
+
+    override fun schema() = DtoSchema.build {
+        + ::name min 1 max 100 // this comes from stack entity name limit
+        + ::templateField1 min 1 max 100
+        + ::templateField2 min 2 max 50
+    }
+
+    override fun getType() = type
+
+    override fun comm() = comm
+
+}
+```
+
+### Get Entity Related URLs
+
+To get URL for the Entity Record DTO itself by:
+
+```kotlin
+val url = EntityRecordDto.dtoUrl(id)
+    // OR when dto is an EntityRecordDto
+val url = dto.dtoUrl()
+```
+
+To get URL for the Entity Record DTO and a view:
+
+```kotlin
+val url = EntityRecordDto.viewUrl(id, "read")
+    // OR when dto is an EntityRecordDto
+val url = dto.viewUrl("read")
+```
+
+To get URL for the last revision of the binary content of the entity:
+
+```kotlin
+val url = EntityRecordDto.revisionUrl(id)
+    // OR when dto is an EntityRecordDto
+val url = dto.revisionUrl()
+```
+
+To get URL for a given revision of the binary content of the entity:
+
+```kotlin
+val revisionNumber = 23
+val url = EntityRecordDto.revisionUrl(id, revisionNumber)
+    // OR when dto is an EntityRecordDto
+val url = dto.revisionUrl(revisionNumber)
 ```
 
 ## Data Validation

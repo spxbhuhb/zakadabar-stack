@@ -90,6 +90,21 @@ data class EntityRecordDto(
         return this
     }
 
+    @PublicApi
+    fun dtoUrl() = "/api/${Stack.shid}/entities/$id"
+
+    @PublicApi
+    fun viewUrl(viewName: String? = null) = when {
+        viewName != null -> "/api/${Stack.shid}/entities/$id/$viewName"
+        else -> "/api/${Stack.shid}/entities/$id"
+    }
+
+    @PublicApi
+    fun revisionUrl(revision: Long? = null) = when (revision) {
+        null -> "/api/${Stack.shid}/entities/$id/revisions"
+        else -> "/api/${Stack.shid}/entities/$id/revisions/$revision"
+    }
+
     override fun comm() = comm
 }
 

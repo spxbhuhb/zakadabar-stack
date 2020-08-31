@@ -1,7 +1,7 @@
 ## Common
 
 * [Accounts](../cookbook/common/Accounts.md)
-* [Data](../cookbook/common/Data.md)
+* [Data](../cookbook/common/Data.md)    
 
 ## Frontend
 
