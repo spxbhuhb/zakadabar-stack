@@ -29,6 +29,11 @@ class CoreClasses(theme: Theme) : CssStyleSheet<CoreClasses>(theme) {
         height = "100%"
     }
 
+    val whMax100p by cssClass {
+        maxWidth = "100%"
+        maxHeight = "100%"
+    }
+
     val mainContent by cssClass {
         width = "100%"
         display = "flex"

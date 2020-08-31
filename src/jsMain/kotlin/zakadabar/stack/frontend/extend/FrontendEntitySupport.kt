@@ -16,18 +16,19 @@ import zakadabar.stack.util.UUID
  * [FrontendEntitySupport] are added to the
  * [FrontendContext][zakadabar.stack.frontend.FrontendContext] by module loaders.
  *
- * @param     module       The module that provides this entity type.
- * @property  companion    The companion object of the entity DTO.
- * @property  comm         The [EntityRestComm] for the DTO (defaults to standard RestComm for the companion).
- * @property  type         Type of the entity (defaults to [companion] type).
- * @property  displayName  Type name to display to the user.
- * @property  iconSource   Type icon to display to the user.
- * @property  newView      The view to use for new entity creation.
- * @property  navView      The view to use in Navigation.
- * @property  preView      The view to use when displaying a preview or summary of th entity.
- * @property  readView     The view to use when displaying the entity in read-only mode.
- * @property  editView     The view to use when displaying the entity in edit mode.
- * @property  removeView   The view to use when the user wants to remove the entity.
+ * @param     module          The module that provides this entity type.
+ * @property  companion       The companion object of the entity DTO.
+ * @property  comm            The [EntityRestComm] for the DTO (defaults to standard RestComm for the companion).
+ * @property  type            Type of the entity (defaults to [companion] type).
+ * @property  displayName     Type name to display to the user.
+ * @property  iconSource      Type icon to display to the user.
+ * @property  newView         The view to use for new entity creation.
+ * @property  navView         The view to use in Navigation.
+ * @property  preView         The view to use when displaying a preview or summary of th entity.
+ * @property  readView        The view to use when displaying the entity in read-only mode.
+ * @property  editView        The view to use when displaying the entity in edit mode.
+ * @property  removeView      The view to use when the user wants to remove the entity.
+ * @property  navigationStop  When true the entity navigator won't show the children of this entity.
  */
 class FrontendEntitySupport<T : DtoWithEntityContract<T>>(
     module: UUID,
@@ -41,7 +42,8 @@ class FrontendEntitySupport<T : DtoWithEntityContract<T>>(
     val preView: ScopedViewContract? = null,
     val readView: ScopedViewContract? = null,
     val editView: ScopedViewContract? = null,
-    val removeView: ScopedViewContract? = null
+    val removeView: ScopedViewContract? = null,
+    val navigationStop: Boolean = true
 ) {
 
     init {

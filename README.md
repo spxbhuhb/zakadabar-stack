@@ -21,6 +21,7 @@ features as we need them.
   * [The Cookbook](doc/cookbook/README.md)
   * [Knowledge Base](doc/knowledge-base/README.md)
   * [Developers Guide](doc/developers-guide/README.md)
+  * [Architects Guide](doc/architects-guide/README.md)
   * [Productivity Tips](doc/misc/Productivity.md)
   * [Espresso Lessons](doc/espresso-lessons/README.md)
   * API as soon as Dokka doesn't crash (yay 1.4)

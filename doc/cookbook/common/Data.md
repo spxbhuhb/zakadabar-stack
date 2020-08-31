@@ -65,6 +65,34 @@ That said, entities are very useful because they give you a well-defined and eas
 way to extend the system. After you define a new entity type most parts of the 
 application will automatically include it.
 
+## Get URL for an Entity
+
+To get URL for the Entity DTO itself:
+
+```kotlin
+val url = EntityDto.dtoUrl(entityDto.id)
+```
+
+To get URL for the Entity DTO and a view:
+
+```kotlin
+val url = EntityDto.viewUrl(entityDto.id, "read")
+```
+
+To get URL for the last revision of the binary content of the entity:
+
+```kotlin
+val url = EntityDto.contentUrl(entityDto.id)
+```
+
+To get URL for a given revision of the binary content of the entity:
+
+```kotlin
+val revisionNumber = 23
+val url = EntityDto.contentUrl(entityDto.id, revisionNumber)
+```
+
+
 ### Write a Query DTO
 
 As query DTOs are only used for getting data from the server we don't define a schema and a type.
