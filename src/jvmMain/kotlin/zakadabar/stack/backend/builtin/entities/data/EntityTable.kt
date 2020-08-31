@@ -19,7 +19,7 @@ import zakadabar.stack.backend.builtin.entities.data.EntityTable.revision
 import zakadabar.stack.backend.builtin.entities.data.EntityTable.size
 import zakadabar.stack.backend.builtin.entities.data.EntityTable.status
 import zakadabar.stack.backend.builtin.entities.data.EntityTable.type
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.data.entity.EntityStatus
 import zakadabar.stack.util.Executor
 import java.time.ZoneOffset
@@ -55,7 +55,7 @@ object EntityTable : LongIdTable("t_${Stack.shid}_entities") {
     val modifiedAt = datetime("modified_at")
     val modifiedBy = reference("modified_by", EntityTable)
 
-    fun toDto(row: ResultRow) = EntityDto(
+    fun toDto(row: ResultRow) = EntityRecordDto(
         id = row[id].value,
         status = row[status],
         acl = row[acl]?.value,

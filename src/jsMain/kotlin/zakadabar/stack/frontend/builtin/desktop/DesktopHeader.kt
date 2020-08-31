@@ -5,7 +5,7 @@ package zakadabar.stack.frontend.builtin.desktop
 
 import kotlinx.dom.clear
 import org.w3c.dom.events.Event
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext.dispatcher
 import zakadabar.stack.frontend.builtin.desktop.DesktopCenter.Companion.regex
 import zakadabar.stack.frontend.builtin.desktop.DesktopClasses.Companion.desktopClasses
@@ -92,7 +92,7 @@ class DesktopHeader : ComplexElement() {
             return this
         }
 
-        suspend fun update(dto: EntityDto?) {
+        suspend fun update(dto: EntityRecordDto?) {
 
             var current = dto
             val items = mutableListOf<PathItem>()

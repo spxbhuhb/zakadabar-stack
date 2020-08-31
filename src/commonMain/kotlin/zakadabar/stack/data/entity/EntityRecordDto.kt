@@ -10,7 +10,7 @@ import zakadabar.stack.extend.DtoWithRecordContract
 import zakadabar.stack.util.PublicApi
 
 @Serializable
-data class EntityDto(
+data class EntityRecordDto(
     override val id: Long,
     val acl: Long?,
     val status: EntityStatus,
@@ -21,11 +21,11 @@ data class EntityDto(
     val revision: Long,
     val modifiedBy: Long,
     val modifiedAt: Long
-) : DtoWithRecordContract<EntityDto> {
+) : DtoWithRecordContract<EntityRecordDto> {
 
-    companion object : DtoWithRecordCompanion<EntityDto>() {
+    companion object : DtoWithRecordCompanion<EntityRecordDto>() {
 
-        fun new(parentId: Long?, type: String, name: String) = EntityDto(
+        fun new(parentId: Long?, type: String, name: String) = EntityRecordDto(
             id = 0,
             acl = null,
             status = EntityStatus.Active,
@@ -80,12 +80,12 @@ data class EntityDto(
 
     }
 
-    fun requireId(id: Long): EntityDto {
+    fun requireId(id: Long): EntityRecordDto {
         require(this.id == id)
         return this
     }
 
-    fun requireType(type: String): EntityDto {
+    fun requireType(type: String): EntityRecordDto {
         require(this.type == type)
         return this
     }

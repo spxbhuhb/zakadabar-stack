@@ -6,7 +6,7 @@ package zakadabar.stack.data.security
 import kotlinx.serialization.Serializable
 import zakadabar.stack.Stack
 import zakadabar.stack.data.entity.DtoWithEntityCompanion
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.data.schema.DtoSchema
 import zakadabar.stack.extend.DtoWithEntityContract
 
@@ -14,7 +14,7 @@ import zakadabar.stack.extend.DtoWithEntityContract
 data class CommonAccountDto(
 
     override var id: Long = 0,
-    override var entityDto: EntityDto? = null,
+    override var entityRecord: EntityRecordDto? = null,
 
     var emailAddress: String = "",
     var fullName: String = "",

@@ -15,10 +15,10 @@ import zakadabar.stack.backend.builtin.entities.data.SnapshotDao
 import zakadabar.stack.backend.builtin.entities.data.SnapshotTable
 import zakadabar.stack.backend.util.ContentBlob
 import zakadabar.stack.backend.util.sql
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.util.Executor
 
-fun queryEntities(executor: Executor, id: Long? = null, parentId: Long? = null): List<EntityDto> = transaction {
+fun queryEntities(executor: Executor, id: Long? = null, parentId: Long? = null): List<EntityRecordDto> = transaction {
 
     val condition = if (id == null) {
         EntityTable.parent eq parentId
@@ -33,7 +33,7 @@ fun queryEntities(executor: Executor, id: Long? = null, parentId: Long? = null):
 }
 
 
-fun createEntity(executor: Executor, dto: EntityDto) = transaction {
+fun createEntity(executor: Executor, dto: EntityRecordDto) = transaction {
 
     val entityDao = EntityDao.create(executor, dto)
 
@@ -41,7 +41,7 @@ fun createEntity(executor: Executor, dto: EntityDto) = transaction {
 
 }
 
-fun updateEntity(executor: Executor, dto: EntityDto) = transaction {
+fun updateEntity(executor: Executor, dto: EntityRecordDto) = transaction {
 
     val entityDao = EntityDao.update(executor, dto)
 
@@ -81,7 +81,7 @@ suspend fun pushContent(executor: Executor, entityId: Long, data: ByteArray) = s
 
 }
 
-fun resolve(executor: Executor, path: List<String>): List<EntityDto> = transaction {
+fun resolve(executor: Executor, path: List<String>): List<EntityRecordDto> = transaction {
 
     var parentId: Long? = null
 

@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.desktop.messages
 
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.messaging.Message
 
 /**
@@ -20,6 +20,6 @@ data class GlobalNavigationRequest(
     val location: String
 ) : Message {
 
-    constructor(entityId: Long?, viewName: String? = null) : this(EntityDto.viewUrl(entityId, viewName))
+    constructor(entityId: Long?, viewName: String? = null) : this(EntityRecordDto.viewUrl(entityId, viewName))
 
 }

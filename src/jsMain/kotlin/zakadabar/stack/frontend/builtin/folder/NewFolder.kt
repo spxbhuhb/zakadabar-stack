@@ -4,7 +4,7 @@
 package zakadabar.stack.frontend.builtin.folder
 
 import zakadabar.stack.data.FolderDto
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.navigator.EntityNavigator
@@ -29,13 +29,13 @@ class NewFolder(newEntity: NewEntity) : NewEntityItemWithName(newEntity) {
 
     }
 
-    override suspend fun create(parentDto: EntityDto?, name: String) {
+    override suspend fun create(parentDto: EntityRecordDto?, name: String) {
 
         val parentId = parentDto?.id
 
-        val entityDto = FolderDto(id = 0, entityDto = EntityDto.new(parentId, FolderDto.type, name))
+        val dto = FolderDto(id = 0, entityRecord = EntityRecordDto.new(parentId, FolderDto.type, name))
 
-        entityDto.create()
+        dto.create()
 
     }
 

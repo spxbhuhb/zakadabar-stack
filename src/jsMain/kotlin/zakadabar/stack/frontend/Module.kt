@@ -6,7 +6,7 @@ package zakadabar.stack.frontend
 import zakadabar.stack.Stack
 import zakadabar.stack.data.FolderDto
 import zakadabar.stack.data.SystemDto
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.data.security.CommonAccountDto
 import zakadabar.stack.frontend.builtin.desktop.Desktop
 import zakadabar.stack.frontend.builtin.folder.NewFolder
@@ -30,7 +30,7 @@ object Module : FrontendModule() {
         FrontendContext += Desktop
         FrontendContext += EntityNavigator
 
-        EntityDto.comm = EntityCache
+        EntityRecordDto.comm = EntityCache
 
         FrontendContext += FrontendEntitySupport(
             Stack.uuid,

@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.util
 
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.data.security.CommonAccountDto
 import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.simple.SimpleDateTime
@@ -13,12 +13,12 @@ import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
-open class EntityStatusCard(val entityDto: EntityDto) : ComplexElement() {
+open class EntityStatusCard(val dto: EntityRecordDto) : ComplexElement() {
 
     override fun init(): EntityStatusCard {
 
         launch {
-            val accountDto = CommonAccountDto.comm.get(entityDto.modifiedBy)
+            val accountDto = CommonAccountDto.comm.get(dto.modifiedBy)
             val avatar = accountDto.avatar
 
             this cssClass coreClasses.row build {
@@ -41,7 +41,7 @@ open class EntityStatusCard(val entityDto: EntityDto) : ComplexElement() {
                     }
                     + row {
                         + t("modifiedAt")
-                        + SimpleDateTime(entityDto.modifiedAt)
+                        + SimpleDateTime(dto.modifiedAt)
                     }
                 }
             }

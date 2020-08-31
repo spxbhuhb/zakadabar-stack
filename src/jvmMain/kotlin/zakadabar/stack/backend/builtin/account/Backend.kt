@@ -55,7 +55,7 @@ object Backend : EntityRestBackend<CommonAccountDto> {
 
         // ---- create the entity record ---------
 
-        val edto = dto.entityDto?.requireType(CommonAccountDto.type) ?: throw IllegalArgumentException()
+        val edto = dto.entityRecord?.requireType(CommonAccountDto.type) ?: throw IllegalArgumentException()
 
         val edao = EntityDao.create(executor, edto) // performs authorization
 
@@ -77,7 +77,7 @@ object Backend : EntityRestBackend<CommonAccountDto> {
             it[avatar] = avatarDao?.id
         }
 
-        dto.copy(id = edao.id.value, entityDto = edao.toDto())
+        dto.copy(id = edao.id.value, entityRecord = edao.toDto())
     }
 
     override fun update(executor: Executor, dto: CommonAccountDto) = transaction {
@@ -97,7 +97,7 @@ object Backend : EntityRestBackend<CommonAccountDto> {
 
         // update the entity record
 
-        val entityDto = dto.entityDto?.requireId(dto.id) ?: throw IllegalArgumentException()
+        val entityDto = dto.entityRecord?.requireId(dto.id) ?: throw IllegalArgumentException()
 
         val entityDao = EntityDao.update(executor, entityDto) // performs authorization
 

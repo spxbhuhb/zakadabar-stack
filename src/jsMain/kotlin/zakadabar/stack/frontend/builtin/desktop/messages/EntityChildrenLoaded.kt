@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.desktop.messages
 
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.messaging.Message
 
 /**
@@ -11,6 +11,6 @@ import zakadabar.stack.messaging.Message
  */
 data class EntityChildrenLoaded(
     val entityId: Long?,
-    val children: List<EntityDto>,
+    val children: List<EntityRecordDto>,
     val error: String?
 ) : Message

@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.navigator
 
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext
 import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.icon.Icons
@@ -21,7 +21,7 @@ import zakadabar.stack.frontend.extend.FrontendEntitySupport
  */
 class NewEntity(
     private val navigator: EntityNavigator,
-    val parentDto: EntityDto?
+    val parentDto: EntityRecordDto?
 ) : ComplexElement() {
 
     private val header = NewEntityHeader(this)

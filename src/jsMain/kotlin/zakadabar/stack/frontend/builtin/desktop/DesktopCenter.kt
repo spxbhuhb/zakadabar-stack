@@ -5,7 +5,7 @@ package zakadabar.stack.frontend.builtin.desktop
 
 import kotlinx.atomicfu.atomic
 import zakadabar.stack.Stack
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext
 import zakadabar.stack.frontend.FrontendContext.entitySupports
 import zakadabar.stack.frontend.builtin.desktop.DesktopClasses.Companion.desktopClasses
@@ -94,7 +94,7 @@ open class DesktopCenter : ComplexElement() {
 
     }
 
-    open fun getMainInstance(dto: EntityDto?, view: String): ComplexElement? {
+    open fun getMainInstance(dto: EntityRecordDto?, view: String): ComplexElement? {
         if (dto == null) return null
         val entitySupport = entitySupports[dto.type] ?: return null
 

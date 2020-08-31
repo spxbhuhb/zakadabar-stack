@@ -43,7 +43,7 @@ import zakadabar.stack.backend.util.executor
 import zakadabar.stack.backend.ws.StackServerSession
 import zakadabar.stack.data.FolderDto
 import zakadabar.stack.data.SystemDto
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.data.entity.EntityStatus
 import zakadabar.stack.data.security.CommonAccountDto
 import zakadabar.stack.util.Executor
@@ -211,7 +211,7 @@ class Server : CliktCommand() {
 
             val soDto = CommonAccountDto(
                 id = 0,
-                entityDto = EntityDto.new(accountsDao.id.value, CommonAccountDto.type, "so"),
+                entityRecord = EntityRecordDto.new(accountsDao.id.value, CommonAccountDto.type, "so"),
                 emailAddress = "noreply@simplexion.hu",
                 fullName = "Security Officer",
                 displayName = "Security Officer",
@@ -223,7 +223,7 @@ class Server : CliktCommand() {
 
             val anonymousDto = CommonAccountDto(
                 id = 0,
-                entityDto = EntityDto.new(accountsDao.id.value, CommonAccountDto.type, "anonymous"),
+                entityRecord = EntityRecordDto.new(accountsDao.id.value, CommonAccountDto.type, "anonymous"),
                 emailAddress = "noreply@simplexion.hu",
                 fullName = "Anonymous",
                 displayName = "Anonymous",

@@ -22,7 +22,7 @@ object AccountTable : IdTable<Long>("t_${Stack.shid}_accounts") {
 
     fun toDto(row: ResultRow) = CommonAccountDto(
         id = row[id].value,
-        entityDto = null, // do not include entity by default
+        entityRecord = null, // do not include entity by default
         emailAddress = row[emailAddress],
         fullName = row[fullName],
         displayName = row[displayName],

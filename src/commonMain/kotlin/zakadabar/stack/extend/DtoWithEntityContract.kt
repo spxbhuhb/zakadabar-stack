@@ -3,14 +3,14 @@
  */
 package zakadabar.stack.extend
 
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 
 /**
  * A contract for DTO classes that have a corresponding entity in the entity tree.
  */
 interface DtoWithEntityContract<T> : DtoWithRecordContract<T> {
 
-    val entityDto: EntityDto?
+    val entityRecord: EntityRecordDto?
 
     fun getType(): String
 

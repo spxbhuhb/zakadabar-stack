@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.navigator
 
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.input.Input
@@ -60,5 +60,5 @@ abstract class NewEntityItemWithName(
         }
     }
 
-    abstract suspend fun create(parentDto: EntityDto?, name: String)
+    abstract suspend fun create(parentDto: EntityRecordDto?, name: String)
 }

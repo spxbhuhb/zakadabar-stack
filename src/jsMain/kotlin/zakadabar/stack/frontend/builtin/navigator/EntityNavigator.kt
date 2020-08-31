@@ -8,7 +8,7 @@ import org.w3c.dom.DataTransfer
 import org.w3c.dom.events.Event
 import zakadabar.entity.browser.frontend.util.EntityDrop
 import zakadabar.stack.data.FolderDto
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext.dispatcher
 import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.desktop.DesktopCenter
@@ -49,7 +49,7 @@ class EntityNavigator : ComplexElement() {
     private val idPrefix = "${element.id}-item-"
 
     internal var currentEntityId: Long? = null
-    internal var currentEntityDto: EntityDto? = null
+    internal var currentEntityDto: EntityRecordDto? = null
     private var selectedEntityId: Long? = null
 
     override fun init(): ComplexElement {
@@ -112,11 +112,11 @@ class EntityNavigator : ComplexElement() {
         currentEntityId = match.groupValues[3].toLongOrNull()
     }
 
-    private fun onEntityAdded(message: EntityAdded) = refresh(message.entityDto.parentId)
+    private fun onEntityAdded(message: EntityAdded) = refresh(message.dto.parentId)
 
-    private fun onEntityRemoved(message: EntityRemoved) = refresh(message.entityDto.parentId)
+    private fun onEntityRemoved(message: EntityRemoved) = refresh(message.dto.parentId)
 
-    private fun onEntityUpdated(message: EntityUpdated) = refresh(message.entityDto.parentId)
+    private fun onEntityUpdated(message: EntityUpdated) = refresh(message.dto.parentId)
 
     private fun refresh(entityId: Long?) {
         if (entityId != currentEntityId) return

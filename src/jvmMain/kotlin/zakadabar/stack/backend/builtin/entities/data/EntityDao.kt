@@ -10,7 +10,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.BackendContext
 import zakadabar.stack.backend.util.AuthorizationException
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.data.entity.EntityStatus
 import zakadabar.stack.util.Executor
 import zakadabar.stack.util.PublicApi
@@ -31,7 +31,7 @@ class EntityDao(id: EntityID<Long>) : LongEntity(id) {
     var modifiedAt by EntityTable.modifiedAt
     var modifiedBy by EntityDao referencedOn EntityTable.modifiedBy
 
-    fun toDto() = EntityDto(
+    fun toDto() = EntityRecordDto(
         id = id.value,
         acl = acl?.id?.value,
         status = status,
@@ -155,7 +155,7 @@ class EntityDao(id: EntityID<Long>) : LongEntity(id) {
          * @throws  NotFoundException        when the parent entity cannot be found
          * @throws  AuthorizationException   when the principal has no write access to the parent entity
          */
-        fun create(executor: Executor, dto: EntityDto): EntityDao {
+        fun create(executor: Executor, dto: EntityRecordDto): EntityDao {
 
             val now = LocalDateTime.now()
 
@@ -180,7 +180,7 @@ class EntityDao(id: EntityID<Long>) : LongEntity(id) {
         }
 
 
-        fun update(executor: Executor, dto: EntityDto): EntityDao {
+        fun update(executor: Executor, dto: EntityRecordDto): EntityDao {
 
             val dao = EntityDao[dto.id].requireWriteFor(executor)
 

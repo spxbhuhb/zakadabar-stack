@@ -3,12 +3,12 @@
  */
 package zakadabar.stack.frontend.builtin.desktop.messages
 
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.messaging.Message
 
 /**
  * Indicates that the given entity has been changed.
  */
 data class EntityUpdated(
-    val entityDto: EntityDto
+    val dto: EntityRecordDto
 ) : Message

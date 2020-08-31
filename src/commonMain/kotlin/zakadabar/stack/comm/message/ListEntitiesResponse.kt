@@ -7,11 +7,11 @@ import zakadabar.stack.comm.serialization.MessageType
 import zakadabar.stack.comm.serialization.ResponseCode
 import zakadabar.stack.comm.serialization.StackInputCommArray
 import zakadabar.stack.comm.serialization.StackOutputCommArray
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 
 class ListEntitiesResponse(
     override val responseCode: ResponseCode,
-    val entities: List<EntityDto>
+    val entities: List<EntityRecordDto>
 ) : Response {
 
     override var messageId = 0L
@@ -28,7 +28,7 @@ class ListEntitiesResponse(
         }
     }
 
-    fun EntityDto.write(commArray: StackOutputCommArray) {
+    fun EntityRecordDto.write(commArray: StackOutputCommArray) {
         with(commArray) {
             write(id)
             write(acl)
@@ -49,7 +49,7 @@ class ListEntitiesResponse(
             val responseCode = readResponseCode()
             val size = readInt()
 
-            val entities = mutableListOf<EntityDto>()
+            val entities = mutableListOf<EntityRecordDto>()
 
             for (index in 0 until size) {
                 entities += readEntity(commArray)
@@ -61,9 +61,9 @@ class ListEntitiesResponse(
             )
         }
 
-        private fun readEntity(commArray: StackInputCommArray): EntityDto {
+        private fun readEntity(commArray: StackInputCommArray): EntityRecordDto {
             with(commArray) {
-                return EntityDto(
+                return EntityRecordDto(
                     id = readLong(),
                     acl = readLong(),
                     status = readEntityStatus(),

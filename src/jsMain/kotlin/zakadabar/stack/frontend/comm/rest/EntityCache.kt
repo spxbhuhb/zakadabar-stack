@@ -6,7 +6,7 @@ package zakadabar.stack.frontend.comm.rest
 import org.w3c.files.Blob
 import org.w3c.files.File
 import zakadabar.stack.Stack
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.extend.EntityRestCommContract
 import zakadabar.stack.frontend.FrontendContext
 import zakadabar.stack.frontend.builtin.desktop.messages.EntityAdded
@@ -32,12 +32,12 @@ import kotlin.collections.set
  *
  */
 @PublicApi
-object EntityCache : RecordRestComm<EntityDto>("${Stack.shid}/entities", EntityDto.serializer()),
-    EntityRestCommContract<EntityDto> {
+object EntityCache : RecordRestComm<EntityRecordDto>("${Stack.shid}/entities", EntityRecordDto.serializer()),
+    EntityRestCommContract<EntityRecordDto> {
 
-    private val cache = mutableMapOf<Long, EntityDto>()
+    private val cache = mutableMapOf<Long, EntityRecordDto>()
 
-    val children = mutableMapOf<Long?, List<EntityDto>>()
+    val children = mutableMapOf<Long?, List<EntityRecordDto>>()
 
     @PublicApi
     fun clear() {
@@ -45,7 +45,7 @@ object EntityCache : RecordRestComm<EntityDto>("${Stack.shid}/entities", EntityD
         children.clear()
     }
 
-    override suspend fun get(id: Long): EntityDto {
+    override suspend fun get(id: Long): EntityRecordDto {
         val cached = cache[id]
         if (cached != null) return cached
 
@@ -54,7 +54,7 @@ object EntityCache : RecordRestComm<EntityDto>("${Stack.shid}/entities", EntityD
         return result
     }
 
-    override suspend fun getChildrenOf(parentId: Long?): List<EntityDto> {
+    override suspend fun getChildrenOf(parentId: Long?): List<EntityRecordDto> {
         val cached = children[parentId]
         if (cached != null) return cached
 
@@ -65,20 +65,20 @@ object EntityCache : RecordRestComm<EntityDto>("${Stack.shid}/entities", EntityD
         return result
     }
 
-    override suspend fun search(parameters: String): List<EntityDto> {
+    override suspend fun search(parameters: String): List<EntityRecordDto> {
         val result = super.search(parameters)
         result.forEach { cache[it.id] = it }
         return result
     }
 
-    override suspend fun create(dto: EntityDto): EntityDto {
+    override suspend fun create(dto: EntityRecordDto): EntityRecordDto {
         val result = super.create(dto)
         cache[result.id] = result
         FrontendContext.dispatcher.postSync { EntityAdded(dto) }
         return result
     }
 
-    override suspend fun update(dto: EntityDto): EntityDto {
+    override suspend fun update(dto: EntityRecordDto): EntityRecordDto {
         val result = super.update(dto)
         cache[result.id] = result
         FrontendContext.dispatcher.postSync { EntityAdded(result) }
@@ -89,7 +89,7 @@ object EntityCache : RecordRestComm<EntityDto>("${Stack.shid}/entities", EntityD
     @PublicApi
     fun launchCreateAndPush(parentId: Long?, file: File) {
         launch {
-            val dto = create(EntityDto.new(parentId, file.type, file.name))
+            val dto = create(EntityRecordDto.new(parentId, file.type, file.name))
             pushBlob(dto.id, file)
         }
     }
@@ -97,13 +97,13 @@ object EntityCache : RecordRestComm<EntityDto>("${Stack.shid}/entities", EntityD
     @PublicApi
     fun launchCreateAndPush(parentId: Long?, name: String, type: String, byteArray: ByteArray) {
         launch {
-            val dto = create(EntityDto.new(parentId, name, type))
+            val dto = create(EntityRecordDto.new(parentId, name, type))
             pushBlob(dto.id, Blob(byteArray.toTypedArray()))
         }
     }
 
     @PublicApi
-    fun launchGetChildren(parentId: Long?, onFinish: (children: List<EntityDto>, error: String?) -> Unit) {
+    fun launchGetChildren(parentId: Long?, onFinish: (children: List<EntityRecordDto>, error: String?) -> Unit) {
         launch {
             try {
                 onFinish(children[parentId] ?: getChildrenOf(parentId), null)

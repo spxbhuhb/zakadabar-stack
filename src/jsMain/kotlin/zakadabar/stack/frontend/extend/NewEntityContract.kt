@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.extend
 
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.builtin.icon.Icons
 
 /**
@@ -11,7 +11,7 @@ import zakadabar.stack.frontend.builtin.icon.Icons
  */
 abstract class NewEntityContract : ScopedViewContract() {
 
-    open fun supportsParent(dto: EntityDto?) = true
+    open fun supportsParent(dto: EntityRecordDto?) = true
 
     abstract val name: String
 

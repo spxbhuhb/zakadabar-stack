@@ -70,26 +70,26 @@ application will automatically include it.
 To get URL for the Entity DTO itself:
 
 ```kotlin
-val url = EntityDto.dtoUrl(entityDto.id)
+val url = EntityDto.dtoUrl(dto.id)
 ```
 
 To get URL for the Entity DTO and a view:
 
 ```kotlin
-val url = EntityDto.viewUrl(entityDto.id, "read")
+val url = EntityDto.viewUrl(dto.id, "read")
 ```
 
 To get URL for the last revision of the binary content of the entity:
 
 ```kotlin
-val url = EntityDto.contentUrl(entityDto.id)
+val url = EntityDto.revisionUrl(dto.id)
 ```
 
 To get URL for a given revision of the binary content of the entity:
 
 ```kotlin
 val revisionNumber = 23
-val url = EntityDto.contentUrl(entityDto.id, revisionNumber)
+val url = EntityDto.revisionUrl(dto.id, revisionNumber)
 ```
 
 

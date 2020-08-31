@@ -19,7 +19,7 @@ class AccountDao(id: EntityID<Long>) : LongEntity(id) {
 
     fun toDto() = CommonAccountDto(
         id = id.value,
-        entityDto = null, // do not include entity by default
+        entityRecord = null, // do not include entity by default
         emailAddress = emailAddress,
         fullName = fullName,
         displayName = displayName,

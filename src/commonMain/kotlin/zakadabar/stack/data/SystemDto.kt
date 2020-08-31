@@ -6,7 +6,7 @@ package zakadabar.stack.data
 import kotlinx.serialization.Serializable
 import zakadabar.stack.Stack
 import zakadabar.stack.data.entity.DtoWithEntityCompanion
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.extend.DtoWithEntityContract
 import zakadabar.stack.util.PublicApi
 
@@ -15,7 +15,7 @@ import zakadabar.stack.util.PublicApi
 data class SystemDto(
 
     override val id: Long,
-    override val entityDto: EntityDto?
+    override val entityRecord: EntityRecordDto?
 
 ) : DtoWithEntityContract<SystemDto> {
 

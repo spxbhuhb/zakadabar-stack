@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.navigator
 
-import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.navigator.NavigatorClasses.Companion.navigatorClasses
@@ -12,21 +12,21 @@ import zakadabar.stack.frontend.util.svg
 
 class EntityNavigatorItem(
     private val idPrefix: String,
-    private val entityDto: EntityDto
+    private val dto: EntityRecordDto
 ) : ComplexElement() {
 
     override fun init(): EntityNavigatorItem {
-        val support = FrontendContext.entitySupports[entityDto.type]
+        val support = FrontendContext.entitySupports[dto.type]
 
         val iconSource = support?.iconSource ?: Icons.description
         val typeName = support?.displayName ?: FrontendContext.t("entity")
 
         var html = ""
 
-        html += """<div id="${idPrefix}${entityDto.id}" class="${navigatorClasses.entityListItem}">"""
+        html += """<div id="${idPrefix}${dto.id}" class="${navigatorClasses.entityListItem}">"""
         html += svg(iconSource.content, navigatorClasses.entityListIcon, 16) // FIXME cache icons somehow
-        html += """<div class=${navigatorClasses.entityListName}>${entityDto.name}</div>"""
-        html += """<div class=${navigatorClasses.entityListDetail}>${typeName} #${entityDto.id}</div>"""
+        html += """<div class=${navigatorClasses.entityListName}>${dto.name}</div>"""
+        html += """<div class=${navigatorClasses.entityListDetail}>${typeName} #${dto.id}</div>"""
         html += "</div>"
 
         innerHTML = html

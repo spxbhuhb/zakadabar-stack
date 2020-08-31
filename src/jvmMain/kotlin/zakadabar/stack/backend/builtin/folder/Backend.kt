@@ -32,33 +32,33 @@ object Backend : EntityRestBackend<FolderDto> {
                 .map {
                     FolderDto(
                         id = it[EntityTable.id].value,
-                        entityDto = EntityTable.toDto(it)
+                        entityRecord = EntityTable.toDto(it)
                     )
                 }
         }
 
     override fun create(executor: Executor, dto: FolderDto) = transaction {
 
-        val entityDto = dto.entityDto?.requireType(FolderDto.type) ?: throw IllegalArgumentException()
+        val entityDto = dto.entityRecord?.requireType(FolderDto.type) ?: throw IllegalArgumentException()
 
         val dao = EntityDao.create(executor, entityDto)
 
         FolderDto(
             id = dao.id.value,
-            entityDto = dao.toDto()
+            entityRecord = dao.toDto()
         )
 
     }
 
     override fun update(executor: Executor, dto: FolderDto) = transaction {
 
-        val entityDto = dto.entityDto ?: throw IllegalArgumentException()
+        val entityDto = dto.entityRecord ?: throw IllegalArgumentException()
 
         val entityDao = EntityDao.update(executor, entityDto)
 
         FolderDto(
             id = entityDao.id.value,
-            entityDto = entityDao.toDto()
+            entityRecord = entityDao.toDto()
         )
     }
 }
