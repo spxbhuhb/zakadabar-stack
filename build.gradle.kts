@@ -2,8 +2,6 @@
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
-import java.util.*
-
 plugins {
     kotlin("multiplatform") version "1.4.0"
     kotlin("plugin.serialization") version "1.4.0"
@@ -160,19 +158,13 @@ publishing {
             mavenLocal()
         }
     } else {
-
-        val properties = Properties()
-        val propFile = File(project.findProperty("gpr.properties").toString())
-
-        properties.load(propFile.inputStream())
-
         repositories {
             maven {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/$path")
                 credentials {
-                    username = properties["user"].toString()
-                    password = properties["key"].toString()
+                    username = (properties["github.user"] ?: System.getenv("USERNAME")).toString()
+                    password = (properties["github.key"] ?: System.getenv("TOKEN")).toString()
                 }
             }
         }

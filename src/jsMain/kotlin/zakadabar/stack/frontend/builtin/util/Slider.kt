@@ -7,6 +7,7 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.elements.SimpleElement
 import kotlin.math.max
 import kotlin.math.min
 
@@ -35,7 +36,7 @@ import kotlin.math.min
 open class Slider(
     private val container: ComplexElement,
     private val subject: ComplexElement,
-    private val attached: List<ComplexElement> = emptyList(),
+    private val attached: List<SimpleElement> = emptyList(),
     private val orientation: Orientation = Orientation.Vertical,
     private val reverse: Boolean = false,
     private val minSize: Double = 26.0, // TODO this comes from the style/theme: header icon dimensions
@@ -52,8 +53,7 @@ open class Slider(
     override fun init(): ComplexElement {
         super.init()
 
-        className =
-            if (orientation == Orientation.Vertical) coreClasses.verticalSlider else coreClasses.horizontalSlider
+        className = if (orientation == Orientation.Vertical) coreClasses.verticalSlider else coreClasses.horizontalSlider
 
         on("mousedown", ::onMouseDown)
         container.on("mouseup", ::onMouseUp)

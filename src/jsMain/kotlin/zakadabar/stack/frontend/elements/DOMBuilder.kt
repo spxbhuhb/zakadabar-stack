@@ -178,8 +178,8 @@ class DOMBuilder(
      */
     fun complex(): ComplexElement {
         val ce = ComplexElement()
-        parentComplex?.childElements?.plusAssign(ce)
         current.appendChild(ce.element)
+        parentComplex?.childElements?.plusAssign(ce)
         return ce
     }
 
@@ -284,8 +284,8 @@ class DOMBuilder(
      */
     operator fun ComplexElement.unaryPlus(): ComplexElement {
         require(parentComplex != null) { "cannot add complex element to simple element" }
-        parentComplex.childElements += this.init()
         current.appendChild(this.element)
+        parentComplex.childElements += this.init()
         return this
     }
 

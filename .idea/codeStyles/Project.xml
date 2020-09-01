@@ -1,6 +1,8 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
+    <option name="RIGHT_MARGIN" value="200" />
     <option name="FORMATTER_TAGS_ENABLED" value="true" />
+    <option name="SOFT_MARGINS" value="80,120,160" />
     <JetCodeStyleSettings>
       <option name="PACKAGES_TO_USE_STAR_IMPORTS">
         <value>

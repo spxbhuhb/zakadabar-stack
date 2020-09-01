@@ -132,22 +132,22 @@ open class ComplexElement(
 
     operator fun plusAssign(children: List<SimpleElement>) {
         children.forEach { child ->
-            childElements += child.init()
             this.element.appendChild(child.element)
+            childElements += child.init()
         }
     }
 
     operator fun plusAssign(child: SimpleElement?) {
         if (child == null) return
-        childElements += child.init()
         this.element.appendChild(child.element)
+        childElements += child.init()
     }
 
     @PublicApi
     infix fun insertFirst(child: SimpleElement?) {
         if (child == null) return
-        childElements.add(0, child.init())
         this.element.insertBefore(child.element, this.element.firstChild)
+        childElements.add(0, child.init())
     }
 
     fun insertAfter(child: SimpleElement?, after: SimpleElement?) {
@@ -160,8 +160,8 @@ open class ComplexElement(
                 - 1 -> plusAssign(child)
                 childElements.lastIndex -> plusAssign(child)
                 else -> {
-                    childElements.add(index + 1, child.init())
                     this.element.insertBefore(child.element, childElements[index].element.nextElementSibling)
+                    childElements.add(index + 1, child.init())
                 }
             }
         }
@@ -180,8 +180,8 @@ open class ComplexElement(
         if (index == - 1) {
             plusAssign(child)
         } else {
-            childElements.add(index, child.init())
             this.element.insertBefore(child.element, childElements[index].element)
+            childElements.add(index, child.init())
         }
 
     }

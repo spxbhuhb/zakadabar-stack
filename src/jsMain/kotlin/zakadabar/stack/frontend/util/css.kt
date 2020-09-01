@@ -309,6 +309,42 @@ class CssStyleRule(val sheet: CssStyleSheet<*>, val cssClassName: String) {
             styles["font-stretch"] = value
         }
 
+    var gridColumnEnd: Int?
+        get() = styles["grid-column-end"]?.toInt()
+        set(value) {
+            styles["grid-column-end"] = value.toString()
+        }
+
+    var gridColumnStart: Int?
+        get() = styles["grid-column-start"]?.toInt()
+        set(value) {
+            styles["grid-column-start"] = value.toString()
+        }
+
+    var gridRowEnd: Int?
+        get() = styles["grid-row-end"]?.toInt()
+        set(value) {
+            styles["grid-row-end"] = value.toString()
+        }
+
+    var gridRowStart: Int?
+        get() = styles["grid-row-start"]?.toInt()
+        set(value) {
+            styles["grid-row-start"] = value.toString()
+        }
+
+    var gridTemplateColumns: String?
+        get() = styles["grid-template-columns"]
+        set(value) {
+            styles["grid-template-columns"] = value
+        }
+
+    var gridTemplateRows: String?
+        get() = styles["grid-template-rows"]
+        set(value) {
+            styles["grid-template-rows"] = value
+        }
+
     var height: Any?
         get() = styles["height"]
         set(value) {
