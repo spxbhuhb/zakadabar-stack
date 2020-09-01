@@ -17,6 +17,7 @@ import zakadabar.stack.backend.util.ContentBlob
 import zakadabar.stack.backend.util.sql
 import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.util.Executor
+import java.time.LocalDateTime
 
 fun queryEntities(executor: Executor, id: Long? = null, parentId: Long? = null): List<EntityRecordDto> = transaction {
 
@@ -77,7 +78,10 @@ suspend fun pushContent(executor: Executor, entityId: Long, data: ByteArray) = s
     val blob = ContentBlob(snapshot.content)
     blob.write(0, data)
 
+    entityDao.modifiedAt = LocalDateTime.now()
+    entityDao.modifiedBy = EntityDao[executor.entityId]
     entityDao.revision = snapshot.revision
+    entityDao.size = data.size.toLong()
 
 }
 
