@@ -8,9 +8,9 @@ All non-static backend routes are:
 * under `/api/<shid>/`
 * authenticated (see [Accounts](../common/Accounts.md) for more information) 
 
-## Add REST Routing for an Entity Type
+## Add REST Routing for a Record DTO
 
-To route REST requests for an entity type use the `restApi` helper function from 
+To route REST requests for an entity type use the `recordRestApi` helper function from 
 [restApi.kt](../../../src/jvmMain/kotlin/zakadabar/stack/backend/extend/restApi.kt)
 in the [Module](Modules.md) file.
 
@@ -25,7 +25,29 @@ in the [Module](Modules.md) file.
     //   POST   /api/<shid>/<data-name>
     //   PATCH  /api/<shid>/<data-name>
      
-    restApi(route, Backend, YourData::class, YourData.type) 
+    recordRestApi(route, Backend, YourData::class, YourData.type) 
+
+}
+```
+
+## Add REST Routing for an Entity DTO
+
+To route REST requests for an entity type use the `entityRestApi` helper function from 
+[restApi.kt](../../../src/jvmMain/kotlin/zakadabar/stack/backend/extend/restApi.kt)
+in the [Module](Modules.md) file.
+
+```kotlin
+ override fun install(route: Route) {
+
+    // this routing serves (data-name is the part after "/" in the DTO type):
+    //
+    //   GET    /api/<shid>/<data-name>
+    //   GET    /api/<shid>/<data-name>/<id>
+    //   GET    /api/<shid>/<data-name>?parent=<parent-id>
+    //   POST   /api/<shid>/<data-name>
+    //   PATCH  /api/<shid>/<data-name>
+     
+    entityRestApi(route, Backend, YourData::class, YourData.type) 
 
 }
 ```
@@ -36,7 +58,6 @@ To route non-rest requests add a Ktor route like this. You may mix REST and non-
 
 Have a look at [Server Routing](https://ktor.io/servers/features/routing.html) to get more
 information.
-
 
 ```kotlin
  override fun install(route: Route) {
@@ -55,6 +76,7 @@ information.
 
 }
 ```
+
 ## Add WebSocket Routing
 
 For using WebSockets in Ktor check [WebSockets](https://ktor.io/servers/features/websockets.html).

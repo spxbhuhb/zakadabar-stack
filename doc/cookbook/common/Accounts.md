@@ -1,15 +1,72 @@
 # Accounts
 
-## Frontend: Account of the User
+## Frontend
 
-The account of the frontend user is available in [FrontendContext.executor](../../src/jsMain/kotlin/zakadabar/stack/frontend/FrontendContext.kt)
+### Get Account of the User on the Frontend
+
+The account of the frontend user is available in [FrontendContext.executor](../../../src/jsMain/kotlin/zakadabar/stack/frontend/FrontendContext.kt)
 
 There is **always** an account, it must not be empty. 
 
-[FrontendContext.init](../../src/jsMain/kotlin/zakadabar/stack/frontend/FrontendContext.kt) fetches the account during bootstrap:
+[FrontendContext.init](../../../src/jsMain/kotlin/zakadabar/stack/frontend/FrontendContext.kt) fetches the account during bootstrap:
 
 * when there is an active session: the user of the session,
 * when the user haven't logged in yet: the account named "anonymous".
+
+## Backend
+
+### Get Account of the User on the Backend
+
+The backend provides an extension function to Ktor's `ApplicationCall` that returns with an 
+[Executor](../../../src/jvmMain/kotlin/zakadabar/stack/util/Executor.kt) instance.
+
+This instance has an `entityId` field which stores the id of the entity that executes the code.
+
+When you use `entityRestApi` or `recordRestApi` the API wrapper passes the backend to your backend
+implementation as the first parameter of the called method:
+
+```kotlin
+interface EntityRestBackend<T> {
+
+    fun query(executor: Executor, id: Long? = null, parentId: Long? = null): List<T>
+
+    fun create(executor: Executor, dto: T): T
+
+    fun update(executor: Executor, dto: T): T
+
+}
+```
+
+When you use your own routing you can get the executor like this:
+
+```kotlin
+ override fun install(route: Route) {
+    with(route) {
+        get("/statistics") { 
+            val executor = call.executor()
+            BackendContext.requireRole(executor, "/system/roles/statistician")
+            call.respondText("some statistics for $executor") 
+        }
+    }
+}
+```
+
+## User Passwords
+
+If you implement your own backend you have to encrypt and validate user passwords. To do so
+use the [BCrypt](../../../src/jvmMain/kotlin/zakadabar/stack/util/BCrypt.kt) utility.
+
+To Encrypt:
+
+```kotlin
+val passwordHash = BCrypt.hashpw(plain_password, BCrypt.gensalt())
+``` 
+
+To Validate:
+
+```kotlin
+if ( ! BCrypt.checkpw(candidate_password, stored_hash)) throw Unauthorized()
+```
 
 ## Providing Account Data for Other Modules
 

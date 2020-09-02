@@ -17,6 +17,7 @@ object AccountTable : IdTable<Long>("t_${Stack.shid}_accounts") {
     val displayName = varchar("display_name", 20)
     val organizationName = varchar("organization_name", 100)
     val avatar = reference("avatar", EntityTable).nullable()
+    val password = varchar("password", 100).default("")
 
     override val primaryKey = PrimaryKey(id)
 
@@ -28,6 +29,7 @@ object AccountTable : IdTable<Long>("t_${Stack.shid}_accounts") {
         displayName = row[displayName],
         organizationName = row[organizationName],
         avatar = row[avatar]?.value
+        // IMPORTANT Do not send out the password!
     )
 
 }

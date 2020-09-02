@@ -17,6 +17,7 @@ import zakadabar.stack.backend.builtin.entities.data.EntityTable
 import zakadabar.stack.backend.extend.EntityRestBackend
 import zakadabar.stack.data.entity.EntityStatus
 import zakadabar.stack.data.security.CommonAccountDto
+import zakadabar.stack.util.BCrypt
 import zakadabar.stack.util.Executor
 
 object Backend : EntityRestBackend<CommonAccountDto> {
@@ -75,6 +76,7 @@ object Backend : EntityRestBackend<CommonAccountDto> {
             it[displayName] = dto.displayName
             it[organizationName] = dto.organizationName
             it[avatar] = avatarDao?.id
+            it[password] = BCrypt.hashpw(dto.password, BCrypt.gensalt(10)) // TODO get salt number from config
         }
 
         dto.copy(id = edao.id.value, entityRecord = edao.toDto())

@@ -1,8 +1,8 @@
 # Authentication
 
-Highlights:
+**Highlights**
 
-* as soon as the browser connects a session is created, no exceptions
+* as soon as the frontend connects the backend creates a session, no exceptions
 * the session has an `executor`: the entity who owns the session
 * before logging in, the session executor is the user named "anonymous"
 * all routes are inside Ktor's `authenticate`, no exceptions (but the user may be "anonymous")

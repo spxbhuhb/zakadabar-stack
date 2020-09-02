@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class Configuration(
+    val serverName: String = "Zakadabar Server",
     val database: DatabaseConfig,
     val systemApiKey: String? = null,
     val traceRouting: Boolean = false,

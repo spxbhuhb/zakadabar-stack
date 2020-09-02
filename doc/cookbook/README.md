@@ -4,7 +4,9 @@
 
 ## Common
 
-* [Accounts](common/Accounts.md)
+* Users
+    * [Accounts](common/Accounts.md)
+    * [Authentication](common/Authentication.md)
 * Data
     * [Write a Query DTO](common/Data.md#Write-a-Query-DTO)
     * [Write a Record DTO](common/Data.md#Write-a-Record-DTO)
@@ -39,17 +41,23 @@
     * [Add the Dock](frontend/Dock.md#Add-the-Dock)
     * [Dock an Element](frontend/Dock.md#Dock-an-Element)
     * [Remove a Docked Element](frontend/Dock.md#Remove-a-Docked-Element)
+* Users
+    * [Get Account of the User on the Frontend](common/Accounts.md#Get-Account-of-the-User-on-the-Frontend)
 
 ## Backend
 
 * Modules
     * [Write a Backend Module](backend/Modules.md#Write-a-Backend-Module)
 * Routing
-    * [Add REST Routing for an Entity Type](backend/Routing.md#Add-REST-Routing-for-an-Entity-Type)
+    * [Add REST Routing for a Record DTO](backend/Routing.md#Add-REST-Routing-for-a-Record-DTO)
+    * [Add REST Routing for an Entity DTO](backend/Routing.md#Add-REST-Routing-for-an-Entity-DTO)
     * [Add Non REST Routing](backend/Routing.md#Add-Non-REST-Routing)
     * [Add WebSocket Routing](backend/Routing.md#Add-WebSocket-Routing)
 * Data
     * [Backend for a Query DTO](common/Data.md#Backend-for-a-Query-DTO)
     * [Backend for a Record DTO](common/Data.md#Backend-for-a-Record-DTO)
     * [Validate Data on the Backend](common/Data.md#Validate-Data-on-the-Backend)
+* Users
+    * [Get Account of the User on the Backend](common/Accounts.md#Get-Account-of-the-User-on-the-Backend)
+
 

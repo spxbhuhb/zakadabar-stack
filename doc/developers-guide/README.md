@@ -1,6 +1,7 @@
 ## Common
 
 * [Accounts](../cookbook/common/Accounts.md)
+* [Authentication](../cookbook/common/Authentication.md)
 * [Data](../cookbook/common/Data.md)    
 
 ## Frontend

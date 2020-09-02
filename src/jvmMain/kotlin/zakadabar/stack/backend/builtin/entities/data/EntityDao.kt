@@ -126,11 +126,11 @@ class EntityDao(id: EntityID<Long>) : LongEntity(id) {
 
             val now = LocalDateTime.now()
 
-            val domainId = BackendContext.requireWriteFor(executor, parentId)
+            BackendContext.requireWriteFor(executor, parentId)
 
             return EntityDao.new {
                 this.name = name
-                acl = EntityDao[domainId]
+                acl = null
                 this.status = status
                 this.parent = if (parentId == null) null else EntityDao[parentId]
                 type = mimeType

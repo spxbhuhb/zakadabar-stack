@@ -87,6 +87,12 @@ class Server : CliktCommand() {
 
             install(Authentication) {
                 session()
+
+                basic(name = "basic") {
+                    realm = config.serverName
+                    validate { credentials -> return@validate Executor(BackendContext.anonymous.id.value) }
+                }
+
             }
 
             install(ContentNegotiation) {
@@ -103,6 +109,22 @@ class Server : CliktCommand() {
 
             routing {
                 if (config.traceRouting) trace { wsLogger.trace(it.buildText()) }
+
+                route("auth") {
+                    authenticate("basic") {
+                        route("basic") {
+                            get("login") {
+                                // FIXME not system :D
+                                call.sessions.set(StackSession(BackendContext.system.id.value))
+                                call.respondText(BackendContext.system.id.value.toString(), ContentType.Application.Json)
+                            }
+                            get("logout") {
+                                call.sessions.set(StackSession(BackendContext.anonymous.id.value))
+                                call.respondText(BackendContext.anonymous.id.value.toString(), ContentType.Application.Json)
+                            }
+                        }
+                    }
+                }
 
                 authenticate {
 
@@ -128,11 +150,13 @@ class Server : CliktCommand() {
 
                     }
 
+                    // TODO move static stuff under an URL like "static/"
                     static {
                         staticRootFolder = File(config.staticResources)
                         files(".")
                         default("index.html")
                     }
+
                 }
 
             }
@@ -216,7 +240,8 @@ class Server : CliktCommand() {
                 fullName = "Security Officer",
                 displayName = "Security Officer",
                 organizationName = "Simplexion Kft.",
-                avatar = null
+                avatar = null,
+                password = "df;kgh32yfsdhfoia"
             )
 
             AccountBackend.create(pid, soDto)
@@ -228,7 +253,8 @@ class Server : CliktCommand() {
                 fullName = "Anonymous",
                 displayName = "Anonymous",
                 organizationName = "Simplexion Kft.",
-                avatar = null
+                avatar = null,
+                password = "df;kgh32yfsdhfoia"
             )
 
             AccountBackend.create(pid, anonymousDto)

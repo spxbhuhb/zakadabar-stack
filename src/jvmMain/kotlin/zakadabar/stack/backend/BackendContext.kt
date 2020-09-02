@@ -19,7 +19,7 @@ object BackendContext {
 
     val system by lazy {
         transaction {
-            EntityDao.find { (EntityTable.name eq "system") and (EntityTable.type eq SystemDto.type) }.firstOrNull() !!
+            EntityDao.find { EntityTable.parent.isNull() and (EntityTable.type eq SystemDto.type) }.firstOrNull() !!
         }
     }
 
@@ -38,18 +38,12 @@ object BackendContext {
     }
 
     /**
-     * Require write access on the entity for the given principal.
-     *
-     * @param   entityId  Id of the entity to request write access on. When it is
-     *                    null, the request is for creating a top-level entity without
-     *                    a parent.
-     *
-     * @return  security domain the entity belongs to
+     * Require write access for the given executor on the given entity.
      *
      * @throws  AuthorizationException
      */
-    fun requireWriteFor(executor: Executor, entityId: Long?): Long {
-        return 1L
+    fun requireWriteFor(executor: Executor, entityId: Long?) {
+        // FIXME implement auth check
     }
 
     /**
@@ -57,7 +51,17 @@ object BackendContext {
      * security domain.
      */
     fun hasReadAccess(executor: Executor, entityStatus: EntityStatus, aclId: Long?): Boolean {
+        // FIXME implement auth check
         return true
+    }
+
+    /**
+     * Require that the executor has the given role.
+     *
+     * @throws  AuthorizationException
+     */
+    fun requireRole(executor: Executor, rolePath: String) {
+        // FIXME implement role check
     }
 
 }

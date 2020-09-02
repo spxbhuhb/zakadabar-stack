@@ -20,7 +20,8 @@ data class CommonAccountDto(
     var fullName: String = "",
     var displayName: String = "",
     var organizationName: String = "",
-    var avatar: Long? = null
+    var avatar: Long? = null,
+    var password: String = ""
 
 ) : DtoWithEntityContract<CommonAccountDto> {
 

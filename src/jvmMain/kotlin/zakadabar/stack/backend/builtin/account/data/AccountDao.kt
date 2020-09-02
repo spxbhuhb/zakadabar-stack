@@ -16,6 +16,7 @@ class AccountDao(id: EntityID<Long>) : LongEntity(id) {
     var displayName by AccountTable.displayName
     var organizationName by AccountTable.organizationName
     var avatar by AccountTable.avatar
+    val password by AccountTable.password
 
     fun toDto() = CommonAccountDto(
         id = id.value,
@@ -25,5 +26,6 @@ class AccountDao(id: EntityID<Long>) : LongEntity(id) {
         displayName = displayName,
         organizationName = organizationName,
         avatar = avatar?.value
+        // IMPORTANT Do not send out the password!
     )
 }
