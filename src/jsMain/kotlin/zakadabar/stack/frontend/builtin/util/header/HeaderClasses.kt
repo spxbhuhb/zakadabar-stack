@@ -17,6 +17,7 @@ open class HeaderClasses(theme: Theme) : CssStyleSheet<HeaderClasses>(theme) {
         display = "flex"
         flexDirection = "row"
         boxSizing = "border-box"
+        minHeight = theme.headerHeight
         height = theme.headerHeight
         alignItems = "center"
         backgroundColor = theme.headerBackground

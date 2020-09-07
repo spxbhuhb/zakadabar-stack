@@ -5,6 +5,7 @@ package zakadabar.stack.frontend.builtin.dock
 
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.elements.SimpleElement
 
 /**
  * Contains [DockedElement]s and shows them over the normal content. The items
@@ -17,5 +18,33 @@ class Dock : ComplexElement() {
     override fun init(): Dock {
         className = coreClasses.dock
         return this
+    }
+
+    /**
+     * A modified version of [ComplexElement.minusAssign] to remove a child.
+     * This version checks the content field of [DockedElement] children
+     * and removes the [DockedElement] if the content field contains the
+     * element passed in the [child] parameter.
+     */
+    override operator fun minusAssign(child: SimpleElement?) {
+
+        if (child == null) return
+
+        if (childElements.contains(child)) {
+            childElements -= child
+            child.cleanup()
+            child.element.remove()
+            return
+        }
+
+        for (candidate in childElements) {
+            if (candidate !is DockedElement) continue
+            if (candidate.content != child) continue
+            childElements -= candidate
+            candidate.cleanup()
+            candidate.element.remove()
+            return
+        }
+
     }
 }

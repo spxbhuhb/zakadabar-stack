@@ -186,7 +186,7 @@ open class ComplexElement(
 
     }
 
-    operator fun minusAssign(child: SimpleElement?) {
+    open operator fun minusAssign(child: SimpleElement?) {
         if (child == null) return
 
         childElements -= child

@@ -30,11 +30,11 @@ document.body?.appendChild(FrontendContext.dock.element)
 ## Dock an Element
 
 ```kotlin
-val dockedHelloWorld = SimpleText("Hello World!").grow().build {
+val helloWorld = SimpleText("Hello World!").grow().build {
     current.style.backgroundColor = "gray"
 }
 
-FrontendContext.dock += DockElement(Icons.menu.simple16, "hello", DockItemState.Minimized, dockedHelloWorld)
+FrontendContext.dock += DockedElement(Icons.menu.simple16, "hello", DockItemState.Minimized, helloWorld)
 ```
 
 ## Remove a Docked Element
@@ -43,6 +43,26 @@ If you use DockedItem the user can remove the docked element by clicking on the 
 
 The close icon calls `onClose` of the DockItem.
 
+To remove the docked item manually you can remove the docked element itself **or** the content of the docked element.
+
+```kotlin
+val helloWorld = SimpleText("Hello World!").grow().build {
+    current.style.backgroundColor = "gray"
+}
+
+FrontendContext.dock += DockedElement(Icons.menu.simple16, "hello", DockItemState.Minimized, helloWorld)
+
+FrontendContext.dock -= helloWorld
 ```
-dock -= dockedHelloWorld
+
+```kotlin
+val helloWorld = SimpleText("Hello World!").grow().build {
+    current.style.backgroundColor = "gray"
+}
+
+val dockedHelloWorld = DockedElement(Icons.menu.simple16, "hello", DockItemState.Minimized, dockedHelloWorld)
+
+FrontendContext.dock += dockedHelloWorld
+
+FrontendContext.dock -= dockedHelloWorld
 ```
