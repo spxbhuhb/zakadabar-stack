@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2020.9.7"
+version = "2020.9.14-SNAPSHOT"
 
 val isSnapshot = version.toString().contains("SNAPSHOT")
 
@@ -19,6 +19,7 @@ val isSnapshot = version.toString().contains("SNAPSHOT")
 val ktorVersion = "1.4.0"
 val coroutinesVersion = "1.3.9"
 val serializationVersion = "1.0.0-RC"
+val datetimeVersion = "0.1.0"
 val cliktVersion = "2.8.0"
 
 // jvm
@@ -30,6 +31,7 @@ val kamlVersion = "0.19.0"
 repositories {
     jcenter()
     mavenCentral()
+    maven(url = "https://kotlin.bintray.com/kotlinx/") // for kotlinx.datetime, to be changed to jcenter()
 }
 
 kotlin {
@@ -63,6 +65,7 @@ kotlin {
             dependencies {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-core:$serializationVersion")
+                api("org.jetbrains.kotlinx:kotlinx-datetime:$datetimeVersion")
                 api("io.ktor:ktor-client-core:$ktorVersion")
                 api("io.ktor:ktor-client-websockets:$ktorVersion")
             }

@@ -40,7 +40,7 @@ class EntityDao(id: EntityID<Long>) : LongEntity(id) {
         type = type,
         name = name,
         size = size,
-        modifiedAt = modifiedAt.toEpochSecond(ZoneOffset.UTC),
+        modifiedAt = modifiedAt.toEpochSecond(ZoneOffset.UTC) * 1000, // TODO don't loose precision
         modifiedBy = modifiedBy.id.value
     )
 

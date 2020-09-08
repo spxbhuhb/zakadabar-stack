@@ -40,7 +40,7 @@ object Api {
                         call.respond(updateEntity(call.executor(), call.receive()))
                     }
 
-                    get("revisions/{revision}") {
+                    get("revisions/{revision?}") {
                         val (name, data) = fetchContent(
                             call.executor(),
                             call.parameters["id"]?.toLongOrNull() ?: throw BadRequestException("invalid entity id"),

@@ -64,7 +64,7 @@ object EntityTable : LongIdTable("t_${Stack.shid}_entities") {
         name = row[name],
         size = row[size],
         revision = row[revision],
-        modifiedAt = row[modifiedAt].toEpochSecond(ZoneOffset.UTC),
+        modifiedAt = row[modifiedAt].toEpochSecond(ZoneOffset.UTC) * 1000, // TODO don't loose precision
         modifiedBy = row[modifiedBy].value
     )
 

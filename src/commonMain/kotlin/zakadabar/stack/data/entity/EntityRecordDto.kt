@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.data.entity
 
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import zakadabar.stack.Stack
 import zakadabar.stack.data.DtoWithRecordCompanion
@@ -48,6 +49,15 @@ data class EntityRecordDto(
         }
 
         /**
+         * Get an URL for the list of children of the given entity (or root).
+         */
+        @PublicApi
+        fun childrenUrl(entityId: Long? = null) = when (entityId) {
+            null -> "/api/${Stack.shid}/entities"
+            else -> "/api/${Stack.shid}/entities?parent=$entityId"
+        }
+
+        /**
          * Get url for an entity id and a view.
          *
          * @param  entityId  Id of the entity to get view URL for.
@@ -77,7 +87,6 @@ data class EntityRecordDto(
          */
         @PublicApi
         fun resolveUrl(entityPath: String) = "/api/${Stack.shid}/resolve/${entityPath.trim('/')}"
-
     }
 
     fun requireId(id: Long): EntityRecordDto {
@@ -91,18 +100,20 @@ data class EntityRecordDto(
     }
 
     @PublicApi
-    fun dtoUrl() = "/api/${Stack.shid}/entities/$id"
+    fun dtoUrl() = Companion.dtoUrl(this.id)
 
     @PublicApi
-    fun viewUrl(viewName: String? = null) = when {
-        viewName != null -> "/api/${Stack.shid}/entities/$id/$viewName"
-        else -> "/api/${Stack.shid}/entities/$id"
-    }
+    fun viewUrl(viewName: String? = null) = Companion.viewUrl(this.id, viewName)
 
     @PublicApi
-    fun revisionUrl(revision: Long? = null) = when (revision) {
-        null -> "/api/${Stack.shid}/entities/$id/revisions"
-        else -> "/api/${Stack.shid}/entities/$id/revisions/$revision"
+    fun revisionUrl(revision: Long? = null) = Companion.revisionUrl(this.id, revision)
+
+    @PublicApi
+    fun childrenUrl() = Companion.childrenUrl(this.id)
+
+    fun prettyPrint(): String {
+        val ts = Instant.fromEpochMilliseconds(modifiedAt)
+        return "# ${id.toString().padEnd(6)}  ${name.padEnd(40)}  size: ${size.toString().padStart(8)}  type: ${type.padEnd(20)} rev: ${revision.toString().padEnd(6)}  $ts"
     }
 
     override fun comm() = comm
