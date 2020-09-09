@@ -16,8 +16,8 @@ open class DesktopClasses(theme: Theme) : HeaderClasses(theme) {
     val desktop by cssClass {
         boxSizing = "border-box"
 
-        width = "100%"
-        height = "100%"
+        width = "100vw"
+        height = "100vh"
 
         display = "flex"
         flexDirection = "column"
@@ -29,6 +29,7 @@ open class DesktopClasses(theme: Theme) : HeaderClasses(theme) {
         flexGrow = 1
         display = "flex"
         flexDirection = "row"
+        minHeight = 0 // https://stackoverflow.com/a/33612613/3796844
     }
 
     val main by cssClass {
