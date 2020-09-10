@@ -2,30 +2,40 @@
 
 ## Simple Elements
 
-Use simple elements when there is nothing special to do:
+Working example:
+- [Initials.kt](../../../src/jsMain/kotlin/zakadabar/stack/frontend/builtin/util/Initials.kt)
+- [EntityStatusCard.kt](../../../src/jsMain/kotlin/zakadabar/stack/frontend/builtin/util/EntityStatusCard.kt)
+
+Use simple elements when there is nothing special to do but to set the content.
 
 ```kotlin
 class Initials(displayName: String) : SimpleElement() {
 
-    init {
+    override fun init() : Initials {
+
         innerText = if (displayName.length < 2) {
-            displayName
+            displayName.toUpperCase()
         } else {
             val e = displayName.split(" ")
             if (e.size < 2) {
-                displayName.substring(0, 2)
+                displayName.substring(0, 2).toUpperCase()
             } else {
                 "${e[0][0].toUpperCase()}${e[1][0].toUpperCase()}"
             }
         }
 
         className = coreClasses.avatar
+
+        return this
     }
 
 }
 ```
 
 ## Complex Elements
+
+Working example:
+- [EntityStatusCard.kt](../../../src/jsMain/kotlin/zakadabar/stack/frontend/builtin/util/EntityStatusCard.kt)
 
 Use complex elements: 
 
@@ -43,56 +53,47 @@ Complex elements perform proper cleanup when they are removed.
 * ComplexElement.cleanup removes all listeners added with `on`
 
 ```kotlin
-class Example() : ComplexElement() {
+class Example : ComplexElement() {
     override fun init(): SimpleElement {
-        on("click") { println("click")}
+        on("click") { println("click") }
     }
 }
 ```
 
 ## Build Structures
 
-It is very common, that a frontend element has an internal layout with a lot of "div"-s.
-To support this use case you can use the DOM builder of SimpleElement.
+Working examples:
+- [RealSimple.kt](https://github.com/spxbhuhb/zakadabar-samples/blob/master/01-beginner/witches-brew/src/jsMain/kotlin/zakadabar/samples/wichesbrew/frontend/RealSimple.kt)
+- [DeepInTheForest.kt](https://github.com/spxbhuhb/zakadabar-samples/blob/master/01-beginner/witches-brew/src/jsMain/kotlin/zakadabar/samples/wichesbrew/frontend/DeepInTheForest.kt)
+- [HtmlSamples.kt](https://github.com/spxbhuhb/zakadabar-samples/blob/master/01-beginner/5-ways-to-html/src/jsMain/kotlin/zakadabar/samples/waystohtml/frontend/HtmlSamples.kt)
+
+It is very common, that a frontend element has an internal layout with a lot of "div"-s, other elements, etc.
+To support this use case you can use the [DOMBuilder](../../../src/jsMain/kotlin/zakadabar/stack/frontend/elements/DOMBuilder.kt).
 
 Important points:
 
 * "+" on String adds text safely, no need for escape.
 * "!" sets innerHTML and **must** be properly escaped.
+* you can use "+" on a HTMLElement without restriction
 * you can use "+" on a SimpleElement without restriction
 * you can use "+" on a ComplexElement only from builders that are run in a ComplexElement
 
 ```kotlin
-override fun init(): SimpleElement {
+class RealSimple : SimpleElement() {
 
-    val css = helloWorldClasses
+    private val css = cauldronClasses
 
-    build(css.welcome) {
-        + image("jungle-sea.jpeg", css.welcomeImage)
-        + div(css.welcomeTitle) { +thw("welcome") }
-        + div(css.welcomeInstructions) { !"""<span style="font-size: 150%">↫</span> ${thw("click.on.something")}""" }
-        + div(css.welcomeInstructions) { !"""<span style="font-size: 150%">↫</span> ${thw("dbclick.on.something")}""" }
-    }
+    override fun init(): SimpleElement {
 
-    return super.init()
-}
-```
+        className = css.realSimple
 
-```kotlin
-override fun init(): SimpleElement {
-
-
-
-    build {
-        + prefixIcon
-        + input
-        + buttons.build(classes.inputPostfix) {
-            + approveIcon.withClass(classes.inputPostfixIcon, classes.approveFill)
-            + cancelIcon.withClass(classes.inputPostfixIcon, classes.cancelFill)
+        build {
+            + div(css.text1) { +t("text1") }
+            + div(css.text2) { !"""<span style="font-size: 150%">↫</span> ${t("text2")}""" }
         }
-    }
 
-    return super.init()
+        return super.init()
+    }
 }
 ```
 
@@ -101,25 +102,38 @@ The DOM and the ComplexElement structure will be different in this case, so if y
 you have to use a wrapper:
 
 ```kotlin
-val sometimesThis = StaticText("but this is the shortest route")
-val sometimesThat = StaticText("and we are lost")
+class DeepInTheForest : ComplexElement() {
 
-val wrapper = ComplexElement()
-wrapper += sometimesThis
+    override fun init(): ComplexElement {
 
-build {
-    + div {
-        + div {
-            + "we are deep in the forest"
-            + wrapper
+        val sometimesThis = SimpleText(" is this the shortest route")
+        val sometimesThat = SimpleText(" are we lost")
+
+        val wrapper = ComplexElement()
+
+        build {
+            + div {
+                + row {
+                    ! "we are deep in the forest ...&nbsp;"
+                    + wrapper
+                    + " ?"
+                }
+            }
         }
-    }
-}
+    
+        var round = 0
 
-launch {
-    delay(1000)
-    wrapper -= sometimesThis
-    wrapper += sometimesThat
+        launch {
+            while (true) {
+                delay(2000)
+                wrapper -= SimpleText::class
+                wrapper += if (round % 2 == 0) sometimesThat else sometimesThis
+                round ++
+            }
+        }
+
+        return this
+    }
 }
 ```
 

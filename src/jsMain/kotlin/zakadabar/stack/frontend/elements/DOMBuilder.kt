@@ -25,8 +25,8 @@ import org.w3c.dom.events.Event
 import zakadabar.stack.Stack
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
 import zakadabar.stack.messaging.Message
+import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KClass
-import kotlin.reflect.KProperty0
 
 /**
  * A class to build DOM structures easily.
@@ -141,6 +141,7 @@ class DOMBuilder(
      * @param  className  Additional CSS class. Optional.
      * @param  build      Builder function to manage the IMG tag added. Optional.
      */
+    @PublicApi
     fun image(src: String, className: String? = null, build: DOMBuilder.() -> Unit = { }): HTMLImageElement {
         val img = document.createElement("img") as HTMLImageElement
         img.src = src
@@ -180,6 +181,7 @@ class DOMBuilder(
         val ce = ComplexElement()
         current.appendChild(ce.element)
         parentComplex?.childElements?.plusAssign(ce)
+        // no need for init as it is empty
         return ce
     }
 
@@ -276,6 +278,7 @@ class DOMBuilder(
      */
     operator fun SimpleElement.unaryPlus(): SimpleElement {
         current.appendChild(this.element)
+        this.init()
         return this
     }
 
@@ -287,10 +290,6 @@ class DOMBuilder(
         current.appendChild(this.element)
         parentComplex.childElements += this.init()
         return this
-    }
-
-    fun KProperty0<String>.unaryPlus() {
-
     }
 
     private fun buildElement(e: HTMLElement, className: String?, build: DOMBuilder.() -> Unit) {

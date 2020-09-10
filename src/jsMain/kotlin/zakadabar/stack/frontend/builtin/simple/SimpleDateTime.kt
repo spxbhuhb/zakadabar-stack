@@ -8,12 +8,13 @@ import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.elements.SimpleElement
 import kotlin.js.Date
 
-open class SimpleDateTime(value: Long) : SimpleElement(
+open class SimpleDateTime(val value: Long) : SimpleElement(
     element = document.createElement("span") as HTMLElement
 ) {
 
-    init {
+    override fun init(): SimpleElement {
         element.innerText = Date(value * 1000).toLocaleString()
+        return this
     }
 
 }

@@ -6,9 +6,10 @@ package zakadabar.stack.frontend.builtin.util
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.elements.SimpleElement
 
-class Initials(displayName: String) : SimpleElement() {
+class Initials(private val displayName: String) : SimpleElement() {
 
-    init {
+    override fun init(): Initials {
+
         innerText = if (displayName.length < 2) {
             displayName.toUpperCase()
         } else {
@@ -21,6 +22,8 @@ class Initials(displayName: String) : SimpleElement() {
         }
 
         className = coreClasses.avatar
+
+        return this
     }
 
 }

@@ -5,10 +5,11 @@ package zakadabar.stack.frontend.builtin.icon
 
 import zakadabar.stack.frontend.elements.SimpleElement
 
-open class SimpleIcon(icon: String) : SimpleElement() {
+open class SimpleIcon(val icon: String) : SimpleElement() {
 
-    init {
+    override fun init(): SimpleIcon {
         element.innerHTML = icon
+        return this
     }
 
 }

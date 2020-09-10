@@ -51,13 +51,13 @@ operator fun DOMTokenList.minusAssign(token: String?) {
 }
 
  infix fun HTMLElement.height(value: Any): HTMLElement {
-    if (value == "100%") {
-        classList += CoreClasses.coreClasses.h100
-    } else {
-        this.style.height = value.toString()
-    }
-    return this
-}
+     if (value is String) {
+         this.style.height = value
+     } else {
+         this.style.height = "${value}px"
+     }
+     return this
+ }
 
  infix fun HTMLElement.flex(value: String): HTMLElement {
     if (value == "grow") {

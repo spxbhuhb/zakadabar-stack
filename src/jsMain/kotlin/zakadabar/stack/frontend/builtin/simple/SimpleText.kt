@@ -7,12 +7,13 @@ import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.elements.SimpleElement
 
-open class SimpleText(text: String) : SimpleElement(
+open class SimpleText(val text: String) : SimpleElement(
     element = document.createElement("span") as HTMLElement
 ) {
 
-    init {
+    override fun init(): SimpleElement {
         element.innerText = text
+        return this
     }
 
 }

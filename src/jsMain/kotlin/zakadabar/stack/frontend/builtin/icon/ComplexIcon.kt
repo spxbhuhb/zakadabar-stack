@@ -7,15 +7,12 @@ import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.elements.ComplexElement
 
 open class ComplexIcon(
-    icon: String,
+    val icon: String,
     private val onClick: (() -> Unit)? = null
 ) : ComplexElement() {
 
-    init {
-        element.innerHTML = icon
-    }
-
     override fun init(): ComplexElement {
+        element.innerHTML = icon
         on("click", onClick)
         on("mousedown", ::onMouseDown)
         return this

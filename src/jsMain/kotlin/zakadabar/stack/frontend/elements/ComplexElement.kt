@@ -186,6 +186,9 @@ open class ComplexElement(
 
     }
 
+    /**
+     * Remove a child.
+     */
     open operator fun minusAssign(child: SimpleElement?) {
         if (child == null) return
 
@@ -193,6 +196,15 @@ open class ComplexElement(
 
         child.cleanup()
         child.element.remove()
+    }
+
+    /**
+     * Remove all children that are of the given class.
+     */
+    open operator fun minusAssign(clazz: KClass<*>) {
+        childElements.filter { clazz.isInstance(it) }.forEach {
+            this -= it
+        }
     }
 
     fun hasChildOf(clazz: KClass<*>): Boolean {

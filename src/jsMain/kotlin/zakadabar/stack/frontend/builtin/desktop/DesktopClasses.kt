@@ -42,6 +42,7 @@ open class DesktopClasses(theme: Theme) : HeaderClasses(theme) {
         alignItems = "center"
         boxSizing = "border-box"
         height = 24
+        minHeight = 24
         fontFamily = theme.fontFamily
         fontSize = theme.fontSize
         borderRadius = theme.borderRadius
