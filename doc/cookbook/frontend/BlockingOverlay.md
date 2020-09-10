@@ -6,7 +6,7 @@ Use this element to block user interactions on another element for a while.
 
 **Highlights**
 
-- [BlockingOverlay](../../../src/jsMain/kotlin/zakadabar/stack/frontend/util/w3c/ResizeObserver.kt)
+- [BlockingOverlay](../../../src/jsMain/kotlin/zakadabar/stack/frontend/builtin/util/BlockingOverlay.kt)
 - Add to the element that is to be blocked.
 - Remove from the element when blocking is no longer necessary.
 - Blocks user interactions with a high z-index overlay.
