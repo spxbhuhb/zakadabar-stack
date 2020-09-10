@@ -1,11 +1,11 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.navigator
+package zakadabar.stack.frontend.builtin.desktop.navigator
 
 import org.w3c.dom.events.Event
+import zakadabar.stack.frontend.builtin.desktop.navigator.NavigatorClasses.Companion.navigatorClasses
 import zakadabar.stack.frontend.builtin.icon.Icons
-import zakadabar.stack.frontend.builtin.navigator.NavigatorClasses.Companion.navigatorClasses
 import zakadabar.stack.frontend.builtin.simple.SimpleText
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.extend.FrontendEntitySupport

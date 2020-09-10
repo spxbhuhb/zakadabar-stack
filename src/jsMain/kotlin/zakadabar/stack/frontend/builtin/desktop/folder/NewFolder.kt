@@ -1,15 +1,15 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.folder
+package zakadabar.stack.frontend.builtin.desktop.folder
 
 import zakadabar.stack.data.FolderDto
 import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext.t
+import zakadabar.stack.frontend.builtin.desktop.navigator.EntityNavigator
+import zakadabar.stack.frontend.builtin.desktop.navigator.NewEntity
+import zakadabar.stack.frontend.builtin.desktop.navigator.NewEntityItemWithName
 import zakadabar.stack.frontend.builtin.icon.Icons
-import zakadabar.stack.frontend.builtin.navigator.EntityNavigator
-import zakadabar.stack.frontend.builtin.navigator.NewEntity
-import zakadabar.stack.frontend.builtin.navigator.NewEntityItemWithName
 import zakadabar.stack.frontend.extend.NewEntityContract
 import zakadabar.stack.util.UUID
 

@@ -9,10 +9,10 @@ import zakadabar.stack.data.SystemDto
 import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.data.security.CommonAccountDto
 import zakadabar.stack.frontend.builtin.desktop.Desktop
-import zakadabar.stack.frontend.builtin.folder.NewFolder
+import zakadabar.stack.frontend.builtin.desktop.folder.NewFolder
+import zakadabar.stack.frontend.builtin.desktop.navigator.EntityNavigator
 import zakadabar.stack.frontend.builtin.i18n
 import zakadabar.stack.frontend.builtin.icon.Icons
-import zakadabar.stack.frontend.builtin.navigator.EntityNavigator
 import zakadabar.stack.frontend.comm.rest.EntityCache
 import zakadabar.stack.frontend.extend.FrontendEntitySupport
 import zakadabar.stack.frontend.extend.FrontendModule

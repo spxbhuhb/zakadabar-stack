@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.navigator
+package zakadabar.stack.frontend.builtin.desktop.navigator
 
 import kotlinx.browser.document
 import org.w3c.dom.DataTransfer
@@ -14,8 +14,8 @@ import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.desktop.DesktopCenter
 import zakadabar.stack.frontend.builtin.desktop.DesktopCenter.Companion.regex
 import zakadabar.stack.frontend.builtin.desktop.messages.*
-import zakadabar.stack.frontend.builtin.navigator.NavigatorClasses.Companion.navigatorClasses
-import zakadabar.stack.frontend.builtin.navigator.messages.PreviewEntityIntent
+import zakadabar.stack.frontend.builtin.desktop.navigator.NavigatorClasses.Companion.navigatorClasses
+import zakadabar.stack.frontend.builtin.desktop.navigator.messages.PreviewEntityIntent
 import zakadabar.stack.frontend.builtin.util.droparea.DropArea
 import zakadabar.stack.frontend.builtin.util.status.Status
 import zakadabar.stack.frontend.builtin.util.status.StatusInfo

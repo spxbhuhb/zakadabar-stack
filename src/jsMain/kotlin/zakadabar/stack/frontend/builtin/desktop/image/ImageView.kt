@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package zakadabar.stack.frontend.builtin.util.image
+package zakadabar.stack.frontend.builtin.desktop.image
 
 import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.elements.ComplexElement
