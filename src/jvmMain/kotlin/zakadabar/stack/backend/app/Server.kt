@@ -22,6 +22,8 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.sessions.*
 import io.ktor.websocket.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.toJavaInstant
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.deleteWhere
@@ -51,7 +53,6 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.time.Duration
-import java.time.LocalDateTime
 import kotlin.reflect.full.isSubclassOf
 import zakadabar.stack.backend.builtin.account.Backend as AccountBackend
 
@@ -184,7 +185,7 @@ class Server : CliktCommand() {
 
             if (systemDao != null) return@transaction
 
-            val now = LocalDateTime.now()
+            val now = Clock.System.now().toJavaInstant()
 
             // this is a temporary entity for bootstrap
 

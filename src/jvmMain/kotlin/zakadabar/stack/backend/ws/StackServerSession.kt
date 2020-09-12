@@ -4,6 +4,8 @@
 package zakadabar.stack.backend.ws
 
 import io.ktor.http.cio.websocket.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.toJavaInstant
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
@@ -152,7 +154,7 @@ class StackServerSession(private val webSocketSession: WebSocketSession) {
 
         val parent = if (parentId == null) null else EntityDao[parentId]
 
-        val now = LocalDateTime.now()
+        val now = Clock.System.now().toJavaInstant()
 
         val entity = EntityDao.new {
             name = request.name

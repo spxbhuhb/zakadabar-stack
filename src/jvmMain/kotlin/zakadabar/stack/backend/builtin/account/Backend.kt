@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.backend.builtin.account
 
+import io.ktor.http.*
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
@@ -14,15 +15,15 @@ import zakadabar.stack.backend.builtin.account.data.AccountTable
 import zakadabar.stack.backend.builtin.account.data.AccountTable.toDto
 import zakadabar.stack.backend.builtin.entities.data.EntityDao
 import zakadabar.stack.backend.builtin.entities.data.EntityTable
-import zakadabar.stack.backend.extend.EntityRestBackend
+import zakadabar.stack.backend.extend.RestBackend
 import zakadabar.stack.data.entity.EntityStatus
 import zakadabar.stack.data.security.CommonAccountDto
 import zakadabar.stack.util.BCrypt
 import zakadabar.stack.util.Executor
 
-object Backend : EntityRestBackend<CommonAccountDto> {
+object Backend : RestBackend<CommonAccountDto> {
 
-    override fun query(executor: Executor, id: Long?, parentId: Long?): List<CommonAccountDto> = transaction {
+    override fun query(executor: Executor, id: Long?, parentId: Long?, parameters: Parameters): List<CommonAccountDto> = transaction {
 
         val condition = if (id == null) {
             (EntityTable.parent eq parentId) and (EntityTable.type eq CommonAccountDto.type)

@@ -4,16 +4,18 @@
 package zakadabar.stack.frontend.builtin.simple
 
 import kotlinx.browser.document
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.elements.SimpleElement
-import kotlin.js.Date
 
-open class SimpleDateTime(val value: Long) : SimpleElement(
+open class SimpleDateTime(val value: Instant) : SimpleElement(
     element = document.createElement("span") as HTMLElement
 ) {
 
     override fun init(): SimpleElement {
-        element.innerText = Date(value * 1000).toLocaleString()
+        element.innerText = value.toLocalDateTime(TimeZone.currentSystemDefault()).toString()
         return this
     }
 

@@ -122,6 +122,35 @@ data class TemplateRecordDto(
 
 ### Backend for a Record DTO
 
+To create a backend SQL table for a Record DTO:
+
+```kotlin
+object TemplateRecordTable : LongIdTable("t_${Template.shid}_records") {
+
+    val templateField1 = varchar("template_field_1", length = 100)
+    val templateField2 = varchar("template_field_2", length = 50)
+
+}
+```
+
+To create a backend DAO for a Record DTO:
+
+```kotlin
+class TemplateRecordDao(id: EntityID<Long>) : LongEntity(id) {
+    companion object : LongEntityClass<TemplateRecordDao>(TemplateRecordTable)
+
+    var templateField1 by TemplateRecordTable.templateField1
+    var templateField2 by TemplateRecordTable.templateField2
+
+    fun toDto() = TemplateRecordDto(
+        id = id.value,
+        templateField1 = templateField1,
+        templateField2 = templateField2
+    )
+
+}
+```
+
 To create the backend routing for record DTO use the [recordRestApi](../../../src/jvmMain/kotlin/zakadabar/stack/backend/extend/restApi.kt)
 function.
 
@@ -131,7 +160,7 @@ object Module : BackendModule() {
     override val uuid = Template.uuid
 
     override fun install(route: Route) {
-        recordRestApi(route, TemplateRecordBackend, TemplateRecordDto::class, TemplateRecordDto.type)
+        restApi(route, TemplateRecordBackend, TemplateRecordDto::class, TemplateRecordDto.type)
     }
 }
 ```
@@ -141,7 +170,7 @@ To add backend REST functions to a record DTO implement the RecordRestBackend in
 ```kotlin
 object TemplateRecordBackend : RecordRestBackend<TemplateRecordDto> {
 
-    override fun query(executor: Executor, id: Long?): List<TemplateRecordDto> = transaction {
+    override fun query(executor: Executor, id: Long?, parentId : Long?, parameters : Parameters): List<TemplateRecordDto> = transaction {
 
         if (id == null) {
             TemplateRecordDao.find { TemplateRecordTable.id eq id }

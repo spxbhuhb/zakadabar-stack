@@ -3,19 +3,20 @@
  */
 package zakadabar.stack.backend.builtin.folder
 
+import io.ktor.http.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.builtin.entities.data.EntityDao
 import zakadabar.stack.backend.builtin.entities.data.EntityTable
-import zakadabar.stack.backend.extend.EntityRestBackend
+import zakadabar.stack.backend.extend.RestBackend
 import zakadabar.stack.data.FolderDto
 import zakadabar.stack.util.Executor
 
-object Backend : EntityRestBackend<FolderDto> {
+object Backend : RestBackend<FolderDto> {
 
-    override fun query(executor: Executor, id: Long?, parentId: Long?): List<FolderDto> =
+    override fun query(executor: Executor, id: Long?, parentId: Long?, parameters: Parameters): List<FolderDto> =
         transaction {
 
             val condition = if (id == null) {

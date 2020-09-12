@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.comm.message
 
+import kotlinx.datetime.Instant
 import zakadabar.stack.comm.serialization.MessageType
 import zakadabar.stack.comm.serialization.ResponseCode
 import zakadabar.stack.comm.serialization.StackInputCommArray
@@ -39,7 +40,7 @@ class ListEntitiesResponse(
             write(size)
             write(revision)
             write(modifiedBy)
-            write(modifiedAt)
+            write(modifiedAt.toEpochMilliseconds())
         }
     }
 
@@ -73,7 +74,7 @@ class ListEntitiesResponse(
                     size = readLong(),
                     revision = readLong(),
                     modifiedBy = readLong(),
-                    modifiedAt = readLong()
+                    modifiedAt = Instant.fromEpochMilliseconds(readLong())
                 )
             }
         }

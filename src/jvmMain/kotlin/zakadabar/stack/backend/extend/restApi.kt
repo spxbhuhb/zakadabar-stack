@@ -4,16 +4,17 @@
 package zakadabar.stack.backend.extend
 
 import io.ktor.application.*
-import io.ktor.features.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import zakadabar.stack.backend.util.executor
+import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KClass
 
-fun <T : Any> entityRestApi(
+@PublicApi
+fun <T : Any> restApi(
     route: Route,
-    backend: EntityRestBackend<T>,
+    backend: RestBackend<T>,
     dtoClass: KClass<T>,
     dtoType: String
 ) {
@@ -22,46 +23,11 @@ fun <T : Any> entityRestApi(
         route(dtoType) {
 
             get {
-                call.respond(backend.query(call.executor(), parentId = call.parameters["parent"]?.toLong()))
+                call.respond(backend.query(call.executor(), null, parentId = call.parameters["parent"]?.toLong(), call.parameters))
             }
 
             get("/{id}") {
-                val list = backend.query(call.executor(), id = call.parameters["id"] !!.toLong())
-                if (list.isEmpty()) throw NotFoundException()
-                call.respond(list[0])
-            }
-
-            post {
-                call.respond(backend.create(call.executor(), call.receive(dtoClass)))
-            }
-
-            patch {
-                call.respond(backend.update(call.executor(), call.receive(dtoClass)))
-            }
-
-        }
-
-    }
-}
-
-fun <T : Any> recordRestApi(
-    route: Route,
-    backend: RecordRestBackend<T>,
-    dtoClass: KClass<T>,
-    dtoType: String
-) {
-    with(route) {
-
-        route(dtoType) {
-
-            get {
-                call.respond(backend.query(call.executor()))
-            }
-
-            get("/{id}") {
-                val list = backend.query(call.executor(), id = call.parameters["id"] !!.toLong())
-                if (list.isEmpty()) throw NotFoundException()
-                call.respond(list[0])
+                call.respond(backend.fetch(call.executor(), id = call.parameters["id"] !!.toLong(), call.parameters))
             }
 
             post {

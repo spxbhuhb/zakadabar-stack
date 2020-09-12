@@ -5,7 +5,7 @@ package zakadabar.stack.backend.builtin.folder
 
 import io.ktor.routing.*
 import zakadabar.stack.backend.extend.BackendModule
-import zakadabar.stack.backend.extend.entityRestApi
+import zakadabar.stack.backend.extend.restApi
 import zakadabar.stack.data.FolderDto
 import zakadabar.stack.util.UUID
 
@@ -13,6 +13,6 @@ object Module : BackendModule() {
 
     override val uuid = UUID("82b9f17e-27eb-44e8-97a0-578c5404d087")
 
-    override fun install(route: Route) = entityRestApi(route, Backend, FolderDto::class, FolderDto.type)
+    override fun install(route: Route) = restApi(route, Backend, FolderDto::class, FolderDto.type)
 
 }

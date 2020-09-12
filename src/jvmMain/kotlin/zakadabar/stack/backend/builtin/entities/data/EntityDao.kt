@@ -4,6 +4,9 @@
 package zakadabar.stack.backend.builtin.entities.data
 
 import io.ktor.features.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.toJavaInstant
+import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -14,8 +17,6 @@ import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.data.entity.EntityStatus
 import zakadabar.stack.util.Executor
 import zakadabar.stack.util.PublicApi
-import java.time.LocalDateTime
-import java.time.ZoneOffset
 
 class EntityDao(id: EntityID<Long>) : LongEntity(id) {
 
@@ -40,7 +41,7 @@ class EntityDao(id: EntityID<Long>) : LongEntity(id) {
         type = type,
         name = name,
         size = size,
-        modifiedAt = modifiedAt.toEpochSecond(ZoneOffset.UTC) * 1000, // TODO don't loose precision
+        modifiedAt = modifiedAt.toKotlinInstant(),
         modifiedBy = modifiedBy.id.value
     )
 
@@ -97,7 +98,7 @@ class EntityDao(id: EntityID<Long>) : LongEntity(id) {
 
         status = EntityStatus.MarkedForDelete
         modifiedBy = EntityDao[executor.entityId]
-        modifiedAt = LocalDateTime.now()
+        modifiedAt = Clock.System.now().toJavaInstant()
 
     }
 
@@ -124,7 +125,7 @@ class EntityDao(id: EntityID<Long>) : LongEntity(id) {
             executor: Executor
         ): EntityDao {
 
-            val now = LocalDateTime.now()
+            val now = Clock.System.now().toJavaInstant()
 
             BackendContext.requireWriteFor(executor, parentId)
 
@@ -157,7 +158,7 @@ class EntityDao(id: EntityID<Long>) : LongEntity(id) {
          */
         fun create(executor: Executor, dto: EntityRecordDto): EntityDao {
 
-            val now = LocalDateTime.now()
+            val now = Clock.System.now().toJavaInstant()
 
             BackendContext.requireWriteFor(executor, dto.parentId)
 
@@ -189,7 +190,7 @@ class EntityDao(id: EntityID<Long>) : LongEntity(id) {
             dao.name = dto.name
             dao.status = dto.status
             dao.modifiedBy = EntityDao[executor.entityId]
-            dao.modifiedAt = LocalDateTime.now()
+            dao.modifiedAt = Clock.System.now().toJavaInstant()
 
             if (dao.parent?.id?.value != dto.parentId) {
 

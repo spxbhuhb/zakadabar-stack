@@ -1,12 +1,17 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
+@file:UseSerializers(InstantAsStringSerializer::class)
+
 package zakadabar.stack.data.entity
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import zakadabar.stack.Stack
 import zakadabar.stack.data.DtoWithRecordCompanion
+import zakadabar.stack.data.InstantAsStringSerializer
 import zakadabar.stack.extend.DtoWithRecordContract
 import zakadabar.stack.util.PublicApi
 
@@ -21,7 +26,7 @@ data class EntityRecordDto(
     val size: Long,
     val revision: Long,
     val modifiedBy: Long,
-    val modifiedAt: Long
+    val modifiedAt: Instant
 ) : DtoWithRecordContract<EntityRecordDto> {
 
     companion object : DtoWithRecordCompanion<EntityRecordDto>() {
@@ -35,7 +40,7 @@ data class EntityRecordDto(
             name = name,
             size = 0,
             revision = 1,
-            modifiedAt = 0,
+            modifiedAt = Clock.System.now(),
             modifiedBy = 0
         )
 
@@ -112,8 +117,7 @@ data class EntityRecordDto(
     fun childrenUrl() = Companion.childrenUrl(this.id)
 
     fun prettyPrint(): String {
-        val ts = Instant.fromEpochMilliseconds(modifiedAt)
-        return "# ${id.toString().padEnd(6)}  ${name.padEnd(40)}  size: ${size.toString().padStart(8)}  type: ${type.padEnd(20)} rev: ${revision.toString().padEnd(6)}  $ts"
+        return "# ${id.toString().padEnd(6)}  ${name.padEnd(40)}  size: ${size.toString().padStart(8)}  type: ${type.padEnd(20)} rev: ${revision.toString().padEnd(6)}  $modifiedAt"
     }
 
     override fun comm() = comm

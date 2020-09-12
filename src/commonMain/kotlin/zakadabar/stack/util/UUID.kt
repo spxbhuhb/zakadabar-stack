@@ -3,6 +3,8 @@
  */
 package zakadabar.stack.util
 
+import kotlinx.serialization.Serializable
+
 const val versionMask = 0xffff0fff.toInt()
 const val version = 0x00004000
 const val variantMask = 0x3fffffff
@@ -10,6 +12,7 @@ const val variant = 0x80000000.toInt()
 
 val hexChars = arrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f')
 
+@Serializable
 class UUID : Comparable<UUID> {
 
     companion object {

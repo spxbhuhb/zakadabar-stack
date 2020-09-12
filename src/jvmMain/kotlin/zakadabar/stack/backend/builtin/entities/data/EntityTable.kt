@@ -3,9 +3,10 @@
  */
 package zakadabar.stack.backend.builtin.entities.data
 
+import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.`java-time`.datetime
+import org.jetbrains.exposed.sql.`java-time`.timestamp
 import zakadabar.stack.Stack
 import zakadabar.stack.backend.BackendContext
 import zakadabar.stack.backend.builtin.entities.data.EntityTable.acl
@@ -22,7 +23,6 @@ import zakadabar.stack.backend.builtin.entities.data.EntityTable.type
 import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.data.entity.EntityStatus
 import zakadabar.stack.util.Executor
-import java.time.ZoneOffset
 
 /**
  * Stores entity records. Don't change this table directly as many mechanisms
@@ -50,9 +50,9 @@ object EntityTable : LongIdTable("t_${Stack.shid}_entities") {
     val name = varchar("name", 100)
     val size = long("size")
     val revision = long("revision")
-    val createdAt = datetime("created_at")
+    val createdAt = timestamp("created_at")
     val createdBy = reference("created_by", EntityTable)
-    val modifiedAt = datetime("modified_at")
+    val modifiedAt = timestamp("modified_at")
     val modifiedBy = reference("modified_by", EntityTable)
 
     fun toDto(row: ResultRow) = EntityRecordDto(
@@ -64,7 +64,7 @@ object EntityTable : LongIdTable("t_${Stack.shid}_entities") {
         name = row[name],
         size = row[size],
         revision = row[revision],
-        modifiedAt = row[modifiedAt].toEpochSecond(ZoneOffset.UTC) * 1000, // TODO don't loose precision
+        modifiedAt = row[modifiedAt].toKotlinInstant(),
         modifiedBy = row[modifiedBy].value
     )
 
