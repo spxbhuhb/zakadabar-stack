@@ -80,7 +80,7 @@ class CoreClasses(theme: Theme) : CssStyleSheet<CoreClasses>(theme) {
         width = "100%"
         height = 3
         minHeight = 3
-        backgroundColor = theme.lightGray
+        backgroundColor = theme.sliderColor
         cursor = "row-resize"
         on(":hover") {
             backgroundColor = theme.selectedColor
@@ -92,7 +92,7 @@ class CoreClasses(theme: Theme) : CssStyleSheet<CoreClasses>(theme) {
         height = "100%"
         width = 3
         minWidth = 3
-        backgroundColor = theme.lightGray
+        backgroundColor = theme.sliderColor
         cursor = "col-resize"
         on(":hover") {
             backgroundColor = theme.selectedColor

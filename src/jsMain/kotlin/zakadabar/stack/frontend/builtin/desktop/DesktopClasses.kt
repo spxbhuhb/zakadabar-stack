@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.util.Theme
 open class DesktopClasses(theme: Theme) : HeaderClasses(theme) {
 
     companion object {
-        val desktopClasses = DesktopClasses(theme).attach() as DesktopClasses
+        var desktopClasses = DesktopClasses(theme).attach() as DesktopClasses
     }
 
     val desktop by cssClass {

@@ -14,12 +14,13 @@ import zakadabar.stack.frontend.util.launch
 class EntityNavigatorHeader(
     private val navigator: EntityNavigator
 ) : Header(
-    icon = Icons.globe.simple18.withClass(headerClasses.headerIcon18),
     title = t("navigation")
 ) {
 
     override fun init(): ComplexElement {
         super.init()
+
+        this.element.style.marginLeft = "10px"
 
         toolElement += Icons.filterAlt.simple16.withClass(headerClasses.extensionIcon16)
         toolElement += Icons.addBox.complex16(::onNewEntity).withClass(headerClasses.extensionIcon16)

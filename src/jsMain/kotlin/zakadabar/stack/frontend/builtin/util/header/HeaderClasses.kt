@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.util.Theme
 open class HeaderClasses(theme: Theme) : CssStyleSheet<HeaderClasses>(theme) {
 
     companion object {
-        val headerClasses = HeaderClasses(FrontendContext.theme).attach()
+        var headerClasses = HeaderClasses(FrontendContext.theme).attach()
     }
 
     open val header by cssClass {
@@ -31,6 +31,7 @@ open class HeaderClasses(theme: Theme) : CssStyleSheet<HeaderClasses>(theme) {
         width = theme.headerHeight
         backgroundColor = theme.headerIconBackground
         fill = theme.headerIconFill
+        marginRight = 8
     }
 
     open val headerIcon18 by cssClass {
@@ -41,6 +42,7 @@ open class HeaderClasses(theme: Theme) : CssStyleSheet<HeaderClasses>(theme) {
         width = theme.headerHeight
         backgroundColor = theme.headerIconBackground
         fill = theme.headerIconFill
+        marginRight = 8
     }
 
     open val headerIcon20 by cssClass {
@@ -51,6 +53,7 @@ open class HeaderClasses(theme: Theme) : CssStyleSheet<HeaderClasses>(theme) {
         width = theme.headerHeight
         backgroundColor = theme.headerIconBackground
         fill = theme.headerIconFill
+        marginRight = 8
     }
 
     open val innerIcon by cssClass {
@@ -66,12 +69,8 @@ open class HeaderClasses(theme: Theme) : CssStyleSheet<HeaderClasses>(theme) {
         flexDirection = "row"
         alignItems = "center"
         color = theme.headerForeground
-        fontFamily = "'Open Sans', sans-serif"
-        fontWeight = 600
-        fontSize = 11
+        fontSize = theme.fontSize
         height = 21
-        paddingLeft = 8
-        textTransform = "uppercase"
     }
 
     open val extensions by cssClass {

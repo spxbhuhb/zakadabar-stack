@@ -35,7 +35,8 @@ open class Theme {
     open var headerToolBackground = "rgba(13,91,40,0.05)"
     open var headerToolFill = "#2e8d36"
 
-    open var fontFamily = "Roboto"
+    open var sliderColor = lightGray
+    open var fontFamily = "IBM Plex Sans"
     open var fontSize = 12
 
     open var borderRadius = 2
@@ -129,6 +130,12 @@ class CssStyleRule(val sheet: CssStyleSheet<*>, val cssClassName: String) {
         get() = styles["align-items"]
         set(value) {
             styles["align-items"] = value
+        }
+
+    var background
+        get() = styles["background"]
+        set(value) {
+            styles["background"] = value
         }
 
     var backgroundColor

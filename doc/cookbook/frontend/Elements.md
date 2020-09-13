@@ -167,14 +167,14 @@ class ParallelDownloadView(private val stuffId : Long) : ComplexElement() {
 
         this += loading // add loading, use variable so we can easily remove it later
 
-        launch {        
+        launch {     // launch the block in the global scope   
 
-            coroutineScope {
-                launch {
+            coroutineScope {    // will wait until all coroutines in the local scope finish
+                this.launch {   // launch this block in the local scope (it is local because of "this.")
                     stuff = StuffDto.comm.get(stuffId) // download the data from the server
                     insertFirst(StaticText(stuff.name)) // you can create elements on the fly if you don't want to access them easily later
                 }
-                launch {
+                this.launch {   // launch this block in the local scope (it is local because of "this.")
                     children = StuffDto.comm.getChildren(stuffId) // download the children of stuff
                     childNames += children.map { StaticText(it.name) } // add a StaticText for each children with the name as content
                     insertBefore(children, loading) // insert the children before loading
