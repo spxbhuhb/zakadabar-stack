@@ -15,30 +15,18 @@ import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.header.HeaderClasses.Companion.headerClasses
 import zakadabar.stack.frontend.comm.rest.EntityCache
 import zakadabar.stack.frontend.elements.ComplexElement
-import zakadabar.stack.frontend.extend.ViewContract
 import zakadabar.stack.frontend.util.getElementId
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.util.PublicApi
-import zakadabar.stack.util.UUID
 
 @PublicApi
 class DesktopHeader : ComplexElement() {
-
-    companion object : ViewContract() {
-
-        override val uuid = UUID("ab5af364-0caa-4c28-a82c-a6ac23140cbe")
-
-        override val target = Desktop.header
-
-        override fun newInstance() = DesktopHeader()
-
-    }
 
     private val idPrefix = element.id + "-item-"
 
     private val path = Path()
 
-    override fun init(): ComplexElement {
+    override fun init(): DesktopHeader {
         super.init()
 
         this cssClass desktopClasses.header build {
@@ -65,7 +53,7 @@ class DesktopHeader : ComplexElement() {
         val id = match.groupValues[3].toLongOrNull()
 
         launch {
-            path.update(if (id == null) null else EntityCache.get(id))
+            path.update(if (id == null) null else EntityCache.read(id))
         }
     }
 
@@ -100,7 +88,7 @@ class DesktopHeader : ComplexElement() {
             while (current != null) {
                 items += PathItem(current.id, current.name)
                 val parentId = current.parentId ?: break
-                current = current.get(parentId)
+                current = EntityRecordDto.read(parentId)
             }
 
             if (items.isNotEmpty()) {

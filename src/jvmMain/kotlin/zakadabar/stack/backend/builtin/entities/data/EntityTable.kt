@@ -60,7 +60,7 @@ object EntityTable : LongIdTable("t_${Stack.shid}_entities") {
         status = row[status],
         acl = row[acl]?.value,
         parentId = row[parent]?.value,
-        type = row[type],
+        entityType = row[type],
         name = row[name],
         size = row[size],
         revision = row[revision],

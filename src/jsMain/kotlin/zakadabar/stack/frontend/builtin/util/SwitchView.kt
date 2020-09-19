@@ -5,7 +5,7 @@ package zakadabar.stack.frontend.builtin.util
 
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.elements.SwitchableElement
-import zakadabar.stack.frontend.extend.ViewContract
+import zakadabar.stack.frontend.extend.ViewCompanion
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KClass
 
@@ -97,7 +97,7 @@ open class SwitchView : ComplexElement() {
      * @param  viewClass  The view contract to switch to.
      */
     @PublicApi
-    fun to(viewClass: KClass<ViewContract>) {
+    fun to(viewClass: KClass<ViewCompanion>) {
         val to = views.indexOfFirst { viewClass.isInstance(it) }
         require(to > 0) { "cannot find view to switch to: ${viewClass.simpleName}" }
         switch(to)

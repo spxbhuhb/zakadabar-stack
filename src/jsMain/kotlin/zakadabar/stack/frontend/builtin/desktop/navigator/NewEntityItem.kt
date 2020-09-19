@@ -8,11 +8,11 @@ import zakadabar.stack.frontend.builtin.desktop.navigator.NavigatorClasses.Compa
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.simple.SimpleText
 import zakadabar.stack.frontend.elements.ComplexElement
-import zakadabar.stack.frontend.extend.FrontendEntitySupport
+import zakadabar.stack.frontend.extend.DtoFrontend
 
 class NewEntityItem(
     private val newEntity: NewEntity,
-    internal val support: FrontendEntitySupport<*>
+    internal val support: DtoFrontend<*>
 ) : ComplexElement() {
 
     override fun init(): ComplexElement {

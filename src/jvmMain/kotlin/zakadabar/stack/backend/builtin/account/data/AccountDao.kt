@@ -6,7 +6,7 @@ package zakadabar.stack.backend.builtin.account.data
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import zakadabar.stack.data.security.CommonAccountDto
+import zakadabar.stack.data.builtin.security.CommonAccountDto
 
 class AccountDao(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<AccountDao>(AccountTable)

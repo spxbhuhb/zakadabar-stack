@@ -7,7 +7,7 @@ import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.ResultRow
 import zakadabar.stack.Stack
 import zakadabar.stack.backend.builtin.entities.data.EntityTable
-import zakadabar.stack.data.security.CommonAccountDto
+import zakadabar.stack.data.builtin.security.CommonAccountDto
 
 object AccountTable : IdTable<Long>("t_${Stack.shid}_accounts") {
     override val id = reference("id", EntityTable)

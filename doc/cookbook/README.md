@@ -13,6 +13,9 @@
     * [Write an Entity DTO](common/Data.md#Write-an-Entity-DTO)
     * [Data Validation](common/Data.md#Data-Validation)
     * [Write a Schema](common/Data.md#Write-a-Schema)
+* URLs
+    * [Backend URLs](common/URLs.md#API-URLs)
+    * [Frontend URLs](common/URLs.md#View-URLs)
 
 ## Frontend
 
@@ -43,6 +46,8 @@
     * [Remove a Docked Element](frontend/Dock.md#Remove-a-Docked-Element)
 * Users
     * [Get Account of the User on the Frontend](common/Accounts.md#Get-Account-of-the-User-on-the-Frontend)
+* Prototyping
+    * [Prototyping](frontend/Prototyping.md)
 
 ## Backend
 

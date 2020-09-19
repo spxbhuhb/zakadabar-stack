@@ -3,16 +3,16 @@
  */
 package zakadabar.stack.frontend.comm.rest
 
+import kotlinx.serialization.KSerializer
 import org.w3c.files.Blob
 import org.w3c.files.File
-import zakadabar.stack.Stack
+import zakadabar.stack.data.entity.ChildrenQuery
 import zakadabar.stack.data.entity.EntityRecordDto
-import zakadabar.stack.extend.EntityRestCommContract
 import zakadabar.stack.frontend.FrontendContext
 import zakadabar.stack.frontend.builtin.desktop.messages.EntityAdded
-import zakadabar.stack.frontend.comm.rest.EntityCache.get
-import zakadabar.stack.frontend.comm.rest.EntityCache.getChildrenOf
-import zakadabar.stack.frontend.comm.rest.EntityCache.search
+import zakadabar.stack.frontend.comm.rest.EntityCache.childrenOf
+import zakadabar.stack.frontend.comm.rest.EntityCache.query
+import zakadabar.stack.frontend.comm.rest.EntityCache.read
 import zakadabar.stack.frontend.comm.util.pushBlob
 import zakadabar.stack.frontend.errors.FetchError
 import zakadabar.stack.frontend.util.launch
@@ -25,15 +25,14 @@ import kotlin.collections.set
  *
  * TODO Channel based synchronisation for EntityCache #2
  *
- * Methods [get], [getChildrenOf] and [search] should be send requests to a channel.
+ * Methods [read], [childrenOf] and [query] should be send requests to a channel.
  * A receiver on the other side of the channel should coalesce similar requests, so
  * if two or more elements requests the same entity at the same time (which happens
  * a lot) only one request would be sent to the server.
  *
  */
 @PublicApi
-object EntityCache : RecordRestComm<EntityRecordDto>("${Stack.shid}/entities", EntityRecordDto.serializer()),
-    EntityRestCommContract<EntityRecordDto> {
+object EntityCache : FrontendComm<EntityRecordDto>(EntityRecordDto.type, EntityRecordDto.serializer()) {
 
     private val cache = mutableMapOf<Long, EntityRecordDto>()
 
@@ -45,28 +44,30 @@ object EntityCache : RecordRestComm<EntityRecordDto>("${Stack.shid}/entities", E
         children.clear()
     }
 
-    override suspend fun get(id: Long): EntityRecordDto {
+    override suspend fun read(id: Long): EntityRecordDto {
         val cached = cache[id]
         if (cached != null) return cached
 
-        val result = super.get(id)
+        val result = super.read(id)
         cache[result.id] = result
         return result
     }
 
-    override suspend fun getChildrenOf(parentId: Long?): List<EntityRecordDto> {
+    suspend fun childrenOf(parentId: Long?): List<EntityRecordDto> {
         val cached = children[parentId]
         if (cached != null) return cached
 
-        val result = getChildrenOf(parentId, path, serializer)
+        val result = ChildrenQuery(parentId).execute()
 
         result.forEach { cache[it.id] = it }
+
+        children[parentId] = result
 
         return result
     }
 
-    override suspend fun search(parameters: String): List<EntityRecordDto> {
-        val result = super.search(parameters)
+    override suspend fun <RQ : Any> query(request: RQ, requestSerializer: KSerializer<RQ>): List<EntityRecordDto> {
+        val result = super.query(request, requestSerializer)
         result.forEach { cache[it.id] = it }
         return result
     }
@@ -106,7 +107,7 @@ object EntityCache : RecordRestComm<EntityRecordDto>("${Stack.shid}/entities", E
     fun launchGetChildren(parentId: Long?, onFinish: (children: List<EntityRecordDto>, error: String?) -> Unit) {
         launch {
             try {
-                onFinish(children[parentId] ?: getChildrenOf(parentId), null)
+                onFinish(children[parentId] ?: childrenOf(parentId), null)
             } catch (ex: Throwable) {
                 log(ex)
                 val status = if (ex is FetchError) ex.response.status.toString() else "unknown"

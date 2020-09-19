@@ -7,38 +7,23 @@ import kotlinx.browser.document
 import org.w3c.dom.DataTransfer
 import org.w3c.dom.events.Event
 import zakadabar.entity.browser.frontend.util.EntityDrop
-import zakadabar.stack.data.FolderDto
+import zakadabar.stack.data.builtin.FolderDto
 import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext.dispatcher
 import zakadabar.stack.frontend.FrontendContext.t
-import zakadabar.stack.frontend.builtin.desktop.DesktopCenter
 import zakadabar.stack.frontend.builtin.desktop.DesktopCenter.Companion.regex
 import zakadabar.stack.frontend.builtin.desktop.messages.*
 import zakadabar.stack.frontend.builtin.desktop.navigator.NavigatorClasses.Companion.navigatorClasses
-import zakadabar.stack.frontend.builtin.desktop.navigator.messages.PreviewEntityIntent
 import zakadabar.stack.frontend.builtin.util.droparea.DropArea
 import zakadabar.stack.frontend.builtin.util.status.Status
 import zakadabar.stack.frontend.builtin.util.status.StatusInfo
 import zakadabar.stack.frontend.builtin.util.status.StatusMessages
 import zakadabar.stack.frontend.comm.rest.EntityCache
 import zakadabar.stack.frontend.elements.ComplexElement
-import zakadabar.stack.frontend.extend.ViewContract
 import zakadabar.stack.frontend.util.getElementId
 import zakadabar.stack.frontend.util.launch
-import zakadabar.stack.util.UUID
 
 class EntityNavigator : ComplexElement() {
-
-    companion object : ViewContract() {
-
-        override var uuid = UUID("1d43b96a-485d-49b7-8419-025e8dab832e")
-
-        override var target = DesktopCenter.navigation
-
-        val newEntity = UUID("9de640f7-2c1e-4862-8672-fc9b2e52c287")
-
-        override fun newInstance() = EntityNavigator()
-    }
 
     internal val header = EntityNavigatorHeader(this)
 
@@ -49,7 +34,7 @@ class EntityNavigator : ComplexElement() {
     private val idPrefix = "${element.id}-item-"
 
     internal var currentEntityId: Long? = null
-    internal var currentEntityDto: EntityRecordDto? = null
+    private var currentEntityDto: EntityRecordDto? = null
     private var selectedEntityId: Long? = null
 
     override fun init(): ComplexElement {
@@ -159,9 +144,9 @@ class EntityNavigator : ComplexElement() {
     // ---- Rendering ----------------------------------------------------
 
     private suspend fun render() {
-        currentEntityDto = EntityCache.get(currentEntityId)
+        currentEntityDto = currentEntityId?.let { EntityCache.read(it) }
 
-        val children = EntityCache.getChildrenOf(currentEntityId)
+        val children = EntityCache.childrenOf(currentEntityId)
 
         if (children.isEmpty()) {
             statusInfo.update(Status.Empty).show()
@@ -176,7 +161,7 @@ class EntityNavigator : ComplexElement() {
 
         val sortedChildren = children.toMutableList()
         sortedChildren.sortBy { it.name }
-        sortedChildren.sortBy { if (it.type == FolderDto.type) 0 else 1 }
+        sortedChildren.sortBy { if (it.entityType == FolderDto.type) 0 else 1 }
 
         sortedChildren.forEach {
             items += EntityNavigatorItem(idPrefix, it)

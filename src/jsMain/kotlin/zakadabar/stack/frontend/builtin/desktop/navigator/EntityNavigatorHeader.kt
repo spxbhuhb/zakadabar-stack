@@ -35,7 +35,7 @@ class EntityNavigatorHeader(
 
         launch {
             val parentId = navigator.currentEntityId
-            val newEntity = NewEntity(navigator, if (parentId == null) null else EntityCache.get(parentId))
+            val newEntity = NewEntity(navigator, if (parentId == null) null else EntityCache.read(parentId))
             navigator.insertAfter(newEntity, navigator.header)
             newEntity.focus()
         }

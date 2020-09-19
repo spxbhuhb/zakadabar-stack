@@ -7,25 +7,22 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import zakadabar.stack.Stack
-import zakadabar.stack.comm.session.StackClientSession
-import zakadabar.stack.data.security.CommonAccountDto
+import zakadabar.stack.comm.websocket.session.StackClientSession
+import zakadabar.stack.data.builtin.security.CommonAccountDto
 import zakadabar.stack.frontend.FrontendContext.dispatcher
-import zakadabar.stack.frontend.FrontendContext.entitySupports
-import zakadabar.stack.frontend.FrontendContext.scopedViews
+import zakadabar.stack.frontend.FrontendContext.dtoFrontends
 import zakadabar.stack.frontend.FrontendContext.stackSession
-import zakadabar.stack.frontend.FrontendContext.views
 import zakadabar.stack.frontend.builtin.dock.Dock
-import zakadabar.stack.frontend.comm.rest.CachedEntityRestComm
-import zakadabar.stack.frontend.extend.*
+import zakadabar.stack.frontend.comm.rest.FrontendComm
+import zakadabar.stack.frontend.extend.DtoFrontend
+import zakadabar.stack.frontend.extend.FrontendModule
 import zakadabar.stack.frontend.util.Dictionary
 import zakadabar.stack.frontend.util.defaultTheme
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.messaging.MessageDispatcher
 import zakadabar.stack.messaging.SyncMessageDispatcher
-import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.UUID
 import zakadabar.stack.util.Unique
-import kotlin.reflect.KClass
 
 /**
  * Access points for the most common frontend data structures and utilities.
@@ -44,8 +41,8 @@ import kotlin.reflect.KClass
  * @property  scopedViews     Entity independent scoped views added by modules.
  *                            See [ScopedViewContract] for more information.
  *
- * @property  entitySupports  A map of entity type (such as "3a8627/folder") and
- *                            [FrontendEntitySupport] pairs. Modules add their
+ * @property  dtoFrontends    A map of dto type (such as "3a8627/folder") and
+ *                            [DtoFrontend] pairs. Modules add their
  *                            entity types into this map.
  *
  * @property  stackSession    The websocket session used to communicate with the
@@ -64,11 +61,7 @@ object FrontendContext {
 
     val dispatcher: MessageDispatcher = SyncMessageDispatcher()
 
-    val entitySupports = mutableMapOf<String, FrontendEntitySupport<*>>()
-
-    private val views = ViewCatalog()
-
-    private val scopedViews = mutableMapOf<Any, ViewCatalog>()
+    val dtoFrontends = mutableMapOf<String, DtoFrontend<*>>()
 
     lateinit var dock: Dock
 
@@ -81,9 +74,9 @@ object FrontendContext {
             .text().await()
             .toLong()
 
-        CommonAccountDto.comm = CachedEntityRestComm(CommonAccountDto.type, CommonAccountDto.serializer())
+        CommonAccountDto.comm = FrontendComm(CommonAccountDto.type, CommonAccountDto.serializer())
 
-        executor = CommonAccountDto.comm.get(id)
+        executor = CommonAccountDto.comm.read(id)
 
         dock = Dock().init() // this does not add it to the DOM, it's just created
     }
@@ -134,121 +127,10 @@ object FrontendContext {
     fun t(text: String, namespace: Unique, language: String) =
         dictionaries[namespace.uuid]?.get(language)?.get(text) ?: text
 
-    // ----  Entity Types  -------------------------------------------------
+    // ----  DTO Frontends  -------------------------------------------------
 
-    operator fun plusAssign(support: FrontendEntitySupport<*>) {
-        entitySupports[support.type] = support
+    operator fun plusAssign(support: DtoFrontend<*>) {
+        dtoFrontends[support.type] = support
     }
 
-    // ----  Views  --------------------------------------------------------
-
-    operator fun plusAssign(view: ViewContract) {
-        view.installOrder = views.size
-        views += view
-    }
-
-    operator fun plusAssign(scopeAndView: Pair<Any, ScopedViewContract>) {
-        val (scope, view) = scopeAndView
-
-        if (! scopedViews.containsKey(scope)) scopedViews[scope] = ViewCatalog()
-
-        val scopeViews = scopedViews[scope] !!
-
-        view.installOrder = scopeViews.size
-        scopeViews += view
-    }
-
-    operator fun minusAssign(scope: Any) {
-        scopedViews.remove(scope)
-    }
-
-    /**
-     * Gets an instance of the first top priority view for the given target.
-     */
-    @Suppress("UNCHECKED_CAST")
-    fun <T : Any> newInstance(
-        target: UUID,
-        clazz: KClass<T>,
-        scope: Any? = null,
-        test: ((ViewContract) -> Boolean)? = null
-    ): T? {
-
-        val catalog = if (scope == null) views else scopedViews[scope] ?: views
-        val contract = catalog.getTop(target, test) ?: return null
-
-        val instance = if (contract is ScopedViewContract) {
-            contract.newInstance(scope)
-        } else {
-            contract.newInstance()
-        }
-
-        return if (clazz.isInstance(instance)) instance as T else null
-    }
-
-    /**
-     * Get instances for all top priority views for the given slot. If there
-     * are views with the same uuid and same priority all of them are included.
-     */
-    @PublicApi
-    fun <T : Any> allNewInstances(
-        target: UUID,
-        clazz: KClass<T>,
-        scope: Any? = null,
-        test: ((ViewContract) -> Boolean)? = null
-    ): List<T> {
-
-        val tops = allContracts(target, scope, test)
-
-        return tops.mapNotNull { contract ->
-
-            val instance = if (contract is ScopedViewContract) {
-                contract.newInstance(scope)
-            } else {
-                contract.newInstance()
-            }
-
-            @Suppress("UNCHECKED_CAST") // this is fine as we check the class just before
-            if (clazz.isInstance(instance)) instance as T else null
-        }
-    }
-
-    /**
-     * Get all top priority contracts for the given slot. If there
-     * are contracts with the same uuid and same priority all of them are included.
-     */
-    @PublicApi
-    fun allContracts(target: UUID, scope: Any? = null, test: ((ViewContract) -> Boolean)? = null): List<ViewContract> {
-
-        val tops = mutableListOf<ViewContract>()
-
-        val catalog = if (scope == null) views else scopedViews[scope] ?: views
-
-        catalog.getAll(target, test).forEach { candidate ->
-
-            var found = false
-
-            for (i in tops.indices) {
-                if (tops[i].uuid != candidate.uuid) continue
-                if (tops[i].priority > candidate.priority) continue
-
-                found = true
-
-                if (tops[i].priority < candidate.priority) {
-                    tops[i] = candidate
-                } else {
-                    tops += candidate
-                }
-
-                break
-            }
-
-            if (! found) tops += candidate
-        }
-
-        // two sorts mean that the second has preference, but in the same position install order matters
-        tops.sortBy { it.installOrder }
-        tops.sortBy { it.position }
-
-        return tops
-    }
 }

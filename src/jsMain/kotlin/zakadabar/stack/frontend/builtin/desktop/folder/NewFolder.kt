@@ -3,27 +3,15 @@
  */
 package zakadabar.stack.frontend.builtin.desktop.folder
 
-import zakadabar.stack.data.FolderDto
+import zakadabar.stack.data.builtin.FolderDto
 import zakadabar.stack.data.entity.EntityRecordDto
-import zakadabar.stack.frontend.FrontendContext.t
-import zakadabar.stack.frontend.builtin.desktop.navigator.EntityNavigator
 import zakadabar.stack.frontend.builtin.desktop.navigator.NewEntity
 import zakadabar.stack.frontend.builtin.desktop.navigator.NewEntityItemWithName
-import zakadabar.stack.frontend.builtin.icon.Icons
-import zakadabar.stack.frontend.extend.NewEntityContract
-import zakadabar.stack.util.UUID
+import zakadabar.stack.frontend.extend.ViewCompanion
 
 class NewFolder(newEntity: NewEntity) : NewEntityItemWithName(newEntity) {
 
-    companion object : NewEntityContract() {
-
-        override val uuid = UUID("39fb543c-7f6f-4102-a8ba-d4d372a0e385")
-
-        override val name by lazy { t(FolderDto.type) }
-
-        override val target = EntityNavigator.newEntity
-
-        override val icon = Icons.folder.simple18
+    companion object : ViewCompanion {
 
         override fun newInstance(scope: Any?) = NewFolder(scope as NewEntity)
 

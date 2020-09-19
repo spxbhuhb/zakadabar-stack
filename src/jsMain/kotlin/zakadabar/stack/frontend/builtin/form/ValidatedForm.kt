@@ -16,9 +16,9 @@
  */
 package zakadabar.stack.frontend.builtin.form
 
-import zakadabar.stack.extend.DtoWithRecordContract
+import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.frontend.elements.ComplexElement
 
-class ValidatedForm<T>(val dto: DtoWithRecordContract<T>) : ComplexElement() {
+class ValidatedForm<T>(val dto: RecordDto<T>) : ComplexElement() {
 
 }

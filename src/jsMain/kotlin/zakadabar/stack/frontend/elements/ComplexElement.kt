@@ -8,6 +8,7 @@ import kotlinx.browser.window
 import kotlinx.dom.clear
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
+import org.w3c.dom.events.EventTarget
 import zakadabar.stack.frontend.FrontendContext.dispatcher
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.util.log
@@ -28,7 +29,7 @@ open class ComplexElement(
 
     val childElements by lazy { mutableListOf<SimpleElement>() }
 
-    private val eventListeners by lazy { mutableListOf<Pair<String, (Event) -> Unit>>() }
+    private val eventListeners by lazy { mutableListOf<Pair<String, Pair<EventTarget, (Event) -> Unit>>>() }
 
     private val messageHandlers by lazy { mutableListOf<Pair<KClass<*>, (Message) -> Unit>>() }
 
@@ -216,13 +217,17 @@ open class ComplexElement(
 
     // ---- Event listeners ----
 
-    fun on(type: String, listener: (() -> Unit)?) {
+    fun on(type: String, listener: (() -> Unit)?) = on(element, type, listener)
+
+    fun on(type: String, listener: ((Event) -> Unit)?) = on(element, type, listener)
+
+    fun on(target: EventTarget, type: String, listener: (() -> Unit)?) {
         if (listener == null) return
 
         // wrap the listener so we won't have crazy exception strings all around
         // this also helps with removal as the object will be the same as we added
 
-        addWrapped(type) { event ->
+        addWrapped(target, type) { event ->
             try {
                 lastEvent = event
                 listener()
@@ -234,13 +239,13 @@ open class ComplexElement(
         }
     }
 
-    fun on(type: String, listener: ((Event) -> Unit)?) {
+    fun on(target: EventTarget, type: String, listener: ((Event) -> Unit)?) {
         if (listener == null) return
 
         // wrap the listener so we won't have crazy exception strings all around
         // this also helps with removal as the object will be the same as we added
 
-        addWrapped(type) { event ->
+        addWrapped(target, type) { event ->
             try {
                 lastEvent = event
                 listener(event)
@@ -256,9 +261,9 @@ open class ComplexElement(
     /**
      * Add a wrapped event listener. Keep it private, so users won't start to use it.
      */
-    private fun addWrapped(type: String, wrapper: ((Event) -> Unit)) {
+    private fun addWrapped(target: EventTarget, type: String, wrapper: ((Event) -> Unit)) {
 
-        eventListeners.add(type to wrapper)
+        eventListeners.add(type to (target to wrapper))
 
         // sanity check, this means that some code adds listeners again and again
 
@@ -268,21 +273,23 @@ open class ComplexElement(
 
         // finally, we are ready to add the listener to the HTML element
 
-        element.addEventListener(type, wrapper)
+        target.addEventListener(type, wrapper)
 
     }
 
     fun off(typeToRemove: String) {
-        eventListeners.forEach { (type, wrapper) ->
+        eventListeners.forEach { (type, entry) ->
             if (type == typeToRemove) {
-                element.removeEventListener(type, wrapper)
+                entry.first.removeEventListener(type, entry.second)
             }
         }
     }
 
     private fun cleanupEventListeners() {
         if (::eventListeners.isInitialized) {
-            eventListeners.forEach { (type, wrapper) -> element.removeEventListener(type, wrapper) }
+            eventListeners.forEach { (type, entry) ->
+                entry.first.removeEventListener(type, entry.second)
+            }
         }
     }
 

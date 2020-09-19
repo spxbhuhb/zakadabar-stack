@@ -20,17 +20,11 @@ package zakadabar.stack.frontend.builtin.desktop.image
 import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
-import zakadabar.stack.frontend.extend.ScopedViewContract
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
 class ImageView(private val dto: EntityRecordDto) : ComplexElement() {
 
-    companion object : ScopedViewContract() {
-
-        override fun newInstance(scope: Any?) = ImageView(scope as EntityRecordDto)
-
-    }
 
     override fun init(): ImageView {
 

@@ -1,48 +1,24 @@
 # Data
 
-Examples:
-
-* [Query Data Example - TODO](https://github.com/spxbhuhb/zakadabar-samples/tree/master/01-beginner/query-data)
-* [Record Data Example - TODO](https://github.com/spxbhuhb/zakadabar-samples/tree/master/01-beginner/record-data)
-* [Entity Data Example - TODO](https://github.com/spxbhuhb/zakadabar-samples/tree/master/01-beginner/entity-data)
-
 ## Terminology
 
-| Generic Concept | Explanation |
+| Name | Explanation |
 | ---- | ---- |
 | Table | An SQL table for persistence, the stack uses Exposed tables. |
 | DAO | A Data Access Object used on the backend that makes handling the data easier, the stack uses Exposed DAOs. |
-| DTO | A Data Transfer Object that we use to transfer data between the client and the frontend. |
+| DTO | A Data Transfer Object that we use to transfer data between the frontend and the backend. |
+| Query Parameters DTO | The frontend sends query parameters to the backend. Not for CRUD. |
+| Query Response DTO |  The backend sends the result of a query to the frontend. Not for CRUD. |
+| Record DTO | DTO for a Record which has a type and an id. Not the very same as an SQL table record, but close. Usually with standard CRUD API. |
+| Entity DTO | DTO for an Entity in the entity tree (see below). These are meant to build a hierarchical structure, like folders and files. Standard CRUD API with hierarchy support. |
 
-## DTO Types
-
-There are three DTO types in the stack:
-
-| Type | Use |
-| ---- | --- |
-| Query DTO | The backend sends the result of a complex query (joins etc.) to the frontend. |
-| Record DTO | Plain SQL tables with a Long id. Usually with standard REST API. |
-| Entity DTO | Entities in the entity tree (see below). These are meant to build a hierarchical structure, like folders and files. Standard REST API with hierarchy support. |
-
-### Query DTOs
-
-Used mostly for lists which contain just some parts of the actual data. Like tables which contain only the main
-field of the backing records.
-
-Query DTOs are mostly read only, creation and update usually uses record and/or entity DTOs.
-
-### Record DTOs
-
-These are good old SQL records of SQL tables.
-
-If your DTO implement the [DtoWithRecordContract](../../../src/commonMain/kotlin/zakadabar/stack/extend/DtoWithRecordContract.kt)
-interface, you can use a [RecordRestComm](../../../src/jsMain/kotlin/zakadabar/stack/frontend/comm/rest/RecordRestComm.kt)
-to handle your data easily.
-
-### Entity DTOs
+### Entities
 
 The stack maintains a so-called **Entity Tree**. The nodes and leaves are entities
-stored in the SQL table `t_3a8627_entities`. 
+stored in the SQL table `t_3a8627_entities`.
+
+For each entity there is a row in the `t_3a8627_entities` SQL table and usually there
+is be a record in some other table, depending on the `type` of the entity.
 
 Points of interest:
 
@@ -58,14 +34,41 @@ its data as entities for example:
 * folders
 
 It is important, that the entity tree is not suitable for everything. For example:
-it is better to store order records outside of the tree as there are many, and 
-you will probably write a specific query API for it anyway.
+it is better to store order records outside of the tree when there are many. 
+You will probably write a specific query API for it anyway.
 
 That said, entities are very useful because they give you a well-defined and easy
 way to extend the system. After you define a new entity type most parts of the 
 application will automatically include it.
 
-## Query DTOs
+## Serialization
+
+Serialization of DTOs use kotlinx.serialization. Just add the `@Serializable`
+annotation in front of the DTO class.
+
+When serializing kotlinx.datetime data types the appropriate annotation is needed:
+
+```kotlin
+@file:UseSerializers(InstantAsStringSerializer::class)
+```
+
+## Communication
+
+The stack provides communication support for all DTO types. 
+
+
+
+## Query Parameter DTOs
+
+```kotlin
+@Serializable
+data class QueryDto(
+    val field1 : String,
+    val field2 : String,
+) {
+    
+}
+```
 
 ### Write a Query DTO
 

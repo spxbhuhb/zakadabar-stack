@@ -16,7 +16,7 @@ class EntityNavigatorItem(
 ) : ComplexElement() {
 
     override fun init(): EntityNavigatorItem {
-        val support = FrontendContext.entitySupports[dto.type]
+        val support = FrontendContext.dtoFrontends[dto.entityType]
 
         val iconSource = support?.iconSource ?: Icons.description
         val typeName = support?.displayName ?: FrontendContext.t("entity")

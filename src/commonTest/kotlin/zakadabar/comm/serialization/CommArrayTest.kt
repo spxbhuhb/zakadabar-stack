@@ -3,8 +3,8 @@
  */
 package zakadabar.comm.serialization
 
-import zakadabar.stack.comm.serialization.InputCommArray
-import zakadabar.stack.comm.serialization.OutputCommArray
+import zakadabar.stack.comm.websocket.serialization.InputCommArray
+import zakadabar.stack.comm.websocket.serialization.OutputCommArray
 import zakadabar.stack.util.UUID
 import kotlin.math.abs
 import kotlin.test.Test

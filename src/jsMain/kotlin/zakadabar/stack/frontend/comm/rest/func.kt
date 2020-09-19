@@ -24,7 +24,7 @@ import zakadabar.stack.frontend.errors.FetchError
 import zakadabar.stack.frontend.errors.ensure
 import zakadabar.stack.frontend.util.json
 
-suspend fun <T> getChildrenOf(parentId : Long?, path : String, serializer : KSerializer<T>): List<T> {
+suspend fun <T> childrenOf(parentId: Long?, path: String, serializer: KSerializer<T>): List<T> {
     val responsePromise = window.fetch("/api/" + if (parentId == null) path else "${path}?parent=$parentId")
     val response = responsePromise.await()
 

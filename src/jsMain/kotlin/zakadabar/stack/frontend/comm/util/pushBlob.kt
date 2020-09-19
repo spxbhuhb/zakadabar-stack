@@ -12,8 +12,8 @@ import org.khronos.webgl.get
 import org.w3c.dom.events.Event
 import org.w3c.files.Blob
 import org.w3c.files.FileReader
-import zakadabar.stack.comm.session.SessionError
-import zakadabar.stack.comm.util.PushContent
+import zakadabar.stack.comm.websocket.session.SessionError
+import zakadabar.stack.comm.websocket.util.PushContent
 import zakadabar.stack.frontend.FrontendContext
 
 /**

@@ -38,7 +38,7 @@ class EntityDao(id: EntityID<Long>) : LongEntity(id) {
         status = status,
         parentId = parent?.id?.value,
         revision = revision,
-        type = type,
+        entityType = type,
         name = name,
         size = size,
         modifiedAt = modifiedAt.toKotlinInstant(),
@@ -170,7 +170,7 @@ class EntityDao(id: EntityID<Long>) : LongEntity(id) {
                 acl = if (dtoAcl == null) null else EntityDao[dtoAcl]
                 status = dto.status
                 parent = if (dtoParentId == null) null else EntityDao[dtoParentId]
-                type = dto.type
+                type = dto.entityType
                 size = dto.size
                 revision = dto.revision
                 createdAt = now

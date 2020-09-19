@@ -5,10 +5,11 @@ package zakadabar.stack.backend.builtin.entities.data
 
 import org.jetbrains.exposed.dao.id.LongIdTable
 import zakadabar.stack.Stack
+import zakadabar.stack.backend.builtin.session.data.SessionTable
 
 object Locks : LongIdTable("t_${Stack.shid}_locks") {
     val entity = reference("entity", EntityTable).index()
-    val session = reference("session", Sessions)
+    val session = reference("session", SessionTable)
     val revision = long("revision")
     val content = long("content")
 }

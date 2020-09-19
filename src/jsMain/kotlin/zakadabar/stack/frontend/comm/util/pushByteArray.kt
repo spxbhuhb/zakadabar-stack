@@ -3,8 +3,8 @@
  */
 package zakadabar.stack.frontend.comm.util
 
-import zakadabar.stack.comm.session.SessionError
-import zakadabar.stack.comm.util.PushContent
+import zakadabar.stack.comm.websocket.session.SessionError
+import zakadabar.stack.comm.websocket.util.PushContent
 import zakadabar.stack.frontend.FrontendContext
 import zakadabar.stack.util.PublicApi
 

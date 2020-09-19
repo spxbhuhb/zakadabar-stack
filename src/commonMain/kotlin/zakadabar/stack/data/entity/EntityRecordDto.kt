@@ -10,9 +10,9 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import zakadabar.stack.Stack
-import zakadabar.stack.data.DtoWithRecordCompanion
-import zakadabar.stack.data.InstantAsStringSerializer
-import zakadabar.stack.extend.DtoWithRecordContract
+import zakadabar.stack.data.record.RecordDto
+import zakadabar.stack.data.record.RecordDtoCompanion
+import zakadabar.stack.data.util.InstantAsStringSerializer
 import zakadabar.stack.util.PublicApi
 
 @Serializable
@@ -21,22 +21,24 @@ data class EntityRecordDto(
     val acl: Long?,
     val status: EntityStatus,
     val parentId: Long?,
-    val type: String,
+    val entityType: String,
     val name: String,
     val size: Long,
     val revision: Long,
     val modifiedBy: Long,
     val modifiedAt: Instant
-) : DtoWithRecordContract<EntityRecordDto> {
+) : RecordDto<EntityRecordDto> {
 
-    companion object : DtoWithRecordCompanion<EntityRecordDto>() {
+    companion object : RecordDtoCompanion<EntityRecordDto>() {
 
-        fun new(parentId: Long?, type: String, name: String) = EntityRecordDto(
+        override val type = "${Stack.shid}/entity"
+
+        fun new(parentId: Long?, entityType: String, name: String) = EntityRecordDto(
             id = 0,
             acl = null,
             status = EntityStatus.Active,
             parentId = parentId,
-            type = type,
+            entityType = entityType,
             name = name,
             size = 0,
             revision = 1,
@@ -100,7 +102,7 @@ data class EntityRecordDto(
     }
 
     fun requireType(type: String): EntityRecordDto {
-        require(this.type == type)
+        require(this.entityType == type)
         return this
     }
 
@@ -117,10 +119,13 @@ data class EntityRecordDto(
     fun childrenUrl() = Companion.childrenUrl(this.id)
 
     fun prettyPrint(): String {
-        return "# ${id.toString().padEnd(6)}  ${name.padEnd(40)}  size: ${size.toString().padStart(8)}  type: ${type.padEnd(20)} rev: ${revision.toString().padEnd(6)}  $modifiedAt"
+        return "# ${id.toString().padEnd(6)}  ${name.padEnd(40)}  size: ${size.toString().padStart(8)}  type: ${entityType.padEnd(20)} rev: ${revision.toString().padEnd(6)}  $modifiedAt"
     }
 
     override fun comm() = comm
+
+    override fun getType() = type
+
 }
 
 

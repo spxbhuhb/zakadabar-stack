@@ -11,7 +11,7 @@ import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.input.Input
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
-import zakadabar.stack.frontend.extend.FrontendEntitySupport
+import zakadabar.stack.frontend.extend.DtoFrontend
 
 /**
  * Entity creation from the global navigator. Displays list of entity types that
@@ -32,7 +32,7 @@ class NewEntity(
 
     private val typeList = ComplexElement()
 
-    internal var selected: FrontendEntitySupport<*>? = null
+    internal var selected: DtoFrontend<*>? = null
 
     var repeat = false
 
@@ -52,10 +52,10 @@ class NewEntity(
 
         this += typeList.withClass(coreClasses.w100) // TODO some scrolling and height limit would be nice
 
-        FrontendContext.entitySupports.forEach {
-            if (it.value.newView != null) {
-                typeList += NewEntityItem(this, it.value)
-            }
+        FrontendContext.dtoFrontends.forEach {
+//            if (it.value.hasCreate) {
+            typeList += NewEntityItem(this, it.value)
+            //}
         }
 
         input.value = ""
@@ -71,10 +71,9 @@ class NewEntity(
         this -= inputAndActions
         this -= typeList
 
-        val entityBuilder = selected?.newView?.newElement(this)
+        val entityBuilder = selected?.createView()
         this += entityBuilder
         entityBuilder?.focus()
-
     }
 
     fun close() {
@@ -87,7 +86,7 @@ class NewEntity(
         val trimmed = s.trim().toLowerCase()
         var count = 0
 
-        var lastShown: FrontendEntitySupport<*>? = null
+        var lastShown: DtoFrontend<*>? = null
 
         typeList.childElements.forEach {
             if (it is NewEntityItem) {

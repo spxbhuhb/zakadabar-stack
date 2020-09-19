@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.comm.util
 
-import zakadabar.stack.comm.util.FetchContent
+import zakadabar.stack.comm.websocket.util.FetchContent
 import zakadabar.stack.frontend.FrontendContext
 
 suspend fun fetchAsByteArray(entityId: Long, revision: Long): ByteArray {
