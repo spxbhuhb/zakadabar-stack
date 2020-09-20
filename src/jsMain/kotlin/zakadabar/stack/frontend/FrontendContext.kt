@@ -9,7 +9,6 @@ import kotlinx.coroutines.await
 import zakadabar.stack.Stack
 import zakadabar.stack.comm.websocket.session.StackClientSession
 import zakadabar.stack.data.builtin.security.CommonAccountDto
-import zakadabar.stack.frontend.FrontendContext.dispatcher
 import zakadabar.stack.frontend.FrontendContext.dtoFrontends
 import zakadabar.stack.frontend.FrontendContext.stackSession
 import zakadabar.stack.frontend.builtin.dock.Dock
@@ -32,14 +31,6 @@ import zakadabar.stack.util.Unique
  * Switching language and the styles require refreshing of the page in the
  * browser. That is fine, as the user does these rarely and most of the page
  * has to be changed anyway.
- *
- * @property  dispatcher      Dispatcher to send messages to other components.
- *
- * @property  views           Entity independent views added by modules. See
- *                            [ViewContract] for more information.
- *
- * @property  scopedViews     Entity independent scoped views added by modules.
- *                            See [ScopedViewContract] for more information.
  *
  * @property  dtoFrontends    A map of dto type (such as "3a8627/folder") and
  *                            [DtoFrontend] pairs. Modules add their

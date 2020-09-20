@@ -5,7 +5,9 @@ package zakadabar.stack.frontend.builtin.navigation
 
 import kotlinx.browser.window
 import org.w3c.dom.events.Event
+import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.frontend.FrontendContext
+import zakadabar.stack.frontend.util.launch
 
 object Navigation {
 
@@ -93,6 +95,16 @@ object Navigation {
     fun changeLocation(type: String, id: Long, view: String) {
 
     }
+
+    fun changeLocation(dto: RecordDto<*>, view: String) {
+        val path = "/view/${dto.getType()}/${dto.id}/$view"
+        window.history.pushState("", "", path)
+        decodeLocation(path, "")
+        window.dispatchEvent(Event(EVENT))
+    }
+
+    fun changeLocation(view: String, fetch: suspend () -> RecordDto<*>) =
+        launch { changeLocation(fetch(), view) }
 
     fun changeLocation(path: String) {
         window.history.pushState("", "", path)

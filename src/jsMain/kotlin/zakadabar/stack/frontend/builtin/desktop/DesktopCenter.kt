@@ -51,7 +51,7 @@ open class DesktopCenter(
         return this
     }
 
-    private fun onNavigation() {
+    open fun onNavigation() {
 
         val state = Navigation.state
 
@@ -88,4 +88,9 @@ open class DesktopCenter(
         }
     }
 
+    fun switchMain(newMain: ComplexElement) {
+        this -= mainInstance
+        mainInstance = newMain
+        this += mainInstance
+    }
 }

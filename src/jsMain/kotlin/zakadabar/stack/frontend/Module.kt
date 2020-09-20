@@ -4,6 +4,7 @@
 package zakadabar.stack.frontend
 
 import zakadabar.stack.Stack
+import zakadabar.stack.frontend.builtin.desktop.entity.EntityRecordFrontend
 import zakadabar.stack.frontend.builtin.i18n
 import zakadabar.stack.frontend.extend.FrontendModule
 import zakadabar.stack.util.PublicApi
@@ -16,6 +17,8 @@ object Module : FrontendModule() {
     override fun init() {
 
         FrontendContext += uuid to i18n
+
+        FrontendContext += EntityRecordFrontend
 
 //        FrontendContext += Desktop
 //        FrontendContext += EntityNavigator

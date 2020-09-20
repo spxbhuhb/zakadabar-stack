@@ -49,26 +49,26 @@ abstract class DtoFrontend<T : RecordDto<T>>(
 
     @PublicApi
     fun createView() = ComplexElement() build {
-        + "create view for ${this::class.simpleName} is not implemented"
+        + "create view for ${this@DtoFrontend::class.simpleName} is not implemented"
     }
 
     @PublicApi
     fun readView() = ComplexElement() build {
-        + "read view for ${this::class.simpleName} is not implemented"
+        + "read view for ${this@DtoFrontend::class.simpleName} is not implemented"
     }
 
     @PublicApi
     fun updateView() = ComplexElement() build {
-        + "update view for ${this::class.simpleName} is not implemented"
+        + "update view for ${this@DtoFrontend::class.simpleName} is not implemented"
     }
 
     @PublicApi
     fun deleteView() = ComplexElement() build {
-        + "delete view for ${this::class.simpleName} is not implemented"
+        + "delete view for ${this@DtoFrontend::class.simpleName} is not implemented"
     }
 
     @PublicApi
     fun allView() = ComplexElement() build {
-        + "all view for ${this::class.simpleName} is not implemented"
+        + "all view for ${this@DtoFrontend::class.simpleName} is not implemented"
     }
 }

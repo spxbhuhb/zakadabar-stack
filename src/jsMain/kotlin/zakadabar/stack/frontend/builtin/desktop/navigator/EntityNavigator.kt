@@ -4,6 +4,7 @@
 package zakadabar.stack.frontend.builtin.desktop.navigator
 
 import kotlinx.browser.document
+import kotlinx.browser.window
 import org.w3c.dom.DataTransfer
 import org.w3c.dom.events.Event
 import zakadabar.entity.browser.frontend.util.EntityDrop
@@ -11,8 +12,13 @@ import zakadabar.stack.data.builtin.FolderDto
 import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext.dispatcher
 import zakadabar.stack.frontend.FrontendContext.t
-import zakadabar.stack.frontend.builtin.desktop.messages.*
+import zakadabar.stack.frontend.builtin.desktop.messages.EntityAdded
+import zakadabar.stack.frontend.builtin.desktop.messages.EntityChildrenLoaded
+import zakadabar.stack.frontend.builtin.desktop.messages.EntityRemoved
+import zakadabar.stack.frontend.builtin.desktop.messages.EntityUpdated
 import zakadabar.stack.frontend.builtin.desktop.navigator.NavigatorClasses.Companion.navigatorClasses
+import zakadabar.stack.frontend.builtin.navigation.Navigation
+import zakadabar.stack.frontend.builtin.navigation.NavigationState
 import zakadabar.stack.frontend.builtin.util.droparea.DropArea
 import zakadabar.stack.frontend.builtin.util.status.Status
 import zakadabar.stack.frontend.builtin.util.status.StatusInfo
@@ -50,7 +56,7 @@ class EntityNavigator : ComplexElement() {
                 + dropArea
 
                 on("click", ::onClick)
-                on("dblclick", ::onDoubleClick)
+                on("dblclick", ::onClick)
             }
         }
 
@@ -60,11 +66,11 @@ class EntityNavigator : ComplexElement() {
 
         on(EntityChildrenLoaded::class, ::onEntityChildrenLoaded)
 
+        on(window, Navigation.EVENT, ::onNavigation)
+
         return this
 
     }
-
-    // ---- Message handling (except new entity intents) ------------------
 
     private fun onEntityChildrenLoaded(message: EntityChildrenLoaded) {
         if (message.entityId != currentEntityId) return
@@ -75,18 +81,19 @@ class EntityNavigator : ComplexElement() {
         }
     }
 
-    private fun onGlobalNavigationRequest(message: GlobalNavigationRequest) {
+    private fun onNavigation() {
+        val state = Navigation.state
 
-//        EntityCache.launchGetChildren(parentId) { children, error ->
-//            dispatcher.postSync { EntityChildrenLoaded(parentId, children, error) }
-//        }
-//
-//        dispatcher.postSync { GlobalNavigationEvent(message.location) }
-    }
+        currentEntityId = when (state.stateType) {
+            NavigationState.StateType.Home -> null
+            NavigationState.StateType.View -> state.viewState !!.localId
+            NavigationState.StateType.Page -> return
+            NavigationState.StateType.Unknown -> return
+        }
 
-    private fun onGlobalNavigationEvent(message: GlobalNavigationEvent) {
-//        val match = regex.matchEntire(message.location) ?: return
-//        currentEntityId = match.groupValues[3].toLongOrNull()
+        launch {
+            render() // FIXME this is not properly synchronized
+        }
     }
 
     private fun onEntityAdded(message: EntityAdded) = refresh(message.dto.parentId)
@@ -108,12 +115,7 @@ class EntityNavigator : ComplexElement() {
 
     private fun onClick(event: Event) {
         val entityId = getEntityId(event) ?: return
-        dispatcher.postSync { PreviewEntityIntent(entityId) }
-    }
-
-    private fun onDoubleClick(event: Event) {
-        val entityId = getEntityId(event) ?: return
-        dispatcher.postSync { GlobalNavigationRequest(entityId) }
+        Navigation.changeLocation(Navigation.READ) { EntityRecordDto.read(entityId) }
     }
 
     private fun getEntityId(event: Event): Long? {

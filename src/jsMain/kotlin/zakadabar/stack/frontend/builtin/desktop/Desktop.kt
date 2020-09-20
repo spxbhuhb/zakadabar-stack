@@ -5,7 +5,9 @@ package zakadabar.stack.frontend.builtin.desktop
 
 import zakadabar.stack.frontend.builtin.desktop.DesktopClasses.Companion.desktopClasses
 import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.util.PublicApi
 
+@PublicApi
 class Desktop(
     val header: ComplexElement? = DesktopHeader(),
     val center: ComplexElement? = DesktopCenter(),
