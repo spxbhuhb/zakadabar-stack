@@ -4,36 +4,30 @@
 package zakadabar.stack.frontend.builtin.desktop
 
 import kotlinx.atomicfu.atomic
-import zakadabar.stack.Stack
+import kotlinx.browser.window
+import zakadabar.stack.frontend.FrontendContext.dtoFrontends
 import zakadabar.stack.frontend.builtin.desktop.DesktopClasses.Companion.desktopClasses
-import zakadabar.stack.frontend.builtin.desktop.messages.GlobalNavigationEvent
 import zakadabar.stack.frontend.builtin.desktop.navigator.EntityNavigator
+import zakadabar.stack.frontend.builtin.navigation.Navigation
+import zakadabar.stack.frontend.builtin.navigation.NavigationState
 import zakadabar.stack.frontend.builtin.util.Slider
-import zakadabar.stack.frontend.comm.rest.EntityCache
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.elements.SimpleElement
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.util.PublicApi
 
 /**
- * A desktop center component that show a navigator and views for entities
- * with [FrontendEntitySupport][zakadabar.stack.frontend.extend.DtoFrontend].
- *
- * On [GlobalNavigationEvent] gets the dto and then replaces the main with
- * one that can display the given dto.
+ * A desktop center component that show a navigator and views/pages.
  */
 @PublicApi
 open class DesktopCenter(
     private val navigationInstance: ComplexElement? = EntityNavigator()
 ) : ComplexElement() {
 
-    companion object {
-        val regex = Regex("/api/${Stack.shid}/entities((/([0-9]*))(/([a-z]*))*)*")
-    }
-
     private var revision = atomic(0)
 
-    private var mainInstance: ComplexElement? = null
+    private var mainInstance: SimpleElement? = null
 
     override fun init(): ComplexElement {
         super.init()
@@ -46,55 +40,52 @@ open class DesktopCenter(
             Slider(this, navigationInstance, minRemaining = 200.0).withClass(coreClasses.verticalSlider)
         }
 
-        mainInstance = getMainInstance(null, "read")
+        mainInstance = SimpleElement()
 
         this += navigationInstance
         this += slider
         this += mainInstance
 
-        on(GlobalNavigationEvent::class, ::onGlobalNavigationEvent)
+        on(window, Navigation.EVENT, ::onNavigation)
 
         return this
     }
 
-    private fun onGlobalNavigationEvent(message: GlobalNavigationEvent) {
+    private fun onNavigation() {
 
-        val match = regex.matchEntire(message.location) ?: return
+        val state = Navigation.state
 
         val eventRevision = revision.incrementAndGet()
 
         launch {
-            val entityId = match.groupValues[3].toLongOrNull()
-            val view = if (match.groupValues.size > 5) match.groupValues[5] else ""
-
-            val dto = if (entityId == null) null else EntityCache.read(entityId)
+            val viewState = state.viewState ?: return@launch
 
             // entity load took too long, the user clicked to somewhere else
             if (eventRevision != revision.value) return@launch
 
             this -= mainInstance
 
-            mainInstance = getMainInstance(null, view)
+            mainInstance = getMainInstance(viewState)
 
             this += mainInstance
         }
 
     }
 
-    open fun getMainInstance(id: Long?, view: String): ComplexElement? {
-        return null
-//        if (dto == null) return null
-//
-//        @Suppress("UNCHECKED_CAST")
-//        val dtoFrontend = dtoFrontends[dto.entityType] ?: return null
-//
-//        return when (view) {
-//            "create" -> dtoFrontend.createView()
-//            "", "read" -> dtoFrontend.readView(dto.id)
-//            "update" -> dtoFrontend.updateView(dto.id)
-//            "delete" -> dtoFrontend.deleteView(dto.id)
-//            else -> null
-//        }
+    open fun getMainInstance(viewState: NavigationState.ViewState): ComplexElement? {
+        if (viewState.localId == null) return null
+
+        @Suppress("UNCHECKED_CAST")
+        val dtoFrontend = dtoFrontends[viewState.dataType] ?: return null
+
+        return when (viewState.viewName) {
+            Navigation.CREATE -> dtoFrontend.createView()
+            Navigation.READ -> dtoFrontend.readView()
+            Navigation.UPDATE -> dtoFrontend.updateView()
+            Navigation.DELETE -> dtoFrontend.deleteView()
+            Navigation.ALL -> dtoFrontend.allView()
+            else -> null
+        }
     }
 
 }

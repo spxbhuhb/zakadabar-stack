@@ -4,6 +4,8 @@
 package zakadabar.stack.data.builtin.security
 
 import kotlinx.serialization.Serializable
+import zakadabar.stack.data.query.QueryDto
+import zakadabar.stack.data.query.QueryDtoCompanion
 
 /**
  * Get common account ids. Used to get the display name and avatar that belongs
@@ -12,6 +14,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 class SearchAccounts(
     val accountIds: List<Long>
-) {
+) : QueryDto<SearchAccounts> {
+
     suspend fun execute() = CommonAccountDto.comm.query(this, serializer())
+
+    companion object : QueryDtoCompanion(CommonAccountDto.Companion)
+
 }

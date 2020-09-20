@@ -8,6 +8,7 @@ import zakadabar.stack.Stack
 import zakadabar.stack.data.entity.EntityDto
 import zakadabar.stack.data.entity.EntityDtoCompanion
 import zakadabar.stack.data.entity.EntityRecordDto
+import zakadabar.stack.data.query.Queries
 import zakadabar.stack.data.schema.DtoSchema
 
 @Serializable
@@ -26,7 +27,12 @@ data class CommonAccountDto(
 ) : EntityDto<CommonAccountDto> {
 
     companion object : EntityDtoCompanion<CommonAccountDto>() {
+
         override val type = "${Stack.shid}/account"
+
+        override val queries = Queries.build {
+            + SearchAccounts.Companion
+        }
     }
 
     override fun schema() = DtoSchema.build {

@@ -11,7 +11,6 @@ import zakadabar.stack.data.builtin.FolderDto
 import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext.dispatcher
 import zakadabar.stack.frontend.FrontendContext.t
-import zakadabar.stack.frontend.builtin.desktop.DesktopCenter.Companion.regex
 import zakadabar.stack.frontend.builtin.desktop.messages.*
 import zakadabar.stack.frontend.builtin.desktop.navigator.NavigatorClasses.Companion.navigatorClasses
 import zakadabar.stack.frontend.builtin.util.droparea.DropArea
@@ -55,9 +54,6 @@ class EntityNavigator : ComplexElement() {
             }
         }
 
-        on(GlobalNavigationRequest::class, ::onGlobalNavigationRequest)
-        on(GlobalNavigationEvent::class, ::onGlobalNavigationEvent)
-
         on(EntityAdded::class, ::onEntityAdded)
         on(EntityRemoved::class, ::onEntityRemoved)
         on(EntityUpdated::class, ::onEntityUpdated)
@@ -81,20 +77,16 @@ class EntityNavigator : ComplexElement() {
 
     private fun onGlobalNavigationRequest(message: GlobalNavigationRequest) {
 
-        val match = regex.matchEntire(message.location) ?: return
-
-        val parentId = match.groupValues[3].toLongOrNull()
-
-        EntityCache.launchGetChildren(parentId) { children, error ->
-            dispatcher.postSync { EntityChildrenLoaded(parentId, children, error) }
-        }
-
-        dispatcher.postSync { GlobalNavigationEvent(message.location) }
+//        EntityCache.launchGetChildren(parentId) { children, error ->
+//            dispatcher.postSync { EntityChildrenLoaded(parentId, children, error) }
+//        }
+//
+//        dispatcher.postSync { GlobalNavigationEvent(message.location) }
     }
 
     private fun onGlobalNavigationEvent(message: GlobalNavigationEvent) {
-        val match = regex.matchEntire(message.location) ?: return
-        currentEntityId = match.groupValues[3].toLongOrNull()
+//        val match = regex.matchEntire(message.location) ?: return
+//        currentEntityId = match.groupValues[3].toLongOrNull()
     }
 
     private fun onEntityAdded(message: EntityAdded) = refresh(message.dto.parentId)

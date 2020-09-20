@@ -89,6 +89,10 @@ class Server : CliktCommand() {
                 masking = c.masking
             }
 
+            install(StatusPages) {
+                statusFile(HttpStatusCode.NotFound, filePattern = "index.html")
+            }
+
             routing {
                 if (config.traceRouting) trace { wsLogger.trace(it.buildText()) }
 

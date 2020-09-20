@@ -1,12 +1,13 @@
 # URLs
 
-Two types:
+Types:
 
 - API URL, for frontend - backend communication
-- View URL, for frontend location
+- View URL, for frontend data based views
+- Page URL, for frontend non-data pages (start page, login etc.)
 
 Compose / decompose URLs programmatically from class and type names. Do not
-hardcode URLs manually, so refactor, move etc. will work properly.
+hardcode URLs manually, so refactor, move etc. will work automatically.
 
 See also:
 - [Frontend Navigation](../frontend/Navigation.md)
@@ -47,10 +48,12 @@ the entity and resolve entity paths. It also provides the crud URLs listed above
 
 ## View URLs
 
-On the frontend the actual view which is displayed to the user has a view url.
-This tells the frontend what to show to the user. 
+On the frontend data related views usually use a View URL. These URLs belong
+to data records naturally, contain the type and id of the data they handle.
 
-Crud:
+These URLs don't exist on the backend. 
+
+### Crud
 
 | View | URL |
 | ---- | --- |
@@ -59,7 +62,7 @@ Crud:
 | Update | `/view/eae64d/rabbit/12/update` |
 | Delete | `/view/eae64d/rabbit/12/delete` |
 
-Listing and queries:
+### Listing and queries
 
 | View | URL |
 | ---- | --- |
@@ -67,7 +70,15 @@ Listing and queries:
 | Query | `/view/eae64d/rabbit/RabbitSearch?q={"name":"Bunny"}` |
 | Query | `/view/eae64d/rabbit/RabbitColors?q=[]` |
 
-### Data Paths
+### Special views
+
+When the standard CRUD and listing views are not enough and data should be
+displayed in a special way we use a local view name:
+
+`/view/eae64d/rabbit/RabbitDashboard`
+`/view/eae64d/rabbit/12/RabbitConnections`
+
+### Nested Data Paths
 
 Sometimes pages display structural information, think of breadcrumbs.
 To get this result the stack concatenates the types and ids
@@ -77,12 +88,20 @@ that lead to the currently displayed data:
 
 `/view/eae64d/quest/1/eae64d/cave/2/eae64d/rabbit/RabbitColors?q=[]`
 
-### EBNF
+### Page URLs
+
+Use page URLs when the page don't belong to a data record type naturally.
+Examples: start page, login, dashboards.
+
+`/page/eae64d/Login`
+`/page/eae64d/Main`
+
+## EBNF for View and Page URLs
 
 ```text
 URL ::= PageURL | ViewURL
 
-PageURL ::= '/page/' PageName
+PageURL ::= '/page/' ModuleId '/' PageName Query?
 
 PageName ::= any string
 
@@ -92,7 +111,7 @@ PathItem ::= DataType LocalId
 
 DataType ::= ModuleShid '/' LocalName '/'
 
-ViewName ::= 'create' | 'read' | 'update' | 'delete' | 'all' | QueryName
+ViewName ::= 'create' | 'read' | 'update' | 'delete' | 'all' | LocalName | QueryName
 
 Query ::= '?q=' QueryData
 
@@ -100,11 +119,11 @@ ModuleShid ::= [0-9a-f] [0-9a-f] [0-9a-f] [0-9a-f] [0-9a-f] [0-9a-f]
 
 LocalId ::= [0-9] [0-9]* '/'
 
-LocalName ::= any string without the "/" character
+LocalName ::= any string without the "/" character (should conform URL requirements)
 
-TypeName ::= Kotlin Class simple name
+TypeName ::= Kotlin Class simple name (should conform URL requirements)
 
-QueryName ::= Kotlin Class simple name
+QueryName ::= Kotlin Class simple name (should conform URL requirements)
 
 QueryData = JSON serialized query DTO content
 ```

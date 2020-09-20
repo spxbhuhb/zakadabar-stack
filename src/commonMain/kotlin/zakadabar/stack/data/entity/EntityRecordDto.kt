@@ -10,6 +10,7 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import zakadabar.stack.Stack
+import zakadabar.stack.data.query.Queries
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.util.InstantAsStringSerializer
@@ -33,6 +34,10 @@ data class EntityRecordDto(
 
         override val type = "${Stack.shid}/entity"
 
+        override val queries = Queries.build {
+            + ChildrenQuery.Companion
+        }
+
         fun new(parentId: Long?, entityType: String, name: String) = EntityRecordDto(
             id = 0,
             acl = null,
@@ -51,8 +56,8 @@ data class EntityRecordDto(
          */
         @PublicApi
         fun dtoUrl(entityId: Long? = null) = when (entityId) {
-            null -> "/api/${Stack.shid}/entities"
-            else -> "/api/${Stack.shid}/entities/$entityId"
+            null -> "/api/$type"
+            else -> "/api/$type/$entityId"
         }
 
         /**
@@ -60,8 +65,8 @@ data class EntityRecordDto(
          */
         @PublicApi
         fun childrenUrl(entityId: Long? = null) = when (entityId) {
-            null -> "/api/${Stack.shid}/entities"
-            else -> "/api/${Stack.shid}/entities?parent=$entityId"
+            null -> "/api/$type"
+            else -> "/api/$type?parent=$entityId"
         }
 
         /**
@@ -71,9 +76,9 @@ data class EntityRecordDto(
          * @param  viewName  The view to get the URL for.
          */
         fun viewUrl(entityId: Long?, viewName: String? = null) = when {
-            entityId == null -> "/api/${Stack.shid}/entities"
-            viewName != null -> "/api/${Stack.shid}/entities/$entityId/$viewName"
-            else -> "/api/${Stack.shid}/entities/$entityId"
+            entityId == null -> "/api/$type"
+            viewName != null -> "/api/$type/$entityId/$viewName"
+            else -> "/api/$type/$entityId"
         }
 
         /**
@@ -83,8 +88,8 @@ data class EntityRecordDto(
          * @param  revision  Revision number or null to get the last revision.
          */
         fun revisionUrl(entityId: Long, revision: Long? = null) = when (revision) {
-            null -> "/api/${Stack.shid}/entities/$entityId/revisions"
-            else -> "/api/${Stack.shid}/entities/$entityId/revisions/$revision"
+            null -> "/api/$type/$entityId/revisions"
+            else -> "/api/$type/$entityId/revisions/$revision"
         }
 
         /**
@@ -93,7 +98,7 @@ data class EntityRecordDto(
          * @param  entityPath  Path to resolve.
          */
         @PublicApi
-        fun resolveUrl(entityPath: String) = "/api/${Stack.shid}/resolve/${entityPath.trim('/')}"
+        fun resolveUrl(entityPath: String) = "/api/$type/resolve/${entityPath.trim('/')}"
     }
 
     fun requireId(id: Long): EntityRecordDto {

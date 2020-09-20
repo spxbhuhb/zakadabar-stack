@@ -79,6 +79,7 @@ object FrontendContext {
         executor = CommonAccountDto.comm.read(id)
 
         dock = Dock().init() // this does not add it to the DOM, it's just created
+
     }
 
     // ----  Comm ----------------------------------------------------------

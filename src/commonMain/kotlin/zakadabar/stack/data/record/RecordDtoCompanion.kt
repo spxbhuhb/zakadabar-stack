@@ -5,6 +5,7 @@ package zakadabar.stack.data.record
 
 import kotlinx.serialization.KSerializer
 import zakadabar.stack.comm.http.Comm
+import zakadabar.stack.data.query.QueryDtoCompanion
 
 abstract class RecordDtoCompanion<T : RecordDto<T>> {
 
@@ -15,5 +16,7 @@ abstract class RecordDtoCompanion<T : RecordDto<T>> {
     abstract fun serializer(): KSerializer<T>
 
     suspend fun read(id: Long) = comm.read(id)
+
+    open val queries = emptyMap<String, QueryDtoCompanion>()
 
 }

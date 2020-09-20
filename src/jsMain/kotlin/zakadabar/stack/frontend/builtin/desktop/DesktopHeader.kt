@@ -7,16 +7,12 @@ import kotlinx.dom.clear
 import org.w3c.dom.events.Event
 import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext.dispatcher
-import zakadabar.stack.frontend.builtin.desktop.DesktopCenter.Companion.regex
 import zakadabar.stack.frontend.builtin.desktop.DesktopClasses.Companion.desktopClasses
-import zakadabar.stack.frontend.builtin.desktop.messages.GlobalNavigationEvent
 import zakadabar.stack.frontend.builtin.desktop.messages.GlobalNavigationRequest
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.header.HeaderClasses.Companion.headerClasses
-import zakadabar.stack.frontend.comm.rest.EntityCache
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.util.getElementId
-import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
@@ -41,20 +37,7 @@ class DesktopHeader : ComplexElement() {
             + path
         }
 
-        on(GlobalNavigationEvent::class, ::onGlobalNavigationEvent)
-
         return this
-    }
-
-    private fun onGlobalNavigationEvent(message: GlobalNavigationEvent) {
-
-        val match = regex.matchEntire(message.location) ?: return
-
-        val id = match.groupValues[3].toLongOrNull()
-
-        launch {
-            path.update(if (id == null) null else EntityCache.read(id))
-        }
     }
 
     private fun onHomeClick(@Suppress("UNUSED_PARAMETER") event: Event) =

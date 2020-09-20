@@ -3,12 +3,16 @@
 Applications built on Zakadabar Stack are Single Page Applications (SPA) in which so-called 
 `pages` and `views` show the content to the user.
 
-The [Location](https://developer.mozilla.org/en-US/docs/Web/API/Location) determines which
-views are active and what data they show. See [URLs](../common/URLs.md#View-URLs) for
+The browser's [Location](https://developer.mozilla.org/en-US/docs/Web/API/Location) determines
+which views/pages are active and what they show. See [URLs](../common/URLs.md#View-URLs) for
 more information.
 
-The [Navigation](../../../src/jsMain/kotlin/zakadabar/stack/frontend/builtin/navigation/Navigation.kt) object
-provides functions to easily switch locations and views on the frontend.
+The [Navigation](../../../src/jsMain/kotlin/zakadabar/stack/frontend/builtin/navigation/Navigation.kt) object:
+
+- stores the current [NavigationState](../../../src/jsMain/kotlin/zakadabar/stack/frontend/builtin/navigation/NavigationState.kt) in its  `state` property
+- has functions to easily switch locations
+- notifies elements when the location changes
+- handles the browser `back` and `forward` button
 
 ## Mechanism
 
@@ -17,15 +21,15 @@ Working example:
 
 ### Page Load
 
-`FrontendContext.init` calls `Navigation.init` to initialize the navigation. This typically happens when
-the `main` function runs. 
+To initialise navigation call `Navigation.init`. This is typically the last call in `main.kt`.
 
-`Navigation.init`
+`Navigation.init`:
 
+1. adds event listener to the `popstate` browser event
 1. analyzes [Window.location](https://developer.mozilla.org/en-US/docs/Web/API/Location) and creates a
    [NavigationState](../../../src/jsMain/kotlin/zakadabar/stack/frontend/builtin/navigation/Navigation.kt)
-1. makes newly created navigation state accessible by `Navigation.state`
-1. creates a browser event `new Event(Navigation.EVENT)` and dispatches it on the `window`
+1. sets `Navigation.state` to contain the newly created navigation state 
+1. creates a browser event of type `Navigation.EVENT` and dispatches it on the browser `window`
 1. elements that listen on this event add the appropriate `page` or `view` to the frontend, see [DesktopCenter](../../../src/jsMain/kotlin/zakadabar/stack/frontend/builtin/desktop/DesktopCenter.kt)
 
 ### Everything Else
@@ -33,7 +37,11 @@ the `main` function runs.
 Navigation happens when:
 
 - the user clicks on an element,
-- the user uses the `back` or `forward` function of the browser.
+- the user uses the `back` or `forward` function of the browser,
+- the code decides to switch the location.
+
+The [Navigation](../../../src/jsMain/kotlin/zakadabar/stack/frontend/builtin/navigation/Navigation.kt) object handles
+all of these cases.
 
 Elements that want to receive navigation events has to add an event listener:
 
@@ -129,7 +137,7 @@ Navigation.changeView(Navigation.UPDATE)
 Go deeper in a hierarchical data structure. This will result in a location with
 contains a data path. For example: `/view/eae64d/quest/1/eae64d/cave/2/eae64d/rabbit/3/read`
 
-See [URLs](../common/URLs.md#Data-Paths) for more information.
+See [URLs](../common/URLs.md#Nested-Data-Paths) for more information.
 
 ```kotlin
 // you are at: /view/eae64d/quest/1/eae64d/cave/2/read
@@ -141,7 +149,7 @@ Navigation.stepInto(RabbitDto.type, 12, Navigation.READ)
 
 Go higher in a hierarchical data structure.
 
-See [URLs](../common/URLs.md#Data-Paths) for more information.
+See [URLs](../common/URLs.md#Nested-Data-Paths) for more information.
 
 ```kotlin
 // you are at: /view/eae64d/quest/1/eae64d/cave/2/eae64d/rabbit/12/read
