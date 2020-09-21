@@ -25,10 +25,11 @@ import io.ktor.websocket.*
 import org.slf4j.LoggerFactory
 import zakadabar.stack.Stack
 import zakadabar.stack.backend.BackendContext
+import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.builtin.session.StackSession
 import zakadabar.stack.backend.builtin.session.session
-import zakadabar.stack.backend.comm.http.DtoBackend
 import zakadabar.stack.backend.comm.websocket.StackServerSession
+import zakadabar.stack.backend.data.DtoBackend
 import zakadabar.stack.backend.util.executor
 import zakadabar.stack.util.Executor
 import java.io.File
@@ -175,20 +176,18 @@ class Server : CliktCommand() {
     }
 
     private fun loadModules(config: Configuration) {
-        // load extensions
+
+        val modules = mutableListOf<BackendModule>()
 
         config.modules.forEach {
 
             val installable = Server::class.java.classLoader.loadClass(it).kotlin
 
-            require(installable.isSubclassOf(DtoBackend::class)) { "module $it is not loadable (maybe the name is wrong)" }
+            require(installable.isSubclassOf(BackendModule::class)) { "module $it is not loadable (maybe the name is wrong)" }
 
             try {
 
-                val module = (installable.objectInstance as DtoBackend<*>)
-                BackendContext += module
-                module.onLoad()
-
+                modules += (installable.objectInstance as BackendModule)
                 moduleLogger.info("loaded module $it")
 
             } catch (ex: Throwable) {
@@ -200,8 +199,12 @@ class Server : CliktCommand() {
 
         // backend installs create sql tables and whatever else they need
 
-        BackendContext.dtoBackends.forEach {
-            it.init()
+        modules.forEach {
+            if (it is DtoBackend<*>) {
+                BackendContext += it
+            } else {
+                it.init()
+            }
             moduleLogger.info("initialized module $it")
         }
     }

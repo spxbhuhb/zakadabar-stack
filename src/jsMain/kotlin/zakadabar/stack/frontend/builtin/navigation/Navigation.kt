@@ -8,6 +8,7 @@ import org.w3c.dom.events.Event
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.frontend.FrontendContext
 import zakadabar.stack.frontend.util.launch
+import zakadabar.stack.util.PublicApi
 
 object Navigation {
 
@@ -92,10 +93,7 @@ object Navigation {
         )
     }
 
-    fun changeLocation(type: String, id: Long, view: String) {
-
-    }
-
+    @PublicApi
     fun changeLocation(dto: RecordDto<*>, view: String) {
         val path = "/view/${dto.getType()}/${dto.id}/$view"
         window.history.pushState("", "", path)

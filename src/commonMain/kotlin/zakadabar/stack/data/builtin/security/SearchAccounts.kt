@@ -14,9 +14,9 @@ import zakadabar.stack.data.query.QueryDtoCompanion
 @Serializable
 class SearchAccounts(
     val accountIds: List<Long>
-) : QueryDto<SearchAccounts> {
+) : QueryDto {
 
-    suspend fun execute() = CommonAccountDto.comm.query(this, serializer())
+    suspend fun execute() = comm.query(this, serializer())
 
     companion object : QueryDtoCompanion(CommonAccountDto.Companion)
 

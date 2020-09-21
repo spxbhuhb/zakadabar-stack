@@ -17,6 +17,8 @@ abstract class RecordDtoCompanion<T : RecordDto<T>> {
 
     suspend fun read(id: Long) = comm.read(id)
 
+    suspend fun all() = comm.all()
+
     open val queries = emptyMap<String, QueryDtoCompanion>()
 
 }

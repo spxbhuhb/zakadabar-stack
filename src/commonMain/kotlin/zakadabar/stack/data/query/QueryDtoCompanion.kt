@@ -10,4 +10,7 @@ abstract class QueryDtoCompanion(
     val base: RecordDtoCompanion<*>
 ) {
     abstract fun serializer(): KSerializer<Any>
+
+    val comm
+        get() = base.comm
 }

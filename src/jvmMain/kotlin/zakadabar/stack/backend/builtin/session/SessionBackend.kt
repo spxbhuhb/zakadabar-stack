@@ -7,7 +7,7 @@ package zakadabar.stack.backend.builtin.session
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.builtin.session.data.SessionTable
-import zakadabar.stack.backend.comm.http.DtoBackend
+import zakadabar.stack.backend.data.DtoBackend
 import zakadabar.stack.data.builtin.session.SessionDto
 import zakadabar.stack.util.PublicApi
 

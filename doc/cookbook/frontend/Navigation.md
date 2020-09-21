@@ -65,11 +65,14 @@ Use the [navLink](../../../src/jsMain/kotlin/zakadabar/stack/frontend/builtin/na
 for add-and-forget navigation. They create an element and simply attach an event listener to "onclick" that 
 will perform the programmatic navigation (see below) when clicked.
 
+**Not yet implemented.**
+
 ```kotlin
 this build {
     + navLink(RabbitDto.type, 12, Navigation.READ, "Fluff-Bunny")
 }
 ```
+**Not yet implemented.**
 
 To use an element instead of simple text:
 
@@ -81,6 +84,8 @@ this build {
 
 Short hand for an anonymous complex element:
 
+**Not yet implemented.**
+
 ```kotlin
 this build {
     + navLink(RabbitDto.type, 12, Navigation.READ) { ! "<b>Fluff-Bunny</b>" }
@@ -91,6 +96,8 @@ When you have a DTO at hand you may use one of its `*Link` methods. They are sho
 [navLink](../../../src/jsMain/kotlin/zakadabar/stack/frontend/builtin/navigation/navLink.kt).
 
 Using elements and/or the shorthand also works.
+
+**Not yet implemented.**
 
 ```kotlin
 this build {
@@ -104,9 +111,19 @@ this build {
 }
 ```
 
+### Navigate To a Page
+
+To navigate to a page, add a navLink with the class.
+
+```kotlin
++ navLink(Tortuga::class, "Tortuga")
+```
+
 ### Navigate to Other Website
 
 To add navigation that goes to another website use:
+
+**Not yet implemented.**
 
 ```kotlin
 this build {
@@ -118,13 +135,22 @@ this build {
 
 ### Change the Location
 
-Change the location to another one. Usually independent of the current location.
+To change the location to another one. Usually independent of the current location.
 
 ```kotlin
-Navigation.changeLocation(RabbitDto.type, 12, Navigation.READ)
+val dto = RabbitDto.read(12)
+Navigation.changeLocation(toDto, Navigation.READ)
+```
+
+Or use a shorthand:
+
+```kotlin
+Navigation.changeLocation(Navigation.READ) { RabbitDto.read(12) }
 ```
 
 ### Change the View
+
+**Not yet implemented.**
 
 Change the view on the same data.
 
@@ -133,6 +159,8 @@ Navigation.changeView(Navigation.UPDATE)
 ```
 
 ### Step Into a Sub-Data Structure 
+
+**Not yet implemented.**
 
 Go deeper in a hierarchical data structure. This will result in a location with
 contains a data path. For example: `/view/eae64d/quest/1/eae64d/cave/2/eae64d/rabbit/3/read`
@@ -147,6 +175,8 @@ Navigation.stepInto(RabbitDto.type, 12, Navigation.READ)
 
 ### Step Out of a Sub-Data Structure 
 
+**Not yet implemented.**
+
 Go higher in a hierarchical data structure.
 
 See [URLs](../common/URLs.md#Nested-Data-Paths) for more information.
@@ -159,6 +189,8 @@ Navigation.stepOut()
 
 ### Go Back
 
+**Not yet implemented.**
+
 To go back to the previous location.
 
 - This call may cause the browser to leave your application.
@@ -170,6 +202,8 @@ Navigation.stepBack()
 
 ### Go Forward
 
+**Not yet implemented.**
+
 To go forward to a location you've seen before using `stepBack`.
 
 - This call may cause the browser to leave your application.
@@ -177,4 +211,30 @@ To go forward to a location you've seen before using `stepBack`.
 
 ```kotlin
 Navigation.stepForward()
+```
+
+## Building Navigation for an Application
+
+**Not yet implemented.**
+
+```kotlin
+Navigation.build {
+    group("header") {
+        item("header-item-1")
+        item("header-item-2")
+        item("header-item-3")
+    }
+    group("menu") {
+        item("menu-item-1", role = Roles.Administrator) {
+            + DtoBackend1::class
+            + DtoBackend2::class
+        }
+        item("menu-item-2", role = Roles.SiteMember) {
+            + AccountPage::class 
+        }
+        item("menu-item-3", role = Roles.Anonymous) {
+            + LoginPage::class
+        }
+    }
+}
 ```

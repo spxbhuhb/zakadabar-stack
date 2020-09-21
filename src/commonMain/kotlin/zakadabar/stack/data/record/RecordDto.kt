@@ -6,9 +6,6 @@ package zakadabar.stack.data.record
 import zakadabar.stack.comm.http.Comm
 import zakadabar.stack.data.schema.DtoSchema
 
-/**
- * A contract for DTO classes that have an id.
- */
 @Suppress("UNCHECKED_CAST")
 interface RecordDto<T> {
 

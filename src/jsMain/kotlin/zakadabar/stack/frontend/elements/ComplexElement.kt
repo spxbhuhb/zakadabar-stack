@@ -11,6 +11,7 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventTarget
 import zakadabar.stack.frontend.FrontendContext.dispatcher
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.frontend.util.log
 import zakadabar.stack.messaging.Message
 import zakadabar.stack.util.PublicApi
@@ -48,8 +49,14 @@ open class ComplexElement(
     // ---- DOM Builder
 
     override infix fun build(build: DOMBuilder.() -> Unit): ComplexElement {
-        val builder = DOMBuilder(element, this)
-        builder.build()
+        DOMBuilder(element, this).build()
+        return this
+    }
+
+    infix fun launchBuild(build: suspend DOMBuilder.() -> Unit): ComplexElement {
+        launch {
+            DOMBuilder(element, this@ComplexElement).build()
+        }
         return this
     }
 

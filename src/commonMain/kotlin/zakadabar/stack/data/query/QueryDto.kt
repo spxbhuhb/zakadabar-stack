@@ -3,4 +3,4 @@
  */
 package zakadabar.stack.data.query
 
-interface QueryDto<T>
+interface QueryDto

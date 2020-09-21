@@ -17,7 +17,7 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.builtin.entities.data.*
-import zakadabar.stack.backend.comm.http.DtoBackend
+import zakadabar.stack.backend.data.DtoBackend
 import zakadabar.stack.backend.util.ContentBlob
 import zakadabar.stack.backend.util.executor
 import zakadabar.stack.backend.util.sql

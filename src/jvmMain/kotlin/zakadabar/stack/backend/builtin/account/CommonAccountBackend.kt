@@ -11,7 +11,7 @@ import zakadabar.stack.backend.builtin.account.data.AccountTable
 import zakadabar.stack.backend.builtin.account.data.AccountTable.toDto
 import zakadabar.stack.backend.builtin.entities.data.EntityDao
 import zakadabar.stack.backend.builtin.entities.data.EntityTable
-import zakadabar.stack.backend.comm.http.DtoBackend
+import zakadabar.stack.backend.data.DtoBackend
 import zakadabar.stack.data.builtin.security.CommonAccountDto
 import zakadabar.stack.data.builtin.security.SearchAccounts
 import zakadabar.stack.data.entity.EntityStatus

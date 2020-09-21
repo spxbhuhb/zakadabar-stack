@@ -11,9 +11,9 @@ import zakadabar.stack.data.query.QueryDtoCompanion
 @Serializable
 class ChildrenQuery(
     val parentId: Long?
-) : QueryDto<ChildrenQuery> {
+) : QueryDto {
 
-    suspend fun execute() = EntityRecordDto.comm.query(this, kotlinx.serialization.serializer(), ListSerializer(EntityRecordDto.serializer()))
+    suspend fun execute() = comm.query(this, serializer(), ListSerializer(EntityRecordDto.serializer()))
 
     companion object : QueryDtoCompanion(EntityRecordDto.Companion)
 

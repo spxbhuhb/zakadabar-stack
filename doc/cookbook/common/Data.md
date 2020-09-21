@@ -7,119 +7,60 @@
 | Table | An SQL table for persistence, the stack uses Exposed tables. |
 | DAO | A Data Access Object used on the backend that makes handling the data easier, the stack uses Exposed DAOs. |
 | DTO | A Data Transfer Object that we use to transfer data between the frontend and the backend. |
-| Query Parameters DTO | The frontend sends query parameters to the backend. Not for CRUD. |
+| Data Record | A set of data fields which belong together logically. We use "Data Record" when we talk about abstract data model records. One data record may have one or more SQL table rows. |
+| Query | Everything that belongs to one data query: Query Parameter DTO, Query Response DTO, backend implementation. |
+| Query Parameter DTO | The frontend sends query parameters to the backend. Not for CRUD. |
 | Query Response DTO |  The backend sends the result of a query to the frontend. Not for CRUD. |
-| Record DTO | DTO for a Record which has a type and an id. Not the very same as an SQL table record, but close. Usually with standard CRUD API. |
+| Record DTO | DTO for a data record which has a type and an id. Not the very same as an SQL table record, but close. Usually with standard CRUD API. |
 | Entity DTO | DTO for an Entity in the entity tree (see below). These are meant to build a hierarchical structure, like folders and files. Standard CRUD API with hierarchy support. |
 
-### Entities
+## Data Records
 
-The stack maintains a so-called **Entity Tree**. The nodes and leaves are entities
-stored in the SQL table `t_3a8627_entities`.
+Data records have a:
+- Record DTO
+- [DTO Frontend](../frontend/DtoFrontend.md)
+- [DTO Backend](../backend/DtoBackend.md)
 
-For each entity there is a row in the `t_3a8627_entities` SQL table and usually there
-is be a record in some other table, depending on the `type` of the entity.
+### Writing a Record DTO
 
-Points of interest:
+Working example:
+  - [The Old Man from Scene 24 - RabbitDto.kt](https://github.com/spxbhuhb/zakadabar-samples/blob/master/01-beginner/the-old-man-from-Scene-24/src/commonMain/kotlin/zakadabar/samples/holygrail/data/rabbit/RabbitDto.kt)
+  - [The Old Man from Scene 24 - RabbitBackend.kt](https://github.com/spxbhuhb/zakadabar-samples/blob/master/01-beginner/the-old-man-from-Scene-24/src/jvmMain/kotlin/zakadabar/samples/holygrail/backend/rabbit/RabbitBackend.kt)
 
-* [EntityRecordDto](../../../src/commonMain/kotlin/zakadabar/stack/data/entity/EntityRecordDto.kt)
-* [EntityDao](../../../src/jvmMain/kotlin/zakadabar/stack/backend/builtin/entities/data/EntityDao.kt)
-* [EntityTable](../../../src/jvmMain/kotlin/zakadabar/stack/backend/builtin/entities/data/EntityDao.kt)
+To write a record DTO:
 
-Many stack functions revolve around these entities as the stack stores most of 
-its data as entities for example:
-
-* user accounts
-* access control objects (ACLs, roles, grants)
-* folders
-
-It is important, that the entity tree is not suitable for everything. For example:
-it is better to store order records outside of the tree when there are many. 
-You will probably write a specific query API for it anyway.
-
-That said, entities are very useful because they give you a well-defined and easy
-way to extend the system. After you define a new entity type most parts of the 
-application will automatically include it.
-
-## Serialization
-
-Serialization of DTOs use kotlinx.serialization. Just add the `@Serializable`
-annotation in front of the DTO class.
-
-When serializing kotlinx.datetime data types the appropriate annotation is needed:
-
-```kotlin
-@file:UseSerializers(InstantAsStringSerializer::class)
-```
-
-## Communication
-
-The stack provides communication support for all DTO types. 
-
-
-
-## Query Parameter DTOs
+- write the DTO class, RabbitDto in this case
+- write the DTO frontend
+- write the DTO backend
 
 ```kotlin
 @Serializable
-data class QueryDto(
-    val field1 : String,
-    val field2 : String,
-) {
-    
-}
-```
-
-### Write a Query DTO
-
-As query DTOs are only used for getting data from the server we don't define a schema and a type.
-
-```kotlin
-@Serializable
-data class QueryDto(
-    val field1 : String,
-    val field2 : String,
-)
-```
-
-### Backend for a Query DTO
-
-```kotlin
-
-```
-
-### Frontend for a Query DTO
-
-```kotlin
-
-```
-
-## Record DTOs
-
-### Write a Record DTO
-
-```kotlin
-@Serializable
-data class TemplateRecordDto(
+data class RabbitDto(
 
     override val id: Long,
+    val name: String,
+    val color: String
 
-    val templateField1 : String,
-    val templateField2 : String,
+) : RecordDto<RabbitDto> {
 
-) : DtoWithRecordContract<TemplateRecordDto> {
+    companion object : RecordDtoCompanion<RabbitDto>() {
 
-    companion object : DtoWithRecordCompanion<TemplateRecordDto>() {
-        val type = "${Template.shid}/template-record"
+        override val type = "${Rabbit.shid}/rabbit"
+
+        override val queries = Queries.build {
+            + RabbitSearch.Companion
+            + RabbitColors.Companion
+        }
+
     }
 
     override fun schema() = DtoSchema.build {
-        + ::templateField1 min 1 max 100
-        + ::templateField2 min 2 max 50
+        + ::name max 20 min 2 notEquals "Caerbannog"
     }
 
-    override fun comm() = comm
+    override fun getType() = type
 
+    override fun comm() = RabbitDto.comm
 }
 ```
 
@@ -227,6 +168,102 @@ object Module : FrontendModule() {
          TemplateRecordDto.comm = RecordRestComm(TemplateRecordDto.type, TemplateRecordDto.serializer()) 
     }
 
+}
+```
+
+## Queries
+
+### Writing a Query
+
+Working example:
+  - [The Old Man from Scene 24 - RabbitDto.kt](https://github.com/spxbhuhb/zakadabar-samples/blob/master/01-beginner/the-old-man-from-Scene-24/src/commonMain/kotlin/zakadabar/samples/holygrail/data/rabbit/RabbitDto.kt)
+  - [The Old Man from Scene 24 - RabbitBackend.kt](https://github.com/spxbhuhb/zakadabar-samples/blob/master/01-beginner/the-old-man-from-Scene-24/src/jvmMain/kotlin/zakadabar/samples/holygrail/backend/rabbit/RabbitBackend.kt)
+
+- write the parameter class, RabbitColors in this case
+- write the response class, Color in this case
+- add the query to the base DTO class
+- add the query to the DTO backend
+
+Write the parameter class:
+
+```kotlin
+@Serializable
+data class RabbitColors(
+
+    val rabbitNames: List<String> = emptyList()
+
+) : QueryDto {
+
+    suspend fun execute() = comm.query(this, serializer(), ListSerializer(Color.serializer()))
+
+    companion object : QueryDtoCompanion(RabbitDto.Companion)
+
+}
+```
+
+Write the response class:
+
+```kotlin
+@Serializable
+data class Color(
+    val color: String
+)
+```
+
+Add the query to the DTO class:
+
+```kotlin
+@Serializable
+data class RabbitDto : RecordDto<RabbitDto> {
+
+    companion object : RecordDtoCompanion<RabbitDto>() {
+
+        override val queries = Queries.build {
+            + RabbitColors.Companion  // <- this is what you add
+        }
+
+    }
+}
+```
+
+Add the query to the DTO backend:
+
+```kotlin
+object RabbitBackend : DtoBackend<RabbitDto>() {
+
+    override fun install(route: Route) {
+        route.query(RabbitColors::class, RabbitBackend::query)  // <- this is what you add
+    }
+
+    private fun query(executor: Executor, query: RabbitColors) = transaction {   // <- this is what you add
+        RabbitTable
+            .slice(RabbitTable.color)
+            .select { RabbitTable.name inList query.rabbitNames }
+            .distinct()
+            .map { Color(it[RabbitTable.color]) }
+    }
+}
+```
+
+### Using a Query
+
+Call the `execute` method:
+
+```kotlin
+RabbitColors().execute().forEach { println(it) }
+```
+
+### Shorthand for Query
+
+Use shorthand when the query returns with the base DTO, RabbitDto in this case
+
+```kotlin
+@Serializable
+data class RabbitSearch(
+    val name: String
+) : QueryDto {
+    suspend fun execute() = comm.query(this, serializer())
+    companion object : QueryDtoCompanion(RabbitDto.Companion)
 }
 ```
 
@@ -379,4 +416,46 @@ fun checkValidRabbit(dto : RabbitDto) {
 fun requireValidRabbit(dto : RabbitDto) {
     dto.requireValidity() // throws IllegalArgumentException when invalid
 }
+```
+
+
+
+### Entities
+
+The stack maintains a so-called **Entity Tree**. The nodes and leaves are entities
+stored in the SQL table `t_3a8627_entities`.
+
+For each entity there is a row in the `t_3a8627_entities` SQL table and usually there
+is be a record in some other table, depending on the `type` of the entity.
+
+Points of interest:
+
+* [EntityRecordDto](../../../src/commonMain/kotlin/zakadabar/stack/data/entity/EntityRecordDto.kt)
+* [EntityDao](../../../src/jvmMain/kotlin/zakadabar/stack/backend/builtin/entities/data/EntityDao.kt)
+* [EntityTable](../../../src/jvmMain/kotlin/zakadabar/stack/backend/builtin/entities/data/EntityDao.kt)
+
+Many stack functions revolve around these entities as the stack stores most of 
+its data as entities for example:
+
+* user accounts
+* access control objects (ACLs, roles, grants)
+* folders
+
+It is important, that the entity tree is not suitable for everything. For example:
+it is better to store order records outside of the tree when there are many. 
+You will probably write a specific query API for it anyway.
+
+That said, entities are very useful because they give you a well-defined and easy
+way to extend the system. After you define a new entity type most parts of the 
+application will automatically include it.
+
+## Serialization
+
+Serialization of DTOs use kotlinx.serialization. Just add the `@Serializable`
+annotation in front of the DTO class.
+
+When serializing kotlinx.datetime data types the appropriate annotation is needed:
+
+```kotlin
+@file:UseSerializers(InstantAsStringSerializer::class)
 ```

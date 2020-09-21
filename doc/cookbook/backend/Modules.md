@@ -1,38 +1,48 @@
 # Backend Modules
 
-## Write a Backend Module
+Backend modules are packages that contain backend components.
 
-1. Create a file named `Module` in your project. The convention is to place it in the package 
-`zakadabar.<module-package>.backend`.
-1. Set uuid, routing and init.
-1. Add the module to the server config YAML.
+Working example:
+  - [The Old Man from Scene 24 - Module.kt](https://github.com/spxbhuhb/zakadabar-samples/blob/master/01-beginner/the-old-man-from-Scene-24/src/jsMain/kotlin/zakadabar/samples/holygrail/backend/Module.kt)
+
+## Writing a Backend Module
+
+Create an object that implements the interface [BackendModule](../../../src/jvmMain/kotlin/zakadabar/stack/backend/BackendModule.kt).
+
+Use the `init` function to add the DTO backends this module contains:
 
 ```kotlin
 @PublicApi
-object Module : BackendModule() {
-
-    override val uuid = Discussions.uuid
-
-    override fun install(route: Route) {
-        restApi(route, zakadabar.discussions.backend.forum.Backend, ForumDto::class, ForumDto.type)
-        restApi(route, zakadabar.discussions.backend.topic.Backend, TopicDto::class, TopicDto.type)
-        restApi(route, zakadabar.discussions.backend.post.Backend, PostDto::class, PostDto.type)
-    }
-
+object RabbitModule : BackendModule {
     override fun init() {
-        transaction {
-            SchemaUtils.createMissingTablesAndColumns(
-                ForumTable,
-                TopicTable,
-                PostTable,
-                RelationTable
-            )
-        }
+        BackendContext += RabbitBackend
     }
 }
 ```
 
+To perform cleanup during backend shutdown:
+
+```kotlin
+@PublicApi
+object RabbitModule : BackendModule {
+    override fun init() {
+        BackendContext += RabbitBackend
+    }
+    override fun cleanup() {
+        TODO("cleanup")
+    }
+}
+```
+
+## Using a Backend Module
+
+To include a backend module in your application add them to the configuration file (etc/zakadabar-server.yaml):
+
 ```yaml
 modules:
-  - zakadabar.discussions.backend.Module
+  - zakadabar.samples.holygrail.backend.Module
 ```
+
+During start-up the stack:
+- loads all modules from the configuration file,
+- calls `init` for each module, in the order the configuration file lists the modules.
