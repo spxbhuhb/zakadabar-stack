@@ -9,7 +9,9 @@
 
 The actual login means that we assign a new user to the session.
 
-This is not implemented yet. The plan is to use authentication methods supplied by Ktor like this:
+**Not implemented yet.**
+ 
+The plan is to use authentication methods supplied by Ktor like this:
 
 ```kotlin
 authenticate("basic") {

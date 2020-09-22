@@ -9,7 +9,7 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.get
 import org.w3c.dom.set
 import zakadabar.stack.data.query.QueryDto
-import zakadabar.stack.frontend.extend.DtoFrontend
+import zakadabar.stack.frontend.data.DtoFrontend
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KClass
 

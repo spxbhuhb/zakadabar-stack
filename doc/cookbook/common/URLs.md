@@ -2,7 +2,7 @@
 
 Types:
 
-- API URL, for frontend - backend communication
+- Backend URL, for frontend - backend communication
 - View URL, for frontend data based views
 - Page URL, for frontend non-data pages (start page, login etc.)
 
@@ -13,7 +13,7 @@ See also:
 - [Frontend Navigation](../frontend/Navigation.md)
 - [Backend Routing](../backend/Routing.md)
 
-## API URLs
+## Backend URLs
 
 Used during frontend - backend communication.
 
@@ -88,7 +88,7 @@ that lead to the currently displayed data:
 
 `/view/eae64d/quest/1/eae64d/cave/2/eae64d/rabbit/RabbitColors?q=[]`
 
-### Page URLs
+## Page URLs
 
 Use page URLs when the page don't belong to a data record type naturally.
 Examples: start page, login, dashboards.

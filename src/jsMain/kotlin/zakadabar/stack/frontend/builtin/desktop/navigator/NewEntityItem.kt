@@ -7,8 +7,8 @@ import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.builtin.desktop.navigator.NavigatorClasses.Companion.navigatorClasses
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.simple.SimpleText
+import zakadabar.stack.frontend.data.DtoFrontend
 import zakadabar.stack.frontend.elements.ComplexElement
-import zakadabar.stack.frontend.extend.DtoFrontend
 
 class NewEntityItem(
     private val newEntity: NewEntity,

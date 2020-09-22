@@ -60,7 +60,7 @@ repositories {
     }
 }
 
-val stackVersion = "2020.8.29"
+val stackVersion = "2020.9.21"
 
 commonMain {
     dependencies {
@@ -83,30 +83,28 @@ commonMain {
 | Documentation - [Developers Guide](doc/developers-guide/README.md) | --> | |
 | Documentation - API | RW | Dokka throws StackOverflowException |
 | Development - Appliance | RW | Gradle: one-click appliance build works, need others |
-| [Accounts](doc/cookbook/common/Accounts.md) | --> | Very basic implementation works. |
+| [Accounts](doc/cookbook/common/Accounts.md) | RW | Very basic implementation works. |
 | [Authentication](doc/developers-guide/Authentication.md) | RW | |
 | Authorization | RW | Role based, ACL, basics coded |
 | Sessions | RW | Have to write SQL backend |
 | Routing - [Backend](doc/cookbook/backend/Routing.md) | OK | Ktor, module namespace |
-| Routing - Frontend - Menu | RW | |
+| Routing - Frontend - Menu | --> | Basic navigation works. |
 | Routing - Frontend - Entity Tree | --> | Navigation |
 | Data - Common - Serialization | stable | Kotlinx.serialization, CommArray |
 | Data - Common - Transfer | stable | Data Transfer Objects (DTOs) - in common code |
-| Data - Common - [Entities](doc/developers-guide/Data.md) | --> | Entity Tree, revisions, snapshots |
+| Data - Common - Entities | --> | Entity Tree, revisions, snapshots |
 | Data - Common - Files | stable | upload, download works both for REST and WebSocket |
 | Data - Common - Validation | --> | |
-| Data - Frontend - REST | --> | query, record and entity communications are mostly OK, documentation is missing |
+| Data - Frontend - CRUD, Queries | --> | query, record and entity communications are mostly OK, documentation is missing |
 | Data - Frontend - WebSocket | stable | FrontendContext.transferSession |
 | Data - Backend - DAO, Tables | stable | Exposed, PostgreSQL, HikariCP |
 | Frontend - [Elements](doc/cookbook/frontend/Elements.md) | stable | easy and clean DOM handling |
-| Frontend - Slots | stable | target slots for GUI elements |
-| Frontend - Builtin - Desktop | stable | Desktop, Header, Footer |
-| Frontend - Builtin - Navigator | --> | |
+| Frontend - Builtin - Desktop | --> | Desktop, Header, Footer |
+| Frontend - Builtin - Navigation | --> | |
 | Frontend - Builtin - Utils | --> | Slider, DropArea, [Icons], Header, Status |
 | Frontend - Building - Inputs | --> | Input, SingleLineInput |
 | Frontend - Components - RTE | --> | Zakadabar Editor |
 | Frontend - Context | stable | FrontendContext |
-| Frontend - Messaging | stable | Dispatcher |
 | Frontend - Form | --> | migrate from previous React based solution | 
 | Frontend - Tables | RW | migrate from previous React based solution |
 | Frontend - Themes CSS | stable |  |

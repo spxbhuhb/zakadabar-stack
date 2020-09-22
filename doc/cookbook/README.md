@@ -8,14 +8,20 @@
     * [Accounts](common/Accounts.md)
     * [Authentication](common/Authentication.md)
 * Data
-    * [Write a Query DTO](common/Data.md#Write-a-Query-DTO)
+    * [General Concepts](common/Data.md#General-Concepts)
     * [Write a Record DTO](common/Data.md#Write-a-Record-DTO)
-    * [Write an Entity DTO](common/Data.md#Write-an-Entity-DTO)
+    * [Backend for a Record DTO](common/Data.md#Backend-for-a-Record-DTO)
+    * [Frontend for a Record DTO](common/Data.md#Frontend-for-a-Record-DTO)
+    * [Use Comm without DtoFrontend](common/Data.md#Use-Comm-without-DtoFrontend)
+    * [Write a Query](common/Data.md#Write-a-Query)
+    * [Use a Query](common/Data.md#Use-a-Query)
+    * [Shorthand for Query](common/Data.md#Shorthand-for-Query)
     * [Data Validation](common/Data.md#Data-Validation)
     * [Write a Schema](common/Data.md#Write-a-Schema)
 * URLs
-    * [Backend URLs](common/URLs.md#API-URLs)
-    * [Frontend URLs](common/URLs.md#View-URLs)
+    * [Backend URLs](common/URLs.md#Backend-URLs)
+    * [View URLs](common/URLs.md#View-URLs)
+    * [Page URLs](common/URLs.md#Page-URLs)
 
 ## Frontend
 
@@ -34,7 +40,6 @@
     * [Icons Included in the Stack](frontend/Icons.md#Icons-Included-in-the-Stack)
     * [Global Navigation on Click](frontend/Icons.md#Global-Navigation-on-Click)
 * Data
-    * [Frontend for a Query DTO](common/Data.md#Frontend-for-a-Query-DTO)
     * [Frontend for a Record DTO](common/Data.md#Frontend-for-a-Record-DTO)
     * [Get Entity Related URLs](common/Data.md#Get-Entity-Related-URLs)
     * [Use a Schema in a Form](common/Data.md#Use-a-Schema-in-a-Form)
@@ -53,17 +58,22 @@
 
 * Modules
     * [Write a Backend Module](backend/Modules.md#Write-a-Backend-Module)
+    * [Use a Backend Module](backend/Modules.md#Use-a-Backend-Module)
+* HttpServer
+    * [Add Static Resources](backend/HttpServer.md#Add-Static-Resources)
 * Routing
-    * [Add REST Routing for a Record DTO](backend/Routing.md#Add-REST-Routing-for-a-Record-DTO)
-    * [Add REST Routing for an Entity DTO](backend/Routing.md#Add-REST-Routing-for-an-Entity-DTO)
-    * [Add Non REST Routing](backend/Routing.md#Add-Non-REST-Routing)
+    * [Add Non Crud, Non Query Routes](backend/Routing.md#Add-Non-Crud,-Non-Query-Routes)
     * [Add WebSocket Routing](backend/Routing.md#Add-WebSocket-Routing)
 * Data
-    * [Backend for a Query DTO](common/Data.md#Backend-for-a-Query-DTO)
+    * [Add DTO Backend From Configuration](backend/DtoBackend.md#Add-DTO-Backend-From-Configuration)
+    * [Add DTO Backend Programmatically](backend/DtoBackend.md#Add-DTO-Backend-Programmatically)
     * [Backend for a Record DTO](common/Data.md#Backend-for-a-Record-DTO)
     * [Validate Data on the Backend](common/Data.md#Validate-Data-on-the-Backend)
 * Users
     * [Get Account of the User on the Backend](common/Accounts.md#Get-Account-of-the-User-on-the-Backend)
+* Logging
+    * [Configure Logback](backend/Logging.md#Configure-Logback)
+    * [Switch of Read and Query Logs](backend/Logging.md#Switch-of-Read-and-Query-Logs)
 
 ## Todo
 

@@ -22,27 +22,15 @@ The backend provides an extension function to Ktor's `ApplicationCall` that retu
 
 This instance has an `entityId` field which stores the id of the entity that executes the code.
 
-When you use `entityRestApi` or `recordRestApi` the API wrapper passes the backend to your backend
-implementation as the first parameter of the called method:
-
-```kotlin
-interface EntityRestBackend<T> {
-
-    fun query(executor: Executor, id: Long? = null, parentId: Long? = null): List<T>
-
-    fun create(executor: Executor, dto: T): T
-
-    fun update(executor: Executor, dto: T): T
-
-}
-```
+When you use [DtoBackend](../../../src/jvmMain/kotlin/zakadabar/stack/backend/data/DtoBackend.kt) 
+the API wrapper passes the backend to your backend implementation as the first parameter of the called method.
 
 When you use your own routing you can get the executor like this:
 
 ```kotlin
  override fun install(route: Route) {
     with(route) {
-        get("/statistics") { 
+        get("${MyModule.shid}/statistics") { 
             val executor = call.executor()
             BackendContext.requireRole(executor, "/system/roles/statistician")
             call.respondText("some statistics for $executor") 
@@ -75,52 +63,9 @@ You'll probably have your own data model for user accounts.
 However, many modules would like to know a few things about your accounts: the name of the user,
 the avatar, the e-mail address etc.
 
-To provide these add a backend API and a backend implementation to serve the requests with the route
-`CommonAccountDto.type`. 
+To provide common account data add a backend to serve the requests for the route `3a8627/account/all`.
+
+For example of the `all` method check [CommonAccountBackend](../../../src/jvmMain/kotlin/zakadabar/stack/backend/builtin/account/CommonAccountBackend.kt)
 
 In most cases it is a good idea to use a cache as the frontend usually access account data very frequently.
 
-```kotlin
-object CommonAccountApi : RoutingContract {
-
-    override fun install(route: Route) {
-        with(route) {
-
-            route(CommonAccountDto.type) {
-
-                get {
-                    call.respond(query(call.executor(), parentId = call.parameters["parent"]?.toLong()))
-                }
-
-                get("/{id}") {
-                    val folder = query(call.executor(), id = call.parameters["id"]!!.toLong())
-                    if (folder.isEmpty()) throw NotFoundException()
-                    call.respond(folder[0])
-                }
-
-            }
-        }
-    }
-}
-```
-
-```kotlin
-object CommonAccountBackend : BackendContract {
-
-    fun query(executor: Executor, id: Long? = null, parentId: Long? = null): List<CommonAccountDto> = transaction {
-
-        val condition = if (id == null) {
-            (EntityTable.parent eq parentId) and (EntityTable.type eq YourAccountDto.type)
-        } else {
-            YourAccountDto.id eq id // YourAccountDto is the DTO class you've written for yourself
-        }
-
-        YourAccountTable // this is your account table
-            .join(EntityTable, JoinType.INNER) { EntityTable.id eq AccountTable.id }
-            .select(condition)
-            .filter { EntityTable.readableBy(executor, it) } // you probably want to change this
-            .map(::toDto) // you will need to write the ::toDto method that converts between your account data and CommonAccountDto
-    }
-
-}
-```

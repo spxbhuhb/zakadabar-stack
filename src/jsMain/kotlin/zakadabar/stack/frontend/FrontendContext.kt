@@ -13,7 +13,7 @@ import zakadabar.stack.frontend.FrontendContext.dtoFrontends
 import zakadabar.stack.frontend.FrontendContext.stackSession
 import zakadabar.stack.frontend.builtin.dock.Dock
 import zakadabar.stack.frontend.comm.rest.FrontendComm
-import zakadabar.stack.frontend.extend.DtoFrontend
+import zakadabar.stack.frontend.data.DtoFrontend
 import zakadabar.stack.frontend.extend.FrontendModule
 import zakadabar.stack.frontend.util.Dictionary
 import zakadabar.stack.frontend.util.defaultTheme

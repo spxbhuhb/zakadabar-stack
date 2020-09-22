@@ -6,7 +6,7 @@ The backend uses [LOGBack](http://logback.qos.ch) for logging.
 logs all CRUD operations and all queries automatically. If you do not add
 special functions you don't need to add any additional logs.
 
-## Configuring Logback
+## Configure Logback
 
 The default configuration is in [logback.xml](../../../src/jvmMain/resources/logback.xml).
 
@@ -18,7 +18,7 @@ starting the backend:
 java -Dlogback.configurationFile=etc/logback.xml
 ```
 
-## Switching of Read and Query Logs
+## Switch of Read and Query Logs
 
 To stop the automatic DtoBackend logging for reads and queries:
 

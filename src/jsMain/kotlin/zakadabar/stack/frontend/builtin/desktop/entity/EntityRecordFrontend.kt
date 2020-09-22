@@ -5,7 +5,7 @@ package zakadabar.stack.frontend.builtin.desktop.entity
 
 import zakadabar.stack.Stack
 import zakadabar.stack.data.entity.EntityRecordDto
-import zakadabar.stack.frontend.extend.DtoFrontend
+import zakadabar.stack.frontend.data.DtoFrontend
 
 object EntityRecordFrontend : DtoFrontend<EntityRecordDto>(
     Stack.uuid,

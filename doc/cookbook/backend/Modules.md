@@ -5,7 +5,7 @@ Backend modules are packages that contain backend components.
 Working example:
   - [The Old Man from Scene 24 - Module.kt](https://github.com/spxbhuhb/zakadabar-samples/blob/master/01-beginner/the-old-man-from-Scene-24/src/jsMain/kotlin/zakadabar/samples/holygrail/backend/Module.kt)
 
-## Writing a Backend Module
+## Write a Backend Module
 
 Create an object that implements the interface [BackendModule](../../../src/jvmMain/kotlin/zakadabar/stack/backend/BackendModule.kt).
 
@@ -34,7 +34,7 @@ object RabbitModule : BackendModule {
 }
 ```
 
-## Using a Backend Module
+## Use a Backend Module
 
 To include a backend module in your application add them to the configuration file (etc/zakadabar-server.yaml):
 

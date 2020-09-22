@@ -9,9 +9,9 @@ import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.desktop.navigator.NavigatorClasses.Companion.navigatorClasses
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.input.Input
+import zakadabar.stack.frontend.data.DtoFrontend
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
-import zakadabar.stack.frontend.extend.DtoFrontend
 
 /**
  * Entity creation from the global navigator. Displays list of entity types that

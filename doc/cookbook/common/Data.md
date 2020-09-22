@@ -1,6 +1,6 @@
 # Data
 
-## Terminology
+## General Concepts
 
 | Name | Explanation |
 | ---- | ---- |
@@ -21,7 +21,7 @@ Data records have a:
 - [DTO Frontend](../frontend/DtoFrontend.md)
 - [DTO Backend](../backend/DtoBackend.md)
 
-### Writing a Record DTO
+### Write a Record DTO
 
 Working example:
   - [The Old Man from Scene 24 - RabbitDto.kt](https://github.com/spxbhuhb/zakadabar-samples/blob/master/01-beginner/the-old-man-from-Scene-24/src/commonMain/kotlin/zakadabar/samples/holygrail/data/rabbit/RabbitDto.kt)
@@ -66,94 +66,114 @@ data class RabbitDto(
 
 ### Backend for a Record DTO
 
-To create a backend SQL table for a Record DTO:
+To create a backend SQL table for a data record:
 
 ```kotlin
-object TemplateRecordTable : LongIdTable("t_${Template.shid}_records") {
+object RabbitTable : LongIdTable("t_${Stack.shid}_rabbits") {
 
-    val templateField1 = varchar("template_field_1", length = 100)
-    val templateField2 = varchar("template_field_2", length = 50)
+    val name = varchar("name", 20)
+    val color = varchar("color", 20)
 
-}
-```
-
-To create a backend DAO for a Record DTO:
-
-```kotlin
-class TemplateRecordDao(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<TemplateRecordDao>(TemplateRecordTable)
-
-    var templateField1 by TemplateRecordTable.templateField1
-    var templateField2 by TemplateRecordTable.templateField2
-
-    fun toDto() = TemplateRecordDto(
-        id = id.value,
-        templateField1 = templateField1,
-        templateField2 = templateField2
+    fun toDto(row: ResultRow) = RabbitDto(
+        id = row[id].value,
+        name = row[name],
+        color = row[color]
     )
 
 }
 ```
 
-To create the backend routing for record DTO use the [recordRestApi](../../../src/jvmMain/kotlin/zakadabar/stack/backend/extend/restApi.kt)
-function.
+To create a backend DAO for a data record:
 
 ```kotlin
-object Module : BackendModule() {
+class RabbitDao(id: EntityID<Long>) : LongEntity(id) {
+    companion object : LongEntityClass<RabbitDao>(RabbitTable)
 
-    override val uuid = Template.uuid
+    var name by RabbitTable.name
+    var color by RabbitTable.color
 
-    override fun install(route: Route) {
-        restApi(route, TemplateRecordBackend, TemplateRecordDto::class, TemplateRecordDto.type)
-    }
+    fun toDto() = RabbitDto(
+        id = id.value,
+        name = name,
+        color = color
+    )
 }
 ```
 
-To add backend REST functions to a record DTO implement the RecordRestBackend interface.
+To add a backend for a record DTO extend [DtoBackend](../../../src/jvmMain/kotlin/zakadabar/stack/backend/data/DtoBackend.kt).
+
+- `init` is called during server startup
+- `install` is called during server startup to add Ktor routing, see [URLs](../common/URLs.md)
+- `query`, `all`, `create`, `read`, `update`, `delete` are automatically handled when `install` adds the routes
 
 ```kotlin
-object TemplateRecordBackend : RecordRestBackend<TemplateRecordDto> {
+object RabbitBackend : DtoBackend<RabbitDto>() {
 
-    override fun query(executor: Executor, id: Long?, parentId : Long?, parameters : Parameters): List<TemplateRecordDto> = transaction {
+    override val dtoClass = RabbitDto::class
 
-        if (id == null) {
-            TemplateRecordDao.find { TemplateRecordTable.id eq id }
-        } else {
-            TemplateRecordDao.all()
+    override fun init() {
+        transaction {
+            SchemaUtils.createMissingTablesAndColumns(
+                RabbitTable
+            )
         }
-            .filter { false /* TODO Authorization */ }
-            .map { it.toDto() }
-
     }
 
-    override fun create(executor: Executor, dto: TemplateRecordDto) = transaction {
+    override fun install(route: Route) {
+        route.crud()
+        route.query(RabbitSearch::class, RabbitBackend::query)
+        route.query(RabbitColors::class, RabbitBackend::query)
+    }
 
-        // TODO authorization
+    private fun query(executor: Executor, query: RabbitSearch) = transaction {
+        RabbitTable
+            .select { RabbitTable.name like query.name }
+            .map(RabbitTable::toDto)
+    }
 
-        val dao = TemplateRecordDao.new {
-            templateField1 = dto.templateField1
-            templateField2 = dto.templateField2
-        }
+    private fun query(executor: Executor, query: RabbitColors) = transaction {
+        RabbitTable
+            .slice(RabbitTable.color)
+            .select { RabbitTable.name inList query.rabbitNames }
+            .distinct()
+            .map { Color(it[RabbitTable.color]) }
+    }
 
+    override fun all(executor: Executor) = transaction {
+        RabbitTable
+            .selectAll()
+            .map(RabbitTable::toDto)
+    }
+
+    override fun create(executor: Executor, dto: RabbitDto) = transaction {
+        RabbitDao.new {
+            name = dto.name
+            color = dto.color
+        }.toDto()
+    }
+
+    override fun read(executor: Executor, id: Long) = transaction {
+        RabbitDao[id].toDto()
+    }
+
+    override fun update(executor: Executor, dto: RabbitDto) = transaction {
+        val dao = RabbitDao[dto.id]
+        dao.name = dto.name
+        dao.color = dto.color
         dao.toDto()
     }
 
-    override fun update(executor: Executor, dto: TemplateRecordDto) = transaction {
-
-        // TODO authorization
-
-        val dao = TemplateRecordDao[dto.id]
-
-        dao.templateField1 = dto.templateField1
-        dao.templateField2 = dto.templateField2
-
-        dao.toDto()
+    override fun delete(executor: Executor, id: Long) {
+        RabbitDao[id].delete()
     }
-
 }
 ```
 
 ### Frontend for a Record DTO
+
+To have a frontend for a data record extend [DtoFrontend](../../../src/jsMain/kotlin/zakadabar/stack/frontend/data/DtoFrontend.kt).
+
+### Use Comm without DtoFrontend
 
 To add a comm to a record DTO use RecordRestComm. The URL is important, it has to match with the URL on the backend.
 Best is to define a `type` field in the DTO's companion.
@@ -173,7 +193,7 @@ object Module : FrontendModule() {
 
 ## Queries
 
-### Writing a Query
+### Write a Query
 
 Working example:
   - [The Old Man from Scene 24 - RabbitDto.kt](https://github.com/spxbhuhb/zakadabar-samples/blob/master/01-beginner/the-old-man-from-Scene-24/src/commonMain/kotlin/zakadabar/samples/holygrail/data/rabbit/RabbitDto.kt)
@@ -245,7 +265,7 @@ object RabbitBackend : DtoBackend<RabbitDto>() {
 }
 ```
 
-### Using a Query
+### Use a Query
 
 Call the `execute` method:
 
