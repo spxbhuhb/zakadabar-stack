@@ -16,47 +16,50 @@
  */
 package zakadabar.stack.data.schema
 
+import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KProperty0
 
 class StringValidationRuleList(val kProperty: KProperty0<String>) : ValidationRuleList<String> {
 
     private val rules = mutableListOf<ValidationRule<String>>()
 
-    inner class Max(private val limit: Int) : ValidationRule<String> {
+    inner class Max(@PublicApi val limit: Int) : ValidationRule<String> {
         override fun validate(value: String, report: ValidityReport) {
-            if (value.length > limit) report.fail(kProperty, this::class)
-        }
-
-    }
-
-    inner class Min(private val limit: Int) : ValidationRule<String> {
-        override fun validate(value: String, report: ValidityReport) {
-            if (value.length < limit) report.fail(kProperty, this::class)
+            if (value.length > limit) report.fail(kProperty, this)
         }
     }
 
-    inner class NotEquals(private val invalidValue: String) : ValidationRule<String> {
+    inner class Min(@PublicApi val limit: Int) : ValidationRule<String> {
         override fun validate(value: String, report: ValidityReport) {
-            if (value == invalidValue) report.fail(kProperty, this::class)
+            if (value.length < limit) report.fail(kProperty, this)
         }
     }
 
+    inner class NotEquals(@PublicApi val invalidValue: String) : ValidationRule<String> {
+        override fun validate(value: String, report: ValidityReport) {
+            if (value == invalidValue) report.fail(kProperty, this)
+        }
+    }
+
+    @PublicApi
     infix fun max(limit: Int): StringValidationRuleList {
         rules += Max(limit)
         return this
     }
 
+    @PublicApi
     infix fun min(limit: Int): StringValidationRuleList {
         rules += Min(limit)
         return this
     }
 
+    @PublicApi
     infix fun notEquals(invalidValue: String): StringValidationRuleList {
         rules += NotEquals(invalidValue)
         return this
     }
 
-    fun validate(report: ValidityReport) {
+    override fun validate(report: ValidityReport) {
         val value = kProperty.get()
         for (rule in rules) {
             rule.validate(value, report)

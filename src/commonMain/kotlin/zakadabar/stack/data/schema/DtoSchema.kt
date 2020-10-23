@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.data.schema
 
-import kotlin.reflect.KClass
+import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KProperty0
 
 open class DtoSchema {
@@ -26,18 +26,36 @@ open class DtoSchema {
         return ruleList
     }
 
+    @PublicApi
+    fun validate() : ValidityReport {
+        val report = ValidityReport()
+        ruleLists.forEach { it.value.validate(report) }
+        return report
+    }
+
 }
 
-interface ValidationRuleList<T>
+interface ValidationRuleList<T> {
+    fun validate(report: ValidityReport)
+}
 
 interface ValidationRule<T> {
-    fun validate(value: String, report: ValidityReport)
+    fun validate(value: T, report: ValidityReport)
 }
 
 class ValidityReport(
-    val fails: MutableMap<KProperty0<*>, MutableList<KClass<*>>> = mutableMapOf()
+    @PublicApi
+    val fails: MutableMap<KProperty0<*>, MutableList<ValidationRule<*>>> = mutableMapOf()
 ) {
-    fun fail(property: KProperty0<*>, validation: KClass<*>) {
+    fun fail(property: KProperty0<*>, validation: ValidationRule<*>) {
+        println("fail: ${validation::class.simpleName}")
         fails.getOrPut(property) { mutableListOf() } += validation
+    }
+
+    @PublicApi
+    fun dump() : String {
+        val lines = mutableListOf<String>()
+        fails.forEach { lines += "${it.key.name} : ${it.value.map { v -> v::class.simpleName }.joinToString(", ")}" }
+        return lines.joinToString("\n")
     }
 }
