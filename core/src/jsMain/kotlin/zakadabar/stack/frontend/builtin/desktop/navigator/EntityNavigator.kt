@@ -12,13 +12,12 @@ import zakadabar.stack.data.builtin.FolderDto
 import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext.dispatcher
 import zakadabar.stack.frontend.FrontendContext.t
+import zakadabar.stack.frontend.application.navigation.Navigation
 import zakadabar.stack.frontend.builtin.desktop.messages.EntityAdded
 import zakadabar.stack.frontend.builtin.desktop.messages.EntityChildrenLoaded
 import zakadabar.stack.frontend.builtin.desktop.messages.EntityRemoved
 import zakadabar.stack.frontend.builtin.desktop.messages.EntityUpdated
 import zakadabar.stack.frontend.builtin.desktop.navigator.NavigatorClasses.Companion.navigatorClasses
-import zakadabar.stack.frontend.builtin.navigation.Navigation
-import zakadabar.stack.frontend.builtin.navigation.NavState
 import zakadabar.stack.frontend.builtin.util.droparea.DropArea
 import zakadabar.stack.frontend.builtin.util.status.Status
 import zakadabar.stack.frontend.builtin.util.status.StatusInfo
@@ -83,13 +82,6 @@ class EntityNavigator : ComplexElement() {
 
     private fun onNavigation() {
         val state = Navigation.state
-
-        currentEntityId = when (state.stateType) {
-            NavState.StateType.Home -> null
-            NavState.StateType.View -> state.viewState !!.localId
-            NavState.StateType.Page -> return
-            NavState.StateType.Unknown -> return
-        }
 
         launch {
             render() // FIXME this is not properly synchronized

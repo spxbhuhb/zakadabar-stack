@@ -3,4 +3,31 @@
  */
 package zakadabar.stack.frontend.builtin.layout
 
-object FullScreen : AppLayout("fullscreen")
+import kotlinx.browser.document
+import zakadabar.stack.frontend.application.AppLayout
+import zakadabar.stack.frontend.application.navigation.NavState
+import zakadabar.stack.frontend.elements.ComplexElement
+
+object FullScreen : AppLayout("fullscreen") {
+
+    private var activeElement: ComplexElement? = null
+
+    init {
+        document.body?.appendChild(element)
+        hide()
+    }
+
+    override fun resume(state: NavState) {
+        this -= activeElement
+        activeElement = state.target.element(state)
+        this += activeElement
+        show()
+    }
+
+    override fun pause() {
+        this -= activeElement
+        activeElement = null
+        hide()
+    }
+
+}

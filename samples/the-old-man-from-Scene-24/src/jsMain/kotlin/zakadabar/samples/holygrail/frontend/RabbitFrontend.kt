@@ -6,7 +6,7 @@ package zakadabar.samples.holygrail.frontend
 import zakadabar.samples.holygrail.HolyGrail
 import zakadabar.samples.holygrail.data.rabbit.RabbitColors
 import zakadabar.samples.holygrail.data.rabbit.RabbitDto
-import zakadabar.stack.frontend.builtin.navigation.Navigation
+import zakadabar.stack.frontend.application.navigation.Navigation
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.extend.DtoFrontend
 import zakadabar.stack.util.fourRandomInt

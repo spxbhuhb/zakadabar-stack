@@ -3,9 +3,9 @@
  */
 package zakadabar.samples.helloworld.frontend
 
+import zakadabar.stack.frontend.application.navigation.Navigation
+import zakadabar.stack.frontend.application.navigation.NavigationState
 import zakadabar.stack.frontend.builtin.desktop.DesktopCenter
-import zakadabar.stack.frontend.builtin.navigation.Navigation
-import zakadabar.stack.frontend.builtin.navigation.NavState
 import zakadabar.stack.frontend.builtin.util.NYI
 
 /**

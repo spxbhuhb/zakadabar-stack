@@ -6,10 +6,10 @@ package zakadabar.stack.frontend.builtin.desktop
 import kotlinx.atomicfu.atomic
 import kotlinx.browser.window
 import zakadabar.stack.frontend.FrontendContext.dtoFrontends
+import zakadabar.stack.frontend.application.navigation.NavState
 import zakadabar.stack.frontend.builtin.desktop.DesktopClasses.Companion.desktopClasses
 import zakadabar.stack.frontend.builtin.desktop.navigator.EntityNavigator
 import zakadabar.stack.frontend.builtin.navigation.Navigation
-import zakadabar.stack.frontend.builtin.navigation.NavState
 import zakadabar.stack.frontend.builtin.util.Slider
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses

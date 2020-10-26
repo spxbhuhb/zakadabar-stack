@@ -4,12 +4,12 @@
 package zakadabar.samples.theplace.frontend
 
 import zakadabar.stack.data.entity.EntityRecordDto
-import zakadabar.stack.frontend.builtin.navigation.NavState
-import zakadabar.stack.frontend.builtin.navigation.Route
+import zakadabar.stack.frontend.application.navigation.NavState
+import zakadabar.stack.frontend.application.navigation.NavTarget
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.util.launch
 
-object Ship : Route() {
+object Ship : NavTarget() {
 
     lateinit var dto: EntityRecordDto
 

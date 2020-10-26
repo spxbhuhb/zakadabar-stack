@@ -3,11 +3,11 @@
  */
 package zakadabar.samples.theplace.frontend
 
-import zakadabar.stack.frontend.builtin.navigation.NavState
-import zakadabar.stack.frontend.builtin.navigation.Route
+import zakadabar.stack.frontend.application.navigation.NavState
+import zakadabar.stack.frontend.application.navigation.NavTarget
 import zakadabar.stack.frontend.elements.ComplexElement
 
-object Tortuga : Route() {
+object Tortuga : NavTarget() {
 
     override fun element(newState: NavState) = ComplexElement() build {
         + "Tortuga"

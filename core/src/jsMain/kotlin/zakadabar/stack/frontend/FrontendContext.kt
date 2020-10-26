@@ -11,8 +11,8 @@ import zakadabar.stack.comm.websocket.session.StackClientSession
 import zakadabar.stack.data.builtin.security.CommonAccountDto
 import zakadabar.stack.frontend.FrontendContext.dtoFrontends
 import zakadabar.stack.frontend.FrontendContext.stackSession
+import zakadabar.stack.frontend.application.AppLayout
 import zakadabar.stack.frontend.builtin.dock.Dock
-import zakadabar.stack.frontend.builtin.layout.AppLayout
 import zakadabar.stack.frontend.builtin.layout.FullScreen
 import zakadabar.stack.frontend.comm.rest.FrontendComm
 import zakadabar.stack.frontend.data.DtoFrontend

@@ -5,9 +5,9 @@ package zakadabar.samples.holygrail.frontend
 
 import kotlinx.browser.window
 import zakadabar.samples.holygrail.data.rabbit.RabbitColors
-import zakadabar.stack.frontend.builtin.navigation.Navigation
-import zakadabar.stack.frontend.builtin.navigation.NavState
-import zakadabar.stack.frontend.builtin.navigation.navLink
+import zakadabar.stack.frontend.application.navigation.Navigation
+import zakadabar.stack.frontend.application.navigation.NavigationState
+import zakadabar.stack.frontend.application.navigation.navLink
 import zakadabar.stack.frontend.elements.ComplexElement
 
 class Home : ComplexElement() {

@@ -5,8 +5,6 @@
 
 import kotlinx.browser.document
 import zakadabar.samples.theperfectform.frontend.Home
-import zakadabar.stack.frontend.FrontendContext
-import zakadabar.stack.frontend.builtin.navigation.Navigation
 import zakadabar.stack.frontend.elements.SimpleElement
 import zakadabar.stack.frontend.util.launch
 

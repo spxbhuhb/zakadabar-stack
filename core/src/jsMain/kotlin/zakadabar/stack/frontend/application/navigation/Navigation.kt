@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.navigation
+package zakadabar.stack.frontend.application.navigation
 
 import kotlinx.browser.window
 import org.w3c.dom.events.Event
@@ -9,6 +9,10 @@ import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.util.PublicApi
 
+/**
+ * Handles changes of the browser window's location.
+ * Provides methods for changing the location.
+ */
 object Navigation {
 
     const val CREATE = "create"
@@ -50,14 +54,6 @@ object Navigation {
     }
 
     fun changeView(view: String) {
-
-    }
-
-    fun stepInto(type: String, id: Long, view: String) {
-
-    }
-
-    fun stepOut() {
 
     }
 
