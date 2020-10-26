@@ -1,0 +1,22 @@
+database:
+  driverClassName: org.postgresql.Driver
+  jdbcUrl: jdbc:postgresql://localhost:5432/zakadabar
+  username: test
+  password: Almafa.12
+
+traceRouting: true
+staticResources: ./var/static
+
+modules:
+  - zakadabar.stack.backend.builtin.account.CommonAccountBackend
+  - zakadabar.stack.backend.builtin.entities.EntityBackend
+  - zakadabar.stack.backend.builtin.folder.FolderBackend
+  - zakadabar.stack.backend.builtin.session.SessionBackend
+
+#ktor:
+#  port: 8080
+#  websocket:
+#    pingPeriod: 60
+#    timeout: 15
+#    maxFrameSize: 1000000
+#    masking: false
