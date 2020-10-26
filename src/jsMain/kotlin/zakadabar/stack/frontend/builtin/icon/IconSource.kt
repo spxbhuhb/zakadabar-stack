@@ -36,8 +36,8 @@ class IconSource(val content: String) {
 
     fun complex20(onClick: (() -> Unit)? = null) = ComplexIcon(svg20, onClick)
 
-    fun simple(size: Int) =
-        SimpleIcon("""<svg xmlns="http://www.w3.org/2000/svg" width="$size" height="$size" viewBox="0 0 24 24">$content</svg>""")
+    fun simple(viewBox: Int) =
+        SimpleIcon("""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $viewBox $viewBox">$content</svg>""")
 
     fun complex(size: Int, onClick: (() -> Unit)? = null) =
         ComplexIcon(
