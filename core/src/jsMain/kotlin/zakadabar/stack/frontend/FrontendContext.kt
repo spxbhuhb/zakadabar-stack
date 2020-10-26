@@ -12,6 +12,8 @@ import zakadabar.stack.data.builtin.security.CommonAccountDto
 import zakadabar.stack.frontend.FrontendContext.dtoFrontends
 import zakadabar.stack.frontend.FrontendContext.stackSession
 import zakadabar.stack.frontend.builtin.dock.Dock
+import zakadabar.stack.frontend.builtin.layout.AppLayout
+import zakadabar.stack.frontend.builtin.layout.FullScreen
 import zakadabar.stack.frontend.comm.rest.FrontendComm
 import zakadabar.stack.frontend.data.DtoFrontend
 import zakadabar.stack.frontend.extend.FrontendModule
@@ -53,6 +55,10 @@ object FrontendContext {
     val dispatcher: MessageDispatcher = SyncMessageDispatcher()
 
     val dtoFrontends = mutableMapOf<String, DtoFrontend<*>>()
+
+    val layouts = mutableListOf<AppLayout>()
+
+    var defaultLayout = FullScreen
 
     lateinit var dock: Dock
 

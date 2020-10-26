@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.FrontendContext.dtoFrontends
 import zakadabar.stack.frontend.builtin.desktop.DesktopClasses.Companion.desktopClasses
 import zakadabar.stack.frontend.builtin.desktop.navigator.EntityNavigator
 import zakadabar.stack.frontend.builtin.navigation.Navigation
-import zakadabar.stack.frontend.builtin.navigation.NavigationState
+import zakadabar.stack.frontend.builtin.navigation.NavState
 import zakadabar.stack.frontend.builtin.util.Slider
 import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
@@ -72,7 +72,7 @@ open class DesktopCenter(
 
     }
 
-    open fun getMainInstance(viewState: NavigationState.ViewState): ComplexElement? {
+    open fun getMainInstance(viewState: NavState.ViewState): ComplexElement? {
         if (viewState.localId == null) return null
 
         @Suppress("UNCHECKED_CAST")

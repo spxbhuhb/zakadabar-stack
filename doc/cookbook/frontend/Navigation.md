@@ -1,11 +1,14 @@
 # Navigation
 
-Applications built on Zakadabar Stack are Single Page Applications (SPA) in which so-called 
-`pages` and `views` show the content to the user.
+Navigation handles URL changes:
+
+* initial page load
+* back and forward buttons of the browser
+* navigation by links
+* programmatic navigation
 
 The browser's [Location](https://developer.mozilla.org/en-US/docs/Web/API/Location) determines
-which views/pages are active and what they show. See [URLs](../common/URLs.md#View-URLs) for
-more information.
+what is displayed to the user. See [URLs](../common/URLs.md#View-URLs) for more information.
 
 The [Navigation](../../../src/jsMain/kotlin/zakadabar/stack/frontend/builtin/navigation/Navigation.kt) object:
 
@@ -156,35 +159,6 @@ Change the view on the same data.
 
 ```kotlin
 Navigation.changeView(Navigation.UPDATE)
-```
-
-### Step Into a Sub-Data Structure 
-
-**Not yet implemented.**
-
-Go deeper in a hierarchical data structure. This will result in a location with
-contains a data path. For example: `/view/eae64d/quest/1/eae64d/cave/2/eae64d/rabbit/3/read`
-
-See [URLs](../common/URLs.md#Nested-Data-Paths) for more information.
-
-```kotlin
-// you are at: /view/eae64d/quest/1/eae64d/cave/2/read
-Navigation.stepInto(RabbitDto.type, 12, Navigation.READ)
-// you went to: /view/eae64d/quest/1/eae64d/cave/2/eae64d/rabbit/12/read
-```
-
-### Step Out of a Sub-Data Structure 
-
-**Not yet implemented.**
-
-Go higher in a hierarchical data structure.
-
-See [URLs](../common/URLs.md#Nested-Data-Paths) for more information.
-
-```kotlin
-// you are at: /view/eae64d/quest/1/eae64d/cave/2/eae64d/rabbit/12/read
-Navigation.stepOut()
-// you went to: /view/eae64d/quest/1/eae64d/cave/2/read
 ```
 
 ### Go Back

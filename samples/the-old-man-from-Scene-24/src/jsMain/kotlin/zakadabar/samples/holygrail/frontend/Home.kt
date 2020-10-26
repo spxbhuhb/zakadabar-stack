@@ -6,7 +6,7 @@ package zakadabar.samples.holygrail.frontend
 import kotlinx.browser.window
 import zakadabar.samples.holygrail.data.rabbit.RabbitColors
 import zakadabar.stack.frontend.builtin.navigation.Navigation
-import zakadabar.stack.frontend.builtin.navigation.NavigationState
+import zakadabar.stack.frontend.builtin.navigation.NavState
 import zakadabar.stack.frontend.builtin.navigation.navLink
 import zakadabar.stack.frontend.elements.ComplexElement
 
@@ -37,9 +37,9 @@ class Home : ComplexElement() {
         content.clearChildren()
 
         when (state.stateType) {
-            NavigationState.StateType.Home -> return
-            NavigationState.StateType.Page -> return
-            NavigationState.StateType.Unknown -> return
+            NavState.StateType.Home -> return
+            NavState.StateType.Page -> return
+            NavState.StateType.Unknown -> return
             else -> Unit
         }
 

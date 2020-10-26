@@ -18,7 +18,7 @@ import zakadabar.stack.frontend.builtin.desktop.messages.EntityRemoved
 import zakadabar.stack.frontend.builtin.desktop.messages.EntityUpdated
 import zakadabar.stack.frontend.builtin.desktop.navigator.NavigatorClasses.Companion.navigatorClasses
 import zakadabar.stack.frontend.builtin.navigation.Navigation
-import zakadabar.stack.frontend.builtin.navigation.NavigationState
+import zakadabar.stack.frontend.builtin.navigation.NavState
 import zakadabar.stack.frontend.builtin.util.droparea.DropArea
 import zakadabar.stack.frontend.builtin.util.status.Status
 import zakadabar.stack.frontend.builtin.util.status.StatusInfo
@@ -85,10 +85,10 @@ class EntityNavigator : ComplexElement() {
         val state = Navigation.state
 
         currentEntityId = when (state.stateType) {
-            NavigationState.StateType.Home -> null
-            NavigationState.StateType.View -> state.viewState !!.localId
-            NavigationState.StateType.Page -> return
-            NavigationState.StateType.Unknown -> return
+            NavState.StateType.Home -> null
+            NavState.StateType.View -> state.viewState !!.localId
+            NavState.StateType.Page -> return
+            NavState.StateType.Unknown -> return
         }
 
         launch {

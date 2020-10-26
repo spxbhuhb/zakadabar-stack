@@ -5,11 +5,14 @@ package zakadabar.samples.theplace.frontend
 
 import kotlinx.browser.window
 import zakadabar.stack.frontend.builtin.navigation.Navigation
-import zakadabar.stack.frontend.builtin.navigation.NavigationState
+import zakadabar.stack.frontend.builtin.navigation.NavState
+import zakadabar.stack.frontend.builtin.navigation.Route
 import zakadabar.stack.frontend.builtin.navigation.navLink
 import zakadabar.stack.frontend.elements.ComplexElement
 
-class Home : ComplexElement() {
+object Home : ComplexElement(), Route {
+
+    override val path = "/"
 
     val content = ComplexElement()
 
@@ -33,20 +36,20 @@ class Home : ComplexElement() {
         val state = Navigation.state
 
         when (state.stateType) {
-            NavigationState.StateType.Home -> TODO()
+            NavState.StateType.Home -> TODO()
 
-            NavigationState.StateType.Page -> {
+            NavState.StateType.Page -> {
                 content.clearChildren()
                 val pageState = state.pageState ?: return
                 when (pageState.pageName) {
-                    "Tortuga" -> content += Tortuga()
-                    "Singapore" -> content += Singapore()
+                    "Tortuga" -> content += Tortuga
+                    "Singapore" -> content += Singapore
                 }
             }
 
-            NavigationState.StateType.View -> TODO()
+            NavState.StateType.View -> TODO()
 
-            NavigationState.StateType.Unknown -> TODO()
+            NavState.StateType.Unknown -> TODO()
         }
 
     }

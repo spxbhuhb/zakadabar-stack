@@ -1,16 +1,13 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.samples.theplace.frontend
+package zakadabar.stack.frontend.builtin.layout
 
-import zakadabar.stack.frontend.builtin.navigation.NavState
 import zakadabar.stack.frontend.builtin.navigation.Route
 import zakadabar.stack.frontend.elements.ComplexElement
 
-object Singapore : Route() {
+open class AppLayout(val name : String) : ComplexElement() {
 
-    override fun element(newState: NavState) = ComplexElement() build {
-        + "Singapore"
-    }
+    val routes = mutableListOf<Route>()
 
 }
