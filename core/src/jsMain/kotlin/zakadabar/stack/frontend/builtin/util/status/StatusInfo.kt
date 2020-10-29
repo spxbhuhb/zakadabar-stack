@@ -6,7 +6,7 @@ package zakadabar.stack.frontend.builtin.util.status
 import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.status.StatusInfoClasses.Companion.classes
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.escape
 import zakadabar.stack.frontend.util.svg
 
@@ -32,7 +32,7 @@ open class StatusMessages(
 // TODO update these with the current structure builder
 class StatusInfo(
     private val messages: StatusMessages = DefaultStatusMessages
-) : ComplexElement() {
+) : ZkElement() {
 
     fun update(status: Status, additionalInfo: String = ""): StatusInfo {
         clearChildren()
@@ -71,9 +71,9 @@ class StatusInfo(
 
 }
 
-class Loading(val message: String) : ComplexElement() {
+class Loading(val message: String) : ZkElement() {
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         super.init()
 
         var html = """<div class="${classes.loading}">"""
@@ -87,9 +87,9 @@ class Loading(val message: String) : ComplexElement() {
     }
 }
 
-class Error(val message: String, private val additionalInfo: String) : ComplexElement() {
+class Error(val message: String, private val additionalInfo: String) : ZkElement() {
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         super.init()
 
         val icon = svg(Icons.cloudUpload.content, width = 18, height = 18)
@@ -105,9 +105,9 @@ class Error(val message: String, private val additionalInfo: String) : ComplexEl
     }
 }
 
-class Empty(val message: String) : ComplexElement() {
+class Empty(val message: String) : ZkElement() {
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         super.init()
 
         var html = """<div class="${classes.empty}">"""

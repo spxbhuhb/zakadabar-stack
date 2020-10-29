@@ -9,14 +9,15 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.InputEvent
 import org.w3c.dom.events.KeyboardEvent
 import zakadabar.stack.frontend.builtin.input.InputClasses.Companion.inputClasses
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.elements.plusAssign
 
 open class Input(
     private val onEnter: ((String) -> Unit)? = null,
     private val onEscape: (() -> Unit)? = null,
     private val onChange: ((String) -> Unit)? = null,
     private val placeholder: String = ""
-) : ComplexElement(
+) : ZkElement(
     element = document.createElement("input") as HTMLInputElement
 ) {
 
@@ -28,7 +29,7 @@ open class Input(
             input.value = value
         }
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         classList += inputClasses.inputInput
 
         input.placeholder = placeholder

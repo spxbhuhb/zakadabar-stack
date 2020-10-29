@@ -3,8 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.util
 
-import zakadabar.stack.frontend.elements.ComplexElement
-import zakadabar.stack.frontend.elements.SimpleElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.util.PublicApi
 
 /**
@@ -12,9 +11,9 @@ import zakadabar.stack.util.PublicApi
  */
 @PublicApi
 open class BlockingOverlay(
-    val subject: SimpleElement,
-    val control: SimpleElement
-) : ComplexElement() {
+    val subject: ZkElement,
+    val control: ZkElement
+) : ZkElement() {
 
     override fun init(): BlockingOverlay {
         TODO("not implemented tey")

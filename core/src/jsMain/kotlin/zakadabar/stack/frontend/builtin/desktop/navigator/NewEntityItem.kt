@@ -8,14 +8,14 @@ import zakadabar.stack.frontend.builtin.desktop.navigator.NavigatorClasses.Compa
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.simple.SimpleText
 import zakadabar.stack.frontend.data.DtoFrontend
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 
 class NewEntityItem(
     private val newEntity: NewEntity,
     internal val support: DtoFrontend<*>
-) : ComplexElement() {
+) : ZkElement() {
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         super.init()
 
         className = navigatorClasses.newEntityItem

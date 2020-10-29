@@ -3,12 +3,12 @@
  */
 package zakadabar.samples.witchesbrew.frontend
 
-import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.elements.ZkElement
 
-class Cauldron : ComplexElement() {
+class Cauldron : ZkElement() {
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
 
         // build this element use coreClasses.contentColumn to align the content to middle
 

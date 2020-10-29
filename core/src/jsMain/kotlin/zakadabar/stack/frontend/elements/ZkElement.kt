@@ -6,20 +6,34 @@ package zakadabar.stack.frontend.elements
 import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.dom.clear
+import org.w3c.dom.DOMTokenList
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventTarget
-import zakadabar.stack.frontend.FrontendContext.dispatcher
+import org.w3c.dom.set
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.frontend.util.log
-import zakadabar.stack.messaging.Message
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KClass
 
-open class ComplexElement(
-    element: HTMLElement = document.createElement("div") as HTMLElement
-) : SimpleElement(element) {
+open class ZkElement(
+    val element: HTMLElement = document.createElement("div") as HTMLElement
+) {
+
+    companion object {
+        var nextId: Long = 1L
+            get() = field ++
+
+        var addKClass = false
+    }
+
+    val id = nextId
+
+    init {
+        element.id = "zk-$id"
+        if (addKClass) element.dataset["kclass"] = this::class.simpleName.toString()
+    }
 
     /**
      * The event that is currently processed by this element. This variable is here
@@ -28,100 +42,140 @@ open class ComplexElement(
      */
     var lastEvent: Event? = null
 
-    val childElements by lazy { mutableListOf<SimpleElement>() }
+    val childElements by lazy { mutableListOf<ZkElement>() }
 
     private val eventListeners by lazy { mutableListOf<Pair<String, Pair<EventTarget, (Event) -> Unit>>>() }
 
-    private val messageHandlers by lazy { mutableListOf<Pair<KClass<*>, (Message) -> Unit>>() }
-
-    override fun init(): ComplexElement {
+    open fun init(): ZkElement {
         return this
     }
 
-    override fun cleanup(): ComplexElement {
+    open fun cleanup(): ZkElement {
         clearChildren()
         cleanupEventListeners()
-        cleanupMessageHandlers()
         element.clear()
         return this
     }
 
+    // ---- Shorthands for DOM data --------
+
+    /**
+     * Shorthand for the innerHTML property of the HTML [element].
+     */
+    var innerHTML: String
+        inline get() = element.innerHTML
+        inline set(value) {
+            element.innerHTML = value
+        }
+
+    /**
+     * Shorthand for the innerText property of the HTML [element].
+     */
+    var innerText: String
+        inline get() = element.innerText
+        inline set(value) {
+            element.innerText = value
+        }
+
+    /**
+     * Shorthand for the className property of the HTML [element].
+     */
+    var className: String
+        inline get() = element.className
+        inline set(value) {
+            element.className = value
+        }
+
+    /**
+     * Shorthand for the classList property of the HTML [element].
+     */
+    val classList: DOMTokenList
+        inline get() = element.classList
+
     // ---- DOM Builder
 
-    override infix fun build(build: DOMBuilder.() -> Unit): ComplexElement {
-        DOMBuilder(element, this).build()
+    infix fun build(build: ZkBuilder.() -> Unit): ZkElement {
+        ZkBuilder(this, element).build()
         return this
     }
 
-    infix fun launchBuild(build: suspend DOMBuilder.() -> Unit): ComplexElement {
+    infix fun launchBuild(build: suspend ZkBuilder.() -> Unit): ZkElement {
         launch {
-            DOMBuilder(element, this@ComplexElement).build()
+            ZkBuilder(this@ZkElement, element).build()
         }
         return this
     }
 
-    // ---- Utilities --------
-    // We have to redefine these to return with ComplexElement instead of SimpleElement.
-    // This is a bit of hassle but adding generics to SimpleElement seems to be even worse.
-    // This makes builder working properly for ComplexElement.
-    // TODO check if we can modify the builder so that we get rid of these.
-
-    override fun hide(): ComplexElement {
+    fun hide(): ZkElement {
         classList.add(coreClasses.hidden)
         return this
     }
 
-    override fun show(): ComplexElement {
+    fun show(): ZkElement {
         classList.remove(coreClasses.hidden)
         return this
     }
 
-    override fun focus(): ComplexElement {
+    open fun focus(): ZkElement {
         element.focus()
         return this
     }
 
-    override infix fun marginRight(size: Any): ComplexElement {
-        super.marginRight(size)
+    infix fun marginRight(size: Any): ZkElement {
+        element.style.marginRight = if (size is Int) "${size}px" else size.toString()
         return this
     }
 
-    override infix fun marginBottom(size: Any): ComplexElement {
-        super.marginBottom(size)
+    infix fun marginBottom(size: Any): ZkElement {
+        element.style.marginBottom = if (size is Int) "${size}px" else size.toString()
         return this
     }
 
-    override infix fun width(value: Any): ComplexElement {
-        super.width(value)
+    infix fun width(value: Any): ZkElement {
+        if (value == "100%") {
+            classList += coreClasses.w100
+        } else {
+            element.style.width = value.toString()
+        }
         return this
     }
 
-    override infix fun flex(value: String): ComplexElement {
-        super.flex(value)
+    infix fun height(value: Any): ZkElement {
+        if (value == "100%") {
+            classList += coreClasses.h100
+        } else {
+            element.style.height = value.toString()
+        }
         return this
     }
 
-    override fun mainContent(): ComplexElement {
-        classList += coreClasses.mainContent
+    open infix fun flex(value: String): ZkElement {
+        if (value == "grow") {
+            classList += coreClasses.grow
+        } else {
+            throw RuntimeException("invalid flex value: $value")
+        }
         return this
     }
 
-    override fun withClass(className: String): ComplexElement {
+    fun hasClass() = ! className.isBlank()
+
+    fun withClass(className: String): ZkElement {
         element.classList.add(className)
         return this
     }
 
-    override infix fun cssClass(className: String): ComplexElement {
-        super.cssClass(className)
+    infix fun cssClass(className: String): ZkElement {
+        element.classList.add(className)
         return this
     }
 
-    override fun withClass(vararg classNames: String): ComplexElement {
+    fun withClass(vararg classNames: String): ZkElement {
         element.classList.add(*classNames)
         return this
     }
 
-    override fun withOptionalClass(className: String): ComplexElement {
+    fun withOptionalClass(className: String): ZkElement {
         if (element.className.isBlank()) {
             element.className = className
         }
@@ -130,7 +184,7 @@ open class ComplexElement(
 
     // ---- Child elements  ----
 
-    fun clearChildren(): ComplexElement {
+    fun clearChildren(): ZkElement {
         if (::childElements.isInitialized) {
             childElements.forEach { child -> child.cleanup() }
         }
@@ -138,27 +192,27 @@ open class ComplexElement(
         return this
     }
 
-    operator fun plusAssign(children: List<SimpleElement>) {
+    operator fun plusAssign(children: List<ZkElement>) {
         children.forEach { child ->
             this.element.appendChild(child.element)
             childElements += child.init()
         }
     }
 
-    operator fun plusAssign(child: SimpleElement?) {
+    operator fun plusAssign(child: ZkElement?) {
         if (child == null) return
         this.element.appendChild(child.element)
         childElements += child.init()
     }
 
     @PublicApi
-    infix fun insertFirst(child: SimpleElement?) {
+    infix fun insertFirst(child: ZkElement?) {
         if (child == null) return
         this.element.insertBefore(child.element, this.element.firstChild)
         childElements.add(0, child.init())
     }
 
-    fun insertAfter(child: SimpleElement?, after: SimpleElement?) {
+    fun insertAfter(child: ZkElement?, after: ZkElement?) {
         if (child == null) return
         if (after == null) {
             insertFirst(child)
@@ -175,7 +229,7 @@ open class ComplexElement(
         }
     }
 
-    fun insertBefore(child: SimpleElement?, before: SimpleElement?) {
+    fun insertBefore(child: ZkElement?, before: ZkElement?) {
         if (child == null) return
 
         if (before == null) {
@@ -197,7 +251,7 @@ open class ComplexElement(
     /**
      * Remove a child.
      */
-    open operator fun minusAssign(child: SimpleElement?) {
+    open operator fun minusAssign(child: ZkElement?) {
         if (child == null) return
 
         childElements -= child
@@ -220,6 +274,28 @@ open class ComplexElement(
             if (clazz.isInstance(child)) return true
         }
         return false
+    }
+
+    /**
+     * Get a child [ZkElement] of the given class. Useful in event handlers
+     * to get child element without storing it in a variable.
+     *
+     * Note that in this example "this" is the ZkBuilder instance.
+     * ```
+     *
+     *    fun updateShip(state: NavState) = launchBuildNew {
+     *
+     *        + ShipForm(ShipDto.read(state.recordId))
+     *
+     *        + SimpleButton("back") { Navigation.back() }
+     *        + SimpleButton("submit") { zkElement[ShipForm::class].submit() }
+     *
+     *    }
+     *
+     * ```
+     */
+    inline operator fun <reified T : ZkElement> get(kClass: KClass<T>): T {
+        return childElements.first { kClass.isInstance(it) } as T
     }
 
     // ---- Event listeners ----
@@ -301,53 +377,4 @@ open class ComplexElement(
     }
 
     open fun onException(ex: Throwable) = log(ex)
-
-    // ---- Message handlers ----
-
-    fun <T : Message> on(type: KClass<T>, handler: (T) -> Unit) {
-
-        // wrap the handler so we won't have crazy exception strings all around
-        // this also helps with removal as the object will be the same as we added
-
-        val wrapper = fun(message: T) {
-            try {
-                handler(message)
-            } catch (ex: Throwable) {
-                onException(ex)
-            }
-        }
-
-        @Suppress("UNCHECKED_CAST")
-        messageHandlers.add((type as KClass<*>) to (handler as ((Message) -> Unit)))
-
-        // sanity check, this means that some code adds handlers again and again
-
-        if (messageHandlers.size > 100) {
-            window.alert("Internal program error (more than 100 handlers) in ${this::class.simpleName}")
-        }
-
-        // finally, we can subscribe for messages
-
-        dispatcher.subscribe(type, wrapper)
-
-    }
-
-    fun <T : Message> off(typeToRemove: KClass<T>) {
-        messageHandlers.forEach { (type, wrapper) ->
-            if (type == typeToRemove) {
-                @Suppress("UNCHECKED_CAST")
-                dispatcher.unsubscribe(type as KClass<Message>, wrapper)
-            }
-        }
-    }
-
-    private fun cleanupMessageHandlers() {
-        if (::messageHandlers.isInitialized) {
-            messageHandlers.forEach { (type, wrapper) ->
-                @Suppress("UNCHECKED_CAST")
-                dispatcher.unsubscribe(type as KClass<Message>, wrapper)
-            }
-        }
-    }
-
 }

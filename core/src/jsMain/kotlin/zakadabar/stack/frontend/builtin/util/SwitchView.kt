@@ -3,8 +3,8 @@
  */
 package zakadabar.stack.frontend.builtin.util
 
-import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.elements.SwitchableElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.extend.ViewCompanion
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KClass
@@ -14,7 +14,7 @@ import kotlin.reflect.KClass
  *
  * @sample [zakadabar.stack.frontend.builtin.input.EditableText]
  */
-open class SwitchView : ComplexElement() {
+open class SwitchView : ZkElement() {
 
     protected val views = mutableListOf<() -> SwitchableElement>()
 
@@ -23,14 +23,14 @@ open class SwitchView : ComplexElement() {
     private var removed = false // to prevent new view creation by callbacks after the element is removed
 
     @PublicApi
-    protected var activeView: ComplexElement? = null
+    protected var activeView: ZkElement? = null
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         switch(index)
         return this
     }
 
-    override fun cleanup(): ComplexElement {
+    override fun cleanup(): ZkElement {
         removed = true
         return super.cleanup()
     }

@@ -6,6 +6,7 @@ package zakadabar.stack.frontend.application.navigation
 import org.w3c.dom.url.URLSearchParams
 import zakadabar.stack.frontend.FrontendContext
 import zakadabar.stack.frontend.application.AppLayout
+import zakadabar.stack.frontend.application.Application
 
 /**
  * Stores the current navigation state of the browser window. Created by
@@ -24,30 +25,43 @@ class NavState(urlPath: String, urlQuery: String) {
     val layout: AppLayout
     val module: String
     val view: String
-    val mode: String
-    val recordId: Long?
+    val recordId: Long
     val query: Any?
 
     val target: NavTarget
 
     init {
         val segments = urlPath.trim('/').split("/")
-        val searchParams = URLSearchParams(urlQuery.trim('?'))
 
-        layout = FrontendContext.layouts.find { it.name == segments[0] } ?: throw IllegalStateException("missing layout $segments[0]")
-        module = segments[1]
-        view = segments[2]
+        // use application home when there are no segments
 
-        recordId = searchParams.get("id")?.toLong()
-        mode = searchParams.get("mode") ?: "read"
+        if (segments.size == 1 && segments[0].isEmpty()) {
 
-        query = searchParams.get("query")?.let {
-            val dataType = "$module/$view"
-            val dtoFrontend = FrontendContext.dtoFrontends[dataType] ?: throw IllegalStateException("missing dto frontend for $dataType")
-            dtoFrontend.decodeQuery(dataType, it)
+            target = Application.home
+            layout = target.layout
+            module = target.module
+            view = target.name
+            recordId = 0
+            query = null
+
+        } else {
+
+            val searchParams = URLSearchParams(urlQuery.trim('?'))
+
+            layout = Application.layouts.find { it.name == segments[0] } ?: throw IllegalStateException("missing layout $segments[0]")
+            module = segments[1]
+            view = segments[2]
+
+            recordId = searchParams.get("id")?.toLong() ?: 0
+
+            query = searchParams.get("query")?.let {
+                val dataType = "$module/$view"
+                val dtoFrontend = FrontendContext.dtoFrontends[dataType] ?: throw IllegalStateException("missing dto frontend for $dataType")
+                dtoFrontend.decodeQuery(dataType, it)
+            }
+
+            target = layout.navTargets.find { it.accepts(this) } ?: throw IllegalStateException("missing nav target, path=$urlPath query=$urlQuery")
         }
-
-        target = layout.navTargets.find { it.accepts(this) } ?: throw IllegalStateException("missing nav target, path=$urlPath query=$urlQuery")
     }
 
 }

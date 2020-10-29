@@ -8,7 +8,7 @@ import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.header.Header
 import zakadabar.stack.frontend.builtin.util.header.HeaderClasses.Companion.headerClasses
 import zakadabar.stack.frontend.comm.rest.EntityCache
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.launch
 
 class EntityNavigatorHeader(
@@ -17,7 +17,7 @@ class EntityNavigatorHeader(
     title = t("navigation")
 ) {
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         super.init()
 
         this.element.style.marginLeft = "10px"

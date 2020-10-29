@@ -3,9 +3,9 @@
  */
 package zakadabar.stack.frontend.builtin.icon
 
-import zakadabar.stack.frontend.elements.SimpleElement
+import zakadabar.stack.frontend.elements.ZkElement
 
-open class SimpleIcon(val icon: String) : SimpleElement() {
+open class SimpleIcon(val icon: String) : ZkElement() {
 
     override fun init(): SimpleIcon {
         element.innerHTML = icon

@@ -4,8 +4,7 @@
 package zakadabar.stack.frontend.builtin.util.dropdown
 
 import zakadabar.stack.frontend.builtin.util.dropdown.DropdownClasses.Companion.dropdownClasses
-import zakadabar.stack.frontend.elements.ComplexElement
-import zakadabar.stack.frontend.elements.SimpleElement
+import zakadabar.stack.frontend.elements.ZkElement
 
 /**
  * Wrapper around the content of the dropdown.
@@ -13,8 +12,8 @@ import zakadabar.stack.frontend.elements.SimpleElement
  * @since 2020.9.14
  */
 class DropdownContent(
-    private val content: SimpleElement
-) : ComplexElement() {
+    private val content: ZkElement
+) : ZkElement() {
 
     override fun init(): DropdownContent {
 

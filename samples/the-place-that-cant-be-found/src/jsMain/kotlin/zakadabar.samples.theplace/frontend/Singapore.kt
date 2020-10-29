@@ -3,13 +3,11 @@
  */
 package zakadabar.samples.theplace.frontend
 
-import zakadabar.stack.frontend.application.navigation.NavState
-import zakadabar.stack.frontend.application.navigation.NavTarget
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 
-object Singapore : NavTarget() {
+object Singapore : ZkElement() {
 
-    override fun element(newState: NavState) = ComplexElement() build {
+    override fun init() = build {
         + "Singapore"
     }
 

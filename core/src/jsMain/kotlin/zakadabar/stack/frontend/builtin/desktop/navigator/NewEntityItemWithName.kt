@@ -8,13 +8,13 @@ import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.desktop.navigator.NavigatorClasses.Companion.navigatorClasses
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.input.Input
-import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.launch
 
 abstract class NewEntityItemWithName(
     private val newEntity: NewEntity
-) : ComplexElement() {
+) : ZkElement() {
 
     private var changed = false
     private val input = Input(::onEnter, newEntity::close, ::onChange, placeholder = t("typeName"))

@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.util.routing
 
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 
 /**
  * A router for a Single Page Application. Handles browser history, navigation
@@ -17,9 +17,9 @@ class Router {
         routes += route
     }
 
-    fun route(): ComplexElement? = route(ViewRequest())
+    fun route(): ZkElement? = route(ViewRequest())
 
-    fun route(request: ViewRequest): ComplexElement? {
+    fun route(request: ViewRequest): ZkElement? {
 
         for (route in routes) {
             val view = route.route(request, 0, mutableListOf())

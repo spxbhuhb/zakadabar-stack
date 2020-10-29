@@ -20,7 +20,7 @@ import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.schema.ValidationRule
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 import kotlin.reflect.KProperty0
 
 class ValidatedString<T : RecordDto<T>>(
@@ -33,7 +33,7 @@ class ValidatedString<T : RecordDto<T>>(
 
     private val input = element as HTMLInputElement
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         if (readOnly) input.readOnly = true
 
         input.value = prop.get()

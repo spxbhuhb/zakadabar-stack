@@ -64,12 +64,10 @@ class CoreClasses(theme: Theme) : CssStyleSheet<CoreClasses>(theme) {
         flexDirection = "row"
     }
 
-    val col by cssClass {
+    val column by cssClass {
         display = "flex"
         flexDirection = "column"
     }
-
-    val column = col
 
     val grow by cssClass {
         flexGrow = 1

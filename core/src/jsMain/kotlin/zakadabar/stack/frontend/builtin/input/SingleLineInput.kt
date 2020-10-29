@@ -5,13 +5,12 @@ package zakadabar.stack.frontend.builtin.input
 
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.input.InputClasses.Companion.inputClasses
-import zakadabar.stack.frontend.elements.ComplexElement
-import zakadabar.stack.frontend.elements.OptionalElement
-import zakadabar.stack.frontend.elements.SimpleElement
+import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
-open class SingleLineInput : ComplexElement() {
+open class SingleLineInput : ZkElement() {
 
     var value: String
         get() = input.value
@@ -19,7 +18,7 @@ open class SingleLineInput : ComplexElement() {
             input.value = value
         }
 
-    open val prefixIcon: SimpleElement = OptionalElement()
+    open val prefixIcon = ZkElement().withClass(coreClasses.hidden)
     open val input = Input(::onEnter, ::onEscape)
     open val approveIcon = Icons.check.complex18 { approve(value) }
     open val cancelIcon = Icons.close.complex18 { cancel() }

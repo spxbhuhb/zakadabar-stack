@@ -7,13 +7,13 @@ import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext
 import zakadabar.stack.frontend.builtin.desktop.navigator.NavigatorClasses.Companion.navigatorClasses
 import zakadabar.stack.frontend.builtin.icon.Icons
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.svg
 
 class EntityNavigatorItem(
     private val idPrefix: String,
     private val dto: EntityRecordDto
-) : ComplexElement() {
+) : ZkElement() {
 
     override fun init(): EntityNavigatorItem {
         val support = FrontendContext.dtoFrontends[dto.entityType]

@@ -5,7 +5,7 @@
 
 import kotlinx.browser.document
 import zakadabar.samples.witchesbrew.frontend.Cauldron
-import zakadabar.stack.frontend.elements.SimpleElement
+import zakadabar.stack.frontend.elements.ZkElement
 
 /**
  * The main method of the web browser application. Check the "hello world" sample for a
@@ -14,7 +14,7 @@ import zakadabar.stack.frontend.elements.SimpleElement
  */
 fun main() {
 
-    SimpleElement.addKClass = true
+    ZkElement.addKClass = true
 
     document.body?.appendChild(Cauldron().init().element)
 

@@ -3,10 +3,9 @@
  */
 @file:Suppress("unused")
 
-import kotlinx.browser.document
 import zakadabar.stack.frontend.FrontendContext
-import zakadabar.stack.frontend.application.navigation.Navigation
-import zakadabar.stack.frontend.elements.SimpleElement
+import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.launch
 
 /**
@@ -24,7 +23,7 @@ fun main() {
         // add KClass names as data attributes to DOM elements, useful for debugging, not meant for production
         // See: https://github.com/spxbhuhb/zakadabar-stack/blob/master/doc/misc/Productivity.md#simpleelement-addkclass
 
-        SimpleElement.addKClass = true
+        ZkElement.addKClass = true
 
         // Initialize the frontend. This method needs a running backend because it
         // fetches the account of the user who runs the frontend.
@@ -34,11 +33,14 @@ fun main() {
 
         // Add an instance of Home to the document body
 
-        document.body?.appendChild(Home().init().element)
+        //document.body?.appendChild(Home.init().element)
 
         // Initialize navigation
 
-        Navigation.init()
+        // Set the opening page of the application
+
+        Application.home = Routing.home
+        Application.init()
     }
 
 }

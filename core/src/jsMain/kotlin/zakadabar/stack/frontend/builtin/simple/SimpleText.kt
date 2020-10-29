@@ -5,13 +5,13 @@ package zakadabar.stack.frontend.builtin.simple
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.elements.SimpleElement
+import zakadabar.stack.frontend.elements.ZkElement
 
-open class SimpleText(val text: String) : SimpleElement(
+open class SimpleText(val text: String) : ZkElement(
     element = document.createElement("span") as HTMLElement
 ) {
 
-    override fun init(): SimpleElement {
+    override fun init(): ZkElement {
         element.innerText = text
         return this
     }

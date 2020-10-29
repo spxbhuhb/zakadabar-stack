@@ -3,12 +3,12 @@
  */
 package zakadabar.stack.frontend.builtin.util.status
 
-import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.elements.SwitchableElement
+import zakadabar.stack.frontend.elements.ZkElement
 
 class SwitchableLoadingBar : SwitchableElement() {
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         innerHTML = "...loading..." // FIXME implement loading bar
         return this
     }

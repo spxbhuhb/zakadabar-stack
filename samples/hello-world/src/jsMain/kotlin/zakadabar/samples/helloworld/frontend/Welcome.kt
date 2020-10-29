@@ -4,19 +4,19 @@
 package zakadabar.samples.helloworld.frontend
 
 import zakadabar.samples.helloworld.frontend.HelloWorldClasses.Companion.helloWorldClasses
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 
 /**
  * Displays the welcome page with the image and the click instructions.
  */
-class Welcome : ComplexElement() {
+class Welcome : ZkElement() {
 
     /**
      * This initialization function is called when the welcome element is
      * added to another element in some way. There are different ways to
      * build element structures, most of them calls [init] at some point.
      */
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
 
         // We use the classes from the source file [HelloWorldClasses].
         // This is just a shorthand for the CSS style.

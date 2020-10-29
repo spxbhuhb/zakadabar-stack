@@ -5,11 +5,11 @@ package zakadabar.stack.frontend.builtin.desktop
 
 import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.desktop.DesktopClasses.Companion.desktopClasses
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
-class DesktopFooter : ComplexElement() {
+class DesktopFooter : ZkElement() {
 
     override fun init(): DesktopFooter {
         super.init()

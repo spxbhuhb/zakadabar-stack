@@ -1,23 +1,13 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
+
 package zakadabar.stack.frontend.elements
 
 import org.w3c.dom.DOMTokenList
 import org.w3c.dom.HTMLElement
+import zakadabar.stack.util.PublicApi
+import kotlin.math.max
 
 operator fun DOMTokenList.plusAssign(token: String?) {
     if (token != null) this.add(token)
@@ -59,11 +49,43 @@ operator fun DOMTokenList.minusAssign(token: String?) {
      return this
  }
 
- infix fun HTMLElement.flex(value: String): HTMLElement {
+infix fun HTMLElement.flex(value: String): HTMLElement {
     if (value == "grow") {
         classList += CoreClasses.coreClasses.grow
     } else {
         throw RuntimeException("invalid flex value: $value")
     }
     return this
+}
+
+/**
+ * Align the width of two elements. The [calc] function is used to calculate the aligned
+ * width from the with of the two elements.
+ *
+ * Sets inline styles minWidth, width, maxWidth of the.
+ *
+ * @param  first   First element, does nothing when its null.
+ * @param  second  Second element, does nothing when its null.
+ * @param  calc    Calculation function, defaults to [max].
+ */
+@PublicApi
+fun alignWidth(first: HTMLElement?, second: HTMLElement?, calc: (Double, Double) -> Double = ::max) {
+    if (first == null || second == null) return
+
+    val firstWidth = first.getBoundingClientRect().width
+    val secondWidth = second.getBoundingClientRect().width
+
+    val alignedWidthPx = "${calc(firstWidth, secondWidth)}px"
+
+    with(first.style) {
+        minWidth = alignedWidthPx
+        width = alignedWidthPx
+        maxWidth = alignedWidthPx
+    }
+
+    with(second.style) {
+        minWidth = alignedWidthPx
+        width = alignedWidthPx
+        maxWidth = alignedWidthPx
+    }
 }

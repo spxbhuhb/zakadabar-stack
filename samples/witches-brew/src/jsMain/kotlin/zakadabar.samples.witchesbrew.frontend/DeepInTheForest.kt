@@ -5,17 +5,17 @@ package zakadabar.samples.witchesbrew.frontend
 
 import kotlinx.coroutines.delay
 import zakadabar.stack.frontend.builtin.simple.SimpleText
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.launch
 
-class DeepInTheForest : ComplexElement() {
+class DeepInTheForest : ZkElement() {
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
 
         val sometimesThis = SimpleText(" is this the shortest route")
         val sometimesThat = SimpleText(" are we lost")
 
-        val wrapper = ComplexElement()
+        val wrapper = ZkElement()
 
         build {
             + div {

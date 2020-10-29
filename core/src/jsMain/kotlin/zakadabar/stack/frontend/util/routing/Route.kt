@@ -3,15 +3,15 @@
  */
 package zakadabar.stack.frontend.util.routing
 
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 
 class Route(
     private val segments: List<PathSegment>,
-    private val handler: ((request: ViewRequest) -> ComplexElement?)? = null
+    private val handler: ((request: ViewRequest) -> ZkElement?)? = null
 ) {
     val children = mutableListOf<Route>()
 
-    fun route(request: ViewRequest, position: Int, parameters: MutableList<Pair<String, String>>): ComplexElement? {
+    fun route(request: ViewRequest, position: Int, parameters: MutableList<Pair<String, String>>): ZkElement? {
         var currentPosition = position
 
         for (segment in segments) {
@@ -46,7 +46,7 @@ class Route(
             return route
         }
 
-        fun handle(path: String, handler: (request: ViewRequest) -> ComplexElement?): Route {
+        fun handle(path: String, handler: (request: ViewRequest) -> ZkElement?): Route {
             return Route(toSegments(path), handler)
         }
     }

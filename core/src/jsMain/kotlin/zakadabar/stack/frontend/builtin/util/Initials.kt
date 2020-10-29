@@ -4,9 +4,9 @@
 package zakadabar.stack.frontend.builtin.util
 
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
-import zakadabar.stack.frontend.elements.SimpleElement
+import zakadabar.stack.frontend.elements.ZkElement
 
-class Initials(private val displayName: String) : SimpleElement() {
+class Initials(private val displayName: String) : ZkElement() {
 
     override fun init(): Initials {
 

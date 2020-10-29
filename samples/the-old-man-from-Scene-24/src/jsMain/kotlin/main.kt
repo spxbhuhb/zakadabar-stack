@@ -5,9 +5,8 @@
 
 import kotlinx.browser.document
 import zakadabar.samples.holygrail.frontend.Home
-import zakadabar.samples.holygrail.frontend.RabbitFrontend
 import zakadabar.stack.frontend.FrontendContext
-import zakadabar.stack.frontend.elements.SimpleElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.launch
 
 /**
@@ -25,7 +24,7 @@ fun main() {
         // add KClass names as data attributes to DOM elements, useful for debugging, not meant for production
         // See: https://github.com/spxbhuhb/zakadabar-stack/blob/master/doc/misc/Productivity.md#simpleelement-addkclass
 
-        SimpleElement.addKClass = true
+        ZkElement.addKClass = true
 
         // Initialize the frontend. This method needs a running backend because it
         // fetches the account of the user who runs the frontend.
@@ -33,7 +32,7 @@ fun main() {
 
         FrontendContext.init()
 
-        FrontendContext += RabbitFrontend
+        //FrontendContext += RabbitFrontend
 
         // Add modules to the frontend
 

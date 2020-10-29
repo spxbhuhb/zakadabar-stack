@@ -22,90 +22,85 @@ import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLImageElement
 import org.w3c.dom.events.Event
-import zakadabar.stack.Stack
+import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
-import zakadabar.stack.messaging.Message
 import zakadabar.stack.util.PublicApi
-import kotlin.reflect.KClass
 
 /**
- * A class to build DOM structures easily.
+ * Creates an anonymous [ZkElement] and calls [ZkElement.launchBuild] on it with
+ * the [builder] function.
  *
- * Check [current] to see how to add HTML tags from the builder functions.
+ * Use this function when you need to fetch data asynchronously during building
+ * the element.
  */
-@Suppress("KDocUnresolvedReference")
-class DOMBuilder(
-    /**
-     * The [HTMLElement] the current build function builds. May be used to
-     * set additional tags. For example:
-     *
-     * ```kotlin
-     *
-     * + image("/my-picture.png") {
-     *     current.style.width = "10"
-     * }
-     * ```
-     */
-    var current: HTMLElement,
-    private val parentComplex: ComplexElement? = null,
+fun launchBuildNew(builder: suspend ZkBuilder.() -> Unit) = ZkElement().launchBuild(builder)
+
+/**
+ * Creates an anonymous [ZkElement] and calls [ZkElement.build] on it with
+ * the [builder] function.
+ *
+ * Use this function when there is no need to asynchronous data fetch.
+ */
+fun buildNew(builder: ZkBuilder.() -> Unit) = ZkElement().build(builder)
+
+/**
+ * Provides programmatic builder functionality to create the DOM and link
+ * it to [ZkElement] implementations.
+ *
+ * @property  zkElement    The [ZkElement] being built. Does not change in the scope
+ *                         of one builder.
+ *
+ * @property  htmlElement  The [HTMLElement] being built. Changes frequently as
+ *                         the builder goes on.
+ */
+class ZkBuilder(
+    val zkElement: ZkElement,
+    var htmlElement: HTMLElement
 ) {
 
+    private fun runBuild(e: HTMLElement, className: String?, build: ZkBuilder.() -> Unit) {
+        if (className != null) e.classList.add(className)
+        val original = htmlElement
+        htmlElement = e
+        build()
+        htmlElement = original
+    }
+
     /**
-     * Creates SimpleElement and executes the builder function on it.
+     * Creates "div" [HTMLElement] and executes the builder function on it.
      *
      * @param  className  CSS class to add. Optional.
      * @param  build      The builder function to build the content of the div. Optional.
      */
-    fun div(className: String? = null, build: DOMBuilder.() -> Unit = { }): HTMLElement {
+    fun div(className: String? = null, build: ZkBuilder.() -> Unit = { }): HTMLElement {
         val e = document.createElement("div") as HTMLElement
-        e.classList += className
-        buildElement(e, className, build)
+        runBuild(e, className, build)
         return e
     }
 
     /**
-     * Creates a "div" [HTMLElement] with [coreClasses.row] added and executes the builder on it.
+     * Creates a "div" [HTMLElement] with coreClasses.row added and executes the builder on it.
      *
      * @param  className  Additional CSS class. Optional.
      * @param  build      The builder function to build the content of the div. Optional.
      */
-    fun row(className: String? = null, build: DOMBuilder.() -> Unit): HTMLElement {
+    fun row(className: String? = null, build: ZkBuilder.() -> Unit): HTMLElement {
         val e = document.createElement("div") as HTMLElement
         e.classList += coreClasses.row
-        buildElement(e, className, build)
+        runBuild(e, className, build)
         return e
     }
 
     /**
-     * Creates [HTMLElement] with [coreClasses.row].
-     */
-    fun row(): HTMLElement {
-        val e = document.createElement("div") as HTMLElement
-        e.classList += coreClasses.row
-        current.appendChild(e)
-        return e
-    }
-
-    /**
-     * Creates "div" [HTMLElement] with [coreClasses.col] added and executes the builder on it.
+     * Creates "div" [HTMLElement] with coreClasses.column added and executes the builder on it.
      *
      * @param  className  Additional CSS class. Optional.
      * @param  build      The builder function to build the content of the div. Optional.
      */
-    fun col(className: String? = null, build: DOMBuilder.() -> Unit): HTMLElement {
+    fun column(className: String? = null, build: ZkBuilder.() -> Unit): HTMLElement {
         val e = document.createElement("div") as HTMLElement
-        e.classList += coreClasses.col
-        buildElement(e, className, build)
-        return e
-    }
-
-    /**
-     * Creates [HTMLElement] with [coreClasses.col].
-     */
-    fun column(): HTMLElement {
-        val e = document.createElement("div") as HTMLElement
-        e.classList += coreClasses.col
-        current.appendChild(e)
+        e.classList += coreClasses.column
+        runBuild(e, className, build)
         return e
     }
 
@@ -126,7 +121,7 @@ class DOMBuilder(
     }
 
     /**
-     * Creates an IMG with a source url. Use [DOMBuilder.current] to add attributes other than the source.
+     * Creates an IMG with a source url. Use [ZkBuilder.htmlElement] to add attributes other than the source.
      *
      * ```
      *
@@ -142,16 +137,16 @@ class DOMBuilder(
      * @param  build      Builder function to manage the IMG tag added. Optional.
      */
     @PublicApi
-    fun image(src: String, className: String? = null, build: DOMBuilder.() -> Unit = { }): HTMLImageElement {
+    fun image(src: String, className: String? = null, build: ZkBuilder.() -> Unit = { }): HTMLImageElement {
         val img = document.createElement("img") as HTMLImageElement
         img.src = src
-        buildElement(img, className, build)
+        runBuild(img, className, build)
         return img
     }
 
     /**
      * Adds an IMG to the current element with an entity id. Converts the entity id
-     * into a Stack entity URL to use as source. Use [DOMBuilder.current] to add
+     * into a Stack entity URL to use as source. Use [ZkBuilder.htmlElement] to add
      * attributes other than the source.
      *
      * ```
@@ -167,20 +162,20 @@ class DOMBuilder(
      * @param  className  Additional CSS class. Optional.
      * @param  build      Builder function to manage the IMG tag added. Optional.
      */
-    fun image(entityId: Long, className: String? = null, build: DOMBuilder.() -> Unit = { }): HTMLImageElement {
+    fun image(entityId: Long, className: String? = null, build: ZkBuilder.() -> Unit = { }): HTMLImageElement {
         val img = document.createElement("img") as HTMLImageElement
-        img.src = "/api/${Stack.shid}/entities/$entityId/revisions/last"
-        buildElement(img, className, build)
+        img.src = EntityRecordDto.revisionUrl(entityId)
+        runBuild(img, className, build)
         return img
     }
 
     /**
-     * Creates an unnamed [ComplexElement].
+     * Creates an unnamed [ZkElement].
      */
-    fun complex(): ComplexElement {
-        val ce = ComplexElement()
-        current.appendChild(ce.element)
-        parentComplex?.childElements?.plusAssign(ce)
+    fun element(): ZkElement {
+        val ce = ZkElement()
+        htmlElement.appendChild(ce.element)
+        zkElement.childElements.plusAssign(ce)
         // no need for init as it is empty
         return ce
     }
@@ -192,37 +187,17 @@ class DOMBuilder(
      * @param  listener  Event listener function.
      */
     fun on(type: String, listener: ((Event) -> Unit)?) {
-        parentComplex !!.on(type, listener)
+        zkElement.on(type, listener)
     }
 
     /**
-     * Adds a browser event listener (without the event parameter) to the current element.
-     *
-     * @param  type      Name of the browser event like "click".
-     * @param  listener  Event listener function.
-     */
-    fun on(type: String, listener: (() -> Unit)?) {
-        parentComplex !!.on(type, listener)
-    }
-
-    /**
-     * Adds a message handler to the current element.
-     *
-     * @param  type      Class of the message to handle.
-     * @param  handler   The message handler function.
-     */
-    fun <T : Message> on(type: KClass<T>, handler: (T) -> Unit) {
-        parentComplex !!.on(type, handler)
-    }
-
-    /**
-     * Creates a SPAN with [SimpleElement.innerHTML] set to the string passed.
+     * Creates a SPAN with [HTMLElement.innerHTML] set to the string passed.
      * The string is **not escaped**. You have to escape it yourself.
      */
-    operator fun String.not() : HTMLElement {
+    operator fun String.not(): HTMLElement {
         val e = document.createElement("span")
         e.innerHTML = this
-        current.append(e)
+        htmlElement.append(e)
         return e as HTMLElement
     }
 
@@ -230,33 +205,31 @@ class DOMBuilder(
      * Creates a text node using [HTMLElement.appendText] with the string passed as content.
      * No need for escape.
      */
-    operator fun String.unaryPlus() : Element {
-        return current.appendText(this)
+    operator fun String.unaryPlus(): Element {
+        return htmlElement.appendText(this)
     }
 
     /**
-     * Adds the HTML element.
+     * Adds an HTML element.
      */
     operator fun HTMLElement.unaryPlus(): HTMLElement {
-        current.appendChild(this)
+        htmlElement.appendChild(this)
         return this
     }
 
     /**
-     * Build a structure of elements inside this element.
-     *
-     * @param  build      Builder function.
+     * Adds a [ZkElement].
      */
-    infix fun HTMLElement.build(build: DOMBuilder.() -> Unit): HTMLElement {
-        val builder = DOMBuilder(this, parentComplex)
-        builder.build()
+    operator fun ZkElement.unaryPlus(): ZkElement {
+        htmlElement.appendChild(this.element)
+        zkElement.childElements += this.init()
         return this
     }
 
     /**
-     * Build a structure of elements inside this element.
+     * Append the given class to the class list of the element.
      *
-     * @param  build      Builder function.
+     * @param  className  Name of the class to append.
      */
     infix fun Element.cssClass(className: String): Element {
         this.classList += className
@@ -264,9 +237,9 @@ class DOMBuilder(
     }
 
     /**
-     * Build a structure of elements inside this element.
+     * Append the given class to the class list of the element.
      *
-     * @param  build      Builder function.
+     * @param  className  Name of the class to append.
      */
     infix fun HTMLElement.cssClass(className: String): HTMLElement {
         this.classList += className
@@ -274,30 +247,14 @@ class DOMBuilder(
     }
 
     /**
-     * Adds a [SimpleElement].
+     * Creates "div" [HTMLElement] and executes the builder function on it.
+     *
+     * @param  className  CSS class to add. Optional.
+     * @param  build      The builder function to build the content of the div. Optional.
      */
-    operator fun SimpleElement.unaryPlus(): SimpleElement {
-        current.appendChild(this.element)
-        this.init()
+    infix fun HTMLElement.build(build: ZkBuilder.() -> Unit): HTMLElement {
+        runBuild(this, className, build)
         return this
-    }
-
-    /**
-     * Adds a [ComplexElement].
-     */
-    operator fun ComplexElement.unaryPlus(): ComplexElement {
-        require(parentComplex != null) { "cannot add complex element to simple element" }
-        current.appendChild(this.element)
-        parentComplex.childElements += this.init()
-        return this
-    }
-
-    private fun buildElement(e: HTMLElement, className: String?, build: DOMBuilder.() -> Unit) {
-        if (className != null) e.classList.add(className)
-        val original = current
-        current = e
-        build()
-        current = original
     }
 
 }

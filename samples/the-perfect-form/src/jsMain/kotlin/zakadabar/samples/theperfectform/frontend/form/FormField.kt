@@ -5,16 +5,16 @@ package zakadabar.samples.theperfectform.frontend.form
 
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.data.schema.ValidationRule
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 import kotlin.reflect.KProperty0
 
 abstract class FormField<T>(
     val prop: KProperty0<T>,
     element: HTMLElement
-) : ComplexElement(element) {
+) : ZkElement(element) {
     var readOnly = false
     var isValid = true
 
-    abstract fun validated(fails : MutableList<ValidationRule<*>>?)
+    abstract fun validated(fails: MutableList<ValidationRule<*>>?)
 
 }

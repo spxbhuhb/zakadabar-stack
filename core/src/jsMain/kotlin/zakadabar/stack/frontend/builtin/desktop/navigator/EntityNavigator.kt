@@ -23,16 +23,16 @@ import zakadabar.stack.frontend.builtin.util.status.Status
 import zakadabar.stack.frontend.builtin.util.status.StatusInfo
 import zakadabar.stack.frontend.builtin.util.status.StatusMessages
 import zakadabar.stack.frontend.comm.rest.EntityCache
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.getElementId
 import zakadabar.stack.frontend.util.launch
 
-class EntityNavigator : ComplexElement() {
+class EntityNavigator : ZkElement() {
 
     internal val header = EntityNavigatorHeader(this)
 
     private val statusInfo = StatusInfo(StatusMessages(emptyMessage = t("emptyFolder")))
-    internal val items = ComplexElement()
+    internal val items = ZkElement()
     private val dropArea = DropArea(::onDrop)
 
     private val idPrefix = "${element.id}-item-"
@@ -41,14 +41,14 @@ class EntityNavigator : ComplexElement() {
     private var currentEntityDto: EntityRecordDto? = null
     private var selectedEntityId: Long? = null
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         super.init()
 
         this cssClass navigatorClasses.navigator build {
 
             + header
 
-            + complex() cssClass navigatorClasses.content build {
+            + element() cssClass navigatorClasses.content build {
 
                 + statusInfo.update(Status.Loading)
                 + (items cssClass navigatorClasses.items).hide()
@@ -58,12 +58,6 @@ class EntityNavigator : ComplexElement() {
                 on("dblclick", ::onClick)
             }
         }
-
-        on(EntityAdded::class, ::onEntityAdded)
-        on(EntityRemoved::class, ::onEntityRemoved)
-        on(EntityUpdated::class, ::onEntityUpdated)
-
-        on(EntityChildrenLoaded::class, ::onEntityChildrenLoaded)
 
         on(window, Navigation.EVENT, ::onNavigation)
 
@@ -107,7 +101,7 @@ class EntityNavigator : ComplexElement() {
 
     private fun onClick(event: Event) {
         val entityId = getEntityId(event) ?: return
-        Navigation.changeLocation(Navigation.READ) { EntityRecordDto.read(entityId) }
+//        Navigation.changeLocation(Navigation.READ) { EntityRecordDto.read(entityId) }
     }
 
     private fun getEntityId(event: Event): Long? {

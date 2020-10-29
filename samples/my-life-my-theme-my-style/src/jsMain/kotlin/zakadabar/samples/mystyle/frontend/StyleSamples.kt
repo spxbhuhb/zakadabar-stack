@@ -4,11 +4,13 @@
 package zakadabar.samples.mystyle.frontend
 
 import zakadabar.samples.mystyle.frontend.SampleClasses.Companion.sampleClasses
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.elements.minusAssign
+import zakadabar.stack.frontend.elements.plusAssign
 
-class StyleSamples : ComplexElement() {
+class StyleSamples : ZkElement() {
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
 
         val classes = sampleClasses
 

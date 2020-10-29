@@ -16,7 +16,7 @@
  */
 package zakadabar.stack.frontend.builtin.form
 
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 
-class ValidatedSubmit : ComplexElement() {
+class ValidatedSubmit : ZkElement() {
 }

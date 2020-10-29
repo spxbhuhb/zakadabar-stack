@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.builtin.util.SwitchView
  *
  *
  */
-abstract class SwitchableElement : ComplexElement() {
+abstract class SwitchableElement : ZkElement() {
 
     lateinit var switchView: SwitchView
 

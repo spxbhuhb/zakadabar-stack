@@ -5,21 +5,20 @@ package zakadabar.stack.frontend.builtin.util.header
 
 import zakadabar.stack.frontend.builtin.simple.SimpleText
 import zakadabar.stack.frontend.builtin.util.header.HeaderClasses.Companion.headerClasses
-import zakadabar.stack.frontend.elements.ComplexElement
-import zakadabar.stack.frontend.elements.SimpleElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
 open class Header(
     title: String = "",
-    val icon: SimpleElement? = null,
-    @PublicApi val titleElement: SimpleElement = SimpleText(title),
-    private val tools: List<SimpleElement> = emptyList()
-) : ComplexElement() {
+    val icon: ZkElement? = null,
+    @PublicApi val titleElement: ZkElement = SimpleText(title),
+    private val tools: List<ZkElement> = emptyList()
+) : ZkElement() {
 
-    val toolElement = ComplexElement()
+    val toolElement = ZkElement()
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         super.init()
 
         element.classList.add(headerClasses.header)

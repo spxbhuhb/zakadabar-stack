@@ -7,9 +7,9 @@ import zakadabar.stack.frontend.FrontendContext.theme
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.simple.SimpleText
 import zakadabar.stack.frontend.builtin.util.SwitchView
-import zakadabar.stack.frontend.elements.ComplexElement
 import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.elements.SwitchableElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.util.PublicApi
 
 /**
@@ -30,7 +30,7 @@ open class EditableText(
 
     inner class ReadView : SwitchableElement() {
 
-        override fun init(): ComplexElement {
+        override fun init(): ZkElement {
 
             className = coreClasses.row
 
@@ -46,7 +46,7 @@ open class EditableText(
 
         private val input = Input(::onApprove, ::onCancel)
 
-        override fun init(): ComplexElement {
+        override fun init(): ZkElement {
 
             className = coreClasses.row
 

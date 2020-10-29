@@ -3,10 +3,10 @@
  */
 package zakadabar.stack.frontend.extend
 
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 
 interface ViewCompanion {
 
-    fun newInstance(scope: Any? = null): ComplexElement
+    fun newInstance(scope: Any? = null): ZkElement
 
 }
