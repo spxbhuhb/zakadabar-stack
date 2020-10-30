@@ -3,7 +3,6 @@
  */
 package zakadabar.samples.helloworld.frontend
 
-import zakadabar.stack.frontend.application.navigation.Navigation
 import zakadabar.stack.frontend.builtin.desktop.DesktopCenter
 
 /**

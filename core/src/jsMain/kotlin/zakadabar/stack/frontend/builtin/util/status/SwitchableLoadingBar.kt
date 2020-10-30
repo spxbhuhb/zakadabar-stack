@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.util.status
 
-import zakadabar.stack.frontend.elements.SwitchableElement
+import zakadabar.stack.frontend.builtin.util.SwitchableElement
 import zakadabar.stack.frontend.elements.ZkElement
 
 class SwitchableLoadingBar : SwitchableElement() {

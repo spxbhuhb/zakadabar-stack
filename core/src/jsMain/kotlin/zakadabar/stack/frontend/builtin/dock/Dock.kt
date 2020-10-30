@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.dock
 
-import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.elements.ZkElement
 
 /**

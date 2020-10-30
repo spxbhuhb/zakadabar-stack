@@ -4,7 +4,7 @@
 package zakadabar.stack.frontend.builtin.layout
 
 import zakadabar.stack.frontend.application.AppLayout
-import zakadabar.stack.frontend.application.navigation.NavState
+import zakadabar.stack.frontend.application.NavState
 import zakadabar.stack.frontend.elements.ZkElement
 
 /**

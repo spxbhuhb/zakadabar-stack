@@ -5,7 +5,7 @@ package zakadabar.stack.frontend.builtin.util
 
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
-import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.elements.ZkElement
 import kotlin.math.max
 import kotlin.math.min

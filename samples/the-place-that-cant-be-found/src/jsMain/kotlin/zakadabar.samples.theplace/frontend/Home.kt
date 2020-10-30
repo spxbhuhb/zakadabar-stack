@@ -3,8 +3,9 @@
  */
 package zakadabar.samples.theplace.frontend
 
-import zakadabar.stack.frontend.elements.buildNew
+import zakadabar.samples.theplace.ThePlace
+import zakadabar.stack.frontend.elements.ZkPage.Companion.buildNewPage
 
-val Home = buildNew {
+val Home = buildNewPage(ThePlace.shid, "") {
     + "Home"
 }

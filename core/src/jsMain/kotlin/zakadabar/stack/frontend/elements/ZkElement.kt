@@ -11,7 +11,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventTarget
 import org.w3c.dom.set
-import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.elements.ZkClasses.Companion.zkClasses
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.frontend.util.log
 import zakadabar.stack.util.PublicApi
@@ -22,10 +22,29 @@ open class ZkElement(
 ) {
 
     companion object {
+
         var nextId: Long = 1L
             get() = field ++
 
         var addKClass = false
+
+        /**
+         * Creates an anonymous [ZkElement] and calls [ZkElement.launchBuild] on it with
+         * the [builder] function.
+         *
+         * Use this function when you need to fetch data asynchronously during building
+         * the element.
+         */
+        fun launchBuildNew(builder: suspend ZkBuilder.() -> Unit) = ZkElement().launchBuild(builder)
+
+        /**
+         * Creates an anonymous [ZkElement] and calls [ZkElement.build] on it with
+         * the [builder] function.
+         *
+         * Use this function when there is no need to asynchronous data fetch.
+         */
+        fun buildNew(builder: ZkBuilder.() -> Unit) = ZkElement().build(builder)
+
     }
 
     val id = nextId
@@ -107,12 +126,12 @@ open class ZkElement(
     }
 
     fun hide(): ZkElement {
-        classList.add(coreClasses.hidden)
+        classList.add(zkClasses.hidden)
         return this
     }
 
     fun show(): ZkElement {
-        classList.remove(coreClasses.hidden)
+        classList.remove(zkClasses.hidden)
         return this
     }
 
@@ -133,7 +152,7 @@ open class ZkElement(
 
     infix fun width(value: Any): ZkElement {
         if (value == "100%") {
-            classList += coreClasses.w100
+            classList += zkClasses.w100
         } else {
             element.style.width = value.toString()
         }
@@ -142,7 +161,7 @@ open class ZkElement(
 
     infix fun height(value: Any): ZkElement {
         if (value == "100%") {
-            classList += coreClasses.h100
+            classList += zkClasses.h100
         } else {
             element.style.height = value.toString()
         }
@@ -151,7 +170,7 @@ open class ZkElement(
 
     open infix fun flex(value: String): ZkElement {
         if (value == "grow") {
-            classList += coreClasses.grow
+            classList += zkClasses.grow
         } else {
             throw RuntimeException("invalid flex value: $value")
         }

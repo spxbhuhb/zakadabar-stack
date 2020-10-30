@@ -6,6 +6,7 @@ package zakadabar.stack.frontend.elements
 
 import org.w3c.dom.DOMTokenList
 import org.w3c.dom.HTMLElement
+import zakadabar.stack.frontend.builtin.CoreClasses
 import zakadabar.stack.util.PublicApi
 import kotlin.math.max
 
@@ -21,17 +22,17 @@ operator fun DOMTokenList.minusAssign(token: String?) {
     if (token != null) this.remove(token)
 }
 
- infix fun HTMLElement.marginRight(size: Any): HTMLElement {
+infix fun HTMLElement.marginRight(size: Any): HTMLElement {
     this.style.marginRight = if (size is Int) "${size}px" else size.toString()
     return this
 }
 
- infix fun HTMLElement.marginBottom(size: Any): HTMLElement {
+infix fun HTMLElement.marginBottom(size: Any): HTMLElement {
     this.style.marginBottom = if (size is Int) "${size}px" else size.toString()
     return this
 }
 
- infix fun HTMLElement.width(value: Any): HTMLElement {
+infix fun HTMLElement.width(value: Any): HTMLElement {
     if (value == "100%") {
         classList += CoreClasses.coreClasses.w100
     } else {
@@ -40,14 +41,14 @@ operator fun DOMTokenList.minusAssign(token: String?) {
     return this
 }
 
- infix fun HTMLElement.height(value: Any): HTMLElement {
-     if (value is String) {
-         this.style.height = value
-     } else {
-         this.style.height = "${value}px"
-     }
-     return this
- }
+infix fun HTMLElement.height(value: Any): HTMLElement {
+    if (value is String) {
+        this.style.height = value
+    } else {
+        this.style.height = "${value}px"
+    }
+    return this
+}
 
 infix fun HTMLElement.flex(value: String): HTMLElement {
     if (value == "grow") {

@@ -4,7 +4,7 @@
 package zakadabar.samples.theplace.frontend
 
 import zakadabar.stack.frontend.application.AppLayout
-import zakadabar.stack.frontend.application.navigation.NavState
+import zakadabar.stack.frontend.application.NavState
 import zakadabar.stack.frontend.elements.ZkElement
 
 object Layout : AppLayout("default") {

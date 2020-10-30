@@ -6,8 +6,8 @@ package zakadabar.stack.frontend.builtin.util
 import zakadabar.stack.data.builtin.security.CommonAccountDto
 import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext.t
+import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.builtin.simple.SimpleDateTime
-import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.util.PublicApi

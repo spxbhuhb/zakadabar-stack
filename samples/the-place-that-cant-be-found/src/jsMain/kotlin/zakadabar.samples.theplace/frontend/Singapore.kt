@@ -3,9 +3,10 @@
  */
 package zakadabar.samples.theplace.frontend
 
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.samples.theplace.ThePlace
+import zakadabar.stack.frontend.elements.ZkPage
 
-object Singapore : ZkElement() {
+object Singapore : ZkPage(ThePlace.shid, "/singapore") {
 
     override fun init() = build {
         + "Singapore"

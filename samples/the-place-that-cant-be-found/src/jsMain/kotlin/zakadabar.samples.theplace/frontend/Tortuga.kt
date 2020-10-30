@@ -3,9 +3,10 @@
  */
 package zakadabar.samples.theplace.frontend
 
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.samples.theplace.ThePlace
+import zakadabar.stack.frontend.elements.ZkPage
 
-object Tortuga : ZkElement() {
+object Tortuga : ZkPage(ThePlace.shid, "/tortuga") {
 
     override fun init() = build {
         + "Tortuga"

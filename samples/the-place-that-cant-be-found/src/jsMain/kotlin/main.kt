@@ -35,11 +35,6 @@ fun main() {
 
         //document.body?.appendChild(Home.init().element)
 
-        // Initialize navigation
-
-        // Set the opening page of the application
-
-        Application.home = Routing.home
         Application.init()
     }
 

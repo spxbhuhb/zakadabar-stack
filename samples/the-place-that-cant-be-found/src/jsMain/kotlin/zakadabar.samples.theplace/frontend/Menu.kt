@@ -3,25 +3,19 @@
  */
 package zakadabar.samples.theplace.frontend
 
-import Routing
-import zakadabar.stack.frontend.application.navigation.navLink
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.simple.SimpleButton
+import zakadabar.stack.frontend.elements.ZkElement.Companion.buildNew
 
-object Menu : ZkElement() {
+class Role(val name: String)
 
-    private val content = ZkElement()
+val admin = Role("admin")
 
-    override fun init() = build {
-        + column {
-            + row {
-                with(Routing) {
-                    + navLink(ships, "Ships")
-                    + navLink(tortuga, "Tortuga")
-                    + navLink(singapore, "Singapore")
-                }
-            }
-            + content
-        }
+val Menu = buildNew {
+
+    + column {
+        + SimpleButton("Ships") { Ships.openAll() }
+        + SimpleButton("Tortuga") { Tortuga.open() }
+        + SimpleButton("Singapore") { Singapore.open() }
     }
 
 }

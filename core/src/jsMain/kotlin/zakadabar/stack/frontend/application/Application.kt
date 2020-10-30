@@ -3,10 +3,8 @@
  */
 package zakadabar.stack.frontend.application
 
-import kotlinx.browser.document
-import zakadabar.stack.frontend.application.navigation.NavTarget
-import zakadabar.stack.frontend.application.navigation.Navigation
-import zakadabar.stack.frontend.builtin.layout.FullScreen
+import kotlinx.browser.window
+import org.w3c.dom.events.Event
 
 /**
  * The application that runs in the browser window. This object contains data
@@ -14,34 +12,29 @@ import zakadabar.stack.frontend.builtin.layout.FullScreen
  */
 object Application {
 
-    /**
-     * Application layouts, see [AppLayout] for more information.
-     */
-    val layouts = mutableListOf<AppLayout>()
+    lateinit var routing: AppRouting
 
-    /**
-     * The default layout. [zakadabar.stack.frontend.application.navigation.NavTarget]s
-     * without different layout specified use this layout. to this
-     */
-    var defaultLayout = FullScreen
+    const val EVENT = "zk-navstate-change"
 
-    /**
-     * Target to use when the URL is '/'. Application startup should set the
-     * value.
-     */
-    lateinit var home: NavTarget
-
-    /**
-     * Initializes the application.
-     */
     fun init() {
+        window.addEventListener("popstate", onPopState)
+        routing.onNavStateChange(NavState(window.location.pathname, window.location.search))
+        window.dispatchEvent(Event(EVENT))
+    }
 
-        layouts.forEach {
-            document.body?.appendChild(it.element)
-            it.hide()
-            it.init()
-        }
+    private val onPopState = fun(_: Event) {
+        routing.onNavStateChange(NavState(window.location.pathname, window.location.search))
+        window.dispatchEvent(Event(EVENT))
+    }
 
-        Navigation.init()
+    fun changeNavState(path: String, query: String = "") {
+        val url = if (query.isEmpty()) path else "$path?$query"
+        window.history.pushState("", "", url)
+        routing.onNavStateChange(NavState(path, query))
+        window.dispatchEvent(Event(EVENT))
+    }
+
+    fun back() {
+
     }
 }

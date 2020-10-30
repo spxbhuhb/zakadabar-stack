@@ -12,7 +12,6 @@ import zakadabar.stack.data.builtin.FolderDto
 import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext.dispatcher
 import zakadabar.stack.frontend.FrontendContext.t
-import zakadabar.stack.frontend.application.navigation.Navigation
 import zakadabar.stack.frontend.builtin.desktop.messages.EntityAdded
 import zakadabar.stack.frontend.builtin.desktop.messages.EntityChildrenLoaded
 import zakadabar.stack.frontend.builtin.desktop.messages.EntityRemoved

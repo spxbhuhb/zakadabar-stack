@@ -3,9 +3,9 @@
  */
 package zakadabar.stack.frontend.builtin.input
 
+import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.input.InputClasses.Companion.inputClasses
-import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.util.PublicApi
 

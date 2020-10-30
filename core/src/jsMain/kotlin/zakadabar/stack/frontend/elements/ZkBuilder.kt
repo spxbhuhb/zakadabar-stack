@@ -23,25 +23,8 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLImageElement
 import org.w3c.dom.events.Event
 import zakadabar.stack.data.entity.EntityRecordDto
-import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.elements.ZkClasses.Companion.zkClasses
 import zakadabar.stack.util.PublicApi
-
-/**
- * Creates an anonymous [ZkElement] and calls [ZkElement.launchBuild] on it with
- * the [builder] function.
- *
- * Use this function when you need to fetch data asynchronously during building
- * the element.
- */
-fun launchBuildNew(builder: suspend ZkBuilder.() -> Unit) = ZkElement().launchBuild(builder)
-
-/**
- * Creates an anonymous [ZkElement] and calls [ZkElement.build] on it with
- * the [builder] function.
- *
- * Use this function when there is no need to asynchronous data fetch.
- */
-fun buildNew(builder: ZkBuilder.() -> Unit) = ZkElement().build(builder)
 
 /**
  * Provides programmatic builder functionality to create the DOM and link
@@ -86,7 +69,7 @@ class ZkBuilder(
      */
     fun row(className: String? = null, build: ZkBuilder.() -> Unit): HTMLElement {
         val e = document.createElement("div") as HTMLElement
-        e.classList += coreClasses.row
+        e.classList += zkClasses.row
         runBuild(e, className, build)
         return e
     }
@@ -99,7 +82,7 @@ class ZkBuilder(
      */
     fun column(className: String? = null, build: ZkBuilder.() -> Unit): HTMLElement {
         val e = document.createElement("div") as HTMLElement
-        e.classList += coreClasses.column
+        e.classList += zkClasses.column
         runBuild(e, className, build)
         return e
     }
@@ -249,7 +232,6 @@ class ZkBuilder(
     /**
      * Creates "div" [HTMLElement] and executes the builder function on it.
      *
-     * @param  className  CSS class to add. Optional.
      * @param  build      The builder function to build the content of the div. Optional.
      */
     infix fun HTMLElement.build(build: ZkBuilder.() -> Unit): HTMLElement {

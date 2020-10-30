@@ -3,7 +3,7 @@
  */
 package zakadabar.samples.witchesbrew.frontend
 
-import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.elements.ZkElement
 
 class Cauldron : ZkElement() {

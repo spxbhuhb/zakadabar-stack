@@ -7,7 +7,6 @@ import kotlinx.browser.document
 import zakadabar.samples.helloworld.frontend.HelloWorldCenter
 import zakadabar.samples.helloworld.frontend.Module
 import zakadabar.stack.frontend.FrontendContext
-import zakadabar.stack.frontend.application.navigation.Navigation
 import zakadabar.stack.frontend.builtin.desktop.Desktop
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.launch

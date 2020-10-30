@@ -3,65 +3,70 @@
  */
 package zakadabar.samples.theplace.frontend
 
+import zakadabar.samples.theplace.ThePlace
 import zakadabar.samples.theplace.data.ShipDto
-import zakadabar.stack.frontend.application.navigation.Navigation
+import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.builtin.simple.SimpleButton
+import zakadabar.stack.frontend.elements.ZkCrud
 import zakadabar.stack.frontend.elements.ZkElement
-import zakadabar.stack.frontend.elements.buildNew
-import zakadabar.stack.frontend.elements.launchBuildNew
+import zakadabar.stack.frontend.elements.ZkElement.Companion.buildNew
+import zakadabar.stack.frontend.elements.ZkElement.Companion.launchBuildNew
 import zakadabar.stack.frontend.util.launch
 
-class ShipForm(private val dto: ShipDto) : ZkElement() {
-    override fun init() = build {
-        + dto.name
+object Ships : ZkCrud(ThePlace.shid, "/ships") {
+
+    override fun all() = launchBuildNew {
+        val ships = ShipDto.all()
+        ships.forEach { + it.name }
     }
 
-    fun submit() {
+    override fun create() = buildNew {
+        + ShipForm(ShipDto(0, "", ""))
+    }
+
+    override fun read(recordId: Long) = launchBuildNew {
+
+        + ShipForm(ShipDto.read(recordId))
+
+        + SimpleButton("back") { Application.back() }
+        + SimpleButton("edit") { openUpdate(recordId) }
 
     }
-}
 
-fun ships() = launchBuildNew {
-    val ships = ShipDto.all()
-    ships.forEach { + it.name }
-}
+    override fun update(recordId: Long) = launchBuildNew {
 
-fun createShip() = buildNew {
-    + ShipForm(ShipDto(0, "", ""))
-}
+        + ShipForm(ShipDto.read(recordId))
 
-fun readShip(recordId: Long) = launchBuildNew {
+        + SimpleButton("back") { Application.back() }
+        + SimpleButton("submit") { zkElement[ShipForm::class].submit() }
 
-    + createShip()
+    }
 
-    + ShipForm(ShipDto.read(recordId))
+    override fun delete(recordId: Long) = launchBuildNew {
 
-    + SimpleButton("back") { Navigation.back() }
-    + SimpleButton("edit") { Navigation.changeLocation("") }
+        val dto = ShipDto.read(recordId)
 
-}
+        + ShipForm(dto)
 
-fun updateShip(recordId: Long) = launchBuildNew {
+        + SimpleButton("back") { Application.back() }
+        + SimpleButton("submit") {
+            launch {
+                dto.delete()
+                Application.back()
+            }
+        }
 
-    + ShipForm(ShipDto.read(recordId))
+    }
 
-    + SimpleButton("back") { Navigation.back() }
-    + SimpleButton("submit") { zkElement[ShipForm::class].submit() }
+    class ShipForm(private val dto: ShipDto) : ZkElement() {
+        override fun init() = build {
+            + dto.name
+        }
 
-}
+        fun submit() {
 
-fun deleteShip(recordId: Long) = launchBuildNew {
-
-    val dto = ShipDto.read(recordId)
-
-    + ShipForm(dto)
-
-    + SimpleButton("back") { Navigation.back() }
-    + SimpleButton("submit") {
-        launch {
-            dto.delete()
-            Navigation.back()
         }
     }
 
 }
+

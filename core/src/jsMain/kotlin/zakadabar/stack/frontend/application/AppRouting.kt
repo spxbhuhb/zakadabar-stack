@@ -1,17 +1,54 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.application/*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
- */
-import zakadabar.stack.frontend.application.navigation.NavState
-import zakadabar.stack.frontend.application.navigation.NavTargetProvider
+package zakadabar.stack.frontend.application
+
+import zakadabar.stack.frontend.builtin.util.NYI
 import zakadabar.stack.frontend.elements.ZkElement
 
-fun navTarget(func: (state: NavState) -> ZkElement) = NavTargetProvider(func)
+abstract class AppRouting(
+    private val defaultLayout: AppLayout
+) {
 
-open class AppRouting(val appModule: String) {
+    interface ZkTarget {
+        val module: String
+        val viewPrefix: String
+        fun route(routing: AppRouting, state: NavState)
+    }
 
-    fun target(func: (state: NavState) -> ZkElement) = NavTargetProvider(func)
+    private val targets = mutableMapOf<String, ZkTarget>()
+
+    private lateinit var activeLayout: AppLayout
+
+    lateinit var layout: AppLayout
+    lateinit var target: ZkElement
+
+    operator fun ZkTarget.unaryPlus() {
+        require(viewPrefix.startsWith('/'))
+        targets["$module$viewPrefix"] = this
+    }
+
+    internal fun onNavStateChange(state: NavState) {
+
+        layout = defaultLayout
+        target = NYI()
+
+        val registered = targets["${state.module}${state.view}"]
+
+        if (registered != null) {
+            registered.route(this, state)
+        } else {
+            route(state)
+        }
+
+        if (layout != activeLayout) {
+            activeLayout.pause()
+            activeLayout = layout
+        }
+
+        activeLayout.resume(state, target)
+    }
+
+    open fun route(state: NavState) {}
 
 }

@@ -6,11 +6,11 @@ package zakadabar.stack.frontend.builtin.desktop.navigator
 import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext
 import zakadabar.stack.frontend.FrontendContext.t
+import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.builtin.desktop.navigator.NavigatorClasses.Companion.navigatorClasses
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.input.Input
 import zakadabar.stack.frontend.data.DtoFrontend
-import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.elements.ZkElement
 
 /**

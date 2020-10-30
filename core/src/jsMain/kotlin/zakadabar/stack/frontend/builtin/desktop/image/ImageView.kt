@@ -18,7 +18,7 @@
 package zakadabar.stack.frontend.builtin.desktop.image
 
 import zakadabar.stack.data.entity.EntityRecordDto
-import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.util.PublicApi
 

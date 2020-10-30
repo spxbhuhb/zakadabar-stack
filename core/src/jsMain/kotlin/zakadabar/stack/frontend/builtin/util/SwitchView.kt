@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.frontend.builtin.util
 
-import zakadabar.stack.frontend.elements.SwitchableElement
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.extend.ViewCompanion
 import zakadabar.stack.util.PublicApi
