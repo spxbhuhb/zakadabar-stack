@@ -24,7 +24,7 @@ data class ShipDto(
 
     companion object : RecordDtoCompanion<ShipDto>() {
 
-        override val type = "${ThePlace.shid}/rabbit"
+        override val type = "${ThePlace.shid}/ship"
 
         override val queries = Queries.build {
             + ShipSearch.Companion
@@ -58,9 +58,9 @@ data class Speed(
 
 @Serializable
 data class ShipSpeeds(
-    val rabbitNames: List<String> = emptyList()
+    val speeds: List<String> = emptyList()
 ) : QueryDto {
-    suspend fun execute() = comm.query(this, serializer(), ListSerializer(ShipSpeeds.serializer()))
+    suspend fun execute() = comm.query(this, serializer(), ListSerializer(serializer()))
 
     companion object : QueryDtoCompanion(ShipDto.Companion)
 }

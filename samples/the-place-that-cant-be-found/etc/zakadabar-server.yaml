@@ -12,6 +12,7 @@ modules:
   - zakadabar.stack.backend.builtin.entities.EntityBackend
   - zakadabar.stack.backend.builtin.folder.FolderBackend
   - zakadabar.stack.backend.builtin.session.SessionBackend
+  - zakadabar.samples.theplace.backend.ship.Module
 
 #ktor:
 #  port: 8080
