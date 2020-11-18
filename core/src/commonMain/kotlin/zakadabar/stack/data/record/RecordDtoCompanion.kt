@@ -14,8 +14,14 @@ abstract class RecordDtoCompanion<T : RecordDto<T>> {
 
     private var _comm: Comm<T>? = null
 
+    private fun makeComm(): Comm<T> {
+        val nc = makeComm(this)
+        _comm = nc
+        return nc
+    }
+
     var comm: Comm<T>
-        get() = _comm ?: makeComm(this)
+        get() = _comm ?: makeComm()
         set(value) {
             _comm = value
         }

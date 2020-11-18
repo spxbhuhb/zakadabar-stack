@@ -5,10 +5,11 @@ package zakadabar.samples.theplace.frontend
 
 import zakadabar.samples.theplace.ThePlace
 import zakadabar.samples.theplace.data.ShipDto
+import zakadabar.samples.theplace.frontend.form.ValidatedForm
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.builtin.simple.SimpleButton
+import zakadabar.stack.frontend.builtin.util.NYI
 import zakadabar.stack.frontend.elements.ZkCrud
-import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.elements.ZkElement.Companion.buildNew
 import zakadabar.stack.frontend.elements.ZkElement.Companion.launchBuildNew
 import zakadabar.stack.frontend.util.launch
@@ -17,10 +18,12 @@ object Ships : ZkCrud(ThePlace.shid, "/ships") {
 
     override fun all() = launchBuildNew {
         val ships = ShipDto.all()
+        + SimpleButton("new") { Ships.openCreate() }
         ships.forEach { + it.name }
     }
 
     override fun create() = buildNew {
+        + "New Ship"
         + ShipForm(ShipDto(0, "", ""))
     }
 
@@ -58,9 +61,41 @@ object Ships : ZkCrud(ThePlace.shid, "/ships") {
 
     }
 
-    class ShipForm(private val dto: ShipDto) : ZkElement() {
-        override fun init() = build {
-            + dto.name
+    class ShipForm(dto: ShipDto) : ValidatedForm<ShipDto>(dto) {
+
+        override fun init(): ValidatedForm<ShipDto> {
+
+            this build {
+                + NYI("header")
+                + NYI("frame")
+            }
+
+            launch {
+                setData(ShipDto.all())
+            }
+
+            this build {
+                + dto::name
+
+                val a0 = dto::speed
+                a0.get()
+
+                // definicio
+                val a1 = ShipDto::speed
+
+                // runtime
+                val list = emptyList<ShipDto>()
+
+                list.forEach {
+                    + a1.get(it)
+                }
+            }
+
+            return this
+        }
+
+        private fun setData(all: List<ShipDto>) {
+            TODO("Not yet implemented")
         }
 
         fun submit() {

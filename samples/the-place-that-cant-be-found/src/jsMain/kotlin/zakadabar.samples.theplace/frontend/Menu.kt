@@ -6,10 +6,6 @@ package zakadabar.samples.theplace.frontend
 import zakadabar.stack.frontend.builtin.simple.SimpleButton
 import zakadabar.stack.frontend.elements.ZkElement.Companion.buildNew
 
-class Role(val name: String)
-
-val admin = Role("admin")
-
 val Menu = buildNew {
 
     + column {

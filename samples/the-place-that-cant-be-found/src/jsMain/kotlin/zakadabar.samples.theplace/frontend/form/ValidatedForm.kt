@@ -14,13 +14,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.samples.theperfectform.frontend.form
+package zakadabar.samples.theplace.frontend.form
 
-import zakadabar.samples.theperfectform.data.FormDto
 import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.frontend.builtin.util.NYI
 import zakadabar.stack.frontend.elements.ZkElement
-import zakadabar.stack.frontend.util.launch
 import kotlin.reflect.KProperty0
 import kotlin.reflect.KProperty1
 
@@ -48,45 +45,6 @@ open class ValidatedForm<T : RecordDto<T>>(val dto: T) : ZkElement() {
         fields.forEach {
             it.validated(report.fails[it.prop])
         }
-    }
-
-}
-
-class PerfectForm(dto: FormDto) : ValidatedForm<FormDto>(dto) {
-
-    override fun init(): ValidatedForm<FormDto> {
-
-        this build {
-            + NYI("header")
-            + NYI("frame")
-        }
-
-        launch {
-            setData(FormDto.all())
-        }
-
-        this build {
-            + dto::textField
-
-            val a0 = dto::textField
-            a0.get()
-
-            // definicio
-            val a1 = FormDto::textField
-
-            // runtime
-            val list = emptyList<FormDto>()
-
-            list.forEach {
-                + a1.get(it)
-            }
-        }
-
-        return this
-    }
-
-    private fun setData(all: List<FormDto>) {
-        TODO("Not yet implemented")
     }
 
 }
