@@ -38,9 +38,7 @@ open class ZkPage(
             ZkPage(module, viewPrefix).build(builder) as ZkPage
     }
 
-    val path = "$module$viewPrefix"
-
-    open fun open() = Application.changeNavState(path)
+    open fun open() = Application.changeNavState("/$module$viewPrefix")
 
     override fun route(routing: AppRouting, state: NavState) = this
 

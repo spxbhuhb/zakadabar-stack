@@ -8,7 +8,13 @@ import zakadabar.stack.frontend.elements.ZkElement.Companion.buildNew
 
 val Menu = buildNew {
 
+    val self = this.zkElement
+
     + column {
+        + row {
+            + SimpleButton("<") { self.hide() }
+            + "The Place"
+        }
         + SimpleButton("Ships") { Ships.openAll() }
         + SimpleButton("Tortuga") { Tortuga.open() }
         + SimpleButton("Singapore") { Singapore.open() }
