@@ -7,6 +7,7 @@ import zakadabar.samples.theplace.ThePlace
 import zakadabar.samples.theplace.data.ShipDto
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.builtin.simple.SimpleButton
+import zakadabar.stack.frontend.comm.rest.FrontendComm
 import zakadabar.stack.frontend.elements.ZkCrud
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.elements.ZkElement.Companion.buildNew

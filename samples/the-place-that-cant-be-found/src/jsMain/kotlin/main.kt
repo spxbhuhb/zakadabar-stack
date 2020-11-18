@@ -4,6 +4,7 @@
 @file:Suppress("unused")
 
 import zakadabar.stack.frontend.FrontendContext
+import zakadabar.stack.frontend.application.AppRouting
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.launch
@@ -29,13 +30,17 @@ fun main() {
         // fetches the account of the user who runs the frontend.
         // See: https://github.com/spxbhuhb/zakadabar-stack/blob/master/doc/cookbook/common/Accounts.md
 
+        with(Application) {
+            routing = Routing
+            init()
+        }
+
         FrontendContext.init()
 
         // Add an instance of Home to the document body
 
         //document.body?.appendChild(Home.init().element)
 
-        Application.init()
     }
 
 }

@@ -58,7 +58,7 @@ class EntityNavigator : ZkElement() {
             }
         }
 
-        on(window, Navigation.EVENT, ::onNavigation)
+        //on(window, Navigation.EVENT, ::onNavigation)
 
         return this
 
@@ -73,13 +73,13 @@ class EntityNavigator : ZkElement() {
         }
     }
 
-    private fun onNavigation() {
-        val state = Navigation.state
-
-        launch {
-            render() // FIXME this is not properly synchronized
-        }
-    }
+//    private fun onNavigation() {
+//        val state = Navigation.state
+//
+//        launch {
+//            render() // FIXME this is not properly synchronized
+//        }
+//    }
 
     private fun onEntityAdded(message: EntityAdded) = refresh(message.dto.parentId)
 

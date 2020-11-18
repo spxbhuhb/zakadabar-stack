@@ -19,7 +19,7 @@ import zakadabar.stack.frontend.builtin.desktop.DesktopCenter
 class HelloWorldCenter : DesktopCenter() {
 
     override fun onNavigation() {
-        val state = Navigation.state
+        //val state = Navigation.state
 
 //        when (state.stateType) {
 //            NavState.StateType.Home -> switchMain(Welcome())

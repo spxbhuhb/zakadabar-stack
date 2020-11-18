@@ -32,7 +32,7 @@ import zakadabar.stack.frontend.elements.ZkElement
 abstract class AppLayout(val name: String) : ZkElement() {
 
     init {
-        element.dataset["zk-layout-name"] = name
+        element.dataset["zkLayoutName"] = name
         document.body?.appendChild(element)
         hide()
     }

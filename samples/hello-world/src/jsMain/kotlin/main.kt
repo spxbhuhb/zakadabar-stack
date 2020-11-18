@@ -55,7 +55,7 @@ fun main() {
         // See: https://github.com/spxbhuhb/zakadabar-stack/blob/master/doc/cookbook/common/URLs.md
         // See: https://github.com/spxbhuhb/zakadabar-stack/blob/master/doc/cookbook/frontent/Navigation.md
 
-        Navigation.init()
+        //Navigation.init()
     }
 
 }

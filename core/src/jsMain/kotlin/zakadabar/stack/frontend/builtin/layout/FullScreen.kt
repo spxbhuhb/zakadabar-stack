@@ -15,9 +15,9 @@ object FullScreen : AppLayout("fullscreen") {
 
     private var activeElement: ZkElement? = null
 
-    override fun resume(state: NavState) {
+    override fun resume(state: NavState, target : ZkElement) {
         this -= activeElement
-        activeElement = state.target.element(state)
+        activeElement = target
         this += activeElement
         show()
     }

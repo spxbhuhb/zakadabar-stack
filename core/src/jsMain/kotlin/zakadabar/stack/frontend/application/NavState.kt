@@ -17,7 +17,7 @@ import zakadabar.stack.frontend.FrontendContext
  * @property  recordId  Id of the record when specified in the URL.
  * @property  query     The query object when specified in the URL.
  */
-class NavState(urlPath: String, urlQuery: String) {
+class NavState(val urlPath: String, val urlQuery: String) {
 
     val module: String
     val view: String
@@ -25,7 +25,7 @@ class NavState(urlPath: String, urlQuery: String) {
     val query: Any?
 
     init {
-        val segments = urlPath.trim('/').split("/", limit = 2)
+        val segments = urlPath.trim('/').split("/")
 
         // use application home when there are no segments
 
@@ -53,4 +53,7 @@ class NavState(urlPath: String, urlQuery: String) {
         }
     }
 
+    override fun toString(): String {
+        return "urlPath=$urlPath, urlQuery=$urlQuery, module=$module, view=$view, recordId=$recordId, query=$query"
+    }
 }

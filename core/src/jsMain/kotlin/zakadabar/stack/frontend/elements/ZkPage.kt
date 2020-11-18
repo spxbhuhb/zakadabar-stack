@@ -34,16 +34,14 @@ open class ZkPage(
          *
          * Use this function when there is no need to asynchronous data fetch.
          */
-        fun buildNewPage(module: String, viewPrefix: String, builder: suspend ZkBuilder.() -> Unit) =
-            ZkPage(module, viewPrefix).launchBuild(builder) as ZkPage
+        fun buildNewPage(module: String, viewPrefix: String, builder: ZkBuilder.() -> Unit) =
+            ZkPage(module, viewPrefix).build(builder) as ZkPage
     }
 
     val path = "$module$viewPrefix"
 
     open fun open() = Application.changeNavState(path)
 
-    override fun route(routing: AppRouting, state: NavState) {
-        routing.target = this
-    }
+    override fun route(routing: AppRouting, state: NavState) = this
 
 }
