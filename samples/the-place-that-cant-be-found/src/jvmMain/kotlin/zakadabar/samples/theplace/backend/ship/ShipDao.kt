@@ -6,17 +6,18 @@ package zakadabar.samples.theplace.backend.ship
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import zakadabar.samples.theplace.backend.speed.SpeedDao
 import zakadabar.samples.theplace.data.ShipDto
 
 class ShipDao(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<ShipDao>(ShipTable)
 
     var name by ShipTable.name
-    var speed by ShipTable.speed
+    var speed by SpeedDao referencedOn ShipTable.speed
 
     fun toDto() = ShipDto(
         id = id.value,
         name = name,
-        speed = speed
+        speed = speed.id.value
     )
 }

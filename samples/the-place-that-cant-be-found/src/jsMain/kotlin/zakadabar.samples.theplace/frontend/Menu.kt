@@ -3,6 +3,8 @@
  */
 package zakadabar.samples.theplace.frontend
 
+import zakadabar.samples.theplace.frontend.ship.Ships
+import zakadabar.samples.theplace.frontend.speed.Speeds
 import zakadabar.stack.frontend.builtin.simple.SimpleButton
 import zakadabar.stack.frontend.elements.ZkElement.Companion.buildNew
 
@@ -16,6 +18,7 @@ val Menu = buildNew {
             + "The Place"
         }
         + SimpleButton("Ships") { Ships.openAll() }
+        + SimpleButton("Speeds") { Speeds.openAll() }
         + SimpleButton("Tortuga") { Tortuga.open() }
         + SimpleButton("Singapore") { Singapore.open() }
     }

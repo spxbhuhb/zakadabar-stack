@@ -23,10 +23,10 @@ import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.elements.ZkElement
 import kotlin.reflect.KMutableProperty0
 
-class ValidatedString<T : RecordDto<T>>(
+class ValidatedDouble<T : RecordDto<T>>(
     private val form: ValidatedForm<T>,
-    private val prop: KMutableProperty0<String>
-) : FormField<String>(
+    private val prop: KMutableProperty0<Double>
+) : FormField<Double>(
     element = document.createElement("input") as HTMLInputElement
 ) {
 
@@ -35,10 +35,16 @@ class ValidatedString<T : RecordDto<T>>(
     override fun init(): ZkElement {
         if (readOnly) input.readOnly = true
 
-        input.value = prop.get()
+        val value = prop.get()
+
+        if (value.isNaN()) {
+            input.value = ""
+        } else {
+            input.value = prop.get().toString()
+        }
 
         on("input") { _ ->
-            prop.set(input.value)
+            prop.set(input.value.toDoubleOrNull() ?: Double.NaN)
             form.validate()
         }
 
@@ -47,9 +53,7 @@ class ValidatedString<T : RecordDto<T>>(
 
     override fun onValidated(report: ValidityReport) {
         val fails = report.fails[prop.name]
-
         println("${prop.name} $fails")
-
         if (fails == null) {
             isValid = true
             element.style.backgroundColor = "white"

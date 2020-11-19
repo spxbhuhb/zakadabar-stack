@@ -167,7 +167,7 @@ open class FrontendComm<T : RecordDto<T>>(
      * @throws  FetchError
      */
     @PublicApi
-    override suspend fun <RQ : Any, RS> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<RS>): RS {
+    override suspend fun <RQ : Any, RS> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<List<RS>>): List<RS> {
 
         val responsePromise = window.fetch("/api/$path/${request::class.simpleName}?q=${Json.encodeToString(requestSerializer, request)}")
         val response = responsePromise.await()

@@ -4,17 +4,15 @@
 package zakadabar.samples.theplace.frontend.form
 
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.data.schema.ValidationRule
+import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.elements.ZkElement
-import kotlin.reflect.KProperty0
 
-abstract class FormField<T>(
-    val prop: KProperty0<T>,
-    element: HTMLElement
-) : ZkElement(element) {
+abstract class FormField<T>(element: HTMLElement) : ZkElement(element) {
+
     var readOnly = false
+
     var isValid = true
 
-    abstract fun onValidated(fails: MutableList<ValidationRule<*>>?)
+    abstract fun onValidated(report: ValidityReport)
 
 }

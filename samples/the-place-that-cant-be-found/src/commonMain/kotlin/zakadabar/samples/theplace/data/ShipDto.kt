@@ -11,14 +11,15 @@ import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.query.QueryDtoCompanion
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.DtoSchema
 
 @Serializable
 data class ShipDto(
 
-    override val id: Long,
-    val name: String,
-    val speed: String
+    override val id: RecordId<ShipDto>,
+    var name: String,
+    var speed: RecordId<SpeedDto>
 
 ) : RecordDto<ShipDto> {
 
@@ -52,15 +53,10 @@ data class ShipSearch(
 }
 
 @Serializable
-data class Speed(
-    val speeds: String
-)
-
-@Serializable
 data class ShipSpeeds(
     val names: List<String> = emptyList()
-) : QueryDto<Speed> {
-    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(Speed.serializer()))
+) : QueryDto<SpeedDto> {
+    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(SpeedDto.serializer()))
 
-    companion object : QueryDtoCompanion<ShipDto,ShipDto>(ShipDto.Companion)
+    companion object : QueryDtoCompanion<ShipDto, ShipDto>(ShipDto.Companion)
 }

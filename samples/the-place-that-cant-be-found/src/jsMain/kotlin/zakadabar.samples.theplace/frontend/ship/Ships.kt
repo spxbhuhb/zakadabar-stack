@@ -1,14 +1,13 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.samples.theplace.frontend
+package zakadabar.samples.theplace.frontend.ship
 
 import zakadabar.samples.theplace.ThePlace
 import zakadabar.samples.theplace.data.ShipDto
 import zakadabar.samples.theplace.frontend.form.ValidatedForm
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.builtin.simple.SimpleButton
-import zakadabar.stack.frontend.builtin.util.NYI
 import zakadabar.stack.frontend.elements.ZkCrud
 import zakadabar.stack.frontend.elements.ZkElement.Companion.buildNew
 import zakadabar.stack.frontend.elements.ZkElement.Companion.launchBuildNew
@@ -24,12 +23,12 @@ object Ships : ZkCrud(ThePlace.shid, "/ships") {
 
     override fun create() = buildNew {
         + "New Ship"
-        + ShipForm(ShipDto(0, "", ""))
+        + ShipForm(ShipDto(0, "", 0), ValidatedForm.Mode.Create)
     }
 
     override fun read(recordId: Long) = launchBuildNew {
 
-        + ShipForm(ShipDto.read(recordId))
+        + ShipForm(ShipDto.read(recordId), ValidatedForm.Mode.Read)
 
         + SimpleButton("back") { Application.back() }
         + SimpleButton("edit") { openUpdate(recordId) }
@@ -38,7 +37,7 @@ object Ships : ZkCrud(ThePlace.shid, "/ships") {
 
     override fun update(recordId: Long) = launchBuildNew {
 
-        + ShipForm(ShipDto.read(recordId))
+        + ShipForm(ShipDto.read(recordId), ValidatedForm.Mode.Update)
 
         + SimpleButton("back") { Application.back() }
         + SimpleButton("submit") { zkElement[ShipForm::class].submit() }
@@ -49,7 +48,7 @@ object Ships : ZkCrud(ThePlace.shid, "/ships") {
 
         val dto = ShipDto.read(recordId)
 
-        + ShipForm(dto)
+        + ShipForm(dto, ValidatedForm.Mode.Delete)
 
         + SimpleButton("back") { Application.back() }
         + SimpleButton("submit") {
@@ -60,48 +59,5 @@ object Ships : ZkCrud(ThePlace.shid, "/ships") {
         }
 
     }
-
-    class ShipForm(dto: ShipDto) : ValidatedForm<ShipDto>(dto) {
-
-        override fun init(): ValidatedForm<ShipDto> {
-
-            this build {
-                + NYI("header")
-                + NYI("frame")
-            }
-
-            launch {
-                setData(ShipDto.all())
-            }
-
-            this build {
-                + dto::name
-
-                val a0 = dto::speed
-                a0.get()
-
-                // definicio
-                val a1 = ShipDto::speed
-
-                // runtime
-                val list = emptyList<ShipDto>()
-
-                list.forEach {
-                    + a1.get(it)
-                }
-            }
-
-            return this
-        }
-
-        private fun setData(all: List<ShipDto>) {
-            TODO("Not yet implemented")
-        }
-
-        fun submit() {
-
-        }
-    }
-
 }
 

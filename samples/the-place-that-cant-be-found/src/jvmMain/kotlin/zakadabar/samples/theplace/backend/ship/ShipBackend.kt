@@ -10,6 +10,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import zakadabar.samples.theplace.backend.speed.SpeedDao
 import zakadabar.samples.theplace.data.ShipDto
 import zakadabar.samples.theplace.data.ShipSearch
 import zakadabar.samples.theplace.data.ShipSpeeds
@@ -42,7 +43,7 @@ object ShipBackend : DtoBackend<ShipDto>() {
     private fun query(executor: Executor, query: ShipSpeeds) = transaction {
         ShipTable
             .slice(ShipTable.speed)
-            .select { ShipTable.name inList query.speeds }
+            .select { ShipTable.name inList query.names }
             .distinct()
             .map { it[ShipTable.speed] }
     }
@@ -56,7 +57,7 @@ object ShipBackend : DtoBackend<ShipDto>() {
     override fun create(executor: Executor, dto: ShipDto) = transaction {
         ShipDao.new {
             name = dto.name
-            speed = dto.speed
+            speed = SpeedDao[dto.speed]
         }.toDto()
     }
 
@@ -67,7 +68,7 @@ object ShipBackend : DtoBackend<ShipDto>() {
     override fun update(executor: Executor, dto: ShipDto) = transaction {
         val dao = ShipDao[dto.id]
         dao.name = dto.name
-        dao.speed = dto.speed
+        dao.speed = SpeedDao[dto.speed]
         dao.toDto()
     }
 

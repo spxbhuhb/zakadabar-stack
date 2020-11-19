@@ -23,19 +23,18 @@ import org.w3c.dom.get
 import org.w3c.dom.set
 import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.schema.ValidationRule
+import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.util.dropdown.Dropdown
 import zakadabar.stack.frontend.elements.ZkElement
-import kotlin.reflect.KProperty0
+import kotlin.reflect.KMutableProperty0
 
 class ValidatedRecordSelect<T : RecordDto<T>, E : Any>(
-    prop: KProperty0<String>,
+    prop: KMutableProperty0<String>,
     private val form: ValidatedForm<T>,
     private val query: QueryDto<E>,
     private val entryBuilder: (E) -> ZkElement
 ) : FormField<String>(
-    element = document.createElement("div") as HTMLElement,
-    prop = prop
+    element = document.createElement("div") as HTMLElement
 ) {
 
     private val selectedEntry = ZkElement()
@@ -50,14 +49,11 @@ class ValidatedRecordSelect<T : RecordDto<T>, E : Any>(
         return this
     }
 
-    override fun onValidated(fails: MutableList<ValidationRule<*>>?) {
-        if (fails == null) {
-            isValid = true
-            return
-        }
-
-        element.style.backgroundColor = "red"
+    override fun onValidated(report: ValidityReport) {
+        TODO("Not yet implemented")
     }
+
+
 }
 
 open class ItemList<I>(

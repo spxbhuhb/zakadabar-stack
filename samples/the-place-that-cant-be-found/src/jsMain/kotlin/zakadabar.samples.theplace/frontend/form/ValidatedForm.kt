@@ -17,34 +17,87 @@
 package zakadabar.samples.theplace.frontend.form
 
 import zakadabar.stack.data.record.RecordDto
+import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.frontend.builtin.util.toast
 import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.util.launch
+import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KProperty0
-import kotlin.reflect.KProperty1
 
-open class ValidatedForm<T : RecordDto<T>>(val dto: T) : ZkElement() {
+open class ValidatedForm<T : RecordDto<T>>(val dto: T, val mode: Mode) : ZkElement() {
+
+    enum class Mode {
+        Create,
+        Read,
+        Update,
+        Delete
+    }
 
     private val schema = dto.schema()
     private val fields = mutableListOf<FormField<*>>()
 
-    operator fun KProperty0<String>.unaryPlus() {
+    operator fun KProperty0<RecordId<T>>.unaryPlus() {
+        val field = ValidatedId<T>(this)
+        fields += field
+        this@ValidatedForm += field
+    }
+
+    operator fun KMutableProperty0<String>.unaryPlus() {
         val field = ValidatedString(this@ValidatedForm, this)
         fields += field
         this@ValidatedForm += field
     }
 
-    operator fun KProperty1<RecordDto<*>, String>.unaryPlus() {
-
+    operator fun KMutableProperty0<Double>.unaryPlus() {
+        val field = ValidatedDouble(this@ValidatedForm, this)
+        fields += field
+        this@ValidatedForm += field
     }
 
-    fun validate() {
+    fun validate(): ValidityReport {
         val report = schema.validate()
-
-        println("validation result:")
-        println(report.dump())
-
         fields.forEach {
-            it.onValidated(report.fails[it.prop])
+            it.onValidated(report)
+        }
+        return report
+    }
+
+    fun submit() {
+        val report = validate()
+
+        if (report.fails.isNotEmpty()) {
+            toast { "validation.failed" }
+            return
+        }
+
+        launch {
+            try {
+                when (mode) {
+                    Mode.Create -> {
+                        dto.create()
+                        toast { "create.success" }
+                    }
+                    Mode.Read -> {
+                        // nothing to do here
+                    }
+                    Mode.Update -> {
+                        dto.update()
+                        toast { "update.success" }
+                    }
+                    Mode.Delete -> {
+                        dto.delete()
+                        toast { "delete.success" }
+                    }
+                }
+            } catch (ex: Exception) {
+                when (mode) {
+                    Mode.Create -> toast { "create.failed" }
+                    Mode.Read -> Unit
+                    Mode.Update -> toast { "update.failed" }
+                    Mode.Delete -> toast { "delete.failed" }
+                }
+            }
         }
     }
-
 }
