@@ -4,11 +4,8 @@
 package zakadabar.samples.theplace.data
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.ListSerializer
 import zakadabar.samples.theplace.ThePlace
 import zakadabar.stack.data.query.Queries
-import zakadabar.stack.data.query.QueryDto
-import zakadabar.stack.data.query.QueryDtoCompanion
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
@@ -41,22 +38,4 @@ data class ShipDto(
     override fun getType() = type
 
     override fun comm() = ShipDto.comm
-}
-
-@Serializable
-data class ShipSearch(
-    val name: String
-) : QueryDto<ShipDto> {
-    override suspend fun execute() = comm.query(this, serializer())
-
-    companion object : QueryDtoCompanion<ShipDto,ShipDto>(ShipDto.Companion)
-}
-
-@Serializable
-data class ShipSpeeds(
-    val names: List<String> = emptyList()
-) : QueryDto<SpeedDto> {
-    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(SpeedDto.serializer()))
-
-    companion object : QueryDtoCompanion<ShipDto, ShipDto>(ShipDto.Companion)
 }

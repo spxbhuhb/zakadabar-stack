@@ -3,8 +3,8 @@
  */
 import zakadabar.samples.theplace.frontend.Home
 import zakadabar.samples.theplace.frontend.Layout
-import zakadabar.samples.theplace.frontend.Singapore
-import zakadabar.samples.theplace.frontend.Tortuga
+import zakadabar.samples.theplace.frontend.ports.Singapore
+import zakadabar.samples.theplace.frontend.ports.Tortuga
 import zakadabar.samples.theplace.frontend.ship.Ships
 import zakadabar.samples.theplace.frontend.speed.Speeds
 import zakadabar.stack.frontend.application.AppRouting
