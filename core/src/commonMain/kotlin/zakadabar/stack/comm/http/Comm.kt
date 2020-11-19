@@ -19,6 +19,6 @@ interface Comm<T> {
 
     suspend fun <RQ : Any> query(request: RQ, requestSerializer: KSerializer<RQ>): List<T>
 
-    suspend fun <RQ : Any, RS> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<RS>): RS
+    suspend fun <RQ : Any, RS> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<List<RS>>): List<RS>
 
 }

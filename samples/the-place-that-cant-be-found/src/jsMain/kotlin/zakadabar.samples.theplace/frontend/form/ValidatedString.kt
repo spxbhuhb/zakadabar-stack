@@ -44,7 +44,7 @@ class ValidatedString<T : RecordDto<T>>(
     }
 
 
-    override fun validated(fails: MutableList<ValidationRule<*>>?) {
+    override fun onValidated(fails: MutableList<ValidationRule<*>>?) {
         if (fails == null) {
             isValid = true
             return

@@ -12,8 +12,8 @@ import zakadabar.stack.util.PublicApi
  * A wrapper around a simple element which is the [controller] that shows
  * the content when the user clicks on the it.
  *
- * @property   content           The content to show in the dropdown.
- * @property   controller        The element that controls showing / hiding the dropdown.
+ * @property   content           The content of the dropdown.
+ * @property   controller        The element that controls show / hide of the dropdown.
  * @property   initialPosition   The position where the dropdown shows, may contain "top", "right", "bottom" and/or "left".
  */
 @PublicApi

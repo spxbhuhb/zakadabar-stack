@@ -45,10 +45,10 @@ data class ShipDto(
 @Serializable
 data class ShipSearch(
     val name: String
-) : QueryDto {
-    suspend fun execute() = comm.query(this, serializer())
+) : QueryDto<ShipDto> {
+    override suspend fun execute() = comm.query(this, serializer())
 
-    companion object : QueryDtoCompanion(ShipDto.Companion)
+    companion object : QueryDtoCompanion<ShipDto,ShipDto>(ShipDto.Companion)
 }
 
 @Serializable
@@ -58,9 +58,9 @@ data class Speed(
 
 @Serializable
 data class ShipSpeeds(
-    val speeds: List<String> = emptyList()
-) : QueryDto {
-    suspend fun execute() = comm.query(this, serializer(), ListSerializer(serializer()))
+    val names: List<String> = emptyList()
+) : QueryDto<Speed> {
+    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(Speed.serializer()))
 
-    companion object : QueryDtoCompanion(ShipDto.Companion)
+    companion object : QueryDtoCompanion<ShipDto,ShipDto>(ShipDto.Companion)
 }

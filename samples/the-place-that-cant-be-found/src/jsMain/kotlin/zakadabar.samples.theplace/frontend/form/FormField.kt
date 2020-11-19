@@ -15,6 +15,6 @@ abstract class FormField<T>(
     var readOnly = false
     var isValid = true
 
-    abstract fun validated(fails: MutableList<ValidationRule<*>>?)
+    abstract fun onValidated(fails: MutableList<ValidationRule<*>>?)
 
 }

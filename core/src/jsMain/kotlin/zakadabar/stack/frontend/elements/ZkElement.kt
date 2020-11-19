@@ -59,7 +59,7 @@ open class ZkElement(
      * so we don't have to pass event objects all around. The event wrapper function
      * sets/clears this method. When it is null there is no event handling in process.
      */
-    var lastEvent: Event? = null
+    var event: Event? = null
 
     val childElements by lazy { mutableListOf<ZkElement>() }
 
@@ -331,12 +331,12 @@ open class ZkElement(
 
         addWrapped(target, type) { event ->
             try {
-                lastEvent = event
+                this.event = event
                 listener()
             } catch (ex: Throwable) {
                 onException(ex)
             } finally {
-                lastEvent = null
+                this.event = null
             }
         }
     }
@@ -349,12 +349,12 @@ open class ZkElement(
 
         addWrapped(target, type) { event ->
             try {
-                lastEvent = event
+                this.event = event
                 listener(event)
             } catch (ex: Throwable) {
                 onException(ex)
             } finally {
-                lastEvent = null
+                this.event = null
             }
         }
 

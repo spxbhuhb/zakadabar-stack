@@ -43,7 +43,7 @@ open class ValidatedForm<T : RecordDto<T>>(val dto: T) : ZkElement() {
         println(report.dump())
 
         fields.forEach {
-            it.validated(report.fails[it.prop])
+            it.onValidated(report.fails[it.prop])
         }
     }
 

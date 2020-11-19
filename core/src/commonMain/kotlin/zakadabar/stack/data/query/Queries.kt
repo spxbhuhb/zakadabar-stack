@@ -5,16 +5,16 @@ package zakadabar.stack.data.query
 
 object Queries {
 
-    fun build(func: QueryBuilder.() -> Unit): Map<String, QueryDtoCompanion> {
+    fun build(func: QueryBuilder.() -> Unit): Map<String, QueryDtoCompanion<*,*>> {
         val builder = QueryBuilder()
         builder.func()
         return builder.map
     }
 
     class QueryBuilder {
-        val map = mutableMapOf<String, QueryDtoCompanion>()
+        val map = mutableMapOf<String, QueryDtoCompanion<*,*>>()
 
-        operator fun QueryDtoCompanion.unaryPlus() {
+        operator fun QueryDtoCompanion<*,*>.unaryPlus() {
             val name = this::class.simpleName ?: return
             map[name] = this
         }

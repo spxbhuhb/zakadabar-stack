@@ -3,4 +3,7 @@
  */
 package zakadabar.stack.data.query
 
-interface QueryDto
+interface QueryDto<T> {
+    suspend fun execute() : List<T>
+}
+
