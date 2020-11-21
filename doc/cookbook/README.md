@@ -2,6 +2,9 @@
 
 "A recipe is a set of instructions that describes how to prepare or make something..." - Wikipedia
 
+**The cookbook is out-of-sync at the moment as we add changes very frequently. We'll do our best to bring it up to the
+current code level.**
+
 ## Common
 
 * Users
