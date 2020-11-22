@@ -3,18 +3,17 @@
  */
 package zakadabar.stack.frontend.elements
 
-import zakadabar.stack.data.record.RecordDtoCompanion
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.application.AppRouting
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.application.NavState
 import zakadabar.stack.frontend.builtin.util.NYI
-import kotlin.reflect.KClass
 
 /**
  * Provides common functions used in most CRUD implementations.
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
-open class ZkCrud(
+open class ZkCrud<T>(
     final override val module: String,
     final override val viewPrefix: String
 ) : AppRouting.ZkTarget {
@@ -27,9 +26,9 @@ open class ZkCrud(
 
     open fun openAll() = Application.changeNavState(allPath)
     open fun openCreate() = Application.changeNavState(createPath)
-    open fun openRead(recordId: Long) = Application.changeNavState("$readPath?id=$recordId")
-    open fun openUpdate(recordId: Long) = Application.changeNavState("$updatePath?id=$recordId")
-    open fun openDelete(recordId: Long) = Application.changeNavState("$deletePath?id=$recordId")
+    open fun openRead(recordId: RecordId<T>) = Application.changeNavState("$readPath?id=$recordId")
+    open fun openUpdate(recordId: RecordId<T>) = Application.changeNavState("$updatePath?id=$recordId")
+    open fun openDelete(recordId: RecordId<T>) = Application.changeNavState("$deletePath?id=$recordId")
 
     override fun route(routing: AppRouting, state: NavState) = when (state.urlPath) {
         allPath -> all()

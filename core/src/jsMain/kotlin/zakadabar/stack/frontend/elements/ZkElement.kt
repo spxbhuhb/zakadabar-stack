@@ -113,12 +113,12 @@ open class ZkElement(
 
     // ---- DOM Builder
 
-    infix fun build(build: ZkBuilder.() -> Unit): ZkElement {
+    open infix fun build(build: ZkBuilder.() -> Unit): ZkElement {
         ZkBuilder(this, element).build()
         return this
     }
 
-    infix fun launchBuild(build: suspend ZkBuilder.() -> Unit): ZkElement {
+    open infix fun launchBuild(build: suspend ZkBuilder.() -> Unit): ZkElement {
         launch {
             ZkBuilder(this@ZkElement, element).build()
         }

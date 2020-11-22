@@ -6,17 +6,16 @@ package zakadabar.demo.frontend.ship
 import zakadabar.demo.data.ShipDto
 import zakadabar.demo.frontend.form.ValidatedForm
 
-class ShipForm(dto: ShipDto, mode: Mode) : ValidatedForm<ShipDto>(dto, mode) {
+class ShipForm(dto: ShipDto, mode: Mode) : ValidatedForm<ShipDto>(dto, Ships, mode) {
 
-    override fun init(): ValidatedForm<ShipDto> {
-
-        this build {
+    override fun init() = build {
+        + header("Ships")
+        + section("Basics", "Data that all ships have.") {
             + dto::id
             + dto::name
             + dto::speed
         }
-
-        return this
+        + buttons()
     }
 
 }

@@ -23,8 +23,11 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLImageElement
 import org.w3c.dom.events.Event
 import zakadabar.stack.data.entity.EntityRecordDto
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.elements.ZkClasses.Companion.zkClasses
 import zakadabar.stack.util.PublicApi
+import kotlin.reflect.KMutableProperty0
+import kotlin.reflect.KProperty0
 
 /**
  * Provides programmatic builder functionality to create the DOM and link
@@ -40,6 +43,10 @@ class ZkBuilder(
     val zkElement: ZkElement,
     var htmlElement: HTMLElement
 ) {
+
+    companion object {
+        var propertyReceiver: ZkPropertyReceiver? = null
+    }
 
     private fun runBuild(e: HTMLElement, className: String?, build: ZkBuilder.() -> Unit) {
         if (className != null) e.classList.add(className)
@@ -156,11 +163,11 @@ class ZkBuilder(
      * Creates an unnamed [ZkElement].
      */
     fun element(): ZkElement {
-        val ce = ZkElement()
-        htmlElement.appendChild(ce.element)
-        zkElement.childElements.plusAssign(ce)
+        val e = ZkElement()
+        htmlElement.appendChild(e.element)
+        zkElement.childElements.plusAssign(e)
         // no need for init as it is empty
-        return ce
+        return e
     }
 
     /**
@@ -237,6 +244,25 @@ class ZkBuilder(
     infix fun HTMLElement.build(build: ZkBuilder.() -> Unit): HTMLElement {
         runBuild(this, className, build)
         return this
+    }
+
+
+    operator fun KProperty0<RecordId<*>>.unaryPlus() {
+        val receiver = propertyReceiver
+        checkNotNull(receiver) { "you have to set a property receiver to add properties" }
+        + receiver.add(this)
+    }
+
+    operator fun KMutableProperty0<String>.unaryPlus() {
+        val receiver = propertyReceiver
+        checkNotNull(receiver) { "you have to set a property receiver to add properties" }
+        + receiver.add(this)
+    }
+
+    operator fun KMutableProperty0<Double>.unaryPlus() {
+        val receiver = propertyReceiver
+        checkNotNull(receiver) { "you have to set a property receiver to add properties" }
+        + receiver.add(this)
     }
 
 }

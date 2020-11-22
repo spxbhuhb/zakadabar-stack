@@ -16,16 +16,30 @@
  */
 package zakadabar.demo.frontend.form
 
+import zakadabar.demo.frontend.form.fields.FormField
+import zakadabar.demo.frontend.form.fields.ValidatedDouble
+import zakadabar.demo.frontend.form.fields.ValidatedId
+import zakadabar.demo.frontend.form.fields.ValidatedString
+import zakadabar.demo.frontend.form.structure.Buttons
+import zakadabar.demo.frontend.form.structure.Header
+import zakadabar.demo.frontend.form.structure.Section
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.util.toast
+import zakadabar.stack.frontend.elements.ZkBuilder
+import zakadabar.stack.frontend.elements.ZkCrud
 import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.elements.ZkPropertyReceiver
 import zakadabar.stack.frontend.util.launch
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KProperty0
 
-open class ValidatedForm<T : RecordDto<T>>(val dto: T, val mode: Mode) : ZkElement() {
+open class ValidatedForm<T : RecordDto<T>>(
+    val dto: T,
+    val crud: ZkCrud<T>,
+    val mode: Mode
+) : ZkElement(), ZkPropertyReceiver {
 
     enum class Mode {
         Create,
@@ -35,25 +49,13 @@ open class ValidatedForm<T : RecordDto<T>>(val dto: T, val mode: Mode) : ZkEleme
     }
 
     private val schema = dto.schema()
-    private val fields = mutableListOf<FormField<*>>()
+    internal val fields = mutableListOf<FormField<*>>()
 
-    operator fun KProperty0<RecordId<T>>.unaryPlus() {
-        val field = ValidatedId<T>(this)
-        fields += field
-        this@ValidatedForm += field
-    }
+    fun header(title: String) = Header(title)
 
-    operator fun KMutableProperty0<String>.unaryPlus() {
-        val field = ValidatedString(this@ValidatedForm, this)
-        fields += field
-        this@ValidatedForm += field
-    }
+    fun buttons() = Buttons(this)
 
-    operator fun KMutableProperty0<Double>.unaryPlus() {
-        val field = ValidatedDouble(this@ValidatedForm, this)
-        fields += field
-        this@ValidatedForm += field
-    }
+    fun section(title: String, summary: String = "", builder: ZkBuilder.() -> Unit) = Section(title, summary, builder)
 
     fun validate(): ValidityReport {
         val report = schema.validate()
@@ -99,5 +101,39 @@ open class ValidatedForm<T : RecordDto<T>>(val dto: T, val mode: Mode) : ZkEleme
                 }
             }
         }
+    }
+
+    override infix fun build(build: ZkBuilder.() -> Unit): ZkElement {
+        ZkBuilder.propertyReceiver = this
+        ZkBuilder(this, element).build()
+        ZkBuilder.propertyReceiver = null
+        return this
+    }
+
+    override infix fun launchBuild(build: suspend ZkBuilder.() -> Unit): ZkElement {
+        launch {
+            ZkBuilder.propertyReceiver = this
+            ZkBuilder(this, element).build()
+            ZkBuilder.propertyReceiver = null
+        }
+        return this
+    }
+
+    override fun add(kProperty0: KProperty0<RecordId<T>>): ZkElement {
+        val field = ValidatedId<T>(kProperty0)
+        fields += field
+        return field
+    }
+
+    override fun add(kProperty0: KMutableProperty0<String>): ZkElement {
+        val field = ValidatedString(this, kProperty0)
+        fields += field
+        return field
+    }
+
+    override fun add(kProperty0: KMutableProperty0<Double>): ZkElement {
+        val field = ValidatedDouble(this, kProperty0)
+        fields += field
+        return field
     }
 }

@@ -14,13 +14,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.demo.frontend.form
+package zakadabar.demo.frontend.form.fields
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.get
 import org.w3c.dom.set
+import zakadabar.demo.frontend.form.ValidatedForm
 import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.schema.ValidityReport
