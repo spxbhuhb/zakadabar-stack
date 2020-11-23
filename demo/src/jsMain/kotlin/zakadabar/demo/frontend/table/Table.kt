@@ -4,6 +4,7 @@
 package zakadabar.demo.frontend.table
 
 import kotlinx.dom.clear
+import zakadabar.demo.frontend.table.TableClasses.Companion.tableClasses
 import zakadabar.stack.frontend.elements.ZkBuilder
 import zakadabar.stack.frontend.elements.ZkElement
 import kotlin.properties.ReadOnlyProperty
@@ -18,10 +19,13 @@ open class Table<T> : ZkElement() {
         element.clear()
 
         build {
-            for ((index, row) in data.withIndex()) {
-                + row {
-                    for (column in columns) {
-                        column.render(this@Table, this, index, row)
+            + table(tableClasses.table) {
+                htmlElement.style.cssText = gridTemplateColumns()
+                for ((index, row) in data.withIndex()) {
+                    + tr(tableClasses.tableRow) {
+                        for (column in columns) {
+                            + td { column.render(this@Table, this, index, row) }
+                        }
                     }
                 }
             }
@@ -30,6 +34,13 @@ open class Table<T> : ZkElement() {
         return this
     }
 
+    private fun gridTemplateColumns(): String {
+        var s = "grid-template-columns:"
+        for (column in columns) {
+            s += " " + column.gridTemplate()
+        }
+        return "$s;"
+    }
 }
 
 open class Column<T>(val prop: KProperty1<T, *>? = null, init: Column<T>.() -> Unit = { }) : ReadOnlyProperty<Table<T>, Column<T>> {
@@ -43,12 +54,14 @@ open class Column<T>(val prop: KProperty1<T, *>? = null, init: Column<T>.() -> U
 
     open fun render(table: Table<T>, builder: ZkBuilder, index: Int, row: T) {
         with(builder) {
-            + div {
-                if (prop != null) {
-                    + prop.get(row).toString()
-                }
+            if (prop != null) {
+                + prop.get(row).toString()
             }
         }
+    }
+
+    fun gridTemplate(): String {
+        return "minmax(100px, 1.33fr)"
     }
 
 }

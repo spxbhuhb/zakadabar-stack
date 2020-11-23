@@ -18,9 +18,7 @@ package zakadabar.stack.frontend.elements
 
 import kotlinx.browser.document
 import kotlinx.dom.appendText
-import org.w3c.dom.Element
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLImageElement
+import org.w3c.dom.*
 import org.w3c.dom.events.Event
 import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.data.record.RecordId
@@ -157,6 +155,24 @@ class ZkBuilder(
         img.src = EntityRecordDto.revisionUrl(entityId)
         runBuild(img, className, build)
         return img
+    }
+
+    fun table(className: String? = null, build: ZkBuilder.() -> Unit = { }): HTMLTableElement {
+        val e = document.createElement("table") as HTMLTableElement
+        runBuild(e, className, build)
+        return e
+    }
+
+    fun tr(className: String? = null, build: ZkBuilder.() -> Unit = { }): HTMLTableRowElement {
+        val e = document.createElement("tr") as HTMLTableRowElement
+        runBuild(e, className, build)
+        return e
+    }
+
+    fun td(className: String? = null, build: ZkBuilder.() -> Unit = { }): HTMLTableCellElement {
+        val e = document.createElement("td") as HTMLTableCellElement
+        runBuild(e, className, build)
+        return e
     }
 
     /**
