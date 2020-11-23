@@ -14,51 +14,32 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.demo.frontend.form.fields
+package zakadabar.stack.frontend.builtin.form.fields
 
 import kotlinx.browser.document
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLSelectElement
-import zakadabar.demo.frontend.form.FormClasses.Companion.formClasses
-import zakadabar.demo.frontend.form.ValidatedForm
+import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.frontend.builtin.form.ValidatedForm
 import zakadabar.stack.frontend.elements.ZkElement
-import zakadabar.stack.frontend.util.escape
-import zakadabar.stack.frontend.util.launch
 import kotlin.reflect.KMutableProperty0
 
-class ValidatedRecordSelect<T : RecordDto<T>>(
+class ValidatedString<T : RecordDto<T>>(
     private val form: ValidatedForm<T>,
-    private val prop: KMutableProperty0<RecordId<*>>,
-    private val sortOptions: Boolean = true,
-    private val options: suspend () -> List<Pair<RecordId<*>, String>>
+    private val prop: KMutableProperty0<String>
 ) : FormField<String>(
-    element = document.createElement("select") as HTMLElement
+    element = document.createElement("input") as HTMLInputElement
 ) {
 
+    private val input = element as HTMLInputElement
+
     override fun init(): ZkElement {
-        className = formClasses.select
+        if (readOnly) input.readOnly = true
 
-        launch {
-            val value = prop.get()
-            val items = if (sortOptions) options().sortedBy { it.second } else options()
-
-            var s = ""
-            items.forEach {
-                s += if (it.first == value) {
-                    """<option value="${it.first}" selected>${escape(it.second)}</option>"""
-                } else {
-                    """<option value="${it.first}">${escape(it.second)}</option>"""
-                }
-            }
-
-            element.innerHTML = s
-        }
+        input.value = prop.get()
 
         on("input") { _ ->
-            prop.set((element as HTMLSelectElement).value.toLongOrNull() ?: - 1)
+            prop.set(input.value)
             form.validate()
         }
 
@@ -75,4 +56,5 @@ class ValidatedRecordSelect<T : RecordDto<T>>(
             element.style.backgroundColor = "red"
         }
     }
+
 }

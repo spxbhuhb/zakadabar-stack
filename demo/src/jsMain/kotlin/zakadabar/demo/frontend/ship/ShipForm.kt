@@ -5,7 +5,7 @@ package zakadabar.demo.frontend.ship
 
 import zakadabar.demo.data.ShipDto
 import zakadabar.demo.data.SpeedDto
-import zakadabar.demo.frontend.form.ValidatedForm
+import zakadabar.stack.frontend.builtin.form.ValidatedForm
 
 class ShipForm(dto: ShipDto, mode: Mode) : ValidatedForm<ShipDto>(dto, Ships, mode) {
 

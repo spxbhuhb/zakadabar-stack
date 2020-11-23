@@ -5,7 +5,7 @@ package zakadabar.demo.frontend.speed
 
 import zakadabar.demo.Demo
 import zakadabar.demo.data.SpeedDto
-import zakadabar.demo.frontend.form.ValidatedForm
+import zakadabar.stack.frontend.builtin.form.ValidatedForm
 import zakadabar.stack.frontend.builtin.simple.SimpleButton
 import zakadabar.stack.frontend.elements.ZkCrud
 import zakadabar.stack.frontend.elements.ZkElement.Companion.buildNew

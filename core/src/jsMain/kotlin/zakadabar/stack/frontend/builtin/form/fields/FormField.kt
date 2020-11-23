@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.frontend.form.fields
+package zakadabar.stack.frontend.builtin.form.fields
 
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.data.schema.ValidityReport

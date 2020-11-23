@@ -4,7 +4,7 @@
 package zakadabar.demo.frontend.speed
 
 import zakadabar.demo.data.SpeedDto
-import zakadabar.demo.frontend.form.ValidatedForm
+import zakadabar.stack.frontend.builtin.form.ValidatedForm
 
 class SpeedForm(dto: SpeedDto, mode: Mode) : ValidatedForm<SpeedDto>(dto, Speeds, mode) {
 

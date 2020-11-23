@@ -1,11 +1,11 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.frontend.form.structure
+package zakadabar.stack.frontend.builtin.form.structure
 
-import zakadabar.demo.frontend.form.ValidatedForm
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.builtin.form.ValidatedForm
 import zakadabar.stack.frontend.builtin.simple.SimpleButton
 import zakadabar.stack.frontend.elements.ZkElement
 
