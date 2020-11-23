@@ -42,11 +42,16 @@ class ValidatedRecordSelect<T : RecordDto<T>>(
         className = formClasses.select
 
         launch {
+            val value = prop.get()
             val items = if (sortOptions) options().sortedBy { it.second } else options()
 
             var s = ""
             items.forEach {
-                s += """<option value="${it.first}">${escape(it.second)}</option>"""
+                s += if (it.first == value) {
+                    """<option value="${it.first}" selected>${escape(it.second)}</option>"""
+                } else {
+                    """<option value="${it.first}">${escape(it.second)}</option>"""
+                }
             }
 
             element.innerHTML = s
