@@ -15,7 +15,7 @@ object Speeds : ZkCrud<SpeedDto>(Demo.shid, "/speeds") {
 
     override fun all() = launchBuildNew {
         + SimpleButton("new") { Speeds.openCreate() }
-        SpeedDto.all().forEach { + it.description }
+        + SpeedTable().setData(SpeedDto.all())
     }
 
     override fun create() = buildNew {
@@ -32,7 +32,6 @@ object Speeds : ZkCrud<SpeedDto>(Demo.shid, "/speeds") {
 
     override fun delete(recordId: Long) = launchBuildNew {
         + SpeedForm(SpeedDto.read(recordId), ValidatedForm.Mode.Delete)
-
     }
 
 }
