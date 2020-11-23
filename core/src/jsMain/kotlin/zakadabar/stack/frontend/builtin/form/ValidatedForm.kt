@@ -17,8 +17,8 @@
 package zakadabar.stack.frontend.builtin.form
 
 import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 
-class ValidatedForm<T>(val dto: RecordDto<T>) : ComplexElement() {
+class ValidatedForm<T>(val dto: RecordDto<T>) : ZkElement() {
 
 }

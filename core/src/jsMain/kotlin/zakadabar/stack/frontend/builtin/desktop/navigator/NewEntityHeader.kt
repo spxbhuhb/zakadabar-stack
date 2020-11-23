@@ -7,7 +7,7 @@ import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.header.Header
 import zakadabar.stack.frontend.builtin.util.header.HeaderClasses.Companion.headerClasses
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 
 class NewEntityHeader(
     private val newEntity: NewEntity
@@ -17,7 +17,7 @@ class NewEntityHeader(
 
     private val repeatIcon = Icons.repeat.complex16(::onRepeat)
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         super.init()
 
         toolElement += repeatIcon.withClass(headerClasses.extensionIcon16)

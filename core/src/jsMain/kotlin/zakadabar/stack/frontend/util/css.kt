@@ -38,6 +38,7 @@ open class Theme {
     open var sliderColor = lightGray
     open var fontFamily = "IBM Plex Sans"
     open var fontSize = 12
+    open var fontWeight = 300
 
     open var borderRadius = 2
 
@@ -132,6 +133,12 @@ class CssStyleRule(val sheet: CssStyleSheet<*>, val cssClassName: String) {
             styles["align-items"] = value
         }
 
+    var appearance
+        get() = styles["appearance"]
+        set(value) {
+            styles["appearance"] = value
+        }
+
     var background
         get() = styles["background"]
         set(value) {
@@ -142,6 +149,30 @@ class CssStyleRule(val sheet: CssStyleSheet<*>, val cssClassName: String) {
         get() = styles["background-color"]
         set(value) {
             styles["background-color"] = value
+        }
+
+    var backgroundImage
+        get() = styles["background-image"]
+        set(value) {
+            styles["background-image"] = value
+        }
+
+    var backgroundPosition
+        get() = styles["background-position"]
+        set(value) {
+            styles["background-position"] = value
+        }
+
+    var backgroundRepeat
+        get() = styles["background-repeat"]
+        set(value) {
+            styles["background-repeat"] = value
+        }
+
+    var backgroundSize
+        get() = styles["background-size"]
+        set(value) {
+            styles["background-size"] = value
         }
 
     var border: Any?
@@ -242,6 +273,12 @@ class CssStyleRule(val sheet: CssStyleSheet<*>, val cssClassName: String) {
         get() = styles["box-sizing"]
         set(value) {
             styles["box-sizing"] = value
+        }
+
+    var boxShadow
+        get() = styles["box-shadow"]
+        set(value) {
+            styles["box-shadow"] = value
         }
 
     var color
@@ -434,6 +471,12 @@ class CssStyleRule(val sheet: CssStyleSheet<*>, val cssClassName: String) {
             styles["min-height"] = stringOrPx(value)
         }
 
+    var mozAppearance
+        get() = styles["-moz-appearance"]
+        set(value) {
+            styles["-moz-appearance"] = value
+        }
+
     var minWidth: Any?
         get() = styles["min-width"]
         set(value) {
@@ -581,6 +624,12 @@ class CssStyleRule(val sheet: CssStyleSheet<*>, val cssClassName: String) {
         get() = styles["vertical-align"]
         set(value) {
             styles["vertical-align"] = value
+        }
+
+    var webkitAppearance
+        get() = styles["-webkit-appearance"]
+        set(value) {
+            styles["-webkit-appearance"] = value
         }
 
     var whiteSpace

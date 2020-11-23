@@ -9,12 +9,11 @@ import kotlinx.browser.document
 import org.w3c.dom.HTMLHtmlElement
 import zakadabar.stack.frontend.FrontendContext.dock
 import zakadabar.stack.frontend.FrontendContext.theme
+import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.header.Header
 import zakadabar.stack.frontend.builtin.util.header.HeaderClasses.Companion.headerClasses
-import zakadabar.stack.frontend.elements.ComplexElement
-import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
-import zakadabar.stack.frontend.elements.SimpleElement
+import zakadabar.stack.frontend.elements.ZkElement
 
 /**
  * An element to put into the dock with a header, minimize, normal, maximize, close actions.
@@ -23,11 +22,11 @@ import zakadabar.stack.frontend.elements.SimpleElement
  * If you extend you have to modify the [update] method to show/hide whatever is docked.
  */
 open class DockedElement(
-    val icon: SimpleElement,
+    val icon: ZkElement,
     val title: String,
     var state: DockedElementState,
-    var content: SimpleElement? = null,
-) : ComplexElement() {
+    var content: ZkElement? = null,
+) : ZkElement() {
 
     protected val minimize = Icons.minimize.complex16(::onMinimize).withClass(headerClasses.extensionIcon)
     protected val maximize = Icons.maximize.complex16(::onMaximize).withClass(headerClasses.extensionIcon)

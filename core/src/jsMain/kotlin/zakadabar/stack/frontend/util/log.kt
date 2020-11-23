@@ -8,7 +8,7 @@ fun log(ex: dynamic): String {
 
     val stack = ex.stack
     return if (stack is String) {
-        val message = ex.message.toString() ?: ""
+        val message = ex.message?.toString() ?: ""
         val error = js("Error()")
         error.name = ex.toString().substringBefore(':')
         error.message = message.substringAfter(':')

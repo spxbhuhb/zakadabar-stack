@@ -6,14 +6,14 @@ package zakadabar.stack.frontend.builtin.util
 import zakadabar.stack.data.builtin.security.CommonAccountDto
 import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext.t
+import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.builtin.simple.SimpleDateTime
-import zakadabar.stack.frontend.elements.ComplexElement
-import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
-open class EntityStatusCard(val dto: EntityRecordDto) : ComplexElement() {
+open class EntityStatusCard(val dto: EntityRecordDto) : ZkElement() {
 
     override fun init(): EntityStatusCard {
 
@@ -31,9 +31,9 @@ open class EntityStatusCard(val dto: EntityRecordDto) : ComplexElement() {
 
                 + gap(width = 10)
 
-                + column() cssClass coreClasses.smallInfo build {
+                + column(coreClasses.smallInfo) {
 
-                    current.style.alignSelf = "center"
+                    htmlElement.style.alignSelf = "center"
 
                     + row {
                         + t("modifiedBy")

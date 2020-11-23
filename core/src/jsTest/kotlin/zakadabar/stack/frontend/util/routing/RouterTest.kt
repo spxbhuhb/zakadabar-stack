@@ -5,7 +5,7 @@ package zakadabar.stack.frontend.util.routing
 
 import org.w3c.dom.url.URLSearchParams
 import zakadabar.stack.Stack
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.routing.Route.Companion.handle
 import zakadabar.stack.frontend.util.routing.Route.Companion.route
 import kotlin.test.Test
@@ -15,7 +15,7 @@ import kotlin.test.assertTrue
 
 class RouterTest {
 
-    class TestUiElement(val testId: Int) : ComplexElement()
+    class TestUiElement(val testId: Int) : ZkElement()
 
     private fun makeRequest(path: String) =
         ViewRequest(

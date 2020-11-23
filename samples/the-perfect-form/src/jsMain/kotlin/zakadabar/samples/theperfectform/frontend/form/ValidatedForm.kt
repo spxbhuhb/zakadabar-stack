@@ -19,13 +19,12 @@ package zakadabar.samples.theperfectform.frontend.form
 import zakadabar.samples.theperfectform.data.FormDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.frontend.builtin.util.NYI
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.launch
-import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KProperty0
 import kotlin.reflect.KProperty1
 
-open class ValidatedForm<T : RecordDto<T>>(val dto: T) : ComplexElement() {
+open class ValidatedForm<T : RecordDto<T>>(val dto: T) : ZkElement() {
 
     private val schema = dto.schema()
     private val fields = mutableListOf<FormField<*>>()
@@ -54,15 +53,6 @@ open class ValidatedForm<T : RecordDto<T>>(val dto: T) : ComplexElement() {
 }
 
 class PerfectForm(dto: FormDto) : ValidatedForm<FormDto>(dto) {
-
-    val columns = build {
-        col {
-            label = ize
-            field = FormDto::textField
-            dataFunc = { dto: FormDto -> dto.textField }
-            renderer = { }
-        }
-    }
 
     override fun init(): ValidatedForm<FormDto> {
 

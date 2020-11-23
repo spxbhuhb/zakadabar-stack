@@ -5,13 +5,26 @@ package zakadabar.stack.data.record
 
 import kotlinx.serialization.KSerializer
 import zakadabar.stack.comm.http.Comm
+import zakadabar.stack.comm.http.makeComm
 import zakadabar.stack.data.query.QueryDtoCompanion
 
 abstract class RecordDtoCompanion<T : RecordDto<T>> {
 
     abstract val type: String
 
-    lateinit var comm: Comm<T>
+    private var _comm: Comm<T>? = null
+
+    private fun makeComm(): Comm<T> {
+        val nc = makeComm(this)
+        _comm = nc
+        return nc
+    }
+
+    var comm: Comm<T>
+        get() = _comm ?: makeComm()
+        set(value) {
+            _comm = value
+        }
 
     abstract fun serializer(): KSerializer<T>
 
@@ -19,6 +32,6 @@ abstract class RecordDtoCompanion<T : RecordDto<T>> {
 
     suspend fun all() = comm.all()
 
-    open val queries = emptyMap<String, QueryDtoCompanion>()
+    open val queries = emptyMap<String, QueryDtoCompanion<*,*>>()
 
 }

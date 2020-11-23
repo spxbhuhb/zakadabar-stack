@@ -3,9 +3,8 @@
  */
 package zakadabar.stack.frontend.builtin.dock
 
-import zakadabar.stack.frontend.elements.ComplexElement
-import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
-import zakadabar.stack.frontend.elements.SimpleElement
+import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.elements.ZkElement
 
 /**
  * Contains [DockedElement]s and shows them over the normal content. The items
@@ -13,7 +12,7 @@ import zakadabar.stack.frontend.elements.SimpleElement
  * from the normal document flow, mostly for editing. Check the cookbook for
  * examples.
  */
-class Dock : ComplexElement() {
+class Dock : ZkElement() {
 
     override fun init(): Dock {
         className = coreClasses.dock
@@ -21,12 +20,12 @@ class Dock : ComplexElement() {
     }
 
     /**
-     * A modified version of [ComplexElement.minusAssign] to remove a child.
+     * A modified version of [ZkElement.minusAssign] to remove a child.
      * This version checks the content field of [DockedElement] children
      * and removes the [DockedElement] if the content field contains the
      * element passed in the [child] parameter.
      */
-    override operator fun minusAssign(child: SimpleElement?) {
+    override operator fun minusAssign(child: ZkElement?) {
 
         if (child == null) return
 

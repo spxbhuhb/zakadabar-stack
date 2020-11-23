@@ -14,10 +14,10 @@ import zakadabar.stack.data.query.QueryDtoCompanion
 @Serializable
 class SearchAccounts(
     val accountIds: List<Long>
-) : QueryDto {
+) : QueryDto<CommonAccountDto> {
 
-    suspend fun execute() = comm.query(this, serializer())
+    override suspend fun execute() = comm.query(this, serializer())
 
-    companion object : QueryDtoCompanion(CommonAccountDto.Companion)
+    companion object : QueryDtoCompanion<CommonAccountDto,CommonAccountDto>(CommonAccountDto.Companion)
 
 }

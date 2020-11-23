@@ -9,14 +9,14 @@ import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.droparea.DropAreaClasses.Companion.classes
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 
 class DropArea(
     private val process: (DataTransfer) -> Unit,
     private val message: String = t("drop.files.here")
-) : ComplexElement() {
+) : ZkElement() {
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
 
         this cssClass classes.dropArea build {
             + row(classes.dropAreaMessage) {

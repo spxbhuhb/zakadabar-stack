@@ -10,7 +10,7 @@ import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.icon.IconSource
 import zakadabar.stack.frontend.comm.rest.FrontendComm
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.UUID
 import kotlin.reflect.KClass
@@ -48,27 +48,27 @@ abstract class DtoFrontend<T : RecordDto<T>>(
     }
 
     @PublicApi
-    open fun createView() = ComplexElement() build {
+    open fun createView() = ZkElement() build {
         + "create view for ${this@DtoFrontend::class.simpleName} is not implemented"
     }
 
     @PublicApi
-    open fun readView() = ComplexElement() build {
+    open fun readView() = ZkElement() build {
         + "read view for ${this@DtoFrontend::class.simpleName} is not implemented"
     }
 
     @PublicApi
-    open fun updateView() = ComplexElement() build {
+    open fun updateView() = ZkElement() build {
         + "update view for ${this@DtoFrontend::class.simpleName} is not implemented"
     }
 
     @PublicApi
-    open fun deleteView() = ComplexElement() build {
+    open fun deleteView() = ZkElement() build {
         + "delete view for ${this@DtoFrontend::class.simpleName} is not implemented"
     }
 
     @PublicApi
-    open fun allView() = ComplexElement() build {
+    open fun allView() = ZkElement() build {
         + "all view for ${this@DtoFrontend::class.simpleName} is not implemented"
     }
 }

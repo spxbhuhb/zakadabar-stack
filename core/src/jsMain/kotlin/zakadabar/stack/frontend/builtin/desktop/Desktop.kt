@@ -4,21 +4,21 @@
 package zakadabar.stack.frontend.builtin.desktop
 
 import zakadabar.stack.frontend.builtin.desktop.DesktopClasses.Companion.desktopClasses
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
 class Desktop(
-    val header: ComplexElement? = DesktopHeader(),
-    val center: ComplexElement? = DesktopCenter(),
-    val footer: ComplexElement? = DesktopFooter()
-) : ComplexElement() {
+    val header: ZkElement? = DesktopHeader(),
+    val center: ZkElement? = DesktopCenter(),
+    val footer: ZkElement? = DesktopFooter()
+) : ZkElement() {
 
     // ----------------------------------------------------------------
     // Lifecycle
     // ----------------------------------------------------------------
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         super.init()
 
         element.className = desktopClasses.desktop

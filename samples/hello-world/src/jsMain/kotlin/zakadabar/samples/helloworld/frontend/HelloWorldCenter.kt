@@ -4,9 +4,6 @@
 package zakadabar.samples.helloworld.frontend
 
 import zakadabar.stack.frontend.builtin.desktop.DesktopCenter
-import zakadabar.stack.frontend.builtin.navigation.Navigation
-import zakadabar.stack.frontend.builtin.navigation.NavigationState
-import zakadabar.stack.frontend.builtin.util.NYI
 
 /**
  * When you use the standard desktop layout you have:
@@ -22,14 +19,14 @@ import zakadabar.stack.frontend.builtin.util.NYI
 class HelloWorldCenter : DesktopCenter() {
 
     override fun onNavigation() {
-        val state = Navigation.state
+        //val state = Navigation.state
 
-        when (state.stateType) {
-            NavigationState.StateType.Home -> switchMain(Welcome())
-            NavigationState.StateType.Page -> switchMain(NYI())
-            NavigationState.StateType.View -> switchMain(getMainInstance(state.viewState !!) !!)
-            NavigationState.StateType.Unknown -> switchMain(NYI())
-        }
+//        when (state.stateType) {
+//            NavState.StateType.Home -> switchMain(Welcome())
+//            NavState.StateType.Page -> switchMain(NYI())
+//            NavState.StateType.View -> switchMain(getMainInstance(state.viewState !!) !!)
+//            NavState.StateType.Unknown -> switchMain(NYI())
+//        }
 
     }
 

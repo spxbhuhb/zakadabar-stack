@@ -16,7 +16,7 @@
  */
 package zakadabar.samples.theperfectform.frontend.form
 
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 
-class ValidatedIntInput : ComplexElement() {
+class ValidatedIntInput : ZkElement() {
 }

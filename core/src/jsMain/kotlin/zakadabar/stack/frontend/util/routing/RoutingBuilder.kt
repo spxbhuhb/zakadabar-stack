@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.util.routing
 
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
@@ -15,7 +15,7 @@ fun Route.route(path: String, builder: Route.() -> Route): Route {
 }
 
 @PublicApi
-fun Route.handle(path: String, handler: (request: ViewRequest) -> ComplexElement): Route {
+fun Route.handle(path: String, handler: (request: ViewRequest) -> ZkElement): Route {
     val route = Route(toSegments(path), handler)
     this.children += route
     return route

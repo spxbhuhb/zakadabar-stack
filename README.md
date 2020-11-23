@@ -1,12 +1,9 @@
-# Zakadabar Stack
+# Zakadabar
 
-Zakadabar Stack is a set of intertwined tools and habits which make building full-stack
-applications fast, easy and fun.
+Welcome to Zakadabar, a full-stack development platform for Kotlin. Zakadabar has a JVM backend and a JavaScript frontend,
+both programmed exclusively in Kotlin as part of one Kotlin MultiPlatform Project.
 
-Our aim is to have solutions for the everyday tasks we do as developers: build
-a frontend, upload a file, have a server, release an appliance etc. 
-
-As of now we publish the stack as **technology preview**. Many things are missing, **we might brake this and that with releases**.
+As of now we publish the project as **technology preview**. Many things are missing, **we might brake this and that with releases**.
 Interfaces, use patterns might change, it will need some time to mature. We actively use it in our own projects and add 
 features as we need them.
 
@@ -26,17 +23,9 @@ features as we need them.
   * [Espresso Lessons](doc/espresso-lessons/README.md)
   * API as soon as Dokka doesn't crash (yay 1.4)
 
-# Quick Start
- 
-* clone the [Zakadabar Samples](https://github.com/spxbhuhb/zakadabar-samples) repository
-* choose a sample application to start with: [5 Ways to HTML](https://github.com/spxbhuhb/zakadabar-samples/tree/master/01-beginner/5-ways-to-html) or [Hello World](https://github.com/spxbhuhb/zakadabar-samples/tree/master/01-beginner/hello-world) is a good choice
-* follow the instructions from the README.md file
-
 ## Releases and Gradle dependency
 
 We release only Kotlin 1.4+ multiplatform packages.
-
-During 2020 we publish a new release every Monday. They are as-is, just a build of that Monday morning. We use [continuous version numbers](./doc/misc/ContinuousVersions.md).
 
 Packages of Zakadabar Stack are available from GitHub Packages. To reference them
 from your project use the following Gradle setup.
@@ -119,7 +108,6 @@ commonMain {
 | Backend - Auditing | RW | |
 | Backend - Backup and Restore | RW | |
 | Backend - Resilience | RW | PostgreSQL DB mirroring |
-| API - Command Line | --> | Zakadabar CLI a.k.a ZLI |
 
 ## Credits and Dependency Licenses
 

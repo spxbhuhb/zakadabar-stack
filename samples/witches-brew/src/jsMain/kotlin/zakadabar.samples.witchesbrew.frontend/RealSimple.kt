@@ -5,13 +5,13 @@ package zakadabar.samples.witchesbrew.frontend
 
 import zakadabar.samples.witchesbrew.frontend.CauldronClasses.Companion.cauldronClasses
 import zakadabar.stack.frontend.FrontendContext.t
-import zakadabar.stack.frontend.elements.SimpleElement
+import zakadabar.stack.frontend.elements.ZkElement
 
-class RealSimple : SimpleElement() {
+class RealSimple : ZkElement() {
 
     private val css = cauldronClasses
 
-    override fun init(): SimpleElement {
+    override fun init(): ZkElement {
 
         className = css.realSimple
 

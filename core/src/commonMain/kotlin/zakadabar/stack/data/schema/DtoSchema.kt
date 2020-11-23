@@ -45,17 +45,17 @@ interface ValidationRule<T> {
 
 class ValidityReport(
     @PublicApi
-    val fails: MutableMap<KProperty0<*>, MutableList<ValidationRule<*>>> = mutableMapOf()
+    val fails: MutableMap<String, MutableList<ValidationRule<*>>> = mutableMapOf()
 ) {
     fun fail(property: KProperty0<*>, validation: ValidationRule<*>) {
         println("fail: ${validation::class.simpleName}")
-        fails.getOrPut(property) { mutableListOf() } += validation
+        fails.getOrPut(property.name) { mutableListOf() } += validation
     }
 
     @PublicApi
     fun dump() : String {
         val lines = mutableListOf<String>()
-        fails.forEach { lines += "${it.key.name} : ${it.value.map { v -> v::class.simpleName }.joinToString(", ")}" }
+        fails.forEach { lines += "${it.key} : ${it.value.map { v -> v::class.simpleName }.joinToString(", ")}" }
         return lines.joinToString("\n")
     }
 }

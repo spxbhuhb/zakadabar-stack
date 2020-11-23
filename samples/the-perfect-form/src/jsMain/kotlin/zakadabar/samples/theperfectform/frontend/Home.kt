@@ -5,11 +5,11 @@ package zakadabar.samples.theperfectform.frontend
 
 import zakadabar.samples.theperfectform.data.FormDto
 import zakadabar.samples.theperfectform.frontend.form.PerfectForm
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 
-class Home : ComplexElement() {
+class Home : ZkElement() {
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         this build {
             + PerfectForm(FormDto(0, "hello world"))
         }

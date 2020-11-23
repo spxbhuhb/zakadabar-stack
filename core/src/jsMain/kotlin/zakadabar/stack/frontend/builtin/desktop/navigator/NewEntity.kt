@@ -6,12 +6,12 @@ package zakadabar.stack.frontend.builtin.desktop.navigator
 import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.frontend.FrontendContext
 import zakadabar.stack.frontend.FrontendContext.t
+import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.builtin.desktop.navigator.NavigatorClasses.Companion.navigatorClasses
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.input.Input
 import zakadabar.stack.frontend.data.DtoFrontend
-import zakadabar.stack.frontend.elements.ComplexElement
-import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.elements.ZkElement
 
 /**
  * Entity creation from the global navigator. Displays list of entity types that
@@ -22,21 +22,21 @@ import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
 class NewEntity(
     private val navigator: EntityNavigator,
     val parentDto: EntityRecordDto?
-) : ComplexElement() {
+) : ZkElement() {
 
     private val header = NewEntityHeader(this)
 
-    private val inputAndActions = ComplexElement()
+    private val inputAndActions = ZkElement()
     private val nextIcon = Icons.arrowRight.complex18(::next)
     private val input = Input(::onEnter, ::close, ::onChange, placeholder = t("typeToSelect"))
 
-    private val typeList = ComplexElement()
+    private val typeList = ZkElement()
 
     internal var selected: DtoFrontend<*>? = null
 
     var repeat = false
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         super.init()
 
         className = navigatorClasses.newEntity

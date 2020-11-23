@@ -5,7 +5,7 @@ package zakadabar.stack.frontend.builtin.simple
 
 import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.builtin.simple.SimpleClasses.Companion.simpleClasses
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.util.PublicApi
 
 /**
@@ -20,9 +20,9 @@ import zakadabar.stack.util.PublicApi
 class SimpleButton(
     private val text: String,
     private val onClick: (() -> Unit)? = null
-) : ComplexElement() {
+) : ZkElement() {
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
 
         this cssClass simpleClasses.button build {
             + SimpleText(text)

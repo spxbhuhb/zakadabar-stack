@@ -5,9 +5,8 @@ package zakadabar.stack.frontend.builtin.util
 
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
-import zakadabar.stack.frontend.elements.ComplexElement
-import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
-import zakadabar.stack.frontend.elements.SimpleElement
+import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.elements.ZkElement
 import kotlin.math.max
 import kotlin.math.min
 
@@ -34,9 +33,9 @@ import kotlin.math.min
  * @property  onAbove       Called when the subject size goes above the threshold.
  */
 open class Slider(
-    private val container: ComplexElement,
-    private val subject: ComplexElement,
-    private val attached: List<SimpleElement> = emptyList(),
+    private val container: ZkElement,
+    private val subject: ZkElement,
+    private val attached: List<ZkElement> = emptyList(),
     private val orientation: Orientation = Orientation.Vertical,
     private val reverse: Boolean = false,
     private val minSize: Double = 26.0, // TODO this comes from the style/theme: header icon dimensions
@@ -45,12 +44,12 @@ open class Slider(
     private val threshold: Double = 1.0,
     private val onBelow: () -> Unit = { },
     private val onAbove: () -> Unit = { }
-) : ComplexElement() {
+) : ZkElement() {
 
     private var active = false
     var position = 0.0
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         super.init()
 
         className = if (orientation == Orientation.Vertical) coreClasses.verticalSlider else coreClasses.horizontalSlider

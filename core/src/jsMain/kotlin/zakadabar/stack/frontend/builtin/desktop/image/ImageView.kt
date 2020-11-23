@@ -18,12 +18,12 @@
 package zakadabar.stack.frontend.builtin.desktop.image
 
 import zakadabar.stack.data.entity.EntityRecordDto
-import zakadabar.stack.frontend.elements.ComplexElement
-import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
-class ImageView(private val dto: EntityRecordDto) : ComplexElement() {
+class ImageView(private val dto: EntityRecordDto) : ZkElement() {
 
 
     override fun init(): ImageView {

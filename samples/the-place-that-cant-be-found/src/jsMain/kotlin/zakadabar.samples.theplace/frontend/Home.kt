@@ -3,51 +3,9 @@
  */
 package zakadabar.samples.theplace.frontend
 
-import kotlinx.browser.window
-import zakadabar.stack.frontend.builtin.navigation.Navigation
-import zakadabar.stack.frontend.builtin.navigation.NavigationState
-import zakadabar.stack.frontend.builtin.navigation.navLink
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.samples.theplace.ThePlace
+import zakadabar.stack.frontend.elements.ZkPage.Companion.buildNewPage
 
-class Home : ComplexElement() {
-
-    val content = ComplexElement()
-
-    override fun init(): ComplexElement {
-        this build {
-            + col {
-                + row {
-                    + navLink(Tortuga::class, "Tortuga")
-                    + navLink(Singapore::class, "Singapore")
-                }
-                + content
-            }
-        }
-
-        on(window, Navigation.EVENT, ::navigation)
-
-        return this
-    }
-
-    private fun navigation() {
-        val state = Navigation.state
-
-        when (state.stateType) {
-            NavigationState.StateType.Home -> TODO()
-
-            NavigationState.StateType.Page -> {
-                content.clearChildren()
-                val pageState = state.pageState ?: return
-                when (pageState.pageName) {
-                    "Tortuga" -> content += Tortuga()
-                    "Singapore" -> content += Singapore()
-                }
-            }
-
-            NavigationState.StateType.View -> TODO()
-
-            NavigationState.StateType.Unknown -> TODO()
-        }
-
-    }
+val Home = buildNewPage(ThePlace.shid, "/") {
+    + "Home"
 }

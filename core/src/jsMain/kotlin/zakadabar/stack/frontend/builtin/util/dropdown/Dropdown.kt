@@ -5,30 +5,29 @@ package zakadabar.stack.frontend.builtin.util.dropdown
 
 import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.builtin.util.dropdown.DropdownClasses.Companion.dropdownClasses
-import zakadabar.stack.frontend.elements.ComplexElement
-import zakadabar.stack.frontend.elements.SimpleElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.util.PublicApi
 
 /**
  * A wrapper around a simple element which is the [controller] that shows
  * the content when the user clicks on the it.
  *
- * @property   content           The content to show in the dropdown.
- * @property   controller        The element that controls showing / hiding the dropdown.
+ * @property   content           The content of the dropdown.
+ * @property   controller        The element that controls show / hide of the dropdown.
  * @property   initialPosition   The position where the dropdown shows, may contain "top", "right", "bottom" and/or "left".
  */
 @PublicApi
 class Dropdown(
-    private val content: SimpleElement,
-    private val controller: ComplexElement,
+    private val content: ZkElement,
+    private val controller: ZkElement,
     private val initialPosition: String
-) : ComplexElement() {
+) : ZkElement() {
 
     private var temporaryPosition: String = ""
 
-    private val dropdownContent: ComplexElement = DropdownContent(content)
+    private val dropdownContent: ZkElement = DropdownContent(content)
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         this cssClass dropdownClasses.dropdown build {
             + controller
             + dropdownContent

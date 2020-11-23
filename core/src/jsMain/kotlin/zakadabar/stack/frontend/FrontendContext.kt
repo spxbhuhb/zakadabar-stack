@@ -5,14 +5,12 @@ package zakadabar.stack.frontend
 
 import kotlinx.browser.document
 import kotlinx.browser.window
-import kotlinx.coroutines.await
 import zakadabar.stack.Stack
 import zakadabar.stack.comm.websocket.session.StackClientSession
 import zakadabar.stack.data.builtin.security.CommonAccountDto
 import zakadabar.stack.frontend.FrontendContext.dtoFrontends
 import zakadabar.stack.frontend.FrontendContext.stackSession
 import zakadabar.stack.frontend.builtin.dock.Dock
-import zakadabar.stack.frontend.comm.rest.FrontendComm
 import zakadabar.stack.frontend.data.DtoFrontend
 import zakadabar.stack.frontend.extend.FrontendModule
 import zakadabar.stack.frontend.util.Dictionary
@@ -61,13 +59,13 @@ object FrontendContext {
     suspend fun init() {
         document.body?.style?.fontFamily = theme.fontFamily
 
-        val id = window.fetch("/api/${Stack.shid}/who-am-i").await()
-            .text().await()
-            .toLong()
-
-        CommonAccountDto.comm = FrontendComm(CommonAccountDto.type, CommonAccountDto.serializer())
-
-        executor = CommonAccountDto.comm.read(id)
+//        val id = window.fetch("/api/${Stack.shid}/who-am-i").await()
+//            .text().await()
+//            .toLong()
+//
+//        CommonAccountDto.comm = FrontendComm(CommonAccountDto.type, CommonAccountDto.serializer())
+//
+//        executor = CommonAccountDto.comm.read(id)
 
         dock = Dock().init() // this does not add it to the DOM, it's just created
 

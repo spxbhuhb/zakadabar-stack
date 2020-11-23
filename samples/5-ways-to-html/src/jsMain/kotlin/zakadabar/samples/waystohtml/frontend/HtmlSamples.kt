@@ -7,16 +7,15 @@ import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLImageElement
 import zakadabar.stack.frontend.FrontendContext.t
+import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.Initials
-import zakadabar.stack.frontend.elements.ComplexElement
-import zakadabar.stack.frontend.elements.CoreClasses.Companion.coreClasses
-import zakadabar.stack.frontend.elements.SimpleElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.elements.marginBottom
 
-class HtmlSamples : ComplexElement() {
+class HtmlSamples : ZkElement() {
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
 
         // build this element use coreClasses.contentColumn to align the content to middle
 
@@ -41,7 +40,7 @@ class HtmlSamples : ComplexElement() {
                 // by using it's id instead of the URL.
 
                 + image("roads.jpg") {
-                    with(current as HTMLImageElement) {
+                    with(htmlElement as HTMLImageElement) {
                         width = 500
                         height = 432
                         alt = t("roads")
@@ -51,16 +50,16 @@ class HtmlSamples : ComplexElement() {
 
                 + gap(height = 10)
 
-                + column() build { // creates a flex column with its own builder
+                + column { // creates a flex column with its own builder
 
                     + Way1() marginBottom "1em" // appends a SimpleElement with 1em margin at the bottom
 
                     + Way2() marginBottom 20 // appends another SimpleElement with a 20 pixels margin bottom
 
-                    + row() build { // creates a flex row with its own builder, appends it to the column
+                    + row { // creates a flex row with its own builder, appends it to the column
 
                         // set styles directly
-                        current.style.flexGrow = "1"
+                        htmlElement.style.flexGrow = "1"
 
                         + Way3() marginRight 20 // appends a ComplexElement to the row with 20 pixels margin
                         + Way4(t("this is inside")).marginRight(20) // appends another ComplexElement to the row
@@ -100,25 +99,25 @@ class HtmlSamples : ComplexElement() {
         return super.init()
     }
 
-    class Way1 : SimpleElement() {
-        override fun init(): SimpleElement {
+    class Way1 : ZkElement() {
+        override fun init(): ZkElement {
             innerHTML = "Setting the innerHTML directly, from the <b>Kotlin class initialization</b>"
             return this
         }
     }
 
-    class Way2 : SimpleElement() {
-        override fun init(): SimpleElement {
+    class Way2 : ZkElement() {
+        override fun init(): ZkElement {
             innerText = "Setting innerText directly, from the <b>Kotlin class initialization</b>"
             return this
         }
     }
 
-    class Way3 : ComplexElement() {
+    class Way3 : ZkElement() {
 
         private val icon = Icons.account_box.simple16 // create a simple icon, nothing happens when clicked on
 
-        override fun init(): ComplexElement {
+        override fun init(): ZkElement {
             this += icon // You can add elements to "this", in case Way3
             return this
         }
@@ -127,9 +126,9 @@ class HtmlSamples : ComplexElement() {
     /**
      * In this case we pass a string and use it in the builder of the element.
      */
-    class Way4(private val whatsInside: String) : ComplexElement() {
+    class Way4(private val whatsInside: String) : ZkElement() {
 
-        override fun init(): ComplexElement {
+        override fun init(): ZkElement {
             this build {
                 ! whatsInside
             }
@@ -141,14 +140,14 @@ class HtmlSamples : ComplexElement() {
      * Here, we pass something and then sort it out. This is actually pretty
      * ugly, I wouldn't use it this way without good reason.
      */
-    class Way5(private val whatsInside: Any) : ComplexElement() {
+    class Way5(private val whatsInside: Any) : ZkElement() {
 
-        override fun init(): ComplexElement {
+        override fun init(): ZkElement {
             this build {
-                when(whatsInside) {
+                when (whatsInside) {
                     is String -> + whatsInside
                     is HTMLElement -> + whatsInside
-                    is SimpleElement -> + whatsInside
+                    is ZkElement -> + whatsInside
                     else -> throw IllegalArgumentException()
                 }
             }

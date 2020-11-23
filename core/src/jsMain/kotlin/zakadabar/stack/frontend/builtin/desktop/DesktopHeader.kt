@@ -11,12 +11,12 @@ import zakadabar.stack.frontend.builtin.desktop.DesktopClasses.Companion.desktop
 import zakadabar.stack.frontend.builtin.desktop.messages.GlobalNavigationRequest
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.header.HeaderClasses.Companion.headerClasses
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.getElementId
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
-class DesktopHeader : ComplexElement() {
+class DesktopHeader : ZkElement() {
 
     private val idPrefix = element.id + "-item-"
 
@@ -52,9 +52,9 @@ class DesktopHeader : ComplexElement() {
         return """<a id="$idPrefix$id" class="${headerClasses.pathItem}">$name</a>"""
     }
 
-    inner class Path : ComplexElement() {
+    inner class Path : ZkElement() {
 
-        override fun init(): ComplexElement {
+        override fun init(): ZkElement {
             className = headerClasses.path
 
             on("click", ::onClick)

@@ -4,14 +4,14 @@
 package zakadabar.stack.frontend.builtin.icon
 
 import org.w3c.dom.events.Event
-import zakadabar.stack.frontend.elements.ComplexElement
+import zakadabar.stack.frontend.elements.ZkElement
 
 open class ComplexIcon(
     val icon: String,
     private val onClick: (() -> Unit)? = null
-) : ComplexElement() {
+) : ZkElement() {
 
-    override fun init(): ComplexElement {
+    override fun init(): ZkElement {
         element.innerHTML = icon
         on("click", onClick)
         on("mousedown", ::onMouseDown)
