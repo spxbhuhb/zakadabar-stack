@@ -4,6 +4,7 @@
 package zakadabar.demo.frontend.ship
 
 import zakadabar.demo.data.ShipDto
+import zakadabar.demo.data.SpeedDto
 import zakadabar.demo.frontend.form.ValidatedForm
 
 class ShipForm(dto: ShipDto, mode: Mode) : ValidatedForm<ShipDto>(dto, Ships, mode) {
@@ -13,7 +14,11 @@ class ShipForm(dto: ShipDto, mode: Mode) : ValidatedForm<ShipDto>(dto, Ships, mo
         + section("Basics", "Data that all ships have.") {
             + dto::id
             + dto::name
-            + dto::speed
+            + select(dto::speed) {
+                SpeedDto.all()
+                    .map { it.id to it.description }
+                    .sortedBy { it.second }
+            }
         }
         + buttons()
     }

@@ -54,7 +54,6 @@ class ValidatedDouble<T : RecordDto<T>>(
 
     override fun onValidated(report: ValidityReport) {
         val fails = report.fails[prop.name]
-        println("${prop.name} $fails")
         if (fails == null) {
             isValid = true
             element.style.backgroundColor = "white"

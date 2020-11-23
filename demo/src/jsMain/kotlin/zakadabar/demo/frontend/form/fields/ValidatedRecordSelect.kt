@@ -18,83 +18,56 @@ package zakadabar.demo.frontend.form.fields
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
-import org.w3c.dom.events.Event
-import org.w3c.dom.get
-import org.w3c.dom.set
+import org.w3c.dom.HTMLSelectElement
+import zakadabar.demo.frontend.form.FormClasses.Companion.formClasses
 import zakadabar.demo.frontend.form.ValidatedForm
-import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.record.RecordDto
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.frontend.builtin.util.dropdown.Dropdown
 import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.util.escape
+import zakadabar.stack.frontend.util.launch
 import kotlin.reflect.KMutableProperty0
 
-class ValidatedRecordSelect<T : RecordDto<T>, E : Any>(
-    prop: KMutableProperty0<String>,
+class ValidatedRecordSelect<T : RecordDto<T>>(
     private val form: ValidatedForm<T>,
-    private val query: QueryDto<E>,
-    private val entryBuilder: (E) -> ZkElement
+    private val prop: KMutableProperty0<RecordId<*>>,
+    private val sortOptions: Boolean = true,
+    private val options: suspend () -> List<Pair<RecordId<*>, String>>
 ) : FormField<String>(
-    element = document.createElement("div") as HTMLElement
+    element = document.createElement("select") as HTMLElement
 ) {
 
-    private val selectedEntry = ZkElement()
-    private val entryList = buildNew { + "betoltes" }
-
     override fun init(): ZkElement {
+        className = formClasses.select
 
-        this += Dropdown(entryList, selectedEntry, "bottom")
+        launch {
+            val items = if (sortOptions) options().sortedBy { it.second } else options()
 
+            var s = ""
+            items.forEach {
+                s += """<option value="${it.first}">${escape(it.second)}</option>"""
+            }
 
+            element.innerHTML = s
+        }
+
+        on("input") { _ ->
+            prop.set((element as HTMLSelectElement).value.toLongOrNull() ?: - 1)
+            form.validate()
+        }
 
         return this
     }
 
     override fun onValidated(report: ValidityReport) {
-        TODO("Not yet implemented")
-    }
-
-
-}
-
-open class ItemList<I>(
-    private val query: QueryDto<I>,
-    private val entryBuilder: (I) -> ZkElement,
-    private val onSelected: (I) -> Unit
-) : ZkElement() {
-
-    private lateinit var entries: List<I>
-
-    override fun init(): ItemList<I> {
-
-        launchBuild {
-            entries = query.execute()
-
-            clearChildren()
-
-            var index = 0
-
-            entries.forEach {
-                val item = entryBuilder(it)
-                item.element.dataset["zk-select-index"] = "${index ++}"
-            }
-        }
-
-        on("click", ::onClick)
-
-        return this
-    }
-
-    private fun onClick(event: Event) {
-        var current = event.target as? HTMLElement
-        while (current != null) {
-            val index = current.dataset["zk-select-index"]?.toIntOrNull()
-            if (index != null) {
-                onSelected(entries[index])
-                return
-            }
-            current = current.parentElement as HTMLElement
+        val fails = report.fails[prop.name]
+        if (fails == null) {
+            isValid = true
+            element.style.backgroundColor = "white"
+        } else {
+            isValid = false
+            element.style.backgroundColor = "red"
         }
     }
-
 }

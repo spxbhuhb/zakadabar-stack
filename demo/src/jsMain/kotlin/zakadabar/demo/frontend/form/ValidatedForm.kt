@@ -16,10 +16,7 @@
  */
 package zakadabar.demo.frontend.form
 
-import zakadabar.demo.frontend.form.fields.FormField
-import zakadabar.demo.frontend.form.fields.ValidatedDouble
-import zakadabar.demo.frontend.form.fields.ValidatedId
-import zakadabar.demo.frontend.form.fields.ValidatedString
+import zakadabar.demo.frontend.form.fields.*
 import zakadabar.demo.frontend.form.structure.Buttons
 import zakadabar.demo.frontend.form.structure.Header
 import zakadabar.demo.frontend.form.structure.Section
@@ -51,11 +48,61 @@ open class ValidatedForm<T : RecordDto<T>>(
     private val schema = dto.schema()
     internal val fields = mutableListOf<FormField<*>>()
 
-    fun header(title: String) = Header(title)
+    // ----  Builder convenience functions --------
 
-    fun buttons() = Buttons(this)
+    fun header(title: String) =
+        Header(title)
 
-    fun section(title: String, summary: String = "", builder: ZkBuilder.() -> Unit) = Section(title, summary, builder)
+    fun buttons() =
+        Buttons(this)
+
+    fun section(title: String, summary: String = "", builder: ZkBuilder.() -> Unit) =
+        Section(title, summary, builder)
+
+    fun select(kProperty0: KMutableProperty0<RecordId<*>>, sortOptions: Boolean = true, options: suspend () -> List<Pair<RecordId<*>, String>>): ValidatedRecordSelect<T> {
+        val field = ValidatedRecordSelect(this, kProperty0, sortOptions, options)
+        fields += field
+        return field
+    }
+
+    // ----  Customized build and property receiver  --------
+
+    override infix fun build(build: ZkBuilder.() -> Unit): ZkElement {
+        ZkBuilder.propertyReceiver = this
+        ZkBuilder(this, element).build()
+        ZkBuilder.propertyReceiver = null
+        return this
+    }
+
+    override infix fun launchBuild(build: suspend ZkBuilder.() -> Unit): ZkElement {
+        launch {
+            ZkBuilder.propertyReceiver = this
+            ZkBuilder(this, element).build()
+            ZkBuilder.propertyReceiver = null
+        }
+        return this
+    }
+
+    override fun add(kProperty0: KProperty0<RecordId<T>>): ZkElement {
+        val field = ValidatedId<T>(kProperty0)
+        fields += field
+        return field
+    }
+
+    override fun add(kProperty0: KMutableProperty0<String>): ZkElement {
+        val field = ValidatedString(this, kProperty0)
+        fields += field
+        return field
+    }
+
+    override fun add(kProperty0: KMutableProperty0<Double>): ZkElement {
+        val field = ValidatedDouble(this, kProperty0)
+        fields += field
+        return field
+    }
+
+
+    // ----  Validation and submit --------
 
     fun validate(): ValidityReport {
         val report = schema.validate()
@@ -101,39 +148,5 @@ open class ValidatedForm<T : RecordDto<T>>(
                 }
             }
         }
-    }
-
-    override infix fun build(build: ZkBuilder.() -> Unit): ZkElement {
-        ZkBuilder.propertyReceiver = this
-        ZkBuilder(this, element).build()
-        ZkBuilder.propertyReceiver = null
-        return this
-    }
-
-    override infix fun launchBuild(build: suspend ZkBuilder.() -> Unit): ZkElement {
-        launch {
-            ZkBuilder.propertyReceiver = this
-            ZkBuilder(this, element).build()
-            ZkBuilder.propertyReceiver = null
-        }
-        return this
-    }
-
-    override fun add(kProperty0: KProperty0<RecordId<T>>): ZkElement {
-        val field = ValidatedId<T>(kProperty0)
-        fields += field
-        return field
-    }
-
-    override fun add(kProperty0: KMutableProperty0<String>): ZkElement {
-        val field = ValidatedString(this, kProperty0)
-        fields += field
-        return field
-    }
-
-    override fun add(kProperty0: KMutableProperty0<Double>): ZkElement {
-        val field = ValidatedDouble(this, kProperty0)
-        fields += field
-        return field
     }
 }

@@ -20,7 +20,7 @@ object Ships : ZkCrud<ShipDto>(Demo.shid, "/ships") {
     }
 
     override fun create() = buildNew {
-        ShipForm(ShipDto(0, "", 0), ValidatedForm.Mode.Create)
+        + ShipForm(ShipDto(0, "", 0), ValidatedForm.Mode.Create)
     }
 
     override fun read(recordId: Long) = launchBuildNew {
