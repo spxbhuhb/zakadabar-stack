@@ -175,6 +175,24 @@ class ZkBuilder(
         return e
     }
 
+    fun thead(className: String? = null, build: ZkBuilder.() -> Unit = { }): HTMLTableSectionElement {
+        val e = document.createElement("thead") as HTMLTableSectionElement
+        runBuild(e, className, build)
+        return e
+    }
+
+    fun tbody(className: String? = null, build: ZkBuilder.() -> Unit = { }): HTMLTableSectionElement {
+        val e = document.createElement("tbody") as HTMLTableSectionElement
+        runBuild(e, className, build)
+        return e
+    }
+
+    fun th(className: String? = null, build: ZkBuilder.() -> Unit = { }): HTMLTableCellElement {
+        val e = document.createElement("th") as HTMLTableCellElement
+        runBuild(e, className, build)
+        return e
+    }
+
     /**
      * Creates an unnamed [ZkElement].
      */

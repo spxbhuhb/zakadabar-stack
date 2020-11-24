@@ -187,6 +187,12 @@ class CssStyleRule(val sheet: CssStyleSheet<*>, val cssClassName: String) {
             styles["border-color"] = value
         }
 
+    var borderCollapse
+        get() = styles["border-collapse"]
+        set(value) {
+            styles["border-collapse"] = value
+        }
+
     var borderTop: Any?
         get() = styles["border-top"]
         set(value) {
@@ -565,6 +571,12 @@ class CssStyleRule(val sheet: CssStyleSheet<*>, val cssClassName: String) {
         get() = styles["text-decoration"]
         set(value) {
             styles["text-decoration"] = value
+        }
+
+    var textOverflow
+        get() = styles["text-overflow"]
+        set(value) {
+            styles["text-overflow"] = value
         }
 
     var textTransform

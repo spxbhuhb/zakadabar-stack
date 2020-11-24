@@ -3,7 +3,8 @@
  */
 package zakadabar.stack.frontend.builtin.table
 
-import kotlinx.dom.clear
+import kotlinx.browser.document
+import org.w3c.dom.HTMLTableSectionElement
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.table.TableClasses.Companion.tableClasses
 import zakadabar.stack.frontend.elements.ZkBuilder
@@ -18,6 +19,18 @@ open class Table<T> : ZkElement() {
 
     val preloads = mutableListOf<Preload<*>>()
 
+    private val tbody = document.createElement("tbody") as HTMLTableSectionElement
+
+    override fun init() = build {
+        + table(tableClasses.table) {
+            htmlElement.style.cssText = gridTemplateColumns()
+            + thead {
+                columns.forEach { it.renderHeader(this) }
+            }
+            + tbody
+        }
+    }
+
     fun <RT : Any> preload(loader: suspend () -> RT) = Preload(loader)
 
     fun setData(data: List<T>): Table<T> {
@@ -26,16 +39,12 @@ open class Table<T> : ZkElement() {
                 it.job.join()
             }
 
-            element.clear()
-
             build {
-                + table(tableClasses.table) {
-                    htmlElement.style.cssText = gridTemplateColumns()
-                    for ((index, row) in data.withIndex()) {
-                        + tr(tableClasses.tableRow) {
-                            for (column in columns) {
-                                + td { column.render(this, index, row) }
-                            }
+                this.htmlElement = tbody
+                for ((index, row) in data.withIndex()) {
+                    + tr {
+                        for (column in columns) {
+                            + td { column.render(this, index, row) }
                         }
                     }
                 }

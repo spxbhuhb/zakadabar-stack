@@ -15,7 +15,7 @@ object Ships : ZkCrud<ShipDto>(Demo.shid, "/ships") {
 
     override fun all() = launchBuildNew {
         + SimpleButton("new") { Ships.openCreate() }
-        + ShipTable().setData(ShipDto.all())
+        + ShipTable().setData(ShipDto.all().sortedBy { it.id })
     }
 
     override fun create() = buildNew {

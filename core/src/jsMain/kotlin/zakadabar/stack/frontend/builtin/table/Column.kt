@@ -15,15 +15,23 @@ import kotlin.reflect.KProperty1
 
 abstract class Column<T> : ReadOnlyProperty<Table<T>, Column<T>> {
 
+    protected lateinit var name: String
     protected lateinit var table: Table<T>
 
     operator fun provideDelegate(table: Table<T>, prop: KProperty<*>): ReadOnlyProperty<Table<T>, Column<T>> {
+        this.name = prop.name
         this.table = table
         table.columns += this
         return this
     }
 
     override fun getValue(thisRef: Table<T>, property: KProperty<*>) = this
+
+    fun renderHeader(builder: ZkBuilder) {
+        with(builder) {
+            + th { + name }
+        }
+    }
 
     abstract fun render(builder: ZkBuilder, index: Int, row: T)
 

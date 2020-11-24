@@ -13,8 +13,8 @@ class ShipTable : Table<ShipDto>() {
     private val speeds by preload { SpeedDto.allAsMap() }
 
     val recordId by column(ShipDto::id)
-    val description by column(ShipDto::name)
-    val value by column { + speeds[it.speed]?.description }
+    val name by column(ShipDto::name)
+    val speed by column { + speeds[it.speed]?.description }
     val update by updateLink(ShipDto::id, Ships)
 
 }
