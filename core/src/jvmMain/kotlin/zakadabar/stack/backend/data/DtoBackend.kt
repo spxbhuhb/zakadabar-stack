@@ -94,14 +94,14 @@ abstract class DtoBackend<T : RecordDto<T>> : BackendModule {
                 }
             }
 
-            patch("/{id}") {
+            patch {
                 val executor = call.executor()
                 val request = call.receive(dtoClass)
                 logger.info("${executor.entityId}: UPDATE $dtoType $request")
                 call.respond(update(executor, request))
             }
 
-            delete("/{id}") {
+            delete {
                 val executor = call.executor()
                 val id = call.parameters["id"]?.toLongOrNull() ?: throw BadRequestException("missing id")
                 logger.info("${executor.entityId}: DELETE $dtoType $id")

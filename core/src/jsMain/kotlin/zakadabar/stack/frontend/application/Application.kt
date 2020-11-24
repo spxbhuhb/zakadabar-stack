@@ -34,7 +34,6 @@ object Application {
         window.dispatchEvent(Event(EVENT))
     }
 
-    fun back() {
+    fun back() = window.history.back()
 
-    }
 }

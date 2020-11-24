@@ -216,6 +216,15 @@ class ZkBuilder(
     }
 
     /**
+     * Creates a text node using [HTMLElement.appendText] with the string passed as content.
+     * No need for escape.
+     */
+    operator fun String?.unaryPlus(): Element? {
+        if (this == null) return null
+        return htmlElement.appendText(this)
+    }
+
+    /**
      * Adds an HTML element.
      */
     operator fun HTMLElement.unaryPlus(): HTMLElement {

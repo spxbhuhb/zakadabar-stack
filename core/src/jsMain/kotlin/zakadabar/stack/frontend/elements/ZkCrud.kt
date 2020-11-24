@@ -26,9 +26,9 @@ open class ZkCrud<T>(
 
     open fun openAll() = Application.changeNavState(allPath)
     open fun openCreate() = Application.changeNavState(createPath)
-    open fun openRead(recordId: RecordId<T>) = Application.changeNavState("$readPath?id=$recordId")
-    open fun openUpdate(recordId: RecordId<T>) = Application.changeNavState("$updatePath?id=$recordId")
-    open fun openDelete(recordId: RecordId<T>) = Application.changeNavState("$deletePath?id=$recordId")
+    open fun openRead(recordId: RecordId<T>) = Application.changeNavState(readPath, "id=$recordId")
+    open fun openUpdate(recordId: RecordId<T>) = Application.changeNavState(updatePath, "id=$recordId")
+    open fun openDelete(recordId: RecordId<T>) = Application.changeNavState(deletePath, "id=$recordId")
 
     override fun route(routing: AppRouting, state: NavState) = when (state.urlPath) {
         allPath -> all()
@@ -41,9 +41,9 @@ open class ZkCrud<T>(
 
     open fun routeQuery(routing: AppRouting, state: NavState): ZkElement = NYI()
 
-    open fun all(): ZkElement = NYI()
-    open fun create(): ZkElement = NYI()
-    open fun read(recordId: Long): ZkElement = NYI()
-    open fun update(recordId: Long): ZkElement = NYI()
-    open fun delete(recordId: Long): ZkElement = NYI()
+    open fun all(): ZkElement = NYI("crud all")
+    open fun create(): ZkElement = NYI("crud create")
+    open fun read(recordId: Long): ZkElement = NYI("crud read")
+    open fun update(recordId: Long): ZkElement = NYI("crud update")
+    open fun delete(recordId: Long): ZkElement = NYI("crud delete")
 }

@@ -4,13 +4,14 @@
 package zakadabar.demo.frontend.speed
 
 import zakadabar.demo.data.SpeedDto
-import zakadabar.demo.frontend.table.Column
-import zakadabar.demo.frontend.table.Table
+import zakadabar.stack.frontend.builtin.table.Table
 
+@Suppress("unused") // table pattern
 class SpeedTable : Table<SpeedDto>() {
 
-    val recordId by Column(SpeedDto::id)
-    val description by Column(SpeedDto::description)
-    val value by Column(SpeedDto::value)
+    val recordId by column(SpeedDto::id)
+    val description by column(SpeedDto::description)
+    val value by column(SpeedDto::value)
+    val update by updateLink(SpeedDto::id, Speeds)
 
 }

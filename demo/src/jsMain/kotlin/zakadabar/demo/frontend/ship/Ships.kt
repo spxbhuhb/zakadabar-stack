@@ -14,9 +14,8 @@ import zakadabar.stack.frontend.elements.ZkElement.Companion.launchBuildNew
 object Ships : ZkCrud<ShipDto>(Demo.shid, "/ships") {
 
     override fun all() = launchBuildNew {
-        val ships = ShipDto.all()
         + SimpleButton("new") { Ships.openCreate() }
-        ships.forEach { + it.name }
+        + ShipTable().setData(ShipDto.all())
     }
 
     override fun create() = buildNew {
@@ -34,5 +33,6 @@ object Ships : ZkCrud<ShipDto>(Demo.shid, "/ships") {
     override fun delete(recordId: Long) = launchBuildNew {
         + ShipForm(ShipDto.read(recordId), ValidatedForm.Mode.Delete)
     }
+
 }
 

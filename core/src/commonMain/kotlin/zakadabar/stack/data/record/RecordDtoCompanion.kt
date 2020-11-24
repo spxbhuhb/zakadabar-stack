@@ -32,6 +32,8 @@ abstract class RecordDtoCompanion<T : RecordDto<T>> {
 
     suspend fun all() = comm.all()
 
-    open val queries = emptyMap<String, QueryDtoCompanion<*,*>>()
+    suspend fun allAsMap() = comm.all().associateBy { it.id }
+
+    open val queries = emptyMap<String, QueryDtoCompanion<*, *>>()
 
 }

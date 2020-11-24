@@ -56,7 +56,7 @@ abstract class AppRouting(
         activeLayout.resume(state, activeTarget)
 
         if (trace) {
-            println("AppRouting.onNavStateChange  ${activeLayout.name}  ${nextTarget::class}  $state")
+            println("AppRouting.onNavStateChange  layout=${activeLayout.name}  class=${nextTarget::class.simpleName}  $state")
         }
     }
 

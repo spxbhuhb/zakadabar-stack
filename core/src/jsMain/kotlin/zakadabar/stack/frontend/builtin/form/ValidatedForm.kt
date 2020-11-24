@@ -29,6 +29,7 @@ import zakadabar.stack.frontend.elements.ZkCrud
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.elements.ZkPropertyReceiver
 import zakadabar.stack.frontend.util.launch
+import zakadabar.stack.frontend.util.log
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KProperty0
 
@@ -140,6 +141,7 @@ open class ValidatedForm<T : RecordDto<T>>(
                     }
                 }
             } catch (ex: Exception) {
+                log(ex)
                 when (mode) {
                     Mode.Create -> toast { "create.failed" }
                     Mode.Read -> Unit
