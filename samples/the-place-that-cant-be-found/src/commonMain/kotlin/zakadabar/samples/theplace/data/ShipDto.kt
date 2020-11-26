@@ -35,7 +35,7 @@ data class ShipDto(
         + ::name max 20 min 2 notEquals "Titanic"
     }
 
-    override fun getType() = type
+    override fun getType() = recordType
 
     override fun comm() = ShipDto.comm
 }

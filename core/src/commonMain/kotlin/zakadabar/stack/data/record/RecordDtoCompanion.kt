@@ -10,7 +10,7 @@ import zakadabar.stack.data.query.QueryDtoCompanion
 
 abstract class RecordDtoCompanion<T : RecordDto<T>> {
 
-    abstract val type: String
+    abstract val recordType: String
 
     private var _comm: Comm<T>? = null
 

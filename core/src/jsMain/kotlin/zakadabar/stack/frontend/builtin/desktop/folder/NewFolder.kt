@@ -21,7 +21,7 @@ class NewFolder(newEntity: NewEntity) : NewEntityItemWithName(newEntity) {
 
         val parentId = parentDto?.id
 
-        val dto = FolderDto(id = 0, entityRecord = EntityRecordDto.new(parentId, FolderDto.type, name))
+        val dto = FolderDto(id = 0, entityRecord = EntityRecordDto.new(parentId, FolderDto.recordType, name))
 
         dto.create()
 

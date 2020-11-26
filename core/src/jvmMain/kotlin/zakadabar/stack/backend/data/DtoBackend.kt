@@ -28,7 +28,7 @@ abstract class DtoBackend<T : RecordDto<T>> : BackendModule {
     private val logger = LoggerFactory.getLogger("DTO") !!
 
     open val dtoType
-        get() = (dtoClass.companionObject !!.objectInstance as RecordDtoCompanion<*>).type
+        get() = (dtoClass.companionObject !!.objectInstance as RecordDtoCompanion<*>).recordType
 
     open fun create(executor: Executor, dto: T): T {
         throw NotImplementedError()

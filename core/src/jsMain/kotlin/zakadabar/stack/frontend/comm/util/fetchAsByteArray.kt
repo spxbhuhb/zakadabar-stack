@@ -6,7 +6,7 @@ package zakadabar.stack.frontend.comm.util
 import zakadabar.stack.comm.websocket.util.FetchContent
 import zakadabar.stack.frontend.FrontendContext
 
-suspend fun fetchAsByteArray(entityId: Long, revision: Long): ByteArray {
+suspend fun fetchAsByteArray(blobId: Long): ByteArray {
 
     var array = ByteArray(0)
 
@@ -21,7 +21,7 @@ suspend fun fetchAsByteArray(entityId: Long, revision: Long): ByteArray {
         data.copyInto(array, position.toInt(), 0, data.size)
     }
 
-    FetchContent(FrontendContext.stackSession, entityId, revision, ::allocate, ::writeData).run()
+    FetchContent(FrontendContext.stackSession, blobId, ::allocate, ::writeData).run()
 
     return array
 }

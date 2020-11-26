@@ -9,7 +9,10 @@ import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import zakadabar.stack.comm.websocket.message.*
+import zakadabar.stack.comm.websocket.message.GetBlobMetaRequest
+import zakadabar.stack.comm.websocket.message.GetBlobMetaResponse
+import zakadabar.stack.comm.websocket.message.ReadBlobRequest
+import zakadabar.stack.comm.websocket.message.ReadBlobResponse
 import zakadabar.stack.comm.websocket.session.SessionError
 import zakadabar.stack.comm.websocket.session.StackClientSession
 import kotlin.math.min
@@ -22,8 +25,7 @@ import kotlin.math.min
  * * Closes the snapshot.
  *
  * @property  session          the session to use for sending and receiving messages
- * @property  entityId         Id of the entity to push data for.
- * @property  revision         Revision to open the snapshot for.
+ * @property  blobId           Id of the blob to get data from.
  * @property  prepareForWrite  Perform preparations before the first [writeData] call.
  *                             Parameter is the size of data that will be fetched from the server.
  * @property  writeData        Function to write a part of the data.
@@ -33,8 +35,7 @@ import kotlin.math.min
  */
 class FetchContent(
     private val session: StackClientSession,
-    private val entityId: Long,
-    private val revision: Long,
+    private val blobId: Long,
     private val prepareForWrite: suspend (size: Long) -> Unit = { },
     private val writeData: suspend (position: Long, data: ByteArray) -> Unit,
     private val onProgress: (position: Long) -> Unit = { }
@@ -83,15 +84,12 @@ class FetchContent(
                 onProgress(totalChunkCount * 100 / counter)
                 if (counter == totalChunkCount) break
             }
-
-            closeSnapshot()
         }
     }
 
     private suspend fun openSnapshot() {
-        val response = session.send { OpenSnapshotRequest(entityId, revision) } as OpenSnapshotResponse
+        val response = session.send { GetBlobMetaRequest(blobId) } as GetBlobMetaResponse
 
-        snapshotId = response.snapshotId
         val dataSize = response.size
 
         if (dataSize != 0L) {
@@ -102,10 +100,6 @@ class FetchContent(
         }
 
         prepareForWrite(dataSize)
-    }
-
-    private suspend fun closeSnapshot() {
-        session.send { CloseSnapshotRequest(snapshotId) }
     }
 
     private fun CoroutineScope.chunksChannel(): ReceiveChannel<FetchChunk> = produce {
@@ -128,7 +122,7 @@ class FetchContent(
             for (chunk in channel) {
 
                 val response =
-                    session.send { FetchContentRequest(snapshotId, chunk.position, chunk.size) } as FetchContentResponse
+                    session.send { ReadBlobRequest(snapshotId, chunk.position, chunk.size) } as ReadBlobResponse
 
                 writeData(chunk.position, response.data)
 

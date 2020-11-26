@@ -27,7 +27,7 @@ class FormDto(
         + ::textField min 2 max 4 notEquals "abcd"
     }
 
-    override fun getType() = type
+    override fun getType() = recordType
 
     override fun comm() = FormDto.comm
 

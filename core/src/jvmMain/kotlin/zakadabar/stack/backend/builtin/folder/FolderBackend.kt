@@ -20,7 +20,7 @@ object FolderBackend : DtoBackend<FolderDto>() {
 
     override fun create(executor: Executor, dto: FolderDto) = transaction {
 
-        val entityDto = dto.entityRecord?.requireType(FolderDto.type) ?: throw IllegalArgumentException()
+        val entityDto = dto.entityRecord?.requireType(FolderDto.recordType) ?: throw IllegalArgumentException()
 
         val dao = EntityDao.create(executor, entityDto)
 

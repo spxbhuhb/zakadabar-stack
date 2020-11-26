@@ -4,7 +4,6 @@
 package zakadabar.stack.frontend.builtin.desktop.navigator
 
 import kotlinx.browser.document
-import kotlinx.browser.window
 import org.w3c.dom.DataTransfer
 import org.w3c.dom.events.Event
 import zakadabar.entity.browser.frontend.util.EntityDrop
@@ -17,7 +16,6 @@ import zakadabar.stack.frontend.builtin.desktop.messages.EntityChildrenLoaded
 import zakadabar.stack.frontend.builtin.desktop.messages.EntityRemoved
 import zakadabar.stack.frontend.builtin.desktop.messages.EntityUpdated
 import zakadabar.stack.frontend.builtin.desktop.navigator.NavigatorClasses.Companion.navigatorClasses
-import zakadabar.stack.frontend.builtin.util.droparea.DropArea
 import zakadabar.stack.frontend.builtin.util.status.Status
 import zakadabar.stack.frontend.builtin.util.status.StatusInfo
 import zakadabar.stack.frontend.builtin.util.status.StatusMessages
@@ -32,7 +30,7 @@ class EntityNavigator : ZkElement() {
 
     private val statusInfo = StatusInfo(StatusMessages(emptyMessage = t("emptyFolder")))
     internal val items = ZkElement()
-    private val dropArea = DropArea(::onDrop)
+    // private val dropArea = DropArea(::onDrop)
 
     private val idPrefix = "${element.id}-item-"
 
@@ -51,7 +49,7 @@ class EntityNavigator : ZkElement() {
 
                 + statusInfo.update(Status.Loading)
                 + (items cssClass navigatorClasses.items).hide()
-                + dropArea
+                // + dropArea
 
                 on("click", ::onClick)
                 on("dblclick", ::onClick)
@@ -140,7 +138,7 @@ class EntityNavigator : ZkElement() {
 
         val sortedChildren = children.toMutableList()
         sortedChildren.sortBy { it.name }
-        sortedChildren.sortBy { if (it.entityType == FolderDto.type) 0 else 1 }
+        sortedChildren.sortBy { if (it.entityType == FolderDto.recordType) 0 else 1 }
 
         sortedChildren.forEach {
             items += EntityNavigatorItem(idPrefix, it)

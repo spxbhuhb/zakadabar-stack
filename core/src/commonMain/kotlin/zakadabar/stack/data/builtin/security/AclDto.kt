@@ -21,11 +21,11 @@ class AclDto(
 
 ) : EntityDto<AclDto> {
 
-    override fun getType() = type
+    override fun getRecordType() = recordType
 
     override fun comm() = comm
 
     companion object : EntityDtoCompanion<AclDto>() {
-        override val type = "${Stack.shid}/acl"
+        override val recordType = "${Stack.shid}/acl"
     }
 }

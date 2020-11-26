@@ -26,8 +26,14 @@ open class DtoSchema {
         return ruleList
     }
 
+    operator fun KProperty0<Long>.unaryPlus(): LongValidationRuleList {
+        val ruleList = LongValidationRuleList(this)
+        ruleLists[this] = ruleList
+        return ruleList
+    }
+
     @PublicApi
-    fun validate() : ValidityReport {
+    fun validate(): ValidityReport {
         val report = ValidityReport()
         ruleLists.forEach { it.value.validate(report) }
         return report

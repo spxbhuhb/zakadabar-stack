@@ -18,19 +18,19 @@ enum class MessageType(val read: (StackInputCommArray) -> StackMessage) {
     ADD_ENTITY_REQUEST(AddEntityRequest.Companion::read),
     ADD_ENTITY_RESPONSE(AddEntityResponse.Companion::read),
 
-    FETCH_CONTENT_REQUEST(FetchContentRequest.Companion::read),
-    FETCH_CONTENT_RESPONSE(FetchContentResponse.Companion::read),
+    READ_BLOB_REQUEST(ReadBlobRequest.Companion::read),
+    READ_BLOB_RESPONSE(ReadBlobResponse.Companion::read),
 
-    PUSH_CONTENT_REQUEST(PushContentRequest.Companion::read),
-    PUSH_CONTENT_RESPONSE(PushContentResponse.Companion::read),
+    WRITE_BLOB_REQUEST(WriteBlobRequest.Companion::read),
+    WRITE_BLOB_RESPONSE(WriteBlobResponse.Companion::read),
 
     LIST_ENTITIES_REQUEST(ListEntitiesRequest.Companion::read),
     LIST_ENTITIES_RESPONSE(ListEntitiesResponse.Companion::read),
 
-    OPEN_SNAPSHOT_REQUEST(OpenSnapshotRequest.Companion::read),
-    OPEN_SNAPSHOT_RESPONSE(OpenSnapshotResponse.Companion::read),
+    CREATE_BLOB_REQUEST(CreateBlobRequest.Companion::read),
+    CREATE_BLOB_RESPONSE(CreateBlobResponse.Companion::read),
 
-    CLOSE_SNAPSHOT_REQUEST(CloseSnapshotRequest.Companion::read),
-    CLOSE_SNAPSHOT_RESPONSE(CloseSnapshotResponse.Companion::read),
+    GET_BLOB_META_REQUEST(GetBlobMetaRequest.Companion::read),
+    GET_BLOB_META_RESPONSE(GetBlobMetaResponse.Companion::read),
 
 }

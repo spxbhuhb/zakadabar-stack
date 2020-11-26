@@ -32,7 +32,7 @@ data class EntityRecordDto(
 
     companion object : RecordDtoCompanion<EntityRecordDto>() {
 
-        override val type = "${Stack.shid}/entity"
+        override val recordType = "${Stack.shid}/entity"
 
         override val queries = Queries.build {
             + ChildrenQuery.Companion
@@ -56,8 +56,8 @@ data class EntityRecordDto(
          */
         @PublicApi
         fun dtoUrl(entityId: Long? = null) = when (entityId) {
-            null -> "/api/$type"
-            else -> "/api/$type/$entityId"
+            null -> "/api/$recordType"
+            else -> "/api/$recordType/$entityId"
         }
 
         /**
@@ -65,8 +65,8 @@ data class EntityRecordDto(
          */
         @PublicApi
         fun childrenUrl(entityId: Long? = null) = when (entityId) {
-            null -> "/api/$type"
-            else -> "/api/$type?parent=$entityId"
+            null -> "/api/$recordType"
+            else -> "/api/$recordType?parent=$entityId"
         }
 
         /**
@@ -76,9 +76,9 @@ data class EntityRecordDto(
          * @param  viewName  The view to get the URL for.
          */
         fun viewUrl(entityId: Long?, viewName: String? = null) = when {
-            entityId == null -> "/api/$type"
-            viewName != null -> "/api/$type/$entityId/$viewName"
-            else -> "/api/$type/$entityId"
+            entityId == null -> "/api/$recordType"
+            viewName != null -> "/api/$recordType/$entityId/$viewName"
+            else -> "/api/$recordType/$entityId"
         }
 
         /**
@@ -88,8 +88,8 @@ data class EntityRecordDto(
          * @param  revision  Revision number or null to get the last revision.
          */
         fun revisionUrl(entityId: Long, revision: Long? = null) = when (revision) {
-            null -> "/api/$type/$entityId/revisions"
-            else -> "/api/$type/$entityId/revisions/$revision"
+            null -> "/api/$recordType/$entityId/revisions"
+            else -> "/api/$recordType/$entityId/revisions/$revision"
         }
 
         /**
@@ -98,7 +98,7 @@ data class EntityRecordDto(
          * @param  entityPath  Path to resolve.
          */
         @PublicApi
-        fun resolveUrl(entityPath: String) = "/api/$type/resolve/${entityPath.trim('/')}"
+        fun resolveUrl(entityPath: String) = "/api/$recordType/resolve/${entityPath.trim('/')}"
     }
 
     fun requireId(id: Long): EntityRecordDto {
@@ -129,7 +129,7 @@ data class EntityRecordDto(
 
     override fun comm() = comm
 
-    override fun getType() = type
+    override fun getRecordType() = recordType
 
 }
 

@@ -7,27 +7,24 @@ import zakadabar.stack.comm.websocket.serialization.MessageType
 import zakadabar.stack.comm.websocket.serialization.StackInputCommArray
 import zakadabar.stack.comm.websocket.serialization.StackOutputCommArray
 
-class OpenSnapshotRequest(
-    val entityId: Long,
-    val revision: Long? = null
+class GetBlobMetaRequest(
+    val blobId: Long
 ) : StackMessage {
 
     override var messageId = 0L
 
-    override val messageType = MessageType.OPEN_SNAPSHOT_REQUEST
+    override val messageType = MessageType.GET_BLOB_META_REQUEST
 
-    override fun toString(): String = "${this::class.simpleName}(entityId=$entityId, revision=$revision)"
+    override fun toString(): String = "${this::class.simpleName}(blobId=$blobId)"
 
     override fun write(commArray: StackOutputCommArray) = with(commArray) {
-        write(entityId)
-        write(revision)
+        write(blobId)
     }
 
     companion object {
         fun read(commArray: StackInputCommArray) = with(commArray) {
-            OpenSnapshotRequest(
-                entityId = readLong(),
-                revision = readOptLong()
+            GetBlobMetaRequest(
+                blobId = readLong()
             )
         }
     }

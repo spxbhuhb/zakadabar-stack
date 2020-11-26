@@ -27,7 +27,7 @@ data class SpeedDto(
         + ::description min 1 max 100
     }
 
-    override fun getType() = type
+    override fun getType() = recordType
 
     override fun comm() = SpeedDto.comm
 }

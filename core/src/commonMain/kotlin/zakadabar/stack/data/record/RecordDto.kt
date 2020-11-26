@@ -11,7 +11,7 @@ interface RecordDto<T> {
 
     val id: RecordId<T>
 
-    fun getType(): String
+    fun getRecordType(): String
 
     fun comm(): Comm<T>
 

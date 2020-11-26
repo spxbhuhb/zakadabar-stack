@@ -18,14 +18,14 @@ object BackendContext {
 
     val system by lazy {
         transaction {
-            EntityDao.find { EntityTable.parent.isNull() and (EntityTable.type eq SystemDto.type) }.firstOrNull() !!
+            EntityDao.find { EntityTable.parent.isNull() and (EntityTable.type eq SystemDto.recordType) }.firstOrNull() !!
         }
     }
 
     val anonymous by lazy {
         transaction {
             // FIXME CommonAccountDto.type should be swappable or maybe we should use "anonymous" directly
-            EntityDao.find { (EntityTable.name eq "anonymous") and (EntityTable.type eq CommonAccountDto.type) }
+            EntityDao.find { (EntityTable.name eq "anonymous") and (EntityTable.type eq CommonAccountDto.recordType) }
                 .firstOrNull() !!
         }
     }

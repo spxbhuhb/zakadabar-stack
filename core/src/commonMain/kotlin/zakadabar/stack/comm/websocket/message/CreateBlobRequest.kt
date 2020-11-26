@@ -7,31 +7,30 @@ import zakadabar.stack.comm.websocket.serialization.MessageType
 import zakadabar.stack.comm.websocket.serialization.StackInputCommArray
 import zakadabar.stack.comm.websocket.serialization.StackOutputCommArray
 
-class FetchContentRequest(
-    val snapshotId: Long,
-    val position: Long,
-    val size: Int
+class CreateBlobRequest(
+    val name: String,
+    val type: String,
+    val size: Long
 ) : StackMessage {
 
     override var messageId = 0L
 
-    override val messageType = MessageType.FETCH_CONTENT_REQUEST
+    override val messageType = MessageType.CREATE_BLOB_REQUEST
 
-    override fun toString(): String =
-        "${this::class.simpleName}(snapshotId=$snapshotId, position=$position, size=$size)"
+    override fun toString(): String = "${this::class.simpleName}(name=$name, type=$type, size=$size)"
 
     override fun write(commArray: StackOutputCommArray) = with(commArray) {
-        write(snapshotId)
-        write(position)
+        write(name)
+        write(type)
         write(size)
     }
 
     companion object {
         fun read(commArray: StackInputCommArray) = with(commArray) {
-            FetchContentRequest(
-                snapshotId = readLong(),
-                position = readLong(),
-                size = readInt()
+            CreateBlobRequest(
+                name = readString(),
+                type = readString(),
+                size = readLong()
             )
         }
     }

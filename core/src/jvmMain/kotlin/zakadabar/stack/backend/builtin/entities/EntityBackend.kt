@@ -47,7 +47,7 @@ object EntityBackend : DtoBackend<EntityRecordDto>() {
 
         with(route) {
 
-            route(EntityRecordDto.type) {
+            route(EntityRecordDto.recordType) {
 
                 get("/{id}/revisions/{revision?}") {
                     val (name, data) = fetchContent(

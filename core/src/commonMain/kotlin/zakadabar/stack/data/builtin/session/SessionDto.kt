@@ -18,10 +18,10 @@ data class SessionDto(
 ) : RecordDto<SessionDto> {
 
     companion object : RecordDtoCompanion<SessionDto>() {
-        override val type = "${Stack.shid}/session"
+        override val recordType = "${Stack.shid}/session"
     }
 
-    override fun getType() = type
+    override fun getRecordType() = recordType
 
     override fun comm() = SessionDto.comm
 

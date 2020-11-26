@@ -9,9 +9,12 @@ import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import zakadabar.stack.comm.websocket.message.*
+import zakadabar.stack.comm.websocket.message.CreateBlobRequest
+import zakadabar.stack.comm.websocket.message.CreateBlobResponse
+import zakadabar.stack.comm.websocket.message.WriteBlobRequest
 import zakadabar.stack.comm.websocket.session.SessionError
 import zakadabar.stack.comm.websocket.session.StackClientSession
+import zakadabar.stack.data.BlobDto
 import kotlin.math.min
 
 /**
@@ -22,8 +25,7 @@ import kotlin.math.min
  * * Closes the snapshot.
  *
  * @property  session     the session to use for sending and receiving messages
- * @property  entityId    Id of the entity to push data for.
- * @property  dataSize    The size of the complete data to push.
+ * @property  dto         DTO of the blob, id is ignored.
  * @property  readData    Function to read a part of the data.
  *                        First parameter is the position to read from, second is the number of bytes to read.
  * @property  onProgress  Callback to report the progress of push.
@@ -31,10 +33,9 @@ import kotlin.math.min
  */
 class PushContent(
     private val session: StackClientSession,
-    private val entityId: Long,
-    private val dataSize: Long,
+    private var dto: BlobDto,
     private val readData: suspend (position: Long, size: Int) -> ByteArray,
-    private val onProgress: (position: Long) -> Unit = { }
+    private val onProgress: (dto: BlobDto, state: PushState, position: Long) -> Unit = { _, _, _ -> }
 ) {
     companion object {
         const val CHUNK_SIZE = 900000L
@@ -46,58 +47,62 @@ class PushContent(
         val size: Long
     )
 
-    private val chunkSize = min(dataSize, CHUNK_SIZE)
-    private val fullChunkCount = dataSize / chunkSize
-    private val lastChunkSize = dataSize % chunkSize
-    private val totalChunkCount = if (lastChunkSize > 0) fullChunkCount + 1 else fullChunkCount
+    enum class PushState {
+        Starting,
+        Created,
+        Progress,
+        Finished,
+        Error
+    }
 
-    private var snapshotId = 0L
-    private var revision = 0L
+    private val chunkSize = min(dto.size, CHUNK_SIZE)
+    private val fullChunkCount = dto.size / chunkSize
+    private val lastChunkSize = dto.size % chunkSize
+    private val totalChunkCount = if (lastChunkSize > 0) fullChunkCount + 1 else fullChunkCount
 
     /**
      * Run the content push process.
      *
-     * @return  the revision created
+     * @return  DTO of the blob created
      *
      * @throws  SessionError  The server returns with a non-OK response, network error.
      */
-    suspend fun run(): Long {
+    suspend fun run(): BlobDto {
         coroutineScope {
 
-            openSnapshot()
+            try {
+                val response = session.send { CreateBlobRequest(dto.name, dto.type, dto.size) } as CreateBlobResponse
+                dto = dto.copy(id = response.blobId)
+                onProgress(dto, PushState.Created, 0L)
 
-            val chunkProducer = chunksChannel()
+                val chunkProducer = chunksChannel()
 
-            val completed = Channel<PushChunk>()
+                val completed = Channel<PushChunk>()
 
-            launch {
-                repeat(MAX_ACTIVE_REQUESTS) {
-                    uploadProcessor(chunkProducer, completed)
+                launch {
+                    repeat(MAX_ACTIVE_REQUESTS) {
+                        uploadProcessor(chunkProducer, completed)
+                    }
                 }
+
+                var counter = 0L
+
+                for (chunk in completed) {
+                    counter ++
+                    onProgress(dto, PushState.Progress, totalChunkCount * 100 / counter)
+                    if (counter == totalChunkCount) break
+                }
+
+                onProgress(dto, PushState.Finished, totalChunkCount * 100 / counter)
+
+            } catch (ex: Exception) {
+                onProgress(dto, PushState.Error, 0L)
+                throw ex
             }
 
-            var counter = 0L
-
-            for (chunk in completed) {
-                counter ++
-                onProgress(totalChunkCount * 100 / counter)
-                if (counter == totalChunkCount) break
-            }
-
-            closeSnapshot()
         }
 
-        return revision
-    }
-
-    private suspend fun openSnapshot() {
-        val response = session.send { OpenSnapshotRequest(entityId) } as OpenSnapshotResponse
-        snapshotId = response.snapshotId
-    }
-
-    private suspend fun closeSnapshot() {
-        val response = session.send { CloseSnapshotRequest(snapshotId) } as CloseSnapshotResponse
-        revision = response.revision
+        return dto
     }
 
     private fun CoroutineScope.chunksChannel(): ReceiveChannel<PushChunk> = produce {
@@ -121,7 +126,7 @@ class PushContent(
 
                 val data = readData(chunk.position, chunk.size.toInt())
 
-                session.send { PushContentRequest(snapshotId, chunk.position, data) }
+                session.send { WriteBlobRequest(dto.id, chunk.position, data) }
 
                 completed.send(chunk)
             }

@@ -19,12 +19,12 @@ data class FolderDto(
 
 ) : EntityDto<FolderDto> {
 
-    override fun getType() = type
+    override fun getRecordType() = recordType
 
     override fun comm() = comm
 
     companion object : EntityDtoCompanion<FolderDto>() {
-        override val type = "${Stack.shid}/folder"
+        override val recordType = "${Stack.shid}/folder"
     }
 
 }

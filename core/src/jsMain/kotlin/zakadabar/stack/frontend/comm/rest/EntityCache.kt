@@ -32,7 +32,7 @@ import kotlin.collections.set
  *
  */
 @PublicApi
-object EntityCache : FrontendComm<EntityRecordDto>(EntityRecordDto.type, EntityRecordDto.serializer()) {
+object EntityCache : FrontendComm<EntityRecordDto>(EntityRecordDto.recordType, EntityRecordDto.serializer()) {
 
     private val cache = mutableMapOf<Long, EntityRecordDto>()
 
@@ -88,18 +88,16 @@ object EntityCache : FrontendComm<EntityRecordDto>(EntityRecordDto.type, EntityR
 
 
     @PublicApi
-    fun launchCreateAndPush(parentId: Long?, file: File) {
+    fun launchCreateAndPush(file: File) {
         launch {
-            val dto = create(EntityRecordDto.new(parentId, file.type, file.name))
-            pushBlob(dto.id, file)
+            pushBlob(file.name, file.type, file)
         }
     }
 
     @PublicApi
-    fun launchCreateAndPush(parentId: Long?, name: String, type: String, byteArray: ByteArray) {
+    fun launchCreateAndPush(name: String, type: String, byteArray: ByteArray) {
         launch {
-            val dto = create(EntityRecordDto.new(parentId, name, type))
-            pushBlob(dto.id, Blob(byteArray.toTypedArray()))
+            pushBlob(name, type, Blob(byteArray.toTypedArray()))
         }
     }
 

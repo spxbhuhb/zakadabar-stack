@@ -74,7 +74,7 @@ object CommonAccountBackend : DtoBackend<CommonAccountDto>() {
 
         // ---- create the entity record ---------
 
-        val edto = dto.entityRecord?.requireType(CommonAccountDto.type) ?: throw IllegalArgumentException()
+        val edto = dto.entityRecord?.requireType(CommonAccountDto.recordType) ?: throw IllegalArgumentException()
 
         val edao = EntityDao.create(executor, edto) // performs authorization
 

@@ -4,32 +4,36 @@
 package zakadabar.stack.comm.websocket.message
 
 import zakadabar.stack.comm.websocket.serialization.MessageType
+import zakadabar.stack.comm.websocket.serialization.ResponseCode
 import zakadabar.stack.comm.websocket.serialization.StackInputCommArray
 import zakadabar.stack.comm.websocket.serialization.StackOutputCommArray
 
-class PushContentRequest(
-    val snapshotId: Long,
+class ReadBlobResponse(
+    override val responseCode: ResponseCode,
+    val blobId: Long,
     val position: Long,
     val data: ByteArray
-) : StackMessage {
+) : Response {
 
     override var messageId = 0L
 
-    override val messageType = MessageType.PUSH_CONTENT_REQUEST
+    override val messageType = MessageType.READ_BLOB_RESPONSE
 
     override fun toString(): String =
-        "${this::class.simpleName}(snapshotId=$snapshotId, position=$position, data.size=${data.size})"
+        "${this::class.simpleName}(blobId=$blobId, position=$position, data.size=${data.size})"
 
     override fun write(commArray: StackOutputCommArray) = with(commArray) {
-        write(snapshotId)
+        write(responseCode)
+        write(blobId)
         write(position)
         write(data)
     }
 
     companion object {
         fun read(commArray: StackInputCommArray) = with(commArray) {
-            PushContentRequest(
-                snapshotId = readLong(),
+            ReadBlobResponse(
+                readResponseCode(),
+                blobId = readLong(),
                 position = readLong(),
                 data = readByteArray()
             )

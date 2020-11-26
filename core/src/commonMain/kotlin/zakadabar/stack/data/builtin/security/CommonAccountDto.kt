@@ -28,7 +28,7 @@ data class CommonAccountDto(
 
     companion object : EntityDtoCompanion<CommonAccountDto>() {
 
-        override val type = "${Stack.shid}/account"
+        override val recordType = "${Stack.shid}/account"
 
         override val queries = Queries.build {
             + SearchAccounts.Companion
@@ -42,7 +42,7 @@ data class CommonAccountDto(
         + ::organizationName max 100
     }
 
-    override fun getType() = type
+    override fun getRecordType() = recordType
 
     override fun comm() = comm
 

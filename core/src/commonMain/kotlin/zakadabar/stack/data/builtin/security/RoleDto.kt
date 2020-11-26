@@ -21,11 +21,11 @@ class RoleDto(
 
 ) : EntityDto<RoleDto> {
 
-    override fun getType() = type
+    override fun getRecordType() = recordType
 
     override fun comm() = comm
 
     companion object : EntityDtoCompanion<RoleDto>() {
-        override val type = "${Stack.shid}/role"
+        override val recordType = "${Stack.shid}/role"
     }
 }

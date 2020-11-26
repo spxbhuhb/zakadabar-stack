@@ -8,5 +8,5 @@ import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.frontend.comm.rest.FrontendComm
 
 actual fun <T : RecordDto<T>> makeComm(recordDtoCompanion: RecordDtoCompanion<T>): Comm<T> {
-    return FrontendComm(recordDtoCompanion.type, recordDtoCompanion.serializer())
+    return FrontendComm(recordDtoCompanion.recordType, recordDtoCompanion.serializer())
 }

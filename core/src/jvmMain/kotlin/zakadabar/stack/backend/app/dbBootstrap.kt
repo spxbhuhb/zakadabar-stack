@@ -40,7 +40,7 @@ fun dbBootstrap(config: Configuration) {
     }
 
     transaction {
-        val systemDao = EntityDao.find { EntityTable.type eq SystemDto.type }.firstOrNull()
+        val systemDao = EntityDao.find { EntityTable.type eq SystemDto.recordType }.firstOrNull()
 
         if (systemDao != null) return@transaction
 
@@ -68,7 +68,7 @@ fun dbBootstrap(config: Configuration) {
             acl = null
             status = EntityStatus.Active
             parent = null
-            type = SystemDto.type
+            type = SystemDto.recordType
             size = 0
             revision = 1
             createdAt = now
@@ -88,14 +88,14 @@ fun dbBootstrap(config: Configuration) {
 
         val pid = Executor(system.id.value)
 
-        val accountsDao = EntityDao.create("accounts", FolderDto.type, 1L, EntityStatus.Active, pid)
-        EntityDao.create("roles", FolderDto.type, 1L, EntityStatus.Active, pid)
-        EntityDao.create("tmp", FolderDto.type, 1L, EntityStatus.Active, pid)
-        EntityDao.create("bin", FolderDto.type, 1L, EntityStatus.Active, pid)
+        val accountsDao = EntityDao.create("accounts", FolderDto.recordType, 1L, EntityStatus.Active, pid)
+        EntityDao.create("roles", FolderDto.recordType, 1L, EntityStatus.Active, pid)
+        EntityDao.create("tmp", FolderDto.recordType, 1L, EntityStatus.Active, pid)
+        EntityDao.create("bin", FolderDto.recordType, 1L, EntityStatus.Active, pid)
 
         val soDto = CommonAccountDto(
             id = 0,
-            entityRecord = EntityRecordDto.new(accountsDao.id.value, CommonAccountDto.type, "so"),
+            entityRecord = EntityRecordDto.new(accountsDao.id.value, CommonAccountDto.recordType, "so"),
             emailAddress = "noreply@simplexion.hu",
             fullName = "Security Officer",
             displayName = "Security Officer",
@@ -108,7 +108,7 @@ fun dbBootstrap(config: Configuration) {
 
         val anonymousDto = CommonAccountDto(
             id = 0,
-            entityRecord = EntityRecordDto.new(accountsDao.id.value, CommonAccountDto.type, "anonymous"),
+            entityRecord = EntityRecordDto.new(accountsDao.id.value, CommonAccountDto.recordType, "anonymous"),
             emailAddress = "noreply@simplexion.hu",
             fullName = "Anonymous",
             displayName = "Anonymous",

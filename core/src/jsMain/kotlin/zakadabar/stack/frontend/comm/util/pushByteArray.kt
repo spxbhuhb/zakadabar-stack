@@ -5,23 +5,30 @@ package zakadabar.stack.frontend.comm.util
 
 import zakadabar.stack.comm.websocket.session.SessionError
 import zakadabar.stack.comm.websocket.util.PushContent
+import zakadabar.stack.data.BlobDto
 import zakadabar.stack.frontend.FrontendContext
 import zakadabar.stack.util.PublicApi
 
 /**
  * Helper method to push a byte array as entity content. Calls [PushContent].
  *
- * @param  entityId    Id of the entity to push data for.
+ * @param  name        Name of the blob (typically the name of the source file).
+ * @param  type        Type of the blob (typically the mime type if the source file).
  * @param  data        The byte array to push.
  * @param  onProgress  Callback to report the progress of push.
  *                     Called whenever a response is received from the server.
  *
- * @return  id of the revision created
+ * @return  id of the blob created
  *
  * @throws  SessionError  The server returns with a non-OK response, network error.
  */
 @PublicApi
-suspend fun pushByteArray(entityId: Long, data: ByteArray, onProgress: (position: Long) -> Unit = { }): Long {
+suspend fun pushByteArray(
+    name: String,
+    type: String,
+    data: ByteArray,
+    onProgress: (dto: BlobDto, state: PushContent.PushState, position: Long) -> Unit = { _, _, _ -> }
+): BlobDto {
 
     @Suppress("RedundantSuspendModifier") // PushContent wants suspend
     suspend fun readData(position: Long, size: Int): ByteArray {
@@ -36,5 +43,6 @@ suspend fun pushByteArray(entityId: Long, data: ByteArray, onProgress: (position
         return byteData
     }
 
-    return PushContent(FrontendContext.stackSession, entityId, data.size.toLong(), ::readData, onProgress).run()
+    val dto = BlobDto(0L, name, type, data.size.toLong())
+    return PushContent(FrontendContext.stackSession, dto, ::readData, onProgress).run()
 }

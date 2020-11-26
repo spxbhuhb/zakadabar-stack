@@ -49,6 +49,6 @@ class EntityDrop(
         }
     }
 
-    private fun addFile(file: File) = launchCreateAndPush(parentId, file)
+    private fun addFile(file: File) = launchCreateAndPush(file)
 
 }

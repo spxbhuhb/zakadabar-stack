@@ -6,10 +6,11 @@ package zakadabar.stack.backend.comm.websocket
 import io.ktor.http.cio.websocket.*
 import kotlinx.datetime.Clock
 import kotlinx.datetime.toJavaInstant
-import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.slf4j.LoggerFactory
+import zakadabar.stack.backend.builtin.blob.BlobDao
 import zakadabar.stack.backend.builtin.entities.data.*
 import zakadabar.stack.backend.builtin.entities.data.EntityTable.name
 import zakadabar.stack.backend.builtin.session.data.SessionDao
@@ -60,15 +61,17 @@ class StackServerSession(private val webSocketSession: WebSocketSession) {
 
                 val response = try {
                     when (request) {
-                        is FetchContentRequest -> onFetchContent(request)
-                        is PushContentRequest -> onPushContent(request)
+                        is ReadBlobRequest -> onFetchContent(request)
+                        is WriteBlobRequest -> onPushContent(request)
                         is ListEntitiesRequest -> onListEntities(request)
                         is AddEntityRequest -> onAddEntity(request)
-                        is OpenSnapshotRequest -> onOpenSnapshot(request)
-                        is CloseSnapshotRequest -> onCloseSnapshot(request)
+                        is CreateBlobRequest -> onCreateBlob(request)
+                        is GetBlobMetaRequest -> onGetBlobMeta(request)
                         is CloseStackSessionRequest -> onCloseSession()
                         else -> FaultResponse(ResponseCode.UNKNOWN_MESSAGE_TYPE)
                     }
+                } catch (ex: EntityNotFoundException) {
+                    FaultResponse(ResponseCode.NOT_FOUND)
                 } catch (ex: Exception) {
                     logger.error("$sessionUuid receive error", ex)
                     FaultResponse(ResponseCode.INTERNAL_SERVER_ERROR)
@@ -177,16 +180,15 @@ class StackServerSession(private val webSocketSession: WebSocketSession) {
         AddEntityResponse(ResponseCode.OK, entity.id.value)
     }
 
-    private suspend fun onFetchContent(request: FetchContentRequest) = sql {
+    private suspend fun onFetchContent(request: ReadBlobRequest) = sql {
 
         if (request.size > MAX_FETCH_SIZE) return@sql FaultResponse(ResponseCode.REQUEST_SIZE_LIMIT)
 
-        val snapshot = SnapshotDao.findById(request.snapshotId) ?: return@sql FaultResponse(ResponseCode.NOT_FOUND)
-
-        val blob = ContentBlob(snapshot.content)
+        val dao = BlobDao[request.blobId]
+        val blob = ContentBlob(dao.content)
         val data = blob.read(request.position, request.size)
 
-        FetchContentResponse(ResponseCode.OK, request.snapshotId, request.position, data)
+        ReadBlobResponse(ResponseCode.OK, request.blobId, request.position, data)
     }
 
     private suspend fun onListEntities(request: ListEntitiesRequest) = sql {
@@ -196,80 +198,41 @@ class StackServerSession(private val webSocketSession: WebSocketSession) {
         ListEntitiesResponse(ResponseCode.OK, entities)
     }
 
-    private suspend fun onOpenSnapshot(request: OpenSnapshotRequest) = sql {
-        if (request.revision == null) {
-            val e = EntityDao.findById(request.entityId) ?: return@sql FaultResponse(ResponseCode.NOT_FOUND)
+    private suspend fun onCreateBlob(request: CreateBlobRequest) = sql {
 
-            val snapshot = SnapshotDao.new {
-                entity = e
-                revision = e.revision + 1
-                size = 0
-                content = ContentBlob().create().id
-            }
+        val blob = BlobDao.new {
+            name = request.name
+            type = request.type
+            size = request.size
+            content = ContentBlob().create().id
+        }
 
-            Lock.new {
-                entity = e
-                this.session = this@StackServerSession.session
-                revision = snapshot.revision
-                content = snapshot.content
-            }
+        CreateBlobResponse(ResponseCode.OK, blob.id.value)
 
-            OpenSnapshotResponse(ResponseCode.OK, snapshot.id.value, snapshot.revision)
+    }
 
-        } else {
-
-            val entity = EntityDao.findById(request.entityId) ?: return@sql FaultResponse(ResponseCode.NOT_FOUND)
-
-            // FIXME check this out, too late, had a few beers, no idea why the compiler started to complain about this all of sudden
-            val requestRevision = request.revision !!
-
-            if (entity.revision < requestRevision) return@sql FaultResponse(ResponseCode.NOT_AVAILABLE_YET)
-
-            val select =
-                Op.build { (SnapshotTable.entity eq request.entityId) and (SnapshotTable.revision eq requestRevision) }
-
-            val snapshot = SnapshotDao.find(select).firstOrNull() ?: return@sql FaultResponse(ResponseCode.NOT_FOUND)
-
-            OpenSnapshotResponse(ResponseCode.OK, snapshot.id.value, snapshot.revision, snapshot.size)
+    private suspend fun onGetBlobMeta(request: GetBlobMetaRequest) = sql {
+        with(BlobDao[request.blobId]) {
+            GetBlobMetaResponse(ResponseCode.OK, id.value, name, type, size)
         }
     }
 
-    private suspend fun onCloseSnapshot(request: CloseSnapshotRequest) = sql {
+    private suspend fun onPushContent(request: WriteBlobRequest) = sql {
 
-        val snapshot = SnapshotDao.findById(request.snapshotId) ?: return@sql FaultResponse(ResponseCode.NOT_FOUND)
+        val dao = BlobDao[request.blobId]
 
-        if (snapshot.entity.revision < snapshot.revision) {
-            val lock = getLock(snapshot) ?: return@sql FaultResponse(ResponseCode.MISSING_LOCK)
-
-            snapshot.entity.size = snapshot.size
-            snapshot.entity.revision = snapshot.revision
-
-            Locks.deleteWhere { Locks.id eq lock.id }
-        }
-
-        CloseSnapshotResponse(ResponseCode.OK, request.snapshotId, snapshot.revision)
-    }
-
-    private suspend fun onPushContent(request: PushContentRequest) = sql {
-
-        val snapshot = SnapshotDao.findById(request.snapshotId) ?: return@sql FaultResponse(ResponseCode.NOT_FOUND)
-
-        getLock(snapshot) ?: return@sql FaultResponse(ResponseCode.MISSING_LOCK)
-
-        val blob = ContentBlob(snapshot.content)
+        val blob = ContentBlob(dao.content)
         blob.write(request.position, request.data)
 
         val requestEnd = request.position + request.data.size
-        if (snapshot.size < requestEnd) {
-            snapshot.size = requestEnd
+        if (dao.size < requestEnd) {
+            dao.size = requestEnd
         }
 
-        logger.info("$logTag content write on entity ${snapshot.entity.id} revision ${snapshot.revision} at ${request.position}, ${request.data.size} bytes")
+        logger.info("$logTag blob write ${dao.id} at ${request.position}, ${request.data.size} bytes")
 
-        PushContentResponse(ResponseCode.OK, request.snapshotId, request.position, request.data.size)
+        WriteBlobResponse(ResponseCode.OK, request.blobId, request.position, request.data.size)
     }
 
-    private fun getLock(snapshot: SnapshotDao): Lock? {
-        return Lock.find { (Locks.entity eq snapshot.entity.id) and (Locks.session eq session.id.value) }.firstOrNull()
-    }
+
 }

@@ -1,33 +1,36 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.data
+package zakadabar.stack.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.demo.Demo
+import zakadabar.stack.Stack
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.DtoSchema
 
 @Serializable
-data class SpeedDto(
+data class BlobDto(
 
-    override val id: RecordId<SpeedDto>,
-    var description: String,
-    var value: Double
+    override val id: RecordId<BlobDto>,
+    var name: String,
+    var type: String,
+    var size: Long
 
-) : RecordDto<SpeedDto> {
+) : RecordDto<BlobDto> {
 
-    companion object : RecordDtoCompanion<SpeedDto>() {
-        override val recordType = "${Demo.shid}/speed"
+    companion object : RecordDtoCompanion<BlobDto>() {
+        override val recordType = "${Stack.shid}/blob"
     }
 
     override fun schema() = DtoSchema.build {
-        + ::description min 1 max 100
+        + ::name min 1 max 200
+        + ::type min 1 max 100
+        + ::size min 0 max Long.MAX_VALUE
     }
 
     override fun getRecordType() = recordType
 
-    override fun comm() = SpeedDto.comm
+    override fun comm() = BlobDto.comm
 }

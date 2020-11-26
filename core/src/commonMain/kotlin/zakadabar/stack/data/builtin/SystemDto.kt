@@ -19,12 +19,12 @@ data class SystemDto(
 
 ) : EntityDto<SystemDto> {
 
-    override fun getType() = type
+    override fun getRecordType() = recordType
 
     override fun comm() = comm
 
     companion object : EntityDtoCompanion<SystemDto>() {
-        override val type = "${Stack.shid}/system"
+        override val recordType = "${Stack.shid}/system"
     }
 
 }

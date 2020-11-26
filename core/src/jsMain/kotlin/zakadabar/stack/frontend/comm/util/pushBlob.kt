@@ -14,21 +14,28 @@ import org.w3c.files.Blob
 import org.w3c.files.FileReader
 import zakadabar.stack.comm.websocket.session.SessionError
 import zakadabar.stack.comm.websocket.util.PushContent
+import zakadabar.stack.data.BlobDto
 import zakadabar.stack.frontend.FrontendContext
 
 /**
  * Helper method to push a whole Javascript file as entity content. Calls [PushContent].
  *
- * @param  entityId    Id of the entity to push data for.
+ * @param  name        Name of the blob (typically the name of the source file).
+ * @param  type        Type of the blob (typically the mime type if the source file).
  * @param  blob        The blob to push content from.
  * @param  onProgress  Callback to report the progress of push.
  *                     Called whenever a response is received from the server.
  *
- * @return  id of the revision created
+ * @return  DTO of the blob created (not the same as passed in the parameter).
  *
  * @throws  SessionError  The server returns with a non-OK response, network error.
  */
-suspend fun pushBlob(entityId: Long, blob: Blob, onProgress: (position: Long) -> Unit = { }): Long {
+suspend fun pushBlob(
+    name: String,
+    type: String,
+    blob: Blob,
+    onProgress: (dto: BlobDto, state: PushContent.PushState, position: Long) -> Unit = { _, _, _ -> }
+): BlobDto {
 
     // using this mutex to serialize file reads, without this the chunks will be empty
     // TODO investigate async Javascript file read in different browsers
@@ -74,5 +81,6 @@ suspend fun pushBlob(entityId: Long, blob: Blob, onProgress: (position: Long) ->
         }
     }
 
-    return PushContent(FrontendContext.stackSession, entityId, blob.size.toLong(), ::readData, onProgress).run()
+    val dto = BlobDto(0L, name, type, blob.size.toLong())
+    return PushContent(FrontendContext.stackSession, dto, ::readData, onProgress).run()
 }

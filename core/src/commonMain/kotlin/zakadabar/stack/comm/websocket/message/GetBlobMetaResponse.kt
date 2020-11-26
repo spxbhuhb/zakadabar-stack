@@ -8,34 +8,37 @@ import zakadabar.stack.comm.websocket.serialization.ResponseCode
 import zakadabar.stack.comm.websocket.serialization.StackInputCommArray
 import zakadabar.stack.comm.websocket.serialization.StackOutputCommArray
 
-class OpenSnapshotResponse(
+class GetBlobMetaResponse(
     override val responseCode: ResponseCode,
-    val snapshotId: Long,
-    val revision: Long,
-    val size: Long = 0L
+    val blobId: Long,
+    val name: String,
+    val type: String,
+    val size: Long
 ) : Response {
 
     override var messageId = 0L
 
-    override val messageType = MessageType.OPEN_SNAPSHOT_RESPONSE
+    override val messageType = MessageType.GET_BLOB_META_RESPONSE
 
     override fun toString(): String =
-        "${this::class.simpleName}(responseCode=$responseCode, snapshotId=$snapshotId, revision=$revision, size=$size)"
+        "${this::class.simpleName}(responseCode=$responseCode, blob=$blobId, name=$name, type=$type, size=$size)"
 
     override fun write(commArray: StackOutputCommArray) = with(commArray) {
         write(responseCode)
-        write(snapshotId)
-        write(revision)
+        write(blobId)
+        write(name)
+        write(type)
         write(size)
     }
 
     companion object {
         fun read(commArray: StackInputCommArray) = with(commArray) {
-            OpenSnapshotResponse(
+            GetBlobMetaResponse(
                 readResponseCode(),
-                readLong(),
-                readLong(),
-                readLong()
+                blobId = readLong(),
+                name = readString(),
+                type = readString(),
+                size = readLong()
             )
         }
     }

@@ -58,7 +58,7 @@ data class RabbitDto(
         + ::name max 20 min 2 notEquals "Caerbannog"
     }
 
-    override fun getType() = type
+    override fun getType() = recordType
 
     override fun comm() = RabbitDto.comm
 }
@@ -314,7 +314,7 @@ data class TemplateEntityDto(
         + ::templateField2 min 2 max 50
     }
 
-    override fun getType() = type
+    override fun getType() = recordType
 
     override fun comm() = comm
 
