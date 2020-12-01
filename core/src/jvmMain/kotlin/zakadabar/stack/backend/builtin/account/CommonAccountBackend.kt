@@ -11,7 +11,7 @@ import zakadabar.stack.backend.builtin.account.data.AccountTable
 import zakadabar.stack.backend.builtin.account.data.AccountTable.toDto
 import zakadabar.stack.backend.builtin.entities.data.EntityDao
 import zakadabar.stack.backend.builtin.entities.data.EntityTable
-import zakadabar.stack.backend.data.DtoBackend
+import zakadabar.stack.backend.data.RecordBackend
 import zakadabar.stack.data.builtin.security.CommonAccountDto
 import zakadabar.stack.data.builtin.security.SearchAccounts
 import zakadabar.stack.data.entity.EntityStatus
@@ -20,7 +20,7 @@ import zakadabar.stack.util.Executor
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
-object CommonAccountBackend : DtoBackend<CommonAccountDto>() {
+object CommonAccountBackend : RecordBackend<CommonAccountDto>() {
 
     override val dtoClass = CommonAccountDto::class
 
@@ -101,10 +101,10 @@ object CommonAccountBackend : DtoBackend<CommonAccountDto>() {
     }
 
 
-    override fun read(executor: Executor, id: Long) = transaction {
+    override fun read(executor: Executor, recordId: Long) = transaction {
 
-        EntityDao[id].requireReadFor(executor)
-        val accountDao = AccountDao[id]
+        EntityDao[recordId].requireReadFor(executor)
+        val accountDao = AccountDao[recordId]
 
         accountDao.toDto()
 
@@ -160,7 +160,7 @@ object CommonAccountBackend : DtoBackend<CommonAccountDto>() {
         accountDao.toDto()
     }
 
-    override fun delete(executor: Executor, id: Long) {
+    override fun delete(executor: Executor, recordId: Long) {
         throw NotImplementedError()
     }
 }

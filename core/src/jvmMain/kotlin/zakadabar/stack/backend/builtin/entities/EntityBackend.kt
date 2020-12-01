@@ -17,7 +17,7 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.builtin.entities.data.*
-import zakadabar.stack.backend.data.DtoBackend
+import zakadabar.stack.backend.data.RecordBackend
 import zakadabar.stack.backend.util.ContentBlob
 import zakadabar.stack.backend.util.executor
 import zakadabar.stack.backend.util.sql
@@ -27,7 +27,7 @@ import zakadabar.stack.util.Executor
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
-object EntityBackend : DtoBackend<EntityRecordDto>() {
+object EntityBackend : RecordBackend<EntityRecordDto>() {
 
     override val dtoClass = EntityRecordDto::class
 
@@ -93,16 +93,16 @@ object EntityBackend : DtoBackend<EntityRecordDto>() {
         EntityDao.create(executor, dto).toDto()
     }
 
-    override fun read(executor: Executor, id: Long) = transaction {
-        EntityDao[id].requireReadFor(executor).toDto()
+    override fun read(executor: Executor, recordId: Long) = transaction {
+        EntityDao[recordId].requireReadFor(executor).toDto()
     }
 
     override fun update(executor: Executor, dto: EntityRecordDto) = transaction {
         EntityDao.update(executor, dto).toDto()
     }
 
-    override fun delete(executor: Executor, id: Long) = transaction {
-        EntityDao[id].requireControlFor(executor).delete()
+    override fun delete(executor: Executor, recordId: Long) = transaction {
+        EntityDao[recordId].requireControlFor(executor).delete()
     }
 
     private suspend fun fetchContent(executor: Executor, entityId: Long, revision: Long?) = sql {

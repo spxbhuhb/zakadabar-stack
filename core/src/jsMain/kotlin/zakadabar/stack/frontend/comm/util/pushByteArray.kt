@@ -43,6 +43,6 @@ suspend fun pushByteArray(
         return byteData
     }
 
-    val dto = BlobDto(0L, name, type, data.size.toLong())
+    val dto = BlobDto(0L, 0L, "", name, type, data.size.toLong())
     return PushContent(FrontendContext.stackSession, dto, ::readData, onProgress).run()
 }

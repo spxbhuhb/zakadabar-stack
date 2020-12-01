@@ -29,7 +29,7 @@ import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.builtin.session.StackSession
 import zakadabar.stack.backend.builtin.session.session
 import zakadabar.stack.backend.comm.websocket.StackServerSession
-import zakadabar.stack.backend.data.DtoBackend
+import zakadabar.stack.backend.data.RecordBackend
 import zakadabar.stack.backend.util.executor
 import zakadabar.stack.util.Executor
 import java.io.File
@@ -200,7 +200,7 @@ class Server : CliktCommand() {
         // backend installs create sql tables and whatever else they need
 
         modules.forEach {
-            if (it is DtoBackend<*>) {
+            if (it is RecordBackend<*>) {
                 BackendContext += it
             } else {
                 it.init()

@@ -9,7 +9,7 @@ import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.icon.IconSource
-import zakadabar.stack.frontend.comm.rest.FrontendComm
+import zakadabar.stack.frontend.comm.rest.RecordComm
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.UUID
@@ -21,7 +21,7 @@ import kotlin.reflect.KClass
  *
  * @param     namespace         The namespace for displayName that provides this entity type.
  * @property  companion         The companion object of the entity DTO.
- * @property  comm              The [FrontendComm] for the DTO (defaults to standard RestComm for the companion).
+ * @property  comm              The [RecordComm] for the DTO (defaults to standard RestComm for the companion).
  * @property  type              Type of the entity (defaults to [companion] type).
  * @property  displayName       Type name to display to the user.
  * @property  iconSource        Type icon to display to the user.
@@ -33,7 +33,7 @@ abstract class DtoFrontend<T : RecordDto<T>>(
 
     abstract val dtoClass: KClass<T>
 
-    val comm: Comm<T>? = FrontendComm(companion.recordType, companion.serializer())
+    val comm: Comm<T>? = RecordComm(companion.recordType, companion.serializer())
     val type: String = companion.recordType
     val displayName: String = t(companion.recordType, namespace)
     val iconSource: IconSource? = null

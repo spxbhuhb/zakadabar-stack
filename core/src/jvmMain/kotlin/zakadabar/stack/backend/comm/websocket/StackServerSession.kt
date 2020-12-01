@@ -10,7 +10,7 @@ import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.slf4j.LoggerFactory
-import zakadabar.stack.backend.builtin.blob.BlobDao
+import zakadabar.stack.backend.builtin.blob.BigBlobDao
 import zakadabar.stack.backend.builtin.entities.data.*
 import zakadabar.stack.backend.builtin.entities.data.EntityTable.name
 import zakadabar.stack.backend.builtin.session.data.SessionDao
@@ -184,7 +184,7 @@ class StackServerSession(private val webSocketSession: WebSocketSession) {
 
         if (request.size > MAX_FETCH_SIZE) return@sql FaultResponse(ResponseCode.REQUEST_SIZE_LIMIT)
 
-        val dao = BlobDao[request.blobId]
+        val dao = BigBlobDao[request.blobId]
         val blob = ContentBlob(dao.content)
         val data = blob.read(request.position, request.size)
 
@@ -200,7 +200,7 @@ class StackServerSession(private val webSocketSession: WebSocketSession) {
 
     private suspend fun onCreateBlob(request: CreateBlobRequest) = sql {
 
-        val blob = BlobDao.new {
+        val blob = BigBlobDao.new {
             name = request.name
             type = request.type
             size = request.size
@@ -212,14 +212,14 @@ class StackServerSession(private val webSocketSession: WebSocketSession) {
     }
 
     private suspend fun onGetBlobMeta(request: GetBlobMetaRequest) = sql {
-        with(BlobDao[request.blobId]) {
+        with(BigBlobDao[request.blobId]) {
             GetBlobMetaResponse(ResponseCode.OK, id.value, name, type, size)
         }
     }
 
     private suspend fun onPushContent(request: WriteBlobRequest) = sql {
 
-        val dao = BlobDao[request.blobId]
+        val dao = BigBlobDao[request.blobId]
 
         val blob = ContentBlob(dao.content)
         blob.write(request.position, request.data)

@@ -81,6 +81,6 @@ suspend fun pushBlob(
         }
     }
 
-    val dto = BlobDto(0L, name, type, blob.size.toLong())
+    val dto = BlobDto(0L, 0L, "", name, type, blob.size.toLong())
     return PushContent(FrontendContext.stackSession, dto, ::readData, onProgress).run()
 }

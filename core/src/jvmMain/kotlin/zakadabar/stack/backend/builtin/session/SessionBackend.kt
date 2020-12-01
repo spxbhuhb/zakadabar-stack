@@ -7,12 +7,12 @@ package zakadabar.stack.backend.builtin.session
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.builtin.session.data.SessionTable
-import zakadabar.stack.backend.data.DtoBackend
+import zakadabar.stack.backend.data.RecordBackend
 import zakadabar.stack.data.builtin.session.SessionDto
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
-object SessionBackend : DtoBackend<SessionDto>() {
+object SessionBackend : RecordBackend<SessionDto>() {
 
     override val dtoClass = SessionDto::class
 

@@ -8,10 +8,10 @@ import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.util.PublicApi
 
 /**
- * A cache for objects accessed with a [FrontendComm]. This is basically a
- * wrapper around [FrontendComm], that caches objects on the fly.
+ * A cache for objects accessed with a [RecordComm]. This is basically a
+ * wrapper around [RecordComm], that caches objects on the fly.
  *
- * Be careful with this one, you should probably use a [FrontendComm].
+ * Be careful with this one, you should probably use a [RecordComm].
  *
  * Caching objects in general is not a good idea as it is very easy
  * to use up a lot of memory. However, sometimes it is very useful.
@@ -23,10 +23,10 @@ import zakadabar.stack.util.PublicApi
  * Using a cache has to be considered case-by-case basis, again, be careful.
  */
 @PublicApi
-open class CachedFrontendComm<T : RecordDto<T>>(
+open class CachedRecordComm<T : RecordDto<T>>(
     path: String,
     serializer: KSerializer<T>,
-) : FrontendComm<T>(path, serializer) {
+) : RecordComm<T>(path, serializer) {
 
     private val cache = mutableMapOf<Long, T>()
 

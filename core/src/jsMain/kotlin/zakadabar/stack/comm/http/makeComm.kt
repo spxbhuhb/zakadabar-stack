@@ -5,8 +5,8 @@ package zakadabar.stack.comm.http
 
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
-import zakadabar.stack.frontend.comm.rest.FrontendComm
+import zakadabar.stack.frontend.comm.rest.RecordComm
 
 actual fun <T : RecordDto<T>> makeComm(recordDtoCompanion: RecordDtoCompanion<T>): Comm<T> {
-    return FrontendComm(recordDtoCompanion.recordType, recordDtoCompanion.serializer())
+    return RecordComm(recordDtoCompanion.recordType, recordDtoCompanion.serializer())
 }

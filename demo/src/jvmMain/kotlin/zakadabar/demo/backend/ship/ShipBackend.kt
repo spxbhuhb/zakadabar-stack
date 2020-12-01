@@ -14,24 +14,27 @@ import zakadabar.demo.backend.speed.SpeedDao
 import zakadabar.demo.data.ShipDto
 import zakadabar.demo.data.ShipSearch
 import zakadabar.demo.data.ShipSpeeds
-import zakadabar.stack.backend.data.DtoBackend
+import zakadabar.stack.backend.data.RecordBackend
 import zakadabar.stack.util.Executor
 
-object ShipBackend : DtoBackend<ShipDto>() {
+object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTable = ShipTable) {
 
     override val dtoClass = ShipDto::class
 
     override fun init() {
         transaction {
             SchemaUtils.createMissingTablesAndColumns(
-                ShipTable
+                ShipTable,
+                ShipImageTable
             )
         }
     }
 
     override fun install(route: Route) {
         route.crud()
+        route.blob()
         route.query(ShipSearch::class, ShipBackend::query)
+        route.query(ShipSpeeds::class, ShipBackend::query)
     }
 
     private fun query(executor: Executor, query: ShipSearch) = transaction {
@@ -61,18 +64,21 @@ object ShipBackend : DtoBackend<ShipDto>() {
         }.toDto()
     }
 
-    override fun read(executor: Executor, id: Long) = transaction {
-        ShipDao[id].toDto()
+    override fun read(executor: Executor, recordId: Long) = transaction {
+        ShipDao[recordId].toDto()
     }
 
     override fun update(executor: Executor, dto: ShipDto) = transaction {
+
         val dao = ShipDao[dto.id]
         dao.name = dto.name
         dao.speed = SpeedDao[dto.speed]
+
         dao.toDto()
+
     }
 
-    override fun delete(executor: Executor, id: Long) {
-        ShipDao[id].delete()
+    override fun delete(executor: Executor, recordId: Long) {
+        ShipDao[recordId].delete()
     }
 }

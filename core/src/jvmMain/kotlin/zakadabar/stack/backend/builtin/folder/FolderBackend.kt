@@ -6,13 +6,13 @@ package zakadabar.stack.backend.builtin.folder
 import io.ktor.routing.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.builtin.entities.data.EntityDao
-import zakadabar.stack.backend.data.DtoBackend
+import zakadabar.stack.backend.data.RecordBackend
 import zakadabar.stack.data.builtin.FolderDto
 import zakadabar.stack.util.Executor
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
-object FolderBackend : DtoBackend<FolderDto>() {
+object FolderBackend : RecordBackend<FolderDto>() {
 
     override val dtoClass = FolderDto::class
 

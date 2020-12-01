@@ -4,6 +4,7 @@
 package zakadabar.stack.comm.http
 
 import kotlinx.serialization.KSerializer
+import zakadabar.stack.data.BlobDto
 
 interface Comm<T> {
 
@@ -21,4 +22,12 @@ interface Comm<T> {
 
     suspend fun <RQ : Any, RS> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<List<RS>>): List<RS>
 
+    fun blobCreate(
+        recordId: Long, name: String, type: String, data: Any,
+        callback: (dto: BlobDto, state: BlobCreateState, uploaded: Long) -> Unit
+    )
+
+    suspend fun blobMeta(recordId: Long): List<BlobDto>
+
+    suspend fun blobDelete(recordId: Long, blobId: Long)
 }

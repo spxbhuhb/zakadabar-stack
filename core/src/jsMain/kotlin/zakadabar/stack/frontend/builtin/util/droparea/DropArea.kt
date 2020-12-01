@@ -7,19 +7,20 @@ import org.w3c.dom.DataTransfer
 import org.w3c.dom.DragEvent
 import org.w3c.dom.events.Event
 import org.w3c.dom.get
-import org.w3c.files.File
-import zakadabar.stack.comm.websocket.util.PushContent
+import zakadabar.stack.comm.http.BlobCreateState
+import zakadabar.stack.comm.http.Comm
 import zakadabar.stack.data.BlobDto
 import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.droparea.DropAreaClasses.Companion.classes
-import zakadabar.stack.frontend.comm.util.pushBlob
 import zakadabar.stack.frontend.elements.ZkElement
-import zakadabar.stack.frontend.util.launch
 
-open class DropArea(
+open class DropArea<C : Any>(
     private val message: String = t("drop.files.here"),
-    private val onProgress: (dto: BlobDto, state: PushContent.PushState, position: Long) -> Unit = { _, _, _ -> }
+    private val recordId: Long,
+    private val comm: Comm<*>,
+    private val context: C,
+    private val onProgress: (context: C, dto: BlobDto, state: BlobCreateState, uploaded: Long) -> Unit
 ) : ZkElement() {
 
     override fun init(): ZkElement {
@@ -63,15 +64,13 @@ open class DropArea(
             val item = dataTransfer.items[index] ?: continue
 
             when (item.kind) {
-                "file" -> createFile(item.getAsFile() !!)
+                "file" -> {
+                    val file = item.getAsFile() ?: continue
+                    //comm.createBlob(recordId, file.name, file.type, file, context, onProgress)
+                }
             }
 
             index ++
         }
     }
-
-    private fun createFile(file: File) {
-        launch { pushBlob(file.name, file.type, file, onProgress) }
-    }
-
 }

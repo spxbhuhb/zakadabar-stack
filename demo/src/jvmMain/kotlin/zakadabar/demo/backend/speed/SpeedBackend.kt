@@ -10,10 +10,10 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.demo.data.SpeedDto
-import zakadabar.stack.backend.data.DtoBackend
+import zakadabar.stack.backend.data.RecordBackend
 import zakadabar.stack.util.Executor
 
-object SpeedBackend : DtoBackend<SpeedDto>() {
+object SpeedBackend : RecordBackend<SpeedDto>() {
 
     override val dtoClass = SpeedDto::class
 
@@ -42,8 +42,8 @@ object SpeedBackend : DtoBackend<SpeedDto>() {
         }.toDto()
     }
 
-    override fun read(executor: Executor, id: Long) = transaction {
-        SpeedDao[id].toDto()
+    override fun read(executor: Executor, recordId: Long) = transaction {
+        SpeedDao[recordId].toDto()
     }
 
     override fun update(executor: Executor, dto: SpeedDto) = transaction {
@@ -53,7 +53,7 @@ object SpeedBackend : DtoBackend<SpeedDto>() {
         dao.toDto()
     }
 
-    override fun delete(executor: Executor, id: Long) {
-        SpeedDao[id].delete()
+    override fun delete(executor: Executor, recordId: Long) {
+        SpeedDao[recordId].delete()
     }
 }

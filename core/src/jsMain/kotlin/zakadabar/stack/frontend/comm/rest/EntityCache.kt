@@ -32,7 +32,7 @@ import kotlin.collections.set
  *
  */
 @PublicApi
-object EntityCache : FrontendComm<EntityRecordDto>(EntityRecordDto.recordType, EntityRecordDto.serializer()) {
+object EntityCache : RecordComm<EntityRecordDto>(EntityRecordDto.recordType, EntityRecordDto.serializer()) {
 
     private val cache = mutableMapOf<Long, EntityRecordDto>()
 

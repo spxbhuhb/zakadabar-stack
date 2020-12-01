@@ -10,7 +10,12 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
+import org.w3c.files.Blob
+import org.w3c.xhr.ProgressEvent
+import org.w3c.xhr.XMLHttpRequest
+import zakadabar.stack.comm.http.BlobCreateState
 import zakadabar.stack.comm.http.Comm
+import zakadabar.stack.data.BlobDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.frontend.errors.FetchError
 import zakadabar.stack.frontend.errors.ensure
@@ -20,16 +25,14 @@ import zakadabar.stack.util.PublicApi
 /**
  * REST communication functions for objects that implement [RecordDto]
  *
+ * @property  recordType   Type of the record this comm handles.
  *
- * @property  path  The path on which the server provides the REST
- *                  access to this data store, for example "/apis/1a2b3c".
- *
- * @property  serializer  The serializer to serialize/deserialize objects
- *                        sent/received.
+ * @property  serializer   The serializer to serialize/deserialize objects
+ *                         sent/received.
  */
 @PublicApi
-open class FrontendComm<T : RecordDto<T>>(
-    internal val path: String,
+open class RecordComm<T : RecordDto<T>>(
+    private val recordType: String,
     private val serializer: KSerializer<T>
 ) : Comm<T> {
 
@@ -55,7 +58,7 @@ open class FrontendComm<T : RecordDto<T>>(
             body = body
         )
 
-        return sendAndReceive(path, requestInit)
+        return sendAndReceive(recordType, requestInit)
     }
 
     /**
@@ -69,7 +72,7 @@ open class FrontendComm<T : RecordDto<T>>(
      */
     @PublicApi
     override suspend fun read(id: Long): T {
-        val responsePromise = window.fetch("/api/$path/$id")
+        val responsePromise = window.fetch("/api/$recordType/$id")
         val response = responsePromise.await()
 
         ensure(response.ok) { FetchError(response) }
@@ -88,7 +91,7 @@ open class FrontendComm<T : RecordDto<T>>(
      * @throws  FetchError
      */
     override suspend fun update(dto: T): T {
-        ensure(dto.id != 0L) { "id is 0 in $dto" }
+        ensure(dto.id != 0L) { "ID of the $dto is 0 " }
 
         val headers = Headers()
 
@@ -102,7 +105,7 @@ open class FrontendComm<T : RecordDto<T>>(
             body = body
         )
 
-        return sendAndReceive(path, requestInit)
+        return sendAndReceive(recordType, requestInit)
     }
 
     /**
@@ -115,7 +118,7 @@ open class FrontendComm<T : RecordDto<T>>(
     @PublicApi
     override suspend fun all(): List<T> {
 
-        val responsePromise = window.fetch("/api/$path/all")
+        val responsePromise = window.fetch("/api/$recordType")
         val response = responsePromise.await()
 
         ensure(response.ok) { FetchError(response) }
@@ -136,7 +139,7 @@ open class FrontendComm<T : RecordDto<T>>(
     @PublicApi
     override suspend fun delete(id: Long) {
 
-        val responsePromise = window.fetch("/api/$path/$id", RequestInit(method = "DELETE"))
+        val responsePromise = window.fetch("/api/$recordType/$id", RequestInit(method = "DELETE"))
         val response = responsePromise.await()
 
         ensure(response.ok) { FetchError(response) }
@@ -169,7 +172,7 @@ open class FrontendComm<T : RecordDto<T>>(
     @PublicApi
     override suspend fun <RQ : Any, RS> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<List<RS>>): List<RS> {
 
-        val responsePromise = window.fetch("/api/$path/${request::class.simpleName}?q=${Json.encodeToString(requestSerializer, request)}")
+        val responsePromise = window.fetch("/api/$recordType/${request::class.simpleName}?q=${Json.encodeToString(requestSerializer, request)}")
         val response = responsePromise.await()
 
         ensure(response.ok) { FetchError(response) }
@@ -190,5 +193,86 @@ open class FrontendComm<T : RecordDto<T>>(
         val text = textPromise.await()
 
         return json.decodeFromString(serializer, text)
+    }
+
+    /**
+     * Create a BLOB that belongs to the given record.
+     *
+     * Works only when the backend supports BLOBs for the record type.
+     *
+     * Calls [callback] once before the upload starts and then whenever
+     * the state of the upload changes.
+     *
+     * Blob ID is 0 until the upload finishes. The actual id of the blob
+     * is set when callback is called with state [BlobCreateState.Done].
+     *
+     * @param  recordId  Id of the record the new BLOB belongs to.
+     * @param  name      Name of the BLOB, typically the file name.
+     * @param  type      Type of the BLOB, typically the MIME type.
+     * @param  data      BLOB data, a Javascript [Blob].
+     * @param  callback  Callback function to report progress, completion or error.
+     *
+     * @return A DTO which contains data of the blob. The `id` is 0 in this DTO.
+     */
+    override fun blobCreate(
+        recordId: Long, name: String, type: String,
+        data: Any,
+        callback: (dto: BlobDto, state: BlobCreateState, uploaded: Long) -> Unit
+    ) {
+        require(data is Blob)
+
+        val req = XMLHttpRequest()
+
+        val dto = BlobDto(0L, recordId, recordType, name, type, data.size.toLong())
+
+        req.addEventListener("progress", { callback(dto, BlobCreateState.Progress, (it as ProgressEvent).loaded.toLong()) })
+        req.addEventListener("load", { callback(json.decodeFromString(BlobDto.serializer(), req.responseText), BlobCreateState.Done, data.size.toLong()) })
+        req.addEventListener("error", { callback(dto, BlobCreateState.Error, 0) })
+        req.addEventListener("abort", { callback(dto, BlobCreateState.Abort, 0) })
+
+        callback(dto, BlobCreateState.Starting, 0)
+
+        req.open("POST", "/api/$recordType/$recordId/blob", true)
+        req.setRequestHeader("Content-Type", type)
+        //req.setRequestHeader("Content-Length", data.size.toString())
+        req.setRequestHeader("Content-Disposition", """attachment; filename="$name"""")
+        req.send(data)
+    }
+
+    /**
+     * Retrieves metadata of BLOBs.
+     *
+     * @return  List of BLOB metadata.
+     *
+     * @throws  FetchError
+     */
+    @PublicApi
+    override suspend fun blobMeta(recordId: Long): List<BlobDto> {
+
+        val responsePromise = window.fetch("/api/$recordType/$recordId/blob/all")
+        val response = responsePromise.await()
+
+        ensure(response.ok) { FetchError(response) }
+
+        val textPromise = response.text()
+        val text = textPromise.await()
+
+        return json.decodeFromString(ListSerializer(BlobDto.serializer()), text)
+    }
+
+    /**
+     * Deletes an BLOB.
+     *
+     * @param  id  Id of the blob to delete.
+     *
+     * @throws  FetchError
+     */
+    @PublicApi
+    override suspend fun blobDelete(recordId: Long, blobId: Long) {
+
+        val responsePromise = window.fetch("/api/$recordType/$recordId/blob/$blobId", RequestInit(method = "DELETE"))
+        val response = responsePromise.await()
+
+        ensure(response.ok) { FetchError(response) }
     }
 }

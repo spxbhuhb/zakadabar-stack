@@ -7,12 +7,12 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 
-class BlobDao(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<BlobDao>(BlobTable)
+class BigBlobDao(id: EntityID<Long>) : LongEntity(id) {
+    companion object : LongEntityClass<BigBlobDao>(BigBlobTable)
 
-    var name by BlobTable.name
-    var type by BlobTable.type
-    var size by BlobTable.size
-    var content by BlobTable.content
+    var name by BigBlobTable.name
+    var type by BigBlobTable.type
+    var size by BigBlobTable.size
+    var content by BigBlobTable.content
 
 }
