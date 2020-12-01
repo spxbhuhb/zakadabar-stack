@@ -3,14 +3,14 @@
  */
 package zakadabar.stack.frontend.builtin
 
-import zakadabar.stack.frontend.FrontendContext
+import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.util.CssStyleSheet
 import zakadabar.stack.frontend.util.Theme
 
 class CoreClasses(theme: Theme) : CssStyleSheet<CoreClasses>(theme) {
 
     companion object {
-        val coreClasses = CoreClasses(FrontendContext.theme).attach()
+        val coreClasses = CoreClasses(Application.theme).attach()
     }
 
     val green by cssClass {

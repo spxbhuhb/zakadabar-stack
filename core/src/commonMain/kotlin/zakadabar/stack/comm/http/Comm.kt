@@ -4,7 +4,7 @@
 package zakadabar.stack.comm.http
 
 import kotlinx.serialization.KSerializer
-import zakadabar.stack.data.BlobDto
+import zakadabar.stack.data.builtin.BlobDto
 
 interface Comm<T> {
 

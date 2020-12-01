@@ -21,7 +21,7 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.get
 import zakadabar.stack.comm.http.BlobCreateState
 import zakadabar.stack.comm.http.Comm
-import zakadabar.stack.data.BlobDto
+import zakadabar.stack.data.builtin.BlobDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.icon.Icons

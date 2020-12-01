@@ -5,14 +5,14 @@ package zakadabar.demo.backend
 
 import zakadabar.demo.backend.ship.ShipBackend
 import zakadabar.demo.backend.speed.SpeedBackend
-import zakadabar.stack.backend.BackendContext
 import zakadabar.stack.backend.BackendModule
+import zakadabar.stack.backend.Server
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
 object Module : BackendModule {
     override fun init() {
-        BackendContext += ShipBackend
-        BackendContext += SpeedBackend
+        Server += ShipBackend
+        Server += SpeedBackend
     }
 }

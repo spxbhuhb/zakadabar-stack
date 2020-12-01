@@ -3,8 +3,17 @@
  */
 package zakadabar.stack.frontend.application
 
+import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.events.Event
+import zakadabar.stack.Stack
+import zakadabar.stack.data.builtin.AccountDto
+import zakadabar.stack.frontend.builtin.dock.Dock
+import zakadabar.stack.frontend.data.DtoFrontend
+import zakadabar.stack.frontend.util.Dictionary
+import zakadabar.stack.frontend.util.defaultTheme
+import zakadabar.stack.util.UUID
+import zakadabar.stack.util.Unique
 
 /**
  * The application that runs in the browser window. This object contains data
@@ -12,14 +21,39 @@ import org.w3c.dom.events.Event
  */
 object Application {
 
+    @Suppress("MemberVisibilityCanBePrivate")
+    lateinit var executor: AccountDto
+
     lateinit var routing: AppRouting
+
+    private var defaultLanguage = window.navigator.language
+
+    var theme = defaultTheme
+
+    private val dictionaries = mutableMapOf<UUID, Dictionary>()
+
+    val dtoFrontends = mutableMapOf<String, DtoFrontend<*>>()
+
+    lateinit var dock: Dock
 
     const val EVENT = "zk-navstate-change"
 
     fun init() {
+        document.body?.style?.fontFamily = theme.fontFamily
+
         window.addEventListener("popstate", onPopState)
         routing.onNavStateChange(NavState(window.location.pathname, window.location.search))
         window.dispatchEvent(Event(EVENT))
+
+//        val id = window.fetch("/api/${Stack.shid}/who-am-i").await()
+//            .text().await()
+//            .toLong()
+//
+//        CommonAccountDto.comm = FrontendComm(CommonAccountDto.type, CommonAccountDto.serializer())
+//
+//        executor = CommonAccountDto.comm.read(id)
+
+        dock = Dock().init() // this does not add it to the DOM, it's just created
     }
 
     private val onPopState = fun(_: Event) {
@@ -36,4 +70,18 @@ object Application {
 
     fun back() = window.history.back()
 
+    fun t(text: String) =
+        dictionaries[Stack.uuid]?.get(defaultLanguage)?.get(text) ?: text
+
+    fun t(text: String, namespace: UUID) =
+        dictionaries[namespace]?.get(defaultLanguage)?.get(text) ?: text
+
+    fun t(text: String, namespace: Unique) =
+        dictionaries[namespace.uuid]?.get(defaultLanguage)?.get(text) ?: text
+
+    fun t(text: String, namespace: UUID, language: String) =
+        dictionaries[namespace]?.get(language)?.get(text) ?: text
+
+    fun t(text: String, namespace: Unique, language: String) =
+        dictionaries[namespace.uuid]?.get(language)?.get(text) ?: text
 }

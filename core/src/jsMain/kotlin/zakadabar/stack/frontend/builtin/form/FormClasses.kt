@@ -3,14 +3,14 @@
  */
 package zakadabar.stack.frontend.builtin.form
 
-import zakadabar.stack.frontend.FrontendContext
+import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.util.CssStyleSheet
 import zakadabar.stack.frontend.util.Theme
 
 class FormClasses(theme: Theme) : CssStyleSheet<FormClasses>(theme) {
 
     companion object {
-        val formClasses = FormClasses(FrontendContext.theme).attach()
+        val formClasses = FormClasses(Application.theme).attach()
     }
 
     val activeBlue = "#2746ab"

@@ -3,14 +3,14 @@
  */
 package zakadabar.stack.frontend.builtin.util.header
 
-import zakadabar.stack.frontend.FrontendContext
+import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.util.CssStyleSheet
 import zakadabar.stack.frontend.util.Theme
 
 open class HeaderClasses(theme: Theme) : CssStyleSheet<HeaderClasses>(theme) {
 
     companion object {
-        var headerClasses = HeaderClasses(FrontendContext.theme).attach()
+        var headerClasses = HeaderClasses(Application.theme).attach()
     }
 
     open val header by cssClass {

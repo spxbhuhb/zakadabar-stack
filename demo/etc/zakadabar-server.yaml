@@ -8,10 +8,6 @@ traceRouting: false
 staticResources: ./var/static
 
 modules:
-  - zakadabar.stack.backend.builtin.account.CommonAccountBackend
-  - zakadabar.stack.backend.builtin.entities.EntityBackend
-  - zakadabar.stack.backend.builtin.folder.FolderBackend
-  - zakadabar.stack.backend.builtin.session.SessionBackend
   - zakadabar.demo.backend.Module
 
 #ktor:

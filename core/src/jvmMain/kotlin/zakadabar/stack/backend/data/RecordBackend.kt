@@ -20,11 +20,11 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
-import zakadabar.stack.backend.BackendContext
 import zakadabar.stack.backend.BackendModule
-import zakadabar.stack.backend.builtin.blob.BlobTable
+import zakadabar.stack.backend.Server
+import zakadabar.stack.backend.data.builtin.BlobTable
 import zakadabar.stack.backend.util.executor
-import zakadabar.stack.data.BlobDto
+import zakadabar.stack.data.builtin.BlobDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.util.Executor
@@ -241,15 +241,15 @@ abstract class RecordBackend<T : RecordDto<T>>(
             }
 
             get("/{rid?}") {
-                val id = call.parameters["rid"]?.toLongOrNull() ?: "all"
+                val id = call.parameters["rid"]?.toLongOrNull()
                 val executor = call.executor()
 
-                if (id == "all") {
-                    if (BackendContext.logReads) logger.info("${executor.entityId}: ALL $dtoType")
+                if (id == null) {
+                    if (Server.logReads) logger.info("${executor.entityId}: ALL $dtoType")
                     call.respond(all(executor))
                 } else {
-                    if (BackendContext.logReads) logger.info("${executor.entityId}: READ $dtoType $id")
-                    call.respond(read(executor, id as Long))
+                    if (Server.logReads) logger.info("${executor.entityId}: READ $dtoType $id")
+                    call.respond(read(executor, id))
                 }
             }
 
@@ -283,13 +283,13 @@ abstract class RecordBackend<T : RecordDto<T>>(
 
                 if (blobId == null) {
 
-                    if (BackendContext.logReads) logger.info("${executor.entityId}: BLOB-META $dtoType $recordId $blobId")
+                    if (Server.logReads) logger.info("${executor.entityId}: BLOB-META $dtoType $recordId $blobId")
 
                     call.respond(blobMeta(executor, recordId))
 
                 } else {
 
-                    if (BackendContext.logReads) logger.info("${executor.entityId}: BLOB-READ $dtoType $recordId $blobId")
+                    if (Server.logReads) logger.info("${executor.entityId}: BLOB-READ $dtoType $recordId $blobId")
 
                     val (dto, bytes) = blobRead(executor, recordId, blobId)
 
@@ -311,7 +311,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
 
                 val executor = call.executor()
 
-                if (BackendContext.logReads) logger.info("${executor.entityId}: BLOB-CREATE $dtoType $recordId")
+                if (Server.logReads) logger.info("${executor.entityId}: BLOB-CREATE $dtoType $recordId")
 
                 val headers = call.request.headers
 
@@ -340,7 +340,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
 
                 val executor = call.executor()
 
-                if (BackendContext.logReads) logger.info("${executor.entityId}: BLOB-DELETE $dtoType $id $blobId")
+                if (Server.logReads) logger.info("${executor.entityId}: BLOB-DELETE $dtoType $id $blobId")
 
                 call.respond(blobDelete(executor, id, blobId))
             }
@@ -360,7 +360,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
             requireNotNull(qText)
             val qObj = Json.decodeFromString(serializer(queryDto.createType()), qText)
 
-            if (BackendContext.logReads) logger.info("${executor.entityId}: GET $dtoType/${queryDto.simpleName} $qText")
+            if (Server.logReads) logger.info("${executor.entityId}: GET $dtoType/${queryDto.simpleName} $qText")
 
             @Suppress("UNCHECKED_CAST")
             call.respond(func(executor, qObj as RQ))

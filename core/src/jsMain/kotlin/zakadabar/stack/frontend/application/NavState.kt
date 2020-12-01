@@ -4,7 +4,6 @@
 package zakadabar.stack.frontend.application
 
 import org.w3c.dom.url.URLSearchParams
-import zakadabar.stack.frontend.FrontendContext
 
 /**
  * Stores the current navigation state of the browser window. Created by
@@ -47,7 +46,7 @@ class NavState(val urlPath: String, val urlQuery: String) {
 
             query = searchParams.get("query")?.let {
                 val dataType = "$module/$view"
-                val dtoFrontend = FrontendContext.dtoFrontends[dataType] ?: throw IllegalStateException("missing dto frontend for $dataType")
+                val dtoFrontend = Application.dtoFrontends[dataType] ?: throw IllegalStateException("missing dto frontend for $dataType")
                 dtoFrontend.decodeQuery(dataType, it)
             }
         }

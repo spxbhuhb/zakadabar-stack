@@ -20,7 +20,6 @@ import kotlinx.browser.document
 import kotlinx.dom.appendText
 import org.w3c.dom.*
 import org.w3c.dom.events.Event
-import zakadabar.stack.data.entity.EntityRecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.elements.ZkClasses.Companion.zkClasses
 import zakadabar.stack.util.PublicApi
@@ -128,31 +127,6 @@ class ZkBuilder(
     fun image(src: String, className: String? = null, build: ZkBuilder.() -> Unit = { }): HTMLImageElement {
         val img = document.createElement("img") as HTMLImageElement
         img.src = src
-        runBuild(img, className, build)
-        return img
-    }
-
-    /**
-     * Adds an IMG to the current element with an entity id. Converts the entity id
-     * into a Stack entity URL to use as source. Use [ZkBuilder.htmlElement] to add
-     * attributes other than the source.
-     *
-     * ```
-     *
-     *     with(current as HTMLImageElement) {
-     *         width = 100
-     *         height = 100
-     *     }
-     *
-     * ```
-     *
-     * @param  entityId   Id of the image entity. Nothing will be added when null.
-     * @param  className  Additional CSS class. Optional.
-     * @param  build      Builder function to manage the IMG tag added. Optional.
-     */
-    fun image(entityId: Long, className: String? = null, build: ZkBuilder.() -> Unit = { }): HTMLImageElement {
-        val img = document.createElement("img") as HTMLImageElement
-        img.src = EntityRecordDto.revisionUrl(entityId)
         runBuild(img, className, build)
         return img
     }

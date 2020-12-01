@@ -3,10 +3,9 @@
  */
 package zakadabar.stack.frontend.builtin.util
 
-import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.elements.ZkElement
 
-class NYI(val message: String = t("not yet implemented")) : ZkElement() {
+class NYI(val message: String = "not yet implemented") : ZkElement() {
 
     override fun init(): ZkElement {
         this.innerText = message

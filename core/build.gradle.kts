@@ -63,13 +63,6 @@ kotlin {
             }
         }
 
-        commonTest {
-            dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-                implementation(kotlin("test-junit"))
-            }
-        }
 
         @Suppress("UNUSED_VARIABLE")
         val jvmMain by getting {
@@ -97,13 +90,6 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 api("io.ktor:ktor-client-js:$ktorVersion")
-            }
-        }
-
-        @Suppress("UNUSED_VARIABLE")
-        val jsTest by getting {
-            dependencies {
-                implementation(kotlin("test-js"))
             }
         }
     }

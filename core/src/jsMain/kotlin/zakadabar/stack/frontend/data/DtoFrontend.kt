@@ -4,12 +4,10 @@
 package zakadabar.stack.frontend.data
 
 import kotlinx.serialization.json.Json
-import zakadabar.stack.comm.http.Comm
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
-import zakadabar.stack.frontend.FrontendContext.t
 import zakadabar.stack.frontend.builtin.icon.IconSource
-import zakadabar.stack.frontend.comm.rest.RecordComm
+import zakadabar.stack.frontend.comm.http.RecordComm
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.UUID
@@ -33,13 +31,13 @@ abstract class DtoFrontend<T : RecordDto<T>>(
 
     abstract val dtoClass: KClass<T>
 
-    val comm: Comm<T>? = RecordComm(companion.recordType, companion.serializer())
+    private val comm = RecordComm(companion.recordType, companion.serializer())
     val type: String = companion.recordType
-    val displayName: String = t(companion.recordType, namespace)
-    val iconSource: IconSource? = null
+    private val displayName: String = companion.recordType
+    private val iconSource: IconSource? = null
 
     init {
-        if (comm != null) companion.comm = comm
+        companion.comm = comm
     }
 
     fun decodeQuery(queryName: String, queryData: String): Any {

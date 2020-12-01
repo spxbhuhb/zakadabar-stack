@@ -3,7 +3,6 @@
  */
 @file:Suppress("unused")
 
-import zakadabar.stack.frontend.FrontendContext
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.launch
@@ -33,8 +32,6 @@ fun main() {
             routing = Routing
             init()
         }
-
-        FrontendContext.init()
 
         // Add an instance of Home to the document body
 

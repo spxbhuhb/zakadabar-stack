@@ -3,14 +3,14 @@
  */
 package zakadabar.stack.frontend.builtin.util.droparea
 
-import zakadabar.stack.frontend.FrontendContext
+import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.util.CssStyleSheet
 import zakadabar.stack.frontend.util.Theme
 
 class DropAreaClasses(theme: Theme) : CssStyleSheet<DropAreaClasses>(theme) {
 
     companion object {
-        var classes = DropAreaClasses(FrontendContext.theme).attach()
+        var classes = DropAreaClasses(Application.theme).attach()
     }
 
     val dropArea by cssClass {

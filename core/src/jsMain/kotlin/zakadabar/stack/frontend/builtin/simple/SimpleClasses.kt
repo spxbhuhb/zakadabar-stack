@@ -3,14 +3,14 @@
  */
 package zakadabar.stack.frontend.builtin.simple
 
-import zakadabar.stack.frontend.FrontendContext
+import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.util.CssStyleSheet
 import zakadabar.stack.frontend.util.Theme
 
 class SimpleClasses(theme: Theme) : CssStyleSheet<SimpleClasses>(theme) {
 
     companion object {
-        var simpleClasses = SimpleClasses(FrontendContext.theme).attach()
+        var simpleClasses = SimpleClasses(Application.theme).attach()
     }
 
     val button by cssClass {

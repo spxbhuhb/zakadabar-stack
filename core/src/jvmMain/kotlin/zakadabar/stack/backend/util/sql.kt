@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.stack.backend.app.DatabaseConfig
+import zakadabar.stack.backend.DatabaseConfig
 
 /**
  * Use this everywhere BUT when handling blob content.

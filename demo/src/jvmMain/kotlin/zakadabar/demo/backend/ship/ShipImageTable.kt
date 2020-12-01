@@ -4,6 +4,6 @@
 package zakadabar.demo.backend.ship
 
 import zakadabar.demo.Demo
-import zakadabar.stack.backend.builtin.blob.BlobTable
+import zakadabar.stack.backend.data.builtin.BlobTable
 
 object ShipImageTable : BlobTable("t_${Demo.shid}_ship_blobs", ShipTable)

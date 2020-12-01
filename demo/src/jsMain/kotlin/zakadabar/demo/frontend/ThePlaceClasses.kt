@@ -3,7 +3,7 @@
  */
 package zakadabar.demo.frontend
 
-import zakadabar.stack.frontend.FrontendContext
+import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.util.CssStyleSheet
 import zakadabar.stack.frontend.util.Theme
 
@@ -34,9 +34,9 @@ class ThePlaceClasses(theme: Theme) : CssStyleSheet<ThePlaceClasses>(theme) {
          * That [CssStyleSheet.attach] call adds the style sheet to the browser. There is also
          * a [CssStyleSheet.detach] function that removes the style sheet.
          *
-         * This particular call uses the default theme from the [FrontendContext].
+         * This particular call uses the default theme from the [Application].
          */
-        val thePlaceClasses = ThePlaceClasses(FrontendContext.theme).attach()
+        val thePlaceClasses = ThePlaceClasses(Application.theme).attach()
     }
 
     val menu by cssClass {

@@ -13,10 +13,10 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2020.10.26-SNAPSHOT"
+version = "2020.12.01-SNAPSHOT"
 
 application {
-    mainClassName = "zakadabar.stack.backend.app.ServerKt"
+    mainClassName = "zakadabar.stack.backend.ServerKt"
 }
 
 kotlin {

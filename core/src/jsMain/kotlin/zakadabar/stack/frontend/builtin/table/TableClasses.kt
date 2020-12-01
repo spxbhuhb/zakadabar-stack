@@ -3,14 +3,14 @@
  */
 package zakadabar.stack.frontend.builtin.table
 
-import zakadabar.stack.frontend.FrontendContext
+import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.util.CssStyleSheet
 import zakadabar.stack.frontend.util.Theme
 
 class TableClasses(theme: Theme) : CssStyleSheet<TableClasses>(theme) {
 
     companion object {
-        val tableClasses = TableClasses(FrontendContext.theme).attach()
+        val tableClasses = TableClasses(Application.theme).attach()
     }
 
     val table by cssClass {

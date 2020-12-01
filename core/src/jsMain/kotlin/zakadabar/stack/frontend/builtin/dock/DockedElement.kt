@@ -7,8 +7,8 @@ package zakadabar.stack.frontend.builtin.dock
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLHtmlElement
-import zakadabar.stack.frontend.FrontendContext.dock
-import zakadabar.stack.frontend.FrontendContext.theme
+import zakadabar.stack.frontend.application.Application.dock
+import zakadabar.stack.frontend.application.Application.theme
 import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.header.Header

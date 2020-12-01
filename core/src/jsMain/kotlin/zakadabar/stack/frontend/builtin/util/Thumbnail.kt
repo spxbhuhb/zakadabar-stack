@@ -4,7 +4,7 @@
 package zakadabar.stack.frontend.builtin.util
 
 import zakadabar.stack.comm.http.BlobCreateState
-import zakadabar.stack.data.BlobDto
+import zakadabar.stack.data.builtin.BlobDto
 import zakadabar.stack.frontend.elements.ZkBuilder
 import zakadabar.stack.frontend.elements.ZkElement
 
