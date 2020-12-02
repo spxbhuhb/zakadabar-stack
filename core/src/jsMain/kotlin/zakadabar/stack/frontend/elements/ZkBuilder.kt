@@ -66,7 +66,7 @@ class ZkBuilder(
     }
 
     /**
-     * Creates a "div" [HTMLElement] with coreClasses.row added and executes the builder on it.
+     * Creates a "div" [HTMLElement] with zkClasses.grid added and executes the builder on it.
      *
      * @param  className  Additional CSS class. Optional.
      * @param  build      The builder function to build the content of the div. Optional.
@@ -79,7 +79,7 @@ class ZkBuilder(
     }
 
     /**
-     * Creates "div" [HTMLElement] with coreClasses.column added and executes the builder on it.
+     * Creates "div" [HTMLElement] with zkClasses.column added and executes the builder on it.
      *
      * @param  className  Additional CSS class. Optional.
      * @param  build      The builder function to build the content of the div. Optional.
@@ -87,6 +87,21 @@ class ZkBuilder(
     fun column(className: String? = null, build: ZkBuilder.() -> Unit): HTMLElement {
         val e = document.createElement("div") as HTMLElement
         e.classList += zkClasses.column
+        runBuild(e, className, build)
+        return e
+    }
+
+    /**
+     * Creates a "div" [HTMLElement] with zkClasses.row added and executes the builder on it.
+     *
+     * @param  className  Additional CSS class. Optional.
+     * @param  style      Inline style for the grid. Optional.
+     * @param  build      The builder function to build the content of the div. Optional.
+     */
+    fun grid(className: String? = null, style: String? = null, build: ZkBuilder.() -> Unit): HTMLElement {
+        val e = document.createElement("div") as HTMLElement
+        e.classList += zkClasses.grid
+        if (style != null) e.style.cssText = style
         runBuild(e, className, build)
         return e
     }

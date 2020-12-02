@@ -34,19 +34,22 @@ class FormClasses(theme: Theme) : CssStyleSheet<FormClasses>(theme) {
     }
 
     val section by cssClass {
+        padding = 4
+        marginBottom = 8
         border = "1px solid $activeBlue"
-        borderRadius = 5
+        borderRadius = 4
     }
 
     val sectionTitle by cssClass {
         color = activeBlue
         fontWeight = 500
+        paddingBottom = 4
     }
 
     val sectionSummary by cssClass {
         fontSize = "80%"
+        paddingBottom = 8
     }
-
 
     val selectedEntry by cssClass {
         width = 200

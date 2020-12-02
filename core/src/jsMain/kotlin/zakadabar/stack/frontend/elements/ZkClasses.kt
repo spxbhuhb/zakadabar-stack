@@ -42,4 +42,9 @@ class ZkClasses(theme: Theme) : CssStyleSheet<ZkClasses>(theme) {
         flexGrow = 1
     }
 
+    val grid by cssClass {
+        display = "grid"
+        borderCollapse = "collapse"
+        border = 0
+    }
 }

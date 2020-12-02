@@ -59,6 +59,11 @@ infix fun HTMLElement.flex(value: String): HTMLElement {
     return this
 }
 
+infix fun HTMLElement.style(value: String): HTMLElement {
+    style.cssText = value
+    return this
+}
+
 /**
  * Align the width of two elements. The [calc] function is used to calculate the aligned
  * width from the with of the two elements.

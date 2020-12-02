@@ -12,19 +12,33 @@ class ShipForm(dto: ShipDto, mode: Mode) : ValidatedForm<ShipDto>(dto, Ships, mo
 
     override fun init() = build {
         + header("Ships")
-        + section("Basics", "Data that all ships have.") {
-            + dto::id
-            + dto::name
-            + select(dto::speed) {
-                SpeedDto.all()
-                    .map { it.id to it.description }
-                    .sortedBy { it.second }
+        + column {
+            + row {
+                + section("Basics", "Data that all ships have.") {
+                    + fieldGrid {
+                        ifNotCreate {
+                            + "id"
+                            + dto::id
+                        }
+                        + "name"
+                        + dto::name
+                        + "speed"
+                        + select(dto::speed) {
+                            SpeedDto.all()
+                                .map { it.id to it.description }
+                                .sortedBy { it.second }
+                        }
+                    }
+                } marginRight 8
+                + section("Description") {
+                    + textarea(dto::name)
+                }
             }
+            + section("Images") {
+                + Images(this@ShipForm, dto.id)
+            }
+            + buttons()
         }
-        + section("Images") {
-            + Images(this@ShipForm, dto.id)
-        }
-        + buttons()
     }
 
 }

@@ -19,6 +19,7 @@ package zakadabar.stack.frontend.builtin.form
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.frontend.builtin.form.FormClasses.Companion.formClasses
 import zakadabar.stack.frontend.builtin.form.fields.*
 import zakadabar.stack.frontend.builtin.form.structure.Buttons
 import zakadabar.stack.frontend.builtin.form.structure.Header
@@ -36,7 +37,8 @@ import kotlin.reflect.KProperty0
 open class ValidatedForm<T : RecordDto<T>>(
     val dto: T,
     val crud: ZkCrud<T>,
-    val mode: Mode
+    val mode: Mode,
+    val fieldGridTemplate: String = "grid-template-columns: 150px 1fr"
 ) : ZkElement(), ZkPropertyReceiver {
 
     enum class Mode {
@@ -51,6 +53,10 @@ open class ValidatedForm<T : RecordDto<T>>(
 
     // ----  Builder convenience functions --------
 
+    init {
+        className = formClasses.form
+    }
+
     fun header(title: String) =
         Header(title)
 
@@ -62,6 +68,12 @@ open class ValidatedForm<T : RecordDto<T>>(
 
     fun select(kProperty0: KMutableProperty0<RecordId<*>>, sortOptions: Boolean = true, options: suspend () -> List<Pair<RecordId<*>, String>>): ValidatedRecordSelect<T> {
         val field = ValidatedRecordSelect(this, kProperty0, sortOptions, options)
+        fields += field
+        return field
+    }
+
+    fun textarea(kProperty0: KMutableProperty0<String>): ValidatedTextArea<T> {
+        val field = ValidatedTextArea(this, kProperty0)
         fields += field
         return field
     }
@@ -102,6 +114,15 @@ open class ValidatedForm<T : RecordDto<T>>(
         return field
     }
 
+    fun ZkBuilder.ifNotCreate(build: ZkBuilder.() -> Unit) {
+        if (mode == Mode.Create) return
+        build()
+    }
+
+    fun ZkBuilder.fieldGrid(build: ZkBuilder.() -> Unit) =
+        grid(style = fieldGridTemplate, build = build)
+
+    fun KProperty0<*>.label() = this.name
 
     // ----  Validation and submit --------
 

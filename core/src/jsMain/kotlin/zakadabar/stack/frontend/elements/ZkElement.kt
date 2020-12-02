@@ -106,6 +106,15 @@ open class ZkElement(
         }
 
     /**
+     * Shorthand for the setting the style string of the HTML [element].
+     */
+    var style: String
+        inline get() = element.style.cssText
+        inline set(value) {
+            element.style.cssText = value
+        }
+
+    /**
      * Shorthand for the classList property of the HTML [element].
      */
     val classList: DOMTokenList
