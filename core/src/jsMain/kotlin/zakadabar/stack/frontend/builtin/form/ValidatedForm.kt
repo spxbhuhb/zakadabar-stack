@@ -125,7 +125,8 @@ open class ValidatedForm<T : RecordDto<T>>(
             try {
                 when (mode) {
                     Mode.Create -> {
-                        dto.create()
+                        val created = dto.create()
+                        fields.forEach { it.onCreateSuccess(created) }
                         toast { "create.success" }
                     }
                     Mode.Read -> {

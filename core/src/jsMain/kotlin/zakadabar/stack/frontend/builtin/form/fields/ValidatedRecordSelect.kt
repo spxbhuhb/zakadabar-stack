@@ -42,8 +42,20 @@ class ValidatedRecordSelect<T : RecordDto<T>>(
         className = formClasses.select
 
         launch {
-            val value = prop.get()
             val items = if (sortOptions) options().sortedBy { it.second } else options()
+
+            val value: Long
+
+            if (prop.get() == 0L) {
+                if (items.isEmpty()) {
+                    value = 0L
+                } else {
+                    value = items[0].first
+                    prop.set(value)
+                }
+            } else {
+                value = prop.get()
+            }
 
             var s = ""
             items.forEach {

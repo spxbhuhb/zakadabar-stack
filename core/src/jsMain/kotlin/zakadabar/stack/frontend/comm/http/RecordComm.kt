@@ -206,7 +206,7 @@ open class RecordComm<T : RecordDto<T>>(
      * Blob ID is 0 until the upload finishes. The actual id of the blob
      * is set when callback is called with state [BlobCreateState.Done].
      *
-     * @param  recordId  Id of the record the new BLOB belongs to.
+     * @param  dataRecordId  Id of the record the new BLOB belongs to.
      * @param  name      Name of the BLOB, typically the file name.
      * @param  type      Type of the BLOB, typically the MIME type.
      * @param  data      BLOB data, a Javascript [Blob].
@@ -215,7 +215,7 @@ open class RecordComm<T : RecordDto<T>>(
      * @return A DTO which contains data of the blob. The `id` is 0 in this DTO.
      */
     override fun blobCreate(
-        recordId: Long, name: String, type: String,
+        dataRecordId: Long?, name: String, type: String,
         data: Any,
         callback: (dto: BlobDto, state: BlobCreateState, uploaded: Long) -> Unit
     ) {
@@ -223,7 +223,7 @@ open class RecordComm<T : RecordDto<T>>(
 
         val req = XMLHttpRequest()
 
-        val dto = BlobDto(0L, recordId, recordType, name, type, data.size.toLong())
+        val dto = BlobDto(0L, dataRecordId, recordType, name, type, data.size.toLong())
 
         req.addEventListener("progress", { callback(dto, BlobCreateState.Progress, (it as ProgressEvent).loaded.toLong()) })
         req.addEventListener("load", { callback(json.decodeFromString(BlobDto.serializer(), req.responseText), BlobCreateState.Done, data.size.toLong()) })
@@ -232,9 +232,8 @@ open class RecordComm<T : RecordDto<T>>(
 
         callback(dto, BlobCreateState.Starting, 0)
 
-        req.open("POST", "/api/$recordType/$recordId/blob", true)
+        req.open("POST", "/api/$recordType/$dataRecordId/blob", true)
         req.setRequestHeader("Content-Type", type)
-        //req.setRequestHeader("Content-Length", data.size.toString())
         req.setRequestHeader("Content-Disposition", """attachment; filename="$name"""")
         req.send(data)
     }
@@ -247,9 +246,9 @@ open class RecordComm<T : RecordDto<T>>(
      * @throws  FetchError
      */
     @PublicApi
-    override suspend fun blobMeta(recordId: Long): List<BlobDto> {
+    override suspend fun blobMetaRead(dataRecordId: Long): List<BlobDto> {
 
-        val responsePromise = window.fetch("/api/$recordType/$recordId/blob/all")
+        val responsePromise = window.fetch("/api/$recordType/$dataRecordId/blob/all")
         val response = responsePromise.await()
 
         ensure(response.ok) { FetchError(response) }
@@ -261,16 +260,50 @@ open class RecordComm<T : RecordDto<T>>(
     }
 
     /**
-     * Deletes an BLOB.
+     * Updates an metadata of a blob: recordId, name, type fields.
      *
-     * @param  id  Id of the blob to delete.
+     * @param  dto  DTO of the object to update.
+     *
+     * @throws  FetchError
+     */
+    override suspend fun blobMetaUpdate(dto: BlobDto): BlobDto {
+        ensure(dto.id != 0L) { "ID of the $dto is 0 " }
+
+        val headers = Headers()
+
+        headers.append("content-type", "application/json")
+
+        val body = json.encodeToString(BlobDto.serializer(), dto)
+
+        val requestInit = RequestInit(
+            method = "PATCH",
+            headers = headers,
+            body = body
+        )
+
+        val responsePromise = window.fetch("/api/$recordType/${dto.dataRecord}/blob", requestInit)
+        val response = responsePromise.await()
+
+        ensure(response.ok) { FetchError(response) }
+
+        val textPromise = response.text()
+        val text = textPromise.await()
+
+        return json.decodeFromString(BlobDto.serializer(), text)
+    }
+
+    /**
+     * Deletes a BLOB.
+     *
+     * @param  dataRecordId  Id of the data record the blob to delete belongs to.
+     * @param  blobId        Id of the blob to delete.
      *
      * @throws  FetchError
      */
     @PublicApi
-    override suspend fun blobDelete(recordId: Long, blobId: Long) {
+    override suspend fun blobDelete(dataRecordId: Long, blobId: Long) {
 
-        val responsePromise = window.fetch("/api/$recordType/$recordId/blob/$blobId", RequestInit(method = "DELETE"))
+        val responsePromise = window.fetch("/api/$recordType/$dataRecordId/blob/$blobId", RequestInit(method = "DELETE"))
         val response = responsePromise.await()
 
         ensure(response.ok) { FetchError(response) }

@@ -14,29 +14,38 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.frontend.builtin.util.droparea
+package zakadabar.stack.frontend.builtin.form.fields
 
+import kotlinx.browser.document
 import org.w3c.dom.DragEvent
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.get
 import zakadabar.stack.comm.http.BlobCreateState
-import zakadabar.stack.comm.http.Comm
 import zakadabar.stack.data.builtin.BlobDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.frontend.builtin.form.ValidatedForm
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.Thumbnail
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.util.droparea.DropAreaClasses
 
 class Images<T : RecordDto<T>>(
-    val recordId: RecordId<T>,
-    val comm: Comm<T>
-) : ZkElement() {
+    private val form: ValidatedForm<T>,
+    private val dataRecordId: RecordId<T>,
+) : FormField<Unit>(
+    element = document.createElement("div") as HTMLElement
+) {
 
     override fun init() = launchBuild {
 
-        comm.blobMeta(recordId).forEach {
-            + Thumbnail(it)
+        form.fields += this@Images
+
+        if (form.mode != ValidatedForm.Mode.Create) {
+            form.dto.comm().blobMetaRead(dataRecordId).forEach {
+                + Thumbnail(it)
+            }
         }
 
         + div(DropAreaClasses.classes.dropArea) {
@@ -70,12 +79,33 @@ class Images<T : RecordDto<T>>(
             when (item.kind) {
                 "file" -> {
                     val file = item.getAsFile() ?: continue
+
+                    // this is a temporary dto to initialize the Thumbnail
                     val dto = BlobDto(0, 0, "", file.name, file.type, file.size.toLong())
                     val thumbnail = Thumbnail(dto, BlobCreateState.Starting)
-                    comm.blobCreate(recordId, file.name, file.type, file, thumbnail::update)
+
+                    // when the form is in create mode we don't have a proper record id, use null instead
+                    form.dto.comm().blobCreate(
+                        if (form.mode == ValidatedForm.Mode.Create) null else dataRecordId,
+                        file.name, file.type, file,
+                        thumbnail::update
+                    )
+
+                    // this will insert after the first thumbnail or at the beginning
                     insertAfter(thumbnail, childElements.filterIsInstance<Thumbnail>().lastOrNull())
                 }
             }
+        }
+    }
+
+    override fun onValidated(report: ValidityReport) {
+
+    }
+
+    override suspend fun onCreateSuccess(created: RecordDto<*>) {
+        // update blobs with the proper record id
+        childElements.filterIsInstance<Thumbnail>().forEach {
+            form.dto.comm().blobMetaUpdate(it.dto.copy(dataRecord = created.id))
         }
     }
 

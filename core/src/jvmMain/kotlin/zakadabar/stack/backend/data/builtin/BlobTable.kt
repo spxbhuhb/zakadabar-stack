@@ -9,7 +9,7 @@ import zakadabar.stack.data.builtin.BlobDto
 
 open class BlobTable(name: String, recordTable: LongIdTable) : LongIdTable(name) {
 
-    val dataRecord = reference("data_record", recordTable)
+    val dataRecord = reference("data_record", recordTable).nullable()
     val name = varchar("name", 100)
     val type = varchar("type", 50)
     val size = long("size")
@@ -17,7 +17,7 @@ open class BlobTable(name: String, recordTable: LongIdTable) : LongIdTable(name)
 
     fun toDto(row: ResultRow, recordType: String) = BlobDto(
         id = row[id].value,
-        dataRecord = row[dataRecord].value,
+        dataRecord = row[dataRecord]?.value,
         dataType = recordType,
         name = row[name],
         type = row[type],

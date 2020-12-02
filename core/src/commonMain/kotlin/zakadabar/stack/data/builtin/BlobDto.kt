@@ -15,7 +15,7 @@ import zakadabar.stack.data.schema.DtoSchema
 data class BlobDto(
 
     override val id: RecordId<BlobDto>,
-    var dataRecord: RecordId<*>,
+    var dataRecord: RecordId<*>?,
     var dataType: String,
     var name: String,
     var type: String,
@@ -28,7 +28,6 @@ data class BlobDto(
     }
 
     override fun schema() = DtoSchema.build {
-        + ::dataRecord min 1
         + ::name min 1 max 200
         + ::type min 1 max 100
         + ::size min 0 max Long.MAX_VALUE

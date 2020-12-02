@@ -6,7 +6,7 @@ package zakadabar.demo.frontend.ship
 import zakadabar.demo.data.ShipDto
 import zakadabar.demo.data.SpeedDto
 import zakadabar.stack.frontend.builtin.form.ValidatedForm
-import zakadabar.stack.frontend.builtin.util.droparea.Images
+import zakadabar.stack.frontend.builtin.form.fields.Images
 
 class ShipForm(dto: ShipDto, mode: Mode) : ValidatedForm<ShipDto>(dto, Ships, mode) {
 
@@ -22,7 +22,7 @@ class ShipForm(dto: ShipDto, mode: Mode) : ValidatedForm<ShipDto>(dto, Ships, mo
             }
         }
         + section("Images") {
-            + Images(dto.id, dto.comm())
+            + Images(this@ShipForm, dto.id)
         }
         + buttons()
     }

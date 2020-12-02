@@ -13,10 +13,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
@@ -126,7 +123,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      *
      * @return DTO of the blobs
      */
-    open fun blobMeta(executor: Executor, recordId: Long): List<BlobDto> {
+    open fun blobMetaRead(executor: Executor, recordId: Long): List<BlobDto> {
         check(blobTable != null) { "missing blob table" }
 
         return transaction {
@@ -149,7 +146,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      *
      * @return Content of the blob (binary).
      */
-    open fun blobRead(executor: Executor, recordId: Long, blobId: Long): Pair<BlobDto, ByteArray> {
+    open fun blobRead(executor: Executor, recordId: Long?, blobId: Long): Pair<BlobDto, ByteArray> {
         check(blobTable != null) { "missing blob table" }
 
         return transaction {
@@ -176,7 +173,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
 
         return transaction {
             val id = blobTable.insert {
-                it[dataRecord] = EntityID(dto.dataRecord, recordTable)
+                it[dataRecord] = if (dto.dataRecord == null) null else EntityID(dto.dataRecord !!, recordTable)
                 it[name] = dto.name
                 it[type] = dto.type
                 it[size] = dto.size
@@ -188,9 +185,33 @@ abstract class RecordBackend<T : RecordDto<T>>(
     }
 
     /**
+     * Update metadata of a blob.
+     *
+     * URL : `PATCH /api/<shid>/<type>/<recordId>/blob
+     *
+     * @param executor Executor of the operation.
+     * @param dto DTO of the blob
+     *
+     * @return Content of the blob (binary).
+     */
+    open fun blobMetaUpdate(executor: Executor, dto: BlobDto): BlobDto {
+        check(blobTable != null && recordTable != null) { "missing blob or record table" }
+
+        transaction {
+            blobTable.update({ blobTable.id eq dto.id }) {
+                it[dataRecord] = if (dto.dataRecord == null) null else EntityID(dto.dataRecord !!, recordTable)
+                it[name] = dto.name
+                it[type] = dto.type
+            }
+        }
+
+        return dto
+    }
+
+    /**
      * Delete a blob.
      *
-     * URL : `DELETE /api/<shid>/<type>/<recordId>/blob/<blobId>
+     * URL : `DELETE /api/<shid>/<type>/<recordId>/blob/<blobId>`
      *
      * @param executor Executor of the operation.
      * @param recordId Id record the blob belongs to.
@@ -276,16 +297,22 @@ abstract class RecordBackend<T : RecordDto<T>>(
         route("$dtoType/{rid}/blob") {
 
             get("/{bid?}") {
-                val recordId = call.parameters["rid"]?.toLongOrNull() ?: throw BadRequestException("missing record id")
+                val recordId = call.parameters["rid"]?.toLongOrNull()
                 val blobId = call.parameters["bid"]?.toLongOrNull()
 
                 val executor = call.executor()
 
                 if (blobId == null) {
+                    if (recordId == null || recordId == 0L) {
 
-                    if (Server.logReads) logger.info("${executor.entityId}: BLOB-META $dtoType $recordId $blobId")
+                        call.respond(emptyList<BlobDto>())
 
-                    call.respond(blobMeta(executor, recordId))
+                    } else {
+
+                        if (Server.logReads) logger.info("${executor.entityId}: BLOB-META $dtoType $recordId $blobId")
+
+                        call.respond(blobMetaRead(executor, recordId))
+                    }
 
                 } else {
 
@@ -307,7 +334,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
             }
 
             post {
-                val recordId = call.parameters["rid"]?.toLongOrNull() ?: throw BadRequestException("missing record id")
+                val recordId = call.parameters["rid"]?.toLongOrNull()
 
                 val executor = call.executor()
 
@@ -332,6 +359,13 @@ abstract class RecordBackend<T : RecordDto<T>>(
                 call.receiveChannel().readFully(bytes, 0, length)
 
                 call.respond(blobCreate(executor, dto, bytes))
+            }
+
+            patch {
+                val executor = call.executor()
+                val request = call.receive(BlobDto::class)
+                logger.info("${executor.entityId}: BLOB-UPDATE ${BlobDto.recordType} $request")
+                call.respond(blobMetaUpdate(executor, request))
             }
 
             delete("/{bid}") {
