@@ -28,13 +28,15 @@ import zakadabar.stack.backend.data.RecordBackend
 import zakadabar.stack.backend.data.builtin.StackSession
 import zakadabar.stack.backend.data.builtin.session
 import zakadabar.stack.backend.util.Sql
-import zakadabar.stack.backend.util.executor
+import zakadabar.stack.data.builtin.AccountSummaryDto
 import zakadabar.stack.util.Executor
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.time.Duration
 import kotlin.reflect.full.isSubclassOf
+
+val anonymous = AccountSummaryDto()
 
 val wsLogger = LoggerFactory.getLogger("ws") !! // log ws events
 
@@ -134,7 +136,7 @@ class Server : CliktCommand() {
                         }
 
                         get("${Stack.shid}/who-am-i") {
-                            call.respondText(call.executor().entityId.toString(), ContentType.Application.Json)
+                            call.respond(anonymous)
                         }
 
                         // api installs add routes and the code to serve them

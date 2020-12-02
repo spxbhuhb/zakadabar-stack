@@ -13,7 +13,7 @@ import zakadabar.stack.data.record.RecordId
 data class RoleGrantDto(
 
     override val id: Long,
-    val accountId: RecordId<AccountDto>,
+    val accountId: RecordId<AccountSummaryDto>,
     val roleId: RecordId<RoleDto>
 
 ) : RecordDto<RoleGrantDto> {
