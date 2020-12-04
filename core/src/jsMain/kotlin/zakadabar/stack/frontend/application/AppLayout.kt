@@ -31,10 +31,26 @@ import zakadabar.stack.frontend.elements.ZkElement
  */
 abstract class AppLayout(val name: String) : ZkElement() {
 
+    protected var initialized = false
+    protected var activeElement: ZkElement? = null
+    protected var content = ZkElement()
+
     init {
         element.dataset["zkLayoutName"] = name
+
         document.body?.appendChild(element)
+
+        with(element.style) {
+            width = "100vw"
+            height = "100vh"
+        }
+
         hide()
+    }
+
+    override fun init() = build {
+        initialized = true
+        + content
     }
 
     /**
@@ -47,15 +63,28 @@ abstract class AppLayout(val name: String) : ZkElement() {
      *
      * @param  state  The navigation state to resume.
      */
-    abstract fun resume(state: NavState, target: ZkElement)
+    open fun resume(state: NavState, target: ZkElement) {
+        if (! initialized) init()
+
+        content -= activeElement
+        activeElement = target
+        content += activeElement
+
+        show()
+    }
 
     /**
-     * Resume the layout:
+     * Pause the layout:
      *
      * * pause automatic refresh processes (if necessary)
      * * remove the element shown by the layout
      * * call [hide] to hide the HTML element
      */
-    abstract fun pause()
+    open fun pause() {
+        content -= activeElement
+        activeElement = null
+
+        hide()
+    }
 
 }

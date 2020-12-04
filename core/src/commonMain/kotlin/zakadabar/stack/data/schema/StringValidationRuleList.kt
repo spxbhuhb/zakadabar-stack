@@ -41,6 +41,13 @@ class StringValidationRuleList(val kProperty: KProperty0<String>) : ValidationRu
         }
     }
 
+
+    inner class Blank(@PublicApi val validValue: Boolean) : ValidationRule<String> {
+        override fun validate(value: String, report: ValidityReport) {
+            if (value.isBlank() != validValue) report.fail(kProperty, this)
+        }
+    }
+
     @PublicApi
     infix fun max(limit: Int): StringValidationRuleList {
         rules += Max(limit)
@@ -56,6 +63,12 @@ class StringValidationRuleList(val kProperty: KProperty0<String>) : ValidationRu
     @PublicApi
     infix fun notEquals(invalidValue: String): StringValidationRuleList {
         rules += NotEquals(invalidValue)
+        return this
+    }
+
+    @PublicApi
+    infix fun blank(blank: Boolean): StringValidationRuleList {
+        rules += Blank(blank)
         return this
     }
 

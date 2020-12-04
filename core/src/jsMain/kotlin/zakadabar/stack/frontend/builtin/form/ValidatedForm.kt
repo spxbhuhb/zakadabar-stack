@@ -25,28 +25,23 @@ import zakadabar.stack.frontend.builtin.form.structure.Buttons
 import zakadabar.stack.frontend.builtin.form.structure.Header
 import zakadabar.stack.frontend.builtin.form.structure.Section
 import zakadabar.stack.frontend.builtin.util.toast
-import zakadabar.stack.frontend.elements.ZkBuilder
 import zakadabar.stack.frontend.elements.ZkCrud
 import zakadabar.stack.frontend.elements.ZkElement
-import zakadabar.stack.frontend.elements.ZkPropertyReceiver
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.frontend.util.log
+import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KProperty0
 
 open class ValidatedForm<T : RecordDto<T>>(
     val dto: T,
-    val crud: ZkCrud<T>,
-    val mode: Mode,
-    val fieldGridTemplate: String = "grid-template-columns: 150px 1fr"
-) : ZkElement(), ZkPropertyReceiver {
-
-    enum class Mode {
-        Create,
-        Read,
-        Update,
-        Delete
-    }
+    val mode: FormMode,
+    val crud: ZkCrud<T>? = null,
+    @PublicApi
+    val fieldGridTemplate: String = "150px 1fr",
+    val fieldGridGap: String = "5px",
+    val builder: ValidatedForm<T>.() -> Unit = { }
+) : ZkElement() {
 
     private val schema = dto.schema()
     internal val fields = mutableListOf<FormField<*>>()
@@ -57,70 +52,61 @@ open class ValidatedForm<T : RecordDto<T>>(
         className = formClasses.form
     }
 
-    fun header(title: String) =
-        Header(title)
+    override fun init(): ZkElement {
+        builder()
+        return this
+    }
 
-    fun buttons() =
-        Buttons(this)
+    fun header(title: String) = Header(title)
 
-    fun section(title: String, summary: String = "", builder: ZkBuilder.() -> Unit) =
+    fun buttons() = Buttons(this@ValidatedForm)
+
+    fun section(title: String, summary: String = "", builder: ZkElement.() -> Unit) =
         Section(title, summary, builder)
 
     fun select(kProperty0: KMutableProperty0<RecordId<*>>, sortOptions: Boolean = true, options: suspend () -> List<Pair<RecordId<*>, String>>): ValidatedRecordSelect<T> {
-        val field = ValidatedRecordSelect(this, kProperty0, sortOptions, options)
+        val field = ValidatedRecordSelect(this@ValidatedForm, kProperty0, sortOptions, options)
         fields += field
         return field
     }
 
-    fun textarea(kProperty0: KMutableProperty0<String>): ValidatedTextArea<T> {
-        val field = ValidatedTextArea(this, kProperty0)
+    fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkElement.() -> Unit = { }): ValidatedTextArea<T> {
+        val field = ValidatedTextArea(this@ValidatedForm, kProperty0)
         fields += field
+        field.builder()
         return field
     }
 
     // ----  Customized build and property receiver  --------
 
-    override infix fun build(build: ZkBuilder.() -> Unit): ZkElement {
-        ZkBuilder.propertyReceiver = this
-        ZkBuilder(this, element).build()
-        ZkBuilder.propertyReceiver = null
-        return this
-    }
-
-    override infix fun launchBuild(build: suspend ZkBuilder.() -> Unit): ZkElement {
-        launch {
-            ZkBuilder.propertyReceiver = this
-            ZkBuilder(this, element).build()
-            ZkBuilder.propertyReceiver = null
-        }
-        return this
-    }
-
-    override fun add(kProperty0: KProperty0<RecordId<T>>): ZkElement {
-        val field = ValidatedId<T>(kProperty0)
+    operator fun KProperty0<RecordId<T>>.unaryPlus(): ZkElement {
+        val field = ValidatedId<T>(this)
+        + field
         fields += field
         return field
     }
 
-    override fun add(kProperty0: KMutableProperty0<String>): ZkElement {
-        val field = ValidatedString(this, kProperty0)
+    operator fun KMutableProperty0<String>.unaryPlus(): ZkElement {
+        val field = ValidatedString(this@ValidatedForm, this)
+        + field
         fields += field
         return field
     }
 
-    override fun add(kProperty0: KMutableProperty0<Double>): ZkElement {
-        val field = ValidatedDouble(this, kProperty0)
+    operator fun KMutableProperty0<Double>.unaryPlus(): ZkElement {
+        val field = ValidatedDouble(this@ValidatedForm, this)
+        plusAssign(field)
         fields += field
         return field
     }
 
-    fun ZkBuilder.ifNotCreate(build: ZkBuilder.() -> Unit) {
-        if (mode == Mode.Create) return
+    fun ifNotCreate(build: ZkElement.() -> Unit) {
+        if (mode == FormMode.Create) return
         build()
     }
 
-    fun ZkBuilder.fieldGrid(build: ZkBuilder.() -> Unit) =
-        grid(style = fieldGridTemplate, build = build)
+    fun fieldGrid(build: ZkElement.() -> Unit) =
+        grid(style = "grid-template-columns: $fieldGridTemplate; gap: $fieldGridGap", build = build)
 
     fun KProperty0<*>.label() = this.name
 
@@ -145,19 +131,19 @@ open class ValidatedForm<T : RecordDto<T>>(
         launch {
             try {
                 when (mode) {
-                    Mode.Create -> {
+                    FormMode.Create -> {
                         val created = dto.create()
                         fields.forEach { it.onCreateSuccess(created) }
                         toast { "create.success" }
                     }
-                    Mode.Read -> {
+                    FormMode.Read -> {
                         // nothing to do here
                     }
-                    Mode.Update -> {
+                    FormMode.Update -> {
                         dto.update()
                         toast { "update.success" }
                     }
-                    Mode.Delete -> {
+                    FormMode.Delete -> {
                         dto.delete()
                         toast { "delete.success" }
                     }
@@ -165,10 +151,10 @@ open class ValidatedForm<T : RecordDto<T>>(
             } catch (ex: Exception) {
                 log(ex)
                 when (mode) {
-                    Mode.Create -> toast { "create.failed" }
-                    Mode.Read -> Unit
-                    Mode.Update -> toast { "update.failed" }
-                    Mode.Delete -> toast { "delete.failed" }
+                    FormMode.Create -> toast { "create.failed" }
+                    FormMode.Read -> Unit
+                    FormMode.Update -> toast { "update.failed" }
+                    FormMode.Delete -> toast { "delete.failed" }
                 }
             }
         }

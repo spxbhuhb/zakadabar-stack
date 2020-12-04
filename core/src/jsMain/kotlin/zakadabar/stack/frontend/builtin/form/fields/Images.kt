@@ -26,6 +26,7 @@ import zakadabar.stack.data.builtin.BlobDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ValidatedForm
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.Thumbnail
@@ -42,7 +43,7 @@ class Images<T : RecordDto<T>>(
 
         form.fields += this@Images
 
-        if (form.mode != ValidatedForm.Mode.Create) {
+        if (form.mode != FormMode.Create) {
             form.dto.comm().blobMetaRead(dataRecordId).forEach {
                 + Thumbnail(it)
             }
@@ -86,7 +87,7 @@ class Images<T : RecordDto<T>>(
 
                     // when the form is in create mode we don't have a proper record id, use null instead
                     form.dto.comm().blobCreate(
-                        if (form.mode == ValidatedForm.Mode.Create) null else dataRecordId,
+                        if (form.mode == FormMode.Create) null else dataRecordId,
                         file.name, file.type, file,
                         thumbnail::update
                     )

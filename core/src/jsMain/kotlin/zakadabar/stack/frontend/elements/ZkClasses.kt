@@ -47,4 +47,5 @@ class ZkClasses(theme: Theme) : CssStyleSheet<ZkClasses>(theme) {
         borderCollapse = "collapse"
         border = 0
     }
+
 }

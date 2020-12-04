@@ -3,6 +3,7 @@
  */
 @file:Suppress("unused")
 
+import zakadabar.demo.frontend.Routing
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.launch

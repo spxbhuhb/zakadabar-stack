@@ -4,16 +4,23 @@
 package zakadabar.demo.frontend.speed
 
 import zakadabar.demo.data.SpeedDto
+import zakadabar.demo.frontend.R
+import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ValidatedForm
 
-class SpeedForm(dto: SpeedDto, mode: Mode) : ValidatedForm<SpeedDto>(dto, Speeds, mode) {
+class SpeedForm(dto: SpeedDto, mode: FormMode) : ValidatedForm<SpeedDto>(dto, mode, Speeds) {
 
     override fun init() = build {
-        + header("Speed")
-        + section("Basics", "Data that all speeds have.") {
-            + dto::id
-            + dto::description
-            + dto::value
+        + header(R.Speed.speed)
+        + section(R.basics, R.Speed.Basics.explanation) {
+            + fieldGrid {
+                + R.id
+                + dto::id
+                + R.description
+                + dto::description
+                + R.value
+                + dto::value
+            }
         }
         + buttons()
     }

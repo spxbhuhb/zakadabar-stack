@@ -13,6 +13,10 @@ var defaultTheme = Theme()
 
 open class Theme {
 
+    val activeBlue = "#2746ab"
+    val inactiveBlue = "#bec7e6";
+    val green = "#89e6c2"
+
     open var darkestColor = "#0d5b28"
     open var darkColor = "#2e8d36"
     open var lightColor = "#43cd50"
@@ -65,20 +69,21 @@ open class CssStyleSheet<T : CssStyleSheet<T>>(val theme: Theme) {
 
     internal val rules = mutableMapOf<String, CssStyleRule>()
 
-    fun cssClass(init: RuleInit): ReadOnlyProperty<CssStyleSheet<T>, String> =
-        object : ReadOnlyProperty<CssStyleSheet<T>, String> {
+    class CssDelegate(private val cssClassName: String) : ReadOnlyProperty<CssStyleSheet<*>, String> {
+        override fun getValue(thisRef: CssStyleSheet<*>, property: KProperty<*>) = cssClassName
+    }
 
-            val cssClassName = "zkc-${nextId.getAndIncrement()}"
-            val rule = CssStyleRule(this@CssStyleSheet, cssClassName)
-
-            init {
-                rule.init(theme)
-                rules[cssClassName] = rule
-            }
-
-            override fun getValue(thisRef: CssStyleSheet<T>, property: KProperty<*>) = cssClassName
+    class CssDelegateProvider(val init: RuleInit) {
+        operator fun provideDelegate(thisRef: CssStyleSheet<*>, prop: KProperty<*>): ReadOnlyProperty<CssStyleSheet<*>, String> {
+            val cssClassName = "${thisRef::class.simpleName}-${prop.name}-${nextId.getAndIncrement()}"
+            val rule = CssStyleRule(thisRef, cssClassName)
+            rule.init(thisRef.theme)
+            thisRef.rules[cssClassName] = rule
+            return CssDelegate(cssClassName)
         }
+    }
 
+    fun cssClass(init: RuleInit) = CssDelegateProvider(init)
 
     @PublicApi
     fun attach(): T {
@@ -281,6 +286,31 @@ class CssStyleRule(val sheet: CssStyleSheet<*>, val cssClassName: String) {
             styles["box-sizing"] = value
         }
 
+    /**
+     * [MDN: box-shadow](https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow)
+     *
+     * ```
+     *
+     * // Keyword values
+     * box-shadow = "none"
+     *
+     * // offset-x | offset-y | color
+     * box-shadow = "60px -16px teal"
+     *
+     * // offset-x | offset-y | blur-radius | color
+     * box-shadow = "10px 5px 5px black"
+     *
+     * // offset-x | offset-y | blur-radius | spread-radius | color
+     * box-shadow = "2px 2px 2px 1px rgba(0, 0, 0, 0.2)"
+     *
+     * // inset | offset-x | offset-y | color
+     * box-shadow = "inset 5em 1em gold"
+     *
+     * // Any number of shadows, separated by commas
+     * box-shadow = "3px 3px red, -1em 0 0.4em olive"
+     *
+     * ```
+     */
     var boxShadow
         get() = styles["box-shadow"]
         set(value) {

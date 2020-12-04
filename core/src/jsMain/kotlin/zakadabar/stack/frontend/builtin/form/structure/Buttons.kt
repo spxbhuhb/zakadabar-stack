@@ -5,6 +5,7 @@ package zakadabar.stack.frontend.builtin.form.structure
 
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ValidatedForm
 import zakadabar.stack.frontend.builtin.simple.SimpleButton
 import zakadabar.stack.frontend.elements.ZkElement
@@ -14,22 +15,28 @@ class Buttons<T : RecordDto<T>>(
 ) : ZkElement() {
     override fun init() = build {
         when (form.mode) {
-            ValidatedForm.Mode.Create -> {
-                + SimpleButton("back") { Application.back() }
-                + SimpleButton("save") { form.submit() }
+            FormMode.Create ->
+                + row {
+                    + SimpleButton("back") { Application.back() }
+                    + SimpleButton("save") { form.submit() }
+                }
+
+            FormMode.Read -> {
+                + row {
+                    + SimpleButton("back") { Application.back() }
+                    + SimpleButton("edit") { form.crud?.openUpdate(form.dto.id) }
+                }
             }
-            ValidatedForm.Mode.Read -> {
-                + SimpleButton("back") { Application.back() }
-                + SimpleButton("edit") { form.crud.openUpdate(form.dto.id) }
-            }
-            ValidatedForm.Mode.Update -> {
-                + SimpleButton("back") { Application.back() }
-                + SimpleButton("save") { form.submit() }
-            }
-            ValidatedForm.Mode.Delete -> {
-                + SimpleButton("back") { Application.back() }
-                + SimpleButton("delete") { form.submit() }
-            }
+            FormMode.Update ->
+                + row {
+                    + SimpleButton("back") { Application.back() }
+                    + SimpleButton("save") { form.submit() }
+                }
+            FormMode.Delete ->
+                + row {
+                    + SimpleButton("back") { Application.back() }
+                    + SimpleButton("delete") { form.submit() }
+                }
         }
 
     }

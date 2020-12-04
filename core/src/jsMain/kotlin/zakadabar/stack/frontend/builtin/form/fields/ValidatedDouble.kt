@@ -20,6 +20,7 @@ import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.frontend.builtin.form.FormClasses
 import zakadabar.stack.frontend.builtin.form.ValidatedForm
 import zakadabar.stack.frontend.elements.ZkElement
 import kotlin.reflect.KMutableProperty0
@@ -34,6 +35,8 @@ class ValidatedDouble<T : RecordDto<T>>(
     private val input = element as HTMLInputElement
 
     override fun init(): ZkElement {
+        className = FormClasses.formClasses.text
+
         if (readOnly) input.readOnly = true
 
         val value = prop.get()

@@ -34,6 +34,8 @@ class FormClasses(theme: Theme) : CssStyleSheet<FormClasses>(theme) {
     }
 
     val section by cssClass {
+        display = "flex"
+        flexDirection = "column"
         padding = 4
         marginBottom = 8
         border = "1px solid $activeBlue"
@@ -61,6 +63,80 @@ class FormClasses(theme: Theme) : CssStyleSheet<FormClasses>(theme) {
         width = 200
         height = 200
         border = "1px solid lightgray"
+    }
+
+
+    val recordId by cssClass {
+        display = "block"
+        fontSize = theme.fontSize
+        fontFamily = theme.fontFamily
+        fontWeight = theme.fontWeight
+        color = "#444"
+        lineHeight = "1.3"
+        padding = ".6em 1.4em .5em .8em"
+        width = "100%"
+        maxWidth = "100%"
+        boxSizing = "border-box"
+        margin = 0
+        border = "1px solid #aaa"
+        boxShadow = "0 1px 0 1px rgba(0,0,0,.04)"
+        borderRadius = ".5em"
+        mozAppearance = "none"
+        webkitAppearance = "none"
+        appearance = "none"
+        backgroundColor = "#fff"
+    }
+
+    val text by cssClass {
+        display = "block"
+        fontSize = theme.fontSize
+        fontFamily = theme.fontFamily
+        fontWeight = theme.fontWeight
+        color = "#444"
+        lineHeight = "1.3"
+        padding = ".6em 1.4em .5em .8em"
+        width = "100%"
+        maxWidth = "100%"
+        boxSizing = "border-box"
+        margin = 0
+        border = "1px solid #aaa"
+        boxShadow = "0 1px 0 1px rgba(0,0,0,.04)"
+        borderRadius = ".5em"
+        mozAppearance = "none"
+        webkitAppearance = "none"
+        appearance = "none"
+        backgroundColor = "#fff"
+
+        on(":hover") {
+            borderColor = "#888"
+        }
+
+        on(":focus") {
+            borderColor = "#aaa"
+            boxShadow = "0 0 1px 3px rgba(59, 153, 252, .7)"
+            // box-shadow: 0 0 0 3px -moz-mac-focusring;
+            color = "#222"
+            outline = "none"
+        }
+
+        on(" option") {
+            fontWeight = "normal"
+        }
+
+        on(":disabled") {
+            color = "gray"
+            backgroundColor = "#gray"
+            borderColor = "#aaa"
+        }
+
+        on(":disabled:hover") {
+            borderColor = "#aaa"
+        }
+
+        on("[aria-disabled=true]") {
+            color = "gray"
+            borderColor = "#aaa"
+        }
     }
 
     // for select the styling idea comes from: https://www.filamentgroup.com/lab/select-css.html

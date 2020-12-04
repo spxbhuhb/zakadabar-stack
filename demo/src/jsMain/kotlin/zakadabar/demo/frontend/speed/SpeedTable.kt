@@ -9,9 +9,9 @@ import zakadabar.stack.frontend.builtin.table.Table
 @Suppress("unused") // table pattern
 class SpeedTable : Table<SpeedDto>() {
 
-    val recordId by column(SpeedDto::id)
-    val description by column(SpeedDto::description)
-    val value by column(SpeedDto::value)
+    val recordId by tableColumn(SpeedDto::id)
+    val description by tableColumn(SpeedDto::description)
+    val value by tableColumn(SpeedDto::value)
     val update by updateLink(SpeedDto::id, Speeds)
 
 }

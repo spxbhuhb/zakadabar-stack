@@ -5,7 +5,6 @@ package zakadabar.stack.frontend.builtin.util
 
 import zakadabar.stack.comm.http.BlobCreateState
 import zakadabar.stack.data.builtin.BlobDto
-import zakadabar.stack.frontend.elements.ZkBuilder
 import zakadabar.stack.frontend.elements.ZkElement
 
 open class Thumbnail(
@@ -37,21 +36,21 @@ open class Thumbnail(
         }
     }
 
-    private fun ZkBuilder.renderImage() {
+    private fun ZkElement.renderImage() {
         + image(dto.url())
     }
 
-    private fun ZkBuilder.renderProgress() {
+    private fun ZkElement.renderProgress() {
         + row {
             + "uploading: $progress / ${dto.size}"
         }
     }
 
-    private fun ZkBuilder.renderError() {
+    private fun ZkElement.renderError() {
         + "upload error"
     }
 
-    private fun ZkBuilder.renderAbort() {
+    private fun ZkElement.renderAbort() {
         + "aborted"
     }
 

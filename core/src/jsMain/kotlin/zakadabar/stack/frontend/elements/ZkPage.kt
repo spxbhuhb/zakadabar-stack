@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.frontend.elements
 
+import zakadabar.stack.frontend.application.AppLayout
 import zakadabar.stack.frontend.application.AppRouting
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.application.NavState
@@ -13,7 +14,8 @@ import zakadabar.stack.frontend.application.NavState
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
 open class ZkPage(
     final override val module: String,
-    final override val viewPrefix: String
+    final override val viewPrefix: String,
+    val layout: AppLayout? = null
 ) : ZkElement(), AppRouting.ZkTarget {
 
     companion object {
@@ -24,7 +26,7 @@ open class ZkPage(
          * Use this function when you need to fetch data asynchronously during building
          * the element.
          */
-        fun launchBuildNewPage(module: String, viewPrefix: String, builder: suspend ZkBuilder.() -> Unit) =
+        fun launchBuildNewPage(module: String, viewPrefix: String, builder: suspend ZkElement.() -> Unit) =
             // FIXME run build only when needed
             ZkPage(module, viewPrefix).launchBuild(builder) as ZkPage
 
@@ -34,12 +36,15 @@ open class ZkPage(
          *
          * Use this function when there is no need to asynchronous data fetch.
          */
-        fun buildNewPage(module: String, viewPrefix: String, builder: ZkBuilder.() -> Unit) =
+        fun buildNewPage(module: String, viewPrefix: String, builder: ZkElement.() -> Unit) =
             ZkPage(module, viewPrefix).build(builder) as ZkPage
     }
 
     open fun open() = Application.changeNavState("/$module$viewPrefix")
 
-    override fun route(routing: AppRouting, state: NavState) = this
+    override fun route(routing: AppRouting, state: NavState): ZkElement {
+        if (layout != null) routing.nextLayout = layout
+        return this
+    }
 
 }

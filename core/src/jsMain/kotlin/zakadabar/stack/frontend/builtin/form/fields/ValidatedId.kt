@@ -22,6 +22,7 @@ import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.frontend.builtin.form.FormClasses.Companion.formClasses
 import zakadabar.stack.frontend.elements.ZkElement
 import kotlin.reflect.KProperty0
 
@@ -34,6 +35,7 @@ class ValidatedId<T : RecordDto<T>>(
     private val input = element as HTMLInputElement
 
     override fun init(): ZkElement {
+        className = formClasses.recordId
         input.readOnly = true
         input.value = prop.get().toString()
         return this

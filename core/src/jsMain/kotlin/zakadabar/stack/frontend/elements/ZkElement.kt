@@ -5,12 +5,12 @@ package zakadabar.stack.frontend.elements
 
 import kotlinx.browser.document
 import kotlinx.browser.window
+import kotlinx.dom.appendText
 import kotlinx.dom.clear
-import org.w3c.dom.DOMTokenList
-import org.w3c.dom.HTMLElement
+import org.w3c.dom.*
+import org.w3c.dom.css.CSSStyleDeclaration
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventTarget
-import org.w3c.dom.set
 import zakadabar.stack.frontend.elements.ZkClasses.Companion.zkClasses
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.frontend.util.log
@@ -35,7 +35,7 @@ open class ZkElement(
          * Use this function when you need to fetch data asynchronously during building
          * the element.
          */
-        fun launchBuildNew(builder: suspend ZkBuilder.() -> Unit) = ZkElement().launchBuild(builder)
+        fun launchBuildNew(builder: suspend ZkElement.() -> Unit) = ZkElement().launchBuild(builder)
 
         /**
          * Creates an anonymous [ZkElement] and calls [ZkElement.build] on it with
@@ -43,11 +43,13 @@ open class ZkElement(
          *
          * Use this function when there is no need to asynchronous data fetch.
          */
-        fun buildNew(builder: ZkBuilder.() -> Unit) = ZkElement().build(builder)
+        fun buildNew(builder: ZkElement.() -> Unit) = ZkElement().build(builder)
 
     }
 
     val id = nextId
+
+    var buildContext = element
 
     init {
         element.id = "zk-$id"
@@ -122,17 +124,19 @@ open class ZkElement(
 
     // ---- DOM Builder
 
-    open infix fun build(build: ZkBuilder.() -> Unit): ZkElement {
-        ZkBuilder(this, element).build()
+    open infix fun build(builder: ZkElement.() -> Unit): ZkElement {
+        this.builder()
         return this
     }
 
-    open infix fun launchBuild(build: suspend ZkBuilder.() -> Unit): ZkElement {
+    open infix fun launchBuild(builder: suspend ZkElement.() -> Unit): ZkElement {
         launch {
-            ZkBuilder(this@ZkElement, element).build()
+            this.builder()
         }
         return this
     }
+
+    fun toggle() = element.classList.toggle(zkClasses.hidden)
 
     fun hide(): ZkElement {
         classList.add(zkClasses.hidden)
@@ -186,7 +190,7 @@ open class ZkElement(
         return this
     }
 
-    fun hasClass() = ! className.isBlank()
+    fun hasClass() = className.isNotBlank()
 
     fun withClass(className: String): ZkElement {
         element.classList.add(className)
@@ -210,8 +214,9 @@ open class ZkElement(
         return this
     }
 
-    // ---- Child elements  ----
+    // ----  Child elements  --------
 
+    @PublicApi
     fun clearChildren(): ZkElement {
         if (::childElements.isInitialized) {
             childElements.forEach { child -> child.cleanup() }
@@ -405,4 +410,243 @@ open class ZkElement(
     }
 
     open fun onException(ex: Throwable) = log(ex)
+
+    // ----  Builder  --------
+
+    private fun runBuild(e: HTMLElement, className: String?, build: ZkElement.() -> Unit) {
+        if (className != null) e.classList.add(className)
+        val original = buildContext
+        buildContext = e
+        this.build()
+        buildContext = original
+    }
+
+    /**
+     * Convenience to set the style of the current [buildContext].
+     */
+    fun style(styleBuilder: CSSStyleDeclaration.() -> Unit) {
+        with(buildContext.style) {
+            styleBuilder()
+        }
+    }
+
+    /**
+     * Creates "div" [HTMLElement] and executes the builder function on it.
+     *
+     * @param  className  CSS class to add. Optional.
+     * @param  build      The builder function to build the content of the div. Optional.
+     */
+    fun div(className: String? = null, build: ZkElement.() -> Unit = { }): HTMLElement {
+        val e = document.createElement("div") as HTMLElement
+        runBuild(e, className, build)
+        return e
+    }
+
+    /**
+     * Creates a "div" [HTMLElement] with zkClasses.grid added and executes the builder on it.
+     *
+     * @param  className  Additional CSS class. Optional.
+     * @param  build      The builder function to build the content of the div. Optional.
+     */
+    fun row(className: String? = null, build: ZkElement.() -> Unit): HTMLElement {
+        val e = document.createElement("div") as HTMLElement
+        e.classList += zkClasses.row
+        runBuild(e, className, build)
+        return e
+    }
+
+    /**
+     * Creates "div" [HTMLElement] with zkClasses.column added and executes the builder on it.
+     *
+     * @param  className  Additional CSS class. Optional.
+     * @param  build      The builder function to build the content of the div. Optional.
+     */
+    fun column(className: String? = null, build: ZkElement.() -> Unit): HTMLElement {
+        val e = document.createElement("div") as HTMLElement
+        e.classList += zkClasses.column
+        runBuild(e, className, build)
+        return e
+    }
+
+    /**
+     * Creates a "div" [HTMLElement] with zkClasses.row added and executes the builder on it.
+     *
+     * @param  className  Additional CSS class. Optional.
+     * @param  style      Inline style for the grid. Optional.
+     * @param  build      The builder function to build the content of the div. Optional.
+     */
+    fun grid(className: String? = null, style: String? = null, build: ZkElement.() -> Unit): HTMLElement {
+        val e = document.createElement("div") as HTMLElement
+        e.classList += zkClasses.grid
+        if (style != null) e.style.cssText = style
+        runBuild(e, className, build)
+        return e
+    }
+
+    /**
+     * Creates "div" [HTMLElement] with height and width passed as parameters.
+     *
+     * Be careful as Safari (and perhaps Chrome) collapses the gap when you
+     * use percent and the parent container is not sized properly.
+     *
+     * @param  width   Width of the gap. String or Int. Defaults is "100%".
+     * @param  height  Height of the gap. String or Int. Defaults is "100%".
+     */
+    fun gap(width: Any = "100%", height: Any = "100%"): HTMLElement {
+        val e = document.createElement("div") as HTMLElement
+        e.style.height = if (height is Int) "${height}px" else height.toString()
+        e.style.width = if (width is Int) "${width}px" else width.toString()
+        return e
+    }
+
+    /**
+     * Creates an IMG with a source url. Use [buildContext] to add attributes other than the source.
+     *
+     * ```
+     *
+     *     with(buildContext as HTMLImageElement) {
+     *         width = 100
+     *         height = 100
+     *     }
+     *
+     * ```
+     *
+     * @param  src        Source URL.
+     * @param  className  Additional CSS class. Optional.
+     * @param  build      Builder function to manage the IMG tag added. Optional.
+     */
+    @PublicApi
+    fun image(src: String, className: String? = null, build: ZkElement.() -> Unit = { }): HTMLImageElement {
+        val img = document.createElement("img") as HTMLImageElement
+        img.src = src
+        runBuild(img, className, build)
+        return img
+    }
+
+    fun table(className: String? = null, build: ZkElement.() -> Unit = { }): HTMLTableElement {
+        val e = document.createElement("table") as HTMLTableElement
+        runBuild(e, className, build)
+        return e
+    }
+
+    fun tr(className: String? = null, build: ZkElement.() -> Unit = { }): HTMLTableRowElement {
+        val e = document.createElement("tr") as HTMLTableRowElement
+        runBuild(e, className, build)
+        return e
+    }
+
+    fun td(className: String? = null, build: ZkElement.() -> Unit = { }): HTMLTableCellElement {
+        val e = document.createElement("td") as HTMLTableCellElement
+        runBuild(e, className, build)
+        return e
+    }
+
+    @PublicApi
+    fun thead(className: String? = null, build: ZkElement.() -> Unit = { }): HTMLTableSectionElement {
+        val e = document.createElement("thead") as HTMLTableSectionElement
+        runBuild(e, className, build)
+        return e
+    }
+
+    @PublicApi
+    fun tbody(className: String? = null, build: ZkElement.() -> Unit = { }): HTMLTableSectionElement {
+        val e = document.createElement("tbody") as HTMLTableSectionElement
+        runBuild(e, className, build)
+        return e
+    }
+
+    @PublicApi
+    fun th(className: String? = null, build: ZkElement.() -> Unit = { }): HTMLTableCellElement {
+        val e = document.createElement("th") as HTMLTableCellElement
+        runBuild(e, className, build)
+        return e
+    }
+
+    /**
+     * Creates an unnamed [ZkElement].
+     */
+    fun zke(className: String? = null, build: ZkElement.() -> Unit = { }): ZkElement {
+        val e = ZkElement()
+        if (className != null) e.className = className
+        buildContext.appendChild(e.element)
+        childElements.plusAssign(e)
+        e.build()
+        return e
+    }
+
+    /**
+     * Creates a SPAN with [HTMLElement.innerHTML] set to the string passed.
+     * The string is **not escaped**. You have to escape it yourself.
+     */
+    operator fun String.not(): HTMLElement {
+        val e = document.createElement("span")
+        e.innerHTML = this
+        buildContext.append(e)
+        return e as HTMLElement
+    }
+
+    /**
+     * Creates a text node using [HTMLElement.appendText] with the string passed as content.
+     * No need for escape.
+     */
+    operator fun String.unaryPlus(): Element {
+        return buildContext.appendText(this)
+    }
+
+    /**
+     * Creates a text node using [HTMLElement.appendText] with the string passed as content.
+     * No need for escape.
+     */
+    operator fun String?.unaryPlus(): Element? {
+        if (this == null) return null
+        return buildContext.appendText(this)
+    }
+
+    /**
+     * Adds an HTML element.
+     */
+    operator fun HTMLElement.unaryPlus(): HTMLElement {
+        buildContext.appendChild(this)
+        return this
+    }
+
+    /**
+     * Adds a [ZkElement].
+     */
+    operator fun ZkElement.unaryPlus(): ZkElement {
+        this@ZkElement.buildContext.appendChild(this.element)
+        this@ZkElement.childElements += this.init()
+        return this
+    }
+
+    /**
+     * Append the given class to the class list of the element.
+     *
+     * @param  className  Name of the class to append.
+     */
+    infix fun Element.cssClass(className: String): Element {
+        this.classList += className
+        return this
+    }
+
+    /**
+     * Append the given class to the class list of the element.
+     *
+     * @param  className  Name of the class to append.
+     */
+    infix fun HTMLElement.cssClass(className: String): HTMLElement {
+        this.classList += className
+        return this
+    }
+
+    /**
+     * Creates "div" [HTMLElement] and executes the builder function on it.
+     *
+     * @param  build      The builder function to build the content of the div. Optional.
+     */
+    infix fun HTMLElement.build(build: ZkElement.() -> Unit): HTMLElement {
+        runBuild(this, className, build)
+        return this
+    }
+
 }

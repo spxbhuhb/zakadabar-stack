@@ -4,13 +4,12 @@
 package zakadabar.stack.frontend.builtin.form.structure
 
 import zakadabar.stack.frontend.builtin.form.FormClasses.Companion.formClasses
-import zakadabar.stack.frontend.elements.ZkBuilder
 import zakadabar.stack.frontend.elements.ZkElement
 
 class Section(
     private val title: String,
     private val summary: String,
-    private val builder: ZkBuilder.() -> Unit
+    private val builder: ZkElement.() -> Unit
 ) : ZkElement() {
 
     override fun init() = build {

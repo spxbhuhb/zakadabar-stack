@@ -21,6 +21,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLTextAreaElement
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.frontend.builtin.form.FormClasses.Companion.formClasses
 import zakadabar.stack.frontend.builtin.form.ValidatedForm
 import zakadabar.stack.frontend.elements.ZkElement
 import kotlin.reflect.KMutableProperty0
@@ -35,6 +36,7 @@ class ValidatedTextArea<T : RecordDto<T>>(
     private val area = element as HTMLTextAreaElement
 
     override fun init(): ZkElement {
+        className = formClasses.recordId
         if (readOnly) area.readOnly = true
 
         area.value = prop.get()
