@@ -3,9 +3,8 @@
  */
 package zakadabar.demo.frontend.general
 
-import zakadabar.demo.Demo
 import zakadabar.stack.frontend.elements.ZkPage.Companion.buildNewPage
 
-val Home = buildNewPage(Demo.shid, "/") {
+val Home = buildNewPage("/") {
     + "Home"
 }

@@ -32,7 +32,7 @@ abstract class AppRouting(
         targets["$module$viewPrefix"] = this
     }
 
-    internal fun onNavStateChange(state: NavState) {
+    open fun onNavStateChange(state: NavState) {
 
         nextLayout = defaultLayout // when not specified, use the default layout
 

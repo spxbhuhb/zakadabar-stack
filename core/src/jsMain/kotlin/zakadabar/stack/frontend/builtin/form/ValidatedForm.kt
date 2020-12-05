@@ -33,6 +33,9 @@ import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KProperty0
 
+/**
+ * Base class for DTO forms.
+ */
 open class ValidatedForm<T : RecordDto<T>>(
     val dto: T,
     val mode: FormMode,
@@ -95,7 +98,7 @@ open class ValidatedForm<T : RecordDto<T>>(
 
     operator fun KMutableProperty0<Double>.unaryPlus(): ZkElement {
         val field = ValidatedDouble(this@ValidatedForm, this)
-        plusAssign(field)
+        + field
         fields += field
         return field
     }

@@ -3,10 +3,9 @@
  */
 package zakadabar.demo.frontend.port
 
-import zakadabar.demo.Demo
 import zakadabar.stack.frontend.elements.ZkPage
 
-object Tortuga : ZkPage(Demo.shid, "/tortuga") {
+object Tortuga : ZkPage() {
 
     override fun init() = build {
         + "Tortuga"

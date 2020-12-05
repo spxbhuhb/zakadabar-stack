@@ -13,10 +13,14 @@ import kotlinx.serialization.Serializable
 data class AccountSummaryDto(
 
     val id: Long = 0,
+    val name: String = "",
     val emailAddress: String = "",
     val fullName: String = "",
     val displayName: String = "",
     val organizationName: String = "",
     val avatar: Long? = null
 
-)
+) {
+    val isAnonymous
+        get() = (name == "anonymous")
+}

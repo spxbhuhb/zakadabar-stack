@@ -13,16 +13,34 @@ import zakadabar.stack.frontend.builtin.util.NYI
  * Provides common functions used in most CRUD implementations.
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
-open class ZkCrud<T>(
-    final override val module: String,
-    final override val viewPrefix: String
-) : AppRouting.ZkTarget {
+open class ZkCrud<T> : AppRouting.ZkTarget {
 
-    val allPath = "/$module$viewPrefix/all"
-    val createPath = "/$module$viewPrefix/create"
-    val readPath = "/$module$viewPrefix/read"
-    val updatePath = "/$module$viewPrefix/update"
-    val deletePath = "/$module$viewPrefix/delete"
+    private var _module = "default"
+
+    override var module
+        get() = _module
+        set(value) {
+            _module = value
+        }
+
+    private var _viewPrefix = "/${this::class.simpleName}"
+
+    override var viewPrefix
+        get() = _viewPrefix
+        set(value) {
+            _viewPrefix = value
+        }
+
+    val allPath
+        get() = "/$_module$_viewPrefix/all"
+    val createPath
+        get() = "/$_module$_viewPrefix/create"
+    val readPath
+        get() = "/$_module$_viewPrefix/read"
+    val updatePath
+        get() = "/$_module$_viewPrefix/update"
+    val deletePath
+        get() = "/$_module$_viewPrefix/delete"
 
     open fun openAll() = Application.changeNavState(allPath)
     open fun openCreate() = Application.changeNavState(createPath)

@@ -15,7 +15,6 @@ class MenuClasses(theme: Theme) : CssStyleSheet<MenuClasses>(theme) {
 
     val item by cssClass {
         color = theme.activeBlue
-        textTransform = "uppercase"
         cursor = "pointer"
         padding = 10
         on(":hover") {
@@ -26,10 +25,8 @@ class MenuClasses(theme: Theme) : CssStyleSheet<MenuClasses>(theme) {
 
     val groupTitle by cssClass {
         color = theme.activeBlue
-        textTransform = "uppercase"
         cursor = "pointer"
         padding = 10
-        paddingBottom = 10
         on(":hover") {
             backgroundColor = theme.darkGray
             color = theme.lightestColor

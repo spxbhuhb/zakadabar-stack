@@ -9,16 +9,15 @@ import zakadabar.demo.frontend.port.Tortuga
 import zakadabar.demo.frontend.ship.Ships
 import zakadabar.demo.frontend.speed.Speeds
 import zakadabar.stack.frontend.builtin.menu.Menu
-import zakadabar.stack.frontend.builtin.simple.SimpleButton
 
 val menu = Menu {
+    className = R.Css.menu
     + column {
-        + row {
-            + SimpleButton("<") { this@Menu.hide() }
-            + R.title
-        }
+
+        + item(R.title) { Home.open() }
         + item(R.Ship.ships) { Ships.openAll() }
         + item(R.Speed.speeds) { Speeds.openAll() }
+
         + group(R.ports) {
             + group(R.carribean) {
                 + item(R.tortuga) { Tortuga.open() }
@@ -27,6 +26,7 @@ val menu = Menu {
                 + item(R.singapore) { Singapore.open() }
             }
         }
-        + item(R.login) { Login.open() }
+
+        + item(R.Account.login) { Login.open() }
     }
 }

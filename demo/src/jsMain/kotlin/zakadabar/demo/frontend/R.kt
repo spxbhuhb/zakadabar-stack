@@ -14,7 +14,6 @@ object R {
     val basics = "Basics"
     val description = "Description"
     val id = "Id"
-    val login = "Login"
     val name = "Name"
     val singapore = "Singapore"
     val title = "The Place"
@@ -24,6 +23,13 @@ object R {
     val ports = "Ports"
     val carribean = "Carribean"
     val asia = "Asia"
+
+    object Account {
+        val login = "Login"
+        val account = "Account"
+        val password = "Password"
+        val forgotten = "New Password"
+    }
 
     object Ship {
         val ships = "Ships"
@@ -47,7 +53,7 @@ object R {
         }
     }
 
-    object css : CssStyleSheet<css>(Application.theme) {
+    object Css : CssStyleSheet<Css>(Application.theme) {
 
         val menu by cssClass {
             height = "100%"

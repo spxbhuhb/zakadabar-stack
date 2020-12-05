@@ -3,8 +3,8 @@
  */
 package zakadabar.demo.frontend.general
 
-import zakadabar.demo.Demo
 import zakadabar.demo.data.LoginDto
+import zakadabar.demo.frontend.R
 import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ValidatedForm
 import zakadabar.stack.frontend.builtin.layout.FullScreen
@@ -12,7 +12,7 @@ import zakadabar.stack.frontend.builtin.simple.SimpleButton
 import zakadabar.stack.frontend.elements.ZkPage
 import zakadabar.stack.frontend.elements.marginBottom
 
-object Login : ZkPage(Demo.shid, "/login", FullScreen) {
+object Login : ZkPage(FullScreen) {
 
     override fun init() = build {
 
@@ -32,12 +32,12 @@ object Login : ZkPage(Demo.shid, "/login", FullScreen) {
                     width = "min(100%, 300px)"
                 }
 
-                + header("Login") marginBottom 20
+                + header(R.Account.login) marginBottom 20
 
                 + fieldGrid {
-                    + "Account"
+                    + R.Account.account
                     + dto::account
-                    + "Password"
+                    + R.Account.password
                     + dto::password
                 } marginBottom 20
 
@@ -46,8 +46,8 @@ object Login : ZkPage(Demo.shid, "/login", FullScreen) {
                         width = "100%"
                         justifyContent = "space-between"
                     }
-                    + SimpleButton("forgotten password") { /* PasswordReset.open() */ }
-                    + SimpleButton("login") { this@ValidatedForm.submit() }
+                    + SimpleButton(R.Account.forgotten) { /* PasswordReset.open() */ }
+                    + SimpleButton(R.Account.login) { this@ValidatedForm.submit() }
                 }
             }
         }

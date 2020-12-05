@@ -3,10 +3,9 @@
  */
 package zakadabar.demo.frontend.port
 
-import zakadabar.demo.Demo
 import zakadabar.stack.frontend.elements.ZkPage
 
-object Singapore : ZkPage(Demo.shid, "/singapore") {
+object Singapore : ZkPage() {
 
     override fun init() = build {
         + "Singapore"

@@ -3,18 +3,18 @@
  */
 package zakadabar.demo.frontend.ship
 
-import zakadabar.demo.Demo
 import zakadabar.demo.data.ShipDto
+import zakadabar.demo.frontend.R
 import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.simple.SimpleButton
 import zakadabar.stack.frontend.elements.ZkCrud
 import zakadabar.stack.frontend.elements.ZkElement.Companion.buildNew
 import zakadabar.stack.frontend.elements.ZkElement.Companion.launchBuildNew
 
-object Ships : ZkCrud<ShipDto>(Demo.shid, "/ships") {
+object Ships : ZkCrud<ShipDto>() {
 
     override fun all() = launchBuildNew {
-        + SimpleButton("new") { Ships.openCreate() }
+        + SimpleButton(R.new) { Ships.openCreate() }
         + ShipTable().setData(ShipDto.all().sortedBy { it.id })
     }
 

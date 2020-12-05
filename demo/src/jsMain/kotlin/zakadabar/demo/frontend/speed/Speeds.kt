@@ -3,7 +3,6 @@
  */
 package zakadabar.demo.frontend.speed
 
-import zakadabar.demo.Demo
 import zakadabar.demo.data.SpeedDto
 import zakadabar.demo.frontend.R
 import zakadabar.stack.frontend.builtin.form.FormMode
@@ -12,7 +11,7 @@ import zakadabar.stack.frontend.elements.ZkCrud
 import zakadabar.stack.frontend.elements.ZkElement.Companion.buildNew
 import zakadabar.stack.frontend.elements.ZkElement.Companion.launchBuildNew
 
-object Speeds : ZkCrud<SpeedDto>(Demo.shid, "/speeds") {
+object Speeds : ZkCrud<SpeedDto>() {
 
     override fun all() = launchBuildNew {
         + SimpleButton(R.new) { Speeds.openCreate() }
