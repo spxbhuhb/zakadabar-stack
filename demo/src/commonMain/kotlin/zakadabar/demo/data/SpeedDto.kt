@@ -4,7 +4,6 @@
 package zakadabar.demo.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.demo.Demo
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
@@ -20,7 +19,7 @@ data class SpeedDto(
 ) : RecordDto<SpeedDto> {
 
     companion object : RecordDtoCompanion<SpeedDto>() {
-        override val recordType = "${Demo.shid}/speed"
+        override val recordType = "speed"
     }
 
     override fun schema() = DtoSchema.build {

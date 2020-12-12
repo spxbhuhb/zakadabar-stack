@@ -6,19 +6,21 @@
 package zakadabar.stack.data.builtin
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.Stack
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 
 @Serializable
 data class SessionDto(
 
-    override val id: Long
+    override val id: Long,
+    val accountId: Long,
+    val displayName: String,
+    val roles: List<String>
 
 ) : RecordDto<SessionDto> {
 
     companion object : RecordDtoCompanion<SessionDto>() {
-        override val recordType = "${Stack.shid}/session"
+        override val recordType = "session"
     }
 
     override fun getRecordType() = recordType

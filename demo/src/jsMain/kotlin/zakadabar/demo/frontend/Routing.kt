@@ -51,7 +51,7 @@ object Routing : AppRouting(DefaultLayout, Home) {
      */
     override fun onNavStateChange(state: NavState) {
         if (Application.executor.isAnonymous) {
-            super.onNavStateChange(NavState(Login.url, ""))
+            super.onNavStateChange(NavState(Login.viewName, ""))
         } else {
             super.onNavStateChange(state)
         }

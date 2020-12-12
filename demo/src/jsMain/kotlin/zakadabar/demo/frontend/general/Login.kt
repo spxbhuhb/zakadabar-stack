@@ -3,7 +3,7 @@
  */
 package zakadabar.demo.frontend.general
 
-import zakadabar.demo.data.LoginDto
+import zakadabar.demo.data.account.LoginDto
 import zakadabar.demo.frontend.R
 import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ValidatedForm

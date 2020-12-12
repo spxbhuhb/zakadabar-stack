@@ -1,16 +1,18 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-@file:Suppress("unused")
+@file:Suppress("unused") // main is called by webpack
 
 import zakadabar.demo.frontend.Routing
+import zakadabar.stack.data.builtin.SessionDto
 import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.application.Executor
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.launch
 
 /**
  * The main method of the web browser application. Stared by the bundled Javascript file
- * (the-place-that-cant-be-found.js) in this case.
+ * (demo.js in this case).
  */
 fun main() {
 
@@ -20,24 +22,30 @@ fun main() {
 
     launch {
 
-        // add KClass names as data attributes to DOM elements, useful for debugging, not meant for production
-        // See: https://github.com/spxbhuhb/zakadabar-stack/blob/master/doc/misc/Productivity.md#simpleelement-addkclass
+        // Add KClass names as data attributes to DOM elements, useful for debugging, not meant for production.
 
         ZkElement.addKClass = true
 
-        // Initialize the frontend. This method needs a running backend because it
-        // fetches the account of the user who runs the frontend.
-        // See: https://github.com/spxbhuhb/zakadabar-stack/blob/master/doc/cookbook/common/Accounts.md
+        // Get the session from the server. Note that this is a suspend function, so the code below
+        // will be executed only when it finishes.
+
+        val session = SessionDto.read(0L)
 
         with(Application) {
+
+            // Application.executor is the user who runs the application. There is always a user
+            // even without login. The not logged in users has the role "anonymous" (by convention).
+
+            executor = Executor(session.accountId, session.displayName, session.roles)
+
+            // Set the routing. You may change this on-the-fly if you want, for example if the user logs in.
+
             routing = Routing
+
+            // Initializes the Application and opens the page selected by the URL.
+
             init()
         }
-
-        // Add an instance of Home to the document body
-
-        //document.body?.appendChild(Home.init().element)
-
     }
 
 }

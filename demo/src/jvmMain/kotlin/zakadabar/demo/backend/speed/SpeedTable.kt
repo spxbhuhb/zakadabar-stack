@@ -5,10 +5,9 @@ package zakadabar.demo.backend.speed
 
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
-import zakadabar.demo.Demo
 import zakadabar.demo.data.SpeedDto
 
-object SpeedTable : LongIdTable("t_${Demo.shid}_speeds") {
+object SpeedTable : LongIdTable("speeds") {
 
     val description = varchar("description", 100)
     val value = double("value")

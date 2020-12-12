@@ -24,21 +24,16 @@ import io.ktor.sessions.*
 import io.ktor.websocket.*
 import org.slf4j.LoggerFactory
 import zakadabar.stack.Stack
+import zakadabar.stack.backend.data.CustomBackend
 import zakadabar.stack.backend.data.RecordBackend
-import zakadabar.stack.backend.data.builtin.StackSession
-import zakadabar.stack.backend.data.builtin.session
 import zakadabar.stack.backend.util.Sql
-import zakadabar.stack.data.builtin.AccountSummaryDto
+import zakadabar.stack.data.builtin.SessionDto
 import zakadabar.stack.util.Executor
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.time.Duration
 import kotlin.reflect.full.isSubclassOf
-
-val anonymous = AccountSummaryDto()
-
-val wsLogger = LoggerFactory.getLogger("ws") !! // log ws events
 
 val moduleLogger = LoggerFactory.getLogger("modules") !! // log module events
 
@@ -54,9 +49,16 @@ class Server : CliktCommand() {
 
         private val dtoBackends = mutableListOf<RecordBackend<*>>()
 
+        private val customBackends = mutableListOf<CustomBackend>()
+
         operator fun plusAssign(dtoBackend: RecordBackend<*>) {
             this.dtoBackends += dtoBackend
             dtoBackend.init()
+        }
+
+        operator fun plusAssign(customBackend: CustomBackend) {
+            this.customBackends += customBackend
+            customBackend.init()
         }
     }
 
@@ -77,7 +79,7 @@ class Server : CliktCommand() {
         val server = embeddedServer(Netty, port = config.ktor.port) {
 
             install(Sessions) {
-                cookie<StackSession>("StackSessionId", SessionStorageMemory()) { // TODO replace this with SQL storage
+                cookie<SessionDto>("StackSessionId", SessionStorageMemory()) { // TODO replace this with SQL storage
                     cookie.path = "/"
                 }
             }
@@ -109,18 +111,17 @@ class Server : CliktCommand() {
             }
 
             routing {
-                if (config.traceRouting) trace { wsLogger.trace(it.buildText()) }
 
                 route("auth") {
                     authenticate("basic") {
                         route("basic") {
                             get("login") {
                                 // FIXME not anonymous :D
-                                call.sessions.set(StackSession(0L))
+                                call.sessions.set(SessionDto(0L, 0L, "", emptyList()))
                                 call.respondText(0L.toString(), ContentType.Application.Json)
                             }
                             get("logout") {
-                                call.sessions.set(StackSession(0L))
+                                call.sessions.set(SessionDto(0L, 0L, "", emptyList()))
                                 call.respondText(0L.toString(), ContentType.Application.Json)
                             }
                         }
@@ -135,12 +136,12 @@ class Server : CliktCommand() {
                             call.respondText("OK", ContentType.Text.Plain)
                         }
 
-                        get("${Stack.shid}/who-am-i") {
-                            call.respond(anonymous)
-                        }
-
                         // api installs add routes and the code to serve them
                         dtoBackends.forEach {
+                            it.install(this)
+                        }
+
+                        customBackends.forEach {
                             it.install(this)
                         }
 
@@ -209,10 +210,10 @@ class Server : CliktCommand() {
         // backend installs create sql tables and whatever else they need
 
         modules.forEach {
-            if (it is RecordBackend<*>) {
-                dtoBackends += it
-            } else {
-                it.init()
+            when (it) {
+                is RecordBackend<*> -> dtoBackends += it
+                is CustomBackend -> customBackends += it
+                else -> it.init()
             }
             moduleLogger.info("initialized module $it")
         }

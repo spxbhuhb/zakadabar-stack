@@ -34,20 +34,20 @@ import kotlin.reflect.full.createType
  */
 abstract class RecordBackend<T : RecordDto<T>>(
     val blobTable: BlobTable? = null,
-    val recordTable: IdTable<Long>? = null,
+    val recordTable: IdTable<Long>? = null
 ) : BackendModule {
 
     abstract val dtoClass: KClass<T>
 
-    private val logger = LoggerFactory.getLogger("DTO") !!
-
-    open val dtoType
+    private val recordType
         get() = (dtoClass.companionObject !!.objectInstance as RecordDtoCompanion<*>).recordType
+
+    private val logger by lazy { LoggerFactory.getLogger(recordType) !! }
 
     /**
      * Create a new record.
      *
-     * URL: `POST /api/<shid>/<type>`
+     * URL: `POST /api/<recordType>`
      *
      * @param executor Executor of the operation.
      * @param dto The record to create.
@@ -61,7 +61,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
     /**
      * Read a record.
      *
-     * URL: `GET /api/<shid>/<type>/<recordId>`
+     * URL: `GET /api/<recordType>/<recordId>`
      *
      * @param executor Executor of the operation.
      * @param recordId The id of the record to read.
@@ -75,7 +75,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
     /**
      * Update an existing record.
      *
-     * URL: `PATCH /api/<shid>/<type>`
+     * URL: `PATCH /api/<recordType>`
      *
      * Id comes from the [dto] parameter.
      *
@@ -91,7 +91,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
     /**
      * Delete a record.
      *
-     * URL: `DELETE /api/<shid>/<type>/<recordId>`
+     * URL: `DELETE /api/<recordType>/<recordId>`
      *
      * @param executor Executor of the operation.
      * @param recordId Id of the record to delete.
@@ -103,7 +103,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
     /**
      * List all records of this type.
      *
-     * URL: `GET /api/<shid>/<type>/all`
+     * URL: `GET /api/<recordType>/all`
      *
      * @param executor Executor of the operation.
      *
@@ -116,7 +116,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
     /**
      * Get metadata of blobs that belong to this record.
      *
-     * URL : `GET /api/<shid>/<type>/<rid>/blob/<bid>`
+     * URL : `GET /api/<recordType>/<rid>/blob/<bid>`
      *
      * @param executor Executor of the operation.
      * @param recordId The record to get blob metadata for.
@@ -130,7 +130,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
             with(blobTable) {
                 slice(id, dataRecord, name, type, size)
                     .select { dataRecord eq recordId }
-                    .map { toDto(it, dtoType) }
+                    .map { toDto(it, recordType) }
             }
         }
     }
@@ -138,7 +138,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
     /**
      * Get content of a blob.
      *
-     * URL : `GET /api/<shid>/<type>/<recordId>/blob/<blobId>`
+     * URL : `GET /api/<recordType>/<recordId>/blob/<blobId>`
      *
      * @param executor Executor of the operation.
      * @param recordId The record to get blob metadata for.
@@ -152,7 +152,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
         return transaction {
             blobTable
                 .select { blobTable.id eq blobId and (blobTable.dataRecord eq recordId) }
-                .map { blobTable.toDto(it, dtoType) to it[blobTable.content].bytes }
+                .map { blobTable.toDto(it, recordType) to it[blobTable.content].bytes }
                 .firstOrNull() ?: throw NotFoundException()
         }
     }
@@ -160,7 +160,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
     /**
      * Create a new blob.
      *
-     * URL : `POST /api/<shid>/<type>/<recordId>/blob`
+     * URL : `POST /api/<recordType>/<recordId>/blob`
      *
      * @param executor Executor of the operation.
      * @param dto The DTO of the blob to create.
@@ -187,7 +187,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
     /**
      * Update metadata of a blob.
      *
-     * URL : `PATCH /api/<shid>/<type>/<recordId>/blob
+     * URL : `PATCH /api/<recordType>/<recordId>/blob
      *
      * @param executor Executor of the operation.
      * @param dto DTO of the blob
@@ -211,7 +211,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
     /**
      * Delete a blob.
      *
-     * URL : `DELETE /api/<shid>/<type>/<recordId>/blob/<blobId>`
+     * URL : `DELETE /api/<recordType>/<recordId>/blob/<blobId>`
      *
      * @param executor Executor of the operation.
      * @param recordId Id record the blob belongs to.
@@ -252,12 +252,12 @@ abstract class RecordBackend<T : RecordDto<T>>(
      * Adds CRUD routes for this record backend. Check crud functions for URLs.
      */
     fun Route.crud() {
-        route(dtoType) {
+        route(recordType) {
 
             post {
                 val executor = call.executor()
                 val request = call.receive(dtoClass)
-                logger.info("${executor.entityId}: CREATE $dtoType $request")
+                logger.info("${executor.entityId}: CREATE $request")
                 call.respond(create(executor, request))
             }
 
@@ -266,10 +266,10 @@ abstract class RecordBackend<T : RecordDto<T>>(
                 val executor = call.executor()
 
                 if (id == null) {
-                    if (Server.logReads) logger.info("${executor.entityId}: ALL $dtoType")
+                    if (Server.logReads) logger.info("${executor.entityId}: ALL")
                     call.respond(all(executor))
                 } else {
-                    if (Server.logReads) logger.info("${executor.entityId}: READ $dtoType $id")
+                    if (Server.logReads) logger.info("${executor.entityId}: READ $id")
                     call.respond(read(executor, id))
                 }
             }
@@ -277,14 +277,14 @@ abstract class RecordBackend<T : RecordDto<T>>(
             patch {
                 val executor = call.executor()
                 val request = call.receive(dtoClass)
-                logger.info("${executor.entityId}: UPDATE $dtoType $request")
+                logger.info("${executor.entityId}: UPDATE $request")
                 call.respond(update(executor, request))
             }
 
             delete("/{id}") {
                 val executor = call.executor()
                 val id = call.parameters["id"]?.toLongOrNull() ?: throw BadRequestException("missing record id")
-                logger.info("${executor.entityId}: DELETE $dtoType $id")
+                logger.info("${executor.entityId}: DELETE $id")
                 call.respond(delete(executor, id))
             }
         }
@@ -294,7 +294,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      * Adds BLOB routes for this backend. Check blob functions for URLs.
      */
     fun Route.blob() {
-        route("$dtoType/{rid}/blob") {
+        route("$recordType/{rid}/blob") {
 
             get("/{bid?}") {
                 val recordId = call.parameters["rid"]?.toLongOrNull()
@@ -309,14 +309,14 @@ abstract class RecordBackend<T : RecordDto<T>>(
 
                     } else {
 
-                        if (Server.logReads) logger.info("${executor.entityId}: BLOB-META $dtoType $recordId $blobId")
+                        if (Server.logReads) logger.info("${executor.entityId}: BLOB-META $recordId $blobId")
 
                         call.respond(blobMetaRead(executor, recordId))
                     }
 
                 } else {
 
-                    if (Server.logReads) logger.info("${executor.entityId}: BLOB-READ $dtoType $recordId $blobId")
+                    if (Server.logReads) logger.info("${executor.entityId}: BLOB-READ $recordId $blobId")
 
                     val (dto, bytes) = blobRead(executor, recordId, blobId)
 
@@ -338,7 +338,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
 
                 val executor = call.executor()
 
-                if (Server.logReads) logger.info("${executor.entityId}: BLOB-CREATE $dtoType $recordId")
+                if (Server.logReads) logger.info("${executor.entityId}: BLOB-CREATE $recordId")
 
                 val headers = call.request.headers
 
@@ -350,7 +350,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
                 val dto = BlobDto(
                     id = 0,
                     dataRecord = recordId,
-                    dataType = dtoType,
+                    dataType = recordType,
                     name = parseHeaderValue(disposition).single().params.find { it.name == "filename" }?.value ?: throw BadRequestException("missing filename"),
                     type = headers["Content-Type"] ?: "application/octet-stream",
                     size = length.toLong()
@@ -374,7 +374,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
 
                 val executor = call.executor()
 
-                if (Server.logReads) logger.info("${executor.entityId}: BLOB-DELETE $dtoType $id $blobId")
+                if (Server.logReads) logger.info("${executor.entityId}: BLOB-DELETE $id $blobId")
 
                 call.respond(blobDelete(executor, id, blobId))
             }
@@ -386,7 +386,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      * Adds a Query route for this backend.
      */
     fun <RQ : Any, RS : Any> Route.query(queryDto: KClass<RQ>, func: (Executor, RQ) -> RS) {
-        get("$dtoType/${queryDto.simpleName}") {
+        get("$recordType/${queryDto.simpleName}") {
 
             val executor = call.executor()
 
@@ -394,7 +394,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
             requireNotNull(qText)
             val qObj = Json.decodeFromString(serializer(queryDto.createType()), qText)
 
-            if (Server.logReads) logger.info("${executor.entityId}: GET $dtoType/${queryDto.simpleName} $qText")
+            if (Server.logReads) logger.info("${executor.entityId}: GET ${queryDto.simpleName} $qText")
 
             @Suppress("UNCHECKED_CAST")
             call.respond(func(executor, qObj as RQ))

@@ -3,11 +3,12 @@
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package zakadabar.stack.backend.data.builtin
+package zakadabar.stack.backend
 
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.sessions.*
+import zakadabar.stack.data.builtin.SessionDto
 import zakadabar.stack.util.Executor
 
 class SessionAuthenticationProvider internal constructor(configuration: Configuration) :
@@ -23,14 +24,14 @@ fun Authentication.Configuration.session(name: String? = null) {
 
     provider.pipeline.intercept(AuthenticationPipeline.RequestAuthentication) { context ->
 
-        var session = call.sessions.get<StackSession>()
+        var session = call.sessions.get<SessionDto>()
 
         if (session == null) {
-            session = StackSession(0L)
+            session = SessionDto(0L, 0L, "Anonymous", listOf("anonymous"))
             call.sessions.set(session)
         }
 
-        context.principal(Executor(session.executorId))
+        context.principal(Executor(session.accountId))
 
     }
 
