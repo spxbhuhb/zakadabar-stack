@@ -48,9 +48,9 @@ repositories {
 val stackVersion = "2021.1.9"
 
 commonMain {
-    dependencies {
-       api("hu.simplexion.zakadabar:zakadabar-stack:$stackVersion")
-    }
+  dependencies {
+    api("hu.simplexion.zakadabar:core:$stackVersion")
+  }
 }
 ```
 

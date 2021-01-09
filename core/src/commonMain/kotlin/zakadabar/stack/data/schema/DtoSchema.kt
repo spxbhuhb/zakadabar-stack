@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.data.schema
 
+import kotlinx.datetime.Instant
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KProperty0
 
@@ -18,7 +19,8 @@ open class DtoSchema {
         val NO_VALIDATION = DtoSchema()
     }
 
-    private val ruleLists = mutableMapOf<KProperty0<*>, ValidationRuleList<*>>()
+    @Suppress("MemberVisibilityCanBePrivate") // To make extensions possible
+    val ruleLists = mutableMapOf<KProperty0<*>, ValidationRuleList<*>>()
 
     operator fun KProperty0<String>.unaryPlus(): StringValidationRuleList {
         val ruleList = StringValidationRuleList(this)
@@ -26,8 +28,56 @@ open class DtoSchema {
         return ruleList
     }
 
+    operator fun KProperty0<String?>.unaryPlus(): OptStringValidationRuleList {
+        val ruleList = OptStringValidationRuleList(this)
+        ruleLists[this] = ruleList
+        return ruleList
+    }
+
+    operator fun KProperty0<Boolean>.unaryPlus(): BooleanValidationRuleList {
+        val ruleList = BooleanValidationRuleList(this)
+        ruleLists[this] = ruleList
+        return ruleList
+    }
+
+    operator fun KProperty0<Boolean?>.unaryPlus(): OptBooleanValidationRuleList {
+        val ruleList = OptBooleanValidationRuleList(this)
+        ruleLists[this] = ruleList
+        return ruleList
+    }
+
+    operator fun KProperty0<Int>.unaryPlus(): IntValidationRuleList {
+        val ruleList = IntValidationRuleList(this)
+        ruleLists[this] = ruleList
+        return ruleList
+    }
+
+    operator fun KProperty0<Int?>.unaryPlus(): OptIntValidationRuleList {
+        val ruleList = OptIntValidationRuleList(this)
+        ruleLists[this] = ruleList
+        return ruleList
+    }
+
     operator fun KProperty0<Long>.unaryPlus(): LongValidationRuleList {
         val ruleList = LongValidationRuleList(this)
+        ruleLists[this] = ruleList
+        return ruleList
+    }
+
+    operator fun KProperty0<Long?>.unaryPlus(): OptLongValidationRuleList {
+        val ruleList = OptLongValidationRuleList(this)
+        ruleLists[this] = ruleList
+        return ruleList
+    }
+
+    operator fun KProperty0<Instant>.unaryPlus(): InstantValidationRuleList {
+        val ruleList = InstantValidationRuleList(this)
+        ruleLists[this] = ruleList
+        return ruleList
+    }
+
+    operator fun KProperty0<Instant?>.unaryPlus(): OptInstantValidationRuleList {
+        val ruleList = OptInstantValidationRuleList(this)
         ruleLists[this] = ruleList
         return ruleList
     }

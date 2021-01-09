@@ -6,3 +6,5 @@
 package zakadabar.stack.data.record
 
 typealias RecordId<T> = Long
+
+typealias OptRecordId<T> = Long?

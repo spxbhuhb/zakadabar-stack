@@ -7,10 +7,10 @@ import kotlinx.serialization.KSerializer
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 
-abstract class QueryDtoCompanion<T : RecordDto<T>, E : Any>(
-    val base: RecordDtoCompanion<T>
+abstract class QueryDtoCompanion<COMM : RecordDto<COMM>, RESULT : Any>(
+    val base: RecordDtoCompanion<COMM>
 ) {
-    abstract fun serializer(): KSerializer<E>
+    abstract fun serializer(): KSerializer<RESULT>
 
     val comm
         get() = base.comm
