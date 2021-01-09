@@ -1,11 +1,9 @@
 # Zakadabar
 
-Welcome to Zakadabar, a full-stack development platform for Kotlin. Zakadabar has a JVM backend and a JavaScript frontend,
-both programmed exclusively in Kotlin as part of one Kotlin MultiPlatform Project.
+A full-stack development platform for Kotlin. JVM backend, JavaScript frontend, both programmed exclusively in Kotlin as part of one Kotlin MultiPlatform Project.
 
-As of now we publish the project as **technology preview**. Many things are missing, **we might brake this and that with releases**.
-Interfaces, use patterns might change, it will need some time to mature. We actively use it in our own projects and add 
-features as we need them.
+As of now we publish the project as **technology preview**. Many things are missing, **we might brake this and that with releases**. Interfaces, use patterns might change, it will need some time to
+mature. We actively use it in our own projects and add features as we need them.
 
 ## Highlights
 
@@ -18,19 +16,17 @@ features as we need them.
   * [The Cookbook](doc/cookbook/README.md)
   * [Knowledge Base](doc/knowledge-base/README.md)
   * [Developers Guide](doc/developers-guide/README.md)
-  * [Architects Guide](doc/architects-guide/README.md)
   * [Productivity Tips](doc/misc/Productivity.md)
-  * [Espresso Lessons](doc/espresso-lessons/README.md)
   * API as soon as Dokka doesn't crash (yay 1.4)
 
-## Releases and Gradle dependency
+## Using
 
 We release only Kotlin 1.4+ multiplatform packages.
 
-Packages of Zakadabar Stack are available from GitHub Packages. To reference them
-from your project use the following Gradle setup.
+Packages of Zakadabar Stack are available from GitHub Packages. To reference them from your project use the following Gradle setup.
 
-Property values are from your `<HOME-DIRECTORY>/.gradle/gradle.properties` file. See [Authenticating to GitHub Packages](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-gradle-for-use-with-github-packages#authenticating-to-github-packages) 
+Property values are from your `<HOME-DIRECTORY>/.gradle/gradle.properties` file.
+See [Authenticating to GitHub Packages](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-gradle-for-use-with-github-packages#authenticating-to-github-packages)
 for more information.
 
 ```kotlin
@@ -49,7 +45,7 @@ repositories {
     }
 }
 
-val stackVersion = "2020.9.21"
+val stackVersion = "2021.1.9"
 
 commonMain {
     dependencies {
@@ -57,57 +53,6 @@ commonMain {
     }
 }
 ```
-
-## Features and Statuses
-
-* `-->` = Moving fast
-* RW = Resource (i.e developer, designer, architect) wait
-* stable = Mostly stable
-* OK = stable + have documentation
-
-| Feature | Status | Details |
-| ------- | -------| --------|
-| Documentation - [The Cookbook](doc/cookbook/README.md) | --> | |
-| Documentation - [Knowledge Base](doc/knowledge-base/README.md) | --> | |
-| Documentation - [Developers Guide](doc/developers-guide/README.md) | --> | |
-| Documentation - API | RW | Dokka throws StackOverflowException |
-| Development - Appliance | RW | Gradle: one-click appliance build works, need others |
-| [Accounts](doc/cookbook/common/Accounts.md) | RW | Very basic implementation works. |
-| [Authentication](doc/developers-guide/Authentication.md) | RW | |
-| Authorization | RW | Role based, ACL, basics coded |
-| Sessions | RW | Have to write SQL backend |
-| Routing - [Backend](doc/cookbook/backend/Routing.md) | OK | Ktor, module namespace |
-| Routing - Frontend - Menu | --> | Basic navigation works. |
-| Routing - Frontend - Entity Tree | --> | Navigation |
-| Data - Common - Serialization | stable | Kotlinx.serialization, CommArray |
-| Data - Common - Transfer | stable | Data Transfer Objects (DTOs) - in common code |
-| Data - Common - Entities | --> | Entity Tree, revisions, snapshots |
-| Data - Common - Files | stable | upload, download works both for REST and WebSocket |
-| Data - Common - Validation | --> | |
-| Data - Frontend - CRUD, Queries | --> | query, record and entity communications are mostly OK, documentation is missing |
-| Data - Frontend - WebSocket | stable | FrontendContext.transferSession |
-| Data - Backend - DAO, Tables | stable | Exposed, PostgreSQL, HikariCP |
-| Frontend - [Elements](doc/cookbook/frontend/Elements.md) | stable | easy and clean DOM handling |
-| Frontend - Builtin - Desktop | --> | Desktop, Header, Footer |
-| Frontend - Builtin - Navigation | --> | |
-| Frontend - Builtin - Utils | --> | Slider, DropArea, [Icons], Header, Status |
-| Frontend - Building - Inputs | --> | Input, SingleLineInput |
-| Frontend - Components - RTE | --> | Zakadabar Editor |
-| Frontend - Context | stable | FrontendContext |
-| Frontend - Form | --> | migrate from previous React based solution | 
-| Frontend - Tables | RW | migrate from previous React based solution |
-| Frontend - Themes CSS | stable |  |
-| Frontend - I18N | stable |  |
-| Frontend - Notification | RW | |
-| Frontend - Logging | RW |  |
-| Frontend - Error Handling | RW | |
-| Backend - Search | RW | Apache Lucene? |
-| Backend - Document Generation | RW | Zakadabar Editor - Export to PDF/HTML |
-| Backend - Notifications | RW | e-mail with templates |
-| Backend - Archiving | RW | |
-| Backend - Auditing | RW | |
-| Backend - Backup and Restore | RW | |
-| Backend - Resilience | RW | PostgreSQL DB mirroring |
 
 ## Credits and Dependency Licenses
 

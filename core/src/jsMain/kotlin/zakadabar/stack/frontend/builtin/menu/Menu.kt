@@ -23,7 +23,7 @@ class Menu(builder: Menu.() -> Unit) : ZkElement() {
         MenuGroup(text, builder)
 }
 
-class MenuItem(
+open class MenuItem(
     private val text: String,
     private val onClick: (() -> Unit)? = null
 ) : ZkElement() {

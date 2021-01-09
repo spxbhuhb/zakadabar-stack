@@ -3,6 +3,9 @@
  */
 package zakadabar.stack.comm.http
 
+/**
+ * States of the blob (image or file) "send to the server" process.
+ */
 enum class BlobCreateState {
     Starting,
     Progress,

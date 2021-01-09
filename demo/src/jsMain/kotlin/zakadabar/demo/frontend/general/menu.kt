@@ -9,12 +9,17 @@ import zakadabar.demo.frontend.port.Tortuga
 import zakadabar.demo.frontend.ship.Ships
 import zakadabar.demo.frontend.speed.Speeds
 import zakadabar.stack.frontend.builtin.menu.Menu
+import zakadabar.stack.frontend.builtin.menu.MenuItem
 
 val menu = Menu {
     className = R.Css.menu
+
     + column {
 
         + item(R.title) { Home.open() }
+
+        + CuccItem { this -= this[CuccItem::class] }
+
         + item(R.Ship.ships) { Ships.openAll() }
         + item(R.Speed.speeds) { Speeds.openAll() }
 
@@ -30,3 +35,7 @@ val menu = Menu {
         + item(R.Account.login) { Login.open() }
     }
 }
+
+class CuccItem(onClick: () -> Unit) : MenuItem("cucc", onClick)
+
+

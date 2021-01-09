@@ -2,8 +2,6 @@
 
 ## Supported Versions
 
-Zakadabar Stack releases are continuous. For more information please check: [Continuous Versions](doc/misc/ContinuousVersions.md).
-
 In general, we do not provide patches for previous releases. This is because you (and we) should keep our software
 up-to-date.
 

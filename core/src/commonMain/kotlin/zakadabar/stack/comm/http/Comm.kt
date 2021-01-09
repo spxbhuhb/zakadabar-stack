@@ -6,6 +6,10 @@ package zakadabar.stack.comm.http
 import kotlinx.serialization.KSerializer
 import zakadabar.stack.data.builtin.BlobDto
 
+/**
+ * Interface to be implemented on the client side for communication. An
+ * actual implementation is zakadabar.stack.frontend.comm.http.RecordComm.
+ */
 interface Comm<T> {
 
     suspend fun create(dto: T): T
