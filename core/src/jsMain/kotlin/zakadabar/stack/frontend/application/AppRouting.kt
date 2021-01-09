@@ -15,8 +15,7 @@ abstract class AppRouting(
     }
 
     interface ZkTarget {
-        val module: String
-        val viewPrefix: String
+        val viewName: String
         fun route(routing: AppRouting, state: NavState): ZkElement
     }
 
@@ -28,18 +27,17 @@ abstract class AppRouting(
     lateinit var nextLayout: AppLayout
 
     operator fun ZkTarget.unaryPlus() {
-        require(viewPrefix.startsWith('/')) { "${this::class}.viewPrefix has to start with /" }
-        targets["$module$viewPrefix"] = this
+        targets[viewName] = this
     }
 
     open fun onNavStateChange(state: NavState) {
 
         nextLayout = defaultLayout // when not specified, use the default layout
 
-        val nextTarget = if (state.module.isEmpty() && state.view.isEmpty()) {
+        val nextTarget = if (state.viewName.isEmpty()) {
             home.route(this, state)
         } else {
-            targets["${state.module}${state.view}"]?.route(this, state) ?: route(state)
+            targets[state.viewName]?.route(this, state) ?: route(state)
         }
 
         if (nextTarget == null) {

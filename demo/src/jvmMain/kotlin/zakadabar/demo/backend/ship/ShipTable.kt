@@ -5,11 +5,10 @@ package zakadabar.demo.backend.ship
 
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
-import zakadabar.demo.Demo
 import zakadabar.demo.backend.speed.SpeedTable
 import zakadabar.demo.data.ShipDto
 
-object ShipTable : LongIdTable("t_${Demo.shid}_ships") {
+object ShipTable : LongIdTable("ships") {
 
     val name = varchar("name", 20)
     val speed = reference("speed", SpeedTable)

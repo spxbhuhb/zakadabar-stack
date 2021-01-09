@@ -15,32 +15,18 @@ import zakadabar.stack.frontend.builtin.util.NYI
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
 open class ZkCrud<T> : AppRouting.ZkTarget {
 
-    private var _module = "default"
-
-    override var module
-        get() = _module
-        set(value) {
-            _module = value
-        }
-
-    private var _viewPrefix = "/${this::class.simpleName}"
-
-    override var viewPrefix
-        get() = _viewPrefix
-        set(value) {
-            _viewPrefix = value
-        }
+    override var viewName = "${this::class.simpleName}"
 
     val allPath
-        get() = "/$_module$_viewPrefix/all"
+        get() = "/$viewName/all"
     val createPath
-        get() = "/$_module$_viewPrefix/create"
+        get() = "/$viewName/create"
     val readPath
-        get() = "/$_module$_viewPrefix/read"
+        get() = "/$viewName/read"
     val updatePath
-        get() = "/$_module$_viewPrefix/update"
+        get() = "/$viewName/update"
     val deletePath
-        get() = "/$_module$_viewPrefix/delete"
+        get() = "/$viewName/delete"
 
     open fun openAll() = Application.changeNavState(allPath)
     open fun openCreate() = Application.changeNavState(createPath)

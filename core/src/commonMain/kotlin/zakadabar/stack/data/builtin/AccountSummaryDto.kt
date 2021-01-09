@@ -3,24 +3,16 @@
  */
 package zakadabar.stack.data.builtin
 
-import kotlinx.serialization.Serializable
+interface AccountSummary {
 
-/**
- * Summary of an account. Intended for selects which contains list of
- * accounts.
- */
-@Serializable
-data class AccountSummaryDto(
+    val id: Long
+    val accountName: String
+    val emailAddress: String
+    val fullName: String
+    val displayName: String?
+    val organizationName: String?
+    val avatar: Long?
 
-    val id: Long = 0,
-    val name: String = "",
-    val emailAddress: String = "",
-    val fullName: String = "",
-    val displayName: String = "",
-    val organizationName: String = "",
-    val avatar: Long? = null
-
-) {
     val isAnonymous
-        get() = (name == "anonymous")
+        get() = (accountName == "anonymous")
 }
