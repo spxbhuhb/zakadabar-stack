@@ -6,22 +6,33 @@ package zakadabar.stack.frontend.builtin.menu
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.util.CssStyleSheet
 
-object MenuStyles : CssStyleSheet<MenuStyles>(Application.theme) {
+object ZkMenuStyles : CssStyleSheet<ZkMenuStyles>(Application.theme) {
 
     val menu by cssClass {
         height = "100%"
         backgroundColor = theme.menu.background
         color = theme.menu.text
         minWidth = 200
-        marginRight = 10
+        paddingLeft = 10
+        paddingRight = 10
+    }
+
+    val title by cssClass {
+        fontWeight = 500
+        fontSize = "120%"
+        paddingTop = 12
+        paddingBottom = 4
+        borderBottom = "1px solid white"
+        marginBottom = 4
     }
 
     val item by cssClass {
         cursor = "pointer"
         padding = 10
         on(":hover") {
-            backgroundColor = theme.darkGray
-            color = theme.lightestColor
+            backgroundColor = theme.menu.hoverBackground
+            color = theme.menu.hoverText
+            borderRadius = 4
         }
     }
 
@@ -29,8 +40,9 @@ object MenuStyles : CssStyleSheet<MenuStyles>(Application.theme) {
         cursor = "pointer"
         padding = 10
         on(":hover") {
-            backgroundColor = theme.darkGray
-            color = theme.lightestColor
+            backgroundColor = theme.menu.hoverBackground
+            color = theme.menu.hoverText
+            borderRadius = 4
         }
     }
 

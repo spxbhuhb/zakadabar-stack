@@ -1,0 +1,58 @@
+/*
+ * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ */
+
+package zakadabar.stack.frontend.resources
+
+import zakadabar.stack.frontend.builtin.menu.ZkMenuTheme
+
+open class ZkTheme {
+
+    val white = "#ffffff"
+
+    val activeBlue = "#2746ab"
+    val inactiveBlue = "#bec7e6";
+    val green = "#89e6c2"
+
+    open var darkestColor = "#0d5b28"
+    open var darkColor = "#2e8d36"
+    open var lightColor = "#43cd50"
+    open var lightestColor = "#fff"
+    open var darkestGray = "#7b7b7b"
+    open var darkGray = "#acabab"
+    open var gray = "#d9d9d9"
+    open var lightGray = "#f5f5f5"
+
+    open var infoColor = "#6f90e5"
+    open var errorColor = "#D71313"
+    open var approveColor = darkColor
+    open var cancelColor = "#bfbe96"
+    open var selectedColor = "#486cc7"
+
+    open var headerBackground = "rgba(13,91,40,0.05)"
+    open var headerForeground = "#0d5b28"
+    open var headerIconBackground = "0d5b28"
+    open var headerIconFill = "$43cd50"
+    open var headerToolBackground = "rgba(13,91,40,0.05)"
+    open var headerToolFill = "#2e8d36"
+
+    open var sliderColor = lightGray
+    open var fontFamily = "IBM Plex Sans"
+    open var fontSize = 12
+    open var fontWeight = 300
+
+    open var borderRadius = 2
+
+    open var margin = 8
+
+    open var contentWidth = 600
+    open var headerHeight = 26
+
+    open var menu = ZkMenuTheme(
+        background = activeBlue,
+        hoverBackground = inactiveBlue,
+        activeBackground = inactiveBlue,
+        text = white
+    )
+
+}

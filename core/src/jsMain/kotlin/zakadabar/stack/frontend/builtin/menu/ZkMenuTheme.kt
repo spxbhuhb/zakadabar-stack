@@ -3,7 +3,11 @@
  */
 package zakadabar.stack.frontend.builtin.menu
 
-data class MenuTheme(
+data class ZkMenuTheme(
     val background: String,
-    val text: String
+    val text: String,
+    val hoverBackground: String,
+    val hoverText: String = text,
+    val activeBackground: String,
+    val activeText: String = text
 )
