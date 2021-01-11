@@ -4,10 +4,10 @@
 package zakadabar.stack.frontend.builtin
 
 import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.util.CssStyleSheet
-import zakadabar.stack.frontend.util.Theme
 
-class CoreClasses(theme: Theme) : CssStyleSheet<CoreClasses>(theme) {
+class CoreClasses(theme: ZkTheme) : CssStyleSheet<CoreClasses>(theme) {
 
     companion object {
         val coreClasses = CoreClasses(Application.theme).attach()

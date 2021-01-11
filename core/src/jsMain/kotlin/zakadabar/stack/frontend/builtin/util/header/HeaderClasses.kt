@@ -4,10 +4,10 @@
 package zakadabar.stack.frontend.builtin.util.header
 
 import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.util.CssStyleSheet
-import zakadabar.stack.frontend.util.Theme
 
-open class HeaderClasses(theme: Theme) : CssStyleSheet<HeaderClasses>(theme) {
+open class HeaderClasses(theme: ZkTheme) : CssStyleSheet<HeaderClasses>(theme) {
 
     companion object {
         var headerClasses = HeaderClasses(Application.theme).attach()

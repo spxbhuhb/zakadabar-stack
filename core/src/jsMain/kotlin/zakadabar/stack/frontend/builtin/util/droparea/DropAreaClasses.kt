@@ -4,10 +4,10 @@
 package zakadabar.stack.frontend.builtin.util.droparea
 
 import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.util.CssStyleSheet
-import zakadabar.stack.frontend.util.Theme
 
-class DropAreaClasses(theme: Theme) : CssStyleSheet<DropAreaClasses>(theme) {
+class DropAreaClasses(theme: ZkTheme) : CssStyleSheet<DropAreaClasses>(theme) {
 
     companion object {
         var classes = DropAreaClasses(Application.theme).attach()

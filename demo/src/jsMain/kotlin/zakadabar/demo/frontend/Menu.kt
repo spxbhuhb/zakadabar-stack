@@ -10,11 +10,9 @@ import zakadabar.demo.frontend.pages.port.Tortuga
 import zakadabar.demo.frontend.pages.ship.Ships
 import zakadabar.demo.frontend.pages.speed.Speeds
 import zakadabar.demo.frontend.resources.Strings
-import zakadabar.demo.frontend.resources.Styles
 import zakadabar.stack.frontend.builtin.menu.ZkMenu
 
 object Menu : ZkMenu({
-    className = Styles.menu
 
     + column {
 
@@ -34,5 +32,6 @@ object Menu : ZkMenu({
 
         + item(Strings.login) { Login.open() }
     }
+
 })
 

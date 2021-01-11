@@ -5,16 +5,18 @@ package zakadabar.stack.frontend.builtin.menu
 
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.util.CssStyleSheet
-import zakadabar.stack.frontend.util.Theme
 
-class MenuClasses(theme: Theme) : CssStyleSheet<MenuClasses>(theme) {
+object MenuStyles : CssStyleSheet<MenuStyles>(Application.theme) {
 
-    companion object {
-        var menuClasses = MenuClasses(Application.theme).attach()
+    val menu by cssClass {
+        height = "100%"
+        backgroundColor = theme.menu.background
+        color = theme.menu.text
+        minWidth = 200
+        marginRight = 10
     }
 
     val item by cssClass {
-        color = theme.activeBlue
         cursor = "pointer"
         padding = 10
         on(":hover") {
@@ -24,7 +26,6 @@ class MenuClasses(theme: Theme) : CssStyleSheet<MenuClasses>(theme) {
     }
 
     val groupTitle by cssClass {
-        color = theme.activeBlue
         cursor = "pointer"
         padding = 10
         on(":hover") {
@@ -37,4 +38,7 @@ class MenuClasses(theme: Theme) : CssStyleSheet<MenuClasses>(theme) {
         paddingLeft = 20
     }
 
+    init {
+        attach()
+    }
 }

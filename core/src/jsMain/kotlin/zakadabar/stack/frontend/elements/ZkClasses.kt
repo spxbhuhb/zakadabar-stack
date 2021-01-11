@@ -4,13 +4,13 @@
 package zakadabar.stack.frontend.elements
 
 import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.util.CssStyleSheet
-import zakadabar.stack.frontend.util.Theme
 
 /**
  * Basic CSS classes used by ZkElement and ZkBuilder.
  */
-class ZkClasses(theme: Theme) : CssStyleSheet<ZkClasses>(theme) {
+class ZkClasses(theme: ZkTheme) : CssStyleSheet<ZkClasses>(theme) {
 
     companion object {
         val zkClasses = ZkClasses(Application.theme).attach()

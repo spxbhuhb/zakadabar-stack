@@ -4,10 +4,10 @@
 package zakadabar.stack.frontend.builtin.table
 
 import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.util.CssStyleSheet
-import zakadabar.stack.frontend.util.Theme
 
-class TableClasses(theme: Theme) : CssStyleSheet<TableClasses>(theme) {
+class TableClasses(theme: ZkTheme) : CssStyleSheet<TableClasses>(theme) {
 
     companion object {
         val tableClasses = TableClasses(Application.theme).attach()

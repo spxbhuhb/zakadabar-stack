@@ -4,15 +4,14 @@
 package zakadabar.stack.frontend.builtin.menu
 
 import org.w3c.dom.events.Event
-import zakadabar.stack.frontend.builtin.menu.MenuClasses.Companion.menuClasses
 import zakadabar.stack.frontend.elements.ZkClasses
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.elements.plusAssign
 
-
 open class ZkMenu() : ZkElement() {
 
     constructor(builder: ZkMenu.() -> Unit) : this() {
+        className = MenuStyles.menu
         builder()
     }
 
@@ -29,7 +28,7 @@ open class MenuItem(
 ) : ZkElement() {
 
     override fun init() = build {
-        className = menuClasses.item
+        className = MenuStyles.item
         + text
 
         on("click", onClick)
@@ -50,11 +49,11 @@ class MenuGroup(
 
     init {
         + column {
-            + div(menuClasses.groupTitle) {
+            + div(MenuStyles.groupTitle) {
                 + text
                 on(buildContext, "click") { _ -> childElements.first().toggle() }
             }
-            + zke(menuClasses.groupContent) {
+            + zke(MenuStyles.groupContent) {
                 classList += ZkClasses.zkClasses.hidden
                 this.builder()
             }

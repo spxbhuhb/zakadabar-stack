@@ -8,14 +8,6 @@ import zakadabar.stack.frontend.util.CssStyleSheet
 
 object Styles : CssStyleSheet<Styles>(Application.theme) {
 
-    val menu by cssClass {
-        height = "100%"
-        backgroundColor = "#ddd"
-        color = "white"
-        minWidth = 200
-        marginRight = 10
-    }
-
     init {
         attach()
     }

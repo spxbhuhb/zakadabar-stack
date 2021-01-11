@@ -4,10 +4,10 @@
 package zakadabar.stack.frontend.builtin.form
 
 import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.util.CssStyleSheet
-import zakadabar.stack.frontend.util.Theme
 
-class FormClasses(theme: Theme) : CssStyleSheet<FormClasses>(theme) {
+class FormClasses(theme: ZkTheme) : CssStyleSheet<FormClasses>(theme) {
 
     companion object {
         val formClasses = FormClasses(Application.theme).attach()

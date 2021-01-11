@@ -4,10 +4,10 @@
 package zakadabar.stack.frontend.builtin.util.dropdown
 
 import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.util.CssStyleSheet
-import zakadabar.stack.frontend.util.Theme
 
-class DropdownClasses(theme: Theme) : CssStyleSheet<DropdownClasses>(theme) {
+class DropdownClasses(theme: ZkTheme) : CssStyleSheet<DropdownClasses>(theme) {
 
     companion object {
         var dropdownClasses = DropdownClasses(Application.theme).attach()
