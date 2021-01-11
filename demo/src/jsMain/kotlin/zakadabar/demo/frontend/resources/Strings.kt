@@ -1,35 +1,28 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.frontend
-
-import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.util.CssStyleSheet
+package zakadabar.demo.frontend.resources
 
 @Suppress("MayBeConstant")
-object R {
+object Strings {
 
-    val images = "Images"
-    val new = "New"
+    val account = "Account"
+    val asia = "Asia"
     val basics = "Basics"
+    val carribean = "Carribean"
     val description = "Description"
+    val forgotten = "New Password"
     val id = "Id"
+    val images = "Images"
+    val login = "Login"
     val name = "Name"
+    val new = "New"
+    val password = "Password"
+    val ports = "Ports"
     val singapore = "Singapore"
     val title = "The Place"
     val tortuga = "Tortuga"
     val value = "Value"
-
-    val ports = "Ports"
-    val carribean = "Carribean"
-    val asia = "Asia"
-
-    object Account {
-        val login = "Login"
-        val account = "Account"
-        val password = "Password"
-        val forgotten = "New Password"
-    }
 
     object Ship {
         val ships = "Ships"
@@ -50,21 +43,6 @@ object R {
 
         object Basics {
             val explanation = "Data all speeds have."
-        }
-    }
-
-    object Css : CssStyleSheet<Css>(Application.theme) {
-
-        val menu by cssClass {
-            height = "100%"
-            backgroundColor = "#ddd"
-            color = "white"
-            minWidth = 200
-            marginRight = 10
-        }
-
-        init {
-            attach()
         }
     }
 }

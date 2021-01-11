@@ -1,24 +1,24 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.frontend.speed
+package zakadabar.demo.frontend.pages.speed
 
 import zakadabar.demo.data.SpeedDto
-import zakadabar.demo.frontend.R
+import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ValidatedForm
 
 class SpeedForm(dto: SpeedDto, mode: FormMode) : ValidatedForm<SpeedDto>(dto, mode, Speeds) {
 
     override fun init() = build {
-        + header(R.Speed.speed)
-        + section(R.basics, R.Speed.Basics.explanation) {
+        + header(Strings.Speed.speed)
+        + section(Strings.basics, Strings.Speed.Basics.explanation) {
             + fieldGrid {
-                + R.id
+                + Strings.id
                 + dto::id
-                + R.description
+                + Strings.description
                 + dto::description
-                + R.value
+                + Strings.value
                 + dto::value
             }
         }

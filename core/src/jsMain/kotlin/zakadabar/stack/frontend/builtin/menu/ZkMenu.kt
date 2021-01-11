@@ -10,16 +10,16 @@ import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.elements.plusAssign
 
 
-class Menu(builder: Menu.() -> Unit) : ZkElement() {
+open class ZkMenu() : ZkElement() {
 
-    init {
+    constructor(builder: ZkMenu.() -> Unit) : this() {
         builder()
     }
 
-    fun item(text: String, onClick: (() -> Unit)? = null) =
+    open fun item(text: String, onClick: (() -> Unit)? = null) =
         MenuItem(text, onClick)
 
-    fun group(text: String, builder: ZkElement.() -> Unit) =
+    open fun group(text: String, builder: ZkElement.() -> Unit) =
         MenuGroup(text, builder)
 }
 

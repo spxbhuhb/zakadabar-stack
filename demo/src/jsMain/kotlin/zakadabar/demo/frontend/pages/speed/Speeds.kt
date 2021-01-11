@@ -1,10 +1,10 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.frontend.speed
+package zakadabar.demo.frontend.pages.speed
 
 import zakadabar.demo.data.SpeedDto
-import zakadabar.demo.frontend.R
+import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.simple.SimpleButton
 import zakadabar.stack.frontend.elements.ZkCrud
@@ -14,7 +14,7 @@ import zakadabar.stack.frontend.elements.ZkElement.Companion.launchBuildNew
 object Speeds : ZkCrud<SpeedDto>() {
 
     override fun all() = launchBuildNew {
-        + SimpleButton(R.new) { Speeds.openCreate() }
+        + SimpleButton(Strings.new) { Speeds.openCreate() }
         + SpeedTable().setData(SpeedDto.all())
     }
 

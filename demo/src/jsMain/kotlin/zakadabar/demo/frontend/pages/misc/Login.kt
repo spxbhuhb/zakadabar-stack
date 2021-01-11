@@ -1,10 +1,10 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.frontend.general
+package zakadabar.demo.frontend.pages.misc
 
 import zakadabar.demo.data.account.LoginDto
-import zakadabar.demo.frontend.R
+import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ValidatedForm
 import zakadabar.stack.frontend.builtin.layout.FullScreen
@@ -32,12 +32,12 @@ object Login : ZkPage(FullScreen) {
                     width = "min(100%, 300px)"
                 }
 
-                + header(R.Account.login) marginBottom 20
+                + header(Strings.login) marginBottom 20
 
                 + fieldGrid {
-                    + R.Account.account
+                    + Strings.account
                     + dto::account
-                    + R.Account.password
+                    + Strings.password
                     + dto::password
                 } marginBottom 20
 
@@ -46,8 +46,8 @@ object Login : ZkPage(FullScreen) {
                         width = "100%"
                         justifyContent = "space-between"
                     }
-                    + SimpleButton(R.Account.forgotten) { /* PasswordReset.open() */ }
-                    + SimpleButton(R.Account.login) { this@ValidatedForm.submit() }
+                    + SimpleButton(Strings.forgotten) { /* PasswordReset.open() */ }
+                    + SimpleButton(Strings.login) { this@ValidatedForm.submit() }
                 }
             }
         }

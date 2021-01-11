@@ -4,13 +4,12 @@
 
 package zakadabar.demo.frontend
 
-import zakadabar.demo.frontend.general.DefaultLayout
-import zakadabar.demo.frontend.general.Home
-import zakadabar.demo.frontend.general.Login
-import zakadabar.demo.frontend.port.Singapore
-import zakadabar.demo.frontend.port.Tortuga
-import zakadabar.demo.frontend.ship.Ships
-import zakadabar.demo.frontend.speed.Speeds
+import zakadabar.demo.frontend.pages.misc.Home
+import zakadabar.demo.frontend.pages.misc.Login
+import zakadabar.demo.frontend.pages.port.Singapore
+import zakadabar.demo.frontend.pages.port.Tortuga
+import zakadabar.demo.frontend.pages.ship.Ships
+import zakadabar.demo.frontend.pages.speed.Speeds
 import zakadabar.stack.frontend.application.AppRouting
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.application.NavState
