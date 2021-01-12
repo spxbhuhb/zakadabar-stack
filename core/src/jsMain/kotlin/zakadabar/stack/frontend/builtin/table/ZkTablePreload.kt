@@ -10,15 +10,15 @@ import zakadabar.stack.frontend.util.log
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-class Preload<T : Any>(val loader: suspend () -> T) : ReadOnlyProperty<Table<*>, T> {
+class ZkTablePreload<T : Any>(val loader: suspend () -> T) : ReadOnlyProperty<ZkTable<*>, T> {
 
-    protected lateinit var table: Table<*>
+    protected lateinit var table: ZkTable<*>
 
     protected lateinit var value: T
 
     internal lateinit var job: Job
 
-    operator fun provideDelegate(table: Table<*>, prop: KProperty<*>): ReadOnlyProperty<Table<*>, T> {
+    operator fun provideDelegate(table: ZkTable<*>, prop: KProperty<*>): ReadOnlyProperty<ZkTable<*>, T> {
         this.table = table
         table.preloads += this
 
@@ -34,6 +34,6 @@ class Preload<T : Any>(val loader: suspend () -> T) : ReadOnlyProperty<Table<*>,
         return this
     }
 
-    override fun getValue(thisRef: Table<*>, property: KProperty<*>) = value
+    override fun getValue(thisRef: ZkTable<*>, property: KProperty<*>) = value
 
 }

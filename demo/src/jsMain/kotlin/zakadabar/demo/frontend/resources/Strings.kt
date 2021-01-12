@@ -6,6 +6,7 @@ package zakadabar.demo.frontend.resources
 @Suppress("MayBeConstant")
 object Strings {
 
+    val actions = "Actions"
     val account = "Account"
     val asia = "Asia"
     val basics = "Basics"

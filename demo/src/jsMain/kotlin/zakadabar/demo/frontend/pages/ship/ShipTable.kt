@@ -5,16 +5,17 @@ package zakadabar.demo.frontend.pages.ship
 
 import zakadabar.demo.data.ShipDto
 import zakadabar.demo.data.SpeedDto
-import zakadabar.stack.frontend.builtin.table.Table
+import zakadabar.stack.frontend.builtin.table.ZkTable
 
-@Suppress("unused") // table pattern
-class ShipTable : Table<ShipDto>() {
+class ShipTable : ZkTable<ShipDto>() {
 
     private val speeds by preload { SpeedDto.allAsMap() }
 
-    val recordId by tableColumn(ShipDto::id)
-    val name by tableColumn(ShipDto::name)
-    val speed by tableColumn { + speeds[it.speed]?.description }
-    val update by updateLink(ShipDto::id, Ships)
+    init {
+        + ShipDto::id build { label = "#" }
+        + ShipDto::name
+        + custom { render = { speeds[it.speed]?.description } }
+        + ShipDto::id.actions(Ships)
+    }
 
 }

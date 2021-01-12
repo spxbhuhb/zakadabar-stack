@@ -7,10 +7,10 @@ import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.util.CssStyleSheet
 
-class TableClasses(theme: ZkTheme) : CssStyleSheet<TableClasses>(theme) {
+class ZkTableStyles(theme: ZkTheme) : CssStyleSheet<ZkTableStyles>(theme) {
 
     companion object {
-        val tableClasses = TableClasses(Application.theme).attach()
+        val tableClasses = ZkTableStyles(Application.theme).attach()
     }
 
     val table by cssClass {

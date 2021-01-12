@@ -31,7 +31,7 @@ abstract class DtoFrontend<T : RecordDto<T>>(
 
     abstract val dtoClass: KClass<T>
 
-    private val comm = RecordComm(companion.recordType, companion.serializer())
+    private val comm = RecordComm<T>(companion.recordType, companion.serializer())
     val type: String = companion.recordType
     private val displayName: String = companion.recordType
     private val iconSource: IconSource? = null
