@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.demo.data.account.AccountDto
-import zakadabar.stack.backend.data.RecordBackend
+import zakadabar.stack.backend.RecordBackend
 import zakadabar.stack.util.Executor
 
 object AccountBackend : RecordBackend<AccountDto>() {

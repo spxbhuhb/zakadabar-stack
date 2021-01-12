@@ -14,7 +14,7 @@ import zakadabar.demo.backend.speed.SpeedDao
 import zakadabar.demo.data.ShipDto
 import zakadabar.demo.data.ShipSearch
 import zakadabar.demo.data.ShipSpeeds
-import zakadabar.stack.backend.data.RecordBackend
+import zakadabar.stack.backend.RecordBackend
 import zakadabar.stack.util.Executor
 
 object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTable = ShipTable) {

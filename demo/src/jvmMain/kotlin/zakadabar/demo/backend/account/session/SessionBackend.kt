@@ -9,7 +9,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
 import zakadabar.demo.data.account.LoginDto
-import zakadabar.stack.backend.data.CustomBackend
+import zakadabar.stack.backend.CustomBackend
 import zakadabar.stack.backend.util.executor
 import zakadabar.stack.data.builtin.SessionDto
 

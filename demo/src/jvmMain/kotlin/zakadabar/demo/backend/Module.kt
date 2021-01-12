@@ -7,6 +7,7 @@ import zakadabar.demo.backend.account.account.AccountBackend
 import zakadabar.demo.backend.account.role.RoleBackend
 import zakadabar.demo.backend.account.rolegrant.RoleGrantBackend
 import zakadabar.demo.backend.account.session.SessionBackend
+import zakadabar.demo.backend.misc.PingBackend
 import zakadabar.demo.backend.ship.ShipBackend
 import zakadabar.demo.backend.speed.SpeedBackend
 import zakadabar.stack.backend.BackendModule
@@ -23,5 +24,8 @@ object Module : BackendModule {
 
         Server += ShipBackend
         Server += SpeedBackend
+
+        Server += PingBackend
+        Server += WebsocketBackend
     }
 }

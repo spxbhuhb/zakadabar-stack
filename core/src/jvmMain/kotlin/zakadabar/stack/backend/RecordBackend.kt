@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.data
+package zakadabar.stack.backend
 
 import io.ktor.application.*
 import io.ktor.features.*
@@ -17,8 +17,6 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
-import zakadabar.stack.backend.BackendModule
-import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.data.builtin.BlobTable
 import zakadabar.stack.backend.util.executor
 import zakadabar.stack.data.builtin.BlobDto

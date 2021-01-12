@@ -2,6 +2,8 @@
 
 A full-stack development platform for Kotlin. JVM backend, JavaScript frontend, both programmed exclusively in Kotlin as part of one Kotlin MultiPlatform Project.
 
+The overall goal of the project is to type "just enough" code.
+
 As of now we publish the project as **technology preview**. Many things are missing, **we might brake this and that with releases**. Interfaces, use patterns might change, it will need some time to
 mature. We actively use it in our own projects and add features as we need them.
 

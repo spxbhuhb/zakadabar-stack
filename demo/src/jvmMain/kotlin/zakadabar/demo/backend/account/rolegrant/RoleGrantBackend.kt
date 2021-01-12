@@ -12,7 +12,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.demo.backend.account.account.AccountDao
 import zakadabar.demo.backend.account.role.RoleDao
 import zakadabar.demo.data.account.RoleGrantDto
-import zakadabar.stack.backend.data.RecordBackend
+import zakadabar.stack.backend.RecordBackend
 import zakadabar.stack.util.Executor
 
 object RoleGrantBackend : RecordBackend<RoleGrantDto>() {
