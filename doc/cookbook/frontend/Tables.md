@@ -11,8 +11,14 @@ class ShipTable : ZkTable<ShipDto>() {
 
     init {
         + ShipDto::id build { label = "#" }
+
         + ShipDto::name
-        + custom { render = { speeds[it.speed]?.description } }
+
+        + custom {
+            label = Strings.Speed.speed
+            render = { + speeds[it.speed]?.description }
+        }
+
         + ShipDto::id.actions(Ships)
     }
 

@@ -4,14 +4,9 @@
 package zakadabar.stack.frontend.builtin.table
 
 import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.util.CssStyleSheet
 
-class ZkTableStyles(theme: ZkTheme) : CssStyleSheet<ZkTableStyles>(theme) {
-
-    companion object {
-        val tableClasses = ZkTableStyles(Application.theme).attach()
-    }
+object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
 
     val table by cssClass {
         display = "grid"
@@ -39,9 +34,9 @@ class ZkTableStyles(theme: ZkTheme) : CssStyleSheet<ZkTableStyles>(theme) {
             whiteSpace = "nowrap"
             position = "sticky"
             top = 0
-            background = "#6c7ae0"
+            background = theme.table.headerBackground
             textAlign = "left"
-            color = "white"
+            color = theme.table.headerText
             fontWeight = "normal"
         }
 
@@ -56,13 +51,18 @@ class ZkTableStyles(theme: ZkTheme) : CssStyleSheet<ZkTableStyles>(theme) {
             overflow = "hidden"
             textOverflow = "ellipsis"
             whiteSpace = "nowrap"
-            color = "#505050"
+            color = theme.table.text
+            background = theme.table.oddRowBackground
             fontWeight = theme.fontWeight
         }
 
         on(" tr:nth-child(even) td") {
-            background = "#f8f6ff"
+            background = theme.table.evenRowBackground
         }
+    }
+
+    init {
+        attach()
     }
 
 }

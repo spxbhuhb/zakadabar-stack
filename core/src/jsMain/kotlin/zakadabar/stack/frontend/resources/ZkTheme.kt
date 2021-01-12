@@ -5,10 +5,12 @@
 package zakadabar.stack.frontend.resources
 
 import zakadabar.stack.frontend.builtin.menu.ZkMenuTheme
+import zakadabar.stack.frontend.builtin.table.ZkTableTheme
 
 open class ZkTheme {
 
     val white = "#ffffff"
+    val black = "#000000"
 
     val activeBlue = "#2746ab"
     val inactiveBlue = "#bec7e6";
@@ -53,6 +55,16 @@ open class ZkTheme {
         hoverBackground = inactiveBlue,
         activeBackground = inactiveBlue,
         text = white
+    )
+
+    open var table = ZkTableTheme(
+        headerBackground = "#6c7ae0",
+        headerText = white,
+        oddRowBackground = white,
+        evenRowBackground = "#f8f6ff",
+        text = "#505050",
+        hoverBackground = "#6c7ae0",
+        hoverText = black
     )
 
 }

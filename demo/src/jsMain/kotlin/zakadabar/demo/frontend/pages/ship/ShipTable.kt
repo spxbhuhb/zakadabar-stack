@@ -5,6 +5,7 @@ package zakadabar.demo.frontend.pages.ship
 
 import zakadabar.demo.data.ShipDto
 import zakadabar.demo.data.SpeedDto
+import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class ShipTable : ZkTable<ShipDto>() {
@@ -13,8 +14,14 @@ class ShipTable : ZkTable<ShipDto>() {
 
     init {
         + ShipDto::id build { label = "#" }
+
         + ShipDto::name
-        + custom { render = { speeds[it.speed]?.description } }
+
+        + custom {
+            label = Strings.Speed.speed
+            render = { + speeds[it.speed]?.description }
+        }
+
         + ShipDto::id.actions(Ships)
     }
 
