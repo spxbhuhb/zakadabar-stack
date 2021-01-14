@@ -12,7 +12,7 @@ import zakadabar.stack.data.schema.DtoSchema
 @Serializable
 data class LoginDto(
 
-    override val id: RecordId<LoginDto> = 0,
+    override var id: RecordId<LoginDto> = 0,
     var account: String = "",
     var password: String = ""
 

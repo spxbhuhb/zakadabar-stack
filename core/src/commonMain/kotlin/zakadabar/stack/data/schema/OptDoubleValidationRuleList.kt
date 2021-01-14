@@ -19,44 +19,44 @@ package zakadabar.stack.data.schema
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class IntValidationRuleList(val kProperty: KMutableProperty0<Int>) : ValidationRuleList<Int> {
+class OptDoubleValidationRuleList(val kProperty: KMutableProperty0<Double?>) : ValidationRuleList<Double?> {
 
-    var defaultValue = 0
+    var defaultValue: Double? = null
 
-    private val rules = mutableListOf<ValidationRule<Int>>()
+    private val rules = mutableListOf<ValidationRule<Double?>>()
 
-    inner class Max(@PublicApi val limit: Int) : ValidationRule<Int> {
-        override fun validate(value: Int, report: ValidityReport) {
-            if (value > limit) report.fail(kProperty, this)
+    inner class Max(@PublicApi val limit: Double) : ValidationRule<Double?> {
+        override fun validate(value: Double?, report: ValidityReport) {
+            if (value != null && value > limit) report.fail(kProperty, this)
         }
     }
 
-    inner class Min(@PublicApi val limit: Int) : ValidationRule<Int> {
-        override fun validate(value: Int, report: ValidityReport) {
-            if (value < limit) report.fail(kProperty, this)
+    inner class Min(@PublicApi val limit: Double) : ValidationRule<Double?> {
+        override fun validate(value: Double?, report: ValidityReport) {
+            if (value != null && value < limit) report.fail(kProperty, this)
         }
     }
 
-    inner class NotEquals(@PublicApi val invalidValue: Int) : ValidationRule<Int> {
-        override fun validate(value: Int, report: ValidityReport) {
+    inner class NotEquals(@PublicApi val invalidValue: Double?) : ValidationRule<Double?> {
+        override fun validate(value: Double?, report: ValidityReport) {
             if (value == invalidValue) report.fail(kProperty, this)
         }
     }
 
     @PublicApi
-    infix fun max(limit: Int): IntValidationRuleList {
+    infix fun max(limit: Double): OptDoubleValidationRuleList {
         rules += Max(limit)
         return this
     }
 
     @PublicApi
-    infix fun min(limit: Int): IntValidationRuleList {
+    infix fun min(limit: Double): OptDoubleValidationRuleList {
         rules += Min(limit)
         return this
     }
 
     @PublicApi
-    infix fun notEquals(invalidValue: Int): IntValidationRuleList {
+    infix fun notEquals(invalidValue: Double?): OptDoubleValidationRuleList {
         rules += NotEquals(invalidValue)
         return this
     }
@@ -69,7 +69,7 @@ class IntValidationRuleList(val kProperty: KMutableProperty0<Int>) : ValidationR
     }
 
     @PublicApi
-    infix fun default(value: Int): IntValidationRuleList {
+    infix fun default(value: Double?): OptDoubleValidationRuleList {
         defaultValue = value
         return this
     }

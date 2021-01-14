@@ -16,11 +16,14 @@
  */
 package zakadabar.stack.data.schema
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import zakadabar.stack.util.PublicApi
-import kotlin.reflect.KProperty0
+import kotlin.reflect.KMutableProperty0
 
-class InstantValidationRuleList(val kProperty: KProperty0<Instant>) : ValidationRuleList<Instant> {
+class InstantValidationRuleList(val kProperty: KMutableProperty0<Instant>) : ValidationRuleList<Instant> {
+
+    var defaultValue: Instant? = null
 
     private val rules = mutableListOf<ValidationRule<Instant>>()
 
@@ -90,4 +93,15 @@ class InstantValidationRuleList(val kProperty: KProperty0<Instant>) : Validation
             rule.validate(value, report)
         }
     }
+
+    @PublicApi
+    infix fun default(value: Instant): InstantValidationRuleList {
+        defaultValue = value
+        return this
+    }
+
+    override fun setDefault() {
+        kProperty.set(defaultValue ?: Clock.System.now())
+    }
+
 }

@@ -6,13 +6,14 @@ package zakadabar.stack.frontend.builtin.table.columns
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.set
+import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.elements.ZkCrud
 import zakadabar.stack.frontend.elements.ZkElement
 import kotlin.reflect.KProperty1
 
-open class ZkActionsColumn<T>(
+open class ZkActionsColumn<T : RecordDto<T>>(
     override val table: ZkTable<T>,
     private val prop: KProperty1<T, RecordId<T>>,
     private val crud: ZkCrud<T>

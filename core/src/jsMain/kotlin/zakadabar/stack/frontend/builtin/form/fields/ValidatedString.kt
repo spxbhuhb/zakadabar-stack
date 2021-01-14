@@ -21,12 +21,12 @@ import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.FormClasses.Companion.formClasses
-import zakadabar.stack.frontend.builtin.form.ValidatedForm
+import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.elements.ZkElement
 import kotlin.reflect.KMutableProperty0
 
 class ValidatedString<T : RecordDto<T>>(
-    private val form: ValidatedForm<T>,
+    private val form: ZkForm<T>,
     private val prop: KMutableProperty0<String>
 ) : FormField<String>(
     element = document.createElement("input") as HTMLInputElement

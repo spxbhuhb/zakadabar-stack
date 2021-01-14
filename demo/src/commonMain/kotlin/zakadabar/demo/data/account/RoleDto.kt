@@ -13,7 +13,7 @@ import zakadabar.stack.data.record.RecordDtoCompanion
 @Serializable
 class RoleDto(
 
-    override val id: Long,
+    override var id: Long,
     var name: String,
     var description: String = ""
 

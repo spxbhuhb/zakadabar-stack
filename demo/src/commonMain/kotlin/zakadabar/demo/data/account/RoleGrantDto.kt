@@ -11,7 +11,7 @@ import zakadabar.stack.data.record.RecordId
 @Serializable
 data class RoleGrantDto(
 
-    override val id: Long,
+    override var id: Long,
     val account: RecordId<AccountDto>,
     val role: RecordId<RoleDto>
 

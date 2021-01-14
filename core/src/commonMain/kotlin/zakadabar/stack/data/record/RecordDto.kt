@@ -9,7 +9,7 @@ import zakadabar.stack.data.schema.DtoSchema
 @Suppress("UNCHECKED_CAST")
 interface RecordDto<T> {
 
-    val id: RecordId<T>
+    var id: RecordId<T>
 
     fun getRecordType(): String
 

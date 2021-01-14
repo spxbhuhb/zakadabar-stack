@@ -3,10 +3,11 @@
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
+import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.elements.ZkElement
 
-interface ZkColumn<T> {
+interface ZkColumn<T : RecordDto<T>> {
 
     var label: String
     val table: ZkTable<T>

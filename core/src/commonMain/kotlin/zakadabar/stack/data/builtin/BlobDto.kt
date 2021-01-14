@@ -14,7 +14,7 @@ import zakadabar.stack.data.schema.DtoSchema
 @Serializable
 data class BlobDto(
 
-    override val id: RecordId<BlobDto>,
+    override var id: RecordId<BlobDto>,
     var dataRecord: RecordId<*>?,
     var dataType: String,
     var name: String,

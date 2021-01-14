@@ -6,12 +6,12 @@ package zakadabar.stack.frontend.builtin.form.structure
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.builtin.form.FormMode
-import zakadabar.stack.frontend.builtin.form.ValidatedForm
+import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.simple.SimpleButton
 import zakadabar.stack.frontend.elements.ZkElement
 
 class Buttons<T : RecordDto<T>>(
-    private val form: ValidatedForm<T>
+    private val form: ZkForm<T>
 ) : ZkElement() {
     override fun init() = build {
         when (form.mode) {

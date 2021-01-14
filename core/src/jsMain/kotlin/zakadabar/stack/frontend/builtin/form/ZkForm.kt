@@ -18,6 +18,7 @@ package zakadabar.stack.frontend.builtin.form
 
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.schema.DtoSchema
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.FormClasses.Companion.formClasses
 import zakadabar.stack.frontend.builtin.form.fields.*
@@ -29,24 +30,24 @@ import zakadabar.stack.frontend.elements.ZkCrud
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.frontend.util.log
-import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KProperty0
 
 /**
  * Base class for DTO forms.
  */
-open class ValidatedForm<T : RecordDto<T>>(
-    val dto: T,
-    val mode: FormMode,
-    val crud: ZkCrud<T>? = null,
-    @PublicApi
-    val fieldGridTemplate: String = "150px 1fr",
-    val fieldGridGap: String = "5px",
-    val builder: ValidatedForm<T>.() -> Unit = { }
-) : ZkElement() {
+open class ZkForm<T : RecordDto<T>> : ZkElement() {
 
-    private val schema = dto.schema()
+    lateinit var dto: T
+    lateinit var mode: FormMode
+
+    var crud: ZkCrud<T>? = null
+    var fieldGridTemplate: String = "150px 1fr"
+    var fieldGridGap: String = "5px"
+    var builder: ZkForm<T>.() -> Unit = { }
+
+    lateinit var schema: DtoSchema
+
     internal val fields = mutableListOf<FormField<*>>()
 
     // ----  Builder convenience functions --------
@@ -56,25 +57,26 @@ open class ValidatedForm<T : RecordDto<T>>(
     }
 
     override fun init(): ZkElement {
+        schema = dto.schema()
         builder()
         return this
     }
 
     fun header(title: String) = Header(title)
 
-    fun buttons() = Buttons(this@ValidatedForm)
+    fun buttons() = Buttons(this@ZkForm)
 
     fun section(title: String, summary: String = "", builder: ZkElement.() -> Unit) =
         Section(title, summary, builder)
 
     fun select(kProperty0: KMutableProperty0<RecordId<*>>, sortOptions: Boolean = true, options: suspend () -> List<Pair<RecordId<*>, String>>): ValidatedRecordSelect<T> {
-        val field = ValidatedRecordSelect(this@ValidatedForm, kProperty0, sortOptions, options)
+        val field = ValidatedRecordSelect(this@ZkForm, kProperty0, sortOptions, options)
         fields += field
         return field
     }
 
     fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkElement.() -> Unit = { }): ValidatedTextArea<T> {
-        val field = ValidatedTextArea(this@ValidatedForm, kProperty0)
+        val field = ValidatedTextArea(this@ZkForm, kProperty0)
         fields += field
         field.builder()
         return field
@@ -82,7 +84,7 @@ open class ValidatedForm<T : RecordDto<T>>(
 
     // ----  Customized build and property receiver  --------
 
-    operator fun KProperty0<RecordId<T>>.unaryPlus(): ZkElement {
+    operator fun KMutableProperty0<RecordId<T>>.unaryPlus(): ZkElement {
         val field = ValidatedId<T>(this)
         + field
         fields += field
@@ -90,14 +92,14 @@ open class ValidatedForm<T : RecordDto<T>>(
     }
 
     operator fun KMutableProperty0<String>.unaryPlus(): ZkElement {
-        val field = ValidatedString(this@ValidatedForm, this)
+        val field = ValidatedString(this@ZkForm, this)
         + field
         fields += field
         return field
     }
 
     operator fun KMutableProperty0<Double>.unaryPlus(): ZkElement {
-        val field = ValidatedDouble(this@ValidatedForm, this)
+        val field = ValidatedDouble(this@ZkForm, this)
         + field
         fields += field
         return field

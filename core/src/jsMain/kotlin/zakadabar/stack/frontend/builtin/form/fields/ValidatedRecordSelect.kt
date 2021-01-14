@@ -23,14 +23,14 @@ import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.FormClasses.Companion.formClasses
-import zakadabar.stack.frontend.builtin.form.ValidatedForm
+import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.escape
 import zakadabar.stack.frontend.util.launch
 import kotlin.reflect.KMutableProperty0
 
 class ValidatedRecordSelect<T : RecordDto<T>>(
-    private val form: ValidatedForm<T>,
+    private val form: ZkForm<T>,
     private val prop: KMutableProperty0<RecordId<*>>,
     private val sortOptions: Boolean = true,
     private val options: suspend () -> List<Pair<RecordId<*>, String>>

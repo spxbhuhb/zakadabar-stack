@@ -16,9 +16,12 @@
  */
 package zakadabar.stack.data.schema
 
-import kotlin.reflect.KProperty0
+import zakadabar.stack.util.PublicApi
+import kotlin.reflect.KMutableProperty0
 
-class BooleanValidationRuleList(val kProperty: KProperty0<Boolean>) : ValidationRuleList<Boolean> {
+class BooleanValidationRuleList(val kProperty: KMutableProperty0<Boolean>) : ValidationRuleList<Boolean> {
+
+    var defaultValue = false
 
     private val rules = mutableListOf<ValidationRule<Boolean>>()
 
@@ -28,4 +31,15 @@ class BooleanValidationRuleList(val kProperty: KProperty0<Boolean>) : Validation
             rule.validate(value, report)
         }
     }
+
+    @PublicApi
+    infix fun default(value: Boolean): BooleanValidationRuleList {
+        defaultValue = value
+        return this
+    }
+
+    override fun setDefault() {
+        kProperty.set(defaultValue)
+    }
+
 }

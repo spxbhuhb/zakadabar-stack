@@ -27,13 +27,13 @@ import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.FormMode
-import zakadabar.stack.frontend.builtin.form.ValidatedForm
+import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.Thumbnail
 import zakadabar.stack.frontend.builtin.util.droparea.DropAreaClasses
 
 class Images<T : RecordDto<T>>(
-    private val form: ValidatedForm<T>,
+    private val form: ZkForm<T>,
     private val dataRecordId: RecordId<T>,
 ) : FormField<Unit>(
     element = document.createElement("div") as HTMLElement

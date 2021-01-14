@@ -3,11 +3,12 @@
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
+import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.elements.ZkElement
 import kotlin.reflect.KProperty1
 
-open class ZkStringColumn<T>(
+open class ZkStringColumn<T : RecordDto<T>>(
     override val table: ZkTable<T>,
     private val prop: KProperty1<T, String>
 ) : ZkColumn<T> {

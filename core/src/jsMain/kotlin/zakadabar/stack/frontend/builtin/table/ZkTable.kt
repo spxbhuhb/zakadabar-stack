@@ -5,6 +5,7 @@ package zakadabar.stack.frontend.builtin.table
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLTableSectionElement
+import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.table.columns.*
 import zakadabar.stack.frontend.elements.ZkCrud
@@ -12,7 +13,9 @@ import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.launch
 import kotlin.reflect.KProperty1
 
-open class ZkTable<T> : ZkElement() {
+open class ZkTable<T : RecordDto<T>> : ZkElement() {
+
+    lateinit var actionBar: ZkTableActionBar
 
     val columns = mutableListOf<ZkColumn<T>>()
 
@@ -21,6 +24,10 @@ open class ZkTable<T> : ZkElement() {
     private val tbody = document.createElement("tbody") as HTMLTableSectionElement
 
     override fun init() = build {
+        if (::actionBar.isInitialized) {
+            + actionBar
+        }
+
         + table(ZkTableStyles.table) {
             buildContext.style.cssText = gridTemplateColumns()
             + thead {

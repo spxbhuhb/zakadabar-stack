@@ -5,23 +5,29 @@ package zakadabar.demo.frontend.pages.speed
 
 import zakadabar.demo.data.SpeedDto
 import zakadabar.demo.frontend.resources.Strings
-import zakadabar.stack.frontend.builtin.form.FormMode
-import zakadabar.stack.frontend.builtin.form.ValidatedForm
+import zakadabar.stack.frontend.builtin.form.ZkForm
 
-class SpeedForm(dto: SpeedDto, mode: FormMode) : ValidatedForm<SpeedDto>(dto, mode, Speeds) {
+class SpeedForm : ZkForm<SpeedDto>() {
 
     override fun init() = build {
         + header(Strings.Speed.speed)
+
         + section(Strings.basics, Strings.Speed.Basics.explanation) {
             + fieldGrid {
-                + Strings.id
-                + dto::id
+
+                ifNotCreate {
+                    + Strings.id
+                    + dto::id
+                }
+
                 + Strings.description
                 + dto::description
+
                 + Strings.value
                 + dto::value
             }
         }
+
         + buttons()
     }
 

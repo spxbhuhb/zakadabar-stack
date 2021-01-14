@@ -24,10 +24,10 @@ import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.FormClasses.Companion.formClasses
 import zakadabar.stack.frontend.elements.ZkElement
-import kotlin.reflect.KProperty0
+import kotlin.reflect.KMutableProperty0
 
 class ValidatedId<T : RecordDto<T>>(
-    private val prop: KProperty0<RecordId<T>>
+    private val prop: KMutableProperty0<RecordId<T>>
 ) : FormField<RecordId<T>>(
     element = document.createElement("input") as HTMLElement
 ) {

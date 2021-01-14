@@ -13,7 +13,7 @@ import zakadabar.stack.data.schema.DtoSchema
 @Serializable
 data class ShipDto(
 
-    override val id: RecordId<ShipDto>,
+    override var id: RecordId<ShipDto>,
     var name: String,
     var speed: RecordId<SpeedDto>
 
@@ -31,7 +31,9 @@ data class ShipDto(
     }
 
     override fun schema() = DtoSchema.build {
+        + ::id
         + ::name max 20 min 2 notEquals "Titanic"
+        + ::speed
     }
 
     override fun getRecordType() = recordType

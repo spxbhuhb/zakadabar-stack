@@ -4,9 +4,11 @@
 package zakadabar.stack.data.schema
 
 import zakadabar.stack.util.PublicApi
-import kotlin.reflect.KProperty0
+import kotlin.reflect.KMutableProperty0
 
-class OptStringValidationRuleList(val kProperty: KProperty0<String?>) : ValidationRuleList<String?> {
+class OptStringValidationRuleList(val kProperty: KMutableProperty0<String?>) : ValidationRuleList<String?> {
+
+    var defaultValue: String? = null
 
     private val rules = mutableListOf<ValidationRule<String?>>()
 
@@ -65,4 +67,15 @@ class OptStringValidationRuleList(val kProperty: KProperty0<String?>) : Validati
             rule.validate(value, report)
         }
     }
+
+    @PublicApi
+    infix fun default(value: String?): OptStringValidationRuleList {
+        defaultValue = value
+        return this
+    }
+
+    override fun setDefault() {
+        kProperty.set(defaultValue)
+    }
+
 }

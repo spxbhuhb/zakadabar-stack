@@ -10,7 +10,7 @@ import zakadabar.stack.data.record.RecordDtoCompanion
 @Serializable
 class AccountDto(
 
-    override val id: Long = 0,
+    override var id: Long = 0,
     val accountName: String = "",
     val email: String = "",
     val fullName: String = "",

@@ -3,19 +3,31 @@
  */
 package zakadabar.stack.frontend.elements
 
+import zakadabar.stack.data.record.RecordDto
+import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.application.AppRouting
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.application.NavState
+import zakadabar.stack.frontend.builtin.form.FormMode
+import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.builtin.util.NYI
+import zakadabar.stack.frontend.util.newInstance
+import kotlin.reflect.KClass
 
 /**
  * Provides common functions used in most CRUD implementations.
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
-open class ZkCrud<T> : AppRouting.ZkTarget {
+open class ZkCrud<T : RecordDto<T>> : AppRouting.ZkTarget {
 
     override var viewName = "${this::class.simpleName}"
+
+    lateinit var companion: RecordDtoCompanion<T>
+    lateinit var dtoClass: KClass<T>
+    lateinit var formClass: KClass<out ZkForm<T>>
+    lateinit var tableClass: KClass<out ZkTable<T>>
 
     val allPath
         get() = "/$viewName/all"
@@ -45,9 +57,50 @@ open class ZkCrud<T> : AppRouting.ZkTarget {
 
     open fun routeQuery(routing: AppRouting, state: NavState): ZkElement = NYI()
 
-    open fun all(): ZkElement = NYI("crud all")
-    open fun create(): ZkElement = NYI("crud create")
-    open fun read(recordId: Long): ZkElement = NYI("crud read")
-    open fun update(recordId: Long): ZkElement = NYI("crud update")
-    open fun delete(recordId: Long): ZkElement = NYI("crud delete")
+    open fun all(): ZkElement = ZkElement.launchBuildNew {
+        + tableClass.newInstance().setData(companion.comm.all())
+    }
+
+    open fun create(): ZkElement = ZkElement.buildNew {
+
+        val dto = dtoClass.newInstance()
+        dto.schema().setDefaults()
+
+        val form = formClass.newInstance()
+        form.dto = dto
+        form.crud = this@ZkCrud
+        form.mode = FormMode.Create
+
+        + form
+    }
+
+    open fun read(recordId: Long): ZkElement = ZkElement.launchBuildNew {
+
+        val form = formClass.newInstance()
+        form.dto = companion.read(recordId)
+        form.crud = this@ZkCrud
+        form.mode = FormMode.Read
+
+        + form
+    }
+
+    open fun update(recordId: Long): ZkElement = ZkElement.launchBuildNew {
+
+        val form = formClass.newInstance()
+        form.dto = companion.read(recordId)
+        form.crud = this@ZkCrud
+        form.mode = FormMode.Update
+
+        + form
+    }
+
+    open fun delete(recordId: Long): ZkElement = ZkElement.launchBuildNew {
+
+        val form = formClass.newInstance()
+        form.dto = companion.read(recordId)
+        form.crud = this@ZkCrud
+        form.mode = FormMode.Delete
+
+        + form
+    }
 }

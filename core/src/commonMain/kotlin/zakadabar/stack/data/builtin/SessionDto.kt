@@ -12,7 +12,7 @@ import zakadabar.stack.data.record.RecordDtoCompanion
 @Serializable
 data class SessionDto(
 
-    override val id: Long,
+    override var id: Long,
     val accountId: Long,
     val displayName: String,
     val roles: List<String>

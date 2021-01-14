@@ -3,11 +3,12 @@
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
+import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.elements.ZkElement
 import kotlin.reflect.KProperty1
 
-open class ZkDoubleColumn<T>(
+open class ZkDoubleColumn<T : RecordDto<T>>(
     override val table: ZkTable<T>,
     private val prop: KProperty1<T, Double>
 ) : ZkColumn<T> {

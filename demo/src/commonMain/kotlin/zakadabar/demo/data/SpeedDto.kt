@@ -12,7 +12,7 @@ import zakadabar.stack.data.schema.DtoSchema
 @Serializable
 data class SpeedDto(
 
-    override val id: RecordId<SpeedDto>,
+    override var id: RecordId<SpeedDto>,
     var description: String,
     var value: Double
 
@@ -23,7 +23,9 @@ data class SpeedDto(
     }
 
     override fun schema() = DtoSchema.build {
+        + ::id
         + ::description min 1 max 100
+        + ::value
     }
 
     override fun getRecordType() = recordType

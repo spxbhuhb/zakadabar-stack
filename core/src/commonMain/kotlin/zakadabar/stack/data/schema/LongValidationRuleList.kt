@@ -17,9 +17,11 @@
 package zakadabar.stack.data.schema
 
 import zakadabar.stack.util.PublicApi
-import kotlin.reflect.KProperty0
+import kotlin.reflect.KMutableProperty0
 
-class LongValidationRuleList(val kProperty: KProperty0<Long>) : ValidationRuleList<Long> {
+class LongValidationRuleList(val kProperty: KMutableProperty0<Long>) : ValidationRuleList<Long> {
+
+    var defaultValue = 0L
 
     private val rules = mutableListOf<ValidationRule<Long>>()
 
@@ -65,4 +67,15 @@ class LongValidationRuleList(val kProperty: KProperty0<Long>) : ValidationRuleLi
             rule.validate(value, report)
         }
     }
+
+    @PublicApi
+    infix fun default(value: Long): LongValidationRuleList {
+        defaultValue = value
+        return this
+    }
+
+    override fun setDefault() {
+        kProperty.set(defaultValue)
+    }
+
 }

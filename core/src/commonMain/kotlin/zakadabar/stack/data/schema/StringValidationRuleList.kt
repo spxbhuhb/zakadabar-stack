@@ -17,9 +17,11 @@
 package zakadabar.stack.data.schema
 
 import zakadabar.stack.util.PublicApi
-import kotlin.reflect.KProperty0
+import kotlin.reflect.KMutableProperty0
 
-class StringValidationRuleList(val kProperty: KProperty0<String>) : ValidationRuleList<String> {
+class StringValidationRuleList(val kProperty: KMutableProperty0<String>) : ValidationRuleList<String> {
+
+    var defaultValue = ""
 
     private val rules = mutableListOf<ValidationRule<String>>()
 
@@ -78,4 +80,15 @@ class StringValidationRuleList(val kProperty: KProperty0<String>) : ValidationRu
             rule.validate(value, report)
         }
     }
+
+    @PublicApi
+    infix fun default(value: String): StringValidationRuleList {
+        defaultValue = value
+        return this
+    }
+
+    override fun setDefault() {
+        kProperty.set(defaultValue)
+    }
+
 }
