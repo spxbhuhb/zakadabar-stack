@@ -15,11 +15,16 @@ mature. We actively use it in our own projects and add features as we need them.
 * Database: anything supported by Exposed, we use PostgreSQL
 * Development tools: IntelliJ IDEA, Gradle, Firefox
 * Documentation:
+  * [The Demo Project](demo/README.md)
   * [The Cookbook](doc/cookbook/README.md)
   * [Knowledge Base](doc/knowledge-base/README.md)
   * [Developers Guide](doc/developers-guide/README.md)
   * [Productivity Tips](doc/misc/Productivity.md)
   * API as soon as Dokka doesn't crash (yay 1.4)
+
+## Getting Started
+
+Check out the [The Demo Project](demo/README.md) which is commented and explained.
 
 ## Using
 
