@@ -13,8 +13,10 @@ class ShipTable : ZkTable<ShipDto>() {
     private val speeds by preload { SpeedDto.allAsMap() }
 
     init {
-        + ShipDto::id build { label = "#" }
+        title = Strings.Ship.ships
+        onCreate = { Ships.openCreate() }
 
+        + ShipDto::id build { label = "#" }
         + ShipDto::name
 
         + custom {

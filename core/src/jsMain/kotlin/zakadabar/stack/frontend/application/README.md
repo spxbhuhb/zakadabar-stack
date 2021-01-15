@@ -5,12 +5,12 @@ Layouts define the general structure for the UI. Typically, there are only a few
 For each page there is a layout that page uses to when displayed. For example the application might not want to display the menu before the user logs in. In this case the login page uses the full
 screen layout.
 
-All layouts extend [AppLayout](../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/application/Application.kt).
+All layouts extend [AppLayout](./AppLayout.kt).
 
-When the user performs navigation, the [Application](../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/application/Application.kt)
+When the user performs navigation, the [Application](./Application.kt)
 tries to find the page that is able to display the new location.
 
-These pages (ones that can display a location) are called targets, they implement [AppRouting.ZkTarget](../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/application/AppRouting.kt).
+These pages (ones that can display a location) are called targets, they implement [AppRouting.ZkTarget](./AppRouting.kt).
 
 Each target has a layout associated with it. When the layout is **NOT** the same as the one currently displayed the application switches to the other layout. Then it calls the `resume` function of the
 layout to load the given target.

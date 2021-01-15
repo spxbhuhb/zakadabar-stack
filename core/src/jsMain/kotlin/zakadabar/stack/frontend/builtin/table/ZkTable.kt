@@ -16,7 +16,11 @@ import kotlin.reflect.KProperty1
 
 open class ZkTable<T : RecordDto<T>> : ZkElement() {
 
-    lateinit var actionBar: ZkTableActionBar
+    var title: String? = null
+    var onCreate: (() -> Unit)? = null
+    var onSearch: ((searchText: String) -> Unit)? = null
+
+    var actionBar: ZkTableActionBar? = null
 
     val columns = mutableListOf<ZkColumn<T>>()
 
@@ -25,9 +29,8 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
     private val tbody = document.createElement("tbody") as HTMLTableSectionElement
 
     override fun init() = build {
-        if (::actionBar.isInitialized) {
-            + actionBar
-        }
+
+        buildActionBar()?.let { + it }
 
         + table(ZkTableStyles.table) {
             buildContext.style.cssText = gridTemplateColumns()
@@ -36,6 +39,17 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
             }
             + tbody
         }
+    }
+
+    private fun buildActionBar(): ZkTableActionBar? {
+        if (actionBar == null && (title != null || onCreate != null || onSearch != null)) {
+            actionBar = ZkTableActionBar {
+                this@ZkTable.title?.let { title = it }
+                this@ZkTable.onCreate?.let { onCreate = it }
+                this@ZkTable.onSearch?.let { onSearch = it }
+            }
+        }
+        return actionBar
     }
 
     fun <RT : Any> preload(loader: suspend () -> RT) = ZkTablePreload(loader)

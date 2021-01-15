@@ -98,6 +98,13 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
         return field
     }
 
+    operator fun KMutableProperty0<String?>.unaryPlus(): ZkElement {
+        val field = ValidatedOptString(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
     operator fun KMutableProperty0<Double>.unaryPlus(): ZkElement {
         val field = ValidatedDouble(this@ZkForm, this)
         + field
