@@ -7,7 +7,7 @@ import zakadabar.demo.data.SpeedDto
 import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.builtin.form.ZkForm
 
-class SpeedForm : ZkForm<SpeedDto>() {
+class Form : ZkForm<SpeedDto>() {
 
     override fun init() = build {
         + header(Strings.Speed.speed)

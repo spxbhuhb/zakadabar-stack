@@ -10,7 +10,7 @@ object Speeds : ZkCrud<SpeedDto>() {
     init {
         companion = SpeedDto.Companion
         dtoClass = SpeedDto::class
-        formClass = SpeedForm::class
-        tableClass = SpeedTable::class
+        formClass = Form::class
+        tableClass = Table::class
     }
 }

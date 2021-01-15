@@ -7,7 +7,7 @@ import zakadabar.demo.data.SpeedDto
 import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
-class SpeedTable : ZkTable<SpeedDto>() {
+class Table : ZkTable<SpeedDto>() {
 
     init {
         title = Strings.Speed.speeds

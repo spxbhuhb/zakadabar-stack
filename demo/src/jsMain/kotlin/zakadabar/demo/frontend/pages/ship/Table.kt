@@ -8,7 +8,7 @@ import zakadabar.demo.data.SpeedDto
 import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
-class ShipTable : ZkTable<ShipDto>() {
+class Table : ZkTable<ShipDto>() {
 
     private val speeds by preload { SpeedDto.allAsMap() }
 

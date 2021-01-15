@@ -18,7 +18,6 @@ package zakadabar.stack.frontend.builtin.form
 
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.schema.DtoSchema
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.FormClasses.Companion.formClasses
 import zakadabar.stack.frontend.builtin.form.fields.*
@@ -44,9 +43,8 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
     var crud: ZkCrud<T>? = null
     var fieldGridTemplate: String = "150px 1fr"
     var fieldGridGap: String = "5px"
-    var builder: ZkForm<T>.() -> Unit = { }
 
-    lateinit var schema: DtoSchema
+    var schema = lazy { dto.schema() }
 
     internal val fields = mutableListOf<FormField<*>>()
 
@@ -54,12 +52,6 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
 
     init {
         className = formClasses.form
-    }
-
-    override fun init(): ZkElement {
-        schema = dto.schema()
-        builder()
-        return this
     }
 
     fun header(title: String) = Header(title)
@@ -125,7 +117,7 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
     // ----  Validation and submit --------
 
     fun validate(): ValidityReport {
-        val report = schema.validate()
+        val report = schema.value.validate()
         fields.forEach {
             it.onValidated(report)
         }

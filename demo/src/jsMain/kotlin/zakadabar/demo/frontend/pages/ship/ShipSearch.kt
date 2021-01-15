@@ -11,7 +11,7 @@ import zakadabar.stack.frontend.util.launch
 object ShipSearch : ZkPage() {
 
     private val input = SimpleInput(enter = true) { searchText -> onSearch(searchText, table) }
-    private val table = ShipTable()
+    private val table = Table()
 
     override fun init() = build {
         + column {
@@ -20,7 +20,7 @@ object ShipSearch : ZkPage() {
         }
     }
 
-    private fun onSearch(searchText: String, table: ShipTable) = launch {
+    private fun onSearch(searchText: String, table: Table) = launch {
         table.setData(ShipsByName(name = searchText).execute())
     }
 

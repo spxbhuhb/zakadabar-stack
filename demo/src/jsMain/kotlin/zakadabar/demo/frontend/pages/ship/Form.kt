@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.fields.Images
 import zakadabar.stack.frontend.elements.ZkClasses.Companion.zkClasses
 
-class ShipForm : ZkForm<ShipDto>() {
+class Form : ZkForm<ShipDto>() {
 
     override fun init() = build {
         + header(Strings.Ship.ships)
@@ -50,6 +50,6 @@ class ShipForm : ZkForm<ShipDto>() {
 
     private fun images() =
         section(Strings.images) {
-            + Images(this@ShipForm, dto.id)
+            + Images(this@Form, dto.id)
         }
 }

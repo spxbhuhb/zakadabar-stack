@@ -11,8 +11,8 @@ object Ships : ZkCrud<ShipDto>() {
     init {
         companion = ShipDto.Companion
         dtoClass = ShipDto::class
-        formClass = ShipForm::class
-        tableClass = ShipTable::class
+        formClass = Form::class
+        tableClass = Table::class
     }
 
 }
