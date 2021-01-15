@@ -38,19 +38,22 @@ There are a few other things in this directory:
 
 ## commonMain
 
-Contains code we use both on the backend and on frontends. When you change something in this code set it will change **everywhere**.
+Contains code we use both on the backend and on frontends.
 
-Most important parts of the common code are the DTOs (Data Transfer Objects). DTOs are data classes sent by the backend to the frontend and vice-versa. You may think DTOs as definitions of the
-frontend - backend API.
+When you change something in this code set, it changes **everywhere**.
+
+Most important parts of the common code are the DTOs (Data Transfer Objects).
+
+DTOs are data classes sent by the backend to the frontend and vice-versa. You may think DTOs as definitions of the frontend - backend API.
 
 You can see an example of a DTO below, there are a few important points about this:
 
 * **BOTH the frontend and the backend uses this very same piece of code, from the same file**
 * communication is ready to go, no need to write anything else
 * this DTO has a schema, useful for
-    * filling an instance with default values
-    * automatic validation of forms on the frontend
-    * automatic validation of incoming data on the server
+  * filling an instance with default values
+  * automatic validation of forms on the frontend
+  * automatic validation of incoming data on the server
     * all these above is either a one-liner or already provided by the stack
 * also, this DTO defines two queries, which are
     * automatically serialized / deserialized

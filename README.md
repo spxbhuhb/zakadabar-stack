@@ -2,29 +2,31 @@
 
 A full-stack development platform for Kotlin. JVM backend, JavaScript frontend, both programmed exclusively in Kotlin as part of one Kotlin MultiPlatform Project.
 
-The overall goal of the project is to type "just enough" code.
+As of now we publish the project as **technology preview**. Many things are missing,
+**we might brake this and that with releases**. Interfaces, use patterns might change, it will need some time to mature.
 
-As of now we publish the project as **technology preview**. Many things are missing, **we might brake this and that with releases**. Interfaces, use patterns might change, it will need some time to
-mature. We actively use it in our own projects and add features as we need them.
+## Keywords
 
-## Highlights
+Kotlin(x), Ktor, SQL
 
-* Basics: Kotlin, Kotlinx, Ktor
-* Keywords: multi-platform, coroutines, operator overloading, builders
-* Dependencies: Kotlin(x), Ktor, HikariCP, Exposed, Clikt, Kaml, LogBack (yes, that's all of them :D )
-* Database: anything supported by Exposed, we use PostgreSQL
-* Development tools: IntelliJ IDEA, Gradle, Firefox
-* Documentation:
-  * [The Demo Project](demo)
-  * [The Cookbook](doc/cookbook/README.md)
-  * [Knowledge Base](doc/knowledge-base/README.md)
-  * [Developers Guide](doc/developers-guide/README.md)
-  * [Productivity Tips](doc/misc/Productivity.md)
-  * API as soon as Dokka doesn't crash (yay 1.4)
+`techniques` multi-platform, coroutines, operator overloading, builders
+
+`dependencies (all of them)` Kotlin(x), Ktor, HikariCP, Exposed, Clikt, Kaml, LogBack
+
+`development tools` IntelliJ IDEA, Gradle, Firefox
 
 ## Getting Started
 
 Check out the [The Demo Project](demo) which is commented and explained.
+
+## Documentation
+
+* [The Demo Project](demo)
+* [The Cookbook](doc/cookbook/README.md)
+* [Knowledge Base](doc/knowledge-base/README.md)
+* [Developers Guide](doc/developers-guide/README.md)
+* [Productivity Tips](doc/misc/Productivity.md)
+* API as soon as Dokka doesn't crash (yay 1.4)
 
 ## Using
 

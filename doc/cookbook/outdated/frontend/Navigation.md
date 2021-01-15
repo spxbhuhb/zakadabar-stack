@@ -1,14 +1,13 @@
-# Navigation
+# Routing
 
-Navigation handles URL changes:
+Routing handles URL changes:
 
 * initial page load
 * back and forward buttons of the browser
 * navigation by links
 * programmatic navigation
 
-The browser's [Location](https://developer.mozilla.org/en-US/docs/Web/API/Location) determines
-what is displayed to the user. See [URLs](../common/URLs.md#View-URLs) for more information.
+The browser's [Location](https://developer.mozilla.org/en-US/docs/Web/API/Location) determines what is displayed to the user. See [URLs](../../../) for more information.
 
 The [Navigation](../../../src/jsMain/kotlin/zakadabar/stack/frontend/builtin/navigation/Navigation.kt) object:
 

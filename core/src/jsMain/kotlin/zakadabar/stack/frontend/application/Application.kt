@@ -6,16 +6,26 @@ package zakadabar.stack.frontend.application
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.events.Event
-import zakadabar.stack.Stack
+import zakadabar.stack.frontend.application.Application.executor
+import zakadabar.stack.frontend.application.Application.routing
+import zakadabar.stack.frontend.application.Application.theme
 import zakadabar.stack.frontend.builtin.dock.Dock
-import zakadabar.stack.frontend.util.Dictionary
 import zakadabar.stack.frontend.util.defaultTheme
-import zakadabar.stack.util.UUID
-import zakadabar.stack.util.Unique
 
 /**
  * The application that runs in the browser window. This object contains data
  * and resources that are used all over the application.
+ *
+ * It listens to the location change events of the browser window and loads
+ * the pages that belongs to the current URL.
+ *
+ * @property  executor The user who views the web page. There is always a user,
+ *                     before login it is "anonymous".
+ *
+ * @property  routing  The URL -> page mapping to navigate in the application.
+ *
+ * @property  theme    The design theme of the application.
+ *
  */
 object Application {
 
@@ -24,15 +34,14 @@ object Application {
 
     lateinit var routing: AppRouting
 
-    private var defaultLanguage = window.navigator.language
+    // we'll need this later private var defaultLanguage = window.navigator.language
 
     var theme = defaultTheme
 
-    private val dictionaries = mutableMapOf<UUID, Dictionary>()
-
     lateinit var dock: Dock
 
-    const val EVENT = "zk-navstate-change"
+    @Suppress("MemberVisibilityCanBePrivate")
+    const val NAVSTATE_CHANGE = "zk-navstate-change"
 
     fun init() {
         document.body?.style?.fontFamily = theme.fontFamily
@@ -40,35 +49,21 @@ object Application {
 
         window.addEventListener("popstate", onPopState)
         routing.onNavStateChange(NavState(window.location.pathname, window.location.search))
-        window.dispatchEvent(Event(EVENT))
+        window.dispatchEvent(Event(NAVSTATE_CHANGE))
     }
 
     private val onPopState = fun(_: Event) {
         routing.onNavStateChange(NavState(window.location.pathname, window.location.search))
-        window.dispatchEvent(Event(EVENT))
+        window.dispatchEvent(Event(NAVSTATE_CHANGE))
     }
 
     fun changeNavState(path: String, query: String = "") {
         val url = if (query.isEmpty()) path else "$path?$query"
         window.history.pushState("", "", url)
         routing.onNavStateChange(NavState(path, query))
-        window.dispatchEvent(Event(EVENT))
+        window.dispatchEvent(Event(NAVSTATE_CHANGE))
     }
 
     fun back() = window.history.back()
 
-    fun t(text: String) =
-        dictionaries[Stack.uuid]?.get(defaultLanguage)?.get(text) ?: text
-
-    fun t(text: String, namespace: UUID) =
-        dictionaries[namespace]?.get(defaultLanguage)?.get(text) ?: text
-
-    fun t(text: String, namespace: Unique) =
-        dictionaries[namespace.uuid]?.get(defaultLanguage)?.get(text) ?: text
-
-    fun t(text: String, namespace: UUID, language: String) =
-        dictionaries[namespace]?.get(language)?.get(text) ?: text
-
-    fun t(text: String, namespace: Unique, language: String) =
-        dictionaries[namespace.uuid]?.get(language)?.get(text) ?: text
 }
