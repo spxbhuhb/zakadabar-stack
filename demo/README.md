@@ -105,7 +105,7 @@ Code for the backend. Based on Ktor, contains:
 * backend services
 * M2M (machine to machine) interfaces
 
-Check out [jvmMain](./src/jvmMain/README.md) for more information.
+Check out [jvmMain](./src/jvmMain) for more information.
 
 ## jsMain
 
@@ -115,7 +115,7 @@ When the user opens the page in the browser [index.html](./src/jsMain/resources/
 
 This is rather short and mostly it just loads the application's `.js` file and calls `main` from [main.kt](./src/jsMain/kotlin/main.kt).
 
-Check out [jsMain](./src/jsMain/README.md) for more information.
+Check out [jsMain](./src/jsMain) for more information.
 
 ## etc
 

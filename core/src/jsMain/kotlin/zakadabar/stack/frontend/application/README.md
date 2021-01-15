@@ -1,3 +1,22 @@
+# Layouts
+
+Layouts define the general structure for the UI. Typically, there are only a few layouts for an application: full screen, one with the side menu, one for mobile.
+
+For each page there is a layout that page uses to when displayed. For example the application might not want to display the menu before the user logs in. In this case the login page uses the full
+screen layout.
+
+All layouts extend [AppLayout](../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/application/Application.kt).
+
+When the user performs navigation, the [Application](../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/application/Application.kt)
+tries to find the page that is able to display the new location.
+
+These pages (ones that can display a location) are called targets, they implement [AppRouting.ZkTarget](../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/application/AppRouting.kt).
+
+Each target has a layout associated with it. When the layout is **NOT** the same as the one currently displayed the application switches to the other layout. Then it calls the `resume` function of the
+layout to load the given target.
+
+The layouts themselves are never removed, they are only hidden when not active. The application calls `pause` of the layout when it is replaced with another and 'resume' when it is activated.
+
 # Routing
 
 Routing handles URL changes:
@@ -54,81 +73,8 @@ class NavLog : ZkElement() {
 
 Add-And-Forget navigation means that you add a clickable element and then forget about it. If the user clicks on it, navigation happens, if the user doesn't click, nothing happens.
 
+TODO
+
 ## Programmatic Navigation
 
-### Change the Location
-
-To change the location to another one. Usually independent of the current location.
-
-```kotlin
-val dto = RabbitDto.read(12)
-Navigation.changeLocation(toDto, Navigation.READ)
-```
-
-Or use a shorthand:
-
-```kotlin
-Navigation.changeLocation(Navigation.READ) { RabbitDto.read(12) }
-```
-
-### Change the View
-
-**Not yet implemented.**
-
-Change the view on the same data.
-
-```kotlin
-Navigation.changeView(Navigation.UPDATE)
-```
-
-### Go Back
-
-**Not yet implemented.**
-
-To go back to the previous location.
-
-- This call may cause the browser to leave your application.
-- Executed also when the user clicks on the "Back" button of the browser.
-
-```kotlin
-Navigation.stepBack()
-```
-
-### Go Forward
-
-**Not yet implemented.**
-
-To go forward to a location you've seen before using `stepBack`.
-
-- This call may cause the browser to leave your application.
-- Executed also when the user clicks on the "Forward" button of the browser.
-
-```kotlin
-Navigation.stepForward()
-```
-
-## Building Navigation for an Application
-
-**Not yet implemented.**
-
-```kotlin
-Navigation.build {
-    group("header") {
-        item("header-item-1")
-        item("header-item-2")
-        item("header-item-3")
-    }
-    group("menu") {
-        item("menu-item-1", role = Roles.Administrator) {
-            + DtoBackend1::class
-            + DtoBackend2::class
-        }
-        item("menu-item-2", role = Roles.SiteMember) {
-            + AccountPage::class
-        }
-        item("menu-item-3", role = Roles.Anonymous) {
-            + LoginPage::class
-        }
-    }
-}
-```
+TODO
