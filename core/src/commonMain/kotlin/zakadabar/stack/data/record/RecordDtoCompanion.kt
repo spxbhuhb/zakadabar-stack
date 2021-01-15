@@ -8,9 +8,13 @@ import zakadabar.stack.comm.http.Comm
 import zakadabar.stack.comm.http.makeComm
 import zakadabar.stack.data.query.QueryDtoCompanion
 
-abstract class RecordDtoCompanion<T : RecordDto<T>> {
+abstract class RecordDtoCompanion<T : RecordDto<T>>() {
 
-    abstract val recordType: String
+    constructor(builder: RecordDtoCompanion<T>.() -> Unit) : this() {
+        this.builder()
+    }
+
+    lateinit var recordType: String
 
     private var _comm: Comm<T>? = null
 
@@ -26,6 +30,10 @@ abstract class RecordDtoCompanion<T : RecordDto<T>> {
             _comm = value
         }
 
+    open val queries = lazy {
+        mutableMapOf<String, QueryDtoCompanion<*, *>>()
+    }
+
     abstract fun serializer(): KSerializer<T>
 
     suspend fun read(id: Long) = comm.read(id)
@@ -34,6 +42,9 @@ abstract class RecordDtoCompanion<T : RecordDto<T>> {
 
     suspend fun allAsMap() = comm.all().associateBy { it.id }
 
-    open val queries = emptyMap<String, QueryDtoCompanion<*, *>>()
-
+    operator fun QueryDtoCompanion<T, *>.unaryPlus() {
+        val name = this::class.simpleName ?: return
+        queries.value[name] = this
+        base = this@RecordDtoCompanion
+    }
 }

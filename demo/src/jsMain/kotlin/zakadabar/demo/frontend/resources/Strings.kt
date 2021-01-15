@@ -20,6 +20,7 @@ object Strings {
     val new = "New"
     val password = "Password"
     val ports = "Ports"
+    val search = "Search"
     val singapore = "Singapore"
     val title = "The Place"
     val tortuga = "Tortuga"

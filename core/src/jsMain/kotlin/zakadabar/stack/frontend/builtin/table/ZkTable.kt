@@ -4,6 +4,7 @@
 package zakadabar.stack.frontend.builtin.table
 
 import kotlinx.browser.document
+import kotlinx.dom.clear
 import org.w3c.dom.HTMLTableSectionElement
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
@@ -46,6 +47,7 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
             }
 
             build {
+                tbody.clear()
                 this.buildContext = tbody
                 for ((index, row) in data.withIndex()) {
                     + tr {

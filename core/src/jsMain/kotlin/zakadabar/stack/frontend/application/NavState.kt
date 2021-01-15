@@ -39,8 +39,8 @@ class NavState(val urlPath: String, val urlQuery: String) {
 
             query = searchParams.get("query")?.let {
                 val dataType = viewName
-                val dtoFrontend = Application.dtoFrontends[dataType] ?: throw IllegalStateException("missing dto frontend for $dataType")
-                dtoFrontend.decodeQuery(dataType, it)
+//                val dtoFrontend = Application.dtoFrontends[dataType] ?: throw IllegalStateException("missing dto frontend for $dataType")
+//                dtoFrontend.decodeQuery(dataType, it)
             }
         }
     }

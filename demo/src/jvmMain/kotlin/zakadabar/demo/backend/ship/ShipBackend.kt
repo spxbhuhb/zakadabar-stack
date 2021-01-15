@@ -12,8 +12,8 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.demo.backend.speed.SpeedDao
 import zakadabar.demo.data.ShipDto
-import zakadabar.demo.data.ShipSearch
 import zakadabar.demo.data.ShipSpeeds
+import zakadabar.demo.data.ShipsByName
 import zakadabar.stack.backend.RecordBackend
 import zakadabar.stack.util.Executor
 
@@ -33,13 +33,13 @@ object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTa
     override fun install(route: Route) {
         route.crud()
         route.blob()
-        route.query(ShipSearch::class, ShipBackend::query)
+        route.query(ShipsByName::class, ShipBackend::query)
         route.query(ShipSpeeds::class, ShipBackend::query)
     }
 
-    private fun query(executor: Executor, query: ShipSearch) = transaction {
+    private fun query(executor: Executor, query: ShipsByName) = transaction {
         ShipTable
-            .select { ShipTable.name like query.name }
+            .select { ShipTable.name like "%${query.name}%" }
             .map(ShipTable::toDto)
     }
 

@@ -5,6 +5,7 @@ package zakadabar.stack.frontend.builtin.simple
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.events.KeyboardEvent
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.util.PublicApi
 
@@ -12,11 +13,14 @@ import zakadabar.stack.util.PublicApi
  * A simple input text field.
  *
  * @property  onChange  The function to execute when the value of the field changes.
+ * @property  enter     When true [onChange] is called only when the user hits enter.
  *
  * @since  2021.1.14
  */
 @PublicApi
 class SimpleInput(
+    private val enter: Boolean = false,
+    var value: String = "",
     private val onChange: (String) -> Unit
 ) : ZkElement(
     element = document.createElement("input") as HTMLInputElement
@@ -27,7 +31,13 @@ class SimpleInput(
     override fun init(): ZkElement {
 
         on("input") { _ ->
-            onChange(input.value)
+            value = input.value
+            if (! enter) onChange(value)
+        }
+
+        on("keydown") { event ->
+            event as KeyboardEvent
+            if (enter && event.key == "Enter") onChange(value)
         }
 
         return this

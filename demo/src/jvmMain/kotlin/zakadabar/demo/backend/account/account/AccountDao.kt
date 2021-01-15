@@ -24,6 +24,7 @@ class AccountDao(id: EntityID<Long>) : LongEntity(id) {
         email = email,
         fullName = fullName,
         displayName = displayName,
-        organizationName = organizationName
+        organizationName = organizationName,
+        avatar = avatar?.id?.value
     )
 }

@@ -12,22 +12,23 @@ import zakadabar.stack.data.schema.DtoSchema
 @Serializable
 data class LoginDto(
 
-    override var id: RecordId<LoginDto> = 0,
-    var account: String = "",
-    var password: String = ""
+    override var id: RecordId<LoginDto>,
+    var account: String,
+    var password: String
 
 ) : RecordDto<LoginDto> {
 
-    companion object : RecordDtoCompanion<LoginDto>() {
-        override val recordType = "session/login"
-    }
+    companion object : RecordDtoCompanion<LoginDto>({
+        recordType = "login"
+    })
 
-    override fun schema() = DtoSchema.build {
+    override fun getRecordType() = recordType
+    override fun comm() = comm
+
+    override fun schema() = DtoSchema {
+        + ::id
         + ::account min 1 max 50 blank false
         + ::password min 1 max 50 blank false
     }
 
-    override fun getRecordType() = recordType
-
-    override fun comm() = LoginDto.comm
 }

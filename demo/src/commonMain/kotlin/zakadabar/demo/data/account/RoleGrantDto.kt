@@ -7,22 +7,28 @@ import kotlinx.serialization.Serializable
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.schema.DtoSchema
 
 @Serializable
 data class RoleGrantDto(
 
     override var id: Long,
-    val account: RecordId<AccountDto>,
-    val role: RecordId<RoleDto>
+    var account: RecordId<AccountDto>,
+    var role: RecordId<RoleDto>
 
 ) : RecordDto<RoleGrantDto> {
 
-    companion object : RecordDtoCompanion<RoleGrantDto>() {
-        override val recordType = "role-grant"
-    }
+    companion object : RecordDtoCompanion<RoleGrantDto>({
+        recordType = "role-grant"
+    })
 
     override fun getRecordType() = recordType
-
     override fun comm() = comm
+
+    override fun schema() = DtoSchema {
+        + ::id
+        + ::account
+        + ::role
+    }
 
 }

@@ -8,10 +8,11 @@ import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.query.QueryDtoCompanion
 
 @Serializable
-data class ShipSearch(
+data class ShipsByName(
     val name: String
 ) : QueryDto<ShipDto> {
+
     override suspend fun execute() = comm.query(this, serializer())
 
-    companion object : QueryDtoCompanion<ShipDto, ShipDto>(ShipDto)
+    companion object : QueryDtoCompanion<ShipDto, ShipDto>()
 }

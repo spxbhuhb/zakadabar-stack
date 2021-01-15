@@ -11,6 +11,7 @@ import zakadabar.stack.frontend.builtin.simple.SimpleButton
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.elements.ZkPage
 import zakadabar.stack.frontend.elements.marginBottom
+import zakadabar.stack.frontend.util.newWithDefaults
 
 object Login : ZkPage(FullScreen) {
 
@@ -33,7 +34,7 @@ object Login : ZkPage(FullScreen) {
     class LoginForm : ZkForm<LoginDto>() {
 
         init {
-            dto = LoginDto()
+            dto = LoginDto::class.newWithDefaults()
         }
 
         override fun init(): ZkElement {

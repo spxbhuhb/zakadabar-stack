@@ -19,6 +19,7 @@ import zakadabar.stack.data.builtin.BlobDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.frontend.errors.FetchError
 import zakadabar.stack.frontend.errors.ensure
+import zakadabar.stack.frontend.util.encodeURIComponent
 import zakadabar.stack.frontend.util.json
 import zakadabar.stack.util.PublicApi
 
@@ -172,7 +173,9 @@ open class RecordComm<T : RecordDto<T>>(
     @PublicApi
     override suspend fun <RQ : Any, RS> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<List<RS>>): List<RS> {
 
-        val responsePromise = window.fetch("/api/$recordType/${request::class.simpleName}?q=${Json.encodeToString(requestSerializer, request)}")
+        val q = encodeURIComponent(Json.encodeToString(requestSerializer, request))
+
+        val responsePromise = window.fetch("/api/$recordType/${request::class.simpleName}?q=${q}")
         val response = responsePromise.await()
 
         ensure(response.ok) { FetchError(response) }

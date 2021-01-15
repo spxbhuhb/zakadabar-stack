@@ -14,5 +14,5 @@ data class ShipSpeeds(
 ) : QueryDto<SpeedDto> {
     override suspend fun execute() = comm.query(this, serializer(), ListSerializer(SpeedDto.serializer()))
 
-    companion object : QueryDtoCompanion<ShipDto, ShipDto>(ShipDto)
+    companion object : QueryDtoCompanion<ShipDto, ShipDto>()
 }

@@ -26,7 +26,7 @@ open class ZkTableActionBar() : ZkElement() {
             + title
 
             if (onSearch != null) {
-                + SimpleInput(onSearch !!)
+                + SimpleInput(onChange = onSearch !!)
             }
         }
     }

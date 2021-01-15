@@ -4,7 +4,6 @@
 package zakadabar.demo.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.query.Queries
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
@@ -19,24 +18,19 @@ data class ShipDto(
 
 ) : RecordDto<ShipDto> {
 
-    companion object : RecordDtoCompanion<ShipDto>() {
+    companion object : RecordDtoCompanion<ShipDto>({
+        recordType = "ship"
+        + ShipsByName
+        + ShipSpeeds
+    })
 
-        override val recordType = "ship"
+    override fun getRecordType() = recordType
+    override fun comm() = comm
 
-        override val queries = Queries.build {
-            + ShipSearch
-            + ShipSpeeds
-        }
-
-    }
-
-    override fun schema() = DtoSchema.build {
+    override fun schema() = DtoSchema {
         + ::id
         + ::name max 20 min 2 notEquals "Titanic"
         + ::speed
     }
 
-    override fun getRecordType() = recordType
-
-    override fun comm() = ShipDto.comm
 }

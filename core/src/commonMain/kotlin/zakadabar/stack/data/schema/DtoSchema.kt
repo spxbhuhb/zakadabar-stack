@@ -8,16 +8,14 @@ import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KProperty0
 
-open class DtoSchema {
+open class DtoSchema() {
 
     companion object {
-        fun build(init: DtoSchema.() -> Unit): DtoSchema {
-            val schema = DtoSchema()
-            schema.init()
-            return schema
-        }
-
         val NO_VALIDATION = DtoSchema()
+    }
+
+    constructor(init: DtoSchema.() -> Unit) : this() {
+        this.init()
     }
 
     @Suppress("MemberVisibilityCanBePrivate") // To make extensions possible
@@ -127,7 +125,7 @@ class ValidityReport(
     }
 
     @PublicApi
-    fun dump() : String {
+    fun dump(): String {
         val lines = mutableListOf<String>()
         fails.forEach { lines += "${it.key} : ${it.value.map { v -> v::class.simpleName }.joinToString(", ")}" }
         return lines.joinToString("\n")

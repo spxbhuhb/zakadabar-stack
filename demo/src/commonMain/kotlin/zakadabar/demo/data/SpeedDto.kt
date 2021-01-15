@@ -18,17 +18,17 @@ data class SpeedDto(
 
 ) : RecordDto<SpeedDto> {
 
-    companion object : RecordDtoCompanion<SpeedDto>() {
-        override val recordType = "speed"
-    }
+    companion object : RecordDtoCompanion<SpeedDto>({
+        recordType = "speed"
+    })
 
-    override fun schema() = DtoSchema.build {
+    override fun getRecordType() = recordType
+    override fun comm() = comm
+
+    override fun schema() = DtoSchema {
         + ::id
         + ::description min 1 max 100
         + ::value
     }
 
-    override fun getRecordType() = recordType
-
-    override fun comm() = SpeedDto.comm
 }

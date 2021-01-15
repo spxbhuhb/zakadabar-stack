@@ -45,7 +45,7 @@ open class ZkPage(
 
     override var viewName = "${this::class.simpleName}"
 
-    open fun open() = Application.changeNavState(viewName)
+    open fun open() = Application.changeNavState("/$viewName")
 
     override fun route(routing: AppRouting, state: NavState): ZkElement {
         if (layout != null) routing.nextLayout = layout

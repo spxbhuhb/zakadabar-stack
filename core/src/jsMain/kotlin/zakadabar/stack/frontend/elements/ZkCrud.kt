@@ -52,10 +52,10 @@ open class ZkCrud<T : RecordDto<T>> : AppRouting.ZkTarget {
         readPath -> read(state.recordId)
         updatePath -> update(state.recordId)
         deletePath -> delete(state.recordId)
-        else -> routeQuery(routing, state)
+        else -> routeNonCrud(routing, state)
     }
 
-    open fun routeQuery(routing: AppRouting, state: NavState): ZkElement = NYI()
+    open fun routeNonCrud(routing: AppRouting, state: NavState): ZkElement = NYI()
 
     open fun all(): ZkElement = ZkElement.launchBuildNew {
         + tableClass.newInstance().setData(companion.comm.all())

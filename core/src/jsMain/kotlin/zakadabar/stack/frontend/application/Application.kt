@@ -8,7 +8,6 @@ import kotlinx.browser.window
 import org.w3c.dom.events.Event
 import zakadabar.stack.Stack
 import zakadabar.stack.frontend.builtin.dock.Dock
-import zakadabar.stack.frontend.data.DtoFrontend
 import zakadabar.stack.frontend.util.Dictionary
 import zakadabar.stack.frontend.util.defaultTheme
 import zakadabar.stack.util.UUID
@@ -30,8 +29,6 @@ object Application {
     var theme = defaultTheme
 
     private val dictionaries = mutableMapOf<UUID, Dictionary>()
-
-    val dtoFrontends = mutableMapOf<String, DtoFrontend<*>>()
 
     lateinit var dock: Dock
 

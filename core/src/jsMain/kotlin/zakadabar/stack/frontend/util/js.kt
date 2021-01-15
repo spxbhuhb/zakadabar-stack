@@ -3,9 +3,20 @@
  */
 package zakadabar.stack.frontend.util
 
+import zakadabar.stack.data.record.RecordDto
 import kotlin.reflect.KClass
 
 fun <T : Any> KClass<T>.newInstance(): T {
     inline fun callCtor(ctor: dynamic) = js("new ctor()")
     return callCtor(this.js) as T
 }
+
+
+fun <T : RecordDto<T>> KClass<T>.newWithDefaults(): T {
+    inline fun callCtor(ctor: dynamic) = js("new ctor()")
+    val dto = callCtor(this.js) as T
+    dto.schema().setDefaults()
+    return dto
+}
+
+external fun encodeURIComponent(encodedURI: String): String

@@ -7,6 +7,7 @@ import zakadabar.demo.frontend.pages.misc.Home
 import zakadabar.demo.frontend.pages.misc.Login
 import zakadabar.demo.frontend.pages.port.Singapore
 import zakadabar.demo.frontend.pages.port.Tortuga
+import zakadabar.demo.frontend.pages.ship.ShipSearch
 import zakadabar.demo.frontend.pages.ship.Ships
 import zakadabar.demo.frontend.pages.speed.Speeds
 import zakadabar.demo.frontend.resources.Strings
@@ -17,6 +18,8 @@ object Menu : ZkMenu({
     + column {
 
         + item(Strings.title) { Home.open() }
+
+        + item(Strings.search) { ShipSearch.open() }
 
         + item(Strings.Ship.ships) { Ships.openAll() }
         + item(Strings.Speed.speeds) { Speeds.openAll() }

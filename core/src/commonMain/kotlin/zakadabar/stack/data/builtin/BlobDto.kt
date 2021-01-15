@@ -4,7 +4,6 @@
 package zakadabar.stack.data.builtin
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.Stack
 import zakadabar.stack.comm.http.Comm
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
@@ -23,11 +22,11 @@ data class BlobDto(
 
 ) : RecordDto<BlobDto> {
 
-    companion object : RecordDtoCompanion<BlobDto>() {
-        override val recordType = "${Stack.shid}/blob"
-    }
+    companion object : RecordDtoCompanion<BlobDto>({
+        recordType = "blob"
+    })
 
-    override fun schema() = DtoSchema.build {
+    override fun schema() = DtoSchema {
         + ::name min 1 max 200
         + ::type min 1 max 100
         + ::size min 0 max Long.MAX_VALUE

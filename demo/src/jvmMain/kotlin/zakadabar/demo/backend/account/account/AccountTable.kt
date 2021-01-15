@@ -18,6 +18,7 @@ object AccountTable : LongIdTable("accounts") {
 
     fun toDto(row: ResultRow) = AccountDto(
         id = row[id].value,
+        accountName = row[accountName],
         email = row[email],
         fullName = row[fullName],
         displayName = row[displayName],
