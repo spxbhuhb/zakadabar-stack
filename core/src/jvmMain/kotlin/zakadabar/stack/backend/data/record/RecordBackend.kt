@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend
+package zakadabar.stack.backend.data.record
 
 import io.ktor.application.*
 import io.ktor.features.*
@@ -17,6 +17,8 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
+import zakadabar.stack.backend.BackendModule
+import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.data.builtin.BlobTable
 import zakadabar.stack.backend.util.executor
 import zakadabar.stack.data.builtin.BlobDto
@@ -255,7 +257,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
             post {
                 val executor = call.executor()
                 val request = call.receive(dtoClass)
-                logger.info("${executor.entityId}: CREATE $request")
+                logger.info("${executor.accountId}: CREATE $request")
                 call.respond(create(executor, request))
             }
 
@@ -264,10 +266,10 @@ abstract class RecordBackend<T : RecordDto<T>>(
                 val executor = call.executor()
 
                 if (id == null) {
-                    if (Server.logReads) logger.info("${executor.entityId}: ALL")
+                    if (Server.logReads) logger.info("${executor.accountId}: ALL")
                     call.respond(all(executor))
                 } else {
-                    if (Server.logReads) logger.info("${executor.entityId}: READ $id")
+                    if (Server.logReads) logger.info("${executor.accountId}: READ $id")
                     call.respond(read(executor, id))
                 }
             }
@@ -275,14 +277,14 @@ abstract class RecordBackend<T : RecordDto<T>>(
             patch {
                 val executor = call.executor()
                 val request = call.receive(dtoClass)
-                logger.info("${executor.entityId}: UPDATE $request")
+                logger.info("${executor.accountId}: UPDATE $request")
                 call.respond(update(executor, request))
             }
 
             delete("/{id}") {
                 val executor = call.executor()
                 val id = call.parameters["id"]?.toLongOrNull() ?: throw BadRequestException("missing record id")
-                logger.info("${executor.entityId}: DELETE $id")
+                logger.info("${executor.accountId}: DELETE $id")
                 call.respond(delete(executor, id))
             }
         }
@@ -307,14 +309,14 @@ abstract class RecordBackend<T : RecordDto<T>>(
 
                     } else {
 
-                        if (Server.logReads) logger.info("${executor.entityId}: BLOB-META $recordId $blobId")
+                        if (Server.logReads) logger.info("${executor.accountId}: BLOB-META $recordId $blobId")
 
                         call.respond(blobMetaRead(executor, recordId))
                     }
 
                 } else {
 
-                    if (Server.logReads) logger.info("${executor.entityId}: BLOB-READ $recordId $blobId")
+                    if (Server.logReads) logger.info("${executor.accountId}: BLOB-READ $recordId $blobId")
 
                     val (dto, bytes) = blobRead(executor, recordId, blobId)
 
@@ -336,7 +338,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
 
                 val executor = call.executor()
 
-                if (Server.logReads) logger.info("${executor.entityId}: BLOB-CREATE $recordId")
+                if (Server.logReads) logger.info("${executor.accountId}: BLOB-CREATE $recordId")
 
                 val headers = call.request.headers
 
@@ -362,7 +364,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
             patch {
                 val executor = call.executor()
                 val request = call.receive(BlobDto::class)
-                logger.info("${executor.entityId}: BLOB-UPDATE ${BlobDto.recordType} $request")
+                logger.info("${executor.accountId}: BLOB-UPDATE ${BlobDto.recordType} $request")
                 call.respond(blobMetaUpdate(executor, request))
             }
 
@@ -372,7 +374,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
 
                 val executor = call.executor()
 
-                if (Server.logReads) logger.info("${executor.entityId}: BLOB-DELETE $id $blobId")
+                if (Server.logReads) logger.info("${executor.accountId}: BLOB-DELETE $id $blobId")
 
                 call.respond(blobDelete(executor, id, blobId))
             }
@@ -392,7 +394,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
             requireNotNull(qText)
             val qObj = Json.decodeFromString(serializer(queryDto.createType()), qText)
 
-            if (Server.logReads) logger.info("${executor.entityId}: GET ${queryDto.simpleName} $qText")
+            if (Server.logReads) logger.info("${executor.accountId}: GET ${queryDto.simpleName} $qText")
 
             @Suppress("UNCHECKED_CAST")
             call.respond(func(executor, qObj as RQ))

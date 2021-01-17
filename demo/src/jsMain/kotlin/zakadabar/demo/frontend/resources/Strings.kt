@@ -6,6 +6,18 @@ package zakadabar.demo.frontend.resources
 @Suppress("MayBeConstant")
 object Strings {
 
+    val avatar = "Avatar"
+    val displayName = "Displayed Name"
+    val position = "Position"
+    val organization = "Organization"
+    val display = "Display"
+    val workplace = "Workplace"
+    val phone = "Phone Number"
+    val contact = "Contact"
+    val accountName = "Account Name"
+    val captain = "Captain"
+    val accounts = "Accounts"
+    val email = "Email"
     val actions = "Actions"
     val account = "Account"
     val asia = "Asia"
@@ -25,27 +37,18 @@ object Strings {
     val title = "The Place"
     val tortuga = "Tortuga"
     val value = "Value"
+    val ships = "Ships"
+    val ship = "Ship"
+    val speeds = "Speeds"
+    val speed = "Speed"
 
     object Ship {
-        val ships = "Ships"
-        val ship = "Ship"
-
-        object Basics {
-            val explanation = "Data all ships have."
-        }
-
-        object Description {
-            val explanation = "Description of the ship, special features, number of cannons, history."
-        }
+        val basicsExplanation = "Data all ships have."
+        val descriptionExplanation = "Description of the ship, special features, number of cannons, history."
     }
 
     object Speed {
-        val speeds = "Speeds"
-        val speed = "Speed"
-
-        object Basics {
-            val explanation = "Data all speeds have."
-        }
+        val basicsExplanation = "Data all speeds have."
     }
 }
 

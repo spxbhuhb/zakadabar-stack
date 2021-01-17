@@ -3,16 +3,17 @@
  */
 package zakadabar.stack.data.builtin
 
-interface AccountSummary {
+/**
+ * An interface account DTO should implement to provide access to core
+ * functions to the commonly used account data.
+ */
+interface AccountPublic {
 
     val id: Long
     val accountName: String
-    val emailAddress: String
+    val email: String
     val fullName: String
-    val displayName: String?
-    val organizationName: String?
-    val avatar: Long?
+    val displayName: String
+    val organizationName: String
 
-    val isAnonymous
-        get() = (accountName == "anonymous")
 }

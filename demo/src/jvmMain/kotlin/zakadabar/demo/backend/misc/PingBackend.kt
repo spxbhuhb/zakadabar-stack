@@ -6,7 +6,7 @@ package zakadabar.demo.backend.misc
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import zakadabar.stack.backend.CustomBackend
+import zakadabar.stack.backend.custom.CustomBackend
 
 object PingBackend : CustomBackend() {
 

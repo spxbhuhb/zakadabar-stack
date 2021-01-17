@@ -24,8 +24,12 @@ import io.ktor.sessions.*
 import io.ktor.websocket.*
 import org.slf4j.LoggerFactory
 import zakadabar.stack.Stack
-import zakadabar.stack.backend.util.Sql
-import zakadabar.stack.data.builtin.SessionDto
+import zakadabar.stack.backend.custom.CustomBackend
+import zakadabar.stack.backend.data.Sql
+import zakadabar.stack.backend.data.builtin.session.SessionStorageSql
+import zakadabar.stack.backend.data.builtin.session.StackSession
+import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.data.builtin.AccountPublic
 import zakadabar.stack.util.Executor
 import java.io.File
 import java.nio.file.Files
@@ -40,6 +44,8 @@ fun main(argv: Array<String>) = Server().main(argv)
 class Server : CliktCommand() {
 
     companion object {
+        lateinit var anonymous: AccountPublic
+
         /**
          * When true GET (read and query) requests are logged by DTO backends.
          */
@@ -77,7 +83,7 @@ class Server : CliktCommand() {
         val server = embeddedServer(Netty, port = config.ktor.port) {
 
             install(Sessions) {
-                cookie<SessionDto>("StackSessionId", SessionStorageMemory()) { // TODO replace this with SQL storage
+                cookie<StackSession>("STACK_SESSION", SessionStorageSql) {
                     cookie.path = "/"
                 }
             }
@@ -115,12 +121,12 @@ class Server : CliktCommand() {
                         route("basic") {
                             get("login") {
                                 // FIXME not anonymous :D
-                                call.sessions.set(SessionDto(0L, 0L, "", emptyList()))
+                                call.sessions.set(StackSession(0))
                                 call.respondText(0L.toString(), ContentType.Application.Json)
                             }
                             get("logout") {
-                                call.sessions.set(SessionDto(0L, 0L, "", emptyList()))
-                                call.respondText(0L.toString(), ContentType.Application.Json)
+                                call.sessions.set(StackSession(anonymous.id))
+                                call.respondText(anonymous.id.toString(), ContentType.Application.Json)
                             }
                         }
                     }

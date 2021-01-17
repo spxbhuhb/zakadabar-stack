@@ -3,26 +3,24 @@
  */
 @file:Suppress("UNUSED_PARAMETER", "unused")
 
-package zakadabar.demo.backend.account.rolegrant
+package zakadabar.stack.backend.data.builtin.role
 
 import io.ktor.routing.*
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.demo.backend.account.account.AccountDao
-import zakadabar.demo.backend.account.role.RoleDao
-import zakadabar.demo.data.account.RoleGrantDto
-import zakadabar.stack.backend.RecordBackend
+import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.data.builtin.RoleDto
 import zakadabar.stack.util.Executor
 
-object RoleGrantBackend : RecordBackend<RoleGrantDto>() {
+object RoleBackend : RecordBackend<RoleDto>() {
 
-    override val dtoClass = RoleGrantDto::class
+    override val dtoClass = RoleDto::class
 
     override fun init() {
         transaction {
             SchemaUtils.createMissingTablesAndColumns(
-                RoleGrantTable
+                RoleTable
             )
         }
     }
@@ -32,23 +30,32 @@ object RoleGrantBackend : RecordBackend<RoleGrantDto>() {
     }
 
     override fun all(executor: Executor) = transaction {
-        RoleGrantTable
+        RoleTable
             .selectAll()
-            .map(RoleGrantTable::toDto)
+            .map(RoleTable::toDto)
     }
 
-    override fun create(executor: Executor, dto: RoleGrantDto) = transaction {
-        RoleGrantDao.new {
-            account = AccountDao[dto.account]
-            role = RoleDao[dto.role]
+    override fun create(executor: Executor, dto: RoleDto) = transaction {
+        RoleDao.new {
+            name = dto.name
+            description = dto.description
         }.toDto()
     }
 
     override fun read(executor: Executor, recordId: Long) = transaction {
-        RoleGrantDao[recordId].toDto()
+        RoleDao[recordId].toDto()
+    }
+
+    override fun update(executor: Executor, dto: RoleDto) = transaction {
+        val dao = RoleDao[dto.id]
+        with(dao) {
+            name = dto.name
+            description = dto.description
+        }
+        dao.toDto()
     }
 
     override fun delete(executor: Executor, recordId: Long) {
-        RoleGrantDao[recordId].delete()
+        RoleDao[recordId].delete()
     }
 }

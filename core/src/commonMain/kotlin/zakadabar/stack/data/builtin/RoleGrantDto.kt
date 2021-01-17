@@ -1,29 +1,25 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.data
+package zakadabar.stack.data.builtin
 
 import kotlinx.serialization.Serializable
-import zakadabar.demo.data.account.AccountPrivateDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.DtoSchema
 
 @Serializable
-data class ShipDto(
+data class RoleGrantDto(
 
-    override var id: RecordId<ShipDto>,
-    var name: String,
-    var speed: RecordId<SpeedDto>,
-    var captain: RecordId<AccountPrivateDto>
+    override var id: Long,
+    var principal: RecordId<PrincipalDto>,
+    var role: RecordId<RoleDto>
 
-) : RecordDto<ShipDto> {
+) : RecordDto<RoleGrantDto> {
 
-    companion object : RecordDtoCompanion<ShipDto>({
-        recordType = "ship"
-        + ShipsByName
-        + ShipSpeeds
+    companion object : RecordDtoCompanion<RoleGrantDto>({
+        recordType = "role-grant"
     })
 
     override fun getRecordType() = recordType
@@ -31,9 +27,8 @@ data class ShipDto(
 
     override fun schema() = DtoSchema {
         + ::id
-        + ::name max 20 min 2 notEquals "Titanic"
-        + ::speed
-        + ::captain
+        + ::principal
+        + ::role
     }
 
 }

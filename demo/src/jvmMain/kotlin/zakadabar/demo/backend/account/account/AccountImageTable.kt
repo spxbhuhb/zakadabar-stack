@@ -5,4 +5,4 @@ package zakadabar.demo.backend.account.account
 
 import zakadabar.stack.backend.data.builtin.BlobTable
 
-object AccountImageTable : BlobTable("account_images", AccountTable)
+object AccountImageTable : BlobTable("account_images", AccountPrivateTable)

@@ -77,6 +77,7 @@ kotlin {
                 implementation(kotlin("stdlib-jdk8"))
                 api("io.ktor:ktor-server-core:$ktorVersion")
                 implementation("io.ktor:ktor-server-netty:$ktorVersion")
+                implementation("io.ktor:ktor-server-sessions:$ktorVersion")
                 api("io.ktor:ktor-websockets:$ktorVersion")
                 api("io.ktor:ktor-client-cio:$ktorVersion") // TODO check if we want this one (CIO) or another
                 api("io.ktor:ktor-auth:$ktorVersion")

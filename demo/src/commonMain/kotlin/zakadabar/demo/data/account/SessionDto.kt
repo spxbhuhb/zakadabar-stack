@@ -3,7 +3,7 @@
  */
 @file:Suppress("unused")
 
-package zakadabar.stack.data.builtin
+package zakadabar.demo.data.account
 
 import kotlinx.serialization.Serializable
 import zakadabar.stack.data.record.RecordDto
@@ -13,8 +13,7 @@ import zakadabar.stack.data.record.RecordDtoCompanion
 data class SessionDto(
 
     override var id: Long,
-    val accountId: Long,
-    val displayName: String,
+    val account: AccountPublicDto,
     val roles: List<String>
 
 ) : RecordDto<SessionDto> {
@@ -24,6 +23,6 @@ data class SessionDto(
     })
 
     override fun getRecordType() = recordType
-    override fun comm() = SessionDto.comm
+    override fun comm() = comm
 
 }

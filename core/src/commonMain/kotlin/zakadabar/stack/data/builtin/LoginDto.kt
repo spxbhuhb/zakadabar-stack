@@ -1,27 +1,25 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.data.account
+package zakadabar.stack.data.builtin
 
 import kotlinx.serialization.Serializable
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.DtoSchema
 
-/**
- * A role which has some business specific meaning.
- */
 @Serializable
-class RoleDto(
+data class LoginDto(
 
-    override var id: Long,
-    var name: String,
-    var description: String
+    override var id: RecordId<LoginDto>,
+    var accountName: String,
+    var password: String
 
-) : RecordDto<RoleDto> {
+) : RecordDto<LoginDto> {
 
-    companion object : RecordDtoCompanion<RoleDto>({
-        recordType = "role"
+    companion object : RecordDtoCompanion<LoginDto>({
+        recordType = "login"
     })
 
     override fun getRecordType() = recordType
@@ -29,7 +27,8 @@ class RoleDto(
 
     override fun schema() = DtoSchema {
         + ::id
-        + ::name min 1 max 50 blank false
-        + ::description
+        + ::accountName min 1 max 50 blank false
+        + ::password min 1 max 50 blank false
     }
+
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.data.account
+package zakadabar.stack.data.builtin
 
 import kotlinx.serialization.Serializable
 import zakadabar.stack.data.record.RecordDto
@@ -9,17 +9,22 @@ import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.DtoSchema
 
+/**
+ * Password change data. Account id is present to allow administrators change the
+ * password of other accounts.
+ */
 @Serializable
-data class RoleGrantDto(
+data class PasswordChangeDto(
 
-    override var id: Long,
-    var account: RecordId<AccountDto>,
-    var role: RecordId<RoleDto>
+    override var id: RecordId<PasswordChangeDto>,
+    var accountId: Long,
+    var oldPassword: String,
+    var newPassword: String
 
-) : RecordDto<RoleGrantDto> {
+) : RecordDto<PasswordChangeDto> {
 
-    companion object : RecordDtoCompanion<RoleGrantDto>({
-        recordType = "role-grant"
+    companion object : RecordDtoCompanion<PasswordChangeDto>({
+        recordType = "password-change"
     })
 
     override fun getRecordType() = recordType
@@ -27,8 +32,8 @@ data class RoleGrantDto(
 
     override fun schema() = DtoSchema {
         + ::id
-        + ::account
-        + ::role
+        + ::oldPassword
+        + ::newPassword
     }
 
 }

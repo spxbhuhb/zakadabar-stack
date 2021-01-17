@@ -43,10 +43,15 @@ class StringValidationRuleList(val kProperty: KMutableProperty0<String>) : Valid
         }
     }
 
-
     inner class Blank(@PublicApi val validValue: Boolean) : ValidationRule<String> {
         override fun validate(value: String, report: ValidityReport) {
             if (value.isBlank() != validValue) report.fail(kProperty, this)
+        }
+    }
+
+    inner class Format(@PublicApi val checker: (String) -> Boolean) : ValidationRule<String> {
+        override fun validate(value: String, report: ValidityReport) {
+            if (! checker(value)) report.fail(kProperty, this)
         }
     }
 
@@ -71,6 +76,12 @@ class StringValidationRuleList(val kProperty: KMutableProperty0<String>) : Valid
     @PublicApi
     infix fun blank(blank: Boolean): StringValidationRuleList {
         rules += Blank(blank)
+        return this
+    }
+
+    @PublicApi
+    infix fun format(checker: (String) -> Boolean): StringValidationRuleList {
+        rules += Format(checker)
         return this
     }
 

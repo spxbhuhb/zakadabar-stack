@@ -10,9 +10,9 @@ import zakadabar.stack.frontend.builtin.form.ZkForm
 class Form : ZkForm<SpeedDto>() {
 
     override fun init() = build {
-        + header(Strings.Speed.speed)
+        + header(Strings.speed)
 
-        + section(Strings.basics, Strings.Speed.Basics.explanation) {
+        + section(Strings.basics, Strings.Speed.basicsExplanation) {
             + fieldGrid {
 
                 ifNotCreate {

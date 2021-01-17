@@ -3,6 +3,7 @@
  */
 package zakadabar.demo.frontend
 
+import zakadabar.demo.frontend.pages.account.Accounts
 import zakadabar.demo.frontend.pages.misc.Home
 import zakadabar.demo.frontend.pages.misc.Login
 import zakadabar.demo.frontend.pages.port.Singapore
@@ -21,8 +22,8 @@ object Menu : ZkMenu({
 
         + item(Strings.search) { ShipSearch.open() }
 
-        + item(Strings.Ship.ships) { Ships.openAll() }
-        + item(Strings.Speed.speeds) { Speeds.openAll() }
+        + item(Strings.ships) { Ships.openAll() }
+        + item(Strings.speeds) { Speeds.openAll() }
 
         + group(Strings.ports) {
             + group(Strings.carribean) {
@@ -32,6 +33,8 @@ object Menu : ZkMenu({
                 + item(Strings.singapore) { Singapore.open() }
             }
         }
+
+        + item(Strings.accounts) { Accounts.openAll() }
 
         + item(Strings.login) { Login.open() }
     }

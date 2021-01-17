@@ -4,6 +4,7 @@
 
 package zakadabar.demo.frontend
 
+import zakadabar.demo.frontend.pages.account.Accounts
 import zakadabar.demo.frontend.pages.misc.Home
 import zakadabar.demo.frontend.pages.misc.Login
 import zakadabar.demo.frontend.pages.port.Singapore
@@ -43,7 +44,9 @@ object Routing : AppRouting(DefaultLayout, Home) {
         + Speeds
         + Singapore
         + Tortuga
+
         + Login
+        + Accounts
     }
 
     /**

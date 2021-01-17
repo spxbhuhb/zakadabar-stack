@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.builtin.table.ZkTable
 class Table : ZkTable<SpeedDto>() {
 
     init {
-        title = Strings.Speed.speeds
+        title = Strings.speeds
         onCreate = { Speeds.openCreate() }
 
         + SpeedDto::id

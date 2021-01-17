@@ -61,6 +61,9 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
     fun section(title: String, summary: String = "", builder: ZkElement.() -> Unit) =
         Section(title, summary, builder)
 
+    fun fieldGridSection(title: String, summary: String = "", builder: ZkElement.() -> Unit) =
+        Section(title, summary) { + fieldGrid { builder() } }
+
     fun select(kProperty0: KMutableProperty0<RecordId<*>>, sortOptions: Boolean = true, options: suspend () -> List<Pair<RecordId<*>, String>>): ValidatedRecordSelect<T> {
         val field = ValidatedRecordSelect(this@ZkForm, kProperty0, sortOptions, options)
         fields += field

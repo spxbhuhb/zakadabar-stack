@@ -10,11 +10,12 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import zakadabar.demo.backend.account.account.AccountPrivateDao
 import zakadabar.demo.backend.speed.SpeedDao
 import zakadabar.demo.data.ShipDto
 import zakadabar.demo.data.ShipSpeeds
 import zakadabar.demo.data.ShipsByName
-import zakadabar.stack.backend.RecordBackend
+import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.util.Executor
 
 object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTable = ShipTable) {
@@ -59,9 +60,15 @@ object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTa
 
     override fun create(executor: Executor, dto: ShipDto) = transaction {
         ShipDao.new {
-            name = dto.name
-            speed = SpeedDao[dto.speed]
+            fromDto(dto)
         }.toDto()
+    }
+
+    private fun ShipDao.fromDto(dto: ShipDto): ShipDao {
+        name = dto.name
+        speed = SpeedDao[dto.speed]
+        captain = AccountPrivateDao[dto.captain]
+        return this
     }
 
     override fun read(executor: Executor, recordId: Long) = transaction {
@@ -69,13 +76,7 @@ object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTa
     }
 
     override fun update(executor: Executor, dto: ShipDto) = transaction {
-
-        val dao = ShipDao[dto.id]
-        dao.name = dto.name
-        dao.speed = SpeedDao[dto.speed]
-
-        dao.toDto()
-
+        ShipDao[dto.id].fromDto(dto).toDto()
     }
 
     override fun delete(executor: Executor, recordId: Long) {

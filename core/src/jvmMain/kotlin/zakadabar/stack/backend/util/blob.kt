@@ -8,6 +8,7 @@ import org.jetbrains.exposed.sql.LongColumnType
 import org.postgresql.PGConnection
 import org.postgresql.largeobject.LargeObject
 import org.postgresql.largeobject.LargeObjectManager
+import zakadabar.stack.backend.data.Sql
 import java.sql.Connection
 
 class OidBlobColumnType : IColumnType by LongColumnType() {

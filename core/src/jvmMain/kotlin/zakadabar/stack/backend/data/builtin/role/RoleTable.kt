@@ -1,11 +1,11 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.backend.account.role
+package zakadabar.stack.backend.data.builtin.role
 
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
-import zakadabar.demo.data.account.RoleDto
+import zakadabar.stack.data.builtin.RoleDto
 
 object RoleTable : LongIdTable("roles") {
 

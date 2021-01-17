@@ -3,9 +3,9 @@
  */
 @file:Suppress("unused") // main is called by webpack
 
+import zakadabar.demo.data.account.SessionDto
 import zakadabar.demo.frontend.Routing
 import zakadabar.demo.frontend.resources.Theme
-import zakadabar.stack.data.builtin.SessionDto
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.application.Executor
 import zakadabar.stack.frontend.elements.ZkElement
@@ -28,7 +28,9 @@ fun main() {
         ZkElement.addKClass = true
 
         // Get the session from the server. Note that this is a suspend function, so the code below
-        // will be executed only when it finishes.
+        // will be executed only when it finishes. By definition session id "0" returns with the
+        // current session between the frontend and backend. If there is no such session, a new
+        // one is created.
 
         val session = SessionDto.read(0L)
 
@@ -40,7 +42,7 @@ fun main() {
             // Application.executor is the user who runs the application. There is always a user
             // even without login. The not logged in users has the role "anonymous" (by convention).
 
-            executor = Executor(session.accountId, session.displayName, session.roles)
+            executor = Executor(session.account.id, session.account.displayName, session.roles)
 
             // Set the routing. You may change this on-the-fly if you want, for example if the user logs in.
 

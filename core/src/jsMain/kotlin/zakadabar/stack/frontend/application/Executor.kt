@@ -8,5 +8,5 @@ class Executor(
     val displayName: String,
     val roles: List<String>
 ) {
-    val isAnonymous = roles.contains("anonymous")
+    val isAnonymous = roles.isEmpty()
 }

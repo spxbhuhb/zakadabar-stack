@@ -1,15 +1,17 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.util
+package zakadabar.stack.backend.data
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.DatabaseConfig
+import zakadabar.stack.backend.data.builtin.session.SessionTable
 
 /**
  * Use this everywhere BUT when handling blob content.
@@ -36,5 +38,10 @@ object Sql {
 
         Database.connect(dataSource)
 
+        transaction {
+            SchemaUtils.createMissingTablesAndColumns(
+                SessionTable
+            )
+        }
     }
 }

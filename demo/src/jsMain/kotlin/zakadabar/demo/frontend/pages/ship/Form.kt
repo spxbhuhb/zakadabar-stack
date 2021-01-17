@@ -5,6 +5,7 @@ package zakadabar.demo.frontend.pages.ship
 
 import zakadabar.demo.data.ShipDto
 import zakadabar.demo.data.SpeedDto
+import zakadabar.demo.data.account.AccountPublicDto
 import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.fields.Images
@@ -13,7 +14,7 @@ import zakadabar.stack.frontend.elements.ZkClasses.Companion.zkClasses
 class Form : ZkForm<ShipDto>() {
 
     override fun init() = build {
-        + header(Strings.Ship.ships)
+        + header(Strings.ships)
         + column {
             + row {
                 + basics() marginRight 8
@@ -25,25 +26,34 @@ class Form : ZkForm<ShipDto>() {
     }
 
     private fun basics() =
-        section(Strings.basics, Strings.Ship.Basics.explanation) {
+        section(Strings.basics, Strings.Ship.basicsExplanation) {
             + fieldGrid {
                 ifNotCreate {
                     + Strings.id
                     + dto::id
                 }
+
                 + Strings.name
                 + dto::name
-                + Strings.Speed.speed
+
+                + Strings.speed
                 + select(dto::speed) {
                     SpeedDto.all()
                         .map { it.id to it.description }
+                        .sortedBy { it.second }
+                }
+
+                + Strings.captain
+                + select(dto::captain) {
+                    AccountPublicDto.all()
+                        .map { it.id to it.fullName }
                         .sortedBy { it.second }
                 }
             }
         }
 
     private fun description() =
-        section(Strings.description, Strings.Ship.Description.explanation) {
+        section(Strings.description, Strings.Ship.descriptionExplanation) {
             style { flexGrow = "1" }
             + textarea(dto::name) cssClass zkClasses.h100
         }

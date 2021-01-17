@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.demo.data.SpeedDto
-import zakadabar.stack.backend.RecordBackend
+import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.util.Executor
 
 object SpeedBackend : RecordBackend<SpeedDto>() {

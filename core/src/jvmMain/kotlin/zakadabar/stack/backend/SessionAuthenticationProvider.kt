@@ -8,7 +8,7 @@ package zakadabar.stack.backend
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.sessions.*
-import zakadabar.stack.data.builtin.SessionDto
+import zakadabar.stack.backend.data.builtin.session.StackSession
 import zakadabar.stack.util.Executor
 
 class SessionAuthenticationProvider internal constructor(configuration: Configuration) :
@@ -24,15 +24,14 @@ fun Authentication.Configuration.session(name: String? = null) {
 
     provider.pipeline.intercept(AuthenticationPipeline.RequestAuthentication) { context ->
 
-        var session = call.sessions.get<SessionDto>()
+        var session = call.sessions.get<StackSession>()
 
         if (session == null) {
-            session = SessionDto(0L, 0L, "Anonymous", listOf("anonymous"))
+            session = StackSession(Server.anonymous.id)
             call.sessions.set(session)
         }
 
-        context.principal(Executor(session.accountId))
-
+        context.principal(Executor(session.account))
     }
 
     register(provider)

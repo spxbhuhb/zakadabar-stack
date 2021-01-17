@@ -6,6 +6,7 @@ package zakadabar.demo.backend.ship
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import zakadabar.demo.backend.account.account.AccountPrivateDao
 import zakadabar.demo.backend.speed.SpeedDao
 import zakadabar.demo.data.ShipDto
 
@@ -14,10 +15,12 @@ class ShipDao(id: EntityID<Long>) : LongEntity(id) {
 
     var name by ShipTable.name
     var speed by SpeedDao referencedOn ShipTable.speed
+    var captain by AccountPrivateDao referencedOn ShipTable.captain
 
     fun toDto() = ShipDto(
         id = id.value,
         name = name,
-        speed = speed.id.value
+        speed = speed.id.value,
+        captain = captain.id.value
     )
 }

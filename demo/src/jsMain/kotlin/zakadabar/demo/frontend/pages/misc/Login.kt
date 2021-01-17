@@ -3,8 +3,8 @@
  */
 package zakadabar.demo.frontend.pages.misc
 
-import zakadabar.demo.data.account.LoginDto
 import zakadabar.demo.frontend.resources.Strings
+import zakadabar.stack.data.builtin.LoginDto
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.layout.FullScreen
 import zakadabar.stack.frontend.builtin.simple.SimpleButton
@@ -46,7 +46,7 @@ object Login : ZkPage(FullScreen) {
 
             + fieldGrid {
                 + Strings.account
-                + dto::account
+                + dto::accountName
                 + Strings.password
                 + dto::password
             } marginBottom 20

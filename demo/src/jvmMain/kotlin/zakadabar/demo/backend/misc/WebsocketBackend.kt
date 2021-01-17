@@ -5,7 +5,7 @@ package zakadabar.demo.backend.misc
 
 import io.ktor.routing.*
 import io.ktor.websocket.*
-import zakadabar.stack.backend.CustomBackend
+import zakadabar.stack.backend.custom.CustomBackend
 
 object WebsocketBackend : CustomBackend() {
 

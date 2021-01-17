@@ -103,7 +103,6 @@ open class DtoSchema() {
     fun setDefaults() {
         ruleLists.forEach { it.value.setDefault() }
     }
-
 }
 
 interface ValidationRuleList<T> {
