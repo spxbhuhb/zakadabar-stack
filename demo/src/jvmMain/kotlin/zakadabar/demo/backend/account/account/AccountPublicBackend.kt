@@ -8,8 +8,8 @@ package zakadabar.demo.backend.account.account
 import io.ktor.routing.*
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.demo.data.account.AccountPublicDto
 import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.data.builtin.AccountPublicDto
 import zakadabar.stack.util.Executor
 
 object AccountPublicBackend : RecordBackend<AccountPublicDto>() {

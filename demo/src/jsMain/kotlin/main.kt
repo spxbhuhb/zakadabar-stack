@@ -3,9 +3,9 @@
  */
 @file:Suppress("unused") // main is called by webpack
 
-import zakadabar.demo.data.account.SessionDto
 import zakadabar.demo.frontend.Routing
 import zakadabar.demo.frontend.resources.Theme
+import zakadabar.stack.data.builtin.SessionDto
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.application.Executor
 import zakadabar.stack.frontend.elements.ZkElement

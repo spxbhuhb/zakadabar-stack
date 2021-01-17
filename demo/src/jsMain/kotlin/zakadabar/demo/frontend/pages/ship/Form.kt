@@ -5,8 +5,8 @@ package zakadabar.demo.frontend.pages.ship
 
 import zakadabar.demo.data.ShipDto
 import zakadabar.demo.data.SpeedDto
-import zakadabar.demo.data.account.AccountPublicDto
 import zakadabar.demo.frontend.resources.Strings
+import zakadabar.stack.data.builtin.AccountPublicDto
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.fields.Images
 import zakadabar.stack.frontend.elements.ZkClasses.Companion.zkClasses

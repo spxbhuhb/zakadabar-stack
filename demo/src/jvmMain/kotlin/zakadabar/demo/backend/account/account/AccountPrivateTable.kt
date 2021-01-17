@@ -5,12 +5,9 @@ package zakadabar.demo.backend.account.account
 
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.demo.data.account.AccountPrivateDto
-import zakadabar.demo.data.account.AccountPublicDto
-import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
 import zakadabar.stack.backend.data.builtin.principal.PrincipalTable
+import zakadabar.stack.data.builtin.AccountPublicDto
 
 object AccountPrivateTable : LongIdTable("accounts") {
 
@@ -51,34 +48,5 @@ object AccountPrivateTable : LongIdTable("accounts") {
         organizationName = row[organizationName],
         email = row[email]
     )
-
-    /**
-     * Get the anonymous account or create one if not exists.
-     * This method is called during server startup to make
-     * sure there is an anonymous account.
-     */
-    fun anonymous() = transaction {
-        val account = AccountPrivateTable
-            .select { accountName eq "anonymous" }
-            .map { toPublicDto(it) }
-            .firstOrNull()
-
-        if (account != null) return@transaction account
-
-        val newPrincipal = PrincipalDao.new { }
-
-        val newAccount = AccountPrivateDao.new {
-            principal = newPrincipal
-            accountName = "anonymous"
-            fullName = "anonymous"
-            displayName = "anonymous"
-            organizationName = ""
-            position = ""
-            email = ""
-            phone = ""
-        }
-
-        newAccount.toPublicDto()
-    }
 
 }

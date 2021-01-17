@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.backend.account.session
+package zakadabar.stack.backend.data.builtin.session
 
 import io.ktor.application.*
 import io.ktor.features.*
@@ -11,16 +11,12 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.demo.backend.account.account.AccountPrivateDao
-import zakadabar.demo.backend.account.account.AccountPrivateTable
-import zakadabar.demo.data.account.AccountPublicDto
-import zakadabar.demo.data.account.SessionDto
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.custom.CustomBackend
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
-import zakadabar.stack.backend.data.builtin.session.StackSession
 import zakadabar.stack.backend.util.executor
 import zakadabar.stack.data.builtin.LoginDto
+import zakadabar.stack.data.builtin.SessionDto
 
 object SessionBackend : CustomBackend() {
 
@@ -35,18 +31,18 @@ object SessionBackend : CustomBackend() {
                     val dto = if (session.account == Server.anonymous.id) {
                         SessionDto(
                             id = 0,
-                            account = Server.anonymous as AccountPublicDto,
+                            account = Server.anonymous,
                             roles = emptyList()
                         )
                     } else {
                         transaction {
 
-                            val account = AccountPrivateDao[session.account]
+                            val (account, principalId) = Server.findAccountById(session.account)
 
                             SessionDto(
                                 id = 0,
-                                account = account.toPublicDto(),
-                                roles = PrincipalBackend.roles(account.principal.id.value)
+                                account = account,
+                                roles = PrincipalBackend.roles(principalId)
                             )
                         }
                     }
@@ -62,15 +58,13 @@ object SessionBackend : CustomBackend() {
 
                 val old = call.sessions.get<StackSession>() !!
 
-                val account = try {
+                val (account, principalId) = try {
 
-                    val account = AccountPrivateDao
-                        .find { AccountPrivateTable.accountName eq request.accountName }
-                        .firstOrNull() ?: throw NoSuchElementException()
+                    val (account, principalId) = Server.findAccountByName(request.accountName)
 
-                    PrincipalBackend.authenticate(account.principal.id.value, request.password)
+                    PrincipalBackend.authenticate(principalId, request.password)
 
-                    account
+                    account to principalId
 
                 } catch (ex: NoSuchElementException) {
                     logger.info("${executor.accountId}: /login result=fail session=${old.account} name=${request.accountName}")
@@ -95,12 +89,12 @@ object SessionBackend : CustomBackend() {
 
                 logger.info("${executor.accountId}: /login result=success session=${old.account} new=${account.id} name=${request.accountName}")
 
-                val new = StackSession(account.id.value)
+                val new = StackSession(account.id)
 
                 val dto = SessionDto(
                     id = 0,
-                    account = account.toPublicDto(),
-                    roles = PrincipalBackend.roles(account.id.value)
+                    account = account,
+                    roles = PrincipalBackend.roles(principalId)
                 )
 
                 call.sessions.set(new)
@@ -118,7 +112,7 @@ object SessionBackend : CustomBackend() {
 
                 val dto = SessionDto(
                     id = 0,
-                    account = Server.anonymous as AccountPublicDto,
+                    account = Server.anonymous,
                     roles = emptyList()
                 )
 

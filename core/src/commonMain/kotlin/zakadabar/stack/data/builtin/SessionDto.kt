@@ -3,7 +3,7 @@
  */
 @file:Suppress("unused")
 
-package zakadabar.demo.data.account
+package zakadabar.stack.data.builtin
 
 import kotlinx.serialization.Serializable
 import zakadabar.stack.data.record.RecordDto

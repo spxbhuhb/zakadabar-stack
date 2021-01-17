@@ -26,10 +26,11 @@ import org.slf4j.LoggerFactory
 import zakadabar.stack.Stack
 import zakadabar.stack.backend.custom.CustomBackend
 import zakadabar.stack.backend.data.Sql
+import zakadabar.stack.backend.data.builtin.session.SessionBackend
 import zakadabar.stack.backend.data.builtin.session.SessionStorageSql
 import zakadabar.stack.backend.data.builtin.session.StackSession
 import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.data.builtin.AccountPublic
+import zakadabar.stack.data.builtin.AccountPublicDto
 import zakadabar.stack.util.Executor
 import java.io.File
 import java.nio.file.Files
@@ -44,7 +45,31 @@ fun main(argv: Array<String>) = Server().main(argv)
 class Server : CliktCommand() {
 
     companion object {
-        lateinit var anonymous: AccountPublic
+        /**
+         * This variable contains the anonymous account. Each server should have one
+         * this is used for public access.
+         *
+         * For example, check AccountPrivateBackend in the demo.
+         */
+        lateinit var anonymous: AccountPublicDto
+
+        /**
+         * Find an account by its id. Used by [SessionBackend].
+         *
+         * For example, check AccountPrivateBackend in the demo.
+         *
+         * @return the public account dto and the id of the principal that belongs to this account
+         */
+        lateinit var findAccountById: (accountId: Long) -> Pair<AccountPublicDto, Long>
+
+        /**
+         * Find an account by its id. Used by [SessionBackend].
+         *
+         * For example, check AccountPrivateBackend in the demo.
+         *
+         * @return the public account dto and the id of the principal that belongs to this account
+         */
+        lateinit var findAccountByName: (accountName: String) -> Pair<AccountPublicDto, Long>
 
         /**
          * When true GET (read and query) requests are logged by DTO backends.

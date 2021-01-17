@@ -1,10 +1,9 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.data.account
+package zakadabar.stack.data.builtin
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.builtin.AccountPublic
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 
@@ -12,13 +11,13 @@ import zakadabar.stack.data.record.RecordDtoCompanion
 class AccountPublicDto(
 
     override var id: Long,
-    override var accountName: String,
-    override var email: String,
-    override var fullName: String,
-    override var displayName: String,
-    override var organizationName: String
+    var accountName: String,
+    var email: String,
+    var fullName: String,
+    var displayName: String,
+    var organizationName: String
 
-) : RecordDto<AccountPublicDto>, AccountPublic {
+) : RecordDto<AccountPublicDto> {
 
     companion object : RecordDtoCompanion<AccountPublicDto>({
         recordType = "account-public"
