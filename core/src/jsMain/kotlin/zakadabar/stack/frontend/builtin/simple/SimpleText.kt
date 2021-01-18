@@ -7,6 +7,7 @@ import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.elements.ZkElement
 
+@Deprecated("use + instead")
 open class SimpleText(val text: String) : ZkElement(
     element = document.createElement("span") as HTMLElement
 ) {

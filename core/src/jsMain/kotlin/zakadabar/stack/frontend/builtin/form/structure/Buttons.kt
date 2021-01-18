@@ -5,9 +5,9 @@ package zakadabar.stack.frontend.builtin.form.structure
 
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.simple.SimpleButton
 import zakadabar.stack.frontend.elements.ZkElement
 
 class Buttons<T : RecordDto<T>>(
@@ -17,25 +17,25 @@ class Buttons<T : RecordDto<T>>(
         when (form.mode) {
             FormMode.Create ->
                 + row {
-                    + SimpleButton("back") { Application.back() }
-                    + SimpleButton("save") { form.submit() }
+                    + ZkButton("back") { Application.back() } marginRight 10
+                    + ZkButton("save") { form.submit() }
                 }
 
             FormMode.Read -> {
                 + row {
-                    + SimpleButton("back") { Application.back() }
-                    + SimpleButton("edit") { form.crud?.openUpdate(form.dto.id) }
+                    + ZkButton("back") { Application.back() } marginRight 10
+                    + ZkButton("edit") { form.crud?.openUpdate(form.dto.id) }
                 }
             }
             FormMode.Update ->
                 + row {
-                    + SimpleButton("back") { Application.back() }
-                    + SimpleButton("save") { form.submit() }
+                    + ZkButton("back") { Application.back() } marginRight 10
+                    + ZkButton("save") { form.submit() }
                 }
             FormMode.Delete ->
                 + row {
-                    + SimpleButton("back") { Application.back() }
-                    + SimpleButton("delete") { form.submit() }
+                    + ZkButton("back") { Application.back() } marginRight 10
+                    + ZkButton("delete") { form.submit() }
                 }
         }
 

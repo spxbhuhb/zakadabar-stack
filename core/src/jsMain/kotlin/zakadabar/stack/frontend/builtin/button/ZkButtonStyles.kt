@@ -8,6 +8,25 @@ import zakadabar.stack.frontend.util.CssStyleSheet
 
 object ZkButtonStyles : CssStyleSheet<ZkButtonStyles>(Application.theme) {
 
+    val button by cssClass {
+        fontFamily = theme.fontFamily
+        fontSize = 14
+        color = theme.button.text
+        textTransform = "uppercase"
+        cursor = "pointer"
+        backgroundColor = theme.button.background
+        paddingTop = 6
+        paddingBottom = 6
+        paddingLeft = 10
+        paddingRight = 10
+        borderWidth = 1
+        borderRadius = 4
+        on(":hover") {
+            backgroundColor = theme.button.hoverBackground
+            color = theme.button.hoverText
+        }
+    }
+
     val iconButton by cssClass {
         boxSizing = "border-box"
 

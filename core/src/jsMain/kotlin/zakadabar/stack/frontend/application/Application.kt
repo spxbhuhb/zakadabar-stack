@@ -6,10 +6,13 @@ package zakadabar.stack.frontend.application
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.events.Event
+import zakadabar.stack.frontend.application.Application.dock
 import zakadabar.stack.frontend.application.Application.executor
 import zakadabar.stack.frontend.application.Application.routing
 import zakadabar.stack.frontend.application.Application.theme
-import zakadabar.stack.frontend.builtin.dock.Dock
+import zakadabar.stack.frontend.application.Application.toasts
+import zakadabar.stack.frontend.builtin.dock.ZkDock
+import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
 import zakadabar.stack.frontend.util.defaultTheme
 
 /**
@@ -26,6 +29,9 @@ import zakadabar.stack.frontend.util.defaultTheme
  *
  * @property  theme    The design theme of the application.
  *
+ * @property  dock     A container to show sub-windows such as mail editing in Gmail.
+ *
+ * @property  toasts   A container to show toasts.
  */
 object Application {
 
@@ -38,14 +44,18 @@ object Application {
 
     var theme = defaultTheme
 
-    lateinit var dock: Dock
+    lateinit var dock: ZkDock
+
+    lateinit var toasts: ZkToastContainer
 
     @Suppress("MemberVisibilityCanBePrivate")
     const val NAVSTATE_CHANGE = "zk-navstate-change"
 
     fun init() {
         document.body?.style?.fontFamily = theme.fontFamily
-        dock = Dock().init() // this does not add it to the DOM, it's just created
+
+        dock = ZkDock().init()
+        toasts = ZkToastContainer().init()
 
         window.addEventListener("popstate", onPopState)
         routing.onNavStateChange(NavState(window.location.pathname, window.location.search))

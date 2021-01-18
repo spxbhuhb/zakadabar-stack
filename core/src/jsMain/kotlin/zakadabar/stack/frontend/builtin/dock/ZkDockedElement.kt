@@ -21,7 +21,7 @@ import zakadabar.stack.frontend.resources.Icons
  *
  * If you extend you have to modify the [update] method to show/hide whatever is docked.
  */
-open class DockedElement(
+open class ZkDockedElement(
     val icon: ZkElement,
     val title: String,
     var state: DockedElementState,
@@ -37,7 +37,7 @@ open class DockedElement(
 
     protected val header = Header(title, icon, tools = listOf(minimize, maximize, openInFull, closeFullScreen, close))
 
-    override fun init(): DockedElement {
+    override fun init(): ZkDockedElement {
         className += coreClasses.dockItem
 
         this += header

@@ -51,9 +51,23 @@ open class ZkTheme {
     open var contentWidth = 600
     open var headerHeight = 26
 
+    val infoBackground = "#81d4fa"
+    val infoText = black
+
+    val successBackground = "#087f23"
+    val successText = white
+
+    val warningBackground = "#ffea00"
+    val warningText = black
+
+    val errorBackground = "#c41c00"
+    val errorText = white
+
     open var button = ZkButtonTheme(
         background = activeBlue,
-        text = white
+        text = white,
+        hoverBackground = inactiveBlue,
+        hoverText = black
     )
 
     open var menu = ZkMenuTheme(

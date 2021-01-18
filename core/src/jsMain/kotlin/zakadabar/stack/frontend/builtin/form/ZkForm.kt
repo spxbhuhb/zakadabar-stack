@@ -16,6 +16,7 @@
  */
 package zakadabar.stack.frontend.builtin.form
 
+import toast
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
@@ -24,9 +25,9 @@ import zakadabar.stack.frontend.builtin.form.fields.*
 import zakadabar.stack.frontend.builtin.form.structure.Buttons
 import zakadabar.stack.frontend.builtin.form.structure.Header
 import zakadabar.stack.frontend.builtin.form.structure.Section
-import zakadabar.stack.frontend.builtin.util.toast
 import zakadabar.stack.frontend.elements.ZkCrud
 import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.resources.Strings
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.frontend.util.log
 import kotlin.reflect.KMutableProperty0
@@ -131,7 +132,7 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
         val report = validate()
 
         if (report.fails.isNotEmpty()) {
-            toast { "validation.failed" }
+            toast(warning = true) { Strings.invalidFields + report.fails.map { it.key }.joinToString(", ") }
             console.log("==== Validation Report ====")
             report.fails.forEach {
                 console.log("${it.key} = ${it.value}")
@@ -145,27 +146,27 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
                     FormMode.Create -> {
                         val created = dto.create()
                         fields.forEach { it.onCreateSuccess(created) }
-                        toast { "create.success" }
+                        toast { Strings.createSuccess }
                     }
                     FormMode.Read -> {
                         // nothing to do here
                     }
                     FormMode.Update -> {
                         dto.update()
-                        toast { "update.success" }
+                        toast { Strings.updateSuccess }
                     }
                     FormMode.Delete -> {
                         dto.delete()
-                        toast { "delete.success" }
+                        toast { Strings.deleteSuccess }
                     }
                 }
             } catch (ex: Exception) {
                 log(ex)
                 when (mode) {
-                    FormMode.Create -> toast { "create.failed" }
+                    FormMode.Create -> toast(error = true) { Strings.createFail }
                     FormMode.Read -> Unit
-                    FormMode.Update -> toast { "update.failed" }
-                    FormMode.Delete -> toast { "delete.failed" }
+                    FormMode.Update -> toast(error = true) { Strings.updateFail }
+                    FormMode.Delete -> toast(error = true) { Strings.deleteFail }
                 }
             }
         }

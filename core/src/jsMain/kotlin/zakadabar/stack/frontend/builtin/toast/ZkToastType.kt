@@ -1,8 +1,12 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.util
+package zakadabar.stack.frontend.builtin.toast
 
-fun toast(messageBuilder: () -> String) {
-    println(messageBuilder())
+enum class ZkToastType {
+    Info,
+    Success,
+    Warning,
+    Error,
+    Custom
 }

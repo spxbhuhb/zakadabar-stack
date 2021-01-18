@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.table
 
-import zakadabar.stack.frontend.builtin.button.IconButton
+import zakadabar.stack.frontend.builtin.button.ZkIconButton
 import zakadabar.stack.frontend.builtin.simple.SimpleInput
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.resources.Icons
@@ -22,7 +22,7 @@ open class ZkTableActionBar() : ZkElement() {
         + row(ZkTableStyles.actionBar) {
 
             if (onCreate != null) {
-                + IconButton(Icons.add) { onCreate?.invoke() } marginRight 16
+                + ZkIconButton(Icons.add) { onCreate?.invoke() } marginRight 16
             }
 
             + div {
@@ -32,7 +32,7 @@ open class ZkTableActionBar() : ZkElement() {
 
             if (onSearch != null) {
                 + SimpleInput(onChange = onSearch !!) marginRight 8
-                + IconButton(Icons.search) { onCreate?.invoke() }
+                + ZkIconButton(Icons.search) { onCreate?.invoke() }
             }
         }
     }
