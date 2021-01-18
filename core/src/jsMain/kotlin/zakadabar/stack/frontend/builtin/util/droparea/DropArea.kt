@@ -10,9 +10,9 @@ import org.w3c.dom.get
 import zakadabar.stack.comm.http.BlobCreateState
 import zakadabar.stack.comm.http.Comm
 import zakadabar.stack.data.builtin.BlobDto
-import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.droparea.DropAreaClasses.Companion.classes
 import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.resources.Icons
 
 open class DropArea<C : Any>(
     private val message: String = "drop.files.here",

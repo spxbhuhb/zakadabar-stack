@@ -37,8 +37,6 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
 
     override val dtoClass = AccountPrivateDto::class
 
-    var maxFailCount = 5
-
     override fun init() {
 
         // create the tables we need, actually this backend needs [PrincipalTable] also

@@ -10,10 +10,10 @@ import org.w3c.dom.HTMLHtmlElement
 import zakadabar.stack.frontend.application.Application.dock
 import zakadabar.stack.frontend.application.Application.theme
 import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
-import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.header.Header
 import zakadabar.stack.frontend.builtin.util.header.HeaderClasses.Companion.headerClasses
 import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.resources.Icons
 
 /**
  * An element to put into the dock with a header, minimize, normal, maximize, close actions.

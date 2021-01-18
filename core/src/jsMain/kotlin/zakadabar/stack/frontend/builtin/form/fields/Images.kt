@@ -28,9 +28,9 @@ import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.icon.Icons
 import zakadabar.stack.frontend.builtin.util.Thumbnail
 import zakadabar.stack.frontend.builtin.util.droparea.DropAreaClasses
+import zakadabar.stack.frontend.resources.Icons
 
 class Images<T : RecordDto<T>>(
     private val form: ZkForm<T>,

@@ -3,9 +3,10 @@
  */
 package zakadabar.stack.frontend.builtin.table
 
-import zakadabar.stack.frontend.builtin.icon.Icons
+import zakadabar.stack.frontend.builtin.button.IconButton
 import zakadabar.stack.frontend.builtin.simple.SimpleInput
 import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.resources.Icons
 
 open class ZkTableActionBar() : ZkElement() {
 
@@ -18,15 +19,20 @@ open class ZkTableActionBar() : ZkElement() {
     }
 
     override fun init() = build {
-        + row {
+        + row(ZkTableStyles.actionBar) {
+
             if (onCreate != null) {
-                + Icons.addBox.complex20 { onCreate?.invoke() }
+                + IconButton(Icons.add) { onCreate?.invoke() } marginRight 16
             }
 
-            + title
+            + div {
+                style { flexGrow = "1" }
+                + title
+            }
 
             if (onSearch != null) {
-                + SimpleInput(onChange = onSearch !!)
+                + SimpleInput(onChange = onSearch !!) marginRight 8
+                + IconButton(Icons.search) { onCreate?.invoke() }
             }
         }
     }

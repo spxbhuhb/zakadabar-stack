@@ -10,5 +10,6 @@ data class ZkTableTheme(
     val evenRowBackground: String,
     val text: String,
     val hoverBackground: String,
-    val hoverText: String
+    val hoverText: String,
+    val border: String? = null
 )

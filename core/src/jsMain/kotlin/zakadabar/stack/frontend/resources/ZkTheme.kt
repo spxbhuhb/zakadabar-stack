@@ -4,6 +4,7 @@
 
 package zakadabar.stack.frontend.resources
 
+import zakadabar.stack.frontend.builtin.button.ZkButtonTheme
 import zakadabar.stack.frontend.builtin.menu.ZkMenuTheme
 import zakadabar.stack.frontend.builtin.table.ZkTableTheme
 
@@ -50,6 +51,11 @@ open class ZkTheme {
     open var contentWidth = 600
     open var headerHeight = 26
 
+    open var button = ZkButtonTheme(
+        background = activeBlue,
+        text = white
+    )
+
     open var menu = ZkMenuTheme(
         background = activeBlue,
         hoverBackground = inactiveBlue,
@@ -64,7 +70,8 @@ open class ZkTheme {
         evenRowBackground = "#f8f6ff",
         text = "#505050",
         hoverBackground = "#6c7ae0",
-        hoverText = black
+        hoverText = black,
+        border = "1px solid #6c7ae0"
     )
 
 }

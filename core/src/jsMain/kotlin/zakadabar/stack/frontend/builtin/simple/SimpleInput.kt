@@ -6,6 +6,7 @@ package zakadabar.stack.frontend.builtin.simple
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.KeyboardEvent
+import zakadabar.stack.frontend.builtin.simple.SimpleClasses.Companion.simpleClasses
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.util.PublicApi
 
@@ -29,6 +30,8 @@ class SimpleInput(
     private val input = element as HTMLInputElement
 
     override fun init(): ZkElement {
+
+        className = simpleClasses.simpleInput
 
         on("input") { _ ->
             value = input.value

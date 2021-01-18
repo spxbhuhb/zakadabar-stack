@@ -8,6 +8,10 @@ import zakadabar.stack.frontend.util.CssStyleSheet
 
 object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
 
+    val container by cssClass {
+        paddingLeft = 10
+    }
+
     val table by cssClass {
         display = "grid"
         borderCollapse = "collapse"
@@ -40,8 +44,13 @@ object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
             fontWeight = "normal"
         }
 
+        on(" th:first-child") {
+            borderTopLeftRadius = 4
+        }
+
         on(" th:last-child") {
             border = 0
+            borderTopRightRadius = 4
         }
 
         on(" td") {
@@ -56,9 +65,40 @@ object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
             fontWeight = theme.fontWeight
         }
 
+        if (theme.table.border != null) {
+            val border = theme.table.border
+
+            on(" tr td:first-child") {
+                borderLeft = border
+            }
+
+            on(" tr td:last-child") {
+                borderRight = border
+            }
+
+            on(" tr:last-child td") {
+                borderBottom = border
+            }
+        }
+
         on(" tr:nth-child(even) td") {
             background = theme.table.evenRowBackground
         }
+
+        on(" tr:last-child td:first-child") {
+            borderBottomLeftRadius = 4
+        }
+
+        on(" tr:last-child td:last-child") {
+            borderBottomRightRadius = 4
+        }
+    }
+
+    val actionBar by cssClass {
+        paddingTop = 10
+        marginBottom = 10
+        fontSize = "125%"
+        alignItems = "flex-end"
     }
 
     init {

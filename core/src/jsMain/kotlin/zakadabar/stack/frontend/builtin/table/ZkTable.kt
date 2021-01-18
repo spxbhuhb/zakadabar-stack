@@ -30,6 +30,8 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
 
     override fun init() = build {
 
+        className = ZkTableStyles.container
+
         buildActionBar()?.let { + it }
 
         + table(ZkTableStyles.table) {

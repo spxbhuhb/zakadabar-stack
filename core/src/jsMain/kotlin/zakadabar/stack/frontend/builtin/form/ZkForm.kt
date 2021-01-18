@@ -132,6 +132,10 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
 
         if (report.fails.isNotEmpty()) {
             toast { "validation.failed" }
+            console.log("==== Validation Report ====")
+            report.fails.forEach {
+                console.log("${it.key} = ${it.value}")
+            }
             return
         }
 
