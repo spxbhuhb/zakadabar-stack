@@ -25,41 +25,35 @@ class Form : ZkForm<ShipDto>() {
         }
     }
 
-    private fun basics() =
-        section(Strings.basics, Strings.shipBasicsExplanation) {
-            + fieldGrid {
-                ifNotCreate {
-                    + Strings.id
-                    + dto::id
-                }
+    private fun basics() = section(Strings.basics, Strings.shipBasicsExplanation) {
 
-                + Strings.name
-                + dto::name
-
-                + Strings.speed
-                + select(dto::speed) {
-                    SpeedDto.all()
-                        .map { it.id to it.description }
-                        .sortedBy { it.second }
-                }
-
-                + Strings.captain
-                + select(dto::captain) {
-                    AccountPublicDto.all()
-                        .map { it.id to it.fullName }
-                        .sortedBy { it.second }
-                }
-            }
+        ifNotCreate {
+            + dto::id
         }
 
-    private fun description() =
-        section(Strings.description, Strings.shipDescriptionExplanation) {
-            style { flexGrow = "1" }
-            + textarea(dto::name) cssClass zkClasses.h100
+        + dto::name
+
+        + select(dto::speed) {
+            SpeedDto.all()
+                .map { it.id to it.description }
+                .sortedBy { it.second }
         }
 
-    private fun images() =
-        section(Strings.images) {
-            + Images(this@Form, dto.id)
+        + select(dto::captain) {
+            AccountPublicDto.all()
+                .map { it.id to it.fullName }
+                .sortedBy { it.second }
         }
+
+    }
+
+    private fun description() = section(Strings.description, Strings.shipDescriptionExplanation, fieldGrid = false) {
+        style { flexGrow = "1" }
+        + textarea(dto::description) cssClass zkClasses.h100
+    }
+
+    private fun images() = section(Strings.images, fieldGrid = false) {
+        + Images(this@Form, dto.id)
+    }
+
 }

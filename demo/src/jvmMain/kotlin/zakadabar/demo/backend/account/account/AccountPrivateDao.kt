@@ -6,7 +6,7 @@ package zakadabar.demo.backend.account.account
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import zakadabar.demo.data.account.AccountPrivateDto
+import zakadabar.demo.data.AccountPrivateDto
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
 import zakadabar.stack.data.builtin.AccountPublicDto
 

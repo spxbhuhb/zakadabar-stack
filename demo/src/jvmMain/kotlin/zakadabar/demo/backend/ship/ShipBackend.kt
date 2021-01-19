@@ -68,6 +68,7 @@ object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTa
         name = dto.name
         speed = SpeedDao[dto.speed]
         captain = AccountPrivateDao[dto.captain]
+        description = dto.description
         return this
     }
 

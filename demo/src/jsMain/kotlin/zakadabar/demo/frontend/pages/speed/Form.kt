@@ -13,19 +13,14 @@ class Form : ZkForm<SpeedDto>() {
         + header(Strings.speed)
 
         + section(Strings.basics, Strings.speedBasicsExplanation) {
-            + fieldGrid {
 
-                ifNotCreate {
-                    + Strings.id
-                    + dto::id
-                }
-
-                + Strings.description
-                + dto::description
-
-                + Strings.value
-                + dto::value
+            ifNotCreate {
+                + dto::id
             }
+
+            + dto::description
+
+            + dto::value
         }
 
         + buttons()

@@ -29,7 +29,7 @@ class Table : ZkTable<ShipDto>() {
 
         + custom {
             label = Strings.captain
-            render = { + accounts[it.captain]?.displayName }
+            render = { + accounts[it.captain]?.fullName }
         }
 
         + ShipDto::id.actions(Ships)

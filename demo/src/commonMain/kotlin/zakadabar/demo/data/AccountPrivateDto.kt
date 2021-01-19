@@ -4,7 +4,7 @@
 
 @file:UseSerializers(OptInstantAsStringSerializer::class)
 
-package zakadabar.demo.data.account
+package zakadabar.demo.data
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers

@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.demo.backend.account.account.AccountPrivateBackend.init
-import zakadabar.demo.data.account.AccountPrivateDto
+import zakadabar.demo.data.AccountPrivateDto
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
 import zakadabar.stack.backend.data.record.RecordBackend

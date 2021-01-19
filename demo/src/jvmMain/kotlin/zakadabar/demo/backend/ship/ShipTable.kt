@@ -14,12 +14,14 @@ object ShipTable : LongIdTable("ships") {
     val name = varchar("name", 20)
     val speed = reference("speed", SpeedTable)
     val captain = reference("captain", AccountPrivateTable)
+    val description = varchar("description", 2000)
 
     fun toDto(row: ResultRow) = ShipDto(
         id = row[id].value,
         name = row[name],
         speed = row[speed].value,
-        captain = row[captain].value
+        captain = row[captain].value,
+        description = row[description]
     )
 
 }

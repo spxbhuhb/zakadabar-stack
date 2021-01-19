@@ -20,6 +20,7 @@ import toast
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.builtin.form.FormClasses.Companion.formClasses
 import zakadabar.stack.frontend.builtin.form.fields.*
 import zakadabar.stack.frontend.builtin.form.structure.Buttons
@@ -42,6 +43,7 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
     lateinit var mode: FormMode
 
     var crud: ZkCrud<T>? = null
+    var autoLabel = true
     var fieldGridTemplate: String = "150px 1fr"
     var fieldGridGap: String = "5px"
 
@@ -59,14 +61,21 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
 
     fun buttons() = Buttons(this@ZkForm)
 
-    fun section(title: String, summary: String = "", builder: ZkElement.() -> Unit) =
-        Section(title, summary, builder)
+    fun section(title: String, summary: String = "", fieldGrid: Boolean = true, builder: ZkElement.() -> Unit): Section {
+        return if (fieldGrid) {
+            Section(title, summary) { + fieldGrid { builder() } }
+        } else {
+            Section(title, summary, builder)
+        }
+    }
 
+    @Deprecated("use simple section instead", ReplaceWith("section(title, summary, builder)"))
     fun fieldGridSection(title: String, summary: String = "", builder: ZkElement.() -> Unit) =
-        Section(title, summary) { + fieldGrid { builder() } }
+        section(title, summary, true, builder)
 
     fun select(kProperty0: KMutableProperty0<RecordId<*>>, sortOptions: Boolean = true, options: suspend () -> List<Pair<RecordId<*>, String>>): ValidatedRecordSelect<T> {
         val field = ValidatedRecordSelect(this@ZkForm, kProperty0, sortOptions, options)
+        label(kProperty0)
         fields += field
         return field
     }
@@ -78,36 +87,6 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
         return field
     }
 
-    // ----  Customized build and property receiver  --------
-
-    operator fun KMutableProperty0<RecordId<T>>.unaryPlus(): ZkElement {
-        val field = ValidatedId<T>(this)
-        + field
-        fields += field
-        return field
-    }
-
-    operator fun KMutableProperty0<String>.unaryPlus(): ZkElement {
-        val field = ValidatedString(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
-
-    operator fun KMutableProperty0<String?>.unaryPlus(): ZkElement {
-        val field = ValidatedOptString(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
-
-    operator fun KMutableProperty0<Double>.unaryPlus(): ZkElement {
-        val field = ValidatedDouble(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
-
     fun ifNotCreate(build: ZkElement.() -> Unit) {
         if (mode == FormMode.Create) return
         build()
@@ -116,7 +95,43 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
     fun fieldGrid(build: ZkElement.() -> Unit) =
         grid(style = "grid-template-columns: $fieldGridTemplate; gap: $fieldGridGap", build = build)
 
-    fun KProperty0<*>.label() = this.name
+    fun label(prop: KProperty0<*>) {
+        if (autoLabel) + (Application.stringMap[prop.name] ?: prop.name)
+    }
+
+    // ----  Customized build and property receiver  --------
+
+    operator fun KMutableProperty0<RecordId<T>>.unaryPlus(): ZkElement {
+        val field = ValidatedId<T>(this)
+        label(this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<String>.unaryPlus(): ZkElement {
+        val field = ValidatedString(this@ZkForm, this)
+        label(this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<String?>.unaryPlus(): ZkElement {
+        val field = ValidatedOptString(this@ZkForm, this)
+        label(this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<Double>.unaryPlus(): ZkElement {
+        val field = ValidatedDouble(this@ZkForm, this)
+        label(this)
+        + field
+        fields += field
+        return field
+    }
 
     // ----  Validation and submit --------
 

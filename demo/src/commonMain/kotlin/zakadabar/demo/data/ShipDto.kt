@@ -4,7 +4,6 @@
 package zakadabar.demo.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.demo.data.account.AccountPrivateDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
@@ -16,7 +15,8 @@ data class ShipDto(
     override var id: RecordId<ShipDto>,
     var name: String,
     var speed: RecordId<SpeedDto>,
-    var captain: RecordId<AccountPrivateDto>
+    var captain: RecordId<AccountPrivateDto>,
+    var description: String
 
 ) : RecordDto<ShipDto> {
 
@@ -34,6 +34,7 @@ data class ShipDto(
         + ::name max 20 min 2 notEquals "Titanic"
         + ::speed
         + ::captain
+        + ::description max 2000
     }
 
 }
