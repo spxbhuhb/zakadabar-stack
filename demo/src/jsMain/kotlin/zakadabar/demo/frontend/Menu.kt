@@ -18,7 +18,7 @@ object Menu : ZkMenu({
 
     + column {
 
-        + item(Strings.title) { Home.open() }
+        + item(Strings.applicationName) { Home.open() }
 
         + item(Strings.search) { ShipSearch.open() }
 

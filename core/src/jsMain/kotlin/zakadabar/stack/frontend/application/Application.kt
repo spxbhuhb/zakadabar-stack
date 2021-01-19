@@ -9,10 +9,12 @@ import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.application.Application.dock
 import zakadabar.stack.frontend.application.Application.executor
 import zakadabar.stack.frontend.application.Application.routing
+import zakadabar.stack.frontend.application.Application.stringMap
 import zakadabar.stack.frontend.application.Application.theme
 import zakadabar.stack.frontend.application.Application.toasts
 import zakadabar.stack.frontend.builtin.dock.ZkDock
 import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
+import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.util.defaultTheme
 
 /**
@@ -22,16 +24,19 @@ import zakadabar.stack.frontend.util.defaultTheme
  * It listens to the location change events of the browser window and loads
  * the pages that belongs to the current URL.
  *
- * @property  executor The user who views the web page. There is always a user,
- *                     before login it is "anonymous".
+ * @property  executor   The user who views the web page. There is always a user,
+ *                       before login it is "anonymous".
  *
- * @property  routing  The URL -> page mapping to navigate in the application.
+ * @property  routing    The URL -> page mapping to navigate in the application.
  *
- * @property  theme    The design theme of the application.
+ * @property  theme      The design theme of the application.
  *
- * @property  dock     A container to show sub-windows such as mail editing in Gmail.
+ * @property  stringMap  Map of string resource name - string id pairs. This usually is
+ *                       the map property of Strings and should be set in main.kt.
  *
- * @property  toasts   A container to show toasts.
+ * @property  dock       A container to show sub-windows such as mail editing in Gmail.
+ *
+ * @property  toasts     A container to show toasts.
  */
 object Application {
 
@@ -43,6 +48,8 @@ object Application {
     // we'll need this later private var defaultLanguage = window.navigator.language
 
     var theme = defaultTheme
+
+    var stringMap = CoreStrings.map
 
     lateinit var dock: ZkDock
 

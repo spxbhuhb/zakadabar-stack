@@ -3,58 +3,40 @@
  */
 package zakadabar.stack.frontend.resources
 
-@Suppress("MayBeConstant")
-object Strings {
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
-    val invalidFields = "Some fields contain invalid values: "
-    val createSuccess = "Create success."
-    val updateSuccess = "Update success."
-    val deleteSuccess = "Delete success."
-    val createFail = "Create failed."
-    val updateFail = "Update failed."
-    val deleteFail = "Delete failed."
-    val displayName = "Displayed Name"
-    val position = "Position"
-    val organization = "Organization"
-    val display = "Display"
-    val workplace = "Workplace"
-    val phone = "Phone Number"
-    val contact = "Contact"
-    val accountName = "Account Name"
-    val captain = "Captain"
-    val accounts = "Accounts"
-    val email = "Email"
-    val actions = "Actions"
-    val account = "Account"
-    val asia = "Asia"
-    val basics = "Basics"
-    val carribean = "Carribean"
-    val description = "Description"
-    val forgotten = "New Password"
-    val id = "Id"
-    val images = "Images"
-    val login = "Login"
-    val name = "Name"
-    val new = "New"
-    val password = "Password"
-    val ports = "Ports"
-    val search = "Search"
-    val singapore = "Singapore"
-    val title = "The Place"
-    val tortuga = "Tortuga"
-    val value = "Value"
-    val ships = "Ships"
-    val ship = "Ship"
-    val speeds = "Speeds"
-    val speed = "Speed"
+val CoreStrings = StringsImpl()
 
-    object Ship {
-        val basicsExplanation = "Data all ships have."
-        val descriptionExplanation = "Description of the ship, special features, number of cannons, history."
+class StringsDelegate : ReadOnlyProperty<StringsImpl, String> {
+    override fun getValue(thisRef: StringsImpl, property: KProperty<*>): String {
+        return thisRef.map[property.name] !!
     }
+}
 
-    object Speed {
-        val basicsExplanation = "Data all speeds have."
+class StringsDelegateProvider(private val default: String) {
+    operator fun provideDelegate(thisRef: StringsImpl, prop: KProperty<*>): ReadOnlyProperty<StringsImpl, String> {
+        thisRef.map[prop.name] = default
+        return StringsDelegate()
     }
+}
+
+open class StringsImpl(
+    val map: MutableMap<String, String> = mutableMapOf()
+) {
+    fun string(default: String) = StringsDelegateProvider(default)
+
+    val invalidFields by string("Some fields contain invalid values: ")
+    val createSuccess by string("Create success.")
+    val updateSuccess by string("Update success.")
+    val deleteSuccess by string("Delete success.")
+    val createFail by string("Create failed.")
+    val updateFail by string("Update failed.")
+    val deleteFail by string("Delete failed.")
+
+    val id by string("Id")
+    val name by string("Name")
+    val actions by string("Actions")
+
 }
 

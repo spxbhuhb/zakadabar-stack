@@ -12,7 +12,7 @@ class Form : ZkForm<SpeedDto>() {
     override fun init() = build {
         + header(Strings.speed)
 
-        + section(Strings.basics, Strings.Speed.basicsExplanation) {
+        + section(Strings.basics, Strings.speedBasicsExplanation) {
             + fieldGrid {
 
                 ifNotCreate {

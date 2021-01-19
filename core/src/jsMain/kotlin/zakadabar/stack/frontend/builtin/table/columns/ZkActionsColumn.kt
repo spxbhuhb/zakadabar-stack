@@ -8,6 +8,7 @@ import org.w3c.dom.get
 import org.w3c.dom.set
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.elements.ZkCrud
 import zakadabar.stack.frontend.elements.ZkElement
@@ -19,7 +20,7 @@ open class ZkActionsColumn<T : RecordDto<T>>(
     private val crud: ZkCrud<T>
 ) : ZkColumn<T> {
 
-    override var label = prop.name
+    override var label = Application.stringMap["actions"] ?: prop.name
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         with(builder) {

@@ -27,7 +27,7 @@ import zakadabar.stack.frontend.builtin.form.structure.Header
 import zakadabar.stack.frontend.builtin.form.structure.Section
 import zakadabar.stack.frontend.elements.ZkCrud
 import zakadabar.stack.frontend.elements.ZkElement
-import zakadabar.stack.frontend.resources.Strings
+import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.frontend.util.log
 import kotlin.reflect.KMutableProperty0
@@ -132,7 +132,7 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
         val report = validate()
 
         if (report.fails.isNotEmpty()) {
-            toast(warning = true) { Strings.invalidFields + report.fails.map { it.key }.joinToString(", ") }
+            toast(warning = true) { CoreStrings.invalidFields + report.fails.map { it.key }.joinToString(", ") }
             console.log("==== Validation Report ====")
             report.fails.forEach {
                 console.log("${it.key} = ${it.value}")
@@ -146,27 +146,27 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
                     FormMode.Create -> {
                         val created = dto.create()
                         fields.forEach { it.onCreateSuccess(created) }
-                        toast { Strings.createSuccess }
+                        toast { CoreStrings.createSuccess }
                     }
                     FormMode.Read -> {
                         // nothing to do here
                     }
                     FormMode.Update -> {
                         dto.update()
-                        toast { Strings.updateSuccess }
+                        toast { CoreStrings.updateSuccess }
                     }
                     FormMode.Delete -> {
                         dto.delete()
-                        toast { Strings.deleteSuccess }
+                        toast { CoreStrings.deleteSuccess }
                     }
                 }
             } catch (ex: Exception) {
                 log(ex)
                 when (mode) {
-                    FormMode.Create -> toast(error = true) { Strings.createFail }
+                    FormMode.Create -> toast(error = true) { CoreStrings.createFail }
                     FormMode.Read -> Unit
-                    FormMode.Update -> toast(error = true) { Strings.updateFail }
-                    FormMode.Delete -> toast(error = true) { Strings.deleteFail }
+                    FormMode.Update -> toast(error = true) { CoreStrings.updateFail }
+                    FormMode.Delete -> toast(error = true) { CoreStrings.deleteFail }
                 }
             }
         }

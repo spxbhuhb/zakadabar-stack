@@ -4,6 +4,7 @@
 @file:Suppress("unused") // main is called by webpack
 
 import zakadabar.demo.frontend.Routing
+import zakadabar.demo.frontend.resources.Strings
 import zakadabar.demo.frontend.resources.Theme
 import zakadabar.stack.data.builtin.SessionDto
 import zakadabar.stack.frontend.application.Application
@@ -37,7 +38,12 @@ fun main() {
         with(Application) {
 
             // Change the theme of the application to have our own colors
+
             theme = Theme
+
+            // Set string map for automatic form label / table header lookup.
+
+            stringMap = Strings.map
 
             // Application.executor is the user who runs the application. There is always a user
             // even without login. The not logged in users has the role "anonymous" (by convention).

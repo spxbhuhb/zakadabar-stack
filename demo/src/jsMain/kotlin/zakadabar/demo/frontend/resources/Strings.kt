@@ -3,52 +3,55 @@
  */
 package zakadabar.demo.frontend.resources
 
-@Suppress("MayBeConstant")
-object Strings {
+import zakadabar.stack.frontend.resources.StringsImpl
 
-    val avatar = "Avatar"
-    val displayName = "Displayed Name"
-    val position = "Position"
-    val organization = "Organization"
-    val display = "Display"
-    val workplace = "Workplace"
-    val phone = "Phone Number"
-    val contact = "Contact"
-    val accountName = "Account Name"
-    val captain = "Captain"
-    val accounts = "Accounts"
-    val email = "Email"
-    val actions = "Actions"
-    val account = "Account"
-    val asia = "Asia"
-    val basics = "Basics"
-    val carribean = "Carribean"
-    val description = "Description"
-    val forgotten = "New Password"
-    val id = "Id"
-    val images = "Images"
-    val login = "Login"
-    val name = "Name"
-    val new = "New"
-    val password = "Password"
-    val ports = "Ports"
-    val search = "Search"
-    val singapore = "Singapore"
-    val title = "The Place"
-    val tortuga = "Tortuga"
-    val value = "Value"
-    val ships = "Ships"
-    val ship = "Ship"
-    val speeds = "Speeds"
-    val speed = "Speed"
+val Strings = DemoStringsImpl()
 
-    object Ship {
-        val basicsExplanation = "Data all ships have."
-        val descriptionExplanation = "Description of the ship, special features, number of cannons, history."
-    }
+class DemoStringsImpl : StringsImpl() {
 
-    object Speed {
-        val basicsExplanation = "Data all speeds have."
-    }
+    // general stuff
+
+    val account by string("Account")
+    val accountName by string("Account Name")
+    val accounts by string("Accounts")
+    val basics by string("Basics")
+    val contact by string("Contact")
+    val description by string("Description")
+    val display by string("Display")
+    val displayName by string("Displayed Name")
+    val email by string("Email")
+    val forgotten by string("New Password")
+    val images by string("Images")
+    val login by string("Login")
+    val new by string("New")
+    val organization by string("Organization")
+    val password by string("Password")
+    val phone by string("Phone Number")
+    val position by string("Position")
+    val search by string("Search")
+    val value by string("Value")
+    val workplace by string("Workplace")
+
+    // demo related stuff
+
+    val applicationName by string("Zakadabar Demo")
+
+    val captain by string("Captain")
+
+    val ports by string("Ports")
+    val carribean by string("Carribean")
+    val asia by string("Asia")
+    val singapore by string("Singapore")
+    val tortuga by string("Tortuga")
+
+    val ships by string("Ships")
+    val ship by string("Ship")
+    val shipBasicsExplanation by string("Data all ships have.")
+    val shipDescriptionExplanation by string("Description of the ship, special features, number of cannons, history.")
+
+    val speeds by string("Speeds")
+    val speed by string("Speed")
+    val speedBasicsExplanation by string("Data all speeds have.")
+
 }
 

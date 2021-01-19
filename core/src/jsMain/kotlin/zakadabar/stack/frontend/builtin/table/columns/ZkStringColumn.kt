@@ -4,6 +4,7 @@
 package zakadabar.stack.frontend.builtin.table.columns
 
 import zakadabar.stack.data.record.RecordDto
+import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.elements.ZkElement
 import kotlin.reflect.KProperty1
@@ -13,7 +14,11 @@ open class ZkStringColumn<T : RecordDto<T>>(
     private val prop: KProperty1<T, String>
 ) : ZkColumn<T> {
 
-    override var label = prop.name
+    override var label = Application.stringMap[prop.name] ?: prop.name
+
+    init {
+        println("string.getValue ${prop.name} ${Application.stringMap[prop.name]}")
+    }
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         with(builder) {

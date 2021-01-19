@@ -3,12 +3,13 @@
  */
 package zakadabar.demo.frontend.pages.port
 
+import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.elements.ZkPage
 
 object Tortuga : ZkPage() {
 
     override fun init() = build {
-        + "Tortuga"
+        + Strings.tortuga
     }
 
 }

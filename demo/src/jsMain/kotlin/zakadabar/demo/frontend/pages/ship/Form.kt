@@ -26,7 +26,7 @@ class Form : ZkForm<ShipDto>() {
     }
 
     private fun basics() =
-        section(Strings.basics, Strings.Ship.basicsExplanation) {
+        section(Strings.basics, Strings.shipBasicsExplanation) {
             + fieldGrid {
                 ifNotCreate {
                     + Strings.id
@@ -53,7 +53,7 @@ class Form : ZkForm<ShipDto>() {
         }
 
     private fun description() =
-        section(Strings.description, Strings.Ship.descriptionExplanation) {
+        section(Strings.description, Strings.shipDescriptionExplanation) {
             style { flexGrow = "1" }
             + textarea(dto::name) cssClass zkClasses.h100
         }
