@@ -11,47 +11,47 @@ class DemoStringsImpl : StringsImpl() {
 
     // general stuff
 
-    val account by string("Account")
-    val accountName by string("Account Name")
-    val accounts by string("Accounts")
-    val basics by string("Basics")
-    val contact by string("Contact")
-    val description by string("Description")
-    val display by string("Display")
-    val displayName by string("Displayed Name")
-    val email by string("Email")
-    val forgotten by string("New Password")
-    val images by string("Images")
-    val login by string("Login")
-    val new by string("New")
-    val organization by string("Organization")
-    val password by string("Password")
-    val phone by string("Phone Number")
-    val position by string("Position")
-    val search by string("Search")
-    val value by string("Value")
-    val workplace by string("Workplace")
+    val account by "Account"
+    val accountName by "Account Name"
+    val accounts by "Accounts"
+    val basics by "Basics"
+    val contact by "Contact"
+    val description by "Description"
+    val display by "Display"
+    val displayName by "Displayed Name"
+    val email by "Email"
+    val forgotten by "New Password"
+    val images by "Images"
+    val login by "Login"
+    val new by "New"
+    val organization by "Organization"
+    val password by "Password"
+    val phone by "Phone Number"
+    val position by "Position"
+    val search by "Search"
+    val value by "Value"
+    val workplace by "Workplace"
 
     // demo related stuff
 
-    val applicationName by string("Zakadabar Demo")
+    val applicationName by "Zakadabar Demo"
 
-    val captain by string("Captain")
+    val captain by "Captain"
 
-    val ports by string("Ports")
-    val carribean by string("Carribean")
-    val asia by string("Asia")
-    val singapore by string("Singapore")
-    val tortuga by string("Tortuga")
+    val ports by "Ports"
+    val carribean by "Carribean"
+    val asia by "Asia"
+    val singapore by "Singapore"
+    val tortuga by "Tortuga"
 
-    val ships by string("Ships")
-    val ship by string("Ship")
-    val shipBasicsExplanation by string("Data all ships have.")
-    val shipDescriptionExplanation by string("Description of the ship, special features, number of cannons, history.")
+    val ships by "Ships"
+    val ship by "Ship"
+    val shipBasicsExplanation by "Data all ships have."
+    val shipDescriptionExplanation by "Description of the ship, special features, number of cannons, history."
 
-    val speeds by string("Speeds")
-    val speed by string("Speed")
-    val speedBasicsExplanation by string("Data all speeds have.")
+    val speeds by "Speeds"
+    val speed by "Speed"
+    val speedBasicsExplanation by "Data all speeds have."
 
 }
 

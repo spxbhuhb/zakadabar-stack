@@ -2,36 +2,39 @@ This directory contains resources the application uses:
 
 * [Strings](Strings.kt) - text resources, subject to I18N
 * [Icons](Icons.kt) - build-in icons from Material Icons
-* [Theme][ZkTheme.kt] - theme for the UI, colors and such
+* [Theme](ZkTheme.kt) - theme for the UI, colors and such
 
-**NOTE**
+**Status**
 
-This module is unfinished, it is quite confused at the moment. Strings are close to the final state, the missing thing is the internationalization but that should not change the use pattern (namely,
-just use the field).
+Strings are close to the final state. I18N is missing but that should not change the use pattern.
 
 Icons and the theme is something we'll change into something better more conceptual.
 
 ## Strings
 
-The basic concept of the string implementation is very similar to the one Android uses: define the string resources somewhere collected and let the application use only references to the resources. We
-do not use XML but Kotlin source.
+**IMPORTANT** When adding strings use `by`. I18n and automatic labels doesn't work with `=`.
+
+**IMPORTANT** Remember to set Application.stringMap in `main.kt`.
+
+The basic concept of the string implementation is very similar to the one Android uses: define the string resources
+somewhere collected and let the application use only references to the resources. Only we Kotlin instead of XML.
 
 In [Strings.kt](Strings.kt) you will find the [StringImpl](Strings.kt)
 class. This class plays with the property delegation feature of Kotlin such a way that:
 
-* in the code you can use the property of the class
+* you can use the properties of the class
 * there is a map that stores the values, so
   * I18N can easily load translations
-  * form and table can find values easily by property name
+  * form and table can automatically set labels and fields based on property name
 
 You usually want to extend the `StringImpl` like the demo does:
-[demo.Strings](../../../../../../../../demo/src/jsMain/kotlin/zakadabar/demo/frontend/resources/Strings.kt).
+[DemoStringImpl](../../../../../../../../demo/src/jsMain/kotlin/zakadabar/demo/frontend/resources/Strings.kt).
 
 ```kotlin
 val Strings = DemoStringsImpl()
 
 class DemoStringsImpl : StringsImpl() {
-  val tortuga by string("Torguga")
+  val tortuga by "Torguga"
 }
 ```
 
@@ -49,9 +52,12 @@ object Tortuga : ZkPage() {
 
 ### Forms and tables
 
-Forms and tables set the field label / header label automatically from the field name whenever possible (for custom columns it is not).
+Forms and tables set the field label / header label automatically from the field name whenever possible (for custom
+columns it is not).
 
-So, this table definition will have proper, translated header names because the `Strings` of demo has the `id`, `description`, `value` and `actions`.
+So, this table definition will have proper, translated header names because
+the [Strings](../../../../../../../../demo/src/jsMain/kotlin/zakadabar/demo/frontend/resources/Strings.kt)
+of demo has the `id`, `description`, `value` and `actions` (some of these are defined in the core module).
 
 ```kotlin
 class Table : ZkTable<SpeedDto>() {
@@ -65,6 +71,20 @@ class Table : ZkTable<SpeedDto>() {
     + SpeedDto::value
     + SpeedDto::id.actions(Speeds)
   }
+
+}
+```
+
+This functionality uses `Application.stringMap` to look up the names by the name of the property.
+
+Set `Application.stringMap` in [main.kt](../../../../../../../../demo/src/jsMain/kotlin/main.kt):
+
+```kotlin
+with(Application) {
+
+  // Set string map for automatic form label / table header lookup.
+
+  stringMap = Strings.map
 
 }
 ```

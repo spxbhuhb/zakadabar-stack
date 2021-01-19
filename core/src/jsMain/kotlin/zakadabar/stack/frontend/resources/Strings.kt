@@ -14,29 +14,30 @@ class StringsDelegate : ReadOnlyProperty<StringsImpl, String> {
     }
 }
 
-class StringsDelegateProvider(private val default: String) {
-    operator fun provideDelegate(thisRef: StringsImpl, prop: KProperty<*>): ReadOnlyProperty<StringsImpl, String> {
-        thisRef.map[prop.name] = default
-        return StringsDelegate()
-    }
-}
-
 open class StringsImpl(
     val map: MutableMap<String, String> = mutableMapOf()
 ) {
-    fun string(default: String) = StringsDelegateProvider(default)
+    operator fun String.provideDelegate(thisRef: StringsImpl, prop: KProperty<*>): ReadOnlyProperty<StringsImpl, String> {
+        thisRef.map[prop.name] = this
+        return StringsDelegate()
+    }
 
-    val invalidFields by string("Some fields contain invalid values: ")
-    val createSuccess by string("Create success.")
-    val updateSuccess by string("Update success.")
-    val deleteSuccess by string("Delete success.")
-    val createFail by string("Create failed.")
-    val updateFail by string("Update failed.")
-    val deleteFail by string("Delete failed.")
+    val invalidFields by "Some fields contain invalid values: "
+    val createSuccess by "Create success."
+    val updateSuccess by "Update success."
+    val deleteSuccess by "Delete success."
+    val createFail by "Create failed."
+    val updateFail by "Update failed."
+    val deleteFail by "Delete failed."
 
-    val id by string("Id")
-    val name by string("Name")
-    val actions by string("Actions")
+    val id by "Id"
+    val name by "Name"
+    val actions by "Actions"
+
+    val back by "Back"
+    val edit by "Edit"
+    val save by "Save"
+    val delete by "Delete"
 
 }
 
