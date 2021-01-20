@@ -32,6 +32,7 @@ class Form : ZkForm<ShipDto>() {
         }
 
         + dto::name
+        + dto::hasFlag
 
         + select(dto::speed) {
             SpeedDto.all()

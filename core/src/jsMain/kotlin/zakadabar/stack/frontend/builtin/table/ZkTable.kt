@@ -115,6 +115,12 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
         return column
     }
 
+    operator fun KProperty1<T, Boolean>.unaryPlus(): ZkBooleanColumn<T> {
+        val column = ZkBooleanColumn(this@ZkTable, this)
+        columns += column
+        return column
+    }
+
     fun custom(builder: ZkCustomColumn<T>.() -> Unit = {}): ZkCustomColumn<T> {
         val column = ZkCustomColumn(this)
         column.builder()

@@ -152,6 +152,14 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
         return field
     }
 
+    operator fun KMutableProperty0<Boolean>.unaryPlus(): ZkElement {
+        val field = ValidatedBoolean(this@ZkForm, this)
+        label(this)
+        + field
+        fields += field
+        return field
+    }
+
     // ----  Validation and submit --------
 
     fun validate(): ValidityReport {

@@ -16,7 +16,8 @@ data class ShipDto(
     var name: String,
     var speed: RecordId<SpeedDto>,
     var captain: RecordId<AccountPrivateDto>,
-    var description: String
+    var description: String,
+    var hasFlag: Boolean
 
 ) : RecordDto<ShipDto> {
 
@@ -31,10 +32,11 @@ data class ShipDto(
 
     override fun schema() = DtoSchema {
         + ::id
-        + ::name max 20 min 2 notEquals "Titanic"
+        + ::name max 20 min 2 notEquals "Titanic" default "Titanic"
         + ::speed
         + ::captain
         + ::description max 2000
+        + ::hasFlag default false
     }
 
 }

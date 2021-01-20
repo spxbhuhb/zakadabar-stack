@@ -8,6 +8,7 @@ import zakadabar.demo.data.SpeedDto
 import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.data.builtin.AccountPublicDto
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import kotlin.reflect.KMutableProperty1
 
 class Table : ZkTable<ShipDto>() {
 
@@ -21,6 +22,7 @@ class Table : ZkTable<ShipDto>() {
 
         + ShipDto::id build { label = "#" }
         + ShipDto::name
+        + ShipDto::hasFlag
 
         + custom {
             label = Strings.speed

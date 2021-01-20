@@ -17,12 +17,14 @@ class ShipDao(id: EntityID<Long>) : LongEntity(id) {
     var speed by SpeedDao referencedOn ShipTable.speed
     var captain by AccountPrivateDao referencedOn ShipTable.captain
     var description by ShipTable.description
+    var hasFlag by ShipTable.hasFlag
 
     fun toDto() = ShipDto(
         id = id.value,
         name = name,
         speed = speed.id.value,
         captain = captain.id.value,
-        description = description
+        description = description,
+        hasFlag = hasFlag
     )
 }

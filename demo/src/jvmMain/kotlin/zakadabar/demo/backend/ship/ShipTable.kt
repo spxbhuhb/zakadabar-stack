@@ -15,13 +15,15 @@ object ShipTable : LongIdTable("ships") {
     val speed = reference("speed", SpeedTable)
     val captain = reference("captain", AccountPrivateTable)
     val description = varchar("description", 2000)
+    val hasFlag = bool("has_flag").clientDefault { false }
 
     fun toDto(row: ResultRow) = ShipDto(
         id = row[id].value,
         name = row[name],
         speed = row[speed].value,
         captain = row[captain].value,
-        description = row[description]
+        description = row[description],
+        hasFlag = row[hasFlag]
     )
 
 }

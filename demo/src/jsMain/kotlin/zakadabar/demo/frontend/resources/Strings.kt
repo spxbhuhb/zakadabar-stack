@@ -31,6 +31,7 @@ class DemoStringsImpl : StringsImpl() {
     val search by "Search"
     val value by "Value"
     val workplace by "Workplace"
+    val active by "Aktív"
 
     // demo related stuff
 
@@ -48,6 +49,7 @@ class DemoStringsImpl : StringsImpl() {
     val ship by "Ship"
     val shipBasicsExplanation by "Data all ships have."
     val shipDescriptionExplanation by "Description of the ship, special features, number of cannons, history."
+    val hasFlag by "Has flag?"
 
     val speeds by "Speeds"
     val speed by "Speed"
