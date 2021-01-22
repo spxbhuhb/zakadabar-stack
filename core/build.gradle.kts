@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.1.20"
+version = "2021.1.22-SNAPSHOT"
 
 // common
 val ktorVersion = "1.4.0"
@@ -79,9 +79,10 @@ kotlin {
                 implementation("io.ktor:ktor-server-netty:$ktorVersion")
                 implementation("io.ktor:ktor-server-sessions:$ktorVersion")
                 api("io.ktor:ktor-websockets:$ktorVersion")
-                api("io.ktor:ktor-client-cio:$ktorVersion") // TODO check if we want this one (CIO) or another
                 api("io.ktor:ktor-auth:$ktorVersion")
                 api("io.ktor:ktor-serialization:$ktorVersion")
+                api("io.ktor:ktor-client-serialization:$ktorVersion")
+                api("io.ktor:ktor-client-cio:$ktorVersion") // TODO check if we want this one (CIO) or another
                 api("ch.qos.logback:logback-classic:1.2.3")
                 api("org.jetbrains.exposed:exposed-core:$exposedVersion")
                 api("org.jetbrains.exposed:exposed-dao:$exposedVersion")

@@ -3,8 +3,8 @@
  */
 package zakadabar.stack.data.record
 
-import zakadabar.stack.comm.http.Comm
 import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.frontend.comm.http.Comm
 
 @Suppress("UNCHECKED_CAST")
 interface RecordDto<T> {

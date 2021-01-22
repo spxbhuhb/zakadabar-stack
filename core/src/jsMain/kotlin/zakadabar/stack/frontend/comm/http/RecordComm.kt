@@ -13,15 +13,13 @@ import org.w3c.fetch.RequestInit
 import org.w3c.files.Blob
 import org.w3c.xhr.ProgressEvent
 import org.w3c.xhr.XMLHttpRequest
-import zakadabar.stack.comm.http.BlobCreateState
-import zakadabar.stack.comm.http.Comm
 import zakadabar.stack.data.builtin.BlobDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.frontend.errors.FetchError
 import zakadabar.stack.frontend.errors.ensure
 import zakadabar.stack.frontend.util.encodeURIComponent
-import zakadabar.stack.frontend.util.json
 import zakadabar.stack.util.PublicApi
+import zakadabar.stack.util.json
 
 /**
  * REST communication functions for objects that implement [RecordDto]

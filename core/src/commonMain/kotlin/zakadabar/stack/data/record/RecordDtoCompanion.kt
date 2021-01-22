@@ -4,9 +4,9 @@
 package zakadabar.stack.data.record
 
 import kotlinx.serialization.KSerializer
-import zakadabar.stack.comm.http.Comm
-import zakadabar.stack.comm.http.makeComm
 import zakadabar.stack.data.query.QueryDtoCompanion
+import zakadabar.stack.frontend.comm.http.Comm
+import zakadabar.stack.frontend.comm.http.makeComm
 
 abstract class RecordDtoCompanion<T : RecordDto<T>>() {
 

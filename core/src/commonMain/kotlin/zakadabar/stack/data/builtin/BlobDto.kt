@@ -4,11 +4,11 @@
 package zakadabar.stack.data.builtin
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.comm.http.Comm
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.frontend.comm.http.Comm
 
 @Serializable
 data class BlobDto(
