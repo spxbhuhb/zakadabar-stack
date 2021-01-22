@@ -1,9 +1,13 @@
 # Zakadabar
 
-A full-stack development platform for Kotlin. JVM backend, JavaScript frontend, both programmed exclusively in Kotlin as part of one Kotlin MultiPlatform Project.
+A full-stack development platform for Kotlin. JVM backend, JVM (Android) frontend, JavaScript frontend, all programmed
+exclusively in Kotlin.
 
 As of now we publish the project as **technology preview**. Many things are missing,
 **we might brake this and that with releases**. Interfaces, use patterns might change, it will need some time to mature.
+
+As of now, the Android support is just the communication data model (data classes) and the communication itself. We use
+the same classes form `commonMain` on all platforms. For those, DTO classes communication works out of the box.
 
 ## Keywords
 
@@ -13,7 +17,7 @@ Kotlin(x), Ktor, SQL
 
 `dependencies (all of them)` Kotlin(x), Ktor, HikariCP, Exposed, Clikt, Kaml, LogBack
 
-`development tools` IntelliJ IDEA, Gradle, Firefox
+`development tools` IntelliJ IDEA, Gradle, Firefox, Android Studio
 
 ## Getting Started
 
