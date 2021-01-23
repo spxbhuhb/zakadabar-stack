@@ -6,7 +6,6 @@
 package zakadabar.stack.backend.data.builtin.rolegrant
 
 import io.ktor.routing.*
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
@@ -19,15 +18,11 @@ object RoleGrantBackend : RecordBackend<RoleGrantDto>() {
 
     override val dtoClass = RoleGrantDto::class
 
-    override fun init() {
-        transaction {
-            SchemaUtils.createMissingTablesAndColumns(
-                RoleGrantTable
-            )
-        }
+    override fun onModuleLoad() {
+        + RoleGrantTable
     }
 
-    override fun install(route: Route) {
+    override fun onInstallRoutes(route: Route) {
         route.crud()
     }
 

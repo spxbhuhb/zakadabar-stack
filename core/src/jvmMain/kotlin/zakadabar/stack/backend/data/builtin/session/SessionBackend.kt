@@ -20,7 +20,11 @@ import zakadabar.stack.data.builtin.SessionDto
 
 object SessionBackend : CustomBackend() {
 
-    override fun install(route: Route) {
+    override fun onModuleLoad() {
+        + SessionTable
+    }
+
+    override fun onInstallRoutes(route: Route) {
         with(route) {
             route(SessionDto.recordType) {
 

@@ -16,7 +16,7 @@ object AccountPublicBackend : RecordBackend<AccountPublicDto>() {
 
     override val dtoClass = AccountPublicDto::class
 
-    override fun install(route: Route) {
+    override fun onInstallRoutes(route: Route) {
         route.crud()
     }
 

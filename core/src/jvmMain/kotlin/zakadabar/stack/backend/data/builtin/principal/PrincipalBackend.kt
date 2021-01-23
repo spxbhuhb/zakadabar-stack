@@ -10,7 +10,6 @@ import io.ktor.routing.*
 import kotlinx.datetime.Clock
 import kotlinx.datetime.toJavaInstant
 import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -27,15 +26,11 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
 
     var maxFailCount = 5
 
-    override fun init() {
-        transaction {
-            SchemaUtils.createMissingTablesAndColumns(
-                PrincipalTable
-            )
-        }
+    override fun onModuleLoad() {
+        + PrincipalTable
     }
 
-    override fun install(route: Route) {
+    override fun onInstallRoutes(route: Route) {
         route.crud()
     }
 

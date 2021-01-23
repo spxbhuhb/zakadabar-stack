@@ -76,18 +76,22 @@ class Server : CliktCommand() {
          */
         var logReads: Boolean = true
 
+        private val modules = mutableListOf<BackendModule>()
+
         private val dtoBackends = mutableListOf<RecordBackend<*>>()
 
         private val customBackends = mutableListOf<CustomBackend>()
 
         operator fun plusAssign(dtoBackend: RecordBackend<*>) {
+            this.modules += dtoBackend
             this.dtoBackends += dtoBackend
-            dtoBackend.init()
+            dtoBackend.onModuleLoad()
         }
 
         operator fun plusAssign(customBackend: CustomBackend) {
+            this.modules += customBackend
             this.customBackends += customBackend
-            customBackend.init()
+            customBackend.onModuleLoad()
         }
     }
 
@@ -101,9 +105,15 @@ class Server : CliktCommand() {
 
         val config = loadConfig()
 
-        Sql.init(config.database)
+        Sql.onCreate(config.database) // initializes SQL connection
 
-        loadModules(config)
+        loadModules(config) // load modules
+
+        Sql.onStart() // create missing tables and columns
+
+        startModules() // start the modules
+
+        // start the server
 
         val server = embeddedServer(Netty, port = config.ktor.port) {
 
@@ -167,11 +177,11 @@ class Server : CliktCommand() {
 
                         // api installs add routes and the code to serve them
                         dtoBackends.forEach {
-                            it.install(this)
+                            it.onInstallRoutes(this)
                         }
 
                         customBackends.forEach {
-                            it.install(this)
+                            it.onInstallRoutes(this)
                         }
 
                     }
@@ -216,17 +226,26 @@ class Server : CliktCommand() {
 
     private fun loadModules(config: Configuration) {
 
-        val modules = mutableListOf<BackendModule>()
-
         config.modules.forEach {
 
             val installable = Server::class.java.classLoader.loadClass(it).kotlin
 
-            require(installable.isSubclassOf(BackendModule::class)) { "module $it is not loadable (maybe the name is wrong)" }
+            require(installable.isSubclassOf(BackendModule::class)) { "module $it is not instance of BackendModule (maybe the name is wrong)" }
 
             try {
 
-                modules += (installable.objectInstance as BackendModule)
+                val module = (installable.objectInstance as BackendModule)
+                modules += module
+
+                when (module) {
+                    is RecordBackend<*> -> dtoBackends += module
+                    is CustomBackend -> customBackends += module
+                    else -> {
+                        modules += module
+                        module.onModuleLoad()
+                    }
+                }
+
                 moduleLogger.info("loaded module $it")
 
             } catch (ex: Throwable) {
@@ -235,16 +254,17 @@ class Server : CliktCommand() {
             }
 
         }
+    }
 
-        // backend installs create sql tables and whatever else they need
-
+    private fun startModules() {
         modules.forEach {
-            when (it) {
-                is RecordBackend<*> -> dtoBackends += it
-                is CustomBackend -> customBackends += it
-                else -> it.init()
+            try {
+                it.onModuleStart()
+                moduleLogger.info("started module $it")
+            } catch (ex: Throwable) {
+                moduleLogger.error("failed to start module $it")
+                throw ex
             }
-            moduleLogger.info("initialized module $it")
         }
     }
 

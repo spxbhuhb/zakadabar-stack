@@ -8,10 +8,9 @@ import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.DatabaseConfig
-import zakadabar.stack.backend.data.builtin.session.SessionTable
 
 /**
  * Use this everywhere BUT when handling blob content.
@@ -22,7 +21,9 @@ object Sql {
 
     lateinit var dataSource: HikariDataSource
 
-    fun init(config: DatabaseConfig) {
+    val tables = mutableListOf<Table>()
+
+    fun onCreate(config: DatabaseConfig) {
         val hikariConfig = HikariConfig()
 
         hikariConfig.driverClassName = config.driverClassName
@@ -37,11 +38,9 @@ object Sql {
         dataSource = HikariDataSource(hikariConfig)
 
         Database.connect(dataSource)
+    }
 
-        transaction {
-            SchemaUtils.createMissingTablesAndColumns(
-                SessionTable
-            )
-        }
+    fun onStart() {
+
     }
 }

@@ -3,36 +3,14 @@
  */
 package zakadabar.stack.backend.custom
 
-import io.ktor.routing.*
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.BackendModule
 
 /**
- * Base class for custom backends. Supports CRUD, queries and BLOBs.
+ * Base class for custom backends.
  */
 abstract class CustomBackend : BackendModule {
 
     protected val logger = LoggerFactory.getLogger(this::class.simpleName) !!
-
-    /**
-     * Install route handlers.
-     *
-     * @param  route  Ktor Route context for installing routes
-     */
-    open fun install(route: Route) = Unit
-
-    /**
-     * An initialization function that is called during system startup to
-     * initialize this module.
-     *
-     * When called all modules are loaded and the DB is accessible.
-     */
-    override fun init() = Unit
-
-    /**
-     * A cleanup function that is called during system shutdown to clean up
-     * this module. DB is still accessible at this point.
-     */
-    override fun cleanup() = Unit
 
 }

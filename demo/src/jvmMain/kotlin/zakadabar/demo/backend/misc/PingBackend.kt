@@ -10,7 +10,7 @@ import zakadabar.stack.backend.custom.CustomBackend
 
 object PingBackend : CustomBackend() {
 
-    override fun install(route: Route) {
+    override fun onInstallRoutes(route: Route) {
         with(route) {
             get("ping") {
                 call.respond("pong")

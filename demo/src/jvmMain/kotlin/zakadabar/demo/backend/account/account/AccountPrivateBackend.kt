@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.demo.backend.account.account.AccountPrivateBackend.init
+import zakadabar.demo.backend.account.account.AccountPrivateBackend.onModuleLoad
 import zakadabar.demo.data.AccountPrivateDto
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
@@ -22,7 +22,7 @@ import zakadabar.stack.util.Executor
  * needs.
  *
  * Be careful with this one, it is intertwined with sessions and principals. See
- * comments in [init].
+ * comments in [onModuleLoad].
  *
  * This class stores all the information that belongs to the account and it is private:
  * only the owner of the account and the administrators may access it.
@@ -37,7 +37,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
 
     override val dtoClass = AccountPrivateDto::class
 
-    override fun init() {
+    override fun onModuleLoad() {
 
         // create the tables we need, actually this backend needs [PrincipalTable] also
         // but that should be created by the principal backend
@@ -73,7 +73,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
         }
     }
 
-    override fun install(route: Route) {
+    override fun onInstallRoutes(route: Route) {
         route.crud()
     }
 
@@ -124,7 +124,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
 
 
     /**
-     * Get the anonymous account or create one if not exists. Called by [init],
+     * Get the anonymous account or create one if not exists. Called by [onModuleLoad],
      * creates principal and account for anonymous if none exists.
      */
     private fun anonymous() = transaction {

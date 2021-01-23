@@ -9,7 +9,7 @@ import zakadabar.stack.backend.custom.CustomBackend
 
 object WebsocketBackend : CustomBackend() {
 
-    override fun install(route: Route) {
+    override fun onInstallRoutes(route: Route) {
         with(route) {
             webSocket("ws") { // available at /api/ws
                 println("connection to ws")

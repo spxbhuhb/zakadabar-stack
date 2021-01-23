@@ -19,7 +19,7 @@ import zakadabar.stack.util.PublicApi
 
 @PublicApi
 object Module : BackendModule {
-    override fun init() {
+    override fun onModuleLoad() {
 
         // these three are defined in the core project, you could write your own
         // but in most cases there are fine

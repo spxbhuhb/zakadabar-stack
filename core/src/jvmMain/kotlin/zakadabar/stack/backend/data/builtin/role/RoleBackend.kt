@@ -6,7 +6,6 @@
 package zakadabar.stack.backend.data.builtin.role
 
 import io.ktor.routing.*
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.data.record.RecordBackend
@@ -17,15 +16,11 @@ object RoleBackend : RecordBackend<RoleDto>() {
 
     override val dtoClass = RoleDto::class
 
-    override fun init() {
-        transaction {
-            SchemaUtils.createMissingTablesAndColumns(
-                RoleTable
-            )
-        }
+    override fun onModuleLoad() {
+        + RoleTable
     }
 
-    override fun install(route: Route) {
+    override fun onInstallRoutes(route: Route) {
         route.crud()
     }
 

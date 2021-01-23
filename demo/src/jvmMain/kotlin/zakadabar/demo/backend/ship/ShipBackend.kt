@@ -22,7 +22,7 @@ object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTa
 
     override val dtoClass = ShipDto::class
 
-    override fun init() {
+    override fun onModuleLoad() {
         transaction {
             SchemaUtils.createMissingTablesAndColumns(
                 ShipTable,
@@ -31,7 +31,7 @@ object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTa
         }
     }
 
-    override fun install(route: Route) {
+    override fun onInstallRoutes(route: Route) {
         route.crud()
         route.blob()
         route.query(ShipsByName::class, ShipBackend::query)

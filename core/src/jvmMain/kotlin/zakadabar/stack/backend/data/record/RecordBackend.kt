@@ -228,27 +228,6 @@ abstract class RecordBackend<T : RecordDto<T>>(
     }
 
     /**
-     * Install route handlers.
-     *
-     * @param  route  Ktor Route context for installing routes
-     */
-    open fun install(route: Route) = Unit
-
-    /**
-     * An initialization function that is called during system startup to
-     * initialize this module.
-     *
-     * When called all modules are loaded and the DB is accessible.
-     */
-    override fun init() = Unit
-
-    /**
-     * A cleanup function that is called during system shutdown to clean up
-     * this module. DB is still accessible at this point.
-     */
-    override fun cleanup() = Unit
-
-    /**
      * Adds CRUD routes for this record backend. Check crud functions for URLs.
      */
     fun Route.crud() {

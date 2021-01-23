@@ -17,7 +17,7 @@ object SpeedBackend : RecordBackend<SpeedDto>() {
 
     override val dtoClass = SpeedDto::class
 
-    override fun init() {
+    override fun onModuleLoad() {
         transaction {
             SchemaUtils.createMissingTablesAndColumns(
                 SpeedTable
@@ -25,7 +25,7 @@ object SpeedBackend : RecordBackend<SpeedDto>() {
         }
     }
 
-    override fun install(route: Route) {
+    override fun onInstallRoutes(route: Route) {
         route.crud()
     }
 

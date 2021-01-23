@@ -5,9 +5,14 @@ package zakadabar.stack.backend.data.builtin
 
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
+import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.data.builtin.BlobDto
 
-open class BlobTable(name: String, recordTable: LongIdTable) : LongIdTable(name) {
+/**
+ * Base table for storing binary data (images, files). [RecordBackend] support
+ * for BLOB operations requires a table that extends this one.
+ */
+abstract class BlobTable(name: String, recordTable: LongIdTable) : LongIdTable(name) {
 
     val dataRecord = reference("data_record", recordTable).nullable()
     val name = varchar("name", 100)
