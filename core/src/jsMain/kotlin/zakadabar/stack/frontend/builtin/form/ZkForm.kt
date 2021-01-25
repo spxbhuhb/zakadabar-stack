@@ -73,11 +73,30 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
     fun fieldGridSection(title: String, summary: String = "", builder: ZkElement.() -> Unit) =
         section(title, summary, true, builder)
 
-    fun select(kProperty0: KMutableProperty0<RecordId<*>>, sortOptions: Boolean = true, options: suspend () -> List<Pair<RecordId<*>, String>>): ValidatedRecordSelect<T> {
+    fun select(
+        kProperty0: KMutableProperty0<RecordId<*>>,
+        sortOptions: Boolean = true,
+        options: suspend () -> List<Pair<RecordId<*>, String>>
+    ): ValidatedRecordSelect<T> {
+
         val field = ValidatedRecordSelect(this@ZkForm, kProperty0, sortOptions, options)
         label(kProperty0)
         fields += field
         return field
+
+    }
+
+    fun select(
+        kProperty0: KMutableProperty0<RecordId<*>?>,
+        sortOptions: Boolean = true,
+        options: suspend () -> List<Pair<RecordId<*>, String>>
+    ): ValidatedOptRecordSelect<T> {
+
+        val field = ValidatedOptRecordSelect(this@ZkForm, kProperty0, sortOptions, options)
+        label(kProperty0)
+        fields += field
+        return field
+
     }
 
     fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkElement.() -> Unit = { }): ValidatedTextArea<T> {

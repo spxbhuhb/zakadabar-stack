@@ -22,9 +22,9 @@ import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-class ValidatedRecordSelect<T : RecordDto<T>>(
+class ValidatedOptRecordSelect<T : RecordDto<T>>(
     form: ZkForm<T>,
-    private val prop: KMutableProperty0<RecordId<*>>,
+    private val prop: KMutableProperty0<RecordId<*>?>,
     sortOptions: Boolean = true,
     options: suspend () -> List<Pair<RecordId<*>, String>>
 ) : ValidatedRecordSelectBase<T>(form, sortOptions, options) {
@@ -34,7 +34,7 @@ class ValidatedRecordSelect<T : RecordDto<T>>(
     override fun setPropValue() {
         val value = (element as HTMLSelectElement).value.toLongOrNull()
         if (value == null) {
-            prop.set(0L)
+            prop.set(null)
         } else {
             prop.set(value)
         }

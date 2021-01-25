@@ -30,6 +30,8 @@ open class StringsImpl(
     val updateFail by "Update failed."
     val deleteFail by "Delete failed."
 
+    val notSelected by "not selected"
+
     val id by "Id"
     val name by "Name"
     val actions by "Actions"

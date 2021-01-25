@@ -37,10 +37,17 @@ TopicDto(
     relations = (it[RelationTable.relation] as String?) ?: ""
 )
 ```
- 
+
 ### Cannot Import Exposed "eq"
 
 No idea why this happens, Just add the import manually:
 
 ```import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq```
 
+### NPM + Yarn lock - whatever wherever ...
+
+Gradle Clean IntelliJ Gradle refresh
+
+### kotlinx.serializer stuff cannot be imported after Gradle clean
+
+Run a Gradle refresh from IntelliJ.
