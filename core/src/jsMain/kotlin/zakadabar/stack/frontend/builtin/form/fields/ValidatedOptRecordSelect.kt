@@ -33,7 +33,7 @@ class ValidatedOptRecordSelect<T : RecordDto<T>>(
 
     override fun setPropValue() {
         val value = (element as HTMLSelectElement).value.toLongOrNull()
-        if (value == null) {
+        if (value == null || value == 0L) {
             prop.set(null)
         } else {
             prop.set(value)

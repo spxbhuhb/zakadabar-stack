@@ -8,6 +8,7 @@ import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.DatabaseConfig
@@ -41,6 +42,8 @@ object Sql {
     }
 
     fun onStart() {
-
+        transaction {
+            SchemaUtils.createMissingTablesAndColumns(*tables.toTypedArray())
+        }
     }
 }

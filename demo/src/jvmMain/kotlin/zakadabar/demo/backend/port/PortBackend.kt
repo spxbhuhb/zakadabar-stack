@@ -3,21 +3,22 @@
  */
 @file:Suppress("UNUSED_PARAMETER", "unused")
 
-package zakadabar.demo.backend.speed
+package zakadabar.demo.backend.port
 
 import io.ktor.routing.*
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.demo.data.SpeedDto
+import zakadabar.demo.backend.sea.SeaDao
+import zakadabar.demo.data.PortDto
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.util.Executor
 
-object SpeedBackend : RecordBackend<SpeedDto>() {
+object PortBackend : RecordBackend<PortDto>() {
 
-    override val dtoClass = SpeedDto::class
+    override val dtoClass = PortDto::class
 
     override fun onModuleLoad() {
-        + SpeedTable
+        + PortTable
     }
 
     override fun onInstallRoutes(route: Route) {
@@ -25,30 +26,31 @@ object SpeedBackend : RecordBackend<SpeedDto>() {
     }
 
     override fun all(executor: Executor) = transaction {
-        SpeedTable
+        PortTable
             .selectAll()
-            .map(SpeedTable::toDto)
+            .map(PortTable::toDto)
     }
 
-    override fun create(executor: Executor, dto: SpeedDto) = transaction {
-        SpeedDao.new {
-            description = dto.description
-            value = dto.value
+    override fun create(executor: Executor, dto: PortDto) = transaction {
+        PortDao.new {
+            name = dto.name
+            sea = SeaDao[dto.sea]
         }.toDto()
     }
 
     override fun read(executor: Executor, recordId: Long) = transaction {
-        SpeedDao[recordId].toDto()
+        PortDao[recordId].toDto()
     }
 
-    override fun update(executor: Executor, dto: SpeedDto) = transaction {
-        val dao = SpeedDao[dto.id]
-        dao.description = dto.description
-        dao.value = dto.value
-        dao.toDto()
+    override fun update(executor: Executor, dto: PortDto) = transaction {
+        with(PortDao[dto.id]) {
+            name = dto.name
+            sea = SeaDao[dto.sea]
+            toDto()
+        }
     }
 
     override fun delete(executor: Executor, recordId: Long) {
-        SpeedDao[recordId].delete()
+        PortDao[recordId].delete()
     }
 }

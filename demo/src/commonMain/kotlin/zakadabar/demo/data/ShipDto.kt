@@ -17,7 +17,8 @@ data class ShipDto(
     var speed: RecordId<SpeedDto>,
     var captain: RecordId<AccountPrivateDto>,
     var description: String,
-    var hasFlag: Boolean
+    var hasPirateFlag: Boolean,
+    var port: RecordId<PortDto>?
 
 ) : RecordDto<ShipDto> {
 
@@ -36,7 +37,8 @@ data class ShipDto(
         + ::speed
         + ::captain
         + ::description max 2000
-        + ::hasFlag default false
+        + ::hasPirateFlag default false
+        + ::port
     }
 
 }

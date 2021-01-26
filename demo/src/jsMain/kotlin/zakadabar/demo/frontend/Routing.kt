@@ -7,8 +7,8 @@ package zakadabar.demo.frontend
 import zakadabar.demo.frontend.pages.account.Accounts
 import zakadabar.demo.frontend.pages.misc.Home
 import zakadabar.demo.frontend.pages.misc.Login
-import zakadabar.demo.frontend.pages.port.Singapore
-import zakadabar.demo.frontend.pages.port.Tortuga
+import zakadabar.demo.frontend.pages.port.Ports
+import zakadabar.demo.frontend.pages.sea.Seas
 import zakadabar.demo.frontend.pages.ship.ShipSearch
 import zakadabar.demo.frontend.pages.ship.Ships
 import zakadabar.demo.frontend.pages.speed.Speeds
@@ -42,9 +42,8 @@ object Routing : AppRouting(DefaultLayout, Home) {
         + Ships
         + ShipSearch
         + Speeds
-        + Singapore
-        + Tortuga
-
+        + Seas
+        + Ports
         + Login
         + Accounts
     }

@@ -6,6 +6,7 @@ package zakadabar.demo.backend.ship
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
 import zakadabar.demo.backend.account.account.AccountPrivateTable
+import zakadabar.demo.backend.port.PortTable
 import zakadabar.demo.backend.speed.SpeedTable
 import zakadabar.demo.data.ShipDto
 
@@ -15,7 +16,8 @@ object ShipTable : LongIdTable("ships") {
     val speed = reference("speed", SpeedTable)
     val captain = reference("captain", AccountPrivateTable)
     val description = varchar("description", 2000)
-    val hasFlag = bool("has_flag").clientDefault { false }
+    val hasPirateFlag = bool("has_flag").clientDefault { false }
+    val port = reference("port", PortTable).nullable()
 
     fun toDto(row: ResultRow) = ShipDto(
         id = row[id].value,
@@ -23,7 +25,8 @@ object ShipTable : LongIdTable("ships") {
         speed = row[speed].value,
         captain = row[captain].value,
         description = row[description],
-        hasFlag = row[hasFlag]
+        hasPirateFlag = row[hasPirateFlag],
+        port = row[port]?.value
     )
 
 }

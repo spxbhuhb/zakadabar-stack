@@ -3,21 +3,21 @@
  */
 @file:Suppress("UNUSED_PARAMETER", "unused")
 
-package zakadabar.demo.backend.speed
+package zakadabar.demo.backend.sea
 
 import io.ktor.routing.*
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.demo.data.SpeedDto
+import zakadabar.demo.data.SeaDto
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.util.Executor
 
-object SpeedBackend : RecordBackend<SpeedDto>() {
+object SeaBackend : RecordBackend<SeaDto>() {
 
-    override val dtoClass = SpeedDto::class
+    override val dtoClass = SeaDto::class
 
     override fun onModuleLoad() {
-        + SpeedTable
+        + SeaTable
     }
 
     override fun onInstallRoutes(route: Route) {
@@ -25,30 +25,28 @@ object SpeedBackend : RecordBackend<SpeedDto>() {
     }
 
     override fun all(executor: Executor) = transaction {
-        SpeedTable
+        SeaTable
             .selectAll()
-            .map(SpeedTable::toDto)
+            .map(SeaTable::toDto)
     }
 
-    override fun create(executor: Executor, dto: SpeedDto) = transaction {
-        SpeedDao.new {
-            description = dto.description
-            value = dto.value
+    override fun create(executor: Executor, dto: SeaDto) = transaction {
+        SeaDao.new {
+            name = dto.name
         }.toDto()
     }
 
     override fun read(executor: Executor, recordId: Long) = transaction {
-        SpeedDao[recordId].toDto()
+        SeaDao[recordId].toDto()
     }
 
-    override fun update(executor: Executor, dto: SpeedDto) = transaction {
-        val dao = SpeedDao[dto.id]
-        dao.description = dto.description
-        dao.value = dto.value
+    override fun update(executor: Executor, dto: SeaDto) = transaction {
+        val dao = SeaDao[dto.id]
+        dao.name = dto.name
         dao.toDto()
     }
 
     override fun delete(executor: Executor, recordId: Long) {
-        SpeedDao[recordId].delete()
+        SeaDao[recordId].delete()
     }
 }

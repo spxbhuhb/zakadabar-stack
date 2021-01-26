@@ -9,12 +9,10 @@ import kotlinx.coroutines.launch
 /**
  * A general wrapper around launched suspend functions to avoid the repetition.
  */
-fun launch(func: suspend () -> Unit) {
-    GlobalScope.launch {
-        try {
-            func()
-        } catch (ex: Throwable) {
-            log(ex)
-        }
+fun launch(func: suspend () -> Unit) = GlobalScope.launch {
+    try {
+        func()
+    } catch (ex: Throwable) {
+        log(ex)
     }
 }

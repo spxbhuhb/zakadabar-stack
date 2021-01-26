@@ -6,11 +6,11 @@
 package zakadabar.demo.backend.ship
 
 import io.ktor.routing.*
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.demo.backend.account.account.AccountPrivateDao
+import zakadabar.demo.backend.port.PortDao
 import zakadabar.demo.backend.speed.SpeedDao
 import zakadabar.demo.data.ShipDto
 import zakadabar.demo.data.ShipSpeeds
@@ -23,12 +23,8 @@ object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTa
     override val dtoClass = ShipDto::class
 
     override fun onModuleLoad() {
-        transaction {
-            SchemaUtils.createMissingTablesAndColumns(
-                ShipTable,
-                ShipImageTable
-            )
-        }
+        + ShipTable
+        + ShipImageTable
     }
 
     override fun onInstallRoutes(route: Route) {
@@ -69,7 +65,8 @@ object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTa
         speed = SpeedDao[dto.speed]
         captain = AccountPrivateDao[dto.captain]
         description = dto.description
-        hasFlag = dto.hasFlag
+        hasFlag = dto.hasPirateFlag
+        port = dto.port?.let { PortDao[it] }
         return this
     }
 

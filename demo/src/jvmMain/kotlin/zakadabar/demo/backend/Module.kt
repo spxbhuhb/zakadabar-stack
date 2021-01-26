@@ -7,6 +7,8 @@ import zakadabar.demo.backend.account.account.AccountPrivateBackend
 import zakadabar.demo.backend.account.account.AccountPublicBackend
 import zakadabar.demo.backend.misc.PingBackend
 import zakadabar.demo.backend.misc.WebsocketBackend
+import zakadabar.demo.backend.port.PortBackend
+import zakadabar.demo.backend.sea.SeaBackend
 import zakadabar.demo.backend.ship.ShipBackend
 import zakadabar.demo.backend.speed.SpeedBackend
 import zakadabar.stack.backend.BackendModule
@@ -38,6 +40,8 @@ object Module : BackendModule {
 
         Server += ShipBackend
         Server += SpeedBackend
+        Server += PortBackend
+        Server += SeaBackend
 
         Server += PingBackend
         Server += WebsocketBackend
