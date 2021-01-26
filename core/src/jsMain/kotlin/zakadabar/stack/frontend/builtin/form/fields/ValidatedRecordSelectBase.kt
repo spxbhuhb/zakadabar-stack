@@ -47,24 +47,7 @@ abstract class ValidatedRecordSelectBase<T : RecordDto<T>>(
 
         launch {
             val items = if (sortOptions) options().sortedBy { it.second } else options()
-
-            val value = getPropValue()
-
-            var s = if (value == null || value == 0L) {
-                """<option value="0" selected>${CoreStrings.notSelected}</option>"""
-            } else {
-                """<option value="0">${CoreStrings.notSelected}</option>"""
-            }
-
-            items.forEach {
-                s += if (it.first == value) {
-                    """<option value="${it.first}" selected>${escape(it.second)}</option>"""
-                } else {
-                    """<option value="${it.first}">${escape(it.second)}</option>"""
-                }
-            }
-
-            element.innerHTML = s
+            render(items)
         }
 
         on("input") { _ ->
@@ -84,5 +67,24 @@ abstract class ValidatedRecordSelectBase<T : RecordDto<T>>(
             isValid = false
             element.style.backgroundColor = "red"
         }
+    }
+
+    fun render(items: List<Pair<RecordId<*>, String>>) {
+        val value = getPropValue()
+
+        var s = if (value == null || value == 0L) {
+            """<option value="0" selected>${CoreStrings.notSelected}</option>"""
+        } else {
+            """<option value="0">${CoreStrings.notSelected}</option>"""
+        }
+
+        items.forEach {
+            s += if (it.first == value) {
+                """<option value="${it.first}" selected>${escape(it.second)}</option>"""
+            } else {
+                """<option value="${it.first}">${escape(it.second)}</option>"""
+            }
+        }
+        element.innerHTML = s
     }
 }

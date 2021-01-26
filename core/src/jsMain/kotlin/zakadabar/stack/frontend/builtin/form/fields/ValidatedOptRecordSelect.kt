@@ -24,7 +24,7 @@ import kotlin.reflect.KMutableProperty0
 
 class ValidatedOptRecordSelect<T : RecordDto<T>>(
     form: ZkForm<T>,
-    private val prop: KMutableProperty0<RecordId<*>?>,
+    val prop: KMutableProperty0<RecordId<*>?>,
     sortOptions: Boolean = true,
     options: suspend () -> List<Pair<RecordId<*>, String>>
 ) : ValidatedRecordSelectBase<T>(form, sortOptions, options) {
