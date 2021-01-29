@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.1.26-SNAPSHOT"
+version = "2021.2.1-SNAPSHOT"
 
 // common
 val ktorVersion = "1.4.0"
@@ -132,53 +132,59 @@ tasks.withType<Jar> {
 //    }
 //}
 
-signing {
-    useGpgCmd()
-    sign(publishing.publications)
-}
+// add sign and publish only if the user is a zakadabar publisher
 
-publishing {
+if (properties["zakadabar.publisher"] != null) {
 
-    val path = "spxbhuhb/zakadabar-stack"
-
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/$path")
-            credentials {
-                username = (properties["github.user"] ?: System.getenv("USERNAME")).toString()
-                password = (properties["github.key"] ?: System.getenv("TOKEN")).toString()
-            }
-        }
+    signing {
+        useGpgCmd()
+        sign(publishing.publications)
     }
 
-    publications.withType<MavenPublication>().all {
+    publishing {
 
-        pom {
-            description.set("Kotlin/Ktor based web server and client")
-            name.set("Zakadabar")
-            url.set("https://github.com/$path")
-            scm {
+        val path = "spxbhuhb/zakadabar-stack"
+
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/$path")
+                credentials {
+                    username = (properties["github.user"] ?: System.getenv("USERNAME")).toString()
+                    password = (properties["github.key"] ?: System.getenv("TOKEN")).toString()
+                }
+            }
+        }
+
+        publications.withType<MavenPublication>().all {
+
+            pom {
+                description.set("Kotlin/Ktor based web server and client")
+                name.set("Zakadabar")
                 url.set("https://github.com/$path")
-                connection.set("scm:git:git://github.com/$path.git")
-                developerConnection.set("scm:git:ssh://git@github.com/$path.git")
-            }
-            licenses {
-                license {
-                    name.set("Apache 2.0")
-                    url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-                    distribution.set("repo")
+                scm {
+                    url.set("https://github.com/$path")
+                    connection.set("scm:git:git://github.com/$path.git")
+                    developerConnection.set("scm:git:ssh://git@github.com/$path.git")
                 }
-            }
-            developers {
-                developer {
-                    id.set("toth-istvan-zoltan")
-                    name.set("Tóth István Zoltán")
-                    url.set("https://github.com/toth-istvan-zoltan")
-                    organization.set("Simplexion Kft.")
-                    organizationUrl.set("https://www.simplexion.hu")
+                licenses {
+                    license {
+                        name.set("Apache 2.0")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                        distribution.set("repo")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("toth-istvan-zoltan")
+                        name.set("Tóth István Zoltán")
+                        url.set("https://github.com/toth-istvan-zoltan")
+                        organization.set("Simplexion Kft.")
+                        organizationUrl.set("https://www.simplexion.hu")
+                    }
                 }
             }
         }
     }
+
 }
