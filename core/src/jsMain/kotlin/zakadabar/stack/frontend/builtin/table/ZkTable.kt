@@ -109,6 +109,12 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
         return column
     }
 
+    operator fun KProperty1<T, String?>.unaryPlus(): ZkOptStringColumn<T> {
+        val column = ZkOptStringColumn(this@ZkTable, this)
+        columns += column
+        return column
+    }
+
     operator fun KProperty1<T, Double>.unaryPlus(): ZkDoubleColumn<T> {
         val column = ZkDoubleColumn(this@ZkTable, this)
         columns += column

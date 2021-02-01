@@ -5,6 +5,7 @@
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
+    id("org.jetbrains.kotlin.plugin.noarg")
     id("org.jetbrains.dokka")
     signing
     `maven-publish`
@@ -109,6 +110,9 @@ tasks.named("compileKotlinJs") {
     kotlinOptions.moduleKind = "umd"
 }
 
+noArg {
+    annotation("kotlinx.serialization.Serializable")
+}
 
 tasks.withType<Jar> {
     manifest {

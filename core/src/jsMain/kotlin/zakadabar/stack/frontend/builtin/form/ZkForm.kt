@@ -99,6 +99,32 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
 
     }
 
+    fun select(
+        kProperty0: KMutableProperty0<String>,
+        options: List<String>,
+        sortOptions: Boolean = true
+    ): ValidatedSelect<T> {
+
+        val field = ValidatedSelect(this@ZkForm, kProperty0, sortOptions, options)
+        label(kProperty0)
+        fields += field
+        return field
+
+    }
+
+    fun select(
+        kProperty0: KMutableProperty0<String?>,
+        options: List<String>,
+        sortOptions: Boolean = true
+    ): ValidatedOptSelect<T> {
+
+        val field = ValidatedOptSelect(this@ZkForm, kProperty0, sortOptions, options)
+        label(kProperty0)
+        fields += field
+        return field
+
+    }
+
     fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkElement.() -> Unit = { }): ValidatedTextArea<T> {
         val field = ValidatedTextArea(this@ZkForm, kProperty0)
         fields += field

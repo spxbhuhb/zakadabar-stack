@@ -76,7 +76,7 @@ open class RecordComm<T : RecordDto<T>>(
     override suspend fun update(dto: T): T {
         require(dto.id != 0L) { "ID of the $dto is 0 " }
 
-        val text = client.patch<String>("$baseUrl/api/$recordType/${dto.id}") {
+        val text = client.patch<String>("$baseUrl/api/$recordType") {
             header("Content-Type", "application/json")
             body = Json.encodeToString(serializer, dto)
         }

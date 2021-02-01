@@ -7,8 +7,7 @@ import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 
 /**
- * Creates an instance of the given DTO with the default set in the
- * schema.
+ * Creates an instance of the given DTO with defaults from the schema.
  *
  * @return an instance of T with the default values set
  */
@@ -16,5 +15,19 @@ import zakadabar.stack.data.record.RecordDtoCompanion
 inline fun <reified T : RecordDto<T>> RecordDtoCompanion<T>.default(): T {
     val instance = T::class.java.newInstance()
     instance.schema().setDefaults()
+    return instance
+}
+
+/**
+ * Creates an instance of the given DTO with defaults from the schema.
+ * Then runs the builder function so the defaults may be customized.
+ *
+ * @return an instance of T with the default values set
+ */
+@Suppress("unused") // we do want to use this on the companion
+inline fun <reified T : RecordDto<T>> RecordDtoCompanion<T>.default(builder: T.() -> Unit): T {
+    val instance = T::class.java.newInstance()
+    instance.schema().setDefaults()
+    instance.builder()
     return instance
 }
