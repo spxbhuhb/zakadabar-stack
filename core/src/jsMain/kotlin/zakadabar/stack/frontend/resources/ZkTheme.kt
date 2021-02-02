@@ -5,6 +5,7 @@
 package zakadabar.stack.frontend.resources
 
 import zakadabar.stack.frontend.builtin.button.ZkButtonTheme
+import zakadabar.stack.frontend.builtin.icon.ZkIconTheme
 import zakadabar.stack.frontend.builtin.menu.ZkMenuTheme
 import zakadabar.stack.frontend.builtin.table.ZkTableTheme
 
@@ -62,6 +63,11 @@ open class ZkTheme {
 
     val errorBackground = "#c41c00"
     val errorText = white
+
+    open var icon = ZkIconTheme(
+        background = "transparent",
+        foreground = white
+    )
 
     open var button = ZkButtonTheme(
         background = activeBlue,

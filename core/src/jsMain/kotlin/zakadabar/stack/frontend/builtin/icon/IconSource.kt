@@ -21,13 +21,13 @@ class IconSource(val content: String) {
 
 
     val simple18
-        get() = SimpleIcon(svg18.value)
+        get() = ZkIcon(svg18.value)
 
-    fun complex16(onClick: (() -> Unit)? = null) = ComplexIcon(svg16.value, onClick)
+    fun complex16(onClick: (() -> Unit)? = null) = ZkIcon(svg16.value, onClick)
 
-    fun complex20(onClick: (() -> Unit)? = null) = ComplexIcon(svg20.value, onClick)
+    fun complex20(onClick: (() -> Unit)? = null) = ZkIcon(svg20.value, onClick)
 
     fun simple(viewBox: Int) =
-        SimpleIcon("""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $viewBox $viewBox">$content</svg>""")
+        ZkIcon("""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $viewBox $viewBox">$content</svg>""")
 
 }

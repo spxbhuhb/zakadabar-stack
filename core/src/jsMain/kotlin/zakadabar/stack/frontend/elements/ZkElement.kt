@@ -331,6 +331,14 @@ open class ZkElement(
         return childElements.first { kClass.isInstance(it) } as T
     }
 
+    /**
+     * Get the first [ZkElement] by the given CSS class.
+     * ```
+     */
+    inline operator fun <reified T : ZkElement> get(cssClassName: String): T {
+        return childElements.first { it.classList.contains(cssClassName) } as T
+    }
+
     // ---- Event listeners ----
 
     fun on(type: String, listener: (() -> Unit)?) = on(element, type, listener)

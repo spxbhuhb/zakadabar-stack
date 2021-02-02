@@ -27,7 +27,9 @@ object ZkMenuStyles : CssStyleSheet<ZkMenuStyles>(Application.theme) {
     }
 
     val item by cssClass {
+        boxSizing = "border-box"
         cursor = "pointer"
+        height = 40
         padding = 10
         on(":hover") {
             backgroundColor = theme.menu.hoverBackground
@@ -37,8 +39,17 @@ object ZkMenuStyles : CssStyleSheet<ZkMenuStyles>(Application.theme) {
     }
 
     val groupTitle by cssClass {
+        boxSizing = "border-box"
+        display = "flex"
+        flexDirection = "row"
+        justifyContent = "space-between"
+        alignItems = "center"
         cursor = "pointer"
-        padding = 10
+        height = 40
+        paddingLeft = 10
+        paddingTop = 8
+        paddingBottom = 8
+        paddingRight = 8
         on(":hover") {
             backgroundColor = theme.menu.hoverBackground
             color = theme.menu.hoverText
