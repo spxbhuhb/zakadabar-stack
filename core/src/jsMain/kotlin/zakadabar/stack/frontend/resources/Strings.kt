@@ -6,7 +6,7 @@ package zakadabar.stack.frontend.resources
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-val CoreStrings = StringsImpl()
+var CoreStrings = StringsImpl()
 
 class StringsDelegate : ReadOnlyProperty<StringsImpl, String> {
     override fun getValue(thisRef: StringsImpl, property: KProperty<*>): String {
@@ -22,24 +22,24 @@ open class StringsImpl(
         return StringsDelegate()
     }
 
-    val invalidFields by "Some fields contain invalid values: "
-    val createSuccess by "Create success."
-    val updateSuccess by "Update success."
-    val deleteSuccess by "Delete success."
-    val createFail by "Create failed."
-    val updateFail by "Update failed."
-    val deleteFail by "Delete failed."
+    open val invalidFields by "Some fields contain invalid values: "
+    open val createSuccess by "Create success."
+    open val updateSuccess by "Update success."
+    open val deleteSuccess by "Delete success."
+    open val createFail by "Create failed."
+    open val updateFail by "Update failed."
+    open val deleteFail by "Delete failed."
 
-    val notSelected by "not selected"
+    open val notSelected by "not selected"
 
-    val id by "Id"
-    val name by "Name"
-    val actions by "Actions"
+    open val id by "Id"
+    open val name by "Name"
+    open val actions by "Actions"
 
-    val back by "Back"
-    val edit by "Edit"
-    val save by "Save"
-    val delete by "Delete"
+    open val back by "Back"
+    open val edit by "Edit"
+    open val save by "Save"
+    open val delete by "Delete"
 
 }
 

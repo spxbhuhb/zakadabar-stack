@@ -84,7 +84,8 @@ class FormClasses(theme: ZkTheme) : CssStyleSheet<FormClasses>(theme) {
         mozAppearance = "none"
         webkitAppearance = "none"
         appearance = "none"
-        backgroundColor = "#fff"
+        color = "#333"
+        backgroundColor = "#eee"
     }
 
     val text by cssClass {
@@ -124,8 +125,8 @@ class FormClasses(theme: ZkTheme) : CssStyleSheet<FormClasses>(theme) {
         }
 
         on(":disabled") {
-            color = "gray"
-            backgroundColor = "#gray"
+            color = "#333"
+            backgroundColor = "#eee"
             borderColor = "#aaa"
         }
 

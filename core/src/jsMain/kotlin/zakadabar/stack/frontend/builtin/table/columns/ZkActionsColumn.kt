@@ -12,6 +12,7 @@ import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.elements.ZkCrud
 import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.resources.CoreStrings
 import kotlin.reflect.KProperty1
 
 open class ZkActionsColumn<T : RecordDto<T>>(
@@ -25,7 +26,7 @@ open class ZkActionsColumn<T : RecordDto<T>>(
     override fun render(builder: ZkElement, index: Int, row: T) {
         with(builder) {
             buildContext.dataset["recordId"] = prop.get(row).toString()
-            + "edit"
+            + CoreStrings.edit
             on("click") { event ->
                 val target = event.target as? HTMLElement ?: return@on
                 val recordId = target.dataset["recordId"]?.toLongOrNull() ?: return@on
