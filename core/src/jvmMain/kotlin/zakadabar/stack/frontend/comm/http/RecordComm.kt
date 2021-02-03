@@ -185,6 +185,42 @@ open class RecordComm<T : RecordDto<T>>(
     }
 
     /**
+     * Create a BLOB that belongs to the given record.
+     *
+     * Works only when the backend supports BLOBs for the record type.
+     *
+     * @param  dataRecordId  Id of the record the new BLOB belongs to.
+     * @param  name      Name of the BLOB, typically the file name.
+     * @param  type      Type of the BLOB, typically the MIME type.
+     * @param  data      BLOB data, a ByteArray (cannot use ByteArray because of JavaScrip)
+     *
+     * @return A DTO which contains data of the blob. The `id` is 0 in this DTO.
+     */
+    suspend fun blobCreate(dataRecordId: Long?, name: String, type: ContentType, data: ByteArray): BlobDto {
+        // FIXME add this to Comm
+        val text = client.post<String>("$baseUrl/api/$recordType/$dataRecordId/blob") {
+            header("Content-Disposition", """attachment; filename="$name"""")
+            body = ByteArrayContent(data, contentType = type)
+        }
+
+        return Json.decodeFromString(BlobDto.serializer(), text)
+    }
+
+    /**
+     * Read a BLOB that belongs to the given record.
+     *
+     * Works only when the backend supports BLOBs for the record type.
+     *
+     * @param  dataRecordId  Id of the record the BLOB belongs to.
+     * @param  blobId        Id of the BLOB.
+     *
+     * @return A DTO which contains data of the blob. The `id` is 0 in this DTO.
+     */
+    suspend fun blobRead(dataRecordId: Long, blobId: Long): ByteArray {
+        return client.get("$baseUrl/api/$recordType/$dataRecordId/blob/$blobId")
+    }
+
+    /**
      * Retrieves metadata of BLOBs.
      *
      * @return  List of BLOB metadata.
