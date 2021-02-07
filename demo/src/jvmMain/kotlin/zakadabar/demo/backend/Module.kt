@@ -3,8 +3,8 @@
  */
 package zakadabar.demo.backend
 
-import zakadabar.demo.backend.account.account.AccountPrivateBackend
-import zakadabar.demo.backend.account.account.AccountPublicBackend
+import zakadabar.demo.backend.account.AccountPrivateBackend
+import zakadabar.demo.backend.account.AccountPublicBackend
 import zakadabar.demo.backend.misc.PingBackend
 import zakadabar.demo.backend.misc.WebsocketBackend
 import zakadabar.demo.backend.port.PortBackend
@@ -32,6 +32,7 @@ object Module : BackendModule {
 
         // you probably need something similar to these as most systems have
         // some account / session management
+
         Server += SessionBackend
         Server += AccountPrivateBackend
         Server += AccountPublicBackend

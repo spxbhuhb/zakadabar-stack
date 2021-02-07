@@ -7,7 +7,7 @@ As of now we publish the project as **technology preview**. Many things are miss
 **we might brake this and that with releases**. Interfaces, use patterns might change, it will need some time to mature.
 
 As of now, the Android support is just the communication data model (data classes) and the communication itself. We use
-the same classes form `commonMain` on all platforms. For those, DTO classes communication works out of the box.
+the same classes form `commonMain` on all platforms. For those, frontend - backend communication works out of the box.
 
 ## Keywords
 

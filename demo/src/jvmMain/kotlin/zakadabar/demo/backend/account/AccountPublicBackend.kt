@@ -3,7 +3,7 @@
  */
 @file:Suppress("UNUSED_PARAMETER", "unused")
 
-package zakadabar.demo.backend.account.account
+package zakadabar.demo.backend.account
 
 import io.ktor.routing.*
 import org.jetbrains.exposed.sql.JoinType

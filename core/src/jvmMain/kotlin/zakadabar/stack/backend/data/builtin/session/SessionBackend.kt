@@ -71,27 +71,27 @@ object SessionBackend : CustomBackend() {
                     account to principalId
 
                 } catch (ex: NoSuchElementException) {
-                    logger.info("${executor.accountId}: /login result=fail session=${old.account} name=${request.accountName}")
+                    logger.warn("${executor.accountId}: /login result=fail current-account=${old.account} name=${request.accountName}")
                     call.respond(HttpStatusCode.NotFound)
                     return@patch
                 } catch (ex: PrincipalBackend.AccountLockedException) {
-                    logger.info("${executor.accountId}: /login result=locked session=${old.account} name=${request.accountName}")
+                    logger.warn("${executor.accountId}: /login result=locked current-account=${old.account} name=${request.accountName}")
                     call.respond(HttpStatusCode.Locked)
                     return@patch
                 } catch (ex: PrincipalBackend.AccountExpiredException) {
-                    logger.info("${executor.accountId}: /login result=expired session=${old.account} name=${request.accountName}")
+                    logger.warn("${executor.accountId}: /login result=expired current-account=${old.account} name=${request.accountName}")
                     call.respond(HttpStatusCode.Gone)
                     return@patch
                 } catch (ex: PrincipalBackend.AccountNotValidatedException) {
-                    logger.info("${executor.accountId}: /login result=not-validated session=${old.account} name=${request.accountName}")
+                    logger.warn("${executor.accountId}: /login result=not-validated current-account=${old.account} name=${request.accountName}")
                     call.respond(HttpStatusCode.Conflict)
                     return@patch
                 } catch (ex: Exception) {
-                    logger.error("${executor.accountId}: /login result=error session=${old.account} name=${request.accountName}", ex)
+                    logger.error("${executor.accountId}: /login result=error current-account=${old.account} name=${request.accountName}", ex)
                     throw ex
                 }
 
-                logger.info("${executor.accountId}: /login result=success session=${old.account} new=${account.id} name=${request.accountName}")
+                logger.info("${executor.accountId}: /login result=success current-account=${old.account} new-account=${account.id} name=${request.accountName}")
 
                 val new = StackSession(account.id)
 

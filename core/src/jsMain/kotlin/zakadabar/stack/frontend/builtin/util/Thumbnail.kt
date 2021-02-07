@@ -4,7 +4,7 @@
 package zakadabar.stack.frontend.builtin.util
 
 import zakadabar.stack.data.builtin.BlobDto
-import zakadabar.stack.frontend.comm.http.BlobCreateState
+import zakadabar.stack.data.record.BlobCreateState
 import zakadabar.stack.frontend.elements.ZkElement
 
 open class Thumbnail(

@@ -3,16 +3,17 @@
  */
 @file:Suppress("UNUSED_PARAMETER", "unused")
 
-package zakadabar.demo.backend.account.account
+package zakadabar.demo.backend.account
 
 import io.ktor.routing.*
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.demo.backend.account.account.AccountPrivateBackend.onModuleLoad
+import zakadabar.demo.backend.account.AccountPrivateBackend.onModuleLoad
 import zakadabar.demo.data.AccountPrivateDto
 import zakadabar.stack.backend.Server
+import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.util.Executor
@@ -47,6 +48,12 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
                 AccountPrivateTable
             )
         }
+
+        // FIXME You probably want to change this in production code!
+        // Create the "demo" user. In production code this user is usually a master admin
+        // or something like that to initialize the system setup.
+
+        demo()
 
         // set the anonymous user of the server, creates an anonymous user if missing
 
@@ -124,7 +131,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
 
 
     /**
-     * Get the anonymous account or create one if not exists. Called by [onModuleLoad],
+     * Get the anonymous account or create one if doesn't exist. Called by [onModuleLoad],
      * creates principal and account for anonymous if none exists.
      */
     private fun anonymous() = transaction {
@@ -135,7 +142,10 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
 
         if (account != null) return@transaction account
 
-        val newPrincipal = PrincipalDao.new { }
+        val newPrincipal = PrincipalDao.new {
+            validated = false
+            locked = true
+        }
 
         val newAccount = AccountPrivateDao.new {
             principal = newPrincipal
@@ -151,4 +161,37 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
         newAccount.toPublicDto()
     }
 
+
+    /**
+     * Create a demo account if doesn't exist. Called by [onModuleLoad],
+     * creates principal and account for demo if none exists.
+     *
+     * FIXME You probably want to remove or change this function in production code!
+     */
+    private fun demo() = transaction {
+        val account = AccountPrivateTable
+            .select { AccountPrivateTable.accountName eq "demo" }
+            .map { AccountPrivateTable.toPublicDto(it) }
+            .firstOrNull()
+
+        if (account != null) return@transaction account
+
+        val newPrincipal = PrincipalDao.new {
+            credentials = PrincipalBackend.encrypt("demo")
+            validated = true
+        }
+
+        val newAccount = AccountPrivateDao.new {
+            principal = newPrincipal
+            accountName = "demo"
+            fullName = "demo"
+            displayName = "demo"
+            organizationName = ""
+            position = ""
+            email = ""
+            phone = ""
+        }
+
+        newAccount.toPublicDto()
+    }
 }

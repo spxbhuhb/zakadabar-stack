@@ -73,6 +73,8 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
         return this
     }
 
+    fun encrypt(password: String) = BCrypt.hashpw(password, BCrypt.gensalt())
+
     class AccountNotValidatedException : Exception()
     class AccountLockedException : Exception()
     class AccountExpiredException : Exception()
@@ -92,7 +94,7 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
         }
 
         if (! principal.validated) throw AccountNotValidatedException()
-        if (! principal.locked) throw AccountLockedException()
+        if (principal.locked) throw AccountLockedException()
         if (principal.expired) throw AccountExpiredException()
 
         principal.lastLoginSuccess = Clock.System.now().toJavaInstant()

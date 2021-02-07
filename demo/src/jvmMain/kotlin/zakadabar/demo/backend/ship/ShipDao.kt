@@ -6,7 +6,7 @@ package zakadabar.demo.backend.ship
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import zakadabar.demo.backend.account.account.AccountPrivateDao
+import zakadabar.demo.backend.account.AccountPrivateDao
 import zakadabar.demo.backend.port.PortDao
 import zakadabar.demo.backend.speed.SpeedDao
 import zakadabar.demo.data.ShipDto

@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.backend.account.account
+package zakadabar.demo.backend.account
 
 import zakadabar.stack.backend.data.builtin.BlobTable
 

@@ -9,7 +9,7 @@ import io.ktor.routing.*
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.demo.backend.account.account.AccountPrivateDao
+import zakadabar.demo.backend.account.AccountPrivateDao
 import zakadabar.demo.backend.port.PortDao
 import zakadabar.demo.backend.speed.SpeedDao
 import zakadabar.demo.data.ShipDto

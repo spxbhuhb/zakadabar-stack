@@ -8,16 +8,16 @@ import org.w3c.dom.DragEvent
 import org.w3c.dom.events.Event
 import org.w3c.dom.get
 import zakadabar.stack.data.builtin.BlobDto
+import zakadabar.stack.data.record.BlobCreateState
+import zakadabar.stack.data.record.RecordCommInterface
 import zakadabar.stack.frontend.builtin.util.droparea.DropAreaClasses.Companion.classes
-import zakadabar.stack.frontend.comm.http.BlobCreateState
-import zakadabar.stack.frontend.comm.http.Comm
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.resources.Icons
 
 open class DropArea<C : Any>(
     private val message: String = "drop.files.here",
     private val recordId: Long,
-    private val comm: Comm<*>,
+    private val comm: RecordCommInterface<*>,
     private val context: C,
     private val onProgress: (context: C, dto: BlobDto, state: BlobCreateState, uploaded: Long) -> Unit
 ) : ZkElement() {

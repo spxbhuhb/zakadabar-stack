@@ -4,9 +4,8 @@
 package zakadabar.stack.data.record
 
 import kotlinx.serialization.KSerializer
+import zakadabar.stack.data.action.ActionDtoCompanion
 import zakadabar.stack.data.query.QueryDtoCompanion
-import zakadabar.stack.frontend.comm.http.Comm
-import zakadabar.stack.frontend.comm.http.makeComm
 
 abstract class RecordDtoCompanion<T : RecordDto<T>>() {
 
@@ -16,15 +15,15 @@ abstract class RecordDtoCompanion<T : RecordDto<T>>() {
 
     lateinit var recordType: String
 
-    private var _comm: Comm<T>? = null
+    private var _comm: RecordCommInterface<T>? = null
 
-    private fun makeComm(): Comm<T> {
-        val nc = makeComm(this)
+    private fun makeComm(): RecordCommInterface<T> {
+        val nc = makeRecordComm(this)
         _comm = nc
         return nc
     }
 
-    var comm: Comm<T>
+    var comm: RecordCommInterface<T>
         get() = _comm ?: makeComm()
         set(value) {
             _comm = value
@@ -32,6 +31,10 @@ abstract class RecordDtoCompanion<T : RecordDto<T>>() {
 
     open val queries = lazy {
         mutableMapOf<String, QueryDtoCompanion<*, *>>()
+    }
+
+    open val actions = lazy {
+        mutableMapOf<String, ActionDtoCompanion<*>>()
     }
 
     abstract fun serializer(): KSerializer<T>
@@ -45,6 +48,12 @@ abstract class RecordDtoCompanion<T : RecordDto<T>>() {
     operator fun QueryDtoCompanion<T, *>.unaryPlus() {
         val name = this::class.simpleName ?: return
         queries.value[name] = this
-        base = this@RecordDtoCompanion
+        comm = { this@RecordDtoCompanion.comm }
+    }
+
+    operator fun ActionDtoCompanion<*>.unaryPlus() {
+        val name = this::class.simpleName ?: return
+        actions.value[name] = this
+        comm = { this@RecordDtoCompanion.comm }
     }
 }

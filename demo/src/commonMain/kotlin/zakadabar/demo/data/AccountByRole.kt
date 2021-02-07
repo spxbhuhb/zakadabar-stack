@@ -14,7 +14,7 @@ data class AccountByRole(
     val roleName: String
 ) : QueryDto<AccountPublicDto> {
 
-    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(AccountPublicDto.serializer()))
+    override suspend fun execute() = comm().query(this, serializer(), ListSerializer(AccountPublicDto.serializer()))
 
     companion object : QueryDtoCompanion<AccountPublicDto, AccountPublicDto>()
 

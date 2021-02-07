@@ -1,17 +1,16 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.comm.http
+package zakadabar.stack.data.record
 
 import kotlinx.serialization.KSerializer
-import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.util.PublicApi
 
 /**
- * A cache for objects accessed with a [RecordComm]. This is basically a
- * wrapper around [RecordComm], that caches objects on the fly.
+ * A cache for objects accessed with a [RecordCommInterface]. This is basically a
+ * wrapper around [RecordCommInterface], that caches objects on the fly.
  *
- * Be careful with this one, you should probably use a [RecordComm].
+ * Be careful with this one, you should probably use a [RecordCommInterface].
  *
  * Caching objects in general is not a good idea as it is very easy
  * to use up a lot of memory. However, sometimes it is very useful.

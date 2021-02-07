@@ -9,8 +9,6 @@ import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.serializer
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.*
@@ -19,7 +17,9 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.Server
+import zakadabar.stack.backend.data.action.ActionBackend
 import zakadabar.stack.backend.data.builtin.BlobTable
+import zakadabar.stack.backend.data.query.QueryBackend
 import zakadabar.stack.backend.util.executor
 import zakadabar.stack.data.builtin.BlobDto
 import zakadabar.stack.data.record.RecordDto
@@ -27,7 +27,6 @@ import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.util.Executor
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObject
-import kotlin.reflect.full.createType
 
 /**
  * Base class for record backends. Supports CRUD, queries and BLOBs.
@@ -35,14 +34,14 @@ import kotlin.reflect.full.createType
 abstract class RecordBackend<T : RecordDto<T>>(
     val blobTable: BlobTable? = null,
     val recordTable: IdTable<Long>? = null
-) : BackendModule {
+) : BackendModule, ActionBackend, QueryBackend {
 
     abstract val dtoClass: KClass<T>
 
-    private val recordType
+    override val recordType
         get() = (dtoClass.companionObject !!.objectInstance as RecordDtoCompanion<*>).recordType
 
-    private val logger by lazy { LoggerFactory.getLogger(recordType) !! }
+    override val logger by lazy { LoggerFactory.getLogger(recordType) !! }
 
     /**
      * Create a new record.
@@ -103,7 +102,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
     /**
      * List all records of this type.
      *
-     * URL: `GET /api/<recordType>/all`
+     * URL: `GET /api/<recordType>`
      *
      * @param executor Executor of the operation.
      *
@@ -124,7 +123,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      * @return DTO of the blobs
      */
     open fun blobMetaRead(executor: Executor, recordId: Long): List<BlobDto> {
-        check(blobTable != null) { "missing blob table" }
+        if (blobTable == null) throw NotImplementedError("missing blob table")
 
         return transaction {
             with(blobTable) {
@@ -147,7 +146,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      * @return Content of the blob (binary).
      */
     open fun blobRead(executor: Executor, recordId: Long?, blobId: Long): Pair<BlobDto, ByteArray> {
-        check(blobTable != null) { "missing blob table" }
+        if (blobTable == null) throw NotImplementedError("missing blob table")
 
         return transaction {
             blobTable
@@ -169,7 +168,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      * @return Dto of the blob created.
      */
     open fun blobCreate(executor: Executor, dto: BlobDto, bytes: ByteArray): BlobDto {
-        check(blobTable != null && recordTable != null) { "missing blob or record table" }
+        if (blobTable == null || recordTable == null) throw NotImplementedError("missing blob or record table")
 
         return transaction {
             val id = blobTable.insert {
@@ -195,7 +194,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      * @return Content of the blob (binary).
      */
     open fun blobMetaUpdate(executor: Executor, dto: BlobDto): BlobDto {
-        check(blobTable != null && recordTable != null) { "missing blob or record table" }
+        if (blobTable == null || recordTable == null) throw NotImplementedError("missing blob or record table")
 
         transaction {
             blobTable.update({ blobTable.id eq dto.id }) {
@@ -220,7 +219,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      * @return Content of the blob (binary).
      */
     open fun blobDelete(executor: Executor, recordId: Long, blobId: Long) {
-        check(blobTable != null) { "missing blob table" }
+        if (blobTable == null) throw NotImplementedError("missing blob table")
 
         transaction {
             blobTable.deleteWhere { blobTable.id eq blobId }
@@ -358,25 +357,6 @@ abstract class RecordBackend<T : RecordDto<T>>(
                 call.respond(blobDelete(executor, id, blobId))
             }
 
-        }
-    }
-
-    /**
-     * Adds a Query route for this backend.
-     */
-    fun <RQ : Any, RS : Any> Route.query(queryDto: KClass<RQ>, func: (Executor, RQ) -> RS) {
-        get("$recordType/${queryDto.simpleName}") {
-
-            val executor = call.executor()
-
-            val qText = call.parameters["q"]
-            requireNotNull(qText)
-            val qObj = Json.decodeFromString(serializer(queryDto.createType()), qText)
-
-            if (Server.logReads) logger.info("${executor.accountId}: GET ${queryDto.simpleName} $qText")
-
-            @Suppress("UNCHECKED_CAST")
-            call.respond(func(executor, qObj as RQ))
         }
     }
 

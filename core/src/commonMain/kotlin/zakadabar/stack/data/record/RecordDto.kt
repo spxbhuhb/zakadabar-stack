@@ -4,7 +4,6 @@
 package zakadabar.stack.data.record
 
 import zakadabar.stack.data.schema.DtoSchema
-import zakadabar.stack.frontend.comm.http.Comm
 
 @Suppress("UNCHECKED_CAST")
 interface RecordDto<T> {
@@ -13,7 +12,7 @@ interface RecordDto<T> {
 
     fun getRecordType(): String
 
-    fun comm(): Comm<T>
+    fun comm(): RecordCommInterface<T>
 
     fun schema() = DtoSchema.NO_VALIDATION
 

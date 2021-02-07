@@ -22,6 +22,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.get
 import zakadabar.stack.data.builtin.BlobDto
+import zakadabar.stack.data.record.BlobCreateState
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
@@ -29,7 +30,6 @@ import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.util.Thumbnail
 import zakadabar.stack.frontend.builtin.util.droparea.DropAreaClasses
-import zakadabar.stack.frontend.comm.http.BlobCreateState
 import zakadabar.stack.frontend.resources.Icons
 
 class Images<T : RecordDto<T>>(
