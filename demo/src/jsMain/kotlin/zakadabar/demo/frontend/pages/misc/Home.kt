@@ -3,8 +3,12 @@
  */
 package zakadabar.demo.frontend.pages.misc
 
-import zakadabar.stack.frontend.elements.ZkPage.Companion.buildNewPage
+import zakadabar.stack.frontend.elements.ZkPage
 
-val Home = buildNewPage("/") {
-    + "Home"
+object Home : ZkPage() {
+
+    override fun init() = build {
+        + "Home"
+    }
+
 }

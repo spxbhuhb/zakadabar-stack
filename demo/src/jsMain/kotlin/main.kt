@@ -48,7 +48,7 @@ fun main() {
             // Application.executor is the user who runs the application. There is always a user
             // even without login. The not logged in users has the role "anonymous" (by convention).
 
-            executor = Executor(session.account.id, session.account.displayName, session.roles)
+            executor = Executor(session.account, session.anonymous, session.roles)
 
             // Set the routing. You may change this on-the-fly if you want, for example if the user logs in.
 

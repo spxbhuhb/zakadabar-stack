@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.util
 
-import zakadabar.stack.data.record.RecordDto
+import zakadabar.stack.data.DtoBase
 import kotlin.reflect.KClass
 
 /**
@@ -20,7 +20,7 @@ fun <T : Any> KClass<T>.newInstance(): T = callCtor(this.js) as T
  *
  * @return an instance of T with the default values set and modifications made by [builder]
  */
-inline fun <reified T : RecordDto<T>> default(builder: T.() -> Unit): T {
+inline fun <reified T : DtoBase> default(builder: T.() -> Unit): T {
     val dto = callCtor(T::class.js) as T
     dto.schema().setDefaults()
     dto.builder()
@@ -33,7 +33,7 @@ inline fun <reified T : RecordDto<T>> default(builder: T.() -> Unit): T {
  *
  * @return an instance of T with the default values set
  */
-inline fun <reified T : RecordDto<T>> default(): T {
+inline fun <reified T : DtoBase> default(): T {
     val dto = callCtor(T::class.js) as T
     dto.schema().setDefaults()
     return dto

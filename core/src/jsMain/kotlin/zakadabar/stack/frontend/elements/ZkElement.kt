@@ -11,6 +11,7 @@ import org.w3c.dom.*
 import org.w3c.dom.css.CSSStyleDeclaration
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventTarget
+import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.elements.ZkClasses.Companion.zkClasses
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.frontend.util.log
@@ -66,6 +67,12 @@ open class ZkElement(
     val childElements by lazy { mutableListOf<ZkElement>() }
 
     private val eventListeners by lazy { mutableListOf<Pair<String, Pair<EventTarget, (Event) -> Unit>>>() }
+
+    /**
+     * Display name of the current user.
+     */
+    val displayName
+        get() = Application.executor.account.displayName
 
     open fun init(): ZkElement {
         return this
@@ -655,6 +662,48 @@ open class ZkElement(
     infix fun HTMLElement.build(build: ZkElement.() -> Unit): HTMLElement {
         runBuild(this, className, build)
         return this
+    }
+
+    // ----  Executor permissions, loggged in etc  --------
+
+    /**
+     * Execute the builder function when the user **is not** the
+     * anonymous user, i.e. is a logged in user.
+     */
+    @PublicApi
+    fun ifNotAnonymous(builder: ZkElement.() -> Unit) {
+        if (Application.executor.anonymous) return
+        this.builder()
+    }
+
+    /**
+     * Execute the builder function when the user **is the
+     * anonymous user, i.e. is **not** a logged in user.
+     */
+    @PublicApi
+    fun ifAnonymous(builder: ZkElement.() -> Unit) {
+        if (Application.executor.anonymous) return
+        this.builder()
+    }
+
+    /**
+     * Execute the builder function when the user **has**
+     * the given role.
+     */
+    @PublicApi
+    fun withRole(role: String, builder: ZkElement.() -> Unit) {
+        if (role !in Application.executor.roles) return
+        this.builder()
+    }
+
+    /**
+     * Execute the builder function when the user **does not have**
+     * the given role.
+     */
+    @PublicApi
+    fun withoutRole(role: String, builder: ZkElement.() -> Unit) {
+        if (role in Application.executor.roles) return
+        this.builder()
     }
 
 }

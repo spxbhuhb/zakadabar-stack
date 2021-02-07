@@ -26,9 +26,12 @@ open class StringsImpl(
     open val createSuccess by "Create success."
     open val updateSuccess by "Update success."
     open val deleteSuccess by "Delete success."
+    open val actionSuccess by "Successful action execution."
     open val createFail by "Create failed."
     open val updateFail by "Update failed."
     open val deleteFail by "Delete failed."
+    open val actionFail by "Action execution error."
+    open val queryFail by "Query execution error."
 
     open val notSelected by "not selected"
 

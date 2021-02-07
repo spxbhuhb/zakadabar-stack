@@ -72,6 +72,20 @@ abstract class RecordBackend<T : RecordDto<T>>(
     }
 
     /**
+     * Read a record with access to Ktor's application call. The
+     * default implementation simply calls read without [call].
+     *
+     * URL: `GET /api/<recordType>/<recordId>`
+     *
+     * @param call     Ktor's [ApplicationCall].
+     * @param executor Executor of the operation.
+     * @param recordId The id of the record to read.
+     *
+     * @return DTO of the record
+     */
+    open fun read(call: ApplicationCall, executor: Executor, recordId: Long) = read(executor, recordId)
+
+    /**
      * Update an existing record.
      *
      * URL: `PATCH /api/<recordType>`
@@ -248,7 +262,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
                     call.respond(all(executor))
                 } else {
                     if (Server.logReads) logger.info("${executor.accountId}: READ $id")
-                    call.respond(read(executor, id))
+                    call.respond(read(call, executor, id))
                 }
             }
 

@@ -3,7 +3,9 @@
  */
 package zakadabar.stack.data.query
 
-interface QueryDto<RESULT> {
+import zakadabar.stack.data.DtoBase
+
+interface QueryDto<RESULT> : DtoBase {
     suspend fun execute(): List<RESULT>
 }
 

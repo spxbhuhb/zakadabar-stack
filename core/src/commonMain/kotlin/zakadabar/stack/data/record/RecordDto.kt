@@ -3,18 +3,16 @@
  */
 package zakadabar.stack.data.record
 
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.DtoBase
 
 @Suppress("UNCHECKED_CAST")
-interface RecordDto<T> {
+interface RecordDto<T> : DtoBase {
 
     var id: RecordId<T>
 
     fun getRecordType(): String
 
     fun comm(): RecordCommInterface<T>
-
-    fun schema() = DtoSchema.NO_VALIDATION
 
     suspend fun create() = comm().create(this as T)
 

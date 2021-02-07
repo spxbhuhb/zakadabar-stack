@@ -8,12 +8,12 @@
 ## Frontend
 
 * General
-    * [Css](../cookbook/frontend/Css.md)
-    * [Elements](../cookbook/frontend/Elements.md)
-    * [Icons](../cookbook/frontend/Icons.md)
+    * [Css](../cookbook/frontend-browser/Css.md)
+    * [Elements](../cookbook/frontend-browser/Elements.md)
+    * [Icons](../cookbook/frontend-browser/Icons.md)
 * Build-in Elements
-    * [Dock](../cookbook/frontend/Css.md)
-    * [SwitchView](../cookbook/frontend/SwitchViews.md)
+    * [Dock](../cookbook/frontend-browser/Css.md)
+    * [SwitchView](../cookbook/frontend-browser/SwitchViews.md)
 
 ## Backend
 

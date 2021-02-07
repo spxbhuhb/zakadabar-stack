@@ -68,7 +68,7 @@ open class ZkCrud<T : RecordDto<T>> : AppRouting.ZkTarget {
 
         val form = formClass.newInstance()
         form.dto = dto
-        form.crud = this@ZkCrud
+        form.openUpdate = { openUpdate(it.id) }
         form.mode = FormMode.Create
 
         + form
@@ -78,7 +78,7 @@ open class ZkCrud<T : RecordDto<T>> : AppRouting.ZkTarget {
 
         val form = formClass.newInstance()
         form.dto = companion.read(recordId)
-        form.crud = this@ZkCrud
+        form.openUpdate = { openUpdate(it.id) }
         form.mode = FormMode.Read
 
         + form
@@ -88,7 +88,7 @@ open class ZkCrud<T : RecordDto<T>> : AppRouting.ZkTarget {
 
         val form = formClass.newInstance()
         form.dto = companion.read(recordId)
-        form.crud = this@ZkCrud
+        form.openUpdate = { openUpdate(it.id) }
         form.mode = FormMode.Update
 
         + form
@@ -98,7 +98,7 @@ open class ZkCrud<T : RecordDto<T>> : AppRouting.ZkTarget {
 
         val form = formClass.newInstance()
         form.dto = companion.read(recordId)
-        form.crud = this@ZkCrud
+        form.openUpdate = { openUpdate(it.id) }
         form.mode = FormMode.Delete
 
         + form

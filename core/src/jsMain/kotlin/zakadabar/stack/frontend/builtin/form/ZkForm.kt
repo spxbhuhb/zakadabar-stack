@@ -16,7 +16,9 @@
  */
 package zakadabar.stack.frontend.builtin.form
 
-import toast
+import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.action.ActionDto
+import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
@@ -26,26 +28,40 @@ import zakadabar.stack.frontend.builtin.form.fields.*
 import zakadabar.stack.frontend.builtin.form.structure.Buttons
 import zakadabar.stack.frontend.builtin.form.structure.Header
 import zakadabar.stack.frontend.builtin.form.structure.Section
-import zakadabar.stack.frontend.elements.ZkCrud
+import zakadabar.stack.frontend.builtin.toast.toast
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.frontend.util.log
+import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KProperty0
 
 /**
  * Base class for DTO forms.
  */
-open class ZkForm<T : RecordDto<T>> : ZkElement() {
+open class ZkForm<T : DtoBase> : ZkElement() {
 
     lateinit var dto: T
     lateinit var mode: FormMode
 
-    var crud: ZkCrud<T>? = null
+    @PublicApi
     var autoLabel = true
+
+    @PublicApi
     var fieldGridTemplate: String = "150px 1fr"
+
+    @PublicApi
     var fieldGridGap: String = "5px"
+
+    var openUpdate: ((dto: T) -> Unit)? = null
+
+    /**
+     * A function to be called when execution of the form operation has a result.
+     * This means that the server sent a response which is successful at HTTP level.
+     * However, the response may indicate an error.
+     */
+    var onExecuteResult: ((resultDto: DtoBase) -> Unit)? = null
 
     var schema = lazy { dto.schema() }
 
@@ -212,7 +228,7 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
             try {
                 when (mode) {
                     FormMode.Create -> {
-                        val created = dto.create()
+                        val created = (dto as RecordDto<*>).create() as RecordDto<*>
                         fields.forEach { it.onCreateSuccess(created) }
                         toast { CoreStrings.createSuccess }
                     }
@@ -220,12 +236,21 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
                         // nothing to do here
                     }
                     FormMode.Update -> {
-                        dto.update()
+                        (dto as RecordDto<*>).update()
                         toast { CoreStrings.updateSuccess }
                     }
                     FormMode.Delete -> {
-                        dto.delete()
+                        (dto as RecordDto<*>).delete()
                         toast { CoreStrings.deleteSuccess }
+                    }
+                    FormMode.Action -> {
+                        val result = (dto as ActionDto<*>).execute() as DtoBase
+                        onExecuteResult?.let { it(result) }
+                        toast { CoreStrings.actionSuccess }
+                    }
+                    FormMode.Query -> {
+                        (dto as QueryDto<*>).execute()
+                        // TODO do something here with the result
                     }
                 }
             } catch (ex: Exception) {
@@ -235,6 +260,8 @@ open class ZkForm<T : RecordDto<T>> : ZkElement() {
                     FormMode.Read -> Unit
                     FormMode.Update -> toast(error = true) { CoreStrings.updateFail }
                     FormMode.Delete -> toast(error = true) { CoreStrings.deleteFail }
+                    FormMode.Action -> toast(error = true) { CoreStrings.actionFail }
+                    FormMode.Query -> toast(error = true) { CoreStrings.queryFail }
                 }
             }
         }

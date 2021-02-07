@@ -17,12 +17,12 @@
 package zakadabar.stack.frontend.builtin.form.fields
 
 import org.w3c.dom.HTMLSelectElement
-import zakadabar.stack.data.record.RecordDto
+import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-class ValidatedOptRecordSelect<T : RecordDto<T>>(
+class ValidatedOptRecordSelect<T : DtoBase>(
     form: ZkForm<T>,
     val prop: KMutableProperty0<RecordId<*>?>,
     sortOptions: Boolean = true,

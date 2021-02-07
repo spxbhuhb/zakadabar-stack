@@ -18,7 +18,7 @@ package zakadabar.stack.frontend.builtin.form.fields
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.data.record.RecordDto
+import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.FormClasses.Companion.formClasses
 import zakadabar.stack.frontend.builtin.form.ZkForm
@@ -27,7 +27,7 @@ import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.util.escape
 import zakadabar.stack.frontend.util.launch
 
-abstract class ValidatedSelectBase<T : RecordDto<T>>(
+abstract class ValidatedSelectBase<T : DtoBase>(
     private val form: ZkForm<T>,
     private val sortOptions: Boolean = true,
     private val options: List<String>

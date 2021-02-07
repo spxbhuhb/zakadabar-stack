@@ -5,7 +5,7 @@
 ## Frontend
 
 * Build in elements
-  * [Tables](frontend/Tables.md)
+  * [Tables](frontend-browser/Tables.md)
 
 ## Backend
 

@@ -15,6 +15,7 @@ import zakadabar.demo.frontend.pages.ship.ShipSearch
 import zakadabar.demo.frontend.pages.ship.Ships
 import zakadabar.demo.frontend.pages.speed.Speeds
 import zakadabar.demo.frontend.resources.Strings
+import zakadabar.stack.data.builtin.LogoutAction
 import zakadabar.stack.frontend.builtin.menu.ZkMenu
 import zakadabar.stack.frontend.util.launch
 
@@ -31,13 +32,25 @@ object Menu : ZkMenu({
 
         + seasAndPorts()
 
-        + group(Strings.administration) {
-            + item(Strings.seas) { Seas.openAll() }
-            + item(Strings.ports) { Ports.openAll() }
-            + item(Strings.accounts) { Accounts.openAll() }
+        // show administration only for logged in users
+
+        ifNotAnonymous {
+            + group(Strings.administration) {
+                + item(Strings.seas) { Seas.openAll() }
+                + item(Strings.ports) { Ports.openAll() }
+                + item(Strings.accounts) { Accounts.openAll() }
+            }
         }
 
         + item(Strings.login) { Login.open() }
+
+        + item(Strings.logout) {
+            launch {
+                LogoutAction().execute()
+                Home.open()
+            }
+        }
+
     }
 
 })

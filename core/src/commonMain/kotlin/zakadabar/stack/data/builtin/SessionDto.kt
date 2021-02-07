@@ -12,14 +12,17 @@ import zakadabar.stack.data.record.RecordDtoCompanion
 @Serializable
 data class SessionDto(
 
-    override var id: Long,
+    override var id: Long, // always 1
     val account: AccountPublicDto,
+    val anonymous: Boolean,
     val roles: List<String>
 
 ) : RecordDto<SessionDto> {
 
     companion object : RecordDtoCompanion<SessionDto>({
         recordType = "session"
+        + LoginAction
+        + LogoutAction
     })
 
     override fun getRecordType() = recordType

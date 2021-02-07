@@ -7,5 +7,7 @@ enum class FormMode {
     Create,
     Read,
     Update,
-    Delete
+    Delete,
+    Action,
+    Query
 }

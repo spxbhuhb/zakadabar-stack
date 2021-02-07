@@ -4,15 +4,22 @@
 package zakadabar.demo.frontend.pages.misc
 
 import zakadabar.demo.frontend.resources.Strings
-import zakadabar.stack.data.builtin.LoginDto
+import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.builtin.ActionStatusDto
+import zakadabar.stack.data.builtin.LoginAction
+import zakadabar.stack.data.builtin.SessionDto
+import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.application.Executor
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.layout.FullScreen
+import zakadabar.stack.frontend.builtin.toast.toast
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.elements.ZkPage
 import zakadabar.stack.frontend.elements.marginBottom
 import zakadabar.stack.frontend.util.default
+import zakadabar.stack.frontend.util.launch
 
 object Login : ZkPage(FullScreen) {
 
@@ -32,7 +39,7 @@ object Login : ZkPage(FullScreen) {
         }
     }
 
-    class LoginForm : ZkForm<LoginDto>() {
+    class LoginForm : ZkForm<LoginAction>() {
 
         // This is here, so the we login form is initialized with
         // the username and password. For [ZkCrud] based forms this
@@ -41,11 +48,11 @@ object Login : ZkPage(FullScreen) {
 
         init {
             dto = default {
-                id = 1 // this is here, so comm update won't complain about non-identified record
                 accountName = "demo"
                 password = "demo"
             }
-            mode = FormMode.Update
+            mode = FormMode.Action
+            onExecuteResult = ::onExecuteResult
         }
 
         override fun init(): ZkElement {
@@ -72,4 +79,17 @@ object Login : ZkPage(FullScreen) {
             return this
         }
     }
+
+    fun onExecuteResult(resultDto: DtoBase) {
+        resultDto as ActionStatusDto
+
+        if (resultDto.success) launch {
+            val session = SessionDto.read(0L)
+            Application.executor = Executor(session.account, session.anonymous, session.roles)
+            Home.open()
+        }
+
+        toast(error = true) { Strings.loginFail }
+    }
+
 }

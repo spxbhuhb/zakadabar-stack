@@ -46,6 +46,7 @@ object Routing : AppRouting(DefaultLayout, Home) {
         + Ports
         + Login
         + Accounts
+        + Home
     }
 
     /**
@@ -53,7 +54,7 @@ object Routing : AppRouting(DefaultLayout, Home) {
      * This example redirects the anonymous user to the login page.
      */
     override fun onNavStateChange(state: NavState) {
-        if (! Application.executor.isAnonymous) {
+        if (! Application.executor.anonymous) {
             super.onNavStateChange(NavState(Login.viewName, ""))
         } else {
             super.onNavStateChange(state)

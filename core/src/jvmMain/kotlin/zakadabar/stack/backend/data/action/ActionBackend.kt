@@ -39,4 +39,21 @@ interface ActionBackend : BackendModule {
             call.respond(func(executor, aObj as RQ))
         }
     }
+
+    /**
+     * Adds an Action route for this backend.
+     */
+    fun <RQ : Any, RS : Any> Route.action(actionDto: KClass<RQ>, func: (ApplicationCall, Executor, RQ) -> RS) {
+        post("$recordType/${actionDto.simpleName}") {
+
+            val executor = call.executor()
+            val aText = call.receive<String>()
+            val aObj = Json.decodeFromString(serializer(actionDto.createType()), aText)
+
+            if (Server.logReads) logger.info("${executor.accountId}: ACTION ${actionDto.simpleName} $aText")
+
+            @Suppress("UNCHECKED_CAST")
+            call.respond(func(call, executor, aObj as RQ))
+        }
+    }
 }

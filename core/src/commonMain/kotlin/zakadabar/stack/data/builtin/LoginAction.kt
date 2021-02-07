@@ -4,29 +4,23 @@
 package zakadabar.stack.data.builtin
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordDtoCompanion
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.action.ActionDto
+import zakadabar.stack.data.action.ActionDtoCompanion
 import zakadabar.stack.data.schema.DtoSchema
 
 @Serializable
-data class LoginDto(
+data class LoginAction(
 
-    override var id: RecordId<LoginDto>,
     var accountName: String,
     var password: String
 
-) : RecordDto<LoginDto> {
+) : ActionDto<ActionStatusDto> {
 
-    companion object : RecordDtoCompanion<LoginDto>({
-        recordType = "login"
-    })
+    override suspend fun execute() = comm().action(this, serializer(), ActionStatusDto.serializer())
 
-    override fun getRecordType() = recordType
-    override fun comm() = comm
+    companion object : ActionDtoCompanion<ActionStatusDto>()
 
     override fun schema() = DtoSchema {
-        + ::id
         + ::accountName min 1 max 50 blank false
         + ::password min 1 max 50 blank false
     }

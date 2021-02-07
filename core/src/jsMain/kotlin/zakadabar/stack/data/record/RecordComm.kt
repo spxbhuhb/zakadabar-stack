@@ -131,9 +131,19 @@ open class RecordComm<T : RecordDto<T>>(
     @PublicApi
     override suspend fun <REQUEST : Any, RESPONSE> action(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<RESPONSE>): RESPONSE {
 
-        val q = encodeURIComponent(Json.encodeToString(requestSerializer, request))
+        val headers = Headers()
 
-        val responsePromise = window.fetch("/api/$recordType/${request::class.simpleName}?q=${q}")
+        headers.append("content-type", "application/json")
+
+        val body = json.encodeToString(requestSerializer, request)
+
+        val requestInit = RequestInit(
+            method = "POST",
+            headers = headers,
+            body = body
+        )
+
+        val responsePromise = window.fetch("/api/$recordType/${request::class.simpleName}", requestInit)
         val response = responsePromise.await()
 
         ensure(response.ok) { FetchError(response) }

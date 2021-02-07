@@ -6,16 +6,16 @@ package zakadabar.stack.frontend.builtin.util
 import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
 import zakadabar.stack.frontend.elements.ZkElement
 
-class Initials(private val displayName: String) : ZkElement() {
+class Initials(val name: String) : ZkElement() {
 
     override fun init(): Initials {
 
-        innerText = if (displayName.length < 2) {
-            displayName.toUpperCase()
+        innerText = if (name.length < 2) {
+            name.toUpperCase()
         } else {
-            val e = displayName.split(" ")
+            val e = name.split(" ")
             if (e.size < 2) {
-                displayName.substring(0, 2).toUpperCase()
+                name.substring(0, 2).toUpperCase()
             } else {
                 "${e[0][0].toUpperCase()}${e[1][0].toUpperCase()}"
             }

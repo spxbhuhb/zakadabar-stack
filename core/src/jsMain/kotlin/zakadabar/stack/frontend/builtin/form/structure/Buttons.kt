@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.form.structure
 
-import zakadabar.stack.data.record.RecordDto
+import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.FormMode
@@ -11,7 +11,7 @@ import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.resources.CoreStrings
 
-class Buttons<T : RecordDto<T>>(
+class Buttons<T : DtoBase>(
     private val form: ZkForm<T>
 ) : ZkElement() {
     override fun init() = build {
@@ -25,7 +25,7 @@ class Buttons<T : RecordDto<T>>(
             FormMode.Read -> {
                 + row {
                     + ZkButton(CoreStrings.back) { Application.back() } marginRight 10
-                    + ZkButton(CoreStrings.edit) { form.crud?.openUpdate(form.dto.id) }
+                    form.openUpdate?.let { + ZkButton(CoreStrings.edit) { it(form.dto) } }
                 }
             }
             FormMode.Update ->

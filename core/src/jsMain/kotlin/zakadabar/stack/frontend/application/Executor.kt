@@ -3,10 +3,10 @@
  */
 package zakadabar.stack.frontend.application
 
+import zakadabar.stack.data.builtin.AccountPublicDto
+
 class Executor(
-    val accountId: Long,
-    val displayName: String,
+    val account: AccountPublicDto,
+    val anonymous: Boolean,
     val roles: List<String>
-) {
-    val isAnonymous = roles.isEmpty()
-}
+)
