@@ -9,5 +9,6 @@ package zakadabar.stack.backend.data.builtin.session
  * @property account Id of the account this session belongs to.
  */
 data class StackSession(
-    val account: Long
+    val account: Long,
+    val roles: List<String>
 )

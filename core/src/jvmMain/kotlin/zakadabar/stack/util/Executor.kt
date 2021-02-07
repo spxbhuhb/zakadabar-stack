@@ -4,7 +4,6 @@
 package zakadabar.stack.util
 
 import io.ktor.auth.*
-import zakadabar.stack.backend.Server
 
 /**
  * Ktor authentication principal id.
@@ -13,11 +12,11 @@ import zakadabar.stack.backend.Server
  */
 open class Executor internal constructor(
 
-    val accountId: Long
+    val accountId: Long,
+    private val roles: List<String>
 
 ) : Principal {
 
-    val isAnonymous
-        get() = accountId == Server.anonymous.id
+    fun hasRole(roleName: String) = roleName in roles
 
 }

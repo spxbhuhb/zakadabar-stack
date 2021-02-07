@@ -1,8 +1,10 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.util
+package zakadabar.stack
 
-import zakadabar.stack.util.Executor
+object StackRoles : RolesBase()
 
-object Anonymous : Executor(2)
+open class RolesBase {
+    val securityOfficer = "security-officer"
+}

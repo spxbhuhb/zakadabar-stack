@@ -60,13 +60,13 @@ object SessionBackend : RecordBackend<SessionDto>() {
     private fun action(call: ApplicationCall, executor: Executor, action: LoginAction): ActionStatusDto {
         val old = call.sessions.get<StackSession>() !!
 
-        val account = try {
+        val (account, principalId) = try {
 
             val (account, principalId) = Server.findAccountByName(action.accountName)
 
             PrincipalBackend.authenticate(principalId, action.password)
 
-            account
+            account to principalId
 
         } catch (ex: NoSuchElementException) {
             logger.warn("${executor.accountId}: /login result=fail current-account=${old.account} name=${action.accountName}")
@@ -87,7 +87,7 @@ object SessionBackend : RecordBackend<SessionDto>() {
 
         logger.info("${executor.accountId}: /login result=success current-account=${old.account} new-account=${account.id} name=${action.accountName}")
 
-        call.sessions.set(StackSession(account.id))
+        call.sessions.set(StackSession(account.id, PrincipalBackend.roles(principalId)))
 
         return ActionStatusDto(success = true)
     }
@@ -99,7 +99,7 @@ object SessionBackend : RecordBackend<SessionDto>() {
 
         logger.info("${executor.accountId}: /logout old=${old.account} new=${Server.anonymous.id}")
 
-        call.sessions.set(StackSession(Server.anonymous.id))
+        call.sessions.set(StackSession(Server.anonymous.id, emptyList()))
 
         return ActionStatusDto(success = true)
     }

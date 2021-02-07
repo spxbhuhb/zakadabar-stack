@@ -13,6 +13,8 @@ import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import zakadabar.stack.StackRoles
+import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantTable
 import zakadabar.stack.backend.data.record.RecordBackend
@@ -35,26 +37,41 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
     }
 
     override fun all(executor: Executor) = transaction {
+
+        authorize(executor, StackRoles.securityOfficer)
+
         PrincipalTable
             .selectAll()
             .map(PrincipalTable::toDto)
     }
 
     override fun create(executor: Executor, dto: PrincipalDto) = transaction {
+
+        authorize(executor, StackRoles.securityOfficer)
+
         PrincipalDao.new {
             fromDto(dto)
         }.toDto()
     }
 
     override fun read(executor: Executor, recordId: Long) = transaction {
+
+        authorize(executor, StackRoles.securityOfficer)
+
         PrincipalDao[recordId].toDto()
     }
 
     override fun update(executor: Executor, dto: PrincipalDto) = transaction {
+
+        authorize(executor, StackRoles.securityOfficer)
+
         PrincipalDao[dto.id].fromDto(dto).toDto()
     }
 
     override fun delete(executor: Executor, recordId: Long) {
+
+        authorize(executor, StackRoles.securityOfficer)
+
         PrincipalDao[recordId].delete()
     }
 

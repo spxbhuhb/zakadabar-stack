@@ -8,6 +8,8 @@ package zakadabar.stack.backend.data.builtin.rolegrant
 import io.ktor.routing.*
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import zakadabar.stack.StackRoles
+import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
 import zakadabar.stack.backend.data.builtin.role.RoleDao
 import zakadabar.stack.backend.data.record.RecordBackend
@@ -27,12 +29,18 @@ object RoleGrantBackend : RecordBackend<RoleGrantDto>() {
     }
 
     override fun all(executor: Executor) = transaction {
+
+        authorize(executor, StackRoles.securityOfficer)
+
         RoleGrantTable
             .selectAll()
             .map(RoleGrantTable::toDto)
     }
 
     override fun create(executor: Executor, dto: RoleGrantDto) = transaction {
+
+        authorize(executor, StackRoles.securityOfficer)
+
         RoleGrantDao.new {
             principal = PrincipalDao[dto.principal]
             role = RoleDao[dto.role]
@@ -40,10 +48,17 @@ object RoleGrantBackend : RecordBackend<RoleGrantDto>() {
     }
 
     override fun read(executor: Executor, recordId: Long) = transaction {
+
+        authorize(executor, StackRoles.securityOfficer)
+
         RoleGrantDao[recordId].toDto()
     }
 
     override fun delete(executor: Executor, recordId: Long) {
+
+        authorize(executor, StackRoles.securityOfficer)
+
         RoleGrantDao[recordId].delete()
     }
+
 }

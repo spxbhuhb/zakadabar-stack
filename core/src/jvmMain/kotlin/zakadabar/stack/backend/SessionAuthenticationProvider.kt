@@ -27,11 +27,11 @@ fun Authentication.Configuration.session(name: String? = null) {
         var session = call.sessions.get<StackSession>()
 
         if (session == null) {
-            session = StackSession(Server.anonymous.id)
+            session = StackSession(Server.anonymous.id, emptyList())
             call.sessions.set(session)
         }
 
-        context.principal(Executor(session.account))
+        context.principal(Executor(session.account, session.roles))
     }
 
     register(provider)

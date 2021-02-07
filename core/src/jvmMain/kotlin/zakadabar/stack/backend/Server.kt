@@ -10,7 +10,6 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import io.ktor.application.*
-import io.ktor.auth.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
@@ -23,7 +22,6 @@ import io.ktor.server.netty.*
 import io.ktor.sessions.*
 import io.ktor.websocket.*
 import org.slf4j.LoggerFactory
-import zakadabar.stack.Stack
 import zakadabar.stack.backend.custom.CustomBackend
 import zakadabar.stack.backend.data.Sql
 import zakadabar.stack.backend.data.builtin.session.SessionBackend
@@ -31,7 +29,6 @@ import zakadabar.stack.backend.data.builtin.session.SessionStorageSql
 import zakadabar.stack.backend.data.builtin.session.StackSession
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.data.builtin.AccountPublicDto
-import zakadabar.stack.util.Executor
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -123,15 +120,15 @@ class Server : CliktCommand() {
                 }
             }
 
-            install(Authentication) {
-                session()
-
-                basic(name = "basic") {
-                    realm = config.serverName
-                    validate { return@validate Executor(0L) }
-                }
-
-            }
+//            install(Authentication) {
+//                session()
+//
+//                basic(name = "basic") {
+//                    realm = config.serverName
+//                    validate { return@validate Executor(0L) }
+//                }
+//
+//            }
 
             install(ContentNegotiation) {
                 json()
@@ -151,52 +148,51 @@ class Server : CliktCommand() {
 
             routing {
 
-                route("auth") {
-                    authenticate("basic") {
-                        route("basic") {
-                            get("login") {
-                                // FIXME not anonymous :D
-                                call.sessions.set(StackSession(0))
-                                call.respondText(0L.toString(), ContentType.Application.Json)
-                            }
-                            get("logout") {
-                                call.sessions.set(StackSession(anonymous.id))
-                                call.respondText(anonymous.id.toString(), ContentType.Application.Json)
-                            }
-                        }
-                    }
+//                route("auth") {
+//                    authenticate("basic") {
+//                        route("basic") {
+//                            get("login") {
+//                                // FIXME not anonymous :D
+//                                call.sessions.set(StackSession(0, emptyList()))
+//                                call.respondText(0L.toString(), ContentType.Application.Json)
+//                            }
+//                            get("logout") {
+//                                call.sessions.set(StackSession(anonymous.id))
+//                                call.respondText(anonymous.id.toString(), ContentType.Application.Json)
+//                            }
+//                        }
+//                    }
+//                }
+//                authenticate {
+
+                get("health") {
+                    call.respondText("OK", ContentType.Text.Plain)
                 }
 
-                authenticate {
+                route("api") {
 
-                    route("api") {
-
-                        get("${Stack.shid}/health") {
-                            call.respondText("OK", ContentType.Text.Plain)
-                        }
-
-                        // api installs add routes and the code to serve them
-                        dtoBackends.forEach {
-                            it.onInstallRoutes(this)
-                        }
-
-                        customBackends.forEach {
-                            it.onInstallRoutes(this)
-                        }
-
+                    // api installs add routes and the code to serve them
+                    dtoBackends.forEach {
+                        it.onInstallRoutes(this)
                     }
 
-                    // TODO move static stuff under an URL like "static/"
-                    static {
-                        staticRootFolder = File(config.staticResources)
-                        files(".")
-                        default("index.html")
+                    customBackends.forEach {
+                        it.onInstallRoutes(this)
                     }
 
+                }
+
+                // TODO move static stuff under an URL like "static/"
+                static {
+                    staticRootFolder = File(config.staticResources)
+                    files(".")
+                    default("index.html")
                 }
 
             }
+
         }
+//        }
 
         server.start(wait = true)
     }
