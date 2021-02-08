@@ -8,3 +8,8 @@ import io.ktor.auth.*
 import zakadabar.stack.util.Executor
 
 fun ApplicationCall.executor() = authentication.principal<Executor>() !!
+
+//fun ApplicationCall.executor() : Executor {
+//    val session = sessions.get<StackSession>() ?: throw IllegalStateException("missing session")
+//    return Executor(session.account, session.roles)
+//}

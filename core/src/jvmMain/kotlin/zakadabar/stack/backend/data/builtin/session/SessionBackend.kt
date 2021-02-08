@@ -10,10 +10,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
 import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.data.builtin.ActionStatusDto
-import zakadabar.stack.data.builtin.LoginAction
-import zakadabar.stack.data.builtin.LogoutAction
-import zakadabar.stack.data.builtin.SessionDto
+import zakadabar.stack.data.builtin.*
 import zakadabar.stack.util.Executor
 
 /**
@@ -58,38 +55,45 @@ object SessionBackend : RecordBackend<SessionDto>() {
     }
 
     private fun action(call: ApplicationCall, executor: Executor, action: LoginAction): ActionStatusDto {
-        val old = call.sessions.get<StackSession>() !!
 
+        val result = authenticate(executor.accountId, action.accountName, action.password)
+
+        if (result != null) {
+            val (account, principalId) = result
+            call.sessions.set(StackSession(account.id, PrincipalBackend.roles(principalId)))
+        }
+
+        return ActionStatusDto(success = result != null)
+    }
+
+    fun authenticate(executorAccountId: Long, accountName: String, password: String): Pair<AccountPublicDto, Long>? {
         val (account, principalId) = try {
 
-            val (account, principalId) = Server.findAccountByName(action.accountName)
+            val (account, principalId) = Server.findAccountByName(accountName)
 
-            PrincipalBackend.authenticate(principalId, action.password)
+            PrincipalBackend.authenticate(principalId, password)
 
             account to principalId
 
         } catch (ex: NoSuchElementException) {
-            logger.warn("${executor.accountId}: /login result=fail current-account=${old.account} name=${action.accountName}")
-            return ActionStatusDto(success = false)
+            logger.warn("${executorAccountId}: /login result=fail name=${accountName}")
+            return null
         } catch (ex: PrincipalBackend.AccountLockedException) {
-            logger.warn("${executor.accountId}: /login result=locked current-account=${old.account} name=${action.accountName}")
-            return ActionStatusDto(success = false)
+            logger.warn("${executorAccountId}: /login result=locked name=${accountName}")
+            return null
         } catch (ex: PrincipalBackend.AccountExpiredException) {
-            logger.warn("${executor.accountId}: /login result=expired current-account=${old.account} name=${action.accountName}")
-            return ActionStatusDto(success = false)
+            logger.warn("${executorAccountId}: /login result=expired name=${accountName}")
+            return null
         } catch (ex: PrincipalBackend.AccountNotValidatedException) {
-            logger.warn("${executor.accountId}: /login result=not-validated current-account=${old.account} name=${action.accountName}")
-            return ActionStatusDto(success = false)
+            logger.warn("${executorAccountId}: /login result=not-validated name=${accountName}")
+            return null
         } catch (ex: Exception) {
-            logger.error("${executor.accountId}: /login result=error current-account=${old.account} name=${action.accountName}", ex)
+            logger.error("${executorAccountId}: /login result=error name=${accountName}", ex)
             throw ex
         }
 
-        logger.info("${executor.accountId}: /login result=success current-account=${old.account} new-account=${account.id} name=${action.accountName}")
-
-        call.sessions.set(StackSession(account.id, PrincipalBackend.roles(principalId)))
-
-        return ActionStatusDto(success = true)
+        logger.info("${executorAccountId}: /login result=success new-account=${account.id} name=${accountName}")
+        return account to principalId
     }
 
     @Suppress("UNUSED_PARAMETER") // action is needed here because of route mapping
