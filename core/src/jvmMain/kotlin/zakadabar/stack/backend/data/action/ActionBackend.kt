@@ -13,6 +13,8 @@ import org.slf4j.Logger
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.util.executor
+import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.action.ActionDto
 import zakadabar.stack.util.Executor
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
@@ -26,7 +28,7 @@ interface ActionBackend : BackendModule {
     /**
      * Adds an Action route for this backend.
      */
-    fun <RQ : Any, RS : Any> Route.action(actionDto: KClass<RQ>, func: (Executor, RQ) -> RS) {
+    fun <RQ : ActionDto<RS>, RS : DtoBase> Route.action(actionDto: KClass<RQ>, func: (Executor, RQ) -> RS) {
         post("$recordType/${actionDto.simpleName}") {
 
             val executor = call.executor()
@@ -43,7 +45,7 @@ interface ActionBackend : BackendModule {
     /**
      * Adds an Action route for this backend.
      */
-    fun <RQ : Any, RS : Any> Route.action(actionDto: KClass<RQ>, func: (ApplicationCall, Executor, RQ) -> RS) {
+    fun <RQ : ActionDto<RS>, RS : DtoBase> Route.action(actionDto: KClass<RQ>, func: (ApplicationCall, Executor, RQ) -> RS) {
         post("$recordType/${actionDto.simpleName}") {
 
             val executor = call.executor()

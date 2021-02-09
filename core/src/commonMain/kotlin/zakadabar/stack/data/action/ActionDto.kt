@@ -5,7 +5,7 @@ package zakadabar.stack.data.action
 
 import zakadabar.stack.data.DtoBase
 
-interface ActionDto<RESPONSE> : DtoBase {
+interface ActionDto<RESPONSE : DtoBase> : DtoBase {
     suspend fun execute(): RESPONSE
 }
 
