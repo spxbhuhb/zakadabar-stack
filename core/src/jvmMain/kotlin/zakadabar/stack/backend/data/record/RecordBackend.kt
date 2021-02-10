@@ -43,6 +43,8 @@ abstract class RecordBackend<T : RecordDto<T>>(
 
     override val logger by lazy { LoggerFactory.getLogger(recordType) !! }
 
+    override var logActions = true
+
     /**
      * Create a new record.
      *

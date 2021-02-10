@@ -11,7 +11,6 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import org.slf4j.Logger
 import zakadabar.stack.backend.BackendModule
-import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.util.executor
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.action.ActionDto
@@ -25,6 +24,8 @@ interface ActionBackend : BackendModule {
 
     val logger: Logger
 
+    var logActions: Boolean
+
     /**
      * Adds an Action route for this backend.
      */
@@ -35,7 +36,7 @@ interface ActionBackend : BackendModule {
             val aText = call.receive<String>()
             val aObj = Json.decodeFromString(serializer(actionDto.createType()), aText)
 
-            if (Server.logReads) logger.info("${executor.accountId}: ACTION ${actionDto.simpleName} $aText")
+            if (logActions) logger.info("${executor.accountId}: ACTION ${actionDto.simpleName} $aText")
 
             @Suppress("UNCHECKED_CAST")
             call.respond(func(executor, aObj as RQ))
@@ -52,7 +53,7 @@ interface ActionBackend : BackendModule {
             val aText = call.receive<String>()
             val aObj = Json.decodeFromString(serializer(actionDto.createType()), aText)
 
-            if (Server.logReads) logger.info("${executor.accountId}: ACTION ${actionDto.simpleName} $aText")
+            if (logActions) logger.info("${executor.accountId}: ACTION ${actionDto.simpleName} $aText")
 
             @Suppress("UNCHECKED_CAST")
             call.respond(func(call, executor, aObj as RQ))

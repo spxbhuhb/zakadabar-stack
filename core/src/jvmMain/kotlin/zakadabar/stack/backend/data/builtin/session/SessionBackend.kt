@@ -20,6 +20,8 @@ object SessionBackend : RecordBackend<SessionDto>() {
 
     override val dtoClass = SessionDto::class
 
+    override var logActions = false // do not log passwords
+
     override fun onModuleLoad() {
         + SessionTable
     }

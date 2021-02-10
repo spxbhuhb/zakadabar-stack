@@ -4,6 +4,7 @@
 package zakadabar.stack.data.record
 
 import io.ktor.client.*
+import io.ktor.client.features.cookies.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.http.content.*
@@ -34,7 +35,12 @@ open class RecordComm<T : RecordDto<T>>(
     companion object {
         lateinit var baseUrl: String
 
-        val client = HttpClient()
+        val client = HttpClient {
+            install(HttpCookies) {
+                // Will keep an in-memory map with all the cookies from previous requests.
+                storage = AcceptAllCookiesStorage()
+            }
+        }
     }
 
     @PublicApi
@@ -97,7 +103,7 @@ open class RecordComm<T : RecordDto<T>>(
     @PublicApi
     override suspend fun <REQUEST : Any, RESPONSE> action(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<RESPONSE>): RESPONSE {
         val text = client.post<String>("$baseUrl/api/$recordType/${request::class.simpleName}") {
-            header("Content-Type", "application/json")
+            header("Content-Type", "application/json; charset=UTF-8")
             body = Json.encodeToString(requestSerializer, request)
         }
 
