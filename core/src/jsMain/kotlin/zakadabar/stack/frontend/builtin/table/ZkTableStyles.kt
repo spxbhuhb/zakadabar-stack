@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.util.CssStyleSheet
 object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
 
     val contentContainer by cssClass {
-        padding = 10
+
     }
 
     val table by cssClass {
@@ -29,28 +29,34 @@ object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
             display = "contents"
         }
 
+        on(" tr:hover td") {
+            backgroundColor = theme.table.hoverBackground
+        }
+
         on(" th") {
             padding = 15
             paddingTop = 10
             paddingBottom = 10
             overflow = "hidden"
             textOverflow = "ellipsis"
+            textTransform = "uppercase"
+            fontSize = "75%"
+            fontWeight = 400
             whiteSpace = "nowrap"
             position = "sticky"
             top = 0
             background = theme.table.headerBackground
             textAlign = "left"
             color = theme.table.headerText
-            fontWeight = "normal"
+            borderBottom = "2px solid ${theme.table.innerBorder}"
         }
 
         on(" th:first-child") {
-            borderTopLeftRadius = 4
+
         }
 
         on(" th:last-child") {
-            border = 0
-            borderTopRightRadius = 4
+
         }
 
         on(" td") {
@@ -61,8 +67,8 @@ object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
             textOverflow = "ellipsis"
             whiteSpace = "nowrap"
             color = theme.table.text
-            background = theme.table.oddRowBackground
             fontWeight = theme.fontWeight
+            borderBottom = "1px solid ${theme.table.innerBorder}"
         }
 
         if (theme.table.border != null) {
@@ -81,9 +87,9 @@ object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
             }
         }
 
-        on(" tr:nth-child(even) td") {
-            background = theme.table.evenRowBackground
-        }
+//        on(" tr:nth-child(even) td") {
+//            background = theme.table.evenRowBackground
+//        }
 
         on(" tr:last-child td:first-child") {
             borderBottomLeftRadius = 4

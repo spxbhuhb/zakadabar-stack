@@ -78,15 +78,6 @@ open class ZkTheme {
         text = white
     )
 
-    open var table = ZkTableTheme(
-        headerBackground = "#6c7ae0",
-        headerText = white,
-        oddRowBackground = white,
-        evenRowBackground = "#f8f6ff",
-        text = "#505050",
-        hoverBackground = "#6c7ae0",
-        hoverText = black,
-        border = "1px solid #6c7ae0"
-    )
+    open var table = ZkTableTheme()
 
 }

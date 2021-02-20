@@ -6,6 +6,7 @@ package zakadabar.stack.frontend.builtin.table
 import kotlinx.browser.document
 import kotlinx.dom.clear
 import org.w3c.dom.HTMLTableSectionElement
+import org.w3c.dom.events.MouseEvent
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.table.columns.*
@@ -18,6 +19,7 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
 
     var title: String? = null
     var onCreate: (() -> Unit)? = null
+    var onUpdate: ((T) -> Unit)? = null
     var onSearch: ((searchText: String) -> Unit)? = null
 
     var titleBar: ZkTableTitleBar? = null
@@ -74,6 +76,20 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
                             + td {
                                 column.render(this, index, row)
                             }
+                        }
+
+                        // this is here to prevent text selection on double click
+                        on("mousedown") { event ->
+                            event as MouseEvent
+                            if (event.detail > 1) {
+                                event.preventDefault()
+                            }
+                        }
+
+                        // this handles the double click itself
+                        on("dblclick") { event ->
+                            event.preventDefault()
+                            onUpdate?.invoke(row)
                         }
                     }
                 }
