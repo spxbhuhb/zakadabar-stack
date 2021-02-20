@@ -10,27 +10,39 @@ object ZkMenuStyles : CssStyleSheet<ZkMenuStyles>(Application.theme) {
 
     val menu by cssClass {
         height = "100%"
+        maxHeight = "100%"
+        overflowY = "auto"
         backgroundColor = theme.menu.background
         color = theme.menu.text
-        minWidth = 200
-        paddingLeft = 10
-        paddingRight = 10
+        minWidth = 220
+        display = "flex"
+        flexDirection = "column"
     }
 
     val title by cssClass {
+        boxSizing = "border-box"
         fontWeight = 500
         fontSize = "120%"
-        paddingTop = 12
-        paddingBottom = 4
-        borderBottom = "1px solid white"
+        borderBottom = "0.5px solid #ccc"
         marginBottom = 4
+        paddingLeft = 8
+        display = "flex"
+        flexDirection = "row"
+        alignItems = "center"
+        height = "44px"  // linked to PageTitleBar.height
+        marginBottom = 8
     }
 
     val item by cssClass {
         boxSizing = "border-box"
         cursor = "pointer"
-        height = 40
-        padding = 10
+        height = 32
+        paddingLeft = 12
+        marginRight = 8
+        marginLeft = 8
+        display = "flex"
+        flexDirection = "row"
+        alignItems = "center"
         on(":hover") {
             backgroundColor = theme.menu.hoverBackground
             color = theme.menu.hoverText
@@ -40,16 +52,15 @@ object ZkMenuStyles : CssStyleSheet<ZkMenuStyles>(Application.theme) {
 
     val groupTitle by cssClass {
         boxSizing = "border-box"
+        cursor = "pointer"
+        height = 32
         display = "flex"
         flexDirection = "row"
         justifyContent = "space-between"
         alignItems = "center"
-        cursor = "pointer"
-        height = 40
-        paddingLeft = 10
-        paddingTop = 8
-        paddingBottom = 8
-        paddingRight = 8
+        marginLeft = 8
+        marginRight = 8
+        paddingLeft = 12
         on(":hover") {
             backgroundColor = theme.menu.hoverBackground
             color = theme.menu.hoverText

@@ -26,7 +26,7 @@ class Form : ZkForm<AccountPrivateDto>() {
         + buttons()
     }
 
-    private fun basics() = fieldGridSection(Strings.basics) {
+    private fun basics() = section(Strings.basics) {
 
         ifNotCreate {
             + Strings.id
@@ -41,7 +41,7 @@ class Form : ZkForm<AccountPrivateDto>() {
 
     }
 
-    private fun contact() = fieldGridSection(Strings.contact) {
+    private fun contact() = section(Strings.contact) {
 
         + Strings.email
         + dto::email
@@ -51,7 +51,7 @@ class Form : ZkForm<AccountPrivateDto>() {
 
     }
 
-    private fun workplace() = fieldGridSection(Strings.workplace) {
+    private fun workplace() = section(Strings.workplace) {
 
         + Strings.organization
         + dto::organizationName
@@ -61,7 +61,7 @@ class Form : ZkForm<AccountPrivateDto>() {
 
     }
 
-    private fun displayDetails() = fieldGridSection(Strings.display) {
+    private fun displayDetails() = section(Strings.display) {
 
         + Strings.displayName
         + dto::displayName

@@ -48,4 +48,16 @@ class ZkClasses(theme: ZkTheme) : CssStyleSheet<ZkClasses>(theme) {
         border = 0
     }
 
+    // TODO this should be in the application somewhere it think
+    val titleBar by cssClass {
+        height = 44 // linked to ZkMenuStyles.title.height
+        backgroundColor = "rgb(245,245,245)"
+        borderBottom = "0.5px solid #ccc"
+        display = "flex"
+        flexDirection = "row"
+        alignItems = "center"
+        paddingLeft = 20
+        fontSize = 16
+    }
+
 }

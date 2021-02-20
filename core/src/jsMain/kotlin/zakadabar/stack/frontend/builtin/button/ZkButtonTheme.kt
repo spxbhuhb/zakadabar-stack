@@ -3,9 +3,11 @@
  */
 package zakadabar.stack.frontend.builtin.button
 
+import zakadabar.stack.frontend.resources.MaterialColors
+
 class ZkButtonTheme(
-    val background: String,
-    val text: String,
-    val hoverBackground: String,
-    val hoverText: String
+    val background: String = MaterialColors.LightBlue.a700,
+    val text: String = MaterialColors.white,
+    val hoverBackground: String = MaterialColors.LightBlue.a700,
+    val hoverText: String = MaterialColors.white
 )

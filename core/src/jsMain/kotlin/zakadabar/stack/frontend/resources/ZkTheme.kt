@@ -41,7 +41,7 @@ open class ZkTheme {
     open var headerToolFill = "#2e8d36"
 
     open var sliderColor = lightGray
-    open var fontFamily = "IBM Plex Sans"
+    open var fontFamily = "'Lato', sans-serif"
     open var fontSize = 12
     open var fontWeight = 300
 
@@ -69,16 +69,11 @@ open class ZkTheme {
         foreground = white
     )
 
-    open var button = ZkButtonTheme(
-        background = activeBlue,
-        text = white,
-        hoverBackground = inactiveBlue,
-        hoverText = black
-    )
+    open var button = ZkButtonTheme()
 
     open var menu = ZkMenuTheme(
         background = activeBlue,
-        hoverBackground = inactiveBlue,
+        hoverBackground = "rgba(255,255,255,0.2)",
         activeBackground = inactiveBlue,
         text = white
     )

@@ -20,7 +20,7 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
     var onCreate: (() -> Unit)? = null
     var onSearch: ((searchText: String) -> Unit)? = null
 
-    var actionBar: ZkTableActionBar? = null
+    var titleBar: ZkTableTitleBar? = null
 
     val columns = mutableListOf<ZkColumn<T>>()
 
@@ -30,28 +30,31 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
 
     override fun init() = build {
 
-        className = ZkTableStyles.container
+        buildTitleBar()?.let { + it }
 
-        buildActionBar()?.let { + it }
+        + div(ZkTableStyles.contentContainer) {
 
-        + table(ZkTableStyles.table) {
-            buildContext.style.cssText = gridTemplateColumns()
-            + thead {
-                columns.forEach { it.renderHeader(this) }
+            + table(ZkTableStyles.table) {
+                buildContext.style.cssText = gridTemplateColumns()
+                + thead {
+                    columns.forEach { it.renderHeader(this) }
+                }
+                + tbody
             }
-            + tbody
         }
     }
 
-    private fun buildActionBar(): ZkTableActionBar? {
-        if (actionBar == null && (title != null || onCreate != null || onSearch != null)) {
-            actionBar = ZkTableActionBar {
-                this@ZkTable.title?.let { title = it }
+    private fun buildTitleBar(): ZkTableTitleBar? {
+
+        if (titleBar == null && (onCreate != null || onSearch != null)) {
+            titleBar = ZkTableTitleBar {
+                title = this@ZkTable.title
                 this@ZkTable.onCreate?.let { onCreate = it }
                 this@ZkTable.onSearch?.let { onSearch = it }
             }
         }
-        return actionBar
+
+        return titleBar
     }
 
     fun <RT : Any> preload(loader: suspend () -> RT) = ZkTablePreload(loader)

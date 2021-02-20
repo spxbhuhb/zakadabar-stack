@@ -8,13 +8,14 @@ import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
 
 object DefaultLayout : AppLayout("default") {
 
-
     override fun init() = build {
         initialized = true
 
         + row(coreClasses.h100) {
             + Menu
-            + content
+            + column(coreClasses.w100) {
+                + content
+            }
         }
     }
 

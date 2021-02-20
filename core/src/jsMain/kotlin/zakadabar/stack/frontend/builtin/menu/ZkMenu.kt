@@ -5,15 +5,14 @@ package zakadabar.stack.frontend.builtin.menu
 
 import zakadabar.stack.frontend.elements.ZkElement
 
-open class ZkMenu() : ZkElement() {
+open class ZkMenu : ZkElement() {
 
-    constructor(builder: ZkMenu.() -> Unit) : this() {
+    init {
         className = ZkMenuStyles.menu
-        builder()
     }
 
-    open fun title(text: String, onClick: (() -> Unit)? = null) =
-        ZkMenuTitle(text, onClick)
+    open fun title(text: String, onIconClick: (() -> Unit)? = null, onTextClick: (() -> Unit)? = null) =
+        ZkMenuTitle(text, onIconClick, onTextClick)
 
     open fun item(text: String, onClick: (() -> Unit)? = null) =
         ZkMenuItem(text, onClick)

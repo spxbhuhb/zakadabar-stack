@@ -8,8 +8,8 @@ import zakadabar.stack.frontend.util.CssStyleSheet
 
 object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
 
-    val container by cssClass {
-        paddingLeft = 10
+    val contentContainer by cssClass {
+        padding = 10
     }
 
     val table by cssClass {
@@ -92,13 +92,6 @@ object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
         on(" tr:last-child td:last-child") {
             borderBottomRightRadius = 4
         }
-    }
-
-    val actionBar by cssClass {
-        paddingTop = 10
-        marginBottom = 10
-        fontSize = "125%"
-        alignItems = "flex-end"
     }
 
     init {

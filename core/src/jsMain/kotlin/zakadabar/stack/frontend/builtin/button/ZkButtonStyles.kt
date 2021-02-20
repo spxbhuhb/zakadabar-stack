@@ -31,10 +31,33 @@ object ZkButtonStyles : CssStyleSheet<ZkButtonStyles>(Application.theme) {
         boxSizing = "border-box"
 
         // these assume the icon is 24x24 pixels
-        padding = 3
-        height = 30
+        height = 22
+        width = 22
+
+        display = "flex"
+        justifyContent = "center"
+        alignItems = "center"
 
         borderRadius = 4
+        cursor = "pointer"
+
+        background = theme.button.background
+        fill = theme.button.text
+
+    }
+
+    val roundButton by cssClass {
+        boxSizing = "border-box"
+
+        // these assume the icon is 20x20 pixels
+        height = 22
+        width = 22
+
+        display = "flex"
+        justifyContent = "center"
+        alignItems = "center"
+
+        borderRadius = 11
         cursor = "pointer"
 
         background = theme.button.background

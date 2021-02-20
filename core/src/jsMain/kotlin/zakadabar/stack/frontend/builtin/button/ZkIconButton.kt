@@ -19,14 +19,18 @@ import zakadabar.stack.util.PublicApi
 @PublicApi
 class ZkIconButton(
     private val icon: IconSource,
+    private val transparent: Boolean = false,
+    private val round: Boolean = false,
     private val onClick: (() -> Unit)? = null
 ) : ZkElement() {
 
     override fun init(): ZkElement {
 
-        className = ZkButtonStyles.iconButton
+        className = if (round) ZkButtonStyles.roundButton else ZkButtonStyles.iconButton
 
-        innerHTML = icon.svg(24)
+        if (transparent) style { background = "transparent" }
+
+        innerHTML = icon.svg(18)
 
         on("click", onClick)
         on("mousedown", ::onMouseDown)

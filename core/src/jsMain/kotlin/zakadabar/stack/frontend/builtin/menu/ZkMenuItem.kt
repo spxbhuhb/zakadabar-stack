@@ -13,7 +13,10 @@ open class ZkMenuItem(
 
     override fun init() = build {
         className = ZkMenuStyles.item
-        + text
+
+        + div {
+            + text
+        }
 
         on("click", onClick)
         on("mousedown", ::onMouseDown)

@@ -19,11 +19,16 @@ import zakadabar.stack.data.builtin.LogoutAction
 import zakadabar.stack.frontend.builtin.menu.ZkMenu
 import zakadabar.stack.frontend.util.launch
 
-object Menu : ZkMenu({
+object Menu : ZkMenu() {
 
-    + column {
+    init {
+        style {
+            height = "100%"
+            backgroundImage = """url("/menu_background.jpg")"""
+            backgroundSize = "cover"
+        }
 
-        + item(Strings.applicationName) { Home.open() }
+        + title(Strings.applicationName, ::hideMenu) { Home.open() }
 
         + item(Strings.search) { ShipSearch.open() }
 
@@ -50,48 +55,53 @@ object Menu : ZkMenu({
                 Home.open()
             }
         }
+    }
+
+    private fun hideMenu() {
 
     }
 
-})
+    /**
+     * This function is a bit tricky and not well optimized but it works.
+     * What happens here is that we download the list of seas and
+     * ports from the server and build the menu from the actual DB content.
+     *
+     * This is not perfect as the page needs refresh to update the menu.
+     */
+    private fun seasAndPorts() = group(Strings.ports) {
 
-/**
- * This function is a bit tricky and not well optimized but it works.
- * What happens here is that we download the list of seas and
- * ports from the server and build the menu from the actual DB content.
- *
- * This is not perfect as the page needs refresh to update the menu.
- */
-fun ZkMenu.seasAndPorts() = group(Strings.ports) {
+        // This part is in a launch, that means ports will be empty until
+        // the data arrives. It would be a bit better to show the user that
+        // we are downloading.
 
-    // This part is in a launch, that means ports will be empty until
-    // the data arrives. It would be a bit better to show the user that
-    // we are downloading.
+        launch {
+            var seas = emptyList<SeaDto>()
+            var ports = emptyList<PortDto>()
 
-    launch {
-        var seas = emptyList<SeaDto>()
-        var ports = emptyList<PortDto>()
+            // This pattern lets us download the seas and ports simultaneously.
+            // the coroutineScope ends when both of the launched jobs are done.
 
-        // This pattern lets us download the seas and ports simultaneously.
-        // the coroutineScope ends when both of the launched jobs are done.
+            // IMPORTANT note ".join()" at the end, that's needed to wait until completion
 
-        // IMPORTANT note ".join()" at the end, that's needed to wait until completion
+            coroutineScope {
+                launch { seas = SeaDto.all() }
+                launch { ports = PortDto.all() }
+            }.join()
 
-        coroutineScope {
-            launch { seas = SeaDto.all() }
-            launch { ports = PortDto.all() }
-        }.join()
-
-        seas.forEach { sea ->
-            + group(sea.name) {
-                ports.filter { it.sea == sea.id }.forEach { port ->
-                    + item(port.name) {
-                        Ports.openUpdate(port.id)
+            seas.forEach { sea ->
+                + group(sea.name) {
+                    ports.filter { it.sea == sea.id }.forEach { port ->
+                        + item(port.name) {
+                            Ports.openUpdate(port.id)
+                        }
                     }
                 }
             }
-        }
 
+        }
     }
+
 }
+
+
 
