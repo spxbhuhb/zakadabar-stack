@@ -11,7 +11,9 @@ import zakadabar.stack.frontend.builtin.form.ZkForm
 class Form : ZkForm<PortDto>() {
 
     override fun init() = build {
-        + header(Strings.port)
+
+        title = dto.name
+        super.init()
 
         + section(Strings.basics) {
 

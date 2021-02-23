@@ -20,6 +20,8 @@ object MaterialColors {
     }
 
     object Gray {
+        val c50 = "#FAFAFA"
+        val c100 = "#F5F5F5"
         val c300 = "#E0E0E0"
         val c600 = "#757575"
         val c700 = "#616161"

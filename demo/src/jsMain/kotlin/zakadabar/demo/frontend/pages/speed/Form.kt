@@ -10,7 +10,9 @@ import zakadabar.stack.frontend.builtin.form.ZkForm
 class Form : ZkForm<SpeedDto>() {
 
     override fun init() = build {
-        + header(Strings.speed)
+
+        title = dto.description
+        super.init()
 
         + section(Strings.basics, Strings.speedBasicsExplanation) {
 

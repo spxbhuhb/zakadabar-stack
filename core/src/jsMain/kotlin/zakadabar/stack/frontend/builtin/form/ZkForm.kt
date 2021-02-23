@@ -22,37 +22,35 @@ import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.builtin.form.FormClasses.Companion.formClasses
 import zakadabar.stack.frontend.builtin.form.fields.*
 import zakadabar.stack.frontend.builtin.form.structure.Buttons
-import zakadabar.stack.frontend.builtin.form.structure.Header
 import zakadabar.stack.frontend.builtin.form.structure.Section
 import zakadabar.stack.frontend.builtin.toast.toast
 import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.elements.plusAssign
 import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.util.launch
 import zakadabar.stack.frontend.util.log
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
-import kotlin.reflect.KProperty0
 
 /**
  * Base class for DTO forms.
+ *
+ * @property  autoLabel  When true labels are automatically added. When false they are not.
  */
 open class ZkForm<T : DtoBase> : ZkElement() {
 
     lateinit var dto: T
     lateinit var mode: FormMode
 
-    @PublicApi
+    var title: String = ""
+    var titleBar: ZkFormTitleBar? = null
+
     var autoLabel = true
 
     @PublicApi
     var fieldGridTemplate: String = "150px 1fr"
-
-    @PublicApi
-    var fieldGridGap: String = "5px"
 
     var openUpdate: ((dto: T) -> Unit)? = null
 
@@ -65,15 +63,29 @@ open class ZkForm<T : DtoBase> : ZkElement() {
 
     var schema = lazy { dto.schema() }
 
-    internal val fields = mutableListOf<FormField<*>>()
+    internal val fields = mutableListOf<FormField<T, *>>()
 
     // ----  Builder convenience functions --------
 
-    init {
-        className = formClasses.form
+    override fun init(): ZkElement {
+        classList += ZkFormStyles.form
+        buildTitleBar()?.let { + it }
+        return this
     }
 
-    fun header(title: String) = Header(title)
+    private fun buildTitleBar(): ZkFormTitleBar? {
+
+        // this check lets the extending class to define it's own title bar
+        // TODO think about this, might be better to make buildTitleBar protected
+
+        if (titleBar == null) {
+            titleBar = ZkFormTitleBar {
+                title = this@ZkForm.title
+            }
+        }
+
+        return titleBar
+    }
 
     fun buttons() = Buttons(this@ZkForm)
 
@@ -94,9 +106,7 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         sortOptions: Boolean = true,
         options: suspend () -> List<Pair<RecordId<*>, String>>
     ): ValidatedRecordSelect<T> {
-
         val field = ValidatedRecordSelect(this@ZkForm, kProperty0, sortOptions, options)
-        label(kProperty0)
         fields += field
         return field
 
@@ -109,7 +119,6 @@ open class ZkForm<T : DtoBase> : ZkElement() {
     ): ValidatedOptRecordSelect<T> {
 
         val field = ValidatedOptRecordSelect(this@ZkForm, kProperty0, sortOptions, options)
-        label(kProperty0)
         fields += field
         return field
 
@@ -122,7 +131,6 @@ open class ZkForm<T : DtoBase> : ZkElement() {
     ): ValidatedSelect<T> {
 
         val field = ValidatedSelect(this@ZkForm, kProperty0, sortOptions, options)
-        label(kProperty0)
         fields += field
         return field
 
@@ -135,7 +143,6 @@ open class ZkForm<T : DtoBase> : ZkElement() {
     ): ValidatedOptSelect<T> {
 
         val field = ValidatedOptSelect(this@ZkForm, kProperty0, sortOptions, options)
-        label(kProperty0)
         fields += field
         return field
 
@@ -154,17 +161,12 @@ open class ZkForm<T : DtoBase> : ZkElement() {
     }
 
     fun fieldGrid(build: ZkElement.() -> Unit) =
-        grid(style = "grid-template-columns: $fieldGridTemplate; gap: $fieldGridGap", build = build)
-
-    fun label(prop: KProperty0<*>) {
-        if (autoLabel) + (Application.stringMap[prop.name] ?: prop.name)
-    }
+        grid(style = "grid-template-columns: $fieldGridTemplate; gap: 0", build = build)
 
     // ----  Customized build and property receiver  --------
 
     operator fun KMutableProperty0<RecordId<T>>.unaryPlus(): ZkElement {
-        val field = ValidatedId<T>(this)
-        label(this)
+        val field = ValidatedId(this@ZkForm, this)
         + field
         fields += field
         return field
@@ -172,7 +174,6 @@ open class ZkForm<T : DtoBase> : ZkElement() {
 
     operator fun KMutableProperty0<String>.unaryPlus(): ZkElement {
         val field = ValidatedString(this@ZkForm, this)
-        label(this)
         + field
         fields += field
         return field
@@ -180,7 +181,6 @@ open class ZkForm<T : DtoBase> : ZkElement() {
 
     operator fun KMutableProperty0<String?>.unaryPlus(): ZkElement {
         val field = ValidatedOptString(this@ZkForm, this)
-        label(this)
         + field
         fields += field
         return field
@@ -188,7 +188,6 @@ open class ZkForm<T : DtoBase> : ZkElement() {
 
     operator fun KMutableProperty0<Double>.unaryPlus(): ZkElement {
         val field = ValidatedDouble(this@ZkForm, this)
-        label(this)
         + field
         fields += field
         return field
@@ -196,7 +195,6 @@ open class ZkForm<T : DtoBase> : ZkElement() {
 
     operator fun KMutableProperty0<Boolean>.unaryPlus(): ZkElement {
         val field = ValidatedBoolean(this@ZkForm, this)
-        label(this)
         + field
         fields += field
         return field

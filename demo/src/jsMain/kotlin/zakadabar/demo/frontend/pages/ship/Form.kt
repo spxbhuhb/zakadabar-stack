@@ -15,8 +15,8 @@ import zakadabar.demo.data.SpeedDto
 import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.data.builtin.AccountPublicDto
 import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.frontend.builtin.form.FormClasses
 import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.fields.Images
 import zakadabar.stack.frontend.builtin.form.fields.ValidatedOptRecordSelect
 import zakadabar.stack.frontend.elements.ZkClasses.Companion.zkClasses
@@ -33,13 +33,15 @@ class Form : ZkForm<ShipDto>() {
 
     override fun init() = launchBuild {
 
+        title = dto.name
+        super.init()
+
         coroutineScope {
             this.launch { seas = SeaDto.all() }
             this.launch { port = dto.port?.let { PortDto.read(it) } }
         }.join()
 
-        + header(Strings.ships)
-        + column {
+        + column(ZkFormStyles.contentContainer) {
             + row {
                 + basics() marginRight 8
                 + description()
@@ -66,7 +68,7 @@ class Form : ZkForm<ShipDto>() {
             AccountPublicDto.all().map { it.id to it.fullName }
         }
 
-        + Strings.seas
+        + div(ZkFormStyles.fieldLabel) { + Strings.seas }
         + PreSelect {
             getValue = { seas.firstOrNull { it.id == port?.id }?.id }
             options = { seas.map { it.id to it.name } }
@@ -78,6 +80,7 @@ class Form : ZkForm<ShipDto>() {
                 }
             }
         }
+        + div(ZkFormStyles.fieldBottomBorder)
 
         + select(dto::port) {
             // ports are initialized by the PreSelect below
@@ -88,7 +91,9 @@ class Form : ZkForm<ShipDto>() {
 
     private fun description() = section(Strings.description, Strings.shipDescriptionExplanation, fieldGrid = false) {
         style { flexGrow = "1" }
+        autoLabel = false
         + textarea(dto::description) cssClass zkClasses.h100
+        autoLabel = true
     }
 
     private fun images() = section(Strings.images, fieldGrid = false) {
@@ -119,7 +124,7 @@ class Form : ZkForm<ShipDto>() {
         }
 
         override fun init(): ZkElement {
-            className = FormClasses.formClasses.select
+            className = ZkFormStyles.select
 
             launch {
                 val items = if (sortOptions) options().sortedBy { it.second } else options()

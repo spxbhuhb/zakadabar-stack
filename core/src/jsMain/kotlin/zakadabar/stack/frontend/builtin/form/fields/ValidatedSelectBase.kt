@@ -19,53 +19,42 @@ package zakadabar.stack.frontend.builtin.form.fields
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.frontend.builtin.form.FormClasses.Companion.formClasses
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.util.escape
 import zakadabar.stack.frontend.util.launch
 
 abstract class ValidatedSelectBase<T : DtoBase>(
-    private val form: ZkForm<T>,
+    form: ZkForm<T>,
+    propName: String,
     private val sortOptions: Boolean = true,
     private val options: List<String>
-) : FormField<String>(
-    element = document.createElement("select") as HTMLElement
+) : FormField<T, String>(
+    form = form,
+    propName = propName
 ) {
 
     abstract fun getPropValue(): String?
 
     abstract fun setPropValue()
 
-    abstract val propName: String
+    val select = document.createElement("select") as HTMLElement
 
-    override fun init(): ZkElement {
-        className = formClasses.select
+    override fun buildFieldValue() {
+        select.className = ZkFormStyles.select
 
         launch {
             val items = if (sortOptions) options.sorted() else options
             render(items)
         }
 
-        on("input") { _ ->
+        on(select, "input") { _ ->
             setPropValue()
             form.validate()
         }
 
-        return this
-    }
-
-    override fun onValidated(report: ValidityReport) {
-        val fails = report.fails[propName]
-        if (fails == null) {
-            isValid = true
-            element.style.backgroundColor = "white"
-        } else {
-            isValid = false
-            element.style.backgroundColor = "red"
-        }
+        + select
     }
 
     fun render(items: List<String>) {
@@ -84,6 +73,6 @@ abstract class ValidatedSelectBase<T : DtoBase>(
                 """<option value="$it">${escape(it)}</option>"""
             }
         }
-        element.innerHTML = s
+        select.innerHTML = s
     }
 }

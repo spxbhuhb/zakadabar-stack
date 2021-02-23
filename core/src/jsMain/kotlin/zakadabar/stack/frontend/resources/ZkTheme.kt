@@ -42,7 +42,7 @@ open class ZkTheme {
 
     open var sliderColor = lightGray
     open var fontFamily = "'Lato', sans-serif"
-    open var fontSize = 12
+    open var fontSize = 16
     open var fontWeight = 300
 
     open var borderRadius = 2

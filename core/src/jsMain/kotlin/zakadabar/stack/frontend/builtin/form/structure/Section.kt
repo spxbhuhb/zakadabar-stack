@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.form.structure
 
-import zakadabar.stack.frontend.builtin.form.FormClasses.Companion.formClasses
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.elements.ZkElement
 
 class Section(
@@ -13,13 +13,13 @@ class Section(
 ) : ZkElement() {
 
     override fun init() = build {
-        className = formClasses.section
+        className = ZkFormStyles.section
 
-        + div(formClasses.sectionTitle) {
+        + div(ZkFormStyles.sectionTitle) {
             + title
         }
 
-        + div(formClasses.sectionSummary) {
+        + div(ZkFormStyles.sectionSummary) {
             + summary
         }
 

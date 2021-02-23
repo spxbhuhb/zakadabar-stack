@@ -10,7 +10,9 @@ import zakadabar.stack.frontend.builtin.form.ZkForm
 class Form : ZkForm<AccountPrivateDto>() {
 
     override fun init() = build {
-        + header(Strings.accounts)
+
+        title = dto.accountName
+        super.init()
 
         + column {
             + row {

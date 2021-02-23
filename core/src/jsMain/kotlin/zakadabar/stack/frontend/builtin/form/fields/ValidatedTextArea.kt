@@ -17,47 +17,35 @@
 package zakadabar.stack.frontend.builtin.form.fields
 
 import kotlinx.browser.document
-import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLTextAreaElement
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.frontend.builtin.form.FormClasses.Companion.formClasses
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import kotlin.reflect.KMutableProperty0
 
 class ValidatedTextArea<T : DtoBase>(
-    private val form: ZkForm<T>,
+    form: ZkForm<T>,
     private val prop: KMutableProperty0<String>
-) : FormField<String>(
-    element = document.createElement("textarea") as HTMLElement
+) : FormField<T, String>(
+    form = form,
+    propName = prop.name
 ) {
 
-    private val area = element as HTMLTextAreaElement
+    private val area = document.createElement("textarea") as HTMLTextAreaElement
 
-    override fun init(): ZkElement {
-        className = formClasses.recordId
+    override fun buildFieldValue() {
+        area.className = ZkFormStyles.text
+
         if (readOnly) area.readOnly = true
 
         area.value = prop.get()
 
-        on("input") { _ ->
+        on(area, "input") { _ ->
             prop.set(area.value)
             form.validate()
         }
 
-        return this
-    }
-
-    override fun onValidated(report: ValidityReport) {
-        val fails = report.fails[prop.name]
-        if (fails == null) {
-            isValid = true
-            element.style.backgroundColor = "white"
-        } else {
-            isValid = false
-            element.style.backgroundColor = "red"
-        }
+        + area
     }
 
 }

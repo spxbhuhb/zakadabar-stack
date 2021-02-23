@@ -60,7 +60,7 @@ object Login : ZkPage(FullScreen) {
                 width = "min(100%, 300px)"
             }
 
-            + header(Strings.login) marginBottom 20
+            + div { + Strings.login } marginBottom 20
 
             + fieldGrid {
                 + dto::accountName

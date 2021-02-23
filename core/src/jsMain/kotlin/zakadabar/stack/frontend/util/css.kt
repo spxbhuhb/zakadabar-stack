@@ -98,6 +98,39 @@ class CssStyleRule(val sheet: CssStyleSheet<*>, val cssClassName: String) {
             styles["align-items"] = value
         }
 
+    /**
+     * [MDN: align-items](https://developer.mozilla.org/en-US/docs/Web/CSS/align-self)
+     *
+     * ```
+     *   align-self <=> flex cross axis
+     *
+     *    auto
+     *    normal
+     *
+     *    center
+     *    start
+     *    end
+     *    self-start
+     *    self-end
+     *    flex-start
+     *    flex-end
+     *
+     *    baseline
+     *    first baseline
+     *    last baseline
+     *    stretch
+     *
+     *    safe center
+     *    unsafe center
+     *
+     * ```
+     */
+    var alignSelf
+        get() = styles["align-self"]
+        set(value) {
+            styles["align-self"] = value
+        }
+
     var appearance
         get() = styles["appearance"]
         set(value) {

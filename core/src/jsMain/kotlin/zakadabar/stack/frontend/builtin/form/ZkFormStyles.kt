@@ -4,26 +4,24 @@
 package zakadabar.stack.frontend.builtin.form
 
 import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.resources.ZkTheme
+import zakadabar.stack.frontend.builtin.table.ZkTableStyles
+import zakadabar.stack.frontend.resources.MaterialColors
 import zakadabar.stack.frontend.util.CssStyleSheet
 
-class FormClasses(theme: ZkTheme) : CssStyleSheet<FormClasses>(theme) {
+object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
 
-    companion object {
-        val formClasses = FormClasses(Application.theme).attach()
-    }
+    val rowHeight = 38
 
     val activeBlue = "#2746ab"
-    val inactiveBlue = "#bec7e6";
-    val green = "#89e6c2"
-
-    //     color: #009ee3;
-    //    color: #0d5b28;
-    //    color: #009ee3;
-    //    color: #131359;
 
     val form by cssClass {
-        padding = 8
+        backgroundColor = "rgb(245,245,245)"
+        flexGrow = "1"
+    }
+
+    val contentContainer by ZkTableStyles.cssClass {
+        flexGrow = "1"
+        padding = 10
     }
 
     val headerTitle by cssClass {
@@ -36,21 +34,68 @@ class FormClasses(theme: ZkTheme) : CssStyleSheet<FormClasses>(theme) {
     val section by cssClass {
         display = "flex"
         flexDirection = "column"
-        padding = 4
-        marginBottom = 8
-        border = "1px solid $activeBlue"
-        borderRadius = 4
+        padding = 12
+        margin = 8
+        boxShadow = "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)"
+        borderRadius = 2
+        backgroundColor = MaterialColors.white
     }
 
     val sectionTitle by cssClass {
-        color = activeBlue
+        color = MaterialColors.black
         fontWeight = 500
         paddingBottom = 4
     }
 
     val sectionSummary by cssClass {
         fontSize = "80%"
-        paddingBottom = 8
+        color = MaterialColors.Gray.c600
+        paddingBottom = 16
+    }
+
+    val fieldContainer by cssClass {
+        boxSizing = "border-box"
+        display = "contents"
+    }
+
+    val fieldLabel by cssClass {
+        color = MaterialColors.Gray.c700
+        fontSize = "90%"
+        display = "flex"
+        alignItems = "center"
+        minHeight = rowHeight
+    }
+
+    val fieldValue by cssClass {
+        minHeight = rowHeight
+    }
+
+    val fieldBottomBorder by cssClass {
+        gridColumnStart = 1
+        gridColumnEnd = 3
+        height = 1
+        boxSizing = "border-box"
+        borderBottom = "1px solid ${MaterialColors.Gray.c300}"
+    }
+
+    val onFieldHover by cssClass {
+        borderBottom = "1px solid ${MaterialColors.LightBlue.a700}"
+    }
+
+    val fieldHint by cssClass {
+        color = MaterialColors.Gray.c700
+        fontSize = "90%"
+        borderBottom = "1px solid ${MaterialColors.Gray.c600}"
+    }
+
+    val fieldError by cssClass {
+        color = MaterialColors.Gray.c700
+        fontSize = "90%"
+        borderBottom = "1px solid ${MaterialColors.Gray.c600}"
+    }
+
+    val invalid by cssClass {
+        borderBottom = "1px solid red"
     }
 
     val selectedEntry by cssClass {
@@ -65,7 +110,6 @@ class FormClasses(theme: ZkTheme) : CssStyleSheet<FormClasses>(theme) {
         border = "1px solid lightgray"
     }
 
-
     val recordId by cssClass {
         display = "block"
         fontSize = theme.fontSize
@@ -78,14 +122,12 @@ class FormClasses(theme: ZkTheme) : CssStyleSheet<FormClasses>(theme) {
         maxWidth = "100%"
         boxSizing = "border-box"
         margin = 0
-        border = "1px solid #aaa"
-        boxShadow = "0 1px 0 1px rgba(0,0,0,.04)"
-        borderRadius = ".5em"
+        border = 0
         mozAppearance = "none"
         webkitAppearance = "none"
         appearance = "none"
         color = "#333"
-        backgroundColor = "#eee"
+        backgroundColor = MaterialColors.Gray.c100
     }
 
     val text by cssClass {
@@ -95,28 +137,23 @@ class FormClasses(theme: ZkTheme) : CssStyleSheet<FormClasses>(theme) {
         fontWeight = theme.fontWeight
         color = "#444"
         lineHeight = "1.3"
-        padding = ".6em 1.4em .5em .8em"
+        padding = ".6em 1.4em .5em .4em"
         width = "100%"
         maxWidth = "100%"
         boxSizing = "border-box"
         margin = 0
-        border = "1px solid #aaa"
-        boxShadow = "0 1px 0 1px rgba(0,0,0,.04)"
-        borderRadius = ".5em"
+        border = 0
         mozAppearance = "none"
         webkitAppearance = "none"
         appearance = "none"
         backgroundColor = "#fff"
 
         on(":hover") {
-            borderColor = "#888"
+            backgroundColor = MaterialColors.LightBlue.c50
         }
 
         on(":focus") {
-            borderColor = "#aaa"
-            boxShadow = "0 0 1px 3px rgba(59, 153, 252, .7)"
-            // box-shadow: 0 0 0 3px -moz-mac-focusring;
-            color = "#222"
+            backgroundColor = MaterialColors.LightBlue.c50
             outline = "none"
         }
 
@@ -126,7 +163,7 @@ class FormClasses(theme: ZkTheme) : CssStyleSheet<FormClasses>(theme) {
 
         on(":disabled") {
             color = "#333"
-            backgroundColor = "#eee"
+            backgroundColor = MaterialColors.Gray.c100
             borderColor = "#aaa"
         }
 
@@ -154,9 +191,7 @@ class FormClasses(theme: ZkTheme) : CssStyleSheet<FormClasses>(theme) {
         maxWidth = "100%"
         boxSizing = "border-box"
         margin = 0
-        border = "1px solid #aaa"
-        boxShadow = "0 1px 0 1px rgba(0,0,0,.04)"
-        borderRadius = ".5em"
+        border = 0
         mozAppearance = "none"
         webkitAppearance = "none"
         appearance = "none"
@@ -178,12 +213,12 @@ class FormClasses(theme: ZkTheme) : CssStyleSheet<FormClasses>(theme) {
         }
 
         on(":hover") {
-            borderColor = "#888"
+            backgroundColor = MaterialColors.LightBlue.c50
         }
 
         on(":focus") {
-            borderColor = "#aaa"
-            boxShadow = "0 0 1px 3px rgba(59, 153, 252, .7)"
+            backgroundColor = MaterialColors.LightBlue.c50
+            //boxShadow = "0 0 1px 3px rgba(59, 153, 252, .7)"
             // box-shadow: 0 0 0 3px -moz-mac-focusring;
             color = "#222"
             outline = "none"
@@ -217,5 +252,25 @@ class FormClasses(theme: ZkTheme) : CssStyleSheet<FormClasses>(theme) {
                         "linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%)"
             borderColor = "#aaa"
         }
+    }
+
+    val checkbox by cssClass {
+        display = "flex"
+        paddingLeft = ".8em"
+        height = rowHeight
+        alignItems = "center"
+
+        on(":hover") {
+            backgroundColor = MaterialColors.LightBlue.c50
+        }
+
+        on(":focus") {
+            backgroundColor = MaterialColors.LightBlue.c50
+            outline = "none"
+        }
+    }
+
+    init {
+        attach()
     }
 }

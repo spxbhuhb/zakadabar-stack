@@ -25,7 +25,7 @@ open class ZkActionsColumn<T : RecordDto<T>>(
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         with(builder) {
-            buildContext.dataset["recordId"] = prop.get(row).toString()
+            currentElement.dataset["recordId"] = prop.get(row).toString()
             + CoreStrings.edit
             on("click") { event ->
                 val target = event.target as? HTMLElement ?: return@on

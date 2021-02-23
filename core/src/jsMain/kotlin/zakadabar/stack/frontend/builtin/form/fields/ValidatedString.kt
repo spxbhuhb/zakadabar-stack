@@ -19,45 +19,43 @@ package zakadabar.stack.frontend.builtin.form.fields
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.frontend.builtin.form.FormClasses.Companion.formClasses
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.elements.minusAssign
+import zakadabar.stack.frontend.elements.plusAssign
 import kotlin.reflect.KMutableProperty0
 
 class ValidatedString<T : DtoBase>(
-    private val form: ZkForm<T>,
+    form: ZkForm<T>,
     private val prop: KMutableProperty0<String>
-) : FormField<String>(
-    element = document.createElement("input") as HTMLInputElement
+) : FormField<T, String>(
+    form = form,
+    propName = prop.name
 ) {
 
-    private val input = element as HTMLInputElement
+    private val input = document.createElement("input") as HTMLInputElement
 
-    override fun init(): ZkElement {
-        className = formClasses.text
+    override fun buildFieldValue() {
+        input.className = ZkFormStyles.text
 
         if (readOnly) input.readOnly = true
 
         input.value = prop.get()
 
-        on("input") { _ ->
+        on(input, "input") { _ ->
             prop.set(input.value)
             form.validate()
         }
 
-        return this
-    }
-
-    override fun onValidated(report: ValidityReport) {
-        val fails = report.fails[prop.name]
-        if (fails == null) {
-            isValid = true
-            element.style.backgroundColor = "white"
-        } else {
-            isValid = false
-            element.style.backgroundColor = "red"
+        on(input, "focus") { _ ->
+            fieldBottomBorder.classList += ZkFormStyles.onFieldHover
         }
+
+        on(input, "blur") { _ ->
+            fieldBottomBorder.classList -= ZkFormStyles.onFieldHover
+        }
+
+        + input
     }
 
 }

@@ -26,7 +26,7 @@ class ZkMenuGroup(
                     + openIcon
                     + closeIcon.hide()
                 }
-                on(buildContext, "click") { _ -> if (open) onClose() else onOpen() }
+                on(currentElement, "click") { _ -> if (open) onClose() else onOpen() }
             }
             + zke(ZkMenuStyles.groupContent) {
                 hide()

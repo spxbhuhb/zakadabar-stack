@@ -32,12 +32,19 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
 
     override fun init() = build {
 
+        style {
+            display = "flex"
+            flexDirection = "column"
+            width = "100%"
+            height = "100%"// FIXME move direct style away from here
+        }
+
         buildTitleBar()?.let { + it }
 
         + div(ZkTableStyles.contentContainer) {
 
             + table(ZkTableStyles.table) {
-                buildContext.style.cssText = gridTemplateColumns()
+                currentElement.style.cssText = gridTemplateColumns()
                 + thead {
                     columns.forEach { it.renderHeader(this) }
                 }
@@ -69,7 +76,7 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
 
             build {
                 tbody.clear()
-                this.buildContext = tbody
+                this.currentElement = tbody
                 for ((index, row) in data.withIndex()) {
                     + tr {
                         for (column in columns) {

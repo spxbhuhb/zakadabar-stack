@@ -32,32 +32,27 @@ class SimpleClasses(theme: ZkTheme) : CssStyleSheet<SimpleClasses>(theme) {
     }
 
     val simpleInput by cssClass {
+
         display = "block"
         fontSize = theme.fontSize
         fontFamily = theme.fontFamily
         fontWeight = theme.fontWeight
         color = "#444"
-        lineHeight = "1.3"
-        padding = ".6em 1.4em .5em .8em"
+        padding = ".3em 1.4em .3em .8em"
         boxSizing = "border-box"
         margin = 0
         border = "1px solid #aaa"
-        boxShadow = "0 1px 0 1px rgba(0,0,0,.04)"
-        borderRadius = ".5em"
         mozAppearance = "none"
         webkitAppearance = "none"
         appearance = "none"
         backgroundColor = "#fff"
+        borderRadius = 2
 
         on(":hover") {
             borderColor = "#888"
         }
 
         on(":focus") {
-            borderColor = "#aaa"
-            boxShadow = "0 0 1px 3px rgba(59, 153, 252, .7)"
-            // box-shadow: 0 0 0 3px -moz-mac-focusring;
-            color = "#222"
             outline = "none"
         }
 

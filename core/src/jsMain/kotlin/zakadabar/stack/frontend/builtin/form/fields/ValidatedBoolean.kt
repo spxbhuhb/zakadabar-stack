@@ -19,46 +19,38 @@ package zakadabar.stack.frontend.builtin.form.fields
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import kotlin.reflect.KMutableProperty0
 
 class ValidatedBoolean<T : DtoBase>(
-    private val form: ZkForm<T>,
-    private val prop: KMutableProperty0<Boolean>
-) : FormField<Boolean>(
-    element = document.createElement("input") as HTMLInputElement
+    form: ZkForm<T>,
+    val prop: KMutableProperty0<Boolean>
+) : FormField<T, Boolean>(
+    form = form,
+    propName = prop.name
 ) {
 
-    private val checkbox = element as HTMLInputElement
+    private val checkbox = document.createElement("input") as HTMLInputElement
 
-    override fun init(): ZkElement {
-        checkbox.type = "checkbox"
+    override fun buildFieldValue() {
+        + div(ZkFormStyles.checkbox) {
+            checkbox.type = "checkbox"
+            checkbox.id = "zk-$id-checkbox"
+            checkbox.tabIndex = 0 // TODO fix tabindex, it does not work
 
-        val value: Boolean = prop.get()
+            val value: Boolean = prop.get()
 
-        if (readOnly) checkbox.readOnly = true
+            if (readOnly) checkbox.readOnly = true
 
-        checkbox.checked = value
+            checkbox.checked = value
 
-        on("change") { _ ->
-            prop.set(this.checkbox.checked)
-            form.validate()
-        }
+            on(checkbox, "change") { _ ->
+                prop.set(checkbox.checked)
+                form.validate()
+            }
 
-        return this
-    }
-
-    override fun onValidated(report: ValidityReport) {
-        val fails = report.fails[prop.name]
-        if (fails == null) {
-            isValid = true
-            element.style.backgroundColor = "white"
-        } else {
-            isValid = false
-            element.style.backgroundColor = "red"
+            + checkbox
         }
     }
-
 }

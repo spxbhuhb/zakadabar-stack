@@ -26,7 +26,7 @@ class ValidatedSelect<T : DtoBase>(
     val prop: KMutableProperty0<String>,
     sortOptions: Boolean = true,
     options: List<String>
-) : ValidatedSelectBase<T>(form, sortOptions, options) {
+) : ValidatedSelectBase<T>(form, prop.name, sortOptions, options) {
 
     override fun getPropValue() = prop.get()
 
@@ -34,7 +34,5 @@ class ValidatedSelect<T : DtoBase>(
         val value = (element as HTMLSelectElement).value
         prop.set(value)
     }
-
-    override val propName = prop.name
 
 }

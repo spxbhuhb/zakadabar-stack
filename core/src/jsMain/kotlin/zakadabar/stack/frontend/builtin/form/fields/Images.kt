@@ -16,9 +16,7 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import kotlinx.browser.document
 import org.w3c.dom.DragEvent
-import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.get
 import zakadabar.stack.data.builtin.BlobDto
@@ -33,10 +31,11 @@ import zakadabar.stack.frontend.builtin.util.droparea.DropAreaClasses
 import zakadabar.stack.frontend.resources.Icons
 
 class Images<T : RecordDto<T>>(
-    private val form: ZkForm<T>,
+    form: ZkForm<T>,
     private val dataRecordId: RecordId<T>,
-) : FormField<Unit>(
-    element = document.createElement("div") as HTMLElement
+) : FormField<T, Unit>(
+    form = form,
+    propName = ""
 ) {
 
     override fun init() = launchBuild {

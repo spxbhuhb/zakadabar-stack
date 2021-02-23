@@ -10,7 +10,9 @@ import zakadabar.stack.frontend.builtin.form.ZkForm
 class Form : ZkForm<SeaDto>() {
 
     override fun init() = build {
-        + header(Strings.sea)
+
+        title = dto.name
+        super.init()
 
         + section(Strings.basics) {
 

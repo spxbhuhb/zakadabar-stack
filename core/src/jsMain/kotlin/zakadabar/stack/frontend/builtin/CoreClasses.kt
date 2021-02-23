@@ -34,12 +34,9 @@ class CoreClasses(theme: ZkTheme) : CssStyleSheet<CoreClasses>(theme) {
         maxHeight = "100%"
     }
 
-    val mainContent by cssClass {
-        width = "100%"
+    val layoutContent by cssClass {
+        flexGrow = 1
         display = "flex"
-        flexDirection = "column"
-        width = theme.contentWidth
-        alignItems = "flex-start"
     }
 
     val contentColumn by cssClass {

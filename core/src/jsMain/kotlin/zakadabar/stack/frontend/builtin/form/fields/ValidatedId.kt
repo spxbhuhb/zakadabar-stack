@@ -17,28 +17,29 @@
 package zakadabar.stack.frontend.builtin.form.fields
 
 import kotlinx.browser.document
-import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.frontend.builtin.form.FormClasses.Companion.formClasses
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import kotlin.reflect.KMutableProperty0
 
 class ValidatedId<T : DtoBase>(
+    form: ZkForm<T>,
     private val prop: KMutableProperty0<RecordId<T>>
-) : FormField<RecordId<T>>(
-    element = document.createElement("input") as HTMLElement
+) : FormField<T, RecordId<T>>(
+    form = form,
+    propName = prop.name
 ) {
 
-    private val input = element as HTMLInputElement
+    private val input = document.createElement("input") as HTMLInputElement
 
-    override fun init(): ZkElement {
-        className = formClasses.recordId
+    override fun buildFieldValue() {
+        input.className = ZkFormStyles.recordId
         input.readOnly = true
         input.value = prop.get().toString()
-        return this
+        + input
     }
 
     override fun onValidated(report: ValidityReport) {

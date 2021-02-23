@@ -22,6 +22,7 @@ open class StringsImpl(
         return StringsDelegate()
     }
 
+    open val invalidValue by "Invalid value."
     open val invalidFields by "Some fields contain invalid values: "
     open val createSuccess by "Create success."
     open val updateSuccess by "Update success."

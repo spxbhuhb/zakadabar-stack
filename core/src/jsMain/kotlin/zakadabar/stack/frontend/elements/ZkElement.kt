@@ -18,6 +18,11 @@ import zakadabar.stack.frontend.util.log
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KClass
 
+/**
+ * @property  currentElement  The HTML DOM element that is currently built. This may be
+ *                            different than the ZkElement build as DIVs are usually added
+ *                            to build the layout of the page.
+ */
 open class ZkElement(
     val element: HTMLElement = document.createElement("div") as HTMLElement
 ) {
@@ -50,7 +55,7 @@ open class ZkElement(
 
     val id = nextId
 
-    var buildContext = element
+    var currentElement = element
 
     init {
         element.id = "zk-$id"
@@ -430,17 +435,17 @@ open class ZkElement(
 
     private fun runBuild(e: HTMLElement, className: String?, build: ZkElement.() -> Unit) {
         if (className != null) e.classList.add(className)
-        val original = buildContext
-        buildContext = e
+        val original = currentElement
+        currentElement = e
         this.build()
-        buildContext = original
+        currentElement = original
     }
 
     /**
-     * Convenience to set the style of the current [buildContext].
+     * Convenience to set the style of the current [currentElement].
      */
     fun style(styleBuilder: CSSStyleDeclaration.() -> Unit) {
-        with(buildContext.style) {
+        with(currentElement.style) {
             styleBuilder()
         }
     }
@@ -515,7 +520,7 @@ open class ZkElement(
     }
 
     /**
-     * Creates an IMG with a source url. Use [buildContext] to add attributes other than the source.
+     * Creates an IMG with a source url. Use [currentElement] to add attributes other than the source.
      *
      * ```
      *
@@ -583,7 +588,7 @@ open class ZkElement(
     fun zke(className: String? = null, build: ZkElement.() -> Unit = { }): ZkElement {
         val e = ZkElement()
         if (className != null) e.className = className
-        buildContext.appendChild(e.element)
+        currentElement.appendChild(e.element)
         childElements.plusAssign(e)
         e.build()
         return e
@@ -596,7 +601,7 @@ open class ZkElement(
     operator fun String.not(): HTMLElement {
         val e = document.createElement("span")
         e.innerHTML = this
-        buildContext.append(e)
+        currentElement.append(e)
         return e as HTMLElement
     }
 
@@ -605,7 +610,7 @@ open class ZkElement(
      * No need for escape.
      */
     operator fun String.unaryPlus(): Element {
-        return buildContext.appendText(this)
+        return currentElement.appendText(this)
     }
 
     /**
@@ -614,14 +619,14 @@ open class ZkElement(
      */
     operator fun String?.unaryPlus(): Element? {
         if (this == null) return null
-        return buildContext.appendText(this)
+        return currentElement.appendText(this)
     }
 
     /**
      * Adds an HTML element.
      */
     operator fun HTMLElement.unaryPlus(): HTMLElement {
-        buildContext.appendChild(this)
+        currentElement.appendChild(this)
         return this
     }
 
@@ -629,7 +634,7 @@ open class ZkElement(
      * Adds a [ZkElement].
      */
     operator fun ZkElement.unaryPlus(): ZkElement {
-        this@ZkElement.buildContext.appendChild(this.element)
+        this@ZkElement.currentElement.appendChild(this.element)
         this@ZkElement.childElements += this.init()
         return this
     }
@@ -661,6 +666,23 @@ open class ZkElement(
      */
     infix fun HTMLElement.build(build: ZkElement.() -> Unit): HTMLElement {
         runBuild(this, className, build)
+        return this
+    }
+
+    /**
+     * Hide an [HTMLElement] by adding zkClasses.hidden to its class list.
+     * That is "display: none !imporant".
+     */
+    fun HTMLElement.hide(): HTMLElement {
+        this.classList += zkClasses.hidden
+        return this
+    }
+
+    /**
+     * Show an [HTMLElement] by removing zkClasses.hidden from its class list.
+     */
+    fun HTMLElement.show(): HTMLElement {
+        this.classList -= zkClasses.hidden
         return this
     }
 

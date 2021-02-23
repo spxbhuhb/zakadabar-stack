@@ -9,6 +9,7 @@ import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.application.AppRouting
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.application.NavState
+import zakadabar.stack.frontend.builtin.CoreClasses
 import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.table.ZkTable
@@ -58,10 +59,13 @@ open class ZkCrud<T : RecordDto<T>> : AppRouting.ZkTarget {
     open fun routeNonCrud(routing: AppRouting, state: NavState): ZkElement = NYI()
 
     open fun all(): ZkElement = ZkElement.launchBuildNew {
+
+        classList += CoreClasses.coreClasses.layoutContent
+
         + tableClass.newInstance().setData(companion.comm.all())
     }
 
-    open fun create(): ZkElement = ZkElement.buildNew {
+    open fun create(): ZkElement {
 
         val dto = dtoClass.newInstance()
         dto.schema().setDefaults()
@@ -71,10 +75,12 @@ open class ZkCrud<T : RecordDto<T>> : AppRouting.ZkTarget {
         form.openUpdate = { openUpdate(it.id) }
         form.mode = FormMode.Create
 
-        + form
+        return form
     }
 
     open fun read(recordId: Long): ZkElement = ZkElement.launchBuildNew {
+
+        classList += CoreClasses.coreClasses.layoutContent
 
         val form = formClass.newInstance()
         form.dto = companion.read(recordId)
@@ -86,6 +92,8 @@ open class ZkCrud<T : RecordDto<T>> : AppRouting.ZkTarget {
 
     open fun update(recordId: Long): ZkElement = ZkElement.launchBuildNew {
 
+        classList += CoreClasses.coreClasses.layoutContent
+
         val form = formClass.newInstance()
         form.dto = companion.read(recordId)
         form.openUpdate = { openUpdate(it.id) }
@@ -95,6 +103,8 @@ open class ZkCrud<T : RecordDto<T>> : AppRouting.ZkTarget {
     }
 
     open fun delete(recordId: Long): ZkElement = ZkElement.launchBuildNew {
+
+        classList += CoreClasses.coreClasses.layoutContent
 
         val form = formClass.newInstance()
         form.dto = companion.read(recordId)
