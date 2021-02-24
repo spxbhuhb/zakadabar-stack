@@ -16,7 +16,6 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import org.w3c.dom.HTMLSelectElement
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.form.ZkForm
@@ -31,13 +30,13 @@ class ValidatedOptRecordSelect<T : DtoBase>(
 
     override fun getPropValue() = prop.get()
 
-    override fun setPropValue() {
-        val value = (element as HTMLSelectElement).value.toLongOrNull()
-        if (value == null || value == 0L) {
+    override fun setPropValue(value: Pair<RecordId<*>, String>?) {
+        if (value == null) {
             prop.set(null)
         } else {
-            prop.set(value)
+            prop.set(value.first)
         }
+        form.validate()
     }
 
 }

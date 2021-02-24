@@ -20,7 +20,6 @@ import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.util.escape
 import zakadabar.stack.frontend.util.launch
@@ -42,7 +41,6 @@ abstract class ValidatedSelectBase<T : DtoBase>(
     val select = document.createElement("select") as HTMLElement
 
     override fun buildFieldValue() {
-        select.className = ZkFormStyles.select
 
         launch {
             val items = if (sortOptions) options.sorted() else options

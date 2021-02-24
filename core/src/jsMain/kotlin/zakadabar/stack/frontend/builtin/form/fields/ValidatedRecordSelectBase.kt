@@ -16,12 +16,15 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import kotlinx.browser.document
-import org.w3c.dom.HTMLSelectElement
+import org.w3c.dom.HTMLElement
+import org.w3c.dom.events.MouseEvent
+import org.w3c.dom.get
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.builtin.util.dropdown.Dropdown
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.elements.minusAssign
 import zakadabar.stack.frontend.elements.plusAssign
 import zakadabar.stack.frontend.resources.CoreStrings
@@ -40,50 +43,76 @@ abstract class ValidatedRecordSelectBase<T : DtoBase>(
 
     abstract fun getPropValue(): RecordId<*>?
 
-    abstract fun setPropValue()
+    abstract fun setPropValue(value: Pair<RecordId<*>, String>?)
 
-    val select = document.createElement("select") as HTMLSelectElement
+    private val selectedOption = ZkElement().withClass(ZkFormStyles.selectedOption)
+    private val optionList = ZkElement().withClass(ZkFormStyles.selectOptionList)
+    private val dropdown = Dropdown(optionList, selectedOption, "bottom")
+
+    lateinit var items: List<Pair<RecordId<*>, String>>
 
     override fun buildFieldValue() {
-        select.className = ZkFormStyles.select
-
         launch {
-            val items = if (sortOptions) options().sortedBy { it.second } else options()
-            render(items)
+            items = if (sortOptions) options().sortedBy { it.second } else options()
+            render()
         }
 
-        on(select, "input") { _ ->
-            setPropValue()
-            form.validate()
-        }
-
-        on(select, "focus") { _ ->
+        on("focus") { _ ->
             fieldBottomBorder.classList += ZkFormStyles.onFieldHover
         }
 
-        on(select, "blur") { _ ->
+        on("blur") { _ ->
             fieldBottomBorder.classList -= ZkFormStyles.onFieldHover
         }
 
-        + select
+        + dropdown
+
+        optionList.on("click") { event ->
+            event as MouseEvent
+
+            val target = event.target
+            if (target !is HTMLElement) return@on
+
+            val entryId = target.dataset["entry-id"] ?: return@on
+
+            println("entry-id: ${entryId}")
+
+            if (entryId == "0") {
+                selectedOption.innerText = CoreStrings.notSelected
+                setPropValue(null)
+            } else {
+                val recordId = entryId.toLong()
+                val selected = items.first { it.first == recordId }
+                selectedOption.innerText = selected.second
+                setPropValue(selected)
+            }
+
+            dropdown.close()
+        }
     }
 
-    fun render(items: List<Pair<RecordId<*>, String>>) {
+    fun render() {
         val value = getPropValue()
 
-        var s = if (value == null || value == 0L) {
-            """<option value="0" selected>${CoreStrings.notSelected}</option>"""
+        var s = ""
+
+        if (value == null || value == 0L) {
+            s += """<div class="${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-entry-id="0">${CoreStrings.notSelected}</div>"""
+            selectedOption.innerText = CoreStrings.notSelected
         } else {
-            """<option value="0">${CoreStrings.notSelected}</option>"""
+            s += """<div class="${ZkFormStyles.selectEntry}" data-entry-id="0">${CoreStrings.notSelected}</div>"""
         }
 
         items.forEach {
-            s += if (it.first == value) {
-                """<option value="${it.first}" selected>${escape(it.second)}</option>"""
+            if (it.first == value) {
+                s += """<div class=" ${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-entry-id="${it.first}">${escape(it.second)}</div>"""
+                selectedOption.innerText = it.second
             } else {
-                """<option value="${it.first}">${escape(it.second)}</option>"""
+                s += """<div class="${ZkFormStyles.selectEntry}" data-entry-id="${it.first}">${escape(it.second)}</div>"""
             }
         }
-        select.innerHTML = s
+
+        optionList.innerHTML = s
     }
+
 }

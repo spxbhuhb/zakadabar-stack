@@ -21,6 +21,7 @@ class DropdownClasses(theme: ZkTheme) : CssStyleSheet<DropdownClasses>(theme) {
         position = "absolute"
         display = "none"
         zIndex = 100
+        outline = "none"
     }
 
     val dropdownActive by cssClass {

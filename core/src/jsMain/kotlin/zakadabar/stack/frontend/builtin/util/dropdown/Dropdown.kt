@@ -6,6 +6,7 @@ package zakadabar.stack.frontend.builtin.util.dropdown
 import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.builtin.util.dropdown.DropdownClasses.Companion.dropdownClasses
 import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.elements.minusAssign
 import zakadabar.stack.util.PublicApi
 
 /**
@@ -38,6 +39,9 @@ class Dropdown(
         controller.on("click", ::onControllerClick)
 
         on("onMouseDown", ::onMouseDown)
+
+        dropdownContent.element.tabIndex = 0
+        dropdownContent.on("blur") { _ -> close() }
 
         return this
     }
@@ -156,6 +160,14 @@ class Dropdown(
 
         setPositions(temporaryPosition)
 
+        if (dropdownContent.classList.contains(dropdownClasses.dropdownActive)) {
+            dropdownContent.element.focus()
+        }
+
+    }
+
+    fun close() {
+        dropdownContent.classList -= dropdownClasses.dropdownActive
     }
 
     private fun onMouseDown(event: Event) {

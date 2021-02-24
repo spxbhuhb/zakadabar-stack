@@ -76,7 +76,8 @@ class Form : ZkForm<ShipDto>() {
                 launch {
                     val ports = PortDto.all().filter { it.sea == seaId } // this should be done with a query
                     val portElement = dto::port.find()
-                    portElement.render(ports.sortedBy { it.name }.map { it.id to it.name })
+                    portElement.items = ports.sortedBy { it.name }.map { it.id to it.name }
+                    portElement.render()
                 }
             }
         }
@@ -124,7 +125,6 @@ class Form : ZkForm<ShipDto>() {
         }
 
         override fun init(): ZkElement {
-            className = ZkFormStyles.select
 
             launch {
                 val items = if (sortOptions) options().sortedBy { it.second } else options()
