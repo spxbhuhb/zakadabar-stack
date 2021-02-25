@@ -16,7 +16,6 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import org.w3c.dom.HTMLSelectElement
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
@@ -25,14 +24,19 @@ class ValidatedSelect<T : DtoBase>(
     form: ZkForm<T>,
     val prop: KMutableProperty0<String>,
     sortOptions: Boolean = true,
-    options: List<String>
-) : ValidatedSelectBase<T>(form, prop.name, sortOptions, options) {
+    options: suspend () -> List<Pair<String, String>>
+) : ValidatedSelectBase<T, String>(form, prop.name, sortOptions, options) {
+
+    override fun fromString(string: String): String {
+        return string
+    }
 
     override fun getPropValue() = prop.get()
 
-    override fun setPropValue() {
-        val value = (element as HTMLSelectElement).value
-        prop.set(value)
+    override fun setPropValue(value: Pair<String, String>?) {
+        if (value == null) return
+        prop.set(value.first)
+        form.validate()
     }
 
 }

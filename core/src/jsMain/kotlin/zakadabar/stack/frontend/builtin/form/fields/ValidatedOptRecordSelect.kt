@@ -26,7 +26,11 @@ class ValidatedOptRecordSelect<T : DtoBase>(
     val prop: KMutableProperty0<RecordId<*>?>,
     sortOptions: Boolean = true,
     options: suspend () -> List<Pair<RecordId<*>, String>>
-) : ValidatedRecordSelectBase<T>(form, prop.name, sortOptions, options) {
+) : ValidatedSelectBase<T, RecordId<*>>(form, prop.name, sortOptions, options) {
+
+    override fun fromString(string: String): RecordId<*> {
+        return string.toLong()
+    }
 
     override fun getPropValue() = prop.get()
 

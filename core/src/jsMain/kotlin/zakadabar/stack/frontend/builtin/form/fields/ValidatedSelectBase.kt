@@ -16,61 +16,113 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.events.MouseEvent
+import org.w3c.dom.get
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.builtin.util.dropdown.Dropdown
+import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.elements.minusAssign
+import zakadabar.stack.frontend.elements.plusAssign
 import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.util.escape
 import zakadabar.stack.frontend.util.launch
 
-abstract class ValidatedSelectBase<T : DtoBase>(
+/**
+ *
+ */
+abstract class ValidatedSelectBase<T : DtoBase, VT>(
     form: ZkForm<T>,
     propName: String,
     private val sortOptions: Boolean = true,
-    private val options: List<String>
-) : FormField<T, String>(
+    private val options: suspend () -> List<Pair<VT, String>>
+) : FormField<T, VT>(
     form = form,
     propName = propName
 ) {
 
-    abstract fun getPropValue(): String?
+    companion object {
+        private const val DATASET_KEY = "value"
+    }
 
-    abstract fun setPropValue()
+    abstract fun fromString(string: String): VT
 
-    val select = document.createElement("select") as HTMLElement
+    abstract fun getPropValue(): VT?
+
+    abstract fun setPropValue(value: Pair<VT, String>?)
+
+    private val selectedOption = ZkElement().withClass(ZkFormStyles.selectedOption)
+    private val optionList = ZkElement().withClass(ZkFormStyles.selectOptionList)
+    private val dropdown = Dropdown(optionList, selectedOption, "bottom")
+
+    lateinit var items: List<Pair<VT, String>>
 
     override fun buildFieldValue() {
-
         launch {
-            val items = if (sortOptions) options.sorted() else options
-            render(items)
+            items = if (sortOptions) options().sortedBy { it.second } else options()
+            render()
         }
 
-        on(select, "input") { _ ->
-            setPropValue()
-            form.validate()
+        on("focus") { _ ->
+            fieldBottomBorder.classList += ZkFormStyles.onFieldHover
         }
 
-        + select
+        on("blur") { _ ->
+            fieldBottomBorder.classList -= ZkFormStyles.onFieldHover
+        }
+
+        + dropdown
+
+        optionList.on("click") { event ->
+            event as MouseEvent
+
+            val target = event.target
+            if (target !is HTMLElement) return@on
+
+            val entryId = target.dataset[DATASET_KEY] ?: return@on
+
+            if (entryId == "0") {
+                selectedOption.innerText = CoreStrings.notSelected
+                setPropValue(null)
+            } else {
+                val value = entryId.toLong()
+                val selected = items.first { it.first == value }
+                selectedOption.innerText = selected.second
+                setPropValue(selected)
+            }
+
+            dropdown.close()
+        }
     }
 
-    fun render(items: List<String>) {
+    fun render() {
         val value = getPropValue()
 
-        var s = if (value == null) {
-            """<option value="" selected>${CoreStrings.notSelected}</option>"""
+        var s = ""
+
+        if (value == null || value == 0L) {
+            s += """<div class="${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-${DATASET_KEY}="0">${CoreStrings.notSelected}</div>"""
+            selectedOption.innerText = CoreStrings.notSelected
         } else {
-            """<option value="">${CoreStrings.notSelected}</option>"""
+            s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="0">${CoreStrings.notSelected}</div>"""
         }
 
+//        for (i in 1..1000) {
+//            s += """<div class="${ZkFormStyles.selectEntry}" data-entry-id="0">${CoreStrings.notSelected} $i</div>"""
+//        }
+
         items.forEach {
-            s += if (it == value) {
-                """<option value="$it" selected>${escape(it)}</option>"""
+            if (it.first == value) {
+                s += """<div class=" ${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-${DATASET_KEY}="${it.first}">${escape(it.second)}</div>"""
+                selectedOption.innerText = it.second
             } else {
-                """<option value="$it">${escape(it)}</option>"""
+                s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="${it.first}">${escape(it.second)}</div>"""
             }
         }
-        select.innerHTML = s
+
+        optionList.innerHTML = s
     }
+
 }

@@ -3,28 +3,20 @@
  */
 package zakadabar.demo.frontend.pages.ship
 
-import kotlinx.browser.document
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLSelectElement
 import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
 import zakadabar.demo.data.ShipDto
 import zakadabar.demo.data.SpeedDto
 import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.data.builtin.AccountPublicDto
-import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.fields.Images
-import zakadabar.stack.frontend.builtin.form.fields.ValidatedOptRecordSelect
+import zakadabar.stack.frontend.builtin.form.fields.RecordSelectFilter
 import zakadabar.stack.frontend.elements.ZkClasses.Companion.zkClasses
-import zakadabar.stack.frontend.elements.ZkElement
-import zakadabar.stack.frontend.resources.CoreStrings
-import zakadabar.stack.frontend.util.escape
 import zakadabar.stack.frontend.util.launch
-import kotlin.reflect.KProperty
 
 class Form : ZkForm<ShipDto>() {
 
@@ -68,26 +60,50 @@ class Form : ZkForm<ShipDto>() {
             AccountPublicDto.all().map { it.id to it.fullName }
         }
 
-        + div(ZkFormStyles.fieldLabel) { + Strings.seas }
-        + PreSelect {
-            getValue = { seas.firstOrNull { it.id == port?.id }?.id }
-            options = { seas.map { it.id to it.name } }
-            onSelected = { seaId ->
+        portSelect()
+    }
+
+    private fun portSelect() {
+
+        // Create the select for "port" and initialize it if we have a value.
+        // This does not add the select to the form yet, that's at the
+        // end of the function.
+
+        val select = select(dto::port) {
+            val portId = dto::port.get() ?: return@select emptyList()
+            val port = PortDto.read(portId)
+            PortDto.all().filter { it.sea == port.sea }.map { it.id to it.name }
+        }
+
+        // Create a filter which shows "seas". When the filter changes we have
+        // to update the "port" select we've just created above.
+
+        + RecordSelectFilter(
+            this@Form,
+            label = Strings.seas, // as this form field is not bound to a DTO field it needs a label
+            getValue = { seas.firstOrNull { it.id == port?.id }?.id }, // get the selected "sea" from "port" (if we have a port)
+            options = suspend { seas.map { it.id to it.name } }, // options for the "sea" select
+            onSelected = { value ->
                 launch {
-                    val ports = PortDto.all().filter { it.sea == seaId } // this should be done with a query
-                    val portElement = dto::port.find()
-                    portElement.items = ports.sortedBy { it.name }.map { it.id to it.name }
-                    portElement.render()
+                    val seaId = value?.first
+                    val ports = PortDto.all().filter { it.sea == seaId }
+
+                    val portId = dto::port.get()
+                    if (portId != null) {
+                        val port = PortDto.read(portId)
+                        if (port.sea != seaId) dto::port.set(null)
+                    }
+
+                    select
+                        .apply { items = ports.sortedBy { it.name }.map { it.id to it.name } }
+                        .render()
                 }
             }
-        }
-        + div(ZkFormStyles.fieldBottomBorder)
+        )
 
-        + select(dto::port) {
-            // ports are initialized by the PreSelect below
-            emptyList()
-        }
+        // add the port select to the form
 
+        + select
     }
 
     private fun description() = section(Strings.description, Strings.shipDescriptionExplanation, fieldGrid = false) {
@@ -101,59 +117,5 @@ class Form : ZkForm<ShipDto>() {
         + Images(this@Form, dto.id)
     }
 
-    fun KProperty<RecordId<*>?>.find() = this@Form.find(this)
-
-    fun ZkElement.find(prop: KProperty<RecordId<*>?>): ValidatedOptRecordSelect<*> {
-        childElements.forEach {
-            if (it is ValidatedOptRecordSelect<*> && it.prop.name == prop.name) return it
-            if (it.childElements.isEmpty()) return@forEach
-            it.find(prop)
-        }
-        throw NoSuchElementException(prop.name)
-    }
-
-    class PreSelect() : ZkElement(
-        element = document.createElement("select") as HTMLElement
-    ) {
-        var sortOptions: Boolean = true
-        var getValue: () -> Long? = { null }
-        var onSelected: (RecordId<*>?) -> Unit = { }
-        var options: suspend () -> List<Pair<RecordId<*>, String>> = { emptyList() }
-
-        constructor(builder: PreSelect.() -> Unit) : this() {
-            builder()
-        }
-
-        override fun init(): ZkElement {
-
-            launch {
-                val items = if (sortOptions) options().sortedBy { it.second } else options()
-
-                val value = getValue()
-
-                var s = if (value == null || value == 0L) {
-                    """<option value="0" selected>${CoreStrings.notSelected}</option>"""
-                } else {
-                    """<option value="0">${CoreStrings.notSelected}</option>"""
-                }
-
-                items.forEach {
-                    s += if (it.first == value) {
-                        """<option value="${it.first}" selected>${escape(it.second)}</option>"""
-                    } else {
-                        """<option value="${it.first}">${escape(it.second)}</option>"""
-                    }
-                }
-
-                element.innerHTML = s
-            }
-
-            on("input") { _ ->
-                onSelected((element as HTMLSelectElement).value.toLongOrNull())
-            }
-
-            return this
-        }
-    }
 
 }

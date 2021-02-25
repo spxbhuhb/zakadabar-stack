@@ -130,7 +130,7 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         sortOptions: Boolean = true
     ): ValidatedSelect<T> {
 
-        val field = ValidatedSelect(this@ZkForm, kProperty0, sortOptions, options)
+        val field = ValidatedSelect(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
         fields += field
         return field
 
@@ -142,7 +142,7 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         sortOptions: Boolean = true
     ): ValidatedOptSelect<T> {
 
-        val field = ValidatedOptSelect(this@ZkForm, kProperty0, sortOptions, options)
+        val field = ValidatedOptSelect(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
         fields += field
         return field
 
