@@ -50,7 +50,7 @@ open class ZkTableTitleBar() : ZkElement() {
 
                 onSearch?.let {
                     + SimpleInput(onChange = it, enter = true) marginRight 8
-                    + ZkIconButton(Icons.search) {
+                    + ZkIconButton(Icons.search, buttonSize = 24) {
                         this@ZkTableTitleBar[SimpleInput::class].value
                     }
                 }

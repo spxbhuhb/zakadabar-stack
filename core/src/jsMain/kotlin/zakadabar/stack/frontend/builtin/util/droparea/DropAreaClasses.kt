@@ -4,6 +4,7 @@
 package zakadabar.stack.frontend.builtin.util.droparea
 
 import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.resources.MaterialColors
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.util.CssStyleSheet
 
@@ -14,21 +15,25 @@ class DropAreaClasses(theme: ZkTheme) : CssStyleSheet<DropAreaClasses>(theme) {
     }
 
     val dropArea by cssClass {
+        boxSizing = "border-box"
         flexGrow = 1
         width = "100%"
+        height = "100%"
         display = "flex"
         flexDirection = "row"
-        minHeight = 20
         justifyContent = "center"
         alignItems = "center"
-        height = "100%"
         color = theme.darkestGray
         fill = theme.darkestGray
-        marginTop = 20
+
+        padding = 20
+
+        backgroundColor = "#f5f5f5"
+        borderRadius = 2
+        border = "1px dotted lightgray"
+
         on(":hover") {
-            backgroundColor = "#f5f5f5"
-            borderRadius = 2
-            border = "1px dotted lightgray"
+            backgroundColor = MaterialColors.LightBlue.c50
         }
     }
 

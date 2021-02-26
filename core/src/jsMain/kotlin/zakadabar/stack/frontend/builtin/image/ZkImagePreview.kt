@@ -1,16 +1,18 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.util
+package zakadabar.stack.frontend.builtin.image
 
 import zakadabar.stack.data.builtin.BlobDto
 import zakadabar.stack.data.record.BlobCreateState
 import zakadabar.stack.frontend.elements.ZkElement
 
-open class Thumbnail(
+open class ZkImagePreview(
     var dto: BlobDto,
     var state: BlobCreateState? = null,
-    var progress: Long? = null
+    var progress: Long? = null,
+    var size: Int = 200,
+    var onDelete: (preview: ZkImagePreview) -> Boolean = { false }
 ) : ZkElement() {
 
     override fun init() = build {
@@ -37,10 +39,19 @@ open class Thumbnail(
     }
 
     private fun ZkElement.renderImage() {
-        + image(dto.url()) {
-            with(currentElement.style) {
-                height = "200px"
-                width = "200px"
+        + column {
+            + image(dto.url()) {
+                with(currentElement.style) {
+                    height = "${size}px"
+                    width = "${size}px"
+                }
+
+                on(currentElement, "click") { _ ->
+                    FullScreenImageView(dto.url()) {
+                        val deleted = onDelete(this@ZkImagePreview)
+                        if (deleted) it.hide()
+                    }.show()
+                }
             }
         }
     }

@@ -20,6 +20,8 @@ import zakadabar.stack.util.PublicApi
 @PublicApi
 class ZkIconButton(
     private val icon: IconSource,
+    private val iconSize: Int = 18,
+    private val buttonSize: Int = 22,
     private val cssClass: String? = null,
     private val fill: String? = null,
     private val round: Boolean = false,
@@ -31,7 +33,14 @@ class ZkIconButton(
         className = if (round) ZkButtonStyles.roundButton else ZkButtonStyles.iconButton
         if (cssClass != null) classList += cssClass
 
-        innerHTML = icon.svg(18)
+        element.style.width = "${buttonSize}px"
+        element.style.height = "${buttonSize}px"
+
+        if (round) {
+            element.style.borderRadius = "${buttonSize / 2}px"
+        }
+
+        innerHTML = icon.svg(iconSize)
 
         on("click", onClick)
         on("mousedown", ::onMouseDown)

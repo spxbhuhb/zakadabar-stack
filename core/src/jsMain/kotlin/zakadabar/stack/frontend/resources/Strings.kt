@@ -35,6 +35,9 @@ open class StringsImpl(
     open val queryFail by "Query execution error."
 
     open val notSelected by "not selected"
+    open val confirmDelete by "Delete is irreversible. Are you sure?"
+
+    open val cannotAttachMoreImage by "Image count maximum reached, cannot add more images."
 
     open val id by "Id"
     open val name by "Name"

@@ -16,6 +16,7 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
+import kotlinx.browser.window
 import org.w3c.dom.DragEvent
 import org.w3c.dom.events.Event
 import org.w3c.dom.get
@@ -24,15 +25,19 @@ import zakadabar.stack.data.record.BlobCreateState
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.frontend.builtin.button.ZkIconButton
 import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.util.Thumbnail
+import zakadabar.stack.frontend.builtin.image.ZkImagePreview
 import zakadabar.stack.frontend.builtin.util.droparea.DropAreaClasses
+import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.resources.Icons
+import zakadabar.stack.frontend.util.launch
 
 class Images<T : RecordDto<T>>(
     form: ZkForm<T>,
     private val dataRecordId: RecordId<T>,
+    private val imageCountMax: Int? = null
 ) : FormField<T, Unit>(
     form = form,
     propName = ""
@@ -40,24 +45,53 @@ class Images<T : RecordDto<T>>(
 
     override fun init() = launchBuild {
 
+        element.style.display = "flex"
+        element.style.flexDirection = "row"
+
         form.fields += this@Images
 
         if (form.mode != FormMode.Create) {
             form.dto.comm().blobMetaRead(dataRecordId).forEach {
-                + Thumbnail(it)
+
+                + ZkImagePreview(it, onDelete = {
+                    if (! window.confirm(CoreStrings.confirmDelete)) return@ZkImagePreview false
+                    launch {
+                        if (form.mode != FormMode.Create) {
+                            form.dto.comm().blobDelete(dataRecordId, it.dto.id)
+                        }
+                        this@Images -= it
+                    }
+                    return@ZkImagePreview true
+                }) marginRight 10 marginBottom 10
+
+            }
+
+            val dropArea = zke {
+
+                + div(DropAreaClasses.classes.dropArea) {
+                    + column(DropAreaClasses.classes.dropAreaMessage) {
+                        style {
+                            alignItems = "center"
+                        }
+                        + ZkIconButton(Icons.cloudUpload) marginBottom 10
+                        + "drop files here"
+                    }
+                }
+
+                on("drop", ::onDrop)
+                on("dragover", ::onDragOver)
+
+            } marginRight 10 marginBottom 10
+
+            + dropArea
+
+            if (allowUpload()) {
+                dropArea.show()
+            } else {
+                dropArea.hide()
             }
         }
 
-        + div(DropAreaClasses.classes.dropArea) {
-            + row(DropAreaClasses.classes.dropAreaMessage) {
-                + Icons.cloudUpload.simple18
-                ! "&nbsp;"
-                + "drop files here"
-            }
-        }
-
-        on("drop", ::onDrop)
-        on("dragover", ::onDragOver)
     }
 
     private fun onDragOver(event: Event) {
@@ -67,6 +101,11 @@ class Images<T : RecordDto<T>>(
     private fun onDrop(event: Event) {
         event.stopPropagation()
         event.preventDefault()
+
+        if (allowUpload()) {
+            window.alert(CoreStrings.cannotAttachMoreImage)
+            return
+        }
 
         if (event !is DragEvent) return
 
@@ -82,7 +121,7 @@ class Images<T : RecordDto<T>>(
 
                     // this is a temporary dto to initialize the Thumbnail
                     val dto = BlobDto(0, 0, "", file.name, file.type, file.size.toLong())
-                    val thumbnail = Thumbnail(dto, BlobCreateState.Starting)
+                    val thumbnail = ZkImagePreview(dto, BlobCreateState.Starting)
 
                     // when the form is in create mode we don't have a proper record id, use null instead
                     form.dto.comm().blobCreate(
@@ -92,10 +131,14 @@ class Images<T : RecordDto<T>>(
                     )
 
                     // this will insert after the first thumbnail or at the beginning
-                    insertAfter(thumbnail, childElements.filterIsInstance<Thumbnail>().lastOrNull())
+                    insertAfter(thumbnail, childElements.filterIsInstance<ZkImagePreview>().lastOrNull())
                 }
             }
         }
+    }
+
+    private fun allowUpload(): Boolean {
+        return (imageCountMax == null || imageCountMax - childElements.count { it is ZkImagePreview } > 0)
     }
 
     override fun onValidated(report: ValidityReport) {
@@ -104,9 +147,10 @@ class Images<T : RecordDto<T>>(
 
     override suspend fun onCreateSuccess(created: RecordDto<*>) {
         // update blobs with the proper record id
-        childElements.filterIsInstance<Thumbnail>().forEach {
+        childElements.filterIsInstance<ZkImagePreview>().forEach {
             form.dto.comm().blobMetaUpdate(it.dto.copy(dataRecord = created.id))
         }
     }
+
 
 }

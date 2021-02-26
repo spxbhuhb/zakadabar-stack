@@ -14,5 +14,6 @@ data class ZkTableTheme(
     val hoverBackground: String = MaterialColors.LightBlue.c50,
     val hoverText: String = text,
     val innerBorder: String = MaterialColors.Gray.c300,
+    val headerBottom: String = MaterialColors.LightBlue.a700,
     val border: String? = null
 )

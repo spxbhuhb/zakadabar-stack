@@ -113,7 +113,7 @@ class Form : ZkForm<ShipDto>() {
     }
 
     private fun images() = section(Strings.images, Strings.shipImagesExplanation, fieldGrid = false) {
-        + Images(this@Form, dto.id)
+        + Images(this@Form, dto.id, imageCountMax = 1)
     }
 
 

@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.util.CssStyleSheet
 object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
 
     val contentContainer by cssClass {
-        padding = 10
+        padding = 14
         backgroundColor = "rgb(245,245,245)"
         flexGrow = 1
     }
@@ -55,7 +55,7 @@ object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
             background = theme.table.headerBackground
             textAlign = "left"
             color = theme.table.headerText
-            borderBottom = "2px solid ${theme.table.innerBorder}"
+            borderBottom = "1px solid ${theme.table.headerBottom}"
         }
 
         on(" th:first-child") {

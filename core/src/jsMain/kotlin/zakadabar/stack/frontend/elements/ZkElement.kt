@@ -154,12 +154,12 @@ open class ZkElement(
 
     fun toggle() = element.classList.toggle(zkClasses.hidden)
 
-    fun hide(): ZkElement {
+    open fun hide(): ZkElement {
         classList.add(zkClasses.hidden)
         return this
     }
 
-    fun show(): ZkElement {
+    open fun show(): ZkElement {
         classList.remove(zkClasses.hidden)
         return this
     }
