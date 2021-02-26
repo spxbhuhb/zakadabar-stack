@@ -18,6 +18,7 @@ package zakadabar.stack.frontend.builtin.form.fields
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.events.KeyboardEvent
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
@@ -37,7 +38,8 @@ class ValidatedBoolean<T : DtoBase>(
         + div(ZkFormStyles.checkbox) {
             checkbox.type = "checkbox"
             checkbox.id = "zk-$id-checkbox"
-            checkbox.tabIndex = 0 // TODO fix tabindex, it does not work
+
+            currentElement.tabIndex = 0
 
             val value: Boolean = prop.get()
 
@@ -48,6 +50,13 @@ class ValidatedBoolean<T : DtoBase>(
             on(checkbox, "change") { _ ->
                 prop.set(checkbox.checked)
                 form.validate()
+            }
+
+            on(currentElement, "keypress") { event ->
+                event as KeyboardEvent
+                when (event.key) {
+                    "Enter", " " -> checkbox.checked = ! checkbox.checked
+                }
             }
 
             + checkbox
