@@ -4,6 +4,7 @@
 package zakadabar.stack.frontend.builtin.menu
 
 import org.w3c.dom.events.Event
+import zakadabar.stack.frontend.builtin.button.ZkButtonStyles
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.resources.Icons
@@ -17,7 +18,7 @@ open class ZkMenuTitle(
     override fun init() = build {
         className = ZkMenuStyles.title
 
-        + ZkIconButton(Icons.notes, transparent = true, onClick = onIconClick) marginRight 10
+        + ZkIconButton(Icons.notes, cssClass = ZkButtonStyles.transparent, onClick = onIconClick) marginRight 10
         + text
 
         on("click", onTextClick)

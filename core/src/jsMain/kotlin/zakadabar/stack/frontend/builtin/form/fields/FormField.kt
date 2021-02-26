@@ -5,6 +5,7 @@ package zakadabar.stack.frontend.builtin.form.fields
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.get
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.schema.ValidityReport
@@ -107,13 +108,40 @@ abstract class FormField<FT : DtoBase, DT>(
     open fun onValidated(report: ValidityReport) {
         val fails = report.fails[propName]
         if (fails == null) {
-            valid = true
-            classList -= ZkFormStyles.invalid
+            updateValid(true)
             errors.hide()
         } else {
-            valid = false
-            classList += ZkFormStyles.invalid
+            updateValid(false)
             showErrors()
+        }
+    }
+
+    open fun updateValid(valid: Boolean) {
+        this.valid = valid
+        if (valid) {
+            element.removeInvalid()
+        } else {
+            if (touched) element.addInvalid()
+        }
+    }
+
+    open fun HTMLElement.addInvalid() {
+        classList += "invalid"
+        for (i in 0..childElementCount) {
+            val child = children[i]
+            if (child is HTMLElement) {
+                child.addInvalid()
+            }
+        }
+    }
+
+    open fun HTMLElement.removeInvalid() {
+        classList -= "invalid"
+        for (i in 0..childElementCount) {
+            val child = children[i]
+            if (child is HTMLElement) {
+                child.removeInvalid()
+            }
         }
     }
 

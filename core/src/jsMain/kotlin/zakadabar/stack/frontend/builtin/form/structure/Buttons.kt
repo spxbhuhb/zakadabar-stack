@@ -8,6 +8,7 @@ import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.resources.CoreStrings
 
@@ -17,24 +18,24 @@ class Buttons<T : DtoBase>(
     override fun init() = build {
         when (form.mode) {
             FormMode.Create ->
-                + row {
+                + row(ZkFormStyles.buttons) {
                     + ZkButton(CoreStrings.back) { Application.back() } marginRight 10
                     + ZkButton(CoreStrings.save) { form.submit() }
                 }
 
             FormMode.Read -> {
-                + row {
+                + row(ZkFormStyles.buttons) {
                     + ZkButton(CoreStrings.back) { Application.back() } marginRight 10
                     form.openUpdate?.let { + ZkButton(CoreStrings.edit) { it(form.dto) } }
                 }
             }
             FormMode.Update ->
-                + row {
+                + row(ZkFormStyles.buttons) {
                     + ZkButton(CoreStrings.back) { Application.back() } marginRight 10
                     + ZkButton(CoreStrings.save) { form.submit() }
                 }
             FormMode.Delete ->
-                + row {
+                + row(ZkFormStyles.buttons) {
                     + ZkButton(CoreStrings.back) { Application.back() } marginRight 10
                     + ZkButton(CoreStrings.delete) { form.submit() }
                 }

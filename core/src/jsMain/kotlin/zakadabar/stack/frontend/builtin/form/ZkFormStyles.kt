@@ -11,8 +11,7 @@ import zakadabar.stack.frontend.util.CssStyleSheet
 object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
 
     val rowHeight = 38
-
-    val activeBlue = "#2746ab"
+    val invalidColor = MaterialColors.Red.c100
 
     val form by cssClass {
         backgroundColor = "rgb(245,245,245)"
@@ -24,11 +23,8 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         padding = 10
     }
 
-    val headerTitle by cssClass {
-        color = activeBlue
-        fontSize = "120%"
-        fontWeight = 500
-        marginBottom = 8
+    val buttons by cssClass {
+        margin = 8
     }
 
     val section by cssClass {
@@ -76,6 +72,10 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         height = 1
         boxSizing = "border-box"
         borderBottom = "1px solid ${MaterialColors.Gray.c300}"
+
+        on(".invalid") {
+            borderBottom = "1px solid ${MaterialColors.Red.c500}"
+        }
     }
 
     val onFieldHover by cssClass {
@@ -92,10 +92,6 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         color = MaterialColors.Gray.c700
         fontSize = "90%"
         borderBottom = "1px solid ${MaterialColors.Gray.c600}"
-    }
-
-    val invalid by cssClass {
-        borderBottom = "1px solid red"
     }
 
     val entryList by cssClass {
@@ -142,6 +138,18 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         appearance = "none"
         backgroundColor = "#fff"
 
+        on(".invalid") {
+            backgroundColor = invalidColor
+        }
+
+        on(".invalid:hover") {
+            backgroundColor = invalidColor
+        }
+
+        on(".invalid:focus") {
+            backgroundColor = invalidColor
+        }
+
         on(":hover") {
             backgroundColor = MaterialColors.LightBlue.c50
         }
@@ -171,7 +179,33 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         }
     }
 
-    // for select the styling idea comes from: https://www.filamentgroup.com/lab/select-css.html
+    val selectContainer by cssClass {
+        display = "relative"
+        outline = "none"
+
+        on(".invalid") {
+            backgroundColor = invalidColor
+        }
+
+        on(".invalid:hover") {
+            backgroundColor = invalidColor
+        }
+
+        on(".invalid:focus") {
+            backgroundColor = invalidColor
+        }
+
+        on(":hover") {
+            backgroundColor = MaterialColors.LightBlue.c50
+        }
+
+        on(":focus") {
+            backgroundColor = MaterialColors.LightBlue.c50
+            color = "#222"
+            outline = "none"
+        }
+
+    }
 
     val selectedOption by cssClass {
         display = "block"
@@ -188,17 +222,7 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         mozAppearance = "none"
         webkitAppearance = "none"
         appearance = "none"
-        backgroundColor = "#fff"
 
-        on(":hover") {
-            backgroundColor = MaterialColors.LightBlue.c50
-        }
-
-        on(":focus") {
-            backgroundColor = MaterialColors.LightBlue.c50
-            color = "#222"
-            outline = "none"
-        }
 
         on(" option") {
             fontWeight = "normal"
@@ -218,9 +242,14 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
     }
 
     val selectOptionList by cssClass {
+        position = "absolute"
+        zIndex = 100
+        outline = "none"
         backgroundColor = MaterialColors.white
         boxShadow = "0 0 32px 12px rgba(0, 0, 0, 0.2) "
         borderRadius = 2
+        overflowY = "auto"
+        overflowX = "hidden"
     }
 
     val selectEntry by cssClass {

@@ -12,7 +12,6 @@ object ZkButtonStyles : CssStyleSheet<ZkButtonStyles>(Application.theme) {
         fontFamily = theme.fontFamily
         fontSize = 14
         color = theme.button.text
-        textTransform = "uppercase"
         cursor = "pointer"
         backgroundColor = theme.button.background
         paddingTop = 6
@@ -63,6 +62,10 @@ object ZkButtonStyles : CssStyleSheet<ZkButtonStyles>(Application.theme) {
         background = theme.button.background
         fill = theme.button.text
 
+    }
+
+    val transparent by cssClass {
+        background = "transparent"
     }
 
     init {

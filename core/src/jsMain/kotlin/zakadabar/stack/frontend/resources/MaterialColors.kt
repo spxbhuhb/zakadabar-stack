@@ -13,6 +13,23 @@ object MaterialColors {
     val white = "#ffffff"
     val black = "#000000"
 
+    object Red {
+        val c50 = "#FFEBEE"
+        val c100 = "#FFCDD2"
+        val c200 = "#EF9A9A"
+        val c300 = "#E57373"
+        val c400 = "#EF5350"
+        val c500 = "#F44336"
+        val c600 = "#E53935"
+        val c700 = "#D32F2F"
+        val c800 = "#C62828"
+        val c900 = "#B71C1C"
+        val a100 = "#FF8A80"
+        val a200 = "#FF5252"
+        val a400 = "#FF1744"
+        val a700 = "#D50000"
+    }
+
     object LightBlue {
         val c50 = "#E1F5FE"
         val a400 = "#00B0FF"

@@ -17,12 +17,13 @@
 package zakadabar.stack.frontend.builtin.form.fields
 
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.get
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
-import zakadabar.stack.frontend.builtin.util.dropdown.Dropdown
+import zakadabar.stack.frontend.builtin.popup.alignPopup
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.elements.minusAssign
 import zakadabar.stack.frontend.elements.plusAssign
@@ -55,7 +56,6 @@ abstract class ValidatedSelectBase<T : DtoBase, VT>(
 
     private val selectedOption = ZkElement().withClass(ZkFormStyles.selectedOption)
     private val optionList = ZkElement().withClass(ZkFormStyles.selectOptionList)
-    private val dropdown = Dropdown(optionList, selectedOption, "bottom")
 
     lateinit var items: List<Pair<VT, String>>
 
@@ -65,21 +65,20 @@ abstract class ValidatedSelectBase<T : DtoBase, VT>(
             render()
         }
 
-        on("focus") { _ ->
-            fieldBottomBorder.classList += ZkFormStyles.onFieldHover
+        selectedOption.on("click") { _ ->
+            optionList.toggle()
+            if (optionList.isShown()) {
+                alignPopup(optionList.element, selectedOption.element, ZkFormStyles.rowHeight * 5)
+            }
         }
-
-        on("blur") { _ ->
-            fieldBottomBorder.classList -= ZkFormStyles.onFieldHover
-        }
-
-        + dropdown
 
         optionList.on("click") { event ->
             event as MouseEvent
 
             val target = event.target
             if (target !is HTMLElement) return@on
+
+            console.log(target, event)
 
             val entryId = target.dataset[DATASET_KEY] ?: return@on
 
@@ -93,8 +92,45 @@ abstract class ValidatedSelectBase<T : DtoBase, VT>(
                 setPropValue(selected)
             }
 
-            dropdown.close()
+            optionList.hide()
         }
+
+        val container = div(ZkFormStyles.selectContainer) {
+            + selectedOption
+            + optionList.hide()
+        }
+
+        container.tabIndex = 0
+
+        on(container, "focus") { _ ->
+            fieldBottomBorder.classList += ZkFormStyles.onFieldHover
+        }
+
+        on(container, "blur") { _ ->
+            fieldBottomBorder.classList -= ZkFormStyles.onFieldHover
+            optionList.hide()
+        }
+
+        on(container, "keydown") { event ->
+            event as KeyboardEvent
+
+            // FIXME add keyboard navigation to the list itself
+
+            when (event.key) {
+                "Enter", "ArrowDown" -> {
+                    event.preventDefault()
+                    if (optionList.isHidden()) {
+                        optionList.show()
+                    }
+                }
+                "Escape" -> {
+                    event.preventDefault()
+                    optionList.hide()
+                }
+            }
+        }
+
+        + container
     }
 
     fun render() {
@@ -109,7 +145,7 @@ abstract class ValidatedSelectBase<T : DtoBase, VT>(
             s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="0">${CoreStrings.notSelected}</div>"""
         }
 
-//        for (i in 1..1000) {
+//        for (i in 1..100) {
 //            s += """<div class="${ZkFormStyles.selectEntry}" data-entry-id="0">${CoreStrings.notSelected} $i</div>"""
 //        }
 

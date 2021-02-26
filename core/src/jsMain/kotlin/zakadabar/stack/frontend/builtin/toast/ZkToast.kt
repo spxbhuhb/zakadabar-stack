@@ -25,16 +25,18 @@ open class ZkToast(
     override fun init() = build {
         className = ZkToastStyles.toast
 
-        when (type) {
-            ZkToastType.Info -> classList += ZkToastStyles.info
-            ZkToastType.Success -> classList += ZkToastStyles.success
-            ZkToastType.Warning -> classList += ZkToastStyles.warning
-            ZkToastType.Error -> classList += ZkToastStyles.error
-            ZkToastType.Custom -> Unit
+        val typeClass = when (type) {
+            ZkToastType.Info -> ZkToastStyles.info
+            ZkToastType.Success -> ZkToastStyles.success
+            ZkToastType.Warning -> ZkToastStyles.warning
+            ZkToastType.Error -> ZkToastStyles.error
+            ZkToastType.Custom -> ""
         }
 
+        classList += typeClass
+
         + div { + message } marginRight 16
-        + ZkIconButton(Icons.close) { Application.toasts -= this }
+        + ZkIconButton(Icons.close, cssClass = typeClass) { Application.toasts -= this }
 
         if (type == ZkToastType.Success || type == ZkToastType.Info) {
             launch {

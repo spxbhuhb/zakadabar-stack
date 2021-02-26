@@ -49,10 +49,12 @@ class ValidatedString<T : DtoBase>(
 
         on(input, "focus") { _ ->
             fieldBottomBorder.classList += ZkFormStyles.onFieldHover
+            touched = true
         }
 
         on(input, "blur") { _ ->
             fieldBottomBorder.classList -= ZkFormStyles.onFieldHover
+            form.validate()
         }
 
         + input

@@ -24,32 +24,37 @@ object ZkToastStyles : CssStyleSheet<ZkToastStyles>(Application.theme) {
         alignItems = "center"
         marginRight = 10
         marginBottom = 10
-        paddingTop = 4
-        paddingBottom = 4
+        paddingTop = 8
+        paddingBottom = 8
         paddingLeft = 10
         paddingRight = 10
         borderRadius = 4
+        boxShadow = "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)"
+        borderRadius = 2
     }
 
     val info by cssClass {
-        backgroundColor = theme.infoBackground
-        color = theme.infoText
+        background = theme.infoBackground + " !important"
+        color = theme.infoText + " !important"
+        fill = theme.successText + " !important"
     }
 
     val success by cssClass {
-        backgroundColor = theme.successBackground
-        color = theme.successText
+        background = theme.successBackground + " !important"
+        color = theme.successText + " !important"
+        fill = theme.successText + " !important"
     }
 
     val warning by cssClass {
-        backgroundColor = theme.warningBackground
-        color = theme.warningText
-
+        background = theme.warningBackground + " !important"
+        color = theme.warningText + " !important"
+        fill = theme.warningText + " !important"
     }
 
     val error by cssClass {
-        backgroundColor = theme.errorBackground
-        color = theme.errorText
+        background = theme.errorBackground + " !important"
+        color = theme.errorText + " !important"
+        fill = theme.errorText + " !important"
     }
 
     init {

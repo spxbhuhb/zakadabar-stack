@@ -211,14 +211,13 @@ open class ZkForm<T : DtoBase> : ZkElement() {
     }
 
     fun submit() {
+        // submit marks all fields touched to show all invalid fields for the user
+        fields.forEach { it.touched = true }
+
         val report = validate()
 
         if (report.fails.isNotEmpty()) {
             toast(warning = true) { CoreStrings.invalidFields + report.fails.map { it.key }.joinToString(", ") }
-            console.log("==== Validation Report ====")
-            report.fails.forEach {
-                console.log("${it.key} = ${it.value}")
-            }
             return
         }
 

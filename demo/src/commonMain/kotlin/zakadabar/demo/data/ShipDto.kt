@@ -3,7 +3,6 @@
  */
 package zakadabar.demo.data
 
-import kotlinx.serialization.Serializable
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
@@ -34,8 +33,8 @@ data class ShipDto(
     override fun schema() = DtoSchema {
         + ::id
         + ::name max 20 min 2 notEquals "Titanic" default "Titanic"
-        + ::speed
-        + ::captain
+        + ::speed min 1
+        + ::captain min 1
         + ::description max 2000
         + ::hasPirateFlag default false
         + ::port

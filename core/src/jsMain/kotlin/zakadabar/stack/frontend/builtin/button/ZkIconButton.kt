@@ -6,6 +6,7 @@ package zakadabar.stack.frontend.builtin.button
 import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.builtin.icon.IconSource
 import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.elements.plusAssign
 import zakadabar.stack.util.PublicApi
 
 /**
@@ -19,7 +20,8 @@ import zakadabar.stack.util.PublicApi
 @PublicApi
 class ZkIconButton(
     private val icon: IconSource,
-    private val transparent: Boolean = false,
+    private val cssClass: String? = null,
+    private val fill: String? = null,
     private val round: Boolean = false,
     private val onClick: (() -> Unit)? = null
 ) : ZkElement() {
@@ -27,8 +29,7 @@ class ZkIconButton(
     override fun init(): ZkElement {
 
         className = if (round) ZkButtonStyles.roundButton else ZkButtonStyles.iconButton
-
-        if (transparent) style { background = "transparent" }
+        if (cssClass != null) classList += cssClass
 
         innerHTML = icon.svg(18)
 

@@ -148,6 +148,10 @@ open class ZkElement(
         return this
     }
 
+    fun isShown() = ! element.classList.contains(zkClasses.hidden)
+
+    fun isHidden() = element.classList.contains(zkClasses.hidden)
+
     fun toggle() = element.classList.toggle(zkClasses.hidden)
 
     fun hide(): ZkElement {

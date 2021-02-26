@@ -15,8 +15,6 @@ import org.w3c.files.Blob
 import org.w3c.xhr.ProgressEvent
 import org.w3c.xhr.XMLHttpRequest
 import zakadabar.stack.data.builtin.BlobDto
-import zakadabar.stack.frontend.errors.FetchError
-import zakadabar.stack.frontend.errors.ensure
 import zakadabar.stack.frontend.util.encodeURIComponent
 import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.json
@@ -36,7 +34,7 @@ open class RecordComm<T : RecordDto<T>>(
 ) : RecordCommInterface<T> {
 
     override suspend fun create(dto: T): T {
-        ensure(dto.id == 0L) { "id is not 0 in $dto" }
+        if (dto.id != 0L) throw RuntimeException("id is not 0 in $dto")
 
         val headers = Headers()
 
@@ -58,7 +56,7 @@ open class RecordComm<T : RecordDto<T>>(
         val responsePromise = window.fetch("/api/$recordType/$id")
         val response = responsePromise.await()
 
-        ensure(response.ok) { FetchError(response) }
+        if (! response.ok) throw RuntimeException()
 
         val textPromise = response.text()
         val text = textPromise.await()
@@ -68,7 +66,7 @@ open class RecordComm<T : RecordDto<T>>(
 
     @PublicApi
     override suspend fun update(dto: T): T {
-        ensure(dto.id != 0L) { "ID of the $dto is 0 " }
+        if (dto.id == 0L) throw RuntimeException("ID of the $dto is 0 ")
 
         val headers = Headers()
 
@@ -91,7 +89,7 @@ open class RecordComm<T : RecordDto<T>>(
         val responsePromise = window.fetch("/api/$recordType")
         val response = responsePromise.await()
 
-        ensure(response.ok) { FetchError(response) }
+        if (! response.ok) throw RuntimeException()
 
         val textPromise = response.text()
         val text = textPromise.await()
@@ -105,7 +103,7 @@ open class RecordComm<T : RecordDto<T>>(
         val responsePromise = window.fetch("/api/$recordType/$id", RequestInit(method = "DELETE"))
         val response = responsePromise.await()
 
-        ensure(response.ok) { FetchError(response) }
+        if (! response.ok) throw RuntimeException()
     }
 
     @PublicApi
@@ -120,7 +118,7 @@ open class RecordComm<T : RecordDto<T>>(
         val responsePromise = window.fetch("/api/$recordType/${request::class.simpleName}?q=${q}")
         val response = responsePromise.await()
 
-        ensure(response.ok) { FetchError(response) }
+        if (! response.ok) throw RuntimeException()
 
         val textPromise = response.text()
         val text = textPromise.await()
@@ -146,7 +144,7 @@ open class RecordComm<T : RecordDto<T>>(
         val responsePromise = window.fetch("/api/$recordType/${request::class.simpleName}", requestInit)
         val response = responsePromise.await()
 
-        ensure(response.ok) { FetchError(response) }
+        if (! response.ok) throw RuntimeException()
 
         val textPromise = response.text()
         val text = textPromise.await()
@@ -158,7 +156,7 @@ open class RecordComm<T : RecordDto<T>>(
         val responsePromise = window.fetch("/api/$path", requestInit)
         val response = responsePromise.await()
 
-        ensure(response.ok) { FetchError(response) }
+        if (! response.ok) throw RuntimeException()
 
         val textPromise = response.text()
         val text = textPromise.await()
@@ -202,7 +200,7 @@ open class RecordComm<T : RecordDto<T>>(
         val responsePromise = window.fetch("/api/$recordType/$dataRecordId/blob/all")
         val response = responsePromise.await()
 
-        ensure(response.ok) { FetchError(response) }
+        if (! response.ok) throw RuntimeException()
 
         val textPromise = response.text()
         val text = textPromise.await()
@@ -212,7 +210,7 @@ open class RecordComm<T : RecordDto<T>>(
 
     @PublicApi
     override suspend fun blobMetaUpdate(dto: BlobDto): BlobDto {
-        ensure(dto.id != 0L) { "ID of the $dto is 0 " }
+        if (dto.id != 0L) throw RuntimeException("ID of the $dto is 0 ")
 
         val headers = Headers()
 
@@ -229,7 +227,8 @@ open class RecordComm<T : RecordDto<T>>(
         val responsePromise = window.fetch("/api/$recordType/${dto.dataRecord}/blob", requestInit)
         val response = responsePromise.await()
 
-        ensure(response.ok) { FetchError(response) }
+        if (! response.ok) throw RuntimeException()
+        if (! response.ok) throw RuntimeException()
 
         val textPromise = response.text()
         val text = textPromise.await()
@@ -243,6 +242,6 @@ open class RecordComm<T : RecordDto<T>>(
         val responsePromise = window.fetch("/api/$recordType/$dataRecordId/blob/$blobId", RequestInit(method = "DELETE"))
         val response = responsePromise.await()
 
-        ensure(response.ok) { FetchError(response) }
+        if (! response.ok) throw RuntimeException()
     }
 }
