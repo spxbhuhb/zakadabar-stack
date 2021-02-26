@@ -24,7 +24,7 @@ class SimpleClasses(theme: ZkTheme) : CssStyleSheet<SimpleClasses>(theme) {
         borderWidth = 1
         borderStyle = "solid"
         borderColor = theme.darkestGray
-        borderRadius = 4
+        borderRadius = 2
         on(":hover") {
             backgroundColor = theme.darkGray
             color = theme.lightestColor

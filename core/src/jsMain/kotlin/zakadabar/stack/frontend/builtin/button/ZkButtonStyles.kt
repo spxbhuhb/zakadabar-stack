@@ -19,7 +19,7 @@ object ZkButtonStyles : CssStyleSheet<ZkButtonStyles>(Application.theme) {
         paddingLeft = 10
         paddingRight = 10
         borderWidth = 1
-        borderRadius = 4
+        borderRadius = 2
         on(":hover") {
             backgroundColor = theme.button.hoverBackground
             color = theme.button.hoverText
@@ -37,7 +37,7 @@ object ZkButtonStyles : CssStyleSheet<ZkButtonStyles>(Application.theme) {
         justifyContent = "center"
         alignItems = "center"
 
-        borderRadius = 4
+        borderRadius = 2
         cursor = "pointer"
 
         background = theme.button.background

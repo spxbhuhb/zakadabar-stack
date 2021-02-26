@@ -30,6 +30,7 @@ import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.image.ZkImagePreview
 import zakadabar.stack.frontend.builtin.util.droparea.DropAreaClasses
+import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.resources.Icons
 import zakadabar.stack.frontend.util.launch
@@ -43,6 +44,8 @@ class Images<T : RecordDto<T>>(
     propName = ""
 ) {
 
+    lateinit var droparea: ZkElement
+
     override fun init() = launchBuild {
 
         element.style.display = "flex"
@@ -52,21 +55,10 @@ class Images<T : RecordDto<T>>(
 
         if (form.mode != FormMode.Create) {
             form.dto.comm().blobMetaRead(dataRecordId).forEach {
-
-                + ZkImagePreview(it, onDelete = {
-                    if (! window.confirm(CoreStrings.confirmDelete)) return@ZkImagePreview false
-                    launch {
-                        if (form.mode != FormMode.Create) {
-                            form.dto.comm().blobDelete(dataRecordId, it.dto.id)
-                        }
-                        this@Images -= it
-                    }
-                    return@ZkImagePreview true
-                }) marginRight 10 marginBottom 10
-
+                + ZkImagePreview(it, onDelete = { preview -> onDelete(preview) }) marginRight 10 marginBottom 10
             }
 
-            val dropArea = zke {
+            droparea = zke {
 
                 + div(DropAreaClasses.classes.dropArea) {
                     + column(DropAreaClasses.classes.dropAreaMessage) {
@@ -83,13 +75,8 @@ class Images<T : RecordDto<T>>(
 
             } marginRight 10 marginBottom 10
 
-            + dropArea
-
-            if (allowUpload()) {
-                dropArea.show()
-            } else {
-                dropArea.hide()
-            }
+            + droparea
+            updateDropArea()
         }
 
     }
@@ -102,7 +89,7 @@ class Images<T : RecordDto<T>>(
         event.stopPropagation()
         event.preventDefault()
 
-        if (allowUpload()) {
+        if (! allowUpload()) {
             window.alert(CoreStrings.cannotAttachMoreImage)
             return
         }
@@ -121,7 +108,7 @@ class Images<T : RecordDto<T>>(
 
                     // this is a temporary dto to initialize the Thumbnail
                     val dto = BlobDto(0, 0, "", file.name, file.type, file.size.toLong())
-                    val thumbnail = ZkImagePreview(dto, BlobCreateState.Starting)
+                    val thumbnail = ZkImagePreview(dto, BlobCreateState.Starting, onDelete = { preview -> onDelete(preview) })
 
                     // when the form is in create mode we don't have a proper record id, use null instead
                     form.dto.comm().blobCreate(
@@ -132,6 +119,7 @@ class Images<T : RecordDto<T>>(
 
                     // this will insert after the first thumbnail or at the beginning
                     insertAfter(thumbnail, childElements.filterIsInstance<ZkImagePreview>().lastOrNull())
+                    updateDropArea()
                 }
             }
         }
@@ -139,6 +127,26 @@ class Images<T : RecordDto<T>>(
 
     private fun allowUpload(): Boolean {
         return (imageCountMax == null || imageCountMax - childElements.count { it is ZkImagePreview } > 0)
+    }
+
+    private fun updateDropArea() {
+        if (allowUpload()) {
+            droparea.show()
+        } else {
+            droparea.hide()
+        }
+    }
+
+    private fun onDelete(preview: ZkImagePreview): Boolean {
+        if (! window.confirm(CoreStrings.confirmDelete)) return false
+        launch {
+            if (form.mode != FormMode.Create) {
+                form.dto.comm().blobDelete(dataRecordId, preview.dto.id)
+            }
+            this@Images -= preview
+            updateDropArea()
+        }
+        return true
     }
 
     override fun onValidated(report: ValidityReport) {
