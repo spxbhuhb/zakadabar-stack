@@ -37,7 +37,12 @@ open class Thumbnail(
     }
 
     private fun ZkElement.renderImage() {
-        + image(dto.url())
+        + image(dto.url()) {
+            with(currentElement.style) {
+                height = "200px"
+                width = "200px"
+            }
+        }
     }
 
     private fun ZkElement.renderProgress() {

@@ -103,4 +103,6 @@ class OptInstantValidationRuleList(val kProperty: KMutableProperty0<Instant?>) :
         kProperty.set(defaultValue)
     }
 
+    override fun isOptional() = true
+
 }

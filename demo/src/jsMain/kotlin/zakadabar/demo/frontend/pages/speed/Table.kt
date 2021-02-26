@@ -12,6 +12,7 @@ class Table : ZkTable<SpeedDto>() {
     init {
         title = Strings.speeds
         onCreate = { Speeds.openCreate() }
+        onUpdate = { Speeds.openUpdate(it) }
 
         + SpeedDto::id
         + SpeedDto::description

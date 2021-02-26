@@ -112,7 +112,7 @@ class Form : ZkForm<ShipDto>() {
         autoLabel = true
     }
 
-    private fun images() = section(Strings.images, fieldGrid = false) {
+    private fun images() = section(Strings.images, Strings.shipImagesExplanation, fieldGrid = false) {
         + Images(this@Form, dto.id)
     }
 

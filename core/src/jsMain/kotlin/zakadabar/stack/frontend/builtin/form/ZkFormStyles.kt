@@ -38,7 +38,7 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
     }
 
     val sectionTitle by cssClass {
-        color = MaterialColors.black
+        color = MaterialColors.Blue.c700
         fontWeight = 500
         paddingBottom = 4
     }
@@ -60,6 +60,10 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         display = "flex"
         alignItems = "center"
         minHeight = rowHeight
+    }
+
+    val mandatoryMark by cssClass {
+        color = MaterialColors.Red.c400
     }
 
     val fieldValue by cssClass {
@@ -273,7 +277,7 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         fontFamily = theme.fontFamily
         fontWeight = theme.fontWeight
         color = "#444"
-        padding = ".6em 1.4em .5em .8em"
+        padding = ".6em 1.4em .5em .4em"
         width = "100%"
         maxWidth = "100%"
         boxSizing = "border-box"

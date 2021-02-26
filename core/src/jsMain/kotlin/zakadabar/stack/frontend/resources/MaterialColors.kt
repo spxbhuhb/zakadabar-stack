@@ -30,8 +30,36 @@ object MaterialColors {
         val a700 = "#D50000"
     }
 
+    object Blue {
+        val c50 = "#E3F2FD"
+        val c100 = "#BBDEFB"
+        val c200 = "#90CAF9"
+        val c300 = "#64B5F6"
+        val c400 = "#42A5F5"
+        val c500 = "#2196F3"
+        val c600 = "#1E88E5"
+        val c700 = "#1976D2"
+        val c800 = "#1565C0"
+        val c900 = "#0D47A1"
+        val a100 = "#82B1FF"
+        val a200 = "#448AFF"
+        val a400 = "#2979FF"
+        val a700 = "#2962FF"
+    }
+
     object LightBlue {
         val c50 = "#E1F5FE"
+        val c100 = "#B3E5FC"
+        val c200 = "#81D4FA"
+        val c300 = "#4FC3F7"
+        val c400 = "#29B6F6"
+        val c500 = "#03A9F4"
+        val c600 = "#039BE5"
+        val c700 = "#0288D1"
+        val c800 = "#0277BD"
+        val c900 = "#01579B"
+        val a100 = "#80D8FF"
+        val a200 = "#40C4FF"
         val a400 = "#00B0FF"
         val a700 = "#0091EA"
     }

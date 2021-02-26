@@ -42,4 +42,6 @@ class BooleanValidationRuleList(val kProperty: KMutableProperty0<Boolean>) : Val
         kProperty.set(defaultValue)
     }
 
+    override fun isOptional() = false
+
 }

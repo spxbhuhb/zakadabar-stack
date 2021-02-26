@@ -78,4 +78,6 @@ class DoubleValidationRuleList(val kProperty: KMutableProperty0<Double>) : Valid
         kProperty.set(defaultValue)
     }
 
+    override fun isOptional() = false
+
 }

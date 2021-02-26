@@ -78,4 +78,6 @@ class OptLongValidationRuleList(val kProperty: KMutableProperty0<Long?>) : Valid
         kProperty.set(defaultValue)
     }
 
+    override fun isOptional() = true
+
 }

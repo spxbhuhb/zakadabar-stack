@@ -39,6 +39,7 @@ class ValidatedId<T : DtoBase>(
         input.className = ZkFormStyles.recordId
         input.readOnly = true
         input.value = prop.get().toString()
+        input.tabIndex = - 1
         + input
     }
 

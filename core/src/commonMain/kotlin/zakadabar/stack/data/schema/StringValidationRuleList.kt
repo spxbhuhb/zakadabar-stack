@@ -102,4 +102,6 @@ class StringValidationRuleList(val kProperty: KMutableProperty0<String>) : Valid
         kProperty.set(defaultValue)
     }
 
+    override fun isOptional() = false
+
 }

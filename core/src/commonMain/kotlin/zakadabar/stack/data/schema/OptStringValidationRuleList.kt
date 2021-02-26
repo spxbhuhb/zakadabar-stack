@@ -78,4 +78,6 @@ class OptStringValidationRuleList(val kProperty: KMutableProperty0<String?>) : V
         kProperty.set(defaultValue)
     }
 
+    override fun isOptional() = true
+
 }

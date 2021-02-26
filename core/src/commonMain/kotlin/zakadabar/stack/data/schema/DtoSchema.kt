@@ -103,10 +103,21 @@ open class DtoSchema() {
     fun setDefaults() {
         ruleLists.forEach { it.value.setDefault() }
     }
+
+    fun isOptional(propName: String): Boolean {
+        ruleLists.forEach {
+            if (it.key.name == propName) {
+                return it.value.isOptional()
+            }
+        }
+        return true
+    }
+
 }
 
 interface ValidationRuleList<T> {
     fun validate(report: ValidityReport)
+    fun isOptional(): Boolean
     fun setDefault()
 }
 

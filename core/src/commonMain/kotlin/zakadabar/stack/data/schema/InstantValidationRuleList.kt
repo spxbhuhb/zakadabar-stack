@@ -104,4 +104,6 @@ class InstantValidationRuleList(val kProperty: KMutableProperty0<Instant>) : Val
         kProperty.set(defaultValue ?: Clock.System.now())
     }
 
+    override fun isOptional() = false
+
 }

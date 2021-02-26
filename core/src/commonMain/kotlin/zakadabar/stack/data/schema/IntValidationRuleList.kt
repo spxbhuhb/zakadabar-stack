@@ -78,4 +78,6 @@ class IntValidationRuleList(val kProperty: KMutableProperty0<Int>) : ValidationR
         kProperty.set(defaultValue)
     }
 
+    override fun isOptional() = false
+
 }

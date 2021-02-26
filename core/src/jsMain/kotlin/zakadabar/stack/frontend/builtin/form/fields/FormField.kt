@@ -93,6 +93,9 @@ abstract class FormField<FT : DtoBase, DT>(
         if (form.autoLabel) {
             + div(ZkFormStyles.fieldLabel) {
                 + (Application.stringMap[propName] ?: propName)
+                if (! form.schema.value.isOptional(propName)) {
+                    + div(ZkFormStyles.mandatoryMark) { ! "&nbsp;*" }
+                }
             }
         }
     }

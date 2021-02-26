@@ -49,6 +49,7 @@ class DemoStringsImpl : StringsImpl() {
     val ship by "Ship"
     val shipBasicsExplanation by "Data all ships have."
     val shipDescriptionExplanation by "Description of the ship, special features, number of cannons, history."
+    val shipImagesExplanation by "Drop image files on this field to upload the pictures of this ship. Click on the picture to enlarge."
     val hasPirateFlag by "Pirate Flag"
 
     val speeds by "Speeds"
