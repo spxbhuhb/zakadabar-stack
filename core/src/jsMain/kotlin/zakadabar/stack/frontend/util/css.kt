@@ -578,6 +578,12 @@ class CssStyleRule(val sheet: CssStyleSheet<*>, val cssClassName: String) {
             styles["position"] = value
         }
 
+    var resize
+        get() = styles["resize"]
+        set(value) {
+            styles["resize"] = value
+        }
+
     var strokeWidth: Any?
         get() = styles["stroke-width"]
         set(value) {

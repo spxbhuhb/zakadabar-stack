@@ -34,7 +34,12 @@ class ValidatedTextArea<T : DtoBase>(
     private val area = document.createElement("textarea") as HTMLTextAreaElement
 
     override fun buildFieldValue() {
-        area.className = ZkFormStyles.text
+        currentElement.style.flexGrow = "1"
+        currentElement.style.display = "flex"
+
+        area.className = ZkFormStyles.textarea
+        area.style.flexGrow = "1"
+        area.style.resize = "none"
 
         if (readOnly) area.readOnly = true
 

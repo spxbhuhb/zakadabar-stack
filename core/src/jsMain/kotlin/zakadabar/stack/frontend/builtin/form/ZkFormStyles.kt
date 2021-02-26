@@ -179,6 +179,66 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         }
     }
 
+    val textarea by cssClass {
+        flexGrow = "1"
+        resize = "none"
+        fontSize = theme.fontSize
+        fontFamily = theme.fontFamily
+        fontWeight = theme.fontWeight
+        color = "#444"
+        lineHeight = "1.3"
+        padding = ".6em 1.4em .5em .4em"
+        width = "100%"
+        maxWidth = "100%"
+        boxSizing = "border-box"
+        margin = 0
+        border = 0
+        mozAppearance = "none"
+        webkitAppearance = "none"
+        appearance = "none"
+        backgroundColor = "#fff"
+
+        on(".invalid") {
+            backgroundColor = invalidColor
+        }
+
+        on(".invalid:hover") {
+            backgroundColor = invalidColor
+        }
+
+        on(".invalid:focus") {
+            backgroundColor = invalidColor
+        }
+
+        on(":hover") {
+            backgroundColor = MaterialColors.LightBlue.c50
+        }
+
+        on(":focus") {
+            backgroundColor = MaterialColors.LightBlue.c50
+            outline = "none"
+        }
+
+        on(" option") {
+            fontWeight = "normal"
+        }
+
+        on(":disabled") {
+            color = "#333"
+            backgroundColor = MaterialColors.Gray.c100
+            borderColor = "#aaa"
+        }
+
+        on(":disabled:hover") {
+            borderColor = "#aaa"
+        }
+
+        on("[aria-disabled=true]") {
+            color = "gray"
+            borderColor = "#aaa"
+        }
+    }
+
     val selectContainer by cssClass {
         display = "relative"
         outline = "none"

@@ -15,7 +15,6 @@ import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.fields.Images
 import zakadabar.stack.frontend.builtin.form.fields.RecordSelectFilter
-import zakadabar.stack.frontend.elements.ZkClasses.Companion.zkClasses
 import zakadabar.stack.frontend.util.launch
 
 class Form : ZkForm<ShipDto>() {
@@ -109,7 +108,7 @@ class Form : ZkForm<ShipDto>() {
     private fun description() = section(Strings.description, Strings.shipDescriptionExplanation, fieldGrid = false) {
         style { flexGrow = "1" }
         autoLabel = false
-        + textarea(dto::description) cssClass zkClasses.h100
+        + textarea(dto::description)
         autoLabel = true
     }
 
