@@ -6,6 +6,7 @@ package zakadabar.stack.frontend.util
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.Node
 import org.w3c.dom.events.Event
+import org.w3c.dom.get
 
 /**
  * Look for an HTML element which has a DOM Node Id with the given prefix and is
@@ -37,4 +38,11 @@ fun getElementId(event: Event, idPrefix: String, removePrefix: Boolean = true): 
     } else {
         current to current.id
     }
+}
+
+fun HTMLElement.getDatasetEntry(key: String): String? {
+    val value = this.dataset[key]
+    if (value != null) return value
+
+    return (this.parentElement as? HTMLElement)?.getDatasetEntry(key)
 }

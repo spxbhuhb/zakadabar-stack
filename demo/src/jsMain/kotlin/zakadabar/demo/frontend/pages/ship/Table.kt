@@ -24,7 +24,7 @@ class Table : ZkTable<ShipDto>() {
     init {
         title = Strings.ships
         onCreate = { Ships.openCreate() }
-        onUpdate = { Ships.openUpdate(it.id) }
+        onUpdate = { Ships.openUpdate(it) }
         onSearch = { }
 
         + ShipDto::id build { label = "#" }

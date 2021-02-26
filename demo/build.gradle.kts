@@ -5,6 +5,7 @@
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
+    id("org.jetbrains.kotlin.plugin.noarg")
     id("org.jetbrains.dokka")
     id("com.github.johnrengelman.shadow")
     application
@@ -17,6 +18,10 @@ version = "2021.1.20-SNAPSHOT"
 
 application {
     mainClassName = "zakadabar.stack.backend.ServerKt"
+}
+
+noArg {
+    annotation("kotlinx.serialization.Serializable")
 }
 
 kotlin {

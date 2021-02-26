@@ -5,13 +5,16 @@ package zakadabar.stack.frontend.builtin.table
 
 import kotlinx.browser.document
 import kotlinx.dom.clear
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLTableSectionElement
 import org.w3c.dom.events.MouseEvent
+import org.w3c.dom.set
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.table.columns.*
 import zakadabar.stack.frontend.elements.ZkCrud
 import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.util.getDatasetEntry
 import zakadabar.stack.frontend.util.launch
 import kotlin.reflect.KProperty1
 
@@ -19,7 +22,7 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
 
     var title: String? = null
     var onCreate: (() -> Unit)? = null
-    var onUpdate: ((T) -> Unit)? = null
+    var onUpdate: ((id: RecordId<T>) -> Unit)? = null
     var onSearch: ((searchText: String) -> Unit)? = null
 
     var titleBar: ZkTableTitleBar? = null
@@ -79,6 +82,8 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
                 this.currentElement = tbody
                 for ((index, row) in data.withIndex()) {
                     + tr {
+                        currentElement.dataset["rid"] = row.id.toString()
+
                         for (column in columns) {
                             + td {
                                 column.render(this, index, row)
@@ -94,9 +99,14 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
                         }
 
                         // this handles the double click itself
-                        on("dblclick") { event ->
+                        on(currentElement, "dblclick") { event ->
+                            event as MouseEvent
                             event.preventDefault()
-                            onUpdate?.invoke(row)
+
+                            val target = event.target as HTMLElement
+                            val rid = target.getDatasetEntry("rid")?.toLongOrNull() ?: return@on
+
+                            onUpdate?.invoke(rid)
                         }
                     }
                 }
