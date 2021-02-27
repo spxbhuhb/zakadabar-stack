@@ -40,6 +40,14 @@ fun getElementId(event: Event, idPrefix: String, removePrefix: Boolean = true): 
     }
 }
 
+/**
+ * Get an HTML dataset entry from the element or from one of its
+ * ancestors. Traverses up in the DOM until reaches root or finds
+ * an element with a dataset that holds the given key.
+ *
+ * @return null when no data has been found, value of the data set
+ *         entry otherwise
+ */
 fun HTMLElement.getDatasetEntry(key: String): String? {
     val value = this.dataset[key]
     if (value != null) return value

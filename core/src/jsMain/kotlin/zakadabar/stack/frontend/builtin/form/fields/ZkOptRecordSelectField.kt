@@ -16,42 +16,31 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import kotlinx.browser.document
-import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import kotlin.reflect.KMutableProperty0
 
-class ValidatedDouble<T : DtoBase>(
+class ZkOptRecordSelectField<T : DtoBase>(
     form: ZkForm<T>,
-    private val prop: KMutableProperty0<Double>
-) : FormField<T, Double>(
-    form = form,
-    propName = prop.name
-) {
+    val prop: KMutableProperty0<RecordId<*>?>,
+    sortOptions: Boolean = true,
+    options: suspend () -> List<Pair<RecordId<*>, String>>
+) : ZkSelectBase<T, RecordId<*>>(form, prop.name, sortOptions, options) {
 
-    private val input = document.createElement("input") as HTMLInputElement
+    override fun fromString(string: String): RecordId<*> {
+        return string.toLong()
+    }
 
-    override fun buildFieldValue() {
-        input.className = ZkFormStyles.text
+    override fun getPropValue() = prop.get()
 
-        if (readOnly) input.readOnly = true
-
-        val value = prop.get()
-
-        if (value.isNaN()) {
-            input.value = ""
+    override fun setPropValue(value: Pair<RecordId<*>, String>?) {
+        if (value == null) {
+            prop.set(null)
         } else {
-            input.value = prop.get().toString()
+            prop.set(value.first)
         }
-
-        on(input, "input") { _ ->
-            prop.set(input.value.toDoubleOrNull() ?: Double.NaN)
-            form.validate()
-        }
-
-        + input
+        form.validate()
     }
 
 }

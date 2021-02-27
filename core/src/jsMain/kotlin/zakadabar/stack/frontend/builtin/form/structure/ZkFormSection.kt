@@ -6,7 +6,7 @@ package zakadabar.stack.frontend.builtin.form.structure
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.elements.ZkElement
 
-class Section(
+class ZkFormSection(
     private val title: String,
     private val summary: String,
     private val builder: ZkElement.() -> Unit

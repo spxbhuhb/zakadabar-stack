@@ -25,10 +25,10 @@ import zakadabar.stack.frontend.elements.minusAssign
 import zakadabar.stack.frontend.elements.plusAssign
 import kotlin.reflect.KMutableProperty0
 
-class ValidatedString<T : DtoBase>(
+class ZkStringField<T : DtoBase>(
     form: ZkForm<T>,
     private val prop: KMutableProperty0<String>
-) : FormField<T, String>(
+) : ZkFieldBase<T, String>(
     form = form,
     propName = prop.name
 ) {

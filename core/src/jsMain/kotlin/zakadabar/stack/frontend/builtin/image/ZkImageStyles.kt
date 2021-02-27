@@ -20,6 +20,7 @@ object ZkImageStyles : CssStyleSheet<ZkImageStyles>(Application.theme) {
         zIndex = 1000
         justifyContent = "center"
         alignItems = "center"
+        outline = "none" // this is here because we have a tabindex on ZkFullScreenImageView
     }
 
     val image by cssClass {
@@ -37,12 +38,14 @@ object ZkImageStyles : CssStyleSheet<ZkImageStyles>(Application.theme) {
         position = "absolute"
         top = 20
         right = 20
+        zIndex = 1001
     }
 
     val deleteButton by cssClass {
         position = "absolute"
         top = 20
         left = 20
+        zIndex = 1001
     }
 
     init {

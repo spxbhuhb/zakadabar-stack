@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.form
 
-enum class FormMode {
+enum class ZkFormMode {
     Create,
     Read,
     Update,

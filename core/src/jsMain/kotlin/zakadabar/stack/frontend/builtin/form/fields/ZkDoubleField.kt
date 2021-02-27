@@ -21,12 +21,14 @@ import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.elements.minusAssign
+import zakadabar.stack.frontend.elements.plusAssign
 import kotlin.reflect.KMutableProperty0
 
-class ValidatedOptString<T : DtoBase>(
+class ZkDoubleField<T : DtoBase>(
     form: ZkForm<T>,
-    private val prop: KMutableProperty0<String?>
-) : FormField<T, String>(
+    private val prop: KMutableProperty0<Double>
+) : ZkFieldBase<T, Double>(
     form = form,
     propName = prop.name
 ) {
@@ -38,13 +40,38 @@ class ValidatedOptString<T : DtoBase>(
 
         if (readOnly) input.readOnly = true
 
-        input.value = prop.get() ?: ""
+        val value = prop.get()
+
+        if (value.isNaN()) {
+            input.value = ""
+        } else {
+            input.value = prop.get().toString()
+        }
 
         on(input, "input") { _ ->
-            val value = input.value
-            prop.set(if (value.isBlank()) null else value)
+            touched = true
+
+            val iv = input.value.toDoubleOrNull()
+            if (iv == null) {
+                updateValid(false)
+                return@on
+            }
+
+            prop.set(iv)
             form.validate()
         }
+
+        on(input, "focus") { _ ->
+            fieldBottomBorder.classList += ZkFormStyles.onFieldHover
+            touched = true
+        }
+
+        on(input, "blur") { _ ->
+            fieldBottomBorder.classList -= ZkFormStyles.onFieldHover
+            form.validate()
+        }
+
+        + input
     }
 
 }

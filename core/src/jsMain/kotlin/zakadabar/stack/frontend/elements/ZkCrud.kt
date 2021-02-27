@@ -10,8 +10,8 @@ import zakadabar.stack.frontend.application.AppRouting
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.application.NavState
 import zakadabar.stack.frontend.builtin.CoreClasses
-import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.builtin.form.ZkFormMode
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.builtin.util.NYI
 import zakadabar.stack.frontend.util.newInstance
@@ -73,7 +73,7 @@ open class ZkCrud<T : RecordDto<T>> : AppRouting.ZkTarget {
         val form = formClass.newInstance()
         form.dto = dto
         form.openUpdate = { openUpdate(it.id) }
-        form.mode = FormMode.Create
+        form.mode = ZkFormMode.Create
 
         return form
     }
@@ -85,7 +85,7 @@ open class ZkCrud<T : RecordDto<T>> : AppRouting.ZkTarget {
         val form = formClass.newInstance()
         form.dto = companion.read(recordId)
         form.openUpdate = { openUpdate(it.id) }
-        form.mode = FormMode.Read
+        form.mode = ZkFormMode.Read
 
         + form
     }
@@ -97,7 +97,7 @@ open class ZkCrud<T : RecordDto<T>> : AppRouting.ZkTarget {
         val form = formClass.newInstance()
         form.dto = companion.read(recordId)
         form.openUpdate = { openUpdate(it.id) }
-        form.mode = FormMode.Update
+        form.mode = ZkFormMode.Update
 
         + form
     }
@@ -109,7 +109,7 @@ open class ZkCrud<T : RecordDto<T>> : AppRouting.ZkTarget {
         val form = formClass.newInstance()
         form.dto = companion.read(recordId)
         form.openUpdate = { openUpdate(it.id) }
-        form.mode = FormMode.Delete
+        form.mode = ZkFormMode.Delete
 
         + form
     }

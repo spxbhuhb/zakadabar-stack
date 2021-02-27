@@ -9,9 +9,9 @@ import zakadabar.stack.frontend.builtin.button.ZkIconButton
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.resources.Icons
 
-class FullScreenImageView(
+class ZkFullScreenImageView(
     val url: String,
-    val onDelete: (preview: FullScreenImageView) -> Unit
+    val onDelete: (preview: ZkFullScreenImageView) -> Unit
 ) : ZkElement() {
 
     init {

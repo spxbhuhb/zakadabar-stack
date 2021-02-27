@@ -1,14 +1,14 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.menu
+package zakadabar.stack.frontend.builtin.sidebar
 
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.util.CssStyleSheet
 
-object ZkMenuStyles : CssStyleSheet<ZkMenuStyles>(Application.theme) {
+object ZkSideBarStyles : CssStyleSheet<ZkSideBarStyles>(Application.theme) {
 
-    val menu by cssClass {
+    val sidebar by cssClass {
         height = "100%"
         maxHeight = "100%"
         overflowY = "auto"
@@ -29,14 +29,14 @@ object ZkMenuStyles : CssStyleSheet<ZkMenuStyles>(Application.theme) {
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
-        height = "44px"  // linked to PageTitleBar.height
+        minHeight = "44px"  // linked to PageTitleBar.height
         marginBottom = 8
     }
 
     val item by cssClass {
         boxSizing = "border-box"
         cursor = "pointer"
-        height = 32
+        minHeight = 32
         paddingLeft = 12
         marginRight = 8
         marginLeft = 8
@@ -53,7 +53,7 @@ object ZkMenuStyles : CssStyleSheet<ZkMenuStyles>(Application.theme) {
     val groupTitle by cssClass {
         boxSizing = "border-box"
         cursor = "pointer"
-        height = 32
+        minHeight = 32
         display = "flex"
         flexDirection = "row"
         justifyContent = "space-between"

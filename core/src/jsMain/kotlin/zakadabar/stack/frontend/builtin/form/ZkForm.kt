@@ -23,8 +23,8 @@ import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.fields.*
-import zakadabar.stack.frontend.builtin.form.structure.Buttons
-import zakadabar.stack.frontend.builtin.form.structure.Section
+import zakadabar.stack.frontend.builtin.form.structure.ZkFormButtons
+import zakadabar.stack.frontend.builtin.form.structure.ZkFormSection
 import zakadabar.stack.frontend.builtin.toast.toast
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.elements.plusAssign
@@ -42,7 +42,7 @@ import kotlin.reflect.KMutableProperty0
 open class ZkForm<T : DtoBase> : ZkElement() {
 
     lateinit var dto: T
-    lateinit var mode: FormMode
+    lateinit var mode: ZkFormMode
 
     var title: String = ""
     var titleBar: ZkFormTitleBar? = null
@@ -63,12 +63,12 @@ open class ZkForm<T : DtoBase> : ZkElement() {
 
     var schema = lazy { dto.schema() }
 
-    internal val fields = mutableListOf<FormField<T, *>>()
+    internal val fields = mutableListOf<ZkFieldBase<T, *>>()
 
     // ----  Builder convenience functions --------
 
     override fun init(): ZkElement {
-        classList += ZkFormStyles.form
+        classList += ZkFormStyles.outerContainer
         buildTitleBar()?.let { + it }
         return this
     }
@@ -87,13 +87,13 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         return titleBar
     }
 
-    fun buttons() = Buttons(this@ZkForm)
+    fun buttons() = ZkFormButtons(this@ZkForm)
 
-    fun section(title: String, summary: String = "", fieldGrid: Boolean = true, builder: ZkElement.() -> Unit): Section {
+    fun section(title: String, summary: String = "", fieldGrid: Boolean = true, builder: ZkElement.() -> Unit): ZkFormSection {
         return if (fieldGrid) {
-            Section(title, summary) { + fieldGrid { builder() } }
+            ZkFormSection(title, summary) { + fieldGrid { builder() } }
         } else {
-            Section(title, summary, builder)
+            ZkFormSection(title, summary, builder)
         }
     }
 
@@ -105,8 +105,8 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         kProperty0: KMutableProperty0<RecordId<*>>,
         sortOptions: Boolean = true,
         options: suspend () -> List<Pair<RecordId<*>, String>>
-    ): ValidatedRecordSelect<T> {
-        val field = ValidatedRecordSelect(this@ZkForm, kProperty0, sortOptions, options)
+    ): ZkRecordSelectField<T> {
+        val field = ZkRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
         fields += field
         return field
 
@@ -116,9 +116,9 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         kProperty0: KMutableProperty0<RecordId<*>?>,
         sortOptions: Boolean = true,
         options: suspend () -> List<Pair<RecordId<*>, String>>
-    ): ValidatedOptRecordSelect<T> {
+    ): ZkOptRecordSelectField<T> {
 
-        val field = ValidatedOptRecordSelect(this@ZkForm, kProperty0, sortOptions, options)
+        val field = ZkOptRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
         fields += field
         return field
 
@@ -128,9 +128,9 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         kProperty0: KMutableProperty0<String>,
         options: List<String>,
         sortOptions: Boolean = true
-    ): ValidatedSelect<T> {
+    ): ZkSelectField<T> {
 
-        val field = ValidatedSelect(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
+        val field = ZkSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
         fields += field
         return field
 
@@ -140,23 +140,23 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         kProperty0: KMutableProperty0<String?>,
         options: List<String>,
         sortOptions: Boolean = true
-    ): ValidatedOptSelect<T> {
+    ): ZkOptSelectField<T> {
 
-        val field = ValidatedOptSelect(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
+        val field = ZkOptSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
         fields += field
         return field
 
     }
 
-    fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkElement.() -> Unit = { }): ValidatedTextArea<T> {
-        val field = ValidatedTextArea(this@ZkForm, kProperty0)
+    fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkElement.() -> Unit = { }): ZkTextAreaField<T> {
+        val field = ZkTextAreaField(this@ZkForm, kProperty0)
         fields += field
         field.builder()
         return field
     }
 
     fun ifNotCreate(build: ZkElement.() -> Unit) {
-        if (mode == FormMode.Create) return
+        if (mode == ZkFormMode.Create) return
         build()
     }
 
@@ -166,35 +166,35 @@ open class ZkForm<T : DtoBase> : ZkElement() {
     // ----  Customized build and property receiver  --------
 
     operator fun KMutableProperty0<RecordId<T>>.unaryPlus(): ZkElement {
-        val field = ValidatedId(this@ZkForm, this)
+        val field = ZkIdField(this@ZkForm, this)
         + field
         fields += field
         return field
     }
 
     operator fun KMutableProperty0<String>.unaryPlus(): ZkElement {
-        val field = ValidatedString(this@ZkForm, this)
+        val field = ZkStringField(this@ZkForm, this)
         + field
         fields += field
         return field
     }
 
     operator fun KMutableProperty0<String?>.unaryPlus(): ZkElement {
-        val field = ValidatedOptString(this@ZkForm, this)
+        val field = ZkOptStringField(this@ZkForm, this)
         + field
         fields += field
         return field
     }
 
     operator fun KMutableProperty0<Double>.unaryPlus(): ZkElement {
-        val field = ValidatedDouble(this@ZkForm, this)
+        val field = ZkDoubleField(this@ZkForm, this)
         + field
         fields += field
         return field
     }
 
     operator fun KMutableProperty0<Boolean>.unaryPlus(): ZkElement {
-        val field = ValidatedBoolean(this@ZkForm, this)
+        val field = ZkBooleanField(this@ZkForm, this)
         + field
         fields += field
         return field
@@ -211,41 +211,49 @@ open class ZkForm<T : DtoBase> : ZkElement() {
     }
 
     fun submit() {
+
+        val invalid = mutableListOf<String>()
+
         // submit marks all fields touched to show all invalid fields for the user
-        fields.forEach { it.touched = true }
+        fields.forEach {
+            it.touched = true
+            if (! it.valid) invalid += it.propName
+        }
 
         val report = validate()
 
-        if (report.fails.isNotEmpty()) {
-            toast(warning = true) { CoreStrings.invalidFields + report.fails.map { it.key }.joinToString(", ") }
+        report.fails.keys.forEach { invalid += it }
+
+        if (invalid.isNotEmpty()) {
+            toast(warning = true) { CoreStrings.invalidFields + invalid.joinToString(", ") } // TODO translation
             return
         }
 
         launch {
             try {
                 when (mode) {
-                    FormMode.Create -> {
+                    ZkFormMode.Create -> {
                         val created = (dto as RecordDto<*>).create() as RecordDto<*>
                         fields.forEach { it.onCreateSuccess(created) }
                         toast { CoreStrings.createSuccess }
                     }
-                    FormMode.Read -> {
+                    ZkFormMode.Read -> {
                         // nothing to do here
                     }
-                    FormMode.Update -> {
+                    ZkFormMode.Update -> {
                         (dto as RecordDto<*>).update()
                         toast { CoreStrings.updateSuccess }
                     }
-                    FormMode.Delete -> {
+                    ZkFormMode.Delete -> {
                         (dto as RecordDto<*>).delete()
                         toast { CoreStrings.deleteSuccess }
                     }
-                    FormMode.Action -> {
+                    ZkFormMode.Action -> {
                         val result = (dto as ActionDto<*>).execute() as DtoBase
                         onExecuteResult?.let { it(result) }
                         toast { CoreStrings.actionSuccess }
                     }
-                    FormMode.Query -> {
+                    ZkFormMode.Query -> {
                         (dto as QueryDto<*>).execute()
                         // TODO do something here with the result
                     }
@@ -253,12 +261,12 @@ open class ZkForm<T : DtoBase> : ZkElement() {
             } catch (ex: Exception) {
                 log(ex)
                 when (mode) {
-                    FormMode.Create -> toast(error = true) { CoreStrings.createFail }
-                    FormMode.Read -> Unit
-                    FormMode.Update -> toast(error = true) { CoreStrings.updateFail }
-                    FormMode.Delete -> toast(error = true) { CoreStrings.deleteFail }
-                    FormMode.Action -> toast(error = true) { CoreStrings.actionFail }
-                    FormMode.Query -> toast(error = true) { CoreStrings.queryFail }
+                    ZkFormMode.Create -> toast(error = true) { CoreStrings.createFail }
+                    ZkFormMode.Read -> Unit
+                    ZkFormMode.Update -> toast(error = true) { CoreStrings.updateFail }
+                    ZkFormMode.Delete -> toast(error = true) { CoreStrings.deleteFail }
+                    ZkFormMode.Action -> toast(error = true) { CoreStrings.actionFail }
+                    ZkFormMode.Query -> toast(error = true) { CoreStrings.queryFail }
                 }
             }
         }

@@ -15,7 +15,7 @@ object DefaultLayout : AppLayout("default") {
         content.classList += coreClasses.layoutContent
 
         + row(coreClasses.h100) {
-            + Menu
+            + SideBar
             + content
         }
     }

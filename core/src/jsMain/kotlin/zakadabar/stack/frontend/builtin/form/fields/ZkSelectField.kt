@@ -16,35 +16,27 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import kotlinx.browser.document
-import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import kotlin.reflect.KMutableProperty0
 
-class ValidatedId<T : DtoBase>(
+class ZkSelectField<T : DtoBase>(
     form: ZkForm<T>,
-    private val prop: KMutableProperty0<RecordId<T>>
-) : FormField<T, RecordId<T>>(
-    form = form,
-    propName = prop.name
-) {
+    val prop: KMutableProperty0<String>,
+    sortOptions: Boolean = true,
+    options: suspend () -> List<Pair<String, String>>
+) : ZkSelectBase<T, String>(form, prop.name, sortOptions, options) {
 
-    private val input = document.createElement("input") as HTMLInputElement
-
-    override fun buildFieldValue() {
-        input.className = ZkFormStyles.recordId
-        input.readOnly = true
-        input.value = prop.get().toString()
-        input.tabIndex = - 1
-        + input
+    override fun fromString(string: String): String {
+        return string
     }
 
-    override fun onValidated(report: ValidityReport) {
-        // id is handled automatically, shouldn't be wrong
+    override fun getPropValue() = prop.get()
+
+    override fun setPropValue(value: Pair<String, String>?) {
+        if (value == null) return
+        prop.set(value.first)
+        form.validate()
     }
 
 }

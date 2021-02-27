@@ -17,25 +17,29 @@
 package zakadabar.stack.frontend.builtin.form.fields
 
 import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-class ValidatedSelect<T : DtoBase>(
+class ZkRecordSelectField<T : DtoBase>(
     form: ZkForm<T>,
-    val prop: KMutableProperty0<String>,
+    val prop: KMutableProperty0<RecordId<*>>,
     sortOptions: Boolean = true,
-    options: suspend () -> List<Pair<String, String>>
-) : ValidatedSelectBase<T, String>(form, prop.name, sortOptions, options) {
+    options: suspend () -> List<Pair<RecordId<*>, String>>
+) : ZkSelectBase<T, RecordId<*>>(form, prop.name, sortOptions, options) {
 
-    override fun fromString(string: String): String {
-        return string
+    override fun fromString(string: String): RecordId<*> {
+        return string.toLong()
     }
 
     override fun getPropValue() = prop.get()
 
-    override fun setPropValue(value: Pair<String, String>?) {
-        if (value == null) return
-        prop.set(value.first)
+    override fun setPropValue(value: Pair<RecordId<*>, String>?) {
+        if (value == null) {
+            prop.set(0L)
+        } else {
+            prop.set(value.first)
+        }
         form.validate()
     }
 

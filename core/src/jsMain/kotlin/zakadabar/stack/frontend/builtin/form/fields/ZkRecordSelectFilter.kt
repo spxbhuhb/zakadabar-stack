@@ -7,14 +7,14 @@ import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.form.ZkForm
 
-class RecordSelectFilter<T : DtoBase>(
+class ZkRecordSelectFilter<T : DtoBase>(
     form: ZkForm<T>,
     sortOptions: Boolean = true,
     label: String? = null,
     var getValue: () -> Long?,
     var options: suspend () -> List<Pair<RecordId<*>, String>>,
     var onSelected: (Pair<RecordId<*>, String>?) -> Unit
-) : ValidatedSelectBase<T, RecordId<*>>(form, "", sortOptions, options) {
+) : ZkSelectBase<T, RecordId<*>>(form, "", sortOptions, options) {
 
     init {
         if (label != null) this.label = label

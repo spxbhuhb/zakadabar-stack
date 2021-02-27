@@ -13,14 +13,22 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
     val rowHeight = 38
     val invalidColor = MaterialColors.Red.c100
 
-    val form by cssClass {
-        backgroundColor = "rgb(245,245,245)"
-        flexGrow = "1"
+    val outerContainer by ZkTableStyles.cssClass {
+        display = "flex"
+        flexDirection = "column"
+        width = "100%"
+        height = "100%"
     }
 
     val contentContainer by ZkTableStyles.cssClass {
         flexGrow = "1"
         padding = 10
+        overflow = "scroll"
+        backgroundColor = "rgb(245,245,245)"
+    }
+
+    val form by cssClass {
+        backgroundColor = "rgb(245,245,245)"
     }
 
     val buttons by cssClass {

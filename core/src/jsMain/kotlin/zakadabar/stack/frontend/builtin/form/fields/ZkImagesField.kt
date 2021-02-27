@@ -26,8 +26,8 @@ import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
-import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.builtin.form.ZkFormMode
 import zakadabar.stack.frontend.builtin.image.ZkImagePreview
 import zakadabar.stack.frontend.builtin.util.droparea.DropAreaClasses
 import zakadabar.stack.frontend.elements.ZkElement
@@ -35,11 +35,11 @@ import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.resources.Icons
 import zakadabar.stack.frontend.util.launch
 
-class Images<T : RecordDto<T>>(
+class ZkImagesField<T : RecordDto<T>>(
     form: ZkForm<T>,
     private val dataRecordId: RecordId<T>,
     private val imageCountMax: Int? = null
-) : FormField<T, Unit>(
+) : ZkFieldBase<T, Unit>(
     form = form,
     propName = ""
 ) {
@@ -51,9 +51,9 @@ class Images<T : RecordDto<T>>(
         element.style.display = "flex"
         element.style.flexDirection = "row"
 
-        form.fields += this@Images
+        form.fields += this@ZkImagesField
 
-        if (form.mode != FormMode.Create) {
+        if (form.mode != ZkFormMode.Create) {
             form.dto.comm().blobMetaRead(dataRecordId).forEach {
                 + ZkImagePreview(it, onDelete = { preview -> onDelete(preview) }) marginRight 10 marginBottom 10
             }
@@ -112,7 +112,7 @@ class Images<T : RecordDto<T>>(
 
                     // when the form is in create mode we don't have a proper record id, use null instead
                     form.dto.comm().blobCreate(
-                        if (form.mode == FormMode.Create) null else dataRecordId,
+                        if (form.mode == ZkFormMode.Create) null else dataRecordId,
                         file.name, file.type, file,
                         thumbnail::update
                     )
@@ -140,10 +140,10 @@ class Images<T : RecordDto<T>>(
     private fun onDelete(preview: ZkImagePreview): Boolean {
         if (! window.confirm(CoreStrings.confirmDelete)) return false
         launch {
-            if (form.mode != FormMode.Create) {
+            if (form.mode != ZkFormMode.Create) {
                 form.dto.comm().blobDelete(dataRecordId, preview.dto.id)
             }
-            this@Images -= preview
+            this@ZkImagesField -= preview
             updateDropArea()
         }
         return true

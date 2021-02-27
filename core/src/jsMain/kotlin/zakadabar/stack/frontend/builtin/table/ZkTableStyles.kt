@@ -9,13 +9,22 @@ import zakadabar.stack.frontend.util.CssStyleSheet
 
 object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
 
+    val outerContainer by cssClass {
+        display = "flex"
+        flexDirection = "column"
+        width = "100%"
+        height = "100%"
+    }
+
     val contentContainer by cssClass {
-        padding = 14
         backgroundColor = "rgb(245,245,245)"
         flexGrow = 1
+        overflow = "scroll"
     }
 
     val table by cssClass {
+        boxSizing = "border-box"
+
         display = "grid"
         borderCollapse = "collapse"
         minWidth = "100%"

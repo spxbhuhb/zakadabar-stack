@@ -17,7 +17,7 @@ import zakadabar.stack.frontend.elements.minusAssign
 import zakadabar.stack.frontend.elements.plusAssign
 import zakadabar.stack.frontend.resources.CoreStrings
 
-abstract class FormField<FT : DtoBase, DT>(
+abstract class ZkFieldBase<FT : DtoBase, DT>(
     val form: ZkForm<FT>,
     val propName: String
 ) : ZkElement() {

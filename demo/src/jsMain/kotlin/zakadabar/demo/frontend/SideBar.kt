@@ -16,10 +16,10 @@ import zakadabar.demo.frontend.pages.ship.Ships
 import zakadabar.demo.frontend.pages.speed.Speeds
 import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.data.builtin.LogoutAction
-import zakadabar.stack.frontend.builtin.menu.ZkMenu
+import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
 import zakadabar.stack.frontend.util.launch
 
-object Menu : ZkMenu() {
+object SideBar : ZkSideBar() {
 
     init {
         style {

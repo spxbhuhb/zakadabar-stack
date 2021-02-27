@@ -34,12 +34,12 @@ import zakadabar.stack.frontend.util.launch
 /**
  *
  */
-abstract class ValidatedSelectBase<T : DtoBase, VT>(
+abstract class ZkSelectBase<T : DtoBase, VT>(
     form: ZkForm<T>,
     propName: String,
     private val sortOptions: Boolean = true,
     private val options: suspend () -> List<Pair<VT, String>>
-) : FormField<T, VT>(
+) : ZkFieldBase<T, VT>(
     form = form,
     propName = propName
 ) {

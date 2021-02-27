@@ -47,7 +47,7 @@ open class ZkImagePreview(
                 }
 
                 on(currentElement, "click") { _ ->
-                    FullScreenImageView(dto.url()) {
+                    ZkFullScreenImageView(dto.url()) {
                         val deleted = onDelete(this@ZkImagePreview)
                         if (deleted) it.hide()
                     }.show()

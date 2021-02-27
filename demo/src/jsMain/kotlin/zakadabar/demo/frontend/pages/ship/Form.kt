@@ -13,8 +13,8 @@ import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.data.builtin.AccountPublicDto
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
-import zakadabar.stack.frontend.builtin.form.fields.Images
-import zakadabar.stack.frontend.builtin.form.fields.RecordSelectFilter
+import zakadabar.stack.frontend.builtin.form.fields.ZkImagesField
+import zakadabar.stack.frontend.builtin.form.fields.ZkRecordSelectFilter
 import zakadabar.stack.frontend.util.launch
 
 class Form : ZkForm<ShipDto>() {
@@ -32,13 +32,15 @@ class Form : ZkForm<ShipDto>() {
             this.launch { port = dto.port?.let { PortDto.read(it) } }
         }.join()
 
-        + column(ZkFormStyles.contentContainer) {
-            + row {
-                + basics() marginRight 8
-                + description()
+        + div(ZkFormStyles.contentContainer) {
+            + column(ZkFormStyles.form) {
+                + row {
+                    + basics() marginRight 8
+                    + description()
+                }
+                + images()
+                + buttons()
             }
-            + images()
-            + buttons()
         }
     }
 
@@ -77,7 +79,7 @@ class Form : ZkForm<ShipDto>() {
         // Create a filter which shows "seas". When the filter changes we have
         // to update the "port" select we've just created above.
 
-        + RecordSelectFilter(
+        + ZkRecordSelectFilter(
             this@Form,
             label = Strings.seas, // as this form field is not bound to a DTO field it needs a label
             getValue = { seas.firstOrNull { it.id == port?.id }?.id }, // get the selected "sea" from "port" (if we have a port)
@@ -113,7 +115,7 @@ class Form : ZkForm<ShipDto>() {
     }
 
     private fun images() = section(Strings.images, Strings.shipImagesExplanation, fieldGrid = false) {
-        + Images(this@Form, dto.id, imageCountMax = 1)
+        + ZkImagesField(this@Form, dto.id, imageCountMax = 1)
     }
 
 

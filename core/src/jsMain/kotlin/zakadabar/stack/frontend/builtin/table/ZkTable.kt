@@ -34,13 +34,7 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
     private val tbody = document.createElement("tbody") as HTMLTableSectionElement
 
     override fun init() = build {
-
-        style {
-            display = "flex"
-            flexDirection = "column"
-            width = "100%"
-            height = "100%"// FIXME move direct style away from here
-        }
+        className = ZkTableStyles.outerContainer
 
         buildTitleBar()?.let { + it }
 
@@ -53,6 +47,25 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
                 }
                 + tbody
             }
+        }
+
+        // this is here to prevent text selection on double click
+        on("mousedown") { event ->
+            event as MouseEvent
+            if (event.detail > 1) {
+                event.preventDefault()
+            }
+        }
+
+        // this handles the double click itself
+        on("dblclick") { event ->
+            event as MouseEvent
+            event.preventDefault()
+
+            val target = event.target as HTMLElement
+            val rid = target.getDatasetEntry("rid")?.toLongOrNull() ?: return@on
+
+            onUpdate?.invoke(rid)
         }
     }
 
@@ -80,6 +93,7 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
             build {
                 tbody.clear()
                 this.currentElement = tbody
+
                 for ((index, row) in data.withIndex()) {
                     + tr {
                         currentElement.dataset["rid"] = row.id.toString()
@@ -90,24 +104,6 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
                             }
                         }
 
-                        // this is here to prevent text selection on double click
-                        on("mousedown") { event ->
-                            event as MouseEvent
-                            if (event.detail > 1) {
-                                event.preventDefault()
-                            }
-                        }
-
-                        // this handles the double click itself
-                        on(currentElement, "dblclick") { event ->
-                            event as MouseEvent
-                            event.preventDefault()
-
-                            val target = event.target as HTMLElement
-                            val rid = target.getDatasetEntry("rid")?.toLongOrNull() ?: return@on
-
-                            onUpdate?.invoke(rid)
-                        }
                     }
                 }
             }

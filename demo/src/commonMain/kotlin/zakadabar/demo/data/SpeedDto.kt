@@ -28,7 +28,7 @@ data class SpeedDto(
     override fun schema() = DtoSchema {
         + ::id
         + ::description min 1 max 100
-        + ::value
+        + ::value notEquals Double.NaN
     }
 
 }

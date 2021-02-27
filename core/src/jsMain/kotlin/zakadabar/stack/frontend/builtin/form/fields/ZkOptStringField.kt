@@ -18,48 +18,33 @@ package zakadabar.stack.frontend.builtin.form.fields
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.events.KeyboardEvent
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import kotlin.reflect.KMutableProperty0
 
-class ValidatedBoolean<T : DtoBase>(
+class ZkOptStringField<T : DtoBase>(
     form: ZkForm<T>,
-    val prop: KMutableProperty0<Boolean>
-) : FormField<T, Boolean>(
+    private val prop: KMutableProperty0<String?>
+) : ZkFieldBase<T, String>(
     form = form,
     propName = prop.name
 ) {
 
-    private val checkbox = document.createElement("input") as HTMLInputElement
+    private val input = document.createElement("input") as HTMLInputElement
 
     override fun buildFieldValue() {
-        + div(ZkFormStyles.checkbox) {
-            checkbox.type = "checkbox"
-            checkbox.id = "zk-$id-checkbox"
+        input.className = ZkFormStyles.text
 
-            currentElement.tabIndex = 0
+        if (readOnly) input.readOnly = true
 
-            val value: Boolean = prop.get()
+        input.value = prop.get() ?: ""
 
-            if (readOnly) checkbox.readOnly = true
-
-            checkbox.checked = value
-
-            on(checkbox, "change") { _ ->
-                prop.set(checkbox.checked)
-                form.validate()
-            }
-
-            on(currentElement, "keypress") { event ->
-                event as KeyboardEvent
-                when (event.key) {
-                    "Enter", " " -> checkbox.checked = ! checkbox.checked
-                }
-            }
-
-            + checkbox
+        on(input, "input") { _ ->
+            val value = input.value
+            prop.set(if (value.isBlank()) null else value)
+            form.validate()
         }
     }
+
 }

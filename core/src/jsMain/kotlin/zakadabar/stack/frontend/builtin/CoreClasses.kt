@@ -37,6 +37,7 @@ class CoreClasses(theme: ZkTheme) : CssStyleSheet<CoreClasses>(theme) {
     val layoutContent by cssClass {
         flexGrow = 1
         display = "flex"
+        overflow = "hidden"
     }
 
     val contentColumn by cssClass {

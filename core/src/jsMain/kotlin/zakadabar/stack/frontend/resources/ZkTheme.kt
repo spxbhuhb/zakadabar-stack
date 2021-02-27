@@ -6,7 +6,7 @@ package zakadabar.stack.frontend.resources
 
 import zakadabar.stack.frontend.builtin.button.ZkButtonTheme
 import zakadabar.stack.frontend.builtin.icon.ZkIconTheme
-import zakadabar.stack.frontend.builtin.menu.ZkMenuTheme
+import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarTheme
 import zakadabar.stack.frontend.builtin.table.ZkTableTheme
 
 open class ZkTheme {
@@ -71,7 +71,7 @@ open class ZkTheme {
 
     open var button = ZkButtonTheme()
 
-    open var menu = ZkMenuTheme(
+    open var menu = ZkSideBarTheme(
         background = activeBlue,
         hoverBackground = "rgba(255,255,255,0.2)",
         activeBackground = inactiveBlue,

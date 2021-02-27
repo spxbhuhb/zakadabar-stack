@@ -16,31 +16,41 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
+import kotlinx.browser.document
+import org.w3c.dom.HTMLTextAreaElement
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import kotlin.reflect.KMutableProperty0
 
-class ValidatedOptRecordSelect<T : DtoBase>(
+class ZkTextAreaField<T : DtoBase>(
     form: ZkForm<T>,
-    val prop: KMutableProperty0<RecordId<*>?>,
-    sortOptions: Boolean = true,
-    options: suspend () -> List<Pair<RecordId<*>, String>>
-) : ValidatedSelectBase<T, RecordId<*>>(form, prop.name, sortOptions, options) {
+    private val prop: KMutableProperty0<String>
+) : ZkFieldBase<T, String>(
+    form = form,
+    propName = prop.name
+) {
 
-    override fun fromString(string: String): RecordId<*> {
-        return string.toLong()
-    }
+    private val area = document.createElement("textarea") as HTMLTextAreaElement
 
-    override fun getPropValue() = prop.get()
+    override fun buildFieldValue() {
+        currentElement.style.flexGrow = "1"
+        currentElement.style.display = "flex"
 
-    override fun setPropValue(value: Pair<RecordId<*>, String>?) {
-        if (value == null) {
-            prop.set(null)
-        } else {
-            prop.set(value.first)
+        area.className = ZkFormStyles.textarea
+        area.style.flexGrow = "1"
+        area.style.resize = "none"
+
+        if (readOnly) area.readOnly = true
+
+        area.value = prop.get()
+
+        on(area, "input") { _ ->
+            prop.set(area.value)
+            form.validate()
         }
-        form.validate()
+
+        + area
     }
 
 }

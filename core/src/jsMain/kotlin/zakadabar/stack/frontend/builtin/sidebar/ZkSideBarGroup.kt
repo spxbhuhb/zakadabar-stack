@@ -1,13 +1,13 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.menu
+package zakadabar.stack.frontend.builtin.sidebar
 
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.resources.Icons
 
-class ZkMenuGroup(
+class ZkSideBarGroup(
     private val text: String,
     builder: ZkElement.() -> Unit
 ) : ZkElement() {
@@ -20,7 +20,7 @@ class ZkMenuGroup(
 
     init {
         + column {
-            + div(ZkMenuStyles.groupTitle) {
+            + div(ZkSideBarStyles.groupTitle) {
                 + text
                 + row {
                     + openIcon
@@ -28,7 +28,7 @@ class ZkMenuGroup(
                 }
                 on(currentElement, "click") { _ -> if (open) onClose() else onOpen() }
             }
-            + zke(ZkMenuStyles.groupContent) {
+            + zke(ZkSideBarStyles.groupContent) {
                 hide()
                 this.builder()
             }
@@ -36,14 +36,14 @@ class ZkMenuGroup(
     }
 
     private fun onOpen() {
-        get<ZkElement>(ZkMenuStyles.groupContent).show()
+        get<ZkElement>(ZkSideBarStyles.groupContent).show()
         openIcon.hide()
         closeIcon.show()
         open = true
     }
 
     private fun onClose() {
-        get<ZkElement>(ZkMenuStyles.groupContent).hide()
+        get<ZkElement>(ZkSideBarStyles.groupContent).hide()
         closeIcon.hide()
         openIcon.show()
         open = false

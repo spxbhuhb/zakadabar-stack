@@ -6,6 +6,7 @@ package zakadabar.demo.frontend.pages.speed
 import zakadabar.demo.data.SpeedDto
 import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 
 class Form : ZkForm<SpeedDto>() {
 
@@ -14,18 +15,20 @@ class Form : ZkForm<SpeedDto>() {
         title = dto.description
         super.init()
 
-        + section(Strings.basics, Strings.speedBasicsExplanation) {
+        + column(ZkFormStyles.contentContainer) {
+            + section(Strings.basics, Strings.speedBasicsExplanation) {
 
-            ifNotCreate {
-                + dto::id
+                ifNotCreate {
+                    + dto::id
+                }
+
+                + dto::description
+
+                + dto::value
             }
 
-            + dto::description
-
-            + dto::value
+            + buttons()
         }
-
-        + buttons()
     }
 
 }

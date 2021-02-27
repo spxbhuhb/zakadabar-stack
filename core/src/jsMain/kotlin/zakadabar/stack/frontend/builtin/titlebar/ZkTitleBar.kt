@@ -17,7 +17,7 @@ open class ZkTitleBar : ZkElement() {
 
     init {
         style {
-            height = "44px" // linked to ZkMenuStyles.title.height
+            minHeight = "44px" // linked to ZkMenuStyles.title.height
             backgroundColor = "rgb(245,245,245)"
             borderBottom = "0.5px solid #ccc"
             display = "flex"

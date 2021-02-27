@@ -11,8 +11,8 @@ import zakadabar.stack.data.builtin.SessionDto
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.application.Executor
 import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.form.FormMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.builtin.form.ZkFormMode
 import zakadabar.stack.frontend.builtin.layout.FullScreen
 import zakadabar.stack.frontend.builtin.toast.toast
 import zakadabar.stack.frontend.elements.ZkElement
@@ -51,7 +51,7 @@ object Login : ZkPage(FullScreen) {
                 accountName = "demo"
                 password = "demo"
             }
-            mode = FormMode.Action
+            mode = ZkFormMode.Action
             onExecuteResult = ::onExecuteResult
         }
 
