@@ -21,6 +21,7 @@ import org.w3c.dom.HTMLTextAreaElement
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.resources.CoreStrings
 import kotlin.reflect.KMutableProperty0
 
 class ZkTextAreaField<T : DtoBase>(
@@ -40,6 +41,7 @@ class ZkTextAreaField<T : DtoBase>(
         area.className = ZkFormStyles.textarea
         area.style.flexGrow = "1"
         area.style.resize = "none"
+        area.placeholder = CoreStrings.pleaseTypeHere
 
         if (readOnly) area.readOnly = true
 

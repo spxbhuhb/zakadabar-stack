@@ -23,6 +23,7 @@ import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.elements.minusAssign
 import zakadabar.stack.frontend.elements.plusAssign
+import zakadabar.stack.frontend.resources.CoreStrings
 import kotlin.reflect.KMutableProperty0
 
 class ZkStringField<T : DtoBase>(
@@ -37,6 +38,7 @@ class ZkStringField<T : DtoBase>(
 
     override fun buildFieldValue() {
         input.className = ZkFormStyles.text
+        input.placeholder = CoreStrings.pleaseTypeHere
 
         if (readOnly) input.readOnly = true
 

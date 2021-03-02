@@ -21,6 +21,9 @@ import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.elements.minusAssign
+import zakadabar.stack.frontend.elements.plusAssign
+import zakadabar.stack.frontend.resources.CoreStrings
 import kotlin.reflect.KMutableProperty0
 
 class ZkOptStringField<T : DtoBase>(
@@ -35,6 +38,7 @@ class ZkOptStringField<T : DtoBase>(
 
     override fun buildFieldValue() {
         input.className = ZkFormStyles.text
+        input.placeholder = CoreStrings.pleaseTypeHere
 
         if (readOnly) input.readOnly = true
 
@@ -45,6 +49,18 @@ class ZkOptStringField<T : DtoBase>(
             prop.set(if (value.isBlank()) null else value)
             form.validate()
         }
+
+        on(input, "focus") { _ ->
+            fieldBottomBorder.classList += ZkFormStyles.onFieldHover
+            touched = true
+        }
+
+        on(input, "blur") { _ ->
+            fieldBottomBorder.classList -= ZkFormStyles.onFieldHover
+            form.validate()
+        }
+
+        + input
     }
 
 }

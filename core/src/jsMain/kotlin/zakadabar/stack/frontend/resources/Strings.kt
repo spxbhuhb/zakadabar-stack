@@ -22,6 +22,7 @@ open class StringsImpl(
         return StringsDelegate()
     }
 
+    open val pleaseTypeHere by "Please type a value here."
     open val notSaved by "Changes are not saved, by going back you'll lose them. Are you sure?"
     open val invalidValue by "Invalid value."
     open val invalidFieldsExplanation by "Cannot save the data yet as some values are invalid. They are marked by red color, please enter valid values and try save again."
