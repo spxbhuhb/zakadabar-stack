@@ -22,8 +22,10 @@ open class StringsImpl(
         return StringsDelegate()
     }
 
+    open val notSaved by "Changes are not saved, by going back you'll lose them. Are you sure?"
     open val invalidValue by "Invalid value."
-    open val invalidFields by "Some fields contain invalid values: "
+    open val invalidFieldsExplanation by "Cannot save the data yet as some values are invalid. They are marked by red color, please enter valid values and try save again."
+    open val invalidFieldsToast by "Invalid fields, cannot save yet."
     open val createSuccess by "Create success."
     open val updateSuccess by "Update success."
     open val deleteSuccess by "Delete success."
@@ -34,6 +36,7 @@ open class StringsImpl(
     open val actionFail by "Action execution error."
     open val queryFail by "Query execution error."
 
+    open val loading by "loading..."
     open val notSelected by "not selected"
     open val confirmDelete by "Delete is irreversible. Are you sure?"
 
@@ -47,6 +50,8 @@ open class StringsImpl(
     open val edit by "Edit"
     open val save by "Save"
     open val delete by "Delete"
+
+    open val details by "Details"
 
 }
 

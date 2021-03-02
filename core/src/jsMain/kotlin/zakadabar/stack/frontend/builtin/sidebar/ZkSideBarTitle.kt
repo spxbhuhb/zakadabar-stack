@@ -19,7 +19,7 @@ open class ZkSideBarTitle(
         className = ZkSideBarStyles.title
 
         + ZkIconButton(Icons.notes, cssClass = ZkButtonStyles.transparent, onClick = onIconClick) marginRight 10
-        + text
+        + div { + text }
 
         on("click", onTextClick)
         on("mousedown", ::onMouseDown)

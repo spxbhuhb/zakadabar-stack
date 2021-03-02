@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.form.structure
 
+import kotlinx.browser.window
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.builtin.button.ZkButton
@@ -12,34 +13,56 @@ import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.resources.CoreStrings
 
-class ZkFormButtons<T : DtoBase>(
+open class ZkFormButtons<T : DtoBase>(
     private val form: ZkForm<T>
 ) : ZkElement() {
     override fun init() = build {
         when (form.mode) {
             ZkFormMode.Create ->
                 + row(ZkFormStyles.buttons) {
-                    + ZkButton(CoreStrings.back) { Application.back() } marginRight 10
-                    + ZkButton(CoreStrings.save) { form.submit() }
+                    + backButton()
+                    + submitButton(CoreStrings.save) { form.submit() }
                 }
 
             ZkFormMode.Read -> {
                 + row(ZkFormStyles.buttons) {
-                    + ZkButton(CoreStrings.back) { Application.back() } marginRight 10
-                    form.openUpdate?.let { + ZkButton(CoreStrings.edit) { it(form.dto) } }
+                    + backButton()
+                    form.openUpdate?.let { + submitButton(CoreStrings.edit) { it(form.dto) } }
                 }
             }
             ZkFormMode.Update ->
                 + row(ZkFormStyles.buttons) {
-                    + ZkButton(CoreStrings.back) { Application.back() } marginRight 10
-                    + ZkButton(CoreStrings.save) { form.submit() }
+                    + backButton()
+                    + submitButton(CoreStrings.save) { form.submit() }
                 }
             ZkFormMode.Delete ->
                 + row(ZkFormStyles.buttons) {
-                    + ZkButton(CoreStrings.back) { Application.back() } marginRight 10
-                    + ZkButton(CoreStrings.delete) { form.submit() }
+                    + backButton()
+                    + submitButton(CoreStrings.delete) { form.submit() }
                 }
+            ZkFormMode.Action -> {
+            }
+            ZkFormMode.Query -> {
+            }
         }
 
     }
+
+    open fun backButton() =
+        ZkButton(CoreStrings.back) {
+            var touched = false
+            form.fields.forEach { touched = touched || it.touched }
+
+            if (touched) {
+                // TODO replace this with a styled dialog
+                if (window.confirm(CoreStrings.notSaved)) Application.back()
+            } else {
+                Application.back()
+            }
+
+        } marginRight 10
+
+    open fun submitButton(text: String, onClick: (() -> Unit)? = null) =
+        ZkButton(text, onClick).also { form.submitButton = it }
+
 }

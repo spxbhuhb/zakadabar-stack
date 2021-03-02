@@ -38,7 +38,8 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
     form: ZkForm<T>,
     propName: String,
     private val sortOptions: Boolean = true,
-    private val options: suspend () -> List<Pair<VT, String>>
+    private val options: suspend () -> List<Pair<VT, String>>,
+    var onSelected: (Pair<VT, String>?) -> Unit = { }
 ) : ZkFieldBase<T, VT>(
     form = form,
     propName = propName
@@ -62,7 +63,7 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
     override fun buildFieldValue() {
         launch {
             items = if (sortOptions) options().sortedBy { it.second } else options()
-            render()
+            render(getPropValue())
         }
 
         selectedOption.on("click") { _ ->
@@ -78,19 +79,13 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
             val target = event.target
             if (target !is HTMLElement) return@on
 
-            console.log(target, event)
+            val entryIdString = target.dataset[DATASET_KEY]
+            val entryId = if (entryIdString.isNullOrEmpty()) null else fromString(entryIdString)
+            val value = entryId?.let { items.firstOrNull { it.first == entryId } }
 
-            val entryId = target.dataset[DATASET_KEY] ?: return@on
-
-            if (entryId == "0") {
-                selectedOption.innerText = CoreStrings.notSelected
-                setPropValue(null)
-            } else {
-                val value = entryId.toLong()
-                val selected = items.first { it.first == value }
-                selectedOption.innerText = selected.second
-                setPropValue(selected)
-            }
+            setPropValue(value)
+            onSelected(value)
+            render(value?.first) // FIXME this re-rendering is a bit too expensive I think
 
             optionList.hide()
         }
@@ -133,21 +128,15 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
         + container
     }
 
-    fun render() {
-        val value = getPropValue()
-
+    open fun render(value: VT?) {
         var s = ""
 
         if (value == null || value == 0L) {
-            s += """<div class="${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-${DATASET_KEY}="0">${CoreStrings.notSelected}</div>"""
+            s += """<div class="${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-${DATASET_KEY}="">${CoreStrings.notSelected}</div>"""
             selectedOption.innerText = CoreStrings.notSelected
         } else {
             s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="0">${CoreStrings.notSelected}</div>"""
         }
-
-//        for (i in 1..100) {
-//            s += """<div class="${ZkFormStyles.selectEntry}" data-entry-id="0">${CoreStrings.notSelected} $i</div>"""
-//        }
 
         items.forEach {
             if (it.first == value) {
@@ -160,5 +149,4 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
 
         optionList.innerHTML = s
     }
-
 }

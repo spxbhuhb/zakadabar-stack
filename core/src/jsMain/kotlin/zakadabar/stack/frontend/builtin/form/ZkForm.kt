@@ -25,6 +25,8 @@ import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.fields.*
 import zakadabar.stack.frontend.builtin.form.structure.ZkFormButtons
 import zakadabar.stack.frontend.builtin.form.structure.ZkFormSection
+import zakadabar.stack.frontend.builtin.form.structure.ZkInvalidFieldList
+import zakadabar.stack.frontend.builtin.toast.ZkToast
 import zakadabar.stack.frontend.builtin.toast.toast
 import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.elements.plusAssign
@@ -43,6 +45,12 @@ open class ZkForm<T : DtoBase> : ZkElement() {
 
     lateinit var dto: T
     lateinit var mode: ZkFormMode
+
+    /**
+     * True when the form is in create mode.
+     */
+    val isCreate
+        get() = (mode == ZkFormMode.Create)
 
     var title: String = ""
     var titleBar: ZkFormTitleBar? = null
@@ -65,29 +73,71 @@ open class ZkForm<T : DtoBase> : ZkElement() {
 
     internal val fields = mutableListOf<ZkFieldBase<T, *>>()
 
-    // ----  Builder convenience functions --------
+    /**
+     * False until the first time the user clicks on the submit button.
+     * Before first submit the list of invalid fields are not shown.
+     * After the first submit try the list of invalid fields are shown
+     * (if there are any) and is updated automatically.
+     */
+    var submitTouched = false
 
-    override fun init(): ZkElement {
+    /**
+     * The toast that shows the message that there are invalid values.
+     * Automatically goes hidden if validation is successful.
+     */
+    var invalidToast: ZkToast? = null
+
+    /**
+     * The submit button element of the form. Set by [ZkFormButtons] which is
+     * added by [build] or [buttons]. This is here so we can enable / disable
+     * the button depending on the validity of the form.
+     */
+    var submitButton: ZkElement? = null
+
+    /**
+     * Container to display list of the invalid fields. Filled automatically when
+     * present.
+     */
+    var invalidFields: ZkInvalidFieldList? = null
+
+    init {
         classList += ZkFormStyles.outerContainer
-        buildTitleBar()?.let { + it }
-        return this
     }
 
-    private fun buildTitleBar(): ZkFormTitleBar? {
+    // ----  Builder convenience functions --------
 
-        // this check lets the extending class to define it's own title bar
-        // TODO think about this, might be better to make buildTitleBar protected
+    open fun build(title: String, createTitle: String = title, builder: () -> Unit): ZkForm<T> {
+        + titleBar(title, createTitle)
 
-        if (titleBar == null) {
-            titleBar = ZkFormTitleBar {
-                title = this@ZkForm.title
+        + div(ZkFormStyles.contentContainer) {
+            + column(ZkFormStyles.form) {
+                builder()
+                + buttons()
+                + invalidFieldList()
             }
         }
 
-        return titleBar
+        return this
+    }
+
+    /**
+     * Creates a title bar, using [title] when not in create mode and
+     * [createTitle] when in create mode.
+     */
+    open fun titleBar(title: String, createTitle: String = title): ZkFormTitleBar {
+
+        val bar = ZkFormTitleBar {
+            this.title = if (isCreate) createTitle else title
+        }
+
+        titleBar = bar
+
+        return bar
     }
 
     fun buttons() = ZkFormButtons(this@ZkForm)
+
+    open fun invalidFieldList() = ZkInvalidFieldList().also { invalidFields = it }.hide()
 
     fun section(title: String, summary: String = "", fieldGrid: Boolean = true, builder: ZkElement.() -> Unit): ZkFormSection {
         return if (fieldGrid) {
@@ -101,57 +151,67 @@ open class ZkForm<T : DtoBase> : ZkElement() {
     fun fieldGridSection(title: String, summary: String = "", builder: ZkElement.() -> Unit) =
         section(title, summary, true, builder)
 
+    fun <T : RecordDto<T>> List<T>.by(field: (it: T) -> String) =
+        map { it.id to field(it) }.sortedBy { it.second }
+
     fun select(
         kProperty0: KMutableProperty0<RecordId<*>>,
         sortOptions: Boolean = true,
+        label: String? = null,
         options: suspend () -> List<Pair<RecordId<*>, String>>
     ): ZkRecordSelectField<T> {
         val field = ZkRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
+        label?.let { field.label = label }
         fields += field
         return field
-
     }
 
     fun select(
         kProperty0: KMutableProperty0<RecordId<*>?>,
         sortOptions: Boolean = true,
+        label: String? = null,
         options: suspend () -> List<Pair<RecordId<*>, String>>
     ): ZkOptRecordSelectField<T> {
-
         val field = ZkOptRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
+        label?.let { field.label = label }
         fields += field
         return field
-
     }
 
     fun select(
         kProperty0: KMutableProperty0<String>,
-        options: List<String>,
-        sortOptions: Boolean = true
+        label: String? = null,
+        sortOptions: Boolean = true,
+        options: List<String>
     ): ZkSelectField<T> {
-
         val field = ZkSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
+        label?.let { field.label = label }
         fields += field
         return field
-
     }
 
     fun select(
         kProperty0: KMutableProperty0<String?>,
-        options: List<String>,
-        sortOptions: Boolean = true
+        label: String? = null,
+        sortOptions: Boolean = true,
+        options: List<String>
     ): ZkOptSelectField<T> {
-
         val field = ZkOptSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
+        label?.let { field.label = label }
         fields += field
         return field
-
     }
 
     fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkElement.() -> Unit = { }): ZkTextAreaField<T> {
         val field = ZkTextAreaField(this@ZkForm, kProperty0)
         fields += field
         field.builder()
+        return field
+    }
+
+    fun constString(label: String, value: () -> String): ZkConstStringField<T> {
+        val field = ZkConstStringField(this@ZkForm, label, value())
+        fields += field
         return field
     }
 
@@ -169,6 +229,9 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         val field = ZkIdField(this@ZkForm, this)
         + field
         fields += field
+        if (mode == ZkFormMode.Create) {
+            field.hide()
+        }
         return field
     }
 
@@ -202,32 +265,71 @@ open class ZkForm<T : DtoBase> : ZkElement() {
 
     // ----  Validation and submit --------
 
-    fun validate(): ValidityReport {
+    /**
+     * Validates the DTO with the schema. Validation occurs at every
+     * change. When the user did not touch a field yet a validation
+     * fail may not be displayed for that field.
+     *
+     * @return true if the DTO is valid, false otherwise
+     */
+    fun validate(submit: Boolean = false): Boolean {
         val report = schema.value.validate()
+
         fields.forEach {
             it.onValidated(report)
         }
-        return report
+
+        val invalid = invalidTouchedFields(report)
+
+        if (! submitTouched || invalid.isEmpty()) {
+            invalidFields?.hide()
+            invalidToast?.dispose()
+        }
+
+        if (submitTouched && invalid.isNotEmpty()) {
+            invalidFields?.show(invalid)
+        }
+
+        if (submit && invalid.isNotEmpty()) {
+            invalidToast = toast(warning = true, hideAfter = 3000) { CoreStrings.invalidFieldsToast }
+        }
+
+        return report.fails.isEmpty()
     }
 
-    fun submit() {
+    private fun invalidTouchedFields(report: ValidityReport): List<ZkFieldBase<T, *>> {
+        val invalid = mutableListOf<ZkFieldBase<T, *>>()
 
-        val invalid = mutableListOf<String>()
+        report.fails.keys.forEach { propName ->
+            val field = fields.firstOrNull { it.propName == propName } ?: return@forEach
+            if (field.touched) {
+                invalid += field
+            }
+        }
+
+        // it is possible that a field is not touched but invalid by default
+        // for example a mandatory name which cannot be blank but starts with blank
+
+        fields.forEach {
+            if (it.touched && ! it.valid) invalid += it
+        }
+
+        // using distinct because report and field.invalid can add the same field twice
+
+        return invalid.distinct()
+    }
+
+
+    fun submit() {
 
         // submit marks all fields touched to show all invalid fields for the user
         fields.forEach {
             it.touched = true
-            if (! it.valid) invalid += it.propName
         }
 
-        val report = validate()
+        submitTouched = true
 
-        report.fails.keys.forEach { invalid += it }
-
-        if (invalid.isNotEmpty()) {
-            toast(warning = true) { CoreStrings.invalidFields + invalid.joinToString(", ") } // TODO translation
-            return
-        }
+        if (! validate(true)) return
 
         launch {
             try {
@@ -249,7 +351,7 @@ open class ZkForm<T : DtoBase> : ZkElement() {
                         toast { CoreStrings.deleteSuccess }
                     }
                     ZkFormMode.Action -> {
-                        val result = (dto as ActionDto<*>).execute() as DtoBase
+                        val result = (dto as ActionDto<*>).execute()
                         onExecuteResult?.let { it(result) }
                         toast { CoreStrings.actionSuccess }
                     }
@@ -271,4 +373,5 @@ open class ZkForm<T : DtoBase> : ZkElement() {
             }
         }
     }
+
 }

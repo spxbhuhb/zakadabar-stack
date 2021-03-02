@@ -12,8 +12,7 @@ class Form : ZkForm<PortDto>() {
 
     override fun init() = build {
 
-        title = dto.name
-        super.init()
+        + titleBar(dto.name, Strings.port)
 
         + section(Strings.basics) {
 

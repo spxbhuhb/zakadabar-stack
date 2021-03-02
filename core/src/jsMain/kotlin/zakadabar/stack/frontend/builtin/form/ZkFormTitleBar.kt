@@ -8,6 +8,8 @@ import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.elements.marginRight
 import zakadabar.stack.frontend.elements.plusAssign
 
+// FIXME make titlebar dynamic, when bound to data fields it should update automatically
+
 open class ZkFormTitleBar() : ZkElement() {
 
     constructor(builder: ZkFormTitleBar.() -> Unit) : this() {

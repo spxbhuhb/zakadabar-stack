@@ -71,12 +71,7 @@ open class ZkTheme {
 
     open var button = ZkButtonTheme()
 
-    open var menu = ZkSideBarTheme(
-        background = activeBlue,
-        hoverBackground = "rgba(255,255,255,0.2)",
-        activeBackground = inactiveBlue,
-        text = white
-    )
+    open var sidebar = ZkSideBarTheme()
 
     open var table = ZkTableTheme()
 

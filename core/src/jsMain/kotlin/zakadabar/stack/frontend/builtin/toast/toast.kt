@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.application.Application
  * Displays a message to the user by showing a toast. Custom toast type should use it's own
  * function.
  */
-fun toast(info: Boolean = false, warning: Boolean = false, error: Boolean = false, message: () -> String) {
+fun toast(info: Boolean = false, warning: Boolean = false, error: Boolean = false, hideAfter: Long? = null, message: () -> String): ZkToast {
     val type = when {
         info -> ZkToastType.Info
         warning -> ZkToastType.Warning
@@ -18,5 +18,5 @@ fun toast(info: Boolean = false, warning: Boolean = false, error: Boolean = fals
         else -> ZkToastType.Success
     }
 
-    Application.toasts += ZkToast(message(), type)
+    return ZkToast(message(), type, hideAfter).also { Application.toasts += it }
 }

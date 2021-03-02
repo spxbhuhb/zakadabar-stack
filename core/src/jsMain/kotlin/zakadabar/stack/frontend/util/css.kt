@@ -673,6 +673,19 @@ class CssStyleRule(val sheet: CssStyleSheet<*>, val cssClassName: String) {
             styles["-webkit-appearance"] = value
         }
 
+    /**
+     * [MDN: white-space](https://developer.mozilla.org/en-US/docs/Web/CSS/white-space)
+     *
+     * ```
+     *
+     * white-space: normal;
+     * white-space: nowrap;
+     * white-space: pre;
+     * white-space: pre-wrap;
+     * white-space: pre-line;
+     * white-space: break-spaces;
+     * ```
+     */
     var whiteSpace
         get() = styles["white-space"]
         set(value) {

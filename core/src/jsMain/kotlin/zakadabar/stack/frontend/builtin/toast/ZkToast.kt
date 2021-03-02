@@ -19,7 +19,8 @@ import zakadabar.stack.frontend.util.launch
  */
 open class ZkToast(
     val message: String,
-    val type: ZkToastType
+    val type: ZkToastType,
+    val hideAfter: Long? = null
 ) : ZkElement() {
 
     override fun init() = build {
@@ -38,11 +39,16 @@ open class ZkToast(
         + div { + message } marginRight 16
         + ZkIconButton(Icons.close, cssClass = typeClass) { Application.toasts -= this }
 
-        if (type == ZkToastType.Success || type == ZkToastType.Info) {
+        if (type == ZkToastType.Success || type == ZkToastType.Info || hideAfter != null) {
             launch {
-                delay(3000)
+                delay(hideAfter ?: 3000)
                 Application.toasts -= this
             }
         }
     }
+
+    open fun dispose() {
+        Application.toasts -= this
+    }
+
 }

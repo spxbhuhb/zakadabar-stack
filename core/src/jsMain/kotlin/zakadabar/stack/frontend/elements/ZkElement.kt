@@ -169,6 +169,14 @@ open class ZkElement(
         return this
     }
 
+    /**
+     * Clears the children and the HTML node of this element.
+     */
+    open fun clear() {
+        clearChildren()
+        element.clear()
+    }
+
     infix fun marginRight(size: Any): ZkElement {
         element.style.marginRight = if (size is Int) "${size}px" else size.toString()
         return this

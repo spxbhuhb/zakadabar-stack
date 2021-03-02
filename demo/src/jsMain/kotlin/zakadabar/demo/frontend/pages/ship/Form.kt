@@ -12,7 +12,6 @@ import zakadabar.demo.data.SpeedDto
 import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.data.builtin.AccountPublicDto
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.fields.ZkImagesField
 import zakadabar.stack.frontend.builtin.form.fields.ZkRecordSelectFilter
 import zakadabar.stack.frontend.util.launch
@@ -24,32 +23,26 @@ class Form : ZkForm<ShipDto>() {
 
     override fun init() = launchBuild {
 
-        title = dto.name
-        super.init()
-
         coroutineScope {
             this.launch { seas = SeaDto.all() }
             this.launch { port = dto.port?.let { PortDto.read(it) } }
         }.join()
 
-        + div(ZkFormStyles.contentContainer) {
-            + column(ZkFormStyles.form) {
-                + row {
-                    + basics() marginRight 8
-                    + description()
-                }
-                + images()
-                + buttons()
+        build(dto.name, Strings.ship) {
+
+            + row {
+                + basics() marginRight 8
+                + description()
             }
+
+            + images()
+
         }
     }
 
     private fun basics() = section(Strings.basics, Strings.shipBasicsExplanation) {
 
-        ifNotCreate {
-            + dto::id
-        }
-
+        + dto::id
         + dto::name
         + dto::hasPirateFlag
 
@@ -97,7 +90,7 @@ class Form : ZkForm<ShipDto>() {
 
                     select
                         .apply { items = ports.sortedBy { it.name }.map { it.id to it.name } }
-                        .render()
+                        .render(dto.port)
                 }
             }
         )

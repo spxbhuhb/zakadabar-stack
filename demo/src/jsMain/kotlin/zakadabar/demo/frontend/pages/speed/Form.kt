@@ -12,8 +12,7 @@ class Form : ZkForm<SpeedDto>() {
 
     override fun init() = build {
 
-        title = dto.description
-        super.init()
+        + titleBar(dto.description, Strings.speed)
 
         + column(ZkFormStyles.contentContainer) {
             + section(Strings.basics, Strings.speedBasicsExplanation) {

@@ -21,6 +21,7 @@ import kotlin.reflect.KProperty1
 open class ZkTable<T : RecordDto<T>> : ZkElement() {
 
     var title: String? = null
+    var crud: ZkCrud<T>? = null
     var onCreate: (() -> Unit)? = null
     var onUpdate: ((id: RecordId<T>) -> Unit)? = null
     var onSearch: ((searchText: String) -> Unit)? = null
@@ -65,16 +66,41 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
             val target = event.target as HTMLElement
             val rid = target.getDatasetEntry("rid")?.toLongOrNull() ?: return@on
 
-            onUpdate?.invoke(rid)
+            if (onUpdate != null) {
+                onUpdate?.invoke(rid)
+            } else if (crud != null) {
+                crud?.openUpdate(rid)
+            }
+        }
+
+        on("click") { event ->
+            event as MouseEvent
+            event.preventDefault()
+
+            val target = event.target as HTMLElement
+            val rid = target.getDatasetEntry("rid")?.toLongOrNull() ?: return@on
+            val action = target.getDatasetEntry("action") ?: return@on
+
+            if (action == "update") {
+                if (onUpdate != null) {
+                    onUpdate?.invoke(rid)
+                } else if (crud != null) {
+                    crud?.openUpdate(rid)
+                }
+            }
         }
     }
 
     private fun buildTitleBar(): ZkTableTitleBar? {
 
-        if (titleBar == null && (onCreate != null || onSearch != null)) {
+        if (titleBar == null && (title != null || onCreate != null || onSearch != null || crud != null)) {
             titleBar = ZkTableTitleBar {
                 title = this@ZkTable.title
-                this@ZkTable.onCreate?.let { onCreate = it }
+                if (this@ZkTable.onCreate != null) {
+                    onCreate = this@ZkTable.onCreate !!
+                } else if (this@ZkTable.crud != null) {
+                    onCreate = { this@ZkTable.crud !!.openCreate() }
+                }
                 this@ZkTable.onSearch?.let { onSearch = it }
             }
         }

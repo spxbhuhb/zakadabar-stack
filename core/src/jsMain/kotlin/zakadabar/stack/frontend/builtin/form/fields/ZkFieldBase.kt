@@ -28,7 +28,10 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
 
     var valid = true
 
-    lateinit var label: String
+    /**
+     * Label of the form field. Displayed in front of the field, used in error messages.
+     */
+    open lateinit var label: String
 
     lateinit var hint: String
 
@@ -77,26 +80,31 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
     }
 
     /**
-     * Builds the label for the field. First it checks if the label
-     * property is initialized. If so adds its value as the label.
+     * Builds the label for the field.
      *
-     * If it is not initialized, but form.autoLabel is true looks
-     * up the label in Application.stringMap and adds it if found.
+     * If the [label] property is initialized uses its value.
+     *
+     * When it is not initialized and form.autoLabel is true,
+     * looks up the label in [Application.stringMap] and adds
+     * it if found.
+     *
+     * When not in [Application.stringMap] it adds [propName]
+     * as label.
      */
     open fun buildFieldLabel() {
-        if (::label.isInitialized) {
-            + div(ZkFormStyles.fieldLabel) {
-                + label
-            }
-            return
+        if (! ::label.isInitialized) {
+            label = Application.stringMap[propName] ?: propName
         }
-        if (form.autoLabel) {
-            + div(ZkFormStyles.fieldLabel) {
-                + (Application.stringMap[propName] ?: propName)
-                if (! form.schema.value.isOptional(propName)) {
-                    + div(ZkFormStyles.mandatoryMark) { ! "&nbsp;*" }
-                }
-            }
+
+        + div(ZkFormStyles.fieldLabel) {
+            + label
+            mandatoryMark()
+        }
+    }
+
+    open fun mandatoryMark() {
+        if (! form.schema.value.isOptional(propName)) {
+            + div(ZkFormStyles.mandatoryMark) { ! "&nbsp;*" }
         }
     }
 

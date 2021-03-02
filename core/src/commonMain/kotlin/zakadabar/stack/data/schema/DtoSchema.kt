@@ -130,7 +130,6 @@ class ValidityReport(
     val fails: MutableMap<String, MutableList<ValidationRule<*>>> = mutableMapOf()
 ) {
     fun fail(property: KProperty0<*>, validation: ValidationRule<*>) {
-        println("fail: ${validation::class.simpleName}")
         fails.getOrPut(property.name) { mutableListOf() } += validation
     }
 

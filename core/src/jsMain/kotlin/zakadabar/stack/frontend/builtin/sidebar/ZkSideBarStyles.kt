@@ -12,8 +12,8 @@ object ZkSideBarStyles : CssStyleSheet<ZkSideBarStyles>(Application.theme) {
         height = "100%"
         maxHeight = "100%"
         overflowY = "auto"
-        backgroundColor = theme.menu.background
-        color = theme.menu.text
+        backgroundColor = theme.sidebar.background
+        color = theme.sidebar.text
         minWidth = 220
         display = "flex"
         flexDirection = "column"
@@ -26,11 +26,13 @@ object ZkSideBarStyles : CssStyleSheet<ZkSideBarStyles>(Application.theme) {
         borderBottom = "0.5px solid #ccc"
         marginBottom = 4
         paddingLeft = 8
+        paddingRight = 16
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
         minHeight = "44px"  // linked to PageTitleBar.height
         marginBottom = 8
+        whiteSpace = "nowrap"
     }
 
     val item by cssClass {
@@ -44,8 +46,8 @@ object ZkSideBarStyles : CssStyleSheet<ZkSideBarStyles>(Application.theme) {
         flexDirection = "row"
         alignItems = "center"
         on(":hover") {
-            backgroundColor = theme.menu.hoverBackground
-            color = theme.menu.hoverText
+            backgroundColor = theme.sidebar.hoverBackground
+            color = theme.sidebar.hoverText
             borderRadius = 4
         }
     }
@@ -62,8 +64,8 @@ object ZkSideBarStyles : CssStyleSheet<ZkSideBarStyles>(Application.theme) {
         marginRight = 8
         paddingLeft = 12
         on(":hover") {
-            backgroundColor = theme.menu.hoverBackground
-            color = theme.menu.hoverText
+            backgroundColor = theme.sidebar.hoverBackground
+            color = theme.sidebar.hoverText
             borderRadius = 4
         }
     }

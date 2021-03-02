@@ -130,6 +130,7 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         appearance = "none"
         color = "#333"
         backgroundColor = MaterialColors.Gray.c100
+        outline = "none"
     }
 
     val text by cssClass {
@@ -148,7 +149,6 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         mozAppearance = "none"
         webkitAppearance = "none"
         appearance = "none"
-        backgroundColor = "#fff"
 
         on(".invalid") {
             backgroundColor = invalidColor
@@ -252,7 +252,9 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
     }
 
     val selectContainer by cssClass {
-        display = "relative"
+        display = "flex"
+        flexDirection = "row"
+        alignItems = "center"
         outline = "none"
 
         on(".invalid") {
@@ -280,12 +282,12 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
     }
 
     val selectedOption by cssClass {
-        display = "block"
+        display = "flex"
         fontSize = theme.fontSize
         fontFamily = theme.fontFamily
         fontWeight = theme.fontWeight
+        paddingLeft = ".4em"
         color = "#444"
-        padding = ".6em 1.4em .5em .4em"
         width = "100%"
         maxWidth = "100%"
         boxSizing = "border-box"
@@ -294,7 +296,8 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         mozAppearance = "none"
         webkitAppearance = "none"
         appearance = "none"
-
+        height = rowHeight
+        alignItems = "center"
 
         on(" option") {
             fontWeight = "normal"
@@ -362,6 +365,20 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
             backgroundColor = MaterialColors.LightBlue.c50
             outline = "none"
         }
+    }
+
+    val invalidFieldList by cssClass {
+        padding = 12
+        margin = 8
+        boxShadow = "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)"
+        borderRadius = 2
+        backgroundColor = MaterialColors.white
+    }
+
+    val invalidFieldListInto by cssClass {
+        fontSize = "80%"
+        color = MaterialColors.Gray.c600
+        paddingBottom = 16
     }
 
     init {

@@ -11,8 +11,7 @@ class Form : ZkForm<SeaDto>() {
 
     override fun init() = build {
 
-        title = dto.name
-        super.init()
+        + titleBar(dto.name, Strings.sea)
 
         + section(Strings.basics) {
 

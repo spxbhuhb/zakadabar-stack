@@ -116,6 +116,18 @@ object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
         }
     }
 
+    val action by cssClass {
+        display = "flex"
+        alignItems = "center"
+        textTransform = "uppercase"
+        fontSize = "75%"
+        lineHeight = "1.3em"
+        fontWeight = "400 !important"
+        whiteSpace = "nowrap"
+        cursor = "pointer"
+        color = "${theme.table.actionColor} !important"
+    }
+
     init {
         attach()
     }

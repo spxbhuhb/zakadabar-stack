@@ -11,8 +11,7 @@ class Form : ZkForm<AccountPrivateDto>() {
 
     override fun init() = build {
 
-        title = dto.accountName
-        super.init()
+        + titleBar(dto.accountName, Strings.account)
 
         + column {
             + row {

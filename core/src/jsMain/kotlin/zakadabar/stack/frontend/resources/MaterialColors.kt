@@ -30,6 +30,24 @@ object MaterialColors {
         val a700 = "#D50000"
     }
 
+    object Yellow {
+        val c50 = "#FFFDE7"
+        val c100 = "#FFF9C4"
+        val c200 = "#FFF59D"
+        val c300 = "#FFF176"
+        val c400 = "#FFEE58"
+        val c500 = "#FFEB3B"
+        val c600 = "#FDD835"
+        val c700 = "#FBC02D"
+        val c800 = "#F9A825"
+        val c900 = "#F57F17"
+        val a100 = "#FFFF8D"
+        val a200 = "#FFFF00"
+        val a400 = "#FFEA00"
+        val a700 = "#FFD600"
+    }
+
+
     object Blue {
         val c50 = "#E3F2FD"
         val c100 = "#BBDEFB"

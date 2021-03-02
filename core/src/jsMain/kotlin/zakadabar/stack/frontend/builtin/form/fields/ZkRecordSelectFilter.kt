@@ -13,8 +13,8 @@ class ZkRecordSelectFilter<T : DtoBase>(
     label: String? = null,
     var getValue: () -> Long?,
     var options: suspend () -> List<Pair<RecordId<*>, String>>,
-    var onSelected: (Pair<RecordId<*>, String>?) -> Unit
-) : ZkSelectBase<T, RecordId<*>>(form, "", sortOptions, options) {
+    onSelected: (Pair<RecordId<*>, String>?) -> Unit
+) : ZkSelectBase<T, RecordId<*>>(form, "", sortOptions, options, onSelected) {
 
     init {
         if (label != null) this.label = label
@@ -27,7 +27,7 @@ class ZkRecordSelectFilter<T : DtoBase>(
     override fun getPropValue() = getValue()
 
     override fun setPropValue(value: Pair<RecordId<*>, String>?) {
-        onSelected(value)
+        // do nothing here, onSelected will be called by ZkSelectBase
     }
 
 }

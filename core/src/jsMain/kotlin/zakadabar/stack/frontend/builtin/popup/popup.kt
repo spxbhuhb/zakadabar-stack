@@ -20,21 +20,26 @@ fun alignPopup(popupElement: HTMLElement, anchorElement: HTMLElement, minHeight:
     val spaceAbove = anchorRect.top
     val maxHeight = popupRect.height
 
+    console.log(minHeight, anchorRect, popupRect, spaceBelow, spaceAbove, maxHeight)
+
     when {
         spaceBelow > minHeight -> {
             if (spaceBelow > maxHeight) {
                 popupElement.style.height = "${maxHeight}px"
+                popupElement.style.top = "${anchorRect.top}px"
             } else {
-                popupElement.style.height = "${spaceBelow}px"
+                popupElement.style.maxHeight = "${spaceBelow}px"
+                popupElement.style.top = "${anchorRect.top}px"
             }
         }
+
         spaceAbove > minHeight -> {
             if (spaceAbove > maxHeight) {
                 popupElement.style.height = "${maxHeight}px"
                 popupElement.style.top = "${anchorRect.top - maxHeight}px"
             } else {
                 popupElement.style.height = "${spaceAbove}px"
-                popupElement.style.top = "${anchorRect.top - spaceAbove}px"
+                popupElement.style.top = "0px"
             }
         }
         // TODO try to position the element in the middle.
@@ -42,6 +47,7 @@ fun alignPopup(popupElement: HTMLElement, anchorElement: HTMLElement, minHeight:
         // fallback, there is not enough space, just put it there and shrink it
         else -> {
             popupElement.style.height = "${spaceBelow}px"
+            popupElement.style.top = "-${spaceAbove}px"
         }
     }
 
