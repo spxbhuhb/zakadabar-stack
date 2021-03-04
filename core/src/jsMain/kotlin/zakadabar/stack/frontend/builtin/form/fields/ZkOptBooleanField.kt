@@ -16,35 +16,29 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import kotlinx.browser.document
-import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-open class ZkIdField<T : DtoBase>(
+@PublicApi
+open class ZkOptBooleanField<T : DtoBase>(
     form: ZkForm<T>,
-    private val prop: KMutableProperty0<RecordId<T>>
-) : ZkFieldBase<T, RecordId<T>>(
+    val prop: KMutableProperty0<Boolean?>,
+    options: suspend () -> List<Pair<Boolean, String>>
+) : ZkSelectBase<T, Boolean>(
     form = form,
-    propName = prop.name
+    propName = prop.name,
+    options = options
 ) {
-
-    private val input = document.createElement("input") as HTMLInputElement
-
-    override fun buildFieldValue() {
-        input.className = ZkFormStyles.recordId
-        input.readOnly = true
-        input.value = prop.get().toString()
-        input.tabIndex = - 1
-        + input
+    override fun fromString(string: String) = when (string) {
+        "true" -> true
+        "false" -> false
+        else -> throw IllegalStateException()
     }
 
-    override fun onValidated(report: ValidityReport) {
-        // id is handled automatically, shouldn't be wrong
-    }
+    override fun getPropValue() = prop.get()
+
+    override fun setPropValue(value: Pair<Boolean, String>?) = prop.set(value?.first)
 
 }

@@ -25,7 +25,7 @@ import zakadabar.stack.frontend.elements.minusAssign
 import zakadabar.stack.frontend.elements.plusAssign
 import kotlin.reflect.KMutableProperty0
 
-class ZkDoubleField<T : DtoBase>(
+open class ZkDoubleField<T : DtoBase>(
     form: ZkForm<T>,
     private val prop: KMutableProperty0<Double>
 ) : ZkFieldBase<T, Double>(

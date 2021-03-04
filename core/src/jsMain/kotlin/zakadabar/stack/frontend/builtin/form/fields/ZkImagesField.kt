@@ -35,7 +35,7 @@ import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.resources.Icons
 import zakadabar.stack.frontend.util.launch
 
-class ZkImagesField<T : RecordDto<T>>(
+open class ZkImagesField<T : RecordDto<T>>(
     form: ZkForm<T>,
     private val dataRecordId: RecordId<T>,
     private val imageCountMax: Int? = null

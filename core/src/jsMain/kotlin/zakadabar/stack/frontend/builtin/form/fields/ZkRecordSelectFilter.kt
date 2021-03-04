@@ -7,7 +7,7 @@ import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.form.ZkForm
 
-class ZkRecordSelectFilter<T : DtoBase>(
+open class ZkRecordSelectFilter<T : DtoBase>(
     form: ZkForm<T>,
     sortOptions: Boolean = true,
     label: String? = null,

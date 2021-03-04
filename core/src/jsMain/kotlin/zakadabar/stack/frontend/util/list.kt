@@ -1,0 +1,9 @@
+/*
+ * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ */
+package zakadabar.stack.frontend.util
+
+import zakadabar.stack.data.record.RecordDto
+
+fun <T : RecordDto<T>> List<T>.by(field: (it: T) -> String) =
+    map { it.id to field(it) }.sortedBy { it.second }

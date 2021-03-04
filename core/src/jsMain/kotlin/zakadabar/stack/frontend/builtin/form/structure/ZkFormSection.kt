@@ -7,20 +7,24 @@ import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.elements.ZkElement
 
 class ZkFormSection(
-    private val title: String,
-    private val summary: String,
+    private val title: String? = null,
+    private val summary: String? = null,
     private val builder: ZkElement.() -> Unit
 ) : ZkElement() {
 
     override fun init() = build {
         className = ZkFormStyles.section
 
-        + div(ZkFormStyles.sectionTitle) {
-            + title
+        if (title != null) {
+            + div(ZkFormStyles.sectionTitle) {
+                + title
+            }
         }
 
-        + div(ZkFormStyles.sectionSummary) {
-            + summary
+        if (summary != null) {
+            + div(ZkFormStyles.sectionSummary) {
+                + summary
+            }
         }
 
         builder()

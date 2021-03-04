@@ -20,7 +20,7 @@ import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-class ZkOptSelectField<T : DtoBase>(
+open class ZkOptSelectField<T : DtoBase>(
     form: ZkForm<T>,
     val prop: KMutableProperty0<String?>,
     sortOptions: Boolean = true,

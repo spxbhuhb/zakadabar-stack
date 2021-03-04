@@ -58,7 +58,10 @@ open class ZkForm<T : DtoBase> : ZkElement() {
     var autoLabel = true
 
     @PublicApi
-    var fieldGridTemplate: String = "150px 1fr"
+    var fieldGridColumnTemplate: String = "150px 1fr"
+
+    @PublicApi
+    var fieldGridRowTemplate: String = "max-content"
 
     var openUpdate: ((dto: T) -> Unit)? = null
 
@@ -139,7 +142,7 @@ open class ZkForm<T : DtoBase> : ZkElement() {
 
     open fun invalidFieldList() = ZkInvalidFieldList().also { invalidFields = it }.hide()
 
-    fun section(title: String, summary: String = "", fieldGrid: Boolean = true, builder: ZkElement.() -> Unit): ZkFormSection {
+    fun section(title: String? = null, summary: String? = null, fieldGrid: Boolean = true, builder: ZkElement.() -> Unit): ZkFormSection {
         return if (fieldGrid) {
             ZkFormSection(title, summary) { + fieldGrid { builder() } }
         } else {
@@ -221,7 +224,7 @@ open class ZkForm<T : DtoBase> : ZkElement() {
     }
 
     fun fieldGrid(build: ZkElement.() -> Unit) =
-        grid(style = "grid-template-columns: $fieldGridTemplate; gap: 0", build = build)
+        grid(style = "grid-template-columns: $fieldGridColumnTemplate; gap: 0; grid-auto-rows: $fieldGridRowTemplate", build = build)
 
     // ----  Customized build and property receiver  --------
 
@@ -320,7 +323,17 @@ open class ZkForm<T : DtoBase> : ZkElement() {
     }
 
 
+    /**
+     * Callback to finalize the DTO before submit starts. Called before validation.
+     * Default implementation does nothing.
+     */
+    open fun onSubmitStart() {
+
+    }
+
     fun submit() {
+
+        onSubmitStart()
 
         // submit marks all fields touched to show all invalid fields for the user
         fields.forEach {
@@ -338,6 +351,7 @@ open class ZkForm<T : DtoBase> : ZkElement() {
                         val created = (dto as RecordDto<*>).create() as RecordDto<*>
                         fields.forEach { it.onCreateSuccess(created) }
                         toast { CoreStrings.createSuccess }
+                        resetTouched()
                     }
                     ZkFormMode.Read -> {
                         // nothing to do here
@@ -345,15 +359,18 @@ open class ZkForm<T : DtoBase> : ZkElement() {
                     ZkFormMode.Update -> {
                         (dto as RecordDto<*>).update()
                         toast { CoreStrings.updateSuccess }
+                        resetTouched()
                     }
                     ZkFormMode.Delete -> {
                         (dto as RecordDto<*>).delete()
                         toast { CoreStrings.deleteSuccess }
+                        resetTouched()
                     }
                     ZkFormMode.Action -> {
                         val result = (dto as ActionDto<*>).execute()
                         onExecuteResult?.let { it(result) }
                         toast { CoreStrings.actionSuccess }
+                        resetTouched()
                     }
                     ZkFormMode.Query -> {
                         (dto as QueryDto<*>).execute()
@@ -371,6 +388,13 @@ open class ZkForm<T : DtoBase> : ZkElement() {
                     ZkFormMode.Query -> toast(error = true) { CoreStrings.queryFail }
                 }
             }
+        }
+    }
+
+    private fun resetTouched() {
+        submitTouched = false
+        fields.forEach {
+            it.touched = false
         }
     }
 

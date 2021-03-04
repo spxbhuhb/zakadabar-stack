@@ -21,7 +21,7 @@ import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-class ZkOptRecordSelectField<T : DtoBase>(
+open class ZkOptRecordSelectField<T : DtoBase>(
     form: ZkForm<T>,
     val prop: KMutableProperty0<RecordId<*>?>,
     sortOptions: Boolean = true,

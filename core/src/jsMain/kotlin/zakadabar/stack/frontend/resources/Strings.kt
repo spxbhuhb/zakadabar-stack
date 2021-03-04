@@ -31,6 +31,7 @@ open class StringsImpl(
     open val updateSuccess by "Update success."
     open val deleteSuccess by "Delete success."
     open val actionSuccess by "Successful action execution."
+    open val querySuccess by "Sikeres lekérdezés."
     open val createFail by "Create failed."
     open val updateFail by "Update failed."
     open val deleteFail by "Delete failed."

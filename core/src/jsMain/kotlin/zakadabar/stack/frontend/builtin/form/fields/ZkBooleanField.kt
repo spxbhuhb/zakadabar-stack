@@ -24,7 +24,7 @@ import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import kotlin.reflect.KMutableProperty0
 
-class ZkBooleanField<T : DtoBase>(
+open class ZkBooleanField<T : DtoBase>(
     form: ZkForm<T>,
     val prop: KMutableProperty0<Boolean>
 ) : ZkFieldBase<T, Boolean>(

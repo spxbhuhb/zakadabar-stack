@@ -4,8 +4,10 @@
 package zakadabar.stack.frontend.builtin.titlebar
 
 import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.util.PublicApi
 
-open class ZkTitleBar : ZkElement() {
+@PublicApi
+open class ZkTitleBar() : ZkElement() {
 
     private val _title = ZkElement()
 
@@ -28,6 +30,11 @@ open class ZkTitleBar : ZkElement() {
         }
 
         + _title
+    }
+
+    @PublicApi
+    constructor(title: String) : this() {
+        this.title = title
     }
 
 

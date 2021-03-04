@@ -27,7 +27,7 @@ import zakadabar.stack.util.PublicApi
  * A field that displays a constant, readonly string.
  */
 @PublicApi
-class ZkConstStringField<T : DtoBase>(
+open class ZkConstStringField<T : DtoBase>(
     form: ZkForm<T>,
     label: String,
     val value: String

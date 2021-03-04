@@ -31,9 +31,6 @@ import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.util.escape
 import zakadabar.stack.frontend.util.launch
 
-/**
- *
- */
 abstract class ZkSelectBase<T : DtoBase, VT>(
     form: ZkForm<T>,
     propName: String,
@@ -135,7 +132,7 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
             s += """<div class="${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-${DATASET_KEY}="">${CoreStrings.notSelected}</div>"""
             selectedOption.innerText = CoreStrings.notSelected
         } else {
-            s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="0">${CoreStrings.notSelected}</div>"""
+            s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="">${CoreStrings.notSelected}</div>"""
         }
 
         items.forEach {

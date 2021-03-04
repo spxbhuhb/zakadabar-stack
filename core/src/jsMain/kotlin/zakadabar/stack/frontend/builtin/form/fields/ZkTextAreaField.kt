@@ -24,7 +24,7 @@ import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.resources.CoreStrings
 import kotlin.reflect.KMutableProperty0
 
-class ZkTextAreaField<T : DtoBase>(
+open class ZkTextAreaField<T : DtoBase>(
     form: ZkForm<T>,
     private val prop: KMutableProperty0<String>
 ) : ZkFieldBase<T, String>(

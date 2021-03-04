@@ -26,7 +26,7 @@ import zakadabar.stack.frontend.elements.plusAssign
 import zakadabar.stack.frontend.resources.CoreStrings
 import kotlin.reflect.KMutableProperty0
 
-class ZkStringField<T : DtoBase>(
+open class ZkStringField<T : DtoBase>(
     form: ZkForm<T>,
     private val prop: KMutableProperty0<String>
 ) : ZkFieldBase<T, String>(
