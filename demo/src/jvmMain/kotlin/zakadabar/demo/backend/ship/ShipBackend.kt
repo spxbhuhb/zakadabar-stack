@@ -6,15 +6,20 @@
 package zakadabar.demo.backend.ship
 
 import io.ktor.routing.*
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.JoinType
+import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.demo.backend.account.AccountPrivateDao
+import zakadabar.demo.backend.account.AccountPrivateTable
 import zakadabar.demo.backend.port.PortDao
+import zakadabar.demo.backend.port.PortTable
+import zakadabar.demo.backend.sea.SeaTable
 import zakadabar.demo.backend.speed.SpeedDao
-import zakadabar.demo.data.ShipDto
-import zakadabar.demo.data.ShipSpeeds
-import zakadabar.demo.data.ShipsByName
+import zakadabar.demo.backend.speed.SpeedTable
+import zakadabar.demo.data.ship.SearchShipsQuery
+import zakadabar.demo.data.ship.SearchShipsResult
+import zakadabar.demo.data.ship.ShipDto
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.util.Executor
 
@@ -30,22 +35,36 @@ object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTa
     override fun onInstallRoutes(route: Route) {
         route.crud()
         route.blob()
-        route.query(ShipsByName::class, ShipBackend::query)
-        route.query(ShipSpeeds::class, ShipBackend::query)
+        route.query(SearchShipsQuery::class, ::query)
     }
 
-    private fun query(executor: Executor, query: ShipsByName) = transaction {
-        ShipTable
-            .select { ShipTable.name like "%${query.name}%" }
-            .map(ShipTable::toDto)
-    }
+    private fun query(executor: Executor, query: SearchShipsQuery) = transaction {
+        val select = ShipTable
+            .join(PortTable, JoinType.INNER, additionalConstraint = { PortTable.id eq ShipTable.port })
+            .join(SeaTable, JoinType.INNER, additionalConstraint = { SeaTable.id eq PortTable.sea })
+            .join(SpeedTable, JoinType.INNER, additionalConstraint = { SpeedTable.id eq ShipTable.speed })
+            .join(AccountPrivateTable, JoinType.INNER, additionalConstraint = { AccountPrivateTable.id eq ShipTable.captain })
+            .slice(
+                ShipTable.id,
+                ShipTable.name,
+                PortTable.name,
+                AccountPrivateTable.fullName
+            )
+            .selectAll()
 
-    private fun query(executor: Executor, query: ShipSpeeds) = transaction {
-        ShipTable
-            .slice(ShipTable.speed)
-            .select { ShipTable.name inList query.names }
-            .distinct()
-            .map { it[ShipTable.speed] }
+        query.name?.let { select.andWhere { ShipTable.name like "%${query.name}%" } }
+        query.speed?.let { select.andWhere { SpeedTable.id eq query.speed } }
+        query.sea?.let { select.andWhere { SeaTable.id eq query.speed } }
+        query.port?.let { select.andWhere { PortTable.id eq query.port } }
+
+        select.map {
+            SearchShipsResult(
+                id = it[ShipTable.id].value,
+                name = it[ShipTable.name],
+                port = it[PortTable.name],
+                captain = it[AccountPrivateTable.fullName]
+            )
+        }
     }
 
     override fun all(executor: Executor) = transaction {

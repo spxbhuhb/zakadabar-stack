@@ -11,11 +11,11 @@ class Table : ZkTable<SeaDto>() {
 
     init {
         title = Strings.seas
-        onCreate = { Seas.openCreate() }
+        crud = Seas
 
         + SeaDto::id
         + SeaDto::name
-        + SeaDto::id.actions(Seas)
+        + actions()
     }
 
 }

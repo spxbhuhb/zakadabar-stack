@@ -3,22 +3,29 @@
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.elements.ZkElement
 import kotlin.reflect.KProperty1
 
-open class ZkStringColumn<T : DtoBase>(
+open class ZkOptInstantColumn<T : DtoBase>(
     override val table: ZkTable<T>,
-    private val prop: KProperty1<T, String>
+    private val prop: KProperty1<T, Instant?>
 ) : ZkColumn<T> {
 
     override var label = Application.stringMap[prop.name] ?: prop.name
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         with(builder) {
-            + prop.get(row)
+            // FIXME proper formatting, Kotlin datatime supports only ISO for now
+            val value = prop.get(row)
+            if (value != null) {
+                + value.toLocalDateTime(TimeZone.currentSystemDefault()).toString()
+            }
         }
     }
 

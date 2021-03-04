@@ -3,11 +3,11 @@
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
-import zakadabar.stack.data.record.RecordDto
+import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.elements.ZkElement
 
-open class ZkCustomColumn<T : RecordDto<T>>(
+open class ZkCustomColumn<T : DtoBase>(
     override val table: ZkTable<T>
 ) : ZkColumn<T> {
 

@@ -3,7 +3,7 @@
  */
 package zakadabar.demo.frontend.pages.ship
 
-import zakadabar.demo.data.ShipDto
+import zakadabar.demo.data.ship.ShipDto
 import zakadabar.stack.frontend.elements.ZkCrud
 
 object Ships : ZkCrud<ShipDto>() {

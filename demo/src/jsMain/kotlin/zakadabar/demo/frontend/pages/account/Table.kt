@@ -11,12 +11,12 @@ class Table : ZkTable<AccountPrivateDto>() {
 
     init {
         title = Strings.accounts
-        onCreate = { Accounts.openCreate() }
+        crud = Accounts
 
         + AccountPrivateDto::id
         + AccountPrivateDto::accountName
         + AccountPrivateDto::fullName
-        + AccountPrivateDto::id.actions(Accounts)
+        + actions()
     }
 
 }

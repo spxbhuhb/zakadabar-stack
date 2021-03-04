@@ -9,7 +9,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 import zakadabar.demo.backend.account.AccountPrivateDao
 import zakadabar.demo.backend.port.PortDao
 import zakadabar.demo.backend.speed.SpeedDao
-import zakadabar.demo.data.ShipDto
+import zakadabar.demo.data.ship.ShipDto
 
 class ShipDao(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<ShipDao>(ShipTable)

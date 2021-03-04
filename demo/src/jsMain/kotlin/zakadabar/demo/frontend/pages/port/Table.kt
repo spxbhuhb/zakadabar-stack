@@ -14,7 +14,7 @@ class Table : ZkTable<PortDto>() {
 
     init {
         title = Strings.ports
-        onCreate = { Ports.openCreate() }
+        crud = Ports
 
         + PortDto::id
 
@@ -24,7 +24,7 @@ class Table : ZkTable<PortDto>() {
         }
 
         + PortDto::name
-        + PortDto::id.actions(Ports)
+        + actions()
     }
 
 }

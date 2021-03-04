@@ -52,7 +52,7 @@ Add your menu items to [Menu.kt](./kotlin/zakadabar/demo/frontend/Menu.kt).
 
 `Example`
 
-* DTO - [ShipDto](../commonMain/kotlin/zakadabar/demo/data/ShipDto.kt)
+* DTO - [ShipDto](../commonMain/kotlin/zakadabar/demo/data/ship/ShipDto.kt)
 * Form - [ShipForm](./kotlin/zakadabar/demo/frontend/pages/ship/ShipForm.kt)
 * Table - [ShipTable](./kotlin/zakadabar/demo/frontend/pages/ship/ShipTable.kt)
 * Crud - [Ships](./kotlin/zakadabar/demo/frontend/pages/ship/Ships.kt)

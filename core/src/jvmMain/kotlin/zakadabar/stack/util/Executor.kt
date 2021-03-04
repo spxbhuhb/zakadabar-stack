@@ -19,4 +19,11 @@ open class Executor internal constructor(
 
     fun hasRole(roleName: String) = roleName in roles
 
+    fun oneOf(roleNames: Array<out String>): Boolean {
+        roleNames.forEach {
+            if (it in roles) return true
+        }
+        return false
+    }
+
 }

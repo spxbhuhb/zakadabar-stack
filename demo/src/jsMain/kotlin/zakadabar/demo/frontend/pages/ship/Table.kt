@@ -5,8 +5,8 @@ package zakadabar.demo.frontend.pages.ship
 
 import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
-import zakadabar.demo.data.ShipDto
 import zakadabar.demo.data.SpeedDto
+import zakadabar.demo.data.ship.ShipDto
 import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.data.builtin.AccountPublicDto
 import zakadabar.stack.frontend.builtin.table.ZkTable
@@ -23,8 +23,7 @@ class Table : ZkTable<ShipDto>() {
 
     init {
         title = Strings.ships
-        onCreate = { Ships.openCreate() }
-        onUpdate = { Ships.openUpdate(it) }
+        crud = Ships
         onSearch = { }
 
         + ShipDto::id build { label = "#" }
@@ -50,7 +49,7 @@ class Table : ZkTable<ShipDto>() {
             }
         }
 
-        + ShipDto::id.actions(Ships)
+        + actions()
     }
 
 }

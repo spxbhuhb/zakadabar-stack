@@ -11,13 +11,12 @@ class Table : ZkTable<SpeedDto>() {
 
     init {
         title = Strings.speeds
-        onCreate = { Speeds.openCreate() }
-        onUpdate = { Speeds.openUpdate(it) }
+        crud = Speeds
 
         + SpeedDto::id
         + SpeedDto::description
         + SpeedDto::value
-        + SpeedDto::id.actions(Speeds)
+        + actions()
     }
 
 }

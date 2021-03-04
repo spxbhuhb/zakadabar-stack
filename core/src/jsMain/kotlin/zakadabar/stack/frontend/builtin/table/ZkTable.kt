@@ -4,11 +4,13 @@
 package zakadabar.stack.frontend.builtin.table
 
 import kotlinx.browser.document
+import kotlinx.datetime.Instant
 import kotlinx.dom.clear
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLTableSectionElement
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.set
+import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.table.columns.*
@@ -18,10 +20,12 @@ import zakadabar.stack.frontend.util.getDatasetEntry
 import zakadabar.stack.frontend.util.launch
 import kotlin.reflect.KProperty1
 
-open class ZkTable<T : RecordDto<T>> : ZkElement() {
+open class ZkTable<T : DtoBase> : ZkElement() {
 
     var title: String? = null
-    var crud: ZkCrud<T>? = null
+
+    var crud: ZkCrud<*>? = null
+
     var onCreate: (() -> Unit)? = null
     var onUpdate: ((id: RecordId<T>) -> Unit)? = null
     var onSearch: ((searchText: String) -> Unit)? = null
@@ -122,7 +126,7 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
 
                 for ((index, row) in data.withIndex()) {
                     + tr {
-                        currentElement.dataset["rid"] = row.id.toString()
+                        currentElement.dataset["rid"] = getRowId(row).toString()
 
                         for (column in columns) {
                             + td {
@@ -136,6 +140,14 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
         }
 
         return this
+    }
+
+    open fun getRowId(row: T): Long {
+        if (row is RecordDto<*>) {
+            return row.id
+        } else {
+            throw NotImplementedError("please override ${this::class}.getRowId when not using crud")
+        }
     }
 
     private fun gridTemplateColumns(): String {
@@ -152,8 +164,8 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
         return column
     }
 
-    fun KProperty1<T, RecordId<T>>.actions(crud: ZkCrud<T>): ZkActionsColumn<T> {
-        return ZkActionsColumn(this@ZkTable, this, crud)
+    fun actions(): ZkActionsColumn<T> {
+        return ZkActionsColumn(this@ZkTable)
     }
 
     operator fun ZkActionsColumn<T>.unaryPlus(): ZkActionsColumn<T> {
@@ -188,6 +200,18 @@ open class ZkTable<T : RecordDto<T>> : ZkElement() {
     fun custom(builder: ZkCustomColumn<T>.() -> Unit = {}): ZkCustomColumn<T> {
         val column = ZkCustomColumn(this)
         column.builder()
+        return column
+    }
+
+    operator fun KProperty1<T, Instant>.unaryPlus(): ZkInstantColumn<T> {
+        val column = ZkInstantColumn(this@ZkTable, this)
+        columns += column
+        return column
+    }
+
+    operator fun KProperty1<T, Instant?>.unaryPlus(): ZkOptInstantColumn<T> {
+        val column = ZkOptInstantColumn(this@ZkTable, this)
+        columns += column
         return column
     }
 

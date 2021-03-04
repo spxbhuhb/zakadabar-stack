@@ -5,13 +5,13 @@ package zakadabar.stack.frontend.builtin.table.columns
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
-import zakadabar.stack.data.record.RecordDto
+import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.elements.ZkElement
 import kotlin.reflect.KProperty1
 
-open class ZkBooleanColumn<T : RecordDto<T>>(
+open class ZkBooleanColumn<T : DtoBase>(
     override val table: ZkTable<T>,
     private val prop: KProperty1<T, Boolean>
 ) : ZkColumn<T> {

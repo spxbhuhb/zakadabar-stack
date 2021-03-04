@@ -5,6 +5,7 @@ package zakadabar.demo.data
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
+import zakadabar.demo.data.ship.ShipDto
 import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.query.QueryDtoCompanion
 

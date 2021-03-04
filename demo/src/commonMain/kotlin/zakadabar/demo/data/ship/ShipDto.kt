@@ -1,9 +1,10 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.data
+package zakadabar.demo.data.ship
 
 import kotlinx.serialization.Serializable
+import zakadabar.demo.data.*
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId

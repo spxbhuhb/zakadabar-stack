@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import zakadabar.demo.backend.account.AccountPrivateTable
 import zakadabar.demo.backend.port.PortTable
 import zakadabar.demo.backend.speed.SpeedTable
-import zakadabar.demo.data.ShipDto
+import zakadabar.demo.data.ship.ShipDto
 
 object ShipTable : LongIdTable("ships") {
 
