@@ -109,13 +109,15 @@ open class ZkForm<T : DtoBase> : ZkElement() {
 
     // ----  Builder convenience functions --------
 
-    open fun build(title: String, createTitle: String = title, builder: () -> Unit): ZkForm<T> {
+    open fun build(title: String, createTitle: String = title, addButtons: Boolean = true, builder: () -> Unit): ZkForm<T> {
         + titleBar(title, createTitle)
 
         + div(ZkFormStyles.contentContainer) {
             + column(ZkFormStyles.form) {
                 builder()
-                + buttons()
+                if (addButtons) {
+                    + buttons()
+                }
                 + invalidFieldList()
             }
         }
