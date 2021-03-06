@@ -4,7 +4,7 @@
 package zakadabar.demo.frontend.pages.port
 
 import zakadabar.demo.data.PortDto
-import zakadabar.stack.frontend.elements.ZkCrud
+import zakadabar.stack.frontend.builtin.ZkCrud
 
 object Ports : ZkCrud<PortDto>() {
     init {

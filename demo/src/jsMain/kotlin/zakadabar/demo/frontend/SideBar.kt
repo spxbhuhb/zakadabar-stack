@@ -4,6 +4,7 @@
 package zakadabar.demo.frontend
 
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
 import zakadabar.demo.frontend.pages.account.Accounts
@@ -17,7 +18,7 @@ import zakadabar.demo.frontend.pages.speed.Speeds
 import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.data.builtin.LogoutAction
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
-import zakadabar.stack.frontend.util.launch
+import zakadabar.stack.frontend.util.io
 
 object SideBar : ZkSideBar() {
 
@@ -50,7 +51,7 @@ object SideBar : ZkSideBar() {
         + item(Strings.login) { Login.open() }
 
         + item(Strings.logout) {
-            launch {
+            io {
                 LogoutAction().execute()
                 Home.open()
             }
@@ -74,19 +75,17 @@ object SideBar : ZkSideBar() {
         // the data arrives. It would be a bit better to show the user that
         // we are downloading.
 
-        launch {
+        io {
             var seas = emptyList<SeaDto>()
             var ports = emptyList<PortDto>()
 
             // This pattern lets us download the seas and ports simultaneously.
             // the coroutineScope ends when both of the launched jobs are done.
 
-            // IMPORTANT note ".join()" at the end, that's needed to wait until completion
-
             coroutineScope {
                 launch { seas = SeaDto.all() }
                 launch { ports = PortDto.all() }
-            }.join()
+            }
 
             seas.forEach { sea ->
                 + group(sea.name) {

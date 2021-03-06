@@ -46,7 +46,7 @@ Add your menu items to [Menu.kt](./kotlin/zakadabar/demo/frontend/Menu.kt).
 
 ## Crud Pages
 
-* Extend [ZkCrud](../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/elements/ZkCrud.kt).
+* Extend [ZkCrud](../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/ZkCrud.kt).
 * Add it to [Routing.kt](./kotlin/zakadabar/demo/frontend/Routing.kt).
 * Add it to [Menu.kt](./kotlin/zakadabar/demo/frontend/Menu.kt).
 
@@ -59,7 +59,7 @@ Add your menu items to [Menu.kt](./kotlin/zakadabar/demo/frontend/Menu.kt).
 
 ## Non-Crud Pages
 
-* Extend [ZkPage](../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/elements/ZkPage.kt).
+* Extend [ZkPage](../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/ZkPage.kt).
 * Add it to [Routing.kt](./kotlin/zakadabar/demo/frontend/Routing.kt).
 * Add it to [Menu.kt](./kotlin/zakadabar/demo/frontend/Menu.kt).
 

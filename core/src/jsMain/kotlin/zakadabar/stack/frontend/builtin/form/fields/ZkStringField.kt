@@ -21,9 +21,9 @@ import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
-import zakadabar.stack.frontend.elements.minusAssign
-import zakadabar.stack.frontend.elements.plusAssign
 import zakadabar.stack.frontend.resources.CoreStrings
+import zakadabar.stack.frontend.util.minusAssign
+import zakadabar.stack.frontend.util.plusAssign
 import kotlin.reflect.KMutableProperty0
 
 open class ZkStringField<T : DtoBase>(

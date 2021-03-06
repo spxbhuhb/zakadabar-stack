@@ -3,11 +3,11 @@
  */
 package zakadabar.demo.frontend.pages.misc
 
-import zakadabar.stack.frontend.elements.ZkPage
+import zakadabar.stack.frontend.builtin.ZkPage
 
 object Home : ZkPage() {
 
-    override fun init() = build {
+    override fun onCreate() {
         + "Home"
     }
 

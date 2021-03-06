@@ -3,10 +3,11 @@
  */
 package zakadabar.stack.frontend.builtin.form
 
-import zakadabar.stack.frontend.elements.ZkClasses.Companion.zkClasses
-import zakadabar.stack.frontend.elements.ZkElement
-import zakadabar.stack.frontend.elements.marginRight
-import zakadabar.stack.frontend.elements.plusAssign
+import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
+import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarStyles
+import zakadabar.stack.frontend.util.marginRight
+import zakadabar.stack.frontend.util.plusAssign
 
 // FIXME make titlebar dynamic, when bound to data fields it should update automatically
 
@@ -18,10 +19,10 @@ open class ZkFormTitleBar() : ZkElement() {
 
     var title: String? = null
 
-    override fun init(): ZkFormTitleBar {
-        classList += zkClasses.titleBar
+    override fun onCreate() {
+        classList += ZkTitleBarStyles.titleBar
 
-        + row(zkClasses.w100) {
+        + row(ZkLayoutStyles.w100) {
 
             style { justifyContent = "space-between" }
 
@@ -37,8 +38,6 @@ open class ZkFormTitleBar() : ZkElement() {
 
             }
         }
-
-        return this
     }
 
 }

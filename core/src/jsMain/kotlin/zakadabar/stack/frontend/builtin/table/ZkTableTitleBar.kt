@@ -3,13 +3,14 @@
  */
 package zakadabar.stack.frontend.builtin.table
 
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
-import zakadabar.stack.frontend.builtin.simple.SimpleInput
-import zakadabar.stack.frontend.elements.ZkClasses.Companion.zkClasses
-import zakadabar.stack.frontend.elements.ZkElement
-import zakadabar.stack.frontend.elements.marginRight
-import zakadabar.stack.frontend.elements.plusAssign
+import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
+import zakadabar.stack.frontend.builtin.standalone.ZkStandaloneInput
+import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarStyles
 import zakadabar.stack.frontend.resources.Icons
+import zakadabar.stack.frontend.util.marginRight
+import zakadabar.stack.frontend.util.plusAssign
 
 open class ZkTableTitleBar() : ZkElement() {
 
@@ -18,13 +19,13 @@ open class ZkTableTitleBar() : ZkElement() {
     }
 
     var title: String? = null
-    var onCreate: (() -> Unit)? = null
+    var onAddRow: (() -> Unit)? = null
     var onSearch: ((query: String) -> Unit)? = null
 
-    override fun init(): ZkTableTitleBar {
-        classList += zkClasses.titleBar
+    override fun onCreate() {
+        classList += ZkTitleBarStyles.titleBar
 
-        + row(zkClasses.w100) {
+        + row(ZkLayoutStyles.w100) {
 
             style { justifyContent = "space-between" }
 
@@ -44,21 +45,18 @@ open class ZkTableTitleBar() : ZkElement() {
 
                 style { alignItems = "center" }
 
-                onCreate?.let {
+                onAddRow?.let {
                     + ZkIconButton(Icons.add, round = true) { it.invoke() } marginRight 16
                 }
 
                 onSearch?.let {
-                    + SimpleInput(onChange = it, enter = true) marginRight 8
+                    + ZkStandaloneInput(onChange = it, enter = true) marginRight 8
                     + ZkIconButton(Icons.search, buttonSize = 24) {
-                        this@ZkTableTitleBar[SimpleInput::class].value
+                        this@ZkTableTitleBar[ZkStandaloneInput::class].value
                     }
                 }
             } marginRight 10
         }
-
-
-        return this
     }
 
 }

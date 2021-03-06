@@ -10,12 +10,12 @@ import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
-import zakadabar.stack.frontend.elements.ZkElement
-import zakadabar.stack.frontend.elements.minusAssign
-import zakadabar.stack.frontend.elements.plusAssign
 import zakadabar.stack.frontend.resources.CoreStrings
+import zakadabar.stack.frontend.util.minusAssign
+import zakadabar.stack.frontend.util.plusAssign
 
 abstract class ZkFieldBase<FT : DtoBase, DT>(
     val form: ZkForm<FT>,
@@ -37,18 +37,17 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
 
     val fieldBottomBorder = document.createElement("div") as HTMLElement
 
-    val errors = ZkElement().withClass(ZkFormStyles.fieldError)
+    val errors = ZkElement().withCss(ZkFormStyles.fieldError)
 
-    override fun init(): ZkElement {
+    override fun onCreate() {
         buildSectionField()
-        return this
     }
 
     /**
      * Builds the default layout for a field. Calls [buildFieldValue]
      * to build the actual field value.
      *
-     * Call this function from [init] or simply write your own implementation.
+     * Call this function from [onResume] or simply write your own implementation.
      */
     open fun buildSectionField() {
         classList += ZkFormStyles.fieldContainer

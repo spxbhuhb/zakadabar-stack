@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 
 class Form : ZkForm<SpeedDto>() {
 
-    override fun init() = build {
+    override fun onCreate() {
 
         + titleBar(dto.description, Strings.speed)
 

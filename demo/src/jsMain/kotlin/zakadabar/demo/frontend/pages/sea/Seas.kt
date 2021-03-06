@@ -4,7 +4,7 @@
 package zakadabar.demo.frontend.pages.sea
 
 import zakadabar.demo.data.SeaDto
-import zakadabar.stack.frontend.elements.ZkCrud
+import zakadabar.stack.frontend.builtin.ZkCrud
 
 object Seas : ZkCrud<SeaDto>() {
     init {

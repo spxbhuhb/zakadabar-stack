@@ -35,8 +35,8 @@ open class ZkTextAreaField<T : DtoBase>(
     private val area = document.createElement("textarea") as HTMLTextAreaElement
 
     override fun buildFieldValue() {
-        currentElement.style.flexGrow = "1"
-        currentElement.style.display = "flex"
+        buildElement.style.flexGrow = "1"
+        buildElement.style.display = "flex"
 
         area.className = ZkFormStyles.textarea
         area.style.flexGrow = "1"

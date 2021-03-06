@@ -3,25 +3,52 @@
  */
 package zakadabar.demo.frontend.pages.ship
 
-import zakadabar.demo.data.ShipsByName
-import zakadabar.stack.frontend.builtin.simple.SimpleInput
-import zakadabar.stack.frontend.elements.ZkPage
-import zakadabar.stack.frontend.util.launch
+import zakadabar.demo.data.ship.SearchShipsQuery
+import zakadabar.demo.frontend.resources.Strings
+import zakadabar.stack.frontend.builtin.ZkPage
+import zakadabar.stack.frontend.builtin.form.ZkFormMode
+import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
+import zakadabar.stack.frontend.util.default
+import zakadabar.stack.frontend.util.io
 
 object ShipSearch : ZkPage() {
 
-    private val input = SimpleInput(enter = true) { searchText -> onSearch(searchText, table) }
-    private val table = Table()
+    // This page shows a form for the query parameters and a table that
+    // shows the query results. When the user clicks on the "Run Query"
+    // button the runQuery method is called and the table is updated
+    // with the results.
 
-    override fun init() = build {
-        + column {
-            + input
-            + table
+    val form = SearchForm(::runQuery)
+    val table = SearchResult()
+
+    // When you use "object" you have to initialize the DOM structure from
+    // an init block and you have to override cleanup, so the underlying structure
+    // won't be removed. The init and cleanup functions will be called again
+    // and again and you don't want them to change the object.
+
+    init {
+        // "default" is an inline reified function. It gets the type of DTO to
+        // create from the generic parameter of the form class, creates a
+        // new instance, creates a schema and calls setDefaults of the schema
+        // to set the default values.
+
+        build {
+            form.dto = default()
+            form.mode = ZkFormMode.Query
+            width("100%")
+
+            + column {
+                + ZkTitleBar(Strings.searchShips)
+                + form
+                + table
+            }
         }
     }
 
-    private fun onSearch(searchText: String, table: Table) = launch {
-        table.setData(ShipsByName(name = searchText).execute())
+    private fun runQuery(query: SearchShipsQuery) {
+        io {
+            table.setData(query.execute())
+        }
     }
 
 }

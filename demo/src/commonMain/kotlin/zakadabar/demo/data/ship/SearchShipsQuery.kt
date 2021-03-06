@@ -15,13 +15,15 @@ import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.PublicApi
 
 @Serializable
-@PublicApi // used from Android
+@PublicApi
 data class SearchShipsQuery(
     var name: String?,
     var speed: RecordId<SpeedDto>?,
     var sea: RecordId<SeaDto>?,
     var port: RecordId<PortDto>?,
 ) : QueryDto<SearchShipsResult> {
+
+    // Do not forget to add query and action classes to ShipDto!
 
     override suspend fun execute() = comm().query(this, serializer(), ListSerializer(SearchShipsResult.serializer()))
 

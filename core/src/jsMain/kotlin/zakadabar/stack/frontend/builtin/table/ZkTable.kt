@@ -13,21 +13,43 @@ import org.w3c.dom.set
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.frontend.builtin.ZkCrud
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.columns.*
-import zakadabar.stack.frontend.elements.ZkCrud
-import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.util.getDatasetEntry
-import zakadabar.stack.frontend.util.launch
+import zakadabar.stack.frontend.util.io
 import kotlin.reflect.KProperty1
 
+/**
+ * Provides functions to build tables for the browser frontend.
+ *
+ * Title bar is the bar above the table that contains the title and possibly functions such
+ * as create new item, search in the table, etc.
+ *
+ * The title bar is optional. One is added automatically if one of [title], [onResume] or [onSearch]
+ * is specified. You can override the default by setting the [titleBar] property before [onResume] runs.
+ *
+ * @property  title       Title to show in the title bar.
+ * @property  crud        The [ZkCrud] that is linked with the table. When specified the functions
+ *                        of the table (onCreate, onDblClick for example) will use it to open the
+ *                        appropriate page.
+ * @property  onAddRow    Called when the user clicks the plus button in the title bar. This function
+ *                        has preference over [crud].
+ * @property  onDblClick  Called when the user double clicks on a row. Parameter is the id of the
+ *                        row. When [crud] is set this will be the record id. Otherwise it will be
+ *                        the value returned by [getRowId]. This function has preference over [crud].
+ * @property  titleBar    Title bar of the table. Set this to override the default title bar.
+ * @property  columns     Column definitions.
+ * @property  preloads    Data load jobs which has to be performed before the table is rendered.
+ */
 open class ZkTable<T : DtoBase> : ZkElement() {
 
     var title: String? = null
 
     var crud: ZkCrud<*>? = null
 
-    var onCreate: (() -> Unit)? = null
-    var onUpdate: ((id: RecordId<T>) -> Unit)? = null
+    var onAddRow: (() -> Unit)? = null
+    var onDblClick: ((id: String) -> Unit)? = null
     var onSearch: ((searchText: String) -> Unit)? = null
 
     var titleBar: ZkTableTitleBar? = null
@@ -38,7 +60,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     private val tbody = document.createElement("tbody") as HTMLTableSectionElement
 
-    override fun init() = build {
+    override fun onCreate() {
         className = ZkTableStyles.outerContainer
 
         buildTitleBar()?.let { + it }
@@ -46,7 +68,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         + div(ZkTableStyles.contentContainer) {
 
             + table(ZkTableStyles.table) {
-                currentElement.style.cssText = gridTemplateColumns()
+                buildElement.style.cssText = gridTemplateColumns()
                 + thead {
                     columns.forEach { it.renderHeader(this) }
                 }
@@ -68,12 +90,12 @@ open class ZkTable<T : DtoBase> : ZkElement() {
             event.preventDefault()
 
             val target = event.target as HTMLElement
-            val rid = target.getDatasetEntry("rid")?.toLongOrNull() ?: return@on
+            val rid = target.getDatasetEntry("rid") ?: return@on
 
-            if (onUpdate != null) {
-                onUpdate?.invoke(rid)
+            if (onDblClick != null) {
+                onDblClick?.invoke(rid)
             } else if (crud != null) {
-                crud?.openUpdate(rid)
+                crud?.openUpdate(rid.toLong())
             }
         }
 
@@ -82,14 +104,14 @@ open class ZkTable<T : DtoBase> : ZkElement() {
             event.preventDefault()
 
             val target = event.target as HTMLElement
-            val rid = target.getDatasetEntry("rid")?.toLongOrNull() ?: return@on
+            val rid = target.getDatasetEntry("rid") ?: return@on
             val action = target.getDatasetEntry("action") ?: return@on
 
             if (action == "update") {
-                if (onUpdate != null) {
-                    onUpdate?.invoke(rid)
+                if (onDblClick != null) {
+                    onDblClick?.invoke(rid)
                 } else if (crud != null) {
-                    crud?.openUpdate(rid)
+                    crud?.openUpdate(rid.toLong())
                 }
             }
         }
@@ -97,13 +119,13 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     private fun buildTitleBar(): ZkTableTitleBar? {
 
-        if (titleBar == null && (title != null || onCreate != null || onSearch != null || crud != null)) {
+        if (titleBar == null && (title != null || onAddRow != null || onSearch != null || crud != null)) {
             titleBar = ZkTableTitleBar {
                 title = this@ZkTable.title
-                if (this@ZkTable.onCreate != null) {
-                    onCreate = this@ZkTable.onCreate !!
+                if (this@ZkTable.onAddRow != null) {
+                    onAddRow = this@ZkTable.onAddRow !!
                 } else if (this@ZkTable.crud != null) {
-                    onCreate = { this@ZkTable.crud !!.openCreate() }
+                    onAddRow = { this@ZkTable.crud !!.openCreate() }
                 }
                 this@ZkTable.onSearch?.let { onSearch = it }
             }
@@ -115,18 +137,18 @@ open class ZkTable<T : DtoBase> : ZkElement() {
     fun <RT : Any> preload(loader: suspend () -> RT) = ZkTablePreload(loader)
 
     fun setData(data: List<T>): ZkTable<T> {
-        launch {
+        io {
             preloads.forEach {
                 it.job.join()
             }
 
             build {
                 tbody.clear()
-                this.currentElement = tbody
+                this.buildElement = tbody
 
                 for ((index, row) in data.withIndex()) {
                     + tr {
-                        currentElement.dataset["rid"] = getRowId(row).toString()
+                        buildElement.dataset["rid"] = getRowId(row).toString()
 
                         for (column in columns) {
                             + td {
@@ -142,9 +164,13 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         return this
     }
 
-    open fun getRowId(row: T): Long {
+    /**
+     * Get a unique if for the given row. The id of the row is used by actions and is
+     * passed to row based functions such as [onDblClick].
+     */
+    open fun getRowId(row: T): String {
         if (row is RecordDto<*>) {
-            return row.id
+            return row.id.toString()
         } else {
             throw NotImplementedError("please override ${this::class}.getRowId when not using crud")
         }

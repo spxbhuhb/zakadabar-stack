@@ -3,7 +3,8 @@
  */
 package zakadabar.stack.frontend.application
 
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElementState
 
 abstract class AppRouting(
     private val defaultLayout: AppLayout,
@@ -46,11 +47,17 @@ abstract class AppRouting(
         }
 
         if (nextLayout != activeLayout) {
-            activeLayout.pause()
+            activeLayout.onPause()
             activeLayout = nextLayout
         }
 
         activeTarget = nextTarget
+
+        if (activeLayout.lifeCycleState == ZkElementState.Initialized) {
+            activeLayout.onCreate()
+            activeLayout.lifeCycleState = ZkElementState.Created
+        }
+
         activeLayout.resume(state, activeTarget)
 
         if (trace) {

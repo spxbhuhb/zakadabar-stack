@@ -27,6 +27,7 @@ data class ShipDto(
         recordType = "ship"
         + ShipsByName
         + ShipSpeeds
+        + SearchShipsQuery
     })
 
     override fun getRecordType() = recordType

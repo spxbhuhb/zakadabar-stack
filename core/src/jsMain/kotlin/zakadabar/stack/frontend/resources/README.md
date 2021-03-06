@@ -2,11 +2,12 @@ This directory contains resources the application uses:
 
 * [Strings](Strings.kt) - text resources, subject to I18N
 * [Icons](Icons.kt) - build-in icons from Material Icons
+* [MaterialColors](MaterialColors.kt) - colors from the Material palette
 * [Theme](ZkTheme.kt) - theme for the UI, colors and such
 
 **Status**
 
-Strings are close to the final state. I18N is missing but that should not change the use pattern.
+Strings usage pattern won't change.
 
 Icons and the theme is something we'll change into something better more conceptual.
 
@@ -16,7 +17,7 @@ Icons and the theme is something we'll change into something better more concept
 
 **IMPORTANT** Remember to set Application.stringMap in `main.kt`.
 
-The basic concept of the string implementation is very similar to the one Android uses: define the string resources
+The basic concept of the string implementation is very similar to the one Android uses. Define the string resources
 somewhere collected and let the application use only references to the resources. Only we Kotlin instead of XML.
 
 In [Strings.kt](Strings.kt) you will find the [StringImpl](Strings.kt)

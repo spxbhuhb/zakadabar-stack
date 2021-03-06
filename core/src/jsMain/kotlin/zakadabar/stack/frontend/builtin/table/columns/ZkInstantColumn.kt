@@ -8,8 +8,8 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
-import zakadabar.stack.frontend.elements.ZkElement
 import kotlin.reflect.KProperty1
 
 open class ZkInstantColumn<T : DtoBase>(

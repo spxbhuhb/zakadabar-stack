@@ -11,6 +11,9 @@ class DemoStringsImpl : StringsImpl() {
 
     // general stuff
 
+    val searchShips by "Search Ships"
+    val runQuery by "Run Query"
+    val filters by "Filters"
     val administration by "Administration"
     val account by "Account"
     val accountName by "Account Name"

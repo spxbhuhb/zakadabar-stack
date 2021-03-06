@@ -14,29 +14,30 @@ import zakadabar.stack.data.builtin.AccountPublicDto
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.fields.ZkImagesField
 import zakadabar.stack.frontend.builtin.form.fields.ZkRecordSelectFilter
-import zakadabar.stack.frontend.util.launch
+import zakadabar.stack.frontend.util.io
 
 class Form : ZkForm<ShipDto>() {
 
     private lateinit var seas: List<SeaDto>
     var port: PortDto? = null
 
-    override fun init() = launchBuild {
+    override fun onCreate() {
+        io {
+            coroutineScope {
+                this.launch { seas = SeaDto.all() }
+                this.launch { port = dto.port?.let { PortDto.read(it) } }
+            }.join()
 
-        coroutineScope {
-            this.launch { seas = SeaDto.all() }
-            this.launch { port = dto.port?.let { PortDto.read(it) } }
-        }.join()
+            build(dto.name, Strings.ship) {
 
-        build(dto.name, Strings.ship) {
+                + row {
+                    + basics() marginRight 8
+                    + description()
+                }
 
-            + row {
-                + basics() marginRight 8
-                + description()
+                + images()
+
             }
-
-            + images()
-
         }
     }
 
@@ -78,7 +79,7 @@ class Form : ZkForm<ShipDto>() {
             getValue = { seas.firstOrNull { it.id == port?.id }?.id }, // get the selected "sea" from "port" (if we have a port)
             options = suspend { seas.map { it.id to it.name } }, // options for the "sea" select
             onSelected = { value ->
-                launch {
+                io {
                     val seaId = value?.first
                     val ports = PortDto.all().filter { it.sea == seaId }
 

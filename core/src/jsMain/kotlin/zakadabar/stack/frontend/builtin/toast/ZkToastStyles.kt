@@ -18,7 +18,7 @@ object ZkToastStyles : CssStyleSheet<ZkToastStyles>(Application.theme) {
         justifyContent = "flex-end"
     }
 
-    val toast by cssClass {
+    val toastContent by cssClass {
         display = "flex"
         flexDirection = "row"
         alignItems = "center"

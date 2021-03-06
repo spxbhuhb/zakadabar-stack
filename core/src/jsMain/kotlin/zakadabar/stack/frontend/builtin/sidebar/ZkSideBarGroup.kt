@@ -3,22 +3,20 @@
  */
 package zakadabar.stack.frontend.builtin.sidebar
 
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
-import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.resources.Icons
 
 class ZkSideBarGroup(
     private val text: String,
-    builder: ZkElement.() -> Unit
+    private val builder: ZkElement.() -> Unit
 ) : ZkElement() {
 
     private var open = false
     private val openIcon = ZkIcon(Icons.arrowDropDown)
     private val closeIcon = ZkIcon(Icons.arrowDropUp)
 
-    // TODO think about init block vs init function
-
-    init {
+    override fun onCreate() {
         + column {
             + div(ZkSideBarStyles.groupTitle) {
                 + text
@@ -26,11 +24,11 @@ class ZkSideBarGroup(
                     + openIcon
                     + closeIcon.hide()
                 }
-                on(currentElement, "click") { _ -> if (open) onClose() else onOpen() }
+                on(buildElement, "click") { _ -> if (open) onClose() else onOpen() }
             }
             + zke(ZkSideBarStyles.groupContent) {
                 hide()
-                this.builder()
+                builder()
             }
         }
     }

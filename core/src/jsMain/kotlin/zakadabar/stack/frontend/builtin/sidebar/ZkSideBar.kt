@@ -3,11 +3,11 @@
  */
 package zakadabar.stack.frontend.builtin.sidebar
 
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElement
 
 open class ZkSideBar : ZkElement() {
 
-    init {
+    override fun onCreate() {
         className = ZkSideBarStyles.sidebar
     }
 

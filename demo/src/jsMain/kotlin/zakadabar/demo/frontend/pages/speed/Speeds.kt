@@ -4,7 +4,7 @@
 package zakadabar.demo.frontend.pages.speed
 
 import zakadabar.demo.data.SpeedDto
-import zakadabar.stack.frontend.elements.ZkCrud
+import zakadabar.stack.frontend.builtin.ZkCrud
 
 object Speeds : ZkCrud<SpeedDto>() {
     init {

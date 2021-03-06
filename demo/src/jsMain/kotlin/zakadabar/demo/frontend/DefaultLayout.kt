@@ -4,20 +4,17 @@
 package zakadabar.demo.frontend
 
 import zakadabar.stack.frontend.application.AppLayout
-import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
-import zakadabar.stack.frontend.elements.plusAssign
+import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
+import zakadabar.stack.frontend.util.plusAssign
 
 object DefaultLayout : AppLayout("default") {
 
-    override fun init() = build {
-        initialized = true
+    override fun onCreate() {
+        classList += ZkLayoutStyles.h100
+        classList += ZkLayoutStyles.row
 
-        content.classList += coreClasses.layoutContent
-
-        + row(coreClasses.h100) {
-            + SideBar
-            + content
-        }
+        + SideBar
+        + content withCss ZkLayoutStyles.layoutContent
     }
 
 }

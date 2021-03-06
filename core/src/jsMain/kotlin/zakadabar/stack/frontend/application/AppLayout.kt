@@ -5,7 +5,7 @@ package zakadabar.stack.frontend.application
 
 import kotlinx.browser.document
 import org.w3c.dom.set
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElement
 
 /**
  * Base class for layouts of the application. Typically there are only
@@ -13,7 +13,7 @@ import zakadabar.stack.frontend.elements.ZkElement
  *
  * Layouts are initialized when they are first used. Initialization:
  *
- * * calls [init]
+ * * calls [onResume]
  * * adds the [element] to the document body
  *
  * When the URL changes, the [Application]:
@@ -31,8 +31,7 @@ import zakadabar.stack.frontend.elements.ZkElement
  */
 abstract class AppLayout(val name: String) : ZkElement() {
 
-    protected var initialized = false
-    protected var activeElement: ZkElement? = null
+    private var activeElement: ZkElement? = null
     protected var content = ZkElement()
 
     init {
@@ -44,12 +43,9 @@ abstract class AppLayout(val name: String) : ZkElement() {
             width = "100vw"
             height = "100vh"
         }
-
-        hide()
     }
 
-    override fun init() = build {
-        initialized = true
+    override fun onCreate() {
         + content
     }
 
@@ -64,12 +60,11 @@ abstract class AppLayout(val name: String) : ZkElement() {
      * @param  state  The navigation state to resume.
      */
     open fun resume(state: NavState, target: ZkElement) {
-        if (! initialized) init()
-
         content -= activeElement
         activeElement = target
         content += activeElement
 
+        onResume()
         show()
     }
 
@@ -80,10 +75,12 @@ abstract class AppLayout(val name: String) : ZkElement() {
      * * remove the element shown by the layout
      * * call [hide] to hide the HTML element
      */
-    open fun pause() {
+    override fun onPause() {
+
         content -= activeElement
         activeElement = null
 
+        super.onPause()
         hide()
     }
 

@@ -3,18 +3,17 @@
  */
 package zakadabar.stack.frontend.builtin.form.structure
 
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.fields.ZkFieldBase
-import zakadabar.stack.frontend.elements.ZkElement
-import zakadabar.stack.frontend.elements.marginBottom
-import zakadabar.stack.frontend.elements.plusAssign
 import zakadabar.stack.frontend.resources.CoreStrings
+import zakadabar.stack.frontend.util.marginBottom
+import zakadabar.stack.frontend.util.plusAssign
 
 open class ZkInvalidFieldList : ZkElement() {
 
-    override fun init(): ZkInvalidFieldList {
+    override fun onCreate() {
         classList += ZkFormStyles.invalidFieldList
-        return this
     }
 
     fun show(invalid: List<ZkFieldBase<*, *>>) {

@@ -3,7 +3,7 @@
  */
 package zakadabar.demo.frontend
 
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElement
 
 object PageTitleBar : ZkElement() {
 

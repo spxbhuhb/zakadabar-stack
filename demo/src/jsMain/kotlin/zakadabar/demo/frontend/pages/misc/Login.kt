@@ -10,20 +10,19 @@ import zakadabar.stack.data.builtin.LoginAction
 import zakadabar.stack.data.builtin.SessionDto
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.application.Executor
+import zakadabar.stack.frontend.builtin.ZkPage
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormMode
-import zakadabar.stack.frontend.builtin.layout.FullScreen
+import zakadabar.stack.frontend.builtin.layout.ZkFullScreenLayout
 import zakadabar.stack.frontend.builtin.toast.toast
-import zakadabar.stack.frontend.elements.ZkElement
-import zakadabar.stack.frontend.elements.ZkPage
-import zakadabar.stack.frontend.elements.marginBottom
 import zakadabar.stack.frontend.util.default
-import zakadabar.stack.frontend.util.launch
+import zakadabar.stack.frontend.util.io
+import zakadabar.stack.frontend.util.marginBottom
 
-object Login : ZkPage(FullScreen) {
+object Login : ZkPage(ZkFullScreenLayout) {
 
-    override fun init() = build {
+    override fun onCreate() {
 
         + column {
 
@@ -55,7 +54,7 @@ object Login : ZkPage(FullScreen) {
             onExecuteResult = ::onExecuteResult
         }
 
-        override fun init(): ZkElement {
+        override fun onCreate() {
             style {
                 width = "min(100%, 300px)"
             }
@@ -75,15 +74,13 @@ object Login : ZkPage(FullScreen) {
                 + ZkButton(Strings.forgotten) { /* PasswordReset.open() */ }
                 + ZkButton(Strings.login) { this@LoginForm.submit() }
             }
-
-            return this
         }
     }
 
     fun onExecuteResult(resultDto: DtoBase) {
         resultDto as ActionStatusDto
 
-        if (resultDto.success) launch {
+        if (resultDto.success) io {
             val session = SessionDto.read(0L)
             Application.executor = Executor(session.account, session.anonymous, session.roles)
             Home.open()

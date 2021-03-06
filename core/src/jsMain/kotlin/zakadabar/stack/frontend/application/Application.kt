@@ -61,8 +61,15 @@ object Application {
     fun init() {
         document.body?.style?.fontFamily = theme.fontFamily
 
-        dock = ZkDock().init()
-        toasts = ZkToastContainer().init()
+        dock = ZkDock().also {
+            it.onCreate()
+            it.onResume()
+        }
+
+        toasts = ZkToastContainer().also {
+            it.onCreate()
+            it.onResume()
+        }
 
         window.addEventListener("popstate", onPopState)
         routing.onNavStateChange(NavState(window.location.pathname, window.location.search))

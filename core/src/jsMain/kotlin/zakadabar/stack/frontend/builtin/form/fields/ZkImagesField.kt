@@ -25,15 +25,15 @@ import zakadabar.stack.data.record.BlobCreateState
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormMode
 import zakadabar.stack.frontend.builtin.image.ZkImagePreview
-import zakadabar.stack.frontend.builtin.util.droparea.DropAreaClasses
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.misc.droparea.ZkDropAreaClasses
 import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.resources.Icons
-import zakadabar.stack.frontend.util.launch
+import zakadabar.stack.frontend.util.io
 
 open class ZkImagesField<T : RecordDto<T>>(
     form: ZkForm<T>,
@@ -46,39 +46,40 @@ open class ZkImagesField<T : RecordDto<T>>(
 
     lateinit var droparea: ZkElement
 
-    override fun init() = launchBuild {
+    override fun onCreate() {
+        io {
+            element.style.display = "flex"
+            element.style.flexDirection = "row"
 
-        element.style.display = "flex"
-        element.style.flexDirection = "row"
+            form.fields += this@ZkImagesField
 
-        form.fields += this@ZkImagesField
+            if (form.mode != ZkFormMode.Create) {
 
-        if (form.mode != ZkFormMode.Create) {
-            form.dto.comm().blobMetaRead(dataRecordId).forEach {
-                + ZkImagePreview(it, onDelete = { preview -> onDelete(preview) }) marginRight 10 marginBottom 10
-            }
-
-            droparea = zke {
-
-                + div(DropAreaClasses.classes.dropArea) {
-                    + column(DropAreaClasses.classes.dropAreaMessage) {
-                        style {
-                            alignItems = "center"
-                        }
-                        + ZkIconButton(Icons.cloudUpload) marginBottom 10
-                        + "drop files here"
-                    }
+                form.dto.comm().blobMetaRead(dataRecordId).forEach {
+                    + ZkImagePreview(it, onDelete = { preview -> onDelete(preview) }) marginRight 10 marginBottom 10
                 }
 
-                on("drop", ::onDrop)
-                on("dragover", ::onDragOver)
+                droparea = zke {
 
-            } marginRight 10 marginBottom 10
+                    + div(ZkDropAreaClasses.classes.dropArea) {
+                        + column(ZkDropAreaClasses.classes.dropAreaMessage) {
+                            style {
+                                alignItems = "center"
+                            }
+                            + ZkIconButton(Icons.cloudUpload) marginBottom 10
+                            + "drop files here"
+                        }
+                    }
 
-            + droparea
-            updateDropArea()
+                    on("drop", ::onDrop)
+                    on("dragover", ::onDragOver)
+
+                } marginRight 10 marginBottom 10
+
+                + droparea
+                updateDropArea()
+            }
         }
-
     }
 
     private fun onDragOver(event: Event) {
@@ -139,7 +140,7 @@ open class ZkImagesField<T : RecordDto<T>>(
 
     private fun onDelete(preview: ZkImagePreview): Boolean {
         if (! window.confirm(CoreStrings.confirmDelete)) return false
-        launch {
+        io {
             if (form.mode != ZkFormMode.Create) {
                 form.dto.comm().blobDelete(dataRecordId, preview.dto.id)
             }

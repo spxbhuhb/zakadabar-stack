@@ -4,7 +4,7 @@
 package zakadabar.stack.frontend.builtin.button
 
 import org.w3c.dom.events.Event
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.util.PublicApi
 
 /**
@@ -21,13 +21,12 @@ class ZkButton(
     private val onClick: (() -> Unit)? = null
 ) : ZkElement() {
 
-    override fun init() = build {
-
+    override fun onCreate() {
         className = ZkButtonStyles.button
 
         + text
 
-        on("click", onClick)
+        on("click") { _ -> onClick?.invoke() }
         on("mousedown", ::onMouseDown)
     }
 

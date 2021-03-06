@@ -4,9 +4,9 @@
 package zakadabar.stack.frontend.builtin.sidebar
 
 import org.w3c.dom.events.Event
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButtonStyles
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
-import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.resources.Icons
 
 open class ZkSideBarTitle(
@@ -15,13 +15,13 @@ open class ZkSideBarTitle(
     private val onTextClick: (() -> Unit)? = null
 ) : ZkElement() {
 
-    override fun init() = build {
+    override fun onCreate() {
         className = ZkSideBarStyles.title
 
         + ZkIconButton(Icons.notes, cssClass = ZkButtonStyles.transparent, onClick = onIconClick) marginRight 10
         + div { + text }
 
-        on("click", onTextClick)
+        on("click") { _ -> onTextClick?.invoke() }
         on("mousedown", ::onMouseDown)
     }
 

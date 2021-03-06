@@ -9,10 +9,8 @@ import kotlinx.browser.document
 import org.w3c.dom.HTMLHtmlElement
 import zakadabar.stack.frontend.application.Application.dock
 import zakadabar.stack.frontend.application.Application.theme
-import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
-import zakadabar.stack.frontend.builtin.util.header.Header
-import zakadabar.stack.frontend.builtin.util.header.HeaderClasses.Companion.headerClasses
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.dock.HeaderClasses.Companion.headerClasses
 import zakadabar.stack.frontend.resources.Icons
 
 /**
@@ -24,37 +22,37 @@ import zakadabar.stack.frontend.resources.Icons
 open class ZkDockedElement(
     val icon: ZkElement,
     val title: String,
-    var state: DockedElementState,
+    var state: ZkDockedElementState,
     var content: ZkElement? = null,
 ) : ZkElement() {
 
-    protected val minimize = Icons.minimize.complex16(::onMinimize).withClass(headerClasses.extensionIcon)
-    protected val maximize = Icons.maximize.complex16(::onMaximize).withClass(headerClasses.extensionIcon)
-    protected val openInFull = Icons.openInFull.complex16(::onOpenInFullIcon).withClass(headerClasses.extensionIcon)
+    protected val minimize = Icons.minimize.complex16(::onMinimize).withCss(headerClasses.extensionIcon)
+    protected val maximize = Icons.maximize.complex16(::onMaximize).withCss(headerClasses.extensionIcon)
+    protected val openInFull = Icons.openInFull.complex16(::onOpenInFullIcon).withCss(headerClasses.extensionIcon)
     protected val closeFullScreen =
-        Icons.closeFullScreen.complex16(::onCloseFullScreen).withClass(headerClasses.extensionIcon)
-    protected val close = Icons.close.complex16(::onClose).withClass(headerClasses.extensionIcon)
+        Icons.closeFullScreen.complex16(::onCloseFullScreen).withCss(headerClasses.extensionIcon)
+    protected val close = Icons.close.complex16(::onClose).withCss(headerClasses.extensionIcon)
 
     protected val header = Header(title, icon, tools = listOf(minimize, maximize, openInFull, closeFullScreen, close))
 
-    override fun init(): ZkDockedElement {
-        className += coreClasses.dockItem
+    override fun onCreate() {
+        super.onCreate()
+
+        className += ZkDockStyles.dockItem
 
         this += header
         this += content
 
         update(state)
-
-        return this
     }
 
-    open fun update(newState: DockedElementState) {
+    open fun update(newState: ZkDockedElementState) {
         state = newState
 
         setSize()
 
         when (state) {
-            DockedElementState.Minimized -> {
+            ZkDockedElementState.Minimized -> {
                 minimize.hide()
                 maximize.show()
                 openInFull.show()
@@ -62,7 +60,7 @@ open class ZkDockedElement(
 
                 content?.hide()
             }
-            DockedElementState.Normal -> {
+            ZkDockedElementState.Normal -> {
                 minimize.show()
                 maximize.hide()
                 openInFull.show()
@@ -70,7 +68,7 @@ open class ZkDockedElement(
 
                 content?.show()
             }
-            DockedElementState.Maximized -> {
+            ZkDockedElementState.Maximized -> {
                 minimize.show()
                 maximize.hide()
                 openInFull.hide()
@@ -87,7 +85,7 @@ open class ZkDockedElement(
         val htmlWidth = html.clientWidth
 
         when (state) {
-            DockedElementState.Minimized -> {
+            ZkDockedElementState.Minimized -> {
                 with(element.style) {
                     width = "max-content"
                     height = "${theme.headerHeight}px"
@@ -95,7 +93,7 @@ open class ZkDockedElement(
                 }
             }
 
-            DockedElementState.Normal -> {
+            ZkDockedElementState.Normal -> {
                 // FIXME this is most probably wrong
                 with(element.style) {
                     width = "600px"
@@ -104,7 +102,7 @@ open class ZkDockedElement(
                 }
             }
 
-            DockedElementState.Maximized -> {
+            ZkDockedElementState.Maximized -> {
                 with(element.style) {
                     width = "${htmlWidth - 20}px"
                     height = "${htmlHeight - 20}px"
@@ -115,19 +113,19 @@ open class ZkDockedElement(
     }
 
     open fun onMinimize() {
-        update(DockedElementState.Minimized)
+        update(ZkDockedElementState.Minimized)
     }
 
     open fun onMaximize() {
-        update(DockedElementState.Normal)
+        update(ZkDockedElementState.Normal)
     }
 
     open fun onOpenInFullIcon() {
-        update(DockedElementState.Maximized)
+        update(ZkDockedElementState.Maximized)
     }
 
     open fun onCloseFullScreen() {
-        update(DockedElementState.Normal)
+        update(ZkDockedElementState.Normal)
     }
 
     open fun onClose() {

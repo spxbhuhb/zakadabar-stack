@@ -4,7 +4,7 @@
 package zakadabar.demo.frontend.pages.ship
 
 import zakadabar.demo.data.ship.ShipDto
-import zakadabar.stack.frontend.elements.ZkCrud
+import zakadabar.stack.frontend.builtin.ZkCrud
 
 object Ships : ZkCrud<ShipDto>() {
 

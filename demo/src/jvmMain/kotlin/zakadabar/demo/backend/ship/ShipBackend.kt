@@ -59,7 +59,7 @@ object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTa
 
         select.map {
             SearchShipsResult(
-                id = it[ShipTable.id].value,
+                shipId = it[ShipTable.id].value,
                 name = it[ShipTable.name],
                 port = it[PortTable.name],
                 captain = it[AccountPrivateTable.fullName]

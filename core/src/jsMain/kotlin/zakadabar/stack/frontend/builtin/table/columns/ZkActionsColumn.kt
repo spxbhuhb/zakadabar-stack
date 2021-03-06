@@ -5,11 +5,11 @@ package zakadabar.stack.frontend.builtin.table.columns
 
 import org.w3c.dom.set
 import zakadabar.stack.data.DtoBase
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.builtin.table.ZkTableStyles
-import zakadabar.stack.frontend.elements.ZkElement
-import zakadabar.stack.frontend.elements.plusAssign
 import zakadabar.stack.frontend.resources.CoreStrings
+import zakadabar.stack.frontend.util.plusAssign
 
 open class ZkActionsColumn<T : DtoBase>(
     override val table: ZkTable<T>
@@ -19,8 +19,8 @@ open class ZkActionsColumn<T : DtoBase>(
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         with(builder) {
-            currentElement.classList += ZkTableStyles.action
-            currentElement.dataset["action"] = "update"
+            buildElement.classList += ZkTableStyles.action
+            buildElement.dataset["action"] = "update"
             + CoreStrings.details
         }
     }

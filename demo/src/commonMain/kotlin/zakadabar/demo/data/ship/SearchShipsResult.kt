@@ -5,11 +5,12 @@
 package zakadabar.demo.data.ship
 
 import kotlinx.serialization.Serializable
+import zakadabar.stack.data.DtoBase
 
 @Serializable
 class SearchShipsResult(
-    var id: Long,
+    var shipId: Long,
     var name: String,
     var port: String,
     var captain: String
-)
+) : DtoBase

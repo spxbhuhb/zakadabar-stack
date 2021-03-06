@@ -10,9 +10,9 @@ import zakadabar.stack.frontend.util.log
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-class ZkTablePreload<T : Any>(val loader: suspend () -> T) : ReadOnlyProperty<ZkTable<*>, T> {
+open class ZkTablePreload<T : Any>(val loader: suspend () -> T) : ReadOnlyProperty<ZkTable<*>, T> {
 
-    protected lateinit var table: ZkTable<*>
+    private lateinit var table: ZkTable<*>
 
     protected lateinit var value: T
 

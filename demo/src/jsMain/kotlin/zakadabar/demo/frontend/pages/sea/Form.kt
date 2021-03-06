@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.builtin.form.ZkForm
 
 class Form : ZkForm<SeaDto>() {
 
-    override fun init() = build {
+    override fun onCreate() {
 
         + titleBar(dto.name, Strings.sea)
 

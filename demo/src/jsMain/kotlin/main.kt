@@ -9,8 +9,8 @@ import zakadabar.demo.frontend.resources.Theme
 import zakadabar.stack.data.builtin.SessionDto
 import zakadabar.stack.frontend.application.Application
 import zakadabar.stack.frontend.application.Executor
-import zakadabar.stack.frontend.elements.ZkElement
-import zakadabar.stack.frontend.util.launch
+import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.util.io
 
 /**
  * The main method of the web browser application. Stared by the bundled Javascript file
@@ -22,7 +22,7 @@ fun main() {
     // This launch method starts the task in GlobalScope, and in case an exception is thrown
     // it tries to format it to be a bit more readable.
 
-    launch {
+    io {
 
         // Add KClass names as data attributes to DOM elements, useful for debugging, not meant for production.
 

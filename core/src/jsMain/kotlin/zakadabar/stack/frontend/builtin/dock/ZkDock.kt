@@ -4,8 +4,7 @@
 package zakadabar.stack.frontend.builtin.dock
 
 import kotlinx.browser.document
-import zakadabar.stack.frontend.builtin.CoreClasses.Companion.coreClasses
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElement
 
 /**
  * Contains [ZkDockedElement]s and shows them over the normal content. The items
@@ -15,10 +14,11 @@ import zakadabar.stack.frontend.elements.ZkElement
  */
 class ZkDock : ZkElement() {
 
-    override fun init(): ZkDock {
-        className = coreClasses.dock
+    override fun onCreate() {
+        super.onCreate()
+
+        className = ZkDockStyles.dock
         document.body?.appendChild(this.element)
-        return this
     }
 
     /**
@@ -33,8 +33,6 @@ class ZkDock : ZkElement() {
 
         if (childElements.contains(child)) {
             childElements -= child
-            child.cleanup()
-            child.element.remove()
             return
         }
 
@@ -42,8 +40,6 @@ class ZkDock : ZkElement() {
             if (candidate !is ZkDockedElement) continue
             if (candidate.content != child) continue
             childElements -= candidate
-            candidate.cleanup()
-            candidate.element.remove()
             return
         }
 

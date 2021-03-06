@@ -3,7 +3,8 @@
  */
 package zakadabar.stack.frontend.builtin.titlebar
 
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
@@ -17,18 +18,8 @@ open class ZkTitleBar() : ZkElement() {
             _title.innerHTML = field
         }
 
-    init {
-        style {
-            minHeight = "44px" // linked to ZkMenuStyles.title.height
-            backgroundColor = "rgb(245,245,245)"
-            borderBottom = "0.5px solid #ccc"
-            display = "flex"
-            flexDirection = "row"
-            alignItems = "center"
-            paddingLeft = "20px"
-            fontSize = "16px"
-        }
-
+    override fun onCreate() {
+        classList += ZkTitleBarStyles.titleBar
         + _title
     }
 

@@ -4,21 +4,21 @@
 package zakadabar.stack.frontend.builtin.sidebar
 
 import org.w3c.dom.events.Event
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElement
 
 open class ZkSideBarItem(
     private val text: String,
     private val onClick: (() -> Unit)? = null
 ) : ZkElement() {
 
-    override fun init() = build {
+    override fun onCreate() {
         className = ZkSideBarStyles.item
 
         + div {
             + text
         }
 
-        on("click", onClick)
+        on("click") { _ -> onClick?.invoke() }
         on("mousedown", ::onMouseDown)
 
     }

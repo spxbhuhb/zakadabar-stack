@@ -6,17 +6,18 @@ package zakadabar.stack.frontend.builtin.form.structure
 import kotlinx.browser.window
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormMode
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
-import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.resources.CoreStrings
 
 open class ZkFormButtons<T : DtoBase>(
     private val form: ZkForm<T>
 ) : ZkElement() {
-    override fun init() = build {
+
+    override fun onCreate() {
         when (form.mode) {
             ZkFormMode.Create ->
                 + row(ZkFormStyles.buttons) {
@@ -45,7 +46,6 @@ open class ZkFormButtons<T : DtoBase>(
             ZkFormMode.Query -> {
             }
         }
-
     }
 
     open fun backButton() =

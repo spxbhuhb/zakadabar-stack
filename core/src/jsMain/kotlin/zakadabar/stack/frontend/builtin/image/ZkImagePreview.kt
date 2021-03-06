@@ -5,30 +5,31 @@ package zakadabar.stack.frontend.builtin.image
 
 import zakadabar.stack.data.builtin.BlobDto
 import zakadabar.stack.data.record.BlobCreateState
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElement
 
 open class ZkImagePreview(
     var dto: BlobDto,
-    var state: BlobCreateState? = null,
+    var createState: BlobCreateState? = null,
     var progress: Long? = null,
     var size: Int = 200,
     var onDelete: (preview: ZkImagePreview) -> Boolean = { false }
 ) : ZkElement() {
 
-    override fun init() = build {
+    override fun onCreate() {
         render()
     }
 
-    fun update(dto: BlobDto, state: BlobCreateState, progress: Long) {
+    fun update(dto: BlobDto, createState: BlobCreateState, progress: Long) {
         this.dto = dto
-        this.state = state
+        this.createState = createState
         this.progress = progress
-        cleanup()
         render()
     }
 
     private fun render() = build {
-        when (state) {
+        clear()
+
+        when (createState) {
             BlobCreateState.Starting -> renderProgress()
             BlobCreateState.Progress -> renderProgress()
             BlobCreateState.Done -> renderImage()
@@ -41,12 +42,12 @@ open class ZkImagePreview(
     private fun ZkElement.renderImage() {
         + column {
             + image(dto.url()) {
-                with(currentElement.style) {
+                with(buildElement.style) {
                     height = "${size}px"
                     width = "${size}px"
                 }
 
-                on(currentElement, "click") { _ ->
+                on(buildElement, "click") { _ ->
                     ZkFullScreenImageView(dto.url()) {
                         val deleted = onDelete(this@ZkImagePreview)
                         if (deleted) it.hide()

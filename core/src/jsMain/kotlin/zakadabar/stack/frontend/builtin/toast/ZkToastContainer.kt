@@ -4,18 +4,16 @@
 package zakadabar.stack.frontend.builtin.toast
 
 import kotlinx.browser.document
-import zakadabar.stack.frontend.elements.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElement
 
 /**
  * Contains [ZkToast]s and shows them over the normal content.
  */
 class ZkToastContainer : ZkElement() {
 
-    override fun init(): ZkToastContainer {
+    override fun onCreate() {
         className = ZkToastStyles.toastContainer
         document.body?.appendChild(this.element)
-
-        return this
     }
 
 }

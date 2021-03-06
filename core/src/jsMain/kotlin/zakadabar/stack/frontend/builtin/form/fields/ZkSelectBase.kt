@@ -21,15 +21,15 @@ import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.get
 import zakadabar.stack.data.DtoBase
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.popup.alignPopup
-import zakadabar.stack.frontend.elements.ZkElement
-import zakadabar.stack.frontend.elements.minusAssign
-import zakadabar.stack.frontend.elements.plusAssign
 import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.util.escape
-import zakadabar.stack.frontend.util.launch
+import zakadabar.stack.frontend.util.io
+import zakadabar.stack.frontend.util.minusAssign
+import zakadabar.stack.frontend.util.plusAssign
 
 abstract class ZkSelectBase<T : DtoBase, VT>(
     form: ZkForm<T>,
@@ -52,13 +52,13 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
 
     abstract fun setPropValue(value: Pair<VT, String>?)
 
-    private val selectedOption = ZkElement().withClass(ZkFormStyles.selectedOption)
-    private val optionList = ZkElement().withClass(ZkFormStyles.selectOptionList)
+    private val selectedOption = ZkElement().withCss(ZkFormStyles.selectedOption)
+    private val optionList = ZkElement().withCss(ZkFormStyles.selectOptionList)
 
     lateinit var items: List<Pair<VT, String>>
 
     override fun buildFieldValue() {
-        launch {
+        io {
             items = if (sortOptions) options().sortedBy { it.second } else options()
             render(getPropValue())
         }

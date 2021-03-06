@@ -4,9 +4,9 @@
 package zakadabar.stack.frontend.builtin.button
 
 import org.w3c.dom.events.Event
-import zakadabar.stack.frontend.builtin.icon.IconSource
-import zakadabar.stack.frontend.elements.ZkElement
-import zakadabar.stack.frontend.elements.plusAssign
+import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.icon.ZkIconSource
+import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.util.PublicApi
 
 /**
@@ -19,7 +19,7 @@ import zakadabar.stack.util.PublicApi
  */
 @PublicApi
 class ZkIconButton(
-    private val icon: IconSource,
+    private val icon: ZkIconSource,
     private val iconSize: Int = 18,
     private val buttonSize: Int = 22,
     private val cssClass: String? = null,
@@ -28,8 +28,7 @@ class ZkIconButton(
     private val onClick: (() -> Unit)? = null
 ) : ZkElement() {
 
-    override fun init(): ZkElement {
-
+    override fun onCreate() {
         className = if (round) ZkButtonStyles.roundButton else ZkButtonStyles.iconButton
         if (cssClass != null) classList += cssClass
 
@@ -40,12 +39,14 @@ class ZkIconButton(
             element.style.borderRadius = "${buttonSize / 2}px"
         }
 
+        if (fill != null) {
+            element.style.setPropertyValue("fill", fill) // this is not in the wrapper for some reason
+        }
+
         innerHTML = icon.svg(iconSize)
 
-        on("click", onClick)
+        on("click") { _ -> onClick?.invoke() }
         on("mousedown", ::onMouseDown)
-
-        return this
     }
 
     private fun onMouseDown(event: Event) {

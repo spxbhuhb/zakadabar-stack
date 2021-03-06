@@ -39,7 +39,7 @@ open class ZkBooleanField<T : DtoBase>(
             checkbox.type = "checkbox"
             checkbox.id = "zk-$id-checkbox"
 
-            currentElement.tabIndex = 0
+            buildElement.tabIndex = 0
 
             val value: Boolean = prop.get()
 
@@ -52,7 +52,7 @@ open class ZkBooleanField<T : DtoBase>(
                 form.validate()
             }
 
-            on(currentElement, "keypress") { event ->
+            on(buildElement, "keypress") { event ->
                 event as KeyboardEvent
                 when (event.key) {
                     "Enter", " " -> checkbox.checked = ! checkbox.checked

@@ -5,16 +5,16 @@ package zakadabar.stack.frontend.builtin.image
 
 import kotlinx.browser.document
 import org.w3c.dom.events.KeyboardEvent
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
-import zakadabar.stack.frontend.elements.ZkElement
 import zakadabar.stack.frontend.resources.Icons
 
 class ZkFullScreenImageView(
     val url: String,
-    val onDelete: (preview: ZkFullScreenImageView) -> Unit
+    val onDeleteImage: (preview: ZkFullScreenImageView) -> Unit
 ) : ZkElement() {
 
-    init {
+    override fun onCreate() {
         className = ZkImageStyles.outerView
         element.tabIndex = 0
 
@@ -37,7 +37,7 @@ class ZkFullScreenImageView(
             cssClass = ZkImageStyles.deleteButton,
             round = true
         ) {
-            onDelete(this)
+            onDeleteImage(this)
         }
 
         on("keydown") { event ->
