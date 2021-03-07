@@ -7,7 +7,7 @@ import kotlinx.browser.document
 import org.w3c.dom.events.KeyboardEvent
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
-import zakadabar.stack.frontend.resources.Icons
+import zakadabar.stack.frontend.resources.ZkIcons
 
 class ZkFullScreenImageView(
     val url: String,
@@ -21,7 +21,7 @@ class ZkFullScreenImageView(
         + image(url, ZkImageStyles.image)
 
         + ZkIconButton(
-            Icons.close,
+            ZkIcons.close,
             buttonSize = 48,
             iconSize = 32,
             cssClass = ZkImageStyles.closeButton,
@@ -31,7 +31,7 @@ class ZkFullScreenImageView(
         }
 
         + ZkIconButton(
-            Icons.deleteForever,
+            ZkIcons.deleteForever,
             buttonSize = 48,
             iconSize = 32,
             cssClass = ZkImageStyles.deleteButton,

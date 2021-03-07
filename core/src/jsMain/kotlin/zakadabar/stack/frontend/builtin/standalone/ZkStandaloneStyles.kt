@@ -3,17 +3,14 @@
  */
 package zakadabar.stack.frontend.builtin.standalone
 
-import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.util.CssStyleSheet
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkStandaloneStyles : CssStyleSheet<ZkStandaloneStyles>(Application.theme) {
+object ZkStandaloneStyles : ZkCssStyleSheet<ZkStandaloneStyles>(ZkApplication.theme) {
 
     val standaloneInput by cssClass {
 
         display = "block"
-        fontSize = theme.fontSize
-        fontFamily = theme.fontFamily
-        fontWeight = theme.fontWeight
         color = "#444"
         padding = ".3em 1.4em .3em .8em"
         boxSizing = "border-box"

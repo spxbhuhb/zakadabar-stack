@@ -4,16 +4,16 @@
 package zakadabar.demo.frontend.pages.sea
 
 import zakadabar.demo.data.SeaDto
-import zakadabar.demo.frontend.resources.Strings
+import zakadabar.demo.frontend.resources.DemoStrings.Companion.demo
 import zakadabar.stack.frontend.builtin.form.ZkForm
 
 class Form : ZkForm<SeaDto>() {
 
     override fun onCreate() {
 
-        + titleBar(dto.name, Strings.sea)
+        + titleBar(dto.name, demo.sea)
 
-        + section(Strings.basics) {
+        + section(demo.basics) {
 
             ifNotCreate {
                 + dto::id

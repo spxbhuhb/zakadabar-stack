@@ -6,8 +6,8 @@ package zakadabar.stack.frontend.application
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
 
-abstract class AppRouting(
-    private val defaultLayout: AppLayout,
+abstract class ZkAppRouting(
+    private val defaultLayout: ZkAppLayout,
     private val home: ZkTarget
 ) {
 
@@ -17,7 +17,7 @@ abstract class AppRouting(
 
     interface ZkTarget {
         val viewName: String
-        fun route(routing: AppRouting, state: NavState): ZkElement
+        fun route(routing: ZkAppRouting, state: ZkNavState): ZkElement
     }
 
     private val targets = mutableMapOf<String, ZkTarget>()
@@ -25,13 +25,13 @@ abstract class AppRouting(
     private var activeLayout = defaultLayout
     private lateinit var activeTarget: ZkElement
 
-    lateinit var nextLayout: AppLayout
+    lateinit var nextLayout: ZkAppLayout
 
     operator fun ZkTarget.unaryPlus() {
         targets[viewName] = this
     }
 
-    open fun onNavStateChange(state: NavState) {
+    open fun onNavStateChange(state: ZkNavState) {
 
         nextLayout = defaultLayout // when not specified, use the default layout
 
@@ -65,6 +65,6 @@ abstract class AppRouting(
         }
     }
 
-    open fun route(state: NavState): ZkElement? = null
+    open fun route(state: ZkNavState): ZkElement? = null
 
 }

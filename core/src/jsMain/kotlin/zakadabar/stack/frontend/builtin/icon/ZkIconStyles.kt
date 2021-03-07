@@ -3,10 +3,10 @@
  */
 package zakadabar.stack.frontend.builtin.icon
 
-import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.util.CssStyleSheet
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkIconStyles : CssStyleSheet<ZkIconStyles>(Application.theme) {
+object ZkIconStyles : ZkCssStyleSheet<ZkIconStyles>(ZkApplication.theme) {
 
     val icon by cssClass {
         boxSizing = "border-box"

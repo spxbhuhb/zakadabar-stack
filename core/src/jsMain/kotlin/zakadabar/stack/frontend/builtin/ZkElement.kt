@@ -10,7 +10,7 @@ import org.w3c.dom.*
 import org.w3c.dom.css.CSSStyleDeclaration
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventTarget
-import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.minusAssign
@@ -88,7 +88,7 @@ open class ZkElement(
      * Display name of the current user.
      */
     val displayName
-        get() = Application.executor.account.displayName
+        get() = ZkApplication.executor.account.displayName
 
     /**
      * Called when the element is created, use this for initial setup.
@@ -808,7 +808,7 @@ open class ZkElement(
      */
     @PublicApi
     fun ifNotAnonymous(builder: ZkElement.() -> Unit) {
-        if (Application.executor.anonymous) return
+        if (ZkApplication.executor.anonymous) return
         this.builder()
     }
 
@@ -818,7 +818,7 @@ open class ZkElement(
      */
     @PublicApi
     fun ifAnonymous(builder: ZkElement.() -> Unit) {
-        if (Application.executor.anonymous) return
+        if (ZkApplication.executor.anonymous) return
         this.builder()
     }
 
@@ -828,7 +828,7 @@ open class ZkElement(
      */
     @PublicApi
     fun withRole(role: String, builder: ZkElement.() -> Unit) {
-        if (role !in Application.executor.roles) return
+        if (role !in ZkApplication.executor.roles) return
         this.builder()
     }
 
@@ -838,7 +838,7 @@ open class ZkElement(
      */
     @PublicApi
     fun withoutRole(role: String, builder: ZkElement.() -> Unit) {
-        if (role in Application.executor.roles) return
+        if (role in ZkApplication.executor.roles) return
         this.builder()
     }
 

@@ -25,14 +25,14 @@ import zakadabar.stack.data.record.BlobCreateState
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormMode
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.image.ZkImagePreview
-import zakadabar.stack.frontend.builtin.misc.droparea.ZkDropAreaClasses
-import zakadabar.stack.frontend.resources.CoreStrings
-import zakadabar.stack.frontend.resources.Icons
+import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.io
 
 open class ZkImagesField<T : RecordDto<T>>(
@@ -61,12 +61,12 @@ open class ZkImagesField<T : RecordDto<T>>(
 
                 droparea = zke {
 
-                    + div(ZkDropAreaClasses.classes.dropArea) {
-                        + column(ZkDropAreaClasses.classes.dropAreaMessage) {
+                    + div(ZkFormStyles.imageDropArea) {
+                        + column(ZkFormStyles.imageDropAreaMessage) {
                             style {
                                 alignItems = "center"
                             }
-                            + ZkIconButton(Icons.cloudUpload) marginBottom 10
+                            + ZkIconButton(ZkIcons.cloudUpload) marginBottom 10
                             + "drop files here"
                         }
                     }
@@ -91,7 +91,7 @@ open class ZkImagesField<T : RecordDto<T>>(
         event.preventDefault()
 
         if (! allowUpload()) {
-            window.alert(CoreStrings.cannotAttachMoreImage)
+            window.alert(builtin.cannotAttachMoreImage)
             return
         }
 
@@ -139,7 +139,7 @@ open class ZkImagesField<T : RecordDto<T>>(
     }
 
     private fun onDelete(preview: ZkImagePreview): Boolean {
-        if (! window.confirm(CoreStrings.confirmDelete)) return false
+        if (! window.confirm(builtin.confirmDelete)) return false
         io {
             if (form.mode != ZkFormMode.Create) {
                 form.dto.comm().blobDelete(dataRecordId, preview.dto.id)

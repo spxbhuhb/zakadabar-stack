@@ -4,11 +4,10 @@
 package zakadabar.stack.frontend.builtin.dock
 
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.dock.HeaderClasses.Companion.headerClasses
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
-open class Header(
+open class ZkDockedElementHeader(
     title: String = "",
     val icon: ZkElement? = null,
     @PublicApi val titleElement: ZkElement = ZkElement().also { it.build { + title } },
@@ -18,11 +17,11 @@ open class Header(
     val toolElement = ZkElement()
 
     override fun onCreate() {
-        element.classList.add(headerClasses.header)
+        element.classList.add(ZkDockStyles.header)
 
-        this += icon?.withOptCss(headerClasses.headerIcon)
-        this += titleElement withCss headerClasses.text
-        this += toolElement.withCss(headerClasses.extensions)
+        this += icon?.withOptCss(ZkDockStyles.headerIcon)
+        this += titleElement withCss ZkDockStyles.text
+        this += toolElement.withCss(ZkDockStyles.extensions)
 
         toolElement += tools
     }

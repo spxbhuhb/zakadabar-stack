@@ -21,11 +21,11 @@ import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.get
 import zakadabar.stack.data.DtoBase
+import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.popup.alignPopup
-import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.util.escape
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.minusAssign
@@ -66,7 +66,7 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
         selectedOption.on("click") { _ ->
             optionList.toggle()
             if (optionList.isShown()) {
-                alignPopup(optionList.element, selectedOption.element, ZkFormStyles.rowHeight * 5)
+                alignPopup(optionList.element, selectedOption.element, ZkFormStyles.theme.form.rowHeight * 5)
             }
         }
 
@@ -129,10 +129,10 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
         var s = ""
 
         if (value == null || value == 0L) {
-            s += """<div class="${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-${DATASET_KEY}="">${CoreStrings.notSelected}</div>"""
-            selectedOption.innerText = CoreStrings.notSelected
+            s += """<div class="${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-${DATASET_KEY}="">${builtin.notSelected}</div>"""
+            selectedOption.innerText = builtin.notSelected
         } else {
-            s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="">${CoreStrings.notSelected}</div>"""
+            s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="">${builtin.notSelected}</div>"""
         }
 
         items.forEach {

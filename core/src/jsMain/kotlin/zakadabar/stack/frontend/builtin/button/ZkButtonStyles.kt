@@ -3,13 +3,12 @@
  */
 package zakadabar.stack.frontend.builtin.button
 
-import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.util.CssStyleSheet
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkButtonStyles : CssStyleSheet<ZkButtonStyles>(Application.theme) {
+object ZkButtonStyles : ZkCssStyleSheet<ZkButtonStyles>(ZkApplication.theme) {
 
     val button by cssClass {
-        fontFamily = theme.fontFamily
         fontSize = 14
         color = theme.button.text
         cursor = "pointer"

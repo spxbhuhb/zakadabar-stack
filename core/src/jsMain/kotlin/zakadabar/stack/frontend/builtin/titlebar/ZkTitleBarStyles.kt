@@ -3,12 +3,13 @@
  */
 package zakadabar.stack.frontend.builtin.titlebar
 
-import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.util.CssStyleSheet
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkTitleBarStyles : CssStyleSheet<ZkTitleBarStyles>(Application.theme) {
+object ZkTitleBarStyles : ZkCssStyleSheet<ZkTitleBarStyles>(ZkApplication.theme) {
 
     val titleBar by cssClass {
+        fontWeight = 400
         minHeight = 44 // linked to ZkMenuStyles.title.height
         backgroundColor = "rgb(245,245,245)"
         borderBottom = "0.5px solid #ccc"

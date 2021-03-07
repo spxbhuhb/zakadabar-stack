@@ -6,9 +6,9 @@ package zakadabar.stack.frontend.builtin
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.frontend.application.AppRouting
-import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.application.NavState
+import zakadabar.stack.frontend.application.ZkAppRouting
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.ZkNavState
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormMode
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
@@ -22,7 +22,7 @@ import kotlin.reflect.KClass
  * Provides common functions used in most CRUD implementations.
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
-open class ZkCrud<T : RecordDto<T>> : AppRouting.ZkTarget {
+open class ZkCrud<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
 
     override var viewName = "${this::class.simpleName}"
 
@@ -42,13 +42,13 @@ open class ZkCrud<T : RecordDto<T>> : AppRouting.ZkTarget {
     val deletePath
         get() = "/$viewName/delete"
 
-    open fun openAll() = Application.changeNavState(allPath)
-    open fun openCreate() = Application.changeNavState(createPath)
-    open fun openRead(recordId: RecordId<T>) = Application.changeNavState(readPath, "id=$recordId")
-    open fun openUpdate(recordId: RecordId<T>) = Application.changeNavState(updatePath, "id=$recordId")
-    open fun openDelete(recordId: RecordId<T>) = Application.changeNavState(deletePath, "id=$recordId")
+    open fun openAll() = ZkApplication.changeNavState(allPath)
+    open fun openCreate() = ZkApplication.changeNavState(createPath)
+    open fun openRead(recordId: RecordId<T>) = ZkApplication.changeNavState(readPath, "id=$recordId")
+    open fun openUpdate(recordId: RecordId<T>) = ZkApplication.changeNavState(updatePath, "id=$recordId")
+    open fun openDelete(recordId: RecordId<T>) = ZkApplication.changeNavState(deletePath, "id=$recordId")
 
-    override fun route(routing: AppRouting, state: NavState) = when (state.urlPath) {
+    override fun route(routing: ZkAppRouting, state: ZkNavState) = when (state.urlPath) {
         allPath -> all()
         createPath -> create()
         readPath -> read(state.recordId)
@@ -57,7 +57,7 @@ open class ZkCrud<T : RecordDto<T>> : AppRouting.ZkTarget {
         else -> routeNonCrud(routing, state)
     }
 
-    open fun routeNonCrud(routing: AppRouting, state: NavState): ZkElement = NYI()
+    open fun routeNonCrud(routing: ZkAppRouting, state: ZkNavState): ZkElement = NYI()
 
     open fun all(): ZkElement = ZkElement.launchBuildNew {
 

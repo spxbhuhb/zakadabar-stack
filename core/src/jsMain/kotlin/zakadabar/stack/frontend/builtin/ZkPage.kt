@@ -3,18 +3,18 @@
  */
 package zakadabar.stack.frontend.builtin
 
-import zakadabar.stack.frontend.application.AppLayout
-import zakadabar.stack.frontend.application.AppRouting
-import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.application.NavState
+import zakadabar.stack.frontend.application.ZkAppLayout
+import zakadabar.stack.frontend.application.ZkAppRouting
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.ZkNavState
 
 /**
  * Provides common functions used in most page implementations.
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
 open class ZkPage(
-    val layout: AppLayout? = null
-) : ZkElement(), AppRouting.ZkTarget {
+    val layout: ZkAppLayout? = null
+) : ZkElement(), ZkAppRouting.ZkTarget {
 
     companion object {
         /**
@@ -45,9 +45,9 @@ open class ZkPage(
 
     override var viewName = "${this::class.simpleName}"
 
-    open fun open() = Application.changeNavState("/$viewName")
+    open fun open() = ZkApplication.changeNavState("/$viewName")
 
-    override fun route(routing: AppRouting, state: NavState): ZkElement {
+    override fun route(routing: ZkAppRouting, state: ZkNavState): ZkElement {
         if (layout != null) routing.nextLayout = layout
         return this
     }

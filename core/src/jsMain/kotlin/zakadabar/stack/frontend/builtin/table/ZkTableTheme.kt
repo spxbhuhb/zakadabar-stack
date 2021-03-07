@@ -3,18 +3,18 @@
  */
 package zakadabar.stack.frontend.builtin.table
 
-import zakadabar.stack.frontend.resources.MaterialColors
+import zakadabar.stack.frontend.resources.ZkColors
 
 data class ZkTableTheme(
-    val headerBackground: String = MaterialColors.white,
-    val headerText: String = MaterialColors.Gray.c800,
-    val oddRowBackground: String = MaterialColors.white,
-    val evenRowBackground: String = MaterialColors.white,
-    val text: String = MaterialColors.BlueGray.c900,
-    val hoverBackground: String = MaterialColors.LightBlue.c50,
+    val headerBackground: String = ZkColors.white,
+    val headerText: String = ZkColors.Gray.c800,
+    val oddRowBackground: String = ZkColors.white,
+    val evenRowBackground: String = ZkColors.white,
+    val text: String = ZkColors.BlueGray.c900,
+    val hoverBackground: String = ZkColors.LightBlue.c50,
     val hoverText: String = text,
-    val innerBorder: String = MaterialColors.Gray.c300,
-    val headerBottom: String = MaterialColors.LightBlue.a700,
+    val innerBorder: String = ZkColors.Gray.c300,
+    val headerBottom: String = ZkColors.LightBlue.a700,
     val border: String? = null,
-    val actionColor: String? = MaterialColors.LightBlue.a700
+    val actionColor: String? = ZkColors.LightBlue.a700
 )

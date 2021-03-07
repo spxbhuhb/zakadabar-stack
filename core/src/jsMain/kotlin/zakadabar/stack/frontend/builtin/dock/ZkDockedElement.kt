@@ -7,11 +7,10 @@ package zakadabar.stack.frontend.builtin.dock
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLHtmlElement
-import zakadabar.stack.frontend.application.Application.dock
-import zakadabar.stack.frontend.application.Application.theme
+import zakadabar.stack.frontend.application.ZkApplication.dock
+import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.dock.HeaderClasses.Companion.headerClasses
-import zakadabar.stack.frontend.resources.Icons
+import zakadabar.stack.frontend.resources.ZkIcons
 
 /**
  * An element to put into the dock with a header, minimize, normal, maximize, close actions.
@@ -26,14 +25,14 @@ open class ZkDockedElement(
     var content: ZkElement? = null,
 ) : ZkElement() {
 
-    protected val minimize = Icons.minimize.complex16(::onMinimize).withCss(headerClasses.extensionIcon)
-    protected val maximize = Icons.maximize.complex16(::onMaximize).withCss(headerClasses.extensionIcon)
-    protected val openInFull = Icons.openInFull.complex16(::onOpenInFullIcon).withCss(headerClasses.extensionIcon)
+    protected val minimize = ZkIcons.minimize.complex16(::onMinimize).withCss(ZkDockStyles.extensionIcon)
+    protected val maximize = ZkIcons.maximize.complex16(::onMaximize).withCss(ZkDockStyles.extensionIcon)
+    protected val openInFull = ZkIcons.openInFull.complex16(::onOpenInFullIcon).withCss(ZkDockStyles.extensionIcon)
     protected val closeFullScreen =
-        Icons.closeFullScreen.complex16(::onCloseFullScreen).withCss(headerClasses.extensionIcon)
-    protected val close = Icons.close.complex16(::onClose).withCss(headerClasses.extensionIcon)
+        ZkIcons.closeFullScreen.complex16(::onCloseFullScreen).withCss(ZkDockStyles.extensionIcon)
+    protected val close = ZkIcons.close.complex16(::onClose).withCss(ZkDockStyles.extensionIcon)
 
-    protected val header = Header(title, icon, tools = listOf(minimize, maximize, openInFull, closeFullScreen, close))
+    protected val header = ZkDockedElementHeader(title, icon, tools = listOf(minimize, maximize, openInFull, closeFullScreen, close))
 
     override fun onCreate() {
         super.onCreate()
@@ -88,7 +87,7 @@ open class ZkDockedElement(
             ZkDockedElementState.Minimized -> {
                 with(element.style) {
                     width = "max-content"
-                    height = "${theme.headerHeight}px"
+                    height = "${theme.dock.headerHeight}px"
                     margin = "0px"
                 }
             }

@@ -3,15 +3,13 @@
  */
 package zakadabar.stack.frontend.builtin.form
 
-import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.table.ZkTableStyles
-import zakadabar.stack.frontend.resources.MaterialColors
-import zakadabar.stack.frontend.util.CssStyleSheet
+import zakadabar.stack.frontend.resources.ZkColors
+import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
+import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
-
-    val rowHeight = 38
-    val invalidColor = MaterialColors.Red.c100
+object ZkFormStyles : ZkCssStyleSheet<ZkFormStyles>(ZkApplication.theme) {
 
     val outerContainer by ZkTableStyles.cssClass {
         display = "flex"
@@ -42,18 +40,18 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         margin = 8
         boxShadow = "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)"
         borderRadius = 2
-        backgroundColor = MaterialColors.white
+        backgroundColor = ZkColors.white
     }
 
     val sectionTitle by cssClass {
-        color = MaterialColors.Blue.c700
+        color = ZkColors.Blue.c700
         fontWeight = 500
         paddingBottom = 4
     }
 
     val sectionSummary by cssClass {
         fontSize = "80%"
-        color = MaterialColors.Gray.c600
+        color = ZkColors.Gray.c600
         paddingBottom = 16
     }
 
@@ -63,19 +61,20 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
     }
 
     val fieldLabel by cssClass {
-        color = MaterialColors.Gray.c700
+        color = ZkColors.Gray.c700
         fontSize = "90%"
+        fontWeight = "400"
         display = "flex"
         alignItems = "center"
-        minHeight = rowHeight
+        minHeight = theme.form.rowHeight
     }
 
     val mandatoryMark by cssClass {
-        color = MaterialColors.Red.c400
+        color = ZkColors.Red.c400
     }
 
     val fieldValue by cssClass {
-        minHeight = rowHeight
+        minHeight = theme.form.rowHeight
     }
 
     val fieldBottomBorder by cssClass {
@@ -83,43 +82,31 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         gridColumnEnd = 3
         height = 1
         boxSizing = "border-box"
-        borderBottom = "1px solid ${MaterialColors.Gray.c300}"
+        borderBottom = "1px solid ${ZkColors.Gray.c300}"
 
         on(".invalid") {
-            borderBottom = "1px solid ${MaterialColors.Red.c500}"
+            borderBottom = "1px solid ${ZkColors.Red.c500}"
         }
     }
 
     val onFieldHover by cssClass {
-        borderBottom = "1px solid ${MaterialColors.LightBlue.a700}"
-    }
-
-    val fieldHint by cssClass {
-        color = MaterialColors.Gray.c700
-        fontSize = "90%"
-        borderBottom = "1px solid ${MaterialColors.Gray.c600}"
+        borderBottom = "1px solid ${ZkColors.LightBlue.a700}"
     }
 
     val fieldError by cssClass {
-        color = MaterialColors.Gray.c700
+        color = ZkColors.Gray.c700
         fontSize = "90%"
-        borderBottom = "1px solid ${MaterialColors.Gray.c600}"
+        borderBottom = "1px solid ${ZkColors.Gray.c600}"
     }
 
-    val entryList by cssClass {
-        width = 200
-        height = 200
-        border = "1px solid lightgray"
-    }
-
-    val recordId by cssClass {
+    private fun ZkCssStyleRule.fieldDefault() {
+        fontFamily = theme.font.family
+        fontSize = theme.font.size
+        fontWeight = 300
         display = "block"
-        fontSize = theme.fontSize
-        fontFamily = theme.fontFamily
-        fontWeight = theme.fontWeight
         color = "#444"
         lineHeight = "1.3"
-        padding = ".6em 1.4em .5em .8em"
+        padding = ".6em 1.4em .5em .4em"
         width = "100%"
         maxWidth = "100%"
         boxSizing = "border-box"
@@ -128,127 +115,66 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         mozAppearance = "none"
         webkitAppearance = "none"
         appearance = "none"
+
+        decorators()
+    }
+
+    private fun ZkCssStyleRule.decorators() {
+        on(".invalid") {
+            backgroundColor = theme.form.invalidColor
+        }
+
+        on(".invalid:hover") {
+            backgroundColor = theme.form.invalidColor
+        }
+
+        on(".invalid:focus") {
+            backgroundColor = theme.form.invalidColor
+        }
+
+        on(":hover") {
+            backgroundColor = ZkColors.LightBlue.c50
+        }
+
+        on(":focus") {
+            backgroundColor = ZkColors.LightBlue.c50
+            outline = "none"
+        }
+
+        on(" option") {
+            fontWeight = "normal"
+        }
+
+        on(":disabled") {
+            color = "#333"
+            backgroundColor = ZkColors.Gray.c100
+            borderColor = "#aaa"
+        }
+
+        on(":disabled:hover") {
+            borderColor = "#aaa"
+        }
+
+        on("[aria-disabled=true]") {
+            color = "gray"
+            borderColor = "#aaa"
+        }
+    }
+
+    val recordId by cssClass {
+        fieldDefault()
         color = "#333"
-        backgroundColor = MaterialColors.Gray.c100
+        backgroundColor = ZkColors.Gray.c100
         outline = "none"
     }
 
     val text by cssClass {
-        display = "block"
-        fontSize = theme.fontSize
-        fontFamily = theme.fontFamily
-        fontWeight = theme.fontWeight
-        color = "#444"
-        lineHeight = "1.3"
-        padding = ".6em 1.4em .5em .4em"
-        width = "100%"
-        maxWidth = "100%"
-        boxSizing = "border-box"
-        margin = 0
-        border = 0
-        mozAppearance = "none"
-        webkitAppearance = "none"
-        appearance = "none"
-
-        on(".invalid") {
-            backgroundColor = invalidColor
-        }
-
-        on(".invalid:hover") {
-            backgroundColor = invalidColor
-        }
-
-        on(".invalid:focus") {
-            backgroundColor = invalidColor
-        }
-
-        on(":hover") {
-            backgroundColor = MaterialColors.LightBlue.c50
-        }
-
-        on(":focus") {
-            backgroundColor = MaterialColors.LightBlue.c50
-            outline = "none"
-        }
-
-        on(" option") {
-            fontWeight = "normal"
-        }
-
-        on(":disabled") {
-            color = "#333"
-            backgroundColor = MaterialColors.Gray.c100
-            borderColor = "#aaa"
-        }
-
-        on(":disabled:hover") {
-            borderColor = "#aaa"
-        }
-
-        on("[aria-disabled=true]") {
-            color = "gray"
-            borderColor = "#aaa"
-        }
+        fieldDefault()
     }
 
     val textarea by cssClass {
-        flexGrow = "1"
-        resize = "none"
-        fontSize = theme.fontSize
-        fontFamily = theme.fontFamily
-        fontWeight = theme.fontWeight
-        color = "#444"
-        lineHeight = "1.3"
-        padding = ".6em 1.4em .5em .4em"
-        width = "100%"
-        maxWidth = "100%"
-        boxSizing = "border-box"
-        margin = 0
-        border = 0
-        mozAppearance = "none"
-        webkitAppearance = "none"
-        appearance = "none"
-        backgroundColor = "#fff"
-
-        on(".invalid") {
-            backgroundColor = invalidColor
-        }
-
-        on(".invalid:hover") {
-            backgroundColor = invalidColor
-        }
-
-        on(".invalid:focus") {
-            backgroundColor = invalidColor
-        }
-
-        on(":hover") {
-            backgroundColor = MaterialColors.LightBlue.c50
-        }
-
-        on(":focus") {
-            backgroundColor = MaterialColors.LightBlue.c50
-            outline = "none"
-        }
-
-        on(" option") {
-            fontWeight = "normal"
-        }
-
-        on(":disabled") {
-            color = "#333"
-            backgroundColor = MaterialColors.Gray.c100
-            borderColor = "#aaa"
-        }
-
-        on(":disabled:hover") {
-            borderColor = "#aaa"
-        }
-
-        on("[aria-disabled=true]") {
-            color = "gray"
-            borderColor = "#aaa"
-        }
+        fieldDefault()
+        backgroundColor = ZkColors.white
     }
 
     val selectContainer by cssClass {
@@ -257,46 +183,15 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         alignItems = "center"
         outline = "none"
 
-        on(".invalid") {
-            backgroundColor = invalidColor
-        }
-
-        on(".invalid:hover") {
-            backgroundColor = invalidColor
-        }
-
-        on(".invalid:focus") {
-            backgroundColor = invalidColor
-        }
-
-        on(":hover") {
-            backgroundColor = MaterialColors.LightBlue.c50
-        }
-
-        on(":focus") {
-            backgroundColor = MaterialColors.LightBlue.c50
-            color = "#222"
-            outline = "none"
-        }
-
+        decorators()
     }
 
     val selectedOption by cssClass {
         display = "flex"
-        fontSize = theme.fontSize
-        fontFamily = theme.fontFamily
-        fontWeight = theme.fontWeight
-        paddingLeft = ".4em"
-        color = "#444"
-        width = "100%"
-        maxWidth = "100%"
-        boxSizing = "border-box"
-        margin = 0
-        border = 0
-        mozAppearance = "none"
-        webkitAppearance = "none"
-        appearance = "none"
-        height = rowHeight
+
+        fieldDefault()
+
+        height = theme.form.rowHeight
         alignItems = "center"
 
         on(" option") {
@@ -320,7 +215,7 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         position = "absolute"
         zIndex = 100
         outline = "none"
-        backgroundColor = MaterialColors.white
+        backgroundColor = ZkColors.white
         boxShadow = "0 0 32px 12px rgba(0, 0, 0, 0.2) "
         borderRadius = 2
         overflowY = "auto"
@@ -328,13 +223,10 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
     }
 
     val selectEntry by cssClass {
-        fontSize = theme.fontSize
-        fontFamily = theme.fontFamily
-        fontWeight = theme.fontWeight
         color = "#444"
         width = 200
-        minHeight = rowHeight
-        borderBottom = "1px solid ${MaterialColors.Gray.c300}"
+        minHeight = theme.form.rowHeight
+        borderBottom = "1px solid ${ZkColors.Gray.c300}"
         display = "flex"
         alignItems = "center"
         paddingLeft = 8
@@ -342,27 +234,27 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
 
         on(":hover") {
             color = "#444" // FIXME theme color
-            backgroundColor = MaterialColors.LightBlue.c50
+            backgroundColor = ZkColors.LightBlue.c50
         }
     }
 
     val selected by cssClass {
-        color = MaterialColors.white
-        backgroundColor = MaterialColors.LightBlue.a700
+        color = ZkColors.white
+        backgroundColor = ZkColors.LightBlue.a700
     }
 
     val checkbox by cssClass {
         display = "flex"
         paddingLeft = ".8em"
-        height = rowHeight
+        height = theme.form.rowHeight
         alignItems = "center"
 
         on(":hover") {
-            backgroundColor = MaterialColors.LightBlue.c50
+            backgroundColor = ZkColors.LightBlue.c50
         }
 
         on(":focus") {
-            backgroundColor = MaterialColors.LightBlue.c50
+            backgroundColor = ZkColors.LightBlue.c50
             outline = "none"
         }
     }
@@ -372,13 +264,42 @@ object ZkFormStyles : CssStyleSheet<ZkFormStyles>(Application.theme) {
         margin = 8
         boxShadow = "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)"
         borderRadius = 2
-        backgroundColor = MaterialColors.white
+        backgroundColor = ZkColors.white
     }
 
     val invalidFieldListInto by cssClass {
         fontSize = "80%"
-        color = MaterialColors.Gray.c600
+        color = ZkColors.Gray.c600
         paddingBottom = 16
+    }
+
+    val imageDropArea by cssClass {
+        boxSizing = "border-box"
+        flexGrow = 1
+        width = "100%"
+        height = "100%"
+        display = "flex"
+        flexDirection = "row"
+        justifyContent = "center"
+        alignItems = "center"
+        color = ZkColors.Gray.c800
+        fill = ZkColors.Gray.c800
+
+        padding = 20
+
+        backgroundColor = "#f5f5f5"
+        borderRadius = 2
+        border = "1px dotted lightgray"
+
+        on(":hover") {
+            backgroundColor = ZkColors.LightBlue.c50
+        }
+    }
+
+    val imageDropAreaMessage by cssClass {
+        fontSize = 14
+        fontWeight = 400
+        paddingLeft = 6
     }
 
     init {

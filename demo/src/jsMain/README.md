@@ -69,6 +69,6 @@ Add your menu items to [Menu.kt](./kotlin/zakadabar/demo/frontend/Menu.kt).
 
 ## Resources
 
-* [Strings](./kotlin/zakadabar/demo/frontend/resources/Strings.kt)
+* [Strings](./kotlin/zakadabar/demo/frontend/resources/demo.kt)
 * [Styles](./kotlin/zakadabar/demo/frontend/resources/Styles.kt)
 * [Theme](./kotlin/zakadabar/demo/frontend/resources/Theme.kt)

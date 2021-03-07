@@ -7,7 +7,9 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
-class Initials(val name: String) : ZkElement() {
+class ZkInitials(val name: String) : ZkElement() {
+
+    // TODO this class should be more sophisticated
 
     override fun onCreate() {
 

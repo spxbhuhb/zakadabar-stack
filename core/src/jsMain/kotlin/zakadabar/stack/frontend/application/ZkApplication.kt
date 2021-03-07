@@ -6,16 +6,16 @@ package zakadabar.stack.frontend.application
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.events.Event
-import zakadabar.stack.frontend.application.Application.dock
-import zakadabar.stack.frontend.application.Application.executor
-import zakadabar.stack.frontend.application.Application.routing
-import zakadabar.stack.frontend.application.Application.stringMap
-import zakadabar.stack.frontend.application.Application.theme
-import zakadabar.stack.frontend.application.Application.toasts
+import zakadabar.stack.frontend.application.ZkApplication.dock
+import zakadabar.stack.frontend.application.ZkApplication.executor
+import zakadabar.stack.frontend.application.ZkApplication.routing
+import zakadabar.stack.frontend.application.ZkApplication.strings
+import zakadabar.stack.frontend.application.ZkApplication.theme
+import zakadabar.stack.frontend.application.ZkApplication.toasts
 import zakadabar.stack.frontend.builtin.dock.ZkDock
 import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
-import zakadabar.stack.frontend.resources.CoreStrings
-import zakadabar.stack.frontend.util.defaultTheme
+import zakadabar.stack.frontend.resources.ZkStringStore
+import zakadabar.stack.frontend.resources.ZkTheme
 
 /**
  * The application that runs in the browser window. This object contains data
@@ -31,25 +31,21 @@ import zakadabar.stack.frontend.util.defaultTheme
  *
  * @property  theme      The design theme of the application.
  *
- * @property  stringMap  Map of string resource name - string id pairs. This usually is
- *                       the map property of Strings and should be set in main.kt.
+ * @property  strings    The string store that contains the strings the application uses.
  *
  * @property  dock       A container to show sub-windows such as mail editing in Gmail.
  *
  * @property  toasts     A container to show toasts.
  */
-object Application {
+object ZkApplication {
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    lateinit var executor: Executor
+    lateinit var executor: ZkExecutor
 
-    lateinit var routing: AppRouting
+    lateinit var routing: ZkAppRouting
 
-    // we'll need this later private var defaultLanguage = window.navigator.language
+    lateinit var theme: ZkTheme
 
-    var theme = defaultTheme
-
-    var stringMap = CoreStrings.map
+    lateinit var strings: ZkStringStore
 
     lateinit var dock: ZkDock
 
@@ -59,7 +55,11 @@ object Application {
     const val NAVSTATE_CHANGE = "zk-navstate-change"
 
     fun init() {
-        document.body?.style?.fontFamily = theme.fontFamily
+        with(document.body?.style !!) {
+            fontFamily = theme.font.family
+            fontSize = theme.font.size
+            fontWeight = theme.font.weight
+        }
 
         dock = ZkDock().also {
             it.onCreate()
@@ -72,19 +72,19 @@ object Application {
         }
 
         window.addEventListener("popstate", onPopState)
-        routing.onNavStateChange(NavState(window.location.pathname, window.location.search))
+        routing.onNavStateChange(ZkNavState(window.location.pathname, window.location.search))
         window.dispatchEvent(Event(NAVSTATE_CHANGE))
     }
 
     private val onPopState = fun(_: Event) {
-        routing.onNavStateChange(NavState(window.location.pathname, window.location.search))
+        routing.onNavStateChange(ZkNavState(window.location.pathname, window.location.search))
         window.dispatchEvent(Event(NAVSTATE_CHANGE))
     }
 
     fun changeNavState(path: String, query: String = "") {
         val url = if (query.isEmpty()) path else "$path?$query"
         window.history.pushState("", "", url)
-        routing.onNavStateChange(NavState(path, query))
+        routing.onNavStateChange(ZkNavState(path, query))
         window.dispatchEvent(Event(NAVSTATE_CHANGE))
     }
 

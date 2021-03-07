@@ -3,11 +3,11 @@
  */
 package zakadabar.demo.frontend
 
-import zakadabar.stack.frontend.application.AppLayout
+import zakadabar.stack.frontend.application.ZkAppLayout
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
 import zakadabar.stack.frontend.util.plusAssign
 
-object DefaultLayout : AppLayout("default") {
+object DefaultLayout : ZkAppLayout("default") {
 
     override fun onCreate() {
         classList += ZkLayoutStyles.h100

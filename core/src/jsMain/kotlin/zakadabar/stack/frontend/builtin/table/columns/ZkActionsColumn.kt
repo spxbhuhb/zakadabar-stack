@@ -5,23 +5,23 @@ package zakadabar.stack.frontend.builtin.table.columns
 
 import org.w3c.dom.set
 import zakadabar.stack.data.DtoBase
+import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.builtin.table.ZkTableStyles
-import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.util.plusAssign
 
 open class ZkActionsColumn<T : DtoBase>(
     override val table: ZkTable<T>
 ) : ZkColumn<T> {
 
-    override var label = CoreStrings.actions
+    override var label = builtin.actions
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         with(builder) {
             buildElement.classList += ZkTableStyles.action
             buildElement.dataset["action"] = "update"
-            + CoreStrings.details
+            + builtin.details
         }
     }
 

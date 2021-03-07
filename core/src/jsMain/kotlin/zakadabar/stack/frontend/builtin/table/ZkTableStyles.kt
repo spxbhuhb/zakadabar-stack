@@ -3,11 +3,11 @@
  */
 package zakadabar.stack.frontend.builtin.table
 
-import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.resources.MaterialColors
-import zakadabar.stack.frontend.util.CssStyleSheet
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.resources.ZkColors
+import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
+object ZkTableStyles : ZkCssStyleSheet<ZkTableStyles>(ZkApplication.theme) {
 
     val outerContainer by cssClass {
         display = "flex"
@@ -20,6 +20,8 @@ object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
         backgroundColor = "rgb(245,245,245)"
         flexGrow = 1
         overflow = "scroll"
+        boxShadow = "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)"
+        borderRadius = 2
     }
 
     val table by cssClass {
@@ -29,9 +31,7 @@ object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
         borderCollapse = "collapse"
         minWidth = "100%"
 
-        backgroundColor = MaterialColors.white
-        boxShadow = "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)"
-        borderRadius = 2
+        backgroundColor = ZkColors.white
 
         on(" thead") {
             display = "contents"
@@ -83,7 +83,6 @@ object ZkTableStyles : CssStyleSheet<ZkTableStyles>(Application.theme) {
             textOverflow = "ellipsis"
             whiteSpace = "nowrap"
             color = theme.table.text
-            fontWeight = theme.fontWeight
             borderBottom = "1px solid ${theme.table.innerBorder}"
         }
 

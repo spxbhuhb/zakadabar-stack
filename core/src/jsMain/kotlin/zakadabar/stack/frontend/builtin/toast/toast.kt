@@ -4,7 +4,7 @@
 
 package zakadabar.stack.frontend.builtin.toast
 
-import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.application.ZkApplication
 
 /**
  * Displays a message to the user by showing a toast. Custom toast type should use it's own
@@ -18,5 +18,5 @@ fun toast(info: Boolean = false, warning: Boolean = false, error: Boolean = fals
         else -> ZkToastType.Success
     }
 
-    return ZkToast(message(), type, hideAfter).also { Application.toasts += it }
+    return ZkToast(message(), type, hideAfter).also { ZkApplication.toasts += it }
 }

@@ -22,6 +22,7 @@ import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.fields.*
 import zakadabar.stack.frontend.builtin.form.structure.ZkFormButtons
@@ -29,7 +30,6 @@ import zakadabar.stack.frontend.builtin.form.structure.ZkFormSection
 import zakadabar.stack.frontend.builtin.form.structure.ZkInvalidFieldList
 import zakadabar.stack.frontend.builtin.toast.ZkToast
 import zakadabar.stack.frontend.builtin.toast.toast
-import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.log
 import zakadabar.stack.frontend.util.plusAssign
@@ -296,7 +296,7 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         }
 
         if (submit && invalid.isNotEmpty()) {
-            invalidToast = toast(warning = true, hideAfter = 3000) { CoreStrings.invalidFieldsToast }
+            invalidToast = toast(warning = true, hideAfter = 3000) { builtin.invalidFieldsToast }
         }
 
         return report.fails.isEmpty()
@@ -352,7 +352,7 @@ open class ZkForm<T : DtoBase> : ZkElement() {
                     ZkFormMode.Create -> {
                         val created = (dto as RecordDto<*>).create() as RecordDto<*>
                         fields.forEach { it.onCreateSuccess(created) }
-                        toast { CoreStrings.createSuccess }
+                        toast { builtin.createSuccess }
                         resetTouched()
                     }
                     ZkFormMode.Read -> {
@@ -360,18 +360,18 @@ open class ZkForm<T : DtoBase> : ZkElement() {
                     }
                     ZkFormMode.Update -> {
                         (dto as RecordDto<*>).update()
-                        toast { CoreStrings.updateSuccess }
+                        toast { builtin.updateSuccess }
                         resetTouched()
                     }
                     ZkFormMode.Delete -> {
                         (dto as RecordDto<*>).delete()
-                        toast { CoreStrings.deleteSuccess }
+                        toast { builtin.deleteSuccess }
                         resetTouched()
                     }
                     ZkFormMode.Action -> {
                         val result = (dto as ActionDto<*>).execute()
                         onExecuteResult?.let { it(result) }
-                        toast { CoreStrings.actionSuccess }
+                        toast { builtin.actionSuccess }
                         resetTouched()
                     }
                     ZkFormMode.Query -> {
@@ -382,12 +382,12 @@ open class ZkForm<T : DtoBase> : ZkElement() {
             } catch (ex: Exception) {
                 log(ex)
                 when (mode) {
-                    ZkFormMode.Create -> toast(error = true) { CoreStrings.createFail }
+                    ZkFormMode.Create -> toast(error = true) { builtin.createFail }
                     ZkFormMode.Read -> Unit
-                    ZkFormMode.Update -> toast(error = true) { CoreStrings.updateFail }
-                    ZkFormMode.Delete -> toast(error = true) { CoreStrings.deleteFail }
-                    ZkFormMode.Action -> toast(error = true) { CoreStrings.actionFail }
-                    ZkFormMode.Query -> toast(error = true) { CoreStrings.queryFail }
+                    ZkFormMode.Update -> toast(error = true) { builtin.updateFail }
+                    ZkFormMode.Delete -> toast(error = true) { builtin.deleteFail }
+                    ZkFormMode.Action -> toast(error = true) { builtin.actionFail }
+                    ZkFormMode.Query -> toast(error = true) { builtin.queryFail }
                 }
             }
         }

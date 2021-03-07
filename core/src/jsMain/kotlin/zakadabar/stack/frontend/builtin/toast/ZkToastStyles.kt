@@ -3,10 +3,10 @@
  */
 package zakadabar.stack.frontend.builtin.toast
 
-import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.util.CssStyleSheet
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkToastStyles : CssStyleSheet<ZkToastStyles>(Application.theme) {
+object ZkToastStyles : ZkCssStyleSheet<ZkToastStyles>(ZkApplication.theme) {
 
     val toastContainer by cssClass {
         position = "fixed"
@@ -34,27 +34,27 @@ object ZkToastStyles : CssStyleSheet<ZkToastStyles>(Application.theme) {
     }
 
     val info by cssClass {
-        background = theme.infoBackground + " !important"
-        color = theme.infoText + " !important"
-        fill = theme.successText + " !important"
+        background = theme.toast.infoBackground + " !important"
+        color = theme.toast.infoText + " !important"
+        fill = theme.toast.successText + " !important"
     }
 
     val success by cssClass {
-        background = theme.successBackground + " !important"
-        color = theme.successText + " !important"
-        fill = theme.successText + " !important"
+        background = theme.toast.successBackground + " !important"
+        color = theme.toast.successText + " !important"
+        fill = theme.toast.successText + " !important"
     }
 
     val warning by cssClass {
-        background = theme.warningBackground + " !important"
-        color = theme.warningText + " !important"
-        fill = theme.warningText + " !important"
+        background = theme.toast.warningBackground + " !important"
+        color = theme.toast.warningText + " !important"
+        fill = theme.toast.warningText + " !important"
     }
 
     val error by cssClass {
-        background = theme.errorBackground + " !important"
-        color = theme.errorText + " !important"
-        fill = theme.errorText + " !important"
+        background = theme.toast.errorBackground + " !important"
+        color = theme.toast.errorText + " !important"
+        fill = theme.toast.errorText + " !important"
     }
 
     init {

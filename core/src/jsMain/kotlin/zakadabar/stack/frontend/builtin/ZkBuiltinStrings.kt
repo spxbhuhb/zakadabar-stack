@@ -1,25 +1,22 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.resources
+package zakadabar.stack.frontend.builtin
 
-import kotlin.properties.ReadOnlyProperty
-import kotlin.reflect.KProperty
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.resources.ZkStringStore
 
-var CoreStrings = StringsImpl()
+open class ZkBuiltinStrings : ZkStringStore() {
 
-class StringsDelegate : ReadOnlyProperty<StringsImpl, String> {
-    override fun getValue(thisRef: StringsImpl, property: KProperty<*>): String {
-        return thisRef.map[property.name] !!
-    }
-}
+    companion object {
+        private val fallback by lazy { ZkBuiltinStrings() }
 
-open class StringsImpl(
-    val map: MutableMap<String, String> = mutableMapOf()
-) {
-    operator fun String.provideDelegate(thisRef: StringsImpl, prop: KProperty<*>): ReadOnlyProperty<StringsImpl, String> {
-        thisRef.map[prop.name] = this
-        return StringsDelegate()
+        val builtin: ZkBuiltinStrings
+            get() = if (ZkApplication.strings is ZkBuiltinStrings) {
+                ZkApplication.strings as ZkBuiltinStrings
+            } else {
+                fallback
+            }
     }
 
     open val programError by "Error during program execution, please notify the support about this."

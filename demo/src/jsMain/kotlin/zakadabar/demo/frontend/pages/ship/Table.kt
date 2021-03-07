@@ -7,7 +7,7 @@ import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
 import zakadabar.demo.data.SpeedDto
 import zakadabar.demo.data.ship.ShipDto
-import zakadabar.demo.frontend.resources.Strings
+import zakadabar.demo.frontend.resources.DemoStrings.Companion.demo
 import zakadabar.stack.data.builtin.AccountPublicDto
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
@@ -22,7 +22,7 @@ class Table : ZkTable<ShipDto>() {
     private val accounts by preload { AccountPublicDto.allAsMap() }
 
     init {
-        title = Strings.ships
+        title = demo.ships
         crud = Ships
         onSearch = { }
 
@@ -31,17 +31,17 @@ class Table : ZkTable<ShipDto>() {
         + ShipDto::hasPirateFlag
 
         + custom {
-            label = Strings.speed
+            label = demo.speed
             render = { + speeds[it.speed]?.description }
         }
 
         + custom {
-            label = Strings.captain
+            label = demo.captain
             render = { + accounts[it.captain]?.fullName }
         }
 
         + custom {
-            label = Strings.port
+            label = demo.port
             render = {
                 val port = ports[it.port]
                 val sea = seas[port?.sea]

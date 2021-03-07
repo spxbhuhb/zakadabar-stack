@@ -8,7 +8,7 @@ package zakadabar.stack.frontend.resources
  *
  * Source: https://material.io/design/color/the-color-system.html#tools-for-picking-colors
  */
-object MaterialColors {
+object ZkColors {
 
     val white = "#ffffff"
     val black = "#000000"

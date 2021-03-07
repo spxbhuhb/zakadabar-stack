@@ -3,13 +3,13 @@
  */
 package zakadabar.demo.frontend.pages.misc
 
-import zakadabar.demo.frontend.resources.Strings
+import zakadabar.demo.frontend.resources.DemoStrings.Companion.demo
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.ActionStatusDto
 import zakadabar.stack.data.builtin.LoginAction
 import zakadabar.stack.data.builtin.SessionDto
-import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.application.Executor
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.ZkExecutor
 import zakadabar.stack.frontend.builtin.ZkPage
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
@@ -59,7 +59,7 @@ object Login : ZkPage(ZkFullScreenLayout) {
                 width = "min(100%, 300px)"
             }
 
-            + div { + Strings.login } marginBottom 20
+            + div { + demo.login } marginBottom 20
 
             + fieldGrid {
                 + dto::accountName
@@ -71,8 +71,8 @@ object Login : ZkPage(ZkFullScreenLayout) {
                     width = "100%"
                     justifyContent = "space-between"
                 }
-                + ZkButton(Strings.forgotten) { /* PasswordReset.open() */ }
-                + ZkButton(Strings.login) { this@LoginForm.submit() }
+                + ZkButton(demo.forgotten) { /* PasswordReset.open() */ }
+                + ZkButton(demo.login) { this@LoginForm.submit() }
             }
         }
     }
@@ -82,11 +82,11 @@ object Login : ZkPage(ZkFullScreenLayout) {
 
         if (resultDto.success) io {
             val session = SessionDto.read(0L)
-            Application.executor = Executor(session.account, session.anonymous, session.roles)
+            ZkApplication.executor = ZkExecutor(session.account, session.anonymous, session.roles)
             Home.open()
         }
 
-        toast(error = true) { Strings.loginFail }
+        toast(error = true) { demo.loginFail }
     }
 
 }

@@ -3,17 +3,15 @@
  */
 package zakadabar.stack.frontend.builtin.misc.account
 
-import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.util.CssStyleSheet
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkAccountStyles : CssStyleSheet<ZkAccountStyles>(Application.theme) {
+object ZkAccountStyles : ZkCssStyleSheet<ZkAccountStyles>(ZkApplication.theme) {
 
     val avatar by cssClass {
-        backgroundColor = theme.darkColor
         width = 28
         height = 28
         fontSize = 14
-        color = theme.lightestColor
         textAlign = "center"
         lineHeight = 28
         borderRadius = "50%"

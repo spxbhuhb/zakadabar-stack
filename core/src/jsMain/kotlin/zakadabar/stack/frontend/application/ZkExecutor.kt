@@ -5,7 +5,7 @@ package zakadabar.stack.frontend.application
 
 import zakadabar.stack.data.builtin.AccountPublicDto
 
-class Executor(
+class ZkExecutor(
     val account: AccountPublicDto,
     val anonymous: Boolean,
     val roles: List<String>

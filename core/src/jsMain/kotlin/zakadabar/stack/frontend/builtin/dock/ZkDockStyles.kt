@@ -3,10 +3,10 @@
  */
 package zakadabar.stack.frontend.builtin.dock
 
-import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.util.CssStyleSheet
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkDockStyles : CssStyleSheet<ZkDockStyles>(Application.theme) {
+object ZkDockStyles : ZkCssStyleSheet<ZkDockStyles>(ZkApplication.theme) {
 
     val dock by cssClass {
         position = "fixed"
@@ -20,9 +20,67 @@ object ZkDockStyles : CssStyleSheet<ZkDockStyles>(Application.theme) {
     }
 
     val dockItem by cssClass {
-        backgroundColor = theme.lightGray
+        backgroundColor = theme.dock.background
         display = "flex"
         flexDirection = "column"
+    }
+
+    val header by cssClass {
+        display = "flex"
+        flexDirection = "row"
+        boxSizing = "border-box"
+        minHeight = theme.dock.headerHeight
+        height = theme.dock.headerHeight
+        alignItems = "center"
+        backgroundColor = theme.dock.headerBackground
+        overflow = "hidden"
+    }
+
+    val headerIcon by cssClass {
+        boxSizing = "border-box"
+        padding = 6
+        height = theme.dock.headerHeight
+        width = theme.dock.headerHeight
+        backgroundColor = theme.dock.headerIconBackground
+        fill = theme.dock.headerIconFill
+        marginRight = 8
+    }
+
+    val text by cssClass {
+        display = "flex"
+        flexDirection = "row"
+        alignItems = "center"
+        color = theme.dock.headerForeground
+        fontSize = theme.font.size
+        height = 21
+    }
+
+    val extensions by cssClass {
+        flexGrow = 1
+        display = "flex"
+        flexDirection = "row"
+        justifyContent = "flex-end"
+        alignItems = "center"
+        paddingLeft = 8
+    }
+
+    val extensionIcon by cssClass {
+        boxSizing = "border-box"
+        padding = "6px 2px 2px 2px"
+        height = theme.dock.headerHeight
+        backgroundColor = theme.dock.headerIconBackground
+        fill = theme.dock.headerIconFill
+        strokeWidth = 2
+        cursor = "pointer"
+        userSelect = "none"
+
+        on(":first-child") {
+            paddingLeft = 7
+        }
+
+        on(":last-child") {
+            paddingRight = 6
+        }
     }
 
     init {

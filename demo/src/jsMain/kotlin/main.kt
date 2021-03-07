@@ -4,11 +4,11 @@
 @file:Suppress("unused") // main is called by webpack
 
 import zakadabar.demo.frontend.Routing
-import zakadabar.demo.frontend.resources.Strings
-import zakadabar.demo.frontend.resources.Theme
+import zakadabar.demo.frontend.resources.DemoStrings
 import zakadabar.stack.data.builtin.SessionDto
-import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.application.Executor
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.ZkExecutor
+import zakadabar.stack.frontend.builtin.ZkDefaultTheme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.io
 
@@ -18,9 +18,7 @@ import zakadabar.stack.frontend.util.io
  */
 fun main() {
 
-    // Launch starts something in the background. Think setTimeout(0, ...) in JavaScript.
-    // This launch method starts the task in GlobalScope, and in case an exception is thrown
-    // it tries to format it to be a bit more readable.
+    // Io starts the block behind it in the background. Think setTimeout(0, ...) in JavaScript.
 
     io {
 
@@ -35,20 +33,23 @@ fun main() {
 
         val session = SessionDto.read(0L)
 
-        with(Application) {
-
-            // Change the theme of the application to have our own colors
-
-            theme = Theme
-
-            // Set string map for automatic form label / table header lookup.
-
-            stringMap = Strings.map
+        with(ZkApplication) {
 
             // Application.executor is the user who runs the application. There is always a user
-            // even without login. The not logged in users has the role "anonymous" (by convention).
+            // even without login. In this case (not logged in) the anonymous flag is set to true.
 
-            executor = Executor(session.account, session.anonymous, session.roles)
+            executor = ZkExecutor(session.account, session.anonymous, session.roles)
+
+            // Set the theme for the application. You can create your own theme class
+            // or object and set it here.
+
+            theme = ZkDefaultTheme()
+
+            // Set the string store we want to use. The build-in stack components use this
+            // instance to get strings when needed. This is also used to map property names
+            // to labels in tables and forms.
+
+            strings = DemoStrings()
 
             // Set the routing. You may change this on-the-fly if you want, for example if the user logs in.
 

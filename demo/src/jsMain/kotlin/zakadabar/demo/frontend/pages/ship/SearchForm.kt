@@ -7,7 +7,7 @@ import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
 import zakadabar.demo.data.SpeedDto
 import zakadabar.demo.data.ship.SearchShipsQuery
-import zakadabar.demo.frontend.resources.Strings
+import zakadabar.demo.frontend.resources.DemoStrings.Companion.demo
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.util.io
@@ -20,12 +20,6 @@ class SearchForm(
 
     override fun onCreate() {
         io {
-            // this let the compiler know that we are working with a SearchForm
-            // here is not actually necessary but can be useful in some use cases
-            // (and the colors are pretty)
-
-            this as SearchForm
-
             // As this form is a query and is intended to be part of a page
             // we don't use the "build" function from ZkForm.
 
@@ -33,7 +27,10 @@ class SearchForm(
             // That means we can build the content of the section freely.
 
             + column {
-                + section(Strings.filters, fieldGrid = false) {
+                + section(demo.filters, fieldGrid = false) {
+                    style {
+                        margin = "0px" // override margin, so we can align it with the table
+                    }
                     + row {
 
                         + fieldGrid {
@@ -49,7 +46,7 @@ class SearchForm(
                     } marginBottom 12
 
                     + row {
-                        + ZkButton(Strings.runQuery) { runQuery(dto) }
+                        + ZkButton(demo.runQuery) { runQuery(dto) }
                     }
                 }
             }

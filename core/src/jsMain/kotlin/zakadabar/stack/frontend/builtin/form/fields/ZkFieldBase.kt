@@ -9,11 +9,11 @@ import org.w3c.dom.get
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
-import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.util.minusAssign
 import zakadabar.stack.frontend.util.plusAssign
 
@@ -84,15 +84,15 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
      * If the [label] property is initialized uses its value.
      *
      * When it is not initialized and form.autoLabel is true,
-     * looks up the label in [Application.stringMap] and adds
+     * looks up the label in [ZkApplication.stringMap] and adds
      * it if found.
      *
-     * When not in [Application.stringMap] it adds [propName]
+     * When not in [ZkApplication.stringMap] it adds [propName]
      * as label.
      */
     open fun buildFieldLabel() {
         if (! ::label.isInitialized) {
-            label = Application.stringMap[propName] ?: propName
+            label = ZkApplication.strings.map[propName] ?: propName
         }
 
         + div(ZkFormStyles.fieldLabel) {
@@ -158,7 +158,7 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
     open fun showErrors() {
         errors.clearChildren() // to clean up previous errors
         // TODO add the actual errors
-        errors.innerHTML = CoreStrings.invalidValue
+        errors.innerHTML = builtin.invalidValue
         errors.show()
     }
 

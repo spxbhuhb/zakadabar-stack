@@ -1,8 +1,7 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-
-package zakadabar.stack.frontend.resources
+package zakadabar.stack.frontend.builtin
 
 import zakadabar.stack.frontend.builtin.button.ZkButtonTheme
 import zakadabar.stack.frontend.builtin.dock.ZkDockTheme
@@ -13,25 +12,16 @@ import zakadabar.stack.frontend.builtin.misc.ZkFontTheme
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarTheme
 import zakadabar.stack.frontend.builtin.table.ZkTableTheme
 import zakadabar.stack.frontend.builtin.toast.ZkToastTheme
+import zakadabar.stack.frontend.resources.ZkTheme
 
-interface ZkTheme {
-
-    var button: ZkButtonTheme
-
-    var dock: ZkDockTheme
-
-    var font: ZkFontTheme
-
-    var form: ZkFormTheme
-
-    var icon: ZkIconTheme
-
-    var layout: ZkLayoutTheme
-
-    var sidebar: ZkSideBarTheme
-
-    var table: ZkTableTheme
-
-    var toast: ZkToastTheme
-
+class ZkDefaultTheme : ZkTheme {
+    override var button = ZkButtonTheme()
+    override var dock = ZkDockTheme()
+    override var font = ZkFontTheme()
+    override var form = ZkFormTheme()
+    override var icon = ZkIconTheme()
+    override var layout = ZkLayoutTheme()
+    override var sidebar = ZkSideBarTheme()
+    override var table = ZkTableTheme()
+    override var toast = ZkToastTheme()
 }

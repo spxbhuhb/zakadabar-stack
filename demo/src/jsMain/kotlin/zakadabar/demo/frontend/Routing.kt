@@ -12,23 +12,23 @@ import zakadabar.demo.frontend.pages.sea.Seas
 import zakadabar.demo.frontend.pages.ship.ShipSearch
 import zakadabar.demo.frontend.pages.ship.Ships
 import zakadabar.demo.frontend.pages.speed.Speeds
-import zakadabar.stack.frontend.application.AppRouting
-import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.application.NavState
+import zakadabar.stack.frontend.application.ZkAppRouting
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.ZkNavState
 
 /**
  * Extend AppRouting to define application components.
  *
- * Routing creates a [NavState] from the URL and finds the
- * appropriate [AppRouting.ZkTarget] to display to the user.
+ * Routing creates a [ZkNavState] from the URL and finds the
+ * appropriate [ZkAppRouting.ZkTarget] to display to the user.
  *
- * Set the [Application.routing] field to this object
- * when the [Application] is created (typically in main.kt).
+ * Set the [ZkApplication.routing] field to this object
+ * when the [ZkApplication] is created (typically in main.kt).
  *
  * You can change the routing of an application on-the-fly by
- * setting [Application.routing] to another object.
+ * setting [ZkApplication.routing] to another object.
  */
-object Routing : AppRouting(DefaultLayout, Home) {
+object Routing : ZkAppRouting(DefaultLayout, Home) {
 
     /**
      * Add ZkPage and ZkCrud implementations to the routing.
@@ -53,9 +53,9 @@ object Routing : AppRouting(DefaultLayout, Home) {
      * Override [onNavStateChange] to customize routing behaviour.
      * This example redirects the anonymous user to the login page.
      */
-    override fun onNavStateChange(state: NavState) {
-        if (! Application.executor.anonymous) {
-            super.onNavStateChange(NavState(Login.viewName, ""))
+    override fun onNavStateChange(state: ZkNavState) {
+        if (! ZkApplication.executor.anonymous) {
+            super.onNavStateChange(ZkNavState(Login.viewName, ""))
         } else {
             super.onNavStateChange(state)
         }

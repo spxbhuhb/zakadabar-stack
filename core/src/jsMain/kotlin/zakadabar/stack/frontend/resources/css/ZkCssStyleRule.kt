@@ -1,78 +1,22 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.util
+package zakadabar.stack.frontend.resources.css
 
-import kotlinx.atomicfu.atomic
-import kotlinx.browser.document
 import zakadabar.stack.frontend.resources.ZkTheme
-import zakadabar.stack.util.PublicApi
-import kotlin.properties.ReadOnlyProperty
-import kotlin.reflect.KProperty
-
-var defaultTheme = ZkTheme()
-
-typealias RuleInit = CssStyleRule.(ZkTheme) -> Unit
-
-open class CssStyleSheet<T : CssStyleSheet<T>>(val theme: ZkTheme) {
-
-    companion object {
-        val nextId = atomic(0)
-    }
-
-    val id = nextId.getAndIncrement()
-    val element = document.createElement("style")
-
-    init {
-        element.id = "zkc-$id"
-    }
-
-    internal val rules = mutableMapOf<String, CssStyleRule>()
-
-    class CssDelegate(private val cssClassName: String) : ReadOnlyProperty<CssStyleSheet<*>, String> {
-        override fun getValue(thisRef: CssStyleSheet<*>, property: KProperty<*>) = cssClassName
-    }
-
-    class CssDelegateProvider(val init: RuleInit) {
-        operator fun provideDelegate(thisRef: CssStyleSheet<*>, prop: KProperty<*>): ReadOnlyProperty<CssStyleSheet<*>, String> {
-            val cssClassName = "${thisRef::class.simpleName}-${prop.name}-${nextId.getAndIncrement()}"
-            val rule = CssStyleRule(thisRef, cssClassName)
-            rule.init(thisRef.theme)
-            thisRef.rules[cssClassName] = rule
-            return CssDelegate(cssClassName)
-        }
-    }
-
-    fun cssClass(init: RuleInit) = CssDelegateProvider(init)
-
-    @PublicApi
-    fun attach(): T {
-        element.innerHTML = rules.map { rule ->
-            "." + rule.key + " {\n" + rule.value.styles.map { "${it.key}: ${it.value};" }.joinToString("\n") + "}"
-        }.joinToString("\n")
-
-        document.body?.appendChild(element)
-
-        @Suppress("UNCHECKED_CAST") // returns with itself, should be OK
-        return this as T
-    }
-
-    @PublicApi
-    fun detach() {
-        element.remove()
-    }
-
-}
 
 @Suppress("unused") // may be used by other modules
-class CssStyleRule(val sheet: CssStyleSheet<*>, val cssClassName: String) {
+class ZkCssStyleRule(
+    private val sheet: ZkCssStyleSheet<*>,
+    private val cssClassName: String
+) {
 
     val styles = mutableMapOf<String, String?>()
 
     private fun stringOrPx(value: Any?) = if (value is String) value else "${value}px"
 
-    fun on(pseudoClass: String, init: RuleInit) {
-        val rule = CssStyleRule(sheet, cssClassName)
+    fun on(pseudoClass: String, init: ZkCssStyleRule.(ZkTheme) -> Unit) {
+        val rule = ZkCssStyleRule(sheet, cssClassName)
         rule.init(sheet.theme)
         sheet.rules[cssClassName + pseudoClass] = rule
     }

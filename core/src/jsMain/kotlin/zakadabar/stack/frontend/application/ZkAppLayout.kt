@@ -6,6 +6,8 @@ package zakadabar.stack.frontend.application
 import kotlinx.browser.document
 import org.w3c.dom.set
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
+import zakadabar.stack.frontend.util.plusAssign
 
 /**
  * Base class for layouts of the application. Typically there are only
@@ -16,9 +18,9 @@ import zakadabar.stack.frontend.builtin.ZkElement
  * * calls [onResume]
  * * adds the [element] to the document body
  *
- * When the URL changes, the [Application]:
+ * When the URL changes, the [ZkApplication]:
  *
- * * calls [AppRouting.onNavStateChange],which:
+ * * calls [ZkAppRouting.onNavStateChange],which:
  *     * when the state points to a [Crud], calls [Crud.route]
  *     * when not a crud, calls [AppRouting.route]
  *     * after the route call returns:
@@ -29,20 +31,18 @@ import zakadabar.stack.frontend.builtin.ZkElement
  *             * calls [resume] of the new layout
  *             * sets [AppRouting.activeLayout] to the new layout
  */
-abstract class AppLayout(val name: String) : ZkElement() {
+abstract class ZkAppLayout(val name: String) : ZkElement() {
 
     private var activeElement: ZkElement? = null
     protected var content = ZkElement()
 
     init {
+        element.classList += ZkLayoutStyles.layout
+        element.classList += ZkLayoutStyles.hidden
+
         element.dataset["zkLayoutName"] = name
 
         document.body?.appendChild(element)
-
-        with(element.style) {
-            width = "100vw"
-            height = "100vh"
-        }
     }
 
     override fun onCreate() {
@@ -59,7 +59,7 @@ abstract class AppLayout(val name: String) : ZkElement() {
      *
      * @param  state  The navigation state to resume.
      */
-    open fun resume(state: NavState, target: ZkElement) {
+    open fun resume(state: ZkNavState, target: ZkElement) {
         content -= activeElement
         activeElement = target
         content += activeElement

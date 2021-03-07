@@ -11,6 +11,6 @@ import zakadabar.stack.data.DtoBase
 class SearchShipsResult(
     var shipId: Long,
     var name: String,
-    var port: String,
+    var port: String?,
     var captain: String
 ) : DtoBase

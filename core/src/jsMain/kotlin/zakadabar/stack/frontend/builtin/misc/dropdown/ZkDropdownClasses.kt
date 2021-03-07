@@ -3,14 +3,14 @@
  */
 package zakadabar.stack.frontend.builtin.misc.dropdown
 
-import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.resources.ZkTheme
-import zakadabar.stack.frontend.util.CssStyleSheet
+import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-class ZkDropdownClasses(theme: ZkTheme) : CssStyleSheet<ZkDropdownClasses>(theme) {
+class ZkDropdownClasses(theme: ZkTheme) : ZkCssStyleSheet<ZkDropdownClasses>(theme) {
 
     companion object {
-        var dropdownClasses = ZkDropdownClasses(Application.theme).attach()
+        var dropdownClasses = ZkDropdownClasses(ZkApplication.theme).attach()
     }
 
     val dropdown by cssClass {

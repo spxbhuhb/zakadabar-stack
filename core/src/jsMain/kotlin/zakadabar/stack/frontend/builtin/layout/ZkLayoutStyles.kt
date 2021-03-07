@@ -3,10 +3,10 @@
  */
 package zakadabar.stack.frontend.builtin.layout
 
-import zakadabar.stack.frontend.application.Application
-import zakadabar.stack.frontend.util.CssStyleSheet
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkLayoutStyles : CssStyleSheet<ZkLayoutStyles>(Application.theme) {
+object ZkLayoutStyles : ZkCssStyleSheet<ZkLayoutStyles>(ZkApplication.theme) {
 
     val w100 by cssClass {
         width = "100%"
@@ -40,6 +40,15 @@ object ZkLayoutStyles : CssStyleSheet<ZkLayoutStyles>(Application.theme) {
         border = 0
     }
 
+    val layout by cssClass {
+        position = "absolute"
+        top = 0
+        left = 0
+        width = "100vw"
+        height = "100vh"
+        overflow = "hidden"
+    }
+
     val layoutContent by cssClass {
         flexGrow = 1
         display = "flex"
@@ -51,10 +60,10 @@ object ZkLayoutStyles : CssStyleSheet<ZkLayoutStyles>(Application.theme) {
         width = "100%"
         height = 3
         minHeight = 3
-        backgroundColor = theme.sliderColor
+        backgroundColor = theme.layout.sliderColor
         cursor = "row-resize"
         on(":hover") {
-            backgroundColor = theme.selectedColor
+            backgroundColor = theme.layout.sliderHoverColor
         }
     }
 
@@ -63,10 +72,10 @@ object ZkLayoutStyles : CssStyleSheet<ZkLayoutStyles>(Application.theme) {
         height = "100%"
         width = 3
         minWidth = 3
-        backgroundColor = theme.sliderColor
+        backgroundColor = theme.layout.sliderColor
         cursor = "col-resize"
         on(":hover") {
-            backgroundColor = theme.selectedColor
+            backgroundColor = theme.layout.sliderHoverColor
         }
     }
 

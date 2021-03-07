@@ -5,7 +5,7 @@ package zakadabar.stack.frontend.builtin.sidebar
 
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
-import zakadabar.stack.frontend.resources.Icons
+import zakadabar.stack.frontend.resources.ZkIcons
 
 class ZkSideBarGroup(
     private val text: String,
@@ -13,8 +13,8 @@ class ZkSideBarGroup(
 ) : ZkElement() {
 
     private var open = false
-    private val openIcon = ZkIcon(Icons.arrowDropDown)
-    private val closeIcon = ZkIcon(Icons.arrowDropUp)
+    private val openIcon = ZkIcon(ZkIcons.arrowDropDown)
+    private val closeIcon = ZkIcon(ZkIcons.arrowDropUp)
 
     override fun onCreate() {
         + column {

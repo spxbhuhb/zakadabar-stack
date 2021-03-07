@@ -8,7 +8,7 @@ import zakadabar.stack.frontend.builtin.button.ZkIconButton
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
 import zakadabar.stack.frontend.builtin.standalone.ZkStandaloneInput
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarStyles
-import zakadabar.stack.frontend.resources.Icons
+import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.marginRight
 import zakadabar.stack.frontend.util.plusAssign
 
@@ -46,12 +46,12 @@ open class ZkTableTitleBar() : ZkElement() {
                 style { alignItems = "center" }
 
                 onAddRow?.let {
-                    + ZkIconButton(Icons.add, round = true) { it.invoke() } marginRight 16
+                    + ZkIconButton(ZkIcons.add, round = true) { it.invoke() } marginRight 16
                 }
 
                 onSearch?.let {
                     + ZkStandaloneInput(onChange = it, enter = true) marginRight 8
-                    + ZkIconButton(Icons.search, buttonSize = 24) {
+                    + ZkIconButton(ZkIcons.search, buttonSize = 24) {
                         this@ZkTableTitleBar[ZkStandaloneInput::class].value
                     }
                 }

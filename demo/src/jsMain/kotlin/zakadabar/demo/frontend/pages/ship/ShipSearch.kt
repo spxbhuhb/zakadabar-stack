@@ -4,12 +4,17 @@
 package zakadabar.demo.frontend.pages.ship
 
 import zakadabar.demo.data.ship.SearchShipsQuery
-import zakadabar.demo.frontend.resources.Strings
+import zakadabar.demo.frontend.resources.DemoStrings.Companion.demo
 import zakadabar.stack.frontend.builtin.ZkPage
 import zakadabar.stack.frontend.builtin.form.ZkFormMode
+import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
+import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.h100
+import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.w100
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
+import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.io
+import zakadabar.stack.frontend.util.plusAssign
 
 object ShipSearch : ZkPage() {
 
@@ -21,28 +26,32 @@ object ShipSearch : ZkPage() {
     val form = SearchForm(::runQuery)
     val table = SearchResult()
 
-    // When you use "object" you have to initialize the DOM structure from
-    // an init block and you have to override cleanup, so the underlying structure
-    // won't be removed. The init and cleanup functions will be called again
-    // and again and you don't want them to change the object.
+    override fun onCreate() {
 
-    init {
+        classList += w100
+        classList += grow
+
         // "default" is an inline reified function. It gets the type of DTO to
         // create from the generic parameter of the form class, creates a
         // new instance, creates a schema and calls setDefaults of the schema
         // to set the default values.
 
-        build {
-            form.dto = default()
-            form.mode = ZkFormMode.Query
-            width("100%")
+        form.dto = default()
+        form.mode = ZkFormMode.Query
 
-            + column {
-                + ZkTitleBar(Strings.searchShips)
-                + form
+        + column(h100) {
+            + ZkTitleBar(demo.searchShips)
+
+            + div(grow) {
+                buildElement.style.padding = "8px"
+                buildElement.style.backgroundColor = ZkColors.Gray.c100
+
+                + form marginBottom 8
                 + table
+
             }
         }
+
     }
 
     private fun runQuery(query: SearchShipsQuery) {

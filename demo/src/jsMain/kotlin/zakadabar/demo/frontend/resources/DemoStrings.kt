@@ -3,11 +3,26 @@
  */
 package zakadabar.demo.frontend.resources
 
-import zakadabar.stack.frontend.resources.StringsImpl
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.builtin.ZkBuiltinStrings
 
-val Strings = DemoStringsImpl()
+// This pattern makes it possible to switch the strings easily. Demo is can work as
+// a standalone application, but it is possible to use it as a component library.
+// In that case - or when you write an actual component library - you want to your
+// built-in strings to be customizable.
 
-class DemoStringsImpl : StringsImpl() {
+class DemoStrings : ZkBuiltinStrings() {
+
+    companion object {
+        private val fallback by lazy { DemoStrings() }
+
+        val demo: DemoStrings
+            get() = if (ZkApplication.strings is DemoStrings) {
+                ZkApplication.strings as DemoStrings
+            } else {
+                fallback
+            }
+    }
 
     // general stuff
 

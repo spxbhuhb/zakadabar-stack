@@ -4,13 +4,13 @@
 package zakadabar.demo.frontend.pages.sea
 
 import zakadabar.demo.data.SeaDto
-import zakadabar.demo.frontend.resources.Strings
+import zakadabar.demo.frontend.resources.DemoStrings.Companion.demo
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class Table : ZkTable<SeaDto>() {
 
     init {
-        title = Strings.seas
+        title = demo.seas
         crud = Seas
 
         + SeaDto::id

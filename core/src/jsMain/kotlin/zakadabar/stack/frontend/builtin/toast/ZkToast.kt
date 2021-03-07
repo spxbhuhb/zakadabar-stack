@@ -6,10 +6,10 @@
 package zakadabar.stack.frontend.builtin.toast
 
 import kotlinx.coroutines.delay
-import zakadabar.stack.frontend.application.Application
+import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
-import zakadabar.stack.frontend.resources.Icons
+import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.marginRight
 import zakadabar.stack.frontend.util.plusAssign
@@ -37,18 +37,18 @@ open class ZkToast(
         classList += typeClass
 
         + div { + message } marginRight 16
-        + ZkIconButton(Icons.close, cssClass = typeClass) { Application.toasts -= this }
+        + ZkIconButton(ZkIcons.close, cssClass = typeClass) { ZkApplication.toasts -= this }
 
         if (type == ZkToastType.Success || type == ZkToastType.Info || hideAfter != null) {
             io {
                 delay(hideAfter ?: 3000)
-                Application.toasts -= this
+                ZkApplication.toasts -= this
             }
         }
     }
 
     open fun dispose() {
-        Application.toasts -= this
+        ZkApplication.toasts -= this
     }
 
 }

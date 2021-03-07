@@ -3,10 +3,10 @@
  */
 package zakadabar.stack.frontend.builtin.layout
 
-import zakadabar.stack.frontend.application.AppLayout
+import zakadabar.stack.frontend.application.ZkAppLayout
 
 /**
  * A very basic full screen layout that simply shows the target
  * element.
  */
-object ZkFullScreenLayout : AppLayout("fullscreen")
+object ZkFullScreenLayout : ZkAppLayout("fullscreen")

@@ -19,9 +19,9 @@ package zakadabar.stack.frontend.builtin.form.fields
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.DtoBase
+import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
-import zakadabar.stack.frontend.resources.CoreStrings
 import zakadabar.stack.frontend.util.minusAssign
 import zakadabar.stack.frontend.util.plusAssign
 import kotlin.reflect.KMutableProperty0
@@ -38,7 +38,7 @@ open class ZkStringField<T : DtoBase>(
 
     override fun buildFieldValue() {
         input.className = ZkFormStyles.text
-        input.placeholder = CoreStrings.pleaseTypeHere
+        input.placeholder = builtin.pleaseTypeHere
 
         if (readOnly) input.readOnly = true
 

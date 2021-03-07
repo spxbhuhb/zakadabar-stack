@@ -40,8 +40,8 @@ object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTa
 
     private fun query(executor: Executor, query: SearchShipsQuery) = transaction {
         val select = ShipTable
-            .join(PortTable, JoinType.INNER, additionalConstraint = { PortTable.id eq ShipTable.port })
-            .join(SeaTable, JoinType.INNER, additionalConstraint = { SeaTable.id eq PortTable.sea })
+            .join(PortTable, JoinType.LEFT, additionalConstraint = { PortTable.id eq ShipTable.port })
+            .join(SeaTable, JoinType.LEFT, additionalConstraint = { SeaTable.id eq PortTable.sea })
             .join(SpeedTable, JoinType.INNER, additionalConstraint = { SpeedTable.id eq ShipTable.speed })
             .join(AccountPrivateTable, JoinType.INNER, additionalConstraint = { AccountPrivateTable.id eq ShipTable.captain })
             .slice(

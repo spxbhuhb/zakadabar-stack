@@ -12,7 +12,7 @@ import org.w3c.dom.url.URLSearchParams
  * @property  recordId  Id of the record when specified in the URL.
  * @property  query     The query object when specified in the URL.
  */
-class NavState(val urlPath: String, val urlQuery: String) {
+class ZkNavState(val urlPath: String, val urlQuery: String) {
 
     val viewName: String
     val recordId: Long

@@ -5,16 +5,16 @@ package zakadabar.demo.frontend.pages.port
 
 import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
-import zakadabar.demo.frontend.resources.Strings
+import zakadabar.demo.frontend.resources.DemoStrings.Companion.demo
 import zakadabar.stack.frontend.builtin.form.ZkForm
 
 class Form : ZkForm<PortDto>() {
 
     override fun onCreate() {
 
-        + titleBar(dto.name, Strings.port)
+        + titleBar(dto.name, demo.port)
 
-        + section(Strings.basics) {
+        + section(demo.basics) {
 
             ifNotCreate {
                 + dto::id
