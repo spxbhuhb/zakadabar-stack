@@ -19,7 +19,6 @@ package zakadabar.stack.frontend.builtin.form.fields
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.util.minusAssign
@@ -38,7 +37,6 @@ open class ZkOptStringField<T : DtoBase>(
 
     override fun buildFieldValue() {
         input.className = ZkFormStyles.text
-        input.placeholder = builtin.pleaseTypeHere
 
         if (readOnly) input.readOnly = true
 
@@ -61,6 +59,10 @@ open class ZkOptStringField<T : DtoBase>(
         }
 
         + input
+    }
+
+    override fun focusValue() {
+        input.focus()
     }
 
 }

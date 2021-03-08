@@ -341,24 +341,45 @@ open class ZkElement(
     // ----  Child elements  --------
 
     /**
-     * Resume a children when the state of this element is resumed. Check if the child is in Created
-     * or Initialized state which are the only states when this method should be called.
+     * Synchronizes the state of the children with the state of this element.
      */
-    open fun resume(child: ZkElement) {
-        when (child.lifeCycleState) {
-            ZkElementState.Initialized -> {
-                child.onCreate()
-                child.lifeCycleState = ZkElementState.Created
-                child.onResume()
+    open fun syncChildrenState(child: ZkElement) {
+        when (lifeCycleState) {
+
+            ZkElementState.Initialized, ZkElementState.Created -> {
+                when (child.lifeCycleState) {
+                    ZkElementState.Initialized -> {
+                        child.onCreate()
+                        child.lifeCycleState = ZkElementState.Created
+                    }
+                    ZkElementState.Created -> Unit
+                    ZkElementState.Resumed, ZkElementState.Destroyed -> {
+                        throw IllegalStateException("invalid element state ${child.lifeCycleState} for ${child::class.simpleName}")
+                    }
+                }
             }
-            ZkElementState.Created -> {
-                child.onResume()
+
+            ZkElementState.Resumed -> {
+                when (child.lifeCycleState) {
+                    ZkElementState.Initialized -> {
+                        child.onCreate()
+                        child.lifeCycleState = ZkElementState.Created
+                        child.onResume()
+                    }
+                    ZkElementState.Created -> {
+                        child.onResume()
+                    }
+                    ZkElementState.Resumed, ZkElementState.Destroyed -> {
+                        throw IllegalStateException("invalid element state ${child.lifeCycleState} for ${child::class.simpleName}")
+                    }
+                }
+                child.lifeCycleState = ZkElementState.Resumed
             }
-            ZkElementState.Resumed, ZkElementState.Destroyed -> {
-                throw IllegalStateException("invalid element state ${child.lifeCycleState}for ${child::class.simpleName}")
+
+            ZkElementState.Destroyed -> {
+                throw IllegalStateException("invalid element state ${child.lifeCycleState} for ${this::class.simpleName}")
             }
         }
-        child.lifeCycleState = ZkElementState.Resumed
     }
 
     /**
@@ -380,7 +401,7 @@ open class ZkElement(
         this.element.appendChild(child.element)
         childElements += child
 
-        resume(child)
+        syncChildrenState(child)
     }
 
     /**
@@ -395,7 +416,7 @@ open class ZkElement(
         this.element.insertBefore(child.element, this.element.firstChild)
         childElements.add(0, child)
 
-        resume(child)
+        syncChildrenState(child)
     }
 
     /**
@@ -418,7 +439,7 @@ open class ZkElement(
                 else -> {
                     this.element.insertBefore(child.element, childElements[index].element.nextElementSibling)
                     childElements.add(index + 1, child)
-                    resume(child)
+                    syncChildrenState(child)
                 }
             }
         }
@@ -447,7 +468,7 @@ open class ZkElement(
             this.element.insertBefore(child.element, childElements[index].element)
             childElements.add(index, child)
 
-            resume(child)
+            syncChildrenState(child)
         }
     }
 
@@ -749,7 +770,7 @@ open class ZkElement(
     operator fun ZkElement.unaryPlus(): ZkElement {
         this@ZkElement.buildElement.appendChild(this.element)
         this@ZkElement.childElements += this
-        resume(this)
+        syncChildrenState(this)
         return this
     }
 

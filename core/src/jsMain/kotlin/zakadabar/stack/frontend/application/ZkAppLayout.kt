@@ -7,6 +7,7 @@ import kotlinx.browser.document
 import org.w3c.dom.set
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
+import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.hidden
 import zakadabar.stack.frontend.util.plusAssign
 
 /**
@@ -38,7 +39,7 @@ abstract class ZkAppLayout(val name: String) : ZkElement() {
 
     init {
         element.classList += ZkLayoutStyles.layout
-        element.classList += ZkLayoutStyles.hidden
+        element.classList += hidden
 
         element.dataset["zkLayoutName"] = name
 
@@ -60,11 +61,12 @@ abstract class ZkAppLayout(val name: String) : ZkElement() {
      * @param  state  The navigation state to resume.
      */
     open fun resume(state: ZkNavState, target: ZkElement) {
+        onResume()
+
         content -= activeElement
         activeElement = target
         content += activeElement
 
-        onResume()
         show()
     }
 
@@ -76,12 +78,12 @@ abstract class ZkAppLayout(val name: String) : ZkElement() {
      * * call [hide] to hide the HTML element
      */
     override fun onPause() {
+        hide()
 
         content -= activeElement
         activeElement = null
 
         super.onPause()
-        hide()
     }
 
 }

@@ -27,6 +27,13 @@ abstract class ZkAppRouting(
 
     lateinit var nextLayout: ZkAppLayout
 
+    init {
+        // have to initialize the default layout or the first onPause will set it into
+        // the wrong state
+        defaultLayout.onCreate()
+        defaultLayout.lifeCycleState = ZkElementState.Created
+    }
+
     operator fun ZkTarget.unaryPlus() {
         targets[viewName] = this
     }

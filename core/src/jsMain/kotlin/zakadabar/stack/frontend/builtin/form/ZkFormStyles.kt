@@ -71,6 +71,7 @@ object ZkFormStyles : ZkCssStyleSheet<ZkFormStyles>(ZkApplication.theme) {
         paddingRight = 8
         paddingLeft = 8
         borderRadius = 2
+        cursor = "default"
     }
 
     val mandatoryMark by cssClass {

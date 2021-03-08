@@ -98,6 +98,7 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
         + div(ZkFormStyles.fieldLabel) {
             + label
             mandatoryMark()
+            on(buildElement, "click") { _ -> focusValue() }
         }
     }
 
@@ -105,6 +106,13 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
         if (! form.schema.value.isOptional(propName)) {
             + div(ZkFormStyles.mandatoryMark) { ! "&nbsp;*" }
         }
+    }
+
+    /**
+     * Focus on the value field.
+     */
+    open fun focusValue() {
+
     }
 
     /**

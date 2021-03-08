@@ -29,17 +29,13 @@ import zakadabar.stack.util.PublicApi
 @PublicApi
 open class ZkConstStringField<T : DtoBase>(
     form: ZkForm<T>,
-    label: String,
+    override var label: String,
     val value: String
 ) : ZkFieldBase<T, String>(
     form = form,
     propName = ""
 ) {
     private val input = document.createElement("input") as HTMLInputElement
-
-    init {
-        this.label = label
-    }
 
     override fun buildFieldValue() {
         input.className = ZkFormStyles.recordId
