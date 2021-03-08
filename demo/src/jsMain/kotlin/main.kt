@@ -8,7 +8,7 @@ import zakadabar.demo.frontend.resources.DemoStrings
 import zakadabar.stack.data.builtin.SessionDto
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkExecutor
-import zakadabar.stack.frontend.builtin.ZkDefaultTheme
+import zakadabar.stack.frontend.builtin.ZkBuiltinTheme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.io
 
@@ -43,13 +43,13 @@ fun main() {
             // Set the theme for the application. You can create your own theme class
             // or object and set it here.
 
-            theme = ZkDefaultTheme()
+            theme = ZkBuiltinTheme()
 
             // Set the string store we want to use. The build-in stack components use this
             // instance to get strings when needed. This is also used to map property names
             // to labels in tables and forms.
 
-            strings = DemoStrings()
+            stringStore = DemoStrings()
 
             // Set the routing. You may change this on-the-fly if you want, for example if the user logs in.
 

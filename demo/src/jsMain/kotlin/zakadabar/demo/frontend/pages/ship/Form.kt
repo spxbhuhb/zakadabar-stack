@@ -9,7 +9,7 @@ import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
 import zakadabar.demo.data.SpeedDto
 import zakadabar.demo.data.ship.ShipDto
-import zakadabar.demo.frontend.resources.DemoStrings.Companion.demo
+import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.data.builtin.AccountPublicDto
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.fields.ZkImagesField
@@ -28,7 +28,7 @@ class Form : ZkForm<ShipDto>() {
                 this.launch { port = dto.port?.let { PortDto.read(it) } }
             }.join()
 
-            build(dto.name, demo.ship) {
+            build(dto.name, Strings.ship) {
 
                 + row {
                     + basics() marginRight 8
@@ -41,7 +41,7 @@ class Form : ZkForm<ShipDto>() {
         }
     }
 
-    private fun basics() = section(demo.basics, demo.shipBasicsExplanation) {
+    private fun basics() = section(Strings.basics, Strings.shipBasicsExplanation) {
 
         + dto::id
         + dto::name
@@ -75,7 +75,7 @@ class Form : ZkForm<ShipDto>() {
 
         + ZkRecordSelectFilter(
             this@Form,
-            label = demo.seas, // as this form field is not bound to a DTO field it needs a label
+            label = Strings.seas, // as this form field is not bound to a DTO field it needs a label
             getValue = { seas.firstOrNull { it.id == port?.id }?.id }, // get the selected "sea" from "port" (if we have a port)
             options = suspend { seas.map { it.id to it.name } }, // options for the "sea" select
             onSelected = { value ->
@@ -101,14 +101,14 @@ class Form : ZkForm<ShipDto>() {
         + select
     }
 
-    private fun description() = section(demo.description, demo.shipDescriptionExplanation, fieldGrid = false) {
+    private fun description() = section(Strings.description, Strings.shipDescriptionExplanation, fieldGrid = false) {
         style { flexGrow = "1" }
         autoLabel = false
         + textarea(dto::description)
         autoLabel = true
     }
 
-    private fun images() = section(demo.images, demo.shipImagesExplanation, fieldGrid = false) {
+    private fun images() = section(Strings.images, Strings.shipImagesExplanation, fieldGrid = false) {
         + ZkImagesField(this@Form, dto.id, imageCountMax = 1)
     }
 

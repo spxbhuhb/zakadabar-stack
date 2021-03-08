@@ -4,13 +4,13 @@
 package zakadabar.demo.frontend.pages.speed
 
 import zakadabar.demo.data.SpeedDto
-import zakadabar.demo.frontend.resources.DemoStrings.Companion.demo
+import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class Table : ZkTable<SpeedDto>() {
 
     init {
-        title = demo.speeds
+        title = Strings.speeds
         crud = Speeds
 
         + SpeedDto::id

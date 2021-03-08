@@ -4,14 +4,14 @@
 package zakadabar.demo.frontend.pages.account
 
 import zakadabar.demo.data.AccountPrivateDto
-import zakadabar.demo.frontend.resources.DemoStrings.Companion.demo
+import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.builtin.form.ZkForm
 
 class Form : ZkForm<AccountPrivateDto>() {
 
     override fun onCreate() {
 
-        + titleBar(dto.accountName, demo.account)
+        + titleBar(dto.accountName, Strings.account)
 
         + column {
             + row {
@@ -27,44 +27,44 @@ class Form : ZkForm<AccountPrivateDto>() {
         + buttons()
     }
 
-    private fun basics() = section(demo.basics) {
+    private fun basics() = section(Strings.basics) {
 
         ifNotCreate {
-            + demo.id
+            + Strings.id
             + dto::id
         }
 
-        + demo.accountName
+        + Strings.accountName
         + dto::accountName
 
-        + demo.name
+        + Strings.name
         + dto::fullName
 
     }
 
-    private fun contact() = section(demo.contact) {
+    private fun contact() = section(Strings.contact) {
 
-        + demo.email
+        + Strings.email
         + dto::email
 
-        + demo.phone
+        + Strings.phone
         + dto::phone
 
     }
 
-    private fun workplace() = section(demo.workplace) {
+    private fun workplace() = section(Strings.workplace) {
 
-        + demo.organization
+        + Strings.organization
         + dto::organizationName
 
-        + demo.position
+        + Strings.position
         + dto::position
 
     }
 
-    private fun displayDetails() = section(demo.display) {
+    private fun displayDetails() = section(Strings.display) {
 
-        + demo.displayName
+        + Strings.displayName
         + dto::displayName
 
     }

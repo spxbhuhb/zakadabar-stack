@@ -14,7 +14,7 @@ import zakadabar.stack.frontend.builtin.table.ZkTableTheme
 import zakadabar.stack.frontend.builtin.toast.ZkToastTheme
 import zakadabar.stack.frontend.resources.ZkTheme
 
-class ZkDefaultTheme : ZkTheme {
+open class ZkBuiltinTheme : ZkTheme {
     override var button = ZkButtonTheme()
     override var dock = ZkDockTheme()
     override var font = ZkFontTheme()

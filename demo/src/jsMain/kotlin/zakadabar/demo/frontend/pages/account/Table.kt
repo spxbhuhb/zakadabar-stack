@@ -4,13 +4,13 @@
 package zakadabar.demo.frontend.pages.account
 
 import zakadabar.demo.data.AccountPrivateDto
-import zakadabar.demo.frontend.resources.DemoStrings.Companion.demo
+import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class Table : ZkTable<AccountPrivateDto>() {
 
     init {
-        title = demo.accounts
+        title = Strings.accounts
         crud = Accounts
 
         + AccountPrivateDto::id

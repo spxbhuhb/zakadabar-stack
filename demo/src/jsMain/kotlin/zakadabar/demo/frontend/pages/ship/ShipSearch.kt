@@ -4,7 +4,7 @@
 package zakadabar.demo.frontend.pages.ship
 
 import zakadabar.demo.data.ship.SearchShipsQuery
-import zakadabar.demo.frontend.resources.DemoStrings.Companion.demo
+import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.builtin.ZkPage
 import zakadabar.stack.frontend.builtin.form.ZkFormMode
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
@@ -40,7 +40,7 @@ object ShipSearch : ZkPage() {
         form.mode = ZkFormMode.Query
 
         + column(h100) {
-            + ZkTitleBar(demo.searchShips)
+            + ZkTitleBar(Strings.searchShips)
 
             + div(grow) {
                 buildElement.style.padding = "8px"

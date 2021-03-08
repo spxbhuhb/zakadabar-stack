@@ -15,7 +15,7 @@ import zakadabar.demo.frontend.pages.sea.Seas
 import zakadabar.demo.frontend.pages.ship.ShipSearch
 import zakadabar.demo.frontend.pages.ship.Ships
 import zakadabar.demo.frontend.pages.speed.Speeds
-import zakadabar.demo.frontend.resources.DemoStrings.Companion.demo
+import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.data.builtin.LogoutAction
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
 import zakadabar.stack.frontend.util.io
@@ -29,28 +29,28 @@ object SideBar : ZkSideBar() {
             backgroundSize = "cover"
         }
 
-        + title(demo.applicationName, ::hideMenu) { Home.open() }
+        + title(Strings.applicationName, ::hideMenu) { Home.open() }
 
-        + item(demo.search) { ShipSearch.open() }
+        + item(Strings.search) { ShipSearch.open() }
 
-        + item(demo.ships) { Ships.openAll() }
-        + item(demo.speeds) { Speeds.openAll() }
+        + item(Strings.ships) { Ships.openAll() }
+        + item(Strings.speeds) { Speeds.openAll() }
 
         + seasAndPorts()
 
         // show administration only for logged in users
 
         ifNotAnonymous {
-            + group(demo.administration) {
-                + item(demo.seas) { Seas.openAll() }
-                + item(demo.ports) { Ports.openAll() }
-                + item(demo.accounts) { Accounts.openAll() }
+            + group(Strings.administration) {
+                + item(Strings.seas) { Seas.openAll() }
+                + item(Strings.ports) { Ports.openAll() }
+                + item(Strings.accounts) { Accounts.openAll() }
             }
         }
 
-        + item(demo.login) { Login.open() }
+        + item(Strings.login) { Login.open() }
 
-        + item(demo.logout) {
+        + item(Strings.logout) {
             io {
                 LogoutAction().execute()
                 Home.open()
@@ -69,7 +69,7 @@ object SideBar : ZkSideBar() {
      *
      * This is not perfect as the page needs refresh to update the menu.
      */
-    private fun seasAndPorts() = group(demo.ports) {
+    private fun seasAndPorts() = group(Strings.ports) {
 
         // This part is in a launch, that means ports will be empty until
         // the data arrives. It would be a bit better to show the user that

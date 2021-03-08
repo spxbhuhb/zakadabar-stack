@@ -3,7 +3,7 @@
  */
 package zakadabar.demo.frontend.pages.misc
 
-import zakadabar.demo.frontend.resources.DemoStrings.Companion.demo
+import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.ActionStatusDto
 import zakadabar.stack.data.builtin.LoginAction
@@ -46,11 +46,9 @@ object Login : ZkPage(ZkFullScreenLayout) {
         // before creating the form.
 
         init {
-            dto = default {
-                accountName = "demo"
-                password = "demo"
-            }
+            dto = default()
             mode = ZkFormMode.Action
+            fieldGridColumnTemplate = "minmax(max-content, 100px) 1fr"
             onExecuteResult = ::onExecuteResult
         }
 
@@ -59,7 +57,7 @@ object Login : ZkPage(ZkFullScreenLayout) {
                 width = "min(100%, 300px)"
             }
 
-            + div { + demo.login } marginBottom 20
+            + titleBar(Strings.login) marginBottom 20
 
             + fieldGrid {
                 + dto::accountName
@@ -71,8 +69,8 @@ object Login : ZkPage(ZkFullScreenLayout) {
                     width = "100%"
                     justifyContent = "space-between"
                 }
-                + ZkButton(demo.forgotten) { /* PasswordReset.open() */ }
-                + ZkButton(demo.login) { this@LoginForm.submit() }
+                + ZkButton(Strings.forgotten) { /* PasswordReset.open() */ }
+                + ZkButton(Strings.login) { this@LoginForm.submit() }
             }
         }
     }
@@ -86,7 +84,7 @@ object Login : ZkPage(ZkFullScreenLayout) {
             Home.open()
         }
 
-        toast(error = true) { demo.loginFail }
+        toast(error = true) { Strings.loginFail }
     }
 
 }

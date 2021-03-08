@@ -52,8 +52,8 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
 
     abstract fun setPropValue(value: Pair<VT, String>?)
 
-    private val selectedOption = ZkElement().withCss(ZkFormStyles.selectedOption)
-    private val optionList = ZkElement().withCss(ZkFormStyles.selectOptionList)
+    private val selectedOption = ZkElement().css(ZkFormStyles.selectedOption)
+    private val optionList = ZkElement().css(ZkFormStyles.selectOptionList)
 
     lateinit var items: List<Pair<VT, String>>
 

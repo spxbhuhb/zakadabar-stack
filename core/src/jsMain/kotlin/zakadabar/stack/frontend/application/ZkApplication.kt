@@ -9,7 +9,7 @@ import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.application.ZkApplication.dock
 import zakadabar.stack.frontend.application.ZkApplication.executor
 import zakadabar.stack.frontend.application.ZkApplication.routing
-import zakadabar.stack.frontend.application.ZkApplication.strings
+import zakadabar.stack.frontend.application.ZkApplication.stringStore
 import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.application.ZkApplication.toasts
 import zakadabar.stack.frontend.builtin.dock.ZkDock
@@ -31,7 +31,7 @@ import zakadabar.stack.frontend.resources.ZkTheme
  *
  * @property  theme      The design theme of the application.
  *
- * @property  strings    The string store that contains the strings the application uses.
+ * @property  stringStore    The string store that contains the strings the application uses.
  *
  * @property  dock       A container to show sub-windows such as mail editing in Gmail.
  *
@@ -45,7 +45,7 @@ object ZkApplication {
 
     lateinit var theme: ZkTheme
 
-    lateinit var strings: ZkStringStore
+    lateinit var stringStore: ZkStringStore
 
     lateinit var dock: ZkDock
 

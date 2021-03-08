@@ -7,7 +7,7 @@ import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
 import zakadabar.demo.data.SpeedDto
 import zakadabar.demo.data.ship.SearchShipsQuery
-import zakadabar.demo.frontend.resources.DemoStrings.Companion.demo
+import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.util.io
@@ -27,7 +27,7 @@ class SearchForm(
             // That means we can build the content of the section freely.
 
             + column {
-                + section(demo.filters, fieldGrid = false) {
+                + section(Strings.filters, fieldGrid = false) {
                     style {
                         margin = "0px" // override margin, so we can align it with the table
                     }
@@ -46,7 +46,7 @@ class SearchForm(
                     } marginBottom 12
 
                     + row {
-                        + ZkButton(demo.runQuery) { runQuery(dto) }
+                        + ZkButton(Strings.runQuery) { runQuery(dto) }
                     }
                 }
             }

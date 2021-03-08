@@ -4,7 +4,7 @@
 package zakadabar.demo.frontend.pages.speed
 
 import zakadabar.demo.data.SpeedDto
-import zakadabar.demo.frontend.resources.DemoStrings.Companion.demo
+import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 
@@ -12,10 +12,10 @@ class Form : ZkForm<SpeedDto>() {
 
     override fun onCreate() {
 
-        + titleBar(dto.description, demo.speed)
+        + titleBar(dto.description, Strings.speed)
 
         + column(ZkFormStyles.contentContainer) {
-            + section(demo.basics, demo.speedBasicsExplanation) {
+            + section(Strings.basics, Strings.speedBasicsExplanation) {
 
                 ifNotCreate {
                     + dto::id

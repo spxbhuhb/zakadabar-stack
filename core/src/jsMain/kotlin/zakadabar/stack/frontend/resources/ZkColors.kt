@@ -92,6 +92,12 @@ object ZkColors {
     }
 
     object BlueGray {
+        val c50 = "#ECEFF1"
+        val c100 = "#CFD8DC"
+        val c200 = "#B0BEC5"
+        val c300 = "#90A4AE"
+        val c400 = "#78909C"
+        val c500 = "#607D8B"
         val c600 = "#546E7A"
         val c700 = "#455A64"
         val c800 = "#37474F"

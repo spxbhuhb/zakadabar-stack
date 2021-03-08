@@ -20,8 +20,8 @@ open class ZkDockedElementHeader(
         element.classList.add(ZkDockStyles.header)
 
         this += icon?.withOptCss(ZkDockStyles.headerIcon)
-        this += titleElement withCss ZkDockStyles.text
-        this += toolElement.withCss(ZkDockStyles.extensions)
+        this += titleElement css ZkDockStyles.text
+        this += toolElement.css(ZkDockStyles.extensions)
 
         toolElement += tools
     }

@@ -37,7 +37,7 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
 
     val fieldBottomBorder = document.createElement("div") as HTMLElement
 
-    val errors = ZkElement().withCss(ZkFormStyles.fieldError)
+    val errors = ZkElement().css(ZkFormStyles.fieldError)
 
     override fun onCreate() {
         buildSectionField()
@@ -92,7 +92,7 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
      */
     open fun buildFieldLabel() {
         if (! ::label.isInitialized) {
-            label = ZkApplication.strings.map[propName] ?: propName
+            label = ZkApplication.stringStore.map[propName] ?: propName
         }
 
         + div(ZkFormStyles.fieldLabel) {

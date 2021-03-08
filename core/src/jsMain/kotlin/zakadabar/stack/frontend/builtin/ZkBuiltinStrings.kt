@@ -12,8 +12,8 @@ open class ZkBuiltinStrings : ZkStringStore() {
         private val fallback by lazy { ZkBuiltinStrings() }
 
         val builtin: ZkBuiltinStrings
-            get() = if (ZkApplication.strings is ZkBuiltinStrings) {
-                ZkApplication.strings as ZkBuiltinStrings
+            get() = if (ZkApplication.stringStore is ZkBuiltinStrings) {
+                ZkApplication.stringStore as ZkBuiltinStrings
             } else {
                 fallback
             }

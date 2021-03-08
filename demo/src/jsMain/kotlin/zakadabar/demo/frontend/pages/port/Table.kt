@@ -5,7 +5,7 @@ package zakadabar.demo.frontend.pages.port
 
 import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
-import zakadabar.demo.frontend.resources.DemoStrings.Companion.demo
+import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class Table : ZkTable<PortDto>() {
@@ -13,13 +13,13 @@ class Table : ZkTable<PortDto>() {
     private val seas by preload { SeaDto.allAsMap() }
 
     init {
-        title = demo.ports
+        title = Strings.ports
         crud = Ports
 
         + PortDto::id
 
         + custom {
-            label = demo.sea
+            label = Strings.sea
             render = { + seas[it.sea]?.name }
         }
 

@@ -19,7 +19,7 @@ class ZkDropdownContent(
 
         // kept it this way so we have a clear separation and wrapper around the content
 
-        this withCss dropdownClasses.dropdownContent build {
+        this css dropdownClasses.dropdownContent build {
             + content
         }
 

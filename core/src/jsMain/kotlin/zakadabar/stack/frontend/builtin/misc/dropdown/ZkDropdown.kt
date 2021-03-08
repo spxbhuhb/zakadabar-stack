@@ -29,7 +29,7 @@ class ZkDropdown(
     private val dropdownContent: ZkElement = ZkDropdownContent(content)
 
     override fun onCreate() {
-        this withCss dropdownClasses.dropdown build {
+        this css dropdownClasses.dropdown build {
             + controller
             + dropdownContent
         }

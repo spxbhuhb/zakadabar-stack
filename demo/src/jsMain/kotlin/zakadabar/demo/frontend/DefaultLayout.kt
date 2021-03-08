@@ -14,7 +14,7 @@ object DefaultLayout : ZkAppLayout("default") {
         classList += ZkLayoutStyles.row
 
         + SideBar
-        + content withCss ZkLayoutStyles.layoutContent
+        + content css ZkLayoutStyles.layoutContent
     }
 
 }

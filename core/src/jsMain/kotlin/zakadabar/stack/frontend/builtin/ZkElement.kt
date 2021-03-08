@@ -314,7 +314,7 @@ open class ZkElement(
     /**
      * Adds [className] to the CSS class list of the DOM node.
      */
-    infix fun withCss(className: String): ZkElement {
+    infix fun css(className: String): ZkElement {
         element.classList.add(className)
         return this
     }
@@ -322,7 +322,7 @@ open class ZkElement(
     /**
      * Adds [classNames] to the CSS class list of the DOM node.
      */
-    fun withCss(vararg classNames: String): ZkElement {
+    fun css(vararg classNames: String): ZkElement {
         element.classList.add(*classNames)
         return this
     }
@@ -758,7 +758,7 @@ open class ZkElement(
      *
      * @param  className  Name of the class to append.
      */
-    infix fun Element.withCss(className: String): Element {
+    infix fun Element.css(className: String): Element {
         this.classList += className
         return this
     }
@@ -768,7 +768,7 @@ open class ZkElement(
      *
      * @param  className  Name of the class to append.
      */
-    infix fun HTMLElement.withCss(className: String): HTMLElement {
+    infix fun HTMLElement.css(className: String): HTMLElement {
         this.classList += className
         return this
     }

@@ -25,12 +25,12 @@ open class ZkDockedElement(
     var content: ZkElement? = null,
 ) : ZkElement() {
 
-    protected val minimize = ZkIcons.minimize.complex16(::onMinimize).withCss(ZkDockStyles.extensionIcon)
-    protected val maximize = ZkIcons.maximize.complex16(::onMaximize).withCss(ZkDockStyles.extensionIcon)
-    protected val openInFull = ZkIcons.openInFull.complex16(::onOpenInFullIcon).withCss(ZkDockStyles.extensionIcon)
+    protected val minimize = ZkIcons.minimize.complex16(::onMinimize).css(ZkDockStyles.extensionIcon)
+    protected val maximize = ZkIcons.maximize.complex16(::onMaximize).css(ZkDockStyles.extensionIcon)
+    protected val openInFull = ZkIcons.openInFull.complex16(::onOpenInFullIcon).css(ZkDockStyles.extensionIcon)
     protected val closeFullScreen =
-        ZkIcons.closeFullScreen.complex16(::onCloseFullScreen).withCss(ZkDockStyles.extensionIcon)
-    protected val close = ZkIcons.close.complex16(::onClose).withCss(ZkDockStyles.extensionIcon)
+        ZkIcons.closeFullScreen.complex16(::onCloseFullScreen).css(ZkDockStyles.extensionIcon)
+    protected val close = ZkIcons.close.complex16(::onClose).css(ZkDockStyles.extensionIcon)
 
     protected val header = ZkDockedElementHeader(title, icon, tools = listOf(minimize, maximize, openInFull, closeFullScreen, close))
 
