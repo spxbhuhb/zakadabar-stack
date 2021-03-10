@@ -54,31 +54,33 @@ open class ZkImagesField<T : RecordDto<T>>(
             form.fields += this@ZkImagesField
 
             if (form.mode != ZkFormMode.Create) {
-
                 form.dto.comm().blobMetaRead(dataRecordId).forEach {
                     + ZkImagePreview(it, onDelete = { preview -> onDelete(preview) }) marginRight 10 marginBottom 10
                 }
+            }
 
-                droparea = zke {
+            droparea = zke {
 
-                    + div(ZkFormStyles.imageDropArea) {
-                        + column(ZkFormStyles.imageDropAreaMessage) {
-                            style {
-                                alignItems = "center"
-                            }
-                            + ZkIconButton(ZkIcons.cloudUpload) marginBottom 10
-                            + "drop files here"
+                + div(ZkFormStyles.imageDropArea) {
+                    + column(ZkFormStyles.imageDropAreaMessage) {
+                        style {
+                            alignItems = "center"
+                        }
+                        + ZkIconButton(ZkIcons.cloudUpload) marginBottom 10
+                        + div {
+                            buildElement.style.whiteSpace = "nowrap"
+                            + builtin.dropFilesHere
                         }
                     }
+                }
 
-                    on("drop", ::onDrop)
-                    on("dragover", ::onDragOver)
+                on("drop", ::onDrop)
+                on("dragover", ::onDragOver)
 
-                } marginRight 10 marginBottom 10
+            } marginRight 10 marginBottom 10
 
-                + droparea
-                updateDropArea()
-            }
+            + droparea
+            updateDropArea()
         }
     }
 
@@ -109,7 +111,9 @@ open class ZkImagesField<T : RecordDto<T>>(
 
                     // this is a temporary dto to initialize the Thumbnail
                     val dto = BlobDto(0, 0, "", file.name, file.type, file.size.toLong())
+
                     val thumbnail = ZkImagePreview(dto, BlobCreateState.Starting, onDelete = { preview -> onDelete(preview) })
+                    thumbnail marginRight 10 marginBottom 10
 
                     // when the form is in create mode we don't have a proper record id, use null instead
                     form.dto.comm().blobCreate(

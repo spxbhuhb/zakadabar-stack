@@ -8,15 +8,17 @@ import zakadabar.stack.util.PublicApi
 
 @PublicApi
 fun authorize(executor: Executor, roleName: String) {
-    require(executor.hasRole(roleName))
+    if (! executor.hasRole(roleName)) throw Unauthorized()
 }
 
 @PublicApi
 fun authorize(executor: Executor, vararg roleNames: String) {
-    require(executor.oneOf(roleNames))
+    if (! executor.oneOf(roleNames)) throw Unauthorized()
 }
 
 @PublicApi
 fun authorize(executor: Executor, check: (executor: Executor) -> Boolean) {
-    require(check(executor))
+    if (! check(executor)) throw Unauthorized()
 }
+
+class Unauthorized : Exception()

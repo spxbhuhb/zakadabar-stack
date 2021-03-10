@@ -149,6 +149,9 @@ class Server : CliktCommand() {
             }
 
             install(StatusPages) {
+                exception<Unauthorized> { _ ->
+                    call.respond(HttpStatusCode.Unauthorized)
+                }
                 statusFile(HttpStatusCode.NotFound, filePattern = "index.html")
             }
 

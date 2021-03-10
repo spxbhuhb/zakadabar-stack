@@ -62,4 +62,9 @@ open class ZkBooleanField<T : DtoBase>(
             + checkbox
         }
     }
+
+    override fun mandatoryMark() {
+        // do not show mandatory mark for checkboxes, in most cases it is
+        // useless as they always have a value (true or false)
+    }
 }

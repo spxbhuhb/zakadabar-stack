@@ -17,6 +17,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.Server
+import zakadabar.stack.backend.Unauthorized
 import zakadabar.stack.backend.data.action.ActionBackend
 import zakadabar.stack.backend.data.builtin.BlobTable
 import zakadabar.stack.backend.data.query.QueryBackend
@@ -129,6 +130,13 @@ abstract class RecordBackend<T : RecordDto<T>>(
     }
 
     /**
+     * Called by blob functions to authorize the blob operation.
+     */
+    open fun blobAuthorize(executor: Executor, operation: BlobOperation, recordId: Long?, blobId: Long? = null, dto: BlobDto? = null) {
+        throw Unauthorized()
+    }
+
+    /**
      * Get metadata of blobs that belong to this record.
      *
      * URL : `GET /api/<recordType>/<rid>/blob/<bid>`
@@ -140,6 +148,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      */
     open fun blobMetaRead(executor: Executor, recordId: Long): List<BlobDto> {
         if (blobTable == null) throw NotImplementedError("missing blob table")
+        blobAuthorize(executor, BlobOperation.MetaRead, recordId)
 
         return transaction {
             with(blobTable) {
@@ -163,6 +172,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      */
     open fun blobRead(executor: Executor, recordId: Long?, blobId: Long): Pair<BlobDto, ByteArray> {
         if (blobTable == null) throw NotImplementedError("missing blob table")
+        blobAuthorize(executor, BlobOperation.Read, recordId, blobId)
 
         return transaction {
             blobTable
@@ -185,6 +195,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      */
     open fun blobCreate(executor: Executor, dto: BlobDto, bytes: ByteArray): BlobDto {
         if (blobTable == null || recordTable == null) throw NotImplementedError("missing blob or record table")
+        blobAuthorize(executor, BlobOperation.Create, dto.dataRecord, dto = dto)
 
         return transaction {
             val id = blobTable.insert {
@@ -211,6 +222,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      */
     open fun blobMetaUpdate(executor: Executor, dto: BlobDto): BlobDto {
         if (blobTable == null || recordTable == null) throw NotImplementedError("missing blob or record table")
+        blobAuthorize(executor, BlobOperation.MetaUpdate, recordId = dto.dataRecord, blobId = dto.id, dto = dto)
 
         transaction {
             blobTable.update({ blobTable.id eq dto.id }) {
@@ -236,6 +248,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      */
     open fun blobDelete(executor: Executor, recordId: Long, blobId: Long) {
         if (blobTable == null) throw NotImplementedError("missing blob table")
+        blobAuthorize(executor, BlobOperation.MetaUpdate, recordId, blobId)
 
         transaction {
             blobTable.deleteWhere { blobTable.id eq blobId }

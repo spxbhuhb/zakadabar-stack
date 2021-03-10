@@ -30,6 +30,7 @@ import zakadabar.stack.frontend.builtin.form.structure.ZkFormSection
 import zakadabar.stack.frontend.builtin.form.structure.ZkInvalidFieldList
 import zakadabar.stack.frontend.builtin.toast.ZkToast
 import zakadabar.stack.frontend.builtin.toast.toast
+import zakadabar.stack.frontend.resources.ZkStringStore.Companion.t
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.log
 import zakadabar.stack.frontend.util.plusAssign
@@ -74,7 +75,7 @@ open class ZkForm<T : DtoBase> : ZkElement() {
 
     var schema = lazy { dto.schema() }
 
-    internal val fields = mutableListOf<ZkFieldBase<T, *>>()
+    val fields = mutableListOf<ZkFieldBase<T, *>>()
 
     /**
      * False until the first time the user clicks on the submit button.
@@ -188,8 +189,8 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         label: String? = null,
         sortOptions: Boolean = true,
         options: List<String>
-    ): ZkSelectField<T> {
-        val field = ZkSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
+    ): ZkStringSelectField<T> {
+        val field = ZkStringSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
         label?.let { field.label = label }
         fields += field
         return field
@@ -200,8 +201,20 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         label: String? = null,
         sortOptions: Boolean = true,
         options: List<String>
-    ): ZkOptSelectField<T> {
-        val field = ZkOptSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
+    ): ZkOptStringSelectField<T> {
+        val field = ZkOptStringSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
+        label?.let { field.label = label }
+        fields += field
+        return field
+    }
+
+    inline fun <reified E : Enum<E>> select(
+        kProperty0: KMutableProperty0<String>,
+        label: String? = null,
+        sortOptions: Boolean = true
+    ): ZkStringSelectField<T> {
+        val options = enumValues<E>().map { it.name to t(it.name) } // this is a non-translated to translated mapping
+        val field = ZkStringSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options })
         label?.let { field.label = label }
         fields += field
         return field

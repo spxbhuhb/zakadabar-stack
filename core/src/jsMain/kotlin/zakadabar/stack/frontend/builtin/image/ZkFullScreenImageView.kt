@@ -6,6 +6,7 @@ package zakadabar.stack.frontend.builtin.image
 import kotlinx.browser.document
 import org.w3c.dom.events.KeyboardEvent
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElementState
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
 import zakadabar.stack.frontend.resources.ZkIcons
 
@@ -52,6 +53,9 @@ class ZkFullScreenImageView(
 
     override fun show(): ZkElement {
         document.body?.appendChild(element)
+        if (lifeCycleState != ZkElementState.Created) {
+            onCreate()
+        }
         focus()
         return this
     }

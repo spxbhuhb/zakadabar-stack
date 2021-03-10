@@ -13,5 +13,5 @@ class ZkToastTheme(
     val warningBackground: String = "#ffea00",
     val warningText: String = ZkColors.black,
     val errorBackground: String = "#c41c00",
-    val errorText: String = ZkColors.black
+    val errorText: String = ZkColors.white
 )

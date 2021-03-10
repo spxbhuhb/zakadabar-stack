@@ -19,7 +19,8 @@ import zakadabar.stack.frontend.util.plusAssign
 
 abstract class ZkFieldBase<FT : DtoBase, DT>(
     val form: ZkForm<FT>,
-    val propName: String
+    val propName: String,
+    open var label: String? = null
 ) : ZkElement() {
 
     var readOnly = false
@@ -27,11 +28,6 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
     var touched = false
 
     var valid = true
-
-    /**
-     * Label of the form field. Displayed in front of the field, used in error messages.
-     */
-    open lateinit var label: String
 
     lateinit var hint: String
 
@@ -91,7 +87,7 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
      * as label.
      */
     open fun buildFieldLabel() {
-        if (! ::label.isInitialized) {
+        if (label == null) {
             label = ZkApplication.stringStore.map[propName] ?: propName
         }
 

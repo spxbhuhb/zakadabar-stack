@@ -210,7 +210,7 @@ open class RecordComm<T : RecordDto<T>>(
 
     @PublicApi
     override suspend fun blobMetaUpdate(dto: BlobDto): BlobDto {
-        if (dto.id != 0L) throw RuntimeException("ID of the $dto is 0 ")
+        if (dto.id == 0L) throw RuntimeException("ID of the $dto is 0 ")
 
         val headers = Headers()
 

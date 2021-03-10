@@ -20,9 +20,9 @@ import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-open class ZkSelectField<T : DtoBase>(
+open class ZkOptStringSelectField<T : DtoBase>(
     form: ZkForm<T>,
-    val prop: KMutableProperty0<String>,
+    val prop: KMutableProperty0<String?>,
     sortOptions: Boolean = true,
     options: suspend () -> List<Pair<String, String>>
 ) : ZkSelectBase<T, String>(form, prop.name, sortOptions, options) {
@@ -34,8 +34,11 @@ open class ZkSelectField<T : DtoBase>(
     override fun getPropValue() = prop.get()
 
     override fun setPropValue(value: Pair<String, String>?) {
-        if (value == null) return
-        prop.set(value.first)
+        if (value == null) {
+            prop.set(null)
+        } else {
+            prop.set(value.first)
+        }
         form.validate()
     }
 

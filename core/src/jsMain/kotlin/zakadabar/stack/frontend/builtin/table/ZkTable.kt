@@ -103,7 +103,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
             event as MouseEvent
             event.preventDefault()
 
-            val target = event.target as HTMLElement
+            val target = event.target as? HTMLElement ?: return@on
             val rid = target.getDatasetEntry("rid") ?: return@on
             val action = target.getDatasetEntry("action") ?: return@on
 

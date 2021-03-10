@@ -80,6 +80,7 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
             val entryId = if (entryIdString.isNullOrEmpty()) null else fromString(entryIdString)
             val value = entryId?.let { items.firstOrNull { it.first == entryId } }
 
+            touched = true
             setPropValue(value)
             onSelected(value)
             render(value?.first) // FIXME this re-rendering is a bit too expensive I think

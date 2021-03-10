@@ -29,11 +29,12 @@ import zakadabar.stack.util.PublicApi
 @PublicApi
 open class ZkConstStringField<T : DtoBase>(
     form: ZkForm<T>,
-    override var label: String,
+    label: String,
     val value: String
 ) : ZkFieldBase<T, String>(
     form = form,
-    propName = ""
+    propName = "",
+    label = label
 ) {
     private val input = document.createElement("input") as HTMLInputElement
 
