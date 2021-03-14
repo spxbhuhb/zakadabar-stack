@@ -8,6 +8,7 @@ import zakadabar.stack.frontend.builtin.ZkElement
 
 open class ZkSideBarItem(
     private val text: String,
+    private val capitalize: Boolean = true,
     private val onClick: (() -> Unit)? = null
 ) : ZkElement() {
 
@@ -15,7 +16,7 @@ open class ZkSideBarItem(
         className = ZkSideBarStyles.item
 
         + div {
-            + text
+            + if (capitalize) text.capitalize() else text
         }
 
         on("click") { _ -> onClick?.invoke() }

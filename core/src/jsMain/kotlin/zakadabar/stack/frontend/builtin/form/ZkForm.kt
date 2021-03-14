@@ -22,6 +22,7 @@ import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.frontend.application.ZkApplication.back
 import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.fields.*
@@ -103,6 +104,11 @@ open class ZkForm<T : DtoBase> : ZkElement() {
      * present.
      */
     var invalidFields: ZkInvalidFieldList? = null
+
+    /**
+     * When true the form will go back one page after create is successful.
+     */
+    var goBackAfterCreate: Boolean = true
 
     init {
         classList += ZkFormStyles.outerContainer
@@ -366,7 +372,11 @@ open class ZkForm<T : DtoBase> : ZkElement() {
                         val created = (dto as RecordDto<*>).create() as RecordDto<*>
                         fields.forEach { it.onCreateSuccess(created) }
                         toast { builtin.createSuccess }
-                        resetTouched()
+                        if (goBackAfterCreate) {
+                            back()
+                        } else {
+                            resetTouched()
+                        }
                     }
                     ZkFormMode.Read -> {
                         // nothing to do here

@@ -14,8 +14,8 @@ open class ZkSideBar : ZkElement() {
     open fun title(text: String, onIconClick: (() -> Unit)? = null, onTextClick: (() -> Unit)? = null) =
         ZkSideBarTitle(text, onIconClick, onTextClick)
 
-    open fun item(text: String, onClick: (() -> Unit)? = null) =
-        ZkSideBarItem(text, onClick)
+    open fun item(text: String, capitalize: Boolean = true, onClick: (() -> Unit)? = null) =
+        ZkSideBarItem(text, capitalize, onClick)
 
     open fun group(text: String, builder: ZkElement.() -> Unit) =
         ZkSideBarGroup(text, builder)
