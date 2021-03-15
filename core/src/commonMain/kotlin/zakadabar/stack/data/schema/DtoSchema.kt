@@ -5,6 +5,7 @@ package zakadabar.stack.data.schema
 
 import kotlinx.datetime.Instant
 import zakadabar.stack.util.PublicApi
+import kotlin.js.JsName
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KProperty0
 
@@ -93,8 +94,15 @@ open class DtoSchema() {
         return ruleList
     }
 
+    @JsName("SchemaOptEnumUnaryPlus")
     inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): EnumValidationRuleList<E> {
         val ruleList = EnumValidationRuleList(this, enumValues<E>().first())
+        ruleLists[this] = ruleList
+        return ruleList
+    }
+
+    inline operator fun <reified E : Enum<E>> KMutableProperty0<E?>.unaryPlus(): OptEnumValidationRuleList<E> {
+        val ruleList = OptEnumValidationRuleList(this)
         ruleLists[this] = ruleList
         return ruleList
     }

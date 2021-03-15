@@ -4,6 +4,7 @@
 
 package zakadabar.demo.data.ship
 
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
 import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
