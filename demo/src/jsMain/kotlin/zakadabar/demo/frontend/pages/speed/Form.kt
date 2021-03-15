@@ -3,7 +3,7 @@
  */
 package zakadabar.demo.frontend.pages.speed
 
-import zakadabar.demo.data.SpeedDto
+import zakadabar.demo.data.speed.SpeedDto
 import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles

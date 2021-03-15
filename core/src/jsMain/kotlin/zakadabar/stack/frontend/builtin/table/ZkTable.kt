@@ -148,7 +148,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
                 for ((index, row) in data.withIndex()) {
                     + tr {
-                        buildElement.dataset["rid"] = getRowId(row).toString()
+                        buildElement.dataset["rid"] = getRowId(row)
 
                         for (column in columns) {
                             + td {
@@ -190,10 +190,6 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         return column
     }
 
-    fun actions(): ZkActionsColumn<T> {
-        return ZkActionsColumn(this@ZkTable)
-    }
-
     operator fun ZkActionsColumn<T>.unaryPlus(): ZkActionsColumn<T> {
         columns += this
         return this
@@ -223,9 +219,9 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         return column
     }
 
-    fun custom(builder: ZkCustomColumn<T>.() -> Unit = {}): ZkCustomColumn<T> {
-        val column = ZkCustomColumn(this)
-        column.builder()
+    inline operator fun <reified E : Enum<E>> KProperty1<T, E>.unaryPlus(): ZkEnumColumn<T, E> {
+        val column = ZkEnumColumn(this@ZkTable, this)
+        columns += column
         return column
     }
 
@@ -244,6 +240,16 @@ open class ZkTable<T : DtoBase> : ZkElement() {
     operator fun ZkCustomColumn<T>.unaryPlus(): ZkCustomColumn<T> {
         columns += this
         return this
+    }
+
+    fun custom(builder: ZkCustomColumn<T>.() -> Unit = {}): ZkCustomColumn<T> {
+        val column = ZkCustomColumn(this)
+        column.builder()
+        return column
+    }
+
+    fun actions(): ZkActionsColumn<T> {
+        return ZkActionsColumn(this@ZkTable)
     }
 
 }

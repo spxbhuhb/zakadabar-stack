@@ -6,7 +6,7 @@ package zakadabar.demo.backend.speed
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import zakadabar.demo.data.SpeedDto
+import zakadabar.demo.data.speed.SpeedDto
 
 class SpeedDao(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<SpeedDao>(SpeedTable)

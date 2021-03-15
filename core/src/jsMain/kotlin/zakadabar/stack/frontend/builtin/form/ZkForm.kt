@@ -215,12 +215,12 @@ open class ZkForm<T : DtoBase> : ZkElement() {
     }
 
     inline fun <reified E : Enum<E>> select(
-        kProperty0: KMutableProperty0<String>,
+        kProperty0: KMutableProperty0<E>,
         label: String? = null,
         sortOptions: Boolean = true
-    ): ZkStringSelectField<T> {
-        val options = enumValues<E>().map { it.name to t(it.name) } // this is a non-translated to translated mapping
-        val field = ZkStringSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options })
+    ): ZkEnumSelectField<T, E> {
+        val options = enumValues<E>().map { it to t(it.name) } // this is a non-translated to translated mapping
+        val field = ZkEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
         label?.let { field.label = label }
         fields += field
         return field
@@ -284,6 +284,12 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         val field = ZkBooleanField(this@ZkForm, this)
         + field
         fields += field
+        return field
+    }
+
+    inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): ZkElement {
+        val field = select(this)
+        + field
         return field
     }
 

@@ -4,11 +4,10 @@
 
 package zakadabar.demo.data.ship
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
 import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
-import zakadabar.demo.data.SpeedDto
+import zakadabar.demo.data.speed.SpeedDto
 import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.query.QueryDtoCompanion
 import zakadabar.stack.data.record.RecordId

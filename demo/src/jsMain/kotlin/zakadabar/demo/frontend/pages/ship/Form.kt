@@ -7,8 +7,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
-import zakadabar.demo.data.SpeedDto
 import zakadabar.demo.data.ship.ShipDto
+import zakadabar.demo.data.speed.SpeedDto
 import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.data.builtin.AccountPublicDto
 import zakadabar.stack.frontend.builtin.form.ZkForm

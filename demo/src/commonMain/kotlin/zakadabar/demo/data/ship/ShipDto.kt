@@ -3,8 +3,8 @@
  */
 package zakadabar.demo.data.ship
 
-import kotlinx.serialization.Serializable
 import zakadabar.demo.data.*
+import zakadabar.demo.data.speed.SpeedDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId

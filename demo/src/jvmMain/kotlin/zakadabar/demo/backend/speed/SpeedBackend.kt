@@ -8,7 +8,7 @@ package zakadabar.demo.backend.speed
 import io.ktor.routing.*
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.demo.data.SpeedDto
+import zakadabar.demo.data.speed.SpeedDto
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.util.Executor
 

@@ -93,6 +93,12 @@ open class DtoSchema() {
         return ruleList
     }
 
+    inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): EnumValidationRuleList<E> {
+        val ruleList = EnumValidationRuleList(this, enumValues<E>().first())
+        ruleLists[this] = ruleList
+        return ruleList
+    }
+
     @PublicApi
     fun validate(): ValidityReport {
         val report = ValidityReport()
