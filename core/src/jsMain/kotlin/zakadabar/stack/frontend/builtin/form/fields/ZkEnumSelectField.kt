@@ -34,12 +34,11 @@ open class ZkEnumSelectField<T : DtoBase, E : Enum<E>>(
 
     override fun setPropValue(value: Pair<E, String>?) {
         if (value == null) {
-            valid = false
-            return
+            invalidInput = true
+        } else {
+            invalidInput = false
+            prop.set(value.first)
         }
-
-        prop.set(value.first)
-
         form.validate()
     }
 

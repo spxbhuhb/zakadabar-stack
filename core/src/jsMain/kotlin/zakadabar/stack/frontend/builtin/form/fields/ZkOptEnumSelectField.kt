@@ -17,30 +17,23 @@
 package zakadabar.stack.frontend.builtin.form.fields
 
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-open class ZkRecordSelectField<T : DtoBase>(
+open class ZkOptEnumSelectField<T : DtoBase, E : Enum<E>>(
     form: ZkForm<T>,
-    val prop: KMutableProperty0<RecordId<*>>,
+    val prop: KMutableProperty0<E?>,
+    val toEnum: (String) -> E,
     sortOptions: Boolean = true,
-    options: suspend () -> List<Pair<RecordId<*>, String>>
-) : ZkSelectBase<T, RecordId<*>>(form, prop.name, sortOptions, options) {
+    options: suspend () -> List<Pair<E, String>>
+) : ZkSelectBase<T, E>(form, prop.name, sortOptions, options) {
 
-    override fun fromString(string: String): RecordId<*> {
-        return string.toLong()
-    }
+    override fun fromString(string: String) = toEnum(string)
 
     override fun getPropValue() = prop.get()
 
-    override fun setPropValue(value: Pair<RecordId<*>, String>?) {
-        if (value == null) {
-            invalidInput = true
-        } else {
-            invalidInput = false
-            prop.set(value.first)
-        }
+    override fun setPropValue(value: Pair<E, String>?) {
+        prop.set(value?.first)
         form.validate()
     }
 

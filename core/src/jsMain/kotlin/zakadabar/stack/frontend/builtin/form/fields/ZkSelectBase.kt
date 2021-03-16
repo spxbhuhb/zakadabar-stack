@@ -76,6 +76,7 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
             val target = event.target
             if (target !is HTMLElement) return@on
 
+            println("onclick")
             val entryIdString = target.dataset[DATASET_KEY]
             val entryId = if (entryIdString.isNullOrEmpty()) null else fromString(entryIdString)
             val value = entryId?.let { items.firstOrNull { it.first == entryId } }
@@ -84,7 +85,6 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
             setPropValue(value)
             onSelected(value)
             render(value?.first) // FIXME this re-rendering is a bit too expensive I think
-
             optionList.hide()
         }
 

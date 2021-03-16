@@ -226,6 +226,19 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         return field
     }
 
+    @JsName("FormOptEnumSelect")
+    inline fun <reified E : Enum<E>> select(
+        kProperty0: KMutableProperty0<E?>,
+        label: String? = null,
+        sortOptions: Boolean = true
+    ): ZkOptEnumSelectField<T, E> {
+        val options = enumValues<E>().map { it to t(it.name) } // this is a non-translated to translated mapping
+        val field = ZkOptEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
+        label?.let { field.label = label }
+        fields += field
+        return field
+    }
+
     fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkElement.() -> Unit = { }): ZkTextAreaField<T> {
         val field = ZkTextAreaField(this@ZkForm, kProperty0)
         fields += field
@@ -288,6 +301,13 @@ open class ZkForm<T : DtoBase> : ZkElement() {
     }
 
     inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): ZkElement {
+        val field = select(this)
+        + field
+        return field
+    }
+
+    @JsName("FormOptEnumUnaryPlus")
+    inline operator fun <reified E : Enum<E>> KMutableProperty0<E?>.unaryPlus(): ZkElement {
         val field = select(this)
         + field
         return field

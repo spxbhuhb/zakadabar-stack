@@ -52,12 +52,14 @@ open class ZkDoubleField<T : DtoBase>(
             touched = true
 
             val iv = input.value.toDoubleOrNull()
+
             if (iv == null) {
-                updateValid(false)
-                return@on
+                invalidInput = true
+            } else {
+                invalidInput = false
+                prop.set(iv)
             }
 
-            prop.set(iv)
             form.validate()
         }
 

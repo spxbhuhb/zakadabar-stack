@@ -27,7 +27,20 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
 
     var touched = false
 
-    var valid = true
+    /**
+     * True when the input value is invalid itself, without the schema. This
+     * is the case for mandatory enumerations for example when the dto has
+     * to store a value as it cannot be null. However, if the user selects
+     * "not selected", the input is invalid, but the schema validation won't
+     * show it up.
+     */
+    var invalidInput = false
+
+    var valid: Boolean = true
+        set(value) {
+            field = value
+            setValidClass()
+        }
 
     lateinit var hint: String
 
@@ -121,17 +134,16 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
 
     open fun onValidated(report: ValidityReport) {
         val fails = report.fails[propName]
-        if (fails == null) {
-            updateValid(true)
+        if (fails == null && ! invalidInput) {
+            valid = true
             errors.hide()
         } else {
-            updateValid(false)
+            valid = false
             showErrors()
         }
     }
 
-    open fun updateValid(valid: Boolean) {
-        this.valid = valid
+    open fun setValidClass() {
         if (valid) {
             element.removeInvalid()
         } else {

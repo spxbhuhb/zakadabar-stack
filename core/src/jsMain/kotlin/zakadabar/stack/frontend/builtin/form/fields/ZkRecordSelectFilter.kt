@@ -17,6 +17,7 @@ open class ZkRecordSelectFilter<T : DtoBase>(
 ) : ZkSelectBase<T, RecordId<*>>(form, "", sortOptions, options, onSelected) {
 
     init {
+        // FIXME this is not right, but haven't had time to fix yet
         if (label != null) this.label = label
     }
 
