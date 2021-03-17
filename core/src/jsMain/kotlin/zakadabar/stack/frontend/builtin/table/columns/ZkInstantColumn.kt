@@ -21,8 +21,8 @@ open class ZkInstantColumn<T : DtoBase>(
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         with(builder) {
-            // FIXME proper formatting, Kotlin datatime supports only ISO for now
-            + prop.get(row).toLocalDateTime(TimeZone.currentSystemDefault()).toString()
+            val s = prop.get(row).toLocalDateTime(TimeZone.currentSystemDefault()).toString()
+            + "${s.substring(0, 10)} ${s.substring(11, 5)}"
         }
     }
 
