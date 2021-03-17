@@ -344,7 +344,7 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         }
 
         if (submit && invalid.isNotEmpty()) {
-            invalidToast = toast(warning = true, hideAfter = 3000) { builtin.invalidFieldsToast }
+            onInvalidSubmit()
         }
 
         return report.fails.isEmpty()
@@ -403,7 +403,6 @@ open class ZkForm<T : DtoBase> : ZkElement() {
                     ZkFormMode.Create -> {
                         val created = (dto as RecordDto<*>).create() as RecordDto<*>
                         fields.forEach { it.onCreateSuccess(created) }
-                        toast { builtin.createSuccess }
                         if (goBackAfterCreate) {
                             back()
                         } else {
@@ -415,18 +414,15 @@ open class ZkForm<T : DtoBase> : ZkElement() {
                     }
                     ZkFormMode.Update -> {
                         (dto as RecordDto<*>).update()
-                        toast { builtin.updateSuccess }
                         resetTouched()
                     }
                     ZkFormMode.Delete -> {
                         (dto as RecordDto<*>).delete()
-                        toast { builtin.deleteSuccess }
                         resetTouched()
                     }
                     ZkFormMode.Action -> {
                         val result = (dto as ActionDto<*>).execute()
                         onExecuteResult?.let { it(result) }
-                        toast { builtin.actionSuccess }
                         resetTouched()
                     }
                     ZkFormMode.Query -> {
@@ -434,16 +430,12 @@ open class ZkForm<T : DtoBase> : ZkElement() {
                         // TODO do something here with the result
                     }
                 }
+
+                onSubmitSuccess()
+
             } catch (ex: Exception) {
                 log(ex)
-                when (mode) {
-                    ZkFormMode.Create -> toast(error = true) { builtin.createFail }
-                    ZkFormMode.Read -> Unit
-                    ZkFormMode.Update -> toast(error = true) { builtin.updateFail }
-                    ZkFormMode.Delete -> toast(error = true) { builtin.deleteFail }
-                    ZkFormMode.Action -> toast(error = true) { builtin.actionFail }
-                    ZkFormMode.Query -> toast(error = true) { builtin.queryFail }
-                }
+                onSubmitError(ex)
             } finally {
                 submitButton?.show()
                 progressIndicator?.hide()
@@ -455,6 +447,47 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         submitTouched = false
         fields.forEach {
             it.touched = false
+        }
+    }
+
+    /**
+     * Called when the user tries to submit an invalid form.
+     *
+     * Default implementation shows a toast with a message.
+     */
+    open fun onInvalidSubmit() {
+        invalidToast = toast(warning = true, hideAfter = 3000) { builtin.invalidFieldsToast }
+    }
+
+    /**
+     * Called when submitting the form returns with a success.
+     *
+     * Default implementation shows a toast.
+     */
+    open fun onSubmitSuccess() {
+        when (mode) {
+            ZkFormMode.Create -> toast { builtin.createSuccess }
+            ZkFormMode.Read -> Unit
+            ZkFormMode.Update -> toast { builtin.updateSuccess }
+            ZkFormMode.Delete -> toast { builtin.deleteSuccess }
+            ZkFormMode.Action -> toast { builtin.actionSuccess }
+            ZkFormMode.Query -> Unit
+        }
+    }
+
+    /**
+     * Called when submitting the form returns with an error.
+     *
+     * Default implementation shows a toast.
+     */
+    open fun onSubmitError(ex: Exception) {
+        when (mode) {
+            ZkFormMode.Create -> toast(error = true) { builtin.createFail }
+            ZkFormMode.Read -> Unit
+            ZkFormMode.Update -> toast(error = true) { builtin.updateFail }
+            ZkFormMode.Delete -> toast(error = true) { builtin.deleteFail }
+            ZkFormMode.Action -> toast(error = true) { builtin.actionFail }
+            ZkFormMode.Query -> toast(error = true) { builtin.queryFail }
         }
     }
 
