@@ -99,6 +99,9 @@ open class ZkForm<T : DtoBase> : ZkElement() {
      */
     var submitButton: ZkElement? = null
 
+    /** An element that is show when when the form is submitting. */
+    var progressIndicator: ZkElement? = null
+
     /**
      * Container to display list of the invalid fields. Filled automatically when
      * present.
@@ -393,6 +396,9 @@ open class ZkForm<T : DtoBase> : ZkElement() {
 
         io {
             try {
+                submitButton?.hide()
+                progressIndicator?.show()
+
                 when (mode) {
                     ZkFormMode.Create -> {
                         val created = (dto as RecordDto<*>).create() as RecordDto<*>
@@ -438,6 +444,9 @@ open class ZkForm<T : DtoBase> : ZkElement() {
                     ZkFormMode.Action -> toast(error = true) { builtin.actionFail }
                     ZkFormMode.Query -> toast(error = true) { builtin.queryFail }
                 }
+            } finally {
+                submitButton?.show()
+                progressIndicator?.hide()
             }
         }
     }

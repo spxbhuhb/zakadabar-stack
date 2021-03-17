@@ -12,6 +12,7 @@ import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormMode
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.builtin.misc.processing.ZkProcessing
 
 open class ZkFormButtons<T : DtoBase>(
     private val form: ZkForm<T>
@@ -23,23 +24,27 @@ open class ZkFormButtons<T : DtoBase>(
                 + row(ZkFormStyles.buttons) {
                     + backButton()
                     + submitButton(builtin.save) { form.submit() }
+                    + progressIndicator()
                 }
 
             ZkFormMode.Read -> {
                 + row(ZkFormStyles.buttons) {
                     + backButton()
                     form.openUpdate?.let { + submitButton(builtin.edit) { it(form.dto) } }
+                    + progressIndicator()
                 }
             }
             ZkFormMode.Update ->
                 + row(ZkFormStyles.buttons) {
                     + backButton()
                     + submitButton(builtin.save) { form.submit() }
+                    + progressIndicator()
                 }
             ZkFormMode.Delete ->
                 + row(ZkFormStyles.buttons) {
                     + backButton()
                     + submitButton(builtin.delete) { form.submit() }
+                    + progressIndicator()
                 }
             ZkFormMode.Action -> {
             }
@@ -63,6 +68,10 @@ open class ZkFormButtons<T : DtoBase>(
         } marginRight 10
 
     open fun submitButton(text: String, onClick: (() -> Unit)? = null) =
-        ZkButton(text, onClick).also { form.submitButton = it }
+        ZkButton(text, onClick).also { form.submitButton = it } marginRight 10
 
+    open fun progressIndicator() = ZkProcessing().also {
+        form.progressIndicator = it
+        it.hide()
+    }
 }

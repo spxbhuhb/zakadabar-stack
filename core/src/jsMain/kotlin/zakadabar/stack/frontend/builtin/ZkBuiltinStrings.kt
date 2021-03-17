@@ -19,6 +19,7 @@ open class ZkBuiltinStrings : ZkStringStore() {
             }
     }
 
+    open val processing by "... processing ..."
     open val dropFilesHere by "Drop files here."
     open val programError by "Error during program execution, please notify the support about this."
     open val pleaseTypeHere by "Please type a value here."
