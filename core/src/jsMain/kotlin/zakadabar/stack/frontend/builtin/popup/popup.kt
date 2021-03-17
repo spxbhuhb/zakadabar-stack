@@ -20,7 +20,7 @@ fun alignPopup(popupElement: HTMLElement, anchorElement: HTMLElement, minHeight:
     val spaceAbove = anchorRect.top
     val maxHeight = popupRect.height
 
-    console.log(minHeight, anchorRect, popupRect, spaceBelow, spaceAbove, maxHeight)
+    // console.log(minHeight, anchorRect, popupRect, spaceBelow, spaceAbove, maxHeight)
 
     when {
         spaceBelow > minHeight -> {

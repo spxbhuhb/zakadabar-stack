@@ -16,6 +16,7 @@ class DemoStrings : ZkBuiltinStrings() {
 
     // general stuff
 
+    val builtin by "Built-in"
     val searchShips by "Search Ships"
     val runQuery by "Run Query"
     val filters by "Filters"

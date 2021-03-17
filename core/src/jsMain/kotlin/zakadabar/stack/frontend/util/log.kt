@@ -21,3 +21,7 @@ fun log(ex: dynamic): String {
         ex.toString()
     }
 }
+
+fun dumpStackTrace() {
+    js("console.trace()")
+}

@@ -5,6 +5,7 @@
 package zakadabar.demo.frontend
 
 import zakadabar.demo.frontend.pages.account.Accounts
+import zakadabar.demo.frontend.pages.builtin.ArgPage
 import zakadabar.demo.frontend.pages.misc.Home
 import zakadabar.demo.frontend.pages.misc.Login
 import zakadabar.demo.frontend.pages.port.Ports
@@ -35,7 +36,7 @@ object Routing : ZkAppRouting(DefaultLayout, Home) {
      * You can add anything else that implements [ZkTarget].
      *
      * Remember that when you do not specify the layout directly
-     * [AppRouting] uses the default layout passed as the first
+     * [ZkAppRouting] uses the default layout passed as the first
      * parameter of the constructor.
      */
     init {
@@ -46,6 +47,8 @@ object Routing : ZkAppRouting(DefaultLayout, Home) {
         + Ports
         + Login
         + Accounts
+
+        + ArgPage
         + Home
     }
 

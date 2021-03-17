@@ -9,14 +9,16 @@ import org.w3c.dom.url.URLSearchParams
  * Stores the current navigation state of the browser window.
  *
  * @property  viewName      The name of the view in the URL, selects the Element to use.
- * @property  recordId  Id of the record when specified in the URL.
- * @property  query     The query object when specified in the URL.
+ * @property  recordId      Id of the record when specified in the URL.
+ * @property  query         The query object when specified in the URL.
+ * @property  args          The args object when specified in the URL.
  */
 class ZkNavState(val urlPath: String, val urlQuery: String) {
 
     val viewName: String
     val recordId: Long
     val query: Any?
+    val args: String?
 
     init {
         val segments = urlPath.trim('/').split("/")
@@ -28,6 +30,7 @@ class ZkNavState(val urlPath: String, val urlQuery: String) {
             viewName = ""
             recordId = 0
             query = null
+            args = null
 
         } else {
 
@@ -42,6 +45,8 @@ class ZkNavState(val urlPath: String, val urlQuery: String) {
 //                val dtoFrontend = Application.dtoFrontends[dataType] ?: throw IllegalStateException("missing dto frontend for $dataType")
 //                dtoFrontend.decodeQuery(dataType, it)
             }
+
+            args = searchParams.get("args")
         }
     }
 

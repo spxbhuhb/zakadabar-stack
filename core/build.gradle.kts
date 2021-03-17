@@ -18,7 +18,7 @@ version = "2021.3.11-SNAPSHOT"
 val ktorVersion = "1.4.0"
 val coroutinesVersion = "1.3.9"
 val serializationVersion = "1.0.0-RC"
-val datetimeVersion = "0.1.0"
+val datetimeVersion = "0.1.1"
 val cliktVersion = "2.8.0"
 
 // jvm

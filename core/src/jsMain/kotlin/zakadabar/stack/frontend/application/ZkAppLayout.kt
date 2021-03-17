@@ -61,9 +61,10 @@ abstract class ZkAppLayout(val name: String) : ZkElement() {
      * @param  state  The navigation state to resume.
      */
     open fun resume(state: ZkNavState, target: ZkElement) {
+        content -= activeElement
+
         onResume()
 
-        content -= activeElement
         activeElement = target
         content += activeElement
 
