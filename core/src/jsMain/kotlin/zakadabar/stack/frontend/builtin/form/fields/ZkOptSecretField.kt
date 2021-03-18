@@ -14,36 +14,30 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema
+package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.util.PublicApi
+import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.builtin.Secret
+import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-class OptEnumValidationRuleList<E : Enum<E>>(
-    val kProperty: KMutableProperty0<E?>
-) : ValidationRuleList<E> {
+open class ZkOptSecretField<T : DtoBase>(
+    form: ZkForm<T>,
+    prop: KMutableProperty0<Secret?>
+) : ZkStringBase<T, Secret?>(
+    form = form,
+    prop = prop
+) {
 
-    var defaultValue: E? = null
+    override fun getPropValue() = prop.get()?.value ?: ""
 
-    private val rules = mutableListOf<ValidationRule<E?>>()
-
-    override fun validate(report: ValidityReport) {
-        val value = kProperty.get()
-        for (rule in rules) {
-            rule.validate(value, report)
-        }
+    override fun setPropValue(value: String) {
+        prop.set(Secret(input.value))
     }
 
-    @PublicApi
-    infix fun default(value: E): OptEnumValidationRuleList<E> {
-        defaultValue = value
-        return this
+    override fun buildFieldValue() {
+        input.type = "password"
+        super.buildFieldValue()
     }
-
-    override fun setDefault() {
-        kProperty.set(defaultValue)
-    }
-
-    override fun isOptional() = true
 
 }

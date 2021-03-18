@@ -16,8 +16,10 @@
  */
 package zakadabar.stack.frontend.builtin.form
 
+import kotlinx.datetime.Instant
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.action.ActionDto
+import zakadabar.stack.data.builtin.Secret
 import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
@@ -154,74 +156,49 @@ open class ZkForm<T : DtoBase> : ZkElement() {
 
     open fun invalidFieldList() = ZkInvalidFieldList().also { invalidFields = it }.hide()
 
-    fun section(title: String? = null, summary: String? = null, fieldGrid: Boolean = true, builder: ZkElement.() -> Unit): ZkFormSection {
+    fun section(title: String? = null, summary: String? = null, fieldGrid: Boolean = true, css: String? = null, builder: ZkElement.() -> Unit): ZkFormSection {
         return if (fieldGrid) {
-            ZkFormSection(title, summary) { + fieldGrid { builder() } }
+            ZkFormSection(title, summary, css) { + fieldGrid { builder() } }
         } else {
-            ZkFormSection(title, summary, builder)
+            ZkFormSection(title, summary, css, builder)
         }
     }
 
     @Deprecated("use simple section instead", ReplaceWith("section(title, summary, builder)"))
-    fun fieldGridSection(title: String, summary: String = "", builder: ZkElement.() -> Unit) =
-        section(title, summary, true, builder)
+    fun fieldGridSection(title: String, summary: String = "", css: String? = null, builder: ZkElement.() -> Unit) =
+        section(title, summary, true, css, builder)
 
-    fun <T : RecordDto<T>> List<T>.by(field: (it: T) -> String) =
-        map { it.id to field(it) }.sortedBy { it.second }
+    fun <T : RecordDto<T>> List<T>.by(field: (it: T) -> String) = map { it.id to field(it) }.sortedBy { it.second }
 
-    fun select(
-        kProperty0: KMutableProperty0<RecordId<*>>,
-        sortOptions: Boolean = true,
-        label: String? = null,
-        options: suspend () -> List<Pair<RecordId<*>, String>>
-    ): ZkRecordSelectField<T> {
+    fun select(kProperty0: KMutableProperty0<RecordId<*>>, sortOptions: Boolean = true, label: String? = null, options: suspend () -> List<Pair<RecordId<*>, String>>): ZkRecordSelectField<T> {
         val field = ZkRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
         label?.let { field.label = label }
         fields += field
         return field
     }
 
-    fun select(
-        kProperty0: KMutableProperty0<RecordId<*>?>,
-        sortOptions: Boolean = true,
-        label: String? = null,
-        options: suspend () -> List<Pair<RecordId<*>, String>>
-    ): ZkOptRecordSelectField<T> {
+    fun select(kProperty0: KMutableProperty0<RecordId<*>?>, sortOptions: Boolean = true, label: String? = null, options: suspend () -> List<Pair<RecordId<*>, String>>): ZkOptRecordSelectField<T> {
         val field = ZkOptRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
         label?.let { field.label = label }
         fields += field
         return field
     }
 
-    fun select(
-        kProperty0: KMutableProperty0<String>,
-        label: String? = null,
-        sortOptions: Boolean = true,
-        options: List<String>
-    ): ZkStringSelectField<T> {
+    fun select(kProperty0: KMutableProperty0<String>, label: String? = null, sortOptions: Boolean = true, options: List<String>): ZkStringSelectField<T> {
         val field = ZkStringSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
         label?.let { field.label = label }
         fields += field
         return field
     }
 
-    fun select(
-        kProperty0: KMutableProperty0<String?>,
-        label: String? = null,
-        sortOptions: Boolean = true,
-        options: List<String>
-    ): ZkOptStringSelectField<T> {
+    fun select(kProperty0: KMutableProperty0<String?>, label: String? = null, sortOptions: Boolean = true, options: List<String>): ZkOptStringSelectField<T> {
         val field = ZkOptStringSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
         label?.let { field.label = label }
         fields += field
         return field
     }
 
-    inline fun <reified E : Enum<E>> select(
-        kProperty0: KMutableProperty0<E>,
-        label: String? = null,
-        sortOptions: Boolean = true
-    ): ZkEnumSelectField<T, E> {
+    inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E>, label: String? = null, sortOptions: Boolean = true): ZkEnumSelectField<T, E> {
         val options = enumValues<E>().map { it to t(it.name) } // this is a non-translated to translated mapping
         val field = ZkEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
         label?.let { field.label = label }
@@ -230,11 +207,7 @@ open class ZkForm<T : DtoBase> : ZkElement() {
     }
 
     @JsName("FormOptEnumSelect")
-    inline fun <reified E : Enum<E>> select(
-        kProperty0: KMutableProperty0<E?>,
-        label: String? = null,
-        sortOptions: Boolean = true
-    ): ZkOptEnumSelectField<T, E> {
+    inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E?>, label: String? = null, sortOptions: Boolean = true): ZkOptEnumSelectField<T, E> {
         val options = enumValues<E>().map { it to t(it.name) } // this is a non-translated to translated mapping
         val field = ZkOptEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
         label?.let { field.label = label }
@@ -244,6 +217,21 @@ open class ZkForm<T : DtoBase> : ZkElement() {
 
     fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkElement.() -> Unit = { }): ZkTextAreaField<T> {
         val field = ZkTextAreaField(this@ZkForm, kProperty0)
+        fields += field
+        field.builder()
+        return field
+    }
+
+    fun textarea(kProperty0: KMutableProperty0<String?>, builder: ZkElement.() -> Unit = { }): ZkOptTextAreaField<T> {
+        val field = ZkOptTextAreaField(this@ZkForm, kProperty0)
+        fields += field
+        field.builder()
+        return field
+    }
+
+    fun opt(kProperty0: KMutableProperty0<Boolean?>, trueText: String, falseText: String, builder: ZkOptBooleanField<T>.() -> Unit = { }): ZkOptBooleanField<T> {
+        val options = listOf(true to trueText, false to falseText)
+        val field = ZkOptBooleanField(this@ZkForm, kProperty0) { options }
         fields += field
         field.builder()
         return field
@@ -303,6 +291,34 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         return field
     }
 
+    operator fun KMutableProperty0<Instant>.unaryPlus(): ZkElement {
+        val field = ZkInstantField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<Instant?>.unaryPlus(): ZkElement {
+        val field = ZkOptInstantField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<Secret>.unaryPlus(): ZkElement {
+        val field = ZkSecretField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<Secret?>.unaryPlus(): ZkElement {
+        val field = ZkOptSecretField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
     inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): ZkElement {
         val field = select(this)
         + field
@@ -326,6 +342,14 @@ open class ZkForm<T : DtoBase> : ZkElement() {
      * @return true if the DTO is valid, false otherwise
      */
     fun validate(submit: Boolean = false): Boolean {
+        if (submit) {
+            // submit marks all fields touched to show all invalid fields for the user
+            fields.forEach {
+                it.touched = true
+            }
+            submitTouched = true
+        }
+
         val report = schema.value.validate()
 
         fields.forEach {
@@ -372,7 +396,6 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         return invalid.distinct()
     }
 
-
     /**
      * Callback to finalize the DTO before submit starts. Called before validation.
      * Default implementation does nothing.
@@ -384,13 +407,6 @@ open class ZkForm<T : DtoBase> : ZkElement() {
     fun submit() {
 
         onSubmitStart()
-
-        // submit marks all fields touched to show all invalid fields for the user
-        fields.forEach {
-            it.touched = true
-        }
-
-        submitTouched = true
 
         if (! validate(true)) return
 

@@ -167,7 +167,7 @@ object ZkFormStyles : ZkCssStyleSheet<ZkFormStyles>(ZkApplication.theme) {
         }
     }
 
-    val recordId by cssClass {
+    val disabledString by cssClass {
         fieldDefault()
         color = "#333"
         backgroundColor = theme.form.disabledBackground

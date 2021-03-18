@@ -16,6 +16,10 @@ class DemoStrings : ZkBuiltinStrings() {
 
     // general stuff
 
+    val mandatoryFields by "Mandatory Fields"
+    val optionalFields by "Optional Fields"
+    val validate by "Validate"
+    val formFields by "Form Fields"
     val builtin by "Built-in"
     val searchShips by "Search Ships"
     val runQuery by "Run Query"

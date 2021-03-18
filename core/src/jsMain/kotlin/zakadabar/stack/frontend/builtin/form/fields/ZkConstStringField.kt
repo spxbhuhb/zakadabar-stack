@@ -39,7 +39,7 @@ open class ZkConstStringField<T : DtoBase>(
     private val input = document.createElement("input") as HTMLInputElement
 
     override fun buildFieldValue() {
-        input.className = ZkFormStyles.recordId
+        input.className = ZkFormStyles.disabledString
         input.readOnly = true
         input.value = value
         input.tabIndex = - 1

@@ -16,22 +16,48 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
+import kotlinx.browser.document
+import org.w3c.dom.HTMLTextAreaElement
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptStringField<T : DtoBase>(
+open class ZkOptTextAreaField<T : DtoBase>(
     form: ZkForm<T>,
-    prop: KMutableProperty0<String?>
-) : ZkStringBase<T, String?>(
+    private val prop: KMutableProperty0<String?>
+) : ZkFieldBase<T, String>(
     form = form,
-    prop = prop
+    propName = prop.name
 ) {
 
-    override fun getPropValue() = prop.get() ?: ""
+    private val area = document.createElement("textarea") as HTMLTextAreaElement
 
-    override fun setPropValue(value: String) {
-        prop.set(if (value.isBlank()) null else value)
+    @Suppress("DuplicatedCode") // i don't want to mix this with string field
+    override fun buildFieldValue() {
+        buildElement.style.flexGrow = "1"
+        buildElement.style.display = "flex"
+
+        area.className = ZkFormStyles.textarea
+        area.style.flexGrow = "1"
+        area.style.resize = "none"
+
+        if (readOnly) area.readOnly = true
+
+        area.value = prop.get() ?: ""
+
+        on(area, "input") {
+            prop.set(area.value)
+            form.validate()
+        }
+
+        focusEvents(area)
+
+        + area
+    }
+
+    override fun focusValue() {
+        area.focus()
     }
 
 }

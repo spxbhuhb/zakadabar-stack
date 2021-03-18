@@ -33,6 +33,7 @@ open class ZkTextAreaField<T : DtoBase>(
 
     private val area = document.createElement("textarea") as HTMLTextAreaElement
 
+    @Suppress("DuplicatedCode") // i don't want to mix this with string field
     override fun buildFieldValue() {
         buildElement.style.flexGrow = "1"
         buildElement.style.display = "flex"
@@ -45,10 +46,12 @@ open class ZkTextAreaField<T : DtoBase>(
 
         area.value = prop.get()
 
-        on(area, "input") { _ ->
+        on(area, "input") {
             prop.set(area.value)
             form.validate()
         }
+
+        focusEvents(area)
 
         + area
     }

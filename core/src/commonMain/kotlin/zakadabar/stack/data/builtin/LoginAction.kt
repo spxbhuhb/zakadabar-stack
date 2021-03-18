@@ -12,7 +12,7 @@ import zakadabar.stack.data.schema.DtoSchema
 data class LoginAction(
 
     var accountName: String,
-    var password: String
+    var password: Secret
 
 ) : ActionDto<ActionStatusDto> {
 

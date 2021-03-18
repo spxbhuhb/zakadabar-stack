@@ -14,36 +14,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema
+package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.util.PublicApi
+import kotlinx.datetime.Instant
+import zakadabar.stack.data.DtoBase
+import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.resources.ZkFormatters.formatInstant
 import kotlin.reflect.KMutableProperty0
 
-class OptEnumValidationRuleList<E : Enum<E>>(
-    val kProperty: KMutableProperty0<E?>
-) : ValidationRuleList<E> {
+open class ZkInstantField<T : DtoBase>(
+    form: ZkForm<T>,
+    prop: KMutableProperty0<Instant>
+) : ZkStringBase<T, Instant>(
+    form = form,
+    prop = prop,
+    readOnly = true
+) {
 
-    var defaultValue: E? = null
-
-    private val rules = mutableListOf<ValidationRule<E?>>()
-
-    override fun validate(report: ValidityReport) {
-        val value = kProperty.get()
-        for (rule in rules) {
-            rule.validate(value, report)
-        }
+    override fun getPropValue(): String {
+        return formatInstant(prop.get())
     }
 
-    @PublicApi
-    infix fun default(value: E): OptEnumValidationRuleList<E> {
-        defaultValue = value
-        return this
+    override fun setPropValue(value: String) {
+        throw NotImplementedError("you should not change instants from the UI, read https://github.com/Kotlin/kotlinx-datetime#type-use-cases")
     }
-
-    override fun setDefault() {
-        kProperty.set(defaultValue)
-    }
-
-    override fun isOptional() = true
 
 }

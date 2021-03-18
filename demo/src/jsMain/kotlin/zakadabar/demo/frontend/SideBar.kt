@@ -9,6 +9,7 @@ import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
 import zakadabar.demo.frontend.pages.account.Accounts
 import zakadabar.demo.frontend.pages.builtin.ArgPage
+import zakadabar.demo.frontend.pages.builtin.FormFields
 import zakadabar.demo.frontend.pages.misc.Home
 import zakadabar.demo.frontend.pages.misc.Login
 import zakadabar.demo.frontend.pages.port.Ports
@@ -42,6 +43,7 @@ object SideBar : ZkSideBar() {
 
         + group(Strings.builtin) {
             + item("ZkArgPage") { ArgPage.open(ArgPage.Args(fourRandomInt()[0], "hello")) }
+            + item("ZkForm") { FormFields.open() }
         }
 
         // show administration only for logged in users

@@ -16,22 +16,52 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
+import kotlinx.browser.document
+import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptStringField<T : DtoBase>(
+abstract class ZkStringBase<T : DtoBase, VT>(
     form: ZkForm<T>,
-    prop: KMutableProperty0<String?>
-) : ZkStringBase<T, String?>(
+    protected val prop: KMutableProperty0<VT>,
+    readOnly: Boolean = false
+) : ZkFieldBase<T, VT>(
     form = form,
-    prop = prop
+    propName = prop.name,
+    readOnly = readOnly
 ) {
 
-    override fun getPropValue() = prop.get() ?: ""
+    protected val input = document.createElement("input") as HTMLInputElement
 
-    override fun setPropValue(value: String) {
-        prop.set(if (value.isBlank()) null else value)
+    abstract fun getPropValue(): String
+
+    abstract fun setPropValue(value: String)
+
+    override fun buildFieldValue() {
+
+        if (readOnly) {
+            input.readOnly = true
+            input.className = ZkFormStyles.disabledString
+        } else {
+            input.className = ZkFormStyles.text
+        }
+
+        input.value = getPropValue()
+
+        on(input, "input") {
+            setPropValue(input.value)
+            form.validate()
+        }
+
+        focusEvents(input)
+
+        + input
+    }
+
+    override fun focusValue() {
+        input.focus()
     }
 
 }

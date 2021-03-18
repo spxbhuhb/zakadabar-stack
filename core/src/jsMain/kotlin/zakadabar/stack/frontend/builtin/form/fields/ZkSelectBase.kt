@@ -52,6 +52,7 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
 
     abstract fun setPropValue(value: Pair<VT, String>?)
 
+    private lateinit var container: HTMLElement
     private val selectedOption = ZkElement().css(ZkFormStyles.selectedOption)
     private val optionList = ZkElement().css(ZkFormStyles.selectOptionList)
 
@@ -63,22 +64,17 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
             render(getPropValue())
         }
 
-        selectedOption.on("click") { _ ->
-            optionList.toggle()
-            if (optionList.isShown()) {
-                alignPopup(optionList.element, selectedOption.element, ZkFormStyles.theme.form.rowHeight * 5)
-            }
-        }
+        selectedOption.on("click") { toggleOptions() }
 
-        optionList.on("click") { event ->
-            event as MouseEvent
+        optionList.on("click") {
+            it as MouseEvent
 
-            val target = event.target
+            val target = it.target
             if (target !is HTMLElement) return@on
 
             val entryIdString = target.dataset[DATASET_KEY]
             val entryId = if (entryIdString.isNullOrEmpty()) null else fromString(entryIdString)
-            val value = entryId?.let { items.firstOrNull { it.first == entryId } }
+            val value = entryId?.let { items.firstOrNull { item -> item.first == entryId } }
 
             touched = true
             setPropValue(value)
@@ -87,36 +83,36 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
             optionList.hide()
         }
 
-        val container = div(ZkFormStyles.selectContainer) {
+        container = div(ZkFormStyles.selectContainer) {
             + selectedOption
             + optionList.hide()
         }
 
         container.tabIndex = 0
 
-        on(container, "focus") { _ ->
+        on(container, "focus") {
             fieldBottomBorder.classList += ZkFormStyles.onFieldHover
         }
 
-        on(container, "blur") { _ ->
+        on(container, "blur") {
             fieldBottomBorder.classList -= ZkFormStyles.onFieldHover
             optionList.hide()
         }
 
-        on(container, "keydown") { event ->
-            event as KeyboardEvent
+        on(container, "keydown") {
+            it as KeyboardEvent
 
             // FIXME add keyboard navigation to the list itself
 
-            when (event.key) {
+            when (it.key) {
                 "Enter", "ArrowDown" -> {
-                    event.preventDefault()
+                    it.preventDefault()
                     if (optionList.isHidden()) {
                         optionList.show()
                     }
                 }
                 "Escape" -> {
-                    event.preventDefault()
+                    it.preventDefault()
                     optionList.hide()
                 }
             }
@@ -145,5 +141,15 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
         }
 
         optionList.innerHTML = s
+    }
+
+    override fun focusValue() = toggleOptions()
+
+    private fun toggleOptions() {
+        optionList.toggle()
+        if (optionList.isShown()) {
+            alignPopup(optionList.element, selectedOption.element, ZkFormStyles.theme.form.rowHeight * 5)
+            container.focus()
+        }
     }
 }

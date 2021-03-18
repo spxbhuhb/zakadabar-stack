@@ -20,10 +20,9 @@ import zakadabar.stack.frontend.util.plusAssign
 abstract class ZkFieldBase<FT : DtoBase, DT>(
     val form: ZkForm<FT>,
     val propName: String,
-    open var label: String? = null
+    open var label: String? = null,
+    open var readOnly: Boolean = false
 ) : ZkElement() {
-
-    var readOnly = false
 
     var touched = false
 
@@ -46,7 +45,7 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
 
     val fieldBottomBorder = document.createElement("div") as HTMLElement
 
-    val errors = ZkElement().css(ZkFormStyles.fieldError)
+    private val errors = ZkElement().css(ZkFormStyles.fieldError)
 
     override fun onCreate() {
         buildSectionField()
@@ -70,11 +69,11 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
         fieldBottomBorder.className = ZkFormStyles.fieldBottomBorder
         + fieldBottomBorder
 
-        on("mouseenter") { _ ->
+        on("mouseenter") {
             fieldBottomBorder.classList += ZkFormStyles.onFieldHover
         }
 
-        on("mouseleave") { _ ->
+        on("mouseleave") {
             fieldBottomBorder.classList -= ZkFormStyles.onFieldHover
         }
 
@@ -93,10 +92,10 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
      * If the [label] property is initialized uses its value.
      *
      * When it is not initialized and form.autoLabel is true,
-     * looks up the label in [ZkApplication.stringMap] and adds
+     * looks up the label in [ZkApplication.stringStore] and adds
      * it if found.
      *
-     * When not in [ZkApplication.stringMap] it adds [propName]
+     * When not in [ZkApplication.stringStore] it adds [propName]
      * as label.
      */
     open fun buildFieldLabel() {
@@ -107,13 +106,25 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
         + div(ZkFormStyles.fieldLabel) {
             + label
             mandatoryMark()
-            on(buildElement, "click") { _ -> focusValue() }
+            on(buildElement, "click") { focusValue() }
         }
     }
 
     open fun mandatoryMark() {
         if (! form.schema.value.isOptional(propName)) {
             + div(ZkFormStyles.mandatoryMark) { ! "&nbsp;*" }
+        }
+    }
+
+    open fun focusEvents(element: HTMLElement) {
+        on(element, "focus") {
+            fieldBottomBorder.classList += ZkFormStyles.onFieldHover
+            touched = true
+        }
+
+        on(element, "blur") {
+            fieldBottomBorder.classList -= ZkFormStyles.onFieldHover
+            form.validate()
         }
     }
 

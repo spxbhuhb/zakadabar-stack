@@ -18,8 +18,8 @@ data class PasswordChangeDto(
 
     override var id: RecordId<PasswordChangeDto>,
     var accountId: Long,
-    var oldPassword: String,
-    var newPassword: String
+    var oldPassword: Secret,
+    var newPassword: Secret
 
 ) : RecordDto<PasswordChangeDto> {
 

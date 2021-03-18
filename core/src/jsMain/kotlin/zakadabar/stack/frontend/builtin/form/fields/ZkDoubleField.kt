@@ -21,8 +21,6 @@ import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
-import zakadabar.stack.frontend.util.minusAssign
-import zakadabar.stack.frontend.util.plusAssign
 import kotlin.reflect.KMutableProperty0
 
 open class ZkDoubleField<T : DtoBase>(
@@ -48,7 +46,7 @@ open class ZkDoubleField<T : DtoBase>(
             input.value = prop.get().toString()
         }
 
-        on(input, "input") { _ ->
+        on(input, "input") {
             touched = true
 
             val iv = input.value.toDoubleOrNull()
@@ -63,17 +61,12 @@ open class ZkDoubleField<T : DtoBase>(
             form.validate()
         }
 
-        on(input, "focus") { _ ->
-            fieldBottomBorder.classList += ZkFormStyles.onFieldHover
-            touched = true
-        }
-
-        on(input, "blur") { _ ->
-            fieldBottomBorder.classList -= ZkFormStyles.onFieldHover
-            form.validate()
-        }
+        focusEvents(input)
 
         + input
     }
 
+    override fun focusValue() {
+        input.focus()
+    }
 }
