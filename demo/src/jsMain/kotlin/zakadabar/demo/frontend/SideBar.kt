@@ -3,6 +3,7 @@
  */
 package zakadabar.demo.frontend
 
+import kotlinx.browser.window
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import zakadabar.demo.data.PortDto
@@ -56,12 +57,16 @@ object SideBar : ZkSideBar() {
             }
         }
 
-        + item(Strings.login) { Login.open() }
+        ifAnonymous {
+            + item(Strings.login) { Login.open() }
+        }
 
-        + item(Strings.logout) {
-            io {
-                LogoutAction().execute()
-                Home.open()
+        ifNotAnonymous {
+            + item(Strings.logout) {
+                io {
+                    LogoutAction().execute()
+                    window.location.href = window.location.href // to refresh page
+                }
             }
         }
     }

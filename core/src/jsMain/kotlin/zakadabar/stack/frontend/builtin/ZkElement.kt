@@ -839,7 +839,7 @@ open class ZkElement(
      */
     @PublicApi
     fun ifAnonymous(builder: ZkElement.() -> Unit) {
-        if (ZkApplication.executor.anonymous) return
+        if (! ZkApplication.executor.anonymous) return
         this.builder()
     }
 

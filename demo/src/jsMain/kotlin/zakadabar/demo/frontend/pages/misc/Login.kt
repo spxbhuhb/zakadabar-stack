@@ -3,10 +3,12 @@
  */
 package zakadabar.demo.frontend.pages.misc
 
+import kotlinx.browser.window
 import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.ActionStatusDto
 import zakadabar.stack.data.builtin.LoginAction
+import zakadabar.stack.data.builtin.Secret
 import zakadabar.stack.data.builtin.SessionDto
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkExecutor
@@ -46,7 +48,10 @@ object Login : ZkPage(ZkFullScreenLayout) {
         // before creating the form.
 
         init {
-            dto = default()
+            dto = default {
+                accountName = "demo"
+                password = Secret("demo")
+            }
             mode = ZkFormMode.Action
             fieldGridColumnTemplate = "minmax(max-content, 100px) 1fr"
             onExecuteResult = ::onExecuteResult
@@ -69,22 +74,35 @@ object Login : ZkPage(ZkFullScreenLayout) {
                     width = "100%"
                     justifyContent = "space-between"
                 }
-                + ZkButton(Strings.forgotten) { /* PasswordReset.open() */ }
                 + ZkButton(Strings.login) { this@LoginForm.submit() }
             }
+        }
+
+        override fun onInvalidSubmit() {
+            invalidToast = toast(warning = true) { Strings.loginFail }
+        }
+
+        override fun onSubmitSuccess() {}
+
+        override fun onSubmitError(ex: Exception) {
+            invalidToast = toast(error = true) { Strings.loginFail }
         }
     }
 
     fun onExecuteResult(resultDto: DtoBase) {
         resultDto as ActionStatusDto
 
-        if (resultDto.success) io {
+        if (! resultDto.success) {
+            toast(error = true) { Strings.loginFail }
+            return
+        }
+
+        io {
             val session = SessionDto.read(0L)
             ZkApplication.executor = ZkExecutor(session.account, session.anonymous, session.roles)
             Home.open()
+            window.location.href = window.location.href // to refresh page
         }
-
-        toast(error = true) { Strings.loginFail }
     }
 
 }

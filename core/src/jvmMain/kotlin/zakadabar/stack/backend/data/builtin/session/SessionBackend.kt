@@ -58,7 +58,7 @@ object SessionBackend : RecordBackend<SessionDto>() {
 
     private fun action(call: ApplicationCall, executor: Executor, action: LoginAction): ActionStatusDto {
 
-        val result = authenticate(executor.accountId, action.accountName, action.password)
+        val result = authenticate(executor.accountId, action.accountName, action.password.value)
 
         if (result != null) {
             val (account, principalId) = result

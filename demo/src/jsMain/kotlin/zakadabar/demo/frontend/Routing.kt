@@ -60,7 +60,7 @@ object Routing : ZkAppRouting(DefaultLayout, Home) {
      * This example redirects the anonymous user to the login page.
      */
     override fun onNavStateChange(state: ZkNavState) {
-        if (! ZkApplication.executor.anonymous) {
+        if (ZkApplication.executor.anonymous) {
             super.onNavStateChange(ZkNavState(Login.viewName, ""))
         } else {
             super.onNavStateChange(state)

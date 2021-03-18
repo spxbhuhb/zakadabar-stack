@@ -69,7 +69,7 @@ class DemoStrings : ZkBuiltinStrings() {
     val speed by "Speed"
     val speedBasicsExplanation by "Data all speeds have."
 
-    val logout by "Logout."
+    val logout by "Logout"
     val loginFail by "Login failed."
 
 }
