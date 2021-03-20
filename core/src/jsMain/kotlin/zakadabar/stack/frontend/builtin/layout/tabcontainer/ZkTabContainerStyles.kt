@@ -4,6 +4,7 @@
 package zakadabar.stack.frontend.builtin.layout.tabcontainer
 
 import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
 object ZkTabContainerStyles : ZkCssStyleSheet<ZkTabContainerStyles>(ZkApplication.theme) {
@@ -35,11 +36,20 @@ object ZkTabContainerStyles : ZkCssStyleSheet<ZkTabContainerStyles>(ZkApplicatio
         flexDirection = "column"
         justifyContent = "flex-end"
         whiteSpace = "nowrap"
+        borderRight = "1px solid ${ZkColors.Gray.c300}"
+        borderTop = "1px solid ${ZkColors.Gray.c300}"
+
+        on(":first-child") {
+            borderLeft = "1px solid ${ZkColors.Gray.c300}"
+        }
     }
 
     val activeLabel by cssClass {
         backgroundColor = theme.tabContainer.activeBackground
         color = theme.tabContainer.activeForeground
+        borderLeft = "1px solid ${theme.tabContainer.activeBackground}"
+        borderRight = borderLeft
+        borderTop = borderLeft
     }
 
     val content by cssClass {
