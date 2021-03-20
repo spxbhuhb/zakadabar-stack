@@ -23,37 +23,35 @@ import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import kotlin.reflect.KMutableProperty0
 
-abstract class ZkStringBase<T : DtoBase, VT>(
+open class ZkIntField<T : DtoBase>(
     form: ZkForm<T>,
-    protected val prop: KMutableProperty0<VT>,
-    readOnly: Boolean = false,
-    label: String? = null
-) : ZkFieldBase<T, VT>(
+    private val prop: KMutableProperty0<Int>
+) : ZkFieldBase<T, Int>(
     form = form,
-    propName = prop.name,
-    readOnly = readOnly,
-    label = label
+    propName = prop.name
 ) {
 
-    protected val input = document.createElement("input") as HTMLInputElement
-
-    abstract fun getPropValue(): String
-
-    abstract fun setPropValue(value: String)
+    private val input = document.createElement("input") as HTMLInputElement
 
     override fun buildFieldValue() {
+        input.className = ZkFormStyles.text
 
-        if (readOnly) {
-            input.readOnly = true
-            input.className = ZkFormStyles.disabledString
-        } else {
-            input.className = ZkFormStyles.text
-        }
+        if (readOnly) input.readOnly = true
 
-        input.value = getPropValue()
+        input.value = prop.get().toString()
 
         on(input, "input") {
-            setPropValue(input.value)
+            touched = true
+
+            val iv = input.value.toIntOrNull()
+
+            if (iv == null) {
+                invalidInput = true
+            } else {
+                invalidInput = false
+                prop.set(iv)
+            }
+
             form.validate()
         }
 
@@ -65,5 +63,4 @@ abstract class ZkStringBase<T : DtoBase, VT>(
     override fun focusValue() {
         input.focus()
     }
-
 }

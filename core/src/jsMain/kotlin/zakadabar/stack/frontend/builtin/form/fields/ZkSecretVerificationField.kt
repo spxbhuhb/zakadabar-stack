@@ -16,54 +16,34 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import kotlinx.browser.document
-import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.builtin.Secret
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.resources.ZkStringStore.Companion.t
 import kotlin.reflect.KMutableProperty0
 
-abstract class ZkStringBase<T : DtoBase, VT>(
+open class ZkSecretVerificationField<T : DtoBase>(
     form: ZkForm<T>,
-    protected val prop: KMutableProperty0<VT>,
-    readOnly: Boolean = false,
-    label: String? = null
-) : ZkFieldBase<T, VT>(
+    prop: KMutableProperty0<Secret>,
+    label: String = t(prop.name + "Verification")
+) : ZkStringBase<T, Secret>(
     form = form,
-    propName = prop.name,
-    readOnly = readOnly,
+    prop = prop,
     label = label
 ) {
 
-    protected val input = document.createElement("input") as HTMLInputElement
+    var verificationValue = ""
 
-    abstract fun getPropValue(): String
+    override fun getPropValue() = verificationValue
 
-    abstract fun setPropValue(value: String)
-
-    override fun buildFieldValue() {
-
-        if (readOnly) {
-            input.readOnly = true
-            input.className = ZkFormStyles.disabledString
-        } else {
-            input.className = ZkFormStyles.text
-        }
-
-        input.value = getPropValue()
-
-        on(input, "input") {
-            setPropValue(input.value)
-            form.validate()
-        }
-
-        focusEvents(input)
-
-        + input
+    override fun setPropValue(value: String) {
+        verificationValue = input.value
+        valid = (prop.get().value == verificationValue)
     }
 
-    override fun focusValue() {
-        input.focus()
+    override fun buildFieldValue() {
+        input.type = "password"
+        super.buildFieldValue()
     }
 
 }

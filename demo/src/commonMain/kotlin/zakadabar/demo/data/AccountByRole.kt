@@ -16,9 +16,11 @@ data class AccountByRole(
 
     override suspend fun execute() = comm().query(this, serializer(), ListSerializer(AccountPublicDto.serializer()))
 
-    companion object : QueryDtoCompanion<AccountPublicDto, AccountPublicDto>()
+    companion object : QueryDtoCompanion<AccountPublicDto>()
 
     init {
-        AccountPublicDto.queries.value[AccountByRole::class.simpleName!!] = Companion
+        with(AccountPublicDto.Companion) {
+            + AccountByRole
+        }
     }
 }

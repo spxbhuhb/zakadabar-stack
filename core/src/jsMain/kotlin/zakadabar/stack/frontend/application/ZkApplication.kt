@@ -16,6 +16,7 @@ import zakadabar.stack.frontend.builtin.dock.ZkDock
 import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
 import zakadabar.stack.frontend.resources.ZkStringStore
 import zakadabar.stack.frontend.resources.ZkTheme
+import zakadabar.stack.util.PublicApi
 
 /**
  * The application that runs in the browser window. This object contains data
@@ -90,4 +91,6 @@ object ZkApplication {
 
     fun back() = window.history.back()
 
+    @PublicApi
+    fun hasRole(roleName: String) = roleName in executor.roles
 }

@@ -26,6 +26,7 @@ data class BuiltinDto(
     var booleanValue: Boolean,
     var doubleValue: Double,
     var enumSelectValue: ExampleEnum,
+    var intValue: Int,
     @Serializable(InstantAsStringSerializer::class)
     var instantValue: Instant,
     var optBooleanValue: Boolean?,
@@ -57,6 +58,7 @@ data class BuiltinDto(
         + ::booleanValue
         + ::doubleValue
         + ::enumSelectValue
+        + ::intValue
         + ::instantValue
         + ::optBooleanValue
         + ::optEnumSelectValue

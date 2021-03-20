@@ -6,6 +6,7 @@
 package zakadabar.stack.backend.data.builtin.rolegrant
 
 import io.ktor.routing.*
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
@@ -14,6 +15,7 @@ import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
 import zakadabar.stack.backend.data.builtin.role.RoleDao
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.data.builtin.RoleGrantDto
+import zakadabar.stack.data.builtin.RoleGrantsByPrincipal
 import zakadabar.stack.util.Executor
 
 object RoleGrantBackend : RecordBackend<RoleGrantDto>() {
@@ -26,6 +28,17 @@ object RoleGrantBackend : RecordBackend<RoleGrantDto>() {
 
     override fun onInstallRoutes(route: Route) {
         route.crud()
+        route.query(RoleGrantsByPrincipal::class, ::query)
+    }
+
+    private fun query(executor: Executor, query: RoleGrantsByPrincipal) = transaction {
+
+        authorize(executor, StackRoles.securityOfficer)
+
+        RoleGrantTable
+            .select { RoleGrantTable.principal eq query.principal }
+            .map(RoleGrantTable::toDto)
+
     }
 
     override fun all(executor: Executor) = transaction {

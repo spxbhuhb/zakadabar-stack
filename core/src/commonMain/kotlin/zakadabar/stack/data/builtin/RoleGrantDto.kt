@@ -20,6 +20,7 @@ data class RoleGrantDto(
 
     companion object : RecordDtoCompanion<RoleGrantDto>({
         recordType = "role-grant"
+        + RoleGrantsByPrincipal
     })
 
     override fun getRecordType() = recordType

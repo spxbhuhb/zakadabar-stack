@@ -27,6 +27,6 @@ data class SearchShipsQuery(
 
     override suspend fun execute() = comm().query(this, serializer(), ListSerializer(SearchShipsResult.serializer()))
 
-    companion object : QueryDtoCompanion<ShipDto, SearchShipsResult>()
+    companion object : QueryDtoCompanion<SearchShipsResult>()
 
 }

@@ -30,7 +30,7 @@ abstract class RecordDtoCompanion<T : RecordDto<T>>() {
         }
 
     open val queries = lazy {
-        mutableMapOf<String, QueryDtoCompanion<*, *>>()
+        mutableMapOf<String, QueryDtoCompanion<*>>()
     }
 
     open val actions = lazy {
@@ -45,7 +45,7 @@ abstract class RecordDtoCompanion<T : RecordDto<T>>() {
 
     suspend fun allAsMap() = comm.all().associateBy { it.id }
 
-    operator fun QueryDtoCompanion<T, *>.unaryPlus() {
+    operator fun QueryDtoCompanion<*>.unaryPlus() {
         val name = this::class.simpleName ?: return
         queries.value[name] = this
         comm = { this@RecordDtoCompanion.comm }

@@ -4,9 +4,8 @@
 package zakadabar.stack.data.query
 
 import kotlinx.serialization.KSerializer
-import zakadabar.stack.data.record.RecordDto
 
-abstract class QueryDtoCompanion<COMM : RecordDto<COMM>, RESULT : Any> {
+abstract class QueryDtoCompanion<RESULT : Any> {
 
     abstract fun serializer(): KSerializer<RESULT>
 

@@ -10,6 +10,7 @@ import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormMode
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.builtin.form.fields.ZkSecretVerificationField
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.plusAssign
@@ -42,8 +43,10 @@ object FormFields : ZkPage() {
                             + ::booleanValue
                             + ::doubleValue
                             + ::enumSelectValue
+                            + ::intValue
                             + ::instantValue
                             + ::secretValue
+                            + ZkSecretVerificationField(this@Form, ::secretValue)
                             + select(::recordSelectValue) { emptyList() }
                             + ::stringValue
                             + select(::stringSelectValue, options = listOf("option1", "option2", "option3"))

@@ -4,9 +4,8 @@
 package zakadabar.stack.data.builtin
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordDtoCompanion
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.action.ActionDto
+import zakadabar.stack.data.action.ActionDtoCompanion
 import zakadabar.stack.data.schema.DtoSchema
 
 /**
@@ -14,26 +13,22 @@ import zakadabar.stack.data.schema.DtoSchema
  * password of other accounts.
  */
 @Serializable
-data class PasswordChangeDto(
+data class PasswordChangeAction(
 
-    override var id: RecordId<PasswordChangeDto>,
     var accountId: Long,
     var oldPassword: Secret,
     var newPassword: Secret
 
-) : RecordDto<PasswordChangeDto> {
+) : ActionDto<ActionStatusDto> {
 
-    companion object : RecordDtoCompanion<PasswordChangeDto>({
-        recordType = "password-change"
-    })
+    companion object : ActionDtoCompanion<PasswordChangeAction>()
 
-    override fun getRecordType() = recordType
-    override fun comm() = comm
+    override suspend fun execute() = comm().action(this, serializer(), ActionStatusDto.serializer())
 
     override fun schema() = DtoSchema {
-        + ::id
+        + ::accountId
         + ::oldPassword
-        + ::newPassword
+        + ::newPassword blank false min 8
     }
 
 }

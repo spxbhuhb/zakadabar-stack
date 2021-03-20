@@ -30,14 +30,8 @@ data class PrincipalDto(
     var validated: Boolean,
     var locked: Boolean,
     var expired: Boolean,
-
-    // TODO remove when solved: https://github.com/Kotlin/kotlinx.serialization/issues/1265
-    @Serializable(with = OptInstantAsStringSerializer::class)
     var lastLoginSuccess: Instant?,
     var loginSuccessCount: Int,
-
-    // TODO remove when solved: https://github.com/Kotlin/kotlinx.serialization/issues/1265
-    @Serializable(with = OptInstantAsStringSerializer::class)
     var lastLoginFail: Instant?,
     var loginFailCount: Int
 
@@ -45,6 +39,7 @@ data class PrincipalDto(
 
     companion object : RecordDtoCompanion<PrincipalDto>({
         recordType = "principal"
+        + PasswordChangeAction
     })
 
     override fun getRecordType() = recordType
