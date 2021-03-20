@@ -7,13 +7,17 @@ import zakadabar.stack.frontend.application.ZkAppLayout
 import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkNavState
+import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
+import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
+import zakadabar.stack.frontend.util.plusAssign
 
 /**
  * Provides common functions used in most page implementations.
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
 open class ZkPage(
-    val layout: ZkAppLayout? = null
+    val layout: ZkAppLayout? = null,
+    val title: String? = null
 ) : ZkElement(), ZkAppRouting.ZkTarget {
 
     companion object {
@@ -50,6 +54,12 @@ open class ZkPage(
     override fun route(routing: ZkAppRouting, state: ZkNavState): ZkElement {
         if (layout != null) routing.nextLayout = layout
         return this
+    }
+
+    override fun onCreate() {
+        classList += ZkLayoutStyles.grow
+        classList += ZkLayoutStyles.defaultBackground
+        if (title != null) + ZkTitleBar(title)
     }
 
 }

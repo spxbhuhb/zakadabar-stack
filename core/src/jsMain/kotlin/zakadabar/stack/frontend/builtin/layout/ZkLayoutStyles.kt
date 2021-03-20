@@ -34,6 +34,10 @@ object ZkLayoutStyles : ZkCssStyleSheet<ZkLayoutStyles>(ZkApplication.theme) {
         flexGrow = 1
     }
 
+    val defaultBackground by cssClass {
+        backgroundColor = theme.layout.defaultBackground
+    }
+
     val grid by cssClass {
         display = "grid"
         borderCollapse = "collapse"
@@ -47,6 +51,10 @@ object ZkLayoutStyles : ZkCssStyleSheet<ZkLayoutStyles>(ZkApplication.theme) {
         width = "100vw"
         height = "100vh"
         overflow = "hidden"
+    }
+
+    val p1 by cssClass {
+        padding = 8
     }
 
     val layoutContent by cssClass {

@@ -8,4 +8,5 @@ import zakadabar.stack.frontend.resources.ZkColors
 class ZkLayoutTheme(
     val sliderColor: String = ZkColors.LightBlue.a700,
     val sliderHoverColor: String = ZkColors.LightBlue.a400,
+    val defaultBackground: String = ZkColors.Gray.c100
 )

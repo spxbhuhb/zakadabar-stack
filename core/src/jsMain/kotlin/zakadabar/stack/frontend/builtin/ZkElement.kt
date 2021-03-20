@@ -582,6 +582,21 @@ open class ZkElement(
     }
 
     /**
+     * Creates "div" [HTMLElement] and executes the builder function on it.
+     *
+     * @param  classNames  CSS class names to add. Optional.
+     * @param  build       The builder function to build the content of the div. Optional.
+     */
+    open fun div(vararg classNames: String, build: ZkElement.() -> Unit = { }): HTMLElement {
+        val e = document.createElement("div") as HTMLElement
+        for (className in classNames) {
+            e.classList.add(className)
+        }
+        runBuild(e, null, build)
+        return e
+    }
+
+    /**
      * Creates a "div" [HTMLElement] with ZkClasses.grid added and executes the builder on it.
      *
      * @param  className  Additional CSS class. Optional.

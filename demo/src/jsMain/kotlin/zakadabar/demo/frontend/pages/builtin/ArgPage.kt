@@ -5,6 +5,7 @@ package zakadabar.demo.frontend.pages.builtin
 
 import kotlinx.serialization.Serializable
 import zakadabar.stack.frontend.builtin.ZkArgPage
+import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.p1
 import zakadabar.stack.frontend.util.marginRight
 
 /**
@@ -28,7 +29,10 @@ import zakadabar.stack.frontend.util.marginRight
  * from onResume. Please not that clear destroys children, so you can't use
  * them later.
  */
-object ArgPage : ZkArgPage<ArgPage.Args>(Args.serializer()) {
+object ArgPage : ZkArgPage<ArgPage.Args>(
+    Args.serializer(),
+    title = "ZkArgPage"
+) {
 
     @Serializable
     class Args(
@@ -39,7 +43,8 @@ object ArgPage : ZkArgPage<ArgPage.Args>(Args.serializer()) {
     override fun onResume() {
         super.onResume()
         val args = this.args ?: return
-        + row {
+
+        + row(p1) {
             + div { + "a1 = ${args.a1}" } marginRight 20
             + div { + "a2 = ${args.a2}" }
         }

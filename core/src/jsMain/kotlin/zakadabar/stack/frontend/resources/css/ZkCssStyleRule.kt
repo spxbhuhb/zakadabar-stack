@@ -278,6 +278,12 @@ class ZkCssStyleRule(
             styles["fill"] = value
         }
 
+    var flex
+        get() = styles["flex"]
+        set(value) {
+            styles["flex"] = value
+        }
+
     var flexDirection
         get() = styles["flex-direction"]
         set(value) {

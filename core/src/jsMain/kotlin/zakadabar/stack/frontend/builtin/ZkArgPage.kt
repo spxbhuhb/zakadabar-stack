@@ -9,8 +9,12 @@ import zakadabar.stack.frontend.application.ZkAppLayout
 import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkNavState
+import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
+import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
+import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
 import zakadabar.stack.frontend.util.encodeURIComponent
 import zakadabar.stack.frontend.util.log
+import zakadabar.stack.frontend.util.plusAssign
 
 /**
  * Provides common functions used in most page implementations which
@@ -19,7 +23,8 @@ import zakadabar.stack.frontend.util.log
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
 open class ZkArgPage<T>(
     val serializer: KSerializer<T>,
-    val layout: ZkAppLayout? = null
+    val layout: ZkAppLayout? = null,
+    val title: String? = null
 ) : ZkElement(), ZkAppRouting.ZkTarget {
 
     var args: T? = null
@@ -42,6 +47,13 @@ open class ZkArgPage<T>(
         if (layout != null) routing.nextLayout = layout
 
         return this
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        classList += grow
+        classList += ZkLayoutStyles.defaultBackground
+        if (title != null) + ZkTitleBar(title)
     }
 
 }

@@ -9,6 +9,7 @@ import zakadabar.stack.frontend.builtin.dock.ZkDockTheme
 import zakadabar.stack.frontend.builtin.form.ZkFormTheme
 import zakadabar.stack.frontend.builtin.icon.ZkIconTheme
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutTheme
+import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainerTheme
 import zakadabar.stack.frontend.builtin.misc.ZkFontTheme
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarTheme
 import zakadabar.stack.frontend.builtin.table.ZkTableTheme
@@ -17,21 +18,15 @@ import zakadabar.stack.frontend.builtin.toast.ZkToastTheme
 interface ZkTheme {
 
     var button: ZkButtonTheme
-
     var dock: ZkDockTheme
-
     var font: ZkFontTheme
-
     var form: ZkFormTheme
-
     var icon: ZkIconTheme
-
     var layout: ZkLayoutTheme
-
     var sidebar: ZkSideBarTheme
-
+    var tabContainer: ZkTabContainerTheme
     var table: ZkTableTheme
-
     var toast: ZkToastTheme
+
 
 }
