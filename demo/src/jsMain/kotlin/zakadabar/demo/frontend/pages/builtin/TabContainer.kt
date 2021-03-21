@@ -52,14 +52,19 @@ object TabContainer : ZkPage(
                 style {
                     flex = "1" // this is horizontal grow here!
                     overflowY = "scroll"
-                    backgroundColor = ZkColors.LightBlue.a100
+                    backgroundColor = ZkColors.white
+                    border = "1px solid ${ZkColors.LightBlue.a100}"
+                    borderTop = "0px"
+                    padding = "8px"
                 }
                 + "content of tab 1"
             }
 
             + tab("tab2") {
                 style {
-                    backgroundColor = ZkColors.LightBlue.a100
+                    backgroundColor = ZkColors.white
+                    height = "max-content"
+                    padding = "8px"
                 }
                 + "content of tab 2"
             }

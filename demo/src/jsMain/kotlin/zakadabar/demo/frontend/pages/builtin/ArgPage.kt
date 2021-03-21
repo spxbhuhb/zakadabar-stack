@@ -5,7 +5,6 @@ package zakadabar.demo.frontend.pages.builtin
 
 import kotlinx.serialization.Serializable
 import zakadabar.stack.frontend.builtin.ZkArgPage
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.p1
 import zakadabar.stack.frontend.util.marginRight
 
 /**
@@ -44,10 +43,8 @@ object ArgPage : ZkArgPage<ArgPage.Args>(
         super.onResume()
         val args = this.args ?: return
 
-        + row(p1) {
-            + div { + "a1 = ${args.a1}" } marginRight 20
-            + div { + "a2 = ${args.a2}" }
-        }
+        + div { + "a1 = ${args.a1}" } marginRight 20
+        + div { + "a2 = ${args.a2}" }
     }
 
 }

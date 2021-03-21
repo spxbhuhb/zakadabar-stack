@@ -17,7 +17,7 @@ object ZkTitleBarStyles : ZkCssStyleSheet<ZkTitleBarStyles>(ZkApplication.theme)
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
-        paddingLeft = 20
+        paddingLeft = theme.layout.paddingStep * 2
         fontSize = 16
     }
 

@@ -50,6 +50,10 @@ object ZkTabContainerStyles : ZkCssStyleSheet<ZkTabContainerStyles>(ZkApplicatio
         borderLeft = "1px solid ${theme.tabContainer.activeBackground}"
         borderRight = borderLeft
         borderTop = borderLeft
+
+        on(":first-child") {
+            borderLeft = "1px solid ${theme.tabContainer.activeBackground}"
+        }
     }
 
     val content by cssClass {

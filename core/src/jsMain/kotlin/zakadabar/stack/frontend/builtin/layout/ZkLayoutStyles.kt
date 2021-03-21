@@ -87,6 +87,11 @@ object ZkLayoutStyles : ZkCssStyleSheet<ZkLayoutStyles>(ZkApplication.theme) {
         }
     }
 
+    val page by cssClass {
+        flexGrow = 1
+        backgroundColor = theme.layout.defaultBackground
+    }
+
     init {
         attach()
     }

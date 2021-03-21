@@ -17,10 +17,12 @@ import zakadabar.stack.frontend.util.plusAssign
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
 open class ZkPage(
     val layout: ZkAppLayout? = null,
-    val title: String? = null
+    val title: String? = null,
+    val cssClasses: Array<out String> = arrayOf(ZkLayoutStyles.page)
 ) : ZkElement(), ZkAppRouting.ZkTarget {
 
     companion object {
+
         /**
          * Creates an anonymous [ZkPage] and calls [ZkElement.launchBuild] on it with
          * the [builder] function.
@@ -49,6 +51,8 @@ open class ZkPage(
 
     override var viewName = "${this::class.simpleName}"
 
+    constructor(layout: ZkAppLayout? = null, title: String? = null, vararg cssClasses: String) : this(layout, title, cssClasses)
+
     open fun open() = ZkApplication.changeNavState("/$viewName")
 
     override fun route(routing: ZkAppRouting, state: ZkNavState): ZkElement {
@@ -57,8 +61,9 @@ open class ZkPage(
     }
 
     override fun onCreate() {
-        classList += ZkLayoutStyles.grow
-        classList += ZkLayoutStyles.defaultBackground
+        for (cssClass in cssClasses) {
+            classList += cssClass
+        }
         if (title != null) + ZkTitleBar(title)
     }
 

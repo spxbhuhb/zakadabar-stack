@@ -29,9 +29,9 @@ open class ZkCssStyleSheet<T : ZkCssStyleSheet<T>>(val theme: ZkTheme) {
         override fun getValue(thisRef: ZkCssStyleSheet<*>, property: KProperty<*>) = cssClassName
     }
 
-    class CssDelegateProvider(val init: ZkCssStyleRule.(ZkTheme) -> Unit) {
+    class CssDelegateProvider(val name: String? = null, val init: ZkCssStyleRule.(ZkTheme) -> Unit) {
         operator fun provideDelegate(thisRef: ZkCssStyleSheet<*>, prop: KProperty<*>): ReadOnlyProperty<ZkCssStyleSheet<*>, String> {
-            val cssClassName = "${thisRef::class.simpleName}-${prop.name}-${nextId.getAndIncrement()}"
+            val cssClassName = name ?: "${thisRef::class.simpleName}-${prop.name}-${nextId.getAndIncrement()}"
             val rule = ZkCssStyleRule(thisRef, cssClassName)
             rule.init(thisRef.theme)
             thisRef.rules[cssClassName] = rule
@@ -39,7 +39,9 @@ open class ZkCssStyleSheet<T : ZkCssStyleSheet<T>>(val theme: ZkTheme) {
         }
     }
 
-    fun cssClass(init: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(init)
+    fun cssClass(init: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, init)
+
+    fun cssClass(name: String, init: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(name, init)
 
     @PublicApi
     fun attach(): T {

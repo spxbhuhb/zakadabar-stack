@@ -296,6 +296,12 @@ class ZkCssStyleRule(
             styles["flex-grow"] = value.toString()
         }
 
+    var flexWrap
+        get() = styles["flex-wrap"]
+        set(value) {
+            styles["flex-wrap"] = value
+        }
+
     var fontFamily
         get() = styles["font-family"]
         set(value) {
@@ -330,6 +336,12 @@ class ZkCssStyleRule(
         get() = styles["font-stretch"]
         set(value) {
             styles["font-stretch"] = value
+        }
+
+    var gap: Any?
+        get() = styles["gap"]
+        set(value) {
+            styles["gap"] = stringOrPx(value)
         }
 
     var gridColumnEnd: Int?
