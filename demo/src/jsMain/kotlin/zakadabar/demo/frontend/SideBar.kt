@@ -10,6 +10,7 @@ import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
 import zakadabar.demo.frontend.pages.account.Accounts
 import zakadabar.demo.frontend.pages.builtin.ArgPage
+import zakadabar.demo.frontend.pages.builtin.CheckboxList
 import zakadabar.demo.frontend.pages.builtin.FormFields
 import zakadabar.demo.frontend.pages.builtin.TabContainer
 import zakadabar.demo.frontend.pages.misc.Home
@@ -45,6 +46,7 @@ object SideBar : ZkSideBar() {
 
         + group(Strings.builtin) {
             + item("ZkArgPage") { ArgPage.open(ArgPage.Args(fourRandomInt()[0], "hello")) }
+            + item("ZkCheckboxList") { CheckboxList.open() }
             + item("ZkForm") { FormFields.open() }
             + item("ZkTabContainer") { TabContainer.open() }
         }
