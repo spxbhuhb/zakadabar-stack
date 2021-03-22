@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.util.PublicApi
 
 open class ZkCheckboxList<T>(
-    open var items: List<ZkCheckboxListItem<T>> = emptyList()
+    open val items: List<ZkCheckboxListItem<T>> = emptyList()
 ) : ZkElement() {
 
     @PublicApi
@@ -19,12 +19,7 @@ open class ZkCheckboxList<T>(
     @PublicApi
     var fieldGridRowTemplate: String = "max-content"
 
-    override fun onResume() {
-        super.onResume()
-        render()
-    }
-
-    private fun render() {
+    override fun onCreate() {
         + grid(style = "grid-template-columns: $fieldGridColumnTemplate; gap: 0; grid-auto-rows: $fieldGridRowTemplate") {
             items.forEach { item ->
                 + div(ZkFormStyles.fieldLabel) {

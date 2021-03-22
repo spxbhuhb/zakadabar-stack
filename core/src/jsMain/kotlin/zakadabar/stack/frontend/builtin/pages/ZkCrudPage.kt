@@ -3,6 +3,8 @@
  */
 package zakadabar.stack.frontend.builtin.pages
 
+import zakadabar.stack.frontend.builtin.ZkElementMode
+
 interface ZkCrudPage<T> {
     var dto: T
     var mode: ZkElementMode

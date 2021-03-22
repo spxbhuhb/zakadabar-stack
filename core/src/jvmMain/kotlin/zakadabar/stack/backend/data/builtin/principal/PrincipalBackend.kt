@@ -14,10 +14,14 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
+import zakadabar.stack.backend.Server
+import zakadabar.stack.backend.Unauthorized
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantTable
 import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.data.builtin.ActionStatusDto
+import zakadabar.stack.data.builtin.PasswordChangeAction
 import zakadabar.stack.data.builtin.PrincipalDto
 import zakadabar.stack.util.BCrypt
 import zakadabar.stack.util.Executor
@@ -28,12 +32,15 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
 
     var maxFailCount = 5
 
+    override var logActions = false
+
     override fun onModuleLoad() {
         + PrincipalTable
     }
 
     override fun onInstallRoutes(route: Route) {
         route.crud()
+        route.action(PasswordChangeAction::class, ::action)
     }
 
     override fun all(executor: Executor) = transaction {
@@ -75,16 +82,37 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
         PrincipalDao[recordId].delete()
     }
 
+
+    private fun action(executor: Executor, action: PasswordChangeAction) = transaction {
+
+        authorize(executor, StackRoles.siteMember)
+
+        val (accountDto, principalId) = Server.findAccountById(action.accountId)
+
+        val principalDao = PrincipalDao[principalId]
+
+        if (executor.accountId == action.accountId) {
+            try {
+                authenticate(principalId, action.oldPassword.value)
+            } catch (ex: Exception) {
+                throw Unauthorized()
+            }
+        } else {
+            authorize(executor, StackRoles.securityOfficer)
+        }
+
+        principalDao.credentials = encrypt(action.newPassword.value)
+
+        logger.info("${executor.accountId}: ACTION PasswordChangeAction accountId=${action.accountId} accountName=${accountDto.accountName}")
+
+        ActionStatusDto()
+    }
+
     private fun PrincipalDao.fromDto(dto: PrincipalDto): PrincipalDao {
 
         validated = dto.validated
         locked = dto.locked
         expired = dto.expired
-
-        lastLoginSuccess = dto.lastLoginSuccess?.toJavaInstant()
-        loginSuccessCount = dto.loginSuccessCount
-
-        lastLoginFail = dto.lastLoginFail?.toJavaInstant()
         loginFailCount = dto.loginFailCount
 
         return this

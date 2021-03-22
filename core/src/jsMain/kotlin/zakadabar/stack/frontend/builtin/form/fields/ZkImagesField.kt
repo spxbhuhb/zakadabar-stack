@@ -27,11 +27,12 @@ import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.image.ZkImagePreview
-import zakadabar.stack.frontend.builtin.pages.ZkElementMode
+import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.io
 
@@ -142,15 +143,17 @@ open class ZkImagesField<T : RecordDto<T>>(
         }
     }
 
-    private fun onDelete(preview: ZkImagePreview): Boolean {
-        if (! window.confirm(builtin.confirmDelete)) return false
-        io {
-            if (form.mode != ZkElementMode.Create) {
-                form.dto.comm().blobDelete(dataRecordId, preview.dto.id)
-            }
-            this@ZkImagesField -= preview
-            updateDropArea()
+    private suspend fun onDelete(preview: ZkImagePreview): Boolean {
+        if (! ZkConfirmDialog(builtin.confirmation.capitalize(), builtin.confirmDelete).run()) return false
+
+        if (form.mode != ZkElementMode.Create) {
+            form.dto.comm().blobDelete(dataRecordId, preview.dto.id)
         }
+
+        this@ZkImagesField -= preview
+
+        updateDropArea()
+
         return true
     }
 

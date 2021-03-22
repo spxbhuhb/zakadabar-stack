@@ -48,7 +48,6 @@ open class ZkTabContainer : ZkElement() {
 
         activeItem.label.active = true
         content += activeItem.content
-
     }
 
 }

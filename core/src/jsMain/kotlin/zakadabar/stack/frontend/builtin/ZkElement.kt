@@ -365,15 +365,16 @@ open class ZkElement(
                         child.onCreate()
                         child.lifeCycleState = ZkElementState.Created
                         child.onResume()
+                        child.lifeCycleState = ZkElementState.Resumed
                     }
                     ZkElementState.Created -> {
                         child.onResume()
+                        child.lifeCycleState = ZkElementState.Resumed
                     }
                     ZkElementState.Resumed, ZkElementState.Destroyed -> {
                         throw IllegalStateException("invalid element state ${child.lifeCycleState} for ${child::class.simpleName}")
                     }
                 }
-                child.lifeCycleState = ZkElementState.Resumed
             }
 
             ZkElementState.Destroyed -> {
@@ -785,7 +786,7 @@ open class ZkElement(
     operator fun ZkElement.unaryPlus(): ZkElement {
         this@ZkElement.buildElement.appendChild(this.element)
         this@ZkElement.childElements += this
-        syncChildrenState(this)
+        this@ZkElement.syncChildrenState(this)
         return this
     }
 

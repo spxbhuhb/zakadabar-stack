@@ -10,9 +10,11 @@ import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkNavState
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
 import zakadabar.stack.frontend.builtin.misc.NYI
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.newInstance
 import zakadabar.stack.frontend.util.plusAssign
 import kotlin.reflect.KClass
@@ -66,6 +68,8 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
     }
 
     open fun create(): ZkElement {
+        val container = ZkElement()
+        container.classList += ZkLayoutStyles.layoutContent
 
         val dto = dtoClass.newInstance()
         dto.schema().setDefaults()
@@ -75,42 +79,63 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
         page.openUpdate = { openUpdate(it.id) }
         page.mode = ZkElementMode.Create
 
-        return page as ZkElement
+        page as ZkElement
+        container += page
+
+        return container
     }
 
-    open fun read(recordId: Long): ZkElement = ZkElement.launchBuildNew {
+    open fun read(recordId: Long): ZkElement {
 
-        classList += ZkLayoutStyles.layoutContent
+        val container = ZkElement()
+        container.classList += ZkLayoutStyles.layoutContent
 
-        val page = pageClass.newInstance()
-        page.dto = companion.read(recordId)
-        page.openUpdate = { openUpdate(it.id) }
-        page.mode = ZkElementMode.Read
+        io {
+            val page = pageClass.newInstance()
+            page.dto = companion.read(recordId)
+            page.openUpdate = { openUpdate(it.id) }
+            page.mode = ZkElementMode.Read
 
-        + (page as ZkElement)
+            page as ZkElement
+            container += page
+        }
+
+        return container
     }
 
-    open fun update(recordId: Long): ZkElement = ZkElement.launchBuildNew {
+    open fun update(recordId: Long): ZkElement {
 
-        classList += ZkLayoutStyles.layoutContent
+        val container = ZkElement()
+        container.classList += ZkLayoutStyles.layoutContent
 
-        val page = pageClass.newInstance()
-        page.dto = companion.read(recordId)
-        page.openUpdate = { openUpdate(it.id) }
-        page.mode = ZkElementMode.Update
+        io {
+            val page = pageClass.newInstance()
+            page.dto = companion.read(recordId)
+            page.openUpdate = { openUpdate(it.id) }
+            page.mode = ZkElementMode.Update
 
-        + (page as ZkElement)
+            page as ZkElement
+            container += page
+        }
+
+        return container
     }
 
-    open fun delete(recordId: Long): ZkElement = ZkElement.launchBuildNew {
+    open fun delete(recordId: Long): ZkElement {
 
-        classList += ZkLayoutStyles.layoutContent
+        val container = ZkElement()
+        container.classList += ZkLayoutStyles.layoutContent
 
-        val page = pageClass.newInstance()
-        page.dto = companion.read(recordId)
-        page.openUpdate = { openUpdate(it.id) }
-        page.mode = ZkElementMode.Delete
+        io {
+            val page = pageClass.newInstance()
+            page.dto = companion.read(recordId)
+            page.openUpdate = { openUpdate(it.id) }
+            page.mode = ZkElementMode.Delete
 
-        + (page as ZkElement)
+            page as ZkElement
+            container += page
+        }
+
+        return container
     }
 }

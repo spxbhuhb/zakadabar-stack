@@ -5,10 +5,10 @@ package zakadabar.demo.frontend.pages.ship
 
 import zakadabar.demo.data.ship.SearchShipsQuery
 import zakadabar.demo.frontend.resources.Strings
+import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.h100
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.w100
-import zakadabar.stack.frontend.builtin.pages.ZkElementMode
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
 import zakadabar.stack.frontend.resources.ZkColors

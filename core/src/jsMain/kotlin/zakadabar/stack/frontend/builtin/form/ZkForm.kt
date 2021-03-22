@@ -27,12 +27,12 @@ import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.application.ZkApplication.back
 import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.fields.*
 import zakadabar.stack.frontend.builtin.form.structure.ZkFormButtons
 import zakadabar.stack.frontend.builtin.form.structure.ZkFormSection
 import zakadabar.stack.frontend.builtin.form.structure.ZkInvalidFieldList
 import zakadabar.stack.frontend.builtin.pages.ZkCrudPage
-import zakadabar.stack.frontend.builtin.pages.ZkElementMode
 import zakadabar.stack.frontend.builtin.toast.ZkToast
 import zakadabar.stack.frontend.builtin.toast.toast
 import zakadabar.stack.frontend.resources.ZkStringStore.Companion.t
@@ -64,7 +64,7 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
     var autoLabel = true
 
     @PublicApi
-    var fieldGridColumnTemplate: String = "150px 1fr"
+    var fieldGridColumnTemplate: String = "150px minmax(150px,1fr)"
 
     @PublicApi
     var fieldGridRowTemplate: String = "max-content"
@@ -123,12 +123,15 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
 
     // ----  Builder convenience functions --------
 
-    open fun build(title: String, createTitle: String = title, addButtons: Boolean = true, builder: () -> Unit): ZkForm<T> {
+    open fun build(title: String, createTitle: String = title, css: String? = null, addButtons: Boolean = true, builder: () -> Unit): ZkForm<T> {
         + titleBar(title, createTitle)
 
         + div(ZkFormStyles.contentContainer) {
             + column(ZkFormStyles.form) {
+                css?.let { buildElement.classList += it }
+
                 builder()
+
                 if (addButtons) {
                     + buttons()
                 }
@@ -497,6 +500,7 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
             ZkElementMode.Delete -> toast { builtin.deleteSuccess }
             ZkElementMode.Action -> toast { builtin.actionSuccess }
             ZkElementMode.Query -> Unit
+            ZkElementMode.Other -> toast { builtin.actionSuccess }
         }
     }
 
@@ -513,6 +517,7 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
             ZkElementMode.Delete -> toast(error = true) { builtin.deleteFail }
             ZkElementMode.Action -> toast(error = true) { builtin.actionFail }
             ZkElementMode.Query -> toast(error = true) { builtin.queryFail }
+            ZkElementMode.Other -> toast(error = true) { builtin.actionFail }
         }
     }
 

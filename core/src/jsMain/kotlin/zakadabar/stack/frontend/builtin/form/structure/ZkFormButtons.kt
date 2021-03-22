@@ -7,16 +7,18 @@ import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.misc.processing.ZkProcessing
 import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
-import zakadabar.stack.frontend.builtin.pages.ZkElementMode
 import zakadabar.stack.frontend.util.io
 
 open class ZkFormButtons<T : DtoBase>(
-    private val form: ZkForm<T>
+    private val form: ZkForm<T>,
+    private val execute: () -> Unit = { form.submit() },
+    private val submitLabel: String? = null
 ) : ZkElement() {
 
     override fun onCreate() {
@@ -24,32 +26,44 @@ open class ZkFormButtons<T : DtoBase>(
             ZkElementMode.Create ->
                 + row(ZkFormStyles.buttons) {
                     + backButton()
-                    + submitButton(builtin.save) { form.submit() }
+                    + submitButton(submitLabel ?: builtin.save, execute)
                     + progressIndicator()
                 }
 
             ZkElementMode.Read -> {
                 + row(ZkFormStyles.buttons) {
                     + backButton()
-                    form.openUpdate?.let { + submitButton(builtin.edit) { it(form.dto) } }
+                    form.openUpdate?.let { + submitButton(submitLabel ?: builtin.edit) { it(form.dto) } }
                     + progressIndicator()
                 }
             }
             ZkElementMode.Update ->
                 + row(ZkFormStyles.buttons) {
                     + backButton()
-                    + submitButton(builtin.save) { form.submit() }
+                    + submitButton(submitLabel ?: builtin.save, execute)
                     + progressIndicator()
                 }
             ZkElementMode.Delete ->
                 + row(ZkFormStyles.buttons) {
                     + backButton()
-                    + submitButton(builtin.delete) { form.submit() }
+                    + submitButton(submitLabel ?: builtin.delete, execute)
                     + progressIndicator()
                 }
             ZkElementMode.Action -> {
+                + row(ZkFormStyles.buttons) {
+                    + backButton()
+                    + submitButton(submitLabel ?: builtin.execute, execute)
+                    + progressIndicator()
+                }
             }
             ZkElementMode.Query -> {
+            }
+            ZkElementMode.Other -> {
+                + row(ZkFormStyles.buttons) {
+                    + backButton()
+                    + submitButton(submitLabel ?: builtin.execute, execute)
+                    + progressIndicator()
+                }
             }
         }
     }

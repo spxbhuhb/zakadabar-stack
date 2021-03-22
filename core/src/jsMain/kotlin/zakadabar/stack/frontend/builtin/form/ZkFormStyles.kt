@@ -29,6 +29,22 @@ object ZkFormStyles : ZkCssStyleSheet<ZkFormStyles>(ZkApplication.theme) {
         backgroundColor = "rgb(245,245,245)"
     }
 
+    val onePanel by cssClass {
+        display = "grid"
+        gridTemplateColumns = "1fr"
+        gap = ZkApplication.theme.layout.marginStep * 2
+    }
+
+    val twoPanels by cssClass {
+        display = "grid"
+        gridTemplateColumns = "1fr 1fr"
+        gap = ZkApplication.theme.layout.marginStep * 2
+    }
+
+    val spanTwoPanels by cssClass {
+        gridColumn = "1 / span 2"
+    }
+
     val buttons by cssClass {
 
     }

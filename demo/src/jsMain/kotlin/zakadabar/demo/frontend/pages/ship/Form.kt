@@ -11,11 +11,12 @@ import zakadabar.demo.data.ship.ShipDto
 import zakadabar.demo.data.speed.SpeedDto
 import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.data.builtin.AccountPublicDto
-import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.fields.ZkImagesField
 import zakadabar.stack.frontend.builtin.form.fields.ZkRecordSelectFilter
 import zakadabar.stack.frontend.util.io
+import zakadabar.stack.frontend.util.plusAssign
 
 class Form : ZkForm<ShipDto>() {
 
@@ -31,20 +32,13 @@ class Form : ZkForm<ShipDto>() {
 
             build(dto.name, Strings.ship) {
 
-                style {
-                    display = "grid"
-                }
-
-                //buildElement.style.setProperty("grid-auto-flow", "column")
-                buildElement.style.setProperty("grid-template-columns", "1fr 1fr")
-                buildElement.style.setProperty("gap", "${ZkApplication.theme.layout.marginStep * 2}px")
-
+                buildElement.classList += ZkFormStyles.twoPanels
 
                 + basics()
                 + description()
 
                 + div {
-                    buildElement.style.setProperty("grid-column", "1 / span 2")
+                    buildElement.classList += ZkFormStyles.spanTwoPanels
                     + images()
                 }
 

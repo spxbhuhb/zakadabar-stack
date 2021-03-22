@@ -7,4 +7,5 @@ object StackRoles : RolesBase()
 
 open class RolesBase {
     val securityOfficer = "security-officer"
+    val siteMember = "site-member"
 }

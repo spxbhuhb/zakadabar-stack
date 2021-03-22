@@ -7,6 +7,7 @@ import io.ktor.application.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
 import org.jetbrains.exposed.sql.transactions.transaction
+import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
 import zakadabar.stack.backend.data.record.RecordBackend
@@ -58,14 +59,17 @@ object SessionBackend : RecordBackend<SessionDto>() {
 
     private fun action(call: ApplicationCall, executor: Executor, action: LoginAction): ActionStatusDto {
 
-        val result = authenticate(executor.accountId, action.accountName, action.password.value)
+        val result = authenticate(executor.accountId, action.accountName, action.password.value) ?: return ActionStatusDto(false)
 
-        if (result != null) {
-            val (account, principalId) = result
-            call.sessions.set(StackSession(account.id, PrincipalBackend.roles(principalId)))
-        }
+        val (account, principalId) = result
 
-        return ActionStatusDto(success = result != null)
+        val roles = PrincipalBackend.roles(principalId)
+
+        if (StackRoles.siteMember !in roles) return ActionStatusDto(false)
+
+        call.sessions.set(StackSession(account.id, roles))
+
+        return ActionStatusDto(true)
     }
 
     fun authenticate(executorAccountId: Long, accountName: String, password: String): Pair<AccountPublicDto, Long>? {

@@ -6,13 +6,14 @@ package zakadabar.stack.frontend.builtin.image
 import zakadabar.stack.data.builtin.BlobDto
 import zakadabar.stack.data.record.BlobCreateState
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.util.io
 
 open class ZkImagePreview(
     var dto: BlobDto,
     var createState: BlobCreateState? = null,
     var progress: Long? = null,
     var size: Int = 200,
-    var onDelete: (preview: ZkImagePreview) -> Boolean = { false }
+    var onDelete: suspend (preview: ZkImagePreview) -> Boolean = { false }
 ) : ZkElement() {
 
     override fun onCreate() {
@@ -49,8 +50,10 @@ open class ZkImagePreview(
 
                 on(buildElement, "click") { _ ->
                     ZkFullScreenImageView(dto.url()) {
-                        val deleted = onDelete(this@ZkImagePreview)
-                        if (deleted) it.hide()
+                        io {
+                            val deleted = onDelete(this@ZkImagePreview)
+                            if (deleted) it.hide()
+                        }
                     }.show()
                 }
             }

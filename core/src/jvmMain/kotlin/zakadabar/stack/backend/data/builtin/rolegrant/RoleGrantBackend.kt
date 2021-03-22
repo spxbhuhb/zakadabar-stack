@@ -67,7 +67,7 @@ object RoleGrantBackend : RecordBackend<RoleGrantDto>() {
         RoleGrantDao[recordId].toDto()
     }
 
-    override fun delete(executor: Executor, recordId: Long) {
+    override fun delete(executor: Executor, recordId: Long) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 

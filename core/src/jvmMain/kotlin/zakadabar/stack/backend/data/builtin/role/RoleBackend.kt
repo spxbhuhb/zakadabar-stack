@@ -28,7 +28,7 @@ object RoleBackend : RecordBackend<RoleDto>() {
 
     override fun all(executor: Executor) = transaction {
 
-        authorize(executor, StackRoles.securityOfficer)
+        authorize(executor, StackRoles.siteMember)
 
         RoleTable
             .selectAll()

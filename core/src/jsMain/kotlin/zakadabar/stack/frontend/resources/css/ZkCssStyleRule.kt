@@ -350,6 +350,12 @@ class ZkCssStyleRule(
             styles["grid-column-end"] = value.toString()
         }
 
+    var gridColumn
+        get() = styles["grid-column"]
+        set(value) {
+            styles["grid-column"] = value
+        }
+
     var gridColumnStart: Int?
         get() = styles["grid-column-start"]?.toInt()
         set(value) {

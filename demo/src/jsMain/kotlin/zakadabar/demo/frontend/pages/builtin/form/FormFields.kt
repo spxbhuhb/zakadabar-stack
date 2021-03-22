@@ -5,12 +5,12 @@ package zakadabar.demo.frontend.pages.builtin.form
 
 import zakadabar.demo.data.builtin.BuiltinDto
 import zakadabar.demo.frontend.resources.Strings
-import zakadabar.stack.frontend.application.ZkApplication.theme
+import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.fields.ZkSecretVerificationField
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
-import zakadabar.stack.frontend.builtin.pages.ZkElementMode
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.plusAssign
@@ -37,13 +37,7 @@ object FormFields : ZkPage() {
         override fun onCreate() {
             build(Strings.formFields) {
 
-                style {
-                    display = "grid"
-                }
-
-                buildElement.style.setProperty("grid-template-columns", "1fr 1fr")
-                buildElement.style.setProperty("gap", "${theme.layout.marginStep * 2}px")
-
+                buildElement.classList += ZkFormStyles.twoPanels
 
                 + section(Strings.mandatoryFields) {
                     with(dto) {

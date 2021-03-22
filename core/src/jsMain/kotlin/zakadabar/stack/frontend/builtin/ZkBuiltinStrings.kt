@@ -19,7 +19,8 @@ open class ZkBuiltinStrings : ZkStringStore() {
             }
     }
 
-    val confirmation by "confirmation"
+    open val execute by "execute"
+    open val confirmation by "confirmation"
     open val show by "show"
     open val yes by "yes"
     open val no by "no"
