@@ -4,13 +4,13 @@
 package zakadabar.demo.frontend.pages.account
 
 import zakadabar.demo.data.AccountPrivateDto
-import zakadabar.stack.frontend.builtin.ZkCrud
+import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
 
-object Accounts : ZkCrud<AccountPrivateDto>() {
+object Accounts : ZkCrudTarget<AccountPrivateDto>() {
     init {
         companion = AccountPrivateDto.Companion
         dtoClass = AccountPrivateDto::class
         tableClass = Table::class
-        formClass = Form::class
+        pageClass = Form::class
     }
 }

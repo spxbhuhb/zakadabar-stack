@@ -3,7 +3,7 @@
  */
 package zakadabar.demo.frontend.pages.misc
 
-import zakadabar.stack.frontend.builtin.ZkPage
+import zakadabar.stack.frontend.builtin.pages.ZkPage
 
 object Home : ZkPage() {
 

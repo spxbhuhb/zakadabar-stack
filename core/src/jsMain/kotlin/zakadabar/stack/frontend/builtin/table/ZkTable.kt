@@ -13,8 +13,8 @@ import org.w3c.dom.set
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.frontend.builtin.ZkCrud
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.table.columns.*
 import zakadabar.stack.frontend.util.getDatasetEntry
 import zakadabar.stack.frontend.util.io
@@ -30,7 +30,7 @@ import kotlin.reflect.KProperty1
  * is specified. You can override the default by setting the [titleBar] property before [onResume] runs.
  *
  * @property  title       Title to show in the title bar.
- * @property  crud        The [ZkCrud] that is linked with the table. When specified the functions
+ * @property  crud        The [ZkCrudTarget] that is linked with the table. When specified the functions
  *                        of the table (onCreate, onDblClick for example) will use it to open the
  *                        appropriate page.
  * @property  onAddRow    Called when the user clicks the plus button in the title bar. This function
@@ -46,7 +46,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     var title: String? = null
 
-    var crud: ZkCrud<*>? = null
+    var crud: ZkCrudTarget<*>? = null
 
     var onAddRow: (() -> Unit)? = null
     var onDblClick: ((id: String) -> Unit)? = null

@@ -4,13 +4,13 @@
 package zakadabar.demo.frontend.pages.speed
 
 import zakadabar.demo.data.speed.SpeedDto
-import zakadabar.stack.frontend.builtin.ZkCrud
+import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
 
-object Speeds : ZkCrud<SpeedDto>() {
+object Speeds : ZkCrudTarget<SpeedDto>() {
     init {
         companion = SpeedDto.Companion
         dtoClass = SpeedDto::class
-        formClass = Form::class
+        pageClass = Form::class
         tableClass = Table::class
     }
 }

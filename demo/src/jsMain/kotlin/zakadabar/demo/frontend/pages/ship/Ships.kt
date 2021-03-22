@@ -4,14 +4,14 @@
 package zakadabar.demo.frontend.pages.ship
 
 import zakadabar.demo.data.ship.ShipDto
-import zakadabar.stack.frontend.builtin.ZkCrud
+import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
 
-object Ships : ZkCrud<ShipDto>() {
+object Ships : ZkCrudTarget<ShipDto>() {
 
     init {
         companion = ShipDto.Companion
         dtoClass = ShipDto::class
-        formClass = Form::class
+        pageClass = Form::class
         tableClass = Table::class
     }
 

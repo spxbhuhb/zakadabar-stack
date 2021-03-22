@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin
+package zakadabar.stack.frontend.builtin.pages
 
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
@@ -9,8 +9,7 @@ import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkNavState
-import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.ZkFormMode
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
 import zakadabar.stack.frontend.builtin.misc.NYI
 import zakadabar.stack.frontend.builtin.table.ZkTable
@@ -22,13 +21,13 @@ import kotlin.reflect.KClass
  * Provides common functions used in most CRUD implementations.
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
-open class ZkCrud<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
+open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
 
     override var viewName = "${this::class.simpleName}"
 
     lateinit var companion: RecordDtoCompanion<T>
     lateinit var dtoClass: KClass<T>
-    lateinit var formClass: KClass<out ZkForm<T>>
+    lateinit var pageClass: KClass<out ZkCrudPage<T>>
     lateinit var tableClass: KClass<out ZkTable<T>>
 
     val allPath
@@ -71,47 +70,47 @@ open class ZkCrud<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
         val dto = dtoClass.newInstance()
         dto.schema().setDefaults()
 
-        val form = formClass.newInstance()
-        form.dto = dto
-        form.openUpdate = { openUpdate(it.id) }
-        form.mode = ZkFormMode.Create
+        val page = pageClass.newInstance()
+        page.dto = dto
+        page.openUpdate = { openUpdate(it.id) }
+        page.mode = ZkElementMode.Create
 
-        return form
+        return page as ZkElement
     }
 
     open fun read(recordId: Long): ZkElement = ZkElement.launchBuildNew {
 
         classList += ZkLayoutStyles.layoutContent
 
-        val form = formClass.newInstance()
-        form.dto = companion.read(recordId)
-        form.openUpdate = { openUpdate(it.id) }
-        form.mode = ZkFormMode.Read
+        val page = pageClass.newInstance()
+        page.dto = companion.read(recordId)
+        page.openUpdate = { openUpdate(it.id) }
+        page.mode = ZkElementMode.Read
 
-        + form
+        + (page as ZkElement)
     }
 
     open fun update(recordId: Long): ZkElement = ZkElement.launchBuildNew {
 
         classList += ZkLayoutStyles.layoutContent
 
-        val form = formClass.newInstance()
-        form.dto = companion.read(recordId)
-        form.openUpdate = { openUpdate(it.id) }
-        form.mode = ZkFormMode.Update
+        val page = pageClass.newInstance()
+        page.dto = companion.read(recordId)
+        page.openUpdate = { openUpdate(it.id) }
+        page.mode = ZkElementMode.Update
 
-        + form
+        + (page as ZkElement)
     }
 
     open fun delete(recordId: Long): ZkElement = ZkElement.launchBuildNew {
 
         classList += ZkLayoutStyles.layoutContent
 
-        val form = formClass.newInstance()
-        form.dto = companion.read(recordId)
-        form.openUpdate = { openUpdate(it.id) }
-        form.mode = ZkFormMode.Delete
+        val page = pageClass.newInstance()
+        page.dto = companion.read(recordId)
+        page.openUpdate = { openUpdate(it.id) }
+        page.mode = ZkElementMode.Delete
 
-        + form
+        + (page as ZkElement)
     }
 }

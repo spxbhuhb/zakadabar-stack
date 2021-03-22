@@ -31,6 +31,8 @@ import zakadabar.stack.frontend.builtin.form.fields.*
 import zakadabar.stack.frontend.builtin.form.structure.ZkFormButtons
 import zakadabar.stack.frontend.builtin.form.structure.ZkFormSection
 import zakadabar.stack.frontend.builtin.form.structure.ZkInvalidFieldList
+import zakadabar.stack.frontend.builtin.pages.ZkCrudPage
+import zakadabar.stack.frontend.builtin.pages.ZkElementMode
 import zakadabar.stack.frontend.builtin.toast.ZkToast
 import zakadabar.stack.frontend.builtin.toast.toast
 import zakadabar.stack.frontend.resources.ZkStringStore.Companion.t
@@ -45,16 +47,16 @@ import kotlin.reflect.KMutableProperty0
  *
  * @property  autoLabel  When true labels are automatically added. When false they are not.
  */
-open class ZkForm<T : DtoBase> : ZkElement() {
+open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
 
-    lateinit var dto: T
-    lateinit var mode: ZkFormMode
+    override lateinit var dto: T
+    override lateinit var mode: ZkElementMode
 
     /**
      * True when the form is in create mode.
      */
     val isCreate
-        get() = (mode == ZkFormMode.Create)
+        get() = (mode == ZkElementMode.Create)
 
     var title: String = ""
     var titleBar: ZkFormTitleBar? = null
@@ -67,7 +69,7 @@ open class ZkForm<T : DtoBase> : ZkElement() {
     @PublicApi
     var fieldGridRowTemplate: String = "max-content"
 
-    var openUpdate: ((dto: T) -> Unit)? = null
+    override var openUpdate: ((dto: T) -> Unit)? = null
 
     /**
      * A function to be called when execution of the form operation has a result.
@@ -244,7 +246,7 @@ open class ZkForm<T : DtoBase> : ZkElement() {
     }
 
     fun ifNotCreate(build: ZkElement.() -> Unit) {
-        if (mode == ZkFormMode.Create) return
+        if (mode == ZkElementMode.Create) return
         build()
     }
 
@@ -257,7 +259,7 @@ open class ZkForm<T : DtoBase> : ZkElement() {
         val field = ZkIdField(this@ZkForm, this)
         + field
         fields += field
-        if (mode == ZkFormMode.Create) {
+        if (mode == ZkElementMode.Create) {
             field.hide()
         }
         return field
@@ -423,7 +425,7 @@ open class ZkForm<T : DtoBase> : ZkElement() {
                 progressIndicator?.show()
 
                 when (mode) {
-                    ZkFormMode.Create -> {
+                    ZkElementMode.Create -> {
                         val created = (dto as RecordDto<*>).create() as RecordDto<*>
                         fields.forEach { it.onCreateSuccess(created) }
                         if (goBackAfterCreate) {
@@ -432,23 +434,23 @@ open class ZkForm<T : DtoBase> : ZkElement() {
                             resetTouched()
                         }
                     }
-                    ZkFormMode.Read -> {
+                    ZkElementMode.Read -> {
                         // nothing to do here
                     }
-                    ZkFormMode.Update -> {
+                    ZkElementMode.Update -> {
                         (dto as RecordDto<*>).update()
                         resetTouched()
                     }
-                    ZkFormMode.Delete -> {
+                    ZkElementMode.Delete -> {
                         (dto as RecordDto<*>).delete()
                         resetTouched()
                     }
-                    ZkFormMode.Action -> {
+                    ZkElementMode.Action -> {
                         val result = (dto as ActionDto<*>).execute()
                         onExecuteResult?.let { it(result) }
                         resetTouched()
                     }
-                    ZkFormMode.Query -> {
+                    ZkElementMode.Query -> {
                         (dto as QueryDto<*>).execute()
                         // TODO do something here with the result
                     }
@@ -489,12 +491,12 @@ open class ZkForm<T : DtoBase> : ZkElement() {
      */
     open fun onSubmitSuccess() {
         when (mode) {
-            ZkFormMode.Create -> toast { builtin.createSuccess }
-            ZkFormMode.Read -> Unit
-            ZkFormMode.Update -> toast { builtin.updateSuccess }
-            ZkFormMode.Delete -> toast { builtin.deleteSuccess }
-            ZkFormMode.Action -> toast { builtin.actionSuccess }
-            ZkFormMode.Query -> Unit
+            ZkElementMode.Create -> toast { builtin.createSuccess }
+            ZkElementMode.Read -> Unit
+            ZkElementMode.Update -> toast { builtin.updateSuccess }
+            ZkElementMode.Delete -> toast { builtin.deleteSuccess }
+            ZkElementMode.Action -> toast { builtin.actionSuccess }
+            ZkElementMode.Query -> Unit
         }
     }
 
@@ -505,12 +507,12 @@ open class ZkForm<T : DtoBase> : ZkElement() {
      */
     open fun onSubmitError(ex: Exception) {
         when (mode) {
-            ZkFormMode.Create -> toast(error = true) { builtin.createFail }
-            ZkFormMode.Read -> Unit
-            ZkFormMode.Update -> toast(error = true) { builtin.updateFail }
-            ZkFormMode.Delete -> toast(error = true) { builtin.deleteFail }
-            ZkFormMode.Action -> toast(error = true) { builtin.actionFail }
-            ZkFormMode.Query -> toast(error = true) { builtin.queryFail }
+            ZkElementMode.Create -> toast(error = true) { builtin.createFail }
+            ZkElementMode.Read -> Unit
+            ZkElementMode.Update -> toast(error = true) { builtin.updateFail }
+            ZkElementMode.Delete -> toast(error = true) { builtin.deleteFail }
+            ZkElementMode.Action -> toast(error = true) { builtin.actionFail }
+            ZkElementMode.Query -> toast(error = true) { builtin.queryFail }
         }
     }
 

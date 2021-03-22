@@ -10,9 +10,9 @@ import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.ZkFormMode
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.misc.processing.ZkProcessing
+import zakadabar.stack.frontend.builtin.pages.ZkElementMode
 
 open class ZkFormButtons<T : DtoBase>(
     private val form: ZkForm<T>
@@ -20,35 +20,35 @@ open class ZkFormButtons<T : DtoBase>(
 
     override fun onCreate() {
         when (form.mode) {
-            ZkFormMode.Create ->
+            ZkElementMode.Create ->
                 + row(ZkFormStyles.buttons) {
                     + backButton()
                     + submitButton(builtin.save) { form.submit() }
                     + progressIndicator()
                 }
 
-            ZkFormMode.Read -> {
+            ZkElementMode.Read -> {
                 + row(ZkFormStyles.buttons) {
                     + backButton()
                     form.openUpdate?.let { + submitButton(builtin.edit) { it(form.dto) } }
                     + progressIndicator()
                 }
             }
-            ZkFormMode.Update ->
+            ZkElementMode.Update ->
                 + row(ZkFormStyles.buttons) {
                     + backButton()
                     + submitButton(builtin.save) { form.submit() }
                     + progressIndicator()
                 }
-            ZkFormMode.Delete ->
+            ZkElementMode.Delete ->
                 + row(ZkFormStyles.buttons) {
                     + backButton()
                     + submitButton(builtin.delete) { form.submit() }
                     + progressIndicator()
                 }
-            ZkFormMode.Action -> {
+            ZkElementMode.Action -> {
             }
-            ZkFormMode.Query -> {
+            ZkElementMode.Query -> {
             }
         }
     }

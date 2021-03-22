@@ -4,13 +4,13 @@
 package zakadabar.demo.frontend.pages.sea
 
 import zakadabar.demo.data.SeaDto
-import zakadabar.stack.frontend.builtin.ZkCrud
+import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
 
-object Seas : ZkCrud<SeaDto>() {
+object Seas : ZkCrudTarget<SeaDto>() {
     init {
         companion = SeaDto.Companion
         dtoClass = SeaDto::class
-        formClass = Form::class
+        pageClass = Form::class
         tableClass = Table::class
     }
 }

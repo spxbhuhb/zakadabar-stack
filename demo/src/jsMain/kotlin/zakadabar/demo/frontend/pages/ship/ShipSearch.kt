@@ -5,11 +5,11 @@ package zakadabar.demo.frontend.pages.ship
 
 import zakadabar.demo.data.ship.SearchShipsQuery
 import zakadabar.demo.frontend.resources.Strings
-import zakadabar.stack.frontend.builtin.ZkPage
-import zakadabar.stack.frontend.builtin.form.ZkFormMode
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.h100
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.w100
+import zakadabar.stack.frontend.builtin.pages.ZkElementMode
+import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.util.default
@@ -37,7 +37,7 @@ object ShipSearch : ZkPage() {
         // to set the default values.
 
         form.dto = default()
-        form.mode = ZkFormMode.Query
+        form.mode = ZkElementMode.Query
 
         + column(h100) {
             + ZkTitleBar(Strings.searchShips)

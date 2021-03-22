@@ -12,11 +12,11 @@ import zakadabar.stack.data.builtin.Secret
 import zakadabar.stack.data.builtin.SessionDto
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkExecutor
-import zakadabar.stack.frontend.builtin.ZkPage
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.ZkFormMode
 import zakadabar.stack.frontend.builtin.layout.ZkFullScreenLayout
+import zakadabar.stack.frontend.builtin.pages.ZkElementMode
+import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.toast.toast
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.io
@@ -52,7 +52,7 @@ object Login : ZkPage(ZkFullScreenLayout) {
                 accountName = "demo"
                 password = Secret("demo")
             }
-            mode = ZkFormMode.Action
+            mode = ZkElementMode.Action
             fieldGridColumnTemplate = "minmax(max-content, 100px) 1fr"
             onExecuteResult = ::onExecuteResult
         }

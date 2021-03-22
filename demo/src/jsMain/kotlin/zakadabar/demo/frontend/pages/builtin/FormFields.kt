@@ -6,12 +6,12 @@ package zakadabar.demo.frontend.pages.builtin
 import zakadabar.demo.data.builtin.BuiltinDto
 import zakadabar.demo.frontend.resources.Strings
 import zakadabar.stack.frontend.application.ZkApplication.theme
-import zakadabar.stack.frontend.builtin.ZkPage
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.ZkFormMode
 import zakadabar.stack.frontend.builtin.form.fields.ZkSecretVerificationField
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
+import zakadabar.stack.frontend.builtin.pages.ZkElementMode
+import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.plusAssign
 
@@ -28,7 +28,7 @@ object FormFields : ZkPage() {
 
         val form = Form()
         form.dto = default()
-        form.mode = ZkFormMode.Action
+        form.mode = ZkElementMode.Action
         + form
     }
 

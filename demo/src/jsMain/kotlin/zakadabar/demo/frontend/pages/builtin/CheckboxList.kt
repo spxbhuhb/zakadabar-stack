@@ -5,10 +5,10 @@ package zakadabar.demo.frontend.pages.builtin
 
 import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.ZkPage
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.input.checkboxlist.ZkCheckboxList
 import zakadabar.stack.frontend.builtin.input.checkboxlist.ZkCheckboxListItem
+import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.util.marginRight
 
 /**

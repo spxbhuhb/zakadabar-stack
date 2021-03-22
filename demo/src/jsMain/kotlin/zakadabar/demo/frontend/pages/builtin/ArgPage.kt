@@ -4,7 +4,7 @@
 package zakadabar.demo.frontend.pages.builtin
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.frontend.builtin.ZkArgPage
+import zakadabar.stack.frontend.builtin.pages.ZkArgPage
 import zakadabar.stack.frontend.util.marginRight
 
 /**

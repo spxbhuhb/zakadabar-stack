@@ -29,9 +29,9 @@ import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.ZkFormMode
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.image.ZkImagePreview
+import zakadabar.stack.frontend.builtin.pages.ZkElementMode
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.io
 
@@ -53,7 +53,7 @@ open class ZkImagesField<T : RecordDto<T>>(
 
             form.fields += this@ZkImagesField
 
-            if (form.mode != ZkFormMode.Create) {
+            if (form.mode != ZkElementMode.Create) {
                 form.dto.comm().blobMetaRead(dataRecordId).forEach {
                     + ZkImagePreview(it, onDelete = { preview -> onDelete(preview) }) marginRight 10 marginBottom 10
                 }
@@ -117,7 +117,7 @@ open class ZkImagesField<T : RecordDto<T>>(
 
                     // when the form is in create mode we don't have a proper record id, use null instead
                     form.dto.comm().blobCreate(
-                        if (form.mode == ZkFormMode.Create) null else dataRecordId,
+                        if (form.mode == ZkElementMode.Create) null else dataRecordId,
                         file.name, file.type, file,
                         thumbnail::update
                     )
@@ -145,7 +145,7 @@ open class ZkImagesField<T : RecordDto<T>>(
     private fun onDelete(preview: ZkImagePreview): Boolean {
         if (! window.confirm(builtin.confirmDelete)) return false
         io {
-            if (form.mode != ZkFormMode.Create) {
+            if (form.mode != ZkElementMode.Create) {
                 form.dto.comm().blobDelete(dataRecordId, preview.dto.id)
             }
             this@ZkImagesField -= preview

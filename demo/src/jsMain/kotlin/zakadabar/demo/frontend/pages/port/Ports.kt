@@ -4,13 +4,13 @@
 package zakadabar.demo.frontend.pages.port
 
 import zakadabar.demo.data.PortDto
-import zakadabar.stack.frontend.builtin.ZkCrud
+import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
 
-object Ports : ZkCrud<PortDto>() {
+object Ports : ZkCrudTarget<PortDto>() {
     init {
         companion = PortDto.Companion
         dtoClass = PortDto::class
-        formClass = Form::class
+        pageClass = Form::class
         tableClass = Table::class
     }
 }
