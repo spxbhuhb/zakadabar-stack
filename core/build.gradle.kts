@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.3.11-SNAPSHOT"
+version = "2021.3.22"
 
 // common
 val ktorVersion = "1.4.0"

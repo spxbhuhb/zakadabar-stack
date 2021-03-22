@@ -3,8 +3,7 @@
 A full-stack development platform for Kotlin. JVM backend, JVM (Android) frontend, JavaScript frontend, all programmed
 exclusively in Kotlin.
 
-As of now we publish the project as **technology preview**. Many things are missing,
-**we might brake this and that with releases**. Interfaces, use patterns might change, it will need some time to mature.
+Project status is **alpha testing**.
 
 As of now, the Android support is just the communication data model (data classes) and the communication itself. We use
 the same classes form `commonMain` on all platforms. For those, frontend - backend communication works out of the box.
@@ -21,14 +20,16 @@ Kotlin(x), Ktor, SQL
 
 ## Getting Started
 
-Check out the [The Demo Project](demo) which is commented and explained.
+Check the [The Demo Project](demo) which is commented and explained.
 
 ## Documentation
 
 * [The Demo Project](demo)
+
+**The ones below are very outdated, we'll update them during the April.**
+
 * [The Cookbook](doc/cookbook/README.md)
 * [Knowledge Base](doc/knowledge-base/README.md)
-* [Developers Guide](doc/developers-guide/README.md)
 * [Productivity Tips](doc/misc/Productivity.md)
 * API as soon as Dokka doesn't crash (yay 1.4)
 
