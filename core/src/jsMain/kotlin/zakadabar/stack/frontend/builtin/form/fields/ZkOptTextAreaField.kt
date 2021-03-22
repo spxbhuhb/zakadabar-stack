@@ -47,6 +47,7 @@ open class ZkOptTextAreaField<T : DtoBase>(
         area.value = prop.get() ?: ""
 
         on(area, "input") {
+            touched = true
             prop.set(area.value)
             form.validate()
         }

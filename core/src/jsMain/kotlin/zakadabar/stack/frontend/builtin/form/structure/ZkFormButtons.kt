@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.frontend.builtin.form.structure
 
-import kotlinx.browser.window
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
@@ -12,7 +11,9 @@ import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.misc.processing.ZkProcessing
+import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
 import zakadabar.stack.frontend.builtin.pages.ZkElementMode
+import zakadabar.stack.frontend.util.io
 
 open class ZkFormButtons<T : DtoBase>(
     private val form: ZkForm<T>
@@ -59,8 +60,11 @@ open class ZkFormButtons<T : DtoBase>(
             form.fields.forEach { touched = touched || it.touched }
 
             if (touched) {
-                // TODO replace this with a styled dialog
-                if (window.confirm(builtin.notSaved)) ZkApplication.back()
+                io {
+                    if (ZkConfirmDialog(builtin.confirmation.capitalize(), builtin.notSaved).run()) {
+                        ZkApplication.back()
+                    }
+                }
             } else {
                 ZkApplication.back()
             }

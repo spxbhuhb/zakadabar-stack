@@ -19,6 +19,11 @@ open class ZkBuiltinStrings : ZkStringStore() {
             }
     }
 
+    val confirmation by "confirmation"
+    open val show by "show"
+    open val yes by "yes"
+    open val no by "no"
+    open val cancel by "cancel"
     open val processing by "... processing ..."
     open val dropFilesHere by "Drop files here."
     open val programError by "Error during program execution, please notify the support about this."

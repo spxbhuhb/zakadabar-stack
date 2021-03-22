@@ -13,6 +13,7 @@ import zakadabar.stack.frontend.application.ZkApplication.stringStore
 import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.application.ZkApplication.toasts
 import zakadabar.stack.frontend.builtin.dock.ZkDock
+import zakadabar.stack.frontend.builtin.modal.ZkModalContainer
 import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
 import zakadabar.stack.frontend.resources.ZkStringStore
 import zakadabar.stack.frontend.resources.ZkTheme
@@ -52,6 +53,8 @@ object ZkApplication {
 
     lateinit var toasts: ZkToastContainer
 
+    lateinit var modals: ZkModalContainer
+
     @Suppress("MemberVisibilityCanBePrivate")
     const val NAVSTATE_CHANGE = "zk-navstate-change"
 
@@ -62,14 +65,19 @@ object ZkApplication {
             fontWeight = theme.font.weight
         }
 
-        dock = ZkDock().also {
-            it.onCreate()
-            it.onResume()
+        dock = ZkDock().apply {
+            onCreate()
+            onResume()
         }
 
-        toasts = ZkToastContainer().also {
-            it.onCreate()
-            it.onResume()
+        toasts = ZkToastContainer().apply {
+            onCreate()
+            onResume()
+        }
+
+        modals = ZkModalContainer().apply {
+            onCreate()
+            onResume()
         }
 
         window.addEventListener("popstate", onPopState)

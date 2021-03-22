@@ -53,6 +53,7 @@ abstract class ZkStringBase<T : DtoBase, VT>(
         input.value = getPropValue()
 
         on(input, "input") {
+            touched = true
             setPropValue(input.value)
             form.validate()
         }

@@ -1,8 +1,9 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.frontend.pages.builtin
+package zakadabar.demo.frontend.pages.builtin.layout
 
+import zakadabar.demo.frontend.pages.builtin.form.FormFields
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.p1
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer

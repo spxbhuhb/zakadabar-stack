@@ -10,6 +10,7 @@ import zakadabar.stack.frontend.builtin.icon.ZkIconTheme
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutTheme
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainerTheme
 import zakadabar.stack.frontend.builtin.misc.ZkFontTheme
+import zakadabar.stack.frontend.builtin.modal.ZkModalTheme
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarTheme
 import zakadabar.stack.frontend.builtin.table.ZkTableTheme
 import zakadabar.stack.frontend.builtin.toast.ZkToastTheme
@@ -22,6 +23,7 @@ open class ZkBuiltinTheme : ZkTheme {
     override var form = ZkFormTheme()
     override var icon = ZkIconTheme()
     override var layout = ZkLayoutTheme()
+    override var modal = ZkModalTheme()
     override var sidebar = ZkSideBarTheme()
     override var tabContainer = ZkTabContainerTheme()
     override var table = ZkTableTheme()

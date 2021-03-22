@@ -9,6 +9,7 @@ import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 object ZkButtonStyles : ZkCssStyleSheet<ZkButtonStyles>(ZkApplication.theme) {
 
     val button by cssClass {
+        width = "max-content"
         fontSize = 14
         color = theme.button.text
         cursor = "pointer"

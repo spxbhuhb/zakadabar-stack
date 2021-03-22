@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.frontend.pages.builtin
+package zakadabar.demo.frontend.pages.builtin.input
 
 import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
 import zakadabar.stack.frontend.builtin.ZkElement
@@ -37,9 +37,7 @@ object CheckboxList : ZkPage(
             + "Checkbox list with int values"
             + ints
 
-            + row {
-                + ZkButton(builtin.save, ::onSave)
-            }
+            + ZkButton(builtin.save, CheckboxList::onSave)
 
             + output
         }

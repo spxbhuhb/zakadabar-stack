@@ -9,10 +9,11 @@ import kotlinx.coroutines.launch
 import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
 import zakadabar.demo.frontend.pages.account.Accounts
-import zakadabar.demo.frontend.pages.builtin.ArgPage
-import zakadabar.demo.frontend.pages.builtin.CheckboxList
-import zakadabar.demo.frontend.pages.builtin.FormFields
-import zakadabar.demo.frontend.pages.builtin.TabContainer
+import zakadabar.demo.frontend.pages.builtin.form.FormFields
+import zakadabar.demo.frontend.pages.builtin.input.CheckboxList
+import zakadabar.demo.frontend.pages.builtin.layout.TabContainer
+import zakadabar.demo.frontend.pages.builtin.modal.ConfirmDialog
+import zakadabar.demo.frontend.pages.builtin.pages.ArgPage
 import zakadabar.demo.frontend.pages.misc.Home
 import zakadabar.demo.frontend.pages.misc.Login
 import zakadabar.demo.frontend.pages.port.Ports
@@ -46,6 +47,7 @@ object SideBar : ZkSideBar() {
 
         + group(Strings.builtin) {
             + item("ZkArgPage") { ArgPage.open(ArgPage.Args(fourRandomInt()[0], "hello")) }
+            + item("ZkConfirmDialog") { ConfirmDialog.open() }
             + item("ZkCheckboxList") { CheckboxList.open() }
             + item("ZkForm") { FormFields.open() }
             + item("ZkTabContainer") { TabContainer.open() }

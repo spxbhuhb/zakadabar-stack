@@ -119,7 +119,6 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
     open fun focusEvents(element: HTMLElement) {
         on(element, "focus") {
             fieldBottomBorder.classList += ZkFormStyles.onFieldHover
-            touched = true
         }
 
         on(element, "blur") {

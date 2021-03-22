@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.frontend.pages.builtin
+package zakadabar.demo.frontend.pages.builtin.form
 
 import zakadabar.demo.data.builtin.BuiltinDto
 import zakadabar.demo.frontend.resources.Strings
@@ -75,13 +75,8 @@ object FormFields : ZkPage() {
                     }
                 }
 
-                + div {
-                    style {
-                        width = "max-content"
-                    }
-                    + ZkButton(Strings.validate) {
-                        validate(true)
-                    }
+                + ZkButton(Strings.validate) {
+                    validate(true)
                 }
 
             }

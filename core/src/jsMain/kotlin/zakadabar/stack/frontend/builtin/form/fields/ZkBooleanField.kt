@@ -49,13 +49,17 @@ open class ZkBooleanField<T : DtoBase>(
 
             on(checkbox, "change") {
                 prop.set(checkbox.checked)
+                touched = true
                 form.validate()
             }
 
             on(buildElement, "keypress") {
                 it as KeyboardEvent
                 when (it.key) {
-                    "Enter", " " -> checkbox.checked = ! checkbox.checked
+                    "Enter", " " -> {
+                        checkbox.checked = ! checkbox.checked
+                        touched = true
+                    }
                 }
             }
 
