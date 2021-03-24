@@ -1,12 +1,15 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.data.builtin
+
+package zakadabar.demo.data.ship
 
 import zakadabar.stack.data.DtoBase
 
 @Serializable
-data class ActionStatusDto(
-    val success: Boolean = true,
-    val reason: String? = null
+class SearchShipsResult(
+    var shipId: Long,
+    var name: String,
+    var port: String?,
+    var captain: String
 ) : DtoBase

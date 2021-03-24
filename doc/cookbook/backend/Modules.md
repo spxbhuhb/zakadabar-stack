@@ -48,7 +48,7 @@ To include a backend module in your application add them to the configuration fi
 
 ```yaml
 modules:
-  - zakadabar.demo.backend.Module
+  - Module
 ```
 
 During start-up the stack:

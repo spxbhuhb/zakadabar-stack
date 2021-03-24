@@ -15,6 +15,7 @@ import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
 import io.ktor.http.content.*
+import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.serialization.*
@@ -22,6 +23,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.sessions.*
 import io.ktor.websocket.*
+import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.custom.CustomBackend
 import zakadabar.stack.backend.data.Sql
@@ -149,10 +151,21 @@ class Server : CliktCommand() {
             }
 
             install(StatusPages) {
-                exception<Unauthorized> { _ ->
+                exception<Unauthorized> {
                     call.respond(HttpStatusCode.Unauthorized)
                 }
-                statusFile(HttpStatusCode.NotFound, filePattern = "index.html")
+                exception<EntityNotFoundException> {
+                    call.respond(HttpStatusCode.NotFound)
+                }
+                status(HttpStatusCode.NotFound) {
+                    val uri = call.request.uri
+                    // this check is here so we will redirect only when needed
+                    // api not found has to go directly to the browser, check
+                    // for index.html is there to avoid recursive redirection
+                    if (! uri.startsWith("/api") && uri != "/index.html") {
+                        call.respondRedirect("/index.html")
+                    }
+                }
             }
 
             routing {

@@ -28,7 +28,7 @@ You may add custom backends directly from the configuration, without creating a 
 
 ```yaml
 modules:
-  - zakadabar.demo.backend.misc.PingBackend
+  - PingBackend
 ```
 
 To add a custom backend from a module see: [Modules](./Modules.md)
