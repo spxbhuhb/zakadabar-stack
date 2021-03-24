@@ -40,7 +40,8 @@ class SecretValidationRuleList(val kProperty: KMutableProperty0<Secret>) : Valid
 
     inner class Blank(@PublicApi val validValue: Boolean) : ValidationRule<Secret> {
         override fun validate(value: Secret, report: ValidityReport) {
-            if (value.value.isBlank() != validValue) report.fail(kProperty, this)
+            if (validValue) return // nothing to check when blank is allowed
+            if (value.value.isBlank()) report.fail(kProperty, this)
         }
     }
 

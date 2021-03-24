@@ -353,7 +353,7 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
      *
      * @return true if the DTO is valid, false otherwise
      */
-    fun validate(submit: Boolean = false): Boolean {
+    open fun validate(submit: Boolean = false): Boolean {
         if (submit) {
             // submit marks all fields touched to show all invalid fields for the user
             fields.forEach {
@@ -379,14 +379,15 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
             invalidFields?.show(invalid)
         }
 
-        if (submit && invalid.isNotEmpty()) {
+        if (submit && (invalid.isNotEmpty() || report.fails.isNotEmpty())) {
             onInvalidSubmit()
+            return false
         }
 
-        return report.fails.isEmpty()
+        return true
     }
 
-    private fun invalidTouchedFields(report: ValidityReport): List<ZkFieldBase<T, *>> {
+    open fun invalidTouchedFields(report: ValidityReport): List<ZkFieldBase<T, *>> {
         val invalid = mutableListOf<ZkFieldBase<T, *>>()
 
         report.fails.keys.forEach { propName ->
@@ -456,6 +457,9 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
                     ZkElementMode.Query -> {
                         (dto as QueryDto<*>).execute()
                         // TODO do something here with the result
+                    }
+                    ZkElementMode.Other -> {
+
                     }
                 }
 

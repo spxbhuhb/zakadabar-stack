@@ -15,7 +15,6 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.Server
-import zakadabar.stack.backend.Unauthorized
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantTable
@@ -95,7 +94,7 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
             try {
                 authenticate(principalId, action.oldPassword.value)
             } catch (ex: Exception) {
-                throw Unauthorized()
+                return@transaction ActionStatusDto(false)
             }
         } else {
             authorize(executor, StackRoles.securityOfficer)

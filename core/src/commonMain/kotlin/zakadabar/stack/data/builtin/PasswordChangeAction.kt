@@ -27,7 +27,7 @@ data class PasswordChangeAction(
 
     override fun schema() = DtoSchema {
         + ::accountId
-        + ::oldPassword
+        + ::oldPassword blank false
         + ::newPassword blank false min 8
     }
 

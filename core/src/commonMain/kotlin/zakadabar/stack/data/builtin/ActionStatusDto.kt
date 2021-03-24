@@ -8,5 +8,6 @@ import zakadabar.stack.data.DtoBase
 
 @Serializable
 class ActionStatusDto(
-    val success: Boolean = true
+    val success: Boolean = true,
+    val reason: String? = null
 ) : DtoBase

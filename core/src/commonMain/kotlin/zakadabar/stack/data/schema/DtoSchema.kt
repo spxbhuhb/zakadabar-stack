@@ -23,6 +23,9 @@ open class DtoSchema() {
     @Suppress("MemberVisibilityCanBePrivate") // To make extensions possible
     val ruleLists = mutableMapOf<KProperty0<*>, ValidationRuleList<*>>()
 
+    @Suppress("MemberVisibilityCanBePrivate") // To make extensions possible
+    val customRuleLists = mutableListOf<CustomValidationRuleList>()
+
     operator fun KMutableProperty0<String>.unaryPlus(): StringValidationRuleList {
         val ruleList = StringValidationRuleList(this)
         ruleLists[this] = ruleList
@@ -107,6 +110,14 @@ open class DtoSchema() {
         return ruleList
     }
 
+    operator fun plusAssign(custom: CustomValidationRuleList) {
+        customRuleLists += custom
+    }
+
+    operator fun CustomValidationRuleList.unaryPlus() {
+        customRuleLists += this
+    }
+
     @JsName("SchemaOptEnumUnaryPlus")
     inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): EnumValidationRuleList<E> {
         val ruleList = EnumValidationRuleList(this, enumValues<E>().first())
@@ -119,6 +130,8 @@ open class DtoSchema() {
         ruleLists[this] = ruleList
         return ruleList
     }
+
+    fun custom(function: (report: ValidityReport, rule: ValidationRule<Unit>) -> Unit) = CustomValidationRuleList(function)
 
     @PublicApi
     fun validate(): ValidityReport {
