@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.data.builtin
 
+import kotlinx.serialization.Serializable
 import zakadabar.stack.data.DtoBase
 
 @Serializable
