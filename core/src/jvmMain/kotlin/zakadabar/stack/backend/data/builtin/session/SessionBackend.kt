@@ -59,7 +59,11 @@ object SessionBackend : RecordBackend<SessionDto>() {
 
     private fun action(call: ApplicationCall, executor: Executor, action: LoginAction): ActionStatusDto {
 
-        val result = authenticate(executor.accountId, action.accountName, action.password.value) ?: return ActionStatusDto(false)
+        val result = try {
+            authenticate(executor.accountId, action.accountName, action.password.value, throwLocked = true) ?: return ActionStatusDto(false)
+        } catch (ex: PrincipalBackend.AccountLockedException) {
+            return ActionStatusDto(false, "locked")
+        }
 
         val (account, principalId) = result
 
@@ -72,7 +76,7 @@ object SessionBackend : RecordBackend<SessionDto>() {
         return ActionStatusDto(true)
     }
 
-    fun authenticate(executorAccountId: Long, accountName: String, password: String): Pair<AccountPublicDto, Long>? {
+    fun authenticate(executorAccountId: Long, accountName: String, password: String, throwLocked: Boolean = false): Pair<AccountPublicDto, Long>? {
         val (account, principalId) = try {
 
             val (account, principalId) = Server.findAccountByName(accountName)
@@ -81,11 +85,15 @@ object SessionBackend : RecordBackend<SessionDto>() {
 
             account to principalId
 
+        } catch (ex: PrincipalBackend.InvalidCredentials) {
+            logger.warn("${executorAccountId}: /login result=fail name=${accountName}")
+            return null
         } catch (ex: NoSuchElementException) {
             logger.warn("${executorAccountId}: /login result=fail name=${accountName}")
             return null
         } catch (ex: PrincipalBackend.AccountLockedException) {
             logger.warn("${executorAccountId}: /login result=locked name=${accountName}")
+            if (throwLocked) throw ex
             return null
         } catch (ex: PrincipalBackend.AccountExpiredException) {
             logger.warn("${executorAccountId}: /login result=expired name=${accountName}")

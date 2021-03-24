@@ -56,7 +56,10 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
         authorize(executor, StackRoles.securityOfficer)
 
         PrincipalDao.new {
-            fromDto(dto)
+            validated = dto.validated
+            locked = dto.locked
+            expired = dto.expired
+            loginFailCount = 0
         }.toDto()
     }
 
@@ -71,7 +74,15 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
 
         authorize(executor, StackRoles.securityOfficer)
 
-        PrincipalDao[dto.id].fromDto(dto).toDto()
+        val dao = PrincipalDao[dto.id]
+
+        if (dao.locked && ! dto.locked) {
+            dao.loginFailCount = 0
+        }
+
+        dao.locked = dto.locked
+
+        dao.toDto()
     }
 
     override fun delete(executor: Executor, recordId: Long) {
@@ -80,7 +91,6 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
 
         PrincipalDao[recordId].delete()
     }
-
 
     private fun action(executor: Executor, action: PasswordChangeAction) = transaction {
 
@@ -107,18 +117,9 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
         ActionStatusDto()
     }
 
-    private fun PrincipalDao.fromDto(dto: PrincipalDto): PrincipalDao {
-
-        validated = dto.validated
-        locked = dto.locked
-        expired = dto.expired
-        loginFailCount = dto.loginFailCount
-
-        return this
-    }
-
     fun encrypt(password: String) = BCrypt.hashpw(password, BCrypt.gensalt())
 
+    class InvalidCredentials : Exception()
     class AccountNotValidatedException : Exception()
     class AccountLockedException : Exception()
     class AccountExpiredException : Exception()
@@ -127,6 +128,10 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
 
         val principal = PrincipalDao[principalId]
 
+        if (! principal.validated) throw AccountNotValidatedException()
+        if (principal.locked) throw AccountLockedException()
+        if (principal.expired) throw AccountExpiredException()
+
         val credentials = principal.credentials ?: throw NoSuchElementException()
 
         if (! BCrypt.checkpw(password, credentials)) {
@@ -134,12 +139,8 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
             principal.lastLoginFail = Clock.System.now().toJavaInstant()
             principal.locked = principal.loginFailCount > maxFailCount
             commit()
-            throw NotFoundException() // intentional
+            throw InvalidCredentials()
         }
-
-        if (! principal.validated) throw AccountNotValidatedException()
-        if (principal.locked) throw AccountLockedException()
-        if (principal.expired) throw AccountExpiredException()
 
         principal.lastLoginSuccess = Clock.System.now().toJavaInstant()
         principal.loginSuccessCount ++

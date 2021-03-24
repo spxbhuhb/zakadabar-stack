@@ -157,21 +157,6 @@ class Server : CliktCommand() {
 
             routing {
 
-//                route("auth") {
-//                    authenticate("basic") {
-//                        route("basic") {
-//                            get("login") {
-//                                // FIXME not anonymous :D
-//                                call.sessions.set(StackSession(0, emptyList()))
-//                                call.respondText(0L.toString(), ContentType.Application.Json)
-//                            }
-//                            get("logout") {
-//                                call.sessions.set(StackSession(anonymous.id))
-//                                call.respondText(anonymous.id.toString(), ContentType.Application.Json)
-//                            }
-//                        }
-//                    }
-//                }
                 authenticate {
 
                     get("health") {
