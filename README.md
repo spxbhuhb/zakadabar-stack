@@ -1,43 +1,29 @@
 # Zakadabar
 
-A full-stack development platform for Kotlin. JVM backend, JVM (Android) frontend, JavaScript frontend, all programmed
-exclusively in Kotlin.
+Full-stack development stack implemented as a Kotlin Multiplatform project.
+
+Goal of the stack is to implement small business applications very fast without re-doing the same programming task again
+and again.
 
 Project status is **alpha testing**.
 
-As of now, the Android support is just the communication data model (data classes) and the communication itself. We use
-the same classes form `commonMain` on all platforms. For those, frontend - backend communication works out of the box.
-
-## Keywords
-
-Kotlin(x), Ktor, SQL
-
-`techniques` multi-platform, coroutines, operator overloading, builders
-
-`dependencies (all of them)` Kotlin(x), Ktor, HikariCP, Exposed, Clikt, Kaml, LogBack
-
-`development tools` IntelliJ IDEA, Gradle, Firefox, Android Studio
-
-## Getting Started
-
-Check the [The Demo Project](demo) which is commented and explained.
-
 ## Documentation
 
-* [The Demo Project](demo)
+* [Accounts](doc/Accounts.md)
 
-**The ones below are very outdated, we'll update them during the April.**
+* [Demo - Backend and Web Frontend](demo/demo)
+* [Demo - JVM client](demo/demo-jvm-client)
 
-* [The Cookbook](doc/cookbook/README.md)
-* [Knowledge Base](doc/knowledge-base/README.md)
-* [Productivity Tips](doc/misc/Productivity.md)
-* API as soon as Dokka doesn't crash (yay 1.4)
+General structure of an application that uses the stack.
+
+![Structure](doc/structure.png)
 
 ## Using
 
 We release only Kotlin 1.4+ multiplatform packages.
 
-Packages of Zakadabar Stack are available from GitHub Packages. To reference them from your project use the following Gradle setup.
+Packages of Zakadabar Stack are available from GitHub Packages. To reference them from your project use the following
+Gradle setup.
 
 Property values are from your `<HOME-DIRECTORY>/.gradle/gradle.properties` file.
 See [Authenticating to GitHub Packages](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-gradle-for-use-with-github-packages#authenticating-to-github-packages)

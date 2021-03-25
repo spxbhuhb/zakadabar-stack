@@ -4,7 +4,7 @@
 
 | Name | Explanation |
 | ---- | ---- |
-| Table | An SQL table for persistence, the stack uses Exposed tables. |
+| Table | An SQL table for persistence, the stack uses Exposed tables, but you can use whatever persistence you want actually. |
 | DAO | A Data Access Object used on the backend that makes handling the data easier, the stack uses Exposed DAOs. |
 | DTO | A Data Transfer Object that we use to transfer data between the frontend and the backend. |
 | Data Record | A set of data fields which belong together logically. We use "Data Record" when we talk about abstract data model records. One data record may have one or more SQL table rows. |
@@ -12,7 +12,6 @@
 | Query Parameter DTO | The frontend sends query parameters to the backend. Not for CRUD. |
 | Query Response DTO |  The backend sends the result of a query to the frontend. Not for CRUD. |
 | Record DTO | DTO for a data record which has a type and an id. Not the very same as an SQL table record, but close. Usually with standard CRUD API. |
-| Entity DTO | DTO for an Entity in the entity tree (see below). These are meant to build a hierarchical structure, like folders and files. Standard CRUD API with hierarchy support. |
 
 ## Data Records
 

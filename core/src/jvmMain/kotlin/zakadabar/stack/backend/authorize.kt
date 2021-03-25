@@ -13,7 +13,7 @@ fun authorize(executor: Executor, roleName: String) {
 
 @PublicApi
 fun authorize(executor: Executor, vararg roleNames: String) {
-    if (! executor.oneOf(roleNames)) throw Unauthorized()
+    if (! executor.hasOneOfRoles(roleNames)) throw Unauthorized()
 }
 
 @PublicApi

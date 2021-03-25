@@ -2,7 +2,7 @@
 
 Types:
 
-- Backend URL, for frontend - backend communication
+- Backend URL, for communication between the frontend and the backend
 - Browser Frontend URL, the URL used in the browser to select the page
 
 Compose / decompose URLs programmatically from class and type names. Do not hardcode URLs manually. With programmatic
