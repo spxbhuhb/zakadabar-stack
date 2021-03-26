@@ -7,20 +7,16 @@ and again.
 
 Project status is **alpha testing**.
 
+**Links below are mostly broken at the moment.**
+
 ## Getting Started
 
-**These links are broken at the moment.**
-
 1. [Full-Stack in 15 minutes](https://zakadabar.com/CodeLab) - code lab
-2. [Concepts](https://zakadabar.com/concepts.pdf) - PDF slide show
-3. [Demo](https://zakadabar.com/Demo) and the [source code](demo/demo) of the demo
-
-## Documentation
-
-* [Accounts, Authentication, Authorization](doc/Accounts.md)
-
-* [Demo - Backend and Web Frontend](demo/demo)
-* [Demo - JVM client](demo/demo-jvm-client)
+1. [Concepts](https://zakadabar.com/concepts.pdf) - PDF slide show
+1. [Gotchas](https://zakadabar.com/gotchas) - common gotchas, avoid frustration!
+1. [Cheat Sheet](https://zakadabar.com/CheatSeat) - for copy-paste knights
+1. [Demo](https://zakadabar.com/Demo) and the [source code](demo/demo) of the demo
+1. [Documentation](https://zakadabar.com/Documentation)
 
 ## Gradle
 
@@ -38,7 +34,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation("hu.simplexion.zakadabar:core:2021.3.25")
+                implementation("hu.simplexion.zakadabar:core:2021.3.26")
             }
         }
     }

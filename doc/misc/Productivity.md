@@ -14,7 +14,7 @@ So, when you hover over "justifyContent" you'll see something like this:
 
 ## Finding Bugs
 
-* Check the [Knowledge Base](../knowledge-base/README.md)
+* Check the [Knowledge Base](../gotchas/README.md)
 * Check GitHub issues
 * Read on
 

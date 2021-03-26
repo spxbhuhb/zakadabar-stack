@@ -12,7 +12,9 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.3.23-SNAPSHOT"
+version = "2021.3.26"
+
+val isSnapshot = version.toString().contains("SNAPSHOT")
 
 // common
 val ktorVersion = "1.4.0"
@@ -126,15 +128,18 @@ tasks.withType<Jar> {
     }
 }
 
-// Dokka Crashes
-//tasks.dokkaHtml {
-//    outputDirectory = "$buildDir/dokka"
-//    dokkaSourceSets {
-//        val commonMain by creating {}
-//        val jvmMain by creating {}
-//        val jsMain by creating {}
-//    }
-//}
+val dokkaHtml by tasks.getting(org.jetbrains.dokka.gradle.DokkaTask::class)
+
+val javadocJar: TaskProvider<Jar> by tasks.registering(Jar::class) {
+    dependsOn(dokkaHtml)
+    archiveBaseName.set("core")
+    archiveClassifier.set("javadoc")
+    from(dokkaHtml.outputDirectory)
+}
+
+tasks.getByName("build") {
+    dependsOn(javadocJar)
+}
 
 // add sign and publish only if the user is a zakadabar publisher
 
@@ -150,21 +155,35 @@ if (properties["zakadabar.publisher"] != null) {
         val path = "spxbhuhb/zakadabar-stack"
 
         repositories {
+//            if (!isSnapshot) {
+//                maven {
+//                    name = "GitHubPackages"
+//                    url = uri("https://maven.pkg.github.com/$path")
+//                    credentials {
+//                        username = (properties["github.user"] ?: System.getenv("GITHUB_USERNAME")).toString()
+//                        password = (properties["github.key"] ?: System.getenv("GITHUB_TOKEN")).toString()
+//                    }
+//                }
+//            }
             maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/$path")
+                name = "MavenCentral"
+                url = if (isSnapshot) {
+                    uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+                } else {
+                    uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                }
                 credentials {
-                    username = (properties["github.user"] ?: System.getenv("USERNAME")).toString()
-                    password = (properties["github.key"] ?: System.getenv("TOKEN")).toString()
+                    username = (properties["central.user"] ?: System.getenv("CENTRAL_USERNAME")).toString()
+                    password = (properties["central.password"] ?: System.getenv("CENTRAL_PASSWORD")).toString()
                 }
             }
         }
 
         publications.withType<MavenPublication>().all {
-
+            artifact(javadocJar.get())
             pom {
-                description.set("Kotlin/Ktor based web server and client")
-                name.set("Zakadabar")
+                description.set("Kotlin/Ktor based full-stack platform")
+                name.set("Zakadabar Stack")
                 url.set("https://github.com/$path")
                 scm {
                     url.set("https://github.com/$path")

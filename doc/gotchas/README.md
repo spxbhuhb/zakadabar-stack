@@ -46,8 +46,15 @@ No idea why this happens, Just add the import manually:
 
 ### NPM + Yarn lock - whatever wherever ...
 
-Gradle Clean IntelliJ Gradle refresh
+```text
+* What went wrong:
+  Execution failed for task ':kotlinNpmInstall'.
+>                 Process 'Resolving NPM dependencies using yarn' returns 1
+> 
+```
+
+* Gradle Clean
 
 ### kotlinx.serializer stuff cannot be imported after Gradle clean
 
-Run a Gradle refresh from IntelliJ.
+This happens if you commit with "organize imports" on. Add an `import kotlinx.serialization.*` to the files in error.
