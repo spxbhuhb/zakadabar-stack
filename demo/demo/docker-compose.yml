@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+
+  demo-db:
+    image: postgres:9.6.21
+    environment:
+      POSTGRES_DB: demo
+      POSTGRES_USER: demo
+      POSTGRES_PASSWORD: demo
+    ports:
+      - '25432:5432'
+    restart: on-failure
+
+  demo-srv:
+    image: spxbhuhb/zakadabar-demo:2021.3.26
+    depends_on:
+      - demo-db
+    ports:
+      - '8080:8080'

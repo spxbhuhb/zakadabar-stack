@@ -41,10 +41,6 @@ kotlin {
 }
 ```
 
-## Credits and Dependency Licenses
-
-[Credits](doc/misc/credits.md) to the projects we built on.
-
 ## License
 
 > Copyright (c) 2020 Simplexion Kft, Hungary and contributors
@@ -60,3 +56,7 @@ kotlin {
 > WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 > See the License for the specific language governing permissions and
 > limitations under the License.
+
+## Credits
+
+[Credits](doc/misc/credits.md) to the projects we built on.
