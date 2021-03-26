@@ -46,15 +46,17 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
     override val dtoClass = AccountPrivateDto::class
 
     override fun onModuleLoad() {
-
-        // create the tables we need, actually this backend needs [PrincipalTable] also
-        // but that should be created by the principal backend
-
         transaction {
             SchemaUtils.createMissingTablesAndColumns(
                 AccountPrivateTable
             )
         }
+    }
+
+    override fun onModuleStart() {
+
+        // create the tables we need, actually this backend needs [PrincipalTable] also
+        // but that should be created by the principal backend
 
         // FIXME You probably want to change this in production code!
         // Create the "demo" user. In production code this user is usually a master admin

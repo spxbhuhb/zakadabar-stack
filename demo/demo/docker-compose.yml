@@ -13,11 +13,17 @@ services:
     restart: on-failure
     networks:
       - demo-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   demo-srv:
     image: spxbhuhb/zakadabar-demo:2021.3.26
     depends_on:
-      - demo-db
+      demo-db:
+        condition: service_healthy
     ports:
       - '8080:8080'
     networks:

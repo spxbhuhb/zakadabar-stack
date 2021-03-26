@@ -23,17 +23,17 @@ import zakadabar.stack.util.PublicApi
 object Module : BackendModule {
     override fun onModuleLoad() {
 
-        // these three are defined in the core project, you could write your own
+        // these are defined in the core project, you could write your own
         // but in most cases there are fine
 
         Server += RoleBackend
         Server += RoleGrantBackend
         Server += PrincipalBackend
+        Server += SessionBackend
 
         // you probably need something similar to these as most systems have
         // some account / session management
 
-        Server += SessionBackend
         Server += AccountPrivateBackend
         Server += AccountPublicBackend
 

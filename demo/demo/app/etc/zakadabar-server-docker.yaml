@@ -5,7 +5,7 @@ database:
   password: demo
 
 traceRouting: false
-staticResources: ./var/static
+staticResources: /local/demo/var/static
 
 modules:
   - zakadabar.demo.backend.Module
