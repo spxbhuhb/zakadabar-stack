@@ -3,6 +3,7 @@
  */
 package zakadabar.demo.data.ship
 
+import kotlinx.serialization.*
 import kotlinx.serialization.builtins.ListSerializer
 import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.query.QueryDtoCompanion

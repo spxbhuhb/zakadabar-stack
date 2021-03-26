@@ -4,6 +4,7 @@
 
 package zakadabar.demo.data.ship
 
+import kotlinx.serialization.*
 import zakadabar.stack.data.DtoBase
 
 @Serializable

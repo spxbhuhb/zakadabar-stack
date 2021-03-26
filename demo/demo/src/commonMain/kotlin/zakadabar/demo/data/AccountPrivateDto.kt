@@ -6,7 +6,7 @@
 
 package zakadabar.demo.data
 
-import kotlinx.serialization.UseSerializers
+import kotlinx.serialization.*
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId

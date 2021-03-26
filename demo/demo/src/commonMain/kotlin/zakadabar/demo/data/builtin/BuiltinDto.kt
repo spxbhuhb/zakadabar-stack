@@ -9,7 +9,7 @@
 package zakadabar.demo.data.builtin
 
 import kotlinx.datetime.Instant
-import kotlinx.serialization.UseSerializers
+import kotlinx.serialization.*
 import zakadabar.stack.data.builtin.Secret
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
