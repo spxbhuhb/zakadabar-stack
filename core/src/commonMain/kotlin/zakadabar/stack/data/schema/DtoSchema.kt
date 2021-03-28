@@ -4,7 +4,7 @@
 package zakadabar.stack.data.schema
 
 import kotlinx.datetime.Instant
-import zakadabar.stack.data.builtin.Secret
+import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.util.PublicApi
 import kotlin.js.JsName
 import kotlin.reflect.KMutableProperty0

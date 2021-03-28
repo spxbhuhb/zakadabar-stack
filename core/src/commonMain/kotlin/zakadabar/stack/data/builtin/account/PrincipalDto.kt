@@ -4,7 +4,7 @@
 
 @file:UseSerializers(OptInstantAsStringSerializer::class)
 
-package zakadabar.stack.data.builtin
+package zakadabar.stack.data.builtin.account
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable

@@ -17,7 +17,7 @@
 package zakadabar.stack.frontend.builtin.form.fields
 
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.builtin.Secret
+import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 

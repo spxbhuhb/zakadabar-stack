@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.data.builtin.RoleDto
+import zakadabar.stack.data.builtin.account.RoleDto
 import zakadabar.stack.util.Executor
 
 object RoleBackend : RecordBackend<RoleDto>() {
@@ -64,7 +64,7 @@ object RoleBackend : RecordBackend<RoleDto>() {
         dao.toDto()
     }
 
-    override fun delete(executor: Executor, recordId: Long) {
+    override fun delete(executor: Executor, recordId: Long) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 

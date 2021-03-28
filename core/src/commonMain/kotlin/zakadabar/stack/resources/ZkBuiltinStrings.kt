@@ -1,23 +1,11 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin
+@file:Suppress("unused") // automatic detection does not work here because many strings are auto bound
 
-import zakadabar.stack.frontend.application.ZkApplication
-import zakadabar.stack.frontend.resources.ZkStringStore
+package zakadabar.stack.resources
 
 open class ZkBuiltinStrings : ZkStringStore() {
-
-    companion object {
-        private val fallback by lazy { ZkBuiltinStrings() }
-
-        val builtin: ZkBuiltinStrings
-            get() = if (ZkApplication.stringStore is ZkBuiltinStrings) {
-                ZkApplication.stringStore as ZkBuiltinStrings
-            } else {
-                fallback
-            }
-    }
 
     open val execute by "execute"
     open val confirmation by "confirmation"

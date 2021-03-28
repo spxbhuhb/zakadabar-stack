@@ -14,7 +14,7 @@ open class ZkOptStringColumn<T : DtoBase>(
     private val prop: KProperty1<T, String?>
 ) : ZkColumn<T> {
 
-    override var label = ZkApplication.stringStore.map[prop.name] ?: prop.name
+    override var label = ZkApplication.strings.map[prop.name] ?: prop.name
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         with(builder) {

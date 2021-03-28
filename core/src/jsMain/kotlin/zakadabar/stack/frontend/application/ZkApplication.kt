@@ -8,15 +8,16 @@ import kotlinx.browser.window
 import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.application.ZkApplication.dock
 import zakadabar.stack.frontend.application.ZkApplication.executor
+import zakadabar.stack.frontend.application.ZkApplication.modals
 import zakadabar.stack.frontend.application.ZkApplication.routing
-import zakadabar.stack.frontend.application.ZkApplication.stringStore
+import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.application.ZkApplication.toasts
 import zakadabar.stack.frontend.builtin.dock.ZkDock
 import zakadabar.stack.frontend.builtin.modal.ZkModalContainer
 import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
-import zakadabar.stack.frontend.resources.ZkStringStore
 import zakadabar.stack.frontend.resources.ZkTheme
+import zakadabar.stack.resources.ZkBuiltinStrings
 import zakadabar.stack.util.PublicApi
 
 /**
@@ -33,11 +34,14 @@ import zakadabar.stack.util.PublicApi
  *
  * @property  theme      The design theme of the application.
  *
- * @property  stringStore    The string store that contains the strings the application uses.
+ * @property  strings    The string store that contains the strings the application uses.
  *
  * @property  dock       A container to show sub-windows such as mail editing in Gmail.
  *
  * @property  toasts     A container to show toasts.
+ *
+ * @property  modals     A container that contains modal windows.
+ *
  */
 object ZkApplication {
 
@@ -47,7 +51,7 @@ object ZkApplication {
 
     lateinit var theme: ZkTheme
 
-    lateinit var stringStore: ZkStringStore
+    lateinit var strings: ZkBuiltinStrings
 
     lateinit var dock: ZkDock
 
@@ -98,6 +102,12 @@ object ZkApplication {
     }
 
     fun back() = window.history.back()
+
+    /**
+     * Translates the given string if there is a translation in the application's
+     * string store. Returns with the original string when there is no translation.
+     */
+    fun t(original: String) = strings.map[original] ?: original
 
     @PublicApi
     fun hasRole(roleName: String) = roleName in executor.roles

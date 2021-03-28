@@ -10,7 +10,7 @@ import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.application.ZkApplication
-import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
+import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
@@ -92,15 +92,15 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
      * If the [label] property is initialized uses its value.
      *
      * When it is not initialized and form.autoLabel is true,
-     * looks up the label in [ZkApplication.stringStore] and adds
+     * looks up the label in [ZkApplication.strings] and adds
      * it if found.
      *
-     * When not in [ZkApplication.stringStore] it adds [propName]
+     * When not in [ZkApplication.strings] it adds [propName]
      * as label.
      */
     open fun buildFieldLabel() {
         if (label == null) {
-            label = ZkApplication.stringStore.map[propName] ?: propName
+            label = ZkApplication.strings.map[propName] ?: propName
         }
 
         + div(ZkFormStyles.fieldLabel) {
@@ -184,7 +184,7 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
     open fun showErrors() {
         errors.clearChildren() // to clean up previous errors
         // TODO add the actual errors
-        errors.innerHTML = builtin.invalidValue
+        errors.innerHTML = strings.invalidValue
         errors.show()
     }
 

@@ -1,26 +1,27 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.data.builtin
+package zakadabar.stack.data.builtin.account
 
 import kotlinx.serialization.Serializable
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
-import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.DtoSchema
 
+/**
+ * A role which has some business specific meaning.
+ */
 @Serializable
-data class RoleGrantDto(
+class RoleDto(
 
     override var id: Long,
-    var principal: RecordId<PrincipalDto>,
-    var role: RecordId<RoleDto>
+    var name: String,
+    var description: String
 
-) : RecordDto<RoleGrantDto> {
+) : RecordDto<RoleDto> {
 
-    companion object : RecordDtoCompanion<RoleGrantDto>({
-        recordType = "role-grant"
-        + RoleGrantsByPrincipal
+    companion object : RecordDtoCompanion<RoleDto>({
+        recordType = "role"
     })
 
     override fun getRecordType() = recordType
@@ -28,8 +29,7 @@ data class RoleGrantDto(
 
     override fun schema() = DtoSchema {
         + ::id
-        + ::principal
-        + ::role
+        + ::name min 1 max 50 blank false
+        + ::description
     }
-
 }

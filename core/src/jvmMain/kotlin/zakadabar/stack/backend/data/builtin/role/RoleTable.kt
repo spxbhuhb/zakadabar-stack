@@ -5,7 +5,7 @@ package zakadabar.stack.backend.data.builtin.role
 
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
-import zakadabar.stack.data.builtin.RoleDto
+import zakadabar.stack.data.builtin.account.RoleDto
 
 object RoleTable : LongIdTable("roles") {
 

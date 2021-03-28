@@ -21,4 +21,9 @@ fun authorize(executor: Executor, check: (executor: Executor) -> Boolean) {
     if (! check(executor)) throw Unauthorized()
 }
 
+@PublicApi
+fun authorize(authorized: Boolean) {
+    if (! authorized) throw Unauthorized()
+}
+
 class Unauthorized : Exception()

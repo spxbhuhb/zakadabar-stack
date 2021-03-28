@@ -5,7 +5,7 @@ package zakadabar.demo.data
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
-import zakadabar.stack.data.builtin.AccountPublicDto
+import zakadabar.stack.data.builtin.account.AccountPublicDto
 import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.query.QueryDtoCompanion
 

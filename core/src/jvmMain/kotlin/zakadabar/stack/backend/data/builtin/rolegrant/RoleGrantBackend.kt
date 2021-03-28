@@ -14,8 +14,8 @@ import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
 import zakadabar.stack.backend.data.builtin.role.RoleDao
 import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.data.builtin.RoleGrantDto
-import zakadabar.stack.data.builtin.RoleGrantsByPrincipal
+import zakadabar.stack.data.builtin.account.RoleGrantDto
+import zakadabar.stack.data.builtin.account.RoleGrantsByPrincipal
 import zakadabar.stack.util.Executor
 
 object RoleGrantBackend : RecordBackend<RoleGrantDto>() {

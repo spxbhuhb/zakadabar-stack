@@ -8,7 +8,7 @@ import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import zakadabar.demo.data.AccountPrivateDto
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
-import zakadabar.stack.data.builtin.AccountPublicDto
+import zakadabar.stack.data.builtin.account.AccountPublicDto
 
 class AccountPrivateDao(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<AccountPrivateDao>(AccountPrivateTable)

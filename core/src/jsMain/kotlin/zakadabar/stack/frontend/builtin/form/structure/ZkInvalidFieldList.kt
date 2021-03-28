@@ -3,7 +3,8 @@
  */
 package zakadabar.stack.frontend.builtin.form.structure
 
-import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.fields.ZkFieldBase
@@ -22,7 +23,7 @@ open class ZkInvalidFieldList : ZkElement() {
         clear()
 
         + column {
-            + div(ZkFormStyles.invalidFieldListInto) { + builtin.invalidFieldsExplanation } marginBottom 8
+            + div(ZkFormStyles.invalidFieldListInto) { + strings.invalidFieldsExplanation } marginBottom 8
             + div { + invalid.joinToString(", ") { it.label ?: it.propName } }
         }
     }

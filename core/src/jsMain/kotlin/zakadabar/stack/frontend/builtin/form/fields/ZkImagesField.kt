@@ -25,7 +25,7 @@ import zakadabar.stack.data.record.BlobCreateState
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
+import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
@@ -70,7 +70,7 @@ open class ZkImagesField<T : RecordDto<T>>(
                         + ZkIconButton(ZkIcons.cloudUpload) marginBottom 10
                         + div {
                             buildElement.style.whiteSpace = "nowrap"
-                            + builtin.dropFilesHere
+                            + strings.dropFilesHere
                         }
                     }
                 }
@@ -94,7 +94,7 @@ open class ZkImagesField<T : RecordDto<T>>(
         event.preventDefault()
 
         if (! allowUpload()) {
-            window.alert(builtin.cannotAttachMoreImage)
+            window.alert(strings.cannotAttachMoreImage)
             return
         }
 
@@ -144,7 +144,7 @@ open class ZkImagesField<T : RecordDto<T>>(
     }
 
     private suspend fun onDelete(preview: ZkImagePreview): Boolean {
-        if (! ZkConfirmDialog(builtin.confirmation.capitalize(), builtin.confirmDelete).run()) return false
+        if (! ZkConfirmDialog(strings.confirmation.capitalize(), strings.confirmDelete).run()) return false
 
         if (form.mode != ZkElementMode.Create) {
             form.dto.comm().blobDelete(dataRecordId, preview.dto.id)

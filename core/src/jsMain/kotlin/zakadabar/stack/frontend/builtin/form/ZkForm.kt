@@ -19,13 +19,14 @@ package zakadabar.stack.frontend.builtin.form
 import kotlinx.datetime.Instant
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.action.ActionDto
-import zakadabar.stack.data.builtin.Secret
+import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.application.ZkApplication.back
-import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
+import zakadabar.stack.frontend.application.ZkApplication.strings
+import zakadabar.stack.frontend.application.ZkApplication.t
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.fields.*
@@ -35,7 +36,6 @@ import zakadabar.stack.frontend.builtin.form.structure.ZkInvalidFieldList
 import zakadabar.stack.frontend.builtin.pages.ZkCrudPage
 import zakadabar.stack.frontend.builtin.toast.ZkToast
 import zakadabar.stack.frontend.builtin.toast.toast
-import zakadabar.stack.frontend.resources.ZkStringStore.Companion.t
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.log
 import zakadabar.stack.frontend.util.plusAssign
@@ -488,7 +488,7 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
      * Default implementation shows a toast with a message.
      */
     open fun onInvalidSubmit() {
-        invalidToast = toast(warning = true, hideAfter = 3000) { builtin.invalidFieldsToast }
+        invalidToast = toast(warning = true, hideAfter = 3000) { strings.invalidFieldsToast }
     }
 
     /**
@@ -498,13 +498,13 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
      */
     open fun onSubmitSuccess() {
         when (mode) {
-            ZkElementMode.Create -> toast { builtin.createSuccess }
+            ZkElementMode.Create -> toast { strings.createSuccess }
             ZkElementMode.Read -> Unit
-            ZkElementMode.Update -> toast { builtin.updateSuccess }
-            ZkElementMode.Delete -> toast { builtin.deleteSuccess }
-            ZkElementMode.Action -> toast { builtin.actionSuccess }
+            ZkElementMode.Update -> toast { strings.updateSuccess }
+            ZkElementMode.Delete -> toast { strings.deleteSuccess }
+            ZkElementMode.Action -> toast { strings.actionSuccess }
             ZkElementMode.Query -> Unit
-            ZkElementMode.Other -> toast { builtin.actionSuccess }
+            ZkElementMode.Other -> toast { strings.actionSuccess }
         }
     }
 
@@ -515,13 +515,13 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
      */
     open fun onSubmitError(ex: Exception) {
         when (mode) {
-            ZkElementMode.Create -> toast(error = true) { builtin.createFail }
+            ZkElementMode.Create -> toast(error = true) { strings.createFail }
             ZkElementMode.Read -> Unit
-            ZkElementMode.Update -> toast(error = true) { builtin.updateFail }
-            ZkElementMode.Delete -> toast(error = true) { builtin.deleteFail }
-            ZkElementMode.Action -> toast(error = true) { builtin.actionFail }
-            ZkElementMode.Query -> toast(error = true) { builtin.queryFail }
-            ZkElementMode.Other -> toast(error = true) { builtin.actionFail }
+            ZkElementMode.Update -> toast(error = true) { strings.updateFail }
+            ZkElementMode.Delete -> toast(error = true) { strings.deleteFail }
+            ZkElementMode.Action -> toast(error = true) { strings.actionFail }
+            ZkElementMode.Query -> toast(error = true) { strings.queryFail }
+            ZkElementMode.Other -> toast(error = true) { strings.actionFail }
         }
     }
 

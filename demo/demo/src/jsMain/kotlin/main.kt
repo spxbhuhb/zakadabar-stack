@@ -4,8 +4,8 @@
 @file:Suppress("unused") // main is called by webpack
 
 import zakadabar.demo.frontend.Routing
-import zakadabar.demo.frontend.resources.DemoStrings
-import zakadabar.stack.data.builtin.SessionDto
+import zakadabar.demo.resources.DemoStrings
+import zakadabar.stack.data.builtin.account.SessionDto
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkExecutor
 import zakadabar.stack.frontend.builtin.ZkBuiltinTheme
@@ -49,7 +49,7 @@ fun main() {
             // instance to get strings when needed. This is also used to map property names
             // to labels in tables and forms.
 
-            stringStore = DemoStrings()
+            strings = DemoStrings()
 
             // Set the routing. You may change this on-the-fly if you want, for example if the user logs in.
 

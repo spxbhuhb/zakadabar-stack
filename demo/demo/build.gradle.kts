@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.3.26"
+version = "2021.3.26-SNAPSHOT"
 
 application {
     mainClassName = "zakadabar.stack.backend.ServerKt"
@@ -48,10 +48,11 @@ tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJ
     // seems like this does not work - minimize()
 }
 
+val appTemplate = "$projectDir/template/app"
 val distName = "demo-$version-server"
 
 val copyAppStruct by tasks.registering(Copy::class) {
-    from("$projectDir/app")
+    from(appTemplate)
     into("$buildDir/$distName")
     include("**")
     exclude("**/.gitignore")

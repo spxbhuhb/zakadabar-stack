@@ -20,8 +20,8 @@ import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantTable
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.data.builtin.ActionStatusDto
-import zakadabar.stack.data.builtin.PasswordChangeAction
-import zakadabar.stack.data.builtin.PrincipalDto
+import zakadabar.stack.data.builtin.account.PasswordChangeAction
+import zakadabar.stack.data.builtin.account.PrincipalDto
 import zakadabar.stack.util.BCrypt
 import zakadabar.stack.util.Executor
 
@@ -85,7 +85,7 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
         dao.toDto()
     }
 
-    override fun delete(executor: Executor, recordId: Long) {
+    override fun delete(executor: Executor, recordId: Long) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 

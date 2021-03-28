@@ -3,7 +3,7 @@
  */
 package zakadabar.demo.frontend.pages.builtin.modal
 
-import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
+import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
@@ -22,7 +22,7 @@ object ConfirmDialog : ZkPage(
     override fun onCreate() {
         super.onCreate()
         + column {
-            + ZkButton(builtin.show.capitalize(), ::onShowDialog)
+            + ZkButton(strings.show.capitalize(), ::onShowDialog)
             + output
         }
     }

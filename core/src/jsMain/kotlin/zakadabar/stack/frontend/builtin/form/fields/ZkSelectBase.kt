@@ -21,7 +21,7 @@ import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.get
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
+import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
@@ -125,10 +125,10 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
         var s = ""
 
         if (value == null || value == 0L) {
-            s += """<div class="${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-${DATASET_KEY}="">${builtin.notSelected}</div>"""
-            selectedOption.innerText = builtin.notSelected
+            s += """<div class="${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-${DATASET_KEY}="">${strings.notSelected}</div>"""
+            selectedOption.innerText = strings.notSelected
         } else {
-            s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="">${builtin.notSelected}</div>"""
+            s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="">${strings.notSelected}</div>"""
         }
 
         items.forEach {

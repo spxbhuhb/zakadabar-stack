@@ -16,7 +16,7 @@ open class ZkBooleanColumn<T : DtoBase>(
     private val prop: KProperty1<T, Boolean>
 ) : ZkColumn<T> {
 
-    override var label = ZkApplication.stringStore.map[prop.name] ?: prop.name
+    override var label = ZkApplication.strings.map[prop.name] ?: prop.name
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         val checkbox = document.createElement("input") as HTMLInputElement

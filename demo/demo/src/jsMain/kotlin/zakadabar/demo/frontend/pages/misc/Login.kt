@@ -4,12 +4,12 @@
 package zakadabar.demo.frontend.pages.misc
 
 import kotlinx.browser.window
-import zakadabar.demo.frontend.resources.Strings
+import zakadabar.demo.resources.Strings
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.ActionStatusDto
-import zakadabar.stack.data.builtin.LoginAction
-import zakadabar.stack.data.builtin.Secret
-import zakadabar.stack.data.builtin.SessionDto
+import zakadabar.stack.data.builtin.account.LoginAction
+import zakadabar.stack.data.builtin.misc.Secret
+import zakadabar.stack.data.builtin.account.SessionDto
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkExecutor
 import zakadabar.stack.frontend.builtin.ZkElementMode

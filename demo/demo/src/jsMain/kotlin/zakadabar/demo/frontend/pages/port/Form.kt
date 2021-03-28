@@ -5,7 +5,7 @@ package zakadabar.demo.frontend.pages.port
 
 import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
-import zakadabar.demo.frontend.resources.Strings
+import zakadabar.demo.resources.Strings
 import zakadabar.stack.frontend.builtin.form.ZkForm
 
 class Form : ZkForm<PortDto>() {

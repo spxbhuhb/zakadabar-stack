@@ -4,7 +4,7 @@
 package zakadabar.demo.frontend.pages.sea
 
 import zakadabar.demo.data.SeaDto
-import zakadabar.demo.frontend.resources.Strings
+import zakadabar.demo.resources.Strings
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class Table : ZkTable<SeaDto>() {

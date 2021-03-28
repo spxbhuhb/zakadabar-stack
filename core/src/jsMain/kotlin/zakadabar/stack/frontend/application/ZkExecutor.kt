@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.application
 
-import zakadabar.stack.data.builtin.AccountPublicDto
+import zakadabar.stack.data.builtin.account.AccountPublicDto
 
 class ZkExecutor(
     val account: AccountPublicDto,

@@ -7,7 +7,7 @@ import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
 import zakadabar.stack.backend.data.builtin.principal.PrincipalTable
 import zakadabar.stack.backend.data.builtin.role.RoleTable
-import zakadabar.stack.data.builtin.RoleGrantDto
+import zakadabar.stack.data.builtin.account.RoleGrantDto
 
 object RoleGrantTable : LongIdTable("role_grants") {
 

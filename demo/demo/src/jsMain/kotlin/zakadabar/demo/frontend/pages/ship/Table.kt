@@ -7,8 +7,8 @@ import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
 import zakadabar.demo.data.ship.ShipDto
 import zakadabar.demo.data.speed.SpeedDto
-import zakadabar.demo.frontend.resources.Strings
-import zakadabar.stack.data.builtin.AccountPublicDto
+import zakadabar.demo.resources.Strings
+import zakadabar.stack.data.builtin.account.AccountPublicDto
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class Table : ZkTable<ShipDto>() {

@@ -14,3 +14,4 @@ pluginManagement {
 include("core")
 include("demo:demo")
 include("demo:demo-jvm-client")
+include("site")

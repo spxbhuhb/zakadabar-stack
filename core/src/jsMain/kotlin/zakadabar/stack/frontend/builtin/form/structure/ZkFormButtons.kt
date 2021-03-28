@@ -5,7 +5,7 @@ package zakadabar.stack.frontend.builtin.form.structure
 
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.application.ZkApplication
-import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
+import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.button.ZkButton
@@ -26,33 +26,33 @@ open class ZkFormButtons<T : DtoBase>(
             ZkElementMode.Create ->
                 + row(ZkFormStyles.buttons) {
                     + backButton()
-                    + submitButton(submitLabel ?: builtin.save, execute)
+                    + submitButton(submitLabel ?: strings.save, execute)
                     + progressIndicator()
                 }
 
             ZkElementMode.Read -> {
                 + row(ZkFormStyles.buttons) {
                     + backButton()
-                    form.openUpdate?.let { + submitButton(submitLabel ?: builtin.edit) { it(form.dto) } }
+                    form.openUpdate?.let { + submitButton(submitLabel ?: strings.edit) { it(form.dto) } }
                     + progressIndicator()
                 }
             }
             ZkElementMode.Update ->
                 + row(ZkFormStyles.buttons) {
                     + backButton()
-                    + submitButton(submitLabel ?: builtin.save, execute)
+                    + submitButton(submitLabel ?: strings.save, execute)
                     + progressIndicator()
                 }
             ZkElementMode.Delete ->
                 + row(ZkFormStyles.buttons) {
                     + backButton()
-                    + submitButton(submitLabel ?: builtin.delete, execute)
+                    + submitButton(submitLabel ?: strings.delete, execute)
                     + progressIndicator()
                 }
             ZkElementMode.Action -> {
                 + row(ZkFormStyles.buttons) {
                     + backButton()
-                    + submitButton(submitLabel ?: builtin.execute, execute)
+                    + submitButton(submitLabel ?: strings.execute, execute)
                     + progressIndicator()
                 }
             }
@@ -61,7 +61,7 @@ open class ZkFormButtons<T : DtoBase>(
             ZkElementMode.Other -> {
                 + row(ZkFormStyles.buttons) {
                     + backButton()
-                    + submitButton(submitLabel ?: builtin.execute, execute)
+                    + submitButton(submitLabel ?: strings.execute, execute)
                     + progressIndicator()
                 }
             }
@@ -69,13 +69,13 @@ open class ZkFormButtons<T : DtoBase>(
     }
 
     open fun backButton() =
-        ZkButton(builtin.back) {
+        ZkButton(strings.back) {
             var touched = false
             form.fields.forEach { touched = touched || it.touched }
 
             if (touched) {
                 io {
-                    if (ZkConfirmDialog(builtin.confirmation.capitalize(), builtin.notSaved).run()) {
+                    if (ZkConfirmDialog(strings.confirmation.capitalize(), strings.notSaved).run()) {
                         ZkApplication.back()
                     }
                 }

@@ -4,7 +4,7 @@
 package zakadabar.demo.frontend.pages.account
 
 import zakadabar.demo.data.AccountPrivateDto
-import zakadabar.demo.frontend.resources.Strings
+import zakadabar.demo.resources.Strings
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class Table : ZkTable<AccountPrivateDto>() {

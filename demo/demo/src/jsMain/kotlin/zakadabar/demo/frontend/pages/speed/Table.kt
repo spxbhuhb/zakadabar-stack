@@ -4,7 +4,7 @@
 package zakadabar.demo.frontend.pages.speed
 
 import zakadabar.demo.data.speed.SpeedDto
-import zakadabar.demo.frontend.resources.Strings
+import zakadabar.demo.resources.Strings
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class Table : ZkTable<SpeedDto>() {

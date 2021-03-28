@@ -1,18 +1,18 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.frontend.resources
+package zakadabar.site.resources
 
-import zakadabar.stack.frontend.builtin.ZkBuiltinStrings
+import zakadabar.stack.resources.ZkBuiltinStrings
 
 // This pattern makes it possible to switch the strings easily. Demo is can work as
 // a standalone application, but it is possible to use it as a component library.
 // In that case - or when you write an actual component library - you want to your
 // built-in strings to be customizable.
 
-val Strings = DemoStrings()
+val Strings = SiteStrings()
 
-class DemoStrings : ZkBuiltinStrings() {
+class SiteStrings : ZkBuiltinStrings() {
 
     // general stuff
 

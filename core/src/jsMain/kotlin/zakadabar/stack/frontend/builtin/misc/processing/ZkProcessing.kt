@@ -3,13 +3,13 @@
  */
 package zakadabar.stack.frontend.builtin.misc.processing
 
-import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
+import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.plusAssign
 
 class ZkProcessing : ZkElement() {
     override fun onCreate() {
         classList += ZkProcessingStyles.asButton
-        + builtin.processing
+        + strings.processing
     }
 }

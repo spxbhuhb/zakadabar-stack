@@ -7,7 +7,7 @@ import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
 import zakadabar.demo.data.ship.SearchShipsQuery
 import zakadabar.demo.data.speed.SpeedDto
-import zakadabar.demo.frontend.resources.Strings
+import zakadabar.demo.resources.Strings
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.util.io

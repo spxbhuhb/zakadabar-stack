@@ -7,7 +7,7 @@ import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import zakadabar.stack.data.builtin.PrincipalDto
+import zakadabar.stack.data.builtin.account.PrincipalDto
 
 class PrincipalDao(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<PrincipalDao>(PrincipalTable)

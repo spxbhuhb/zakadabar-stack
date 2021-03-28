@@ -21,8 +21,8 @@ import zakadabar.demo.frontend.pages.sea.Seas
 import zakadabar.demo.frontend.pages.ship.ShipSearch
 import zakadabar.demo.frontend.pages.ship.Ships
 import zakadabar.demo.frontend.pages.speed.Speeds
-import zakadabar.demo.frontend.resources.Strings
-import zakadabar.stack.data.builtin.LogoutAction
+import zakadabar.demo.resources.Strings
+import zakadabar.stack.data.builtin.account.LogoutAction
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.util.fourRandomInt

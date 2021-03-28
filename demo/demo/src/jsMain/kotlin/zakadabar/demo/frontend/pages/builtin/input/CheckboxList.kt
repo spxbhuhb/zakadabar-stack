@@ -3,7 +3,7 @@
  */
 package zakadabar.demo.frontend.pages.builtin.input
 
-import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
+import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.input.checkboxlist.ZkCheckboxList
@@ -24,8 +24,8 @@ object CheckboxList : ZkPage(
         ZkCheckboxListItem(3, "label3", false)
     )
 
-    val strings = StringCheckboxList()
-    val ints = ZkCheckboxList(intItems)
+    private val stringCheckboxList = StringCheckboxList()
+    private val intCheckboxList = ZkCheckboxList(intItems)
 
     val output = ZkElement()
 
@@ -33,11 +33,11 @@ object CheckboxList : ZkPage(
         super.onCreate()
         + column {
             + "Checkbox list with String values."
-            + strings marginBottom 10
+            + stringCheckboxList marginBottom 10
             + "Checkbox list with int values"
-            + ints
+            + intCheckboxList
 
-            + ZkButton(builtin.save, CheckboxList::onSave)
+            + ZkButton(ZkApplication.strings.save, CheckboxList::onSave)
 
             + output
         }
@@ -56,12 +56,12 @@ object CheckboxList : ZkPage(
 
         output.build {
             + "Strings"
-            strings.items.forEach {
+            stringCheckboxList.items.forEach {
                 + div { + "${it.value} = ${it.selected}" } marginRight 20
             }
 
             + "Ints"
-            ints.items.forEach {
+            intCheckboxList.items.forEach {
                 + div { + "${it.value} = ${it.selected}" } marginRight 20
             }
         }

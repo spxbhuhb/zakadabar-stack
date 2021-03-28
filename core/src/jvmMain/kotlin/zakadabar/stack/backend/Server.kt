@@ -32,7 +32,7 @@ import zakadabar.stack.backend.data.builtin.session.SessionBackend
 import zakadabar.stack.backend.data.builtin.session.SessionStorageSql
 import zakadabar.stack.backend.data.builtin.session.StackSession
 import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.data.builtin.AccountPublicDto
+import zakadabar.stack.data.builtin.account.AccountPublicDto
 import zakadabar.stack.util.Executor
 import java.io.File
 import java.nio.file.Files
@@ -213,7 +213,7 @@ class Server : CliktCommand() {
             "./etc/zakadabar-server.yml",
             "../etc/zakadabar-server.yaml",
             "../etc/zakadabar-server.yml",
-            "./app/etc/zakadabar-server.yaml" // this is for development
+            "./resources/app-template/etc/zakadabar-server.yaml" // this is for development
         )
 
         for (p in paths) {

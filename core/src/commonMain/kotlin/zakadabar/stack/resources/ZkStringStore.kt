@@ -1,23 +1,18 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.resources
+package zakadabar.stack.resources
 
-import zakadabar.stack.frontend.application.ZkApplication
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
+/**
+ * Stores constant strings meant to display for the user. On the frontend
+ * this is labels, messages etc.
+ */
 open class ZkStringStore(
     val map: MutableMap<String, String> = mutableMapOf()
 ) {
-
-    companion object {
-        /**
-         * Translates the given string if there is a translation in the application's
-         * string store. Returns with the original string when there is no translation.
-         */
-        fun t(original: String) = ZkApplication.stringStore.map[original] ?: original
-    }
 
     class StringsDelegate : ReadOnlyProperty<ZkStringStore, String> {
         override fun getValue(thisRef: ZkStringStore, property: KProperty<*>): String {
@@ -31,4 +26,3 @@ open class ZkStringStore(
     }
 
 }
-

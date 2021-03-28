@@ -7,7 +7,7 @@ import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
 import zakadabar.demo.data.AccountPrivateDto
 import zakadabar.stack.backend.data.builtin.principal.PrincipalTable
-import zakadabar.stack.data.builtin.AccountPublicDto
+import zakadabar.stack.data.builtin.account.AccountPublicDto
 
 object AccountPrivateTable : LongIdTable("accounts") {
 

@@ -5,7 +5,7 @@ package zakadabar.stack.frontend.builtin.modal
 
 import kotlinx.coroutines.channels.Channel
 import zakadabar.stack.frontend.application.ZkApplication
-import zakadabar.stack.frontend.builtin.ZkBuiltinStrings.Companion.builtin
+import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
@@ -15,8 +15,8 @@ import zakadabar.stack.frontend.util.plusAssign
 open class ZkConfirmDialog(
     val title: String? = null,
     val message: String,
-    val noLabel: String = builtin.no.capitalize(),
-    val yesLabel: String = builtin.yes.capitalize(),
+    val noLabel: String = strings.no.capitalize(),
+    val yesLabel: String = strings.yes.capitalize(),
 ) : ZkElement() {
 
     val channel = Channel<Boolean>()

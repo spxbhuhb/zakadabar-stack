@@ -17,9 +17,9 @@
 package zakadabar.stack.frontend.builtin.form.fields
 
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.builtin.Secret
+import zakadabar.stack.data.builtin.misc.Secret
+import zakadabar.stack.frontend.application.ZkApplication.t
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.resources.ZkStringStore.Companion.t
 import kotlin.reflect.KMutableProperty0
 
 open class ZkSecretVerificationField<T : DtoBase>(

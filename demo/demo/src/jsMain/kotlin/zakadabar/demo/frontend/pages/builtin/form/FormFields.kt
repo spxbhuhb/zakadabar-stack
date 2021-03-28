@@ -4,7 +4,7 @@
 package zakadabar.demo.frontend.pages.builtin.form
 
 import zakadabar.demo.data.builtin.BuiltinDto
-import zakadabar.demo.frontend.resources.Strings
+import zakadabar.demo.resources.Strings
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm

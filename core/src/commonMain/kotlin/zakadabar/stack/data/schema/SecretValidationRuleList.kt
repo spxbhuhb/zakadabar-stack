@@ -16,7 +16,7 @@
  */
 package zakadabar.stack.data.schema
 
-import zakadabar.stack.data.builtin.Secret
+import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 

@@ -14,7 +14,7 @@ import zakadabar.demo.data.AccountByRole
 import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantTable
 import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.data.builtin.AccountPublicDto
+import zakadabar.stack.data.builtin.account.AccountPublicDto
 import zakadabar.stack.util.Executor
 
 object AccountPublicBackend : RecordBackend<AccountPublicDto>() {
