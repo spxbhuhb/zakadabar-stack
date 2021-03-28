@@ -75,7 +75,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
         Server.findAccountById = {
             transaction {
                 val account = AccountPrivateDao[it]
-                account.toPublicDto() to account.principal.id.value
+                account.toPublicDto(false) to account.principal.id.value
             }
         }
 
@@ -85,7 +85,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
         Server.findAccountByName = {
             transaction {
                 val account = AccountPrivateDao.find { AccountPrivateTable.accountName eq it }.firstOrNull() ?: throw NoSuchElementException()
-                account.toPublicDto() to account.principal.id.value
+                account.toPublicDto(false) to account.principal.id.value
             }
         }
     }
@@ -149,13 +149,14 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
 
         accountName = dto.accountName
         fullName = dto.fullName
+        email = dto.email
+
         displayName = dto.displayName
+        locale = dto.locale
         avatar = avatarId?.let { AccountImageDao[avatarId] }
 
         organizationName = dto.organizationName
         position = dto.position
-
-        email = dto.email
         phone = dto.phone
 
         return this
@@ -203,7 +204,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
             phone = ""
         }
 
-        newAccount.toPublicDto()
+        newAccount.toPublicDto(false)
     }
 
 

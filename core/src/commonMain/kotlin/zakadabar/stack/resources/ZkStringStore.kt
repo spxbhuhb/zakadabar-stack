@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.resources
 
+import zakadabar.stack.data.builtin.resources.LocaleStringDto
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -23,6 +24,20 @@ open class ZkStringStore(
     operator fun String.provideDelegate(thisRef: ZkStringStore, prop: KProperty<*>): ReadOnlyProperty<ZkStringStore, String> {
         thisRef.map[prop.name] = this
         return StringsDelegate()
+    }
+
+    /**
+     * Merge a list of locale strings into this string store. Overrides any
+     * strings that are already in the store. Adds any new strings that are
+     * not in the store yet.
+     *
+     * @return  the string store merge is called on
+     */
+    inline fun <reified T> merge(other: List<LocaleStringDto>): T {
+        other.forEach {
+            map[it.name] = it.value
+        }
+        return this as T
     }
 
 }

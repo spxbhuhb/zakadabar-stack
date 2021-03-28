@@ -15,38 +15,43 @@ object AccountPrivateTable : LongIdTable("accounts") {
 
     val accountName = varchar("accountName", 50).index() // login finds account by this field
     val fullName = varchar("fullName", 100)
-    val displayName = varchar("displayName", 100)
+    val email = varchar("email", 50)
+
+    val displayName = varchar("displayName", 100).nullable()
+    val locale = varchar("locale", 20).nullable()
     val avatar = reference("avatar", AccountImageTable).nullable()
 
-    val organizationName = varchar("organizationName", 100)
-    val position = varchar("position", 50)
-
-    val email = varchar("email", 50)
-    val phone = varchar("phone", 50)
+    val organizationName = varchar("organizationName", 100).nullable()
+    val position = varchar("position", 50).nullable()
+    val phone = varchar("phone", 50).nullable()
 
     fun toDto(row: ResultRow) = AccountPrivateDto(
         id = row[id].value,
 
         accountName = row[accountName],
         fullName = row[fullName],
+        email = row[email],
+
         displayName = row[displayName],
+        locale = row[locale],
         avatar = row[avatar]?.value,
 
         organizationName = row[organizationName],
         position = row[position],
-
-        email = row[email],
         phone = row[phone]
     )
 
-    fun toPublicDto(row: ResultRow) = AccountPublicDto(
+    fun toPublicDto(row: ResultRow, addEmail: Boolean = false) = AccountPublicDto(
         id = row[id].value,
 
         accountName = row[accountName],
         fullName = row[fullName],
+        email = if (addEmail) row[email] else null,
+
         displayName = row[displayName],
-        organizationName = row[organizationName],
-        email = row[email]
+        locale = row[locale],
+
+        organizationName = row[organizationName]
     )
 
 }

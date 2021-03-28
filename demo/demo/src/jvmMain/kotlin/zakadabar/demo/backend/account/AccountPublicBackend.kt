@@ -49,7 +49,7 @@ object AccountPublicBackend : RecordBackend<AccountPublicDto>() {
     }
 
     override fun read(executor: Executor, recordId: Long) = transaction {
-        AccountPrivateDao[recordId].toPublicDto()
+        AccountPrivateDao[recordId].toPublicDto(false)
     }
 
 }

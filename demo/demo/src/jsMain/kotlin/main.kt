@@ -6,6 +6,7 @@
 import zakadabar.demo.frontend.Routing
 import zakadabar.demo.resources.DemoStrings
 import zakadabar.stack.data.builtin.account.SessionDto
+import zakadabar.stack.data.builtin.resources.StringsByLocale
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkExecutor
 import zakadabar.stack.frontend.builtin.ZkBuiltinTheme
@@ -49,7 +50,11 @@ fun main() {
             // instance to get strings when needed. This is also used to map property names
             // to labels in tables and forms.
 
-            strings = DemoStrings()
+            // This form loads translations of strings from the server according to the locale the user
+            // has and merges them with the default strings. If you don't want that, just delete the
+            // merge call.
+
+            strings = DemoStrings().merge(StringsByLocale(session.account.locale).execute())
 
             // Set the routing. You may change this on-the-fly if you want, for example if the user logs in.
 

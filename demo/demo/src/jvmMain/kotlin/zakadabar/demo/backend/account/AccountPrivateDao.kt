@@ -17,13 +17,14 @@ class AccountPrivateDao(id: EntityID<Long>) : LongEntity(id) {
 
     var accountName by AccountPrivateTable.accountName
     var fullName by AccountPrivateTable.fullName
+    var email by AccountPrivateTable.email
+
     var displayName by AccountPrivateTable.displayName
+    var locale by AccountPrivateTable.locale
     var avatar by AccountImageDao optionalReferencedOn AccountPrivateTable.avatar
 
     var organizationName by AccountPrivateTable.organizationName
     var position by AccountPrivateTable.position
-
-    var email by AccountPrivateTable.email
     var phone by AccountPrivateTable.phone
 
     fun toDto() = AccountPrivateDto(
@@ -31,25 +32,27 @@ class AccountPrivateDao(id: EntityID<Long>) : LongEntity(id) {
 
         accountName = accountName,
         fullName = fullName,
+        email = email,
+
         displayName = displayName,
+        locale = locale,
         avatar = avatar?.id?.value,
 
         organizationName = organizationName,
         position = position,
-
-        email = email,
         phone = phone
     )
 
-    fun toPublicDto() = AccountPublicDto(
+    fun toPublicDto(addEmail: Boolean) = AccountPublicDto(
         id = id.value,
 
         accountName = accountName,
         fullName = fullName,
+        email = if (addEmail) email else null,
+
         displayName = displayName,
+        locale = locale,
 
-        organizationName = organizationName,
-
-        email = email
+        organizationName = organizationName
     )
 }

@@ -7,4 +7,7 @@ import zakadabar.stack.data.schema.DtoSchema
 
 interface DtoBase {
     fun schema() = DtoSchema.NO_VALIDATION
+
+    val isValid
+        get() = schema().validate().fails.isEmpty()
 }

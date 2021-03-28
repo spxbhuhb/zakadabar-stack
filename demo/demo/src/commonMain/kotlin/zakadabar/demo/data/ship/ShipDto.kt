@@ -30,6 +30,7 @@ data class ShipDto(
         + ShipsByName
         + ShipSpeeds
         + SearchShipsQuery
+        + ShootAtShipAction
     })
 
     override fun getRecordType() = recordType

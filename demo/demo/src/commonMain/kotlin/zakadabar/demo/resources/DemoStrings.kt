@@ -7,12 +7,12 @@ package zakadabar.demo.resources
 
 import zakadabar.stack.resources.ZkBuiltinStrings
 
-// This pattern makes it possible to switch the strings easily. Demo is can work as
+// This pattern makes it possible to switch the strings easily. Demo can work as
 // a standalone application, but it is possible to use it as a component library.
 // In that case - or when you write an actual component library - you want to your
-// built-in strings to be customizable.
+// strings to be customizable.
 
-val Strings = DemoStrings()
+internal var Strings = DemoStrings()
 
 class DemoStrings : ZkBuiltinStrings() {
 

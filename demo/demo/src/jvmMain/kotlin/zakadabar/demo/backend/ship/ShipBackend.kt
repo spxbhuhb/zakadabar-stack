@@ -21,6 +21,7 @@ import zakadabar.demo.data.ship.SearchShipsQuery
 import zakadabar.demo.data.ship.SearchShipsResult
 import zakadabar.demo.data.ship.ShipDto
 import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.backend.util.default
 import zakadabar.stack.util.Executor
 
 object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTable = ShipTable) {

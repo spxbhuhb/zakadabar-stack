@@ -31,3 +31,17 @@ inline fun <reified T : RecordDto<T>> RecordDtoCompanion<T>.default(builder: T.(
     instance.builder()
     return instance
 }
+
+/**
+ * Creates an instance of the given DTO with defaults from the schema.
+ * Then runs the builder function so the defaults may be customized.
+ *
+ * @return an instance of T with the default values set
+ */
+@Suppress("unused") // we do want to use this on the companion
+inline fun <reified T : RecordDto<T>> default(builder: T.() -> Unit): T {
+    val instance = T::class.java.newInstance()
+    instance.schema().setDefaults()
+    instance.builder()
+    return instance
+}

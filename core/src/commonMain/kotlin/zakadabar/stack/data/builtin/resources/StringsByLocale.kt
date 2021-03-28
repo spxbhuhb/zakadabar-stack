@@ -17,10 +17,10 @@ import zakadabar.stack.data.schema.DtoSchema
 @Serializable
 data class StringsByLocale(
     var locale: String
-) : QueryDto<String> {
+) : QueryDto<LocaleStringDto> {
 
-    override suspend fun execute() = comm().query(this, serializer(), ListSerializer(String.serializer()))
+    override suspend fun execute() = comm().query(this, serializer(), ListSerializer(LocaleStringDto.serializer()))
 
-    companion object : QueryDtoCompanion<String>()
+    companion object : QueryDtoCompanion<LocaleStringDto>()
 
 }

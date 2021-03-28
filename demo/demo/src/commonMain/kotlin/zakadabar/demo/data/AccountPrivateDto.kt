@@ -21,16 +21,17 @@ data class AccountPrivateDto(
 
     var accountName: String,
     var fullName: String,
-    var displayName: String,
+    var email: String,
+
+    var displayName: String?,
+    var locale: String?,
     var avatar: Long?,
 
-    var organizationName: String,
-    var position: String,
+    var organizationName: String?,
+    var position: String?,
+    var phone: String?
 
-    var email: String,
-    var phone: String,
-
-    ) : RecordDto<AccountPrivateDto> {
+) : RecordDto<AccountPrivateDto> {
 
     companion object : RecordDtoCompanion<AccountPrivateDto>({
         recordType = "account-private"
@@ -44,14 +45,14 @@ data class AccountPrivateDto(
 
         + ::accountName min 3 max 50
         + ::fullName min 5 max 100
+        + ::email min 4 max 50 format Formats::email
+
         + ::displayName min 3 max 50
+        + ::locale max 20
         + ::avatar
 
         + ::organizationName min 2 max 100
         + ::position min 3 max 50
-
-        + ::email min 4 max 50 format Formats::email
-        + ::phone min 10 max 20 format Formats::phoneNumber
-
+        + ::phone min 10 max 20
     }
 }
