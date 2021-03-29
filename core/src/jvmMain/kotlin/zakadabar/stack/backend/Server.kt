@@ -213,7 +213,7 @@ class Server : CliktCommand() {
             "./etc/zakadabar-server.yml",
             "../etc/zakadabar-server.yaml",
             "../etc/zakadabar-server.yml",
-            "./resources/app-template/etc/zakadabar-server.yaml" // this is for development
+            "./template/app/etc/zakadabar-server.yaml" // this is for development, TODO remove hard-coded development config path
         )
 
         for (p in paths) {

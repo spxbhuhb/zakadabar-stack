@@ -3,6 +3,7 @@
  */
 @file:Suppress("unused") // main is called by webpack
 
+import kotlinx.browser.window
 import zakadabar.demo.frontend.Routing
 import zakadabar.demo.resources.DemoStrings
 import zakadabar.stack.data.builtin.account.SessionDto
@@ -54,7 +55,9 @@ fun main() {
             // has and merges them with the default strings. If you don't want that, just delete the
             // merge call.
 
-            strings = DemoStrings().merge(StringsByLocale(session.account.locale).execute())
+            val locale = session.account.locale ?: window.navigator.language
+
+            strings = DemoStrings().merge(StringsByLocale(locale).execute())
 
             // Set the routing. You may change this on-the-fly if you want, for example if the user logs in.
 
