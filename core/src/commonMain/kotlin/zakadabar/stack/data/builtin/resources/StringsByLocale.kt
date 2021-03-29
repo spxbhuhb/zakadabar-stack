@@ -19,8 +19,8 @@ data class StringsByLocale(
     var locale: String
 ) : QueryDto<LocaleStringDto> {
 
-    override suspend fun execute() = comm().query(this, serializer(), ListSerializer(LocaleStringDto.serializer()))
+    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(LocaleStringDto.serializer()))
 
-    companion object : QueryDtoCompanion<LocaleStringDto>()
+    companion object : QueryDtoCompanion<LocaleStringDto>(LocaleStringDto.recordType)
 
 }

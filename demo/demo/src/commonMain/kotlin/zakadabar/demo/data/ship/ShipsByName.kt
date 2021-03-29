@@ -13,7 +13,7 @@ data class ShipsByName(
     val name: String
 ) : QueryDto<ShipDto> {
 
-    override suspend fun execute() = comm().query(this, serializer(), ListSerializer(ShipDto.serializer()))
+    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(ShipDto.serializer()))
 
-    companion object : QueryDtoCompanion<ShipDto>()
+    companion object : QueryDtoCompanion<ShipDto>(ShipDto.recordType)
 }

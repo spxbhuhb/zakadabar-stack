@@ -29,14 +29,6 @@ abstract class RecordDtoCompanion<T : RecordDto<T>>() {
             _comm = value
         }
 
-    open val queries = lazy {
-        mutableMapOf<String, QueryDtoCompanion<*>>()
-    }
-
-    open val actions = lazy {
-        mutableMapOf<String, ActionDtoCompanion<*>>()
-    }
-
     abstract fun serializer(): KSerializer<T>
 
     suspend fun read(id: Long) = comm.read(id)
@@ -45,15 +37,4 @@ abstract class RecordDtoCompanion<T : RecordDto<T>>() {
 
     suspend fun allAsMap() = comm.all().associateBy { it.id }
 
-    operator fun QueryDtoCompanion<*>.unaryPlus() {
-        val name = this::class.simpleName ?: return
-        queries.value[name] = this
-        comm = { this@RecordDtoCompanion.comm }
-    }
-
-    operator fun ActionDtoCompanion<*>.unaryPlus() {
-        val name = this::class.simpleName ?: return
-        actions.value[name] = this
-        comm = { this@RecordDtoCompanion.comm }
-    }
 }

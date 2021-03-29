@@ -39,7 +39,6 @@ data class PrincipalDto(
 
     companion object : RecordDtoCompanion<PrincipalDto>({
         recordType = "principal"
-        + PasswordChangeAction
     })
 
     override fun getRecordType() = recordType

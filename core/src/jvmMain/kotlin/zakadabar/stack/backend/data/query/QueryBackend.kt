@@ -25,16 +25,16 @@ interface QueryBackend : BackendModule {
     /**
      * Adds a Query route for this backend.
      */
-    fun <RQ : Any, RS : Any> Route.query(queryDto: KClass<RQ>, func: (Executor, RQ) -> RS) {
-        get("$recordType/${queryDto.simpleName}") {
+    fun <RQ : Any, RS : Any> Route.query(queryDtoClass: KClass<RQ>, func: (Executor, RQ) -> RS) {
+        get("$recordType/${queryDtoClass.simpleName}") {
 
             val executor = call.executor()
 
             val qText = call.parameters["q"]
             requireNotNull(qText)
-            val qObj = Json.decodeFromString(serializer(queryDto.createType()), qText)
+            val qObj = Json.decodeFromString(serializer(queryDtoClass.createType()), qText)
 
-            if (Server.logReads) logger.info("${executor.accountId}: GET ${queryDto.simpleName} $qText")
+            if (Server.logReads) logger.info("${executor.accountId}: GET ${queryDtoClass.simpleName} $qText")
 
             @Suppress("UNCHECKED_CAST")
             call.respond(func(executor, qObj as RQ))

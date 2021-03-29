@@ -42,6 +42,8 @@ import kotlin.reflect.full.isSubclassOf
 
 val moduleLogger = LoggerFactory.getLogger("modules") !! // log module events
 
+val routingLogger by lazy { LoggerFactory.getLogger("routing") } // trace routing events
+
 fun main(argv: Array<String>) = Server().main(argv)
 
 class Server : CliktCommand() {
@@ -169,6 +171,7 @@ class Server : CliktCommand() {
             }
 
             routing {
+                if (config.traceRouting) trace { routingLogger.trace(it.buildText()) }
 
                 authenticate {
 

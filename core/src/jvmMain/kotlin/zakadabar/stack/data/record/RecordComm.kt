@@ -87,30 +87,6 @@ open class RecordComm<T : RecordDto<T>>(
     }
 
     @PublicApi
-    override suspend fun <RQ : Any> query(request: RQ, requestSerializer: KSerializer<RQ>) =
-        query(request, requestSerializer, ListSerializer(serializer))
-
-    @PublicApi
-    override suspend fun <RQ : Any, RS> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<List<RS>>): List<RS> {
-
-        val q = Json.encodeToString(requestSerializer, request).encodeURLPath()
-
-        val text = client.get<String>("$baseUrl/api/$recordType/${request::class.simpleName}?q=${q}")
-
-        return Json.decodeFromString(responseSerializer, text)
-    }
-
-    @PublicApi
-    override suspend fun <REQUEST : Any, RESPONSE> action(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<RESPONSE>): RESPONSE {
-        val text = client.post<String>("$baseUrl/api/$recordType/${request::class.simpleName}") {
-            header("Content-Type", "application/json; charset=UTF-8")
-            body = Json.encodeToString(requestSerializer, request)
-        }
-
-        return Json.decodeFromString(responseSerializer, text)
-    }
-
-    @PublicApi
     override fun blobCreate(
         dataRecordId: Long?, name: String, type: String, data: Any,
         callback: (dto: BlobDto, state: BlobCreateState, uploaded: Long) -> Unit

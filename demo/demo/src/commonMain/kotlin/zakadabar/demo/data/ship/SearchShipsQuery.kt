@@ -23,10 +23,8 @@ data class SearchShipsQuery(
     var port: RecordId<PortDto>?,
 ) : QueryDto<SearchShipsResult> {
 
-    // Do not forget to add query and action classes to ShipDto!
+    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(SearchShipsResult.serializer()))
 
-    override suspend fun execute() = comm().query(this, serializer(), ListSerializer(SearchShipsResult.serializer()))
-
-    companion object : QueryDtoCompanion<SearchShipsResult>()
+    companion object : QueryDtoCompanion<SearchShipsResult>(ShipDto.recordType)
 
 }

@@ -18,9 +18,9 @@ data class LoginAction(
 
 ) : ActionDto<ActionStatusDto> {
 
-    override suspend fun execute() = comm().action(this, serializer(), ActionStatusDto.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), ActionStatusDto.serializer())
 
-    companion object : ActionDtoCompanion<ActionStatusDto>()
+    companion object : ActionDtoCompanion<ActionStatusDto>(SessionDto.recordType)
 
     override fun schema() = DtoSchema {
         + ::accountName min 1 max 50 blank false

@@ -13,7 +13,7 @@ import zakadabar.stack.data.query.QueryDtoCompanion
 data class ShipSpeeds(
     val names: List<String> = emptyList()
 ) : QueryDto<SpeedDto> {
-    override suspend fun execute() = comm().query(this, serializer(), ListSerializer(SpeedDto.serializer()))
+    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(SpeedDto.serializer()))
 
-    companion object : QueryDtoCompanion<ShipDto>()
+    companion object : QueryDtoCompanion<ShipDto>(ShipDto.recordType)
 }

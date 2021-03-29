@@ -5,10 +5,24 @@ package zakadabar.stack.data.query
 
 import kotlinx.serialization.KSerializer
 
-abstract class QueryDtoCompanion<RESULT : Any> {
+abstract class QueryDtoCompanion<RESULT : Any>(
+    val namespace: String
+) {
 
     abstract fun serializer(): KSerializer<RESULT>
 
-    lateinit var comm: () -> QueryCommInterface
+    private var _comm: QueryCommInterface? = null
+
+    private fun makeComm(): QueryCommInterface {
+        val nc = makeQueryComm(this)
+        _comm = nc
+        return nc
+    }
+
+    var comm: QueryCommInterface
+        get() = _comm ?: makeComm()
+        set(value) {
+            _comm = value
+        }
 
 }

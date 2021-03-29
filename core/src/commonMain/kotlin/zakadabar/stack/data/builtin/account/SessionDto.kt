@@ -21,8 +21,6 @@ data class SessionDto(
 
     companion object : RecordDtoCompanion<SessionDto>({
         recordType = "session"
-        + LoginAction
-        + LogoutAction
     })
 
     override fun getRecordType() = recordType

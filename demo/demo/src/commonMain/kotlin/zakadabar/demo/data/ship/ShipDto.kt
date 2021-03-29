@@ -27,10 +27,6 @@ data class ShipDto(
 
     companion object : RecordDtoCompanion<ShipDto>({
         recordType = "ship"
-        + ShipsByName
-        + ShipSpeeds
-        + SearchShipsQuery
-        + ShootAtShipAction
     })
 
     override fun getRecordType() = recordType

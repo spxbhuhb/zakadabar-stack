@@ -13,8 +13,8 @@ data class RoleGrantsByPrincipal(
     val principal: Long
 ) : QueryDto<RoleGrantDto> {
 
-    override suspend fun execute() = comm().query(this, serializer(), ListSerializer(RoleGrantDto.serializer()))
+    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(RoleGrantDto.serializer()))
 
-    companion object : QueryDtoCompanion<RoleGrantDto>()
+    companion object : QueryDtoCompanion<RoleGrantDto>(PrincipalDto.recordType)
 
 }

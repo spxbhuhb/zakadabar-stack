@@ -23,9 +23,9 @@ data class PasswordChangeAction(
 
 ) : ActionDto<ActionStatusDto> {
 
-    companion object : ActionDtoCompanion<PasswordChangeAction>()
+    companion object : ActionDtoCompanion<PasswordChangeAction>(PrincipalDto.recordType)
 
-    override suspend fun execute() = comm().action(this, serializer(), ActionStatusDto.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), ActionStatusDto.serializer())
 
     override fun schema() = DtoSchema {
         + ::accountId

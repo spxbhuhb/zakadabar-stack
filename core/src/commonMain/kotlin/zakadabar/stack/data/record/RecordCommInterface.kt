@@ -16,7 +16,7 @@ import zakadabar.stack.data.util.CommunicationException
  * Interface to be implemented on the client side for communication. An
  * actual implementation is zakadabar.stack.data.record.RecordComm.
  */
-interface RecordCommInterface<T> : QueryCommInterface, ActionCommInterface {
+interface RecordCommInterface<T> {
 
     /**
      * Creates a new record on the server.
@@ -93,23 +93,6 @@ interface RecordCommInterface<T> : QueryCommInterface, ActionCommInterface {
      * @throws CommunicationException server unavailable, request timeout, any not 400,401,403 error codes
      */
     suspend fun all(): List<T>
-
-    /**
-     * Searches for records by the passed search parameters.
-     *
-     * @param   request            The query request to send.
-     * @param   requestSerializer  Serializer for the request.
-     *
-     * @return  List of record DTOs found.
-     *
-     * @throws IllegalArgumentException the request dto is invalid (HTTP status code 400)
-     * @throws AuthenticationException the principal is not authenticated (HTTP status code 401)
-     * @throws AuthorizationException the principal is authenticated but not authorized to create objects of this type (HTTP status code 403)
-     * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
-     * @throws RuntimeException if there is a general server side processing error (HTTP status code 5xx)
-     * @throws CommunicationException server unavailable, request timeout, any not 400,401,403 error codes
-     */
-    suspend fun <REQUEST : Any> query(request: REQUEST, requestSerializer: KSerializer<REQUEST>): List<T>
 
     /**
      * Create a BLOB that belongs to the given record.

@@ -11,8 +11,8 @@ import zakadabar.stack.data.builtin.ActionStatusDto
 @Serializable
 class LogoutAction : ActionDto<ActionStatusDto> {
 
-    override suspend fun execute() = comm().action(this, serializer(), ActionStatusDto.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), ActionStatusDto.serializer())
 
-    companion object : ActionDtoCompanion<ActionStatusDto>()
+    companion object : ActionDtoCompanion<ActionStatusDto>(SessionDto.recordType)
 
 }

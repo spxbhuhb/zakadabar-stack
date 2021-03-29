@@ -23,8 +23,8 @@ class ShootAtShipAction : ActionDto<ActionStatusDto> {
 
     // Do not forget to add query and action classes to ShipDto!
 
-    override suspend fun execute() = comm().action(this, serializer(), ActionStatusDto.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), ActionStatusDto.serializer())
 
-    companion object : ActionDtoCompanion<ActionStatusDto>()
+    companion object : ActionDtoCompanion<ActionStatusDto>(ShipDto.recordType)
 
 }

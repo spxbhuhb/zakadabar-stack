@@ -8,14 +8,12 @@ import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.json.Json
 import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
 import org.w3c.files.Blob
 import org.w3c.xhr.ProgressEvent
 import org.w3c.xhr.XMLHttpRequest
 import zakadabar.stack.data.builtin.BlobDto
-import zakadabar.stack.frontend.util.encodeURIComponent
 import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.json
 
@@ -104,52 +102,6 @@ open class RecordComm<T : RecordDto<T>>(
         val response = responsePromise.await()
 
         if (! response.ok) throw RuntimeException()
-    }
-
-    @PublicApi
-    override suspend fun <RQ : Any> query(request: RQ, requestSerializer: KSerializer<RQ>) =
-        query(request, requestSerializer, ListSerializer(serializer))
-
-    @PublicApi
-    override suspend fun <RQ : Any, RS> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<List<RS>>): List<RS> {
-
-        val q = encodeURIComponent(Json.encodeToString(requestSerializer, request))
-
-        val responsePromise = window.fetch("/api/$recordType/${request::class.simpleName}?q=${q}")
-        val response = responsePromise.await()
-
-        if (! response.ok) throw RuntimeException()
-
-        val textPromise = response.text()
-        val text = textPromise.await()
-
-        return json.decodeFromString(responseSerializer, text)
-    }
-
-    @PublicApi
-    override suspend fun <REQUEST : Any, RESPONSE> action(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<RESPONSE>): RESPONSE {
-
-        val headers = Headers()
-
-        headers.append("content-type", "application/json")
-
-        val body = json.encodeToString(requestSerializer, request)
-
-        val requestInit = RequestInit(
-            method = "POST",
-            headers = headers,
-            body = body
-        )
-
-        val responsePromise = window.fetch("/api/$recordType/${request::class.simpleName}", requestInit)
-        val response = responsePromise.await()
-
-        if (! response.ok) throw RuntimeException()
-
-        val textPromise = response.text()
-        val text = textPromise.await()
-
-        return json.decodeFromString(responseSerializer, text)
     }
 
     private suspend fun sendAndReceive(path: String, requestInit: RequestInit): T {
