@@ -6,6 +6,14 @@ package zakadabar.stack.frontend.resources.css
 import zakadabar.stack.frontend.resources.ZkTheme
 
 @Suppress("unused") // may be used by other modules
+/**
+ * One CSS rule. Puts properties of the rule into a map and then generates the CSS from
+ * that map.
+ *
+ * The getter/setter pattern is intentional. With property delegation a new object would
+ * be created for each property and we don't want that. Also, there are conversions,
+ * so we can't use a simple map as delegate.
+ */
 class ZkCssStyleRule(
     private val sheet: ZkCssStyleSheet<*>,
     private val cssClassName: String
@@ -478,6 +486,12 @@ class ZkCssStyleRule(
         get() = styles["min-width"]
         set(value) {
             styles["min-width"] = stringOrPx(value)
+        }
+
+    var opacity: Any?
+        get() = styles["opacity"]
+        set(value) {
+            styles["opacity"] = value.toString()
         }
 
     var outline

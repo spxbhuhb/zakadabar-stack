@@ -10,11 +10,14 @@ import zakadabar.stack.frontend.builtin.table.ZkTable
 import kotlin.reflect.KProperty1
 
 open class ZkStringColumn<T : DtoBase>(
-    override val table: ZkTable<T>,
+    table: ZkTable<T>,
     private val prop: KProperty1<T, String>
-) : ZkColumn<T> {
+) : ZkColumn<T>(table) {
 
-    override var label = ZkApplication.strings.map[prop.name] ?: prop.name
+    override fun onCreate() {
+        label = ZkApplication.strings.map[prop.name] ?: prop.name
+        super.onCreate()
+    }
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         with(builder) {

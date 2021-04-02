@@ -36,7 +36,8 @@ If you want i18n, switchable languages or any other customization that may be ch
   in [main.kt](../../demo/demo/src/jsMain/kotlin/main.kt)
 * use the strings as described above
 
-The locale is stored in `ZkApplication.executor.account.locale`.
+The locale is stored in `ZkApplication.executor.account.locale`. If there is no locale, the default browser language is
+used.
 
 ## Automatic bindings
 

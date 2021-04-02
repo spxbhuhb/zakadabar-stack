@@ -571,6 +571,18 @@ open class ZkElement(
     }
 
     /**
+     * Creates "span" [HTMLElement] and executes the builder function on it.
+     *
+     * @param  className  CSS class to add. Optional.
+     * @param  build      The builder function to build the content of the div. Optional.
+     */
+    open fun span(className: String? = null, build: ZkElement.() -> Unit = { }): HTMLElement {
+        val e = document.createElement("span") as HTMLElement
+        runBuild(e, className, build)
+        return e
+    }
+
+    /**
      * Creates "div" [HTMLElement] and executes the builder function on it.
      *
      * @param  className  CSS class to add. Optional.

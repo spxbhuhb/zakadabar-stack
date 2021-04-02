@@ -8,10 +8,8 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 open class ZkCustomColumn<T : DtoBase>(
-    override val table: ZkTable<T>
-) : ZkColumn<T> {
-
-    override var label = ""
+    table: ZkTable<T>
+) : ZkColumn<T>(table) {
 
     lateinit var render: ZkElement.(T) -> Unit
 

@@ -5,6 +5,7 @@ package zakadabar.stack.frontend.builtin.table.columns
 
 import org.w3c.dom.set
 import zakadabar.stack.data.DtoBase
+import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
@@ -12,10 +13,13 @@ import zakadabar.stack.frontend.builtin.table.ZkTableStyles
 import zakadabar.stack.frontend.util.plusAssign
 
 open class ZkActionsColumn<T : DtoBase>(
-    override val table: ZkTable<T>
-) : ZkColumn<T> {
+    table: ZkTable<T>
+) : ZkColumn<T>(table) {
 
-    override var label = strings.actions
+    override fun onCreate() {
+        label = strings.actions
+        super.onCreate()
+    }
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         with(builder) {

@@ -24,6 +24,38 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTableStyles>(ZkApplication.theme) {
         borderRadius = 2
     }
 
+    val resizeHandle by cssClass {
+        boxSizing = "border-box"
+        position = "absolute"
+        top = 0
+        right = 0
+        bottom = 0
+        borderRight = "1px solid ${ZkColors.LightBlue.c800}"
+        borderLeft = "1px solid ${ZkColors.LightBlue.c800}"
+        marginTop = 4
+        marginBottom = 4
+        opacity = 0
+        width = 5
+        cursor = "col-resize"
+
+        on(":hover") {
+            opacity = 1
+        }
+    }
+
+    val beingResized by cssClass {
+        on(" .resize-handle") {
+            opacity = 1
+        }
+    }
+
+    val noSelect by cssClass {
+        userSelect = "none"
+        styles["-moz-user-select"] = "none"
+        styles["-webkit-user-select"] = "none"
+        styles["-ms-user-select"] = "none"
+    }
+
     val table by cssClass {
         boxSizing = "border-box"
 
@@ -67,6 +99,10 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTableStyles>(ZkApplication.theme) {
             borderBottom = "1px solid ${theme.table.headerBottom}"
         }
 
+        on(" th:hover .$resizeHandle") {
+            opacity = 1
+        }
+
         on(" th:first-child") {
 
         }
@@ -84,6 +120,7 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTableStyles>(ZkApplication.theme) {
             whiteSpace = "nowrap"
             color = theme.table.text
             borderBottom = "1px solid ${theme.table.innerBorder}"
+            backgroundColor = theme.table.oddRowBackground
         }
 
         if (theme.table.border != null) {

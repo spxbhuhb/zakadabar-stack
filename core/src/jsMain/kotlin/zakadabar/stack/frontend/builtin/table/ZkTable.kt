@@ -7,6 +7,7 @@ import kotlinx.browser.document
 import kotlinx.datetime.Instant
 import kotlinx.dom.clear
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.HTMLTableElement
 import org.w3c.dom.HTMLTableSectionElement
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.set
@@ -18,6 +19,7 @@ import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.table.columns.*
 import zakadabar.stack.frontend.util.getDatasetEntry
 import zakadabar.stack.frontend.util.io
+import zakadabar.stack.frontend.util.plusAssign
 import kotlin.reflect.KProperty1
 
 /**
@@ -58,22 +60,29 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     val preloads = mutableListOf<ZkTablePreload<*>>()
 
+    lateinit var fullData: List<T>
+
+    lateinit var tableElement: HTMLTableElement
+
     private val tbody = document.createElement("tbody") as HTMLTableSectionElement
 
     override fun onCreate() {
         className = ZkTableStyles.outerContainer
+        classList += ZkTableStyles.noSelect
 
         buildTitleBar()?.let { + it }
 
         + div(ZkTableStyles.contentContainer) {
 
-            + table(ZkTableStyles.table) {
+            tableElement = table(ZkTableStyles.table) {
                 buildElement.style.cssText = gridTemplateColumns()
                 + thead {
-                    columns.forEach { it.renderHeader(this) }
+                    columns.forEach { + it }
                 }
                 + tbody
             }
+
+            + tableElement
         }
 
         // this is here to prevent text selection on double click
@@ -141,27 +150,31 @@ open class ZkTable<T : DtoBase> : ZkElement() {
             preloads.forEach {
                 it.job.join()
             }
-
-            build {
-                tbody.clear()
-                this.buildElement = tbody
-
-                for ((index, row) in data.withIndex()) {
-                    + tr {
-                        buildElement.dataset["rid"] = getRowId(row)
-
-                        for (column in columns) {
-                            + td {
-                                column.render(this, index, row)
-                            }
-                        }
-
-                    }
-                }
-            }
+            fullData = data
+            render()
         }
 
         return this
+    }
+
+    open fun render() {
+        build {
+            tbody.clear()
+            this.buildElement = tbody
+
+            for ((index, row) in fullData.withIndex()) {
+                + tr {
+                    buildElement.dataset["rid"] = getRowId(row)
+
+                    for (column in columns) {
+                        + td {
+                            column.render(this, index, row)
+                        }
+                    }
+
+                }
+            }
+        }
     }
 
     /**

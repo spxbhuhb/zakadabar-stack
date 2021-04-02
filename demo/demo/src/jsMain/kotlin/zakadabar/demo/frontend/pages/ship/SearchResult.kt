@@ -15,7 +15,7 @@ class SearchResult : ZkTable<SearchShipsResult>() {
     init {
         onDblClick = { Ships.openRead(it.toLong()) }
 
-        + SearchShipsResult::shipId build { label = "#" }
+        + SearchShipsResult::shipId
         + SearchShipsResult::name
         + SearchShipsResult::port
         + SearchShipsResult::captain

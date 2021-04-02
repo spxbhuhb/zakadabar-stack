@@ -3,25 +3,88 @@
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
+import kotlinx.browser.document
+import kotlinx.browser.window
+import org.w3c.dom.HTMLElement
+import org.w3c.dom.events.Event
+import org.w3c.dom.events.MouseEvent
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.frontend.builtin.table.ZkTableStyles
+import zakadabar.stack.frontend.util.minusAssign
+import zakadabar.stack.frontend.util.plusAssign
+import kotlin.math.max
 
-interface ZkColumn<T : DtoBase> {
-
-    var label: String
+open class ZkColumn<T : DtoBase>(
     val table: ZkTable<T>
+) : ZkElement(
+    element = document.createElement("th") as HTMLElement
+) {
 
-    fun renderHeader(builder: ZkElement) {
-        with(builder) {
-            + th { + label }
+    open val min = 24.0
+    open val fraction = "1fr"
+    open var size = Double.NaN
+
+    lateinit var label: String
+
+    var beingResized = false
+
+    override fun onCreate() {
+        + label
+        + span(ZkTableStyles.resizeHandle) {
+            on(buildElement, "mousedown", ::onResizeMouseDown)
         }
     }
 
-    fun render(builder: ZkElement, index: Int, row: T)
-
     fun gridTemplate(): String {
-        return "minmax(100px, 1fr)"
+        return "minmax(${min}px, $fraction)"
+    }
+
+    open fun render(builder: ZkElement, index: Int, row: T) {
+
+    }
+
+    open fun onResizeMouseDown(event: Event) {
+        beingResized = true
+        classList += ZkTableStyles.beingResized
+        table.classList += ZkTableStyles.noSelect
+
+        on(window, "mouseup", mouseUpWrapper)
+        on(window, "mousemove", mouseMoveWrapper)
+    }
+
+    private val mouseUpWrapper = { event: Event -> onMouseUp(event) }
+
+    open fun onMouseUp(event: Event) {
+        println("mouseup")
+        beingResized = false
+        classList -= ZkTableStyles.beingResized
+        table.classList -= ZkTableStyles.noSelect
+        window.removeEventListener("mouseup", mouseUpWrapper)
+        window.removeEventListener("mousemove", mouseMoveWrapper)
+    }
+
+    private val mouseMoveWrapper = { event: Event -> onMouseMove(event) }
+
+    open fun onMouseMove(event: Event) {
+        println("mousemove")
+        window.requestAnimationFrame {
+            if (! beingResized) return@requestAnimationFrame
+
+            event as MouseEvent
+
+            val horizontalScrollOffset = document.documentElement !!.scrollLeft
+            size = max(min, (horizontalScrollOffset + event.clientX) - element.offsetLeft)
+
+            table.columns.forEach {
+                if (it.size.isNaN()) {
+                    it.size = it.element.clientWidth.toDouble()
+                }
+            }
+
+            table.tableElement.style.cssText = "grid-template-columns: " + table.columns.joinToString(" ") { "${it.size}px" }
+        }
     }
 
 }

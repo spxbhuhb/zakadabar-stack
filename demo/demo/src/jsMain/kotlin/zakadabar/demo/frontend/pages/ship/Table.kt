@@ -26,7 +26,7 @@ class Table : ZkTable<ShipDto>() {
         crud = Ships
         onSearch = { }
 
-        + ShipDto::id build { label = "#" }
+        + ShipDto::id
         + ShipDto::name
         + ShipDto::hasPirateFlag
 
