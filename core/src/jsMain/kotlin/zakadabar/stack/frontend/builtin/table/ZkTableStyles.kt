@@ -32,8 +32,10 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTableStyles>(ZkApplication.theme) {
         bottom = 0
         borderRight = "1px solid ${ZkColors.LightBlue.c800}"
         borderLeft = "1px solid ${ZkColors.LightBlue.c800}"
+        backgroundColor = theme.table.headerBackground
         marginTop = 4
         marginBottom = 4
+        marginRight = 8
         opacity = 0
         width = 5
         cursor = "col-resize"
@@ -44,7 +46,7 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTableStyles>(ZkApplication.theme) {
     }
 
     val beingResized by cssClass {
-        on(" .resize-handle") {
+        on(" .$resizeHandle") {
             opacity = 1
         }
     }
@@ -82,9 +84,9 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTableStyles>(ZkApplication.theme) {
         }
 
         on(" th") {
-            padding = 15
             paddingTop = 10
             paddingBottom = 10
+            paddingRight = 8
             overflow = "hidden"
             textOverflow = "ellipsis"
             textTransform = "uppercase"
@@ -97,6 +99,8 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTableStyles>(ZkApplication.theme) {
             textAlign = "left"
             color = theme.table.headerText
             borderBottom = "1px solid ${theme.table.headerBottom}"
+            cursor = "pointer"
+
         }
 
         on(" th:hover .$resizeHandle") {
@@ -104,7 +108,7 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTableStyles>(ZkApplication.theme) {
         }
 
         on(" th:first-child") {
-
+            paddingLeft = 10
         }
 
         on(" th:last-child") {
@@ -112,7 +116,6 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTableStyles>(ZkApplication.theme) {
         }
 
         on(" td") {
-            padding = 15
             paddingTop = 10
             paddingBottom = 10
             overflow = "hidden"
@@ -142,6 +145,10 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTableStyles>(ZkApplication.theme) {
 //        on(" tr:nth-child(even) td") {
 //            background = theme.table.evenRowBackground
 //        }
+
+        on(" td:first-child") {
+            paddingLeft = 10
+        }
 
         on(" tr:last-child td:first-child") {
             borderBottomLeftRadius = 4
