@@ -15,6 +15,7 @@ class Table : ZkTable<SpeedDto>() {
 
         add = true
         search = true
+        exportCsv = true
 
         + SpeedDto::id
         + SpeedDto::description

@@ -22,21 +22,26 @@ open class ZkEnumColumn<T : DtoBase, E : Enum<E>>(
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         with(builder) {
-            + t(prop.get(row).name)
+            + format(row)
         }
     }
 
     override fun sort() {
         table.fullData = if (sortAscending) {
-            table.fullData.sortedBy { prop.get(it) }
+            table.fullData.sortedBy { format(it) }
         } else {
-            table.fullData.sortedByDescending { prop.get(it) }
+            table.fullData.sortedByDescending { format(it) }
         }
     }
 
     override fun matches(row: T, string: String?): Boolean {
         if (string == null) return false
-        return (string in t(prop.get(row).name))
+        return (string in format(row))
     }
 
+    override fun exportCsv(row: T): String {
+        return "\"${format(row).replace("\"", "\"\"")}\""
+    }
+
+    open fun format(row: T) = t(prop.get(row).name)
 }

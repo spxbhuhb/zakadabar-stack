@@ -38,4 +38,8 @@ open class ZkStringColumn<T : DtoBase>(
         return (string in prop.get(row))
     }
 
+    override fun exportCsv(row: T): String {
+        return "\"${prop.get(row).replace("\"", "\"\"")}\""
+    }
+
 }

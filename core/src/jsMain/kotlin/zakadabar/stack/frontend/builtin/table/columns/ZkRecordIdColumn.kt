@@ -44,4 +44,8 @@ open class ZkRecordIdColumn<T : DtoBase>(
         return (string in prop.get(row).toString())
     }
 
+    override fun exportCsv(row: T): String {
+        return prop.get(row).toString()
+    }
+
 }

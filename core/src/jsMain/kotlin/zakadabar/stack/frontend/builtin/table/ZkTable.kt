@@ -17,9 +17,7 @@ import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.table.columns.*
-import zakadabar.stack.frontend.util.getDatasetEntry
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.stack.frontend.util.*
 import kotlin.reflect.KProperty1
 
 /**
@@ -50,6 +48,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     var add: Boolean = false
     var search: Boolean = false
+    var exportCsv: Boolean = false
 
     var crud: ZkCrudTarget<*>? = null
 
@@ -138,6 +137,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
                 title = this@ZkTable.title ?: ""
                 if (add) onAddRow = ::onAddRow
                 if (search) onSearch = ::onSearch
+                if (exportCsv) onExportCsv = ::onExportCsv
             }
         }
 
@@ -233,6 +233,20 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         searchText = if (text.isEmpty()) null else text
         filter()
         render()
+    }
+
+    open fun onExportCsv() {
+        val lines = mutableListOf<String>()
+
+        fullData.forEach { row ->
+            val fields = mutableListOf<String>()
+            columns.forEach { if (it.exportable) fields += it.exportCsv(row) }
+            lines += fields.joinToString(",")
+        }
+
+        val csv = lines.joinToString("\n")
+
+        downloadCsv((title ?: "content") + ".csv", csv)
     }
 
     private fun gridTemplateColumns(): String {

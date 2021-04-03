@@ -21,6 +21,7 @@ open class ZkTableTitleBar() : ZkElement() {
     var title: String? = null
     var onAddRow: (() -> Unit)? = null
     var onSearch: ((query: String) -> Unit)? = null
+    var onExportCsv: (() -> Unit)? = null
 
     override fun onCreate() {
         classList += ZkTitleBarStyles.titleBar
@@ -49,6 +50,10 @@ open class ZkTableTitleBar() : ZkElement() {
                     + ZkIconButton(ZkIcons.add, round = true) { it.invoke() } marginRight 16
                 }
 
+                onExportCsv?.let {
+                    + ZkIconButton(ZkIcons.fileDownload, round = true) { it.invoke() } marginRight 16
+                }
+
                 onSearch?.let {
                     + ZkStandaloneInput(onChange = it, enter = true) marginRight 8
                     + ZkIconButton(ZkIcons.search, buttonSize = 24) {
@@ -56,6 +61,7 @@ open class ZkTableTitleBar() : ZkElement() {
                         it.invoke(value)
                     }
                 }
+
             } marginRight 10
         }
     }

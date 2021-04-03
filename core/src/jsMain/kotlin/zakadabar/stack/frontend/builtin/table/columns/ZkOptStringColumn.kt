@@ -38,4 +38,7 @@ open class ZkOptStringColumn<T : DtoBase>(
         return (prop.get(row)?.contains(string)) ?: false
     }
 
+    override fun exportCsv(row: T): String {
+        return "\"${(prop.get(row) ?: "").replace("\"", "\"\"")}\""
+    }
 }

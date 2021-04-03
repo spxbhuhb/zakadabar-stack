@@ -25,6 +25,7 @@ open class ZkColumn<T : DtoBase>(
     open val min = 24.0
     open val fraction = "1fr"
     open var size = Double.NaN
+    open var exportable = true
 
     lateinit var label: String
     var sortSign = ZkElement() css ZkTableStyles.sortSign
@@ -125,6 +126,10 @@ open class ZkColumn<T : DtoBase>(
      */
     open fun matches(row: T, string: String?): Boolean {
         return false
+    }
+
+    open fun exportCsv(row: T): String {
+        return ""
     }
 
 }

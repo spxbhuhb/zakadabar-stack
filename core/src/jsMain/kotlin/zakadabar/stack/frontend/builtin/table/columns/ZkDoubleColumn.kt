@@ -27,15 +27,21 @@ open class ZkDoubleColumn<T : DtoBase>(
 
     override fun sort() {
         table.fullData = if (sortAscending) {
-            table.fullData.sortedBy { prop.get(it) }
+            table.fullData.sortedBy { format(it) }
         } else {
-            table.fullData.sortedByDescending { prop.get(it) }
+            table.fullData.sortedByDescending { format(it) }
         }
     }
 
     override fun matches(row: T, string: String?): Boolean {
         if (string == null) return false
-        return (string in prop.get(row).toString())
+        return (string in format(row))
     }
+
+    override fun exportCsv(row: T): String {
+        return format(row)
+    }
+
+    open fun format(row: T) = prop.get(row).toString()
 
 }

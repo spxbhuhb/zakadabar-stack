@@ -6,7 +6,6 @@ package zakadabar.stack.frontend.builtin.table.columns
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.w3c.dom.HTMLElement
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.ZkElement
@@ -25,11 +24,7 @@ open class ZkOptInstantColumn<T : DtoBase>(
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         with(builder) {
-            // FIXME proper formatting, Kotlin datatime supports only ISO for now
-            val value = prop.get(row)
-            if (value != null) {
-                + value.toLocalDateTime(TimeZone.currentSystemDefault()).toString()
-            }
+            + format(row)
         }
     }
 
@@ -43,6 +38,17 @@ open class ZkOptInstantColumn<T : DtoBase>(
 
     override fun matches(row: T, string: String?): Boolean {
         if (string == null) return false
-        return (string in prop.get(row).toString())
+        return (string in format(row))
+    }
+
+    override fun exportCsv(row: T): String {
+        return format(row)
+    }
+
+    open fun format(row: T): String {
+        // FIXME proper formatting, Kotlin datetime supports only ISO for now
+        val value = prop.get(row) ?: return ""
+        val s = value.toLocalDateTime(TimeZone.currentSystemDefault()).toString()
+        return "${s.substring(0, 10)} ${s.substring(11, 5)}"
     }
 }

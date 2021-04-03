@@ -40,6 +40,13 @@ open class ZkInstantColumn<T : DtoBase>(
 
     override fun matches(row: T, string: String?): Boolean {
         if (string == null) return false
-        return (string in prop.get(row).toString())
+        return (string in format(row))
+    }
+
+    open fun format(row: T): String {
+        // FIXME proper formatting, Kotlin datetime supports only ISO for now
+        val value = prop.get(row)
+        val s = value.toLocalDateTime(TimeZone.currentSystemDefault()).toString()
+        return "${s.substring(0, 10)} ${s.substring(11, 5)}"
     }
 }
