@@ -38,4 +38,8 @@ open class ZkInstantColumn<T : DtoBase>(
         }
     }
 
+    override fun matches(row: T, string: String?): Boolean {
+        if (string == null) return false
+        return (string in prop.get(row).toString())
+    }
 }

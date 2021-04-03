@@ -34,4 +34,9 @@ open class ZkEnumColumn<T : DtoBase, E : Enum<E>>(
         }
     }
 
+    override fun matches(row: T, string: String?): Boolean {
+        if (string == null) return false
+        return (string in t(prop.get(row).name))
+    }
+
 }

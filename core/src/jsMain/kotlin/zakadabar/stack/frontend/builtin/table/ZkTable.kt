@@ -48,11 +48,10 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     var title: String? = null
 
-    var crud: ZkCrudTarget<*>? = null
+    var add: Boolean = false
+    var search: Boolean = false
 
-    var onAddRow: (() -> Unit)? = null
-    var onDblClick: ((id: String) -> Unit)? = null
-    var onSearch: ((searchText: String) -> Unit)? = null
+    var crud: ZkCrudTarget<*>? = null
 
     var titleBar: ZkTableTitleBar? = null
 
@@ -60,13 +59,27 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     val preloads = mutableListOf<ZkTablePreload<*>>()
 
+    var searchText: String? = null
+
     lateinit var fullData: List<T>
+
+    lateinit var filteredData: List<T>
 
     lateinit var tableElement: HTMLTableElement
 
     private val tbody = document.createElement("tbody") as HTMLTableSectionElement
 
+    /**
+     * Called by [onCreate] to configure the table before building it.
+     * This is the place to add columns, switch on and off features.
+     */
+    open fun onConfigure() {
+
+    }
+
     override fun onCreate() {
+        onConfigure()
+
         className = ZkTableStyles.outerContainer
         classList += ZkTableStyles.noSelect
 
@@ -101,11 +114,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
             val target = event.target as HTMLElement
             val rid = target.getDatasetEntry("rid") ?: return@on
 
-            if (onDblClick != null) {
-                onDblClick?.invoke(rid)
-            } else if (crud != null) {
-                crud?.openUpdate(rid.toLong())
-            }
+            onDblClick(rid)
         }
 
         on("click") { event ->
@@ -117,26 +126,18 @@ open class ZkTable<T : DtoBase> : ZkElement() {
             val action = target.getDatasetEntry("action") ?: return@on
 
             if (action == "update") {
-                if (onDblClick != null) {
-                    onDblClick?.invoke(rid)
-                } else if (crud != null) {
-                    crud?.openUpdate(rid.toLong())
-                }
+                onDblClick(rid)
             }
         }
     }
 
     private fun buildTitleBar(): ZkTableTitleBar? {
 
-        if (titleBar == null && (title != null || onAddRow != null || onSearch != null || crud != null)) {
+        if (titleBar == null && (title != null || add || search || crud != null)) {
             titleBar = ZkTableTitleBar {
-                title = this@ZkTable.title
-                if (this@ZkTable.onAddRow != null) {
-                    onAddRow = this@ZkTable.onAddRow !!
-                } else if (this@ZkTable.crud != null) {
-                    onAddRow = { this@ZkTable.crud !!.openCreate() }
-                }
-                this@ZkTable.onSearch?.let { onSearch = it }
+                title = this@ZkTable.title ?: ""
+                if (add) onAddRow = ::onAddRow
+                if (search) onSearch = ::onSearch
             }
         }
 
@@ -151,10 +152,35 @@ open class ZkTable<T : DtoBase> : ZkElement() {
                 it.job.join()
             }
             fullData = data
+            filter()
             render()
         }
 
         return this
+    }
+
+    /**
+     * Applies all filters on the table rows.
+     */
+    open fun filter() {
+
+        if (searchText == null) {
+            filteredData = fullData
+            return
+        }
+
+        filteredData = fullData.filter { filterRow(it, searchText) }
+    }
+
+    /**
+     * Applies the filters to one row to decide if that row should be
+     * present in the filtered table.
+     */
+    open fun filterRow(row: T, text: String?): Boolean {
+        columns.forEach {
+            if (it.matches(row, searchText)) return true
+        }
+        return false
     }
 
     open fun render() {
@@ -162,7 +188,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
             tbody.clear()
             this.buildElement = tbody
 
-            for ((index, row) in fullData.withIndex()) {
+            for ((index, row) in filteredData.withIndex()) {
                 + tr {
                     buildElement.dataset["rid"] = getRowId(row)
 
@@ -187,6 +213,26 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         } else {
             throw NotImplementedError("please override ${this::class}.getRowId when not using crud")
         }
+    }
+
+    open fun onAddRow() {
+        crud?.openCreate()
+    }
+
+    /**
+     * Handles double click on a row. Default implementation calls openUpdate
+     * of the crud if there is a crud.
+     *
+     * @param  id  Id of the row.
+     */
+    open fun onDblClick(id: String) {
+        crud?.openUpdate(id.toLong())
+    }
+
+    open fun onSearch(text: String) {
+        searchText = if (text.isEmpty()) null else text
+        filter()
+        render()
     }
 
     private fun gridTemplateColumns(): String {

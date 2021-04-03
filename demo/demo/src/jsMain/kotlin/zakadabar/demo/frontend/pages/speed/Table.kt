@@ -9,13 +9,17 @@ import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class Table : ZkTable<SpeedDto>() {
 
-    init {
+    override fun onConfigure() {
         title = Strings.speeds
         crud = Speeds
+
+        add = true
+        search = true
 
         + SpeedDto::id
         + SpeedDto::description
         + SpeedDto::value
+
         + actions()
     }
 

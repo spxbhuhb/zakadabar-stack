@@ -21,6 +21,7 @@ object ZkStandaloneStyles : ZkCssStyleSheet<ZkStandaloneStyles>(ZkApplication.th
         appearance = "none"
         backgroundColor = "#fff"
         borderRadius = 2
+        minHeight = 26
 
         on(":hover") {
             borderColor = "#888"
@@ -50,4 +51,7 @@ object ZkStandaloneStyles : ZkCssStyleSheet<ZkStandaloneStyles>(ZkApplication.th
         }
     }
 
+    init {
+        attach()
+    }
 }

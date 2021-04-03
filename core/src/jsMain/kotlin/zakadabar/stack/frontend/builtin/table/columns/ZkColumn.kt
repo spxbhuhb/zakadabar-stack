@@ -69,6 +69,7 @@ open class ZkColumn<T : DtoBase>(
 
         sortSign.show()
 
+        table.filter()
         table.render()
     }
 
@@ -122,8 +123,8 @@ open class ZkColumn<T : DtoBase>(
     /**
      * Checks if this column of the given row matches the given string or not.
      */
-    open fun matches(row: T, string: String): Boolean {
-        return true
+    open fun matches(row: T, string: String?): Boolean {
+        return false
     }
 
 }

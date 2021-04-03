@@ -21,10 +21,12 @@ class Table : ZkTable<ShipDto>() {
     private val speeds by preload { SpeedDto.allAsMap() }
     private val accounts by preload { AccountPublicDto.allAsMap() }
 
-    init {
+    override fun onConfigure() {
         title = Strings.ships
         crud = Ships
-        onSearch = { }
+
+        add = true
+        search = true
 
         + ShipDto::id
         + ShipDto::name

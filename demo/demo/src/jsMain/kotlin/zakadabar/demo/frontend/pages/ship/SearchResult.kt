@@ -13,8 +13,6 @@ class SearchResult : ZkTable<SearchShipsResult>() {
     // we do not provide the crud for this table, but add onDblClick manually.
 
     init {
-        onDblClick = { Ships.openRead(it.toLong()) }
-
         + SearchShipsResult::shipId
         + SearchShipsResult::name
         + SearchShipsResult::port
@@ -23,6 +21,10 @@ class SearchResult : ZkTable<SearchShipsResult>() {
 
     override fun getRowId(row: SearchShipsResult): String {
         return row.shipId.toString()
+    }
+
+    override fun onDblClick(id: String) {
+        Ships.openRead(id.toLong())
     }
 
 }

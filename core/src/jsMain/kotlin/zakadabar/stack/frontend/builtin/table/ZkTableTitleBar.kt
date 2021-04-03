@@ -52,7 +52,8 @@ open class ZkTableTitleBar() : ZkElement() {
                 onSearch?.let {
                     + ZkStandaloneInput(onChange = it, enter = true) marginRight 8
                     + ZkIconButton(ZkIcons.search, buttonSize = 24) {
-                        this@ZkTableTitleBar[ZkStandaloneInput::class].value
+                        val value = this@ZkTableTitleBar[ZkStandaloneInput::class].value
+                        it.invoke(value)
                     }
                 }
             } marginRight 10
