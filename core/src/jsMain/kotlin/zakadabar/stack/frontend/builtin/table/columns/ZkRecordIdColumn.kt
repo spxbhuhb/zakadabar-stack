@@ -31,4 +31,12 @@ open class ZkRecordIdColumn<T : DtoBase>(
         return this
     }
 
+    override fun sort() {
+        table.fullData = if (sortAscending) {
+            table.fullData.sortedBy { prop.get(it) }
+        } else {
+            table.fullData.sortedByDescending { prop.get(it) }
+        }
+    }
+
 }

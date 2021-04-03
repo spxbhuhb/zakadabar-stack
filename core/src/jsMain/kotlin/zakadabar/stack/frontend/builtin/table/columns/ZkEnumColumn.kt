@@ -26,4 +26,12 @@ open class ZkEnumColumn<T : DtoBase, E : Enum<E>>(
         }
     }
 
+    override fun sort() {
+        table.fullData = if (sortAscending) {
+            table.fullData.sortedBy { prop.get(it) }
+        } else {
+            table.fullData.sortedByDescending { prop.get(it) }
+        }
+    }
+
 }

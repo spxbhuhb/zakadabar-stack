@@ -27,14 +27,19 @@ open class ZkColumn<T : DtoBase>(
     open var size = Double.NaN
 
     lateinit var label: String
+    var sortSign = ZkElement() css ZkTableStyles.sortSign
 
     var beingResized = false
 
+    var sortAscending = false
+
     override fun onCreate() {
         + label
+        + sortSign
         + span(ZkTableStyles.resizeHandle) {
             on(buildElement, "mousedown", ::onResizeMouseDown)
         }
+        on("click", ::onClick)
     }
 
     fun gridTemplate(): String {
@@ -43,6 +48,28 @@ open class ZkColumn<T : DtoBase>(
 
     open fun render(builder: ZkElement, index: Int, row: T) {
 
+    }
+
+    open fun onClick(event: Event) {
+        sortAscending = ! sortAscending
+
+        sort()
+
+        table.columns.forEach {
+            it.sortSign.hide()
+        }
+
+        if (sortAscending) {
+            sortSign.classList -= ZkTableStyles.sortedDescending
+            sortSign.classList += ZkTableStyles.sortedAscending
+        } else {
+            sortSign.classList += ZkTableStyles.sortedDescending
+            sortSign.classList -= ZkTableStyles.sortedAscending
+        }
+
+        sortSign.show()
+
+        table.render()
     }
 
     open fun onResizeMouseDown(event: Event) {
@@ -57,7 +84,6 @@ open class ZkColumn<T : DtoBase>(
     private val mouseUpWrapper = { event: Event -> onMouseUp(event) }
 
     open fun onMouseUp(event: Event) {
-        println("mouseup")
         beingResized = false
         classList -= ZkTableStyles.beingResized
         table.classList -= ZkTableStyles.noSelect
@@ -68,7 +94,6 @@ open class ZkColumn<T : DtoBase>(
     private val mouseMoveWrapper = { event: Event -> onMouseMove(event) }
 
     open fun onMouseMove(event: Event) {
-        println("mousemove")
         window.requestAnimationFrame {
             if (! beingResized) return@requestAnimationFrame
 
@@ -85,6 +110,20 @@ open class ZkColumn<T : DtoBase>(
 
             table.tableElement.style.cssText = "grid-template-columns: " + table.columns.joinToString(" ") { "${it.size}px" }
         }
+    }
+
+    /**
+     * Sorts the table data by this column.
+     */
+    open fun sort() {
+
+    }
+
+    /**
+     * Checks if this column of the given row matches the given string or not.
+     */
+    open fun matches(row: T, string: String): Boolean {
+        return true
     }
 
 }

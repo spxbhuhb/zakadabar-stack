@@ -58,6 +58,34 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTableStyles>(ZkApplication.theme) {
         styles["-ms-user-select"] = "none"
     }
 
+    val sortSign by cssClass {
+        boxSizing = "border-box"
+        position = "absolute"
+        top = 0
+        right = 10
+        bottom = 0
+    }
+
+    val sortedDescending by cssClass {
+        marginTop = 16
+        marginRight = 12
+        width = 0
+        height = 0
+        borderLeft = "6px solid transparent"
+        borderRight = "6px solid transparent"
+        borderTop = "6px solid ${ZkColors.Gray.c800}"
+    }
+
+    val sortedAscending by cssClass {
+        marginTop = 16
+        marginRight = 12
+        width = 0
+        height = 0
+        borderLeft = "6px solid transparent"
+        borderRight = "6px solid transparent"
+        borderBottom = "6px solid ${ZkColors.Gray.c800}"
+    }
+
     val table by cssClass {
         boxSizing = "border-box"
 
@@ -100,7 +128,6 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTableStyles>(ZkApplication.theme) {
             color = theme.table.headerText
             borderBottom = "1px solid ${theme.table.headerBottom}"
             cursor = "pointer"
-
         }
 
         on(" th:hover .$resizeHandle") {
