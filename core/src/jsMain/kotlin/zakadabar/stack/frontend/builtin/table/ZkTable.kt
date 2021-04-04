@@ -21,40 +21,48 @@ import zakadabar.stack.frontend.util.*
 import kotlin.reflect.KProperty1
 
 /**
- * Provides functions to build tables for the browser frontend.
+ * Table for the browser frontend.
  *
- * Title bar is the bar above the table that contains the title and possibly functions such
- * as create new item, search in the table, etc.
+ * Override [onConfigure] to set table configuration properties such as title, icons, etc.
  *
- * The title bar is optional. One is added automatically if one of [title], [onResume] or [onSearch]
- * is specified. You can override the default by setting the [titleBar] property before [onResume] runs.
- *
- * @property  title       Title to show in the title bar.
  * @property  crud        The [ZkCrudTarget] that is linked with the table. When specified the functions
  *                        of the table (onCreate, onDblClick for example) will use it to open the
  *                        appropriate page.
- * @property  onAddRow    Called when the user clicks the plus button in the title bar. This function
- *                        has preference over [crud].
- * @property  onDblClick  Called when the user double clicks on a row. Parameter is the id of the
- *                        row. When [crud] is set this will be the record id. Otherwise it will be
- *                        the value returned by [getRowId]. This function has preference over [crud].
- * @property  titleBar    Title bar of the table. Set this to override the default title bar.
+ * @property  titleBar    When true a title bar is added to the table. Function [addTitleBar] adds the title bar.
+ * @property  title       Title to show in the title bar.
+ * @property  add         When true a plus icon is added to the title bar. Click on the icon calls [onAddRow].
+ * @property  search      When true a search input and icon is added to the title bar. Enter in the search field
+ *                        or click on the icon calls [onSearch].
+ * @property  export      When true an export icon is added to the title bar. Calls [onExportCsv].
  * @property  columns     Column definitions.
  * @property  preloads    Data load jobs which has to be performed before the table is rendered.
  */
 open class ZkTable<T : DtoBase> : ZkElement() {
 
-    var title: String? = null
-
-    var add: Boolean = false
-    var search: Boolean = false
-    var exportCsv: Boolean = false
+    // configuration
 
     var crud: ZkCrudTarget<*>? = null
 
-    var titleBar: ZkTableTitleBar? = null
+    var titleBar = true
+    var title = ""
+    var add = false
+    var search = false
+    var export = false
+
+    open val exportFileName: String
+        get() = (if (title.isEmpty()) "content" else title) + ".csv"
 
     val columns = mutableListOf<ZkColumn<T>>()
+
+    // DOM and children
+
+    lateinit var titleBarElement: ZkTableTitleBar
+
+    lateinit var tableElement: HTMLTableElement
+
+    private val tbody = document.createElement("tbody") as HTMLTableSectionElement
+
+    // state
 
     val preloads = mutableListOf<ZkTablePreload<*>>()
 
@@ -64,9 +72,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     lateinit var filteredData: List<T>
 
-    lateinit var tableElement: HTMLTableElement
-
-    private val tbody = document.createElement("tbody") as HTMLTableSectionElement
+    // create, render, set data
 
     /**
      * Called by [onCreate] to configure the table before building it.
@@ -82,7 +88,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         className = ZkTableStyles.outerContainer
         classList += ZkTableStyles.noSelect
 
-        buildTitleBar()?.let { + it }
+        addTitleBar()
 
         + div(ZkTableStyles.contentContainer) {
 
@@ -130,18 +136,15 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         }
     }
 
-    private fun buildTitleBar(): ZkTableTitleBar? {
+    open fun addTitleBar() {
+        if (! titleBar) return
 
-        if (titleBar == null && (title != null || add || search || crud != null)) {
-            titleBar = ZkTableTitleBar {
-                title = this@ZkTable.title ?: ""
-                if (add) onAddRow = ::onAddRow
-                if (search) onSearch = ::onSearch
-                if (exportCsv) onExportCsv = ::onExportCsv
-            }
+        + ZkTableTitleBar {
+            title = this@ZkTable.title
+            if (add) onAddRow = ::onAddRow
+            if (search) onSearch = ::onSearch
+            if (export) onExportCsv = ::onExportCsv
         }
-
-        return titleBar
     }
 
     fun <RT : Any> preload(loader: suspend () -> RT) = ZkTablePreload(loader)
@@ -159,28 +162,12 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         return this
     }
 
-    /**
-     * Applies all filters on the table rows.
-     */
-    open fun filter() {
-
-        if (searchText == null) {
-            filteredData = fullData
-            return
+    private fun gridTemplateColumns(): String {
+        var s = "grid-template-columns:"
+        for (column in columns) {
+            s += " " + column.gridTemplate()
         }
-
-        filteredData = fullData.filter { filterRow(it, searchText) }
-    }
-
-    /**
-     * Applies the filters to one row to decide if that row should be
-     * present in the filtered table.
-     */
-    open fun filterRow(row: T, text: String?): Boolean {
-        columns.forEach {
-            if (it.matches(row, searchText)) return true
-        }
-        return false
+        return "$s;"
     }
 
     open fun render() {
@@ -215,6 +202,8 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         }
     }
 
+    // extended functions
+
     open fun onAddRow() {
         crud?.openCreate()
     }
@@ -246,16 +235,34 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
         val csv = lines.joinToString("\n")
 
-        downloadCsv((title ?: "content") + ".csv", csv)
+        downloadCsv(exportFileName, csv)
     }
 
-    private fun gridTemplateColumns(): String {
-        var s = "grid-template-columns:"
-        for (column in columns) {
-            s += " " + column.gridTemplate()
+    /**
+     * Applies all filters on the table rows.
+     */
+    open fun filter() {
+
+        if (searchText == null) {
+            filteredData = fullData
+            return
         }
-        return "$s;"
+
+        filteredData = fullData.filter { filterRow(it, searchText) }
     }
+
+    /**
+     * Applies the filters to one row to decide if that row should be
+     * present in the filtered table.
+     */
+    open fun filterRow(row: T, text: String?): Boolean {
+        columns.forEach {
+            if (it.matches(row, searchText)) return true
+        }
+        return false
+    }
+
+    // column add functions for properties
 
     operator fun KProperty1<T, RecordId<T>>.unaryPlus(): ZkRecordIdColumn<T> {
         val column = ZkRecordIdColumn(this@ZkTable, this)

@@ -10,6 +10,7 @@ import zakadabar.demo.frontend.pages.builtin.input.CheckboxList
 import zakadabar.demo.frontend.pages.builtin.layout.TabContainer
 import zakadabar.demo.frontend.pages.builtin.modal.ConfirmDialog
 import zakadabar.demo.frontend.pages.builtin.pages.ArgPage
+import zakadabar.demo.frontend.pages.builtin.table.TableColumns
 import zakadabar.demo.frontend.pages.misc.Home
 import zakadabar.demo.frontend.pages.misc.Login
 import zakadabar.demo.frontend.pages.port.Ports
@@ -57,6 +58,7 @@ object Routing : ZkAppRouting(DefaultLayout, Home) {
         + ConfirmDialog
         + FormFields
         + TabContainer
+        + TableColumns
 
         + Home
     }

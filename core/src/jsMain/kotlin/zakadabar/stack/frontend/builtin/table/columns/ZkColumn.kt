@@ -104,13 +104,23 @@ open class ZkColumn<T : DtoBase>(
             val horizontalScrollOffset = document.documentElement !!.scrollLeft
             size = max(min, (horizontalScrollOffset + event.clientX) - element.offsetLeft)
 
+            val tableWidth = table.tableElement.clientWidth
+            var sumWidth = 0.0
+
             table.columns.forEach {
                 if (it.size.isNaN()) {
                     it.size = it.element.clientWidth.toDouble()
                 }
+                sumWidth += it.size
             }
 
-            table.tableElement.style.cssText = "grid-template-columns: " + table.columns.joinToString(" ") { "${it.size}px" }
+            val template = if (sumWidth >= tableWidth || table.columns.size == 0) {
+                "grid-template-columns: " + table.columns.joinToString(" ") { "${it.size}px" }
+            } else {
+                "grid-template-columns: " + table.columns.subList(0, table.columns.size - 1).joinToString(" ") { "${it.size}px" } + " 1fr"
+            }
+
+            table.tableElement.style.cssText = template
         }
     }
 
