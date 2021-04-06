@@ -2,7 +2,11 @@
 
 ## Breaking changes
 
-**Sort account related DTOs into directories**
+**Move app into template directory**
+
+Demo `app` directory moved into `template\app`. The server loads configuration from `template\app` instead of `app`.
+
+**Move account related DTOs into data.builtin.account**
 
 Move the following classes into `zakadabar.stack.data.builtin.account`
 
@@ -10,7 +14,7 @@ Move the following classes into `zakadabar.stack.data.builtin.account`
 * LoginAction
 * LogoutAction
 * PasswordChangeAction
-* PrinicipalDto
+* PrincipalDto
 * RoleDto
 * RoleGrantDto
 * RoleGrantsByPrincipal
