@@ -18,7 +18,7 @@ import kotlin.reflect.full.createType
 
 interface QueryBackend : BackendModule {
 
-    val recordType: String
+    val namespace: String
 
     val logger: Logger
 
@@ -26,7 +26,7 @@ interface QueryBackend : BackendModule {
      * Adds a Query route for this backend.
      */
     fun <RQ : Any, RS : Any> Route.query(queryDtoClass: KClass<RQ>, func: (Executor, RQ) -> RS) {
-        get("$recordType/${queryDtoClass.simpleName}") {
+        get("$namespace/${queryDtoClass.simpleName}") {
 
             val executor = call.executor()
 

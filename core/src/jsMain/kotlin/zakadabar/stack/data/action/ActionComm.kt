@@ -9,7 +9,6 @@ import kotlinx.serialization.KSerializer
 import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
 import zakadabar.stack.util.PublicApi
-import zakadabar.stack.util.json
 
 /**
  * Communication functions for records.
@@ -28,7 +27,7 @@ open class ActionComm(
 
         headers.append("content-type", "application/json")
 
-        val body = json.encodeToString(requestSerializer, request)
+        val body = Json.encodeToString(requestSerializer, request)
 
         val requestInit = RequestInit(
             method = "POST",
@@ -44,7 +43,7 @@ open class ActionComm(
         val textPromise = response.text()
         val text = textPromise.await()
 
-        return json.decodeFromString(responseSerializer, text)
+        return Json.decodeFromString(responseSerializer, text)
     }
 
 }

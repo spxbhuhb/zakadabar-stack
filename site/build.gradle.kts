@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.3.26-SNAPSHOTs"
+version = "2021.3.26-SNAPSHOT"
 
 application {
     mainClassName = "zakadabar.stack.backend.ServerKt"
@@ -40,6 +40,7 @@ kotlin {
 
     sourceSets["commonMain"].dependencies {
         implementation(project(":core"))
+        implementation(project(":lib:markdown"))
     }
 }
 
@@ -48,7 +49,7 @@ tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJ
     // seems like this does not work - minimize()
 }
 
-val distName = "demo-$version-server"
+val distName = "site-$version-server"
 
 val copyAppStruct by tasks.registering(Copy::class) {
     from("$projectDir/app")
@@ -71,6 +72,13 @@ val copyAppStatic by tasks.registering(Copy::class) {
     exclude("*.zip")
 }
 
+val copyMarkdown by tasks.registering(Copy::class) {
+    from("$projectDir/docs")
+    into("$buildDir/$distName/var/static")
+    include("**/*.md")
+    includeEmptyDirs = false
+}
+
 val copyAppUsr by tasks.registering(Copy::class) {
     from("$projectDir")
     into("$buildDir/$distName/usr")
@@ -79,7 +87,7 @@ val copyAppUsr by tasks.registering(Copy::class) {
 }
 
 val appDistZip by tasks.registering(Zip::class) {
-    dependsOn(copyAppStruct, copyAppLib, copyAppStatic, copyAppUsr)
+    dependsOn(copyAppStruct, copyAppLib, copyAppStatic, copyMarkdown, copyAppUsr)
 
     archiveFileName.set("${base.archivesBaseName}-${project.version}-app.zip")
     destinationDirectory.set(file("$buildDir/app"))

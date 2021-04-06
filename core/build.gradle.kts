@@ -12,14 +12,14 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.3.26-SNAPSHOT"
+version = "2021.4.6-SNAPSHOT"
 
 val isSnapshot = version.toString().contains("SNAPSHOT")
 
 // common
-val ktorVersion = "1.4.0"
-val coroutinesVersion = "1.3.9"
-val serializationVersion = "1.0.0-RC"
+val ktorVersion = "1.5.3"
+val coroutinesVersion = "1.4.3"
+val serializationVersion = "1.1.0"
 val datetimeVersion = "0.1.1"
 val cliktVersion = "2.8.0"
 
@@ -59,7 +59,7 @@ kotlin {
         commonMain {
             dependencies {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-core:$serializationVersion")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
                 api("org.jetbrains.kotlinx:kotlinx-datetime:$datetimeVersion")
                 api("io.ktor:ktor-client-core:$ktorVersion")
                 api("io.ktor:ktor-client-websockets:$ktorVersion")

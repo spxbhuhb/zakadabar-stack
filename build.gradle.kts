@@ -3,9 +3,9 @@
  */
 
 plugins {
-    kotlin("multiplatform") version "1.4.31" apply false
-    kotlin("plugin.serialization") version "1.4.31" apply false
-    id("org.jetbrains.kotlin.plugin.noarg") version "1.4.31" apply false
+    kotlin("multiplatform") version "1.4.32" apply false
+    kotlin("plugin.serialization") version "1.4.32" apply false
+    id("org.jetbrains.kotlin.plugin.noarg") version "1.4.30" apply false
     id("org.jetbrains.dokka") version "1.4.30" apply false
     id("com.github.johnrengelman.shadow") version "6.0.0" apply false
     signing
@@ -17,7 +17,8 @@ subprojects {
     repositories {
         mavenCentral()
         jcenter()
-        maven(url = "https://kotlin.bintray.com/kotlinx/") // for kotlinx.datetime, to be changed to jcenter()
+        maven(url = "https://kotlin.bintray.com/kotlinx/") // for kotlinx.datetime, TODO remove when ready
+        maven(url = "http://dl.bintray.com/jetbrains/markdown") // TODO remove when ready
     }
 
 }

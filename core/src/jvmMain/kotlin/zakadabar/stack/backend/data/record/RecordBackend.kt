@@ -39,10 +39,10 @@ abstract class RecordBackend<T : RecordDto<T>>(
 
     abstract val dtoClass: KClass<T>
 
-    override val recordType
-        get() = (dtoClass.companionObject !!.objectInstance as RecordDtoCompanion<*>).recordType
+    override val namespace
+        get() = (dtoClass.companionObject!!.objectInstance as RecordDtoCompanion<*>).recordType
 
-    override val logger by lazy { LoggerFactory.getLogger(recordType) !! }
+    override val logger by lazy { LoggerFactory.getLogger(namespace)!! }
 
     override var logActions = true
 
@@ -154,7 +154,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
             with(blobTable) {
                 slice(id, dataRecord, name, type, size)
                     .select { dataRecord eq recordId }
-                    .map { toDto(it, recordType) }
+                    .map { toDto(it, namespace) }
             }
         }
     }
@@ -177,7 +177,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
         return transaction {
             blobTable
                 .select { blobTable.id eq blobId and (blobTable.dataRecord eq recordId) }
-                .map { blobTable.toDto(it, recordType) to it[blobTable.content].bytes }
+                .map { blobTable.toDto(it, namespace) to it[blobTable.content].bytes }
                 .firstOrNull() ?: throw NotFoundException()
         }
     }
@@ -259,7 +259,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      * Adds CRUD routes for this record backend. Check crud functions for URLs.
      */
     fun Route.crud() {
-        route(recordType) {
+        route(namespace) {
 
             post {
                 val executor = call.executor()
@@ -301,7 +301,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      * Adds BLOB routes for this backend. Check blob functions for URLs.
      */
     fun Route.blob() {
-        route("$recordType/{rid}/blob") {
+        route("$namespace/{rid}/blob") {
 
             get("/{bid?}") {
                 val recordId = call.parameters["rid"]?.toLongOrNull()
@@ -357,7 +357,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
                 val dto = BlobDto(
                     id = 0,
                     dataRecord = recordId,
-                    dataType = recordType,
+                    dataType = namespace,
                     name = parseHeaderValue(disposition).single().params.find { it.name == "filename" }?.value ?: throw BadRequestException("missing filename"),
                     type = headers["Content-Type"] ?: "application/octet-stream",
                     size = length.toLong()

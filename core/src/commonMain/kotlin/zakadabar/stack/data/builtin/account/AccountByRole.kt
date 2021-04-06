@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.data
+package zakadabar.stack.data.builtin.account
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
