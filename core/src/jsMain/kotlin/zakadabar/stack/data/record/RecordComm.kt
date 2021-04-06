@@ -8,6 +8,7 @@ import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.json.Json
 import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
 import org.w3c.files.Blob
@@ -15,7 +16,6 @@ import org.w3c.xhr.ProgressEvent
 import org.w3c.xhr.XMLHttpRequest
 import zakadabar.stack.data.builtin.BlobDto
 import zakadabar.stack.util.PublicApi
-import zakadabar.stack.util.json
 
 /**
  * Communication functions for records.
@@ -38,7 +38,7 @@ open class RecordComm<T : RecordDto<T>>(
 
         headers.append("content-type", "application/json")
 
-        val body = json.encodeToString(serializer, dto)
+        val body = Json.encodeToString(serializer, dto)
 
         val requestInit = RequestInit(
             method = "POST",
@@ -59,7 +59,7 @@ open class RecordComm<T : RecordDto<T>>(
         val textPromise = response.text()
         val text = textPromise.await()
 
-        return json.decodeFromString(serializer, text)
+        return Json.decodeFromString(serializer, text)
     }
 
     @PublicApi
@@ -70,7 +70,7 @@ open class RecordComm<T : RecordDto<T>>(
 
         headers.append("content-type", "application/json")
 
-        val body = json.encodeToString(serializer, dto)
+        val body = Json.encodeToString(serializer, dto)
 
         val requestInit = RequestInit(
             method = "PATCH",
@@ -92,7 +92,7 @@ open class RecordComm<T : RecordDto<T>>(
         val textPromise = response.text()
         val text = textPromise.await()
 
-        return json.decodeFromString(ListSerializer(serializer), text)
+        return Json.decodeFromString(ListSerializer(serializer), text)
     }
 
     @PublicApi
@@ -113,7 +113,7 @@ open class RecordComm<T : RecordDto<T>>(
         val textPromise = response.text()
         val text = textPromise.await()
 
-        return json.decodeFromString(serializer, text)
+        return Json.decodeFromString(serializer, text)
     }
 
     @PublicApi
@@ -129,7 +129,7 @@ open class RecordComm<T : RecordDto<T>>(
         val dto = BlobDto(0L, dataRecordId, recordType, name, type, data.size.toLong())
 
         req.addEventListener("progress", { callback(dto, BlobCreateState.Progress, (it as ProgressEvent).loaded.toLong()) })
-        req.addEventListener("load", { callback(json.decodeFromString(BlobDto.serializer(), req.responseText), BlobCreateState.Done, data.size.toLong()) })
+        req.addEventListener("load", { callback(Json.decodeFromString(BlobDto.serializer(), req.responseText), BlobCreateState.Done, data.size.toLong()) })
         req.addEventListener("error", { callback(dto, BlobCreateState.Error, 0) })
         req.addEventListener("abort", { callback(dto, BlobCreateState.Abort, 0) })
 
@@ -157,7 +157,7 @@ open class RecordComm<T : RecordDto<T>>(
         val textPromise = response.text()
         val text = textPromise.await()
 
-        return json.decodeFromString(ListSerializer(BlobDto.serializer()), text)
+        return Json.decodeFromString(ListSerializer(BlobDto.serializer()), text)
     }
 
     @PublicApi
@@ -168,7 +168,7 @@ open class RecordComm<T : RecordDto<T>>(
 
         headers.append("content-type", "application/json")
 
-        val body = json.encodeToString(BlobDto.serializer(), dto)
+        val body = Json.encodeToString(BlobDto.serializer(), dto)
 
         val requestInit = RequestInit(
             method = "PATCH",
@@ -185,7 +185,7 @@ open class RecordComm<T : RecordDto<T>>(
         val textPromise = response.text()
         val text = textPromise.await()
 
-        return json.decodeFromString(BlobDto.serializer(), text)
+        return Json.decodeFromString(BlobDto.serializer(), text)
     }
 
     @PublicApi

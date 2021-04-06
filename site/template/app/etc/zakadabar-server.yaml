@@ -8,7 +8,7 @@ traceRouting: false
 staticResources: ./var/static
 
 modules:
-  - zakadabar.demo.backend.Module
+  - zakadabar.site.backend.Module
 
 #ktor:
 #  port: 8080

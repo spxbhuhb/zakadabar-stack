@@ -3,7 +3,7 @@
  */
 package zakadabar.demo.frontend.pages.account
 
-import zakadabar.demo.data.AccountPrivateDto
+import zakadabar.stack.data.builtin.account.AccountPrivateDto
 import zakadabar.demo.resources.Strings
 import zakadabar.stack.frontend.builtin.form.ZkForm
 

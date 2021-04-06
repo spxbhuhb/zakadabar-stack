@@ -1,13 +1,13 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.backend.account
+package zakadabar.stack.backend.data.builtin.account
 
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import zakadabar.demo.data.AccountPrivateDto
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
+import zakadabar.stack.data.builtin.account.AccountPrivateDto
 import zakadabar.stack.data.builtin.account.AccountPublicDto
 
 class AccountPrivateDao(id: EntityID<Long>) : LongEntity(id) {

@@ -10,8 +10,8 @@ import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.demo.backend.account.AccountPrivateDao
-import zakadabar.demo.backend.account.AccountPrivateTable
+import zakadabar.stack.backend.data.builtin.account.AccountPrivateDao
+import zakadabar.stack.backend.data.builtin.account.AccountPrivateTable
 import zakadabar.demo.backend.port.PortDao
 import zakadabar.demo.backend.port.PortTable
 import zakadabar.demo.backend.sea.SeaTable
@@ -21,7 +21,6 @@ import zakadabar.demo.data.ship.SearchShipsQuery
 import zakadabar.demo.data.ship.SearchShipsResult
 import zakadabar.demo.data.ship.ShipDto
 import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.backend.util.default
 import zakadabar.stack.util.Executor
 
 object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTable = ShipTable) {

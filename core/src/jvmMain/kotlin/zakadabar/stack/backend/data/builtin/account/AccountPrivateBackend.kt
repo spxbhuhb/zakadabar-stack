@@ -3,7 +3,7 @@
  */
 @file:Suppress("UNUSED_PARAMETER", "unused")
 
-package zakadabar.demo.backend.account
+package zakadabar.stack.backend.data.builtin.account
 
 import io.ktor.routing.*
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -11,8 +11,7 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.demo.backend.account.AccountPrivateBackend.onModuleLoad
-import zakadabar.demo.data.AccountPrivateDto
+import zakadabar.stack.backend.data.builtin.account.AccountPrivateBackend.onModuleLoad
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize
@@ -23,6 +22,7 @@ import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantDao
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantTable
 import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.data.builtin.account.AccountPrivateDto
 import zakadabar.stack.util.Executor
 
 /**

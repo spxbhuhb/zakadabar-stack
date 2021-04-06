@@ -47,29 +47,6 @@ class SiteStrings : ZkBuiltinStrings() {
     val value by "Value"
     val workplace by "Workplace"
     val active by "Active"
-
-    // demo related stuff
-
-    val applicationName by "Zakadabar Demo"
-
-    val captain by "Captain"
-
-    val sea by "Sea"
-    val seas by "Seas"
-    val port by "Port"
-    val ports by "Ports"
-
-    val ships by "Ships"
-    val ship by "Ship"
-    val shipBasicsExplanation by "Data all ships have."
-    val shipDescriptionExplanation by "Description of the ship, special features, number of cannons, history."
-    val shipImagesExplanation by "Drop image files on this field to upload the pictures of this ship. Click on the picture to enlarge."
-    val hasPirateFlag by "Pirate Flag"
-
-    val speeds by "Speeds"
-    val speed by "Speed"
-    val speedBasicsExplanation by "Data all speeds have."
-
     val logout by "Logout"
     val loginFail by "Login failed."
 

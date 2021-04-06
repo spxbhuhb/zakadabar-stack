@@ -80,6 +80,8 @@ class Server : CliktCommand() {
          */
         var logReads: Boolean = true
 
+        lateinit var staticRoot: String
+
         private val modules = mutableListOf<BackendModule>()
 
         private val dtoBackends = mutableListOf<RecordBackend<*>>()
@@ -203,6 +205,8 @@ class Server : CliktCommand() {
 
             }
         }
+
+        staticRoot = config.staticResources
 
         server.start(wait = true)
     }

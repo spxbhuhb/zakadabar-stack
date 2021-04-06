@@ -16,7 +16,6 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import zakadabar.stack.data.builtin.BlobDto
 import zakadabar.stack.util.PublicApi
-import zakadabar.stack.util.json
 
 /**
  * REST communication functions for objects that implement [RecordDto]
@@ -106,7 +105,7 @@ open class RecordComm<T : RecordDto<T>>(
                     body = ByteArrayContent(data)
                 }
 
-                callback(json.decodeFromString(BlobDto.serializer(), text), BlobCreateState.Done, data.size.toLong())
+                callback(Json.decodeFromString(BlobDto.serializer(), text), BlobCreateState.Done, data.size.toLong())
 
             } catch (ex: Exception) {
                 ex.printStackTrace() // TODO replace this with a function similar to writeLog (from Android project)

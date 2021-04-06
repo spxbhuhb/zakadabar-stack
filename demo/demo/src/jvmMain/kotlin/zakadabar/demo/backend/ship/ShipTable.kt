@@ -5,7 +5,7 @@ package zakadabar.demo.backend.ship
 
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
-import zakadabar.demo.backend.account.AccountPrivateTable
+import zakadabar.stack.backend.data.builtin.account.AccountPrivateTable
 import zakadabar.demo.backend.port.PortTable
 import zakadabar.demo.backend.speed.SpeedTable
 import zakadabar.demo.data.ship.ShipDto

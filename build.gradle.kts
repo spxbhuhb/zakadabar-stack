@@ -17,7 +17,8 @@ subprojects {
     repositories {
         mavenCentral()
         jcenter()
-        maven(url = "https://kotlin.bintray.com/kotlinx/") // for kotlinx.datetime, to be changed to jcenter()
+        maven(url = "https://kotlin.bintray.com/kotlinx/") // for kotlinx.datetime, TODO remove when ready
+        maven(url = "http://dl.bintray.com/jetbrains/markdown") // TODO remove when ready
     }
 
 }

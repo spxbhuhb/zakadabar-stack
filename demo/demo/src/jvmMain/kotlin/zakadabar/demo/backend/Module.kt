@@ -3,8 +3,8 @@
  */
 package zakadabar.demo.backend
 
-import zakadabar.demo.backend.account.AccountPrivateBackend
-import zakadabar.demo.backend.account.AccountPublicBackend
+import zakadabar.stack.backend.data.builtin.account.AccountPrivateBackend
+import zakadabar.stack.backend.data.builtin.account.AccountPublicBackend
 import zakadabar.demo.backend.misc.PingBackend
 import zakadabar.demo.backend.misc.WebsocketBackend
 import zakadabar.demo.backend.port.PortBackend

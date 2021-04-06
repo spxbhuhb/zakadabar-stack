@@ -7,16 +7,20 @@ and again.
 
 Project status is **alpha testing**.
 
+**Links below are mostly broken at the moment.**
+
 ## Getting Started
 
-**These are broken at the moment.**
+As of now the best way is to check the demo project:
+
+1. [Source code](demo/demo) of the demo project.
 
 ```
 1. [Full-Stack in 15 minutes](https://zakadabar.com/CodeLab) - code lab
 1. [Concepts](https://zakadabar.com/concepts.pdf) - PDF slide show
 1. [Gotchas](https://zakadabar.com/gotchas) - common gotchas, avoid frustration!
 1. [Cheat Sheet](https://zakadabar.com/CheatSeat) - for copy-paste knights
-1. [Demo](https://zakadabar.com/Demo) and the [source code](demo/demo) of the demo
+1. [Demo](https://zakadabar.com/Demo) 
 1. [Documentation](https://zakadabar.com/Documentation)
 ```
 

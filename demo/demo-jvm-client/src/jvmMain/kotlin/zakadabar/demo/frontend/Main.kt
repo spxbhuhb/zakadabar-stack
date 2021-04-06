@@ -4,7 +4,7 @@
 package zakadabar.demo.frontend
 
 import io.ktor.client.features.*
-import zakadabar.demo.data.AccountPrivateDto
+import zakadabar.stack.data.builtin.account.AccountPrivateDto
 import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.ship.ShipDto
 import zakadabar.demo.data.speed.SpeedDto

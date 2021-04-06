@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.3.26-SNAPSHOT"
+version = "2021.4.6-SNAPSHOT"
 
 application {
     mainClassName = "zakadabar.stack.backend.ServerKt"

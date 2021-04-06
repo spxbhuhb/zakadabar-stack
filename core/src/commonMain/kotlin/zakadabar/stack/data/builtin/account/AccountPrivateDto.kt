@@ -4,7 +4,7 @@
 
 @file:UseSerializers(OptInstantAsStringSerializer::class)
 
-package zakadabar.demo.data
+package zakadabar.stack.data.builtin.account
 
 import kotlinx.serialization.*
 import zakadabar.stack.data.record.RecordDto

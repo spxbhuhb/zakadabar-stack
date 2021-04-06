@@ -20,7 +20,7 @@ import kotlin.reflect.full.createType
 
 interface ActionBackend : BackendModule {
 
-    val recordType: String
+    val namespace: String
 
     val logger: Logger
 
@@ -30,7 +30,7 @@ interface ActionBackend : BackendModule {
      * Adds an Action route for this backend.
      */
     fun <RQ : ActionDto<RS>, RS : DtoBase> Route.action(actionDto: KClass<RQ>, func: (Executor, RQ) -> RS) {
-        post("$recordType/${actionDto.simpleName}") {
+        post("$namespace/${actionDto.simpleName}") {
 
             val executor = call.executor()
             val aText = call.receive<String>()
@@ -47,7 +47,7 @@ interface ActionBackend : BackendModule {
      * Adds an Action route for this backend.
      */
     fun <RQ : ActionDto<RS>, RS : DtoBase> Route.action(actionDto: KClass<RQ>, func: (ApplicationCall, Executor, RQ) -> RS) {
-        post("$recordType/${actionDto.simpleName}") {
+        post("$namespace/${actionDto.simpleName}") {
 
             val executor = call.executor()
             val aText = call.receive<String>()
