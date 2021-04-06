@@ -6,6 +6,7 @@ package zakadabar.stack.data.action
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.json.Json
 import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
 import zakadabar.stack.util.PublicApi

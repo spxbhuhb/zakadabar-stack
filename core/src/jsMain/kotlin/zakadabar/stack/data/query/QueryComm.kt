@@ -9,7 +9,6 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import zakadabar.stack.frontend.util.encodeURIComponent
 import zakadabar.stack.util.PublicApi
-import zakadabar.stack.util.json
 
 /**
  * Communication functions for records.
@@ -34,7 +33,7 @@ open class QueryComm(
         val textPromise = response.text()
         val text = textPromise.await()
 
-        return json.decodeFromString(responseSerializer, text)
+        return Json.decodeFromString(responseSerializer, text)
     }
 
 }
