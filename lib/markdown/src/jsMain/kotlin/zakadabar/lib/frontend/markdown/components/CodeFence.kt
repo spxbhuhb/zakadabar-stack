@@ -30,7 +30,7 @@ class CodeFence(
 
         + code
 
-        hljs.highlightBlock(code)
+        hljs.highlightElement(code)
     }
 
     private fun collectContent(): String {

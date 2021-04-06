@@ -6,6 +6,5 @@ package zakadabar.lib.frontend.markdown
 @JsModule("highlight.js")
 @JsNonModule
 external object hljs {
-    fun highlightAll()
-    fun highlightBlock(block: dynamic)
+    fun highlightElement(element: dynamic)
 }

@@ -14,6 +14,8 @@ val Strings = SiteStrings()
 
 class SiteStrings : ZkBuiltinStrings() {
 
+    val applicationName = "Zakadabar"
+
     // general stuff
 
     val loginLocked by "User account is locked."

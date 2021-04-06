@@ -8,6 +8,6 @@ import zakadabar.stack.data.DtoBase
 
 @Serializable
 class DocumentTreeEntry(
-    val path: String,
-    val children: List<DocumentTreeEntry>
+    val name: String,
+    val path: String
 ) : DtoBase

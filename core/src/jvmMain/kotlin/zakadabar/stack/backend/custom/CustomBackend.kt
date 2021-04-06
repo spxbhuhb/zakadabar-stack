@@ -11,6 +11,6 @@ import zakadabar.stack.backend.BackendModule
  */
 abstract class CustomBackend : BackendModule {
 
-    protected val logger = LoggerFactory.getLogger(this::class.simpleName) !!
+    protected open val logger = LoggerFactory.getLogger(this::class.simpleName) !!
 
 }

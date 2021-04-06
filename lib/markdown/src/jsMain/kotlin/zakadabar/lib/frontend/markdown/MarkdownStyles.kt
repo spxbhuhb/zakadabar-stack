@@ -31,6 +31,10 @@ class MarkdownStyles : ZkCssStyleSheet<MarkdownStyles>(ZkApplication.theme) {
         color = ZkColors.LightBlue.c700
     }
 
+    val paragraph by cssClass {
+        marginBottom = 10
+    }
+
     init {
         attach()
     }

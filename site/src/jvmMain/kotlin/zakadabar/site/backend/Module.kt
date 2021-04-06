@@ -3,8 +3,10 @@
  */
 package zakadabar.site.backend
 
+import zakadabar.site.backend.data.documents.DocumentBackend
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.Server
+import zakadabar.stack.backend.Server.Companion.plusAssign
 import zakadabar.stack.backend.data.builtin.account.AccountPrivateBackend
 import zakadabar.stack.backend.data.builtin.account.AccountPublicBackend
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
@@ -27,6 +29,8 @@ object Module : BackendModule {
         Server += SettingStringBackend
         Server += AccountPrivateBackend
         Server += AccountPublicBackend
+
+        Server += DocumentBackend
     }
 
 }
