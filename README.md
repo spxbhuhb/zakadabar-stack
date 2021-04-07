@@ -1,9 +1,12 @@
 # Zakadabar
 
+[![Maven Central](https://img.shields.io/maven-central/v/hu.simplexion.zakadabar/core)](https://mvnrepository.com/artifact/hu.simplexion.zakadabar/core)
+[![GitHub License](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
+![Kotlin](https://img.shields.io/github/languages/top/spxbhuhb/zakadabar-stack)
+
 Full-stack development platform implemented as a Kotlin Multiplatform project.
 
-Goal of the stack is to implement small business applications very fast without re-doing the same programming task again
-and again.
+Goal is to implement small business applications very fast without re-doing the same programming task again and again.
 
 Project status is **alpha testing**.
 
