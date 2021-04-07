@@ -49,7 +49,7 @@ tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJ
 }
 
 val appTemplate = "$projectDir/template/app"
-val distName = "demo-$version-server"
+val distName = "$name-$version-server"
 
 val copyAppStruct by tasks.registering(Copy::class) {
     from(appTemplate)
@@ -64,12 +64,25 @@ val copyAppLib by tasks.registering(Copy::class) {
     include("${base.archivesBaseName}-${project.version}-all.jar")
 }
 
+val copyAppIndex by tasks.registering(Copy::class) {
+    from("$buildDir/distributions")
+    into("$buildDir/$distName/var/static")
+    include("index.html")
+    filter { line: String ->
+        line.replace("""src="/${project.name}.js"""", """src="/${project.name}-${project.version}.js"""")
+    }
+}
+
 val copyAppStatic by tasks.registering(Copy::class) {
     from("$buildDir/distributions")
     into("$buildDir/$distName/var/static")
     include("**")
+
+    exclude("index.html")
     exclude("*.tar")
     exclude("*.zip")
+
+    rename("${project.name}.js", "${project.name}-${project.version}.js")
 }
 
 val copyAppUsr by tasks.registering(Copy::class) {
@@ -80,7 +93,7 @@ val copyAppUsr by tasks.registering(Copy::class) {
 }
 
 val appDistZip by tasks.registering(Zip::class) {
-    dependsOn(copyAppStruct, copyAppLib, copyAppStatic, copyAppUsr)
+    dependsOn(copyAppStruct, copyAppLib, copyAppStatic, copyAppUsr, copyAppIndex)
 
     archiveFileName.set("${base.archivesBaseName}-${project.version}-app.zip")
     destinationDirectory.set(file("$buildDir/app"))

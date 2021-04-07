@@ -5,7 +5,8 @@ This demo project shows how to use the stack and contains quite some documentati
 To run the demo:
 
 * download the stack repository
-* create a database and set parameters in [etc/zakadabar-server.yaml](etcakadabar-server.yaml)
+* create a database and set parameters
+  in [template/app/etc/zakadabar-server.yaml](template/app/etc/zakadabar-server.yaml)
 * run the `application/run` Gradle task
 * run the `kotlin browser/jsBrowserRun` Gradle task
 
@@ -72,8 +73,6 @@ data class ShipDto(
 
     companion object : RecordDtoCompanion<ShipDto>({
         recordType = "ship"
-        + ShipSearch
-        + ShipSpeeds
     })
 
     override fun getRecordType() = recordType
@@ -92,7 +91,7 @@ The strict definition and code sharing (between frontend and backend) of communi
 Just an example: it happened that I wanted to rename a query DTO. I used the refactor function: the name of the class
 changed both on the frontend and on the backend and my program was still working.
 
-Check out [commonMain](srcommonMain/kotlin/zakadabar/demo/data/README.md) for more information.
+Check out [commonMain](src/commonMain/kotlin/zakadabar/demo/data/README.md) for more information.
 
 ## jvmMain
 
@@ -106,18 +105,18 @@ Code for the backend. Based on Ktor, contains:
 * backend services
 * M2M (machine to machine) interfaces
 
-Check out [jvmMain](srcvmMain) for more information.
+Check out [jvmMain](src/jvmMain) for more information.
 
 ## jsMain
 
 Code for the web browser frontend.
 
-When the user opens the page in the browser [index.html](srcsMain/resources/index.html) loads first.
+When the user opens the page in the browser [index.html](src/jsMain/resources/index.html) loads first.
 
 This is rather short and mostly it just loads the application's `.js` file and calls `main`
-from [main.kt](srcsMain/kotlin/main.kt).
+from [main.kt](src/jsMain/kotlin/main.kt).
 
-Check out [jsMain](srcsMain) for more information.
+Check out [jsMain](src/jsMain) for more information.
 
 ## etc
 
