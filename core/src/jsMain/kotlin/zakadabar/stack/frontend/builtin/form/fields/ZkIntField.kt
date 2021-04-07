@@ -25,42 +25,23 @@ import kotlin.reflect.KMutableProperty0
 
 open class ZkIntField<T : DtoBase>(
     form: ZkForm<T>,
-    private val prop: KMutableProperty0<Int>
-) : ZkFieldBase<T, Int>(
+    prop: KMutableProperty0<Int>
+) : ZkStringBase<T, Int>(
     form = form,
-    propName = prop.name
+    prop = prop
 ) {
 
-    private val input = document.createElement("input") as HTMLInputElement
+    override fun getPropValue() = prop.get().toString()
 
-    override fun buildFieldValue() {
-        input.className = ZkFormStyles.text
+    override fun setPropValue(value: String) {
+        val iv = input.value.toIntOrNull()
 
-        if (readOnly) input.readOnly = true
-
-        input.value = prop.get().toString()
-
-        on(input, "input") {
-            touched = true
-
-            val iv = input.value.toIntOrNull()
-
-            if (iv == null) {
-                invalidInput = true
-            } else {
-                invalidInput = false
-                prop.set(iv)
-            }
-
-            form.validate()
+        if (iv == null) {
+            invalidInput = true
+        } else {
+            invalidInput = false
+            prop.set(iv)
         }
-
-        focusEvents(input)
-
-        + input
     }
 
-    override fun focusValue() {
-        input.focus()
-    }
 }

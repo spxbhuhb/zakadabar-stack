@@ -29,9 +29,11 @@ data class BuiltinDto(
     @Serializable(InstantAsStringSerializer::class)
     var instantValue: Instant,
     var optBooleanValue: Boolean?,
+    var optDoubleValue: Double?,
     var optEnumSelectValue: ExampleEnum?,
     @Serializable(OptInstantAsStringSerializer::class) // TODO remove when fixed:
     var optInstantValue: Instant?,
+    var optIntValue: Int?,
     var optSecretValue: Secret?,
     var optRecordSelectValue: RecordId<BuiltinDto>?,
     var optStringValue: String?,
@@ -60,8 +62,10 @@ data class BuiltinDto(
         + ::intValue
         + ::instantValue
         + ::optBooleanValue
+        + ::optDoubleValue
         + ::optEnumSelectValue
         + ::optInstantValue
+        + ::optIntValue
         + ::optSecretValue
         + ::optRecordSelectValue
         + ::optStringValue

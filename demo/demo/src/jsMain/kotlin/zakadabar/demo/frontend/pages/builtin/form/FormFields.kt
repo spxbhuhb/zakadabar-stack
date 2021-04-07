@@ -59,8 +59,10 @@ object FormFields : ZkPage() {
                 + section(Strings.optionalFields) {
                     with(dto) {
                         + opt(::optBooleanValue, "true", "false")
+                        + ::optDoubleValue
                         + ::optEnumSelectValue
                         + ::optInstantValue
+                        + ::optIntValue
                         + ::optSecretValue
                         + select(::optRecordSelectValue) { emptyList() }
                         + ::optStringValue

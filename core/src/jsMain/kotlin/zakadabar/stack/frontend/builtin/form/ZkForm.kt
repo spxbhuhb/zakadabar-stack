@@ -289,8 +289,22 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
         return field
     }
 
+    operator fun KMutableProperty0<Int?>.unaryPlus(): ZkElement {
+        val field = ZkOptIntField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
     operator fun KMutableProperty0<Double>.unaryPlus(): ZkElement {
         val field = ZkDoubleField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<Double?>.unaryPlus(): ZkElement {
+        val field = ZkOptDoubleField(this@ZkForm, this)
         + field
         fields += field
         return field

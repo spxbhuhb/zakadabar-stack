@@ -20,24 +20,25 @@ import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-open class ZkDoubleField<T : DtoBase>(
+open class ZkOptIntField<T : DtoBase>(
     form: ZkForm<T>,
-    prop: KMutableProperty0<Double>
-) : ZkStringBase<T, Double>(
+    prop: KMutableProperty0<Int?>
+) : ZkStringBase<T, Int?>(
     form = form,
     prop = prop
 ) {
 
-    override fun getPropValue() = prop.get().toString()
+    override fun getPropValue() = prop.get()?.toString() ?: ""
 
     override fun setPropValue(value: String) {
-        val iv = input.value.toDoubleOrNull()
+        val iv = input.value.toIntOrNull()
 
-        if (iv == null) {
+        if (iv == null && input.value.isNotEmpty()) {
             invalidInput = true
         } else {
             invalidInput = false
             prop.set(iv)
         }
     }
+
 }
