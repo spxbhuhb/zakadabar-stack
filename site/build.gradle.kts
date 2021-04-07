@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.3.26-SNAPSHOT"
+version = "2021.4.7"
 
 application {
     mainClassName = "zakadabar.stack.backend.ServerKt"
@@ -49,24 +49,24 @@ tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJ
     // seems like this does not work - minimize()
 }
 
-val distName = "site-$version-server"
+val distDir = "$buildDir/${project.name}-$version-server"
 
 val copyAppStruct by tasks.registering(Copy::class) {
-    from("$projectDir/app")
-    into("$buildDir/$distName")
+    from("$projectDir/template/app")
+    into(distDir)
     include("**")
     exclude("**/.gitignore")
 }
 
 val copyAppLib by tasks.registering(Copy::class) {
     from("$buildDir/libs")
-    into("$buildDir/$distName/lib")
+    into("$distDir/lib")
     include("${base.archivesBaseName}-${project.version}-all.jar")
 }
 
 val copyAppIndex by tasks.registering(Copy::class) {
     from("$buildDir/distributions")
-    into("$buildDir/$distName/var/static")
+    into("$distDir/var/static")
     include("index.html")
     filter { line: String ->
         line.replace("""src="/${project.name}.js"""", """src="/${project.name}-${project.version}.js"""")
@@ -75,7 +75,7 @@ val copyAppIndex by tasks.registering(Copy::class) {
 
 val copyAppStatic by tasks.registering(Copy::class) {
     from("$buildDir/distributions")
-    into("$buildDir/$distName/var/static")
+    into("$distDir/var/static")
     include("**")
 
     exclude("index.html")
@@ -87,14 +87,14 @@ val copyAppStatic by tasks.registering(Copy::class) {
 
 val copyMarkdown by tasks.registering(Copy::class) {
     from("$projectDir/docs")
-    into("$buildDir/$distName/var/static")
+    into("$distDir/var/static")
     include("**/*.md")
     includeEmptyDirs = false
 }
 
 val copyAppUsr by tasks.registering(Copy::class) {
     from("$projectDir")
-    into("$buildDir/$distName/usr")
+    into("$distDir/usr")
     include("README.md")
     include("LICENSE.txt")
 }

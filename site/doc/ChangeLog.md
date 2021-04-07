@@ -1,3 +1,11 @@
+# Next Release
+
+## Features
+
+* Optional double and int fields for ZkForm
+* `appDistZip` gradle task of Demo and Site adds version number to the generated JavaScript file name (also updates
+  index.html)
+
 # 2021.4.6
 
 ## Breaking changes
