@@ -42,14 +42,7 @@ override suspend fun execute() = comm.action(this, serializer(), ActionStatusDto
 companion object : ActionDtoCompanion<ActionStatusDto>(SessionDto.recordType)
 ```
 
-Infrastructure:
-
-* Kotlin 1.4.31
-* Kotlin Serialization 1.1.0
-* Kotlin Coroutines 1.4.3
-* Ktor 1.5.3
-
-Feature
+## Features
 
 * Docker configuration for demo (postgres + backend)
 * Documentation improvements
