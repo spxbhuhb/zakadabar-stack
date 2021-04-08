@@ -16,6 +16,8 @@
  */
 package zakadabar.stack.frontend.builtin.form
 
+import ZkOptUuidField
+import ZkUuidField
 import kotlinx.datetime.Instant
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.action.ActionDto
@@ -40,6 +42,7 @@ import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.log
 import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.util.PublicApi
+import zakadabar.stack.util.UUID
 import kotlin.reflect.KMutableProperty0
 
 /**
@@ -51,12 +54,6 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
 
     override lateinit var dto: T
     override lateinit var mode: ZkElementMode
-
-    /**
-     * True when the form is in create mode.
-     */
-    val isCreate
-        get() = (mode == ZkElementMode.Create)
 
     var title: String = ""
     var titleBar: ZkFormTitleBar? = null
@@ -149,7 +146,7 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
     open fun titleBar(title: String, createTitle: String = title): ZkFormTitleBar {
 
         val bar = ZkFormTitleBar {
-            this.title = if (isCreate) createTitle else title
+            this.title = if (mode == ZkElementMode.Create) createTitle else title
         }
 
         titleBar = bar
@@ -340,6 +337,20 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
 
     operator fun KMutableProperty0<Secret?>.unaryPlus(): ZkElement {
         val field = ZkOptSecretField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<UUID>.unaryPlus(): ZkElement {
+        val field = ZkUuidField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<UUID?>.unaryPlus(): ZkElement {
+        val field = ZkOptUuidField(this@ZkForm, this)
         + field
         fields += field
         return field

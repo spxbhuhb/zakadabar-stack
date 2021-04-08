@@ -3,6 +3,11 @@
  */
 package zakadabar.stack.backend.util
 
+import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.UUID
 
-fun UUID.native() = java.util.UUID(msb, lsb)
+@PublicApi
+fun UUID.toJavaUuid() = java.util.UUID(msb, lsb)
+
+@PublicApi
+fun java.util.UUID.toStackUuid() = UUID(mostSignificantBits, leastSignificantBits)

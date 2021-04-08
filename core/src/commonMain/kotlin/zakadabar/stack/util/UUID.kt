@@ -56,6 +56,13 @@ class UUID : Comparable<UUID> {
         lsbl = array[idx]
     }
 
+    constructor(msb: Long, lsb: Long) {
+        msbm = (msb.toULong() shr 32).toInt()
+        msbl = (msb.toULong() and mask).toInt()
+        lsbm = (lsb.toULong() shr 32).toInt()
+        lsbl = (lsb.toULong() and mask).toInt()
+    }
+
     constructor(uuid: String) {
         val s = uuid.replace("-", "")
 
@@ -93,12 +100,6 @@ class UUID : Comparable<UUID> {
         digits(lsbm, chars, 24, 4)
         digits(lsbl, chars, 28, 8)
 
-        return chars.concatToString()
-    }
-
-    fun shid(): String {
-        val chars = CharArray(6)
-        digits(msbm shr 8, chars, 0, 6)
         return chars.concatToString()
     }
 

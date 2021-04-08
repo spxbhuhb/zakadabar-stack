@@ -53,6 +53,7 @@ object FormFields : ZkPage() {
                         + ::stringValue
                         + select(::stringSelectValue, options = listOf("option1", "option2", "option3"))
                         + textarea(::textAreaValue)
+                        + ::uuidValue
                     }
                 }
 
@@ -68,6 +69,7 @@ object FormFields : ZkPage() {
                         + ::optStringValue
                         + select(::optStringSelectValue, options = listOf("option1", "option2", "option3"))
                         + textarea(::optTextAreaValue)
+                        + ::optUuidValue
                     }
                 }
 

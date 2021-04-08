@@ -1,3 +1,11 @@
+# 2021.4.8
+
+## Feature
+
+* spxbhuhb/zakadabar#16 UUID type in the Dto schema, form, and table
+* builtin backend to demo to show handling of all data types
+* builtin crud frontend to demo
+
 # 2021.4.7
 
 ## Features

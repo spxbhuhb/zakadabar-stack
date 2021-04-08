@@ -18,6 +18,7 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.table.columns.*
 import zakadabar.stack.frontend.util.*
+import zakadabar.stack.util.UUID
 import kotlin.reflect.KProperty1
 
 /**
@@ -313,6 +314,18 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     operator fun KProperty1<T, Instant?>.unaryPlus(): ZkOptInstantColumn<T> {
         val column = ZkOptInstantColumn(this@ZkTable, this)
+        columns += column
+        return column
+    }
+
+    operator fun KProperty1<T, UUID>.unaryPlus(): ZkUuidColumn<T> {
+        val column = ZkUuidColumn(this@ZkTable, this)
+        columns += column
+        return column
+    }
+
+    operator fun KProperty1<T, UUID?>.unaryPlus(): ZkOptUuidColumn<T> {
+        val column = ZkOptUuidColumn(this@ZkTable, this)
         columns += column
         return column
     }

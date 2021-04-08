@@ -17,6 +17,7 @@ import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.DtoSchema
 import zakadabar.stack.data.util.InstantAsStringSerializer
 import zakadabar.stack.data.util.OptInstantAsStringSerializer
+import zakadabar.stack.util.UUID
 
 @Serializable
 data class BuiltinDto(
@@ -35,15 +36,17 @@ data class BuiltinDto(
     var optInstantValue: Instant?,
     var optIntValue: Int?,
     var optSecretValue: Secret?,
-    var optRecordSelectValue: RecordId<BuiltinDto>?,
+    var optRecordSelectValue: RecordId<ExampleReferenceDto>?,
     var optStringValue: String?,
     var optStringSelectValue: String?,
     var optTextAreaValue: String?,
+    var optUuidValue: UUID?,
     var secretValue: Secret,
-    var recordSelectValue: RecordId<BuiltinDto>,
+    var recordSelectValue: RecordId<ExampleReferenceDto>,
     var stringValue: String,
     var stringSelectValue: String,
-    var textAreaValue: String
+    var textAreaValue: String,
+    var uuidValue: UUID
 
 ) : RecordDto<BuiltinDto> {
 
@@ -66,16 +69,18 @@ data class BuiltinDto(
         + ::optEnumSelectValue
         + ::optInstantValue
         + ::optIntValue
-        + ::optSecretValue
+        + ::optSecretValue max 50
         + ::optRecordSelectValue
-        + ::optStringValue
+        + ::optStringValue max 100
         + ::optStringSelectValue
-        + ::optTextAreaValue
-        + ::secretValue blank false
+        + ::optTextAreaValue max 100000
+        + ::optUuidValue
+        + ::secretValue blank false max 50
         + ::recordSelectValue min 1
-        + ::stringValue blank false
-        + ::stringSelectValue blank false
+        + ::stringValue blank false max 50
+        + ::stringSelectValue blank false max 50
         + ::textAreaValue blank false
+        + ::uuidValue
     }
 
 }

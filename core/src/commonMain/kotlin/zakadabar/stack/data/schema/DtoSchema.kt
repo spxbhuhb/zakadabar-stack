@@ -6,6 +6,7 @@ package zakadabar.stack.data.schema
 import kotlinx.datetime.Instant
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.util.PublicApi
+import zakadabar.stack.util.UUID
 import kotlin.js.JsName
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KProperty0
@@ -106,6 +107,18 @@ open class DtoSchema() {
 
     operator fun KMutableProperty0<Secret?>.unaryPlus(): OptSecretValidationRuleList {
         val ruleList = OptSecretValidationRuleList(this)
+        ruleLists[this] = ruleList
+        return ruleList
+    }
+
+    operator fun KMutableProperty0<UUID>.unaryPlus(): UuidValidationRuleList {
+        val ruleList = UuidValidationRuleList(this)
+        ruleLists[this] = ruleList
+        return ruleList
+    }
+
+    operator fun KMutableProperty0<UUID?>.unaryPlus(): OptUuidValidationRuleList {
+        val ruleList = OptUuidValidationRuleList(this)
         ruleLists[this] = ruleList
         return ruleList
     }

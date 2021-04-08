@@ -5,6 +5,7 @@
 package zakadabar.demo.frontend
 
 import zakadabar.demo.frontend.pages.account.Accounts
+import zakadabar.demo.frontend.pages.builtin.crud.BuiltinCrud
 import zakadabar.demo.frontend.pages.builtin.form.FormFields
 import zakadabar.demo.frontend.pages.builtin.input.CheckboxList
 import zakadabar.demo.frontend.pages.builtin.layout.TabContainer
@@ -54,6 +55,7 @@ object Routing : ZkAppRouting(DefaultLayout, Home) {
         + Accounts
 
         + ArgPage
+        + BuiltinCrud
         + CheckboxList
         + ConfirmDialog
         + FormFields

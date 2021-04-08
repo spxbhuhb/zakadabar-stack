@@ -3,6 +3,8 @@
  */
 package zakadabar.demo.backend
 
+import zakadabar.demo.backend.builtin.BuiltinBackend
+import zakadabar.demo.backend.builtin.ExampleReferenceBackend
 import zakadabar.stack.backend.data.builtin.account.AccountPrivateBackend
 import zakadabar.stack.backend.data.builtin.account.AccountPublicBackend
 import zakadabar.demo.backend.misc.PingBackend
@@ -47,6 +49,9 @@ object Module : BackendModule {
         Server += SpeedBackend
         Server += PortBackend
         Server += SeaBackend
+
+        Server += ExampleReferenceBackend
+        Server += BuiltinBackend
 
         Server += PingBackend
         Server += WebsocketBackend

@@ -4,14 +4,14 @@
 package zakadabar.demo.frontend.pages.builtin.table
 
 import zakadabar.demo.data.builtin.BuiltinDto
+import zakadabar.demo.frontend.pages.builtin.crud.BuiltinTable
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
 import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.plusAssign
 
 /**
- * This example shows all built in table columns.
+ * This example shows all built in table columns with generated table data.
  */
 object TableColumns : ZkPage() {
 
@@ -21,33 +21,14 @@ object TableColumns : ZkPage() {
         // this makes the form to fill the whole page
         classList += grow
 
-        val table = Table()
-        val data = (1..1000).map {
+        val table = BuiltinTable()
+        val data = (1..100).map {
             val dto: BuiltinDto = default { id = it.toLong() }
             dto
         }
 
         + table
         table.setData(data)
-    }
-
-    class Table : ZkTable<BuiltinDto>() {
-
-        override fun onConfigure() {
-            title = "Example Table"
-
-            add = true
-            search = true
-            export = true
-
-            + BuiltinDto::id
-            + BuiltinDto::booleanValue
-            + BuiltinDto::doubleValue
-            + BuiltinDto::enumSelectValue
-            + BuiltinDto::instantValue
-            + BuiltinDto::stringValue
-        }
-
     }
 
 }

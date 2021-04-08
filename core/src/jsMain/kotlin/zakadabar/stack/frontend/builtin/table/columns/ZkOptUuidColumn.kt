@@ -3,19 +3,16 @@
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import org.w3c.dom.HTMLElement
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.util.UUID
 import kotlin.reflect.KProperty1
 
-open class ZkInstantColumn<T : DtoBase>(
+open class ZkOptUuidColumn<T : DtoBase>(
     table: ZkTable<T>,
-    private val prop: KProperty1<T, Instant>
+    private val prop: KProperty1<T, UUID?>
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {
@@ -25,7 +22,7 @@ open class ZkInstantColumn<T : DtoBase>(
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         with(builder) {
-            + format(row)
+            + prop.get(row)?.toString() ?: ""
         }
     }
 
@@ -39,13 +36,11 @@ open class ZkInstantColumn<T : DtoBase>(
 
     override fun matches(row: T, string: String?): Boolean {
         if (string == null) return false
-        return (string in format(row))
+        return (prop.get(row)?.toString()?.contains(string)) ?: false
     }
 
-    open fun format(row: T): String {
-        // FIXME proper formatting, Kotlin datetime supports only ISO for now
-        val value = prop.get(row)
-        val s = value.toLocalDateTime(TimeZone.currentSystemDefault()).toString()
-        return "${s.substring(0, 10)} ${s.substring(11, 16)}"
+    override fun exportCsv(row: T): String {
+        return prop.get(row)?.toString() ?: ""
     }
+
 }
