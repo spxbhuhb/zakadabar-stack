@@ -10,13 +10,13 @@ import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.plusAssign
 
-object Home : ZkPage() {
+object ChangeLog : ZkPage() {
 
     override fun onCreate() {
         classList += SiteStyles.page
 
         io {
-            + MarkdownView("/api/${ContentQuery.namespace}/Home.md")
+            + MarkdownView("/api/${ContentQuery.namespace}/ChangeLog.md")
         }
     }
 

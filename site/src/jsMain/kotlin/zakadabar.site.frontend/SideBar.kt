@@ -3,10 +3,10 @@
  */
 package zakadabar.site.frontend
 
-import kotlinx.browser.window
-import kotlinx.coroutines.await
-import zakadabar.lib.frontend.markdown.MarkdownView
-import zakadabar.site.data.DocumentTreeQuery
+import zakadabar.site.data.ContentEntry
+import zakadabar.site.data.ContentQuery
+import zakadabar.site.frontend.pages.misc.ChangeLog
+import zakadabar.site.frontend.pages.misc.Content
 import zakadabar.site.frontend.pages.misc.Home
 import zakadabar.site.resources.Strings
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
@@ -22,26 +22,34 @@ object SideBar : ZkSideBar() {
         }
     }
 
+    lateinit var contents: List<ContentEntry>
+
     override fun onCreate() {
         super.onCreate()
 
-        + title(Strings.applicationName, ::hideMenu) { Home.open() }
-
         io {
-            DocumentTreeQuery().execute().sortedBy { it.name }.forEach {
-                + item(it.name) {
-                    io {
-                        val content = window.fetch("/api/content/${it.path}").await().text().await()
-                        with(Home) {
-                            clear()
-                            + MarkdownView(content)
-                        }
-                    }
+            contents = ContentQuery().execute().sortedBy { it.name }
+
+            + title(Strings.applicationName, ::hideMenu) { Home.open() }
+
+            + item("Change Log") { ChangeLog.open() }
+
+            contentGroup("Guides", "guides/")
+
+            contentGroup("Contribute", "contribute/")
+
+        }
+    }
+
+    private fun contentGroup(title: String, path: String) {
+        + group(title) {
+            contents.forEach {
+                if (it.path.startsWith(path)) {
+                    + item(it.name) { Content.open(it) }
                 }
             }
         }
     }
-
 
     private fun hideMenu() {
 

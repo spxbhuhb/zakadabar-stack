@@ -3,6 +3,8 @@
  */
 package zakadabar.lib.frontend.markdown
 
+import kotlinx.browser.window
+import kotlinx.coroutines.await
 import org.intellij.markdown.IElementType
 import org.intellij.markdown.MarkdownElementTypes.ATX_1
 import org.intellij.markdown.MarkdownElementTypes.ATX_2
@@ -32,24 +34,28 @@ import org.intellij.markdown.flavours.commonmark.CommonMarkFlavourDescriptor
 import org.intellij.markdown.parser.MarkdownParser
 import zakadabar.lib.frontend.markdown.components.*
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.util.io
 import zakadabar.stack.util.PublicApi
 
 open class MarkdownView(
-    val source: String,
+    val url: String? = null,
+    var content: String? = null,
     val styles: MarkdownStyles = defaultStyles,
     val lib: MutableMap<IElementType, MarkdownView.(node: ASTNode) -> ZkElement?> = MarkdownView.lib
 ) : ZkElement() {
 
+    lateinit var source: String
     lateinit var parsedTree: ASTNode
 
     override fun onCreate() {
         super.onCreate()
         val flavour = CommonMarkFlavourDescriptor()
-        parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(source)
 
-        + MarkdownComponentBase(this, parsedTree)
-
-        // console.log(dump("", parsedTree))
+        io {
+            source = content ?: window.fetch(url).await().text().await()
+            parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(source)
+            + MarkdownComponentBase(this, parsedTree)
+        }
     }
 
     @PublicApi

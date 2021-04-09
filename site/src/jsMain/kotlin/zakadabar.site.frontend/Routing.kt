@@ -4,6 +4,8 @@
 
 package zakadabar.site.frontend
 
+import zakadabar.site.frontend.pages.misc.ChangeLog
+import zakadabar.site.frontend.pages.misc.Content
 import zakadabar.site.frontend.pages.misc.Home
 import zakadabar.stack.frontend.application.ZkAppRouting
 
@@ -11,6 +13,8 @@ object Routing : ZkAppRouting(DefaultLayout, Home) {
 
     init {
         + Home
+        + ChangeLog
+        + Content
     }
 
 }

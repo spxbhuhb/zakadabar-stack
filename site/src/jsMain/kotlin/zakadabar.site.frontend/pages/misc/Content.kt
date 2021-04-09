@@ -4,19 +4,24 @@
 package zakadabar.site.frontend.pages.misc
 
 import zakadabar.lib.frontend.markdown.MarkdownView
+import zakadabar.site.data.ContentEntry
 import zakadabar.site.data.ContentQuery
 import zakadabar.site.frontend.SiteStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.plusAssign
 
-object Home : ZkPage() {
+object Content : ZkPage() {
 
     override fun onCreate() {
         classList += SiteStyles.page
+    }
 
+    fun open(content: ContentEntry) {
+        clear()
+        open()
         io {
-            + MarkdownView("/api/${ContentQuery.namespace}/Home.md")
+            + MarkdownView("/api/${ContentQuery.namespace}/${content.path}")
         }
     }
 

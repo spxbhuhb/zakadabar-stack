@@ -7,7 +7,7 @@ import kotlinx.serialization.*
 import zakadabar.stack.data.DtoBase
 
 @Serializable
-class DocumentTreeEntry(
+class ContentEntry(
     val name: String,
     val path: String
 ) : DtoBase

@@ -12,10 +12,10 @@ import zakadabar.stack.util.PublicApi
 
 @Serializable
 @PublicApi
-class DocumentTreeQuery : QueryDto<DocumentTreeEntry> {
+class ContentQuery : QueryDto<ContentEntry> {
 
-    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(DocumentTreeEntry.serializer()))
+    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(ContentEntry.serializer()))
 
-    companion object : QueryDtoCompanion<DocumentTreeEntry>("documents")
+    companion object : QueryDtoCompanion<ContentEntry>("contents")
 
 }
