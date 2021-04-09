@@ -40,6 +40,7 @@ kotlin {
 
     sourceSets["commonMain"].dependencies {
         implementation(project(":core"))
+        implementation(project(":demo:demo-lib"))
         implementation(project(":lib:markdown"))
     }
 }

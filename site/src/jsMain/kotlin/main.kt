@@ -4,7 +4,10 @@
 @file:Suppress("unused") // main is called by webpack
 
 import kotlinx.browser.window
+import org.intellij.markdown.MarkdownElementTypes
+import zakadabar.lib.frontend.markdown.MarkdownView
 import zakadabar.site.frontend.Routing
+import zakadabar.site.frontend.components.SiteMarkdownImage
 import zakadabar.site.resources.SiteStrings
 import zakadabar.stack.data.builtin.account.SessionDto
 import zakadabar.stack.data.builtin.resources.StringsByLocale
@@ -34,9 +37,18 @@ fun main() {
 
             routing = Routing
 
+            configureMarkdown()
+
             init()
         }
 
     }
 
+}
+
+/**
+ * Overrides for markdown views according to our own content API.
+ */
+fun configureMarkdown() {
+    MarkdownView.lib[MarkdownElementTypes.IMAGE] = { SiteMarkdownImage(this, it) }
 }

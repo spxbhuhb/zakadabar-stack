@@ -3,14 +3,23 @@
  */
 package zakadabar.site.frontend
 
+import zakadabar.demo.frontend.lib.crud.BuiltinCrud
+import zakadabar.demo.frontend.lib.form.FormFields
+import zakadabar.demo.frontend.lib.input.CheckboxList
+import zakadabar.demo.frontend.lib.layout.TabContainer
+import zakadabar.demo.frontend.lib.modal.ConfirmDialog
+import zakadabar.demo.frontend.lib.pages.ArgPage
+import zakadabar.demo.frontend.lib.table.Table
 import zakadabar.site.data.ContentEntry
 import zakadabar.site.data.ContentQuery
 import zakadabar.site.frontend.pages.misc.ChangeLog
 import zakadabar.site.frontend.pages.misc.Content
+import zakadabar.site.frontend.pages.misc.GettingStarted
 import zakadabar.site.frontend.pages.misc.Home
 import zakadabar.site.resources.Strings
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
 import zakadabar.stack.frontend.util.io
+import zakadabar.stack.util.fourRandomInt
 
 object SideBar : ZkSideBar() {
 
@@ -34,10 +43,21 @@ object SideBar : ZkSideBar() {
 
             + item("Change Log") { ChangeLog.open() }
 
+            + item("Getting Started") { GettingStarted.open() }
+
             contentGroup("Guides", "guides/")
 
-            contentGroup("Contribute", "contribute/")
+            + group(Strings.features) {
+                + item("ZkArgPage") { ArgPage.open(ArgPage.Args(fourRandomInt()[0], "hello")) }
+                + item("ZkCheckboxList") { CheckboxList.open() }
+                + item("ZkConfirmDialog") { ConfirmDialog.open() }
+                + item("ZkCrud") { BuiltinCrud.openAll() }
+                + item("ZkForm") { FormFields.open() }
+                + item("ZkTabContainer") { TabContainer.open() }
+                + item("ZkTable") { Table.open() }
+            }
 
+            contentGroup("Contribute", "contribute/")
         }
     }
 

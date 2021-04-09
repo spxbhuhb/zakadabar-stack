@@ -7,14 +7,14 @@ import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
 import zakadabar.lib.frontend.markdown.MarkdownView
 
-class Text(
+class Eol(
     view: MarkdownView,
     node: ASTNode
 ) : MarkdownComponentBase(view, node, "span") {
 
     override fun onCreate() {
         super.onCreate()
-        element.innerText = node.getTextInNode(view.source).toString()
+        element.innerText = " "
     }
 
 }

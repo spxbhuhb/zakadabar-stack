@@ -3,8 +3,8 @@
  */
 package zakadabar.demo.backend
 
-import zakadabar.demo.backend.builtin.BuiltinBackend
-import zakadabar.demo.backend.builtin.ExampleReferenceBackend
+import zakadabar.demo.backend.lib.BuiltinBackend
+import zakadabar.demo.backend.lib.ExampleReferenceBackend
 import zakadabar.stack.backend.data.builtin.account.AccountPrivateBackend
 import zakadabar.stack.backend.data.builtin.account.AccountPublicBackend
 import zakadabar.demo.backend.misc.PingBackend

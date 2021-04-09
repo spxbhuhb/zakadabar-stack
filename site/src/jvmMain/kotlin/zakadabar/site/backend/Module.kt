@@ -3,6 +3,8 @@
  */
 package zakadabar.site.backend
 
+import zakadabar.demo.backend.lib.BuiltinBackend
+import zakadabar.demo.backend.lib.ExampleReferenceBackend
 import zakadabar.site.backend.data.content.ContentBackend
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.Server
@@ -30,6 +32,9 @@ object Module : BackendModule {
         Server += AccountPublicBackend
 
         Server += ContentBackend
+
+        Server += BuiltinBackend
+        Server += ExampleReferenceBackend
     }
 
 }

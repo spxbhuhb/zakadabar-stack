@@ -13,6 +13,7 @@ pluginManagement {
 
 include("core")
 include("demo:demo")
+include("demo:demo-lib")
 include("demo:demo-jvm-client")
 include("lib:markdown")
 include("site")

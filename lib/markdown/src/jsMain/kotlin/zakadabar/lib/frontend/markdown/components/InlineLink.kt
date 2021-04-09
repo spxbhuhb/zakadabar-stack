@@ -28,7 +28,7 @@ class InlineLink(
     }
 
     private fun destination(): String {
-        return node.find(LINK_DESTINATION)?.find(TEXT)?.getTextInNode(view.source)?.toString() ?: ""
+        return node.find(LINK_DESTINATION)?.getTextInNode(view.source)?.toString() ?: ""
     }
 
 }

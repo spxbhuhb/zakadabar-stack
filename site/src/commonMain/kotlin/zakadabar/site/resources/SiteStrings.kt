@@ -10,7 +10,7 @@ import zakadabar.stack.resources.ZkBuiltinStrings
 // In that case - or when you write an actual component library - you want to your
 // built-in strings to be customizable.
 
-val Strings = SiteStrings()
+internal val Strings = SiteStrings()
 
 class SiteStrings : ZkBuiltinStrings() {
 
@@ -23,7 +23,7 @@ class SiteStrings : ZkBuiltinStrings() {
     val optionalFields by "Optional Fields"
     val validate by "Validate"
     val formFields by "Form Fields"
-    val builtin by "Built-in"
+    val features by "Features"
     val searchShips by "Search Ships"
     val runQuery by "Run Query"
     val filters by "Filters"

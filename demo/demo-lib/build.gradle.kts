@@ -7,12 +7,10 @@ plugins {
     kotlin("plugin.serialization")
     id("org.jetbrains.kotlin.plugin.noarg")
     id("org.jetbrains.dokka")
-    signing
-    `maven-publish`
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.4.6-SNAPSHOT"
+version = "2021.4.8"
 
 noArg {
     annotation("kotlinx.serialization.Serializable")
@@ -33,10 +31,6 @@ kotlin {
 
     sourceSets["commonMain"].dependencies {
         implementation(project(":core"))
-        api("org.jetbrains:markdown:0.2.0.pre-55")
     }
 
-    sourceSets["jsMain"].dependencies {
-        implementation(npm("highlight.js", "10.7.2"))
-    }
 }

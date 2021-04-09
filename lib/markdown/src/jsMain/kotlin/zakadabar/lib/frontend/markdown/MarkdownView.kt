@@ -15,6 +15,7 @@ import org.intellij.markdown.MarkdownElementTypes.ATX_6
 import org.intellij.markdown.MarkdownElementTypes.CODE_FENCE
 import org.intellij.markdown.MarkdownElementTypes.CODE_SPAN
 import org.intellij.markdown.MarkdownElementTypes.EMPH
+import org.intellij.markdown.MarkdownElementTypes.IMAGE
 import org.intellij.markdown.MarkdownElementTypes.INLINE_LINK
 import org.intellij.markdown.MarkdownElementTypes.LINK_DEFINITION
 import org.intellij.markdown.MarkdownElementTypes.LINK_TEXT
@@ -26,6 +27,7 @@ import org.intellij.markdown.MarkdownElementTypes.STRONG
 import org.intellij.markdown.MarkdownElementTypes.UNORDERED_LIST
 import org.intellij.markdown.MarkdownTokenTypes.Companion.ATX_CONTENT
 import org.intellij.markdown.MarkdownTokenTypes.Companion.ATX_HEADER
+import org.intellij.markdown.MarkdownTokenTypes.Companion.EOL
 import org.intellij.markdown.MarkdownTokenTypes.Companion.LIST_NUMBER
 import org.intellij.markdown.MarkdownTokenTypes.Companion.TEXT
 import org.intellij.markdown.MarkdownTokenTypes.Companion.WHITE_SPACE
@@ -55,13 +57,14 @@ open class MarkdownView(
             source = content ?: window.fetch(url).await().text().await()
             parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(source)
             + MarkdownComponentBase(this, parsedTree)
+            println(dump("", parsedTree))
         }
     }
 
     @PublicApi
     open fun dump(indent: String, node: ASTNode): String {
         var s = "$indent${node.type}\n"
-        val ni = "$indent  "
+        val ni = "$indent    "
         node.children.forEach {
             s += dump(ni, it)
         }
@@ -83,6 +86,8 @@ open class MarkdownView(
             CODE_FENCE to { CodeFence(this, it) },
             CODE_SPAN to { CodeSpan(this, it) },
             EMPH to { null },
+            EOL to { Eol(this, it) },
+            IMAGE to { Image(this, it) },
             INLINE_LINK to { InlineLink(this, it) },
             LINK_TEXT to { LinkText(this, it) },
             LINK_DEFINITION to { MarkdownComponentBase(this, it) },
