@@ -17,6 +17,7 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTableStyles>(ZkApplication.theme) {
     }
 
     val contentContainer by cssClass {
+        position = "relative"
         backgroundColor = theme.layout.defaultBackground
         flexGrow = 1
         overflow = "scroll"
@@ -128,6 +129,7 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTableStyles>(ZkApplication.theme) {
             color = theme.table.headerText
             borderBottom = "1px solid ${theme.table.headerBottom}"
             cursor = "pointer"
+            zIndex = 30
         }
 
         on(" th:hover .$resizeHandle") {
@@ -151,6 +153,7 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTableStyles>(ZkApplication.theme) {
             color = theme.table.text
             borderBottom = "1px solid ${theme.table.innerBorder}"
             backgroundColor = theme.table.oddRowBackground
+            zIndex = 20
         }
 
         if (theme.table.border != null) {

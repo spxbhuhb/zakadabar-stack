@@ -6,11 +6,8 @@ package zakadabar.stack.frontend.builtin.table
 import kotlinx.browser.document
 import kotlinx.datetime.Instant
 import kotlinx.dom.clear
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLTableElement
-import org.w3c.dom.HTMLTableSectionElement
+import org.w3c.dom.*
 import org.w3c.dom.events.MouseEvent
-import org.w3c.dom.set
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
@@ -18,7 +15,9 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.table.columns.*
 import zakadabar.stack.frontend.util.*
+import zakadabar.stack.frontend.util.Areas
 import zakadabar.stack.util.UUID
+import kotlin.math.max
 import kotlin.reflect.KProperty1
 
 /**
@@ -50,6 +49,8 @@ open class ZkTable<T : DtoBase> : ZkElement() {
     var search = false
     var export = false
 
+    val rowHeight = 42
+
     open val exportFileName: String
         get() = (if (title.isEmpty()) "content" else title) + ".csv"
 
@@ -57,11 +58,19 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     // DOM and children
 
+    lateinit var areas: Areas
+
     lateinit var titleBarElement: ZkTableTitleBar
 
     lateinit var tableElement: HTMLTableElement
 
     private val tbody = document.createElement("tbody") as HTMLTableSectionElement
+
+    val placeHolderCell = document.createElement("td") as HTMLTableCellElement
+    val placeHolderRow = (document.createElement("tr") as HTMLTableRowElement).also { it.appendChild(placeHolderCell) }
+
+    var firstShownRow = Int.MAX_VALUE
+    var lastShownRow = - 1
 
     // state
 
@@ -69,9 +78,9 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     var searchText: String? = null
 
-    lateinit var fullData: List<T>
+    lateinit var fullData: List<ZkTableRow<T>>
 
-    lateinit var filteredData: List<T>
+    lateinit var filteredData: List<ZkTableRow<T>>
 
     // create, render, set data
 
@@ -93,7 +102,12 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
         + div(ZkTableStyles.contentContainer) {
 
+            + div {
+                areas = Areas(element.id, ::onAreasChange, buildElement, 0).apply { onCreate() }
+            }
+
             tableElement = table(ZkTableStyles.table) {
+
                 buildElement.style.cssText = gridTemplateColumns()
                 + thead {
                     columns.forEach { + it }
@@ -137,6 +151,10 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         }
     }
 
+    override fun onDestroy() {
+        areas.onDestroy()
+    }
+
     open fun addTitleBar() {
         if (! titleBar) return
 
@@ -155,7 +173,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
             preloads.forEach {
                 it.job.join()
             }
-            fullData = data
+            fullData = data.map { ZkTableRow(it) }
             filter()
             render()
         }
@@ -176,19 +194,69 @@ open class ZkTable<T : DtoBase> : ZkElement() {
             tbody.clear()
             this.buildElement = tbody
 
-            for ((index, row) in filteredData.withIndex()) {
-                + tr {
-                    buildElement.dataset["rid"] = getRowId(row)
+            areas.adjustAreas((filteredData.size * rowHeight).toFloat())
 
-                    for (column in columns) {
-                        + td {
-                            column.render(this, index, row)
-                        }
-                    }
+            + placeHolderRow
+        }
+    }
 
-                }
+    open fun onAreasChange() {
+        placeHolderCell.style.cssText = "background: transparent; grid-column: 1 / span ${columns.size}; padding: 0; border: 0; height: ${areas.start}px"
+
+        val firstRowIndex = (areas.start / rowHeight).toInt()
+        val lastRowIndex = (areas.end / rowHeight).toInt()
+
+        // Remove all rows that became hidden
+
+        for (index in firstShownRow..lastShownRow) {
+            if (index < firstRowIndex || index > lastRowIndex) {
+                filteredData[index].element?.remove()
             }
         }
+
+        // Add all new rows
+
+        for (index in firstRowIndex..lastRowIndex) {
+            val element = getRowElement(index, filteredData[index])
+
+            if (index > lastShownRow) {
+                tbody.appendChild(element)
+            } else if (index < firstShownRow) {
+                tbody.insertBefore(element, placeHolderRow.nextSibling)
+            }
+        }
+
+        firstShownRow = firstRowIndex
+        lastShownRow = lastRowIndex
+    }
+
+    /**
+     * Get the [HTMLTableRowElement] that belongs to the given index in filtered
+     * data.
+     *
+     * Creates a [ZkTableRow] if missing, creates an [HTMLTableRowElement]
+     * and renders the row is missing.
+     */
+    open fun getRowElement(index: Int, row: ZkTableRow<T>): HTMLTableRowElement {
+
+        var element = row.element
+
+        if (element == null) {
+
+            element = tr {
+                buildElement.dataset["rid"] = getRowId(row.data)
+
+                for (column in columns) {
+                    + td {
+                        column.render(this, index, row.data)
+                    }
+                }
+            }
+
+            row.element = element
+        }
+
+        return element
     }
 
     /**
@@ -230,7 +298,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
         fullData.forEach { row ->
             val fields = mutableListOf<String>()
-            columns.forEach { if (it.exportable) fields += it.exportCsv(row) }
+            columns.forEach { if (it.exportable) fields += it.exportCsv(row.data) }
             lines += fields.joinToString(",")
         }
 
@@ -249,7 +317,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
             return
         }
 
-        filteredData = fullData.filter { filterRow(it, searchText) }
+        filteredData = fullData.filter { filterRow(it.data, searchText) }
     }
 
     /**

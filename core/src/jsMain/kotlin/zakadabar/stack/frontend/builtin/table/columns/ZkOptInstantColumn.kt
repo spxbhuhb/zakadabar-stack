@@ -30,9 +30,9 @@ open class ZkOptInstantColumn<T : DtoBase>(
 
     override fun sort() {
         table.fullData = if (sortAscending) {
-            table.fullData.sortedBy { prop.get(it) }
+            table.fullData.sortedBy { prop.get(it.data) }
         } else {
-            table.fullData.sortedByDescending { prop.get(it) }
+            table.fullData.sortedByDescending { prop.get(it.data) }
         }
     }
 

@@ -28,9 +28,9 @@ open class ZkEnumColumn<T : DtoBase, E : Enum<E>>(
 
     override fun sort() {
         table.fullData = if (sortAscending) {
-            table.fullData.sortedBy { format(it) }
+            table.fullData.sortedBy { format(it.data) }
         } else {
-            table.fullData.sortedByDescending { format(it) }
+            table.fullData.sortedByDescending { format(it.data) }
         }
     }
 

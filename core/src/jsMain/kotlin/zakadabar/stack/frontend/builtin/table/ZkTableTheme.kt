@@ -16,5 +16,6 @@ data class ZkTableTheme(
     val innerBorder: String = ZkColors.Gray.c300,
     val headerBottom: String = ZkColors.LightBlue.a700,
     val border: String? = null,
-    val actionColor: String? = ZkColors.LightBlue.a700
+    val actionColor: String? = ZkColors.LightBlue.a700,
+    val rowHeight: String? = "42px"
 )
