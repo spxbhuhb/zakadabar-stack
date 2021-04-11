@@ -16,6 +16,7 @@ Project status is **alpha testing**.
 
 As of now the best way is to check the demo project:
 
+1. [Application Template](https://github.com/spxbhuhb/zakadabar-application-template)
 1. [Source code](demo/demo) of the demo project.
 
 ```

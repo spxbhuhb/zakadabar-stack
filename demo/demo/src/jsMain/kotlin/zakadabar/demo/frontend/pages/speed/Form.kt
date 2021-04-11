@@ -16,13 +16,8 @@ class Form : ZkForm<SpeedDto>() {
 
         + column(ZkFormStyles.contentContainer) {
             + section(Strings.basics, Strings.speedBasicsExplanation) {
-
-                ifNotCreate {
-                    + dto::id
-                }
-
+                + dto::id
                 + dto::description
-
                 + dto::value
             }
 

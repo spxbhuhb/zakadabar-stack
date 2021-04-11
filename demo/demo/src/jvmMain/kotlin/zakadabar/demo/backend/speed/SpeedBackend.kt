@@ -48,7 +48,7 @@ object SpeedBackend : RecordBackend<SpeedDto>() {
         dao.toDto()
     }
 
-    override fun delete(executor: Executor, recordId: Long) {
+    override fun delete(executor: Executor, recordId: Long) = transaction {
         SpeedDao[recordId].delete()
     }
 }
