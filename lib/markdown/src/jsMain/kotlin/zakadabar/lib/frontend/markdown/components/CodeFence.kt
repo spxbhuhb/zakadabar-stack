@@ -5,6 +5,7 @@ package zakadabar.lib.frontend.markdown.components
 
 import kotlinx.browser.document
 import org.intellij.markdown.MarkdownTokenTypes.Companion.CODE_FENCE_CONTENT
+import org.intellij.markdown.MarkdownTokenTypes.Companion.EOL
 import org.intellij.markdown.MarkdownTokenTypes.Companion.FENCE_LANG
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
@@ -26,7 +27,7 @@ class CodeFence(
 
         val code = document.createElement("code") as HTMLElement
         code.className = lang
-        code.innerText = content
+        code.textContent = content
 
         + code
 
@@ -34,15 +35,16 @@ class CodeFence(
     }
 
     private fun collectContent(): String {
-        val lines = mutableListOf<String>()
+        var content = ""
 
         node.children.forEach {
             when (it.type) {
-                CODE_FENCE_CONTENT -> lines += it.getTextInNode(view.source).toString()
+                CODE_FENCE_CONTENT -> content += it.getTextInNode(view.source).toString()
+                EOL -> content += "\n"
             }
         }
 
-        return lines.joinToString("\n")
+        return content
     }
 
 }

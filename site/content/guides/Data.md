@@ -12,7 +12,7 @@
 
 This image summarizes DTO types the stack handles.
 
-![DTO types](dto-types.png)
+![DTO types](./dto-types.png)
 
 ## Important points
 

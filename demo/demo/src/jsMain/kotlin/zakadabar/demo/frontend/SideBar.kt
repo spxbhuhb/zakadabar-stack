@@ -15,7 +15,7 @@ import zakadabar.demo.frontend.lib.input.CheckboxList
 import zakadabar.demo.frontend.lib.layout.TabContainer
 import zakadabar.demo.frontend.lib.modal.ConfirmDialog
 import zakadabar.demo.frontend.lib.pages.ArgPage
-import zakadabar.demo.frontend.lib.table.Table
+import zakadabar.demo.frontend.lib.table.GeneratedTable
 import zakadabar.demo.frontend.pages.misc.Home
 import zakadabar.demo.frontend.pages.misc.Login
 import zakadabar.demo.frontend.pages.port.Ports
@@ -54,7 +54,7 @@ object SideBar : ZkSideBar() {
             + item("ZkCrud") { BuiltinCrud.openAll() }
             + item("ZkForm") { FormFields.open() }
             + item("ZkTabContainer") { TabContainer.open() }
-            + item("ZkTable") { Table.open() }
+            + item("ZkTable") { GeneratedTable.open() }
         }
 
         // show administration only for logged in users

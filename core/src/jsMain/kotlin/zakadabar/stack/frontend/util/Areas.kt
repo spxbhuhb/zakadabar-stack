@@ -72,8 +72,8 @@ class Areas(
 
             activeAreas.sort()
 
-            start = activeAreas.first() * areaHeight
-            end = (activeAreas.last() + 1) * areaHeight
+            start = if (activeAreas.size == 0) 0f else activeAreas.first() * areaHeight
+            end = if (activeAreas.size == 0) 0f else (activeAreas.last() + 1) * areaHeight
 
             if (trace > 150) stdoutTrace("areas changed", "start: $start, end: $end, active: $activeAreas")
 

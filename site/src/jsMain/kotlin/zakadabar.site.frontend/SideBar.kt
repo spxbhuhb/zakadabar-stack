@@ -9,7 +9,8 @@ import zakadabar.demo.frontend.lib.input.CheckboxList
 import zakadabar.demo.frontend.lib.layout.TabContainer
 import zakadabar.demo.frontend.lib.modal.ConfirmDialog
 import zakadabar.demo.frontend.lib.pages.ArgPage
-import zakadabar.demo.frontend.lib.table.Table
+import zakadabar.demo.frontend.lib.table.FetchedTable
+import zakadabar.demo.frontend.lib.table.GeneratedTable
 import zakadabar.site.data.ContentEntry
 import zakadabar.site.data.ContentQuery
 import zakadabar.site.frontend.pages.misc.ChangeLog
@@ -54,7 +55,10 @@ object SideBar : ZkSideBar() {
                 + item("ZkCrud") { BuiltinCrud.openAll() }
                 + item("ZkForm") { FormFields.open() }
                 + item("ZkTabContainer") { TabContainer.open() }
-                + item("ZkTable") { Table.open() }
+                + group("Table") {
+                    + item("Generated") { GeneratedTable.open() }
+                    + item("Fetched") { FetchedTable.open() }
+                }
             }
 
             contentGroup("Contribute", "contribute/")

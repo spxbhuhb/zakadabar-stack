@@ -12,12 +12,11 @@ import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElementState
 import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.table.columns.*
 import zakadabar.stack.frontend.util.*
-import zakadabar.stack.frontend.util.Areas
 import zakadabar.stack.util.UUID
-import kotlin.math.max
 import kotlin.math.min
 import kotlin.reflect.KProperty1
 
@@ -35,12 +34,15 @@ import kotlin.reflect.KProperty1
  * @property  search      When true a search input and icon is added to the title bar. Enter in the search field
  *                        or click on the icon calls [onSearch].
  * @property  export      When true an export icon is added to the title bar. Calls [onExportCsv].
+ * @property  rowHeight   Height (in pixels) of one table row, used when calculating row positions for virtualization.
  * @property  columns     Column definitions.
  * @property  preloads    Data load jobs which has to be performed before the table is rendered.
  */
 open class ZkTable<T : DtoBase> : ZkElement() {
 
-    // configuration
+    // -------------------------------------------------------------------------
+    //  Configuration -- meant to set by onConfigure
+    // -------------------------------------------------------------------------
 
     var crud: ZkCrudTarget<*>? = null
 
@@ -50,22 +52,26 @@ open class ZkTable<T : DtoBase> : ZkElement() {
     var search = false
     var export = false
 
-    val rowHeight = 42
+    var rowHeight = 42
+
+    val columns = mutableListOf<ZkColumn<T>>()
 
     open val exportFileName: String
         get() = (if (title.isEmpty()) "content" else title) + ".csv"
 
-    val columns = mutableListOf<ZkColumn<T>>()
+    // -------------------------------------------------------------------------
+    //  DOM
+    // -------------------------------------------------------------------------
 
-    // DOM and children
+    lateinit var titleBarElement: ZkTableTitleBar // this is a bit out of place here
 
-    lateinit var areas: Areas
-
-    lateinit var titleBarElement: ZkTableTitleBar
+    lateinit var areas: Areas // areas for intersection observer
 
     lateinit var tableElement: HTMLTableElement
 
     private val tbody = document.createElement("tbody") as HTMLTableSectionElement
+
+    // gap before the first row, used to virtualize rows
 
     private val placeHolderCell = document.createElement("td") as HTMLTableCellElement
     private val placeHolderRow = (document.createElement("tr") as HTMLTableRowElement).also { it.appendChild(placeHolderCell) }
@@ -73,17 +79,21 @@ open class ZkTable<T : DtoBase> : ZkElement() {
     private var firstShownRow = Int.MAX_VALUE
     private var lastShownRow = - 1
 
-    // state
-
-    val preloads = mutableListOf<ZkTablePreload<*>>()
-
-    var searchText: String? = null
+    // -------------------------------------------------------------------------
+    //  State -- data of the table, search text, preloaded data
+    // -------------------------------------------------------------------------
 
     lateinit var fullData: List<ZkTableRow<T>>
 
     lateinit var filteredData: List<ZkTableRow<T>>
 
-    // create, render, set data
+    val preloads = mutableListOf<ZkTablePreload<*>>()
+
+    var searchText: String? = null
+
+    // -------------------------------------------------------------------------
+    //  Lifecycle functions
+    // -------------------------------------------------------------------------
 
     /**
      * Called by [onCreate] to configure the table before building it.
@@ -109,7 +119,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
             tableElement = table(ZkTableStyles.table) {
 
-                buildElement.style.cssText = gridTemplateColumns()
+                buildElement.style.cssText = inlineCss()
                 + thead {
                     columns.forEach { + it }
                 }
@@ -152,6 +162,14 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        // this means that setData has been called before onResume
+        if (::fullData.isInitialized) {
+            render()
+        }
+    }
+
     override fun onDestroy() {
         areas.onDestroy()
     }
@@ -167,6 +185,10 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         }
     }
 
+    // -------------------------------------------------------------------------
+    //  Data setter, preload
+    // -------------------------------------------------------------------------
+
     fun <RT : Any> preload(loader: suspend () -> RT) = ZkTablePreload(loader)
 
     fun setData(data: List<T>): ZkTable<T> {
@@ -174,21 +196,27 @@ open class ZkTable<T : DtoBase> : ZkElement() {
             preloads.forEach {
                 it.job.join()
             }
+
             fullData = data.map { ZkTableRow(it) }
             filter()
-            render()
+
+            // this means that onResume has been called before setData
+            if (lifeCycleState == ZkElementState.Resumed) {
+                render()
+            }
         }
 
         return this
     }
 
-    private fun gridTemplateColumns(): String {
-        var s = "grid-template-columns:"
-        for (column in columns) {
-            s += " " + column.gridTemplate()
-        }
-        return "$s;"
-    }
+    // -------------------------------------------------------------------------
+    //  Rendering, intersection observer callback
+    // -------------------------------------------------------------------------
+
+    private fun inlineCss() = """
+        grid-template-columns: ${columns.joinToString(" ") { it.gridTemplate() }};
+        grid-template-rows: ${rowHeight}px;
+    """.trimIndent()
 
     open fun render() {
         build {
@@ -285,9 +313,16 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         return element
     }
 
+    // -------------------------------------------------------------------------
+    //  API functions, intended for override
+    // -------------------------------------------------------------------------
+
     /**
      * Get a unique if for the given row. The id of the row is used by actions and is
      * passed to row based functions such as [onDblClick].
+     *
+     * Default implementation uses [RecordDto.id] when rows are record dto instances,
+     * otherwise it throws [NotImplementedError].
      */
     open fun getRowId(row: T): String {
         if (row is RecordDto<*>) {
@@ -297,30 +332,48 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         }
     }
 
-    // extended functions
-
+    /**
+     * Add a new row to the table. Default implementation calls [ZkCrudTarget.openCreate]
+     * when there is a crud, does nothing otherwise.
+     */
     open fun onAddRow() {
         crud?.openCreate()
     }
 
     /**
-     * Handles double click on a row. Default implementation calls openUpdate
-     * of the crud if there is a crud.
+     * Handles double click on a row. Default implementation calls [ZkCrudTarget.openUpdate]
+     * when there is a crud, does nothing otherwise.
      *
-     * @param  id  Id of the row.
+     * @param  id  Id of the row as given by [getRowId].
      */
     open fun onDblClick(id: String) {
         crud?.openUpdate(id.toLong())
     }
 
+    /**
+     * Performs a search on the table, showing only rows that contain [text].
+     *
+     * Default implementation:
+     *
+     * * sets [searchText] to [text]
+     * * calls [filter]
+     * * calls [render]
+     */
     open fun onSearch(text: String) {
         searchText = if (text.isEmpty()) null else text
-        println("searchText = $searchText")
         filter()
-        println("filteredData.size = ${filteredData.size}")
         render()
     }
 
+    /**
+     * Exports the table to CSV.
+     *
+     * Default implementation:
+     *
+     * * exports all the data, not the filtered state
+     * * calls [ZkColumn.exportCsv] for each row to build the csv line
+     * * pops a download in the browser with the file name set to [exportFileName]
+     */
     open fun onExportCsv() {
         val lines = mutableListOf<String>()
 
@@ -359,7 +412,9 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         return false
     }
 
-    // column add functions for properties
+    // -------------------------------------------------------------------------
+    //  Column builders
+    // -------------------------------------------------------------------------
 
     operator fun KProperty1<T, RecordId<T>>.unaryPlus(): ZkRecordIdColumn<T> {
         val column = ZkRecordIdColumn(this@ZkTable, this)

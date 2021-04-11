@@ -10,7 +10,8 @@ import zakadabar.demo.frontend.lib.input.CheckboxList
 import zakadabar.demo.frontend.lib.layout.TabContainer
 import zakadabar.demo.frontend.lib.modal.ConfirmDialog
 import zakadabar.demo.frontend.lib.pages.ArgPage
-import zakadabar.demo.frontend.lib.table.Table
+import zakadabar.demo.frontend.lib.table.FetchedTable
+import zakadabar.demo.frontend.lib.table.GeneratedTable
 import zakadabar.site.frontend.pages.misc.*
 import zakadabar.stack.frontend.application.ZkAppRouting
 
@@ -29,7 +30,8 @@ object Routing : ZkAppRouting(DefaultLayout, Home) {
         + ConfirmDialog
         + FormFields
         + TabContainer
-        + Table
+        + GeneratedTable
+        + FetchedTable
     }
 
 }
