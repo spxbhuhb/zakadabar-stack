@@ -120,11 +120,11 @@ if (result.success) {
 
 ## Data Validation
 
-Data validation uses DtoSchema definitions. Theoretically you want to validate data when you transfer it from one place
-to another, this is why it is linked with the DTO.
+Data validation uses [DtoSchema](../../../core/src/commonMain/kotlin/zakadabar/stack/data/schema/DtoSchema.kt)
+definitions.
 
-Validation in the Stack meant for validating user input. It focuses more on programmer convenience than on performance.
-It is not really suitable for validating large batches of data like thousands of transactions from XML files.
+DtoSchema focuses more on programmer convenience than on performance. It is not really suitable for validating large
+batches of data like thousands of transactions from XML files.
 
 In practice, you use the validation when:
 
@@ -132,7 +132,7 @@ In practice, you use the validation when:
 * the frontend sends some data to the backend, and you want to check that everything is OK
 
 Additionally, you need the information about what's wrong when the user enters invalid data, this needs a properly
-formatted, nice, translated message.
+formatted, translated message.
 
 Technically if you follow the guidelines you should not be able to send data from the client that fails to validate on
 the server because you've already validated it on the client.

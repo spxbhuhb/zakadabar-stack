@@ -9,26 +9,27 @@ import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.plusAssign
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
 /**
  * This example shows all built in table columns with generated table data.
  */
 object Table : ZkPage() {
 
+    @ExperimentalTime
     override fun onCreate() {
         super.onCreate()
 
         // this makes the form to fill the whole page
         classList += grow
 
+        val b: BuiltinDto = default { }
         val table = BuiltinTable()
-        val data = (1..100).map {
-            val dto: BuiltinDto = default { id = it.toLong() }
-            dto
-        }
-
+        val data = (1..100).map { b.copy(id = it.toLong()) }
         + table
         table.setData(data)
+
     }
 
 }

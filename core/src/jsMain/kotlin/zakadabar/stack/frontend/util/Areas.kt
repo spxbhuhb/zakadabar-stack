@@ -46,7 +46,7 @@ class Areas(
     fun onCreate() {
         val options: dynamic = object {}
         options["root"] = element.parentElement
-        options["rootMargin"] = "40px" // pre-load when the area is as close as 40 px to the screen
+        options["rootMargin"] = "200px" // pre-load when the area is as close as 200px to the screen
         options["threshold"] = 0 // pre-load when even a pixel of the area is about to be shown
 
         observer = IntersectionObserver(observerCallback, options)
@@ -108,7 +108,7 @@ class Areas(
 
         areaNumber = neededAreaNumber
 
-        val lastArea = document.getElementById("${id}-area-${areaNumber - 1}") as HTMLElement
+        val lastArea = document.getElementById("${id}-area-${areaNumber - 1}") as? HTMLElement ?: return
         lastArea.style.height = "${lastAreaHeight}px"
     }
 

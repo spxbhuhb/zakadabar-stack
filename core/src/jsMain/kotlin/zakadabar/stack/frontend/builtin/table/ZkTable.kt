@@ -18,6 +18,7 @@ import zakadabar.stack.frontend.util.*
 import zakadabar.stack.frontend.util.Areas
 import zakadabar.stack.util.UUID
 import kotlin.math.max
+import kotlin.math.min
 import kotlin.reflect.KProperty1
 
 /**
@@ -66,11 +67,11 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     private val tbody = document.createElement("tbody") as HTMLTableSectionElement
 
-    val placeHolderCell = document.createElement("td") as HTMLTableCellElement
-    val placeHolderRow = (document.createElement("tr") as HTMLTableRowElement).also { it.appendChild(placeHolderCell) }
+    private val placeHolderCell = document.createElement("td") as HTMLTableCellElement
+    private val placeHolderRow = (document.createElement("tr") as HTMLTableRowElement).also { it.appendChild(placeHolderCell) }
 
-    var firstShownRow = Int.MAX_VALUE
-    var lastShownRow = - 1
+    private var firstShownRow = Int.MAX_VALUE
+    private var lastShownRow = - 1
 
     // state
 
@@ -194,19 +195,38 @@ open class ZkTable<T : DtoBase> : ZkElement() {
             tbody.clear()
             this.buildElement = tbody
 
+            firstShownRow = Int.MAX_VALUE
+            lastShownRow = - 1
+
             areas.adjustAreas((filteredData.size * rowHeight).toFloat())
 
             + placeHolderRow
+
+            onAreasChange()
         }
     }
 
     open fun onAreasChange() {
-        placeHolderCell.style.cssText = "background: transparent; grid-column: 1 / span ${columns.size}; padding: 0; border: 0; height: ${areas.start}px"
+
+        // First and last row to show on the screen. Added [min] to lastRowIndex
+        // because when the last area is shown the index would equal to the number
+        // of rows (generates IndexOutOfBounds).
 
         val firstRowIndex = (areas.start / rowHeight).toInt()
-        val lastRowIndex = (areas.end / rowHeight).toInt()
+        val lastRowIndex = min((areas.end / rowHeight).toInt(), filteredData.size - 1)
 
-        // Remove all rows that became hidden
+        // The placeholder fills the gap between the start of the table and
+        // the first row shown.
+
+        placeHolderCell.style.cssText = """
+            height: ${firstRowIndex * rowHeight}px;
+            grid-column: 1 / span ${columns.size};
+            background: transparent;
+            padding: 0;
+            border: 0; 
+        """.trimIndent()
+
+        // Remove all rows that became hidden.
 
         for (index in firstShownRow..lastShownRow) {
             if (index < firstRowIndex || index > lastRowIndex) {
@@ -214,15 +234,21 @@ open class ZkTable<T : DtoBase> : ZkElement() {
             }
         }
 
-        // Add all new rows
+        // Add all new rows.
+
+        val anchor = placeHolderRow.nextSibling
 
         for (index in firstRowIndex..lastRowIndex) {
             val element = getRowElement(index, filteredData[index])
 
+            if (index < firstShownRow) {
+                tbody.insertBefore(element, anchor)
+                continue
+            }
+
             if (index > lastShownRow) {
                 tbody.appendChild(element)
-            } else if (index < firstShownRow) {
-                tbody.insertBefore(element, placeHolderRow.nextSibling)
+                continue
             }
         }
 
@@ -289,7 +315,9 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     open fun onSearch(text: String) {
         searchText = if (text.isEmpty()) null else text
+        println("searchText = $searchText")
         filter()
+        println("filteredData.size = ${filteredData.size}")
         render()
     }
 
