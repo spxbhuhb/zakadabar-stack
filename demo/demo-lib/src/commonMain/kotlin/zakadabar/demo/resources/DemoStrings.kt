@@ -12,7 +12,7 @@ import zakadabar.stack.resources.ZkBuiltinStrings
 // In that case - or when you write an actual component library - you want to your
 // strings to be customizable.
 
-internal var Strings = DemoStrings()
+var Strings = DemoStrings()
 
 class DemoStrings : ZkBuiltinStrings() {
 
