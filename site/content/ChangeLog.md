@@ -1,3 +1,12 @@
+# 2021.4.12
+
+## Features
+
+* table virtualization
+* markdown improvements
+* bugfixes
+* site and documentation improvements
+
 # 2021.4.8
 
 ## Features
