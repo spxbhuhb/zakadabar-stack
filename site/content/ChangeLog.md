@@ -1,3 +1,9 @@
+# 2021.4.13
+
+## Bugfixes
+
+* fixed RoleGrantByPrincipal query use of wrong backend
+
 # 2021.4.12
 
 ## Features
