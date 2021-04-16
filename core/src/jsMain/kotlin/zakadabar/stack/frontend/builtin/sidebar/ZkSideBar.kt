@@ -11,6 +11,8 @@ open class ZkSideBar : ZkElement() {
         className = ZkSideBarStyles.sidebar
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith") // replacement is ZkAppHandle but it is set at a different place
+    @Deprecated("use ZkAppHandle and ZkDefaultLayout instead")
     open fun title(text: String, onIconClick: (() -> Unit)? = null, onTextClick: (() -> Unit)? = null) =
         ZkSideBarTitle(text, onIconClick, onTextClick)
 

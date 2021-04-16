@@ -9,6 +9,7 @@ import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkNavState
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
+import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
 import zakadabar.stack.frontend.util.plusAssign
 
@@ -65,7 +66,11 @@ open class ZkPage(
         for (cssClass in cssClasses) {
             classList += cssClass
         }
-        if (title != null) + ZkTitleBar(title)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (title != null) ZkApplication.title = ZkPageTitle(title)
     }
 
 }

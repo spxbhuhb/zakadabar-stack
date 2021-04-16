@@ -36,8 +36,8 @@ Apart these there are a number of built in elements such as buttons, inputs and 
 `Details`
 in [application.Layouts](../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/application/README.md#Layouts)
 
-Use [DefaultLayout](kotlin/zakadabar/demo/frontend/DefaultLayout.kt).
-Check [Login.kt](kotlin/zakadabar/demo/frontend/pages/misc/Login.kt)
+Use [zakadabar.demo.frontend.DefaultLayout](../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/layout/DefaultLayout.kt)
+. Check [Login.kt](kotlin/zakadabar/demo/frontend/pages/misc/Login.kt)
 to see how to use other (search for FullScreen).
 
 ## Routing

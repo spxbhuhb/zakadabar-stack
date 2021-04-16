@@ -47,22 +47,23 @@ object Login : ZkPage(ZkFullScreenLayout) {
         // is not necessary as ZkCrud creates a default empty instance
         // before creating the form.
 
-        init {
+        override fun onConfigure() {
             dto = default {
                 accountName = "demo"
                 password = Secret("demo")
             }
+            title = Strings.login
             mode = ZkElementMode.Action
             fieldGridColumnTemplate = "minmax(max-content, 100px) 1fr"
             onExecuteResult = ::onExecuteResult
         }
 
         override fun onCreate() {
+            super.onCreate()
+
             style {
                 width = "min(100%, 300px)"
             }
-
-            + titleBar(Strings.login) marginBottom 20
 
             + fieldGrid {
                 + dto::accountName

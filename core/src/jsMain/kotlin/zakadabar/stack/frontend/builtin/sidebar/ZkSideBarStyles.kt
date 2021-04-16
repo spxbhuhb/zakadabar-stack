@@ -9,14 +9,11 @@ import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 object ZkSideBarStyles : ZkCssStyleSheet<ZkSideBarStyles>(ZkApplication.theme) {
 
     val sidebar by cssClass {
-        height = "100%"
-        maxHeight = "100%"
-        overflowY = "auto"
+        minHeight = "100%"
         backgroundColor = theme.sidebar.background
         color = theme.sidebar.text
+        overflowY = "auto"
         minWidth = 220
-        display = "flex"
-        flexDirection = "column"
     }
 
     val title by cssClass {

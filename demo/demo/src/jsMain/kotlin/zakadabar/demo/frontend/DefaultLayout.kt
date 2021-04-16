@@ -3,18 +3,24 @@
  */
 package zakadabar.demo.frontend
 
-import zakadabar.stack.frontend.application.ZkAppLayout
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.demo.resources.Strings
+import zakadabar.stack.frontend.builtin.layout.ZkDefaultLayout
+import zakadabar.stack.frontend.builtin.misc.ZkAppHandle
+import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarStyles
 
-object DefaultLayout : ZkAppLayout("default") {
+object DefaultLayout : ZkDefaultLayout() {
 
     override fun onCreate() {
-        classList += ZkLayoutStyles.h100
-        classList += ZkLayoutStyles.row
+        super.onCreate()
 
-        + SideBar
-        + content css ZkLayoutStyles.layoutContent
+        appHandle = ZkAppHandle(Strings.applicationName) css ZkSideBarStyles.title build {
+            style {
+                backgroundColor = "black"
+                color = "white"
+            }
+        }
+
+        sideBar = SideBar
     }
 
 }

@@ -8,6 +8,15 @@ import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
 object ZkLayoutStyles : ZkCssStyleSheet<ZkLayoutStyles>(ZkApplication.theme) {
 
+    val defaultLayout by cssClass {
+        display = "grid"
+        gridTemplateColumns = "minmax(200px,max-content) 1fr"
+        gridTemplateRows = "${theme.layout.titleBarHeight}px 1fr"
+        height = "100vh"
+        width = "100vw"
+        overflow = "hidden"
+    }
+
     val w100 by cssClass {
         width = "100%"
     }

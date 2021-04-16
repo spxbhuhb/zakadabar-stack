@@ -3,12 +3,13 @@
  */
 package zakadabar.demo.frontend.pages.misc
 
+import zakadabar.demo.resources.Strings
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 
-object Home : ZkPage() {
+object Home : ZkPage(title = Strings.home) {
 
     override fun onCreate() {
-        + "Home"
+        + Strings.home
     }
 
 }

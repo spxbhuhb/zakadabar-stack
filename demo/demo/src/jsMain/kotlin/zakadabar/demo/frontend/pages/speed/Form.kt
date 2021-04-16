@@ -12,16 +12,14 @@ class Form : ZkForm<SpeedDto>() {
 
     override fun onCreate() {
 
-        + titleBar(dto.description, Strings.speed)
+        + build(dto.description, Strings.speed) {
 
-        + column(ZkFormStyles.contentContainer) {
             + section(Strings.basics, Strings.speedBasicsExplanation) {
                 + dto::id
                 + dto::description
                 + dto::value
             }
 
-            + buttons()
         }
     }
 

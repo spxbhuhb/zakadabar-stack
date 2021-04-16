@@ -12,6 +12,7 @@ import zakadabar.stack.frontend.application.ZkNavState
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
+import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
 import zakadabar.stack.frontend.util.encodeURIComponent
 import zakadabar.stack.frontend.util.log
@@ -54,7 +55,11 @@ open class ZkArgPage<T>(
         super.onCreate()
         classList += grow
         classList += ZkLayoutStyles.defaultBackground
-        if (title != null) + ZkTitleBar(title)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (title != null) ZkApplication.title = ZkPageTitle(title)
     }
 
 }

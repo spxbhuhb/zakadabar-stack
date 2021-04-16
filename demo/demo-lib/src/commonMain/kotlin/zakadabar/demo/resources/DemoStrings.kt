@@ -18,6 +18,7 @@ class DemoStrings : ZkBuiltinStrings() {
 
     // general stuff
 
+    val home by "Home"
     val loginLocked by "User account is locked."
     val mandatoryFields by "Mandatory Fields"
     val optionalFields by "Optional Fields"

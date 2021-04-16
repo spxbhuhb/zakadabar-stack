@@ -5,11 +5,14 @@ package zakadabar.demo.frontend.pages.ship
 
 import zakadabar.demo.data.ship.SearchShipsQuery
 import zakadabar.demo.resources.Strings
+import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.h100
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.w100
 import zakadabar.stack.frontend.builtin.pages.ZkPage
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleBar
+import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.util.default
@@ -40,8 +43,6 @@ object ShipSearch : ZkPage() {
         form.mode = ZkElementMode.Query
 
         + column(h100) {
-            + ZkTitleBar(Strings.searchShips)
-
             + div(grow) {
                 buildElement.style.padding = "8px"
                 buildElement.style.backgroundColor = ZkColors.Gray.c100
@@ -52,6 +53,11 @@ object ShipSearch : ZkPage() {
             }
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        ZkApplication.title = ZkPageTitle(Strings.searchShips)
     }
 
     private fun runQuery(query: SearchShipsQuery) {

@@ -26,6 +26,7 @@ import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkApplication.back
 import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.application.ZkApplication.t
@@ -36,6 +37,7 @@ import zakadabar.stack.frontend.builtin.form.structure.ZkFormButtons
 import zakadabar.stack.frontend.builtin.form.structure.ZkFormSection
 import zakadabar.stack.frontend.builtin.form.structure.ZkInvalidFieldList
 import zakadabar.stack.frontend.builtin.pages.ZkCrudPage
+import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
 import zakadabar.stack.frontend.builtin.toast.ZkToast
 import zakadabar.stack.frontend.builtin.toast.toast
 import zakadabar.stack.frontend.util.io
@@ -55,8 +57,8 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
     override lateinit var dto: T
     override lateinit var mode: ZkElementMode
 
-    var title: String = ""
-    var titleBar: ZkFormTitleBar? = null
+    var titleBar = true
+    var title = ""
 
     var autoLabel = true
 
@@ -114,262 +116,39 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
      */
     var goBackAfterCreate: Boolean = true
 
-    init {
+    // -------------------------------------------------------------------------
+    //  Lifecycle functions
+    // -------------------------------------------------------------------------
+
+    /**
+     * Called by [onCreate] to configure the table before building it.
+     * This is the place to add columns, switch on and off features.
+     */
+    open fun onConfigure() {
+
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        onConfigure()
         classList += ZkFormStyles.outerContainer
     }
 
-    // ----  Builder convenience functions --------
-
-    open fun build(title: String, createTitle: String = title, css: String? = null, addButtons: Boolean = true, builder: () -> Unit): ZkForm<T> {
-        + titleBar(title, createTitle)
-
-        + div(ZkFormStyles.contentContainer) {
-            + column(ZkFormStyles.form) {
-                css?.let { buildElement.classList += it }
-
-                builder()
-
-                if (addButtons) {
-                    + buttons()
-                }
-                + invalidFieldList()
-            }
-        }
-
-        return this
+    override fun onResume() {
+        super.onResume()
+        if (titleBar) setAppTitleBar()
     }
 
     /**
-     * Creates a title bar, using [title] when not in create mode and
-     * [createTitle] when in create mode.
+     * Creates a title bar.
      */
-    open fun titleBar(title: String, createTitle: String = title): ZkFormTitleBar {
-
-        val bar = ZkFormTitleBar {
-            this.title = if (mode == ZkElementMode.Create) createTitle else title
-        }
-
-        titleBar = bar
-
-        return bar
+    open fun setAppTitleBar() {
+        ZkApplication.title = ZkPageTitle(title)
     }
 
-    fun buttons() = ZkFormButtons(this@ZkForm)
-
-    open fun invalidFieldList() = ZkInvalidFieldList().also { invalidFields = it }.hide()
-
-    fun section(title: String? = null, summary: String? = null, fieldGrid: Boolean = true, css: String? = null, builder: ZkElement.() -> Unit): ZkFormSection {
-        return if (fieldGrid) {
-            ZkFormSection(title, summary, css) { + fieldGrid { builder() } }
-        } else {
-            ZkFormSection(title, summary, css, builder)
-        }
-    }
-
-    @Deprecated("use simple section instead", ReplaceWith("section(title, summary, builder)"))
-    fun fieldGridSection(title: String, summary: String = "", css: String? = null, builder: ZkElement.() -> Unit) =
-        section(title, summary, true, css, builder)
-
-    fun <T : RecordDto<T>> List<T>.by(field: (it: T) -> String) = map { it.id to field(it) }.sortedBy { it.second }
-
-    fun select(kProperty0: KMutableProperty0<RecordId<*>>, sortOptions: Boolean = true, label: String? = null, options: suspend () -> List<Pair<RecordId<*>, String>>): ZkRecordSelectField<T> {
-        val field = ZkRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
-        label?.let { field.label = label }
-        fields += field
-        return field
-    }
-
-    fun select(kProperty0: KMutableProperty0<RecordId<*>?>, sortOptions: Boolean = true, label: String? = null, options: suspend () -> List<Pair<RecordId<*>, String>>): ZkOptRecordSelectField<T> {
-        val field = ZkOptRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
-        label?.let { field.label = label }
-        fields += field
-        return field
-    }
-
-    fun select(kProperty0: KMutableProperty0<String>, label: String? = null, sortOptions: Boolean = true, options: List<String>): ZkStringSelectField<T> {
-        val field = ZkStringSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
-        label?.let { field.label = label }
-        fields += field
-        return field
-    }
-
-    fun select(kProperty0: KMutableProperty0<String?>, label: String? = null, sortOptions: Boolean = true, options: List<String>): ZkOptStringSelectField<T> {
-        val field = ZkOptStringSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
-        label?.let { field.label = label }
-        fields += field
-        return field
-    }
-
-    inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E>, label: String? = null, sortOptions: Boolean = true): ZkEnumSelectField<T, E> {
-        val options = enumValues<E>().map { it to t(it.name) } // this is a non-translated to translated mapping
-        val field = ZkEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
-        label?.let { field.label = label }
-        fields += field
-        return field
-    }
-
-    @JsName("FormOptEnumSelect")
-    inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E?>, label: String? = null, sortOptions: Boolean = true): ZkOptEnumSelectField<T, E> {
-        val options = enumValues<E>().map { it to t(it.name) } // this is a non-translated to translated mapping
-        val field = ZkOptEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
-        label?.let { field.label = label }
-        fields += field
-        return field
-    }
-
-    fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkElement.() -> Unit = { }): ZkTextAreaField<T> {
-        val field = ZkTextAreaField(this@ZkForm, kProperty0)
-        fields += field
-        field.builder()
-        return field
-    }
-
-    fun textarea(kProperty0: KMutableProperty0<String?>, builder: ZkElement.() -> Unit = { }): ZkOptTextAreaField<T> {
-        val field = ZkOptTextAreaField(this@ZkForm, kProperty0)
-        fields += field
-        field.builder()
-        return field
-    }
-
-    fun opt(kProperty0: KMutableProperty0<Boolean?>, trueText: String, falseText: String, builder: ZkOptBooleanField<T>.() -> Unit = { }): ZkOptBooleanField<T> {
-        val options = listOf(true to trueText, false to falseText)
-        val field = ZkOptBooleanField(this@ZkForm, kProperty0) { options }
-        fields += field
-        field.builder()
-        return field
-    }
-
-    fun constString(label: String, value: () -> String): ZkConstStringField<T> {
-        val field = ZkConstStringField(this@ZkForm, label, value())
-        fields += field
-        return field
-    }
-
-    fun ifNotCreate(build: ZkElement.() -> Unit) {
-        if (mode == ZkElementMode.Create) return
-        build()
-    }
-
-    fun fieldGrid(build: ZkElement.() -> Unit) =
-        grid(style = "grid-template-columns: $fieldGridColumnTemplate; gap: 0; grid-auto-rows: $fieldGridRowTemplate", build = build)
-
-    // ----  Customized build and property receiver  --------
-
-    operator fun KMutableProperty0<RecordId<T>>.unaryPlus(): ZkElement {
-        val field = ZkIdField(this@ZkForm, this)
-        + field
-        fields += field
-        if (mode == ZkElementMode.Create) {
-            field.hide()
-        }
-        return field
-    }
-
-    operator fun KMutableProperty0<String>.unaryPlus(): ZkElement {
-        val field = ZkStringField(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
-
-    operator fun KMutableProperty0<String?>.unaryPlus(): ZkElement {
-        val field = ZkOptStringField(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
-
-    operator fun KMutableProperty0<Int>.unaryPlus(): ZkElement {
-        val field = ZkIntField(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
-
-    operator fun KMutableProperty0<Int?>.unaryPlus(): ZkElement {
-        val field = ZkOptIntField(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
-
-    operator fun KMutableProperty0<Double>.unaryPlus(): ZkElement {
-        val field = ZkDoubleField(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
-
-    operator fun KMutableProperty0<Double?>.unaryPlus(): ZkElement {
-        val field = ZkOptDoubleField(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
-
-    operator fun KMutableProperty0<Boolean>.unaryPlus(): ZkElement {
-        val field = ZkBooleanField(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
-
-    operator fun KMutableProperty0<Instant>.unaryPlus(): ZkElement {
-        val field = ZkInstantField(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
-
-    operator fun KMutableProperty0<Instant?>.unaryPlus(): ZkElement {
-        val field = ZkOptInstantField(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
-
-    operator fun KMutableProperty0<Secret>.unaryPlus(): ZkElement {
-        val field = ZkSecretField(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
-
-    operator fun KMutableProperty0<Secret?>.unaryPlus(): ZkElement {
-        val field = ZkOptSecretField(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
-
-    operator fun KMutableProperty0<UUID>.unaryPlus(): ZkElement {
-        val field = ZkUuidField(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
-
-    operator fun KMutableProperty0<UUID?>.unaryPlus(): ZkElement {
-        val field = ZkOptUuidField(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
-
-    inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): ZkElement {
-        val field = select(this)
-        + field
-        return field
-    }
-
-    @JsName("FormOptEnumUnaryPlus")
-    inline operator fun <reified E : Enum<E>> KMutableProperty0<E?>.unaryPlus(): ZkElement {
-        val field = select(this)
-        + field
-        return field
-    }
-
-    // ----  Validation and submit --------
+    // -------------------------------------------------------------------------
+    //  Validation and submit
+    // ------------------------------------------------------------------------
 
     /**
      * Validates the DTO with the schema. Validation occurs at every
@@ -548,6 +327,246 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
             ZkElementMode.Query -> toast(error = true) { strings.queryFail }
             ZkElementMode.Other -> toast(error = true) { strings.actionFail }
         }
+    }
+
+    // -------------------------------------------------------------------------
+    //  Field builders
+    // ------------------------------------------------------------------------
+
+    open fun build(title: String, createTitle: String = title, css: String? = null, addButtons: Boolean = true, builder: () -> Unit): ZkForm<T> {
+        this.title = if (mode == ZkElementMode.Create) createTitle else title
+
+        + div(ZkFormStyles.contentContainer) {
+            + column(ZkFormStyles.form) {
+                css?.let { buildElement.classList += it }
+
+                builder()
+
+                if (addButtons) {
+                    + buttons()
+                }
+                + invalidFieldList()
+            }
+        }
+
+        return this
+    }
+
+    fun buttons() = ZkFormButtons(this@ZkForm)
+
+    open fun invalidFieldList() = ZkInvalidFieldList().also { invalidFields = it }.hide()
+
+    fun section(title: String? = null, summary: String? = null, fieldGrid: Boolean = true, css: String? = null, builder: ZkElement.() -> Unit): ZkFormSection {
+        return if (fieldGrid) {
+            ZkFormSection(title, summary, css) { + fieldGrid { builder() } }
+        } else {
+            ZkFormSection(title, summary, css, builder)
+        }
+    }
+
+    @Deprecated("use simple section instead", ReplaceWith("section(title, summary, builder)"))
+    fun fieldGridSection(title: String, summary: String = "", css: String? = null, builder: ZkElement.() -> Unit) =
+        section(title, summary, true, css, builder)
+
+    fun <T : RecordDto<T>> List<T>.by(field: (it: T) -> String) = map { it.id to field(it) }.sortedBy { it.second }
+
+    fun select(kProperty0: KMutableProperty0<RecordId<*>>, sortOptions: Boolean = true, label: String? = null, options: suspend () -> List<Pair<RecordId<*>, String>>): ZkRecordSelectField<T> {
+        val field = ZkRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
+        label?.let { field.label = label }
+        fields += field
+        return field
+    }
+
+    fun select(kProperty0: KMutableProperty0<RecordId<*>?>, sortOptions: Boolean = true, label: String? = null, options: suspend () -> List<Pair<RecordId<*>, String>>): ZkOptRecordSelectField<T> {
+        val field = ZkOptRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
+        label?.let { field.label = label }
+        fields += field
+        return field
+    }
+
+    fun select(kProperty0: KMutableProperty0<String>, label: String? = null, sortOptions: Boolean = true, options: List<String>): ZkStringSelectField<T> {
+        val field = ZkStringSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
+        label?.let { field.label = label }
+        fields += field
+        return field
+    }
+
+    fun select(kProperty0: KMutableProperty0<String?>, label: String? = null, sortOptions: Boolean = true, options: List<String>): ZkOptStringSelectField<T> {
+        val field = ZkOptStringSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
+        label?.let { field.label = label }
+        fields += field
+        return field
+    }
+
+    inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E>, label: String? = null, sortOptions: Boolean = true): ZkEnumSelectField<T, E> {
+        val options = enumValues<E>().map { it to t(it.name) } // this is a non-translated to translated mapping
+        val field = ZkEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
+        label?.let { field.label = label }
+        fields += field
+        return field
+    }
+
+    @JsName("FormOptEnumSelect")
+    inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E?>, label: String? = null, sortOptions: Boolean = true): ZkOptEnumSelectField<T, E> {
+        val options = enumValues<E>().map { it to t(it.name) } // this is a non-translated to translated mapping
+        val field = ZkOptEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
+        label?.let { field.label = label }
+        fields += field
+        return field
+    }
+
+    fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkElement.() -> Unit = { }): ZkTextAreaField<T> {
+        val field = ZkTextAreaField(this@ZkForm, kProperty0)
+        fields += field
+        field.builder()
+        return field
+    }
+
+    fun textarea(kProperty0: KMutableProperty0<String?>, builder: ZkElement.() -> Unit = { }): ZkOptTextAreaField<T> {
+        val field = ZkOptTextAreaField(this@ZkForm, kProperty0)
+        fields += field
+        field.builder()
+        return field
+    }
+
+    fun opt(kProperty0: KMutableProperty0<Boolean?>, trueText: String, falseText: String, builder: ZkOptBooleanField<T>.() -> Unit = { }): ZkOptBooleanField<T> {
+        val options = listOf(true to trueText, false to falseText)
+        val field = ZkOptBooleanField(this@ZkForm, kProperty0) { options }
+        fields += field
+        field.builder()
+        return field
+    }
+
+    fun constString(label: String, value: () -> String): ZkConstStringField<T> {
+        val field = ZkConstStringField(this@ZkForm, label, value())
+        fields += field
+        return field
+    }
+
+    fun ifNotCreate(build: ZkElement.() -> Unit) {
+        if (mode == ZkElementMode.Create) return
+        build()
+    }
+
+    fun fieldGrid(build: ZkElement.() -> Unit) =
+        grid(style = "grid-template-columns: $fieldGridColumnTemplate; gap: 0; grid-auto-rows: $fieldGridRowTemplate", build = build)
+
+    // -------------------------------------------------------------------------
+    //  Property field builder shorthands
+    // ------------------------------------------------------------------------
+
+    operator fun KMutableProperty0<RecordId<T>>.unaryPlus(): ZkElement {
+        val field = ZkIdField(this@ZkForm, this)
+        + field
+        fields += field
+        if (mode == ZkElementMode.Create) {
+            field.hide()
+        }
+        return field
+    }
+
+    operator fun KMutableProperty0<String>.unaryPlus(): ZkElement {
+        val field = ZkStringField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<String?>.unaryPlus(): ZkElement {
+        val field = ZkOptStringField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<Int>.unaryPlus(): ZkElement {
+        val field = ZkIntField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<Int?>.unaryPlus(): ZkElement {
+        val field = ZkOptIntField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<Double>.unaryPlus(): ZkElement {
+        val field = ZkDoubleField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<Double?>.unaryPlus(): ZkElement {
+        val field = ZkOptDoubleField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<Boolean>.unaryPlus(): ZkElement {
+        val field = ZkBooleanField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<Instant>.unaryPlus(): ZkElement {
+        val field = ZkInstantField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<Instant?>.unaryPlus(): ZkElement {
+        val field = ZkOptInstantField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<Secret>.unaryPlus(): ZkElement {
+        val field = ZkSecretField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<Secret?>.unaryPlus(): ZkElement {
+        val field = ZkOptSecretField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<UUID>.unaryPlus(): ZkElement {
+        val field = ZkUuidField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<UUID?>.unaryPlus(): ZkElement {
+        val field = ZkOptUuidField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): ZkElement {
+        val field = select(this)
+        + field
+        return field
+    }
+
+    @JsName("FormOptEnumUnaryPlus")
+    inline operator fun <reified E : Enum<E>> KMutableProperty0<E?>.unaryPlus(): ZkElement {
+        val field = select(this)
+        + field
+        return field
     }
 
 }

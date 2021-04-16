@@ -151,7 +151,9 @@ open class ZkElement(
         lifeCycleState = ZkElementState.Destroyed
     }
 
-    // ---- Shorthands for DOM data --------
+    // -------------------------------------------------------------------------
+    //   Shorthands for DOM data
+    // -------------------------------------------------------------------------
 
     /**
      * Shorthand for the innerHTML property of the HTML [element].
@@ -195,7 +197,9 @@ open class ZkElement(
     val classList: DOMTokenList
         inline get() = element.classList
 
-    // ---- Convenience functions to call build
+    // -------------------------------------------------------------------------
+    //   Convenience functions to call build
+    // -------------------------------------------------------------------------
 
     /**
      * Calls [builder] and returns with this element.
@@ -216,7 +220,9 @@ open class ZkElement(
         return this
     }
 
-    // ---- DOM utilities
+    // -------------------------------------------------------------------------
+    //   DOM and CSS utilities
+    // -------------------------------------------------------------------------
 
     /**
      * True when the DOM node does not have the [ZkLayoutStyles].hidden class in
@@ -288,6 +294,14 @@ open class ZkElement(
     }
 
     /**
+     * Sets the display CSS property.
+     */
+    infix fun display(value: String): ZkElement {
+        element.style.display = value
+        return this
+    }
+
+    /**
      * Sets the witdh of the element.
      */
     infix fun width(value: Any): ZkElement {
@@ -338,7 +352,41 @@ open class ZkElement(
         return this
     }
 
-    // ----  Child elements  --------
+    /**
+     * Sets the "grid-row" CSS property.
+     */
+    infix fun gridRow(value: String): ZkElement {
+        element.style.setProperty("grid-row", value)
+        return this
+    }
+
+    /**
+     * Sets the "grid-row" CSS property.
+     */
+    infix fun gridRow(value: Int): ZkElement {
+        element.style.setProperty("grid-row", value.toString())
+        return this
+    }
+
+    /**
+     * Sets the "grid-column" CSS property.
+     */
+    infix fun gridColumn(value: String): ZkElement {
+        element.style.setProperty("grid-column", value)
+        return this
+    }
+
+    /**
+     * Sets the "grid-column" CSS property.
+     */
+    infix fun gridColumn(value: Int): ZkElement {
+        element.style.setProperty("grid-column", value.toString())
+        return this
+    }
+
+    // -------------------------------------------------------------------------
+    //   Child elements
+    // -------------------------------------------------------------------------
 
     /**
      * Synchronizes the state of the children with the state of this element.
@@ -536,7 +584,9 @@ open class ZkElement(
         return childElements.first { it.classList.contains(cssClassName) } as T
     }
 
-    // ---- Event listeners ----
+    // -------------------------------------------------------------------------
+    //   Event listeners
+    // -------------------------------------------------------------------------
 
     /**
      * Attach a DOM event handler to this element.
@@ -551,7 +601,9 @@ open class ZkElement(
         target.addEventListener(type, listener)
     }
 
-    // ----  Builder  --------
+    // -------------------------------------------------------------------------
+    //   Builder
+    // -------------------------------------------------------------------------
 
     private fun runBuild(e: HTMLElement, className: String?, build: ZkElement.() -> Unit) {
         if (className != null) e.classList.add(className)
@@ -849,7 +901,9 @@ open class ZkElement(
         return this
     }
 
-    // ----  Executor permissions, logged in etc  --------
+    // -------------------------------------------------------------------------
+    //   Executor permissions, logged in etc
+    // -------------------------------------------------------------------------
 
     /**
      * Execute the builder function when the user **is not** the

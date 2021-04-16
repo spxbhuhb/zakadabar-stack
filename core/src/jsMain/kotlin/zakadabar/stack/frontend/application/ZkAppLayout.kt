@@ -31,6 +31,9 @@ import zakadabar.stack.frontend.util.plusAssign
  *             * calls [pause] of the old layout
  *             * calls [resume] of the new layout
  *             * sets [AppRouting.activeLayout] to the new layout
+ *
+ * @property  content        container for [activeElement], never changes
+ * @property  activeElement  the active element displayed
  */
 abstract class ZkAppLayout(val name: String) : ZkElement() {
 

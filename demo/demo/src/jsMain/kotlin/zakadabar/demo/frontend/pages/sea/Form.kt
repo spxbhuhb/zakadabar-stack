@@ -11,19 +11,13 @@ class Form : ZkForm<SeaDto>() {
 
     override fun onCreate() {
 
-        + titleBar(dto.name, Strings.sea)
+        + build(dto.name, Strings.sea) {
 
-        + section(Strings.basics) {
-
-            ifNotCreate {
+            + section(Strings.basics) {
                 + dto::id
+                + dto::name
             }
 
-            + dto::name
-
         }
-
-        + buttons()
     }
-
 }

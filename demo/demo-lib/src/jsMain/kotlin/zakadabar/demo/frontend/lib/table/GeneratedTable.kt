@@ -24,7 +24,9 @@ object GeneratedTable : ZkPage() {
 
         val template: BuiltinDto = default { }
 
-        // Create the data to display.
+        // Create the data to display. "default" uses the schema to generate the
+        // default data therefore it is slow. Using "copy" is better suited for
+        // large record count.
 
         val data = (1..10000).map { template.copy(id = it.toLong()) }
 

@@ -16,7 +16,6 @@ import zakadabar.demo.frontend.lib.layout.TabContainer
 import zakadabar.demo.frontend.lib.modal.ConfirmDialog
 import zakadabar.demo.frontend.lib.pages.ArgPage
 import zakadabar.demo.frontend.lib.table.GeneratedTable
-import zakadabar.demo.frontend.pages.misc.Home
 import zakadabar.demo.frontend.pages.misc.Login
 import zakadabar.demo.frontend.pages.port.Ports
 import zakadabar.demo.frontend.pages.sea.Seas
@@ -31,14 +30,16 @@ import zakadabar.stack.util.fourRandomInt
 
 object SideBar : ZkSideBar() {
 
-    init {
+    override fun onCreate() {
+        super.onCreate()
+
         style {
-            height = "100%"
+            boxSizing = "border-box"
             backgroundImage = """url("/menu_background.jpg")"""
             backgroundSize = "cover"
+            paddingTop = "4px"
+            paddingBottom = "4px"
         }
-
-        + title(Strings.applicationName, ::hideMenu) { Home.open() }
 
         + item(Strings.search) { ShipSearch.open() }
 

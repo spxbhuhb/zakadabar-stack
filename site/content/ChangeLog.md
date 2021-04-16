@@ -1,3 +1,71 @@
+# Next Release
+
+## Features
+
+* Common title bar concept. Added to pages, form and table.
+
+## Changes
+
+### ZkApplication
+
+* property `title`, stores the data for top application title bar
+* property `onTitleChange`, callback, executed when `title` changes
+
+### ZkDefaultLayout
+
+* Implements the app-handle/sidebar/title-bar/content layout from the demo.
+* ZkPageTitle class to store application title bar data.
+* ZkAppHandle class to display application name and menu close button.
+* ZkAppTitleBar class to display the application title bar.
+
+### ZkArgPage
+
+* Use `ZkApplication.title`.
+* Refresh title bar during onResume.
+
+### ZkArgPage
+
+* Use `ZkApplication.title`.
+* Refresh title bar during onResume.
+
+### ZkForm
+
+* Use `ZkApplication.title`.
+* Refresh title bar during onResume.
+* `onConfigure` method to replace `init`
+
+### ZkTable
+
+* Use `ZkApplication.title`.
+* Refresh title bar during onResume.
+* Actions moved into the `actions` package:
+  * ZkAddRowAction
+  * ZkExportCsvAction
+  * ZkSearchAction
+
+### ZkElement
+
+* New convenience functions:
+  * `gridRow` to set CSS grid row placement,
+  * `gridColumn` to set CSS grid column placement,
+  * `display` to set CSS display property.
+
+### ZkIconButton
+
+* `open` class.
+* Replace `className=` with `classList +=`.
+* Function `onMouseClick`, calls `onClick` by default.
+
+## Deprecated
+
+* `ZkSideBarTitle` - replaced by ZkAppHandle
+* `ZkSideBar.title` - replaced by appHandle in ZkDefaultLayout
+
+## Removed
+
+* `ZkForm.titleBar`
+* `ZkTableTitleBar`
+
 # 2021.4.13
 
 ## Bugfixes

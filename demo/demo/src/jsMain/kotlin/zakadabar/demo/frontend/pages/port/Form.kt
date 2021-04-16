@@ -11,25 +11,14 @@ import zakadabar.stack.frontend.builtin.form.ZkForm
 class Form : ZkForm<PortDto>() {
 
     override fun onCreate() {
+        build(dto.name, Strings.port) {
 
-        + titleBar(dto.name, Strings.port)
-
-        + section(Strings.basics) {
-
-            ifNotCreate {
+            + section(Strings.basics) {
                 + dto::id
+                + dto::name
+                + select(dto::sea) { SeaDto.all().by { it.name } }
             }
 
-            + dto::name
-
-            + select(dto::sea) {
-                SeaDto.all()
-                    .map { it.id to it.name }
-                    .sortedBy { it.second }
-            }
         }
-
-        + buttons()
     }
-
 }

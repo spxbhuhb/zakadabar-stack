@@ -18,7 +18,7 @@ import zakadabar.stack.util.PublicApi
  * @since  2021.1.18
  */
 @PublicApi
-class ZkIconButton(
+open class ZkIconButton(
     private val icon: ZkIconSource,
     private val iconSize: Int = 18,
     private val buttonSize: Int = 22,
@@ -29,7 +29,7 @@ class ZkIconButton(
 ) : ZkElement() {
 
     override fun onCreate() {
-        className = if (round) ZkButtonStyles.roundButton else ZkButtonStyles.iconButton
+        classList += if (round) ZkButtonStyles.roundButton else ZkButtonStyles.iconButton
         if (cssClass != null) classList += cssClass
 
         element.style.width = "${buttonSize}px"
@@ -45,12 +45,16 @@ class ZkIconButton(
 
         innerHTML = icon.svg(iconSize)
 
-        on("click") { _ -> onClick?.invoke() }
+        on("click", ::onMouseClick)
         on("mousedown", ::onMouseDown)
     }
 
-    private fun onMouseDown(event: Event) {
+    open fun onMouseDown(event: Event) {
         event.preventDefault() // to prevent focus change
+    }
+
+    open fun onMouseClick(event: Event) {
+        onClick?.invoke()
     }
 
 }

@@ -11,10 +11,15 @@ import org.w3c.dom.events.MouseEvent
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
 import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
+import zakadabar.stack.frontend.builtin.table.actions.ZkAddRowAction
+import zakadabar.stack.frontend.builtin.table.actions.ZkExportCsvAction
+import zakadabar.stack.frontend.builtin.table.actions.ZkSearchAction
 import zakadabar.stack.frontend.builtin.table.columns.*
+import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
 import zakadabar.stack.frontend.util.*
 import zakadabar.stack.util.UUID
 import kotlin.math.min
@@ -28,7 +33,7 @@ import kotlin.reflect.KProperty1
  * @property  crud        The [ZkCrudTarget] that is linked with the table. When specified the functions
  *                        of the table (onCreate, onDblClick for example) will use it to open the
  *                        appropriate page.
- * @property  titleBar    When true a title bar is added to the table. Function [addTitleBar] adds the title bar.
+ * @property  titleBar    When true a page title bar is added for the table. Function [setAppTitleBar] adds the title bar.
  * @property  title       Title to show in the title bar.
  * @property  add         When true a plus icon is added to the title bar. Click on the icon calls [onAddRow].
  * @property  search      When true a search input and icon is added to the title bar. Enter in the search field
@@ -48,11 +53,12 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     var titleBar = true
     var title = ""
+
     var add = false
     var search = false
     var export = false
 
-    var rowHeight = 42
+    open var rowHeight = 42
 
     val columns = mutableListOf<ZkColumn<T>>()
 
@@ -63,9 +69,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
     //  DOM
     // -------------------------------------------------------------------------
 
-    lateinit var titleBarElement: ZkTableTitleBar // this is a bit out of place here
-
-    lateinit var areas: Areas // areas for intersection observer
+    private lateinit var areas: Areas // areas for intersection observer
 
     lateinit var tableElement: HTMLTableElement
 
@@ -85,11 +89,11 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     lateinit var fullData: List<ZkTableRow<T>>
 
-    lateinit var filteredData: List<ZkTableRow<T>>
+    open lateinit var filteredData: List<ZkTableRow<T>>
 
     val preloads = mutableListOf<ZkTablePreload<*>>()
 
-    var searchText: String? = null
+    open var searchText: String? = null
 
     // -------------------------------------------------------------------------
     //  Lifecycle functions
@@ -108,8 +112,6 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
         className = ZkTableStyles.outerContainer
         classList += ZkTableStyles.noSelect
-
-        addTitleBar()
 
         + div(ZkTableStyles.contentContainer) {
 
@@ -164,6 +166,9 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     override fun onResume() {
         super.onResume()
+
+        if (titleBar) setAppTitleBar()
+
         // this means that setData has been called before onResume
         if (::fullData.isInitialized) {
             render()
@@ -174,15 +179,13 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         areas.onDestroy()
     }
 
-    open fun addTitleBar() {
-        if (! titleBar) return
+    open fun setAppTitleBar() {
+        val actions = mutableListOf<ZkElement>()
+        if (add) actions += ZkAddRowAction(::onAddRow)
+        if (export) actions += ZkExportCsvAction(::onExportCsv)
+        if (search) actions += ZkSearchAction(::onSearch)
 
-        + ZkTableTitleBar {
-            title = this@ZkTable.title
-            if (add) onAddRow = ::onAddRow
-            if (search) onSearch = ::onSearch
-            if (export) onExportCsv = ::onExportCsv
-        }
+        ZkApplication.title = ZkPageTitle(title, actions)
     }
 
     // -------------------------------------------------------------------------

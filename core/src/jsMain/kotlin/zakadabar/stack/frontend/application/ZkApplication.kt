@@ -14,6 +14,7 @@ import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.application.ZkApplication.toasts
 import zakadabar.stack.frontend.builtin.dock.ZkDock
+import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
 import zakadabar.stack.frontend.builtin.modal.ZkModalContainer
 import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
 import zakadabar.stack.frontend.resources.ZkTheme
@@ -42,6 +43,10 @@ import zakadabar.stack.util.PublicApi
  *
  * @property  modals     A container that contains modal windows.
  *
+ * @property  title      Current title of the page.
+ *
+ * @property  onTitleChange  Called when [title] changes, layouts replace this function.
+ *
  */
 object ZkApplication {
 
@@ -58,6 +63,14 @@ object ZkApplication {
     lateinit var toasts: ZkToastContainer
 
     lateinit var modals: ZkModalContainer
+
+    var title = ZkPageTitle("")
+        set(value) {
+            onTitleChange?.invoke(value)
+            field = title
+        }
+
+    var onTitleChange: ((newTitle: ZkPageTitle) -> Unit)? = null
 
     @Suppress("MemberVisibilityCanBePrivate")
     const val NAVSTATE_CHANGE = "zk-navstate-change"
