@@ -32,13 +32,13 @@ import zakadabar.stack.frontend.util.plusAssign
  *             * calls [resume] of the new layout
  *             * sets [AppRouting.activeLayout] to the new layout
  *
- * @property  content        container for [activeElement], never changes
+ * @property  contentContainer        container for [activeElement], never changes
  * @property  activeElement  the active element displayed
  */
 abstract class ZkAppLayout(val name: String) : ZkElement() {
 
     private var activeElement: ZkElement? = null
-    protected var content = ZkElement()
+    protected var contentContainer = ZkElement()
 
     init {
         element.classList += ZkLayoutStyles.layout
@@ -50,7 +50,7 @@ abstract class ZkAppLayout(val name: String) : ZkElement() {
     }
 
     override fun onCreate() {
-        + content
+        + contentContainer
     }
 
     /**
@@ -64,12 +64,12 @@ abstract class ZkAppLayout(val name: String) : ZkElement() {
      * @param  state  The navigation state to resume.
      */
     open fun resume(state: ZkNavState, target: ZkElement) {
-        content -= activeElement
+        contentContainer -= activeElement
 
         onResume()
 
         activeElement = target
-        content += activeElement
+        contentContainer += activeElement
 
         show()
     }
@@ -84,7 +84,7 @@ abstract class ZkAppLayout(val name: String) : ZkElement() {
     override fun onPause() {
         hide()
 
-        content -= activeElement
+        contentContainer -= activeElement
         activeElement = null
 
         super.onPause()

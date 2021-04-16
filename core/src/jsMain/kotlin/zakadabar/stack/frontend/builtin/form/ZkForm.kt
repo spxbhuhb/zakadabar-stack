@@ -32,6 +32,7 @@ import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.application.ZkApplication.t
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
+import zakadabar.stack.frontend.builtin.ZkElementState
 import zakadabar.stack.frontend.builtin.form.fields.*
 import zakadabar.stack.frontend.builtin.form.structure.ZkFormButtons
 import zakadabar.stack.frontend.builtin.form.structure.ZkFormSection
@@ -335,6 +336,9 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
 
     open fun build(title: String, createTitle: String = title, css: String? = null, addButtons: Boolean = true, builder: () -> Unit): ZkForm<T> {
         this.title = if (mode == ZkElementMode.Create) createTitle else title
+
+        // this lets build be called from an IO block after onResume ran
+        if (lifeCycleState == ZkElementState.Resumed && titleBar) setAppTitleBar()
 
         + div(ZkFormStyles.contentContainer) {
             + column(ZkFormStyles.form) {

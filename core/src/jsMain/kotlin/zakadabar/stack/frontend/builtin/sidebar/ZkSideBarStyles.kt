@@ -21,14 +21,13 @@ object ZkSideBarStyles : ZkCssStyleSheet<ZkSideBarStyles>(ZkApplication.theme) {
         fontWeight = 500
         fontSize = "120%"
         borderBottom = "0.5px solid #ccc"
-        marginBottom = 4
         paddingLeft = 8
         paddingRight = 16
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
-        minHeight = "44px"  // linked to PageTitleBar.height
-        marginBottom = 8
+        minHeight = theme.layout.titleBarHeight
+        maxHeight = theme.layout.titleBarHeight
         whiteSpace = "nowrap"
         backgroundColor = theme.sidebar.background
         color = theme.sidebar.text

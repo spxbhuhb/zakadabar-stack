@@ -12,7 +12,7 @@ class Form : ZkForm<SpeedDto>() {
 
     override fun onCreate() {
 
-        + build(dto.description, Strings.speed) {
+        build(dto.description, Strings.speed) {
 
             + section(Strings.basics, Strings.speedBasicsExplanation) {
                 + dto::id

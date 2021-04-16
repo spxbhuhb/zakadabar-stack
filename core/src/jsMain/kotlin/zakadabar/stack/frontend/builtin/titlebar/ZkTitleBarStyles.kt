@@ -27,8 +27,8 @@ object ZkTitleBarStyles : ZkCssStyleSheet<ZkTitleBarStyles>(ZkApplication.theme)
         backgroundColor = theme.sidebar.background
         fill = theme.sidebar.text
         color = theme.sidebar.text
-        height = theme.layout.titleBarHeight
-        width = theme.layout.titleBarHeight
+        minHeight = theme.layout.titleBarHeight
+        minWidth = theme.layout.titleBarHeight
         display = "flex"
         alignItems = "center"
         justifyContent = "center"
