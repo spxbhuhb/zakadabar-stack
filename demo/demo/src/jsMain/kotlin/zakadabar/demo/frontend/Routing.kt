@@ -35,7 +35,7 @@ import zakadabar.stack.frontend.application.ZkNavState
  * You can change the routing of an application on-the-fly by
  * setting [ZkApplication.routing] to another object.
  */
-object Routing : ZkAppRouting(DefaultLayout, Home) {
+object Routing : ZkAppRouting(DemoLayout, Home) {
 
     /**
      * Add ZkPage and ZkCrud implementations to the routing.

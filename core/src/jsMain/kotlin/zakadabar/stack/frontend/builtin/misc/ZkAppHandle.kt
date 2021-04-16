@@ -7,7 +7,9 @@ import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButtonStyles
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
+import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarStyles
 import zakadabar.stack.frontend.resources.ZkIcons
+import zakadabar.stack.frontend.util.plusAssign
 
 /**
  * The top-left part of the default layout, a button to close the menu and the title of the application.
@@ -19,6 +21,8 @@ open class ZkAppHandle(
 ) : ZkElement() {
 
     override fun onCreate() {
+        classList += ZkSideBarStyles.title
+
         + ZkIconButton(ZkIcons.notes, cssClass = ZkButtonStyles.transparent, onClick = onIconClick) marginRight 10
         + div { + text }
 

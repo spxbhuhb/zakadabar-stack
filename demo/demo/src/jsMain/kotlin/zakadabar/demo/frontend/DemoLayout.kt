@@ -7,20 +7,17 @@ import zakadabar.demo.resources.Strings
 import zakadabar.stack.frontend.builtin.layout.ZkDefaultLayout
 import zakadabar.stack.frontend.builtin.misc.ZkAppHandle
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarStyles
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleBar
 
-object DefaultLayout : ZkDefaultLayout() {
+object DemoLayout : ZkDefaultLayout() {
 
     override fun onCreate() {
         super.onCreate()
 
-        appHandle = ZkAppHandle(Strings.applicationName) css ZkSideBarStyles.title build {
-            style {
-                backgroundColor = "black"
-                color = "white"
-            }
-        }
-
+        appHandle = ZkAppHandle(Strings.applicationName, onIconClick = ::onToggleSideBar)
         sideBar = SideBar
+        titleBar = ZkAppTitleBar(::onToggleSideBar)
+
     }
 
 }

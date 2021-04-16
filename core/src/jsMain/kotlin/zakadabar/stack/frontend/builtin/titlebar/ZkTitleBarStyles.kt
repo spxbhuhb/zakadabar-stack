@@ -20,11 +20,22 @@ object ZkTitleBarStyles : ZkCssStyleSheet<ZkTitleBarStyles>(ZkApplication.theme)
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
-        paddingLeft = theme.layout.paddingStep * 2
         fontSize = 16
     }
 
+    val sidebarHandle by cssClass {
+        backgroundColor = theme.sidebar.background
+        fill = theme.sidebar.text
+        color = theme.sidebar.text
+        height = theme.layout.titleBarHeight
+        width = theme.layout.titleBarHeight
+        display = "flex"
+        alignItems = "center"
+        justifyContent = "center"
+    }
+
     val titleContainer by cssClass {
+        paddingLeft = theme.layout.paddingStep * 2
         alignItems = "center"
     }
 

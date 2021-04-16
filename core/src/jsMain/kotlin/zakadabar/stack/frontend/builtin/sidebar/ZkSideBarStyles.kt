@@ -30,6 +30,8 @@ object ZkSideBarStyles : ZkCssStyleSheet<ZkSideBarStyles>(ZkApplication.theme) {
         minHeight = "44px"  // linked to PageTitleBar.height
         marginBottom = 8
         whiteSpace = "nowrap"
+        backgroundColor = theme.sidebar.background
+        color = theme.sidebar.text
     }
 
     val item by cssClass {

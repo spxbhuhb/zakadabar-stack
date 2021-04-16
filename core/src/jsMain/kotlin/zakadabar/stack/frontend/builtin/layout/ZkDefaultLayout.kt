@@ -71,4 +71,11 @@ open class ZkDefaultLayout : ZkAppLayout("default") {
     private fun onTitleChange(newTitle: ZkPageTitle) {
         this.titleBar.title = newTitle
     }
+
+    open fun onToggleSideBar() {
+        appHandleContainer.toggle()
+        sideBarContainer.toggle()
+        titleBar.handleContainer.toggle()
+    }
+
 }

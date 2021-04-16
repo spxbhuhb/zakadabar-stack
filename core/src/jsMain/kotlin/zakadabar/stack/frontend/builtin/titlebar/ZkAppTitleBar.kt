@@ -12,9 +12,11 @@ import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
-open class ZkAppTitleBar : ZkElement() {
+open class ZkAppTitleBar(
+    var onToggleSideBar: () -> Unit = { }
+) : ZkElement() {
 
-    open val sidebarHandle = ZkIconButton(ZkIcons.notes, cssClass = ZkButtonStyles.transparent, onClick = ::onShowSideBar).hide()
+    open val handleContainer = ZkElement()
     open val titleContainer = ZkElement()
     open val contextElements = ZkElement()
     open val globalElements = ZkElement()
@@ -29,12 +31,18 @@ open class ZkAppTitleBar : ZkElement() {
     override fun onCreate() {
         classList += ZkTitleBarStyles.titleBar
 
-        + sidebarHandle marginRight 10
-        + titleContainer css ZkTitleBarStyles.titleContainer marginRight 16
-        + div { style { flexGrow = "1" } }
-        + contextElements css ZkTitleBarStyles.contextElementContainer marginRight 10
-        + globalElements css ZkTitleBarStyles.globalElementContainer marginRight 10
+        + handleContainer css ZkTitleBarStyles.sidebarHandle build {
+            hide()
+            + ZkIconButton(ZkIcons.notes, cssClass = ZkButtonStyles.transparent, onClick = ::onHandleClick)
+        } marginRight 10
 
+        + titleContainer css ZkTitleBarStyles.titleContainer marginRight 10
+
+        + div { style { flexGrow = "1" } }
+
+        + contextElements css ZkTitleBarStyles.contextElementContainer marginRight 10
+
+        + globalElements css ZkTitleBarStyles.globalElementContainer marginRight 10
     }
 
     open fun onTitleChange(value: ZkPageTitle?) {
@@ -51,8 +59,8 @@ open class ZkAppTitleBar : ZkElement() {
         }
     }
 
-    private fun onShowSideBar() {
-
+    open fun onHandleClick() {
+        onToggleSideBar()
     }
 
 }
