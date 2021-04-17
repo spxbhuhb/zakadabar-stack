@@ -5,6 +5,7 @@ package zakadabar.stack.frontend.builtin.button
 
 import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.util.PublicApi
 
 /**
@@ -22,7 +23,7 @@ class ZkButton(
 ) : ZkElement() {
 
     override fun onCreate() {
-        className = ZkButtonStyles.button
+        classList += ZkButtonStyles.button
 
         + text
 

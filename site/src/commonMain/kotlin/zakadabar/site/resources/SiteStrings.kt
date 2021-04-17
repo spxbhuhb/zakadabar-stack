@@ -52,5 +52,25 @@ class SiteStrings : ZkBuiltinStrings() {
     val logout by "Logout"
     val loginFail by "Login failed."
 
+    val siteTitle by "A Kotlin Multiplatform library for full-stack software development."
+
+    val getStarted by "Get Started"
+    val demo by "Demo"
+    val guides by "Guides"
+    val github by "GitHub"
+
+    val writeOnceTitle by "Write Once"
+    val writeOnceText by "Use everywhere. It's enough to code an API once, isn't it? Data models, schemas, logic: share code between server, browser and mobile. "
+
+    val letTheMachineTitle by "Let the Machine Work"
+    val letTheMachineText by "Write what's needed, let the compiler do the heavy lifting. There are so many parts that are trivial. You can just skip them."
+
+    val walkYourWayTitle by "Walk Your Way"
+    val walkYourWayText by "Tools, ready-to-use parts, blueprints: that's us. No restrictions, no boxes to fit into. Your application, your choice."
+
+    val goTillItsReadyTitle by "Go Till It's Ready"
+    val goTillItsReadyText by "From start to finish: we give you templates, examples, how-tos. In the end you'll have an enterprise grade software system."
+
+    val developedBy by "by Simplexion"
 }
 

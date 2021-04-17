@@ -3,6 +3,8 @@
 ## Features
 
 * Common title bar concept. Added to pages, form and table.
+* New landing page for site.
+* Zakadabar Design colors to ZkColors.
 
 ## Changes
 
@@ -49,6 +51,10 @@
   * `gridRow` to set CSS grid row placement,
   * `gridColumn` to set CSS grid column placement,
   * `display` to set CSS display property.
+
+### ZkButton
+
+* replace `className=` with `classList +=`.
 
 ### ZkIconButton
 

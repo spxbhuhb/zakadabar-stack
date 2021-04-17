@@ -5,16 +5,13 @@ package zakadabar.site.frontend.pages.misc
 
 import zakadabar.lib.frontend.markdown.MarkdownView
 import zakadabar.site.data.ContentQuery
-import zakadabar.site.frontend.SiteStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.util.io
-import zakadabar.stack.frontend.util.plusAssign
 
 object ChangeLog : ZkPage() {
 
     override fun onCreate() {
-        classList += SiteStyles.page
-
+        super.onCreate()
         io {
             + MarkdownView("/api/${ContentQuery.namespace}/ChangeLog.md")
         }

@@ -47,7 +47,6 @@ object ZkColors {
         val a700 = "#FFD600"
     }
 
-
     object Blue {
         val c50 = "#E3F2FD"
         val c100 = "#BBDEFB"
@@ -119,5 +118,31 @@ object ZkColors {
         val c700 = "#455A64"
         val c800 = "#37474F"
         val c900 = "#263238"
+    }
+
+    /**
+     * These colors are designed by Dániel Nagy for Zakadabar
+     */
+    object Design {
+        val activeBlue = "#2746ab"
+        val inactiveBlue = "#bec7e6"
+        val green = "#89e6c2"
+
+        val navBlue = "#0097ec"
+        val navPurple = "#9b72ed"
+        val navCyan = "#11c6ac"
+        val navGreen = "#a6c95c"
+        val navOrange = "#f1a938"
+        val navRed = "#ff5e3d"
+
+        val gray1 = "#ebebeb"
+        val gray2 = "#c8c8c8"
+        val gray3 = "#b4b4b4"
+        val gray4 = "#969696"
+        val gray5 = "#787878"
+        val gray6 = "#646464"
+        val gray7 = "#464646"
+        val gray8 = "#2d2d30"
+        val gray9 = "#1e1e1e"
     }
 }
