@@ -15,19 +15,80 @@ import zakadabar.stack.frontend.resources.ZkTheme
  * so we can't use a simple map as delegate.
  */
 class ZkCssStyleRule(
-    private val sheet: ZkCssStyleSheet<*>,
-    private val cssClassName: String
+    private val sheet: ZkCssStyleSheet,
+    val propName: String,
+    val cssClassName: String,
+    var builder: ZkCssStyleRule.(ZkTheme) -> Unit
 ) {
+    var media: String? = null
+    var pseudoClass: String? = null
 
     val styles = mutableMapOf<String, String?>()
 
-    private fun stringOrPx(value: Any?) = if (value is String) value else "${value}px"
+    private lateinit var variations: MutableList<ZkCssStyleRule>
 
-    fun on(pseudoClass: String, init: ZkCssStyleRule.(ZkTheme) -> Unit) {
-        val rule = ZkCssStyleRule(sheet, cssClassName)
-        rule.init(sheet.theme)
-        sheet.rules[cssClassName + pseudoClass] = rule
+    fun compile(): String {
+
+        styles.clear()
+        if (::variations.isInitialized) variations.clear()
+
+        builder(sheet.theme)
+
+        if (! ::variations.isInitialized) {
+            return toCssString()
+        }
+
+        val strings = mutableListOf(toCssString())
+
+        variations.forEach { strings += it.compile() }
+
+        return strings.joinToString("\n")
     }
+
+    private fun toCssString(): String {
+        val styles = styles.map { style -> "    ${style.key}: ${style.value};" }.joinToString("\n")
+
+        var s = ""
+
+        if (media != null) s += "@media $media {\n"
+        s += "."
+        s += cssClassName
+        if (pseudoClass != null) s += pseudoClass
+        s += "{\n${styles}\n}"
+        if (media != null) s += "}"
+
+        return s
+    }
+
+    fun copyFrom(from: ZkCssStyleRule) {
+        styles.clear()
+        styles.putAll(from.styles)
+    }
+
+    // -------------------------------------------------------------------------
+    // Pseudo-class and media methods
+    // -------------------------------------------------------------------------
+
+    fun hover(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(":hover", builder = builder)
+
+    fun media(media: String, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = media, builder = builder)
+
+    fun on(pseudoClass: String? = null, media: String? = null, builder: ZkCssStyleRule.(ZkTheme) -> Unit) {
+        require(pseudoClass != null || media != null) { "both pseudoClass and media is null" }
+
+        if (! ::variations.isInitialized) variations = mutableListOf()
+
+        val rule = ZkCssStyleRule(sheet, this.propName, cssClassName, builder)
+
+        rule.pseudoClass = pseudoClass
+        rule.media = media
+
+        variations.add(rule)
+    }
+
+    // -------------------------------------------------------------------------
+    // Build helpers
+    // -------------------------------------------------------------------------
 
     /**
      * [MDN: align-items](https://developer.mozilla.org/en-US/docs/Web/CSS/align-items)

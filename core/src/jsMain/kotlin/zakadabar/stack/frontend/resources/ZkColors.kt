@@ -82,6 +82,23 @@ object ZkColors {
         val a700 = "#0091EA"
     }
 
+    object Green {
+        val c50 = "#E8F5E9"
+        val c100 = "#C8E6C9"
+        val c200 = "#A5D6A7"
+        val c300 = "#81C784"
+        val c400 = "#66BB6A"
+        val c500 = "#4CAF50"
+        val c600 = "#43A047"
+        val c700 = "#388E3C"
+        val c800 = "#2E7D32"
+        val c900 = "#1B5E20"
+        val a100 = "#B9F6CA"
+        val a200 = "#69F0AE"
+        val a400 = "#00E676"
+        val a700 = "#00C853"
+    }
+
     object Gray {
         val c50 = "#FAFAFA"
         val c100 = "#F5F5F5"

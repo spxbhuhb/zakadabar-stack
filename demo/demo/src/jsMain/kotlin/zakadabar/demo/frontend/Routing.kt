@@ -11,6 +11,7 @@ import zakadabar.demo.frontend.lib.layout.TabContainer
 import zakadabar.demo.frontend.lib.modal.ConfirmDialog
 import zakadabar.demo.frontend.lib.pages.ArgPage
 import zakadabar.demo.frontend.lib.table.GeneratedTable
+import zakadabar.demo.frontend.lib.themes.Themes
 import zakadabar.demo.frontend.pages.account.Accounts
 import zakadabar.demo.frontend.pages.misc.Home
 import zakadabar.demo.frontend.pages.misc.Login
@@ -35,7 +36,7 @@ import zakadabar.stack.frontend.application.ZkNavState
  * You can change the routing of an application on-the-fly by
  * setting [ZkApplication.routing] to another object.
  */
-object Routing : ZkAppRouting(DemoLayout, Home) {
+class Routing : ZkAppRouting(DemoLayout, Home) {
 
     /**
      * Add ZkPage and ZkCrud implementations to the routing.
@@ -61,6 +62,7 @@ object Routing : ZkAppRouting(DemoLayout, Home) {
         + FormFields
         + TabContainer
         + GeneratedTable
+        + Themes
 
         + Home
     }

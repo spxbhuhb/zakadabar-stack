@@ -4,7 +4,6 @@
 package zakadabar.stack.frontend.builtin.misc.dropdown
 
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.misc.dropdown.ZkDropdownClasses.Companion.dropdownClasses
 
 /**
  * Wrapper around the content of the dropdown.
@@ -19,7 +18,7 @@ class ZkDropdownContent(
 
         // kept it this way so we have a clear separation and wrapper around the content
 
-        this css dropdownClasses.dropdownContent build {
+        this css ZkDropdownStyles.dropdownContent build {
             + content
         }
 

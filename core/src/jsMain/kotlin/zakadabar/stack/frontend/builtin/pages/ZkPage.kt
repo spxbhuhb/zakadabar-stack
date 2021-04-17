@@ -20,7 +20,7 @@ import zakadabar.stack.frontend.util.plusAssign
 open class ZkPage(
     val layout: ZkAppLayout? = null,
     val title: String? = null,
-    val cssClasses: Array<out String> = arrayOf(ZkLayoutStyles.page)
+    val cssClasses: Array<out String>? = null
 ) : ZkElement(), ZkAppRouting.ZkTarget {
 
     companion object {
@@ -63,8 +63,12 @@ open class ZkPage(
     }
 
     override fun onCreate() {
-        for (cssClass in cssClasses) {
-            classList += cssClass
+        if (cssClasses == null) {
+            classList += ZkPageStyles.page
+        } else {
+            for (cssClass in cssClasses) {
+                classList += cssClass
+            }
         }
     }
 

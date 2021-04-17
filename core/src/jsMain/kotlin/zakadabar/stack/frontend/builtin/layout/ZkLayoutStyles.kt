@@ -3,10 +3,9 @@
  */
 package zakadabar.stack.frontend.builtin.layout
 
-import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkLayoutStyles : ZkCssStyleSheet<ZkLayoutStyles>(ZkApplication.theme) {
+object ZkLayoutStyles : ZkCssStyleSheet() {
 
     val defaultLayoutSmall by cssClass {
         display = "flex"

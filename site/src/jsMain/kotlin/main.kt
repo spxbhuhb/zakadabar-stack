@@ -13,7 +13,7 @@ import zakadabar.stack.data.builtin.account.SessionDto
 import zakadabar.stack.data.builtin.resources.StringsByLocale
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkExecutor
-import zakadabar.stack.frontend.builtin.ZkBuiltinTheme
+import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.io
 
@@ -29,7 +29,7 @@ fun main() {
 
             executor = ZkExecutor(session.account, session.anonymous, session.roles)
 
-            theme = ZkBuiltinTheme()
+            theme = ZkBuiltinLightTheme()
 
             val locale = session.account.locale ?: window.navigator.language
 

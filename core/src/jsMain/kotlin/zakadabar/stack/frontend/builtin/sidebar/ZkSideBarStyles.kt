@@ -3,10 +3,9 @@
  */
 package zakadabar.stack.frontend.builtin.sidebar
 
-import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkSideBarStyles : ZkCssStyleSheet<ZkSideBarStyles>(ZkApplication.theme) {
+object ZkSideBarStyles : ZkCssStyleSheet() {
 
     val sidebar by cssClass {
         minHeight = "100%"

@@ -65,6 +65,8 @@ open class ZkDefaultLayout : ZkAppLayout("default") {
 
         titleBarContainer build { + titleBar }
 
+        contentContainer css ZkLayoutStyles.defaultBackground
+
         popupSidebarContainer build {
             buildElement.style.zIndex = "100"
             buildElement.style.position = "absolute"

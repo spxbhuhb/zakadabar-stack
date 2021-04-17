@@ -3,10 +3,9 @@
  */
 package zakadabar.stack.frontend.builtin.misc.account
 
-import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkAccountStyles : ZkCssStyleSheet<ZkAccountStyles>(ZkApplication.theme) {
+object ZkAccountStyles : ZkCssStyleSheet() {
 
     val avatar by cssClass {
         width = 28

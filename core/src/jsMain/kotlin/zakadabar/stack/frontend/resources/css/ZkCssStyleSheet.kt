@@ -5,12 +5,18 @@ package zakadabar.stack.frontend.resources.css
 
 import kotlinx.atomicfu.atomic
 import kotlinx.browser.document
+import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.util.PublicApi
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-open class ZkCssStyleSheet<T : ZkCssStyleSheet<T>>(val theme: ZkTheme) {
+/**
+ * Represents a CSS style sheet in the browser. Provides programmatic
+ * tools to build, maintain and merge style sheets. Uses [ZkApplication.theme]
+ * to build the styles.
+ */
+open class ZkCssStyleSheet {
 
     companion object {
         val nextId = atomic(0)
@@ -20,44 +26,70 @@ open class ZkCssStyleSheet<T : ZkCssStyleSheet<T>>(val theme: ZkTheme) {
     val element = document.createElement("style")
 
     init {
-        element.id = "zkc-$id"
+        element.id = "zk-${this::class.simpleName}-$id"
     }
 
-    internal val rules = mutableMapOf<String, ZkCssStyleRule>()
+    var theme = ZkApplication.theme
 
-    class CssDelegate(private val cssClassName: String) : ReadOnlyProperty<ZkCssStyleSheet<*>, String> {
-        override fun getValue(thisRef: ZkCssStyleSheet<*>, property: KProperty<*>) = cssClassName
+    internal val rules = mutableMapOf<String, ZkCssStyleRule>() // key is property name
+
+    class CssDelegate(private var cssClassName: String) : ReadOnlyProperty<ZkCssStyleSheet, String> {
+        override fun getValue(thisRef: ZkCssStyleSheet, property: KProperty<*>) = cssClassName
     }
 
-    class CssDelegateProvider(val name: String? = null, val init: ZkCssStyleRule.(ZkTheme) -> Unit) {
-        operator fun provideDelegate(thisRef: ZkCssStyleSheet<*>, prop: KProperty<*>): ReadOnlyProperty<ZkCssStyleSheet<*>, String> {
+    class CssDelegateProvider(val name: String? = null, val builder: ZkCssStyleRule.(ZkTheme) -> Unit) {
+        operator fun provideDelegate(thisRef: ZkCssStyleSheet, prop: KProperty<*>): ReadOnlyProperty<ZkCssStyleSheet, String> {
+
             val cssClassName = name ?: "${thisRef::class.simpleName}-${prop.name}-${nextId.getAndIncrement()}"
-            val rule = ZkCssStyleRule(thisRef, cssClassName)
-            rule.init(thisRef.theme)
-            thisRef.rules[cssClassName] = rule
+
+            thisRef.rules[prop.name] = ZkCssStyleRule(thisRef, prop.name, cssClassName, builder)
+
             return CssDelegate(cssClassName)
         }
     }
 
-    fun cssClass(init: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, init)
+    fun cssClass(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, builder)
 
-    fun cssClass(name: String, init: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(name, init)
+    fun cssClass(name: String? = null, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(name, builder)
 
     @PublicApi
-    fun attach(): T {
-        element.innerHTML = rules.map { rule ->
-            "." + rule.key + " {\n" + rule.value.styles.map { "${it.key}: ${it.value};" }.joinToString("\n") + "}"
-        }.joinToString("\n")
+    fun attach() {
+        if (this in ZkApplication.styleSheets) return
+
+        ZkApplication.styleSheets.add(this)
 
         document.body?.appendChild(element)
 
-        @Suppress("UNCHECKED_CAST") // returns with itself, should be OK
-        return this as T
+        refresh()
     }
 
     @PublicApi
     fun detach() {
         element.remove()
+
+        ZkApplication.styleSheets.remove(this)
+    }
+
+    private fun refresh() {
+        element.innerHTML = rules.map { it.value.compile() }.joinToString("\n")
+    }
+
+    @PublicApi
+    fun merge(from: ZkCssStyleSheet) {
+        from.rules.forEach { entry ->
+
+            val fromRule = entry.value
+            val toRule = rules[fromRule.propName] ?: return@forEach
+
+            toRule.builder = fromRule.builder
+        }
+
+        refresh()
+    }
+
+    fun onThemeChange(newTheme: ZkTheme) {
+        theme = newTheme
+        refresh()
     }
 
 }

@@ -3,11 +3,10 @@
  */
 package zakadabar.stack.frontend.builtin.table
 
-import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkTableStyles : ZkCssStyleSheet<ZkTableStyles>(ZkApplication.theme) {
+object ZkTableStyles : ZkCssStyleSheet() {
 
     val outerContainer by cssClass {
         display = "flex"

@@ -16,6 +16,7 @@ import zakadabar.demo.frontend.lib.layout.TabContainer
 import zakadabar.demo.frontend.lib.modal.ConfirmDialog
 import zakadabar.demo.frontend.lib.pages.ArgPage
 import zakadabar.demo.frontend.lib.table.GeneratedTable
+import zakadabar.demo.frontend.lib.themes.Themes
 import zakadabar.demo.frontend.pages.misc.Login
 import zakadabar.demo.frontend.pages.port.Ports
 import zakadabar.demo.frontend.pages.sea.Seas
@@ -56,6 +57,7 @@ object SideBar : ZkSideBar() {
             + item("ZkForm") { FormFields.open() }
             + item("ZkTabContainer") { TabContainer.open() }
             + item("ZkTable") { GeneratedTable.open() }
+            + item("Themes") { Themes.open() }
         }
 
         // show administration only for logged in users

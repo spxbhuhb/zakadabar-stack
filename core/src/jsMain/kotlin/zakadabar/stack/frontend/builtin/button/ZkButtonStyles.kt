@@ -3,10 +3,9 @@
  */
 package zakadabar.stack.frontend.builtin.button
 
-import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkButtonStyles : ZkCssStyleSheet<ZkButtonStyles>(ZkApplication.theme) {
+object ZkButtonStyles : ZkCssStyleSheet() {
 
     val button by cssClass {
         width = "max-content"

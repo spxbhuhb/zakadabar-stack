@@ -13,11 +13,13 @@ import zakadabar.stack.frontend.application.ZkApplication.routing
 import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.application.ZkApplication.toasts
+import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
 import zakadabar.stack.frontend.builtin.dock.ZkDock
 import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
 import zakadabar.stack.frontend.builtin.modal.ZkModalContainer
 import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
 import zakadabar.stack.frontend.resources.ZkTheme
+import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.resources.ZkBuiltinStrings
 import zakadabar.stack.util.PublicApi
 
@@ -54,7 +56,13 @@ object ZkApplication {
 
     lateinit var routing: ZkAppRouting
 
-    lateinit var theme: ZkTheme
+    var theme: ZkTheme = ZkBuiltinLightTheme()
+        set(value) {
+            field = value
+            styleSheets.forEach { it.onThemeChange(value) }
+        }
+
+    val styleSheets = mutableListOf<ZkCssStyleSheet>()
 
     lateinit var strings: ZkBuiltinStrings
 

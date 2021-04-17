@@ -7,7 +7,7 @@ import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkTabContainerStyles : ZkCssStyleSheet<ZkTabContainerStyles>(ZkApplication.theme) {
+object ZkTabContainerStyles : ZkCssStyleSheet() {
 
     val container by cssClass {
         display = "flex"

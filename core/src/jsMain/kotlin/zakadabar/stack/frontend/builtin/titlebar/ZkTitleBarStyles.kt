@@ -3,11 +3,10 @@
  */
 package zakadabar.stack.frontend.builtin.titlebar
 
-import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkTitleBarStyles : ZkCssStyleSheet<ZkTitleBarStyles>(ZkApplication.theme) {
+object ZkTitleBarStyles : ZkCssStyleSheet() {
 
     val titleBar by cssClass {
         boxSizing = "border-box"

@@ -26,7 +26,8 @@ import zakadabar.stack.frontend.util.plusAssign
 open class ZkArgPage<T>(
     val serializer: KSerializer<T>,
     val layout: ZkAppLayout? = null,
-    val title: String? = null
+    val title: String? = null,
+    val cssClasses: Array<out String>? = null
 ) : ZkElement(), ZkAppRouting.ZkTarget {
 
     var args: T? = null
@@ -52,9 +53,13 @@ open class ZkArgPage<T>(
     }
 
     override fun onCreate() {
-        super.onCreate()
-        classList += grow
-        classList += ZkLayoutStyles.defaultBackground
+        if (cssClasses == null) {
+            classList += ZkPageStyles.page
+        } else {
+            for (cssClass in cssClasses) {
+                classList += cssClass
+            }
+        }
     }
 
     override fun onResume() {

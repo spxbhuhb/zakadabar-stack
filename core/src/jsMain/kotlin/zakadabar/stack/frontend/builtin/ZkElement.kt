@@ -12,6 +12,7 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventTarget
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
+import zakadabar.stack.frontend.resources.css.stringOrPx
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.minusAssign
 import zakadabar.stack.frontend.util.plusAssign
@@ -84,11 +85,37 @@ open class ZkElement(
 
     val childElements by lazy { mutableListOf<ZkElement>() }
 
+    // -------------------------------------------------------------------------
+    //   Shorthands variables
+    // -------------------------------------------------------------------------
+
     /**
      * Display name of the current user.
      */
     val displayName
         get() = ZkApplication.executor.account.displayName
+
+    var gridTemplateRows: String
+        get() = buildElement.style.getPropertyValue("grid-template-rows")
+        set(value) {
+            buildElement.style.setProperty("grid-template-rows", value)
+        }
+
+    var gridTemplateColumns: String
+        get() = buildElement.style.getPropertyValue("grid-template-columns")
+        set(value) {
+            buildElement.style.setProperty("grid-template-columns", value)
+        }
+
+    var gridGap: Any
+        get() = buildElement.style.getPropertyValue("grid-gap")
+        set(value) {
+            buildElement.style.setProperty("grid-gap", stringOrPx(value))
+        }
+
+    // -------------------------------------------------------------------------
+    //   Lifecycle
+    // -------------------------------------------------------------------------
 
     /**
      * Called when the element is created, use this for initial setup.

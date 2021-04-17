@@ -3,10 +3,9 @@
  */
 package zakadabar.stack.frontend.builtin.modal
 
-import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkModalStyles : ZkCssStyleSheet<ZkModalStyles>(ZkApplication.theme) {
+object ZkModalStyles : ZkCssStyleSheet() {
 
     val modalContainer by cssClass {
         position = "fixed"

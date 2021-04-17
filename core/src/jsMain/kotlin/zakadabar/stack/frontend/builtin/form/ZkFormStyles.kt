@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkFormStyles : ZkCssStyleSheet<ZkFormStyles>(ZkApplication.theme) {
+object ZkFormStyles : ZkCssStyleSheet() {
 
     val outerContainer by ZkTableStyles.cssClass {
         display = "flex"

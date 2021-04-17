@@ -3,11 +3,10 @@
  */
 package zakadabar.stack.frontend.builtin.misc.processing
 
-import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkProcessingStyles : ZkCssStyleSheet<ZkProcessingStyles>(ZkApplication.theme) {
+object ZkProcessingStyles : ZkCssStyleSheet() {
 
     val asButton by cssClass {
         fontSize = 14

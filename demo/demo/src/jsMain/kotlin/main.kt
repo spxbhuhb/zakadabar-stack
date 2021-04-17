@@ -10,7 +10,7 @@ import zakadabar.stack.data.builtin.account.SessionDto
 import zakadabar.stack.data.builtin.resources.StringsByLocale
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkExecutor
-import zakadabar.stack.frontend.builtin.ZkBuiltinTheme
+import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.io
 
@@ -45,7 +45,7 @@ fun main() {
             // Set the theme for the application. You can create your own theme class
             // or object and set it here.
 
-            theme = ZkBuiltinTheme()
+            theme = ZkBuiltinLightTheme()
 
             // Set the string store we want to use. The build-in stack components use this
             // instance to get strings when needed. This is also used to map property names
@@ -61,7 +61,7 @@ fun main() {
 
             // Set the routing. You may change this on-the-fly if you want, for example if the user logs in.
 
-            routing = Routing
+            routing = Routing()
 
             // Initializes the Application and opens the page selected by the URL.
 

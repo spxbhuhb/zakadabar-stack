@@ -9,6 +9,7 @@ import zakadabar.stack.frontend.builtin.pages.ZkPage
 object Home : ZkPage(title = Strings.home) {
 
     override fun onCreate() {
+        super.onCreate()
         + Strings.home
     }
 
