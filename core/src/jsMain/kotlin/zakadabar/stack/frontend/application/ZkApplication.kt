@@ -84,10 +84,13 @@ object ZkApplication {
     const val NAVSTATE_CHANGE = "zk-navstate-change"
 
     fun init() {
+
         with(document.body?.style !!) {
             fontFamily = theme.font.family
             fontSize = theme.font.size
             fontWeight = theme.font.weight
+            backgroundColor = theme.layout.defaultBackground
+            color = theme.layout.defaultForeground
         }
 
         dock = ZkDock().apply {

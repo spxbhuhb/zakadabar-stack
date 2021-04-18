@@ -15,14 +15,15 @@ import zakadabar.demo.frontend.lib.table.GeneratedTable
 import zakadabar.site.frontend.pages.misc.*
 import zakadabar.stack.frontend.application.ZkAppRouting
 
-object Routing : ZkAppRouting(DefaultLayout, Home) {
+object Routing : ZkAppRouting(DefaultLayout, Landing) {
 
     init {
-        + Home
+        + Landing
         + ChangeLog
         + Content
         + CodeLab
         + GettingStarted
+        + Highlights
 
         + ArgPage
         + BuiltinCrud

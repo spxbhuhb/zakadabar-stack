@@ -16,21 +16,12 @@ import zakadabar.site.data.ContentQuery
 import zakadabar.site.frontend.pages.misc.ChangeLog
 import zakadabar.site.frontend.pages.misc.Content
 import zakadabar.site.frontend.pages.misc.GettingStarted
-import zakadabar.site.frontend.pages.misc.Home
 import zakadabar.site.resources.Strings
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.util.fourRandomInt
 
 object SideBar : ZkSideBar() {
-
-    init {
-        style {
-            height = "100%"
-            backgroundImage = """url("/menu_background.jpg")"""
-            backgroundSize = "cover"
-        }
-    }
 
     lateinit var contents: List<ContentEntry>
 
@@ -39,8 +30,6 @@ object SideBar : ZkSideBar() {
 
         io {
             contents = ContentQuery().execute().sortedBy { it.name }
-
-            + title(Strings.applicationName, ::hideMenu) { Home.open() }
 
             + item("Change Log") { ChangeLog.open() }
 

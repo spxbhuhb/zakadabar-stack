@@ -3,18 +3,23 @@
  */
 package zakadabar.site.frontend
 
-import zakadabar.stack.frontend.application.ZkAppLayout
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.site.frontend.components.Logo
+import zakadabar.site.frontend.resources.SiteStyles
+import zakadabar.stack.frontend.builtin.layout.ZkDefaultLayout
+import zakadabar.stack.frontend.builtin.misc.ZkAppHandle
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleBar
 
-object DefaultLayout : ZkAppLayout("default") {
+object DefaultLayout : ZkDefaultLayout() {
 
     override fun onCreate() {
-        classList += ZkLayoutStyles.h100
-        classList += ZkLayoutStyles.row
+        super.onCreate()
 
-        + SideBar
-        + contentContainer css ZkLayoutStyles.layoutContent
+        appHandle = ZkAppHandle(Logo(), onIconClick = ::onToggleSideBar)
+        sideBar = SideBar
+        titleBar = ZkAppTitleBar(::onToggleSideBar)
+
+        appHandle css SiteStyles.header
+        titleBar css SiteStyles.header
     }
 
 }

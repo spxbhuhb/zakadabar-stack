@@ -14,7 +14,8 @@ internal val Strings = SiteStrings()
 
 class SiteStrings : ZkBuiltinStrings() {
 
-    val applicationName = "Zakadabar"
+    val highLights by "HighLights"
+    val applicationName by "Zakadabar"
 
     // general stuff
 

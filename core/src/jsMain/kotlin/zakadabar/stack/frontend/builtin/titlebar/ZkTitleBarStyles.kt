@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.frontend.builtin.titlebar
 
-import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
 object ZkTitleBarStyles : ZkCssStyleSheet() {
@@ -14,7 +13,6 @@ object ZkTitleBarStyles : ZkCssStyleSheet() {
         width = "100%"
         minHeight = theme.layout.titleBarHeight
         maxHeight = theme.layout.titleBarHeight
-        backgroundColor = ZkColors.Gray.c100
         borderBottom = "0.5px solid #ccc"
         display = "flex"
         flexDirection = "row"
@@ -23,7 +21,6 @@ object ZkTitleBarStyles : ZkCssStyleSheet() {
     }
 
     val sidebarHandle by cssClass {
-        backgroundColor = theme.sidebar.background
         fill = theme.sidebar.text
         color = theme.sidebar.text
         minHeight = theme.layout.titleBarHeight

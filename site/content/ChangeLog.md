@@ -3,6 +3,7 @@
 ## Features
 
 * Common title bar concept. Added to pages, form and table.
+* Refactor of theme and styles, themes demo.
 * New landing page for site.
 * Zakadabar Design colors to ZkColors.
 
@@ -12,6 +13,14 @@
 
 * property `title`, stores the data for top application title bar
 * property `onTitleChange`, callback, executed when `title` changes
+* property `styleSheets`, stores attached CSS style sheets
+* calls `onThemeChange` of all attached style sheeds when the theme changes
+
+### ZkCssStyleSheet
+
+* Remove generic type.
+* Add `merge` method.
+* Add `onThemeChange` callback.
 
 ### ZkDefaultLayout
 

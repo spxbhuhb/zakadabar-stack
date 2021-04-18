@@ -40,7 +40,7 @@ object ZkButtonStyles : ZkCssStyleSheet() {
         cursor = "pointer"
 
         background = theme.button.background
-        fill = theme.button.text
+        fill = theme.button.iconFill
 
     }
 

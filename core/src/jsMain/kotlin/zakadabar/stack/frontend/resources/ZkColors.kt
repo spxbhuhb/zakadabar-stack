@@ -145,4 +145,8 @@ object ZkColors {
         val gray8 = "#2d2d30"
         val gray9 = "#1e1e1e"
     }
+
+    object Contrast {
+        val high = "yellow"
+    }
 }

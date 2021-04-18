@@ -8,6 +8,7 @@ import org.intellij.markdown.MarkdownElementTypes
 import zakadabar.lib.frontend.markdown.MarkdownView
 import zakadabar.site.frontend.Routing
 import zakadabar.site.frontend.components.SiteMarkdownImage
+import zakadabar.site.frontend.resources.SiteDarkTheme
 import zakadabar.site.resources.SiteStrings
 import zakadabar.stack.data.builtin.account.SessionDto
 import zakadabar.stack.data.builtin.resources.StringsByLocale
@@ -30,7 +31,7 @@ fun main() {
 
             executor = ZkExecutor(session.account, session.anonymous, session.roles)
 
-            theme = ZkBuiltinDarkTheme()
+            theme = SiteDarkTheme()
 
             val locale = session.account.locale ?: window.navigator.language
 

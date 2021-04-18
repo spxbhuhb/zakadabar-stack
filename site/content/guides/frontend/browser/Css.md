@@ -69,7 +69,7 @@ object DemoStyles : ZkCssStyleSheet() {
         on(":disabled") {
             color = ZkColors.white
         }
-
+        
         // You can use media queries with [media]
 
         media("(min-width: 800px)") {
@@ -80,6 +80,24 @@ object DemoStyles : ZkCssStyleSheet() {
 
         on(media = "(min-width: 1200px)") {
             width = 600
+        }
+        
+        // Convenience for media queries
+
+        // small = (max-width: 600px)
+        // medium = (min-width: 800px)
+        // large = (min-width: 1200px)
+        
+        small {
+            fontSize = 12
+        }
+        
+        medium {
+            fontSize = 14
+        }
+        
+        large {
+            fontSize = 16
         }
 
     }

@@ -14,10 +14,13 @@ import zakadabar.stack.frontend.builtin.modal.ZkModalTheme
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarTheme
 import zakadabar.stack.frontend.builtin.table.ZkTableTheme
 import zakadabar.stack.frontend.builtin.toast.ZkToastTheme
+import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
 
 open class ZkBuiltinContrastTheme : ZkTheme {
-    override var button = ZkButtonTheme()
+    override var button = ZkButtonTheme(
+        iconFill = ZkColors.Contrast.high
+    )
     override var dock = ZkDockTheme()
     override var font = ZkFontTheme()
     override var form = ZkFormTheme()

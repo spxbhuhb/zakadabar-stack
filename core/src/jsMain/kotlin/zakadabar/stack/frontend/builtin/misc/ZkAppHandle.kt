@@ -15,7 +15,7 @@ import zakadabar.stack.frontend.util.plusAssign
  * The top-left part of the default layout, a button to close the menu and the title of the application.
  */
 open class ZkAppHandle(
-    private val text: String,
+    private val text: ZkElement,
     private val onIconClick: (() -> Unit)? = null,
     private val onTextClick: (() -> Unit)? = null
 ) : ZkElement() {

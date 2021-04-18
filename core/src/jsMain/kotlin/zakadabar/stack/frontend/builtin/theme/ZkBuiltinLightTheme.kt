@@ -14,15 +14,25 @@ import zakadabar.stack.frontend.builtin.modal.ZkModalTheme
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarTheme
 import zakadabar.stack.frontend.builtin.table.ZkTableTheme
 import zakadabar.stack.frontend.builtin.toast.ZkToastTheme
+import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
 
 open class ZkBuiltinLightTheme : ZkTheme {
-    override var button = ZkButtonTheme()
+
+    override var button = ZkButtonTheme(
+        iconFill = ZkColors.Design.gray8
+    )
+
     override var dock = ZkDockTheme()
     override var font = ZkFontTheme()
     override var form = ZkFormTheme()
     override var icon = ZkIconTheme()
-    override var layout = ZkLayoutTheme()
+
+    override var layout = ZkLayoutTheme(
+        defaultForeground = ZkColors.Design.gray8,
+        defaultBackground = ZkColors.Design.gray1
+    )
+
     override var modal = ZkModalTheme()
     override var sidebar = ZkSideBarTheme()
     override var tabContainer = ZkTabContainerTheme()

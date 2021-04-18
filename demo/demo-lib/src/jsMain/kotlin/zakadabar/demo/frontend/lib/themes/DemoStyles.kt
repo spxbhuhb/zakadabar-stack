@@ -49,6 +49,21 @@ object DemoStyles : ZkCssStyleSheet() {
             width = 600
         }
 
+        // small = (max-width: 600px)
+        // medium = (min-width: 800px)
+        // large = (min-width: 1200px)
+
+        small {
+            fontSize = 12
+        }
+
+        medium {
+            fontSize = 14
+        }
+
+        large {
+            fontSize = 16
+        }
     }
 
     val exampleButtonStyle by cssClass {

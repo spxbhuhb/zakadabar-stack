@@ -8,6 +8,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.url.URL
 import org.w3c.files.Blob
 import org.w3c.files.BlobPropertyBag
+import zakadabar.stack.frontend.builtin.ZkElement
 
 fun escape(source: String) = source.replace("&", "&amp;").replace("<", "&lt;")
 
@@ -27,4 +28,18 @@ fun downloadCsv(filename: String, content: String) {
     document.body?.appendChild(link)
     link.click()
     document.body?.removeChild(link)
+}
+
+/**
+ * Create a [ZkElement] with the content of the HTML element set to the string.
+ *
+ * @param  asText  When true the string is assigned to `innerText`. When false it is assigned to `innerHTML`
+ */
+fun String.asElement(asText: Boolean = true): ZkElement {
+    return ZkElement() build {
+        if (asText) {
+            buildElement.innerText = this@asElement
+        } else
+            buildElement.innerText = this@asElement
+    }
 }

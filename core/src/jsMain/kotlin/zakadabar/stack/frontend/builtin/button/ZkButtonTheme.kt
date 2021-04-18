@@ -9,5 +9,6 @@ class ZkButtonTheme(
     val background: String = ZkColors.LightBlue.a700,
     val text: String = ZkColors.white,
     val hoverBackground: String = ZkColors.LightBlue.a700,
-    val hoverText: String = ZkColors.white
+    val hoverText: String = ZkColors.white,
+    val iconFill: String
 )

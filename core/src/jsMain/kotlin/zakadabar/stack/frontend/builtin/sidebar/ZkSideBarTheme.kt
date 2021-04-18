@@ -3,11 +3,9 @@
  */
 package zakadabar.stack.frontend.builtin.sidebar
 
-import zakadabar.stack.frontend.resources.ZkColors
-
 data class ZkSideBarTheme(
-    val background: String = ZkColors.black,
-    val text: String = ZkColors.white,
+    val background: String = "inherit",
+    val text: String = "inherit",
     val hoverBackground: String = "rgba(255,255,255,0.2)",
     val hoverText: String = text,
     val activeBackground: String = background,

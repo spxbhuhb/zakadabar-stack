@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.site.frontend
+package zakadabar.site.frontend.resources
 
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
@@ -10,7 +10,7 @@ object LandingStyles : ZkCssStyleSheet() {
 
     val landing by cssClass {
         display = "grid"
-        gridTemplateRows = "${theme.layout.titleBarHeight}px 1fr 44px"
+        gridTemplateRows = "max-content 1fr max-content"
         width = "100vw"
         height = "100vh"
         backgroundColor = theme.layout.defaultBackground
@@ -21,15 +21,13 @@ object LandingStyles : ZkCssStyleSheet() {
         paddingLeft = 50
         display = "flex"
         alignItems = "center"
+        justifyContent = "space-between"
         height = 60
+        backgroundColor = theme.layout.defaultBackground
         borderBottom = "1px solid ${ZkColors.Design.navPurple}"
     }
 
-    val headerTitle by cssClass {
-        fill = theme.layout.defaultForeground
-    }
-
-    val landingContent by cssClass {
+    val content by cssClass {
         padding = 50
         overflow = "auto"
     }
@@ -51,6 +49,10 @@ object LandingStyles : ZkCssStyleSheet() {
         marginTop = 20
         color = "${theme.layout.defaultForeground} !important"
         backgroundColor = "transparent !important"
+    }
+
+    val buttonCyan by cssClass {
+        border = "1px solid ${ZkColors.Design.navCyan}"
     }
 
     val buttonBlue by cssClass {
@@ -96,6 +98,8 @@ object LandingStyles : ZkCssStyleSheet() {
     }
 
     val footer by cssClass {
+        paddingTop = 20
+        paddingBottom = 20
         paddingLeft = 50
         display = "flex"
         flexDirection = "row"

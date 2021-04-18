@@ -29,7 +29,7 @@ open class ZkCssStyleSheet {
         element.id = "zk-${this::class.simpleName}-$id"
     }
 
-    var theme = ZkApplication.theme
+    open var theme = ZkApplication.theme
 
     internal val rules = mutableMapOf<String, ZkCssStyleRule>() // key is property name
 

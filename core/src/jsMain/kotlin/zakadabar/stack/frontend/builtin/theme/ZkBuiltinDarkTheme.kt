@@ -18,19 +18,26 @@ import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
 
 open class ZkBuiltinDarkTheme : ZkTheme {
+
     override var button = ZkButtonTheme(
-        background = ZkColors.Design.navBlue
+        background = ZkColors.Design.navBlue,
+        iconFill = ZkColors.Design.gray2
     )
+
     override var dock = ZkDockTheme()
+
     override var font = ZkFontTheme(
         family = "'IBM Plex Sans', sans-serif"
     )
+
     override var form = ZkFormTheme()
     override var icon = ZkIconTheme()
+
     override var layout = ZkLayoutTheme(
         defaultForeground = ZkColors.Design.gray2,
         defaultBackground = ZkColors.Design.gray9
     )
+
     override var modal = ZkModalTheme()
     override var sidebar = ZkSideBarTheme()
     override var tabContainer = ZkTabContainerTheme()

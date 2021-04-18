@@ -4,8 +4,10 @@
 package zakadabar.site.frontend.pages.misc
 
 import kotlinx.browser.window
-import kotlinx.coroutines.await
-import zakadabar.site.frontend.LandingStyles
+import zakadabar.site.frontend.components.HeaderActions
+import zakadabar.site.frontend.resources.LandingStyles
+import zakadabar.site.frontend.components.Logo
+import zakadabar.site.frontend.resources.SiteStyles
 import zakadabar.site.resources.Strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
@@ -14,26 +16,23 @@ import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.util.*
 import zakadabar.stack.frontend.util.height
 
-object Home : ZkPage(ZkFullScreenLayout) {
+object Landing : ZkPage(ZkFullScreenLayout) {
 
-    val headerTitle = ZkElement() css LandingStyles.headerTitle
 
     override fun onCreate() {
         classList += LandingStyles.landing
 
         + div(LandingStyles.header) {
-            + headerTitle
-            io {
-                // "fill" from CSS works only for inline SV, it doesn't work for <img>
-                headerTitle.element.innerHTML = window.fetch("/zakadabar.svg").await().text().await()
-            }
+            + Logo()
+            + HeaderActions()
         }
 
-        + div(LandingStyles.landingContent) {
+        + div(LandingStyles.content) {
 
             + div(LandingStyles.title) { + Strings.siteTitle } marginBottom 50
 
             + row(LandingStyles.buttons) {
+                + ZkButton(Strings.highLights) { Highlights.open() } css LandingStyles.button css LandingStyles.buttonCyan marginRight 20
                 + ZkButton(Strings.getStarted) { GettingStarted.open() } css LandingStyles.button css LandingStyles.buttonBlue marginRight 20
                 + ZkButton(Strings.demo) css LandingStyles.button css LandingStyles.buttonGreen marginRight 20
                 + ZkButton(Strings.guides) css LandingStyles.button css LandingStyles.buttonOrange marginRight 20
@@ -50,9 +49,9 @@ object Home : ZkPage(ZkFullScreenLayout) {
         }
 
         + div(LandingStyles.footer) {
-            + image("/simplexion_logo_dark.png") width 24 height 24 marginRight 16
+            + div(SiteStyles.developerLogo)
             + div { + Strings.developedBy }
-        } marginBottom 10
+        }
     }
 
     private fun openGitHub() {

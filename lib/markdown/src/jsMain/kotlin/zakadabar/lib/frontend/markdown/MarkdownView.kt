@@ -57,7 +57,6 @@ open class MarkdownView(
             source = content ?: window.fetch(url).await().text().await()
             parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(source)
             + MarkdownComponentBase(this, parsedTree)
-            println(dump("", parsedTree))
         }
     }
 
