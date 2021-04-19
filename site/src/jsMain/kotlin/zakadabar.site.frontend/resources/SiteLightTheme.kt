@@ -7,7 +7,7 @@ import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
 
 class SiteLightTheme : ZkBuiltinLightTheme(), SiteTheme {
 
-    override val developerLogo = "url(/simplexion_logo_light.png)"
+    override val developerLogo = "/simplexion_logo.svg"
 
     init {
         layout = layout.copy(

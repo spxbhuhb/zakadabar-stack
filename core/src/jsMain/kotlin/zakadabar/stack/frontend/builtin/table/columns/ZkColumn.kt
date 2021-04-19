@@ -101,8 +101,9 @@ open class ZkColumn<T : DtoBase>(
 
             event as MouseEvent
 
+            // FIXME check table row size calculation for different use cases
             val horizontalScrollOffset = document.documentElement !!.scrollLeft
-            size = max(min, (horizontalScrollOffset + event.clientX) - element.offsetLeft)
+            size = max(min, (horizontalScrollOffset + event.clientX) - (element.offsetParent as HTMLElement).offsetLeft - element.offsetLeft)
 
             val tableWidth = table.tableElement.clientWidth
             var sumWidth = 0.0

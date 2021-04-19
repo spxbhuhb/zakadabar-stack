@@ -4,9 +4,10 @@
 package zakadabar.demo.frontend.lib.themes
 
 import zakadabar.stack.frontend.resources.ZkColors
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-class DemoGreenStyles : ZkCssStyleSheet() {
+class DemoGreenStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val exampleStyle by cssClass {
         color = ZkColors.white

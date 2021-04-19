@@ -8,6 +8,7 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButtonStyles
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarStyles
+import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarStyles
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.plusAssign
 
@@ -21,12 +22,14 @@ open class ZkAppHandle(
 ) : ZkElement() {
 
     override fun onCreate() {
-        classList += ZkSideBarStyles.title
+        classList += ZkTitleBarStyles.title
 
-        + ZkIconButton(ZkIcons.notes, cssClass = ZkButtonStyles.transparent, onClick = onIconClick) marginRight 10
-        + div { + text }
+        + ZkIconButton(ZkIcons.notes, cssClass = ZkTitleBarStyles.handleButton, onClick = onIconClick) marginRight 10
+        + zke {
+            + text
+            on("click") { onTextClick?.invoke() }
+        }
 
-        on("click") { onTextClick?.invoke() }
         on("mousedown", ::onMouseDown)
     }
 

@@ -15,8 +15,13 @@ import kotlin.reflect.KProperty
  * Represents a CSS style sheet in the browser. Provides programmatic
  * tools to build, maintain and merge style sheets. Uses [ZkApplication.theme]
  * to build the styles.
+ *
+ * I decided to add a type parameter because that makes themes easily extendable.
+ * However, the theme in the application is not typed, so this is not a perfect
+ * solution. We can go with this for now and then figure out how to resolve
+ * this conflict.
  */
-open class ZkCssStyleSheet {
+open class ZkCssStyleSheet<T : ZkTheme> {
 
     companion object {
         val nextId = atomic(0)
@@ -29,16 +34,17 @@ open class ZkCssStyleSheet {
         element.id = "zk-${this::class.simpleName}-$id"
     }
 
-    open var theme = ZkApplication.theme
+    @Suppress("UNCHECKED_CAST") // TODO figure out if we can remove this, maybe doesn't even worth it
+    open var theme: T = ZkApplication.theme as T
 
     internal val rules = mutableMapOf<String, ZkCssStyleRule>() // key is property name
 
-    class CssDelegate(private var cssClassName: String) : ReadOnlyProperty<ZkCssStyleSheet, String> {
-        override fun getValue(thisRef: ZkCssStyleSheet, property: KProperty<*>) = cssClassName
+    class CssDelegate(private var cssClassName: String) : ReadOnlyProperty<ZkCssStyleSheet<*>, String> {
+        override fun getValue(thisRef: ZkCssStyleSheet<*>, property: KProperty<*>) = cssClassName
     }
 
     class CssDelegateProvider(val name: String? = null, val builder: ZkCssStyleRule.(ZkTheme) -> Unit) {
-        operator fun provideDelegate(thisRef: ZkCssStyleSheet, prop: KProperty<*>): ReadOnlyProperty<ZkCssStyleSheet, String> {
+        operator fun provideDelegate(thisRef: ZkCssStyleSheet<*>, prop: KProperty<*>): ReadOnlyProperty<ZkCssStyleSheet<*>, String> {
 
             val cssClassName = name ?: "${thisRef::class.simpleName}-${prop.name}-${nextId.getAndIncrement()}"
 
@@ -75,7 +81,7 @@ open class ZkCssStyleSheet {
     }
 
     @PublicApi
-    fun merge(from: ZkCssStyleSheet) {
+    fun merge(from: ZkCssStyleSheet<*>) {
         from.rules.forEach { entry ->
 
             val fromRule = entry.value
@@ -87,8 +93,9 @@ open class ZkCssStyleSheet {
         refresh()
     }
 
+    @Suppress("UNCHECKED_CAST") // TODO figure out if we can remove this, maybe doesn't even worth it
     fun onThemeChange(newTheme: ZkTheme) {
-        theme = newTheme
+        theme = newTheme as T
         refresh()
     }
 

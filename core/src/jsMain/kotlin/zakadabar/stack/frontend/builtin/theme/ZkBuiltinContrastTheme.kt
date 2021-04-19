@@ -13,11 +13,16 @@ import zakadabar.stack.frontend.builtin.misc.ZkFontTheme
 import zakadabar.stack.frontend.builtin.modal.ZkModalTheme
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarTheme
 import zakadabar.stack.frontend.builtin.table.ZkTableTheme
+import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarTheme
 import zakadabar.stack.frontend.builtin.toast.ZkToastTheme
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
 
 open class ZkBuiltinContrastTheme : ZkTheme {
+
+    val low = ZkColors.black
+    val high = ZkColors.Contrast.high
+
     override var button = ZkButtonTheme(
         iconFill = ZkColors.Contrast.high
     )
@@ -25,10 +30,24 @@ open class ZkBuiltinContrastTheme : ZkTheme {
     override var font = ZkFontTheme()
     override var form = ZkFormTheme()
     override var icon = ZkIconTheme()
-    override var layout = ZkLayoutTheme()
+
+    override var layout = ZkLayoutTheme(
+        defaultBackground = low,
+        defaultForeground = high
+    )
+
     override var modal = ZkModalTheme()
-    override var sidebar = ZkSideBarTheme()
+
+    override var sidebar = ZkSideBarTheme(
+        border = high
+    )
+
     override var tabContainer = ZkTabContainerTheme()
     override var table = ZkTableTheme()
+
+    override var titleBar = ZkTitleBarTheme(
+        border = "1px solid $high"
+    )
+
     override var toast = ZkToastTheme()
 }

@@ -34,14 +34,6 @@ object SideBar : ZkSideBar() {
     override fun onCreate() {
         super.onCreate()
 
-        style {
-            boxSizing = "border-box"
-            backgroundImage = """url("/menu_background.jpg")"""
-            backgroundSize = "cover"
-            paddingTop = "4px"
-            paddingBottom = "4px"
-        }
-
         + item(Strings.search) { ShipSearch.open() }
 
         + item(Strings.ships) { Ships.openAll() }

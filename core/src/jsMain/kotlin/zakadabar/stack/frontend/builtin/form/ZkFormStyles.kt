@@ -6,27 +6,25 @@ package zakadabar.stack.frontend.builtin.form
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.table.ZkTableStyles
 import zakadabar.stack.frontend.resources.ZkColors
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkFormStyles : ZkCssStyleSheet() {
+object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val outerContainer by ZkTableStyles.cssClass {
         display = "flex"
         flexDirection = "column"
         width = "100%"
-        height = "100%"
     }
 
     val contentContainer by ZkTableStyles.cssClass {
         flexGrow = "1"
-        padding = theme.layout.paddingStep * 2
         overflow = "scroll"
-        backgroundColor = "rgb(245,245,245)"
     }
 
     val form by cssClass {
-        backgroundColor = "rgb(245,245,245)"
+
     }
 
     val onePanel by cssClass {
@@ -56,6 +54,7 @@ object ZkFormStyles : ZkCssStyleSheet() {
         boxShadow = "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)"
         borderRadius = 2
         backgroundColor = ZkColors.white
+        marginBottom = 20
     }
 
     val sectionTitle by cssClass {

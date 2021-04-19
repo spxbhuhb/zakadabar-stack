@@ -5,16 +5,15 @@ package zakadabar.site.frontend.pages.misc
 
 import kotlinx.browser.window
 import zakadabar.site.frontend.components.HeaderActions
+import zakadabar.site.frontend.components.DeveloperLogo
 import zakadabar.site.frontend.resources.LandingStyles
-import zakadabar.site.frontend.components.Logo
-import zakadabar.site.frontend.resources.SiteStyles
+import zakadabar.site.frontend.components.SiteLogo
 import zakadabar.site.resources.Strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.layout.ZkFullScreenLayout
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.util.*
-import zakadabar.stack.frontend.util.height
 
 object Landing : ZkPage(ZkFullScreenLayout) {
 
@@ -23,7 +22,7 @@ object Landing : ZkPage(ZkFullScreenLayout) {
         classList += LandingStyles.landing
 
         + div(LandingStyles.header) {
-            + Logo()
+            + SiteLogo()
             + HeaderActions()
         }
 
@@ -49,7 +48,7 @@ object Landing : ZkPage(ZkFullScreenLayout) {
         }
 
         + div(LandingStyles.footer) {
-            + div(SiteStyles.developerLogo)
+            + DeveloperLogo()
             + div { + Strings.developedBy }
         }
     }

@@ -3,9 +3,10 @@
  */
 package zakadabar.stack.frontend.builtin.standalone
 
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkStandaloneStyles : ZkCssStyleSheet() {
+object ZkStandaloneStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val standaloneInput by cssClass {
 

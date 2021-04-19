@@ -3,9 +3,10 @@
  */
 package zakadabar.stack.frontend.builtin.dock
 
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkDockStyles : ZkCssStyleSheet() {
+object ZkDockStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val dock by cssClass {
         position = "fixed"

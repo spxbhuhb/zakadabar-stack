@@ -3,15 +3,16 @@
  */
 package zakadabar.stack.frontend.builtin.layout
 
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkLayoutStyles : ZkCssStyleSheet() {
+object ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val defaultLayoutSmall by cssClass {
         display = "flex"
         flexDirection = "column"
-        height = "100vh"
-        width = "100vw"
+        height = "100%"
+        width = "100%"
         overflow = "hidden"
     }
 
@@ -19,8 +20,8 @@ object ZkLayoutStyles : ZkCssStyleSheet() {
         display = "grid"
         gridTemplateColumns = "max-content 1fr"
         gridTemplateRows = "${theme.layout.titleBarHeight}px 1fr"
-        height = "100vh"
-        width = "100vw"
+        height = "100%"
+        width = "100%"
         overflow = "hidden"
     }
 
@@ -64,8 +65,8 @@ object ZkLayoutStyles : ZkCssStyleSheet() {
         position = "absolute"
         top = 0
         left = 0
-        width = "100vw"
-        height = "100vh"
+        width = "100%"
+        height = "100%"
         overflow = "hidden"
     }
 

@@ -3,33 +3,20 @@
  */
 package zakadabar.stack.frontend.builtin.sidebar
 
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkSideBarStyles : ZkCssStyleSheet() {
+object ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val sidebar by cssClass {
+        boxSizing = "border-box"
         minHeight = "100%"
         backgroundColor = theme.sidebar.background
         color = theme.sidebar.text
         overflowY = "auto"
         minWidth = 220
-    }
-
-    val title by cssClass {
-        boxSizing = "border-box"
-        fontWeight = 500
-        fontSize = "120%"
-        borderBottom = "0.5px solid #ccc"
-        paddingLeft = 8
-        paddingRight = 16
-        display = "flex"
-        flexDirection = "row"
-        alignItems = "center"
-        minHeight = theme.layout.titleBarHeight
-        maxHeight = theme.layout.titleBarHeight
-        whiteSpace = "nowrap"
-        backgroundColor = theme.sidebar.background
-        color = theme.sidebar.text
+        paddingTop = 10
+        borderRight = theme.sidebar.border
     }
 
     val item by cssClass {

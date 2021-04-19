@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.plusAssign
 
-class Logo : ZkElement() {
+class SiteLogo : ZkElement() {
 
     override fun onCreate() {
         classList += SiteStyles.logo

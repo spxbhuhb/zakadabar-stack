@@ -15,7 +15,7 @@ import zakadabar.stack.frontend.resources.ZkTheme
  * so we can't use a simple map as delegate.
  */
 class ZkCssStyleRule(
-    private val sheet: ZkCssStyleSheet,
+    private val sheet: ZkCssStyleSheet<*>,
     val propName: String,
     val cssClassName: String,
     var builder: ZkCssStyleRule.(ZkTheme) -> Unit

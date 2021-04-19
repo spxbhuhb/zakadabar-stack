@@ -3,9 +3,10 @@
  */
 package zakadabar.stack.frontend.builtin.modal
 
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkModalStyles : ZkCssStyleSheet() {
+object ZkModalStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val modalContainer by cssClass {
         position = "fixed"
@@ -22,10 +23,11 @@ object ZkModalStyles : ZkCssStyleSheet() {
 
     val modal by cssClass {
         background = theme.modal.background
-
+        border = theme.modal.border
     }
 
     val title by cssClass {
+        paddingLeft = theme.layout.paddingStep * 2
         borderBottom = "1px solid ${theme.modal.border} !important"
     }
 

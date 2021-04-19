@@ -5,7 +5,9 @@ package zakadabar.demo.frontend.lib.table
 
 import zakadabar.demo.data.builtin.BuiltinDto
 import zakadabar.demo.frontend.lib.crud.BuiltinTable
+import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
+import zakadabar.stack.frontend.builtin.layout.ZkLayoutTheme
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.plusAssign
@@ -17,8 +19,6 @@ object GeneratedTable : ZkPage() {
 
     override fun onCreate() {
         super.onCreate()
-
-        classList += grow
 
         // Create a template DTO.
 

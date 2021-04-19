@@ -4,13 +4,14 @@
 package zakadabar.stack.frontend.builtin.misc.processing
 
 import zakadabar.stack.frontend.resources.ZkColors
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkProcessingStyles : ZkCssStyleSheet() {
+object ZkProcessingStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val asButton by cssClass {
         fontSize = 14
-        color = theme.button.text
+        color = theme.button.foreground
         backgroundColor = ZkColors.Gray.c600
         paddingTop = 6
         paddingBottom = 6

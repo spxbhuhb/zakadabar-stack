@@ -4,16 +4,10 @@
 package zakadabar.site.frontend.resources
 
 import zakadabar.stack.frontend.resources.ZkColors
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object SiteStyles : ZkCssStyleSheet() {
-
-    val developerLogo by cssClass {
-        backgroundImage = (theme as SiteTheme).developerLogo
-        width = 24
-        height = 24
-        marginRight = 16
-    }
+object SiteStyles : ZkCssStyleSheet<SiteTheme>() {
 
     val header by cssClass {
         paddingLeft = theme.layout.paddingStep * 2
@@ -21,6 +15,7 @@ object SiteStyles : ZkCssStyleSheet() {
     }
 
     val logo by cssClass {
+        cursor = "pointer"
         height = 22
         fill = theme.layout.defaultForeground
     }
@@ -32,6 +27,12 @@ object SiteStyles : ZkCssStyleSheet() {
     val headerButton by cssClass {
         color = "${theme.layout.defaultForeground} !important"
         backgroundColor = "transparent !important"
+    }
+
+    val developerLogo by cssClass {
+        width = 48
+        height = 48
+        fill = theme.layout.defaultForeground
     }
 
     init {

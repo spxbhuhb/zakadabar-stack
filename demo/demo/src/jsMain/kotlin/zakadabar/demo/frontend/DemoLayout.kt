@@ -8,13 +8,14 @@ import zakadabar.stack.frontend.builtin.layout.ZkDefaultLayout
 import zakadabar.stack.frontend.builtin.misc.ZkAppHandle
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarStyles
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleBar
+import zakadabar.stack.frontend.util.asElement
 
 object DemoLayout : ZkDefaultLayout() {
 
     override fun onCreate() {
         super.onCreate()
 
-        appHandle = ZkAppHandle(Strings.applicationName, onIconClick = ::onToggleSideBar)
+        appHandle = ZkAppHandle(Strings.applicationName.asElement(), onIconClick = ::onToggleSideBar)
         sideBar = SideBar
         titleBar = ZkAppTitleBar(::onToggleSideBar)
 

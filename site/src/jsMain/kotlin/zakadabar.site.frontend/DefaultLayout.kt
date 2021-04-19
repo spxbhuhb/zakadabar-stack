@@ -3,7 +3,8 @@
  */
 package zakadabar.site.frontend
 
-import zakadabar.site.frontend.components.Logo
+import zakadabar.site.frontend.components.SiteLogo
+import zakadabar.site.frontend.pages.misc.Landing
 import zakadabar.site.frontend.resources.SiteStyles
 import zakadabar.stack.frontend.builtin.layout.ZkDefaultLayout
 import zakadabar.stack.frontend.builtin.misc.ZkAppHandle
@@ -14,7 +15,7 @@ object DefaultLayout : ZkDefaultLayout() {
     override fun onCreate() {
         super.onCreate()
 
-        appHandle = ZkAppHandle(Logo(), onIconClick = ::onToggleSideBar)
+        appHandle = ZkAppHandle(SiteLogo(), onIconClick = ::onToggleSideBar, onTextClick = { Landing.open() })
         sideBar = SideBar
         titleBar = ZkAppTitleBar(::onToggleSideBar)
 

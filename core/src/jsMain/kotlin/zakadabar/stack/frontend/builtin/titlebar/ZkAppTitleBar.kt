@@ -33,7 +33,7 @@ open class ZkAppTitleBar(
 
         + handleContainer css ZkTitleBarStyles.sidebarHandle build {
             hide()
-            + ZkIconButton(ZkIcons.notes, cssClass = ZkButtonStyles.transparent, onClick = ::onHandleClick)
+            + ZkIconButton(ZkIcons.notes, cssClass = ZkTitleBarStyles.handleButton, onClick = ::onHandleClick)
         }
 
         + titleContainer css ZkTitleBarStyles.titleContainer marginRight 10

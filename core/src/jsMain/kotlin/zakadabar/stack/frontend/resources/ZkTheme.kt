@@ -14,6 +14,7 @@ import zakadabar.stack.frontend.builtin.misc.ZkFontTheme
 import zakadabar.stack.frontend.builtin.modal.ZkModalTheme
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarTheme
 import zakadabar.stack.frontend.builtin.table.ZkTableTheme
+import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarTheme
 import zakadabar.stack.frontend.builtin.toast.ZkToastTheme
 
 interface ZkTheme {
@@ -28,6 +29,7 @@ interface ZkTheme {
     var sidebar: ZkSideBarTheme
     var tabContainer: ZkTabContainerTheme
     var table: ZkTableTheme
+    var titleBar: ZkTitleBarTheme
     var toast: ZkToastTheme
 
 

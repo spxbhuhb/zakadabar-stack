@@ -69,7 +69,8 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
 
     open fun create(): ZkElement {
         val container = ZkElement()
-        container.classList += ZkLayoutStyles.layoutContent
+
+        container.classList += ZkPageStyles.page
 
         val dto = dtoClass.newInstance()
         dto.schema().setDefaults()
@@ -88,7 +89,7 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
     open fun read(recordId: Long): ZkElement {
 
         val container = ZkElement()
-        container.classList += ZkLayoutStyles.layoutContent
+        container.classList += ZkPageStyles.page
 
         io {
             val page = pageClass.newInstance()
@@ -106,7 +107,7 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
     open fun update(recordId: Long): ZkElement {
 
         val container = ZkElement()
-        container.classList += ZkLayoutStyles.layoutContent
+        container.classList += ZkPageStyles.page
 
         io {
             val page = pageClass.newInstance()
@@ -124,7 +125,7 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
     open fun delete(recordId: Long): ZkElement {
 
         val container = ZkElement()
-        container.classList += ZkLayoutStyles.layoutContent
+        container.classList += ZkPageStyles.page
 
         io {
             val page = pageClass.newInstance()

@@ -4,9 +4,10 @@
 package zakadabar.lib.frontend.markdown
 
 import zakadabar.stack.frontend.resources.ZkColors
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-class MarkdownStyles : ZkCssStyleSheet() {
+class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val codeFence by cssClass {
         borderRadius = 4

@@ -3,9 +3,10 @@
  */
 package zakadabar.stack.frontend.builtin.toast
 
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkToastStyles : ZkCssStyleSheet() {
+object ZkToastStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val toastContainer by cssClass {
         position = "fixed"

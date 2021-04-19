@@ -3,9 +3,11 @@
  */
 package zakadabar.stack.frontend.builtin.titlebar
 
+import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarStyles
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkTitleBarStyles : ZkCssStyleSheet() {
+object ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val titleBar by cssClass {
         boxSizing = "border-box"
@@ -13,7 +15,7 @@ object ZkTitleBarStyles : ZkCssStyleSheet() {
         width = "100%"
         minHeight = theme.layout.titleBarHeight
         maxHeight = theme.layout.titleBarHeight
-        borderBottom = "0.5px solid #ccc"
+        borderBottom = theme.titleBar.border
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
@@ -33,6 +35,29 @@ object ZkTitleBarStyles : ZkCssStyleSheet() {
     val titleContainer by cssClass {
         paddingLeft = theme.layout.paddingStep * 2
         alignItems = "center"
+    }
+
+    val title by ZkSideBarStyles.cssClass {
+        boxSizing = "border-box"
+        fontWeight = 500
+        fontSize = "120%"
+        borderBottom = theme.titleBar.border
+        paddingLeft = 8
+        paddingRight = 16
+        display = "flex"
+        flexDirection = "row"
+        alignItems = "center"
+        minHeight = theme.layout.titleBarHeight
+        maxHeight = theme.layout.titleBarHeight
+        whiteSpace = "nowrap"
+        backgroundColor = theme.sidebar.background
+        color = ZkSideBarStyles.theme.sidebar.text
+        cursor = "pointer"
+    }
+
+    val handleButton by cssClass {
+        background = "transparent !important"
+        fill = theme.layout.defaultForeground + " !important"
     }
 
     val contextElementContainer by cssClass {

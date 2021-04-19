@@ -218,7 +218,6 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     private fun inlineCss() = """
         grid-template-columns: ${columns.joinToString(" ") { it.gridTemplate() }};
-        grid-template-rows: ${rowHeight}px;
     """.trimIndent()
 
     open fun render() {

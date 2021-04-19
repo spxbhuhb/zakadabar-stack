@@ -13,15 +13,19 @@ import zakadabar.stack.frontend.builtin.misc.ZkFontTheme
 import zakadabar.stack.frontend.builtin.modal.ZkModalTheme
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarTheme
 import zakadabar.stack.frontend.builtin.table.ZkTableTheme
+import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarTheme
 import zakadabar.stack.frontend.builtin.toast.ZkToastTheme
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
 
 open class ZkBuiltinDarkTheme : ZkTheme {
 
+    val background = ZkColors.Design.gray9
+    val foreground = ZkColors.Design.gray2
+
     override var button = ZkButtonTheme(
         background = ZkColors.Design.navBlue,
-        iconFill = ZkColors.Design.gray2
+        iconFill = foreground
     )
 
     override var dock = ZkDockTheme()
@@ -34,13 +38,22 @@ open class ZkBuiltinDarkTheme : ZkTheme {
     override var icon = ZkIconTheme()
 
     override var layout = ZkLayoutTheme(
-        defaultForeground = ZkColors.Design.gray2,
-        defaultBackground = ZkColors.Design.gray9
+        defaultForeground = foreground,
+        defaultBackground = background
     )
 
     override var modal = ZkModalTheme()
-    override var sidebar = ZkSideBarTheme()
+
+    override var sidebar = ZkSideBarTheme(
+        border = "1px solid ${ZkColors.Design.navPurple}"
+    )
+
     override var tabContainer = ZkTabContainerTheme()
     override var table = ZkTableTheme()
+
+    override var titleBar = ZkTitleBarTheme(
+        border = "1px solid ${ZkColors.Design.navPurple}"
+    )
+
     override var toast = ZkToastTheme()
 }

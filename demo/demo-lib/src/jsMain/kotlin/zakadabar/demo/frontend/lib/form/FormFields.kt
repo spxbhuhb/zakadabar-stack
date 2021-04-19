@@ -23,12 +23,10 @@ object FormFields : ZkPage() {
     override fun onCreate() {
         super.onCreate()
 
-        // this makes the form to fill the whole page
-        classList += grow
-
         val form = Form()
         form.dto = default()
         form.mode = ZkElementMode.Action
+
         + form
     }
 

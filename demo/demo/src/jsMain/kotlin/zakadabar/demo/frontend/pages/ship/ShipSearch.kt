@@ -30,9 +30,7 @@ object ShipSearch : ZkPage() {
     val table = SearchResult()
 
     override fun onCreate() {
-
-        classList += w100
-        classList += grow
+        super.onCreate()
 
         // "default" is an inline reified function. It gets the type of DTO to
         // create from the generic parameter of the form class, creates a
@@ -42,16 +40,9 @@ object ShipSearch : ZkPage() {
         form.dto = default()
         form.mode = ZkElementMode.Query
 
-        + column(h100) {
-            + div(grow) {
-                buildElement.style.padding = "8px"
-                buildElement.style.backgroundColor = ZkColors.Gray.c100
 
-                + form marginBottom 8
-                + table
-
-            }
-        }
+        + form marginBottom 8
+        + table
 
     }
 

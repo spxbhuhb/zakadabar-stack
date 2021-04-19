@@ -59,10 +59,11 @@ object ZkApplication {
     var theme: ZkTheme = ZkBuiltinLightTheme()
         set(value) {
             field = value
+            applyThemeToBody()
             styleSheets.forEach { it.onThemeChange(value) }
         }
 
-    val styleSheets = mutableListOf<ZkCssStyleSheet>()
+    val styleSheets = mutableListOf<ZkCssStyleSheet<*>>()
 
     lateinit var strings: ZkBuiltinStrings
 
@@ -85,13 +86,7 @@ object ZkApplication {
 
     fun init() {
 
-        with(document.body?.style !!) {
-            fontFamily = theme.font.family
-            fontSize = theme.font.size
-            fontWeight = theme.font.weight
-            backgroundColor = theme.layout.defaultBackground
-            color = theme.layout.defaultForeground
-        }
+        applyThemeToBody()
 
         dock = ZkDock().apply {
             onCreate()
@@ -111,6 +106,16 @@ object ZkApplication {
         window.addEventListener("popstate", onPopState)
         routing.onNavStateChange(ZkNavState(window.location.pathname, window.location.search))
         window.dispatchEvent(Event(NAVSTATE_CHANGE))
+    }
+
+    private fun applyThemeToBody() {
+        with(document.body?.style !!) {
+            fontFamily = theme.font.family
+            fontSize = theme.font.size
+            fontWeight = theme.font.weight
+            backgroundColor = theme.layout.defaultBackground
+            color = theme.layout.defaultForeground
+        }
     }
 
     private val onPopState = fun(_: Event) {

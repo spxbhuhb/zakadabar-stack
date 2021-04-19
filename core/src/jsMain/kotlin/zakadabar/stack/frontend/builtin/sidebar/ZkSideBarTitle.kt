@@ -7,6 +7,7 @@ import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButtonStyles
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
+import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarStyles
 import zakadabar.stack.frontend.resources.ZkIcons
 
 @Deprecated("use ZkAppHandle instead")
@@ -17,7 +18,7 @@ open class ZkSideBarTitle(
 ) : ZkElement() {
 
     override fun onCreate() {
-        className = ZkSideBarStyles.title
+        className = ZkTitleBarStyles.title
 
         + ZkIconButton(ZkIcons.notes, cssClass = ZkButtonStyles.transparent, onClick = onIconClick) marginRight 10
         + div { + text }

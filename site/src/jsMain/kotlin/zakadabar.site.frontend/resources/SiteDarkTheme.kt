@@ -7,7 +7,7 @@ import zakadabar.stack.frontend.builtin.theme.ZkBuiltinDarkTheme
 
 class SiteDarkTheme : ZkBuiltinDarkTheme(), SiteTheme {
 
-    override val developerLogo = "url(/simplexion_logo_dark.png)"
+    override val developerLogo = "/simplexion_logo.svg"
 
     init {
         layout = layout.copy(

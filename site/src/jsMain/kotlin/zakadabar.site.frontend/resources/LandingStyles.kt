@@ -4,9 +4,10 @@
 package zakadabar.site.frontend.resources
 
 import zakadabar.stack.frontend.resources.ZkColors
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object LandingStyles : ZkCssStyleSheet() {
+object LandingStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val landing by cssClass {
         display = "grid"
@@ -98,12 +99,13 @@ object LandingStyles : ZkCssStyleSheet() {
     }
 
     val footer by cssClass {
-        paddingTop = 20
-        paddingBottom = 20
         paddingLeft = 50
+        paddingBottom = 8
+        paddingTop = 8
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
+        borderTop = "1px solid ${ZkColors.Design.navPurple}"
     }
 
     init {

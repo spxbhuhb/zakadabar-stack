@@ -3,14 +3,15 @@
  */
 package zakadabar.stack.frontend.builtin.button
 
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkButtonStyles : ZkCssStyleSheet() {
+object ZkButtonStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val button by cssClass {
         width = "max-content"
         fontSize = 14
-        color = theme.button.text
+        color = theme.button.foreground
         cursor = "pointer"
         backgroundColor = theme.button.background
         paddingTop = 6
@@ -59,7 +60,7 @@ object ZkButtonStyles : ZkCssStyleSheet() {
         cursor = "pointer"
 
         background = theme.button.background
-        fill = theme.button.text
+        fill = theme.button.foreground
 
     }
 

@@ -3,15 +3,13 @@
  */
 package zakadabar.stack.frontend.builtin.pages
 
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
-object ZkPageStyles : ZkCssStyleSheet() {
+object ZkPageStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val page by cssClass {
-        width = "100%"
-        height = "100%"
         margin = theme.layout.marginStep * 2
-        backgroundColor = theme.layout.defaultBackground
     }
 
     init {
