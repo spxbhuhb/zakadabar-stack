@@ -26,8 +26,8 @@ import zakadabar.stack.frontend.util.plusAssign
 open class ZkArgPage<T>(
     val serializer: KSerializer<T>,
     val layout: ZkAppLayout? = null,
-    val title: String? = null,
-    val cssClasses: Array<out String>? = null
+    val title: ZkPageTitle? = null,
+    cssClass: String? = null
 ) : ZkElement(), ZkAppRouting.ZkTarget {
 
     var args: T? = null
@@ -52,19 +52,13 @@ open class ZkArgPage<T>(
         return this
     }
 
-    override fun onCreate() {
-        if (cssClasses == null) {
-            classList += ZkPageStyles.page
-        } else {
-            for (cssClass in cssClasses) {
-                classList += cssClass
-            }
-        }
+    init {
+        classList += cssClass ?: ZkPageStyles.scrollable
     }
 
     override fun onResume() {
         super.onResume()
-        if (title != null) ZkApplication.title = ZkPageTitle(title)
+        ZkApplication.title = title ?: ZkPageTitle(ZkApplication.t(this::class.simpleName ?: ""))
     }
 
 }

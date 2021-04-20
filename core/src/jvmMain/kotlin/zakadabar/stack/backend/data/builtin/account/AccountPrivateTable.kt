@@ -18,6 +18,7 @@ object AccountPrivateTable : LongIdTable("accounts") {
     val email = varchar("email", 50)
 
     val displayName = varchar("displayName", 100).nullable()
+    val theme = varchar("theme", 50).nullable()
     val locale = varchar("locale", 20).nullable()
     val avatar = reference("avatar", AccountImageTable).nullable()
 
@@ -33,6 +34,7 @@ object AccountPrivateTable : LongIdTable("accounts") {
         email = row[email],
 
         displayName = row[displayName],
+        theme = row[theme],
         locale = row[locale],
         avatar = row[avatar]?.value,
 
@@ -49,6 +51,7 @@ object AccountPrivateTable : LongIdTable("accounts") {
         email = if (addEmail) row[email] else null,
 
         displayName = row[displayName],
+        theme = row[theme],
         locale = row[locale],
 
         organizationName = row[organizationName]

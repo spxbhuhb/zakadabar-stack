@@ -14,7 +14,7 @@ import zakadabar.stack.frontend.util.plusAssign
 /**
  * This example shows how to switch styles and themes
  */
-object Themes : ZkPage(title = "Themes") {
+object Themes : ZkPage() {
 
     override fun onCreate() {
         super.onCreate()

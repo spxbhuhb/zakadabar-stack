@@ -30,6 +30,7 @@ class AccountPublicDto(
     var email: String?,
     var displayName: String?,
     var organizationName: String?,
+    var theme: String?,
     var locale: String?
 
 ) : RecordDto<AccountPublicDto> {

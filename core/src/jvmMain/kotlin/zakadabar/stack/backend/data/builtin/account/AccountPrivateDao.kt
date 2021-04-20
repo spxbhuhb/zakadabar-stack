@@ -20,6 +20,7 @@ class AccountPrivateDao(id: EntityID<Long>) : LongEntity(id) {
     var email by AccountPrivateTable.email
 
     var displayName by AccountPrivateTable.displayName
+    var theme by AccountPrivateTable.theme
     var locale by AccountPrivateTable.locale
     var avatar by AccountImageDao optionalReferencedOn AccountPrivateTable.avatar
 
@@ -35,6 +36,7 @@ class AccountPrivateDao(id: EntityID<Long>) : LongEntity(id) {
         email = email,
 
         displayName = displayName,
+        theme = theme,
         locale = locale,
         avatar = avatar?.id?.value,
 
@@ -51,6 +53,7 @@ class AccountPrivateDao(id: EntityID<Long>) : LongEntity(id) {
         email = if (addEmail) email else null,
 
         displayName = displayName,
+        theme = theme,
         locale = locale,
 
         organizationName = organizationName

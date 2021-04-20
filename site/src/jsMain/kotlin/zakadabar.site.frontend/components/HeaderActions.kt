@@ -18,9 +18,17 @@ class HeaderActions : ZkElement() {
     val dark = ZkIconButton(ZkIcons.darkMode, iconSize = 28, onClick = ::onDarkMode) css SiteStyles.headerButton
 
     override fun onCreate() {
+        if ("light" in ZkApplication.theme.name) {
+            light.hide()
+            dark.show()
+        } else {
+            light.show()
+            dark.hide()
+        }
+
         + row(SiteStyles.headerActions) {
             + light
-            + dark.hide()
+            + dark
         } marginRight 20
     }
 

@@ -6,6 +6,7 @@ package zakadabar.site.frontend.pages.misc
 import zakadabar.lib.frontend.markdown.MarkdownView
 import zakadabar.site.data.ContentQuery
 import zakadabar.stack.frontend.builtin.pages.ZkPage
+import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
 import zakadabar.stack.frontend.util.io
 
 object GettingStarted : ZkPage() {
@@ -14,7 +15,7 @@ object GettingStarted : ZkPage() {
         super.onCreate()
 
         io {
-            + MarkdownView("/api/${ContentQuery.namespace}/GettingStarted.md")
+            + MarkdownView("/api/${ContentQuery.namespace}/GettingStarted.md") css ZkPageStyles.content
         }
     }
 

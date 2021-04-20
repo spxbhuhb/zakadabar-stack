@@ -152,6 +152,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
         email = dto.email
 
         displayName = dto.displayName
+        theme = dto.theme
         locale = dto.locale
         avatar = avatarId?.let { AccountImageDao[avatarId] }
 

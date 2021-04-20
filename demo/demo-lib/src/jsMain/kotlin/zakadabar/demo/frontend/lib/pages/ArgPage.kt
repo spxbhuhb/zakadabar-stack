@@ -4,7 +4,9 @@
 package zakadabar.demo.frontend.lib.pages
 
 import kotlinx.serialization.Serializable
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.pages.ZkArgPage
+import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
 import zakadabar.stack.frontend.util.marginRight
 
 /**
@@ -29,9 +31,10 @@ import zakadabar.stack.frontend.util.marginRight
  * them later.
  */
 object ArgPage : ZkArgPage<ArgPage.Args>(
-    Args.serializer(),
-    title = "ZkArgPage"
+    Args.serializer()
 ) {
+
+    val content = ZkElement() css ZkPageStyles.content
 
     @Serializable
     class Args(
@@ -39,12 +42,21 @@ object ArgPage : ZkArgPage<ArgPage.Args>(
         val a2: String
     )
 
+    override fun onCreate() {
+        super.onCreate()
+
+        + content
+    }
+
     override fun onResume() {
         super.onResume()
+
         val args = this.args ?: return
 
-        + div { + "a1 = ${args.a1}" } marginRight 20
-        + div { + "a2 = ${args.a2}" }
+        content build {
+            + div { + "a1 = ${args.a1}" } marginRight 20
+            + div { + "a2 = ${args.a2}" }
+        }
     }
 
 }

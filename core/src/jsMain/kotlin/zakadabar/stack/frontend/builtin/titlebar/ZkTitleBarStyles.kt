@@ -33,7 +33,6 @@ object ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
     }
 
     val titleContainer by cssClass {
-        paddingLeft = theme.layout.paddingStep * 2
         alignItems = "center"
     }
 

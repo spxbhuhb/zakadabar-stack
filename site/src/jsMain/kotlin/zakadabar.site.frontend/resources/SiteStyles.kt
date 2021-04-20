@@ -4,13 +4,12 @@
 package zakadabar.site.frontend.resources
 
 import zakadabar.stack.frontend.resources.ZkColors
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
 object SiteStyles : ZkCssStyleSheet<SiteTheme>() {
 
     val header by cssClass {
-        paddingLeft = theme.layout.paddingStep * 2
+        paddingLeft = theme.layout.spacingStep
         borderBottom = "1px solid ${ZkColors.Design.navPurple}"
     }
 
@@ -25,7 +24,7 @@ object SiteStyles : ZkCssStyleSheet<SiteTheme>() {
     }
 
     val headerButton by cssClass {
-        color = "${theme.layout.defaultForeground} !important"
+        fill = "${theme.layout.defaultForeground} !important"
         backgroundColor = "transparent !important"
     }
 

@@ -6,11 +6,10 @@ package zakadabar.stack.frontend.builtin.pages
 import zakadabar.stack.frontend.application.ZkAppLayout
 import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.ZkApplication.t
 import zakadabar.stack.frontend.application.ZkNavState
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
 import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
-import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
 import zakadabar.stack.frontend.util.plusAssign
 
 /**
@@ -19,8 +18,8 @@ import zakadabar.stack.frontend.util.plusAssign
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
 open class ZkPage(
     val layout: ZkAppLayout? = null,
-    val title: String? = null,
-    val cssClasses: Array<out String>? = null
+    val title: ZkPageTitle? = null,
+    cssClass: String? = null
 ) : ZkElement(), ZkAppRouting.ZkTarget {
 
     companion object {
@@ -53,8 +52,6 @@ open class ZkPage(
 
     override var viewName = "${this::class.simpleName}"
 
-    constructor(layout: ZkAppLayout? = null, title: String? = null, vararg cssClasses: String) : this(layout, title, cssClasses)
-
     open fun open() = ZkApplication.changeNavState("/$viewName")
 
     override fun route(routing: ZkAppRouting, state: ZkNavState): ZkElement {
@@ -62,19 +59,13 @@ open class ZkPage(
         return this
     }
 
-    override fun onCreate() {
-        if (cssClasses == null) {
-            classList += ZkPageStyles.page
-        } else {
-            for (cssClass in cssClasses) {
-                classList += cssClass
-            }
-        }
+    init {
+        classList += cssClass ?: ZkPageStyles.scrollable
     }
 
     override fun onResume() {
         super.onResume()
-        if (title != null) ZkApplication.title = ZkPageTitle(title)
+        ZkApplication.title = title ?: ZkPageTitle(t(this::class.simpleName ?: ""))
     }
 
 }

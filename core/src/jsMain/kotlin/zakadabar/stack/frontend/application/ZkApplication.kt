@@ -9,14 +9,17 @@ import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.application.ZkApplication.dock
 import zakadabar.stack.frontend.application.ZkApplication.executor
 import zakadabar.stack.frontend.application.ZkApplication.modals
+import zakadabar.stack.frontend.application.ZkApplication.onTitleChange
 import zakadabar.stack.frontend.application.ZkApplication.routing
 import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.application.ZkApplication.theme
+import zakadabar.stack.frontend.application.ZkApplication.themes
+import zakadabar.stack.frontend.application.ZkApplication.title
 import zakadabar.stack.frontend.application.ZkApplication.toasts
-import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
 import zakadabar.stack.frontend.builtin.dock.ZkDock
-import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
 import zakadabar.stack.frontend.builtin.modal.ZkModalContainer
+import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
+import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
 import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
@@ -34,6 +37,8 @@ import zakadabar.stack.util.PublicApi
  *                       before login it is "anonymous".
  *
  * @property  routing    The URL -> page mapping to navigate in the application.
+ *
+ * @property  themes     List of known UI themes.
  *
  * @property  theme      The design theme of the application.
  *
@@ -56,9 +61,12 @@ object ZkApplication {
 
     lateinit var routing: ZkAppRouting
 
+    val themes = mutableListOf<ZkTheme>()
+
     var theme: ZkTheme = ZkBuiltinLightTheme()
         set(value) {
             field = value
+            window.localStorage.setItem(THEME_STORAGE_KEY, value.name)
             applyThemeToBody()
             styleSheets.forEach { it.onThemeChange(value) }
         }
@@ -84,6 +92,8 @@ object ZkApplication {
     @Suppress("MemberVisibilityCanBePrivate")
     const val NAVSTATE_CHANGE = "zk-navstate-change"
 
+    private const val THEME_STORAGE_KEY = "zk-theme-name"
+
     fun init() {
 
         applyThemeToBody()
@@ -106,6 +116,11 @@ object ZkApplication {
         window.addEventListener("popstate", onPopState)
         routing.onNavStateChange(ZkNavState(window.location.pathname, window.location.search))
         window.dispatchEvent(Event(NAVSTATE_CHANGE))
+    }
+
+    fun initTheme(): ZkTheme {
+        val themeName = (executor.account.theme ?: window.localStorage.getItem(THEME_STORAGE_KEY)) ?: "default-light"
+        return themes.firstOrNull { it.name == themeName } ?: ZkBuiltinLightTheme()
     }
 
     private fun applyThemeToBody() {

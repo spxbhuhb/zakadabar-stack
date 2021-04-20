@@ -30,13 +30,13 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
     val onePanel by cssClass {
         display = "grid"
         gridTemplateColumns = "1fr"
-        gap = ZkApplication.theme.layout.marginStep * 2
+        gap = ZkApplication.theme.layout.spacingStep
     }
 
     val twoPanels by cssClass {
         display = "grid"
         gridTemplateColumns = "1fr 1fr"
-        gap = ZkApplication.theme.layout.marginStep * 2
+        gap = ZkApplication.theme.layout.spacingStep
     }
 
     val spanTwoPanels by cssClass {

@@ -8,22 +8,9 @@ import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
 object ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
 
-    val defaultLayoutSmall by cssClass {
-        display = "flex"
-        flexDirection = "column"
-        height = "100%"
-        width = "100%"
-        overflow = "hidden"
-    }
-
-    val defaultLayoutLarge by cssClass {
-        display = "grid"
-        gridTemplateColumns = "max-content 1fr"
-        gridTemplateRows = "${theme.layout.titleBarHeight}px 1fr"
-        height = "100%"
-        width = "100%"
-        overflow = "hidden"
-    }
+    // -------------------------------------------------------------------------
+    // General
+    // -------------------------------------------------------------------------
 
     val w100 by cssClass {
         width = "100%"
@@ -51,15 +38,15 @@ object ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
         flexGrow = 1
     }
 
-    val defaultBackground by cssClass {
-        backgroundColor = theme.layout.defaultBackground
-    }
-
     val grid by cssClass {
         display = "grid"
         borderCollapse = "collapse"
         border = 0
     }
+
+    // -------------------------------------------------------------------------
+    // ZkAppLayout
+    // -------------------------------------------------------------------------
 
     val layout by cssClass {
         position = "absolute"
@@ -70,15 +57,48 @@ object ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
         overflow = "hidden"
     }
 
-    val p1 by cssClass {
-        padding = 8
-    }
+    // -------------------------------------------------------------------------
+    // ZkDefaultLayout
+    // -------------------------------------------------------------------------
 
-    val layoutContent by cssClass {
-        flexGrow = 1
+    val defaultLayoutSmall by cssClass {
         display = "flex"
+        flexDirection = "column"
+        height = "100%"
+        width = "100%"
         overflow = "hidden"
     }
+
+    val defaultLayoutLarge by cssClass {
+        display = "grid"
+        gridTemplateColumns = "max-content 1fr"
+        gridTemplateRows = "${theme.layout.titleBarHeight}px 1fr"
+        height = "100%"
+        width = "100%"
+        overflow = "hidden"
+    }
+
+    val sideBarContainer by cssClass {
+        maxHeight = "100%"
+        overflowY = "auto"
+    }
+
+    val popupSideBarContainer by cssClass {
+        background = theme.layout.defaultBackground
+        zIndex = 100
+        position = "absolute"
+        width = "100%"
+    }
+
+    val contentContainer by cssClass {
+        height = "100%"
+        maxHeight = "100%"
+        overflowY = "hidden"
+    }
+
+    // -------------------------------------------------------------------------
+    // Slider
+    // -------------------------------------------------------------------------
 
     val horizontalSlider by cssClass {
         boxSizing = "border-box"
@@ -102,11 +122,6 @@ object ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
         on(":hover") {
             backgroundColor = theme.layout.sliderHoverColor
         }
-    }
-
-    val page by cssClass {
-        flexGrow = 1
-        backgroundColor = theme.layout.defaultBackground
     }
 
     init {

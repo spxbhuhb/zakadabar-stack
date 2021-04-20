@@ -20,6 +20,8 @@ import zakadabar.stack.frontend.resources.ZkTheme
 
 open class ZkBuiltinContrastTheme : ZkTheme {
 
+    override val name = "default-contrast"
+
     val low = ZkColors.black
     val high = ZkColors.Contrast.high
 

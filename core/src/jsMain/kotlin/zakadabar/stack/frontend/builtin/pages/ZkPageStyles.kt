@@ -8,8 +8,31 @@ import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
 object ZkPageStyles : ZkCssStyleSheet<ZkTheme>() {
 
-    val page by cssClass {
-        margin = theme.layout.marginStep * 2
+    /**
+     * This style is meant for pages where the content of the page scrolls itself.
+     * The overflow is `hidden`.
+     */
+    val fixed by cssClass {
+        height = "100%"
+        maxHeight = "100%"
+        overflow = "hidden"
+    }
+
+    /**
+     * This style is meant for pages where the content of the page **does not** scroll itself.
+     * The overflow is `auto`.
+     */
+
+    val scrollable by cssClass {
+        maxHeight = "100%"
+        overflowY = "auto"
+    }
+
+    /**
+     * Adds the default margin.
+     */
+    val content by cssClass {
+        margin = theme.layout.spacingStep
     }
 
     init {

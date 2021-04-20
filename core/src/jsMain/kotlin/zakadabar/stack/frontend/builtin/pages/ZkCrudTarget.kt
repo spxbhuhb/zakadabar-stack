@@ -11,7 +11,6 @@ import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkNavState
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
 import zakadabar.stack.frontend.builtin.misc.NYI
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.util.io
@@ -62,7 +61,7 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
 
     open fun all(): ZkElement = ZkElement.launchBuildNew {
 
-        classList += ZkLayoutStyles.layoutContent
+        classList += ZkPageStyles.fixed
 
         + tableClass.newInstance().setData(companion.comm.all())
     }
@@ -70,7 +69,7 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
     open fun create(): ZkElement {
         val container = ZkElement()
 
-        container.classList += ZkPageStyles.page
+        container.classList += ZkPageStyles.scrollable
 
         val dto = dtoClass.newInstance()
         dto.schema().setDefaults()
@@ -81,7 +80,12 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
         page.mode = ZkElementMode.Create
 
         page as ZkElement
-        container += page
+
+        container build {
+            + div(ZkPageStyles.content) {
+                + page
+            }
+        }
 
         return container
     }
@@ -89,7 +93,7 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
     open fun read(recordId: Long): ZkElement {
 
         val container = ZkElement()
-        container.classList += ZkPageStyles.page
+        container.classList += ZkPageStyles.scrollable
 
         io {
             val page = pageClass.newInstance()
@@ -98,7 +102,13 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
             page.mode = ZkElementMode.Read
 
             page as ZkElement
-            container += page
+
+            container build {
+                + div(ZkPageStyles.content) {
+                    + page
+                }
+            }
+
         }
 
         return container
@@ -107,7 +117,8 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
     open fun update(recordId: Long): ZkElement {
 
         val container = ZkElement()
-        container.classList += ZkPageStyles.page
+
+        container.classList += ZkPageStyles.scrollable
 
         io {
             val page = pageClass.newInstance()
@@ -116,7 +127,13 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
             page.mode = ZkElementMode.Update
 
             page as ZkElement
-            container += page
+
+            container build {
+                + div(ZkPageStyles.content) {
+                    + page
+                }
+            }
+
         }
 
         return container
@@ -125,7 +142,8 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
     open fun delete(recordId: Long): ZkElement {
 
         val container = ZkElement()
-        container.classList += ZkPageStyles.page
+
+        container.classList += ZkPageStyles.scrollable
 
         io {
             val page = pageClass.newInstance()
@@ -134,7 +152,13 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
             page.mode = ZkElementMode.Delete
 
             page as ZkElement
-            container += page
+
+            container build {
+                + div(ZkPageStyles.content) {
+                    + page
+                }
+            }
+
         }
 
         return container

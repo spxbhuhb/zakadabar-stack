@@ -55,23 +55,15 @@ open class ZkDefaultLayout : ZkAppLayout("default") {
 
         appHandleContainer build { + appHandle }
 
-        sideBarContainer build {
-            style {
-                maxHeight = "100%"
-                overflowY = "auto"
-            }
+        sideBarContainer css ZkLayoutStyles.sideBarContainer build {
             + sideBar
         }
 
         titleBarContainer build { + titleBar }
 
-        contentContainer css ZkLayoutStyles.defaultBackground
+        contentContainer css ZkLayoutStyles.contentContainer
 
-        popupSidebarContainer build {
-            buildElement.style.zIndex = "100"
-            buildElement.style.position = "absolute"
-            buildElement.style.width = "100%"
-        }
+        popupSidebarContainer css ZkLayoutStyles.popupSideBarContainer
 
         on(window, "resize") {
             if (lifeCycleState != ZkElementState.Resumed) return@on

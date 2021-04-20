@@ -9,14 +9,13 @@ import zakadabar.lib.frontend.markdown.MarkdownView
 import zakadabar.site.frontend.Routing
 import zakadabar.site.frontend.components.SiteMarkdownImage
 import zakadabar.site.frontend.resources.SiteDarkTheme
+import zakadabar.site.frontend.resources.SiteLightTheme
 import zakadabar.site.resources.SiteStrings
 import zakadabar.stack.data.builtin.account.SessionDto
 import zakadabar.stack.data.builtin.resources.StringsByLocale
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkExecutor
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.ZkButtonTheme
-import zakadabar.stack.frontend.builtin.theme.ZkBuiltinDarkTheme
 import zakadabar.stack.frontend.util.io
 
 fun main() {
@@ -31,7 +30,10 @@ fun main() {
 
             executor = ZkExecutor(session.account, session.anonymous, session.roles)
 
-            theme = SiteDarkTheme()
+            themes += SiteDarkTheme()
+            themes += SiteLightTheme()
+
+            theme = initTheme()
 
             val locale = session.account.locale ?: window.navigator.language
 

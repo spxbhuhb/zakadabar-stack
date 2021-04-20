@@ -9,14 +9,13 @@ import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.input.checkboxlist.ZkCheckboxList
 import zakadabar.stack.frontend.builtin.input.checkboxlist.ZkCheckboxListItem
 import zakadabar.stack.frontend.builtin.pages.ZkPage
+import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
 import zakadabar.stack.frontend.util.marginRight
 
 /**
  * This example shows how to create checkbox lists.
  */
-object CheckboxList : ZkPage(
-    title = "ZkCheckboxList"
-) {
+object CheckboxList : ZkPage() {
 
     var intItems = listOf(
         ZkCheckboxListItem(1, "label1", true),
@@ -31,7 +30,8 @@ object CheckboxList : ZkPage(
 
     override fun onCreate() {
         super.onCreate()
-        + column {
+
+        + column(ZkPageStyles.content) {
             + "Checkbox list with String values."
             + stringCheckboxList marginBottom 10
             + "Checkbox list with int values"

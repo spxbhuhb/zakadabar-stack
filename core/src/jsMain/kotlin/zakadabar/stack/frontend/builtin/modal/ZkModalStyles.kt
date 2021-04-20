@@ -27,20 +27,20 @@ object ZkModalStyles : ZkCssStyleSheet<ZkTheme>() {
     }
 
     val title by cssClass {
-        paddingLeft = theme.layout.paddingStep * 2
+        paddingLeft = theme.layout.spacingStep
         borderBottom = "1px solid ${theme.modal.border} !important"
     }
 
     val content by cssClass {
-        padding = theme.layout.paddingStep * 2
+        padding = theme.layout.spacingStep
     }
 
     val buttons by cssClass {
         display = "flex"
         flexDirection = "row"
         justifyContent = "space-around"
-        paddingTop = theme.layout.paddingStep
-        paddingBottom = theme.layout.paddingStep * 2
+        paddingTop = theme.layout.spacingStep
+        paddingBottom = theme.layout.spacingStep
     }
 
     init {

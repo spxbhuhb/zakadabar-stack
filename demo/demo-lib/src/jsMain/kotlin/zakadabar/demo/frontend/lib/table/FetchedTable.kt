@@ -7,6 +7,7 @@ import zakadabar.demo.data.builtin.BuiltinDto
 import zakadabar.demo.frontend.lib.crud.BuiltinTable
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
 import zakadabar.stack.frontend.builtin.pages.ZkPage
+import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.plusAssign
@@ -14,7 +15,7 @@ import zakadabar.stack.frontend.util.plusAssign
 /**
  * This example shows all built in table columns with generated table data.
  */
-object FetchedTable : ZkPage(cssClasses = arrayOf(grow)) {
+object FetchedTable : ZkPage(cssClass = ZkPageStyles.fixed) {
 
     override fun onCreate() {
         super.onCreate()

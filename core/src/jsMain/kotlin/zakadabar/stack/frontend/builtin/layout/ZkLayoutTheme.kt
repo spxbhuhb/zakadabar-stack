@@ -8,8 +8,7 @@ import zakadabar.stack.frontend.resources.ZkColors
 
 @Serializable
 data class ZkLayoutTheme(
-    val marginStep: Int = 10,
-    val paddingStep: Int = 10,
+    val spacingStep: Int = 20,
     val sliderColor: String = ZkColors.LightBlue.a700,
     val sliderHoverColor: String = ZkColors.LightBlue.a400,
     val defaultForeground: String = ZkColors.black,

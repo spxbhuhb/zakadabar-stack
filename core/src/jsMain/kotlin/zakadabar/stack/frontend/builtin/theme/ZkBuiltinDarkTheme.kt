@@ -20,6 +20,8 @@ import zakadabar.stack.frontend.resources.ZkTheme
 
 open class ZkBuiltinDarkTheme : ZkTheme {
 
+    override val name = "default-dark"
+
     val background = ZkColors.Design.gray9
     val foreground = ZkColors.Design.gray2
 

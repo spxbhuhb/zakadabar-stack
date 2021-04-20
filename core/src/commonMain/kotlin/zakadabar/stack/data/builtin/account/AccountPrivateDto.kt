@@ -24,6 +24,7 @@ data class AccountPrivateDto(
     var email: String,
 
     var displayName: String?,
+    var theme: String?,
     var locale: String?,
     var avatar: Long?,
 
@@ -49,6 +50,7 @@ data class AccountPrivateDto(
 
         + ::displayName min 3 max 50
         + ::locale max 20
+        + ::theme max 50
         + ::avatar
 
         + ::organizationName min 2 max 100

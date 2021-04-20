@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.theme
 
+import zakadabar.stack.frontend.application.ZkApplication.t
 import zakadabar.stack.frontend.builtin.button.ZkButtonTheme
 import zakadabar.stack.frontend.builtin.dock.ZkDockTheme
 import zakadabar.stack.frontend.builtin.form.ZkFormTheme
@@ -19,6 +20,8 @@ import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
 
 open class ZkBuiltinLightTheme : ZkTheme {
+
+    override val name = "default-light"
 
     val background = ZkColors.Design.gray8
     val foreground = ZkColors.Design.gray1

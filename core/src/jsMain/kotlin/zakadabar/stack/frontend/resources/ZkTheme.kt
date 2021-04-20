@@ -19,6 +19,8 @@ import zakadabar.stack.frontend.builtin.toast.ZkToastTheme
 
 interface ZkTheme {
 
+    val name: String
+
     var button: ZkButtonTheme
     var dock: ZkDockTheme
     var font: ZkFontTheme
@@ -31,6 +33,5 @@ interface ZkTheme {
     var table: ZkTableTheme
     var titleBar: ZkTitleBarTheme
     var toast: ZkToastTheme
-
 
 }
