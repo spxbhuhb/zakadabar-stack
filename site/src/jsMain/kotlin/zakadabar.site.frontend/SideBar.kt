@@ -13,9 +13,9 @@ import zakadabar.demo.frontend.lib.table.FetchedTable
 import zakadabar.demo.frontend.lib.table.GeneratedTable
 import zakadabar.site.data.ContentEntry
 import zakadabar.site.data.ContentQuery
-import zakadabar.site.frontend.pages.misc.ChangeLog
 import zakadabar.site.frontend.pages.misc.Content
 import zakadabar.site.frontend.pages.misc.GettingStarted
+import zakadabar.site.frontend.pages.misc.Highlights
 import zakadabar.site.resources.Strings
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
 import zakadabar.stack.frontend.util.io
@@ -31,9 +31,11 @@ object SideBar : ZkSideBar() {
         io {
             contents = ContentQuery().execute().sortedBy { it.name }
 
-            + item("Change Log") { ChangeLog.open() }
+            + item("Highlights") { Highlights.open() }
 
             + item("Getting Started") { GettingStarted.open() }
+
+            contentGroup("ChangeLog", "changelog/", true)
 
             contentGroup("Guides", "guides/")
 
@@ -54,18 +56,16 @@ object SideBar : ZkSideBar() {
         }
     }
 
-    private fun contentGroup(title: String, path: String) {
+    private fun contentGroup(title: String, path: String, sortByDate: Boolean = false) {
+        var entries = contents.filter { it.path.startsWith(path) }
+
+        if (sortByDate) entries = entries.sortedBy { it.lastModified }
+
         + group(title) {
-            contents.forEach {
-                if (it.path.startsWith(path)) {
-                    + item(it.name) { Content.open(it) }
-                }
+            entries.forEach {
+                + item(it.name) { Content.open(it) }
             }
         }
-    }
-
-    private fun hideMenu() {
-
     }
 
 }

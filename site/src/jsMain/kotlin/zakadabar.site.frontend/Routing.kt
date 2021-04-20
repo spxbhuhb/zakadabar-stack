@@ -19,7 +19,6 @@ object Routing : ZkAppRouting(DefaultLayout, Landing) {
 
     init {
         + Landing
-        + ChangeLog
         + Content
         + CodeLab
         + GettingStarted

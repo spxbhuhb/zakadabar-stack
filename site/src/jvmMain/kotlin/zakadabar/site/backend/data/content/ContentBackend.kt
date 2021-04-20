@@ -7,6 +7,7 @@ import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import kotlinx.datetime.Instant
 import org.slf4j.LoggerFactory
 import zakadabar.site.data.ContentEntry
 import zakadabar.site.data.ContentQuery
@@ -23,14 +24,14 @@ object ContentBackend : CustomBackend(), QueryBackend {
 
     private val root = File("./content") // FIXME replace hard coded file path ./doc
 
-    private val pattern = Regex("[a-zA-Z0-9/]+\\.[a-zA-Z0-9]*")
+    private val pattern = Regex("[a-zA-Z0-9/\\.]+\\.[a-zA-Z0-9]*")
 
     override fun onInstallRoutes(route: Route) {
         route.query(ContentQuery::class, ::query)
 
         route.get("$namespace/{name...}") {
             val path = call.parameters.getAll("name")?.joinToString("/") ?: throw NotFoundException()
-            if (! path.matches(pattern)) throw BadRequestException("invalid name")
+            if (! path.matches(pattern) || ".." in path) throw BadRequestException("invalid name")
             call.respondFile(File(root, path))
         }
     }
@@ -41,7 +42,7 @@ object ContentBackend : CustomBackend(), QueryBackend {
 
         root.walk().forEach {
             if (it.name.endsWith(".md")) {
-                result += ContentEntry(it.nameWithoutExtension, it.relativeTo(root).path)
+                result += ContentEntry(it.nameWithoutExtension, it.relativeTo(root).path, Instant.fromEpochSeconds(it.lastModified()))
             }
         }
 

@@ -6,7 +6,6 @@ package zakadabar.demo.frontend.lib.layout
 import zakadabar.demo.frontend.lib.form.FormFields
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.p1
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.pages.ZkPageStyles

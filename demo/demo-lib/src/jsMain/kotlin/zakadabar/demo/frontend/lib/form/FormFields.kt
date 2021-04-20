@@ -12,6 +12,7 @@ import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.fields.ZkSecretVerificationField
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
 import zakadabar.stack.frontend.builtin.pages.ZkPage
+import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.plusAssign
 
@@ -27,7 +28,7 @@ object FormFields : ZkPage() {
         form.dto = default()
         form.mode = ZkElementMode.Action
 
-        + form
+        + form css ZkPageStyles.content
     }
 
     class Form : ZkForm<BuiltinDto>() {

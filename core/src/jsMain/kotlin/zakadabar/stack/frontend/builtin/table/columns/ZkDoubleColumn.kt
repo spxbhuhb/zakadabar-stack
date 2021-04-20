@@ -21,7 +21,7 @@ open class ZkDoubleColumn<T : DtoBase>(
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         with(builder) {
-            + prop.get(row)
+            + format(row)
         }
     }
 
