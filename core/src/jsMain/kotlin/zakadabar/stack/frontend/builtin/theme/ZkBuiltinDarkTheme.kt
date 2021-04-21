@@ -24,6 +24,7 @@ open class ZkBuiltinDarkTheme : ZkTheme {
 
     val background = ZkColors.Design.gray9
     val foreground = ZkColors.Design.gray2
+    val border = "1px solid ${ZkColors.Design.navPurple}"
 
     override var button = ZkButtonTheme(
         background = ZkColors.Design.navBlue,
@@ -54,7 +55,13 @@ open class ZkBuiltinDarkTheme : ZkTheme {
     override var table = ZkTableTheme()
 
     override var titleBar = ZkTitleBarTheme(
-        border = "1px solid ${ZkColors.Design.navPurple}"
+        appHandleBackground = background,
+        appHandleForeground = foreground,
+        appHandleBorder = border,
+        titleBarBackground = background,
+        titleBarForeground = foreground,
+        titleBarBorder = border,
+        height = "44px"
     )
 
     override var toast = ZkToastTheme()

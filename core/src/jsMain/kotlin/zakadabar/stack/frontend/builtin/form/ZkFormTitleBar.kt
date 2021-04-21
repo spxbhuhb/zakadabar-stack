@@ -11,6 +11,7 @@ import zakadabar.stack.frontend.util.plusAssign
 
 // FIXME make titlebar dynamic, when bound to data fields it should update automatically
 
+@Deprecated("use ZkApplication.title instead")
 open class ZkFormTitleBar() : ZkElement() {
 
     constructor(builder: ZkFormTitleBar.() -> Unit) : this() {
@@ -20,7 +21,7 @@ open class ZkFormTitleBar() : ZkElement() {
     var title: String? = null
 
     override fun onCreate() {
-        classList += ZkTitleBarStyles.titleBar
+        classList += ZkTitleBarStyles.appTitleBar
 
         + row(ZkLayoutStyles.w100) {
 

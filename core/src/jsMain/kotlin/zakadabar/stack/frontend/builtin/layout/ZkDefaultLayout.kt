@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleBar
-import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.util.minusAssign
 import zakadabar.stack.frontend.util.plusAssign
 
@@ -143,7 +143,7 @@ open class ZkDefaultLayout : ZkAppLayout("default") {
         super.onPause()
     }
 
-    private fun onTitleChange(newTitle: ZkPageTitle) {
+    private fun onTitleChange(newTitle: ZkAppTitle) {
         this.titleBar.title = newTitle
     }
 

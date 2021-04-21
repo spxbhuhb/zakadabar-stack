@@ -5,17 +5,16 @@ package zakadabar.demo.frontend
 
 import zakadabar.demo.resources.Strings
 import zakadabar.stack.frontend.builtin.layout.ZkDefaultLayout
-import zakadabar.stack.frontend.builtin.misc.ZkAppHandle
-import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarStyles
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppHandle
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleBar
-import zakadabar.stack.frontend.util.asElement
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 
 object DemoLayout : ZkDefaultLayout() {
 
     override fun onCreate() {
         super.onCreate()
 
-        appHandle = ZkAppHandle(Strings.applicationName.asElement(), onIconClick = ::onToggleSideBar)
+        appHandle = ZkAppHandle(ZkAppTitle(Strings.applicationName), onIconClick = ::onToggleSideBar)
         sideBar = SideBar
         titleBar = ZkAppTitleBar(::onToggleSideBar)
 

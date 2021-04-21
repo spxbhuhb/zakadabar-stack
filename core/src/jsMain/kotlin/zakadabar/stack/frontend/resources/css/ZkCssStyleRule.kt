@@ -513,8 +513,8 @@ class ZkCssStyleRule(
             styles["margin-top"] = stringOrPx(value)
         }
 
-    var marginLeft
-        get() = styles["margin-left"]?.toInt()
+    var marginLeft: Any?
+        get() = styles["margin-left"]
         set(value) {
             styles["margin-left"] = stringOrPx(value)
         }

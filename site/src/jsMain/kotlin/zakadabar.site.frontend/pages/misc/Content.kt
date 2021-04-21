@@ -9,7 +9,7 @@ import zakadabar.site.data.ContentQuery
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.pages.ZkArgPage
 import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
-import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.util.io
 
 object Content : ZkArgPage<ContentEntry>(
@@ -20,7 +20,7 @@ object Content : ZkArgPage<ContentEntry>(
         clear()
         val contentEntry = args ?: return
 
-        ZkApplication.title = ZkPageTitle(contentEntry.name)
+        ZkApplication.title = ZkAppTitle(contentEntry.name)
 
         io {
             + MarkdownView("/api/${ContentQuery.namespace}/${contentEntry.path}") css ZkPageStyles.content

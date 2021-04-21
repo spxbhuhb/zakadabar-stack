@@ -27,6 +27,17 @@ Check the demo example: [Themes](../../../../../demo/demo-lib/src/jsMain/kotlin/
     * [ZkBuiltinContrastTheme](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkBuiltinContrastTheme.kt)
         - high contrast theme
 
+### Initial Theme Selection
+
+`ZkApplication.initTheme`, called from `jsMain/main.kt`, selects the theme to use during application startup.
+
+Algorithm:
+
+1. check account theme, if present, find the theme with the given name in `ZkApplication.themes`
+2. check local storage for `zk-theme-name`, if present, find the theme with the given name in `ZkApplication.themes`
+3. first theme in `ZkApplication.themes`, if not empty
+4. ZkBuiltinLightTheme
+
 ### Change the Theme
 
 ```kotlin

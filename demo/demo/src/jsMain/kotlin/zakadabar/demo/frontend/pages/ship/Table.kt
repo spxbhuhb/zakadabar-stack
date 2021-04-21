@@ -22,7 +22,7 @@ class Table : ZkTable<ShipDto>() {
     private val accounts by preload { AccountPublicDto.allAsMap() }
 
     override fun onConfigure() {
-        title = Strings.ships
+        titleText = Strings.ships
         crud = Ships
 
         add = true

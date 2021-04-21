@@ -5,7 +5,10 @@ package zakadabar.stack.frontend.builtin.titlebar
 
 import zakadabar.stack.frontend.builtin.ZkElement
 
-open class ZkPageTitle(
+/**
+ * Element to shown in the application title bar.
+ */
+open class ZkAppTitle(
     val text: String,
     val contextElements: List<ZkElement> = emptyList()
 ) : ZkElement() {

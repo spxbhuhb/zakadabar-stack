@@ -12,6 +12,7 @@ import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.util.minusAssign
@@ -21,7 +22,7 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
     val form: ZkForm<FT>,
     val propName: String,
     open var label: String? = null,
-    open var readOnly: Boolean = false
+    open var readOnly: Boolean = (form.mode == ZkElementMode.Read)
 ) : ZkElement() {
 
     var touched = false
@@ -100,7 +101,7 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
      */
     open fun buildFieldLabel() {
         if (label == null) {
-            label = ZkApplication.strings.map[propName] ?: propName
+            label = strings.map[propName] ?: propName
         }
 
         + div(ZkFormStyles.fieldLabel) {

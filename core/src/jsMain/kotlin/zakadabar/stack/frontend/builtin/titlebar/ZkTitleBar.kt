@@ -19,7 +19,7 @@ open class ZkTitleBar() : ZkElement() {
         }
 
     override fun onCreate() {
-        classList += ZkTitleBarStyles.titleBar
+        classList += ZkTitleBarStyles.appTitleBar
         + _title
     }
 

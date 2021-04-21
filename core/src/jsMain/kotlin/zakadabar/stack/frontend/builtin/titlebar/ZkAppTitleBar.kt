@@ -5,7 +5,6 @@ package zakadabar.stack.frontend.builtin.titlebar
 
 import kotlinx.browser.document
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.ZkButtonStyles
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.plusAssign
@@ -21,7 +20,7 @@ open class ZkAppTitleBar(
     open val contextElements = ZkElement()
     open val globalElements = ZkElement()
 
-    open var title: ZkPageTitle? = null
+    open var title: ZkAppTitle? = null
         set(value) {
             titleContainer -= field // this is necessary so clears onTitleChange won't destroy the title
             field = value
@@ -29,11 +28,11 @@ open class ZkAppTitleBar(
         }
 
     override fun onCreate() {
-        classList += ZkTitleBarStyles.titleBar
+        classList += ZkTitleBarStyles.appTitleBar
 
         + handleContainer css ZkTitleBarStyles.sidebarHandle build {
             hide()
-            + ZkIconButton(ZkIcons.notes, cssClass = ZkTitleBarStyles.handleButton, onClick = ::onHandleClick)
+            + ZkIconButton(ZkIcons.notes, cssClass = ZkTitleBarStyles.sidebarHandle, onClick = ::onHandleClick)
         }
 
         + titleContainer css ZkTitleBarStyles.titleContainer marginRight 10
@@ -45,7 +44,7 @@ open class ZkAppTitleBar(
         + globalElements css ZkTitleBarStyles.globalElementContainer marginRight 10
     }
 
-    open fun onTitleChange(value: ZkPageTitle?) {
+    open fun onTitleChange(value: ZkAppTitle?) {
         titleContainer.clear()
         contextElements.clear()
 

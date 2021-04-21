@@ -19,7 +19,7 @@ import zakadabar.stack.frontend.application.ZkApplication.toasts
 import zakadabar.stack.frontend.builtin.dock.ZkDock
 import zakadabar.stack.frontend.builtin.modal.ZkModalContainer
 import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
-import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
@@ -81,13 +81,13 @@ object ZkApplication {
 
     lateinit var modals: ZkModalContainer
 
-    var title = ZkPageTitle("")
+    var title = ZkAppTitle("")
         set(value) {
             onTitleChange?.invoke(value)
             field = title
         }
 
-    var onTitleChange: ((newTitle: ZkPageTitle) -> Unit)? = null
+    var onTitleChange: ((newTitle: ZkAppTitle) -> Unit)? = null
 
     @Suppress("MemberVisibilityCanBePrivate")
     const val NAVSTATE_CHANGE = "zk-navstate-change"
@@ -120,7 +120,7 @@ object ZkApplication {
 
     fun initTheme(): ZkTheme {
         val themeName = (executor.account.theme ?: window.localStorage.getItem(THEME_STORAGE_KEY)) ?: "default-light"
-        return themes.firstOrNull { it.name == themeName } ?: ZkBuiltinLightTheme()
+        return themes.firstOrNull { it.name == themeName } ?: if (themes.isEmpty()) ZkBuiltinLightTheme() else themes.first()
     }
 
     private fun applyThemeToBody() {

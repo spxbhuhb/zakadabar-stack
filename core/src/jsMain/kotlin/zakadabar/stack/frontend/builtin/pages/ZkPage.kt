@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkApplication.t
 import zakadabar.stack.frontend.application.ZkNavState
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.util.plusAssign
 
 /**
@@ -18,7 +18,6 @@ import zakadabar.stack.frontend.util.plusAssign
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
 open class ZkPage(
     val layout: ZkAppLayout? = null,
-    val title: ZkPageTitle? = null,
     cssClass: String? = null
 ) : ZkElement(), ZkAppRouting.ZkTarget {
 
@@ -50,6 +49,10 @@ open class ZkPage(
         }
     }
 
+    var appTitle = true
+    var titleText: String? = null
+    var title: ZkAppTitle? = null
+
     override var viewName = "${this::class.simpleName}"
 
     open fun open() = ZkApplication.changeNavState("/$viewName")
@@ -63,9 +66,30 @@ open class ZkPage(
         classList += cssClass ?: ZkPageStyles.scrollable
     }
 
+    open fun onConfigure() {
+
+    }
+
+    override fun onCreate() {
+        onConfigure()
+        super.onCreate()
+    }
+
     override fun onResume() {
         super.onResume()
-        ZkApplication.title = title ?: ZkPageTitle(t(this::class.simpleName ?: ""))
+        setAppTitle()
+    }
+
+    open fun setAppTitle() {
+        if (! appTitle) return
+
+        title?.let {
+            ZkApplication.title = it
+            return
+        }
+
+        val text = titleText ?: t(this::class.simpleName ?: "")
+        ZkApplication.title = ZkAppTitle(text)
     }
 
 }

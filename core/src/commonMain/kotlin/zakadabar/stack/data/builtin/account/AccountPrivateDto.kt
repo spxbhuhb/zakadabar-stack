@@ -19,6 +19,8 @@ data class AccountPrivateDto(
 
     override var id: RecordId<AccountPrivateDto>,
 
+    val principal: RecordId<PrincipalDto>,
+
     var accountName: String,
     var fullName: String,
     var email: String,

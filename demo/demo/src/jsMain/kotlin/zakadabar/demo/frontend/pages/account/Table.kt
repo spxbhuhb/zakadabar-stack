@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.builtin.table.ZkTable
 class Table : ZkTable<AccountPrivateDto>() {
 
     init {
-        title = Strings.accounts
+        titleText = Strings.accounts
         crud = Accounts
 
         + AccountPrivateDto::id

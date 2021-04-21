@@ -18,7 +18,7 @@ open class ZkSideBarTitle(
 ) : ZkElement() {
 
     override fun onCreate() {
-        className = ZkTitleBarStyles.title
+        className = ZkTitleBarStyles.appHandleContainer
 
         + ZkIconButton(ZkIcons.notes, cssClass = ZkButtonStyles.transparent, onClick = onIconClick) marginRight 10
         + div { + text }

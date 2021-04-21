@@ -31,6 +31,8 @@ class AccountPrivateDao(id: EntityID<Long>) : LongEntity(id) {
     fun toDto() = AccountPrivateDto(
         id = id.value,
 
+        principal = principal.id.value,
+
         accountName = accountName,
         fullName = fullName,
         email = email,

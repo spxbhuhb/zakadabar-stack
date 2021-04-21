@@ -13,7 +13,7 @@ class Table : ZkTable<PortDto>() {
     private val seas by preload { SeaDto.allAsMap() }
 
     init {
-        title = Strings.ports
+        titleText = Strings.ports
         crud = Ports
 
         + PortDto::id

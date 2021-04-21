@@ -52,7 +52,6 @@ object Login : ZkPage(ZkFullScreenLayout) {
                 accountName = "demo"
                 password = Secret("demo")
             }
-            title = Strings.login
             mode = ZkElementMode.Action
             fieldGridColumnTemplate = "minmax(max-content, 100px) 1fr"
             onExecuteResult = ::onExecuteResult

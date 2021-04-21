@@ -8,12 +8,10 @@ import kotlinx.serialization.json.Json
 import zakadabar.stack.frontend.application.ZkAppLayout
 import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.ZkApplication.t
 import zakadabar.stack.frontend.application.ZkNavState
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
-import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
-import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.util.encodeURIComponent
 import zakadabar.stack.frontend.util.log
 import zakadabar.stack.frontend.util.plusAssign
@@ -26,13 +24,16 @@ import zakadabar.stack.frontend.util.plusAssign
 open class ZkArgPage<T>(
     val serializer: KSerializer<T>,
     val layout: ZkAppLayout? = null,
-    val title: ZkPageTitle? = null,
     cssClass: String? = null
 ) : ZkElement(), ZkAppRouting.ZkTarget {
 
     var args: T? = null
 
     override var viewName = "${this::class.simpleName}"
+
+    var appTitle = true
+    var titleText: String? = null
+    var title: ZkAppTitle? = null
 
     open fun open(args: T) {
         val a = encodeURIComponent(Json.encodeToString(serializer, args))
@@ -58,7 +59,18 @@ open class ZkArgPage<T>(
 
     override fun onResume() {
         super.onResume()
-        ZkApplication.title = title ?: ZkPageTitle(ZkApplication.t(this::class.simpleName ?: ""))
+        setAppTitle()
     }
 
+    open fun setAppTitle() {
+        if (! appTitle) return
+
+        title?.let {
+            ZkApplication.title = it
+            return
+        }
+
+        val text = titleText ?: t(this::class.simpleName ?: "")
+        ZkApplication.title = ZkAppTitle(text)
+    }
 }

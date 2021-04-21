@@ -19,7 +19,7 @@ import zakadabar.stack.frontend.builtin.table.actions.ZkAddRowAction
 import zakadabar.stack.frontend.builtin.table.actions.ZkExportCsvAction
 import zakadabar.stack.frontend.builtin.table.actions.ZkSearchAction
 import zakadabar.stack.frontend.builtin.table.columns.*
-import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.util.*
 import zakadabar.stack.util.UUID
 import kotlin.math.min
@@ -30,18 +30,19 @@ import kotlin.reflect.KProperty1
  *
  * Override [onConfigure] to set table configuration properties such as title, icons, etc.
  *
- * @property  crud        The [ZkCrudTarget] that is linked with the table. When specified the functions
- *                        of the table (onCreate, onDblClick for example) will use it to open the
- *                        appropriate page.
- * @property  titleBar    When true a page title bar is added for the table. Function [setAppTitleBar] adds the title bar.
- * @property  title       Title to show in the title bar.
- * @property  add         When true a plus icon is added to the title bar. Click on the icon calls [onAddRow].
- * @property  search      When true a search input and icon is added to the title bar. Enter in the search field
- *                        or click on the icon calls [onSearch].
- * @property  export      When true an export icon is added to the title bar. Calls [onExportCsv].
- * @property  rowHeight   Height (in pixels) of one table row, used when calculating row positions for virtualization.
- * @property  columns     Column definitions.
- * @property  preloads    Data load jobs which has to be performed before the table is rendered.
+ * @property  crud          The [ZkCrudTarget] that is linked with the table. When specified the functions
+ *                          of the table (onCreate, onDblClick for example) will use it to open the
+ *                          appropriate page.
+ * @property  appTitle      When true (default) the app title bar is set for the table. Function [setAppTitleBar] adds the title bar.
+ * @property  titleText     Title text to show in the title bar. Used when [title] is not set.
+ * @property  title         The element of the title.
+ * @property  add           When true a plus icon is added to the title bar. Click on the icon calls [onAddRow].
+ * @property  search        When true a search input and icon is added to the title bar. Enter in the search field
+ *                          or click on the icon calls [onSearch].
+ * @property  export        When true an export icon is added to the title bar. Calls [onExportCsv].
+ * @property  rowHeight     Height (in pixels) of one table row, used when calculating row positions for virtualization.
+ * @property  columns       Column definitions.
+ * @property  preloads      Data load jobs which has to be performed before the table is rendered.
  */
 open class ZkTable<T : DtoBase> : ZkElement() {
 
@@ -51,8 +52,9 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     var crud: ZkCrudTarget<*>? = null
 
-    var titleBar = true
-    var title = ""
+    var appTitle = true
+    var titleText: String? = null
+    var title: ZkAppTitle? = null
 
     var add = false
     var search = false
@@ -63,7 +65,10 @@ open class ZkTable<T : DtoBase> : ZkElement() {
     val columns = mutableListOf<ZkColumn<T>>()
 
     open val exportFileName: String
-        get() = (if (title.isEmpty()) "content" else title) + ".csv"
+        get() {
+            val titleText = title?.text
+            return (if (titleText.isNullOrEmpty()) "content" else titleText) + ".csv"
+        }
 
     // -------------------------------------------------------------------------
     //  DOM
@@ -167,7 +172,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
     override fun onResume() {
         super.onResume()
 
-        if (titleBar) setAppTitleBar()
+        setAppTitleBar()
 
         // this means that setData has been called before onResume
         if (::fullData.isInitialized) {
@@ -180,12 +185,21 @@ open class ZkTable<T : DtoBase> : ZkElement() {
     }
 
     open fun setAppTitleBar() {
+
+        if (! appTitle) return
+
+        title?.let {
+            ZkApplication.title = it
+            return
+        }
+
         val actions = mutableListOf<ZkElement>()
         if (add) actions += ZkAddRowAction(::onAddRow)
         if (export) actions += ZkExportCsvAction(::onExportCsv)
         if (search) actions += ZkSearchAction(::onSearch)
 
-        ZkApplication.title = ZkPageTitle(title, actions)
+        val text = titleText ?: ZkApplication.t(this::class.simpleName ?: "")
+        ZkApplication.title = ZkAppTitle(text, actions)
     }
 
     // -------------------------------------------------------------------------
@@ -443,6 +457,12 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     operator fun KProperty1<T, Double>.unaryPlus(): ZkDoubleColumn<T> {
         val column = ZkDoubleColumn(this@ZkTable, this)
+        columns += column
+        return column
+    }
+
+    operator fun KProperty1<T, Double?>.unaryPlus(): ZkOptDoubleColumn<T> {
+        val column = ZkOptDoubleColumn(this@ZkTable, this)
         columns += column
         return column
     }

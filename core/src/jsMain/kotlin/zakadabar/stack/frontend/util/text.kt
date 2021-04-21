@@ -8,8 +8,6 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.url.URL
 import org.w3c.files.Blob
 import org.w3c.files.BlobPropertyBag
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
 
 fun escape(source: String) = source.replace("&", "&amp;").replace("<", "&lt;")
 

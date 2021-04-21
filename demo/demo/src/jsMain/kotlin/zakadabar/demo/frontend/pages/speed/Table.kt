@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.builtin.table.ZkTable
 class Table : ZkTable<SpeedDto>() {
 
     override fun onConfigure() {
-        title = Strings.speeds
+        titleText = Strings.speeds
         crud = Speeds
 
         add = true

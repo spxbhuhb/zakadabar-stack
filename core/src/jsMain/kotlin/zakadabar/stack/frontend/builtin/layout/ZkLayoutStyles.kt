@@ -72,7 +72,7 @@ object ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
     val defaultLayoutLarge by cssClass {
         display = "grid"
         gridTemplateColumns = "max-content 1fr"
-        gridTemplateRows = "${theme.layout.titleBarHeight}px 1fr"
+        gridTemplateRows = "${theme.titleBar.height} 1fr"
         height = "100%"
         width = "100%"
         overflow = "hidden"

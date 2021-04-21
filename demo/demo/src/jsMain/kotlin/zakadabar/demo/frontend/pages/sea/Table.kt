@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.builtin.table.ZkTable
 class Table : ZkTable<SeaDto>() {
 
     init {
-        title = Strings.seas
+        titleText = Strings.seas
         crud = Seas
 
         + SeaDto::id

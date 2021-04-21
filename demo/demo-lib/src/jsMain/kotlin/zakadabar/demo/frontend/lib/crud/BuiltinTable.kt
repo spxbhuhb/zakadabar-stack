@@ -18,7 +18,7 @@ class BuiltinTable : ZkTable<BuiltinDto>() {
 
         // Set the title of the table.
 
-        title = t("builtin")
+        titleText = t("builtin")
 
         // Enable the add button (plus icon in the header).
         // Enable search (input field in the header).

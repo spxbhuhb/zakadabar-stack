@@ -30,13 +30,13 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
     val onePanel by cssClass {
         display = "grid"
         gridTemplateColumns = "1fr"
-        gap = ZkApplication.theme.layout.spacingStep
+        gap = theme.layout.spacingStep
     }
 
     val twoPanels by cssClass {
         display = "grid"
         gridTemplateColumns = "1fr 1fr"
-        gap = ZkApplication.theme.layout.spacingStep
+        gap = theme.layout.spacingStep
     }
 
     val spanTwoPanels by cssClass {
@@ -54,7 +54,7 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
         boxShadow = "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)"
         borderRadius = 2
         backgroundColor = ZkColors.white
-        marginBottom = 20
+        marginBottom = theme.layout.spacingStep / 2
     }
 
     val sectionTitle by cssClass {

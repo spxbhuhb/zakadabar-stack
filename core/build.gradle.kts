@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.4.13"
+version = "2021.4.13-SNAPSHOT"
 
 val isSnapshot = version.toString().contains("SNAPSHOT")
 
@@ -155,16 +155,6 @@ if (properties["zakadabar.publisher"] != null) {
         val path = "spxbhuhb/zakadabar-stack"
 
         repositories {
-//            if (!isSnapshot) {
-//                maven {
-//                    name = "GitHubPackages"
-//                    url = uri("https://maven.pkg.github.com/$path")
-//                    credentials {
-//                        username = (properties["github.user"] ?: System.getenv("GITHUB_USERNAME")).toString()
-//                        password = (properties["github.key"] ?: System.getenv("GITHUB_TOKEN")).toString()
-//                    }
-//                }
-//            }
             maven {
                 name = "MavenCentral"
                 url = if (isSnapshot) {

@@ -8,11 +8,6 @@ import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
 object SiteStyles : ZkCssStyleSheet<SiteTheme>() {
 
-    val header by cssClass {
-        paddingLeft = theme.layout.spacingStep
-        borderBottom = "1px solid ${ZkColors.Design.navPurple}"
-    }
-
     val logo by cssClass {
         cursor = "pointer"
         height = 22

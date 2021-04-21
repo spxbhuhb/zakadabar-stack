@@ -7,7 +7,7 @@ import zakadabar.site.frontend.components.SiteLogo
 import zakadabar.site.frontend.pages.misc.Landing
 import zakadabar.site.frontend.resources.SiteStyles
 import zakadabar.stack.frontend.builtin.layout.ZkDefaultLayout
-import zakadabar.stack.frontend.builtin.misc.ZkAppHandle
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppHandle
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleBar
 
 object DefaultLayout : ZkDefaultLayout() {
@@ -19,8 +19,6 @@ object DefaultLayout : ZkDefaultLayout() {
         sideBar = SideBar
         titleBar = ZkAppTitleBar(::onToggleSideBar)
 
-        appHandle css SiteStyles.header
-        titleBar css SiteStyles.header
     }
 
 }

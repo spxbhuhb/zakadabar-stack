@@ -12,6 +12,5 @@ data class ZkLayoutTheme(
     val sliderColor: String = ZkColors.LightBlue.a700,
     val sliderHoverColor: String = ZkColors.LightBlue.a400,
     val defaultForeground: String = ZkColors.black,
-    val defaultBackground: String = ZkColors.Gray.c100,
-    val titleBarHeight: Int = 44
+    val defaultBackground: String = ZkColors.Gray.c100
 )

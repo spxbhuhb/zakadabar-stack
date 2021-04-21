@@ -7,17 +7,10 @@ import zakadabar.demo.data.ship.SearchShipsQuery
 import zakadabar.demo.resources.Strings
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.h100
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.w100
 import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleBar
-import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
-import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
-import zakadabar.stack.frontend.resources.ZkColors
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.io
-import zakadabar.stack.frontend.util.plusAssign
 
 object ShipSearch : ZkPage() {
 
@@ -48,7 +41,7 @@ object ShipSearch : ZkPage() {
 
     override fun onResume() {
         super.onResume()
-        ZkApplication.title = ZkPageTitle(Strings.searchShips)
+        ZkApplication.title = ZkAppTitle(Strings.searchShips)
     }
 
     private fun runQuery(query: SearchShipsQuery) {

@@ -10,8 +10,6 @@ class SiteLightTheme : ZkBuiltinLightTheme(), SiteTheme {
     override val developerLogo = "/simplexion_logo.svg"
 
     init {
-        layout = layout.copy(
-            titleBarHeight = 60
-        )
+        titleBar.height = "60px"
     }
 }

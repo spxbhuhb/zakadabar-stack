@@ -29,6 +29,8 @@ object AccountPrivateTable : LongIdTable("accounts") {
     fun toDto(row: ResultRow) = AccountPrivateDto(
         id = row[id].value,
 
+        principal = row[principal].value,
+
         accountName = row[accountName],
         fullName = row[fullName],
         email = row[email],

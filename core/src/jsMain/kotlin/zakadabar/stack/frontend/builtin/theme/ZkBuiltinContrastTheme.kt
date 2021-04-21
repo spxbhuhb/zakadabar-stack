@@ -22,8 +22,9 @@ open class ZkBuiltinContrastTheme : ZkTheme {
 
     override val name = "default-contrast"
 
-    val low = ZkColors.black
-    val high = ZkColors.Contrast.high
+    val background = ZkColors.black
+    val foreground = ZkColors.Contrast.high
+    val border = "1px solid $foreground"
 
     override var button = ZkButtonTheme(
         iconFill = ZkColors.Contrast.high
@@ -34,21 +35,27 @@ open class ZkBuiltinContrastTheme : ZkTheme {
     override var icon = ZkIconTheme()
 
     override var layout = ZkLayoutTheme(
-        defaultBackground = low,
-        defaultForeground = high
+        defaultBackground = background,
+        defaultForeground = foreground
     )
 
     override var modal = ZkModalTheme()
 
     override var sidebar = ZkSideBarTheme(
-        border = high
+        border = foreground
     )
 
     override var tabContainer = ZkTabContainerTheme()
     override var table = ZkTableTheme()
 
     override var titleBar = ZkTitleBarTheme(
-        border = "1px solid $high"
+        appHandleBackground = background,
+        appHandleForeground = foreground,
+        appHandleBorder = border,
+        titleBarBackground = background,
+        titleBarForeground = foreground,
+        titleBarBorder = border,
+        height = "44px"
     )
 
     override var toast = ZkToastTheme()

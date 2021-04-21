@@ -5,8 +5,9 @@ package zakadabar.demo.frontend.pages.misc
 
 import zakadabar.demo.resources.Strings
 import zakadabar.stack.frontend.builtin.pages.ZkPage
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 
-object Home : ZkPage(title = Strings.home) {
+object Home : ZkPage() {
 
     override fun onCreate() {
         super.onCreate()

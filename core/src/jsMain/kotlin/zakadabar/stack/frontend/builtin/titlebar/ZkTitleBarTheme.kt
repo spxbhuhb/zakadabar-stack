@@ -3,7 +3,15 @@
  */
 package zakadabar.stack.frontend.builtin.titlebar
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ZkTitleBarTheme(
-    val background: String = "inherit",
-    val border: String
+    var height: String,
+    var appHandleBackground: String,
+    var appHandleForeground: String,
+    var appHandleBorder: String,
+    var titleBarBackground: String,
+    var titleBarForeground: String,
+    var titleBarBorder: String
 )

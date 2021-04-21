@@ -38,7 +38,7 @@ import zakadabar.stack.frontend.builtin.form.structure.ZkFormButtons
 import zakadabar.stack.frontend.builtin.form.structure.ZkFormSection
 import zakadabar.stack.frontend.builtin.form.structure.ZkInvalidFieldList
 import zakadabar.stack.frontend.builtin.pages.ZkCrudPage
-import zakadabar.stack.frontend.builtin.titlebar.ZkPageTitle
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.toast.ZkToast
 import zakadabar.stack.frontend.builtin.toast.toast
 import zakadabar.stack.frontend.util.io
@@ -58,8 +58,9 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
     override lateinit var dto: T
     override lateinit var mode: ZkElementMode
 
-    var titleBar = true
-    var title = ""
+    var appTitle = true
+    var titleText: String? = null
+    var title: ZkAppTitle? = null
 
     var autoLabel = true
 
@@ -137,14 +138,21 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
 
     override fun onResume() {
         super.onResume()
-        if (titleBar) setAppTitleBar()
+        setAppTitleBar()
     }
 
     /**
      * Creates a title bar.
      */
     open fun setAppTitleBar() {
-        ZkApplication.title = ZkPageTitle(title)
+        if (! appTitle) return
+
+        title?.let {
+            ZkApplication.title = it
+            return
+        }
+
+        ZkApplication.title = ZkAppTitle(titleText ?: t(this::class.simpleName ?: ""))
     }
 
     // -------------------------------------------------------------------------
@@ -335,10 +343,10 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
     // ------------------------------------------------------------------------
 
     open fun build(title: String, createTitle: String = title, css: String? = null, addButtons: Boolean = true, builder: () -> Unit): ZkForm<T> {
-        this.title = if (mode == ZkElementMode.Create) createTitle else title
+        this.titleText = if (mode == ZkElementMode.Create) createTitle else title
 
         // this lets build be called from an IO block after onResume ran
-        if (lifeCycleState == ZkElementState.Resumed && titleBar) setAppTitleBar()
+        if (lifeCycleState == ZkElementState.Resumed && appTitle) setAppTitleBar()
 
         + div(ZkFormStyles.contentContainer) {
             + column(ZkFormStyles.form) {
