@@ -14,6 +14,7 @@ import org.w3c.fetch.RequestInit
 import org.w3c.files.Blob
 import org.w3c.xhr.ProgressEvent
 import org.w3c.xhr.XMLHttpRequest
+import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.builtin.BlobDto
 import zakadabar.stack.util.PublicApi
 
@@ -108,7 +109,13 @@ open class RecordComm<T : RecordDto<T>>(
         val responsePromise = window.fetch("/api/$path", requestInit)
         val response = responsePromise.await()
 
-        if (! response.ok) throw RuntimeException()
+        if (! response.ok) {
+            if (response.status.toInt() == HttpStatusCode.Conflict.value) {
+                throw DataConflictException(response.text().await())
+            } else {
+                throw RuntimeException()
+            }
+        }
 
         val textPromise = response.text()
         val text = textPromise.await()

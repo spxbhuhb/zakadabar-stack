@@ -32,6 +32,7 @@ import zakadabar.stack.backend.data.builtin.session.SessionBackend
 import zakadabar.stack.backend.data.builtin.session.SessionStorageSql
 import zakadabar.stack.backend.data.builtin.session.StackSession
 import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.builtin.account.AccountPublicDto
 import zakadabar.stack.util.Executor
 import java.io.File
@@ -160,6 +161,9 @@ class Server : CliktCommand() {
                 }
                 exception<EntityNotFoundException> {
                     call.respond(HttpStatusCode.NotFound)
+                }
+                exception<DataConflictException> {
+                    call.respond(HttpStatusCode.Conflict, it.message)
                 }
                 status(HttpStatusCode.NotFound) {
                     val uri = call.request.uri

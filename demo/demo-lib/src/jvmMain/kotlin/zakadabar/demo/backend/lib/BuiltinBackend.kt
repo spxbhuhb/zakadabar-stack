@@ -10,6 +10,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.demo.data.builtin.BuiltinDto
 import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.util.Executor
 
 object BuiltinBackend : RecordBackend<BuiltinDto>() {
@@ -31,7 +32,10 @@ object BuiltinBackend : RecordBackend<BuiltinDto>() {
     }
 
     override fun create(executor: Executor, dto: BuiltinDto) = transaction {
-        BuiltinDao.new { fromDto(dto) }
+        if (dto.stringValue == "conflict") throw DataConflictException("stringValueConflict")
+
+        BuiltinDao
+            .new { fromDto(dto) }
             .toDto()
     }
 

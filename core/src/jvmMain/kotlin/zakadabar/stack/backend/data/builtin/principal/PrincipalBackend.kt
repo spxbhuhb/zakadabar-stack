@@ -128,18 +128,22 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
 
         val principal = PrincipalDao[principalId]
 
-        if (! principal.validated) throw AccountNotValidatedException()
-        if (principal.locked) throw AccountLockedException()
-        if (principal.expired) throw AccountExpiredException()
-
         val credentials = principal.credentials ?: throw NoSuchElementException()
 
-        if (! BCrypt.checkpw(password, credentials)) {
+        val result = when {
+            ! principal.validated -> AccountNotValidatedException()
+            principal.locked -> AccountLockedException()
+            principal.expired -> AccountExpiredException()
+            ! BCrypt.checkpw(password, credentials) -> InvalidCredentials()
+            else -> null
+        }
+
+        if (result != null) {
             principal.loginFailCount ++
             principal.lastLoginFail = Clock.System.now().toJavaInstant()
             principal.locked = principal.loginFailCount > maxFailCount
             commit()
-            throw InvalidCredentials()
+            throw result
         }
 
         principal.lastLoginSuccess = Clock.System.now().toJavaInstant()

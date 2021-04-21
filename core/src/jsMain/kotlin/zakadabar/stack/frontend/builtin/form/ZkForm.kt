@@ -19,6 +19,7 @@ package zakadabar.stack.frontend.builtin.form
 import ZkOptUuidField
 import ZkUuidField
 import kotlinx.datetime.Instant
+import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.action.ActionDto
 import zakadabar.stack.data.builtin.misc.Secret
@@ -225,21 +226,25 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
     /**
      * Callback to finalize the DTO before submit starts. Called before validation.
      * Default implementation does nothing.
+     *
+     * This is a suspend function that allows the form perform validations that require
+     * backend calls.
      */
-    open fun onSubmitStart() {
+    open suspend fun onSubmitStart() {
 
     }
 
     fun submit() {
 
-        onSubmitStart()
-
-        if (! validate(true)) return
+        submitButton?.hide()
+        progressIndicator?.show()
 
         io {
             try {
-                submitButton?.hide()
-                progressIndicator?.show()
+
+                onSubmitStart()
+
+                if (! validate(true)) return@io
 
                 when (mode) {
                     ZkElementMode.Create -> {
@@ -278,12 +283,20 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
 
                 onSubmitSuccess()
 
+            } catch (ex: DataConflictException) {
+
+                toast(error = true) { t(ex.message) }
+
             } catch (ex: Exception) {
+
                 log(ex)
                 onSubmitError(ex)
+
             } finally {
+
                 submitButton?.show()
                 progressIndicator?.hide()
+
             }
         }
     }
@@ -451,6 +464,16 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
 
     fun constString(label: String, value: () -> String): ZkConstStringField<T> {
         val field = ZkConstStringField(this@ZkForm, label, value())
+        fields += field
+        return field
+    }
+
+    /**
+     * Field for a new secret (password). Instructs browsers not to fill the content with old password.
+     */
+    fun newSecret(prop: KMutableProperty0<Secret>): ZkSecretField<T> {
+        val field = ZkSecretField(this@ZkForm, prop, newSecret = true)
+        + field
         fields += field
         return field
     }

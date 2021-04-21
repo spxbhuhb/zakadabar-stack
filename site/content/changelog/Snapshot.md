@@ -12,7 +12,10 @@
   * CRUD forms use scrollable page.
 * New landing page for `site`.
 * Zakadabar design colors added to ZkColors.
-* Minor bugfixes.
+* Server side data conflicts reported back to the client.
+* All login fails increment failed login count and update last failed time.
+* Enum select field initializes with non-selected value for create, action and query mode.
+* Bugfixes.
 
 ## New Properties
 
@@ -48,6 +51,7 @@
 * `ZkTable.appTitle` - set app title during page resume when true
 * `ZkTable.titleText` - make title from this string
 * `ZkTable.title` - title to use
+* `ZkSecretField.newSecret` - when true `autocomplete="new-password"` is added to the field
 
 ## Changed Properties
 
@@ -78,10 +82,15 @@
 * `ZkElement.gridColumn` - set CSS grid column placement
 * `ZkElement.display` - set CSS display property
 * `ZkForm.onConfigure` - use this instead of `init` block, called by `onCreate`
+* `ZkForm.newSecret` - creates a secret field with `autocomplete="new-password"`
 * `ZkIconButton.onMouseClick` - default implementation calls `onClick`, intended for override
 * `ZkCssStyleSheet.merge` - merges another style sheet into this one.
 * `ZkCssStyleSheet.onThemeChange` - called when the `ZkApplication.theme` changes, rebuilds the style sheet.
 * `ZkPage.onConfigure` - called by onCreate, replace `init` block
+
+## Changed Methods
+
+* `ZkForm.onSubmitStart` - is now suspend to allow backend communication
 
 ## New Behaviour
 
@@ -100,8 +109,15 @@
 * `ZkArgPage.init` - title is set to the class name translated when not passed to constructor
 * `ZkArgPage.onResume` - sets application title (when appTitle is true)
 * `ZkForm.onResume` - sets application title (when appTitle is true)
+* `ZkForm.submit` - hides button first, runs onSubmitStart and validate in an `io` block
+* `ZkForm.submit` - DataConflictException is shown in a toast
 * `ZkPage.onResume` - sets application title (when appTitle is true)
 * `ZkTable.onResume` - sets application title (when appTitle is true)
+* `PrincipalBackend.authenticate` - all login fails increment failed login count and update last failed time
+* `Server.kt` - DataConflictException is converted ino HTTP status 409
+* `RecordComm` - HTTP status 409 is converted into DataConflictException
+* `ZkEnumSelectField` - uses a shadow value for create-like modes to show not-selected even when the field is mandatory
+* `ZkSecretVerificationField` - adds `autocomplete="new-password"` to the input
 
 ## New Classes
 

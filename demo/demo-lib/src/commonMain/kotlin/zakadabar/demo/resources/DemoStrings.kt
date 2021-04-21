@@ -55,6 +55,8 @@ class DemoStrings : ZkBuiltinStrings() {
     val workplace by "Workplace"
     val active by "Active"
 
+    val stringValueConflict = "Invalid string value (reported by the server)."
+
     // demo related stuff
 
     val applicationName by "Zakadabar Demo"

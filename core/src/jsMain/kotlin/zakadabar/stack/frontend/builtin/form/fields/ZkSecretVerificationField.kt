@@ -43,6 +43,7 @@ open class ZkSecretVerificationField<T : DtoBase>(
 
     override fun buildFieldValue() {
         input.type = "password"
+        input.autocomplete = "new-password"
         super.buildFieldValue()
     }
 
