@@ -22,6 +22,26 @@ Restart the backend.
 
 ## Exposed
 
+### No Transaction in Context
+
+`Caused by: java.lang.IllegalStateException: No transaction in context.`
+
+Means you forgot to add the transaction block for Exposed:
+
+```kotlin
+fun query(executor: Executor, query: ExampleQuery) {
+    // this throws the exception
+}
+```
+
+vs.
+
+```kotlin
+fun query(executor: Executor, query : ExampleQuery) = transaction {
+    // this works
+}
+```
+
 ### Loading from Left Join
 
 When loading from a left join and there is no record to join with you may get an exception like this:
@@ -30,6 +50,7 @@ When loading from a left join and there is no record to join with you may get an
 java.lang.NullPointerException: Parameter specified as non-null is null: method zakadabar.discussions.dto.PostDto.<init>, parameter relations
 	at zakadabar.discussions.dto.PostDto.<init>(PostDto.kt)
 ```
+
 The solution is use this syntax:
 
 ```koltin

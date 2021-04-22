@@ -18,6 +18,8 @@ class DemoStrings : ZkBuiltinStrings() {
 
     // general stuff
 
+    val falseText by "False"
+    val trueText by "True"
     val style1 by "Style 1"
     val style2 by "Style 2"
     val light by "Light"

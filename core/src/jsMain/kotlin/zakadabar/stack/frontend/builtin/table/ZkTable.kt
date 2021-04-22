@@ -455,6 +455,18 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         return column
     }
 
+    operator fun KProperty1<T, Int>.unaryPlus(): ZkIntColumn<T> {
+        val column = ZkIntColumn(this@ZkTable, this)
+        columns += column
+        return column
+    }
+
+    operator fun KProperty1<T, Int?>.unaryPlus(): ZkOptIntColumn<T> {
+        val column = ZkOptIntColumn(this@ZkTable, this)
+        columns += column
+        return column
+    }
+
     operator fun KProperty1<T, Double>.unaryPlus(): ZkDoubleColumn<T> {
         val column = ZkDoubleColumn(this@ZkTable, this)
         columns += column

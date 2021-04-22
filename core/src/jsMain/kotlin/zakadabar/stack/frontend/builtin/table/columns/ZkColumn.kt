@@ -54,6 +54,8 @@ open class ZkColumn<T : DtoBase>(
     open fun onClick(event: Event) {
         sortAscending = ! sortAscending
 
+        if (! table::fullData.isInitialized) return
+
         sort()
 
         table.columns.forEach {
@@ -101,9 +103,11 @@ open class ZkColumn<T : DtoBase>(
 
             event as MouseEvent
 
-            // FIXME check table row size calculation for different use cases
             val horizontalScrollOffset = document.documentElement !!.scrollLeft
-            size = max(min, (horizontalScrollOffset + event.clientX) - (element.offsetParent as HTMLElement).offsetLeft - element.offsetLeft)
+            val parentOffset = findParentOffset()
+            val elementOffset = element.offsetLeft
+
+            size = max(min, horizontalScrollOffset + event.clientX - parentOffset - elementOffset)
 
             val tableWidth = table.tableElement.clientWidth
             var sumWidth = 0.0
@@ -123,6 +127,15 @@ open class ZkColumn<T : DtoBase>(
 
             table.tableElement.style.cssText = template
         }
+    }
+
+    private fun findParentOffset(): Int {
+        var current = element.offsetParent as? HTMLElement
+        while (current != null) {
+            if (current.offsetLeft != 0) return current.offsetLeft
+            current = current.offsetParent as? HTMLElement
+        }
+        return 0
     }
 
     /**

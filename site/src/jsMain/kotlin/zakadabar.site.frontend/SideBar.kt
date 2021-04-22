@@ -9,6 +9,7 @@ import zakadabar.demo.frontend.lib.input.CheckboxList
 import zakadabar.demo.frontend.lib.layout.TabContainer
 import zakadabar.demo.frontend.lib.modal.ConfirmDialog
 import zakadabar.demo.frontend.lib.pages.ArgPage
+import zakadabar.demo.frontend.lib.query.QueryPage
 import zakadabar.demo.frontend.lib.table.FetchedTable
 import zakadabar.demo.frontend.lib.table.GeneratedTable
 import zakadabar.site.data.ContentEntry
@@ -40,12 +41,13 @@ object SideBar : ZkSideBar() {
             contentGroup("Guides", "guides/")
 
             + group(Strings.features) {
-                + item("ZkArgPage") { ArgPage.open(ArgPage.Args(fourRandomInt()[0], "hello")) }
-                + item("ZkCheckboxList") { CheckboxList.open() }
-                + item("ZkConfirmDialog") { ConfirmDialog.open() }
-                + item("ZkCrud") { BuiltinCrud.openAll() }
-                + item("ZkForm") { FormFields.open() }
-                + item("ZkTabContainer") { TabContainer.open() }
+                + item("ArgPage") { ArgPage.open(ArgPage.Args(fourRandomInt()[0], "hello")) }
+                + item("CheckboxList") { CheckboxList.open() }
+                + item("ConfirmDialog") { ConfirmDialog.open() }
+                + item("Crud") { BuiltinCrud.openAll() }
+                + item("Form") { FormFields.open() }
+                + item("Query") { QueryPage.open() }
+                + item("TabContainer") { TabContainer.open() }
                 + group("Table") {
                     + item("Generated") { GeneratedTable.open() }
                     + item("Fetched") { FetchedTable.open() }

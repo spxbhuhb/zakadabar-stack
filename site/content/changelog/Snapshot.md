@@ -128,6 +128,8 @@
 * `ZkExportCsvAction` - table export to CSV action
 * `ZkSearchAction` - table search action
 * `ZkOptDoubleColumn` - table optional double column
+* `ZkIntColumn` - table int column
+* `ZkOptIntColumn` - table optional int column
 
 ## Changed Classes
 
@@ -150,3 +152,5 @@
 * `ZkTitleBarStyles.titleContainer` - removed padding
 * `ZkDoubleColumn.render` - now displays value
 * `ZkCssStyleRule.marginLeft` - changed from Int to Any to make string values possible
+* `RecordComm` - now uses `application/json; charset=UTF-8` when sending data
+* `ZkColumn` - column size calculation: embedeed table bug fix
