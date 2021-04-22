@@ -37,7 +37,7 @@ open class RecordComm<T : RecordDto<T>>(
 
         val headers = Headers()
 
-        headers.append("content-type", "application/json")
+        headers.append("content-type", "application/json; charset=UTF-8")
 
         val body = Json.encodeToString(serializer, dto)
 
@@ -69,7 +69,7 @@ open class RecordComm<T : RecordDto<T>>(
 
         val headers = Headers()
 
-        headers.append("content-type", "application/json")
+        headers.append("content-type", "application/json; charset=UTF-8")
 
         val body = Json.encodeToString(serializer, dto)
 
@@ -173,7 +173,7 @@ open class RecordComm<T : RecordDto<T>>(
 
         val headers = Headers()
 
-        headers.append("content-type", "application/json")
+        headers.append("content-type", "application/json; charset=UTF-8")
 
         val body = Json.encodeToString(BlobDto.serializer(), dto)
 
