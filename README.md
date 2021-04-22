@@ -4,18 +4,20 @@
 [![GitHub License](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
 ![Kotlin](https://img.shields.io/github/languages/top/spxbhuhb/zakadabar-stack)
 
-Full-stack development platform implemented as a Kotlin Multiplatform project.
+A Kotlin Multiplatform library for full-stack software development.
 
 Goal is to implement small business applications very fast without re-doing the same programming task again and again.
 
-Project status is **alpha testing**.
-
-**Links below are mostly broken at the moment.**
+Project status is **alpha**,
+see [components stability](https://kotlinlang.org/docs/reference/evolution/components-stability.html).
 
 ## Getting Started
 
 1. [Application Template](https://github.com/spxbhuhb/zakadabar-application-template)
+1. [Documentation](site/content) - this is work in progress, improves each day
 1. [Source code](demo/demo) of the demo project.
+1. [Source code](demo/demo-lib) of the demo library project.
+1. [Source code](site) of the site project.
 
 ## Gradle
 
@@ -33,7 +35,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation("hu.simplexion.zakadabar:core:2021.4.12")
+                implementation("hu.simplexion.zakadabar:core:2021.4.22")
             }
         }
     }
