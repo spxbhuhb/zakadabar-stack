@@ -7,7 +7,7 @@ import kotlinx.browser.window
 import zakadabar.demo.frontend.Routing
 import zakadabar.demo.resources.DemoStrings
 import zakadabar.stack.data.builtin.account.SessionDto
-import zakadabar.stack.data.builtin.resources.StringsByLocale
+import zakadabar.stack.data.builtin.resources.TranslationsByLocale
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkExecutor
 import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
@@ -57,7 +57,7 @@ fun main() {
 
             val locale = session.account.locale ?: window.navigator.language
 
-            strings = DemoStrings().merge(StringsByLocale(locale).execute())
+            strings = DemoStrings().merge(TranslationsByLocale(locale).execute())
 
             // Set the routing. You may change this on-the-fly if you want, for example if the user logs in.
 

@@ -23,7 +23,7 @@ data class BlobDto(
 ) : RecordDto<BlobDto> {
 
     companion object : RecordDtoCompanion<BlobDto>({
-        recordType = "blob"
+        namespace = "blob"
     })
 
     override fun schema() = DtoSchema {

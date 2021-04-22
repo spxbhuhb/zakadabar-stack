@@ -13,7 +13,7 @@ abstract class RecordDtoCompanion<T : RecordDto<T>>() {
         this.builder()
     }
 
-    lateinit var recordType: String
+    lateinit var namespace: String
 
     private var _comm: RecordCommInterface<T>? = null
 

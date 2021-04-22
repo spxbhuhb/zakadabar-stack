@@ -23,7 +23,7 @@ data class PasswordChangeAction(
 
 ) : ActionDto<ActionStatusDto> {
 
-    companion object : ActionDtoCompanion<PasswordChangeAction>(PrincipalDto.recordType)
+    companion object : ActionDtoCompanion<PasswordChangeAction>(PrincipalDto.namespace)
 
     override suspend fun execute() = comm.action(this, serializer(), ActionStatusDto.serializer())
 

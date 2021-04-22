@@ -6,16 +6,16 @@ package zakadabar.stack.backend.data.builtin.resources
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import zakadabar.stack.data.builtin.resources.LocaleStringDto
+import zakadabar.stack.data.builtin.resources.TranslationDto
 
-class LocaleStringDao(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<LocaleStringDao>(LocaleStringTable)
+class TranslationDao(id: EntityID<Long>) : LongEntity(id) {
+    companion object : LongEntityClass<TranslationDao>(TranslationTable)
 
-    var name by LocaleStringTable.name
-    var locale by LocaleStringTable.locale
-    var value by LocaleStringTable.value
+    var name by TranslationTable.name
+    var locale by TranslationTable.locale
+    var value by TranslationTable.value
 
-    fun toDto() = LocaleStringDto(
+    fun toDto() = TranslationDto(
         id = id.value,
         name = name,
         locale = locale,

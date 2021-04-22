@@ -3,6 +3,8 @@
  */
 package zakadabar.site.frontend
 
+import hu.simplexion.rf.leltar.frontend.pages.roles.Roles
+import kotlinx.browser.window
 import zakadabar.demo.frontend.lib.crud.BuiltinCrud
 import zakadabar.demo.frontend.lib.form.FormFields
 import zakadabar.demo.frontend.lib.input.CheckboxList
@@ -18,6 +20,14 @@ import zakadabar.site.frontend.pages.misc.Content
 import zakadabar.site.frontend.pages.misc.GettingStarted
 import zakadabar.site.frontend.pages.misc.Highlights
 import zakadabar.site.resources.Strings
+import zakadabar.stack.StackRoles
+import zakadabar.stack.data.builtin.account.LogoutAction
+import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.builtin.pages.account.accounts.Accounts
+import zakadabar.stack.frontend.builtin.pages.account.Login
+import zakadabar.stack.frontend.builtin.pages.resources.translations.Translations
+import zakadabar.stack.frontend.builtin.pages.resources.locales.Locales
+import zakadabar.stack.frontend.builtin.pages.resources.settings.Settings
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.util.fourRandomInt
@@ -55,7 +65,41 @@ object SideBar : ZkSideBar() {
             }
 
             contentGroup("Contribute", "contribute/")
+
+            withOneOfRoles(StackRoles.securityOfficer, StackRoles.siteAdmin) {
+
+                + group(Strings.administration) {
+
+                    + item(Strings.settings) { Settings.openAll() }
+
+                    withRole(StackRoles.siteAdmin) {
+                        + item(Strings.locales) { Locales.openAll() }
+                        + item(Strings.translations) { Translations.openAll() }
+                    }
+
+                    withRole(StackRoles.securityOfficer) {
+                        + item(Strings.accounts) { Accounts.openAll() }
+                        + item(Strings.roles) { Roles.openAll() }
+                    }
+
+                }
+            }
+
+            ifAnonymous {
+                + item(Strings.login) { Login.open() }
+            }
+
+            ifNotAnonymous {
+                + item(Strings.account) { Accounts.openUpdate(ZkApplication.executor.account.id) }
+                + item(Strings.logout) {
+                    io {
+                        LogoutAction().execute()
+                        window.location.href = "/"
+                    }
+                }
+            }
         }
+
     }
 
     private fun contentGroup(title: String, path: String, sortByDate: Boolean = false) {

@@ -13,6 +13,6 @@ class LogoutAction : ActionDto<ActionStatusDto> {
 
     override suspend fun execute() = comm.action(this, serializer(), ActionStatusDto.serializer())
 
-    companion object : ActionDtoCompanion<ActionStatusDto>(SessionDto.recordType)
+    companion object : ActionDtoCompanion<ActionStatusDto>(SessionDto.namespace)
 
 }

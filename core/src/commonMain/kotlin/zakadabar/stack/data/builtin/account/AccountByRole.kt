@@ -5,7 +5,6 @@ package zakadabar.stack.data.builtin.account
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
-import zakadabar.stack.data.builtin.account.AccountPublicDto
 import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.query.QueryDtoCompanion
 
@@ -16,6 +15,6 @@ data class AccountByRole(
 
     override suspend fun execute() = comm.query(this, serializer(), ListSerializer(AccountPublicDto.serializer()))
 
-    companion object : QueryDtoCompanion<AccountPublicDto>(AccountPublicDto.recordType)
+    companion object : QueryDtoCompanion<AccountPublicDto>(AccountPublicDto.namespace)
 
 }

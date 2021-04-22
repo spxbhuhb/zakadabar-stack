@@ -40,7 +40,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
     abstract val dtoClass: KClass<T>
 
     override val namespace
-        get() = (dtoClass.companionObject!!.objectInstance as RecordDtoCompanion<*>).recordType
+        get() = (dtoClass.companionObject !!.objectInstance as RecordDtoCompanion<*>).namespace
 
     override val logger by lazy { LoggerFactory.getLogger(namespace)!! }
 
@@ -371,7 +371,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
             patch {
                 val executor = call.executor()
                 val request = call.receive(BlobDto::class)
-                logger.info("${executor.accountId}: BLOB-UPDATE ${BlobDto.recordType} $request")
+                logger.info("${executor.accountId}: BLOB-UPDATE ${BlobDto.namespace} $request")
                 call.respond(blobMetaUpdate(executor, request))
             }
 

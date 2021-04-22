@@ -15,6 +15,6 @@ data class RoleGrantsByPrincipal(
 
     override suspend fun execute() = comm.query(this, serializer(), ListSerializer(RoleGrantDto.serializer()))
 
-    companion object : QueryDtoCompanion<RoleGrantDto>(RoleGrantDto.recordType)
+    companion object : QueryDtoCompanion<RoleGrantDto>(RoleGrantDto.namespace)
 
 }

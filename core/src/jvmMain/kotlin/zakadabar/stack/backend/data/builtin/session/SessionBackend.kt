@@ -52,11 +52,12 @@ object SessionBackend : RecordBackend<SessionDto>() {
             )
         } else {
             val (account, principalId) = Server.findAccountById(session.account)
+            val (_, roleNames) = PrincipalBackend.roles(principalId)
             SessionDto(
                 id = 1,
                 account = account,
                 anonymous = false,
-                roles = PrincipalBackend.roles(principalId)
+                roles = roleNames
             )
         }
     }
@@ -71,11 +72,11 @@ object SessionBackend : RecordBackend<SessionDto>() {
 
         val (account, principalId) = result
 
-        val roles = PrincipalBackend.roles(principalId)
+        val (roleIds, roleNames) = PrincipalBackend.roles(principalId)
 
-        if (StackRoles.siteMember !in roles) return ActionStatusDto(false)
+        if (StackRoles.siteMember !in roleNames) return ActionStatusDto(false)
 
-        call.sessions.set(StackSession(account.id, roles))
+        call.sessions.set(StackSession(account.id, roleIds, roleNames))
 
         return ActionStatusDto(true)
     }
@@ -121,7 +122,7 @@ object SessionBackend : RecordBackend<SessionDto>() {
 
         logger.info("${executor.accountId}: /logout old=${old.account} new=${Server.anonymous.id}")
 
-        call.sessions.set(StackSession(Server.anonymous.id, emptyList()))
+        call.sessions.set(StackSession(Server.anonymous.id, emptyList(), emptyList()))
 
         return ActionStatusDto(success = true)
     }

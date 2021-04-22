@@ -38,10 +38,10 @@ data class PrincipalDto(
 ) : RecordDto<PrincipalDto> {
 
     companion object : RecordDtoCompanion<PrincipalDto>({
-        recordType = "principal"
+        namespace = "principal"
     })
 
-    override fun getRecordType() = recordType
+    override fun getRecordType() = namespace
     override fun comm() = comm
 
     override fun schema() = DtoSchema {

@@ -15,11 +15,9 @@ internal val Strings = SiteStrings()
 class SiteStrings : ZkBuiltinStrings() {
 
     val highLights by "HighLights"
-    val applicationName by "Zakadabar"
 
     // general stuff
 
-    val loginLocked by "User account is locked."
     val mandatoryFields by "Mandatory Fields"
     val optionalFields by "Optional Fields"
     val validate by "Validate"
@@ -29,10 +27,7 @@ class SiteStrings : ZkBuiltinStrings() {
     val runQuery by "Run Query"
     val filters by "Filters"
     val administration by "Administration"
-    val account by "Account"
     val accountName by "Account Name"
-    val accounts by "Accounts"
-    val basics by "Basics"
     val contact by "Contact"
     val description by "Description"
     val display by "Display"
@@ -40,7 +35,6 @@ class SiteStrings : ZkBuiltinStrings() {
     val email by "Email"
     val forgotten by "New Password"
     val images by "Images"
-    val login by "Login"
     val new by "New"
     val organization by "Organization"
     val password by "Password"
@@ -51,7 +45,6 @@ class SiteStrings : ZkBuiltinStrings() {
     val workplace by "Workplace"
     val active by "Active"
     val logout by "Logout"
-    val loginFail by "Login failed."
 
     val siteTitle by "A Kotlin Multiplatform library for full-stack software development."
 

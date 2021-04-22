@@ -11,15 +11,15 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.data.builtin.resources.SettingStringDto
+import zakadabar.stack.data.builtin.resources.LocaleDto
 import zakadabar.stack.util.Executor
 
-object SettingStringBackend : RecordBackend<SettingStringDto>() {
+object LocaleBackend : RecordBackend<LocaleDto>() {
 
-    override val dtoClass = SettingStringDto::class
+    override val dtoClass = LocaleDto::class
 
     override fun onModuleLoad() {
-        + SettingStringTable
+        + LocaleTable
     }
 
     override fun onInstallRoutes(route: Route) {
@@ -28,38 +28,38 @@ object SettingStringBackend : RecordBackend<SettingStringDto>() {
 
     override fun all(executor: Executor) = transaction {
 
-        authorize(executor, StackRoles.siteAdmin)
+        authorize(true)
 
-        SettingStringTable
+        LocaleTable
             .selectAll()
-            .map(SettingStringTable::toDto)
+            .map(LocaleTable::toDto)
     }
 
-    override fun create(executor: Executor, dto: SettingStringDto) = transaction {
+    override fun create(executor: Executor, dto: LocaleDto) = transaction {
 
         authorize(executor, StackRoles.siteAdmin)
 
-        SettingStringDao.new {
+        LocaleDao.new {
             name = dto.name
-            value = dto.value
+            description = dto.description
         }.toDto()
     }
 
     override fun read(executor: Executor, recordId: Long) = transaction {
 
-        authorize(executor, StackRoles.siteMember)
+        authorize(true)
 
-        SettingStringDao[recordId].toDto()
+        LocaleDao[recordId].toDto()
     }
 
-    override fun update(executor: Executor, dto: SettingStringDto) = transaction {
+    override fun update(executor: Executor, dto: LocaleDto) = transaction {
 
         authorize(executor, StackRoles.siteAdmin)
 
-        val dao = SettingStringDao[dto.id]
+        val dao = LocaleDao[dto.id]
         with(dao) {
             name = dto.name
-            value = dto.value
+            description = dto.description
         }
         dao.toDto()
     }
@@ -68,7 +68,7 @@ object SettingStringBackend : RecordBackend<SettingStringDto>() {
 
         authorize(executor, StackRoles.siteAdmin)
 
-        SettingStringDao[recordId].delete()
+        LocaleDao[recordId].delete()
     }
 
 }

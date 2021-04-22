@@ -25,7 +25,6 @@ class DemoStrings : ZkBuiltinStrings() {
     val light by "Light"
     val dark by "Dark"
     val home by "Home"
-    val loginLocked by "User account is locked."
     val mandatoryFields by "Mandatory Fields"
     val optionalFields by "Optional Fields"
     val validate by "Validate"
@@ -35,10 +34,7 @@ class DemoStrings : ZkBuiltinStrings() {
     val runQuery by "Run Query"
     val filters by "Filters"
     val administration by "Administration"
-    val account by "Account"
     val accountName by "Account Name"
-    val accounts by "Accounts"
-    val basics by "Basics"
     val contact by "Contact"
     val description by "Description"
     val display by "Display"
@@ -46,7 +42,6 @@ class DemoStrings : ZkBuiltinStrings() {
     val email by "Email"
     val forgotten by "New Password"
     val images by "Images"
-    val login by "Login"
     val new by "New"
     val organization by "Organization"
     val password by "Password"
@@ -61,7 +56,7 @@ class DemoStrings : ZkBuiltinStrings() {
 
     // demo related stuff
 
-    val applicationName by "Zakadabar Demo"
+    override val applicationName by "Zakadabar Demo"
 
     val captain by "Captain"
 
@@ -82,7 +77,6 @@ class DemoStrings : ZkBuiltinStrings() {
     val speedBasicsExplanation by "Data all speeds have."
 
     val logout by "Logout"
-    val loginFail by "Login failed."
 
 }
 

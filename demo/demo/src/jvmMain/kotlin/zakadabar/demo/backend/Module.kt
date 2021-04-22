@@ -16,8 +16,8 @@ import zakadabar.demo.backend.speed.SpeedBackend
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
-import zakadabar.stack.backend.data.builtin.resources.LocaleStringBackend
-import zakadabar.stack.backend.data.builtin.resources.SettingStringBackend
+import zakadabar.stack.backend.data.builtin.resources.TranslationBackend
+import zakadabar.stack.backend.data.builtin.resources.SettingBackend
 import zakadabar.stack.backend.data.builtin.role.RoleBackend
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantBackend
 import zakadabar.stack.backend.data.builtin.session.SessionBackend
@@ -34,8 +34,8 @@ object Module : BackendModule {
         Server += RoleGrantBackend
         Server += PrincipalBackend
         Server += SessionBackend
-        Server += LocaleStringBackend
-        Server += SettingStringBackend
+        Server += TranslationBackend
+        Server += SettingBackend
 
         // you probably need something similar to these as most systems have
         // some account / session management

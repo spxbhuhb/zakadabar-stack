@@ -12,37 +12,37 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.data.builtin.resources.LocaleStringDto
-import zakadabar.stack.data.builtin.resources.StringsByLocale
+import zakadabar.stack.data.builtin.resources.TranslationDto
+import zakadabar.stack.data.builtin.resources.TranslationsByLocale
 import zakadabar.stack.util.Executor
 
-object LocaleStringBackend : RecordBackend<LocaleStringDto>() {
+object TranslationBackend : RecordBackend<TranslationDto>() {
 
-    override val dtoClass = LocaleStringDto::class
+    override val dtoClass = TranslationDto::class
 
     override fun onModuleLoad() {
-        + LocaleStringTable
+        + TranslationTable
     }
 
     override fun onInstallRoutes(route: Route) {
         route.crud()
-        route.query(StringsByLocale::class, ::query)
+        route.query(TranslationsByLocale::class, ::query)
     }
 
     override fun all(executor: Executor) = transaction {
 
         authorize(executor, StackRoles.siteAdmin)
 
-        LocaleStringTable
+        TranslationTable
             .selectAll()
-            .map(LocaleStringTable::toDto)
+            .map(TranslationTable::toDto)
     }
 
-    override fun create(executor: Executor, dto: LocaleStringDto) = transaction {
+    override fun create(executor: Executor, dto: TranslationDto) = transaction {
 
         authorize(executor, StackRoles.siteAdmin)
 
-        LocaleStringDao.new {
+        TranslationDao.new {
             name = dto.name
             locale = dto.locale
             value = dto.value
@@ -53,14 +53,14 @@ object LocaleStringBackend : RecordBackend<LocaleStringDto>() {
 
         authorize(executor, StackRoles.siteMember)
 
-        LocaleStringDao[recordId].toDto()
+        TranslationDao[recordId].toDto()
     }
 
-    override fun update(executor: Executor, dto: LocaleStringDto) = transaction {
+    override fun update(executor: Executor, dto: TranslationDto) = transaction {
 
         authorize(executor, StackRoles.siteAdmin)
 
-        val dao = LocaleStringDao[dto.id]
+        val dao = TranslationDao[dto.id]
         with(dao) {
             name = dto.name
             locale = dto.locale
@@ -73,16 +73,16 @@ object LocaleStringBackend : RecordBackend<LocaleStringDto>() {
 
         authorize(executor, StackRoles.siteAdmin)
 
-        LocaleStringDao[recordId].delete()
+        TranslationDao[recordId].delete()
     }
 
-    private fun query(executor: Executor, query: StringsByLocale) = transaction {
+    private fun query(executor: Executor, query: TranslationsByLocale) = transaction {
 
         // TODO this should be governed by a server parameter
         authorize(true) // this makes translations available for the public
 
-        LocaleStringTable
-            .select { LocaleStringTable.locale eq query.locale }
-            .map { LocaleStringTable.toDto(it) }
+        TranslationTable
+            .select { TranslationTable.locale eq query.locale }
+            .map { TranslationTable.toDto(it) }
     }
 }

@@ -3,6 +3,9 @@
  */
 package zakadabar.stack.backend.data.builtin.session
 
+import zakadabar.stack.data.builtin.account.RoleDto
+import zakadabar.stack.data.record.RecordId
+
 /**
  * Session data class passed to Ktor.
  *
@@ -10,5 +13,6 @@ package zakadabar.stack.backend.data.builtin.session
  */
 data class StackSession(
     val account: Long,
-    val roles: List<String>
+    val roleIds: List<RecordId<RoleDto>>,
+    val roleNames: List<String>
 )

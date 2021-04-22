@@ -36,10 +36,10 @@ class AccountPublicDto(
 ) : RecordDto<AccountPublicDto> {
 
     companion object : RecordDtoCompanion<AccountPublicDto>({
-        recordType = "account-public"
+        namespace = "account-public"
     })
 
-    override fun getRecordType() = recordType
+    override fun getRecordType() = namespace
     override fun comm() = comm
 
     // No need for schema for this as this is basically a view of AccountPrivateDto

@@ -4,6 +4,7 @@
 
 package zakadabar.site.frontend
 
+import hu.simplexion.rf.leltar.frontend.pages.roles.Roles
 import zakadabar.demo.frontend.lib.crud.BuiltinCrud
 import zakadabar.demo.frontend.lib.form.FormFields
 import zakadabar.demo.frontend.lib.input.CheckboxList
@@ -15,6 +16,11 @@ import zakadabar.demo.frontend.lib.table.FetchedTable
 import zakadabar.demo.frontend.lib.table.GeneratedTable
 import zakadabar.site.frontend.pages.misc.*
 import zakadabar.stack.frontend.application.ZkAppRouting
+import zakadabar.stack.frontend.builtin.pages.account.accounts.Accounts
+import zakadabar.stack.frontend.builtin.pages.account.Login
+import zakadabar.stack.frontend.builtin.pages.resources.translations.Translations
+import zakadabar.stack.frontend.builtin.pages.resources.locales.Locales
+import zakadabar.stack.frontend.builtin.pages.resources.settings.Settings
 
 object Routing : ZkAppRouting(DefaultLayout, Landing) {
 
@@ -34,6 +40,13 @@ object Routing : ZkAppRouting(DefaultLayout, Landing) {
         + GeneratedTable
         + FetchedTable
         + QueryPage
+
+        + Accounts
+        + Login
+        + Roles
+        + Settings
+        + Locales
+        + Translations
     }
 
 }

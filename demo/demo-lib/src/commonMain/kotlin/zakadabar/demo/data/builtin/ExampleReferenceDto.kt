@@ -18,10 +18,10 @@ data class ExampleReferenceDto(
 ) : RecordDto<ExampleReferenceDto> {
 
     companion object : RecordDtoCompanion<ExampleReferenceDto>({
-        recordType = "example-reference"
+        namespace = "example-reference"
     })
 
-    override fun getRecordType() = recordType
+    override fun getRecordType() = namespace
     override fun comm() = comm
 
     override fun schema() = DtoSchema {

@@ -51,10 +51,10 @@ data class BuiltinDto(
 ) : RecordDto<BuiltinDto> {
 
     companion object : RecordDtoCompanion<BuiltinDto>({
-        recordType = "builtin"
+        namespace = "builtin"
     })
 
-    override fun getRecordType() = recordType
+    override fun getRecordType() = namespace
     override fun comm() = comm
 
     override fun schema() = DtoSchema {

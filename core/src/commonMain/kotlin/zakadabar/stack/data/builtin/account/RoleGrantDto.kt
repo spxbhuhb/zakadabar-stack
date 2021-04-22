@@ -19,10 +19,10 @@ data class RoleGrantDto(
 ) : RecordDto<RoleGrantDto> {
 
     companion object : RecordDtoCompanion<RoleGrantDto>({
-        recordType = "role-grant"
+        namespace = "role-grant"
     })
 
-    override fun getRecordType() = recordType
+    override fun getRecordType() = namespace
     override fun comm() = comm
 
     override fun schema() = DtoSchema {

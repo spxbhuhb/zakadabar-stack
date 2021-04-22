@@ -137,7 +137,8 @@ class Server : CliktCommand() {
                     realm = config.serverName
                     validate {
                         val (account, principalId) = SessionBackend.authenticate(anonymous.id, it.name, it.password) ?: return@validate null
-                        return@validate Executor(account.id, PrincipalBackend.roles(principalId))
+                        val (roleIds, roleNames) = PrincipalBackend.roles(principalId)
+                        return@validate Executor(account.id, roleIds, roleNames)
                     }
                 }
 

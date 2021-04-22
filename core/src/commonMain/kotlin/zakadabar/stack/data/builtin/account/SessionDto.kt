@@ -20,10 +20,10 @@ data class SessionDto(
 ) : RecordDto<SessionDto> {
 
     companion object : RecordDtoCompanion<SessionDto>({
-        recordType = "session"
+        namespace = "session"
     })
 
-    override fun getRecordType() = recordType
+    override fun getRecordType() = namespace
     override fun comm() = comm
 
 }

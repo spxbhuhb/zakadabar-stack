@@ -10,28 +10,31 @@ import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.DtoSchema
 
 /**
- * A general configuration setting.
+ * A string in a given locale.
  *
- * @property  id      Id of the configuration setting record.
- * @property  name    Name of the setting.
- * @property  value   Value of the setting.
+ * @property  id      Id of the string locale record.
+ * @property  locale  The locale of the string like "hu-HU".
+ * @property  name    Name of the string resource as defined in the string store.
+ * @property  value   Value of the string resource.
  */
 @Serializable
-data class SettingStringDto(
-    override var id: RecordId<SettingStringDto>,
+data class TranslationDto(
+    override var id: RecordId<TranslationDto>,
     var name: String,
+    var locale: String,
     var value: String,
-) : RecordDto<SettingStringDto> {
+) : RecordDto<TranslationDto> {
 
-    companion object : RecordDtoCompanion<SettingStringDto>({
-        recordType = "setting-string"
+    companion object : RecordDtoCompanion<TranslationDto>({
+        namespace = "translation"
     })
 
-    override fun getRecordType() = recordType
+    override fun getRecordType() = namespace
     override fun comm() = comm
 
     override fun schema() = DtoSchema {
         + ::name min 1 max 100 blank false
+        + ::locale min 2 max 20 blank false
         + ::value
     }
 }

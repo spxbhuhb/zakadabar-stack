@@ -12,7 +12,7 @@ import zakadabar.site.frontend.resources.SiteDarkTheme
 import zakadabar.site.frontend.resources.SiteLightTheme
 import zakadabar.site.resources.SiteStrings
 import zakadabar.stack.data.builtin.account.SessionDto
-import zakadabar.stack.data.builtin.resources.StringsByLocale
+import zakadabar.stack.data.builtin.resources.TranslationsByLocale
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkExecutor
 import zakadabar.stack.frontend.builtin.ZkElement
@@ -37,7 +37,7 @@ fun main() {
 
             val locale = session.account.locale ?: window.navigator.language
 
-            strings = SiteStrings().merge(StringsByLocale(locale).execute())
+            strings = SiteStrings().merge(TranslationsByLocale(locale).execute())
 
             routing = Routing
 

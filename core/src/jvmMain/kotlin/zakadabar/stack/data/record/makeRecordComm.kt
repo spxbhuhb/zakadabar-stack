@@ -4,5 +4,5 @@
 package zakadabar.stack.data.record
 
 actual fun <T : RecordDto<T>> makeRecordComm(recordDtoCompanion: RecordDtoCompanion<T>): RecordCommInterface<T> {
-    return RecordComm(recordDtoCompanion.recordType, recordDtoCompanion.serializer())
+    return RecordComm(recordDtoCompanion.namespace, recordDtoCompanion.serializer())
 }

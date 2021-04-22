@@ -22,6 +22,8 @@ import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.data.builtin.ActionStatusDto
 import zakadabar.stack.data.builtin.account.PasswordChangeAction
 import zakadabar.stack.data.builtin.account.PrincipalDto
+import zakadabar.stack.data.builtin.account.RoleDto
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.BCrypt
 import zakadabar.stack.util.Executor
 
@@ -156,11 +158,19 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
     }
 
     fun roles(principalId: Long) = transaction {
+        val roleIds = mutableListOf<RecordId<RoleDto>>()
+        val roleNames = mutableListOf<String>()
+
         RoleGrantTable
             .join(RoleTable, JoinType.INNER, additionalConstraint = { RoleTable.id eq RoleGrantTable.role })
-            .slice(RoleTable.name)
+            .slice(RoleTable.name, RoleTable.id)
             .select { RoleGrantTable.principal eq principalId }
-            .map { it[RoleTable.name] }
+            .forEach {
+                roleIds += it[RoleTable.id].value
+                roleNames += it[RoleTable.name]
+            }
+
+        roleIds to roleNames
     }
 
 }

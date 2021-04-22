@@ -963,6 +963,20 @@ open class ZkElement(
     }
 
     /**
+     * Execute the builder function when the user **has**
+     * the given role.
+     */
+    @PublicApi
+    fun withOneOfRoles(vararg roles: String, builder: ZkElement.() -> Unit) {
+        roles.forEach {
+            if (it in ZkApplication.executor.roles) {
+                this.builder()
+                return
+            }
+        }
+    }
+
+    /**
      * Execute the builder function when the user **does not have**
      * the given role.
      */

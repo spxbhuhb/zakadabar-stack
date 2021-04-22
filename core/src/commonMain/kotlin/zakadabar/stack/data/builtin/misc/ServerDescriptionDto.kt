@@ -9,7 +9,6 @@
 package zakadabar.stack.data.builtin.misc
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.builtin.resources.StringsByLocale
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
@@ -26,10 +25,10 @@ data class ServerDescriptionDto(
 ) : RecordDto<ServerDescriptionDto> {
 
     companion object : RecordDtoCompanion<ServerDescriptionDto>({
-        recordType = "server-description"
+        namespace = "server-description"
     })
 
-    override fun getRecordType() = ServerDescriptionDto.recordType
+    override fun getRecordType() = ServerDescriptionDto.namespace
     override fun comm() = ServerDescriptionDto.comm
 
 }

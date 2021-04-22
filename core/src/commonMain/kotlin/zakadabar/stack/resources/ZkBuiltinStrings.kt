@@ -7,6 +7,12 @@ package zakadabar.stack.resources
 
 open class ZkBuiltinStrings : ZkStringStore() {
 
+    open val locales by "Locales"
+    open val settings by "Settings"
+    open val translations by "Translations"
+
+    open val applicationName by "Zakadabar"
+
     open val execute by "execute"
     open val confirmation by "confirmation"
     open val show by "show"
@@ -49,5 +55,21 @@ open class ZkBuiltinStrings : ZkStringStore() {
 
     open val details by "Details"
 
+    open val account by "Account"
+    open val accounts by "Accounts"
+    open val basics by "Basics"
+    open val passwordChange by "Password Change"
+    open val roles by "Roles"
+    open val accountStatus by "Account Status"
+    open val passwordChangeExpOwn by "Please type in your old password and then the new password twice. The password has to be at least 8 characters long."
+    open val passwordChangeExpSo by "Please type in the new password twice. The password has to be at least 8 characters long."
+    open val passwordChangeInvalid by "Invalid fields, cannot change password yet."
+    open val passwordChangeFail by "Failed to change the password."
+    open val loginFailCount by "Failed logins"
+    open val loginFail by "Login failed."
+    open val login by "Login"
+    open val loginLocked by "Login has failed because the account is locked."
+    open val role by "Role"
+    open val setting by "Setting"
 }
 
