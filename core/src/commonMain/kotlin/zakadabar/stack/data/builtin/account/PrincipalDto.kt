@@ -47,7 +47,7 @@ data class PrincipalDto(
     override fun schema() = DtoSchema {
         + ::id
 
-        + ::validated
+        // + ::validated
         + ::locked
         + ::expired
 

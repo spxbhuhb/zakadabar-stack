@@ -24,13 +24,12 @@ import io.ktor.server.netty.*
 import io.ktor.sessions.*
 import io.ktor.websocket.*
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.custom.CustomBackend
 import zakadabar.stack.backend.data.Sql
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
-import zakadabar.stack.backend.data.builtin.session.SessionBackend
-import zakadabar.stack.backend.data.builtin.session.SessionStorageSql
-import zakadabar.stack.backend.data.builtin.session.StackSession
+import zakadabar.stack.backend.data.builtin.session.*
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.builtin.account.AccountPublicDto
@@ -43,7 +42,7 @@ import kotlin.reflect.full.isSubclassOf
 
 val moduleLogger = LoggerFactory.getLogger("modules") !! // log module events
 
-val routingLogger by lazy { LoggerFactory.getLogger("routing") } // trace routing events
+val routingLogger: Logger by lazy { LoggerFactory.getLogger("routing") } // trace routing events
 
 fun main(argv: Array<String>) = Server().main(argv)
 
@@ -157,8 +156,11 @@ class Server : CliktCommand() {
             }
 
             install(StatusPages) {
-                exception<Unauthorized> {
-                    call.respond(HttpStatusCode.Unauthorized)
+                exception<LoginTimeout> {
+                    call.respond(HttpStatusCode(440, "Login Timeout"))
+                }
+                exception<Forbidden> {
+                    call.respond(HttpStatusCode.Forbidden)
                 }
                 exception<EntityNotFoundException> {
                     call.respond(HttpStatusCode.NotFound)

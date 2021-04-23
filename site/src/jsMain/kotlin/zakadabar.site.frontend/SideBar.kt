@@ -23,18 +23,18 @@ import zakadabar.site.resources.Strings
 import zakadabar.stack.StackRoles
 import zakadabar.stack.data.builtin.account.LogoutAction
 import zakadabar.stack.frontend.application.ZkApplication
-import zakadabar.stack.frontend.builtin.pages.account.accounts.Accounts
 import zakadabar.stack.frontend.builtin.pages.account.Login
-import zakadabar.stack.frontend.builtin.pages.resources.translations.Translations
+import zakadabar.stack.frontend.builtin.pages.account.accounts.Accounts
 import zakadabar.stack.frontend.builtin.pages.resources.locales.Locales
 import zakadabar.stack.frontend.builtin.pages.resources.settings.Settings
+import zakadabar.stack.frontend.builtin.pages.resources.translations.Translations
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.util.fourRandomInt
 
 object SideBar : ZkSideBar() {
 
-    lateinit var contents: List<ContentEntry>
+    private lateinit var contents: List<ContentEntry>
 
     override fun onCreate() {
         super.onCreate()

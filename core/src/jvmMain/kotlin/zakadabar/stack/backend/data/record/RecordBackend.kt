@@ -16,8 +16,8 @@ import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.BackendModule
+import zakadabar.stack.backend.Forbidden
 import zakadabar.stack.backend.Server
-import zakadabar.stack.backend.Unauthorized
 import zakadabar.stack.backend.data.action.ActionBackend
 import zakadabar.stack.backend.data.builtin.BlobTable
 import zakadabar.stack.backend.data.query.QueryBackend
@@ -133,7 +133,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      * Called by blob functions to authorize the blob operation.
      */
     open fun blobAuthorize(executor: Executor, operation: BlobOperation, recordId: Long?, blobId: Long? = null, dto: BlobDto? = null) {
-        throw Unauthorized()
+        throw Forbidden()
     }
 
     /**

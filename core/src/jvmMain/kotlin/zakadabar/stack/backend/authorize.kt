@@ -10,27 +10,27 @@ import zakadabar.stack.util.PublicApi
 
 @PublicApi
 fun authorize(executor: Executor, roleName: String) {
-    if (! executor.hasRole(roleName)) throw Unauthorized()
+    if (! executor.hasRole(roleName)) throw Forbidden()
 }
 
 @PublicApi
 fun authorize(executor: Executor, roleId: RecordId<RoleDto>) {
-    if (! executor.hasRole(roleId)) throw Unauthorized()
+    if (! executor.hasRole(roleId)) throw Forbidden()
 }
 
 @PublicApi
 fun authorize(executor: Executor, vararg roleNames: String) {
-    if (! executor.hasOneOfRoles(roleNames)) throw Unauthorized()
+    if (! executor.hasOneOfRoles(roleNames)) throw Forbidden()
 }
 
 @PublicApi
 fun authorize(executor: Executor, check: (executor: Executor) -> Boolean) {
-    if (! check(executor)) throw Unauthorized()
+    if (! check(executor)) throw Forbidden()
 }
 
 @PublicApi
 fun authorize(authorized: Boolean) {
-    if (! authorized) throw Unauthorized()
+    if (! authorized) throw Forbidden()
 }
 
-class Unauthorized : Exception()
+class Forbidden : Exception()

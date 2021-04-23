@@ -8,9 +8,9 @@ import org.jetbrains.exposed.sql.Table
 /**
  * Stores [StackSession] objects.
  */
-object SessionTable : Table("stack_sessions") {
+object SessionTable : Table("sessions") {
     val id = varchar("id", 50)
     val content = blob("content")
 
-    override val primaryKey = PrimaryKey(id, name = "pk_session_ids_id")
+    override val primaryKey = PrimaryKey(id)
 }
