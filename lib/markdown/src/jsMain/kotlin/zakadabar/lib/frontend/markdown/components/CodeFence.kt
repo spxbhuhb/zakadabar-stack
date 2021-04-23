@@ -44,7 +44,7 @@ class CodeFence(
             }
         }
 
-        return content
+        return content.trim()
     }
 
 }
