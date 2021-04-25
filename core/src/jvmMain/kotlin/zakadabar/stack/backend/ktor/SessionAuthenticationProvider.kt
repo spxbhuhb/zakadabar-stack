@@ -1,14 +1,15 @@
 /*
  * Copyright 2014-2019 JetBrains s.r.o and contributors. Use of this source code is governed by the Apache 2.0 license.
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package zakadabar.stack.backend.data.builtin.session
+package zakadabar.stack.backend.ktor
 
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.sessions.*
 import zakadabar.stack.backend.Server
+import zakadabar.stack.backend.data.builtin.session.LoginTimeout
 import zakadabar.stack.util.Executor
 
 class SessionAuthenticationProvider internal constructor(configuration: Configuration) :
@@ -24,23 +25,19 @@ fun Authentication.Configuration.session(name: String? = null) {
 
     provider.pipeline.intercept(AuthenticationPipeline.RequestAuthentication) { context ->
 
-        var session = call.sessions.get<StackSession>()
-
-        if (session == null) {
-            session = StackSession(Server.anonymous.id, emptyList(), emptyList())
-            call.sessions.set(session)
-
-            // When there is a STACK_SESSION cookie but the session instance was null
-            // the session is expired. In this case the server responds with
-            // 440 Login Timeout, so the client can perform a re-login.
-
-            val cookie = call.request.cookies["STACK_SESSION"]
-            if (cookie != null) throw LoginTimeout()
+        call.sessions.get<StackSession>()?.let {
+            context.principal(Executor(it.account, it.roleIds, it.roleNames))
+            return@intercept
         }
 
+        val session = StackSession(Server.anonymous.id, emptyList(), emptyList())
+        call.sessions.set(session)
         context.principal(Executor(session.account, session.roleIds, session.roleNames))
+
+        if (call.attributes[LoginTimeoutKey]) {
+            throw LoginTimeout()
+        }
     }
 
     register(provider)
-
 }

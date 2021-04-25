@@ -12,11 +12,10 @@ import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.plusAssign
 
-open class ZkConfirmDialog(
+open class ZkMessageDialog(
     open val title: String? = null,
     open val message: String,
-    open val noLabel: String = strings.no.capitalize(),
-    open val yesLabel: String = strings.yes.capitalize(),
+    open val okLabel: String = strings.ok.capitalize(),
 ) : ZkElement() {
 
     private val channel = Channel<Boolean>()
@@ -34,8 +33,7 @@ open class ZkConfirmDialog(
             }
 
             + row(ZkModalStyles.buttons) {
-                + ZkButton(noLabel, ::onNo)
-                + ZkButton(yesLabel, ::onYes)
+                + ZkButton(okLabel, ::onOk)
             }
         }
     }
@@ -52,11 +50,7 @@ open class ZkConfirmDialog(
         return value
     }
 
-    open fun onNo() = io {
-        channel.send(false)
-    }
-
-    open fun onYes() = io {
+    open fun onOk() = io {
         channel.send(true)
     }
 }

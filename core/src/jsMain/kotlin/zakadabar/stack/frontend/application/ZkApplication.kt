@@ -57,6 +57,8 @@ import zakadabar.stack.util.PublicApi
  */
 object ZkApplication {
 
+    var sessionManager = ZkSessionManager()
+
     lateinit var executor: ZkExecutor
 
     lateinit var routing: ZkAppRouting

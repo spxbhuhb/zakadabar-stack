@@ -11,10 +11,8 @@ import zakadabar.site.frontend.components.SiteMarkdownImage
 import zakadabar.site.frontend.resources.SiteDarkTheme
 import zakadabar.site.frontend.resources.SiteLightTheme
 import zakadabar.site.resources.SiteStrings
-import zakadabar.stack.data.builtin.account.SessionDto
 import zakadabar.stack.data.builtin.resources.TranslationsByLocale
 import zakadabar.stack.frontend.application.ZkApplication
-import zakadabar.stack.frontend.application.ZkExecutor
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.io
 
@@ -24,18 +22,16 @@ fun main() {
 
         ZkElement.addKClass = true
 
-        val session = SessionDto.read(0L)
-
         with(ZkApplication) {
 
-            executor = ZkExecutor(session.account, session.anonymous, session.roles)
+            sessionManager.init()
 
             themes += SiteDarkTheme()
             themes += SiteLightTheme()
 
             theme = initTheme()
 
-            val locale = session.account.locale ?: window.navigator.language
+            val locale = executor.account.locale ?: window.navigator.language
 
             strings = SiteStrings().merge(TranslationsByLocale(locale).execute())
 
@@ -44,6 +40,7 @@ fun main() {
             configureMarkdown()
 
             init()
+
         }
 
     }

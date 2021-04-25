@@ -7,6 +7,8 @@ package zakadabar.stack.resources
 
 open class ZkBuiltinStrings : ZkStringStore() {
 
+    open val sessionRenewError by "An error happened during session renewal. You have been logged out, please log in again to continue."
+    open val ok by "ok"
     open val locales by "Locales"
     open val settings by "Settings"
     open val translations by "Translations"

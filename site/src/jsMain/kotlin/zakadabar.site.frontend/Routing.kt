@@ -17,10 +17,10 @@ import zakadabar.demo.frontend.lib.table.GeneratedTable
 import zakadabar.site.frontend.pages.misc.*
 import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.builtin.pages.account.accounts.Accounts
-import zakadabar.stack.frontend.builtin.pages.account.Login
-import zakadabar.stack.frontend.builtin.pages.resources.translations.Translations
+import zakadabar.stack.frontend.builtin.pages.account.login.Login
 import zakadabar.stack.frontend.builtin.pages.resources.locales.Locales
 import zakadabar.stack.frontend.builtin.pages.resources.settings.Settings
+import zakadabar.stack.frontend.builtin.pages.resources.translations.Translations
 
 object Routing : ZkAppRouting(DefaultLayout, Landing) {
 

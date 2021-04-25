@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.data.builtin.session
+package zakadabar.stack.backend.ktor
 
 import io.ktor.sessions.*
 import io.ktor.utils.io.*
@@ -15,6 +15,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
+import zakadabar.stack.backend.data.builtin.session.SessionTable
 import java.io.ByteArrayOutputStream
 import kotlin.coroutines.coroutineContext
 

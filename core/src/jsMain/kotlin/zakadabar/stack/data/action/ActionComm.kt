@@ -9,6 +9,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
+import zakadabar.stack.data.CommBase
 import zakadabar.stack.util.PublicApi
 
 /**
@@ -19,7 +20,7 @@ import zakadabar.stack.util.PublicApi
 @PublicApi
 open class ActionComm(
     private val companion: ActionDtoCompanion<*>
-) : ActionCommInterface {
+) : CommBase(), ActionCommInterface {
 
     @PublicApi
     override suspend fun <REQUEST : Any, RESPONSE> action(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<RESPONSE>): RESPONSE {
@@ -36,10 +37,10 @@ open class ActionComm(
             body = body
         )
 
-        val responsePromise = window.fetch("/api/${companion.namespace}/${request::class.simpleName}", requestInit)
-        val response = responsePromise.await()
-
-        if (! response.ok) throw RuntimeException()
+        val response = commBlock {
+            val responsePromise = window.fetch("/api/${companion.namespace}/${request::class.simpleName}", requestInit)
+            checkStatus(responsePromise.await())
+        }
 
         val textPromise = response.text()
         val text = textPromise.await()

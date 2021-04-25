@@ -31,6 +31,10 @@ import zakadabar.stack.backend.data.Sql
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
 import zakadabar.stack.backend.data.builtin.session.*
 import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.backend.ktor.RenewableSessionTrackerById
+import zakadabar.stack.backend.ktor.SessionStorageSql
+import zakadabar.stack.backend.ktor.StackSession
+import zakadabar.stack.backend.ktor.session
 import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.builtin.account.AccountPublicDto
 import zakadabar.stack.util.Executor
@@ -124,9 +128,17 @@ class Server : CliktCommand() {
         val server = embeddedServer(Netty, port = config.ktor.port) {
 
             install(Sessions) {
-                cookie<StackSession>("STACK_SESSION", SessionStorageSql) {
+                val sessionType = StackSession::class
+                val name = "STACK_SESSION"
+
+                @Suppress("DEPRECATION") // as in Ktor code
+                val builder = CookieIdSessionBuilder(sessionType).apply {
                     cookie.path = "/"
                 }
+                val transport = SessionTransportCookie(name, builder.cookie, builder.transformers)
+                val tracker = RenewableSessionTrackerById(sessionType, builder.serializer, SessionStorageSql, builder.sessionIdProvider)
+                val provider = SessionProvider(name, sessionType, transport, tracker)
+                register(provider)
             }
 
             install(Authentication) {
@@ -197,6 +209,10 @@ class Server : CliktCommand() {
 
                         customBackends.forEach {
                             it.onInstallRoutes(this)
+                        }
+
+                        get("health") {
+                            call.respondText("OK", ContentType.Text.Plain)
                         }
 
                     }
