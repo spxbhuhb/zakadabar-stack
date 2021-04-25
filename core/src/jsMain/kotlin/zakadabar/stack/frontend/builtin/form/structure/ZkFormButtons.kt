@@ -86,7 +86,7 @@ open class ZkFormButtons<T : DtoBase>(
         } marginRight 10
 
     open fun submitButton(text: String, onClick: (() -> Unit)? = null) =
-        ZkButton(text, onClick).also { form.submitButton = it } marginRight 10
+        ZkButton(text, onClick = onClick).also { form.submitButton = it } marginRight 10
 
     open fun progressIndicator() = ZkProcessing().also {
         form.progressIndicator = it

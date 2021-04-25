@@ -18,6 +18,13 @@ class DemoStrings : ZkBuiltinStrings() {
 
     // general stuff
 
+    val successToast by "Success"
+    val infoToast by "Info"
+    val warningToast by "Warning"
+    val errorToast by "Error"
+    val confirmDialog by "Confirm Dialog"
+    val messageDialog by "Message Dialog"
+    val renewLoginDialog by "Renew Login Dialog"
     val falseText by "False"
     val trueText by "True"
     val style1 by "Style 1"

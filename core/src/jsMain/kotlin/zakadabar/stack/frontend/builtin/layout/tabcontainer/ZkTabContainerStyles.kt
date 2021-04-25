@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.frontend.builtin.layout.tabcontainer
 
-import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet

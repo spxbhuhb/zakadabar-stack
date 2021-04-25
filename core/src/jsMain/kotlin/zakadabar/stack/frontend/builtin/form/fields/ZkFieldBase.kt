@@ -128,6 +128,11 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
         }
     }
 
+    override fun focus(): ZkElement {
+        focusValue()
+        return this
+    }
+
     /**
      * Focus on the value field.
      */

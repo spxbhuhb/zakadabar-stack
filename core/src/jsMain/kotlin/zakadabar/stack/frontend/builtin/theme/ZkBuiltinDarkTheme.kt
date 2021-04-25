@@ -15,12 +15,18 @@ import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarTheme
 import zakadabar.stack.frontend.builtin.table.ZkTableTheme
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarTheme
 import zakadabar.stack.frontend.builtin.toast.ZkToastTheme
+import zakadabar.stack.frontend.resources.ZkColorTheme
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
 
 open class ZkBuiltinDarkTheme : ZkTheme {
 
     override val name = "default-dark"
+
+    val success = ZkColors.Design.navGreen
+    val info = ZkColors.Design.navBlue
+    val warning = ZkColors.Design.navOrange
+    val error = ZkColors.Design.navRed
 
     val background = ZkColors.Design.gray9
     val foreground = ZkColors.Design.gray2
@@ -29,6 +35,15 @@ open class ZkBuiltinDarkTheme : ZkTheme {
     override var button = ZkButtonTheme(
         background = ZkColors.Design.navBlue,
         iconFill = foreground
+    )
+
+    override var color = ZkColorTheme(
+        background = background,
+        foreground = foreground,
+        success = success,
+        info = info,
+        warning = warning,
+        error = error
     )
 
     override var dock = ZkDockTheme()
@@ -64,5 +79,14 @@ open class ZkBuiltinDarkTheme : ZkTheme {
         height = "44px"
     )
 
-    override var toast = ZkToastTheme()
+    override var toast = ZkToastTheme(
+        infoBackground = info,
+        infoText = ZkColors.black,
+        successBackground = success,
+        successText = ZkColors.black,
+        warningBackground = warning,
+        warningText = ZkColors.black,
+        errorBackground = error,
+        errorText = ZkColors.black
+    )
 }

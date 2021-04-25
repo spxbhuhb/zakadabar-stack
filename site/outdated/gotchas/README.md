@@ -6,6 +6,16 @@ In the Stack, there are none. For all those things we use Kotlin based solutions
 
 We handle CSS with [CssStyleSheet](../../core/src/jsMain/kotlin/zakadabar/stack/frontend/util/css.kt).
 
+## Focus on Inputs
+
+If you try to focus on a form input field automatically, and it does not work put the focus code into an animation frame like this:
+
+```kotlin
+window.requestAnimationFrame {
+    dto::accountName.find().focus()
+}
+```
+
 ## Running the Webpack devServer in Continuous Mode
 
 * Use the "jsBrowserRun" manually first.

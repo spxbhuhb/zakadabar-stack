@@ -8,15 +8,15 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import zakadabar.demo.data.PortDto
 import zakadabar.demo.data.SeaDto
-import zakadabar.demo.frontend.pages.account.Accounts
 import zakadabar.demo.frontend.lib.crud.BuiltinCrud
 import zakadabar.demo.frontend.lib.form.FormFields
 import zakadabar.demo.frontend.lib.input.CheckboxList
 import zakadabar.demo.frontend.lib.layout.TabContainer
-import zakadabar.demo.frontend.lib.modal.ConfirmDialog
+import zakadabar.demo.frontend.lib.modal.Modals
 import zakadabar.demo.frontend.lib.pages.ArgPage
 import zakadabar.demo.frontend.lib.table.GeneratedTable
 import zakadabar.demo.frontend.lib.themes.Themes
+import zakadabar.demo.frontend.pages.account.Accounts
 import zakadabar.demo.frontend.pages.misc.Login
 import zakadabar.demo.frontend.pages.port.Ports
 import zakadabar.demo.frontend.pages.sea.Seas
@@ -44,7 +44,7 @@ object SideBar : ZkSideBar() {
         + group(Strings.builtin) {
             + item("ZkArgPage") { ArgPage.open(ArgPage.Args(fourRandomInt()[0], "hello")) }
             + item("ZkCheckboxList") { CheckboxList.open() }
-            + item("ZkConfirmDialog") { ConfirmDialog.open() }
+            + item("ZkConfirmDialog") { Modals.open() }
             + item("ZkCrud") { BuiltinCrud.openAll() }
             + item("ZkForm") { FormFields.open() }
             + item("ZkTabContainer") { TabContainer.open() }

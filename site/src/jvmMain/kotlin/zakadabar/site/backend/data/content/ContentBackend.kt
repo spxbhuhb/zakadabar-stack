@@ -24,7 +24,7 @@ object ContentBackend : CustomBackend(), QueryBackend {
 
     private val root = File("./content") // FIXME replace hard coded file path ./doc
 
-    private val pattern = Regex("[a-zA-Z0-9/\\.]+\\.[a-zA-Z0-9]*")
+    private val pattern = Regex("[a-zA-Z0-9/\\-\\.]+\\.[a-zA-Z0-9]*")
 
     override fun onInstallRoutes(route: Route) {
         route.query(ContentQuery::class, ::query)

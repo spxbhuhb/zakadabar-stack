@@ -49,7 +49,6 @@ abstract class CommBase {
      */
     suspend fun checkStatus(response: Response): Response {
         val code = response.status.toInt()
-        println("Status: $code")
         when {
             code == HttpStatusCode.Conflict.value -> throw DataConflictException(response.text().await())
             code == 440 -> throw LoginTimeout()

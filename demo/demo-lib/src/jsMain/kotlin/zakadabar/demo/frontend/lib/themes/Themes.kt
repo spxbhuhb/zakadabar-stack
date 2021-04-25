@@ -24,10 +24,10 @@ object Themes : ZkPage() {
             gridTemplateColumns = "max-content max-content"
             gridGap = 10
 
-            + ZkButton(Strings.light, ::onLight)
-            + ZkButton(Strings.dark, ::onDark)
-            + ZkButton(Strings.style1, ::onRedStyle)
-            + ZkButton(Strings.style2, ::onBlueStyle)
+            + ZkButton(Strings.light, onClick = ::onLight)
+            + ZkButton(Strings.dark, onClick = ::onDark)
+            + ZkButton(Strings.style1, onClick = ::onRedStyle)
+            + ZkButton(Strings.style2, onClick = ::onBlueStyle)
 
         } marginBottom 20
 

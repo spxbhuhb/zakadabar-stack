@@ -9,8 +9,12 @@
 package zakadabar.stack.frontend.builtin.pages.account.login
 
 import kotlinx.browser.window
+import zakadabar.stack.frontend.application.ZkApplication.strings
+import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.layout.ZkFullScreenLayout
 import zakadabar.stack.frontend.builtin.pages.ZkPage
+import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarStyles
+import zakadabar.stack.frontend.util.marginBottom
 
 /**
  * A simple username / password login page. When the login is
@@ -31,8 +35,25 @@ object Login : ZkPage(ZkFullScreenLayout) {
 
             + gap(height = 60)
 
-            + LoginForm {
-                window.location.pathname = "/"
+            + div {
+
+                style {
+                    width = "300px"
+                }
+
+                + div(ZkTitleBarStyles.appTitleBar) {
+                    style {
+                        minHeight = "unset"
+                        maxHeight = "unset"
+                        paddingBottom = "${theme.layout.spacingStep / 2}px"
+                    }
+                    + strings.applicationName
+                } marginBottom 20
+
+                + LoginForm(
+                    onCancel = { window.history.back() },
+                    onSuccess = { window.location.pathname = "/" }
+                )
             }
         }
     }

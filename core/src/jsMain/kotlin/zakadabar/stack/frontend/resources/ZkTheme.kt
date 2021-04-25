@@ -22,6 +22,7 @@ interface ZkTheme {
     val name: String
 
     var button: ZkButtonTheme
+    var color: ZkColorTheme
     var dock: ZkDockTheme
     var font: ZkFontTheme
     var form: ZkFormTheme

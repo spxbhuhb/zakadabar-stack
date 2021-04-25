@@ -3,24 +3,30 @@
  */
 package zakadabar.stack.frontend.builtin.pages.account.login
 
+import kotlinx.browser.window
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.ActionStatusDto
 import zakadabar.stack.data.builtin.account.LoginAction
 import zakadabar.stack.frontend.application.ZkApplication.strings
+import zakadabar.stack.frontend.application.ZkApplication.t
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarStyles
+import zakadabar.stack.frontend.builtin.form.fields.ZkConstStringField
 import zakadabar.stack.frontend.builtin.toast.toast
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.marginBottom
 
 class LoginForm(
+    private val accountName: String? = null,
+    val onCancel: () -> Unit = { },
     val onSuccess: () -> Unit
 ) : ZkForm<LoginAction>() {
 
     override fun onConfigure() {
-        dto = default { }
+        dto = default {
+            this@LoginForm.accountName?.let { accountName = it }
+        }
         mode = ZkElementMode.Action
         fieldGridColumnTemplate = "minmax(max-content, 100px) 1fr"
         onExecuteResult = ::onExecuteResult
@@ -33,21 +39,33 @@ class LoginForm(
             width = "min(100%, 300px)"
         }
 
-        + div(ZkTitleBarStyles.appTitleBar) {
-            + strings.applicationName
-        } marginBottom 20
-
         + fieldGrid {
-            + dto::accountName
+            if (accountName == null) {
+                + dto::accountName
+            } else {
+                + ZkConstStringField(this@LoginForm, t("accountName"), dto.accountName)
+            }
             + dto::password
         } marginBottom 20
 
         + row {
             style {
                 width = "100%"
-                justifyContent = "flex-end"
+                justifyContent = "space-between"
             }
+            + ZkButton(strings.cancel) { onCancel() }
             + ZkButton(strings.login) { this@LoginForm.submit() }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        window.requestAnimationFrame {
+            if (accountName == null) {
+                dto::accountName.find().focus()
+            } else {
+                dto::password.find().focus()
+            }
         }
     }
 

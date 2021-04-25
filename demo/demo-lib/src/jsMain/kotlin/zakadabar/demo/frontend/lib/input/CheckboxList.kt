@@ -37,7 +37,7 @@ object CheckboxList : ZkPage() {
             + "Checkbox list with int values"
             + intCheckboxList
 
-            + ZkButton(ZkApplication.strings.save, CheckboxList::onSave)
+            + ZkButton(ZkApplication.strings.save, onClick = CheckboxList::onSave)
 
             + output
         }

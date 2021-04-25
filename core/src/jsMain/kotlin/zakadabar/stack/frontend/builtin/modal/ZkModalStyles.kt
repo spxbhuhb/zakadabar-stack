@@ -28,6 +28,7 @@ object ZkModalStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val title by cssClass {
         paddingLeft = theme.layout.spacingStep
+        paddingRight = theme.layout.spacingStep
         borderBottom = "1px solid ${theme.modal.border} !important"
     }
 

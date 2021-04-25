@@ -33,7 +33,7 @@ open class ZkMessageDialog(
             }
 
             + row(ZkModalStyles.buttons) {
-                + ZkButton(okLabel, ::onOk)
+                + ZkButton(okLabel, onClick = ::onOk)
             }
         }
     }

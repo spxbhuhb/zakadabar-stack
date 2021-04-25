@@ -3,11 +3,17 @@
  */
 package zakadabar.stack.frontend.builtin.pages.account.login
 
+import kotlinx.browser.window
 import kotlinx.coroutines.channels.Channel
 import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.ZkApplication.executor
+import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.modal.ZkModalStyles
+import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
 import zakadabar.stack.frontend.util.io
+import zakadabar.stack.frontend.util.marginBottom
 import zakadabar.stack.frontend.util.plusAssign
 
 /**
@@ -34,8 +40,22 @@ class RenewLoginDialog : ZkElement() {
     override fun onCreate() {
         classList += ZkModalStyles.modal
 
-        + LoginForm {
-            io { channel.send(true) }
+        + ZkTitleBar(strings.applicationName) css ZkModalStyles.title
+
+        + column(ZkModalStyles.content) {
+            style {
+                alignItems = "center"
+            }
+
+            + div(ZkFormStyles.sectionSummary) {
+                + strings.sessionRenew
+            } marginBottom 5
+
+            + LoginForm(
+                accountName = executor.account.accountName,
+                onCancel = { window.location.href = "/" },
+                onSuccess = { io { channel.send(true) } }
+            )
         }
     }
 }

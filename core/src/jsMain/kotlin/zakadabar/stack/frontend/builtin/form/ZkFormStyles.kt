@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.frontend.builtin.form
 
-import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.table.ZkTableStyles
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
@@ -20,7 +19,6 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val contentContainer by ZkTableStyles.cssClass {
         flexGrow = "1"
-        overflow = "scroll"
     }
 
     val form by cssClass {
@@ -64,7 +62,6 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
     }
 
     val sectionSummary by cssClass {
-        fontSize = "80%"
         color = ZkColors.Gray.c600
         paddingBottom = 16
     }

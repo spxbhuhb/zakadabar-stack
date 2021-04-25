@@ -34,8 +34,8 @@ open class ZkConfirmDialog(
             }
 
             + row(ZkModalStyles.buttons) {
-                + ZkButton(noLabel, ::onNo)
-                + ZkButton(yesLabel, ::onYes)
+                + ZkButton(noLabel, onClick = ::onNo)
+                + ZkButton(yesLabel, onClick = ::onYes)
             }
         }
     }

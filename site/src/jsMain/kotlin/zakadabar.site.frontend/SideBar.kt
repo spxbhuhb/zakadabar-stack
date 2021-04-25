@@ -9,11 +9,12 @@ import zakadabar.demo.frontend.lib.crud.BuiltinCrud
 import zakadabar.demo.frontend.lib.form.FormFields
 import zakadabar.demo.frontend.lib.input.CheckboxList
 import zakadabar.demo.frontend.lib.layout.TabContainer
-import zakadabar.demo.frontend.lib.modal.ConfirmDialog
+import zakadabar.demo.frontend.lib.modal.Modals
 import zakadabar.demo.frontend.lib.pages.ArgPage
 import zakadabar.demo.frontend.lib.query.QueryPage
 import zakadabar.demo.frontend.lib.table.FetchedTable
 import zakadabar.demo.frontend.lib.table.GeneratedTable
+import zakadabar.demo.frontend.lib.toast.Toasts
 import zakadabar.site.data.ContentEntry
 import zakadabar.site.data.ContentQuery
 import zakadabar.site.frontend.pages.misc.Content
@@ -53,7 +54,7 @@ object SideBar : ZkSideBar() {
             + group(Strings.features) {
                 + item("ArgPage") { ArgPage.open(ArgPage.Args(fourRandomInt()[0], "hello")) }
                 + item("CheckboxList") { CheckboxList.open() }
-                + item("ConfirmDialog") { ConfirmDialog.open() }
+                + item("Modals") { Modals.open() }
                 + item("Crud") { BuiltinCrud.openAll() }
                 + item("Form") { FormFields.open() }
                 + item("Query") { QueryPage.open() }
@@ -62,6 +63,7 @@ object SideBar : ZkSideBar() {
                     + item("Generated") { GeneratedTable.open() }
                     + item("Fetched") { FetchedTable.open() }
                 }
+                + item("Toasts") { Toasts.open() }
             }
 
             contentGroup("Contribute", "contribute/")

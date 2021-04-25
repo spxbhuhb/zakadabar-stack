@@ -7,6 +7,12 @@ package zakadabar.stack.resources
 
 open class ZkBuiltinStrings : ZkStringStore() {
 
+    open val sessionRenew by "Your session has been expired. Please log in again to continue."
+    open val fullName by "Full Name"
+    open val organizationName by "Organization Name"
+    open val newPassword by "New Password"
+    open val oldPassword by "Old Password"
+    open val newPasswordVerification by "Verification"
     open val sessionRenewError by "An error happened during session renewal. You have been logged out, please log in again to continue."
     open val ok by "ok"
     open val locales by "Locales"

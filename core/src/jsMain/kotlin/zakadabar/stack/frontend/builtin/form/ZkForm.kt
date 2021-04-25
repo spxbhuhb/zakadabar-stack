@@ -604,4 +604,11 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
         return field
     }
 
+    /**
+     * Find a field for this property.
+     */
+    fun KMutableProperty0<*>.find(): ZkFieldBase<*, *> {
+        return fields.first { it.propName == this.name }
+    }
+
 }

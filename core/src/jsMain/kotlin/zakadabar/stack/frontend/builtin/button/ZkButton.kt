@@ -19,13 +19,14 @@ import zakadabar.stack.util.PublicApi
 @PublicApi
 class ZkButton(
     private val text: String,
-    private val onClick: (() -> Unit)? = null
+    private val capitalize: Boolean = true,
+    private val onClick: (() -> Unit)? = null,
 ) : ZkElement() {
 
     override fun onCreate() {
         classList += ZkButtonStyles.button
 
-        + text
+        + if (capitalize) text.capitalize() else text
 
         on("click") { _ -> onClick?.invoke() }
         on("mousedown", ::onMouseDown)
