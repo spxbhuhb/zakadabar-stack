@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.datetime.*
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -41,7 +42,7 @@ object SessionStorageSql : SessionStorage {
      * mean very frequent and unnecessary SQL updates, not to mention that
      * PostgreSQL complains about concurrent updates a lot.
      */
-    private val cache = mutableMapOf<String, ByteArray>()
+    private val cache = mutableMapOf<String, SessionCacheEntry>()
 
     override suspend fun invalidate(id: String) {
         transaction {
@@ -53,23 +54,52 @@ object SessionStorageSql : SessionStorage {
     override suspend fun <R> read(id: String, consumer: suspend (ByteReadChannel) -> R): R {
 
         // check the cache first, return with the cached content if there is one
-        val cached = mutex.withLock { cache[id] }
-        if (cached != null) return consumer(ByteReadChannel(cached))
+        val cached = mutex.withLock {
+            sendForUpdate(cache[id])
+        }
+
+        if (cached != null) {
+            return consumer(ByteReadChannel(cached.sessionData))
+        }
 
         // check SQL, in case of server restart
-        val content = transaction {
+        val entry = transaction {
             SessionTable
                 .select { SessionTable.id eq id }
-                .map { it[SessionTable.content].bytes }
+                .map {
+                    SessionCacheEntry(
+                        id,
+                        it[SessionTable.content].bytes,
+                        it[SessionTable.lastAccess].toKotlinInstant()
+                    )
+                }
                 .firstOrNull()
         } ?: throw NoSuchElementException()
 
         // update the cache
         mutex.withLock {
-            cache[id] = content
+            cache[id] = sendForUpdate(entry) !! // cannot be null at this point
         }
 
-        return consumer(ByteReadChannel(content))
+        return consumer(ByteReadChannel(entry.sessionData))
+    }
+
+    private suspend fun sendForUpdate(entry: SessionCacheEntry?): SessionCacheEntry? {
+        if (entry == null) return entry
+
+        val now = Clock.System.now()
+        val cutoff = now.minus(2, DateTimeUnit.MINUTE)
+
+        println("$cutoff ${entry.createdAt} ${entry.createdAt.epochSeconds < cutoff.epochSeconds}")
+
+        if (entry.createdAt.epochSeconds < cutoff.epochSeconds) {
+            val newEntry = SessionCacheEntry(entry.sessionId, entry.sessionData, now)
+            cache[entry.sessionId] = newEntry
+            SessionMaintenanceTask.updateChannel.send(newEntry)
+            return newEntry
+        }
+
+        return entry
     }
 
     override suspend fun write(id: String, provider: suspend (ByteWriteChannel) -> Unit) {
@@ -82,14 +112,18 @@ object SessionStorageSql : SessionStorage {
             mutex.withLock {
                 val cached = cache[id]
 
-                // if the new value is the same as the cached one, simply skip write
-                if (cached.contentEquals(content)) return@reader
+                if (cached != null) {
+                    // if the new value is the same as the cached one, simply skip write
+                    if (cached.sessionData.contentEquals(content)) return@reader
 
-                // save the new value into the cache, this will prevent other writes
-                cache[id] = content
+                    // save the new value into the cache, this will prevent other writes
+                    cache[id] = SessionCacheEntry(id, content, cached.createdAt)
+                }
             }
 
             // TODO use upsert. It is not supported out-of-the-box by exposed so, I went for a manual check.
+
+            val now = Clock.System.now().toJavaInstant()
 
             transaction {
 
@@ -99,10 +133,12 @@ object SessionStorageSql : SessionStorage {
                     SessionTable.insert {
                         it[SessionTable.id] = id
                         it[SessionTable.content] = ExposedBlob(content)
+                        it[lastAccess] = now
                     }
                 } else {
                     SessionTable.update({ SessionTable.id eq id }) {
                         it[SessionTable.content] = ExposedBlob(content)
+                        it[lastAccess] = now
                     }
                 }
             }

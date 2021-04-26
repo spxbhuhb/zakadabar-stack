@@ -31,10 +31,7 @@ import zakadabar.stack.backend.data.Sql
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
 import zakadabar.stack.backend.data.builtin.session.*
 import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.backend.ktor.RenewableSessionTrackerById
-import zakadabar.stack.backend.ktor.SessionStorageSql
-import zakadabar.stack.backend.ktor.StackSession
-import zakadabar.stack.backend.ktor.session
+import zakadabar.stack.backend.ktor.*
 import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.builtin.account.AccountPublicDto
 import zakadabar.stack.util.Executor
@@ -84,6 +81,16 @@ class Server : CliktCommand() {
          */
         var logReads: Boolean = true
 
+        /**
+         * When true the server is shutting down and background tasks should stop.
+         * TODO replace shutdown flag with an event driven system
+         */
+        var shutdown: Boolean = false
+            get() = synchronized(field) { field }
+            set(value) {
+                synchronized(field) { field = value }
+            }
+
         lateinit var staticRoot: String
 
         private val modules = mutableListOf<BackendModule>()
@@ -106,10 +113,10 @@ class Server : CliktCommand() {
     }
 
     private val configPath
-            by option("-c", "--config", help = "Path to the configuration file or directory.")
-                .file(mustExist = true, mustBeReadable = true, canBeDir = true)
-                .convert { it.path }
-                .default("./zakadabar-config.yaml")
+        by option("-c", "--config", help = "Path to the configuration file or directory.")
+            .file(mustExist = true, mustBeReadable = true, canBeDir = true)
+            .convert { it.path }
+            .default("./zakadabar-config.yaml")
 
     override fun run() {
 
@@ -139,6 +146,8 @@ class Server : CliktCommand() {
                 val tracker = RenewableSessionTrackerById(sessionType, builder.serializer, SessionStorageSql, builder.sessionIdProvider)
                 val provider = SessionProvider(name, sessionType, transport, tracker)
                 register(provider)
+
+                SessionMaintenanceTask.start()
             }
 
             install(Authentication) {
