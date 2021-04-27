@@ -12,17 +12,17 @@ import zakadabar.stack.data.schema.DtoSchema
 data class WebSocketSettingsDto(
 
     var pingPeriod: Long = 60,
-    var timeout: Long = 60,
+    var timeout: Long = 15,
     var maxFrameSize: Long = 1000000,
     var masking: Boolean = false
 
 ) : DtoBase {
 
     override fun schema() = DtoSchema {
-        + ::pingPeriod min 0 default 60
-        + ::timeout min 0 default 15
-        + ::maxFrameSize min 0 default 1000000
-        + ::masking default false
+        + ::pingPeriod min 0 default pingPeriod
+        + ::timeout min 0 default timeout
+        + ::maxFrameSize min 0 default maxFrameSize
+        + ::masking default masking
     }
 
 }

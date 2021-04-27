@@ -20,10 +20,10 @@ class ServerSettingsDto(
 ) : DtoBase {
 
     override fun schema() = DtoSchema {
-        + ::serverName
+        + ::serverName default serverName
         + ::database
-        + ::traceRouting
-        + ::staticResources
+        + ::traceRouting default traceRouting
+        + ::staticResources default staticResources
         + ::ktor
         // + ::modules
     }

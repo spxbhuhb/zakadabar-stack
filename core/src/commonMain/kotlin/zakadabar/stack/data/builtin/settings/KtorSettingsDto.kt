@@ -16,7 +16,7 @@ data class KtorSettingsDto(
 ) : DtoBase {
 
     override fun schema() = DtoSchema {
-        + ::port default 8080
+        + ::port default port
         + ::websocket
     }
 

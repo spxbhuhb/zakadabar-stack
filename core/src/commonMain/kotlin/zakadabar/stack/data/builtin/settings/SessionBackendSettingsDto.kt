@@ -17,9 +17,9 @@ class SessionBackendSettingsDto(
 ) : DtoBase {
 
     override fun schema() = DtoSchema {
-        + ::sessionTimeout default 30000
-        + ::updateDelay default 120
-        + ::expirationCheckInterval default 120
+        + ::sessionTimeout default sessionTimeout
+        + ::updateDelay default updateDelay
+        + ::expirationCheckInterval default expirationCheckInterval
     }
 
 }
