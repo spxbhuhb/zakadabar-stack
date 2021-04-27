@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.4.27"
+version = "2021.5.3-SNAPSHOT"
 
 val isSnapshot = version.toString().contains("SNAPSHOT")
 

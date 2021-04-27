@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.theme
 
@@ -49,7 +49,11 @@ open class ZkBuiltinLightTheme : ZkTheme {
     )
 
     override var dock = ZkDockTheme()
-    override var font = ZkFontTheme()
+
+    override var font = ZkFontTheme(
+        family = "'IBM Plex Sans', sans-serif"
+    )
+
     override var form = ZkFormTheme()
     override var icon = ZkIconTheme(
         background = "transparent",
