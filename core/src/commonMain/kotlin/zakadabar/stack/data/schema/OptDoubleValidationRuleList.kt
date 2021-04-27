@@ -80,4 +80,8 @@ class OptDoubleValidationRuleList(val kProperty: KMutableProperty0<Double?>) : V
 
     override fun isOptional() = true
 
+    override fun decodeFromString(value: String?) {
+        kProperty.set(value?.toDouble())
+    }
+
 }

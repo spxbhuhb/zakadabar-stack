@@ -45,4 +45,8 @@ class OptUuidValidationRuleList(val kProperty: KMutableProperty0<UUID?>) : Valid
 
     override fun isOptional() = true
 
+    override fun decodeFromString(value: String?) {
+        kProperty.set(value?.let { UUID(value) })
+    }
+
 }

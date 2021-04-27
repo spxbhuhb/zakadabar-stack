@@ -3,12 +3,22 @@
  */
 package zakadabar.stack.backend.util
 
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.serializer
+import zakadabar.stack.backend.Server
 import zakadabar.stack.data.DtoBase
 import kotlin.reflect.KProperty
+import kotlin.reflect.full.createType
+
+@Suppress("UNCHECKED_CAST") // serializer should create KSerializer<T> for sure
+inline fun <reified T : DtoBase> setting(namespace: String) =
+    Setting(default(), namespace, serializer(T::class.createType()) as KSerializer<T>)
+
 
 class Setting<V : DtoBase>(
     var value: V,
-    var namespace: String
+    val namespace: String,
+    serializer: KSerializer<V>
 ) {
 
     operator fun getValue(thisRef: Any?, property: KProperty<*>): V {
@@ -20,6 +30,7 @@ class Setting<V : DtoBase>(
     }
 
     init {
-
+        value = Server.loadSettings(value, serializer, namespace)
+        Server.overrideSettings(value, namespace)
     }
 }

@@ -40,4 +40,8 @@ class DtoBaseValidationRuleList<T : DtoBase>(val kProperty: KMutableProperty0<T>
 
     override fun isOptional() = false
 
+    override fun decodeFromString(value: String?) {
+        if (value == null) throw NotImplementedError("decoding of complex values is not implemented")
+    }
+
 }

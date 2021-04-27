@@ -104,4 +104,8 @@ class StringValidationRuleList(val kProperty: KMutableProperty0<String>) : Valid
 
     override fun isOptional() = false
 
+    override fun decodeFromString(value: String?) {
+        if (value == null) throw IllegalArgumentException()
+        kProperty.set(value)
+    }
 }

@@ -17,11 +17,12 @@ import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.data.builtin.session.SessionTable
 import zakadabar.stack.backend.util.Setting
 import zakadabar.stack.backend.util.default
+import zakadabar.stack.backend.util.setting
 import zakadabar.stack.data.builtin.settings.SessionBackendSettingsDto
 
 object SessionMaintenanceTask {
 
-    private val settings by Setting<SessionBackendSettingsDto>(default(), "zakadabar.stack.session")
+    private val settings by setting<SessionBackendSettingsDto>("zakadabar.stack.session")
 
     val updateChannel = Channel<SessionCacheEntry>()
 

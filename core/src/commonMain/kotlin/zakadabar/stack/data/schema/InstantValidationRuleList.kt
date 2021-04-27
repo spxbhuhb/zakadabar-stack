@@ -106,4 +106,9 @@ class InstantValidationRuleList(val kProperty: KMutableProperty0<Instant>) : Val
 
     override fun isOptional() = false
 
+    override fun decodeFromString(value: String?) {
+        if (value == null) throw IllegalArgumentException()
+        kProperty.set(Instant.parse(value))
+    }
+
 }

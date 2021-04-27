@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.data.builtin.resources
 
@@ -23,12 +23,13 @@ data class SettingDto(
     override var id: RecordId<SettingDto>,
     var role: RecordId<RoleDto>?,
     var format: SettingFormat,
-    var name: String,
+    var namespace: String,
+    var path: String,
     var value: String,
 ) : RecordDto<SettingDto> {
 
     companion object : RecordDtoCompanion<SettingDto>({
-        namespace = "setting-string"
+        namespace = "setting"
     })
 
     override fun getRecordType() = namespace
@@ -37,7 +38,8 @@ data class SettingDto(
     override fun schema() = DtoSchema {
         + ::role min 1
         + ::format default SettingFormat.TEXT
-        + ::name min 1 max 100 blank false
+        + ::namespace min 0 max 100
+        + ::path min 1 max 100 blank false
         + ::value
     }
 }

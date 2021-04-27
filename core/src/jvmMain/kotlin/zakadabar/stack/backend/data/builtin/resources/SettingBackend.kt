@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 @file:Suppress("UNUSED_PARAMETER", "unused")
 
@@ -14,6 +14,7 @@ import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.resources.SettingDto
 import zakadabar.stack.util.Executor
 
@@ -45,7 +46,8 @@ object SettingBackend : RecordBackend<SettingDto>() {
         authorize(executor, StackRoles.siteAdmin)
 
         SettingDao.new {
-            name = dto.name
+            namespace = dto.namespace
+            path = dto.path
             value = dto.value
         }.toDto()
     }
@@ -67,7 +69,8 @@ object SettingBackend : RecordBackend<SettingDto>() {
 
         val dao = SettingDao[dto.id]
         with(dao) {
-            name = dto.name
+            namespace = dto.namespace
+            path = dto.path
             value = dto.value
         }
         dao.toDto()
@@ -78,6 +81,17 @@ object SettingBackend : RecordBackend<SettingDto>() {
         authorize(executor, StackRoles.siteAdmin)
 
         SettingDao[recordId].delete()
+    }
+
+    fun overrideSettings(settings: DtoBase, namespace: String) = transaction {
+        val schema = settings.schema()
+
+        SettingTable.select { SettingTable.namespace eq namespace }.forEach {
+            val dto = SettingTable.toDto(it)
+            schema.ruleLists.forEach { (key, value) ->
+                if (key.name == dto.path) value.decodeFromString(dto.value)
+            }
+        }
     }
 
 }

@@ -82,4 +82,9 @@ class SecretValidationRuleList(val kProperty: KMutableProperty0<Secret>) : Valid
 
     override fun isOptional() = false
 
+    override fun decodeFromString(value: String?) {
+        if (value == null) throw IllegalArgumentException()
+        kProperty.set(Secret(value))
+    }
+
 }

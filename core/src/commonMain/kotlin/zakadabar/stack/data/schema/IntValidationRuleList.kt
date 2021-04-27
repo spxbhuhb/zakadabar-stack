@@ -80,4 +80,9 @@ class IntValidationRuleList(val kProperty: KMutableProperty0<Int>) : ValidationR
 
     override fun isOptional() = false
 
+    override fun decodeFromString(value: String?) {
+        if (value == null) throw IllegalArgumentException()
+        kProperty.set(value.toInt())
+    }
+
 }

@@ -16,7 +16,6 @@
  */
 package zakadabar.stack.data.schema
 
-import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.UUID
 import kotlin.reflect.KMutableProperty0
@@ -45,5 +44,10 @@ class UuidValidationRuleList(val kProperty: KMutableProperty0<UUID>) : Validatio
     }
 
     override fun isOptional() = false
+
+    override fun decodeFromString(value: String?) {
+        if (value == null) throw IllegalArgumentException()
+        kProperty.set(UUID(value))
+    }
 
 }

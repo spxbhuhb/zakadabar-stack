@@ -87,4 +87,8 @@ class OptSecretValidationRuleList(val kProperty: KMutableProperty0<Secret?>) : V
 
     override fun isOptional() = true
 
+    override fun decodeFromString(value: String?) {
+        kProperty.set(value?.let { Secret(value) })
+    }
+
 }

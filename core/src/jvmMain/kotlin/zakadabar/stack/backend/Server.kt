@@ -23,21 +23,27 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.sessions.*
 import io.ktor.websocket.*
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerializationStrategy
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.custom.CustomBackend
 import zakadabar.stack.backend.data.Sql
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
+import zakadabar.stack.backend.data.builtin.resources.SettingBackend
 import zakadabar.stack.backend.data.builtin.session.*
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.backend.ktor.*
 import zakadabar.stack.data.DataConflictException
+import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.account.AccountPublicDto
 import zakadabar.stack.data.builtin.settings.ServerSettingsDto
 import zakadabar.stack.util.Executor
 import java.io.File
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.Duration
 import kotlin.reflect.full.isSubclassOf
@@ -78,6 +84,32 @@ class Server : CliktCommand() {
         lateinit var findAccountByName: (accountName: String) -> Pair<AccountPublicDto, Long>
 
         /**
+         * The directory where setting files are. Set automatically by the configuration loader.
+         */
+        lateinit var settingsDirectory: Path
+
+        /**
+         * Function that override settings if needed. Called during setting DTO initialization.
+         */
+        var overrideSettings: (settings: DtoBase, namespace: String) -> Unit = SettingBackend::overrideSettings
+        // FIXME make override settings atomic
+
+
+        fun <T : DtoBase> loadSettings(default: T, serializer: KSerializer<T>, namespace: String): T {
+
+            val p1 = settingsDirectory.resolve("$namespace.yaml")
+            val p2 = settingsDirectory.resolve("$namespace.yml")
+
+            val source = when {
+                Files.isReadable(p1) -> Files.readAllBytes(p1).decodeToString()
+                Files.isReadable(p2) -> Files.readAllBytes(p2).decodeToString()
+                else -> null
+            } ?: return default
+
+            return Yaml.default.decodeFromString(serializer, source)
+        }
+
+        /**
          * When true GET (read and query) requests are logged by DTO backends.
          */
         var logReads: Boolean = true
@@ -113,15 +145,15 @@ class Server : CliktCommand() {
         }
     }
 
-    private val configPath
-        by option("-c", "--config", help = "Path to the configuration file or directory.")
-            .file(mustExist = true, mustBeReadable = true, canBeDir = true)
+    private val settingsPath
+        by option("-s", "--settings", help = "Path to the settings file.")
+            .file(mustExist = true, mustBeReadable = true, canBeDir = false)
             .convert { it.path }
-            .default("./zakadabar-config.yaml")
+            .default("./zakadabar.stack.server.yaml")
 
     override fun run() {
 
-        val config = loadConfig()
+        val config = loadSettings()
 
         Sql.onCreate(config.database) // initializes SQL connection
 
@@ -244,27 +276,29 @@ class Server : CliktCommand() {
         server.start(wait = true)
     }
 
-    private fun loadConfig(): ServerSettingsDto {
+    private fun loadSettings(): ServerSettingsDto {
 
         val paths = listOf(
-            configPath,
-            "./zakadabar-server.yml",
-            "./etc/zakadabar-server.yaml",
-            "./etc/zakadabar-server.yml",
-            "../etc/zakadabar-server.yaml",
-            "../etc/zakadabar-server.yml",
-            "./template/app/etc/zakadabar-server.yaml" // this is for development, TODO remove hard-coded development config path
+            settingsPath,
+            "./zakadabar.stack.server.yml",
+            "./etc/zakadabar.stack.server.yaml",
+            "./etc/zakadabar.stack.server.yml",
+            "../etc/zakadabar.stack.server.yaml",
+            "../etc/zakadabar.stack.server.yml",
+            "./template/app/etc/zakadabar.stack.server.yaml" // this is for development, TODO remove hard-coded development config path
         )
 
         for (p in paths) {
             val path = Paths.get(p)
             if (! Files.exists(path)) continue
 
+            settingsDirectory = path.parent
             val source = Files.readAllBytes(path).decodeToString()
+
             return Yaml.default.decodeFromString(ServerSettingsDto.serializer(), source)
         }
 
-        throw IllegalArgumentException("cannot locate configuration file")
+        throw IllegalArgumentException("cannot locate server settings file")
     }
 
     private fun loadModules(config: ServerSettingsDto) {

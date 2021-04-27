@@ -46,4 +46,9 @@ class OptEnumValidationRuleList<E : Enum<E>>(
 
     override fun isOptional() = true
 
+    override fun decodeFromString(value: String?) {
+        throw NotImplementedError("enum decode from string is not implemented")
+    }
+
+
 }

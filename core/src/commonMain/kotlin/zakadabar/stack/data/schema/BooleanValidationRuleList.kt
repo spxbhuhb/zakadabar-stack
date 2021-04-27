@@ -44,4 +44,9 @@ class BooleanValidationRuleList(val kProperty: KMutableProperty0<Boolean>) : Val
 
     override fun isOptional() = false
 
+    override fun decodeFromString(value: String?) {
+        if (value == null) throw IllegalArgumentException()
+        kProperty.set(value.toBoolean())
+    }
+
 }

@@ -80,4 +80,8 @@ class OptLongValidationRuleList(val kProperty: KMutableProperty0<Long?>) : Valid
 
     override fun isOptional() = true
 
+    override fun decodeFromString(value: String?) {
+        kProperty.set(value?.toLong())
+    }
+
 }

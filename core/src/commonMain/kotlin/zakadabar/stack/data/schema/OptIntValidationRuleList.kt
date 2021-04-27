@@ -80,4 +80,8 @@ class OptIntValidationRuleList(val kProperty: KMutableProperty0<Int?>) : Validat
 
     override fun isOptional() = true
 
+    override fun decodeFromString(value: String?) {
+        kProperty.set(value?.toInt())
+    }
+
 }

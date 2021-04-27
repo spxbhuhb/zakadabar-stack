@@ -44,4 +44,7 @@ class CustomValidationRuleList(function: (report: ValidityReport, rule: Validati
 
     override fun isOptional() = false
 
+    override fun decodeFromString(value: String?) {
+    }
+
 }

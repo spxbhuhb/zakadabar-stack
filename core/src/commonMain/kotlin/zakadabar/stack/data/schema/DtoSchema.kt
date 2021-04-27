@@ -23,7 +23,7 @@ open class DtoSchema() {
     }
 
     @Suppress("MemberVisibilityCanBePrivate") // To make extensions possible
-    val ruleLists = mutableMapOf<KProperty0<*>, ValidationRuleList<*>>()
+    val ruleLists = mutableMapOf<KMutableProperty0<*>, ValidationRuleList<*>>()
 
     @Suppress("MemberVisibilityCanBePrivate") // To make extensions possible
     val customRuleLists = mutableListOf<CustomValidationRuleList>()
@@ -179,6 +179,7 @@ interface ValidationRuleList<T> {
     fun validate(report: ValidityReport)
     fun isOptional(): Boolean
     fun setDefault()
+    fun decodeFromString(value: String?)
 }
 
 interface ValidationRule<T> {

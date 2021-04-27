@@ -44,4 +44,8 @@ class OptBooleanValidationRuleList(val kProperty: KMutableProperty0<Boolean?>) :
 
     override fun isOptional() = true
 
+    override fun decodeFromString(value: String?) {
+        kProperty.set(value?.toBoolean())
+    }
+
 }

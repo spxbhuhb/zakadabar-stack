@@ -105,4 +105,8 @@ class OptInstantValidationRuleList(val kProperty: KMutableProperty0<Instant?>) :
 
     override fun isOptional() = true
 
+    override fun decodeFromString(value: String?) {
+        kProperty.set(value?.let { Instant.parse(it) })
+    }
+
 }

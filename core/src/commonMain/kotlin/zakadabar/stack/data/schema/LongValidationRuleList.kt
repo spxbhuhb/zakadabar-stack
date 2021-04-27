@@ -80,4 +80,10 @@ class LongValidationRuleList(val kProperty: KMutableProperty0<Long>) : Validatio
 
     override fun isOptional() = false
 
+    override fun decodeFromString(value: String?) {
+        if (value == null) throw IllegalArgumentException()
+        kProperty.set(value.toLong())
+    }
+
+
 }
