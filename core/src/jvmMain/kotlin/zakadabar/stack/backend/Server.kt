@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.backend
 
@@ -34,6 +34,7 @@ import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.backend.ktor.*
 import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.builtin.account.AccountPublicDto
+import zakadabar.stack.data.builtin.settings.ServerSettingsDto
 import zakadabar.stack.util.Executor
 import java.io.File
 import java.nio.file.Files
@@ -243,7 +244,7 @@ class Server : CliktCommand() {
         server.start(wait = true)
     }
 
-    private fun loadConfig(): Configuration {
+    private fun loadConfig(): ServerSettingsDto {
 
         val paths = listOf(
             configPath,
@@ -260,13 +261,13 @@ class Server : CliktCommand() {
             if (! Files.exists(path)) continue
 
             val source = Files.readAllBytes(path).decodeToString()
-            return Yaml.default.decodeFromString(Configuration.serializer(), source)
+            return Yaml.default.decodeFromString(ServerSettingsDto.serializer(), source)
         }
 
         throw IllegalArgumentException("cannot locate configuration file")
     }
 
-    private fun loadModules(config: Configuration) {
+    private fun loadModules(config: ServerSettingsDto) {
 
         config.modules.forEach {
 

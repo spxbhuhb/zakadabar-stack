@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.backend.ktor
 
@@ -15,8 +15,13 @@ import org.jetbrains.exposed.sql.update
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.data.builtin.session.SessionTable
+import zakadabar.stack.backend.util.Setting
+import zakadabar.stack.backend.util.default
+import zakadabar.stack.data.builtin.settings.SessionBackendSettingsDto
 
 object SessionMaintenanceTask {
+
+    private val settings by Setting<SessionBackendSettingsDto>(default(), "zakadabar.stack.session")
 
     val updateChannel = Channel<SessionCacheEntry>()
 
@@ -47,7 +52,7 @@ object SessionMaintenanceTask {
     private suspend fun expireJob() {
         while (! Server.shutdown) {
             try {
-                val cutoff = Clock.System.now().toJavaInstant().minusMillis(30 * 60 * 1000)
+                val cutoff = Clock.System.now().toJavaInstant().minusMillis(settings.sessionTimeout * 1000)
                 val toDelete = transaction {
                     SessionTable
                         .select { SessionTable.lastAccess less cutoff }
@@ -59,7 +64,7 @@ object SessionMaintenanceTask {
             } catch (ex: Exception) {
                 logger.error("session expire error", ex)
             }
-            delay(2 * 60 * 1000)
+            delay(settings.expirationCheckInterval * 1000)
         }
     }
 

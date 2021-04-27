@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.backend.data
 
@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.stack.backend.DatabaseConfig
+import zakadabar.stack.data.builtin.settings.DatabaseSettingsDto
 
 /**
  * Use this everywhere BUT when handling blob content.
@@ -24,7 +24,7 @@ object Sql {
 
     val tables = mutableListOf<Table>()
 
-    fun onCreate(config: DatabaseConfig) {
+    fun onCreate(config: DatabaseSettingsDto) {
         val hikariConfig = HikariConfig()
 
         hikariConfig.driverClassName = config.driverClassName

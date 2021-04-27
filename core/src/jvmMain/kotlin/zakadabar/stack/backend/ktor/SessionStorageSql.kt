@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.backend.ktor
 
@@ -17,6 +17,9 @@ import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import zakadabar.stack.backend.data.builtin.session.SessionTable
+import zakadabar.stack.backend.util.Setting
+import zakadabar.stack.backend.util.default
+import zakadabar.stack.data.builtin.settings.SessionBackendSettingsDto
 import java.io.ByteArrayOutputStream
 import kotlin.coroutines.coroutineContext
 
@@ -28,6 +31,8 @@ import kotlin.coroutines.coroutineContext
  * handling and went for a "just works" solution.
  */
 object SessionStorageSql : SessionStorage {
+
+    private val settings by Setting<SessionBackendSettingsDto>(default(), "zakadabar.stack.session")
 
     /**
      * Cache access is synchronised with this mutex. We use cache for simple lookup
@@ -88,7 +93,7 @@ object SessionStorageSql : SessionStorage {
         if (entry == null) return entry
 
         val now = Clock.System.now()
-        val cutoff = now.minus(2, DateTimeUnit.MINUTE)
+        val cutoff = now.minus(settings.updateDelay, DateTimeUnit.SECOND)
 
         println("$cutoff ${entry.createdAt} ${entry.createdAt.epochSeconds < cutoff.epochSeconds}")
 

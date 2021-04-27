@@ -1,9 +1,10 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.data.schema
 
 import kotlinx.datetime.Instant
+import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.UUID
@@ -123,12 +124,10 @@ open class DtoSchema() {
         return ruleList
     }
 
-    operator fun plusAssign(custom: CustomValidationRuleList) {
-        customRuleLists += custom
-    }
-
-    operator fun CustomValidationRuleList.unaryPlus() {
-        customRuleLists += this
+    inline operator fun <reified T : DtoBase> KMutableProperty0<T>.unaryPlus(): DtoBaseValidationRuleList<T> {
+        val ruleList = DtoBaseValidationRuleList(this)
+        ruleLists[this] = ruleList
+        return ruleList
     }
 
     @JsName("SchemaOptEnumUnaryPlus")
@@ -142,6 +141,14 @@ open class DtoSchema() {
         val ruleList = OptEnumValidationRuleList(this)
         ruleLists[this] = ruleList
         return ruleList
+    }
+
+    operator fun plusAssign(custom: CustomValidationRuleList) {
+        customRuleLists += custom
+    }
+
+    operator fun CustomValidationRuleList.unaryPlus() {
+        customRuleLists += this
     }
 
     fun custom(function: (report: ValidityReport, rule: ValidationRule<Unit>) -> Unit) = CustomValidationRuleList(function)
