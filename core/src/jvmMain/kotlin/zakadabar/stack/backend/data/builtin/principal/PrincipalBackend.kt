@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 @file:Suppress("UNUSED_PARAMETER", "unused")
 
@@ -143,7 +143,7 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
         if (result != null) {
             principal.loginFailCount ++
             principal.lastLoginFail = Clock.System.now().toJavaInstant()
-            principal.locked = principal.loginFailCount > maxFailCount
+            principal.locked = principal.locked || (principal.loginFailCount > maxFailCount)
             commit()
             throw result
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
@@ -49,6 +49,6 @@ open class ZkOptInstantColumn<T : DtoBase>(
         // FIXME proper formatting, Kotlin datetime supports only ISO for now
         val value = prop.get(row) ?: return ""
         val s = value.toLocalDateTime(TimeZone.currentSystemDefault()).toString()
-        return "${s.substring(0, 10)} ${s.substring(11, 5)}"
+        return "${s.substring(0, 10)} ${s.substring(11, 16)}"
     }
 }

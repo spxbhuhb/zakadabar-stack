@@ -1,8 +1,9 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.demo.backend.lib
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.toJavaInstant
 import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.LongEntity
@@ -75,7 +76,7 @@ class BuiltinDao(id: EntityID<Long>) : LongEntity(id) {
         optBooleanValue = dto.optBooleanValue
         optDoubleValue = dto.optDoubleValue
         optEnumSelectValue = dto.optEnumSelectValue
-        optInstantValue = dto.optInstantValue?.toJavaInstant()
+        optInstantValue = dto.optInstantValue?.toJavaInstant() ?: (if (dto.booleanValue) Clock.System.now().toJavaInstant() else null)
         optIntValue = dto.optIntValue
         optSecretValue = dto.optSecretValue?.let { s -> BCrypt.hashpw(s.value, BCrypt.gensalt()) }
         optRecordSelectValue = dto.optRecordSelectValue?.let { v -> ExampleReferenceDao[v] }
