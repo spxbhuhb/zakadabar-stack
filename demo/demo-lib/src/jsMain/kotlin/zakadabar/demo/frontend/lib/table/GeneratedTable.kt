@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.demo.frontend.lib.table
 
@@ -14,7 +14,7 @@ import zakadabar.stack.frontend.util.default
 /**
  * This example shows all built in table columns with generated table data.
  */
-object GeneratedTable : ZkPage() {
+object GeneratedTable : ZkPage(cssClass = ZkPageStyles.fixed) {
 
     override fun onCreate() {
         super.onCreate()
