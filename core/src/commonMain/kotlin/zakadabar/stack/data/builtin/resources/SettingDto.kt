@@ -10,21 +10,13 @@ import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.DtoSchema
 
-/**
- * A general configuration setting.
- *
- * @property  id      Id of the configuration setting record.
- * @property  role    Id of the role this setting string is visible for. When null everyone can see the setting.
- * @property  name    Name of the setting.
- * @property  value   Value of the setting.
- */
 @Serializable
 data class SettingDto(
     override var id: RecordId<SettingDto>,
     var role: RecordId<RoleDto>?,
-    var format: SettingFormat,
+    var source: SettingSource,
     var namespace: String,
-    var path: String,
+    var className: String,
     var value: String,
 ) : RecordDto<SettingDto> {
 
@@ -37,9 +29,9 @@ data class SettingDto(
 
     override fun schema() = DtoSchema {
         + ::role min 1
-        + ::format default SettingFormat.TEXT
+        + ::source
         + ::namespace min 0 max 100
-        + ::path min 1 max 100 blank false
+        + ::className min 1 max 100 blank false
         + ::value
     }
 }

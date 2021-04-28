@@ -3,7 +3,7 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package zakadabar.stack.backend.ktor
+package zakadabar.stack.backend.service.sessions
 
 import io.ktor.application.*
 import io.ktor.auth.*

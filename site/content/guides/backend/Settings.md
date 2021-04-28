@@ -8,7 +8,7 @@ There are three layers of settings:
 1. configuration files,
 1. overwrites from the database.
 
-**Override of sub-fields and enums is not supported yet.**
+**Override of nested instances and enums is not supported yet.**
 
 ## Startup
 
@@ -33,11 +33,12 @@ The directory that contains the server settings file becomes the
 1. Once the file is located, the backend loads the content of it into a
    [ServerSettingsDto](../../../../core/src/commonMain/kotlin/zakadabar/stack/data/builtin/settings/ServerSettingsDto.kt).
 1. From the server settings the database connection is initialized.
-1. From the database setting overrides are loaded for the server settings by calling the `overrideSettings` method of the
-   [Server](../../../../core/src/jvmMain/kotlin/zakadabar/stack/backend/Server.kt)
+1. The setting overrides are loaded for the server settings by calling the `overrideSettings` method of the
+   [Server](../../../../core/src/jvmMain/kotlin/zakadabar/stack/backend/Server.kt). Note that the database connection is already initialized at this point, so you cannot override the database
+   parameters from the database.
 
-Default implementation of `loadSettingOverrides` use [SettingsBackend](../../../../core/src/jvmMain/kotlin/zakadabar/stack/backend/data/builtin/resources/SettingBackend.kt)
-to load setting overrides for the server settings. Note that the database connection is already initialized a this point, so you cannot override the database parameters from the database.
+Default implementation of `overrideSettings` use [SettingsBackend](../../../../core/src/jvmMain/kotlin/zakadabar/stack/backend/data/builtin/resources/SettingBackend.kt)
+to load overrides.
 
 ## Write a Setting DTO
 

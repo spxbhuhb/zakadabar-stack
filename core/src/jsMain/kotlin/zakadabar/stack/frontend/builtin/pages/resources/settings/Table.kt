@@ -29,8 +29,7 @@ class Table : ZkTable<SettingDto>() {
             render = { + roles[it.role]?.name }
         }
         + SettingDto::namespace
-        + SettingDto::path
-        + SettingDto::value
+        + SettingDto::className
 
         + actions()
     }

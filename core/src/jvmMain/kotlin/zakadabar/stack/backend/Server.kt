@@ -23,19 +23,16 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.sessions.*
 import io.ktor.websocket.*
-import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerializationStrategy
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.custom.CustomBackend
 import zakadabar.stack.backend.data.Sql
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
-import zakadabar.stack.backend.data.builtin.resources.SettingBackend
 import zakadabar.stack.backend.data.builtin.session.*
 import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.backend.ktor.*
+import zakadabar.stack.backend.service.sessions.*
 import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.account.AccountPublicDto
@@ -89,27 +86,6 @@ class Server : CliktCommand() {
         lateinit var settingsDirectory: Path
 
         /**
-         * Function that override settings if needed. Called during setting DTO initialization.
-         */
-        var overrideSettings: (settings: DtoBase, namespace: String) -> Unit = SettingBackend::overrideSettings
-        // FIXME make override settings atomic
-
-
-        fun <T : DtoBase> loadSettings(default: T, serializer: KSerializer<T>, namespace: String): T {
-
-            val p1 = settingsDirectory.resolve("$namespace.yaml")
-            val p2 = settingsDirectory.resolve("$namespace.yml")
-
-            val source = when {
-                Files.isReadable(p1) -> Files.readAllBytes(p1).decodeToString()
-                Files.isReadable(p2) -> Files.readAllBytes(p2).decodeToString()
-                else -> null
-            } ?: return default
-
-            return Yaml.default.decodeFromString(serializer, source)
-        }
-
-        /**
          * When true GET (read and query) requests are logged by DTO backends.
          */
         var logReads: Boolean = true
@@ -143,6 +119,20 @@ class Server : CliktCommand() {
             this.customBackends += customBackend
             customBackend.onModuleLoad()
         }
+
+        fun <T : DtoBase> loadSettings(namespace: String, serializer: KSerializer<T>): T? {
+
+            val p1 = settingsDirectory.resolve("$namespace.yaml")
+            val p2 = settingsDirectory.resolve("$namespace.yml")
+
+            val source = when {
+                Files.isReadable(p1) -> Files.readAllBytes(p1).decodeToString()
+                Files.isReadable(p2) -> Files.readAllBytes(p2).decodeToString()
+                else -> null
+            } ?: return null
+
+            return Yaml.default.decodeFromString(serializer, source)
+        }
     }
 
     private val settingsPath
@@ -153,7 +143,7 @@ class Server : CliktCommand() {
 
     override fun run() {
 
-        val config = loadSettings()
+        val config = loadServerSettings()
 
         Sql.onCreate(config.database) // initializes SQL connection
 
@@ -276,7 +266,7 @@ class Server : CliktCommand() {
         server.start(wait = true)
     }
 
-    private fun loadSettings(): ServerSettingsDto {
+    private fun loadServerSettings(): ServerSettingsDto {
 
         val paths = listOf(
             settingsPath,

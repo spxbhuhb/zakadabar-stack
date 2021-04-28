@@ -7,22 +7,21 @@ import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
 import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.data.builtin.resources.SettingDto
-import zakadabar.stack.data.builtin.resources.SettingFormat
+import zakadabar.stack.data.builtin.resources.SettingSource
 
 object SettingTable : LongIdTable("settings") {
 
     val role = reference("role", RoleTable).nullable()
-    val format = enumerationByName("format", 20, SettingFormat::class)
     var namespace = varchar("namespace", 100)
-    val path = varchar("path", 100)
+    val className = varchar("path", 100)
     val value = text("value")
 
     fun toDto(row: ResultRow) = SettingDto(
         id = row[id].value,
         role = row[role]?.value,
-        format = row[format],
+        source = SettingSource.Database,
         namespace = row[namespace],
-        path = row[path],
+        className = row[className],
         value = row[value]
     )
 

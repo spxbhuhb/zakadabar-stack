@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.backend.data.builtin.session
 
@@ -11,7 +11,7 @@ import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
 import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.backend.ktor.StackSession
+import zakadabar.stack.backend.service.sessions.StackSession
 import zakadabar.stack.data.builtin.ActionStatusDto
 import zakadabar.stack.data.builtin.account.AccountPublicDto
 import zakadabar.stack.data.builtin.account.LoginAction
