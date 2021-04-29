@@ -14,8 +14,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema
+package zakadabar.stack.data.schema.validations
 
+import zakadabar.stack.data.schema.ValidationRule
+import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.DoubleValidationDto
+import zakadabar.stack.data.schema.dto.OptDoublePropertyDto
+import zakadabar.stack.data.schema.dto.ValidationType
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -26,21 +32,33 @@ class OptDoubleValidationRuleList(val kProperty: KMutableProperty0<Double?>) : V
     private val rules = mutableListOf<ValidationRule<Double?>>()
 
     inner class Max(@PublicApi val limit: Double) : ValidationRule<Double?> {
+
         override fun validate(value: Double?, report: ValidityReport) {
             if (value != null && value > limit) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = DoubleValidationDto(ValidationType.Max, limit)
+
     }
 
     inner class Min(@PublicApi val limit: Double) : ValidationRule<Double?> {
+
         override fun validate(value: Double?, report: ValidityReport) {
             if (value != null && value < limit) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = DoubleValidationDto(ValidationType.Min, limit)
+
     }
 
     inner class NotEquals(@PublicApi val invalidValue: Double?) : ValidationRule<Double?> {
+
         override fun validate(value: Double?, report: ValidityReport) {
             if (value == invalidValue) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = DoubleValidationDto(ValidationType.NotEquals, invalidValue)
+
     }
 
     @PublicApi
@@ -80,8 +98,11 @@ class OptDoubleValidationRuleList(val kProperty: KMutableProperty0<Double?>) : V
 
     override fun isOptional() = true
 
-    override fun decodeFromString(value: String?) {
-        kProperty.set(value?.toDouble())
-    }
+    override fun toPropertyDto() = OptDoublePropertyDto(
+        kProperty.name,
+        rules.map { it.toValidationDto() },
+        defaultValue,
+        kProperty.get()
+    )
 
 }

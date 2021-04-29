@@ -14,8 +14,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema
+package zakadabar.stack.data.schema.validations
 
+import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.OptUuidPropertyDto
 import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.UUID
 import kotlin.reflect.KMutableProperty0
@@ -24,14 +27,7 @@ class OptUuidValidationRuleList(val kProperty: KMutableProperty0<UUID?>) : Valid
 
     var defaultValue: UUID? = null
 
-    private val rules = mutableListOf<ValidationRule<UUID?>>()
-
-    override fun validate(report: ValidityReport) {
-        val value = kProperty.get()
-        for (rule in rules) {
-            rule.validate(value, report)
-        }
-    }
+    override fun validate(report: ValidityReport) {}
 
     @PublicApi
     infix fun default(value: UUID?): OptUuidValidationRuleList {
@@ -45,8 +41,10 @@ class OptUuidValidationRuleList(val kProperty: KMutableProperty0<UUID?>) : Valid
 
     override fun isOptional() = true
 
-    override fun decodeFromString(value: String?) {
-        kProperty.set(value?.let { UUID(value) })
-    }
-
+    override fun toPropertyDto() = OptUuidPropertyDto(
+        kProperty.name,
+        emptyList(),
+        defaultValue,
+        kProperty.get()
+    )
 }

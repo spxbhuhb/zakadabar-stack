@@ -14,29 +14,23 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema
+package zakadabar.stack.data.schema.validations
 
+import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.UuidPropertyDto
 import zakadabar.stack.util.PublicApi
+import zakadabar.stack.util.UUID
 import kotlin.reflect.KMutableProperty0
 
-class EnumValidationRuleList<E : Enum<E>>(
-    val kProperty: KMutableProperty0<E>,
-    default: E
-) : ValidationRuleList<E> {
+class UuidValidationRuleList(val kProperty: KMutableProperty0<UUID>) : ValidationRuleList<UUID> {
 
-    var defaultValue = default
+    var defaultValue = UUID.NIL
 
-    private val rules = mutableListOf<ValidationRule<E>>()
-
-    override fun validate(report: ValidityReport) {
-        val value = kProperty.get()
-        for (rule in rules) {
-            rule.validate(value, report)
-        }
-    }
+    override fun validate(report: ValidityReport) {}
 
     @PublicApi
-    infix fun default(value: E): EnumValidationRuleList<E> {
+    infix fun default(value: UUID): UuidValidationRuleList {
         defaultValue = value
         return this
     }
@@ -47,9 +41,11 @@ class EnumValidationRuleList<E : Enum<E>>(
 
     override fun isOptional() = false
 
-    override fun decodeFromString(value: String?) {
-        if (value == null) throw NotImplementedError("enum decode from string is not implemented")
-    }
-
+    override fun toPropertyDto() = UuidPropertyDto(
+        kProperty.name,
+        emptyList(),
+        defaultValue,
+        kProperty.get()
+    )
 
 }

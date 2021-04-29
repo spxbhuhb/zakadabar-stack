@@ -6,12 +6,19 @@ package zakadabar.stack.data.schema
 import kotlinx.datetime.Instant
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.misc.Secret
+import zakadabar.stack.data.schema.dto.DescriptorDto
+import zakadabar.stack.data.schema.dto.PropertyDto
+import zakadabar.stack.data.schema.dto.ValidationDto
+import zakadabar.stack.data.schema.validations.*
 import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.UUID
 import kotlin.js.JsName
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KProperty0
 
+/**
+ * A data model schema that may be used to validate a data instance.
+ */
 open class DtoSchema() {
 
     companion object {
@@ -132,13 +139,13 @@ open class DtoSchema() {
 
     @JsName("SchemaOptEnumUnaryPlus")
     inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): EnumValidationRuleList<E> {
-        val ruleList = EnumValidationRuleList(this, enumValues<E>().first())
+        val ruleList = EnumValidationRuleList(this, enumValues())
         ruleLists[this] = ruleList
         return ruleList
     }
 
     inline operator fun <reified E : Enum<E>> KMutableProperty0<E?>.unaryPlus(): OptEnumValidationRuleList<E> {
-        val ruleList = OptEnumValidationRuleList(this)
+        val ruleList = OptEnumValidationRuleList(this, enumValues())
         ruleLists[this] = ruleList
         return ruleList
     }
@@ -173,17 +180,20 @@ open class DtoSchema() {
         return true
     }
 
+    fun toDescriptorDto() = DescriptorDto(ruleLists.mapNotNull { it.value.toPropertyDto() })
+
 }
 
 interface ValidationRuleList<T> {
     fun validate(report: ValidityReport)
     fun isOptional(): Boolean
     fun setDefault()
-    fun decodeFromString(value: String?)
+    fun toPropertyDto() : PropertyDto?
 }
 
 interface ValidationRule<T> {
     fun validate(value: T, report: ValidityReport)
+    fun toValidationDto() : ValidationDto
 }
 
 class ValidityReport(

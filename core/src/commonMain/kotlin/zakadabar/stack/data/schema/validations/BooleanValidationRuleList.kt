@@ -14,26 +14,22 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema
+package zakadabar.stack.data.schema.validations
 
+import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.BooleanPropertyDto
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class OptBooleanValidationRuleList(val kProperty: KMutableProperty0<Boolean?>) : ValidationRuleList<Boolean?> {
+class BooleanValidationRuleList(val kProperty: KMutableProperty0<Boolean>) : ValidationRuleList<Boolean> {
 
-    var defaultValue: Boolean? = null
+    var defaultValue = false
 
-    private val rules = mutableListOf<ValidationRule<Boolean?>>()
-
-    override fun validate(report: ValidityReport) {
-        val value = kProperty.get()
-        for (rule in rules) {
-            rule.validate(value, report)
-        }
-    }
+    override fun validate(report: ValidityReport) {}
 
     @PublicApi
-    infix fun default(value: Boolean?): OptBooleanValidationRuleList {
+    infix fun default(value: Boolean): BooleanValidationRuleList {
         defaultValue = value
         return this
     }
@@ -42,10 +38,12 @@ class OptBooleanValidationRuleList(val kProperty: KMutableProperty0<Boolean?>) :
         kProperty.set(defaultValue)
     }
 
-    override fun isOptional() = true
+    override fun isOptional() = false
 
-    override fun decodeFromString(value: String?) {
-        kProperty.set(value?.toBoolean())
-    }
-
+    override fun toPropertyDto() = BooleanPropertyDto(
+        kProperty.name,
+        emptyList(),
+        defaultValue,
+        kProperty.get()
+    )
 }

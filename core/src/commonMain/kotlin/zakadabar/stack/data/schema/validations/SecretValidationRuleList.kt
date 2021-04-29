@@ -14,9 +14,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema
+package zakadabar.stack.data.schema.validations
 
 import zakadabar.stack.data.builtin.misc.Secret
+import zakadabar.stack.data.schema.ValidationRule
+import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.SecretPropertyDto
+import zakadabar.stack.data.schema.dto.StringValidationBooleanDto
+import zakadabar.stack.data.schema.dto.StringValidationIntDto
+import zakadabar.stack.data.schema.dto.ValidationType
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -27,22 +34,34 @@ class SecretValidationRuleList(val kProperty: KMutableProperty0<Secret>) : Valid
     private val rules = mutableListOf<ValidationRule<Secret>>()
 
     inner class Max(@PublicApi val limit: Int) : ValidationRule<Secret> {
+
         override fun validate(value: Secret, report: ValidityReport) {
             if (value.value.length > limit) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = StringValidationIntDto(ValidationType.Max, limit)
+
     }
 
     inner class Min(@PublicApi val limit: Int) : ValidationRule<Secret> {
+
         override fun validate(value: Secret, report: ValidityReport) {
             if (value.value.length < limit) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = StringValidationIntDto(ValidationType.Min, limit)
+
     }
 
     inner class Blank(@PublicApi val validValue: Boolean) : ValidationRule<Secret> {
+
         override fun validate(value: Secret, report: ValidityReport) {
             if (validValue) return // nothing to check when blank is allowed
             if (value.value.isBlank()) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = StringValidationBooleanDto(ValidationType.Blank, validValue)
+
     }
 
     @PublicApi
@@ -82,9 +101,11 @@ class SecretValidationRuleList(val kProperty: KMutableProperty0<Secret>) : Valid
 
     override fun isOptional() = false
 
-    override fun decodeFromString(value: String?) {
-        if (value == null) throw IllegalArgumentException()
-        kProperty.set(Secret(value))
-    }
+    override fun toPropertyDto() = SecretPropertyDto(
+        kProperty.name,
+        rules.map { it.toValidationDto() },
+        defaultValue,
+        kProperty.get()
+    )
 
 }

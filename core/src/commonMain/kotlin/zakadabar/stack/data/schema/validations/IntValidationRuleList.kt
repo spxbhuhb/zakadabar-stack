@@ -14,8 +14,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema
+package zakadabar.stack.data.schema.validations
 
+import zakadabar.stack.data.schema.ValidationRule
+import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.IntPropertyDto
+import zakadabar.stack.data.schema.dto.IntValidationDto
+import zakadabar.stack.data.schema.dto.ValidationType
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -26,21 +32,33 @@ class IntValidationRuleList(val kProperty: KMutableProperty0<Int>) : ValidationR
     private val rules = mutableListOf<ValidationRule<Int>>()
 
     inner class Max(@PublicApi val limit: Int) : ValidationRule<Int> {
+
         override fun validate(value: Int, report: ValidityReport) {
             if (value > limit) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = IntValidationDto(ValidationType.Max, limit)
+
     }
 
     inner class Min(@PublicApi val limit: Int) : ValidationRule<Int> {
+
         override fun validate(value: Int, report: ValidityReport) {
             if (value < limit) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = IntValidationDto(ValidationType.Min, limit)
+
     }
 
     inner class NotEquals(@PublicApi val invalidValue: Int) : ValidationRule<Int> {
+
         override fun validate(value: Int, report: ValidityReport) {
             if (value == invalidValue) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = IntValidationDto(ValidationType.NotEquals, invalidValue)
+
     }
 
     @PublicApi
@@ -80,9 +98,11 @@ class IntValidationRuleList(val kProperty: KMutableProperty0<Int>) : ValidationR
 
     override fun isOptional() = false
 
-    override fun decodeFromString(value: String?) {
-        if (value == null) throw IllegalArgumentException()
-        kProperty.set(value.toInt())
-    }
+    override fun toPropertyDto() = IntPropertyDto(
+        kProperty.name,
+        rules.map { it.toValidationDto() },
+        defaultValue,
+        kProperty.get()
+    )
 
 }

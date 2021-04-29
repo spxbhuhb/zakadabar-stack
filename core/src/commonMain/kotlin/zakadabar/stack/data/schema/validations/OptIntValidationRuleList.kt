@@ -14,8 +14,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema
+package zakadabar.stack.data.schema.validations
 
+import zakadabar.stack.data.schema.ValidationRule
+import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.IntValidationDto
+import zakadabar.stack.data.schema.dto.OptIntPropertyDto
+import zakadabar.stack.data.schema.dto.ValidationType
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -26,21 +32,33 @@ class OptIntValidationRuleList(val kProperty: KMutableProperty0<Int?>) : Validat
     private val rules = mutableListOf<ValidationRule<Int?>>()
 
     inner class Max(@PublicApi val limit: Int) : ValidationRule<Int?> {
+
         override fun validate(value: Int?, report: ValidityReport) {
             if (value != null && value > limit) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = IntValidationDto(ValidationType.Max, limit)
+
     }
 
     inner class Min(@PublicApi val limit: Int) : ValidationRule<Int?> {
+
         override fun validate(value: Int?, report: ValidityReport) {
             if (value != null && value < limit) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = IntValidationDto(ValidationType.Min, limit)
+
     }
 
     inner class NotEquals(@PublicApi val invalidValue: Int?) : ValidationRule<Int?> {
+
         override fun validate(value: Int?, report: ValidityReport) {
             if (value == invalidValue) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = IntValidationDto(ValidationType.NotEquals, invalidValue)
+
     }
 
     @PublicApi
@@ -80,8 +98,11 @@ class OptIntValidationRuleList(val kProperty: KMutableProperty0<Int?>) : Validat
 
     override fun isOptional() = true
 
-    override fun decodeFromString(value: String?) {
-        kProperty.set(value?.toInt())
-    }
+    override fun toPropertyDto() = OptIntPropertyDto(
+        kProperty.name,
+        rules.map { it.toValidationDto() },
+        defaultValue,
+        kProperty.get()
+    )
 
 }

@@ -14,9 +14,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema
+package zakadabar.stack.data.schema.validations
 
 import kotlinx.datetime.Instant
+import zakadabar.stack.data.schema.ValidationRule
+import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.InstantValidationDto
+import zakadabar.stack.data.schema.dto.OptInstantPropertyDto
+import zakadabar.stack.data.schema.dto.ValidationType
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -27,33 +33,53 @@ class OptInstantValidationRuleList(val kProperty: KMutableProperty0<Instant?>) :
     private val rules = mutableListOf<ValidationRule<Instant?>>()
 
     inner class Max(@PublicApi val limit: Instant) : ValidationRule<Instant?> {
+
         override fun validate(value: Instant?, report: ValidityReport) {
             if (value != null && value > limit) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = InstantValidationDto(ValidationType.Max, limit)
+
     }
 
     inner class Min(@PublicApi val limit: Instant) : ValidationRule<Instant?> {
+
         override fun validate(value: Instant?, report: ValidityReport) {
             if (value != null && value < limit) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = InstantValidationDto(ValidationType.Min, limit)
+
     }
 
     inner class Before(@PublicApi val limit: Instant) : ValidationRule<Instant?> {
+
         override fun validate(value: Instant?, report: ValidityReport) {
             if (value != null && value >= limit) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = InstantValidationDto(ValidationType.Before, limit)
+
     }
 
     inner class After(@PublicApi val limit: Instant) : ValidationRule<Instant?> {
+
         override fun validate(value: Instant?, report: ValidityReport) {
             if (value != null && value <= limit) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = InstantValidationDto(ValidationType.After, limit)
+
     }
 
     inner class NotEquals(@PublicApi val invalidValue: Instant) : ValidationRule<Instant?> {
+
         override fun validate(value: Instant?, report: ValidityReport) {
             if (value == invalidValue) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = InstantValidationDto(ValidationType.NotEquals, invalidValue)
+
     }
 
     @PublicApi
@@ -105,8 +131,12 @@ class OptInstantValidationRuleList(val kProperty: KMutableProperty0<Instant?>) :
 
     override fun isOptional() = true
 
-    override fun decodeFromString(value: String?) {
-        kProperty.set(value?.let { Instant.parse(it) })
-    }
+
+    override fun toPropertyDto() = OptInstantPropertyDto(
+        kProperty.name,
+        rules.map { it.toValidationDto() },
+        defaultValue,
+        kProperty.get()
+    )
 
 }

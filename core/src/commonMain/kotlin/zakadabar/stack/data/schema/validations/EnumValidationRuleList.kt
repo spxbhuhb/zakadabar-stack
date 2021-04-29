@@ -14,27 +14,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema
+package zakadabar.stack.data.schema.validations
 
+import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.EnumPropertyDto
 import zakadabar.stack.util.PublicApi
-import zakadabar.stack.util.UUID
 import kotlin.reflect.KMutableProperty0
 
-class UuidValidationRuleList(val kProperty: KMutableProperty0<UUID>) : ValidationRuleList<UUID> {
+class EnumValidationRuleList<E : Enum<E>>(
+    val kProperty: KMutableProperty0<E>,
+    val values : Array<E>
+) : ValidationRuleList<E> {
 
-    var defaultValue = UUID.NIL
+    var defaultValue = values.first()
 
-    private val rules = mutableListOf<ValidationRule<UUID>>()
-
-    override fun validate(report: ValidityReport) {
-        val value = kProperty.get()
-        for (rule in rules) {
-            rule.validate(value, report)
-        }
-    }
+    override fun validate(report: ValidityReport) {}
 
     @PublicApi
-    infix fun default(value: UUID): UuidValidationRuleList {
+    infix fun default(value: E): EnumValidationRuleList<E> {
         defaultValue = value
         return this
     }
@@ -45,9 +43,12 @@ class UuidValidationRuleList(val kProperty: KMutableProperty0<UUID>) : Validatio
 
     override fun isOptional() = false
 
-    override fun decodeFromString(value: String?) {
-        if (value == null) throw IllegalArgumentException()
-        kProperty.set(UUID(value))
-    }
+    override fun toPropertyDto() = EnumPropertyDto(
+        kProperty.name,
+        emptyList(),
+        values.map { it.name },
+        defaultValue.name,
+        kProperty.get().name
+    )
 
 }

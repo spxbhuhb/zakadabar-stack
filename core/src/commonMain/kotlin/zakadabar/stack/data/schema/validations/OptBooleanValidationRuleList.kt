@@ -14,22 +14,22 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema
+package zakadabar.stack.data.schema.validations
 
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.OptBooleanPropertyDto
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class DtoBaseValidationRuleList<T : DtoBase>(val kProperty: KMutableProperty0<T>) : ValidationRuleList<T> {
+class OptBooleanValidationRuleList(val kProperty: KMutableProperty0<Boolean?>) : ValidationRuleList<Boolean?> {
 
-    var defaultValue = kProperty.get()
+    var defaultValue: Boolean? = null
 
-    override fun validate(report: ValidityReport) {
-        kProperty.get().schema().validate()
-    }
+    override fun validate(report: ValidityReport) {}
 
     @PublicApi
-    infix fun default(value: T): DtoBaseValidationRuleList<T> {
+    infix fun default(value: Boolean?): OptBooleanValidationRuleList {
         defaultValue = value
         return this
     }
@@ -38,10 +38,13 @@ class DtoBaseValidationRuleList<T : DtoBase>(val kProperty: KMutableProperty0<T>
         kProperty.set(defaultValue)
     }
 
-    override fun isOptional() = false
+    override fun isOptional() = true
 
-    override fun decodeFromString(value: String?) {
-        if (value == null) throw NotImplementedError("decoding of complex values is not implemented")
-    }
+    override fun toPropertyDto() = OptBooleanPropertyDto(
+        kProperty.name,
+        emptyList(),
+        defaultValue,
+        kProperty.get()
+    )
 
 }

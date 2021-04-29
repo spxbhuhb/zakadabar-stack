@@ -14,28 +14,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema
+package zakadabar.stack.data.schema.validations
 
+import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.DtoBasePropertyDto
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class OptEnumValidationRuleList<E : Enum<E>>(
-    val kProperty: KMutableProperty0<E?>
-) : ValidationRuleList<E> {
+class DtoBaseValidationRuleList<T : DtoBase>(val kProperty: KMutableProperty0<T>) : ValidationRuleList<T> {
 
-    var defaultValue: E? = null
-
-    private val rules = mutableListOf<ValidationRule<E?>>()
+    var defaultValue = kProperty.get()
 
     override fun validate(report: ValidityReport) {
-        val value = kProperty.get()
-        for (rule in rules) {
-            rule.validate(value, report)
-        }
+        kProperty.get().schema().validate()
     }
 
     @PublicApi
-    infix fun default(value: E): OptEnumValidationRuleList<E> {
+    infix fun default(value: T): DtoBaseValidationRuleList<T> {
         defaultValue = value
         return this
     }
@@ -44,11 +41,13 @@ class OptEnumValidationRuleList<E : Enum<E>>(
         kProperty.set(defaultValue)
     }
 
-    override fun isOptional() = true
+    override fun isOptional() = false
 
-    override fun decodeFromString(value: String?) {
-        throw NotImplementedError("enum decode from string is not implemented")
-    }
+    override fun toPropertyDto() = DtoBasePropertyDto(
+        kProperty.name,
+        emptyList(),
+        kProperty.get().schema().toDescriptorDto()
+    )
 
 
 }

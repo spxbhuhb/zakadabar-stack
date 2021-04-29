@@ -14,8 +14,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema
+package zakadabar.stack.data.schema.validations
 
+import zakadabar.stack.data.schema.ValidationRule
+import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.LongValidationDto
+import zakadabar.stack.data.schema.dto.OptLongPropertyDto
+import zakadabar.stack.data.schema.dto.ValidationType
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -26,21 +32,33 @@ class OptLongValidationRuleList(val kProperty: KMutableProperty0<Long?>) : Valid
     private val rules = mutableListOf<ValidationRule<Long?>>()
 
     inner class Max(@PublicApi val limit: Long) : ValidationRule<Long?> {
+
         override fun validate(value: Long?, report: ValidityReport) {
             if (value != null && value > limit) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = LongValidationDto(ValidationType.Max, limit)
+
     }
 
     inner class Min(@PublicApi val limit: Long) : ValidationRule<Long?> {
+
         override fun validate(value: Long?, report: ValidityReport) {
             if (value != null && value < limit) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = LongValidationDto(ValidationType.Min, limit)
+
     }
 
     inner class NotEquals(@PublicApi val invalidValue: Long?) : ValidationRule<Long?> {
+
         override fun validate(value: Long?, report: ValidityReport) {
             if (value == invalidValue) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = LongValidationDto(ValidationType.NotEquals, invalidValue)
+
     }
 
     @PublicApi
@@ -80,8 +98,11 @@ class OptLongValidationRuleList(val kProperty: KMutableProperty0<Long?>) : Valid
 
     override fun isOptional() = true
 
-    override fun decodeFromString(value: String?) {
-        kProperty.set(value?.toLong())
-    }
+    override fun toPropertyDto() = OptLongPropertyDto(
+        kProperty.name,
+        rules.map { it.toValidationDto() },
+        defaultValue,
+        kProperty.get()
+    )
 
 }

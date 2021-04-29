@@ -14,26 +14,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema
+package zakadabar.stack.data.schema.validations
 
+import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.OptEnumPropertyDto
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class BooleanValidationRuleList(val kProperty: KMutableProperty0<Boolean>) : ValidationRuleList<Boolean> {
+class OptEnumValidationRuleList<E : Enum<E>>(
+    val kProperty: KMutableProperty0<E?>,
+    val values : Array<E>
+) : ValidationRuleList<E> {
 
-    var defaultValue = false
+    var defaultValue: E? = null
 
-    private val rules = mutableListOf<ValidationRule<Boolean>>()
-
-    override fun validate(report: ValidityReport) {
-        val value = kProperty.get()
-        for (rule in rules) {
-            rule.validate(value, report)
-        }
-    }
+    override fun validate(report: ValidityReport) {}
 
     @PublicApi
-    infix fun default(value: Boolean): BooleanValidationRuleList {
+    infix fun default(value: E): OptEnumValidationRuleList<E> {
         defaultValue = value
         return this
     }
@@ -42,11 +41,14 @@ class BooleanValidationRuleList(val kProperty: KMutableProperty0<Boolean>) : Val
         kProperty.set(defaultValue)
     }
 
-    override fun isOptional() = false
+    override fun isOptional() = true
 
-    override fun decodeFromString(value: String?) {
-        if (value == null) throw IllegalArgumentException()
-        kProperty.set(value.toBoolean())
-    }
+    override fun toPropertyDto() = OptEnumPropertyDto(
+        kProperty.name,
+        emptyList(),
+        values.map { it.name },
+        defaultValue?.name,
+        kProperty.get()?.name
+    )
 
 }

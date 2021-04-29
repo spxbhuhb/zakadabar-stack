@@ -14,8 +14,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema
+package zakadabar.stack.data.schema.validations
 
+import zakadabar.stack.data.schema.ValidationRule
+import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.*
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -26,33 +30,52 @@ class StringValidationRuleList(val kProperty: KMutableProperty0<String>) : Valid
     private val rules = mutableListOf<ValidationRule<String>>()
 
     inner class Max(@PublicApi val limit: Int) : ValidationRule<String> {
+
         override fun validate(value: String, report: ValidityReport) {
             if (value.length > limit) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = StringValidationIntDto(ValidationType.Max, limit)
+
     }
 
     inner class Min(@PublicApi val limit: Int) : ValidationRule<String> {
+
         override fun validate(value: String, report: ValidityReport) {
             if (value.length < limit) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = StringValidationIntDto(ValidationType.Min, limit)
+
     }
 
     inner class NotEquals(@PublicApi val invalidValue: String) : ValidationRule<String> {
+
         override fun validate(value: String, report: ValidityReport) {
             if (value == invalidValue) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = StringValidationStringDto(ValidationType.NotEquals, invalidValue)
+
     }
 
     inner class Blank(@PublicApi val validValue: Boolean) : ValidationRule<String> {
+
         override fun validate(value: String, report: ValidityReport) {
             if (value.isBlank() != validValue) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = StringValidationBooleanDto(ValidationType.Blank, validValue)
+
     }
 
-    inner class Format(@PublicApi val checker: (String) -> Boolean) : ValidationRule<String> {
+    inner class Format(@PublicApi val pattern : String) : ValidationRule<String> {
+
         override fun validate(value: String, report: ValidityReport) {
-            if (! checker(value)) report.fail(kProperty, this)
+            if (Regex(pattern).matchEntire(value) == null) report.fail(kProperty, this)
         }
+
+        override fun toValidationDto() = StringValidationStringDto(ValidationType.Format, pattern)
     }
 
     @PublicApi
@@ -80,8 +103,8 @@ class StringValidationRuleList(val kProperty: KMutableProperty0<String>) : Valid
     }
 
     @PublicApi
-    infix fun format(checker: (String) -> Boolean): StringValidationRuleList {
-        rules += Format(checker)
+    infix fun format(pattern: String): StringValidationRuleList {
+        rules += Format(pattern)
         return this
     }
 
@@ -104,8 +127,10 @@ class StringValidationRuleList(val kProperty: KMutableProperty0<String>) : Valid
 
     override fun isOptional() = false
 
-    override fun decodeFromString(value: String?) {
-        if (value == null) throw IllegalArgumentException()
-        kProperty.set(value)
-    }
+    override fun toPropertyDto() = StringPropertyDto(
+        kProperty.name,
+        emptyList(),
+        defaultValue,
+        kProperty.get()
+    )
 }

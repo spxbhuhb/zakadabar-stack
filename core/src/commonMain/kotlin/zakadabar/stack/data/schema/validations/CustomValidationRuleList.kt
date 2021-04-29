@@ -14,9 +14,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema
+package zakadabar.stack.data.schema.validations
 
-import zakadabar.stack.util.PublicApi
+import zakadabar.stack.data.schema.ValidationRule
+import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.PropertyDto
+import zakadabar.stack.data.schema.dto.ValidationDto
 
 class CustomValidationRuleList(function: (report: ValidityReport, rule: ValidationRule<Unit>) -> Unit) : ValidationRuleList<Unit> {
 
@@ -26,6 +30,10 @@ class CustomValidationRuleList(function: (report: ValidityReport, rule: Validati
         override fun validate(value: Unit, report: ValidityReport) {
             function(report, this)
         }
+
+        override fun toValidationDto(): ValidationDto {
+            throw NotImplementedError("serialization of custom validations is not supported")
+        }
     }
 
     override fun validate(report: ValidityReport) {
@@ -34,17 +42,10 @@ class CustomValidationRuleList(function: (report: ValidityReport, rule: Validati
         }
     }
 
-    @PublicApi
-    infix fun default(value: Unit): CustomValidationRuleList {
-        return this
-    }
-
     override fun setDefault() {
     }
 
     override fun isOptional() = false
 
-    override fun decodeFromString(value: String?) {
-    }
-
+    override fun toPropertyDto() : PropertyDto? = null
 }
