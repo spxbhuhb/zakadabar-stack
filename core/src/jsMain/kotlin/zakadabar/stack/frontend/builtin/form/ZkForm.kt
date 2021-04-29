@@ -26,6 +26,7 @@ import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.query.QueryDto
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.schema.DtoSchema
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkApplication.back
@@ -80,7 +81,7 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
      */
     var onExecuteResult: ((resultDto: DtoBase) -> Unit)? = null
 
-    var schema = lazy { dto.schema() }
+    var schema = lazy { if (! ::dto.isInitialized) DtoSchema.Companion.NO_VALIDATION else dto.schema() }
 
     val fields = mutableListOf<ZkFieldBase<T, *>>()
 

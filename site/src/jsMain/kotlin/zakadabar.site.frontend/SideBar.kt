@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.site.frontend
 
@@ -7,6 +7,7 @@ import hu.simplexion.rf.leltar.frontend.pages.roles.Roles
 import kotlinx.browser.window
 import zakadabar.demo.frontend.lib.crud.BuiltinCrud
 import zakadabar.demo.frontend.lib.form.FormFields
+import zakadabar.demo.frontend.lib.form.SyntheticForm
 import zakadabar.demo.frontend.lib.input.CheckboxList
 import zakadabar.demo.frontend.lib.layout.TabContainer
 import zakadabar.demo.frontend.lib.modal.Modals
@@ -56,7 +57,10 @@ object SideBar : ZkSideBar() {
                 + item("CheckboxList") { CheckboxList.open() }
                 + item("Modals") { Modals.open() }
                 + item("Crud") { BuiltinCrud.openAll() }
-                + item("Form") { FormFields.open() }
+                + group("Form") {
+                    + item("Fields") { FormFields.open() }
+                    + item("Synthetic") { SyntheticForm.open() }
+                }
                 + item("Query") { QueryPage.open() }
                 + item("TabContainer") { TabContainer.open() }
                 + group("Table") {
