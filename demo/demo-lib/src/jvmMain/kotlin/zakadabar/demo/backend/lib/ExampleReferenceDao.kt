@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.demo.backend.lib
 
@@ -7,6 +7,7 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import zakadabar.demo.data.builtin.ExampleReferenceDto
+import zakadabar.stack.backend.data.recordId
 
 class ExampleReferenceDao(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<ExampleReferenceDao>(ExampleReferenceTable)
@@ -14,7 +15,7 @@ class ExampleReferenceDao(id: EntityID<Long>) : LongEntity(id) {
     var name by ExampleReferenceTable.name
 
     fun toDto() = ExampleReferenceDto(
-        id = id.value,
+        id = id.recordId(),
         name = name
     )
 

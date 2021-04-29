@@ -3,6 +3,10 @@
  */
 package zakadabar.stack.backend.service.sessions
 
+import io.ktor.sessions.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import zakadabar.stack.data.builtin.account.AccountPrivateDto
 import zakadabar.stack.data.builtin.account.RoleDto
 import zakadabar.stack.data.record.RecordId
 
@@ -11,8 +15,17 @@ import zakadabar.stack.data.record.RecordId
  *
  * @property account Id of the account this session belongs to.
  */
+@Serializable
 data class StackSession(
-    val account: Long,
+    val account: RecordId<AccountPrivateDto>,
     val roleIds: List<RecordId<RoleDto>>,
     val roleNames: List<String>
 )
+
+object StackSessionSerializer : SessionSerializer<StackSession> {
+
+    override fun deserialize(text: String) = Json.decodeFromString(StackSession.serializer(), text)
+
+    override fun serialize(session: StackSession) = Json.encodeToString(StackSession.serializer(), session)
+
+}

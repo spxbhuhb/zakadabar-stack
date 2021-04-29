@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.data.builtin.account
 
@@ -12,7 +12,7 @@ import zakadabar.stack.data.schema.DtoSchema
 @Serializable
 data class RoleGrantDto(
 
-    override var id: Long,
+    override var id: RecordId<RoleGrantDto>,
     var principal: RecordId<PrincipalDto>,
     var role: RecordId<RoleDto>
 

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 @file:UseSerializers(
     InstantAsStringSerializer::class,
@@ -9,7 +9,8 @@
 package zakadabar.demo.data.builtin
 
 import kotlinx.datetime.Instant
-import kotlinx.serialization.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
@@ -76,7 +77,7 @@ data class BuiltinDto(
         + ::optTextAreaValue max 100000
         + ::optUuidValue
         + ::secretValue blank false max 50
-        + ::recordSelectValue min 1
+        + ::recordSelectValue
         + ::stringValue blank false max 50
         + ::stringSelectValue blank false max 50
         + ::textAreaValue blank false

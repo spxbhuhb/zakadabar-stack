@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 @file:Suppress("unused") // main is called by webpack
 
@@ -8,10 +8,11 @@ import zakadabar.demo.frontend.Routing
 import zakadabar.demo.resources.DemoStrings
 import zakadabar.stack.data.builtin.account.SessionDto
 import zakadabar.stack.data.builtin.resources.TranslationsByLocale
+import zakadabar.stack.data.record.EmptyRecordId
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkExecutor
-import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
 import zakadabar.stack.frontend.util.io
 
 /**
@@ -33,7 +34,7 @@ fun main() {
         // current session between the frontend and backend. If there is no such session, a new
         // one is created.
 
-        val session = SessionDto.read(0L)
+        val session = SessionDto.read(EmptyRecordId())
 
         with(ZkApplication) {
 

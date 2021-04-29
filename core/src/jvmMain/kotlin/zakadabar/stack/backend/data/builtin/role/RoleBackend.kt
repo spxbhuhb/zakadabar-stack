@@ -10,8 +10,10 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
+import zakadabar.stack.backend.data.get
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.data.builtin.account.RoleDto
+import zakadabar.stack.data.record.LongRecordId
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.Executor
 
@@ -46,7 +48,7 @@ object RoleBackend : RecordBackend<RoleDto>() {
         }.toDto()
     }
 
-    override fun read(executor: Executor, recordId: Long) = transaction {
+    override fun read(executor: Executor, recordId: RecordId<RoleDto>) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 
@@ -65,7 +67,7 @@ object RoleBackend : RecordBackend<RoleDto>() {
         dao.toDto()
     }
 
-    override fun delete(executor: Executor, recordId: Long) = transaction {
+    override fun delete(executor: Executor, recordId: RecordId<RoleDto>) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 
@@ -73,9 +75,11 @@ object RoleBackend : RecordBackend<RoleDto>() {
     }
 
     fun findForName(roleName: String): RecordId<RoleDto>? = transaction {
-        RoleDao
+        val value = RoleDao
             .find { RoleTable.name eq roleName }
             .firstOrNull()
             ?.id?.value
+
+        if (value == null) null else LongRecordId(value)
     }
 }

@@ -1,14 +1,15 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.demo.backend.ship
 
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
-import zakadabar.stack.backend.data.builtin.account.AccountPrivateTable
 import zakadabar.demo.backend.port.PortTable
 import zakadabar.demo.backend.speed.SpeedTable
 import zakadabar.demo.data.ship.ShipDto
+import zakadabar.stack.backend.data.builtin.account.AccountPrivateTable
+import zakadabar.stack.backend.data.recordId
 
 object ShipTable : LongIdTable("ships") {
 
@@ -20,13 +21,13 @@ object ShipTable : LongIdTable("ships") {
     val port = reference("port", PortTable).nullable()
 
     fun toDto(row: ResultRow) = ShipDto(
-        id = row[id].value,
+        id = row[id].recordId(),
         name = row[name],
-        speed = row[speed].value,
-        captain = row[captain].value,
+        speed = row[speed].recordId(),
+        captain = row[captain].recordId(),
         description = row[description],
         hasPirateFlag = row[hasPirateFlag],
-        port = row[port]?.value
+        port = row[port]?.recordId()
     )
 
 }

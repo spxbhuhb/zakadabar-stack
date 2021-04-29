@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 @file:Suppress("UNUSED_PARAMETER", "unused")
 
@@ -10,8 +10,10 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
+import zakadabar.stack.backend.data.get
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.data.builtin.resources.LocaleDto
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.Executor
 
 object LocaleBackend : RecordBackend<LocaleDto>() {
@@ -45,7 +47,7 @@ object LocaleBackend : RecordBackend<LocaleDto>() {
         }.toDto()
     }
 
-    override fun read(executor: Executor, recordId: Long) = transaction {
+    override fun read(executor: Executor, recordId: RecordId<LocaleDto>) = transaction {
 
         authorize(true)
 
@@ -64,7 +66,7 @@ object LocaleBackend : RecordBackend<LocaleDto>() {
         dao.toDto()
     }
 
-    override fun delete(executor: Executor, recordId: Long) = transaction {
+    override fun delete(executor: Executor, recordId: RecordId<LocaleDto>) = transaction {
 
         authorize(executor, StackRoles.siteAdmin)
 

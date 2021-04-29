@@ -5,6 +5,7 @@ package zakadabar.demo.frontend.lib.table
 
 import zakadabar.demo.data.builtin.BuiltinDto
 import zakadabar.demo.frontend.lib.crud.BuiltinTable
+import zakadabar.stack.data.record.LongRecordId
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
 import zakadabar.stack.frontend.resources.ZkTheme
@@ -27,7 +28,7 @@ object GeneratedTable : ZkPage(cssClass = ZkPageStyles.fixed) {
         // default data therefore it is slow. Using "copy" is better suited for
         // large record count.
 
-        val data = (1..10000).map { template.copy(id = it.toLong()) }
+        val data = (1..10000).map { template.copy(id = LongRecordId(it.toLong())) }
 
         // Add the table and set the data. It is not important to use these
         // together, you can add the table and set the data later.

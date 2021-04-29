@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.backend.data.builtin.account
 
@@ -7,6 +7,7 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
+import zakadabar.stack.backend.data.recordId
 import zakadabar.stack.data.builtin.account.AccountPrivateDto
 import zakadabar.stack.data.builtin.account.AccountPublicDto
 
@@ -29,9 +30,9 @@ class AccountPrivateDao(id: EntityID<Long>) : LongEntity(id) {
     var phone by AccountPrivateTable.phone
 
     fun toDto() = AccountPrivateDto(
-        id = id.value,
+        id = id.recordId(),
 
-        principal = principal.id.value,
+        principal = principal.id.recordId(),
 
         accountName = accountName,
         fullName = fullName,
@@ -48,7 +49,7 @@ class AccountPrivateDao(id: EntityID<Long>) : LongEntity(id) {
     )
 
     fun toPublicDto(addEmail: Boolean) = AccountPublicDto(
-        id = id.value,
+        id = id.recordId(),
 
         accountName = accountName,
         fullName = fullName,

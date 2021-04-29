@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.pages
 
@@ -44,16 +44,17 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
 
     open fun openAll() = ZkApplication.changeNavState(allPath)
     open fun openCreate() = ZkApplication.changeNavState(createPath)
-    open fun openRead(recordId: RecordId<T>) = ZkApplication.changeNavState(readPath, "id=$recordId")
-    open fun openUpdate(recordId: RecordId<T>) = ZkApplication.changeNavState(updatePath, "id=$recordId")
-    open fun openDelete(recordId: RecordId<T>) = ZkApplication.changeNavState(deletePath, "id=$recordId")
+    open fun openRead(recordId: RecordId<*>) = ZkApplication.changeNavState(readPath, "id=$recordId")
+    open fun openUpdate(recordId: RecordId<*>) = ZkApplication.changeNavState(updatePath, "id=$recordId")
+    open fun openDelete(recordId: RecordId<*>) = ZkApplication.changeNavState(deletePath, "id=$recordId")
 
+    @Suppress("UNCHECKED_CAST") // got lost in generics hell, probably fine
     override fun route(routing: ZkAppRouting, state: ZkNavState) = when (state.urlPath) {
         allPath -> all()
         createPath -> create()
-        readPath -> read(state.recordId)
-        updatePath -> update(state.recordId)
-        deletePath -> delete(state.recordId)
+        readPath -> read(state.recordId as RecordId<T>)
+        updatePath -> update(state.recordId as RecordId<T>)
+        deletePath -> delete(state.recordId as RecordId<T>)
         else -> routeNonCrud(routing, state)
     }
 
@@ -90,7 +91,7 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
         return container
     }
 
-    open fun read(recordId: Long): ZkElement {
+    open fun read(recordId: RecordId<T>): ZkElement {
 
         val container = ZkElement()
         container.classList += ZkPageStyles.scrollable
@@ -114,7 +115,7 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
         return container
     }
 
-    open fun update(recordId: Long): ZkElement {
+    open fun update(recordId: RecordId<T>): ZkElement {
 
         val container = ZkElement()
 
@@ -139,7 +140,7 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
         return container
     }
 
-    open fun delete(recordId: Long): ZkElement {
+    open fun delete(recordId: RecordId<T>): ZkElement {
 
         val container = ZkElement()
 

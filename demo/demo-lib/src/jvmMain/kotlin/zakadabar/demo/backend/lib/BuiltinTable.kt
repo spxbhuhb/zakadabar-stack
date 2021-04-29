@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.demo.backend.lib
 
@@ -9,6 +9,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.`java-time`.timestamp
 import zakadabar.demo.data.builtin.BuiltinDto
 import zakadabar.demo.data.builtin.ExampleEnum
+import zakadabar.stack.backend.data.recordId
 import zakadabar.stack.backend.util.toStackUuid
 import zakadabar.stack.data.builtin.misc.Secret
 
@@ -38,7 +39,7 @@ object BuiltinTable : LongIdTable("builtin") {
     val uuidValue = uuid("uuidValue")
 
     fun toDto(row: ResultRow) = BuiltinDto(
-        id = row[id].value,
+        id = row[id].recordId(),
         booleanValue = row[booleanValue],
         doubleValue = row[doubleValue],
         enumSelectValue = row[enumSelectValue],
@@ -50,13 +51,13 @@ object BuiltinTable : LongIdTable("builtin") {
         optInstantValue = row[optInstantValue]?.toKotlinInstant(),
         optIntValue = row[optIntValue],
         optSecretValue = null, // never send out secrets
-        optRecordSelectValue = row[recordSelectValue].value,
+        optRecordSelectValue = row[recordSelectValue].recordId(),
         optStringValue = row[optStringSelectValue],
         optStringSelectValue = row[optStringSelectValue],
         optTextAreaValue = row[optTextAreaValue],
         optUuidValue = row[optUuidValue]?.toStackUuid(),
         secretValue = Secret(""), // never send out secrets
-        recordSelectValue = row[recordSelectValue].value,
+        recordSelectValue = row[recordSelectValue].recordId(),
         stringValue = row[stringValue],
         stringSelectValue = row[stringSelectValue],
         textAreaValue = row[textAreaValue],

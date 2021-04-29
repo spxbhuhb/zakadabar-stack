@@ -1,9 +1,11 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.demo.frontend.pages.ship
 
 import zakadabar.demo.data.ship.SearchShipsResult
+import zakadabar.demo.data.ship.ShipDto
+import zakadabar.stack.data.record.StringRecordId
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class SearchResult : ZkTable<SearchShipsResult>() {
@@ -24,7 +26,7 @@ class SearchResult : ZkTable<SearchShipsResult>() {
     }
 
     override fun onDblClick(id: String) {
-        Ships.openRead(id.toLong())
+        Ships.openRead(StringRecordId<ShipDto>(id))
     }
 
 }

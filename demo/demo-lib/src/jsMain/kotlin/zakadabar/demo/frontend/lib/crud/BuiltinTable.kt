@@ -46,7 +46,7 @@ class BuiltinTable : ZkTable<BuiltinDto>() {
         + custom {
             label = t("custom")
             render = { row ->
-                if ((row.id % 2L) == 0L) {
+                if ((row.id.toLong() % 2L) == 0L) {
                     + t("odd")
                 } else {
                     + t("even")

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.data.record
 
@@ -15,6 +15,7 @@ import org.w3c.files.Blob
 import org.w3c.xhr.ProgressEvent
 import org.w3c.xhr.XMLHttpRequest
 import zakadabar.stack.data.CommBase
+import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.BlobDto
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.util.PublicApi
@@ -34,7 +35,7 @@ open class RecordComm<T : RecordDto<T>>(
 ) : CommBase(), RecordCommInterface<T> {
 
     override suspend fun create(dto: T): T {
-        if (dto.id != 0L) throw RuntimeException("id is not 0 in $dto")
+        if (! dto.id.isEmpty()) throw RuntimeException("id is not 0 in $dto")
 
         val headers = Headers()
 
@@ -52,7 +53,7 @@ open class RecordComm<T : RecordDto<T>>(
     }
 
     @PublicApi
-    override suspend fun read(id: Long): T {
+    override suspend fun read(id: RecordId<T>): T {
         val response = commBlock {
             val responsePromise = window.fetch("/api/$recordType/$id")
             checkStatus(responsePromise.await())
@@ -66,7 +67,7 @@ open class RecordComm<T : RecordDto<T>>(
 
     @PublicApi
     override suspend fun update(dto: T): T {
-        if (dto.id == 0L) throw RuntimeException("ID of the $dto is 0 ")
+        if (dto.id.isEmpty()) throw RuntimeException("ID of the $dto is 0 ")
 
         val headers = Headers()
 
@@ -97,7 +98,7 @@ open class RecordComm<T : RecordDto<T>>(
     }
 
     @PublicApi
-    override suspend fun delete(id: Long) {
+    override suspend fun delete(id: RecordId<T>) {
         commBlock {
             val responsePromise = window.fetch("/api/$recordType/$id", RequestInit(method = "DELETE"))
             checkStatus(responsePromise.await())
@@ -118,7 +119,7 @@ open class RecordComm<T : RecordDto<T>>(
 
     @PublicApi
     override fun blobCreate(
-        dataRecordId: Long?, name: String, type: String,
+        dataRecordId: RecordId<T>?, name: String, type: String,
         data: Any,
         callback: (dto: BlobDto, state: BlobCreateState, uploaded: Long) -> Unit
     ) {
@@ -130,7 +131,8 @@ open class RecordComm<T : RecordDto<T>>(
 
             val req = XMLHttpRequest()
 
-            val dto = BlobDto(0L, dataRecordId, recordType, name, type, data.size.toLong())
+            @Suppress("UNCHECKED_CAST") // T is DtoBase
+            val dto = BlobDto(EmptyRecordId(), dataRecordId as RecordId<DtoBase>?, recordType, name, type, data.size.toLong())
 
             req.addEventListener("progress", { callback(dto, BlobCreateState.Progress, (it as ProgressEvent).loaded.toLong()) })
             req.addEventListener("load", { callback(Json.decodeFromString(BlobDto.serializer(), req.responseText), BlobCreateState.Done, data.size.toLong()) })
@@ -147,12 +149,12 @@ open class RecordComm<T : RecordDto<T>>(
     }
 
     @PublicApi
-    override suspend fun blobCreate(dataRecordId: Long?, name: String, type: ContentType, data: ByteArray): BlobDto {
+    override suspend fun blobCreate(dataRecordId: RecordId<T>?, name: String, type: ContentType, data: ByteArray): BlobDto {
         TODO("Not yet implemented")
     }
 
     @PublicApi
-    override suspend fun blobMetaRead(dataRecordId: Long): List<BlobDto> {
+    override suspend fun blobMetaRead(dataRecordId: RecordId<T>): List<BlobDto> {
 
         val response = commBlock {
             val responsePromise = window.fetch("/api/$recordType/$dataRecordId/blob/all")
@@ -167,7 +169,7 @@ open class RecordComm<T : RecordDto<T>>(
 
     @PublicApi
     override suspend fun blobMetaUpdate(dto: BlobDto): BlobDto {
-        if (dto.id == 0L) throw RuntimeException("ID of the $dto is 0 ")
+        if (dto.id.isEmpty()) throw RuntimeException("ID of the $dto is 0 ")
 
         val headers = Headers()
 
@@ -193,7 +195,7 @@ open class RecordComm<T : RecordDto<T>>(
     }
 
     @PublicApi
-    override suspend fun blobDelete(dataRecordId: Long, blobId: Long) {
+    override suspend fun blobDelete(dataRecordId: RecordId<T>, blobId: RecordId<BlobDto>) {
         commBlock {
             val responsePromise = window.fetch("/api/$recordType/$dataRecordId/blob/$blobId", RequestInit(method = "DELETE"))
             checkStatus(responsePromise.await())

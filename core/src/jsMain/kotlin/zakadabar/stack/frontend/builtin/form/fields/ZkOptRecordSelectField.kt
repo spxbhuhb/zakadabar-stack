@@ -21,20 +21,20 @@ import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptRecordSelectField<T : DtoBase>(
+open class ZkOptRecordSelectField<T : DtoBase, ST>(
     form: ZkForm<T>,
-    val prop: KMutableProperty0<RecordId<*>?>,
+    val prop: KMutableProperty0<RecordId<ST>?>,
     sortOptions: Boolean = true,
-    options: suspend () -> List<Pair<RecordId<*>, String>>
-) : ZkSelectBase<T, RecordId<*>>(form, prop.name, sortOptions, options) {
+    options: suspend () -> List<Pair<RecordId<ST>, String>>
+) : ZkSelectBase<T, RecordId<ST>>(form, prop.name, sortOptions, options) {
 
-    override fun fromString(string: String): RecordId<*> {
-        return string.toLong()
+    override fun fromString(string: String): RecordId<ST> {
+        return items.first().first.fromString(string)
     }
 
     override fun getPropValue() = prop.get()
 
-    override fun setPropValue(value: Pair<RecordId<*>, String>?) {
+    override fun setPropValue(value: Pair<RecordId<ST>, String>?) {
         if (value == null) {
             prop.set(null)
         } else {

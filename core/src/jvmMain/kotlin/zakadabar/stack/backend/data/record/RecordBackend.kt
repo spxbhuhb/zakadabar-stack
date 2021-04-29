@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.backend.data.record
 
@@ -23,8 +23,7 @@ import zakadabar.stack.backend.data.builtin.BlobTable
 import zakadabar.stack.backend.data.query.QueryBackend
 import zakadabar.stack.backend.util.executor
 import zakadabar.stack.data.builtin.BlobDto
-import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordDtoCompanion
+import zakadabar.stack.data.record.*
 import zakadabar.stack.util.Executor
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObject
@@ -42,7 +41,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
     override val namespace
         get() = (dtoClass.companionObject !!.objectInstance as RecordDtoCompanion<*>).namespace
 
-    override val logger by lazy { LoggerFactory.getLogger(namespace)!! }
+    override val logger by lazy { LoggerFactory.getLogger(namespace) !! }
 
     override var logActions = true
 
@@ -70,7 +69,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      *
      * @return DTO of the record
      */
-    open fun read(executor: Executor, recordId: Long): T {
+    open fun read(executor: Executor, recordId: RecordId<T>): T {
         throw NotImplementedError()
     }
 
@@ -86,7 +85,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      *
      * @return DTO of the record
      */
-    open fun read(call: ApplicationCall, executor: Executor, recordId: Long) = read(executor, recordId)
+    open fun read(call: ApplicationCall, executor: Executor, recordId: RecordId<T>) = read(executor, recordId)
 
     /**
      * Update an existing record.
@@ -112,7 +111,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
      * @param executor Executor of the operation.
      * @param recordId Id of the record to delete.
      */
-    open fun delete(executor: Executor, recordId: Long) {
+    open fun delete(executor: Executor, recordId: RecordId<T>) {
         throw NotImplementedError()
     }
 
@@ -132,7 +131,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
     /**
      * Called by blob functions to authorize the blob operation.
      */
-    open fun blobAuthorize(executor: Executor, operation: BlobOperation, recordId: Long?, blobId: Long? = null, dto: BlobDto? = null) {
+    open fun blobAuthorize(executor: Executor, operation: BlobOperation, recordId: RecordId<T>?, blobId: RecordId<BlobDto>? = null, dto: BlobDto? = null) {
         throw Forbidden()
     }
 
@@ -146,14 +145,16 @@ abstract class RecordBackend<T : RecordDto<T>>(
      *
      * @return DTO of the blobs
      */
-    open fun blobMetaRead(executor: Executor, recordId: Long): List<BlobDto> {
+    open fun blobMetaRead(executor: Executor, recordId: RecordId<T>): List<BlobDto> {
         if (blobTable == null) throw NotImplementedError("missing blob table")
         blobAuthorize(executor, BlobOperation.MetaRead, recordId)
+
+        val longId = recordId.toLong()
 
         return transaction {
             with(blobTable) {
                 slice(id, dataRecord, name, type, size)
-                    .select { dataRecord eq recordId }
+                    .select { dataRecord eq longId }
                     .map { toDto(it, namespace) }
             }
         }
@@ -170,13 +171,13 @@ abstract class RecordBackend<T : RecordDto<T>>(
      *
      * @return Content of the blob (binary).
      */
-    open fun blobRead(executor: Executor, recordId: Long?, blobId: Long): Pair<BlobDto, ByteArray> {
+    open fun blobRead(executor: Executor, recordId: RecordId<T>?, blobId: RecordId<BlobDto>): Pair<BlobDto, ByteArray> {
         if (blobTable == null) throw NotImplementedError("missing blob table")
         blobAuthorize(executor, BlobOperation.Read, recordId, blobId)
 
         return transaction {
             blobTable
-                .select { blobTable.id eq blobId and (blobTable.dataRecord eq recordId) }
+                .select { blobTable.id eq blobId.toLong() and (blobTable.dataRecord eq recordId?.toLong()) }
                 .map { blobTable.toDto(it, namespace) to it[blobTable.content].bytes }
                 .firstOrNull() ?: throw NotFoundException()
         }
@@ -195,18 +196,19 @@ abstract class RecordBackend<T : RecordDto<T>>(
      */
     open fun blobCreate(executor: Executor, dto: BlobDto, bytes: ByteArray): BlobDto {
         if (blobTable == null || recordTable == null) throw NotImplementedError("missing blob or record table")
-        blobAuthorize(executor, BlobOperation.Create, dto.dataRecord, dto = dto)
+        @Suppress("UNCHECKED_CAST") // can't do much with this
+        blobAuthorize(executor, BlobOperation.Create, dto.dataRecord as RecordId<T>?, dto = dto)
 
         return transaction {
             val id = blobTable.insert {
-                it[dataRecord] = if (dto.dataRecord == null) null else EntityID(dto.dataRecord !!, recordTable)
+                it[dataRecord] = if (dto.dataRecord == null) null else EntityID(dto.dataRecord !!.toLong(), recordTable)
                 it[name] = dto.name
                 it[type] = dto.type
                 it[size] = dto.size
                 it[content] = ExposedBlob(bytes)
             } get blobTable.id
 
-            dto.copy(id = id.value)
+            dto.copy(id = LongRecordId(id.value))
         }
     }
 
@@ -222,11 +224,12 @@ abstract class RecordBackend<T : RecordDto<T>>(
      */
     open fun blobMetaUpdate(executor: Executor, dto: BlobDto): BlobDto {
         if (blobTable == null || recordTable == null) throw NotImplementedError("missing blob or record table")
-        blobAuthorize(executor, BlobOperation.MetaUpdate, recordId = dto.dataRecord, blobId = dto.id, dto = dto)
+        @Suppress("UNCHECKED_CAST") // can't do much about this
+        blobAuthorize(executor, BlobOperation.MetaUpdate, recordId = dto.dataRecord as RecordId<T>?, blobId = dto.id, dto = dto)
 
         transaction {
-            blobTable.update({ blobTable.id eq dto.id }) {
-                it[dataRecord] = if (dto.dataRecord == null) null else EntityID(dto.dataRecord !!, recordTable)
+            blobTable.update({ blobTable.id eq dto.id.toLong() }) {
+                it[dataRecord] = if (dto.dataRecord == null) null else EntityID(dto.dataRecord !!.toLong(), recordTable)
                 it[name] = dto.name
                 it[type] = dto.type
             }
@@ -246,12 +249,12 @@ abstract class RecordBackend<T : RecordDto<T>>(
      *
      * @return Content of the blob (binary).
      */
-    open fun blobDelete(executor: Executor, recordId: Long, blobId: Long) {
+    open fun blobDelete(executor: Executor, recordId: RecordId<T>, blobId: RecordId<BlobDto>) {
         if (blobTable == null) throw NotImplementedError("missing blob table")
         blobAuthorize(executor, BlobOperation.MetaUpdate, recordId, blobId)
 
         transaction {
-            blobTable.deleteWhere { blobTable.id eq blobId }
+            blobTable.deleteWhere { blobTable.id eq blobId.toLong() }
         }
     }
 
@@ -269,7 +272,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
             }
 
             get("/{rid?}") {
-                val id = call.parameters["rid"]?.toLongOrNull()
+                val id = call.parameters["rid"]
                 val executor = call.executor()
 
                 if (id == null) {
@@ -277,7 +280,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
                     call.respond(all(executor))
                 } else {
                     if (Server.logReads) logger.info("${executor.accountId}: READ $id")
-                    call.respond(read(call, executor, id))
+                    call.respond(read(call, executor, StringRecordId(id)))
                 }
             }
 
@@ -290,9 +293,9 @@ abstract class RecordBackend<T : RecordDto<T>>(
 
             delete("/{id}") {
                 val executor = call.executor()
-                val id = call.parameters["id"]?.toLongOrNull() ?: throw BadRequestException("missing record id")
+                val id = call.parameters["id"] ?: throw BadRequestException("missing record id")
                 logger.info("${executor.accountId}: DELETE $id")
-                call.respond(delete(executor, id))
+                call.respond(delete(executor, StringRecordId(id)))
             }
         }
     }
@@ -304,13 +307,13 @@ abstract class RecordBackend<T : RecordDto<T>>(
         route("$namespace/{rid}/blob") {
 
             get("/{bid?}") {
-                val recordId = call.parameters["rid"]?.toLongOrNull()
-                val blobId = call.parameters["bid"]?.toLongOrNull()
+                val recordId = call.parameters["rid"]
+                val blobId = call.parameters["bid"]
 
                 val executor = call.executor()
 
                 if (blobId == null) {
-                    if (recordId == null || recordId == 0L) {
+                    if (recordId == null) {
 
                         call.respond(emptyList<BlobDto>())
 
@@ -318,14 +321,16 @@ abstract class RecordBackend<T : RecordDto<T>>(
 
                         if (Server.logReads) logger.info("${executor.accountId}: BLOB-META $recordId $blobId")
 
-                        call.respond(blobMetaRead(executor, recordId))
+                        call.respond(blobMetaRead(executor, StringRecordId(recordId)))
                     }
 
                 } else {
 
                     if (Server.logReads) logger.info("${executor.accountId}: BLOB-READ $recordId $blobId")
 
-                    val (dto, bytes) = blobRead(executor, recordId, blobId)
+                    require(recordId != null) { "data record id is null" }
+
+                    val (dto, bytes) = blobRead(executor, StringRecordId(recordId), StringRecordId(blobId))
 
                     // TODO add creation-date, modification-date
                     call.response.header(
@@ -341,7 +346,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
             }
 
             post {
-                val recordId = call.parameters["rid"]?.toLongOrNull()
+                val recordId = call.parameters["rid"] ?: throw BadRequestException("missing data record id")
 
                 val executor = call.executor()
 
@@ -355,8 +360,8 @@ abstract class RecordBackend<T : RecordDto<T>>(
                 val bytes = ByteArray(length)
 
                 val dto = BlobDto(
-                    id = 0,
-                    dataRecord = recordId,
+                    id = EmptyRecordId(),
+                    dataRecord = StringRecordId(recordId),
                     dataType = namespace,
                     name = parseHeaderValue(disposition).single().params.find { it.name == "filename" }?.value ?: throw BadRequestException("missing filename"),
                     type = headers["Content-Type"] ?: "application/octet-stream",
@@ -376,14 +381,14 @@ abstract class RecordBackend<T : RecordDto<T>>(
             }
 
             delete("/{bid}") {
-                val id = call.parameters["rid"]?.toLongOrNull() ?: throw BadRequestException("missing record id")
-                val blobId = call.parameters["bid"]?.toLongOrNull() ?: throw BadRequestException("missing blob id")
+                val id = call.parameters["rid"] ?: throw BadRequestException("missing record id")
+                val blobId = call.parameters["bid"] ?: throw BadRequestException("missing blob id")
 
                 val executor = call.executor()
 
                 if (Server.logReads) logger.info("${executor.accountId}: BLOB-DELETE $id $blobId")
 
-                call.respond(blobDelete(executor, id, blobId))
+                call.respond(blobDelete(executor, StringRecordId(id), StringRecordId(blobId)))
             }
 
         }

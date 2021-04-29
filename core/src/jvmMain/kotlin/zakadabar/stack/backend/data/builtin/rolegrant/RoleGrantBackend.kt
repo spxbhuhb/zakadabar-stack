@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 @file:Suppress("UNUSED_PARAMETER", "unused")
 
@@ -13,9 +13,11 @@ import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
 import zakadabar.stack.backend.data.builtin.role.RoleDao
+import zakadabar.stack.backend.data.get
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.data.builtin.account.RoleGrantDto
 import zakadabar.stack.data.builtin.account.RoleGrantsByPrincipal
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.Executor
 
 object RoleGrantBackend : RecordBackend<RoleGrantDto>() {
@@ -36,7 +38,7 @@ object RoleGrantBackend : RecordBackend<RoleGrantDto>() {
         authorize(executor, StackRoles.securityOfficer)
 
         RoleGrantTable
-            .select { RoleGrantTable.principal eq query.principal }
+            .select { RoleGrantTable.principal eq query.principal.toLong() }
             .map(RoleGrantTable::toDto)
 
     }
@@ -60,14 +62,14 @@ object RoleGrantBackend : RecordBackend<RoleGrantDto>() {
         }.toDto()
     }
 
-    override fun read(executor: Executor, recordId: Long) = transaction {
+    override fun read(executor: Executor, recordId: RecordId<RoleGrantDto>) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 
         RoleGrantDao[recordId].toDto()
     }
 
-    override fun delete(executor: Executor, recordId: Long) = transaction {
+    override fun delete(executor: Executor, recordId: RecordId<RoleGrantDto>) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 

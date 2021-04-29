@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.application
 
@@ -7,6 +7,7 @@ import kotlinx.browser.window
 import kotlinx.coroutines.channels.Channel
 import zakadabar.stack.data.builtin.account.LogoutAction
 import zakadabar.stack.data.builtin.account.SessionDto
+import zakadabar.stack.data.record.StringRecordId
 import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.builtin.modal.ZkMessageDialog
 import zakadabar.stack.frontend.builtin.pages.account.login.RenewLoginDialog
@@ -30,7 +31,7 @@ class ZkSessionManager {
      */
     suspend fun init() {
         io { renewTask() }
-        val session = SessionDto.read(0L)
+        val session = SessionDto.read(StringRecordId("own"))
         ZkApplication.executor = ZkExecutor(session.account, session.anonymous, session.roles)
     }
 
@@ -75,7 +76,7 @@ class ZkSessionManager {
 
                 // This is the latest session info from the server.
 
-                var session = SessionDto.read(0L)
+                var session = SessionDto.read(StringRecordId("own"))
 
                 // When the id is the same we are OK. In this case we have to go on with the
                 // original account information to keep the consistency of the UI. This happens
@@ -94,7 +95,7 @@ class ZkSessionManager {
 
                 // At this point the should have have a proper session.
 
-                session = SessionDto.read(0L)
+                session = SessionDto.read(StringRecordId("own"))
 
                 if (session.account.id == ZkApplication.executor.account.id) {
                     responseChannel.send(true)

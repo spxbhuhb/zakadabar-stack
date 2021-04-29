@@ -20,8 +20,10 @@ import kotlinx.browser.window
 import org.w3c.dom.DragEvent
 import org.w3c.dom.events.Event
 import org.w3c.dom.get
+import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.BlobDto
 import zakadabar.stack.data.record.BlobCreateState
+import zakadabar.stack.data.record.EmptyRecordId
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
@@ -111,7 +113,7 @@ open class ZkImagesField<T : RecordDto<T>>(
                     val file = item.getAsFile() ?: continue
 
                     // this is a temporary dto to initialize the Thumbnail
-                    val dto = BlobDto(0, 0, "", file.name, file.type, file.size.toLong())
+                    val dto = BlobDto(EmptyRecordId(), EmptyRecordId(), "", file.name, file.type, file.size.toLong())
 
                     val thumbnail = ZkImagePreview(dto, BlobCreateState.Starting, onDelete = { preview -> onDelete(preview) })
                     thumbnail marginRight 10 marginBottom 10
@@ -164,7 +166,8 @@ open class ZkImagesField<T : RecordDto<T>>(
     override suspend fun onCreateSuccess(created: RecordDto<*>) {
         // update blobs with the proper record id
         childElements.filterIsInstance<ZkImagePreview>().forEach {
-            form.dto.comm().blobMetaUpdate(it.dto.copy(dataRecord = created.id))
+            @Suppress("UNCHECKED_CAST") // this is just an id, it should be fine
+            form.dto.comm().blobMetaUpdate(it.dto.copy(dataRecord = created.id as RecordId<DtoBase>))
         }
     }
 

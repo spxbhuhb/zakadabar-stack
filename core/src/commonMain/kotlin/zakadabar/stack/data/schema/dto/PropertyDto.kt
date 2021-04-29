@@ -14,6 +14,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.misc.Secret
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.util.InstantAsStringSerializer
 import zakadabar.stack.data.util.OptInstantAsStringSerializer
 import zakadabar.stack.util.UUID
@@ -23,6 +24,14 @@ sealed class PropertyDto : DtoBase {
     abstract val name: String
     abstract val validations: List<ValidationDto>
 }
+
+@Serializable
+class RecordIdPropertyDto(
+    override val name: String,
+    override var validations: List<ValidationDto>,
+    var defaultValue: RecordId<DtoBase>,
+    var value: RecordId<DtoBase>
+) : PropertyDto()
 
 @Serializable
 class BooleanPropertyDto(
@@ -104,6 +113,14 @@ class UuidPropertyDto(
     override var validations: List<ValidationDto>,
     var defaultValue: UUID,
     var value: UUID
+) : PropertyDto()
+
+@Serializable
+class OptRecordIdPropertyDto(
+    override val name: String,
+    override var validations: List<ValidationDto>,
+    var defaultValue: RecordId<DtoBase>?,
+    var value: RecordId<DtoBase>?
 ) : PropertyDto()
 
 @Serializable

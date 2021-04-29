@@ -1,9 +1,10 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.data.builtin
 
 import kotlinx.serialization.Serializable
+import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordCommInterface
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
@@ -14,7 +15,7 @@ import zakadabar.stack.data.schema.DtoSchema
 data class BlobDto(
 
     override var id: RecordId<BlobDto>,
-    var dataRecord: RecordId<*>?,
+    var dataRecord: RecordId<DtoBase>?,
     var dataType: String,
     var name: String,
     var type: String,

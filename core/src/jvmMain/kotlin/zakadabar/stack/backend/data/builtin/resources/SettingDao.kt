@@ -7,6 +7,7 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import zakadabar.stack.backend.data.builtin.role.RoleDao
+import zakadabar.stack.backend.data.recordId
 import zakadabar.stack.data.builtin.resources.SettingDto
 import zakadabar.stack.data.builtin.resources.SettingSource
 
@@ -19,8 +20,8 @@ class SettingDao(id: EntityID<Long>) : LongEntity(id) {
     var descriptor by SettingTable.descriptor
 
     fun toDto() = SettingDto(
-        id = id.value,
-        role = role?.id?.value,
+        id = id.recordId(),
+        role = role?.id?.recordId(),
         source = SettingSource.Database,
         namespace = namespace,
         className = className,

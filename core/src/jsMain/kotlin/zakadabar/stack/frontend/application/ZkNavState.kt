@@ -1,9 +1,14 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.application
 
 import org.w3c.dom.url.URLSearchParams
+import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.record.EmptyRecordId
+import zakadabar.stack.data.record.LongRecordId
+import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.record.StringRecordId
 
 /**
  * Stores the current navigation state of the browser window.
@@ -16,7 +21,7 @@ import org.w3c.dom.url.URLSearchParams
 class ZkNavState(val urlPath: String, val urlQuery: String) {
 
     val viewName: String
-    val recordId: Long
+    val recordId: RecordId<*>
     val query: Any?
     val args: String?
 
@@ -28,7 +33,7 @@ class ZkNavState(val urlPath: String, val urlQuery: String) {
         if (segments.isEmpty()) {
 
             viewName = ""
-            recordId = 0
+            recordId = EmptyRecordId<DtoBase>()
             query = null
             args = null
 
@@ -38,7 +43,12 @@ class ZkNavState(val urlPath: String, val urlQuery: String) {
 
             viewName = segments[0]
 
-            recordId = searchParams.get("id")?.toLong() ?: 0
+            val id = searchParams.get("id")
+            recordId = when {
+                id == null -> EmptyRecordId<DtoBase>()
+                id.toLongOrNull() == null -> StringRecordId<DtoBase>(id)
+                else -> LongRecordId<DtoBase>(id.toLong())
+            }
 
             query = searchParams.get("query")?.let {
                 val dataType = viewName

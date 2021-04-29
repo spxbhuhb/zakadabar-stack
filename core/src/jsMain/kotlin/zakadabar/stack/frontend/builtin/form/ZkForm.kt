@@ -396,14 +396,24 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
 
     fun <T : RecordDto<T>> List<T>.by(field: (it: T) -> String) = map { it.id to field(it) }.sortedBy { it.second }
 
-    fun select(kProperty0: KMutableProperty0<RecordId<*>>, sortOptions: Boolean = true, label: String? = null, options: suspend () -> List<Pair<RecordId<*>, String>>): ZkRecordSelectField<T> {
+    fun <ST> select(
+        kProperty0: KMutableProperty0<RecordId<ST>>,
+        sortOptions: Boolean = true,
+        label: String? = null,
+        options: suspend () -> List<Pair<RecordId<ST>, String>>
+    ): ZkRecordSelectField<T, ST> {
         val field = ZkRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
         label?.let { field.label = label }
         fields += field
         return field
     }
 
-    fun select(kProperty0: KMutableProperty0<RecordId<*>?>, sortOptions: Boolean = true, label: String? = null, options: suspend () -> List<Pair<RecordId<*>, String>>): ZkOptRecordSelectField<T> {
+    fun <ST> select(
+        kProperty0: KMutableProperty0<RecordId<ST>?>,
+        sortOptions: Boolean = true,
+        label: String? = null,
+        options: suspend () -> List<Pair<RecordId<ST>, String>>
+    ): ZkOptRecordSelectField<T, ST> {
         val field = ZkOptRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
         label?.let { field.label = label }
         fields += field

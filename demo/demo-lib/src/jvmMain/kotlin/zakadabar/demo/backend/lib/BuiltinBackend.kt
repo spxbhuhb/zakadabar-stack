@@ -1,12 +1,11 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 @file:Suppress("UNUSED_PARAMETER", "unused")
 
 package zakadabar.demo.backend.lib
 
 import io.ktor.routing.*
-import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -14,8 +13,11 @@ import zakadabar.demo.data.builtin.BuiltinDto
 import zakadabar.demo.data.builtin.ExampleQuery
 import zakadabar.demo.data.builtin.ExampleResult
 import zakadabar.stack.backend.authorize
+import zakadabar.stack.backend.data.get
 import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.backend.data.recordId
 import zakadabar.stack.data.DataConflictException
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.Executor
 
 object BuiltinBackend : RecordBackend<BuiltinDto>() {
@@ -51,7 +53,7 @@ object BuiltinBackend : RecordBackend<BuiltinDto>() {
             .toDto()
     }
 
-    override fun read(executor: Executor, recordId: Long) = transaction {
+    override fun read(executor: Executor, recordId: RecordId<BuiltinDto>) = transaction {
 
         authorize(true)
 
@@ -67,7 +69,7 @@ object BuiltinBackend : RecordBackend<BuiltinDto>() {
             .toDto()
     }
 
-    override fun delete(executor: Executor, recordId: Long) = transaction {
+    override fun delete(executor: Executor, recordId: RecordId<BuiltinDto>) = transaction {
 
         authorize(true)
 
@@ -94,8 +96,9 @@ object BuiltinBackend : RecordBackend<BuiltinDto>() {
         query.stringValue?.let { select.andWhere { BuiltinTable.stringValue eq it } }
 
         select.map {
+            val t = it[BuiltinTable.id]
             ExampleResult(
-                recordId = it[BuiltinTable.id].value,
+                recordId = it[BuiltinTable.id].recordId(),
                 booleanValue = it[BuiltinTable.booleanValue],
                 enumSelectValue = it[BuiltinTable.enumSelectValue],
                 intValue = it[BuiltinTable.intValue],

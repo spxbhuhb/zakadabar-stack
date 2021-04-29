@@ -24,6 +24,7 @@ import io.ktor.server.netty.*
 import io.ktor.sessions.*
 import io.ktor.websocket.*
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -35,8 +36,12 @@ import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.backend.service.sessions.*
 import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.builtin.account.AccountPrivateDto
 import zakadabar.stack.data.builtin.account.AccountPublicDto
+import zakadabar.stack.data.builtin.account.PrincipalDto
 import zakadabar.stack.data.builtin.settings.ServerSettingsDto
+import zakadabar.stack.data.record.LongRecordId
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.Executor
 import java.io.File
 import java.nio.file.Files
@@ -69,7 +74,7 @@ class Server : CliktCommand() {
          *
          * @return the public account dto and the id of the principal that belongs to this account
          */
-        lateinit var findAccountById: (accountId: Long) -> Pair<AccountPublicDto, Long>
+        lateinit var findAccountById: (accountId: RecordId<AccountPrivateDto>) -> Pair<AccountPublicDto, RecordId<PrincipalDto>>
 
         /**
          * Find an account by its id. Used by [SessionBackend].
@@ -78,7 +83,7 @@ class Server : CliktCommand() {
          *
          * @return the public account dto and the id of the principal that belongs to this account
          */
-        lateinit var findAccountByName: (accountName: String) -> Pair<AccountPublicDto, Long>
+        lateinit var findAccountByName: (accountName: String) -> Pair<AccountPublicDto, RecordId<PrincipalDto>>
 
         /**
          * The directory where setting files are. Set automatically by the configuration loader.
@@ -166,7 +171,7 @@ class Server : CliktCommand() {
                     cookie.path = "/"
                 }
                 val transport = SessionTransportCookie(name, builder.cookie, builder.transformers)
-                val tracker = RenewableSessionTrackerById(sessionType, builder.serializer, SessionStorageSql, builder.sessionIdProvider)
+                val tracker = RenewableSessionTrackerById(sessionType, StackSessionSerializer, SessionStorageSql, builder.sessionIdProvider)
                 val provider = SessionProvider(name, sessionType, transport, tracker)
                 register(provider)
 
@@ -179,16 +184,16 @@ class Server : CliktCommand() {
                 basic(name = "basic") {
                     realm = config.serverName
                     validate {
-                        val (account, principalId) = SessionBackend.authenticate(anonymous.id, it.name, it.password) ?: return@validate null
+                        val (account, principalId) = SessionBackend.authenticate(LongRecordId(anonymous.id.toLong()), it.name, it.password) ?: return@validate null
                         val (roleIds, roleNames) = PrincipalBackend.roles(principalId)
-                        return@validate Executor(account.id, roleIds, roleNames)
+                        return@validate Executor(LongRecordId(account.id.toLong()), roleIds, roleNames)
                     }
                 }
 
             }
 
             install(ContentNegotiation) {
-                json()
+                json(Json { })
             }
 
             install(WebSockets) {

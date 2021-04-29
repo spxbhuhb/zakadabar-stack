@@ -6,6 +6,7 @@ package zakadabar.stack.data.schema
 import kotlinx.datetime.Instant
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.misc.Secret
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.dto.DescriptorDto
 import zakadabar.stack.data.schema.dto.PropertyDto
 import zakadabar.stack.data.schema.dto.ValidationDto
@@ -34,6 +35,20 @@ open class DtoSchema() {
 
     @Suppress("MemberVisibilityCanBePrivate") // To make extensions possible
     val customRuleLists = mutableListOf<CustomValidationRuleList>()
+
+    operator fun KMutableProperty0<out RecordId<*>>.unaryPlus(): RecordIdValidationRuleList {
+        @Suppress("UNCHECKED_CAST") // at this point out doesn't really matters
+        val ruleList = RecordIdValidationRuleList(this as KMutableProperty0<RecordId<*>>)
+        ruleLists[this] = ruleList
+        return ruleList
+    }
+
+    operator fun KMutableProperty0<out RecordId<*>?>.unaryPlus(): OptRecordIdValidationRuleList {
+        @Suppress("UNCHECKED_CAST") // at this point out doesn't really matters
+        val ruleList = OptRecordIdValidationRuleList(this as KMutableProperty0<RecordId<*>?>)
+        ruleLists[this] = ruleList
+        return ruleList
+    }
 
     operator fun KMutableProperty0<String>.unaryPlus(): StringValidationRuleList {
         val ruleList = StringValidationRuleList(this)

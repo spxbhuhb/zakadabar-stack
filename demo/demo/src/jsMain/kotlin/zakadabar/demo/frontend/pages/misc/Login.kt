@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.demo.frontend.pages.misc
 
@@ -8,8 +8,9 @@ import zakadabar.demo.resources.Strings
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.ActionStatusDto
 import zakadabar.stack.data.builtin.account.LoginAction
-import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.builtin.account.SessionDto
+import zakadabar.stack.data.builtin.misc.Secret
+import zakadabar.stack.data.record.EmptyRecordId
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkExecutor
 import zakadabar.stack.frontend.builtin.ZkElementMode
@@ -102,7 +103,7 @@ object Login : ZkPage(ZkFullScreenLayout) {
         }
 
         io {
-            val session = SessionDto.read(0L)
+            val session = SessionDto.read(EmptyRecordId())
             ZkApplication.executor = ZkExecutor(session.account, session.anonymous, session.roles)
             window.location.pathname = "/"
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 @file:Suppress("unused")
 
@@ -8,11 +8,12 @@ package zakadabar.stack.data.builtin.account
 import kotlinx.serialization.Serializable
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
+import zakadabar.stack.data.record.RecordId
 
 @Serializable
 data class SessionDto(
 
-    override var id: Long, // always 1
+    override var id: RecordId<SessionDto>,
     val account: AccountPublicDto,
     val anonymous: Boolean,
     val roles: List<String>

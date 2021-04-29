@@ -1,11 +1,9 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.data.record
 
 import kotlinx.serialization.KSerializer
-import zakadabar.stack.data.action.ActionDtoCompanion
-import zakadabar.stack.data.query.QueryDtoCompanion
 
 abstract class RecordDtoCompanion<T : RecordDto<T>>() {
 
@@ -31,7 +29,7 @@ abstract class RecordDtoCompanion<T : RecordDto<T>>() {
 
     abstract fun serializer(): KSerializer<T>
 
-    suspend fun read(id: Long) = comm.read(id)
+    suspend fun read(id: RecordId<T>) = comm.read(id)
 
     suspend fun all() = comm.all()
 

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
@@ -11,7 +11,7 @@ open class ZkRecordSelectFilter<T : DtoBase>(
     form: ZkForm<T>,
     sortOptions: Boolean = true,
     label: String? = null,
-    var getValue: () -> Long?,
+    var getValue: () -> RecordId<*>?,
     var options: suspend () -> List<Pair<RecordId<*>, String>>,
     onSelected: (Pair<RecordId<*>, String>?) -> Unit
 ) : ZkSelectBase<T, RecordId<*>>(form, "", sortOptions, options, onSelected) {
@@ -22,7 +22,7 @@ open class ZkRecordSelectFilter<T : DtoBase>(
     }
 
     override fun fromString(string: String): RecordId<*> {
-        return string.toLong()
+        return items.first().first.fromString(string)
     }
 
     override fun getPropValue() = getValue()

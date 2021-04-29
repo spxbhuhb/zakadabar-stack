@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.backend.data.builtin.principal
 
@@ -7,6 +7,7 @@ import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.`java-time`.timestamp
+import zakadabar.stack.backend.data.recordId
 import zakadabar.stack.data.builtin.account.PrincipalDto
 
 object PrincipalTable : LongIdTable("principals") {
@@ -27,7 +28,7 @@ object PrincipalTable : LongIdTable("principals") {
     val loginFailCount = integer("login_fail_count").default(0)
 
     fun toDto(row: ResultRow) = PrincipalDto(
-        id = row[id].value,
+        id = row[id].recordId(),
 
         validated = row[validated],
         locked = row[locked],

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
@@ -10,9 +10,9 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import kotlin.reflect.KProperty1
 
-open class ZkRecordIdColumn<T : DtoBase>(
+open class ZkRecordIdColumn<T : DtoBase, IT>(
     table: ZkTable<T>,
-    private val prop: KProperty1<T, RecordId<T>>
+    private val prop: KProperty1<T, RecordId<IT>>
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {
@@ -26,7 +26,7 @@ open class ZkRecordIdColumn<T : DtoBase>(
         }
     }
 
-    infix fun build(builder: ZkRecordIdColumn<T>.() -> Unit): ZkRecordIdColumn<T> {
+    infix fun build(builder: ZkRecordIdColumn<T, IT>.() -> Unit): ZkRecordIdColumn<T, IT> {
         this.builder()
         return this
     }

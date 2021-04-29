@@ -16,10 +16,14 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize
+import zakadabar.stack.backend.data.get
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.resources.SettingDto
 import zakadabar.stack.data.builtin.resources.SettingSource
+import zakadabar.stack.data.record.EmptyRecordId
+import zakadabar.stack.data.record.LongRecordId
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.dto.DescriptorDto
 import zakadabar.stack.util.Executor
 import kotlin.reflect.KClass
@@ -80,13 +84,13 @@ object SettingBackend : RecordBackend<SettingDto>() {
 //        }.toDto()
 //    }
 
-    override fun read(executor: Executor, recordId: Long) = transaction {
+    override fun read(executor: Executor, recordId: RecordId<SettingDto>) = transaction {
 
         authorize(true) // authorize for all users, throw not found if role is missing
 
         val dao = SettingDao[recordId]
 
-        dao.role?.id?.let { if (! executor.hasRole(it.value)) throw NotFoundException() }
+        dao.role?.id?.let { if (! executor.hasRole(LongRecordId(it.value))) throw NotFoundException() }
 
         dao.toDto()
     }
@@ -104,7 +108,7 @@ object SettingBackend : RecordBackend<SettingDto>() {
 //        dao.toDto()
 //    }
 
-//    override fun delete(executor: Executor, recordId: Long) = transaction {
+//    override fun delete(executor: Executor, recordId:  RecordId<SettingDto>) = transaction {
 //
 //        authorize(executor, StackRoles.siteAdmin)
 //
@@ -155,7 +159,7 @@ object SettingBackend : RecordBackend<SettingDto>() {
 
     private fun <T : DtoBase> buildDto(source: SettingSource, instance: T, namespace: String, serializer: KSerializer<T>) =
         SettingDto(
-            id = 0L,
+            id = EmptyRecordId(),
             role = null, //RoleBackend.findForName(StackRoles.securityOfficer),
             source = SettingSource.Default,
             namespace = namespace,

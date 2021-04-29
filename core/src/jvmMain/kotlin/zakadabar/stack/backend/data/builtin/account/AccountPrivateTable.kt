@@ -1,11 +1,12 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.backend.data.builtin.account
 
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
 import zakadabar.stack.backend.data.builtin.principal.PrincipalTable
+import zakadabar.stack.backend.data.recordId
 import zakadabar.stack.data.builtin.account.AccountPrivateDto
 import zakadabar.stack.data.builtin.account.AccountPublicDto
 
@@ -27,9 +28,9 @@ object AccountPrivateTable : LongIdTable("accounts") {
     val phone = varchar("phone", 50).nullable()
 
     fun toDto(row: ResultRow) = AccountPrivateDto(
-        id = row[id].value,
+        id = row[id].recordId(),
 
-        principal = row[principal].value,
+        principal = row[principal].recordId(),
 
         accountName = row[accountName],
         fullName = row[fullName],
@@ -46,7 +47,7 @@ object AccountPrivateTable : LongIdTable("accounts") {
     )
 
     fun toPublicDto(row: ResultRow, addEmail: Boolean = false) = AccountPublicDto(
-        id = row[id].value,
+        id = row[id].recordId(),
 
         accountName = row[accountName],
         fullName = row[fullName],

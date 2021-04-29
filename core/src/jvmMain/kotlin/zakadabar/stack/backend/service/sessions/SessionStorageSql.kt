@@ -94,8 +94,6 @@ object SessionStorageSql : SessionStorage {
         val now = Clock.System.now()
         val cutoff = now.minus(settings.updateDelay, DateTimeUnit.SECOND)
 
-        println("$cutoff ${entry.createdAt} ${entry.createdAt.epochSeconds < cutoff.epochSeconds}")
-
         if (entry.createdAt.epochSeconds < cutoff.epochSeconds) {
             val newEntry = SessionCacheEntry(entry.sessionId, entry.sessionData, now)
             cache[entry.sessionId] = newEntry

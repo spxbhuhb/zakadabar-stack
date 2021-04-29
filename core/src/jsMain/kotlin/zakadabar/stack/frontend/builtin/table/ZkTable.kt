@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.table
 
@@ -11,6 +11,7 @@ import org.w3c.dom.events.MouseEvent
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.record.StringRecordId
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
@@ -363,7 +364,8 @@ open class ZkTable<T : DtoBase> : ZkElement() {
      * @param  id  Id of the row as given by [getRowId].
      */
     open fun onDblClick(id: String) {
-        crud?.openUpdate(id.toLong())
+        val recordId: RecordId<*> = StringRecordId<DtoBase>(id)
+        crud?.openUpdate(recordId)
     }
 
     /**
@@ -432,7 +434,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
     //  Column builders
     // -------------------------------------------------------------------------
 
-    operator fun KProperty1<T, RecordId<T>>.unaryPlus(): ZkRecordIdColumn<T> {
+    operator fun <IT> KProperty1<T, RecordId<IT>>.unaryPlus(): ZkRecordIdColumn<T, IT> {
         val column = ZkRecordIdColumn(this@ZkTable, this)
         columns += column
         return column

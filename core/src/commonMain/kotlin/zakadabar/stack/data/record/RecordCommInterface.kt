@@ -1,13 +1,10 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.data.record
 
 import io.ktor.http.*
-import kotlinx.serialization.KSerializer
-import zakadabar.stack.data.action.ActionCommInterface
 import zakadabar.stack.data.builtin.BlobDto
-import zakadabar.stack.data.query.QueryCommInterface
 import zakadabar.stack.data.util.AuthenticationException
 import zakadabar.stack.data.util.AuthorizationException
 import zakadabar.stack.data.util.CommunicationException
@@ -48,7 +45,7 @@ interface RecordCommInterface<T> {
      * @throws RuntimeException if there is a general server side processing error (HTTP status code 5xx)
      * @throws CommunicationException server unavailable, request timeout, any not 400,401,403,404 error codes
      */
-    suspend fun read(id: Long): T
+    suspend fun read(id: RecordId<T>): T
 
     /**
      * Updates a record on the server.
@@ -79,7 +76,7 @@ interface RecordCommInterface<T> {
      * @throws RuntimeException if there is a general server side processing error (HTTP status code 5xx)
      * @throws CommunicationException server unavailable, request timeout, any not 400,401,403 error codes
      */
-    suspend fun delete(id: Long)
+    suspend fun delete(id: RecordId<T>)
 
     /**
      * Retrieves all records of the given type.
@@ -115,7 +112,7 @@ interface RecordCommInterface<T> {
      *
      */
     fun blobCreate(
-        dataRecordId: Long?, name: String, type: String, data: Any,
+        dataRecordId: RecordId<T>?, name: String, type: String, data: Any,
         callback: (dto: BlobDto, state: BlobCreateState, uploaded: Long) -> Unit
     )
 
@@ -139,7 +136,7 @@ interface RecordCommInterface<T> {
      * @throws RuntimeException if there is a general server side processing error (HTTP status code 5xx)
      * @throws CommunicationException server unavailable, request timeout, any not 400,401,403, 404 error codes
      */
-    suspend fun blobCreate(dataRecordId: Long?, name: String, type: ContentType, data: ByteArray): BlobDto
+    suspend fun blobCreate(dataRecordId: RecordId<T>?, name: String, type: ContentType, data: ByteArray): BlobDto
 
     /**
      * Retrieves metadata of BLOBs.
@@ -155,7 +152,7 @@ interface RecordCommInterface<T> {
      * @throws RuntimeException if there is a general server side processing error (HTTP status code 5xx)
      * @throws CommunicationException server unavailable, request timeout, any not 400,401,403, 404 error codes
      */
-    suspend fun blobMetaRead(dataRecordId: Long): List<BlobDto>
+    suspend fun blobMetaRead(dataRecordId: RecordId<T>): List<BlobDto>
 
     /**
      * Updates an metadata of a blob: recordId, name, type fields.
@@ -186,5 +183,5 @@ interface RecordCommInterface<T> {
      * @throws RuntimeException if there is a general server side processing error (HTTP status code 5xx)
      * @throws CommunicationException server unavailable, request timeout, any not 400,401,403 error codes
      */
-    suspend fun blobDelete(dataRecordId: Long, blobId: Long)
+    suspend fun blobDelete(dataRecordId: RecordId<T>, blobId: RecordId<BlobDto>)
 }

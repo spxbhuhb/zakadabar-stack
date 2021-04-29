@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 @file:Suppress("UNUSED_PARAMETER", "unused")
 
@@ -10,8 +10,6 @@ import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.stack.backend.data.builtin.account.AccountPrivateDao
-import zakadabar.stack.backend.data.builtin.account.AccountPrivateTable
 import zakadabar.demo.backend.port.PortDao
 import zakadabar.demo.backend.port.PortTable
 import zakadabar.demo.backend.sea.SeaTable
@@ -20,7 +18,12 @@ import zakadabar.demo.backend.speed.SpeedTable
 import zakadabar.demo.data.ship.SearchShipsQuery
 import zakadabar.demo.data.ship.SearchShipsResult
 import zakadabar.demo.data.ship.ShipDto
+import zakadabar.stack.backend.data.builtin.account.AccountPrivateDao
+import zakadabar.stack.backend.data.builtin.account.AccountPrivateTable
+import zakadabar.stack.backend.data.get
 import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.backend.data.recordId
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.Executor
 
 object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTable = ShipTable) {
@@ -53,13 +56,13 @@ object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTa
             .selectAll()
 
         query.name?.let { select.andWhere { ShipTable.name like "%${query.name}%" } }
-        query.speed?.let { select.andWhere { SpeedTable.id eq query.speed } }
-        query.sea?.let { select.andWhere { SeaTable.id eq query.speed } }
-        query.port?.let { select.andWhere { PortTable.id eq query.port } }
+        query.speed?.let { select.andWhere { SpeedTable.id eq query.speed?.toLong() } }
+        query.sea?.let { select.andWhere { SeaTable.id eq query.sea?.toLong() } }
+        query.port?.let { select.andWhere { PortTable.id eq query.port?.toLong() } }
 
         select.map {
             SearchShipsResult(
-                shipId = it[ShipTable.id].value,
+                shipId = it[ShipTable.id].recordId(),
                 name = it[ShipTable.name],
                 port = it[PortTable.name],
                 captain = it[AccountPrivateTable.fullName]
@@ -89,7 +92,7 @@ object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTa
         return this
     }
 
-    override fun read(executor: Executor, recordId: Long) = transaction {
+    override fun read(executor: Executor, recordId: RecordId<ShipDto>) = transaction {
         ShipDao[recordId].toDto()
     }
 
@@ -97,7 +100,7 @@ object ShipBackend : RecordBackend<ShipDto>(blobTable = ShipImageTable, recordTa
         ShipDao[dto.id].fromDto(dto).toDto()
     }
 
-    override fun delete(executor: Executor, recordId: Long) = transaction {
+    override fun delete(executor: Executor, recordId: RecordId<ShipDto>) = transaction {
         ShipDao[recordId].delete()
     }
 }

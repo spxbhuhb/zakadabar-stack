@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.pages.account.accounts
 
@@ -8,6 +8,8 @@ import zakadabar.stack.StackRoles
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.*
 import zakadabar.stack.data.builtin.account.*
+import zakadabar.stack.data.record.EmptyRecordId
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.ZkApplication.executor
 import zakadabar.stack.frontend.application.ZkApplication.hasRole
@@ -277,12 +279,12 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
             }
         }
 
-        private suspend fun grant(roleId: Long) {
+        private suspend fun grant(roleId: RecordId<RoleDto>) {
             if (userRoles.firstOrNull { it.role == roleId } != null) return
-            RoleGrantDto(0, principalDto.id, roleId).create()
+            RoleGrantDto(EmptyRecordId(), principalDto.id, roleId).create()
         }
 
-        private suspend fun revoke(roleId: Long) {
+        private suspend fun revoke(roleId: RecordId<RoleDto>) {
             userRoles.forEach {
                 if (it.role != roleId) return@forEach
                 it.delete()

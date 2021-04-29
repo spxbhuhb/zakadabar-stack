@@ -10,6 +10,7 @@ import io.ktor.auth.*
 import io.ktor.sessions.*
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.data.builtin.session.LoginTimeout
+import zakadabar.stack.data.record.LongRecordId
 import zakadabar.stack.util.Executor
 
 class SessionAuthenticationProvider internal constructor(configuration: Configuration) :
@@ -30,7 +31,7 @@ fun Authentication.Configuration.session(name: String? = null) {
             return@intercept
         }
 
-        val session = StackSession(Server.anonymous.id, emptyList(), emptyList())
+        val session = StackSession(LongRecordId(Server.anonymous.id.toLong()), emptyList(), emptyList())
         call.sessions.set(session)
         context.principal(Executor(session.account, session.roleIds, session.roleNames))
 

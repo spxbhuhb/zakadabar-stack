@@ -1,11 +1,12 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.backend.data.builtin
 
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
 import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.backend.data.recordId
 import zakadabar.stack.data.builtin.BlobDto
 
 /**
@@ -21,8 +22,8 @@ abstract class BlobTable(name: String, recordTable: LongIdTable) : LongIdTable(n
     val content = blob("content")
 
     fun toDto(row: ResultRow, recordType: String) = BlobDto(
-        id = row[id].value,
-        dataRecord = row[dataRecord]?.value,
+        id = row[id].recordId(),
+        dataRecord = row[dataRecord]?.recordId(),
         dataType = recordType,
         name = row[name],
         type = row[type],

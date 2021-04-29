@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.backend.data.builtin.principal
 
@@ -7,6 +7,7 @@ import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import zakadabar.stack.backend.data.recordId
 import zakadabar.stack.data.builtin.account.PrincipalDto
 
 class PrincipalDao(id: EntityID<Long>) : LongEntity(id) {
@@ -28,7 +29,7 @@ class PrincipalDao(id: EntityID<Long>) : LongEntity(id) {
     var loginFailCount by PrincipalTable.loginFailCount
 
     fun toDto() = PrincipalDto(
-        id = id.value,
+        id = id.recordId(),
 
         validated = validated,
         locked = locked,

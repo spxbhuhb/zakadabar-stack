@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 @file:Suppress("UNUSED_PARAMETER", "unused")
 
@@ -11,18 +11,21 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.stack.backend.data.builtin.account.AccountPrivateBackend.onModuleLoad
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize
+import zakadabar.stack.backend.data.builtin.account.AccountPrivateBackend.onModuleLoad
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
 import zakadabar.stack.backend.data.builtin.role.RoleDao
 import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantDao
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantTable
+import zakadabar.stack.backend.data.get
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.data.builtin.account.AccountPrivateDto
+import zakadabar.stack.data.record.LongRecordId
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.Executor
 
 /**
@@ -74,8 +77,8 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
 
         Server.findAccountById = {
             transaction {
-                val account = AccountPrivateDao[it]
-                account.toPublicDto(false) to account.principal.id.value
+                val account = AccountPrivateDao[it.toLong()]
+                account.toPublicDto(false) to LongRecordId(account.principal.id.value)
             }
         }
 
@@ -85,7 +88,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
         Server.findAccountByName = {
             transaction {
                 val account = AccountPrivateDao.find { AccountPrivateTable.accountName eq it }.firstOrNull() ?: throw NoSuchElementException()
-                account.toPublicDto(false) to account.principal.id.value
+                account.toPublicDto(false) to LongRecordId(account.principal.id.value)
             }
         }
     }
@@ -115,7 +118,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
         }.toDto()
     }
 
-    override fun read(executor: Executor, recordId: Long) = transaction {
+    override fun read(executor: Executor, recordId: RecordId<AccountPrivateDto>) = transaction {
 
         // the owner of the account and security officers may read it
 
@@ -137,7 +140,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
         AccountPrivateDao[dto.id].fromDto(dto).toDto()
     }
 
-    override fun delete(executor: Executor, recordId: Long) {
+    override fun delete(executor: Executor, recordId: RecordId<AccountPrivateDto>) {
 
         authorize(executor, StackRoles.securityOfficer)
 

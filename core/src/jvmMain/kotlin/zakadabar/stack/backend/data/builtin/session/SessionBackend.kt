@@ -13,10 +13,10 @@ import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.backend.service.sessions.StackSession
 import zakadabar.stack.data.builtin.ActionStatusDto
-import zakadabar.stack.data.builtin.account.AccountPublicDto
-import zakadabar.stack.data.builtin.account.LoginAction
-import zakadabar.stack.data.builtin.account.LogoutAction
-import zakadabar.stack.data.builtin.account.SessionDto
+import zakadabar.stack.data.builtin.account.*
+import zakadabar.stack.data.record.EmptyRecordId
+import zakadabar.stack.data.record.LongRecordId
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.Executor
 
 /**
@@ -41,12 +41,12 @@ object SessionBackend : RecordBackend<SessionDto>() {
     /**
      * Read session data. Does not use record id as session is identified by Ktor.
      */
-    override fun read(call: ApplicationCall, executor: Executor, recordId: Long) = transaction {
+    override fun read(call: ApplicationCall, executor: Executor, recordId: RecordId<SessionDto>) = transaction {
         val session = call.sessions.get<StackSession>() ?: throw IllegalStateException()
 
         if (session.account == Server.anonymous.id) {
             SessionDto(
-                id = 1,
+                id = EmptyRecordId(),
                 account = Server.anonymous,
                 anonymous = true,
                 roles = emptyList()
@@ -55,7 +55,7 @@ object SessionBackend : RecordBackend<SessionDto>() {
             val (account, principalId) = Server.findAccountById(session.account)
             val (_, roleNames) = PrincipalBackend.roles(principalId)
             SessionDto(
-                id = 1,
+                id = EmptyRecordId(),
                 account = account,
                 anonymous = false,
                 roles = roleNames
@@ -77,12 +77,12 @@ object SessionBackend : RecordBackend<SessionDto>() {
 
         if (StackRoles.siteMember !in roleNames) return ActionStatusDto(false)
 
-        call.sessions.set(StackSession(account.id, roleIds, roleNames))
+        call.sessions.set(StackSession(LongRecordId(account.id.toLong()), roleIds, roleNames))
 
         return ActionStatusDto(true)
     }
 
-    fun authenticate(executorAccountId: Long, accountName: String, password: String, throwLocked: Boolean = false): Pair<AccountPublicDto, Long>? {
+    fun authenticate(executorAccountId: RecordId<AccountPrivateDto>, accountName: String, password: String, throwLocked: Boolean = false): Pair<AccountPublicDto, RecordId<PrincipalDto>>? {
         val (account, principalId) = try {
 
             val (account, principalId) = Server.findAccountByName(accountName)
@@ -123,7 +123,7 @@ object SessionBackend : RecordBackend<SessionDto>() {
 
         logger.info("${executor.accountId}: /logout old=${old.account} new=${Server.anonymous.id}")
 
-        call.sessions.set(StackSession(Server.anonymous.id, emptyList(), emptyList()))
+        call.sessions.set(StackSession(LongRecordId(Server.anonymous.id.toLong()), emptyList(), emptyList()))
 
         return ActionStatusDto(success = true)
     }
