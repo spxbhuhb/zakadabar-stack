@@ -20,9 +20,7 @@ import kotlinx.datetime.Instant
 import zakadabar.stack.data.schema.ValidationRule
 import zakadabar.stack.data.schema.ValidationRuleList
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.dto.InstantValidationDto
-import zakadabar.stack.data.schema.dto.OptInstantPropertyDto
-import zakadabar.stack.data.schema.dto.ValidationType
+import zakadabar.stack.data.schema.dto.*
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -131,6 +129,10 @@ class OptInstantValidationRuleList(val kProperty: KMutableProperty0<Instant?>) :
 
     override fun isOptional() = true
 
+    override fun push(dto: PropertyDto) {
+        require(dto is OptInstantPropertyDto)
+        kProperty.set(dto.value)
+    }
 
     override fun toPropertyDto() = OptInstantPropertyDto(
         kProperty.name,

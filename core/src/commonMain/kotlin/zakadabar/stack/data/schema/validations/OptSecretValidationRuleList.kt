@@ -20,10 +20,7 @@ import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.schema.ValidationRule
 import zakadabar.stack.data.schema.ValidationRuleList
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.dto.OptSecretPropertyDto
-import zakadabar.stack.data.schema.dto.StringValidationBooleanDto
-import zakadabar.stack.data.schema.dto.StringValidationIntDto
-import zakadabar.stack.data.schema.dto.ValidationType
+import zakadabar.stack.data.schema.dto.*
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -105,6 +102,11 @@ class OptSecretValidationRuleList(val kProperty: KMutableProperty0<Secret?>) : V
     }
 
     override fun isOptional() = true
+
+    override fun push(dto: PropertyDto) {
+        require(dto is OptSecretPropertyDto)
+        kProperty.set(dto.value)
+    }
 
     override fun toPropertyDto() = OptSecretPropertyDto(
         kProperty.name,

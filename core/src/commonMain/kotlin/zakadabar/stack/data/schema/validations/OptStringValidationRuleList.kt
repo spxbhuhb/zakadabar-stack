@@ -100,6 +100,11 @@ class OptStringValidationRuleList(val kProperty: KMutableProperty0<String?>) : V
 
     override fun isOptional() = true
 
+    override fun push(dto: PropertyDto) {
+        require(dto is OptStringPropertyDto)
+        kProperty.set(dto.value)
+    }
+
     override fun toPropertyDto() = OptStringPropertyDto(
         kProperty.name,
         rules.map { it.toValidationDto() },

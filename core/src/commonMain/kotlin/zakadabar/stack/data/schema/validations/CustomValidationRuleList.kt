@@ -19,6 +19,7 @@ package zakadabar.stack.data.schema.validations
 import zakadabar.stack.data.schema.ValidationRule
 import zakadabar.stack.data.schema.ValidationRuleList
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.BooleanPropertyDto
 import zakadabar.stack.data.schema.dto.PropertyDto
 import zakadabar.stack.data.schema.dto.ValidationDto
 
@@ -47,5 +48,9 @@ class CustomValidationRuleList(function: (report: ValidityReport, rule: Validati
 
     override fun isOptional() = false
 
-    override fun toPropertyDto() : PropertyDto? = null
+    override fun push(dto: PropertyDto) {
+
+    }
+
+    override fun toPropertyDto(): PropertyDto? = null
 }

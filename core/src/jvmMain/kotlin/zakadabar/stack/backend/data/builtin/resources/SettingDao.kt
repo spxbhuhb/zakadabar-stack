@@ -16,7 +16,7 @@ class SettingDao(id: EntityID<Long>) : LongEntity(id) {
     var role by RoleDao optionalReferencedOn SettingTable.role
     var namespace by SettingTable.namespace
     var className by SettingTable.className
-    var value by SettingTable.value
+    var descriptor by SettingTable.descriptor
 
     fun toDto() = SettingDto(
         id = id.value,
@@ -24,6 +24,6 @@ class SettingDao(id: EntityID<Long>) : LongEntity(id) {
         source = SettingSource.Database,
         namespace = namespace,
         className = className,
-        value = value
+        descriptor = descriptor
     )
 }

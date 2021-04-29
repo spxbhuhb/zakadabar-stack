@@ -15,10 +15,17 @@ class Form : ZkForm<SettingDto>() {
         build(dto.className, strings.setting, css = ZkFormStyles.onePanel) {
             + section(strings.basics) {
                 + dto::id
-                + select(dto::role) { RoleDto.all().by { it.name } }
+                //+ select(dto::role, options = ::roles)
                 + dto::className
-                + dto::value
             }
         }
     }
+
+    suspend fun roles() =
+        try {
+            RoleDto.all().by { it.name }
+        } catch (ex: Exception) {
+            emptyList()
+        }
+
 }

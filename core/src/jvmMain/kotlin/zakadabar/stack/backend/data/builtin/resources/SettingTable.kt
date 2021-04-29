@@ -14,15 +14,10 @@ object SettingTable : LongIdTable("settings") {
     val role = reference("role", RoleTable).nullable()
     var namespace = varchar("namespace", 100)
     val className = varchar("path", 100)
-    val value = text("value")
+    val descriptor = text("descriptor")
 
-    fun toDto(row: ResultRow) = SettingDto(
-        id = row[id].value,
-        role = row[role]?.value,
-        source = SettingSource.Database,
-        namespace = row[namespace],
-        className = row[className],
-        value = row[value]
-    )
-
+    // I decided not to have a toDto here to avoid confusion
+    // about the descriptor. SettingBackend performs quite
+    // a few special operations, so it is better to have
+    // everything there.
 }

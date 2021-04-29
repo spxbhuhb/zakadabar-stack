@@ -18,7 +18,10 @@ package zakadabar.stack.data.schema.validations
 
 import zakadabar.stack.data.schema.ValidationRuleList
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.BooleanPropertyDto
+import zakadabar.stack.data.schema.dto.EnumPropertyDto
 import zakadabar.stack.data.schema.dto.OptEnumPropertyDto
+import zakadabar.stack.data.schema.dto.PropertyDto
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -42,6 +45,15 @@ class OptEnumValidationRuleList<E : Enum<E>>(
     }
 
     override fun isOptional() = true
+
+    override fun push(dto: PropertyDto) {
+        require(dto is OptEnumPropertyDto)
+        if (dto.value == null) {
+            kProperty.set(null)
+        } else {
+            kProperty.set(values.firstOrNull { it.name == dto.value } ?: throw IllegalArgumentException("value for ${kProperty.name} is invalid"))
+        }
+    }
 
     override fun toPropertyDto() = OptEnumPropertyDto(
         kProperty.name,

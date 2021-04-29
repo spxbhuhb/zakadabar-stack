@@ -19,9 +19,7 @@ package zakadabar.stack.data.schema.validations
 import zakadabar.stack.data.schema.ValidationRule
 import zakadabar.stack.data.schema.ValidationRuleList
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.dto.LongPropertyDto
-import zakadabar.stack.data.schema.dto.LongValidationDto
-import zakadabar.stack.data.schema.dto.ValidationType
+import zakadabar.stack.data.schema.dto.*
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -97,6 +95,11 @@ class LongValidationRuleList(val kProperty: KMutableProperty0<Long>) : Validatio
     }
 
     override fun isOptional() = false
+
+    override fun push(dto: PropertyDto) {
+        require(dto is LongPropertyDto)
+        kProperty.set(dto.value)
+    }
 
     override fun toPropertyDto() = LongPropertyDto(
         kProperty.name,

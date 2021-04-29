@@ -6,12 +6,19 @@ package zakadabar.stack.frontend.builtin.pages.resources.settings
 import hu.simplexion.rf.leltar.frontend.pages.roles.Roles
 import zakadabar.stack.data.builtin.account.RoleDto
 import zakadabar.stack.data.builtin.resources.SettingDto
+import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class Table : ZkTable<SettingDto>() {
 
-    private val roles by preload { RoleDto.allAsMap() }
+    private val roles by preload {
+        try {
+            RoleDto.allAsMap()
+        } catch (ex: Exception) {
+            emptyMap()
+        }
+    }
 
     override fun onConfigure() {
         super.onConfigure()
@@ -21,7 +28,7 @@ class Table : ZkTable<SettingDto>() {
         export = true
 
         titleText = strings.roles
-        crud = Roles
+        crud = Settings
 
         + SettingDto::id
         + custom {

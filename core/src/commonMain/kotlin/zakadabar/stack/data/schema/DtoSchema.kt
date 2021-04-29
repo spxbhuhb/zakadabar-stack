@@ -182,18 +182,27 @@ open class DtoSchema() {
 
     fun toDescriptorDto() = DescriptorDto(ruleLists.mapNotNull { it.value.toPropertyDto() })
 
+    fun push(descriptor: DescriptorDto) {
+        ruleLists.forEach { (kProperty, validation) ->
+            validation.push(
+                descriptor.properties.firstOrNull { it.name == kProperty.name }
+                    ?: throw IllegalStateException("property ${kProperty.name} missing from the descriptor")
+            )
+        }
+    }
 }
 
 interface ValidationRuleList<T> {
     fun validate(report: ValidityReport)
     fun isOptional(): Boolean
     fun setDefault()
-    fun toPropertyDto() : PropertyDto?
+    fun push(dto: PropertyDto)
+    fun toPropertyDto(): PropertyDto?
 }
 
 interface ValidationRule<T> {
     fun validate(value: T, report: ValidityReport)
-    fun toValidationDto() : ValidationDto
+    fun toValidationDto(): ValidationDto
 }
 
 class ValidityReport(

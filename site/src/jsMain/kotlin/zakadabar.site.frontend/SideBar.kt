@@ -68,6 +68,7 @@ object SideBar : ZkSideBar() {
                     + item("Fetched") { FetchedTable.open() }
                 }
                 + item("Toasts") { Toasts.open() }
+                + item("Settings") { Settings.openAll() }
             }
 
             contentGroup("Contribute", "contribute/")

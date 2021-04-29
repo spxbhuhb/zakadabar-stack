@@ -9,6 +9,7 @@ import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.schema.dto.DescriptorDto
 
 @Serializable
 data class SettingDto(
@@ -17,7 +18,7 @@ data class SettingDto(
     var source: SettingSource,
     var namespace: String,
     var className: String,
-    var value: String,
+    var descriptor: String?
 ) : RecordDto<SettingDto> {
 
     companion object : RecordDtoCompanion<SettingDto>({
@@ -32,6 +33,5 @@ data class SettingDto(
         + ::source
         + ::namespace min 0 max 100
         + ::className min 1 max 100 blank false
-        + ::value
     }
 }

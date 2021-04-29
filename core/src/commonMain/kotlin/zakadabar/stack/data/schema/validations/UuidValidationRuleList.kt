@@ -18,6 +18,8 @@ package zakadabar.stack.data.schema.validations
 
 import zakadabar.stack.data.schema.ValidationRuleList
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.BooleanPropertyDto
+import zakadabar.stack.data.schema.dto.PropertyDto
 import zakadabar.stack.data.schema.dto.UuidPropertyDto
 import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.UUID
@@ -40,6 +42,11 @@ class UuidValidationRuleList(val kProperty: KMutableProperty0<UUID>) : Validatio
     }
 
     override fun isOptional() = false
+
+    override fun push(dto: PropertyDto) {
+        require(dto is UuidPropertyDto)
+        kProperty.set(dto.value)
+    }
 
     override fun toPropertyDto() = UuidPropertyDto(
         kProperty.name,

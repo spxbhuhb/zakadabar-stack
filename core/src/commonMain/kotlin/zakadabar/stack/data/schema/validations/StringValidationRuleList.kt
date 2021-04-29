@@ -127,6 +127,11 @@ class StringValidationRuleList(val kProperty: KMutableProperty0<String>) : Valid
 
     override fun isOptional() = false
 
+    override fun push(dto: PropertyDto) {
+        require(dto is StringPropertyDto)
+        kProperty.set(dto.value)
+    }
+
     override fun toPropertyDto() = StringPropertyDto(
         kProperty.name,
         emptyList(),

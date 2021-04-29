@@ -19,7 +19,9 @@ package zakadabar.stack.data.schema.validations
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.schema.ValidationRuleList
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.BooleanPropertyDto
 import zakadabar.stack.data.schema.dto.DtoBasePropertyDto
+import zakadabar.stack.data.schema.dto.PropertyDto
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -42,6 +44,11 @@ class DtoBaseValidationRuleList<T : DtoBase>(val kProperty: KMutableProperty0<T>
     }
 
     override fun isOptional() = false
+
+    override fun push(dto: PropertyDto) {
+        require(dto is DtoBasePropertyDto)
+        kProperty.get().schema().push(dto.descriptor)
+    }
 
     override fun toPropertyDto() = DtoBasePropertyDto(
         kProperty.name,

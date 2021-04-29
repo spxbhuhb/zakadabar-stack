@@ -19,9 +19,7 @@ package zakadabar.stack.data.schema.validations
 import zakadabar.stack.data.schema.ValidationRule
 import zakadabar.stack.data.schema.ValidationRuleList
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.dto.IntValidationDto
-import zakadabar.stack.data.schema.dto.OptIntPropertyDto
-import zakadabar.stack.data.schema.dto.ValidationType
+import zakadabar.stack.data.schema.dto.*
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -97,6 +95,11 @@ class OptIntValidationRuleList(val kProperty: KMutableProperty0<Int?>) : Validat
     }
 
     override fun isOptional() = true
+
+    override fun push(dto: PropertyDto) {
+        require(dto is OptIntPropertyDto)
+        kProperty.set(dto.value)
+    }
 
     override fun toPropertyDto() = OptIntPropertyDto(
         kProperty.name,

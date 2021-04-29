@@ -20,10 +20,7 @@ import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.schema.ValidationRule
 import zakadabar.stack.data.schema.ValidationRuleList
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.dto.SecretPropertyDto
-import zakadabar.stack.data.schema.dto.StringValidationBooleanDto
-import zakadabar.stack.data.schema.dto.StringValidationIntDto
-import zakadabar.stack.data.schema.dto.ValidationType
+import zakadabar.stack.data.schema.dto.*
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -100,6 +97,11 @@ class SecretValidationRuleList(val kProperty: KMutableProperty0<Secret>) : Valid
     }
 
     override fun isOptional() = false
+
+    override fun push(dto: PropertyDto) {
+        require(dto is SecretPropertyDto)
+        kProperty.set(dto.value)
+    }
 
     override fun toPropertyDto() = SecretPropertyDto(
         kProperty.name,

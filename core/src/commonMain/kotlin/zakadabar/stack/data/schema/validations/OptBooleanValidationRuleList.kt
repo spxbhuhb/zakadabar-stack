@@ -18,7 +18,9 @@ package zakadabar.stack.data.schema.validations
 
 import zakadabar.stack.data.schema.ValidationRuleList
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.dto.BooleanPropertyDto
 import zakadabar.stack.data.schema.dto.OptBooleanPropertyDto
+import zakadabar.stack.data.schema.dto.PropertyDto
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -39,6 +41,11 @@ class OptBooleanValidationRuleList(val kProperty: KMutableProperty0<Boolean?>) :
     }
 
     override fun isOptional() = true
+
+    override fun push(dto: PropertyDto) {
+        require(dto is OptBooleanPropertyDto)
+        kProperty.set(dto.value)
+    }
 
     override fun toPropertyDto() = OptBooleanPropertyDto(
         kProperty.name,

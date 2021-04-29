@@ -19,9 +19,7 @@ package zakadabar.stack.data.schema.validations
 import zakadabar.stack.data.schema.ValidationRule
 import zakadabar.stack.data.schema.ValidationRuleList
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.dto.DoublePropertyDto
-import zakadabar.stack.data.schema.dto.DoubleValidationDto
-import zakadabar.stack.data.schema.dto.ValidationType
+import zakadabar.stack.data.schema.dto.*
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -92,6 +90,12 @@ class DoubleValidationRuleList(val kProperty: KMutableProperty0<Double>) : Valid
     }
 
     override fun isOptional() = false
+
+    override fun push(dto: PropertyDto) {
+        require(dto is DoublePropertyDto)
+        kProperty.set(dto.value)
+    }
+
 
     override fun toPropertyDto() = DoublePropertyDto(
         kProperty.name,

@@ -12,19 +12,15 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
-import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize
-import zakadabar.stack.backend.data.builtin.role.RoleBackend
-import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.resources.SettingDto
 import zakadabar.stack.data.builtin.resources.SettingSource
+import zakadabar.stack.data.schema.dto.DescriptorDto
 import zakadabar.stack.util.Executor
 import kotlin.reflect.KClass
 
@@ -48,23 +44,41 @@ object SettingBackend : RecordBackend<SettingDto>() {
 
         authorize(true) // authorized for all users, filter settings by roles later
 
-        val roleIds = executor.roleIds.map { EntityID(it, RoleTable) } + null
+//        val roleIds = executor.roleIds.map { EntityID(it, RoleTable) } + null
 
-        SettingTable
-            .select { SettingTable.role inList roleIds }
-            .map(SettingTable::toDto)
+//        SettingTable
+//            .select { SettingTable.role inList roleIds }
+//            .map { row ->
+//                 SettingDto(
+//                    id = row[SettingTable.id].value,
+//                    role = row[SettingTable.role]?.value,
+//                    source = SettingSource.Database,
+//                    namespace = row[SettingTable.namespace],
+//                    className = row[SettingTable.className],
+//                    descriptor = null // this is intentional, do not send out value in the list
+//                )
+//            }
+
+        val roleIds = executor.roleIds + null
+
+        runBlocking {
+            buildMutex.withLock {
+                instances.values.mapNotNull { if (it.first.role in roleIds) it.first else null }
+            }
+        }
+
     }
 
-    override fun create(executor: Executor, dto: SettingDto) = transaction {
-
-        authorize(executor, StackRoles.siteAdmin)
-
-        SettingDao.new {
-            namespace = dto.namespace
-            className = dto.className
-            value = dto.value
-        }.toDto()
-    }
+//    override fun create(executor: Executor, dto: SettingDto) = transaction {
+//
+//        authorize(executor, StackRoles.siteAdmin)
+//
+//        SettingDao.new {
+//            namespace = dto.namespace
+//            className = dto.className
+//            descriptor = dto.descriptor
+//        }.toDto()
+//    }
 
     override fun read(executor: Executor, recordId: Long) = transaction {
 
@@ -77,25 +91,25 @@ object SettingBackend : RecordBackend<SettingDto>() {
         dao.toDto()
     }
 
-    override fun update(executor: Executor, dto: SettingDto) = transaction {
+//    override fun update(executor: Executor, dto: SettingDto) = transaction {
+//
+//        authorize(executor, StackRoles.siteAdmin)
+//
+//        val dao = SettingDao[dto.id]
+//        with(dao) {
+//            namespace = dto.namespace
+//            className = dto.className
+//            descriptor = dto.descriptor
+//        }
+//        dao.toDto()
+//    }
 
-        authorize(executor, StackRoles.siteAdmin)
-
-        val dao = SettingDao[dto.id]
-        with(dao) {
-            namespace = dto.namespace
-            className = dto.className
-            value = dto.value
-        }
-        dao.toDto()
-    }
-
-    override fun delete(executor: Executor, recordId: Long) = transaction {
-
-        authorize(executor, StackRoles.siteAdmin)
-
-        SettingDao[recordId].delete()
-    }
+//    override fun delete(executor: Executor, recordId: Long) = transaction {
+//
+//        authorize(executor, StackRoles.siteAdmin)
+//
+//        SettingDao[recordId].delete()
+//    }
 
 
     @Suppress("UNCHECKED_CAST") // key contains class
@@ -118,7 +132,9 @@ object SettingBackend : RecordBackend<SettingDto>() {
             }
 
             if (dto != null) {
-                instance = Json.decodeFromString(serializer, dto.value)
+                val descriptor = Json.decodeFromString(DescriptorDto.serializer(), dto.descriptor !!)
+                instance = default
+                instance.schema().push(descriptor)
                 instances[key] = dto to instance
                 return@runBlocking instance
             }
@@ -126,24 +142,24 @@ object SettingBackend : RecordBackend<SettingDto>() {
             instance = Server.loadSettings(namespace, serializer)
 
             if (instance != null) {
-                instances[key] = buildDto(SettingSource.File, instance, serializer) to instance
+                instances[key] = buildDto(SettingSource.File, instance, namespace, serializer) to instance
                 return@runBlocking instance
             }
 
             instance = default
-            instances[key] = buildDto(SettingSource.Default, instance, serializer) to instance
+            instances[key] = buildDto(SettingSource.Default, instance, namespace, serializer) to instance
             return@runBlocking instance
         }
 
     }
 
-    private fun <T : DtoBase> buildDto(source: SettingSource, instance: T, serializer: KSerializer<T>) =
+    private fun <T : DtoBase> buildDto(source: SettingSource, instance: T, namespace: String, serializer: KSerializer<T>) =
         SettingDto(
             id = 0L,
-            role = RoleBackend.findForName(StackRoles.securityOfficer),
+            role = null, //RoleBackend.findForName(StackRoles.securityOfficer),
             source = SettingSource.Default,
             namespace = namespace,
             className = instance::class.simpleName !!,
-            value = Json.encodeToString(serializer, instance)
+            descriptor = Json.encodeToString(DescriptorDto.serializer(), instance.schema().toDescriptorDto())
         )
 }
