@@ -1,13 +1,10 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 @file:Suppress("unused") // main is called by webpack
 
 import kotlinx.browser.window
-import org.intellij.markdown.MarkdownElementTypes
-import zakadabar.lib.frontend.markdown.MarkdownView
 import zakadabar.site.frontend.Routing
-import zakadabar.site.frontend.components.SiteMarkdownImage
 import zakadabar.site.frontend.resources.SiteDarkTheme
 import zakadabar.site.frontend.resources.SiteLightTheme
 import zakadabar.site.resources.SiteStrings
@@ -37,7 +34,7 @@ fun main() {
 
             routing = Routing
 
-            configureMarkdown()
+//            configureMarkdown()
 
             init()
 
@@ -47,9 +44,9 @@ fun main() {
 
 }
 
-/**
- * Overrides for markdown views according to our own content API.
- */
-fun configureMarkdown() {
-    MarkdownView.lib[MarkdownElementTypes.IMAGE] = { SiteMarkdownImage(this, it) }
-}
+///**
+// * Overrides for markdown views according to our own content API.
+// */
+//fun configureMarkdown() {
+//    MarkdownView.lib[MarkdownElementTypes.IMAGE] = { SiteMarkdownImage(this, it) }
+//}
