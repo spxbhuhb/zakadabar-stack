@@ -23,14 +23,14 @@ import zakadabar.stack.util.PublicApi
 /**
  * Communication functions for records.
  *
- * @property  recordType   Type of the record this comm handles.
+ * @property  namespace   Type of the record this comm handles.
  *
  * @property  serializer   The serializer to serialize/deserialize objects
  *                         sent/received.
  */
 @PublicApi
 open class RecordComm<T : RecordDto<T>>(
-    private val recordType: String,
+    private val namespace: String,
     private val serializer: KSerializer<T>
 ) : CommBase(), RecordCommInterface<T> {
 
@@ -49,18 +49,17 @@ open class RecordComm<T : RecordDto<T>>(
             body = body
         )
 
-        return sendAndReceive(recordType, requestInit)
+        return sendAndReceive("/api/$namespace/record", requestInit)
     }
 
     @PublicApi
     override suspend fun read(id: RecordId<T>): T {
         val response = commBlock {
-            val responsePromise = window.fetch("/api/$recordType/$id")
+            val responsePromise = window.fetch("/api/$namespace/record/$id")
             checkStatus(responsePromise.await())
         }
 
-        val textPromise = response.text()
-        val text = textPromise.await()
+        val text = response.text().await()
 
         return Json.decodeFromString(serializer, text)
     }
@@ -81,13 +80,13 @@ open class RecordComm<T : RecordDto<T>>(
             body = body
         )
 
-        return sendAndReceive(recordType, requestInit)
+        return sendAndReceive("/api/$namespace/record/${dto.id}", requestInit)
     }
 
     @PublicApi
     override suspend fun all(): List<T> {
         val response = commBlock {
-            val responsePromise = window.fetch("/api/$recordType")
+            val responsePromise = window.fetch("/api/$namespace/record")
             checkStatus(responsePromise.await())
         }
 
@@ -100,14 +99,14 @@ open class RecordComm<T : RecordDto<T>>(
     @PublicApi
     override suspend fun delete(id: RecordId<T>) {
         commBlock {
-            val responsePromise = window.fetch("/api/$recordType/$id", RequestInit(method = "DELETE"))
+            val responsePromise = window.fetch("/api/$namespace/record/$id", RequestInit(method = "DELETE"))
             checkStatus(responsePromise.await())
         }
     }
 
     private suspend fun sendAndReceive(path: String, requestInit: RequestInit): T {
         val response = commBlock {
-            val responsePromise = window.fetch("/api/$path", requestInit)
+            val responsePromise = window.fetch(path, requestInit)
             checkStatus(responsePromise.await())
         }
 
@@ -132,7 +131,7 @@ open class RecordComm<T : RecordDto<T>>(
             val req = XMLHttpRequest()
 
             @Suppress("UNCHECKED_CAST") // T is DtoBase
-            val dto = BlobDto(EmptyRecordId(), dataRecordId as RecordId<DtoBase>?, recordType, name, type, data.size.toLong())
+            val dto = BlobDto(EmptyRecordId(), dataRecordId as RecordId<DtoBase>?, namespace, name, type, data.size.toLong())
 
             req.addEventListener("progress", { callback(dto, BlobCreateState.Progress, (it as ProgressEvent).loaded.toLong()) })
             req.addEventListener("load", { callback(Json.decodeFromString(BlobDto.serializer(), req.responseText), BlobCreateState.Done, data.size.toLong()) })
@@ -141,7 +140,14 @@ open class RecordComm<T : RecordDto<T>>(
 
             callback(dto, BlobCreateState.Starting, 0)
 
-            req.open("POST", "/api/$recordType/$dataRecordId/blob", true)
+            // intent = true tells the backend that this is just an intent, we don't have a backend record yet, so
+            // the data record id of the path is useless
+
+            // FIXME fix the clash between string record ids and "null"
+
+            val url = "/api/$namespace/blob${if (dataRecordId == null) "" else "/$dataRecordId"}"
+
+            req.open("POST", url, true)
             req.setRequestHeader("Content-Type", type)
             req.setRequestHeader("Content-Disposition", """attachment; filename="$name"""")
             req.send(data)
@@ -154,10 +160,11 @@ open class RecordComm<T : RecordDto<T>>(
     }
 
     @PublicApi
-    override suspend fun blobMetaRead(dataRecordId: RecordId<T>): List<BlobDto> {
+    override suspend fun blobMetaList(dataRecordId: RecordId<T>): List<BlobDto> {
+        require(! dataRecordId.isEmpty()) { "data record id is empty" }
 
         val response = commBlock {
-            val responsePromise = window.fetch("/api/$recordType/$dataRecordId/blob/all")
+            val responsePromise = window.fetch("/api/$namespace/blob/list/$dataRecordId")
             checkStatus(responsePromise.await())
         }
 
@@ -165,6 +172,21 @@ open class RecordComm<T : RecordDto<T>>(
         val text = textPromise.await()
 
         return Json.decodeFromString(ListSerializer(BlobDto.serializer()), text)
+    }
+
+    @PublicApi
+    override suspend fun blobMetaRead(blobId: RecordId<BlobDto>): BlobDto {
+        require(! blobId.isEmpty()) { "blob id is empty" }
+
+        val response = commBlock {
+            val responsePromise = window.fetch("/api/$namespace/blob/meta/$blobId")
+            checkStatus(responsePromise.await())
+        }
+
+        val textPromise = response.text()
+        val text = textPromise.await()
+
+        return Json.decodeFromString(BlobDto.serializer(), text)
     }
 
     @PublicApi
@@ -184,7 +206,7 @@ open class RecordComm<T : RecordDto<T>>(
         )
 
         val response = commBlock {
-            val responsePromise = window.fetch("/api/$recordType/${dto.dataRecord}/blob", requestInit)
+            val responsePromise = window.fetch("/api/$namespace/blob/meta/${dto.id}", requestInit)
             checkStatus(responsePromise.await())
         }
 
@@ -195,9 +217,9 @@ open class RecordComm<T : RecordDto<T>>(
     }
 
     @PublicApi
-    override suspend fun blobDelete(dataRecordId: RecordId<T>, blobId: RecordId<BlobDto>) {
+    override suspend fun blobDelete(blobId: RecordId<BlobDto>) {
         commBlock {
-            val responsePromise = window.fetch("/api/$recordType/$dataRecordId/blob/$blobId", RequestInit(method = "DELETE"))
+            val responsePromise = window.fetch("/api/$namespace/blob/$blobId", RequestInit(method = "DELETE"))
             checkStatus(responsePromise.await())
         }
     }

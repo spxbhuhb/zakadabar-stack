@@ -4,10 +4,8 @@
 package zakadabar.stack.data.record
 
 import io.ktor.http.*
+import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.builtin.BlobDto
-import zakadabar.stack.data.util.AuthenticationException
-import zakadabar.stack.data.util.AuthorizationException
-import zakadabar.stack.data.util.CommunicationException
 
 /**
  * Interface to be implemented on the client side for communication. An
@@ -23,11 +21,9 @@ interface RecordCommInterface<T> {
      * @return The record DTO of the created record.
      *
      * @throws IllegalArgumentException the dto is invalid (HTTP status code 400)
-     * @throws AuthenticationException the principal is not authenticated (HTTP status code 401)
-     * @throws AuthorizationException the principal is authenticated but not authorized to create objects of this type (HTTP status code 403)
+     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
      * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
-     * @throws RuntimeException if there is a general server side processing error (HTTP status code 5xx)
-     * @throws CommunicationException server unavailable, request timeout, any not 400,401,403 error codes
+     * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
      */
     suspend fun create(dto: T): T
 
@@ -38,12 +34,11 @@ interface RecordCommInterface<T> {
      *
      * @return  DTO of the fetched record.
      *
+     * @throws IllegalArgumentException the dto is invalid (HTTP status code 400)
      * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
-     * @throws AuthenticationException the principal is not authenticated (HTTP status code 401)
-     * @throws AuthorizationException the principal is authenticated but not authorized to create objects of this type (HTTP status code 403)
+     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
      * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
-     * @throws RuntimeException if there is a general server side processing error (HTTP status code 5xx)
-     * @throws CommunicationException server unavailable, request timeout, any not 400,401,403,404 error codes
+     * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
      */
     suspend fun read(id: RecordId<T>): T
 
@@ -54,13 +49,11 @@ interface RecordCommInterface<T> {
      *
      * @return The updated DTO.
      *
-     * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
      * @throws IllegalArgumentException the dto is invalid (HTTP status code 400)
-     * @throws AuthenticationException the principal is not authenticated (HTTP status code 401)
-     * @throws AuthorizationException the principal is authenticated but not authorized to create objects of this type (HTTP status code 403)
+     * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
+     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
      * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
-     * @throws RuntimeException if there is a general server side processing error (HTTP status code 5xx)
-     * @throws CommunicationException server unavailable, request timeout, any not 400,401,403 error codes
+     * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
      */
     suspend fun update(dto: T): T
 
@@ -69,12 +62,11 @@ interface RecordCommInterface<T> {
      *
      * @param  id  Id of the record to delete.
      *
+     * @throws IllegalArgumentException the dto is invalid (HTTP status code 400)
      * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
-     * @throws AuthenticationException the principal is not authenticated (HTTP status code 401)
-     * @throws AuthorizationException the principal is authenticated but not authorized to create objects of this type (HTTP status code 403)
+     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
      * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
-     * @throws RuntimeException if there is a general server side processing error (HTTP status code 5xx)
-     * @throws CommunicationException server unavailable, request timeout, any not 400,401,403 error codes
+     * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
      */
     suspend fun delete(id: RecordId<T>)
 
@@ -83,11 +75,11 @@ interface RecordCommInterface<T> {
      *
      * @return  List of record DTOs.
      *
-     * @throws AuthenticationException the principal is not authenticated (HTTP status code 401)
-     * @throws AuthorizationException the principal is authenticated but not authorized to create objects of this type (HTTP status code 403)
+     * @throws IllegalArgumentException the dto is invalid (HTTP status code 400)
+     * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
+     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
      * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
-     * @throws RuntimeException if there is a general server side processing error (HTTP status code 5xx)
-     * @throws CommunicationException server unavailable, request timeout, any not 400,401,403 error codes
+     * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
      */
     suspend fun all(): List<T>
 
@@ -105,11 +97,16 @@ interface RecordCommInterface<T> {
      * @param  dataRecordId  Id of the record the new BLOB belongs to.
      * @param  name      Name of the BLOB, typically the file name.
      * @param  type      Type of the BLOB, typically the MIME type.
-     * @param  data      BLOB data, a Javascript [Blob].
+     * @param  data      BLOB data, a Javascript Blob.
      * @param  callback  Callback function to report progress, completion or error.
      *
      * @return A DTO which contains data of the blob. The `id` is 0 in this DTO.
      *
+     * @throws IllegalArgumentException the dto is invalid (HTTP status code 400)
+     * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
+     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
+     * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
+     * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
      */
     fun blobCreate(
         dataRecordId: RecordId<T>?, name: String, type: String, data: Any,
@@ -124,17 +121,15 @@ interface RecordCommInterface<T> {
      * @param  dataRecordId  Id of the record the new BLOB belongs to.
      * @param  name      Name of the BLOB, typically the file name.
      * @param  type      Type of the BLOB, typically the MIME type.
-     * @param  data      BLOB data, a Javascript [Blob].
+     * @param  data      BLOB data
      *
      * @return A DTO which contains data of the blob.
      *
-     * @throws IllegalArgumentException the request dto is invalid (HTTP status code 400)
-     * @throws NoSuchElementException if the data record with the given id does not exists (HTTP status code 404)
-     * @throws AuthenticationException the principal is not authenticated (HTTP status code 401)
-     * @throws AuthorizationException the principal is authenticated but not authorized to create objects of this type (HTTP status code 403)
+     * @throws IllegalArgumentException the dto is invalid (HTTP status code 400)
+     * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
+     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
      * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
-     * @throws RuntimeException if there is a general server side processing error (HTTP status code 5xx)
-     * @throws CommunicationException server unavailable, request timeout, any not 400,401,403, 404 error codes
+     * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
      */
     suspend fun blobCreate(dataRecordId: RecordId<T>?, name: String, type: ContentType, data: ByteArray): BlobDto
 
@@ -145,43 +140,54 @@ interface RecordCommInterface<T> {
      *
      * @return  List of BLOB metadata.
      *
-     * @throws NoSuchElementException if the data record with the given id does not exists (HTTP status code 404)
-     * @throws AuthenticationException the principal is not authenticated (HTTP status code 401)
-     * @throws AuthorizationException the principal is authenticated but not authorized to create objects of this type (HTTP status code 403)
+     * @throws IllegalArgumentException the dto is invalid (HTTP status code 400)
+     * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
+     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
      * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
-     * @throws RuntimeException if there is a general server side processing error (HTTP status code 5xx)
-     * @throws CommunicationException server unavailable, request timeout, any not 400,401,403, 404 error codes
+     * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
      */
-    suspend fun blobMetaRead(dataRecordId: RecordId<T>): List<BlobDto>
+    suspend fun blobMetaList(dataRecordId: RecordId<T>): List<BlobDto>
+
+    /**
+     * Retrieves metadata of one BLOB.
+     *
+     * @param  blobId  Id of the record the BLOBs belong to.
+     *
+     * @return  List of BLOB metadata.
+     *
+     * @throws IllegalArgumentException the dto is invalid (HTTP status code 400)
+     * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
+     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
+     * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
+     * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
+     */
+    suspend fun blobMetaRead(blobId: RecordId<BlobDto>): BlobDto
 
     /**
      * Updates an metadata of a blob: recordId, name, type fields.
      *
+     * @param  dto   The dto to update.
+     *
      * @return The updated DTO.
      *
-     * @throws NoSuchElementException if the blob with the given id does not exists (HTTP status code 404)
      * @throws IllegalArgumentException the dto is invalid (HTTP status code 400)
-     * @throws AuthenticationException the principal is not authenticated (HTTP status code 401)
-     * @throws AuthorizationException the principal is authenticated but not authorized to create objects of this type (HTTP status code 403)
+     * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
+     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
      * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
-     * @throws RuntimeException if there is a general server side processing error (HTTP status code 5xx)
-     * @throws CommunicationException server unavailable, request timeout, any not 400,401,403 error codes
+     * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
      */
     suspend fun blobMetaUpdate(dto: BlobDto): BlobDto
 
     /**
      * Deletes a BLOB.
      *
-     * @param  dataRecordId  Id of the data record the blob to delete belongs to.
      * @param  blobId        Id of the blob to delete.
      *
-     * @throws NoSuchElementException if the record or the blob with the given id does not exists (HTTP status code 404)
      * @throws IllegalArgumentException the dto is invalid (HTTP status code 400)
-     * @throws AuthenticationException the principal is not authenticated (HTTP status code 401)
-     * @throws AuthorizationException the principal is authenticated but not authorized to create objects of this type (HTTP status code 403)
+     * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
+     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
      * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
-     * @throws RuntimeException if there is a general server side processing error (HTTP status code 5xx)
-     * @throws CommunicationException server unavailable, request timeout, any not 400,401,403 error codes
+     * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
      */
-    suspend fun blobDelete(dataRecordId: RecordId<T>, blobId: RecordId<BlobDto>)
+    suspend fun blobDelete(blobId: RecordId<BlobDto>)
 }

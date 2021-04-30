@@ -57,7 +57,7 @@ open class ZkImagesField<T : RecordDto<T>>(
             form.fields += this@ZkImagesField
 
             if (form.mode != ZkElementMode.Create) {
-                form.dto.comm().blobMetaRead(dataRecordId).forEach {
+                form.dto.comm().blobMetaList(dataRecordId).forEach {
                     + ZkImagePreview(it, onDelete = { preview -> onDelete(preview) }) marginRight 10 marginBottom 10
                 }
             }
@@ -113,7 +113,7 @@ open class ZkImagesField<T : RecordDto<T>>(
                     val file = item.getAsFile() ?: continue
 
                     // this is a temporary dto to initialize the Thumbnail
-                    val dto = BlobDto(EmptyRecordId(), EmptyRecordId(), "", file.name, file.type, file.size.toLong())
+                    val dto = BlobDto(EmptyRecordId(), null, "", file.name, file.type, file.size.toLong())
 
                     val thumbnail = ZkImagePreview(dto, BlobCreateState.Starting, onDelete = { preview -> onDelete(preview) })
                     thumbnail marginRight 10 marginBottom 10
@@ -149,7 +149,7 @@ open class ZkImagesField<T : RecordDto<T>>(
         if (! ZkConfirmDialog(strings.confirmation.capitalize(), strings.confirmDelete).run()) return false
 
         if (form.mode != ZkElementMode.Create) {
-            form.dto.comm().blobDelete(dataRecordId, preview.dto.id)
+            form.dto.comm().blobDelete(preview.dto.id)
         }
 
         this@ZkImagesField -= preview

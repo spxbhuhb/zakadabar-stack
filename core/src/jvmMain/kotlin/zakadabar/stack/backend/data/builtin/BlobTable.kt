@@ -21,10 +21,10 @@ abstract class BlobTable(name: String, recordTable: LongIdTable) : LongIdTable(n
     val size = long("size")
     val content = blob("content")
 
-    fun toDto(row: ResultRow, recordType: String) = BlobDto(
+    fun toDto(row: ResultRow, namespace: String) = BlobDto(
         id = row[id].recordId(),
         dataRecord = row[dataRecord]?.recordId(),
-        dataType = recordType,
+        namespace = namespace,
         name = row[name],
         type = row[type],
         size = row[size]

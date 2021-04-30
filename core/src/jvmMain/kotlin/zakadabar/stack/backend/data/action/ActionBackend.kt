@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.backend.data.action
 
@@ -30,7 +30,7 @@ interface ActionBackend : BackendModule {
      * Adds an Action route for this backend.
      */
     fun <RQ : ActionDto<RS>, RS : DtoBase> Route.action(actionDto: KClass<RQ>, func: (Executor, RQ) -> RS) {
-        post("$namespace/${actionDto.simpleName}") {
+        post("$namespace/action/${actionDto.simpleName}") {
 
             val executor = call.executor()
             val aText = call.receive<String>()
@@ -47,7 +47,7 @@ interface ActionBackend : BackendModule {
      * Adds an Action route for this backend.
      */
     fun <RQ : ActionDto<RS>, RS : DtoBase> Route.action(actionDto: KClass<RQ>, func: (ApplicationCall, Executor, RQ) -> RS) {
-        post("$namespace/${actionDto.simpleName}") {
+        post("$namespace/action/${actionDto.simpleName}") {
 
             val executor = call.executor()
             val aText = call.receive<String>()

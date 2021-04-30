@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.data.action
 
@@ -38,7 +38,7 @@ open class ActionComm(
         )
 
         val response = commBlock {
-            val responsePromise = window.fetch("/api/${companion.namespace}/${request::class.simpleName}", requestInit)
+            val responsePromise = window.fetch("/api/${companion.namespace}/action/${request::class.simpleName}", requestInit)
             checkStatus(responsePromise.await())
         }
 

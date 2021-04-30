@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.4.27"
+version = "2021.4.30"
 
 noArg {
     annotation("kotlinx.serialization.Serializable")

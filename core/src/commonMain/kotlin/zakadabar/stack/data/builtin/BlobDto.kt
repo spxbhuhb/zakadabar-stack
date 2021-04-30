@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordCommInterface
 import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.DtoSchema
 
@@ -16,16 +15,12 @@ data class BlobDto(
 
     override var id: RecordId<BlobDto>,
     var dataRecord: RecordId<DtoBase>?,
-    var dataType: String,
+    var namespace: String,
     var name: String,
     var type: String,
     var size: Long
 
 ) : RecordDto<BlobDto> {
-
-    companion object : RecordDtoCompanion<BlobDto>({
-        namespace = "blob"
-    })
 
     override fun schema() = DtoSchema {
         + ::name min 1 max 200
@@ -33,7 +28,7 @@ data class BlobDto(
         + ::size min 0 max Long.MAX_VALUE
     }
 
-    override fun getRecordType() = dataType
+    override fun getRecordType() = namespace
 
     override fun comm(): RecordCommInterface<BlobDto> {
         throw IllegalStateException("comm of BlobDto should not be used directly")
@@ -42,6 +37,6 @@ data class BlobDto(
     /**
      * Get an URL for the a BLOB.
      */
-    fun url() = "/api/$dataType/$dataRecord/blob/$id"
+    fun url() = "/api/$namespace/blob/content/$id"
 
 }

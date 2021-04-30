@@ -21,14 +21,14 @@ import zakadabar.stack.util.PublicApi
 /**
  * REST communication functions for objects that implement [RecordDto]
  *
- * @property  recordType   Type of the record this comm handles.
+ * @property  namespace   Type of the record this comm handles.
  *
  * @property  serializer   The serializer to serialize/deserialize objects
  *                         sent/received.
  */
 @PublicApi
 open class RecordComm<T : RecordDto<T>>(
-    private val recordType: String,
+    private val namespace: String,
     private val serializer: KSerializer<T>
 ) : RecordCommInterface<T> {
 
@@ -47,7 +47,7 @@ open class RecordComm<T : RecordDto<T>>(
     override suspend fun create(dto: T): T {
         require(dto.id.isEmpty()) { "id is not 0 in $dto" }
 
-        val text = client.post<String>("$baseUrl/api/$recordType") {
+        val text = client.post<String>("$baseUrl/api/$namespace/record") {
             header("Content-Type", "application/json")
             body = Json.encodeToString(serializer, dto)
         }
@@ -57,7 +57,7 @@ open class RecordComm<T : RecordDto<T>>(
 
     @PublicApi
     override suspend fun read(id: RecordId<T>): T {
-        val text = client.get<String>("$baseUrl/api/$recordType/$id")
+        val text = client.get<String>("$baseUrl/api/$namespace/record/$id")
 
         return Json.decodeFromString(serializer, text)
     }
@@ -66,7 +66,7 @@ open class RecordComm<T : RecordDto<T>>(
     override suspend fun update(dto: T): T {
         require(! dto.id.isEmpty()) { "ID of the $dto is 0 " }
 
-        val text = client.patch<String>("$baseUrl/api/$recordType") {
+        val text = client.patch<String>("$baseUrl/api/$namespace/record/${dto.id}") {
             header("Content-Type", "application/json")
             body = Json.encodeToString(serializer, dto)
         }
@@ -76,14 +76,14 @@ open class RecordComm<T : RecordDto<T>>(
 
     @PublicApi
     override suspend fun all(): List<T> {
-        val text = client.get<String>("$baseUrl/api/$recordType")
+        val text = client.get<String>("$baseUrl/api/$namespace/record")
 
         return Json.decodeFromString(ListSerializer(serializer), text)
     }
 
     @PublicApi
     override suspend fun delete(id: RecordId<T>) {
-        client.delete<Unit>("$baseUrl/api/$recordType/$id")
+        client.delete<Unit>("$baseUrl/api/$namespace/record/$id")
     }
 
     @PublicApi
@@ -94,14 +94,14 @@ open class RecordComm<T : RecordDto<T>>(
         require(data is ByteArray) // TODO should use an interface instead
 
         @Suppress("UNCHECKED_CAST") // can't do much here
-        val dto = BlobDto(EmptyRecordId(), dataRecordId as RecordId<DtoBase>, recordType, name, type, data.size.toLong())
+        val dto = BlobDto(EmptyRecordId(), dataRecordId as? RecordId<DtoBase>, namespace, name, type, data.size.toLong())
 
         callback(dto, BlobCreateState.Starting, 0)
 
         GlobalScope.launch(Dispatchers.Default) {
 
             try {
-                val text = client.post<String>("$baseUrl/api/$recordType/$dataRecordId/blob") {
+                val text = client.post<String>("$baseUrl/api/$namespace/blob${if (dataRecordId == null) "" else "/$dataRecordId"}") {
                     header("Content-Type", type)
                     header("Content-Disposition", """attachment; filename="$name"""")
                     body = ByteArrayContent(data)
@@ -118,7 +118,7 @@ open class RecordComm<T : RecordDto<T>>(
 
     @PublicApi
     override suspend fun blobCreate(dataRecordId: RecordId<T>?, name: String, type: ContentType, data: ByteArray): BlobDto {
-        val text = client.post<String>("$baseUrl/api/$recordType/$dataRecordId/blob") {
+        val text = client.post<String>("$baseUrl/api/$namespace/blob${if (dataRecordId == null) "" else "/$dataRecordId"}") {
             header("Content-Disposition", """attachment; filename="$name"""")
             body = ByteArrayContent(data, contentType = type)
         }
@@ -127,23 +127,31 @@ open class RecordComm<T : RecordDto<T>>(
     }
 
     @PublicApi
-    suspend fun blobRead(dataRecordId: RecordId<T>, blobId: RecordId<BlobDto>): ByteArray {
-        return client.get("$baseUrl/api/$recordType/$dataRecordId/blob/$blobId")
+    suspend fun blobRead(blobId: RecordId<BlobDto>): ByteArray {
+        return client.get("$baseUrl/api/$namespace/blob/$blobId")
     }
 
     @PublicApi
-    override suspend fun blobMetaRead(dataRecordId: RecordId<T>): List<BlobDto> {
+    override suspend fun blobMetaList(dataRecordId: RecordId<T>): List<BlobDto> {
 
-        val text = client.get<String>("$baseUrl/api/$recordType/$dataRecordId/blob/all")
+        val text = client.get<String>("$baseUrl/api/$namespace/blob/list/$dataRecordId")
 
         return Json.decodeFromString(ListSerializer(BlobDto.serializer()), text)
+    }
+
+    @PublicApi
+    override suspend fun blobMetaRead(blobId: RecordId<BlobDto>): BlobDto {
+
+        val text = client.get<String>("$baseUrl/api/$namespace/blob/meta/$blobId")
+
+        return Json.decodeFromString(BlobDto.serializer(), text)
     }
 
     @PublicApi
     override suspend fun blobMetaUpdate(dto: BlobDto): BlobDto {
         require(! dto.id.isEmpty()) { "ID of the $dto is 0 " }
 
-        val text = client.patch<String>("$baseUrl/api/$recordType/${dto.dataRecord}/blob") {
+        val text = client.patch<String>("$baseUrl/api/$namespace/blob/meta/${dto.id}") {
             header("Content-Type", "application/json")
             body = Json.encodeToString(BlobDto.serializer(), dto)
         }
@@ -152,8 +160,8 @@ open class RecordComm<T : RecordDto<T>>(
     }
 
     @PublicApi
-    override suspend fun blobDelete(dataRecordId: RecordId<T>, blobId: RecordId<BlobDto>) {
-        client.delete<Unit>("$baseUrl/api/$recordType/$dataRecordId/blob/$blobId")
+    override suspend fun blobDelete(blobId: RecordId<BlobDto>) {
+        client.delete<Unit>("$baseUrl/api/$namespace/blob/$blobId")
     }
 
 }

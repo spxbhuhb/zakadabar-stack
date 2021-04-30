@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
 plugins {
@@ -14,10 +14,10 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.3.24"
+version = "2021.4.30"
 
 application {
-    mainClassName = "zakadabar.demo.frontend.MainKt"
+    mainClassName = "zakadabar.demo.jvm.frontend.MainKt"
 }
 
 noArg {
@@ -35,6 +35,6 @@ kotlin {
 
     sourceSets["commonMain"].dependencies {
         implementation(project(":core"))
-        implementation(project(":demo:demo"))
+        implementation(project(":demo:demo-marina"))
     }
 }

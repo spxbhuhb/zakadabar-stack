@@ -5,17 +5,17 @@ package zakadabar.site.frontend
 
 import hu.simplexion.rf.leltar.frontend.pages.roles.Roles
 import kotlinx.browser.window
-import zakadabar.demo.frontend.lib.crud.BuiltinCrud
-import zakadabar.demo.frontend.lib.form.FormFields
-import zakadabar.demo.frontend.lib.form.SyntheticForm
-import zakadabar.demo.frontend.lib.input.CheckboxList
-import zakadabar.demo.frontend.lib.layout.TabContainer
-import zakadabar.demo.frontend.lib.modal.Modals
-import zakadabar.demo.frontend.lib.pages.ArgPage
-import zakadabar.demo.frontend.lib.query.QueryPage
-import zakadabar.demo.frontend.lib.table.FetchedTable
-import zakadabar.demo.frontend.lib.table.GeneratedTable
-import zakadabar.demo.frontend.lib.toast.Toasts
+import zakadabar.demo.lib.frontend.crud.BuiltinCrud
+import zakadabar.demo.lib.frontend.form.FormFieldsGenerated
+import zakadabar.demo.lib.frontend.form.SyntheticForm
+import zakadabar.demo.lib.frontend.input.CheckboxList
+import zakadabar.demo.lib.frontend.layout.TabContainer
+import zakadabar.demo.lib.frontend.modal.Modals
+import zakadabar.demo.lib.frontend.pages.ArgPage
+import zakadabar.demo.lib.frontend.query.QueryPage
+import zakadabar.demo.lib.frontend.table.FetchedTable
+import zakadabar.demo.lib.frontend.table.GeneratedTable
+import zakadabar.demo.lib.frontend.toast.Toasts
 import zakadabar.site.data.ContentEntry
 import zakadabar.site.data.ContentQuery
 import zakadabar.site.frontend.pages.misc.Content
@@ -58,7 +58,7 @@ object SideBar : ZkSideBar() {
                 + item("Modals") { Modals.open() }
                 + item("Crud") { BuiltinCrud.openAll() }
                 + group("Form") {
-                    + item("Fields") { FormFields.open() }
+                    + item("Fields") { FormFieldsGenerated.open() }
                     + item("Synthetic") { SyntheticForm.open() }
                 }
                 + item("Query") { QueryPage.open() }

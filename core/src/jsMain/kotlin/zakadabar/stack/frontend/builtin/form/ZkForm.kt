@@ -356,7 +356,7 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
     //  Field builders
     // ------------------------------------------------------------------------
 
-    open fun build(title: String, createTitle: String = title, css: String? = null, addButtons: Boolean = true, builder: () -> Unit): ZkForm<T> {
+    open fun build(title: String, createTitle: String = title, css: String? = null, addButtons: Boolean = true, builder: () -> Unit) {
         this.titleText = if (mode == ZkElementMode.Create) createTitle else title
 
         // this lets build be called from an IO block after onResume ran
@@ -374,8 +374,6 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
                 + invalidFieldList()
             }
         }
-
-        return this
     }
 
     fun buttons() = ZkFormButtons(this@ZkForm)

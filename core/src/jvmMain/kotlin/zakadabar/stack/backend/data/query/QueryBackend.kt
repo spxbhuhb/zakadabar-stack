@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.backend.data.query
 
@@ -26,7 +26,7 @@ interface QueryBackend : BackendModule {
      * Adds a Query route for this backend.
      */
     fun <RQ : Any, RS : Any> Route.query(queryDtoClass: KClass<RQ>, func: (Executor, RQ) -> RS) {
-        get("$namespace/${queryDtoClass.simpleName}") {
+        get("$namespace/query/${queryDtoClass.simpleName}") {
 
             val executor = call.executor()
 

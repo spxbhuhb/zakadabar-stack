@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.form
 
@@ -12,6 +12,7 @@ import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val outerContainer by ZkTableStyles.cssClass {
+        boxSizing = "border-box"
         display = "flex"
         flexDirection = "column"
         width = "100%"

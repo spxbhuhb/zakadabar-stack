@@ -1,9 +1,8 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.data
 
-import io.ktor.http.*
 import kotlinx.coroutines.await
 import org.w3c.fetch.Response
 import zakadabar.stack.frontend.application.ZkApplication.sessionManager
@@ -49,11 +48,18 @@ abstract class CommBase {
      */
     suspend fun checkStatus(response: Response): Response {
         val code = response.status.toInt()
-        when {
-            code == HttpStatusCode.Conflict.value -> throw DataConflictException(response.text().await())
-            code == 440 -> throw LoginTimeout()
-            code >= 400 -> throw RuntimeException()
+
+        if (code >= 400) {
+            when (code) {
+                400 -> throw IllegalArgumentException()
+                404 -> throw NoSuchElementException()
+                409 -> throw DataConflictException(response.text().await())
+                440 -> throw LoginTimeout()
+                501 -> throw NotImplementedError()
+                else -> throw RuntimeException()
+            }
         }
+
         return response
     }
 }
