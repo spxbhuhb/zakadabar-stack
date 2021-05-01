@@ -8,6 +8,7 @@ import kotlinx.coroutines.await
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.html.HtmlGenerator
 import org.intellij.markdown.parser.MarkdownParser
+import org.w3c.dom.HTMLElement
 import zakadabar.lib.frontend.markdown.flavour.ZkFlavourDescriptor
 import zakadabar.lib.frontend.markdown.flavour.ZkMarkdownContext
 import zakadabar.stack.frontend.application.ZkApplication.theme
@@ -27,7 +28,7 @@ open class MarkdownView(
         super.onCreate()
 
         io {
-            val context = ZkMarkdownContext()
+            val context = ZkMarkdownContext(element.id)
             val flavour = ZkFlavourDescriptor(context)
             source = content ?: window.fetch(url).await().text().await()
             parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(source)
@@ -36,6 +37,7 @@ open class MarkdownView(
 
             + grid {
                 gridTemplateColumns = "1fr max-content"
+
                 + div {
                     style {
                         overflowX = "auto"
@@ -44,7 +46,8 @@ open class MarkdownView(
                     }
                     buildElement.innerHTML = html
                 }
-                + TableOfContents(context)
+
+                + TableOfContents(context, element.parentElement as HTMLElement) // TODO think about using element.parentElement in MarkdownView
             }
             // println(dump("", parsedTree))
         }

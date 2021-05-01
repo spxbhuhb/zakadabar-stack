@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.theme
 
@@ -38,7 +38,9 @@ open class ZkBuiltinContrastTheme : ZkTheme {
 
     override var color = ZkColorTheme(
         background = background,
+        hoverBackground = background,
         foreground = foreground,
+        hoverForeground = foreground,
         success = success,
         info = info,
         warning = warning,

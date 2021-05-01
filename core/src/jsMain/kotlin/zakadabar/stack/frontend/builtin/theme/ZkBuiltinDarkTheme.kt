@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.theme
 
@@ -30,7 +30,7 @@ open class ZkBuiltinDarkTheme : ZkTheme {
 
     val background = ZkColors.Design.gray9
     val foreground = ZkColors.Design.gray2
-    val border = "1px solid ${ZkColors.Design.navPurple}"
+    val border = "1px solid ${foreground}80"
 
     override var button = ZkButtonTheme(
         background = ZkColors.Design.navBlue,
@@ -39,7 +39,9 @@ open class ZkBuiltinDarkTheme : ZkTheme {
 
     override var color = ZkColorTheme(
         background = background,
+        hoverBackground = "rgba(255,255,255,0.2)",
         foreground = foreground,
+        hoverForeground = foreground,
         success = success,
         info = info,
         warning = warning,
@@ -63,7 +65,7 @@ open class ZkBuiltinDarkTheme : ZkTheme {
     override var modal = ZkModalTheme()
 
     override var sidebar = ZkSideBarTheme(
-        border = "1px solid ${ZkColors.Design.navPurple}"
+        border = border
     )
 
     override var tabContainer = ZkTabContainerTheme()

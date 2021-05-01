@@ -3,16 +3,18 @@
  */
 package zakadabar.lib.frontend.markdown.flavour
 
-class ZkMarkdownContext {
+class ZkMarkdownContext(
+    var viewId: String
+) {
 
-    var nextId = 1
+    var nextTocId = 1
 
     var headerText: String = ""
 
     val tableOfContents = mutableListOf<TocEntry>()
 
     class TocEntry(
-        val id: Int,
+        val tocId: String,
         val level: Int,
         val text: String
     )

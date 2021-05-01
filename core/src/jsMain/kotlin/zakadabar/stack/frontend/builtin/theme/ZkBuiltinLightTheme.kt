@@ -41,7 +41,9 @@ open class ZkBuiltinLightTheme : ZkTheme {
 
     override var color = ZkColorTheme(
         background = background,
+        hoverBackground = "rgba(255,255,255,0.2)",
         foreground = foreground,
+        hoverForeground = foreground,
         success = success,
         info = info,
         warning = warning,

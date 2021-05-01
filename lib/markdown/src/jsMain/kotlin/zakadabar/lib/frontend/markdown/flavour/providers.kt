@@ -7,18 +7,23 @@ import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.LeafASTNode
 import org.intellij.markdown.html.HtmlGenerator
 import org.intellij.markdown.html.HtmlGenerator.Companion.leafText
-import org.intellij.markdown.html.SimpleTagProvider
+import org.intellij.markdown.html.OpenCloseGeneratingProvider
 import org.intellij.markdown.html.TrimmingInlineHolderProvider
 
 class HeaderProvider(
-    val context: ZkMarkdownContext,
-    val level: Int,
-    tagName: String
-) : SimpleTagProvider(tagName) {
+    private val context: ZkMarkdownContext,
+    private val level: Int,
+    private val tagName: String
+) : OpenCloseGeneratingProvider() {
+
+    override fun openTag(visitor: HtmlGenerator.HtmlGeneratingVisitor, text: String, node: ASTNode) {
+        visitor.consumeTagOpen(node, tagName, "data-toc-id=\"${context.viewId}-${context.nextTocId}\"")
+    }
 
     override fun closeTag(visitor: HtmlGenerator.HtmlGeneratingVisitor, text: String, node: ASTNode) {
-        context.tableOfContents += ZkMarkdownContext.TocEntry(context.nextId ++, level, context.headerText)
-        super.closeTag(visitor, text, node)
+        context.tableOfContents += ZkMarkdownContext.TocEntry("${context.viewId}-${context.nextTocId}", level, context.headerText)
+        context.nextTocId ++
+        visitor.consumeTagClose(tagName)
     }
 
 }
