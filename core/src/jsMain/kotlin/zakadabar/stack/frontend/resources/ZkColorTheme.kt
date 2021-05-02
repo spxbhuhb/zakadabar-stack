@@ -11,5 +11,6 @@ class ZkColorTheme(
     val info: String,
     val success: String,
     val warning: String,
-    val error: String
+    val error: String,
+    val border: String
 )

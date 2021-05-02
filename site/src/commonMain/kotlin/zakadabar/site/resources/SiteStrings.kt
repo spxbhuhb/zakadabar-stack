@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.site.resources
 
@@ -18,7 +18,7 @@ class SiteStrings : ZkBuiltinStrings() {
     val normalPeople by "Normal People"
     val jungleWarriors by "Jungle Warriors"
 
-    val highLights by "HighLights"
+    val overview by "Overview"
 
     // general stuff
 
@@ -26,7 +26,7 @@ class SiteStrings : ZkBuiltinStrings() {
     val optionalFields by "Optional Fields"
     val validate by "Validate"
     val formFields by "Form Fields"
-    val features by "Features"
+    val examples by "Examples"
     val searchShips by "Search Ships"
     val runQuery by "Run Query"
     val filters by "Filters"
@@ -53,9 +53,9 @@ class SiteStrings : ZkBuiltinStrings() {
     val siteTitle by "A Kotlin Multiplatform library for full-stack software development."
 
     val getStarted by "Get Started"
-    val demo by "Demo"
-    val guides by "Guides"
-    val github by "GitHub"
+    val documentation by "Documentation"
+    val getHelp by "Get Help"
+    val sourceCode by "Source Code"
 
     val writeOnceTitle by "Write Once"
     val writeOnceText by "Use everywhere. It's enough to code an API once, isn't it? Data models, schemas, logic: share code between server, browser and mobile. "

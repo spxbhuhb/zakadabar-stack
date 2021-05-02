@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.titlebar
 
@@ -93,6 +93,12 @@ object ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
+        paddingRight = 10
+    }
+
+    val iconButton by cssClass {
+        fill = "${theme.layout.defaultForeground} !important"
+        backgroundColor = "transparent !important"
     }
 
     init {

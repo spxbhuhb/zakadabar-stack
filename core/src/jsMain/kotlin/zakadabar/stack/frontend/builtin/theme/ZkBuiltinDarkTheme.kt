@@ -30,7 +30,9 @@ open class ZkBuiltinDarkTheme : ZkTheme {
 
     val background = ZkColors.Design.gray9
     val foreground = ZkColors.Design.gray2
-    val border = "1px solid ${foreground}80"
+
+    val borderColor = ZkColors.Gray.c600
+    val border = "1px solid $borderColor"
 
     override var button = ZkButtonTheme(
         background = ZkColors.Design.navBlue,
@@ -45,7 +47,8 @@ open class ZkBuiltinDarkTheme : ZkTheme {
         success = success,
         info = info,
         warning = warning,
-        error = error
+        error = error,
+        border = borderColor
     )
 
     override var dock = ZkDockTheme()

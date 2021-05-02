@@ -25,7 +25,7 @@ object LandingStyles : ZkCssStyleSheet<ZkTheme>() {
         justifyContent = "space-between"
         height = 60
         backgroundColor = theme.layout.defaultBackground
-        borderBottom = "1px solid ${ZkColors.Design.navPurple}"
+        borderBottom = "1px solid ${theme.color.border}"
     }
 
     val content by cssClass {
@@ -68,6 +68,10 @@ object LandingStyles : ZkCssStyleSheet<ZkTheme>() {
         border = "1px solid ${ZkColors.Design.navOrange}"
     }
 
+    val buttonPurple by cssClass {
+        border = "1px solid ${ZkColors.Design.navPurple}"
+    }
+
     val buttonRed by cssClass {
         border = "1px solid ${ZkColors.Design.navRed}"
     }
@@ -105,7 +109,7 @@ object LandingStyles : ZkCssStyleSheet<ZkTheme>() {
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
-        borderTop = "1px solid ${ZkColors.Design.navPurple}"
+        borderTop = "1px solid ${theme.color.border}"
     }
 
     init {

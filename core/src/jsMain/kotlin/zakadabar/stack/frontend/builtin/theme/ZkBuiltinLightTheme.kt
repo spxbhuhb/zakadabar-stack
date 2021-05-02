@@ -31,7 +31,8 @@ open class ZkBuiltinLightTheme : ZkTheme {
     val warning = ZkColors.Design.navOrange
     val error = ZkColors.Design.navRed
 
-    val border = "1px solid ${ZkColors.Design.navPurple}"
+    val borderColor = ZkColors.Gray.c600
+    val border = "1px solid $borderColor"
 
     override var button = ZkButtonTheme(
         background = ZkColors.Design.navBlue,
@@ -47,7 +48,8 @@ open class ZkBuiltinLightTheme : ZkTheme {
         success = success,
         info = info,
         warning = warning,
-        error = error
+        error = error,
+        border = borderColor
     )
 
     override var dock = ZkDockTheme()

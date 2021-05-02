@@ -19,8 +19,8 @@ import zakadabar.demo.lib.frontend.toast.Toasts
 import zakadabar.site.data.ContentEntry
 import zakadabar.site.data.ContentQuery
 import zakadabar.site.frontend.pages.misc.Content
-import zakadabar.site.frontend.pages.misc.GettingStarted
-import zakadabar.site.frontend.pages.misc.Highlights
+import zakadabar.site.frontend.pages.misc.GetStarted
+import zakadabar.site.frontend.pages.misc.Overview
 import zakadabar.site.resources.Strings
 import zakadabar.stack.StackRoles
 import zakadabar.stack.data.builtin.account.LogoutAction
@@ -44,15 +44,13 @@ object SideBar : ZkSideBar() {
         io {
             contents = ContentQuery().execute().sortedBy { it.name }
 
-            + item("Highlights") { Highlights.open() }
+            + item(Strings.overview) { Overview.open() }
 
-            + item("Getting Started") { GettingStarted.open() }
+            + item(Strings.getStarted) { GetStarted.open() }
 
-            contentGroup("ChangeLog", "changelog/", true)
+            contentGroup(Strings.documentation, "guides/")
 
-            contentGroup("Guides", "guides/")
-
-            + group(Strings.features) {
+            + group(Strings.examples) {
                 + item("ArgPage") { ArgPage.open(ArgPage.Args(fourRandomInt()[0], "hello")) }
                 + item("CheckboxList") { CheckboxList.open() }
                 + item("Modals") { Modals.open() }
@@ -70,6 +68,8 @@ object SideBar : ZkSideBar() {
                 + item("Toasts") { Toasts.open() }
                 + item("Settings") { Settings.openAll() }
             }
+
+            contentGroup("ChangeLog", "changelog/", true)
 
             contentGroup("Contribute", "contribute/")
 

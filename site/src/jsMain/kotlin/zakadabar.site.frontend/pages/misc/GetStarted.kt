@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.site.frontend.pages.misc
 
@@ -14,7 +14,7 @@ import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.marginBottom
 
-object GettingStarted : ZkPage() {
+object GetStarted : ZkPage() {
 
     private val content = ZkElement()
 

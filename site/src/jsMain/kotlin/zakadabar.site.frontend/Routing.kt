@@ -30,8 +30,8 @@ object Routing : ZkAppRouting(DefaultLayout, Landing) {
         + Landing
         + Content
         + CodeLab
-        + GettingStarted
-        + Highlights
+        + GetStarted
+        + Overview
 
         + ArgPage
         + BuiltinCrud

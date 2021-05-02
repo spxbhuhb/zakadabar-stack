@@ -4,6 +4,7 @@
 @file:Suppress("unused") // main is called by webpack
 
 import kotlinx.browser.window
+import zakadabar.site.frontend.DefaultLayout
 import zakadabar.site.frontend.Routing
 import zakadabar.site.frontend.resources.SiteDarkTheme
 import zakadabar.site.frontend.resources.SiteLightTheme
@@ -11,6 +12,7 @@ import zakadabar.site.resources.SiteStrings
 import zakadabar.stack.data.builtin.resources.TranslationsByLocale
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.titlebar.actions.DarkLightMode
 import zakadabar.stack.frontend.util.io
 
 fun main() {
@@ -33,6 +35,8 @@ fun main() {
             strings = SiteStrings().merge(TranslationsByLocale(locale).execute())
 
             routing = Routing
+
+            DefaultLayout.titleBar.globalElements += DarkLightMode(SiteDarkTheme.NAME, SiteLightTheme.NAME)
 
 //            configureMarkdown()
 

@@ -44,7 +44,8 @@ open class ZkBuiltinContrastTheme : ZkTheme {
         success = success,
         info = info,
         warning = warning,
-        error = error
+        error = error,
+        border = border
     )
 
     override var dock = ZkDockTheme()
@@ -60,7 +61,7 @@ open class ZkBuiltinContrastTheme : ZkTheme {
     override var modal = ZkModalTheme()
 
     override var sidebar = ZkSideBarTheme(
-        border = foreground
+        border = border
     )
 
     override var tabContainer = ZkTabContainerTheme()

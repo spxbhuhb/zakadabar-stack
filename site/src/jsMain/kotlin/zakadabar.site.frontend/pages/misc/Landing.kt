@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.site.frontend.pages.misc
 
@@ -32,11 +32,11 @@ object Landing : ZkPage(ZkFullScreenLayout) {
             + div(LandingStyles.title) { + Strings.siteTitle } marginBottom 50
 
             + row(LandingStyles.buttons) {
-                + ZkButton(Strings.highLights) { Highlights.open() } css LandingStyles.button css LandingStyles.buttonCyan marginRight 20
-                + ZkButton(Strings.getStarted) { GettingStarted.open() } css LandingStyles.button css LandingStyles.buttonBlue marginRight 20
-                + ZkButton(Strings.demo) css LandingStyles.button css LandingStyles.buttonGreen marginRight 20
-                + ZkButton(Strings.guides) css LandingStyles.button css LandingStyles.buttonOrange marginRight 20
-                + ZkButton(Strings.github, onClick = ::openGitHub) css LandingStyles.button css LandingStyles.buttonRed marginRight 20
+                + ZkButton(Strings.overview) { Overview.open() } css LandingStyles.button css LandingStyles.buttonCyan marginRight 20
+                + ZkButton(Strings.getStarted) { GetStarted.open() } css LandingStyles.button css LandingStyles.buttonBlue marginRight 20
+                + ZkButton(Strings.documentation) css LandingStyles.button css LandingStyles.buttonGreen marginRight 20
+                + ZkButton(Strings.examples) css LandingStyles.button css LandingStyles.buttonOrange marginRight 20
+                + ZkButton(Strings.getHelp) css LandingStyles.button css LandingStyles.buttonRed marginRight 20
             } marginBottom 30
 
             + row(LandingStyles.cards) {
