@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.sidebar
 
@@ -11,12 +11,12 @@ object ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
     val sidebar by cssClass {
         boxSizing = "border-box"
         minHeight = "100%"
-        backgroundColor = theme.sidebar.background
-        color = theme.sidebar.text
+        backgroundColor = theme.sideBar.background
+        color = theme.sideBar.text
         overflowY = "auto"
         minWidth = 220
         paddingTop = 10
-        borderRight = theme.sidebar.border
+        borderRight = theme.sideBar.border
     }
 
     val item by cssClass {
@@ -30,8 +30,8 @@ object ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
         flexDirection = "row"
         alignItems = "center"
         on(":hover") {
-            backgroundColor = theme.sidebar.hoverBackground
-            color = theme.sidebar.hoverText
+            backgroundColor = theme.sideBar.hoverBackground
+            color = theme.sideBar.hoverText
             borderRadius = 4
         }
     }
@@ -48,8 +48,8 @@ object ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
         marginRight = 8
         paddingLeft = 12
         on(":hover") {
-            backgroundColor = theme.sidebar.hoverBackground
-            color = theme.sidebar.hoverText
+            backgroundColor = theme.sideBar.hoverBackground
+            color = theme.sideBar.hoverText
             borderRadius = 4
         }
     }

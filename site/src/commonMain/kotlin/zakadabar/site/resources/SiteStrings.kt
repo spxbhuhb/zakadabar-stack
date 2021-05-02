@@ -18,7 +18,7 @@ class SiteStrings : ZkBuiltinStrings() {
     val normalPeople by "Normal People"
     val jungleWarriors by "Jungle Warriors"
 
-    val overview by "Overview"
+    val Welcome by "Welcome"
 
     // general stuff
 

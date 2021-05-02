@@ -13,11 +13,20 @@ import zakadabar.stack.frontend.resources.ZkTheme
  * The getter/setter pattern is intentional. With property delegation a new object would
  * be created for each property and we don't want that. Also, there are conversions,
  * so we can't use a simple map as delegate.
+ *
+ * @property  sheet          The CSS Style Sheet this rule is part of.
+ * @property  propName       Name of the property in the CSS style sheet.
+ * @property  cssClassname   Name of the CSS class to use.
+ * @property  cssSelector    The CSS selector to include in the style sheet. When [cssSelector]
+ *                           is not null [cssClassName] is skipped. Using [on] for a rule
+ *                           with [cssSelector] does not work.
+ * @property  builder        The function to build the CSS text for the rule.
  */
 class ZkCssStyleRule(
     private val sheet: ZkCssStyleSheet<*>,
     val propName: String,
-    val cssClassName: String,
+    val cssClassname: String,
+    val cssSelector: String? = null,
     var builder: ZkCssStyleRule.(ZkTheme) -> Unit
 ) {
     var media: String? = null
@@ -50,10 +59,14 @@ class ZkCssStyleRule(
 
         var s = ""
 
-        if (media != null) s += "@media $media {\n"
-        s += "."
-        s += cssClassName
-        if (pseudoClass != null) s += pseudoClass
+        if (cssSelector == null) {
+            if (media != null) s += "@media $media {\n"
+            s += "."
+            s += cssClassname
+            if (pseudoClass != null) s += pseudoClass
+        } else {
+            s += cssSelector
+        }
         s += "{\n${styles}\n}"
         if (media != null) s += "}"
 
@@ -84,7 +97,7 @@ class ZkCssStyleRule(
 
         if (! ::variations.isInitialized) variations = mutableListOf()
 
-        val rule = ZkCssStyleRule(sheet, this.propName, cssClassName, builder)
+        val rule = ZkCssStyleRule(sheet, this.propName, cssClassname, cssSelector, builder)
 
         rule.pseudoClass = pseudoClass
         rule.media = media

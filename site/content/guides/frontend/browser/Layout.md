@@ -19,19 +19,19 @@ This picture shows the structure of ZkDefaultLayout. Blue class names are the co
 
 ![<img src="default-layout.png" width="800"/>](./default-layout.png)
 
-## Application Title
+## Application Title Bar
 
-Pages, tables and forms use `ZkApplication.title` to set the title bar.
-
-Default title bar
-implementation: [ZkTitleBar](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/titlebar/ZkTitleBar.kt)
-
-The title bar has 4 areas:
+The default layout has an application title bar which has 4 areas:
 
 * sidebar show button (hidden by default)
 * title - title of the page currently shown
 * context elements - actions that belong to the current page like table search
 * global elements - global actions, shown all the time
+
+Default application title bar
+implementation: [ZkAppTitleBar](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/titlebar/ZkTitleBar.kt)
+
+Pages, tables and forms use `ZkApplication.title` to set the title and context elements of the title bar.
 
 All high level elements (ZkPage, ZkArgPage, ZkForm, ZkTable) have the following fields:
 
@@ -39,3 +39,32 @@ All high level elements (ZkPage, ZkArgPage, ZkForm, ZkTable) have the following 
 * `title` - string, when set this element is assigned to `ZkApplication.title`
 * `titleText` - string, when set, a new `ZkAppTitle` instance is created and that instance is assigned
   to `ZkApplication.title`
+
+### Global Elements
+
+Global elements of the application title bar are independent of the specific content displayed and are always shown
+(if not explicitly hidden).
+
+Use the `+=` on the application title bar to add a global element.
+
+```kotlin
+object DefaultLayout : ZkDefaultLayout() {
+
+  override fun onCreate() {
+    super.onCreate()
+
+    appHandle = ZkAppHandle(SiteLogo(), onIconClick = ::onToggleSideBar, onTextClick = { Landing.open() })
+    sideBar = SideBar
+    titleBar = ZkAppTitleBar(::onToggleSideBar)
+
+    titleBar.globalElements += DarkLightMode(SiteDarkTheme.NAME, SiteLightTheme.NAME)
+
+  }
+
+}
+```
+
+### Sidebar show button
+
+This button is tied to the side bar. When the side bar is shown the button is hidden. When the side bar is hidden, the
+button is shown. `ZkAppTitleBar` automatically handles these states.

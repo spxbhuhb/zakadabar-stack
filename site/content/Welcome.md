@@ -1,12 +1,30 @@
-# Highlights
+![logo](/zakadabar.svg)
+
+# Welcome
+
+Zakadabar Stack is a software library for full-stack application development in Kotlin.
+
+Building full-stack, deployable applications is inherently complex. It is quite a task in itself just to collect the
+areas one has to pay attention to.
+
+The stack aims to provide at least one solution for each requirement a full-stack application has to meet. Check the
+list of features below to get an idea what's included.
+
+Our ultimate goals:
+
+* maximize developer output,
+* minimize developer frustration,
+* deliver prototypes and quality product very fast.
+
+## Highlights
 
 * Use Kotlin whenever possible (that is: close to 100%).
-* Avoid conflicts between components by using shared code for data models.
-* Deliver small-medium applications very fast while keep quality on top.
+* Use shared code for data models and schemas.
 * When something can be done automatically, do it automatically.
 * Figure sensible defaults and use them whenever possible.
 * Secure by default: deny-first, allow explicitly.
 * Minimize dependencies.
+* Make administration and operation of the products easy.
 
 ## Features - Common
 

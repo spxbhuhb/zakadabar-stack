@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
 package zakadabar.stack.frontend.resources
@@ -9,6 +9,7 @@ import zakadabar.stack.frontend.builtin.dock.ZkDockTheme
 import zakadabar.stack.frontend.builtin.form.ZkFormTheme
 import zakadabar.stack.frontend.builtin.icon.ZkIconTheme
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutTheme
+import zakadabar.stack.frontend.builtin.layout.ZkScrollBarTheme
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainerTheme
 import zakadabar.stack.frontend.builtin.misc.ZkFontTheme
 import zakadabar.stack.frontend.builtin.modal.ZkModalTheme
@@ -29,7 +30,8 @@ interface ZkTheme {
     var icon: ZkIconTheme
     var layout: ZkLayoutTheme
     var modal: ZkModalTheme
-    var sidebar: ZkSideBarTheme
+    var scrollBar: ZkScrollBarTheme
+    var sideBar: ZkSideBarTheme
     var tabContainer: ZkTabContainerTheme
     var table: ZkTableTheme
     var titleBar: ZkTitleBarTheme

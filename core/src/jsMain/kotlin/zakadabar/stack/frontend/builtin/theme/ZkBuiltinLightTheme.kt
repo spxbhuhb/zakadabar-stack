@@ -8,6 +8,7 @@ import zakadabar.stack.frontend.builtin.dock.ZkDockTheme
 import zakadabar.stack.frontend.builtin.form.ZkFormTheme
 import zakadabar.stack.frontend.builtin.icon.ZkIconTheme
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutTheme
+import zakadabar.stack.frontend.builtin.layout.ZkScrollBarTheme
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainerTheme
 import zakadabar.stack.frontend.builtin.misc.ZkFontTheme
 import zakadabar.stack.frontend.builtin.modal.ZkModalTheme
@@ -73,7 +74,14 @@ open class ZkBuiltinLightTheme : ZkTheme {
         border = border
     )
 
-    override var sidebar = ZkSideBarTheme(
+    override var scrollBar = ZkScrollBarTheme(
+        width = 12,
+        height = 12,
+        background = "${foreground}80",
+        foreground = background
+    )
+
+    override var sideBar = ZkSideBarTheme(
         border = border
     )
 

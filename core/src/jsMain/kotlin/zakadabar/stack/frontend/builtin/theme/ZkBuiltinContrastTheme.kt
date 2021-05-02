@@ -8,6 +8,7 @@ import zakadabar.stack.frontend.builtin.dock.ZkDockTheme
 import zakadabar.stack.frontend.builtin.form.ZkFormTheme
 import zakadabar.stack.frontend.builtin.icon.ZkIconTheme
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutTheme
+import zakadabar.stack.frontend.builtin.layout.ZkScrollBarTheme
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainerTheme
 import zakadabar.stack.frontend.builtin.misc.ZkFontTheme
 import zakadabar.stack.frontend.builtin.modal.ZkModalTheme
@@ -60,7 +61,14 @@ open class ZkBuiltinContrastTheme : ZkTheme {
 
     override var modal = ZkModalTheme()
 
-    override var sidebar = ZkSideBarTheme(
+    override var scrollBar = ZkScrollBarTheme(
+        width = 10,
+        height = 10,
+        background = background,
+        foreground = foreground
+    )
+
+    override var sideBar = ZkSideBarTheme(
         border = border
     )
 

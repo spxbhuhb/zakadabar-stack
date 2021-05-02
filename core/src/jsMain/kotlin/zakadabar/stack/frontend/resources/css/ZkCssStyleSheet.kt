@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.resources.css
 
@@ -43,20 +43,22 @@ open class ZkCssStyleSheet<T : ZkTheme> {
         override fun getValue(thisRef: ZkCssStyleSheet<*>, property: KProperty<*>) = cssClassName
     }
 
-    class CssDelegateProvider(val name: String? = null, val builder: ZkCssStyleRule.(ZkTheme) -> Unit) {
+    class CssDelegateProvider(val name: String? = null, val selector: String? = null, val builder: ZkCssStyleRule.(ZkTheme) -> Unit) {
         operator fun provideDelegate(thisRef: ZkCssStyleSheet<*>, prop: KProperty<*>): ReadOnlyProperty<ZkCssStyleSheet<*>, String> {
 
             val cssClassName = name ?: "${thisRef::class.simpleName}-${prop.name}-${nextId.getAndIncrement()}"
 
-            thisRef.rules[prop.name] = ZkCssStyleRule(thisRef, prop.name, cssClassName, builder)
+            thisRef.rules[prop.name] = ZkCssStyleRule(thisRef, prop.name, cssClassName, selector, builder)
 
             return CssDelegate(cssClassName)
         }
     }
 
-    fun cssClass(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, builder)
+    fun cssRule(selector: String, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, selector, builder)
 
-    fun cssClass(name: String? = null, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(name, builder)
+    fun cssClass(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, null, builder)
+
+    fun cssClass(name: String? = null, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(name, null, builder)
 
     @PublicApi
     fun attach() {

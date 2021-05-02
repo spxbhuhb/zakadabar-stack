@@ -161,3 +161,16 @@ Use the `merge` method to update a CSS style sheet.
 DemoStyles.merge(DemoRedStyles())
 ```
 
+## Scroll Bar Styles
+
+Scroll bars are styled
+by [ZkScrollBarStyles](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/layout/ZkScrollBarStyles.kt)
+.
+
+The default is to use scroll bar colors aligned with the theme.
+
+To switch off scroll bar styling use `detach`:
+
+```kotlin
+scrollBarStyles.detach()
+```

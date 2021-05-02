@@ -9,13 +9,13 @@ import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
 import zakadabar.stack.frontend.util.io
 
-object Overview : ZkPage() {
+object Welcome : ZkPage() {
 
     override fun onCreate() {
         super.onCreate()
 
         io {
-            + MarkdownView("/api/${ContentQuery.namespace}/Highlights.md") css ZkPageStyles.content
+            + MarkdownView("/api/${ContentQuery.namespace}/Welcome.md") css ZkPageStyles.content
         }
     }
 

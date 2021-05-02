@@ -32,7 +32,7 @@ object Landing : ZkPage(ZkFullScreenLayout) {
             + div(LandingStyles.title) { + Strings.siteTitle } marginBottom 50
 
             + row(LandingStyles.buttons) {
-                + ZkButton(Strings.overview) { Overview.open() } css LandingStyles.button css LandingStyles.buttonCyan marginRight 20
+                + ZkButton(Strings.Welcome) { Welcome.open() } css LandingStyles.button css LandingStyles.buttonCyan marginRight 20
                 + ZkButton(Strings.getStarted) { GetStarted.open() } css LandingStyles.button css LandingStyles.buttonBlue marginRight 20
                 + ZkButton(Strings.documentation) css LandingStyles.button css LandingStyles.buttonGreen marginRight 20
                 + ZkButton(Strings.examples) css LandingStyles.button css LandingStyles.buttonOrange marginRight 20

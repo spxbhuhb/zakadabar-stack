@@ -27,7 +27,7 @@ object ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
         maxHeight = theme.titleBar.height
         whiteSpace = "nowrap"
         backgroundColor = theme.titleBar.appHandleBackground
-        color = ZkSideBarStyles.theme.sidebar.text
+        color = ZkSideBarStyles.theme.sideBar.text
         cursor = "pointer"
     }
 

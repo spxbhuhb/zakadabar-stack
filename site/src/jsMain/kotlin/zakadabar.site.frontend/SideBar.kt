@@ -20,7 +20,7 @@ import zakadabar.site.data.ContentEntry
 import zakadabar.site.data.ContentQuery
 import zakadabar.site.frontend.pages.misc.Content
 import zakadabar.site.frontend.pages.misc.GetStarted
-import zakadabar.site.frontend.pages.misc.Overview
+import zakadabar.site.frontend.pages.misc.Welcome
 import zakadabar.site.resources.Strings
 import zakadabar.stack.StackRoles
 import zakadabar.stack.data.builtin.account.LogoutAction
@@ -44,30 +44,13 @@ object SideBar : ZkSideBar() {
         io {
             contents = ContentQuery().execute().sortedBy { it.name }
 
-            + item(Strings.overview) { Overview.open() }
+            + item(Strings.Welcome) { Welcome.open() }
 
             + item(Strings.getStarted) { GetStarted.open() }
 
             contentGroup(Strings.documentation, "guides/")
 
-            + group(Strings.examples) {
-                + item("ArgPage") { ArgPage.open(ArgPage.Args(fourRandomInt()[0], "hello")) }
-                + item("CheckboxList") { CheckboxList.open() }
-                + item("Modals") { Modals.open() }
-                + item("Crud") { BuiltinCrud.openAll() }
-                + group("Form") {
-                    + item("Fields") { FormFieldsGenerated.open() }
-                    + item("Synthetic") { SyntheticForm.open() }
-                }
-                + item("Query") { QueryPage.open() }
-                + item("TabContainer") { TabContainer.open() }
-                + group("Table") {
-                    + item("Generated") { GeneratedTable.open() }
-                    + item("Fetched") { FetchedTable.open() }
-                }
-                + item("Toasts") { Toasts.open() }
-                + item("Settings") { Settings.openAll() }
-            }
+            + examples()
 
             contentGroup("ChangeLog", "changelog/", true)
 
@@ -118,6 +101,42 @@ object SideBar : ZkSideBar() {
             entries.forEach {
                 + item(it.name) { Content.open(it) }
             }
+        }
+    }
+
+    private fun examples() = group(Strings.examples) {
+        + group("Browser") {
+
+            + item("Crud") { BuiltinCrud.openAll() }
+
+            + group("Form") {
+                + item("Fields") { FormFieldsGenerated.open() }
+                + item("Synthetic") { SyntheticForm.open() }
+            }
+
+            + group("Inputs") {
+                + item("CheckboxList") { CheckboxList.open() }
+            }
+
+            + item("Modals") { Modals.open() }
+
+            + group("Pages") {
+                + item("ArgPage") { ArgPage.open(ArgPage.Args(fourRandomInt()[0], "hello")) }
+            }
+
+            + item("Query") { QueryPage.open() }
+
+            + item("Settings") { Settings.openAll() }
+
+            + item("TabContainer") { TabContainer.open() }
+
+            + group("Table") {
+                + item("Generated") { GeneratedTable.open() }
+                + item("Fetched") { FetchedTable.open() }
+            }
+
+            + item("Toasts") { Toasts.open() }
+
         }
     }
 
