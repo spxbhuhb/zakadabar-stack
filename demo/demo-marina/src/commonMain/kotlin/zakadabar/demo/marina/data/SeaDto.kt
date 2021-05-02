@@ -13,13 +13,11 @@ import zakadabar.stack.data.schema.DtoSchema
 data class SeaDto(
 
     override var id: RecordId<SeaDto>,
-    var name: String,
+    var name: String
 
-    ) : RecordDto<SeaDto> {
+) : RecordDto<SeaDto> {
 
-    companion object : RecordDtoCompanion<SeaDto>({
-        namespace = "sea"
-    })
+    companion object : RecordDtoCompanion<SeaDto>({ namespace = "sea" })
 
     override fun getRecordType() = namespace
     override fun comm() = comm
