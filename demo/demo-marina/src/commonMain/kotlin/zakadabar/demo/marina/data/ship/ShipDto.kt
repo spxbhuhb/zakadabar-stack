@@ -25,11 +25,9 @@ data class ShipDto(
 
 ) : RecordDto<ShipDto> {
 
-    companion object : RecordDtoCompanion<ShipDto>({
-        namespace = "ship"
-    })
+    companion object : RecordDtoCompanion<ShipDto>("ship")
 
-    override fun getRecordType() = namespace
+    override fun getDtoNamespace() = dtoNamespace
     override fun comm() = comm
 
     override fun schema() = DtoSchema {

@@ -17,11 +17,9 @@ data class ExampleReferenceDto(
 
 ) : RecordDto<ExampleReferenceDto> {
 
-    companion object : RecordDtoCompanion<ExampleReferenceDto>({
-        namespace = "example-reference"
-    })
+    companion object : RecordDtoCompanion<ExampleReferenceDto>("example-reference")
 
-    override fun getRecordType() = namespace
+    override fun getDtoNamespace() = dtoNamespace
     override fun comm() = comm
 
     override fun schema() = DtoSchema {

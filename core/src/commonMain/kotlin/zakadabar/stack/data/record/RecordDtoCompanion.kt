@@ -5,13 +5,9 @@ package zakadabar.stack.data.record
 
 import kotlinx.serialization.KSerializer
 
-abstract class RecordDtoCompanion<T : RecordDto<T>>() {
-
-    constructor(builder: RecordDtoCompanion<T>.() -> Unit) : this() {
-        this.builder()
-    }
-
-    lateinit var namespace: String
+abstract class RecordDtoCompanion<T : RecordDto<T>>(
+    val dtoNamespace: String
+) {
 
     private var _comm: RecordCommInterface<T>? = null
 

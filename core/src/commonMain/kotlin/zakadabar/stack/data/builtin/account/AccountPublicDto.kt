@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.data.builtin.account
 
@@ -35,11 +35,9 @@ class AccountPublicDto(
 
 ) : RecordDto<AccountPublicDto> {
 
-    companion object : RecordDtoCompanion<AccountPublicDto>({
-        namespace = "account-public"
-    })
+    companion object : RecordDtoCompanion<AccountPublicDto>("account-public")
 
-    override fun getRecordType() = namespace
+    override fun getDtoNamespace() = dtoNamespace
     override fun comm() = comm
 
     // No need for schema for this as this is basically a view of AccountPrivateDto

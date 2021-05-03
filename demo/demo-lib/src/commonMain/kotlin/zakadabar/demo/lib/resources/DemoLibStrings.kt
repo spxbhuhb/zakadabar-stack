@@ -18,7 +18,6 @@ class DemoLibStrings : ZkBuiltinStrings() {
 
     val accountName by "Account Name"
     val active by "Active"
-    val administration by "Administration"
     val builtin by "Built-in"
     val confirmDialog by "Confirm Dialog"
     val contact by "Contact"
@@ -36,7 +35,6 @@ class DemoLibStrings : ZkBuiltinStrings() {
     val images by "Images"
     val infoToast by "Info"
     val light by "Light"
-    val logout by "Logout"
     val mandatoryFields by "Mandatory Fields"
     val messageDialog by "Message Dialog"
     val new by "New"

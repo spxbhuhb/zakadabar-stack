@@ -44,7 +44,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
     abstract val dtoClass: KClass<T>
 
     override val namespace
-        get() = (dtoClass.companionObject !!.objectInstance as RecordDtoCompanion<*>).namespace
+        get() = (dtoClass.companionObject !!.objectInstance as RecordDtoCompanion<*>).dtoNamespace
 
     override val logger by lazy { LoggerFactory.getLogger(namespace) !! }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin
 
@@ -829,8 +829,6 @@ open class ZkElement(
     open fun zke(className: String? = null, build: ZkElement.() -> Unit = { }): ZkElement {
         val e = ZkElement()
         if (className != null) e.className = className
-        buildElement.appendChild(e.element)
-        childElements.plusAssign(e)
         e.build()
         return e
     }

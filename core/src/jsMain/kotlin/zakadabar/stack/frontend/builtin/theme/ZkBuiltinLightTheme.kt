@@ -22,7 +22,11 @@ import zakadabar.stack.frontend.resources.ZkTheme
 
 open class ZkBuiltinLightTheme : ZkTheme {
 
-    override val name = "default-light"
+    companion object {
+        const val NAME = "default-light"
+    }
+
+    override val name = NAME
 
     val background = ZkColors.Design.gray1
     val foreground = ZkColors.Design.gray8

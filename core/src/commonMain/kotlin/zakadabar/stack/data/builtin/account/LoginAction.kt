@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.data.builtin.account
 
@@ -20,7 +20,7 @@ data class LoginAction(
 
     override suspend fun execute() = comm.action(this, serializer(), ActionStatusDto.serializer())
 
-    companion object : ActionDtoCompanion<ActionStatusDto>(SessionDto.namespace)
+    companion object : ActionDtoCompanion<ActionStatusDto>(SessionDto.dtoNamespace)
 
     override fun schema() = DtoSchema {
         + ::accountName min 1 max 50 blank false

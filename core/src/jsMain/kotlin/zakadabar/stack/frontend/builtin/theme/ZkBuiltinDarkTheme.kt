@@ -22,7 +22,11 @@ import zakadabar.stack.frontend.resources.ZkTheme
 
 open class ZkBuiltinDarkTheme : ZkTheme {
 
-    override val name = "default-dark"
+    companion object {
+        const val NAME = "default-dark"
+    }
+
+    override val name = NAME
 
     val success = ZkColors.Design.navGreen
     val info = ZkColors.Design.navBlue

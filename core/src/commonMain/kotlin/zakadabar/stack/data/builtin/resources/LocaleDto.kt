@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.data.builtin.resources
 
@@ -23,11 +23,9 @@ data class LocaleDto(
     var description: String
 ) : RecordDto<LocaleDto> {
 
-    companion object : RecordDtoCompanion<LocaleDto>({
-        namespace = "locale"
-    })
+    companion object : RecordDtoCompanion<LocaleDto>("locale")
 
-    override fun getRecordType() = namespace
+    override fun getDtoNamespace() = dtoNamespace
     override fun comm() = comm
 
     override fun schema() = DtoSchema {

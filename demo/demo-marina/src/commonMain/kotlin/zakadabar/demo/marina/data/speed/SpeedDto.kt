@@ -18,11 +18,9 @@ data class SpeedDto(
 
 ) : RecordDto<SpeedDto> {
 
-    companion object : RecordDtoCompanion<SpeedDto>({
-        namespace = "speed"
-    })
+    companion object : RecordDtoCompanion<SpeedDto>("speed")
 
-    override fun getRecordType() = namespace
+    override fun getDtoNamespace() = dtoNamespace
     override fun comm() = comm
 
     override fun schema() = DtoSchema {

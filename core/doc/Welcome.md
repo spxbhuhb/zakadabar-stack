@@ -2,7 +2,7 @@
 
 # Welcome
 
-Zakadabar Stack is a software library for full-stack application development in Kotlin.
+Zakadabar Stack is a Kotlin software library for full-stack application development.
 
 Building full-stack, deployable applications is inherently complex. It is quite a task in itself just to collect the
 areas one has to pay attention to.
@@ -14,7 +14,7 @@ Our ultimate goals:
 
 * maximize developer output,
 * minimize developer frustration,
-* deliver prototypes and quality product very fast.
+* deliver prototypes and quality products very fast.
 
 ## Highlights
 

@@ -18,6 +18,6 @@ class ShootAtShipAction : ActionDto<ActionStatusDto> {
 
     override suspend fun execute() = comm.action(this, serializer(), ActionStatusDto.serializer())
 
-    companion object : ActionDtoCompanion<ActionStatusDto>(ShipDto.namespace)
+    companion object : ActionDtoCompanion<ActionStatusDto>(ShipDto.dtoNamespace)
 
 }

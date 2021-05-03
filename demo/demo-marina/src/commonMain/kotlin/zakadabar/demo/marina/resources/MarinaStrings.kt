@@ -40,7 +40,6 @@ class MarinaStrings : ZkBuiltinStrings() {
     val searchShips by "Search Ships"
     val runQuery by "Run Query"
     val filters by "Filters"
-    val administration by "Administration"
     val accountName by "Account Name"
     val contact by "Contact"
     val description by "Description"
@@ -82,8 +81,6 @@ class MarinaStrings : ZkBuiltinStrings() {
     val speeds by "Speeds"
     val speed by "Speed"
     val speedBasicsExplanation by "Data all speeds have."
-
-    val logout by "Logout"
 
 }
 

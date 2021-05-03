@@ -15,5 +15,5 @@ data class ShipsByName(
 
     override suspend fun execute() = comm.query(this, serializer(), ListSerializer(ShipDto.serializer()))
 
-    companion object : QueryDtoCompanion<ShipDto>(ShipDto.namespace)
+    companion object : QueryDtoCompanion<ShipDto>(ShipDto.dtoNamespace)
 }

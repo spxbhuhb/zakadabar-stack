@@ -20,11 +20,9 @@ data class SettingDto(
     var descriptor: String?
 ) : RecordDto<SettingDto> {
 
-    companion object : RecordDtoCompanion<SettingDto>({
-        namespace = "setting"
-    })
+    companion object : RecordDtoCompanion<SettingDto>("setting")
 
-    override fun getRecordType() = namespace
+    override fun getDtoNamespace() = namespace
     override fun comm() = comm
 
     override fun schema() = DtoSchema {

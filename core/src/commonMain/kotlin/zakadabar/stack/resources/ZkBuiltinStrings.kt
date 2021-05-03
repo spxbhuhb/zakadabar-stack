@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 @file:Suppress("unused") // automatic detection does not work here because many strings are auto bound
 
@@ -76,8 +76,10 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val loginFailCount by "Failed logins"
     open val loginFail by "Login failed."
     open val login by "Login"
+    open val logout by "Logout"
     open val loginLocked by "Login has failed because the account is locked."
     open val role by "Role"
     open val setting by "Setting"
+    open val administration by "Administration"
 }
 

@@ -18,11 +18,9 @@ data class PortDto(
 
 ) : RecordDto<PortDto> {
 
-    companion object : RecordDtoCompanion<PortDto>({
-        namespace = "port"
-    })
+    companion object : RecordDtoCompanion<PortDto>("port")
 
-    override fun getRecordType() = namespace
+    override fun getDtoNamespace() = dtoNamespace
     override fun comm() = comm
 
     override fun schema() = DtoSchema {

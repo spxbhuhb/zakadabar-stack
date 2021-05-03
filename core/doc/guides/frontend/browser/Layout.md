@@ -51,7 +51,7 @@ object DefaultLayout : ZkDefaultLayout() {
   override fun onCreate() {
     super.onCreate()
 
-    appHandle = ZkAppHandle(SiteLogo(), onIconClick = ::onToggleSideBar, onTextClick = { Landing.open() })
+    appHandle = ZkAppHandle(zke { + Strings.applicationName }, onIconClick = ::onToggleSideBar, onTextClick = { Landing.open() })
     sideBar = SideBar
     titleBar = ZkAppTitleBar(::onToggleSideBar)
 

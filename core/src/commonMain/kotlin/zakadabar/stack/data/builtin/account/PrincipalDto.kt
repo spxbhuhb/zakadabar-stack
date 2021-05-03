@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
 @file:UseSerializers(OptInstantAsStringSerializer::class)
@@ -37,11 +37,9 @@ data class PrincipalDto(
 
 ) : RecordDto<PrincipalDto> {
 
-    companion object : RecordDtoCompanion<PrincipalDto>({
-        namespace = "principal"
-    })
+    companion object : RecordDtoCompanion<PrincipalDto>("principal")
 
-    override fun getRecordType() = namespace
+    override fun getDtoNamespace() = dtoNamespace
     override fun comm() = comm
 
     override fun schema() = DtoSchema {

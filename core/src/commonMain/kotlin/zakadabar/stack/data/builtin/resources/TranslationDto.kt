@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.data.builtin.resources
 
@@ -25,11 +25,9 @@ data class TranslationDto(
     var value: String,
 ) : RecordDto<TranslationDto> {
 
-    companion object : RecordDtoCompanion<TranslationDto>({
-        namespace = "translation"
-    })
+    companion object : RecordDtoCompanion<TranslationDto>("translation")
 
-    override fun getRecordType() = namespace
+    override fun getDtoNamespace() = dtoNamespace
     override fun comm() = comm
 
     override fun schema() = DtoSchema {

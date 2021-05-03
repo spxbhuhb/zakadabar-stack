@@ -37,11 +37,9 @@ data class AccountPrivateDto(
 
 ) : RecordDto<AccountPrivateDto> {
 
-    companion object : RecordDtoCompanion<AccountPrivateDto>({
-        namespace = "account-private"
-    })
+    companion object : RecordDtoCompanion<AccountPrivateDto>("account-private")
 
-    override fun getRecordType() = namespace
+    override fun getDtoNamespace() = dtoNamespace
     override fun comm() = comm
 
     override fun schema() = DtoSchema {

@@ -24,11 +24,9 @@ data class ServerDescriptionDto(
 
 ) : RecordDto<ServerDescriptionDto> {
 
-    companion object : RecordDtoCompanion<ServerDescriptionDto>({
-        namespace = "server-description"
-    })
+    companion object : RecordDtoCompanion<ServerDescriptionDto>("server-description")
 
-    override fun getRecordType() = ServerDescriptionDto.namespace
+    override fun getDtoNamespace() = ServerDescriptionDto.dtoNamespace
     override fun comm() = ServerDescriptionDto.comm
 
 }

@@ -30,7 +30,6 @@ class SiteStrings : ZkBuiltinStrings() {
     val searchShips by "Search Ships"
     val runQuery by "Run Query"
     val filters by "Filters"
-    val administration by "Administration"
     val accountName by "Account Name"
     val contact by "Contact"
     val description by "Description"
@@ -48,7 +47,6 @@ class SiteStrings : ZkBuiltinStrings() {
     val value by "Value"
     val workplace by "Workplace"
     val active by "Active"
-    val logout by "Logout"
 
     val siteTitle by "A Kotlin Multiplatform library for full-stack software development."
 

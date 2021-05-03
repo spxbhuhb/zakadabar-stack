@@ -28,7 +28,7 @@ data class BlobDto(
         + ::size min 0 max Long.MAX_VALUE
     }
 
-    override fun getRecordType() = namespace
+    override fun getDtoNamespace() = namespace
 
     override fun comm(): RecordCommInterface<BlobDto> {
         throw IllegalStateException("comm of BlobDto should not be used directly")

@@ -21,11 +21,9 @@ class RoleDto(
 
 ) : RecordDto<RoleDto> {
 
-    companion object : RecordDtoCompanion<RoleDto>({
-        namespace = "role"
-    })
+    companion object : RecordDtoCompanion<RoleDto>("role")
 
-    override fun getRecordType() = namespace
+    override fun getDtoNamespace() = dtoNamespace
     override fun comm() = comm
 
     override fun schema() = DtoSchema {
