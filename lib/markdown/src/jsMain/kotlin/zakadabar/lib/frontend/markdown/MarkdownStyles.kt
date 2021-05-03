@@ -11,6 +11,12 @@ val markdownStyles = MarkdownStyles()
 
 class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
 
+    val content by cssClass {
+        overflowX = "auto"
+        padding = theme.layout.spacingStep * 2
+        paddingTop = 0
+    }
+
     val codeFence by cssClass {
         borderRadius = 4
         paddingLeft = 4
@@ -72,6 +78,11 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val tocText by cssClass {
         verticalAlign = "center"
+    }
+
+    val link by cssRule(".$content a") {
+        color = theme.color.info
+        textDecoration = "none"
     }
 
     init {

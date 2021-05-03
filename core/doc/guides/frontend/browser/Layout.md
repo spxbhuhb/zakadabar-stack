@@ -2,16 +2,14 @@
 
 An application may have any number of layouts. A layout defines the general structure of the page.
 
-* Layout classes
-  extend [ZkAppLayout](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkAppLayout.kt).
+* Layout classes extend [ZkAppLayout](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkAppLayout.kt).
 * There is one active layout at one time, others are in the DOM but hidden.
-* [ZkAppRouting](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkAppRouting.kt) handles
-  layout changes
+* [ZkAppRouting](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkAppRouting.kt) handles layout changes
 
 There are two pre-defined layouts:
 
-* [ZkFullScreenLayout](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/layout/ZkFullScreenLayout.kt)
-* [ZkDefaultLayout](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/layout/ZkDefaultLayout.kt)
+* [ZkFullScreenLayout](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/layout/ZkFullScreenLayout.kt)
+* [ZkDefaultLayout](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/layout/ZkDefaultLayout.kt)
 
 ## The Default Layout
 
@@ -29,7 +27,7 @@ The default layout has an application title bar which has 4 areas:
 * global elements - global actions, shown all the time
 
 Default application title bar
-implementation: [ZkAppTitleBar](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/titlebar/ZkTitleBar.kt)
+implementation: [ZkAppTitleBar](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/titlebar/ZkTitleBar.kt)
 
 Pages, tables and forms use `ZkApplication.title` to set the title and context elements of the title bar.
 

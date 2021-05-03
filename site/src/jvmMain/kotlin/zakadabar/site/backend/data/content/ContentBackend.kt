@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.site.backend.data.content
 
@@ -22,7 +22,7 @@ object ContentBackend : CustomBackend(), QueryBackend {
 
     override val logger by lazy { LoggerFactory.getLogger(namespace) !! }
 
-    private val root = File("./content") // FIXME replace hard coded file path ./doc
+    private val root = File("../core/doc") // FIXME replace hard coded file path ./doc
 
     private val pattern = Regex("[a-zA-Z0-9/\\-\\.]+\\.[a-zA-Z0-9]*")
 

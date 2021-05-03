@@ -31,11 +31,11 @@ The directory that contains the server settings file becomes the
 
 1. The backend stops if there is no server settings file.
 1. Once the file is located, the backend loads the content of it into a
-   [ServerSettingsDto](../../../../core/src/commonMain/kotlin/zakadabar/stack/data/builtin/settings/ServerSettingsDto.kt).
+   [ServerSettingsDto](/src/commonMain/kotlin/zakadabar/stack/data/builtin/settings/ServerSettingsDto.kt).
 1. From the server settings the database connection is initialized.
 1. The setting overrides are loaded for the server settings by calling the `overrideSettings` method of the
-   [Server](../../../../core/src/jvmMain/kotlin/zakadabar/stack/backend/Server.kt). Note that the database connection is already initialized at this point, so you cannot override the database
-   parameters from the database.
+   [Server](/src/jvmMain/kotlin/zakadabar/stack/backend/Server.kt). Note that the database connection is already
+   initialized at this point, so you cannot override the database parameters from the database.
 
 Default implementation of `overrideSettings` use [SettingsBackend](../../../../core/src/jvmMain/kotlin/zakadabar/stack/backend/data/builtin/resources/SettingBackend.kt)
 to load overrides.

@@ -3,8 +3,10 @@
 Features:
 
 * communication instances provide blob methods automatically
-* [RecordBackend](../../../core/src/jvmMain/kotlin/zakadabar/stack/backend/data/record/RecordBackend.kt) supports handling of blobs attached to records with minimal configuration.
-* [ZkImagesField](../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/fields/ZkImagesField.kt) supports images in forms out-of-the-box
+* [RecordBackend](/src/jvmMain/kotlin/zakadabar/stack/backend/data/record/RecordBackend.kt) supports handling of blobs
+  attached to records with minimal configuration.
+* [ZkImagesField](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/fields/ZkImagesField.kt) supports images in
+  forms out-of-the-box
 
 <div class="zk-note-info">
 A general concept is that BLOB objects belong to a record, there is no

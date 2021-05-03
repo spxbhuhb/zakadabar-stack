@@ -1,30 +1,30 @@
 # CSS and Theming
 
-Check the demo example: [Themes](../../../../../demo/demo-lib/src/jsMain/kotlin/zakadabar/demo/frontend/lib/themes)
+Check the demo example: [Themes](../../../../../demo/demo-lib/src/jsMain/kotlin/zakadabar/demo/lib/frontend/themes)
 
 | class | use |
 | ----- | --- |
-| [ZkApplication](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt) | `theme` property  stores the active theme |
-| [ZkTheme](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/ZkTheme.kt) | interface for themes |
-| [ZkCssStyleSheet](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleSheet.kt) | CSS style sheet builder / manager |
-| [ZkColors](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/ZkColors.kt) | Color constants (Material) |
-| [ZkIcons](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/ZkIcons.kt) | Icons (Material) |
-| [ZkFormatters](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/ZkFormatters.kt) | Formatters (data -> string) |
+| [ZkApplication](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt) | `theme` property  stores the active theme |
+| [ZkTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/ZkTheme.kt) | interface for themes |
+| [ZkCssStyleSheet](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleSheet.kt) | CSS style sheet builder / manager |
+| [ZkColors](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/ZkColors.kt) | Color constants (Material) |
+| [ZkIcons](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/ZkIcons.kt) | Icons (Material) |
+| [ZkFormatters](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/ZkFormatters.kt) | Formatters (data to string) |
 
 ## Theme
 
 * Themes define values used by style sheets.
 * Each style sheet can access the current theme in the `theme` property
-  of [ZkApplication](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt)
+  of [ZkApplication](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt)
 * Changing the theme:
     * rebuilds all attached style sheets.
     * **does not** re-render the page.
 * Built-in themes:
-    * [ZkBuiltinLightTheme](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkBuiltinLightTheme.kt)
+    * [ZkBuiltinLightTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkBuiltinLightTheme.kt)
         - light theme
-    * [ZkBuiltinDarkTheme](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkBuiltinDarkTheme.kt)
+    * [ZkBuiltinDarkTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkBuiltinDarkTheme.kt)
         - dark theme
-    * [ZkBuiltinContrastTheme](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkBuiltinContrastTheme.kt)
+    * [ZkBuiltinContrastTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkBuiltinContrastTheme.kt)
         - high contrast theme
 
 ### Initial Theme Selection
@@ -47,7 +47,7 @@ ZkApplication.theme = ZkBuildinLightTheme()
 ## Write a CSS Style Sheet
 
 CSS style sheets are typically objects
-extending [ZkCssStyleSheet](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleSheet.kt):
+extending [ZkCssStyleSheet](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleSheet.kt):
 
 ```kotlin
 /**
@@ -80,7 +80,7 @@ object DemoStyles : ZkCssStyleSheet<ZkTheme>() {
         on(":disabled") {
             color = ZkColors.white
         }
-        
+
         // You can use media queries with [media]
 
         media("(min-width: 800px)") {
@@ -92,21 +92,21 @@ object DemoStyles : ZkCssStyleSheet<ZkTheme>() {
         on(media = "(min-width: 1200px)") {
             width = 600
         }
-        
+
         // Convenience for media queries
 
         // small = (max-width: 600px)
         // medium = (min-width: 800px)
         // large = (min-width: 1200px)
-        
+
         small {
             fontSize = 12
         }
-        
+
         medium {
             fontSize = 14
         }
-        
+
         large {
             fontSize = 16
         }
@@ -122,6 +122,46 @@ object DemoStyles : ZkCssStyleSheet<ZkTheme>() {
         attach()
     }
 
+}
+```
+
+## Fix CSS Class Name
+
+CSS classes defined with `cssClass` have automatically generated names to avoid collisions.
+
+To use a fix name pass it as parameter to `cssClass`
+
+```kotlin
+val myClass by cssClass("fix-class-name") { }
+```
+
+## Use CSS Selectors
+
+The function `cssRule` let you specify whatever selector you would like instead of a class name.
+
+At the moment functions `on`, `media`, `hover` etc **do not work** inside `cssRule`.
+
+In this case the property name ("link" in this case) is mostly useless.
+
+```kotlin
+val link by cssRule("a") {
+    color = theme.color.info
+    textDecoration = "none"
+}
+```
+
+You can combine your classes with selectors. The example below will set the styles for
+`<a>` tags under the element that has the `content` css class. Note that the actual CSS class name of `content` is
+automatically generated.
+
+```kotlin
+val content by cssClass {
+    
+}
+
+val link by cssRule(".$content a") {
+    color = theme.color.info
+    textDecoration = "none"
 }
 ```
 
@@ -164,7 +204,7 @@ DemoStyles.merge(DemoRedStyles())
 ## Scroll Bar Styles
 
 Scroll bars are styled
-by [ZkScrollBarStyles](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/layout/ZkScrollBarStyles.kt)
+by [ZkScrollBarStyles](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/layout/ZkScrollBarStyles.kt)
 .
 
 The default is to use scroll bar colors aligned with the theme.

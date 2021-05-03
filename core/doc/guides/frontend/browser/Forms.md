@@ -12,7 +12,7 @@
 ## Write a Form component
 
 1. create a [DTO](../../Data.md) to store the data of the form
-1. create a class that extends [ZkForm](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/ZkForm.kt)
+1. create a class that extends [ZkForm](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/ZkForm.kt)
 1. override `onCreate` to build the form
 
 ```kotlin
@@ -130,6 +130,7 @@ object FormFieldsGenerated : ZkPage() {
 
 ## Images
 
-[Add a blob backend](../../Data.md#Add-Blob-Support). Use [ZkImagesField](../../../../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/fields/ZkImagesField.kt).
+[Add a blob backend](../../Data.md#Add-Blob-Support).
+Use [ZkImagesField](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/fields/ZkImagesField.kt).
 
 

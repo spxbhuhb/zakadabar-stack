@@ -11,7 +11,6 @@ import org.intellij.markdown.parser.MarkdownParser
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.frontend.markdown.flavour.ZkFlavourDescriptor
 import zakadabar.lib.frontend.markdown.flavour.ZkMarkdownContext
-import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.util.PublicApi
@@ -38,12 +37,7 @@ open class MarkdownView(
             + grid {
                 gridTemplateColumns = "1fr max-content"
 
-                + div {
-                    style {
-                        overflowX = "auto"
-                        padding = "${theme.layout.spacingStep * 2}px"
-                        paddingTop = "0px"
-                    }
+                + div(markdownStyles.content) {
                     buildElement.innerHTML = html
                 }
 

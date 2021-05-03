@@ -26,26 +26,26 @@ This image summarizes DTO types the stack handles.
 To write a record DTO and make it accessible from the frontend:
 
 - write the DTO class
-  - [SpeedDto](../../demo/demo/src/commonMain/kotlin/zakadabar/demo/data/speed/SpeedDto.kt)
+    - [SpeedDto](../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/speed/SpeedDto.kt)
 - write the DTO frontend
-  - [crud](../../demo/demo/src/jsMain/kotlin/zakadabar/demo/frontend/pages/speed/Speeds.kt) (for automatic crud routing)
-  - [form](../../demo/demo/src/jsMain/kotlin/zakadabar/demo/frontend/pages/speed/Form.kt)
-  - [table](../../demo/demo/src/jsMain/kotlin/zakadabar/demo/frontend/pages/speed/Table.kt)
-  - [routing](../../demo/demo/src/jsMain/kotlin/zakadabar/demo/frontend/Routing.kt)
-  - [sidebar](../../demo/demo/src/jsMain/kotlin/zakadabar/demo/frontend/SideBar.kt)
+    - [crud](../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/pages/speed/Speeds.kt) (for
+      automatic crud routing)
+    - [form](../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/pages/speed/Form.kt)
+    - [table](../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/pages/speed/Table.kt)
+    - [routing](../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/Routing.kt)
+    - [sidebar](../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/SideBar.kt)
 - write the DTO backend
-  - [table](../../demo/demo/src/jvmMain/kotlin/zakadabar/demo/backend/speed/SpeedTable.kt)
-  - [dao](../../demo/demo/src/jvmMain/kotlin/zakadabar/demo/backend/speed/SpeedDao.kt)
-  - [backend](../../demo/demo/src/jvmMain/kotlin/zakadabar/demo/backend/speed/SpeedBackend.kt)
+    - [table](../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/speed/SpeedTable.kt)
+    - [dao](../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/speed/SpeedDao.kt)
+    - [backend](../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/speed/SpeedBackend.kt)
 
 ## Use a Record DTO
 
-On the
-frontend [RecordDtoCompanion](../../core/src/commonMain/kotlin/zakadabar/stack/data/record/RecordDtoCompanion.kt)`.comm`
+On the frontend [RecordDtoCompanion](/src/commonMain/kotlin/zakadabar/stack/data/record/RecordDtoCompanion.kt)`.comm`
 provides easy access to basic record operations.
 
-Check [demo-jvm-client](../../demo/demo-jvm-client/src/jvmMain/kotlin/zakadabar/demo/frontend/Main.kt) for a working
-example.
+Check [demo-jvm-client](../../../demo/demo-jvm-client/src/jvmMain/kotlin/zakadabar/demo/marina/frontend/Main.kt) for a
+working example.
 
 ```kotlin
 val iAmFast = SpeedDto.default {
@@ -71,14 +71,14 @@ SpeedDto.all().forEach {
 To write a query DTO:
 
 - write the DTO classes:
-  - [SearchShipsQuery](../../demo/demo/src/commonMain/kotlin/zakadabar/demo/data/ship/SearchShipsQuery.kt)
-  - [SearchShipsResult](../../demo/demo/src/commonMain/kotlin/zakadabar/demo/data/ship/SearchShipsResult.kt)
+    - [SearchShipsQuery](../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/SearchShipsQuery.kt)
+    - [SearchShipsResult](../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/SearchShipsResult.kt)
 - add the query to the DTO companion that provides communication
-  - [ShipDto](../../demo/demo/src/commonMain/kotlin/zakadabar/demo/data/ship/ShipDto.kt)
+    - [ShipDto](../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/ShipDto.kt)
 - add the query to the DTO backend:
-  - [backend](../../demo/demo/src/jvmMain/kotlin/zakadabar/demo/backend/ship/ShipBackend.kt)
-    - add a `route.query` call to `installRoutes`
-    - add a `query` function with the query DTO class as second parameter and the result DTO class as return type
+    - [backend](../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/ship/ShipBackend.kt)
+        - add a `route.query` call to `installRoutes`
+        - add a `query` function with the query DTO class as second parameter and the result DTO class as return type
 
 ## Use a Query
 
@@ -95,13 +95,13 @@ SearchShipsQuery().execute().forEach {
 To write an action DTO:
 
 - write the DTO classes:
-  - [ShootAtShipAction](../../demo/demo/src/commonMain/kotlin/zakadabar/demo/data/ship/ShootAtShipAction.kt)
+    - [ShootAtShipAction](../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/ShootAtShipAction.kt)
 - add the action to the DTO companion that provides communication
-  - [ShipDto](../../demo/demo/src/commonMain/kotlin/zakadabar/demo/data/ship/ShipDto.kt)
+    - [ShipDto](../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/ShipDto.kt)
 - add the action to the DTO backend:
-  - [backend](../../demo/demo/src/jvmMain/kotlin/zakadabar/demo/backend/ship/ShipBackend.kt)
-    - add a `route.action` call to `installRoutes`
-    - add an `action` function with the action DTO class as second parameter and the result DTO class as return type
+    - [backend](../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/ship/ShipBackend.kt)
+        - add a `route.action` call to `installRoutes`
+        - add an `action` function with the action DTO class as second parameter and the result DTO class as return type
 
 ## Use an Action
 
@@ -120,7 +120,7 @@ if (result.success) {
 
 ## Data Validation
 
-Data validation uses [DtoSchema](../../../core/src/commonMain/kotlin/zakadabar/stack/data/schema/DtoSchema.kt)
+Data validation uses [DtoSchema](/src/commonMain/kotlin/zakadabar/stack/data/schema/DtoSchema.kt)
 definitions.
 
 DtoSchema focuses more on programmer convenience than on performance. It is not really suitable for validating large
@@ -143,11 +143,11 @@ much about it as a developer.
 ## Write a Schema
 
 - override the schema variable of the DTO class
-  - [SpeedDto](../../demo/demo/src/commonMain/kotlin/zakadabar/demo/data/speed/SpeedDto.kt)
+    - [SpeedDto](../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/speed/SpeedDto.kt)
 
 ## Use a Schema
 
-[ZkForm](../../core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/ZkForm.kt) validates the dto automatically.
+[ZkForm](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/ZkForm.kt) validates the dto automatically.
 
 To validate manually:
 
