@@ -128,7 +128,7 @@ open class RecordComm<T : RecordDto<T>>(
 
     @PublicApi
     suspend fun blobRead(blobId: RecordId<BlobDto>): ByteArray {
-        return client.get("$baseUrl/api/$namespace/blob/$blobId")
+        return client.get("$baseUrl/api/$namespace/blob/content/$blobId")
     }
 
     @PublicApi
