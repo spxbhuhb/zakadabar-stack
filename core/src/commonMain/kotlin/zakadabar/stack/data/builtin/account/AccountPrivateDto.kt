@@ -20,7 +20,7 @@ data class AccountPrivateDto(
 
     override var id: RecordId<AccountPrivateDto>,
 
-    val principal: RecordId<PrincipalDto>,
+    var principal: RecordId<PrincipalDto>,
 
     var accountName: String,
     var fullName: String,
@@ -44,6 +44,8 @@ data class AccountPrivateDto(
 
     override fun schema() = DtoSchema {
         + ::id
+
+        + ::principal
 
         + ::accountName min 3 max 50
         + ::fullName min 5 max 100

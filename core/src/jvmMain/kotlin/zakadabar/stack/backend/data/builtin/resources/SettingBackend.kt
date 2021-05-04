@@ -24,7 +24,7 @@ import zakadabar.stack.data.builtin.resources.SettingSource
 import zakadabar.stack.data.record.EmptyRecordId
 import zakadabar.stack.data.record.LongRecordId
 import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.schema.dto.DescriptorDto
+import zakadabar.stack.data.schema.descriptor.DescriptorDto
 import zakadabar.stack.util.Executor
 import kotlin.reflect.KClass
 

@@ -27,7 +27,7 @@ open class QueryComm(
         val q = encodeURIComponent(Json.encodeToString(requestSerializer, request))
 
         val response = commBlock {
-            val responsePromise = window.fetch("/api/${companion.namespace}/query/${request::class.simpleName}?q=${q}")
+            val responsePromise = window.fetch("/api/${companion.dtoNamespace}/query/${request::class.simpleName}?q=${q}")
             checkStatus(responsePromise.await())
         }
 

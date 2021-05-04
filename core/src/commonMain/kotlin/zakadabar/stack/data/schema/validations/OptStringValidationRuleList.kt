@@ -6,7 +6,7 @@ package zakadabar.stack.data.schema.validations
 import zakadabar.stack.data.schema.ValidationRule
 import zakadabar.stack.data.schema.ValidationRuleList
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.dto.*
+import zakadabar.stack.data.schema.descriptor.*
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 

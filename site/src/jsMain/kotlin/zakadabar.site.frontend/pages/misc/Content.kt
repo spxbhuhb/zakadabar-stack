@@ -31,7 +31,7 @@ object Content : ZkArgPage<ContentEntry>(
         ZkApplication.title = ZkAppTitle(contentEntry.name)
 
         io {
-            + MarkdownView("/api/${ContentQuery.namespace}/${contentEntry.path}")
+            + MarkdownView("/api/${ContentQuery.dtoNamespace}/${contentEntry.path}")
         }
     }
 

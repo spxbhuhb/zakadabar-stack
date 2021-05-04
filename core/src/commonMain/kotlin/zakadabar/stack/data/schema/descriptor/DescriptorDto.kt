@@ -4,7 +4,7 @@
 
 @file:UseSerializers(OptInstantAsStringSerializer::class)
 
-package zakadabar.stack.data.schema.dto
+package zakadabar.stack.data.schema.descriptor
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers

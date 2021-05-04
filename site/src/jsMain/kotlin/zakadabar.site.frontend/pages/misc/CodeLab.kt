@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.site.frontend.pages.misc
 
@@ -14,7 +14,7 @@ object CodeLab : ZkPage() {
     override fun onCreate() {
         super.onCreate()
         io {
-            + MarkdownView("/api/${ContentQuery.namespace}/CodeLab.md") css ZkPageStyles.content
+            + MarkdownView("/api/${ContentQuery.dtoNamespace}/CodeLab.md") css ZkPageStyles.content
         }
     }
 

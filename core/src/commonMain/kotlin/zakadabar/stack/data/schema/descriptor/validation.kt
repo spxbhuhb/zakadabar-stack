@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.data.schema.dto
+package zakadabar.stack.data.schema.descriptor
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
@@ -35,6 +35,12 @@ class IntValidationDto(
 class LongValidationDto(
     override val type: ValidationType,
     val value: Long?
+) : ValidationDto()
+
+@Serializable
+class RecordIdValidationBooleanDto(
+    override val type: ValidationType,
+    val value: Boolean
 ) : ValidationDto()
 
 @Serializable

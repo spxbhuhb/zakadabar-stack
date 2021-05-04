@@ -19,9 +19,8 @@ package zakadabar.stack.data.schema.validations
 import zakadabar.stack.data.schema.ValidationRule
 import zakadabar.stack.data.schema.ValidationRuleList
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.dto.BooleanPropertyDto
-import zakadabar.stack.data.schema.dto.PropertyDto
-import zakadabar.stack.data.schema.dto.ValidationDto
+import zakadabar.stack.data.schema.descriptor.PropertyDto
+import zakadabar.stack.data.schema.descriptor.ValidationDto
 
 class CustomValidationRuleList(function: (report: ValidityReport, rule: ValidationRule<Unit>) -> Unit) : ValidationRuleList<Unit> {
 

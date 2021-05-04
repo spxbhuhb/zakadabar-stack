@@ -67,6 +67,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
 
         roles()
         demo()
+        so()
 
         // set the anonymous user of the server, creates an anonymous user if missing
 
@@ -244,6 +245,36 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
             }
         }
 
+        grant(account, StackRoles.siteMember)
+    }
+
+    private fun so() {
+        val account = transaction {
+
+            val existing = AccountPrivateDao
+                .find { AccountPrivateTable.accountName eq "so" }
+                .firstOrNull()
+
+            if (existing != null) return@transaction existing
+
+            val newPrincipal = PrincipalDao.new {
+                credentials = PrincipalBackend.encrypt("rkDxoU6eNPoujMig")
+                validated = true
+            }
+
+            AccountPrivateDao.new {
+                principal = newPrincipal
+                accountName = "so"
+                fullName = "Security Officer"
+                displayName = "Security Officer"
+                organizationName = ""
+                position = ""
+                email = ""
+                phone = ""
+            }
+        }
+
+        grant(account, StackRoles.securityOfficer)
         grant(account, StackRoles.siteMember)
     }
 

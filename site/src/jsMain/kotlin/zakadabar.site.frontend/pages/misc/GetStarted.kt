@@ -35,7 +35,7 @@ object GetStarted : ZkPage() {
 
     fun load(path: String) = io {
         content.clear()
-        content += MarkdownView("/api/${ContentQuery.namespace}$path")
+        content += MarkdownView("/api/${ContentQuery.dtoNamespace}$path")
     }
 
 }

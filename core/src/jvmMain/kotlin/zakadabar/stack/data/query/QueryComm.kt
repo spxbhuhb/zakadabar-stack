@@ -25,7 +25,7 @@ open class QueryComm(
 
         val q = Json.encodeToString(requestSerializer, request).encodeURLPath()
 
-        val text = RecordComm.client.get<String>("${RecordComm.baseUrl}/api/${companion.namespace}/query/${request::class.simpleName}?q=${q}")
+        val text = RecordComm.client.get<String>("${RecordComm.baseUrl}/api/${companion.dtoNamespace}/query/${request::class.simpleName}?q=${q}")
 
         return Json.decodeFromString(responseSerializer, text)
     }

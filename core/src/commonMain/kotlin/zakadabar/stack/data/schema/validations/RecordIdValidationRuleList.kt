@@ -19,10 +19,13 @@ package zakadabar.stack.data.schema.validations
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.EmptyRecordId
 import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.schema.ValidationRule
 import zakadabar.stack.data.schema.ValidationRuleList
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.dto.PropertyDto
-import zakadabar.stack.data.schema.dto.RecordIdPropertyDto
+import zakadabar.stack.data.schema.descriptor.PropertyDto
+import zakadabar.stack.data.schema.descriptor.RecordIdPropertyDto
+import zakadabar.stack.data.schema.descriptor.RecordIdValidationBooleanDto
+import zakadabar.stack.data.schema.descriptor.ValidationType
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -30,7 +33,30 @@ class RecordIdValidationRuleList(val kProperty: KMutableProperty0<RecordId<*>>) 
 
     var defaultValue: RecordId<*> = EmptyRecordId<DtoBase>()
 
-    override fun validate(report: ValidityReport) {}
+    private val rules = mutableListOf<ValidationRule<RecordId<*>>>()
+
+    override fun validate(report: ValidityReport) {
+        val value = kProperty.get()
+        for (rule in rules) {
+            rule.validate(value, report)
+        }
+    }
+
+    inner class Empty(@PublicApi val validValue: Boolean) : ValidationRule<RecordId<*>> {
+
+        override fun validate(value: RecordId<*>, report: ValidityReport) {
+            if (value.isEmpty() != validValue) report.fail(kProperty, this)
+        }
+
+        override fun toValidationDto() = RecordIdValidationBooleanDto(ValidationType.Empty, validValue)
+
+    }
+
+    @PublicApi
+    infix fun empty(validValue: Boolean): RecordIdValidationRuleList {
+        rules += Empty(validValue)
+        return this
+    }
 
     @PublicApi
     infix fun default(value: RecordId<*>): RecordIdValidationRuleList {

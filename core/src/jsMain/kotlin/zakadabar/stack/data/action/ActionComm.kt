@@ -38,7 +38,7 @@ open class ActionComm(
         )
 
         val response = commBlock {
-            val responsePromise = window.fetch("/api/${companion.namespace}/action/${request::class.simpleName}", requestInit)
+            val responsePromise = window.fetch("/api/${companion.dtoNamespace}/action/${request::class.simpleName}", requestInit)
             checkStatus(responsePromise.await())
         }
 

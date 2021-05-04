@@ -7,9 +7,9 @@ import kotlinx.datetime.Instant
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.schema.dto.DescriptorDto
-import zakadabar.stack.data.schema.dto.PropertyDto
-import zakadabar.stack.data.schema.dto.ValidationDto
+import zakadabar.stack.data.schema.descriptor.DescriptorDto
+import zakadabar.stack.data.schema.descriptor.PropertyDto
+import zakadabar.stack.data.schema.descriptor.ValidationDto
 import zakadabar.stack.data.schema.validations.*
 import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.UUID

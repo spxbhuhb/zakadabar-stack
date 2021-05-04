@@ -4,6 +4,7 @@
 
 ### Core
 
+1. upgrade to latest kotlinx, Ktor, Exposed
 1. synthetic forms
 1. settings
    1. change settings from browser UI

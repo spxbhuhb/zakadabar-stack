@@ -18,7 +18,7 @@ import java.io.File
 
 object ContentBackend : CustomBackend(), QueryBackend {
 
-    override val namespace = ContentQuery.namespace
+    override val namespace = ContentQuery.dtoNamespace
 
     override val logger by lazy { LoggerFactory.getLogger(namespace) !! }
 

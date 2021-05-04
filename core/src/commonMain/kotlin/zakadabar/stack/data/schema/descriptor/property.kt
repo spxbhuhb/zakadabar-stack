@@ -7,7 +7,7 @@
     OptInstantAsStringSerializer::class
 )
 
-package zakadabar.stack.data.schema.dto
+package zakadabar.stack.data.schema.descriptor
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable

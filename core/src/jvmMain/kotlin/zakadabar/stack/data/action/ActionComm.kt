@@ -21,7 +21,7 @@ open class ActionComm(
 
     @PublicApi
     override suspend fun <REQUEST : Any, RESPONSE> action(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<RESPONSE>): RESPONSE {
-        val text = RecordComm.client.post<String>("${RecordComm.baseUrl}/api/${companion.namespace}/action/${request::class.simpleName}") {
+        val text = RecordComm.client.post<String>("${RecordComm.baseUrl}/api/${companion.dtoNamespace}/action/${request::class.simpleName}") {
             header("Content-Type", "application/json; charset=UTF-8")
             body = Json.encodeToString(requestSerializer, request)
         }

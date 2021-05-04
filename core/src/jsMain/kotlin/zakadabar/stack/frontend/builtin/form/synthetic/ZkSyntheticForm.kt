@@ -4,9 +4,9 @@
 package zakadabar.stack.frontend.builtin.form.synthetic
 
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.schema.dto.DescriptorDto
-import zakadabar.stack.data.schema.dto.IntPropertyDto
-import zakadabar.stack.data.schema.dto.StringPropertyDto
+import zakadabar.stack.data.schema.descriptor.DescriptorDto
+import zakadabar.stack.data.schema.descriptor.IntPropertyDto
+import zakadabar.stack.data.schema.descriptor.StringPropertyDto
 import zakadabar.stack.frontend.application.ZkApplication.t
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles

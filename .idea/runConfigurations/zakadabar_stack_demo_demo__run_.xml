@@ -2,7 +2,7 @@
   <configuration default="false" name="zakadabar-stack:demo:demo [run]" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
-      <option name="externalProjectPath" value="$PROJECT_DIR$/demo/demo" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$/demo/demo-marina" />
       <option name="externalSystemIdString" value="GRADLE" />
       <option name="scriptParameters" value="" />
       <option name="taskDescriptions">

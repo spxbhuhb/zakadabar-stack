@@ -18,10 +18,8 @@ package zakadabar.stack.data.schema.validations
 
 import zakadabar.stack.data.schema.ValidationRuleList
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.dto.BooleanPropertyDto
-import zakadabar.stack.data.schema.dto.EnumPropertyDto
-import zakadabar.stack.data.schema.dto.OptEnumPropertyDto
-import zakadabar.stack.data.schema.dto.PropertyDto
+import zakadabar.stack.data.schema.descriptor.OptEnumPropertyDto
+import zakadabar.stack.data.schema.descriptor.PropertyDto
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
