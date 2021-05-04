@@ -26,6 +26,8 @@ fun Authentication.Configuration.session(name: String? = null) {
 
     provider.pipeline.intercept(AuthenticationPipeline.RequestAuthentication) { context ->
 
+        call.attributes.put(LoginTimeoutKey, false)
+
         call.sessions.get<StackSession>()?.let {
             context.principal(Executor(it.account, it.roleIds, it.roleNames))
             return@intercept
