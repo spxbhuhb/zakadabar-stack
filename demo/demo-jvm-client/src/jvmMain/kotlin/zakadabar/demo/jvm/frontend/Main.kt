@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.demo.frontend
+package zakadabar.demo.jvm.frontend
 
 import io.ktor.client.features.*
 import zakadabar.demo.marina.data.PortDto
@@ -13,6 +13,7 @@ import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.record.EmptyRecordId
 import zakadabar.stack.data.record.LongRecordId
 import zakadabar.stack.data.record.RecordComm
+import zakadabar.stack.data.record.StringRecordId
 
 suspend fun main() {
     RecordComm.baseUrl = "http://localhost:8080"
@@ -69,20 +70,20 @@ suspend fun dumpShips(message: String) {
 suspend fun login() {
     println("\n======== Login ========\n")
 
-    var session = SessionDto.read(EmptyRecordId())
+    var session = SessionDto.read(StringRecordId("own"))
 
     println("    ---- at start ----\n")
     println("        $session\n")
 
     var actionStatus = LoginAction("demo", Secret("wrong")).execute()
-    session = SessionDto.read(EmptyRecordId())
+    session = SessionDto.read(StringRecordId("own"))
 
     println("    ---- unsuccessful login ----\n")
     println("        $actionStatus\n")
     println("        $session\n")
 
     actionStatus = LoginAction("demo", Secret("demo")).execute()
-    session = SessionDto.read(EmptyRecordId())
+    session = SessionDto.read(StringRecordId("own"))
 
     println("    ---- successful login ----\n")
     println("        $actionStatus\n")

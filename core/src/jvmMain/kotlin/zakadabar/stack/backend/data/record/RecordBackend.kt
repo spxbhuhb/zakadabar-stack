@@ -317,7 +317,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
                 val executor = call.executor()
                 val request = call.receive(dtoClass)
                 logger.info("${executor.accountId}: CREATE $request")
-                call.respond(create(executor, request))
+                call.respond(create(executor, request) as Any)
             }
 
             get("/{rid?}") {
@@ -326,10 +326,10 @@ abstract class RecordBackend<T : RecordDto<T>>(
 
                 if (id == null) {
                     if (Server.logReads) logger.info("${executor.accountId}: ALL")
-                    call.respond(all(executor))
+                    call.respond(all(executor) as Any)
                 } else {
                     if (Server.logReads) logger.info("${executor.accountId}: READ $id")
-                    call.respond(read(call, executor, StringRecordId(id)))
+                    call.respond(read(call, executor, StringRecordId(id)) as Any)
                 }
             }
 
@@ -337,14 +337,14 @@ abstract class RecordBackend<T : RecordDto<T>>(
                 val executor = call.executor()
                 val request = call.receive(dtoClass)
                 logger.info("${executor.accountId}: UPDATE $request")
-                call.respond(update(executor, request))
+                call.respond(update(executor, request) as Any)
             }
 
             delete("/{rid}") {
                 val executor = call.executor()
                 val id = call.parameters["rid"] ?: throw BadRequestException("missing record id")
                 logger.info("${executor.accountId}: DELETE $id")
-                call.respond(delete(executor, StringRecordId(id)))
+                call.respond(delete(executor, StringRecordId(id)) as Any)
             }
         }
     }
@@ -405,7 +405,7 @@ abstract class RecordBackend<T : RecordDto<T>>(
 
             post("/{rid?}") {
 
-                val recordId: RecordId<DtoBase>? = call.parameters["rid"]?.let { StringRecordId<DtoBase>(it) }
+                val recordId: RecordId<DtoBase>? = call.parameters["rid"]?.let { StringRecordId(it) }
 
                 val executor = call.executor()
 

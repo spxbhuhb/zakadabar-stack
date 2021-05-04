@@ -39,7 +39,7 @@ interface ActionBackend : BackendModule {
             if (logActions) logger.info("${executor.accountId}: ACTION ${actionDto.simpleName} $aText")
 
             @Suppress("UNCHECKED_CAST")
-            call.respond(func(executor, aObj as RQ))
+            call.respond(func(executor, aObj as RQ) as Any)
         }
     }
 
@@ -56,7 +56,7 @@ interface ActionBackend : BackendModule {
             if (logActions) logger.info("${executor.accountId}: ACTION ${actionDto.simpleName} $aText")
 
             @Suppress("UNCHECKED_CAST")
-            call.respond(func(call, executor, aObj as RQ))
+            call.respond(func(call, executor, aObj as RQ) as Any)
         }
     }
 }

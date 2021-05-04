@@ -37,7 +37,7 @@ interface QueryBackend : BackendModule {
             if (Server.logReads) logger.info("${executor.accountId}: GET ${queryDtoClass.simpleName} $qText")
 
             @Suppress("UNCHECKED_CAST")
-            call.respond(func(executor, qObj as RQ))
+            call.respond(func(executor, qObj as RQ) as Any)
         }
     }
 }
