@@ -1,5 +1,10 @@
 # Roadmap
 
+## Unscheduled
+
+* unit test concept, unit tests for comm
+* use common frontend comm code base on Ktor Client
+
 ## 2021 May
 
 ### Core
