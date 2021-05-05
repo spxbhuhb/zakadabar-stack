@@ -11,17 +11,18 @@ if (config.devServer) {
         port: 3000,
         // host: "0.0.0.0", // comment this out to have the dev server listen on all interfaces
         proxy: {
-            '/api': {  // proxy to the development backend
+            '/api/': {  // proxy to the development backend
                 target: 'http://localhost:8080',
                 secure: 'false'
             },
-            '/content': {  // proxy to the development backend
+            '/content/': {  // proxy to the development backend
                 target: 'http://localhost:8080',
                 secure: 'false'
             }
         },
         historyApiFallback: {
-            index: 'index.html'
+            index: 'index.html',
+            disableDotRule: true
         }
     }
 }

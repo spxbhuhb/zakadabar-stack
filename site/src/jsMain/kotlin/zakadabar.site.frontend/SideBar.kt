@@ -18,7 +18,7 @@ import zakadabar.lib.examples.frontend.table.GeneratedTable
 import zakadabar.lib.examples.frontend.toast.Toasts
 import zakadabar.site.data.ContentEntry
 import zakadabar.site.data.ContentQuery
-import zakadabar.site.frontend.pages.misc.Content
+import zakadabar.site.frontend.pages.misc.ContentPages
 import zakadabar.site.frontend.pages.misc.GetStarted
 import zakadabar.site.frontend.pages.misc.Welcome
 import zakadabar.site.resources.Strings
@@ -125,7 +125,7 @@ object SideBar : ZkSideBar() {
 
         fun toGroup(sortByDate: Boolean): ZkElement = group(name.capitalize()) {
             subgroups.sortedBy { it.name }.forEach { + it.toGroup(sortByDate) }
-            entries.sortedBy { it.name }.forEach { + item(it.name) { Content.open(Content.Args(it.name, it.path)) } }
+            entries.sortedBy { it.name }.forEach { + item(it.name) { ContentPages.open(it.path) } }
         }
     }
 

@@ -67,7 +67,8 @@ class ZkCssStyleRule(
                 if (pseudoClass != null) s += pseudoClass
             }
             "@import" -> {
-                return "@import url(\"${styles["url"]}\");"
+                val url = styles["url"] ?: return ""
+                return "@import url(\"${url}\");"
             }
             else -> {
                 s += cssSelector

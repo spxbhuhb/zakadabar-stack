@@ -12,6 +12,6 @@ interface MarkdownThemeExt : ZkTheme {
 class MarkdownTheme(
     val backgroundColor: String? = null,
     val borderColor: String? = null,
-    val highlightUrl: String? = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/idea.min.css"
+    val highlightUrl: String = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/idea.min.css"
 )
 

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.application
 
@@ -26,6 +26,8 @@ abstract class ZkAppRouting(
     private lateinit var activeTarget: ZkElement
 
     lateinit var nextLayout: ZkAppLayout
+
+    lateinit var navState: ZkNavState
 
     init {
         // have to initialize the default layout or the first onPause will set it into
@@ -59,6 +61,8 @@ abstract class ZkAppRouting(
         }
 
         activeTarget = nextTarget
+
+        navState = state
 
         if (activeLayout.lifeCycleState == ZkElementState.Initialized) {
             activeLayout.onCreate()

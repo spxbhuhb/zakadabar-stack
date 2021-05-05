@@ -1,26 +1,15 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.site.frontend.pages.misc
+package zakadabar.lib.markdown.frontend
 
-import kotlinx.serialization.Serializable
-import zakadabar.lib.markdown.frontend.MarkdownView
-import zakadabar.site.data.ContentQuery
 import zakadabar.stack.frontend.application.ZkApplication
-import zakadabar.stack.frontend.builtin.pages.ZkArgPage
 import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
+import zakadabar.stack.frontend.builtin.pages.ZkPathPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.util.io
 
-object Content : ZkArgPage<Content.Args>(
-    Args.serializer()
-) {
-
-    @Serializable
-    class Args(
-        val name: String,
-        val path: String
-    )
+abstract class MarkdownPages : ZkPathPage() {
 
     override fun onCreate() {
         super.onCreate()
@@ -32,14 +21,16 @@ object Content : ZkArgPage<Content.Args>(
 
     override fun onResume() {
         clear()
-
-        val params = args ?: return
-
-        ZkApplication.title = ZkAppTitle(params.name)
-
+        setTitle()
         io {
-            + MarkdownView("/${ContentQuery.dtoNamespace}/${params.path}")
+            + MarkdownView(url())
         }
     }
+
+    open fun setTitle() {
+        ZkApplication.title = ZkAppTitle(name)
+    }
+
+    abstract fun url(): String
 
 }
