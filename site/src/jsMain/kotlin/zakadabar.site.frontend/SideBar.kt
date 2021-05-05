@@ -25,6 +25,7 @@ import zakadabar.site.resources.Strings
 import zakadabar.stack.StackRoles
 import zakadabar.stack.data.builtin.account.LogoutAction
 import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.pages.account.accounts.Accounts
 import zakadabar.stack.frontend.builtin.pages.account.login.Login
 import zakadabar.stack.frontend.builtin.pages.resources.locales.Locales
@@ -92,16 +93,52 @@ object SideBar : ZkSideBar() {
 
     }
 
-    private fun contentGroup(title: String, path: String, sortByDate: Boolean = false) {
-        var entries = contents.filter { it.path.startsWith(path) }
+    class ContentTreeEntry(
+        val name: String,
+        val path: String,
+        val relativePath: String,
+        val groups: List<String> = relativePath.split("/").dropLast(1)
+    )
 
-        if (sortByDate) entries = entries.sortedBy { it.lastModified }
+    class ContentTreeGroup(
+        val name: String,
+        val subgroups: MutableList<ContentTreeGroup> = mutableListOf(),
+        val entries: MutableList<ContentTreeEntry> = mutableListOf()
+    ) {
+        /**
+         * Find a group based on group names.
+         * Creates groups that does not exists.
+         */
+        fun find(groups: List<String>): ContentTreeGroup {
+            if (groups.isEmpty()) return this
 
-        + group(title) {
-            entries.forEach {
-                + item(it.name) { Content.open(it) }
-            }
+            val name = groups.first()
+
+            var group = subgroups.firstOrNull { it.name == name }
+            if (group != null) return if (groups.size == 1) group else group.find(groups.drop(1))
+
+            group = ContentTreeGroup(name)
+            subgroups += group
+
+            return group.find(groups.drop(1))
         }
+
+        fun toGroup(sortByDate: Boolean): ZkElement = group(name.capitalize()) {
+            subgroups.sortedBy { it.name }.forEach { + it.toGroup(sortByDate) }
+            entries.sortedBy { it.name }.forEach { + item(it.name) { Content.open(Content.Args(it.name, it.path)) } }
+        }
+    }
+
+    private fun contentGroup(title: String, path: String, sortByDate: Boolean = false) {
+        val root = ContentTreeGroup(title)
+
+        contents.filter { it.path.startsWith(path) }.forEach {
+            val entry = ContentTreeEntry(it.name, it.path, it.path.substring(path.length).trim('/'))
+            val group = root.find(entry.groups)
+            group.entries += entry
+        }
+
+        + root.toGroup(sortByDate)
     }
 
     private fun examples() = group(Strings.examples) {

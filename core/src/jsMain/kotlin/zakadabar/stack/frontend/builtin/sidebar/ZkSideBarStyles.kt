@@ -17,22 +17,21 @@ object ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
         minWidth = 220
         paddingTop = 10
         borderRight = theme.sideBar.border
+        fontSize = "90%"
     }
 
     val item by cssClass {
         boxSizing = "border-box"
         cursor = "pointer"
         minHeight = 32
-        paddingLeft = 12
-        marginRight = 8
-        marginLeft = 8
+        paddingLeft = 20
+        paddingRight = 8
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
         on(":hover") {
             backgroundColor = theme.sideBar.hoverBackground
             color = theme.sideBar.hoverText
-            borderRadius = 4
         }
     }
 
@@ -42,15 +41,13 @@ object ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
         minHeight = 32
         display = "flex"
         flexDirection = "row"
-        justifyContent = "space-between"
+        justifyContent = "flex-start"
         alignItems = "center"
-        marginLeft = 8
-        marginRight = 8
-        paddingLeft = 12
+        paddingRight = 8
+        paddingLeft = 14
         on(":hover") {
             backgroundColor = theme.sideBar.hoverBackground
             color = theme.sideBar.hoverText
-            borderRadius = 4
         }
     }
 

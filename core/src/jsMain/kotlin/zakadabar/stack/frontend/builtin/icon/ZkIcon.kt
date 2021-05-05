@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.icon
 
@@ -12,7 +12,7 @@ open class ZkIcon(
     private val onClick: (() -> Unit)? = null
 ) : ZkElement() {
 
-    constructor(source: ZkIconSource, onClick: (() -> Unit)? = null) : this(source.svg(24), onClick)
+    constructor(source: ZkIconSource, size: Int = 24, onClick: (() -> Unit)? = null) : this(source.svg(size), onClick)
 
     override fun onCreate() {
         classList += ZkIconStyles.icon

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.sidebar
 
@@ -13,17 +13,15 @@ class ZkSideBarGroup(
 ) : ZkElement() {
 
     private var open = false
-    private val openIcon = ZkIcon(ZkIcons.arrowDropDown)
-    private val closeIcon = ZkIcon(ZkIcons.arrowDropUp)
+    private val openIcon = ZkIcon(ZkIcons.arrowRight, 18)
+    private val closeIcon = ZkIcon(ZkIcons.arrowDropDown, 18)
 
     override fun onCreate() {
         + column {
             + div(ZkSideBarStyles.groupTitle) {
+                + openIcon
+                + closeIcon.hide()
                 + text
-                + row {
-                    + openIcon
-                    + closeIcon.hide()
-                }
                 on(buildElement, "click") { _ -> if (open) onClose() else onOpen() }
             }
             + zke(ZkSideBarStyles.groupContent) {

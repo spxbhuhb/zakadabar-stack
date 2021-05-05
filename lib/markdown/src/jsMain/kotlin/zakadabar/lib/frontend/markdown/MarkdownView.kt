@@ -26,6 +26,8 @@ open class MarkdownView(
     override fun onCreate() {
         super.onCreate()
 
+        println(url)
+
         io {
             val context = ZkMarkdownContext(element.id)
             val flavour = ZkFlavourDescriptor(context)
