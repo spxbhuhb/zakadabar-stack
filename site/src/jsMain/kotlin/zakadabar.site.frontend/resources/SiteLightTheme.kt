@@ -3,7 +3,7 @@
  */
 package zakadabar.site.frontend.resources
 
-import zakadabar.lib.frontend.markdown.MarkdownTheme
+import zakadabar.lib.markdown.frontend.MarkdownTheme
 import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
 
 class SiteLightTheme : ZkBuiltinLightTheme(), SiteTheme {

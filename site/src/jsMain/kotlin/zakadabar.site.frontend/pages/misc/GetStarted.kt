@@ -3,7 +3,7 @@
  */
 package zakadabar.site.frontend.pages.misc
 
-import zakadabar.lib.frontend.markdown.MarkdownView
+import zakadabar.lib.markdown.frontend.MarkdownView
 import zakadabar.site.data.ContentQuery
 import zakadabar.site.frontend.resources.LandingStyles
 import zakadabar.site.resources.Strings

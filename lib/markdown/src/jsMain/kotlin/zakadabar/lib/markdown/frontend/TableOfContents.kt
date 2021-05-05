@@ -1,14 +1,14 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.frontend.markdown
+package zakadabar.lib.markdown.frontend
 
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.set
-import zakadabar.lib.frontend.markdown.flavour.ZkMarkdownContext
+import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.getElementId
 import zakadabar.stack.frontend.util.plusAssign

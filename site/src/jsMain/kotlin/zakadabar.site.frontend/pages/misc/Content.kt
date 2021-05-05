@@ -4,7 +4,7 @@
 package zakadabar.site.frontend.pages.misc
 
 import kotlinx.serialization.Serializable
-import zakadabar.lib.frontend.markdown.MarkdownView
+import zakadabar.lib.markdown.frontend.MarkdownView
 import zakadabar.site.data.ContentQuery
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.pages.ZkArgPage

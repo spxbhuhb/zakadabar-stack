@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.frontend.markdown
+package zakadabar.lib.markdown.frontend
 
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
@@ -11,7 +11,7 @@ val markdownStyles = MarkdownStyles()
 
 class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
 
-    fun withMarkdownTheme(func: (MarkdownTheme) -> Unit) {
+    private fun withMarkdownTheme(func: (MarkdownTheme) -> Unit) {
         if (theme !is MarkdownThemeExt) return
         func((theme as MarkdownThemeExt).markdownTheme)
     }
@@ -119,13 +119,14 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
         fontSize = 13
         paddingLeft = 4
         paddingRight = 4
+        borderRadius = 2
         withMarkdownTheme { markdown ->
             markdown.backgroundColor?.let { backgroundColor = it }
         }
     }
 
     val codeBlock by cssRule(".$content pre > code") {
-        borderRadius = 2
+        position = "relative"
         padding = 12
         lineHeight = 13 * 1.4
         marginLeft = - 12
@@ -137,6 +138,29 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
             }
             markdown.backgroundColor?.let { backgroundColor = it }
         }
+    }
+
+    val codeCopy by cssClass {
+        position = "absolute"
+        right = 4
+        top = 4
+    }
+
+    val codeCopyIcon by cssClass {
+        cursor = "pointer"
+        padding = 6
+        borderRadius = 2
+
+        hover {
+            backgroundColor = theme.color.hoverBackground
+        }
+    }
+
+    val codeCopySuccess by cssClass {
+        fontFamily = theme.font.family
+        borderRadius = 2
+        alignSelf = "center"
+        marginRight = 10
     }
 
     init {

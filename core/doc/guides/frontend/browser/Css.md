@@ -156,12 +156,37 @@ automatically generated.
 
 ```kotlin
 val content by cssClass {
-    
+
 }
 
 val link by cssRule(".$content a") {
     color = theme.color.info
     textDecoration = "none"
+}
+```
+
+## Import a CSS Style Sheet
+
+Use `cssImport` to import a style sheet.
+
+```kotlin
+val imported by cssImport {
+    url = "imported.css"
+}
+```
+
+This import is dynamic, if you store the URL in the theme the import can be theme-aware.
+
+For example `Lib:Markdown` uses `highlight.js` for code syntax highlight. The colors have to be different in dark and
+light mode. `highlight.js` does not support multiple themes,
+so [MarkdownStyles](../../../../../lib/markdown/src/jsMain/kotlin/zakadabar/lib/markdown/frontend/MarkdownStyles.kt)
+uses the URL from the theme:
+
+```kotlin
+val highlightStyles by cssImport {
+    withMarkdownTheme {
+        url = it.highlightUrl
+    }
 }
 ```
 

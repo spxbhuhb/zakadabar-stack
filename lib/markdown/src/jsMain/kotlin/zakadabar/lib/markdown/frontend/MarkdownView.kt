@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.frontend.markdown
+package zakadabar.lib.markdown.frontend
 
 import kotlinx.browser.window
 import kotlinx.coroutines.await
@@ -9,9 +9,9 @@ import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.html.HtmlGenerator
 import org.intellij.markdown.parser.MarkdownParser
 import org.w3c.dom.HTMLElement
-import org.w3c.dom.get
-import zakadabar.lib.frontend.markdown.flavour.ZkFlavourDescriptor
-import zakadabar.lib.frontend.markdown.flavour.ZkMarkdownContext
+import org.w3c.dom.asList
+import zakadabar.lib.markdown.frontend.flavour.ZkFlavourDescriptor
+import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.util.PublicApi
@@ -52,9 +52,9 @@ open class MarkdownView(
 
     private fun syntaxHighLight() {
         window.requestAnimationFrame {
-            val codeNodes = element.querySelectorAll("pre")
-            for (i in 0 until codeNodes.length) {
-                hljs.highlightElement(codeNodes[i]?.firstChild)
+            element.querySelectorAll("pre").asList().forEach {
+                hljs.highlightElement(it.firstChild)
+                CodeCopy(it.firstChild as HTMLElement).onCreate()
             }
         }
     }
