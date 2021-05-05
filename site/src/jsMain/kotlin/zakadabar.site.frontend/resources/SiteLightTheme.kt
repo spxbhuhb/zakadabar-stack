@@ -3,6 +3,7 @@
  */
 package zakadabar.site.frontend.resources
 
+import zakadabar.lib.frontend.markdown.MarkdownTheme
 import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
 
 class SiteLightTheme : ZkBuiltinLightTheme(), SiteTheme {
@@ -14,6 +15,11 @@ class SiteLightTheme : ZkBuiltinLightTheme(), SiteTheme {
     override val name = NAME
 
     override val developerLogo = "/simplexion_logo.svg"
+
+    override val markdownTheme = MarkdownTheme(
+        backgroundColor = "#f5f7f9",
+        borderColor = color.border
+    )
 
     init {
         titleBar.height = "60px"

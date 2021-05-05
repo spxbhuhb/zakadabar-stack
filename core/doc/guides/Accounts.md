@@ -36,7 +36,7 @@ if (actionStatus.success) {
     println("failed to login")
 }
 
-session = SessionDto.read(0L) // this will return with the roles of the logged in user
+session = SessionDto.read(0L) // returns with the roles of the logged in user
 ```
 
 ## Get User Information on the Frontend

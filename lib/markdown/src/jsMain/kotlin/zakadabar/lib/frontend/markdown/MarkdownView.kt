@@ -9,6 +9,7 @@ import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.html.HtmlGenerator
 import org.intellij.markdown.parser.MarkdownParser
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.get
 import zakadabar.lib.frontend.markdown.flavour.ZkFlavourDescriptor
 import zakadabar.lib.frontend.markdown.flavour.ZkMarkdownContext
 import zakadabar.stack.frontend.builtin.ZkElement
@@ -25,8 +26,6 @@ open class MarkdownView(
 
     override fun onCreate() {
         super.onCreate()
-
-        println(url)
 
         io {
             val context = ZkMarkdownContext(element.id)
@@ -45,7 +44,18 @@ open class MarkdownView(
 
                 + TableOfContents(context, element.parentElement as HTMLElement) // TODO think about using element.parentElement in MarkdownView
             }
+
+            syntaxHighLight()
             // println(dump("", parsedTree))
+        }
+    }
+
+    private fun syntaxHighLight() {
+        window.requestAnimationFrame {
+            val codeNodes = element.querySelectorAll("pre")
+            for (i in 0 until codeNodes.length) {
+                hljs.highlightElement(codeNodes[i]?.firstChild)
+            }
         }
     }
 

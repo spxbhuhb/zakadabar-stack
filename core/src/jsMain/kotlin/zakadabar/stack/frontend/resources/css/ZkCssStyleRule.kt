@@ -55,20 +55,29 @@ class ZkCssStyleRule(
     }
 
     private fun toCssString(): String {
-        val styles = styles.map { style -> "    ${style.key}: ${style.value};" }.joinToString("\n")
+        val styleStrings = styles.map { style -> "    ${style.key}: ${style.value};" }.joinToString("\n")
 
         var s = ""
 
-        if (cssSelector == null) {
-            if (media != null) s += "@media $media {\n"
-            s += "."
-            s += cssClassname
-            if (pseudoClass != null) s += pseudoClass
-        } else {
-            s += cssSelector
+        when (cssSelector) {
+            null -> {
+                if (media != null) s += "@media $media {\n"
+                s += "."
+                s += cssClassname
+                if (pseudoClass != null) s += pseudoClass
+            }
+            "@import" -> {
+                return "@import url(\"${styles["url"]}\");"
+            }
+            else -> {
+                s += cssSelector
+            }
         }
-        s += "{\n${styles}\n}"
-        if (media != null) s += "}"
+
+        s += "{\n${styleStrings}\n}"
+
+        if (media != null) s +=
+            "}"
 
         return s
     }
@@ -720,6 +729,18 @@ class ZkCssStyleRule(
         get() = styles["left"]
         set(value) {
             styles["left"] = stringOrPx(value)
+        }
+
+
+    /**
+     * [MDN: import](https://developer.mozilla.org/en-US/docs/Web/CSS/@import)
+     *
+     * URL of the imported style sheet.
+     */
+    var url
+        get() = styles["url"]
+        set(value) {
+            styles["url"] = value
         }
 
     /**

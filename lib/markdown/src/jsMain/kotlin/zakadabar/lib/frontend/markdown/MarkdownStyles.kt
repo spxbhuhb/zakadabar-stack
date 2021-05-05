@@ -11,6 +11,17 @@ val markdownStyles = MarkdownStyles()
 
 class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
 
+    fun withMarkdownTheme(func: (MarkdownTheme) -> Unit) {
+        if (theme !is MarkdownThemeExt) return
+        func((theme as MarkdownThemeExt).markdownTheme)
+    }
+
+    val highlightStyles by cssImport {
+        withMarkdownTheme {
+            url = it.highlightUrl
+        }
+    }
+
     val content by cssClass {
         overflowX = "auto"
         padding = theme.layout.spacingStep * 2
@@ -103,8 +114,32 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
         paddingRight = 8
     }
 
+    val inlineCode by cssRule(".$content code") {
+        fontFamily = "JetBrains Mono, monospace"
+        fontSize = 13
+        paddingLeft = 4
+        paddingRight = 4
+        withMarkdownTheme { markdown ->
+            markdown.backgroundColor?.let { backgroundColor = it }
+        }
+    }
+
+    val codeBlock by cssRule(".$content pre > code") {
+        borderRadius = 2
+        padding = 12
+        lineHeight = 13 * 1.4
+        marginLeft = - 12
+        withMarkdownTheme { markdown ->
+            markdown.borderColor?.let {
+                borderLeft = "2px solid $it"
+                borderTopLeftRadius = 0
+                borderBottomLeftRadius = 0
+            }
+            markdown.backgroundColor?.let { backgroundColor = it }
+        }
+    }
+
     init {
         attach()
     }
-
 }

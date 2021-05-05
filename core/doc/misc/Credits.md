@@ -1,9 +1,8 @@
 # Credits
 
-This is the list of third party software Zakadabar uses.
+We would like to say thank you for every person / organization who contributed to the software we include.
 
-We would like to say thank you for every person / organization who contributed
-to the software we include.
+## Core
 
 *Multiplatform*
 
@@ -24,6 +23,7 @@ to the software we include.
 * [Material Icons](https://material.io)
 * [Roboto](https://github.com/googlefonts/roboto)
 * [Oxygen](https://github.com/vernnobile/oxygenFont)
+* [JetBrains Mono](https://www.jetbrains.com/lp/mono/)
 
 We use [Gradle](https://gradle.org) for building the released software packages.
 
@@ -32,7 +32,7 @@ server OS ever (well, except OpenVMS, but she is a childhood love.)
 
 In case we've forgotten something, please let us know. We'll add your project to the list above.
 
-# Licenses of the Direct Dependencies
+### Licenses of the Direct Dependencies
 
 Names and organizations are from the Github project information or from the public we page of the project as of
 2020.08.24. This list is give attribution to the software we depend on, it does not imply any legal/contractual
@@ -55,7 +55,7 @@ connection between the listed projects/authors and Zakadabar Stack/Simplexion.
 * Gradle by Gradle Inc. is licensed under Apache 2.0
 * OpenBSD by The OpenBSD Foundation has a [Copyright Policy](https://www.openbsd.org/policy.html)
 
-# Licenses for Integrated Code
+### Licenses for Integrated Code
 
 jBCrypt is subject to the following license:
 
@@ -74,3 +74,21 @@ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ```
+
+## Lib: Markdown
+
+*Client side*
+
+* [JetBrains Markdown](https://github.com/JetBrains/markdown)
+* [JetBrains Mono](https://www.jetbrains.com/lp/mono/)
+* [highlight.js](https://highlightjs.org)
+
+### Licenses of the Direct Dependencies
+
+Names and organizations are from the Github project information or from the public we page of the project as of
+2021.05.05. This list is give attribution to the software we depend on, it does not imply any legal/contractual
+connection between the listed projects/authors and Zakadabar Stack/Simplexion.
+
+* Markdown by Jetbrains is licensed under Apache 2.0
+* JetBrains Mono by JetBrains is licensed under SIL Open Font License 1.1
+* Highlight.js by multiple contributors is licensed under BSD-3-Clause License

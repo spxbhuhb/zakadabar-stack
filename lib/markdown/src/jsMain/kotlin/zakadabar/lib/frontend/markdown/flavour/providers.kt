@@ -44,11 +44,3 @@ class HeaderTextProvider(
         context.headerText = s
     }
 }
-
-//val code = document.createElement("code") as HTMLElement
-//code.className = lang
-//code.textContent = content
-//
-//+ code
-//
-//hljs.highlightElement(code)

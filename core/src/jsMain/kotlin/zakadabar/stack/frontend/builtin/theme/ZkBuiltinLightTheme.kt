@@ -28,7 +28,7 @@ open class ZkBuiltinLightTheme : ZkTheme {
 
     override val name = NAME
 
-    val background = ZkColors.Design.gray1
+    val background = ZkColors.white
     val foreground = ZkColors.Design.gray8
 
     val success = ZkColors.Design.navGreen
