@@ -1,10 +1,5 @@
 # Roadmap
 
-## Unscheduled
-
-* unit test concept, unit tests for comm
-* use common frontend comm code base on Ktor Client
-
 ## 2021 May
 
 ### Core
@@ -48,6 +43,12 @@
 ## 2021 June
 
 1. Add option to use Redis for session handling
+
+## Unscheduled
+
+* unit test concept, unit tests for comm
+* use common frontend comm code base on Ktor Client
+* move ContentBackend from site into the stack, document content backends
 
 ## History
 

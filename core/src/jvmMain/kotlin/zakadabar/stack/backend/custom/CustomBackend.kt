@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.backend.custom
 
@@ -11,6 +11,6 @@ import zakadabar.stack.backend.BackendModule
  */
 abstract class CustomBackend : BackendModule {
 
-    protected open val logger = LoggerFactory.getLogger(this::class.simpleName) !!
+    open val logger = LoggerFactory.getLogger(this::class.simpleName) !!
 
 }

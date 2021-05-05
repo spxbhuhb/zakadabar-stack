@@ -85,6 +85,24 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
         textDecoration = "none"
     }
 
+    val img by cssRule(".$content img") {
+        overflow = "auto"
+    }
+
+    val table by cssRule(".$content table") {
+        border = "1px solid ${theme.color.border}"
+        borderCollapse = "collapse"
+        overflow = "auto"
+    }
+
+    val td by cssRule(".$content td") {
+        border = "1px solid ${theme.color.border}"
+        paddingTop = 4
+        paddingBottom = 4
+        paddingLeft = 8
+        paddingRight = 8
+    }
+
     init {
         attach()
     }

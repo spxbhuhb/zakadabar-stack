@@ -1,5 +1,3 @@
-![logo](/zakadabar.svg)
-
 # Welcome
 
 Zakadabar Stack is a Kotlin software library for full-stack application development.
@@ -25,6 +23,20 @@ Our ultimate goals:
 * Secure by default: deny-first, allow explicitly.
 * Minimize dependencies.
 * Make administration and operation of the products easy.
+
+## The Main Concept
+
+The stack focuses on the communication data model. This data model:
+
+* defines how our components talk with each other,
+* is the actual API our backend provides and our frontends consume,
+* contains a schema to support data validation,
+* automatically provides:
+  * frontend communication components,
+  * type-safe backend routing,
+  * frontend forms, tables.
+
+<img src="/content/focus.png" width="800" alt="focus">
 
 ## Features - Common
 

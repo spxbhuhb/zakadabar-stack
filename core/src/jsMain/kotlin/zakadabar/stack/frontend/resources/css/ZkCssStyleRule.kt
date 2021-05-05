@@ -217,6 +217,16 @@ class ZkCssStyleRule(
             styles["border-color"] = value
         }
 
+    /**
+     * [MDN: border-collapse](https://developer.mozilla.org/en-US/docs/Web/CSS/border-collapse)
+     *
+     * ```
+     *
+     *    collapse
+     *    separate
+     *
+     * ```
+     */
     var borderCollapse
         get() = styles["border-collapse"]
         set(value) {

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.backend
 
@@ -26,6 +26,11 @@ interface BackendModule {
      * @param  route  Ktor Route context for installing routes
      */
     fun onInstallRoutes(route: Route) = Unit
+
+    /**
+     * Install static routes.
+     */
+    fun onInstallStatic(route: Route) = Unit
 
     /**
      * A function that is called when the module is unloaded.

@@ -36,7 +36,7 @@ import java.time.Duration
 
 fun buildServer(
     config: ServerSettingsDto,
-    dtoBackends: List<RecordBackend<*>>,
+    recordBackends: List<RecordBackend<*>>,
     customBackends: List<CustomBackend>
 ) = embeddedServer(Netty, port = config.ktor.port) {
 
@@ -118,7 +118,7 @@ fun buildServer(
             route("api") {
 
                 // api installs add routes and the code to serve them
-                dtoBackends.forEach {
+                recordBackends.forEach {
                     it.onInstallRoutes(this)
                 }
 
@@ -132,11 +132,19 @@ fun buildServer(
 
             }
 
-            // TODO move static stuff under an URL like "static/"
             static {
                 staticRootFolder = File(config.staticResources)
                 files(".")
                 default("index.html")
+
+                // api installs add routes and the code to serve them
+                recordBackends.forEach {
+                    it.onInstallStatic(this)
+                }
+
+                customBackends.forEach {
+                    it.onInstallStatic(this)
+                }
             }
 
         }

@@ -36,7 +36,7 @@ open class ZkBuiltinLightTheme : ZkTheme {
     val warning = ZkColors.Design.navOrange
     val error = ZkColors.Design.navRed
 
-    val borderColor = ZkColors.Gray.c600
+    val borderColor = "${foreground}80"
     val border = "1px solid $borderColor"
 
     override var button = ZkButtonTheme(

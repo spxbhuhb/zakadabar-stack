@@ -87,13 +87,13 @@ class Server : CliktCommand() {
 
         private val modules = mutableListOf<BackendModule>()
 
-        private val dtoBackends = mutableListOf<RecordBackend<*>>()
+        private val recordBackends = mutableListOf<RecordBackend<*>>()
 
         private val customBackends = mutableListOf<CustomBackend>()
 
         operator fun plusAssign(dtoBackend: RecordBackend<*>) {
             this.modules += dtoBackend
-            this.dtoBackends += dtoBackend
+            this.recordBackends += dtoBackend
             dtoBackend.onModuleLoad()
         }
 
@@ -136,7 +136,7 @@ class Server : CliktCommand() {
 
         startModules() // start the modules
 
-        val server = buildServer(config, dtoBackends, customBackends) //  build the Ktor server instance
+        val server = buildServer(config, recordBackends, customBackends) //  build the Ktor server instance
 
         staticRoot = config.staticResources
 
@@ -182,7 +182,7 @@ class Server : CliktCommand() {
                 modules += module
 
                 when (module) {
-                    is RecordBackend<*> -> dtoBackends += module
+                    is RecordBackend<*> -> recordBackends += module
                     is CustomBackend -> customBackends += module
                     else -> {
                         modules += module

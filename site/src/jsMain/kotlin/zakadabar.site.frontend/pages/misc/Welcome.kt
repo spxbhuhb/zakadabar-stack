@@ -15,7 +15,7 @@ object Welcome : ZkPage() {
         super.onCreate()
 
         io {
-            + MarkdownView("/api/${ContentQuery.dtoNamespace}/Welcome.md") css ZkPageStyles.content
+            + MarkdownView("/${ContentQuery.dtoNamespace}/Welcome.md") css ZkPageStyles.content
         }
     }
 
