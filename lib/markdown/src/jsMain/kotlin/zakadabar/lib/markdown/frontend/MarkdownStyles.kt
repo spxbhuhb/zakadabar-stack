@@ -97,7 +97,7 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
     }
 
     val img by cssRule(".$content img") {
-        overflow = "auto"
+        width = "100%"
     }
 
     val table by cssRule(".$content table") {

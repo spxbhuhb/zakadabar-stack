@@ -17,8 +17,9 @@ import zakadabar.stack.frontend.util.io
 import zakadabar.stack.util.PublicApi
 
 open class MarkdownView(
-    val url: String? = null,
-    var content: String? = null
+    private val url: String? = null,
+    val content: String? = null,
+    private val context: ZkMarkdownContext = ZkMarkdownContext()
 ) : ZkElement() {
 
     lateinit var source: String
@@ -28,7 +29,9 @@ open class MarkdownView(
         super.onCreate()
 
         io {
-            val context = ZkMarkdownContext(element.id)
+            context.clear()
+            context.viewId = element.id
+
             val flavour = ZkFlavourDescriptor(context)
             source = content ?: window.fetch(url).await().text().await()
             parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(source)

@@ -3,13 +3,19 @@
  */
 package zakadabar.lib.markdown.frontend
 
+import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPathPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.util.io
 
-abstract class MarkdownPages : ZkPathPage() {
+/**
+ * Displays markdown files of a file hierarchy, one by one.
+ * [onResume] loads the markdown file specified by the current
+ * URL.
+ */
+abstract class MarkdownPathPage : ZkPathPage() {
 
     override fun onCreate() {
         super.onCreate()
@@ -23,7 +29,7 @@ abstract class MarkdownPages : ZkPathPage() {
         clear()
         setTitle()
         io {
-            + MarkdownView(url())
+            + MarkdownView(url(), context = context())
         }
     }
 
@@ -32,5 +38,7 @@ abstract class MarkdownPages : ZkPathPage() {
     }
 
     abstract fun url(): String
+
+    abstract fun context(): ZkMarkdownContext
 
 }

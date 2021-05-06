@@ -50,6 +50,11 @@
 * use common frontend comm code base on Ktor Client
 * move ContentBackend from site into the stack, document content backends
 
+### ZkSideBar
+
+* add keyboard navigation
+* add search function that filters sidebar topics
+
 ## History
 
 ### 2021 April

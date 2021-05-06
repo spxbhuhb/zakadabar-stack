@@ -3,11 +3,11 @@
 ## Backend
 
 * Use Ktor session feature with:
-    * [StackSession](/src/jvmMain/kotlin/zakadabar/stack/backend/data/builtin/session/StackSession.kt)
-    * [SessionStoreSQL](/src/jvmMain/kotlin/zakadabar/stack/backend/data/builtin/session/SessionStorageSql.kt)
-    * [SessionAuthenticationProvider](/src/jvmMain/kotlin/zakadabar/stack/backend/data/builtin/session/SessionAuthenticationProvider.kt)
+  * [StackSession](/src/jvmMain/kotlin/zakadabar/stack/backend/ktor/session/StackSession.kt)
+  * [SessionStoreSQL](/src/jvmMain/kotlin/zakadabar/stack/backend/ktor/session/SessionStorageSql.kt)
+  * [SessionAuthenticationProvider](/src/jvmMain/kotlin/zakadabar/stack/backend/ktor/session/SessionAuthenticationProvider.kt)
 * Store session data in the `sessions` SQL table:
-    * [SessionTable](/src/jvmMain/kotlin/zakadabar/stack/backend/data/builtin/session/SessionTable.kt)
+  * [SessionTable](/src/jvmMain/kotlin/zakadabar/stack/backend/data/builtin/session/SessionTable.kt)
 * Handled by:
     * [SessionBackend](/src/jvmMain/kotlin/zakadabar/stack/backend/data/builtin/session/SessionBackend.kt)
         * [LoginAction](/src/commonMain/kotlin/zakadabar/stack/data/builtin/account/LoginAction.kt)

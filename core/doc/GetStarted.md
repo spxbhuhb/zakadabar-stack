@@ -1,8 +1,7 @@
 ## Introduction
 
-The Zakadabar stack is about sensible defaults. We really try not to force you to use a specific component or walk a
-specific way. You can replace the whole frontend, the whole backend, or both (which makes little sense, but actually it
-does make sense).
+The stack is about sensible defaults. We don't want to force you to use a specific component or walk a specific way. You
+can replace the whole frontend, the whole backend, or both (which makes little sense, but actually it does make sense).
 
 However, the point of sensible defaults is that in most cases we don't want to replace them.
 
