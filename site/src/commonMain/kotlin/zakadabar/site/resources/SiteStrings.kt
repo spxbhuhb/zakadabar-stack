@@ -14,6 +14,9 @@ internal val Strings = SiteStrings()
 
 class SiteStrings : ZkBuiltinStrings() {
 
+    val showCase by "Show Case"
+    val marinaDemo by "Marina Demo"
+
     val faq by "Frequently Asked Questions"
     val tldr by "TL;DR"
     val normalPeople by "Normal People"

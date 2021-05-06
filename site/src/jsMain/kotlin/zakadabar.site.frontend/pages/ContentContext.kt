@@ -1,10 +1,17 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.site.frontend.pages.misc
+package zakadabar.site.frontend.pages
 
 import org.intellij.markdown.html.resolveToStringSafe
+import org.w3c.dom.HTMLElement
+import org.w3c.dom.get
+import zakadabar.lib.examples.frontend.modal.ModalExamples
+import zakadabar.lib.examples.frontend.toast.ToastExamples
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
+import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.note.ZkNote
+import zakadabar.stack.frontend.builtin.note.ZkNoteStyles
 
 class ContentContext(
     viewName: String,
@@ -32,4 +39,23 @@ class ContentContext(
         }
     }
 
+    override fun enrich(htmlElement: HTMLElement): ZkElement? {
+        val type = htmlElement.dataset["zkEnrich"] ?: return null
+
+        return when (type) {
+
+            "InfoNote" -> ZkNote(htmlElement) {
+                className = ZkNoteStyles.info
+                title = htmlElement.dataset["zkTitle"]
+                text = htmlElement.innerText
+                htmlElement.innerText = ""
+            } marginLeft - 14
+
+            "ModalExamples" -> ModalExamples(htmlElement)
+
+            "ToastExamples" -> ToastExamples(htmlElement)
+
+            else -> null
+        }
+    }
 }

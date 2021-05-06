@@ -49,6 +49,7 @@ open class MarkdownView(
             }
 
             syntaxHighLight()
+            enrich()
             // println(dump("", parsedTree))
         }
     }
@@ -58,6 +59,14 @@ open class MarkdownView(
             element.querySelectorAll("pre").asList().forEach {
                 hljs.highlightElement(it.firstChild)
                 CodeCopy(it.firstChild as HTMLElement).onCreate()
+            }
+        }
+    }
+
+    private fun enrich() {
+        window.requestAnimationFrame {
+            element.querySelectorAll("[data-zk-enrich]").asList().forEach {
+                context.enrich(it as HTMLElement)?.let { child -> addChildSkipDOM(child) }
             }
         }
     }

@@ -5,6 +5,8 @@ package zakadabar.lib.markdown.frontend.flavour
 
 import org.intellij.markdown.html.URI
 import org.intellij.markdown.html.resolveToStringSafe
+import org.w3c.dom.HTMLElement
+import zakadabar.stack.frontend.builtin.ZkElement
 
 /**
  * Context for the markdown rendering process. Main purposes of this class is
@@ -36,6 +38,14 @@ open class ZkMarkdownContext(
         if (destination.startsWith('#')) return destination
         return baseURI?.resolveToStringSafe(destination.toString()) ?: destination
     }
+
+    /**
+     * Called at the end of markdown processing to enrich the markdown with
+     * ZkElement instances.
+     *
+     * @param  htmlElement  The element in the HTML DOM with "data-zk-md-enrich" attribute present.
+     */
+    open fun enrich(htmlElement: HTMLElement): ZkElement? = null
 
     fun resolveToStringSafe(uri: String, destination: String) = URI(uri).resolveToStringSafe(destination)
 

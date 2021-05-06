@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.note
 
@@ -9,9 +9,8 @@ import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 object ZkNoteStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val info by cssClass {
-        borderLeft = "4px solid ${theme.color.info}"
-        backgroundColor = "white"
-        borderRadius = 2
+        borderLeft = "2px solid ${theme.color.info}"
+        backgroundColor = theme.note.background
     }
 
     val title by cssClass {

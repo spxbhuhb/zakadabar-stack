@@ -16,6 +16,7 @@ var Strings = DemoLibStrings()
 
 class DemoLibStrings : ZkBuiltinStrings() {
 
+    val exampleDialog by "Example Dialog"
     val accountName by "Account Name"
     val active by "Active"
     val builtin by "Built-in"

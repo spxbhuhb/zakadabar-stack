@@ -3,18 +3,21 @@
  */
 package zakadabar.lib.examples.frontend.toast
 
+import org.w3c.dom.HTMLElement
 import zakadabar.lib.examples.resources.Strings
 import zakadabar.stack.frontend.application.ZkApplication.theme
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
 import zakadabar.stack.frontend.builtin.toast.toast
 import zakadabar.stack.frontend.util.marginBottom
 
 /**
- * This example shows how to create checkbox lists.
+ * This example shows how to create toasts.
  */
-object Toasts : ZkPage() {
+class ToastExamples(
+    element: HTMLElement
+) : ZkElement(element) {
 
     override fun onCreate() {
         super.onCreate()

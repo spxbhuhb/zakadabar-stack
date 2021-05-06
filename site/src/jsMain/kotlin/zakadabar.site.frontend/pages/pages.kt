@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.site.frontend.pages.misc
+package zakadabar.site.frontend.pages
 
 import zakadabar.lib.markdown.frontend.MarkdownPage
 import zakadabar.lib.markdown.frontend.MarkdownPathPage
@@ -9,8 +9,13 @@ import zakadabar.site.data.ContentQuery
 import zakadabar.stack.frontend.application.ZkApplication
 
 object Welcome : MarkdownPage(
-    "/${ContentQuery.dtoNamespace}/Welcome.md",
-    ContentContext("/Welcome", "/")
+    "/${ContentQuery.dtoNamespace}/welcome/Welcome.md",
+    ContentContext("/Welcome", "welcome/")
+)
+
+object ShowCase : MarkdownPage(
+    "/${ContentQuery.dtoNamespace}/welcome/ShowCase.md",
+    ContentContext("/ShowCase", "welcome/")
 )
 
 object GetStarted : MarkdownPage(

@@ -3,7 +3,6 @@
  */
 package zakadabar.lib.markdown.frontend
 
-import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
@@ -16,6 +15,7 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
         func((theme as MarkdownThemeExt).markdownTheme)
     }
 
+    @Suppress("unused") // this is a CSS import, used by hljs
     val highlightStyles by cssImport {
         withMarkdownTheme {
             url = it.highlightUrl
@@ -28,37 +28,11 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
         paddingTop = 0
     }
 
-    val codeFence by cssClass {
-        borderRadius = 4
-        paddingLeft = 4
-        paddingRight = 4
-        backgroundColor = ZkColors.Gray.c300
-        fontFamily = "monospace"
-        fontWeight = "300"
-    }
-
-    val codeSpan by cssClass {
-        borderRadius = 4
-        paddingLeft = 4
-        paddingRight = 4
-        backgroundColor = ZkColors.Gray.c300
-        fontFamily = "monospace"
-        fontWeight = "300"
-    }
-
-    val inlineLink by cssClass {
-        color = ZkColors.LightBlue.c700
-    }
-
-    val paragraph by cssClass {
-        marginBottom = 10
-    }
-
     val tocContainer by cssClass {
         boxSizing = "border-box"
         minWidth = 200 + theme.layout.spacingStep
         marginRight = theme.layout.spacingStep
-        fontSize = "90%"
+        fontSize = "80%"
         paddingTop = theme.layout.spacingStep
     }
 
@@ -71,8 +45,8 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
         borderLeft = "1px solid ${theme.color.foreground}80"
         paddingLeft = theme.layout.spacingStep
         cursor = "pointer"
-        paddingTop = 8
-        paddingBottom = 8
+        paddingTop = 5
+        paddingBottom = 5
         maxWidth = 200
 
         on("[data-active=\"true\"]") {
@@ -91,11 +65,28 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
         verticalAlign = "center"
     }
 
+
+    @Suppress("unused") // used implicitly by the browser
     val link by cssRule(".$content a") {
         color = theme.color.info
         textDecoration = "none"
     }
 
+    @Suppress("unused") // used implicitly by the browser
+    val header1Link by cssRule(".$content h1 > a") {
+        paddingLeft = 20
+        fontWeight = 400
+        fontSize = "70%"
+    }
+
+    @Suppress("unused") // used implicitly by the browser
+    val header2Link by cssRule(".$content h2 > a") {
+        paddingLeft = 20
+        fontWeight = 400
+        fontSize = "70%"
+    }
+
+    @Suppress("unused") // used implicitly by the browser
     val img by cssRule(".$content img") {
         width = "100%"
     }
@@ -106,6 +97,7 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
         overflow = "auto"
     }
 
+    @Suppress("unused") // used implicitly by the browser
     val td by cssRule(".$content td") {
         border = "1px solid ${theme.color.border}"
         paddingTop = 4
@@ -114,6 +106,7 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
         paddingRight = 8
     }
 
+    @Suppress("unused") // used implicitly by the browser
     val inlineCode by cssRule(".$content code") {
         fontFamily = "JetBrains Mono, monospace"
         fontSize = 13
@@ -125,6 +118,7 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
         }
     }
 
+    @Suppress("unused") // used implicitly by the browser
     val codeBlock by cssRule(".$content pre > code") {
         position = "relative"
         padding = 12

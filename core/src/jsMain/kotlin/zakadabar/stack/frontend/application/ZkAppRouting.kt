@@ -5,6 +5,7 @@ package zakadabar.stack.frontend.application
 
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
+import kotlin.reflect.KClass
 
 abstract class ZkAppRouting(
     private val defaultLayout: ZkAppLayout,
@@ -38,6 +39,11 @@ abstract class ZkAppRouting(
 
     operator fun ZkTarget.unaryPlus() {
         targets[viewName] = this
+    }
+
+    @Suppress("UNCHECKED_CAST") // checked with isInstance
+    fun <T : ZkTarget> find(kClass: KClass<T>): List<T> {
+        return targets.filterValues { kClass.isInstance(it) }.map { it.value as T }
     }
 
     open fun onNavStateChange(state: ZkNavState) {

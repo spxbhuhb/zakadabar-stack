@@ -17,13 +17,13 @@ object ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
         minWidth = 220
         paddingTop = 10
         borderRight = theme.sideBar.border
-        fontSize = "90%"
+        fontSize = "80%"
     }
 
     val item by cssClass {
         boxSizing = "border-box"
         cursor = "pointer"
-        minHeight = 32
+        minHeight = 28
         paddingLeft = 20
         paddingRight = 8
         display = "flex"
@@ -38,7 +38,7 @@ object ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
     val groupTitle by cssClass {
         boxSizing = "border-box"
         cursor = "pointer"
-        minHeight = 32
+        minHeight = 28
         display = "flex"
         flexDirection = "row"
         justifyContent = "flex-start"

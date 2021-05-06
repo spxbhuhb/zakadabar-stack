@@ -12,6 +12,7 @@ import zakadabar.stack.frontend.builtin.layout.ZkScrollBarTheme
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainerTheme
 import zakadabar.stack.frontend.builtin.misc.ZkFontTheme
 import zakadabar.stack.frontend.builtin.modal.ZkModalTheme
+import zakadabar.stack.frontend.builtin.note.ZkNoteTheme
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarTheme
 import zakadabar.stack.frontend.builtin.table.ZkTableTheme
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarTheme
@@ -71,6 +72,10 @@ open class ZkBuiltinDarkTheme : ZkTheme {
     )
 
     override var modal = ZkModalTheme()
+
+    override var note = ZkNoteTheme(
+        background = ZkColors.Gray.c800
+    )
 
     override var scrollBar = ZkScrollBarTheme(
         width = 12,

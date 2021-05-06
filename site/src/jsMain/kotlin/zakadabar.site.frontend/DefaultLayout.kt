@@ -4,7 +4,7 @@
 package zakadabar.site.frontend
 
 import zakadabar.site.frontend.components.SiteLogo
-import zakadabar.site.frontend.pages.misc.Landing
+import zakadabar.site.frontend.pages.Landing
 import zakadabar.site.frontend.resources.SiteDarkTheme
 import zakadabar.site.frontend.resources.SiteLightTheme
 import zakadabar.stack.frontend.builtin.layout.ZkDefaultLayout

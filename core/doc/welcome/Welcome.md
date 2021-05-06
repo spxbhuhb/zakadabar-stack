@@ -36,7 +36,7 @@ The stack focuses on the communication data model. This data model:
   * type-safe backend routing,
   * frontend forms, tables.
 
-<img src="/content/focus.png" width="800" alt="focus">
+![Focus](focus.png)
 
 ## Features - Common
 

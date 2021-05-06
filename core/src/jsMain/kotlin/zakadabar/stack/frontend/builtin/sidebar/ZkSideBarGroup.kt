@@ -7,8 +7,16 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
 import zakadabar.stack.frontend.resources.ZkIcons
 
+/**
+ * A group of sidebar entries. Supports open and close.
+ *
+ * @property  onClick  A function to call when the user clicks on the group title. The parameter shows
+ *                     if the bar is open or close. True means that the user opened a bar just now,
+ *                     false means that the user closed it.
+ */
 class ZkSideBarGroup(
     private val text: String,
+    private var onClick: (Boolean) -> Unit = { },
     private val builder: ZkElement.() -> Unit
 ) : ZkElement() {
 

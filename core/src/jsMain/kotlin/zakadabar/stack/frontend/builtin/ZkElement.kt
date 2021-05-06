@@ -313,6 +313,14 @@ open class ZkElement(
     }
 
     /**
+     * Adds a left margin to the element.
+     */
+    infix fun marginLeft(size: Any): ZkElement {
+        element.style.marginLeft = if (size is Int) "${size}px" else size.toString()
+        return this
+    }
+
+    /**
      * Adds a bottom margin to the element.
      */
     infix fun marginBottom(size: Any): ZkElement {
@@ -477,6 +485,21 @@ open class ZkElement(
         this.element.appendChild(child.element)
         childElements += child
 
+        syncChildrenState(child)
+    }
+
+    /**
+     * Adds a child element to children and synchronizes its state.
+     *
+     * The child is not added to the DOM.
+     *
+     * When [child] is null this is a no-op.
+     *
+     * The child must be in [ZkElementState.Created] state.
+     */
+    open fun addChildSkipDOM(child: ZkElement?) {
+        if (child == null) return
+        childElements.add(0, child)
         syncChildrenState(child)
     }
 

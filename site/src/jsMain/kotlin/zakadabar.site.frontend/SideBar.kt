@@ -9,15 +9,13 @@ import zakadabar.lib.examples.frontend.form.FormFieldsGenerated
 import zakadabar.lib.examples.frontend.form.SyntheticForm
 import zakadabar.lib.examples.frontend.input.CheckboxList
 import zakadabar.lib.examples.frontend.layout.TabContainer
-import zakadabar.lib.examples.frontend.modal.Modals
 import zakadabar.lib.examples.frontend.pages.ArgPage
 import zakadabar.lib.examples.frontend.query.QueryPage
 import zakadabar.lib.examples.frontend.table.FetchedTable
 import zakadabar.lib.examples.frontend.table.GeneratedTable
-import zakadabar.lib.examples.frontend.toast.Toasts
 import zakadabar.site.data.ContentEntry
 import zakadabar.site.data.ContentQuery
-import zakadabar.site.frontend.pages.misc.*
+import zakadabar.site.frontend.pages.*
 import zakadabar.site.resources.Strings
 import zakadabar.stack.StackRoles
 import zakadabar.stack.frontend.builtin.ZkElement
@@ -39,7 +37,10 @@ object SideBar : ZkSideBar() {
         io {
             contents = ContentQuery().execute().sortedBy { it.name }
 
-            + item(Strings.Welcome) { Welcome.open() }
+            + group(Strings.Welcome, { Welcome.open() }) {
+                + item(Strings.showCase) { ShowCase.open() }
+                + item(Strings.marinaDemo) { }
+            }
 
             + item(Strings.getStarted) { GetStarted.open() }
 
@@ -138,8 +139,6 @@ object SideBar : ZkSideBar() {
                 + item("CheckboxList") { CheckboxList.open() }
             }
 
-            + item("Modals") { Modals.open() }
-
             + group("Pages") {
                 + item("ArgPage") { ArgPage.open(ArgPage.Args(fourRandomInt()[0], "hello")) }
             }
@@ -154,8 +153,6 @@ object SideBar : ZkSideBar() {
                 + item("Generated") { GeneratedTable.open() }
                 + item("Fetched") { FetchedTable.open() }
             }
-
-            + item("Toasts") { Toasts.open() }
 
         }
     }
