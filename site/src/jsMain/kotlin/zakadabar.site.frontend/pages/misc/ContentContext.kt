@@ -25,6 +25,7 @@ class ContentContext(
             dest.startsWith("/src") -> resolveToStringSafe(coreSrc, dest.trim('/'))
             dest.contains("../lib/") -> resolveToStringSafe(libSrc, dest.substringAfter("../lib/").trim('/'))
             dest.contains("../site/") -> resolveToStringSafe(siteSrc, dest.substringAfter("../site/").trim('/'))
+            dest.contains("/guides/") -> resolveToStringSafe("/ContentPages/guides/", dest.substringAfter("/guides/").trim('/'))
             dest.endsWith(".png") -> resolveToStringSafe("/content/$path", dest.trim('/'))
             dest.endsWith(".jpg") -> resolveToStringSafe("/content/$path", dest.trim('/'))
             else -> baseURI?.resolveToStringSafe(dest) ?: dest

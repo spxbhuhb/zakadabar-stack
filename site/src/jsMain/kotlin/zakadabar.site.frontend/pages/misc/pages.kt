@@ -18,6 +18,16 @@ object GetStarted : MarkdownPage(
     ContentContext("/GetStarted", "/")
 )
 
+object GetHelp : MarkdownPage(
+    "/${ContentQuery.dtoNamespace}/GetHelp.md",
+    ContentContext("/GetHelp", "/")
+)
+
+object FAQ : MarkdownPage(
+    "/${ContentQuery.dtoNamespace}/faq/FAQ.md",
+    ContentContext("FAQ", "faq/")
+)
+
 object ContentPages : MarkdownPathPage() {
 
     fun open(path: String) {
