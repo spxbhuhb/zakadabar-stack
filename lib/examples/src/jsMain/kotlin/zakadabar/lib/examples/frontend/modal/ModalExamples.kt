@@ -8,9 +8,9 @@ import zakadabar.lib.examples.resources.Strings
 import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
+import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
 import zakadabar.stack.frontend.builtin.modal.ZkMessageDialog
-import zakadabar.stack.frontend.builtin.note.ZkNote
 import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.marginBottom
@@ -36,9 +36,12 @@ class ModalExamples(
                 + ZkButton(Strings.exampleDialog, onClick = ::onShowExample)
             } marginBottom theme.layout.spacingStep
 
-            + ZkNote {
-                title = "Output"
-                content = output
+            + column(zkLayoutStyles.border) {
+                buildElement.style.paddingTop = "10px"
+                buildElement.style.paddingLeft = "10px"
+                buildElement.style.paddingBottom = "10px"
+                + div { + "Output" } marginBottom 10
+                + output
             }
         }
     }

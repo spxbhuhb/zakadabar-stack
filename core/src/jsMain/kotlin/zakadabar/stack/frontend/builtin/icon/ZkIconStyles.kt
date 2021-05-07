@@ -10,8 +10,6 @@ object ZkIconStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val icon by cssClass {
         boxSizing = "border-box"
-        background = theme.icon.background
-        fill = theme.icon.foreground
         width = 18 // FIXME remove hard-coded icon width and height
         height = 18
     }

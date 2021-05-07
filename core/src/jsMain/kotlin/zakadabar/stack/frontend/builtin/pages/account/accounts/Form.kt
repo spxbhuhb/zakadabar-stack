@@ -24,8 +24,8 @@ import zakadabar.stack.frontend.builtin.form.fields.ZkSecretVerificationField
 import zakadabar.stack.frontend.builtin.form.structure.ZkFormButtons
 import zakadabar.stack.frontend.builtin.input.checkboxlist.ZkCheckboxList
 import zakadabar.stack.frontend.builtin.input.checkboxlist.ZkCheckboxListItem
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
+import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkCrudPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.toast.toast
@@ -55,7 +55,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
                 }
             }
 
-            classList += ZkLayoutStyles.grow
+            classList += zkLayoutStyles.grow
 
             ZkApplication.title = ZkAppTitle(if (mode != ZkElementMode.Create) dto.accountName else strings.account)
 
@@ -71,7 +71,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
             // Add a small padding around the container and make it grow.
             // We want this particular container to fill the whole page.
 
-            classList += ZkLayoutStyles.grow
+            classList += zkLayoutStyles.grow
 
             // This is needed to make the content scrollable if there is
             // not enough vertical space for it.
@@ -201,7 +201,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
             resultDto as ActionStatusDto
 
             if (! resultDto.success) {
-                toast(error = true) { strings.passwordChangeFail }
+                toast(danger = true) { strings.passwordChangeFail }
             } else {
                 toast { strings.actionSuccess }
             }

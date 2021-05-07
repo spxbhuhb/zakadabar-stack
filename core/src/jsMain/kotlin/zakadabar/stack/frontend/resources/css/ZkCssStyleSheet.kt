@@ -11,6 +11,29 @@ import zakadabar.stack.util.PublicApi
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
+fun <T : ZkTheme, S : ZkCssStyleSheet<T>> cssStyleSheet(sheet: S) = CssStyleSheetDelegate(sheet)
+
+class CssStyleSheetDelegate<T : ZkTheme, S : ZkCssStyleSheet<T>>(
+    var sheet: S?
+) {
+
+    init {
+        sheet?.attach()
+    }
+
+    operator fun getValue(thisRef: Nothing?, property: KProperty<*>): S {
+        return sheet ?: throw IllegalStateException("style sheet not initialized yet")
+    }
+
+    operator fun setValue(thisRef: Nothing?, property: KProperty<*>, value: S) {
+        sheet?.detach()
+        sheet = value
+        value.attach()
+    }
+
+}
+
+
 /**
  * Represents a CSS style sheet in the browser. Provides programmatic
  * tools to build, maintain and merge style sheets. Uses [ZkApplication.theme]

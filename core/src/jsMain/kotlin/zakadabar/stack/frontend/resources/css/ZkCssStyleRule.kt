@@ -702,6 +702,20 @@ class ZkCssStyleRule(
             styles["text-overflow"] = value
         }
 
+    /**
+     * [MDN: text-transform](https://developer.mozilla.org/en-US/docs/Web/CSS/text-transform)
+     *
+     * ```
+     *
+     *    none
+     *    capitalize
+     *    uppercase
+     *    lowercase
+     *    full-width
+     *    full-size-kana
+     *
+     * ```
+     */
     var textTransform
         get() = styles["text-transform"]
         set(value) {

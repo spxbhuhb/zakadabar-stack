@@ -5,8 +5,8 @@ package zakadabar.lib.examples.frontend.layout
 
 import zakadabar.lib.examples.frontend.crud.BuiltinForm
 import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles.grow
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
+import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
 import zakadabar.stack.frontend.resources.ZkColors
@@ -35,7 +35,7 @@ object TabContainer : ZkPage(cssClass = ZkPageStyles.fixed) {
             // Add a small padding around the container and make it grow.
             // We want this particular container to fill the whole page.
 
-            classList += grow
+            classList += zkLayoutStyles.grow
             classList += ZkPageStyles.content
 
             // This is needed to make the content scrollable if there is

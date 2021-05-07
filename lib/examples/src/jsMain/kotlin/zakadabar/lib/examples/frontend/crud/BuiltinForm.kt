@@ -3,13 +3,15 @@
  */
 package zakadabar.lib.examples.frontend.crud
 
+import zakadabar.lib.examples.data.builtin.BuiltinDto
+import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
 import zakadabar.lib.examples.resources.Strings
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.util.plusAssign
 
-class BuiltinForm : ZkForm<zakadabar.lib.examples.data.builtin.BuiltinDto>() {
+class BuiltinForm : ZkForm<BuiltinDto>() {
 
     override fun onCreate() {
         super.onCreate()
@@ -27,7 +29,7 @@ class BuiltinForm : ZkForm<zakadabar.lib.examples.data.builtin.BuiltinDto>() {
                     + ::intValue
                     + ::instantValue
                     + ::secretValue
-                    + select(::recordSelectValue) { zakadabar.lib.examples.data.builtin.ExampleReferenceDto.all().by { it.name } }
+                    + select(::recordSelectValue) { ExampleReferenceDto.all().by { it.name } }
                     + ::stringValue
                     + select(::stringSelectValue, options = listOf("option1", "option2", "option3"))
                     + textarea(::textAreaValue)
@@ -43,7 +45,7 @@ class BuiltinForm : ZkForm<zakadabar.lib.examples.data.builtin.BuiltinDto>() {
                     + ::optInstantValue
                     + ::optIntValue
                     + ::optSecretValue
-                    + select(::optRecordSelectValue) { zakadabar.lib.examples.data.builtin.ExampleReferenceDto.all().by { it.name } }
+                    + select(::optRecordSelectValue) { ExampleReferenceDto.all().by { it.name } }
                     + ::optStringValue
                     + select(::optStringSelectValue, options = listOf("option1", "option2", "option3"))
                     + textarea(::optTextAreaValue)

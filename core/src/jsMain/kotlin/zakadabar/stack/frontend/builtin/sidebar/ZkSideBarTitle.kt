@@ -1,11 +1,10 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.sidebar
 
 import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.ZkButtonStyles
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarStyles
 import zakadabar.stack.frontend.resources.ZkIcons
@@ -20,7 +19,7 @@ open class ZkSideBarTitle(
     override fun onCreate() {
         className = ZkTitleBarStyles.appHandleContainer
 
-        + ZkIconButton(ZkIcons.notes, cssClass = ZkButtonStyles.transparent, onClick = onIconClick) marginRight 10
+        + ZkIconButton(ZkIcons.notes, onClick = onIconClick) marginRight 10
         + div { + text }
 
         on("click") { onTextClick?.invoke() }

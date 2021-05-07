@@ -7,7 +7,7 @@ import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.stack.frontend.application.ZkApplication.t
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
-class BuiltinTable : ZkTable<zakadabar.lib.examples.data.builtin.BuiltinDto>() {
+class BuiltinTable : ZkTable<BuiltinDto>() {
 
     override fun onConfigure() {
 
@@ -31,15 +31,15 @@ class BuiltinTable : ZkTable<zakadabar.lib.examples.data.builtin.BuiltinDto>() {
         // Add columns to the table. Column types are automatically
         // derived from the property type.
 
-        + zakadabar.lib.examples.data.builtin.BuiltinDto::id
-        + zakadabar.lib.examples.data.builtin.BuiltinDto::booleanValue
-        + zakadabar.lib.examples.data.builtin.BuiltinDto::doubleValue
-        + zakadabar.lib.examples.data.builtin.BuiltinDto::enumSelectValue
-        + zakadabar.lib.examples.data.builtin.BuiltinDto::instantValue
-        + zakadabar.lib.examples.data.builtin.BuiltinDto::optInstantValue
-        + zakadabar.lib.examples.data.builtin.BuiltinDto::stringValue
-        + zakadabar.lib.examples.data.builtin.BuiltinDto::uuidValue
-        + zakadabar.lib.examples.data.builtin.BuiltinDto::optUuidValue
+        + BuiltinDto::id
+        + BuiltinDto::booleanValue
+        + BuiltinDto::doubleValue
+        + BuiltinDto::enumSelectValue
+        + BuiltinDto::instantValue
+        + BuiltinDto::optInstantValue
+        + BuiltinDto::stringValue
+        + BuiltinDto::uuidValue
+        + BuiltinDto::optUuidValue
 
         // Add a custom column
 

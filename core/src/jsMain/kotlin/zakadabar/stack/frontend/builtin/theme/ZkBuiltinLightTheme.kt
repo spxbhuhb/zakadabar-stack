@@ -24,10 +24,33 @@ import zakadabar.stack.frontend.resources.ZkTheme
 open class ZkBuiltinLightTheme : ZkTheme {
 
     companion object {
-        const val NAME = "default-light"
+        const val NAME = "zakadabar.stack.theme.light"
     }
 
     override val name = NAME
+
+    override val backgroundColor = ZkColors.white
+    override val textColor = ZkColors.Design.gray8
+
+    override val primaryColor = ZkColors.Design.navGreen
+    override val primaryPair = ZkColors.white
+    override val secondaryColor = ZkColors.Design.gray5
+    override val secondaryPair = ZkColors.white
+    override val successColor = ZkColors.Design.navGreen
+    override val successPair = ZkColors.white
+    override val warningColor = ZkColors.Design.navOrange
+    override val warningPair = ZkColors.white
+    override val dangerColor = ZkColors.Design.navRed
+    override val dangerPair = ZkColors.white
+    override val infoColor = ZkColors.Design.navBlue
+    override val infoPair = ZkColors.white
+    override val disabledColor = ZkColors.Design.gray2
+    override val disabledPair = ZkColors.Design.gray6
+
+    override val borderColor = "${ZkColors.Design.gray8}80"
+
+    override val border = "1px solid ${ZkColors.Gray.c600}80"
+    override val cornerRadius = 2
 
     val background = ZkColors.white
     val foreground = ZkColors.Design.gray8
@@ -36,9 +59,6 @@ open class ZkBuiltinLightTheme : ZkTheme {
     val info = ZkColors.Design.navBlue
     val warning = ZkColors.Design.navOrange
     val error = ZkColors.Design.navRed
-
-    val borderColor = "${foreground}80"
-    val border = "1px solid $borderColor"
 
     override var button = ZkButtonTheme(
         background = ZkColors.Design.navBlue,

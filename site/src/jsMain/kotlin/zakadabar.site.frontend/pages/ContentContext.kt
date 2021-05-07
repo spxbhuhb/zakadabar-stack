@@ -6,12 +6,15 @@ package zakadabar.site.frontend.pages
 import org.intellij.markdown.html.resolveToStringSafe
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
+import zakadabar.lib.examples.frontend.button.ButtonExamples
 import zakadabar.lib.examples.frontend.modal.ModalExamples
 import zakadabar.lib.examples.frontend.toast.ToastExamples
+import zakadabar.lib.examples.frontend.toast.ToastFormExample
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.note.ZkNote
 import zakadabar.stack.frontend.builtin.note.ZkNoteStyles
+import zakadabar.stack.frontend.resources.ZkFlavour
 
 class ContentContext(
     viewName: String,
@@ -41,21 +44,35 @@ class ContentContext(
 
     override fun enrich(htmlElement: HTMLElement): ZkElement? {
         val type = htmlElement.dataset["zkEnrich"] ?: return null
+        val flavour = htmlElement.dataset["zkFlavour"]?.let { ZkFlavour.valueOf(it.capitalize()) } ?: ZkFlavour.Primary
 
         return when (type) {
 
-            "InfoNote" -> ZkNote(htmlElement) {
-                className = ZkNoteStyles.info
+            "ButtonExamples" -> {
+                ButtonExamples(htmlElement, flavour = flavour)
+            }
+
+            "InfoNote", "WarningNote" -> ZkNote(htmlElement) {
+                className = infoClassName(type)
                 title = htmlElement.dataset["zkTitle"]
-                text = htmlElement.innerText
-                htmlElement.innerText = ""
+                content = zke { innerHTML = htmlElement.innerHTML }
+                htmlElement.innerHTML = ""
             } marginLeft - 14
 
             "ModalExamples" -> ModalExamples(htmlElement)
 
             "ToastExamples" -> ToastExamples(htmlElement)
 
+            "ToastFormExample" -> ToastFormExample(htmlElement)
+
             else -> null
         }
     }
+
+    fun infoClassName(type: String?) = when (type) {
+        "InfoNote" -> ZkNoteStyles.info
+        "WarningNote" -> ZkNoteStyles.warning
+        else -> ZkNoteStyles.info
+    }
+
 }

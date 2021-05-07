@@ -2,6 +2,18 @@
 
 Zakadabar Stack is a Kotlin software library for full-stack application development.
 
+<div data-zk-enrich="InfoNote" data-zk-title="Try It">
+Check the <a href="/ShowCase">Show Case</a> or the <a href="https://marina.zakadabar.com" target="_blank">Marina Demo</a> to see sites implemented with the
+stack.
+
+Actually, this documentation site is also built with the stack.
+</div>
+<br>
+<div data-zk-enrich="WarningNote" data-zk-title="Alpha">
+Project status of the stack is <b>alpha</b>. This means that some migration steps may be needed
+between releases. See <a href="https://kotlinlang.org/docs/reference/evolution/components-stability.html" target="_blank">components stability</a>.
+</div>
+
 Building full-stack, deployable applications is inherently complex. It is quite a task in itself just to collect the
 areas one has to pay attention to.
 
@@ -51,10 +63,11 @@ The stack focuses on the communication data model. This data model:
 | Data Transfer | Automatically handled by on-demand created `comm` instances.<br />Built-in binary data handling. |
 | Data Validation | Clients and servers share schema code.<br/>Automatic browser form validation with schema. |
 
-## Features - Browser Frontend
+## Features - Browser
 
 | Feature | Details |
 | --------| ------- | 
+| Admin pages | Built-in pages for administration tasks, integrated with built-in backends. |
 | Builders | Intuitive UI builders. Adding and subtracting elements. HTML is mostly hidden. |
 | Colors | Color palettes: Zakadabar, Material. |
 | Components | Ready-to use UI components. |
@@ -89,10 +102,19 @@ The stack focuses on the communication data model. This data model:
 | Title Bar | Tables, Forms, Pages are title bar aware and automatically update title, actions. |
 | Toast | Built-in toasts for info, warning, error, success. |
 
+## Features - Android
+
+| Feature | Details |
+| --------| ------- | 
+| Communication | One-liners for CRUD, BLOB, queries and actions.<br />Based on the shared data model. |
+
 ## Features - Backend
 
 | Feature | Details |
 | --------| ------- |
+| Authentication | Username and password based authentication.<br />Automatic lock after try limit.</br>|
 | Authorization | One-liner authorization checks (role based). |
+| Builtin Backends | Built-in backends for common backend data (accounts, roles, translations, etc.) |
 | Persistence | SQL, default uses Exposed. |
 | Routing | Uses Ktor routing.<br />Pre-defined helpers for easy and types safe backend setup. |
+| Sessions | Built-in session handling fully integrated with the client.<br />Session expiration.<br/>Session renewal. |

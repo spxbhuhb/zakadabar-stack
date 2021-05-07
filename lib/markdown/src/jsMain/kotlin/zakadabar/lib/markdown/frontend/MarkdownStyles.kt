@@ -5,8 +5,9 @@ package zakadabar.lib.markdown.frontend
 
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-val markdownStyles = MarkdownStyles()
+val markdownStyles by cssStyleSheet(MarkdownStyles())
 
 class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
 
@@ -65,11 +66,30 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
         verticalAlign = "center"
     }
 
-
     @Suppress("unused") // used implicitly by the browser
     val link by cssRule(".$content a") {
         color = theme.color.info
         textDecoration = "none"
+    }
+
+    @Suppress("unused") // used implicitly by the browser
+    val header1 by cssRule(".$content h1") {
+        marginTop = theme.layout.spacingStep * 2
+    }
+
+    @Suppress("unused") // used implicitly by the browser
+    val header1First by cssRule(".$content h1:first-child") {
+        marginTop = 0
+    }
+
+    @Suppress("unused") // used implicitly by the browser
+    val header2 by cssRule(".$content h2") {
+        marginTop = theme.layout.spacingStep * 2
+    }
+
+    @Suppress("unused") // used implicitly by the browser
+    val header2First by cssRule(".$content h2:first-child") {
+        marginTop = 0
     }
 
     @Suppress("unused") // used implicitly by the browser
@@ -95,6 +115,8 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
         border = "1px solid ${theme.color.border}"
         borderCollapse = "collapse"
         overflow = "auto"
+        marginTop = 10
+        marginBottom = 10
     }
 
     @Suppress("unused") // used implicitly by the browser

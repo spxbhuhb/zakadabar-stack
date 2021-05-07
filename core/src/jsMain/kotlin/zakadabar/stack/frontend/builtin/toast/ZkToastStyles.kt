@@ -1,16 +1,22 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.toast
 
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-object ZkToastStyles : ZkCssStyleSheet<ZkTheme>() {
+val zkToastStyles by cssStyleSheet(ZkToastStyles())
 
-    val toastContainer by cssClass {
+open class ZkToastStyles : ZkCssStyleSheet<ZkTheme>() {
+
+    /**
+     * Style for [ZkToastContainer].
+     */
+    open val appToastContainer by cssClass {
         position = "fixed"
-        right = 0
+        right = 20
         bottom = 20
         display = "flex"
         flexDirection = "column"
@@ -18,47 +24,112 @@ object ZkToastStyles : ZkCssStyleSheet<ZkTheme>() {
         justifyContent = "flex-end"
     }
 
-    val toastContent by cssClass {
+    open val toastOuter by cssClass {
+        backgroundColor = theme.backgroundColor
+    }
+
+    /**
+     * Style for one toast.
+     */
+    open val toastInner by cssClass {
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
+        boxShadow = "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)"
+        borderRadius = 2
         marginRight = 10
         marginBottom = 10
+    }
+
+    /**
+     * For the icon at the left side of the toast.
+     */
+    open val iconContainer by cssClass {
+        width = 32
+        alignSelf = "stretch"
+        display = "flex"
+        flexDirection = "row"
+        justifyContent = "center"
+        alignItems = "center"
+    }
+
+    /**
+     * For the text of the toast.
+     */
+    open val text by cssClass {
         paddingTop = 8
         paddingBottom = 8
         paddingLeft = 10
         paddingRight = 10
-        borderRadius = 4
-        boxShadow = "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)"
-        borderRadius = 2
+        flexGrow = 1
     }
 
-    val info by cssClass {
-        background = theme.toast.infoBackground + " !important"
-        color = theme.toast.infoText + " !important"
-        fill = theme.toast.successText + " !important"
+    /**
+     * For the close icon.
+     */
+    open val closeIcon by cssClass {
+        fill = theme.color.foreground
+        marginRight = 6
     }
 
-    val success by cssClass {
-        background = theme.toast.successBackground + " !important"
-        color = theme.toast.successText + " !important"
-        fill = theme.toast.successText + " !important"
+    open val primaryInner by cssClass {
+        border = "1px solid ${theme.primaryColor}"
+        backgroundColor = theme.primaryColor + "20"
     }
 
-    val warning by cssClass {
-        background = theme.toast.warningBackground + " !important"
-        color = theme.toast.warningText + " !important"
-        fill = theme.toast.warningText + " !important"
+    open val primaryIcon by cssClass {
+        backgroundColor = theme.primaryColor
+        fill = theme.primaryPair
     }
 
-    val error by cssClass {
-        background = theme.toast.errorBackground + " !important"
-        color = theme.toast.errorText + " !important"
-        fill = theme.toast.errorText + " !important"
+    open val secondaryInner by cssClass {
+        border = "1px solid ${theme.secondaryColor}"
+        backgroundColor = theme.secondaryColor + "20"
     }
 
-    init {
-        attach()
+    open val secondaryIcon by cssClass {
+        backgroundColor = theme.secondaryColor
+        fill = theme.secondaryPair
+    }
+
+    open val successInner by cssClass {
+        border = "1px solid ${theme.successColor}"
+        backgroundColor = theme.successColor + "20"
+    }
+
+    open val successIcon by cssClass {
+        backgroundColor = theme.successColor
+        fill = theme.successPair
+    }
+
+    open val warningInner by cssClass {
+        border = "1px solid ${theme.warningColor}"
+        backgroundColor = theme.warningColor + "20"
+    }
+
+    open val warningIcon by cssClass {
+        backgroundColor = theme.warningColor
+        fill = theme.warningPair
+    }
+
+    open val dangerInner by cssClass {
+        border = "1px solid ${theme.dangerColor}"
+        backgroundColor = theme.dangerColor + "20"
+    }
+
+    open val dangerIcon by cssClass {
+        backgroundColor = theme.dangerColor
+        fill = theme.dangerPair
+    }
+
+    open val infoInner by cssClass {
+        border = "1px solid ${theme.infoColor}"
+        backgroundColor = theme.infoColor + "20"
+    }
+
+    open val infoIcon by cssClass {
+        backgroundColor = theme.infoColor
+        fill = theme.infoPair
     }
 
 }

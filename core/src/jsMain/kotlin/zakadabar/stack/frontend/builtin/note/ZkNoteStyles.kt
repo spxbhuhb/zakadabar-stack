@@ -11,10 +11,22 @@ object ZkNoteStyles : ZkCssStyleSheet<ZkTheme>() {
     val info by cssClass {
         borderLeft = "2px solid ${theme.color.info}"
         backgroundColor = theme.note.background
+
+        on(" .$title") {
+            borderBottom = "1px solid ${theme.color.info}"
+        }
+    }
+
+    val warning by cssClass {
+        borderLeft = "2px solid ${theme.color.warning}"
+        backgroundColor = theme.note.background
+
+        on(" .$title") {
+            borderBottom = "1px solid ${theme.color.warning}"
+        }
     }
 
     val title by cssClass {
-        borderBottom = "1px solid ${theme.color.info}"
         fontWeight = 500
         paddingLeft = theme.layout.spacingStep / 2
         paddingTop = theme.layout.spacingStep / 4

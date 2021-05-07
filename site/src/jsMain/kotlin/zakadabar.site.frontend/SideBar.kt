@@ -44,15 +44,15 @@ object SideBar : ZkSideBar() {
 
             + item(Strings.getStarted) { GetStarted.open() }
 
-            + item(Strings.getHelp) { GetHelp.open() }
+            + group(Strings.getHelp, { GetHelp.open() }) {
+                + item(Strings.faq) { FAQ.open() }
+            }
 
             contentGroup(Strings.documentation, "guides/")
 
             + examples()
 
             contentGroup("ChangeLog", "changelog/", true)
-
-            + item(Strings.faq) { FAQ.open() }
 
             withOneOfRoles(StackRoles.securityOfficer, StackRoles.siteAdmin) {
 

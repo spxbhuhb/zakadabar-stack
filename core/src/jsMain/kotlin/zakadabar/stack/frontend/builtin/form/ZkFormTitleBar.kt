@@ -1,10 +1,10 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.form
 
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
+import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarStyles
 import zakadabar.stack.frontend.util.marginRight
 import zakadabar.stack.frontend.util.plusAssign
@@ -23,7 +23,7 @@ open class ZkFormTitleBar() : ZkElement() {
     override fun onCreate() {
         classList += ZkTitleBarStyles.appTitleBar
 
-        + row(ZkLayoutStyles.w100) {
+        + row(zkLayoutStyles.w100) {
 
             style { justifyContent = "space-between" }
 

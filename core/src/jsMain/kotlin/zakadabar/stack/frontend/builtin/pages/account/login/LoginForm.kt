@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.pages.account.login
 
@@ -76,7 +76,7 @@ class LoginForm(
     override fun onSubmitSuccess() {}
 
     override fun onSubmitError(ex: Exception) {
-        invalidToast = toast(error = true) { strings.loginFail }
+        invalidToast = toast(danger = true) { strings.loginFail }
     }
 
     private fun onExecuteResult(resultDto: DtoBase) {
@@ -85,9 +85,9 @@ class LoginForm(
 
         if (! resultDto.success) {
             if (resultDto.reason == "locked") {
-                toast(error = true) { strings.loginLocked }
+                toast(danger = true) { strings.loginLocked }
             } else {
-                toast(error = true) { strings.loginFail }
+                toast(danger = true) { strings.loginFail }
             }
             return
         }

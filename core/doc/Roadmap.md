@@ -49,6 +49,7 @@
 * unit test concept, unit tests for comm
 * use common frontend comm code base on Ktor Client
 * move ContentBackend from site into the stack, document content backends
+* optimize for SEO (https://developers.google.com/search/docs/advanced/guidelines/get-started)
 
 ### ZkSideBar
 

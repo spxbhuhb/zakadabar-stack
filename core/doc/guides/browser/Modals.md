@@ -11,9 +11,7 @@ have show, hide and data handling out-of-the-box.
 Support for multiple parallel modals is not ready yet.
 </div>
 
-## Built-In Modals
-
-[Source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/modal/ModalExamples.kt)
+## Built-In Modals [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/modal/ModalExamples.kt)
 
 <div data-zk-enrich="ModalExamples"></div>
 

@@ -1,7 +1,9 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.icon
+package zakadabar.stack.frontend.resources
+
+import zakadabar.stack.frontend.builtin.icon.ZkIcon
 
 class ZkIconSource(val content: String) {
 
@@ -23,9 +25,9 @@ class ZkIconSource(val content: String) {
     val simple18
         get() = ZkIcon(svg18.value)
 
-    fun complex16(onClick: (() -> Unit)? = null) = ZkIcon(svg16.value, onClick)
+    fun complex16(onClick: (() -> Unit)? = null) = ZkIcon(svg16.value, onClick = onClick)
 
-    fun complex20(onClick: (() -> Unit)? = null) = ZkIcon(svg20.value, onClick)
+    fun complex20(onClick: (() -> Unit)? = null) = ZkIcon(svg20.value, onClick = onClick)
 
     fun simple(viewBox: Int) =
         ZkIcon("""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $viewBox $viewBox">$content</svg>""")

@@ -24,16 +24,21 @@ object GetStarted : MarkdownPage(
 )
 
 object GetHelp : MarkdownPage(
-    "/${ContentQuery.dtoNamespace}/GetHelp.md",
-    ContentContext("/GetHelp", "/")
+    "/${ContentQuery.dtoNamespace}/help/GetHelp.md",
+    ContentContext("/GetHelp", "help/")
 )
 
 object FAQ : MarkdownPage(
-    "/${ContentQuery.dtoNamespace}/faq/FAQ.md",
-    ContentContext("FAQ", "faq/")
+    "/${ContentQuery.dtoNamespace}/help/FAQ.md",
+    ContentContext("FAQ", "help/")
 )
 
 object ContentPages : MarkdownPathPage() {
+
+    override fun onCreate() {
+        super.onCreate()
+        paddingTop = ZkApplication.theme.layout.spacingStep
+    }
 
     fun open(path: String) {
         ZkApplication.changeNavState("/$viewName/$path")

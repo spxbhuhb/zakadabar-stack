@@ -1,12 +1,15 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.layout
 
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-object ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
+val zkLayoutStyles by cssStyleSheet(ZkLayoutStyles())
+
+class ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
 
     // -------------------------------------------------------------------------
     // General
@@ -42,6 +45,10 @@ object ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
         display = "grid"
         borderCollapse = "collapse"
         border = 0
+    }
+
+    val border by cssClass {
+        border = theme.border
     }
 
     // -------------------------------------------------------------------------

@@ -11,7 +11,7 @@ package zakadabar.lib.examples.frontend.query
 import zakadabar.lib.examples.resources.Strings
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
+import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
 import zakadabar.stack.frontend.builtin.toast.toast
@@ -33,7 +33,7 @@ object QueryPage : ZkPage(cssClass = ZkPageStyles.fixed) {
     override fun onCreate() {
         super.onCreate()
 
-        classList += ZkLayoutStyles.grid
+        classList += zkLayoutStyles.grid
         gridTemplateRows = "max-content 1fr"
 
         form.dto = default()
@@ -56,7 +56,7 @@ object QueryPage : ZkPage(cssClass = ZkPageStyles.fixed) {
                 table.setData(query.execute())
                 toast { Strings.querySuccess }
             } catch (ex: Exception) {
-                toast(error = true) { Strings.queryFail }
+                toast(danger = true) { Strings.queryFail }
                 log(ex)
             }
         }

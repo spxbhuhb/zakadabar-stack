@@ -19,9 +19,39 @@ import zakadabar.stack.frontend.builtin.table.ZkTableTheme
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarTheme
 import zakadabar.stack.frontend.builtin.toast.ZkToastTheme
 
+/**
+ * General interface for themes.
+ *
+ * @property  name          Name of the theme, used to when saving/restoring the theme preference of the user.
+ * @property  cornerRadius  This value is for rectangular boxes (buttons for example) when there is a border
+ *                          and it looks different when a small border radius is added. Think of 2px.
+ */
 interface ZkTheme {
 
     val name: String
+
+    val backgroundColor: String
+    val textColor: String
+
+    val primaryColor: String
+    val primaryPair: String
+    val secondaryColor: String
+    val secondaryPair: String
+    val successColor: String
+    val successPair: String
+    val warningColor: String
+    val warningPair: String
+    val dangerColor: String
+    val dangerPair: String
+    val infoColor: String
+    val infoPair: String
+    val disabledColor: String
+    val disabledPair: String
+
+    val borderColor: String
+
+    val cornerRadius: Int
+    val border: String
 
     var button: ZkButtonTheme
     var color: ZkColorTheme

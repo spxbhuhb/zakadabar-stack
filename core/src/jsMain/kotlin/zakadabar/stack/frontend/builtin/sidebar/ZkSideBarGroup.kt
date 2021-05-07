@@ -44,6 +44,7 @@ class ZkSideBarGroup(
         openIcon.hide()
         closeIcon.show()
         open = true
+        onClick(open)
     }
 
     private fun onClose() {
@@ -51,5 +52,6 @@ class ZkSideBarGroup(
         closeIcon.hide()
         openIcon.show()
         open = false
+        onClick(open)
     }
 }

@@ -286,7 +286,7 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
 
             } catch (ex: DataConflictException) {
 
-                toast(error = true) { t(ex.message) }
+                toast(danger = true) { t(ex.message) }
 
             } catch (ex: Exception) {
 
@@ -342,13 +342,13 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
      */
     open fun onSubmitError(ex: Exception) {
         when (mode) {
-            ZkElementMode.Create -> toast(error = true) { strings.createFail }
+            ZkElementMode.Create -> toast(danger = true) { strings.createFail }
             ZkElementMode.Read -> Unit
-            ZkElementMode.Update -> toast(error = true) { strings.updateFail }
-            ZkElementMode.Delete -> toast(error = true) { strings.deleteFail }
-            ZkElementMode.Action -> toast(error = true) { strings.actionFail }
-            ZkElementMode.Query -> toast(error = true) { strings.queryFail }
-            ZkElementMode.Other -> toast(error = true) { strings.actionFail }
+            ZkElementMode.Update -> toast(danger = true) { strings.updateFail }
+            ZkElementMode.Delete -> toast(danger = true) { strings.deleteFail }
+            ZkElementMode.Action -> toast(danger = true) { strings.actionFail }
+            ZkElementMode.Query -> toast(danger = true) { strings.queryFail }
+            ZkElementMode.Other -> toast(danger = true) { strings.actionFail }
         }
     }
 

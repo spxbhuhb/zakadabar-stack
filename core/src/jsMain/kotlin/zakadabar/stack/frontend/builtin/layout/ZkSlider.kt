@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.layout
 
@@ -51,7 +51,7 @@ open class ZkSlider(
     var position = 0.0
 
     override fun onCreate() {
-        className = if (orientation == ZkOrientation.Vertical) ZkLayoutStyles.verticalSlider else ZkLayoutStyles.horizontalSlider
+        className = if (orientation == ZkOrientation.Vertical) zkLayoutStyles.verticalSlider else zkLayoutStyles.horizontalSlider
 
         on("mousedown", ::onMouseDown)
         container.on("mouseup", ::onMouseUp)

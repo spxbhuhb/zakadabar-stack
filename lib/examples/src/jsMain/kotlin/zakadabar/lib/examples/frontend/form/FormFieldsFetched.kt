@@ -3,6 +3,7 @@
  */
 package zakadabar.lib.examples.frontend.form
 
+import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.lib.examples.frontend.crud.BuiltinForm
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.pages.ZkPage
@@ -20,10 +21,10 @@ object FormFieldsFetched : ZkPage() {
         io {
             // Get your id in a more logical way, fetching all records just to get
             // an id is plain wrong. I just needed one make this example working.
-            val id = zakadabar.lib.examples.data.builtin.BuiltinDto.all().first().id
+            val id = BuiltinDto.all().first().id
 
             val form = BuiltinForm()
-            form.dto = zakadabar.lib.examples.data.builtin.BuiltinDto.read(id)
+            form.dto = BuiltinDto.read(id)
             form.mode = ZkElementMode.Action
 
             + div(ZkPageStyles.content) {
