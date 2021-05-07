@@ -9,6 +9,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.set
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
+import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.getElementId
 import zakadabar.stack.frontend.util.plusAssign
@@ -36,7 +37,10 @@ class TableOfContents(
             context.tableOfContents.forEach {
                 + div(markdownStyles.tocEntry) {
                     buildElement.id = it.tocId
-                    + div(markdownStyles.tocText) { + it.text }
+                    + div(markdownStyles.tocText) {
+                        buildElement.style.paddingLeft = "${it.level * theme.spacingStep}px"
+                        + it.text
+                    }
 
                     on(buildElement, "click") { event ->
                         val (tocElement, id) = getElementId(event, "zk-", false) ?: return@on

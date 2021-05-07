@@ -5,8 +5,9 @@ package zakadabar.stack.frontend.builtin.layout
 
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-var scrollBarStyles = ZkScrollBarStyles()
+var scrollBarStyles by cssStyleSheet(ZkScrollBarStyles())
 
 class ZkScrollBarStyles : ZkCssStyleSheet<ZkTheme>() {
 
@@ -21,10 +22,6 @@ class ZkScrollBarStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val webkitScrollBarTrack by cssRule("::-webkit-scrollbar-track") {
         backgroundColor = theme.scrollBar.foreground
-    }
-
-    init {
-        attach()
     }
 
 }

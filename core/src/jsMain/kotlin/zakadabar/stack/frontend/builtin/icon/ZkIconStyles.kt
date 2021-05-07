@@ -3,19 +3,45 @@
  */
 package zakadabar.stack.frontend.builtin.icon
 
+import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-object ZkIconStyles : ZkCssStyleSheet<ZkTheme>() {
+val zkIconStyles by cssStyleSheet(ZkIconStyles())
 
-    val icon by cssClass {
+open class ZkIconStyles : ZkCssStyleSheet<ZkTheme>() {
+
+    open fun setInlineStyles(htmlElement: HTMLElement, size: Int) {
+        with(htmlElement.style) {
+            boxShadow = "border-box"
+            width = "${size}px"
+            height = "${size}px"
+        }
+    }
+
+    val icon18 by cssClass {
         boxSizing = "border-box"
-        width = 18 // FIXME remove hard-coded icon width and height
+        width = 18
         height = 18
     }
 
-    init {
-        attach()
+    val icon20 by cssClass {
+        boxSizing = "border-box"
+        width = 20
+        height = 20
+    }
+
+    val icon22 by cssClass {
+        boxSizing = "border-box"
+        width = 22
+        height = 22
+    }
+
+    val icon24 by cssClass {
+        boxSizing = "border-box"
+        width = 24
+        height = 24
     }
 
 }

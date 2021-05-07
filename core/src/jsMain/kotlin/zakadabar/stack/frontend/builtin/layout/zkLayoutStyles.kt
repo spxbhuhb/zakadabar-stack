@@ -88,6 +88,7 @@ class ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
     val sideBarContainer by cssClass {
         maxHeight = "100%"
         overflowY = "auto"
+        borderRight = theme.border
     }
 
     val popupSideBarContainer by cssClass {

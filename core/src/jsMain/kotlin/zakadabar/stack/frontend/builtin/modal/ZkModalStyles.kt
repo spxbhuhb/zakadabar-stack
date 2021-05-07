@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.modal
 
@@ -27,21 +27,21 @@ object ZkModalStyles : ZkCssStyleSheet<ZkTheme>() {
     }
 
     val title by cssClass {
-        paddingLeft = theme.layout.spacingStep
-        paddingRight = theme.layout.spacingStep
+        paddingLeft = theme.spacingStep
+        paddingRight = theme.spacingStep
         borderBottom = "1px solid ${theme.modal.border} !important"
     }
 
     val content by cssClass {
-        padding = theme.layout.spacingStep
+        padding = theme.spacingStep
     }
 
     val buttons by cssClass {
         display = "flex"
         flexDirection = "row"
         justifyContent = "space-around"
-        paddingTop = theme.layout.spacingStep
-        paddingBottom = theme.layout.spacingStep
+        paddingTop = theme.spacingStep
+        paddingBottom = theme.spacingStep
     }
 
     init {

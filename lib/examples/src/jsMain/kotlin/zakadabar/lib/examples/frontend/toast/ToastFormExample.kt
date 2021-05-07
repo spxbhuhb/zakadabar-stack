@@ -27,7 +27,7 @@ class ToastFormExample(
         + column(ZkPageStyles.content) {
             + infoButton("Form in a Toast") {
                 ZkToast(content = InlineForm(), hideAfter = null).run()
-            } marginBottom theme.layout.spacingStep
+            } marginBottom theme.spacingStep
         }
     }
 

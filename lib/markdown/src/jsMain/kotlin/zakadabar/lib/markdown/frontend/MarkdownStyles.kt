@@ -25,16 +25,16 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val content by cssClass {
         overflowX = "auto"
-        padding = theme.layout.spacingStep * 2
+        padding = theme.spacingStep * 2
         paddingTop = 0
     }
 
     val tocContainer by cssClass {
         boxSizing = "border-box"
-        minWidth = 200 + theme.layout.spacingStep
-        marginRight = theme.layout.spacingStep
+        minWidth = 200 + theme.spacingStep
+        marginRight = theme.spacingStep
         fontSize = "80%"
-        paddingTop = theme.layout.spacingStep
+        paddingTop = theme.spacingStep
     }
 
     val tocContent by cssClass {
@@ -44,7 +44,7 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
     val tocEntry by cssClass {
         marginLeft = 1
         borderLeft = "1px solid ${theme.color.foreground}80"
-        paddingLeft = theme.layout.spacingStep
+        paddingLeft = theme.spacingStep
         cursor = "pointer"
         paddingTop = 5
         paddingBottom = 5
@@ -52,7 +52,7 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
 
         on("[data-active=\"true\"]") {
             marginLeft = 0
-            paddingLeft = theme.layout.spacingStep - 1
+            paddingLeft = theme.spacingStep - 1
             borderLeft = "3px solid ${theme.color.foreground}"
         }
 
@@ -74,7 +74,9 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
 
     @Suppress("unused") // used implicitly by the browser
     val header1 by cssRule(".$content h1") {
-        marginTop = theme.layout.spacingStep * 2
+        borderBottom = theme.border
+        paddingTop = theme.spacingStep
+        marginBottom = theme.spacingStep * 2
     }
 
     @Suppress("unused") // used implicitly by the browser
@@ -84,26 +86,21 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
 
     @Suppress("unused") // used implicitly by the browser
     val header2 by cssRule(".$content h2") {
-        marginTop = theme.layout.spacingStep * 2
-    }
-
-    @Suppress("unused") // used implicitly by the browser
-    val header2First by cssRule(".$content h2:first-child") {
-        marginTop = 0
+        marginBottom = theme.spacingStep
     }
 
     @Suppress("unused") // used implicitly by the browser
     val header1Link by cssRule(".$content h1 > a") {
         paddingLeft = 20
         fontWeight = 400
-        fontSize = "70%"
+        fontSize = "60%"
     }
 
     @Suppress("unused") // used implicitly by the browser
     val header2Link by cssRule(".$content h2 > a") {
         paddingLeft = 20
         fontWeight = 400
-        fontSize = "70%"
+        fontSize = "60%"
     }
 
     @Suppress("unused") // used implicitly by the browser
@@ -146,6 +143,7 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
         padding = 12
         lineHeight = 13 * 1.4
         marginLeft = - 12
+        marginBottom = theme.spacingStep
         withMarkdownTheme { markdown ->
             markdown.borderColor?.let {
                 borderLeft = "2px solid $it"
@@ -158,8 +156,14 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val codeCopy by cssClass {
         position = "absolute"
-        right = 4
+        right = 0
+        paddingRight = 4
         top = 4
+        background = theme.backgroundColor
+        withMarkdownTheme { markdown ->
+            markdown.backgroundColor?.let { backgroundColor = it }
+        }
+
     }
 
     val codeCopyIcon by cssClass {
@@ -168,7 +172,7 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
         borderRadius = 2
 
         hover {
-            backgroundColor = theme.color.hoverBackground
+            backgroundColor = theme.hoverBackgroundColor
         }
     }
 

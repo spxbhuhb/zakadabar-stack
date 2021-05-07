@@ -37,7 +37,7 @@ object ContentPages : MarkdownPathPage() {
 
     override fun onCreate() {
         super.onCreate()
-        paddingTop = ZkApplication.theme.layout.spacingStep
+        element.style.paddingTop = "${ZkApplication.theme.spacingStep}px"
     }
 
     fun open(path: String) {

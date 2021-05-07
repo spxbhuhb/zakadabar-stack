@@ -5,22 +5,22 @@ package zakadabar.stack.frontend.builtin.sidebar
 
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-object ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
+val zkSideBarStyles by cssStyleSheet(ZkSideBarStyles())
 
-    val sidebar by cssClass {
+open class ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
+
+    open val sidebar by cssClass {
         boxSizing = "border-box"
         minHeight = "100%"
-        backgroundColor = theme.sideBar.background
-        color = theme.sideBar.text
         overflowY = "auto"
         minWidth = 220
         paddingTop = 10
-        borderRight = theme.sideBar.border
         fontSize = "80%"
     }
 
-    val item by cssClass {
+    open val item by cssClass {
         boxSizing = "border-box"
         cursor = "pointer"
         minHeight = 28
@@ -29,13 +29,14 @@ object ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
-        on(":hover") {
-            backgroundColor = theme.sideBar.hoverBackground
-            color = theme.sideBar.hoverText
+
+        hover {
+            backgroundColor = theme.hoverBackgroundColor
+            color = theme.hoverTextColor
         }
     }
 
-    val groupTitle by cssClass {
+    open val groupTitle by cssClass {
         boxSizing = "border-box"
         cursor = "pointer"
         minHeight = 28
@@ -45,17 +46,16 @@ object ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
         alignItems = "center"
         paddingRight = 8
         paddingLeft = 14
-        on(":hover") {
-            backgroundColor = theme.sideBar.hoverBackground
-            color = theme.sideBar.hoverText
+        fill = theme.textColor
+
+        hover {
+            backgroundColor = theme.hoverBackgroundColor
+            color = theme.hoverTextColor
         }
     }
 
-    val groupContent by cssClass {
+    open val groupContent by cssClass {
         paddingLeft = 20
     }
 
-    init {
-        attach()
-    }
 }

@@ -1,12 +1,15 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.image
 
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-object ZkImageStyles : ZkCssStyleSheet<ZkTheme>() {
+val zkImageStyles by cssStyleSheet(ZkImageStyles())
+
+class ZkImageStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val outerView by cssClass {
         boxSizing = "border-box"
@@ -46,10 +49,6 @@ object ZkImageStyles : ZkCssStyleSheet<ZkTheme>() {
         top = 20
         left = 20
         zIndex = 1001
-    }
-
-    init {
-        attach()
     }
 
 }

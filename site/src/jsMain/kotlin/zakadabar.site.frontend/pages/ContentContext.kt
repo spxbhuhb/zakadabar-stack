@@ -7,10 +7,12 @@ import org.intellij.markdown.html.resolveToStringSafe
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import zakadabar.lib.examples.frontend.button.ButtonExamples
+import zakadabar.lib.examples.frontend.icon.IconExamples
 import zakadabar.lib.examples.frontend.modal.ModalExamples
 import zakadabar.lib.examples.frontend.toast.ToastExamples
 import zakadabar.lib.examples.frontend.toast.ToastFormExample
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
+import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.note.ZkNote
 import zakadabar.stack.frontend.builtin.note.ZkNoteStyles
@@ -48,16 +50,11 @@ class ContentContext(
 
         return when (type) {
 
-            "ButtonExamples" -> {
-                ButtonExamples(htmlElement, flavour = flavour)
-            }
+            "ButtonExamples" -> ButtonExamples(htmlElement, flavour = flavour)
 
-            "InfoNote", "WarningNote" -> ZkNote(htmlElement) {
-                className = infoClassName(type)
-                title = htmlElement.dataset["zkTitle"]
-                content = zke { innerHTML = htmlElement.innerHTML }
-                htmlElement.innerHTML = ""
-            } marginLeft - 14
+            "IconExamples" -> IconExamples(htmlElement)
+
+            "InfoNote", "WarningNote" -> note(htmlElement, type)
 
             "ModalExamples" -> ModalExamples(htmlElement)
 
@@ -66,8 +63,17 @@ class ContentContext(
             "ToastFormExample" -> ToastFormExample(htmlElement)
 
             else -> null
-        }
+        }?.marginBottom(theme.spacingStep)
     }
+
+    fun note(htmlElement: HTMLElement, type: String) =
+        ZkNote(htmlElement) {
+            className = infoClassName(type)
+            title = htmlElement.dataset["zkTitle"]
+            content = zke { innerHTML = htmlElement.innerHTML }
+            htmlElement.innerHTML = ""
+        } marginLeft - 14
+
 
     fun infoClassName(type: String?) = when (type) {
         "InfoNote" -> ZkNoteStyles.info

@@ -1,48 +1,50 @@
 This page shows the browser frontend components included with the stack.
 
-## Buttons [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
+# Buttons [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
-### Primary
+## Primary
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="primary"></div>
 
-### Secondary
+## Secondary
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="secondary"></div>
 
-### Success
+## Success
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="success"></div>
 
-### Warning
+## Warning
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="warning"></div>
 
-### Danger
+## Danger
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="danger"></div>
 
-### Info
+## Info
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="info"></div>
 
-### Disabled
+## Disabled
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="disabled"></div>
 
-## Modals [documentation](../guides/browser/Modals.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/modal/ModalExamples.kt)
+# Icons [documentation](../guides/browser/Icons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/icon/IconExamples.kt)
+
+<div data-zk-enrich="IconExamples"></div>
+
+# Modals [documentation](../guides/browser/Modals.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/modal/ModalExamples.kt)
 
 <div data-zk-enrich="ModalExamples"></div>
 
-## Notes
-
-## Basic Toasts [documentation](../guides/browser/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastExamples.kt)
+# Basic Toasts [documentation](../guides/browser/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastExamples.kt)
 
 Click on the button to show the toast.
 
 <div data-zk-enrich="ToastExamples"></div>
 
-## Complex Toasts [documentation](../guides/browser/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastFormExample.kt)
+# Complex Toasts [documentation](../guides/browser/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastFormExample.kt)
 
 Click on the button to show the toast.
 

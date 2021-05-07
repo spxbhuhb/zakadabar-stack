@@ -6,14 +6,12 @@ package zakadabar.stack.frontend.builtin.theme
 import zakadabar.stack.frontend.builtin.button.ZkButtonTheme
 import zakadabar.stack.frontend.builtin.dock.ZkDockTheme
 import zakadabar.stack.frontend.builtin.form.ZkFormTheme
-import zakadabar.stack.frontend.builtin.icon.ZkIconTheme
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutTheme
 import zakadabar.stack.frontend.builtin.layout.ZkScrollBarTheme
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainerTheme
 import zakadabar.stack.frontend.builtin.misc.ZkFontTheme
 import zakadabar.stack.frontend.builtin.modal.ZkModalTheme
 import zakadabar.stack.frontend.builtin.note.ZkNoteTheme
-import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarTheme
 import zakadabar.stack.frontend.builtin.table.ZkTableTheme
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarTheme
 import zakadabar.stack.frontend.builtin.toast.ZkToastTheme
@@ -32,6 +30,9 @@ open class ZkBuiltinLightTheme : ZkTheme {
     override val backgroundColor = ZkColors.white
     override val textColor = ZkColors.Design.gray8
 
+    override val hoverBackgroundColor = "rgba(0,0,0,0.1)"
+    override val hoverTextColor = ZkColors.Design.gray8
+
     override val primaryColor = ZkColors.Design.navGreen
     override val primaryPair = ZkColors.white
     override val secondaryColor = ZkColors.Design.gray5
@@ -47,10 +48,11 @@ open class ZkBuiltinLightTheme : ZkTheme {
     override val disabledColor = ZkColors.Design.gray2
     override val disabledPair = ZkColors.Design.gray6
 
-    override val borderColor = "${ZkColors.Design.gray8}80"
+    override val borderColor = "${ZkColors.Gray.c600}80"
 
     override val border = "1px solid ${ZkColors.Gray.c600}80"
     override val cornerRadius = 2
+    override val spacingStep = 20
 
     val background = ZkColors.white
     val foreground = ZkColors.Design.gray8
@@ -85,10 +87,6 @@ open class ZkBuiltinLightTheme : ZkTheme {
     )
 
     override var form = ZkFormTheme()
-    override var icon = ZkIconTheme(
-        background = "transparent",
-        foreground = ZkColors.Design.gray8
-    )
 
     override var layout = ZkLayoutTheme(
         defaultForeground = foreground,
@@ -108,11 +106,6 @@ open class ZkBuiltinLightTheme : ZkTheme {
         height = 12,
         background = "${foreground}80",
         foreground = background
-    )
-
-    override var sideBar = ZkSideBarTheme(
-        border = border,
-        hoverBackground = "rgba(0,0,0,0.1)"
     )
 
     override var tabContainer = ZkTabContainerTheme()

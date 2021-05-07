@@ -30,11 +30,11 @@ class ModalExamples(
         + column(ZkPageStyles.content) {
             + grid {
                 gridTemplateColumns = "repeat(3,max-content)"
-                gridGap = theme.layout.spacingStep
+                gridGap = theme.spacingStep
                 + ZkButton(Strings.confirmDialog, onClick = ::onShowConfirm)
                 + ZkButton(Strings.messageDialog, onClick = ::onShowMessage)
                 + ZkButton(Strings.exampleDialog, onClick = ::onShowExample)
-            } marginBottom theme.layout.spacingStep
+            } marginBottom theme.spacingStep
 
             + column(zkLayoutStyles.border) {
                 buildElement.style.paddingTop = "10px"

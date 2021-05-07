@@ -12,7 +12,7 @@ import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.marginBottom
 
 /**
- * This example shows how to create checkbox lists.
+ * This example shows how to create buttons.
  */
 class ButtonExamples(
     element: HTMLElement,
@@ -25,7 +25,7 @@ class ButtonExamples(
 
         + grid {
             gridTemplateColumns = "repeat(5,max-content)"
-            gridGap = theme.layout.spacingStep / 2
+            gridGap = theme.spacingStep / 2
 
             + "Text"
             + ZkButton("Default", flavour)
@@ -51,7 +51,7 @@ class ButtonExamples(
             + ZkButton("No Border", ZkIcons.info, flavour, border = false)
             + ZkButton("No Fill No Border", ZkIcons.info, flavour, fill = false, border = false)
 
-        } marginBottom theme.layout.spacingStep
+        } marginBottom theme.spacingStep
 
     }
 

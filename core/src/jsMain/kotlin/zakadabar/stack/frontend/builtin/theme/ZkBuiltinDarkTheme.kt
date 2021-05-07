@@ -6,14 +6,12 @@ package zakadabar.stack.frontend.builtin.theme
 import zakadabar.stack.frontend.builtin.button.ZkButtonTheme
 import zakadabar.stack.frontend.builtin.dock.ZkDockTheme
 import zakadabar.stack.frontend.builtin.form.ZkFormTheme
-import zakadabar.stack.frontend.builtin.icon.ZkIconTheme
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutTheme
 import zakadabar.stack.frontend.builtin.layout.ZkScrollBarTheme
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainerTheme
 import zakadabar.stack.frontend.builtin.misc.ZkFontTheme
 import zakadabar.stack.frontend.builtin.modal.ZkModalTheme
 import zakadabar.stack.frontend.builtin.note.ZkNoteTheme
-import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarTheme
 import zakadabar.stack.frontend.builtin.table.ZkTableTheme
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarTheme
 import zakadabar.stack.frontend.builtin.toast.ZkToastTheme
@@ -31,6 +29,9 @@ open class ZkBuiltinDarkTheme : ZkTheme {
 
     override val backgroundColor = ZkColors.Design.gray9
     override val textColor = ZkColors.Design.gray2
+
+    override val hoverBackgroundColor = "rgba(255,255,255,0.2)"
+    override val hoverTextColor = ZkColors.Design.gray2
 
     override val primaryColor = ZkColors.Design.navGreen
     override val primaryPair = ZkColors.Design.gray8
@@ -51,6 +52,7 @@ open class ZkBuiltinDarkTheme : ZkTheme {
 
     override val border = "1px solid ${ZkColors.Gray.c600}"
     override val cornerRadius = 2
+    override val spacingStep = 20
 
     val success = ZkColors.Design.navGreen
     val info = ZkColors.Design.navBlue
@@ -84,7 +86,6 @@ open class ZkBuiltinDarkTheme : ZkTheme {
     )
 
     override var form = ZkFormTheme()
-    override var icon = ZkIconTheme()
 
     override var layout = ZkLayoutTheme(
         defaultForeground = foreground,
@@ -102,10 +103,6 @@ open class ZkBuiltinDarkTheme : ZkTheme {
         height = 12,
         background = foreground,
         foreground = "${background}80"
-    )
-
-    override var sideBar = ZkSideBarTheme(
-        border = border
     )
 
     override var tabContainer = ZkTabContainerTheme()

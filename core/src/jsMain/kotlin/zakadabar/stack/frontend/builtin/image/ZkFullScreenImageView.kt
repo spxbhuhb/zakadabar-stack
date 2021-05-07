@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.image
 
@@ -16,16 +16,16 @@ class ZkFullScreenImageView(
 ) : ZkElement() {
 
     override fun onCreate() {
-        className = ZkImageStyles.outerView
+        className = zkImageStyles.outerView
         element.tabIndex = 0
 
-        + image(url, ZkImageStyles.image)
+        + image(url, zkImageStyles.image)
 
         + ZkIconButton(
             ZkIcons.close,
             buttonSize = 48,
             iconSize = 32,
-            cssClass = ZkImageStyles.closeButton,
+            cssClass = zkImageStyles.closeButton,
             round = true
         ) {
             hide()
@@ -35,7 +35,7 @@ class ZkFullScreenImageView(
             ZkIcons.deleteForever,
             buttonSize = 48,
             iconSize = 32,
-            cssClass = ZkImageStyles.deleteButton,
+            cssClass = zkImageStyles.deleteButton,
             round = true
         ) {
             onDeleteImage(this)

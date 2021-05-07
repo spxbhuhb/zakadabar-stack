@@ -31,6 +31,16 @@ class CssStyleSheetDelegate<T : ZkTheme, S : ZkCssStyleSheet<T>>(
         value.attach()
     }
 
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): S {
+        return sheet ?: throw IllegalStateException("style sheet not initialized yet")
+    }
+
+    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: S) {
+        sheet?.detach()
+        sheet = value
+        value.attach()
+    }
+
 }
 
 

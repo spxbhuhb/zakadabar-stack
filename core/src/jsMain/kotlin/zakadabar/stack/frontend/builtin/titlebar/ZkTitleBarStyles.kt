@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.frontend.builtin.titlebar
 
-import zakadabar.stack.frontend.builtin.sidebar.ZkSideBarStyles
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 
@@ -13,7 +12,7 @@ object ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
      * Application handle, the button and application name at the top left.
      * [appHandleContainer] is the style for the whole container.
      */
-    val appHandleContainer by ZkSideBarStyles.cssClass {
+    val appHandleContainer by cssClass {
         boxSizing = "border-box"
         fontWeight = 500
         fontSize = "120%"
@@ -27,7 +26,6 @@ object ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
         maxHeight = theme.titleBar.height
         whiteSpace = "nowrap"
         backgroundColor = theme.titleBar.appHandleBackground
-        color = ZkSideBarStyles.theme.sideBar.text
         cursor = "pointer"
     }
 
@@ -37,7 +35,7 @@ object ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
     val appHandleButton by cssClass {
         background = "transparent !important"
         fill = theme.titleBar.appHandleForeground + " !important"
-        marginLeft = theme.layout.spacingStep / 2
+        marginLeft = theme.spacingStep / 2
     }
 
     /**
@@ -73,7 +71,7 @@ object ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
      * Container for the title in the application title bar.
      */
     val titleContainer by cssClass {
-        marginLeft = theme.layout.spacingStep
+        marginLeft = theme.spacingStep
         alignItems = "center"
     }
 

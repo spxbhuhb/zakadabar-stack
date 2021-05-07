@@ -3,33 +3,11 @@
  */
 package zakadabar.stack.frontend.resources
 
-import zakadabar.stack.frontend.builtin.icon.ZkIcon
-
-class ZkIconSource(val content: String) {
-
-    private val svg16 = lazy {
-        """<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">$content</svg>"""
-    }
-
-    val svg18 = lazy {
-        """<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">$content</svg>"""
-    }
-
-    private val svg20 = lazy {
-        """<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">$content</svg>"""
-    }
+class ZkIconSource(
+    val name: String,
+    val content: String
+) {
 
     fun svg(size: Int) = """<svg xmlns="http://www.w3.org/2000/svg" width="$size" height="$size" viewBox="0 0 24 24">$content</svg>"""
-
-
-    val simple18
-        get() = ZkIcon(svg18.value)
-
-    fun complex16(onClick: (() -> Unit)? = null) = ZkIcon(svg16.value, onClick = onClick)
-
-    fun complex20(onClick: (() -> Unit)? = null) = ZkIcon(svg20.value, onClick = onClick)
-
-    fun simple(viewBox: Int) =
-        ZkIcon("""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $viewBox $viewBox">$content</svg>""")
 
 }

@@ -11,13 +11,8 @@ import kotlin.reflect.KClass
 open class ZkSideBar : ZkElement() {
 
     override fun onCreate() {
-        className = ZkSideBarStyles.sidebar
+        className = zkSideBarStyles.sidebar
     }
-
-    @Suppress("DeprecatedCallableAddReplaceWith") // replacement is ZkAppHandle but it is set at a different place
-    @Deprecated("use ZkAppHandle and ZkDefaultLayout instead")
-    open fun title(text: String, onIconClick: (() -> Unit)? = null, onTextClick: (() -> Unit)? = null) =
-        ZkSideBarTitle(text, onIconClick, onTextClick)
 
     open fun item(text: String, capitalize: Boolean = true, onClick: (() -> Unit)? = null) =
         ZkSideBarItem(text, capitalize, onClick)

@@ -26,13 +26,13 @@ class ZkSideBarGroup(
 
     override fun onCreate() {
         + column {
-            + div(ZkSideBarStyles.groupTitle) {
+            + div(zkSideBarStyles.groupTitle) {
                 + openIcon
                 + closeIcon.hide()
                 + text
                 on(buildElement, "click") { _ -> if (open) onClose() else onOpen() }
             }
-            + zke(ZkSideBarStyles.groupContent) {
+            + zke(zkSideBarStyles.groupContent) {
                 hide()
                 builder()
             }
@@ -40,7 +40,7 @@ class ZkSideBarGroup(
     }
 
     private fun onOpen() {
-        get<ZkElement>(ZkSideBarStyles.groupContent).show()
+        get<ZkElement>(zkSideBarStyles.groupContent).show()
         openIcon.hide()
         closeIcon.show()
         open = true
@@ -48,7 +48,7 @@ class ZkSideBarGroup(
     }
 
     private fun onClose() {
-        get<ZkElement>(ZkSideBarStyles.groupContent).hide()
+        get<ZkElement>(zkSideBarStyles.groupContent).hide()
         closeIcon.hide()
         openIcon.show()
         open = false

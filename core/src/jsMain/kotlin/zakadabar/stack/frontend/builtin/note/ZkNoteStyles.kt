@@ -28,13 +28,13 @@ object ZkNoteStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val title by cssClass {
         fontWeight = 500
-        paddingLeft = theme.layout.spacingStep / 2
-        paddingTop = theme.layout.spacingStep / 4
-        paddingBottom = theme.layout.spacingStep / 4
+        paddingLeft = theme.spacingStep / 2
+        paddingTop = theme.spacingStep / 4
+        paddingBottom = theme.spacingStep / 4
     }
 
     val content by cssClass {
-        padding = theme.layout.spacingStep / 2
+        padding = theme.spacingStep / 2
     }
 
     init {

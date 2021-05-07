@@ -39,7 +39,7 @@ object QueryPage : ZkPage(cssClass = ZkPageStyles.fixed) {
         form.dto = default()
         form.mode = ZkElementMode.Query
 
-        + form marginBottom (ZkApplication.theme.layout.spacingStep)
+        + form marginBottom (ZkApplication.theme.spacingStep)
         + div {
             style {
                 position = "relative"

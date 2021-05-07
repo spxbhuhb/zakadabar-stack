@@ -25,7 +25,7 @@ class ToastExamples(
 
             + grid {
                 gridTemplateColumns = "repeat(3,max-content)"
-                gridGap = theme.layout.spacingStep
+                gridGap = theme.spacingStep
 
                 + primaryButton("Primary") { primaryToast { "This is a primary toast!" } }
 
@@ -39,7 +39,7 @@ class ToastExamples(
 
                 + infoButton("Info") { infoToast { "This is a info toast!" } }
 
-            } marginBottom theme.layout.spacingStep
+            } marginBottom theme.spacingStep
 
         }
     }
