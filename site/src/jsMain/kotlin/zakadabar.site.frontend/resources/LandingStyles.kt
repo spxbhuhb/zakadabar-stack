@@ -12,8 +12,8 @@ object LandingStyles : ZkCssStyleSheet<ZkTheme>() {
     val landing by cssClass {
         display = "grid"
         gridTemplateRows = "max-content 1fr max-content"
-        width = "100vw"
-        height = "100vh"
+        width = "100%"
+        height = "100%"
     }
 
     val header by cssClass {
