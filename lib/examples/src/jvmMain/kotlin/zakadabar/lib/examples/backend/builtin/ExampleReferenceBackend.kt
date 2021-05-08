@@ -14,9 +14,9 @@ import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.Executor
 
-object ExampleReferenceBackend : RecordBackend<zakadabar.lib.examples.data.builtin.ExampleReferenceDto>() {
+object ExampleReferenceBackend : RecordBackend<ExampleReferenceDto>() {
 
-    override val dtoClass = zakadabar.lib.examples.data.builtin.ExampleReferenceDto::class
+    override val dtoClass = ExampleReferenceDto::class
 
     override fun onModuleLoad() {
         + ExampleReferenceTable
@@ -44,22 +44,22 @@ object ExampleReferenceBackend : RecordBackend<zakadabar.lib.examples.data.built
             .map(ExampleReferenceTable::toDto)
     }
 
-    override fun create(executor: Executor, dto: zakadabar.lib.examples.data.builtin.ExampleReferenceDto) = transaction {
+    override fun create(executor: Executor, dto: ExampleReferenceDto) = transaction {
         ExampleReferenceDao.new { fromDto(dto) }
             .toDto()
     }
 
-    override fun read(executor: Executor, recordId: RecordId<zakadabar.lib.examples.data.builtin.ExampleReferenceDto>) = transaction {
+    override fun read(executor: Executor, recordId: RecordId<ExampleReferenceDto>) = transaction {
         ExampleReferenceDao[recordId].toDto()
     }
 
-    override fun update(executor: Executor, dto: zakadabar.lib.examples.data.builtin.ExampleReferenceDto) = transaction {
+    override fun update(executor: Executor, dto: ExampleReferenceDto) = transaction {
         ExampleReferenceDao[dto.id]
             .fromDto(dto)
             .toDto()
     }
 
-    override fun delete(executor: Executor, recordId: RecordId<zakadabar.lib.examples.data.builtin.ExampleReferenceDto>) = transaction {
+    override fun delete(executor: Executor, recordId: RecordId<ExampleReferenceDto>) = transaction {
         ExampleReferenceDao[recordId].delete()
     }
 }

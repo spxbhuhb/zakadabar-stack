@@ -33,10 +33,10 @@ open class ZkBuiltinDarkTheme : ZkTheme {
     override val hoverBackgroundColor = "rgba(255,255,255,0.2)"
     override val hoverTextColor = ZkColors.Design.gray2
 
-    override val primaryColor = ZkColors.Design.navGreen
-    override val primaryPair = ZkColors.Design.gray8
+    override val primaryColor = ZkColors.Design.navPurple
+    override val primaryPair = ZkColors.white
     override val secondaryColor = ZkColors.Design.gray3
-    override val secondaryPair = ZkColors.white
+    override val secondaryPair = ZkColors.Design.gray8
     override val successColor = ZkColors.Design.navGreen
     override val successPair = ZkColors.Design.gray8
     override val warningColor = ZkColors.Design.navOrange
@@ -45,8 +45,8 @@ open class ZkBuiltinDarkTheme : ZkTheme {
     override val dangerPair = ZkColors.white
     override val infoColor = ZkColors.Design.navBlue
     override val infoPair = ZkColors.white
-    override val disabledColor = ZkColors.Design.gray3
-    override val disabledPair = ZkColors.black
+    override val disabledColor = ZkColors.Design.gray4
+    override val disabledPair = ZkColors.Design.gray7
 
     override val borderColor = ZkColors.Gray.c600
 

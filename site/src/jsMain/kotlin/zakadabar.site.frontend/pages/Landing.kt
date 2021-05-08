@@ -27,19 +27,19 @@ object Landing : ZkPage(ZkFullScreenLayout) {
             + HeaderActions()
         }
 
-        + div(LandingStyles.content) {
+        + column(LandingStyles.content) {
 
-            + div(LandingStyles.title) { + Strings.siteTitle } marginBottom 50
+            + div(LandingStyles.title) { + Strings.siteTitle } marginBottom 40
 
-            + row(LandingStyles.buttons) {
-                + ZkButton(Strings.Welcome) { Welcome.open() } css LandingStyles.button css LandingStyles.buttonCyan marginRight 20
-                + ZkButton(Strings.getStarted) { GetStarted.open() } css LandingStyles.button css LandingStyles.buttonBlue marginRight 20
-                + ZkButton(Strings.documentation) css LandingStyles.button css LandingStyles.buttonGreen marginRight 20
-                + ZkButton(Strings.examples) css LandingStyles.button css LandingStyles.buttonOrange marginRight 20
-                + ZkButton(Strings.getHelp) css LandingStyles.button css LandingStyles.buttonRed marginRight 20
-            } marginBottom 30
+            + div(LandingStyles.buttons) {
+                + ZkButton(Strings.Welcome) { Welcome.open() } css LandingStyles.button css LandingStyles.buttonCyan
+                + ZkButton(Strings.getStarted) { GetStarted.open() } css LandingStyles.button css LandingStyles.buttonBlue
+                + ZkButton(Strings.documentation) css LandingStyles.button css LandingStyles.buttonGreen
+                + ZkButton(Strings.examples) css LandingStyles.button css LandingStyles.buttonOrange
+                + ZkButton(Strings.getHelp) css LandingStyles.button css LandingStyles.buttonRed
+            } marginBottom 50
 
-            + row(LandingStyles.cards) {
+            + grid(LandingStyles.cards) {
                 + Card(Strings.writeOnceTitle, Strings.writeOnceText)
                 + Card(Strings.letTheMachineTitle, Strings.letTheMachineText)
                 + Card(Strings.walkYourWayTitle, Strings.walkYourWayText)
@@ -65,9 +65,11 @@ object Landing : ZkPage(ZkFullScreenLayout) {
 
         override fun onCreate() {
             classList += LandingStyles.card
-            + column {
-                + div(LandingStyles.cardTitle) { + title }
-                + div(LandingStyles.cardText) { + text }
+            + div(LandingStyles.cardInner) {
+                + column {
+                    + div(LandingStyles.cardTitle) { + title }
+                    + div(LandingStyles.cardText) { + text }
+                }
             }
         }
     }

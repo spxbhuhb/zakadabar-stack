@@ -22,9 +22,9 @@ import zakadabar.stack.data.util.OptInstantAsStringSerializer
 
 @Serializable
 data class ExampleResult(
-    val recordId: RecordId<zakadabar.lib.examples.data.builtin.BuiltinDto>,
+    val recordId: RecordId<BuiltinDto>,
     var booleanValue: Boolean,
-    var enumSelectValue: zakadabar.lib.examples.data.builtin.ExampleEnum,
+    var enumSelectValue: ExampleEnum,
     var intValue: Int,
     var stringValue: String
 ) : DtoBase

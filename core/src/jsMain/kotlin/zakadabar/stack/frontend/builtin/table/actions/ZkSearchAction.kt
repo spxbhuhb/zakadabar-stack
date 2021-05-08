@@ -5,8 +5,8 @@ package zakadabar.stack.frontend.builtin.table.actions
 
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
+import zakadabar.stack.frontend.builtin.input.standalone.ZkStandaloneInput
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.builtin.standalone.ZkStandaloneInput
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.plusAssign
 

@@ -9,6 +9,7 @@ import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.stack.backend.data.get
 import zakadabar.stack.backend.data.recordId
 import zakadabar.stack.backend.util.toJavaUuid
@@ -42,7 +43,7 @@ class BuiltinDao(id: EntityID<Long>) : LongEntity(id) {
     var textAreaValue by BuiltinTable.textAreaValue
     var uuidValue by BuiltinTable.uuidValue
 
-    fun toDto() = zakadabar.lib.examples.data.builtin.BuiltinDto(
+    fun toDto() = BuiltinDto(
         id = id.recordId(),
         booleanValue = booleanValue,
         doubleValue = doubleValue,
@@ -68,7 +69,7 @@ class BuiltinDao(id: EntityID<Long>) : LongEntity(id) {
         uuidValue = uuidValue.toStackUuid()
     )
 
-    fun fromDto(dto: zakadabar.lib.examples.data.builtin.BuiltinDto): BuiltinDao {
+    fun fromDto(dto: BuiltinDto): BuiltinDao {
         booleanValue = dto.booleanValue
         doubleValue = dto.doubleValue
         enumSelectValue = dto.enumSelectValue

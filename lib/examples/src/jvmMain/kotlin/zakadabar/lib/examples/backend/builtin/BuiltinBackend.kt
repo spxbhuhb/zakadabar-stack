@@ -11,6 +11,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.lib.examples.data.builtin.ExampleQuery
+import zakadabar.lib.examples.data.builtin.ExampleResult
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.get
 import zakadabar.stack.backend.data.record.RecordBackend
@@ -19,9 +20,9 @@ import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.Executor
 
-object BuiltinBackend : RecordBackend<zakadabar.lib.examples.data.builtin.BuiltinDto>() {
+object BuiltinBackend : RecordBackend<BuiltinDto>() {
 
-    override val dtoClass = zakadabar.lib.examples.data.builtin.BuiltinDto::class
+    override val dtoClass = BuiltinDto::class
 
     override fun onModuleLoad() {
         + BuiltinTable
@@ -29,7 +30,7 @@ object BuiltinBackend : RecordBackend<zakadabar.lib.examples.data.builtin.Builti
 
     override fun onInstallRoutes(route: Route) {
         route.crud()
-        route.query(zakadabar.lib.examples.data.builtin.ExampleQuery::class, BuiltinBackend::query)
+        route.query(ExampleQuery::class, BuiltinBackend::query)
     }
 
     override fun all(executor: Executor) = transaction {
@@ -41,7 +42,7 @@ object BuiltinBackend : RecordBackend<zakadabar.lib.examples.data.builtin.Builti
             .map(BuiltinTable::toDto)
     }
 
-    override fun create(executor: Executor, dto: zakadabar.lib.examples.data.builtin.BuiltinDto) = transaction {
+    override fun create(executor: Executor, dto: BuiltinDto) = transaction {
 
         authorize(true)
 
@@ -52,14 +53,14 @@ object BuiltinBackend : RecordBackend<zakadabar.lib.examples.data.builtin.Builti
             .toDto()
     }
 
-    override fun read(executor: Executor, recordId: RecordId<zakadabar.lib.examples.data.builtin.BuiltinDto>) = transaction {
+    override fun read(executor: Executor, recordId: RecordId<BuiltinDto>) = transaction {
 
         authorize(true)
 
         BuiltinDao[recordId].toDto()
     }
 
-    override fun update(executor: Executor, dto: zakadabar.lib.examples.data.builtin.BuiltinDto) = transaction {
+    override fun update(executor: Executor, dto: BuiltinDto) = transaction {
 
         authorize(true)
 
@@ -68,14 +69,14 @@ object BuiltinBackend : RecordBackend<zakadabar.lib.examples.data.builtin.Builti
             .toDto()
     }
 
-    override fun delete(executor: Executor, recordId: RecordId<zakadabar.lib.examples.data.builtin.BuiltinDto>) = transaction {
+    override fun delete(executor: Executor, recordId: RecordId<BuiltinDto>) = transaction {
 
         authorize(true)
 
         BuiltinDao[recordId].delete()
     }
 
-    private fun query(executor: Executor, query: zakadabar.lib.examples.data.builtin.ExampleQuery) = transaction {
+    private fun query(executor: Executor, query: ExampleQuery) = transaction {
 
         authorize(true)
 
@@ -95,8 +96,7 @@ object BuiltinBackend : RecordBackend<zakadabar.lib.examples.data.builtin.Builti
         query.stringValue?.let { select.andWhere { BuiltinTable.stringValue eq it } }
 
         select.map {
-            val t = it[BuiltinTable.id]
-            zakadabar.lib.examples.data.builtin.ExampleResult(
+            ExampleResult(
                 recordId = it[BuiltinTable.id].recordId(),
                 booleanValue = it[BuiltinTable.booleanValue],
                 enumSelectValue = it[BuiltinTable.enumSelectValue],

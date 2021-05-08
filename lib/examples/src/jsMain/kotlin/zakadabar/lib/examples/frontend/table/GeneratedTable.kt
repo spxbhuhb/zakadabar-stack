@@ -3,6 +3,7 @@
  */
 package zakadabar.lib.examples.frontend.table
 
+import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.lib.examples.frontend.crud.BuiltinTable
 import zakadabar.stack.data.record.LongRecordId
 import zakadabar.stack.frontend.builtin.pages.ZkPage
@@ -21,7 +22,7 @@ object GeneratedTable : ZkPage(cssClass = ZkPageStyles.fixed) {
 
         // Create a template DTO.
 
-        val template: zakadabar.lib.examples.data.builtin.BuiltinDto = default { }
+        val template: BuiltinDto = default { }
 
         // Create the data to display. "default" uses the schema to generate the
         // default data therefore it is slow. Using "copy" is better suited for

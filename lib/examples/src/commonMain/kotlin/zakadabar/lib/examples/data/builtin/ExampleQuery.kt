@@ -23,15 +23,15 @@ import zakadabar.stack.data.schema.DtoSchema
 @Serializable
 data class ExampleQuery(
     var booleanValue: Boolean?,
-    var enumSelectValue: zakadabar.lib.examples.data.builtin.ExampleEnum?,
+    var enumSelectValue: ExampleEnum?,
     var intValue: Int?,
     var stringValue: String?,
     var limit: Int
-) : QueryDto<zakadabar.lib.examples.data.builtin.ExampleResult> {
+) : QueryDto<ExampleResult> {
 
-    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(zakadabar.lib.examples.data.builtin.ExampleResult.serializer()))
+    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(ExampleResult.serializer()))
 
-    companion object : QueryDtoCompanion<zakadabar.lib.examples.data.builtin.BuiltinDto>(zakadabar.lib.examples.data.builtin.BuiltinDto.dtoNamespace)
+    companion object : QueryDtoCompanion<BuiltinDto>(BuiltinDto.dtoNamespace)
 
     override fun schema() = DtoSchema {
         + ::booleanValue

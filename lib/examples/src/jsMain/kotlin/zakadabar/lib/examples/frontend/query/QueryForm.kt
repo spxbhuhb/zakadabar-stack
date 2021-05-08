@@ -3,6 +3,7 @@
  */
 package zakadabar.lib.examples.frontend.query
 
+import zakadabar.lib.examples.data.builtin.ExampleQuery
 import zakadabar.lib.examples.resources.Strings
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
@@ -12,8 +13,8 @@ import zakadabar.stack.frontend.util.marginBottom
 import zakadabar.stack.frontend.util.marginRight
 
 class QueryForm(
-    val runQuery: (dto: zakadabar.lib.examples.data.builtin.ExampleQuery) -> Unit
-) : ZkForm<zakadabar.lib.examples.data.builtin.ExampleQuery>() {
+    val runQuery: (dto: ExampleQuery) -> Unit
+) : ZkForm<ExampleQuery>() {
 
     override fun onConfigure() {
         appTitle = false

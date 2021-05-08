@@ -8,6 +8,7 @@
  */
 package zakadabar.lib.examples.frontend.query
 
+import zakadabar.lib.examples.data.builtin.ExampleQuery
 import zakadabar.lib.examples.resources.Strings
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.ZkElementMode
@@ -50,7 +51,7 @@ object QueryPage : ZkPage(cssClass = ZkPageStyles.fixed) {
 
     }
 
-    private fun runQuery(query: zakadabar.lib.examples.data.builtin.ExampleQuery) {
+    private fun runQuery(query: ExampleQuery) {
         io {
             try {
                 table.setData(query.execute())

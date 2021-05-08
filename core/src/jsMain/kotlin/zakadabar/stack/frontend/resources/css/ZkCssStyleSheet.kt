@@ -5,6 +5,7 @@ package zakadabar.stack.frontend.resources.css
 
 import kotlinx.atomicfu.atomic
 import kotlinx.browser.document
+import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.util.PublicApi
@@ -101,7 +102,15 @@ open class ZkCssStyleSheet<T : ZkTheme> {
 
         ZkApplication.styleSheets.add(this)
 
-        document.body?.appendChild(element)
+        var sheets = document.getElementById("zk-styles")
+
+        if (sheets == null) {
+            sheets = document.createElement("div") as HTMLElement
+            sheets.id = "zk-styles"
+            document.body?.appendChild(sheets)
+        }
+
+        sheets.appendChild(element)
 
         refresh()
     }

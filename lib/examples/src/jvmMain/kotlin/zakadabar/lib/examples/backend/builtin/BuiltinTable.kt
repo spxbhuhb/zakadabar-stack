@@ -7,6 +7,8 @@ import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.`java-time`.timestamp
+import zakadabar.lib.examples.data.builtin.BuiltinDto
+import zakadabar.lib.examples.data.builtin.ExampleEnum
 import zakadabar.stack.backend.data.recordId
 import zakadabar.stack.backend.util.toStackUuid
 import zakadabar.stack.data.builtin.misc.Secret
@@ -15,12 +17,12 @@ object BuiltinTable : LongIdTable("builtin") {
 
     val booleanValue = bool("booleanValue")
     val doubleValue = double("doubleValue")
-    val enumSelectValue = enumerationByName("enumSelectValue", 20, zakadabar.lib.examples.data.builtin.ExampleEnum::class)
+    val enumSelectValue = enumerationByName("enumSelectValue", 20, ExampleEnum::class)
     val intValue = integer("intValue")
     val instantValue = timestamp("instantValue")
     val optBooleanValue = bool("optBooleanValue").nullable()
     val optDoubleValue = double("optDoubleValue").nullable()
-    val optEnumSelectValue = enumerationByName("optEnumSelectValue", 20, zakadabar.lib.examples.data.builtin.ExampleEnum::class).nullable()
+    val optEnumSelectValue = enumerationByName("optEnumSelectValue", 20, ExampleEnum::class).nullable()
     val optInstantValue = timestamp("optInstantValue").nullable()
     val optIntValue = integer("optIntValue").nullable()
     val optSecretValue = varchar("optSecretValue", 50).nullable()
@@ -36,7 +38,7 @@ object BuiltinTable : LongIdTable("builtin") {
     val textAreaValue = text("textAreaValue")
     val uuidValue = uuid("uuidValue")
 
-    fun toDto(row: ResultRow) = zakadabar.lib.examples.data.builtin.BuiltinDto(
+    fun toDto(row: ResultRow) = BuiltinDto(
         id = row[id].recordId(),
         booleanValue = row[booleanValue],
         doubleValue = row[doubleValue],

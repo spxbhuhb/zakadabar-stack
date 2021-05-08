@@ -23,35 +23,35 @@ import zakadabar.stack.util.UUID
 @Serializable
 data class BuiltinDto(
 
-    override var id: RecordId<zakadabar.lib.examples.data.builtin.BuiltinDto>,
+    override var id: RecordId<BuiltinDto>,
     var booleanValue: Boolean,
     var doubleValue: Double,
-    var enumSelectValue: zakadabar.lib.examples.data.builtin.ExampleEnum,
+    var enumSelectValue: ExampleEnum,
     var intValue: Int,
     @Serializable(InstantAsStringSerializer::class)
     var instantValue: Instant,
     var optBooleanValue: Boolean?,
     var optDoubleValue: Double?,
-    var optEnumSelectValue: zakadabar.lib.examples.data.builtin.ExampleEnum?,
+    var optEnumSelectValue: ExampleEnum?,
     @Serializable(OptInstantAsStringSerializer::class) // TODO remove when fixed:
     var optInstantValue: Instant?,
     var optIntValue: Int?,
     var optSecretValue: Secret?,
-    var optRecordSelectValue: RecordId<zakadabar.lib.examples.data.builtin.ExampleReferenceDto>?,
+    var optRecordSelectValue: RecordId<ExampleReferenceDto>?,
     var optStringValue: String?,
     var optStringSelectValue: String?,
     var optTextAreaValue: String?,
     var optUuidValue: UUID?,
     var secretValue: Secret,
-    var recordSelectValue: RecordId<zakadabar.lib.examples.data.builtin.ExampleReferenceDto>,
+    var recordSelectValue: RecordId<ExampleReferenceDto>,
     var stringValue: String,
     var stringSelectValue: String,
     var textAreaValue: String,
     var uuidValue: UUID
 
-) : RecordDto<zakadabar.lib.examples.data.builtin.BuiltinDto> {
+) : RecordDto<BuiltinDto> {
 
-    companion object : RecordDtoCompanion<zakadabar.lib.examples.data.builtin.BuiltinDto>("builtin")
+    companion object : RecordDtoCompanion<BuiltinDto>("builtin")
 
     override fun getDtoNamespace() = dtoNamespace
     override fun comm() = comm

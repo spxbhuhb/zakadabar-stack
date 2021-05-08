@@ -12,12 +12,12 @@ import zakadabar.stack.data.schema.DtoSchema
 @Serializable
 data class ExampleReferenceDto(
 
-    override var id: RecordId<zakadabar.lib.examples.data.builtin.ExampleReferenceDto>,
+    override var id: RecordId<ExampleReferenceDto>,
     var name: String
 
-) : RecordDto<zakadabar.lib.examples.data.builtin.ExampleReferenceDto> {
+) : RecordDto<ExampleReferenceDto> {
 
-    companion object : RecordDtoCompanion<zakadabar.lib.examples.data.builtin.ExampleReferenceDto>("example-reference")
+    companion object : RecordDtoCompanion<ExampleReferenceDto>("example-reference")
 
     override fun getDtoNamespace() = dtoNamespace
     override fun comm() = comm

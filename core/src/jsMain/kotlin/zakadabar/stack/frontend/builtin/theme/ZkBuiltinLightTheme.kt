@@ -33,7 +33,7 @@ open class ZkBuiltinLightTheme : ZkTheme {
     override val hoverBackgroundColor = "rgba(0,0,0,0.1)"
     override val hoverTextColor = ZkColors.Design.gray8
 
-    override val primaryColor = ZkColors.Design.navGreen
+    override val primaryColor = ZkColors.Design.navPurple
     override val primaryPair = ZkColors.white
     override val secondaryColor = ZkColors.Design.gray5
     override val secondaryPair = ZkColors.white

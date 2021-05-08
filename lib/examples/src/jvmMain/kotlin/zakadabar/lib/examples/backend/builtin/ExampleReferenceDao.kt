@@ -6,6 +6,7 @@ package zakadabar.lib.examples.backend.builtin
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
 import zakadabar.stack.backend.data.recordId
 
 class ExampleReferenceDao(id: EntityID<Long>) : LongEntity(id) {
@@ -13,12 +14,12 @@ class ExampleReferenceDao(id: EntityID<Long>) : LongEntity(id) {
 
     var name by ExampleReferenceTable.name
 
-    fun toDto() = zakadabar.lib.examples.data.builtin.ExampleReferenceDto(
+    fun toDto() = ExampleReferenceDto(
         id = id.recordId(),
         name = name
     )
 
-    fun fromDto(dto: zakadabar.lib.examples.data.builtin.ExampleReferenceDto): ExampleReferenceDao {
+    fun fromDto(dto: ExampleReferenceDto): ExampleReferenceDao {
         name = dto.name
         return this
     }

@@ -14,8 +14,6 @@ object LandingStyles : ZkCssStyleSheet<ZkTheme>() {
         gridTemplateRows = "max-content 1fr max-content"
         width = "100vw"
         height = "100vh"
-        backgroundColor = theme.layout.defaultBackground
-        color = theme.layout.defaultForeground
     }
 
     val header by cssClass {
@@ -24,13 +22,32 @@ object LandingStyles : ZkCssStyleSheet<ZkTheme>() {
         alignItems = "center"
         justifyContent = "space-between"
         height = 60
-        backgroundColor = theme.layout.defaultBackground
-        borderBottom = "1px solid ${theme.color.border}"
+        backgroundColor = theme.backgroundColor
+        borderBottom = theme.border
     }
 
     val content by cssClass {
-        padding = 50
+        boxSizing = "border-box"
+        paddingTop = 50
+        maxWidth = 1168
+        justifySelf = "center"
         overflow = "auto"
+        alignItems = "center"
+
+        small {
+            paddingLeft = 10
+            paddingRight = 10
+        }
+
+        medium {
+            marginLeft = 20
+            marginLeft = 20
+        }
+
+        large {
+            marginLeft = 30
+            marginLeft = 30
+        }
     }
 
     val title by cssClass {
@@ -47,9 +64,14 @@ object LandingStyles : ZkCssStyleSheet<ZkTheme>() {
         fontSize = "16px !important"
         fontWeight = 400
         whiteSpace = "nowrap"
-        marginTop = 20
         color = "${theme.layout.defaultForeground} !important"
         backgroundColor = "transparent !important"
+        marginRight = 20
+        marginBottom = 20
+
+        on(":last-child") {
+            marginRight = 0
+        }
     }
 
     val buttonCyan by cssClass {
@@ -77,17 +99,21 @@ object LandingStyles : ZkCssStyleSheet<ZkTheme>() {
     }
 
     val cards by cssClass {
-        display = "flex"
-        flexDirection = "row"
-        justifyContent = "space-between"
-        flexWrap = "wrap"
+        gridTemplateColumns = "repeat( auto-fit, minmax( 250px, 1fr ) )"
+        gap = 20
+        alignSelf = "stretch"
     }
 
     val card by cssClass {
-        marginTop = 50
-        marginRight = 20
-        border = "1px solid ${ZkColors.Gray.c600}"
+        alignSelf = "stretch"
+        display = "flex"
+        flexDirection = "row"
+        justifyContent = "center"
+    }
+
+    val cardInner by cssClass {
         width = 250
+        border = theme.border
         borderRadius = 2
     }
 
@@ -95,7 +121,7 @@ object LandingStyles : ZkCssStyleSheet<ZkTheme>() {
         fontSize = 18
         padding = 20
         fontWeight = 500
-        borderBottom = "1px solid ${ZkColors.Gray.c600}"
+        borderBottom = theme.border
     }
 
     val cardText by cssClass {
