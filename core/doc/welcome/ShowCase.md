@@ -38,14 +38,16 @@ This page shows the browser frontend components included with the stack.
 
 <div data-zk-enrich="ModalExamples"></div>
 
-# Basic Toasts [documentation](../guides/browser/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastExamples.kt)
+# Toasts [documentation](../guides/browser/Toasts.md)
 
-Click on the button to show the toast.
+## Basic  [documentation](../guides/browser/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastExamples.kt)
 
-<div data-zk-enrich="ToastExamples"></div>
+<div data-zk-enrich="ToastBasicExamples"></div>
 
-# Complex Toasts [documentation](../guides/browser/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastFormExample.kt)
+## Custom  [documentation](../guides/browser/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastCustomExample.kt)
 
-Click on the button to show the toast.
+<div data-zk-enrich="ToastCustomExample"></div>
+
+## Complex [documentation](../guides/browser/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastFormExample.kt)
 
 <div data-zk-enrich="ToastFormExample"></div>

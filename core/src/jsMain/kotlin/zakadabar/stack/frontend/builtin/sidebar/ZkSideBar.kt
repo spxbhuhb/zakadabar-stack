@@ -20,5 +20,6 @@ open class ZkSideBar : ZkElement() {
     open fun group(text: String, onClick: (Boolean) -> Unit = { }, builder: ZkElement.() -> Unit) =
         ZkSideBarGroup(text, onClick, builder)
 
-    open fun <T : ZkAppRouting.ZkTarget> find(kClass: KClass<T>): List<T> = ZkApplication.routing.find(kClass)
+    open fun <T : ZkAppRouting.ZkTarget> findTarget(kClass: KClass<T>): List<T> = ZkApplication.routing.find(kClass)
+
 }

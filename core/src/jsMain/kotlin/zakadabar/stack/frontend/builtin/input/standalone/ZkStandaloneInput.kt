@@ -12,16 +12,17 @@ import zakadabar.stack.util.PublicApi
 /**
  * A simple input text field.
  *
- * @property  onChange  The function to execute when the value of the field changes.
  * @property  enter     When true [onChange] is called only when the user hits enter.
+ * @property   value     Initial value of the field.
+ * @property  onChange  The function to execute when the value of the field changes.
  *
  * @since  2021.1.14
  */
 @PublicApi
-class ZkStandaloneInput(
+open class ZkStandaloneInput(
     private val enter: Boolean = false,
     var value: String = "",
-    private val onChange: (String) -> Unit
+    private val onChange: (String) -> Unit = { }
 ) : ZkElement(
     element = document.createElement("input") as HTMLInputElement
 ) {
@@ -32,7 +33,9 @@ class ZkStandaloneInput(
 
         className = ZkStandaloneStyles.standaloneInput
 
-        on("input") { _ ->
+        input.value = value
+
+        on("input") {
             value = input.value
             if (! enter) onChange(value)
         }

@@ -610,6 +610,18 @@ open class ZkElement(
         return childElements.first { it.classList.contains(cssClassName) } as T
     }
 
+    inline fun <reified T : ZkElement> find(): List<T> {
+        val kClass = T::class
+        @Suppress("UNCHECKED_CAST") // checking for class
+        return childElements.filter { kClass.isInstance(it) } as List<T>
+    }
+
+    inline fun <reified T : ZkElement> findFirst(): T {
+        val kClass = T::class
+        @Suppress("UNCHECKED_CAST") // checking for class
+        return childElements.first { kClass.isInstance(it) } as T
+    }
+
     // -------------------------------------------------------------------------
     //   Event listeners
     // -------------------------------------------------------------------------

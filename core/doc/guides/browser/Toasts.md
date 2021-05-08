@@ -1,8 +1,9 @@
 # Toasts
 
-Toasts are small pop-up messages displayed to the user to inform him about something.
+Toasts are small pop-up messages displayed to the user to provide information about something.
 
-* Use [toast functions](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/toast.kt) to display simple toasts.
+* Use [toast convenience functions](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/toast.kt) to display basic
+  toasts.
 * Use [ZkToast](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/ZkToast.kt) to display fine-tuned toasts.
 * Extend [ZkToastStyles](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/ZkToastStyles.kt) to override default
   styles.
@@ -11,16 +12,16 @@ Toasts are small pop-up messages displayed to the user to inform him about somet
 * The `toast` property is an instance
   of [ZkToastContainer](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/ZkToastContainer.kt).
 
-<div data-zk-enrich="InfoNote" data-zk-title="Auto Hide">
-Primary, secondary, success and info toasts are hidden after 3 seconds.
-
-Warning and danger toasts are kept on the screen until the user closes them manually.
-</div>
-
-## Use Toasts
+For basic toasts, simply call the appropriate convenience function:
 
 ```kotlin
 successToast { "This is a success!" }
+```
+
+All convenience support the `hideAfter` parameter. `0` value turns off auto-hide.
+
+```kotlin
+successToast(hideAfter = 0) { "This is a success!" }
 ```
 
 Toast convenience functions:
@@ -43,6 +44,9 @@ fine-tuned toasts.
 | content | The content to display. When null, `text` should be set. |
 | flavour |  Flavour of the toast, sets coloring. |
 | hideAfter | Number of milliseconds after the toast is automatically hidden. |
+| icon |   The icon to use in the toast, overrides flavour icon. |
+| iconClass | The CSS class to add to the icon, overrides flavour icon class. |
+| innerClass | The CSS class to add to the inner container, overrides flavour inner class. |
 
 To display a toast built from  [ZkToast](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/ZkToast.kt) use
 the `run` method:
@@ -51,11 +55,60 @@ the `run` method:
 ZkToast("message").run()
 ```
 
-## Built-In Toasts [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastExamples.kt)
+## Auto Hide [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastAutoHideExample.kt)
 
-Click on the button to display the toast.
+Toasts may disappear automatically after a while. The mechanism works as follows:
 
-<div data-zk-enrich="ToastExamples"></div>
+* When the `hideAfter` parameter of the constructor is set:
+  * if its value is `0`, auto hide is off,
+  * if its value is `null`, defaults is used,
+  * otherwise, it specifies the number of milliseconds until auto-hide.
+* otherwise, default values are used.
+
+[ZkToast.autoHideDefaults](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/ZkToast.kt) contains the default
+settings for each flavour:
+
+| Flavour | Auto Hide |
+| --- | --- |
+| Primary | off |
+| Secondary | 3 seconds |
+| Success | 3 seconds |
+| Warning | off |
+| Danger | off |
+| Info | off |
+| Custom | off |
+
+To override the default auto-hide values change `autoHideDefaults`, remember it is milliseconds:
+
+```kotlin
+ZkToast.autoHideDefaults[ZkFlavour.Info] = 3000
+```
+
+Try it out, set a timeout value click on the button:
+
+<div data-zk-enrich="ToastAutoHideExample"></div>
+
+## Built-In Toasts [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastBasicExamples.kt)
+
+<div data-zk-enrich="ToastBasicExamples"></div>
+
+## Custom Toasts [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastCustomExample.kt)
+
+You can customize the icon and the colors easily by setting the appropriate constructor parameters. For example styles
+check the source code of the example
+or [ZkToastStyles](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/ZkToastStyles.kt).
+
+```kotlin
+ZkToast(
+  "This is custom toast!",
+  flavour = ZkFlavour.Custom,
+  icon = ZkIcon(ZkIcons.cloudUpload),
+  iconClass = customToastStyles.customIcon,
+  innerClass = customToastStyles.customInner
+).run()
+```
+
+<div data-zk-enrich="ToastCustomExample"></div>
 
 ## Complex Toast Content [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastFormExample.kt)
 

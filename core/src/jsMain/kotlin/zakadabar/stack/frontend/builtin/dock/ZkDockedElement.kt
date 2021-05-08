@@ -26,18 +26,18 @@ open class ZkDockedElement(
     var content: ZkElement? = null,
 ) : ZkElement() {
 
-    protected val minimize = ZkIcon(ZkIcons.minimize, 16, onClick = ::onMinimize).css(ZkDockStyles.extensionIcon)
-    protected val maximize = ZkIcon(ZkIcons.maximize, 16, onClick = ::onMaximize).css(ZkDockStyles.extensionIcon)
-    protected val openInFull = ZkIcon(ZkIcons.openInFull, 16, onClick = ::onOpenInFullIcon).css(ZkDockStyles.extensionIcon)
-    protected val closeFullScreen = ZkIcon(ZkIcons.closeFullScreen, 16, onClick = ::onCloseFullScreen).css(ZkDockStyles.extensionIcon)
-    protected val close = ZkIcon(ZkIcons.close, 16, onClick = ::onClose).css(ZkDockStyles.extensionIcon)
+    protected val minimize = ZkIcon(ZkIcons.minimize, 16, onClick = ::onMinimize).css(zkDockStyles.extensionIcon)
+    protected val maximize = ZkIcon(ZkIcons.maximize, 16, onClick = ::onMaximize).css(zkDockStyles.extensionIcon)
+    protected val openInFull = ZkIcon(ZkIcons.openInFull, 16, onClick = ::onOpenInFullIcon).css(zkDockStyles.extensionIcon)
+    protected val closeFullScreen = ZkIcon(ZkIcons.closeFullScreen, 16, onClick = ::onCloseFullScreen).css(zkDockStyles.extensionIcon)
+    protected val close = ZkIcon(ZkIcons.close, 16, onClick = ::onClose).css(zkDockStyles.extensionIcon)
 
     protected val header = ZkDockedElementHeader(title, icon, tools = listOf(minimize, maximize, openInFull, closeFullScreen, close))
 
     override fun onCreate() {
         super.onCreate()
 
-        className += ZkDockStyles.dockItem
+        className += zkDockStyles.dockItem
 
         this += header
         this += content

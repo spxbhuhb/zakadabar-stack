@@ -9,7 +9,9 @@ import org.w3c.dom.get
 import zakadabar.lib.examples.frontend.button.ButtonExamples
 import zakadabar.lib.examples.frontend.icon.IconExamples
 import zakadabar.lib.examples.frontend.modal.ModalExamples
-import zakadabar.lib.examples.frontend.toast.ToastExamples
+import zakadabar.lib.examples.frontend.toast.ToastAutoHideExample
+import zakadabar.lib.examples.frontend.toast.ToastBasicExamples
+import zakadabar.lib.examples.frontend.toast.ToastCustomExample
 import zakadabar.lib.examples.frontend.toast.ToastFormExample
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
 import zakadabar.stack.frontend.application.ZkApplication.theme
@@ -58,8 +60,9 @@ class ContentContext(
 
             "ModalExamples" -> ModalExamples(htmlElement)
 
-            "ToastExamples" -> ToastExamples(htmlElement)
-
+            "ToastAutoHideExample" -> ToastAutoHideExample(htmlElement)
+            "ToastCustomExample" -> ToastCustomExample(htmlElement)
+            "ToastBasicExamples" -> ToastBasicExamples(htmlElement)
             "ToastFormExample" -> ToastFormExample(htmlElement)
 
             else -> null

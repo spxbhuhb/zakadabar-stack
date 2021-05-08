@@ -1,12 +1,15 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.dock
 
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-object ZkDockStyles : ZkCssStyleSheet<ZkTheme>() {
+val zkDockStyles by cssStyleSheet(ZkDockStyles())
+
+class ZkDockStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val dock by cssClass {
         position = "fixed"

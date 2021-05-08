@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.dock
 
@@ -17,7 +17,7 @@ class ZkDock : ZkElement() {
     override fun onCreate() {
         super.onCreate()
 
-        className = ZkDockStyles.dock
+        className = zkDockStyles.dock
         document.body?.appendChild(this.element)
     }
 
