@@ -7,7 +7,6 @@ import hu.simplexion.rf.leltar.frontend.pages.roles.Roles
 import zakadabar.lib.examples.frontend.crud.BuiltinCrud
 import zakadabar.lib.examples.frontend.form.FormFieldsGenerated
 import zakadabar.lib.examples.frontend.form.SyntheticForm
-import zakadabar.lib.examples.frontend.input.CheckboxList
 import zakadabar.lib.examples.frontend.layout.TabContainer
 import zakadabar.lib.examples.frontend.pages.ArgPage
 import zakadabar.lib.examples.frontend.query.QueryPage
@@ -37,10 +36,11 @@ object SideBar : ZkSideBar() {
         io {
             contents = ContentQuery().execute().sortedBy { it.name }
 
-            + group(Strings.Welcome, { Welcome.open() }) {
-                + item(Strings.showCase) { ShowCase.open() }
-                + item(Strings.marinaDemo) { }
-            }
+            + item(Strings.Welcome) { Welcome.open() }
+
+            + item(Strings.showCase) { ShowCase.open() }
+
+            + item(Strings.roadmap) { Roadmap.open() }
 
             + item(Strings.getStarted) { GetStarted.open() }
 
@@ -135,9 +135,6 @@ object SideBar : ZkSideBar() {
                 + item("Synthetic") { SyntheticForm.open() }
             }
 
-            + group("Inputs") {
-                + item("CheckboxList") { CheckboxList.open() }
-            }
 
             + group("Pages") {
                 + item("ArgPage") { ArgPage.open(ArgPage.Args(fourRandomInt()[0], "hello")) }

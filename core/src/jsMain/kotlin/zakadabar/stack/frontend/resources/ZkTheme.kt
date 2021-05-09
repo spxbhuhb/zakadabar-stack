@@ -67,6 +67,8 @@ interface ZkTheme {
     var borderColor: String
     var border: String
 
+    var boxShadow: String
+    var blockBorder: String
     var blockBackgroundColor: String
 
     var dock: ZkDockTheme

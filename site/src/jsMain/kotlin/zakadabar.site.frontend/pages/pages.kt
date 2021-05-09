@@ -19,6 +19,11 @@ object ShowCase : MarkdownPage(
     ContentContext("/ShowCase", "welcome/")
 )
 
+object Roadmap : MarkdownPage(
+    "/${ContentQuery.dtoNamespace}/Roadmap.md",
+    ContentContext("/Roadmap", "/")
+)
+
 object GetStarted : MarkdownPage(
     "/${ContentQuery.dtoNamespace}/GetStarted.md",
     ContentContext("/GetStarted", "/")
@@ -27,6 +32,12 @@ object GetStarted : MarkdownPage(
 object GetHelp : MarkdownPage(
     "/${ContentQuery.dtoNamespace}/help/GetHelp.md",
     ContentContext("/GetHelp", "help/")
+)
+
+
+object Documentation : MarkdownPage(
+    "/${ContentQuery.dtoNamespace}/help/Documentation.md",
+    ContentContext("/Documentation", "help/")
 )
 
 object FAQ : MarkdownPage(

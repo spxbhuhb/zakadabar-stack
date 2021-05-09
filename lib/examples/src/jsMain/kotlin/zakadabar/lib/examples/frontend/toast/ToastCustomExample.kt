@@ -6,7 +6,7 @@ package zakadabar.lib.examples.frontend.toast
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.secondaryButton
+import zakadabar.stack.frontend.builtin.button.buttonSecondary
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
 import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
 import zakadabar.stack.frontend.builtin.toast.ZkToast
@@ -52,7 +52,7 @@ class ToastCustomExample(
                 innerClass = customToastStyles.customInner
             ) marginRight theme.spacingStep
 
-            + secondaryButton("Open as Toast") {
+            + buttonSecondary("Open as Toast") {
                 ZkToast(
                     "This is custom toast!",
                     flavour = ZkFlavour.Custom,

@@ -48,6 +48,7 @@ open class ZkToast(
         )
     }
 
+    @Suppress("DuplicatedCode") // no idea how to bring these two together
     override fun onCreate() {
         classList += zkToastStyles.toastOuter
 

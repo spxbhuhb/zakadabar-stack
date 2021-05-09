@@ -48,7 +48,7 @@ data class SeaDto(
 
 ) : RecordDto<SeaDto> {
 
-    companion object : RecordDtoCompanion<SeaDto>({ namespace = "sea" })
+    companion object : RecordDtoCompanion<SeaDto>("sea")
 
     override fun getRecordType() = namespace
     override fun comm() = comm

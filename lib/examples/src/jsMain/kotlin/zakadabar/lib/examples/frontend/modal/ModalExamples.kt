@@ -8,9 +8,10 @@ import zakadabar.lib.examples.resources.Strings
 import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
 import zakadabar.stack.frontend.builtin.modal.ZkMessageDialog
+import zakadabar.stack.frontend.builtin.note.ZkNote
+import zakadabar.stack.frontend.builtin.note.noteSecondary
 import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.marginBottom
@@ -21,8 +22,6 @@ import zakadabar.stack.frontend.util.marginBottom
 class ModalExamples(
     element: HTMLElement
 ) : ZkElement(element) {
-
-    private val output = ZkElement()
 
     override fun onCreate() {
         super.onCreate()
@@ -36,27 +35,21 @@ class ModalExamples(
                 + ZkButton(Strings.exampleDialog, onClick = ::onShowExample)
             } marginBottom theme.spacingStep
 
-            + column(zkLayoutStyles.border) {
-                buildElement.style.paddingTop = "10px"
-                buildElement.style.paddingLeft = "10px"
-                buildElement.style.paddingBottom = "10px"
-                + div { + "Output" } marginBottom 10
-                + output
-            }
+            + noteSecondary("Output", "")
         }
     }
 
     private fun onShowConfirm() {
         io {
-            output.clear()
+            findFirst<ZkNote>().text = ""
             val value = ZkConfirmDialog("Dialog Title", "Message to tell the user what to confirm").run()
-            output.build { + "selected option: $value" }
+            findFirst<ZkNote>().text = "selected option: $value"
         }
     }
 
     private fun onShowMessage() {
         io {
-            output.clear()
+            findFirst<ZkNote>().text = ""
             ZkMessageDialog("Dialog Title", "Message for the user.").run()
         }
     }
@@ -64,9 +57,9 @@ class ModalExamples(
 
     private fun onShowExample() {
         io {
-            output.clear()
+            findFirst<ZkNote>().text = ""
             val value = MyMessageDialog().run()
-            output.build { + value }
+            findFirst<ZkNote>().text = value
         }
     }
 

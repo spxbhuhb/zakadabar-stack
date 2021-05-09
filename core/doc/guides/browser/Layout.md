@@ -15,6 +15,10 @@ There are two pre-defined layouts:
 
 This picture shows the structure of ZkDefaultLayout. Blue class names are the components for the given area.
 
+<div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Error in The Picture">
+TitleBarContainer contains a ZkAppTitleBar, not ZkTitleBar.
+</div>
+
 ![<img src="default-layout.png" width="800"/>](./default-layout.png)
 
 ## Application Title Bar

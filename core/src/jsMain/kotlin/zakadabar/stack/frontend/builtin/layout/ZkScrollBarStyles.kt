@@ -17,11 +17,11 @@ class ZkScrollBarStyles : ZkCssStyleSheet<ZkTheme>() {
     }
 
     val webkitScrollBarThumb by cssRule("::-webkit-scrollbar-thumb") {
-        backgroundColor = theme.scrollBar.background
+        backgroundColor = theme.scrollBar.thumb
     }
 
     val webkitScrollBarTrack by cssRule("::-webkit-scrollbar-track") {
-        backgroundColor = theme.scrollBar.foreground
+        backgroundColor = theme.scrollBar.track
     }
 
 }

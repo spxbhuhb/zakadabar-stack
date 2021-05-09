@@ -17,6 +17,8 @@ class SiteDarkTheme : ZkBuiltinDarkTheme(), SiteTheme {
 
     override val developerLogo = "/simplexion_logo.svg"
 
+    // override var fontFamily = "system-ui, sans-serif"
+
     override val markdownTheme = MarkdownTheme(
         backgroundColor = ZkColors.Zakadabar.gray7,
         borderColor = borderColor,

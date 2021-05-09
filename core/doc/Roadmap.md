@@ -1,64 +1,94 @@
 # Roadmap
 
+<div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Plans and Reality">
+This roadmap is something we would like to follow but there is <b>no guarantee at all</b>
+that we'll be able to do so.
+</div>
+
 ## 2021 May
 
 ### Core
 
-1. upgrade to latest kotlinx, Ktor, Exposed
-1. synthetic forms
-1. settings
-   1. change settings from browser UI
-1. liquibase integration
-1. database initialization procedure
-1. responsive components:
-   1. table
-   1. form
-   1. tab container
-1. toast styles
-1. note styles
-1. indexing
-   * index static content
-   * optionally index data record
-   * search action for application title bar
-   * use Lucene
+* dark mode
+    * table
+    * tab container
+* synthetic forms (halfway done)
+* settings (halfway, depends on syntethic forms)
+    * change settings from browser UI
+* liquibase integration
+    * database initialization procedure
+* responsive components:
+    * table
+    * form
+    * tab container
+* indexing
+    * index static content
+    * optionally index data record
+    * search action for application title bar
+    * use Lucene
+* sidebar
+    * sections
+    * add `item` helper with a ZkTarget parameter to build `a` tag
+* fix closed sidebar icon positioning
+* popup to the user when the server is unavailable
+    * short gap: retry
+    * long gap: refresh the page and/or ask the user what to do
 
 ### Lib
 
-1. markdown:
-   1. images
-   1. tables
-   1. general style revamp
-   1. table of contents on the left
-      1. fix position feedback
-      1. use "a" for toc entries
-   1. add ZkElements from markdown
-1. integration with Lucene
+* markdown:
+    * table of contents on the left
+        * fix position feedback
+        * add scrolling
+* integration with Lucene
 
 ### Documentation
 
-1. site should serve `*.md` from static
-1. convert demo to demo-marina
-1. move demo-lib to site
+* Get Started - make it a code lab
+* write more about
+    * form
+    * table
+    * pages
+    * frontend routing concept
+    * theme borders and box-shadows
+* finish the marina demo
+* migrate "Examples" of site into "Documentation"
 
 ## 2021 June
 
-1. Add option to use Redis for session handling
+### Core
+
+* Add option to use Redis for session handling
+* optimize for SEO (https://developers.google.com/search/docs/advanced/guidelines/get-started)
+
+### Lib
+
+* markdown:
+    * add support for # links
+    * space between parts (margins are wrong here and there)
+    * better integration with built-in components - write note content in markdown
+    * handle internal links internally, without page reload
+    * add dark / light support for markdown pictures
+    * add an icon after titles which let the user add / see comments
+    * table of contents on the left
+        * fix position feedback
+        * use "a" for toc entries
+        * scrolling
+        * add action to hide/show on desktop
+        * move to title bar on mobile as an action, drop down like the sidebar
+        * make it smaller when possible
 
 ## Unscheduled
 
 * unit test concept, unit tests for comm
 * use common frontend comm code base on Ktor Client
 * move ContentBackend from site into the stack, document content backends
-* optimize for SEO (https://developers.google.com/search/docs/advanced/guidelines/get-started)
+* compile and add css classes on-demand (just an idea, but it is possible to manage)
+* show error message when user hits unknown route on UI
+* sidebar
+    * add keyboard navigation
+    * add search function that filters sidebar topics
+    * use "a" for entries when possible (part of SEO optimization)
+    * remember state during session
 
-### ZkSideBar
 
-* add keyboard navigation
-* add search function that filters sidebar topics
-
-## History
-
-### 2021 April
-
-1. load from configuration file
-1. update from SQL

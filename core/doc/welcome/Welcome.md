@@ -1,15 +1,15 @@
 # Welcome
 
 Zakadabar Stack is a Kotlin software library for full-stack application development.
+<br><br>
 
-<div data-zk-enrich="InfoNote" data-zk-title="Try It">
-Check the <a href="/ShowCase">Show Case</a> or the <a href="https://marina.zakadabar.com" target="_blank">Marina Demo</a> to see sites implemented with the
-stack.
+<div data-zk-enrich="Note" data-zk-flavour="Success" data-zk-title="Try It">
+You are actually trying it right now!
 
-Actually, this documentation site is also built with the stack.
+This site has been built with the stack. Check the <a href="/ShowCase">Show Case</a> to se the UI components. The
+documentation, the demos and the example sources can help with the backend.
 </div>
-<br>
-<div data-zk-enrich="WarningNote" data-zk-title="Alpha">
+<div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Alpha">
 Project status of the stack is <b>alpha</b>. This means that some migration steps may be needed
 between releases. See <a href="https://kotlinlang.org/docs/reference/evolution/components-stability.html" target="_blank">components stability</a>.
 </div>
@@ -44,9 +44,9 @@ The stack focuses on the communication data model. This data model:
 * is the actual API our backend provides and our frontends consume,
 * contains a schema to support data validation,
 * automatically provides:
-  * frontend communication components,
-  * type-safe backend routing,
-  * frontend forms, tables.
+    * frontend communication components,
+    * type-safe backend routing,
+    * frontend forms, tables.
 
 ![Focus](focus.png)
 

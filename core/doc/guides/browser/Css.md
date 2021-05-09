@@ -1,5 +1,9 @@
 # CSS and Theming
 
+<div data-zk-enrich="Note" data-zk-flavour="Danger" data-zk-title="Outdated">
+This page is a bit outdated. We are working on it! Really!
+</div>
+
 Check the demo example: [Themes](../../../../../demo/demo-lib/src/jsMain/kotlin/zakadabar/demo/lib/frontend/themes)
 
 | class | use |

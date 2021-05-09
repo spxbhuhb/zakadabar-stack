@@ -11,7 +11,9 @@ import zakadabar.lib.examples.frontend.form.FormBooleanExample
 import zakadabar.lib.examples.frontend.form.FormDoubleExample
 import zakadabar.lib.examples.frontend.form.FormRecordIdExample
 import zakadabar.lib.examples.frontend.icon.IconExamples
+import zakadabar.lib.examples.frontend.input.IntCheckboxListExample
 import zakadabar.lib.examples.frontend.modal.ModalExamples
+import zakadabar.lib.examples.frontend.note.NoteBasicExamples
 import zakadabar.lib.examples.frontend.toast.ToastAutoHideExample
 import zakadabar.lib.examples.frontend.toast.ToastBasicExamples
 import zakadabar.lib.examples.frontend.toast.ToastCustomExample
@@ -20,7 +22,6 @@ import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
 import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.note.ZkNote
-import zakadabar.stack.frontend.builtin.note.ZkNoteStyles
 import zakadabar.stack.frontend.resources.ZkFlavour
 
 class ContentContext(
@@ -57,13 +58,21 @@ class ContentContext(
 
             "ButtonExamples" -> ButtonExamples(htmlElement, flavour = flavour)
 
+            "IntCheckboxListExample" -> IntCheckboxListExample(htmlElement)
+
             "FormBooleanExample" -> FormBooleanExample(htmlElement)
             "FormDoubleExample" -> FormDoubleExample(htmlElement)
             "FormRecordIdExample" -> FormRecordIdExample(htmlElement)
 
             "IconExamples" -> IconExamples(htmlElement)
 
-            "InfoNote", "WarningNote" -> note(htmlElement, type)
+            "Note" -> ZkNote(htmlElement, flavour) {
+                title = htmlElement.dataset["zkTitle"]
+                content = zke { innerHTML = htmlElement.innerHTML }
+                htmlElement.innerHTML = ""
+            }
+
+            "NoteBasicExamples" -> NoteBasicExamples(htmlElement)
 
             "ModalExamples" -> ModalExamples(htmlElement)
 
@@ -74,21 +83,6 @@ class ContentContext(
 
             else -> null
         }?.marginBottom(theme.spacingStep)
-    }
-
-    fun note(htmlElement: HTMLElement, type: String) =
-        ZkNote(htmlElement) {
-            className = infoClassName(type)
-            title = htmlElement.dataset["zkTitle"]
-            content = zke { innerHTML = htmlElement.innerHTML }
-            htmlElement.innerHTML = ""
-        } marginLeft - 14
-
-
-    fun infoClassName(type: String?) = when (type) {
-        "InfoNote" -> ZkNoteStyles.info
-        "WarningNote" -> ZkNoteStyles.warning
-        else -> ZkNoteStyles.info
     }
 
 }

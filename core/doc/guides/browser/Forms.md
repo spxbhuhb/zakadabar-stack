@@ -130,7 +130,7 @@ object FormFieldsGenerated : ZkPage() {
 
 ## Images
 
-[Add a blob backend](../../Data.md#Add-Blob-Support).
+[Add a blob backend](../Data.md#Add-Blob-Support).
 Use [ZkImagesField](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/fields/ZkImagesField.kt).
 
 

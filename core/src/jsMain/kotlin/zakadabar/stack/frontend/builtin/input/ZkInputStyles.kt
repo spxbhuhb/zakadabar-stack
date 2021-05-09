@@ -5,7 +5,6 @@ package zakadabar.stack.frontend.builtin.input
 
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.zkFormStyles
-import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
@@ -20,15 +19,6 @@ open class ZkInputStyles : ZkCssStyleSheet<ZkTheme>() {
         paddingLeft = ".8em"
         height = zkFormStyles.rowHeight
         alignItems = "center"
-
-        on(":hover") {
-            backgroundColor = ZkColors.LightBlue.c50
-        }
-
-        on(":focus") {
-            backgroundColor = ZkColors.LightBlue.c50
-            outline = "none"
-        }
     }
 
     open val standaloneInput by cssClass {

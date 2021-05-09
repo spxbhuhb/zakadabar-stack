@@ -67,10 +67,12 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
         display = "flex"
         flexDirection = "column"
         padding = 12
+        paddingLeft = 20
         paddingBottom = 8
-        boxShadow = "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)"
+        boxShadow = theme.boxShadow
         borderRadius = theme.cornerRadius
         backgroundColor = theme.blockBackgroundColor
+        border = theme.blockBorder
         marginBottom = theme.spacingStep / 2
     }
 
@@ -102,7 +104,7 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
         alignItems = "center"
         minHeight = rowHeight
         paddingRight = 8
-        paddingLeft = 8
+        // this is problematic with ZkCheckboxList, paddingLeft = 8
         cursor = "default"
     }
 
@@ -319,7 +321,7 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
     val invalidFieldList by cssClass {
         padding = 12
         margin = 8
-        boxShadow = "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)"
+        boxShadow = theme.boxShadow
         borderRadius = theme.cornerRadius
         backgroundColor = ZkColors.white
     }

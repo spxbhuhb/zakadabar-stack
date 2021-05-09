@@ -22,15 +22,15 @@ import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.fields.ZkSecretField
 import zakadabar.stack.frontend.builtin.form.fields.ZkSecretVerificationField
 import zakadabar.stack.frontend.builtin.form.structure.ZkFormButtons
-import zakadabar.stack.frontend.builtin.input.checkboxlist.ZkCheckboxList
-import zakadabar.stack.frontend.builtin.input.checkboxlist.ZkCheckboxListItem
+import zakadabar.stack.frontend.builtin.input.ZkCheckboxList
+import zakadabar.stack.frontend.builtin.input.ZkCheckboxListItem
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkCrudPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
-import zakadabar.stack.frontend.builtin.toast.dangerToast
-import zakadabar.stack.frontend.builtin.toast.successToast
-import zakadabar.stack.frontend.builtin.toast.warningToast
+import zakadabar.stack.frontend.builtin.toast.toastDanger
+import zakadabar.stack.frontend.builtin.toast.toastSuccess
+import zakadabar.stack.frontend.builtin.toast.toastWarning
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.plusAssign
@@ -194,7 +194,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
         }
 
         override fun onInvalidSubmit() {
-            warningToast { strings.passwordChangeInvalid }
+            toastWarning { strings.passwordChangeInvalid }
         }
 
         override fun onSubmitSuccess() {}
@@ -203,9 +203,9 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
             resultDto as ActionStatusDto
 
             if (! resultDto.success) {
-                dangerToast { strings.passwordChangeFail }
+                toastDanger { strings.passwordChangeFail }
             } else {
-                successToast { strings.actionSuccess }
+                toastSuccess { strings.actionSuccess }
             }
         }
     }

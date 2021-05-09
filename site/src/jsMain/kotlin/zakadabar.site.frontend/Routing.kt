@@ -8,7 +8,6 @@ import hu.simplexion.rf.leltar.frontend.pages.roles.Roles
 import zakadabar.lib.examples.frontend.crud.BuiltinCrud
 import zakadabar.lib.examples.frontend.form.FormFieldsGenerated
 import zakadabar.lib.examples.frontend.form.SyntheticForm
-import zakadabar.lib.examples.frontend.input.CheckboxList
 import zakadabar.lib.examples.frontend.layout.TabContainer
 import zakadabar.lib.examples.frontend.pages.ArgPage
 import zakadabar.lib.examples.frontend.query.QueryPage
@@ -31,11 +30,12 @@ object Routing : ZkAppRouting(DefaultLayout, Landing) {
         + GetHelp
         + Welcome
         + ShowCase
+        + Roadmap
+        + Documentation
         + FAQ
 
         + ArgPage
         + BuiltinCrud
-        + CheckboxList
         + FormFieldsGenerated
         + TabContainer
         + GeneratedTable

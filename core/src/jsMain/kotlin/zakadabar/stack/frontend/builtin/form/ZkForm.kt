@@ -289,7 +289,7 @@ open class ZkForm<T : DtoBase>(
 
             } catch (ex: DataConflictException) {
 
-                dangerToast { t(ex.message) }
+                toastDanger { t(ex.message) }
 
             } catch (ex: Exception) {
 
@@ -318,7 +318,7 @@ open class ZkForm<T : DtoBase>(
      * Default implementation shows a toast with a message.
      */
     open fun onInvalidSubmit() {
-        invalidToast = warningToast(hideAfter = 3000) { strings.invalidFieldsToast }
+        invalidToast = toastWarning(hideAfter = 3000) { strings.invalidFieldsToast }
     }
 
     /**
@@ -328,13 +328,13 @@ open class ZkForm<T : DtoBase>(
      */
     open fun onSubmitSuccess() {
         when (mode) {
-            ZkElementMode.Create -> successToast { strings.createSuccess }
+            ZkElementMode.Create -> toastSuccess { strings.createSuccess }
             ZkElementMode.Read -> Unit
-            ZkElementMode.Update -> successToast { strings.updateSuccess }
-            ZkElementMode.Delete -> successToast { strings.deleteSuccess }
-            ZkElementMode.Action -> successToast { strings.actionSuccess }
+            ZkElementMode.Update -> toastSuccess { strings.updateSuccess }
+            ZkElementMode.Delete -> toastSuccess { strings.deleteSuccess }
+            ZkElementMode.Action -> toastSuccess { strings.actionSuccess }
             ZkElementMode.Query -> Unit
-            ZkElementMode.Other -> successToast { strings.actionSuccess }
+            ZkElementMode.Other -> toastSuccess { strings.actionSuccess }
         }
     }
 
@@ -345,13 +345,13 @@ open class ZkForm<T : DtoBase>(
      */
     open fun onSubmitError(ex: Exception) {
         when (mode) {
-            ZkElementMode.Create -> dangerToast { strings.createFail }
+            ZkElementMode.Create -> toastDanger { strings.createFail }
             ZkElementMode.Read -> Unit
-            ZkElementMode.Update -> dangerToast { strings.updateFail }
-            ZkElementMode.Delete -> dangerToast { strings.deleteFail }
-            ZkElementMode.Action -> dangerToast { strings.actionFail }
-            ZkElementMode.Query -> dangerToast { strings.queryFail }
-            ZkElementMode.Other -> dangerToast { strings.actionFail }
+            ZkElementMode.Update -> toastDanger { strings.updateFail }
+            ZkElementMode.Delete -> toastDanger { strings.deleteFail }
+            ZkElementMode.Action -> toastDanger { strings.actionFail }
+            ZkElementMode.Query -> toastDanger { strings.queryFail }
+            ZkElementMode.Other -> toastDanger { strings.actionFail }
         }
     }
 

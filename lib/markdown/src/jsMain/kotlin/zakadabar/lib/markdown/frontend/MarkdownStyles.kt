@@ -35,6 +35,14 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
         marginRight = theme.spacingStep
         fontSize = "80%"
         paddingTop = theme.spacingStep
+
+        small {
+            display = "none" // FIXME this is a really quick and really dirty solution
+        }
+
+        medium {
+            display = "none" // FIXME this is a really quick and really dirty solution
+        }
     }
 
     val tocContent by cssClass {

@@ -34,9 +34,9 @@ object Landing : ZkPage(ZkFullScreenLayout) {
             + div(LandingStyles.buttons) {
                 + ZkButton(Strings.Welcome) { Welcome.open() } css LandingStyles.button css LandingStyles.buttonCyan
                 + ZkButton(Strings.getStarted) { GetStarted.open() } css LandingStyles.button css LandingStyles.buttonBlue
-                + ZkButton(Strings.documentation) css LandingStyles.button css LandingStyles.buttonGreen
-                + ZkButton(Strings.examples) css LandingStyles.button css LandingStyles.buttonOrange
-                + ZkButton(Strings.getHelp) css LandingStyles.button css LandingStyles.buttonRed
+                + ZkButton(Strings.documentation) { Documentation.open() } css LandingStyles.button css LandingStyles.buttonGreen
+                + ZkButton(Strings.github) { openGitHub() } css LandingStyles.button css LandingStyles.buttonOrange
+                + ZkButton(Strings.getHelp) { GetHelp.open() } css LandingStyles.button css LandingStyles.buttonRed
             } marginBottom 50
 
             + grid(LandingStyles.cards) {

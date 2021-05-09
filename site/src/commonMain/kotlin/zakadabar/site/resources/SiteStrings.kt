@@ -14,9 +14,11 @@ internal val Strings = SiteStrings()
 
 class SiteStrings : ExamplesStrings() {
 
+    val github by "GitHub"
     val theImportantStuff by "The Important Stuff"
     val showCase by "Show Case"
     val marinaDemo by "Marina Demo"
+    val roadmap by "Roadmap"
 
     val faq by "Frequently Asked Questions"
     val tldr by "TL;DR"

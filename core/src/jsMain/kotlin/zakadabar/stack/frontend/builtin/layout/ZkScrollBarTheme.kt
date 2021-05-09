@@ -9,6 +9,6 @@ import kotlinx.serialization.Serializable
 data class ZkScrollBarTheme(
     val width: Int,
     val height: Int,
-    val background: String,
-    val foreground: String
+    val thumb: String,
+    val track: String
 )

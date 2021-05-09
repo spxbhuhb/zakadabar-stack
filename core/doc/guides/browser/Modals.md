@@ -7,7 +7,7 @@ an instance of [ZkModalContainer](/src/jsMain/kotlin/zakadabar/stack/frontend/bu
 Modals that extend [ZkModalBase](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/modal/ZkModalBase.kt)
 have show, hide and data handling out-of-the-box.
 
-<div data-zk-enrich="InfoNote" data-zk-title="Note">
+<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Note">
 Support for multiple parallel modals is not ready yet.
 </div>
 

@@ -48,9 +48,19 @@ This page shows the browser frontend components included with the stack.
 
 <div data-zk-enrich="IconExamples"></div>
 
+# Inputs
+
+## Checkbox List [documentation](../guides/browser/input/CheckboxList.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/input/IntCheckboxListExample.kt)
+
+<div data-zk-enrich="IntCheckboxListExample"></div>
+
 # Modals [documentation](../guides/browser/Modals.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/modal/ModalExamples.kt)
 
 <div data-zk-enrich="ModalExamples"></div>
+
+# Notes [documentation](../guides/browser/Notes.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/note/NoteBasicExamples.kt)
+
+<div data-zk-enrich="NoteBasicExamples"></div>
 
 # Toasts [documentation](../guides/browser/Toasts.md)
 
