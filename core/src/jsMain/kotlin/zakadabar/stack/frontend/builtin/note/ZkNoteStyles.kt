@@ -9,20 +9,20 @@ import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 object ZkNoteStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val info by cssClass {
-        borderLeft = "2px solid ${theme.color.info}"
+        borderLeft = "2px solid ${theme.infoColor}"
         backgroundColor = theme.note.background
 
         on(" .$title") {
-            borderBottom = "1px solid ${theme.color.info}"
+            borderBottom = "1px solid ${theme.infoColor}"
         }
     }
 
     val warning by cssClass {
-        borderLeft = "2px solid ${theme.color.warning}"
+        borderLeft = "2px solid ${theme.warningColor}"
         backgroundColor = theme.note.background
 
         on(" .$title") {
-            borderBottom = "1px solid ${theme.color.warning}"
+            borderBottom = "1px solid ${theme.warningColor}"
         }
     }
 

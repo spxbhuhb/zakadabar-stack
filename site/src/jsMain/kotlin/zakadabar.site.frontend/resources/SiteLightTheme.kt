@@ -18,10 +18,10 @@ class SiteLightTheme : ZkBuiltinLightTheme(), SiteTheme {
 
     override val markdownTheme = MarkdownTheme(
         backgroundColor = "#f5f7f9",
-        borderColor = color.border
+        borderColor = border
     )
 
     init {
-        titleBar.height = "60px"
+        titleBar.appTitleBarHeight = "60px"
     }
 }

@@ -2,33 +2,39 @@ This page shows the browser frontend components included with the stack.
 
 # Buttons [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
-## Primary
+## Primary [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="primary"></div>
 
-## Secondary
+## Secondary [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="secondary"></div>
 
-## Success
+## Success [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="success"></div>
 
-## Warning
+## Warning [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="warning"></div>
 
-## Danger
+## Danger [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="danger"></div>
 
-## Info
+## Info [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="info"></div>
 
-## Disabled
+## Disabled [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="disabled"></div>
+
+# Forms [documentation](../guides/browser/Forms.md)
+
+## Boolean Fields [documentation](../guides/browser/Forms.md#Boolean) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormBooleanExample.kt)
+
+<div data-zk-enrich="FormBooleanExample"></div>
 
 # Icons [documentation](../guides/browser/Icons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/icon/IconExamples.kt)
 

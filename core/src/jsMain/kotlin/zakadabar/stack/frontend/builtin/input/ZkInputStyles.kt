@@ -1,14 +1,35 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.input.standalone
+package zakadabar.stack.frontend.builtin.input
 
+import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-object ZkStandaloneStyles : ZkCssStyleSheet<ZkTheme>() {
+val zkInputStyles by cssStyleSheet(ZkInputStyles())
 
-    val standaloneInput by cssClass {
+open class ZkInputStyles : ZkCssStyleSheet<ZkTheme>() {
+
+    val checkboxList by ZkFormStyles.cssClass {
+        display = "flex"
+        paddingLeft = ".8em"
+        height = ZkFormStyles.theme.form.rowHeight
+        alignItems = "center"
+
+        on(":hover") {
+            backgroundColor = ZkColors.LightBlue.c50
+        }
+
+        on(":focus") {
+            backgroundColor = ZkColors.LightBlue.c50
+            outline = "none"
+        }
+    }
+
+    open val standaloneInput by cssClass {
 
         display = "block"
         color = "#444"
@@ -49,9 +70,5 @@ object ZkStandaloneStyles : ZkCssStyleSheet<ZkTheme>() {
             color = "gray"
             borderColor = "#aaa"
         }
-    }
-
-    init {
-        attach()
     }
 }

@@ -68,7 +68,7 @@ open class ZkToastStyles : ZkCssStyleSheet<ZkTheme>() {
      * For the close icon.
      */
     open val closeIcon by cssClass {
-        fill = theme.color.foreground
+        fill = theme.textColor
         marginRight = 6
     }
 

@@ -21,7 +21,7 @@ import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.KeyboardEvent
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.builtin.form.zkFormStyles
 import kotlin.reflect.KMutableProperty0
 
 open class ZkBooleanField<T : DtoBase>(
@@ -35,7 +35,7 @@ open class ZkBooleanField<T : DtoBase>(
     private val checkbox = document.createElement("input") as HTMLInputElement
 
     override fun buildFieldValue() {
-        + div(ZkFormStyles.checkbox) {
+        + div(zkFormStyles.booleanField) {
             checkbox.type = "checkbox"
             checkbox.id = "zk-$id-checkbox"
 

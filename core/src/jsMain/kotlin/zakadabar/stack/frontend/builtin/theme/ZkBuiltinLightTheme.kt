@@ -3,21 +3,18 @@
  */
 package zakadabar.stack.frontend.builtin.theme
 
-import zakadabar.stack.frontend.builtin.button.ZkButtonTheme
 import zakadabar.stack.frontend.builtin.dock.ZkDockTheme
 import zakadabar.stack.frontend.builtin.form.ZkFormTheme
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutTheme
 import zakadabar.stack.frontend.builtin.layout.ZkScrollBarTheme
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainerTheme
-import zakadabar.stack.frontend.builtin.misc.ZkFontTheme
-import zakadabar.stack.frontend.builtin.modal.ZkModalTheme
 import zakadabar.stack.frontend.builtin.note.ZkNoteTheme
 import zakadabar.stack.frontend.builtin.table.ZkTableTheme
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarTheme
-import zakadabar.stack.frontend.builtin.toast.ZkToastTheme
-import zakadabar.stack.frontend.resources.ZkColorTheme
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
+import zakadabar.stack.frontend.util.after
+import zakadabar.stack.util.alpha
 
 open class ZkBuiltinLightTheme : ZkTheme {
 
@@ -27,32 +24,42 @@ open class ZkBuiltinLightTheme : ZkTheme {
 
     override val name = NAME
 
-    override val backgroundColor = ZkColors.white
-    override val textColor = ZkColors.Design.gray8
+    override var fontFamily = "'Lato', sans-serif" //     "'IBM Plex Sans', sans-serif"
+    override var fontSize: String = "16px"
+    override var fontWeight: String = "300"
 
-    override val hoverBackgroundColor = "rgba(0,0,0,0.1)"
-    override val hoverTextColor = ZkColors.Design.gray8
+    override var backgroundColor = ZkColors.white
+    override var textColor = ZkColors.Design.gray8
 
-    override val primaryColor = ZkColors.Design.navPurple
-    override val primaryPair = ZkColors.white
-    override val secondaryColor = ZkColors.Design.gray5
-    override val secondaryPair = ZkColors.white
-    override val successColor = ZkColors.Design.navGreen
-    override val successPair = ZkColors.white
-    override val warningColor = ZkColors.Design.navOrange
-    override val warningPair = ZkColors.white
-    override val dangerColor = ZkColors.Design.navRed
-    override val dangerPair = ZkColors.white
-    override val infoColor = ZkColors.Design.navBlue
-    override val infoPair = ZkColors.white
-    override val disabledColor = ZkColors.Design.gray2
-    override val disabledPair = ZkColors.Design.gray6
+    override var hoverBackgroundColor = "rgba(0,0,0,0.1)"
+    override var hoverTextColor = ZkColors.Design.gray8
 
-    override val borderColor = "${ZkColors.Gray.c600}80"
+    override var primaryColor = ZkColors.Design.navPurple
+    override var primaryPair = ZkColors.white
+    override var secondaryColor = ZkColors.Design.gray5
+    override var secondaryPair = ZkColors.white
+    override var successColor = ZkColors.Design.navGreen
+    override var successPair = ZkColors.white
+    override var warningColor = ZkColors.Design.navOrange
+    override var warningPair = ZkColors.white
+    override var dangerColor = ZkColors.Design.navRed
+    override var dangerPair = ZkColors.white
+    override var infoColor = ZkColors.Design.navBlue
+    override var infoPair = ZkColors.white
+    override var disabledColor = ZkColors.Design.gray2
+    override var disabledPair = ZkColors.Design.gray6
 
-    override val border = "1px solid ${ZkColors.Gray.c600}80"
-    override val cornerRadius = 2
-    override val spacingStep = 20
+    override var inputTextColor by after { textColor }
+    override var inputBackgroundColor by after { backgroundColor }
+    override var disabledInputColor by after { disabledColor }
+    override var disabledInputPair by after { disabledPair }
+
+    override var borderColor = "transparent" // ZkColors.Gray.c600.alpha(0.5)
+
+    override var border by after { "1px solid $borderColor" }
+
+    override var cornerRadius = 2
+    override var spacingStep = 20
 
     val background = ZkColors.white
     val foreground = ZkColors.Design.gray8
@@ -62,29 +69,7 @@ open class ZkBuiltinLightTheme : ZkTheme {
     val warning = ZkColors.Design.navOrange
     val error = ZkColors.Design.navRed
 
-    override var button = ZkButtonTheme(
-        background = ZkColors.Design.navBlue,
-        foreground = ZkColors.white,
-        iconFill = ZkColors.white
-    )
-
-    override var color = ZkColorTheme(
-        background = background,
-        hoverBackground = "rgba(0,0,0,0.1)",
-        foreground = foreground,
-        hoverForeground = foreground,
-        success = success,
-        info = info,
-        warning = warning,
-        error = error,
-        border = borderColor
-    )
-
     override var dock = ZkDockTheme()
-
-    override var font = ZkFontTheme(
-        family = "'IBM Plex Sans', sans-serif"
-    )
 
     override var form = ZkFormTheme()
 
@@ -93,42 +78,33 @@ open class ZkBuiltinLightTheme : ZkTheme {
         defaultBackground = background
     )
 
-    override var modal = ZkModalTheme(
-        border = border
-    )
-
     override var note = ZkNoteTheme(
         background = ZkColors.Gray.c50
     )
 
-    override var scrollBar = ZkScrollBarTheme(
-        width = 12,
-        height = 12,
-        background = "${foreground}80",
-        foreground = background
-    )
+    override var scrollBar by after {
+        ZkScrollBarTheme(
+            width = 12,
+            height = 12,
+            background = backgroundColor,
+            foreground = backgroundColor.alpha(0.5)
+        )
+    }
 
     override var tabContainer = ZkTabContainerTheme()
     override var table = ZkTableTheme()
 
-    override var titleBar = ZkTitleBarTheme(
-        appHandleBackground = background,
-        appHandleForeground = foreground,
-        appHandleBorder = border,
-        titleBarBackground = background,
-        titleBarForeground = foreground,
-        titleBarBorder = border,
-        height = "44px"
-    )
+    override var titleBar by after {
+        ZkTitleBarTheme(
+            appTitleBarHeight = "44px",
+            localTitleBarHeight = "44px",
+            appHandleBackground = ZkColors.Design.gray1,
+            appHandleText = textColor,
+            appHandleBorder = border,
+            titleBarBackground = ZkColors.Design.gray1,
+            titleBarText = textColor,
+            titleBarBorder = border
+        )
+    }
 
-    override var toast = ZkToastTheme(
-        infoBackground = info,
-        infoText = ZkColors.black,
-        successBackground = success,
-        successText = ZkColors.black,
-        warningBackground = warning,
-        warningText = ZkColors.black,
-        errorBackground = error,
-        errorText = ZkColors.black
-    )
 }

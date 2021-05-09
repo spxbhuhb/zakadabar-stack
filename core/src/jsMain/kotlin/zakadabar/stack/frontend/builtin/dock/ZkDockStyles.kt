@@ -54,7 +54,7 @@ class ZkDockStyles : ZkCssStyleSheet<ZkTheme>() {
         flexDirection = "row"
         alignItems = "center"
         color = theme.dock.headerForeground
-        fontSize = theme.font.size
+        fontSize = theme.fontSize
         height = 21
     }
 

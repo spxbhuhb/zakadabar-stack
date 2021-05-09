@@ -4,70 +4,77 @@
 
 package zakadabar.stack.frontend.resources
 
-import zakadabar.stack.frontend.builtin.button.ZkButtonTheme
 import zakadabar.stack.frontend.builtin.dock.ZkDockTheme
 import zakadabar.stack.frontend.builtin.form.ZkFormTheme
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutTheme
 import zakadabar.stack.frontend.builtin.layout.ZkScrollBarTheme
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainerTheme
-import zakadabar.stack.frontend.builtin.misc.ZkFontTheme
-import zakadabar.stack.frontend.builtin.modal.ZkModalTheme
 import zakadabar.stack.frontend.builtin.note.ZkNoteTheme
 import zakadabar.stack.frontend.builtin.table.ZkTableTheme
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarTheme
-import zakadabar.stack.frontend.builtin.toast.ZkToastTheme
 
 /**
  * General interface for themes.
  *
- * @property  name          Name of the theme, used to when saving/restoring the theme preference of the user.
+ * Color pairs are for situations when you use the color and its pair in different ways, so
+ * it is not fixed which one is background and which one is foreground.
+ *
+ * @property  border        Default border of the theme. Assign this to "border" CSS parameter. Note, that this
+ *                          is a global border setting, it will affect many styles. If you would like to
+ *                          be independent of this setting, but be in line with border colors, use [borderColor].
+ * @property  borderColor   Default color of borders in the theme.
  * @property  cornerRadius  This value is for rectangular boxes (buttons for example) when there is a border
  *                          and it looks different when a small border radius is added. Think of 2px.
+ * @property  name          Name of the theme, used to when saving/restoring the theme preference of the user.
  */
 interface ZkTheme {
 
     val name: String
 
-    val backgroundColor: String
-    val textColor: String
+    var fontFamily: String
+    var fontSize: String
+    var fontWeight: String
 
-    val hoverBackgroundColor: String
-    val hoverTextColor: String
+    var backgroundColor: String
+    var textColor: String
 
-    val primaryColor: String
-    val primaryPair: String
-    val secondaryColor: String
-    val secondaryPair: String
-    val successColor: String
-    val successPair: String
-    val warningColor: String
-    val warningPair: String
-    val dangerColor: String
-    val dangerPair: String
-    val infoColor: String
-    val infoPair: String
-    val disabledColor: String
-    val disabledPair: String
+    var hoverBackgroundColor: String
+    var hoverTextColor: String
 
-    val borderColor: String
+    var primaryColor: String
+    var primaryPair: String
+    var secondaryColor: String
+    var secondaryPair: String
+    var successColor: String
+    var successPair: String
+    var warningColor: String
+    var warningPair: String
+    var dangerColor: String
+    var dangerPair: String
+    var infoColor: String
+    var infoPair: String
+    var disabledColor: String
+    var disabledPair: String
 
-    val cornerRadius: Int
-    val border: String
+    var inputTextColor: String
+    var inputBackgroundColor: String
 
-    val spacingStep: Int
+    var disabledInputColor: String
+    var disabledInputPair: String
 
-    var button: ZkButtonTheme
-    var color: ZkColorTheme
+    var spacingStep: Int
+
+    var cornerRadius: Int
+    var borderColor: String
+    var border: String
+
     var dock: ZkDockTheme
-    var font: ZkFontTheme
     var form: ZkFormTheme
     var layout: ZkLayoutTheme
-    var modal: ZkModalTheme
     var note: ZkNoteTheme
     var scrollBar: ZkScrollBarTheme
     var tabContainer: ZkTabContainerTheme
     var table: ZkTableTheme
     var titleBar: ZkTitleBarTheme
-    var toast: ZkToastTheme
 
 }

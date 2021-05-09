@@ -135,7 +135,7 @@ object LandingStyles : ZkCssStyleSheet<ZkTheme>() {
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
-        borderTop = "1px solid ${theme.color.border}"
+        borderTop = theme.border
     }
 
     init {

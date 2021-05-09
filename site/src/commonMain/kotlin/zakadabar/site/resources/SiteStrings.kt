@@ -3,7 +3,7 @@
  */
 package zakadabar.site.resources
 
-import zakadabar.stack.resources.ZkBuiltinStrings
+import zakadabar.lib.examples.resources.ExamplesStrings
 
 // This pattern makes it possible to switch the strings easily. Demo is can work as
 // a standalone application, but it is possible to use it as a component library.
@@ -12,7 +12,7 @@ import zakadabar.stack.resources.ZkBuiltinStrings
 
 internal val Strings = SiteStrings()
 
-class SiteStrings : ZkBuiltinStrings() {
+class SiteStrings : ExamplesStrings() {
 
     val theImportantStuff by "The Important Stuff"
     val showCase by "Show Case"
@@ -27,32 +27,8 @@ class SiteStrings : ZkBuiltinStrings() {
 
     // general stuff
 
-    val mandatoryFields by "Mandatory Fields"
-    val optionalFields by "Optional Fields"
-    val validate by "Validate"
-    val formFields by "Form Fields"
     val examples by "Examples"
     val searchShips by "Search Ships"
-    val runQuery by "Run Query"
-    val filters by "Filters"
-    val accountName by "Account Name"
-    val contact by "Contact"
-    val description by "Description"
-    val display by "Display"
-    val displayName by "Displayed Name"
-    val email by "Email"
-    val forgotten by "New Password"
-    val images by "Images"
-    val new by "New"
-    val organization by "Organization"
-    val password by "Password"
-    val phone by "Phone Number"
-    val position by "Position"
-    val search by "Search"
-    val value by "Value"
-    val workplace by "Workplace"
-    val active by "Active"
-
     val siteTitle by "A Kotlin Multiplatform library for full-stack software development."
 
     val getStarted by "Get Started"

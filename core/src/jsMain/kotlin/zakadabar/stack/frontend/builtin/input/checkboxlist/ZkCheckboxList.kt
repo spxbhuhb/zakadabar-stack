@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.input.checkboxlist
 
@@ -7,6 +7,7 @@ import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.builtin.input.zkInputStyles
 import zakadabar.stack.util.PublicApi
 
 open class ZkCheckboxList<T>(
@@ -26,7 +27,7 @@ open class ZkCheckboxList<T>(
                     + item.label
                 }
 
-                + div(ZkFormStyles.checkbox) {
+                + div(zkInputStyles.checkboxList) {
                     val checkbox = document.createElement("input") as HTMLInputElement
                     checkbox.type = "checkbox"
                     checkbox.checked = item.selected

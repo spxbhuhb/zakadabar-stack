@@ -12,10 +12,15 @@ import zakadabar.stack.resources.ZkBuiltinStrings
 // In that case - or when you write an actual component library - you want to your
 // strings to be customizable.
 
-var Strings = DemoLibStrings()
+var Strings = ExamplesStrings()
 
-class DemoLibStrings : ZkBuiltinStrings() {
+open class ExamplesStrings : ZkBuiltinStrings() {
 
+    val booleanValue by "Boolean Value"
+    val optBooleanValue by "Optional Boolean Value"
+
+    val textForFalse by "this is false"
+    val textForTrue by "this is true"
     val exampleDialog by "Example Dialog"
     val accountName by "Account Name"
     val active by "Active"

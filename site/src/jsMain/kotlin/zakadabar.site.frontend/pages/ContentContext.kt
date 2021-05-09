@@ -7,6 +7,7 @@ import org.intellij.markdown.html.resolveToStringSafe
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import zakadabar.lib.examples.frontend.button.ButtonExamples
+import zakadabar.lib.examples.frontend.form.FormBooleanExample
 import zakadabar.lib.examples.frontend.icon.IconExamples
 import zakadabar.lib.examples.frontend.modal.ModalExamples
 import zakadabar.lib.examples.frontend.toast.ToastAutoHideExample
@@ -53,6 +54,8 @@ class ContentContext(
         return when (type) {
 
             "ButtonExamples" -> ButtonExamples(htmlElement, flavour = flavour)
+
+            "FormBooleanExample" -> FormBooleanExample(htmlElement)
 
             "IconExamples" -> IconExamples(htmlElement)
 

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.pages.account.login
 
@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.application.ZkApplication.executor
 import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
-import zakadabar.stack.frontend.builtin.modal.ZkModalStyles
+import zakadabar.stack.frontend.builtin.modal.zkModalStyles
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.marginBottom
@@ -38,11 +38,11 @@ class RenewLoginDialog : ZkElement() {
     }
 
     override fun onCreate() {
-        classList += ZkModalStyles.modal
+        classList += zkModalStyles.modal
 
-        + ZkTitleBar(strings.applicationName) css ZkModalStyles.title
+        + ZkTitleBar(strings.applicationName) css zkModalStyles.title
 
-        + column(ZkModalStyles.content) {
+        + column(zkModalStyles.content) {
             style {
                 alignItems = "center"
             }

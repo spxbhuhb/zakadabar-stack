@@ -7,13 +7,14 @@ import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.KeyboardEvent
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.input.zkInputStyles
 import zakadabar.stack.util.PublicApi
 
 /**
  * A simple input text field.
  *
  * @property  enter     When true [onChange] is called only when the user hits enter.
- * @property   value     Initial value of the field.
+ * @property  value     Initial value of the field.
  * @property  onChange  The function to execute when the value of the field changes.
  *
  * @since  2021.1.14
@@ -31,7 +32,7 @@ open class ZkStandaloneInput(
 
     override fun onCreate() {
 
-        className = ZkStandaloneStyles.standaloneInput
+        className = zkInputStyles.standaloneInput
 
         input.value = value
 

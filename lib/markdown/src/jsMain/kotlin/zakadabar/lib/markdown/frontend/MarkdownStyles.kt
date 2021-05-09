@@ -43,7 +43,7 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val tocEntry by cssClass {
         marginLeft = 1
-        borderLeft = "1px solid ${theme.color.foreground}80"
+        borderLeft = "1px solid ${theme.borderColor}"
         paddingLeft = theme.spacingStep
         cursor = "pointer"
         paddingTop = 5
@@ -53,12 +53,12 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
         on("[data-active=\"true\"]") {
             marginLeft = 0
             paddingLeft = theme.spacingStep - 1
-            borderLeft = "3px solid ${theme.color.foreground}"
+            borderLeft = "3px solid ${theme.textColor}"
         }
 
         hover {
-            backgroundColor = theme.color.hoverBackground
-            color = theme.color.hoverForeground
+            backgroundColor = theme.hoverBackgroundColor
+            color = theme.hoverTextColor
         }
     }
 
@@ -68,7 +68,7 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
 
     @Suppress("unused") // used implicitly by the browser
     val link by cssRule(".$content a") {
-        color = theme.color.info
+        color = theme.infoColor
         textDecoration = "none"
     }
 
@@ -109,7 +109,7 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
     }
 
     val table by cssRule(".$content table") {
-        border = "1px solid ${theme.color.border}"
+        border = "1px solid ${theme.borderColor}"
         borderCollapse = "collapse"
         overflow = "auto"
         marginTop = 10
@@ -118,7 +118,7 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
 
     @Suppress("unused") // used implicitly by the browser
     val td by cssRule(".$content td") {
-        border = "1px solid ${theme.color.border}"
+        border = "1px solid ${theme.borderColor}"
         paddingTop = 4
         paddingBottom = 4
         paddingLeft = 8
@@ -177,8 +177,8 @@ class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
     }
 
     val codeCopySuccess by cssClass {
-        fontFamily = theme.font.family
-        borderRadius = 2
+        fontFamily = theme.fontFamily
+        borderRadius = theme.cornerRadius
         alignSelf = "center"
         marginRight = 10
     }

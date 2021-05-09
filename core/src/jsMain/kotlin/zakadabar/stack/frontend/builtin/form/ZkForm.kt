@@ -18,7 +18,9 @@ package zakadabar.stack.frontend.builtin.form
 
 import ZkOptUuidField
 import ZkUuidField
+import kotlinx.browser.document
 import kotlinx.datetime.Instant
+import org.w3c.dom.HTMLElement
 import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.action.ActionDto
@@ -54,7 +56,9 @@ import kotlin.reflect.KMutableProperty0
  *
  * @property  autoLabel  When true labels are automatically added. When false they are not.
  */
-open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
+open class ZkForm<T : DtoBase>(
+    element: HTMLElement = document.createElement("div") as HTMLElement
+) : ZkElement(element), ZkCrudPage<T> {
 
     override lateinit var dto: T
     override lateinit var mode: ZkElementMode

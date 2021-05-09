@@ -7,6 +7,7 @@ import zakadabar.lib.markdown.frontend.MarkdownPage
 import zakadabar.lib.markdown.frontend.MarkdownPathPage
 import zakadabar.site.data.ContentQuery
 import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 
 object Welcome : MarkdownPage(
     "/${ContentQuery.dtoNamespace}/welcome/Welcome.md",
@@ -42,6 +43,10 @@ object ContentPages : MarkdownPathPage() {
 
     fun open(path: String) {
         ZkApplication.changeNavState("/$viewName/$path")
+    }
+
+    override fun setAppTitle() {
+        ZkApplication.title = ZkAppTitle("")
     }
 
     override fun url(): String {

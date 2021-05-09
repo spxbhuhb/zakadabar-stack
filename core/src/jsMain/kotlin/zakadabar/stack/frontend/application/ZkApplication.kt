@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.application
 
@@ -127,9 +127,9 @@ object ZkApplication {
 
     private fun applyThemeToBody() {
         with(document.body?.style !!) {
-            fontFamily = theme.font.family
-            fontSize = theme.font.size
-            fontWeight = theme.font.weight
+            fontFamily = theme.fontFamily
+            fontSize = theme.fontSize
+            fontWeight = theme.fontWeight
             backgroundColor = theme.layout.defaultBackground
             color = theme.layout.defaultForeground
         }

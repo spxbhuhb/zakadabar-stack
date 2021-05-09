@@ -4,10 +4,8 @@
 package zakadabar.lib.markdown.frontend
 
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
-import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPathPage
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.util.io
 
 /**
@@ -27,14 +25,9 @@ abstract class MarkdownPathPage : ZkPathPage() {
 
     override fun onResume() {
         clear()
-        setTitle()
         io {
             + MarkdownView(url(), context = context())
         }
-    }
-
-    open fun setTitle() {
-        ZkApplication.title = ZkAppTitle(name)
     }
 
     abstract fun url(): String

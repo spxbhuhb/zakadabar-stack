@@ -19,11 +19,11 @@ class SiteDarkTheme : ZkBuiltinDarkTheme(), SiteTheme {
 
     override val markdownTheme = MarkdownTheme(
         backgroundColor = ZkColors.Design.gray7,
-        borderColor = color.border,
+        borderColor = borderColor,
         highlightUrl = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/obsidian.min.css"
     )
 
     init {
-        titleBar.height = "60px"
+        titleBar.appTitleBarHeight = "60px"
     }
 }
