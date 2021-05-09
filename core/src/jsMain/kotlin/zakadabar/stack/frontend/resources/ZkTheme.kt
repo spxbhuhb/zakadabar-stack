@@ -5,7 +5,6 @@
 package zakadabar.stack.frontend.resources
 
 import zakadabar.stack.frontend.builtin.dock.ZkDockTheme
-import zakadabar.stack.frontend.builtin.form.ZkFormTheme
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutTheme
 import zakadabar.stack.frontend.builtin.layout.ZkScrollBarTheme
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainerTheme
@@ -59,8 +58,8 @@ interface ZkTheme {
     var inputTextColor: String
     var inputBackgroundColor: String
 
-    var disabledInputColor: String
-    var disabledInputPair: String
+    var disabledInputTextColor: String
+    var disabledInputBackgroundColor: String
 
     var spacingStep: Int
 
@@ -68,8 +67,9 @@ interface ZkTheme {
     var borderColor: String
     var border: String
 
+    var blockBackgroundColor: String
+
     var dock: ZkDockTheme
-    var form: ZkFormTheme
     var layout: ZkLayoutTheme
     var note: ZkNoteTheme
     var scrollBar: ZkScrollBarTheme

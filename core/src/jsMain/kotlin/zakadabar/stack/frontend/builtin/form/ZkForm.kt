@@ -70,7 +70,7 @@ open class ZkForm<T : DtoBase>(
     var autoLabel = true
 
     @PublicApi
-    var fieldGridColumnTemplate: String = "150px minmax(150px,1fr)"
+    var fieldGridColumnTemplate: String = "minmax(150px, max-content) minmax(150px,1fr)"
 
     @PublicApi
     var fieldGridRowTemplate: String = "max-content"
@@ -503,7 +503,7 @@ open class ZkForm<T : DtoBase>(
     // ------------------------------------------------------------------------
 
     operator fun KMutableProperty0<RecordId<T>>.unaryPlus(): ZkElement {
-        val field = ZkIdField(this@ZkForm, this)
+        val field = ZkRecordIdField(this@ZkForm, this)
         + field
         fields += field
         if (mode == ZkElementMode.Create) {
@@ -616,6 +616,10 @@ open class ZkForm<T : DtoBase>(
         return field
     }
 
+    // -------------------------------------------------------------------------
+    //  Property field convenience methods
+    // ------------------------------------------------------------------------
+
     /**
      * Find a field for this property.
      */
@@ -623,4 +627,10 @@ open class ZkForm<T : DtoBase>(
         return fields.first { it.propName == this.name }
     }
 
+    /**
+     * Set the field to readonly.
+     */
+    infix fun ZkElement.readOnly(value: Boolean) {
+        if (this is ZkFieldBase<*, *>) this.readOnly = value
+    }
 }

@@ -32,7 +32,7 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val programError by "Error during program execution, please notify the support about this."
     open val pleaseTypeHere by "Please type a value here."
     open val notSaved by "Changes are not saved, by going back you'll lose them. Are you sure?"
-    open val invalidValue by "Invalid value."
+    open val invalidValue by "Invalid Value"
     open val invalidFieldsExplanation by "Cannot save the data yet as some values are invalid. They are marked by red color, please enter valid values and try save again."
     open val invalidFieldsToast by "Invalid fields, cannot save yet."
     open val createSuccess by "Create success."

@@ -4,7 +4,6 @@
 package zakadabar.lib.examples.frontend.form
 
 import org.w3c.dom.HTMLElement
-import zakadabar.lib.examples.resources.Strings
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.schema.DtoSchema
 import zakadabar.stack.frontend.builtin.ZkElementMode
@@ -16,24 +15,26 @@ import zakadabar.stack.frontend.util.default
  * example easier to write, but it is not accessible on the backend, and it thas
  * no communication feature.
  */
-class BooleanExampleDto(
-    var value: Boolean,
-    var optValue: Boolean?,
-    var readOnlyValue: Boolean
+class DoubleExampleDto(
+    var value: Double,
+    var optValue: Double?,
+    var invalidValue: Double,
+    var readOnlyValue: Double
 ) : DtoBase {
     override fun schema() = DtoSchema {
         + ::value
         + ::optValue
+        + ::invalidValue default 1.0 notEquals 1.0
         + ::readOnlyValue
     }
 }
 
 /**
- * This example shows boolean form fields.
+ * This example shows double form fields.
  */
-class FormBooleanExample(
+class FormDoubleExample(
     element: HTMLElement
-) : ZkForm<BooleanExampleDto>(element) {
+) : ZkForm<DoubleExampleDto>(element) {
 
     override fun onConfigure() {
         super.onConfigure()
@@ -47,9 +48,16 @@ class FormBooleanExample(
 
         + section {
             + dto::value
-            + opt(dto::optValue, Strings.textForFalse, Strings.textForTrue)
+            + dto::optValue
+            + dto::invalidValue
             + dto::readOnlyValue readOnly true
         }
+
+        // Make invalidValue touched, so the form will show styles.
+        // This is just for the example, not needed in actual code.
+
+        dto::invalidValue.find().touched = true
+        validate()
     }
 
 }

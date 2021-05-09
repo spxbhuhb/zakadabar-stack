@@ -38,7 +38,7 @@ class ToastFormExample(
 
         override fun onConfigure() {
             dto = default { }
-            mode = ZkElementMode.Read
+            mode = ZkElementMode.Action
             appTitle = false
         }
 

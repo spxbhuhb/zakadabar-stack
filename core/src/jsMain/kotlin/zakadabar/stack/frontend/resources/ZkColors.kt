@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.resources
 
@@ -123,7 +123,7 @@ object ZkColors {
     /**
      * These colors are designed by Dániel Nagy for Zakadabar
      */
-    object Design {
+    object Zakadabar {
         val activeBlue = "#2746ab"
         val inactiveBlue = "#bec7e6"
         val green = "#89e6c2"
@@ -135,6 +135,7 @@ object ZkColors {
         val navOrange = "#f1a938"
         val navRed = "#ff5e3d"
 
+        val gray0 = "#f5f5f5"
         val gray1 = "#ebebeb"
         val gray2 = "#c8c8c8"
         val gray3 = "#b4b4b4"

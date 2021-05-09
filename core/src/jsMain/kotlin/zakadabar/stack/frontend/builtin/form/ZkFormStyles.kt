@@ -14,6 +14,8 @@ val zkFormStyles by cssStyleSheet(ZkFormStyles)
 
 object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
 
+    var rowHeight = 38
+
     // -------------------------------------------------------------------------
     // Containers and layouts
     // -------------------------------------------------------------------------
@@ -65,9 +67,10 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
         display = "flex"
         flexDirection = "column"
         padding = 12
+        paddingBottom = 8
         boxShadow = "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)"
         borderRadius = theme.cornerRadius
-        backgroundColor = ZkColors.white.alpha(0.2)
+        backgroundColor = theme.blockBackgroundColor
         marginBottom = theme.spacingStep / 2
     }
 
@@ -89,17 +92,15 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
     val fieldContainer by cssClass {
         boxSizing = "border-box"
         display = "contents"
-        borderRadius = theme.cornerRadius
     }
 
     val fieldLabel by cssClass {
         color = theme.textColor
-        backgroundColor = theme.form.labelBackground
         fontSize = "90%"
         fontWeight = "400"
         display = "flex"
         alignItems = "center"
-        minHeight = theme.form.rowHeight
+        minHeight = rowHeight
         paddingRight = 8
         paddingLeft = 8
         cursor = "default"
@@ -110,25 +111,9 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
     }
 
     val fieldValue by cssClass {
-        minHeight = theme.form.rowHeight
+        minHeight = rowHeight
         color = theme.inputTextColor
-        backgroundColor = theme.inputBackgroundColor
-    }
-
-    val fieldBottomBorder by cssClass {
-        gridColumnStart = 1
-        gridColumnEnd = 3
-        height = 1
-        boxSizing = "border-box"
-        borderBottom = theme.border
-
-        on(".invalid") {
-            borderBottom = "1px solid theme.dangerColor"
-        }
-    }
-
-    val onFieldHover by cssClass {
-        borderBottom = "1px solid ${ZkColors.LightBlue.a700}"
+        marginBottom = 6
     }
 
     val fieldError by cssClass {
@@ -152,39 +137,37 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
         maxWidth = "100%"
         boxSizing = "border-box"
         margin = 0
-        border = "1px solid transparent"
         mozAppearance = "none"
         webkitAppearance = "none"
         appearance = "none"
+        border = "1px solid ${theme.borderColor}"
+        borderRadius = theme.cornerRadius
         color = theme.inputTextColor
         backgroundColor = theme.inputBackgroundColor
-
-        decorators()
     }
 
     private fun ZkCssStyleRule.decorators() {
         on(".invalid") {
-            backgroundColor = theme.form.invalidBackground
+            backgroundColor = theme.dangerColor.alpha(0.1)
+            border = "1px solid ${theme.dangerColor}"
         }
 
-        on(".invalid:hover") {
-            backgroundColor = theme.form.invalidBackground
+        on(".invalid:hover:not(:disabled):not(:focus)") {
+            backgroundColor = theme.dangerColor.alpha(0.3)
         }
 
         on(".invalid:focus") {
-            backgroundColor = theme.form.invalidBackground
+            backgroundColor = theme.dangerColor.alpha(0.1)
             border = "1px solid ${theme.dangerColor}"
-            borderBottom = "1px solid transparent"
         }
 
-        on(":hover") {
+        on(":hover:not(:disabled):not(:focus)") {
             color = theme.hoverTextColor
-            backgroundColor = theme.hoverBackgroundColor
+            backgroundColor = theme.infoColor.alpha(0.1)
         }
 
         on(":focus") {
             border = "1px solid ${theme.infoColor}"
-            borderBottom = "1px solid transparent"
             borderRadius = theme.cornerRadius
             outline = "none"
         }
@@ -194,34 +177,37 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
         }
 
         on(":disabled") {
-            color = theme.disabledPair
-            backgroundColor = theme.disabledColor
-            borderColor = "#aaa"
+            color = theme.disabledInputTextColor
+            backgroundColor = theme.disabledInputBackgroundColor
+
+            // https://stackoverflow.com/questions/262158/disabled-input-text-color-on-ios
+            styles["-webkit-text-fill-color"] = theme.disabledInputTextColor
+            opacity = 1 /* required on iOS */
         }
 
-        on(":disabled:hover") {
-            borderColor = "#aaa"
-        }
-
-        on("[aria-disabled=true]") {
-            color = "gray"
-            borderColor = "#aaa"
-        }
     }
 
     val disabledString by cssClass {
         fieldDefault()
-        color = theme.disabledPair
-        backgroundColor = theme.disabledColor
+
+        // https://stackoverflow.com/questions/262158/disabled-input-text-color-on-ios
+        styles["-webkit-text-fill-color"] = theme.disabledInputTextColor
+        opacity = 1 /* required on iOS */
+
+        color = theme.disabledInputTextColor
+        backgroundColor = theme.disabledInputBackgroundColor
+
         outline = "none"
     }
 
     val text by cssClass {
         fieldDefault()
+        decorators()
     }
 
     val textarea by cssClass {
         fieldDefault()
+        decorators()
     }
 
     // -------------------------------------------------------------------------
@@ -233,30 +219,20 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
         flexDirection = "row"
         alignItems = "center"
         outline = "none"
-
-        decorators()
     }
 
     val selectedOption by cssClass {
         display = "flex"
 
         fieldDefault()
+        decorators()
 
-        height = theme.form.rowHeight
+        lineHeight = "1" // to prevent conversion to px
+        height = rowHeight
         alignItems = "center"
 
         on(" option") {
             fontWeight = "normal"
-        }
-
-        on(":disabled:hover") {
-            borderColor = "#aaa"
-        }
-
-        on("[aria-disabled=true]") {
-            color = "gray"
-            backgroundColor = theme.form.disabledBackground
-            borderColor = "#aaa"
         }
     }
 
@@ -264,7 +240,7 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
         position = "absolute"
         zIndex = 100
         outline = "none"
-        backgroundColor = ZkColors.white
+        backgroundColor = theme.inputBackgroundColor
         boxShadow = "0 0 32px 12px rgba(0, 0, 0, 0.2) "
         borderRadius = theme.cornerRadius
         overflowY = "auto"
@@ -272,24 +248,24 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
     }
 
     val selectEntry by cssClass {
-        color = "#444"
+        color = theme.inputTextColor
         width = 200
-        minHeight = theme.form.rowHeight
-        borderBottom = "1px solid ${ZkColors.Gray.c300}"
+        minHeight = rowHeight
+        borderBottom = "1px solid ${theme.borderColor}"
         display = "flex"
         alignItems = "center"
         paddingLeft = 8
         cursor = "pointer"
 
         on(":hover") {
-            color = "#444" // FIXME theme color
-            backgroundColor = ZkColors.LightBlue.c50
+            color = theme.hoverTextColor
+            backgroundColor = theme.hoverBackgroundColor
         }
     }
 
     val selected by cssClass {
         color = ZkColors.white
-        backgroundColor = ZkColors.LightBlue.a700
+        backgroundColor = theme.infoColor
     }
 
     // -------------------------------------------------------------------------
@@ -299,17 +275,9 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
     val booleanField by cssClass {
         display = "flex"
         paddingLeft = ".8em"
-        height = theme.form.rowHeight
+        height = rowHeight
         alignItems = "center"
-
-        on(":hover") {
-            backgroundColor = ZkColors.LightBlue.c50
-        }
-
-        on(":focus") {
-            backgroundColor = ZkColors.LightBlue.c50
-            outline = "none"
-        }
+        outline = "none"
     }
 
     // -------------------------------------------------------------------------
@@ -330,7 +298,6 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
 
         padding = 20
 
-        backgroundColor = theme.form.labelBackground
         borderRadius = theme.cornerRadius
         border = "1px dotted lightgray"
 

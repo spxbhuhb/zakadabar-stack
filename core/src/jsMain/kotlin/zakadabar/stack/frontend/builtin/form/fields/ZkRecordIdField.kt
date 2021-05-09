@@ -22,10 +22,10 @@ import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.builtin.form.zkFormStyles
 import kotlin.reflect.KMutableProperty0
 
-open class ZkIdField<T : DtoBase>(
+open class ZkRecordIdField<T : DtoBase>(
     form: ZkForm<T>,
     private val prop: KMutableProperty0<RecordId<T>>
 ) : ZkFieldBase<T, RecordId<T>>(
@@ -35,9 +35,11 @@ open class ZkIdField<T : DtoBase>(
 
     private val input = document.createElement("input") as HTMLInputElement
 
+    override var readOnly: Boolean = true
+
     override fun buildFieldValue() {
-        input.className = ZkFormStyles.disabledString
-        input.readOnly = true
+        input.className = zkFormStyles.disabledString
+        input.disabled = true
         input.value = prop.get().toString()
         input.tabIndex = - 1
         + input

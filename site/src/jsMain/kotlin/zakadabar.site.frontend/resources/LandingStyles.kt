@@ -75,27 +75,27 @@ object LandingStyles : ZkCssStyleSheet<ZkTheme>() {
     }
 
     val buttonCyan by cssClass {
-        border = "1px solid ${ZkColors.Design.navCyan}"
+        border = "1px solid ${ZkColors.Zakadabar.navCyan}"
     }
 
     val buttonBlue by cssClass {
-        border = "1px solid ${ZkColors.Design.navBlue}"
+        border = "1px solid ${ZkColors.Zakadabar.navBlue}"
     }
 
     val buttonGreen by cssClass {
-        border = "1px solid ${ZkColors.Design.navGreen}"
+        border = "1px solid ${ZkColors.Zakadabar.navGreen}"
     }
 
     val buttonOrange by cssClass {
-        border = "1px solid ${ZkColors.Design.navOrange}"
+        border = "1px solid ${ZkColors.Zakadabar.navOrange}"
     }
 
     val buttonPurple by cssClass {
-        border = "1px solid ${ZkColors.Design.navPurple}"
+        border = "1px solid ${ZkColors.Zakadabar.navPurple}"
     }
 
     val buttonRed by cssClass {
-        border = "1px solid ${ZkColors.Design.navRed}"
+        border = "1px solid ${ZkColors.Zakadabar.navRed}"
     }
 
     val cards by cssClass {

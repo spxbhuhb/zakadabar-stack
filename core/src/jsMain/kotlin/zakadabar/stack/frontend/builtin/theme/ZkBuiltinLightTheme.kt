@@ -4,7 +4,6 @@
 package zakadabar.stack.frontend.builtin.theme
 
 import zakadabar.stack.frontend.builtin.dock.ZkDockTheme
-import zakadabar.stack.frontend.builtin.form.ZkFormTheme
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutTheme
 import zakadabar.stack.frontend.builtin.layout.ZkScrollBarTheme
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainerTheme
@@ -29,49 +28,50 @@ open class ZkBuiltinLightTheme : ZkTheme {
     override var fontWeight: String = "300"
 
     override var backgroundColor = ZkColors.white
-    override var textColor = ZkColors.Design.gray8
+    override var textColor = ZkColors.Zakadabar.gray8
 
     override var hoverBackgroundColor = "rgba(0,0,0,0.1)"
-    override var hoverTextColor = ZkColors.Design.gray8
+    override var hoverTextColor = ZkColors.Zakadabar.gray8
 
-    override var primaryColor = ZkColors.Design.navPurple
+    override var primaryColor = ZkColors.Zakadabar.navPurple
     override var primaryPair = ZkColors.white
-    override var secondaryColor = ZkColors.Design.gray5
+    override var secondaryColor = ZkColors.Zakadabar.gray5
     override var secondaryPair = ZkColors.white
-    override var successColor = ZkColors.Design.navGreen
+    override var successColor = ZkColors.Zakadabar.navGreen
     override var successPair = ZkColors.white
-    override var warningColor = ZkColors.Design.navOrange
+    override var warningColor = ZkColors.Zakadabar.navOrange
     override var warningPair = ZkColors.white
-    override var dangerColor = ZkColors.Design.navRed
+    override var dangerColor = ZkColors.Zakadabar.navRed
     override var dangerPair = ZkColors.white
-    override var infoColor = ZkColors.Design.navBlue
+    override var infoColor = ZkColors.Zakadabar.navBlue
     override var infoPair = ZkColors.white
-    override var disabledColor = ZkColors.Design.gray2
-    override var disabledPair = ZkColors.Design.gray6
+    override var disabledColor = ZkColors.Zakadabar.gray2
+    override var disabledPair = ZkColors.Zakadabar.gray6
 
     override var inputTextColor by after { textColor }
-    override var inputBackgroundColor by after { backgroundColor }
-    override var disabledInputColor by after { disabledColor }
-    override var disabledInputPair by after { disabledPair }
+    override var inputBackgroundColor = ZkColors.white
 
-    override var borderColor = "transparent" // ZkColors.Gray.c600.alpha(0.5)
+    override var disabledInputTextColor = ZkColors.white
+    override var disabledInputBackgroundColor = ZkColors.Zakadabar.gray4
 
-    override var border by after { "1px solid $borderColor" }
+    override var borderColor = ZkColors.Gray.c600.alpha(0.5)
+
+    override var border = "transparent"
 
     override var cornerRadius = 2
     override var spacingStep = 20
 
-    val background = ZkColors.white
-    val foreground = ZkColors.Design.gray8
+    override var blockBackgroundColor = ZkColors.Zakadabar.gray0
 
-    val success = ZkColors.Design.navGreen
-    val info = ZkColors.Design.navBlue
-    val warning = ZkColors.Design.navOrange
-    val error = ZkColors.Design.navRed
+    val background = ZkColors.white
+    val foreground = ZkColors.Zakadabar.gray8
+
+    val success = ZkColors.Zakadabar.navGreen
+    val info = ZkColors.Zakadabar.navBlue
+    val warning = ZkColors.Zakadabar.navOrange
+    val error = ZkColors.Zakadabar.navRed
 
     override var dock = ZkDockTheme()
-
-    override var form = ZkFormTheme()
 
     override var layout = ZkLayoutTheme(
         defaultForeground = foreground,
@@ -98,10 +98,10 @@ open class ZkBuiltinLightTheme : ZkTheme {
         ZkTitleBarTheme(
             appTitleBarHeight = "44px",
             localTitleBarHeight = "44px",
-            appHandleBackground = ZkColors.Design.gray1,
+            appHandleBackground = ZkColors.Zakadabar.gray1,
             appHandleText = textColor,
             appHandleBorder = border,
-            titleBarBackground = ZkColors.Design.gray1,
+            titleBarBackground = ZkColors.Zakadabar.gray1,
             titleBarText = textColor,
             titleBarBorder = border
         )

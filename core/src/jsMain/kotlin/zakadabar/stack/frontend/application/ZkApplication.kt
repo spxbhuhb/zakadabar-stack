@@ -70,7 +70,9 @@ object ZkApplication {
             field = value
             window.localStorage.setItem(THEME_STORAGE_KEY, value.name)
             applyThemeToBody()
-            styleSheets.forEach { it.onThemeChange(value) }
+            window.requestAnimationFrame {
+                styleSheets.forEach { it.onThemeChange(value) }
+            }
         }
 
     val styleSheets = mutableListOf<ZkCssStyleSheet<*>>()

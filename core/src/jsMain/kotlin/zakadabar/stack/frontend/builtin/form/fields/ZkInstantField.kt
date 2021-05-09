@@ -16,27 +16,39 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
+import kotlinx.browser.document
 import kotlinx.datetime.Instant
+import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.builtin.form.zkFormStyles
 import zakadabar.stack.frontend.resources.ZkFormatters.formatInstant
 import kotlin.reflect.KMutableProperty0
 
 open class ZkInstantField<T : DtoBase>(
     form: ZkForm<T>,
-    prop: KMutableProperty0<Instant>
-) : ZkStringBase<T, Instant>(
+    val prop: KMutableProperty0<Instant>
+) : ZkFieldBase<T, Instant>(
     form = form,
-    prop = prop,
-    readOnly = true
+    propName = prop.name
 ) {
 
-    override fun getPropValue(): String {
-        return formatInstant(prop.get())
+    private val input = document.createElement("input") as HTMLInputElement
+
+    override var readOnly: Boolean = true
+
+    override fun buildFieldValue() {
+        input.className = zkFormStyles.disabledString
+        input.readOnly = true
+        input.disabled = true
+        input.value = formatInstant(prop.get())
+        input.tabIndex = - 1
+        + input
     }
 
-    override fun setPropValue(value: String) {
-        throw NotImplementedError("you should not change instants from the UI, read https://github.com/Kotlin/kotlinx-datetime#type-use-cases")
+    override fun onValidated(report: ValidityReport) {
+        // instants are read only
     }
 
 }

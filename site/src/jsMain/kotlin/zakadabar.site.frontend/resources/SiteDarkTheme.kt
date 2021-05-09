@@ -18,7 +18,7 @@ class SiteDarkTheme : ZkBuiltinDarkTheme(), SiteTheme {
     override val developerLogo = "/simplexion_logo.svg"
 
     override val markdownTheme = MarkdownTheme(
-        backgroundColor = ZkColors.Design.gray7,
+        backgroundColor = ZkColors.Zakadabar.gray7,
         borderColor = borderColor,
         highlightUrl = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/obsidian.min.css"
     )

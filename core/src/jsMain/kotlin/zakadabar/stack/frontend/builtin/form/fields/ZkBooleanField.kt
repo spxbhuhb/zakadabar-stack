@@ -16,12 +16,13 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import kotlinx.browser.document
-import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.KeyboardEvent
 import zakadabar.stack.data.DtoBase
+import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.zkFormStyles
+import zakadabar.stack.frontend.builtin.input.ZkCheckBox
+import zakadabar.stack.frontend.resources.ZkIcons
 import kotlin.reflect.KMutableProperty0
 
 open class ZkBooleanField<T : DtoBase>(
@@ -32,22 +33,26 @@ open class ZkBooleanField<T : DtoBase>(
     propName = prop.name
 ) {
 
-    private val checkbox = document.createElement("input") as HTMLInputElement
+    private val checkbox = ZkCheckBox(ZkIcons.check)
+
+    override var readOnly: Boolean = (form.mode == ZkElementMode.Read)
+        set(value) {
+            checkbox.disabled = value
+            field = value
+        }
 
     override fun buildFieldValue() {
         + div(zkFormStyles.booleanField) {
-            checkbox.type = "checkbox"
-            checkbox.id = "zk-$id-checkbox"
 
             buildElement.tabIndex = 0
 
             val value: Boolean = prop.get()
 
-            if (readOnly) checkbox.readOnly = true
+            if (readOnly) checkbox.checkbox.readOnly = true
 
             checkbox.checked = value
 
-            on(checkbox, "change") {
+            on(checkbox.checkbox, "change") {
                 prop.set(checkbox.checked)
                 touched = true
                 form.validate()

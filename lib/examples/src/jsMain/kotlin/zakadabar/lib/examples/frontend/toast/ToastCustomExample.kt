@@ -29,12 +29,12 @@ class ToastCustomExample(
 
         class CustomToastStyles : ZkCssStyleSheet<ZkTheme>() {
             val customInner by cssClass {
-                border = "1px solid ${ZkColors.Design.navCyan}"
-                backgroundColor = ZkColors.Design.navCyan + "20"
+                border = "1px solid ${ZkColors.Zakadabar.navCyan}"
+                backgroundColor = ZkColors.Zakadabar.navCyan + "20"
             }
             val customIcon by cssClass {
-                backgroundColor = ZkColors.Design.navCyan
-                fill = ZkColors.Design.gray8
+                backgroundColor = ZkColors.Zakadabar.navCyan
+                fill = ZkColors.Zakadabar.gray8
             }
         }
     }

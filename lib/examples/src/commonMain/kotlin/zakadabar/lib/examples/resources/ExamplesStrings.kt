@@ -16,8 +16,8 @@ var Strings = ExamplesStrings()
 
 open class ExamplesStrings : ZkBuiltinStrings() {
 
-    val booleanValue by "Boolean Value"
-    val optBooleanValue by "Optional Boolean Value"
+    val optValue by "Optional Value"
+    val readOnlyValue by "Read Only Value"
 
     val textForFalse by "this is false"
     val textForTrue by "this is true"

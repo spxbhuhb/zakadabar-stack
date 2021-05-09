@@ -36,6 +36,14 @@ This page shows the browser frontend components included with the stack.
 
 <div data-zk-enrich="FormBooleanExample"></div>
 
+## Double Fields [documentation](../guides/browser/Forms.md#Double) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormDoubleExample.kt)
+
+<div data-zk-enrich="FormDoubleExample"></div>
+
+## Record Id Fields [documentation](../guides/browser/Forms.md#Record-Id) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormRecordIdExample.kt)
+
+<div data-zk-enrich="FormRecordIdExample"></div>
+
 # Icons [documentation](../guides/browser/Icons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/icon/IconExamples.kt)
 
 <div data-zk-enrich="IconExamples"></div>

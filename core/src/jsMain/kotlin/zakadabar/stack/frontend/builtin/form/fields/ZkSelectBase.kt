@@ -25,11 +25,10 @@ import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.builtin.form.zkFormStyles
 import zakadabar.stack.frontend.builtin.popup.alignPopup
 import zakadabar.stack.frontend.util.escape
 import zakadabar.stack.frontend.util.io
-import zakadabar.stack.frontend.util.minusAssign
-import zakadabar.stack.frontend.util.plusAssign
 
 abstract class ZkSelectBase<T : DtoBase, VT>(
     form: ZkForm<T>,
@@ -90,12 +89,7 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
 
         container.tabIndex = 0
 
-        on(container, "focus") {
-            fieldBottomBorder.classList += ZkFormStyles.onFieldHover
-        }
-
         on(container, "blur") {
-            fieldBottomBorder.classList -= ZkFormStyles.onFieldHover
             optionList.hide()
         }
 
@@ -148,7 +142,7 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
     private fun toggleOptions() {
         optionList.toggle()
         if (optionList.isShown()) {
-            alignPopup(optionList.element, selectedOption.element, ZkFormStyles.theme.form.rowHeight * 5)
+            alignPopup(optionList.element, selectedOption.element, zkFormStyles.rowHeight * 5)
             container.focus()
         }
     }

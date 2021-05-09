@@ -4,7 +4,6 @@
 package zakadabar.stack.frontend.builtin.theme
 
 import zakadabar.stack.frontend.builtin.dock.ZkDockTheme
-import zakadabar.stack.frontend.builtin.form.ZkFormTheme
 import zakadabar.stack.frontend.builtin.layout.ZkLayoutTheme
 import zakadabar.stack.frontend.builtin.layout.ZkScrollBarTheme
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainerTheme
@@ -28,58 +27,51 @@ open class ZkBuiltinDarkTheme : ZkTheme {
     override var fontSize: String = "16px"
     override var fontWeight: String = "300"
 
-    override var backgroundColor = ZkColors.Design.gray7
-    override var textColor = ZkColors.Design.gray2
+    override var backgroundColor = ZkColors.Zakadabar.gray7
+    override var textColor = ZkColors.Zakadabar.gray2
 
     override var hoverBackgroundColor = "rgba(255,255,255,0.2)"
-    override var hoverTextColor = ZkColors.Design.gray2
+    override var hoverTextColor = ZkColors.Zakadabar.gray2
 
-    override var primaryColor = ZkColors.Design.navPurple
+    override var primaryColor = ZkColors.Zakadabar.navPurple
     override var primaryPair = ZkColors.white
-    override var secondaryColor = ZkColors.Design.gray3
-    override var secondaryPair = ZkColors.Design.gray8
-    override var successColor = ZkColors.Design.navGreen
-    override var successPair = ZkColors.Design.gray8
-    override var warningColor = ZkColors.Design.navOrange
+    override var secondaryColor = ZkColors.Zakadabar.gray3
+    override var secondaryPair = ZkColors.Zakadabar.gray8
+    override var successColor = ZkColors.Zakadabar.navGreen
+    override var successPair = ZkColors.Zakadabar.gray8
+    override var warningColor = ZkColors.Zakadabar.navOrange
     override var warningPair = ZkColors.white
-    override var dangerColor = ZkColors.Design.navRed
+    override var dangerColor = ZkColors.Zakadabar.navRed
     override var dangerPair = ZkColors.white
-    override var infoColor = ZkColors.Design.navBlue
+    override var infoColor = ZkColors.Zakadabar.navBlue
     override var infoPair = ZkColors.white
-    override var disabledColor = ZkColors.Design.gray4
-    override var disabledPair = ZkColors.Design.gray7
+    override var disabledColor = ZkColors.Zakadabar.gray4
+    override var disabledPair = ZkColors.Zakadabar.gray7
 
     override var inputTextColor by after { textColor }
-    override var inputBackgroundColor = ZkColors.Design.gray6
+    override var inputBackgroundColor = ZkColors.Zakadabar.gray8
 
-    override var disabledInputColor by after { disabledColor }
-    override var disabledInputPair by after { disabledPair }
+    override var disabledInputTextColor = ZkColors.Zakadabar.gray2
+    override var disabledInputBackgroundColor = ZkColors.Zakadabar.gray6
 
-    override var borderColor = "transparent" // ZkColors.Gray.c600
+    override var borderColor = ZkColors.Gray.c600
 
-    override var border by after { "1px solid $borderColor" }
+    override var border = "transparent"
+
     override var cornerRadius = 2
     override var spacingStep = 20
 
-    val success = ZkColors.Design.navGreen
-    val info = ZkColors.Design.navBlue
-    val warning = ZkColors.Design.navOrange
-    val error = ZkColors.Design.navRed
+    override var blockBackgroundColor = ZkColors.Zakadabar.gray7
 
-    val background = ZkColors.Design.gray9
-    val foreground = ZkColors.Design.gray2
+    val success = ZkColors.Zakadabar.navGreen
+    val info = ZkColors.Zakadabar.navBlue
+    val warning = ZkColors.Zakadabar.navOrange
+    val error = ZkColors.Zakadabar.navRed
+
+    val background = ZkColors.Zakadabar.gray9
+    val foreground = ZkColors.Zakadabar.gray2
 
     override var dock = ZkDockTheme()
-
-    override var form by after {
-        ZkFormTheme(
-            rowHeight = 38,
-            disabledBackground = ZkColors.BlueGray.c50,
-            labelBackground = backgroundColor,
-            valueBackground = ZkColors.white,
-            invalidBackground = dangerColor.alpha(0.5)
-        )
-    }
 
     override var layout = ZkLayoutTheme(
         defaultForeground = foreground,
@@ -107,10 +99,10 @@ open class ZkBuiltinDarkTheme : ZkTheme {
         ZkTitleBarTheme(
             appTitleBarHeight = "44px",
             localTitleBarHeight = "44px",
-            appHandleBackground = ZkColors.Design.gray8,
+            appHandleBackground = ZkColors.Zakadabar.gray8,
             appHandleText = textColor,
             appHandleBorder = border,
-            titleBarBackground = ZkColors.Design.gray8,
+            titleBarBackground = ZkColors.Zakadabar.gray8,
             titleBarText = textColor,
             titleBarBorder = border
         )

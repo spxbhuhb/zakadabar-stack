@@ -377,6 +377,12 @@ class ZkCssStyleRule(
             styles["color"] = value
         }
 
+    var content
+        get() = styles["content"]
+        set(value) {
+            styles["content"] = value
+        }
+
     var cursor
         get() = styles["cursor"]
         set(value) {
@@ -800,6 +806,17 @@ class ZkCssStyleRule(
             styles["left"] = stringOrPx(value)
         }
 
+    var transform
+        get() = styles["transform"]
+        set(value) {
+            styles["transform"] = value
+        }
+
+    var transition
+        get() = styles["transition"]
+        set(value) {
+            styles["transition"] = value
+        }
 
     /**
      * [MDN: import](https://developer.mozilla.org/en-US/docs/Web/CSS/@import)
@@ -845,6 +862,18 @@ class ZkCssStyleRule(
         get() = styles["-webkit-appearance"]
         set(value) {
             styles["-webkit-appearance"] = value
+        }
+
+    var webkitTransform
+        get() = styles["-webkit-transform"]
+        set(value) {
+            styles["-webkit-transform"] = value
+        }
+
+    var webkitTransition
+        get() = styles["-webkit-transition"]
+        set(value) {
+            styles["-webkit-transition"] = value
         }
 
     /**
