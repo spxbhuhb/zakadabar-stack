@@ -11,13 +11,9 @@ Goal is to implement small business applications very fast without re-doing the 
 Project status is **alpha**,
 see [components stability](https://kotlinlang.org/docs/reference/evolution/components-stability.html).
 
-## Getting Started
+## Documentation
 
-1. [Application Template](https://github.com/spxbhuhb/zakadabar-application-template)
-1. [Documentation](site/content) - this is work in progress, improves each day
-1. [Source code](demo/demo) of the demo project.
-1. [Source code](demo/demo-lib) of the demo library project.
-1. [Source code](site) of the site project.
+1. Please visit [zakadabar.com](https://zakadabar.com).
 
 ## Gradle
 
