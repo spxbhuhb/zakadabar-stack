@@ -53,6 +53,19 @@ class ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
         border = theme.border
     }
 
+    val block by cssClass {
+        border = theme.blockBorder
+        backgroundColor = theme.blockBackgroundColor
+    }
+
+    val blockBorder by cssClass {
+        border = theme.blockBorder
+    }
+
+    val justifySelfCenter by cssClass {
+        justifySelf = "center"
+    }
+
     // -------------------------------------------------------------------------
     // ZkAppLayout
     // -------------------------------------------------------------------------

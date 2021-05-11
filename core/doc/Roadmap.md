@@ -85,10 +85,13 @@ that we'll be able to do so.
 * move ContentBackend from site into the stack, document content backends
 * compile and add css classes on-demand (just an idea, but it is possible to manage)
 * show error message when user hits unknown route on UI
+* themes and styles
+  * make theme.onResume style changes non-cumulative (save style variables?)
+  * make style sheet switches carry the original class name
 * sidebar
-    * add keyboard navigation
-    * add search function that filters sidebar topics
-    * use "a" for entries when possible (part of SEO optimization)
-    * remember state during session
+  * add keyboard navigation
+  * add search function that filters sidebar topics
+  * use "a" for entries when possible (part of SEO optimization)
+  * remember state during session
 
 

@@ -34,8 +34,6 @@ fun main() {
 
             routing = Routing
 
-//            configureMarkdown()
-
             init()
 
         }
@@ -43,10 +41,3 @@ fun main() {
     }
 
 }
-
-///**
-// * Overrides for markdown views according to our own content API.
-// */
-//fun configureMarkdown() {
-//    MarkdownView.lib[MarkdownElementTypes.IMAGE] = { SiteMarkdownImage(this, it) }
-//}

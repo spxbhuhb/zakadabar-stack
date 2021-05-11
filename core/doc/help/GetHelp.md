@@ -1,6 +1,12 @@
 # Get Help
 
-Please create
+First, please check the [Roadmap](/Roadmap). It is quite possible that we already know the problem and/or want the
+feature.
+
+Then, please check the [issues](https://github.com/spxbhuhb/zakadabar-stack/issues) on GitHub to see if there is already
+an issue about the problem.
+
+If all that doesn't help, please create
 a [new question](https://github.com/spxbhuhb/zakadabar-stack/issues/new?assignees=&labels=help+wanted%2C+question&template=question.md&title=)
 on GitHub if you need help. We'll get notified and do our best to give you an answer and/or a solution in a timely
 manner.

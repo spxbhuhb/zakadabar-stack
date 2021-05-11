@@ -7,7 +7,7 @@ import kotlinx.browser.window
 import zakadabar.site.frontend.components.DeveloperLogo
 import zakadabar.site.frontend.components.HeaderActions
 import zakadabar.site.frontend.components.SiteLogo
-import zakadabar.site.frontend.resources.LandingStyles
+import zakadabar.site.frontend.resources.landingStyles
 import zakadabar.site.resources.Strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
@@ -20,26 +20,26 @@ object Landing : ZkPage(ZkFullScreenLayout) {
 
 
     override fun onCreate() {
-        classList += LandingStyles.landing
+        classList += landingStyles.landing
 
-        + div(LandingStyles.header) {
+        + div(landingStyles.header) {
             + SiteLogo()
             + HeaderActions()
         }
 
-        + column(LandingStyles.content) {
+        + column(landingStyles.content) {
 
-            + div(LandingStyles.title) { + Strings.siteTitle } marginBottom 40
+            + div(landingStyles.title) { + Strings.siteTitle } marginBottom 40
 
-            + div(LandingStyles.buttons) {
-                + ZkButton(Strings.Welcome) { Welcome.open() } css LandingStyles.button css LandingStyles.buttonCyan
-                + ZkButton(Strings.getStarted) { GetStarted.open() } css LandingStyles.button css LandingStyles.buttonBlue
-                + ZkButton(Strings.documentation) { Documentation.open() } css LandingStyles.button css LandingStyles.buttonGreen
-                + ZkButton(Strings.github) { openGitHub() } css LandingStyles.button css LandingStyles.buttonOrange
-                + ZkButton(Strings.getHelp) { GetHelp.open() } css LandingStyles.button css LandingStyles.buttonRed
+            + div(landingStyles.buttons) {
+                + ZkButton(Strings.Welcome) { Welcome.open() } css landingStyles.button css landingStyles.buttonCyan
+                + ZkButton(Strings.getStarted) { GetStarted.open() } css landingStyles.button css landingStyles.buttonBlue
+                + ZkButton(Strings.documentation) { Documentation.open() } css landingStyles.button css landingStyles.buttonGreen
+                + ZkButton(Strings.github) { openGitHub() } css landingStyles.button css landingStyles.buttonOrange
+                + ZkButton(Strings.getHelp) { GetHelp.open() } css landingStyles.button css landingStyles.buttonRed
             } marginBottom 50
 
-            + grid(LandingStyles.cards) {
+            + grid(landingStyles.cards) {
                 + Card(Strings.writeOnceTitle, Strings.writeOnceText)
                 + Card(Strings.letTheMachineTitle, Strings.letTheMachineText)
                 + Card(Strings.walkYourWayTitle, Strings.walkYourWayText)
@@ -48,7 +48,7 @@ object Landing : ZkPage(ZkFullScreenLayout) {
 
         }
 
-        + div(LandingStyles.footer) {
+        + div(landingStyles.footer) {
             + DeveloperLogo()
             + div { + Strings.developedBy }
         }
@@ -64,11 +64,11 @@ object Landing : ZkPage(ZkFullScreenLayout) {
     ) : ZkElement() {
 
         override fun onCreate() {
-            classList += LandingStyles.card
-            + div(LandingStyles.cardInner) {
+            classList += landingStyles.card
+            + div(landingStyles.cardInner) {
                 + column {
-                    + div(LandingStyles.cardTitle) { + title }
-                    + div(LandingStyles.cardText) { + text }
+                    + div(landingStyles.cardTitle) { + title }
+                    + div(landingStyles.cardText) { + text }
                 }
             }
         }

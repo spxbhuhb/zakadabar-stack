@@ -13,7 +13,7 @@ import zakadabar.stack.frontend.util.default
 
 /**
  * DTO classes are usually defined in commonMain. This one here is to make the
- * example easier to write, but it is not accessible on the backend, and it thas
+ * example easier to write, but it is not accessible on the backend and it has
  * no communication feature.
  */
 class BooleanExampleDto(

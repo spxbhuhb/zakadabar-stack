@@ -32,15 +32,15 @@ This page shows the browser frontend components included with the stack.
 
 # Forms [documentation](../guides/browser/Forms.md)
 
-## Boolean Fields [documentation](../guides/browser/Forms.md#Boolean) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormBooleanExample.kt)
+## Boolean Fields [documentation](../guides/browser/Forms.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormBooleanExample.kt)
 
 <div data-zk-enrich="FormBooleanExample"></div>
 
-## Double Fields [documentation](../guides/browser/Forms.md#Double) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormDoubleExample.kt)
+## Double Fields [documentation](../guides/browser/Forms.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormDoubleExample.kt)
 
 <div data-zk-enrich="FormDoubleExample"></div>
 
-## Record Id Fields [documentation](../guides/browser/Forms.md#Record-Id) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormRecordIdExample.kt)
+## Record Id Fields [documentation](../guides/browser/Forms.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormRecordIdExample.kt)
 
 <div data-zk-enrich="FormRecordIdExample"></div>
 
@@ -50,7 +50,7 @@ This page shows the browser frontend components included with the stack.
 
 # Inputs
 
-## Checkbox List [documentation](../guides/browser/input/CheckboxList.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/input/IntCheckboxListExample.kt)
+## Checkbox List [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/input/IntCheckboxListExample.kt)
 
 <div data-zk-enrich="IntCheckboxListExample"></div>
 
@@ -58,13 +58,23 @@ This page shows the browser frontend components included with the stack.
 
 <div data-zk-enrich="ModalExamples"></div>
 
-# Notes [documentation](../guides/browser/Notes.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/note/NoteBasicExamples.kt)
+# Notes [documentation](../guides/browser/Notes.md)
+
+## Basic [documentation](../guides/browser/Notes.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/note/NoteBasicExamples.kt)
 
 <div data-zk-enrich="NoteBasicExamples"></div>
 
+## Complex [documentation](../guides/browser/Notes.md)  [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/note/NoteFormExample.kt)
+
+<div data-zk-enrich="NoteFormExample"></div>
+
+# Table [documentation](../guides/browser/Tables.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/note/NoteBasicExamples.kt)
+
+<div data-zk-enrich="TableExample"></div>
+
 # Toasts [documentation](../guides/browser/Toasts.md)
 
-## Basic  [documentation](../guides/browser/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastExamples.kt)
+## Basic  [documentation](../guides/browser/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastBasicExamples.kt)
 
 <div data-zk-enrich="ToastBasicExamples"></div>
 

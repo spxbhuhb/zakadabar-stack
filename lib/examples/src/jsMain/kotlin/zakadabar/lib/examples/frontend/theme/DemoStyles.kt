@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.examples.frontend.themes
+package zakadabar.lib.examples.frontend.theme
 
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
@@ -69,15 +69,6 @@ object DemoStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val exampleButtonStyle by cssClass {
         border = "8px solid ${ZkColors.Green.a100}"
-    }
-
-    // Call [attach] to add the style sheet to the document. Without this the
-    // style sheet is not known by the browser. For commonly used style sheets
-    // [init] is fine, but you can dynamically attach / detach styles sheets
-    // with the appropriate method call.
-
-    init {
-        attach()
     }
 
 }

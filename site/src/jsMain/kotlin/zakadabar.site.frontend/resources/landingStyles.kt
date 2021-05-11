@@ -6,8 +6,11 @@ package zakadabar.site.frontend.resources
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-object LandingStyles : ZkCssStyleSheet<ZkTheme>() {
+val landingStyles by cssStyleSheet(LandingStyles())
+
+class LandingStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val landing by cssClass {
         display = "grid"
@@ -138,7 +141,4 @@ object LandingStyles : ZkCssStyleSheet<ZkTheme>() {
         borderTop = theme.border
     }
 
-    init {
-        attach()
-    }
 }

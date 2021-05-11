@@ -3,9 +3,15 @@
  */
 package zakadabar.site.frontend.resources
 
+import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-object SiteStyles : ZkCssStyleSheet<SiteTheme>() {
+val siteStyles by cssStyleSheet(SiteStyles())
+
+class SiteStyles : ZkCssStyleSheet<ZkTheme>() {
+
+    val developerLogoUrl: String = "/simplexion_logo.svg"
 
     val logo by cssClass {
         cursor = "pointer"

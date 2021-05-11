@@ -14,6 +14,9 @@ import zakadabar.lib.examples.frontend.icon.IconExamples
 import zakadabar.lib.examples.frontend.input.IntCheckboxListExample
 import zakadabar.lib.examples.frontend.modal.ModalExamples
 import zakadabar.lib.examples.frontend.note.NoteBasicExamples
+import zakadabar.lib.examples.frontend.note.NoteFormExample
+import zakadabar.lib.examples.frontend.table.TableExample
+import zakadabar.lib.examples.frontend.theme.ThemeExample
 import zakadabar.lib.examples.frontend.toast.ToastAutoHideExample
 import zakadabar.lib.examples.frontend.toast.ToastBasicExamples
 import zakadabar.lib.examples.frontend.toast.ToastCustomExample
@@ -73,8 +76,13 @@ class ContentContext(
             }
 
             "NoteBasicExamples" -> NoteBasicExamples(htmlElement)
+            "NoteFormExample" -> NoteFormExample(htmlElement)
 
             "ModalExamples" -> ModalExamples(htmlElement)
+
+            "TableExample" -> TableExample(htmlElement)
+
+            "ThemeExample" -> ThemeExample(htmlElement)
 
             "ToastAutoHideExample" -> ToastAutoHideExample(htmlElement)
             "ToastCustomExample" -> ToastCustomExample(htmlElement)

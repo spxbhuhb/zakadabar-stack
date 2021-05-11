@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.frontend.builtin.theme
 
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.layout.zkScrollBarStyles
 import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
 import zakadabar.stack.frontend.resources.ZkColors
@@ -19,7 +18,7 @@ open class ZkBuiltinLightTheme : ZkTheme {
 
     override val name = NAME
 
-    override var fontFamily = "'Lato', sans-serif" //     "'IBM Plex Sans', sans-serif"
+    override var fontFamily = "'IBM Plex Sans', sans-serif"
     override var fontSize: String = "16px"
     override var fontWeight: String = "300"
 
@@ -61,22 +60,9 @@ open class ZkBuiltinLightTheme : ZkTheme {
     override var blockBorder = "1px solid ${ZkColors.Zakadabar.gray3}"
     override var blockBackgroundColor = ZkColors.Zakadabar.gray0
 
-    val background = ZkColors.white
-
-    val success = ZkColors.Zakadabar.navGreen
-    val info = ZkColors.Zakadabar.navBlue
-    val warning = ZkColors.Zakadabar.navOrange
-
     override fun onResume() {
-        onResumeLayout()
         onResumeScrollBar()
         onResumeTitleBar()
-    }
-
-    open fun onResumeLayout() {
-        with(zkLayoutStyles) {
-            appTitleBarHeight = "44px"
-        }
     }
 
     open fun onResumeScrollBar() {
@@ -89,7 +75,6 @@ open class ZkBuiltinLightTheme : ZkTheme {
     open fun onResumeTitleBar() {
         @Suppress("DuplicatedCode") // no need to make this more complex
         with(zkTitleBarStyles) {
-            appTitleBarHeight = "44px"
             appHandleBackground = ZkColors.Zakadabar.gray1
             appHandleText = textColor
             appHandleBorder = border

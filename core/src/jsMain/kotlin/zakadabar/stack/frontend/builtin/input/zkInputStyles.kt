@@ -64,7 +64,11 @@ open class ZkInputStyles : ZkCssStyleSheet<ZkTheme>() {
         }
     }
 
-    val checkBox by cssClass {
+    val checkBoxOuter by cssClass {
+        width = "max-content"
+    }
+
+    val checkBoxNative by cssClass {
         display = "none"
 
         on(":hover:not(:disabled) + label") {

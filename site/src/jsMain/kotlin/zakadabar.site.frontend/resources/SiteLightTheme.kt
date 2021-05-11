@@ -3,12 +3,10 @@
  */
 package zakadabar.site.frontend.resources
 
-import zakadabar.lib.markdown.frontend.MarkdownTheme
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
+import zakadabar.lib.markdown.frontend.markdownStyles
 import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
-import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
 
-class SiteLightTheme : ZkBuiltinLightTheme(), SiteTheme {
+class SiteLightTheme : ZkBuiltinLightTheme() {
 
     companion object {
         const val NAME = "site-light"
@@ -16,18 +14,13 @@ class SiteLightTheme : ZkBuiltinLightTheme(), SiteTheme {
 
     override val name = NAME
 
-    override val developerLogo = "/simplexion_logo.svg"
-
-    // override var fontFamily = "system-ui, sans-serif"
-
-    override val markdownTheme = MarkdownTheme(
-        backgroundColor = "#f5f7f9",
-        borderColor = border
-    )
-
     override fun onResume() {
-        super<ZkBuiltinLightTheme>.onResume() // FIXME remove the SiteTheme
-        zkLayoutStyles.appTitleBarHeight = "60px"
-        zkTitleBarStyles.appTitleBarHeight = "60px"
+        super.onResume()
+
+        with(markdownStyles) {
+            codeBorderColor = borderColor
+            highlightUrl = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/idea.min.css"
+        }
     }
+
 }

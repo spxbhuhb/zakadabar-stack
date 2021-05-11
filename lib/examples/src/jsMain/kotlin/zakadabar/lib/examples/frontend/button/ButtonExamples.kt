@@ -7,6 +7,7 @@ import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
+import zakadabar.stack.frontend.builtin.toast.toastSuccess
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.marginBottom
@@ -28,31 +29,34 @@ class ButtonExamples(
             gridGap = theme.spacingStep / 2
 
             + "Text"
-            + ZkButton("Default", flavour)
-            + ZkButton("No Fill", flavour, fill = false)
-            + ZkButton("No Border", flavour, border = false)
-            + ZkButton("No Fill No Border", flavour, fill = false, border = false)
+            + ZkButton("Default", flavour) { onButtonClick() }
+            + ZkButton("No Fill", flavour, fill = false) { onButtonClick() }
+            + ZkButton("No Border", flavour, border = false) { onButtonClick() }
+            + ZkButton("No Fill No Border", flavour, fill = false, border = false) { onButtonClick() }
 
             + "Icon"
-            + ZkButton(ZkIcons.info, flavour)
-            + ZkButton(ZkIcons.info, flavour, fill = false)
-            + ZkButton(ZkIcons.info, flavour, border = false)
-            + ZkButton(ZkIcons.info, flavour, fill = false, border = false)
+            + ZkButton(ZkIcons.info, flavour) { onButtonClick() }
+            + ZkButton(ZkIcons.info, flavour, fill = false) { onButtonClick() }
+            + ZkButton(ZkIcons.info, flavour, border = false) { onButtonClick() }
+            + ZkButton(ZkIcons.info, flavour, fill = false, border = false) { onButtonClick() }
 
             + "Icon Round"
-            + ZkButton(ZkIcons.info, flavour, round = true)
-            + ZkButton(ZkIcons.info, flavour, round = true, fill = false)
-            + ZkButton(ZkIcons.info, flavour, round = true, border = false)
-            + ZkButton(ZkIcons.info, flavour, round = true, fill = false, border = false)
+            + ZkButton(ZkIcons.info, flavour, round = true) { onButtonClick() }
+            + ZkButton(ZkIcons.info, flavour, round = true, fill = false) { onButtonClick() }
+            + ZkButton(ZkIcons.info, flavour, round = true, border = false) { onButtonClick() }
+            + ZkButton(ZkIcons.info, flavour, round = true, fill = false, border = false) { onButtonClick() }
 
             + "Combined"
-            + ZkButton("Default", ZkIcons.info, flavour)
-            + ZkButton("No Fill", ZkIcons.info, flavour, fill = false)
-            + ZkButton("No Border", ZkIcons.info, flavour, border = false)
-            + ZkButton("No Fill No Border", ZkIcons.info, flavour, fill = false, border = false)
+            + ZkButton("Default", ZkIcons.info, flavour) { onButtonClick() }
+            + ZkButton("No Fill", ZkIcons.info, flavour, fill = false) { onButtonClick() }
+            + ZkButton("No Border", ZkIcons.info, flavour, border = false) { onButtonClick() }
+            + ZkButton("No Fill No Border", ZkIcons.info, flavour, fill = false, border = false) { onButtonClick() }
 
         } marginBottom theme.spacingStep
 
     }
 
+    private fun onButtonClick() {
+        toastSuccess { "You clicked on a button!" }
+    }
 }

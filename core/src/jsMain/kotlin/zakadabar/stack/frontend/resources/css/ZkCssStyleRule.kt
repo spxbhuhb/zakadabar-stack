@@ -36,6 +36,46 @@ class ZkCssStyleRule(
 
     private lateinit var variations: MutableList<ZkCssStyleRule>
 
+    // -------------------------------------------------------------------------
+    // Pseudo-class and media methods
+    // -------------------------------------------------------------------------
+
+    fun hover(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(":hover", builder = builder)
+
+    fun media(media: String, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = media, builder = builder)
+
+    /**
+     * Applies the style on screens that are less then 600px wide.
+     */
+    fun small(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = "(max-width: 600px)", builder = builder)
+
+    /**
+     * Applies the style on screens that are less then 800px wide.
+     */
+    fun medium(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = "(max-width: 800px)", builder = builder)
+
+    /**
+     * Applies the style on screens that are more then 800px wide.
+     */
+    fun large(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = "(min-width: 800px)", builder = builder)
+
+    fun on(pseudoClass: String? = null, media: String? = null, builder: ZkCssStyleRule.(ZkTheme) -> Unit) {
+        require(pseudoClass != null || media != null) { "both pseudoClass and media is null" }
+
+        if (! ::variations.isInitialized) variations = mutableListOf()
+
+        val rule = ZkCssStyleRule(sheet, this.propName, cssClassname, cssSelector, builder)
+
+        rule.pseudoClass = pseudoClass
+        rule.media = media
+
+        variations.add(rule)
+    }
+
+    // -------------------------------------------------------------------------
+    // Compilation
+    // -------------------------------------------------------------------------
+
     fun compile(): String {
 
         styles.clear()
@@ -86,42 +126,6 @@ class ZkCssStyleRule(
     fun copyFrom(from: ZkCssStyleRule) {
         styles.clear()
         styles.putAll(from.styles)
-    }
-
-    // -------------------------------------------------------------------------
-    // Pseudo-class and media methods
-    // -------------------------------------------------------------------------
-
-    fun hover(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(":hover", builder = builder)
-
-    fun media(media: String, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = media, builder = builder)
-
-    /**
-     * Applies the style on screens that are less then 600px wide.
-     */
-    fun small(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = "(max-width: 600px)", builder = builder)
-
-    /**
-     * Applies the style on screens that are less then 800px wide.
-     */
-    fun medium(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = "(max-width: 800px)", builder = builder)
-
-    /**
-     * Applies the style on screens that are more then 800px wide.
-     */
-    fun large(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = "(min-width: 800px)", builder = builder)
-
-    fun on(pseudoClass: String? = null, media: String? = null, builder: ZkCssStyleRule.(ZkTheme) -> Unit) {
-        require(pseudoClass != null || media != null) { "both pseudoClass and media is null" }
-
-        if (! ::variations.isInitialized) variations = mutableListOf()
-
-        val rule = ZkCssStyleRule(sheet, this.propName, cssClassname, cssSelector, builder)
-
-        rule.pseudoClass = pseudoClass
-        rule.media = media
-
-        variations.add(rule)
     }
 
     // -------------------------------------------------------------------------
@@ -906,4 +910,5 @@ class ZkCssStyleRule(
         set(value) {
             styles["z-index"] = value.toString()
         }
+
 }

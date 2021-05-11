@@ -28,6 +28,8 @@ open class ExamplesStrings : ZkBuiltinStrings() {
     val confirmDialog by "Confirm Dialog"
     val contact by "Contact"
     val dark by "Dark"
+    val green by "Green"
+    val red by "Red"
     val description by "Description"
     val display by "Display"
     val displayName by "Displayed Name"
