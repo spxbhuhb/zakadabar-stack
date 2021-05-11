@@ -55,20 +55,30 @@ class ZkCssStyleRule(
     }
 
     private fun toCssString(): String {
-        val styles = styles.map { style -> "    ${style.key}: ${style.value};" }.joinToString("\n")
+        val styleStrings = styles.map { style -> "    ${style.key}: ${style.value};" }.joinToString("\n")
 
         var s = ""
 
-        if (cssSelector == null) {
-            if (media != null) s += "@media $media {\n"
-            s += "."
-            s += cssClassname
-            if (pseudoClass != null) s += pseudoClass
-        } else {
-            s += cssSelector
+        when (cssSelector) {
+            null -> {
+                if (media != null) s += "@media $media {\n"
+                s += "."
+                s += cssClassname
+                if (pseudoClass != null) s += pseudoClass
+            }
+            "@import" -> {
+                val url = styles["url"] ?: return ""
+                return "@import url(\"${url}\");"
+            }
+            else -> {
+                s += cssSelector
+            }
         }
-        s += "{\n${styles}\n}"
-        if (media != null) s += "}"
+
+        s += "{\n${styleStrings}\n}"
+
+        if (media != null) s +=
+            "}"
 
         return s
     }
@@ -86,11 +96,20 @@ class ZkCssStyleRule(
 
     fun media(media: String, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = media, builder = builder)
 
+    /**
+     * Applies the style on screens that are less then 600px wide.
+     */
     fun small(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = "(max-width: 600px)", builder = builder)
 
-    fun medium(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = "(min-width: 800px)", builder = builder)
+    /**
+     * Applies the style on screens that are less then 800px wide.
+     */
+    fun medium(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = "(max-width: 800px)", builder = builder)
 
-    fun large(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = "(min-width: 1200px)", builder = builder)
+    /**
+     * Applies the style on screens that are more then 800px wide.
+     */
+    fun large(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = "(min-width: 800px)", builder = builder)
 
     fun on(pseudoClass: String? = null, media: String? = null, builder: ZkCssStyleRule.(ZkTheme) -> Unit) {
         require(pseudoClass != null || media != null) { "both pseudoClass and media is null" }
@@ -131,7 +150,7 @@ class ZkCssStyleRule(
         }
 
     /**
-     * [MDN: align-items](https://developer.mozilla.org/en-US/docs/Web/CSS/align-self)
+     * [MDN: align-self](https://developer.mozilla.org/en-US/docs/Web/CSS/align-self)
      *
      * ```
      *   align-self <=> flex cross axis
@@ -217,6 +236,16 @@ class ZkCssStyleRule(
             styles["border-color"] = value
         }
 
+    /**
+     * [MDN: border-collapse](https://developer.mozilla.org/en-US/docs/Web/CSS/border-collapse)
+     *
+     * ```
+     *
+     *    collapse
+     *    separate
+     *
+     * ```
+     */
     var borderCollapse
         get() = styles["border-collapse"]
         set(value) {
@@ -346,6 +375,12 @@ class ZkCssStyleRule(
         get() = styles["color"]
         set(value) {
             styles["color"] = value
+        }
+
+    var content
+        get() = styles["content"]
+        set(value) {
+            styles["content"] = value
         }
 
     var cursor
@@ -512,6 +547,51 @@ class ZkCssStyleRule(
         get() = styles["justify-content"]
         set(value) {
             styles["justify-content"] = value
+        }
+
+    /**
+     * [MDN: justify-self](https://developer.mozilla.org/en-US/docs/Web/CSS/justify-self)
+     *
+     * ```
+     *
+     *   justify-self <=> flex main axis
+     *
+     *   auto
+     *   normal
+     *   stretch
+     *
+     *   -- Positional alignment
+     *
+     *   center     -- Pack item around the center
+     *   start      -- Pack item from the start
+     *   end        -- Pack item from the end
+     *   flex-start -- Equivalent to 'start'. Note that justify-self is ignored in Flexbox layouts.
+     *   flex-end   -- Equivalent to 'end'. Note that justify-self is ignored in Flexbox layouts.
+     *   self-start
+     *   self-end
+     *   left       -- Pack item from the left
+     *   right      -- Pack item from the right
+     *
+     *  -- Baseline alignment
+     *   baseline
+     *   first baseline
+     *   last baseline
+     *
+     *  -- Overflow alignment (for positional alignment only)
+     *   safe center
+     *   unsafe center
+     *
+     * -- Global values
+     *   inherit
+     *   initial
+     *   unset
+     *
+     * ```
+     */
+    var justifySelf
+        get() = styles["justify-self"]
+        set(value) {
+            styles["justify-self"] = value
         }
 
     var lineHeight: Any?
@@ -682,6 +762,20 @@ class ZkCssStyleRule(
             styles["text-overflow"] = value
         }
 
+    /**
+     * [MDN: text-transform](https://developer.mozilla.org/en-US/docs/Web/CSS/text-transform)
+     *
+     * ```
+     *
+     *    none
+     *    capitalize
+     *    uppercase
+     *    lowercase
+     *    full-width
+     *    full-size-kana
+     *
+     * ```
+     */
     var textTransform
         get() = styles["text-transform"]
         set(value) {
@@ -710,6 +804,29 @@ class ZkCssStyleRule(
         get() = styles["left"]
         set(value) {
             styles["left"] = stringOrPx(value)
+        }
+
+    var transform
+        get() = styles["transform"]
+        set(value) {
+            styles["transform"] = value
+        }
+
+    var transition
+        get() = styles["transition"]
+        set(value) {
+            styles["transition"] = value
+        }
+
+    /**
+     * [MDN: import](https://developer.mozilla.org/en-US/docs/Web/CSS/@import)
+     *
+     * URL of the imported style sheet.
+     */
+    var url
+        get() = styles["url"]
+        set(value) {
+            styles["url"] = value
         }
 
     /**
@@ -745,6 +862,18 @@ class ZkCssStyleRule(
         get() = styles["-webkit-appearance"]
         set(value) {
             styles["-webkit-appearance"] = value
+        }
+
+    var webkitTransform
+        get() = styles["-webkit-transform"]
+        set(value) {
+            styles["-webkit-transform"] = value
+        }
+
+    var webkitTransition
+        get() = styles["-webkit-transition"]
+        set(value) {
+            styles["-webkit-transition"] = value
         }
 
     /**

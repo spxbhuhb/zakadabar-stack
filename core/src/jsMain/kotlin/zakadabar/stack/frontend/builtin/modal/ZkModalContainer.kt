@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.modal
 
@@ -14,7 +14,7 @@ import zakadabar.stack.frontend.builtin.ZkElement
 class ZkModalContainer : ZkElement() {
 
     override fun onCreate() {
-        className = ZkModalStyles.modalContainer
+        className = zkModalStyles.modalContainer
         document.body?.appendChild(this.element)
         hide()
     }

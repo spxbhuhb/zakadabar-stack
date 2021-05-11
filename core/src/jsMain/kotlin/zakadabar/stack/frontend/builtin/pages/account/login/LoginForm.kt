@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.pages.account.login
 
@@ -13,7 +13,8 @@ import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.fields.ZkConstStringField
-import zakadabar.stack.frontend.builtin.toast.toast
+import zakadabar.stack.frontend.builtin.toast.toastDanger
+import zakadabar.stack.frontend.builtin.toast.toastWarning
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.marginBottom
 
@@ -70,13 +71,13 @@ class LoginForm(
     }
 
     override fun onInvalidSubmit() {
-        invalidToast = toast(warning = true) { strings.loginFail }
+        invalidToast = toastWarning { strings.loginFail }
     }
 
     override fun onSubmitSuccess() {}
 
     override fun onSubmitError(ex: Exception) {
-        invalidToast = toast(error = true) { strings.loginFail }
+        invalidToast = toastDanger { strings.loginFail }
     }
 
     private fun onExecuteResult(resultDto: DtoBase) {
@@ -85,9 +86,9 @@ class LoginForm(
 
         if (! resultDto.success) {
             if (resultDto.reason == "locked") {
-                toast(error = true) { strings.loginLocked }
+                toastDanger { strings.loginLocked }
             } else {
-                toast(error = true) { strings.loginFail }
+                toastDanger { strings.loginFail }
             }
             return
         }

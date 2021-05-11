@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 @file:Suppress("MemberVisibilityCanBePrivate")
 
@@ -8,8 +8,8 @@ package zakadabar.stack.frontend.builtin.dock
 import kotlinx.browser.document
 import org.w3c.dom.HTMLHtmlElement
 import zakadabar.stack.frontend.application.ZkApplication.dock
-import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.icon.ZkIcon
 import zakadabar.stack.frontend.resources.ZkIcons
 
 /**
@@ -25,19 +25,18 @@ open class ZkDockedElement(
     var content: ZkElement? = null,
 ) : ZkElement() {
 
-    protected val minimize = ZkIcons.minimize.complex16(::onMinimize).css(ZkDockStyles.extensionIcon)
-    protected val maximize = ZkIcons.maximize.complex16(::onMaximize).css(ZkDockStyles.extensionIcon)
-    protected val openInFull = ZkIcons.openInFull.complex16(::onOpenInFullIcon).css(ZkDockStyles.extensionIcon)
-    protected val closeFullScreen =
-        ZkIcons.closeFullScreen.complex16(::onCloseFullScreen).css(ZkDockStyles.extensionIcon)
-    protected val close = ZkIcons.close.complex16(::onClose).css(ZkDockStyles.extensionIcon)
+    protected val minimize = ZkIcon(ZkIcons.minimize, 16, onClick = ::onMinimize).css(zkDockStyles.extensionIcon)
+    protected val maximize = ZkIcon(ZkIcons.maximize, 16, onClick = ::onMaximize).css(zkDockStyles.extensionIcon)
+    protected val openInFull = ZkIcon(ZkIcons.openInFull, 16, onClick = ::onOpenInFullIcon).css(zkDockStyles.extensionIcon)
+    protected val closeFullScreen = ZkIcon(ZkIcons.closeFullScreen, 16, onClick = ::onCloseFullScreen).css(zkDockStyles.extensionIcon)
+    protected val close = ZkIcon(ZkIcons.close, 16, onClick = ::onClose).css(zkDockStyles.extensionIcon)
 
     protected val header = ZkDockedElementHeader(title, icon, tools = listOf(minimize, maximize, openInFull, closeFullScreen, close))
 
     override fun onCreate() {
         super.onCreate()
 
-        className += ZkDockStyles.dockItem
+        className += zkDockStyles.dockItem
 
         this += header
         this += content
@@ -87,7 +86,7 @@ open class ZkDockedElement(
             ZkDockedElementState.Minimized -> {
                 with(element.style) {
                     width = "max-content"
-                    height = "${theme.dock.headerHeight}px"
+                    height = "${zkDockStyles.headerHeight}px"
                     margin = "0px"
                 }
             }

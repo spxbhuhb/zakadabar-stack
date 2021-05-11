@@ -60,4 +60,4 @@ kotlin {
 
 ## Credits
 
-[Credits](doc/misc/credits.md) to the projects we built on.
+[Credits](core/doc/misc/Credits.md) to the projects we built on.

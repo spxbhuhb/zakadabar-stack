@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.dock
 
@@ -17,11 +17,11 @@ open class ZkDockedElementHeader(
     val toolElement = ZkElement()
 
     override fun onCreate() {
-        element.classList.add(ZkDockStyles.header)
+        element.classList.add(zkDockStyles.header)
 
-        this += icon?.withOptCss(ZkDockStyles.headerIcon)
-        this += titleElement css ZkDockStyles.text
-        this += toolElement.css(ZkDockStyles.extensions)
+        this += icon?.withOptCss(zkDockStyles.headerIcon)
+        this += titleElement css zkDockStyles.text
+        this += toolElement.css(zkDockStyles.extensions)
 
         toolElement += tools
     }

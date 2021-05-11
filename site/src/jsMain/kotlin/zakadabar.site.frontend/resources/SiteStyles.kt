@@ -10,7 +10,7 @@ object SiteStyles : ZkCssStyleSheet<SiteTheme>() {
     val logo by cssClass {
         cursor = "pointer"
         height = 22
-        fill = theme.layout.defaultForeground
+        fill = theme.textColor
     }
 
     val headerActions by cssClass {
@@ -20,7 +20,7 @@ object SiteStyles : ZkCssStyleSheet<SiteTheme>() {
     val developerLogo by cssClass {
         width = 48
         height = 48
-        fill = theme.layout.defaultForeground
+        fill = theme.textColor
     }
 
     init {

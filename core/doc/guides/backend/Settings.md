@@ -50,16 +50,20 @@ schema so, they need the defaults there.
 To prevent the schema overriding the defaults with zeros, you also have to set schema defaults. Best is to use the instance value directly like this:
 
 ```kotlin
+import kotlinx.serialization.Serializable
+import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.schema.DtoSchema
+
 @Serializable
 class SessionBackendSettingsDto(
 
-    var sessionTimeout: Long = 30000,
-    var updateDelay: Long = 120,
-    var expirationCheckInterval: Long = 120
+   var sessionTimeout: Long = 30000,
+   var updateDelay: Long = 120,
+   var expirationCheckInterval: Long = 120
 
 ) : DtoBase {
 
-    override fun schema() = DtoSchema {
+   override fun schema() = DtoSchema {
         + ::sessionTimeout default sessionTimeout
         + ::updateDelay default updateDelay
         + ::expirationCheckInterval default expirationCheckInterval

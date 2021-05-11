@@ -111,7 +111,9 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
 
         authorize(executor, StackRoles.securityOfficer)
 
-        val newPrincipal = PrincipalDao.new { }
+        val newPrincipal = PrincipalDao.new {
+            validated = true
+        }
 
         AccountPrivateDao.new {
             principal = newPrincipal

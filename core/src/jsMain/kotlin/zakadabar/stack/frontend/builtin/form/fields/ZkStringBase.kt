@@ -19,6 +19,7 @@ package zakadabar.stack.frontend.builtin.form.fields
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.DtoBase
+import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import kotlin.reflect.KMutableProperty0
@@ -36,6 +37,12 @@ abstract class ZkStringBase<T : DtoBase, VT>(
 ) {
 
     protected val input = document.createElement("input") as HTMLInputElement
+
+    override var readOnly: Boolean = (form.mode == ZkElementMode.Read)
+        set(value) {
+            input.disabled = value
+            field = value
+        }
 
     abstract fun getPropValue(): String
 

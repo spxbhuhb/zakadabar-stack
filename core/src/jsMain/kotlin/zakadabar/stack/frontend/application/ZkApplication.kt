@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.application
 
@@ -70,7 +70,10 @@ object ZkApplication {
             field = value
             window.localStorage.setItem(THEME_STORAGE_KEY, value.name)
             applyThemeToBody()
-            styleSheets.forEach { it.onThemeChange(value) }
+            theme.onResume()
+            window.requestAnimationFrame {
+                styleSheets.forEach { it.onThemeChange(value) }
+            }
         }
 
     val styleSheets = mutableListOf<ZkCssStyleSheet<*>>()
@@ -83,10 +86,13 @@ object ZkApplication {
 
     lateinit var modals: ZkModalContainer
 
-    var title = ZkAppTitle("")
+    private var _title: ZkAppTitle? = null
+
+    var title: ZkAppTitle
+        get() = _title !!
         set(value) {
             onTitleChange?.invoke(value)
-            field = title
+            _title = value
         }
 
     var onTitleChange: ((newTitle: ZkAppTitle) -> Unit)? = null
@@ -98,7 +104,7 @@ object ZkApplication {
 
     fun init() {
 
-        applyThemeToBody()
+        title = ZkAppTitle("")
 
         dock = ZkDock().apply {
             onCreate()
@@ -127,11 +133,11 @@ object ZkApplication {
 
     private fun applyThemeToBody() {
         with(document.body?.style !!) {
-            fontFamily = theme.font.family
-            fontSize = theme.font.size
-            fontWeight = theme.font.weight
-            backgroundColor = theme.layout.defaultBackground
-            color = theme.layout.defaultForeground
+            fontFamily = theme.fontFamily
+            fontSize = theme.fontSize
+            fontWeight = theme.fontWeight
+            backgroundColor = theme.backgroundColor
+            color = theme.textColor
         }
     }
 

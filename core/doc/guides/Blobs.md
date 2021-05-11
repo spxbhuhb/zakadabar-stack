@@ -8,11 +8,11 @@ Features:
 * [ZkImagesField](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/fields/ZkImagesField.kt) supports images in
   forms out-of-the-box
 
-<div class="zk-note-info">
-A general concept is that BLOB objects belong to a record, there is no
-"all blobs in one place" in the stack.
+<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="BLOBs belong to records">
+A general concept is that BLOB objects belong to a record, there is no "all blobs in one place" in the stack.
 
-The reason behind this is that you must provide authorization for the blobs and that can be hard if you put everything in one place.
+The reason behind this is that you must provide authorization for the blobs and that can be hard if you put everything
+in one place.
 </div>
 
 # Write Blob Backend
@@ -37,7 +37,13 @@ object ShipBackend : RecordBackend<ShipDto>(
         route.blob() // <-- this adds BLOB routing
     }
 
-    override fun blobAuthorize(executor: Executor, operation: BlobOperation, recordId: RecordId<ShipDto>?, blobId: RecordId<BlobDto>?, dto: BlobDto?) {
+    override fun blobAuthorize(
+        executor: Executor,
+        operation: BlobOperation,
+        recordId: RecordId<ShipDto>?,
+        blobId: RecordId<BlobDto>?,
+        dto: BlobDto?
+    ) {
 
         // This function is called by every blob handling function to perform
         // the authorization of the blob operation.

@@ -40,7 +40,7 @@ open class ZkConstStringField<T : DtoBase>(
 
     override fun buildFieldValue() {
         input.className = ZkFormStyles.disabledString
-        input.readOnly = true
+        input.disabled = true
         input.value = value
         input.tabIndex = - 1
         + input

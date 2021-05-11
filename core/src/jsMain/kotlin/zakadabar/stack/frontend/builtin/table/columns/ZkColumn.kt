@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
@@ -11,7 +11,7 @@ import org.w3c.dom.events.MouseEvent
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
-import zakadabar.stack.frontend.builtin.table.ZkTableStyles
+import zakadabar.stack.frontend.builtin.table.zkTableStyles
 import zakadabar.stack.frontend.util.minusAssign
 import zakadabar.stack.frontend.util.plusAssign
 import kotlin.math.max
@@ -28,7 +28,7 @@ open class ZkColumn<T : DtoBase>(
     open var exportable = true
 
     lateinit var label: String
-    var sortSign = ZkElement() css ZkTableStyles.sortSign
+    var sortSign = ZkElement() css zkTableStyles.sortSign
 
     var beingResized = false
 
@@ -37,7 +37,7 @@ open class ZkColumn<T : DtoBase>(
     override fun onCreate() {
         + label
         + sortSign
-        + span(ZkTableStyles.resizeHandle) {
+        + span(zkTableStyles.resizeHandle) {
             on(buildElement, "mousedown", ::onResizeMouseDown)
         }
         on("click", ::onClick)
@@ -63,11 +63,11 @@ open class ZkColumn<T : DtoBase>(
         }
 
         if (sortAscending) {
-            sortSign.classList -= ZkTableStyles.sortedDescending
-            sortSign.classList += ZkTableStyles.sortedAscending
+            sortSign.classList -= zkTableStyles.sortedDescending
+            sortSign.classList += zkTableStyles.sortedAscending
         } else {
-            sortSign.classList += ZkTableStyles.sortedDescending
-            sortSign.classList -= ZkTableStyles.sortedAscending
+            sortSign.classList += zkTableStyles.sortedDescending
+            sortSign.classList -= zkTableStyles.sortedAscending
         }
 
         sortSign.show()
@@ -78,8 +78,8 @@ open class ZkColumn<T : DtoBase>(
 
     open fun onResizeMouseDown(event: Event) {
         beingResized = true
-        classList += ZkTableStyles.beingResized
-        table.classList += ZkTableStyles.noSelect
+        classList += zkTableStyles.beingResized
+        table.classList += zkTableStyles.noSelect
 
         on(window, "mouseup", mouseUpWrapper)
         on(window, "mousemove", mouseMoveWrapper)
@@ -89,8 +89,8 @@ open class ZkColumn<T : DtoBase>(
 
     open fun onMouseUp(event: Event) {
         beingResized = false
-        classList -= ZkTableStyles.beingResized
-        table.classList -= ZkTableStyles.noSelect
+        classList -= zkTableStyles.beingResized
+        table.classList -= zkTableStyles.noSelect
         window.removeEventListener("mouseup", mouseUpWrapper)
         window.removeEventListener("mousemove", mouseMoveWrapper)
     }

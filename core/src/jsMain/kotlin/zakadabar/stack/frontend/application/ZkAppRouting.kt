@@ -1,10 +1,11 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.application
 
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
+import kotlin.reflect.KClass
 
 abstract class ZkAppRouting(
     private val defaultLayout: ZkAppLayout,
@@ -27,6 +28,8 @@ abstract class ZkAppRouting(
 
     lateinit var nextLayout: ZkAppLayout
 
+    lateinit var navState: ZkNavState
+
     init {
         // have to initialize the default layout or the first onPause will set it into
         // the wrong state
@@ -36,6 +39,11 @@ abstract class ZkAppRouting(
 
     operator fun ZkTarget.unaryPlus() {
         targets[viewName] = this
+    }
+
+    @Suppress("UNCHECKED_CAST") // checked with isInstance
+    fun <T : ZkTarget> find(kClass: KClass<T>): List<T> {
+        return targets.filterValues { kClass.isInstance(it) }.map { it.value as T }
     }
 
     open fun onNavStateChange(state: ZkNavState) {
@@ -59,6 +67,8 @@ abstract class ZkAppRouting(
         }
 
         activeTarget = nextTarget
+
+        navState = state
 
         if (activeLayout.lifeCycleState == ZkElementState.Initialized) {
             activeLayout.onCreate()

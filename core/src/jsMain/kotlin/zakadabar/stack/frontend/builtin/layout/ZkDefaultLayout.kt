@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.layout
 
@@ -8,8 +8,8 @@ import zakadabar.stack.frontend.application.ZkAppLayout
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleBar
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleBar
 import zakadabar.stack.frontend.util.minusAssign
 import zakadabar.stack.frontend.util.plusAssign
 
@@ -55,15 +55,15 @@ open class ZkDefaultLayout : ZkAppLayout("default") {
 
         appHandleContainer build { + appHandle }
 
-        sideBarContainer css ZkLayoutStyles.sideBarContainer build {
+        sideBarContainer css zkLayoutStyles.sideBarContainer build {
             + sideBar
         }
 
         titleBarContainer build { + titleBar }
 
-        contentContainer css ZkLayoutStyles.contentContainer
+        contentContainer css zkLayoutStyles.contentContainer
 
-        popupSidebarContainer css ZkLayoutStyles.popupSideBarContainer
+        popupSidebarContainer css zkLayoutStyles.popupSideBarContainer
 
         on(window, "resize") {
             if (lifeCycleState != ZkElementState.Resumed) return@on
@@ -88,8 +88,8 @@ open class ZkDefaultLayout : ZkAppLayout("default") {
         }
 
         if (activeMediaSize != MediaSize.Uninitialized) {
-            classList -= ZkLayoutStyles.defaultLayoutLarge
-            classList -= ZkLayoutStyles.defaultLayoutSmall
+            classList -= zkLayoutStyles.defaultLayoutLarge
+            classList -= zkLayoutStyles.defaultLayoutSmall
             this -= appHandleContainer
             this -= sideBarContainer
             this -= titleBarContainer
@@ -111,7 +111,7 @@ open class ZkDefaultLayout : ZkAppLayout("default") {
     }
 
     open fun resumeSmall() {
-        classList += ZkLayoutStyles.defaultLayoutSmall
+        classList += zkLayoutStyles.defaultLayoutSmall
 
         + titleBarContainer
         + contentContainer
@@ -126,7 +126,7 @@ open class ZkDefaultLayout : ZkAppLayout("default") {
     }
 
     open fun resumeLarge() {
-        classList += ZkLayoutStyles.defaultLayoutLarge
+        classList += zkLayoutStyles.defaultLayoutLarge
 
         + appHandleContainer gridRow 1 gridColumn 1
         + sideBarContainer gridRow 2 gridColumn 1

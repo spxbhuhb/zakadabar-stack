@@ -13,7 +13,7 @@ import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.layout.ZkFullScreenLayout
 import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarStyles
+import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
 import zakadabar.stack.frontend.util.marginBottom
 
 /**
@@ -41,11 +41,11 @@ object Login : ZkPage(ZkFullScreenLayout) {
                     width = "300px"
                 }
 
-                + div(ZkTitleBarStyles.appTitleBar) {
+                + div(zkTitleBarStyles.appTitleBar) {
                     style {
                         minHeight = "unset"
                         maxHeight = "unset"
-                        paddingBottom = "${theme.layout.spacingStep / 2}px"
+                        padding = "${theme.spacingStep / 2}px"
                     }
                     + strings.applicationName
                 } marginBottom 20

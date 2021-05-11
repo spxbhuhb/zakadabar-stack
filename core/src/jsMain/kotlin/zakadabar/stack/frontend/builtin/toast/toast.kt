@@ -1,22 +1,14 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
 package zakadabar.stack.frontend.builtin.toast
 
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.resources.ZkFlavour
 
-/**
- * Displays a message to the user by showing a toast. Custom toast type should use it's own
- * function.
- */
-fun toast(info: Boolean = false, warning: Boolean = false, error: Boolean = false, hideAfter: Long? = null, message: () -> String): ZkToast {
-    val type = when {
-        info -> ZkToastType.Info
-        warning -> ZkToastType.Warning
-        error -> ZkToastType.Error
-        else -> ZkToastType.Success
-    }
-
-    return ZkToast(message(), type, hideAfter).also { ZkApplication.toasts += it }
-}
+fun toastPrimary(hideAfter: Long? = null, message: () -> String) = ZkToast(message(), flavour = ZkFlavour.Primary, hideAfter = hideAfter).run()
+fun toastSecondary(hideAfter: Long? = null, message: () -> String) = ZkToast(message(), flavour = ZkFlavour.Secondary, hideAfter = hideAfter).run()
+fun toastSuccess(hideAfter: Long? = null, message: () -> String) = ZkToast(message(), flavour = ZkFlavour.Success, hideAfter = hideAfter).run()
+fun toastWarning(hideAfter: Long? = null, message: () -> String) = ZkToast(message(), flavour = ZkFlavour.Warning, hideAfter = hideAfter).run()
+fun toastDanger(hideAfter: Long? = null, message: () -> String) = ZkToast(message(), flavour = ZkFlavour.Danger, hideAfter = hideAfter).run()
+fun toastInfo(hideAfter: Long? = null, message: () -> String) = ZkToast(message(), flavour = ZkFlavour.Info, hideAfter = hideAfter).run()

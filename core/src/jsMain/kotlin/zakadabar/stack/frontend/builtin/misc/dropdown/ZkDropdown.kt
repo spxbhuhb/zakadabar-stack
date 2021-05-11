@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.misc.dropdown
 
@@ -28,7 +28,7 @@ class ZkDropdown(
     private val dropdownContent: ZkElement = ZkDropdownContent(content)
 
     override fun onCreate() {
-        this css ZkDropdownStyles.dropdown build {
+        this css zkDropdownStyles.dropdown build {
             + controller
             + dropdownContent
         }
@@ -138,7 +138,7 @@ class ZkDropdown(
     }
 
     private fun onControllerClick() {
-        dropdownContent.classList.toggle(ZkDropdownStyles.dropdownActive)
+        dropdownContent.classList.toggle(zkDropdownStyles.dropdownActive)
 
         val hasPlace = hasDistance()
 
@@ -157,14 +157,14 @@ class ZkDropdown(
 
         setPositions(temporaryPosition)
 
-        if (dropdownContent.classList.contains(ZkDropdownStyles.dropdownActive)) {
+        if (dropdownContent.classList.contains(zkDropdownStyles.dropdownActive)) {
             dropdownContent.element.focus()
         }
 
     }
 
     fun close() {
-        dropdownContent.classList -= ZkDropdownStyles.dropdownActive
+        dropdownContent.classList -= zkDropdownStyles.dropdownActive
     }
 
     private fun onMouseDown(event: Event) {

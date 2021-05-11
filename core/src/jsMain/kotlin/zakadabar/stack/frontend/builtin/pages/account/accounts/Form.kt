@@ -22,13 +22,15 @@ import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.fields.ZkSecretField
 import zakadabar.stack.frontend.builtin.form.fields.ZkSecretVerificationField
 import zakadabar.stack.frontend.builtin.form.structure.ZkFormButtons
-import zakadabar.stack.frontend.builtin.input.checkboxlist.ZkCheckboxList
-import zakadabar.stack.frontend.builtin.input.checkboxlist.ZkCheckboxListItem
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
+import zakadabar.stack.frontend.builtin.input.ZkCheckboxList
+import zakadabar.stack.frontend.builtin.input.ZkCheckboxListItem
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
+import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkCrudPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
-import zakadabar.stack.frontend.builtin.toast.toast
+import zakadabar.stack.frontend.builtin.toast.toastDanger
+import zakadabar.stack.frontend.builtin.toast.toastSuccess
+import zakadabar.stack.frontend.builtin.toast.toastWarning
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.plusAssign
@@ -55,7 +57,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
                 }
             }
 
-            classList += ZkLayoutStyles.grow
+            classList += zkLayoutStyles.grow
 
             ZkApplication.title = ZkAppTitle(if (mode != ZkElementMode.Create) dto.accountName else strings.account)
 
@@ -71,7 +73,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
             // Add a small padding around the container and make it grow.
             // We want this particular container to fill the whole page.
 
-            classList += ZkLayoutStyles.grow
+            classList += zkLayoutStyles.grow
 
             // This is needed to make the content scrollable if there is
             // not enough vertical space for it.
@@ -192,7 +194,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
         }
 
         override fun onInvalidSubmit() {
-            toast(warning = true) { strings.passwordChangeInvalid }
+            toastWarning { strings.passwordChangeInvalid }
         }
 
         override fun onSubmitSuccess() {}
@@ -201,9 +203,9 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
             resultDto as ActionStatusDto
 
             if (! resultDto.success) {
-                toast(error = true) { strings.passwordChangeFail }
+                toastDanger { strings.passwordChangeFail }
             } else {
-                toast { strings.actionSuccess }
+                toastSuccess { strings.actionSuccess }
             }
         }
     }

@@ -18,7 +18,9 @@ package zakadabar.stack.frontend.builtin.form
 
 import ZkOptUuidField
 import ZkUuidField
+import kotlinx.browser.document
 import kotlinx.datetime.Instant
+import org.w3c.dom.HTMLElement
 import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.action.ActionDto
@@ -41,8 +43,7 @@ import zakadabar.stack.frontend.builtin.form.structure.ZkFormSection
 import zakadabar.stack.frontend.builtin.form.structure.ZkInvalidFieldList
 import zakadabar.stack.frontend.builtin.pages.ZkCrudPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
-import zakadabar.stack.frontend.builtin.toast.ZkToast
-import zakadabar.stack.frontend.builtin.toast.toast
+import zakadabar.stack.frontend.builtin.toast.*
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.log
 import zakadabar.stack.frontend.util.plusAssign
@@ -55,7 +56,9 @@ import kotlin.reflect.KMutableProperty0
  *
  * @property  autoLabel  When true labels are automatically added. When false they are not.
  */
-open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
+open class ZkForm<T : DtoBase>(
+    element: HTMLElement = document.createElement("div") as HTMLElement
+) : ZkElement(element), ZkCrudPage<T> {
 
     override lateinit var dto: T
     override lateinit var mode: ZkElementMode
@@ -67,7 +70,7 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
     var autoLabel = true
 
     @PublicApi
-    var fieldGridColumnTemplate: String = "150px minmax(150px,1fr)"
+    var fieldGridColumnTemplate: String = "minmax(150px, max-content) minmax(150px,1fr)"
 
     @PublicApi
     var fieldGridRowTemplate: String = "max-content"
@@ -286,7 +289,7 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
 
             } catch (ex: DataConflictException) {
 
-                toast(error = true) { t(ex.message) }
+                toastDanger { t(ex.message) }
 
             } catch (ex: Exception) {
 
@@ -315,7 +318,7 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
      * Default implementation shows a toast with a message.
      */
     open fun onInvalidSubmit() {
-        invalidToast = toast(warning = true, hideAfter = 3000) { strings.invalidFieldsToast }
+        invalidToast = toastWarning(hideAfter = 3000) { strings.invalidFieldsToast }
     }
 
     /**
@@ -325,13 +328,13 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
      */
     open fun onSubmitSuccess() {
         when (mode) {
-            ZkElementMode.Create -> toast { strings.createSuccess }
+            ZkElementMode.Create -> toastSuccess { strings.createSuccess }
             ZkElementMode.Read -> Unit
-            ZkElementMode.Update -> toast { strings.updateSuccess }
-            ZkElementMode.Delete -> toast { strings.deleteSuccess }
-            ZkElementMode.Action -> toast { strings.actionSuccess }
+            ZkElementMode.Update -> toastSuccess { strings.updateSuccess }
+            ZkElementMode.Delete -> toastSuccess { strings.deleteSuccess }
+            ZkElementMode.Action -> toastSuccess { strings.actionSuccess }
             ZkElementMode.Query -> Unit
-            ZkElementMode.Other -> toast { strings.actionSuccess }
+            ZkElementMode.Other -> toastSuccess { strings.actionSuccess }
         }
     }
 
@@ -342,13 +345,13 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
      */
     open fun onSubmitError(ex: Exception) {
         when (mode) {
-            ZkElementMode.Create -> toast(error = true) { strings.createFail }
+            ZkElementMode.Create -> toastDanger { strings.createFail }
             ZkElementMode.Read -> Unit
-            ZkElementMode.Update -> toast(error = true) { strings.updateFail }
-            ZkElementMode.Delete -> toast(error = true) { strings.deleteFail }
-            ZkElementMode.Action -> toast(error = true) { strings.actionFail }
-            ZkElementMode.Query -> toast(error = true) { strings.queryFail }
-            ZkElementMode.Other -> toast(error = true) { strings.actionFail }
+            ZkElementMode.Update -> toastDanger { strings.updateFail }
+            ZkElementMode.Delete -> toastDanger { strings.deleteFail }
+            ZkElementMode.Action -> toastDanger { strings.actionFail }
+            ZkElementMode.Query -> toastDanger { strings.queryFail }
+            ZkElementMode.Other -> toastDanger { strings.actionFail }
         }
     }
 
@@ -500,7 +503,7 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
     // ------------------------------------------------------------------------
 
     operator fun KMutableProperty0<RecordId<T>>.unaryPlus(): ZkElement {
-        val field = ZkIdField(this@ZkForm, this)
+        val field = ZkRecordIdField(this@ZkForm, this)
         + field
         fields += field
         if (mode == ZkElementMode.Create) {
@@ -613,6 +616,10 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
         return field
     }
 
+    // -------------------------------------------------------------------------
+    //  Property field convenience methods
+    // ------------------------------------------------------------------------
+
     /**
      * Find a field for this property.
      */
@@ -620,4 +627,10 @@ open class ZkForm<T : DtoBase> : ZkElement(), ZkCrudPage<T> {
         return fields.first { it.propName == this.name }
     }
 
+    /**
+     * Set the field to readonly.
+     */
+    infix fun ZkElement.readOnly(value: Boolean) {
+        if (this is ZkFieldBase<*, *>) this.readOnly = value
+    }
 }

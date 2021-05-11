@@ -1,9 +1,8 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import zakadabar.stack.data.DtoBase
@@ -44,8 +43,6 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
 
     lateinit var hint: String
 
-    val fieldBottomBorder = document.createElement("div") as HTMLElement
-
     private val errors = ZkElement().css(ZkFormStyles.fieldError)
 
     override fun onCreate() {
@@ -65,17 +62,6 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
 
         + div(ZkFormStyles.fieldValue) {
             buildFieldValue()
-        }
-
-        fieldBottomBorder.className = ZkFormStyles.fieldBottomBorder
-        + fieldBottomBorder
-
-        on("mouseenter") {
-            fieldBottomBorder.classList += ZkFormStyles.onFieldHover
-        }
-
-        on("mouseleave") {
-            fieldBottomBorder.classList -= ZkFormStyles.onFieldHover
         }
 
 //        if (::hint.isInitialized) {
@@ -118,12 +104,7 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
     }
 
     open fun focusEvents(element: HTMLElement) {
-        on(element, "focus") {
-            fieldBottomBorder.classList += ZkFormStyles.onFieldHover
-        }
-
         on(element, "blur") {
-            fieldBottomBorder.classList -= ZkFormStyles.onFieldHover
             form.validate()
         }
     }

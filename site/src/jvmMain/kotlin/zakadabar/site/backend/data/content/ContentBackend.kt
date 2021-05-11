@@ -3,42 +3,43 @@
  */
 package zakadabar.site.backend.data.content
 
-import io.ktor.application.*
-import io.ktor.features.*
-import io.ktor.response.*
+import io.ktor.http.content.*
 import io.ktor.routing.*
 import kotlinx.datetime.Instant
-import org.slf4j.LoggerFactory
+import zakadabar.site.data.ContentBackendSettings
 import zakadabar.site.data.ContentEntry
 import zakadabar.site.data.ContentQuery
 import zakadabar.stack.backend.custom.CustomBackend
+import zakadabar.stack.backend.data.builtin.resources.setting
 import zakadabar.stack.backend.data.query.QueryBackend
 import zakadabar.stack.util.Executor
 import java.io.File
 
 object ContentBackend : CustomBackend(), QueryBackend {
 
+    private val settings by setting<ContentBackendSettings>("zakadabar.site.content")
+
     override val namespace = ContentQuery.dtoNamespace
-
-    override val logger by lazy { LoggerFactory.getLogger(namespace) !! }
-
-    private val root = File("../core/doc") // FIXME replace hard coded file path ./doc
-
-    private val pattern = Regex("[a-zA-Z0-9/\\-\\.]+\\.[a-zA-Z0-9]*")
 
     override fun onInstallRoutes(route: Route) {
         route.query(ContentQuery::class, ::query)
+    }
 
-        route.get("$namespace/{name...}") {
-            val path = call.parameters.getAll("name")?.joinToString("/") ?: throw NotFoundException()
-            if (! path.matches(pattern) || ".." in path) throw BadRequestException("invalid name")
-            call.respondFile(File(root, path))
+    override fun onInstallStatic(route: Route) {
+        with(route) {
+            static(namespace) {
+                staticRootFolder = File(settings.root)
+                files(".")
+            }
         }
     }
 
-    @Suppress("UNUSED_PARAMETER") // parameters are used by automatic mapping
+
+    @Suppress("UNUSED_PARAMETER") // parameters are used for automatic mapping
     private fun query(executor: Executor, query: ContentQuery): List<ContentEntry> {
         val result = mutableListOf<ContentEntry>()
+
+        val root = File(settings.root)
 
         root.walk().forEach {
             if (it.name.endsWith(".md")) {

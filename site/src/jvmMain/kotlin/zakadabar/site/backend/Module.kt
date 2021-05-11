@@ -3,8 +3,8 @@
  */
 package zakadabar.site.backend
 
-import zakadabar.demo.lib.backend.builtin.BuiltinBackend
-import zakadabar.demo.lib.backend.builtin.ExampleReferenceBackend
+import zakadabar.lib.examples.backend.builtin.BuiltinBackend
+import zakadabar.lib.examples.backend.builtin.ExampleReferenceBackend
 import zakadabar.site.backend.data.content.ContentBackend
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.Server

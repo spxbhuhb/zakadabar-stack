@@ -1,11 +1,11 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.button
 
 import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.icon.ZkIconSource
+import zakadabar.stack.frontend.resources.ZkIconSource
 import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.util.PublicApi
 
@@ -29,7 +29,8 @@ open class ZkIconButton(
 ) : ZkElement() {
 
     override fun onCreate() {
-        classList += if (round) ZkButtonStyles.roundButton else ZkButtonStyles.iconButton
+        classList += zkButtonStyles.icon
+        if (round) classList += zkButtonStyles.round
         if (cssClass != null) classList += cssClass
 
         element.style.width = "${buttonSize}px"

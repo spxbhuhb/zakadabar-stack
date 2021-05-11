@@ -1,12 +1,12 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
 package zakadabar.stack.frontend.util
 
 import org.w3c.dom.DOMTokenList
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
+import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.util.PublicApi
 import kotlin.math.max
 
@@ -34,7 +34,7 @@ infix fun HTMLElement.marginBottom(size: Any): HTMLElement {
 
 infix fun HTMLElement.width(value: Any): HTMLElement {
     if (value == "100%") {
-        classList.add(ZkLayoutStyles.w100)
+        classList.add(zkLayoutStyles.w100)
     } else {
         this.style.width = value.toString()
     }
@@ -52,7 +52,7 @@ infix fun HTMLElement.height(value: Any): HTMLElement {
 
 infix fun HTMLElement.flex(value: String): HTMLElement {
     if (value == "grow") {
-        classList.add(ZkLayoutStyles.grow)
+        classList.add(zkLayoutStyles.grow)
     } else {
         throw RuntimeException("invalid flex value: $value")
     }

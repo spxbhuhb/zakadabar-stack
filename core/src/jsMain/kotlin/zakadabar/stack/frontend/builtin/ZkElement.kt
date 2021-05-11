@@ -11,7 +11,7 @@ import org.w3c.dom.css.CSSStyleDeclaration
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventTarget
 import zakadabar.stack.frontend.application.ZkApplication
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutStyles
+import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.resources.css.stringOrPx
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.minusAssign
@@ -70,6 +70,9 @@ open class ZkElement(
         @PublicApi
         fun buildNew(builder: ZkElement.() -> Unit) = ZkElement().build(builder)
 
+        val h100 = zkLayoutStyles.h100
+
+        val w100 = zkLayoutStyles.w100
     }
 
     val id = nextId
@@ -222,7 +225,7 @@ open class ZkElement(
      * Shorthand for the classList property of the HTML [element].
      */
     val classList: DOMTokenList
-        inline get() = element.classList
+        inline get() = buildElement.classList
 
     // -------------------------------------------------------------------------
     //   Convenience functions to call build
@@ -252,37 +255,37 @@ open class ZkElement(
     // -------------------------------------------------------------------------
 
     /**
-     * True when the DOM node does not have the [ZkLayoutStyles].hidden class in
+     * True when the DOM node does not have the [zkLayoutStyles].hidden class in
      * it's class list, false otherwise.
      */
-    fun isShown() = ! element.classList.contains(ZkLayoutStyles.hidden)
+    fun isShown() = ! element.classList.contains(zkLayoutStyles.hidden)
 
     /**
-     * True when the DOM node has the [ZkLayoutStyles].hidden class in it's class list,
+     * True when the DOM node has the [zkLayoutStyles].hidden class in it's class list,
      * false otherwise.
      */
-    fun isHidden() = element.classList.contains(ZkLayoutStyles.hidden)
+    fun isHidden() = element.classList.contains(zkLayoutStyles.hidden)
 
     /**
-     * Toggles the [ZkLayoutStyles].hidden class in the DOM node's class list.
+     * Toggles the [zkLayoutStyles].hidden class in the DOM node's class list.
      */
-    fun toggle() = element.classList.toggle(ZkLayoutStyles.hidden)
+    fun toggle() = element.classList.toggle(zkLayoutStyles.hidden)
 
     /**
-     * Hides the DOM node by adding [ZkLayoutStyles].hidden CSS class to the DOM
+     * Hides the DOM node by adding [zkLayoutStyles].hidden CSS class to the DOM
      * node's class list.
      */
     open fun hide(): ZkElement {
-        classList.add(ZkLayoutStyles.hidden)
+        classList.add(zkLayoutStyles.hidden)
         return this
     }
 
     /**
-     * Shows the DOM node by removing [ZkLayoutStyles].hidden CSS class from the DOM
+     * Shows the DOM node by removing [zkLayoutStyles].hidden CSS class from the DOM
      * node's class list.
      */
     open fun show(): ZkElement {
-        classList.remove(ZkLayoutStyles.hidden)
+        classList.remove(zkLayoutStyles.hidden)
         return this
     }
 
@@ -313,6 +316,14 @@ open class ZkElement(
     }
 
     /**
+     * Adds a left margin to the element.
+     */
+    infix fun marginLeft(size: Any): ZkElement {
+        element.style.marginLeft = if (size is Int) "${size}px" else size.toString()
+        return this
+    }
+
+    /**
      * Adds a bottom margin to the element.
      */
     infix fun marginBottom(size: Any): ZkElement {
@@ -325,30 +336,6 @@ open class ZkElement(
      */
     infix fun display(value: String): ZkElement {
         element.style.display = value
-        return this
-    }
-
-    /**
-     * Sets the witdh of the element.
-     */
-    infix fun width(value: Any): ZkElement {
-        if (value == "100%") {
-            classList += ZkLayoutStyles.w100
-        } else {
-            element.style.width = value.toString()
-        }
-        return this
-    }
-
-    /**
-     * Sets the height of the element.
-     */
-    infix fun height(value: Any): ZkElement {
-        if (value == "100%") {
-            classList += ZkLayoutStyles.h100
-        } else {
-            element.style.height = value.toString()
-        }
         return this
     }
 
@@ -477,6 +464,21 @@ open class ZkElement(
         this.element.appendChild(child.element)
         childElements += child
 
+        syncChildrenState(child)
+    }
+
+    /**
+     * Adds a child element to children and synchronizes its state.
+     *
+     * The child is not added to the DOM.
+     *
+     * When [child] is null this is a no-op.
+     *
+     * The child must be in [ZkElementState.Created] state.
+     */
+    open fun addChildSkipDOM(child: ZkElement?) {
+        if (child == null) return
+        childElements.add(0, child)
         syncChildrenState(child)
     }
 
@@ -611,6 +613,18 @@ open class ZkElement(
         return childElements.first { it.classList.contains(cssClassName) } as T
     }
 
+    inline fun <reified T : ZkElement> find(): List<T> {
+        val kClass = T::class
+        @Suppress("UNCHECKED_CAST") // checking for class
+        return childElements.filter { kClass.isInstance(it) } as List<T>
+    }
+
+    inline fun <reified T : ZkElement> findFirst(): T {
+        val kClass = T::class
+        @Suppress("UNCHECKED_CAST") // checking for class
+        return childElements.first { kClass.isInstance(it) } as T
+    }
+
     // -------------------------------------------------------------------------
     //   Event listeners
     // -------------------------------------------------------------------------
@@ -696,7 +710,7 @@ open class ZkElement(
      */
     open fun row(className: String? = null, build: ZkElement.() -> Unit): HTMLElement {
         val e = document.createElement("div") as HTMLElement
-        e.classList += ZkLayoutStyles.row
+        e.classList += zkLayoutStyles.row
         runBuild(e, className, build)
         return e
     }
@@ -709,7 +723,7 @@ open class ZkElement(
      */
     open fun column(className: String? = null, build: ZkElement.() -> Unit): HTMLElement {
         val e = document.createElement("div") as HTMLElement
-        e.classList += ZkLayoutStyles.column
+        e.classList += zkLayoutStyles.column
         runBuild(e, className, build)
         return e
     }
@@ -723,7 +737,7 @@ open class ZkElement(
      */
     open fun grid(className: String? = null, style: String? = null, build: ZkElement.() -> Unit): HTMLElement {
         val e = document.createElement("div") as HTMLElement
-        e.classList += ZkLayoutStyles.grid
+        e.classList += zkLayoutStyles.grid
         if (style != null) e.style.cssText = style
         runBuild(e, className, build)
         return e
@@ -914,7 +928,7 @@ open class ZkElement(
      * That is "display: none !imporant".
      */
     fun HTMLElement.hide(): HTMLElement {
-        this.classList += ZkLayoutStyles.hidden
+        this.classList += zkLayoutStyles.hidden
         return this
     }
 
@@ -922,7 +936,7 @@ open class ZkElement(
      * Show an [HTMLElement] by removing ZkLayoutStyles.hidden from its class list.
      */
     fun HTMLElement.show(): HTMLElement {
-        this.classList -= ZkLayoutStyles.hidden
+        this.classList -= zkLayoutStyles.hidden
         return this
     }
 
