@@ -23,7 +23,7 @@ open class ZkBuiltinDarkTheme : ZkTheme {
     override var fontSize: String = "16px"
     override var fontWeight: String = "300"
 
-    override var backgroundColor = ZkColors.Zakadabar.gray7
+    override var backgroundColor = ZkColors.Zakadabar.gray8
     override var textColor = ZkColors.Zakadabar.gray2
 
     override var hoverBackgroundColor = "rgba(255,255,255,0.2)"
@@ -92,10 +92,10 @@ open class ZkBuiltinDarkTheme : ZkTheme {
         @Suppress("DuplicatedCode") // no need to make this more complex
         with(zkTitleBarStyles) {
             appTitleBarHeight = "44px"
-            appHandleBackground = ZkColors.Zakadabar.gray8
+            appHandleBackground = ZkColors.Zakadabar.gray7
             appHandleText = textColor
             appHandleBorder = border
-            titleBarBackground = ZkColors.Zakadabar.gray8
+            titleBarBackground = ZkColors.Zakadabar.gray7
             titleBarText = textColor
             titleBarBorder = border
         }

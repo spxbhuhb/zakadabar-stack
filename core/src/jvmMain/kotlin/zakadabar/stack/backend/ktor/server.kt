@@ -21,6 +21,7 @@ import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 import zakadabar.stack.backend.Forbidden
 import zakadabar.stack.backend.Server.Companion.anonymous
+import zakadabar.stack.backend.Server.Companion.staticRoot
 import zakadabar.stack.backend.custom.CustomBackend
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
 import zakadabar.stack.backend.data.builtin.session.*
@@ -74,6 +75,10 @@ fun buildServer(
         json(Json { })
     }
 
+    install(Compression) {
+
+    }
+
     install(WebSockets) {
         val c = config.ktor.websocket
         pingPeriod = Duration.ofSeconds(c.pingPeriod)
@@ -101,7 +106,7 @@ fun buildServer(
             // api not found has to go directly to the browser, check
             // for index.html is there to avoid recursive redirection
             if (! uri.startsWith("/api") && uri != "/index.html") {
-                call.respondRedirect("/index.html")
+                call.respondFile(File(staticRoot, "/index.html"))
             }
         }
     }
