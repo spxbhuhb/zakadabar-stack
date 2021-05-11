@@ -13,7 +13,7 @@ see [components stability](https://kotlinlang.org/docs/reference/evolution/compo
 
 ## Documentation
 
-1. Please visit [zakadabar.com](https://zakadabar.com).
+Please visit [zakadabar.io](https://zakadabar.io).
 
 ## Gradle
 
@@ -31,7 +31,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation("hu.simplexion.zakadabar:core:2021.5.4.2")
+                implementation("hu.simplexion.zakadabar:core:2021.5.11")
             }
         }
     }
