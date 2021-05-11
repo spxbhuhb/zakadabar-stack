@@ -2,7 +2,7 @@
 
 * Use [ZkButton](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/button/ZkButton.kt) to add buttons in different
   shapes and flavours.
-* Extend [ZkButtonStyles](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/button/ZkButtonStyles.kt) to override
+* Extend [ZkButtonStyles](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/button/zkButtonStyles.kt) to override
   default styles and dimensions.
 
 Use constructor parameters of [ZkButton](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/button/ZkButton.kt) to

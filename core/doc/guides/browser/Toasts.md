@@ -5,7 +5,7 @@ Toasts are small pop-up messages displayed to the user to provide information ab
 * Use [toast convenience functions](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/toast.kt) to display basic
   toasts.
 * Use [ZkToast](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/ZkToast.kt) to display fine-tuned toasts.
-* Extend [ZkToastStyles](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/ZkToastStyles.kt) to override default
+* Extend [zkToastStyles](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/zkToastStyles.kt) to override default
   styles.
 * Toasts are added to the `toasts` property
   of [ZkApplication](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt) by convenience functions.

@@ -12,6 +12,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.lib.examples.data.builtin.ExampleQuery
 import zakadabar.lib.examples.data.builtin.ExampleResult
+import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.get
 import zakadabar.stack.backend.data.record.RecordBackend
@@ -44,7 +45,7 @@ object BuiltinBackend : RecordBackend<BuiltinDto>() {
 
     override fun create(executor: Executor, dto: BuiltinDto) = transaction {
 
-        authorize(true)
+        authorize(executor, StackRoles.siteMember)
 
         if (dto.stringValue == "conflict") throw DataConflictException("stringValueConflict")
 
@@ -62,7 +63,7 @@ object BuiltinBackend : RecordBackend<BuiltinDto>() {
 
     override fun update(executor: Executor, dto: BuiltinDto) = transaction {
 
-        authorize(true)
+        authorize(executor, StackRoles.siteMember)
 
         BuiltinDao[dto.id]
             .fromDto(dto)
@@ -71,7 +72,7 @@ object BuiltinBackend : RecordBackend<BuiltinDto>() {
 
     override fun delete(executor: Executor, recordId: RecordId<BuiltinDto>) = transaction {
 
-        authorize(true)
+        authorize(executor, StackRoles.siteMember)
 
         BuiltinDao[recordId].delete()
     }

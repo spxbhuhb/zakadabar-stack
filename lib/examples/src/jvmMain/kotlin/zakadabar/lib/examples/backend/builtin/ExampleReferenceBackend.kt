@@ -9,6 +9,8 @@ import io.ktor.routing.*
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
+import zakadabar.stack.StackRoles
+import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.get
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.data.record.RecordId
@@ -39,27 +41,42 @@ object ExampleReferenceBackend : RecordBackend<ExampleReferenceDto>() {
     }
 
     override fun all(executor: Executor) = transaction {
+
+        authorize(true)
+
         ExampleReferenceTable
             .selectAll()
             .map(ExampleReferenceTable::toDto)
     }
 
     override fun create(executor: Executor, dto: ExampleReferenceDto) = transaction {
+
+        authorize(executor, StackRoles.siteMember)
+
         ExampleReferenceDao.new { fromDto(dto) }
             .toDto()
     }
 
     override fun read(executor: Executor, recordId: RecordId<ExampleReferenceDto>) = transaction {
+
+        authorize(true)
+
         ExampleReferenceDao[recordId].toDto()
     }
 
     override fun update(executor: Executor, dto: ExampleReferenceDto) = transaction {
+
+        authorize(executor, StackRoles.siteMember)
+
         ExampleReferenceDao[dto.id]
             .fromDto(dto)
             .toDto()
     }
 
     override fun delete(executor: Executor, recordId: RecordId<ExampleReferenceDto>) = transaction {
+
+        authorize(executor, StackRoles.siteMember)
+
         ExampleReferenceDao[recordId].delete()
     }
 }

@@ -3,7 +3,7 @@
 * Use [ZkIcon](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/icon/ZkIcon.kt) to display a simple icon.
 * Get built-in icons from [ZkIcons](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/ZkIcons.kt).
 * Use a [button](./Buttons.md) instead to display an icon with containing box, fill, etc.
-* Extend [ZkIconStyles](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/button/ZkButtonStyles.kt) to override
+* Extend [ZkIconStyles](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/button/zkButtonStyles.kt) to override
   default styles and dimensions.
 
 ## Use an Icon

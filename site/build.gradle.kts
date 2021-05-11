@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.4.27"
+version = "2021.5.11"
 
 application {
     mainClassName = "zakadabar.stack.backend.ServerKt"
@@ -88,7 +88,7 @@ val copyAppStatic by tasks.registering(Copy::class) {
 
 val copyMarkdown by tasks.registering(Copy::class) {
     from("${rootProject.projectDir}/core/doc")
-    into("$distDir/var/static")
+    into("$distDir/var/static/doc")
     include("**/*.md")
     includeEmptyDirs = false
 }
