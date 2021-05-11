@@ -37,6 +37,7 @@ class ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
         maxHeight = appTitleBarHeight
         whiteSpace = "nowrap"
         backgroundColor = appHandleBackground
+        color = appHandleText
         cursor = "pointer"
     }
 

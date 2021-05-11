@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.frontend.resources.css
 
-import kotlinx.atomicfu.atomic
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.application.ZkApplication
@@ -59,10 +58,10 @@ class CssStyleSheetDelegate<T : ZkTheme, S : ZkCssStyleSheet<T>>(
 open class ZkCssStyleSheet<T : ZkTheme> {
 
     companion object {
-        val nextId = atomic(0)
+        var nextId = 0
     }
 
-    val id = nextId.getAndIncrement()
+    val id = nextId ++
     val element = document.createElement("style")
 
     init {
@@ -81,7 +80,7 @@ open class ZkCssStyleSheet<T : ZkTheme> {
     class CssDelegateProvider(val name: String? = null, val selector: String? = null, val builder: ZkCssStyleRule.(ZkTheme) -> Unit) {
         operator fun provideDelegate(thisRef: ZkCssStyleSheet<*>, prop: KProperty<*>): ReadOnlyProperty<ZkCssStyleSheet<*>, String> {
 
-            val cssClassName = name ?: "${thisRef::class.simpleName}-${prop.name}-${nextId.getAndIncrement()}"
+            val cssClassName = name ?: "${thisRef::class.simpleName}-${prop.name}-${nextId ++}"
 
             thisRef.rules[prop.name] = ZkCssStyleRule(thisRef, prop.name, cssClassName, selector, builder)
 

@@ -11,13 +11,23 @@ val zkSideBarStyles by cssStyleSheet(ZkSideBarStyles())
 
 open class ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
 
+    open var backgroundColor: String? = null
+    open var textColor: String? = null
+    open var fontSize: String = "80%"
+    open var hoverTextColor: String? = null
+
     open val sidebar by cssClass {
         boxSizing = "border-box"
         minHeight = "100%"
         overflowY = "auto"
         minWidth = 220
         paddingTop = 10
-        fontSize = "80%"
+        fontSize = this@ZkSideBarStyles.fontSize
+
+        this@ZkSideBarStyles.backgroundColor?.let { backgroundColor = this@ZkSideBarStyles.backgroundColor }
+        this@ZkSideBarStyles.textColor?.let { color = this@ZkSideBarStyles.textColor }
+        this@ZkSideBarStyles.backgroundColor?.let { backgroundColor = this@ZkSideBarStyles.backgroundColor }
+
     }
 
     open val item by cssClass {
@@ -32,7 +42,7 @@ open class ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
 
         hover {
             backgroundColor = theme.hoverBackgroundColor
-            color = theme.hoverTextColor
+            color = this@ZkSideBarStyles.hoverTextColor ?: theme.hoverTextColor
         }
     }
 
@@ -46,7 +56,7 @@ open class ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
         alignItems = "center"
         paddingRight = 8
         paddingLeft = 14
-        fill = theme.textColor
+        fill = this@ZkSideBarStyles.textColor ?: theme.textColor
 
         hover {
             backgroundColor = theme.hoverBackgroundColor

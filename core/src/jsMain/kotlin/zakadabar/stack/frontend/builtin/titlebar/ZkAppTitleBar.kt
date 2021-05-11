@@ -45,8 +45,8 @@ open class ZkAppTitleBar(
     }
 
     open fun onTitleChange(value: ZkAppTitle?) {
-        titleContainer.clear()
-        contextElements.clear()
+        titleContainer.childElements.forEach { titleContainer -= it }
+        contextElements.childElements.forEach { titleContainer -= it }
 
         if (value == null) return
 

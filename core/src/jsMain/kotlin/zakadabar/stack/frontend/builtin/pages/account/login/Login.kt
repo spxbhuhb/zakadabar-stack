@@ -45,7 +45,7 @@ object Login : ZkPage(ZkFullScreenLayout) {
                     style {
                         minHeight = "unset"
                         maxHeight = "unset"
-                        paddingBottom = "${theme.spacingStep / 2}px"
+                        padding = "${theme.spacingStep / 2}px"
                     }
                     + strings.applicationName
                 } marginBottom 20

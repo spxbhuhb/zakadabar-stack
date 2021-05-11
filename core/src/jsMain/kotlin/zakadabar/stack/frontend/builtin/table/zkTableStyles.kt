@@ -20,9 +20,9 @@ class ZkTableStyles : ZkCssStyleSheet<ZkTheme>() {
     var hoverBackground: String = ZkColors.LightBlue.c50
     var hoverText: String = textColor
     var innerBorder: String = ZkColors.Gray.c300
-    var headerBottom: String = ZkColors.LightBlue.a700
+    var headerBottomBorder: String? = null
     var border: String? = null
-    var actionColor: String = ZkColors.LightBlue.a700
+    var actionTextColor: String = ZkColors.LightBlue.a700
     var rowHeight: String = "42px"
 
     val outerContainer by cssClass {
@@ -143,7 +143,7 @@ class ZkTableStyles : ZkCssStyleSheet<ZkTheme>() {
             background = headerBackground
             textAlign = "left"
             color = headerText
-            borderBottom = "1px solid ${headerBottom}"
+            borderBottom = headerBottomBorder ?: theme.blockBorder
             cursor = "pointer"
             zIndex = 30
         }
@@ -213,7 +213,7 @@ class ZkTableStyles : ZkCssStyleSheet<ZkTheme>() {
         fontWeight = "400 !important"
         whiteSpace = "nowrap"
         cursor = "pointer"
-        color = "$actionColor !important"
+        color = "$actionTextColor !important"
     }
 
 }
