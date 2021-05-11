@@ -70,6 +70,9 @@ open class ZkElement(
         @PublicApi
         fun buildNew(builder: ZkElement.() -> Unit) = ZkElement().build(builder)
 
+        val h100 = zkLayoutStyles.h100
+
+        val w100 = zkLayoutStyles.w100
     }
 
     val id = nextId

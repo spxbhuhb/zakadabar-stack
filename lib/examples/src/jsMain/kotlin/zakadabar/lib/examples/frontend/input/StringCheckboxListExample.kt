@@ -12,7 +12,7 @@ import zakadabar.stack.frontend.builtin.input.ZkCheckboxListItem
 import zakadabar.stack.frontend.builtin.note.ZkNote
 import zakadabar.stack.frontend.builtin.note.noteSecondary
 import zakadabar.stack.frontend.builtin.note.noteSuccess
-import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.util.marginRight
 
@@ -37,7 +37,7 @@ class StringCheckboxListExample(
     override fun onCreate() {
         super.onCreate()
 
-        + column(ZkPageStyles.content) {
+        + column(zkPageStyles.content) {
             + noteSuccess("Strings", stringCheckboxList) marginBottom 20
             + buttonSecondary(strings.execute, onClick = ::onSave) marginBottom 20
             + noteSecondary("Output", "")

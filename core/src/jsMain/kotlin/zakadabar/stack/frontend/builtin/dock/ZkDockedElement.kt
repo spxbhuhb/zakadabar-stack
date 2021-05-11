@@ -8,7 +8,6 @@ package zakadabar.stack.frontend.builtin.dock
 import kotlinx.browser.document
 import org.w3c.dom.HTMLHtmlElement
 import zakadabar.stack.frontend.application.ZkApplication.dock
-import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
 import zakadabar.stack.frontend.resources.ZkIcons
@@ -87,7 +86,7 @@ open class ZkDockedElement(
             ZkDockedElementState.Minimized -> {
                 with(element.style) {
                     width = "max-content"
-                    height = "${theme.dock.headerHeight}px"
+                    height = "${zkDockStyles.headerHeight}px"
                     margin = "0px"
                 }
             }

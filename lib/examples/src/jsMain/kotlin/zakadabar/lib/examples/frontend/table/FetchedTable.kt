@@ -6,13 +6,13 @@ package zakadabar.lib.examples.frontend.table
 import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.lib.examples.frontend.crud.BuiltinTable
 import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.util.io
 
 /**
  * This example shows all built in table columns with generated table data.
  */
-object FetchedTable : ZkPage(cssClass = ZkPageStyles.fixed) {
+object FetchedTable : ZkPage(cssClass = zkPageStyles.fixed) {
 
     override fun onCreate() {
         super.onCreate()

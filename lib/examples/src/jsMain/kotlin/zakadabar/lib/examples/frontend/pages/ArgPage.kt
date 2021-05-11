@@ -6,7 +6,7 @@ package zakadabar.lib.examples.frontend.pages
 import kotlinx.serialization.Serializable
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.pages.ZkArgPage
-import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.util.marginRight
 
 /**
@@ -34,7 +34,7 @@ object ArgPage : ZkArgPage<ArgPage.Args>(
     Args.serializer()
 ) {
 
-    val content = ZkElement() css ZkPageStyles.content
+    val content = ZkElement() css zkPageStyles.content
 
     @Serializable
     class Args(

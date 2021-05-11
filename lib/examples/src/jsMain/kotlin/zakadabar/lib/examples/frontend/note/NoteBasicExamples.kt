@@ -6,7 +6,7 @@ package zakadabar.lib.examples.frontend.note
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.note.*
-import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 
 /**
  * This example shows how to create basic notes.
@@ -18,7 +18,7 @@ class NoteBasicExamples(
     override fun onCreate() {
         super.onCreate()
 
-        + column(ZkPageStyles.content) {
+        + column(zkPageStyles.content) {
 
             + notePrimary("Primary Note", "Content of the note.") marginBottom 20
             + noteSecondary("Secondary Note", "Content of the note.") marginBottom 20

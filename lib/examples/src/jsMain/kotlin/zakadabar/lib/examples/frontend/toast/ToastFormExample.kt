@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.button.buttonSecondary
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.builtin.toast.ZkToast
 import zakadabar.stack.frontend.util.default
 
@@ -24,7 +24,7 @@ class ToastFormExample(
     override fun onCreate() {
         super.onCreate()
 
-        + column(ZkPageStyles.content) {
+        + column(zkPageStyles.content) {
 
             + buttonSecondary("Open as Toast") {
                 ZkToast(content = InlineForm(), hideAfter = null).run()

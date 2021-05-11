@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.titlebar
 
@@ -28,20 +28,20 @@ open class ZkAppTitleBar(
         }
 
     override fun onCreate() {
-        classList += ZkTitleBarStyles.appTitleBar
+        classList += zkTitleBarStyles.appTitleBar
 
-        + handleContainer css ZkTitleBarStyles.sidebarHandle build {
+        + handleContainer css zkTitleBarStyles.sidebarHandle build {
             hide()
-            + ZkIconButton(ZkIcons.notes, cssClass = ZkTitleBarStyles.sidebarHandle, onClick = ::onHandleClick)
+            + ZkIconButton(ZkIcons.notes, cssClass = zkTitleBarStyles.sidebarHandle, onClick = ::onHandleClick)
         }
 
-        + titleContainer css ZkTitleBarStyles.titleContainer marginRight 10
+        + titleContainer css zkTitleBarStyles.titleContainer marginRight 10
 
         + div { style { flexGrow = "1" } }
 
-        + contextElements css ZkTitleBarStyles.contextElementContainer marginRight 10
+        + contextElements css zkTitleBarStyles.contextElementContainer marginRight 10
 
-        + globalElements css ZkTitleBarStyles.globalElementContainer marginRight 10
+        + globalElements css zkTitleBarStyles.globalElementContainer marginRight 10
     }
 
     open fun onTitleChange(value: ZkAppTitle?) {

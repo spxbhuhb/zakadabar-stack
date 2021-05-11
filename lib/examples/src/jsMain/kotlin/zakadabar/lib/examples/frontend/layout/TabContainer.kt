@@ -8,7 +8,7 @@ import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.plusAssign
@@ -16,9 +16,9 @@ import zakadabar.stack.frontend.util.plusAssign
 /**
  * This example shows how to create a tabbed container.
  *
- * We want the scroll to be inside the tab container, [ZkPageStyles.fixed] takes care about that.
+ * We want the scroll to be inside the tab container, [zkPageStyles.fixed] takes care about that.
  */
-object TabContainer : ZkPage(cssClass = ZkPageStyles.fixed) {
+object TabContainer : ZkPage(cssClass = zkPageStyles.fixed) {
 
     override fun onCreate() {
         super.onCreate()
@@ -36,7 +36,7 @@ object TabContainer : ZkPage(cssClass = ZkPageStyles.fixed) {
             // We want this particular container to fill the whole page.
 
             classList += zkLayoutStyles.grow
-            classList += ZkPageStyles.content
+            classList += zkPageStyles.content
 
             // This is needed to make the content scrollable if there is
             // not enough vertical space for it.

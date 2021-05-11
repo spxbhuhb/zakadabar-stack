@@ -6,8 +6,24 @@ package zakadabar.stack.frontend.builtin.table
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-object ZkTableStyles : ZkCssStyleSheet<ZkTheme>() {
+val zkTableStyles by cssStyleSheet(ZkTableStyles())
+
+class ZkTableStyles : ZkCssStyleSheet<ZkTheme>() {
+
+    var headerBackground: String = ZkColors.white
+    var headerText: String = ZkColors.Gray.c800
+    var oddRowBackground: String = ZkColors.white
+    var evenRowBackground: String = ZkColors.white
+    var textColor: String = ZkColors.BlueGray.c900
+    var hoverBackground: String = ZkColors.LightBlue.c50
+    var hoverText: String = textColor
+    var innerBorder: String = ZkColors.Gray.c300
+    var headerBottom: String = ZkColors.LightBlue.a700
+    var border: String? = null
+    var actionColor: String = ZkColors.LightBlue.a700
+    var rowHeight: String = "42px"
 
     val outerContainer by cssClass {
         display = "flex"
@@ -18,7 +34,7 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val contentContainer by cssClass {
         position = "relative"
-        backgroundColor = theme.layout.defaultBackground
+        backgroundColor = theme.backgroundColor
         flexGrow = 1
         overflow = "auto"
         boxShadow = theme.boxShadow
@@ -33,7 +49,7 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTheme>() {
         bottom = 0
         borderRight = "1px solid ${ZkColors.LightBlue.c800}"
         borderLeft = "1px solid ${ZkColors.LightBlue.c800}"
-        backgroundColor = theme.table.headerBackground
+        backgroundColor = headerBackground
         marginTop = 4
         marginBottom = 4
         marginRight = 8
@@ -109,7 +125,7 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTheme>() {
         }
 
         on(" tr:hover td") {
-            backgroundColor = theme.table.hoverBackground
+            backgroundColor = hoverBackground
         }
 
         on(" th") {
@@ -124,10 +140,10 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTheme>() {
             whiteSpace = "nowrap"
             position = "sticky"
             top = 0
-            background = theme.table.headerBackground
+            background = headerBackground
             textAlign = "left"
-            color = theme.table.headerText
-            borderBottom = "1px solid ${theme.table.headerBottom}"
+            color = headerText
+            borderBottom = "1px solid ${headerBottom}"
             cursor = "pointer"
             zIndex = 30
         }
@@ -150,30 +166,29 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTheme>() {
             overflow = "hidden"
             textOverflow = "ellipsis"
             whiteSpace = "nowrap"
-            color = theme.table.text
-            borderBottom = "1px solid ${theme.table.innerBorder}"
-            backgroundColor = theme.table.oddRowBackground
+            color = textColor
+            borderBottom = "1px solid $innerBorder"
+            backgroundColor = oddRowBackground
             zIndex = 20
         }
 
-        if (theme.table.border != null) {
-            val border = theme.table.border
+        if (this@ZkTableStyles.border != null) {
 
             on(" tr td:first-child") {
-                borderLeft = border
+                borderLeft = this@ZkTableStyles.border
             }
 
             on(" tr td:last-child") {
-                borderRight = border
+                borderRight = this@ZkTableStyles.border
             }
 
             on(" tr:last-child td") {
-                borderBottom = border
+                borderBottom = this@ZkTableStyles.border
             }
         }
 
 //        on(" tr:nth-child(even) td") {
-//            background = theme.table.evenRowBackground
+//            background = evenRowBackground
 //        }
 
         on(" td:first-child") {
@@ -198,11 +213,7 @@ object ZkTableStyles : ZkCssStyleSheet<ZkTheme>() {
         fontWeight = "400 !important"
         whiteSpace = "nowrap"
         cursor = "pointer"
-        color = "${theme.table.actionColor} !important"
-    }
-
-    init {
-        attach()
+        color = "$actionColor !important"
     }
 
 }

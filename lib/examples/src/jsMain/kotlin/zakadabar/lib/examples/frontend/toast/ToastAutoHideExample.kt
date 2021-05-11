@@ -8,7 +8,7 @@ import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.buttonSecondary
 import zakadabar.stack.frontend.builtin.input.ZkTextInput
-import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.builtin.toast.ZkToast
 import zakadabar.stack.frontend.builtin.toast.toastDanger
 import zakadabar.stack.frontend.builtin.toast.toastInfo
@@ -25,7 +25,7 @@ class ToastAutoHideExample(
     override fun onCreate() {
         super.onCreate()
 
-        + column(ZkPageStyles.content) {
+        + column(zkPageStyles.content) {
 
             + grid {
                 gridTemplateColumns = "repeat(2,max-content)"

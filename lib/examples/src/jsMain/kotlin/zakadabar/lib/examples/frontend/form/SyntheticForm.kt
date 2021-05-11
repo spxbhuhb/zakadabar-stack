@@ -6,7 +6,7 @@ package zakadabar.lib.examples.frontend.form
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.synthetic.ZkSyntheticForm
 import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.util.default
 
 /**
@@ -21,7 +21,7 @@ object SyntheticForm : ZkPage() {
         val form = ZkSyntheticForm(dto.schema().toDescriptorDto())
         form.mode = ZkElementMode.Other
 
-        + div(ZkPageStyles.content) {
+        + div(zkPageStyles.content) {
             + form
         }
 

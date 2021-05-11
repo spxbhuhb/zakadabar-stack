@@ -5,7 +5,7 @@ package zakadabar.lib.markdown.frontend
 
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
 import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.util.io
 
 /**
@@ -20,7 +20,7 @@ open class MarkdownPage(
         super.onCreate()
 
         io {
-            + MarkdownView(url, context = context) css ZkPageStyles.content
+            + MarkdownView(url, context = context) css zkPageStyles.content
         }
     }
 

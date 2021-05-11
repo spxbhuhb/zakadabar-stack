@@ -4,7 +4,9 @@
 package zakadabar.site.frontend.resources
 
 import zakadabar.lib.markdown.frontend.MarkdownTheme
+import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
+import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
 
 class SiteLightTheme : ZkBuiltinLightTheme(), SiteTheme {
 
@@ -23,7 +25,9 @@ class SiteLightTheme : ZkBuiltinLightTheme(), SiteTheme {
         borderColor = border
     )
 
-    init {
-        titleBar.appTitleBarHeight = "60px"
+    override fun onResume() {
+        super<ZkBuiltinLightTheme>.onResume() // FIXME remove the SiteTheme
+        zkLayoutStyles.appTitleBarHeight = "60px"
+        zkTitleBarStyles.appTitleBarHeight = "60px"
     }
 }

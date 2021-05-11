@@ -3,12 +3,8 @@
  */
 package zakadabar.lib.examples.frontend.themes
 
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutTheme
 import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
-import zakadabar.stack.frontend.resources.ZkColors
 
 class DemoThemeLight : ZkBuiltinLightTheme() {
-
-    override var layout = ZkLayoutTheme(defaultBackground = ZkColors.LightBlue.c50)
 
 }

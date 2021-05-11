@@ -12,7 +12,7 @@ import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
 import zakadabar.stack.frontend.builtin.modal.ZkMessageDialog
 import zakadabar.stack.frontend.builtin.note.ZkNote
 import zakadabar.stack.frontend.builtin.note.noteSecondary
-import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.marginBottom
 
@@ -26,7 +26,7 @@ class ModalExamples(
     override fun onCreate() {
         super.onCreate()
 
-        + column(ZkPageStyles.content) {
+        + column(zkPageStyles.content) {
             + grid {
                 gridTemplateColumns = "repeat(3,max-content)"
                 gridGap = theme.spacingStep

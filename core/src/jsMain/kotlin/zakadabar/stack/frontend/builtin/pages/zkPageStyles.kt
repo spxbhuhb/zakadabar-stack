@@ -5,8 +5,11 @@ package zakadabar.stack.frontend.builtin.pages
 
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-object ZkPageStyles : ZkCssStyleSheet<ZkTheme>() {
+val zkPageStyles by cssStyleSheet(ZkPageStyles())
+
+class ZkPageStyles : ZkCssStyleSheet<ZkTheme>() {
 
     /**
      * This style is meant for pages where the content of the page scrolls itself.
@@ -35,7 +38,4 @@ object ZkPageStyles : ZkCssStyleSheet<ZkTheme>() {
         margin = theme.spacingStep
     }
 
-    init {
-        attach()
-    }
 }

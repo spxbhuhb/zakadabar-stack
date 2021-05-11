@@ -7,7 +7,7 @@ import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.*
-import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.builtin.toast.*
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.util.marginBottom
@@ -22,7 +22,7 @@ class ToastBasicExamples(
     override fun onCreate() {
         super.onCreate()
 
-        + column(ZkPageStyles.content) {
+        + column(zkPageStyles.content) {
 
             + grid {
                 gridTemplateColumns = "repeat(2,max-content)"

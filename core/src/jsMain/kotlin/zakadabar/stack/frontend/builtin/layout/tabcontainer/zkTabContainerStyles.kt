@@ -1,13 +1,22 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.layout.tabcontainer
 
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-object ZkTabContainerStyles : ZkCssStyleSheet<ZkTheme>() {
+val zkTabContainerStyles by cssStyleSheet(ZkTabContainerStyles())
+
+class ZkTabContainerStyles : ZkCssStyleSheet<ZkTheme>() {
+
+    val labelTextColor: String = ZkColors.black
+    val labelBackgroundColor: String = ZkColors.Gray.c50
+    val activeForeground: String = ZkColors.white
+    val activeBackground: String = ZkColors.LightBlue.a400
+    val labelBottomBorder: String = ZkColors.LightBlue.a400
 
     val container by cssClass {
         display = "flex"
@@ -17,7 +26,7 @@ object ZkTabContainerStyles : ZkCssStyleSheet<ZkTheme>() {
     val labels by cssClass {
         display = "flex"
         flexDirection = "row"
-        borderBottom = "1px solid ${theme.tabContainer.labelBottomBorder}"
+        borderBottom = "1px solid $labelBottomBorder"
     }
 
     val label by cssClass {
@@ -26,8 +35,8 @@ object ZkTabContainerStyles : ZkCssStyleSheet<ZkTheme>() {
         fontSize = 14
         minHeight = 32
         minWidth = 100
-        backgroundColor = theme.tabContainer.background
-        color = theme.tabContainer.foreground
+        backgroundColor = labelBackgroundColor
+        color = labelTextColor
         paddingLeft = 8
         paddingRight = 8
         paddingBottom = 6
@@ -45,14 +54,14 @@ object ZkTabContainerStyles : ZkCssStyleSheet<ZkTheme>() {
     }
 
     val activeLabel by cssClass {
-        backgroundColor = theme.tabContainer.activeBackground
-        color = theme.tabContainer.activeForeground
-        borderLeft = "1px solid ${theme.tabContainer.activeBackground}"
+        backgroundColor = activeBackground
+        color = activeForeground
+        borderLeft = "1px solid $activeBackground"
         borderRight = borderLeft
         borderTop = borderLeft
 
         on(":first-child") {
-            borderLeft = "1px solid ${theme.tabContainer.activeBackground}"
+            borderLeft = "1px solid $activeBackground"
         }
     }
 
@@ -60,9 +69,5 @@ object ZkTabContainerStyles : ZkCssStyleSheet<ZkTheme>() {
         flex = "1 1"
         display = "flex"
         minHeight = "0"
-    }
-
-    init {
-        attach()
     }
 }

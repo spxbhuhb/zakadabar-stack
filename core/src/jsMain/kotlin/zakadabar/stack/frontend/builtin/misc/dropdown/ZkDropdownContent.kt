@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.misc.dropdown
 
@@ -18,7 +18,7 @@ class ZkDropdownContent(
 
         // kept it this way so we have a clear separation and wrapper around the content
 
-        this css ZkDropdownStyles.dropdownContent build {
+        this css zkDropdownStyles.dropdownContent build {
             + content
         }
 

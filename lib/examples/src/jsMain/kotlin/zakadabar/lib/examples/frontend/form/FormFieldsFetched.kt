@@ -7,7 +7,7 @@ import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.lib.examples.frontend.crud.BuiltinForm
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.util.io
 
 /**
@@ -27,7 +27,7 @@ object FormFieldsFetched : ZkPage() {
             form.dto = BuiltinDto.read(id)
             form.mode = ZkElementMode.Action
 
-            + div(ZkPageStyles.content) {
+            + div(zkPageStyles.content) {
                 + form
             }
         }

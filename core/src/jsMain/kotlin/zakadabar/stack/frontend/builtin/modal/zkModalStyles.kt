@@ -47,8 +47,4 @@ class ZkModalStyles : ZkCssStyleSheet<ZkTheme>() {
         paddingBottom = theme.spacingStep
     }
 
-    init {
-        attach()
-    }
-
 }

@@ -14,7 +14,7 @@ import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.builtin.toast.toastDanger
 import zakadabar.stack.frontend.builtin.toast.toastSuccess
 import zakadabar.stack.frontend.util.default
@@ -22,7 +22,7 @@ import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.log
 import zakadabar.stack.frontend.util.plusAssign
 
-object QueryPage : ZkPage(cssClass = ZkPageStyles.fixed) {
+object QueryPage : ZkPage(cssClass = zkPageStyles.fixed) {
 
     val form = QueryForm(QueryPage::runQuery)
 

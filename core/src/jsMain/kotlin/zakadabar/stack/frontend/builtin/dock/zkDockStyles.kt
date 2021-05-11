@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.dock
 
+import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
@@ -10,6 +11,13 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 val zkDockStyles by cssStyleSheet(ZkDockStyles())
 
 class ZkDockStyles : ZkCssStyleSheet<ZkTheme>() {
+
+    var dockBackground: String = ZkColors.white
+    var headerBackground: String = ZkColors.BlueGray.c600
+    var headerForeground: String = ZkColors.black
+    var headerIconBackground: String = "transparent"
+    var headerIconFill: String = ZkColors.white
+    var headerHeight: String = "26px"
 
     val dock by cssClass {
         position = "fixed"
@@ -23,7 +31,7 @@ class ZkDockStyles : ZkCssStyleSheet<ZkTheme>() {
     }
 
     val dockItem by cssClass {
-        backgroundColor = theme.dock.background
+        backgroundColor = dockBackground
         display = "flex"
         flexDirection = "column"
     }
@@ -32,20 +40,20 @@ class ZkDockStyles : ZkCssStyleSheet<ZkTheme>() {
         display = "flex"
         flexDirection = "row"
         boxSizing = "border-box"
-        minHeight = theme.dock.headerHeight
-        height = theme.dock.headerHeight
+        minHeight = headerHeight
+        height = headerHeight
         alignItems = "center"
-        backgroundColor = theme.dock.headerBackground
+        backgroundColor = headerBackground
         overflow = "hidden"
     }
 
     val headerIcon by cssClass {
         boxSizing = "border-box"
         padding = 6
-        height = theme.dock.headerHeight
-        width = theme.dock.headerHeight
-        backgroundColor = theme.dock.headerIconBackground
-        fill = theme.dock.headerIconFill
+        height = headerHeight
+        width = headerHeight
+        backgroundColor = headerIconBackground
+        fill = headerIconFill
         marginRight = 8
     }
 
@@ -53,7 +61,7 @@ class ZkDockStyles : ZkCssStyleSheet<ZkTheme>() {
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
-        color = theme.dock.headerForeground
+        color = headerForeground
         fontSize = theme.fontSize
         height = 21
     }
@@ -70,9 +78,9 @@ class ZkDockStyles : ZkCssStyleSheet<ZkTheme>() {
     val extensionIcon by cssClass {
         boxSizing = "border-box"
         padding = "6px 2px 2px 2px"
-        height = theme.dock.headerHeight
-        backgroundColor = theme.dock.headerIconBackground
-        fill = theme.dock.headerIconFill
+        height = headerHeight
+        backgroundColor = headerIconBackground
+        fill = headerIconFill
         strokeWidth = 2
         cursor = "pointer"
         userSelect = "none"
@@ -84,9 +92,5 @@ class ZkDockStyles : ZkCssStyleSheet<ZkTheme>() {
         on(":last-child") {
             paddingRight = 6
         }
-    }
-
-    init {
-        attach()
     }
 }

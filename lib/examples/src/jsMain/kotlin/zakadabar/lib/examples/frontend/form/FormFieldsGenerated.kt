@@ -6,7 +6,7 @@ package zakadabar.lib.examples.frontend.form
 import zakadabar.lib.examples.frontend.crud.BuiltinForm
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.util.default
 
 /**
@@ -21,7 +21,7 @@ object FormFieldsGenerated : ZkPage() {
         form.dto = default()
         form.mode = ZkElementMode.Update
 
-        + div(ZkPageStyles.content) {
+        + div(zkPageStyles.content) {
             + form
         }
     }

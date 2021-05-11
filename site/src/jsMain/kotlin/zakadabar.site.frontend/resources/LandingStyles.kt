@@ -64,7 +64,7 @@ object LandingStyles : ZkCssStyleSheet<ZkTheme>() {
         fontSize = "16px !important"
         fontWeight = 400
         whiteSpace = "nowrap"
-        color = "${theme.layout.defaultForeground} !important"
+        color = "${theme.textColor} !important"
         backgroundColor = "transparent !important"
         marginRight = 20
         marginBottom = 20

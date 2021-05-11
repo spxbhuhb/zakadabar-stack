@@ -116,16 +116,16 @@ open class ZkTable<T : DtoBase> : ZkElement() {
     override fun onCreate() {
         onConfigure()
 
-        className = ZkTableStyles.outerContainer
-        classList += ZkTableStyles.noSelect
+        className = zkTableStyles.outerContainer
+        classList += zkTableStyles.noSelect
 
-        + div(ZkTableStyles.contentContainer) {
+        + div(zkTableStyles.contentContainer) {
 
             + div {
                 areas = Areas(element.id, ::onAreasChange, buildElement, 0).apply { onCreate() }
             }
 
-            tableElement = table(ZkTableStyles.table) {
+            tableElement = table(zkTableStyles.table) {
 
                 buildElement.style.cssText = inlineCss()
                 + thead {

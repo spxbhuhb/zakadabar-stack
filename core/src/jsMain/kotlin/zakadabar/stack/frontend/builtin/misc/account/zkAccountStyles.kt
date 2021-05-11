@@ -1,12 +1,15 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.misc.account
 
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-object ZkAccountStyles : ZkCssStyleSheet<ZkTheme>() {
+val zkAccountStyles by cssStyleSheet(ZkAccountStyles())
+
+class ZkAccountStyles : ZkCssStyleSheet<ZkTheme>() {
 
     val avatar by cssClass {
         width = 28
@@ -17,7 +20,4 @@ object ZkAccountStyles : ZkCssStyleSheet<ZkTheme>() {
         borderRadius = "50%"
     }
 
-    init {
-        attach()
-    }
 }

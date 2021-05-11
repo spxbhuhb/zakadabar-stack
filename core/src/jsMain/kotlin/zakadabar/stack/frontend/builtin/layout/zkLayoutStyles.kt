@@ -11,6 +11,8 @@ val zkLayoutStyles by cssStyleSheet(ZkLayoutStyles())
 
 class ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
 
+    var appTitleBarHeight = "44px"
+
     // -------------------------------------------------------------------------
     // General
     // -------------------------------------------------------------------------
@@ -79,7 +81,7 @@ class ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
     val defaultLayoutLarge by cssClass {
         display = "grid"
         gridTemplateColumns = "max-content 1fr"
-        gridTemplateRows = "${theme.titleBar.appTitleBarHeight} 1fr"
+        gridTemplateRows = "${appTitleBarHeight} 1fr"
         height = "100%"
         width = "100%"
         overflow = "hidden"
@@ -92,7 +94,7 @@ class ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
     }
 
     val popupSideBarContainer by cssClass {
-        background = theme.layout.defaultBackground
+        background = theme.backgroundColor
         zIndex = 100
         position = "absolute"
         width = "100%"
@@ -104,35 +106,4 @@ class ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
         overflowY = "hidden"
     }
 
-    // -------------------------------------------------------------------------
-    // Slider
-    // -------------------------------------------------------------------------
-
-    val horizontalSlider by cssClass {
-        boxSizing = "border-box"
-        width = "100%"
-        height = 3
-        minHeight = 3
-        backgroundColor = theme.layout.sliderColor
-        cursor = "row-resize"
-        on(":hover") {
-            backgroundColor = theme.layout.sliderHoverColor
-        }
-    }
-
-    val verticalSlider by cssClass {
-        boxSizing = "border-box"
-        height = "100%"
-        width = 3
-        minWidth = 3
-        backgroundColor = theme.layout.sliderColor
-        cursor = "col-resize"
-        on(":hover") {
-            backgroundColor = theme.layout.sliderHoverColor
-        }
-    }
-
-    init {
-        attach()
-    }
 }

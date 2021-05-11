@@ -39,6 +39,7 @@ class CssStyleSheetDelegate<T : ZkTheme, S : ZkCssStyleSheet<T>>(
     operator fun setValue(thisRef: Any?, property: KProperty<*>, value: S) {
         sheet?.detach()
         sheet = value
+        sheet?.theme?.onResume() // FIXME make this sheet specific
         value.attach()
     }
 

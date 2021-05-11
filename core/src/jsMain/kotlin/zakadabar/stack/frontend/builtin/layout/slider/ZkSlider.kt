@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.layout
+package zakadabar.stack.frontend.builtin.layout.slider
 
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
@@ -51,7 +51,7 @@ open class ZkSlider(
     var position = 0.0
 
     override fun onCreate() {
-        className = if (orientation == ZkOrientation.Vertical) zkLayoutStyles.verticalSlider else zkLayoutStyles.horizontalSlider
+        className = if (orientation == ZkOrientation.Vertical) zkSliderStyles.verticalSlider else zkSliderStyles.horizontalSlider
 
         on("mousedown", ::onMouseDown)
         container.on("mouseup", ::onMouseUp)

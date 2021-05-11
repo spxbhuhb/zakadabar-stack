@@ -5,8 +5,19 @@ package zakadabar.stack.frontend.builtin.titlebar
 
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-object ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
+val zkTitleBarStyles by cssStyleSheet(ZkTitleBarStyles())
+
+class ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
+
+    var appTitleBarHeight = "44px"
+    var appHandleBackground: String = "yellow"
+    var appHandleText: String = "red"
+    var appHandleBorder: String = "green"
+    var titleBarBackground: String = "yellow"
+    var titleBarText: String = "red"
+    var titleBarBorder: String = "green"
 
     /**
      * Application handle, the button and application name at the top left.
@@ -16,16 +27,16 @@ object ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
         boxSizing = "border-box"
         fontWeight = 500
         fontSize = "120%"
-        borderBottom = theme.titleBar.appHandleBorder
+        borderBottom = appHandleBorder
         paddingLeft = 8
         paddingRight = 16
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
-        minHeight = theme.titleBar.appTitleBarHeight
-        maxHeight = theme.titleBar.appTitleBarHeight
+        minHeight = appTitleBarHeight
+        maxHeight = appTitleBarHeight
         whiteSpace = "nowrap"
-        backgroundColor = theme.titleBar.appHandleBackground
+        backgroundColor = appHandleBackground
         cursor = "pointer"
     }
 
@@ -34,7 +45,7 @@ object ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
      */
     val appHandleButton by cssClass {
         background = "transparent !important"
-        fill = theme.titleBar.appHandleText + " !important"
+        fill = "$appHandleText !important"
         marginLeft = theme.spacingStep / 2
     }
 
@@ -45,14 +56,14 @@ object ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
         boxSizing = "border-box"
         fontWeight = 400
         width = "100%"
-        minHeight = theme.titleBar.appTitleBarHeight
-        maxHeight = theme.titleBar.appTitleBarHeight
-        borderBottom = theme.titleBar.titleBarBorder
+        minHeight = appTitleBarHeight
+        maxHeight = appTitleBarHeight
+        borderBottom = titleBarBorder
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
         fontSize = 16
-        backgroundColor = theme.titleBar.titleBarBackground
+        backgroundColor = titleBarBackground
     }
 
     /**
@@ -61,8 +72,8 @@ object ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
      */
     val sidebarHandle by cssClass {
         background = "transparent !important"
-        fill = "${theme.titleBar.titleBarText} !important"
-        minHeight = theme.titleBar.appTitleBarHeight
+        fill = "$titleBarText !important"
+        minHeight = appTitleBarHeight
         display = "flex"
         alignItems = "center"
         justifyContent = "center"
@@ -96,11 +107,7 @@ object ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
     }
 
     val iconButton by cssClass {
-        fill = "${theme.layout.defaultForeground} !important"
+        fill = "${theme.textColor} !important"
         backgroundColor = "transparent !important"
-    }
-
-    init {
-        attach()
     }
 }

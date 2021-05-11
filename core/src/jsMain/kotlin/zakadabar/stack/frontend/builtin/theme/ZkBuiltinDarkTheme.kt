@@ -3,13 +3,9 @@
  */
 package zakadabar.stack.frontend.builtin.theme
 
-import zakadabar.stack.frontend.builtin.dock.ZkDockTheme
-import zakadabar.stack.frontend.builtin.layout.ZkLayoutTheme
-import zakadabar.stack.frontend.builtin.layout.ZkScrollBarTheme
-import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainerTheme
-import zakadabar.stack.frontend.builtin.note.ZkNoteTheme
-import zakadabar.stack.frontend.builtin.table.ZkTableTheme
-import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBarTheme
+import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
+import zakadabar.stack.frontend.builtin.layout.zkScrollBarStyles
+import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.util.after
@@ -73,41 +69,36 @@ open class ZkBuiltinDarkTheme : ZkTheme {
     val background = ZkColors.Zakadabar.gray9
     val foreground = ZkColors.Zakadabar.gray2
 
-    override var dock = ZkDockTheme()
-
-    override var layout = ZkLayoutTheme(
-        defaultForeground = foreground,
-        defaultBackground = background
-    )
-
-    override var note = ZkNoteTheme(
-        background = ZkColors.Gray.c800
-    )
-
-    override var scrollBar by after {
-        ZkScrollBarTheme(
-            width = 12,
-            height = 12,
-            thumb = textColor.alpha(0.5),
-            track = backgroundColor
-        )
+    override fun onResume() {
+        onResumeLayout()
+        onResumeScrollBar()
+        onResumeTitleBar()
     }
 
-    override var tabContainer = ZkTabContainerTheme()
+    open fun onResumeLayout() {
+        with(zkLayoutStyles) {
+            appTitleBarHeight = "44px"
+        }
+    }
 
-    override var table = ZkTableTheme()
+    open fun onResumeScrollBar() {
+        with(zkScrollBarStyles) {
+            thumbColor = textColor.alpha(0.5)
+            trackColor = backgroundColor
+        }
+    }
 
-    override var titleBar by after {
-        ZkTitleBarTheme(
-            appTitleBarHeight = "44px",
-            localTitleBarHeight = "44px",
-            appHandleBackground = ZkColors.Zakadabar.gray8,
-            appHandleText = textColor,
-            appHandleBorder = border,
-            titleBarBackground = ZkColors.Zakadabar.gray8,
-            titleBarText = textColor,
+    open fun onResumeTitleBar() {
+        @Suppress("DuplicatedCode") // no need to make this more complex
+        with(zkTitleBarStyles) {
+            appTitleBarHeight = "44px"
+            appHandleBackground = ZkColors.Zakadabar.gray8
+            appHandleText = textColor
+            appHandleBorder = border
+            titleBarBackground = ZkColors.Zakadabar.gray8
+            titleBarText = textColor
             titleBarBorder = border
-        )
+        }
     }
 
 }

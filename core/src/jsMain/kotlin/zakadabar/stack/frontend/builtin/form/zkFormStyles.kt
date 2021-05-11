@@ -331,8 +331,4 @@ object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
         color = ZkColors.Gray.c600
         paddingBottom = 16
     }
-
-    init {
-        attach()
-    }
 }

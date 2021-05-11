@@ -8,7 +8,7 @@ import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.buttonSecondary
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
-import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.builtin.toast.ZkToast
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkFlavour
@@ -42,7 +42,7 @@ class ToastCustomExample(
     override fun onCreate() {
         super.onCreate()
 
-        + row(ZkPageStyles.content) {
+        + row(zkPageStyles.content) {
 
             + ZkToast(
                 "This is custom toast!",

@@ -4,8 +4,8 @@
 package zakadabar.lib.markdown.frontend
 
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
-import zakadabar.stack.frontend.builtin.pages.ZkPageStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPathPage
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.util.io
 
 /**
@@ -17,7 +17,7 @@ abstract class MarkdownPathPage : ZkPathPage() {
 
     override fun onCreate() {
         super.onCreate()
-        className = ZkPageStyles.fixed
+        className = zkPageStyles.fixed
         style {
             overflowY = "auto"
         }
