@@ -29,7 +29,6 @@ that we'll be able to do so.
 * sidebar
     * sections
     * add `item` helper with a ZkTarget parameter to build `a` tag
-* fix closed sidebar icon positioning
 * popup to the user when the server is unavailable
     * short gap: retry
     * long gap: refresh the page and/or ask the user what to do

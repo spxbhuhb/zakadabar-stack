@@ -20,7 +20,7 @@ class ZkModalStyles : ZkCssStyleSheet<ZkTheme>() {
         justifyContent = "center"
         alignItems = "center"
         display = "flex"
-        backgroundColor = "rgba(0,0,0,0.2)"
+        backgroundColor = "rgba(0,0,0,0.5)"
         zIndex = 1900
     }
 

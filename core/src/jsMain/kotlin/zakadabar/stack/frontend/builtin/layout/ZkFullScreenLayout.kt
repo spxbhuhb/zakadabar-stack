@@ -13,6 +13,6 @@ object ZkFullScreenLayout : ZkAppLayout("fullscreen") {
 
     override fun onCreate() {
         super.onCreate()
-        contentContainer css zkLayoutStyles.contentContainer
+        contentContainer css zkDefaultLayoutStyles.contentContainer
     }
 }

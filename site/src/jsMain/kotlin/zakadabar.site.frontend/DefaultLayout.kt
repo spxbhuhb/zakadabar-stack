@@ -12,7 +12,7 @@ import zakadabar.stack.frontend.builtin.titlebar.ZkAppHandle
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleBar
 import zakadabar.stack.frontend.builtin.titlebar.actions.DarkLightMode
 
-object DefaultLayout : ZkDefaultLayout() {
+object DefaultLayout : ZkDefaultLayout(spanHeader = true) {
 
     override fun onCreate() {
         super.onCreate()

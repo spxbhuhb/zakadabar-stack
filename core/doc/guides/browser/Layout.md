@@ -13,13 +13,29 @@ There are two pre-defined layouts:
 
 ## The Default Layout
 
-This picture shows the structure of ZkDefaultLayout. Blue class names are the components for the given area.
+This picture shows the structure of ZkDefaultLayout with non-spanned headers. Blue class names are the components for
+the given area.
 
 <div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Error in The Picture">
 TitleBarContainer contains a ZkAppTitleBar, not ZkTitleBar.
 </div>
 
 ![<img src="default-layout.png" width="800"/>](./default-layout.png)
+
+## Spanning the Header
+
+* The default layout supports two header variations: spanned and non-spanned (default).
+* Non-spanned: the application handle and the application title bar occupies separate cells in the grid.
+  * This means that the application handle and the sidebar have the same width.
+* Spanned: the application handle and the application title bar is put into a container and that container spans the two
+  top cells.
+  * This means that the application handle and the sidebar may have different widths.
+
+To span the headers use the `spanHeader` constructor parameter:
+
+```kotlin
+    ZkDefaultLayout(spanHeader = true)
+```
 
 ## Application Title Bar
 
@@ -52,16 +68,18 @@ Use the `+=` on the application title bar to add a global element.
 ```kotlin
 object DefaultLayout : ZkDefaultLayout() {
 
-  override fun onCreate() {
-    super.onCreate()
+    override fun onCreate() {
+        super.onCreate()
 
-    appHandle = ZkAppHandle(zke { + Strings.applicationName }, onIconClick = ::onToggleSideBar, onTextClick = { Landing.open() })
-    sideBar = SideBar
-    titleBar = ZkAppTitleBar(::onToggleSideBar)
+        appHandle = ZkAppHandle(zke { + Strings.applicationName },
+            onIconClick = ::onToggleSideBar,
+            onTextClick = { Landing.open() })
+        sideBar = SideBar
+        titleBar = ZkAppTitleBar(::onToggleSideBar)
 
-    titleBar.globalElements += DarkLightMode(SiteDarkTheme.NAME, SiteLightTheme.NAME)
+        titleBar.globalElements += DarkLightMode(SiteDarkTheme.NAME, SiteLightTheme.NAME)
 
-  }
+    }
 
 }
 ```
@@ -70,3 +88,10 @@ object DefaultLayout : ZkDefaultLayout() {
 
 This button is tied to the side bar. When the side bar is shown the button is hidden. When the side bar is hidden, the
 button is shown. `ZkAppTitleBar` automatically handles these states.
+
+## Past, Present, Future
+
+* 2021.5.12
+  * Move css classes of the default layout into `zkDefaultLayoutStyles`.
+  * Add `spanHeader` function to `ZkDefaultLayout`.
+  * Change sidebar sizing to shrink until 160px.

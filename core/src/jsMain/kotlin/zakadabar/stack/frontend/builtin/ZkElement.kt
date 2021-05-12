@@ -186,39 +186,39 @@ open class ZkElement(
     // -------------------------------------------------------------------------
 
     /**
-     * Shorthand for the innerHTML property of the HTML [element].
+     * Shorthand for the innerHTML property of the [buildElement].
      */
     var innerHTML: String
-        inline get() = element.innerHTML
+        inline get() = buildElement.innerHTML
         inline set(value) {
             element.innerHTML = value
         }
 
     /**
-     * Shorthand for the innerText property of the HTML [element].
+     * Shorthand for the innerText property of the [buildElement].
      */
     var innerText: String
-        inline get() = element.innerText
+        inline get() = buildElement.innerText
         inline set(value) {
             element.innerText = value
         }
 
     /**
-     * Shorthand for the className property of the HTML [element].
+     * Shorthand for the className property of the [buildElement].
      */
     var className: String
-        inline get() = element.className
+        inline get() = buildElement.className
         inline set(value) {
             element.className = value
         }
 
     /**
-     * Shorthand for the setting the style string of the HTML [element].
+     * Shorthand for the setting the style string of the [buildElement].
      */
     var style: String
-        inline get() = element.style.cssText
+        inline get() = buildElement.style.cssText
         inline set(value) {
-            element.style.cssText = value
+            buildElement.style.cssText = value
         }
 
     /**
@@ -332,14 +332,6 @@ open class ZkElement(
     }
 
     /**
-     * Sets the display CSS property.
-     */
-    infix fun display(value: String): ZkElement {
-        element.style.display = value
-        return this
-    }
-
-    /**
      * Adds [className] to the CSS class list of the DOM node.
      */
     infix fun css(className: String): ZkElement {
@@ -395,6 +387,58 @@ open class ZkElement(
      */
     infix fun gridColumn(value: Int): ZkElement {
         element.style.setProperty("grid-column", value.toString())
+        return this
+    }
+
+    /**
+     * Appends the given class to the class list of the element.
+     *
+     * @param  className  Name of the class to append.
+     */
+    infix fun Element.css(className: String): Element {
+        this.classList += className
+        return this
+    }
+
+    /**
+     * Append the given class to the class list of the element.
+     *
+     * @param  className  Name of the class to append.
+     */
+    infix fun HTMLElement.css(className: String): HTMLElement {
+        this.classList += className
+        return this
+    }
+
+    /**
+     * Sets the "grid-row" CSS property.
+     */
+    infix fun HTMLElement.gridRow(value: String): HTMLElement {
+        style.setProperty("grid-row", value)
+        return this
+    }
+
+    /**
+     * Sets the "grid-row" CSS property.
+     */
+    infix fun HTMLElement.gridRow(value: Int): HTMLElement {
+        style.setProperty("grid-row", value.toString())
+        return this
+    }
+
+    /**
+     * Sets the "grid-column" CSS property.
+     */
+    infix fun HTMLElement.gridColumn(value: String): HTMLElement {
+        style.setProperty("grid-column", value)
+        return this
+    }
+
+    /**
+     * Sets the "grid-column" CSS property.
+     */
+    infix fun HTMLElement.gridColumn(value: Int): HTMLElement {
+        style.setProperty("grid-column", value.toString())
         return this
     }
 
@@ -890,26 +934,6 @@ open class ZkElement(
         this@ZkElement.buildElement.appendChild(this.element)
         this@ZkElement.childElements += this
         this@ZkElement.syncChildrenState(this)
-        return this
-    }
-
-    /**
-     * Appends the given class to the class list of the element.
-     *
-     * @param  className  Name of the class to append.
-     */
-    infix fun Element.css(className: String): Element {
-        this.classList += className
-        return this
-    }
-
-    /**
-     * Append the given class to the class list of the element.
-     *
-     * @param  className  Name of the class to append.
-     */
-    infix fun HTMLElement.css(className: String): HTMLElement {
-        this.classList += className
         return this
     }
 

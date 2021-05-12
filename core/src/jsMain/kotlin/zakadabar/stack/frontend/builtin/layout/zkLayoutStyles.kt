@@ -11,12 +11,6 @@ val zkLayoutStyles by cssStyleSheet(ZkLayoutStyles())
 
 class ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
 
-    var appTitleBarHeight = "44px"
-
-    // -------------------------------------------------------------------------
-    // General
-    // -------------------------------------------------------------------------
-
     val w100 by cssClass {
         width = "100%"
     }
@@ -66,10 +60,6 @@ class ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
         justifySelf = "center"
     }
 
-    // -------------------------------------------------------------------------
-    // ZkAppLayout
-    // -------------------------------------------------------------------------
-
     val layout by cssClass {
         position = "absolute"
         top = 0
@@ -77,46 +67,6 @@ class ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
         width = "100%"
         height = "100%"
         overflow = "hidden"
-    }
-
-    // -------------------------------------------------------------------------
-    // ZkDefaultLayout
-    // -------------------------------------------------------------------------
-
-    val defaultLayoutSmall by cssClass {
-        display = "flex"
-        flexDirection = "column"
-        height = "100%"
-        width = "100%"
-        overflow = "hidden"
-    }
-
-    val defaultLayoutLarge by cssClass {
-        display = "grid"
-        gridTemplateColumns = "max-content 1fr"
-        gridTemplateRows = "${appTitleBarHeight} 1fr"
-        height = "100%"
-        width = "100%"
-        overflow = "hidden"
-    }
-
-    val sideBarContainer by cssClass {
-        maxHeight = "100%"
-        overflowY = "auto"
-        borderRight = theme.border
-    }
-
-    val popupSideBarContainer by cssClass {
-        background = theme.backgroundColor
-        zIndex = 100
-        position = "absolute"
-        width = "100%"
-    }
-
-    val contentContainer by cssClass {
-        height = "100%"
-        maxHeight = "100%"
-        overflowY = "hidden"
     }
 
 }

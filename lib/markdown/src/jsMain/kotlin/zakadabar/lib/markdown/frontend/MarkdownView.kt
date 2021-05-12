@@ -38,8 +38,7 @@ open class MarkdownView(
 
             val html = HtmlGenerator(source, parsedTree, flavour).generateHtml()
 
-            + grid {
-                gridTemplateColumns = "1fr max-content"
+            + div(markdownStyles.container) {
 
                 + div(markdownStyles.content) {
                     buildElement.innerHTML = html

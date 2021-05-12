@@ -18,6 +18,7 @@ import zakadabar.stack.util.PublicApi
  * @since  2021.1.18
  */
 @PublicApi
+@Deprecated("use ZkButton(ZkIcons.notes, flavour = ZkFlavour.Custom, onClick = ::onHandleClick) instead")
 open class ZkIconButton(
     private val icon: ZkIconSource,
     private val iconSize: Int = 18,

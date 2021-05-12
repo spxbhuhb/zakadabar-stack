@@ -20,8 +20,7 @@ open class ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
         boxSizing = "border-box"
         minHeight = "100%"
         overflowY = "auto"
-        minWidth = 220
-        paddingTop = 10
+        paddingTop = theme.spacingStep / 2
         fontSize = this@ZkSideBarStyles.fontSize
 
         this@ZkSideBarStyles.backgroundColor?.let { backgroundColor = this@ZkSideBarStyles.backgroundColor }

@@ -28,7 +28,6 @@ class ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
         fontWeight = 500
         fontSize = "120%"
         borderBottom = appHandleBorder
-        paddingLeft = 8
         paddingRight = 16
         display = "flex"
         flexDirection = "row"
@@ -48,6 +47,7 @@ class ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
         background = "transparent !important"
         fill = "$appHandleText !important"
         marginLeft = theme.spacingStep / 2
+        marginRight = theme.spacingStep / 2
     }
 
     /**
@@ -78,6 +78,7 @@ class ZkTitleBarStyles : ZkCssStyleSheet<ZkTheme>() {
         display = "flex"
         alignItems = "center"
         justifyContent = "center"
+        marginLeft = theme.spacingStep / 2
     }
 
     /**

@@ -47,11 +47,6 @@ object FAQ : MarkdownPage(
 
 object ContentPages : MarkdownPathPage() {
 
-    override fun onCreate() {
-        super.onCreate()
-        element.style.paddingTop = "${ZkApplication.theme.spacingStep}px"
-    }
-
     fun open(path: String) {
         ZkApplication.changeNavState("/$viewName/$path")
     }

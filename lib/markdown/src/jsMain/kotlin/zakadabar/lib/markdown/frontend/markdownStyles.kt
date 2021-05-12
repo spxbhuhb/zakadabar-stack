@@ -19,18 +19,41 @@ open class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
         url = highlightUrl
     }
 
+    val container by cssClass {
+        display = "flex"
+        flexDirection = "row"
+        justifyContent = "center"
+    }
+
     val content by cssClass {
         overflowX = "auto"
-        padding = theme.spacingStep * 2
-        paddingTop = 0
+        overflowY = "hidden"
+        maxWidth = 800
+        flexGrow = 1
+
+        small {
+            marginLeft = 0
+            marginRight = 0
+        }
+
+        medium {
+            marginLeft = theme.spacingStep / 2
+            marginRight = theme.spacingStep / 2
+        }
+
+        large {
+            marginLeft = theme.spacingStep
+            marginRight = theme.spacingStep
+        }
     }
 
     open val tocContainer by cssClass {
         boxSizing = "border-box"
-        minWidth = 200 + theme.spacingStep
         marginRight = theme.spacingStep
         fontSize = "80%"
-        paddingTop = theme.spacingStep
+        paddingTop = theme.spacingStep / 2
+        paddingBottom = theme.spacingStep / 2
+        minWidth = 160 + theme.spacingStep
 
         small {
             display = "none" // FIXME this is a really quick and really dirty solution
@@ -38,6 +61,10 @@ open class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
 
         medium {
             display = "none" // FIXME this is a really quick and really dirty solution
+        }
+
+        large {
+            paddingRight = 20
         }
     }
 

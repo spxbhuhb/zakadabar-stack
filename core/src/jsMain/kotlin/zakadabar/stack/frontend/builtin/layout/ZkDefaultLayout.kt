@@ -13,7 +13,16 @@ import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleBar
 import zakadabar.stack.frontend.util.minusAssign
 import zakadabar.stack.frontend.util.plusAssign
 
-open class ZkDefaultLayout : ZkAppLayout("default") {
+/**
+ * Default layout with app handle, title bar, sidebar and content.
+ *
+ * @property  spanHeader  When true, the app handle and the title bar is in a div and
+ *                        that div spans the two columns of the first row. This has
+ *                        effect only on large screens.
+ */
+open class ZkDefaultLayout(
+    open val spanHeader: Boolean = false
+) : ZkAppLayout("default") {
 
     open var appHandle = ZkElement()
         set(value) {
@@ -48,6 +57,7 @@ open class ZkDefaultLayout : ZkAppLayout("default") {
     private var sideBarContainer = ZkElement()
     private var titleBarContainer = ZkElement()
 
+    private var spanHeaderContainer = ZkElement()
     private var popupSidebarContainer = ZkElement()
 
     override fun onCreate() {
@@ -55,15 +65,15 @@ open class ZkDefaultLayout : ZkAppLayout("default") {
 
         appHandleContainer build { + appHandle }
 
-        sideBarContainer css zkLayoutStyles.sideBarContainer build {
+        sideBarContainer css zkDefaultLayoutStyles.sideBarContainer build {
             + sideBar
         }
 
         titleBarContainer build { + titleBar }
 
-        contentContainer css zkLayoutStyles.contentContainer
+        contentContainer css zkDefaultLayoutStyles.contentContainer
 
-        popupSidebarContainer css zkLayoutStyles.popupSideBarContainer
+        popupSidebarContainer css zkDefaultLayoutStyles.popupSideBarContainer
 
         on(window, "resize") {
             if (lifeCycleState != ZkElementState.Resumed) return@on
@@ -88,8 +98,8 @@ open class ZkDefaultLayout : ZkAppLayout("default") {
         }
 
         if (activeMediaSize != MediaSize.Uninitialized) {
-            classList -= zkLayoutStyles.defaultLayoutLarge
-            classList -= zkLayoutStyles.defaultLayoutSmall
+            classList -= zkDefaultLayoutStyles.defaultLayoutLarge
+            classList -= zkDefaultLayoutStyles.defaultLayoutSmall
             this -= appHandleContainer
             this -= sideBarContainer
             this -= titleBarContainer
@@ -97,6 +107,12 @@ open class ZkDefaultLayout : ZkAppLayout("default") {
             this -= popupSidebarContainer
             popupSidebarContainer -= appHandleContainer
             popupSidebarContainer -= sideBarContainer
+
+            if (spanHeader) {
+                this -= spanHeaderContainer
+                spanHeaderContainer -= appHandleContainer
+                spanHeaderContainer -= titleBarContainer
+            }
         }
 
         activeMediaSize = mediaSize
@@ -111,7 +127,7 @@ open class ZkDefaultLayout : ZkAppLayout("default") {
     }
 
     open fun resumeSmall() {
-        classList += zkLayoutStyles.defaultLayoutSmall
+        classList += zkDefaultLayoutStyles.defaultLayoutSmall
 
         + titleBarContainer
         + contentContainer
@@ -126,11 +142,18 @@ open class ZkDefaultLayout : ZkAppLayout("default") {
     }
 
     open fun resumeLarge() {
-        classList += zkLayoutStyles.defaultLayoutLarge
+        classList += zkDefaultLayoutStyles.defaultLayoutLarge
 
-        + appHandleContainer gridRow 1 gridColumn 1
+        if (spanHeader) {
+            + spanHeaderContainer css zkLayoutStyles.row build {
+                + appHandleContainer
+                + titleBarContainer css zkLayoutStyles.grow
+            } gridColumn "1 / span 2"
+        } else {
+            + appHandleContainer gridRow 1 gridColumn 1
+            + titleBarContainer gridRow 1 gridColumn 2
+        }
         + sideBarContainer gridRow 2 gridColumn 1
-        + titleBarContainer gridRow 1 gridColumn 2
         + contentContainer gridRow 2 gridColumn 2
 
         appHandleContainer.show()

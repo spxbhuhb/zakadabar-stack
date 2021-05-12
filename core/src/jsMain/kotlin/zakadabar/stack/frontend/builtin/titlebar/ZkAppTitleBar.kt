@@ -5,7 +5,8 @@ package zakadabar.stack.frontend.builtin.titlebar
 
 import kotlinx.browser.document
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.ZkIconButton
+import zakadabar.stack.frontend.builtin.button.ZkButton
+import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.util.PublicApi
@@ -32,7 +33,7 @@ open class ZkAppTitleBar(
 
         + handleContainer css zkTitleBarStyles.sidebarHandle build {
             hide()
-            + ZkIconButton(ZkIcons.notes, cssClass = zkTitleBarStyles.sidebarHandle, onClick = ::onHandleClick)
+            + ZkButton(ZkIcons.notes, flavour = ZkFlavour.Custom, onClick = ::onHandleClick)
         }
 
         + titleContainer css zkTitleBarStyles.titleContainer marginRight 10

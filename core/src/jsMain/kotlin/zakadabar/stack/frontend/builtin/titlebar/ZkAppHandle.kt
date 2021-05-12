@@ -5,7 +5,8 @@ package zakadabar.stack.frontend.builtin.titlebar
 
 import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.ZkIconButton
+import zakadabar.stack.frontend.builtin.button.ZkButton
+import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.plusAssign
 
@@ -21,7 +22,9 @@ open class ZkAppHandle(
     override fun onCreate() {
         classList += zkTitleBarStyles.appHandleContainer
 
-        + ZkIconButton(ZkIcons.notes, cssClass = zkTitleBarStyles.appHandleButton, onClick = onIconClick) marginRight 10
+        + div(zkTitleBarStyles.appHandleButton) {
+            + ZkButton(ZkIcons.notes, flavour = ZkFlavour.Custom, onClick = onIconClick)
+        }
         + appName build {
             on("click") { onTextClick?.invoke() }
         }
