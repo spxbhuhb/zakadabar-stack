@@ -35,8 +35,8 @@ open class ZkOptTextAreaField<T : DtoBase>(
 
     @Suppress("DuplicatedCode") // i don't want to mix this with string field
     override fun buildFieldValue() {
-        buildElement.style.flexGrow = "1"
-        buildElement.style.display = "flex"
+        buildPoint.style.flexGrow = "1"
+        buildPoint.style.display = "flex"
 
         area.className = ZkFormStyles.textarea
         area.style.flexGrow = "1"

@@ -44,7 +44,7 @@ open class ZkBooleanField<T : DtoBase>(
     override fun buildFieldValue() {
         + div(zkFormStyles.booleanField) {
 
-            buildElement.tabIndex = 0
+            buildPoint.tabIndex = 0
 
             val value: Boolean = prop.get()
 
@@ -58,7 +58,7 @@ open class ZkBooleanField<T : DtoBase>(
                 form.validate()
             }
 
-            on(buildElement, "keypress") {
+            on(buildPoint, "keypress") {
                 it as KeyboardEvent
                 when (it.key) {
                     "Enter", " " -> {

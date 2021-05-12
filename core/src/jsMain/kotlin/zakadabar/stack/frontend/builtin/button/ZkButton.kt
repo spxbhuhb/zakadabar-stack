@@ -102,7 +102,7 @@ open class ZkButton(
 
         val svg = iconSource?.svg(zkButtonStyles.iconSize) ?: throw IllegalStateException("missing icon source")
 
-        buildElement.innerHTML = svg
+        buildPoint.innerHTML = svg
     }
 
     open fun buildText() {
@@ -117,7 +117,7 @@ open class ZkButton(
         val svg = iconSource?.svg(zkButtonStyles.iconSize) ?: throw IllegalStateException("missing icon source")
 
         + div(zkButtonStyles.icon) {
-            buildElement.innerHTML = svg
+            buildPoint.innerHTML = svg
         }
 
         + if (capitalize) text?.capitalize() else text

@@ -33,7 +33,7 @@ import kotlin.reflect.KClass
  * @property  childElements    ZkElements that are child of this one. Child management functions
  *                             are there to manage adding / removing children easy.
  *
- * @property  buildElement     The HTML DOM element that is currently built. This may change a lot
+ * @property  buildPoint       The HTML DOM element that is currently built. This may change a lot
  *                             during the build process as DIVs are usually added to build a
  *                             visual layout.
  */
@@ -77,7 +77,7 @@ open class ZkElement(
 
     val id = nextId
 
-    var buildElement = element
+    var buildPoint = element
 
     var lifeCycleState = ZkElementState.Initialized
 
@@ -99,21 +99,21 @@ open class ZkElement(
         get() = ZkApplication.executor.account.displayName
 
     var gridTemplateRows: String
-        get() = buildElement.style.getPropertyValue("grid-template-rows")
+        get() = buildPoint.style.getPropertyValue("grid-template-rows")
         set(value) {
-            buildElement.style.setProperty("grid-template-rows", value)
+            buildPoint.style.setProperty("grid-template-rows", value)
         }
 
     var gridTemplateColumns: String
-        get() = buildElement.style.getPropertyValue("grid-template-columns")
+        get() = buildPoint.style.getPropertyValue("grid-template-columns")
         set(value) {
-            buildElement.style.setProperty("grid-template-columns", value)
+            buildPoint.style.setProperty("grid-template-columns", value)
         }
 
     var gridGap: Any
-        get() = buildElement.style.getPropertyValue("grid-gap")
+        get() = buildPoint.style.getPropertyValue("grid-gap")
         set(value) {
-            buildElement.style.setProperty("grid-gap", stringOrPx(value))
+            buildPoint.style.setProperty("grid-gap", stringOrPx(value))
         }
 
     // -------------------------------------------------------------------------
@@ -186,46 +186,46 @@ open class ZkElement(
     // -------------------------------------------------------------------------
 
     /**
-     * Shorthand for the innerHTML property of the [buildElement].
+     * Shorthand for the innerHTML property of the [buildPoint].
      */
     var innerHTML: String
-        inline get() = buildElement.innerHTML
+        inline get() = buildPoint.innerHTML
         inline set(value) {
             element.innerHTML = value
         }
 
     /**
-     * Shorthand for the innerText property of the [buildElement].
+     * Shorthand for the innerText property of the [buildPoint].
      */
     var innerText: String
-        inline get() = buildElement.innerText
+        inline get() = buildPoint.innerText
         inline set(value) {
             element.innerText = value
         }
 
     /**
-     * Shorthand for the className property of the [buildElement].
+     * Shorthand for the className property of the [buildPoint].
      */
     var className: String
-        inline get() = buildElement.className
+        inline get() = buildPoint.className
         inline set(value) {
             element.className = value
         }
 
     /**
-     * Shorthand for the setting the style string of the [buildElement].
+     * Shorthand for the setting the style string of the [buildPoint].
      */
     var style: String
-        inline get() = buildElement.style.cssText
+        inline get() = buildPoint.style.cssText
         inline set(value) {
-            buildElement.style.cssText = value
+            buildPoint.style.cssText = value
         }
 
     /**
      * Shorthand for the classList property of the HTML [element].
      */
     val classList: DOMTokenList
-        inline get() = buildElement.classList
+        inline get() = buildPoint.classList
 
     // -------------------------------------------------------------------------
     //   Convenience functions to call build
@@ -692,17 +692,17 @@ open class ZkElement(
 
     private fun runBuild(e: HTMLElement, className: String?, build: ZkElement.() -> Unit) {
         if (className != null) e.classList.add(className)
-        val original = buildElement
-        buildElement = e
+        val original = buildPoint
+        buildPoint = e
         this.build()
-        buildElement = original
+        buildPoint = original
     }
 
     /**
-     * Convenience to set the style of the current [buildElement].
+     * Convenience to set the style of the current [buildPoint].
      */
     open fun style(styleBuilder: CSSStyleDeclaration.() -> Unit) {
-        with(buildElement.style) {
+        with(buildPoint.style) {
             styleBuilder()
         }
     }
@@ -804,7 +804,7 @@ open class ZkElement(
     }
 
     /**
-     * Creates an IMG with a source url. Use [buildElement] to add attributes other than the source.
+     * Creates an IMG with a source url. Use [buildPoint] to add attributes other than the source.
      *
      * ```
      *
@@ -898,7 +898,7 @@ open class ZkElement(
     operator fun String.not(): HTMLElement {
         val e = document.createElement("span")
         e.innerHTML = this
-        buildElement.append(e)
+        buildPoint.append(e)
         return e as HTMLElement
     }
 
@@ -907,7 +907,7 @@ open class ZkElement(
      * The text is added with [appendText], therefore no need to escape the text.
      */
     operator fun String.unaryPlus(): Element {
-        return buildElement.appendText(this)
+        return buildPoint.appendText(this)
     }
 
     /**
@@ -916,14 +916,14 @@ open class ZkElement(
      */
     operator fun String?.unaryPlus(): Element? {
         if (this == null) return null
-        return buildElement.appendText(this)
+        return buildPoint.appendText(this)
     }
 
     /**
      * Adds an HTML element.
      */
     operator fun HTMLElement.unaryPlus(): HTMLElement {
-        buildElement.appendChild(this)
+        buildPoint.appendChild(this)
         return this
     }
 
@@ -931,7 +931,7 @@ open class ZkElement(
      * Adds a [ZkElement] as a child.
      */
     operator fun ZkElement.unaryPlus(): ZkElement {
-        this@ZkElement.buildElement.appendChild(this.element)
+        this@ZkElement.buildPoint.appendChild(this.element)
         this@ZkElement.childElements += this
         this@ZkElement.syncChildrenState(this)
         return this

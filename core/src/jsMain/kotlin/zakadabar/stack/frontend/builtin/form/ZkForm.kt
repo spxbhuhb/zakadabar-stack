@@ -367,7 +367,7 @@ open class ZkForm<T : DtoBase>(
 
         + div(ZkFormStyles.contentContainer) {
             + column(ZkFormStyles.form) {
-                css?.let { buildElement.classList += it }
+                css?.let { buildPoint.classList += it }
 
                 builder()
 

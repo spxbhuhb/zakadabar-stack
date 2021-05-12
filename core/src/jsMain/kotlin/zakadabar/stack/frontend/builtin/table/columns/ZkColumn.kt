@@ -38,7 +38,7 @@ open class ZkColumn<T : DtoBase>(
         + label
         + sortSign
         + span(zkTableStyles.resizeHandle) {
-            on(buildElement, "mousedown", ::onResizeMouseDown)
+            on(buildPoint, "mousedown", ::onResizeMouseDown)
         }
         on("click", ::onClick)
     }

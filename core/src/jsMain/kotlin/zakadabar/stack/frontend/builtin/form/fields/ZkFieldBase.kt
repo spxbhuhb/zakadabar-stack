@@ -93,7 +93,7 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
         + div(ZkFormStyles.fieldLabel) {
             + label
             mandatoryMark()
-            on(buildElement, "click") { focusValue() }
+            on(buildPoint, "click") { focusValue() }
         }
     }
 

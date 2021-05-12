@@ -6,12 +6,14 @@ package zakadabar.site.frontend.pages
 import org.intellij.markdown.html.resolveToStringSafe
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
+import zakadabar.lib.examples.frontend.OperatorExample
 import zakadabar.lib.examples.frontend.button.ButtonExamples
 import zakadabar.lib.examples.frontend.form.FormBooleanExample
 import zakadabar.lib.examples.frontend.form.FormDoubleExample
 import zakadabar.lib.examples.frontend.form.FormRecordIdExample
 import zakadabar.lib.examples.frontend.icon.IconExamples
 import zakadabar.lib.examples.frontend.input.IntCheckboxListExample
+import zakadabar.lib.examples.frontend.misc.NYIExample
 import zakadabar.lib.examples.frontend.modal.ModalExamples
 import zakadabar.lib.examples.frontend.note.NoteBasicExamples
 import zakadabar.lib.examples.frontend.note.NoteFormExample
@@ -78,7 +80,11 @@ class ContentContext(
             "NoteBasicExamples" -> NoteBasicExamples(htmlElement)
             "NoteFormExample" -> NoteFormExample(htmlElement)
 
+            "NYIExample" -> NYIExample(htmlElement)
+
             "ModalExamples" -> ModalExamples(htmlElement)
+
+            "OperatorExample" -> OperatorExample(htmlElement)
 
             "TableExample" -> TableExample(htmlElement)
 

@@ -18,7 +18,7 @@ class BuiltinForm : ZkForm<BuiltinDto>() {
 
         build(Strings.formFields) {
 
-            buildElement.classList += ZkFormStyles.twoPanels
+            buildPoint.classList += ZkFormStyles.twoPanels
 
             + section(Strings.mandatoryFields) {
                 with(dto) {

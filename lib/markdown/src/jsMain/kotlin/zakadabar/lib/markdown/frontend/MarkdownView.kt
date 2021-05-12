@@ -41,7 +41,7 @@ open class MarkdownView(
             + div(markdownStyles.container) {
 
                 + div(markdownStyles.content) {
-                    buildElement.innerHTML = html
+                    buildPoint.innerHTML = html
                 }
 
                 + TableOfContents(context, element.parentElement as HTMLElement) // TODO think about using element.parentElement in MarkdownView

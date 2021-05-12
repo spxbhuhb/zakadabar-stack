@@ -36,13 +36,13 @@ class TableOfContents(
         + div(markdownStyles.tocContent) {
             context.tableOfContents.forEach {
                 + div(markdownStyles.tocEntry) {
-                    buildElement.id = it.tocId
+                    buildPoint.id = it.tocId
                     + div(markdownStyles.tocText) {
-                        buildElement.style.paddingLeft = "${it.level * theme.spacingStep}px"
+                        buildPoint.style.paddingLeft = "${it.level * theme.spacingStep}px"
                         + it.text
                     }
 
-                    on(buildElement, "click") { event ->
+                    on(buildPoint, "click") { event ->
                         val (tocElement, id) = getElementId(event, "zk-", false) ?: return@on
                         content.querySelector("[data-toc-id=\"${id}\"]")?.scrollIntoView()
                     }

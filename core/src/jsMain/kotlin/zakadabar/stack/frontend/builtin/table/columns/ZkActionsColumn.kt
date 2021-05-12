@@ -23,8 +23,8 @@ open class ZkActionsColumn<T : DtoBase>(
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         with(builder) {
-            buildElement.classList += zkTableStyles.action
-            buildElement.dataset["action"] = "update"
+            buildPoint.classList += zkTableStyles.action
+            buildPoint.dataset["action"] = "update"
             + strings.details
         }
     }

@@ -21,7 +21,7 @@ class ZkSyntheticForm(
     override fun onCreate() {
         super.onCreate()
 
-        buildElement.classList += ZkFormStyles.onePanel
+        buildPoint.classList += ZkFormStyles.onePanel
 
         + section {
             descriptor.properties.forEach { dProperty ->

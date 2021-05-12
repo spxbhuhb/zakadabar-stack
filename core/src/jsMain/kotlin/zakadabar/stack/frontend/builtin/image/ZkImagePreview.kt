@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.image
 
@@ -43,12 +43,12 @@ open class ZkImagePreview(
     private fun ZkElement.renderImage() {
         + column {
             + image(dto.url()) {
-                with(buildElement.style) {
+                with(buildPoint.style) {
                     height = "${size}px"
                     width = "${size}px"
                 }
 
-                on(buildElement, "click") { _ ->
+                on(buildPoint, "click") { _ ->
                     ZkFullScreenImageView(dto.url()) {
                         io {
                             val deleted = onDelete(this@ZkImagePreview)

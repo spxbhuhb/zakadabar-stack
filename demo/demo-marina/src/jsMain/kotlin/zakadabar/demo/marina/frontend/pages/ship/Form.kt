@@ -32,13 +32,13 @@ class Form : ZkForm<ShipDto>() {
 
             build(dto.name, Strings.ship) {
 
-                buildElement.classList += ZkFormStyles.twoPanels
+                buildPoint.classList += ZkFormStyles.twoPanels
 
                 + basics()
                 + description()
 
                 + div {
-                    buildElement.classList += ZkFormStyles.spanTwoPanels
+                    buildPoint.classList += ZkFormStyles.spanTwoPanels
                     + images()
                 }
 

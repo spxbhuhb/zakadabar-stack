@@ -30,7 +30,7 @@ class ZkSideBarGroup(
                 + openIcon
                 + closeIcon.hide()
                 + text
-                on(buildElement, "click") { _ -> if (open) onClose() else onOpen() }
+                on(buildPoint, "click") { _ -> if (open) onClose() else onOpen() }
             }
             + zke(zkSideBarStyles.groupContent) {
                 hide()

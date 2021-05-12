@@ -122,12 +122,12 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         + div(zkTableStyles.contentContainer) {
 
             + div {
-                areas = Areas(element.id, ::onAreasChange, buildElement, 0).apply { onCreate() }
+                areas = Areas(element.id, ::onAreasChange, buildPoint, 0).apply { onCreate() }
             }
 
             tableElement = table(zkTableStyles.table) {
 
-                buildElement.style.cssText = inlineCss()
+                buildPoint.style.cssText = inlineCss()
                 + thead {
                     columns.forEach { + it }
                 }
@@ -238,7 +238,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
     open fun render() {
         build {
             tbody.clear()
-            this.buildElement = tbody
+            this.buildPoint = tbody
 
             firstShownRow = Int.MAX_VALUE
             lastShownRow = - 1
@@ -315,7 +315,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         if (element == null) {
 
             element = tr {
-                buildElement.dataset["rid"] = getRowId(row.data)
+                buildPoint.dataset["rid"] = getRowId(row.data)
 
                 for (column in columns) {
                     + td {

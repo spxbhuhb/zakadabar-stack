@@ -71,7 +71,7 @@ open class ZkImagesField<T : RecordDto<T>>(
                         }
                         + ZkIconButton(ZkIcons.cloudUpload) marginBottom 10
                         + div {
-                            buildElement.style.whiteSpace = "nowrap"
+                            buildPoint.style.whiteSpace = "nowrap"
                             + strings.dropFilesHere
                         }
                     }

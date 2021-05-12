@@ -112,7 +112,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
         override fun onCreate() {
             + div(ZkFormStyles.contentContainer) {
                 + column(ZkFormStyles.form) {
-                    buildElement.classList += ZkFormStyles.onePanel
+                    buildPoint.classList += ZkFormStyles.onePanel
                     + basics()
                     + buttons()
                     + invalidFieldList()
@@ -147,7 +147,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
 
             + div(ZkFormStyles.contentContainer) {
                 + column(ZkFormStyles.form) {
-                    buildElement.classList += ZkFormStyles.onePanel
+                    buildPoint.classList += ZkFormStyles.onePanel
 
                     val expl = if (executor.account.id == dto.accountId) {
                         strings.passwordChangeExpOwn
@@ -221,7 +221,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
         override fun onCreate() {
             + div(ZkFormStyles.contentContainer) {
                 + column(ZkFormStyles.form) {
-                    buildElement.classList += ZkFormStyles.onePanel
+                    buildPoint.classList += ZkFormStyles.onePanel
 
                     + section(strings.accountStatus) {
                         + dto::locked
@@ -252,7 +252,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
         override fun onCreate() {
             + div(ZkFormStyles.contentContainer) {
                 + column(ZkFormStyles.form) {
-                    buildElement.classList += ZkFormStyles.onePanel
+                    buildPoint.classList += ZkFormStyles.onePanel
 
                     + section(strings.roles) {
                         + ZkCheckboxList(items)
