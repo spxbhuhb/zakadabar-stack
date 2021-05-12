@@ -89,7 +89,7 @@ val copyAppStatic by tasks.registering(Copy::class) {
 val copyMarkdown by tasks.registering(Copy::class) {
     from("${rootProject.projectDir}/core/doc")
     into("$distDir/var/static/doc")
-    include("**/*.md")
+    include("**/*")
     includeEmptyDirs = false
 }
 
