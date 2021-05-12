@@ -19,7 +19,7 @@ open class ZkSideBarItem(
             + if (capitalize) text.capitalize() else text
         }
 
-        on("click") { _ -> onClick?.invoke() }
+        on("click") { onClick?.invoke() }
         on("mousedown", ::onMouseDown)
 
     }

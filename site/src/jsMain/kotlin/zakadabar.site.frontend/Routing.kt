@@ -25,6 +25,7 @@ object Routing : ZkAppRouting(DefaultLayout, Landing) {
 
     init {
         + Landing
+        + WhatsNew
         + ContentPages
         + GetStarted
         + GetHelp

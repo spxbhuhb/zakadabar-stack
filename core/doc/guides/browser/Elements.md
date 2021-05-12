@@ -7,11 +7,11 @@ ZkElement properties
 
 | Property | Description |
 | --- | --- |
-| id  | ID of the ZkElement. All ZkElements have a unique, auto-generated id. |
-| element | The HTML DOM node that belongs to this ZkElement.<br>The `id` of this DOM node is "zk-$id" where `id` is the value of the `id` property. |
-| lifeCycleState | [ZkElementState](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/ZkElementState.kt) state of the ZkElement.<br>Used to prevent un-intentional reuse of elements and to manage element swapping. |
-| childElements | ZkElements that are child of this one. Child management functions are there to add / remove children easily. |
-| buildElement | The HTML DOM element that is currently built. This may change a lot during the build process as DIVs are usually added to build a visual layout. |
+| `id`  | ID of the ZkElement. All ZkElements have a unique, auto-generated id. |
+| `element` | The HTML DOM node that belongs to this ZkElement.<br>The `id` of this DOM node is "zk-$id" where `id` is the value of the `id` property. |
+| `lifeCycleState` | [ZkElementState](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/ZkElementState.kt) state of the ZkElement.<br>Used to prevent un-intentional reuse of elements and to manage element swapping. |
+| `childElements` | ZkElements that are child of this one. Child management functions are there to add / remove children easily. |
+| `buildPoint` | The HTML DOM element that is currently built. This may change a lot during the build process as DIVs are usually added to build a visual layout. |
 
 ## Lifecycle
 
@@ -20,7 +20,7 @@ ZkElement has a simple lifecycle:
 ![lifecycle](./element-lifecycle.png)
 
 We typically use `onCreate` to build the content of the element and use `onResume` to apply the current state when going
-on-scren.
+on-screen.
 
 <div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Lifecycle Management">
 ZkElement builder methods manage the lifecycle of children elements automatically. When you add an
@@ -33,7 +33,7 @@ ZkElement.clearChildren or ZkElement.onDestroy. It is not an all-purpose destruc
 This behaviour is intentional.
 </div>
 
-## Build Structures
+## Build
 
 It is very common, that a frontend element has an internal layout with a lot of `div`s, other elements, etc. To support
 this [ZkElement](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/ZkElement.kt)
@@ -46,13 +46,15 @@ Operator overloads are provided to build structures idiomatically.
 | Operator | Works On | Description |
 | --- | --- | --- |
 | `+` | String | Add text safely at the current build point, no need for escape. |
+| `+` | String? | Add optional text safely at the current build point, no need for escape. |
 | `!` | String | Add text unsafely at the current build point, sets innerHTML, **must** be properly escaped. |
-| `+` | HTMLElement | Adds an HTML element at the current building point. |
-| `+` | ZkElement? | Adds a ZkElement at the current building point. |
-| `+` | List&lt;ZkElement&gt; | Adds all ZkElements in the list at the current building point. |
-| `+=` | ZkElement, ZkElement? | Adds the ZkElement to another. |
-| `-=` | ZkElement | Removes a ZkElement from another.<br>Removes from `childElements` and from the DOM.<br>Pauses the child. |
-| `-=` | KClass&lt;*&gt; | Removes all children that are instances of the given class. |
+| `+` | HTMLElement | Add an HTML element at the current building point. |
+| `+` | ZkElement? | Add a ZkElement at the current building point. |
+| `-` | ZkElement? | Remove a ZkElement from the children of current ZkElement. The element will be paused. |
+| `+` | List&lt;ZkElement&gt; | Add all ZkElements in the list at the current building point. |
+| `+=` | ZkElement, ZkElement? | Add the ZkElement to another. |
+| `-=` | ZkElement | Remove a ZkElement from another.<br>Removes from `childElements` and from the DOM.<br>Pauses the child. |
+| `-=` | KClass&lt;*&gt; | Remove all children that are instances of the given class. |
 
 ```kotlin
 class OperatorExample(
@@ -71,11 +73,11 @@ class OperatorExample(
 
             + container
 
-            container += buttonPrimary("A Button, click to hide the note") {
+            container += buttonSuccess("A Button, click to hide the note") {
                 container -= ZkNote::class
             } marginBottom 20
 
-            container += notePrimary("A Note", "This note will disappear shortly.")
+            container += noteSuccess("A Note", "This note will disappear shortly.")
         }
     }
 }
@@ -85,100 +87,169 @@ The example above results in this:
 
 <div data-zk-enrich="OperatorExample"></div>
 
-## TODO
+### Special Inserts
 
-When you add Com plexElement instances they will be children of the ComplexElement that performs the building. The DOM
-and the ComplexElement structure will be different in this case, so if you want to swap elements dynamically you have to
-use a wrapper:
+Insert a child before the first one.
 
 ```kotlin
-class DeepInTheForest : ComplexElement() {
+insertFirst(child)
+```
 
-    override fun init(): ComplexElement {
+Insert a child after another.
 
-        val sometimesThis = SimpleText(" is this the shortest route")
-        val sometimesThat = SimpleText(" are we lost")
+```kotlin
+insertAfter(childToInsert, insertAfterThis)
+```
 
-        val wrapper = ComplexElement()
+Insert a child before another.
 
-        build {
-            + div {
-                + row {
-                    ! "we are deep in the forest ...&nbsp;"
-                    + wrapper
-                    + " ?"
-                }
-            }
-        }
+```kotlin
+insertBefore(childToInsert, insertBeforeThis)
+```
 
-        var round = 0
+### Clear
 
-        launch {
-            while (true) {
-                delay(2000)
-                wrapper -= SimpleText::class
-                wrapper += if (round % 2 == 0) sometimesThat else sometimesThis
-                round ++
-            }
-        }
+Remove and destroy all children.
 
-        return this
-    }
+```kotlin
+clearChildren()
+```
+
+Remove and destroy all children and clear the `element` DOM node.
+
+```kotlin
+clear()
+```
+
+### Get and Find
+
+To find a child you can use the getter / finder functons. These functions find only direct children.
+
+Get the first child of a given class. Throws `NoSuchElementException` if there is no such child.
+
+```kotlin
+this[ZkNote::class]
+```
+
+Get the first child which has "cssClassName" in the class list. Throws `NoSuchElementException` if there is no such
+child.
+
+```kotlin
+this["cssClassName"]
+```
+
+Get all children that are ZkNote instances.
+
+```kotlin
+find<ZkNote>()
+```
+
+Get the first child for the given class. Throws `NoSuchElementException` if there is no such child.
+
+```kotlin
+findFirst<ZkNote>()
+```
+
+Check if there is at least one child of a given class.
+
+```kotlin
+hasChildOf<ZkNote>()
+```
+
+### Event Listeners
+
+To listen on browser events use the `on` function. This function adds the event listener at the build point.
+
+```kotlin
+on("click") { println("clicked") }
+```
+
+It is possible to combine operators with `on`.
+
+```kotlin
+val child = ZkElement()
++ child.on("click")
+```
+
+To use the event object the browser supplies.
+
+```kotlin
+on("click") { event ->
+  event as MouseEvent
+  /* ... */
+}
+```
+
+Note that in the case below the build point is `element` of `selectedOption`.
+
+```kotlin
+val selectedOption = ZkElement()
+selectedOption.on("click") { toggleOptions() }
+```
+
+You can pass a function reference to `on`.
+
+```kotlin
+override fun onCreate() {
+  on("click", ::onClick)
+}
+
+fun onClick(event: Event) {
+  // ...
 }
 ```
 
 ## Data load
 
-### More than one fetch during init
+To perform io operations, use the `io` block. This launches a coroutine. You can build the element as usual inside
+the `io` block, but pay attention: this code will run after the data fetch is finished. Code placed after the `io` block
+runs first.
 
-To fetch more than one data set during the initialization of a ComplexElement use `coroutineScope`.
+```kotlin
+io {
+  ExampleDto.all().forEach { + it.name }
+}
 
-Remember that the order in which the internal launch blocks run **is random**.
++ "Hello" // this is the first to run
+```
+
+### More than one fetch [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/ParallelDownloadExample.kt)
+
+To perform more than one fetch use `coroutineScope`.
+
+Remember that the order of launch block execution run **is random**.
 
 It **is guaranteed** that all internal launch blocks finish before anything after
 `coroutineScope` is executed.
 
-This my have an effect on data fields and on the elements of the UI. For example:
+This may have an effect on data fields and on the elements of the UI. For example:
 `insertFirst` and `insertBefore` has to be correct, or the UI will be confused.
 
+Example (source code link above):
+
+<div data-zk-enrich="ParallelDownloadExample"></div>
+
 ```kotlin
-class ParallelDownloadView(private val stuffId: Long) : ComplexElement() {
+override fun onCreate() {
+  super.onCreate()
 
-    private val childNames = ComplexElement()
-    private val statistics = ComplexElement()
-
-    private lateinit var stuff: StuffDto
-    private lateinit var children: List<StuffDto>
-
-    override fun init(): SimpleElement {
-
-        val loading = StaticText(t("loading"))
-
-        this += loading // add loading, use variable so we can easily remove it later
-
-        launch {     // launch the block in the global scope   
-
-            coroutineScope {    // will wait until all coroutines in the local scope finish
-                this.launch {   // launch this block in the local scope (it is local because of "this.")
-                    stuff = StuffDto.comm.get(stuffId) // download the data from the server
-                    insertFirst(StaticText(stuff.name)) // you can create elements on the fly if you don't want to access them easily later
-                }
-                this.launch {   // launch this block in the local scope (it is local because of "this.")
-                    children = StuffDto.comm.getChildren(stuffId) // download the children of stuff
-                    childNames += children.map { StaticText(it.name) } // add a StaticText for each children with the name as content
-                    insertBefore(children, loading) // insert the children before loading
-                }
-            }
-
-            this -= loading // remove loading, we have all the data, no need for it any more
-
-            statistics.innerHTML =
-                "#${stuffDto.id}: ${stuffDto.size} bytes, ${children.size} children" // set statistics
-            this += statistics // show it to the user
-        }
-
-        return super.init()
+  io {
+    coroutineScope {
+      launch { fetched = serverMock(4, "first") }
+      launch { serverMock(2, "second").forEach { + it } }
     }
 
+    fetched.forEach { + it }
+
+    - loading
+  }
+
+  + loading
 }
 ```
+
+## Timeline
+
+* 2021.5.12
+  * rename convenience functions from noteXX to XXnote
+

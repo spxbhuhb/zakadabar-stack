@@ -5,6 +5,23 @@
 * Extend [ZkButtonStyles](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/button/zkButtonStyles.kt) to override
   default styles and dimensions.
 
+For basic buttons, simply call the appropriate convenience function:
+
+```kotlin
+successButton("label") { println("clicked") }
+```
+
+Note convenience functions:
+
+```kotlin
+primaryButton("label") { println("clicked") }
+secondayButton("label") { println("clicked") }
+successButton("label") { println("clicked") }
+warningButton("label") { println("clicked") }
+dangerButton("label") { println("clicked") }
+infoButton("label") { println("clicked") }
+```
+
 Use constructor parameters of [ZkButton](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/button/ZkButton.kt) to
 create fine-tuned buttons:
 
@@ -75,3 +92,8 @@ Add a combined button:
 ### Disabled
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="disabled"></div>
+
+## Timeline
+
+* 2021.5.12
+  * rename convenience functions from buttonXX to XXbutton

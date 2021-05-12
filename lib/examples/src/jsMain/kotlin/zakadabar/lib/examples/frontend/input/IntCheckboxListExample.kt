@@ -6,12 +6,12 @@ package zakadabar.lib.examples.frontend.input
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.buttonSecondary
+import zakadabar.stack.frontend.builtin.button.secondaryButton
 import zakadabar.stack.frontend.builtin.input.ZkCheckboxList
 import zakadabar.stack.frontend.builtin.input.ZkCheckboxListItem
 import zakadabar.stack.frontend.builtin.note.ZkNote
-import zakadabar.stack.frontend.builtin.note.noteSecondary
-import zakadabar.stack.frontend.builtin.note.noteSuccess
+import zakadabar.stack.frontend.builtin.note.secondaryNote
+import zakadabar.stack.frontend.builtin.note.successNote
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.util.marginRight
@@ -35,9 +35,9 @@ class IntCheckboxListExample(
         super.onCreate()
 
         + column(zkPageStyles.content) {
-            + noteSuccess("Integers", intCheckboxList) marginBottom 20
-            + buttonSecondary(strings.execute, onClick = ::onExecute) marginBottom 20
-            + noteSecondary("Output", "")
+            + successNote("Integers", intCheckboxList) marginBottom 20
+            + secondaryButton(strings.execute, onClick = ::onExecute) marginBottom 20
+            + secondaryNote("Output", "")
         }
     }
 

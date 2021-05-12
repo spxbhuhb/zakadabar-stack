@@ -635,9 +635,10 @@ open class ZkElement(
     /**
      * Check if this element has at least one child element of the given class.
      */
-    fun hasChildOf(clazz: KClass<*>): Boolean {
+    inline fun <reified T : ZkElement> hasChildOf(): Boolean {
+        val kClass = T::class
         for (child in childElements) {
-            if (clazz.isInstance(child)) return true
+            if (kClass.isInstance(child)) return true
         }
         return false
     }
@@ -645,24 +646,36 @@ open class ZkElement(
     /**
      * Get a child [ZkElement] of the given class. Useful in event handlers
      * to get child element without storing it in a variable.
+     *
+     * @throws NoSuchElementExceptions
      */
     inline operator fun <reified T : ZkElement> get(kClass: KClass<T>): T {
         return childElements.first { kClass.isInstance(it) } as T
     }
 
     /**
-     * Get the first [ZkElement] by the given CSS class.
+     * Get the first [ZkElement] child by the given CSS class.
+     *
+     * @throws NoSuchElementExceptions
      */
     inline operator fun <reified T : ZkElement> get(cssClassName: String): T {
         return childElements.first { it.classList.contains(cssClassName) } as T
     }
 
+    /**
+     * Get all [ZkElement] children of the given Kotlin class.
+     */
     inline fun <reified T : ZkElement> find(): List<T> {
         val kClass = T::class
         @Suppress("UNCHECKED_CAST") // checking for class
         return childElements.filter { kClass.isInstance(it) } as List<T>
     }
 
+    /**
+     * Get the first [ZkElement] child of the given Kotlin class.
+     *
+     * @throws NoSuchElementExceptions
+     */
     inline fun <reified T : ZkElement> findFirst(): T {
         val kClass = T::class
         @Suppress("UNCHECKED_CAST") // checking for class
@@ -676,14 +689,15 @@ open class ZkElement(
     /**
      * Attach a DOM event handler to this element.
      */
-    fun on(type: String, listener: ((Event) -> Unit)?) = on(element, type, listener)
+    fun on(type: String, listener: ((Event) -> Unit)?) = on(buildPoint, type, listener)
 
     /**
      * Attach a DOM event handler to the given DOM target node.
      */
-    fun on(target: EventTarget, type: String, listener: ((Event) -> Unit)?) {
-        if (listener == null) return
+    fun on(target: EventTarget, type: String, listener: ((Event) -> Unit)?): ZkElement {
+        if (listener == null) return this
         target.addEventListener(type, listener)
+        return this
     }
 
     // -------------------------------------------------------------------------
@@ -934,6 +948,14 @@ open class ZkElement(
         this@ZkElement.buildPoint.appendChild(this.element)
         this@ZkElement.childElements += this
         this@ZkElement.syncChildrenState(this)
+        return this
+    }
+
+    /**
+     * Removes a [ZkElement] child.
+     */
+    operator fun ZkElement.unaryMinus(): ZkElement {
+        this@ZkElement -= this
         return this
     }
 

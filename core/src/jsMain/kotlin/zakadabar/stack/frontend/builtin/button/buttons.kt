@@ -5,9 +5,9 @@ package zakadabar.stack.frontend.builtin.button
 
 import zakadabar.stack.frontend.resources.ZkFlavour
 
-fun buttonPrimary(text: String, onClick: () -> Unit) = ZkButton(text, onClick = onClick)
-fun buttonSecondary(text: String, onClick: () -> Unit) = ZkButton(text, flavour = ZkFlavour.Secondary, onClick = onClick)
-fun buttonSuccess(text: String, onClick: () -> Unit) = ZkButton(text, flavour = ZkFlavour.Success, onClick = onClick)
-fun buttonWarning(text: String, onClick: () -> Unit) = ZkButton(text, flavour = ZkFlavour.Warning, onClick = onClick)
-fun buttonDanger(text: String, onClick: () -> Unit) = ZkButton(text, flavour = ZkFlavour.Danger, onClick = onClick)
-fun buttonInfo(text: String, onClick: () -> Unit) = ZkButton(text, flavour = ZkFlavour.Info, onClick = onClick)
+fun primaryButton(text: String, onClick: () -> Unit) = ZkButton(text, onClick = onClick)
+fun secondaryButton(text: String, onClick: () -> Unit) = ZkButton(text, flavour = ZkFlavour.Secondary, onClick = onClick)
+fun successButton(text: String, onClick: () -> Unit) = ZkButton(text, flavour = ZkFlavour.Success, onClick = onClick)
+fun warningButton(text: String, onClick: () -> Unit) = ZkButton(text, flavour = ZkFlavour.Warning, onClick = onClick)
+fun dangerButton(text: String, onClick: () -> Unit) = ZkButton(text, flavour = ZkFlavour.Danger, onClick = onClick)
+fun infoButton(text: String, onClick: () -> Unit) = ZkButton(text, flavour = ZkFlavour.Info, onClick = onClick)

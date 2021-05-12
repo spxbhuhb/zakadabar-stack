@@ -6,12 +6,12 @@ package zakadabar.lib.examples.frontend.toast
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.buttonSecondary
+import zakadabar.stack.frontend.builtin.button.secondaryButton
 import zakadabar.stack.frontend.builtin.input.ZkTextInput
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.builtin.toast.ZkToast
-import zakadabar.stack.frontend.builtin.toast.toastDanger
-import zakadabar.stack.frontend.builtin.toast.toastInfo
+import zakadabar.stack.frontend.builtin.toast.dangerToast
+import zakadabar.stack.frontend.builtin.toast.infoToast
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.util.marginBottom
 
@@ -36,7 +36,7 @@ class ToastAutoHideExample(
                     value = ZkToast.autoHideDefaults[ZkFlavour.Info].toString()
                 ) { runToast() }
 
-                + buttonSecondary("Try It") { runToast() }
+                + secondaryButton("Try It") { runToast() }
 
             } marginBottom theme.spacingStep
 
@@ -47,13 +47,13 @@ class ToastAutoHideExample(
         val value = findFirst<ZkTextInput>().value.toLongOrNull()
 
         if (value == null || value < 0) {
-            toastDanger { "This is not a valid value!" }
+            dangerToast { "This is not a valid value!" }
             return
         }
 
         ZkToast.autoHideDefaults[ZkFlavour.Info] = value
 
-        toastInfo {
+        infoToast {
             if (value == 0L) {
                 "This toast will stay here indefinitely, you can close it manually."
             } else {

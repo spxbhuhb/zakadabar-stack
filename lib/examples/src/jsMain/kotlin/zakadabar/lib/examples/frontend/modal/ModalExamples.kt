@@ -11,7 +11,7 @@ import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
 import zakadabar.stack.frontend.builtin.modal.ZkMessageDialog
 import zakadabar.stack.frontend.builtin.note.ZkNote
-import zakadabar.stack.frontend.builtin.note.noteSecondary
+import zakadabar.stack.frontend.builtin.note.secondaryNote
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.marginBottom
@@ -35,7 +35,7 @@ class ModalExamples(
                 + ZkButton(Strings.exampleDialog, onClick = ::onShowExample)
             } marginBottom theme.spacingStep
 
-            + noteSecondary("Output", "")
+            + secondaryNote("Output", "")
         }
     }
 

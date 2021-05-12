@@ -25,9 +25,7 @@ open class ZkAppHandle(
         + div(zkTitleBarStyles.appHandleButton) {
             + ZkButton(ZkIcons.notes, flavour = ZkFlavour.Custom, onClick = onIconClick)
         }
-        + appName build {
-            on("click") { onTextClick?.invoke() }
-        }
+        + appName.on("click") { onTextClick?.invoke() }
 
         on("mousedown", ::onMouseDown)
     }

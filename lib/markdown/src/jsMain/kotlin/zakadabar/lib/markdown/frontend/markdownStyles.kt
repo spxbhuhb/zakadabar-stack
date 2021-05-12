@@ -184,8 +184,8 @@ open class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
     open val codeBlock by cssRule(".$content pre > code") {
         position = "relative"
         padding = 12
+        paddingLeft = theme.spacingStep
         lineHeight = 13 * 1.4
-        marginLeft = - 12
         marginBottom = theme.spacingStep
         this@MarkdownStyles.codeBorderColor?.let {
             borderLeft = "2px solid $it"

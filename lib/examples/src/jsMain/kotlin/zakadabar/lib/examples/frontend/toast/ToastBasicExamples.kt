@@ -30,27 +30,27 @@ class ToastBasicExamples(
 
                 + ZkToast("This is a primary toast!", flavour = ZkFlavour.Primary)
 
-                + buttonPrimary("Open as Toast") { toastPrimary { "This is a primary toast!" } }
+                + primaryButton("Open as Toast") { primaryToast { "This is a primary toast!" } }
 
                 + ZkToast("This is a secondary toast!", flavour = ZkFlavour.Secondary)
 
-                + buttonSecondary("Open as Toast") { toastSecondary { "This is a secondary toast!" } }
+                + secondaryButton("Open as Toast") { secondaryToast { "This is a secondary toast!" } }
 
                 + ZkToast("This is a success toast!", flavour = ZkFlavour.Success)
 
-                + buttonSuccess("Open as Toast") { toastSuccess { "This is a success toast!" } }
+                + successButton("Open as Toast") { successToast { "This is a success toast!" } }
 
                 + ZkToast("This is a warning toast!", flavour = ZkFlavour.Warning)
 
-                + buttonWarning("Open as Toast") { toastWarning { "This is a warning toast!" } }
+                + warningButton("Open as Toast") { warningToast { "This is a warning toast!" } }
 
                 + ZkToast("This is a danger toast!", flavour = ZkFlavour.Danger)
 
-                + buttonDanger("Open as Toast") { toastDanger { "This is a danger toast!" } }
+                + dangerButton("Open as Toast") { dangerToast { "This is a danger toast!" } }
 
                 + ZkToast("This is a info toast!", flavour = ZkFlavour.Info)
 
-                + buttonInfo("Open as Toast") { toastInfo { "This is a info toast!" } }
+                + infoButton("Open as Toast") { infoToast { "This is a info toast!" } }
 
             } marginBottom theme.spacingStep
 

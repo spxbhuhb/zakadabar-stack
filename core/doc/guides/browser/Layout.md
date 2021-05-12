@@ -89,7 +89,7 @@ object DefaultLayout : ZkDefaultLayout() {
 This button is tied to the side bar. When the side bar is shown the button is hidden. When the side bar is hidden, the
 button is shown. `ZkAppTitleBar` automatically handles these states.
 
-## Past, Present, Future
+## Timeline
 
 * 2021.5.12
   * Move css classes of the default layout into `zkDefaultLayoutStyles`.

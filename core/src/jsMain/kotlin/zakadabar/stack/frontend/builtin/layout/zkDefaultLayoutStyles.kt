@@ -31,7 +31,7 @@ open class ZkDefaultLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
     }
 
     open val sideBarContainer by cssClass {
-        minWidth = 160
+        minWidth = 200
         maxHeight = "100%"
         overflowY = "auto"
         borderRight = theme.border

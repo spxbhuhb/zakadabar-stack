@@ -6,10 +6,10 @@ package zakadabar.lib.examples.frontend
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.buttonPrimary
+import zakadabar.stack.frontend.builtin.button.successButton
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.note.ZkNote
-import zakadabar.stack.frontend.builtin.note.notePrimary
+import zakadabar.stack.frontend.builtin.note.successNote
 import zakadabar.stack.frontend.util.marginBottom
 
 class OperatorExample(
@@ -28,11 +28,11 @@ class OperatorExample(
 
             + container
 
-            container += buttonPrimary("A Button, click to hide the note") {
+            container += successButton("A Button, click to hide the note") {
                 container -= ZkNote::class
             } marginBottom 20
 
-            container += notePrimary("A Note", "This note will disappear shortly.")
+            container += successNote("A Note", "This note will disappear shortly.")
         }
     }
 }

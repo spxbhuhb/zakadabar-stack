@@ -14,6 +14,11 @@ object Welcome : MarkdownPage(
     ContentContext("/Welcome", "welcome/")
 )
 
+object WhatsNew : MarkdownPage(
+    "/${ContentQuery.dtoNamespace}/WhatsNew.md",
+    ContentContext("/WhatsNew", "/")
+)
+
 object ShowCase : MarkdownPage(
     "/${ContentQuery.dtoNamespace}/welcome/ShowCase.md",
     ContentContext("/ShowCase", "welcome/")

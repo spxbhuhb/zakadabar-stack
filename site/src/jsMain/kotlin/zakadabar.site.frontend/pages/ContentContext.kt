@@ -7,6 +7,7 @@ import org.intellij.markdown.html.resolveToStringSafe
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import zakadabar.lib.examples.frontend.OperatorExample
+import zakadabar.lib.examples.frontend.ParallelDownloadExample
 import zakadabar.lib.examples.frontend.button.ButtonExamples
 import zakadabar.lib.examples.frontend.form.FormBooleanExample
 import zakadabar.lib.examples.frontend.form.FormDoubleExample
@@ -85,6 +86,8 @@ class ContentContext(
             "ModalExamples" -> ModalExamples(htmlElement)
 
             "OperatorExample" -> OperatorExample(htmlElement)
+
+            "ParallelDownloadExample" -> ParallelDownloadExample(htmlElement)
 
             "TableExample" -> TableExample(htmlElement)
 

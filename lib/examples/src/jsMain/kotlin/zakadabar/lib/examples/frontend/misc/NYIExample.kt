@@ -6,7 +6,7 @@ package zakadabar.lib.examples.frontend.misc
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.misc.NYI
-import zakadabar.stack.frontend.builtin.note.noteSecondary
+import zakadabar.stack.frontend.builtin.note.secondaryNote
 
 class NYIExample(
     element: HTMLElement
@@ -15,7 +15,7 @@ class NYIExample(
     override fun onCreate() {
         super.onCreate()
 
-        + noteSecondary("NYI Example", zke {
+        + secondaryNote("NYI Example", zke {
             + column {
                 + NYI("this will be the header")
                 + row {

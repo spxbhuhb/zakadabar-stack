@@ -64,7 +64,7 @@ io {
 }
 ```
 
-## Past, Present, Future
+## Timeline
 
 * 2021.5.12
   * Change opacity of overlay background from 0.2 to 0.5 to make the modal more distinct.

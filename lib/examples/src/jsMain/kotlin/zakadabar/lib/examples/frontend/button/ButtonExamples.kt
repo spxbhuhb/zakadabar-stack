@@ -7,7 +7,7 @@ import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.application.ZkApplication.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.toast.toastSuccess
+import zakadabar.stack.frontend.builtin.toast.successToast
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.marginBottom
@@ -57,6 +57,6 @@ class ButtonExamples(
     }
 
     private fun onButtonClick() {
-        toastSuccess { "You clicked on a button!" }
+        successToast { "You clicked on a button!" }
     }
 }

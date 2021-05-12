@@ -38,6 +38,8 @@ object SideBar : ZkSideBar() {
 
             + item(Strings.Welcome) { Welcome.open() }
 
+            + item(Strings.WhatsNew) { WhatsNew.open() }
+
             + item(Strings.showCase) { ShowCase.open() }
 
             + item(Strings.roadmap) { Roadmap.open() }
