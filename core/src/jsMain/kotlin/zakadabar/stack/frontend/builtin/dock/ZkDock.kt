@@ -32,14 +32,14 @@ class ZkDock : ZkElement() {
         if (child == null) return
 
         if (childElements.contains(child)) {
-            childElements -= child
+            super.minusAssign(child)
             return
         }
 
         for (candidate in childElements) {
             if (candidate !is ZkDockedElement) continue
             if (candidate.content != child) continue
-            childElements -= candidate
+            super.minusAssign(candidate)
             return
         }
 

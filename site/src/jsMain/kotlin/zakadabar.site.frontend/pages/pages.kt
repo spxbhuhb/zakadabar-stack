@@ -11,43 +11,43 @@ import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 
 object Welcome : MarkdownPage(
     "/${ContentQuery.dtoNamespace}/welcome/Welcome.md",
-    ContentContext("/Welcome", "welcome/")
+    SiteMarkdownContext("/Welcome", "welcome/")
 )
 
 object WhatsNew : MarkdownPage(
     "/${ContentQuery.dtoNamespace}/WhatsNew.md",
-    ContentContext("/WhatsNew", "/")
+    SiteMarkdownContext("/WhatsNew", "/")
 )
 
 object ShowCase : MarkdownPage(
     "/${ContentQuery.dtoNamespace}/welcome/ShowCase.md",
-    ContentContext("/ShowCase", "welcome/")
+    SiteMarkdownContext("/ShowCase", "welcome/")
 )
 
 object Roadmap : MarkdownPage(
     "/${ContentQuery.dtoNamespace}/Roadmap.md",
-    ContentContext("/Roadmap", "/")
+    SiteMarkdownContext("/Roadmap", "/")
 )
 
 object GetStarted : MarkdownPage(
     "/${ContentQuery.dtoNamespace}/GetStarted.md",
-    ContentContext("/GetStarted", "/")
+    SiteMarkdownContext("/GetStarted", "/")
 )
 
 object GetHelp : MarkdownPage(
     "/${ContentQuery.dtoNamespace}/help/GetHelp.md",
-    ContentContext("/GetHelp", "help/")
+    SiteMarkdownContext("/GetHelp", "help/")
 )
 
 
 object DocumentationIntro : MarkdownPage(
     "/${ContentQuery.dtoNamespace}/help/Documentation.md",
-    ContentContext("/DocumentationIntro", "help/")
+    SiteMarkdownContext("/DocumentationIntro", "help/")
 )
 
 object FAQ : MarkdownPage(
     "/${ContentQuery.dtoNamespace}/help/FAQ.md",
-    ContentContext("FAQ", "help/")
+    SiteMarkdownContext("FAQ", "help/")
 )
 
 object Documentation : MarkdownPathPage() {
@@ -64,6 +64,6 @@ object Documentation : MarkdownPathPage() {
         return "/content/$path"
     }
 
-    override fun context() = ContentContext(viewName, path)
+    override fun context() = SiteMarkdownContext(viewName, path)
 
 }

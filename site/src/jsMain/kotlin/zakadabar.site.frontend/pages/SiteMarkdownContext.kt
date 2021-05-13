@@ -9,6 +9,8 @@ import org.w3c.dom.get
 import zakadabar.lib.examples.frontend.OperatorExample
 import zakadabar.lib.examples.frontend.ParallelDownloadExample
 import zakadabar.lib.examples.frontend.button.ButtonExamples
+import zakadabar.lib.examples.frontend.dock.DockBasicExample
+import zakadabar.lib.examples.frontend.dock.DockRemoveExample
 import zakadabar.lib.examples.frontend.form.FormBooleanExample
 import zakadabar.lib.examples.frontend.form.FormDoubleExample
 import zakadabar.lib.examples.frontend.form.FormRecordIdExample
@@ -31,7 +33,7 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.note.ZkNote
 import zakadabar.stack.frontend.resources.ZkFlavour
 
-class ContentContext(
+class SiteMarkdownContext(
     viewName: String,
     val path: String
 ) : ZkMarkdownContext(baseURI = "/$viewName/$path") {
@@ -64,6 +66,9 @@ class ContentContext(
         return when (type) {
 
             "ButtonExamples" -> ButtonExamples(htmlElement, flavour = flavour)
+
+            "DockBasicExample" -> DockBasicExample(htmlElement)
+            "DockRemoveExample" -> DockRemoveExample(htmlElement)
 
             "IntCheckboxListExample" -> IntCheckboxListExample(htmlElement)
 

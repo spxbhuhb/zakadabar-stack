@@ -11,7 +11,11 @@ import org.w3c.dom.css.CSSStyleDeclaration
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventTarget
 import zakadabar.stack.frontend.application.application
+import zakadabar.stack.frontend.application.stringStore
+import zakadabar.stack.frontend.builtin.dock.ZkDockedElement
+import zakadabar.stack.frontend.builtin.dock.ZkDockedElementState
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
+import zakadabar.stack.frontend.resources.ZkIconSource
 import zakadabar.stack.frontend.resources.css.stringOrPx
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.minusAssign
@@ -985,6 +989,21 @@ open class ZkElement(
         this.classList -= zkLayoutStyles.hidden
         return this
     }
+
+    // -------------------------------------------------------------------------
+    //   Miscellaneous utilities
+    // -------------------------------------------------------------------------
+
+    /**
+     * Docks this element. When title is not specified tries to translate
+     * the class name from the string store.
+     */
+    fun dock(iconSource : ZkIconSource, title : String? = null) = ZkDockedElement(
+        iconSource,
+        title ?: stringStore[this::class.simpleName!!],
+        ZkDockedElementState.Normal,
+        this
+    ).run()
 
     // -------------------------------------------------------------------------
     //   Executor permissions, logged in etc

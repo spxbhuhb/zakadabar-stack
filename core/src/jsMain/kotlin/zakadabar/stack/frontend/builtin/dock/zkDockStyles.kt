@@ -49,11 +49,9 @@ class ZkDockStyles : ZkCssStyleSheet() {
 
     val headerIcon by cssClass {
         boxSizing = "border-box"
-        padding = 6
-        height = headerHeight
-        width = headerHeight
         backgroundColor = headerIconBackground
         fill = headerIconFill
+        marginLeft = 8
         marginRight = 8
     }
 
@@ -77,20 +75,11 @@ class ZkDockStyles : ZkCssStyleSheet() {
 
     val extensionIcon by cssClass {
         boxSizing = "border-box"
-        padding = "6px 2px 2px 2px"
-        height = headerHeight
         backgroundColor = headerIconBackground
         fill = headerIconFill
         strokeWidth = 2
         cursor = "pointer"
         userSelect = "none"
-
-        on(":first-child") {
-            paddingLeft = 7
-        }
-
-        on(":last-child") {
-            paddingRight = 6
-        }
+        marginRight = 12
     }
 }

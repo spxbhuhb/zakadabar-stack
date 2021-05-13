@@ -10,6 +10,7 @@ import org.w3c.dom.HTMLHtmlElement
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
+import zakadabar.stack.frontend.resources.ZkIconSource
 import zakadabar.stack.frontend.resources.ZkIcons
 
 /**
@@ -19,19 +20,20 @@ import zakadabar.stack.frontend.resources.ZkIcons
  * If you extend you have to modify the [update] method to show/hide whatever is docked.
  */
 open class ZkDockedElement(
-    val icon: ZkElement,
+    val icon: ZkIconSource,
     val title: String,
     var state: ZkDockedElementState,
     var content: ZkElement? = null,
 ) : ZkElement() {
 
+    protected val headerIcon = ZkIcon(icon)
     protected val minimize = ZkIcon(ZkIcons.minimize, 16, onClick = ::onMinimize).css(zkDockStyles.extensionIcon)
     protected val maximize = ZkIcon(ZkIcons.maximize, 16, onClick = ::onMaximize).css(zkDockStyles.extensionIcon)
     protected val openInFull = ZkIcon(ZkIcons.openInFull, 16, onClick = ::onOpenInFullIcon).css(zkDockStyles.extensionIcon)
     protected val closeFullScreen = ZkIcon(ZkIcons.closeFullScreen, 16, onClick = ::onCloseFullScreen).css(zkDockStyles.extensionIcon)
     protected val close = ZkIcon(ZkIcons.close, 16, onClick = ::onClose).css(zkDockStyles.extensionIcon)
 
-    protected val header = ZkDockedElementHeader(title, icon, tools = listOf(minimize, maximize, openInFull, closeFullScreen, close))
+    protected val header = ZkDockedElementHeader(title, headerIcon, tools = listOf(minimize, maximize, openInFull, closeFullScreen, close))
 
     override fun onCreate() {
         super.onCreate()
@@ -42,6 +44,14 @@ open class ZkDockedElement(
         this += content
 
         update(state)
+    }
+
+    /**
+     * Add the element to the application dock.
+     */
+    open fun run() : ZkDockedElement {
+        application.dock += this
+        return this
     }
 
     open fun update(newState: ZkDockedElementState) {
