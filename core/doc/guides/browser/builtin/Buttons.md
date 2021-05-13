@@ -63,7 +63,37 @@ Add a combined button:
 }
 ```
 
-## Built-In Variations [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
+## Button or Link
+
+A quite good description of buttons and links on [stackoverflow](https://stackoverflow.com/a/48433150/3796844)
+from [alexggordon](https://stackoverflow.com/users/2506667/alexggordon):
+
+---
+
+Generally, my distinguishing factor is that Buttons execute an action whereas Links navigate you to a different portion
+of a website, generally undoable with the back button.
+
+Some common Buttons:
+
+* Save Button (on a form)
+* Post Your Answer (stack overflow question answer)
+* Log In
+* Send Email
+
+Some Common Links:
+
+* Home, Profile (facebook)
+* Questions (stack overflow)
+* Notifications (twitter)
+* Popular (reddit)
+
+As a metric for which to use, I usually like to ask if the thing I'm doing would be able to be undone with the back
+button on the browser. You can't "back button" a login request, or a tweet, but you can "back button" navigation to your
+profile on facebook or a link on reddit.
+
+---
+
+## Built-In Variations [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
 ### Primary
 
@@ -96,4 +126,4 @@ Add a combined button:
 ## Timeline
 
 * 2021.5.12
-  * rename convenience functions from buttonXX to XXbutton
+    * rename convenience functions from buttonXX to XXbutton

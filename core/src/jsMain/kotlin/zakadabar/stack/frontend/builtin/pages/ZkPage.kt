@@ -3,11 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.pages
 
-import zakadabar.stack.frontend.application.ZkAppLayout
-import zakadabar.stack.frontend.application.ZkAppRouting
-import zakadabar.stack.frontend.application.ZkApplication
-import zakadabar.stack.frontend.application.ZkApplication.t
-import zakadabar.stack.frontend.application.ZkNavState
+import zakadabar.stack.frontend.application.*
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.util.plusAssign
@@ -55,7 +51,7 @@ open class ZkPage(
 
     override var viewName = "${this::class.simpleName}"
 
-    open fun open() = ZkApplication.changeNavState("/$viewName")
+    open fun open() = application.changeNavState(this)
 
     override fun route(routing: ZkAppRouting, state: ZkNavState): ZkElement {
         if (layout != null) routing.nextLayout = layout
@@ -84,12 +80,12 @@ open class ZkPage(
         if (! appTitle) return
 
         title?.let {
-            ZkApplication.title = it
+            application.title = it
             return
         }
 
-        val text = titleText ?: t(this::class.simpleName ?: "")
-        ZkApplication.title = ZkAppTitle(text)
+        val text = titleText ?: stringStore[this::class.simpleName ?: ""]
+        application.title = ZkAppTitle(text)
     }
 
 }

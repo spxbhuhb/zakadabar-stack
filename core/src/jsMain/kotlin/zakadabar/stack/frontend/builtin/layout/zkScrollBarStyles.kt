@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 var zkScrollBarStyles by cssStyleSheet(ZkScrollBarStyles())
 
 @Suppress("unused") // these are global styles interpreted by the browser
-open class ZkScrollBarStyles : ZkCssStyleSheet<ZkTheme>() {
+open class ZkScrollBarStyles : ZkCssStyleSheet() {
 
     open var enabled: Boolean = true
     open var scrollBarWidth: Int = 12

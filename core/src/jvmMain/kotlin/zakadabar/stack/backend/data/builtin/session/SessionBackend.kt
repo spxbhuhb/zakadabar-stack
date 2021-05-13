@@ -10,10 +10,12 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
+import zakadabar.stack.backend.data.builtin.resources.setting
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.backend.ktor.session.StackSession
 import zakadabar.stack.data.builtin.ActionStatusDto
 import zakadabar.stack.data.builtin.account.*
+import zakadabar.stack.data.builtin.misc.ServerDescriptionDto
 import zakadabar.stack.data.record.EmptyRecordId
 import zakadabar.stack.data.record.LongRecordId
 import zakadabar.stack.data.record.RecordId
@@ -23,6 +25,8 @@ import zakadabar.stack.util.Executor
  * Session read (user account, roles), login and logout.
  */
 object SessionBackend : RecordBackend<SessionDto>() {
+
+    private val serverDescription by setting<ServerDescriptionDto>("zakadabar.server.description")
 
     override val dtoClass = SessionDto::class
 
@@ -49,7 +53,8 @@ object SessionBackend : RecordBackend<SessionDto>() {
                 id = EmptyRecordId(),
                 account = Server.anonymous,
                 anonymous = true,
-                roles = emptyList()
+                roles = emptyList(),
+                serverDescription = serverDescription
             )
         } else {
             val (account, principalId) = Server.findAccountById(session.account)
@@ -58,7 +63,8 @@ object SessionBackend : RecordBackend<SessionDto>() {
                 id = EmptyRecordId(),
                 account = account,
                 anonymous = false,
-                roles = roleNames
+                roles = roleNames,
+                serverDescription = serverDescription
             )
         }
     }

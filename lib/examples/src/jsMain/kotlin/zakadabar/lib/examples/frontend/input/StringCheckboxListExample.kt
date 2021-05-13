@@ -4,7 +4,7 @@
 package zakadabar.lib.examples.frontend.input
 
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.application.ZkApplication.strings
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.secondaryButton
 import zakadabar.stack.frontend.builtin.input.ZkCheckboxList
@@ -39,7 +39,7 @@ class StringCheckboxListExample(
 
         + column(zkPageStyles.content) {
             + successNote("Strings", stringCheckboxList) marginBottom 20
-            + secondaryButton(strings.execute, onClick = ::onSave) marginBottom 20
+            + secondaryButton(stringStore.execute, onClick = ::onSave) marginBottom 20
             + secondaryNote("Output", "")
         }
     }

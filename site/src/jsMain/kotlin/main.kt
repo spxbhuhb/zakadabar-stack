@@ -3,36 +3,39 @@
  */
 @file:Suppress("unused") // main is called by webpack
 
-import kotlinx.browser.window
 import zakadabar.site.frontend.Routing
 import zakadabar.site.frontend.resources.SiteDarkTheme
 import zakadabar.site.frontend.resources.SiteLightTheme
 import zakadabar.site.resources.SiteStrings
 import zakadabar.stack.data.builtin.resources.TranslationsByLocale
 import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.resources.initTheme
 import zakadabar.stack.frontend.util.io
 
 fun main() {
+
+    application = ZkApplication()
 
     io {
 
         ZkElement.addKClass = true
 
-        with(ZkApplication) {
+        with(application) {
 
             sessionManager.init()
 
-            themes += SiteDarkTheme()
-            themes += SiteLightTheme()
+            initTheme(
+                SiteDarkTheme(),
+                SiteLightTheme()
+            )
 
-            theme = initTheme()
-
-            val locale = executor.account.locale ?: window.navigator.language
+            initLocale()
 
             strings = SiteStrings().merge(TranslationsByLocale(locale).execute())
 
-            routing = Routing
+            routing = Routing()
 
             init()
 

@@ -10,11 +10,10 @@ import zakadabar.stack.data.builtin.*
 import zakadabar.stack.data.builtin.account.*
 import zakadabar.stack.data.record.EmptyRecordId
 import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.frontend.application.ZkApplication
-import zakadabar.stack.frontend.application.ZkApplication.executor
-import zakadabar.stack.frontend.application.ZkApplication.hasRole
-import zakadabar.stack.frontend.application.ZkApplication.strings
-import zakadabar.stack.frontend.application.ZkApplication.t
+import zakadabar.stack.frontend.application.application
+import zakadabar.stack.frontend.application.executor
+import zakadabar.stack.frontend.application.hasRole
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
@@ -59,7 +58,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
 
             classList += zkLayoutStyles.grow
 
-            ZkApplication.title = ZkAppTitle(if (mode != ZkElementMode.Create) dto.accountName else strings.account)
+            application.title = ZkAppTitle(if (mode != ZkElementMode.Create) dto.accountName else stringStore.account)
 
             + AccountTabContainer()
         }
@@ -82,19 +81,19 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
                 minHeight = "0px"
             }
 
-            + tab(strings.basics) {
+            + tab(stringStore.basics) {
                 + BasicDataForm()
             }
 
             if (mode != ZkElementMode.Create) {
 
-                + tab(strings.passwordChange) {
+                + tab(stringStore.passwordChange) {
                     + PasswordChangeForm()
                 }
 
                 if (hasRole(StackRoles.securityOfficer)) {
-                    + tab(strings.roles) { + RolesForm() }
-                    + tab(strings.accountStatus) { + PrincipalForm() }
+                    + tab(stringStore.roles) { + RolesForm() }
+                    + tab(stringStore.accountStatus) { + PrincipalForm() }
                 }
             }
         }
@@ -120,7 +119,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
             }
         }
 
-        private fun basics() = section(strings.basics) {
+        private fun basics() = section(stringStore.basics) {
             with(dto) {
                 + ::id
                 + ::accountName
@@ -150,12 +149,12 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
                     buildPoint.classList += ZkFormStyles.onePanel
 
                     val expl = if (executor.account.id == dto.accountId) {
-                        strings.passwordChangeExpOwn
+                        stringStore.passwordChangeExpOwn
                     } else {
-                        strings.passwordChangeExpSo
+                        stringStore.passwordChangeExpSo
                     }
 
-                    + section(strings.passwordChange, expl) {
+                    + section(stringStore.passwordChange, expl) {
 
                         // when the user changes his/her own password ask for the old one
                         // when security officer changes the password of someone else, this
@@ -194,7 +193,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
         }
 
         override fun onInvalidSubmit() {
-            warningToast { strings.passwordChangeInvalid }
+            warningToast { stringStore.passwordChangeInvalid }
         }
 
         override fun onSubmitSuccess() {}
@@ -203,9 +202,9 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
             resultDto as ActionStatusDto
 
             if (! resultDto.success) {
-                dangerToast { strings.passwordChangeFail }
+                dangerToast { stringStore.passwordChangeFail }
             } else {
-                successToast { strings.actionSuccess }
+                successToast { stringStore.actionSuccess }
             }
         }
     }
@@ -223,11 +222,11 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
                 + column(ZkFormStyles.form) {
                     buildPoint.classList += ZkFormStyles.onePanel
 
-                    + section(strings.accountStatus) {
+                    + section(stringStore.accountStatus) {
                         + dto::locked
                         + dto::lastLoginSuccess
                         + dto::lastLoginFail
-                        + constString(strings.loginFailCount) { dto.loginFailCount.toString() }
+                        + constString(stringStore.loginFailCount) { dto.loginFailCount.toString() }
                     }
 
                     + buttons()
@@ -246,7 +245,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
         }
 
         val items = systemRoles.sortedBy { it.description }.map { sr ->
-            ZkCheckboxListItem(sr.id, t(sr.description), userRoles.firstOrNull { ur -> ur.role == sr.id } != null)
+            ZkCheckboxListItem(sr.id, stringStore[sr.description], userRoles.firstOrNull { ur -> ur.role == sr.id } != null)
         }
 
         override fun onCreate() {
@@ -254,7 +253,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
                 + column(ZkFormStyles.form) {
                     buildPoint.classList += ZkFormStyles.onePanel
 
-                    + section(strings.roles) {
+                    + section(stringStore.roles) {
                         + ZkCheckboxList(items)
                     }
 

@@ -5,9 +5,9 @@ package zakadabar.stack.frontend.builtin.pages.account.login
 
 import kotlinx.browser.window
 import kotlinx.coroutines.channels.Channel
-import zakadabar.stack.frontend.application.ZkApplication
-import zakadabar.stack.frontend.application.ZkApplication.executor
-import zakadabar.stack.frontend.application.ZkApplication.strings
+import zakadabar.stack.frontend.application.application
+import zakadabar.stack.frontend.application.executor
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.modal.zkModalStyles
@@ -28,19 +28,19 @@ class RenewLoginDialog : ZkElement() {
     private val channel = Channel<Boolean>()
 
     suspend fun run() {
-        ZkApplication.modals.show()
-        ZkApplication.modals += this
+        application.modals.show()
+        application.modals += this
 
         channel.receive()
 
-        ZkApplication.modals -= this
-        ZkApplication.modals.hide()
+        application.modals -= this
+        application.modals.hide()
     }
 
     override fun onCreate() {
         classList += zkModalStyles.modal
 
-        + ZkTitleBar(strings.applicationName) css zkModalStyles.title
+        + ZkTitleBar(stringStore.applicationName) css zkModalStyles.title
 
         + column(zkModalStyles.content) {
             style {
@@ -48,7 +48,7 @@ class RenewLoginDialog : ZkElement() {
             }
 
             + div(ZkFormStyles.sectionSummary) {
-                + strings.sessionRenew
+                + stringStore.sessionRenew
             } marginBottom 5
 
             + LoginForm(

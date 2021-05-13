@@ -6,7 +6,7 @@
 package zakadabar.stack.frontend.builtin.toast
 
 import kotlinx.coroutines.delay
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
@@ -113,13 +113,13 @@ open class ZkToast(
 
             content?.let { + it marginRight 16 }
 
-            + ZkIconButton(ZkIcons.close, cssClass = zkToastStyles.closeIcon) { ZkApplication.toasts -= this }
+            + ZkIconButton(ZkIcons.close, cssClass = zkToastStyles.closeIcon) { application.toasts -= this }
 
         }
     }
 
     open fun run(): ZkToast {
-        ZkApplication.toasts += this
+        application.toasts += this
 
         val finalHideAfter = hideAfter ?: autoHideDefaults[flavour] ?: 0L
 
@@ -134,6 +134,6 @@ open class ZkToast(
     }
 
     open fun dispose() {
-        ZkApplication.toasts -= this
+        application.toasts -= this
     }
 }

@@ -1,13 +1,13 @@
 # Custom Backends
 
 * are fully customizable request handlers,
-* are Kotlin objects that extend [CustomBackend](/src/jvmMain/kotlin/zakadabar/stack/backend/CustomBackend.kt),
+* are Kotlin objects that extend [CustomBackend](/src/jvmMain/kotlin/zakadabar/stack/backend/custom/CustomBackend.kt),
 * **are not** added automatically.
 
 Examples:
 
-* [PingBackend](../../../../demo/demo-lib/src/jvmMain/kotlin/zakadabar/demo/lib/backend/misc/PingBackend.kt)
-* [WebsocketBackend](../../../../demo/demo-lib/src/jvmMain/kotlin/zakadabar/demo/lib/backend/misc/WebsocketBackend.kt)
+* [PingBackend](../../../../lib/examples/src/jvmMain/kotlin/zakadabar/lib/examples/backend/misc/PingBackend.kt)
+* [WebsocketBackend](../../../../lib/examples/src/jvmMain/kotlin/zakadabar/lib/examples/backend/misc/WebsocketBackend.kt)
 
 ```kotlin
 object PingBackend : CustomBackend() {

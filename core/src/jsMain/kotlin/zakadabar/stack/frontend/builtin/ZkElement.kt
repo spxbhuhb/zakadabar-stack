@@ -10,7 +10,7 @@ import org.w3c.dom.*
 import org.w3c.dom.css.CSSStyleDeclaration
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventTarget
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.resources.css.stringOrPx
 import zakadabar.stack.frontend.util.io
@@ -96,7 +96,7 @@ open class ZkElement(
      * Display name of the current user.
      */
     val displayName
-        get() = ZkApplication.executor.account.displayName
+        get() = application.executor.account.displayName
 
     var gridTemplateRows: String
         get() = buildPoint.style.getPropertyValue("grid-template-rows")
@@ -996,7 +996,7 @@ open class ZkElement(
      */
     @PublicApi
     fun ifNotAnonymous(builder: ZkElement.() -> Unit) {
-        if (ZkApplication.executor.anonymous) return
+        if (application.executor.anonymous) return
         this.builder()
     }
 
@@ -1006,7 +1006,7 @@ open class ZkElement(
      */
     @PublicApi
     fun ifAnonymous(builder: ZkElement.() -> Unit) {
-        if (! ZkApplication.executor.anonymous) return
+        if (! application.executor.anonymous) return
         this.builder()
     }
 
@@ -1016,7 +1016,7 @@ open class ZkElement(
      */
     @PublicApi
     fun withRole(role: String, builder: ZkElement.() -> Unit) {
-        if (role !in ZkApplication.executor.roles) return
+        if (role !in application.executor.roles) return
         this.builder()
     }
 
@@ -1027,7 +1027,7 @@ open class ZkElement(
     @PublicApi
     fun withOneOfRoles(vararg roles: String, builder: ZkElement.() -> Unit) {
         roles.forEach {
-            if (it in ZkApplication.executor.roles) {
+            if (it in application.executor.roles) {
                 this.builder()
                 return
             }
@@ -1040,7 +1040,7 @@ open class ZkElement(
      */
     @PublicApi
     fun withoutRole(role: String, builder: ZkElement.() -> Unit) {
-        if (role in ZkApplication.executor.roles) return
+        if (role in application.executor.roles) return
         this.builder()
     }
 

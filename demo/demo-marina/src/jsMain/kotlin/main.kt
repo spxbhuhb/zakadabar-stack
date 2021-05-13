@@ -7,7 +7,7 @@ import kotlinx.browser.window
 import zakadabar.demo.marina.frontend.Routing
 import zakadabar.demo.marina.resources.MarinaStrings
 import zakadabar.stack.data.builtin.resources.TranslationsByLocale
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
 import zakadabar.stack.frontend.util.io
@@ -31,7 +31,7 @@ fun main() {
         // current session between the frontend and backend. If there is no such session, a new
         // one is created.
 
-        with(ZkApplication) {
+        with(application) {
 
             // The session manager gets the session information from the server and handles
             // session expiration by displaying a renew login modal.

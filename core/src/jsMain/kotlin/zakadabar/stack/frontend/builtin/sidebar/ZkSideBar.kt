@@ -4,9 +4,7 @@
 package zakadabar.stack.frontend.builtin.sidebar
 
 import zakadabar.stack.frontend.application.ZkAppRouting
-import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.builtin.ZkElement
-import kotlin.reflect.KClass
 
 open class ZkSideBar : ZkElement() {
 
@@ -15,11 +13,14 @@ open class ZkSideBar : ZkElement() {
     }
 
     open fun item(text: String, capitalize: Boolean = true, onClick: (() -> Unit)? = null) =
-        ZkSideBarItem(text, capitalize, onClick)
+        ZkSideBarItem(text, null, capitalize, onClick)
 
-    open fun group(text: String, onClick: (Boolean) -> Unit = { }, builder: ZkElement.() -> Unit) =
-        ZkSideBarGroup(text, onClick, builder)
+    open fun item(target : ZkAppRouting.ZkTarget, subPath : String? = null, text : String? = null) = ZkSideBarItem(target, subPath, text)
 
-    open fun <T : ZkAppRouting.ZkTarget> findTarget(kClass: KClass<T>): List<T> = ZkApplication.routing.find(kClass)
+    open fun group(text: String, onClick: ((Boolean) -> Unit)? = null, builder: ZkElement.() -> Unit) =
+        ZkSideBarGroup(text, onClick = onClick, builder = builder)
+
+    open fun group(target : ZkAppRouting.ZkTarget, text : String? = null, builder: ZkElement.() -> Unit) =
+        ZkSideBarGroup(target, text = text, builder = builder)
 
 }

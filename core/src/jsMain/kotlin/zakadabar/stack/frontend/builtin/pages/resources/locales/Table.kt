@@ -6,8 +6,7 @@ package zakadabar.stack.frontend.builtin.pages.resources.locales
 import hu.simplexion.rf.leltar.frontend.pages.roles.Roles
 import zakadabar.stack.data.builtin.account.RoleDto
 import zakadabar.stack.data.builtin.resources.LocaleDto
-import zakadabar.stack.data.builtin.resources.SettingDto
-import zakadabar.stack.frontend.application.ZkApplication.strings
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class Table : ZkTable<LocaleDto>() {
@@ -21,7 +20,7 @@ class Table : ZkTable<LocaleDto>() {
         search = true
         export = true
 
-        titleText = strings.locales
+        titleText = stringStore.locales
         crud = Roles
 
         + LocaleDto::id

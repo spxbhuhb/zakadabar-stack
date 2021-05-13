@@ -6,7 +6,7 @@ Zakadabar Stack is a Kotlin software library for full-stack application developm
 <div data-zk-enrich="Note" data-zk-flavour="Success" data-zk-title="Try It">
 You are actually trying it right now!
 
-This site has been built with the stack. Check the <a href="/ShowCase">Show Case</a> to se the UI components. The
+This site has been built with the stack. Check the <a href="./ShowCase">Show Case</a> to se the UI components. The
 documentation, the demos and the example sources can help with the backend.
 </div>
 <div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Alpha">

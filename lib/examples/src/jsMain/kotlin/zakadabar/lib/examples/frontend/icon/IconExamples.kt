@@ -4,7 +4,7 @@
 package zakadabar.lib.examples.frontend.icon
 
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.application.ZkApplication.theme
+import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
 import zakadabar.stack.frontend.resources.ZkTheme
@@ -24,7 +24,7 @@ class IconExamples(
     companion object {
         val iconExampleStyles by cssStyleSheet(IconExampleStyles())
 
-        class IconExampleStyles : ZkCssStyleSheet<ZkTheme>() {
+        class IconExampleStyles : ZkCssStyleSheet() {
             val exampleStyles by cssClass {
                 fill = theme.textColor
             }

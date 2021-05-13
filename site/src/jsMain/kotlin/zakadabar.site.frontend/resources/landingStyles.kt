@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val landingStyles by cssStyleSheet(LandingStyles())
 
-class LandingStyles : ZkCssStyleSheet<ZkTheme>() {
+class LandingStyles : ZkCssStyleSheet() {
 
     val landing by cssClass {
         display = "grid"

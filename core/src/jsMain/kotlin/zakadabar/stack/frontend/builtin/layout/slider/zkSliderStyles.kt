@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkSliderStyles by cssStyleSheet(ZkSliderStyles())
 
-class ZkSliderStyles : ZkCssStyleSheet<ZkTheme>() {
+class ZkSliderStyles : ZkCssStyleSheet() {
 
     // FIXME these colors are wrong
 

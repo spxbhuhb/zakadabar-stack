@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.modal
 
-import zakadabar.stack.frontend.application.ZkApplication.strings
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
 import zakadabar.stack.frontend.util.io
@@ -12,8 +12,8 @@ import zakadabar.stack.frontend.util.plusAssign
 open class ZkConfirmDialog(
     open val title: String? = null,
     open val message: String,
-    open val noLabel: String = strings.no.capitalize(),
-    open val yesLabel: String = strings.yes.capitalize(),
+    open val noLabel: String = stringStore.no.capitalize(),
+    open val yesLabel: String = stringStore.yes.capitalize(),
 ) : ZkModalBase<Boolean>() {
 
     override fun onCreate() {

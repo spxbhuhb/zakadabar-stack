@@ -3,11 +3,9 @@
  */
 package zakadabar.stack.frontend.builtin.pages.resources.settings
 
-import hu.simplexion.rf.leltar.frontend.pages.roles.Roles
 import zakadabar.stack.data.builtin.account.RoleDto
 import zakadabar.stack.data.builtin.resources.SettingDto
-import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.frontend.application.ZkApplication.strings
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class Table : ZkTable<SettingDto>() {
@@ -27,12 +25,12 @@ class Table : ZkTable<SettingDto>() {
         search = true
         export = true
 
-        titleText = strings.roles
+        titleText = stringStore.roles
         crud = Settings
 
         + SettingDto::id
         + custom {
-            label = strings.role
+            label = stringStore.role
             render = { + roles[it.role]?.name }
         }
         + SettingDto::namespace

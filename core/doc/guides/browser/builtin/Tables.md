@@ -15,7 +15,7 @@
 
 ## Write a Table component
 
-1. create a [DTO](../../Data.md) to store the data of one row
+1. create a [DTO](../../common/Data.md) to store the data of one row
 1. create a class that extends [ZkTable](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/table/ZkTable.kt)
 1. override `onConfigure` to set up the table
 

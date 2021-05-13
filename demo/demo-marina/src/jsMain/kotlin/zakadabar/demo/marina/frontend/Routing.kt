@@ -12,7 +12,7 @@ import zakadabar.demo.marina.frontend.pages.ship.ShipSearch
 import zakadabar.demo.marina.frontend.pages.ship.Ships
 import zakadabar.demo.marina.frontend.pages.speed.Speeds
 import zakadabar.stack.frontend.application.ZkAppRouting
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.ZkNavState
 import zakadabar.stack.frontend.builtin.pages.account.accounts.Accounts
 import zakadabar.stack.frontend.builtin.pages.account.login.Login
@@ -23,11 +23,11 @@ import zakadabar.stack.frontend.builtin.pages.account.login.Login
  * Routing creates a [ZkNavState] from the URL and finds the
  * appropriate [ZkAppRouting.ZkTarget] to display to the user.
  *
- * Set the [ZkApplication.routing] field to this object
- * when the [ZkApplication] is created (typically in main.kt).
+ * Set the [application.routing] field to this object
+ * when the [application] is created (typically in main.kt).
  *
  * You can change the routing of an application on-the-fly by
- * setting [ZkApplication.routing] to another object.
+ * setting [application.routing] to another object.
  */
 class Routing : ZkAppRouting(DemoLayout, Home) {
 
@@ -58,7 +58,7 @@ class Routing : ZkAppRouting(DemoLayout, Home) {
      * This example redirects the anonymous user to the login page.
      */
     override fun onNavStateChange(state: ZkNavState) {
-        if (ZkApplication.executor.anonymous) {
+        if (application.executor.anonymous) {
             super.onNavStateChange(ZkNavState(Login.viewName, ""))
         } else {
             super.onNavStateChange(state)

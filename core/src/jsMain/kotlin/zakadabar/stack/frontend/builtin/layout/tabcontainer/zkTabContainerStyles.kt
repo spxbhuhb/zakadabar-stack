@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkTabContainerStyles by cssStyleSheet(ZkTabContainerStyles())
 
-open class ZkTabContainerStyles : ZkCssStyleSheet<ZkTheme>() {
+open class ZkTabContainerStyles : ZkCssStyleSheet() {
 
     open var labelTextColor: String? = null
     open var labelBackgroundColor: String? = null

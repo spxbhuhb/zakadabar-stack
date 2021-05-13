@@ -8,7 +8,7 @@ Toasts are small pop-up messages displayed to the user to provide information ab
 * Extend [zkToastStyles](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/zkToastStyles.kt) to override default
   styles.
 * Toasts are added to the `toasts` property
-  of [ZkApplication](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt) by convenience functions.
+  of the `application` ([ZkApplication](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt)).
 * The `toast` property is an instance
   of [ZkToastContainer](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/ZkToastContainer.kt).
 
@@ -55,7 +55,7 @@ the `run` method:
 ZkToast("message").run()
 ```
 
-## Auto Hide [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastAutoHideExample.kt)
+## Auto Hide [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastAutoHideExample.kt)
 
 Toasts may disappear automatically after a while. The mechanism works as follows:
 
@@ -88,15 +88,15 @@ Try it out, set a timeout value click on the button:
 
 <div data-zk-enrich="ToastAutoHideExample"></div>
 
-## Built-In Toasts [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastBasicExamples.kt)
+## Built-In Toasts [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastBasicExamples.kt)
 
 <div data-zk-enrich="ToastBasicExamples"></div>
 
-## Custom Toasts [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastCustomExample.kt)
+## Custom Toasts [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastCustomExample.kt)
 
 You can customize the icon and the colors easily by setting the appropriate constructor parameters. For example styles
 check the source code of the example
-or [ZkToastStyles](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/ZkToastStyles.kt).
+or [ZkToastStyles](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/zkToastStyles.kt).
 
 ```kotlin
 ZkToast(
@@ -110,7 +110,7 @@ ZkToast(
 
 <div data-zk-enrich="ToastCustomExample"></div>
 
-## Complex Toast Content [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastFormExample.kt)
+## Complex Toast Content [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastFormExample.kt)
 
 * This example shows how to use a complex element (a form in this case) for a toast.
 * Auto-hiding is disabled to let the user process the content of the toast.

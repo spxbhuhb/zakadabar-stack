@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val siteStyles by cssStyleSheet(SiteStyles())
 
-class SiteStyles : ZkCssStyleSheet<ZkTheme>() {
+class SiteStyles : ZkCssStyleSheet() {
 
     val developerLogoUrl: String = "/simplexion_logo.svg"
 
@@ -29,7 +29,4 @@ class SiteStyles : ZkCssStyleSheet<ZkTheme>() {
         fill = theme.textColor
     }
 
-    init {
-        attach()
-    }
 }

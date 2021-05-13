@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkAccountStyles by cssStyleSheet(ZkAccountStyles())
 
-class ZkAccountStyles : ZkCssStyleSheet<ZkTheme>() {
+class ZkAccountStyles : ZkCssStyleSheet() {
 
     val avatar by cssClass {
         width = 28

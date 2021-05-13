@@ -4,7 +4,7 @@
 package zakadabar.stack.frontend.builtin.pages
 
 import zakadabar.stack.frontend.application.ZkAppLayout
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.application
 
 /**
  * A page that provides convenience methods for serving hierarchic URLs.
@@ -23,9 +23,9 @@ open class ZkPathPage(
 ) : ZkPage(layout, cssClass) {
 
     open val name
-        get() = ZkApplication.routing.navState.urlPath.split("/").last()
+        get() = application.routing.navState.segments.last()
 
     open val path
-        get() = ZkApplication.routing.navState.urlPath.trim('/').substringAfter('/')
+        get() = application.routing.navState.segments.drop(2).joinToString("/")
 
 }

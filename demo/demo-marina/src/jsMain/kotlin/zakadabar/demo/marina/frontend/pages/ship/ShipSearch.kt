@@ -5,7 +5,7 @@ package zakadabar.demo.marina.frontend.pages.ship
 
 import zakadabar.demo.marina.data.ship.SearchShipsQuery
 import zakadabar.demo.marina.resources.Strings
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
@@ -41,7 +41,7 @@ object ShipSearch : ZkPage() {
 
     override fun onResume() {
         super.onResume()
-        ZkApplication.title = ZkAppTitle(Strings.searchShips)
+        application.title = ZkAppTitle(Strings.searchShips)
     }
 
     private fun runQuery(query: SearchShipsQuery) {

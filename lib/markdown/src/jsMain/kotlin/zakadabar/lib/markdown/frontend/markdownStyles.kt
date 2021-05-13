@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val markdownStyles by cssStyleSheet(MarkdownStyles())
 
-open class MarkdownStyles : ZkCssStyleSheet<ZkTheme>() {
+open class MarkdownStyles : ZkCssStyleSheet() {
 
     open var codeBorderColor: String? = null
     open var highlightUrl = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/idea.min.css"

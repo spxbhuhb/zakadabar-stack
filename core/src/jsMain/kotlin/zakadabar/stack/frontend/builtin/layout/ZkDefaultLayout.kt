@@ -5,7 +5,7 @@ package zakadabar.stack.frontend.builtin.layout
 
 import kotlinx.browser.window
 import zakadabar.stack.frontend.application.ZkAppLayout
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
@@ -86,8 +86,8 @@ open class ZkDefaultLayout(
     }
 
     override fun onResume() {
-        ZkApplication.onTitleChange = ::onTitleChange
-        titleBar.title = ZkApplication.title
+        application.onTitleChange = ::onTitleChange
+        titleBar.title = application.title
         popupSidebarContainer.hide()
 
         val mediaSize = if (window.innerWidth < 800) MediaSize.Small else MediaSize.Large

@@ -51,11 +51,11 @@ content property. Clear destroys the internal structure of the note and
 after clear it won't work.
 </div>
 
-## Built-In Notes [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/note/NoteBasicExamples.kt)
+## Built-In Notes [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/note/NoteBasicExamples.kt)
 
 <div data-zk-enrich="NoteBasicExamples"></div>
 
-## Complex Note Content [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/note/NoteFormExample.kt)
+## Complex Note Content [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/note/NoteFormExample.kt)
 
 This example shows how to use a complex element (a form in this case) for a note.
 

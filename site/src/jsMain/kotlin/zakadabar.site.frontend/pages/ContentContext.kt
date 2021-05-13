@@ -25,7 +25,8 @@ import zakadabar.lib.examples.frontend.toast.ToastBasicExamples
 import zakadabar.lib.examples.frontend.toast.ToastCustomExample
 import zakadabar.lib.examples.frontend.toast.ToastFormExample
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
-import zakadabar.stack.frontend.application.ZkApplication.theme
+import zakadabar.stack.frontend.application.application
+import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.note.ZkNote
 import zakadabar.stack.frontend.resources.ZkFlavour
@@ -49,7 +50,7 @@ class ContentContext(
             dest.startsWith("/src") -> resolveToStringSafe(coreSrc, dest.trim('/'))
             dest.contains("../lib/") -> resolveToStringSafe(libSrc, dest.substringAfter("../lib/").trim('/'))
             dest.contains("../site/") -> resolveToStringSafe(siteSrc, dest.substringAfter("../site/").trim('/'))
-            dest.contains("/guides/") -> resolveToStringSafe("/ContentPages/guides/", dest.substringAfter("/guides/").trim('/'))
+            dest.contains("/guides/") -> resolveToStringSafe("/${application.locale}/Documentation/guides/", dest.substringAfter("/guides/").trim('/'))
             dest.endsWith(".png") -> resolveToStringSafe("/content/$path", dest.trim('/'))
             dest.endsWith(".jpg") -> resolveToStringSafe("/content/$path", dest.trim('/'))
             else -> baseURI?.resolveToStringSafe(dest) ?: dest

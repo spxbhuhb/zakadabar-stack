@@ -6,7 +6,7 @@ For the backend Ktor supplies the routing logic. Have a look at
 All non-static backend routes:
 
 * are under `/api`
-* are authenticated (see [Accounts](../Accounts.md) for more information)
+* are authenticated (see [Accounts](../common/Accounts.md) for more information)
 
 ## Handle Non Crud, Non Query Routes
 

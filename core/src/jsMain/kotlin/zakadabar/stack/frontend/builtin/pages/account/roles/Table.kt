@@ -5,7 +5,7 @@ package zakadabar.stack.frontend.builtin.pages.account.roles
 
 import hu.simplexion.rf.leltar.frontend.pages.roles.Roles
 import zakadabar.stack.data.builtin.account.RoleDto
-import zakadabar.stack.frontend.application.ZkApplication.strings
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class Table : ZkTable<RoleDto>() {
@@ -17,7 +17,7 @@ class Table : ZkTable<RoleDto>() {
         search = true
         export = true
 
-        titleText = strings.roles
+        titleText = stringStore.roles
         crud = Roles
 
         + RoleDto::id

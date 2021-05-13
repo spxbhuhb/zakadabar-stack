@@ -14,7 +14,7 @@ class HeaderActions : ZkElement() {
 
     override fun onCreate() {
         + row(siteStyles.headerActions) {
-            + DarkLightMode(SiteDarkTheme.NAME, SiteLightTheme.NAME)
+            + DarkLightMode({ SiteDarkTheme() }, { SiteLightTheme() })
         } marginRight 20
     }
 

@@ -39,7 +39,7 @@ It is very common, that a frontend element has an internal layout with a lot of 
 this [ZkElement](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/ZkElement.kt)
 provides a number of builder methods.
 
-### Operators [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
+### Operators [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
 Operator overloads are provided to build structures idiomatically.
 
@@ -213,7 +213,7 @@ io {
 + "Hello" // this is the first to run
 ```
 
-### More than one fetch [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/ParallelDownloadExample.kt)
+### More than one fetch [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/ParallelDownloadExample.kt)
 
 To perform more than one fetch use `coroutineScope`.
 

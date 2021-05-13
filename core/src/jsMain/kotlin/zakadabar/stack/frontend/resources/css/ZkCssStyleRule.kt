@@ -23,7 +23,7 @@ import zakadabar.stack.frontend.resources.ZkTheme
  * @property  builder        The function to build the CSS text for the rule.
  */
 class ZkCssStyleRule(
-    private val sheet: ZkCssStyleSheet<*>,
+    private val sheet: ZkCssStyleSheet,
     val propName: String,
     val cssClassname: String,
     val cssSelector: String? = null,

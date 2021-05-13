@@ -5,7 +5,7 @@ package zakadabar.stack.data
 
 import kotlinx.coroutines.await
 import org.w3c.fetch.Response
-import zakadabar.stack.frontend.application.ZkApplication.sessionManager
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.pages.account.login.RenewLoginDialog
 
 /**
@@ -19,7 +19,7 @@ abstract class CommBase {
          * The default implementation creates and runs a [RenewLoginDialog].
          */
         var onLoginTimeout: suspend () -> Unit = {
-            sessionManager.renew()
+            application.sessionManager.renew()
         }
     }
 

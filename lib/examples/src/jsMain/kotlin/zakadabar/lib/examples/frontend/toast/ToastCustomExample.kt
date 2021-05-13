@@ -4,7 +4,7 @@
 package zakadabar.lib.examples.frontend.toast
 
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.application.ZkApplication.theme
+import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.secondaryButton
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
@@ -27,7 +27,7 @@ class ToastCustomExample(
     companion object {
         val customToastStyles by cssStyleSheet(CustomToastStyles())
 
-        class CustomToastStyles : ZkCssStyleSheet<ZkTheme>() {
+        class CustomToastStyles : ZkCssStyleSheet() {
             val customInner by cssClass {
                 border = "1px solid ${ZkColors.Zakadabar.navCyan}"
                 backgroundColor = ZkColors.Zakadabar.navCyan + "20"

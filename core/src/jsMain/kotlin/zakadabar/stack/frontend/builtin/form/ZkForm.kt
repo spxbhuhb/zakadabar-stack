@@ -30,10 +30,8 @@ import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.DtoSchema
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.frontend.application.ZkApplication
-import zakadabar.stack.frontend.application.ZkApplication.back
-import zakadabar.stack.frontend.application.ZkApplication.strings
-import zakadabar.stack.frontend.application.ZkApplication.t
+import zakadabar.stack.frontend.application.application
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.ZkElementState
@@ -153,11 +151,11 @@ open class ZkForm<T : DtoBase>(
         if (! appTitle) return
 
         title?.let {
-            ZkApplication.title = it
+            application.title = it
             return
         }
 
-        ZkApplication.title = ZkAppTitle(titleText ?: t(this::class.simpleName ?: ""))
+        application.title = ZkAppTitle(titleText ?: stringStore[this::class.simpleName ?: ""])
     }
 
     // -------------------------------------------------------------------------
@@ -255,7 +253,7 @@ open class ZkForm<T : DtoBase>(
                         val created = (dto as RecordDto<*>).create() as RecordDto<*>
                         fields.forEach { it.onCreateSuccess(created) }
                         if (goBackAfterCreate) {
-                            back()
+                            application.back()
                         } else {
                             resetTouched()
                         }
@@ -289,7 +287,7 @@ open class ZkForm<T : DtoBase>(
 
             } catch (ex: DataConflictException) {
 
-                dangerToast { t(ex.message) }
+                dangerToast { stringStore[ex.message] }
 
             } catch (ex: Exception) {
 
@@ -318,7 +316,7 @@ open class ZkForm<T : DtoBase>(
      * Default implementation shows a toast with a message.
      */
     open fun onInvalidSubmit() {
-        invalidToast = warningToast(hideAfter = 3000) { strings.invalidFieldsToast }
+        invalidToast = warningToast(hideAfter = 3000) { stringStore.invalidFieldsToast }
     }
 
     /**
@@ -328,13 +326,13 @@ open class ZkForm<T : DtoBase>(
      */
     open fun onSubmitSuccess() {
         when (mode) {
-            ZkElementMode.Create -> successToast { strings.createSuccess }
+            ZkElementMode.Create -> successToast { stringStore.createSuccess }
             ZkElementMode.Read -> Unit
-            ZkElementMode.Update -> successToast { strings.updateSuccess }
-            ZkElementMode.Delete -> successToast { strings.deleteSuccess }
-            ZkElementMode.Action -> successToast { strings.actionSuccess }
+            ZkElementMode.Update -> successToast { stringStore.updateSuccess }
+            ZkElementMode.Delete -> successToast { stringStore.deleteSuccess }
+            ZkElementMode.Action -> successToast { stringStore.actionSuccess }
             ZkElementMode.Query -> Unit
-            ZkElementMode.Other -> successToast { strings.actionSuccess }
+            ZkElementMode.Other -> successToast { stringStore.actionSuccess }
         }
     }
 
@@ -345,13 +343,13 @@ open class ZkForm<T : DtoBase>(
      */
     open fun onSubmitError(ex: Exception) {
         when (mode) {
-            ZkElementMode.Create -> dangerToast { strings.createFail }
+            ZkElementMode.Create -> dangerToast { stringStore.createFail }
             ZkElementMode.Read -> Unit
-            ZkElementMode.Update -> dangerToast { strings.updateFail }
-            ZkElementMode.Delete -> dangerToast { strings.deleteFail }
-            ZkElementMode.Action -> dangerToast { strings.actionFail }
-            ZkElementMode.Query -> dangerToast { strings.queryFail }
-            ZkElementMode.Other -> dangerToast { strings.actionFail }
+            ZkElementMode.Update -> dangerToast { stringStore.updateFail }
+            ZkElementMode.Delete -> dangerToast { stringStore.deleteFail }
+            ZkElementMode.Action -> dangerToast { stringStore.actionFail }
+            ZkElementMode.Query -> dangerToast { stringStore.queryFail }
+            ZkElementMode.Other -> dangerToast { stringStore.actionFail }
         }
     }
 
@@ -436,7 +434,7 @@ open class ZkForm<T : DtoBase>(
     }
 
     inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E>, label: String? = null, sortOptions: Boolean = true): ZkEnumSelectField<T, E> {
-        val options = enumValues<E>().map { it to t(it.name) } // this is a non-translated to translated mapping
+        val options = enumValues<E>().map { it to stringStore[it.name] } // this is a non-translated to translated mapping
         val field = ZkEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
         label?.let { field.label = label }
         fields += field
@@ -445,7 +443,7 @@ open class ZkForm<T : DtoBase>(
 
     @JsName("FormOptEnumSelect")
     inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E?>, label: String? = null, sortOptions: Boolean = true): ZkOptEnumSelectField<T, E> {
-        val options = enumValues<E>().map { it to t(it.name) } // this is a non-translated to translated mapping
+        val options = enumValues<E>().map { it to stringStore[it.name] } // this is a non-translated to translated mapping
         val field = ZkOptEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
         label?.let { field.label = label }
         fields += field

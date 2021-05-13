@@ -28,7 +28,7 @@ data class AccountPrivateDto(
 
     var displayName: String?,
     var theme: String?,
-    var locale: String?,
+    var locale: String,
     var avatar: Long?,
 
     var organizationName: String?,

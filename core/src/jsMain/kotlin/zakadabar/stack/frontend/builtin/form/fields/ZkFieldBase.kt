@@ -8,8 +8,7 @@ import org.w3c.dom.get
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.frontend.application.ZkApplication
-import zakadabar.stack.frontend.application.ZkApplication.strings
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
@@ -79,15 +78,15 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
      * If the [label] property is initialized uses its value.
      *
      * When it is not initialized and form.autoLabel is true,
-     * looks up the label in [ZkApplication.strings] and adds
+     * looks up the label in [stringStore] and adds
      * it if found.
      *
-     * When not in [ZkApplication.strings] it adds [propName]
+     * When not in [stringStore] it adds [propName]
      * as label.
      */
     open fun buildFieldLabel() {
         if (label == null) {
-            label = strings.map[propName] ?: propName
+            label = stringStore.map[propName] ?: propName
         }
 
         + div(ZkFormStyles.fieldLabel) {
@@ -171,7 +170,7 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
     open fun showErrors() {
         errors.clearChildren() // to clean up previous errors
         // TODO add the actual errors
-        errors.innerHTML = strings.invalidValue
+        errors.innerHTML = stringStore.invalidValue
         errors.show()
     }
 

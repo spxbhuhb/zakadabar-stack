@@ -40,4 +40,9 @@ open class ZkStringStore(
         return this as T
     }
 
+    /**
+     * Get a value for the given key.
+     */
+    operator fun get(key : String) = map[key] ?: key
+
 }

@@ -57,6 +57,10 @@ val copyAppStruct by tasks.registering(Copy::class) {
     into(distDir)
     include("**")
     exclude("**/.gitignore")
+
+    filter { line: String ->
+        line.replace("@version@", "${project.version}")
+    }
 }
 
 val copyAppLib by tasks.registering(Copy::class) {

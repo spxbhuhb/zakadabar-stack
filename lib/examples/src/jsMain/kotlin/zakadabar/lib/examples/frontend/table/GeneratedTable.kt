@@ -36,7 +36,7 @@ object GeneratedTable : ZkPage(cssClass = zkPageStyles.fixed) {
         + BuiltinTable().setData(data)
     }
 
-    object Styles : ZkCssStyleSheet<ZkTheme>() {
+    object Styles : ZkCssStyleSheet() {
 
         init {
             attach()

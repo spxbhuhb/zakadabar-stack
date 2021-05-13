@@ -4,7 +4,7 @@
 package zakadabar.stack.frontend.builtin.pages.account.accounts
 
 import zakadabar.stack.data.builtin.account.AccountPrivateDto
-import zakadabar.stack.frontend.application.ZkApplication.strings
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class Table : ZkTable<AccountPrivateDto>() {
@@ -16,7 +16,7 @@ class Table : ZkTable<AccountPrivateDto>() {
         search = true
         export = true
 
-        titleText = strings.accounts
+        titleText = stringStore.accounts
         crud = Accounts
 
         + AccountPrivateDto::id

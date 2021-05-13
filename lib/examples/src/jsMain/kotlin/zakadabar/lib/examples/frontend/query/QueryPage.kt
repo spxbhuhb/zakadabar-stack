@@ -10,13 +10,14 @@ package zakadabar.lib.examples.frontend.query
 
 import zakadabar.lib.examples.data.builtin.ExampleQuery
 import zakadabar.lib.examples.resources.Strings
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.builtin.toast.dangerToast
 import zakadabar.stack.frontend.builtin.toast.successToast
+import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.log
@@ -41,7 +42,7 @@ object QueryPage : ZkPage(cssClass = zkPageStyles.fixed) {
         form.dto = default()
         form.mode = ZkElementMode.Query
 
-        + form marginBottom (ZkApplication.theme.spacingStep)
+        + form marginBottom (theme.spacingStep)
         + div {
             style {
                 position = "relative"

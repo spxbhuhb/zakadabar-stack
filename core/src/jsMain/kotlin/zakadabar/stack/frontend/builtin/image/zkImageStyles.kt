@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkImageStyles by cssStyleSheet(ZkImageStyles())
 
-class ZkImageStyles : ZkCssStyleSheet<ZkTheme>() {
+class ZkImageStyles : ZkCssStyleSheet() {
 
     val outerView by cssClass {
         boxSizing = "border-box"

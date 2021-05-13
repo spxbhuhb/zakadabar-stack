@@ -1,18 +1,18 @@
 # CSS and Theming
 
-The stack contains a dynamic theme and style system. You can override all colors and styles.
+The stack contains a dynamic theme and style system.
 
-[ZkApplication](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt)
-
-* `theme` property stores the active theme
+* [theme](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt)
+  * stores the active theme
   * when changes, all styles are rebuilt
-  * `themes` property stores the themes known to the application
-* [ZkTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/ZkTheme.kt)
+* [ZkTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt)
   * interface for themes to implement
 * [ZkCssStyleSheet](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleSheet.kt)
   * CSS style sheet builder / manager
 * [ZkColors](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/ZkColors.kt)
   * Color constants, palettes from Material Colors and the Zakadabar palette
+* [zkHtmlStyles](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/zkHtmlStyles.kt)
+  * global HTML styles (on "body", "a" etc. tags)
 
 ## Theme
 
@@ -31,17 +31,17 @@ The stack contains a dynamic theme and style system. You can override all colors
 
 ### Initial Theme Selection
 
-`ZkApplication.initTheme`, called from `jsMain/main.kt`, selects the theme during application startup.
+[initTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt), called from `jsMain/main.kt`, selects the theme during application startup.
 
 Algorithm:
 
-1. check account theme, if present, find the theme with the given name in `ZkApplication.themes`
-2. check local storage for `zk-theme-name`, if present, find the theme with the given name in `ZkApplication.themes`
-3. first theme in `ZkApplication.themes`, if not empty
+1. check account theme, if present, find the theme with the given name in `application.themes`
+2. check local storage for `zk-theme-name`, if present, find the theme with the given name in `application.themes`
+3. first theme in `application.themes`, if not empty
 4. ZkBuiltinLightTheme
 
 <div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Add Themes In main.kt">
-The initial theme selection works only if you add the available themes to ZkApplication.themes
+The initial theme selection works only if you add the available themes to application.themes
 in main.kt as the example shows below.
 </div>
 
@@ -65,7 +65,7 @@ with(ZkApplication) {
 ### Write a theme
 
 * Extend one of the built-in themes or
-  implement [ZkTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/ZkTheme.kt).
+  implement [ZkTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt).
 * Use `onResume` to fine tune style variables.
 * If you set a style variable, **all of your themes has to set that particular variable**, see warning in Change The
   Theme.
@@ -89,13 +89,13 @@ class ExampleThemeGreen : ZkBuiltinLightTheme() {
 }
 ```
 
-### Change The Theme [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/theme/ThemeExample.kt)
+### Change The Theme [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/theme/ThemeExample.kt)
 
-Assign a theme instance to `ZkApplication.theme` to set the active theme. Be careful, your theme system should be
+Assign a theme instance to `theme` to set the active theme. Be careful, your theme system should be
 consistent (see warnings above and below)!
 
 ```kotlin
-ZkApplication.theme = ZkBuildinLightTheme()
+theme = ZkBuildinLightTheme()
 ```
 
 <div data-zk-enrich="Note" data-zk-flavour="Danger" data-zk-title="Theme Changes Are Cumulative">
@@ -127,7 +127,7 @@ Sorry about the mess, told you that changes are cumulative. :P
 ```kotlin
 val exampleStyles by cssStyleSheet(ExampleStyles())
 
-open class ExampleStyles : ZkCssStyleSheet<ZkTheme>() {
+open class ExampleStyles : ZkCssStyleSheet() {
 
   open var myStyleParameter: Int = 10
 
@@ -325,7 +325,7 @@ This import is dynamic, if you store the URL in the theme the import can be them
 
 For example `Lib:Markdown` uses `highlight.js` for code syntax highlight. The colors have to be different in dark and
 light mode. `highlight.js` does not support multiple themes,
-so [MarkdownStyles](../../../../lib/markdown/src/jsMain/kotlin/zakadabar/lib/markdown/frontend/MarkdownStyles.kt)
+so [MarkdownStyles](../../../../../lib/markdown/src/jsMain/kotlin/zakadabar/lib/markdown/frontend/markdownStyles.kt)
 use a variable and the themes can set whatever URL they want.
 
 ```kotlin
@@ -339,7 +339,7 @@ val highlightStyles by cssImport {
 ### Replace CSS Style Sheets
 
 <div data-zk-enrich="Note" data-zk-flavour="Danger" data-zk-title="Class Names">
-Style switch after ZkApplication.init is broken at the moment because it
+Style switch after application.init is broken at the moment because it
 does not carry the original class names. Fix is already planned for this, but it
 is low priority.
 </div>

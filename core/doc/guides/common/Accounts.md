@@ -60,7 +60,7 @@ The browser frontend usually fetches the session data in `main.kt` by calling `s
 This call sets the `executor` property of `ZkApplication`. For details see: [Accounts](Accounts.md).
 
 ```kotlin
- with(ZkApplication) {
+ with(application) {
     sessionManager.init()
     // ...
 }
@@ -72,7 +72,7 @@ This call sets the `executor` property of `ZkApplication`. For details see: [Acc
 
 ```kotlin
 if (hasRole("role-name")) {
-    // do something
+    TODO()
 }
 ```
 
@@ -80,19 +80,19 @@ if (hasRole("role-name")) {
 
 ```kotlin
 ifNotAnonymous {
-    // do something
+    TODO()
 }
 
 ifAnonymous {
-    // do something
+    TODO()
 }
 
 withRole("role-name") {
-    // do something
+    TODO()
 }
 
 withoutRole("role-name") {
-    // do something
+    TODO()
 }
 ```
 

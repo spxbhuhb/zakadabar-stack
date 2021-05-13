@@ -61,7 +61,7 @@ abstract class LinkGeneratingProvider(
         if (url.startsWith("https://")) {
             visitor.consumeTagOpen(node, "a", "target=\"_blank\"", "href=\"${url}\"", info.title?.let { "title=\"$it\"" })
         } else {
-            visitor.consumeTagOpen(node, "a", "href=\"${url}\"", info.title?.let { "title=\"$it\"" })
+            visitor.consumeTagOpen(node, "a", "href=\"${url}\"", "class=\"zk-local-nav\"", info.title?.let { "title=\"$it\"" })
         }
         labelProvider.processNode(visitor, text, info.label)
         visitor.consumeTagClose("a")

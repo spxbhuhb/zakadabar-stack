@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkButtonStyles by cssStyleSheet(ZkButtonStyles())
 
-open class ZkButtonStyles : ZkCssStyleSheet<ZkTheme>() {
+open class ZkButtonStyles : ZkCssStyleSheet() {
 
     open val iconSize = 20
     open val buttonHeight = 30

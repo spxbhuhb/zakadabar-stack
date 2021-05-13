@@ -6,25 +6,35 @@ package zakadabar.stack.frontend.application
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.events.Event
-import zakadabar.stack.frontend.application.ZkApplication.dock
-import zakadabar.stack.frontend.application.ZkApplication.executor
-import zakadabar.stack.frontend.application.ZkApplication.modals
-import zakadabar.stack.frontend.application.ZkApplication.onTitleChange
-import zakadabar.stack.frontend.application.ZkApplication.routing
-import zakadabar.stack.frontend.application.ZkApplication.strings
-import zakadabar.stack.frontend.application.ZkApplication.theme
-import zakadabar.stack.frontend.application.ZkApplication.themes
-import zakadabar.stack.frontend.application.ZkApplication.title
-import zakadabar.stack.frontend.application.ZkApplication.toasts
 import zakadabar.stack.frontend.builtin.dock.ZkDock
 import zakadabar.stack.frontend.builtin.modal.ZkModalContainer
 import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
-import zakadabar.stack.frontend.resources.ZkTheme
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.resources.ZkBuiltinStrings
-import zakadabar.stack.util.PublicApi
+
+/**
+ * The application itself, initialized in main.kt.
+ */
+lateinit var application: ZkApplication
+
+/**
+ * Shorthand for application.executor
+ */
+val executor
+    get() = application.executor
+
+/**
+ * Global string store that contains the translated strings to show to the user.
+ * This is usually not a ZkBuiltinStrings in itself but an extension of it.
+ */
+val stringStore
+    get() = application.strings
+
+/**
+ * Check if the executor has the given role.
+ */
+fun hasRole(roleName: String) = roleName in application.executor.roles
 
 /**
  * The application that runs in the browser window. This object contains data
@@ -40,8 +50,6 @@ import zakadabar.stack.util.PublicApi
  *
  * @property  themes     List of known UI themes.
  *
- * @property  theme      The design theme of the application.
- *
  * @property  strings    The string store that contains the strings the application uses.
  *
  * @property  dock       A container to show sub-windows such as mail editing in Gmail.
@@ -55,28 +63,15 @@ import zakadabar.stack.util.PublicApi
  * @property  onTitleChange  Called when [title] changes, layouts replace this function.
  *
  */
-object ZkApplication {
+class ZkApplication {
 
     var sessionManager = ZkSessionManager()
+
+    lateinit var locale: String
 
     lateinit var executor: ZkExecutor
 
     lateinit var routing: ZkAppRouting
-
-    val themes = mutableListOf<ZkTheme>()
-
-    var theme: ZkTheme = ZkBuiltinLightTheme()
-        set(value) {
-            field = value
-            window.localStorage.setItem(THEME_STORAGE_KEY, value.name)
-            applyThemeToBody()
-            theme.onResume()
-            window.requestAnimationFrame {
-                styleSheets.forEach { it.onThemeChange(value) }
-            }
-        }
-
-    val styleSheets = mutableListOf<ZkCssStyleSheet<*>>()
 
     lateinit var strings: ZkBuiltinStrings
 
@@ -98,11 +93,11 @@ object ZkApplication {
     var onTitleChange: ((newTitle: ZkAppTitle) -> Unit)? = null
 
     @Suppress("MemberVisibilityCanBePrivate")
-    const val NAVSTATE_CHANGE = "zk-navstate-change"
-
-    private const val THEME_STORAGE_KEY = "zk-theme-name"
+    val navStateChangeEvent = "zk-navstate-change"
 
     fun init() {
+
+        routing.init()
 
         title = ZkAppTitle("")
 
@@ -123,44 +118,42 @@ object ZkApplication {
 
         window.addEventListener("popstate", onPopState)
         routing.onNavStateChange(ZkNavState(window.location.pathname, window.location.search))
-        window.dispatchEvent(Event(NAVSTATE_CHANGE))
+        window.dispatchEvent(Event(navStateChangeEvent))
     }
 
-    fun initTheme(): ZkTheme {
-        val themeName = (executor.account.theme ?: window.localStorage.getItem(THEME_STORAGE_KEY)) ?: "default-light"
-        return themes.firstOrNull { it.name == themeName } ?: if (themes.isEmpty()) ZkBuiltinLightTheme() else themes.first()
-    }
-
-    private fun applyThemeToBody() {
-        with(document.body?.style !!) {
-            fontFamily = theme.fontFamily
-            fontSize = theme.fontSize
-            fontWeight = theme.fontWeight
-            backgroundColor = theme.backgroundColor
-            color = theme.textColor
+    fun initLocale() {
+        val path = window.location.pathname.trim('/')
+        locale = when {
+            path.isNotEmpty() -> path.substringBefore('/')
+            ::executor.isInitialized -> executor.account.locale
+            else -> {
+                document.body?.innerText = "Could not initialize locale."
+                throw IllegalStateException()
+            }
         }
     }
 
     private val onPopState = fun(_: Event) {
         routing.onNavStateChange(ZkNavState(window.location.pathname, window.location.search))
-        window.dispatchEvent(Event(NAVSTATE_CHANGE))
+        window.dispatchEvent(Event(navStateChangeEvent))
     }
 
     fun changeNavState(path: String, query: String = "") {
         val url = if (query.isEmpty()) path else "$path?$query"
         window.history.pushState("", "", url)
         routing.onNavStateChange(ZkNavState(path, query))
-        window.dispatchEvent(Event(NAVSTATE_CHANGE))
+        window.dispatchEvent(Event(navStateChangeEvent))
+    }
+
+    fun changeNavState(target: ZkAppRouting.ZkTarget, path: String? = null, query: String = "") {
+        val url = when {
+            path == null -> routing.toLocalUrl(target)
+            path.startsWith('/') -> routing.toLocalUrl(target) + path
+            else -> routing.toLocalUrl(target) + '/' + path
+        }
+        changeNavState(url, query)
     }
 
     fun back() = window.history.back()
 
-    /**
-     * Translates the given string if there is a translation in the application's
-     * string store. Returns with the original string when there is no translation.
-     */
-    fun t(original: String) = strings.map[original] ?: original
-
-    @PublicApi
-    fun hasRole(roleName: String) = roleName in executor.roles
 }

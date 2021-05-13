@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkPageStyles by cssStyleSheet(ZkPageStyles())
 
-class ZkPageStyles : ZkCssStyleSheet<ZkTheme>() {
+class ZkPageStyles : ZkCssStyleSheet() {
 
     /**
      * This style is meant for pages where the content of the page scrolls itself.

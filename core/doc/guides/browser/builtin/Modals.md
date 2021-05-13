@@ -1,7 +1,7 @@
 # Modals
 
 Modal dialogs are handled through the `modals` property
-of [ZkApplication](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt). The `modals` property is
+of the `application` ([ZkApplication](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt)). The `modals` property is
 an instance of [ZkModalContainer](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/modal/ZkModalContainer.kt).
 
 Modals that extend [ZkModalBase](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/modal/ZkModalBase.kt)
@@ -11,7 +11,7 @@ have show, hide and data handling out-of-the-box.
 Support for multiple parallel modals is not ready yet.
 </div>
 
-## Built-In Modals [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/modal/ModalExamples.kt)
+## Built-In Modals [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/modal/ModalExamples.kt)
 
 <div data-zk-enrich="ModalExamples"></div>
 
@@ -49,11 +49,11 @@ open class MyMessageDialog : ZkModalBase<String>() {
 Modals that extend [ZkModalBase](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/modal/ZkModalBase.kt) has a `run`
 method. When called, `run`:
 
-* calls `show` of `ZkApplication.modals`
-* adds the modal to `ZkApplication.modals`
+* calls `show` of `application.modals`
+* adds the modal to `application.modals`
 * waits until a value arrives in the channel
-* removes the modal from `ZkApplication.modals`
-* calls `hide` of ZkApplication.modals
+* removes the modal from `application.modals`
+* calls `hide` of application.modals
 
 To show the modal use:
 

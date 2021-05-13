@@ -5,13 +5,14 @@ package zakadabar.lib.examples.frontend.theme
 
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.examples.resources.Strings
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.sidebar.zkSideBarStyles
 import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
 import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
 import zakadabar.stack.frontend.resources.ZkColors
+import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.util.marginBottom
 
 class ExampleThemeRed : ZkBuiltinLightTheme() {
@@ -64,8 +65,8 @@ class ThemeExample(
             gridTemplateColumns = "repeat(4, max-content)"
             gridGap = 10
 
-            + ZkButton(Strings.green) { ZkApplication.theme = ExampleThemeGreen() }
-            + ZkButton(Strings.red) { ZkApplication.theme = ExampleThemeRed() }
+            + ZkButton(Strings.green) { theme = ExampleThemeGreen() }
+            + ZkButton(Strings.red) { theme = ExampleThemeRed() }
 
         } marginBottom 20
 

@@ -26,25 +26,25 @@ This image summarizes DTO types the stack handles.
 To write a record DTO and make it accessible from the frontend:
 
 - write the DTO class
-    - [SpeedDto](../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/speed/SpeedDto.kt)
+    - [SpeedDto](../../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/speed/SpeedDto.kt)
 - write the DTO frontend
-    - [crud](../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/pages/speed/Speeds.kt) (for
+    - [crud](../../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/pages/speed/Speeds.kt) (for
       automatic crud routing)
-    - [form](../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/pages/speed/Form.kt)
-    - [table](../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/pages/speed/Table.kt)
-    - [routing](../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/Routing.kt)
-    - [sidebar](../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/SideBar.kt)
+    - [form](../../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/pages/speed/Form.kt)
+    - [table](../../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/pages/speed/Table.kt)
+    - [routing](../../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/Routing.kt)
+    - [sidebar](../../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/SideBar.kt)
 - write the DTO backend
-    - [table](../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/speed/SpeedTable.kt)
-    - [dao](../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/speed/SpeedDao.kt)
-    - [backend](../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/speed/SpeedBackend.kt)
+    - [table](../../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/speed/SpeedTable.kt)
+    - [dao](../../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/speed/SpeedDao.kt)
+    - [backend](../../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/speed/SpeedBackend.kt)
 
 ## Use a Record DTO
 
 On the frontend [RecordDtoCompanion](/src/commonMain/kotlin/zakadabar/stack/data/record/RecordDtoCompanion.kt)`.comm`
 provides easy access to basic record operations.
 
-Check [demo-jvm-client](../../../demo/demo-jvm-client/src/jvmMain/kotlin/zakadabar/demo/marina/frontend/Main.kt) for a
+Check [demo-jvm-client](../../../../demo/demo-jvm-client/src/jvmMain/kotlin/zakadabar/demo/jvm/frontend/Main.kt) for a
 working example.
 
 ```kotlin
@@ -71,12 +71,12 @@ SpeedDto.all().forEach {
 To write a query DTO:
 
 - write the DTO classes:
-    - [SearchShipsQuery](../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/SearchShipsQuery.kt)
-    - [SearchShipsResult](../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/SearchShipsResult.kt)
+    - [SearchShipsQuery](../../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/SearchShipsQuery.kt)
+    - [SearchShipsResult](../../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/SearchShipsResult.kt)
 - add the query to the DTO companion that provides communication
-    - [ShipDto](../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/ShipDto.kt)
+    - [ShipDto](../../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/ShipDto.kt)
 - add the query to the DTO backend:
-    - [backend](../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/ship/ShipBackend.kt)
+    - [backend](../../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/ship/ShipBackend.kt)
         - add a `route.query` call to `installRoutes`
         - add a `query` function with the query DTO class as second parameter and the result DTO class as return type
 
@@ -95,11 +95,11 @@ SearchShipsQuery().execute().forEach {
 To write an action DTO:
 
 - write the DTO classes:
-    - [ShootAtShipAction](../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/ShootAtShipAction.kt)
+    - [ShootAtShipAction](../../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/ShootAtShipAction.kt)
 - add the action to the DTO companion that provides communication
-    - [ShipDto](../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/ShipDto.kt)
+    - [ShipDto](../../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/ShipDto.kt)
 - add the action to the DTO backend:
-    - [backend](../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/ship/ShipBackend.kt)
+    - [backend](../../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/ship/ShipBackend.kt)
         - add a `route.action` call to `installRoutes`
         - add an `action` function with the action DTO class as second parameter and the result DTO class as return type
 
@@ -114,7 +114,7 @@ val result = ShootAtShipAction().execute()
 // If you use another result type, you may not have the result field here.
 
 if (result.success) {
-    // something something
+    TODO()
 }
 ```
 
@@ -143,7 +143,7 @@ much about it as a developer.
 ## Write a Schema
 
 - override the schema variable of the DTO class
-    - [SpeedDto](../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/speed/SpeedDto.kt)
+    - [SpeedDto](../../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/speed/SpeedDto.kt)
 
 ## Use a Schema
 

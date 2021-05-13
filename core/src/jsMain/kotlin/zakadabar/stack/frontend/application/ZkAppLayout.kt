@@ -18,7 +18,7 @@ import zakadabar.stack.frontend.util.plusAssign
  * * calls [onResume]
  * * adds the [element] to the document body
  *
- * When the URL changes, the [ZkApplication]:
+ * When the URL changes, the [application]:
  *
  * * calls [ZkAppRouting.onNavStateChange],which:
  *     * when the state points to a [Crud], calls [Crud.route]

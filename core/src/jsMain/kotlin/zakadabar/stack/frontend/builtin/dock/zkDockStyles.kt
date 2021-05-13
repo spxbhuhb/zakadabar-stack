@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkDockStyles by cssStyleSheet(ZkDockStyles())
 
-class ZkDockStyles : ZkCssStyleSheet<ZkTheme>() {
+class ZkDockStyles : ZkCssStyleSheet() {
 
     var dockBackground: String = ZkColors.white
     var headerBackground: String = ZkColors.BlueGray.c600

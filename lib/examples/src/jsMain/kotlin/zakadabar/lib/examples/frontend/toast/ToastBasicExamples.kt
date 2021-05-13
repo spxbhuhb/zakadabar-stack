@@ -4,7 +4,7 @@
 package zakadabar.lib.examples.frontend.toast
 
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.application.ZkApplication.theme
+import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.*
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles

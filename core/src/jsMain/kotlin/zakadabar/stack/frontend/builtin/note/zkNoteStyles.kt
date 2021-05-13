@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkNoteStyles by cssStyleSheet(ZkNoteStyles())
 
-open class ZkNoteStyles : ZkCssStyleSheet<ZkTheme>() {
+open class ZkNoteStyles : ZkCssStyleSheet() {
 
     open val noteOuter by cssClass {
         backgroundColor = theme.backgroundColor

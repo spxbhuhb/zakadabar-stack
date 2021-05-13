@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.frontend.application
 
+import kotlinx.browser.document
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
 import kotlin.reflect.KClass
@@ -21,16 +22,16 @@ abstract class ZkAppRouting(
         fun route(routing: ZkAppRouting, state: ZkNavState): ZkElement
     }
 
-    private val targets = mutableMapOf<String, ZkTarget>()
+    open val targets = mutableMapOf<String, ZkTarget>()
 
-    private var activeLayout = defaultLayout
-    private lateinit var activeTarget: ZkElement
+    open var activeLayout = defaultLayout
+    open lateinit var activeTarget: ZkElement
 
     lateinit var nextLayout: ZkAppLayout
 
     lateinit var navState: ZkNavState
 
-    init {
+    open fun init() {
         // have to initialize the default layout or the first onPause will set it into
         // the wrong state
         defaultLayout.onCreate()
@@ -58,6 +59,7 @@ abstract class ZkAppRouting(
 
         if (nextTarget == null) {
             println("AppRouting.onNavStateChange: missing route for $state")
+            onMissingRoute()
             return
         }
 
@@ -83,5 +85,23 @@ abstract class ZkAppRouting(
     }
 
     open fun route(state: ZkNavState): ZkElement? = null
+
+    /**
+     * Reports a missing route to the user.
+     */
+    open fun onMissingRoute() {
+        document.body?.innerHTML = application.strings.missingRoute
+    }
+
+    /**
+     * Builds the local URL for the given target.
+     */
+    open fun toLocalUrl(target: ZkTarget, subPath: String? = null) : String {
+        return if(subPath == null) {
+            "/${application.locale}/${target.viewName.trimStart('/')}"
+        } else {
+            "/${application.locale}/${target.viewName.trimStart('/')}/${subPath.trimStart('/')}"
+        }
+    }
 
 }

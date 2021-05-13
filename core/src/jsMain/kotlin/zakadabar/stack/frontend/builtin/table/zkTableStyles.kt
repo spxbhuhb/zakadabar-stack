@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkTableStyles by cssStyleSheet(ZkTableStyles())
 
-class ZkTableStyles : ZkCssStyleSheet<ZkTheme>() {
+class ZkTableStyles : ZkCssStyleSheet() {
 
     var headerBackground: String = ZkColors.white
     var headerText: String = ZkColors.Gray.c800

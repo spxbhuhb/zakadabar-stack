@@ -42,7 +42,7 @@ to load overrides.
 
 ## Write a Setting DTO
 
-A setting DTO is just a normal DTO, check [Data](../Data.md) for details.
+A setting DTO is just a normal DTO, check [Data](../common/Data.md) for details.
 
 One thing to mention is the default values in the schema. If your settings are loaded from file, you have to set the defaults in the class constructor. YAML loaders does not use the default from the
 schema so, they need the defaults there.

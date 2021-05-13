@@ -17,6 +17,7 @@ import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.builtin.account.AccountPrivateBackend.onModuleLoad
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
+import zakadabar.stack.backend.data.builtin.resources.setting
 import zakadabar.stack.backend.data.builtin.role.RoleDao
 import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantDao
@@ -24,6 +25,7 @@ import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantTable
 import zakadabar.stack.backend.data.get
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.data.builtin.account.AccountPrivateDto
+import zakadabar.stack.data.builtin.misc.ServerDescriptionDto
 import zakadabar.stack.data.record.LongRecordId
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.Executor
@@ -47,6 +49,8 @@ import zakadabar.stack.util.Executor
 object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
 
     override val dtoClass = AccountPrivateDto::class
+
+    private val serverDescription by setting<ServerDescriptionDto>("zakadabar.server.description")
 
     override fun onModuleLoad() {
         transaction {
@@ -205,6 +209,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
             accountName = "anonymous"
             fullName = "anonymous"
             displayName = "anonymous"
+            locale = serverDescription.defaultLocale
             organizationName = ""
             position = ""
             email = ""
@@ -240,6 +245,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
                 accountName = "demo"
                 fullName = "Demo"
                 displayName = "Demo"
+                locale = serverDescription.defaultLocale
                 organizationName = ""
                 position = ""
                 email = ""
@@ -269,6 +275,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
                 accountName = "so"
                 fullName = "Security Officer"
                 displayName = "Security Officer"
+                locale = serverDescription.defaultLocale
                 organizationName = ""
                 position = ""
                 email = ""

@@ -4,7 +4,7 @@
 package zakadabar.stack.frontend.builtin.modal
 
 import kotlinx.coroutines.channels.Channel
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
 
 open class ZkModalBase<T : Any> : ZkElement() {
@@ -12,13 +12,13 @@ open class ZkModalBase<T : Any> : ZkElement() {
     protected val channel = Channel<T>()
 
     open suspend fun run(): T {
-        ZkApplication.modals.show()
-        ZkApplication.modals += this
+        application.modals.show()
+        application.modals += this
 
         val value = channel.receive()
 
-        ZkApplication.modals -= this
-        ZkApplication.modals.hide()
+        application.modals -= this
+        application.modals.hide()
 
         return value
     }

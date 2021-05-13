@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkDefaultLayoutStyles by cssStyleSheet(ZkDefaultLayoutStyles())
 
-open class ZkDefaultLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
+open class ZkDefaultLayoutStyles : ZkCssStyleSheet() {
 
     open var appTitleBarHeight = "44px"
 

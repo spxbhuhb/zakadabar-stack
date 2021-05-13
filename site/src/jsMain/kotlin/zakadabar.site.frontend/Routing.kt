@@ -21,18 +21,18 @@ import zakadabar.stack.frontend.builtin.pages.resources.locales.Locales
 import zakadabar.stack.frontend.builtin.pages.resources.settings.Settings
 import zakadabar.stack.frontend.builtin.pages.resources.translations.Translations
 
-object Routing : ZkAppRouting(DefaultLayout, Landing) {
+class Routing : ZkAppRouting(DefaultLayout, Landing) {
 
     init {
         + Landing
         + WhatsNew
-        + ContentPages
+        + Documentation
         + GetStarted
         + GetHelp
         + Welcome
         + ShowCase
         + Roadmap
-        + Documentation
+        + DocumentationIntro
         + FAQ
 
         + ArgPage

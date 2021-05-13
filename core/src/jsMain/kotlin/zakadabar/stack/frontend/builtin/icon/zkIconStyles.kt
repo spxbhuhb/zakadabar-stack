@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkIconStyles by cssStyleSheet(ZkIconStyles())
 
-open class ZkIconStyles : ZkCssStyleSheet<ZkTheme>() {
+open class ZkIconStyles : ZkCssStyleSheet() {
 
     open fun setInlineStyles(htmlElement: HTMLElement, size: Int) {
         with(htmlElement.style) {

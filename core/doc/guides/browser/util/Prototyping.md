@@ -11,6 +11,6 @@ NYI is just a simple element with a message that act as a placeholder until you 
 
 NYI has a left and right padding of `10px`.
 
-## Example [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/misc/NYIExample.kt)
+## Example [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/misc/NYIExample.kt)
 
 <div data-zk-enrich="NYIExample"></div>

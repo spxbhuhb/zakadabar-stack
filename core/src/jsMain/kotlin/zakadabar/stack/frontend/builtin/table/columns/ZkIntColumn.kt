@@ -4,7 +4,7 @@
 package zakadabar.stack.frontend.builtin.table.columns
 
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import kotlin.reflect.KProperty1
@@ -15,7 +15,7 @@ open class ZkIntColumn<T : DtoBase>(
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {
-        label = ZkApplication.strings.map[prop.name] ?: prop.name
+        label = application.strings.map[prop.name] ?: prop.name
         super.onCreate()
     }
 

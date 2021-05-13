@@ -8,10 +8,13 @@ import kotlinx.coroutines.await
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.html.HtmlGenerator
 import org.intellij.markdown.parser.MarkdownParser
+import org.w3c.dom.HTMLAnchorElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
+import org.w3c.dom.events.Event
 import zakadabar.lib.markdown.frontend.flavour.ZkFlavourDescriptor
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.util.PublicApi
@@ -48,6 +51,7 @@ open class MarkdownView(
             }
 
             syntaxHighLight()
+            localNavEvents()
             enrich()
             // println(dump("", parsedTree))
         }
@@ -60,6 +64,27 @@ open class MarkdownView(
                 CodeCopy(it.firstChild as HTMLElement).onCreate()
             }
         }
+    }
+
+    private fun localNavEvents() {
+        window.requestAnimationFrame {
+            element.querySelectorAll(".zk-local-nav").asList().forEach {
+                it.addEventListener("click", ::onLocalNav)
+            }
+        }
+    }
+
+    private fun onLocalNav(event : Event) {
+        val target = event.target
+        if (target !is HTMLAnchorElement) return
+
+        // without this we get the full url with protocol and site and here we don't want that
+        val url = js("target.getAttribute('href', 2)") as String
+
+        if (url.startsWith("https://") || url.startsWith("http://")) return
+
+        event.preventDefault()
+        application.changeNavState(url)
     }
 
     private fun enrich() {

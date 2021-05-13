@@ -7,7 +7,7 @@ import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.frontend.application.ZkAppRouting
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.ZkNavState
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
@@ -31,31 +31,23 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget {
     lateinit var pageClass: KClass<out ZkCrudPage<T>>
     lateinit var tableClass: KClass<out ZkTable<T>>
 
-    val allPath
-        get() = "/$viewName/all"
-    val createPath
-        get() = "/$viewName/create"
-    val readPath
-        get() = "/$viewName/read"
-    val updatePath
-        get() = "/$viewName/update"
-    val deletePath
-        get() = "/$viewName/delete"
-
-    open fun openAll() = ZkApplication.changeNavState(allPath)
-    open fun openCreate() = ZkApplication.changeNavState(createPath)
-    open fun openRead(recordId: RecordId<*>) = ZkApplication.changeNavState(readPath, "id=$recordId")
-    open fun openUpdate(recordId: RecordId<*>) = ZkApplication.changeNavState(updatePath, "id=$recordId")
-    open fun openDelete(recordId: RecordId<*>) = ZkApplication.changeNavState(deletePath, "id=$recordId")
+    open fun openAll() = application.changeNavState(this, "all")
+    open fun openCreate() = application.changeNavState(this, "create")
+    open fun openRead(recordId: RecordId<*>) = application.changeNavState(this, "read", "id=$recordId")
+    open fun openUpdate(recordId: RecordId<*>) = application.changeNavState(this, "update", "id=$recordId")
+    open fun openDelete(recordId: RecordId<*>) = application.changeNavState(this, "delete", "id=$recordId")
 
     @Suppress("UNCHECKED_CAST") // got lost in generics hell, probably fine
-    override fun route(routing: ZkAppRouting, state: ZkNavState) = when (state.urlPath) {
-        allPath -> all()
-        createPath -> create()
-        readPath -> read(state.recordId as RecordId<T>)
-        updatePath -> update(state.recordId as RecordId<T>)
-        deletePath -> delete(state.recordId as RecordId<T>)
-        else -> routeNonCrud(routing, state)
+    override fun route(routing: ZkAppRouting, state: ZkNavState): ZkElement {
+        if (state.segments.size == 2) return all()
+        return when (state.segments[2]) {
+            "all" -> all()
+            "create" -> create()
+            "read" -> read(state.recordId as RecordId<T>)
+            "update" -> update(state.recordId as RecordId<T>)
+            "delete" -> delete(state.recordId as RecordId<T>)
+            else -> routeNonCrud(routing, state)
+        }
     }
 
     open fun routeNonCrud(routing: ZkAppRouting, state: ZkNavState): ZkElement = NYI()

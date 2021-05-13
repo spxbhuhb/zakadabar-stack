@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkSideBarStyles by cssStyleSheet(ZkSideBarStyles())
 
-open class ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
+open class ZkSideBarStyles : ZkCssStyleSheet() {
 
     open var backgroundColor: String? = null
     open var textColor: String? = null
@@ -33,7 +33,6 @@ open class ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
         boxSizing = "border-box"
         cursor = "pointer"
         minHeight = 28
-        paddingLeft = 20
         paddingRight = 8
         display = "flex"
         flexDirection = "row"
@@ -42,6 +41,16 @@ open class ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
         hover {
             backgroundColor = theme.hoverBackgroundColor
             color = this@ZkSideBarStyles.hoverTextColor ?: theme.hoverTextColor
+        }
+
+        on(" a") {
+            paddingLeft = 20
+            flexGrow = 1
+        }
+
+        on(" > div") {
+            paddingLeft = 20
+            flexGrow = 1
         }
     }
 
@@ -60,6 +69,10 @@ open class ZkSideBarStyles : ZkCssStyleSheet<ZkTheme>() {
         hover {
             backgroundColor = theme.hoverBackgroundColor
             color = theme.hoverTextColor
+        }
+
+        on(" a") {
+            flexGrow = 1
         }
     }
 

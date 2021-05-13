@@ -7,6 +7,7 @@ package zakadabar.stack.resources
 
 open class ZkBuiltinStrings : ZkStringStore() {
 
+    open val missingRoute by "This page does not exists. Please go back or <a href=\"/\">go to the home page</a>."
     open val sessionRenew by "Your session has been expired. Please log in again to continue."
     open val fullName by "Full Name"
     open val organizationName by "Organization Name"

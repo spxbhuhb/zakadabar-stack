@@ -31,7 +31,7 @@ class AccountPublicDto(
     var displayName: String?,
     var organizationName: String?,
     var theme: String?,
-    var locale: String?
+    var locale: String
 
 ) : RecordDto<AccountPublicDto> {
 

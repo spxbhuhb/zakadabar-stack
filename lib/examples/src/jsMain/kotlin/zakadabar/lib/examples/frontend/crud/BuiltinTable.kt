@@ -4,7 +4,7 @@
 package zakadabar.lib.examples.frontend.crud
 
 import zakadabar.lib.examples.data.builtin.BuiltinDto
-import zakadabar.stack.frontend.application.ZkApplication.t
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class BuiltinTable : ZkTable<BuiltinDto>() {
@@ -18,7 +18,7 @@ class BuiltinTable : ZkTable<BuiltinDto>() {
 
         // Set the title of the table.
 
-        titleText = t("builtin")
+        titleText = stringStore["builtin"]
 
         // Enable the add button (plus icon in the header).
         // Enable search (input field in the header).
@@ -44,12 +44,12 @@ class BuiltinTable : ZkTable<BuiltinDto>() {
         // Add a custom column
 
         + custom {
-            label = t("custom")
+            label = stringStore["custom"]
             render = { row ->
                 if ((row.id.toLong() % 2L) == 0L) {
-                    + t("odd")
+                    + stringStore["odd"]
                 } else {
-                    + t("even")
+                    + stringStore["even"]
                 }
             }
         }

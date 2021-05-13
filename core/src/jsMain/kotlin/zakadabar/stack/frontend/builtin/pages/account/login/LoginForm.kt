@@ -7,8 +7,7 @@ import kotlinx.browser.window
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.ActionStatusDto
 import zakadabar.stack.data.builtin.account.LoginAction
-import zakadabar.stack.frontend.application.ZkApplication.strings
-import zakadabar.stack.frontend.application.ZkApplication.t
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
@@ -44,7 +43,7 @@ class LoginForm(
             if (accountName == null) {
                 + dto::accountName
             } else {
-                + ZkConstStringField(this@LoginForm, t("accountName"), dto.accountName)
+                + ZkConstStringField(this@LoginForm, stringStore["accountName"], dto.accountName)
             }
             + dto::password
         } marginBottom 20
@@ -54,8 +53,8 @@ class LoginForm(
                 width = "100%"
                 justifyContent = "space-between"
             }
-            + ZkButton(strings.cancel) { onCancel() }
-            + ZkButton(strings.login) { this@LoginForm.submit() }
+            + ZkButton(stringStore.cancel) { onCancel() }
+            + ZkButton(stringStore.login) { this@LoginForm.submit() }
         }
     }
 
@@ -71,13 +70,13 @@ class LoginForm(
     }
 
     override fun onInvalidSubmit() {
-        invalidToast = warningToast { strings.loginFail }
+        invalidToast = warningToast { stringStore.loginFail }
     }
 
     override fun onSubmitSuccess() {}
 
     override fun onSubmitError(ex: Exception) {
-        invalidToast = dangerToast { strings.loginFail }
+        invalidToast = dangerToast { stringStore.loginFail }
     }
 
     private fun onExecuteResult(resultDto: DtoBase) {
@@ -86,9 +85,9 @@ class LoginForm(
 
         if (! resultDto.success) {
             if (resultDto.reason == "locked") {
-                dangerToast { strings.loginLocked }
+                dangerToast { stringStore.loginLocked }
             } else {
-                dangerToast { strings.loginFail }
+                dangerToast { stringStore.loginFail }
             }
             return
         }

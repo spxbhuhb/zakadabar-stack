@@ -18,14 +18,14 @@ package zakadabar.stack.frontend.builtin.form.fields
 
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.frontend.application.ZkApplication.t
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
 open class ZkSecretVerificationField<T : DtoBase>(
     form: ZkForm<T>,
     prop: KMutableProperty0<Secret>,
-    label: String = t(prop.name + "Verification")
+    label: String = stringStore[prop.name + "Verification"]
 ) : ZkStringBase<T, Secret>(
     form = form,
     prop = prop,

@@ -12,7 +12,7 @@ import zakadabar.stack.util.alpha
 
 val zkInputStyles by cssStyleSheet(ZkInputStyles())
 
-open class ZkInputStyles : ZkCssStyleSheet<ZkTheme>() {
+open class ZkInputStyles : ZkCssStyleSheet() {
 
     val checkboxList by ZkFormStyles.cssClass {
         display = "flex"

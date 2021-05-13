@@ -4,15 +4,15 @@
 package zakadabar.stack.frontend.builtin.pages.resources.locales
 
 import zakadabar.stack.data.builtin.resources.LocaleDto
-import zakadabar.stack.frontend.application.ZkApplication.strings
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 
 class Form : ZkForm<LocaleDto>() {
 
     override fun onCreate() {
-        build(dto.name, strings.setting, css = ZkFormStyles.onePanel) {
-            + section(strings.basics) {
+        build(dto.name, stringStore.setting, css = ZkFormStyles.onePanel) {
+            + section(stringStore.basics) {
                 + dto::id
                 + dto::name
                 + dto::description

@@ -5,20 +5,27 @@ package zakadabar.stack.frontend.resources.css
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.resources.ZkTheme
+import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet.Companion.styleSheets
 import zakadabar.stack.util.PublicApi
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-fun <T : ZkTheme, S : ZkCssStyleSheet<T>> cssStyleSheet(sheet: S) = CssStyleSheetDelegate(sheet)
+fun <S : ZkCssStyleSheet> cssStyleSheet(sheet: S) = CssStyleSheetDelegate(sheet)
 
-class CssStyleSheetDelegate<T : ZkTheme, S : ZkCssStyleSheet<T>>(
+class CssStyleSheetDelegate<S : ZkCssStyleSheet>(
     var sheet: S?
 ) {
 
     init {
-        sheet?.attach()
+        sheet?.let { styleSheets.add(it) }
+
+        if (::application.isInitialized) {
+            sheet?.attach()
+        } else {
+            sheet?.attachOnRefresh = true
+        }
     }
 
     operator fun getValue(thisRef: Nothing?, property: KProperty<*>): S {
@@ -47,7 +54,7 @@ class CssStyleSheetDelegate<T : ZkTheme, S : ZkCssStyleSheet<T>>(
 
 /**
  * Represents a CSS style sheet in the browser. Provides programmatic
- * tools to build, maintain and merge style sheets. Uses [ZkApplication.theme]
+ * tools to build, maintain and merge style sheets. Uses [theme]
  * to build the styles.
  *
  * I decided to add a type parameter because that makes themes easily extendable.
@@ -55,30 +62,39 @@ class CssStyleSheetDelegate<T : ZkTheme, S : ZkCssStyleSheet<T>>(
  * solution. We can go with this for now and then figure out how to resolve
  * this conflict.
  */
-open class ZkCssStyleSheet<T : ZkTheme> {
+open class ZkCssStyleSheet {
 
     companion object {
         var nextId = 0
+
+        val styleSheets = mutableListOf<ZkCssStyleSheet>()
     }
 
     val id = nextId ++
+
+    /**
+     * When true, the next refresh attaches this style sheet.
+     * Style sheets have to wait until the application is set.
+     */
+    open var attachOnRefresh = false
+
     val element = document.createElement("style")
 
     init {
         element.id = "zk-${this::class.simpleName}-$id"
     }
 
-    @Suppress("UNCHECKED_CAST") // TODO figure out if we can remove this, maybe doesn't even worth it
-    open var theme: T = ZkApplication.theme as T
+    open val theme: ZkTheme
+        get() = zakadabar.stack.frontend.resources.theme
 
     internal val rules = mutableMapOf<String, ZkCssStyleRule>() // key is property name
 
-    class CssDelegate(private var cssClassName: String) : ReadOnlyProperty<ZkCssStyleSheet<*>, String> {
-        override fun getValue(thisRef: ZkCssStyleSheet<*>, property: KProperty<*>) = cssClassName
+    class CssDelegate(private var cssClassName: String) : ReadOnlyProperty<ZkCssStyleSheet, String> {
+        override fun getValue(thisRef: ZkCssStyleSheet, property: KProperty<*>) = cssClassName
     }
 
     class CssDelegateProvider(val name: String? = null, val selector: String? = null, val builder: ZkCssStyleRule.(ZkTheme) -> Unit) {
-        operator fun provideDelegate(thisRef: ZkCssStyleSheet<*>, prop: KProperty<*>): ReadOnlyProperty<ZkCssStyleSheet<*>, String> {
+        operator fun provideDelegate(thisRef: ZkCssStyleSheet, prop: KProperty<*>): ReadOnlyProperty<ZkCssStyleSheet, String> {
 
             val cssClassName = name ?: "${thisRef::class.simpleName}-${prop.name}-${nextId ++}"
 
@@ -90,6 +106,7 @@ open class ZkCssStyleSheet<T : ZkTheme> {
 
     fun cssImport(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, "@import", builder)
 
+    @PublicApi
     fun cssRule(selector: String, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, selector, builder)
 
     fun cssClass(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, null, builder)
@@ -98,9 +115,15 @@ open class ZkCssStyleSheet<T : ZkTheme> {
 
     @PublicApi
     fun attach() {
-        if (this in ZkApplication.styleSheets) return
 
-        ZkApplication.styleSheets.add(this)
+        if (document.getElementById(element.id) != null) {
+            refresh()
+            return
+        }
+
+        if (this !in styleSheets) {
+            styleSheets += this
+        }
 
         var sheets = document.getElementById("zk-styles")
 
@@ -118,8 +141,7 @@ open class ZkCssStyleSheet<T : ZkTheme> {
     @PublicApi
     fun detach() {
         element.remove()
-
-        ZkApplication.styleSheets.remove(this)
+        styleSheets -= this
     }
 
     private fun refresh() {
@@ -127,7 +149,7 @@ open class ZkCssStyleSheet<T : ZkTheme> {
     }
 
     @PublicApi
-    fun merge(from: ZkCssStyleSheet<*>) {
+    fun merge(from: ZkCssStyleSheet) {
         from.rules.forEach { entry ->
 
             val fromRule = entry.value
@@ -139,10 +161,8 @@ open class ZkCssStyleSheet<T : ZkTheme> {
         refresh()
     }
 
-    @Suppress("UNCHECKED_CAST") // TODO figure out if we can remove this, maybe doesn't even worth it
-    fun onThemeChange(newTheme: ZkTheme) {
-        theme = newTheme as T
-        refresh()
+    fun onThemeChange() {
+        attach()
     }
 
 }

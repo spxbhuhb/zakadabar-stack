@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.form.structure
 
-import zakadabar.stack.frontend.application.ZkApplication.theme
+import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.util.marginBottom

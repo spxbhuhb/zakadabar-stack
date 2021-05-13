@@ -9,7 +9,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.set
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
-import zakadabar.stack.frontend.application.ZkApplication.theme
+import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.getElementId
 import zakadabar.stack.frontend.util.plusAssign
@@ -43,7 +43,7 @@ class TableOfContents(
                     }
 
                     on(buildPoint, "click") { event ->
-                        val (tocElement, id) = getElementId(event, "zk-", false) ?: return@on
+                        val (_, id) = getElementId(event, "zk-", false) ?: return@on
                         content.querySelector("[data-toc-id=\"${id}\"]")?.scrollIntoView()
                     }
                 }

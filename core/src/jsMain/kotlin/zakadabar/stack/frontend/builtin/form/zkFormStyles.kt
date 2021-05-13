@@ -12,7 +12,7 @@ import zakadabar.stack.util.alpha
 
 val zkFormStyles by cssStyleSheet(ZkFormStyles)
 
-object ZkFormStyles : ZkCssStyleSheet<ZkTheme>() {
+object ZkFormStyles : ZkCssStyleSheet() {
 
     var rowHeight = 38
 

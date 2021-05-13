@@ -6,7 +6,7 @@ package zakadabar.site.frontend.pages
 import zakadabar.lib.markdown.frontend.MarkdownPage
 import zakadabar.lib.markdown.frontend.MarkdownPathPage
 import zakadabar.site.data.ContentQuery
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 
 object Welcome : MarkdownPage(
@@ -40,9 +40,9 @@ object GetHelp : MarkdownPage(
 )
 
 
-object Documentation : MarkdownPage(
+object DocumentationIntro : MarkdownPage(
     "/${ContentQuery.dtoNamespace}/help/Documentation.md",
-    ContentContext("/Documentation", "help/")
+    ContentContext("/DocumentationIntro", "help/")
 )
 
 object FAQ : MarkdownPage(
@@ -50,14 +50,14 @@ object FAQ : MarkdownPage(
     ContentContext("FAQ", "help/")
 )
 
-object ContentPages : MarkdownPathPage() {
+object Documentation : MarkdownPathPage() {
 
     fun open(path: String) {
-        ZkApplication.changeNavState("/$viewName/$path")
+        application.changeNavState(this, path)
     }
 
     override fun setAppTitle() {
-        ZkApplication.title = ZkAppTitle("")
+        application.title = ZkAppTitle("")
     }
 
     override fun url(): String {

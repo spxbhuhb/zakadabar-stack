@@ -8,7 +8,6 @@ import kotlinx.coroutines.channels.Channel
 import zakadabar.stack.data.builtin.account.LogoutAction
 import zakadabar.stack.data.builtin.account.SessionDto
 import zakadabar.stack.data.record.StringRecordId
-import zakadabar.stack.frontend.application.ZkApplication.strings
 import zakadabar.stack.frontend.builtin.modal.ZkMessageDialog
 import zakadabar.stack.frontend.builtin.pages.account.login.RenewLoginDialog
 import zakadabar.stack.frontend.util.io
@@ -32,7 +31,7 @@ class ZkSessionManager {
     suspend fun init() {
         io { renewTask() }
         val session = SessionDto.read(StringRecordId("own"))
-        ZkApplication.executor = ZkExecutor(session.account, session.anonymous, session.roles)
+        application.executor = ZkExecutor(session.account, session.anonymous, session.roles)
     }
 
     /**
@@ -62,14 +61,14 @@ class ZkSessionManager {
                 // into sessionStorage or localStorage but that needs some thinking
                 // as it has security and multi-window impact.
 
-                if (! ZkApplication::executor.isInitialized) {
+                if (! application::executor.isInitialized) {
                     window.location.href = "/"
                     return
                 }
 
                 // We don't need to renew anonymous.
 
-                if (ZkApplication.executor.anonymous) {
+                if (application.executor.anonymous) {
                     responseChannel.send(true)
                     continue
                 }
@@ -82,7 +81,7 @@ class ZkSessionManager {
                 // original account information to keep the consistency of the UI. This happens
                 // when more requests receive login timeout response.
 
-                if (session.account.id == ZkApplication.executor.account.id) {
+                if (session.account.id == application.executor.account.id) {
                     responseChannel.send(true)
                     continue
                 }
@@ -97,7 +96,7 @@ class ZkSessionManager {
 
                 session = SessionDto.read(StringRecordId("own"))
 
-                if (session.account.id == ZkApplication.executor.account.id) {
+                if (session.account.id == application.executor.account.id) {
                     responseChannel.send(true)
                     continue
                 }
@@ -106,8 +105,8 @@ class ZkSessionManager {
                 // a message to the user, logout and then refresh the page.
 
                 ZkMessageDialog(
-                    title = strings.actionFail,
-                    message = strings.sessionRenewError
+                    title = stringStore.actionFail,
+                    message = stringStore.sessionRenewError
                 ).run()
 
                 LogoutAction().execute()

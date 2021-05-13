@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkToastStyles by cssStyleSheet(ZkToastStyles())
 
-open class ZkToastStyles : ZkCssStyleSheet<ZkTheme>() {
+open class ZkToastStyles : ZkCssStyleSheet() {
 
     /**
      * Style for [ZkToastContainer].

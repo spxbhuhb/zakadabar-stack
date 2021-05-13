@@ -6,10 +6,11 @@ package zakadabar.stack.frontend.builtin.layout
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.util.PublicApi
 
 val zkLayoutStyles by cssStyleSheet(ZkLayoutStyles())
 
-class ZkLayoutStyles : ZkCssStyleSheet<ZkTheme>() {
+class ZkLayoutStyles : ZkCssStyleSheet() {
 
     val w100 by cssClass {
         width = "100%"

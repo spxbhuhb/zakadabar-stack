@@ -9,18 +9,24 @@
 package zakadabar.stack.data.builtin.misc
 
 import kotlinx.serialization.Serializable
+import zakadabar.stack.data.record.EmptyRecordId
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.util.version
 
 @Serializable
 data class ServerDescriptionDto(
-    override var id: RecordId<ServerDescriptionDto>,
+
+    // empty record id here is OK as this is a setting DTO, there is no id
+    // TODO remove id field and convert this into a simple DtoBase, it is part of SessionDto anyway
+    override var id: RecordId<ServerDescriptionDto> = EmptyRecordId(),
 
     var name: String,
     var version: String,
-    var tags: List<String>,
-    var stringsRevision: Int
+    var defaultLocale : String,
+    var tags: List<String> = emptyList()
 
 ) : RecordDto<ServerDescriptionDto> {
 
@@ -29,4 +35,10 @@ data class ServerDescriptionDto(
     override fun getDtoNamespace() = ServerDescriptionDto.dtoNamespace
     override fun comm() = ServerDescriptionDto.comm
 
+    override fun schema() = DtoSchema {
+        + ::name min 1 max 100 blank false
+        + ::version min 1 max 20 blank false
+        + ::defaultLocale min 2 max 5 blank false
+        // + ::tags - not supported yet
+    }
 }

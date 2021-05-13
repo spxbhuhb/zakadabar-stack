@@ -4,6 +4,40 @@
 
 package zakadabar.stack.frontend.resources
 
+import kotlinx.browser.window
+import zakadabar.stack.frontend.application.executor
+import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
+import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+
+private const val themeStorageKey = "zk-theme-name"
+
+private lateinit var active : ZkTheme
+
+/**
+ * Initializes the theme.
+ *
+ * @param  themes  The themes the application knows. [initTheme] tries to find the
+ *                 desired theme in this list.
+ */
+fun initTheme(vararg themes : ZkTheme) {
+    val themeName = (executor.account.theme ?: window.localStorage.getItem(themeStorageKey)) ?: "default-light"
+    theme = themes.firstOrNull { it.name == themeName } ?: if (themes.isEmpty()) ZkBuiltinLightTheme() else themes.first()
+}
+
+/**
+ * The active application theme.
+ */
+var theme: ZkTheme
+    get() = active
+    set(value) {
+        active = value
+        window.localStorage.setItem(themeStorageKey, value.name)
+        value.onResume()
+        window.requestAnimationFrame {
+            ZkCssStyleSheet.styleSheets.forEach { it.onThemeChange() }
+        }
+    }
+
 /**
  * General interface for themes.
  *

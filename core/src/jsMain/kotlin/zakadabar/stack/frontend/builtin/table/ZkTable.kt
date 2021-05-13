@@ -12,7 +12,8 @@ import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.record.StringRecordId
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.stack.frontend.application.application
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
 import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
@@ -190,7 +191,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         if (! appTitle) return
 
         title?.let {
-            ZkApplication.title = it
+            application.title = it
             return
         }
 
@@ -199,8 +200,8 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         if (export) actions += ZkExportCsvAction(::onExportCsv)
         if (search) actions += ZkSearchAction(::onSearch)
 
-        val text = titleText ?: ZkApplication.t(this::class.simpleName ?: "")
-        ZkApplication.title = ZkAppTitle(text, actions)
+        val text = titleText ?: stringStore[this::class.simpleName ?: ""]
+        application.title = ZkAppTitle(text, actions)
     }
 
     // -------------------------------------------------------------------------

@@ -13,25 +13,30 @@ import zakadabar.stack.data.record.StringRecordId
 /**
  * Stores the current navigation state of the browser window.
  *
+ * @property  locale        The locale of the site, first segment of the URL.
  * @property  viewName      The name of the view in the URL, selects the Element to use.
+ * @property  segments      The segments of the URL path (parts between '/' characters).
  * @property  recordId      Id of the record when specified in the URL.
  * @property  query         The query object when specified in the URL.
  * @property  args          The args object when specified in the URL.
  */
 class ZkNavState(val urlPath: String, val urlQuery: String) {
 
+    private val locale: String
     val viewName: String
+    val segments : List<String>
     val recordId: RecordId<*>
     val query: Any?
     val args: String?
 
     init {
-        val segments = urlPath.trim('/').split("/")
+        segments = urlPath.trim('/').split("/")
 
         // use application home when there are no segments
 
-        if (segments.isEmpty()) {
+        if (segments.size < 2) {
 
+            locale = ""
             viewName = ""
             recordId = EmptyRecordId<DtoBase>()
             query = null
@@ -41,7 +46,8 @@ class ZkNavState(val urlPath: String, val urlQuery: String) {
 
             val searchParams = URLSearchParams(urlQuery.trim('?'))
 
-            viewName = segments[0]
+            locale = segments[0]
+            viewName = segments[1]
 
             val id = searchParams.get("id")
             recordId = when {
@@ -50,11 +56,7 @@ class ZkNavState(val urlPath: String, val urlQuery: String) {
                 else -> LongRecordId<DtoBase>(id.toLong())
             }
 
-            query = searchParams.get("query")?.let {
-                val dataType = viewName
-//                val dtoFrontend = Application.dtoFrontends[dataType] ?: throw IllegalStateException("missing dto frontend for $dataType")
-//                dtoFrontend.decodeQuery(dataType, it)
-            }
+            query = searchParams.get("query")
 
             args = searchParams.get("args")
         }

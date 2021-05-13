@@ -3,8 +3,8 @@
 To use string resources in your application:
 
 * extend the [ZkBuiltinStrings](/src/commonMain/kotlin/zakadabar/stack/resources/ZkBuiltinStrings.kt) class,
-  as [DemoStrings](../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/resources/DemoStrings.kt) does
-* in [main.kt](../../../demo/demo-marina/src/jsMain/kotlin/main.kt)
+  as [SiteStrings](../../../../site/src/commonMain/kotlin/zakadabar/site/resources/SiteStrings.kt) does
+* in [main.kt](../../../../site/src/jsMain/kotlin/main.kt)
   set [ZkApplication](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt)`.strings` to the
   instance of your class
 * use one of the following patterns to access your strings:
@@ -29,10 +29,10 @@ To get something you build on the file form the string store (not checked by the
 
 If you want i18n, switchable languages or any other customization that may be changed on the fly:
 
-* add a [LocaleStringBackend](/src/jvmMain/kotlin/zakadabar/stack/backend/data/builtin/resources/LocaleStringBackend.kt)
+* add a [TranslationBackend](/src/jvmMain/kotlin/zakadabar/stack/backend/data/builtin/resources/TranslationBackend.kt)
   to your application,
 * make sure you download the localized strings during application startup, example
-  in [main.kt](../../../demo/demo-marina/src/jsMain/kotlin/main.kt)
+  in [main.kt](../../../../site/src/jsMain/kotlin/main.kt)
 * use the strings as described above
 
 The locale is stored in `ZkApplication.executor.account.locale`. If there is no locale, the default browser language is

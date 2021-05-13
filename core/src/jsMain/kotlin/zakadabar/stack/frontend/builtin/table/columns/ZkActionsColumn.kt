@@ -5,7 +5,7 @@ package zakadabar.stack.frontend.builtin.table.columns
 
 import org.w3c.dom.set
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.frontend.application.ZkApplication.strings
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.builtin.table.zkTableStyles
@@ -16,7 +16,7 @@ open class ZkActionsColumn<T : DtoBase>(
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {
-        label = strings.actions
+        label = stringStore.actions
         exportable = false
         super.onCreate()
     }
@@ -25,7 +25,7 @@ open class ZkActionsColumn<T : DtoBase>(
         with(builder) {
             buildPoint.classList += zkTableStyles.action
             buildPoint.dataset["action"] = "update"
-            + strings.details
+            + stringStore.details
         }
     }
 

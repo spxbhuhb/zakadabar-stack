@@ -49,6 +49,6 @@ There are a few reasons why the process above is somewhat complex:
 * Avoid icon fonts, we've had many troubles with the swapping, download etc.
 * Author of Glyphicons suggested SVG icons for many reasons.
 
-# Built-In Icons [source code](../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/icon/IconExamples.kt)
+# Built-In Icons [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/icon/IconExamples.kt)
 
 <div data-zk-enrich="IconExamples"></div>

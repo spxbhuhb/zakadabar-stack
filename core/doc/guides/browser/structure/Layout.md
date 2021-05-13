@@ -49,14 +49,14 @@ The default layout has an application title bar which has 4 areas:
 Default application title bar
 implementation: [ZkAppTitleBar](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/titlebar/ZkTitleBar.kt)
 
-Pages, tables and forms use `ZkApplication.title` to set the title and context elements of the title bar.
+Pages, tables and forms use `application.title` to set the title and context elements of the title bar.
 
 All high level elements (ZkPage, ZkArgPage, ZkForm, ZkTable) have the following fields:
 
 * `appTitle` - boolean, when true sets the title bar content (default = true)
-* `title` - string, when set this element is assigned to `ZkApplication.title`
+* `title` - string, when set this element is assigned to `application.title`
 * `titleText` - string, when set, a new `ZkAppTitle` instance is created and that instance is assigned
-  to `ZkApplication.title`
+  to `application.title`
 
 ### Global Elements
 

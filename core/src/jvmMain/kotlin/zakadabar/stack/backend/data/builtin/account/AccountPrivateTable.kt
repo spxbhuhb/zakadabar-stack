@@ -20,7 +20,7 @@ object AccountPrivateTable : LongIdTable("accounts") {
 
     val displayName = varchar("displayName", 100).nullable()
     val theme = varchar("theme", 50).nullable()
-    val locale = varchar("locale", 20).nullable()
+    val locale = varchar("locale", 20)
     val avatar = reference("avatar", AccountImageTable).nullable()
 
     val organizationName = varchar("organizationName", 100).nullable()

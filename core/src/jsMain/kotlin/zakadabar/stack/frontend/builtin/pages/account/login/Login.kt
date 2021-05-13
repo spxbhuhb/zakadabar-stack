@@ -9,8 +9,8 @@
 package zakadabar.stack.frontend.builtin.pages.account.login
 
 import kotlinx.browser.window
-import zakadabar.stack.frontend.application.ZkApplication.strings
-import zakadabar.stack.frontend.application.ZkApplication.theme
+import zakadabar.stack.frontend.application.stringStore
+import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.builtin.layout.ZkFullScreenLayout
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
@@ -47,7 +47,7 @@ object Login : ZkPage(ZkFullScreenLayout) {
                         maxHeight = "unset"
                         padding = "${theme.spacingStep / 2}px"
                     }
-                    + strings.applicationName
+                    + stringStore.applicationName
                 } marginBottom 20
 
                 + LoginForm(

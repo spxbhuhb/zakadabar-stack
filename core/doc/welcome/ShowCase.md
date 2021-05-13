@@ -1,50 +1,50 @@
 This page shows the browser frontend components included with the stack.
 
-# Buttons [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
+# Buttons [documentation](../guides/browser/builtin/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
-## Primary [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
+## Primary [documentation](../guides/browser/builtin/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="primary"></div>
 
-## Secondary [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
+## Secondary [documentation](../guides/browser/builtin/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="secondary"></div>
 
-## Success [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
+## Success [documentation](../guides/browser/builtin/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="success"></div>
 
-## Warning [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
+## Warning [documentation](../guides/browser/builtin/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="warning"></div>
 
-## Danger [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
+## Danger [documentation](../guides/browser/builtin/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="danger"></div>
 
-## Info [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
+## Info [documentation](../guides/browser/builtin/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="info"></div>
 
-## Disabled [documentation](../guides/browser/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
+## Disabled [documentation](../guides/browser/builtin/Buttons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="disabled"></div>
 
-# Forms [documentation](../guides/browser/Forms.md)
+# Forms [documentation](../guides/browser/builtin/Forms.md)
 
-## Boolean Fields [documentation](../guides/browser/Forms.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormBooleanExample.kt)
+## Boolean Fields [documentation](../guides/browser/builtin/Forms.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormBooleanExample.kt)
 
 <div data-zk-enrich="FormBooleanExample"></div>
 
-## Double Fields [documentation](../guides/browser/Forms.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormDoubleExample.kt)
+## Double Fields [documentation](../guides/browser/builtin/Forms.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormDoubleExample.kt)
 
 <div data-zk-enrich="FormDoubleExample"></div>
 
-## Record Id Fields [documentation](../guides/browser/Forms.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormRecordIdExample.kt)
+## Record Id Fields [documentation](../guides/browser/builtin/Forms.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormRecordIdExample.kt)
 
 <div data-zk-enrich="FormRecordIdExample"></div>
 
-# Icons [documentation](../guides/browser/Icons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/icon/IconExamples.kt)
+# Icons [documentation](../guides/browser/builtin/Icons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/icon/IconExamples.kt)
 
 <div data-zk-enrich="IconExamples"></div>
 
@@ -54,34 +54,34 @@ This page shows the browser frontend components included with the stack.
 
 <div data-zk-enrich="IntCheckboxListExample"></div>
 
-# Modals [documentation](../guides/browser/Modals.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/modal/ModalExamples.kt)
+# Modals [documentation](../guides/browser/builtin/Modals.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/modal/ModalExamples.kt)
 
 <div data-zk-enrich="ModalExamples"></div>
 
-# Notes [documentation](../guides/browser/Notes.md)
+# Notes [documentation](../guides/browser/builtin/Notes.md)
 
-## Basic [documentation](../guides/browser/Notes.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/note/NoteBasicExamples.kt)
+## Basic [documentation](../guides/browser/builtin/Notes.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/note/NoteBasicExamples.kt)
 
 <div data-zk-enrich="NoteBasicExamples"></div>
 
-## Complex [documentation](../guides/browser/Notes.md)  [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/note/NoteFormExample.kt)
+## Complex [documentation](../guides/browser/builtin/Notes.md)  [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/note/NoteFormExample.kt)
 
 <div data-zk-enrich="NoteFormExample"></div>
 
-# Table [documentation](../guides/browser/Tables.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/note/NoteBasicExamples.kt)
+# Table [documentation](../guides/browser/builtin/Tables.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/note/NoteBasicExamples.kt)
 
 <div data-zk-enrich="TableExample"></div>
 
-# Toasts [documentation](../guides/browser/Toasts.md)
+# Toasts [documentation](../guides/browser/builtin/Toasts.md)
 
-## Basic  [documentation](../guides/browser/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastBasicExamples.kt)
+## Basic  [documentation](../guides/browser/builtin/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastBasicExamples.kt)
 
 <div data-zk-enrich="ToastBasicExamples"></div>
 
-## Custom  [documentation](../guides/browser/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastCustomExample.kt)
+## Custom  [documentation](../guides/browser/builtin/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastCustomExample.kt)
 
 <div data-zk-enrich="ToastCustomExample"></div>
 
-## Complex [documentation](../guides/browser/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastFormExample.kt)
+## Complex [documentation](../guides/browser/builtin/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastFormExample.kt)
 
 <div data-zk-enrich="ToastFormExample"></div>
