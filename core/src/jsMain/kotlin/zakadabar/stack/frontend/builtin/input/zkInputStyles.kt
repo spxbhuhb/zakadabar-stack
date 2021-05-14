@@ -5,7 +5,6 @@ package zakadabar.stack.frontend.builtin.input
 
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.zkFormStyles
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 import zakadabar.stack.util.alpha
@@ -21,47 +20,39 @@ open class ZkInputStyles : ZkCssStyleSheet() {
         alignItems = "center"
     }
 
-    open val standaloneInput by cssClass {
-
+    @Suppress("DuplicatedCode") // better to keep form an standalone styles separated
+    open val textInput by cssClass {
+        fontFamily = theme.fontFamily
+        fontSize = "80%"
+        fontWeight = 300
         display = "block"
-        color = "#444"
+        color = theme.inputTextColor
         padding = ".3em 1.4em .3em .8em"
         boxSizing = "border-box"
         margin = 0
-        border = "1px solid #aaa"
+        border = "1px solid ${theme.borderColor}"
         mozAppearance = "none"
         webkitAppearance = "none"
         appearance = "none"
-        backgroundColor = "#fff"
-        borderRadius = 2
+        backgroundColor = theme.inputBackgroundColor
+        borderRadius = theme.cornerRadius
         minHeight = 26
 
-        on(":hover") {
-            borderColor = "#888"
+        on(":hover:not(:disabled):not(:focus)") {
+            color = theme.hoverTextColor
+            backgroundColor = theme.infoColor.alpha(0.1)
+        }
+
+        on(":focus") {
+            border = "1px solid ${theme.infoColor}"
+            borderRadius = theme.cornerRadius
+            outline = "none"
         }
 
         on(":focus") {
             outline = "none"
         }
 
-        on(" option") {
-            fontWeight = "normal"
-        }
-
-        on(":disabled") {
-            color = "gray"
-            backgroundColor = "#gray"
-            borderColor = "#aaa"
-        }
-
-        on(":disabled:hover") {
-            borderColor = "#aaa"
-        }
-
-        on("[aria-disabled=true]") {
-            color = "gray"
-            borderColor = "#aaa"
-        }
     }
 
     val checkBoxOuter by cssClass {

@@ -31,7 +31,7 @@ open class ZkTextInput(
 
     override fun onCreate() {
 
-        className = zkInputStyles.standaloneInput
+        className = zkInputStyles.textInput
 
         input.value = value
 
