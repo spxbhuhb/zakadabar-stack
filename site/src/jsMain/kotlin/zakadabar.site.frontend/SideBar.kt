@@ -42,7 +42,7 @@ class SideBar : ZkSideBar() {
                 + item(FAQ)
             }
 
-            val source = window.fetch("/content/guides/TOC.md").await().text().await()
+            val source = window.fetch("/api/content/guides/TOC.md").await().text().await()
             + group(DocumentationIntro, "Documentation") {
                 MarkdownNav().parse(source).forEach {
                     + it.doc()
