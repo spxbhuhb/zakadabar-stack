@@ -4,7 +4,6 @@
 package zakadabar.stack.frontend.builtin.table
 
 import zakadabar.stack.frontend.resources.ZkColors
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
@@ -12,18 +11,19 @@ val zkTableStyles by cssStyleSheet(ZkTableStyles())
 
 class ZkTableStyles : ZkCssStyleSheet() {
 
-    var headerBackground: String = ZkColors.white
-    var headerText: String = ZkColors.Gray.c800
-    var oddRowBackground: String = ZkColors.white
-    var evenRowBackground: String = ZkColors.white
-    var textColor: String = ZkColors.BlueGray.c900
-    var hoverBackground: String = ZkColors.LightBlue.c50
-    var hoverText: String = textColor
-    var innerBorder: String = ZkColors.Gray.c300
+    val tableBackgroundColor : String? = null
+    var headerBackground: String? = null
+    var headerText: String? = null
+    var oddRowBackground: String? = null
+    var evenRowBackground: String? = null
+    var textColor: String? = null
+    var hoverBackgroundColor: String? = null
+    var hoverTextColor: String? = null
+    var rowBorderColor: String? = null
     var headerBottomBorder: String? = null
     var border: String? = null
-    var actionTextColor: String = ZkColors.LightBlue.a700
-    var rowHeight: String = "42px"
+    var actionTextColor: String? = null
+    var rowHeight: Int = 42
 
     val outerContainer by cssClass {
         display = "flex"
@@ -47,9 +47,9 @@ class ZkTableStyles : ZkCssStyleSheet() {
         top = 0
         right = 0
         bottom = 0
-        borderRight = "1px solid ${ZkColors.LightBlue.c800}"
-        borderLeft = "1px solid ${ZkColors.LightBlue.c800}"
-        backgroundColor = headerBackground
+        borderRight = "1px solid ${theme.infoColor}"
+        borderLeft = "1px solid ${theme.infoColor}"
+        backgroundColor = headerBackground ?: theme.backgroundColor
         marginTop = 4
         marginBottom = 4
         marginRight = 8
@@ -110,7 +110,7 @@ class ZkTableStyles : ZkCssStyleSheet() {
         borderCollapse = "collapse"
         minWidth = "100%"
 
-        backgroundColor = ZkColors.white
+        backgroundColor = tableBackgroundColor ?: theme.backgroundColor
 
         on(" thead") {
             display = "contents"
@@ -125,7 +125,8 @@ class ZkTableStyles : ZkCssStyleSheet() {
         }
 
         on(" tr:hover td") {
-            backgroundColor = hoverBackground
+            backgroundColor = hoverBackgroundColor ?: theme.hoverBackgroundColor
+            color = hoverTextColor ?: theme.hoverTextColor
         }
 
         on(" th") {
@@ -140,10 +141,10 @@ class ZkTableStyles : ZkCssStyleSheet() {
             whiteSpace = "nowrap"
             position = "sticky"
             top = 0
-            background = headerBackground
+            background = headerBackground ?: theme.backgroundColor
             textAlign = "left"
-            color = headerText
-            borderBottom = headerBottomBorder ?: theme.blockBorder
+            color = headerText ?: theme.textColor
+            borderBottom = headerBottomBorder ?: "1px solid ${theme.borderColor}"
             cursor = "pointer"
             zIndex = 30
         }
@@ -166,9 +167,9 @@ class ZkTableStyles : ZkCssStyleSheet() {
             overflow = "hidden"
             textOverflow = "ellipsis"
             whiteSpace = "nowrap"
-            color = textColor
-            borderBottom = "1px solid $innerBorder"
-            backgroundColor = oddRowBackground
+            color = textColor ?: theme.textColor
+            borderBottom = "1px solid ${rowBorderColor ?: theme.borderColor}"
+            backgroundColor = oddRowBackground ?: theme.backgroundColor
             zIndex = 20
         }
 
@@ -213,7 +214,7 @@ class ZkTableStyles : ZkCssStyleSheet() {
         fontWeight = "400 !important"
         whiteSpace = "nowrap"
         cursor = "pointer"
-        color = "$actionTextColor !important"
+        color = "${actionTextColor ?: theme.primaryColor} !important"
     }
 
 }
