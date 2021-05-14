@@ -21,6 +21,7 @@ import zakadabar.lib.examples.frontend.misc.NYIExample
 import zakadabar.lib.examples.frontend.modal.ModalExamples
 import zakadabar.lib.examples.frontend.note.NoteBasicExamples
 import zakadabar.lib.examples.frontend.note.NoteFormExample
+import zakadabar.lib.examples.frontend.pages.PageExample
 import zakadabar.lib.examples.frontend.table.TableExample
 import zakadabar.lib.examples.frontend.theme.ThemeExample
 import zakadabar.lib.examples.frontend.toast.ToastAutoHideExample
@@ -94,6 +95,8 @@ class SiteMarkdownContext(
             "ModalExamples" -> ModalExamples(htmlElement)
 
             "OperatorExample" -> OperatorExample(htmlElement)
+
+            "PageExample" -> PageExample(htmlElement)
 
             "ParallelDownloadExample" -> ParallelDownloadExample(htmlElement)
 

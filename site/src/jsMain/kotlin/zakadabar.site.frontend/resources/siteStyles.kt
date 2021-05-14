@@ -3,7 +3,6 @@
  */
 package zakadabar.site.frontend.resources
 
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 

@@ -10,6 +10,7 @@ import zakadabar.stack.data.builtin.resources.TranslationsByLocale
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
+import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.util.io
 
 /**

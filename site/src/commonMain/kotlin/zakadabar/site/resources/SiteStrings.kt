@@ -7,11 +7,6 @@ package zakadabar.site.resources
 
 import zakadabar.lib.examples.resources.ExamplesStrings
 
-// This pattern makes it possible to switch the strings easily. Demo is can work as
-// a standalone application, but it is possible to use it as a component library.
-// In that case - or when you write an actual component library - you want to your
-// built-in strings to be customizable.
-
 internal val Strings = SiteStrings()
 
 class SiteStrings : ExamplesStrings() {

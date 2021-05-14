@@ -14,7 +14,6 @@ import zakadabar.lib.examples.frontend.pages.ArgPage
 import zakadabar.lib.examples.frontend.query.QueryPage
 import zakadabar.lib.examples.frontend.table.FetchedTable
 import zakadabar.lib.examples.frontend.table.GeneratedTable
-import zakadabar.site.data.ContentEntry
 import zakadabar.site.frontend.pages.*
 import zakadabar.site.resources.Strings
 import zakadabar.stack.StackRoles
@@ -28,49 +27,49 @@ import zakadabar.stack.frontend.util.io
 import zakadabar.stack.text.MarkdownNav
 import zakadabar.stack.util.fourRandomInt
 
-object SideBar : ZkSideBar() {
+class SideBar : ZkSideBar() {
 
     override fun onCreate() {
         super.onCreate()
 
-        + item(Welcome)
-        + item(WhatsNew)
-        + item(ShowCase)
-        + item(Roadmap)
-        + item(GetStarted)
-        + group(GetHelp) {
-            + item(FAQ)
-        }
-
         io {
+            + item(Welcome)
+            + item(WhatsNew)
+            + item(ShowCase)
+            + item(Roadmap)
+            + item(GetStarted)
+            + group(GetHelp) {
+                + item(FAQ)
+            }
+
             val source = window.fetch("/content/guides/TOC.md").await().text().await()
             + group(DocumentationIntro, "Documentation") {
                 MarkdownNav().parse(source).forEach {
                     + it.doc()
                 }
             }
-        }
 
-        + examples()
+            + examples()
 
-        //contentGroup("ChangeLog", "changelog/", true)
+            //contentGroup("ChangeLog", "changelog/", true)
 
-        withOneOfRoles(StackRoles.securityOfficer, StackRoles.siteAdmin) {
+            withOneOfRoles(StackRoles.securityOfficer, StackRoles.siteAdmin) {
 
-            + group(Strings.administration) {
+                + group(Strings.administration) {
 
-                + item(Settings)
+                    + item(Settings)
 
-                withRole(StackRoles.siteAdmin) {
-                    + item(Strings.locales) { Locales.openAll() }
-                    + item(Strings.translations) { Translations.openAll() }
+                    withRole(StackRoles.siteAdmin) {
+                        + item(Strings.locales) { Locales.openAll() }
+                        + item(Strings.translations) { Translations.openAll() }
+                    }
+
+                    withRole(StackRoles.securityOfficer) {
+                        + item(Strings.accounts) { Accounts.openAll() }
+                        + item(Strings.roles) { Roles.openAll() }
+                    }
+
                 }
-
-                withRole(StackRoles.securityOfficer) {
-                    + item(Strings.accounts) { Accounts.openAll() }
-                    + item(Strings.roles) { Roles.openAll() }
-                }
-
             }
         }
     }

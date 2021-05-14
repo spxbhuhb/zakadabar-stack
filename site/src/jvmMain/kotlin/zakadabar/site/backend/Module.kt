@@ -5,9 +5,9 @@ package zakadabar.site.backend
 
 import zakadabar.lib.examples.backend.builtin.BuiltinBackend
 import zakadabar.lib.examples.backend.builtin.ExampleReferenceBackend
-import zakadabar.site.backend.data.content.ContentBackend
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.Server
+import zakadabar.stack.backend.custom.ContentBackend
 import zakadabar.stack.backend.data.builtin.account.AccountPrivateBackend
 import zakadabar.stack.backend.data.builtin.account.AccountPublicBackend
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
@@ -33,7 +33,7 @@ object Module : BackendModule {
         Server += AccountPrivateBackend
         Server += AccountPublicBackend
 
-        Server += ContentBackend
+        Server += ContentBackend()
 
         Server += BuiltinBackend
         Server += ExampleReferenceBackend
