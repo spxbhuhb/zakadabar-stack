@@ -3,7 +3,6 @@
  */
 package zakadabar.lib.markdown.frontend
 
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
@@ -13,6 +12,11 @@ open class MarkdownStyles : ZkCssStyleSheet() {
 
     open var codeBorderColor: String? = null
     open var highlightUrl = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/idea.min.css"
+
+    @Suppress("unused") // this is a CSS import, used by hljs
+    open val highlightStyles by cssImport {
+        url = highlightUrl
+    }
 
     val container by cssClass {
         display = "flex"
@@ -118,14 +122,12 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         textDecoration = "none"
     }
 
-
     @Suppress("unused") // used implicitly by the browser
     open val header1 by cssRule(".$content h1") {
         borderBottom = theme.border
         paddingTop = theme.spacingStep
         marginBottom = theme.spacingStep * 2
     }
-
 
     @Suppress("unused") // used implicitly by the browser
     open val header1First by cssRule(".$content h1:first-child") {
@@ -137,14 +139,12 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         marginBottom = theme.spacingStep
     }
 
-
     @Suppress("unused") // used implicitly by the browser
     open val header1Link by cssRule(".$content h1 > a") {
         paddingLeft = 20
         fontWeight = 400
         fontSize = "15px"
     }
-
 
     @Suppress("unused") // used implicitly by the browser
     open val header2Link by cssRule(".$content h2 > a") {
@@ -159,7 +159,6 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         fontWeight = 400
         fontSize = "15px"
     }
-
 
     @Suppress("unused") // used implicitly by the browser
     open val img by cssRule(".$content img") {
@@ -183,7 +182,6 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         paddingRight = 8
     }
 
-
     @Suppress("unused") // used implicitly by the browser
     open val inlineCode by cssRule(".$content code") {
         fontFamily = "JetBrains Mono, monospace"
@@ -192,11 +190,6 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         paddingRight = 4
         borderRadius = 2
         backgroundColor = theme.blockBackgroundColor
-    }
-
-    @Suppress("unused") // this is a CSS import, used by hljs
-    open val highlightStyles by cssImport {
-        url = highlightUrl
     }
 
     @Suppress("unused") // used implicitly by the browser
