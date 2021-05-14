@@ -1,4 +1,4 @@
-# CSS and Theming
+# Themes, CSS
 
 The stack contains a dynamic theme and style system.
 

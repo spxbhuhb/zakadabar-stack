@@ -61,7 +61,7 @@ fun main() {
 
             // Initializes the Application and opens the page selected by the URL.
 
-            init()
+            run()
         }
     }
 

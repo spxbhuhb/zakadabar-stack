@@ -6,12 +6,15 @@ package zakadabar.stack.frontend.application
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.events.Event
+import zakadabar.stack.data.builtin.misc.ServerDescriptionDto
+import zakadabar.stack.data.builtin.resources.TranslationsByLocale
 import zakadabar.stack.frontend.builtin.dock.ZkDock
 import zakadabar.stack.frontend.builtin.modal.ZkModalContainer
 import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
 import zakadabar.stack.resources.ZkBuiltinStrings
+import zakadabar.stack.resources.ZkStringStore
 
 /**
  * The application itself, initialized in main.kt.
@@ -63,13 +66,15 @@ fun hasRole(roleName: String) = roleName in application.executor.roles
  * @property  onTitleChange  Called when [title] changes, layouts replace this function.
  *
  */
-class ZkApplication {
+open class ZkApplication {
 
-    var sessionManager = ZkSessionManager()
+    open var sessionManager = ZkSessionManager()
 
     lateinit var locale: String
 
     lateinit var executor: ZkExecutor
+
+    lateinit var serverDescription : ServerDescriptionDto
 
     lateinit var routing: ZkAppRouting
 
@@ -95,10 +100,7 @@ class ZkApplication {
     @Suppress("MemberVisibilityCanBePrivate")
     val navStateChangeEvent = "zk-navstate-change"
 
-    fun init() {
-
-        routing.init()
-
+    fun run() {
         title = ZkAppTitle("")
 
         dock = ZkDock().apply {
@@ -121,7 +123,16 @@ class ZkApplication {
         window.dispatchEvent(Event(navStateChangeEvent))
     }
 
-    fun initLocale() {
+    suspend fun initSession() {
+        sessionManager.init()
+    }
+
+    fun initRouting(routing : ZkAppRouting) {
+        this.routing = routing
+        routing.init()
+    }
+
+    suspend fun initLocale(store : ZkBuiltinStrings, downloadTranslations : Boolean = true) {
         val path = window.location.pathname.trim('/')
         locale = when {
             path.isNotEmpty() -> path.substringBefore('/')
@@ -130,6 +141,11 @@ class ZkApplication {
                 document.body?.innerText = "Could not initialize locale."
                 throw IllegalStateException()
             }
+        }
+        strings = if (downloadTranslations) {
+            store.merge(TranslationsByLocale(locale).execute())
+        } else {
+            store
         }
     }
 

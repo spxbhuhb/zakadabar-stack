@@ -32,6 +32,7 @@ class ZkSessionManager {
         io { renewTask() }
         val session = SessionDto.read(StringRecordId("own"))
         application.executor = ZkExecutor(session.account, session.anonymous, session.roles)
+        application.serverDescription = session.serverDescription
     }
 
     /**

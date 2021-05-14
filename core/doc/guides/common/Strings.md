@@ -35,13 +35,12 @@ If you want i18n, switchable languages or any other customization that may be ch
   in [main.kt](../../../../site/src/jsMain/kotlin/main.kt)
 * use the strings as described above
 
-The locale is stored in `ZkApplication.executor.account.locale`. If there is no locale, the default browser language is
-used.
+The locale is stored in `application.locale`. This field is initialized by `initLocale`.
 
 ## Automatic bindings
 
-Forms and tables look up the labels and headers automatically, based on the name of the property. This uses
-[ZkApplication](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt)`.strings`, and in consequence
+Forms and tables look up the labels and headers automatically, based on the name of the property. This uses the
+[stringStore](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt). In consequence
 localization affects forms and tables automatically.
 
 You can switch off this behaviour by specifying labels and headers directly.

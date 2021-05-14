@@ -7,7 +7,6 @@ import zakadabar.site.frontend.Routing
 import zakadabar.site.frontend.resources.SiteDarkTheme
 import zakadabar.site.frontend.resources.SiteLightTheme
 import zakadabar.site.resources.SiteStrings
-import zakadabar.stack.data.builtin.resources.TranslationsByLocale
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
@@ -24,20 +23,15 @@ fun main() {
 
         with(application) {
 
-            sessionManager.init()
+            initSession()
 
-            initTheme(
-                SiteDarkTheme(),
-                SiteLightTheme()
-            )
+            initTheme(SiteDarkTheme(), SiteLightTheme())
 
-            initLocale()
+            initLocale(SiteStrings())
 
-            strings = SiteStrings().merge(TranslationsByLocale(locale).execute())
+            initRouting(Routing())
 
-            routing = Routing()
-
-            init()
+            run()
 
         }
 

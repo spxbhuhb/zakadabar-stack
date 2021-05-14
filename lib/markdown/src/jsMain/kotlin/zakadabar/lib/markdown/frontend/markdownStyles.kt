@@ -148,7 +148,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
 
     @Suppress("unused") // used implicitly by the browser
     open val img by cssRule(".$content img") {
-        width = "100%"
+        maxWidth = "100%"
     }
 
     open val table by cssRule(".$content > table") {

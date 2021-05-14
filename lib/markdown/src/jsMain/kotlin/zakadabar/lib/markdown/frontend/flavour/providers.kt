@@ -131,6 +131,7 @@ internal class ImageGeneratingProvider(context: ZkMarkdownContext, linkMap: Link
         visitor.consumeTagOpen(
             node, "img",
             "src=\"${context.makeUrl(info.destination)}\"",
+            "srcset=\"${context.makeUrl(info.destination)} 2x\"",
             "alt=\"${getPlainTextFrom(info.label, text)}\"",
             info.title?.let { "title=\"$it\"" },
             autoClose = true

@@ -13,6 +13,7 @@ import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
+import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.resources.ZkIcons
 
 /**
@@ -72,7 +73,7 @@ open class ZkSideBarGroup(
                     + closeIcon.hide()
                     on("click", ::onHandleClick)
                 }
-                + textElement.on("click", ::onNavigate)
+                + textElement.on("click", ::onNavigate) css zkLayoutStyles.grow
             }
             + zke(zkSideBarStyles.groupContent) {
                 hide()

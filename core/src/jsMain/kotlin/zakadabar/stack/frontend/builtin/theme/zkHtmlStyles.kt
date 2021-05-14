@@ -12,10 +12,16 @@ val zkHtmlStyles by cssStyleSheet(ZkHtmlStyles())
 open class ZkHtmlStyles : ZkCssStyleSheet() {
 
     @PublicApi
-    open val bodyStyle by cssRule("body") {
+    open val bodyStyle by cssRule("html, body") {
+        width = "100%"
+        height = "100%"
+        margin = "0 !important"
+        padding = "0 !important"
+
         fontFamily = theme.fontFamily
         fontSize = theme.fontSize
         fontWeight = theme.fontWeight
+
         backgroundColor = theme.backgroundColor
         color = theme.textColor
     }
