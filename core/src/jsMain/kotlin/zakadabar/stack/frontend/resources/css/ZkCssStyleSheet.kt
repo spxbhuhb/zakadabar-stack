@@ -67,6 +67,13 @@ open class ZkCssStyleSheet {
     companion object {
         var nextId = 0
 
+        /**
+         * When true style names will be like "zks233" where the number
+         * is the id assigned to the ZkCssStyleRule. When false, the class
+         * names will contain the style class name, the property name and the id.
+         */
+        var shortNames = true
+
         val styleSheets = mutableListOf<ZkCssStyleSheet>()
     }
 
@@ -96,7 +103,7 @@ open class ZkCssStyleSheet {
     class CssDelegateProvider(val name: String? = null, val selector: String? = null, val builder: ZkCssStyleRule.(ZkTheme) -> Unit) {
         operator fun provideDelegate(thisRef: ZkCssStyleSheet, prop: KProperty<*>): ReadOnlyProperty<ZkCssStyleSheet, String> {
 
-            val cssClassName = name ?: "${thisRef::class.simpleName}-${prop.name}-${nextId ++}"
+            val cssClassName = name ?: if (shortNames) "zks${nextId++}" else "${thisRef::class.simpleName}-${prop.name}-${nextId ++}"
 
             thisRef.rules[prop.name] = ZkCssStyleRule(thisRef, prop.name, cssClassName, selector, builder)
 

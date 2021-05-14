@@ -10,16 +10,18 @@ import zakadabar.site.resources.SiteStrings
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.initTheme
 import zakadabar.stack.frontend.util.io
 
 fun main() {
 
+    ZkElement.addKClass = false
+    ZkCssStyleSheet.shortNames = true
+
     application = ZkApplication()
 
     io {
-
-        ZkElement.addKClass = true
 
         with(application) {
 

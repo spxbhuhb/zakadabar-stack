@@ -33,6 +33,7 @@ changes please check the changelog.
         * [Routing](./guides/browser/structure/Routing.md)
         * [Dock](./guides/browser/builtin/Dock.md)  
         * [Pages](./guides/browser/builtin/Pages.md)
+        * [SideBar](./guides/browser/builtin/SideBar.md)    
         * [Prototyping](./guides/browser/util/Prototyping.md)
 
 * documentation

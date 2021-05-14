@@ -7,18 +7,21 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.util.PublicApi
 
-open class ZkTabContainer : ZkElement() {
+open class ZkTabContainer(
+    private val builder: (ZkTabContainer.() -> Unit)? = null
+) : ZkElement() {
 
-    private val labels = ZkElement()
-    val content = ZkElement()
+    private val tabLabels = ZkElement()
+    val tabContents = ZkElement()
 
     private val items = mutableListOf<TabItem>()
     private lateinit var activeItem: TabItem
 
     override fun onCreate() {
         classList += zkTabContainerStyles.container
-        + labels css zkTabContainerStyles.labels
-        + content css zkTabContainerStyles.content
+        + tabLabels css zkTabContainerStyles.labels
+        + tabContents css zkTabContainerStyles.content
+        builder?.invoke(this)
     }
 
     @PublicApi
@@ -29,12 +32,12 @@ open class ZkTabContainer : ZkElement() {
 
     operator fun TabItem.unaryPlus() {
         items += this
-        labels += this.label
+        tabLabels += this.label
 
         if (items.size == 1) {
             activeItem = this
             this.label.active = true
-            this@ZkTabContainer.content += this.content
+            this@ZkTabContainer.tabContents += this.content
         }
     }
 
@@ -42,12 +45,12 @@ open class ZkTabContainer : ZkElement() {
         if (activeItem == item) return
 
         activeItem.label.active = false
-        content -= activeItem.content
+        tabContents -= activeItem.content
 
         activeItem = item
 
         activeItem.label.active = true
-        content += activeItem.content
+        tabContents += activeItem.content
     }
 
 }

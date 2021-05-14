@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-@file:Suppress("unused") // auto binding makes this inspection useless
+@file:Suppress("unused", "PropertyName") // auto binding makes this inspection useless
 
 package zakadabar.lib.examples.resources
 
@@ -15,6 +15,8 @@ import zakadabar.stack.resources.ZkBuiltinStrings
 var Strings = ExamplesStrings()
 
 open class ExamplesStrings : ZkBuiltinStrings() {
+
+    val ExampleSideBarTarget by "Example Target"
 
     val optValue by "Optional Value"
     val readOnlyValue by "Read Only Value"

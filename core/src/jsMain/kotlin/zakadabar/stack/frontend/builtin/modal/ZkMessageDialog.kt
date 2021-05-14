@@ -16,21 +16,16 @@ open class ZkMessageDialog(
 ) : ZkModalBase<Boolean>() {
 
     override fun onCreate() {
-        classList += zkModalStyles.modal
+        super.onCreate()
+        build(title)
+    }
 
-        + column {
-            title?.let {
-                + ZkTitleBar(it) css zkModalStyles.title
-            }
+    override fun buildContent() {
+        + message
+    }
 
-            + div(zkModalStyles.content) {
-                + message
-            }
-
-            + row(zkModalStyles.buttons) {
-                + ZkButton(okLabel, onClick = ::onOk)
-            }
-        }
+    override fun buildButtons() {
+        + ZkButton(okLabel, onClick = ::onOk)
     }
 
     open fun onOk() = io {

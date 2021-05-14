@@ -6,11 +6,12 @@ package zakadabar.stack.frontend.application
 import kotlinx.browser.document
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
+import zakadabar.stack.frontend.util.after
 import kotlin.reflect.KClass
 
 abstract class ZkAppRouting(
-    private val defaultLayout: ZkAppLayout,
-    private val home: ZkTarget
+    open val defaultLayout: ZkAppLayout,
+    open val home: ZkTarget
 ) {
 
     companion object {
@@ -24,7 +25,7 @@ abstract class ZkAppRouting(
 
     open val targets = mutableMapOf<String, ZkTarget>()
 
-    open var activeLayout = defaultLayout
+    open var activeLayout by after { defaultLayout }
     open lateinit var activeTarget: ZkElement
 
     lateinit var nextLayout: ZkAppLayout

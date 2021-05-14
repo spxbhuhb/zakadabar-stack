@@ -6,10 +6,38 @@ package zakadabar.stack.frontend.builtin.modal
 import kotlinx.coroutines.channels.Channel
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
+import zakadabar.stack.frontend.util.plusAssign
 
 open class ZkModalBase<T : Any> : ZkElement() {
 
     protected val channel = Channel<T>()
+
+    open fun build(title: String? = null) {
+        classList += zkModalStyles.modal
+
+        + column {
+            title?.let {
+                + ZkTitleBar(it) css zkModalStyles.title
+            }
+
+            + div(zkModalStyles.content) {
+                buildContent()
+            }
+
+            + row(zkModalStyles.buttons) {
+                buildButtons()
+            }
+        }
+    }
+
+    open fun buildContent() {
+
+    }
+
+    open fun buildButtons() {
+
+    }
 
     open suspend fun run(): T {
         application.modals.show()

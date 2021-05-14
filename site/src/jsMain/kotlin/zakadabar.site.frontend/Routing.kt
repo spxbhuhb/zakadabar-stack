@@ -11,6 +11,9 @@ import zakadabar.lib.examples.frontend.form.SyntheticForm
 import zakadabar.lib.examples.frontend.layout.TabContainer
 import zakadabar.lib.examples.frontend.pages.ArgPage
 import zakadabar.lib.examples.frontend.query.QueryPage
+import zakadabar.lib.examples.frontend.sidebar.ExampleMarkdownSideBar
+import zakadabar.lib.examples.frontend.sidebar.ExampleMarkdownSideBarTarget
+import zakadabar.lib.examples.frontend.sidebar.ExampleSideBarTarget
 import zakadabar.lib.examples.frontend.table.FetchedTable
 import zakadabar.lib.examples.frontend.table.GeneratedTable
 import zakadabar.site.frontend.pages.*
@@ -34,6 +37,9 @@ class Routing : ZkAppRouting(DefaultLayout, Landing) {
         + Roadmap
         + DocumentationIntro
         + FAQ
+
+        + ExampleSideBarTarget
+        + ExampleMarkdownSideBarTarget
 
         + ArgPage
         + BuiltinCrud

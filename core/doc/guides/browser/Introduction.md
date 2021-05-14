@@ -59,7 +59,8 @@ fun main() {
 
     io {
 
-        ZkElement.addKClass = true
+        ZkElement.addKClass = false
+        ZkCssStyleSheet.shortNames = true
 
         with(application) {
 
@@ -82,11 +83,18 @@ fun main() {
 ### Element Class Names
 
 ```kotlin
-ZkElement.addKClass = true
+ZkElement.addKClass = false
 ```
 
-This line instructs [Elements](./structure/Elements.md) to add the class name as a data attribute. Can be very useful
-for debugging, may be switched off in production without any effect, no application logic depends on it.
+This line instructs [Elements](./structure/Elements.md) not to add the class name as a data attribute. Adding the
+class name can be very useful for debugging, may be switched off in production without any effect, no application logic depends on it.
+
+```kotlin
+ZkCssStyleSheet.shortNames = true
+```
+
+This line instructs [Themes, Css](./structure/ThemesCss.md) to use a short CSS class name. Long class names
+class name can be very useful for debugging, may be switched off in production without any effect, no application logic depends on it.
 
 ### Session Manager
 

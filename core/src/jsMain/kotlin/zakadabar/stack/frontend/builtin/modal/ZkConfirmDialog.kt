@@ -17,22 +17,16 @@ open class ZkConfirmDialog(
 ) : ZkModalBase<Boolean>() {
 
     override fun onCreate() {
-        classList += zkModalStyles.modal
+        build(title)
+    }
 
-        + column {
-            title?.let {
-                + ZkTitleBar(it) css zkModalStyles.title
-            }
+    override fun buildContent() {
+        + message
+    }
 
-            + div(zkModalStyles.content) {
-                + message
-            }
-
-            + row(zkModalStyles.buttons) {
-                + ZkButton(noLabel, onClick = ::onNo)
-                + ZkButton(yesLabel, onClick = ::onYes)
-            }
-        }
+    override fun buildButtons() {
+        + ZkButton(noLabel, onClick = ::onNo)
+        + ZkButton(yesLabel, onClick = ::onYes)
     }
 
     open fun onNo() = io {

@@ -1,8 +1,9 @@
 # Modals
 
-Modal dialogs are handled through the `modals` property
-of the `application` ([ZkApplication](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt)). The `modals` property is
-an instance of [ZkModalContainer](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/modal/ZkModalContainer.kt).
+Modal dialogs are handled through the `modals` property of
+the `application` ([ZkApplication](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt)).
+The `modals` property is an instance
+of [ZkModalContainer](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/modal/ZkModalContainer.kt).
 
 Modals that extend [ZkModalBase](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/modal/ZkModalBase.kt)
 have show, hide and data handling out-of-the-box.
@@ -15,9 +16,43 @@ Support for multiple parallel modals is not ready yet.
 
 <div data-zk-enrich="ModalExamples"></div>
 
-## Write a Modal
+## Write a Modal With Build
+
+In this case the modal will be similar to the built-in modals: same styled title, content, buttons.
 
 * extend [ZkModalBase](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/modal/ZkModalBase.kt)
+* call `build` from `onCreate` with the title
+* override `buildContent` to build the content
+* override `buildButtons` to build the buttons
+
+```kotlin
+open class MyMessageDialog : ZkModalBase<Boolean>() {
+
+    override fun onCreate() {
+        super.onCreate()
+        build("My Title")
+    }
+
+    override fun buildContent() {
+        + "My Message"
+    }
+
+    override fun buildButtons() {
+        + ZkButton(okLabel, onClick = ::onOk)
+    }
+
+    open fun onOk() = io {
+        channel.send(true)
+    }
+
+}
+```
+
+## Write a Modal Without Build
+
+In this case you are free to put whatever into the modal.
+
+* extend[ZkModalBase](/ src / jsMain / kotlin / zakadabar / stack / frontend / builtin / modal / ZkModalBase . kt)
 * build the modal body in `onCreate`
 * send a value into `channel` when the modal should be closed
 
@@ -66,5 +101,9 @@ io {
 
 ## Timeline
 
+### Changes
+
+* 2021.5.14
+    * Add build function to make styled modals easily.
 * 2021.5.12
-  * Change opacity of overlay background from 0.2 to 0.5 to make the modal more distinct.
+    * Change opacity of overlay background from 0.2 to 0.5 to make the modal more distinct.
