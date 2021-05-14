@@ -23,6 +23,7 @@ class ZkTableStyles : ZkCssStyleSheet() {
     var headerBottomBorder: String? = null
     var border: String? = null
     var actionTextColor: String? = null
+    var controlColor: String? = null
     var rowHeight: Int = 42
 
     val outerContainer by cssClass {
@@ -47,8 +48,8 @@ class ZkTableStyles : ZkCssStyleSheet() {
         top = 0
         right = 0
         bottom = 0
-        borderRight = "1px solid ${theme.infoColor}"
-        borderLeft = "1px solid ${theme.infoColor}"
+        borderRight = "1px solid ${controlColor ?: theme.primaryColor}"
+        borderLeft = "1px solid ${controlColor ?: theme.primaryColor}"
         backgroundColor = headerBackground ?: theme.backgroundColor
         marginTop = 4
         marginBottom = 4
@@ -90,7 +91,7 @@ class ZkTableStyles : ZkCssStyleSheet() {
         height = 0
         borderLeft = "6px solid transparent"
         borderRight = "6px solid transparent"
-        borderTop = "6px solid ${ZkColors.Gray.c800}"
+        borderTop = "6px solid ${controlColor ?: theme.primaryColor}"
     }
 
     val sortedAscending by cssClass {
@@ -100,7 +101,7 @@ class ZkTableStyles : ZkCssStyleSheet() {
         height = 0
         borderLeft = "6px solid transparent"
         borderRight = "6px solid transparent"
-        borderBottom = "6px solid ${ZkColors.Gray.c800}"
+        borderBottom = "6px solid ${controlColor ?: theme.primaryColor}"
     }
 
     val table by cssClass {

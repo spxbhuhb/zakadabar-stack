@@ -3,9 +3,11 @@
  */
 package zakadabar.stack.frontend.builtin.table.actions
 
+import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.button.ZkIconButton
+import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
 
 class ZkExportCsvAction(
     onExecute: () -> Unit
-) : ZkIconButton(ZkIcons.fileDownload, round = true, onClick = onExecute)
+) : ZkButton(ZkIcons.fileDownload, ZkFlavour.Primary, buttonSize = 24, iconSize = 18, round = true, onClick = onExecute)

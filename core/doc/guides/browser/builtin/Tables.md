@@ -206,3 +206,25 @@ With 1.000.000:
 
 The solution for these would be to use fewer areas and improve row position handling. However, in that case the
 scrollbar position problems might arise.
+
+## Timeline
+
+### Known problems
+
+* Sort indicator:
+   * transparent background overlaps header text.
+* Header resize handle:
+   * jumps a bit when start to move,
+   * can appear when moving another handle.
+
+### Possible Improvements
+
+* Initial column size could depend on data type.
+* In-line editing.
+
+### Changes
+
+* 2021.5.14
+  * dark theme
+* 2021.5.12
+  * replace default ui checkbox with ZkCheckBox

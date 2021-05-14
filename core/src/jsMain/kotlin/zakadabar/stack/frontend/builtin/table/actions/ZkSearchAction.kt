@@ -4,9 +4,10 @@
 package zakadabar.stack.frontend.builtin.table.actions
 
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.ZkIconButton
+import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.input.ZkTextInput
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
+import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.plusAssign
 
@@ -18,7 +19,7 @@ open class ZkSearchAction(
         classList += zkLayoutStyles.row
 
         + ZkTextInput(onChange = onExecute, enter = true) marginRight 8
-        + ZkIconButton(ZkIcons.search, buttonSize = 24) {
+        + ZkButton(ZkIcons.search, ZkFlavour.Primary, buttonSize = 24, iconSize = 18) {
             val value = this@ZkSearchAction[ZkTextInput::class].value
             onExecute(value)
         }

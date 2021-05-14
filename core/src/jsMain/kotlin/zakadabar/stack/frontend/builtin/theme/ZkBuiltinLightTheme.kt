@@ -4,6 +4,7 @@
 package zakadabar.stack.frontend.builtin.theme
 
 import zakadabar.stack.frontend.builtin.layout.zkScrollBarStyles
+import zakadabar.stack.frontend.builtin.table.zkTableStyles
 import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
@@ -83,5 +84,4 @@ open class ZkBuiltinLightTheme : ZkTheme {
             titleBarBorder = border
         }
     }
-
 }
