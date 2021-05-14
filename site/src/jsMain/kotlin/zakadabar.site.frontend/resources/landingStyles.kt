@@ -4,7 +4,7 @@
 package zakadabar.site.frontend.resources
 
 import zakadabar.stack.frontend.resources.ZkColors
-import zakadabar.stack.frontend.resources.ZkTheme
+import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
@@ -63,42 +63,32 @@ class LandingStyles : ZkCssStyleSheet() {
         flexWrap = "wrap"
     }
 
-    val button by cssClass {
-        fontSize = "16px !important"
-        fontWeight = 400
-        whiteSpace = "nowrap"
-        color = "${theme.textColor} !important"
-        backgroundColor = "transparent !important"
+    private fun ZkCssStyleRule.button(color : String) {
+        border = "1px solid $color"
         marginRight = 20
-        marginBottom = 20
-
         on(":last-child") {
             marginRight = 0
         }
     }
 
     val buttonCyan by cssClass {
-        border = "1px solid ${ZkColors.Zakadabar.navCyan}"
+        button(ZkColors.Zakadabar.navCyan)
     }
 
     val buttonBlue by cssClass {
-        border = "1px solid ${ZkColors.Zakadabar.navBlue}"
+        button(ZkColors.Zakadabar.navBlue)
     }
 
     val buttonGreen by cssClass {
-        border = "1px solid ${ZkColors.Zakadabar.navGreen}"
+        button(ZkColors.Zakadabar.navGreen)
     }
 
     val buttonOrange by cssClass {
-        border = "1px solid ${ZkColors.Zakadabar.navOrange}"
-    }
-
-    val buttonPurple by cssClass {
-        border = "1px solid ${ZkColors.Zakadabar.navPurple}"
+        button(ZkColors.Zakadabar.navOrange)
     }
 
     val buttonRed by cssClass {
-        border = "1px solid ${ZkColors.Zakadabar.navRed}"
+        button(ZkColors.Zakadabar.navRed)
     }
 
     val cards by cssClass {

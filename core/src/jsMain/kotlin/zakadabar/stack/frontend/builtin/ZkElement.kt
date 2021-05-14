@@ -195,7 +195,7 @@ open class ZkElement(
     var innerHTML: String
         inline get() = buildPoint.innerHTML
         inline set(value) {
-            element.innerHTML = value
+            buildPoint.innerHTML = value
         }
 
     /**
@@ -204,7 +204,7 @@ open class ZkElement(
     var innerText: String
         inline get() = buildPoint.innerText
         inline set(value) {
-            element.innerText = value
+            buildPoint.innerText = value
         }
 
     /**
@@ -213,7 +213,7 @@ open class ZkElement(
     var className: String
         inline get() = buildPoint.className
         inline set(value) {
-            element.className = value
+            buildPoint.className = value
         }
 
     /**

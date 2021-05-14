@@ -25,6 +25,7 @@ open class ZkButtonStyles : ZkCssStyleSheet() {
         borderRadius = theme.cornerRadius
         paddingLeft = 10
         paddingRight = 10
+        whiteSpace = "nowrap"
     }
 
     open val combined by cssClass {
@@ -38,6 +39,7 @@ open class ZkButtonStyles : ZkCssStyleSheet() {
         alignItems = "center"
         borderRadius = theme.cornerRadius
         paddingRight = 10
+        whiteSpace = "nowrap"
     }
 
     open val icon by cssClass {
@@ -52,6 +54,7 @@ open class ZkButtonStyles : ZkCssStyleSheet() {
 
     open val square by cssClass {
         borderRadius = theme.cornerRadius
+        paddingTop = 0.25
     }
 
     open val round by cssClass {

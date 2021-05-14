@@ -20,8 +20,8 @@ open class DarkLightMode(
     buttonStyle: String = zkTitleBarStyles.iconButton
 ) : ZkElement() {
 
-    open val light = ZkButton(ZkIcons.lightMode, flavour = ZkFlavour.Custom, iconSize = 28, onClick = ::onLightMode) css buttonStyle
-    open val dark = ZkButton(ZkIcons.darkMode, flavour = ZkFlavour.Custom, iconSize = 28, onClick = ::onDarkMode) css buttonStyle
+    open val light = ZkButton(ZkIcons.lightMode, flavour = ZkFlavour.Custom, onClick = ::onLightMode) css buttonStyle
+    open val dark = ZkButton(ZkIcons.darkMode, flavour = ZkFlavour.Custom, onClick = ::onDarkMode) css buttonStyle
 
     // ZkIconButton(ZkIcons.lightMode, iconSize = 28, onClick = ::onLightMode) css buttonStyle
 

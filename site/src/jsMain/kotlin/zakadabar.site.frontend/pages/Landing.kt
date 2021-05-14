@@ -11,8 +11,10 @@ import zakadabar.site.frontend.resources.landingStyles
 import zakadabar.site.resources.Strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
+import zakadabar.stack.frontend.builtin.button.customButton
 import zakadabar.stack.frontend.builtin.layout.ZkFullScreenLayout
 import zakadabar.stack.frontend.builtin.pages.ZkPage
+import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.util.marginBottom
 import zakadabar.stack.frontend.util.plusAssign
 
@@ -32,11 +34,11 @@ object Landing : ZkPage(ZkFullScreenLayout) {
             + div(landingStyles.title) { + Strings.siteTitle } marginBottom 40
 
             + div(landingStyles.buttons) {
-                + ZkButton(Strings.Welcome) { Welcome.open() } css landingStyles.button css landingStyles.buttonCyan
-                + ZkButton(Strings.GetStarted) { GetStarted.open() } css landingStyles.button css landingStyles.buttonBlue
-                + ZkButton(Strings.documentation) { DocumentationIntro.open() } css landingStyles.button css landingStyles.buttonGreen
-                + ZkButton(Strings.github) { openGitHub() } css landingStyles.button css landingStyles.buttonOrange
-                + ZkButton(Strings.GetHelp) { GetHelp.open() } css landingStyles.button css landingStyles.buttonRed
+                + customButton(Welcome) css landingStyles.buttonCyan
+                + customButton(GetStarted) css landingStyles.buttonBlue
+                + customButton(DocumentationIntro) css landingStyles.buttonGreen
+                + ZkButton(Strings.github, null, ZkFlavour.Custom, url = "https://github.com/spxbhuhb/zakadabar-stack") css landingStyles.buttonOrange
+                + customButton(GetHelp) css landingStyles.buttonRed
             } marginBottom 50
 
             + grid(landingStyles.cards) {
@@ -52,10 +54,6 @@ object Landing : ZkPage(ZkFullScreenLayout) {
             + DeveloperLogo()
             + div { + Strings.developedBy }
         }
-    }
-
-    private fun openGitHub() {
-        window.open("https://github.com/spxbhuhb/zakadabar-stack")
     }
 
     class Card(

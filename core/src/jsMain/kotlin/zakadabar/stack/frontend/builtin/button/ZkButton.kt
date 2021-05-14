@@ -3,7 +3,13 @@
  */
 package zakadabar.stack.frontend.builtin.button
 
+import kotlinx.browser.document
+import org.w3c.dom.HTMLAnchorElement
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
+import zakadabar.stack.frontend.application.ZkAppRouting
+import zakadabar.stack.frontend.application.application
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIconSource
@@ -15,6 +21,10 @@ import zakadabar.stack.frontend.util.plusAssign
  * @property  text          The text of the button, may be null when displaying only an icon.
  * @property  iconSource    The icon to show on the left, when null, no icon is shown.
  * @property  flavour       The flavor of the button, sets color set to use.
+ * @property  url           The URL this button opens. This might be a local URL in which case
+ *                          the default onClick calls [application.changeNavState]. When it is
+ *                          not a local URL (starts with https:// or http://), the standard
+ *                          browser mechanism for "a" tag is executed.
  * @property  round         When true and [text] is null, the icon button will be round. Not used
  *                          when [text] is not null.
  * @property  fill          When true, fills the button with the colour specified by [flavour].
@@ -28,6 +38,7 @@ open class ZkButton(
     open val text: String? = null,
     open val iconSource: ZkIconSource? = null,
     open val flavour: ZkFlavour = ZkFlavour.Primary,
+    open val url: String? = null,
     open val round: Boolean = false,
     open val fill: Boolean = true,
     open val border: Boolean = true,
@@ -35,7 +46,7 @@ open class ZkButton(
     open val iconSize: Int? = null,
     open val buttonSize: Int? = null,
     open val onClick: (() -> Unit)? = null
-) : ZkElement() {
+) : ZkElement(document.createElement(if (url == null) "div" else "a") as HTMLElement)  {
 
     constructor(
         text: String,
@@ -48,7 +59,7 @@ open class ZkButton(
         buttonSize: Int? = null,
         onClick: (() -> Unit)? = null
     ) : this(
-        text, null, flavour, round, fill, border, capitalize, iconSize, buttonSize, onClick
+        text, null, flavour, null, round, fill, border, capitalize, iconSize, buttonSize, onClick
     )
 
     constructor(
@@ -62,8 +73,11 @@ open class ZkButton(
         buttonSize: Int? = null,
         onClick: (() -> Unit)? = null
     ) : this(
-        null, iconSource, flavour, round, fill, border, capitalize, iconSize, buttonSize, onClick
+        null, iconSource, flavour, null, round, fill, border, capitalize, iconSize, buttonSize, onClick
     )
+
+    open val localNav
+        get() = url == null || (url?.startsWith("https://") != true && url?.startsWith("http://") != true)
 
     override fun onCreate() {
 
@@ -75,12 +89,23 @@ open class ZkButton(
             else -> buildCombined()
         }
 
+        if (element is HTMLAnchorElement) {
+            element.href = url ?: ""
+        }
+
         on("click", ::onClick)
         on("mousedown", ::onMouseDown)
     }
 
     open fun onClick(event: Event) {
-        onClick?.invoke()
+        if (localNav) {
+            event.preventDefault()
+            if (onClick != null) {
+                onClick?.invoke()
+            } else {
+                url?.let { application.changeNavState(it) }
+            }
+        }
     }
 
     open fun onMouseDown(event: Event) {
@@ -100,9 +125,10 @@ open class ZkButton(
             }
         }
 
-        val svg = iconSource?.svg(zkButtonStyles.iconSize) ?: throw IllegalStateException("missing icon source")
+        val svg = iconSource?.svg(iconSize ?: zkButtonStyles.iconSize) ?: throw IllegalStateException("missing icon source")
 
-        buildPoint.innerHTML = svg
+        innerHTML = svg
+
     }
 
     open fun buildText() {
@@ -117,7 +143,7 @@ open class ZkButton(
         val svg = iconSource?.svg(zkButtonStyles.iconSize) ?: throw IllegalStateException("missing icon source")
 
         + div(zkButtonStyles.icon) {
-            buildPoint.innerHTML = svg
+            innerHTML = svg
         }
 
         + if (capitalize) text?.capitalize() else text

@@ -1,6 +1,8 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
+@file:Suppress("PropertyName", "unused")
+
 package zakadabar.site.resources
 
 import zakadabar.lib.examples.resources.ExamplesStrings
@@ -15,11 +17,10 @@ internal val Strings = SiteStrings()
 class SiteStrings : ExamplesStrings() {
 
     val WhatsNew by "What's New"
+    val DocumentationIntro by "Documentation"
     val github by "GitHub"
-    val theImportantStuff by "The Important Stuff"
     val ShowCase by "Show Case"
-    val marinaDemo by "Marina Demo"
-    val roadmap by "Roadmap"
+    val Roadmap by "Roadmap"
     val GetStarted by "Get Started"
     val GetHelp by "Get Help"
 

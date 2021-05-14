@@ -28,17 +28,19 @@ that we'll be able to do so.
     * use Lucene
 * sidebar
     * sections
-    * add `item` helper with a ZkTarget parameter to build `a` tag
+    * add `item` helper with a ZkTarget parameter to build `a` tag - DONE
 * popup to the user when the server is unavailable
     * short gap: retry
     * long gap: refresh the page and/or ask the user what to do
+* optimize for SEO (https://developers.google.com/search/docs/advanced/guidelines/get-started)
 
 ### Lib
 
 * markdown:
+    * handle internal links internally, without page reload - DONE
     * table of contents on the left
-        * fix position feedback
-        * add scrolling
+        * fix position feedback - ACCEPTABLE
+        * add scrolling - DONE
 * integration with Lucene
 
 ### Documentation
@@ -48,7 +50,7 @@ that we'll be able to do so.
     * form
     * table
     * pages
-    * frontend routing concept
+    * frontend routing concept - DONE
     * theme borders and box-shadows
 * finish the marina demo
 * migrate "Examples" of site into "Documentation"
@@ -58,7 +60,6 @@ that we'll be able to do so.
 ### Core
 
 * Add option to use Redis for session handling
-* optimize for SEO (https://developers.google.com/search/docs/advanced/guidelines/get-started)
 
 ### Lib
 
@@ -66,13 +67,11 @@ that we'll be able to do so.
     * add support for # links
     * space between parts (margins are wrong here and there)
     * better integration with built-in components - write note content in markdown
-    * handle internal links internally, without page reload
     * add dark / light support for markdown pictures
     * add an icon after titles which let the user add / see comments
     * table of contents on the left
         * fix position feedback
         * use "a" for toc entries
-        * scrolling
         * add action to hide/show on desktop
         * move to title bar on mobile as an action, drop down like the sidebar
         * make it smaller when possible
@@ -83,14 +82,14 @@ that we'll be able to do so.
 * use common frontend comm code base on Ktor Client
 * move ContentBackend from site into the stack, document content backends
 * compile and add css classes on-demand (just an idea, but it is possible to manage)
-* show error message when user hits unknown route on UI
+* show error message when user hits unknown route on UI - DONE, back is broken tho
 * themes and styles
   * make theme.onResume style changes non-cumulative (save style variables?)
   * make style sheet switches carry the original class name
 * sidebar
   * add keyboard navigation
   * add search function that filters sidebar topics
-  * use "a" for entries when possible (part of SEO optimization)
+  * use "a" for entries when possible (part of SEO optimization) - DONE
   * remember state during session
 
 

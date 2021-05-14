@@ -41,10 +41,10 @@ class ButtonExamples(
             + ZkButton(ZkIcons.info, flavour, fill = false, border = false) { onButtonClick() }
 
             + "Icon Round"
-            + ZkButton(ZkIcons.info, flavour, round = true) { onButtonClick() }
-            + ZkButton(ZkIcons.info, flavour, round = true, fill = false) { onButtonClick() }
-            + ZkButton(ZkIcons.info, flavour, round = true, border = false) { onButtonClick() }
-            + ZkButton(ZkIcons.info, flavour, round = true, fill = false, border = false) { onButtonClick() }
+            + ZkButton(ZkIcons.cloudUpload, flavour, round = true) { onButtonClick() }
+            + ZkButton(ZkIcons.cloudUpload, flavour, round = true, fill = false) { onButtonClick() }
+            + ZkButton(ZkIcons.cloudUpload, flavour, round = true, border = false) { onButtonClick() }
+            + ZkButton(ZkIcons.cloudUpload, flavour, round = true, fill = false, border = false) { onButtonClick() }
 
             + "Combined"
             + ZkButton("Default", ZkIcons.info, flavour) { onButtonClick() }
