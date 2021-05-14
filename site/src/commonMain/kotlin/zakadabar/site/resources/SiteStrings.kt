@@ -17,9 +17,11 @@ class SiteStrings : ExamplesStrings() {
     val WhatsNew by "What's New"
     val github by "GitHub"
     val theImportantStuff by "The Important Stuff"
-    val showCase by "Show Case"
+    val ShowCase by "Show Case"
     val marinaDemo by "Marina Demo"
     val roadmap by "Roadmap"
+    val GetStarted by "Get Started"
+    val GetHelp by "Get Help"
 
     val faq by "Frequently Asked Questions"
     val tldr by "TL;DR"
