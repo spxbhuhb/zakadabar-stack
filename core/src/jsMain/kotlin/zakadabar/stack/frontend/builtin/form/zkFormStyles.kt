@@ -231,6 +231,10 @@ object ZkFormStyles : ZkCssStyleSheet() {
 
         lineHeight = "1" // to prevent conversion to px
         height = rowHeight
+        fill = theme.inputTextColor
+        paddingRight = "0.3em"
+
+        justifyContent = "space-between"
         alignItems = "center"
 
         on(" option") {

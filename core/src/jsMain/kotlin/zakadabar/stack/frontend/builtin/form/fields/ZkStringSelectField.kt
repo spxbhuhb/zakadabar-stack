@@ -34,8 +34,12 @@ open class ZkStringSelectField<T : DtoBase>(
     override fun getPropValue() = prop.get()
 
     override fun setPropValue(value: Pair<String, String>?) {
-        if (value == null) return
-        prop.set(value.first)
+        if (value == null) {
+            invalidInput = true
+        } else {
+            invalidInput = false
+            prop.set(value.first)
+        }
         form.validate()
     }
 

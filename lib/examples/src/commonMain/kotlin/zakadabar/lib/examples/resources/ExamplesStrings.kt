@@ -19,6 +19,9 @@ open class ExamplesStrings : ZkBuiltinStrings() {
     val optValue by "Optional Value"
     val readOnlyValue by "Read Only Value"
 
+    val selectValue by "Select Value"
+    val textAreaValue by "Text Area"
+
     val textForFalse by "this is false"
     val textForTrue by "this is true"
     val exampleDialog by "Example Dialog"

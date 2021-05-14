@@ -44,6 +44,10 @@ This page shows the browser frontend components included with the stack.
 
 <div data-zk-enrich="FormRecordIdExample"></div>
 
+## String Fields [documentation](../guides/browser/builtin/Forms.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormStringExample.kt)
+
+<div data-zk-enrich="FormStringExample"></div>
+
 # Icons [documentation](../guides/browser/builtin/Icons.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/icon/IconExamples.kt)
 
 <div data-zk-enrich="IconExamples"></div>

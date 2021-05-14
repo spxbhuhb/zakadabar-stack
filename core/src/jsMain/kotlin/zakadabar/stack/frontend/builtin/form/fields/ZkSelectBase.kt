@@ -26,7 +26,10 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.zkFormStyles
+import zakadabar.stack.frontend.builtin.icon.ZkIcon
 import zakadabar.stack.frontend.builtin.popup.alignPopup
+import zakadabar.stack.frontend.resources.ZkIconSource
+import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.escape
 import zakadabar.stack.frontend.util.io
 
@@ -52,7 +55,7 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
     abstract fun setPropValue(value: Pair<VT, String>?)
 
     private lateinit var container: HTMLElement
-    private val selectedOption = ZkElement().css(ZkFormStyles.selectedOption)
+    private val selectedOption = ZkElement()
     private val optionList = ZkElement().css(ZkFormStyles.selectOptionList)
 
     lateinit var items: List<Pair<VT, String>>
@@ -62,8 +65,6 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
             items = if (sortOptions) options().sortedBy { it.second } else options()
             render(getPropValue())
         }
-
-        selectedOption.on("click") { toggleOptions() }
 
         optionList.on("click") {
             it as MouseEvent
@@ -83,7 +84,11 @@ abstract class ZkSelectBase<T : DtoBase, VT>(
         }
 
         container = div(ZkFormStyles.selectContainer) {
-            + selectedOption
+            + row(ZkFormStyles.selectedOption) {
+                + selectedOption
+                + ZkIcon(ZkIcons.arrowDropDown, size = 24)
+                on("click") { toggleOptions() }
+            }
             + optionList.hide()
         }
 

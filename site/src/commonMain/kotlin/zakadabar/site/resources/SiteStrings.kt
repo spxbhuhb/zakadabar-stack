@@ -36,9 +36,7 @@ class SiteStrings : ExamplesStrings() {
     val searchShips by "Search Ships"
     val siteTitle by "A Kotlin Multiplatform library for full-stack software development."
 
-    val getStarted by "Get Started"
     val documentation by "Documentation"
-    val getHelp by "Get Help"
     val sourceCode by "Source Code"
 
     val writeOnceTitle by "Write Once"
