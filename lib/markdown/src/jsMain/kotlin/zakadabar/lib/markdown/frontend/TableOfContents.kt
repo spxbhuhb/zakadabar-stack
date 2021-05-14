@@ -23,6 +23,8 @@ class TableOfContents(
 
     private lateinit var observer: IntersectionObserver
 
+    private lateinit var tocContent: HTMLElement
+
     override fun onCreate() {
         super.onCreate()
 
@@ -30,10 +32,15 @@ class TableOfContents(
 
         // the query selector does not work if we use it synchronously
         window.requestAnimationFrame {
+
+            element.parentElement?.parentElement?.parentElement?.getBoundingClientRect()?.let {
+                tocContent.style.maxHeight = "${it.height - theme.spacingStep}px"
+            }
+
             initObserver()
         }
 
-        + div(markdownStyles.tocContent) {
+        tocContent = div(markdownStyles.tocContent) {
             context.tableOfContents.forEach {
                 + div(markdownStyles.tocEntry) {
                     buildPoint.id = it.tocId
@@ -49,6 +56,8 @@ class TableOfContents(
                 }
             }
         }
+
+        + tocContent
     }
 
     private fun initObserver() {
@@ -88,6 +97,12 @@ class TableOfContents(
 
             if (it.isIntersecting) {
                 tocElement.dataset["active"] = "true"
+                tocElement.scrollIntoView(
+                    object {
+                        val block = "nearest"
+                        val inline = "nearest"
+                    }.asDynamic()
+                )
                 break
             }
         }

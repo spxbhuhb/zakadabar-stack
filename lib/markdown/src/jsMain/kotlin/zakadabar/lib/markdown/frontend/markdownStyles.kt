@@ -14,11 +14,6 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     open var codeBorderColor: String? = null
     open var highlightUrl = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/idea.min.css"
 
-    @Suppress("unused") // this is a CSS import, used by hljs
-    open val highlightStyles by cssImport {
-        url = highlightUrl
-    }
-
     val container by cssClass {
         display = "flex"
         flexDirection = "row"
@@ -47,6 +42,10 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         }
     }
 
+    // -------------------------------------------------------------------------
+    // Table of Contents
+    // -------------------------------------------------------------------------
+
     open val tocContainer by cssClass {
         boxSizing = "border-box"
         marginRight = theme.spacingStep
@@ -54,22 +53,28 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         paddingTop = theme.spacingStep / 2
         paddingBottom = theme.spacingStep / 2
         minWidth = 160 + theme.spacingStep
+        display = "flex"
+        flexDirection = "row"
 
         small {
-            display = "none" // FIXME this is a really quick and really dirty solution
+            display = "none" // TODO markdown toc on small displays
         }
 
         medium {
-            display = "none" // FIXME this is a really quick and really dirty solution
+            display = "none" // TODO markdown toc on medium displays
         }
 
-        large {
-            paddingRight = 20
-        }
     }
 
     open val tocContent by cssClass {
         position = "absolute"
+        overflowY = "auto"
+        overflowX = "hidden"
+        flexGrow = 1
+        styles["scrollbar-width"] = "none"
+        on("::-webkit-scrollbar") {
+            display = "none"
+        }
     }
 
     open val tocEntry by cssClass {
@@ -79,6 +84,8 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         cursor = "pointer"
         paddingTop = 5
         paddingBottom = 5
+        width = "100%"
+        minWidth = 155
         maxWidth = 200
 
         on("[data-active=\"true\"]") {
@@ -91,11 +98,19 @@ open class MarkdownStyles : ZkCssStyleSheet() {
             backgroundColor = theme.hoverBackgroundColor
             color = theme.hoverTextColor
         }
+
+        large {
+            paddingRight = 20
+        }
     }
 
     open val tocText by cssClass {
         verticalAlign = "center"
     }
+
+    // -------------------------------------------------------------------------
+    // Content
+    // -------------------------------------------------------------------------
 
     @Suppress("unused") // used implicitly by the browser
     open val link by cssRule(".$content a") {
@@ -179,6 +194,10 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         backgroundColor = theme.blockBackgroundColor
     }
 
+    @Suppress("unused") // this is a CSS import, used by hljs
+    open val highlightStyles by cssImport {
+        url = highlightUrl
+    }
 
     @Suppress("unused") // used implicitly by the browser
     open val codeBlock by cssRule(".$content pre > code") {
@@ -194,6 +213,10 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         }
         backgroundColor = theme.blockBackgroundColor
     }
+
+    // -------------------------------------------------------------------------
+    // Code Copy
+    // -------------------------------------------------------------------------
 
     open val codeCopy by cssClass {
         position = "absolute"

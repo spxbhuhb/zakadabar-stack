@@ -53,6 +53,8 @@ open class MarkdownView(
             syntaxHighLight()
             localNavEvents()
             enrich()
+
+            console.log(element.parentElement?.getBoundingClientRect())
             // println(dump("", parsedTree))
         }
     }
