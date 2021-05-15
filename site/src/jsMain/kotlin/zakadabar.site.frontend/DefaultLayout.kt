@@ -21,7 +21,7 @@ object DefaultLayout : ZkDefaultLayout(spanHeader = true) {
         sideBar = SideBar()
         titleBar = ZkAppTitleBar(::onToggleSideBar)
 
-        titleBar.titleContainer.hide()
+        //titleBar.titleContainer.hide()
         titleBar.globalElements += DarkLightMode({ SiteDarkTheme() }, { SiteLightTheme() })
 
     }

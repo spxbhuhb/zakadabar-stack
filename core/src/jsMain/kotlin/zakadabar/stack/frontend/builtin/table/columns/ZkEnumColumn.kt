@@ -16,7 +16,7 @@ open class ZkEnumColumn<T : DtoBase, E : Enum<E>>(
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {
-        label = application.strings.map[prop.name] ?: prop.name
+        label = stringStore.getNormalized(prop.name)
         super.onCreate()
     }
 
@@ -43,5 +43,5 @@ open class ZkEnumColumn<T : DtoBase, E : Enum<E>>(
         return "\"${format(row).replace("\"", "\"\"")}\""
     }
 
-    open fun format(row: T) = stringStore[prop.get(row).name]
+    open fun format(row: T) = stringStore.getNormalized(prop.get(row).name)
 }

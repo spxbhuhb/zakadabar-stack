@@ -6,6 +6,7 @@ package zakadabar.site.frontend.pages
 import zakadabar.lib.markdown.frontend.MarkdownPage
 import zakadabar.lib.markdown.frontend.MarkdownPathPage
 import zakadabar.stack.frontend.application.application
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 
 const val contentNamespace = "content"
@@ -53,7 +54,7 @@ object FAQ : MarkdownPage(
 
 object Documentation : MarkdownPathPage() {
 
-    override fun setAppTitle() {
+    override fun setAppTitleBar(contextElements: List<ZkElement>) {
         application.title = ZkAppTitle("")
     }
 

@@ -86,7 +86,7 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
      */
     open fun buildFieldLabel() {
         if (label == null) {
-            label = stringStore.map[propName] ?: propName
+            label = stringStore.getNormalized(propName)
         }
 
         + div(ZkFormStyles.fieldLabel) {

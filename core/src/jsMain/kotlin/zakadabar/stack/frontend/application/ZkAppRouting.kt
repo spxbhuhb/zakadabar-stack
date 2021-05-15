@@ -91,7 +91,7 @@ abstract class ZkAppRouting(
      * Reports a missing route to the user.
      */
     open fun onMissingRoute() {
-        document.body?.innerHTML = application.strings.missingRoute
+        document.body?.innerHTML = stringStore.missingRoute
     }
 
     /**

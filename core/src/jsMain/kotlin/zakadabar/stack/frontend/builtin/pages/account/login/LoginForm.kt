@@ -43,7 +43,7 @@ class LoginForm(
             if (accountName == null) {
                 + dto::accountName
             } else {
-                + ZkConstStringField(this@LoginForm, stringStore["accountName"], dto.accountName)
+                + ZkConstStringField(this@LoginForm, stringStore.account, dto.accountName)
             }
             + dto::password
         } marginBottom 20

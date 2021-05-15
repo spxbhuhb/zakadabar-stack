@@ -4,7 +4,6 @@
 package zakadabar.lib.examples.frontend.form
 
 import org.w3c.dom.HTMLElement
-import zakadabar.lib.examples.resources.Strings
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.schema.DtoSchema
 import zakadabar.stack.frontend.builtin.ZkElementMode
@@ -45,7 +44,7 @@ class FormStringExample(
         super.onConfigure()
         dto = default { }
         mode = ZkElementMode.Action
-        appTitle = false
+        setAppTitle = false
     }
 
     override fun onCreate() {

@@ -7,7 +7,7 @@ package zakadabar.site.resources
 
 import zakadabar.lib.examples.resources.ExamplesStrings
 
-internal val Strings = SiteStrings()
+internal val strings = SiteStrings()
 
 class SiteStrings : ExamplesStrings() {
 

@@ -32,7 +32,7 @@ class ZkSyntheticForm(
                     else -> null
                 } ?: return@forEach
 
-                field.label = stringStore[dProperty.name]
+                field.label = stringStore.getNormalized(dProperty.name)
                 fields += field
                 + field
 

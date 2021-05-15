@@ -4,7 +4,7 @@
 package zakadabar.stack.frontend.builtin.table.columns
 
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.frontend.application.application
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.util.UUID
@@ -16,7 +16,7 @@ open class ZkOptUuidColumn<T : DtoBase>(
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {
-        label = application.strings.map[prop.name] ?: prop.name
+        label = stringStore.getNormalized(prop.name)
         super.onCreate()
     }
 

@@ -11,7 +11,7 @@ import zakadabar.stack.frontend.builtin.pages.ZkPage
 class ExamplePage : ZkPage() {
 
     override fun onConfigure() {
-        appTitle = false
+        setAppTitle = false
     }
 
     override fun onCreate() {

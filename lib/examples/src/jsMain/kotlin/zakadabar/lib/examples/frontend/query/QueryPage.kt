@@ -9,8 +9,7 @@
 package zakadabar.lib.examples.frontend.query
 
 import zakadabar.lib.examples.data.builtin.ExampleQuery
-import zakadabar.lib.examples.resources.Strings
-import zakadabar.stack.frontend.application.application
+import zakadabar.lib.examples.resources.strings
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPage
@@ -30,7 +29,7 @@ object QueryPage : ZkPage(cssClass = zkPageStyles.fixed) {
     val table = ResultTable()
 
     override fun onConfigure() {
-        appTitle = false
+        setAppTitle = false
     }
 
     override fun onCreate() {
@@ -57,9 +56,9 @@ object QueryPage : ZkPage(cssClass = zkPageStyles.fixed) {
         io {
             try {
                 table.setData(query.execute())
-                successToast { Strings.querySuccess }
+                successToast { strings.querySuccess }
             } catch (ex: Exception) {
-                dangerToast { Strings.queryFail }
+                dangerToast { strings.queryFail }
                 log(ex)
             }
         }

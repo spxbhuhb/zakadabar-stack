@@ -10,7 +10,6 @@ import zakadabar.stack.data.builtin.*
 import zakadabar.stack.data.builtin.account.*
 import zakadabar.stack.data.record.EmptyRecordId
 import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.executor
 import zakadabar.stack.frontend.application.hasRole
 import zakadabar.stack.frontend.application.stringStore
@@ -27,6 +26,7 @@ import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkCrudPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
 import zakadabar.stack.frontend.builtin.toast.dangerToast
 import zakadabar.stack.frontend.builtin.toast.successToast
 import zakadabar.stack.frontend.builtin.toast.warningToast
@@ -34,11 +34,15 @@ import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.plusAssign
 
-class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
+class Form : ZkElement(), ZkCrudPage<AccountPrivateDto>, ZkAppTitleProvider {
 
     override lateinit var dto: AccountPrivateDto
     override lateinit var mode: ZkElementMode
     override var openUpdate: ((dto: AccountPrivateDto) -> Unit)? = null
+
+    override var setAppTitle = true
+    override var titleText: String? = null
+    override var titleElement: ZkAppTitle? = null
 
     private lateinit var principalDto: PrincipalDto
     private lateinit var systemRoles: List<RoleDto>
@@ -58,10 +62,15 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
 
             classList += zkLayoutStyles.grow
 
-            application.title = ZkAppTitle(if (mode != ZkElementMode.Create) dto.accountName else stringStore.account)
+            titleText = if (mode != ZkElementMode.Create) dto.accountName else stringStore.account
 
             + AccountTabContainer()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setAppTitleBar()
     }
 
     inner class AccountTabContainer : ZkTabContainer() {
@@ -105,7 +114,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
         init {
             dto = this@Form.dto
             mode = this@Form.mode
-            appTitle = false
+            setAppTitle = false
         }
 
         override fun onCreate() {
@@ -137,7 +146,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
         init {
             dto = default { this.accountId = this@Form.dto.id }
             mode = ZkElementMode.Action
-            appTitle = false
+            setAppTitle = false
             onExecuteResult = ::onExecuteResult
         }
 
@@ -214,7 +223,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
         init {
             dto = this@Form.principalDto
             mode = ZkElementMode.Update
-            appTitle = false
+            setAppTitle = false
         }
 
         override fun onCreate() {
@@ -241,11 +250,11 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto> {
         init {
             dto = default { principal = this@Form.principalDto.id }
             mode = ZkElementMode.Other
-            appTitle = false
+            setAppTitle = false
         }
 
         val items = systemRoles.sortedBy { it.description }.map { sr ->
-            ZkCheckboxListItem(sr.id, stringStore[sr.description], userRoles.firstOrNull { ur -> ur.role == sr.id } != null)
+            ZkCheckboxListItem(sr.id, stringStore.getNormalized(sr.description), userRoles.firstOrNull { ur -> ur.role == sr.id } != null)
         }
 
         override fun onCreate() {

@@ -74,8 +74,10 @@ open class ZkElement(
         @PublicApi
         fun buildNew(builder: ZkElement.() -> Unit) = ZkElement().build(builder)
 
+        @PublicApi
         val h100 = zkLayoutStyles.h100
 
+        @PublicApi
         val w100 = zkLayoutStyles.w100
     }
 
@@ -558,8 +560,7 @@ open class ZkElement(
         if (after == null) {
             insertFirst(child)
         } else {
-            val index = childElements.indexOf(after)
-            when (index) {
+            when (val index = childElements.indexOf(after)) {
                 - 1 -> plusAssign(child)
                 childElements.lastIndex -> plusAssign(child)
                 else -> {
@@ -651,7 +652,7 @@ open class ZkElement(
      * Get a child [ZkElement] of the given class. Useful in event handlers
      * to get child element without storing it in a variable.
      *
-     * @throws NoSuchElementExceptions
+     * @throws NoSuchElementException
      */
     inline operator fun <reified T : ZkElement> get(kClass: KClass<T>): T {
         return childElements.first { kClass.isInstance(it) } as T
@@ -660,7 +661,7 @@ open class ZkElement(
     /**
      * Get the first [ZkElement] child by the given CSS class.
      *
-     * @throws NoSuchElementExceptions
+     * @throws NoSuchElementException
      */
     inline operator fun <reified T : ZkElement> get(cssClassName: String): T {
         return childElements.first { it.classList.contains(cssClassName) } as T
@@ -678,7 +679,7 @@ open class ZkElement(
     /**
      * Get the first [ZkElement] child of the given Kotlin class.
      *
-     * @throws NoSuchElementExceptions
+     * @throws NoSuchElementException
      */
     inline fun <reified T : ZkElement> findFirst(): T {
         val kClass = T::class
@@ -1000,7 +1001,7 @@ open class ZkElement(
      */
     fun dock(iconSource : ZkIconSource, title : String? = null) = ZkDockedElement(
         iconSource,
-        title ?: stringStore[this::class.simpleName!!],
+        title ?: stringStore.getNormalized(this::class.simpleName!!),
         ZkDockedElementState.Normal,
         this
     ).run()

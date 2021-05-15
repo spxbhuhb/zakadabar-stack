@@ -34,7 +34,7 @@ class NoteFormExample(
         override fun onConfigure() {
             dto = default { }
             mode = ZkElementMode.Action
-            appTitle = false
+            setAppTitle = false
         }
 
         override fun onCreate() {

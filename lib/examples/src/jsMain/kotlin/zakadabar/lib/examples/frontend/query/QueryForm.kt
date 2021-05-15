@@ -4,7 +4,7 @@
 package zakadabar.lib.examples.frontend.query
 
 import zakadabar.lib.examples.data.builtin.ExampleQuery
-import zakadabar.lib.examples.resources.Strings
+import zakadabar.lib.examples.resources.strings
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.fields.ZkOptBooleanField
@@ -17,13 +17,13 @@ class QueryForm(
 ) : ZkForm<ExampleQuery>() {
 
     override fun onConfigure() {
-        appTitle = false
+        setAppTitle = false
     }
 
     override fun onCreate() {
         io {
             + column {
-                + section(Strings.filters, fieldGrid = false) {
+                + section(strings.filters, fieldGrid = false) {
                     + row {
                         + fieldGrid {
                             // opt boolean field is used to provide a "do not filter on this" function for the user
@@ -42,7 +42,7 @@ class QueryForm(
                     } marginBottom 12
 
                     + row {
-                        + ZkButton(Strings.runQuery) { runQuery(dto) }
+                        + ZkButton(strings.runQuery) { runQuery(dto) }
                     }
                 }
             }
@@ -50,7 +50,7 @@ class QueryForm(
     }
 
     private fun statusOptions(): List<Pair<Boolean, String>> = listOf(
-        false to Strings.falseText,
-        true to Strings.trueText
+        false to strings.falseText,
+        true to strings.trueText
     )
 }

@@ -4,7 +4,6 @@
 package zakadabar.stack.frontend.builtin.theme
 
 import zakadabar.stack.frontend.builtin.layout.zkScrollBarStyles
-import zakadabar.stack.frontend.builtin.table.zkTableStyles
 import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
@@ -34,9 +33,9 @@ open class ZkBuiltinLightTheme : ZkTheme {
     override var secondaryColor = ZkColors.Zakadabar.gray5
     override var secondaryPair = ZkColors.white
     override var successColor = ZkColors.Zakadabar.navGreen
-    override var successPair = ZkColors.white
+    override var successPair by after { textColor }
     override var warningColor = ZkColors.Zakadabar.navOrange
-    override var warningPair = ZkColors.white
+    override var warningPair by after { textColor }
     override var dangerColor = ZkColors.Zakadabar.navRed
     override var dangerPair = ZkColors.white
     override var infoColor = ZkColors.Zakadabar.navBlue

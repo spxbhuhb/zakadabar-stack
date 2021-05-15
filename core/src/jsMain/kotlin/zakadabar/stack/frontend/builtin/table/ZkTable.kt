@@ -12,8 +12,6 @@ import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.record.StringRecordId
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
 import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
@@ -22,6 +20,7 @@ import zakadabar.stack.frontend.builtin.table.actions.ZkExportCsvAction
 import zakadabar.stack.frontend.builtin.table.actions.ZkSearchAction
 import zakadabar.stack.frontend.builtin.table.columns.*
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
 import zakadabar.stack.frontend.util.*
 import zakadabar.stack.util.UUID
 import kotlin.math.min
@@ -35,9 +34,9 @@ import kotlin.reflect.KProperty1
  * @property  crud          The [ZkCrudTarget] that is linked with the table. When specified the functions
  *                          of the table (onCreate, onDblClick for example) will use it to open the
  *                          appropriate page.
- * @property  appTitle      When true (default) the app title bar is set for the table. Function [setAppTitleBar] adds the title bar.
- * @property  titleText     Title text to show in the title bar. Used when [title] is not set.
- * @property  title         The element of the title.
+ * @property  setAppTitle      When true (default) the app title bar is set for the table. Function [setAppTitleBar] adds the title bar.
+ * @property  titleText     Title text to show in the title bar. Used when [titleElement] is not set.
+ * @property  titleElement         The element of the title.
  * @property  add           When true a plus icon is added to the title bar. Click on the icon calls [onAddRow].
  * @property  search        When true a search input and icon is added to the title bar. Enter in the search field
  *                          or click on the icon calls [onSearch].
@@ -46,7 +45,7 @@ import kotlin.reflect.KProperty1
  * @property  columns       Column definitions.
  * @property  preloads      Data load jobs which has to be performed before the table is rendered.
  */
-open class ZkTable<T : DtoBase> : ZkElement() {
+open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider {
 
     // -------------------------------------------------------------------------
     //  Configuration -- meant to set by onConfigure
@@ -54,9 +53,9 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     var crud: ZkCrudTarget<*>? = null
 
-    var appTitle = true
-    var titleText: String? = null
-    var title: ZkAppTitle? = null
+    override var setAppTitle = true
+    override var titleText: String? = null
+    override var titleElement: ZkAppTitle? = null
 
     var add = false
     var search = false
@@ -68,7 +67,7 @@ open class ZkTable<T : DtoBase> : ZkElement() {
 
     open val exportFileName: String
         get() {
-            val titleText = title?.text
+            val titleText = titleElement?.text
             return (if (titleText.isNullOrEmpty()) "content" else titleText) + ".csv"
         }
 
@@ -186,22 +185,15 @@ open class ZkTable<T : DtoBase> : ZkElement() {
         areas.onDestroy()
     }
 
-    open fun setAppTitleBar() {
-
-        if (! appTitle) return
-
-        title?.let {
-            application.title = it
-            return
-        }
+    override fun setAppTitleBar(contextElements: List<ZkElement>) {
+        if (! setAppTitle) return
 
         val actions = mutableListOf<ZkElement>()
         if (add) actions += ZkAddRowAction(::onAddRow)
         if (export) actions += ZkExportCsvAction(::onExportCsv)
         if (search) actions += ZkSearchAction(::onSearch)
 
-        val text = titleText ?: stringStore[this::class.simpleName ?: ""]
-        application.title = ZkAppTitle(text, actions)
+        super.setAppTitleBar(actions)
     }
 
     // -------------------------------------------------------------------------

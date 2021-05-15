@@ -40,7 +40,7 @@ class FormDoubleExample(
         super.onConfigure()
         dto = default { }
         mode = ZkElementMode.Action
-        appTitle = false
+        setAppTitle = false
     }
 
     override fun onCreate() {

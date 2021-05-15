@@ -6,6 +6,7 @@ package zakadabar.stack.frontend.builtin.pages
 import zakadabar.stack.frontend.application.*
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
 import zakadabar.stack.frontend.util.plusAssign
 
 /**
@@ -15,7 +16,7 @@ import zakadabar.stack.frontend.util.plusAssign
 open class ZkPage(
     val layout: ZkAppLayout? = null,
     cssClass: String? = null
-) : ZkElement(), ZkAppRouting.ZkTarget {
+) : ZkElement(), ZkAppRouting.ZkTarget, ZkAppTitleProvider {
 
     companion object {
 
@@ -45,9 +46,9 @@ open class ZkPage(
         }
     }
 
-    var appTitle = true
-    var titleText: String? = null
-    var title: ZkAppTitle? = null
+    override var setAppTitle = true
+    override var titleText: String? = null
+    override var titleElement: ZkAppTitle? = null
 
     override var viewName = "${this::class.simpleName}"
 
@@ -73,19 +74,7 @@ open class ZkPage(
 
     override fun onResume() {
         super.onResume()
-        setAppTitle()
-    }
-
-    open fun setAppTitle() {
-        if (! appTitle) return
-
-        title?.let {
-            application.title = it
-            return
-        }
-
-        val text = titleText ?: stringStore[this::class.simpleName ?: ""]
-        application.title = ZkAppTitle(text)
+        setAppTitleBar()
     }
 
 }

@@ -37,7 +37,7 @@ open class ZkSideBarItem(
         text: String? = null,
         onClick: (() -> Unit)? = null
     ) : this(
-        text = text ?: stringStore[target.viewName],
+        text = text ?: stringStore.getNormalized(target.viewName),
         url = application.routing.toLocalUrl(target, subPath),
         onClick = onClick
     )
@@ -68,7 +68,7 @@ open class ZkSideBarItem(
         if (localNav) {
             event.preventDefault()
             if (onClick != null) {
-                onClick?.invoke()
+                onClick.invoke()
             } else {
                 url?.let { application.changeNavState(it) }
             }

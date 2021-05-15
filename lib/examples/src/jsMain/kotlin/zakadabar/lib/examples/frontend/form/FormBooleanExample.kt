@@ -4,7 +4,7 @@
 package zakadabar.lib.examples.frontend.form
 
 import org.w3c.dom.HTMLElement
-import zakadabar.lib.examples.resources.Strings
+import zakadabar.lib.examples.resources.strings
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.schema.DtoSchema
 import zakadabar.stack.frontend.builtin.ZkElementMode
@@ -39,7 +39,7 @@ class FormBooleanExample(
         super.onConfigure()
         dto = default { }
         mode = ZkElementMode.Action
-        appTitle = false
+        setAppTitle = false
     }
 
     override fun onCreate() {
@@ -47,7 +47,7 @@ class FormBooleanExample(
 
         + section {
             + dto::value
-            + opt(dto::optValue, Strings.textForFalse, Strings.textForTrue)
+            + opt(dto::optValue, strings.textForFalse, strings.textForTrue)
             + dto::readOnlyValue readOnly true
         }
     }

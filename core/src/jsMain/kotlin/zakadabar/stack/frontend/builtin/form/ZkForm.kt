@@ -41,6 +41,7 @@ import zakadabar.stack.frontend.builtin.form.structure.ZkFormSection
 import zakadabar.stack.frontend.builtin.form.structure.ZkInvalidFieldList
 import zakadabar.stack.frontend.builtin.pages.ZkCrudPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
+import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
 import zakadabar.stack.frontend.builtin.toast.*
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.log
@@ -54,16 +55,16 @@ import kotlin.reflect.KMutableProperty0
  *
  * @property  autoLabel  When true labels are automatically added. When false they are not.
  */
-open class ZkForm<T : DtoBase>(
+open class ZkForm<T : DtoBase> (
     element: HTMLElement = document.createElement("div") as HTMLElement
-) : ZkElement(element), ZkCrudPage<T> {
+) : ZkElement(element), ZkCrudPage<T>, ZkAppTitleProvider {
 
     override lateinit var dto: T
     override lateinit var mode: ZkElementMode
 
-    var appTitle = true
-    var titleText: String? = null
-    var title: ZkAppTitle? = null
+    override var setAppTitle = true
+    override var titleText: String? = null
+    override var titleElement: ZkAppTitle? = null
 
     var autoLabel = true
 
@@ -142,20 +143,6 @@ open class ZkForm<T : DtoBase>(
     override fun onResume() {
         super.onResume()
         setAppTitleBar()
-    }
-
-    /**
-     * Creates a title bar.
-     */
-    open fun setAppTitleBar() {
-        if (! appTitle) return
-
-        title?.let {
-            application.title = it
-            return
-        }
-
-        application.title = ZkAppTitle(titleText ?: stringStore[this::class.simpleName ?: ""])
     }
 
     // -------------------------------------------------------------------------
@@ -361,7 +348,7 @@ open class ZkForm<T : DtoBase>(
         this.titleText = if (mode == ZkElementMode.Create) createTitle else title
 
         // this lets build be called from an IO block after onResume ran
-        if (lifeCycleState == ZkElementState.Resumed && appTitle) setAppTitleBar()
+        if (lifeCycleState == ZkElementState.Resumed && setAppTitle) setAppTitleBar()
 
         + div(ZkFormStyles.contentContainer) {
             + column(ZkFormStyles.form) {
@@ -434,7 +421,7 @@ open class ZkForm<T : DtoBase>(
     }
 
     inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E>, label: String? = null, sortOptions: Boolean = true): ZkEnumSelectField<T, E> {
-        val options = enumValues<E>().map { it to stringStore[it.name] } // this is a non-translated to translated mapping
+        val options = enumValues<E>().map { it to stringStore.getNormalized(it.name) } // this is a non-translated to translated mapping
         val field = ZkEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
         label?.let { field.label = label }
         fields += field
@@ -443,7 +430,7 @@ open class ZkForm<T : DtoBase>(
 
     @JsName("FormOptEnumSelect")
     inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E?>, label: String? = null, sortOptions: Boolean = true): ZkOptEnumSelectField<T, E> {
-        val options = enumValues<E>().map { it to stringStore[it.name] } // this is a non-translated to translated mapping
+        val options = enumValues<E>().map { it to stringStore.getNormalized(it.name) } // this is a non-translated to translated mapping
         val field = ZkOptEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
         label?.let { field.label = label }
         fields += field

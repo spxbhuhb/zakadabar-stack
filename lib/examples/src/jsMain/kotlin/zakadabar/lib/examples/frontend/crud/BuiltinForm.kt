@@ -5,7 +5,7 @@ package zakadabar.lib.examples.frontend.crud
 
 import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
-import zakadabar.lib.examples.resources.Strings
+import zakadabar.lib.examples.resources.strings
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
@@ -16,11 +16,11 @@ class BuiltinForm : ZkForm<BuiltinDto>() {
     override fun onCreate() {
         super.onCreate()
 
-        build(Strings.formFields) {
+        build(strings.formFields) {
 
             buildPoint.classList += ZkFormStyles.twoPanels
 
-            + section(Strings.mandatoryFields) {
+            + section(strings.mandatoryFields) {
                 with(dto) {
                     + ::id
                     + ::booleanValue
@@ -37,7 +37,7 @@ class BuiltinForm : ZkForm<BuiltinDto>() {
                 }
             }
 
-            + section(Strings.optionalFields) {
+            + section(strings.optionalFields) {
                 with(dto) {
                     + opt(::optBooleanValue, "true", "false")
                     + ::optDoubleValue
@@ -53,7 +53,7 @@ class BuiltinForm : ZkForm<BuiltinDto>() {
                 }
             }
 
-            + ZkButton(Strings.validate) {
+            + ZkButton(strings.validate) {
                 validate(true)
             }
         }

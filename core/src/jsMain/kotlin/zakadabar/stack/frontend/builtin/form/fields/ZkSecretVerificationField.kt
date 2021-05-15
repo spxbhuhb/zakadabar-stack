@@ -25,7 +25,7 @@ import kotlin.reflect.KMutableProperty0
 open class ZkSecretVerificationField<T : DtoBase>(
     form: ZkForm<T>,
     prop: KMutableProperty0<Secret>,
-    label: String = stringStore[prop.name + "Verification"]
+    label: String = stringStore.getNormalized(prop.name + "Verification")
 ) : ZkStringBase<T, Secret>(
     form = form,
     prop = prop,

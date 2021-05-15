@@ -51,12 +51,17 @@ implementation: [ZkAppTitleBar](/src/jsMain/kotlin/zakadabar/stack/frontend/buil
 
 Pages, tables and forms use `application.title` to set the title and context elements of the title bar.
 
-All high level elements (ZkPage, ZkArgPage, ZkForm, ZkTable) have the following fields:
+All high level elements (ZkPage, ZkArgPage, ZkForm, ZkTable) implement the [ZkAppTitleProvider](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/titlebar/ZkAppTitleProvider.kt)
+interface which declares the following fields:
 
-* `appTitle` - boolean, when true sets the title bar content (default = true)
-* `title` - string, when set this element is assigned to `application.title`
-* `titleText` - string, when set, a new `ZkAppTitle` instance is created and that instance is assigned
-  to `application.title`
+| Field | Type | Description |
+| --- | --- | --- |
+| `setAppTitle` | Boolean | When true sets the title bar content (default = true). |
+| `titleText` | String | Text content of the title. When set and titleElement is not set, an unnamed element is created with `titleText` as content. |
+| `titleElement` | String | Element content of the title. When set `titleText` is ignored. |
+
+Elements that implement `ZkAppTitleProvider` usually call the `setAppTitleBar` function from `onResume`.
+Some may override this function to add actions. Check [ZkTable](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/table/ZkTable.kt) for example.
 
 ### Global Elements
 
@@ -91,6 +96,8 @@ button is shown. `ZkAppTitleBar` automatically handles these states.
 
 ## Timeline
 
+* 2021.5.15
+  * Introduce ZkAppTitleProvider interface.
 * 2021.5.12
   * Move css classes of the default layout into `zkDefaultLayoutStyles`.
   * Add `spanHeader` function to `ZkDefaultLayout`.

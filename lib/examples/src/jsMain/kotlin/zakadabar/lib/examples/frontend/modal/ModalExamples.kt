@@ -4,7 +4,7 @@
 package zakadabar.lib.examples.frontend.modal
 
 import org.w3c.dom.HTMLElement
-import zakadabar.lib.examples.resources.Strings
+import zakadabar.lib.examples.resources.strings
 import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
@@ -30,9 +30,9 @@ class ModalExamples(
             + grid {
                 gridTemplateColumns = "repeat(3,max-content)"
                 gridGap = theme.spacingStep
-                + ZkButton(Strings.confirmDialog, onClick = ::onShowConfirm)
-                + ZkButton(Strings.messageDialog, onClick = ::onShowMessage)
-                + ZkButton(Strings.exampleDialog, onClick = ::onShowExample)
+                + ZkButton(strings.confirmDialog, onClick = ::onShowConfirm)
+                + ZkButton(strings.messageDialog, onClick = ::onShowMessage)
+                + ZkButton(strings.exampleDialog, onClick = ::onShowExample)
             } marginBottom theme.spacingStep
 
             + secondaryNote("Output", "")

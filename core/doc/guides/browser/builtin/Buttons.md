@@ -18,8 +18,8 @@ dangerButton("label") { println("clicked") }
 infoButton("label") { println("clicked") }
 ```
 
-For links, use the target-aware version of the shorthands. These will set the label
-to the translated target `viewName` and the url to the url that opens the target.
+For links, use the target-aware version of the shorthands. These will set the label to the translated target `viewName`
+and the url to the url that opens the target.
 
 ```kotlin
 primaryButton(target)
@@ -138,5 +138,10 @@ Add a combined button:
 
 ## Timeline
 
+### Changes
+
+* 2021.5.14
+    * shorthands for create with routing targets
+    * use `a` tag when target or url is given
 * 2021.5.12
     * rename convenience functions from buttonXX to XXbutton

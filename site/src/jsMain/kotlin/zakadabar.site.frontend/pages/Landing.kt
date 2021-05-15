@@ -3,12 +3,11 @@
  */
 package zakadabar.site.frontend.pages
 
-import kotlinx.browser.window
 import zakadabar.site.frontend.components.DeveloperLogo
 import zakadabar.site.frontend.components.HeaderActions
 import zakadabar.site.frontend.components.SiteLogo
 import zakadabar.site.frontend.resources.landingStyles
-import zakadabar.site.resources.Strings
+import zakadabar.site.resources.strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.button.customButton
@@ -31,28 +30,28 @@ object Landing : ZkPage(ZkFullScreenLayout) {
 
         + column(landingStyles.content) {
 
-            + div(landingStyles.title) { + Strings.siteTitle } marginBottom 40
+            + div(landingStyles.title) { + strings.siteTitle } marginBottom 40
 
             + div(landingStyles.buttons) {
                 + customButton(Welcome) css landingStyles.buttonCyan
                 + customButton(GetStarted) css landingStyles.buttonBlue
                 + customButton(DocumentationIntro) css landingStyles.buttonGreen
-                + ZkButton(Strings.github, null, ZkFlavour.Custom, url = "https://github.com/spxbhuhb/zakadabar-stack") css landingStyles.buttonOrange
+                + ZkButton(strings.github, null, ZkFlavour.Custom, url = "https://github.com/spxbhuhb/zakadabar-stack") css landingStyles.buttonOrange
                 + customButton(GetHelp) css landingStyles.buttonRed
             } marginBottom 50
 
             + grid(landingStyles.cards) {
-                + Card(Strings.writeOnceTitle, Strings.writeOnceText)
-                + Card(Strings.letTheMachineTitle, Strings.letTheMachineText)
-                + Card(Strings.walkYourWayTitle, Strings.walkYourWayText)
-                + Card(Strings.goTillItsReadyTitle, Strings.goTillItsReadyText)
+                + Card(strings.writeOnceTitle, strings.writeOnceText)
+                + Card(strings.letTheMachineTitle, strings.letTheMachineText)
+                + Card(strings.walkYourWayTitle, strings.walkYourWayText)
+                + Card(strings.goTillItsReadyTitle, strings.goTillItsReadyText)
             }
 
         }
 
         + div(landingStyles.footer) {
             + DeveloperLogo()
-            + div { + Strings.developedBy }
+            + div { + strings.developedBy }
         }
     }
 

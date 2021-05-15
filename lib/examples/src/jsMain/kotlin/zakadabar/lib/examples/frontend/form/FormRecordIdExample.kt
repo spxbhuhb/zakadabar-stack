@@ -47,7 +47,7 @@ class FormRecordIdExample(
             id = LongRecordId(123)
         }
         mode = ZkElementMode.Action
-        appTitle = false
+        setAppTitle = false
     }
 
     override fun onCreate() {

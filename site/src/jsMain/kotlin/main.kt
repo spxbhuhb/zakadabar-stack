@@ -6,7 +6,7 @@
 import zakadabar.site.frontend.Routing
 import zakadabar.site.frontend.resources.SiteDarkTheme
 import zakadabar.site.frontend.resources.SiteLightTheme
-import zakadabar.site.resources.SiteStrings
+import zakadabar.site.resources.strings
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
@@ -29,7 +29,7 @@ fun main() {
 
             initTheme(SiteDarkTheme(), SiteLightTheme())
 
-            initLocale(SiteStrings())
+            initLocale(strings)
 
             initRouting(Routing())
 

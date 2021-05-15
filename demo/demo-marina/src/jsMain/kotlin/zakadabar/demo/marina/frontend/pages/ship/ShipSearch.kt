@@ -37,11 +37,8 @@ object ShipSearch : ZkPage() {
         + form marginBottom 8
         + table
 
-    }
+        titleText = Strings.searchShips
 
-    override fun onResume() {
-        super.onResume()
-        application.title = ZkAppTitle(Strings.searchShips)
     }
 
     private fun runQuery(query: SearchShipsQuery) {

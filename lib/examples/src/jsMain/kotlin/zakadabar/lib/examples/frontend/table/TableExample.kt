@@ -16,7 +16,7 @@ import zakadabar.stack.frontend.util.plusAssign
 class ExampleTable : ZkTable<TableExampleDto>() {
 
     override fun onConfigure() {
-        appTitle = false // this table is a simple example, it should not override the page title
+        setAppTitle = false // this table is a simple example, it should not override the page title
 
         + TableExampleDto::name
         + TableExampleDto::scientificName

@@ -15,7 +15,7 @@ import zakadabar.lib.examples.frontend.query.QueryPage
 import zakadabar.lib.examples.frontend.table.FetchedTable
 import zakadabar.lib.examples.frontend.table.GeneratedTable
 import zakadabar.site.frontend.pages.*
-import zakadabar.site.resources.Strings
+import zakadabar.site.resources.strings
 import zakadabar.stack.StackRoles
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.pages.account.accounts.Accounts
@@ -55,18 +55,18 @@ class SideBar : ZkSideBar() {
 
             withOneOfRoles(StackRoles.securityOfficer, StackRoles.siteAdmin) {
 
-                + group(Strings.administration) {
+                + group(strings.administration) {
 
                     + item(Settings)
 
                     withRole(StackRoles.siteAdmin) {
-                        + item(Strings.locales) { Locales.openAll() }
-                        + item(Strings.translations) { Translations.openAll() }
+                        + item(strings.locales) { Locales.openAll() }
+                        + item(strings.translations) { Translations.openAll() }
                     }
 
                     withRole(StackRoles.securityOfficer) {
-                        + item(Strings.accounts) { Accounts.openAll() }
-                        + item(Strings.roles) { Roles.openAll() }
+                        + item(strings.accounts) { Accounts.openAll() }
+                        + item(strings.roles) { Roles.openAll() }
                     }
 
                 }
@@ -88,7 +88,7 @@ class SideBar : ZkSideBar() {
         }
     }
 
-    private fun examples() = group(Strings.examples) {
+    private fun examples() = group(strings.examples) {
         + group("Browser") {
 
             + item(BuiltinCrud)

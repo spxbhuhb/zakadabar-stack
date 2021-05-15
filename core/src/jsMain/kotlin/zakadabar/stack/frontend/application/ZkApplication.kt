@@ -10,11 +10,9 @@ import zakadabar.stack.data.builtin.misc.ServerDescriptionDto
 import zakadabar.stack.data.builtin.resources.TranslationsByLocale
 import zakadabar.stack.frontend.builtin.dock.ZkDock
 import zakadabar.stack.frontend.builtin.modal.ZkModalContainer
-import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
 import zakadabar.stack.resources.ZkBuiltinStrings
-import zakadabar.stack.resources.ZkStringStore
 
 /**
  * The application itself, initialized in main.kt.
@@ -32,7 +30,7 @@ val executor
  * This is usually not a ZkBuiltinStrings in itself but an extension of it.
  */
 val stringStore
-    get() = application.strings
+    get() = application.stringStore
 
 /**
  * Check if the executor has the given role.
@@ -78,7 +76,7 @@ open class ZkApplication {
 
     lateinit var routing: ZkAppRouting
 
-    lateinit var strings: ZkBuiltinStrings
+    lateinit var stringStore: ZkBuiltinStrings
 
     lateinit var dock: ZkDock
 
@@ -142,7 +140,7 @@ open class ZkApplication {
                 throw IllegalStateException()
             }
         }
-        strings = if (downloadTranslations) {
+        stringStore = if (downloadTranslations) {
             store.merge(TranslationsByLocale(locale).execute())
         } else {
             store

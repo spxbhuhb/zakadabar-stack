@@ -46,7 +46,7 @@ open class ZkSideBarGroup(
         onClick: ((Boolean) -> Unit)? = null,
         builder: ZkElement.() -> Unit
     )  : this(
-        text = text ?: stringStore[target.viewName],
+        text = text ?: stringStore.getNormalized(target.viewName),
         url = application.routing.toLocalUrl(target, subPath),
         onClick = onClick,
         builder = builder

@@ -28,7 +28,7 @@ fun customButton(target: ZkAppRouting.ZkTarget) = button(target, ZkFlavour.Custo
 
 fun button(target: ZkAppRouting.ZkTarget, flavour: ZkFlavour) =
     ZkButton(
-        stringStore[target.viewName],
+        stringStore.getNormalized(target.viewName),
         url = application.routing.toLocalUrl(target),
         flavour = flavour,
         onClick = {

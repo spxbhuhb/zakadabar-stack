@@ -4,8 +4,7 @@
 package zakadabar.lib.examples.frontend.theme
 
 import org.w3c.dom.HTMLElement
-import zakadabar.lib.examples.resources.Strings
-import zakadabar.stack.frontend.application.application
+import zakadabar.lib.examples.resources.strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.sidebar.zkSideBarStyles
@@ -65,8 +64,8 @@ class ThemeExample(
             gridTemplateColumns = "repeat(4, max-content)"
             gridGap = 10
 
-            + ZkButton(Strings.green) { theme = ExampleThemeGreen() }
-            + ZkButton(Strings.red) { theme = ExampleThemeRed() }
+            + ZkButton(strings.green) { theme = ExampleThemeGreen() }
+            + ZkButton(strings.red) { theme = ExampleThemeRed() }
 
         } marginBottom 20
 
