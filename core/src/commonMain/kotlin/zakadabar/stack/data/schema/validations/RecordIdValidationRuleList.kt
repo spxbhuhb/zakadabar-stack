@@ -27,11 +27,15 @@ import zakadabar.stack.data.schema.descriptor.RecordIdPropertyDto
 import zakadabar.stack.data.schema.descriptor.RecordIdValidationBooleanDto
 import zakadabar.stack.data.schema.descriptor.ValidationType
 import zakadabar.stack.util.PublicApi
+import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty0
 
-class RecordIdValidationRuleList(val kProperty: KMutableProperty0<RecordId<*>>) : ValidationRuleList<RecordId<*>> {
+class RecordIdValidationRuleList<T : Any>(
+    val kClass: KClass<T>,
+    val kProperty: KMutableProperty0<RecordId<T>>
+) : ValidationRuleList<RecordId<T>> {
 
-    var defaultValue: RecordId<*> = EmptyRecordId<DtoBase>()
+    var defaultValue: RecordId<T> = EmptyRecordId()
 
     private val rules = mutableListOf<ValidationRule<RecordId<*>>>()
 
@@ -53,13 +57,13 @@ class RecordIdValidationRuleList(val kProperty: KMutableProperty0<RecordId<*>>) 
     }
 
     @PublicApi
-    infix fun empty(validValue: Boolean): RecordIdValidationRuleList {
+    infix fun empty(validValue: Boolean): RecordIdValidationRuleList<T> {
         rules += Empty(validValue)
         return this
     }
 
     @PublicApi
-    infix fun default(value: RecordId<*>): RecordIdValidationRuleList {
+    infix fun default(value: RecordId<T>): RecordIdValidationRuleList<T> {
         defaultValue = value
         return this
     }
@@ -72,13 +76,15 @@ class RecordIdValidationRuleList(val kProperty: KMutableProperty0<RecordId<*>>) 
 
     override fun push(dto: PropertyDto) {
         require(dto is RecordIdPropertyDto)
-        kProperty.set(dto.value)
+        @Suppress("UNCHECKED_CAST") // FIXME clarify record id type erasure
+        kProperty.set(dto.value as RecordId<T>)
     }
 
     @Suppress("UNCHECKED_CAST") // should work, lost in generics hell
     override fun toPropertyDto() = RecordIdPropertyDto(
         kProperty.name,
         emptyList(),
+        kClass.simpleName!!,
         defaultValue as RecordId<DtoBase>,
         kProperty.get() as RecordId<DtoBase>
     )

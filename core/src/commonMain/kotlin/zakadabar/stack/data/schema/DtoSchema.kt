@@ -36,16 +36,16 @@ open class DtoSchema() {
     @Suppress("MemberVisibilityCanBePrivate") // To make extensions possible
     val customRuleLists = mutableListOf<CustomValidationRuleList>()
 
-    operator fun KMutableProperty0<out RecordId<*>>.unaryPlus(): RecordIdValidationRuleList {
+    inline operator fun <reified T : Any> KMutableProperty0<out RecordId<T>>.unaryPlus(): RecordIdValidationRuleList<*> {
         @Suppress("UNCHECKED_CAST") // at this point out doesn't really matters
-        val ruleList = RecordIdValidationRuleList(this as KMutableProperty0<RecordId<*>>)
+        val ruleList = RecordIdValidationRuleList(T::class, this as KMutableProperty0<RecordId<T>>)
         ruleLists[this] = ruleList
         return ruleList
     }
 
-    operator fun KMutableProperty0<out RecordId<*>?>.unaryPlus(): OptRecordIdValidationRuleList {
+    inline operator fun <reified T : Any> KMutableProperty0<out RecordId<T>?>.unaryPlus(): OptRecordIdValidationRuleList<*> {
         @Suppress("UNCHECKED_CAST") // at this point out doesn't really matters
-        val ruleList = OptRecordIdValidationRuleList(this as KMutableProperty0<RecordId<*>?>)
+        val ruleList = OptRecordIdValidationRuleList(T::class, this as KMutableProperty0<RecordId<T>?>)
         ruleLists[this] = ruleList
         return ruleList
     }

@@ -29,6 +29,7 @@ sealed class PropertyDto : DtoBase {
 class RecordIdPropertyDto(
     override val name: String,
     override var validations: List<ValidationDto>,
+    val kClassName: String,
     var defaultValue: RecordId<DtoBase>,
     var value: RecordId<DtoBase>
 ) : PropertyDto()
@@ -119,6 +120,7 @@ class UuidPropertyDto(
 class OptRecordIdPropertyDto(
     override val name: String,
     override var validations: List<ValidationDto>,
+    var kClass: String,
     var defaultValue: RecordId<DtoBase>?,
     var value: RecordId<DtoBase>?
 ) : PropertyDto()

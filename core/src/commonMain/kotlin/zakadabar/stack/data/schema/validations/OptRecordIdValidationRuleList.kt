@@ -23,13 +23,17 @@ import zakadabar.stack.data.schema.ValidationRuleList
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.data.schema.descriptor.*
 import zakadabar.stack.util.PublicApi
+import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty0
 
-class OptRecordIdValidationRuleList(val kProperty: KMutableProperty0<RecordId<*>?>) : ValidationRuleList<RecordId<*>?> {
+class OptRecordIdValidationRuleList<T : Any>(
+    val kClass: KClass<T>,
+    val kProperty: KMutableProperty0<RecordId<T>?>
+) : ValidationRuleList<RecordId<*>?> {
 
-    var defaultValue: RecordId<*>? = null
+    var defaultValue: RecordId<T>? = null
 
-    private val rules = mutableListOf<ValidationRule<RecordId<*>?>>()
+    private val rules = mutableListOf<ValidationRule<RecordId<T>?>>()
 
     override fun validate(report: ValidityReport) {
         val value = kProperty.get()
@@ -38,9 +42,9 @@ class OptRecordIdValidationRuleList(val kProperty: KMutableProperty0<RecordId<*>
         }
     }
 
-    inner class Empty(@PublicApi val validValue: Boolean) : ValidationRule<RecordId<*>?> {
+    inner class Empty(@PublicApi val validValue: Boolean) : ValidationRule<RecordId<T>?> {
 
-        override fun validate(value: RecordId<*>?, report: ValidityReport) {
+        override fun validate(value: RecordId<T>?, report: ValidityReport) {
             if (value?.isEmpty() != validValue) report.fail(kProperty, this)
         }
 
@@ -49,13 +53,13 @@ class OptRecordIdValidationRuleList(val kProperty: KMutableProperty0<RecordId<*>
     }
 
     @PublicApi
-    infix fun empty(validValue: Boolean): OptRecordIdValidationRuleList {
+    infix fun empty(validValue: Boolean): OptRecordIdValidationRuleList<*> {
         rules += Empty(validValue)
         return this
     }
 
     @PublicApi
-    infix fun default(value: RecordId<*>?): OptRecordIdValidationRuleList {
+    infix fun default(value: RecordId<T>?): OptRecordIdValidationRuleList<*> {
         defaultValue = value
         return this
     }
@@ -68,13 +72,15 @@ class OptRecordIdValidationRuleList(val kProperty: KMutableProperty0<RecordId<*>
 
     override fun push(dto: PropertyDto) {
         require(dto is RecordIdPropertyDto)
-        kProperty.set(dto.value)
+        @Suppress("UNCHECKED_CAST") // FIXME clarify record id type erasure
+        kProperty.set(dto.value as RecordId<T>)
     }
 
     @Suppress("UNCHECKED_CAST") // should work, lost in generics hell
     override fun toPropertyDto() = OptRecordIdPropertyDto(
         kProperty.name,
         emptyList(),
+        kClass.simpleName!!,
         defaultValue as RecordId<DtoBase>,
         kProperty.get() as RecordId<DtoBase>
     )
