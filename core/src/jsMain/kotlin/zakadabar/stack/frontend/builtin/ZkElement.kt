@@ -16,6 +16,7 @@ import zakadabar.stack.frontend.builtin.dock.ZkDockedElement
 import zakadabar.stack.frontend.builtin.dock.ZkDockedElementState
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.resources.ZkIconSource
+import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.frontend.resources.css.stringOrPx
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.minusAssign
@@ -264,25 +265,25 @@ open class ZkElement(
      * True when the DOM node does not have the [zkLayoutStyles].hidden class in
      * it's class list, false otherwise.
      */
-    fun isShown() = ! element.classList.contains(zkLayoutStyles.hidden)
+    fun isShown() = ! element.classList.contains(zkLayoutStyles.hidden.cssClassname)
 
     /**
      * True when the DOM node has the [zkLayoutStyles].hidden class in it's class list,
      * false otherwise.
      */
-    fun isHidden() = element.classList.contains(zkLayoutStyles.hidden)
+    fun isHidden() = element.classList.contains(zkLayoutStyles.hidden.cssClassname)
 
     /**
      * Toggles the [zkLayoutStyles].hidden class in the DOM node's class list.
      */
-    fun toggle() = element.classList.toggle(zkLayoutStyles.hidden)
+    fun toggle() = element.classList.toggle(zkLayoutStyles.hidden.cssClassname)
 
     /**
      * Hides the DOM node by adding [zkLayoutStyles].hidden CSS class to the DOM
      * node's class list.
      */
     open fun hide(): ZkElement {
-        classList.add(zkLayoutStyles.hidden)
+        classList.add(zkLayoutStyles.hidden.cssClassname)
         return this
     }
 
@@ -291,7 +292,7 @@ open class ZkElement(
      * node's class list.
      */
     open fun show(): ZkElement {
-        classList.remove(zkLayoutStyles.hidden)
+        classList.remove(zkLayoutStyles.hidden.cssClassname)
         return this
     }
 
@@ -338,7 +339,7 @@ open class ZkElement(
     }
 
     /**
-     * Adds [className] to the CSS class list of the DOM node.
+     * Adds [className] to the CSS class list of [element].
      */
     infix fun css(className: String): ZkElement {
         element.classList.add(className)
@@ -346,12 +347,28 @@ open class ZkElement(
     }
 
     /**
-     * Adds [classNames] to the CSS class list of the DOM node.
+     * Adds the rule to the CSS class list of [element].
+     */
+    infix fun css(rule: ZkCssStyleRule): ZkElement {
+        element.classList += rule
+        return this
+    }
+
+    /**
+     * Adds [classNames] to the CSS class list of [element].
      */
     fun css(vararg classNames: String): ZkElement {
         element.classList.add(*classNames)
         return this
     }
+
+//    /**
+//     * Adds the rules to the CSS class list of [element].
+//     */
+//    fun css(vararg rules: ZkCssStyleRule): ZkElement {
+//        element.classList.plusAssign(*rules)
+//        return this
+//    }
 
     /**
      * Adds [className] to the CSS class list of the DOM node if the class list
@@ -394,6 +411,27 @@ open class ZkElement(
     infix fun gridColumn(value: Int): ZkElement {
         element.style.setProperty("grid-column", value.toString())
         return this
+    }
+
+    /**
+     * Appends the given class to the class list of the build point.
+     */
+    operator fun ZkCssStyleRule.unaryPlus() {
+        buildPoint.classList += this
+    }
+
+    /**
+     * Removes the given class to the class list from the build point.
+     */
+    operator fun ZkCssStyleRule.unaryMinus() {
+        buildPoint.classList -= this
+    }
+
+    /**
+     * Removes all current CSS classes and adds this one (at buid point).
+     */
+    operator fun ZkCssStyleRule.not() {
+        buildPoint.className = this.cssClassname
     }
 
     /**
@@ -668,6 +706,15 @@ open class ZkElement(
     }
 
     /**
+     * Get the first [ZkElement] child by the given CSS class.
+     *
+     * @throws NoSuchElementException
+     */
+    inline operator fun <reified T : ZkElement> get(rule: ZkCssStyleRule): T {
+        return childElements.first { it.classList.contains(rule.cssClassname) } as T
+    }
+
+    /**
      * Get all [ZkElement] children of the given Kotlin class.
      */
     inline fun <reified T : ZkElement> find(): List<T> {
@@ -709,8 +756,8 @@ open class ZkElement(
     //   Builder
     // -------------------------------------------------------------------------
 
-    private fun runBuild(e: HTMLElement, className: String?, build: ZkElement.() -> Unit) {
-        if (className != null) e.classList.add(className)
+    private fun runBuild(e: HTMLElement, rule: ZkCssStyleRule?, build: ZkElement.() -> Unit) {
+        e.classList += rule
         val original = buildPoint
         buildPoint = e
         this.build()
@@ -729,37 +776,37 @@ open class ZkElement(
     /**
      * Creates "span" [HTMLElement] and executes the builder function on it.
      *
-     * @param  className  CSS class to add. Optional.
+     * @param  rule       CSS rule to use. Optional.
      * @param  build      The builder function to build the content of the div. Optional.
      */
-    open fun span(className: String? = null, build: ZkElement.() -> Unit = { }): HTMLElement {
+    open fun span(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLElement {
         val e = document.createElement("span") as HTMLElement
-        runBuild(e, className, build)
+        runBuild(e, rule, build)
         return e
     }
 
     /**
      * Creates "div" [HTMLElement] and executes the builder function on it.
      *
-     * @param  className  CSS class to add. Optional.
+     * @param  rule       CSS rule to use. Optional.
      * @param  build      The builder function to build the content of the div. Optional.
      */
-    open fun div(className: String? = null, build: ZkElement.() -> Unit = { }): HTMLElement {
+    open fun div(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLElement {
         val e = document.createElement("div") as HTMLElement
-        runBuild(e, className, build)
+        runBuild(e, rule, build)
         return e
     }
 
     /**
      * Creates "div" [HTMLElement] and executes the builder function on it.
      *
-     * @param  classNames  CSS class names to add. Optional.
+     * @param  rules       CSS rules to use. Optional.
      * @param  build       The builder function to build the content of the div. Optional.
      */
-    open fun div(vararg classNames: String, build: ZkElement.() -> Unit = { }): HTMLElement {
+    open fun div(vararg rules: ZkCssStyleRule, build: ZkElement.() -> Unit = { }): HTMLElement {
         val e = document.createElement("div") as HTMLElement
-        for (className in classNames) {
-            e.classList.add(className)
+        for (rule in rules) {
+            e.classList.add(rule.cssClassname)
         }
         runBuild(e, null, build)
         return e
@@ -768,41 +815,41 @@ open class ZkElement(
     /**
      * Creates a "div" [HTMLElement] with ZkClasses.grid added and executes the builder on it.
      *
-     * @param  className  Additional CSS class. Optional.
+     * @param  rule       CSS rule to use. Optional.
      * @param  build      The builder function to build the content of the div. Optional.
      */
-    open fun row(className: String? = null, build: ZkElement.() -> Unit): HTMLElement {
+    open fun row(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit): HTMLElement {
         val e = document.createElement("div") as HTMLElement
         e.classList += zkLayoutStyles.row
-        runBuild(e, className, build)
+        runBuild(e, rule, build)
         return e
     }
 
     /**
      * Creates "div" [HTMLElement] with ZkClasses.column added and executes the builder on it.
      *
-     * @param  className  Additional CSS class. Optional.
+     * @param  rule       CSS rule to use. Optional.
      * @param  build      The builder function to build the content of the div. Optional.
      */
-    open fun column(className: String? = null, build: ZkElement.() -> Unit): HTMLElement {
+    open fun column(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit): HTMLElement {
         val e = document.createElement("div") as HTMLElement
         e.classList += zkLayoutStyles.column
-        runBuild(e, className, build)
+        runBuild(e, rule, build)
         return e
     }
 
     /**
      * Creates a "div" [HTMLElement] with ZkClasses.row added and executes the builder on it.
      *
-     * @param  className  Additional CSS class. Optional.
+     * @param  rule       CSS rule to use. Optional.
      * @param  style      Inline style for the grid. Optional.
      * @param  build      The builder function to build the content of the div. Optional.
      */
-    open fun grid(className: String? = null, style: String? = null, build: ZkElement.() -> Unit): HTMLElement {
+    open fun grid(rule: ZkCssStyleRule? = null, style: String? = null, build: ZkElement.() -> Unit): HTMLElement {
         val e = document.createElement("div") as HTMLElement
         e.classList += zkLayoutStyles.grid
         if (style != null) e.style.cssText = style
-        runBuild(e, className, build)
+        runBuild(e, rule, build)
         return e
     }
 
@@ -835,77 +882,77 @@ open class ZkElement(
      * ```
      *
      * @param  src        Source URL.
-     * @param  className  Additional CSS class. Optional.
+     * @param  rule       CSS rule to use. Optional.
      * @param  build      Builder function to manage the IMG tag added. Optional.
      */
     @PublicApi
-    open fun image(src: String, className: String? = null, build: ZkElement.() -> Unit = { }): HTMLImageElement {
+    open fun image(src: String, rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLImageElement {
         val img = document.createElement("img") as HTMLImageElement
         img.src = src
-        runBuild(img, className, build)
+        runBuild(img, rule, build)
         return img
     }
 
     /**
      * Creates an [HTMLTableElement] and runs the builder on it.
      */
-    open fun table(className: String? = null, build: ZkElement.() -> Unit = { }): HTMLTableElement {
+    open fun table(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLTableElement {
         val e = document.createElement("table") as HTMLTableElement
-        runBuild(e, className, build)
+        runBuild(e, rule, build)
         return e
     }
 
     /**
      * Creates an [HTMLTableRowElement] and runs the builder on it.
      */
-    open fun tr(className: String? = null, build: ZkElement.() -> Unit = { }): HTMLTableRowElement {
+    open fun tr(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLTableRowElement {
         val e = document.createElement("tr") as HTMLTableRowElement
-        runBuild(e, className, build)
+        runBuild(e, rule, build)
         return e
     }
 
     /**
      * Creates an [HTMLTableCellElement] and runs the builder on it.
      */
-    open fun td(className: String? = null, build: ZkElement.() -> Unit = { }): HTMLTableCellElement {
+    open fun td(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLTableCellElement {
         val e = document.createElement("td") as HTMLTableCellElement
-        runBuild(e, className, build)
+        runBuild(e, rule, build)
         return e
     }
 
     /**
      * Creates a "thead" and runs the builder on it.
      */
-    open fun thead(className: String? = null, build: ZkElement.() -> Unit = { }): HTMLTableSectionElement {
+    open fun thead(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLTableSectionElement {
         val e = document.createElement("thead") as HTMLTableSectionElement
-        runBuild(e, className, build)
+        runBuild(e, rule, build)
         return e
     }
 
     /**
      * Creates a "tbody" and runs the builder on it.
      */
-    open fun tbody(className: String? = null, build: ZkElement.() -> Unit = { }): HTMLTableSectionElement {
+    open fun tbody(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLTableSectionElement {
         val e = document.createElement("tbody") as HTMLTableSectionElement
-        runBuild(e, className, build)
+        runBuild(e, rule, build)
         return e
     }
 
     /**
      * Creates a "th" and runs the builder on it.
      */
-    open fun th(className: String? = null, build: ZkElement.() -> Unit = { }): HTMLTableCellElement {
+    open fun th(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLTableCellElement {
         val e = document.createElement("th") as HTMLTableCellElement
-        runBuild(e, className, build)
+        runBuild(e, rule, build)
         return e
     }
 
     /**
      * Creates an unnamed [ZkElement].
      */
-    open fun zke(className: String? = null, build: ZkElement.() -> Unit = { }): ZkElement {
+    open fun zke(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): ZkElement {
         val e = ZkElement()
-        if (className != null) e.className = className
+        e.classList += rule
         e.build()
         return e
     }
@@ -970,7 +1017,7 @@ open class ZkElement(
      * @param  build      The builder function to build the content of the div. Optional.
      */
     infix fun HTMLElement.build(build: ZkElement.() -> Unit): HTMLElement {
-        runBuild(this, className, build)
+        runBuild(this, null, build)
         return this
     }
 
@@ -999,9 +1046,9 @@ open class ZkElement(
      * Docks this element. When title is not specified tries to translate
      * the class name from the string store.
      */
-    fun dock(iconSource : ZkIconSource, title : String? = null) = ZkDockedElement(
+    fun dock(iconSource: ZkIconSource, title: String? = null) = ZkDockedElement(
         iconSource,
-        title ?: stringStore.getNormalized(this::class.simpleName!!),
+        title ?: stringStore.getNormalized(this::class.simpleName !!),
         ZkDockedElementState.Normal,
         this
     ).run()

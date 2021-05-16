@@ -17,7 +17,8 @@ class ZkDock : ZkElement() {
     override fun onCreate() {
         super.onCreate()
 
-        className = zkDockStyles.dock
+        + zkDockStyles.dock
+
         document.body?.appendChild(this.element)
     }
 

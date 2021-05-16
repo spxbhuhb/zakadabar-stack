@@ -3,16 +3,18 @@
 The stack contains a dynamic theme and style system.
 
 * [theme](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt)
-  * stores the active theme
-  * when changes, all styles are rebuilt
+    * stores the active theme
+    * when changes, all styles are rebuilt
 * [ZkTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt)
-  * interface for themes to implement
+    * interface for themes to implement
 * [ZkCssStyleSheet](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleSheet.kt)
-  * CSS style sheet builder / manager
+    * CSS style sheet builder / manager
+* [ZkCssStyleRule](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleRule.kt)
+    * one CSS rule (with possible variations)
 * [ZkColors](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/ZkColors.kt)
-  * Color constants, palettes from Material Colors and the Zakadabar palette
+    * Color constants, palettes from Material Colors and the Zakadabar palette
 * [zkHtmlStyles](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/zkHtmlStyles.kt)
-  * global HTML styles (on "body", "a" etc. tags)
+    * global HTML styles (on "body", "a" etc. tags)
 
 ## Theme
 
@@ -21,22 +23,25 @@ The stack contains a dynamic theme and style system.
 * Each theme has a `name` which identifies the theme.
 * Each style sheet can access the current theme in their `theme` property
 * Changing the theme:
-  * rebuilds all attached style sheets.
-  * **does not** change the DOM (except the `zk-styles` node under `body`)
+    * rebuilds all attached style sheets.
+    * **does not** change the DOM (except the `zk-styles` node under `body`)
 * Built-in themes:
-  * [ZkBuiltinLightTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkBuiltinLightTheme.kt)
-    - light theme
-  * [ZkBuiltinDarkTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkBuiltinDarkTheme.kt)
-    - dark theme
+    * [ZkBuiltinLightTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkBuiltinLightTheme.kt)
+        - light theme
+    * [ZkBuiltinDarkTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkBuiltinDarkTheme.kt)
+        - dark theme
 
 ### Initial Theme Selection
 
-[initTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt), called from `jsMain/main.kt`, selects the theme during application startup.
+[initTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt),
+called from `jsMain/main.kt`, selects the theme during application startup.
 
 Algorithm:
 
-1. check account theme, if present, find the theme with the given name in `application.themes`
-2. check local storage for `zk-theme-name`, if present, find the theme with the given name in `application.themes`
+1. check account theme, if present, find the theme with the given name
+   in `application.themes`
+2. check local storage for `zk-theme-name`, if present, find the theme with the
+   given name in `application.themes`
 3. first theme in `application.themes`, if not empty
 4. ZkBuiltinLightTheme
 
@@ -45,54 +50,56 @@ The initial theme selection works only if you add the available themes to applic
 in main.kt as the example shows below.
 </div>
 
-The order of calls is important here. `sessionManager.init()` downloads the account settings which are used during theme
-selection. Also you should add all themes before calling `initTheme`.
+The order of calls is important here. `sessionManager.init()` downloads the
+account settings which are used during theme selection. Also you should add all
+themes before calling `initTheme`.
 
 ```kotlin
 with(ZkApplication) {
 
-  sessionManager.init()
+    sessionManager.init()
 
-  themes += SiteDarkTheme()
-  themes += SiteLightTheme()
+    themes += SiteDarkTheme()
+    themes += SiteLightTheme()
 
-  theme = initTheme()
+    theme = initTheme()
 
-  // ...other steps here...
+    // ...other steps here...
 }
 ```
 
 ### Write a theme
 
 * Extend one of the built-in themes or
-  implement [ZkTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt).
+  implement [ZkTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt)
+  .
 * Use `onResume` to fine tune style variables.
-* If you set a style variable, **all of your themes has to set that particular variable**, see warning in Change The
-  Theme.
+* If you set a style variable, **all of your themes has to set that particular
+  variable**, see warning in Change The Theme.
 
 ```kotlin
 class ExampleThemeGreen : ZkBuiltinLightTheme() {
 
-  override var name = "example-green"
+    override var name = "example-green"
 
-  override var primaryColor = ZkColors.Green.c500
+    override var primaryColor = ZkColors.Green.c500
 
-  override fun onResume() {
-    super.onResume()  // apply defaults from built-in light theme
+    override fun onResume() {
+        super.onResume()  // apply defaults from built-in light theme
 
-    with(zkTitleBarStyles) {
-      appHandleBackground = ZkColors.Green.c500
-      titleBarBackground = ZkColors.Green.c500
+        with(zkTitleBarStyles) {
+            appHandleBackground = ZkColors.Green.c500
+            titleBarBackground = ZkColors.Green.c500
+        }
+
     }
-
-  }
 }
 ```
 
 ### Change The Theme [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/theme/ThemeExample.kt)
 
-Assign a theme instance to `theme` to set the active theme. Be careful, your theme system should be
-consistent (see warnings above and below)!
+Assign a theme instance to `theme` to set the active theme. Be careful, your
+theme system should be consistent (see warnings above and below)!
 
 ```kotlin
 theme = ZkBuildinLightTheme()
@@ -115,9 +122,11 @@ Sorry about the mess, told you that changes are cumulative. :P
 ## CSS
 
 * CSS style sheets are written in Kotlin.
-* Extend [ZkCssStyleSheet](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleSheet.kt) to write a new
-  one.
-* Use `val yourStyles by cssStyleSheet(YourStyleSheet())` to make an instance of the style sheet.
+*
+Extend [ZkCssStyleSheet](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleSheet.kt)
+to write a new one.
+* Use `val yourStyles by cssStyleSheet(YourStyleSheet())` to make an instance of
+  the style sheet.
 * When the theme changes, all style sheets are recompiled.
 * During recompile the style names remain the same.
 * Variables of the style sheets may be set by `onResume` of the theme.
@@ -129,24 +138,34 @@ val exampleStyles by cssStyleSheet(ExampleStyles())
 
 open class ExampleStyles : ZkCssStyleSheet() {
 
-  open var myStyleParameter: Int = 10
+    open var myStyleParameter: Int = 10
 
-  open val exampleStyle by cssClass {
-    height = myStyleParameter
-    width = 20
-    backgroundColor = ZkColors.Green.c500
-  }
+    open val exampleStyle by cssClass {
+        height = myStyleParameter
+        width = 20
+        backgroundColor = ZkColors.Green.c500
+    }
 
 }
 ```
 
 ### Use a CSS Class
 
+Use operators to add and remove CSS classes:
+
+```kotlin
++ div {
+    + exampleStyles.exampleStyle // adds the class to classList
+    - exampleStyles.exampleStyle // removes the class from classList
+    ! exampleStyles.exampleStyle // removes all other classes and adds this one
+}
+```
+
 Pass the class name to the helper methods in ZkElement:
 
 ```kotlin
 + div(exampleStyles.exampleStyle) {
-  + "Styled content"
+    + "Styled content"
 }
 ```
 
@@ -156,15 +175,15 @@ Use the `css` inline function:
 + ZkElement() css exampleStyles.exampleStyle
 ```
 
-Use `className` set the classes, this removes all classes set before:
+`className` is the standard HTML `className` attribute, a String.
 
 ```kotlin
 + zke {
-  className = exampleStyles.exampleStyle
+    className = exampleStyles.exampleStyle.cssClassname
 }
 ```
 
-Use `classList` to manipulate the class list
+`classList` is the standard HTML `classList` attribute, a `DOMTokenList`.
 
 ```kotlin
 + zke {
@@ -175,7 +194,7 @@ Use `classList` to manipulate the class list
 ```
 
 <div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Context Dependent">
-className and classList is context dependent. Pay attention where you use them.
+All operators, className and classList is context dependent. Pay attention where you use them.
 </div>
 
 ### CSS Values
@@ -236,7 +255,8 @@ the body. This contains all styles compiled by the stack.
 
 ### Media Queries
 
-You can add a media query to a CSS class by using the `media` parameter of the `on`
+You can add a media query to a CSS class by using the `media` parameter of
+the `on`
 method:
 
 ```kotlin
@@ -266,7 +286,8 @@ val myClass by cssClass {
 
 ### Fixed Class Name
 
-CSS classes defined with `cssClass` have automatically generated names to avoid collisions.
+CSS classes defined with `cssClass` have automatically generated names to avoid
+collisions.
 
 To use a fix name pass it as parameter to `cssClass`
 
@@ -276,7 +297,8 @@ val myClass by cssClass("fixed-class-name") { }
 
 ### Selector Only Rules
 
-The function `cssRule` let you specify whatever selector you would like instead of a class name.
+The function `cssRule` let you specify whatever selector you would like instead
+of a class name.
 
 <div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Space Before">
 At the moment the "on" method and the shorthands <b>do not work</b> inside cssRule.
@@ -291,9 +313,10 @@ val link by cssRule("a") {
 }
 ```
 
-You can combine your classes with selectors. The example below will set the styles for
-`<a>` tags under the element that has the `content` css class. Note that the actual CSS class name of `content` is
-automatically generated.
+You can combine your classes with selectors. The example below will set the
+styles for
+`<a>` tags under the element that has the `content` css class. Note that the
+actual CSS class name of `content` is automatically generated.
 
 ```kotlin
 val content by cssClass {
@@ -321,15 +344,18 @@ val imported by cssImport {
 }
 ```
 
-This import is dynamic, if you store the URL in the theme the import can be theme-aware.
+This import is dynamic, if you store the URL in the theme the import can be
+theme-aware.
 
-For example `Lib:Markdown` uses `highlight.js` for code syntax highlight. The colors have to be different in dark and
-light mode. `highlight.js` does not support multiple themes,
+For example `Lib:Markdown` uses `highlight.js` for code syntax highlight. The
+colors have to be different in dark and light mode. `highlight.js` does not
+support multiple themes,
 so [MarkdownStyles](../../../../../lib/markdown/src/jsMain/kotlin/zakadabar/lib/markdown/frontend/markdownStyles.kt)
 use a variable and the themes can set whatever URL they want.
 
 ```kotlin
-open var highlightUrl = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/idea.min.css"
+open var highlightUrl =
+    "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/idea.min.css"
 
 val highlightStyles by cssImport {
     url = highlightUrl
@@ -352,9 +378,10 @@ zkButtonStyles = MyButtonStyles()
 
 ## Inline Styles
 
-Add inline styles to any element (Zk or HTML) with the `styles` function. This function
-executes a builder on [CSSStyleDeclaration](https://developer.mozilla.org/en-US/docs/Web/API/CSSStyleDeclaration),
-which is a standard Web API.
+Add inline styles to any element (Zk or HTML) with the `styles` function. This
+function executes a builder
+on [CSSStyleDeclaration](https://developer.mozilla.org/en-US/docs/Web/API/CSSStyleDeclaration)
+, which is a standard Web API.
 
 ```kotlin
 + div {
@@ -366,16 +393,16 @@ which is a standard Web API.
 
 <div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Values">
 
-`CSSStyleDeclaration` properites are strings. Therefore you cannot use
-integers as in `cssClass`.
+`CSSStyleDeclaration` properites are strings. Therefore you cannot use integers
+as in `cssClass`.
 
 </div>
 
 <div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Values">
 
 Use inline styles only when the component you use them on is a singleton, and
-the given style is not used anywhere else. Of those conditions are not true,
-use a style sheet.
+the given style is not used anywhere else. Of those conditions are not true, use
+a style sheet.
 
 </div>
 

@@ -24,7 +24,8 @@ class ZkTabLabel(
 
     override fun onCreate() {
         super.onCreate()
-        className = zkTabContainerStyles.label
+
+        + zkTabContainerStyles.label
 
         + item.title
 

@@ -96,19 +96,24 @@ open class ZkCssStyleSheet {
 
     internal val rules = mutableMapOf<String, ZkCssStyleRule>() // key is property name
 
-    class CssDelegate(private var cssClassName: String) : ReadOnlyProperty<ZkCssStyleSheet, String> {
-        override fun getValue(thisRef: ZkCssStyleSheet, property: KProperty<*>) = cssClassName
-    }
-
+    /**
+     * Provides the ZkCssStyleRule as a delegate. I decided to go this way because I think it is important
+     * for the rule to know the property name and that's not possible with a simple assignment. Performance
+     * overhead should be minimal.
+     */
     class CssDelegateProvider(val name: String? = null, val selector: String? = null, val builder: ZkCssStyleRule.(ZkTheme) -> Unit) {
-        operator fun provideDelegate(thisRef: ZkCssStyleSheet, prop: KProperty<*>): ReadOnlyProperty<ZkCssStyleSheet, String> {
+
+        operator fun provideDelegate(thisRef: ZkCssStyleSheet, prop: KProperty<*>): ReadOnlyProperty<ZkCssStyleSheet, ZkCssStyleRule> {
 
             val cssClassName = name ?: if (shortNames) "zks${nextId++}" else "${thisRef::class.simpleName}-${prop.name}-${nextId ++}"
 
-            thisRef.rules[prop.name] = ZkCssStyleRule(thisRef, prop.name, cssClassName, selector, builder)
+            val rule = ZkCssStyleRule(thisRef, prop.name, cssClassName, selector, builder)
 
-            return CssDelegate(cssClassName)
+            thisRef.rules[prop.name] = rule
+
+            return rule
         }
+
     }
 
     fun cssImport(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, "@import", builder)

@@ -14,7 +14,7 @@ import zakadabar.stack.frontend.builtin.ZkElement
 class ZkModalContainer : ZkElement() {
 
     override fun onCreate() {
-        className = zkModalStyles.modalContainer
+        + zkModalStyles.modalContainer
         document.body?.appendChild(this.element)
         hide()
     }

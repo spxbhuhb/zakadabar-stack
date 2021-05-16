@@ -46,7 +46,7 @@ open class ZkSideBarItem(
         get() = url == null || (url?.startsWith("https://") != true && url?.startsWith("http://") != true)
 
     override fun onCreate() {
-        className = zkSideBarStyles.item
+        + zkSideBarStyles.item
 
         if (url == null) {
             textElement = document.createElement("div") as HTMLElement

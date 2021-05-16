@@ -4,6 +4,7 @@
 package zakadabar.stack.frontend.builtin.dock
 
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
@@ -17,9 +18,9 @@ open class ZkDockedElementHeader(
     val toolElement = ZkElement()
 
     override fun onCreate() {
-        element.classList.add(zkDockStyles.header)
+         + zkDockStyles.header
 
-        this += icon?.withOptCss(zkDockStyles.headerIcon)
+        this += icon?.apply { classList += zkDockStyles.headerIcon }
         this += titleElement css zkDockStyles.text
         this += toolElement.css(zkDockStyles.extensions)
 

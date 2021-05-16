@@ -7,6 +7,7 @@ package zakadabar.stack.frontend.util
 import org.w3c.dom.DOMTokenList
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
+import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.util.PublicApi
 import kotlin.math.max
 
@@ -22,6 +23,18 @@ operator fun DOMTokenList.minusAssign(token: String?) {
     if (token != null) this.remove(token)
 }
 
+operator fun DOMTokenList.plusAssign(rule: ZkCssStyleRule?) {
+    if (rule != null) this.add(rule.cssClassname)
+}
+
+operator fun DOMTokenList.plusAssign(rules: Array<out ZkCssStyleRule>) {
+    rules.forEach { this.add(it.cssClassname) }
+}
+
+operator fun DOMTokenList.minusAssign(rule: ZkCssStyleRule?) {
+    if (rule != null) this.remove(rule.cssClassname)
+}
+
 infix fun HTMLElement.marginRight(size: Any): HTMLElement {
     this.style.marginRight = if (size is Int) "${size}px" else size.toString()
     return this
@@ -34,7 +47,7 @@ infix fun HTMLElement.marginBottom(size: Any): HTMLElement {
 
 infix fun HTMLElement.width(value: Any): HTMLElement {
     if (value == "100%") {
-        classList.add(zkLayoutStyles.w100)
+        classList += zkLayoutStyles.w100
     } else {
         this.style.width = value.toString()
     }
@@ -50,15 +63,17 @@ infix fun HTMLElement.height(value: Any): HTMLElement {
     return this
 }
 
+@Deprecated("feels useless")
 infix fun HTMLElement.flex(value: String): HTMLElement {
     if (value == "grow") {
-        classList.add(zkLayoutStyles.grow)
+        classList += zkLayoutStyles.grow
     } else {
         throw RuntimeException("invalid flex value: $value")
     }
     return this
 }
 
+@Deprecated("feels useless")
 infix fun HTMLElement.style(value: String): HTMLElement {
     style.cssText = value
     return this

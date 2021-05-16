@@ -116,8 +116,8 @@ open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider {
     override fun onCreate() {
         onConfigure()
 
-        className = zkTableStyles.outerContainer
-        classList += zkTableStyles.noSelect
+        + zkTableStyles.outerContainer
+        + zkTableStyles.noSelect
 
         + div(zkTableStyles.contentContainer) {
 

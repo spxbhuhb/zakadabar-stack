@@ -24,6 +24,7 @@ import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.zkFormStyles
 import zakadabar.stack.frontend.resources.ZkFormatters.formatInstant
+import zakadabar.stack.frontend.util.plusAssign
 import kotlin.reflect.KMutableProperty0
 
 open class ZkInstantField<T : DtoBase>(
@@ -39,7 +40,7 @@ open class ZkInstantField<T : DtoBase>(
     override var readOnly: Boolean = true
 
     override fun buildFieldValue() {
-        input.className = zkFormStyles.disabledString
+        input.classList += zkFormStyles.disabledString
         input.readOnly = true
         input.disabled = true
         input.value = formatInstant(prop.get())

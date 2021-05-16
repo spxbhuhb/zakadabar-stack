@@ -22,6 +22,7 @@ import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.util.plusAssign
 import kotlin.reflect.KMutableProperty0
 
 abstract class ZkStringBase<T : DtoBase, VT>(
@@ -52,9 +53,9 @@ abstract class ZkStringBase<T : DtoBase, VT>(
 
         if (readOnly) {
             input.readOnly = true
-            input.className = ZkFormStyles.disabledString
+            input.classList += ZkFormStyles.disabledString
         } else {
-            input.className = ZkFormStyles.text
+            input.classList += ZkFormStyles.text
         }
 
         input.value = getPropValue()

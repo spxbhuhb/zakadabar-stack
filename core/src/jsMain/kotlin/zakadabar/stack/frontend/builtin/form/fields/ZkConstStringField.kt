@@ -21,6 +21,7 @@ import org.w3c.dom.HTMLInputElement
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.util.PublicApi
 
 /**
@@ -39,7 +40,7 @@ open class ZkConstStringField<T : DtoBase>(
     private val input = document.createElement("input") as HTMLInputElement
 
     override fun buildFieldValue() {
-        input.className = ZkFormStyles.disabledString
+        input.classList += ZkFormStyles.disabledString
         input.disabled = true
         input.value = value
         input.tabIndex = - 1

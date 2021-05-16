@@ -23,6 +23,7 @@ import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.zkFormStyles
+import zakadabar.stack.frontend.util.plusAssign
 import kotlin.reflect.KMutableProperty0
 
 open class ZkRecordIdField<T : DtoBase>(
@@ -38,7 +39,7 @@ open class ZkRecordIdField<T : DtoBase>(
     override var readOnly: Boolean = true
 
     override fun buildFieldValue() {
-        input.className = zkFormStyles.disabledString
+        input.classList += zkFormStyles.disabledString
         input.disabled = true
         input.value = prop.get().toString()
         input.tabIndex = - 1

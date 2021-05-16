@@ -21,6 +21,7 @@ import org.w3c.dom.HTMLTextAreaElement
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.util.plusAssign
 import kotlin.reflect.KMutableProperty0
 
 open class ZkOptTextAreaField<T : DtoBase>(
@@ -38,7 +39,7 @@ open class ZkOptTextAreaField<T : DtoBase>(
         buildPoint.style.flexGrow = "1"
         buildPoint.style.display = "flex"
 
-        area.className = ZkFormStyles.textarea
+        area.classList += ZkFormStyles.textarea
         area.style.flexGrow = "1"
         area.style.resize = "none"
 

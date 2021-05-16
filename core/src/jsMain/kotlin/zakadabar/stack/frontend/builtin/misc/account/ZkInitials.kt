@@ -13,7 +13,7 @@ class ZkInitials(val name: String) : ZkElement() {
 
     override fun onCreate() {
 
-        className = zkAccountStyles.avatar
+        + zkAccountStyles.avatar
 
         innerText = if (name.length < 2) {
             name.toUpperCase()

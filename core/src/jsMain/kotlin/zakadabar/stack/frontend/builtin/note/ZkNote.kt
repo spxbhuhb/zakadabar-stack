@@ -9,14 +9,15 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
+import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.frontend.util.plusAssign
 
 open class ZkNote(
     val flavour: ZkFlavour = ZkFlavour.Info,
     element: HTMLElement = document.createElement("div") as HTMLElement,
     val icon: ZkElement? = null,
-    val titleClass: String? = null,
-    val innerClass: String? = null
+    val titleClass: ZkCssStyleRule? = null,
+    val innerClass: ZkCssStyleRule? = null
 ) : ZkElement(element) {
 
     open val titleContainer = ZkElement()
@@ -66,8 +67,8 @@ open class ZkNote(
         classList += zkNoteStyles.noteOuter
 
         val finalIcon: ZkElement
-        val finalInnerClass: String
-        val finalTitleClass: String
+        val finalInnerClass: ZkCssStyleRule
+        val finalTitleClass: ZkCssStyleRule
 
         when (flavour) {
             ZkFlavour.Primary -> {
@@ -103,9 +104,7 @@ open class ZkNote(
             else -> {
                 finalIcon = requireNotNull(icon) { "toast icon cannot be null when flavour is Custom" }
                 finalTitleClass = requireNotNull(titleClass) { "toast iconClass cannot be null when flavour is Custom" }
-                require(finalTitleClass.isNotBlank()) { "toast iconClass cannot be blank when flavour is Custom" }
                 finalInnerClass = requireNotNull(innerClass) { "toast innerClass cannot be null when flavour is Custom" }
-                require(finalInnerClass.isNotBlank()) { "toast innerClass cannot be blank when flavour is Custom" }
             }
         }
 

@@ -51,7 +51,7 @@ open class ZkSlider(
     var position = 0.0
 
     override fun onCreate() {
-        className = if (orientation == ZkOrientation.Vertical) zkSliderStyles.verticalSlider else zkSliderStyles.horizontalSlider
+        + if (orientation == ZkOrientation.Vertical) zkSliderStyles.verticalSlider else zkSliderStyles.horizontalSlider
 
         on("mousedown", ::onMouseDown)
         container.on("mouseup", ::onMouseUp)

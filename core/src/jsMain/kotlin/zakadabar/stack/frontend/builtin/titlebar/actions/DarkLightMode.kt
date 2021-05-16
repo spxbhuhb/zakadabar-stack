@@ -9,6 +9,7 @@ import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.resources.ZkTheme
+import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.frontend.resources.theme
 
 /**
@@ -17,7 +18,7 @@ import zakadabar.stack.frontend.resources.theme
 open class DarkLightMode(
     open val darkTheme: () -> ZkTheme,
     open val lightTheme: () -> ZkTheme,
-    buttonStyle: String = zkTitleBarStyles.iconButton
+    buttonStyle: ZkCssStyleRule = zkTitleBarStyles.iconButton
 ) : ZkElement() {
 
     open val light = ZkButton(ZkIcons.lightMode, flavour = ZkFlavour.Custom, onClick = ::onLightMode) css buttonStyle

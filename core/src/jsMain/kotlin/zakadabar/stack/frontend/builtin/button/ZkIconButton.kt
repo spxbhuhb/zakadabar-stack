@@ -6,6 +6,7 @@ package zakadabar.stack.frontend.builtin.button
 import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.resources.ZkIconSource
+import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.util.PublicApi
 
@@ -23,7 +24,7 @@ open class ZkIconButton(
     private val icon: ZkIconSource,
     private val iconSize: Int = 18,
     private val buttonSize: Int = 22,
-    private val cssClass: String? = null,
+    private val cssClass: ZkCssStyleRule? = null,
     private val fill: String? = null,
     private val round: Boolean = false,
     private val onClick: (() -> Unit)? = null

@@ -4,6 +4,8 @@
 package zakadabar.stack.frontend.resources.css
 
 import zakadabar.stack.frontend.resources.ZkTheme
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
 @Suppress("unused") // may be used by other modules
 /**
@@ -28,13 +30,17 @@ class ZkCssStyleRule(
     val cssClassname: String,
     val cssSelector: String? = null,
     var builder: ZkCssStyleRule.(ZkTheme) -> Unit
-) {
+) : ReadOnlyProperty<ZkCssStyleSheet, ZkCssStyleRule> {
     var media: String? = null
     var pseudoClass: String? = null
 
     val styles = mutableMapOf<String, String?>()
 
     private lateinit var variations: MutableList<ZkCssStyleRule>
+
+    override fun getValue(thisRef: ZkCssStyleSheet, property: KProperty<*>) = this
+
+    override fun toString() = cssClassname
 
     // -------------------------------------------------------------------------
     // Pseudo-class and media methods

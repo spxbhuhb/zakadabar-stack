@@ -16,7 +16,9 @@ class ZkFullScreenImageView(
 ) : ZkElement() {
 
     override fun onCreate() {
-        className = zkImageStyles.outerView
+
+        + zkImageStyles.outerView
+
         element.tabIndex = 0
 
         + image(url, zkImageStyles.image)

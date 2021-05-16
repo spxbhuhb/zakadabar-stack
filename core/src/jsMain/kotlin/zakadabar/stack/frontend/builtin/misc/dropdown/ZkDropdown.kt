@@ -138,7 +138,7 @@ class ZkDropdown(
     }
 
     private fun onControllerClick() {
-        dropdownContent.classList.toggle(zkDropdownStyles.dropdownActive)
+        dropdownContent.classList.toggle(zkDropdownStyles.dropdownActive.cssClassname)
 
         val hasPlace = hasDistance()
 
@@ -157,7 +157,7 @@ class ZkDropdown(
 
         setPositions(temporaryPosition)
 
-        if (dropdownContent.classList.contains(zkDropdownStyles.dropdownActive)) {
+        if (dropdownContent.classList.contains(zkDropdownStyles.dropdownActive.cssClassname)) {
             dropdownContent.element.focus()
         }
 

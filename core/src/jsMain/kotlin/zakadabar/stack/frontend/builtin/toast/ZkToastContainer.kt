@@ -12,7 +12,7 @@ import zakadabar.stack.frontend.builtin.ZkElement
 class ZkToastContainer : ZkElement() {
 
     override fun onCreate() {
-        className = zkToastStyles.appToastContainer
+        + zkToastStyles.appToastContainer
         document.body?.appendChild(this.element)
     }
 

@@ -5,6 +5,7 @@ package zakadabar.stack.frontend.builtin.pages
 
 import zakadabar.stack.frontend.application.ZkAppLayout
 import zakadabar.stack.frontend.application.application
+import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 
 /**
  * A page that provides convenience methods for serving hierarchic URLs.
@@ -19,7 +20,7 @@ import zakadabar.stack.frontend.application.application
  */
 open class ZkPathPage(
     layout: ZkAppLayout? = null,
-    cssClass: String? = null
+    cssClass: ZkCssStyleRule? = null
 ) : ZkPage(layout, cssClass) {
 
     open val name

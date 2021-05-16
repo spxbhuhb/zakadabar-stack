@@ -9,6 +9,7 @@ import zakadabar.stack.frontend.application.*
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
+import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.frontend.util.encodeURIComponent
 import zakadabar.stack.frontend.util.log
 import zakadabar.stack.frontend.util.plusAssign
@@ -21,7 +22,7 @@ import zakadabar.stack.frontend.util.plusAssign
 open class ZkArgPage<T>(
     val serializer: KSerializer<T>,
     val layout: ZkAppLayout? = null,
-    cssClass: String? = null
+    cssClass: ZkCssStyleRule? = null
 ) : ZkElement(), ZkAppRouting.ZkTarget, ZkAppTitleProvider {
 
     var args: T? = null

@@ -8,10 +8,11 @@ package zakadabar.stack.frontend.builtin.toast
 import kotlinx.coroutines.delay
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.ZkIconButton
+import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
+import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.plusAssign
 
@@ -32,8 +33,8 @@ open class ZkToast(
     val flavour: ZkFlavour = ZkFlavour.Success,
     val hideAfter: Long? = null,
     val icon: ZkElement? = null,
-    val iconClass: String? = null,
-    val innerClass: String? = null
+    val iconClass: ZkCssStyleRule? = null,
+    val innerClass: ZkCssStyleRule? = null
 ) : ZkElement() {
 
     companion object {
@@ -53,8 +54,8 @@ open class ZkToast(
         classList += zkToastStyles.toastOuter
 
         val finalIcon: ZkElement
-        val finalInnerClass: String
-        val finalIconClass: String
+        val finalInnerClass: ZkCssStyleRule
+        val finalIconClass: ZkCssStyleRule
 
         when (flavour) {
             ZkFlavour.Primary -> {
@@ -90,9 +91,7 @@ open class ZkToast(
             else -> {
                 finalIcon = requireNotNull(icon) { "toast icon cannot be null when flavour is Custom" }
                 finalIconClass = requireNotNull(iconClass) { "toast iconClass cannot be null when flavour is Custom" }
-                require(finalIconClass.isNotBlank()) { "toast iconClass cannot be blank when flavour is Custom" }
                 finalInnerClass = requireNotNull(innerClass) { "toast innerClass cannot be null when flavour is Custom" }
-                require(finalInnerClass.isNotBlank()) { "toast innerClass cannot be blank when flavour is Custom" }
             }
         }
 
@@ -113,7 +112,7 @@ open class ZkToast(
 
             content?.let { + it marginRight 16 }
 
-            + ZkIconButton(ZkIcons.close, cssClass = zkToastStyles.closeIcon) { application.toasts -= this }
+            + ZkButton(ZkIcons.close, flavour = ZkFlavour.Custom, onClick = { application.toasts -= this }) css zkToastStyles.closeIcon
 
         }
     }

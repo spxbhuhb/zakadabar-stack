@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.builtin.ZkElement
 open class ZkSideBar : ZkElement() {
 
     override fun onCreate() {
-        className = zkSideBarStyles.sidebar
+        + zkSideBarStyles.sidebar
     }
 
     open fun item(text: String, capitalize: Boolean = true, onClick: (() -> Unit)? = null) =

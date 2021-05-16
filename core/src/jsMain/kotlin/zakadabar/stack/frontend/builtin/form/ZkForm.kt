@@ -43,6 +43,7 @@ import zakadabar.stack.frontend.builtin.pages.ZkCrudPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
 import zakadabar.stack.frontend.builtin.toast.*
+import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.log
 import zakadabar.stack.frontend.util.plusAssign
@@ -344,7 +345,7 @@ open class ZkForm<T : DtoBase> (
     //  Field builders
     // ------------------------------------------------------------------------
 
-    open fun build(title: String, createTitle: String = title, css: String? = null, addButtons: Boolean = true, builder: () -> Unit) {
+    open fun build(title: String, createTitle: String = title, css: ZkCssStyleRule? = null, addButtons: Boolean = true, builder: () -> Unit) {
         this.titleText = if (mode == ZkElementMode.Create) createTitle else title
 
         // this lets build be called from an IO block after onResume ran
@@ -368,7 +369,7 @@ open class ZkForm<T : DtoBase> (
 
     open fun invalidFieldList() = ZkInvalidFieldList().also { invalidFields = it }.hide()
 
-    fun section(title: String? = null, summary: String? = null, fieldGrid: Boolean = true, css: String? = null, builder: ZkElement.() -> Unit): ZkFormSection {
+    fun section(title: String? = null, summary: String? = null, fieldGrid: Boolean = true, css: ZkCssStyleRule? = null, builder: ZkElement.() -> Unit): ZkFormSection {
         return if (fieldGrid) {
             ZkFormSection(title, summary, css) { + fieldGrid { builder() } }
         } else {
@@ -377,7 +378,7 @@ open class ZkForm<T : DtoBase> (
     }
 
     @Deprecated("use simple section instead", ReplaceWith("section(title, summary, builder)"))
-    fun fieldGridSection(title: String, summary: String = "", css: String? = null, builder: ZkElement.() -> Unit) =
+    fun fieldGridSection(title: String, summary: String = "", css: ZkCssStyleRule? = null, builder: ZkElement.() -> Unit) =
         section(title, summary, true, css, builder)
 
     fun <T : RecordDto<T>> List<T>.by(field: (it: T) -> String) = map { it.id to field(it) }.sortedBy { it.second }

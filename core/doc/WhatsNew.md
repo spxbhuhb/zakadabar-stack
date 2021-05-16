@@ -1,28 +1,34 @@
 # What's New
 
-On this page we collect the major improvements / changes to give an overview of what's happening. For detailed list of
-changes please check the changelog.
+On this page we collect the major improvements / changes to give an overview of
+what's happening. For detailed list of changes please check the changelog.
 
 ## 2021.5.18-SNAPSHOT
 
 * common
-    * string store lookup by normalized key, see [Strings](./guides/common/Strings.md)
+    * string store lookup by normalized key,
+      see [Strings](./guides/common/Strings.md)
     * add `ServerDescriptionDto` to `SessionDto` (property: `serverDescription`)
     * 'locale' in account related DTOs is now mandatory
     * documentation
         * [Strings](./guides/common/Strings.md)
-    
+
 * backend
     * introduce a mandatory `zakadabar.server.description.yaml` settings file
-    * put content of the `zakadabar.server.description` setting into SessionDto responses
+    * put content of the `zakadabar.server.description` setting into SessionDto
+      responses
     * add [ContentBackend](/src/jvmMain/kotlin/zakadabar/stack/backend/custom/ContentBackend.kt) to core
 
 * browser
+    * css
+        * operators for adding and removing CSS classes,
+          see [ThemesCss](./guides/browser/structure/ThemesCss.md)
     * layout
         * `spanHeader` variation for ZkDefaultLayout,
-          see [Spanning The Header](./guides/browser/structure/Layout.md#Spanning-the-Header)
+           see [Spanning The Header](./guides/browser/structure/Layout.md#Spanning-the-Header)
     * sidebar
-        * build from Markdown text, see [SideBar](./guides/browser/builtin/SideBar.md#Loading-From-Markdown)
+        * build from Markdown text,
+          see [SideBar](./guides/browser/builtin/SideBar.md#Loading-From-Markdown)
         * shorthands for build with routing targets
         * use `a` tag when target or url is given
     * buttons
@@ -45,7 +51,8 @@ changes please check the changelog.
         * [Prototyping](./guides/browser/util/Prototyping.md)
 
 * documentation
-    * from now on, documentation pages will end with a "Timeline" section that contains:
+    * from now on, documentation pages will end with a "Timeline" section that
+      contains:
         * Known Problems
         * Possible Improvements
         * Changes

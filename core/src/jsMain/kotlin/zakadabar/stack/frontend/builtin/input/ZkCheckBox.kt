@@ -45,13 +45,13 @@ open class ZkCheckBox(
 
         checkbox.id = "${this.id}-checkbox"
         checkbox.type = "checkbox"
-        checkbox.className = zkInputStyles.checkBoxNative
+        checkbox.classList += zkInputStyles.checkBoxNative
         checkbox.checked = checked
         checkbox.readOnly = readOnly
         + checkbox
 
         label.htmlFor = checkbox.id
-        label.className = zkInputStyles.checkboxLabel
+        label.classList += zkInputStyles.checkboxLabel
         + label
 
         label.innerHTML = iconSource.svg(18)
