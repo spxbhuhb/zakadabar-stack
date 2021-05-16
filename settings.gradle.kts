@@ -14,6 +14,7 @@ pluginManagement {
 include("core")
 include("demo:demo-marina")
 include("demo:demo-jvm-client")
-include("lib:markdown")
+include("lib:cards")
 include("lib:examples")
+include("lib:markdown")
 include("site")

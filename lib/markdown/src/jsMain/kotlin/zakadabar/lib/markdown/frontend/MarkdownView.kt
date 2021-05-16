@@ -3,6 +3,7 @@
  */
 package zakadabar.lib.markdown.frontend
 
+import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import org.intellij.markdown.ast.ASTNode
@@ -50,33 +51,31 @@ open class MarkdownView(
                 + TableOfContents(context, element.parentElement as HTMLElement) // TODO think about using element.parentElement in MarkdownView
             }
 
-            syntaxHighLight()
-            localNavEvents()
-            enrich()
+            window.requestAnimationFrame {
+                syntaxHighLight()
+                localNavEvents()
+                enrich()
+                scrollIntoView()
+            }
 
-            console.log(element.parentElement?.getBoundingClientRect())
-            // println(dump("", parsedTree))
+            //println(dump("", parsedTree))
         }
     }
 
     private fun syntaxHighLight() {
-        window.requestAnimationFrame {
-            element.querySelectorAll("pre").asList().forEach {
-                hljs.highlightElement(it.firstChild)
-                CodeCopy(it.firstChild as HTMLElement).onCreate()
-            }
+        element.querySelectorAll("pre").asList().forEach {
+            hljs.highlightElement(it.firstChild)
+            CodeCopy(it.firstChild as HTMLElement).onCreate()
         }
     }
 
     private fun localNavEvents() {
-        window.requestAnimationFrame {
-            element.querySelectorAll(".zk-local-nav").asList().forEach {
-                it.addEventListener("click", ::onLocalNav)
-            }
+        element.querySelectorAll(".zk-local-nav").asList().forEach {
+            it.addEventListener("click", ::onLocalNav)
         }
     }
 
-    private fun onLocalNav(event : Event) {
+    private fun onLocalNav(event: Event) {
         val target = event.target
         if (target !is HTMLAnchorElement) return
 
@@ -90,11 +89,20 @@ open class MarkdownView(
     }
 
     private fun enrich() {
-        window.requestAnimationFrame {
-            element.querySelectorAll("[data-zk-enrich]").asList().forEach {
-                context.enrich(it as HTMLElement)?.let { child -> addChildSkipDOM(child) }
-            }
+        element.querySelectorAll("[data-zk-enrich]").asList().forEach {
+            context.enrich(it as HTMLElement)?.let { child -> addChildSkipDOM(child) }
         }
+    }
+
+    private fun scrollIntoView() {
+        val hash = application.routing.navState.hash
+        if (hash.isEmpty()) return
+        document.getElementById(hash)?.scrollIntoView(
+            object {
+                val block = "nearest"
+                val inline = "nearest"
+            }.asDynamic()
+        )
     }
 
     @PublicApi

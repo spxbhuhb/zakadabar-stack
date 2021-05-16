@@ -59,21 +59,23 @@ These URLs don't exist on the backend.
 
 General structure of a frontend URL:
 
-`/view?query`
+`/locale/viewName/[segments][?query]`
+
+The `locale` and the `viewName` is mandatory, `segments` and `query` is optional.
 
 ### Crud
 
 | View | URL |
 | ---- | --- |
-| Create | `/ships/create` |
-| Read | `/ships/read?id=12` |
-| Update | `/ships/update?id=12` |
-| Delete | `/ships/delete?id=12` |
+| Create | `/en/Ships/create` |
+| Read | `/en/Ships/read?id=12` |
+| Update | `/en/Ships/update?id=12` |
+| Delete | `/en/Ships/delete?id=12` |
 
 ### Listing and queries
 
 | View | URL |
 | ---- | --- |
-| All | `/ships/all` |
-| Query | `/ships/SearchByName?q={"name":"dinky"}` |
-| Query | `/ships/ShipSpeed?q=[]` |
+| All | `/en/Ships/all` |
+| Query | `/en/Ships/SearchByName?q={"name":"dinky"}` |
+| Query | `/en/Ships/ShipSpeed?q=[]` |

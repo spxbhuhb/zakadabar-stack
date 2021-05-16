@@ -43,6 +43,36 @@ interface RecordCommInterface<T> {
     suspend fun read(id: RecordId<T>): T
 
     /**
+     * Fetches a record.
+     *
+     * @param  id  Id of the record.
+     *
+     * @return  DTO of the fetched record.
+     *
+     * @throws IllegalArgumentException the dto is invalid (HTTP status code 400)
+     * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
+     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
+     * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
+     * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
+     */
+    suspend fun read(id : Long) = read(LongRecordId(id))
+
+    /**
+     * Fetches a record.
+     *
+     * @param  id  Id of the record.
+     *
+     * @return  DTO of the fetched record.
+     *
+     * @throws IllegalArgumentException the dto is invalid (HTTP status code 400)
+     * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
+     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
+     * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
+     * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
+     */
+    suspend fun read(id : String) = read(StringRecordId(id))
+
+    /**
      * Updates a record on the server.
      *
      * @param  dto  DTO of the record to update.

@@ -6,7 +6,7 @@ package zakadabar.stack.text
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class YamlNavTest {
+class MarkdownNavTest {
 
     @Test
     fun test() {

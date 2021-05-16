@@ -16,15 +16,17 @@ import zakadabar.stack.data.record.StringRecordId
  * @property  locale        The locale of the site, first segment of the URL.
  * @property  viewName      The name of the view in the URL, selects the Element to use.
  * @property  segments      The segments of the URL path (parts between '/' characters).
+ * @property  hash       The hashtag from the URL path.
  * @property  recordId      Id of the record when specified in the URL.
  * @property  query         The query object when specified in the URL.
  * @property  args          The args object when specified in the URL.
  */
-class ZkNavState(val urlPath: String, val urlQuery: String) {
+class ZkNavState(val urlPath: String, val urlQuery: String, val urlHashtag: String = "") {
 
     private val locale: String
     val viewName: String
-    val segments : List<String>
+    val segments: List<String>
+    val hash: String
     val recordId: RecordId<*>
     val query: Any?
     val args: String?
@@ -38,6 +40,7 @@ class ZkNavState(val urlPath: String, val urlQuery: String) {
 
             locale = ""
             viewName = ""
+            hash = ""
             recordId = EmptyRecordId<DtoBase>()
             query = null
             args = null
@@ -48,6 +51,8 @@ class ZkNavState(val urlPath: String, val urlQuery: String) {
 
             locale = segments[0]
             viewName = segments[1]
+
+            hash = if (segments.last().contains('#')) segments.last().substringAfter('#') else urlHashtag.trim('#')
 
             val id = searchParams.get("id")
             recordId = when {
@@ -63,6 +68,6 @@ class ZkNavState(val urlPath: String, val urlQuery: String) {
     }
 
     override fun toString(): String {
-        return "urlPath=$urlPath, urlQuery=$urlQuery, viewName=$viewName, recordId=$recordId, query=$query"
+        return "urlPath=$urlPath, urlQuery=$urlQuery, viewName=$viewName, hash=$hash, recordId=$recordId, query=$query"
     }
 }

@@ -9,7 +9,6 @@ import zakadabar.lib.examples.resources.strings
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
-import zakadabar.stack.frontend.util.plusAssign
 
 class BuiltinForm : ZkForm<BuiltinDto>() {
 
@@ -18,7 +17,7 @@ class BuiltinForm : ZkForm<BuiltinDto>() {
 
         build(strings.formFields) {
 
-            buildPoint.classList += ZkFormStyles.twoPanels
+            + ZkFormStyles.twoPanels
 
             + section(strings.mandatoryFields) {
                 with(dto) {

@@ -173,3 +173,11 @@ When called, run:
 * adds containers for toasts, modals, docked elements,
 * calls the routing to route the application to the state specified by the browser window URL.
 
+## Timeline
+
+### Known Problems
+
+`ZkCssStyleSheet.shortNames = true` does not work. More specifically, it does
+not work from `main.kt`. The problem is, that basic initialization of styles
+happens before main runs. Best would be to postpone CSS class name generation
+until the first compile.

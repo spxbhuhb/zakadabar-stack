@@ -25,7 +25,7 @@ class MarkdownNav {
         val children: MutableList<MarkdownNavItem> = mutableListOf()
     )
 
-    private val pattern = Regex("(\\s*)\\*\\s*\\[([^\\]]*)\\]\\(([^\\)]*)\\)\\s*[\\n\\r]*")
+    private val pattern = Regex("(\\s*)\\*\\s*\\[([^\\]]*)\\]\\(([^\\)]*)\\)\\s*([\\r\\n]+|$)")
 
     fun parse(source: String): List<MarkdownNavItem> {
         val items = mutableListOf<MarkdownNavItem>()

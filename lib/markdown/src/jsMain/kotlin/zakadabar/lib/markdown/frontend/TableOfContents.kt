@@ -9,8 +9,9 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.set
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
-import zakadabar.stack.frontend.resources.theme
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.util.getElementId
 import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.frontend.util.w3c.IntersectionObserver
@@ -44,12 +45,13 @@ class TableOfContents(
             context.tableOfContents.forEach {
                 + div(markdownStyles.tocEntry) {
                     buildPoint.id = it.tocId
+
                     + div(markdownStyles.tocText) {
                         buildPoint.style.paddingLeft = "${it.level * theme.spacingStep}px"
                         + it.text
                     }
 
-                    on(buildPoint, "click") { event ->
+                    on("click") { event ->
                         val (_, id) = getElementId(event, "zk-", false) ?: return@on
                         content.querySelector("[data-toc-id=\"${id}\"]")?.scrollIntoView()
                     }
@@ -103,6 +105,11 @@ class TableOfContents(
                         val inline = "nearest"
                     }.asDynamic()
                 )
+
+                val id = target.id
+                if (id.isNotEmpty()) {
+                    application.replaceNavState(hash = id)
+                }
                 break
             }
         }

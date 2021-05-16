@@ -4,6 +4,7 @@
 package zakadabar.lib.markdown.frontend.flavour
 
 import org.intellij.markdown.MarkdownElementTypes
+import org.intellij.markdown.MarkdownTokenTypes
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.LeafASTNode
 import org.intellij.markdown.ast.findChildOfType
@@ -20,7 +21,21 @@ class HeaderProvider(
 ) : OpenCloseGeneratingProvider() {
 
     override fun openTag(visitor: HtmlGenerator.HtmlGeneratingVisitor, text: String, node: ASTNode) {
-        visitor.consumeTagOpen(node, tagName, "data-toc-id=\"${context.viewId}-${context.nextTocId}\"")
+
+        var id = ""
+        node.children.firstOrNull { it.type == MarkdownTokenTypes.ATX_CONTENT }?.let {
+            for (child in it.children) {
+                if (child is LeafASTNode) {
+                    id += leafText(text, child)
+                }
+            }
+        }
+
+        visitor.consumeTagOpen(
+            node, tagName,
+            "id=\"${id.trim().replace(" ", "-")}\"",
+            "data-toc-id=\"${context.viewId}-${context.nextTocId}\""
+        )
     }
 
     override fun closeTag(visitor: HtmlGenerator.HtmlGeneratingVisitor, text: String, node: ASTNode) {

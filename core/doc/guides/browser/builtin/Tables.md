@@ -1,5 +1,13 @@
 # Tables
 
+<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Note">
+
+This documentation page needs rewrite: 
+* it does not provide enough information,
+* the BuiltinDto example is too complex to start with,
+* the old ship examples should not be used here.
+</div>
+
 * CSS grid for layout
 * virtualization
   * intersection observer based
@@ -13,7 +21,7 @@
   * CSV export
   * preload data dependencies before render
 
-## Write a Table component
+## Write a Table
 
 1. create a [DTO](../../common/Data.md) to store the data of one row
 1. create a class that extends [ZkTable](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/table/ZkTable.kt)

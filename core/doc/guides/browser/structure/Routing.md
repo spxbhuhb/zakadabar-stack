@@ -1,7 +1,5 @@
 # Routing
 
-## Details
-
 The routing handles URL changes. Those happen at
 
 * initial page load,

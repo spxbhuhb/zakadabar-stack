@@ -15,7 +15,7 @@ The reason behind this is that you must provide authorization for the blobs and 
 in one place.
 </div>
 
-# Write Blob Backend
+# Write a Blob Backend
 
 1. create a table that stores the blobs
 1. add the table name to the record backend constructor call

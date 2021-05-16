@@ -72,7 +72,7 @@ open class ZkApplication {
 
     lateinit var executor: ZkExecutor
 
-    lateinit var serverDescription : ServerDescriptionDto
+    lateinit var serverDescription: ServerDescriptionDto
 
     lateinit var routing: ZkAppRouting
 
@@ -117,7 +117,7 @@ open class ZkApplication {
         }
 
         window.addEventListener("popstate", onPopState)
-        routing.onNavStateChange(ZkNavState(window.location.pathname, window.location.search))
+        routing.onNavStateChange(ZkNavState(window.location.pathname, window.location.search, window.location.hash))
         window.dispatchEvent(Event(navStateChangeEvent))
     }
 
@@ -125,12 +125,12 @@ open class ZkApplication {
         sessionManager.init()
     }
 
-    fun initRouting(routing : ZkAppRouting) {
+    fun initRouting(routing: ZkAppRouting) {
         this.routing = routing
         routing.init()
     }
 
-    suspend fun initLocale(store : ZkBuiltinStrings, downloadTranslations : Boolean = true) {
+    suspend fun initLocale(store: ZkBuiltinStrings, downloadTranslations: Boolean = true) {
         val path = window.location.pathname.trim('/')
         locale = when {
             path.isNotEmpty() -> path.substringBefore('/')
@@ -148,7 +148,7 @@ open class ZkApplication {
     }
 
     private val onPopState = fun(_: Event) {
-        routing.onNavStateChange(ZkNavState(window.location.pathname, window.location.search))
+        routing.onNavStateChange(ZkNavState(window.location.pathname, window.location.search, window.location.hash))
         window.dispatchEvent(Event(navStateChangeEvent))
     }
 
@@ -157,6 +157,12 @@ open class ZkApplication {
         window.history.pushState("", "", url)
         routing.onNavStateChange(ZkNavState(path, query))
         window.dispatchEvent(Event(navStateChangeEvent))
+    }
+
+    fun replaceNavState(path: String = routing.navState.urlPath, query: String = routing.navState.urlQuery, hash: String = routing.navState.urlHashtag) {
+        var url = if (hash.isEmpty()) path else "$path#$hash"
+        url = if (query.isEmpty()) url else "$url?$query"
+        window.history.replaceState("", "", url)
     }
 
     fun changeNavState(target: ZkAppRouting.ZkTarget, path: String? = null, query: String = "") {

@@ -1,84 +1,127 @@
 # Data
 
-| Term | Explanation |
-| ---- | ---- |
-| BLOB | A binary object, files, images, videos. |
-| Comm | An object on the frontend that provides easy ways to communicate with the backend. |
-| CRUD | Mnemonic for the basic record operations: create, read, update, delete. |
-| DAO | A Data Access Object used on the backend that makes handling the data easier, the stack uses Exposed DAOs. |
-| DTO | A Data Transfer Object for transferring data between the frontend and the backend. |
-| Schema | Collection of validation rules to check validity of data. |
-| Table | An SQL table for persistence, the stack uses Exposed tables, but you can use whatever persistence you want actually. |
+## Data Transfer Objects (DTOs)
 
-This image summarizes DTO types the stack handles.
+The stack is all about handling DTOs (data transfer objects). These define the API between the frontends and the backend.
 
-![DTO types](./dto-types.png)
+Here is a very simple DTO from the examples. At first, it might seem a bit too much boilerplate to for that two
+fields, but hold on, much is going on here.
+
+```kotlin
+@Serializable
+data class SimpleExampleDto(
+
+    override var id: RecordId<SimpleExampleDto>,
+    var name: String
+
+) : RecordDto<SimpleExampleDto> {
+
+    companion object : RecordDtoCompanion<SimpleExampleDto>("simple-example")
+
+    override fun getDtoNamespace() = dtoNamespace
+    override fun comm() = comm
+
+    override fun schema() = DtoSchema {
+        + ::id
+        + ::name min 1 max 30 blank false default "Example Name"
+    }
+
+}
+```
+
+With the DTO above, the stack:
+
+1. Handles all the communication between the frontend (browser, Android) and the backend.
+1. Provides you with:
+    1. Convenient, type safe data access functions out-of-the-box on the frontends: `SimpleExampleDto.all()`, `SimpleExampleDto.read(12)`, `dto.update()`
+    1. Convenient, type safe base module on the backend.
+    1. Automatic data validation in forms based on the schema.
+    1. On browser frontends:
+        1. Automatic form generation.
+        1. Automatic label and header translation in forms and tables.
+        1. Convenient builders for forms and tables. A fields with `+ dto::name` and have styles, validation, feedback
+           out-of-the box.
+
+Also, these DTO definitions are placed in `commonMain`. This means that the frontends and backends share the very same
+code, therefore inconsistencies between the backend and the frontend are non-existing.
+
+## DTO Types
+
+There are a few DTO stereotypes:
+
+| Type | Description |
+| --- | --- |
+| Basic | A data model without any specific use case. |
+| Record | A data record with a namespace and an id. May have complex structure, lists, nested classes, etc. Records usually have a standard CRUD API (not mandatory). |
+| Blob | A binary object, a file, image, video, etc. BLOBs belong to data records. |
+| Query | A search operation requested by the frontend and executed by the backend. Queries do not modify data. |
+| Action | A standalone operation such as login, logout. We also use actions when whenever we want to ensure ACID. |
 
 ## Important points
 
 * all DTOs should be in `commonMain`, this ensures that frontend and backend uses the same API
-* pay attention to the binding of Queries and Actions, they need a backend to work
 * do not copy and paste directories in IDEA, the package names will be wrong and all hell will get lose, create the
   directory and then copy files
 
 ## Write a Record DTO
 
-To write a record DTO and make it accessible from the frontend:
+Copy one and change the fields, the namespace, and the schema. Here is an example to copy.
 
-- write the DTO class
-    - [SpeedDto](../../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/speed/SpeedDto.kt)
-- write the DTO frontend
-    - [crud](../../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/pages/speed/Speeds.kt) (for
-      automatic crud routing)
-    - [form](../../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/pages/speed/Form.kt)
-    - [table](../../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/pages/speed/Table.kt)
-    - [routing](../../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/Routing.kt)
-    - [sidebar](../../../../demo/demo-marina/src/jsMain/kotlin/zakadabar/demo/marina/frontend/SideBar.kt)
-- write the DTO backend
-    - [table](../../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/speed/SpeedTable.kt)
-    - [dao](../../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/speed/SpeedDao.kt)
-    - [backend](../../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/speed/SpeedBackend.kt)
+Namespace is part of the URL the frontend uses to communicate with the backend. The only important
+thing is that it should be unique as it identifies the backend that will handle the request. It
+will be part of the API URL, check [URLs](./URLs.md) for more information.
+
+```kotlin
+@Serializable
+data class SimpleExampleDto(
+
+    override var id: RecordId<SimpleExampleDto>,
+    var name: String
+
+) : RecordDto<SimpleExampleDto> {
+
+    companion object : RecordDtoCompanion<SimpleExampleDto>(dtoNamespace = "simple-example")
+
+    override fun getDtoNamespace() = dtoNamespace
+    override fun comm() = comm
+
+    override fun schema() = DtoSchema {
+        + ::id
+        + ::name min 1 max 30 blank false default "Example Name"
+    }
+
+}
+```
+
+Now, that you have a record DTO, you can:
+
+* [Write a Record Backend](../backend/RecordBackends.md#Write-a-Record-Backend)
+* [Use a Record DTO](./Data.md#Use-a-Record-DTO)
+* [Write a Form](../browser/builtin/Forms.md#Write-a-Form)
+* [Write a Table](../browser/builtin/Tables.md#Write-a-Table)
+* [Write a CRUD](../browser/builtin/Crud.md#Write-a-CRUD)
+* [Route the CRUD](../browser/builtin/Crud.md#Route-a-CRUD)
+* [Include the CRUD](../browser/builtin/Crud.md#Include-a-CRUD)
 
 ## Use a Record DTO
 
-On the frontend [RecordDtoCompanion](/src/commonMain/kotlin/zakadabar/stack/data/record/RecordDtoCompanion.kt)`.comm`
-provides easy access to basic record operations.
-
-Check [demo-jvm-client](../../../../demo/demo-jvm-client/src/jvmMain/kotlin/zakadabar/demo/jvm/frontend/Main.kt) for a
-working example.
+On the frontend, shorthand functions make DTO use really easy:
 
 ```kotlin
-val iAmFast = SpeedDto.default {
-  name = "nigh uncatchable"
-  value = 100
-}.create()
+SimpleExampleDto.all() // lists all SimpleExamples
+SimpleExampleDto.read(12) // read the record with id 12
+SimpleExampleDto.read("aa-12") // read the record with id "aa-12"
 
-val iAmFaster = SpeedDto.read(iAmFast.id)
+val dto = SimpleExampleDto.read(11)
+dto.name = "this is the new name"
+dto.update() // updates the record on the server
 
-iAmFaster.value = 1000
-
-iAmFaster.update()
-
-iAmFaster.delete()
-
-SpeedDto.all().forEach {
-  // do something
-}
+dto.delete() // deletes the record on the server
 ```
 
 ## Write a Query
 
-To write a query DTO:
-
-- write the DTO classes:
-    - [SearchShipsQuery](../../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/SearchShipsQuery.kt)
-    - [SearchShipsResult](../../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/SearchShipsResult.kt)
-- add the query to the DTO companion that provides communication
-    - [ShipDto](../../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/ShipDto.kt)
-- add the query to the DTO backend:
-    - [backend](../../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/ship/ShipBackend.kt)
-        - add a `route.query` call to `installRoutes`
-        - add a `query` function with the query DTO class as second parameter and the result DTO class as return type
+TODO
 
 ## Use a Query
 
@@ -92,16 +135,7 @@ SearchShipsQuery().execute().forEach {
 
 ## Write an Action
 
-To write an action DTO:
-
-- write the DTO classes:
-    - [ShootAtShipAction](../../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/ShootAtShipAction.kt)
-- add the action to the DTO companion that provides communication
-    - [ShipDto](../../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/ship/ShipDto.kt)
-- add the action to the DTO backend:
-    - [backend](../../../../demo/demo-marina/src/jvmMain/kotlin/zakadabar/demo/marina/backend/ship/ShipBackend.kt)
-        - add a `route.action` call to `installRoutes`
-        - add an `action` function with the action DTO class as second parameter and the result DTO class as return type
+TODO
 
 ## Use an Action
 
@@ -142,8 +176,7 @@ much about it as a developer.
 
 ## Write a Schema
 
-- override the schema variable of the DTO class
-    - [SpeedDto](../../../../demo/demo-marina/src/commonMain/kotlin/zakadabar/demo/marina/data/speed/SpeedDto.kt)
+TODO
 
 ## Use a Schema
 
