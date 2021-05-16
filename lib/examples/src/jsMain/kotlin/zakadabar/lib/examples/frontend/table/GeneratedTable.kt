@@ -8,14 +8,13 @@ import zakadabar.lib.examples.frontend.crud.BuiltinTable
 import zakadabar.stack.data.record.LongRecordId
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.util.default
 
 /**
  * This example shows all built in table columns with generated table data.
  */
-object GeneratedTable : ZkPage(cssClass = zkPageStyles.fixed) {
+object GeneratedTable : ZkPage(css = zkPageStyles.fixed) {
 
     override fun onCreate() {
         super.onCreate()

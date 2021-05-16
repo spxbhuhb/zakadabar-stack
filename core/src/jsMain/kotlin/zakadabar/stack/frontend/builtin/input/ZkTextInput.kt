@@ -47,4 +47,6 @@ open class ZkTextInput(
 
     }
 
+    override fun toString() = value
+
 }

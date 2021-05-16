@@ -22,6 +22,9 @@ import zakadabar.stack.data.util.OptInstantAsStringSerializer
 @Serializable
 data class DescriptorDto(
 
+    var packageName : String,
+    var kClassName : String,
+    var dtoNamespace : String,
     var properties: List<PropertyDto>,
 
 ) : DtoBase

@@ -12,7 +12,7 @@ import zakadabar.stack.frontend.util.io
 /**
  * This example shows all built in table columns with generated table data.
  */
-object FetchedTable : ZkPage(cssClass = zkPageStyles.fixed) {
+object FetchedTable : ZkPage(css = zkPageStyles.fixed) {
 
     override fun onCreate() {
         super.onCreate()

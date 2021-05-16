@@ -195,7 +195,8 @@ open class DtoSchema() {
         return true
     }
 
-    fun toDescriptorDto() = DescriptorDto(ruleLists.mapNotNull { it.value.toPropertyDto() })
+    // FIXME package and class for DescriptorDto
+    fun toDescriptorDto() = DescriptorDto("", "", "", ruleLists.mapNotNull { it.value.toPropertyDto() })
 
     fun push(descriptor: DescriptorDto) {
         ruleLists.forEach { (kProperty, validation) ->

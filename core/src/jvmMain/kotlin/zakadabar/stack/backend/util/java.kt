@@ -14,7 +14,7 @@ import zakadabar.stack.data.record.RecordDtoCompanion
  */
 @Suppress("unused") // we do want to use this on the companion
 inline fun <reified T : RecordDto<T>> RecordDtoCompanion<T>.default(): T {
-    val instance = T::class.java.newInstance()
+    val instance = T::class.java.getDeclaredConstructor().newInstance()
     instance.schema().setDefaults()
     return instance
 }
@@ -27,7 +27,7 @@ inline fun <reified T : RecordDto<T>> RecordDtoCompanion<T>.default(): T {
  */
 @Suppress("unused") // we do want to use this on the companion
 inline fun <reified T : RecordDto<T>> RecordDtoCompanion<T>.default(builder: T.() -> Unit): T {
-    val instance = T::class.java.newInstance()
+    val instance = T::class.java.getDeclaredConstructor().newInstance()
     instance.schema().setDefaults()
     instance.builder()
     return instance
@@ -41,7 +41,7 @@ inline fun <reified T : RecordDto<T>> RecordDtoCompanion<T>.default(builder: T.(
  */
 @Suppress("unused") // we do want to use this on the companion
 inline fun <reified T : DtoBase> default(builder: T.() -> Unit = { }): T {
-    val instance = T::class.java.newInstance()
+    val instance = T::class.java.getDeclaredConstructor().newInstance()
     instance.schema().setDefaults()
     instance.builder()
     return instance

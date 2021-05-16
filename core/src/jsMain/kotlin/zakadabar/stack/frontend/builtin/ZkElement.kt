@@ -614,7 +614,8 @@ open class ZkElement(
                 - 1 -> plusAssign(child)
                 childElements.lastIndex -> plusAssign(child)
                 else -> {
-                    this.element.insertBefore(child.element, childElements[index].element.nextElementSibling)
+                    val insertPoint = childElements[index].element.nextElementSibling
+                    insertPoint?.parentElement?.insertBefore(child.element, insertPoint)
                     childElements.add(index + 1, child)
                     syncChildrenState(child)
                 }
@@ -642,7 +643,7 @@ open class ZkElement(
         if (index == - 1) {
             plusAssign(child)
         } else {
-            this.element.insertBefore(child.element, childElements[index].element)
+            before.element.parentElement?.insertBefore(child.element, childElements[index].element)
             childElements.add(index, child)
 
             syncChildrenState(child)

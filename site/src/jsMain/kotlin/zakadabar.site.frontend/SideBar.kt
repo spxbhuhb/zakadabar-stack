@@ -42,6 +42,8 @@ class SideBar : ZkSideBar() {
                 + item(FAQ)
             }
 
+            + item(KodomatPage)
+
             val source = window.fetch("/api/content/guides/TOC.md").await().text().await()
             + group(DocumentationIntro, "Documentation") {
                 MarkdownNav().parse(source).forEach {

@@ -18,7 +18,7 @@ import zakadabar.stack.frontend.util.plusAssign
  *
  * We want the scroll to be inside the tab container, [zkPageStyles.fixed] takes care about that.
  */
-object TabContainer : ZkPage(cssClass = zkPageStyles.fixed) {
+object TabContainer : ZkPage(css = zkPageStyles.fixed) {
 
     override fun onCreate() {
         super.onCreate()

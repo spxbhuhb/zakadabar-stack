@@ -3,10 +3,13 @@
  */
 package zakadabar.site.frontend.pages
 
+import zakadabar.lib.kodomat.frontend.Kodomat
 import zakadabar.lib.markdown.frontend.MarkdownPage
 import zakadabar.lib.markdown.frontend.MarkdownPathPage
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.pages.ZkPage
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 
 const val contentNamespace = "content"
@@ -41,7 +44,6 @@ object GetHelp : MarkdownPage(
     SiteMarkdownContext("/GetHelp", "help/")
 )
 
-
 object DocumentationIntro : MarkdownPage(
     "/api/$contentNamespace/help/Documentation.md",
     SiteMarkdownContext("/DocumentationIntro", "help/")
@@ -51,6 +53,12 @@ object FAQ : MarkdownPage(
     "/api/$contentNamespace/help/FAQ.md",
     SiteMarkdownContext("FAQ", "help/")
 )
+
+object KodomatPage : ZkPage(css = zkPageStyles.fixed) {
+    override fun onCreate() {
+        + Kodomat()
+    }
+}
 
 object Documentation : MarkdownPathPage() {
 

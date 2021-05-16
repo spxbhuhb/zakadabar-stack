@@ -22,7 +22,7 @@ import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.log
 import zakadabar.stack.frontend.util.plusAssign
 
-object QueryPage : ZkPage(cssClass = zkPageStyles.fixed) {
+object QueryPage : ZkPage(css = zkPageStyles.fixed) {
 
     val form = QueryForm(QueryPage::runQuery)
 

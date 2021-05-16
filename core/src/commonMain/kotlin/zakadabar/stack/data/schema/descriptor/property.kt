@@ -120,7 +120,7 @@ class UuidPropertyDto(
 class OptRecordIdPropertyDto(
     override val name: String,
     override var validations: List<ValidationDto>,
-    var kClass: String,
+    var kClassName: String,
     var defaultValue: RecordId<DtoBase>?,
     var value: RecordId<DtoBase>?
 ) : PropertyDto()

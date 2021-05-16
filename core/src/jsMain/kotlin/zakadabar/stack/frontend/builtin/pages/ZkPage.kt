@@ -3,7 +3,10 @@
  */
 package zakadabar.stack.frontend.builtin.pages
 
-import zakadabar.stack.frontend.application.*
+import zakadabar.stack.frontend.application.ZkAppLayout
+import zakadabar.stack.frontend.application.ZkAppRouting
+import zakadabar.stack.frontend.application.ZkNavState
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
@@ -16,7 +19,7 @@ import zakadabar.stack.frontend.util.plusAssign
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
 open class ZkPage(
     val layout: ZkAppLayout? = null,
-    cssClass: ZkCssStyleRule? = null
+    css: ZkCssStyleRule? = null
 ) : ZkElement(), ZkAppRouting.ZkTarget, ZkAppTitleProvider {
 
     companion object {
@@ -61,7 +64,7 @@ open class ZkPage(
     }
 
     init {
-        classList += cssClass ?: zkPageStyles.scrollable
+        classList += css ?: zkPageStyles.scrollable
     }
 
     open fun onConfigure() {
