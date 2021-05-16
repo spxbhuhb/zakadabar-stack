@@ -4,6 +4,8 @@
 package zakadabar.lib.kodomat.frontend
 
 import io.ktor.util.*
+import kotlinx.browser.document
+import org.w3c.dom.*
 import zakadabar.stack.data.schema.descriptor.DescriptorDto
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
@@ -15,7 +17,7 @@ import zakadabar.stack.frontend.util.marginBottom
 
 class Kodomat : ZkTabContainer() {
 
-    private val commonCode = ZkElement()
+    private val commonCode = ZkElement(document.createElement("pre") as HTMLElement)
     private val browserCode = ZkElement()
     private val backendCode = ZkElement()
 
@@ -79,20 +81,22 @@ class EditorEntry(private val editor: Kodomat.Editor) : ZkElement() {
     private val name = ZkTextInput()
     private val type = ZkTextInput(onChange = ::onTypeChange)
 
+    private var schemaParameterContainer = ZkElement()
     private var schemaParameter: SchemaParameter? = null
 
     override fun onCreate() {
         super.onCreate()
         + grid {
-            gridTemplateColumns = "repeat(6, max-content)"
+            gridTemplateColumns = "repeat(4, max-content)"
             gridGap = 20
 
-            + ZkButton(iconSource = ZkIcons.minimize, fill = false, border = false) {
+            + ZkButton(iconSource = ZkIcons.close, fill = false, border = false) {
                 editor -= this@EditorEntry
             }
 
             + name css kodomatStyles.mediumInput
             + type css kodomatStyles.mediumInput
+            + schemaParameterContainer
         }
 
         this marginBottom 10
@@ -109,22 +113,23 @@ class EditorEntry(private val editor: Kodomat.Editor) : ZkElement() {
 
         when {
             new == null -> {
-                this -= schemaParameter
+                schemaParameterContainer -= schemaParameter
                 schemaParameter = null
             }
             schemaParameter == null -> {
-                this += new
+                schemaParameterContainer += new
                 schemaParameter = new
             }
             new::class.isInstance(schemaParameter !!::class) -> Unit
             else -> {
-                this -= schemaParameter
+                schemaParameterContainer -= schemaParameter
                 schemaParameter = new
             }
         }
     }
 
     fun generator(): PropertyGenerator? {
+        if (name.value.isBlank() && type.value.isBlank()) return null
         schemaParameter?.let { return it.generator(name.value, editor.descriptor) }
         dangerToast { "Type of ${name.value.escapeHTML()} (${type.value.escapeHTML()}) is wrong!" }
         return null

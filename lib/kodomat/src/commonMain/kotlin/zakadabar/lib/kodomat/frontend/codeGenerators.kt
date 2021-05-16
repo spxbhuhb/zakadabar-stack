@@ -20,7 +20,7 @@ import zakadabar.stack.data.schema.DtoSchema
 data class ${descriptor.kClassName}(
 
     override var id: RecordId<${descriptor.kClassName}>,
-    ${generators.joinToString(",\n        ")}
+    ${generators.map { it.commonDeclaration() }.joinToString(",\n    ")}
 
 ) : RecordDto<SimpleExampleDto> {
 
@@ -30,10 +30,8 @@ data class ${descriptor.kClassName}(
     override fun comm() = comm
 
     override fun schema() = DtoSchema {
-        + ::id
-        + ::name min 1 max 30 blank false default "Example Name"
+        ${generators.map { it.commonSchema() }.joinToString("\n        ")}
     }
 
 }
-commonDeclarations.joinToString(",\n")
 """.trimIndent()

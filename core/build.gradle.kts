@@ -104,6 +104,12 @@ kotlin {
                 api("io.ktor:ktor-client-js:$ktorVersion")
             }
         }
+        @Suppress("UNUSED_VARIABLE")
+        val jsTest by getting {
+            dependencies {
+                implementation(kotlin("test-js"))
+            }
+        }
     }
 }
 
