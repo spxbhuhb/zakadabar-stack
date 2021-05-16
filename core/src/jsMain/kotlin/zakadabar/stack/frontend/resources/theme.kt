@@ -94,7 +94,7 @@ interface ZkTheme {
     var border: String
 
     var boxShadow: String
-    var blockBorder: String
+    var fixBorder: String
     var blockBackgroundColor: String
 
     /**

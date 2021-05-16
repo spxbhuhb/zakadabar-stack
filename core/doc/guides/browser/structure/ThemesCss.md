@@ -350,6 +350,35 @@ Assign a different instance to the given style variable:
 zkButtonStyles = MyButtonStyles()
 ```
 
+## Inline Styles
+
+Add inline styles to any element (Zk or HTML) with the `styles` function. This function
+executes a builder on [CSSStyleDeclaration](https://developer.mozilla.org/en-US/docs/Web/API/CSSStyleDeclaration),
+which is a standard Web API.
+
+```kotlin
++ div {
+    styles {
+        height = "400px"
+    }
+}
+```
+
+<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Values">
+
+`CSSStyleDeclaration` properites are strings. Therefore you cannot use
+integers as in `cssClass`.
+
+</div>
+
+<div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Values">
+
+Use inline styles only when the component you use them on is a singleton, and
+the given style is not used anywhere else. Of those conditions are not true,
+use a style sheet.
+
+</div>
+
 ## Scroll Bar Styles
 
 Scroll bars are styled

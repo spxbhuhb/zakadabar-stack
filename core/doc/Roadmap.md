@@ -10,7 +10,6 @@ that we'll be able to do so.
 ### Core
 
 * dark mode
-    * table
     * tab container
 * synthetic forms (halfway done)
 * settings (halfway, depends on syntethic forms)
@@ -28,20 +27,11 @@ that we'll be able to do so.
     * use Lucene
 * sidebar
     * sections
-    * add `item` helper with a ZkTarget parameter to build `a` tag - DONE
+
 * popup to the user when the server is unavailable
     * short gap: retry
     * long gap: refresh the page and/or ask the user what to do
 * optimize for SEO (https://developers.google.com/search/docs/advanced/guidelines/get-started)
-
-### Lib
-
-* markdown:
-    * handle internal links internally, without page reload - DONE
-    * table of contents on the left
-        * fix position feedback - ACCEPTABLE
-        * add scrolling - DONE
-* integration with Lucene
 
 ### Documentation
 
@@ -50,7 +40,6 @@ that we'll be able to do so.
     * form
     * table
     * pages
-    * frontend routing concept - DONE
     * theme borders and box-shadows
 * finish the marina demo
 * migrate "Examples" of site into "Documentation"

@@ -237,4 +237,14 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         marginRight = 10
     }
 
+    // -------------------------------------------------------------------------
+    // Util
+    // -------------------------------------------------------------------------
+
+    val unMarkdown by cssClass {
+        on(" a") {
+            color = "${theme.textColor} !important"
+        }
+    }
+
 }

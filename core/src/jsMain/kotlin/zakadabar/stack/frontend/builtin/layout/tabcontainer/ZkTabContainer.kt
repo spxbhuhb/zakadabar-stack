@@ -20,7 +20,7 @@ open class ZkTabContainer(
     override fun onCreate() {
         classList += zkTabContainerStyles.container
         + tabLabels css zkTabContainerStyles.labels
-        + tabContents css zkTabContainerStyles.content
+        + tabContents css zkTabContainerStyles.contentContainer
         builder?.invoke(this)
     }
 

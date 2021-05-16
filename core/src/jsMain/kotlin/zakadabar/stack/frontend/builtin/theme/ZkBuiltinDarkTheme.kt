@@ -36,7 +36,7 @@ open class ZkBuiltinDarkTheme : ZkTheme {
     override var successColor = ZkColors.Zakadabar.navGreen
     override var successPair = ZkColors.Zakadabar.gray8
     override var warningColor = ZkColors.Zakadabar.navOrange
-    override var warningPair = ZkColors.white
+    override var warningPair = ZkColors.Zakadabar.gray8
     override var dangerColor = ZkColors.Zakadabar.navRed
     override var dangerPair = ZkColors.white
     override var infoColor = ZkColors.Zakadabar.navBlue
@@ -58,7 +58,7 @@ open class ZkBuiltinDarkTheme : ZkTheme {
     override var spacingStep = 20
 
     override var boxShadow = "none" // "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)"
-    override var blockBorder = "1px solid ${ZkColors.Zakadabar.gray4}"
+    override var fixBorder = "1px solid ${ZkColors.Zakadabar.gray4}"
     override var blockBackgroundColor = ZkColors.Zakadabar.gray7
 
     override fun onResume() {

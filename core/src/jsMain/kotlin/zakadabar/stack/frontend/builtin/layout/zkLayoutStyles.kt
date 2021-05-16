@@ -3,10 +3,8 @@
  */
 package zakadabar.stack.frontend.builtin.layout
 
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
-import zakadabar.stack.util.PublicApi
 
 val zkLayoutStyles by cssStyleSheet(ZkLayoutStyles())
 
@@ -44,21 +42,45 @@ class ZkLayoutStyles : ZkCssStyleSheet() {
         border = 0
     }
 
+    /**
+     * A switchable border. Use this when you want to give the user the possibility to
+     * hide it. The idea behind this is that some people like to have things separated
+     * by borders, some don't.
+     */
     val border by cssClass {
         border = theme.border
     }
 
-    val block by cssClass {
-        border = theme.blockBorder
-        backgroundColor = theme.blockBackgroundColor
+    /**
+     * A fix border. Use this when you want the border, no matter what. This is different
+     * than [border] because border is meant to switchable by the user.
+     */
+    val fixBorder by cssClass {
+        border = theme.fixBorder
     }
 
-    val blockBorder by cssClass {
-        border = theme.blockBorder
+    /**
+     * A block with background color from the theme and a fix border around it.
+     */
+    val block by cssClass {
+        border = theme.fixBorder
+        backgroundColor = theme.blockBackgroundColor
     }
 
     val justifySelfCenter by cssClass {
         justifySelf = "center"
+    }
+
+    val p1 by cssClass {
+        padding = theme.spacingStep
+    }
+
+    val pl1 by cssClass {
+        paddingLeft = theme.spacingStep
+    }
+
+    val fs80 by cssClass {
+        fontSize = "80%"
     }
 
     val layout by cssClass {

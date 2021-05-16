@@ -67,7 +67,7 @@ class TableExample(
             height = "200px" // because table shrinks
         }
 
-        classList += zkLayoutStyles.blockBorder
+        classList += zkLayoutStyles.fixBorder
 
         val data = listOf(
             TableExampleDto("Rose", "rosa", 341, true),

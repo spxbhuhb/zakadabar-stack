@@ -18,6 +18,7 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
     open var labelBottomBorder: String? = null
 
     open val container by cssClass {
+        position = "relative"
         display = "flex"
         flexDirection = "column"
     }
@@ -36,8 +37,8 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
         minWidth = 100
         backgroundColor = labelBackgroundColor ?: theme.secondaryColor
         color = labelTextColor ?: theme.secondaryPair
-        paddingLeft = 8
-        paddingRight = 8
+        paddingLeft = theme.spacingStep
+        paddingRight = theme.spacingStep
         paddingBottom = 6
         cursor = "pointer"
         display = "flex"
@@ -53,8 +54,8 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
     }
 
     open val activeLabel by cssClass {
-        backgroundColor = activeBackground ?: theme.primaryColor
-        color = activeForeground ?: theme.primaryPair
+        backgroundColor = activeBackground ?: theme.infoColor
+        color = activeForeground ?: theme.infoPair
         borderLeft = "1px solid $backgroundColor"
         borderRight = borderLeft
         borderTop = borderLeft
@@ -64,9 +65,15 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
         }
     }
 
-    open val content by cssClass {
+    open val contentContainer by cssClass {
         flex = "1 1"
         display = "flex"
         minHeight = "0"
+    }
+
+    open val scrolledContent by cssClass {
+        flexGrow = 1
+        overflowY = "auto"
+        height = "100%"
     }
 }

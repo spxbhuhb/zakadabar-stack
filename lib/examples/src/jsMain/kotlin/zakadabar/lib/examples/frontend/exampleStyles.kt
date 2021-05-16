@@ -10,10 +10,7 @@ val exampleStyles by cssStyleSheet(ExampleStyles())
 
 class ExampleStyles : ZkCssStyleSheet() {
 
-    val unMarkdownBlock by cssClass {
-        border = theme.blockBorder
-        backgroundColor = theme.blockBackgroundColor
-
+    val unMarkdown by cssClass {
         on(" a") {
             color = "${theme.textColor} !important"
         }

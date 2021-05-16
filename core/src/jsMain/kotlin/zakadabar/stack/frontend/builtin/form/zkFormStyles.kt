@@ -4,7 +4,6 @@
 package zakadabar.stack.frontend.builtin.form
 
 import zakadabar.stack.frontend.resources.ZkColors
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
@@ -72,7 +71,7 @@ object ZkFormStyles : ZkCssStyleSheet() {
         boxShadow = theme.boxShadow
         borderRadius = theme.cornerRadius
         backgroundColor = theme.blockBackgroundColor
-        border = theme.blockBorder
+        border = theme.fixBorder
         marginBottom = theme.spacingStep / 2
     }
 

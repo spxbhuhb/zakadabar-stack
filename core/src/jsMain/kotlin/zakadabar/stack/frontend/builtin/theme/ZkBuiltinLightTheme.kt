@@ -57,7 +57,7 @@ open class ZkBuiltinLightTheme : ZkTheme {
     override var spacingStep = 20
 
     override var boxShadow = "none" // "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)"
-    override var blockBorder = "1px solid ${ZkColors.Zakadabar.gray3}"
+    override var fixBorder = "1px solid ${ZkColors.Zakadabar.gray3}"
     override var blockBackgroundColor = ZkColors.Zakadabar.gray0
 
     override fun onResume() {

@@ -9,12 +9,14 @@ import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.examples.frontend.exampleStyles
 import zakadabar.lib.markdown.frontend.MarkdownModal
+import zakadabar.lib.markdown.frontend.markdownStyles
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.primaryButton
 import zakadabar.stack.frontend.builtin.button.secondaryButton
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
+import zakadabar.stack.frontend.builtin.layout.tabcontainer.zkTabContainerStyles
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPathPage
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
@@ -75,34 +77,30 @@ class SideBarMarkdownExample(
 
         + ZkTabContainer {
 
+
             style {
                 height = "400px"
             }
 
             + tab("Side Bar") {
-                classList += zkLayoutStyles.grow
+                
+                classList += zkTabContainerStyles.scrolledContent
+                classList += markdownStyles.unMarkdown
+                classList += zkLayoutStyles.fixBorder
 
-                + div(exampleStyles.unMarkdownBlock) {
-                    style {
-                        overflowY = "auto"
-                        maxHeight = "300px"
-                    }
-                    + ExampleMarkdownSideBar()
-                }
+                + ExampleMarkdownSideBar()
+
             }
 
             + tab("Markdown Source") {
-                classList += zkLayoutStyles.grow
 
-                + div(zkLayoutStyles.blockBorder) {
-                    style {
-                        overflowY = "auto"
-                        fontSize = "80%"
-                        maxHeight = "300px"
-                        paddingLeft = "20px"
-                    }
-                    + content
-                }
+                classList += zkTabContainerStyles.scrolledContent
+                classList += zkLayoutStyles.fixBorder
+                classList += zkLayoutStyles.fs80
+                classList += zkLayoutStyles.pl1
+
+                + content
+
                 io {
                     content.innerText = window.fetch("/api/content/guides/TOC.md").await().text().await()
                 }

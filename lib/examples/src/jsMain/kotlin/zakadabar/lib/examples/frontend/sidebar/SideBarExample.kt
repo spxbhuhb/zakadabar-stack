@@ -4,14 +4,16 @@
 package zakadabar.lib.examples.frontend.sidebar
 
 import org.w3c.dom.HTMLElement
-import zakadabar.lib.examples.frontend.exampleStyles
+import zakadabar.lib.markdown.frontend.markdownStyles
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.primaryButton
+import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPathPage
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
 import zakadabar.stack.frontend.builtin.toast.successToast
+import zakadabar.stack.frontend.util.plusAssign
 
 
 object ExampleSideBarTarget : ZkPathPage() {
@@ -50,7 +52,10 @@ class SideBarExample(
     override fun onCreate() {
         super.onCreate()
 
-        + div(exampleStyles.unMarkdownBlock) {
+        + div(markdownStyles.unMarkdown) {
+
+            classList += zkLayoutStyles.fixBorder
+
             + ExampleSideBar()
         }
     }
