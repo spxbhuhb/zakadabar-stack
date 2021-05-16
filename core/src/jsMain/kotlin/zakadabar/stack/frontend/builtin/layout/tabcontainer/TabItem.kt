@@ -9,7 +9,10 @@ class TabItem(
     container: ZkTabContainer,
     val content: ZkElement,
     val title: String? = null,
-    label: ZkTabLabel? = null
+    label: ZkTabLabel? = null,
+    scrolled: Boolean = true,
+    border: Boolean = true,
+    padding: Boolean = true,
 ) {
     val label: ZkTabLabel = label ?: ZkTabLabel(container, this)
 }

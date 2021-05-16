@@ -122,11 +122,8 @@ Sorry about the mess, told you that changes are cumulative. :P
 ## CSS
 
 * CSS style sheets are written in Kotlin.
-*
-Extend [ZkCssStyleSheet](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleSheet.kt)
-to write a new one.
-* Use `val yourStyles by cssStyleSheet(YourStyleSheet())` to make an instance of
-  the style sheet.
+* Extend [ZkCssStyleSheet](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleSheet.kt) to write a new one.
+* Use `val yourStyles by cssStyleSheet(YourStyleSheet())` to make an instance of the style sheet.
 * When the theme changes, all style sheets are recompiled.
 * During recompile the style names remain the same.
 * Variables of the style sheets may be set by `onResume` of the theme.
@@ -314,8 +311,7 @@ val link by cssRule("a") {
 ```
 
 You can combine your classes with selectors. The example below will set the
-styles for
-`<a>` tags under the element that has the `content` css class. Note that the
+styles for `<a>` tags under the element that has the `content` css class. Note that the
 actual CSS class name of `content` is automatically generated.
 
 ```kotlin
@@ -378,6 +374,30 @@ zkButtonStyles = MyButtonStyles()
 
 ## Inline Styles
 
+<div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Inline Styles">
+
+Use inline styles only when the component you use them on is a singleton, and
+the given style is not used anywhere else. Of those conditions are not true, use
+a style sheet.
+
+</div>
+
+### Shorthands
+
+ZkElement provides a number of shorthand variables to set inline styles:
+
+```kotlin
+height = 400 // will be "400px"
+height = "1em"
+width = 400 // will be "400px"
+width = "1em"
+gridTemplateRows = "100px max-content"
+gridTemplateColumns = "100px max-content"
+gridGap = theme.spacingStep
+```
+
+### The styles Function
+
 Add inline styles to any element (Zk or HTML) with the `styles` function. This
 function executes a builder
 on [CSSStyleDeclaration](https://developer.mozilla.org/en-US/docs/Web/API/CSSStyleDeclaration)
@@ -387,22 +407,18 @@ on [CSSStyleDeclaration](https://developer.mozilla.org/en-US/docs/Web/API/CSSSty
 + div {
     styles {
         height = "400px"
+        setProperty(
+            "grid-template-rows",
+            "100px 100px"
+        ) // for names not defined
     }
 }
 ```
 
-<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Values">
+<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Strings">
 
-`CSSStyleDeclaration` properites are strings. Therefore you cannot use integers
+`CSSStyleDeclaration` properties are strings. Therefore, you cannot use integers
 as in `cssClass`.
-
-</div>
-
-<div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Values">
-
-Use inline styles only when the component you use them on is a singleton, and
-the given style is not used anywhere else. Of those conditions are not true, use
-a style sheet.
 
 </div>
 
@@ -419,3 +435,11 @@ To switch off scroll bar set `scrollBarStyles.enabled` to `false`.
 ```kotlin
 scrollBarStyles.enabled = false
 ```
+
+## Timeline
+
+### Changes
+
+* 2021.5.16
+    * change delegated property type from string to ZkCssStyleRule
+    * operators to add/remove rules easily

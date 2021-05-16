@@ -60,6 +60,13 @@ class ZkLayoutStyles : ZkCssStyleSheet() {
     }
 
     /**
+     * Switch off the border with "!important".
+     */
+    val noBorder by cssClass {
+        border = "none !important"
+    }
+
+    /**
      * A block with background color from the theme and a fix border around it.
      */
     val block by cssClass {

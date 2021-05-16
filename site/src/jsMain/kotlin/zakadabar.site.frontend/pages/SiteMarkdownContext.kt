@@ -17,6 +17,7 @@ import zakadabar.lib.examples.frontend.form.FormRecordIdExample
 import zakadabar.lib.examples.frontend.form.FormStringExample
 import zakadabar.lib.examples.frontend.icon.IconExamples
 import zakadabar.lib.examples.frontend.input.IntCheckboxListExample
+import zakadabar.lib.examples.frontend.layout.TabContainerExample
 import zakadabar.lib.examples.frontend.misc.NYIExample
 import zakadabar.lib.examples.frontend.modal.ModalExamples
 import zakadabar.lib.examples.frontend.note.NoteBasicExamples
@@ -32,10 +33,10 @@ import zakadabar.lib.examples.frontend.toast.ToastCustomExample
 import zakadabar.lib.examples.frontend.toast.ToastFormExample
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
 import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.note.ZkNote
 import zakadabar.stack.frontend.resources.ZkFlavour
+import zakadabar.stack.frontend.resources.theme
 
 class SiteMarkdownContext(
     viewName: String,
@@ -104,6 +105,8 @@ class SiteMarkdownContext(
 
             "SideBarExample" -> SideBarExample(htmlElement)
             "SideBarMarkdownExample" -> SideBarMarkdownExample(htmlElement)
+
+            "TabContainerExample" -> TabContainerExample(htmlElement)
 
             "TableExample" -> TableExample(htmlElement)
 

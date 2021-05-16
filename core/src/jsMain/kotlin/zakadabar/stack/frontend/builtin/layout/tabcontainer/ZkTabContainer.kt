@@ -3,7 +3,9 @@
  */
 package zakadabar.stack.frontend.builtin.layout.tabcontainer
 
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.util.PublicApi
 
@@ -21,14 +23,38 @@ open class ZkTabContainer(
         classList += zkTabContainerStyles.container
         + tabLabels css zkTabContainerStyles.labels
         + tabContents css zkTabContainerStyles.contentContainer
+
         builder?.invoke(this)
     }
 
     @PublicApi
-    open fun tab(title: String, builder: ZkElement.() -> Unit) = TabItem(this, ZkElement().build(builder), title)
+    open fun tab(title: String, scroll: Boolean = true, border: Boolean = true, pad: Boolean = true, builder: ZkElement.() -> Unit) : TabItem {
+        return if (scroll || border || pad) {
+            TabItem(this, zke {
+                if (scroll) + zkTabContainerStyles.scrolledContent
+                if (border) + zkLayoutStyles.fixBorder
+                if (pad) + zkLayoutStyles.p1
+                builder()
+            }, title)
+        } else {
+            TabItem(this, zke(build = builder), title)
+        }
+    }
 
     @PublicApi
-    open fun tab(title: String, zke: ZkElement) = TabItem(this, zke, title)
+    open fun tab(element: ZkElement, title : String? = null, scroll: Boolean = true, border: Boolean = true, pad: Boolean = true) : TabItem {
+        return if (scroll || border || pad) {
+            TabItem(this, element build {
+                if (scroll) + zkTabContainerStyles.scrolledContent
+                if (border) + zkLayoutStyles.fixBorder
+                if (pad) + zkLayoutStyles.p1
+            }, title ?: stringStore.getNormalized(element))
+        } else {
+            TabItem(this, element, title)
+        }
+    }
+
+
 
     operator fun TabItem.unaryPlus() {
         items += this

@@ -7,21 +7,17 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
-import zakadabar.lib.examples.frontend.exampleStyles
-import zakadabar.lib.markdown.frontend.MarkdownModal
 import zakadabar.lib.markdown.frontend.markdownStyles
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.primaryButton
-import zakadabar.stack.frontend.builtin.button.secondaryButton
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.zkTabContainerStyles
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPathPage
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
 import zakadabar.stack.frontend.util.io
-import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.text.MarkdownNav
 
 class ExampleMarkdownSideBar : ZkSideBar() {
@@ -77,16 +73,14 @@ class SideBarMarkdownExample(
 
         + ZkTabContainer {
 
-
-            style {
-                height = "400px"
-            }
+            height = 400
 
             + tab("Side Bar") {
-                
-                classList += zkTabContainerStyles.scrolledContent
-                classList += markdownStyles.unMarkdown
-                classList += zkLayoutStyles.fixBorder
+
+                + zkTabContainerStyles.scrolledContent
+
+                + zkLayoutStyles.fixBorder
+                + markdownStyles.unMarkdown
 
                 + ExampleMarkdownSideBar()
 
@@ -94,10 +88,11 @@ class SideBarMarkdownExample(
 
             + tab("Markdown Source") {
 
-                classList += zkTabContainerStyles.scrolledContent
-                classList += zkLayoutStyles.fixBorder
-                classList += zkLayoutStyles.fs80
-                classList += zkLayoutStyles.pl1
+                + zkTabContainerStyles.scrolledContent
+
+                + zkLayoutStyles.fixBorder
+                + zkLayoutStyles.fs80
+                + zkLayoutStyles.pl1
 
                 + content
 

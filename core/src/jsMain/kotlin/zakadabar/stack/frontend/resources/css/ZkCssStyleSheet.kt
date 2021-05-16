@@ -72,7 +72,7 @@ open class ZkCssStyleSheet {
          * is the id assigned to the ZkCssStyleRule. When false, the class
          * names will contain the style class name, the property name and the id.
          */
-        var shortNames = true
+        var shortNames = false
 
         val styleSheets = mutableListOf<ZkCssStyleSheet>()
     }

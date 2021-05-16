@@ -17,7 +17,7 @@ import zakadabar.stack.frontend.util.io
 fun main() {
 
     ZkElement.addKClass = false
-    ZkCssStyleSheet.shortNames = true
+    ZkCssStyleSheet.shortNames = false
 
     application = ZkApplication()
 

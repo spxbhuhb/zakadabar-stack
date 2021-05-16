@@ -68,6 +68,22 @@ open class ZkStringStore(
      */
     fun getNormalized(key: String) = map[key] ?: normalizedKeyMap[normalizeKey(key)] ?: key
 
+    /**
+     * Get a value for the class name of the object with a normalized look up. This is used
+     * for automatic labeling / naming.
+     *
+     * 1. try to get with the exact key, if it exists, return with it.
+     * 1. try to get the normalized key from the [normalizedKeyMap].
+     * 1. return with the key itself
+     *
+     * @param   key  The key to look up.
+     * @return  the string value that belongs to this key
+     */
+    fun getNormalized(any : Any) : String {
+        val key = any::class.simpleName ?: ""
+        return map[key] ?: normalizedKeyMap[normalizeKey(key)] ?: key
+    }
+
     fun normalizeKey(key: String) = key.toLowerCase().replace("-", "")
 
 }

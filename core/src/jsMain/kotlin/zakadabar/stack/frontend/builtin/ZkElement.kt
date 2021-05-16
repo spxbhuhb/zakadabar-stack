@@ -123,6 +123,18 @@ open class ZkElement(
             buildPoint.style.setProperty("grid-gap", stringOrPx(value))
         }
 
+    var height: Any
+        get() = buildPoint.style.height
+        set(value) {
+            buildPoint.style.setProperty("height", stringOrPx(value))
+        }
+
+    var width: Any
+        get() = buildPoint.style.width
+        set(value) {
+            buildPoint.style.setProperty("width", stringOrPx(value))
+        }
+
     // -------------------------------------------------------------------------
     //   Lifecycle
     // -------------------------------------------------------------------------
@@ -781,6 +793,18 @@ open class ZkElement(
      */
     open fun span(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLElement {
         val e = document.createElement("span") as HTMLElement
+        runBuild(e, rule, build)
+        return e
+    }
+
+    /**
+     * Creates "p" [HTMLElement] and executes the builder function on it.
+     *
+     * @param  rule       CSS rule to use. Optional.
+     * @param  build      The builder function to build the content of the div. Optional.
+     */
+    open fun p(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLElement {
+        val e = document.createElement("p") as HTMLElement
         runBuild(e, rule, build)
         return e
     }

@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.frontend.builtin.layout.tabcontainer
 
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
@@ -13,6 +12,7 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
 
     open var labelTextColor: String? = null
     open var labelBackgroundColor: String? = null
+    open var labelHeight = 32
     open var activeForeground: String? = null
     open var activeBackground: String? = null
     open var labelBottomBorder: String? = null
@@ -33,7 +33,7 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
         boxSizing = "border-box"
         fontWeight = 400
         fontSize = 14
-        minHeight = 32
+        height = labelHeight
         minWidth = 100
         backgroundColor = labelBackgroundColor ?: theme.secondaryColor
         color = labelTextColor ?: theme.secondaryPair
@@ -66,14 +66,16 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
     }
 
     open val contentContainer by cssClass {
+        position = "relative"
         flex = "1 1"
         display = "flex"
         minHeight = "0"
+        height = "calc(100% - ${labelHeight}px)" // TODO think about tab container height management
     }
 
     open val scrolledContent by cssClass {
+        boxSizing = "border-box"
         flexGrow = 1
         overflowY = "auto"
-        height = "100%"
     }
 }

@@ -3,46 +3,42 @@
  */
 package zakadabar.lib.examples.frontend.layout
 
-import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.examples.data.builtin.BuiltinDto
+import zakadabar.lib.examples.resources.strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.button.successButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.builtin.note.ZkNote
-import zakadabar.stack.frontend.builtin.note.successNote
+import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
+import zakadabar.stack.frontend.builtin.note.infoNote
+import zakadabar.stack.frontend.builtin.toast.successToast
 import zakadabar.stack.frontend.util.default
-import zakadabar.stack.frontend.util.marginBottom
 
 class TabContainerExample(
     element: HTMLElement
 ) : ZkElement(element) {
 
-    val container = ZkElement()
-
     override fun onCreate() {
         super.onCreate()
 
-        + div(zkLayoutStyles.block) {
-            + "text1"
-            ! """<span style="font-size: 150%">text2</span>"""
-            + (document.createElement("input") as HTMLElement) marginBottom 20
+        + ZkTabContainer {
 
-            + container
+            height = 400
 
-            container += successButton("A Button, click to hide the note") {
-                container -= ZkNote::class
-            } marginBottom 20
+            + tab("First Tab") {
+                (0..10).forEach { _ -> + p { + strings.loremIpsum } }
+            }
 
-            container += successNote("A Note", "This note will disappear shortly.")
+            + tab("Second Tab") {
+                + infoNote("Info", "You are looking at the content of the second tab.")
+            }
+
+            + tab(InlineForm())
+
         }
+
+        this marginBottom 20
     }
-
-
-
-
 
     class InlineForm : ZkForm<BuiltinDto>() {
 
@@ -55,15 +51,21 @@ class TabContainerExample(
         override fun onCreate() {
             super.onCreate()
 
-            element.style.margin = "20px"
-
-            + section("This is a form in a toast!") {
-                + dto::id
-                + dto::doubleValue
-                + dto::instantValue
-                + dto::optInstantValue
-                + dto::stringValue
+            build("Inline Form") {
+                + section("This is a form in a tab") {
+                    + dto::id
+                    + dto::doubleValue
+                    + dto::instantValue
+                    + dto::optInstantValue
+                    + dto::stringValue
+                }
             }
+        }
+
+        override fun validate(submit: Boolean): Boolean {
+            super.validate(submit)
+            successToast { "You clicked on save!" }
+            return false
         }
     }
 }

@@ -52,6 +52,12 @@ lowercase.
 strings.getNormalized("some-Thing")
 ```
 
+Use any non-string object to get the value for its normalized class name.
+
+```kotlin
+strings.getNormalized(MyElement()) // same as getNormalized("MyElement")
+```
+
 ## Write a String Store [source code](../../../../lib/examples/src/commonMain/kotlin/zakadabar/lib/examples/resources/ExamplesStrings.kt)
 
 1. Extend [ZkBuiltinStrings](/src/commonMain/kotlin/zakadabar/stack/resources/ZkBuiltinStrings.kt). Override anything

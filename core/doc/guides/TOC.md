@@ -31,6 +31,7 @@
         * [Notes](./browser/builtin/Notes.md)
         * [Pages](./browser/builtin/Pages.md)
         * [SideBar](./browser/builtin/SideBar.md)
+        * [TabContainer](./browser/builtin/TabContainer.md)
         * [Tables](./browser/builtin/Tables.md)
         * [Toasts](./browser/builtin/Toasts.md)
     * [Lib]()
