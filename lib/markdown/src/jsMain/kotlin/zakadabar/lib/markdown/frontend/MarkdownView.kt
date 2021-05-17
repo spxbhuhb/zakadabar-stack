@@ -48,7 +48,9 @@ open class MarkdownView(
                     buildPoint.innerHTML = html
                 }
 
-                + TableOfContents(context, element.parentElement as HTMLElement) // TODO think about using element.parentElement in MarkdownView
+                if (context.toc) {
+                    + TableOfContents(context, element.parentElement as HTMLElement) // TODO think about using element.parentElement in MarkdownView
+                }
             }
 
             window.requestAnimationFrame {
@@ -95,6 +97,8 @@ open class MarkdownView(
     }
 
     private fun scrollIntoView() {
+        if (!context.hashes) return
+
         val hash = application.routing.navState.hash
         if (hash.isEmpty()) return
         document.getElementById(hash)?.scrollIntoView(

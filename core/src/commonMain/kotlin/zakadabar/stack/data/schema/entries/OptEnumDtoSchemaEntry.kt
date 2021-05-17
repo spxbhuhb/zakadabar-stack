@@ -14,23 +14,26 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema.validations
+package zakadabar.stack.data.schema.entries
 
 import zakadabar.stack.data.schema.DtoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.descriptor.BooleanPropertyDto
+import zakadabar.stack.data.schema.descriptor.EnumPropertyDto
 import zakadabar.stack.data.schema.descriptor.PropertyDto
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class BooleanDtoSchemaEntry(val kProperty: KMutableProperty0<Boolean>) : DtoSchemaEntry<Boolean> {
+class OptEnumDtoSchemaEntry<E : Enum<E>>(
+    val kProperty: KMutableProperty0<E?>,
+    val values : Array<E>
+) : DtoSchemaEntry<E> {
 
-    var defaultValue = false
+    var defaultValue: E? = null
 
     override fun validate(report: ValidityReport) {}
 
     @PublicApi
-    infix fun default(value: Boolean): BooleanDtoSchemaEntry {
+    infix fun default(value: E): OptEnumDtoSchemaEntry<E> {
         defaultValue = value
         return this
     }
@@ -39,18 +42,25 @@ class BooleanDtoSchemaEntry(val kProperty: KMutableProperty0<Boolean>) : DtoSche
         kProperty.set(defaultValue)
     }
 
-    override fun isOptional() = false
+    override fun isOptional() = true
 
     override fun push(dto: PropertyDto) {
-        require(dto is BooleanPropertyDto)
-        kProperty.set(dto.value!!)
+        require(dto is EnumPropertyDto)
+        if (dto.value == null) {
+            kProperty.set(null)
+        } else {
+            kProperty.set(values.firstOrNull { it.name == dto.value } ?: throw IllegalArgumentException("value for ${kProperty.name} is invalid"))
+        }
     }
 
-    override fun toPropertyDto() = BooleanPropertyDto(
+    override fun toPropertyDto() = EnumPropertyDto(
         kProperty.name,
         isOptional(),
         emptyList(),
-        defaultValue,
-        kProperty.get()
+        values.first()::class.simpleName!!,
+        values.map { it.name },
+        defaultValue?.name,
+        kProperty.get()?.name
     )
+
 }

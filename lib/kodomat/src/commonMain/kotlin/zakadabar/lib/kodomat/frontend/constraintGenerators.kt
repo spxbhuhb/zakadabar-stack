@@ -5,7 +5,7 @@ package zakadabar.lib.kodomat.frontend
 
 import zakadabar.stack.data.schema.descriptor.*
 
-fun List<ConstraintDto>.toCode() : String {
+fun List<ConstraintDto>.toCode(): String {
     val parts = mutableListOf<String>()
 
     forEach {
@@ -24,7 +24,10 @@ fun List<ConstraintDto>.toCode() : String {
 
 fun ConstraintBooleanDto.toCode() = "${type.name.toLowerCase()} $value"
 
-fun ConstraintDoubleDto.toCode() = "${type.name.toLowerCase()} $value"
+fun ConstraintDoubleDto.toCode() : String {
+    val s = value.toString()
+    return "${type.name.toLowerCase()} ${if ('.' in s) s else "$s.0"}"
+}
 
 fun ConstraintInstantDto.toCode() = "${type.name.toLowerCase()} $value"
 

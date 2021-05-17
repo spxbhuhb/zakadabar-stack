@@ -49,14 +49,18 @@ open class ZkInputStyles : ZkCssStyleSheet() {
             outline = "none"
         }
 
-        on(":focus") {
-            outline = "none"
-        }
-
     }
 
     val checkBoxOuter by cssClass {
         width = "max-content"
+        outline = "none"
+
+        on(":focus") {
+            border = "1px solid ${theme.infoColor}"
+            borderRadius = theme.cornerRadius
+            outline = "none"
+        }
+
     }
 
     val checkBoxNative by cssClass {

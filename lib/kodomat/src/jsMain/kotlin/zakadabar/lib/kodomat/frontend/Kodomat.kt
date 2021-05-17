@@ -6,12 +6,17 @@ package zakadabar.lib.kodomat.frontend
 import io.ktor.util.*
 import kotlinx.browser.window
 import kotlinx.coroutines.await
+import org.w3c.dom.events.Event
+import org.w3c.dom.events.KeyboardEvent
 import zakadabar.lib.markdown.frontend.MarkdownView
+import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
 import zakadabar.stack.data.schema.descriptor.DescriptorDto
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.input.ZkTextInput
 import zakadabar.stack.frontend.builtin.toast.dangerToast
+import zakadabar.stack.frontend.builtin.toast.infoToast
+import zakadabar.stack.frontend.builtin.toast.warningToast
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.io
@@ -34,6 +39,7 @@ class Kodomat(
 
         io {
             template = window.fetch(templateUrl).await().text().await()
+            resultContainer += MarkdownView(sourceText = template, context = ZkMarkdownContext(toc = false, hashes = false))
         }
 
     }
@@ -46,8 +52,13 @@ class Kodomat(
         private val dtoClassName = ZkTextInput()
         private val dtoNamespace = ZkTextInput()
 
+        private val entryContainer = ZkElement()
+
         override fun onCreate() {
             super.onCreate()
+
+            ! "<h2>Kod-o-mat</h2>"
+
             + row {
                 + div {
                     + div { + "Package" } css kodomatStyles.editorLabel
@@ -61,55 +72,79 @@ class Kodomat(
                     + div { + "Namespace" } css kodomatStyles.editorLabel
                     + dtoNamespace
                 } marginRight 10
-            } marginBottom 10
+            } marginBottom 20
 
             + column {
-                + EditorEntry(this@Editor)
-                + EditorEntry(this@Editor)
+
+                + entryContainer marginBottom 10
+
+                entryContainer += EditorEntry(this@Editor)
+                entryContainer += EditorEntry(this@Editor)
 
                 + ZkButton(flavour = ZkFlavour.Success, iconSource = ZkIcons.add, fill = true, buttonSize = 18) {
-                    insertBefore(EditorEntry(this@Editor), findFirst<ZkButton>())
-                } marginRight 10 marginBottom 4
+                    val new = EditorEntry(this@Editor)
+                    entryContainer += new
+                    new.name.focus()
+                } marginBottom 20
 
                 + ZkButton(text = "Generate", flavour = ZkFlavour.Primary) {
                     generate()
-                } marginRight 10 marginBottom 4
+                }
 
             }
         }
 
         private fun generate() {
 
+            var go = true
+
             descriptor.packageName = packageName.value
             descriptor.kClassName = dtoClassName.value
             descriptor.dtoNamespace = dtoNamespace.value
 
-            classGenerator.descriptor = descriptor
-            classGenerator.generators = find<EditorEntry>().mapNotNull { it.generator() }
+            if (descriptor.packageName.isEmpty()) {
+                warningToast(hideAfter = 3000) { "Please set the package name!" }
+                go = false
+            }
 
-            val commonSource = classGenerator.dtoGenerator()
-            val browserSource = ""
-            val backendSource = classGenerator.backendGenerator()
+            if (descriptor.kClassName.isEmpty()) {
+                warningToast(hideAfter = 3000) { "Please set the DTO name!" }
+                go = false
+            }
+
+            if (! go) return
+
+            if (descriptor.dtoNamespace.isEmpty()) {
+                infoToast(hideAfter = 5000) { "Namespace is empty, using ${descriptor.kClassName} as default." }
+                descriptor.dtoNamespace = descriptor.kClassName
+            }
+
+            classGenerator.descriptor = descriptor
+            classGenerator.generators = entryContainer.find<EditorEntry>().mapNotNull { it.generator() }
+
+            val commonSource = classGenerator.commonGenerator()
+            val browserSource = classGenerator.browserFrontendGenerator()
+            val backendSource = classGenerator.exposedBackendGenerator()
 
             val result = template
                 .replace("@packageName@", descriptor.packageName)
-                .replace("commonSource", commonSource)
-                .replace("browserSource", browserSource)
-                .replace("backendSource", backendSource)
+                .replace("// commonSource", commonSource)
+                .replace("// browserSource", browserSource)
+                .replace("// backendSource", backendSource)
 
             resultContainer.clear()
-            resultContainer += MarkdownView(sourceText = result)
+            resultContainer += MarkdownView(sourceText = result, context = ZkMarkdownContext(toc = false, hashes = false))
         }
     }
 }
 
 class EditorEntry(private val editor: Kodomat.Editor) : ZkElement() {
 
-    private val name = ZkTextInput()
+    val name = ZkTextInput()
     private val type = ZkTextInput(onChange = ::onTypeChange)
 
     private var schemaParameterContainer = ZkElement()
-    private var schemaParameter: SchemaParameter? = null
+    private var entryDetails: EntryDetails? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -117,7 +152,7 @@ class EditorEntry(private val editor: Kodomat.Editor) : ZkElement() {
 
             + div {
                 style { alignSelf = "flex-end" }
-                + ZkButton(flavour = ZkFlavour.Danger, iconSource = ZkIcons.close, fill = true, buttonSize = 18) {
+                + ZkButton(flavour = ZkFlavour.Danger, iconSource = ZkIcons.close, fill = true, buttonSize = 18, tabIndex = -1) {
                     editor -= this@EditorEntry
                 } marginRight 10 marginBottom 4
             }
@@ -135,38 +170,75 @@ class EditorEntry(private val editor: Kodomat.Editor) : ZkElement() {
             + schemaParameterContainer
         }
 
+        type.input.addEventListener("keydown", { event: Event ->
+            event as KeyboardEvent
+            if (event.key == "Tab" && entryDetails == null) {
+                guessType()
+            }
+        })
+
         this marginBottom 10
     }
 
-    private fun onTypeChange(typeName: String) {
+    private fun guessType() {
+        if (type.value.isEmpty()) return
 
-        val new = when (typeName.toLowerCase()) {
-            "string" -> StringSchemaParameters()
-            "boolean" -> BooleanSchemaParameters()
-            "recordid" -> RecordIdSchemaParameters()
+        val lcv = type.value.toLowerCase()
+
+        val guess = when {
+            "boolean".startsWith(lcv) -> "boolean"
+            "double".startsWith(lcv) -> "double"
+            "enum".startsWith(lcv) -> "enum"
+            "int".startsWith(lcv) -> "int"
+            "instant".startsWith(lcv) -> "instant"
+            "long".startsWith(lcv) -> "long"
+            "recordid".startsWith(lcv) -> "recordid"
+            "string".startsWith(lcv) -> "string"
+            "secret".startsWith(lcv) -> "boolean"
+            "uuid".startsWith(lcv) -> "uuid"
+            else -> null
+        } ?: return
+
+        type.value = guess
+        onTypeChange(guess)
+    }
+
+    private fun onTypeChange(input: String) {
+
+        val new = when (input.toLowerCase()) {
+            "boolean" -> BooleanDetails()
+            "double" -> DoubleDetails()
+            "enum" -> EnumDetails()
+            "instant" -> InstantDetails()
+            "int" -> IntDetails()
+            "long" -> LongDetails()
+            "recordid" -> RecordIdDetails()
+            "secret" -> SecretDetails()
+            "string" -> StringDetails()
+            "uuid" -> UuidDetails()
             else -> null
         }
 
         when {
             new == null -> {
-                schemaParameterContainer -= schemaParameter
-                schemaParameter = null
+                schemaParameterContainer -= entryDetails
+                entryDetails = null
             }
-            schemaParameter == null -> {
+            entryDetails == null -> {
                 schemaParameterContainer += new
-                schemaParameter = new
+                entryDetails = new
             }
-            new::class.isInstance(schemaParameter !!::class) -> Unit
+            new::class.isInstance(entryDetails !!::class) -> Unit
             else -> {
-                schemaParameterContainer -= schemaParameter
-                schemaParameter = new
+                schemaParameterContainer -= entryDetails
+                entryDetails = new
             }
         }
     }
 
     fun generator(): PropertyGenerator? {
         if (name.value.isBlank() && type.value.isBlank()) return null
-        schemaParameter?.let { return it.generator(name.value, editor.descriptor) }
+        entryDetails?.let { return it.generator(name.value, editor.descriptor) }
         dangerToast { "Type of ${name.value.escapeHTML()} (${type.value.escapeHTML()}) is wrong!" }
         return null
     }

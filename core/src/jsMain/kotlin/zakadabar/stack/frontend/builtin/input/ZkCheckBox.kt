@@ -7,6 +7,7 @@ import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLLabelElement
 import org.w3c.dom.events.Event
+import org.w3c.dom.events.KeyboardEvent
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.resources.ZkIconSource
 import zakadabar.stack.frontend.resources.ZkIcons
@@ -41,6 +42,8 @@ open class ZkCheckBox(
         }
 
     override fun onCreate() {
+        buildPoint.tabIndex = 0
+
         classList += zkInputStyles.checkBoxOuter
 
         checkbox.id = "${this.id}-checkbox"
@@ -57,6 +60,18 @@ open class ZkCheckBox(
         label.innerHTML = iconSource.svg(18)
 
         on(checkbox, "click", ::onChange)
+
+        on(buildPoint, "keypress") { event ->
+            event as KeyboardEvent
+            when (event.key) {
+                "Enter", " " -> {
+                    checkbox.checked = ! checkbox.checked
+                    onChange(event)
+                    event.preventDefault()
+                }
+            }
+        }
+
     }
 
     open fun onChange(event: Event) {

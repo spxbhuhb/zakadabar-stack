@@ -21,7 +21,10 @@ import zakadabar.stack.frontend.builtin.table.actions.ZkSearchAction
 import zakadabar.stack.frontend.builtin.table.columns.*
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
-import zakadabar.stack.frontend.util.*
+import zakadabar.stack.frontend.util.Areas
+import zakadabar.stack.frontend.util.downloadCsv
+import zakadabar.stack.frontend.util.getDatasetEntry
+import zakadabar.stack.frontend.util.io
 import zakadabar.stack.util.UUID
 import kotlin.math.min
 import kotlin.reflect.KProperty1
@@ -433,6 +436,12 @@ open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider {
         return column
     }
 
+    operator fun <IT> KProperty1<T, RecordId<IT>?>.unaryPlus(): ZkOptRecordIdColumn<T, IT> {
+        val column = ZkOptRecordIdColumn(this@ZkTable, this)
+        columns += column
+        return column
+    }
+
     operator fun ZkActionsColumn<T>.unaryPlus(): ZkActionsColumn<T> {
         columns += this
         return this
@@ -458,6 +467,18 @@ open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider {
 
     operator fun KProperty1<T, Int?>.unaryPlus(): ZkOptIntColumn<T> {
         val column = ZkOptIntColumn(this@ZkTable, this)
+        columns += column
+        return column
+    }
+
+    operator fun KProperty1<T, Long>.unaryPlus(): ZkLongColumn<T> {
+        val column = ZkLongColumn(this@ZkTable, this)
+        columns += column
+        return column
+    }
+
+    operator fun KProperty1<T, Long?>.unaryPlus(): ZkOptLongColumn<T> {
+        val column = ZkOptLongColumn(this@ZkTable, this)
         columns += column
         return column
     }

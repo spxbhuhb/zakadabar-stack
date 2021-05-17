@@ -14,42 +14,49 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema.validations
+package zakadabar.stack.data.schema.entries
 
-import zakadabar.stack.data.schema.DtoPropertyConstraint
 import zakadabar.stack.data.schema.DtoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.descriptor.ConstraintDto
+import zakadabar.stack.data.schema.descriptor.EnumPropertyDto
 import zakadabar.stack.data.schema.descriptor.PropertyDto
+import zakadabar.stack.util.PublicApi
+import kotlin.reflect.KMutableProperty0
 
-class CustomDtoSchemaEntry(function: (report: ValidityReport, rule: DtoPropertyConstraint<Unit>) -> Unit) : DtoSchemaEntry<Unit> {
+class EnumDtoSchemaEntry<E : Enum<E>>(
+    val kProperty: KMutableProperty0<E>,
+    val values : Array<E>
+) : DtoSchemaEntry<E> {
 
-    private val rules = mutableListOf<DtoPropertyConstraint<Unit>>(CustomValidation(function))
+    var defaultValue = values.first()
 
-    inner class CustomValidation(val function: (report: ValidityReport, rule: DtoPropertyConstraint<Unit>) -> Unit) : DtoPropertyConstraint<Unit> {
-        override fun validate(value: Unit, report: ValidityReport) {
-            function(report, this)
-        }
+    override fun validate(report: ValidityReport) {}
 
-        override fun toValidationDto(): ConstraintDto {
-            throw NotImplementedError("serialization of custom validations is not supported")
-        }
-    }
-
-    override fun validate(report: ValidityReport) {
-        for (rule in rules) {
-            rule.validate(Unit, report)
-        }
+    @PublicApi
+    infix fun default(value: E): EnumDtoSchemaEntry<E> {
+        defaultValue = value
+        return this
     }
 
     override fun setDefault() {
+        kProperty.set(defaultValue)
     }
 
     override fun isOptional() = false
 
     override fun push(dto: PropertyDto) {
-
+        require(dto is EnumPropertyDto)
+        kProperty.set(values.firstOrNull { it.name == dto.value } ?: throw IllegalArgumentException("value for ${kProperty.name} is invalid"))
     }
 
-    override fun toPropertyDto(): PropertyDto? = null
+    override fun toPropertyDto() = EnumPropertyDto(
+        kProperty.name,
+        isOptional(),
+        emptyList(),
+        values.first()::class.simpleName!!,
+        values.map { it.name },
+        defaultValue.name,
+        kProperty.get().name
+    )
+
 }

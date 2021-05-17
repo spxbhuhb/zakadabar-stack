@@ -11,9 +11,15 @@ import zakadabar.stack.frontend.builtin.ZkElement
 /**
  * Context for the markdown rendering process. Main purposes of this class is
  * to collect table of contents information and to provide URL resolution.
+ *
+ * @param  baseURI  base url for url resolution
+ * @param  toc      When true (default), table of contents is added. When false, not.
+ * @param  hashes   When true (default), DOM node ids for hashtag navigation is added. When false, not.
  */
 open class ZkMarkdownContext(
-    baseURI: String? = null
+    baseURI: String? = null,
+    val toc : Boolean = true,
+    val hashes : Boolean = true
 ) {
     lateinit var viewId: String
 

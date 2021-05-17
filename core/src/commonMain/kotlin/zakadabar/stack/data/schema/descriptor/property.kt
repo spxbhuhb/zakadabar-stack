@@ -72,6 +72,7 @@ class EnumPropertyDto(
     override val name: String,
     override val optional: Boolean,
     override var constraints: List<ConstraintDto>,
+    var enumName: String,
     var enumValues: List<String>,
     var defaultValue: String?,
     var value: String?

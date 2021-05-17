@@ -7,9 +7,8 @@ import kotlinx.browser.document
 import org.w3c.dom.HTMLAnchorElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
-import zakadabar.stack.frontend.application.ZkAppRouting
+import org.w3c.dom.events.KeyboardEvent
 import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIconSource
@@ -32,6 +31,7 @@ import zakadabar.stack.frontend.util.plusAssign
  * @property  border        When true, adds border to the button using the flavour color.
  *                          When false, no border is added.
  * @property  capitalize    When true, capitalize the [text].
+ * @property  tabIndex      When not null, add a tab index to this button. Default is 0.
  * @property  onClick       The function to execute when the button is clicked.
  */
 open class ZkButton(
@@ -45,6 +45,7 @@ open class ZkButton(
     open val capitalize: Boolean = true,
     open val iconSize: Int? = null,
     open val buttonSize: Int? = null,
+    open val tabIndex: Int? = 0,
     open val onClick: (() -> Unit)? = null
 ) : ZkElement(document.createElement(if (url == null) "div" else "a") as HTMLElement)  {
 
@@ -57,9 +58,10 @@ open class ZkButton(
         capitalize: Boolean = true,
         iconSize: Int? = null,
         buttonSize: Int? = null,
+        tabIndex: Int? = 0,
         onClick: (() -> Unit)? = null
     ) : this(
-        text, null, flavour, null, round, fill, border, capitalize, iconSize, buttonSize, onClick
+        text, null, flavour, null, round, fill, border, capitalize, iconSize, buttonSize, tabIndex, onClick
     )
 
     constructor(
@@ -71,9 +73,10 @@ open class ZkButton(
         capitalize: Boolean = true,
         iconSize: Int? = null,
         buttonSize: Int? = null,
+        tabIndex: Int? = 0,
         onClick: (() -> Unit)? = null
     ) : this(
-        null, iconSource, flavour, null, round, fill, border, capitalize, iconSize, buttonSize, onClick
+        null, iconSource, flavour, null, round, fill, border, capitalize, iconSize, buttonSize, tabIndex, onClick
     )
 
     open val localNav
@@ -93,8 +96,24 @@ open class ZkButton(
             element.href = url ?: ""
         }
 
+        tabIndex?.let { element.tabIndex = it }
+
         on("click", ::onClick)
         on("mousedown", ::onMouseDown)
+        on("keydown") { event ->
+            event as KeyboardEvent
+            if (event.key == "Enter") onEnter(event)
+        }
+    }
+
+    open fun onEnter(event: Event) {
+        if (localNav) {
+            if (onClick != null) {
+                onClick?.invoke()
+            } else {
+                url?.let { application.changeNavState(it) }
+            }
+        }
     }
 
     open fun onClick(event: Event) {

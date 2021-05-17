@@ -32,6 +32,8 @@ val executor
 val stringStore
     get() = application.stringStore
 
+inline fun <reified T> translate() = stringStore.getNormalized(T::class.simpleName!!)
+
 /**
  * Check if the executor has the given role.
  */

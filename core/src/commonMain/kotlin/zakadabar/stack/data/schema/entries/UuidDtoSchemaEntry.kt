@@ -14,26 +14,24 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema.validations
+package zakadabar.stack.data.schema.entries
 
-import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.schema.DtoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.descriptor.DtoBasePropertyDto
 import zakadabar.stack.data.schema.descriptor.PropertyDto
+import zakadabar.stack.data.schema.descriptor.UuidPropertyDto
 import zakadabar.stack.util.PublicApi
+import zakadabar.stack.util.UUID
 import kotlin.reflect.KMutableProperty0
 
-class DtoBaseDtoSchemaEntry<T : DtoBase>(val kProperty: KMutableProperty0<T>) : DtoSchemaEntry<T> {
+class UuidDtoSchemaEntry(val kProperty: KMutableProperty0<UUID>) : DtoSchemaEntry<UUID> {
 
-    var defaultValue = kProperty.get()
+    var defaultValue = UUID.NIL
 
-    override fun validate(report: ValidityReport) {
-        kProperty.get().schema().validate()
-    }
+    override fun validate(report: ValidityReport) {}
 
     @PublicApi
-    infix fun default(value: T): DtoBaseDtoSchemaEntry<T> {
+    infix fun default(value: UUID): UuidDtoSchemaEntry {
         defaultValue = value
         return this
     }
@@ -45,16 +43,16 @@ class DtoBaseDtoSchemaEntry<T : DtoBase>(val kProperty: KMutableProperty0<T>) : 
     override fun isOptional() = false
 
     override fun push(dto: PropertyDto) {
-        require(dto is DtoBasePropertyDto)
-        kProperty.get().schema().push(dto.value!!)
+        require(dto is UuidPropertyDto)
+        kProperty.set(dto.value!!)
     }
 
-    override fun toPropertyDto() = DtoBasePropertyDto(
+    override fun toPropertyDto() = UuidPropertyDto(
         kProperty.name,
         isOptional(),
         emptyList(),
-        kProperty.get().schema().toDescriptorDto()
+        defaultValue,
+        kProperty.get()
     )
-
 
 }

@@ -14,10 +14,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema.validations
+package zakadabar.stack.data.schema.entries
 
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.record.EmptyRecordId
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.DtoPropertyConstraint
 import zakadabar.stack.data.schema.DtoSchemaEntry
@@ -30,14 +29,14 @@ import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty0
 
-class RecordIdDtoSchemaEntry<T : Any>(
+class OptRecordIdDtoSchemaEntry<T : Any>(
     val kClass: KClass<T>,
-    val kProperty: KMutableProperty0<RecordId<T>>
-) : DtoSchemaEntry<RecordId<T>> {
+    val kProperty: KMutableProperty0<RecordId<T>?>
+) : DtoSchemaEntry<RecordId<*>?> {
 
-    var defaultValue: RecordId<T> = EmptyRecordId()
+    var defaultValue: RecordId<T>? = null
 
-    private val rules = mutableListOf<DtoPropertyConstraint<RecordId<*>>>()
+    private val rules = mutableListOf<DtoPropertyConstraint<RecordId<T>?>>()
 
     override fun validate(report: ValidityReport) {
         val value = kProperty.get()
@@ -46,10 +45,10 @@ class RecordIdDtoSchemaEntry<T : Any>(
         }
     }
 
-    inner class Empty(@PublicApi val validValue: Boolean) : DtoPropertyConstraint<RecordId<*>> {
+    inner class Empty(@PublicApi val validValue: Boolean) : DtoPropertyConstraint<RecordId<T>?> {
 
-        override fun validate(value: RecordId<*>, report: ValidityReport) {
-            if (value.isEmpty() != validValue) report.fail(kProperty, this)
+        override fun validate(value: RecordId<T>?, report: ValidityReport) {
+            if (value?.isEmpty() != validValue) report.fail(kProperty, this)
         }
 
         override fun toValidationDto() = ConstraintBooleanDto(ConstraintType.Empty, validValue)
@@ -57,13 +56,13 @@ class RecordIdDtoSchemaEntry<T : Any>(
     }
 
     @PublicApi
-    infix fun empty(validValue: Boolean): RecordIdDtoSchemaEntry<T> {
+    infix fun empty(validValue: Boolean): OptRecordIdDtoSchemaEntry<*> {
         rules += Empty(validValue)
         return this
     }
 
     @PublicApi
-    infix fun default(value: RecordId<T>): RecordIdDtoSchemaEntry<T> {
+    infix fun default(value: RecordId<T>?): OptRecordIdDtoSchemaEntry<*> {
         defaultValue = value
         return this
     }

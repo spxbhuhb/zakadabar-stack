@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.frontend.builtin.button
 
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
@@ -26,6 +25,11 @@ open class ZkButtonStyles : ZkCssStyleSheet() {
         paddingLeft = 10
         paddingRight = 10
         whiteSpace = "nowrap"
+
+        on(":focus") {
+            outline = "1px solid ${theme.infoColor}"
+            styles["outline-offset"] = "4px"
+        }
     }
 
     open val combined by cssClass {
@@ -40,6 +44,12 @@ open class ZkButtonStyles : ZkCssStyleSheet() {
         borderRadius = theme.cornerRadius
         paddingRight = 10
         whiteSpace = "nowrap"
+
+        on(":focus") {
+            outline = "1px solid ${theme.infoColor}"
+            styles["outline-offset"] = "4px"
+        }
+
     }
 
     open val icon by cssClass {
@@ -50,6 +60,11 @@ open class ZkButtonStyles : ZkCssStyleSheet() {
         cursor = "pointer"
         width = buttonHeight
         height = buttonHeight
+
+        on(":focus") {
+            outline = "1px solid ${theme.infoColor}"
+            styles["outline-offset"] = "4px"
+        }
     }
 
     open val square by cssClass {

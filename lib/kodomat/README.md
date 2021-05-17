@@ -6,7 +6,7 @@ Common
 | --- | --- |
 | ClassGenerator | Generates source code for classes. |
 | PropertyGenerator | Generate code for one given property. |
-| ValidationRuleGenerator | Generate code for a validation rule. |
+| ConstraintGenerator | Generate code for one constraint. |
 
 Frontend
 

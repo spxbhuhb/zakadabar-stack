@@ -42,7 +42,10 @@ import zakadabar.stack.frontend.builtin.form.structure.ZkInvalidFieldList
 import zakadabar.stack.frontend.builtin.pages.ZkCrudPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
-import zakadabar.stack.frontend.builtin.toast.*
+import zakadabar.stack.frontend.builtin.toast.ZkToast
+import zakadabar.stack.frontend.builtin.toast.dangerToast
+import zakadabar.stack.frontend.builtin.toast.successToast
+import zakadabar.stack.frontend.builtin.toast.warningToast
 import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.log
@@ -521,6 +524,20 @@ open class ZkForm<T : DtoBase> (
 
     operator fun KMutableProperty0<Int?>.unaryPlus(): ZkElement {
         val field = ZkOptIntField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<Long>.unaryPlus(): ZkElement {
+        val field = ZkLongField(this@ZkForm, this)
+        + field
+        fields += field
+        return field
+    }
+
+    operator fun KMutableProperty0<Long?>.unaryPlus(): ZkElement {
+        val field = ZkOptLongField(this@ZkForm, this)
         + field
         fields += field
         return field

@@ -14,24 +14,23 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema.validations
+package zakadabar.stack.data.schema.entries
 
 import zakadabar.stack.data.schema.DtoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.descriptor.BooleanPropertyDto
 import zakadabar.stack.data.schema.descriptor.PropertyDto
-import zakadabar.stack.data.schema.descriptor.UuidPropertyDto
 import zakadabar.stack.util.PublicApi
-import zakadabar.stack.util.UUID
 import kotlin.reflect.KMutableProperty0
 
-class UuidDtoSchemaEntry(val kProperty: KMutableProperty0<UUID>) : DtoSchemaEntry<UUID> {
+class BooleanDtoSchemaEntry(val kProperty: KMutableProperty0<Boolean>) : DtoSchemaEntry<Boolean> {
 
-    var defaultValue = UUID.NIL
+    var defaultValue = false
 
     override fun validate(report: ValidityReport) {}
 
     @PublicApi
-    infix fun default(value: UUID): UuidDtoSchemaEntry {
+    infix fun default(value: Boolean): BooleanDtoSchemaEntry {
         defaultValue = value
         return this
     }
@@ -43,16 +42,15 @@ class UuidDtoSchemaEntry(val kProperty: KMutableProperty0<UUID>) : DtoSchemaEntr
     override fun isOptional() = false
 
     override fun push(dto: PropertyDto) {
-        require(dto is UuidPropertyDto)
+        require(dto is BooleanPropertyDto)
         kProperty.set(dto.value!!)
     }
 
-    override fun toPropertyDto() = UuidPropertyDto(
+    override fun toPropertyDto() = BooleanPropertyDto(
         kProperty.name,
         isOptional(),
         emptyList(),
         defaultValue,
         kProperty.get()
     )
-
 }

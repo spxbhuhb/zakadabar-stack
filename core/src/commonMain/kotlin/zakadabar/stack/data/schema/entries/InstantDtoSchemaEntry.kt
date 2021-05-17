@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema.validations
+package zakadabar.stack.data.schema.entries
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import zakadabar.stack.data.schema.DtoPropertyConstraint
 import zakadabar.stack.data.schema.DtoSchemaEntry
@@ -27,55 +28,55 @@ import zakadabar.stack.data.schema.descriptor.PropertyDto
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class OptInstantDtoSchemaEntry(val kProperty: KMutableProperty0<Instant?>) : DtoSchemaEntry<Instant?> {
+class InstantDtoSchemaEntry(val kProperty: KMutableProperty0<Instant>) : DtoSchemaEntry<Instant> {
 
     var defaultValue: Instant? = null
 
-    private val rules = mutableListOf<DtoPropertyConstraint<Instant?>>()
+    private val rules = mutableListOf<DtoPropertyConstraint<Instant>>()
 
-    inner class Max(@PublicApi val limit: Instant) : DtoPropertyConstraint<Instant?> {
+    inner class Max(@PublicApi val limit: Instant) : DtoPropertyConstraint<Instant> {
 
-        override fun validate(value: Instant?, report: ValidityReport) {
-            if (value != null && value > limit) report.fail(kProperty, this)
+        override fun validate(value: Instant, report: ValidityReport) {
+            if (value > limit) report.fail(kProperty, this)
         }
 
         override fun toValidationDto() = ConstraintInstantDto(ConstraintType.Max, limit)
 
     }
 
-    inner class Min(@PublicApi val limit: Instant) : DtoPropertyConstraint<Instant?> {
+    inner class Min(@PublicApi val limit: Instant) : DtoPropertyConstraint<Instant> {
 
-        override fun validate(value: Instant?, report: ValidityReport) {
-            if (value != null && value < limit) report.fail(kProperty, this)
+        override fun validate(value: Instant, report: ValidityReport) {
+            if (value < limit) report.fail(kProperty, this)
         }
 
         override fun toValidationDto() = ConstraintInstantDto(ConstraintType.Min, limit)
 
     }
 
-    inner class Before(@PublicApi val limit: Instant) : DtoPropertyConstraint<Instant?> {
+    inner class Before(@PublicApi val limit: Instant) : DtoPropertyConstraint<Instant> {
 
-        override fun validate(value: Instant?, report: ValidityReport) {
-            if (value != null && value >= limit) report.fail(kProperty, this)
+        override fun validate(value: Instant, report: ValidityReport) {
+            if (value >= limit) report.fail(kProperty, this)
         }
 
         override fun toValidationDto() = ConstraintInstantDto(ConstraintType.Before, limit)
 
     }
 
-    inner class After(@PublicApi val limit: Instant) : DtoPropertyConstraint<Instant?> {
+    inner class After(@PublicApi val limit: Instant) : DtoPropertyConstraint<Instant> {
 
-        override fun validate(value: Instant?, report: ValidityReport) {
-            if (value != null && value <= limit) report.fail(kProperty, this)
+        override fun validate(value: Instant, report: ValidityReport) {
+            if (value <= limit) report.fail(kProperty, this)
         }
 
         override fun toValidationDto() = ConstraintInstantDto(ConstraintType.After, limit)
 
     }
 
-    inner class NotEquals(@PublicApi val invalidValue: Instant) : DtoPropertyConstraint<Instant?> {
+    inner class NotEquals(@PublicApi val invalidValue: Instant) : DtoPropertyConstraint<Instant> {
 
-        override fun validate(value: Instant?, report: ValidityReport) {
+        override fun validate(value: Instant, report: ValidityReport) {
             if (value == invalidValue) report.fail(kProperty, this)
         }
 
@@ -84,31 +85,31 @@ class OptInstantDtoSchemaEntry(val kProperty: KMutableProperty0<Instant?>) : Dto
     }
 
     @PublicApi
-    infix fun max(limit: Instant): OptInstantDtoSchemaEntry {
+    infix fun max(limit: Instant): InstantDtoSchemaEntry {
         rules += Max(limit)
         return this
     }
 
     @PublicApi
-    infix fun min(limit: Instant): OptInstantDtoSchemaEntry {
+    infix fun min(limit: Instant): InstantDtoSchemaEntry {
         rules += Min(limit)
         return this
     }
 
     @PublicApi
-    infix fun before(limit: Instant): OptInstantDtoSchemaEntry {
+    infix fun before(limit: Instant): InstantDtoSchemaEntry {
         rules += Before(limit)
         return this
     }
 
     @PublicApi
-    infix fun after(limit: Instant): OptInstantDtoSchemaEntry {
+    infix fun after(limit: Instant): InstantDtoSchemaEntry {
         rules += After(limit)
         return this
     }
 
     @PublicApi
-    infix fun notEquals(invalidValue: Instant): OptInstantDtoSchemaEntry {
+    infix fun notEquals(invalidValue: Instant): InstantDtoSchemaEntry {
         rules += NotEquals(invalidValue)
         return this
     }
@@ -121,20 +122,20 @@ class OptInstantDtoSchemaEntry(val kProperty: KMutableProperty0<Instant?>) : Dto
     }
 
     @PublicApi
-    infix fun default(value: Instant?): OptInstantDtoSchemaEntry {
+    infix fun default(value: Instant): InstantDtoSchemaEntry {
         defaultValue = value
         return this
     }
 
     override fun setDefault() {
-        kProperty.set(defaultValue)
+        kProperty.set(defaultValue ?: Clock.System.now())
     }
 
-    override fun isOptional() = true
+    override fun isOptional() = false
 
     override fun push(dto: PropertyDto) {
         require(dto is InstantPropertyDto)
-        kProperty.set(dto.value)
+        kProperty.set(dto.value!!)
     }
 
     override fun toPropertyDto() = InstantPropertyDto(

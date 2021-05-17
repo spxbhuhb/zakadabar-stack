@@ -31,11 +31,18 @@ class HeaderProvider(
             }
         }
 
-        visitor.consumeTagOpen(
-            node, tagName,
-            "id=\"${id.trim().replace(" ", "-")}\"",
-            "data-toc-id=\"${context.viewId}-${context.nextTocId}\""
-        )
+        if (context.hashes) {
+            visitor.consumeTagOpen(
+                node, tagName,
+                "id=\"${id.trim().replace(" ", "-")}\"",
+                "data-toc-id=\"${context.viewId}-${context.nextTocId}\""
+            )
+        } else {
+            visitor.consumeTagOpen(
+                node, tagName,
+                "data-toc-id=\"${context.viewId}-${context.nextTocId}\""
+            )
+        }
     }
 
     override fun closeTag(visitor: HtmlGenerator.HtmlGeneratingVisitor, text: String, node: ASTNode) {

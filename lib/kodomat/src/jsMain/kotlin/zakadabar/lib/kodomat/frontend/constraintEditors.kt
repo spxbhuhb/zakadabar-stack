@@ -14,7 +14,6 @@ open class ConstraintEditor : ZkElement() {
     }
 }
 
-
 class Optional : ZkElement() {
     override fun onCreate() {
         super.onCreate()

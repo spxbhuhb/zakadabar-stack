@@ -14,26 +14,26 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema.validations
+package zakadabar.stack.data.schema.entries
 
+import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.schema.DtoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.descriptor.EnumPropertyDto
+import zakadabar.stack.data.schema.descriptor.DtoBasePropertyDto
 import zakadabar.stack.data.schema.descriptor.PropertyDto
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class OptEnumDtoSchemaEntry<E : Enum<E>>(
-    val kProperty: KMutableProperty0<E?>,
-    val values : Array<E>
-) : DtoSchemaEntry<E> {
+class DtoBaseDtoSchemaEntry<T : DtoBase>(val kProperty: KMutableProperty0<T>) : DtoSchemaEntry<T> {
 
-    var defaultValue: E? = null
+    var defaultValue = kProperty.get()
 
-    override fun validate(report: ValidityReport) {}
+    override fun validate(report: ValidityReport) {
+        kProperty.get().schema().validate()
+    }
 
     @PublicApi
-    infix fun default(value: E): OptEnumDtoSchemaEntry<E> {
+    infix fun default(value: T): DtoBaseDtoSchemaEntry<T> {
         defaultValue = value
         return this
     }
@@ -42,24 +42,19 @@ class OptEnumDtoSchemaEntry<E : Enum<E>>(
         kProperty.set(defaultValue)
     }
 
-    override fun isOptional() = true
+    override fun isOptional() = false
 
     override fun push(dto: PropertyDto) {
-        require(dto is EnumPropertyDto)
-        if (dto.value == null) {
-            kProperty.set(null)
-        } else {
-            kProperty.set(values.firstOrNull { it.name == dto.value } ?: throw IllegalArgumentException("value for ${kProperty.name} is invalid"))
-        }
+        require(dto is DtoBasePropertyDto)
+        kProperty.get().schema().push(dto.value!!)
     }
 
-    override fun toPropertyDto() = EnumPropertyDto(
+    override fun toPropertyDto() = DtoBasePropertyDto(
         kProperty.name,
         isOptional(),
         emptyList(),
-        values.map { it.name },
-        defaultValue?.name,
-        kProperty.get()?.name
+        kProperty.get().schema().toDescriptorDto()
     )
+
 
 }

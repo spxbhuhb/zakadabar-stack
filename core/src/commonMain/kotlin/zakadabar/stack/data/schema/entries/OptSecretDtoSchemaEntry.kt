@@ -14,69 +14,73 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema.validations
+package zakadabar.stack.data.schema.entries
 
+import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.schema.DtoPropertyConstraint
 import zakadabar.stack.data.schema.DtoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.descriptor.ConstraintIntDto
-import zakadabar.stack.data.schema.descriptor.ConstraintType
-import zakadabar.stack.data.schema.descriptor.IntPropertyDto
-import zakadabar.stack.data.schema.descriptor.PropertyDto
+import zakadabar.stack.data.schema.descriptor.*
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class OptIntDtoSchemaEntry(val kProperty: KMutableProperty0<Int?>) : DtoSchemaEntry<Int?> {
+class OptSecretDtoSchemaEntry(val kProperty: KMutableProperty0<Secret?>) : DtoSchemaEntry<Secret?> {
 
-    var defaultValue: Int? = null
+    var defaultValue: Secret? = null
 
-    private val rules = mutableListOf<DtoPropertyConstraint<Int?>>()
+    private val rules = mutableListOf<DtoPropertyConstraint<Secret?>>()
 
-    inner class Max(@PublicApi val limit: Int) : DtoPropertyConstraint<Int?> {
+    inner class Max(@PublicApi val limit: Int) : DtoPropertyConstraint<Secret?> {
 
-        override fun validate(value: Int?, report: ValidityReport) {
-            if (value != null && value > limit) report.fail(kProperty, this)
+        override fun validate(value: Secret?, report: ValidityReport) {
+            if (value != null && value.value.length > limit) report.fail(kProperty, this)
         }
 
         override fun toValidationDto() = ConstraintIntDto(ConstraintType.Max, limit)
 
     }
 
-    inner class Min(@PublicApi val limit: Int) : DtoPropertyConstraint<Int?> {
+    inner class Min(@PublicApi val limit: Int) : DtoPropertyConstraint<Secret?> {
 
-        override fun validate(value: Int?, report: ValidityReport) {
-            if (value != null && value < limit) report.fail(kProperty, this)
+        override fun validate(value: Secret?, report: ValidityReport) {
+            if (value != null && value.value.length < limit) report.fail(kProperty, this)
         }
 
         override fun toValidationDto() = ConstraintIntDto(ConstraintType.Min, limit)
 
     }
 
-    inner class NotEquals(@PublicApi val invalidValue: Int?) : DtoPropertyConstraint<Int?> {
+    inner class Blank(@PublicApi val validValue: Boolean) : DtoPropertyConstraint<Secret?> {
 
-        override fun validate(value: Int?, report: ValidityReport) {
-            if (value == invalidValue) report.fail(kProperty, this)
+        override fun validate(value: Secret?, report: ValidityReport) {
+            if (validValue) return // there is nothing to check when blank is allowed
+
+            // here blank value is not allowed
+
+            if (value == null || value.value.isBlank()) {
+                report.fail(kProperty, this)
+            }
         }
 
-        override fun toValidationDto() = ConstraintIntDto(ConstraintType.NotEquals, invalidValue)
+        override fun toValidationDto() = ConstraintBooleanDto(ConstraintType.Blank, validValue)
 
     }
 
     @PublicApi
-    infix fun max(limit: Int): OptIntDtoSchemaEntry {
+    infix fun max(limit: Int): OptSecretDtoSchemaEntry {
         rules += Max(limit)
         return this
     }
 
     @PublicApi
-    infix fun min(limit: Int): OptIntDtoSchemaEntry {
+    infix fun min(limit: Int): OptSecretDtoSchemaEntry {
         rules += Min(limit)
         return this
     }
 
     @PublicApi
-    infix fun notEquals(invalidValue: Int?): OptIntDtoSchemaEntry {
-        rules += NotEquals(invalidValue)
+    infix fun blank(blank: Boolean): OptSecretDtoSchemaEntry {
+        rules += Blank(blank)
         return this
     }
 
@@ -88,7 +92,7 @@ class OptIntDtoSchemaEntry(val kProperty: KMutableProperty0<Int?>) : DtoSchemaEn
     }
 
     @PublicApi
-    infix fun default(value: Int?): OptIntDtoSchemaEntry {
+    infix fun default(value: Secret?): OptSecretDtoSchemaEntry {
         defaultValue = value
         return this
     }
@@ -100,16 +104,15 @@ class OptIntDtoSchemaEntry(val kProperty: KMutableProperty0<Int?>) : DtoSchemaEn
     override fun isOptional() = true
 
     override fun push(dto: PropertyDto) {
-        require(dto is IntPropertyDto)
+        require(dto is SecretPropertyDto)
         kProperty.set(dto.value)
     }
 
-    override fun toPropertyDto() = IntPropertyDto(
+    override fun toPropertyDto() = SecretPropertyDto(
         kProperty.name,
         isOptional(),
         rules.map { it.toValidationDto() },
         defaultValue,
         kProperty.get()
     )
-
 }

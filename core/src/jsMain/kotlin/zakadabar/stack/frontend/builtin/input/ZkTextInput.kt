@@ -21,13 +21,19 @@ import zakadabar.stack.util.PublicApi
 @PublicApi
 open class ZkTextInput(
     private val enter: Boolean = false,
-    var value: String = "",
+    value: String = "",
     private val onChange: (String) -> Unit = { }
 ) : ZkElement(
     element = document.createElement("input") as HTMLInputElement
 ) {
 
-    private val input = element as HTMLInputElement
+    val input = element as HTMLInputElement
+
+    open var value: String = value
+        set(value) {
+            if (input.value != value) input.value = value
+            field = value
+        }
 
     override fun onCreate() {
 
@@ -45,6 +51,11 @@ open class ZkTextInput(
             if (enter && event.key == "Enter") onChange(value)
         }
 
+    }
+
+    override fun focus() : ZkElement {
+        input.focus()
+        return this
     }
 
     override fun toString() = value
