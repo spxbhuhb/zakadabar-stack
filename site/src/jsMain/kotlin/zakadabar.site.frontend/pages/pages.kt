@@ -3,13 +3,13 @@
  */
 package zakadabar.site.frontend.pages
 
+import zakadabar.lib.kodomat.frontend.ClassGenerator
 import zakadabar.lib.kodomat.frontend.Kodomat
 import zakadabar.lib.markdown.frontend.MarkdownPage
 import zakadabar.lib.markdown.frontend.MarkdownPathPage
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 
 const val contentNamespace = "content"
@@ -54,9 +54,9 @@ object FAQ : MarkdownPage(
     SiteMarkdownContext("FAQ", "help/")
 )
 
-object KodomatPage : ZkPage(css = zkPageStyles.fixed) {
+object KodomatPage : ZkPage() {
     override fun onCreate() {
-        + Kodomat()
+        + Kodomat(ClassGenerator(), "/api/$contentNamespace/template/kodomat/dto.md")
     }
 }
 

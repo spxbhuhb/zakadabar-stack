@@ -5,16 +5,21 @@ package zakadabar.lib.kodomat.frontend
 
 import zakadabar.stack.data.schema.descriptor.DescriptorDto
 
-open class ClassGenerator(
-    protected val descriptor : DescriptorDto,
-    open val generators: List<PropertyGenerator>
-) {
+open class ClassGenerator {
 
-    val packageName = descriptor.packageName
-    val className = descriptor.kClassName
-    val namespace = descriptor.dtoNamespace
-    val tableName = descriptor.kClassName.toTableName()
-    val daoName = descriptor.kClassName.toDaoName()
+    lateinit var descriptor: DescriptorDto
+    lateinit var generators: List<PropertyGenerator>
+
+    open val packageName
+        get() = descriptor.packageName
+    open val className
+        get() = descriptor.kClassName
+    open val namespace
+        get() = descriptor.dtoNamespace
+    open val tableName
+        get() = descriptor.kClassName.toTableName()
+    open val daoName
+        get() = descriptor.kClassName.toDaoName()
 
     fun dtoGenerator() =
         """
@@ -25,15 +30,15 @@ import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.DtoSchema
-${generators.mapNotNull { it.commonImport() } .joinToString("\n")}
+${generators.mapNotNull { it.commonImport() }.joinToString("\n")}
 
 @Serializable
-class ${packageName}(
+class ${className}(
 
     override var id: RecordId<$className>,
     ${generators.joinToString(",\n    ") { it.commonDeclaration() }}
 
-) : RecordDto<SimpleExampleDto> {
+) : RecordDto<$className> {
 
     companion object : RecordDtoCompanion<$className>("$namespace")
 
@@ -47,9 +52,9 @@ class ${packageName}(
 }
 """.trimIndent()
 
-    fun tableGenerator(descriptor: DescriptorDto, generators: List<PropertyGenerator>) =
+    fun backendGenerator() =
         """
-package ${packageName}
+package $packageName
 
 import io.ktor.routing.*
 import org.jetbrains.exposed.sql.selectAll
@@ -61,7 +66,7 @@ import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.Executor
 import ${packageName}.$className
-${generators.mapNotNull { it.backendImport() } .joinToString("\n")}
+${generators.mapNotNull { it.backendImport() }.joinToString("\n")}
 
 object ${className.withoutDto()}Backend : RecordBackend<$className>() {
 

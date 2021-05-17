@@ -4,34 +4,38 @@
 package zakadabar.lib.kodomat.frontend
 
 import io.ktor.util.*
-import kotlinx.browser.document
-import org.w3c.dom.*
+import kotlinx.browser.window
+import kotlinx.coroutines.await
+import zakadabar.lib.markdown.frontend.MarkdownView
 import zakadabar.stack.data.schema.descriptor.DescriptorDto
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.input.ZkTextInput
-import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
 import zakadabar.stack.frontend.builtin.toast.dangerToast
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
+import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.marginBottom
 import zakadabar.stack.frontend.util.marginRight
 
-class Kodomat : ZkTabContainer() {
+class Kodomat(
+    private val classGenerator: ClassGenerator,
+    private val templateUrl: String,
+) : ZkElement() {
 
-    private val commonCode = ZkElement(document.createElement("pre") as HTMLElement)
-    private val browserCode = ZkElement()
-    private val backendCode = ZkElement()
+    private val resultContainer = ZkElement()
+    lateinit var template: String
 
     override fun onCreate() {
         super.onCreate()
 
-        height = "100%"
+        + Editor()
+        + resultContainer
 
-        + tab(Editor())
-        + tab(commonCode, title = "Common")
-        + tab(browserCode, title = "Browser")
-        + tab(backendCode, title = "Backend")
+        io {
+            template = window.fetch(templateUrl).await().text().await()
+        }
+
     }
 
     inner class Editor : ZkElement() {
@@ -66,21 +70,35 @@ class Kodomat : ZkTabContainer() {
                 + ZkButton(flavour = ZkFlavour.Success, iconSource = ZkIcons.add, fill = true, buttonSize = 18) {
                     insertBefore(EditorEntry(this@Editor), findFirst<ZkButton>())
                 } marginRight 10 marginBottom 4
+
+                + ZkButton(text = "Generate", flavour = ZkFlavour.Primary) {
+                    generate()
+                } marginRight 10 marginBottom 4
+
             }
         }
 
-        override fun onPause() {
+        private fun generate() {
 
             descriptor.packageName = packageName.value
             descriptor.kClassName = dtoClassName.value
             descriptor.dtoNamespace = dtoNamespace.value
 
-            val generator = ClassGenerator(
-                descriptor,
-                find<EditorEntry>().mapNotNull { it.generator() }
-            )
+            classGenerator.descriptor = descriptor
+            classGenerator.generators = find<EditorEntry>().mapNotNull { it.generator() }
 
-            commonCode.innerText = generator.dtoGenerator()
+            val commonSource = classGenerator.dtoGenerator()
+            val browserSource = ""
+            val backendSource = classGenerator.backendGenerator()
+
+            val result = template
+                .replace("@packageName@", descriptor.packageName)
+                .replace("commonSource", commonSource)
+                .replace("browserSource", browserSource)
+                .replace("backendSource", backendSource)
+
+            resultContainer.clear()
+            resultContainer += MarkdownView(sourceText = result)
         }
     }
 }
