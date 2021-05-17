@@ -36,7 +36,7 @@ open class ZkCheckBox(
 
     open var checked: Boolean = checked
         set(value) {
-            checkbox.checked = value
+            if (checkbox.checked != value) checkbox.checked = value
             field = value
         }
 
@@ -60,6 +60,7 @@ open class ZkCheckBox(
     }
 
     open fun onChange(event: Event) {
+        checked = checkbox.checked
         onChange?.invoke(checkbox.checked)
     }
 

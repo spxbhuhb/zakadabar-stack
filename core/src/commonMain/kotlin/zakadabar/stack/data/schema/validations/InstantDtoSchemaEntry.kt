@@ -18,98 +18,98 @@ package zakadabar.stack.data.schema.validations
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import zakadabar.stack.data.schema.ValidationRule
-import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.DtoPropertyConstraint
+import zakadabar.stack.data.schema.DtoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.descriptor.ConstraintInstantDto
+import zakadabar.stack.data.schema.descriptor.ConstraintType
 import zakadabar.stack.data.schema.descriptor.InstantPropertyDto
-import zakadabar.stack.data.schema.descriptor.InstantValidationDto
 import zakadabar.stack.data.schema.descriptor.PropertyDto
-import zakadabar.stack.data.schema.descriptor.ValidationType
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class InstantValidationRuleList(val kProperty: KMutableProperty0<Instant>) : ValidationRuleList<Instant> {
+class InstantDtoSchemaEntry(val kProperty: KMutableProperty0<Instant>) : DtoSchemaEntry<Instant> {
 
     var defaultValue: Instant? = null
 
-    private val rules = mutableListOf<ValidationRule<Instant>>()
+    private val rules = mutableListOf<DtoPropertyConstraint<Instant>>()
 
-    inner class Max(@PublicApi val limit: Instant) : ValidationRule<Instant> {
+    inner class Max(@PublicApi val limit: Instant) : DtoPropertyConstraint<Instant> {
 
         override fun validate(value: Instant, report: ValidityReport) {
             if (value > limit) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = InstantValidationDto(ValidationType.Max, limit)
+        override fun toValidationDto() = ConstraintInstantDto(ConstraintType.Max, limit)
 
     }
 
-    inner class Min(@PublicApi val limit: Instant) : ValidationRule<Instant> {
+    inner class Min(@PublicApi val limit: Instant) : DtoPropertyConstraint<Instant> {
 
         override fun validate(value: Instant, report: ValidityReport) {
             if (value < limit) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = InstantValidationDto(ValidationType.Min, limit)
+        override fun toValidationDto() = ConstraintInstantDto(ConstraintType.Min, limit)
 
     }
 
-    inner class Before(@PublicApi val limit: Instant) : ValidationRule<Instant> {
+    inner class Before(@PublicApi val limit: Instant) : DtoPropertyConstraint<Instant> {
 
         override fun validate(value: Instant, report: ValidityReport) {
             if (value >= limit) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = InstantValidationDto(ValidationType.Before, limit)
+        override fun toValidationDto() = ConstraintInstantDto(ConstraintType.Before, limit)
 
     }
 
-    inner class After(@PublicApi val limit: Instant) : ValidationRule<Instant> {
+    inner class After(@PublicApi val limit: Instant) : DtoPropertyConstraint<Instant> {
 
         override fun validate(value: Instant, report: ValidityReport) {
             if (value <= limit) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = InstantValidationDto(ValidationType.After, limit)
+        override fun toValidationDto() = ConstraintInstantDto(ConstraintType.After, limit)
 
     }
 
-    inner class NotEquals(@PublicApi val invalidValue: Instant) : ValidationRule<Instant> {
+    inner class NotEquals(@PublicApi val invalidValue: Instant) : DtoPropertyConstraint<Instant> {
 
         override fun validate(value: Instant, report: ValidityReport) {
             if (value == invalidValue) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = InstantValidationDto(ValidationType.NotEquals, invalidValue)
+        override fun toValidationDto() = ConstraintInstantDto(ConstraintType.NotEquals, invalidValue)
 
     }
 
     @PublicApi
-    infix fun max(limit: Instant): InstantValidationRuleList {
+    infix fun max(limit: Instant): InstantDtoSchemaEntry {
         rules += Max(limit)
         return this
     }
 
     @PublicApi
-    infix fun min(limit: Instant): InstantValidationRuleList {
+    infix fun min(limit: Instant): InstantDtoSchemaEntry {
         rules += Min(limit)
         return this
     }
 
     @PublicApi
-    infix fun before(limit: Instant): InstantValidationRuleList {
+    infix fun before(limit: Instant): InstantDtoSchemaEntry {
         rules += Before(limit)
         return this
     }
 
     @PublicApi
-    infix fun after(limit: Instant): InstantValidationRuleList {
+    infix fun after(limit: Instant): InstantDtoSchemaEntry {
         rules += After(limit)
         return this
     }
 
     @PublicApi
-    infix fun notEquals(invalidValue: Instant): InstantValidationRuleList {
+    infix fun notEquals(invalidValue: Instant): InstantDtoSchemaEntry {
         rules += NotEquals(invalidValue)
         return this
     }
@@ -122,7 +122,7 @@ class InstantValidationRuleList(val kProperty: KMutableProperty0<Instant>) : Val
     }
 
     @PublicApi
-    infix fun default(value: Instant): InstantValidationRuleList {
+    infix fun default(value: Instant): InstantDtoSchemaEntry {
         defaultValue = value
         return this
     }
@@ -135,11 +135,12 @@ class InstantValidationRuleList(val kProperty: KMutableProperty0<Instant>) : Val
 
     override fun push(dto: PropertyDto) {
         require(dto is InstantPropertyDto)
-        kProperty.set(dto.value)
+        kProperty.set(dto.value!!)
     }
 
     override fun toPropertyDto() = InstantPropertyDto(
         kProperty.name,
+        isOptional(),
         rules.map { it.toValidationDto() },
         defaultValue,
         kProperty.get()

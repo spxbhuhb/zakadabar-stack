@@ -16,66 +16,66 @@
  */
 package zakadabar.stack.data.schema.validations
 
-import zakadabar.stack.data.schema.ValidationRule
-import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.DtoPropertyConstraint
+import zakadabar.stack.data.schema.DtoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.descriptor.IntPropertyDto
-import zakadabar.stack.data.schema.descriptor.IntValidationDto
+import zakadabar.stack.data.schema.descriptor.ConstraintLongDto
+import zakadabar.stack.data.schema.descriptor.ConstraintType
+import zakadabar.stack.data.schema.descriptor.LongPropertyDto
 import zakadabar.stack.data.schema.descriptor.PropertyDto
-import zakadabar.stack.data.schema.descriptor.ValidationType
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class IntValidationRuleList(val kProperty: KMutableProperty0<Int>) : ValidationRuleList<Int> {
+class LongDtoSchemaEntry(val kProperty: KMutableProperty0<Long>) : DtoSchemaEntry<Long> {
 
-    var defaultValue = 0
+    var defaultValue = 0L
 
-    private val rules = mutableListOf<ValidationRule<Int>>()
+    private val rules = mutableListOf<DtoPropertyConstraint<Long>>()
 
-    inner class Max(@PublicApi val limit: Int) : ValidationRule<Int> {
+    inner class Max(@PublicApi val limit: Long) : DtoPropertyConstraint<Long> {
 
-        override fun validate(value: Int, report: ValidityReport) {
+        override fun validate(value: Long, report: ValidityReport) {
             if (value > limit) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = IntValidationDto(ValidationType.Max, limit)
+        override fun toValidationDto() = ConstraintLongDto(ConstraintType.Max, limit)
 
     }
 
-    inner class Min(@PublicApi val limit: Int) : ValidationRule<Int> {
+    inner class Min(@PublicApi val limit: Long) : DtoPropertyConstraint<Long> {
 
-        override fun validate(value: Int, report: ValidityReport) {
+        override fun validate(value: Long, report: ValidityReport) {
             if (value < limit) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = IntValidationDto(ValidationType.Min, limit)
+        override fun toValidationDto() = ConstraintLongDto(ConstraintType.Min, limit)
 
     }
 
-    inner class NotEquals(@PublicApi val invalidValue: Int) : ValidationRule<Int> {
+    inner class NotEquals(@PublicApi val invalidValue: Long) : DtoPropertyConstraint<Long> {
 
-        override fun validate(value: Int, report: ValidityReport) {
+        override fun validate(value: Long, report: ValidityReport) {
             if (value == invalidValue) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = IntValidationDto(ValidationType.NotEquals, invalidValue)
+        override fun toValidationDto() = ConstraintLongDto(ConstraintType.NotEquals, invalidValue)
 
     }
 
     @PublicApi
-    infix fun max(limit: Int): IntValidationRuleList {
+    infix fun max(limit: Long): LongDtoSchemaEntry {
         rules += Max(limit)
         return this
     }
 
     @PublicApi
-    infix fun min(limit: Int): IntValidationRuleList {
+    infix fun min(limit: Long): LongDtoSchemaEntry {
         rules += Min(limit)
         return this
     }
 
     @PublicApi
-    infix fun notEquals(invalidValue: Int): IntValidationRuleList {
+    infix fun notEquals(invalidValue: Long): LongDtoSchemaEntry {
         rules += NotEquals(invalidValue)
         return this
     }
@@ -88,7 +88,7 @@ class IntValidationRuleList(val kProperty: KMutableProperty0<Int>) : ValidationR
     }
 
     @PublicApi
-    infix fun default(value: Int): IntValidationRuleList {
+    infix fun default(value: Long): LongDtoSchemaEntry {
         defaultValue = value
         return this
     }
@@ -100,15 +100,17 @@ class IntValidationRuleList(val kProperty: KMutableProperty0<Int>) : ValidationR
     override fun isOptional() = false
 
     override fun push(dto: PropertyDto) {
-        require(dto is IntPropertyDto)
-        kProperty.set(dto.value)
+        require(dto is LongPropertyDto)
+        kProperty.set(dto.value!!)
     }
 
-    override fun toPropertyDto() = IntPropertyDto(
+    override fun toPropertyDto() = LongPropertyDto(
         kProperty.name,
+        isOptional(),
         rules.map { it.toValidationDto() },
         defaultValue,
         kProperty.get()
     )
+
 
 }

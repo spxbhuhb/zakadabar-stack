@@ -16,22 +16,22 @@
  */
 package zakadabar.stack.data.schema.validations
 
-import zakadabar.stack.data.schema.ValidationRule
-import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.DtoPropertyConstraint
+import zakadabar.stack.data.schema.DtoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.descriptor.ConstraintDto
 import zakadabar.stack.data.schema.descriptor.PropertyDto
-import zakadabar.stack.data.schema.descriptor.ValidationDto
 
-class CustomValidationRuleList(function: (report: ValidityReport, rule: ValidationRule<Unit>) -> Unit) : ValidationRuleList<Unit> {
+class CustomDtoSchemaEntry(function: (report: ValidityReport, rule: DtoPropertyConstraint<Unit>) -> Unit) : DtoSchemaEntry<Unit> {
 
-    private val rules = mutableListOf<ValidationRule<Unit>>(CustomValidationRule(function))
+    private val rules = mutableListOf<DtoPropertyConstraint<Unit>>(CustomValidation(function))
 
-    inner class CustomValidationRule(val function: (report: ValidityReport, rule: ValidationRule<Unit>) -> Unit) : ValidationRule<Unit> {
+    inner class CustomValidation(val function: (report: ValidityReport, rule: DtoPropertyConstraint<Unit>) -> Unit) : DtoPropertyConstraint<Unit> {
         override fun validate(value: Unit, report: ValidityReport) {
             function(report, this)
         }
 
-        override fun toValidationDto(): ValidationDto {
+        override fun toValidationDto(): ConstraintDto {
             throw NotImplementedError("serialization of custom validations is not supported")
         }
     }

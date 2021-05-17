@@ -16,7 +16,7 @@
  */
 package zakadabar.stack.data.schema.validations
 
-import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.DtoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.data.schema.descriptor.PropertyDto
 import zakadabar.stack.data.schema.descriptor.UuidPropertyDto
@@ -24,14 +24,14 @@ import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.UUID
 import kotlin.reflect.KMutableProperty0
 
-class UuidValidationRuleList(val kProperty: KMutableProperty0<UUID>) : ValidationRuleList<UUID> {
+class UuidDtoSchemaEntry(val kProperty: KMutableProperty0<UUID>) : DtoSchemaEntry<UUID> {
 
     var defaultValue = UUID.NIL
 
     override fun validate(report: ValidityReport) {}
 
     @PublicApi
-    infix fun default(value: UUID): UuidValidationRuleList {
+    infix fun default(value: UUID): UuidDtoSchemaEntry {
         defaultValue = value
         return this
     }
@@ -44,11 +44,12 @@ class UuidValidationRuleList(val kProperty: KMutableProperty0<UUID>) : Validatio
 
     override fun push(dto: PropertyDto) {
         require(dto is UuidPropertyDto)
-        kProperty.set(dto.value)
+        kProperty.set(dto.value!!)
     }
 
     override fun toPropertyDto() = UuidPropertyDto(
         kProperty.name,
+        isOptional(),
         emptyList(),
         defaultValue,
         kProperty.get()

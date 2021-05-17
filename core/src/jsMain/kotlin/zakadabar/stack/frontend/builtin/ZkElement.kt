@@ -467,6 +467,16 @@ open class ZkElement(
     }
 
     /**
+     * Append the given class to the class list of the element.
+     *
+     * @param  className  Name of the class to append.
+     */
+    infix fun HTMLElement.css(rule: ZkCssStyleRule): HTMLElement {
+        this.classList += rule
+        return this
+    }
+
+    /**
      * Sets the "grid-row" CSS property.
      */
     infix fun HTMLElement.gridRow(value: String): HTMLElement {

@@ -17,64 +17,64 @@
 package zakadabar.stack.data.schema.validations
 
 import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.schema.ValidationRule
-import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.DtoPropertyConstraint
+import zakadabar.stack.data.schema.DtoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.data.schema.descriptor.*
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class SecretValidationRuleList(val kProperty: KMutableProperty0<Secret>) : ValidationRuleList<Secret> {
+class SecretDtoSchemaEntry(val kProperty: KMutableProperty0<Secret>) : DtoSchemaEntry<Secret> {
 
     var defaultValue = Secret("")
 
-    private val rules = mutableListOf<ValidationRule<Secret>>()
+    private val rules = mutableListOf<DtoPropertyConstraint<Secret>>()
 
-    inner class Max(@PublicApi val limit: Int) : ValidationRule<Secret> {
+    inner class Max(@PublicApi val limit: Int) : DtoPropertyConstraint<Secret> {
 
         override fun validate(value: Secret, report: ValidityReport) {
             if (value.value.length > limit) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = StringValidationIntDto(ValidationType.Max, limit)
+        override fun toValidationDto() = ConstraintIntDto(ConstraintType.Max, limit)
 
     }
 
-    inner class Min(@PublicApi val limit: Int) : ValidationRule<Secret> {
+    inner class Min(@PublicApi val limit: Int) : DtoPropertyConstraint<Secret> {
 
         override fun validate(value: Secret, report: ValidityReport) {
             if (value.value.length < limit) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = StringValidationIntDto(ValidationType.Min, limit)
+        override fun toValidationDto() = ConstraintIntDto(ConstraintType.Min, limit)
 
     }
 
-    inner class Blank(@PublicApi val validValue: Boolean) : ValidationRule<Secret> {
+    inner class Blank(@PublicApi val validValue: Boolean) : DtoPropertyConstraint<Secret> {
 
         override fun validate(value: Secret, report: ValidityReport) {
             if (validValue) return // nothing to check when blank is allowed
             if (value.value.isBlank()) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = StringValidationBooleanDto(ValidationType.Blank, validValue)
+        override fun toValidationDto() = ConstraintBooleanDto(ConstraintType.Blank, validValue)
 
     }
 
     @PublicApi
-    infix fun max(limit: Int): SecretValidationRuleList {
+    infix fun max(limit: Int): SecretDtoSchemaEntry {
         rules += Max(limit)
         return this
     }
 
     @PublicApi
-    infix fun min(limit: Int): SecretValidationRuleList {
+    infix fun min(limit: Int): SecretDtoSchemaEntry {
         rules += Min(limit)
         return this
     }
 
     @PublicApi
-    infix fun blank(blank: Boolean): SecretValidationRuleList {
+    infix fun blank(blank: Boolean): SecretDtoSchemaEntry {
         rules += Blank(blank)
         return this
     }
@@ -87,7 +87,7 @@ class SecretValidationRuleList(val kProperty: KMutableProperty0<Secret>) : Valid
     }
 
     @PublicApi
-    infix fun default(value: Secret): SecretValidationRuleList {
+    infix fun default(value: Secret): SecretDtoSchemaEntry {
         defaultValue = value
         return this
     }
@@ -100,11 +100,12 @@ class SecretValidationRuleList(val kProperty: KMutableProperty0<Secret>) : Valid
 
     override fun push(dto: PropertyDto) {
         require(dto is SecretPropertyDto)
-        kProperty.set(dto.value)
+        kProperty.set(dto.value!!)
     }
 
     override fun toPropertyDto() = SecretPropertyDto(
         kProperty.name,
+        isOptional(),
         rules.map { it.toValidationDto() },
         defaultValue,
         kProperty.get()

@@ -12,8 +12,10 @@ import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.input.ZkTextInput
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
 import zakadabar.stack.frontend.builtin.toast.dangerToast
+import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.marginBottom
+import zakadabar.stack.frontend.util.marginRight
 
 class Kodomat : ZkTabContainer() {
 
@@ -42,24 +44,28 @@ class Kodomat : ZkTabContainer() {
 
         override fun onCreate() {
             super.onCreate()
-            + grid {
-                gridTemplateColumns = "repeat(6, max-content)"
-                gridGap = 20
-                + "package"
-                + packageName
-                + "class"
-                + dtoClassName
-                + "namespace"
-                + dtoNamespace
-            } marginBottom 20
+            + row {
+                + div {
+                    + div { + "Package" } css kodomatStyles.editorLabel
+                    + packageName
+                } marginRight 10
+                + div {
+                    + div { + "DTO name" } css kodomatStyles.editorLabel
+                    + dtoClassName
+                } marginRight 10
+                + div {
+                    + div { + "Namespace" } css kodomatStyles.editorLabel
+                    + dtoNamespace
+                } marginRight 10
+            } marginBottom 10
 
             + column {
                 + EditorEntry(this@Editor)
                 + EditorEntry(this@Editor)
 
-                + ZkButton(iconSource = ZkIcons.addBox, fill = false, border = false) {
+                + ZkButton(flavour = ZkFlavour.Success, iconSource = ZkIcons.add, fill = true, buttonSize = 18) {
                     insertBefore(EditorEntry(this@Editor), findFirst<ZkButton>())
-                }
+                } marginRight 10 marginBottom 4
             }
         }
 
@@ -69,9 +75,12 @@ class Kodomat : ZkTabContainer() {
             descriptor.kClassName = dtoClassName.value
             descriptor.dtoNamespace = dtoNamespace.value
 
-            val generators = find<EditorEntry>().mapNotNull { it.generator() }
+            val generator = ClassGenerator(
+                descriptor,
+                find<EditorEntry>().mapNotNull { it.generator() }
+            )
 
-            commonCode.innerText = dtoGenerator(descriptor, generators)
+            commonCode.innerText = generator.dtoGenerator()
         }
     }
 }
@@ -86,16 +95,25 @@ class EditorEntry(private val editor: Kodomat.Editor) : ZkElement() {
 
     override fun onCreate() {
         super.onCreate()
-        + grid {
-            gridTemplateColumns = "repeat(4, max-content)"
-            gridGap = 20
+        + row {
 
-            + ZkButton(iconSource = ZkIcons.close, fill = false, border = false) {
-                editor -= this@EditorEntry
+            + div {
+                style { alignSelf = "flex-end" }
+                + ZkButton(flavour = ZkFlavour.Danger, iconSource = ZkIcons.close, fill = true, buttonSize = 18) {
+                    editor -= this@EditorEntry
+                } marginRight 10 marginBottom 4
             }
 
-            + name css kodomatStyles.mediumInput
-            + type css kodomatStyles.mediumInput
+            + div {
+                + div { + "Name" } css kodomatStyles.editorLabel
+                + name css kodomatStyles.mediumInput
+            } marginRight 10
+
+            + div {
+                + div { + "Type" } css kodomatStyles.editorLabel
+                + type css kodomatStyles.mediumInput
+            } marginRight 10
+
             + schemaParameterContainer
         }
 

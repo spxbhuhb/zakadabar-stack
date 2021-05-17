@@ -16,24 +16,21 @@
  */
 package zakadabar.stack.data.schema.validations
 
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.DtoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.descriptor.DtoBasePropertyDto
+import zakadabar.stack.data.schema.descriptor.BooleanPropertyDto
 import zakadabar.stack.data.schema.descriptor.PropertyDto
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class DtoBaseValidationRuleList<T : DtoBase>(val kProperty: KMutableProperty0<T>) : ValidationRuleList<T> {
+class BooleanDtoSchemaEntry(val kProperty: KMutableProperty0<Boolean>) : DtoSchemaEntry<Boolean> {
 
-    var defaultValue = kProperty.get()
+    var defaultValue = false
 
-    override fun validate(report: ValidityReport) {
-        kProperty.get().schema().validate()
-    }
+    override fun validate(report: ValidityReport) {}
 
     @PublicApi
-    infix fun default(value: T): DtoBaseValidationRuleList<T> {
+    infix fun default(value: Boolean): BooleanDtoSchemaEntry {
         defaultValue = value
         return this
     }
@@ -45,15 +42,15 @@ class DtoBaseValidationRuleList<T : DtoBase>(val kProperty: KMutableProperty0<T>
     override fun isOptional() = false
 
     override fun push(dto: PropertyDto) {
-        require(dto is DtoBasePropertyDto)
-        kProperty.get().schema().push(dto.descriptor)
+        require(dto is BooleanPropertyDto)
+        kProperty.set(dto.value!!)
     }
 
-    override fun toPropertyDto() = DtoBasePropertyDto(
+    override fun toPropertyDto() = BooleanPropertyDto(
         kProperty.name,
+        isOptional(),
         emptyList(),
-        kProperty.get().schema().toDescriptorDto()
+        defaultValue,
+        kProperty.get()
     )
-
-
 }

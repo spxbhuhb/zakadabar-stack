@@ -16,24 +16,24 @@
  */
 package zakadabar.stack.data.schema.validations
 
-import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.DtoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.descriptor.OptEnumPropertyDto
+import zakadabar.stack.data.schema.descriptor.EnumPropertyDto
 import zakadabar.stack.data.schema.descriptor.PropertyDto
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class OptEnumValidationRuleList<E : Enum<E>>(
-    val kProperty: KMutableProperty0<E?>,
+class EnumDtoSchemaEntry<E : Enum<E>>(
+    val kProperty: KMutableProperty0<E>,
     val values : Array<E>
-) : ValidationRuleList<E> {
+) : DtoSchemaEntry<E> {
 
-    var defaultValue: E? = null
+    var defaultValue = values.first()
 
     override fun validate(report: ValidityReport) {}
 
     @PublicApi
-    infix fun default(value: E): OptEnumValidationRuleList<E> {
+    infix fun default(value: E): EnumDtoSchemaEntry<E> {
         defaultValue = value
         return this
     }
@@ -42,23 +42,20 @@ class OptEnumValidationRuleList<E : Enum<E>>(
         kProperty.set(defaultValue)
     }
 
-    override fun isOptional() = true
+    override fun isOptional() = false
 
     override fun push(dto: PropertyDto) {
-        require(dto is OptEnumPropertyDto)
-        if (dto.value == null) {
-            kProperty.set(null)
-        } else {
-            kProperty.set(values.firstOrNull { it.name == dto.value } ?: throw IllegalArgumentException("value for ${kProperty.name} is invalid"))
-        }
+        require(dto is EnumPropertyDto)
+        kProperty.set(values.firstOrNull { it.name == dto.value } ?: throw IllegalArgumentException("value for ${kProperty.name} is invalid"))
     }
 
-    override fun toPropertyDto() = OptEnumPropertyDto(
+    override fun toPropertyDto() = EnumPropertyDto(
         kProperty.name,
+        isOptional(),
         emptyList(),
         values.map { it.name },
-        defaultValue?.name,
-        kProperty.get()?.name
+        defaultValue.name,
+        kProperty.get().name
     )
 
 }

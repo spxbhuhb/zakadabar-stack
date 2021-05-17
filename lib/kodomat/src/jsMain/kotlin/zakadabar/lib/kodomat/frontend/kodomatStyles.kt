@@ -18,4 +18,11 @@ class KodomatStyles : ZkCssStyleSheet() {
         width = "10em"
     }
 
+    val editorLabel by cssClass {
+        fontSize = "80%"
+    }
+
+    val constraintEditor by cssClass {
+        marginRight = 10
+    }
 }

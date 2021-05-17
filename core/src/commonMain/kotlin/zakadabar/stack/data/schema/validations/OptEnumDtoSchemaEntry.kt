@@ -16,22 +16,24 @@
  */
 package zakadabar.stack.data.schema.validations
 
-import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.DtoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.descriptor.OptUuidPropertyDto
+import zakadabar.stack.data.schema.descriptor.EnumPropertyDto
 import zakadabar.stack.data.schema.descriptor.PropertyDto
 import zakadabar.stack.util.PublicApi
-import zakadabar.stack.util.UUID
 import kotlin.reflect.KMutableProperty0
 
-class OptUuidValidationRuleList(val kProperty: KMutableProperty0<UUID?>) : ValidationRuleList<UUID?> {
+class OptEnumDtoSchemaEntry<E : Enum<E>>(
+    val kProperty: KMutableProperty0<E?>,
+    val values : Array<E>
+) : DtoSchemaEntry<E> {
 
-    var defaultValue: UUID? = null
+    var defaultValue: E? = null
 
     override fun validate(report: ValidityReport) {}
 
     @PublicApi
-    infix fun default(value: UUID?): OptUuidValidationRuleList {
+    infix fun default(value: E): OptEnumDtoSchemaEntry<E> {
         defaultValue = value
         return this
     }
@@ -43,14 +45,21 @@ class OptUuidValidationRuleList(val kProperty: KMutableProperty0<UUID?>) : Valid
     override fun isOptional() = true
 
     override fun push(dto: PropertyDto) {
-        require(dto is OptUuidPropertyDto)
-        kProperty.set(dto.value)
+        require(dto is EnumPropertyDto)
+        if (dto.value == null) {
+            kProperty.set(null)
+        } else {
+            kProperty.set(values.firstOrNull { it.name == dto.value } ?: throw IllegalArgumentException("value for ${kProperty.name} is invalid"))
+        }
     }
 
-    override fun toPropertyDto() = OptUuidPropertyDto(
+    override fun toPropertyDto() = EnumPropertyDto(
         kProperty.name,
+        isOptional(),
         emptyList(),
-        defaultValue,
-        kProperty.get()
+        values.map { it.name },
+        defaultValue?.name,
+        kProperty.get()?.name
     )
+
 }

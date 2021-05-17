@@ -3,80 +3,80 @@
  */
 package zakadabar.stack.data.schema.validations
 
-import zakadabar.stack.data.schema.ValidationRule
-import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.DtoPropertyConstraint
+import zakadabar.stack.data.schema.DtoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.data.schema.descriptor.*
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class OptStringValidationRuleList(val kProperty: KMutableProperty0<String?>) : ValidationRuleList<String?> {
+class OptStringDtoSchemaEntry(val kProperty: KMutableProperty0<String?>) : DtoSchemaEntry<String?> {
 
     var defaultValue: String? = null
 
-    private val rules = mutableListOf<ValidationRule<String?>>()
+    private val rules = mutableListOf<DtoPropertyConstraint<String?>>()
 
-    inner class Max(@PublicApi val limit: Int) : ValidationRule<String?> {
+    inner class Max(@PublicApi val limit: Int) : DtoPropertyConstraint<String?> {
 
         override fun validate(value: String?, report: ValidityReport) {
             if (value != null && value.length > limit) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = StringValidationIntDto(ValidationType.Max, limit)
+        override fun toValidationDto() = ConstraintIntDto(ConstraintType.Max, limit)
 
     }
 
-    inner class Min(@PublicApi val limit: Int) : ValidationRule<String?> {
+    inner class Min(@PublicApi val limit: Int) : DtoPropertyConstraint<String?> {
 
         override fun validate(value: String?, report: ValidityReport) {
             if (value != null && value.length < limit) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = StringValidationIntDto(ValidationType.Min, limit)
+        override fun toValidationDto() = ConstraintIntDto(ConstraintType.Min, limit)
 
     }
 
-    inner class NotEquals(@PublicApi val invalidValue: String) : ValidationRule<String?> {
+    inner class NotEquals(@PublicApi val invalidValue: String) : DtoPropertyConstraint<String?> {
 
         override fun validate(value: String?, report: ValidityReport) {
             if (value == invalidValue) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = StringValidationStringDto(ValidationType.NotEquals, invalidValue)
+        override fun toValidationDto() = ConstraintStringDto(ConstraintType.NotEquals, invalidValue)
 
     }
 
 
-    inner class Blank(@PublicApi val validValue: Boolean) : ValidationRule<String?> {
+    inner class Blank(@PublicApi val validValue: Boolean) : DtoPropertyConstraint<String?> {
 
         override fun validate(value: String?, report: ValidityReport) {
             if (value?.isBlank() != validValue) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = StringValidationBooleanDto(ValidationType.Blank, validValue)
+        override fun toValidationDto() = ConstraintBooleanDto(ConstraintType.Blank, validValue)
 
     }
 
     @PublicApi
-    infix fun max(limit: Int): OptStringValidationRuleList {
+    infix fun max(limit: Int): OptStringDtoSchemaEntry {
         rules += Max(limit)
         return this
     }
 
     @PublicApi
-    infix fun min(limit: Int): OptStringValidationRuleList {
+    infix fun min(limit: Int): OptStringDtoSchemaEntry {
         rules += Min(limit)
         return this
     }
 
     @PublicApi
-    infix fun notEquals(invalidValue: String): OptStringValidationRuleList {
+    infix fun notEquals(invalidValue: String): OptStringDtoSchemaEntry {
         rules += NotEquals(invalidValue)
         return this
     }
 
     @PublicApi
-    infix fun blank(blank: Boolean): OptStringValidationRuleList {
+    infix fun blank(blank: Boolean): OptStringDtoSchemaEntry {
         rules += Blank(blank)
         return this
     }
@@ -89,7 +89,7 @@ class OptStringValidationRuleList(val kProperty: KMutableProperty0<String?>) : V
     }
 
     @PublicApi
-    infix fun default(value: String?): OptStringValidationRuleList {
+    infix fun default(value: String?): OptStringDtoSchemaEntry {
         defaultValue = value
         return this
     }
@@ -101,12 +101,13 @@ class OptStringValidationRuleList(val kProperty: KMutableProperty0<String?>) : V
     override fun isOptional() = true
 
     override fun push(dto: PropertyDto) {
-        require(dto is OptStringPropertyDto)
+        require(dto is StringPropertyDto)
         kProperty.set(dto.value)
     }
 
-    override fun toPropertyDto() = OptStringPropertyDto(
+    override fun toPropertyDto() = StringPropertyDto(
         kProperty.name,
+        isOptional(),
         rules.map { it.toValidationDto() },
         defaultValue,
         kProperty.get()

@@ -7,9 +7,9 @@ import kotlinx.datetime.Instant
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.schema.descriptor.ConstraintDto
 import zakadabar.stack.data.schema.descriptor.DescriptorDto
 import zakadabar.stack.data.schema.descriptor.PropertyDto
-import zakadabar.stack.data.schema.descriptor.ValidationDto
 import zakadabar.stack.data.schema.validations.*
 import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.UUID
@@ -31,163 +31,163 @@ open class DtoSchema() {
     }
 
     @Suppress("MemberVisibilityCanBePrivate") // To make extensions possible
-    val ruleLists = mutableMapOf<KMutableProperty0<*>, ValidationRuleList<*>>()
+    val entries = mutableMapOf<KMutableProperty0<*>, DtoSchemaEntry<*>>()
 
     @Suppress("MemberVisibilityCanBePrivate") // To make extensions possible
-    val customRuleLists = mutableListOf<CustomValidationRuleList>()
+    val customEntries = mutableListOf<CustomDtoSchemaEntry>()
 
-    inline operator fun <reified T : Any> KMutableProperty0<out RecordId<T>>.unaryPlus(): RecordIdValidationRuleList<*> {
+    inline operator fun <reified T : Any> KMutableProperty0<out RecordId<T>>.unaryPlus(): RecordIdDtoSchemaEntry<*> {
         @Suppress("UNCHECKED_CAST") // at this point out doesn't really matters
-        val ruleList = RecordIdValidationRuleList(T::class, this as KMutableProperty0<RecordId<T>>)
-        ruleLists[this] = ruleList
+        val ruleList = RecordIdDtoSchemaEntry(T::class, this as KMutableProperty0<RecordId<T>>)
+        entries[this] = ruleList
         return ruleList
     }
 
-    inline operator fun <reified T : Any> KMutableProperty0<out RecordId<T>?>.unaryPlus(): OptRecordIdValidationRuleList<*> {
+    inline operator fun <reified T : Any> KMutableProperty0<out RecordId<T>?>.unaryPlus(): OptRecordIdDtoSchemaEntry<*> {
         @Suppress("UNCHECKED_CAST") // at this point out doesn't really matters
-        val ruleList = OptRecordIdValidationRuleList(T::class, this as KMutableProperty0<RecordId<T>?>)
-        ruleLists[this] = ruleList
+        val ruleList = OptRecordIdDtoSchemaEntry(T::class, this as KMutableProperty0<RecordId<T>?>)
+        entries[this] = ruleList
         return ruleList
     }
 
-    operator fun KMutableProperty0<String>.unaryPlus(): StringValidationRuleList {
-        val ruleList = StringValidationRuleList(this)
-        ruleLists[this] = ruleList
+    operator fun KMutableProperty0<String>.unaryPlus(): StringDtoSchemaEntry {
+        val ruleList = StringDtoSchemaEntry(this)
+        entries[this] = ruleList
         return ruleList
     }
 
-    operator fun KMutableProperty0<String?>.unaryPlus(): OptStringValidationRuleList {
-        val ruleList = OptStringValidationRuleList(this)
-        ruleLists[this] = ruleList
+    operator fun KMutableProperty0<String?>.unaryPlus(): OptStringDtoSchemaEntry {
+        val ruleList = OptStringDtoSchemaEntry(this)
+        entries[this] = ruleList
         return ruleList
     }
 
-    operator fun KMutableProperty0<Boolean>.unaryPlus(): BooleanValidationRuleList {
-        val ruleList = BooleanValidationRuleList(this)
-        ruleLists[this] = ruleList
+    operator fun KMutableProperty0<Boolean>.unaryPlus(): BooleanDtoSchemaEntry {
+        val ruleList = BooleanDtoSchemaEntry(this)
+        entries[this] = ruleList
         return ruleList
     }
 
-    operator fun KMutableProperty0<Boolean?>.unaryPlus(): OptBooleanValidationRuleList {
-        val ruleList = OptBooleanValidationRuleList(this)
-        ruleLists[this] = ruleList
+    operator fun KMutableProperty0<Boolean?>.unaryPlus(): OptBooleanDtoSchemaEntry {
+        val ruleList = OptBooleanDtoSchemaEntry(this)
+        entries[this] = ruleList
         return ruleList
     }
 
-    operator fun KMutableProperty0<Int>.unaryPlus(): IntValidationRuleList {
-        val ruleList = IntValidationRuleList(this)
-        ruleLists[this] = ruleList
+    operator fun KMutableProperty0<Int>.unaryPlus(): IntDtoSchemaEntry {
+        val ruleList = IntDtoSchemaEntry(this)
+        entries[this] = ruleList
         return ruleList
     }
 
-    operator fun KMutableProperty0<Int?>.unaryPlus(): OptIntValidationRuleList {
-        val ruleList = OptIntValidationRuleList(this)
-        ruleLists[this] = ruleList
+    operator fun KMutableProperty0<Int?>.unaryPlus(): OptIntDtoSchemaEntry {
+        val ruleList = OptIntDtoSchemaEntry(this)
+        entries[this] = ruleList
         return ruleList
     }
 
-    operator fun KMutableProperty0<Long>.unaryPlus(): LongValidationRuleList {
-        val ruleList = LongValidationRuleList(this)
-        ruleLists[this] = ruleList
+    operator fun KMutableProperty0<Long>.unaryPlus(): LongDtoSchemaEntry {
+        val ruleList = LongDtoSchemaEntry(this)
+        entries[this] = ruleList
         return ruleList
     }
 
-    operator fun KMutableProperty0<Long?>.unaryPlus(): OptLongValidationRuleList {
-        val ruleList = OptLongValidationRuleList(this)
-        ruleLists[this] = ruleList
+    operator fun KMutableProperty0<Long?>.unaryPlus(): OptLongDtoSchemaEntry {
+        val ruleList = OptLongDtoSchemaEntry(this)
+        entries[this] = ruleList
         return ruleList
     }
 
-    operator fun KMutableProperty0<Double>.unaryPlus(): DoubleValidationRuleList {
-        val ruleList = DoubleValidationRuleList(this)
-        ruleLists[this] = ruleList
+    operator fun KMutableProperty0<Double>.unaryPlus(): DoubleDtoSchemaEntry {
+        val ruleList = DoubleDtoSchemaEntry(this)
+        entries[this] = ruleList
         return ruleList
     }
 
-    operator fun KMutableProperty0<Double?>.unaryPlus(): OptDoubleValidationRuleList {
-        val ruleList = OptDoubleValidationRuleList(this)
-        ruleLists[this] = ruleList
+    operator fun KMutableProperty0<Double?>.unaryPlus(): OptDoubleDtoSchemaEntry {
+        val ruleList = OptDoubleDtoSchemaEntry(this)
+        entries[this] = ruleList
         return ruleList
     }
 
-    operator fun KMutableProperty0<Instant>.unaryPlus(): InstantValidationRuleList {
-        val ruleList = InstantValidationRuleList(this)
-        ruleLists[this] = ruleList
+    operator fun KMutableProperty0<Instant>.unaryPlus(): InstantDtoSchemaEntry {
+        val ruleList = InstantDtoSchemaEntry(this)
+        entries[this] = ruleList
         return ruleList
     }
 
-    operator fun KMutableProperty0<Instant?>.unaryPlus(): OptInstantValidationRuleList {
-        val ruleList = OptInstantValidationRuleList(this)
-        ruleLists[this] = ruleList
+    operator fun KMutableProperty0<Instant?>.unaryPlus(): OptInstantDtoSchemaEntry {
+        val ruleList = OptInstantDtoSchemaEntry(this)
+        entries[this] = ruleList
         return ruleList
     }
 
-    operator fun KMutableProperty0<Secret>.unaryPlus(): SecretValidationRuleList {
-        val ruleList = SecretValidationRuleList(this)
-        ruleLists[this] = ruleList
+    operator fun KMutableProperty0<Secret>.unaryPlus(): SecretDtoSchemaEntry {
+        val ruleList = SecretDtoSchemaEntry(this)
+        entries[this] = ruleList
         return ruleList
     }
 
-    operator fun KMutableProperty0<Secret?>.unaryPlus(): OptSecretValidationRuleList {
-        val ruleList = OptSecretValidationRuleList(this)
-        ruleLists[this] = ruleList
+    operator fun KMutableProperty0<Secret?>.unaryPlus(): OptSecretDtoSchemaEntry {
+        val ruleList = OptSecretDtoSchemaEntry(this)
+        entries[this] = ruleList
         return ruleList
     }
 
-    operator fun KMutableProperty0<UUID>.unaryPlus(): UuidValidationRuleList {
-        val ruleList = UuidValidationRuleList(this)
-        ruleLists[this] = ruleList
+    operator fun KMutableProperty0<UUID>.unaryPlus(): UuidDtoSchemaEntry {
+        val ruleList = UuidDtoSchemaEntry(this)
+        entries[this] = ruleList
         return ruleList
     }
 
-    operator fun KMutableProperty0<UUID?>.unaryPlus(): OptUuidValidationRuleList {
-        val ruleList = OptUuidValidationRuleList(this)
-        ruleLists[this] = ruleList
+    operator fun KMutableProperty0<UUID?>.unaryPlus(): OptUuidDtoSchemaEntry {
+        val ruleList = OptUuidDtoSchemaEntry(this)
+        entries[this] = ruleList
         return ruleList
     }
 
-    inline operator fun <reified T : DtoBase> KMutableProperty0<T>.unaryPlus(): DtoBaseValidationRuleList<T> {
-        val ruleList = DtoBaseValidationRuleList(this)
-        ruleLists[this] = ruleList
+    inline operator fun <reified T : DtoBase> KMutableProperty0<T>.unaryPlus(): DtoBaseDtoSchemaEntry<T> {
+        val ruleList = DtoBaseDtoSchemaEntry(this)
+        entries[this] = ruleList
         return ruleList
     }
 
     @JsName("SchemaOptEnumUnaryPlus")
-    inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): EnumValidationRuleList<E> {
-        val ruleList = EnumValidationRuleList(this, enumValues())
-        ruleLists[this] = ruleList
+    inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): EnumDtoSchemaEntry<E> {
+        val ruleList = EnumDtoSchemaEntry(this, enumValues())
+        entries[this] = ruleList
         return ruleList
     }
 
-    inline operator fun <reified E : Enum<E>> KMutableProperty0<E?>.unaryPlus(): OptEnumValidationRuleList<E> {
-        val ruleList = OptEnumValidationRuleList(this, enumValues())
-        ruleLists[this] = ruleList
+    inline operator fun <reified E : Enum<E>> KMutableProperty0<E?>.unaryPlus(): OptEnumDtoSchemaEntry<E> {
+        val ruleList = OptEnumDtoSchemaEntry(this, enumValues())
+        entries[this] = ruleList
         return ruleList
     }
 
-    operator fun plusAssign(custom: CustomValidationRuleList) {
-        customRuleLists += custom
+    operator fun plusAssign(custom: CustomDtoSchemaEntry) {
+        customEntries += custom
     }
 
-    operator fun CustomValidationRuleList.unaryPlus() {
-        customRuleLists += this
+    operator fun CustomDtoSchemaEntry.unaryPlus() {
+        customEntries += this
     }
 
-    fun custom(function: (report: ValidityReport, rule: ValidationRule<Unit>) -> Unit) = CustomValidationRuleList(function)
+    fun custom(function: (report: ValidityReport, rule: DtoPropertyConstraint<Unit>) -> Unit) = CustomDtoSchemaEntry(function)
 
     @PublicApi
     fun validate(): ValidityReport {
         val report = ValidityReport()
-        ruleLists.forEach { it.value.validate(report) }
+        entries.forEach { it.value.validate(report) }
         return report
     }
 
     fun setDefaults() {
-        ruleLists.forEach { it.value.setDefault() }
+        entries.forEach { it.value.setDefault() }
     }
 
     fun isOptional(propName: String): Boolean {
-        ruleLists.forEach {
+        entries.forEach {
             if (it.key.name == propName) {
                 return it.value.isOptional()
             }
@@ -196,10 +196,10 @@ open class DtoSchema() {
     }
 
     // FIXME package and class for DescriptorDto
-    fun toDescriptorDto() = DescriptorDto("", "", "", ruleLists.mapNotNull { it.value.toPropertyDto() })
+    fun toDescriptorDto() = DescriptorDto("", "", "", entries.mapNotNull { it.value.toPropertyDto() })
 
     fun push(descriptor: DescriptorDto) {
-        ruleLists.forEach { (kProperty, validation) ->
+        entries.forEach { (kProperty, validation) ->
             validation.push(
                 descriptor.properties.firstOrNull { it.name == kProperty.name }
                     ?: throw IllegalStateException("property ${kProperty.name} missing from the descriptor")
@@ -208,7 +208,7 @@ open class DtoSchema() {
     }
 }
 
-interface ValidationRuleList<T> {
+interface DtoSchemaEntry<T> {
     fun validate(report: ValidityReport)
     fun isOptional(): Boolean
     fun setDefault()
@@ -216,16 +216,16 @@ interface ValidationRuleList<T> {
     fun toPropertyDto(): PropertyDto?
 }
 
-interface ValidationRule<T> {
+interface DtoPropertyConstraint<T> {
     fun validate(value: T, report: ValidityReport)
-    fun toValidationDto(): ValidationDto
+    fun toValidationDto(): ConstraintDto
 }
 
 class ValidityReport(
     @PublicApi
-    val fails: MutableMap<String, MutableList<ValidationRule<*>>> = mutableMapOf()
+    val fails: MutableMap<String, MutableList<DtoPropertyConstraint<*>>> = mutableMapOf()
 ) {
-    fun fail(property: KProperty0<*>, validation: ValidationRule<*>) {
+    fun fail(property: KProperty0<*>, validation: DtoPropertyConstraint<*>) {
         fails.getOrPut(property.name) { mutableListOf() } += validation
     }
 

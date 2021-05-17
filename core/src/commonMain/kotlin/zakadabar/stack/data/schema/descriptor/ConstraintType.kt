@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.data.schema.descriptor
 
-enum class ValidationType {
+enum class ConstraintType {
     Min,
     Max,
     Blank,

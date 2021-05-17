@@ -19,25 +19,25 @@ package zakadabar.stack.data.schema.validations
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.EmptyRecordId
 import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.schema.ValidationRule
-import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.DtoPropertyConstraint
+import zakadabar.stack.data.schema.DtoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.descriptor.ConstraintBooleanDto
+import zakadabar.stack.data.schema.descriptor.ConstraintType
 import zakadabar.stack.data.schema.descriptor.PropertyDto
 import zakadabar.stack.data.schema.descriptor.RecordIdPropertyDto
-import zakadabar.stack.data.schema.descriptor.RecordIdValidationBooleanDto
-import zakadabar.stack.data.schema.descriptor.ValidationType
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty0
 
-class RecordIdValidationRuleList<T : Any>(
+class RecordIdDtoSchemaEntry<T : Any>(
     val kClass: KClass<T>,
     val kProperty: KMutableProperty0<RecordId<T>>
-) : ValidationRuleList<RecordId<T>> {
+) : DtoSchemaEntry<RecordId<T>> {
 
     var defaultValue: RecordId<T> = EmptyRecordId()
 
-    private val rules = mutableListOf<ValidationRule<RecordId<*>>>()
+    private val rules = mutableListOf<DtoPropertyConstraint<RecordId<*>>>()
 
     override fun validate(report: ValidityReport) {
         val value = kProperty.get()
@@ -46,24 +46,24 @@ class RecordIdValidationRuleList<T : Any>(
         }
     }
 
-    inner class Empty(@PublicApi val validValue: Boolean) : ValidationRule<RecordId<*>> {
+    inner class Empty(@PublicApi val validValue: Boolean) : DtoPropertyConstraint<RecordId<*>> {
 
         override fun validate(value: RecordId<*>, report: ValidityReport) {
             if (value.isEmpty() != validValue) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = RecordIdValidationBooleanDto(ValidationType.Empty, validValue)
+        override fun toValidationDto() = ConstraintBooleanDto(ConstraintType.Empty, validValue)
 
     }
 
     @PublicApi
-    infix fun empty(validValue: Boolean): RecordIdValidationRuleList<T> {
+    infix fun empty(validValue: Boolean): RecordIdDtoSchemaEntry<T> {
         rules += Empty(validValue)
         return this
     }
 
     @PublicApi
-    infix fun default(value: RecordId<T>): RecordIdValidationRuleList<T> {
+    infix fun default(value: RecordId<T>): RecordIdDtoSchemaEntry<T> {
         defaultValue = value
         return this
     }
@@ -83,6 +83,7 @@ class RecordIdValidationRuleList<T : Any>(
     @Suppress("UNCHECKED_CAST") // should work, lost in generics hell
     override fun toPropertyDto() = RecordIdPropertyDto(
         kProperty.name,
+        isOptional(),
         emptyList(),
         kClass.simpleName!!,
         defaultValue as RecordId<DtoBase>,

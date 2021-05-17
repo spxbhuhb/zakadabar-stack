@@ -17,40 +17,40 @@
 package zakadabar.stack.data.schema.validations
 
 import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.schema.ValidationRule
-import zakadabar.stack.data.schema.ValidationRuleList
+import zakadabar.stack.data.schema.DtoPropertyConstraint
+import zakadabar.stack.data.schema.DtoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.data.schema.descriptor.*
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class OptSecretValidationRuleList(val kProperty: KMutableProperty0<Secret?>) : ValidationRuleList<Secret?> {
+class OptSecretDtoSchemaEntry(val kProperty: KMutableProperty0<Secret?>) : DtoSchemaEntry<Secret?> {
 
     var defaultValue: Secret? = null
 
-    private val rules = mutableListOf<ValidationRule<Secret?>>()
+    private val rules = mutableListOf<DtoPropertyConstraint<Secret?>>()
 
-    inner class Max(@PublicApi val limit: Int) : ValidationRule<Secret?> {
+    inner class Max(@PublicApi val limit: Int) : DtoPropertyConstraint<Secret?> {
 
         override fun validate(value: Secret?, report: ValidityReport) {
             if (value != null && value.value.length > limit) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = StringValidationIntDto(ValidationType.Max, limit)
+        override fun toValidationDto() = ConstraintIntDto(ConstraintType.Max, limit)
 
     }
 
-    inner class Min(@PublicApi val limit: Int) : ValidationRule<Secret?> {
+    inner class Min(@PublicApi val limit: Int) : DtoPropertyConstraint<Secret?> {
 
         override fun validate(value: Secret?, report: ValidityReport) {
             if (value != null && value.value.length < limit) report.fail(kProperty, this)
         }
 
-        override fun toValidationDto() = StringValidationIntDto(ValidationType.Min, limit)
+        override fun toValidationDto() = ConstraintIntDto(ConstraintType.Min, limit)
 
     }
 
-    inner class Blank(@PublicApi val validValue: Boolean) : ValidationRule<Secret?> {
+    inner class Blank(@PublicApi val validValue: Boolean) : DtoPropertyConstraint<Secret?> {
 
         override fun validate(value: Secret?, report: ValidityReport) {
             if (validValue) return // there is nothing to check when blank is allowed
@@ -62,24 +62,24 @@ class OptSecretValidationRuleList(val kProperty: KMutableProperty0<Secret?>) : V
             }
         }
 
-        override fun toValidationDto() = StringValidationBooleanDto(ValidationType.Blank, validValue)
+        override fun toValidationDto() = ConstraintBooleanDto(ConstraintType.Blank, validValue)
 
     }
 
     @PublicApi
-    infix fun max(limit: Int): OptSecretValidationRuleList {
+    infix fun max(limit: Int): OptSecretDtoSchemaEntry {
         rules += Max(limit)
         return this
     }
 
     @PublicApi
-    infix fun min(limit: Int): OptSecretValidationRuleList {
+    infix fun min(limit: Int): OptSecretDtoSchemaEntry {
         rules += Min(limit)
         return this
     }
 
     @PublicApi
-    infix fun blank(blank: Boolean): OptSecretValidationRuleList {
+    infix fun blank(blank: Boolean): OptSecretDtoSchemaEntry {
         rules += Blank(blank)
         return this
     }
@@ -92,7 +92,7 @@ class OptSecretValidationRuleList(val kProperty: KMutableProperty0<Secret?>) : V
     }
 
     @PublicApi
-    infix fun default(value: Secret?): OptSecretValidationRuleList {
+    infix fun default(value: Secret?): OptSecretDtoSchemaEntry {
         defaultValue = value
         return this
     }
@@ -104,12 +104,13 @@ class OptSecretValidationRuleList(val kProperty: KMutableProperty0<Secret?>) : V
     override fun isOptional() = true
 
     override fun push(dto: PropertyDto) {
-        require(dto is OptSecretPropertyDto)
+        require(dto is SecretPropertyDto)
         kProperty.set(dto.value)
     }
 
-    override fun toPropertyDto() = OptSecretPropertyDto(
+    override fun toPropertyDto() = SecretPropertyDto(
         kProperty.name,
+        isOptional(),
         rules.map { it.toValidationDto() },
         defaultValue,
         kProperty.get()

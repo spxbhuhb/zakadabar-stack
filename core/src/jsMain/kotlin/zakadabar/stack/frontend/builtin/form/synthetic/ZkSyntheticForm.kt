@@ -5,13 +5,8 @@ package zakadabar.stack.frontend.builtin.form.synthetic
 
 import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.schema.descriptor.DescriptorDto
-import zakadabar.stack.data.schema.descriptor.IntPropertyDto
-import zakadabar.stack.data.schema.descriptor.StringPropertyDto
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
-import zakadabar.stack.frontend.builtin.form.fields.ZkIntField
-import zakadabar.stack.frontend.builtin.form.fields.ZkStringField
 import zakadabar.stack.frontend.util.plusAssign
 
 class ZkSyntheticForm(
@@ -26,15 +21,15 @@ class ZkSyntheticForm(
         + section {
             descriptor.properties.forEach { dProperty ->
 
-                val field = when (dProperty) {
-                    is IntPropertyDto -> ZkIntField(this@ZkSyntheticForm, dProperty::value)
-                    is StringPropertyDto -> ZkStringField(this@ZkSyntheticForm, dProperty::value)
-                    else -> null
-                } ?: return@forEach
-
-                field.label = stringStore.getNormalized(dProperty.name)
-                fields += field
-                + field
+//                val field = when (dProperty) {
+//                    is IntPropertyDto -> ZkIntField(this@ZkSyntheticForm, dProperty::value)
+//                    is StringPropertyDto -> ZkStringField(this@ZkSyntheticForm, dProperty::value)
+//                    else -> null
+//                } ?: return@forEach
+//
+//                field.label = stringStore.getNormalized(dProperty.name)
+//                fields += field
+//                + field
 
             }
         }

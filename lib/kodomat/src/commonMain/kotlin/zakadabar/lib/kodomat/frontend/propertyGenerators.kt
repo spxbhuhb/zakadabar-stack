@@ -5,29 +5,129 @@ package zakadabar.lib.kodomat.frontend
 
 import zakadabar.stack.data.schema.descriptor.*
 
-interface PropertyGenerator {
-    fun commonDeclaration(): String
-    fun commonSchema(): String
-    fun browserForm(): String
-    fun browserTable(): String
-    fun exposedTable(): String
-    fun exposedTableToDto(): String
-    fun exposedDao(): String
-    fun exposedDaoToDto(): String
-    fun exposedDaoFromDto(): String
+open class PropertyGenerator(
+    open val descriptor: DescriptorDto,
+    open val property: PropertyDto,
+    open val typeName: String
+) {
+    open fun commonImport() : String? = null
+
+    open fun commonDeclaration() =
+        "var ${property.name} : ${typeName}${optional}"
+
+    open fun commonSchema() =
+        "+ ::${property.name} ${property.constraints.toCode()}"
+
+    open fun browserFormImport() : String? = null
+
+    open fun browserForm() =
+        "+ dto::${property.name}"
+
+    open fun browserTableImport() : String? = null
+
+    open fun browserTable() =
+        "+ ${descriptor.kClassName}::${property::name}"
+
+    open fun backendImport()  : String? = null
+
+    open fun exposedTableImport()  : String? = null
+
+    open fun exposedTable() : String {
+        TODO()
+    }
+
+    open fun exposedTableToDto() =
+        "${property.name} = row[${property.name}]"
+
+    open fun exposedDaoImport() : String? = null
+
+    open fun exposedDao() =
+        "var ${property.name} by ${descriptor.kClassName.toTableName()}.${property.name}"
+
+    open fun exposedDaoToDto() =
+        "${property.name} = ${property.name}"
+
+    open fun exposedDaoFromDto() =
+        "${property.name} = dto.${property.name}"
+
+    val optional
+       get() = if (property.optional) "?" else ""
+
+    val exposedTableOptional
+        get() = if (property.optional) ".nullable()" else ""
+
+    val exposedDaoReference
+        get() = if (property.optional) "optionalReferencedOn" else "referencedOn"
+
 }
 
-fun String.withoutDto() = if (this.toLowerCase().endsWith("dto")) this.substring(0, this.length-3) else this
-fun String.toTableName() = "${withoutDto()}Table"
-fun String.toDaoName() = "${withoutDto()}Dao"
+open class BooleanPropertyGenerator(
+    descriptor: DescriptorDto,
+    override val property: BooleanPropertyDto
+) : PropertyGenerator(descriptor, property, "Boolean") {
 
-open class RecordIdGenerator(
-    open val descriptor: DescriptorDto,
-    open val property: RecordIdPropertyDto
-) : PropertyGenerator {
+    override fun exposedTable() =
+        "val ${property.name} = bool(\"${property.name}\")$exposedTableOptional"
+
+}
+
+open class DoublePropertyGenerator(
+    descriptor: DescriptorDto,
+    override val property: DoublePropertyDto
+) : PropertyGenerator(descriptor, property, "Double") {
+
+    override fun exposedTable() =
+        "val ${property.name} = double(\"${property.name}\")$exposedTableOptional"
+
+}
+
+open class EnumPropertyGenerator(
+    descriptor: DescriptorDto,
+    override val property: EnumPropertyDto
+) : PropertyGenerator(descriptor, property, "Enum") {
+
+    override fun exposedTable() =
+        "val ${property.name} = bool(\"${property.name}\")$exposedTableOptional"
+
+}
+
+open class InstantPropertyGenerator(
+    descriptor: DescriptorDto,
+    override val property: InstantPropertyDto
+) : PropertyGenerator(descriptor, property, "Instant") {
+
+    override fun exposedTable() =
+        "val ${property.name} = bool(\"${property.name}\")$exposedTableOptional"
+
+}
+
+open class IntPropertyGenerator(
+    descriptor: DescriptorDto,
+    override val property: IntPropertyDto
+) : PropertyGenerator(descriptor, property, "Int") {
+
+    override fun exposedTable() =
+        "val ${property.name} = bool(\"${property.name}\")$exposedTableOptional"
+
+}
+
+open class LongPropertyGenerator(
+    descriptor: DescriptorDto,
+    override val property: LongPropertyDto
+) : PropertyGenerator(descriptor, property, "Long") {
+
+    override fun exposedTable() =
+        "val ${property.name} = bool(\"${property.name}\")$exposedTableOptional"
+
+}
+
+open class RecordIdPropertyGenerator(
+    descriptor: DescriptorDto,
+    override val property: RecordIdPropertyDto
+) : PropertyGenerator(descriptor, property, "RecordId") {
 
     override fun commonDeclaration() =
-        "var ${property.name} : RecordId<${property.kClassName}>"
+        "var ${property.name} : RecordId<${property.kClassName}>$optional"
 
     override fun commonSchema() =
         "+ ::${property.name}"
@@ -43,116 +143,51 @@ open class RecordIdGenerator(
         "// ${descriptor.kClassName}::${property::name} // not supported yet "
 
     override fun exposedTable() =
-        "val ${property.name} = reference(\"${property.name}\", ${property.kClassName})"
+        "val ${property.name} = reference(\"${property.name}\", ${property.kClassName}).$exposedTableOptional"
 
     override fun exposedTableToDto() =
         "${property.name} = row[${property.name}].recordId()"
 
     override fun exposedDao() =
-        "var ${property.name} by ${property.kClassName.toDaoName()} referencedOn ${descriptor.kClassName.toTableName()}.${property.name}"
+        "var ${property.name} by ${property.kClassName.toDaoName()} $exposedDaoReference ${descriptor.kClassName.toTableName()}.${property.name}"
 
     override fun exposedDaoToDto() =
         "${property.name} = ${property.name}.recordId()"
 
     override fun exposedDaoFromDto() =
-        "${property.name} = ${property.kClassName.toDaoName()}[dto.${property.name}]"
+        if (property.optional) {
+            "${property.name} = dto.${property.name}?.let { ${property.kClassName.toDaoName()}[it] }"
+        } else {
+            "${property.name} = ${property.kClassName.toDaoName()}[dto.${property.name}]"
+        }
 }
 
-open class BooleanGenerator(
-    open val descriptor: DescriptorDto,
-    open val property: BooleanPropertyDto
-) : PropertyGenerator {
-
-    override fun commonDeclaration() =
-        "var ${property.name} : Boolean"
-
-    override fun commonSchema() =
-        "+ ::${property.name}"
-
-    override fun browserForm() =
-        "+ dto::${property.name}"
-
-    override fun browserTable() =
-        "+ ${descriptor.kClassName}::${property::name}"
+open class SecretPropertyGenerator(
+    descriptor: DescriptorDto,
+    override val property: SecretPropertyDto
+) : PropertyGenerator(descriptor, property, "Secret") {
 
     override fun exposedTable() =
-        "val ${property.name} = bool(\"${property.name}\")"
+        "val ${property.name} = bool(\"${property.name}\")$exposedTableOptional"
 
-    override fun exposedTableToDto() =
-        "${property.name} = row[${property.name}]"
-
-    override fun exposedDao() =
-        "var ${property.name} by ${descriptor.kClassName.toTableName()}.${property.name}"
-
-    override fun exposedDaoToDto() =
-        "${property.name} = ${property.name}"
-
-    override fun exposedDaoFromDto() =
-        "${property.name} = dto.${property.name}"
 }
 
-open class OptBooleanGenerator(
-    open val descriptor: DescriptorDto,
-    open val property: OptBooleanPropertyDto
-) : PropertyGenerator {
-
-    override fun commonDeclaration() =
-        "var ${property.name} : Boolean?"
-
-    override fun commonSchema() =
-        "+ ::${property.name}"
-
-    override fun browserForm() =
-        "+ opt(dto::${property.name}, strings.trueText, strings.falseText)"
-
-    override fun browserTable() =
-        "+ ${descriptor.kClassName}::${property::name}"
+open class StringPropertyGenerator(
+    descriptor: DescriptorDto,
+    override val property: StringPropertyDto
+) : PropertyGenerator(descriptor, property, "String") {
 
     override fun exposedTable() =
-        "val ${property.name} = bool(\"${property.name}\").nullable()"
+        "val ${property.name} = text(\"${property.name}\")$exposedTableOptional"
 
-    override fun exposedTableToDto() =
-        "${property.name} = row[${property.name}]"
-
-    override fun exposedDao() =
-        "var ${property.name} by ${descriptor.kClassName.toTableName()}.${property.name}"
-
-    override fun exposedDaoToDto() =
-        "${property.name} = ${property.name}"
-
-    override fun exposedDaoFromDto() =
-        "${property.name} = dto.${property.name}"
 }
 
-open class OptRecordIdGenerator(
-    open val descriptor: DescriptorDto,
-    open val property: OptRecordIdPropertyDto
-) : PropertyGenerator {
-
-    override fun commonDeclaration() =
-        "var ${property.name} : RecordId<${property.kClassName}>?"
-
-    override fun commonSchema() =
-        "+ ::${property.name}"
-
-    override fun browserForm() =
-        "+ select(dto::${property.name}) { ${property.kClassName}.all().by { it.name } } "
-
-    override fun browserTable() =
-        "// ${descriptor.kClassName}::${property::name} // not supported yet "
+open class UuidPropertyGenerator(
+    descriptor: DescriptorDto,
+    override val property: UuidPropertyDto
+) : PropertyGenerator(descriptor, property, "Uuid") {
 
     override fun exposedTable() =
-        "val ${property.name} = reference(\"${property.name}\", ${property.kClassName}).nullable()"
+        "val ${property.name} = bool(\"${property.name}\")$exposedTableOptional"
 
-    override fun exposedTableToDto() =
-        "${property.name} = row[${property.name}]?.recordId()"
-
-    override fun exposedDao() =
-        "var ${property.name} by ${property.kClassName.toDaoName()} optionalReferencedOn ${descriptor.kClassName.toTableName()}.${property.name}"
-
-    override fun exposedDaoToDto() =
-        "${property.name} = ${property.name}?.recordId()"
-
-    override fun exposedDaoFromDto() =
-        "${property.name} = dto.${property.name}?.let { v -> ${property.kClassName.toDaoName()}[v] }"
 }

@@ -19,181 +19,116 @@ import zakadabar.stack.data.util.InstantAsStringSerializer
 import zakadabar.stack.data.util.OptInstantAsStringSerializer
 import zakadabar.stack.util.UUID
 
+/**
+ * Base class for property DTOs. Decided to go with putting [optional] into
+ * this class and allowing null values in descendants. This halves the number
+ * of classes at the cost of some manual checks.
+ */
 @Serializable
 sealed class PropertyDto : DtoBase {
     abstract val name: String
-    abstract val validations: List<ValidationDto>
+    abstract val optional: Boolean
+    abstract val constraints: List<ConstraintDto>
 }
 
 @Serializable
 class RecordIdPropertyDto(
     override val name: String,
-    override var validations: List<ValidationDto>,
+    override val optional: Boolean,
+    override var constraints: List<ConstraintDto>,
     val kClassName: String,
-    var defaultValue: RecordId<DtoBase>,
-    var value: RecordId<DtoBase>
-) : PropertyDto()
-
-@Serializable
-class BooleanPropertyDto(
-    override val name: String,
-    override var validations: List<ValidationDto>,
-    var defaultValue: Boolean,
-    var value: Boolean
-) : PropertyDto()
-
-@Serializable
-class DoublePropertyDto(
-    override val name: String,
-    override var validations: List<ValidationDto>,
-    var defaultValue: Double,
-    var value: Double
-) : PropertyDto()
-
-@Serializable
-class DtoBasePropertyDto(
-    override val name: String,
-    override var validations: List<ValidationDto>,
-    var descriptor: DescriptorDto
-) : PropertyDto()
-
-@Serializable
-class EnumPropertyDto(
-    override val name: String,
-    override var validations: List<ValidationDto>,
-    var enumValues: List<String>,
-    var defaultValue: String,
-    var value: String
-) : PropertyDto()
-
-@Serializable
-class InstantPropertyDto(
-    override val name: String,
-    override var validations: List<ValidationDto>,
-    @Serializable(OptInstantAsStringSerializer::class)
-    var defaultValue: Instant?,
-    @Serializable(InstantAsStringSerializer::class)
-    var value: Instant
-) : PropertyDto()
-
-@Serializable
-class IntPropertyDto(
-    override val name: String,
-    override var validations: List<ValidationDto>,
-    var defaultValue: Int,
-    var value: Int
-) : PropertyDto()
-
-@Serializable
-class LongPropertyDto(
-    override val name: String,
-    override var validations: List<ValidationDto>,
-    var defaultValue: Long,
-    var value: Long
-) : PropertyDto()
-
-@Serializable
-class SecretPropertyDto(
-    override val name: String,
-    override var validations: List<ValidationDto>,
-    var defaultValue: Secret,
-    var value: Secret
-) : PropertyDto()
-
-@Serializable
-class StringPropertyDto(
-    override val name: String,
-    override var validations: List<ValidationDto>,
-    var defaultValue: String,
-    var value: String
-) : PropertyDto()
-
-@Serializable
-class UuidPropertyDto(
-    override val name: String,
-    override var validations: List<ValidationDto>,
-    var defaultValue: UUID,
-    var value: UUID
-) : PropertyDto()
-
-@Serializable
-class OptRecordIdPropertyDto(
-    override val name: String,
-    override var validations: List<ValidationDto>,
-    var kClassName: String,
     var defaultValue: RecordId<DtoBase>?,
     var value: RecordId<DtoBase>?
 ) : PropertyDto()
 
 @Serializable
-class OptBooleanPropertyDto(
+class BooleanPropertyDto(
     override val name: String,
-    override var validations: List<ValidationDto>,
+    override val optional: Boolean,
+    override var constraints: List<ConstraintDto>,
     var defaultValue: Boolean?,
     var value: Boolean?
 ) : PropertyDto()
 
 @Serializable
-class OptDoublePropertyDto(
+class DoublePropertyDto(
     override val name: String,
-    override var validations: List<ValidationDto>,
+    override val optional: Boolean,
+    override var constraints: List<ConstraintDto>,
     var defaultValue: Double?,
     var value: Double?
 ) : PropertyDto()
 
 @Serializable
-class OptEnumPropertyDto(
+class DtoBasePropertyDto(
     override val name: String,
-    override var validations: List<ValidationDto>,
+    override val optional: Boolean,
+    override var constraints: List<ConstraintDto>,
+    var value: DescriptorDto?
+) : PropertyDto()
+
+@Serializable
+class EnumPropertyDto(
+    override val name: String,
+    override val optional: Boolean,
+    override var constraints: List<ConstraintDto>,
     var enumValues: List<String>,
     var defaultValue: String?,
     var value: String?
 ) : PropertyDto()
 
 @Serializable
-class OptInstantPropertyDto(
+class InstantPropertyDto(
     override val name: String,
-    override var validations: List<ValidationDto>,
+    override val optional: Boolean,
+    override var constraints: List<ConstraintDto>,
+    @Serializable(OptInstantAsStringSerializer::class)
     var defaultValue: Instant?,
+    @Serializable(OptInstantAsStringSerializer::class)
     var value: Instant?
 ) : PropertyDto()
 
 @Serializable
-class OptIntPropertyDto(
+class IntPropertyDto(
     override val name: String,
-    override var validations: List<ValidationDto>,
+    override val optional: Boolean,
+    override var constraints: List<ConstraintDto>,
     var defaultValue: Int?,
     var value: Int?
 ) : PropertyDto()
 
 @Serializable
-class OptLongPropertyDto(
+class LongPropertyDto(
     override val name: String,
-    override var validations: List<ValidationDto>,
+    override val optional: Boolean,
+    override var constraints: List<ConstraintDto>,
     var defaultValue: Long?,
     var value: Long?
 ) : PropertyDto()
 
 @Serializable
-class OptSecretPropertyDto(
+class SecretPropertyDto(
     override val name: String,
-    override var validations: List<ValidationDto>,
+    override val optional: Boolean,
+    override var constraints: List<ConstraintDto>,
     var defaultValue: Secret?,
     var value: Secret?
 ) : PropertyDto()
 
 @Serializable
-class OptStringPropertyDto(
+class StringPropertyDto(
     override val name: String,
-    override var validations: List<ValidationDto>,
+    override val optional: Boolean,
+    override var constraints: List<ConstraintDto>,
     var defaultValue: String?,
     var value: String?
 ) : PropertyDto()
 
 @Serializable
-class OptUuidPropertyDto(
+class UuidPropertyDto(
     override val name: String,
-    override var validations: List<ValidationDto>,
+    override val optional: Boolean,
+    override var constraints: List<ConstraintDto>,
     var defaultValue: UUID?,
     var value: UUID?
 ) : PropertyDto()
