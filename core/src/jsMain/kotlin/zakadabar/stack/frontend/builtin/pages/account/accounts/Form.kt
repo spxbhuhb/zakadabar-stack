@@ -6,7 +6,7 @@ package zakadabar.stack.frontend.builtin.pages.account.accounts
 import kotlinx.coroutines.coroutineScope
 import zakadabar.stack.StackRoles
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.builtin.*
+import zakadabar.stack.data.builtin.ActionStatusDto
 import zakadabar.stack.data.builtin.account.*
 import zakadabar.stack.data.record.EmptyRecordId
 import zakadabar.stack.data.record.RecordId
@@ -27,9 +27,9 @@ import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkCrudPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
-import zakadabar.stack.frontend.builtin.toast.dangerToast
-import zakadabar.stack.frontend.builtin.toast.successToast
-import zakadabar.stack.frontend.builtin.toast.warningToast
+import zakadabar.stack.frontend.builtin.toast.toastDanger
+import zakadabar.stack.frontend.builtin.toast.toastSuccess
+import zakadabar.stack.frontend.builtin.toast.toastWarning
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.plusAssign
@@ -202,7 +202,7 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto>, ZkAppTitleProvider {
         }
 
         override fun onInvalidSubmit() {
-            warningToast { stringStore.passwordChangeInvalid }
+            toastWarning { stringStore.passwordChangeInvalid }
         }
 
         override fun onSubmitSuccess() {}
@@ -211,9 +211,9 @@ class Form : ZkElement(), ZkCrudPage<AccountPrivateDto>, ZkAppTitleProvider {
             resultDto as ActionStatusDto
 
             if (! resultDto.success) {
-                dangerToast { stringStore.passwordChangeFail }
+                toastDanger { stringStore.passwordChangeFail }
             } else {
-                successToast { stringStore.actionSuccess }
+                toastSuccess { stringStore.actionSuccess }
             }
         }
     }

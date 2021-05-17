@@ -5,7 +5,7 @@ package zakadabar.lib.examples.frontend.dock
 
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.secondaryButton
+import zakadabar.stack.frontend.builtin.button.buttonSecondary
 import zakadabar.stack.frontend.resources.ZkIcons
 
 class DockBasicExample(
@@ -13,7 +13,7 @@ class DockBasicExample(
 ) : ZkElement(element) {
 
     override fun onCreate() {
-        + secondaryButton("Try It!") {
+        + buttonSecondary("Try It!") {
             zke { + "Hello World!" }.dock(ZkIcons.account_box, "hello")
         }
     }

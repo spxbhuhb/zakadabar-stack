@@ -5,14 +5,14 @@ package zakadabar.lib.examples.frontend.modal
 
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.examples.resources.strings
-import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
 import zakadabar.stack.frontend.builtin.modal.ZkMessageDialog
 import zakadabar.stack.frontend.builtin.note.ZkNote
-import zakadabar.stack.frontend.builtin.note.secondaryNote
+import zakadabar.stack.frontend.builtin.note.noteSecondary
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
+import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.marginBottom
 
@@ -35,7 +35,7 @@ class ModalExamples(
                 + ZkButton(strings.exampleDialog, onClick = ::onShowExample)
             } marginBottom theme.spacingStep
 
-            + secondaryNote("Output", "")
+            + noteSecondary("Output", "")
         }
     }
 

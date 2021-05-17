@@ -6,6 +6,7 @@ package zakadabar.lib.kodomat.frontend
 import io.ktor.util.*
 import kotlinx.browser.window
 import kotlinx.coroutines.await
+import kotlinx.datetime.Clock
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
 import zakadabar.lib.markdown.frontend.MarkdownView
@@ -14,10 +15,12 @@ import zakadabar.stack.data.schema.descriptor.DescriptorDto
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.input.ZkTextInput
-import zakadabar.stack.frontend.builtin.toast.dangerToast
-import zakadabar.stack.frontend.builtin.toast.infoToast
-import zakadabar.stack.frontend.builtin.toast.warningToast
+import zakadabar.stack.frontend.builtin.toast.toastDanger
+import zakadabar.stack.frontend.builtin.toast.toastInfo
+import zakadabar.stack.frontend.builtin.toast.toastSuccess
+import zakadabar.stack.frontend.builtin.toast.toastWarning
 import zakadabar.stack.frontend.resources.ZkFlavour
+import zakadabar.stack.frontend.resources.ZkFormatters.formatInstant
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.marginBottom
@@ -54,6 +57,12 @@ class Kodomat(
 
         private val entryContainer = ZkElement()
 
+        private val lastGenerate = ZkElement()
+
+        private var commonSource = ""
+        private var browserSource = ""
+        private var backendSource = ""
+
         override fun onCreate() {
             super.onCreate()
 
@@ -87,9 +96,29 @@ class Kodomat(
                     new.name.focus()
                 } marginBottom 20
 
-                + ZkButton(text = "Generate", flavour = ZkFlavour.Primary) {
-                    generate()
-                }
+                + row {
+                    + ZkButton(text = "Generate", flavour = ZkFlavour.Primary) {
+                        generate()
+                    } marginRight 20
+
+                    + ZkButton(text = "Common", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
+                        window.navigator.clipboard.writeText(commonSource)
+                        toastSuccess { "Common source copied to the clipboard!"}
+                    }.hide() marginRight 20
+
+                    + ZkButton(text = "Browser", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
+                        window.navigator.clipboard.writeText(browserSource)
+                        toastSuccess { "Browser source copied to the clipboard!"}
+                    }.hide() marginRight 20
+
+                    + ZkButton(text = "Backend", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
+                        window.navigator.clipboard.writeText(backendSource)
+                        toastSuccess { "Backend source copied to the clipboard!"}
+                    }.hide() marginRight 20
+
+                    + lastGenerate css kodomatStyles.lastGenerated
+
+                } marginBottom 20
 
             }
         }
@@ -103,28 +132,33 @@ class Kodomat(
             descriptor.dtoNamespace = dtoNamespace.value
 
             if (descriptor.packageName.isEmpty()) {
-                warningToast(hideAfter = 3000) { "Please set the package name!" }
+                toastWarning(hideAfter = 3000) { "Please set the package name!" }
                 go = false
             }
 
             if (descriptor.kClassName.isEmpty()) {
-                warningToast(hideAfter = 3000) { "Please set the DTO name!" }
+                toastWarning(hideAfter = 3000) { "Please set the DTO name!" }
                 go = false
             }
 
             if (! go) return
 
+            find<ZkButton>().forEach { it.show() } // TODO make generate button hide/show smarter
+
+            lastGenerate.clear()
+            lastGenerate.innerText = "Generated at: ${formatInstant(Clock.System.now())}"
+
             if (descriptor.dtoNamespace.isEmpty()) {
-                infoToast(hideAfter = 5000) { "Namespace is empty, using ${descriptor.kClassName} as default." }
+                toastInfo(hideAfter = 5000) { "Namespace is empty, using ${descriptor.kClassName} as default." }
                 descriptor.dtoNamespace = descriptor.kClassName
             }
 
             classGenerator.descriptor = descriptor
             classGenerator.generators = entryContainer.find<EditorEntry>().mapNotNull { it.generator() }
 
-            val commonSource = classGenerator.commonGenerator()
-            val browserSource = classGenerator.browserFrontendGenerator()
-            val backendSource = classGenerator.exposedBackendGenerator()
+            commonSource = classGenerator.commonGenerator()
+            browserSource = classGenerator.browserFrontendGenerator()
+            backendSource = classGenerator.exposedBackendGenerator()
 
             val result = template
                 .replace("@packageName@", descriptor.packageName)
@@ -158,12 +192,12 @@ class EditorEntry(private val editor: Kodomat.Editor) : ZkElement() {
             }
 
             + div {
-                + div { + "Name" } css kodomatStyles.editorLabel
-                + name css kodomatStyles.mediumInput
+                //+ div { + "Name" } css kodomatStyles.editorLabel
+                + name css kodomatStyles.largeInput
             } marginRight 10
 
             + div {
-                + div { + "Type" } css kodomatStyles.editorLabel
+                //+ div { + "Type" } css kodomatStyles.editorLabel
                 + type css kodomatStyles.mediumInput
             } marginRight 10
 
@@ -239,7 +273,7 @@ class EditorEntry(private val editor: Kodomat.Editor) : ZkElement() {
     fun generator(): PropertyGenerator? {
         if (name.value.isBlank() && type.value.isBlank()) return null
         entryDetails?.let { return it.generator(name.value, editor.descriptor) }
-        dangerToast { "Type of ${name.value.escapeHTML()} (${type.value.escapeHTML()}) is wrong!" }
+        toastDanger { "Type of ${name.value.escapeHTML()} (${type.value.escapeHTML()}) is wrong!" }
         return null
     }
 }

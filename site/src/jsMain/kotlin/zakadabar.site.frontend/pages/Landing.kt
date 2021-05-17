@@ -10,7 +10,7 @@ import zakadabar.site.frontend.resources.landingStyles
 import zakadabar.site.resources.strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.button.customButton
+import zakadabar.stack.frontend.builtin.button.buttonCustom
 import zakadabar.stack.frontend.builtin.layout.ZkFullScreenLayout
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.resources.ZkFlavour
@@ -33,11 +33,11 @@ object Landing : ZkPage(ZkFullScreenLayout) {
             + div(landingStyles.title) { + strings.siteTitle } marginBottom 40
 
             + div(landingStyles.buttons) {
-                + customButton(Welcome) css landingStyles.buttonCyan
-                + customButton(GetStarted) css landingStyles.buttonBlue
-                + customButton(DocumentationIntro) css landingStyles.buttonGreen
+                + buttonCustom(Welcome) css landingStyles.buttonCyan
+                + buttonCustom(GetStarted) css landingStyles.buttonBlue
+                + buttonCustom(DocumentationIntro) css landingStyles.buttonGreen
                 + ZkButton(strings.github, null, ZkFlavour.Custom, url = "https://github.com/spxbhuhb/zakadabar-stack") css landingStyles.buttonOrange
-                + customButton(GetHelp) css landingStyles.buttonRed
+                + buttonCustom(GetHelp) css landingStyles.buttonRed
             } marginBottom 50
 
             + grid(landingStyles.cards) {

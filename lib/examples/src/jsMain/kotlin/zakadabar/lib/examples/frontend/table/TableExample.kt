@@ -9,7 +9,7 @@ import zakadabar.stack.data.schema.DtoSchema
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.table.ZkTable
-import zakadabar.stack.frontend.builtin.toast.successToast
+import zakadabar.stack.frontend.builtin.toast.toastSuccess
 import zakadabar.stack.frontend.util.plusAssign
 
 
@@ -29,7 +29,7 @@ class ExampleTable : ZkTable<TableExampleDto>() {
     override fun getRowId(row: TableExampleDto) = row.name
 
     override fun onDblClick(id: String) {
-        successToast { "You clicked on details!" }
+        toastSuccess { "You clicked on details!" }
     }
 
 }

@@ -8,7 +8,7 @@ import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.note.warningNote
+import zakadabar.stack.frontend.builtin.note.noteWarning
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.util.default
 
@@ -24,7 +24,7 @@ class NoteFormExample(
 
         + column(zkPageStyles.content) {
 
-            + warningNote("Complex Note Content", InlineForm())
+            + noteWarning("Complex Note Content", InlineForm())
 
         }
     }

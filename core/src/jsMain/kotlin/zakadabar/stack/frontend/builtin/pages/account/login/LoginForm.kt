@@ -12,8 +12,8 @@ import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.fields.ZkConstStringField
-import zakadabar.stack.frontend.builtin.toast.dangerToast
-import zakadabar.stack.frontend.builtin.toast.warningToast
+import zakadabar.stack.frontend.builtin.toast.toastDanger
+import zakadabar.stack.frontend.builtin.toast.toastWarning
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.marginBottom
 
@@ -70,13 +70,13 @@ class LoginForm(
     }
 
     override fun onInvalidSubmit() {
-        invalidToast = warningToast { stringStore.loginFail }
+        invalidToast = toastWarning { stringStore.loginFail }
     }
 
     override fun onSubmitSuccess() {}
 
     override fun onSubmitError(ex: Exception) {
-        invalidToast = dangerToast { stringStore.loginFail }
+        invalidToast = toastDanger { stringStore.loginFail }
     }
 
     private fun onExecuteResult(resultDto: DtoBase) {
@@ -85,9 +85,9 @@ class LoginForm(
 
         if (! resultDto.success) {
             if (resultDto.reason == "locked") {
-                dangerToast { stringStore.loginLocked }
+                toastDanger { stringStore.loginLocked }
             } else {
-                dangerToast { stringStore.loginFail }
+                toastDanger { stringStore.loginFail }
             }
             return
         }

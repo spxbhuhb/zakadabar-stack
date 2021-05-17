@@ -8,16 +8,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.infoButton
-import zakadabar.stack.frontend.builtin.button.secondaryButton
-import zakadabar.stack.frontend.builtin.note.secondaryNote
+import zakadabar.stack.frontend.builtin.button.buttonInfo
+import zakadabar.stack.frontend.builtin.button.buttonSecondary
+import zakadabar.stack.frontend.builtin.note.noteSecondary
 import zakadabar.stack.frontend.util.io
 
 class ParallelDownload : ZkElement() {
 
     lateinit var fetched: List<String>
 
-    val loading = infoButton("... loading ...") { } marginBottom 10
+    val loading = buttonInfo("... loading ...") { } marginBottom 10
 
     override fun onCreate() {
         super.onCreate()
@@ -48,10 +48,10 @@ class ParallelDownloadExample(
     element: HTMLElement
 ) : ZkElement(element) {
 
-    val output = secondaryNote("Output", "")
+    val output = noteSecondary("Output", "")
 
     override fun onCreate() {
-        + secondaryButton("Run Example") {
+        + buttonSecondary("Run Example") {
             output.content = ParallelDownload()
         } marginBottom 20
 

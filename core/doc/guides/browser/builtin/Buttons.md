@@ -10,24 +10,24 @@
 For basic buttons, simply use one of these:
 
 ```kotlin
-primaryButton("label") { println("clicked") }
-secondayButton("label") { println("clicked") }
-successButton("label") { println("clicked") }
-warningButton("label") { println("clicked") }
-dangerButton("label") { println("clicked") }
-infoButton("label") { println("clicked") }
+buttonPrimary("label") { println("clicked") }
+buttonSecondary("label") { println("clicked") }
+buttonSuccess("label") { println("clicked") }
+buttonWarning("label") { println("clicked") }
+buttonDanger("label") { println("clicked") }
+buttonInfo("label") { println("clicked") }
 ```
 
 For links, use the target-aware version of the shorthands. These will set the label to the translated target `viewName`
 and the url to the url that opens the target.
 
 ```kotlin
-primaryButton(target)
-secondayButton(target)
-successButton(target)
-warningButton(target)
-dangerButton(target)
-infoButton(target)
+buttonPrimary(target)
+buttonSecondary(target)
+buttonSuccess(target)
+buttonWarning(target)
+buttonDanger(target)
+buttonInfo(target)
 ```
 
 ## Button or Link

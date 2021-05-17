@@ -5,13 +5,13 @@ package zakadabar.lib.examples.frontend.toast
 
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.examples.data.builtin.BuiltinDto
-import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.button.secondaryButton
+import zakadabar.stack.frontend.builtin.button.buttonSecondary
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.builtin.toast.ZkToast
+import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.util.default
 
 /**
@@ -26,7 +26,7 @@ class ToastFormExample(
 
         + column(zkPageStyles.content) {
 
-            + secondaryButton("Open as Toast") {
+            + buttonSecondary("Open as Toast") {
                 ZkToast(content = InlineForm(), hideAfter = null).run()
             } marginBottom theme.spacingStep
 

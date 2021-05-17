@@ -10,8 +10,8 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
-import zakadabar.stack.frontend.builtin.note.infoNote
-import zakadabar.stack.frontend.builtin.toast.successToast
+import zakadabar.stack.frontend.builtin.note.noteInfo
+import zakadabar.stack.frontend.builtin.toast.toastSuccess
 import zakadabar.stack.frontend.util.default
 
 class TabContainerExample(
@@ -30,7 +30,7 @@ class TabContainerExample(
             }
 
             + tab("Second Tab") {
-                + infoNote("Info", "You are looking at the content of the second tab.")
+                + noteInfo("Info", "You are looking at the content of the second tab.")
             }
 
             + tab(InlineForm())
@@ -64,7 +64,7 @@ class TabContainerExample(
 
         override fun validate(submit: Boolean): Boolean {
             super.validate(submit)
-            successToast { "You clicked on save!" }
+            toastSuccess { "You clicked on save!" }
             return false
         }
     }

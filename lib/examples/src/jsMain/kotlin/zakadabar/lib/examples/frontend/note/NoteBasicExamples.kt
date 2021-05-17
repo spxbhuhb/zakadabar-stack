@@ -20,12 +20,12 @@ class NoteBasicExamples(
 
         + column(zkPageStyles.content) {
 
-            + primaryNote("Primary Note", "Content of the note.") marginBottom 20
-            + secondaryNote("Secondary Note", "Content of the note.") marginBottom 20
-            + successNote("Success Note", "Content of the note.") marginBottom 20
-            + warningNote("Warning Note", "Content of the note.") marginBottom 20
-            + dangerNote("Danger Note", "Content of the note.") marginBottom 20
-            + infoNote("Info Note", "Content of the note.") marginBottom 20
+            + notePrimary("Primary Note", "Content of the note.") marginBottom 20
+            + noteSecondary("Secondary Note", "Content of the note.") marginBottom 20
+            + noteSuccess("Success Note", "Content of the note.") marginBottom 20
+            + noteWarning("Warning Note", "Content of the note.") marginBottom 20
+            + noteDanger("Danger Note", "Content of the note.") marginBottom 20
+            + noteInfo("Info Note", "Content of the note.") marginBottom 20
 
         }
     }

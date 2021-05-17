@@ -35,6 +35,7 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val dropFilesHere by "Drop files here."
     open val edit by "Edit"
     open val execute by "execute"
+    open val falseText by "False"
     open val id by "Id"
     open val invalidFieldsExplanation by "Cannot save the data yet as some values are invalid. They are marked by red color, please enter valid values and try save again."
     open val invalidFieldsToast by "Invalid fields, cannot save yet."
@@ -51,9 +52,11 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val querySuccess by "Query Success."
     open val save by "Save"
     open val show by "show"
+    open val trueText by "True"
     open val updateFail by "Update failed."
     open val updateSuccess by "Update success."
     open val yes by "yes"
+
 
     // -------------------------------------------------------------------------
     // Values for the build-in administration UI

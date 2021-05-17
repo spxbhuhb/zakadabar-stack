@@ -17,12 +17,12 @@ successNote("title", "message")
 Note convenience functions:
 
 ```kotlin
-primaryNote("title", "message")
-secondayNote("title", "message")
-successNote("title", "message")
-warningNote("title", "message")
-dangerNote("title", "message")
-infoNote("title", "message")
+notePrimary("title", "message")
+noteSecondary("title", "message")
+noteSuccess("title", "message")
+noteWarning("title", "message")
+noteDanger("title", "message")
+noteInfo("title", "message")
 ```
 
 Use constructor parameters of [ZkNote](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/note/ZkNote.kt) to create

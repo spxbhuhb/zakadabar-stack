@@ -6,8 +6,8 @@ package zakadabar.lib.examples.frontend.dock
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.dangerButton
-import zakadabar.stack.frontend.builtin.button.secondaryButton
+import zakadabar.stack.frontend.builtin.button.buttonDanger
+import zakadabar.stack.frontend.builtin.button.buttonSecondary
 import zakadabar.stack.frontend.resources.ZkIcons
 
 class DockRemoveExample(
@@ -15,9 +15,9 @@ class DockRemoveExample(
 ) : ZkElement(element) {
 
     override fun onCreate() {
-        + secondaryButton("Try It!") {
+        + buttonSecondary("Try It!") {
             zke {
-                dangerButton("Remove Me!") { application.dock -= this }
+                buttonDanger("Remove Me!") { application.dock -= this }
             }.dock(ZkIcons.menu, "hello")
         }
     }

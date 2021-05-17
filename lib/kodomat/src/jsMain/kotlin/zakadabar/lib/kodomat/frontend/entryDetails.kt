@@ -70,9 +70,9 @@ class EnumDetails : EntryDetails() {
         + row {
             + Optional()
 
-            + column {
+            + row {
                 + div { + "Enum Name" } css kodomatStyles.editorLabel
-                + enumName
+                + enumName css kodomatStyles.largeInput
             }
         }
     }
@@ -153,9 +153,9 @@ class RecordIdDetails : EntryDetails() {
         + row {
             + Optional()
 
-            + column {
-                + div { + "Record Type" } css kodomatStyles.editorLabel
-                + recordType
+            + row {
+                + div { + "Record Type:" } css kodomatStyles.editorLabel
+                + recordType css kodomatStyles.largeInput
             }
         }
     }

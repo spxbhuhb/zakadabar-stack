@@ -33,6 +33,7 @@ open class ClassGenerator {
     open val exposedDaoName
         get() = baseName + "Dao"
 
+
     // @formatter:off
 
     // -------------------------------------------------------------------------
@@ -47,7 +48,7 @@ import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordDtoCompanion
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.schema.DtoSchema
-${generators.mapNotNull { it.commonImport() }.joinToString("\n")}
+${generators.map { it.commonImport() }.flatten().distinct().joinToString("\n")}
 
 @Serializable
 class ${dtoName}(
@@ -77,15 +78,13 @@ fun browserFrontendGenerator() = """
 package ${packageName}.frontend.pages
 
 import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
-import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.application.translate
 
 import ${packageName}.data.$dtoName
 
-${generators.mapNotNull { it.browserImport() }.joinToString("\n")}
+${generators.map { it.browserImport() }.flatten().distinct().joinToString("\n")}
 
 // -----------------------------------------------------------------------------
 //  Crud
@@ -170,7 +169,7 @@ import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.BCrypt
 import zakadabar.stack.util.Executor
 import ${packageName}.data.$dtoName
-${generators.mapNotNull { it.exposedBackendImport() }.joinToString("\n")}
+${generators.map { it.exposedBackendImport() }.flatten().distinct().joinToString("\n")}
 
 // -----------------------------------------------------------------------------
 //  Record Backend

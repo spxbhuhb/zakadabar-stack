@@ -43,9 +43,9 @@ import zakadabar.stack.frontend.builtin.pages.ZkCrudPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
 import zakadabar.stack.frontend.builtin.toast.ZkToast
-import zakadabar.stack.frontend.builtin.toast.dangerToast
-import zakadabar.stack.frontend.builtin.toast.successToast
-import zakadabar.stack.frontend.builtin.toast.warningToast
+import zakadabar.stack.frontend.builtin.toast.toastDanger
+import zakadabar.stack.frontend.builtin.toast.toastSuccess
+import zakadabar.stack.frontend.builtin.toast.toastWarning
 import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.log
@@ -278,7 +278,7 @@ open class ZkForm<T : DtoBase> (
 
             } catch (ex: DataConflictException) {
 
-                dangerToast { stringStore[ex.message] }
+                toastDanger { stringStore[ex.message] }
 
             } catch (ex: Exception) {
 
@@ -307,7 +307,7 @@ open class ZkForm<T : DtoBase> (
      * Default implementation shows a toast with a message.
      */
     open fun onInvalidSubmit() {
-        invalidToast = warningToast(hideAfter = 3000) { stringStore.invalidFieldsToast }
+        invalidToast = toastWarning(hideAfter = 3000) { stringStore.invalidFieldsToast }
     }
 
     /**
@@ -317,13 +317,13 @@ open class ZkForm<T : DtoBase> (
      */
     open fun onSubmitSuccess() {
         when (mode) {
-            ZkElementMode.Create -> successToast { stringStore.createSuccess }
+            ZkElementMode.Create -> toastSuccess { stringStore.createSuccess }
             ZkElementMode.Read -> Unit
-            ZkElementMode.Update -> successToast { stringStore.updateSuccess }
-            ZkElementMode.Delete -> successToast { stringStore.deleteSuccess }
-            ZkElementMode.Action -> successToast { stringStore.actionSuccess }
+            ZkElementMode.Update -> toastSuccess { stringStore.updateSuccess }
+            ZkElementMode.Delete -> toastSuccess { stringStore.deleteSuccess }
+            ZkElementMode.Action -> toastSuccess { stringStore.actionSuccess }
             ZkElementMode.Query -> Unit
-            ZkElementMode.Other -> successToast { stringStore.actionSuccess }
+            ZkElementMode.Other -> toastSuccess { stringStore.actionSuccess }
         }
     }
 
@@ -334,13 +334,13 @@ open class ZkForm<T : DtoBase> (
      */
     open fun onSubmitError(ex: Exception) {
         when (mode) {
-            ZkElementMode.Create -> dangerToast { stringStore.createFail }
+            ZkElementMode.Create -> toastDanger { stringStore.createFail }
             ZkElementMode.Read -> Unit
-            ZkElementMode.Update -> dangerToast { stringStore.updateFail }
-            ZkElementMode.Delete -> dangerToast { stringStore.deleteFail }
-            ZkElementMode.Action -> dangerToast { stringStore.actionFail }
-            ZkElementMode.Query -> dangerToast { stringStore.queryFail }
-            ZkElementMode.Other -> dangerToast { stringStore.actionFail }
+            ZkElementMode.Update -> toastDanger { stringStore.updateFail }
+            ZkElementMode.Delete -> toastDanger { stringStore.deleteFail }
+            ZkElementMode.Action -> toastDanger { stringStore.actionFail }
+            ZkElementMode.Query -> toastDanger { stringStore.queryFail }
+            ZkElementMode.Other -> toastDanger { stringStore.actionFail }
         }
     }
 

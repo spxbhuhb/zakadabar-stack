@@ -11,7 +11,7 @@ open class PropertyGenerator(
     open val property: PropertyDto,
     open val typeName: String
 ) {
-    open fun commonImport(): String? = null
+    open fun commonImport(): List<String> = emptyList()
 
     open fun commonDeclaration() =
         "var ${property.name} : ${typeName}${optional}"
@@ -19,7 +19,7 @@ open class PropertyGenerator(
     open fun commonSchema() =
         "+ ::${property.name} ${property.constraints.toCode()}"
 
-    open fun browserImport(): String? = null
+    open fun browserImport(): List<String> = emptyList()
 
     open fun browserForm() =
         "+ dto::${property.name}"
@@ -27,7 +27,7 @@ open class PropertyGenerator(
     open fun browserTable() =
         "+ ${descriptor.kClassName}::${property.name}"
 
-    open fun exposedBackendImport(): String? = null
+    open fun exposedBackendImport(): List<String> = emptyList()
 
     open fun exposedTable(): String {
         TODO()
@@ -61,6 +61,27 @@ open class BooleanPropertyGenerator(
     override val property: BooleanPropertyDto
 ) : PropertyGenerator(descriptor, property, "Boolean") {
 
+    override fun browserImport() =
+        if (property.optional) {
+            listOf("import zakadabar.stack.frontend.application.stringStore")
+        } else {
+            emptyList()
+        }
+
+    override fun browserForm() =
+        if (property.optional) {
+            "+ opt(dto::${property.name}, stringStore.trueText, stringStore.falseText)"
+        } else {
+            super.browserForm()
+        }
+
+    override fun browserTable() =
+        if (property.optional) {
+            "// ${super.browserTable()} // opt boolean is not supported yet"
+        } else {
+            super.browserTable()
+        }
+
     override fun exposedTable() =
         "val ${property.name} = bool(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"
 
@@ -81,6 +102,13 @@ open class EnumPropertyGenerator(
     override val property: EnumPropertyDto
 ) : PropertyGenerator(descriptor, property, property.enumName) {
 
+    override fun browserTable() =
+        if (property.optional) {
+            "// ${super.browserTable()} // opt enum is not supported yet"
+        } else {
+            super.browserTable()
+        }
+
     override fun exposedTable() =
         "val ${property.name} = enumerationByName(\"${property.name.camelToSnakeCase()}\", 20, ${property.enumName}::class)$exposedTableOptional // TODO check size of ${property.enumName} in the exposed table"
 
@@ -91,13 +119,13 @@ open class InstantPropertyGenerator(
     override val property: InstantPropertyDto
 ) : PropertyGenerator(descriptor, property, "Instant") {
 
-    override fun commonImport() : String {
-        return if (property.optional) {
-            "import kotlinx.datetime.Instant\nimport zakadabar.stack.data.util.InstantAsStringSerializer"
+    override fun commonImport() =
+         if (property.optional) {
+            listOf("import kotlinx.datetime.Instant", "import zakadabar.stack.data.util.InstantAsStringSerializer")
         } else {
-            "import kotlinx.datetime.Instant\nimport zakadabar.stack.data.util.OptInstantAsStringSerializer"
+            listOf("import kotlinx.datetime.Instant", "import zakadabar.stack.data.util.OptInstantAsStringSerializer")
         }
-    }
+
 
     override fun commonDeclaration(): String {
         return if (property.optional) {
@@ -167,14 +195,14 @@ open class RecordIdPropertyGenerator(
         if (property.name == "id") {
             "+ dto::id"
         } else {
-            "+ select(dto::${property.name}) { ${property.kClassName}.all().by { TODO(\"${property.kClassName}.name\") } } "
+            "+ select(dto::${property.name}) { ${property.kClassName}.all().by { it.name } } "
         }
 
     override fun browserTable() =
-        "// ${descriptor.kClassName}::${property.name} // not supported yet "
+        "// ${descriptor.kClassName}::${property.name} // record id and opt record id is not supported yet "
 
     override fun exposedTable() =
-        "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutDto()}Table).$exposedTableOptional"
+        "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutDto()}Table)$exposedTableOptional"
 
     override fun exposedTableToDto() =
         "${property.name} = row[${property.name}]$optional.recordId()"
@@ -183,7 +211,7 @@ open class RecordIdPropertyGenerator(
         "var ${property.name} by ${property.kClassName.toDaoName()} $exposedDaoReference ${descriptor.kClassName.toTableName()}.${property.name}"
 
     override fun exposedDaoToDto() =
-        "${property.name} = ${property.name}$optional.recordId()"
+        "${property.name} = ${property.name}$optional.id$optional.recordId()"
 
     override fun exposedDaoFromDto() =
         if (property.optional) {
@@ -197,6 +225,15 @@ open class SecretPropertyGenerator(
     descriptor: DescriptorDto,
     override val property: SecretPropertyDto
 ) : PropertyGenerator(descriptor, property, "Secret") {
+
+    override fun commonImport() =
+        listOf("import zakadabar.stack.data.builtin.misc.Secret")
+
+    override fun browserTable() =
+        "// ${super.browserTable()} // not supported yet"
+
+    override fun exposedBackendImport() =
+        listOf("import zakadabar.stack.data.builtin.misc.Secret")
 
     override fun exposedTable() =
         "val ${property.name} = varchar(\"${property.name.camelToSnakeCase()}\", 200)$exposedTableOptional"
@@ -231,9 +268,9 @@ open class StringPropertyGenerator(
     override fun exposedTable() : String {
         val max = property.constraints.firstOrNull { it.type == ConstraintType.Max } as? ConstraintIntDto
         return if (max?.value != null) {
-            "val ${property.name} = varchar(\"${property.name}\", ${max.value})$exposedTableOptional"
+            "val ${property.name} = varchar(\"${property.name.camelToSnakeCase()}\", ${max.value})$exposedTableOptional"
         } else {
-            "val ${property.name} = text(\"${property.name}\")$exposedTableOptional"
+            "val ${property.name} = text(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"
         }
     }
 }
@@ -244,13 +281,10 @@ open class UuidPropertyGenerator(
 ) : PropertyGenerator(descriptor, property, "UUID") {
 
     override fun commonImport() =
-        "import zakadabar.stack.util.UUID"
-
-    override fun browserImport() =
-        "import zakadabar.stack.util.UUID"
+        listOf("import zakadabar.stack.util.UUID")
 
     override fun exposedTable() =
-        "val ${property.name} = uuid(\"${property.name}\")$exposedTableOptional"
+        "val ${property.name} = uuid(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"
 
     override fun exposedTableToDto() =
         "${property.name} = row[${property.name}]$optional.toStackUuid()"
@@ -259,5 +293,5 @@ open class UuidPropertyGenerator(
         "${property.name} = ${property.name}$optional.toStackUuid()"
 
     override fun exposedDaoFromDto() =
-        "${property.name} = ${property.name}$optional.toJavaUuid()"
+        "${property.name} = dto.${property.name}$optional.toJavaUuid()"
 }

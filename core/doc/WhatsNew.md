@@ -56,3 +56,6 @@ what's happening. For detailed list of changes please check the changelog.
         * Known Problems
         * Possible Improvements
         * Changes
+    
+* site
+   * Kod-o-mat

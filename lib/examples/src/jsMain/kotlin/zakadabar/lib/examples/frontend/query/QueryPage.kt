@@ -14,8 +14,8 @@ import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.builtin.toast.dangerToast
-import zakadabar.stack.frontend.builtin.toast.successToast
+import zakadabar.stack.frontend.builtin.toast.toastDanger
+import zakadabar.stack.frontend.builtin.toast.toastSuccess
 import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.io
@@ -56,9 +56,9 @@ object QueryPage : ZkPage(css = zkPageStyles.fixed) {
         io {
             try {
                 table.setData(query.execute())
-                successToast { strings.querySuccess }
+                toastSuccess { strings.querySuccess }
             } catch (ex: Exception) {
-                dangerToast { strings.queryFail }
+                toastDanger { strings.queryFail }
                 log(ex)
             }
         }

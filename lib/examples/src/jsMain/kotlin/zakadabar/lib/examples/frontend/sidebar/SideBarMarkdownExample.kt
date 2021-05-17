@@ -11,7 +11,7 @@ import zakadabar.lib.markdown.frontend.markdownStyles
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.primaryButton
+import zakadabar.stack.frontend.builtin.button.buttonPrimary
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.zkTabContainerStyles
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
@@ -56,7 +56,7 @@ object ExampleMarkdownSideBarTarget : ZkPathPage() {
         + column {
             + div { + "The path is: $path" }
             + div { + "Click on the button to go back." }
-            + primaryButton(stringStore.back) { application.back() }
+            + buttonPrimary(stringStore.back) { application.back() }
         }
     }
 }

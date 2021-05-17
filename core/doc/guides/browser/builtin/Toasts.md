@@ -15,24 +15,24 @@ Toasts are small pop-up messages displayed to the user to provide information ab
 For basic toasts, simply call the appropriate convenience function:
 
 ```kotlin
-successToast { "This is a success!" }
+toastSuccess { "This is a success!" }
 ```
 
 All convenience support the `hideAfter` parameter. `0` value turns off auto-hide.
 
 ```kotlin
-successToast(hideAfter = 0) { "This is a success!" }
+toastSuccess(hideAfter = 0) { "This is a success!" }
 ```
 
 Toast convenience functions:
 
 ```kotlin
-primaryToast { "message" }
-secondaryToast { "message" }
-successToast { "message" }
-warningToast { "message" }
-dangerToast { "message" }
-infoToast { "message" }
+toastPrimary { "message" }
+toastSecondary { "message" }
+toastSuccess { "message" }
+toastWarning { "message" }
+toastDanger { "message" }
+toastInfo { "message" }
 ```
 
 Use constructor parameters of [ZkToast](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/ZkToast.kt) to create

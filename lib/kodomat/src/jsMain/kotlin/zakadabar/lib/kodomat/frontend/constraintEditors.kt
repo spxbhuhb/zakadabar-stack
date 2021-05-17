@@ -20,8 +20,10 @@ class Optional : ZkElement() {
 
         + kodomatStyles.constraintEditor
 
-        + div { + "Optional" } css kodomatStyles.editorLabel
-        + ZkCheckBox()
+        + row {
+            + div { + "Optional:" } css kodomatStyles.editorLabel
+            + ZkCheckBox()
+        }
     }
 
     val value: Boolean
@@ -38,8 +40,10 @@ class ConstraintBooleanEditor(
 
         + kodomatStyles.constraintEditor
 
-        + div { + constraintType.name } css kodomatStyles.editorLabel
-        + ZkCheckBox(checked = skipWhen)
+        + row {
+            + div { + "${constraintType.name}:" } css kodomatStyles.editorLabel
+            + ZkCheckBox(checked = skipWhen)
+        }
     }
 
     override fun toDto(): ConstraintDto? {
@@ -57,8 +61,10 @@ class ConstraintDoubleEditor(
 
         + kodomatStyles.constraintEditor
 
-        + div { + constraintType.name } css kodomatStyles.editorLabel
-        + ZkTextInput() css kodomatStyles.mediumInput
+        + row {
+            + div { + "${constraintType.name}:" } css kodomatStyles.editorLabel
+            + ZkTextInput() css kodomatStyles.mediumInput
+        }
     }
 
     override fun toDto(): ConstraintDto? {
@@ -77,8 +83,10 @@ class ConstraintIntEditor(
 
         + kodomatStyles.constraintEditor
 
-        + div { + constraintType.name } css kodomatStyles.editorLabel
-        + ZkTextInput() css kodomatStyles.mediumInput
+        + row {
+            + div { + "${constraintType.name}:" } css kodomatStyles.editorLabel
+            + ZkTextInput() css kodomatStyles.mediumInput
+        }
     }
 
     override fun toDto(): ConstraintDto? {
@@ -97,8 +105,10 @@ class ConstraintLongEditor(
 
         + kodomatStyles.constraintEditor
 
-        + div { + constraintType.name } css kodomatStyles.editorLabel
-        + ZkTextInput() css kodomatStyles.mediumInput
+        + row {
+            + div { + "${constraintType.name}:" } css kodomatStyles.editorLabel
+            + ZkTextInput() css kodomatStyles.mediumInput
+        }
     }
 
     override fun toDto(): ConstraintDto? {
@@ -117,8 +127,10 @@ class ConstraintStringEditor(
 
         + kodomatStyles.constraintEditor
 
-        + div { + constraintType.name } css kodomatStyles.editorLabel
-        + ZkTextInput() css kodomatStyles.mediumInput
+        + row {
+            + div { + "${constraintType.name}:" } css kodomatStyles.editorLabel
+            + ZkTextInput() css kodomatStyles.mediumInput
+        }
     }
 
     override fun toDto(): ConstraintDto? {
