@@ -9,15 +9,10 @@ import zakadabar.site.frontend.resources.SiteLightTheme
 import zakadabar.site.resources.strings
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.initTheme
 import zakadabar.stack.frontend.util.io
 
 fun main() {
-
-    ZkElement.addKClass = false
-    ZkCssStyleSheet.shortNames = false
 
     application = ZkApplication()
 

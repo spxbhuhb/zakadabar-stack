@@ -40,6 +40,7 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val invalidFieldsExplanation by "Cannot save the data yet as some values are invalid. They are marked by red color, please enter valid values and try save again."
     open val invalidFieldsToast by "Invalid fields, cannot save yet."
     open val invalidValue by "Invalid Value"
+    open val loading by "Loading"
     open val missingRoute by "This page does not exists. Please go back or <a href=\"/\">go to the home page</a>."
     open val name by "Name"
     open val no by "no"

@@ -13,6 +13,7 @@ that we'll be able to do so.
   
 ### Core
 
+* move all built-in namespaces to "zk-*"
 * responsive components:
     * table
     * form

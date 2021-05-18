@@ -13,8 +13,8 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
     open var labelTextColor: String? = null
     open var labelBackgroundColor: String? = null
     open var labelHeight = 32
-    open var activeForeground: String? = null
-    open var activeBackground: String? = null
+    open var activeLabelTextColor: String? = null
+    open var activeLabelBackgroundColor: String? = null
     open var labelBottomBorder: String? = null
 
     open val container by cssClass {
@@ -54,8 +54,8 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
     }
 
     open val activeLabel by cssClass {
-        backgroundColor = activeBackground ?: theme.infoColor
-        color = activeForeground ?: theme.infoPair
+        backgroundColor = activeLabelBackgroundColor ?: theme.infoColor
+        color = activeLabelTextColor ?: theme.infoPair
         borderLeft = "1px solid $backgroundColor"
         borderRight = borderLeft
         borderTop = borderLeft
