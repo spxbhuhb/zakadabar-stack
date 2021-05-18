@@ -55,8 +55,8 @@ open class MarkdownView(
 
             window.requestAnimationFrame {
                 syntaxHighLight()
-                localNavEvents()
                 enrich()
+                localNavEvents()
                 scrollIntoView()
             }
 
@@ -84,7 +84,7 @@ open class MarkdownView(
         // without this we get the full url with protocol and site and here we don't want that
         val url = js("target.getAttribute('href', 2)") as String
 
-        if (url.startsWith("https://") || url.startsWith("http://")) return
+        if (url.startsWith("https://") || url.startsWith("http://") || url.startsWith("mailto:") || url.startsWith("tel:")) return
 
         event.preventDefault()
         application.changeNavState(url)

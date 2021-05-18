@@ -32,6 +32,7 @@ import zakadabar.lib.examples.frontend.toast.ToastBasicExamples
 import zakadabar.lib.examples.frontend.toast.ToastCustomExample
 import zakadabar.lib.examples.frontend.toast.ToastFormExample
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
+import zakadabar.site.frontend.components.ThemeShowCase
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.note.ZkNote
@@ -111,6 +112,7 @@ class SiteMarkdownContext(
             "TableExample" -> TableExample(htmlElement)
 
             "ThemeExample" -> ThemeExample(htmlElement)
+            "ThemeShowCase" -> ThemeShowCase(htmlElement)
 
             "ToastAutoHideExample" -> ToastAutoHideExample(htmlElement)
             "ToastCustomExample" -> ToastCustomExample(htmlElement)

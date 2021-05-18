@@ -61,19 +61,11 @@ open class ZkBuiltinLightTheme : ZkTheme {
     override var blockBackgroundColor = ZkColors.Zakadabar.gray0
 
     override fun onResume() {
-        onResumeScrollBar()
-        onResumeTitleBar()
-    }
-
-    open fun onResumeScrollBar() {
         with(zkScrollBarStyles) {
             thumbColor = textColor.alpha(0.5)
             trackColor = backgroundColor
         }
-    }
 
-    open fun onResumeTitleBar() {
-        @Suppress("DuplicatedCode") // no need to make this more complex
         with(zkTitleBarStyles) {
             appHandleBackground = ZkColors.Zakadabar.gray1
             appHandleText = textColor

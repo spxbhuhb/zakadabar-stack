@@ -24,6 +24,9 @@ open class ZkSideBar : ZkElement() {
     open fun section(text: String, onClick: ((Boolean) -> Unit)? = null, builder: ZkElement.() -> Unit) =
         ZkSideBarGroup(text, section = true, onClick = onClick, builder = builder, sideBar = this)
 
+    open fun section(target : ZkAppRouting.ZkTarget, text : String? = null, builder: ZkElement.() -> Unit) =
+        ZkSideBarGroup(target, text = text, section = true, builder = builder, sideBar = this)
+
     open fun group(text: String, section : Boolean = false, onClick: ((Boolean) -> Unit)? = null, builder: ZkElement.() -> Unit) =
         ZkSideBarGroup(text, section = section, onClick = onClick, builder = builder, sideBar = this)
 

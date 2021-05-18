@@ -20,7 +20,7 @@ object Welcome : MarkdownPage(
 )
 
 object WhatsNew : MarkdownPage(
-    "/api/$contentNamespace/WhatsNew.md",
+    "/api/$contentNamespace/changelog/WhatsNew.md",
     SiteMarkdownContext("/WhatsNew", "/")
 )
 
@@ -44,6 +44,16 @@ object GetHelp : MarkdownPage(
     SiteMarkdownContext("/GetHelp", "help/")
 )
 
+object LegalNotices : MarkdownPage(
+    "/api/$contentNamespace/misc/LegalNotices.md",
+    SiteMarkdownContext("/LegalNotices", "misc/")
+)
+
+object Credits : MarkdownPage(
+    "/api/$contentNamespace/misc/Credits.md",
+    SiteMarkdownContext("/Credits", "misc/")
+)
+
 object DocumentationIntro : MarkdownPage(
     "/api/$contentNamespace/help/Documentation.md",
     SiteMarkdownContext("/DocumentationIntro", "help/")
@@ -52,6 +62,11 @@ object DocumentationIntro : MarkdownPage(
 object FAQ : MarkdownPage(
     "/api/$contentNamespace/help/FAQ.md",
     SiteMarkdownContext("FAQ", "help/")
+)
+
+object ServicesAndSupport : MarkdownPage(
+    "/api/$contentNamespace/misc/ServicesAndSupport.md",
+    SiteMarkdownContext("ServicesAndSupport", "misc/")
 )
 
 object KodomatPage : ZkPage() {

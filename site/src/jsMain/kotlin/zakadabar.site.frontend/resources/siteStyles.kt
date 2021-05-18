@@ -28,4 +28,9 @@ class SiteStyles : ZkCssStyleSheet() {
         fill = theme.textColor
     }
 
+    val title by cssClass {
+        justifyContent = "space-around"
+        alignItems = "center"
+    }
+
 }

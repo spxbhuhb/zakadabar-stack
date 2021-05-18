@@ -4,18 +4,19 @@
 package zakadabar.stack.frontend.builtin.layout.tabcontainer
 
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssParameter
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkTabContainerStyles by cssStyleSheet(ZkTabContainerStyles())
 
 open class ZkTabContainerStyles : ZkCssStyleSheet() {
 
-    open var labelTextColor: String? = null
-    open var labelBackgroundColor: String? = null
-    open var labelHeight = 32
-    open var activeLabelTextColor: String? = null
-    open var activeLabelBackgroundColor: String? = null
-    open var labelBottomBorder: String? = null
+    open var labelTextColor by cssParameter { theme.secondaryPair }
+    open var labelBackgroundColor by cssParameter { theme.secondaryColor }
+    open var labelHeight by cssParameter { 32 }
+    open var activeLabelTextColor by cssParameter { theme.infoPair }
+    open var activeLabelBackgroundColor by cssParameter { theme.infoColor }
+    open var labelBottomBorder by cssParameter { "none" }
 
     open val container by cssClass {
         position = "relative"
@@ -26,7 +27,7 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
     open val labels by cssClass {
         display = "flex"
         flexDirection = "row"
-        borderBottom = labelBottomBorder ?: "none"
+        borderBottom = labelBottomBorder
     }
 
     open val label by cssClass {
@@ -35,8 +36,8 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
         fontSize = 14
         height = labelHeight
         minWidth = 100
-        backgroundColor = labelBackgroundColor ?: theme.secondaryColor
-        color = labelTextColor ?: theme.secondaryPair
+        backgroundColor = labelBackgroundColor
+        color = labelTextColor
         paddingLeft = theme.spacingStep
         paddingRight = theme.spacingStep
         paddingBottom = 6
@@ -54,8 +55,8 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
     }
 
     open val activeLabel by cssClass {
-        backgroundColor = activeLabelBackgroundColor ?: theme.infoColor
-        color = activeLabelTextColor ?: theme.infoPair
+        backgroundColor = activeLabelBackgroundColor
+        color = activeLabelTextColor
         borderLeft = "1px solid $backgroundColor"
         borderRight = borderLeft
         borderTop = borderLeft

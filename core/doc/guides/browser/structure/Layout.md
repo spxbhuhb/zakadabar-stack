@@ -63,6 +63,15 @@ interface which declares the following fields:
 Elements that implement `ZkAppTitleProvider` usually call the `setAppTitleBar` function from `onResume`.
 Some may override this function to add actions. Check [ZkTable](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/table/ZkTable.kt) for example.
 
+### Fix Title Bar
+
+To stop components changing the title bar and have a fix element in it, pass the element in the `fixTitle` parameter
+of `ZkApptitleBar`:
+
+```kotlin
+titleBar = ZkAppTitleBar(::onToggleSideBar, fixTitle = PilotTitle())
+```
+
 ### Global Elements
 
 Global elements of the application title bar are independent of the specific content displayed and are always shown
@@ -96,6 +105,8 @@ button is shown. `ZkAppTitleBar` automatically handles these states.
 
 ## Timeline
 
+* 2021.5.18
+  * Introduce `fixTitle` parameter for `ZkAppTitleBar`
 * 2021.5.15
   * Introduce ZkAppTitleProvider interface.
 * 2021.5.12

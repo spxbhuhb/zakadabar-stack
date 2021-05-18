@@ -4,20 +4,20 @@
 package zakadabar.stack.frontend.builtin.dock
 
 import zakadabar.stack.frontend.resources.ZkColors
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssParameter
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkDockStyles by cssStyleSheet(ZkDockStyles())
 
-class ZkDockStyles : ZkCssStyleSheet() {
+open class ZkDockStyles : ZkCssStyleSheet() {
 
-    var dockBackground: String = ZkColors.white
-    var headerBackground: String = ZkColors.BlueGray.c600
-    var headerForeground: String = ZkColors.black
-    var headerIconBackground: String = "transparent"
-    var headerIconFill: String = ZkColors.white
-    var headerHeight: String = "26px"
+    open var dockBackground by cssParameter { ZkColors.white }
+    open var headerBackground by cssParameter { ZkColors.BlueGray.c600 }
+    open var headerForeground by cssParameter { ZkColors.black }
+    open var headerIconBackground by cssParameter { "transparent" }
+    open var headerIconFill by cssParameter { ZkColors.white }
+    open var headerHeight by cssParameter { 26 }
 
     val dock by cssClass {
         position = "fixed"

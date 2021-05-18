@@ -36,34 +36,34 @@ class SideBar : ZkSideBar() {
             val docSource = window.fetch("/api/content/guides/TOC.md").await().text().await()
             val changeLogSource = window.fetch("/api/content/changelog/TOC.md").await().text().await()
 
-            + section(strings.Welcome) {
-                + item(Welcome)
-                + item(WhatsNew)
-                + item(ShowCase)
-                + item(Roadmap)
+            + section(Welcome) {
                 + item(GetStarted)
-                + group(GetHelp) {
-                    + item(FAQ)
-                }
+                + item(ShowCase)
+                + item(GetHelp)
             }
 
             + section(strings.kodomat) {
                 + item(KodomatPage, text = strings.record)
             }
 
-            + group(DocumentationIntro, "Documentation", section = true) {
+            + group(DocumentationIntro, strings.documentation, section = true) {
                 MarkdownNav().parse(docSource).forEach {
                     + it.doc()
                 }
+                + item(FAQ)
             }
 
             + section(strings.other) {
-                + group("Change Log") {
+                + group(WhatsNew, text = strings.changeLog) {
                     MarkdownNav().parse(changeLogSource).forEach {
                         + it.changelog()
                     }
                 }
-                + examples()
+                + item(Roadmap)
+                + item(ServicesAndSupport)
+                + item(LegalNotices)
+                + item(Credits)
+//                + examples()
             }
 
             withOneOfRoles(StackRoles.securityOfficer, StackRoles.siteAdmin) {

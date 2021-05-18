@@ -11,6 +11,10 @@ internal val strings = SiteStrings()
 
 class SiteStrings : ExamplesStrings() {
 
+    val servicesAndSupport by "Services And Support"
+    val greenBlue by "Green/Blue Theme"
+    val changeLog by "Change Log"
+    val legalNotices by "Legal Notices"
     val record by "Record"
     val kodomat by "Kod-o-mat"
     val other by "Other"
@@ -23,7 +27,7 @@ class SiteStrings : ExamplesStrings() {
     val GetStarted by "Get Started"
     val GetHelp by "Get Help"
 
-    val faq by "Frequently Asked Questions"
+    val faq by "F.A.Q."
     val tldr by "TL;DR"
     val normalPeople by "Normal People"
     val jungleWarriors by "Jungle Warriors"

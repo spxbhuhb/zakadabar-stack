@@ -16,12 +16,7 @@ open class ZkSidebarMinimizedSection(
         + zkSideBarStyles.minimizedSection
         + letter
 
-        on("click") { event ->
-            section.onHandleSectionClick(event)
-            section.sideBar?.let {
-                it.minimizedSections -= this
-            }
-        }
+        on("click") { restore() }
     }
 
     open fun run() {
@@ -34,6 +29,13 @@ open class ZkSidebarMinimizedSection(
             } else {
                 sideBar.minimizedSections.insertBefore(this, followers.first())
             }
+        }
+    }
+
+    private fun restore() {
+        section.restore()
+        section.sideBar?.let {
+            it.minimizedSections -= this
         }
     }
 }

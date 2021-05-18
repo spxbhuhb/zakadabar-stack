@@ -4,14 +4,15 @@
 package zakadabar.stack.frontend.builtin.button
 
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssParameter
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkButtonStyles by cssStyleSheet(ZkButtonStyles())
 
 open class ZkButtonStyles : ZkCssStyleSheet() {
 
-    open val iconSize = 20
-    open val buttonHeight = 30
+    open val iconSize by cssParameter { 20 }
+    open val buttonHeight by cssParameter { 30 }
 
     open val text by cssClass {
         boxSizing = "border-box"

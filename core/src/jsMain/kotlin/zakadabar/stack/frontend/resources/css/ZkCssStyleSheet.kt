@@ -8,49 +8,9 @@ import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet.Companion.styleSheets
-import zakadabar.stack.util.PublicApi
 import kotlin.properties.ReadOnlyProperty
+import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
-
-fun <S : ZkCssStyleSheet> cssStyleSheet(sheet: S) = CssStyleSheetDelegate(sheet)
-
-class CssStyleSheetDelegate<S : ZkCssStyleSheet>(
-    var sheet: S?
-) {
-
-    init {
-        sheet?.let { styleSheets.add(it) }
-
-        if (::application.isInitialized) {
-            sheet?.attach()
-        } else {
-            sheet?.attachOnRefresh = true
-        }
-    }
-
-    operator fun getValue(thisRef: Nothing?, property: KProperty<*>): S {
-        return sheet ?: throw IllegalStateException("style sheet not initialized yet")
-    }
-
-    operator fun setValue(thisRef: Nothing?, property: KProperty<*>, value: S) {
-        sheet?.detach()
-        sheet = value
-        value.attach()
-    }
-
-    operator fun getValue(thisRef: Any?, property: KProperty<*>): S {
-        return sheet ?: throw IllegalStateException("style sheet not initialized yet")
-    }
-
-    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: S) {
-        sheet?.detach()
-        sheet = value
-        sheet?.theme?.onResume() // FIXME make this sheet specific
-        value.attach()
-    }
-
-}
-
 
 /**
  * Represents a CSS style sheet in the browser. Provides programmatic
@@ -96,36 +56,23 @@ open class ZkCssStyleSheet {
 
     internal val rules = mutableMapOf<String, ZkCssStyleRule>() // key is property name
 
-    /**
-     * Provides the ZkCssStyleRule as a delegate. I decided to go this way because I think it is important
-     * for the rule to know the property name and that's not possible with a simple assignment. Performance
-     * overhead should be minimal.
-     */
-    class CssDelegateProvider(val name: String? = null, val selector: String? = null, val builder: ZkCssStyleRule.(ZkTheme) -> Unit) {
-
-        operator fun provideDelegate(thisRef: ZkCssStyleSheet, prop: KProperty<*>): ReadOnlyProperty<ZkCssStyleSheet, ZkCssStyleRule> {
-
-            val cssClassName = name ?: if (shortNames) "zks${nextId++}" else "${thisRef::class.simpleName}-${prop.name}-${nextId ++}"
-
-            val rule = ZkCssStyleRule(thisRef, prop.name, cssClassName, selector, builder)
-
-            thisRef.rules[prop.name] = rule
-
-            return rule
-        }
-
-    }
+    internal val parameters = mutableListOf<ZkCssParameter<*>>()
 
     fun cssImport(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, "@import", builder)
 
-    @PublicApi
     fun cssRule(selector: String, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, selector, builder)
 
     fun cssClass(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, null, builder)
 
     fun cssClass(name: String? = null, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(name, null, builder)
 
-    @PublicApi
+    /**
+     * Reset all the parameters to their initial value.
+     */
+    fun resetParameters() {
+        parameters.forEach { it.reset() }
+    }
+
     fun attach() {
 
         if (document.getElementById(element.id) != null) {
@@ -150,7 +97,6 @@ open class ZkCssStyleSheet {
         refresh()
     }
 
-    @PublicApi
     fun detach() {
         element.remove()
         styleSheets -= this
@@ -160,21 +106,131 @@ open class ZkCssStyleSheet {
         element.innerHTML = rules.map { it.value.compile() }.joinToString("\n")
     }
 
-    @PublicApi
-    fun merge(from: ZkCssStyleSheet) {
-        from.rules.forEach { entry ->
-
-            val fromRule = entry.value
-            val toRule = rules[fromRule.propName] ?: return@forEach
-
-            toRule.builder = fromRule.builder
-        }
-
-        refresh()
-    }
-
     fun onThemeChange() {
         attach()
     }
+}
 
+fun <S : ZkCssStyleSheet> cssStyleSheet(sheet: S) = CssStyleSheetDelegate(sheet)
+
+/**
+ * Handles the style sheets. Initial attach is delayed until the theme is
+ * initialized. More precisely, initial attach does not happen when
+ * the application is not initialized yet. In this case, the initTheme
+ * method of the application will run a refresh and that refresh attaches
+ * the sheet.
+ */
+class CssStyleSheetDelegate<S : ZkCssStyleSheet>(
+    private var sheet: S?
+) {
+
+    init {
+        sheet?.let { styleSheets.add(it) }
+
+        if (::application.isInitialized) {
+            sheet?.attach()
+        } else {
+            sheet?.attachOnRefresh = true
+        }
+    }
+
+    operator fun getValue(thisRef: Nothing?, property: KProperty<*>): S {
+        return sheet ?: throw IllegalStateException("style sheet not initialized yet")
+    }
+
+    operator fun setValue(thisRef: Nothing?, property: KProperty<*>, value: S) {
+        sheet?.detach()
+        sheet = value
+        value.attach()
+    }
+
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): S {
+        return sheet ?: throw IllegalStateException("style sheet not initialized yet")
+    }
+
+    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: S) {
+        sheet?.detach()
+        sheet = value
+        sheet?.theme?.onResume() // FIXME make this sheet specific
+        value.attach()
+    }
+
+}
+
+/**
+ * Provides the ZkCssStyleRule as a delegate. I decided to go this way because I think it is important
+ * for the rule to know the property name and that's not possible with a simple assignment. Performance
+ * overhead should be minimal.
+ */
+class CssDelegateProvider(
+    val name: String? = null,
+    private val selector: String? = null,
+    val builder: ZkCssStyleRule.(ZkTheme) -> Unit
+) {
+
+    operator fun provideDelegate(thisRef: ZkCssStyleSheet, prop: KProperty<*>): ReadOnlyProperty<ZkCssStyleSheet, ZkCssStyleRule> {
+
+        val cssClassName = name ?: if (ZkCssStyleSheet.shortNames) "zks${ZkCssStyleSheet.nextId ++}" else "${thisRef::class.simpleName}-${prop.name}-${ZkCssStyleSheet.nextId ++}"
+
+        val rule = ZkCssStyleRule(thisRef, prop.name, cssClassName, selector, builder)
+
+        thisRef.rules[prop.name] = rule
+
+        return rule
+    }
+
+}
+
+/**
+ * Use this function to define style sheet parameters. When defined with this
+ * function the theme switching and state saving will work seamlessly.
+ */
+fun <T> cssParameter(initializer: () -> T) = CssParameterProvider(initializer)
+
+/**
+ * Use this function to define style sheet parameters. When defined with this
+ * function the theme switching and state saving will work seamlessly.
+ */
+fun cssOptStringParameter() = CssParameterProvider<String?> { null }
+
+/**
+ * Provides the ZkCssStyleRule as a delegate. I decided to go this way because I think it is important
+ * for the rule to know the property name and that's not possible with a simple assignment. Performance
+ * overhead should be minimal.
+ */
+class CssParameterProvider<T>(private val initializer: () -> T) {
+
+    operator fun provideDelegate(thisRef: ZkCssStyleSheet, prop: KProperty<*>) =
+        ZkCssParameter(initializer).also { thisRef.parameters += it }
+
+}
+
+private object UNINITIALIZED
+
+/**
+ * A style sheet parameter. Purpose of this class is to have the [reset] method.
+ * During theme change all style sheets are reset before onResume runs.
+ */
+class ZkCssParameter<T>(
+    val initializer: () -> T
+) : ReadWriteProperty<ZkCssStyleSheet, T> {
+
+    private var _value: Any? = UNINITIALIZED
+    private var _initializer: (() -> T)? = initializer
+
+    @Suppress("UNCHECKED_CAST") // initializer will be checked
+    override fun getValue(thisRef: ZkCssStyleSheet, property: KProperty<*>): T {
+        if (_value === UNINITIALIZED) {
+            _value = _initializer !!()
+            _initializer = null
+        }
+        return _value as T
+    }
+    override fun setValue(thisRef: ZkCssStyleSheet, property: KProperty<*>, value: T) {
+        this._value = value
+    }
+
+    fun reset() {
+        _value = initializer()
+    }
 }

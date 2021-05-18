@@ -699,6 +699,13 @@ open class ZkElement(
     }
 
     /**
+     * True when this [ZkElement] has no children an [element].innerHTML is empty.
+     */
+    fun isEmpty(): Boolean {
+        return (childElements.isEmpty() && element.innerHTML.isEmpty())
+    }
+
+    /**
      * Check if this element has at least one child element of the given class.
      */
     inline fun <reified T : ZkElement> hasChildOf(): Boolean {

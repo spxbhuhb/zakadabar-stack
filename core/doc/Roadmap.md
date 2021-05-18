@@ -1,15 +1,23 @@
 # Roadmap
 
-<div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Plans and Reality">
+<div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Pilot">
+
+zakadabar.io runs in pilot mode, some parts might be incomplete or missing.
+We are trying our best to finish up everything and give you a good experience.
+
+Please let us know in you find any errors, typos, inconsistencies, unclear
+documentation etc. Check [Get Help](/en/GetHelp)  for the channels of communication.
+
+Thank you for your interest, we hope that you enjoy your stay on `zakadabar.io`.
+
+</div>
+
 This roadmap is something we would like to follow but there is <b>no guarantee at all</b>
 that we'll be able to do so.
-</div>
 
 ## 2021 May
 
 * public release
-  * cookie policy
-  * paid services
   * https://github.com/AAkira/Kotlin-Multiplatform-Libraries
  
 ### Core
@@ -19,8 +27,6 @@ that we'll be able to do so.
     * table
     * form
     * tab container
-* sidebar
-    * sections
 * form
     * option to add help tooltip
 * popup to the user when the server is unavailable
@@ -38,6 +44,10 @@ that we'll be able to do so.
     * pages
     * theme borders and box-shadows
 * migrate "Examples" of site into "Documentation"
+
+### Site
+
+* clean up site routing and page structure, now it is a bit confused (/en/GetHelp for example)
 
 ## 2021 June
 

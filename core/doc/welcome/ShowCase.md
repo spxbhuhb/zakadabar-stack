@@ -80,6 +80,12 @@ This page shows the browser frontend components included with the stack.
 
 <div data-zk-enrich="TableExample"></div>
 
+# Themes [documentation](../guides/browser/structure/ThemesCss.md) [source code](../../../site/src/jsMain/kotlin/zakadabar/site/frontend/components/ThemeShowCase.kt)
+
+To restore the default dark / light theme, use the icon in the top-right corner.
+
+<div data-zk-enrich="ThemeShowCase"></div>
+
 # Toasts [documentation](../guides/browser/builtin/Toasts.md)
 
 ## Basic  [documentation](../guides/browser/builtin/Toasts.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/toast/ToastBasicExamples.kt)

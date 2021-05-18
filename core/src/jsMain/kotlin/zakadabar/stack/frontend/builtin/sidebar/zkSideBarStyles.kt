@@ -3,17 +3,22 @@
  */
 package zakadabar.stack.frontend.builtin.sidebar
 
+import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssParameter
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkSideBarStyles by cssStyleSheet(ZkSideBarStyles())
 
 open class ZkSideBarStyles : ZkCssStyleSheet() {
 
-    open var backgroundColor: String? = null
-    open var textColor: String? = null
-    open var fontSize: String = "80%"
-    open var hoverTextColor: String? = null
+    open var backgroundColor by cssParameter { theme.backgroundColor }
+    open var textColor by cssParameter { theme.textColor }
+    open var fontSize by cssParameter { "80%" }
+    open var hoverTextColor by cssParameter { theme.hoverTextColor }
+    open var sectionBackgroundColor by cssParameter { theme.blockBackgroundColor }
+    open var sectionTextColor by cssParameter { theme.textColor }
+    open var sectionBorderColor by cssParameter { theme.borderColor }
 
     open val sidebar by cssClass {
         boxSizing = "border-box"
@@ -22,10 +27,8 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         padding = theme.spacingStep / 2
 
         fontSize = this@ZkSideBarStyles.fontSize
-
-        this@ZkSideBarStyles.backgroundColor?.let { backgroundColor = this@ZkSideBarStyles.backgroundColor }
-        this@ZkSideBarStyles.textColor?.let { color = this@ZkSideBarStyles.textColor }
-        this@ZkSideBarStyles.backgroundColor?.let { backgroundColor = this@ZkSideBarStyles.backgroundColor }
+        backgroundColor = this@ZkSideBarStyles.backgroundColor
+        color = this@ZkSideBarStyles.textColor
 
         small {
             padding = 0
@@ -44,15 +47,17 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
+        color = this@ZkSideBarStyles.textColor
 
         hover {
             backgroundColor = theme.hoverBackgroundColor
-            color = this@ZkSideBarStyles.hoverTextColor ?: theme.hoverTextColor
+            color = this@ZkSideBarStyles.hoverTextColor
         }
 
         on(" a") {
             paddingLeft = 20
             flexGrow = 1
+            color = "inherit"
         }
 
         on(" > div") {
@@ -61,7 +66,7 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         }
     }
 
-    open val groupTitle by cssClass {
+    fun ZkCssStyleRule.title() {
         boxSizing = "border-box"
         cursor = "pointer"
         minHeight = 28
@@ -69,9 +74,6 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         flexDirection = "row"
         justifyContent = "flex-start"
         alignItems = "center"
-        paddingRight = 8
-        paddingLeft = 14
-        fill = this@ZkSideBarStyles.textColor ?: theme.textColor
 
         hover {
             backgroundColor = theme.hoverBackgroundColor
@@ -80,6 +82,27 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
 
         on(" a") {
             flexGrow = 1
+            color = "inherit"
+        }
+    }
+
+    open val groupTitle by cssClass {
+        title()
+
+        paddingRight = 8
+        paddingLeft = 14
+
+        fill = this@ZkSideBarStyles.textColor
+        color = this@ZkSideBarStyles.textColor
+
+        hover {
+            backgroundColor = theme.hoverBackgroundColor
+            color = theme.hoverTextColor
+        }
+
+        on(" a") {
+            flexGrow = 1
+            color = "inherit"
         }
     }
 
@@ -88,28 +111,20 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
     }
 
     open val sectionTitle by cssClass {
-        boxSizing = "border-box"
-        cursor = "pointer"
-        minHeight = 28
-        display = "flex"
-        flexDirection = "row"
-        justifyContent = "flex-start"
-        alignItems = "center"
+        title()
+
+        marginTop = theme.spacingStep
+
         paddingRight = 8
         paddingLeft = 20
-        marginTop = theme.spacingStep
-        backgroundColor = theme.blockBackgroundColor
-        fill = this@ZkSideBarStyles.textColor ?: theme.textColor
-        borderBottom = theme.fixBorder
 
-        hover {
-            backgroundColor = theme.hoverBackgroundColor
-            color = theme.hoverTextColor
-        }
+        backgroundColor = sectionBackgroundColor
+        color = sectionTextColor
 
-        on(" a") {
-            flexGrow = 1
-        }
+        //fill = this@ZkSideBarStyles.textColor.alpha(0.2)
+
+        fill = sectionBorderColor
+        borderLeft = "2px solid $sectionBorderColor"
 
         on(":first-child") {
             marginTop = 4
@@ -136,5 +151,6 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         backgroundColor = theme.blockBackgroundColor
         borderBottom = theme.fixBorder
         cursor = "pointer"
+        marginBottom = 6
     }
 }

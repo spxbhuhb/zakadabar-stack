@@ -3,21 +3,21 @@
  */
 package zakadabar.stack.frontend.builtin.titlebar
 
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssParameter
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-val zkTitleBarStyles by cssStyleSheet(ZkTitleBarStyles())
+var zkTitleBarStyles by cssStyleSheet(ZkTitleBarStyles())
 
-class ZkTitleBarStyles : ZkCssStyleSheet() {
+open class ZkTitleBarStyles : ZkCssStyleSheet() {
 
-    var appTitleBarHeight = "44px"
-    var appHandleBackground: String? = null
-    var appHandleText: String? = null
-    var appHandleBorder: String? = null
-    var titleBarBackground: String? = null
-    var titleBarText: String? = null
-    var titleBarBorder: String? = null
+    open var appTitleBarHeight by cssParameter { 44 }
+    open var appHandleBackground by cssParameter { theme.backgroundColor }
+    open var appHandleText by cssParameter{ theme.textColor }
+    open var appHandleBorder by cssParameter { theme.border }
+    open var titleBarBackground by cssParameter { theme.backgroundColor }
+    open var titleBarText by cssParameter { theme.textColor }
+    open var titleBarBorder by cssParameter { theme.border }
 
     /**
      * Application handle, the button and application name at the top left.
@@ -27,7 +27,7 @@ class ZkTitleBarStyles : ZkCssStyleSheet() {
         boxSizing = "border-box"
         fontWeight = 500
         fontSize = "120%"
-        borderBottom = appHandleBorder ?: theme.border
+        borderBottom = appHandleBorder
         paddingRight = 16
         display = "flex"
         flexDirection = "row"
@@ -35,8 +35,8 @@ class ZkTitleBarStyles : ZkCssStyleSheet() {
         minHeight = appTitleBarHeight
         maxHeight = appTitleBarHeight
         whiteSpace = "nowrap"
-        backgroundColor = appHandleBackground ?: theme.backgroundColor
-        color = appHandleText ?: theme.textColor
+        backgroundColor = appHandleBackground
+        color = appHandleText
         cursor = "pointer"
     }
 
@@ -45,7 +45,7 @@ class ZkTitleBarStyles : ZkCssStyleSheet() {
      */
     val appHandleButton by cssClass {
         background = "transparent !important"
-        fill = "${appHandleText ?: theme.textColor} !important"
+        fill = "$appHandleText !important"
         marginLeft = theme.spacingStep / 2
         marginRight = theme.spacingStep / 2
     }
@@ -59,12 +59,12 @@ class ZkTitleBarStyles : ZkCssStyleSheet() {
         width = "100%"
         minHeight = appTitleBarHeight
         maxHeight = appTitleBarHeight
-        borderBottom = titleBarBorder ?: theme.border
+        borderBottom = titleBarBorder
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
         fontSize = 16
-        backgroundColor = titleBarBackground ?: theme.backgroundColor
+        backgroundColor = titleBarBackground
     }
 
     /**
@@ -73,7 +73,7 @@ class ZkTitleBarStyles : ZkCssStyleSheet() {
      */
     val sidebarHandle by cssClass {
         background = "transparent !important"
-        fill = "${titleBarText ?: theme.textColor} !important"
+        fill = "$titleBarText !important"
         minHeight = appTitleBarHeight
         display = "flex"
         alignItems = "center"

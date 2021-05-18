@@ -9,8 +9,8 @@ import zakadabar.stack.frontend.builtin.ZkElement
  * Element to shown in the application title bar as the title of the current page.
  */
 open class ZkAppTitle(
-    val text: String,
-    val contextElements: List<ZkElement> = emptyList()
+    open val text: String,
+    open val contextElements: List<ZkElement> = emptyList()
 ) : ZkElement() {
 
     override fun onCreate() {

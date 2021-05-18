@@ -11,9 +11,15 @@ import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.util.PublicApi
 
+/**
+ * @param  onToggleSideBar  Function to execute then the user switches on the side bar.
+ * @param  fixTitle         A fix application title, when not null title changes have no effect and this
+ *                          element is displayed constantly.
+ */
 @PublicApi
 open class ZkAppTitleBar(
-    var onToggleSideBar: () -> Unit = { }
+    var onToggleSideBar: () -> Unit = { },
+    var fixTitle : ZkAppTitle? = null
 ) : ZkElement() {
 
     open val handleContainer = ZkElement()
@@ -21,8 +27,9 @@ open class ZkAppTitleBar(
     open val contextElements = ZkElement()
     open val globalElements = ZkElement()
 
-    open var title: ZkAppTitle? = null
+    open var title: ZkAppTitle? = fixTitle
         set(value) {
+            if (fixTitle != null) return
             titleContainer -= field // this is necessary so clears onTitleChange won't destroy the title
             field = value
             onTitleChange(value)
@@ -37,6 +44,10 @@ open class ZkAppTitleBar(
         }
 
         + titleContainer css zkTitleBarStyles.titleContainer marginRight 10
+
+        if (fixTitle != null) {
+            onTitleChange(fixTitle)
+        }
 
         + div { style { flexGrow = "1" } }
 

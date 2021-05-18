@@ -55,14 +55,11 @@ account settings which are used during theme selection. Also you should add all
 themes before calling `initTheme`.
 
 ```kotlin
-with(ZkApplication) {
+with(application) {
 
-    sessionManager.init()
+    initSession()
 
-    themes += SiteDarkTheme()
-    themes += SiteLightTheme()
-
-    theme = initTheme()
+    initTheme(SiteDarkTheme(), SiteLightTheme())
 
     // ...other steps here...
 }
@@ -74,8 +71,8 @@ with(ZkApplication) {
   implement [ZkTheme](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt)
   .
 * Use `onResume` to fine tune style variables.
-* If you set a style variable, **all of your themes has to set that particular
-  variable**, see warning in Change The Theme.
+* Calling `super.onResume` is not mandatory. It applies the style modifications of the
+  super class.
 
 ```kotlin
 class ExampleThemeGreen : ZkBuiltinLightTheme() {
@@ -85,7 +82,7 @@ class ExampleThemeGreen : ZkBuiltinLightTheme() {
     override var primaryColor = ZkColors.Green.c500
 
     override fun onResume() {
-        super.onResume()  // apply defaults from built-in light theme
+        super.onResume()  // apply defaults from built-in light theme, not mandatory
 
         with(zkTitleBarStyles) {
             appHandleBackground = ZkColors.Green.c500
@@ -98,26 +95,19 @@ class ExampleThemeGreen : ZkBuiltinLightTheme() {
 
 ### Change The Theme [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/theme/ThemeExample.kt)
 
-Assign a theme instance to `theme` to set the active theme. Be careful, your
-theme system should be consistent (see warnings above and below)!
+Assign a theme instance to `theme` to set the active theme.
 
 ```kotlin
 theme = ZkBuildinLightTheme()
 ```
 
-<div data-zk-enrich="Note" data-zk-flavour="Danger" data-zk-title="Theme Changes Are Cumulative">
-As of now theme changes are cumulative. You have to set all changed values in onResume overrides
-properly. The example below shows what happens when you don't do that: the standard built-in
-themes do not reset values that are changed by the example themes (these ones also miss markdown
-styles, so the page layout brakes down).
-</div>
+These two are somewhat simple examples, for example they don't set markdown colors properly:
 
 <div data-zk-enrich="ThemeExample"></div>
 
-<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Page Refresh">
-If you clicked on "Green" or "Red" above, you have to refresh the page to set your colors right.
-Sorry about the mess, told you that changes are cumulative. :P
-</div>
+This is a fine-tuned example, that can be used to replace one of the default themes in production:
+
+<div data-zk-enrich="ThemeShowCase"></div>
 
 ## CSS
 
@@ -125,22 +115,37 @@ Sorry about the mess, told you that changes are cumulative. :P
 * Extend [ZkCssStyleSheet](/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleSheet.kt) to write a new one.
 * Use `val yourStyles by cssStyleSheet(YourStyleSheet())` to make an instance of the style sheet.
 * When the theme changes, all style sheets are recompiled.
-* During recompile the style names remain the same.
-* Variables of the style sheets may be set by `onResume` of the theme.
+    * During recompile the style names remain the same.
+    * All style sheet parameters are reset before call of `theme.onResume`. 
+    * Variables of the style sheets may be set by `theme.onResume`.
 
 ### Write a CSS Style Sheet
+
+The following example shows a simple style sheet. Note the use of `cssParameter`.
+This is the proper way to define parameters that you offer for the themes to
+modify.
+
+The important thing about `cssParameter` is that the initialization function
+**runs at every theme change**, before `theme.onResume`. This guarantees that
+every `onResume` starts with a clean parameter set, no leftovers from the 
+previous theme are there.
+
+If you define a parameter which has the same name as a css rule name, you have
+to pay attention to the assignment. In the example `backgroundColor` shows
+how to do this properly.
 
 ```kotlin
 val exampleStyles by cssStyleSheet(ExampleStyles())
 
 open class ExampleStyles : ZkCssStyleSheet() {
 
-    open var myStyleParameter: Int = 10
+    open var myStyleParameter by cssParameter { 10 }
+    open var backgroundColor by cssParameter { theme.dangerColor }
 
     open val exampleStyle by cssClass {
         height = myStyleParameter
         width = 20
-        backgroundColor = ZkColors.Green.c500
+        backgroundColor = this@ExampleStyles.backgroundColor
     }
 
 }
@@ -440,6 +445,8 @@ scrollBarStyles.enabled = false
 
 ### Changes
 
+* 2021.5.18
+    * introduce `cssParameter`, changes applied in `theme.onResume` are independent
 * 2021.5.16
     * change delegated property type from string to ZkCssStyleRule
     * operators to add/remove rules easily

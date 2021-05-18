@@ -3,28 +3,26 @@
  */
 package zakadabar.stack.frontend.builtin.table
 
-import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.cssParameter
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
 val zkTableStyles by cssStyleSheet(ZkTableStyles())
 
-class ZkTableStyles : ZkCssStyleSheet() {
+open class ZkTableStyles : ZkCssStyleSheet() {
 
-    val tableBackgroundColor : String? = null
-    var headerBackground: String? = null
-    var headerText: String? = null
-    var oddRowBackground: String? = null
-    var evenRowBackground: String? = null
-    var textColor: String? = null
-    var hoverBackgroundColor: String? = null
-    var hoverTextColor: String? = null
-    var rowBorderColor: String? = null
-    var headerBottomBorder: String? = null
-    var border: String? = null
-    var actionTextColor: String? = null
-    var controlColor: String? = null
-    var rowHeight: Int = 42
+    open var tableBackgroundColor by cssParameter { theme.backgroundColor }
+    open var headerBackground by cssParameter { theme.backgroundColor }
+    open var headerText by cssParameter { theme.textColor }
+    open var oddRowBackground by cssParameter { theme.backgroundColor }
+    open var textColor by cssParameter { theme.textColor }
+    open var hoverBackgroundColor by cssParameter { theme.hoverBackgroundColor }
+    open var hoverTextColor by cssParameter { theme.hoverTextColor }
+    open var rowBorderColor by cssParameter { theme.borderColor }
+    open var headerBottomBorder by cssParameter { theme.fixBorder }
+    open var border by cssParameter<String?> { null }
+    open var actionTextColor by cssParameter { theme.primaryColor }
+    open var controlColor by cssParameter { theme.primaryColor }
 
     val outerContainer by cssClass {
         display = "flex"
@@ -48,9 +46,9 @@ class ZkTableStyles : ZkCssStyleSheet() {
         top = 0
         right = 0
         bottom = 0
-        borderRight = "1px solid ${controlColor ?: theme.primaryColor}"
-        borderLeft = "1px solid ${controlColor ?: theme.primaryColor}"
-        backgroundColor = headerBackground ?: theme.backgroundColor
+        borderRight = "1px solid $controlColor"
+        borderLeft = "1px solid $controlColor"
+        backgroundColor = headerBackground
         marginTop = 4
         marginBottom = 4
         marginRight = 8
@@ -91,7 +89,7 @@ class ZkTableStyles : ZkCssStyleSheet() {
         height = 0
         borderLeft = "6px solid transparent"
         borderRight = "6px solid transparent"
-        borderTop = "6px solid ${controlColor ?: theme.primaryColor}"
+        borderTop = "6px solid $controlColor"
     }
 
     val sortedAscending by cssClass {
@@ -101,7 +99,7 @@ class ZkTableStyles : ZkCssStyleSheet() {
         height = 0
         borderLeft = "6px solid transparent"
         borderRight = "6px solid transparent"
-        borderBottom = "6px solid ${controlColor ?: theme.primaryColor}"
+        borderBottom = "6px solid $controlColor"
     }
 
     val table by cssClass {
@@ -111,7 +109,7 @@ class ZkTableStyles : ZkCssStyleSheet() {
         borderCollapse = "collapse"
         minWidth = "100%"
 
-        backgroundColor = tableBackgroundColor ?: theme.backgroundColor
+        backgroundColor = tableBackgroundColor
 
         on(" thead") {
             display = "contents"
@@ -126,8 +124,8 @@ class ZkTableStyles : ZkCssStyleSheet() {
         }
 
         on(" tr:hover td") {
-            backgroundColor = hoverBackgroundColor ?: theme.hoverBackgroundColor
-            color = hoverTextColor ?: theme.hoverTextColor
+            backgroundColor = hoverBackgroundColor
+            color = hoverTextColor
         }
 
         on(" th") {
@@ -142,10 +140,10 @@ class ZkTableStyles : ZkCssStyleSheet() {
             whiteSpace = "nowrap"
             position = "sticky"
             top = 0
-            background = headerBackground ?: theme.backgroundColor
+            background = headerBackground
             textAlign = "left"
-            color = headerText ?: theme.textColor
-            borderBottom = headerBottomBorder ?: "1px solid ${theme.borderColor}"
+            color = headerText
+            borderBottom = headerBottomBorder
             cursor = "pointer"
             zIndex = 30
         }
@@ -168,9 +166,9 @@ class ZkTableStyles : ZkCssStyleSheet() {
             overflow = "hidden"
             textOverflow = "ellipsis"
             whiteSpace = "nowrap"
-            color = textColor ?: theme.textColor
-            borderBottom = "1px solid ${rowBorderColor ?: theme.borderColor}"
-            backgroundColor = oddRowBackground ?: theme.backgroundColor
+            color = textColor
+            borderBottom = "1px solid $rowBorderColor"
+            backgroundColor = oddRowBackground
             zIndex = 20
         }
 
@@ -215,7 +213,7 @@ class ZkTableStyles : ZkCssStyleSheet() {
         fontWeight = "400 !important"
         whiteSpace = "nowrap"
         cursor = "pointer"
-        color = "${actionTextColor ?: theme.primaryColor} !important"
+        color = "$actionTextColor !important"
     }
 
 }

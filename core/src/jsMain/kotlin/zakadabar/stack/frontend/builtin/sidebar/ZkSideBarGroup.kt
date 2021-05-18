@@ -41,8 +41,10 @@ open class ZkSideBarGroup(
 ) : ZkElement() {
 
     open var open = false
+
     open val openIcon = ZkIcon(ZkIcons.arrowRight, 18)
-    open val closeIcon by after { if (section) ZkIcon(ZkIcons.close, 18) else ZkIcon(ZkIcons.arrowDropDown, 18) }
+    open val closeIcon by after { if (section) ZkIcon(ZkIcons.horizontalRule, 18) else ZkIcon(ZkIcons.arrowDropDown, 18) }
+
     open lateinit var textElement: ZkElement
 
     constructor(
@@ -131,18 +133,30 @@ open class ZkSideBarGroup(
     }
 
     open fun onHandleSectionClick(event: Event) {
-        open = if (open) {
+        if (open) {
+            minimize()
+        } else {
+            restore()
+        }
+    }
+
+    open fun minimize() {
+        if (open) {
             this.hide()
             ZkSidebarMinimizedSection(this.text.substring(0, 1), this).run()
-            false
-        } else {
+            open = false
+        }
+    }
+
+    open fun restore() {
+        if (!open) {
             this.show()
-            true
+            open = true
         }
     }
 
     open fun onNavigate(event: Event) {
-        onHandleGroupClick(event)
+        if (! section) onHandleGroupClick(event)
 
         if (localNav) {
             event.preventDefault()

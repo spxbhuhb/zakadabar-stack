@@ -1,6 +1,6 @@
 # Get Help
 
-First, please check the [Roadmap](/Roadmap). It is quite possible that we already know the problem and/or want the
+First, please check the [Roadmap](/en/Roadmap). It is quite possible that we already know the problem and/or want the
 feature.
 
 Then, please check the [issues](https://github.com/spxbhuhb/zakadabar-stack/issues) on GitHub to see if there is already
