@@ -44,16 +44,21 @@ class SideBar : ZkSideBar() {
 
             + item(KodomatPage)
 
-            val source = window.fetch("/api/content/guides/TOC.md").await().text().await()
+            val docSource = window.fetch("/api/content/guides/TOC.md").await().text().await()
             + group(DocumentationIntro, "Documentation") {
-                MarkdownNav().parse(source).forEach {
+                MarkdownNav().parse(docSource).forEach {
                     + it.doc()
                 }
             }
 
-            + examples()
+            val changeLogSource = window.fetch("/api/content/changelog/TOC.md").await().text().await()
+            + group("Change Log") {
+                MarkdownNav().parse(changeLogSource).forEach {
+                    + it.changelog()
+                }
+            }
 
-            //contentGroup("ChangeLog", "changelog/", true)
+            + examples()
 
             withOneOfRoles(StackRoles.securityOfficer, StackRoles.siteAdmin) {
 
@@ -86,6 +91,20 @@ class SideBar : ZkSideBar() {
         } else {
             group(label) {
                 children.forEach { + it.doc() }
+            }
+        }
+    }
+
+    private fun MarkdownNav.MarkdownNavItem.changelog(): ZkElement {
+        return if (children.isEmpty()) {
+            item(
+                Documentation,
+                "changelog/" + if (url.startsWith("./")) url.substring(2) else url,
+                label
+            )
+        } else {
+            group(label) {
+                children.forEach { + it.changelog() }
             }
         }
     }

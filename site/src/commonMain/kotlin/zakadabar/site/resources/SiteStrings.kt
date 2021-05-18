@@ -29,7 +29,7 @@ class SiteStrings : ExamplesStrings() {
 
     // general stuff
 
-    val examples by "Examples"
+    val examples by "Examples (outdated)"
     val searchShips by "Search Ships"
     val siteTitle by "A Kotlin Multiplatform library for full-stack software development."
 

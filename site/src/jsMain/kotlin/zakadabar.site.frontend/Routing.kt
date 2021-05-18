@@ -29,6 +29,7 @@ class Routing : ZkAppRouting(DefaultLayout, Landing) {
         + Landing
         + WhatsNew
         + Documentation
+        + ChangeLog
         + GetStarted
         + GetHelp
         + Welcome
