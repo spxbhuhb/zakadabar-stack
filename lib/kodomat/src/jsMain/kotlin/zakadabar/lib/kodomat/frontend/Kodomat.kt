@@ -37,8 +37,10 @@ class Kodomat(
     override fun onCreate() {
         super.onCreate()
 
-        + Editor()
-        + resultContainer
+        + column {
+            + Editor()
+            + resultContainer
+        }
 
         io {
             template = window.fetch(templateUrl).await().text().await()
@@ -66,60 +68,63 @@ class Kodomat(
         override fun onCreate() {
             super.onCreate()
 
-            ! "<h2>Kod-o-mat</h2>"
+            + column(kodomatStyles.editor) {
 
-            + row {
-                + div {
-                    + div { + "Package" } css kodomatStyles.editorLabel
-                    + packageName
-                } marginRight 10
-                + div {
-                    + div { + "DTO name" } css kodomatStyles.editorLabel
-                    + dtoClassName
-                } marginRight 10
-                + div {
-                    + div { + "Namespace" } css kodomatStyles.editorLabel
-                    + dtoNamespace
-                } marginRight 10
-            } marginBottom 20
-
-            + column {
-
-                + entryContainer marginBottom 10
-
-                entryContainer += EditorEntry(this@Editor)
-                entryContainer += EditorEntry(this@Editor)
-
-                + ZkButton(flavour = ZkFlavour.Success, iconSource = ZkIcons.add, fill = true, buttonSize = 18) {
-                    val new = EditorEntry(this@Editor)
-                    entryContainer += new
-                    new.name.focus()
-                } marginBottom 20
+                ! "<h2>Kod-o-mat</h2>"
 
                 + row {
-                    + ZkButton(text = "Generate", flavour = ZkFlavour.Primary) {
-                        generate()
-                    } marginRight 20
-
-                    + ZkButton(text = "Common", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
-                        window.navigator.clipboard.writeText(commonSource)
-                        toastSuccess { "Common source copied to the clipboard!"}
-                    }.hide() marginRight 20
-
-                    + ZkButton(text = "Browser", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
-                        window.navigator.clipboard.writeText(browserSource)
-                        toastSuccess { "Browser source copied to the clipboard!"}
-                    }.hide() marginRight 20
-
-                    + ZkButton(text = "Backend", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
-                        window.navigator.clipboard.writeText(backendSource)
-                        toastSuccess { "Backend source copied to the clipboard!"}
-                    }.hide() marginRight 20
-
-                    + lastGenerate css kodomatStyles.lastGenerated
-
+                    + div {
+                        + div { + "Package" } css kodomatStyles.editorLabel
+                        + packageName
+                    } marginRight 10
+                    + div {
+                        + div { + "DTO name" } css kodomatStyles.editorLabel
+                        + dtoClassName
+                    } marginRight 10
+                    + div {
+                        + div { + "Namespace" } css kodomatStyles.editorLabel
+                        + dtoNamespace
+                    } marginRight 10
                 } marginBottom 20
 
+                + column {
+
+                    + entryContainer marginBottom 10
+
+                    entryContainer += EditorEntry(this@Editor)
+                    entryContainer += EditorEntry(this@Editor)
+
+                    + ZkButton(flavour = ZkFlavour.Success, iconSource = ZkIcons.add, fill = true, buttonSize = 18) {
+                        val new = EditorEntry(this@Editor)
+                        entryContainer += new
+                        new.name.focus()
+                    } marginBottom 20
+
+                    + row {
+                        + ZkButton(text = "Generate", flavour = ZkFlavour.Primary) {
+                            generate()
+                        } marginRight 20
+
+                        + ZkButton(text = "Common", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
+                            window.navigator.clipboard.writeText(commonSource)
+                            toastSuccess { "Common source copied to the clipboard!" }
+                        }.hide() marginRight 20
+
+                        + ZkButton(text = "Browser", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
+                            window.navigator.clipboard.writeText(browserSource)
+                            toastSuccess { "Browser source copied to the clipboard!" }
+                        }.hide() marginRight 20
+
+                        + ZkButton(text = "Backend", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
+                            window.navigator.clipboard.writeText(backendSource)
+                            toastSuccess { "Backend source copied to the clipboard!" }
+                        }.hide() marginRight 20
+
+                        + lastGenerate css kodomatStyles.lastGenerated
+
+                    } marginBottom 20
+
+                }
             }
         }
 

@@ -18,6 +18,11 @@ class ExampleSideBar : ZkSideBar() {
             + item("item 1.2") { successToast { "Click on 1.2" } }
         }
 
+        + section("section") {
+            + item("item 2.1") { toastSuccess { "Click on 2.1" } }
+            + item("item 2.2") { toastSuccess { "Click on 2.2" } }
+        }
+        
         + item(ExampleSideBarTarget)
     }
 
@@ -38,6 +43,12 @@ an `ExampleSideBarTarget` entry into the `stringStore` and have automatically tr
 
 In the example above we used `group` with an explicit text while `item` automatically set the text from the target.
 
+## Sections
+
+Sections are groups that are not closed but minimized and restored. When you minimize a section, the first
+letter of `text` is put to the top of the sidebar and the section itself goes hidden. Clicking on the
+letter at the top opens the section again.
+
 ## Loading From Markdown
 
 It is possible to load a sidebar structure from a Markdown list. In this case the lines has to be properly formatted:
@@ -52,3 +63,9 @@ shows the documentation tree of this site.
 
 <div data-zk-enrich="SideBarMarkdownExample"></div>
 
+## Timeline
+
+### Changes
+
+* 2021.5.18
+  * add sections

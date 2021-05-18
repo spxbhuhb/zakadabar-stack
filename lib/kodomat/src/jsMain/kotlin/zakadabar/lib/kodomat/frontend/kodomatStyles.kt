@@ -10,6 +10,11 @@ val kodomatStyles by cssStyleSheet(KodomatStyles())
 
 class KodomatStyles : ZkCssStyleSheet() {
 
+    val editor by cssClass {
+        margin = "auto"
+        maxWidth = "800px"
+    }
+
     val smallInput by cssClass {
         width = "5em"
     }

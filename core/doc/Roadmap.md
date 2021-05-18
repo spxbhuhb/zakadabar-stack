@@ -10,7 +10,8 @@ that we'll be able to do so.
 * public release
   * cookie policy
   * paid services
-  
+  * https://github.com/AAkira/Kotlin-Multiplatform-Libraries
+ 
 ### Core
 
 * move all built-in namespaces to "zk-*"
@@ -20,6 +21,8 @@ that we'll be able to do so.
     * tab container
 * sidebar
     * sections
+* form
+    * option to add help tooltip
 * popup to the user when the server is unavailable
     * short gap: retry
     * long gap: refresh the page and/or ask the user what to do

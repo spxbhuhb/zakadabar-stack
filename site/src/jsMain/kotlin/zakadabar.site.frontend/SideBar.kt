@@ -33,36 +33,42 @@ class SideBar : ZkSideBar() {
         super.onCreate()
 
         io {
-            + item(Welcome)
-            + item(WhatsNew)
-            + item(ShowCase)
-            + item(Roadmap)
-            + item(GetStarted)
-            + group(GetHelp) {
-                + item(FAQ)
+            val docSource = window.fetch("/api/content/guides/TOC.md").await().text().await()
+            val changeLogSource = window.fetch("/api/content/changelog/TOC.md").await().text().await()
+
+            + section(strings.Welcome) {
+                + item(Welcome)
+                + item(WhatsNew)
+                + item(ShowCase)
+                + item(Roadmap)
+                + item(GetStarted)
+                + group(GetHelp) {
+                    + item(FAQ)
+                }
             }
 
-            + item(KodomatPage)
+            + section(strings.kodomat) {
+                + item(KodomatPage, text = strings.record)
+            }
 
-            val docSource = window.fetch("/api/content/guides/TOC.md").await().text().await()
-            + group(DocumentationIntro, "Documentation") {
+            + group(DocumentationIntro, "Documentation", section = true) {
                 MarkdownNav().parse(docSource).forEach {
                     + it.doc()
                 }
             }
 
-            val changeLogSource = window.fetch("/api/content/changelog/TOC.md").await().text().await()
-            + group("Change Log") {
-                MarkdownNav().parse(changeLogSource).forEach {
-                    + it.changelog()
+            + section(strings.other) {
+                + group("Change Log") {
+                    MarkdownNav().parse(changeLogSource).forEach {
+                        + it.changelog()
+                    }
                 }
+                + examples()
             }
-
-            + examples()
 
             withOneOfRoles(StackRoles.securityOfficer, StackRoles.siteAdmin) {
 
-                + group(strings.administration) {
+                + section(strings.administration) {
 
                     + item(Settings)
 

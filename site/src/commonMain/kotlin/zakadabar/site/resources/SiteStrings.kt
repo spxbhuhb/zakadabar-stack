@@ -11,6 +11,9 @@ internal val strings = SiteStrings()
 
 class SiteStrings : ExamplesStrings() {
 
+    val record by "Record"
+    val kodomat by "Kod-o-mat"
+    val other by "Other"
     val KodomatPage by "Kod-o-mat"
     val WhatsNew by "What's New"
     val DocumentationIntro by "Documentation"

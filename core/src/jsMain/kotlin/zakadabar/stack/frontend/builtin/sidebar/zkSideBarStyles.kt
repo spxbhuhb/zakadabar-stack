@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.frontend.builtin.sidebar
 
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
@@ -20,13 +19,21 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         boxSizing = "border-box"
         minHeight = "100%"
         overflowY = "auto"
-        paddingTop = theme.spacingStep / 2
+        padding = theme.spacingStep / 2
+
         fontSize = this@ZkSideBarStyles.fontSize
 
         this@ZkSideBarStyles.backgroundColor?.let { backgroundColor = this@ZkSideBarStyles.backgroundColor }
         this@ZkSideBarStyles.textColor?.let { color = this@ZkSideBarStyles.textColor }
         this@ZkSideBarStyles.backgroundColor?.let { backgroundColor = this@ZkSideBarStyles.backgroundColor }
 
+        small {
+            padding = 0
+        }
+
+        medium {
+            padding = 0
+        }
     }
 
     open val item by cssClass {
@@ -80,4 +87,54 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         paddingLeft = 20
     }
 
+    open val sectionTitle by cssClass {
+        boxSizing = "border-box"
+        cursor = "pointer"
+        minHeight = 28
+        display = "flex"
+        flexDirection = "row"
+        justifyContent = "flex-start"
+        alignItems = "center"
+        paddingRight = 8
+        paddingLeft = 20
+        marginTop = theme.spacingStep
+        backgroundColor = theme.blockBackgroundColor
+        fill = this@ZkSideBarStyles.textColor ?: theme.textColor
+        borderBottom = theme.fixBorder
+
+        hover {
+            backgroundColor = theme.hoverBackgroundColor
+            color = theme.hoverTextColor
+        }
+
+        on(" a") {
+            flexGrow = 1
+        }
+
+        on(":first-child") {
+            marginTop = 4
+        }
+    }
+
+    open val sectionContent by cssClass {
+        paddingLeft = 0
+    }
+
+    open val minimizedSectionContainer by cssClass {
+        display = "flex"
+        flexDirection = "row"
+    }
+
+    open val minimizedSection by cssClass {
+        width = 28
+        height = 28
+        fontWeight = 500
+        fontSize = "125%"
+        display = "flex"
+        justifyContent = "center"
+        alignItems = "center"
+        backgroundColor = theme.blockBackgroundColor
+        borderBottom = theme.fixBorder
+        cursor = "pointer"
+    }
 }

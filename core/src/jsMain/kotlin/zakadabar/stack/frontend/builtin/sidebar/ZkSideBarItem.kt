@@ -16,11 +16,9 @@ import zakadabar.stack.frontend.builtin.ZkElement
  * A sidebar item.
  *
  * @property  text     The text to display.
- * @property  url      The URL the group points to. When specified, the group uses an "a" tag instead of
+ * @property  url      The URL the item points to. When specified, the group uses an "a" tag instead of
  *                     "div" and sets the "href" attribute to the value of this parameter.
- * @property  onClick  A function to call when the user clicks on the group title. The parameter shows
- *                     if the bar is open or close. True means that the user opened a bar just now,
- *                     false means that the user closed it.
+ * @property  onClick  A function to call when the user clicks on the item text.
  */
 open class ZkSideBarItem(
     private val text: String,

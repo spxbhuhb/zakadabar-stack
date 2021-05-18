@@ -3,7 +3,9 @@
 On this page we collect the major improvements / changes to give an overview of
 what's happening. For detailed list of changes please check the changelog.
 
-## 2021.5.18
+## 2021.5.25 - SNAPSHOT
+
+## 2021.5.18 - RELEASED
 
 * common
     * string store lookup by normalized key,

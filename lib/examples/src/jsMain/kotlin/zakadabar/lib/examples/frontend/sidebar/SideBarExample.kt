@@ -37,6 +37,11 @@ class ExampleSideBar : ZkSideBar() {
             + item("item 1.2") { toastSuccess { "Click on 1.2" } }
         }
 
+        + section("section") {
+            + item("item 2.1") { toastSuccess { "Click on 2.1" } }
+            + item("item 2.2") { toastSuccess { "Click on 2.2" } }
+        }
+
         + item(ExampleSideBarTarget)
 
     }
