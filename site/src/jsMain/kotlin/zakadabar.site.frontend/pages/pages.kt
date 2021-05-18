@@ -73,3 +73,17 @@ object Documentation : MarkdownPathPage() {
     override fun context() = SiteMarkdownContext(viewName, path)
 
 }
+
+object ChangeLog : MarkdownPathPage() {
+
+    override fun setAppTitleBar(contextElements: List<ZkElement>) {
+        application.title = ZkAppTitle("")
+    }
+
+    override fun url(): String {
+        return "/api/$contentNamespace/$path"
+    }
+
+    override fun context() = SiteMarkdownContext(viewName, path)
+
+}
