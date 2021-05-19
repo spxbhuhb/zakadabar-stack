@@ -3,8 +3,13 @@
  */
 package zakadabar.lib.markdown.frontend
 
-@JsModule("highlight.js")
+@JsModule("highlight.js/lib/core")
 @JsNonModule
 external object hljs {
     fun highlightElement(element: dynamic)
+    fun registerLanguage(name : String, language: dynamic)
 }
+
+@JsModule("highlight.js/lib/languages/kotlin")
+@JsNonModule
+external object hljsKotlin

@@ -231,7 +231,7 @@ open val exampleStyle by cssClass {
 
 In compiled CSS this looks like:
 
-```css
+```
 .ExampleStyles-exampleStyle-123 {
     color: #ffffff;
 }

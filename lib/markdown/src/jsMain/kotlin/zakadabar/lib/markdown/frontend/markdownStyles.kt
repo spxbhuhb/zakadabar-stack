@@ -13,6 +13,10 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     open var codeBorderColor: String? = null
     open var highlightUrl = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/idea.min.css"
 
+    init {
+        hljs.registerLanguage("kotlin", hljsKotlin)
+    }
+
     @Suppress("unused") // this is a CSS import, used by hljs
     open val highlightStyles by cssImport {
         url = highlightUrl
