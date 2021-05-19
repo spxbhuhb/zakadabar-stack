@@ -14,7 +14,8 @@ import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.record.StringRecordId
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
-import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
+import zakadabar.stack.frontend.builtin.crud.ZkCrud
+import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.table.actions.ZkAddRowAction
 import zakadabar.stack.frontend.builtin.table.actions.ZkExportCsvAction
 import zakadabar.stack.frontend.builtin.table.actions.ZkSearchAction
@@ -54,7 +55,11 @@ open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider {
     //  Configuration -- meant to set by onConfigure
     // -------------------------------------------------------------------------
 
-    var crud: ZkCrudTarget<*>? = null
+    var crud: ZkCrud<T>? = null
+       set(value) {
+           check (field == null || field === value) { "Table crud is changed after first assignment. This happens when you use a table with ZkInlineCrud, but you set the crud property in onConfigure. Remove the set from onConfigure." }
+           field = value
+       }
 
     override var setAppTitle = true
     override var titleText: String? = null
@@ -198,7 +203,7 @@ open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider {
 
         super.setAppTitleBar(actions)
     }
-
+    
     // -------------------------------------------------------------------------
     //  Data setter, preload
     // -------------------------------------------------------------------------
@@ -360,8 +365,7 @@ open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider {
      * @param  id  Id of the row as given by [getRowId].
      */
     open fun onDblClick(id: String) {
-        val recordId: RecordId<*> = StringRecordId<DtoBase>(id)
-        crud?.openUpdate(recordId)
+        crud?.openUpdate(StringRecordId(id))
     }
 
     /**

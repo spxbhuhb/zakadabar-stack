@@ -4,7 +4,7 @@
 package zakadabar.lib.examples.frontend.crud
 
 import zakadabar.lib.examples.data.SimpleExampleDto
-import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
+import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 
 object SimpleExampleCrud : ZkCrudTarget<SimpleExampleDto>() {
     init {

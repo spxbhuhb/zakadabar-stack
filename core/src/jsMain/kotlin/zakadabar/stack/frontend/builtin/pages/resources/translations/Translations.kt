@@ -4,7 +4,7 @@
 package zakadabar.stack.frontend.builtin.pages.resources.translations
 
 import zakadabar.stack.data.builtin.resources.TranslationDto
-import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
+import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 
 object Translations : ZkCrudTarget<TranslationDto>() {
 

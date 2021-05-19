@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.frontend.builtin.pages.resources.translations
 
-import hu.simplexion.rf.leltar.frontend.pages.roles.Roles
 import zakadabar.stack.data.builtin.resources.TranslationDto
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.table.ZkTable
@@ -18,7 +17,7 @@ class Table : ZkTable<TranslationDto>() {
         export = true
 
         titleText = stringStore.roles
-        crud = Roles
+        crud = Translations
 
         + TranslationDto::id
         + TranslationDto::name

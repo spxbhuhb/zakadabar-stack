@@ -9,6 +9,8 @@ import org.w3c.dom.get
 import zakadabar.lib.examples.frontend.OperatorExample
 import zakadabar.lib.examples.frontend.ParallelDownloadExample
 import zakadabar.lib.examples.frontend.button.ButtonExamples
+import zakadabar.lib.examples.frontend.crud.CrudBuiltinExample
+import zakadabar.lib.examples.frontend.crud.CrudReferenceExample
 import zakadabar.lib.examples.frontend.dock.DockBasicExample
 import zakadabar.lib.examples.frontend.dock.DockRemoveExample
 import zakadabar.lib.examples.frontend.form.FormBooleanExample
@@ -72,6 +74,9 @@ class SiteMarkdownContext(
         return when (type) {
 
             "ButtonExamples" -> ButtonExamples(htmlElement, flavour = flavour)
+
+            "CrudBuiltinExample" -> CrudBuiltinExample(htmlElement)
+            "CrudReferenceExample" -> CrudReferenceExample(htmlElement)
 
             "DockBasicExample" -> DockBasicExample(htmlElement)
             "DockRemoveExample" -> DockRemoveExample(htmlElement)

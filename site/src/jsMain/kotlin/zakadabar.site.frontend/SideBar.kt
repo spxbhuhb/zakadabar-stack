@@ -3,10 +3,8 @@
  */
 package zakadabar.site.frontend
 
-import hu.simplexion.rf.leltar.frontend.pages.roles.Roles
 import kotlinx.browser.window
 import kotlinx.coroutines.await
-import zakadabar.lib.examples.frontend.crud.BuiltinCrud
 import zakadabar.lib.examples.frontend.form.FormFieldsGenerated
 import zakadabar.lib.examples.frontend.form.SyntheticForm
 import zakadabar.lib.examples.frontend.layout.TabContainer
@@ -19,6 +17,7 @@ import zakadabar.site.resources.strings
 import zakadabar.stack.StackRoles
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.pages.account.accounts.Accounts
+import zakadabar.stack.frontend.builtin.pages.account.roles.Roles
 import zakadabar.stack.frontend.builtin.pages.resources.locales.Locales
 import zakadabar.stack.frontend.builtin.pages.resources.settings.Settings
 import zakadabar.stack.frontend.builtin.pages.resources.translations.Translations
@@ -61,6 +60,11 @@ class SideBar : ZkSideBar() {
                 }
                 + item(Roadmap)
                 + item(ServicesAndSupport)
+                + group(text = strings.designDecisions) {
+                    MarkdownNav().parse(changeLogSource).forEach {
+                        + it.design()
+                    }
+                }
                 + item(LegalNotices)
                 + item(Credits)
 //                + examples()
@@ -115,10 +119,23 @@ class SideBar : ZkSideBar() {
         }
     }
 
+    private fun MarkdownNav.MarkdownNavItem.design(): ZkElement {
+        return if (children.isEmpty()) {
+            item(
+                Documentation,
+                "design/" + if (url.startsWith("./")) url.substring(2) else url,
+                label
+            )
+        } else {
+            group(label) {
+                children.forEach { + it.design() }
+            }
+        }
+    }
+
+    @Deprecated("should be in documentation")
     private fun examples() = group(strings.examples) {
         + group("Browser") {
-
-            + item(BuiltinCrud)
 
             + group("Form") {
                 + item(FormFieldsGenerated)

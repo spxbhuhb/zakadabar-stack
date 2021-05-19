@@ -4,7 +4,7 @@
 package zakadabar.stack.frontend.builtin.pages.resources.settings
 
 import zakadabar.stack.data.builtin.resources.SettingDto
-import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
+import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 
 object Settings : ZkCrudTarget<SettingDto>() {
 

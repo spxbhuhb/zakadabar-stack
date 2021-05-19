@@ -23,6 +23,8 @@ that we'll be able to do so.
 ### Core
 
 * move all built-in namespaces to "zk-*"
+* add automatic validation for action and query backends  
+* add protection against bots  
 * responsive components:
     * table
     * form

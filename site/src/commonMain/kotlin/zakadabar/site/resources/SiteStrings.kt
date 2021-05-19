@@ -11,6 +11,7 @@ internal val strings = SiteStrings()
 
 class SiteStrings : ExamplesStrings() {
 
+    val designDecisions by "Design Decisions"
     val servicesAndSupport by "Services And Support"
     val greenBlue by "Green/Blue Theme"
     val changeLog by "Change Log"

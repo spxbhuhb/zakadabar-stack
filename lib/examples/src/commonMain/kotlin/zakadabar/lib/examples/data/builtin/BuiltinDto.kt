@@ -71,14 +71,14 @@ data class BuiltinDto(
         + ::optSecretValue max 50
         + ::optRecordSelectValue
         + ::optStringValue max 100
-        + ::optStringSelectValue
+        + ::optStringSelectValue max 100
         + ::optTextAreaValue max 100000
         + ::optUuidValue
         + ::secretValue blank false max 50
         + ::recordSelectValue
         + ::stringValue blank false max 50
         + ::stringSelectValue blank false max 50
-        + ::textAreaValue blank false
+        + ::textAreaValue blank false max 2000
         + ::uuidValue
     }
 

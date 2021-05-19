@@ -99,9 +99,10 @@ Now, that you have a record DTO, you can:
 * [Use a Record DTO](./Data.md#Use-a-Record-DTO)
 * [Write a Form](../browser/builtin/Forms.md#Write-a-Form)
 * [Write a Table](../browser/builtin/Tables.md#Write-a-Table)
-* [Write a CRUD](../browser/builtin/Crud.md#Write-a-CRUD)
-* [Route the CRUD](../browser/builtin/Crud.md#Route-a-CRUD)
-* [Include the CRUD](../browser/builtin/Crud.md#Include-a-CRUD)
+* [Write a CRUD Target](../browser/builtin/Crud.md#Write-a-CRUD-Target)
+* [Route the CRUD Target](../browser/builtin/Crud.md#Route-a-CRUD-Target)
+* [Include the CRUD Target](../browser/builtin/Crud.md#Include-a-CRUD-Target)
+* [Write an Inline CRUD](../browser/builtin/Crud.md#Write-an-Inline-CRUD)
 
 ## Use a Record DTO
 

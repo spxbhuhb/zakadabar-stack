@@ -11,11 +11,6 @@ class BuiltinTable : ZkTable<BuiltinDto>() {
 
     override fun onConfigure() {
 
-        // Sets the CRUD the table uses. When set add and double click on rows
-        // calls this crud to create a new record or open the record for update.
-
-        crud = BuiltinCrud
-
         // Set the title of the table.
 
         titleText = stringStore["builtin"]

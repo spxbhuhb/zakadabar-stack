@@ -1,12 +1,10 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package hu.simplexion.rf.leltar.frontend.pages.roles
+package zakadabar.stack.frontend.builtin.pages.account.roles
 
 import zakadabar.stack.data.builtin.account.RoleDto
-import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
-import zakadabar.stack.frontend.builtin.pages.account.roles.Form
-import zakadabar.stack.frontend.builtin.pages.account.roles.Table
+import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 
 object Roles : ZkCrudTarget<RoleDto>() {
 

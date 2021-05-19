@@ -77,7 +77,7 @@ class ${dtoName}(
 fun browserFrontendGenerator() = """
 package ${packageName}.frontend.pages
 
-import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
+import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.application.translate

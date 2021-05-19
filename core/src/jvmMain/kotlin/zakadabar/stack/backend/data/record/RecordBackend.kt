@@ -41,14 +41,34 @@ abstract class RecordBackend<T : RecordDto<T>>(
     val recordTable: IdTable<Long>? = null
 ) : BackendModule, ActionBackend, QueryBackend {
 
+    /**
+     * The class of DTO this record backend servers. Namespace is automatically
+     * set to the namespace defined for this DTO class.
+     */
     abstract val dtoClass: KClass<T>
 
+    /**
+     * The namespace this backend serves. Must be unique in a server. Default
+     * is the namespace of the DTO class.
+     */
     override val namespace
         get() = (dtoClass.companionObject !!.objectInstance as RecordDtoCompanion<*>).dtoNamespace
 
+    /**
+     * Logger to use when logging is enabled. Name is [namespace].
+     */
     override val logger by lazy { LoggerFactory.getLogger(namespace) !! }
 
+    /**
+     * When true (this is the default), actions are logged by the backend.
+     */
     override var logActions = true
+
+    /**
+     * When true, POST and PATCH validates incoming DTO objects. When invalid
+     * throws [BadRequest]. Default is from the [Server.validate] property.
+     */
+    var validate = Server.validate
 
     /**
      * Create a new record.
@@ -316,6 +336,9 @@ abstract class RecordBackend<T : RecordDto<T>>(
             post {
                 val executor = call.executor()
                 val request = call.receive(dtoClass)
+
+                if (validate && ! request.isValid) throw BadRequestException("invalid request")
+
                 logger.info("${executor.accountId}: CREATE $request")
                 call.respond(create(executor, request) as Any)
             }
@@ -336,6 +359,9 @@ abstract class RecordBackend<T : RecordDto<T>>(
             patch("/{rid}") {
                 val executor = call.executor()
                 val request = call.receive(dtoClass)
+
+                if (validate && ! request.isValid) throw BadRequestException("invalid request")
+
                 logger.info("${executor.accountId}: UPDATE $request")
                 call.respond(update(executor, request) as Any)
             }
@@ -399,6 +425,9 @@ abstract class RecordBackend<T : RecordDto<T>>(
             patch("/meta/{bid}") {
                 val executor = call.executor()
                 val request = call.receive(BlobDto::class)
+
+                if (validate && ! request.isValid) throw BadRequestException("invalid request")
+
                 logger.info("${executor.accountId}: BLOB-UPDATE $namespace $request")
                 call.respond(blobMetaUpdate(executor, request))
             }
@@ -416,8 +445,6 @@ abstract class RecordBackend<T : RecordDto<T>>(
                 val length = headers["Content-Length"]?.toIntOrNull() ?: throw BadRequestException("missing content length")
                 val disposition = headers["Content-Disposition"] ?: throw BadRequestException("missing content disposition")
 
-                val bytes = ByteArray(length)
-
                 val dto = BlobDto(
                     id = EmptyRecordId(),
                     dataRecord = recordId,
@@ -426,6 +453,10 @@ abstract class RecordBackend<T : RecordDto<T>>(
                     type = headers["Content-Type"] ?: "application/octet-stream",
                     size = length.toLong()
                 )
+
+                if (validate && ! dto.isValid) throw BadRequestException("invalid request")
+
+                val bytes = ByteArray(length)
 
                 call.receiveChannel().readFully(bytes, 0, length)
 

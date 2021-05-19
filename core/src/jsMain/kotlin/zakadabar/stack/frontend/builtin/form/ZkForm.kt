@@ -35,11 +35,11 @@ import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.ZkElementState
+import zakadabar.stack.frontend.builtin.crud.ZkCrudEditor
 import zakadabar.stack.frontend.builtin.form.fields.*
 import zakadabar.stack.frontend.builtin.form.structure.ZkFormButtons
 import zakadabar.stack.frontend.builtin.form.structure.ZkFormSection
 import zakadabar.stack.frontend.builtin.form.structure.ZkInvalidFieldList
-import zakadabar.stack.frontend.builtin.pages.ZkCrudPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
 import zakadabar.stack.frontend.builtin.toast.ZkToast
@@ -61,7 +61,7 @@ import kotlin.reflect.KMutableProperty0
  */
 open class ZkForm<T : DtoBase> (
     element: HTMLElement = document.createElement("div") as HTMLElement
-) : ZkElement(element), ZkCrudPage<T>, ZkAppTitleProvider {
+) : ZkElement(element), ZkCrudEditor<T>, ZkAppTitleProvider {
 
     override lateinit var dto: T
     override lateinit var mode: ZkElementMode

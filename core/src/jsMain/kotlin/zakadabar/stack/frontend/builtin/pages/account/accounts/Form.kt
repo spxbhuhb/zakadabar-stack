@@ -15,6 +15,7 @@ import zakadabar.stack.frontend.application.hasRole
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
+import zakadabar.stack.frontend.builtin.crud.ZkCrudEditor
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.fields.ZkSecretField
@@ -24,7 +25,6 @@ import zakadabar.stack.frontend.builtin.input.ZkCheckboxList
 import zakadabar.stack.frontend.builtin.input.ZkCheckboxListItem
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.builtin.pages.ZkCrudPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
 import zakadabar.stack.frontend.builtin.toast.toastDanger
@@ -34,7 +34,7 @@ import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.plusAssign
 
-class Form : ZkElement(), ZkCrudPage<AccountPrivateDto>, ZkAppTitleProvider {
+class Form : ZkElement(), ZkCrudEditor<AccountPrivateDto>, ZkAppTitleProvider {
 
     override lateinit var dto: AccountPrivateDto
     override lateinit var mode: ZkElementMode

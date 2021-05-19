@@ -4,9 +4,9 @@
 package zakadabar.lib.examples.frontend.crud
 
 import zakadabar.lib.examples.data.builtin.BuiltinDto
-import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
+import zakadabar.stack.frontend.builtin.crud.ZkInlineCrud
 
-object BuiltinCrud : ZkCrudTarget<BuiltinDto>() {
+class BuiltinCrud : ZkInlineCrud<BuiltinDto>() {
     init {
         companion = BuiltinDto.Companion
         dtoClass = BuiltinDto::class

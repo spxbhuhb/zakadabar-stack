@@ -29,6 +29,13 @@ fun authorize(executor: Executor, check: (executor: Executor) -> Boolean) {
 }
 
 @PublicApi
+/**
+ * Authorize directly (without role, check, etc).
+ *
+ * @param  authorized  When true, the request is authorized, when false it is denied.
+ *
+ * @throws [Forbidden]
+ */
 fun authorize(authorized: Boolean) {
     if (! authorized) throw Forbidden()
 }

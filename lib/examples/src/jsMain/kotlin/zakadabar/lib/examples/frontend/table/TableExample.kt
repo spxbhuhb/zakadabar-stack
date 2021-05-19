@@ -10,7 +10,6 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.builtin.toast.toastSuccess
-import zakadabar.stack.frontend.util.plusAssign
 
 
 class ExampleTable : ZkTable<TableExampleDto>() {
@@ -67,7 +66,7 @@ class TableExample(
             height = "200px" // because table shrinks
         }
 
-        classList += zkLayoutStyles.fixBorder
+        + zkLayoutStyles.fixBorder
 
         val data = listOf(
             TableExampleDto("Rose", "rosa", 341, true),

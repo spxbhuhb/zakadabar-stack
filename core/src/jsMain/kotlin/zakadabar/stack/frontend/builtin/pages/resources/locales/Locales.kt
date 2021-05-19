@@ -4,7 +4,7 @@
 package zakadabar.stack.frontend.builtin.pages.resources.locales
 
 import zakadabar.stack.data.builtin.resources.LocaleDto
-import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
+import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 
 object Locales : ZkCrudTarget<LocaleDto>() {
 

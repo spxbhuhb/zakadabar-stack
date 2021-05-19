@@ -4,8 +4,6 @@
 
 package zakadabar.site.frontend
 
-import hu.simplexion.rf.leltar.frontend.pages.roles.Roles
-import zakadabar.lib.examples.frontend.crud.BuiltinCrud
 import zakadabar.lib.examples.frontend.form.FormFieldsGenerated
 import zakadabar.lib.examples.frontend.form.SyntheticForm
 import zakadabar.lib.examples.frontend.layout.TabContainer
@@ -19,6 +17,7 @@ import zakadabar.site.frontend.pages.*
 import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.builtin.pages.account.accounts.Accounts
 import zakadabar.stack.frontend.builtin.pages.account.login.Login
+import zakadabar.stack.frontend.builtin.pages.account.roles.Roles
 import zakadabar.stack.frontend.builtin.pages.resources.locales.Locales
 import zakadabar.stack.frontend.builtin.pages.resources.settings.Settings
 import zakadabar.stack.frontend.builtin.pages.resources.translations.Translations
@@ -45,7 +44,6 @@ class Routing : ZkAppRouting(DefaultLayout, Landing) {
         + ExampleMarkdownSideBarTarget
 
         + ArgPage
-        + BuiltinCrud
         + FormFieldsGenerated
         + TabContainer
         + GeneratedTable

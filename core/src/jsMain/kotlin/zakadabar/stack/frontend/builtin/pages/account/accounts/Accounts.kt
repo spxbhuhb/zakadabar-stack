@@ -4,7 +4,7 @@
 package zakadabar.stack.frontend.builtin.pages.account.accounts
 
 import zakadabar.stack.data.builtin.account.AccountPrivateDto
-import zakadabar.stack.frontend.builtin.pages.ZkCrudTarget
+import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 
 object Accounts : ZkCrudTarget<AccountPrivateDto>() {
     init {

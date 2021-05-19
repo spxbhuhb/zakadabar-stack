@@ -74,6 +74,14 @@ class Server : CliktCommand() {
         var logReads: Boolean = true
 
         /**
+         * When true, POST and PATCH handled by RecordBackends and ActionBackends validate
+         * incoming DTO objects. When invalid the request returns with 400 Bad Request.
+         * Default is true, may be switched off by backend, using the validate property
+         * of the backend.
+         */
+        var validate = true
+
+        /**
          * When true the server is shutting down and background tasks should stop.
          * TODO replace shutdown flag with an event driven system
          */
