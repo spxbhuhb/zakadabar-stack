@@ -3,7 +3,6 @@
  */
 package zakadabar.lib.kodomat.frontend
 
-import io.ktor.util.*
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.datetime.Clock
@@ -278,7 +277,7 @@ class EditorEntry(private val editor: Kodomat.Editor) : ZkElement() {
     fun generator(): PropertyGenerator? {
         if (name.value.isBlank() && type.value.isBlank()) return null
         entryDetails?.let { return it.generator(name.value, editor.descriptor) }
-        toastDanger { "Type of ${name.value.escapeHTML()} (${type.value.escapeHTML()}) is wrong!" }
+        toastDanger { "Type of ${name.value.replace("<", "&lt;")} (${type.value.replace("<", "&lt;")}) is wrong!" }
         return null
     }
 }

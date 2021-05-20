@@ -15,6 +15,12 @@ import zakadabar.stack.util.alpha
 
 class GreenBlueTheme : ZkBuiltinLightTheme() {
 
+    companion object {
+        const val NAME = "zakadabar.stack.theme.light.green.blue"
+    }
+
+    override val name = NAME
+
     private val darkGreen = "#538d34"
     private val lightGreen = "#78b641"
     private val darkBlue = "#1d3457"

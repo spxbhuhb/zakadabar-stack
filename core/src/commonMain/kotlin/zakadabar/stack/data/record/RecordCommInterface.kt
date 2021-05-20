@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.data.record
 
-import io.ktor.http.*
 import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.builtin.BlobDto
 
@@ -142,26 +141,6 @@ interface RecordCommInterface<T> {
         dataRecordId: RecordId<T>?, name: String, type: String, data: Any,
         callback: (dto: BlobDto, state: BlobCreateState, uploaded: Long) -> Unit
     )
-
-    /**
-     * Create a BLOB that belongs to the given record.
-     *
-     * Works only when the backend supports BLOBs for the record type.
-     *
-     * @param  dataRecordId  Id of the record the new BLOB belongs to.
-     * @param  name      Name of the BLOB, typically the file name.
-     * @param  type      Type of the BLOB, typically the MIME type.
-     * @param  data      BLOB data
-     *
-     * @return A DTO which contains data of the blob.
-     *
-     * @throws IllegalArgumentException the dto is invalid (HTTP status code 400)
-     * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
-     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
-     * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
-     * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
-     */
-    suspend fun blobCreate(dataRecordId: RecordId<T>?, name: String, type: ContentType, data: ByteArray): BlobDto
 
     /**
      * Retrieves metadata of BLOBs.

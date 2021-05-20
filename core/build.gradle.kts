@@ -61,8 +61,6 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
                 api("org.jetbrains.kotlinx:kotlinx-datetime:$datetimeVersion")
-                api("io.ktor:ktor-client-core:$ktorVersion")
-                api("io.ktor:ktor-client-websockets:$ktorVersion")
             }
         }
 
@@ -100,9 +98,7 @@ kotlin {
 
         @Suppress("UNUSED_VARIABLE")
         val jsMain by getting {
-            dependencies {
-                api("io.ktor:ktor-client-js:$ktorVersion")
-            }
+
         }
         @Suppress("UNUSED_VARIABLE")
         val jsTest by getting {

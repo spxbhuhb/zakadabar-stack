@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.data.record
 
-import io.ktor.http.*
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.serialization.KSerializer
@@ -155,10 +154,6 @@ open class RecordComm<T : RecordDto<T>>(
         }
     }
 
-    @PublicApi
-    override suspend fun blobCreate(dataRecordId: RecordId<T>?, name: String, type: ContentType, data: ByteArray): BlobDto {
-        TODO("Not yet implemented")
-    }
 
     @PublicApi
     override suspend fun blobMetaList(dataRecordId: RecordId<T>): List<BlobDto> {

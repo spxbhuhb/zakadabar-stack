@@ -117,7 +117,7 @@ open class RecordComm<T : RecordDto<T>>(
     }
 
     @PublicApi
-    override suspend fun blobCreate(dataRecordId: RecordId<T>?, name: String, type: ContentType, data: ByteArray): BlobDto {
+    suspend fun blobCreate(dataRecordId: RecordId<T>?, name: String, type: ContentType, data: ByteArray): BlobDto {
         val text = client.post<String>("$baseUrl/api/$namespace/blob${if (dataRecordId == null) "" else "/$dataRecordId"}") {
             header("Content-Disposition", """attachment; filename="$name"""")
             body = ByteArrayContent(data, contentType = type)

@@ -25,7 +25,7 @@ object Landing : ZkPage(ZkFullScreenLayout) {
 
         + div(landingStyles.header) {
             + SiteLogo()
-            + HeaderActions()
+            + HeaderActions() marginRight 20
         }
 
         + column(landingStyles.content) {

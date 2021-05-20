@@ -441,6 +441,22 @@ To switch off scroll bar set `scrollBarStyles.enabled` to `false`.
 scrollBarStyles.enabled = false
 ```
 
+## Theme Rotate
+
+Use [ZkThemeRotate](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkThemeRotate.kt) element to
+rotate between themes. This element is configured with a list of icons and themes. When the user clicks
+on an icon, the theme paired with the icon is activated and the icon of the next theme is shown.
+
+Add three themes to rotate to the top title bar:
+
+```kotlin
+titleBar.globalElements += ZkThemeRotate(
+  ZkIcons.darkMode to SiteDarkTheme(),
+  ZkIcons.lightMode to SiteLightTheme(),
+  ZkIcons.leaf to GreenBlueTheme()
+)
+```
+
 ## Timeline
 
 ### Changes
