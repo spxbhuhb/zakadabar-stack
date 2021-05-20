@@ -27,7 +27,7 @@ class Optional : ZkElement() {
     }
 
     val value: Boolean
-        get() = findFirst<ZkCheckBox>().checked
+        get() = first<ZkCheckBox>().checked
 }
 
 class ConstraintBooleanEditor(
@@ -47,7 +47,7 @@ class ConstraintBooleanEditor(
     }
 
     override fun toDto(): ConstraintDto? {
-        val value = findFirst<ZkCheckBox>().checked
+        val value = first<ZkCheckBox>().checked
         return if (value == skipWhen) null else ConstraintBooleanDto(constraintType, value)
     }
 }
@@ -68,7 +68,7 @@ class ConstraintDoubleEditor(
     }
 
     override fun toDto(): ConstraintDto? {
-        val value = findFirst<ZkTextInput>().value.toDoubleOrNull()
+        val value = first<ZkTextInput>().value.toDoubleOrNull()
         return if (value == null) null else ConstraintDoubleDto(constraintType, value)
     }
 
@@ -90,7 +90,7 @@ class ConstraintIntEditor(
     }
 
     override fun toDto(): ConstraintDto? {
-        val value = findFirst<ZkTextInput>().value.toIntOrNull()
+        val value = first<ZkTextInput>().value.toIntOrNull()
         return if (value == null) null else ConstraintIntDto(constraintType, value)
     }
 
@@ -112,7 +112,7 @@ class ConstraintLongEditor(
     }
 
     override fun toDto(): ConstraintDto? {
-        val value = findFirst<ZkTextInput>().value.toLongOrNull()
+        val value = first<ZkTextInput>().value.toLongOrNull()
         return if (value == null) null else ConstraintLongDto(constraintType, value)
     }
 
@@ -134,7 +134,7 @@ class ConstraintStringEditor(
     }
 
     override fun toDto(): ConstraintDto? {
-        val value = findFirst<ZkTextInput>().value
+        val value = first<ZkTextInput>().value
         return if (value.isEmpty()) null else ConstraintStringDto(constraintType, value)
     }
 

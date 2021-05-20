@@ -10,10 +10,10 @@ package zakadabar.stack.frontend.builtin.pages.account.login
 
 import kotlinx.browser.window
 import zakadabar.stack.frontend.application.stringStore
-import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.builtin.layout.ZkFullScreenLayout
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
+import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.util.marginBottom
 
 /**
@@ -51,7 +51,6 @@ object Login : ZkPage(ZkFullScreenLayout) {
                 } marginBottom 20
 
                 + LoginForm(
-                    onCancel = { window.history.back() },
                     onSuccess = { window.location.pathname = "/" }
                 )
             }

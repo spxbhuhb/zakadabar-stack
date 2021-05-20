@@ -35,7 +35,7 @@ object SiteBuiltinBackend : RecordBackend<BuiltinDto>() {
     private var nextId = 1L
     internal var recordStore = mutableListOf<BuiltinDto>()
 
-    private suspend fun clip() = mutex.withLock {
+    suspend fun clip() {
         recordStore = recordStore.sortedByDescending { it.instantValue }.take(100).toMutableList()
     }
 

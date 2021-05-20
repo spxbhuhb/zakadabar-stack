@@ -57,7 +57,7 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val updateFail by "Update failed."
     open val updateSuccess by "Update success."
     open val yes by "yes"
-
+    open val executeError by "Error while executing the function."
 
     // -------------------------------------------------------------------------
     // Values for the build-in administration UI
@@ -91,6 +91,8 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val setting by "Setting"
     open val settings by "Settings"
     open val translations by "Translations"
+    open val authenticationNeeded by "Authentication needed to access this function. Please log in."
+    open val forbiddenExplanation by "This function is unavailable on this account."
 
 }
 

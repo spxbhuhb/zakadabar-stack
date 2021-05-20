@@ -64,6 +64,7 @@ open class ZkElement(
          * Use this function when you need to fetch data asynchronously during building
          * the element.
          */
+        @Deprecated("use zke { io { ... } } instead", ReplaceWith("zke",))
         fun launchBuildNew(builder: suspend ZkElement.() -> Unit) = ZkElement().launchBuild(builder)
 
         /**
@@ -72,7 +73,7 @@ open class ZkElement(
          *
          * Use this function when there is no need to asynchronous data fetch.
          */
-        @PublicApi
+        @Deprecated("use zke { ... } instead", ReplaceWith("zke"))
         fun buildNew(builder: ZkElement.() -> Unit) = ZkElement().build(builder)
 
         @PublicApi
@@ -469,7 +470,7 @@ open class ZkElement(
     /**
      * Append the given class to the class list of the element.
      *
-     * @param  className  Name of the class to append.
+     * @param  rule  Name of the class to append.
      */
     infix fun HTMLElement.css(rule: ZkCssStyleRule): HTMLElement {
         this.classList += rule
@@ -753,15 +754,32 @@ open class ZkElement(
         return childElements.filter { kClass.isInstance(it) } as List<T>
     }
 
+    @Deprecated("use first instead", ReplaceWith("first<T>()"))
+    inline fun <reified T : ZkElement> findFirst(): T {
+        val kClass = T::class
+        @Suppress("UNCHECKED_CAST") // checking for class
+        return childElements.first { kClass.isInstance(it) } as T
+    }
+
     /**
      * Get the first [ZkElement] child of the given Kotlin class.
      *
      * @throws NoSuchElementException
      */
-    inline fun <reified T : ZkElement> findFirst(): T {
+    inline fun <reified T : ZkElement> first(): T {
         val kClass = T::class
         @Suppress("UNCHECKED_CAST") // checking for class
         return childElements.first { kClass.isInstance(it) } as T
+    }
+
+    /**
+     * Get the first [ZkElement] child of the given Kotlin class
+     * returns null when there is no such element.
+     */
+    inline fun <reified T : ZkElement> firstOrNull(): T? {
+        val kClass = T::class
+        @Suppress("UNCHECKED_CAST") // checking for class
+        return childElements.firstOrNull { kClass.isInstance(it) } as? T
     }
 
     // -------------------------------------------------------------------------
@@ -1039,6 +1057,17 @@ open class ZkElement(
      * Adds a [ZkElement] as a child.
      */
     operator fun ZkElement.unaryPlus(): ZkElement {
+        this@ZkElement.buildPoint.appendChild(this.element)
+        this@ZkElement.childElements += this
+        this@ZkElement.syncChildrenState(this)
+        return this
+    }
+
+    /**
+     * Adds a [ZkElement] as a child.
+     */
+    operator fun ZkElement?.unaryPlus() : ZkElement? {
+        if (this == null) return null
         this@ZkElement.buildPoint.appendChild(this.element)
         this@ZkElement.childElements += this
         this@ZkElement.syncChildrenState(this)

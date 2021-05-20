@@ -31,7 +31,8 @@ object SiteExampleReferenceBackend : RecordBackend<ExampleReferenceDto>() {
     private var nextId = 1L
     private var recordStore = mutableListOf<ExampleReferenceDto>()
 
-    private suspend fun clip() = mutex.withLock {
+    private fun clip() {
+        if (recordStore.size < 100) return
         recordStore = recordStore.filter { ref ->
             SiteBuiltinBackend.recordStore.firstOrNull {
                 it.recordSelectValue == ref.id || it.optRecordSelectValue == ref.id

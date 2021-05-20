@@ -6,7 +6,7 @@ package zakadabar.stack.frontend.builtin.modal
 import kotlinx.coroutines.channels.Channel
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
+import zakadabar.stack.frontend.builtin.titlebar.ZkLocalTitleBar
 import zakadabar.stack.frontend.util.plusAssign
 
 open class ZkModalBase<T : Any> : ZkElement() {
@@ -18,7 +18,7 @@ open class ZkModalBase<T : Any> : ZkElement() {
 
         + column {
             title?.let {
-                + ZkTitleBar(it) css zkModalStyles.title
+                + ZkLocalTitleBar(it) css zkModalStyles.title
             }
 
             + div(zkModalStyles.content) {

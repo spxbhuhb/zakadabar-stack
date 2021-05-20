@@ -12,6 +12,7 @@ import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.record.RecordDto
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.data.record.StringRecordId
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
 import zakadabar.stack.frontend.builtin.crud.ZkCrud
@@ -22,6 +23,8 @@ import zakadabar.stack.frontend.builtin.table.actions.ZkSearchAction
 import zakadabar.stack.frontend.builtin.table.columns.*
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
+import zakadabar.stack.frontend.builtin.titlebar.ZkLocalTitleBar
+import zakadabar.stack.frontend.builtin.titlebar.ZkLocalTitleProvider
 import zakadabar.stack.frontend.util.Areas
 import zakadabar.stack.frontend.util.downloadCsv
 import zakadabar.stack.frontend.util.getDatasetEntry
@@ -38,9 +41,10 @@ import kotlin.reflect.KProperty1
  * @property  crud          The [ZkCrudTarget] that is linked with the table. When specified the functions
  *                          of the table (onCreate, onDblClick for example) will use it to open the
  *                          appropriate page.
- * @property  setAppTitle      When true (default) the app title bar is set for the table. Function [setAppTitleBar] adds the title bar.
+ * @property  setAppTitle   When true (default) the app title bar is set for the table. Function [setAppTitleBar] adds the title bar.
+ * @property  addLocalTitle When true, add a local title bar. Default is false.
  * @property  titleText     Title text to show in the title bar. Used when [titleElement] is not set.
- * @property  titleElement         The element of the title.
+ * @property  titleElement  The element of the title.
  * @property  add           When true a plus icon is added to the title bar. Click on the icon calls [onAddRow].
  * @property  search        When true a search input and icon is added to the title bar. Enter in the search field
  *                          or click on the icon calls [onSearch].
@@ -49,19 +53,20 @@ import kotlin.reflect.KProperty1
  * @property  columns       Column definitions.
  * @property  preloads      Data load jobs which has to be performed before the table is rendered.
  */
-open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider {
+open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider, ZkLocalTitleProvider {
 
     // -------------------------------------------------------------------------
     //  Configuration -- meant to set by onConfigure
     // -------------------------------------------------------------------------
 
     var crud: ZkCrud<T>? = null
-       set(value) {
-           check (field == null || field === value) { "Table crud is changed after first assignment. This happens when you use a table with ZkInlineCrud, but you set the crud property in onConfigure. Remove the set from onConfigure." }
-           field = value
-       }
+        set(value) {
+            check(field == null || field === value) { "Table crud is changed after first assignment. This happens when you use a table with ZkInlineCrud, but you set the crud property in onConfigure. Remove the set from onConfigure." }
+            field = value
+        }
 
     override var setAppTitle = true
+    override var addLocalTitle = false
     override var titleText: String? = null
     override var titleElement: ZkAppTitle? = null
 
@@ -126,6 +131,8 @@ open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider {
 
         + zkTableStyles.outerContainer
         + zkTableStyles.noSelect
+
+        + buildLocalTitleBar()
 
         + div(zkTableStyles.contentContainer) {
 
@@ -196,14 +203,27 @@ open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider {
     override fun setAppTitleBar(contextElements: List<ZkElement>) {
         if (! setAppTitle) return
 
+        super.setAppTitleBar(titleActions())
+    }
+
+    override fun buildLocalTitleBar(contextElements: List<ZkElement>): ZkElement? =
+        if (addLocalTitle) {
+            ZkLocalTitleBar(titleText ?: stringStore.getNormalized(this::class.simpleName ?: ""), titleActions() + contextElements)
+        } else {
+            null
+        }
+
+    private fun titleActions(): List<ZkElement> {
+
         val actions = mutableListOf<ZkElement>()
+
         if (add) actions += ZkAddRowAction(::onAddRow)
         if (export) actions += ZkExportCsvAction(::onExportCsv)
         if (search) actions += ZkSearchAction(::onSearch)
 
-        super.setAppTitleBar(actions)
+        return actions
     }
-    
+
     // -------------------------------------------------------------------------
     //  Data setter, preload
     // -------------------------------------------------------------------------

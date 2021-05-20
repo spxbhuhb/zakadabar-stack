@@ -43,7 +43,7 @@ class ExampleThemeGreen : ZkBuiltinLightTheme() {
 
         with(zkTitleBarStyles) {
             appHandleBackground = ZkColors.Green.c500
-            titleBarBackground = ZkColors.Green.c500
+            appTitleBarBackground = ZkColors.Green.c500
         }
 
     }

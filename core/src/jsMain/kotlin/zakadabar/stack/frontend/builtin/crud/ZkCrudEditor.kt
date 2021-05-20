@@ -4,12 +4,14 @@
 package zakadabar.stack.frontend.builtin.crud
 
 import zakadabar.stack.frontend.builtin.ZkElementMode
+import zakadabar.stack.frontend.builtin.titlebar.ZkLocalTitleProvider
 
 /**
  * Elements capable of editing the DTO content implement this interface.
  */
-interface ZkCrudEditor<T> {
+interface ZkCrudEditor<T> : ZkLocalTitleProvider {
     var dto: T
     var mode: ZkElementMode
     var openUpdate: ((dto: T) -> Unit)?
+    var onBack: () -> Unit
 }

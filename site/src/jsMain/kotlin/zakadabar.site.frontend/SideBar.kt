@@ -60,14 +60,8 @@ class SideBar : ZkSideBar() {
                 }
                 + item(Roadmap)
                 + item(ServicesAndSupport)
-                + group(text = strings.designDecisions) {
-                    MarkdownNav().parse(changeLogSource).forEach {
-                        + it.design()
-                    }
-                }
                 + item(LegalNotices)
                 + item(Credits)
-//                + examples()
             }
 
             withOneOfRoles(StackRoles.securityOfficer, StackRoles.siteAdmin) {
@@ -115,20 +109,6 @@ class SideBar : ZkSideBar() {
         } else {
             group(label) {
                 children.forEach { + it.changelog() }
-            }
-        }
-    }
-
-    private fun MarkdownNav.MarkdownNavItem.design(): ZkElement {
-        return if (children.isEmpty()) {
-            item(
-                Documentation,
-                "design/" + if (url.startsWith("./")) url.substring(2) else url,
-                label
-            )
-        } else {
-            group(label) {
-                children.forEach { + it.design() }
             }
         }
     }

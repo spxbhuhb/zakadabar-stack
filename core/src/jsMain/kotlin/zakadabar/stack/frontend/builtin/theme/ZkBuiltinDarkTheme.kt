@@ -4,7 +4,6 @@
 package zakadabar.stack.frontend.builtin.theme
 
 import zakadabar.stack.frontend.builtin.layout.zkScrollBarStyles
-import zakadabar.stack.frontend.builtin.table.zkTableStyles
 import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
@@ -79,9 +78,9 @@ open class ZkBuiltinDarkTheme : ZkTheme {
             appHandleBackground = ZkColors.Zakadabar.gray7
             appHandleText = textColor
             appHandleBorder = border
-            titleBarBackground = ZkColors.Zakadabar.gray7
-            titleBarText = textColor
-            titleBarBorder = border
+            appTitleBarBackground = ZkColors.Zakadabar.gray7
+            appTitleBarText = textColor
+            appTitleBarBorder = border
         }
     }
 }

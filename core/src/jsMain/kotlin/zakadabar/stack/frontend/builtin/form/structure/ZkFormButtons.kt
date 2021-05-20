@@ -4,7 +4,6 @@
 package zakadabar.stack.frontend.builtin.form.structure
 
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
@@ -76,11 +75,11 @@ open class ZkFormButtons<T : DtoBase>(
             if (touched) {
                 io {
                     if (ZkConfirmDialog(stringStore.confirmation.capitalize(), stringStore.notSaved).run()) {
-                        application.back()
+                        form.onBack()
                     }
                 }
             } else {
-                application.back()
+                form.onBack()
             }
 
         } marginRight 10

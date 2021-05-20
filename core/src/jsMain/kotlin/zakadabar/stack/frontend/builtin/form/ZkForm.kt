@@ -42,6 +42,7 @@ import zakadabar.stack.frontend.builtin.form.structure.ZkFormSection
 import zakadabar.stack.frontend.builtin.form.structure.ZkInvalidFieldList
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
+import zakadabar.stack.frontend.builtin.titlebar.ZkLocalTitleProvider
 import zakadabar.stack.frontend.builtin.toast.ZkToast
 import zakadabar.stack.frontend.builtin.toast.toastDanger
 import zakadabar.stack.frontend.builtin.toast.toastSuccess
@@ -57,16 +58,21 @@ import kotlin.reflect.KMutableProperty0
 /**
  * Base class for DTO forms.
  *
+ * @property  setAppTitle   When true (default) the app title bar is set for the table. Function [setAppTitleBar] adds the title bar.
+ * @property  addLocalTitle When true, add a local title bar. Default is false.
+ * @property  titleText     Title text to show in the title bar. Used when [titleElement] is not set.
+ * @property  titleElement  The element of the title.
  * @property  autoLabel  When true labels are automatically added. When false they are not.
  */
 open class ZkForm<T : DtoBase> (
     element: HTMLElement = document.createElement("div") as HTMLElement
-) : ZkElement(element), ZkCrudEditor<T>, ZkAppTitleProvider {
+) : ZkElement(element), ZkCrudEditor<T>, ZkAppTitleProvider, ZkLocalTitleProvider {
 
     override lateinit var dto: T
     override lateinit var mode: ZkElementMode
 
     override var setAppTitle = true
+    override var addLocalTitle = false
     override var titleText: String? = null
     override var titleElement: ZkAppTitle? = null
 
@@ -86,6 +92,11 @@ open class ZkForm<T : DtoBase> (
      * However, the response may indicate an error.
      */
     var onExecuteResult: ((resultDto: DtoBase) -> Unit)? = null
+
+    /**
+     * Called when the user clicks on the back button.
+     */
+    override var onBack = { application.back() }
 
     var schema = lazy { if (! ::dto.isInitialized) DtoSchema.Companion.NO_VALIDATION else dto.schema() }
 
@@ -142,6 +153,11 @@ open class ZkForm<T : DtoBase> (
         super.onCreate()
         onConfigure()
         classList += ZkFormStyles.outerContainer
+
+        if (addLocalTitle) {
+            + buildLocalTitleBar()?.let { it marginBottom 10 }
+            style { overflowY = "scroll" }
+        }
     }
 
     override fun onResume() {
@@ -244,7 +260,7 @@ open class ZkForm<T : DtoBase> (
                         val created = (dto as RecordDto<*>).create() as RecordDto<*>
                         fields.forEach { it.onCreateSuccess(created) }
                         if (goBackAfterCreate) {
-                            application.back()
+                            onBack()
                         } else {
                             resetTouched()
                         }

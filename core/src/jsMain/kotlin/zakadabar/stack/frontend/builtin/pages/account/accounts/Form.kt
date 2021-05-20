@@ -39,10 +39,13 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateDto>, ZkAppTitleProvider {
     override lateinit var dto: AccountPrivateDto
     override lateinit var mode: ZkElementMode
     override var openUpdate: ((dto: AccountPrivateDto) -> Unit)? = null
+    override var onBack = {  }
 
     override var setAppTitle = true
+    override var addLocalTitle = false
     override var titleText: String? = null
     override var titleElement: ZkAppTitle? = null
+
 
     private lateinit var principalDto: PrincipalDto
     private lateinit var systemRoles: List<RoleDto>

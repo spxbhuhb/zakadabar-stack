@@ -57,8 +57,8 @@ class GreenBlueTheme : ZkBuiltinLightTheme() {
             appHandleBackground = blockBackgroundColor
             appHandleText = textColor
             appHandleBorder = "1px solid $darkGreen"
-            titleBarBackground = blockBackgroundColor
-            titleBarBorder = appHandleBorder
+            appTitleBarBackground = blockBackgroundColor
+            appTitleBarBorder = appHandleBorder
         }
 
         with(zkTabContainerStyles) {

@@ -12,7 +12,7 @@ import zakadabar.stack.frontend.builtin.input.ZkTextInput
 open class EntryDetails : ZkElement() {
 
     val optional
-        get() = findFirst<Optional>().value
+        get() = first<Optional>().value
 
     val constraints
         get() = find<ConstraintEditor>().mapNotNull { it.toDto() }

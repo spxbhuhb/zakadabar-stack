@@ -21,86 +21,87 @@ open class ZkInlineCrud<T : RecordDto<T>> : ZkElement(), ZkCrud<T> {
 
     lateinit var companion: RecordDtoCompanion<T>
     lateinit var dtoClass: KClass<T>
-    lateinit var pageClass: KClass<out ZkCrudEditor<T>>
+    lateinit var editorClass: KClass<out ZkCrudEditor<T>>
     lateinit var tableClass: KClass<out ZkTable<T>>
+
+    var addLocalTitle = true
+
+    lateinit var editorInstance: ZkCrudEditor<T>
+    lateinit var tableInstance: ZkTable<T>
 
     override fun openAll() {
 
         clear()
 
         io {
-            val table = tableClass.newInstance()
+            tableInstance = tableClass.newInstance()
 
-            table.crud = this
-            table.setData(companion.comm.all())
+            tableInstance.crud = this
+            tableInstance.addLocalTitle = addLocalTitle
+            tableInstance.setData(companion.comm.all())
 
-            + table
+            + tableInstance
         }
     }
 
-    override fun openCreate() {
-
+    private fun newEditor(): ZkCrudEditor<T> {
         clear()
 
-        val dto = dtoClass.newInstance()
-        dto.schema().setDefaults()
+        style {
+            height = "100%"
+            overflowY = "auto"
+        }
 
-        val page = pageClass.newInstance()
-        page.dto = dto
-        page.openUpdate = { openUpdate(it.id) }
-        page.mode = ZkElementMode.Create
+        editorInstance = editorClass.newInstance()
 
-        page as ZkElement
+        with(editorInstance) {
+            addLocalTitle = this@ZkInlineCrud.addLocalTitle
+            openUpdate = { openUpdate(it.id) }
+            onBack = { openAll() }
+        }
 
-        + page
+        return editorInstance
+    }
+
+    override fun openCreate() {
+        with(newEditor()) {
+            dto = dtoClass.newInstance().apply { schema().setDefaults() }
+            mode = ZkElementMode.Create
+        }
+
+        + (editorInstance as ZkElement)
     }
 
     override fun openRead(recordId: RecordId<T>) {
-
-        clear()
-
         io {
-            val page = pageClass.newInstance()
-            page.dto = companion.read(recordId)
-            page.openUpdate = { openUpdate(it.id) }
-            page.mode = ZkElementMode.Read
+            with(newEditor()) {
+                dto = companion.read(recordId)
+                mode = ZkElementMode.Read
+            }
 
-            page as ZkElement
-
-            + page
+            + (editorInstance as ZkElement)
         }
     }
 
     override fun openUpdate(recordId: RecordId<T>) {
-
-        clear()
-
         io {
-            val page = pageClass.newInstance()
-            page.dto = companion.read(recordId)
-            page.openUpdate = { openUpdate(it.id) }
-            page.mode = ZkElementMode.Update
+            with(newEditor()) {
+                dto = companion.read(recordId)
+                mode = ZkElementMode.Update
+            }
 
-            page as ZkElement
-
-            + page
+            + (editorInstance as ZkElement)
         }
     }
 
     override fun openDelete(recordId: RecordId<T>) {
-
-        clear()
-
         io {
-            val page = pageClass.newInstance()
-            page.dto = companion.read(recordId)
-            page.openUpdate = { openUpdate(it.id) }
-            page.mode = ZkElementMode.Delete
+            with(newEditor()) {
+                dto = companion.read(recordId)
+                mode = ZkElementMode.Delete
+            }
 
-            page as ZkElement
-
-            + page
-
+            + (editorInstance as ZkElement)
         }
     }
 }

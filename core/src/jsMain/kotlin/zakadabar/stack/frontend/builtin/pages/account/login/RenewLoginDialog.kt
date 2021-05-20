@@ -11,7 +11,7 @@ import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.modal.zkModalStyles
-import zakadabar.stack.frontend.builtin.titlebar.ZkTitleBar
+import zakadabar.stack.frontend.builtin.titlebar.ZkLocalTitleBar
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.marginBottom
 import zakadabar.stack.frontend.util.plusAssign
@@ -40,7 +40,7 @@ class RenewLoginDialog : ZkElement() {
     override fun onCreate() {
         classList += zkModalStyles.modal
 
-        + ZkTitleBar(stringStore.applicationName) css zkModalStyles.title
+        + ZkLocalTitleBar(stringStore.applicationName) css zkModalStyles.title
 
         + column(zkModalStyles.content) {
             style {

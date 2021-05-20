@@ -6,7 +6,8 @@ package zakadabar.stack.data
 import kotlinx.coroutines.await
 import org.w3c.fetch.Response
 import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.pages.account.login.RenewLoginDialog
+import zakadabar.stack.frontend.application.stringStore
+import zakadabar.stack.frontend.builtin.toast.toastDanger
 
 /**
  * Common functions for all comm classes.
@@ -21,8 +22,25 @@ abstract class CommBase {
         var onLoginTimeout: suspend () -> Unit = {
             application.sessionManager.renew()
         }
+
+        /**
+         * Called then the server responds with HTTP status 403 Forbidden.
+         * Default implementation displays a toast.
+         */
+        var onForbidden: suspend () -> Unit = {
+            toastDanger { stringStore.forbiddenExplanation }
+        }
+
+        /**
+         * Called then the server responds with HTTP status 4xx and 5xx
+         * error codes that are not 440 or 403. Default implementation displays a toast.
+         */
+        var onError : suspend () -> Unit = {
+            toastDanger { stringStore.executeError }
+        }
     }
 
+    class Forbidden : Exception()
     class LoginTimeout : Exception()
 
     /**
@@ -38,6 +56,12 @@ abstract class CommBase {
                 return block()
             } catch (ex: LoginTimeout) {
                 onLoginTimeout()
+            } catch (ex : Forbidden) {
+                onForbidden()
+                throw ex
+            } catch (ex : Exception) {
+                onError()
+                throw ex
             }
         }
     }
@@ -52,6 +76,7 @@ abstract class CommBase {
         if (code >= 400) {
             when (code) {
                 400 -> throw IllegalArgumentException()
+                403 -> throw Forbidden()
                 404 -> throw NoSuchElementException()
                 409 -> throw DataConflictException(response.text().await())
                 440 -> throw LoginTimeout()

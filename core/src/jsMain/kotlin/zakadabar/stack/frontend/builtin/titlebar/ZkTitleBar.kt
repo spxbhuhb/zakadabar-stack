@@ -7,7 +7,7 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.util.PublicApi
 
-@PublicApi
+@Deprecated("use a local or the application title instead")
 open class ZkTitleBar() : ZkElement() {
 
     private val _title = ZkElement()

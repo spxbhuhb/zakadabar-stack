@@ -44,7 +44,7 @@ class ToastAutoHideExample(
     }
 
     fun runToast() {
-        val value = findFirst<ZkTextInput>().value.toLongOrNull()
+        val value = first<ZkTextInput>().value.toLongOrNull()
 
         if (value == null || value < 0) {
             toastDanger { "This is not a valid value!" }

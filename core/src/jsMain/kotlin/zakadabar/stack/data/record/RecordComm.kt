@@ -54,14 +54,15 @@ open class RecordComm<T : RecordDto<T>>(
 
     @PublicApi
     override suspend fun read(id: RecordId<T>): T {
-        val response = commBlock {
-            val responsePromise = window.fetch("/api/$namespace/record/$id")
-            checkStatus(responsePromise.await())
-        }
 
-        val text = response.text().await()
+        val headers = Headers()
 
-        return Json.decodeFromString(serializer, text)
+        val requestInit = RequestInit(
+            method = "GET",
+            headers = headers,
+        )
+
+        return sendAndReceive("/api/$namespace/record/$id", requestInit)
     }
 
     @PublicApi

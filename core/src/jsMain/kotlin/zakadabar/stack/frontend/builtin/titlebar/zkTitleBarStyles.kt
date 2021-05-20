@@ -6,6 +6,7 @@ package zakadabar.stack.frontend.builtin.titlebar
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssParameter
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.util.alpha
 
 var zkTitleBarStyles by cssStyleSheet(ZkTitleBarStyles())
 
@@ -15,9 +16,21 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
     open var appHandleBackground by cssParameter { theme.backgroundColor }
     open var appHandleText by cssParameter{ theme.textColor }
     open var appHandleBorder by cssParameter { theme.border }
+
+    @Deprecated("use appTitleBarBackground instead", ReplaceWith("appTitleBarBackground"))
     open var titleBarBackground by cssParameter { theme.backgroundColor }
+    @Deprecated("use appTitleBarText instead", ReplaceWith("appTitleBarText"))
     open var titleBarText by cssParameter { theme.textColor }
+    @Deprecated("use appTitleBarBorder instead", ReplaceWith("appTitleBarBorder"))
     open var titleBarBorder by cssParameter { theme.border }
+
+    open var appTitleBarBackground by cssParameter { titleBarBackground }
+    open var appTitleBarText by cssParameter { titleBarText }
+    open var appTitleBarBorder by cssParameter { titleBarBorder }
+
+    open var localTitleBarBackground by cssParameter { theme.textColor.alpha(0.1) }
+    open var localTitleBarHeight by cssParameter { 32 }
+    open var localTitleBarBorder by cssParameter { theme.fixBorder }
 
     /**
      * Application handle, the button and application name at the top left.
@@ -59,12 +72,12 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
         width = "100%"
         minHeight = appTitleBarHeight
         maxHeight = appTitleBarHeight
-        borderBottom = titleBarBorder
+        borderBottom = appTitleBarBorder
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
         fontSize = 16
-        backgroundColor = titleBarBackground
+        backgroundColor = appTitleBarBackground
     }
 
     /**
@@ -73,7 +86,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
      */
     val sidebarHandle by cssClass {
         background = "transparent !important"
-        fill = "$titleBarText !important"
+        fill = "$appTitleBarText !important"
         minHeight = appTitleBarHeight
         display = "flex"
         alignItems = "center"
@@ -111,5 +124,25 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
     val iconButton by cssClass {
         fill = "${theme.textColor} !important"
         backgroundColor = "transparent !important"
+    }
+
+    /**
+     * Style for the application title bar. This is the title bar above the content.
+     */
+    val localTitleBar by cssClass {
+        boxSizing = "border-box"
+        fontWeight = 400
+        fontSize = "90%"
+        width = "100%"
+        minHeight = localTitleBarHeight
+        maxHeight = localTitleBarHeight
+        borderBottom = localTitleBarBorder
+        display = "flex"
+        justifyContent = "space-between"
+        flexDirection = "row"
+        alignItems = "center"
+        fontSize = 16
+        paddingLeft = 10
+        background = localTitleBarBackground
     }
 }

@@ -18,7 +18,7 @@ class ExampleReferenceCrud : ZkInlineCrud<ExampleReferenceDto>() {
     init {
         companion = ExampleReferenceDto.Companion
         dtoClass = ExampleReferenceDto::class
-        pageClass = ExampleReferenceForm::class
+        editorClass = ExampleReferenceForm::class
         tableClass = ExampleReferenceTable::class
     }
 }
@@ -52,7 +52,8 @@ class ExampleReferenceTable : ZkTable<ExampleReferenceDto>() {
         add = true
         search = true
         export = true
-        
+
+        + ExampleReferenceDto::id
         + ExampleReferenceDto::name
         
         + actions()

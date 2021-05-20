@@ -10,7 +10,7 @@ class BuiltinCrud : ZkInlineCrud<BuiltinDto>() {
     init {
         companion = BuiltinDto.Companion
         dtoClass = BuiltinDto::class
-        pageClass = BuiltinForm::class
+        editorClass = BuiltinForm::class
         tableClass = BuiltinTable::class
     }
 }

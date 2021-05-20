@@ -19,7 +19,7 @@ import zakadabar.stack.frontend.util.marginBottom
 
 class LoginForm(
     private val accountName: String? = null,
-    val onCancel: () -> Unit = { },
+    val onCancel: (() -> Unit)? = null,
     val onSuccess: () -> Unit
 ) : ZkForm<LoginAction>() {
 
@@ -53,7 +53,11 @@ class LoginForm(
                 width = "100%"
                 justifyContent = "space-between"
             }
-            + ZkButton(stringStore.cancel) { onCancel() }
+            if (onCancel != null) {
+                + ZkButton(stringStore.cancel) { onCancel.invoke() }
+            } else {
+                + div {  }
+            }
             + ZkButton(stringStore.login) { this@LoginForm.submit() }
         }
     }

@@ -54,15 +54,21 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
 
     open fun routeNonCrud(routing: ZkAppRouting, state: ZkNavState): ZkElement = NYI()
 
-    open fun all(): ZkElement = ZkElement.launchBuildNew {
+    open fun all(): ZkElement {
 
-        + zkPageStyles.fixed
+        val container = ZkElement()
 
-        val table = tableClass.newInstance()
-        table.crud = this@ZkCrudTarget
-        table.setData(companion.comm.all())
+        io {
+            val table = tableClass.newInstance()
+            table.crud = this@ZkCrudTarget
+            table.setData(companion.comm.all())
 
-        + table
+            container build {
+                + table
+            }
+        }
+
+        return container
     }
 
     open fun create(): ZkElement {

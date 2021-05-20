@@ -70,9 +70,9 @@ open class ZkBuiltinLightTheme : ZkTheme {
             appHandleBackground = ZkColors.Zakadabar.gray1
             appHandleText = textColor
             appHandleBorder = border
-            titleBarBackground = ZkColors.Zakadabar.gray1
-            titleBarText = textColor
-            titleBarBorder = border
+            appTitleBarBackground = ZkColors.Zakadabar.gray1
+            appTitleBarText = textColor
+            appTitleBarBorder = border
         }
     }
 }

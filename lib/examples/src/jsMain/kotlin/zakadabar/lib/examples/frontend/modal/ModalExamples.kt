@@ -41,15 +41,15 @@ class ModalExamples(
 
     private fun onShowConfirm() {
         io {
-            findFirst<ZkNote>().text = ""
+            first<ZkNote>().text = ""
             val value = ZkConfirmDialog("Dialog Title", "Message to tell the user what to confirm").run()
-            findFirst<ZkNote>().text = "selected option: $value"
+            first<ZkNote>().text = "selected option: $value"
         }
     }
 
     private fun onShowMessage() {
         io {
-            findFirst<ZkNote>().text = ""
+            first<ZkNote>().text = ""
             ZkMessageDialog("Dialog Title", "Message for the user.").run()
         }
     }
@@ -57,9 +57,9 @@ class ModalExamples(
 
     private fun onShowExample() {
         io {
-            findFirst<ZkNote>().text = ""
+            first<ZkNote>().text = ""
             val value = MyMessageDialog().run()
-            findFirst<ZkNote>().text = value
+            first<ZkNote>().text = value
         }
     }
 
