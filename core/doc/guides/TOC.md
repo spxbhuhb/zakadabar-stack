@@ -34,8 +34,6 @@
         * [TabContainer](./browser/builtin/TabContainer.md)
         * [Tables](./browser/builtin/Tables.md)
         * [Toasts](./browser/builtin/Toasts.md)
-    * [Lib]()
-        * [Markdown]()
     * [Util]()
         * [Prototyping](./browser/util/Prototyping.md)
 * [Operation]()

@@ -5,17 +5,25 @@ what's happening. For detailed list of changes please check the changelog.
 
 ## 2021.5.25 - SNAPSHOT
 
-* browser
-    * fine-tune theme switch: style sheet parameters are automatically reset before application of the new theme
-    * sidebar sections
-    
-* site
-    * pilot mode, version in the title
-    * sidebar reorganization, legalities, credits
-    * documentation improvements
-    * Green / Blue theme
+## 2021.5.20 - CURRENT
 
-## 2021.5.18 - CURRENT
+* backend
+  * record backends now validate incoming DTOs automatically
+  * session renewal works again
+
+* browser
+  * introduce `cssParameter`, changes applied in `theme.onResume` are independent
+  * report all non 2xx / non 3xx responses to the user
+  * [ZkInlineCrud](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/crud/ZkInlineCrud.kt)
+  * sidebar: section stereotype for groups, section minimize
+
+* site
+  * pilot message
+  * legalities
+  * in-memory, limited stores for demonstration
+  * hljs loads only Kotlin  
+    
+## 2021.5.18
 
 * common
     * string store lookup by normalized key,
