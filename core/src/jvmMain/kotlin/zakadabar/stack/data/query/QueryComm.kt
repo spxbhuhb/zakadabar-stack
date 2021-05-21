@@ -17,7 +17,7 @@ import zakadabar.stack.util.PublicApi
  */
 @PublicApi
 open class QueryComm(
-    private val companion: QueryDtoCompanion<*>
+    private val companion: QueryBoCompanion<*>
 ) : QueryCommInterface {
 
     @PublicApi
@@ -25,7 +25,7 @@ open class QueryComm(
 
         val q = Json.encodeToString(requestSerializer, request).encodeURLPath()
 
-        val text = RecordComm.client.get<String>("${RecordComm.baseUrl}/api/${companion.dtoNamespace}/query/${request::class.simpleName}?q=${q}")
+        val text = RecordComm.client.get<String>("${RecordComm.baseUrl}/api/${companion.boNamespace}/query/${request::class.simpleName}?q=${q}")
 
         return Json.decodeFromString(responseSerializer, text)
     }

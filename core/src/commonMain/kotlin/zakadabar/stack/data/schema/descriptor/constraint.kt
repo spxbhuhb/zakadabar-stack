@@ -7,44 +7,55 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import zakadabar.stack.data.util.InstantAsStringSerializer
 
-@Serializable
-sealed class ConstraintDto {
-    abstract val type: ConstraintType
+enum class BoConstraintType {
+    Min,
+    Max,
+    Blank,
+    Empty,
+    NotEquals,
+    After,
+    Before,
+    Format
 }
 
 @Serializable
-class ConstraintBooleanDto(
-    override val type: ConstraintType,
+sealed class BoConstraint {
+    abstract val type: BoConstraintType
+}
+
+@Serializable
+class BooleanBoConstraint(
+    override val type: BoConstraintType,
     val value: Boolean
-) : ConstraintDto()
+) : BoConstraint()
 
 @Serializable
-class ConstraintDoubleDto(
-    override val type: ConstraintType,
+class DoubleBoConstraint(
+    override val type: BoConstraintType,
     val value: Double?
-) : ConstraintDto()
+) : BoConstraint()
 
 @Serializable
-class ConstraintInstantDto(
-    override val type: ConstraintType,
+class InstantBoConstraint(
+    override val type: BoConstraintType,
     @Serializable(InstantAsStringSerializer::class)
     val value: Instant?
-) : ConstraintDto()
+) : BoConstraint()
 
 @Serializable
-class ConstraintIntDto(
-    override val type: ConstraintType,
+class IntBoConstraint(
+    override val type: BoConstraintType,
     val value: Int?
-) : ConstraintDto()
+) : BoConstraint()
 
 @Serializable
-class ConstraintLongDto(
-    override val type: ConstraintType,
+class LongBoConstraint(
+    override val type: BoConstraintType,
     val value: Long?
-) : ConstraintDto()
+) : BoConstraint()
 
 @Serializable
-class ConstraintStringDto(
-    override val type: ConstraintType,
+class StringBoConstraint(
+    override val type: BoConstraintType,
     val value: String?
-) : ConstraintDto()
+) : BoConstraint()

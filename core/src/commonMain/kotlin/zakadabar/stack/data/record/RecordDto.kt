@@ -3,10 +3,12 @@
  */
 package zakadabar.stack.data.record
 
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.DtoBase
 
 @Suppress("UNCHECKED_CAST")
-interface RecordDto<T> : DtoBase {
+@Deprecated("use EntityBo instead", ReplaceWith("EntityBo", imports = arrayOf("zakadabar.stack.data.entity")))
+interface RecordDto<T> : DtoBase, BaseBo {
 
     var id: RecordId<T>
 

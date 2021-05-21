@@ -18,7 +18,7 @@ object SyntheticForm : ZkPage() {
         super.onCreate()
 
         val dto: zakadabar.lib.examples.data.builtin.BuiltinDto = default { }
-        val form = ZkSyntheticForm(dto.schema().toDescriptorDto())
+        val form = ZkSyntheticForm(dto.schema().toBoDescriptor())
         form.mode = ZkElementMode.Other
 
         + div(zkPageStyles.content) {

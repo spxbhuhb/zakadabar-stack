@@ -17,7 +17,7 @@ open class EntryDetails : ZkElement() {
     val constraints
         get() = find<ConstraintEditor>().mapNotNull { it.toDto() }
 
-    open fun generator(name: String, descriptor: DescriptorDto): PropertyGenerator {
+    open fun generator(name: String, boDescriptor: BoDescriptor): PropertyGenerator {
         TODO()
     }
 }
@@ -32,10 +32,10 @@ class BooleanDetails : EntryDetails() {
         }
     }
 
-    override fun generator(name: String, descriptor: DescriptorDto) =
+    override fun generator(name: String, boDescriptor: BoDescriptor) =
         BooleanPropertyGenerator(
-            descriptor,
-            BooleanPropertyDto(name, optional, constraints, defaultValue = false, value = false)
+            boDescriptor,
+            BooleanBoProperty(name, optional, constraints, defaultValue = false, value = false)
         )
 
 }
@@ -47,15 +47,15 @@ class DoubleDetails : EntryDetails() {
 
         + row {
             + Optional()
-            + ConstraintDoubleEditor(ConstraintType.Min)
-            + ConstraintDoubleEditor(ConstraintType.Max)
+            + ConstraintDoubleEditor(BoConstraintType.Min)
+            + ConstraintDoubleEditor(BoConstraintType.Max)
         }
     }
 
-    override fun generator(name: String, descriptor: DescriptorDto) =
+    override fun generator(name: String, boDescriptor: BoDescriptor) =
         DoublePropertyGenerator(
-            descriptor,
-            DoublePropertyDto(name, optional, constraints, 0.0, 0.0)
+            boDescriptor,
+            DoubleBoProperty(name, optional, constraints, 0.0, 0.0)
         )
 
 }
@@ -77,10 +77,10 @@ class EnumDetails : EntryDetails() {
         }
     }
 
-    override fun generator(name: String, descriptor: DescriptorDto) =
+    override fun generator(name: String, boDescriptor: BoDescriptor) =
         EnumPropertyGenerator(
-            descriptor,
-            EnumPropertyDto(name, optional, constraints, enumName.value, emptyList(), null, null)
+            boDescriptor,
+            EnumBoProperty(name, optional, constraints, enumName.value, emptyList(), null, null)
         )
 
 }
@@ -92,15 +92,15 @@ class IntDetails : EntryDetails() {
 
         + row {
             + Optional()
-            + ConstraintIntEditor(ConstraintType.Min)
-            + ConstraintIntEditor(ConstraintType.Max)
+            + ConstraintIntEditor(BoConstraintType.Min)
+            + ConstraintIntEditor(BoConstraintType.Max)
         }
     }
 
-    override fun generator(name: String, descriptor: DescriptorDto) =
+    override fun generator(name: String, boDescriptor: BoDescriptor) =
         IntPropertyGenerator(
-            descriptor,
-            IntPropertyDto(name, optional, constraints, 0, 0)
+            boDescriptor,
+            IntBoProperty(name, optional, constraints, 0, 0)
         )
 
 }
@@ -115,10 +115,10 @@ class InstantDetails : EntryDetails() {
         }
     }
 
-    override fun generator(name: String, descriptor: DescriptorDto) =
+    override fun generator(name: String, boDescriptor: BoDescriptor) =
         InstantPropertyGenerator(
-            descriptor,
-            InstantPropertyDto(name, optional, constraints, null, null)
+            boDescriptor,
+            InstantBoProperty(name, optional, constraints, null, null)
         )
 
 }
@@ -130,15 +130,15 @@ class LongDetails : EntryDetails() {
 
         + row {
             + Optional()
-            + ConstraintLongEditor(ConstraintType.Min)
-            + ConstraintLongEditor(ConstraintType.Max)
+            + ConstraintLongEditor(BoConstraintType.Min)
+            + ConstraintLongEditor(BoConstraintType.Max)
         }
     }
 
-    override fun generator(name: String, descriptor: DescriptorDto) =
+    override fun generator(name: String, boDescriptor: BoDescriptor) =
         LongPropertyGenerator(
-            descriptor,
-            LongPropertyDto(name, optional, constraints, 0, 0)
+            boDescriptor,
+            LongBoProperty(name, optional, constraints, 0, 0)
         )
 
 }
@@ -160,10 +160,10 @@ class RecordIdDetails : EntryDetails() {
         }
     }
 
-    override fun generator(name: String, descriptor: DescriptorDto) =
+    override fun generator(name: String, boDescriptor: BoDescriptor) =
         RecordIdPropertyGenerator(
-            descriptor,
-            RecordIdPropertyDto(name, optional, constraints, recordType.value, EmptyRecordId(), EmptyRecordId())
+            boDescriptor,
+            RecordIdBoProperty(name, optional, constraints, recordType.value, EmptyRecordId(), EmptyRecordId())
         )
 
 }
@@ -175,15 +175,15 @@ class SecretDetails : EntryDetails() {
 
         + row {
             + Optional()
-            + ConstraintIntEditor(ConstraintType.Min)
-            + ConstraintIntEditor(ConstraintType.Max)
+            + ConstraintIntEditor(BoConstraintType.Min)
+            + ConstraintIntEditor(BoConstraintType.Max)
         }
     }
 
-    override fun generator(name: String, descriptor: DescriptorDto) =
+    override fun generator(name: String, boDescriptor: BoDescriptor) =
         SecretPropertyGenerator(
-            descriptor,
-            SecretPropertyDto(name, optional, constraints, Secret(""), Secret(""))
+            boDescriptor,
+            SecretBoProperty(name, optional, constraints, Secret(""), Secret(""))
         )
 
 }
@@ -195,16 +195,16 @@ class StringDetails : EntryDetails() {
 
         + row {
             + Optional()
-            + ConstraintBooleanEditor(ConstraintType.Blank, true)
-            + ConstraintIntEditor(ConstraintType.Min)
-            + ConstraintIntEditor(ConstraintType.Max)
+            + ConstraintBooleanEditor(BoConstraintType.Blank, true)
+            + ConstraintIntEditor(BoConstraintType.Min)
+            + ConstraintIntEditor(BoConstraintType.Max)
         }
     }
 
-    override fun generator(name: String, descriptor: DescriptorDto) =
+    override fun generator(name: String, boDescriptor: BoDescriptor) =
         StringPropertyGenerator(
-            descriptor,
-            StringPropertyDto(name, optional, constraints, "", "")
+            boDescriptor,
+            StringBoProperty(name, optional, constraints, "", "")
         )
 
 }
@@ -219,10 +219,10 @@ class UuidDetails : EntryDetails() {
         }
     }
 
-    override fun generator(name: String, descriptor: DescriptorDto) =
+    override fun generator(name: String, boDescriptor: BoDescriptor) =
         UuidPropertyGenerator(
-            descriptor,
-            UuidPropertyDto(name, optional, constraints, null, null)
+            boDescriptor,
+            UuidBoProperty(name, optional, constraints, null, null)
         )
 
 }

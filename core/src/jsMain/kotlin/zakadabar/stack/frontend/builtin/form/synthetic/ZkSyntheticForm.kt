@@ -4,13 +4,13 @@
 package zakadabar.stack.frontend.builtin.form.synthetic
 
 import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.schema.descriptor.DescriptorDto
+import zakadabar.stack.data.schema.descriptor.BoDescriptor
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.util.plusAssign
 
 class ZkSyntheticForm(
-    private val descriptor: DescriptorDto
+    private val boDescriptor: BoDescriptor
 ) : ZkForm<DtoBase>() {
 
     override fun onCreate() {
@@ -19,7 +19,7 @@ class ZkSyntheticForm(
         buildPoint.classList += ZkFormStyles.onePanel
 
         + section {
-            descriptor.properties.forEach { dProperty ->
+            boDescriptor.properties.forEach { dProperty ->
 
 //                val field = when (dProperty) {
 //                    is IntPropertyDto -> ZkIntField(this@ZkSyntheticForm, dProperty::value)

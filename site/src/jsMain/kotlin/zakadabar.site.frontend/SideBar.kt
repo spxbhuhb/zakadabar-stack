@@ -41,7 +41,7 @@ class SideBar : ZkSideBar() {
                 + item(GetHelp)
             }
 
-            + section(strings.kodomat) {
+            + section(strings.tools) {
                 + item(KodomatPage, text = strings.record)
             }
 

@@ -19,7 +19,7 @@ import zakadabar.stack.util.PublicApi
  */
 @PublicApi
 open class ActionComm(
-    private val companion: ActionDtoCompanion<*>
+    private val companion: ActionBoCompanion<*>
 ) : CommBase(), ActionCommInterface {
 
     @PublicApi
@@ -38,7 +38,7 @@ open class ActionComm(
         )
 
         val response = commBlock {
-            val responsePromise = window.fetch("/api/${companion.dtoNamespace}/action/${request::class.simpleName}", requestInit)
+            val responsePromise = window.fetch("/api/${companion.boNamespace}/action/${request::class.simpleName}", requestInit)
             checkStatus(responsePromise.await())
         }
 

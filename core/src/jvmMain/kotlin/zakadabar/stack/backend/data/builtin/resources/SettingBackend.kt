@@ -24,7 +24,7 @@ import zakadabar.stack.data.builtin.resources.SettingSource
 import zakadabar.stack.data.record.EmptyRecordId
 import zakadabar.stack.data.record.LongRecordId
 import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.schema.descriptor.DescriptorDto
+import zakadabar.stack.data.schema.descriptor.BoDescriptor
 import zakadabar.stack.util.Executor
 import kotlin.reflect.KClass
 
@@ -136,7 +136,7 @@ object SettingBackend : RecordBackend<SettingDto>() {
             }
 
             if (dto != null) {
-                val descriptor = Json.decodeFromString(DescriptorDto.serializer(), dto.descriptor !!)
+                val descriptor = Json.decodeFromString(BoDescriptor.serializer(), dto.descriptor !!)
                 instance = default
                 instance.schema().push(descriptor)
                 instances[key] = dto to instance
@@ -164,6 +164,6 @@ object SettingBackend : RecordBackend<SettingDto>() {
             source = SettingSource.Default,
             namespace = namespace,
             className = instance::class.simpleName !!,
-            descriptor = Json.encodeToString(DescriptorDto.serializer(), instance.schema().toDescriptorDto())
+            descriptor = Json.encodeToString(BoDescriptor.serializer(), instance.schema().toBoDescriptor())
         )
 }

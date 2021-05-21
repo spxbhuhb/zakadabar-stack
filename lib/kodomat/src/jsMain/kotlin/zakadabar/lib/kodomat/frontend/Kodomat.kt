@@ -10,7 +10,7 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
 import zakadabar.lib.markdown.frontend.MarkdownView
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
-import zakadabar.stack.data.schema.descriptor.DescriptorDto
+import zakadabar.stack.data.schema.descriptor.BoDescriptor
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.input.ZkTextInput
@@ -50,7 +50,7 @@ class Kodomat(
 
     inner class Editor : ZkElement() {
 
-        val descriptor = DescriptorDto("", "", "", emptyList())
+        val descriptor = BoDescriptor("", "", "", emptyList())
 
         private val packageName = ZkTextInput()
         private val dtoClassName = ZkTextInput()
@@ -132,15 +132,15 @@ class Kodomat(
             var go = true
 
             descriptor.packageName = packageName.value
-            descriptor.kClassName = dtoClassName.value
-            descriptor.dtoNamespace = dtoNamespace.value
+            descriptor.className = dtoClassName.value
+            descriptor.boNamespace = dtoNamespace.value
 
             if (descriptor.packageName.isEmpty()) {
                 toastWarning(hideAfter = 3000) { "Please set the package name!" }
                 go = false
             }
 
-            if (descriptor.kClassName.isEmpty()) {
+            if (descriptor.className.isEmpty()) {
                 toastWarning(hideAfter = 3000) { "Please set the DTO name!" }
                 go = false
             }
@@ -152,12 +152,12 @@ class Kodomat(
             lastGenerate.clear()
             lastGenerate.innerText = "Generated at: ${formatInstant(Clock.System.now())}"
 
-            if (descriptor.dtoNamespace.isEmpty()) {
-                toastInfo(hideAfter = 5000) { "Namespace is empty, using ${descriptor.kClassName} as default." }
-                descriptor.dtoNamespace = descriptor.kClassName
+            if (descriptor.boNamespace.isEmpty()) {
+                toastInfo(hideAfter = 5000) { "Namespace is empty, using ${descriptor.className} as default." }
+                descriptor.boNamespace = descriptor.className
             }
 
-            classGenerator.descriptor = descriptor
+            classGenerator.boDescriptor = descriptor
             classGenerator.generators = entryContainer.find<EditorEntry>().mapNotNull { it.generator() }
 
             commonSource = classGenerator.commonGenerator()

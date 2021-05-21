@@ -19,7 +19,7 @@ class SiteStrings : ExamplesStrings() {
     val record by "Record"
     val kodomat by "Kod-o-mat"
     val other by "Other"
-    val KodomatPage by "Kod-o-mat"
+    val tools by "Tools"
     val WhatsNew by "What's New"
     val DocumentationIntro by "Documentation"
     val github by "GitHub"

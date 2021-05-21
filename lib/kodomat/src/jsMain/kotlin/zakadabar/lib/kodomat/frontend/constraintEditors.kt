@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.builtin.input.ZkCheckBox
 import zakadabar.stack.frontend.builtin.input.ZkTextInput
 
 open class ConstraintEditor : ZkElement() {
-    open fun toDto(): ConstraintDto? {
+    open fun toDto(): BoConstraint? {
         TODO()
     }
 }
@@ -31,7 +31,7 @@ class Optional : ZkElement() {
 }
 
 class ConstraintBooleanEditor(
-    private val constraintType: ConstraintType,
+    private val constraintType: BoConstraintType,
     private val skipWhen: Boolean
 ) : ConstraintEditor() {
 
@@ -46,14 +46,14 @@ class ConstraintBooleanEditor(
         }
     }
 
-    override fun toDto(): ConstraintDto? {
+    override fun toDto(): BoConstraint? {
         val value = first<ZkCheckBox>().checked
-        return if (value == skipWhen) null else ConstraintBooleanDto(constraintType, value)
+        return if (value == skipWhen) null else BooleanBoConstraint(constraintType, value)
     }
 }
 
 class ConstraintDoubleEditor(
-    private val constraintType: ConstraintType
+    private val constraintType: BoConstraintType
 ) : ConstraintEditor() {
 
     override fun onCreate() {
@@ -67,15 +67,15 @@ class ConstraintDoubleEditor(
         }
     }
 
-    override fun toDto(): ConstraintDto? {
+    override fun toDto(): BoConstraint? {
         val value = first<ZkTextInput>().value.toDoubleOrNull()
-        return if (value == null) null else ConstraintDoubleDto(constraintType, value)
+        return if (value == null) null else DoubleBoConstraint(constraintType, value)
     }
 
 }
 
 class ConstraintIntEditor(
-    private val constraintType: ConstraintType
+    private val constraintType: BoConstraintType
 ) : ConstraintEditor() {
 
     override fun onCreate() {
@@ -89,15 +89,15 @@ class ConstraintIntEditor(
         }
     }
 
-    override fun toDto(): ConstraintDto? {
+    override fun toDto(): BoConstraint? {
         val value = first<ZkTextInput>().value.toIntOrNull()
-        return if (value == null) null else ConstraintIntDto(constraintType, value)
+        return if (value == null) null else IntBoConstraint(constraintType, value)
     }
 
 }
 
 class ConstraintLongEditor(
-    private val constraintType: ConstraintType
+    private val constraintType: BoConstraintType
 ) : ConstraintEditor() {
 
     override fun onCreate() {
@@ -111,15 +111,15 @@ class ConstraintLongEditor(
         }
     }
 
-    override fun toDto(): ConstraintDto? {
+    override fun toDto(): BoConstraint? {
         val value = first<ZkTextInput>().value.toLongOrNull()
-        return if (value == null) null else ConstraintLongDto(constraintType, value)
+        return if (value == null) null else LongBoConstraint(constraintType, value)
     }
 
 }
 
 class ConstraintStringEditor(
-    private val constraintType: ConstraintType
+    private val constraintType: BoConstraintType
 ) : ConstraintEditor() {
 
     override fun onCreate() {
@@ -133,9 +133,9 @@ class ConstraintStringEditor(
         }
     }
 
-    override fun toDto(): ConstraintDto? {
+    override fun toDto(): BoConstraint? {
         val value = first<ZkTextInput>().value
-        return if (value.isEmpty()) null else ConstraintStringDto(constraintType, value)
+        return if (value.isEmpty()) null else StringBoConstraint(constraintType, value)
     }
 
 }

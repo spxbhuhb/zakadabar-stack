@@ -3,19 +3,19 @@
  */
 package zakadabar.lib.kodomat.frontend
 
-import zakadabar.stack.data.schema.descriptor.DescriptorDto
+import zakadabar.stack.data.schema.descriptor.BoDescriptor
 
 open class ClassGenerator {
 
-    lateinit var descriptor: DescriptorDto
+    lateinit var boDescriptor: BoDescriptor
     lateinit var generators: List<PropertyGenerator>
 
     open val packageName
-        get() = descriptor.packageName
+        get() = boDescriptor.packageName
     open val dtoName
-        get() = descriptor.kClassName
+        get() = boDescriptor.className
     open val namespace
-        get() = descriptor.dtoNamespace
+        get() = boDescriptor.boNamespace
     open val baseName
         get() = dtoName.withoutDto()
 

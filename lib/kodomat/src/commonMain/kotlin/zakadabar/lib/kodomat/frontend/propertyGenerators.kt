@@ -7,8 +7,8 @@ import zakadabar.stack.data.schema.descriptor.*
 import zakadabar.stack.text.camelToSnakeCase
 
 open class PropertyGenerator(
-    open val descriptor: DescriptorDto,
-    open val property: PropertyDto,
+    open val boDescriptor: BoDescriptor,
+    open val property: BoProperty,
     open val typeName: String
 ) {
     open fun commonImport(): List<String> = emptyList()
@@ -25,7 +25,7 @@ open class PropertyGenerator(
         "+ dto::${property.name}"
 
     open fun browserTable() =
-        "+ ${descriptor.kClassName}::${property.name}"
+        "+ ${boDescriptor.className}::${property.name}"
 
     open fun exposedBackendImport(): List<String> = emptyList()
 
@@ -37,7 +37,7 @@ open class PropertyGenerator(
         "${property.name} = row[${property.name}]"
 
     open fun exposedDao() =
-        "var ${property.name} by ${descriptor.kClassName.toTableName()}.${property.name}"
+        "var ${property.name} by ${boDescriptor.className.toTableName()}.${property.name}"
 
     open fun exposedDaoToDto() =
         "${property.name} = ${property.name}"
@@ -57,9 +57,9 @@ open class PropertyGenerator(
 }
 
 open class BooleanPropertyGenerator(
-    descriptor: DescriptorDto,
-    override val property: BooleanPropertyDto
-) : PropertyGenerator(descriptor, property, "Boolean") {
+    boDescriptor: BoDescriptor,
+    override val property: BooleanBoProperty
+) : PropertyGenerator(boDescriptor, property, "Boolean") {
 
     override fun browserImport() =
         if (property.optional) {
@@ -88,9 +88,9 @@ open class BooleanPropertyGenerator(
 }
 
 open class DoublePropertyGenerator(
-    descriptor: DescriptorDto,
-    override val property: DoublePropertyDto
-) : PropertyGenerator(descriptor, property, "Double") {
+    boDescriptor: BoDescriptor,
+    override val property: DoubleBoProperty
+) : PropertyGenerator(boDescriptor, property, "Double") {
 
     override fun exposedTable() =
         "val ${property.name} = double(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"
@@ -98,9 +98,9 @@ open class DoublePropertyGenerator(
 }
 
 open class EnumPropertyGenerator(
-    descriptor: DescriptorDto,
-    override val property: EnumPropertyDto
-) : PropertyGenerator(descriptor, property, property.enumName) {
+    boDescriptor: BoDescriptor,
+    override val property: EnumBoProperty
+) : PropertyGenerator(boDescriptor, property, property.enumName) {
 
     override fun browserTable() =
         if (property.optional) {
@@ -115,9 +115,9 @@ open class EnumPropertyGenerator(
 }
 
 open class InstantPropertyGenerator(
-    descriptor: DescriptorDto,
-    override val property: InstantPropertyDto
-) : PropertyGenerator(descriptor, property, "Instant") {
+    boDescriptor: BoDescriptor,
+    override val property: InstantBoProperty
+) : PropertyGenerator(boDescriptor, property, "Instant") {
 
     override fun commonImport() =
          if (property.optional) {
@@ -161,9 +161,9 @@ open class InstantPropertyGenerator(
 }
 
 open class IntPropertyGenerator(
-    descriptor: DescriptorDto,
-    override val property: IntPropertyDto
-) : PropertyGenerator(descriptor, property, "Int") {
+    boDescriptor: BoDescriptor,
+    override val property: IntBoProperty
+) : PropertyGenerator(boDescriptor, property, "Int") {
 
     override fun exposedTable() =
         "val ${property.name} = integer(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"
@@ -171,9 +171,9 @@ open class IntPropertyGenerator(
 }
 
 open class LongPropertyGenerator(
-    descriptor: DescriptorDto,
-    override val property: LongPropertyDto
-) : PropertyGenerator(descriptor, property, "Long") {
+    boDescriptor: BoDescriptor,
+    override val property: LongBoProperty
+) : PropertyGenerator(boDescriptor, property, "Long") {
 
     override fun exposedTable() =
         "val ${property.name} = long(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"
@@ -181,9 +181,9 @@ open class LongPropertyGenerator(
 }
 
 open class RecordIdPropertyGenerator(
-    descriptor: DescriptorDto,
-    override val property: RecordIdPropertyDto
-) : PropertyGenerator(descriptor, property, "RecordId") {
+    boDescriptor: BoDescriptor,
+    override val property: RecordIdBoProperty
+) : PropertyGenerator(boDescriptor, property, "RecordId") {
 
     override fun commonDeclaration() =
         "var ${property.name} : RecordId<${property.kClassName}>$optional"
@@ -199,7 +199,7 @@ open class RecordIdPropertyGenerator(
         }
 
     override fun browserTable() =
-        "// ${descriptor.kClassName}::${property.name} // record id and opt record id is not supported yet "
+        "// ${boDescriptor.className}::${property.name} // record id and opt record id is not supported yet "
 
     override fun exposedTable() =
         "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutDto()}Table)$exposedTableOptional"
@@ -208,7 +208,7 @@ open class RecordIdPropertyGenerator(
         "${property.name} = row[${property.name}]$optional.recordId()"
 
     override fun exposedDao() =
-        "var ${property.name} by ${property.kClassName.toDaoName()} $exposedDaoReference ${descriptor.kClassName.toTableName()}.${property.name}"
+        "var ${property.name} by ${property.kClassName.toDaoName()} $exposedDaoReference ${boDescriptor.className.toTableName()}.${property.name}"
 
     override fun exposedDaoToDto() =
         "${property.name} = ${property.name}$optional.id$optional.recordId()"
@@ -222,9 +222,9 @@ open class RecordIdPropertyGenerator(
 }
 
 open class SecretPropertyGenerator(
-    descriptor: DescriptorDto,
-    override val property: SecretPropertyDto
-) : PropertyGenerator(descriptor, property, "Secret") {
+    boDescriptor: BoDescriptor,
+    override val property: SecretBoProperty
+) : PropertyGenerator(boDescriptor, property, "Secret") {
 
     override fun commonImport() =
         listOf("import zakadabar.stack.data.builtin.misc.Secret")
@@ -261,12 +261,12 @@ open class SecretPropertyGenerator(
 }
 
 open class StringPropertyGenerator(
-    descriptor: DescriptorDto,
-    override val property: StringPropertyDto
-) : PropertyGenerator(descriptor, property, "String") {
+    boDescriptor: BoDescriptor,
+    override val property: StringBoProperty
+) : PropertyGenerator(boDescriptor, property, "String") {
 
     override fun exposedTable() : String {
-        val max = property.constraints.firstOrNull { it.type == ConstraintType.Max } as? ConstraintIntDto
+        val max = property.constraints.firstOrNull { it.type == BoConstraintType.Max } as? IntBoConstraint
         return if (max?.value != null) {
             "val ${property.name} = varchar(\"${property.name.camelToSnakeCase()}\", ${max.value})$exposedTableOptional"
         } else {
@@ -276,9 +276,9 @@ open class StringPropertyGenerator(
 }
 
 open class UuidPropertyGenerator(
-    descriptor: DescriptorDto,
-    override val property: UuidPropertyDto
-) : PropertyGenerator(descriptor, property, "UUID") {
+    boDescriptor: BoDescriptor,
+    override val property: UuidBoProperty
+) : PropertyGenerator(boDescriptor, property, "UUID") {
 
     override fun commonImport() =
         listOf("import zakadabar.stack.util.UUID")
