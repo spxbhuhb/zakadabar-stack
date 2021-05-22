@@ -71,6 +71,16 @@ abstract class RecordBackend<T : RecordDto<T>>(
     var validate = Server.validate
 
     /**
+     * Adds cache control directive to GET requests, except BLOB content.
+     * Default implementation calls the function with the same name from the
+     * server. The function in the server sets the Cache-Control header to the
+     * value specified by the server settings. Default is "no-cache, no-store".
+     */
+    open fun apiCacheControl(call : ApplicationCall) {
+        server.apiCacheControl(call)
+    }
+
+    /**
      * Create a new record.
      *
      * URL: `POST /api/<namespace>/record`
@@ -347,6 +357,8 @@ abstract class RecordBackend<T : RecordDto<T>>(
                 val id = call.parameters["rid"]
                 val executor = call.executor()
 
+                apiCacheControl(call)
+
                 if (id == null) {
                     if (Server.logReads) logger.info("${executor.accountId}: ALL")
                     call.respond(all(executor) as Any)
@@ -388,6 +400,8 @@ abstract class RecordBackend<T : RecordDto<T>>(
 
                 if (Server.logReads) logger.info("${executor.accountId}: BLOB-META-ALL $dataRecordId")
 
+                apiCacheControl(call)
+
                 call.respond(blobMetaList(executor, StringRecordId(dataRecordId)))
             }
 
@@ -397,6 +411,8 @@ abstract class RecordBackend<T : RecordDto<T>>(
                 val executor = call.executor()
 
                 if (Server.logReads) logger.info("${executor.accountId}: BLOB-META $blobId")
+
+                apiCacheControl(call)
 
                 call.respond(blobMetaRead(executor, StringRecordId(blobId)))
             }

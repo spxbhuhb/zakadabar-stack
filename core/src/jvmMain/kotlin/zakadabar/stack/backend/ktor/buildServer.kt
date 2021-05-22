@@ -24,7 +24,8 @@ import zakadabar.stack.backend.Server.Companion.anonymous
 import zakadabar.stack.backend.Server.Companion.staticRoot
 import zakadabar.stack.backend.custom.CustomBackend
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
-import zakadabar.stack.backend.data.builtin.session.*
+import zakadabar.stack.backend.data.builtin.session.LoginTimeout
+import zakadabar.stack.backend.data.builtin.session.SessionBackend
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.backend.ktor.session.*
 import zakadabar.stack.backend.routingLogger
@@ -85,6 +86,15 @@ fun buildServer(
         timeout = Duration.ofSeconds(c.timeout)
         maxFrameSize = c.maxFrameSize
         masking = c.masking
+    }
+
+    install(CachingHeaders) {
+        options { outgoingContent ->
+            when (outgoingContent.contentType?.withoutParameters()) {
+                ContentType.Text.CSS -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 3600))
+                else -> null
+            }
+        }
     }
 
     install(StatusPages) {

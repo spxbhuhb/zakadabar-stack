@@ -3,9 +3,8 @@
  */
 package zakadabar.stack.data.builtin.settings
 
-import kotlinx.serialization.Serializable
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.schema.BoSchema
 
 @Serializable
 class ServerSettingsDto(
@@ -14,16 +13,18 @@ class ServerSettingsDto(
     var database: DatabaseSettingsDto,
     var traceRouting: Boolean = false,
     var staticResources: String = "./var/static",
+    var apiCacheControl : String = "no-cache, no-store",
     var ktor: KtorSettingsDto = KtorSettingsDto(),
     var modules: List<String> = emptyList()
 
-) : DtoBase {
+) : BaseBo {
 
-    override fun schema() = DtoSchema {
+    override fun schema() = BoSchema {
         + ::serverName default serverName
         + ::database
         + ::traceRouting default traceRouting
         + ::staticResources default staticResources
+        + ::apiCacheControl default apiCacheControl
         + ::ktor
         // + ::modules
     }

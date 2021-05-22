@@ -10,6 +10,7 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import io.ktor.application.*
+import io.ktor.http.*
 import io.ktor.request.*
 import kotlinx.serialization.KSerializer
 import org.slf4j.Logger
@@ -140,21 +141,23 @@ open class Server : CliktCommand() {
             .convert { it.path }
             .default("./zakadabar.stack.server.yaml")
 
+    private lateinit var settings : ServerSettingsDto
+
     override fun run() {
 
-        val config = loadServerSettings()
+        settings = loadServerSettings()
 
-        Sql.onCreate(config.database) // initializes SQL connection
+        Sql.onCreate(settings.database) // initializes SQL connection
 
-        loadModules(config) // load modules
+        loadModules(settings) // load modules
 
         Sql.onStart() // create missing tables and columns
 
         startModules() // start the modules
 
-        val server = buildServer(config, recordBackends, customBackends) //  build the Ktor server instance
+        val server = buildServer(settings, recordBackends, customBackends) //  build the Ktor server instance
 
-        staticRoot = config.staticResources
+        staticRoot = settings.staticResources
 
         server.start(wait = true)
     }
@@ -249,5 +252,14 @@ open class Server : CliktCommand() {
         if (call.request.uri.startsWith("/api")) {
             throw LoginTimeout()
         }
+    }
+
+    /**
+     * Adds the value of the apiCacheControl setting to the response headers.
+     * This is "no-cache, no-store" by default. To change it, modify the
+     * setting in the configuration file or override this method.
+     */
+    open fun apiCacheControl(call : ApplicationCall) {
+        call.response.headers.append(HttpHeaders.CacheControl, settings.apiCacheControl)
     }
 }
