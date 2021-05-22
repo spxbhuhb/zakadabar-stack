@@ -9,11 +9,14 @@ import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
+import io.ktor.application.*
+import io.ktor.request.*
 import kotlinx.serialization.KSerializer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.custom.CustomBackend
 import zakadabar.stack.backend.data.Sql
+import zakadabar.stack.backend.data.builtin.session.LoginTimeout
 import zakadabar.stack.backend.data.builtin.session.SessionBackend
 import zakadabar.stack.backend.data.record.RecordBackend
 import zakadabar.stack.backend.ktor.buildServer
@@ -32,23 +35,28 @@ val moduleLogger = LoggerFactory.getLogger("modules") !! // log module events
 
 val routingLogger: Logger by lazy { LoggerFactory.getLogger("routing") } // trace routing events
 
-fun main(argv: Array<String>) = Server().main(argv)
+lateinit var server : Server
 
-class Server : CliktCommand() {
+fun main(argv: Array<String>) {
+    server = Server()
+    server.main(argv)
+}
+
+open class Server : CliktCommand() {
 
     companion object {
         /**
          * This variable contains the anonymous account. Each server should have one
          * this is used for public access.
          *
-         * For example, check AccountPrivateBackend in the demo.
+         * For example, check AccountPrivateBackend.
          */
         lateinit var anonymous: AccountPublicDto
 
         /**
          * Find an account by its id. Used by [SessionBackend].
          *
-         * For example, check AccountPrivateBackend in the demo.
+         * For example, check AccountPrivateBackend.
          *
          * @return the public account dto and the id of the principal that belongs to this account
          */
@@ -57,7 +65,7 @@ class Server : CliktCommand() {
         /**
          * Find an account by its id. Used by [SessionBackend].
          *
-         * For example, check AccountPrivateBackend in the demo.
+         * For example, check AccountPrivateBackend.
          *
          * @return the public account dto and the id of the principal that belongs to this account
          */
@@ -220,4 +228,26 @@ class Server : CliktCommand() {
         }
     }
 
+    /**
+     * Called when the request has a session cookie which is not known by the
+     * server. This typically means that the session expired on the server
+     * side but the client still remembers the cookie.
+     *
+     * When this is an API call we can respond with 440 Login Timeout because
+     * the client side application is already running and we can assume that
+     * it will handle 440 properly.
+     *
+     * When this is not an API we should let it go through, so the client can
+     * access index.html and other resources to start the application. In this
+     * case the application starts from the beginning, so it will ask the client
+     * to login if needed.
+     *
+     * You can override this method to switch off the login timeout mechanics
+     * or to add other paths to it.
+     */
+    open fun onLoginTimeout(call : ApplicationCall) {
+        if (call.request.uri.startsWith("/api")) {
+            throw LoginTimeout()
+        }
+    }
 }
