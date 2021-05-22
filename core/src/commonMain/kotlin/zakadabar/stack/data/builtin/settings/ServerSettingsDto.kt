@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.data.builtin.settings
 
+import kotlinx.serialization.Serializable
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.schema.BoSchema
 

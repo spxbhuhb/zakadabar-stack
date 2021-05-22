@@ -30,5 +30,8 @@ abstract class QueryBoCompanion<RESULT : Any>(
 
 @Deprecated("EOL: 2021.6.30 - use QueryBoCompanion instead", ReplaceWith("QueryBoCompanion"))
 abstract class QueryDtoCompanion<RESULT : Any>(
-    dtoNamespace : String
-) : QueryBoCompanion<RESULT>(dtoNamespace)
+    dtoNamespace: String
+) : QueryBoCompanion<RESULT>(dtoNamespace) {
+    val dtoNamespace
+        get() = boNamespace
+}
