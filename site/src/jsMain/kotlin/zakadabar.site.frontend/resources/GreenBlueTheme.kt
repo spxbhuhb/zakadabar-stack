@@ -25,7 +25,7 @@ class GreenBlueTheme : ZkBuiltinLightTheme() {
     private val lightGreen = "#78b641"
     private val darkBlue = "#1d3457"
 
-    override var fontFamily = "'IBM Plex Sans', sans-serif" // other type did not support ő, ű
+    override var fontFamily = "Roboto, system-ui, -apple-system, BlinkMacSystemFont, Roboto"
 
     override var primaryColor = darkGreen
     override var secondaryColor = darkBlue

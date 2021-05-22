@@ -18,7 +18,7 @@ open class ZkBuiltinDarkTheme : ZkTheme {
 
     override val name = NAME
 
-    override var fontFamily = "'IBM Plex Sans', sans-serif"
+    override var fontFamily = "Roboto, system-ui, -apple-system, BlinkMacSystemFont, Roboto"
     override var fontSize: String = "16px"
     override var fontWeight: String = "300"
 

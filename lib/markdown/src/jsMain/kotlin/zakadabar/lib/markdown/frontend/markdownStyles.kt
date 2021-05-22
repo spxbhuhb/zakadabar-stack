@@ -31,23 +31,24 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     val content by cssClass {
         overflowX = "auto"
         overflowY = "hidden"
-        maxWidth = 800
+        maxWidth = 600
         flexGrow = 1
+        margin = "auto"
 
-        small {
-            marginLeft = 0
-            marginRight = 0
-        }
-
-        medium {
-            marginLeft = theme.spacingStep / 2
-            marginRight = theme.spacingStep / 2
-        }
-
-        large {
-            marginLeft = theme.spacingStep
-            marginRight = theme.spacingStep
-        }
+//        small {
+//            marginLeft = 0
+//            marginRight = 0
+//        }
+//
+//        medium {
+//            marginLeft = theme.spacingStep / 2
+//            marginRight = theme.spacingStep / 2
+//        }
+//
+//        large {
+//            marginLeft = theme.spacingStep
+//            marginRight = theme.spacingStep
+//        }
     }
 
     // -------------------------------------------------------------------------
@@ -128,6 +129,9 @@ open class MarkdownStyles : ZkCssStyleSheet() {
 
     @Suppress("unused") // used implicitly by the browser
     open val header1 by cssRule(".$content h1") {
+        fontSize = 32
+        fontWeight = 500
+        marginBottom = 20
         borderBottom = theme.border
         paddingTop = theme.spacingStep
         marginBottom = theme.spacingStep * 2
@@ -141,6 +145,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     @Suppress("unused") // used implicitly by the browser
     open val header2 by cssRule(".$content h2") {
         marginBottom = theme.spacingStep
+        fontWeight = 500
     }
 
     @Suppress("unused") // used implicitly by the browser
