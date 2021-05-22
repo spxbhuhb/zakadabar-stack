@@ -28,7 +28,7 @@ kotlin {
     }
 
     js {
-        browser()
+        nodejs()
     }
 
     sourceSets["commonMain"].dependencies {

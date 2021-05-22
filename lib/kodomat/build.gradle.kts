@@ -23,7 +23,7 @@ kotlin {
     jvm { }
 
     js {
-        browser()
+        nodejs()
     }
 
     sourceSets["commonMain"].dependencies {
