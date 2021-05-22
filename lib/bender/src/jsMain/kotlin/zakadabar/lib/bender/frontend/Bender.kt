@@ -71,7 +71,7 @@ class Bender(
 
             + column(benderStyles.editor) {
 
-                ! "<h2>Kod-o-mat</h2>"
+                ! "<h2>Bender</h2>"
 
                 + row {
                     + div {

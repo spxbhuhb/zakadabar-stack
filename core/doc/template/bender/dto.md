@@ -7,13 +7,13 @@ Usage:
 1. click on the copy buttons (above) or the copy icons (below, top-right corner of code blocks),
 1. paste what's on the clipboard to the appropriate directory in IDEA.
 
-Kodomat generates these codes:
+Bender generates these codes:
 
 * common: data model and schema,
 * browser: table, form, crud,
 * backend: record backend, DAO, Exposed table.
 
-Kodomat is **experimental**: we hope that it works.
+Bender is **experimental**: we hope that it works.
 
 Supported types (case-insensitive):
 
@@ -27,7 +27,7 @@ Supported types (case-insensitive):
 * String
 * UUID
 
-Kodomat preforms all code generation on client side, your data model does not go
+Bender preforms all code generation on client side, your data model does not go
 out of your computer.
 
 ## Common

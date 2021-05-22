@@ -3,6 +3,7 @@
  */
 package zakadabar.lib.bender.frontend
 
+import zakadabar.lib.bender.*
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.record.EmptyRecordId
 import zakadabar.stack.data.schema.descriptor.*
