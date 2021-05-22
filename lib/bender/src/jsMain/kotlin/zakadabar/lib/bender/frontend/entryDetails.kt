@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.kodomat.frontend
+package zakadabar.lib.bender.frontend
 
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.record.EmptyRecordId
@@ -71,8 +71,8 @@ class EnumDetails : EntryDetails() {
             + Optional()
 
             + row {
-                + div { + "Enum Name" } css kodomatStyles.editorLabel
-                + enumName css kodomatStyles.largeInput
+                + div { + "Enum Name" } css benderStyles.editorLabel
+                + enumName css benderStyles.largeInput
             }
         }
     }
@@ -154,8 +154,8 @@ class RecordIdDetails : EntryDetails() {
             + Optional()
 
             + row {
-                + div { + "Record Type:" } css kodomatStyles.editorLabel
-                + recordType css kodomatStyles.largeInput
+                + div { + "Record Type:" } css benderStyles.editorLabel
+                + recordType css benderStyles.largeInput
             }
         }
     }

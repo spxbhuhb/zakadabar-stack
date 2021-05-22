@@ -17,7 +17,7 @@ class SiteStrings : ExamplesStrings() {
     val changeLog by "Change Log"
     val legalNotices by "Legal Notices"
     val record by "Record"
-    val kodomat by "Kod-o-mat"
+    val bender by "Bender"
     val other by "Other"
     val tools by "Tools"
     val WhatsNew by "What's New"

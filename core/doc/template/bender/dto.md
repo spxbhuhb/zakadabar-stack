@@ -1,4 +1,4 @@
-Kodomat is a simple tool for generating DTO classes for Zakadabar.
+Bender is a simple tool for generating DTO classes for Zakadabar.
 
 Usage:
 

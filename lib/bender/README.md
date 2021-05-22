@@ -12,13 +12,13 @@ Frontend
 
 | Class | Description |
 | --- | --- |
-| Kodomat | Top-level editor, calls generator. |
+| Bender | Top-level editor, calls generator. |
 | EditorEntry | Entry for one field. |
 | SchemaParameter | Schema parameters editor for a given data type. |
 
 ## UI structure
 
-* Kodomat
+* Bender
   * Editor
     * descriptorDto
     * list of EditorEntry 

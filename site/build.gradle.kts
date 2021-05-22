@@ -41,7 +41,7 @@ kotlin {
     sourceSets["commonMain"].dependencies {
         implementation(project(":core"))
         implementation(project(":lib:examples"))
-        implementation(project(":lib:kodomat"))
+        implementation(project(":lib:bender"))
         implementation(project(":lib:markdown"))
     }
 }

@@ -3,8 +3,8 @@
  */
 package zakadabar.site.frontend.pages
 
-import zakadabar.lib.kodomat.frontend.ClassGenerator
-import zakadabar.lib.kodomat.frontend.Kodomat
+import zakadabar.lib.bender.ClassGenerator
+import zakadabar.lib.bender.frontend.Bender
 import zakadabar.lib.markdown.frontend.MarkdownPage
 import zakadabar.lib.markdown.frontend.MarkdownPathPage
 import zakadabar.stack.frontend.application.application
@@ -69,9 +69,9 @@ object ServicesAndSupport : MarkdownPage(
     SiteMarkdownContext("ServicesAndSupport", "misc/")
 )
 
-object KodomatPage : ZkPage() {
+object BenderPage : ZkPage() {
     override fun onCreate() {
-        + Kodomat(ClassGenerator(), "/api/$contentNamespace/template/kodomat/dto.md")
+        + Bender(ClassGenerator(), "/api/$contentNamespace/template/bender/dto.md")
     }
 }
 

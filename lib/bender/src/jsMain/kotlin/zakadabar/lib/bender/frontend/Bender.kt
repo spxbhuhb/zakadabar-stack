@@ -1,13 +1,15 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.kodomat.frontend
+package zakadabar.lib.bender.frontend
 
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.datetime.Clock
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
+import zakadabar.lib.bender.ClassGenerator
+import zakadabar.lib.bender.PropertyGenerator
 import zakadabar.lib.markdown.frontend.MarkdownView
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
 import zakadabar.stack.data.schema.descriptor.BoDescriptor
@@ -25,7 +27,7 @@ import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.marginBottom
 import zakadabar.stack.frontend.util.marginRight
 
-class Kodomat(
+class Bender(
     private val classGenerator: ClassGenerator,
     private val templateUrl: String,
 ) : ZkElement() {
@@ -67,21 +69,21 @@ class Kodomat(
         override fun onCreate() {
             super.onCreate()
 
-            + column(kodomatStyles.editor) {
+            + column(benderStyles.editor) {
 
                 ! "<h2>Kod-o-mat</h2>"
 
                 + row {
                     + div {
-                        + div { + "Package" } css kodomatStyles.editorLabel
+                        + div { + "Package" } css benderStyles.editorLabel
                         + packageName
                     } marginRight 10
                     + div {
-                        + div { + "DTO name" } css kodomatStyles.editorLabel
+                        + div { + "DTO name" } css benderStyles.editorLabel
                         + dtoClassName
                     } marginRight 10
                     + div {
-                        + div { + "Namespace" } css kodomatStyles.editorLabel
+                        + div { + "Namespace" } css benderStyles.editorLabel
                         + dtoNamespace
                     } marginRight 10
                 } marginBottom 20
@@ -119,7 +121,7 @@ class Kodomat(
                             toastSuccess { "Backend source copied to the clipboard!" }
                         }.hide() marginRight 20
 
-                        + lastGenerate css kodomatStyles.lastGenerated
+                        + lastGenerate css benderStyles.lastGenerated
 
                     } marginBottom 20
 
@@ -176,7 +178,7 @@ class Kodomat(
     }
 }
 
-class EditorEntry(private val editor: Kodomat.Editor) : ZkElement() {
+class EditorEntry(private val editor: Bender.Editor) : ZkElement() {
 
     val name = ZkTextInput()
     private val type = ZkTextInput(onChange = ::onTypeChange)
@@ -196,13 +198,13 @@ class EditorEntry(private val editor: Kodomat.Editor) : ZkElement() {
             }
 
             + div {
-                //+ div { + "Name" } css kodomatStyles.editorLabel
-                + name css kodomatStyles.largeInput
+                //+ div { + "Name" } css benderStyles.editorLabel
+                + name css benderStyles.largeInput
             } marginRight 10
 
             + div {
-                //+ div { + "Type" } css kodomatStyles.editorLabel
-                + type css kodomatStyles.mediumInput
+                //+ div { + "Type" } css benderStyles.editorLabel
+                + type css benderStyles.mediumInput
             } marginRight 10
 
             + schemaParameterContainer

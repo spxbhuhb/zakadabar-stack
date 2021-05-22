@@ -58,7 +58,7 @@ class Routing : ZkAppRouting(DefaultLayout, Landing) {
         + Locales
         + Translations
 
-        + KodomatPage
+        + BenderPage
     }
 
 }

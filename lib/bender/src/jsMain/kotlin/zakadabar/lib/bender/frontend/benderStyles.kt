@@ -1,14 +1,14 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.kodomat.frontend
+package zakadabar.lib.bender.frontend
 
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-val kodomatStyles by cssStyleSheet(KodomatStyles())
+val benderStyles by cssStyleSheet(BenderStyles())
 
-class KodomatStyles : ZkCssStyleSheet() {
+class BenderStyles : ZkCssStyleSheet() {
 
     val editor by cssClass {
         margin = "auto"

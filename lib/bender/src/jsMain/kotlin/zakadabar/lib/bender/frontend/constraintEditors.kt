@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.kodomat.frontend
+package zakadabar.lib.bender.frontend
 
 import zakadabar.stack.data.schema.descriptor.*
 import zakadabar.stack.frontend.builtin.ZkElement
@@ -18,10 +18,10 @@ class Optional : ZkElement() {
     override fun onCreate() {
         super.onCreate()
 
-        + kodomatStyles.constraintEditor
+        + benderStyles.constraintEditor
 
         + row {
-            + div { + "Optional:" } css kodomatStyles.editorLabel
+            + div { + "Optional:" } css benderStyles.editorLabel
             + ZkCheckBox()
         }
     }
@@ -38,10 +38,10 @@ class ConstraintBooleanEditor(
     override fun onCreate() {
         super.onCreate()
 
-        + kodomatStyles.constraintEditor
+        + benderStyles.constraintEditor
 
         + row {
-            + div { + "${constraintType.name}:" } css kodomatStyles.editorLabel
+            + div { + "${constraintType.name}:" } css benderStyles.editorLabel
             + ZkCheckBox(checked = skipWhen)
         }
     }
@@ -59,11 +59,11 @@ class ConstraintDoubleEditor(
     override fun onCreate() {
         super.onCreate()
 
-        + kodomatStyles.constraintEditor
+        + benderStyles.constraintEditor
 
         + row {
-            + div { + "${constraintType.name}:" } css kodomatStyles.editorLabel
-            + ZkTextInput() css kodomatStyles.mediumInput
+            + div { + "${constraintType.name}:" } css benderStyles.editorLabel
+            + ZkTextInput() css benderStyles.mediumInput
         }
     }
 
@@ -81,11 +81,11 @@ class ConstraintIntEditor(
     override fun onCreate() {
         super.onCreate()
 
-        + kodomatStyles.constraintEditor
+        + benderStyles.constraintEditor
 
         + row {
-            + div { + "${constraintType.name}:" } css kodomatStyles.editorLabel
-            + ZkTextInput() css kodomatStyles.mediumInput
+            + div { + "${constraintType.name}:" } css benderStyles.editorLabel
+            + ZkTextInput() css benderStyles.mediumInput
         }
     }
 
@@ -103,11 +103,11 @@ class ConstraintLongEditor(
     override fun onCreate() {
         super.onCreate()
 
-        + kodomatStyles.constraintEditor
+        + benderStyles.constraintEditor
 
         + row {
-            + div { + "${constraintType.name}:" } css kodomatStyles.editorLabel
-            + ZkTextInput() css kodomatStyles.mediumInput
+            + div { + "${constraintType.name}:" } css benderStyles.editorLabel
+            + ZkTextInput() css benderStyles.mediumInput
         }
     }
 
@@ -125,11 +125,11 @@ class ConstraintStringEditor(
     override fun onCreate() {
         super.onCreate()
 
-        + kodomatStyles.constraintEditor
+        + benderStyles.constraintEditor
 
         + row {
-            + div { + "${constraintType.name}:" } css kodomatStyles.editorLabel
-            + ZkTextInput() css kodomatStyles.mediumInput
+            + div { + "${constraintType.name}:" } css benderStyles.editorLabel
+            + ZkTextInput() css benderStyles.mediumInput
         }
     }
 
