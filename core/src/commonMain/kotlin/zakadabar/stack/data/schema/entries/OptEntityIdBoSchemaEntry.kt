@@ -16,27 +16,27 @@
  */
 package zakadabar.stack.data.schema.entries
 
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoPropertyConstraintImpl
 import zakadabar.stack.data.schema.BoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.data.schema.descriptor.BoConstraintType
 import zakadabar.stack.data.schema.descriptor.BoProperty
 import zakadabar.stack.data.schema.descriptor.BooleanBoConstraint
-import zakadabar.stack.data.schema.descriptor.RecordIdBoProperty
+import zakadabar.stack.data.schema.descriptor.EntityIdBoProperty
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty0
 
-class OptRecordIdBoSchemaEntry<T : Any>(
+class OptEntityIdBoSchemaEntry<T : Any>(
     val kClass: KClass<T>,
-    val kProperty: KMutableProperty0<RecordId<T>?>
-) : BoSchemaEntry<RecordId<*>?> {
+    val kProperty: KMutableProperty0<EntityId<T>?>
+) : BoSchemaEntry<EntityId<*>?> {
 
-    var defaultValue: RecordId<T>? = null
+    var defaultValue: EntityId<T>? = null
 
-    private val rules = mutableListOf<BoPropertyConstraintImpl<RecordId<T>?>>()
+    private val rules = mutableListOf<BoPropertyConstraintImpl<EntityId<T>?>>()
 
     override fun validate(report: ValidityReport) {
         val value = kProperty.get()
@@ -45,9 +45,9 @@ class OptRecordIdBoSchemaEntry<T : Any>(
         }
     }
 
-    inner class Empty(@PublicApi val validValue: Boolean) : BoPropertyConstraintImpl<RecordId<T>?> {
+    inner class Empty(@PublicApi val validValue: Boolean) : BoPropertyConstraintImpl<EntityId<T>?> {
 
-        override fun validate(value: RecordId<T>?, report: ValidityReport) {
+        override fun validate(value: EntityId<T>?, report: ValidityReport) {
             if (value?.isEmpty() != validValue) report.fail(kProperty, this)
         }
 
@@ -56,13 +56,13 @@ class OptRecordIdBoSchemaEntry<T : Any>(
     }
 
     @PublicApi
-    infix fun empty(validValue: Boolean): OptRecordIdBoSchemaEntry<*> {
+    infix fun empty(validValue: Boolean): OptEntityIdBoSchemaEntry<*> {
         rules += Empty(validValue)
         return this
     }
 
     @PublicApi
-    infix fun default(value: RecordId<T>?): OptRecordIdBoSchemaEntry<*> {
+    infix fun default(value: EntityId<T>?): OptEntityIdBoSchemaEntry<*> {
         defaultValue = value
         return this
     }
@@ -74,19 +74,19 @@ class OptRecordIdBoSchemaEntry<T : Any>(
     override fun isOptional() = true
 
     override fun push(bo: BoProperty) {
-        require(bo is RecordIdBoProperty)
+        require(bo is EntityIdBoProperty)
         @Suppress("UNCHECKED_CAST") // FIXME clarify record id type erasure
-        kProperty.set(bo.value as RecordId<T>)
+        kProperty.set(bo.value as EntityId<T>)
     }
 
     @Suppress("UNCHECKED_CAST") // should work, lost in generics hell
-    override fun toBoProperty() = RecordIdBoProperty(
+    override fun toBoProperty() = EntityIdBoProperty(
         kProperty.name,
         isOptional(),
         emptyList(),
         kClass.simpleName!!,
-        defaultValue as RecordId<DtoBase>,
-        kProperty.get() as RecordId<DtoBase>
+        defaultValue as EntityId<BaseBo>,
+        kProperty.get() as EntityId<BaseBo>
     )
 
 

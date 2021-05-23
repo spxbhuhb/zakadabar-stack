@@ -3,15 +3,16 @@
  */
 package zakadabar.stack.frontend.builtin.crud
 
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.entity.EntityId
+
 
 /**
- * Elements capable of editing the DTO content implement this interface.
+ * Elements capable of editing the BO content implement this interface.
  */
 interface ZkCrud<T> {
     fun openAll()
     fun openCreate()
-    fun openRead(recordId: RecordId<T>)
-    fun openUpdate(recordId: RecordId<T>)
-    fun openDelete(recordId: RecordId<T>)
+    fun openRead(recordId: EntityId<T>)
+    fun openUpdate(recordId: EntityId<T>)
+    fun openDelete(recordId: EntityId<T>)
 }

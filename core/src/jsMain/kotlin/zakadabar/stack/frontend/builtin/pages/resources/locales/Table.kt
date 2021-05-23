@@ -3,14 +3,14 @@
  */
 package zakadabar.stack.frontend.builtin.pages.resources.locales
 
-import zakadabar.stack.data.builtin.account.RoleDto
-import zakadabar.stack.data.builtin.resources.LocaleDto
+import zakadabar.stack.data.builtin.account.RoleBo
+import zakadabar.stack.data.builtin.resources.LocaleBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
-class Table : ZkTable<LocaleDto>() {
+class Table : ZkTable<LocaleBo>() {
 
-    private val roles by preload { RoleDto.allAsMap() }
+    private val roles by preload { RoleBo.allAsMap() }
 
     override fun onConfigure() {
         super.onConfigure()
@@ -22,9 +22,9 @@ class Table : ZkTable<LocaleDto>() {
         titleText = stringStore.locales
         crud = Locales
 
-        + LocaleDto::id
-        + LocaleDto::name
-        + LocaleDto::description
+        + LocaleBo::id
+        + LocaleBo::name
+        + LocaleBo::description
 
         + actions()
     }

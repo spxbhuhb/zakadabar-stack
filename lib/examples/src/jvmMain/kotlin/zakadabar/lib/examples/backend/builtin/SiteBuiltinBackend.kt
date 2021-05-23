@@ -12,7 +12,7 @@ import kotlinx.coroutines.sync.withLock
 import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.lib.examples.data.builtin.ExampleQuery
 import zakadabar.stack.backend.authorize
-import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.record.LongRecordId
 import zakadabar.stack.data.record.RecordId
@@ -26,9 +26,9 @@ import zakadabar.stack.util.Executor
  * in this case that is fine as the operations are really fast (in-memory only,
  * on a very short list).
  */
-object SiteBuiltinBackend : RecordBackend<BuiltinDto>() {
+object SiteBuiltinBackend : EntityBackend<BuiltinDto>() {
 
-    override val dtoClass = BuiltinDto::class
+    override val boClass = BuiltinDto::class
 
     internal val mutex = Mutex()
 

@@ -4,11 +4,11 @@
 package zakadabar.stack.data.builtin.settings
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.schema.BoSchema
 
 @Serializable
-class SessionBackendSettingsDto(
+class SessionBackendSettingsBo(
 
     /**
      * Session timeout in minutes.
@@ -28,9 +28,9 @@ class SessionBackendSettingsDto(
      */
     var expirationCheckInterval: Long = 120
 
-) : DtoBase {
+) : BaseBo {
 
-    override fun schema() = DtoSchema {
+    override fun schema() = BoSchema {
         + ::sessionTimeout default sessionTimeout
         + ::updateDelay default updateDelay
         + ::expirationCheckInterval default expirationCheckInterval

@@ -10,16 +10,15 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
+import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.backend.data.get
-import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.data.builtin.account.RoleDto
-import zakadabar.stack.data.record.LongRecordId
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.builtin.account.RoleBo
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
 
-object RoleBackend : RecordBackend<RoleDto>() {
+object RoleBackend : EntityBackend<RoleBo>() {
 
-    override val dtoClass = RoleDto::class
+    override val boClass = RoleBo::class
 
     override fun onModuleLoad() {
         + RoleTable
@@ -35,51 +34,51 @@ object RoleBackend : RecordBackend<RoleDto>() {
 
         RoleTable
             .selectAll()
-            .map(RoleTable::toDto)
+            .map(RoleTable::toBo)
     }
 
-    override fun create(executor: Executor, dto: RoleDto) = transaction {
+    override fun create(executor: Executor, bo: RoleBo) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 
         RoleDao.new {
-            name = dto.name
-            description = dto.description
-        }.toDto()
+            name = bo.name
+            description = bo.description
+        }.toBo()
     }
 
-    override fun read(executor: Executor, recordId: RecordId<RoleDto>) = transaction {
+    override fun read(executor: Executor, entityId: EntityId<RoleBo>) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 
-        RoleDao[recordId].toDto()
+        RoleDao[entityId].toBo()
     }
 
-    override fun update(executor: Executor, dto: RoleDto) = transaction {
+    override fun update(executor: Executor, bo: RoleBo) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 
-        val dao = RoleDao[dto.id]
+        val dao = RoleDao[bo.id]
         with(dao) {
-            name = dto.name
-            description = dto.description
+            name = bo.name
+            description = bo.description
         }
-        dao.toDto()
+        dao.toBo()
     }
 
-    override fun delete(executor: Executor, recordId: RecordId<RoleDto>) = transaction {
+    override fun delete(executor: Executor, entityId: EntityId<RoleBo>) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 
-        RoleDao[recordId].delete()
+        RoleDao[entityId].delete()
     }
 
-    fun findForName(roleName: String): RecordId<RoleDto>? = transaction {
+    fun findForName(roleName: String): EntityId<RoleBo>? = transaction {
         val value = RoleDao
             .find { RoleTable.name eq roleName }
             .firstOrNull()
             ?.id?.value
 
-        if (value == null) null else LongRecordId(value)
+        if (value == null) null else EntityId(value)
     }
 }

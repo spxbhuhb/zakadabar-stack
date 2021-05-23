@@ -16,7 +16,7 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
@@ -25,10 +25,10 @@ import kotlin.reflect.KMutableProperty0
  * An enum select form field.
  *
  * Create, Action and Query mode requires special care because in those modes the
- * DTO contains the first enum value which is not selected by the user but set
+ * BO contains the first enum value which is not selected by the user but set
  * by the schema.
  */
-open class ZkEnumSelectField<T : DtoBase, E : Enum<E>>(
+open class ZkEnumSelectField<T : BaseBo, E : Enum<E>>(
     form: ZkForm<T>,
     val prop: KMutableProperty0<E>,
     val toEnum: (String) -> E,

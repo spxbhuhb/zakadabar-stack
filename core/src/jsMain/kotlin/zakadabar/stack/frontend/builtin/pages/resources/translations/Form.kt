@@ -3,20 +3,20 @@
  */
 package zakadabar.stack.frontend.builtin.pages.resources.translations
 
-import zakadabar.stack.data.builtin.resources.TranslationDto
+import zakadabar.stack.data.builtin.resources.TranslationBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 
-class Form : ZkForm<TranslationDto>() {
+class Form : ZkForm<TranslationBo>() {
 
     override fun onCreate() {
-        build(dto.name, stringStore.setting, css = ZkFormStyles.onePanel) {
+        build(bo.name, stringStore.setting, css = ZkFormStyles.onePanel) {
             + section(stringStore.basics) {
-                + dto::id
-                + dto::locale
-                + dto::name
-                + dto::value
+                + bo::id
+                + bo::locale
+                + bo::name
+                + bo::value
             }
         }
     }

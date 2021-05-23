@@ -4,31 +4,31 @@
 package zakadabar.stack.data.builtin.account
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.action.ActionDto
-import zakadabar.stack.data.action.ActionDtoCompanion
-import zakadabar.stack.data.builtin.ActionStatusDto
+import zakadabar.stack.data.action.ActionBo
+import zakadabar.stack.data.action.ActionBoCompanion
+import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.data.schema.BoSchema
 
 /**
  * Password change data. Account id is present to allow administrators change the
  * password of other accounts.
  */
 @Serializable
-data class PasswordChangeAction(
+class PasswordChangeAction(
 
-    var accountId: RecordId<AccountPrivateDto>,
+    var accountId: EntityId<AccountPrivateBo>,
     var oldPassword: Secret,
     var newPassword: Secret
 
-) : ActionDto<ActionStatusDto> {
+) : ActionBo<ActionStatusBo> {
 
-    companion object : ActionDtoCompanion<PasswordChangeAction>(PrincipalDto.dtoNamespace)
+    companion object : ActionBoCompanion<PasswordChangeAction>(PrincipalBo.boNamespace)
 
-    override suspend fun execute() = comm.action(this, serializer(), ActionStatusDto.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
 
-    override fun schema() = DtoSchema {
+    override fun schema() = BoSchema {
         + ::accountId
         + ::oldPassword blank false
         + ::newPassword blank false min 8

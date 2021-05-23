@@ -82,7 +82,7 @@ object TabContainer : ZkPage(css = zkPageStyles.fixed) {
                 }
 
                 val form = BuiltinForm()
-                form.dto = default()
+                form.bo = default()
                 form.mode = ZkElementMode.Action
 
                 + form

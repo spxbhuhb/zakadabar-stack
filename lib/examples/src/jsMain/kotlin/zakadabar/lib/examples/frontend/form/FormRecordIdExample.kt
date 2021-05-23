@@ -43,7 +43,7 @@ class FormRecordIdExample(
 
     override fun onConfigure() {
         super.onConfigure()
-        dto = default {
+        bo = default {
             id = LongRecordId(123)
         }
         mode = ZkElementMode.Action
@@ -59,15 +59,15 @@ class FormRecordIdExample(
         // better to use a cached record comm that gets the data from the server only once.
 
         + section {
-            + dto::id
-            + select(dto::optValue) { ExampleReferenceDto.all().by { it.name } }
-            + select(dto::invalidValue) { ExampleReferenceDto.all().by { it.name } }
+            + bo::id
+            + select(bo::optValue) { ExampleReferenceDto.all().by { it.name } }
+            + select(bo::invalidValue) { ExampleReferenceDto.all().by { it.name } }
         }
 
         // Make invalidValue touched, so the form will show styles.
         // This is just for the example, not needed in actual code.
 
-        with(dto::invalidValue.find()) {
+        with(bo::invalidValue.find()) {
             touched = true
             invalidInput = true
         }

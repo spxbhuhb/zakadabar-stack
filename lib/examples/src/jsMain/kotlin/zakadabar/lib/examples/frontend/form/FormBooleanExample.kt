@@ -37,7 +37,7 @@ class FormBooleanExample(
 
     override fun onConfigure() {
         super.onConfigure()
-        dto = default { }
+        bo = default { }
         mode = ZkElementMode.Action
         setAppTitle = false
     }
@@ -46,9 +46,9 @@ class FormBooleanExample(
         super.onCreate()
 
         + section {
-            + dto::value
-            + opt(dto::optValue, strings.textForFalse, strings.textForTrue)
-            + dto::readOnlyValue readOnly true
+            + bo::value
+            + opt(bo::optValue, strings.textForFalse, strings.textForTrue)
+            + bo::readOnlyValue readOnly true
         }
     }
 

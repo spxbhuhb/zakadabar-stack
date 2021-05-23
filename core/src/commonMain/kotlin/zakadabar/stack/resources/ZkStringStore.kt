@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.resources
 
-import zakadabar.stack.data.builtin.resources.TranslationDto
+import zakadabar.stack.data.builtin.resources.TranslationBo
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -39,7 +39,7 @@ open class ZkStringStore(
      *
      * @return  the string store merge is called on
      */
-    inline fun <reified T> merge(other: List<TranslationDto>): T {
+    inline fun <reified T> merge(other: List<TranslationBo>): T {
         other.forEach {
             map[it.name] = it.value
             normalizedKeyMap[normalizeKey(it.name)] = it.value

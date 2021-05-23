@@ -4,14 +4,13 @@
 package zakadabar.stack.data.entity
 
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.DtoBase
 
 @Suppress("UNCHECKED_CAST")
-interface EntityBo<T> : DtoBase, BaseBo {
+interface EntityBo<T> : BaseBo {
 
     var id: EntityId<T>
 
-    fun getDtoNamespace(): String
+    fun getBoNamespace(): String
 
     fun comm(): EntityCommInterface<T>
 

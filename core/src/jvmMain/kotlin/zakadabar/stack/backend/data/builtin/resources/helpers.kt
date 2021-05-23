@@ -8,9 +8,9 @@ package zakadabar.stack.backend.data.builtin.resources
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.serializer
 import zakadabar.stack.backend.util.default
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import kotlin.reflect.full.createType
 
 @Suppress("UNCHECKED_CAST") // serializer should create KSerializer<T> for sure
-inline fun <reified T : DtoBase> setting(namespace: String) =
+inline fun <reified T : BaseBo> setting(namespace: String) =
     Setting(default(), namespace, serializer(T::class.createType()) as KSerializer<T>)

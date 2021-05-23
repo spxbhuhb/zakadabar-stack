@@ -26,19 +26,19 @@ import zakadabar.stack.backend.custom.CustomBackend
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
 import zakadabar.stack.backend.data.builtin.session.LoginTimeout
 import zakadabar.stack.backend.data.builtin.session.SessionBackend
-import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.backend.ktor.session.*
 import zakadabar.stack.backend.routingLogger
 import zakadabar.stack.data.DataConflictException
-import zakadabar.stack.data.builtin.settings.ServerSettingsDto
-import zakadabar.stack.data.record.LongRecordId
+import zakadabar.stack.data.builtin.settings.ServerSettingsBo
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
 import java.io.File
 import java.time.Duration
 
 fun buildServer(
-    config: ServerSettingsDto,
-    recordBackends: List<RecordBackend<*>>,
+    config: ServerSettingsBo,
+    entityBackends: List<EntityBackend<*>>,
     customBackends: List<CustomBackend>
 ) = embeddedServer(Netty, port = config.ktor.port) {
 
@@ -64,9 +64,9 @@ fun buildServer(
         basic(name = "basic") {
             realm = config.serverName
             validate {
-                val (account, principalId) = SessionBackend.authenticate(LongRecordId(anonymous.id.toLong()), it.name, it.password) ?: return@validate null
+                val (account, principalId) = SessionBackend.authenticate(EntityId(anonymous.id.toLong()), it.name, it.password) ?: return@validate null
                 val (roleIds, roleNames) = PrincipalBackend.roles(principalId)
-                return@validate Executor(LongRecordId(account.id.toLong()), roleIds, roleNames)
+                return@validate Executor(EntityId(account.id.toLong()), roleIds, roleNames)
             }
         }
 
@@ -133,7 +133,7 @@ fun buildServer(
             route("api") {
 
                 // api installs add routes and the code to serve them
-                recordBackends.forEach {
+                entityBackends.forEach {
                     it.onInstallRoutes(this)
                 }
 
@@ -153,7 +153,7 @@ fun buildServer(
                 default("index.html")
 
                 // api installs add routes and the code to serve them
-                recordBackends.forEach {
+                entityBackends.forEach {
                     it.onInstallStatic(this)
                 }
 

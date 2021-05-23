@@ -6,14 +6,14 @@ package zakadabar.lib.examples.backend.data
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
 import zakadabar.lib.examples.data.SimpleExampleDto
-import zakadabar.stack.backend.data.recordId
+import zakadabar.stack.backend.data.entityId
 
 object SimpleExampleTable : LongIdTable("simple_example") {
 
     val name = varchar("name", 30)
 
     fun toDto(row: ResultRow) = SimpleExampleDto(
-        id = row[id].recordId(),
+        id = row[id].entityId(),
         name = row[name]
     )
 

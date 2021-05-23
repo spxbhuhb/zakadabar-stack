@@ -3,11 +3,11 @@
  */
 package zakadabar.stack.frontend.builtin.pages.account.accounts
 
-import zakadabar.stack.data.builtin.account.AccountPrivateDto
+import zakadabar.stack.data.builtin.account.AccountPrivateBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
-class Table : ZkTable<AccountPrivateDto>() {
+class Table : ZkTable<AccountPrivateBo>() {
 
     override fun onConfigure() {
         super.onConfigure()
@@ -19,11 +19,11 @@ class Table : ZkTable<AccountPrivateDto>() {
         titleText = stringStore.accounts
         crud = Accounts
 
-        + AccountPrivateDto::id
-        + AccountPrivateDto::accountName
-        + AccountPrivateDto::fullName
-        + AccountPrivateDto::email
-        + AccountPrivateDto::phone
+        + AccountPrivateBo::id
+        + AccountPrivateBo::accountName
+        + AccountPrivateBo::fullName
+        + AccountPrivateBo::email
+        + AccountPrivateBo::phone
         + actions()
     }
 

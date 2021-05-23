@@ -3,14 +3,14 @@
  */
 package zakadabar.stack.frontend.builtin.pages.account.roles
 
-import zakadabar.stack.data.builtin.account.RoleDto
+import zakadabar.stack.data.builtin.account.RoleBo
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 
-object Roles : ZkCrudTarget<RoleDto>() {
+object Roles : ZkCrudTarget<RoleBo>() {
 
     init {
-        companion = RoleDto.Companion
-        dtoClass = RoleDto::class
+        companion = RoleBo.Companion
+        boClass = RoleBo::class
         tableClass = Table::class
         pageClass = Form::class
     }

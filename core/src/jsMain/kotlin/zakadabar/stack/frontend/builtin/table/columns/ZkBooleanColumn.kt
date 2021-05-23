@@ -3,14 +3,14 @@
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.input.ZkCheckBox
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import kotlin.reflect.KProperty1
 
-open class ZkBooleanColumn<T : DtoBase>(
+open class ZkBooleanColumn<T : BaseBo>(
     table: ZkTable<T>,
     private val prop: KProperty1<T, Boolean>
 ) : ZkColumn<T>(table) {

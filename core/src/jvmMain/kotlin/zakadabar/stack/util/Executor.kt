@@ -4,9 +4,9 @@
 package zakadabar.stack.util
 
 import io.ktor.auth.*
-import zakadabar.stack.data.builtin.account.AccountPrivateDto
-import zakadabar.stack.data.builtin.account.RoleDto
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.builtin.account.AccountPrivateBo
+import zakadabar.stack.data.builtin.account.RoleBo
+import zakadabar.stack.data.entity.EntityId
 
 /**
  * Ktor authentication principal id.
@@ -15,15 +15,15 @@ import zakadabar.stack.data.record.RecordId
  */
 open class Executor internal constructor(
 
-    val accountId: RecordId<AccountPrivateDto>,
-    val roleIds: List<RecordId<RoleDto>>,
+    val accountId: EntityId<AccountPrivateBo>,
+    val roleIds: List<EntityId<RoleBo>>,
     private val roleNames: List<String>
 
 ) : Principal {
 
     fun hasRole(roleName: String) = roleName in roleNames
 
-    fun hasRole(roleId: RecordId<RoleDto>) = roleId in roleIds
+    fun hasRole(roleId: EntityId<RoleBo>) = roleId in roleIds
 
     fun hasOneOfRoles(roleNames: Array<out String>): Boolean {
         roleNames.forEach {

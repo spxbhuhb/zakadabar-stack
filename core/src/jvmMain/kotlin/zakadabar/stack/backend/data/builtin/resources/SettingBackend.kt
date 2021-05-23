@@ -16,25 +16,23 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize
+import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.backend.data.get
-import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.builtin.resources.SettingDto
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.builtin.resources.SettingBo
 import zakadabar.stack.data.builtin.resources.SettingSource
-import zakadabar.stack.data.record.EmptyRecordId
-import zakadabar.stack.data.record.LongRecordId
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.descriptor.BoDescriptor
 import zakadabar.stack.util.Executor
 import kotlin.reflect.KClass
 
-object SettingBackend : RecordBackend<SettingDto>() {
+object SettingBackend : EntityBackend<SettingBo>() {
 
-    override val dtoClass = SettingDto::class
+    override val boClass = SettingBo::class
 
     private val buildMutex = Mutex()
 
-    private val instances = mutableMapOf<Pair<String, KClass<out DtoBase>>, Pair<SettingDto, DtoBase>>()
+    private val instances = mutableMapOf<Pair<String, KClass<out BaseBo>>, Pair<SettingBo, BaseBo>>()
 
     override fun onModuleLoad() {
         + SettingTable
@@ -53,7 +51,7 @@ object SettingBackend : RecordBackend<SettingDto>() {
 //        SettingTable
 //            .select { SettingTable.role inList roleIds }
 //            .map { row ->
-//                 SettingDto(
+//                 SettingBo(
 //                    id = row[SettingTable.id].value,
 //                    role = row[SettingTable.role]?.value,
 //                    source = SettingSource.Database,
@@ -73,51 +71,51 @@ object SettingBackend : RecordBackend<SettingDto>() {
 
     }
 
-//    override fun create(executor: Executor, dto: SettingDto) = transaction {
+//    override fun create(executor: Executor, bo: SettingBo) = transaction {
 //
 //        authorize(executor, StackRoles.siteAdmin)
 //
 //        SettingDao.new {
-//            namespace = dto.namespace
-//            className = dto.className
-//            descriptor = dto.descriptor
-//        }.toDto()
+//            namespace = bo.namespace
+//            className = bo.className
+//            descriptor = bo.descriptor
+//        }.toBo()
 //    }
 
-    override fun read(executor: Executor, recordId: RecordId<SettingDto>) = transaction {
+    override fun read(executor: Executor, entityId: EntityId<SettingBo>) = transaction {
 
         authorize(true) // authorize for all users, throw not found if role is missing
 
-        val dao = SettingDao[recordId]
+        val dao = SettingDao[entityId]
 
-        dao.role?.id?.let { if (! executor.hasRole(LongRecordId(it.value))) throw NotFoundException() }
+        dao.role?.id?.let { if (! executor.hasRole(EntityId(it.value))) throw NotFoundException() }
 
-        dao.toDto()
+        dao.toBo()
     }
 
-//    override fun update(executor: Executor, dto: SettingDto) = transaction {
+//    override fun update(executor: Executor, bo: SettingBo) = transaction {
 //
 //        authorize(executor, StackRoles.siteAdmin)
 //
-//        val dao = SettingDao[dto.id]
+//        val dao = SettingDao[bo.id]
 //        with(dao) {
-//            namespace = dto.namespace
-//            className = dto.className
-//            descriptor = dto.descriptor
+//            namespace = bo.namespace
+//            className = bo.className
+//            descriptor = bo.descriptor
 //        }
-//        dao.toDto()
+//        dao.toBo()
 //    }
 
-//    override fun delete(executor: Executor, recordId:  RecordId<SettingDto>) = transaction {
+//    override fun delete(executor: Executor, entityId:  EntityId<SettingBo>) = transaction {
 //
 //        authorize(executor, StackRoles.siteAdmin)
 //
-//        SettingDao[recordId].delete()
+//        SettingDao[entityId].delete()
 //    }
 
 
     @Suppress("UNCHECKED_CAST") // key contains class
-    fun <T : DtoBase> get(default: T, namespace: String, serializer: KSerializer<T>) = runBlocking {
+    fun <T : BaseBo> get(default: T, namespace: String, serializer: KSerializer<T>) = runBlocking {
 
         val key = namespace to default::class
 
@@ -128,38 +126,38 @@ object SettingBackend : RecordBackend<SettingDto>() {
 
             if (instance != null) return@runBlocking instance
 
-            val dto = transaction {
+            val bo = transaction {
                 SettingDao
                     .find { (SettingTable.namespace eq namespace) and (SettingTable.className eq default::class.simpleName !!) }
                     .firstOrNull()
-                    ?.toDto()
+                    ?.toBo()
             }
 
-            if (dto != null) {
-                val descriptor = Json.decodeFromString(BoDescriptor.serializer(), dto.descriptor !!)
+            if (bo != null) {
+                val descriptor = Json.decodeFromString(BoDescriptor.serializer(), bo.descriptor !!)
                 instance = default
                 instance.schema().push(descriptor)
-                instances[key] = dto to instance
+                instances[key] = bo to instance
                 return@runBlocking instance
             }
 
             instance = Server.loadSettings(namespace, serializer)
 
             if (instance != null) {
-                instances[key] = buildDto(SettingSource.File, instance, namespace, serializer) to instance
+                instances[key] = buildBo(SettingSource.File, instance, namespace, serializer) to instance
                 return@runBlocking instance
             }
 
             instance = default
-            instances[key] = buildDto(SettingSource.Default, instance, namespace, serializer) to instance
+            instances[key] = buildBo(SettingSource.Default, instance, namespace, serializer) to instance
             return@runBlocking instance
         }
 
     }
 
-    private fun <T : DtoBase> buildDto(source: SettingSource, instance: T, namespace: String, serializer: KSerializer<T>) =
-        SettingDto(
-            id = EmptyRecordId(),
+    private fun <T : BaseBo> buildBo(source: SettingSource, instance: T, namespace: String, serializer: KSerializer<T>) =
+        SettingBo(
+            id = EntityId(),
             role = null, //RoleBackend.findForName(StackRoles.securityOfficer),
             source = SettingSource.Default,
             namespace = namespace,

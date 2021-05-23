@@ -5,11 +5,10 @@ package zakadabar.stack.frontend.builtin.pages.account.accounts
 
 import kotlinx.coroutines.coroutineScope
 import zakadabar.stack.StackRoles
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.builtin.ActionStatusDto
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.builtin.account.*
-import zakadabar.stack.data.record.EmptyRecordId
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.application.executor
 import zakadabar.stack.frontend.application.hasRole
 import zakadabar.stack.frontend.application.stringStore
@@ -34,11 +33,11 @@ import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.plusAssign
 
-class Form : ZkElement(), ZkCrudEditor<AccountPrivateDto>, ZkAppTitleProvider {
+class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
-    override lateinit var dto: AccountPrivateDto
+    override lateinit var bo: AccountPrivateBo
     override lateinit var mode: ZkElementMode
-    override var openUpdate: ((dto: AccountPrivateDto) -> Unit)? = null
+    override var openUpdate: ((bo: AccountPrivateBo) -> Unit)? = null
     override var onBack = {  }
 
     override var setAppTitle = true
@@ -47,25 +46,25 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateDto>, ZkAppTitleProvider {
     override var titleElement: ZkAppTitle? = null
 
 
-    private lateinit var principalDto: PrincipalDto
-    private lateinit var systemRoles: List<RoleDto>
-    private lateinit var userRoles: List<RoleGrantDto>
+    private lateinit var principalBo: PrincipalBo
+    private lateinit var systemRoles: List<RoleBo>
+    private lateinit var userRoles: List<RoleGrantBo>
 
     override fun onCreate() {
         super.onCreate()
         io {
             if (hasRole(StackRoles.securityOfficer) && mode != ZkElementMode.Create) {
                 coroutineScope {
-                    principalDto = PrincipalDto.read(dto.principal)
-                    systemRoles = RoleDto.all()
-                    RoleGrantDto.Companion.comm // to initialize comm
-                    userRoles = RoleGrantsByPrincipal(dto.principal).execute()
+                    principalBo = PrincipalBo.read(bo.principal)
+                    systemRoles = RoleBo.all()
+                    RoleGrantBo.Companion.comm // to initialize comm
+                    userRoles = RoleGrantsByPrincipal(bo.principal).execute()
                 }
             }
 
             classList += zkLayoutStyles.grow
 
-            titleText = if (mode != ZkElementMode.Create) dto.accountName else stringStore.account
+            titleText = if (mode != ZkElementMode.Create) bo.accountName else stringStore.account
 
             + AccountTabContainer()
         }
@@ -112,10 +111,10 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateDto>, ZkAppTitleProvider {
 
     }
 
-    inner class BasicDataForm : ZkForm<AccountPrivateDto>() {
+    inner class BasicDataForm : ZkForm<AccountPrivateBo>() {
 
         init {
-            dto = this@Form.dto
+            bo = this@Form.bo
             mode = this@Form.mode
             setAppTitle = false
         }
@@ -132,7 +131,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateDto>, ZkAppTitleProvider {
         }
 
         private fun basics() = section(stringStore.basics) {
-            with(dto) {
+            with(bo) {
                 + ::id
                 + ::accountName
                 + ::fullName
@@ -147,20 +146,20 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateDto>, ZkAppTitleProvider {
     inner class PasswordChangeForm : ZkForm<PasswordChangeAction>() {
 
         init {
-            dto = default { this.accountId = this@Form.dto.id }
+            bo = default { this.accountId = this@Form.bo.id }
             mode = ZkElementMode.Action
             setAppTitle = false
             onExecuteResult = ::onExecuteResult
         }
 
         override fun onCreate() {
-            PrincipalDto.Companion.comm // initialize comm
+            PrincipalBo.Companion.comm // initialize comm
 
             + div(ZkFormStyles.contentContainer) {
                 + column(ZkFormStyles.form) {
                     buildPoint.classList += ZkFormStyles.onePanel
 
-                    val expl = if (executor.account.id == dto.accountId) {
+                    val expl = if (executor.account.id == bo.accountId) {
                         stringStore.passwordChangeExpOwn
                     } else {
                         stringStore.passwordChangeExpSo
@@ -171,14 +170,14 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateDto>, ZkAppTitleProvider {
                         // when the user changes his/her own password ask for the old one
                         // when security officer changes the password of someone else, this
                         // field won't be shown as the account id is different
-                        if (executor.account.id == dto.accountId) {
-                            + dto::oldPassword
+                        if (executor.account.id == bo.accountId) {
+                            + bo::oldPassword
                         } else {
-                            dto.oldPassword.value = "*" // so the schema will be valid
+                            bo.oldPassword.value = "*" // so the schema will be valid
                         }
 
-                        + newSecret(dto::newPassword)
-                        + ZkSecretVerificationField(this@PasswordChangeForm, dto::newPassword)
+                        + newSecret(bo::newPassword)
+                        + ZkSecretVerificationField(this@PasswordChangeForm, bo::newPassword)
                     }
 
                     + buttons()
@@ -193,7 +192,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateDto>, ZkAppTitleProvider {
             val verificationField = get(ZkSecretVerificationField::class)
 
             if (submit || (newField.touched && verificationField.touched)) {
-                if (dto.newPassword.value != verificationField.verificationValue) {
+                if (bo.newPassword.value != verificationField.verificationValue) {
                     verificationField.valid = false
                     return false
                 } else {
@@ -210,10 +209,10 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateDto>, ZkAppTitleProvider {
 
         override fun onSubmitSuccess() {}
 
-        private fun onExecuteResult(resultDto: DtoBase) {
-            resultDto as ActionStatusDto
+        private fun onExecuteResult(resultBo: BaseBo) {
+            resultBo as ActionStatusBo
 
-            if (! resultDto.success) {
+            if (! resultBo.success) {
                 toastDanger { stringStore.passwordChangeFail }
             } else {
                 toastSuccess { stringStore.actionSuccess }
@@ -221,10 +220,10 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateDto>, ZkAppTitleProvider {
         }
     }
 
-    inner class PrincipalForm : ZkForm<PrincipalDto>() {
+    inner class PrincipalForm : ZkForm<PrincipalBo>() {
 
         init {
-            dto = this@Form.principalDto
+            bo = this@Form.principalBo
             mode = ZkElementMode.Update
             setAppTitle = false
         }
@@ -235,10 +234,10 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateDto>, ZkAppTitleProvider {
                     buildPoint.classList += ZkFormStyles.onePanel
 
                     + section(stringStore.accountStatus) {
-                        + dto::locked
-                        + dto::lastLoginSuccess
-                        + dto::lastLoginFail
-                        + constString(stringStore.loginFailCount) { dto.loginFailCount.toString() }
+                        + bo::locked
+                        + bo::lastLoginSuccess
+                        + bo::lastLoginFail
+                        + constString(stringStore.loginFailCount) { bo.loginFailCount.toString() }
                     }
 
                     + buttons()
@@ -248,10 +247,10 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateDto>, ZkAppTitleProvider {
 
     }
 
-    inner class RolesForm : ZkForm<RoleGrantDto>() {
+    inner class RolesForm : ZkForm<RoleGrantBo>() {
 
         init {
-            dto = default { principal = this@Form.principalDto.id }
+            bo = default { principal = this@Form.principalBo.id }
             mode = ZkElementMode.Other
             setAppTitle = false
         }
@@ -284,7 +283,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateDto>, ZkAppTitleProvider {
                             revoke(it.value)
                         }
                     }
-                    userRoles = RoleGrantsByPrincipal(dto.principal).execute()
+                    userRoles = RoleGrantsByPrincipal(bo.principal).execute()
                     onSubmitSuccess()
                 } catch (ex: Exception) {
                     onSubmitError(ex)
@@ -292,12 +291,12 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateDto>, ZkAppTitleProvider {
             }
         }
 
-        private suspend fun grant(roleId: RecordId<RoleDto>) {
+        private suspend fun grant(roleId: EntityId<RoleBo>) {
             if (userRoles.firstOrNull { it.role == roleId } != null) return
-            RoleGrantDto(EmptyRecordId(), principalDto.id, roleId).create()
+            RoleGrantBo(EntityId(), principalBo.id, roleId).create()
         }
 
-        private suspend fun revoke(roleId: RecordId<RoleDto>) {
+        private suspend fun revoke(roleId: EntityId<RoleBo>) {
             userRoles.forEach {
                 if (it.role != roleId) return@forEach
                 it.delete()

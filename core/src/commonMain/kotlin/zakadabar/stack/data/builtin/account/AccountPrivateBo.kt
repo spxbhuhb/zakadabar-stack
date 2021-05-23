@@ -8,19 +8,19 @@ package zakadabar.stack.data.builtin.account
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
-import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordDtoCompanion
-import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.data.entity.EntityBoCompanion
+import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.data.schema.BoSchema
 import zakadabar.stack.data.schema.Formats
 import zakadabar.stack.data.util.OptInstantAsStringSerializer
 
 @Serializable
-data class AccountPrivateDto(
+class AccountPrivateBo(
 
-    override var id: RecordId<AccountPrivateDto>,
+    override var id: EntityId<AccountPrivateBo>,
 
-    var principal: RecordId<PrincipalDto>,
+    var principal: EntityId<PrincipalBo>,
 
     var accountName: String,
     var fullName: String,
@@ -35,14 +35,14 @@ data class AccountPrivateDto(
     var position: String?,
     var phone: String?
 
-) : RecordDto<AccountPrivateDto> {
+) : EntityBo<AccountPrivateBo> {
 
-    companion object : RecordDtoCompanion<AccountPrivateDto>("account-private")
+    companion object : EntityBoCompanion<AccountPrivateBo>("account-private")
 
-    override fun getDtoNamespace() = dtoNamespace
+    override fun getBoNamespace() = boNamespace
     override fun comm() = comm
 
-    override fun schema() = DtoSchema {
+    override fun schema() = BoSchema {
         + ::id
 
         + ::principal

@@ -6,7 +6,7 @@ package zakadabar.stack.frontend.application
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.events.Event
-import zakadabar.stack.data.builtin.misc.ServerDescriptionDto
+import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
 import zakadabar.stack.data.builtin.resources.TranslationsByLocale
 import zakadabar.stack.frontend.builtin.dock.ZkDock
 import zakadabar.stack.frontend.builtin.modal.ZkModalContainer
@@ -74,7 +74,7 @@ open class ZkApplication {
 
     lateinit var executor: ZkExecutor
 
-    lateinit var serverDescription: ServerDescriptionDto
+    lateinit var serverDescription: ServerDescriptionBo
 
     lateinit var routing: ZkAppRouting
 

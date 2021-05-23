@@ -5,7 +5,7 @@ package zakadabar.lib.bender.frontend
 
 import zakadabar.lib.bender.*
 import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.record.EmptyRecordId
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.descriptor.*
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.input.ZkTextInput
@@ -162,9 +162,9 @@ class RecordIdDetails : EntryDetails() {
     }
 
     override fun generator(name: String, boDescriptor: BoDescriptor) =
-        RecordIdPropertyGenerator(
+        EntityIdPropertyGenerator(
             boDescriptor,
-            RecordIdBoProperty(name, optional, constraints, recordType.value, EmptyRecordId(), EmptyRecordId())
+            EntityIdBoProperty(name, optional, constraints, recordType.value, EntityId(), EntityId())
         )
 
 }

@@ -4,9 +4,9 @@
 package zakadabar.stack.data.schema
 
 import kotlinx.datetime.Instant
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.descriptor.BoConstraint
 import zakadabar.stack.data.schema.descriptor.BoDescriptor
 import zakadabar.stack.data.schema.descriptor.BoProperty
@@ -16,17 +16,6 @@ import zakadabar.stack.util.UUID
 import kotlin.js.JsName
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KProperty0
-
-@Deprecated("EOL: 2021.6.30 - use BoSchema instead", ReplaceWith("BoSchema"))
-open class DtoSchema() : BoSchema() {
-    companion object {
-        val NO_VALIDATION = DtoSchema()
-    }
-
-    constructor(init: DtoSchema.() -> Unit) : this() {
-        this.init()
-    }
-}
 
 /**
  * A data model schema that may be used to validate a business object.
@@ -47,16 +36,16 @@ open class BoSchema() {
     @Suppress("MemberVisibilityCanBePrivate") // To make extensions possible
     val customEntries = mutableListOf<CustomBoSchemaEntry>()
 
-    inline operator fun <reified T : Any> KMutableProperty0<out RecordId<T>>.unaryPlus(): RecordIdBoSchemaEntry<*> {
+    inline operator fun <reified T : Any> KMutableProperty0<out EntityId<T>>.unaryPlus(): EntityIdBoSchemaEntry<*> {
         @Suppress("UNCHECKED_CAST") // at this point out doesn't really matters
-        val ruleList = RecordIdBoSchemaEntry(T::class, this as KMutableProperty0<RecordId<T>>)
+        val ruleList = EntityIdBoSchemaEntry(T::class, this as KMutableProperty0<EntityId<T>>)
         entries[this] = ruleList
         return ruleList
     }
 
-    inline operator fun <reified T : Any> KMutableProperty0<out RecordId<T>?>.unaryPlus(): OptRecordIdBoSchemaEntry<*> {
+    inline operator fun <reified T : Any> KMutableProperty0<out EntityId<T>?>.unaryPlus(): OptEntityIdBoSchemaEntry<*> {
         @Suppress("UNCHECKED_CAST") // at this point out doesn't really matters
-        val ruleList = OptRecordIdBoSchemaEntry(T::class, this as KMutableProperty0<RecordId<T>?>)
+        val ruleList = OptEntityIdBoSchemaEntry(T::class, this as KMutableProperty0<EntityId<T>?>)
         entries[this] = ruleList
         return ruleList
     }
@@ -157,8 +146,8 @@ open class BoSchema() {
         return ruleList
     }
 
-    inline operator fun <reified T : DtoBase> KMutableProperty0<T>.unaryPlus(): DtoBaseBoSchemaEntry<T> {
-        val ruleList = DtoBaseBoSchemaEntry(this)
+    inline operator fun <reified T : BaseBo> KMutableProperty0<T>.unaryPlus(): BaseBoBoSchemaEntry<T> {
+        val ruleList = BaseBoBoSchemaEntry(this)
         entries[this] = ruleList
         return ruleList
     }

@@ -13,9 +13,8 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.DtoBase
 import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.util.InstantAsStringSerializer
 import zakadabar.stack.data.util.OptInstantAsStringSerializer
 import zakadabar.stack.util.UUID
@@ -33,13 +32,13 @@ sealed class BoProperty : BaseBo {
 }
 
 @Serializable
-class RecordIdBoProperty(
+class EntityIdBoProperty(
     override val name: String,
     override val optional: Boolean,
     override var constraints: List<BoConstraint>,
     val kClassName: String,
-    var defaultValue: RecordId<DtoBase>?,
-    var value: RecordId<DtoBase>?
+    var defaultValue: EntityId<BaseBo>?,
+    var value: EntityId<BaseBo>?
 ) : BoProperty()
 
 @Serializable
@@ -61,7 +60,7 @@ class DoubleBoProperty(
 ) : BoProperty()
 
 @Serializable
-class DtoBaseBoProperty(
+class BaseBoBoProperty(
     override val name: String,
     override val optional: Boolean,
     override var constraints: List<BoConstraint>,

@@ -28,10 +28,10 @@ data class BlobBo(
         + ::size min 0 max Long.MAX_VALUE
     }
 
-    override fun getDtoNamespace() = namespace
+    override fun getBoNamespace() = namespace
 
     override fun comm(): EntityCommInterface<BlobBo> {
-        throw IllegalStateException("comm of BlobDto should not be used directly")
+        throw IllegalStateException("comm of BlobBo should not be used directly")
     }
 
     /**

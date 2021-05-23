@@ -14,16 +14,15 @@ import zakadabar.lib.examples.data.builtin.ExampleQuery
 import zakadabar.lib.examples.data.builtin.ExampleResult
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
-import zakadabar.stack.backend.data.get
-import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.backend.data.recordId
+import zakadabar.stack.backend.data.entity.EntityBackend
+import zakadabar.stack.backend.data.entityId
 import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.Executor
 
-object BuiltinBackend : RecordBackend<BuiltinDto>() {
+object BuiltinBackend : EntityBackend<BuiltinDto>() {
 
-    override val dtoClass = BuiltinDto::class
+    override val boClass = BuiltinDto::class
 
     override fun onModuleLoad() {
         + BuiltinTable
@@ -98,7 +97,7 @@ object BuiltinBackend : RecordBackend<BuiltinDto>() {
 
         select.map {
             ExampleResult(
-                recordId = it[BuiltinTable.id].recordId(),
+                recordId = it[BuiltinTable.id].entityId(),
                 booleanValue = it[BuiltinTable.booleanValue],
                 enumSelectValue = it[BuiltinTable.enumSelectValue],
                 intValue = it[BuiltinTable.intValue],

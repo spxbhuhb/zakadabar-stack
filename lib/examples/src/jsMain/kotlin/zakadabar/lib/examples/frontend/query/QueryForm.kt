@@ -27,22 +27,22 @@ class QueryForm(
                     + row {
                         + fieldGrid {
                             // opt boolean field is used to provide a "do not filter on this" function for the user
-                            + ZkOptBooleanField(this@QueryForm, dto::booleanValue, options = suspend { statusOptions() })
-                            + dto::enumSelectValue
+                            + ZkOptBooleanField(this@QueryForm, bo::booleanValue, options = suspend { statusOptions() })
+                            + bo::enumSelectValue
                         } marginRight 24
 
                         + fieldGrid {
-                            + dto::intValue
-                            + dto::stringValue
+                            + bo::intValue
+                            + bo::stringValue
                         } marginRight 24
 
                         + fieldGrid {
-                            + dto::limit
+                            + bo::limit
                         }
                     } marginBottom 12
 
                     + row {
-                        + ZkButton(strings.runQuery) { runQuery(dto) }
+                        + ZkButton(strings.runQuery) { runQuery(bo) }
                     }
                 }
             }

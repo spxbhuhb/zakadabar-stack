@@ -3,16 +3,16 @@
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import kotlin.reflect.KProperty1
 
-open class ZkOptRecordIdColumn<T : DtoBase, IT>(
+open class ZkOptRecordIdColumn<T : BaseBo, IT>(
     table: ZkTable<T>,
-    private val prop: KProperty1<T, RecordId<IT>?>
+    private val prop: KProperty1<T, EntityId<IT>?>
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {

@@ -4,29 +4,29 @@
 package zakadabar.stack.data.builtin.account
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordDtoCompanion
-import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.data.entity.EntityBoCompanion
+import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.data.schema.BoSchema
 
 /**
  * A role which has some business specific meaning.
  */
 @Serializable
-class RoleDto(
+class RoleBo(
 
-    override var id: RecordId<RoleDto>,
+    override var id: EntityId<RoleBo>,
     var name: String,
     var description: String
 
-) : RecordDto<RoleDto> {
+) : EntityBo<RoleBo> {
 
-    companion object : RecordDtoCompanion<RoleDto>("role")
+    companion object : EntityBoCompanion<RoleBo>("role")
 
-    override fun getDtoNamespace() = dtoNamespace
+    override fun getBoNamespace() = boNamespace
     override fun comm() = comm
 
-    override fun schema() = DtoSchema {
+    override fun schema() = BoSchema {
         + ::id
         + ::name min 1 max 50 blank false
         + ::description

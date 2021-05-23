@@ -8,7 +8,7 @@ package zakadabar.stack.data.entity
 import kotlinx.serialization.Serializable
 
 @Serializable
-class EntityId<T> {
+class EntityId<T> : Comparable<EntityId<T>> {
 
     val value : String
 
@@ -20,8 +20,8 @@ class EntityId<T> {
         this.value = value.toString()
     }
 
-    constructor(value : String) {
-        this.value = value
+    constructor(value : String?) {
+        this.value = value ?: ""
     }
 
     fun toLong() = value.toLong()
@@ -31,5 +31,16 @@ class EntityId<T> {
     override fun equals(other: Any?) = if (other is EntityId<*>) other.value == this.value else false
 
     override fun hashCode() = value.hashCode()
+
+    override fun compareTo(other: EntityId<T>) : Int {
+        if (value.isEmpty() && other.value.isEmpty()) return 0
+
+        val tl = value.toLongOrNull()
+        val ol = value.toLongOrNull()
+
+        if (tl != null && ol != null) return tl.compareTo(ol)
+
+        return value.compareTo(other.value)
+    }
 
 }

@@ -33,16 +33,16 @@ open class PropertyGenerator(
         TODO()
     }
 
-    open fun exposedTableToDto() =
+    open fun exposedTableToBo() =
         "${property.name} = row[${property.name}]"
 
     open fun exposedDao() =
         "var ${property.name} by ${boDescriptor.className.toTableName()}.${property.name}"
 
-    open fun exposedDaoToDto() =
+    open fun exposedDaoToBo() =
         "${property.name} = ${property.name}"
 
-    open fun exposedDaoFromDto() =
+    open fun exposedDaoFromBo() =
         "${property.name} = dto.${property.name}"
 
     val optional
@@ -138,21 +138,21 @@ open class InstantPropertyGenerator(
     override fun exposedTable() =
         "val ${property.name} = timestamp(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"
 
-    override fun exposedTableToDto() =
+    override fun exposedTableToBo() =
         if (property.optional) {
             "${property.name} = row[${property.name}]?.toKotlinInstant()"
         } else {
             "${property.name} = row[${property.name}].toKotlinInstant()"
         }
 
-    override fun exposedDaoToDto() =
+    override fun exposedDaoToBo() =
         if (property.optional) {
             "${property.name} = ${property.name}?.toKotlinInstant()"
         } else {
             "${property.name} = ${property.name}.toKotlinInstant()"
         }
 
-    override fun exposedDaoFromDto() =
+    override fun exposedDaoFromBo() =
         if (property.optional) {
             "${property.name} = dto.${property.name}?.toJavaInstant()"
         } else {
@@ -180,13 +180,13 @@ open class LongPropertyGenerator(
 
 }
 
-open class RecordIdPropertyGenerator(
+open class EntityIdPropertyGenerator(
     boDescriptor: BoDescriptor,
-    override val property: RecordIdBoProperty
-) : PropertyGenerator(boDescriptor, property, "RecordId") {
+    override val property: EntityIdBoProperty
+) : PropertyGenerator(boDescriptor, property, "EntityId") {
 
     override fun commonDeclaration() =
-        "var ${property.name} : RecordId<${property.kClassName}>$optional"
+        "var ${property.name} : EntityId<${property.kClassName}>$optional"
 
     override fun commonSchema() =
         "+ ::${property.name}"
@@ -204,16 +204,16 @@ open class RecordIdPropertyGenerator(
     override fun exposedTable() =
         "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutDto()}Table)$exposedTableOptional"
 
-    override fun exposedTableToDto() =
-        "${property.name} = row[${property.name}]$optional.recordId()"
+    override fun exposedTableToBo() =
+        "${property.name} = row[${property.name}]$optional.EntityId()"
 
     override fun exposedDao() =
         "var ${property.name} by ${property.kClassName.toDaoName()} $exposedDaoReference ${boDescriptor.className.toTableName()}.${property.name}"
 
-    override fun exposedDaoToDto() =
-        "${property.name} = ${property.name}$optional.id$optional.recordId()"
+    override fun exposedDaoToBo() =
+        "${property.name} = ${property.name}$optional.id$optional.EntityId()"
 
-    override fun exposedDaoFromDto() =
+    override fun exposedDaoFromBo() =
         if (property.optional) {
             "${property.name} = dto.${property.name}?.let { ${property.kClassName.toDaoName()}[it] }"
         } else {
@@ -238,21 +238,21 @@ open class SecretPropertyGenerator(
     override fun exposedTable() =
         "val ${property.name} = varchar(\"${property.name.camelToSnakeCase()}\", 200)$exposedTableOptional"
 
-    override fun exposedTableToDto() =
+    override fun exposedTableToBo() =
         if (property.optional) {
             "${property.name} = null /* do not send out the secret */"
         } else {
             "${property.name} = Secret(\"\") /* do not send out the secret */"
         }
 
-    override fun exposedDaoToDto() =
+    override fun exposedDaoToBo() =
         if (property.optional) {
             "${property.name} = null /* do not send out the secret */"
         } else {
             "${property.name} = Secret(\"\") /* do not send out the secret */"
         }
     
-    override fun exposedDaoFromDto() =
+    override fun exposedDaoFromBo() =
         if (property.optional) {
             "dto.${property.name}?.let { s -> BCrypt.hashpw(s.value, BCrypt.gensalt()) }"
         } else {
@@ -286,12 +286,12 @@ open class UuidPropertyGenerator(
     override fun exposedTable() =
         "val ${property.name} = uuid(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"
 
-    override fun exposedTableToDto() =
+    override fun exposedTableToBo() =
         "${property.name} = row[${property.name}]$optional.toStackUuid()"
     
-    override fun exposedDaoToDto() =
+    override fun exposedDaoToBo() =
         "${property.name} = ${property.name}$optional.toStackUuid()"
 
-    override fun exposedDaoFromDto() =
+    override fun exposedDaoFromBo() =
         "${property.name} = dto.${property.name}$optional.toJavaUuid()"
 }

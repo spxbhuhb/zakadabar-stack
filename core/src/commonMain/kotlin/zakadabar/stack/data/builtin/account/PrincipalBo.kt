@@ -9,10 +9,10 @@ package zakadabar.stack.data.builtin.account
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
-import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordDtoCompanion
-import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.data.entity.EntityBoCompanion
+import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.data.schema.BoSchema
 import zakadabar.stack.data.util.OptInstantAsStringSerializer
 
 /**
@@ -23,9 +23,9 @@ import zakadabar.stack.data.util.OptInstantAsStringSerializer
  * information related to authentication and authorization.
  */
 @Serializable
-data class PrincipalDto(
+class PrincipalBo(
 
-    override var id: RecordId<PrincipalDto>,
+    override var id: EntityId<PrincipalBo>,
 
     var validated: Boolean,
     var locked: Boolean,
@@ -35,14 +35,14 @@ data class PrincipalDto(
     var lastLoginFail: Instant?,
     var loginFailCount: Int
 
-) : RecordDto<PrincipalDto> {
+) : EntityBo<PrincipalBo> {
 
-    companion object : RecordDtoCompanion<PrincipalDto>("principal")
+    companion object : EntityBoCompanion<PrincipalBo>("principal")
 
-    override fun getDtoNamespace() = dtoNamespace
+    override fun getBoNamespace() = boNamespace
     override fun comm() = comm
 
-    override fun schema() = DtoSchema {
+    override fun schema() = BoSchema {
         + ::id
 
         // + ::validated

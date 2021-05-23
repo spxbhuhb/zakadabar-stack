@@ -4,20 +4,20 @@
 package zakadabar.stack.data.builtin.settings
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.schema.BoSchema
 
 @Serializable
-data class DatabaseSettingsDto(
+data class DatabaseSettingsBo(
 
     var driverClassName: String,
     var jdbcUrl: String,
     var username: String,
     var password: String // FIXME replace this when YAML loader knows how to
 
-) : DtoBase {
+) : BaseBo {
 
-    override fun schema() = DtoSchema {
+    override fun schema() = BoSchema {
         + ::driverClassName
         + ::jdbcUrl
         + ::username

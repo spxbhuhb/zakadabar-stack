@@ -5,17 +5,17 @@ package zakadabar.stack.data.builtin.account
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
-import zakadabar.stack.data.query.QueryDto
-import zakadabar.stack.data.query.QueryDtoCompanion
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.data.query.QueryBo
+import zakadabar.stack.data.query.QueryBoCompanion
 
 @Serializable
-data class RoleGrantsByPrincipal(
-    val principal: RecordId<PrincipalDto>
-) : QueryDto<RoleGrantDto> {
+class RoleGrantsByPrincipal(
+    val principal: EntityId<PrincipalBo>
+) : QueryBo<RoleGrantBo> {
 
-    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(RoleGrantDto.serializer()))
+    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(RoleGrantBo.serializer()))
 
-    companion object : QueryDtoCompanion<RoleGrantDto>(RoleGrantDto.dtoNamespace)
+    companion object : QueryBoCompanion<RoleGrantBo>(RoleGrantBo.boNamespace)
 
 }

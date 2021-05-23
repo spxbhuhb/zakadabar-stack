@@ -3,9 +3,9 @@
  */
 package zakadabar.stack.frontend.builtin.crud
 
-import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordDtoCompanion
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.data.entity.EntityBoCompanion
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.application.ZkNavState
 import zakadabar.stack.frontend.application.application
@@ -24,20 +24,20 @@ import kotlin.reflect.KClass
  * If you would like to include a crud on a page, use [ZkInlineCrud].
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
-open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
+open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
 
     override var viewName = "${this::class.simpleName}"
 
-    lateinit var companion: RecordDtoCompanion<T>
-    lateinit var dtoClass: KClass<T>
+    lateinit var companion: EntityBoCompanion<T>
+    lateinit var boClass: KClass<T>
     lateinit var pageClass: KClass<out ZkCrudEditor<T>>
     lateinit var tableClass: KClass<out ZkTable<T>>
 
     override fun openAll() = application.changeNavState(this, "all")
     override fun openCreate() = application.changeNavState(this, "create")
-    override fun openRead(recordId: RecordId<T>) = application.changeNavState(this, "read", "id=$recordId")
-    override fun openUpdate(recordId: RecordId<T>) = application.changeNavState(this, "update", "id=$recordId")
-    override fun openDelete(recordId: RecordId<T>) = application.changeNavState(this, "delete", "id=$recordId")
+    override fun openRead(recordId: EntityId<T>) = application.changeNavState(this, "read", "id=$recordId")
+    override fun openUpdate(recordId: EntityId<T>) = application.changeNavState(this, "update", "id=$recordId")
+    override fun openDelete(recordId: EntityId<T>) = application.changeNavState(this, "delete", "id=$recordId")
 
     @Suppress("UNCHECKED_CAST") // got lost in generics hell, probably fine
     override fun route(routing: ZkAppRouting, state: ZkNavState): ZkElement {
@@ -45,9 +45,9 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
         return when (state.segments[2]) {
             "all" -> all()
             "create" -> create()
-            "read" -> read(state.recordId as RecordId<T>)
-            "update" -> update(state.recordId as RecordId<T>)
-            "delete" -> delete(state.recordId as RecordId<T>)
+            "read" -> read(state.recordId as EntityId<T>)
+            "update" -> update(state.recordId as EntityId<T>)
+            "delete" -> delete(state.recordId as EntityId<T>)
             else -> routeNonCrud(routing, state)
         }
     }
@@ -74,11 +74,11 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
     open fun create(): ZkElement {
         val container = ZkElement()
 
-        val dto = dtoClass.newInstance()
-        dto.schema().setDefaults()
+        val bo = boClass.newInstance()
+        bo.schema().setDefaults()
 
         val page = pageClass.newInstance()
-        page.dto = dto
+        page.bo = bo
         page.openUpdate = { openUpdate(it.id) }
         page.mode = ZkElementMode.Create
 
@@ -94,13 +94,13 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
         return container
     }
 
-    open fun read(recordId: RecordId<T>): ZkElement {
+    open fun read(recordId: EntityId<T>): ZkElement {
 
         val container = ZkElement()
 
         io {
             val page = pageClass.newInstance()
-            page.dto = companion.read(recordId)
+            page.bo = companion.read(recordId)
             page.openUpdate = { openUpdate(it.id) }
             page.mode = ZkElementMode.Read
 
@@ -118,13 +118,13 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
         return container
     }
 
-    open fun update(recordId: RecordId<T>): ZkElement {
+    open fun update(recordId: EntityId<T>): ZkElement {
 
         val container = ZkElement()
 
         io {
             val page = pageClass.newInstance()
-            page.dto = companion.read(recordId)
+            page.bo = companion.read(recordId)
             page.openUpdate = { openUpdate(it.id) }
             page.mode = ZkElementMode.Update
 
@@ -142,13 +142,13 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
         return container
     }
 
-    open fun delete(recordId: RecordId<T>): ZkElement {
+    open fun delete(recordId: EntityId<T>): ZkElement {
 
         val container = ZkElement()
 
         io {
             val page = pageClass.newInstance()
-            page.dto = companion.read(recordId)
+            page.bo = companion.read(recordId)
             page.openUpdate = { openUpdate(it.id) }
             page.mode = ZkElementMode.Delete
 

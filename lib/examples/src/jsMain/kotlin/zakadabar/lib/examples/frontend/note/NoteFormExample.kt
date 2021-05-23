@@ -32,7 +32,7 @@ class NoteFormExample(
     class InlineForm : ZkForm<BuiltinDto>() {
 
         override fun onConfigure() {
-            dto = default { }
+            bo = default { }
             mode = ZkElementMode.Action
             setAppTitle = false
         }
@@ -43,11 +43,11 @@ class NoteFormExample(
             element.style.padding = "20px"
 
             + section("This is a form in a note!") {
-                + dto::id
-                + dto::doubleValue
-                + dto::instantValue
-                + dto::optInstantValue
-                + dto::stringValue
+                + bo::id
+                + bo::doubleValue
+                + bo::instantValue
+                + bo::optInstantValue
+                + bo::stringValue
             }
         }
     }

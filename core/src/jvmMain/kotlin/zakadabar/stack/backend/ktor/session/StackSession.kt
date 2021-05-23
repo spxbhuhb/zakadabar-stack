@@ -6,9 +6,9 @@ package zakadabar.stack.backend.ktor.session
 import io.ktor.sessions.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import zakadabar.stack.data.builtin.account.AccountPrivateDto
-import zakadabar.stack.data.builtin.account.RoleDto
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.builtin.account.AccountPrivateBo
+import zakadabar.stack.data.builtin.account.RoleBo
+import zakadabar.stack.data.entity.EntityId
 
 /**
  * Session data class passed to Ktor.
@@ -17,8 +17,8 @@ import zakadabar.stack.data.record.RecordId
  */
 @Serializable
 data class StackSession(
-    val account: RecordId<AccountPrivateDto>,
-    val roleIds: List<RecordId<RoleDto>>,
+    val account: EntityId<AccountPrivateBo>,
+    val roleIds: List<EntityId<RoleBo>>,
     val roleNames: List<String>
 )
 

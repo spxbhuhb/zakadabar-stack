@@ -3,11 +3,11 @@
  */
 package zakadabar.stack.frontend.builtin.pages.resources.translations
 
-import zakadabar.stack.data.builtin.resources.TranslationDto
+import zakadabar.stack.data.builtin.resources.TranslationBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
-class Table : ZkTable<TranslationDto>() {
+class Table : ZkTable<TranslationBo>() {
 
     override fun onConfigure() {
         super.onConfigure()
@@ -19,9 +19,9 @@ class Table : ZkTable<TranslationDto>() {
         titleText = stringStore.roles
         crud = Translations
 
-        + TranslationDto::id
-        + TranslationDto::name
-        + TranslationDto::value
+        + TranslationBo::id
+        + TranslationBo::name
+        + TranslationBo::value
 
         + actions()
     }

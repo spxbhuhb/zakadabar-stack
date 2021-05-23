@@ -4,10 +4,10 @@
 package zakadabar.stack.data.builtin.resources
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordDtoCompanion
-import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.data.entity.EntityBoCompanion
+import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.data.schema.BoSchema
 
 /**
  * A string in a given locale.
@@ -18,19 +18,19 @@ import zakadabar.stack.data.schema.DtoSchema
  * @property  value   Value of the string resource.
  */
 @Serializable
-data class TranslationDto(
-    override var id: RecordId<TranslationDto>,
+data class TranslationBo(
+    override var id: EntityId<TranslationBo>,
     var name: String,
     var locale: String,
     var value: String,
-) : RecordDto<TranslationDto> {
+) : EntityBo<TranslationBo> {
 
-    companion object : RecordDtoCompanion<TranslationDto>("translation")
+    companion object : EntityBoCompanion<TranslationBo>("translation")
 
-    override fun getDtoNamespace() = dtoNamespace
+    override fun getBoNamespace() = boNamespace
     override fun comm() = comm
 
-    override fun schema() = DtoSchema {
+    override fun schema() = BoSchema {
         + ::name min 1 max 100 blank false
         + ::locale min 2 max 20 blank false
         + ::value

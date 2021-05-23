@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.util
 
-import zakadabar.stack.data.record.RecordDto
+import zakadabar.stack.data.entity.EntityBo
 
-fun <T : RecordDto<T>> List<T>.by(field: (it: T) -> String) =
+fun <T : EntityBo<T>> List<T>.by(field: (it: T) -> String) =
     map { it.id to field(it) }.sortedBy { it.second }

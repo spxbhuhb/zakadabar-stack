@@ -6,8 +6,8 @@ package zakadabar.stack.backend.data.builtin.role
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import zakadabar.stack.backend.data.recordId
-import zakadabar.stack.data.builtin.account.RoleDto
+import zakadabar.stack.backend.data.entityId
+import zakadabar.stack.data.builtin.account.RoleBo
 
 class RoleDao(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<RoleDao>(RoleTable)
@@ -15,8 +15,8 @@ class RoleDao(id: EntityID<Long>) : LongEntity(id) {
     var name by RoleTable.name
     var description by RoleTable.description
 
-    fun toDto() = RoleDto(
-        id = id.recordId(),
+    fun toBo() = RoleBo(
+        id = id.entityId(),
         name = name,
         description = description
     )

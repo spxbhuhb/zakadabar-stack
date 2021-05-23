@@ -12,12 +12,12 @@ open class ClassGenerator {
 
     open val packageName
         get() = boDescriptor.packageName
-    open val dtoName
+    open val boName
         get() = boDescriptor.className
     open val namespace
         get() = boDescriptor.boNamespace
     open val baseName
-        get() = dtoName.withoutDto()
+        get() = boName.withoutDto()
 
     open val browserCrudName
         get() = baseName + "Crud"
@@ -44,21 +44,21 @@ fun commonGenerator() = """
 package ${packageName}.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordDtoCompanion
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.entity.EntityDto
+import zakadabar.stack.data.entity.EntityDtoCompanion
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.DtoSchema
 ${generators.map { it.commonImport() }.flatten().distinct().joinToString("\n")}
 
 @Serializable
-class ${dtoName}(
+class ${boName}(
 
-    override var id: RecordId<$dtoName>,
+    override var id: EntityId<$boName>,
     ${generators.joinToString(",\n    ") { it.commonDeclaration() }}
 
-) : RecordDto<$dtoName> {
+) : EntityDto<$boName> {
 
-    companion object : RecordDtoCompanion<$dtoName>("$namespace")
+    companion object : EntityDtoCompanion<$boName>("$namespace")
 
     override fun getDtoNamespace() = dtoNamespace
     override fun comm() = comm
@@ -82,7 +82,7 @@ import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.application.translate
 
-import ${packageName}.data.$dtoName
+import ${packageName}.data.$boName
 
 ${generators.map { it.browserImport() }.flatten().distinct().joinToString("\n")}
 
@@ -90,10 +90,10 @@ ${generators.map { it.browserImport() }.flatten().distinct().joinToString("\n")}
 //  Crud
 // -----------------------------------------------------------------------------
 
-object $browserCrudName : ZkCrudTarget<$dtoName>() {
+object $browserCrudName : ZkCrudTarget<$boName>() {
     init {
-        companion = $dtoName.Companion
-        dtoClass = $dtoName::class
+        companion = $boName.Companion
+        dtoClass = $boName::class
         pageClass = $browserFormName::class
         tableClass = $browserTableName::class
     }
@@ -103,7 +103,7 @@ object $browserCrudName : ZkCrudTarget<$dtoName>() {
 //  Form
 // -----------------------------------------------------------------------------
 
-class $browserFormName : ZkForm<$dtoName>() {
+class $browserFormName : ZkForm<$boName>() {
     override fun onCreate() {
         super.onCreate()
 
@@ -119,7 +119,7 @@ class $browserFormName : ZkForm<$dtoName>() {
 //  Table
 // -----------------------------------------------------------------------------
 
-class $browserTableName : ZkTable<$dtoName>() {
+class $browserTableName : ZkTable<$boName>() {
 
     override fun onConfigure() {
 
@@ -143,7 +143,7 @@ class $browserTableName : ZkTable<$dtoName>() {
     // -------------------------------------------------------------------------
 
 fun exposedBackendGenerator() = """
-package ${packageName}.backend.record
+package ${packageName}.backend.entity
 
 import io.ktor.routing.*
 import kotlinx.datetime.Clock
@@ -160,24 +160,24 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.get
-import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.backend.data.recordId
+import zakadabar.stack.backend.data.entity.EntityBackend
+import zakadabar.stack.backend.data.entityId
 import zakadabar.stack.backend.util.toJavaUuid
 import zakadabar.stack.backend.util.toStackUuid
 import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.BCrypt
 import zakadabar.stack.util.Executor
-import ${packageName}.data.$dtoName
+import ${packageName}.data.$boName
 ${generators.map { it.exposedBackendImport() }.flatten().distinct().joinToString("\n")}
 
 // -----------------------------------------------------------------------------
-//  Record Backend
+//  Entity Backend
 // -----------------------------------------------------------------------------
 
-object ${dtoName.withoutDto()}Backend : RecordBackend<$dtoName>() {
+object ${boName.withoutDto()}Backend : EntityBackend<$boName>() {
 
-    override val dtoClass = $dtoName::class
+    override val dtoClass = $boName::class
 
     override fun onModuleLoad() {
         + $exposedTableName
@@ -197,7 +197,7 @@ object ${dtoName.withoutDto()}Backend : RecordBackend<$dtoName>() {
             
     }
 
-    override fun create(executor: Executor, dto: $dtoName) = transaction {
+    override fun create(executor: Executor, dto: $boName) = transaction {
 
         authorize(executor, StackRoles.siteMember)
 
@@ -207,15 +207,15 @@ object ${dtoName.withoutDto()}Backend : RecordBackend<$dtoName>() {
            
     }
 
-    override fun read(executor: Executor, recordId: RecordId<$dtoName>) = transaction {
+    override fun read(executor: Executor, entityId: EntityId<$boName>) = transaction {
 
         authorize(true)
 
-        $exposedDaoName[recordId].toDto()
+        $exposedDaoName[entityId].toDto()
         
     }
 
-    override fun update(executor: Executor, dto: $dtoName) = transaction {
+    override fun update(executor: Executor, dto: $boName) = transaction {
 
         authorize(executor, StackRoles.siteMember)
 
@@ -225,11 +225,11 @@ object ${dtoName.withoutDto()}Backend : RecordBackend<$dtoName>() {
             
     }
 
-    override fun delete(executor: Executor, recordId: RecordId<$dtoName>) = transaction {
+    override fun delete(executor: Executor, entityId: EntityId<$boName>) = transaction {
 
         authorize(executor, StackRoles.siteMember)
 
-        $exposedDaoName[recordId].delete()
+        $exposedDaoName[entityId].delete()
      
     }
 
@@ -244,13 +244,13 @@ class $exposedDaoName(id: EntityID<Long>) : LongEntity(id) {
 
     ${generators.joinToString("\n    ") { it.exposedDao() }}
 
-    fun toDto() = $dtoName(
-        id = id.recordId(),
-        ${generators.joinToString(",\n        ") { it.exposedDaoToDto() }}
+    fun toBo() = $boName(
+        id = id.entityId(),
+        ${generators.joinToString(",\n        ") { it.exposedDaoToBo() }}
     )
     
-    fun fromDto(dto : $dtoName) : $exposedDaoName {
-        ${generators.joinToString("\n        ") { it.exposedDaoFromDto() }}
+    fun fromBo(bo : $boName) : $exposedDaoName {
+        ${generators.joinToString("\n        ") { it.exposedDaoFromBo() }}
         
         return this
     }
@@ -264,9 +264,9 @@ object $exposedTableName : LongIdTable("$exposedTableName") {
 
     ${generators.joinToString("\n    ") { it.exposedTable() }}
 
-    fun toDto(row: ResultRow) = $dtoName(
-        id = row[id].recordId(),
-        ${generators.joinToString(",\n        ") { it.exposedTableToDto() }}
+    fun toBo(row: ResultRow) = $boName(
+        id = row[id].entityId(),
+        ${generators.joinToString(",\n        ") { it.exposedTableToBo() }}
     )
 }
 

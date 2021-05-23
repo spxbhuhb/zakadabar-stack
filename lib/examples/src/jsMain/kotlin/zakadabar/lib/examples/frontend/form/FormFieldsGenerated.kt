@@ -18,7 +18,7 @@ object FormFieldsGenerated : ZkPage() {
         super.onCreate()
 
         val form = BuiltinForm()
-        form.dto = default()
+        form.bo = default()
         form.mode = ZkElementMode.Update
 
         + div(zkPageStyles.content) {

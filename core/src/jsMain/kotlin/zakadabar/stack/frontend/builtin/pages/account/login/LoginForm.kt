@@ -4,8 +4,8 @@
 package zakadabar.stack.frontend.builtin.pages.account.login
 
 import kotlinx.browser.window
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.builtin.ActionStatusDto
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.builtin.account.LoginAction
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElementMode
@@ -24,7 +24,7 @@ class LoginForm(
 ) : ZkForm<LoginAction>() {
 
     override fun onConfigure() {
-        dto = default {
+        bo = default {
             this@LoginForm.accountName?.let { accountName = it }
         }
         mode = ZkElementMode.Action
@@ -41,11 +41,11 @@ class LoginForm(
 
         + fieldGrid {
             if (accountName == null) {
-                + dto::accountName
+                + bo::accountName
             } else {
-                + ZkConstStringField(this@LoginForm, stringStore.account, dto.accountName)
+                + ZkConstStringField(this@LoginForm, stringStore.account, bo.accountName)
             }
-            + dto::password
+            + bo::password
         } marginBottom 20
 
         + row {
@@ -66,9 +66,9 @@ class LoginForm(
         super.onResume()
         window.requestAnimationFrame {
             if (accountName == null) {
-                dto::accountName.find().focus()
+                bo::accountName.find().focus()
             } else {
-                dto::password.find().focus()
+                bo::password.find().focus()
             }
         }
     }
@@ -83,12 +83,12 @@ class LoginForm(
         invalidToast = toastDanger { stringStore.loginFail }
     }
 
-    private fun onExecuteResult(resultDto: DtoBase) {
+    private fun onExecuteResult(resultBo: BaseBo) {
 
-        resultDto as ActionStatusDto
+        resultBo as ActionStatusBo
 
-        if (! resultDto.success) {
-            if (resultDto.reason == "locked") {
+        if (! resultBo.success) {
+            if (resultBo.reason == "locked") {
                 toastDanger { stringStore.loginLocked }
             } else {
                 toastDanger { stringStore.loginFail }

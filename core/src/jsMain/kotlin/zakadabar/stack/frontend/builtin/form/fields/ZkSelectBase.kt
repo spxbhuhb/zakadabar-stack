@@ -20,7 +20,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.get
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkForm
@@ -28,12 +28,11 @@ import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.zkFormStyles
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
 import zakadabar.stack.frontend.builtin.popup.alignPopup
-import zakadabar.stack.frontend.resources.ZkIconSource
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.escape
 import zakadabar.stack.frontend.util.io
 
-abstract class ZkSelectBase<T : DtoBase, VT>(
+abstract class ZkSelectBase<T : BaseBo, VT>(
     form: ZkForm<T>,
     propName: String,
     private val sortOptions: Boolean = true,

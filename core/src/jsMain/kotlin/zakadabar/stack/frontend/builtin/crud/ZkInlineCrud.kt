@@ -3,9 +3,9 @@
  */
 package zakadabar.stack.frontend.builtin.crud
 
-import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordDtoCompanion
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.data.entity.EntityBoCompanion
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.table.ZkTable
@@ -17,10 +17,10 @@ import kotlin.reflect.KClass
  * Provides common functions used in most CRUD implementations.
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
-open class ZkInlineCrud<T : RecordDto<T>> : ZkElement(), ZkCrud<T> {
+open class ZkInlineCrud<T : EntityBo<T>> : ZkElement(), ZkCrud<T> {
 
-    lateinit var companion: RecordDtoCompanion<T>
-    lateinit var dtoClass: KClass<T>
+    lateinit var companion: EntityBoCompanion<T>
+    lateinit var boClass: KClass<T>
     lateinit var editorClass: KClass<out ZkCrudEditor<T>>
     lateinit var tableClass: KClass<out ZkTable<T>>
 
@@ -65,17 +65,17 @@ open class ZkInlineCrud<T : RecordDto<T>> : ZkElement(), ZkCrud<T> {
 
     override fun openCreate() {
         with(newEditor()) {
-            dto = dtoClass.newInstance().apply { schema().setDefaults() }
+            bo = boClass.newInstance().apply { schema().setDefaults() }
             mode = ZkElementMode.Create
         }
 
         + (editorInstance as ZkElement)
     }
 
-    override fun openRead(recordId: RecordId<T>) {
+    override fun openRead(recordId: EntityId<T>) {
         io {
             with(newEditor()) {
-                dto = companion.read(recordId)
+                bo = companion.read(recordId)
                 mode = ZkElementMode.Read
             }
 
@@ -83,10 +83,10 @@ open class ZkInlineCrud<T : RecordDto<T>> : ZkElement(), ZkCrud<T> {
         }
     }
 
-    override fun openUpdate(recordId: RecordId<T>) {
+    override fun openUpdate(recordId: EntityId<T>) {
         io {
             with(newEditor()) {
-                dto = companion.read(recordId)
+                bo = companion.read(recordId)
                 mode = ZkElementMode.Update
             }
 
@@ -94,10 +94,10 @@ open class ZkInlineCrud<T : RecordDto<T>> : ZkElement(), ZkCrud<T> {
         }
     }
 
-    override fun openDelete(recordId: RecordId<T>) {
+    override fun openDelete(recordId: EntityId<T>) {
         io {
             with(newEditor()) {
-                dto = companion.read(recordId)
+                bo = companion.read(recordId)
                 mode = ZkElementMode.Delete
             }
 

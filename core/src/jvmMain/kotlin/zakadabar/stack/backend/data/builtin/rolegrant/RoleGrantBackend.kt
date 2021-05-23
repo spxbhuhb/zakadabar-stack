@@ -13,16 +13,16 @@ import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
 import zakadabar.stack.backend.data.builtin.role.RoleDao
+import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.backend.data.get
-import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.data.builtin.account.RoleGrantDto
+import zakadabar.stack.data.builtin.account.RoleGrantBo
 import zakadabar.stack.data.builtin.account.RoleGrantsByPrincipal
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
 
-object RoleGrantBackend : RecordBackend<RoleGrantDto>() {
+object RoleGrantBackend : EntityBackend<RoleGrantBo>() {
 
-    override val dtoClass = RoleGrantDto::class
+    override val boClass = RoleGrantBo::class
 
     override fun onModuleLoad() {
         + RoleGrantTable
@@ -39,7 +39,7 @@ object RoleGrantBackend : RecordBackend<RoleGrantDto>() {
 
         RoleGrantTable
             .select { RoleGrantTable.principal eq query.principal.toLong() }
-            .map(RoleGrantTable::toDto)
+            .map(RoleGrantTable::toBo)
 
     }
 
@@ -49,31 +49,31 @@ object RoleGrantBackend : RecordBackend<RoleGrantDto>() {
 
         RoleGrantTable
             .selectAll()
-            .map(RoleGrantTable::toDto)
+            .map(RoleGrantTable::toBo)
     }
 
-    override fun create(executor: Executor, dto: RoleGrantDto) = transaction {
+    override fun create(executor: Executor, bo: RoleGrantBo) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 
         RoleGrantDao.new {
-            principal = PrincipalDao[dto.principal]
-            role = RoleDao[dto.role]
-        }.toDto()
+            principal = PrincipalDao[bo.principal]
+            role = RoleDao[bo.role]
+        }.toBo()
     }
 
-    override fun read(executor: Executor, recordId: RecordId<RoleGrantDto>) = transaction {
+    override fun read(executor: Executor, entityId: EntityId<RoleGrantBo>) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 
-        RoleGrantDao[recordId].toDto()
+        RoleGrantDao[entityId].toBo()
     }
 
-    override fun delete(executor: Executor, recordId: RecordId<RoleGrantDto>) = transaction {
+    override fun delete(executor: Executor, entityId: EntityId<RoleGrantBo>) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 
-        RoleGrantDao[recordId].delete()
+        RoleGrantDao[entityId].delete()
     }
 
 }

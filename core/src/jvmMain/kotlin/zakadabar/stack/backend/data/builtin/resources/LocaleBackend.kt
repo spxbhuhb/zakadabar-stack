@@ -10,15 +10,15 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
+import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.backend.data.get
-import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.data.builtin.resources.LocaleDto
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.builtin.resources.LocaleBo
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
 
-object LocaleBackend : RecordBackend<LocaleDto>() {
+object LocaleBackend : EntityBackend<LocaleBo>() {
 
-    override val dtoClass = LocaleDto::class
+    override val boClass = LocaleBo::class
 
     override fun onModuleLoad() {
         + LocaleTable
@@ -34,43 +34,43 @@ object LocaleBackend : RecordBackend<LocaleDto>() {
 
         LocaleTable
             .selectAll()
-            .map(LocaleTable::toDto)
+            .map(LocaleTable::toBo)
     }
 
-    override fun create(executor: Executor, dto: LocaleDto) = transaction {
+    override fun create(executor: Executor, bo: LocaleBo) = transaction {
 
         authorize(executor, StackRoles.siteAdmin)
 
         LocaleDao.new {
-            name = dto.name
-            description = dto.description
-        }.toDto()
+            name = bo.name
+            description = bo.description
+        }.toBo()
     }
 
-    override fun read(executor: Executor, recordId: RecordId<LocaleDto>) = transaction {
+    override fun read(executor: Executor, entityId: EntityId<LocaleBo>) = transaction {
 
         authorize(true)
 
-        LocaleDao[recordId].toDto()
+        LocaleDao[entityId].toBo()
     }
 
-    override fun update(executor: Executor, dto: LocaleDto) = transaction {
+    override fun update(executor: Executor, bo: LocaleBo) = transaction {
 
         authorize(executor, StackRoles.siteAdmin)
 
-        val dao = LocaleDao[dto.id]
+        val dao = LocaleDao[bo.id]
         with(dao) {
-            name = dto.name
-            description = dto.description
+            name = bo.name
+            description = bo.description
         }
-        dao.toDto()
+        dao.toBo()
     }
 
-    override fun delete(executor: Executor, recordId: RecordId<LocaleDto>) = transaction {
+    override fun delete(executor: Executor, entityId: EntityId<LocaleBo>) = transaction {
 
         authorize(executor, StackRoles.siteAdmin)
 
-        LocaleDao[recordId].delete()
+        LocaleDao[entityId].delete()
     }
 
 }

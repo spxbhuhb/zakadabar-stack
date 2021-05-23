@@ -38,7 +38,7 @@ class FormDoubleExample(
 
     override fun onConfigure() {
         super.onConfigure()
-        dto = default { }
+        bo = default { }
         mode = ZkElementMode.Action
         setAppTitle = false
     }
@@ -47,16 +47,16 @@ class FormDoubleExample(
         super.onCreate()
 
         + section {
-            + dto::value
-            + dto::optValue
-            + dto::invalidValue
-            + dto::readOnlyValue readOnly true
+            + bo::value
+            + bo::optValue
+            + bo::invalidValue
+            + bo::readOnlyValue readOnly true
         }
 
         // Make invalidValue touched, so the form will show styles.
         // This is just for the example, not needed in actual code.
 
-        dto::invalidValue.find().touched = true
+        bo::invalidValue.find().touched = true
         validate()
     }
 

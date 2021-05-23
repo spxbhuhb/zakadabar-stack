@@ -11,16 +11,16 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
+import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.backend.data.get
-import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.data.builtin.resources.TranslationDto
+import zakadabar.stack.data.builtin.resources.TranslationBo
 import zakadabar.stack.data.builtin.resources.TranslationsByLocale
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
 
-object TranslationBackend : RecordBackend<TranslationDto>() {
+object TranslationBackend : EntityBackend<TranslationBo>() {
 
-    override val dtoClass = TranslationDto::class
+    override val boClass = TranslationBo::class
 
     override fun onModuleLoad() {
         + TranslationTable
@@ -37,45 +37,45 @@ object TranslationBackend : RecordBackend<TranslationDto>() {
 
         TranslationTable
             .selectAll()
-            .map(TranslationTable::toDto)
+            .map(TranslationTable::toBo)
     }
 
-    override fun create(executor: Executor, dto: TranslationDto) = transaction {
+    override fun create(executor: Executor, bo: TranslationBo) = transaction {
 
         authorize(executor, StackRoles.siteAdmin)
 
         TranslationDao.new {
-            name = dto.name
-            locale = dto.locale
-            value = dto.value
-        }.toDto()
+            name = bo.name
+            locale = bo.locale
+            value = bo.value
+        }.toBo()
     }
 
-    override fun read(executor: Executor, recordId: RecordId<TranslationDto>) = transaction {
+    override fun read(executor: Executor, entityId: EntityId<TranslationBo>) = transaction {
 
         authorize(executor, StackRoles.siteMember)
 
-        TranslationDao[recordId].toDto()
+        TranslationDao[entityId].toBo()
     }
 
-    override fun update(executor: Executor, dto: TranslationDto) = transaction {
+    override fun update(executor: Executor, bo: TranslationBo) = transaction {
 
         authorize(executor, StackRoles.siteAdmin)
 
-        val dao = TranslationDao[dto.id]
+        val dao = TranslationDao[bo.id]
         with(dao) {
-            name = dto.name
-            locale = dto.locale
-            value = dto.value
+            name = bo.name
+            locale = bo.locale
+            value = bo.value
         }
-        dao.toDto()
+        dao.toBo()
     }
 
-    override fun delete(executor: Executor, recordId: RecordId<TranslationDto>) = transaction {
+    override fun delete(executor: Executor, entityId: EntityId<TranslationBo>) = transaction {
 
         authorize(executor, StackRoles.siteAdmin)
 
-        TranslationDao[recordId].delete()
+        TranslationDao[entityId].delete()
     }
 
     private fun query(executor: Executor, query: TranslationsByLocale) = transaction {
@@ -85,6 +85,6 @@ object TranslationBackend : RecordBackend<TranslationDto>() {
 
         TranslationTable
             .select { TranslationTable.locale eq query.locale }
-            .map { TranslationTable.toDto(it) }
+            .map { TranslationTable.toBo(it) }
     }
 }

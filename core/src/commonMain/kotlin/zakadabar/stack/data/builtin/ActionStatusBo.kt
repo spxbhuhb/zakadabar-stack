@@ -4,10 +4,10 @@
 package zakadabar.stack.data.builtin
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 
 @Serializable
-data class ActionStatusDto(
+class ActionStatusBo(
     val success: Boolean = true,
     val reason: String? = null
-) : DtoBase
+) : BaseBo

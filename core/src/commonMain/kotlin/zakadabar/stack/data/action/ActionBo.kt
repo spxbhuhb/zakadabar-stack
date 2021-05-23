@@ -4,14 +4,7 @@
 package zakadabar.stack.data.action
 
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.DtoBase
 
-
-interface ActionBo<RESPONSE : BaseBo> : DtoBase, BaseBo {
+interface ActionBo<RESPONSE : BaseBo> : BaseBo {
     suspend fun execute(): RESPONSE
 }
-
-@Deprecated("EOL: 2021.6.30 - use ActionBo instead", ReplaceWith("ActionBo"))
-interface ActionDto<RESPONSE : DtoBase> : ActionBo<RESPONSE>
-
-

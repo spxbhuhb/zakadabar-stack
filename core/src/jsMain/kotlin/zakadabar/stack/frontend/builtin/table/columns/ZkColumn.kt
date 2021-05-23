@@ -8,7 +8,7 @@ import kotlinx.browser.window
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.builtin.table.zkTableStyles
@@ -16,7 +16,7 @@ import zakadabar.stack.frontend.util.minusAssign
 import zakadabar.stack.frontend.util.plusAssign
 import kotlin.math.max
 
-open class ZkColumn<T : DtoBase>(
+open class ZkColumn<T : BaseBo>(
     val table: ZkTable<T>
 ) : ZkElement(
     element = document.createElement("th") as HTMLElement

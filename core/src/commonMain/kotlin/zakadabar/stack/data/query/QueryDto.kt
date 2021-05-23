@@ -4,11 +4,7 @@
 package zakadabar.stack.data.query
 
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.DtoBase
 
-interface QueryBo<RESULT> : DtoBase, BaseBo {
+interface QueryBo<RESULT> : BaseBo {
     suspend fun execute(): List<RESULT>
 }
-
-@Deprecated("EOL: 2021.6.30 - use QueryBo instead", ReplaceWith("QueryBo"))
-interface QueryDto<RESULT> : QueryBo<RESULT>

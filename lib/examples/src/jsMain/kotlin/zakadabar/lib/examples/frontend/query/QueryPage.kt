@@ -38,7 +38,7 @@ object QueryPage : ZkPage(css = zkPageStyles.fixed) {
         classList += zkLayoutStyles.grid
         gridTemplateRows = "max-content 1fr"
 
-        form.dto = default()
+        form.bo = default()
         form.mode = ZkElementMode.Query
 
         + form marginBottom (theme.spacingStep)

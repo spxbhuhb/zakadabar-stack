@@ -4,12 +4,12 @@
 package zakadabar.stack.data.builtin.account
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordDtoCompanion
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.data.entity.EntityBoCompanion
+import zakadabar.stack.data.entity.EntityId
 
 /**
- * A public account DTO which is used to share user information between users.
+ * A public account BO which is used to share user information between users.
  * Actual should depend on the user who requests the information. For example,
  * id and names are OK to display for public, email is not.
  *
@@ -22,9 +22,9 @@ import zakadabar.stack.data.record.RecordId
  * @property  locale            Locale of this account, UI is in this locale.
  */
 @Serializable
-class AccountPublicDto(
+class AccountPublicBo(
 
-    override var id: RecordId<AccountPublicDto>,
+    override var id: EntityId<AccountPublicBo>,
     var accountName: String,
     var fullName: String,
     var email: String?,
@@ -33,13 +33,13 @@ class AccountPublicDto(
     var theme: String?,
     var locale: String
 
-) : RecordDto<AccountPublicDto> {
+) : EntityBo<AccountPublicBo> {
 
-    companion object : RecordDtoCompanion<AccountPublicDto>("account-public")
+    companion object : EntityBoCompanion<AccountPublicBo>("account-public")
 
-    override fun getDtoNamespace() = dtoNamespace
+    override fun getBoNamespace() = boNamespace
     override fun comm() = comm
 
-    // No need for schema for this as this is basically a view of AccountPrivateDto
+    // No need for schema for this as this is basically a view of AccountPrivateBo
 
 }

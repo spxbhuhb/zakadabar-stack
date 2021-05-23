@@ -7,8 +7,8 @@ import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.`java-time`.timestamp
-import zakadabar.stack.backend.data.recordId
-import zakadabar.stack.data.builtin.account.PrincipalDto
+import zakadabar.stack.backend.data.entityId
+import zakadabar.stack.data.builtin.account.PrincipalBo
 
 object PrincipalTable : LongIdTable("principals") {
 
@@ -27,8 +27,8 @@ object PrincipalTable : LongIdTable("principals") {
     val lastLoginFail = timestamp("last_login_fail").nullable()
     val loginFailCount = integer("login_fail_count").default(0)
 
-    fun toDto(row: ResultRow) = PrincipalDto(
-        id = row[id].recordId(),
+    fun toBo(row: ResultRow) = PrincipalBo(
+        id = row[id].entityId(),
 
         validated = row[validated],
         locked = row[locked],

@@ -7,7 +7,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
-import zakadabar.stack.data.record.RecordComm
+import zakadabar.stack.data.entity.EntityComm
 import zakadabar.stack.util.PublicApi
 
 /**
@@ -25,7 +25,7 @@ open class QueryComm(
 
         val q = Json.encodeToString(requestSerializer, request).encodeURLPath()
 
-        val text = RecordComm.client.get<String>("${RecordComm.baseUrl}/api/${companion.boNamespace}/query/${request::class.simpleName}?q=${q}")
+        val text = EntityComm.client.get<String>("${EntityComm.baseUrl}/api/${companion.boNamespace}/query/${request::class.simpleName}?q=${q}")
 
         return Json.decodeFromString(responseSerializer, text)
     }

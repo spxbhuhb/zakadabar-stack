@@ -3,19 +3,19 @@
  */
 package zakadabar.stack.frontend.builtin.pages.resources.locales
 
-import zakadabar.stack.data.builtin.resources.LocaleDto
+import zakadabar.stack.data.builtin.resources.LocaleBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 
-class Form : ZkForm<LocaleDto>() {
+class Form : ZkForm<LocaleBo>() {
 
     override fun onCreate() {
-        build(dto.name, stringStore.setting, css = ZkFormStyles.onePanel) {
+        build(bo.name, stringStore.setting, css = ZkFormStyles.onePanel) {
             + section(stringStore.basics) {
-                + dto::id
-                + dto::name
-                + dto::description
+                + bo::id
+                + bo::name
+                + bo::description
             }
         }
     }

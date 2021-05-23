@@ -11,14 +11,13 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
-import zakadabar.stack.backend.data.get
-import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.Executor
 
-object ExampleReferenceBackend : RecordBackend<ExampleReferenceDto>() {
+object ExampleReferenceBackend : EntityBackend<ExampleReferenceDto>() {
 
-    override val dtoClass = ExampleReferenceDto::class
+    override val boClass = ExampleReferenceDto::class
 
     override fun onModuleLoad() {
         + ExampleReferenceTable

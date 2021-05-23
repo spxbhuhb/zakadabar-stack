@@ -16,15 +16,15 @@
  */
 package zakadabar.stack.data.schema.entries
 
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.schema.BoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.descriptor.BaseBoBoProperty
 import zakadabar.stack.data.schema.descriptor.BoProperty
-import zakadabar.stack.data.schema.descriptor.DtoBaseBoProperty
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class DtoBaseBoSchemaEntry<T : DtoBase>(val kProperty: KMutableProperty0<T>) : BoSchemaEntry<T> {
+class BaseBoBoSchemaEntry<T : BaseBo>(val kProperty: KMutableProperty0<T>) : BoSchemaEntry<T> {
 
     var defaultValue = kProperty.get()
 
@@ -33,7 +33,7 @@ class DtoBaseBoSchemaEntry<T : DtoBase>(val kProperty: KMutableProperty0<T>) : B
     }
 
     @PublicApi
-    infix fun default(value: T): DtoBaseBoSchemaEntry<T> {
+    infix fun default(value: T): BaseBoBoSchemaEntry<T> {
         defaultValue = value
         return this
     }
@@ -45,11 +45,11 @@ class DtoBaseBoSchemaEntry<T : DtoBase>(val kProperty: KMutableProperty0<T>) : B
     override fun isOptional() = false
 
     override fun push(bo: BoProperty) {
-        require(bo is DtoBaseBoProperty)
+        require(bo is BaseBoBoProperty)
         kProperty.get().schema().push(bo.value!!)
     }
 
-    override fun toBoProperty() = DtoBaseBoProperty(
+    override fun toBoProperty() = BaseBoBoProperty(
         kProperty.name,
         isOptional(),
         emptyList(),

@@ -5,8 +5,8 @@ package zakadabar.stack.frontend.builtin.form.fields
 
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.record.RecordDto
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
@@ -16,7 +16,7 @@ import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.util.minusAssign
 import zakadabar.stack.frontend.util.plusAssign
 
-abstract class ZkFieldBase<FT : DtoBase, DT>(
+abstract class ZkFieldBase<FT : BaseBo, DT>(
     val form: ZkForm<FT>,
     val propName: String,
     open var label: String? = null,
@@ -27,7 +27,7 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
 
     /**
      * True when the input value is invalid itself, without the schema. This
-     * is the case for mandatory enumerations for example when the dto has
+     * is the case for mandatory enumerations for example when the bo has
      * to store a value as it cannot be null. However, if the user selects
      * "not selected", the input is invalid, but the schema validation won't
      * show it up.
@@ -177,5 +177,5 @@ abstract class ZkFieldBase<FT : DtoBase, DT>(
     /**
      * Called after a successful form submit in create mode.
      */
-    open suspend fun onCreateSuccess(created: RecordDto<*>) = Unit
+    open suspend fun onCreateSuccess(created: EntityBo<*>) = Unit
 }

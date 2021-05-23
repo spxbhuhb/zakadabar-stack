@@ -4,10 +4,10 @@
 package zakadabar.stack.backend.data.builtin.resources
 
 import kotlinx.serialization.KSerializer
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import kotlin.reflect.KProperty
 
-class Setting<V : DtoBase>(
+class Setting<V : BaseBo>(
     var value: V,
     val namespace: String,
     private val serializer: KSerializer<V>

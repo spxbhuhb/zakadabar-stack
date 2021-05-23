@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.util
 
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import kotlin.reflect.KClass
 
 /**
@@ -12,7 +12,7 @@ import kotlin.reflect.KClass
 fun <T : Any> KClass<T>.newInstance(): T = callCtor(this.js) as T
 
 /**
- * Creates an instance of the given DTO with the default set in the
+ * Creates an instance of the given Bo with the default set in the
  * schema and runs the supplied [builder] function on it to tune
  * field values.
  *
@@ -20,23 +20,23 @@ fun <T : Any> KClass<T>.newInstance(): T = callCtor(this.js) as T
  *
  * @return an instance of T with the default values set and modifications made by [builder]
  */
-inline fun <reified T : DtoBase> default(builder: T.() -> Unit): T {
-    val dto = callCtor(T::class.js) as T
-    dto.schema().setDefaults()
-    dto.builder()
-    return dto
+inline fun <reified T : BaseBo> default(builder: T.() -> Unit): T {
+    val bo = callCtor(T::class.js) as T
+    bo.schema().setDefaults()
+    bo.builder()
+    return bo
 }
 
 /**
- * Creates an instance of the given DTO with the default set in the
+ * Creates an instance of the given BO with the default set in the
  * schema.
  *
  * @return an instance of T with the default values set
  */
-inline fun <reified T : DtoBase> default(): T {
-    val dto = callCtor(T::class.js) as T
-    dto.schema().setDefaults()
-    return dto
+inline fun <reified T : BaseBo> default(): T {
+    val bo = callCtor(T::class.js) as T
+    bo.schema().setDefaults()
+    return bo
 }
 
 

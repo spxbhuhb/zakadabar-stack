@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 object SimpleExampleCrud : ZkCrudTarget<SimpleExampleDto>() {
     init {
         companion = SimpleExampleDto.Companion
-        dtoClass = SimpleExampleDto::class
+        boClass = SimpleExampleDto::class
         pageClass = SimpleExampleForm::class
         tableClass = SimpleExampleTable::class
     }

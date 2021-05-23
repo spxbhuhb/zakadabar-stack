@@ -26,11 +26,3 @@ abstract class ActionBoCompanion<RESPONSE : Any>(
         }
 
 }
-
-@Deprecated("EOL: 2021.6.30 - use ActionBoCompanion instead", ReplaceWith("ActionBoCompanion"))
-abstract class ActionDtoCompanion<RESPONSE : Any>(
-    dtoNamespace: String
-) : ActionBoCompanion<RESPONSE>(dtoNamespace) {
-    val dtoNamespace
-        get() = boNamespace
-}

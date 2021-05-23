@@ -3,16 +3,16 @@
  */
 package zakadabar.stack.frontend.builtin.pages.resources.settings
 
-import zakadabar.stack.data.builtin.account.RoleDto
-import zakadabar.stack.data.builtin.resources.SettingDto
+import zakadabar.stack.data.builtin.account.RoleBo
+import zakadabar.stack.data.builtin.resources.SettingBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
-class Table : ZkTable<SettingDto>() {
+class Table : ZkTable<SettingBo>() {
 
     private val roles by preload {
         try {
-            RoleDto.allAsMap()
+            RoleBo.allAsMap()
         } catch (ex: Exception) {
             emptyMap()
         }
@@ -28,13 +28,13 @@ class Table : ZkTable<SettingDto>() {
         titleText = stringStore.roles
         crud = Settings
 
-        + SettingDto::id
+        + SettingBo::id
         + custom {
             label = stringStore.role
             render = { + roles[it.role]?.name }
         }
-        + SettingDto::namespace
-        + SettingDto::className
+        + SettingBo::namespace
+        + SettingBo::className
 
         + actions()
     }

@@ -14,18 +14,17 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.stack.data.builtin.settings.DatabaseSettingsDto
-import zakadabar.stack.data.record.LongRecordId
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.builtin.settings.DatabaseSettingsBo
+import zakadabar.stack.data.entity.EntityId
 
 /**
  * Use this everywhere BUT when handling blob content.
  */
 suspend fun <T> sql(block: () -> T): T = withContext(Dispatchers.IO) { transaction { block() } }
 
-inline operator fun <reified T : LongEntity> LongEntityClass<T>.get(recordId: RecordId<*>) = this[recordId.toLong()]
+inline operator fun <reified T : LongEntity> LongEntityClass<T>.get(entityId: EntityId<*>) = this[entityId.toLong()]
 
-inline fun <reified T> EntityID<Long>.recordId() = LongRecordId<T>(this.value)
+inline fun <reified T> EntityID<Long>.entityId() = EntityId<T>(this.value)
 
 object Sql {
 
@@ -33,7 +32,7 @@ object Sql {
 
     val tables = mutableListOf<Table>()
 
-    fun onCreate(config: DatabaseSettingsDto) {
+    fun onCreate(config: DatabaseSettingsBo) {
         val hikariConfig = HikariConfig()
 
         hikariConfig.driverClassName = config.driverClassName

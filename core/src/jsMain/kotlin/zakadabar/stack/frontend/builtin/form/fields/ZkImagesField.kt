@@ -20,12 +20,11 @@ import kotlinx.browser.window
 import org.w3c.dom.DragEvent
 import org.w3c.dom.events.Event
 import org.w3c.dom.get
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.builtin.BlobDto
-import zakadabar.stack.data.record.BlobCreateState
-import zakadabar.stack.data.record.EmptyRecordId
-import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.builtin.BlobBo
+import zakadabar.stack.data.entity.BlobCreateState
+import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
@@ -39,9 +38,9 @@ import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.io
 
-open class ZkImagesField<T : RecordDto<T>>(
+open class ZkImagesField<T : EntityBo<T>>(
     form: ZkForm<T>,
-    private val dataRecordId: RecordId<T>,
+    private val dataEntityId: EntityId<T>,
     private val imageCountMax: Int? = null
 ) : ZkFieldBase<T, Unit>(
     form = form,
@@ -58,7 +57,7 @@ open class ZkImagesField<T : RecordDto<T>>(
             form.fields += this@ZkImagesField
 
             if (form.mode != ZkElementMode.Create) {
-                form.dto.comm().blobMetaList(dataRecordId).forEach {
+                form.bo.comm().blobMetaList(dataEntityId).forEach {
                     + ZkImagePreview(it, onDelete = { preview -> onDelete(preview) }) marginRight 10 marginBottom 10
                 }
             }
@@ -113,15 +112,15 @@ open class ZkImagesField<T : RecordDto<T>>(
                 "file" -> {
                     val file = item.getAsFile() ?: continue
 
-                    // this is a temporary dto to initialize the Thumbnail
-                    val dto = BlobDto(EmptyRecordId(), null, "", file.name, file.type, file.size.toLong())
+                    // this is a temporary bo to initialize the Thumbnail
+                    val bo = BlobBo(EntityId(), null, "", file.name, file.type, file.size.toLong())
 
-                    val thumbnail = ZkImagePreview(dto, BlobCreateState.Starting, onDelete = { preview -> onDelete(preview) })
+                    val thumbnail = ZkImagePreview(bo, BlobCreateState.Starting, onDelete = { preview -> onDelete(preview) })
                     thumbnail marginRight 10 marginBottom 10
 
                     // when the form is in create mode we don't have a proper record id, use null instead
-                    form.dto.comm().blobCreate(
-                        if (form.mode == ZkElementMode.Create) null else dataRecordId,
+                    form.bo.comm().blobCreate(
+                        if (form.mode == ZkElementMode.Create) null else dataEntityId,
                         file.name, file.type, file,
                         thumbnail::update
                     )
@@ -150,7 +149,7 @@ open class ZkImagesField<T : RecordDto<T>>(
         if (! ZkConfirmDialog(stringStore.confirmation.capitalize(), stringStore.confirmDelete).run()) return false
 
         if (form.mode != ZkElementMode.Create) {
-            form.dto.comm().blobDelete(preview.dto.id)
+            form.bo.comm().blobDelete(preview.bo.id)
         }
 
         this@ZkImagesField -= preview
@@ -164,11 +163,11 @@ open class ZkImagesField<T : RecordDto<T>>(
 
     }
 
-    override suspend fun onCreateSuccess(created: RecordDto<*>) {
+    override suspend fun onCreateSuccess(created: EntityBo<*>) {
         // update blobs with the proper record id
         childElements.filterIsInstance<ZkImagePreview>().forEach {
             @Suppress("UNCHECKED_CAST") // this is just an id, it should be fine
-            form.dto.comm().blobMetaUpdate(it.dto.copy(dataRecord = created.id as RecordId<DtoBase>))
+            form.bo.comm().blobMetaUpdate(it.bo.copy(entityId = created.id as EntityId<BaseBo>))
         }
     }
 

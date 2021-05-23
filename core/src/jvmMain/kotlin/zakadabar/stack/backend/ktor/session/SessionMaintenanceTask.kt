@@ -16,11 +16,11 @@ import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.data.builtin.resources.setting
 import zakadabar.stack.backend.data.builtin.session.SessionTable
-import zakadabar.stack.data.builtin.settings.SessionBackendSettingsDto
+import zakadabar.stack.data.builtin.settings.SessionBackendSettingsBo
 
 object SessionMaintenanceTask {
 
-    private val settings by setting<SessionBackendSettingsDto>("zakadabar.stack.session")
+    private val settings by setting<SessionBackendSettingsBo>("zakadabar.stack.session")
 
     val updateChannel = Channel<SessionCacheEntry>()
 

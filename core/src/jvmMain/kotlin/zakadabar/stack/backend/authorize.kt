@@ -3,8 +3,8 @@
  */
 package zakadabar.stack.backend
 
-import zakadabar.stack.data.builtin.account.RoleDto
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.builtin.account.RoleBo
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
 import zakadabar.stack.util.PublicApi
 
@@ -14,7 +14,7 @@ fun authorize(executor: Executor, roleName: String) {
 }
 
 @PublicApi
-fun authorize(executor: Executor, roleId: RecordId<RoleDto>) {
+fun authorize(executor: Executor, roleId: EntityId<RoleBo>) {
     if (! executor.hasRole(roleId)) throw Forbidden()
 }
 

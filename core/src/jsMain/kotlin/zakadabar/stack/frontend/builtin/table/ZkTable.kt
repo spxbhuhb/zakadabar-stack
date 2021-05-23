@@ -8,10 +8,9 @@ import kotlinx.datetime.Instant
 import kotlinx.dom.clear
 import org.w3c.dom.*
 import org.w3c.dom.events.MouseEvent
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.record.StringRecordId
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
@@ -53,7 +52,7 @@ import kotlin.reflect.KProperty1
  * @property  columns       Column definitions.
  * @property  preloads      Data load jobs which has to be performed before the table is rendered.
  */
-open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider, ZkLocalTitleProvider {
+open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitleProvider {
 
     // -------------------------------------------------------------------------
     //  Configuration -- meant to set by onConfigure
@@ -359,11 +358,11 @@ open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider, ZkLocalTitleP
      * Get a unique if for the given row. The id of the row is used by actions and is
      * passed to row based functions such as [onDblClick].
      *
-     * Default implementation uses [RecordDto.id] when rows are record dto instances,
+     * Default implementation uses [EntityBo.id] when rows are record bo instances,
      * otherwise it throws [NotImplementedError].
      */
     open fun getRowId(row: T): String {
-        if (row is RecordDto<*>) {
+        if (row is EntityBo<*>) {
             return row.id.toString()
         } else {
             throw NotImplementedError("please override ${this::class}.getRowId when not using crud")
@@ -385,7 +384,7 @@ open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider, ZkLocalTitleP
      * @param  id  Id of the row as given by [getRowId].
      */
     open fun onDblClick(id: String) {
-        crud?.openUpdate(StringRecordId(id))
+        crud?.openUpdate(EntityId<T>(id))
     }
 
     /**
@@ -398,7 +397,7 @@ open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider, ZkLocalTitleP
      * * calls [render]
      */
     open fun onSearch(text: String) {
-        searchText = if (text.isEmpty()) null else text
+        searchText = text.ifEmpty { null }
         filter()
         render()
     }
@@ -454,13 +453,13 @@ open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider, ZkLocalTitleP
     //  Column builders
     // -------------------------------------------------------------------------
 
-    operator fun <IT> KProperty1<T, RecordId<IT>>.unaryPlus(): ZkRecordIdColumn<T, IT> {
+    operator fun <IT> KProperty1<T, EntityId<IT>>.unaryPlus(): ZkRecordIdColumn<T, IT> {
         val column = ZkRecordIdColumn(this@ZkTable, this)
         columns += column
         return column
     }
 
-    operator fun <IT> KProperty1<T, RecordId<IT>?>.unaryPlus(): ZkOptRecordIdColumn<T, IT> {
+    operator fun <IT> KProperty1<T, EntityId<IT>?>.unaryPlus(): ZkOptRecordIdColumn<T, IT> {
         val column = ZkOptRecordIdColumn(this@ZkTable, this)
         columns += column
         return column

@@ -4,11 +4,8 @@
 package zakadabar.stack.frontend.application
 
 import org.w3c.dom.url.URLSearchParams
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.record.EmptyRecordId
-import zakadabar.stack.data.record.LongRecordId
-import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.record.StringRecordId
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.entity.EntityId
 
 /**
  * Stores the current navigation state of the browser window.
@@ -27,7 +24,7 @@ class ZkNavState(val urlPath: String, val urlQuery: String, val urlHashtag: Stri
     val viewName: String
     val segments: List<String>
     val hash: String
-    val recordId: RecordId<*>
+    val recordId: EntityId<*>
     val query: Any?
     val args: String?
 
@@ -41,7 +38,7 @@ class ZkNavState(val urlPath: String, val urlQuery: String, val urlHashtag: Stri
             locale = ""
             viewName = ""
             hash = ""
-            recordId = EmptyRecordId<DtoBase>()
+            recordId = EntityId<BaseBo>()
             query = null
             args = null
 
@@ -54,12 +51,7 @@ class ZkNavState(val urlPath: String, val urlQuery: String, val urlHashtag: Stri
 
             hash = if (segments.last().contains('#')) segments.last().substringAfter('#') else urlHashtag.trim('#')
 
-            val id = searchParams.get("id")
-            recordId = when {
-                id == null -> EmptyRecordId<DtoBase>()
-                id.toLongOrNull() == null -> StringRecordId<DtoBase>(id)
-                else -> LongRecordId<DtoBase>(id.toLong())
-            }
+            recordId = EntityId<BaseBo>(searchParams.get("id"))
 
             query = searchParams.get("query")
 

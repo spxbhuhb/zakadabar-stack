@@ -4,10 +4,10 @@
 package zakadabar.stack.data.builtin.resources
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordDtoCompanion
-import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.data.entity.EntityBoCompanion
+import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.data.schema.BoSchema
 
 /**
  * A locale like "hu-HU".
@@ -17,18 +17,18 @@ import zakadabar.stack.data.schema.DtoSchema
  * @property  description   Description of the locale.
  */
 @Serializable
-data class LocaleDto(
-    override var id: RecordId<LocaleDto>,
+data class LocaleBo(
+    override var id: EntityId<LocaleBo>,
     var name: String,
     var description: String
-) : RecordDto<LocaleDto> {
+) : EntityBo<LocaleBo> {
 
-    companion object : RecordDtoCompanion<LocaleDto>("locale")
+    companion object : EntityBoCompanion<LocaleBo>("locale")
 
-    override fun getDtoNamespace() = dtoNamespace
+    override fun getBoNamespace() = boNamespace
     override fun comm() = comm
 
-    override fun schema() = DtoSchema {
+    override fun schema() = BoSchema {
         + ::name min 2 max 100 blank false
         + ::description
     }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.sync.withLock
 import zakadabar.lib.examples.backend.builtin.SiteBuiltinBackend.mutex
 import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
 import zakadabar.stack.backend.authorize
-import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.data.record.LongRecordId
 import zakadabar.stack.data.record.RecordId
 import zakadabar.stack.util.Executor
@@ -24,9 +24,9 @@ import zakadabar.stack.util.Executor
  * in this case that is fine as the operations are really fast (in-memory only,
  * on a very short list).
  */
-object SiteExampleReferenceBackend : RecordBackend<ExampleReferenceDto>() {
+object SiteExampleReferenceBackend : EntityBackend<ExampleReferenceDto>() {
 
-    override val dtoClass = ExampleReferenceDto::class
+    override val boClass = ExampleReferenceDto::class
 
     private var nextId = 1L
     private var recordStore = mutableListOf<ExampleReferenceDto>()

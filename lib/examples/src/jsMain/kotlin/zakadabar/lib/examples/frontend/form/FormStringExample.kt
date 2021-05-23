@@ -42,7 +42,7 @@ class FormStringExample(
 
     override fun onConfigure() {
         super.onConfigure()
-        dto = default { }
+        bo = default { }
         mode = ZkElementMode.Action
         setAppTitle = false
     }
@@ -51,18 +51,18 @@ class FormStringExample(
         super.onCreate()
 
         + section {
-            + dto::value
-            + dto::optValue
-            + dto::invalidValue
-            + dto::readOnlyValue readOnly true
-            + select(dto::selectValue, options = listOf("Option 1", "Option 2", "Option 3"))
-            + textarea(dto::textAreaValue)
+            + bo::value
+            + bo::optValue
+            + bo::invalidValue
+            + bo::readOnlyValue readOnly true
+            + select(bo::selectValue, options = listOf("Option 1", "Option 2", "Option 3"))
+            + textarea(bo::textAreaValue)
         }
 
         // Make invalidValue touched, so the form will show styles.
         // This is just for the example, not needed in actual code.
 
-        with(dto::invalidValue.find()) {
+        with(bo::invalidValue.find()) {
             touched = true
             invalidInput = true
         }

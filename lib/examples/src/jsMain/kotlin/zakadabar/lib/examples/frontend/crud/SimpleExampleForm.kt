@@ -12,8 +12,8 @@ class SimpleExampleForm : ZkForm<SimpleExampleDto>() {
 
         build("Simple Example") {
             + section("Section Title") {
-                + dto::id
-                + dto::name
+                + bo::id
+                + bo::name
             }
         }
     }

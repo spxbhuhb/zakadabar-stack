@@ -22,12 +22,12 @@ import zakadabar.stack.backend.data.builtin.role.RoleDao
 import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantDao
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantTable
+import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.backend.data.get
-import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.data.builtin.account.AccountPrivateDto
-import zakadabar.stack.data.builtin.misc.ServerDescriptionDto
-import zakadabar.stack.data.record.LongRecordId
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.builtin.account.AccountPrivateBo
+import zakadabar.stack.data.builtin.account.PrincipalBo
+import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
 
 /**
@@ -46,11 +46,11 @@ import zakadabar.stack.util.Executor
  * and authorization functions should use the principal and the account should store only
  * the business data.
  */
-object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
+object AccountPrivateBackend : EntityBackend<AccountPrivateBo>() {
 
-    override val dtoClass = AccountPrivateDto::class
+    override val boClass = AccountPrivateBo::class
 
-    private val serverDescription by setting<ServerDescriptionDto>("zakadabar.server.description")
+    private val serverDescription by setting<ServerDescriptionBo>("zakadabar.server.description")
 
     override fun onModuleLoad() {
         transaction {
@@ -83,7 +83,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
         Server.findAccountById = {
             transaction {
                 val account = AccountPrivateDao[it.toLong()]
-                account.toPublicDto(false) to LongRecordId(account.principal.id.value)
+                account.toPublicBo(false) to EntityId(account.principal.id.value)
             }
         }
 
@@ -93,7 +93,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
         Server.findAccountByName = {
             transaction {
                 val account = AccountPrivateDao.find { AccountPrivateTable.accountName eq it }.firstOrNull() ?: throw NoSuchElementException()
-                account.toPublicDto(false) to LongRecordId(account.principal.id.value)
+                account.toPublicBo(false) to EntityId<PrincipalBo>(account.principal.id.value)
             }
         }
     }
@@ -108,10 +108,10 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
 
         AccountPrivateTable
             .selectAll()
-            .map(AccountPrivateTable::toDto)
+            .map(AccountPrivateTable::toBo)
     }
 
-    override fun create(executor: Executor, dto: AccountPrivateDto) = transaction {
+    override fun create(executor: Executor, bo: AccountPrivateBo) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 
@@ -121,54 +121,54 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
 
         AccountPrivateDao.new {
             principal = newPrincipal
-            fromDto(dto)
-        }.toDto()
+            fromBo(bo)
+        }.toBo()
     }
 
-    override fun read(executor: Executor, recordId: RecordId<AccountPrivateDto>) = transaction {
+    override fun read(executor: Executor, entityId: EntityId<AccountPrivateBo>) = transaction {
 
         // the owner of the account and security officers may read it
 
-        if (recordId != executor.accountId) {
+        if (entityId != executor.accountId) {
             authorize(executor, StackRoles.securityOfficer)
         }
 
-        AccountPrivateDao[recordId].toDto()
+        AccountPrivateDao[entityId].toBo()
     }
 
-    override fun update(executor: Executor, dto: AccountPrivateDto) = transaction {
+    override fun update(executor: Executor, bo: AccountPrivateBo) = transaction {
 
         // the owner of the account and security officers may read it
 
-        if (dto.id != executor.accountId) {
+        if (bo.id != executor.accountId) {
             authorize(executor, StackRoles.securityOfficer)
         }
 
-        AccountPrivateDao[dto.id].fromDto(dto).toDto()
+        AccountPrivateDao[bo.id].fromBo(bo).toBo()
     }
 
-    override fun delete(executor: Executor, recordId: RecordId<AccountPrivateDto>) {
+    override fun delete(executor: Executor, entityId: EntityId<AccountPrivateBo>) {
 
         authorize(executor, StackRoles.securityOfficer)
 
-        AccountPrivateDao[recordId].delete()
+        AccountPrivateDao[entityId].delete()
     }
 
-    private fun AccountPrivateDao.fromDto(dto: AccountPrivateDto): AccountPrivateDao {
-        val avatarId = dto.avatar
+    private fun AccountPrivateDao.fromBo(bo: AccountPrivateBo): AccountPrivateDao {
+        val avatarId = bo.avatar
 
-        accountName = dto.accountName
-        fullName = dto.fullName
-        email = dto.email
+        accountName = bo.accountName
+        fullName = bo.fullName
+        email = bo.email
 
-        displayName = dto.displayName
-        theme = dto.theme
-        locale = dto.locale
+        displayName = bo.displayName
+        theme = bo.theme
+        locale = bo.locale
         avatar = avatarId?.let { AccountImageDao[avatarId] }
 
-        organizationName = dto.organizationName
-        position = dto.position
-        phone = dto.phone
+        organizationName = bo.organizationName
+        position = bo.position
+        phone = bo.phone
 
         return this
     }
@@ -183,7 +183,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
             RoleDao.new {
                 name = roleName
                 description = roleName
-            }.toDto()
+            }.toBo()
         }
     }
 
@@ -194,7 +194,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
     private fun anonymous() = transaction {
         val account = AccountPrivateTable
             .select { AccountPrivateTable.accountName eq "anonymous" }
-            .map { AccountPrivateTable.toPublicDto(it) }
+            .map { AccountPrivateTable.toPublicBo(it) }
             .firstOrNull()
 
         if (account != null) return@transaction account
@@ -216,7 +216,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
             phone = ""
         }
 
-        newAccount.toPublicDto(false)
+        newAccount.toPublicBo(false)
     }
 
 

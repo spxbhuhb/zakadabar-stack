@@ -8,14 +8,14 @@ import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.schema.BoSchema
 
 @Serializable
-class ServerSettingsDto(
+class ServerSettingsBo(
 
     var serverName: String = "",
-    var database: DatabaseSettingsDto,
+    var database: DatabaseSettingsBo,
     var traceRouting: Boolean = false,
     var staticResources: String = "./var/static",
     var apiCacheControl : String = "no-cache, no-store",
-    var ktor: KtorSettingsDto = KtorSettingsDto(),
+    var ktor: KtorSettingsBo = KtorSettingsBo(),
     var modules: List<String> = emptyList()
 
 ) : BaseBo {

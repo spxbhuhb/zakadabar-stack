@@ -16,13 +16,13 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
 @PublicApi
-open class ZkOptBooleanField<T : DtoBase>(
+open class ZkOptBooleanField<T : BaseBo>(
     form: ZkForm<T>,
     val prop: KMutableProperty0<Boolean?>,
     options: suspend () -> List<Pair<Boolean, String>>

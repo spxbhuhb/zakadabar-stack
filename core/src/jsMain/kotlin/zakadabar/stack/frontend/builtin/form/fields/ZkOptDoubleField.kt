@@ -16,11 +16,11 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptDoubleField<T : DtoBase>(
+open class ZkOptDoubleField<T : BaseBo>(
     form: ZkForm<T>,
     prop: KMutableProperty0<Double?>
 ) : ZkStringBase<T, Double?>(

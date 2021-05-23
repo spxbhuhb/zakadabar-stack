@@ -5,9 +5,6 @@ package zakadabar.stack.data
 
 import zakadabar.stack.data.schema.BoSchema
 
-@Deprecated("EOL: 2021.6.30 - use BaseBo instead", ReplaceWith("BaseBo"))
-interface DtoBase : BaseBo
-
 interface BaseBo {
     fun schema() = BoSchema.NO_VALIDATION
 

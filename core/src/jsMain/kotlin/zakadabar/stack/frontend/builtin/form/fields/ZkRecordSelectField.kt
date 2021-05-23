@@ -16,25 +16,25 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-open class ZkRecordSelectField<T : DtoBase, ST>(
+open class ZkRecordSelectField<T : BaseBo, ST>(
     form: ZkForm<T>,
-    val prop: KMutableProperty0<RecordId<ST>>,
+    val prop: KMutableProperty0<EntityId<ST>>,
     sortOptions: Boolean = true,
-    options: suspend () -> List<Pair<RecordId<ST>, String>>
-) : ZkSelectBase<T, RecordId<ST>>(form, prop.name, sortOptions, options) {
+    options: suspend () -> List<Pair<EntityId<ST>, String>>
+) : ZkSelectBase<T, EntityId<ST>>(form, prop.name, sortOptions, options) {
 
-    override fun fromString(string: String): RecordId<ST> {
-        return items.first().first.fromString(string)
+    override fun fromString(string: String): EntityId<ST> {
+        return items.first().first
     }
 
     override fun getPropValue() = prop.get()
 
-    override fun setPropValue(value: Pair<RecordId<ST>, String>?) {
+    override fun setPropValue(value: Pair<EntityId<ST>, String>?) {
         if (value == null) {
             invalidInput = true
         } else {

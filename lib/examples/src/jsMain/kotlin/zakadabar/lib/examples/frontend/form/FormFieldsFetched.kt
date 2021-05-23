@@ -24,7 +24,7 @@ object FormFieldsFetched : ZkPage() {
             val id = BuiltinDto.all().first().id
 
             val form = BuiltinForm()
-            form.dto = BuiltinDto.read(id)
+            form.bo = BuiltinDto.read(id)
             form.mode = ZkElementMode.Action
 
             + div(zkPageStyles.content) {

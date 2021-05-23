@@ -18,13 +18,13 @@ package zakadabar.stack.frontend.builtin.form.fields
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLTextAreaElement
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.util.plusAssign
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptTextAreaField<T : DtoBase>(
+open class ZkOptTextAreaField<T : BaseBo>(
     form: ZkForm<T>,
     private val prop: KMutableProperty0<String?>
 ) : ZkFieldBase<T, String>(

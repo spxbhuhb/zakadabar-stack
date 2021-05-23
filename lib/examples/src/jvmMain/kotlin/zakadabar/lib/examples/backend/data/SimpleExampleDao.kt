@@ -7,7 +7,7 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import zakadabar.lib.examples.data.SimpleExampleDto
-import zakadabar.stack.backend.data.recordId
+import zakadabar.stack.backend.data.entityId
 
 class SimpleExampleDao(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<SimpleExampleDao>(SimpleExampleTable)
@@ -15,7 +15,7 @@ class SimpleExampleDao(id: EntityID<Long>) : LongEntity(id) {
     var name by SimpleExampleTable.name
 
     fun toDto() = SimpleExampleDto(
-        id = id.recordId(),
+        id = id.entityId(),
         name = name
     )
 

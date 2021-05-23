@@ -3,13 +3,13 @@
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import kotlin.reflect.KProperty1
 
-open class ZkDoubleColumn<T : DtoBase>(
+open class ZkDoubleColumn<T : BaseBo>(
     table: ZkTable<T>,
     private val prop: KProperty1<T, Double>
 ) : ZkColumn<T>(table) {

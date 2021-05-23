@@ -6,7 +6,6 @@ package zakadabar.lib.examples.frontend
 import io.ktor.client.features.*
 import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
-import zakadabar.stack.backend.util.default
 import zakadabar.stack.data.builtin.account.*
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.record.EmptyRecordId
@@ -27,7 +26,7 @@ suspend fun crud() {
 
     val builtin = BuiltinDto.all().first()
     val reference = ExampleReferenceDto.all().first()
-    val account = AccountPublicDto.all().first()
+    val account = AccountPublicBo.all().first()
 
     // with the constructor we have to initialize all fields
 
@@ -62,20 +61,20 @@ suspend fun dumpBuiltins(message: String) {
 suspend fun login() {
     println("\n======== Login ========\n")
 
-    var session = SessionDto.read(StringRecordId("own"))
+    var session = SessionBo.read(StringRecordId("own"))
 
     println("    ---- at start ----\n")
     println("        $session\n")
 
     var actionStatus = LoginAction("demo", Secret("wrong")).execute()
-    session = SessionDto.read(StringRecordId("own"))
+    session = SessionBo.read(StringRecordId("own"))
 
     println("    ---- unsuccessful login ----\n")
     println("        $actionStatus\n")
     println("        $session\n")
 
     actionStatus = LoginAction("demo", Secret("demo")).execute()
-    session = SessionDto.read(StringRecordId("own"))
+    session = SessionBo.read(StringRecordId("own"))
 
     println("    ---- successful login ----\n")
     println("        $actionStatus\n")
@@ -83,7 +82,7 @@ suspend fun login() {
 
     println("    ---- after successful login ----\n")
 
-    val account = AccountPrivateDto.read(LongRecordId(session.account.id.toLong()))
+    val account = AccountPrivateBo.read(LongRecordId(session.account.id.toLong()))
     println("        $account\n")
 
     actionStatus = LogoutAction().execute()
@@ -92,7 +91,7 @@ suspend fun login() {
     println("        $actionStatus\n")
 
     try {
-        AccountPrivateDto.read(LongRecordId(session.account.id.toLong()))
+        AccountPrivateBo.read(LongRecordId(session.account.id.toLong()))
     } catch (ex: ClientRequestException) {
         println("    ---- after logout ----\n")
         println("        ${ex.response}")
