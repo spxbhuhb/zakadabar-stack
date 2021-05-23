@@ -1,4 +1,4 @@
-# Introduction
+# Introduction: Software Model
 
 Zakadabar applications start from the data model. This is a very important point. When the data
 model is well-defined, applications almost build up themselves.
