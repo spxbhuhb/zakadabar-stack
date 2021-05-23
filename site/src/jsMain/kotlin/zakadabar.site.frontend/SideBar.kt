@@ -42,7 +42,7 @@ class SideBar : ZkSideBar() {
             }
 
             + section(strings.tools) {
-                + item(BenderPage, text = strings.record)
+                + item(BenderPage, text = strings.bender)
             }
 
             + group(DocumentationIntro, strings.documentation, section = true) {

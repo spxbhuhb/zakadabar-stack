@@ -144,9 +144,9 @@ class LongDetails : EntryDetails() {
 
 }
 
-class RecordIdDetails : EntryDetails() {
+class EntityIdDetails : EntryDetails() {
 
-    private val recordType = ZkTextInput()
+    private val entityType = ZkTextInput()
 
     override fun onCreate() {
         super.onCreate()
@@ -155,8 +155,8 @@ class RecordIdDetails : EntryDetails() {
             + Optional()
 
             + row {
-                + div { + "Record Type:" } css benderStyles.editorLabel
-                + recordType css benderStyles.largeInput
+                + div { + "Entity Type:" } css benderStyles.editorLabel
+                + entityType css benderStyles.largeInput
             }
         }
     }
@@ -164,7 +164,7 @@ class RecordIdDetails : EntryDetails() {
     override fun generator(name: String, boDescriptor: BoDescriptor) =
         EntityIdPropertyGenerator(
             boDescriptor,
-            EntityIdBoProperty(name, optional, constraints, recordType.value, EntityId(), EntityId())
+            EntityIdBoProperty(name, optional, constraints, entityType.value, EntityId(), EntityId())
         )
 
 }

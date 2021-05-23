@@ -6,7 +6,7 @@ package zakadabar.lib.bender
 import zakadabar.stack.data.schema.descriptor.*
 import zakadabar.stack.text.camelToSnakeCase
 
-open class PropertyGenerator(
+abstract class PropertyGenerator(
     open val boDescriptor: BoDescriptor,
     open val property: BoProperty,
     open val typeName: String
@@ -27,23 +27,15 @@ open class PropertyGenerator(
     open fun browserTable() =
         "+ ${boDescriptor.className}::${property.name}"
 
-    open fun exposedBackendImport(): List<String> = emptyList()
+    open fun exposedPaImport(): List<String> = emptyList()
 
-    open fun exposedTable(): String {
-        TODO()
-    }
+    abstract fun exposedTable() : String
 
     open fun exposedTableToBo() =
         "${property.name} = row[${property.name}]"
 
-    open fun exposedDao() =
-        "var ${property.name} by ${boDescriptor.className.toTableName()}.${property.name}"
-
-    open fun exposedDaoToBo() =
-        "${property.name} = ${property.name}"
-
-    open fun exposedDaoFromBo() =
-        "${property.name} = dto.${property.name}"
+    open fun exposedTableFromBo() =
+        "statement[${property.name}] = bo.${property.name}"
 
     val optional
         get() = if (property.optional) "?" else ""
@@ -51,9 +43,7 @@ open class PropertyGenerator(
     val exposedTableOptional
         get() = if (property.optional) ".nullable()" else ""
 
-    val exposedDaoReference
-        get() = if (property.optional) "optionalReferencedOn" else "referencedOn"
-
+    fun String.withoutBo() = if (this.lowercase().endsWith("bo")) this.substring(0, this.length-2) else this
 }
 
 open class BooleanPropertyGenerator(
@@ -135,29 +125,21 @@ open class InstantPropertyGenerator(
         }
     }
 
+    override fun exposedPaImport() = listOf(
+        "import org.jetbrains.exposed.sql.`java-time`.timestamp",
+        "import kotlinx.datetime.toJavaInstant",
+        "import kotlinx.datetime.toKotlinInstant"
+    )
+
     override fun exposedTable() =
         "val ${property.name} = timestamp(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"
 
     override fun exposedTableToBo() =
-        if (property.optional) {
-            "${property.name} = row[${property.name}]?.toKotlinInstant()"
-        } else {
-            "${property.name} = row[${property.name}].toKotlinInstant()"
-        }
+        "${property.name} = row[${property.name}]$optional.toKotlinInstant()"
 
-    override fun exposedDaoToBo() =
-        if (property.optional) {
-            "${property.name} = ${property.name}?.toKotlinInstant()"
-        } else {
-            "${property.name} = ${property.name}.toKotlinInstant()"
-        }
+    override fun exposedTableFromBo() =
+        "statement[${property.name}] = bo.${property.name}$optional.toJavaInstant()"
 
-    override fun exposedDaoFromBo() =
-        if (property.optional) {
-            "${property.name} = dto.${property.name}?.toJavaInstant()"
-        } else {
-            "${property.name} = dto.${property.name}.toJavaInstant()"
-        }
 }
 
 open class IntPropertyGenerator(
@@ -202,23 +184,14 @@ open class EntityIdPropertyGenerator(
         "// ${boDescriptor.className}::${property.name} // record id and opt record id is not supported yet "
 
     override fun exposedTable() =
-        "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutDto()}Table)$exposedTableOptional"
+        "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutBo()}Table)$exposedTableOptional"
 
     override fun exposedTableToBo() =
-        "${property.name} = row[${property.name}]$optional.EntityId()"
+        "${property.name} = row[${property.name}]$optional.entityId()"
 
-    override fun exposedDao() =
-        "var ${property.name} by ${property.kClassName.toDaoName()} $exposedDaoReference ${boDescriptor.className.toTableName()}.${property.name}"
+    override fun exposedTableFromBo() =
+        "statement[${property.name}] = bo.${property.name}$optional.toLong()"
 
-    override fun exposedDaoToBo() =
-        "${property.name} = ${property.name}$optional.id$optional.EntityId()"
-
-    override fun exposedDaoFromBo() =
-        if (property.optional) {
-            "${property.name} = dto.${property.name}?.let { ${property.kClassName.toDaoName()}[it] }"
-        } else {
-            "${property.name} = ${property.kClassName.toDaoName()}[dto.${property.name}]"
-        }
 }
 
 open class SecretPropertyGenerator(
@@ -232,7 +205,7 @@ open class SecretPropertyGenerator(
     override fun browserTable() =
         "// ${super.browserTable()} // not supported yet"
 
-    override fun exposedBackendImport() =
+    override fun exposedPaImport() =
         listOf("import zakadabar.stack.data.builtin.misc.Secret")
 
     override fun exposedTable() =
@@ -245,18 +218,11 @@ open class SecretPropertyGenerator(
             "${property.name} = Secret(\"\") /* do not send out the secret */"
         }
 
-    override fun exposedDaoToBo() =
+    override fun exposedTableFromBo() =
         if (property.optional) {
-            "${property.name} = null /* do not send out the secret */"
+            "statement[${property.name}] = bo.${property.name}?.let { s -> BCrypt.hashpw(s.value, BCrypt.gensalt()) }"
         } else {
-            "${property.name} = Secret(\"\") /* do not send out the secret */"
-        }
-    
-    override fun exposedDaoFromBo() =
-        if (property.optional) {
-            "dto.${property.name}?.let { s -> BCrypt.hashpw(s.value, BCrypt.gensalt()) }"
-        } else {
-            "BCrypt.hashpw(dto.${property.name}.value, BCrypt.gensalt())"
+            "statement[${property.name}] = BCrypt.hashpw(bo.${property.name}.value, BCrypt.gensalt())"
         }
 }
 
@@ -288,10 +254,7 @@ open class UuidPropertyGenerator(
 
     override fun exposedTableToBo() =
         "${property.name} = row[${property.name}]$optional.toStackUuid()"
-    
-    override fun exposedDaoToBo() =
-        "${property.name} = ${property.name}$optional.toStackUuid()"
 
-    override fun exposedDaoFromBo() =
-        "${property.name} = dto.${property.name}$optional.toJavaUuid()"
+    override fun exposedTableFromBo() =
+        "statement[${property.name}] = bo.${property.name}$optional.toJavaUuid()"
 }

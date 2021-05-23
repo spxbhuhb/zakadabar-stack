@@ -64,7 +64,8 @@ class Bender(
 
         private var commonSource = ""
         private var browserSource = ""
-        private var backendSource = ""
+        private var blSource = ""
+        private var paSource = ""
 
         override fun onCreate() {
             super.onCreate()
@@ -116,9 +117,14 @@ class Bender(
                             toastSuccess { "Browser source copied to the clipboard!" }
                         }.hide() marginRight 20
 
-                        + ZkButton(text = "Backend", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
-                            window.navigator.clipboard.writeText(backendSource)
-                            toastSuccess { "Backend source copied to the clipboard!" }
+                        + ZkButton(text = "Business Logic", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
+                            window.navigator.clipboard.writeText(blSource)
+                            toastSuccess { "Business Logic source copied to the clipboard!" }
+                        }.hide() marginRight 20
+
+                        + ZkButton(text = "Persistence API", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
+                            window.navigator.clipboard.writeText(paSource)
+                            toastSuccess { "Persistence API source copied to the clipboard!" }
                         }.hide() marginRight 20
 
                         + lastGenerate css benderStyles.lastGenerated
@@ -164,13 +170,15 @@ class Bender(
 
             commonSource = classGenerator.commonGenerator()
             browserSource = classGenerator.browserFrontendGenerator()
-            backendSource = classGenerator.exposedBackendGenerator()
+            blSource = classGenerator.businessLogicGenerator()
+            paSource = classGenerator.exposedPaGenerator()
 
             val result = template
                 .replace("@packageName@", descriptor.packageName)
                 .replace("// commonSource", commonSource)
                 .replace("// browserSource", browserSource)
-                .replace("// backendSource", backendSource)
+                .replace("// blSource", blSource)
+                .replace("// paSource", paSource)
 
             resultContainer.clear()
             resultContainer += MarkdownView(sourceText = result, context = ZkMarkdownContext(toc = false, hashes = false))
@@ -229,10 +237,11 @@ class EditorEntry(private val editor: Bender.Editor) : ZkElement() {
             "boolean".startsWith(lcv) -> "boolean"
             "double".startsWith(lcv) -> "double"
             "enum".startsWith(lcv) -> "enum"
+            "id".startsWith(lcv) -> "entity"
             "int".startsWith(lcv) -> "int"
             "instant".startsWith(lcv) -> "instant"
             "long".startsWith(lcv) -> "long"
-            "recordid".startsWith(lcv) -> "recordid"
+            "r".startsWith(lcv) -> "reference"
             "string".startsWith(lcv) -> "string"
             "secret".startsWith(lcv) -> "boolean"
             "uuid".startsWith(lcv) -> "uuid"
@@ -252,7 +261,7 @@ class EditorEntry(private val editor: Bender.Editor) : ZkElement() {
             "instant" -> InstantDetails()
             "int" -> IntDetails()
             "long" -> LongDetails()
-            "recordid" -> RecordIdDetails()
+            "reference" -> EntityIdDetails()
             "secret" -> SecretDetails()
             "string" -> StringDetails()
             "uuid" -> UuidDetails()

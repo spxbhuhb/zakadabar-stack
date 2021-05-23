@@ -4,6 +4,7 @@
 package zakadabar.lib.bender
 
 import zakadabar.stack.data.schema.descriptor.BoDescriptor
+import zakadabar.stack.text.camelToSnakeCase
 
 open class ClassGenerator {
 
@@ -17,7 +18,7 @@ open class ClassGenerator {
     open val namespace
         get() = boDescriptor.boNamespace
     open val baseName
-        get() = boName.withoutDto()
+        get() = if (boName.lowercase().endsWith("bo")) boName.substring(0, boName.length-2) else boName
 
     open val browserCrudName
         get() = baseName + "Crud"
@@ -26,14 +27,6 @@ open class ClassGenerator {
     open val browserFormName
         get() = baseName + "Form"
 
-    open val exposedBackendName
-        get() = baseName + "Table"
-    open val exposedTableName
-        get() = baseName + "Table"
-    open val exposedDaoName
-        get() = baseName + "Dao"
-
-
     // @formatter:off
 
     // -------------------------------------------------------------------------
@@ -41,13 +34,13 @@ open class ClassGenerator {
     // -------------------------------------------------------------------------
 
 fun commonGenerator() = """
-package ${packageName}.data
+package $packageName
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.entity.EntityDto
-import zakadabar.stack.data.entity.EntityDtoCompanion
+import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.data.entity.EntityBoCompanion
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.schema.BoSchema
 ${generators.map { it.commonImport() }.flatten().distinct().joinToString("\n")}
 
 @Serializable
@@ -56,14 +49,14 @@ class ${boName}(
     override var id: EntityId<$boName>,
     ${generators.joinToString(",\n    ") { it.commonDeclaration() }}
 
-) : EntityDto<$boName> {
+) : EntityBo<$boName> {
 
-    companion object : EntityDtoCompanion<$boName>("$namespace")
+    companion object : EntityBoCompanion<$boName>("$namespace")
 
-    override fun getDtoNamespace() = dtoNamespace
+    override fun getBoNamespace() = boNamespace
     override fun comm() = comm
 
-    override fun schema() = DtoSchema {
+    override fun schema() = BoSchema {
         ${generators.joinToString("\n        ") { it.commonSchema() }}
     }
 
@@ -75,7 +68,7 @@ class ${boName}(
     // -------------------------------------------------------------------------
 
 fun browserFrontendGenerator() = """
-package ${packageName}.frontend.pages
+package ${packageName}.frontend
 
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.form.ZkForm
@@ -93,7 +86,7 @@ ${generators.map { it.browserImport() }.flatten().distinct().joinToString("\n")}
 object $browserCrudName : ZkCrudTarget<$boName>() {
     init {
         companion = $boName.Companion
-        dtoClass = $boName::class
+        boClass = $boName::class
         pageClass = $browserFormName::class
         tableClass = $browserTableName::class
     }
@@ -142,125 +135,98 @@ class $browserTableName : ZkTable<$boName>() {
     //  Exposed Backend
     // -------------------------------------------------------------------------
 
-fun exposedBackendGenerator() = """
-package ${packageName}.backend.entity
+fun businessLogicGenerator() = """
+package ${packageName}.backend
 
-import io.ktor.routing.*
-import kotlinx.datetime.Clock
-import kotlinx.datetime.toJavaInstant
-import kotlinx.datetime.toKotlinInstant
+import zakadabar.stack.StackRoles
+import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
+import zakadabar.stack.backend.data.entity.EntityBusinessLogicBase
+import ${packageName}.data.$boName
+${generators.map { it.exposedPaImport() }.flatten().distinct().joinToString("\n")}
+
+class ${baseName}Bl : EntityBusinessLogicBase<${boName}>() {
+
+    override val boClass = ${boName}::class
+
+    override val pa = ${baseName}ExposedCrudPa()
+
+    override val authorizer = SimpleRoleAuthorizer<${boName}> {
+        list = StackRoles.siteMember
+        read = StackRoles.siteMember
+        create = StackRoles.securityOfficer
+        update = StackRoles.securityOfficer
+        delete = StackRoles.securityOfficer
+    }
+    
+}
+""".trimIndent()
+
+fun exposedPaGenerator() = """
+package ${packageName}.backend
+
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
+import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.`java-time`.timestamp
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.stack.StackRoles
-import zakadabar.stack.backend.authorize
-import zakadabar.stack.backend.data.get
-import zakadabar.stack.backend.data.entity.EntityBackend
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.update
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.statements.UpdateBuilder
+import zakadabar.stack.backend.data.entity.EntityPersistenceApiBase
+import zakadabar.stack.backend.data.entity.ExposedPersistenceApi
 import zakadabar.stack.backend.data.entityId
-import zakadabar.stack.backend.util.toJavaUuid
-import zakadabar.stack.backend.util.toStackUuid
-import zakadabar.stack.data.builtin.misc.Secret
+import zakadabar.stack.backend.data.get
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.BCrypt
-import zakadabar.stack.util.Executor
 import ${packageName}.data.$boName
-${generators.map { it.exposedBackendImport() }.flatten().distinct().joinToString("\n")}
+${generators.map { it.exposedPaImport() }.flatten().distinct().joinToString("\n")}
 
-// -----------------------------------------------------------------------------
-//  Entity Backend
-// -----------------------------------------------------------------------------
-
-object ${boName.withoutDto()}Backend : EntityBackend<$boName>() {
-
-    override val dtoClass = $boName::class
+class ${baseName}ExposedCrudPa : EntityPersistenceApiBase<${boName}>(), ExposedPersistenceApi {
 
     override fun onModuleLoad() {
-        + $exposedTableName
+        super.onModuleLoad()
+        + ${baseName}ExposedTable
     }
 
-    override fun onInstallRoutes(route: Route) {
-        route.crud()
-    }
-
-    override fun all(executor: Executor) = transaction {
-
-        authorize(executor, StackRoles.siteMember) // TODO authorization for $
-
-        $exposedTableName
+    override fun list(): List<${boName}> {
+        return ${baseName}ExposedTable
             .selectAll()
-            .map($exposedTableName::toDto)
-            
+            .map { ${baseName}ExposedTable.toBo(it) }
     }
 
-    override fun create(executor: Executor, dto: $boName) = transaction {
-
-        authorize(executor, StackRoles.siteMember)
-
-        $exposedDaoName
-            .new { fromDto(dto) }
-            .toDto()
-           
+    override fun create(bo: ${boName}): ${boName} {
+        val id = ${baseName}ExposedTable
+            .insertAndGetId {
+                fromBo(it, bo)
+            }
+        bo.id = EntityId(id.value)
+        return bo
     }
 
-    override fun read(executor: Executor, entityId: EntityId<$boName>) = transaction {
-
-        authorize(true)
-
-        $exposedDaoName[entityId].toDto()
-        
+    override fun read(entityId: EntityId<${boName}>) : $boName {
+        return ${baseName}ExposedTable
+            .select { ${baseName}ExposedTable.id eq entityId.toLong() }
+            .first()
+            .let { ${baseName}ExposedTable.toBo(it) }
     }
 
-    override fun update(executor: Executor, dto: $boName) = transaction {
-
-        authorize(executor, StackRoles.siteMember)
-
-        $exposedDaoName[dto.id]
-            .fromDto(dto)
-            .toDto()
-            
+    override fun update(bo: ${boName}): $boName {
+        ${baseName}ExposedTable
+            .update({ ${baseName}ExposedTable.id eq bo.id.toLong() })
+            { fromBo(it, bo) }
+        return bo
     }
 
-    override fun delete(executor: Executor, entityId: EntityId<$boName>) = transaction {
-
-        authorize(executor, StackRoles.siteMember)
-
-        $exposedDaoName[entityId].delete()
-     
+    override fun delete(entityId: EntityId<${boName}>) {
+        ${baseName}ExposedTable
+            .deleteWhere { ${baseName}ExposedTable.id eq entityId.toLong() }
     }
 
 }
 
-// -----------------------------------------------------------------------------
-//  Exposed DAO
-// -----------------------------------------------------------------------------
-
-class $exposedDaoName(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<$exposedDaoName>($exposedTableName)
-
-    ${generators.joinToString("\n    ") { it.exposedDao() }}
-
-    fun toBo() = $boName(
-        id = id.entityId(),
-        ${generators.joinToString(",\n        ") { it.exposedDaoToBo() }}
-    )
-    
-    fun fromBo(bo : $boName) : $exposedDaoName {
-        ${generators.joinToString("\n        ") { it.exposedDaoFromBo() }}
-        
-        return this
-    }
-}
-
-// -----------------------------------------------------------------------------
-//  Exposed Table
-// -----------------------------------------------------------------------------
-    
-object $exposedTableName : LongIdTable("$exposedTableName") {
+object ${baseName}ExposedTable : LongIdTable("${boName.camelToSnakeCase()}") {
 
     ${generators.joinToString("\n    ") { it.exposedTable() }}
 
@@ -268,7 +234,13 @@ object $exposedTableName : LongIdTable("$exposedTableName") {
         id = row[id].entityId(),
         ${generators.joinToString(",\n        ") { it.exposedTableToBo() }}
     )
+
+    fun fromBo(statement: UpdateBuilder<*>, bo: $boName) {
+        ${generators.joinToString("\n        ") { it.exposedTableFromBo() }}
+    }
+
 }
+
 
 """.trimIndent()
 

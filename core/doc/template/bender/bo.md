@@ -1,4 +1,4 @@
-Bender is a simple tool for generating DTO classes for Zakadabar.
+Bender is a simple tool for generating BO classes for Zakadabar.
 
 Usage:
 
@@ -11,7 +11,7 @@ Bender generates these codes:
 
 * common: data model and schema,
 * browser: table, form, crud,
-* backend: record backend, DAO, Exposed table.
+* backend: business logic, exposed persistence api
 
 Bender is **experimental**: we hope that it works.
 
@@ -23,7 +23,7 @@ Supported types (case-insensitive):
 * Instant
 * Int
 * Long
-* RecordId  
+* Reference
 * String
 * UUID
 
@@ -32,7 +32,7 @@ out of your computer.
 
 ## Common
 
-Copy this into the directory `commonMain/kotlin/@packageName@/data`:
+Copy this into the directory `commonMain/kotlin/@packageName@`:
 
 ```kotlin
 // commonSource
@@ -40,7 +40,7 @@ Copy this into the directory `commonMain/kotlin/@packageName@/data`:
 
 ## Browser Frontend
 
-Copy this into the directory `jsMain/kotlin/@packageName@/frontend/pages`:
+Copy this into the directory `jsMain/kotlin/@packageName@/frontend`:
 
 ```kotlin
 // browserSource
@@ -48,8 +48,12 @@ Copy this into the directory `jsMain/kotlin/@packageName@/frontend/pages`:
 
 ## JVM Backend
 
-Copy this into the directory `jsMain/kotlin/@packageName@/backend/record`:
+Copy this into the directory `jsMain/kotlin/@packageName@/backend`:
 
 ```kotlin
-// backendSource
+// blSource
+```
+
+```kotlin
+// paSource
 ```

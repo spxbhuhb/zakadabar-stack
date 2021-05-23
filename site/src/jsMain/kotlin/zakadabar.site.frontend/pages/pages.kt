@@ -71,7 +71,7 @@ object ServicesAndSupport : MarkdownPage(
 
 object BenderPage : ZkPage() {
     override fun onCreate() {
-        + Bender(ClassGenerator(), "/api/$contentNamespace/template/bender/dto.md")
+        + Bender(ClassGenerator(), "/api/$contentNamespace/template/bender/bo.md")
     }
 }
 
