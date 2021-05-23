@@ -5,8 +5,8 @@ package zakadabar.lib.examples.frontend.form
 
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.examples.resources.strings
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.schema.BoSchema
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.util.default
@@ -20,8 +20,8 @@ class BooleanExampleDto(
     var value: Boolean,
     var optValue: Boolean?,
     var readOnlyValue: Boolean
-) : DtoBase {
-    override fun schema() = DtoSchema {
+) : BaseBo {
+    override fun schema() = BoSchema {
         + ::value
         + ::optValue
         + ::readOnlyValue

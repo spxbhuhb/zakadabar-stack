@@ -32,6 +32,8 @@ class EntityId<T> : Comparable<EntityId<T>> {
 
     override fun hashCode() = value.hashCode()
 
+    override fun toString() = value
+
     override fun compareTo(other: EntityId<T>) : Int {
         if (value.isEmpty() && other.value.isEmpty()) return 0
 

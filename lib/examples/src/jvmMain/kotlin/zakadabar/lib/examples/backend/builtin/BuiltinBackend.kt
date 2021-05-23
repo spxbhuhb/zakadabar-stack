@@ -16,8 +16,9 @@ import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.backend.data.entityId
+import zakadabar.stack.backend.data.get
 import zakadabar.stack.data.DataConflictException
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
 
 object BuiltinBackend : EntityBackend<BuiltinDto>() {
@@ -42,38 +43,38 @@ object BuiltinBackend : EntityBackend<BuiltinDto>() {
             .map(BuiltinTable::toDto)
     }
 
-    override fun create(executor: Executor, dto: BuiltinDto) = transaction {
+    override fun create(executor: Executor, bo: BuiltinDto) = transaction {
 
         authorize(executor, StackRoles.siteMember)
 
-        if (dto.stringValue == "conflict") throw DataConflictException("stringValueConflict")
+        if (bo.stringValue == "conflict") throw DataConflictException("stringValueConflict")
 
         BuiltinDao
-            .new { fromDto(dto) }
+            .new { fromDto(bo) }
             .toDto()
     }
 
-    override fun read(executor: Executor, recordId: RecordId<BuiltinDto>) = transaction {
+    override fun read(executor: Executor, entityId: EntityId<BuiltinDto>) = transaction {
 
         authorize(true)
 
-        BuiltinDao[recordId].toDto()
+        BuiltinDao[entityId].toDto()
     }
 
-    override fun update(executor: Executor, dto: BuiltinDto) = transaction {
+    override fun update(executor: Executor, bo: BuiltinDto) = transaction {
 
         authorize(executor, StackRoles.siteMember)
 
-        BuiltinDao[dto.id]
-            .fromDto(dto)
+        BuiltinDao[bo.id]
+            .fromDto(bo)
             .toDto()
     }
 
-    override fun delete(executor: Executor, recordId: RecordId<BuiltinDto>) = transaction {
+    override fun delete(executor: Executor, entityId: EntityId<BuiltinDto>) = transaction {
 
         authorize(executor, StackRoles.siteMember)
 
-        BuiltinDao[recordId].delete()
+        BuiltinDao[entityId].delete()
     }
 
     private fun query(executor: Executor, query: ExampleQuery) = transaction {
@@ -97,7 +98,7 @@ object BuiltinBackend : EntityBackend<BuiltinDto>() {
 
         select.map {
             ExampleResult(
-                recordId = it[BuiltinTable.id].entityId(),
+                EntityId = it[BuiltinTable.id].entityId(),
                 booleanValue = it[BuiltinTable.booleanValue],
                 enumSelectValue = it[BuiltinTable.enumSelectValue],
                 intValue = it[BuiltinTable.intValue],

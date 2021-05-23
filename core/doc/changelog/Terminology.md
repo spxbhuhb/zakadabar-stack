@@ -3,62 +3,32 @@ LongRecordId -> EntityId
 
 ---
 
-`import zakadabar.stack.data.record.RecordDto`
+`import zakadabar.stack.data.record`
 
-`import zakadabar.stack.data.entity.EntityBo`
+to
 
----
+`import zakadabar.stack.data.entity`
 
-`import zakadabar.stack.data.record.RecordDtoCompanion`
+`getDtoNamespace` to `getBoNamespace`
 
-`import zakadabar.stack.data.entity.EntityBoCompanion`
+`dtoNamespace` to `boNamespace`
 
----
+`DtoSchema` to `BoSchema`
 
-`import zakadabar.stack.data.record.RecordId`
+`EmptyRecordId` to `EntityId`
 
-`import zakadabar.stack.data.entity.EntityId`
+`StringRecordId` to `EntityId`
 
----
+`LongRecordId` to `EntityId`
 
-`import zakadabar.stack.data.schema.DtoSchema`
+`RecordId` to `EntityId`
 
-`import zakadabar.stack.data.schema.BoSchema`
+`RecordDto` to `EnityBo`
 
----
+`QueryDto` to `QueryBo`
 
-`StringRecordId`
+`ActionDto` to `ActionBo`
 
-`EntityId`
+`DtoBase` to `BaseBo`
 
----
-
-`LongRecordId`
-
-`EntityId`
-
----
-
-`RecordId`
-
-`EntityId`
-
----
-
-`RecordDto`
-
-`EnityBo`
-
----
-
-`QueryDto`
-
-`QueryBo`
-
----
-
-`ActionDto`
-
-`ActionBo`
-
----
+`RecordComm` to `EntityComm`

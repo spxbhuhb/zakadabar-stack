@@ -6,15 +6,14 @@ package zakadabar.lib.examples.frontend
 import io.ktor.client.features.*
 import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
+import zakadabar.stack.backend.util.default
 import zakadabar.stack.data.builtin.account.*
 import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.record.EmptyRecordId
-import zakadabar.stack.data.record.LongRecordId
-import zakadabar.stack.data.record.RecordComm
-import zakadabar.stack.data.record.StringRecordId
+import zakadabar.stack.data.entity.EntityComm
+import zakadabar.stack.data.entity.EntityId
 
 suspend fun main() {
-    RecordComm.baseUrl = "http://localhost:8080"
+    EntityComm.baseUrl = "http://localhost:8080"
     crud()
     login()
     errorHandling()
@@ -31,7 +30,7 @@ suspend fun crud() {
     // with the constructor we have to initialize all fields
 
     val newReference = ExampleReferenceDto(
-        EmptyRecordId(), // we don't have an id yet
+        EntityId(), // we don't have an id yet
         name = "hello world"
     ).create()
 
@@ -61,20 +60,20 @@ suspend fun dumpBuiltins(message: String) {
 suspend fun login() {
     println("\n======== Login ========\n")
 
-    var session = SessionBo.read(StringRecordId("own"))
+    var session = SessionBo.read(EntityId("own"))
 
     println("    ---- at start ----\n")
     println("        $session\n")
 
     var actionStatus = LoginAction("demo", Secret("wrong")).execute()
-    session = SessionBo.read(StringRecordId("own"))
+    session = SessionBo.read(EntityId("own"))
 
     println("    ---- unsuccessful login ----\n")
     println("        $actionStatus\n")
     println("        $session\n")
 
     actionStatus = LoginAction("demo", Secret("demo")).execute()
-    session = SessionBo.read(StringRecordId("own"))
+    session = SessionBo.read(EntityId("own"))
 
     println("    ---- successful login ----\n")
     println("        $actionStatus\n")
@@ -82,7 +81,7 @@ suspend fun login() {
 
     println("    ---- after successful login ----\n")
 
-    val account = AccountPrivateBo.read(LongRecordId(session.account.id.toLong()))
+    val account = AccountPrivateBo.read(EntityId(session.account.id.toLong()))
     println("        $account\n")
 
     actionStatus = LogoutAction().execute()
@@ -91,7 +90,7 @@ suspend fun login() {
     println("        $actionStatus\n")
 
     try {
-        AccountPrivateBo.read(LongRecordId(session.account.id.toLong()))
+        AccountPrivateBo.read(EntityId(session.account.id.toLong()))
     } catch (ex: ClientRequestException) {
         println("    ---- after logout ----\n")
         println("        ${ex.response}")
@@ -101,7 +100,7 @@ suspend fun login() {
 suspend fun errorHandling() {
     println("\n======== Error Handling ========\n")
     try {
-        BuiltinDto.read(LongRecordId(- 1))
+        BuiltinDto.read(EntityId(- 1))
     } catch (ex: ClientRequestException) {
         println("    ${ex.response}")
     }

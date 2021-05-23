@@ -12,10 +12,10 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordDtoCompanion
-import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.data.entity.EntityBoCompanion
+import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.data.schema.BoSchema
 import zakadabar.stack.data.util.InstantAsStringSerializer
 import zakadabar.stack.data.util.OptInstantAsStringSerializer
 import zakadabar.stack.util.UUID
@@ -23,7 +23,7 @@ import zakadabar.stack.util.UUID
 @Serializable
 data class BuiltinDto(
 
-    override var id: RecordId<BuiltinDto>,
+    override var id: EntityId<BuiltinDto>,
     var booleanValue: Boolean,
     var doubleValue: Double,
     var enumSelectValue: ExampleEnum,
@@ -37,26 +37,26 @@ data class BuiltinDto(
     var optInstantValue: Instant?,
     var optIntValue: Int?,
     var optSecretValue: Secret?,
-    var optRecordSelectValue: RecordId<ExampleReferenceDto>?,
+    var optRecordSelectValue: EntityId<ExampleReferenceDto>?,
     var optStringValue: String?,
     var optStringSelectValue: String?,
     var optTextAreaValue: String?,
     var optUuidValue: UUID?,
     var secretValue: Secret,
-    var recordSelectValue: RecordId<ExampleReferenceDto>,
+    var recordSelectValue: EntityId<ExampleReferenceDto>,
     var stringValue: String,
     var stringSelectValue: String,
     var textAreaValue: String,
     var uuidValue: UUID
 
-) : RecordDto<BuiltinDto> {
+) : EntityBo<BuiltinDto> {
 
-    companion object : RecordDtoCompanion<BuiltinDto>("builtin")
+    companion object : EntityBoCompanion<BuiltinDto>("builtin")
 
-    override fun getDtoNamespace() = dtoNamespace
+    override fun getBoNamespace() = boNamespace
     override fun comm() = comm
 
-    override fun schema() = DtoSchema {
+    override fun schema() = BoSchema {
         + ::id
         + ::booleanValue
         + ::doubleValue

@@ -10,9 +10,9 @@ package zakadabar.lib.examples.data.builtin
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
-import zakadabar.stack.data.query.QueryDto
-import zakadabar.stack.data.query.QueryDtoCompanion
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.query.QueryBo
+import zakadabar.stack.data.query.QueryBoCompanion
+import zakadabar.stack.data.schema.BoSchema
 
 /**
  * Query class that defines the filters the query supports.
@@ -27,13 +27,13 @@ data class ExampleQuery(
     var intValue: Int?,
     var stringValue: String?,
     var limit: Int
-) : QueryDto<ExampleResult> {
+) : QueryBo<ExampleResult> {
 
     override suspend fun execute() = comm.query(this, serializer(), ListSerializer(ExampleResult.serializer()))
 
-    companion object : QueryDtoCompanion<BuiltinDto>(BuiltinDto.dtoNamespace)
+    companion object : QueryBoCompanion<BuiltinDto>(BuiltinDto.boNamespace)
 
-    override fun schema() = DtoSchema {
+    override fun schema() = BoSchema {
         + ::booleanValue
         + ::enumSelectValue
         + ::intValue

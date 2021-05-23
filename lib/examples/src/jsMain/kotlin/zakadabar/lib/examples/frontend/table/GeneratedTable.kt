@@ -5,10 +5,9 @@ package zakadabar.lib.examples.frontend.table
 
 import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.lib.examples.frontend.crud.BuiltinTable
-import zakadabar.stack.data.record.LongRecordId
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.util.default
 
 /**
@@ -27,19 +26,11 @@ object GeneratedTable : ZkPage(css = zkPageStyles.fixed) {
         // default data therefore it is slow. Using "copy" is better suited for
         // large record count.
 
-        val data = (1..10000).map { template.copy(id = LongRecordId(it.toLong())) }
+        val data = (1..10000).map { template.copy(id = EntityId(it.toLong())) }
 
         // Add the table and set the data. It is not important to use these
         // together, you can add the table and set the data later.
 
         + BuiltinTable().setData(data)
     }
-
-    object Styles : ZkCssStyleSheet() {
-
-        init {
-            attach()
-        }
-    }
-
 }

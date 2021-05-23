@@ -10,9 +10,9 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import kotlin.reflect.KProperty1
 
-open class ZkOptRecordIdColumn<T : BaseBo, IT>(
+open class ZkEntityIdColumn<T : BaseBo, IT>(
     table: ZkTable<T>,
-    private val prop: KProperty1<T, EntityId<IT>?>
+    private val prop: KProperty1<T, EntityId<IT>>
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {
@@ -26,7 +26,7 @@ open class ZkOptRecordIdColumn<T : BaseBo, IT>(
         }
     }
 
-    infix fun build(builder: ZkOptRecordIdColumn<T, IT>.() -> Unit): ZkOptRecordIdColumn<T, IT> {
+    infix fun build(builder: ZkEntityIdColumn<T, IT>.() -> Unit): ZkEntityIdColumn<T, IT> {
         this.builder()
         return this
     }

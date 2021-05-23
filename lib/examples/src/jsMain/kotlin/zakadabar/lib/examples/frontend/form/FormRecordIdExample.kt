@@ -5,10 +5,9 @@ package zakadabar.lib.examples.frontend.form
 
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.record.LongRecordId
-import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.data.schema.BoSchema
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.util.default
@@ -18,14 +17,14 @@ import zakadabar.stack.frontend.util.default
  * example easier to write, but it is not accessible on the backend and it has
  * no communication feature.
  */
-class RecordIdExampleDto(
-    var id: RecordId<RecordIdExampleDto>,
-    var value: RecordId<ExampleReferenceDto>,
-    var optValue: RecordId<ExampleReferenceDto>?,
-    var invalidValue: RecordId<ExampleReferenceDto>,
-    var readOnlyValue: RecordId<ExampleReferenceDto>
-) : DtoBase {
-    override fun schema() = DtoSchema {
+class EntityIdExampleDto(
+    var id: EntityId<EntityIdExampleDto>,
+    var value: EntityId<ExampleReferenceDto>,
+    var optValue: EntityId<ExampleReferenceDto>?,
+    var invalidValue: EntityId<ExampleReferenceDto>,
+    var readOnlyValue: EntityId<ExampleReferenceDto>
+) : BaseBo {
+    override fun schema() = BoSchema {
         + ::id
         + ::value
         + ::optValue
@@ -37,14 +36,14 @@ class RecordIdExampleDto(
 /**
  * This example shows record id form fields.
  */
-class FormRecordIdExample(
+class FormEntityIdExample(
     element: HTMLElement
-) : ZkForm<RecordIdExampleDto>(element) {
+) : ZkForm<EntityIdExampleDto>(element) {
 
     override fun onConfigure() {
         super.onConfigure()
         bo = default {
-            id = LongRecordId(123)
+            id = EntityId(123)
         }
         mode = ZkElementMode.Action
         setAppTitle = false

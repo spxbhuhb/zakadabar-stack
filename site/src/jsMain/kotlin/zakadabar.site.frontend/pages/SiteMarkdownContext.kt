@@ -15,7 +15,7 @@ import zakadabar.lib.examples.frontend.dock.DockBasicExample
 import zakadabar.lib.examples.frontend.dock.DockRemoveExample
 import zakadabar.lib.examples.frontend.form.FormBooleanExample
 import zakadabar.lib.examples.frontend.form.FormDoubleExample
-import zakadabar.lib.examples.frontend.form.FormRecordIdExample
+import zakadabar.lib.examples.frontend.form.FormEntityIdExample
 import zakadabar.lib.examples.frontend.form.FormStringExample
 import zakadabar.lib.examples.frontend.icon.IconExamples
 import zakadabar.lib.examples.frontend.input.IntCheckboxListExample
@@ -85,7 +85,7 @@ class SiteMarkdownContext(
 
             "FormBooleanExample" -> FormBooleanExample(htmlElement)
             "FormDoubleExample" -> FormDoubleExample(htmlElement)
-            "FormRecordIdExample" -> FormRecordIdExample(htmlElement)
+            "FormRecordIdExample" -> FormEntityIdExample(htmlElement)
             "FormStringExample" -> FormStringExample(htmlElement)
 
             "IconExamples" -> IconExamples(htmlElement)

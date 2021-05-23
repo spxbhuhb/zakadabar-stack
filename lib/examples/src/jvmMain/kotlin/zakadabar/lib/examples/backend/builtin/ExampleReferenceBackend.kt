@@ -12,7 +12,8 @@ import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.entity.EntityBackend
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.backend.data.get
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
 
 object ExampleReferenceBackend : EntityBackend<ExampleReferenceDto>() {
@@ -48,34 +49,34 @@ object ExampleReferenceBackend : EntityBackend<ExampleReferenceDto>() {
             .map(ExampleReferenceTable::toDto)
     }
 
-    override fun create(executor: Executor, dto: ExampleReferenceDto) = transaction {
+    override fun create(executor: Executor, bo: ExampleReferenceDto) = transaction {
 
         authorize(executor, StackRoles.siteMember)
 
-        ExampleReferenceDao.new { fromDto(dto) }
+        ExampleReferenceDao.new { fromDto(bo) }
             .toDto()
     }
 
-    override fun read(executor: Executor, recordId: RecordId<ExampleReferenceDto>) = transaction {
+    override fun read(executor: Executor, entityId: EntityId<ExampleReferenceDto>) = transaction {
 
         authorize(true)
 
-        ExampleReferenceDao[recordId].toDto()
+        ExampleReferenceDao[entityId].toDto()
     }
 
-    override fun update(executor: Executor, dto: ExampleReferenceDto) = transaction {
+    override fun update(executor: Executor, bo: ExampleReferenceDto) = transaction {
 
         authorize(executor, StackRoles.siteMember)
 
-        ExampleReferenceDao[dto.id]
-            .fromDto(dto)
+        ExampleReferenceDao[bo.id]
+            .fromDto(bo)
             .toDto()
     }
 
-    override fun delete(executor: Executor, recordId: RecordId<ExampleReferenceDto>) = transaction {
+    override fun delete(executor: Executor, entityId: EntityId<ExampleReferenceDto>) = transaction {
 
         authorize(executor, StackRoles.siteMember)
 
-        ExampleReferenceDao[recordId].delete()
+        ExampleReferenceDao[entityId].delete()
     }
 }

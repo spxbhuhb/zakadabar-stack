@@ -453,14 +453,14 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     //  Column builders
     // -------------------------------------------------------------------------
 
-    operator fun <IT> KProperty1<T, EntityId<IT>>.unaryPlus(): ZkRecordIdColumn<T, IT> {
-        val column = ZkRecordIdColumn(this@ZkTable, this)
+    operator fun <IT> KProperty1<T, EntityId<IT>>.unaryPlus(): ZkEntityIdColumn<T, IT> {
+        val column = ZkEntityIdColumn(this@ZkTable, this)
         columns += column
         return column
     }
 
-    operator fun <IT> KProperty1<T, EntityId<IT>?>.unaryPlus(): ZkOptRecordIdColumn<T, IT> {
-        val column = ZkOptRecordIdColumn(this@ZkTable, this)
+    operator fun <IT> KProperty1<T, EntityId<IT>?>.unaryPlus(): ZkOptEntityIdColumn<T, IT> {
+        val column = ZkOptEntityIdColumn(this@ZkTable, this)
         columns += column
         return column
     }

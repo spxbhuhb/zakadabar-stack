@@ -12,7 +12,8 @@ import zakadabar.lib.examples.data.SimpleExampleDto
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.entity.EntityBackend
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.backend.data.get
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
 
 object SimpleExampleBackend : EntityBackend<SimpleExampleDto>() {
@@ -36,36 +37,36 @@ object SimpleExampleBackend : EntityBackend<SimpleExampleDto>() {
             .map(SimpleExampleTable::toDto)
     }
 
-    override fun create(executor: Executor, dto: SimpleExampleDto) = transaction {
+    override fun create(executor: Executor, bo: SimpleExampleDto) = transaction {
 
         authorize(executor, StackRoles.siteMember)
 
         SimpleExampleDao
-            .new { fromDto(dto) }
+            .new { fromDto(bo) }
             .toDto()
     }
 
-    override fun read(executor: Executor, recordId: RecordId<SimpleExampleDto>) = transaction {
+    override fun read(executor: Executor, entityId: EntityId<SimpleExampleDto>) = transaction {
 
         authorize(true)
 
-        SimpleExampleDao[recordId].toDto()
+        SimpleExampleDao[entityId].toDto()
     }
 
-    override fun update(executor: Executor, dto: SimpleExampleDto) = transaction {
+    override fun update(executor: Executor, bo: SimpleExampleDto) = transaction {
 
         authorize(executor, StackRoles.siteMember)
 
-        SimpleExampleDao[dto.id]
-            .fromDto(dto)
+        SimpleExampleDao[bo.id]
+            .fromDto(bo)
             .toDto()
     }
 
-    override fun delete(executor: Executor, recordId: RecordId<SimpleExampleDto>) = transaction {
+    override fun delete(executor: Executor, entityId: EntityId<SimpleExampleDto>) = transaction {
 
         authorize(executor, StackRoles.siteMember)
 
-        SimpleExampleDao[recordId].delete()
+        SimpleExampleDao[entityId].delete()
     }
 
 }

@@ -4,8 +4,8 @@
 package zakadabar.lib.examples.frontend.table
 
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.schema.BoSchema
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.table.ZkTable
@@ -43,8 +43,8 @@ class TableExampleDto(
     var scientificName: String,
     var likes: Int,
     var hasThorns: Boolean
-) : DtoBase {
-    override fun schema() = DtoSchema {
+) : BaseBo {
+    override fun schema() = BoSchema {
         + ::name
         + ::scientificName
         + ::likes
