@@ -9,8 +9,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
-import org.slf4j.Logger
-import zakadabar.stack.backend.BackendModule
+import zakadabar.stack.backend.audit.Auditor
 import zakadabar.stack.backend.util.executor
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
@@ -18,29 +17,27 @@ import zakadabar.stack.util.Executor
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
 
-@Deprecated("use business logic and ActionMixin instead")
-interface ActionBackend : BackendModule {
+interface ActionMixin {
 
     val namespace: String
 
-    val logger: Logger
-
-    var logActions: Boolean
+    val auditor : Auditor<*>
 
     /**
      * Adds an Action route for this backend.
      */
-    fun <RQ : ActionBo<RS>, RS : BaseBo> Route.action(actionBo: KClass<RQ>, func: (Executor, RQ) -> RS) {
-        post("$namespace/action/${actionBo.simpleName}") {
+    fun <RQ : ActionBo<RS>, RS : BaseBo> Route.action(actionClass: KClass<RQ>, func: (Executor, RQ) -> RS) {
+        post("$namespace/action/${actionClass.simpleName}") {
 
             val executor = call.executor()
             val aText = call.receive<String>()
-            val aObj = Json.decodeFromString(serializer(actionBo.createType()), aText)
-
-            if (logActions) logger.info("${executor.accountId}: ACTION ${actionBo.simpleName} $aText")
+            val aObj = Json.decodeFromString(serializer(actionClass.createType()), aText)
 
             @Suppress("UNCHECKED_CAST")
-            call.respond(func(executor, aObj as RQ) as Any)
+            auditor.auditAction(executor, aObj as RQ)
+
+            @Suppress("UNCHECKED_CAST")
+            call.respond(func(executor, aObj) as Any)
         }
     }
 
@@ -54,10 +51,11 @@ interface ActionBackend : BackendModule {
             val aText = call.receive<String>()
             val aObj = Json.decodeFromString(serializer(actionBo.createType()), aText)
 
-            if (logActions) logger.info("${executor.accountId}: ACTION ${actionBo.simpleName} $aText")
+            @Suppress("UNCHECKED_CAST")
+            auditor.auditAction(executor, aObj as RQ)
 
             @Suppress("UNCHECKED_CAST")
-            call.respond(func(call, executor, aObj as RQ) as Any)
+            call.respond(func(call, executor, aObj) as Any)
         }
     }
 }

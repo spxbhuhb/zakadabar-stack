@@ -13,6 +13,7 @@ import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
 import zakadabar.stack.backend.data.builtin.resources.setting
 import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.backend.ktor.session.StackSession
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.builtin.account.*
 import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
@@ -81,12 +82,12 @@ object SessionBackend : EntityBackend<SessionBo>() {
 
         if (StackRoles.siteMember !in roleNames) return ActionStatusBo(false)
 
-        call.sessions.set(StackSession(EntityId<AccountPrivateBo>(account.id.toLong()), roleIds, roleNames))
+        call.sessions.set(StackSession(EntityId(account.id.toLong()), roleIds, roleNames))
 
         return ActionStatusBo(true)
     }
 
-    fun authenticate(executorAccountId: EntityId<AccountPrivateBo>, accountName: String, password: String, throwLocked: Boolean = false): Pair<AccountPublicBo, EntityId<PrincipalBo>>? {
+    fun authenticate(executorAccountId: EntityId<out BaseBo>, accountName: String, password: String, throwLocked: Boolean = false): Pair<AccountPublicBo, EntityId<PrincipalBo>>? {
         val (account, principalId) = try {
 
             val (account, principalId) = Server.findAccountByName(accountName)

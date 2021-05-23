@@ -20,19 +20,14 @@ import io.ktor.websocket.*
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 import zakadabar.stack.backend.Forbidden
-import zakadabar.stack.backend.Server.Companion.anonymous
 import zakadabar.stack.backend.Server.Companion.staticRoot
 import zakadabar.stack.backend.custom.CustomBackend
-import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
 import zakadabar.stack.backend.data.builtin.session.LoginTimeout
-import zakadabar.stack.backend.data.builtin.session.SessionBackend
 import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.backend.ktor.session.*
 import zakadabar.stack.backend.routingLogger
 import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.builtin.settings.ServerSettingsBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.Executor
 import java.io.File
 import java.time.Duration
 
@@ -60,16 +55,6 @@ fun buildServer(
 
     install(Authentication) {
         session()
-
-        basic(name = "basic") {
-            realm = config.serverName
-            validate {
-                val (account, principalId) = SessionBackend.authenticate(EntityId(anonymous.id.toLong()), it.name, it.password) ?: return@validate null
-                val (roleIds, roleNames) = PrincipalBackend.roles(principalId)
-                return@validate Executor(EntityId(account.id.toLong()), roleIds, roleNames)
-            }
-        }
-
     }
 
     install(ContentNegotiation) {
@@ -102,6 +87,9 @@ fun buildServer(
             call.respond(HttpStatusCode(440, "Login Timeout"))
         }
         exception<Forbidden> {
+            call.respond(HttpStatusCode.Forbidden)
+        }
+        exception<zakadabar.stack.backend.authorize.Forbidden> {
             call.respond(HttpStatusCode.Forbidden)
         }
         exception<EntityNotFoundException> {

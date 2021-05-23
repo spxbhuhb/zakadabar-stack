@@ -75,7 +75,7 @@ object SessionMaintenanceTask {
                 val cutoff = Clock.System.now().minus(settings.expirationCheckInterval, DateTimeUnit.SECOND)
                 val toDelete = transaction {
                     SessionTable
-                        .select { SessionTable.lastAccess less cutoff }
+                        .select { SessionTable.lastAccess less cutoff.toJavaInstant() }
                         .map { it[SessionTable.id] }
                 }
                 toDelete.forEach {
