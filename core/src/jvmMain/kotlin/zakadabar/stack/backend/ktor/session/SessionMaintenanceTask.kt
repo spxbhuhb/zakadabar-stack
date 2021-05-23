@@ -7,7 +7,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.minus
 import kotlinx.datetime.toJavaInstant
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -26,13 +30,25 @@ object SessionMaintenanceTask {
 
     private val logger = LoggerFactory.getLogger("sessions") !!
 
+    private val mutex = Mutex()
+
+    private var updateRunning = false
+    private var expireRunning = false
+    private var trackerRunning = false
+
     fun start() {
-        // TODO prevent start again
         GlobalScope.launch { updateJob() }
         GlobalScope.launch { expireJob() }
+        GlobalScope.launch { trackerMaintenanceJob() }
     }
 
     private suspend fun updateJob() {
+        mutex.withLock {
+            if (updateRunning) return@updateJob
+            updateRunning = true
+        }
+
+        if (updateRunning)
         while (! Server.shutdown) {
             val entry = updateChannel.receive()
             try {
@@ -49,9 +65,14 @@ object SessionMaintenanceTask {
     }
 
     private suspend fun expireJob() {
+        mutex.withLock {
+            if (expireRunning) return@expireJob
+            expireRunning = true
+        }
+
         while (! Server.shutdown) {
             try {
-                val cutoff = Clock.System.now().toJavaInstant().minusMillis(settings.sessionTimeout * 60000)
+                val cutoff = Clock.System.now().minus(settings.expirationCheckInterval, DateTimeUnit.SECOND)
                 val toDelete = transaction {
                     SessionTable
                         .select { SessionTable.lastAccess less cutoff }
@@ -62,6 +83,29 @@ object SessionMaintenanceTask {
                 }
             } catch (ex: Exception) {
                 logger.error("session expire error", ex)
+            }
+            delay(settings.expirationCheckInterval * 1000)
+        }
+    }
+
+    private suspend fun trackerMaintenanceJob() {
+        mutex.withLock {
+            if (trackerRunning) return@trackerMaintenanceJob
+            trackerRunning = true
+        }
+
+        while (! Server.shutdown) {
+            try {
+                val cutoff = Clock.System.now().minus(settings.expirationCheckInterval, DateTimeUnit.SECOND)
+
+                expiredMapMutex.withLock {
+                    expiredToNew.filter { it.value.createdAt < cutoff }.forEach {
+                        expiredToNew.remove(it.key)
+                    }
+                }
+
+            } catch (ex: Exception) {
+                logger.error("session tracker maintenance error", ex)
             }
             delay(settings.expirationCheckInterval * 1000)
         }
