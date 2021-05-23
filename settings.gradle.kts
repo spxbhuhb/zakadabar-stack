@@ -15,6 +15,8 @@ include("core")
 
 include("exp:content")
 
+include("lib:accounts")
+include("lib:blobs")
 include("lib:cards")
 include("lib:bender")
 include("lib:examples")
