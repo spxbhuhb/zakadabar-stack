@@ -5,11 +5,11 @@ package zakadabar.stack.backend.data.entity
 
 import io.ktor.routing.*
 import org.slf4j.LoggerFactory
-import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.audit.Auditor
 import zakadabar.stack.backend.audit.AuditorProvider
 import zakadabar.stack.backend.audit.LogAuditorProvider
 import zakadabar.stack.backend.authorize.Authorizer
+import zakadabar.stack.backend.custom.CustomBackend
 import zakadabar.stack.backend.ktor.KtorRouterProvider
 import zakadabar.stack.backend.route.Router
 import zakadabar.stack.backend.route.RouterProvider
@@ -28,7 +28,13 @@ import kotlin.reflect.full.companionObject
 /**
  * Base class for entity backends. Supports CRUD, queries and BLOBs.
  */
-abstract class EntityBusinessLogicBase<T : EntityBo<T>> : BackendModule {
+abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
+    /**
+     * The class of BO this entity backend servers. Namespace is automatically
+     * set to the namespace defined for this BO class.
+     */
+    val boClass: KClass<T>
+) : CustomBackend() {
 
     companion object {
 
@@ -37,12 +43,6 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>> : BackendModule {
         val auditorProvider : AuditorProvider = LogAuditorProvider()
 
     }
-
-    /**
-     * The class of BO this entity backend servers. Namespace is automatically
-     * set to the namespace defined for this BO class.
-     */
-    abstract val boClass: KClass<T>
 
     /**
      * The namespace this backend serves. Must be unique in a server. Default
@@ -59,7 +59,7 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>> : BackendModule {
     /**
      * Logger to use when logging is enabled. Name is [namespace].
      */
-    val logger by lazy { LoggerFactory.getLogger(namespace) !! }
+    override val logger by lazy { LoggerFactory.getLogger(namespace) !! }
 
     /**
      * Router routes incoming requests to the proper processor function.

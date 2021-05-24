@@ -29,12 +29,12 @@ abstract class PropertyGenerator(
 
     open fun exposedPaImport(): List<String> = emptyList()
 
-    abstract fun exposedTable() : String
+    abstract fun exposedTable() : String?
 
     open fun exposedTableToBo() =
         "${property.name} = row[${property.name}]"
 
-    open fun exposedTableFromBo() =
+    open fun exposedTableFromBo() : String? =
         "statement[${property.name}] = bo.${property.name}"
 
     val optional
@@ -184,14 +184,21 @@ open class EntityIdPropertyGenerator(
         "// ${boDescriptor.className}::${property.name} // record id and opt record id is not supported yet "
 
     override fun exposedTable() =
-        "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutBo()}ExposedTable)$exposedTableOptional"
+        if (property.name == "id") {
+            null
+        } else {
+            "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutBo()}ExposedTable)$exposedTableOptional"
+        }
 
     override fun exposedTableToBo() =
         "${property.name} = row[${property.name}]$optional.entityId()"
 
     override fun exposedTableFromBo() =
-        "statement[${property.name}] = bo.${property.name}$optional.toLong()"
-
+        if (property.name == "id") {
+            null
+        } else {
+            "statement[${property.name}] = bo.${property.name}$optional.toLong()"
+        }
 }
 
 open class SecretPropertyGenerator(

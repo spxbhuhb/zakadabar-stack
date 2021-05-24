@@ -39,8 +39,12 @@ interface Authorizer<T : EntityBo<T>> {
         throw Forbidden()
     }
 
-    fun authorizeAction(executor : Executor, actionBo : ActionBo<*>)
+    fun authorizeAction(executor : Executor, actionBo : ActionBo<*>)  {
+        throw Forbidden()
+    }
 
-    fun authorizeQuery(executor : Executor, queryBo : QueryBo<*>)
+    fun authorizeQuery(executor : Executor, queryBo : QueryBo<*>)  {
+        throw Forbidden()
+    }
 
 }

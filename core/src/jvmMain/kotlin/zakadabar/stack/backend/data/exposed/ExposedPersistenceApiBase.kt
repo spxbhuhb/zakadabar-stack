@@ -3,7 +3,9 @@
  */
 package zakadabar.stack.backend.data.exposed
 
+import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.TransactionManager
+import zakadabar.stack.backend.data.Sql
 
 interface ExposedPersistenceApi {
 
@@ -15,4 +17,11 @@ interface ExposedPersistenceApi {
         TransactionManager.current().rollback()
     }
 
+    /**
+     * This function registers an SQL table. Call from [onModuleLoad].
+     * After all modules are created the [Server] will call createMissingTablesAndColumns
+     */
+    operator fun Table.unaryPlus() {
+        Sql.tables += this
+    }
 }

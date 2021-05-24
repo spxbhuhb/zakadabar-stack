@@ -3,9 +3,11 @@
  */
 package zakadabar.stack.data.builtin.authorize
 
+import kotlinx.serialization.Serializable
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityId
 
+@Serializable
 class SimpleRoleAuthorizationBo(
     var list: EntityId<out BaseBo>?,
     var read: EntityId<out BaseBo>?,

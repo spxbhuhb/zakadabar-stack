@@ -19,7 +19,7 @@ open class ClassGenerator {
     open val namespace
         get() = boDescriptor.boNamespace
     open val baseName
-        get() = if (boName.lowercase().endsWith("bo")) boName.substring(0, boName.length-2) else boName
+        get() = if (boName.lowercase().endsWith("bo")) boName.substring(0, boName.length - 2) else boName
 
     open val browserCrudName
         get() = baseName + "Crud"
@@ -144,6 +144,11 @@ import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
 import zakadabar.stack.backend.data.entity.EntityBusinessLogicBase
 import ${packageName}.data.$boName
 
+/**
+ * Business Logic for ${boName}.
+ * 
+ * Generated with Bender at ${Clock.System.now()}.
+ */
 class ${baseName}Bl : EntityBusinessLogicBase<${boName}>() {
 
     override val boClass = ${boName}::class
@@ -151,11 +156,8 @@ class ${baseName}Bl : EntityBusinessLogicBase<${boName}>() {
     override val pa = ${baseName}ExposedPaGen()
 
     override val authorizer = SimpleRoleAuthorizer<${boName}> {
-        list = StackRoles.siteMember
-        read = StackRoles.siteMember
-        create = StackRoles.securityOfficer
-        update = StackRoles.securityOfficer
-        delete = StackRoles.securityOfficer
+        allReads = StackRoles.siteMember
+        allWrites = StackRoles.siteMember
     }
     
 }
@@ -174,13 +176,13 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.data.entity.EntityPersistenceApi
-import zakadabar.stack.backend.data.entity.ExposedPersistenceApi
+import zakadabar.stack.backend.data.exposed.ExposedPersistenceApi
 import zakadabar.stack.backend.data.entityId
 import zakadabar.stack.data.entity.EntityId
 import ${packageName}.data.$boName
 ${generators.map { it.exposedPaImport() }.flatten().distinct().joinToString("\n")}
 
-/*
+/**
  * Exposed based Persistence API for ${boName}.
  * 
  * Generated with Bender at ${Clock.System.now()}.
@@ -244,15 +246,14 @@ open class ${baseName}ExposedPaGen : EntityPersistenceApi<${boName}>, ExposedPer
 
 object ${baseName}ExposedTable : LongIdTable("${boName.camelToSnakeCase()}") {
 
-    ${generators.joinToString("\n    ") { it.exposedTable() }}
+    ${generators.mapNotNull { it.exposedTable()  }.joinToString("\n    ")}
 
     fun toBo(row: ResultRow) = $boName(
-        id = row[id].entityId(),
         ${generators.joinToString(",\n        ") { it.exposedTableToBo() }}
     )
 
     fun fromBo(statement: UpdateBuilder<*>, bo: $boName) {
-        ${generators.joinToString("\n        ") { it.exposedTableFromBo() }}
+        ${generators.mapNotNull { it.exposedTableFromBo() }.joinToString("\n        ")}
     }
 
 }
