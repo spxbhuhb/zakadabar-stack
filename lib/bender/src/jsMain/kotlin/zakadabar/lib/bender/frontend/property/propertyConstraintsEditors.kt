@@ -1,29 +1,37 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.bender.frontend
+package zakadabar.lib.bender.frontend.property
 
 import zakadabar.lib.bender.*
+import zakadabar.lib.bender.frontend.benderStyles
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.descriptor.*
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.input.ZkTextInput
 
-open class EntryDetails : ZkElement() {
+open class PropertyConstraintsEditor : ZkElement() {
 
     val optional
         get() = first<Optional>().value
 
     val constraints
-        get() = find<ConstraintEditor>().mapNotNull { it.toDto() }
+        get() = find<SingleConstraintEditor>().mapNotNull { it.toBoConstraint() }
+
+    open fun update(property: BoProperty) {
+        firstOrNull<Optional>()?.value = property.optional
+        find<SingleConstraintEditor>().forEach {
+            println(it)
+            it.update(property.constraints) }
+    }
 
     open fun generator(name: String, boDescriptor: BoDescriptor): PropertyGenerator {
         TODO()
     }
 }
 
-class BooleanDetails : EntryDetails() {
+class BooleanPropertyConstraintsEditor : PropertyConstraintsEditor() {
 
     override fun onCreate() {
         super.onCreate()
@@ -41,7 +49,7 @@ class BooleanDetails : EntryDetails() {
 
 }
 
-class DoubleDetails : EntryDetails() {
+class DoublePropertyConstraintsEditor : PropertyConstraintsEditor() {
 
     override fun onCreate() {
         super.onCreate()
@@ -61,7 +69,7 @@ class DoubleDetails : EntryDetails() {
 
 }
 
-class EnumDetails : EntryDetails() {
+class EnumPropertyConstraintsEditor : PropertyConstraintsEditor() {
 
     private val enumName = ZkTextInput()
 
@@ -78,6 +86,11 @@ class EnumDetails : EntryDetails() {
         }
     }
 
+    override fun update(property: BoProperty) {
+        super.update(property)
+        if (property is EnumBoProperty) enumName.value = property.enumName
+    }
+
     override fun generator(name: String, boDescriptor: BoDescriptor) =
         EnumPropertyGenerator(
             boDescriptor,
@@ -86,7 +99,7 @@ class EnumDetails : EntryDetails() {
 
 }
 
-class IntDetails : EntryDetails() {
+class IntPropertyConstraintsEditor : PropertyConstraintsEditor() {
 
     override fun onCreate() {
         super.onCreate()
@@ -106,7 +119,7 @@ class IntDetails : EntryDetails() {
 
 }
 
-class InstantDetails : EntryDetails() {
+class InstantPropertyConstraintsEditor : PropertyConstraintsEditor() {
 
     override fun onCreate() {
         super.onCreate()
@@ -124,7 +137,7 @@ class InstantDetails : EntryDetails() {
 
 }
 
-class LongDetails : EntryDetails() {
+class LongPropertyConstraintsEditor : PropertyConstraintsEditor() {
 
     override fun onCreate() {
         super.onCreate()
@@ -144,7 +157,7 @@ class LongDetails : EntryDetails() {
 
 }
 
-class EntityIdDetails : EntryDetails() {
+class EntityIdPropertyConstraintsEditor : PropertyConstraintsEditor() {
 
     private val entityType = ZkTextInput()
 
@@ -161,6 +174,11 @@ class EntityIdDetails : EntryDetails() {
         }
     }
 
+    override fun update(property: BoProperty) {
+        super.update(property)
+        if (property is EntityIdBoProperty) entityType.value = property.kClassName
+    }
+
     override fun generator(name: String, boDescriptor: BoDescriptor) =
         EntityIdPropertyGenerator(
             boDescriptor,
@@ -169,7 +187,7 @@ class EntityIdDetails : EntryDetails() {
 
 }
 
-class SecretDetails : EntryDetails() {
+class SecretPropertyConstraintsEditor : PropertyConstraintsEditor() {
 
     override fun onCreate() {
         super.onCreate()
@@ -189,7 +207,7 @@ class SecretDetails : EntryDetails() {
 
 }
 
-class StringDetails : EntryDetails() {
+class StringPropertyConstraintsEditor: PropertyConstraintsEditor() {
 
     override fun onCreate() {
         super.onCreate()
@@ -210,7 +228,7 @@ class StringDetails : EntryDetails() {
 
 }
 
-class UuidDetails : EntryDetails() {
+class UuidPropertyConstraintsEditor : PropertyConstraintsEditor() {
 
     override fun onCreate() {
         super.onCreate()

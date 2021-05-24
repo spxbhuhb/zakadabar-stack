@@ -35,7 +35,7 @@ class AccountPublicBo(
 
 ) : EntityBo<AccountPublicBo> {
 
-    companion object : EntityBoCompanion<AccountPublicBo>("account-public")
+    companion object : EntityBoCompanion<AccountPublicBo>("zkl-account-public")
 
     override fun getBoNamespace() = boNamespace
     override fun comm() = comm

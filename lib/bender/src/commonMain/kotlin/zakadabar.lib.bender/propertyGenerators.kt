@@ -184,7 +184,7 @@ open class EntityIdPropertyGenerator(
         "// ${boDescriptor.className}::${property.name} // record id and opt record id is not supported yet "
 
     override fun exposedTable() =
-        "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutBo()}Table)$exposedTableOptional"
+        "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutBo()}ExposedTable)$exposedTableOptional"
 
     override fun exposedTableToBo() =
         "${property.name} = row[${property.name}]$optional.entityId()"

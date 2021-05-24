@@ -23,12 +23,27 @@ kotlin {
     jvm { }
 
     js {
-        nodejs()
+        nodejs {
+            testTask {
+                enabled = false // complains about missing DOM, TODO fix that, maybe, I'm not sure that I want the dependency
+            }
+        }
     }
 
-    sourceSets["commonMain"].dependencies {
-        implementation(project(":core"))
-        implementation(project(":lib:markdown"))
-    }
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation(project(":core"))
+                implementation(project(":lib:markdown"))
+            }
+        }
 
+        commonTest {
+            dependencies {
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+                implementation(kotlin("test-junit"))
+            }
+        }
+    }
 }

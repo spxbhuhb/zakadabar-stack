@@ -5,6 +5,8 @@ package zakadabar.stack.backend.validate
 
 import io.ktor.features.*
 import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.action.ActionBo
+import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.util.Executor
 
 /**
@@ -18,6 +20,14 @@ class SchemaValidator<T : BaseBo> : Validator<T> {
     }
 
     override fun validateUpdate(executor: Executor, bo : T) {
+        if (! bo.isValid) throw BadRequestException("invalid request data")
+    }
+
+    override fun validateAction(executor : Executor, bo : ActionBo<*>) {
+        if (! bo.isValid) throw BadRequestException("invalid request data")
+    }
+
+    override fun validateQuery(executor : Executor, bo : QueryBo<*>) {
         if (! bo.isValid) throw BadRequestException("invalid request data")
     }
 

@@ -4,10 +4,14 @@
 package zakadabar.stack.backend.authorize
 
 import zakadabar.stack.backend.util.default
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.builtin.authorize.SimpleRoleAuthorizationBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.util.Executor
+import kotlin.reflect.KClass
 
 /**
  * Authorizes operations by role names. When a role name is
@@ -15,9 +19,13 @@ import zakadabar.stack.util.Executor
  *
  * Throws [Forbidden] when rejected.
  */
-class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
+open class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
 
     private val roles: SimpleRoleAuthorizationBo = default { }
+
+    private val actionMap = mutableMapOf<KClass<out BaseBo>, EntityId<out BaseBo>>()
+
+    private val queryMap = mutableMapOf<KClass<out BaseBo>, EntityId<out BaseBo>>()
 
     private var initializer: (SimpleRoleAuthorizer<T>.() -> Unit)? = null
 
@@ -31,6 +39,36 @@ class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
             initializer = null
         }
     }
+
+    var all : String
+        get() = throw NotImplementedError()
+        set(value) {
+            val roleId = roleBl.getByName(value)
+            roles.list = roleId
+            roles.read = roleId
+            roles.query = roleId
+            roles.create = roleId
+            roles.update = roleId
+            roles.action = roleId
+        }
+
+    var allReads: String
+        get() = throw NotImplementedError()
+        set(value) {
+            val roleId = roleBl.getByName(value)
+            roles.list = roleId
+            roles.read = roleId
+            roles.query = roleId
+        }
+
+    var allWrites: String
+        get() = throw NotImplementedError()
+        set(value) {
+            val roleId = roleBl.getByName(value)
+            roles.create = roleId
+            roles.update = roleId
+            roles.action = roleId
+        }
 
     var list: String
         get() = throw NotImplementedError()
@@ -62,6 +100,14 @@ class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
             roles.delete = roleBl.getByName(value)
         }
 
+    fun action(actionClass: KClass<out ActionBo<*>>, roleName: String) {
+        actionMap[actionClass] = roleBl.getByName(roleName)
+    }
+
+    fun query(queryClass: KClass<out QueryBo<*>>, roleName: String) {
+        queryMap[queryClass] = roleBl.getByName(roleName)
+    }
+
     override fun authorizeList(executor: Executor) {
         roles.list?.let { authorize(executor, it) } ?: throw Forbidden()
     }
@@ -80,6 +126,18 @@ class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
 
     override fun authorizeDelete(executor: Executor, entityId: EntityId<T>) {
         roles.delete?.let { authorize(executor, it) } ?: throw Forbidden()
+    }
+
+    override fun authorizeAction(executor: Executor, actionBo: ActionBo<*>) {
+        actionMap[actionBo::class]?.let { authorize(executor, it) }
+            ?: roles.action?.let { authorize(executor, it) }
+            ?: throw Forbidden()
+    }
+
+    override fun authorizeQuery(executor: Executor, queryBo: QueryBo<*>) {
+        queryMap[queryBo::class]?.let { authorize(executor, it) }
+            ?: roles.query?.let { authorize(executor, it) }
+            ?: throw Forbidden()
     }
 
 }

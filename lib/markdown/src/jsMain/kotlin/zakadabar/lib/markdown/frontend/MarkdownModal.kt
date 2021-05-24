@@ -17,8 +17,8 @@ class MarkdownModal(
 ) : ZkModalBase<Boolean>() {
 
     override fun onCreate() {
+        titleText = title
         super.onCreate()
-        build(title)
     }
 
     override fun buildContent() {

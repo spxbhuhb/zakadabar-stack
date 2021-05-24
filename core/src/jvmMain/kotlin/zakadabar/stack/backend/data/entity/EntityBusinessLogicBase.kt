@@ -3,23 +3,24 @@
  */
 package zakadabar.stack.backend.data.entity
 
-import io.ktor.application.*
-import io.ktor.features.*
-import io.ktor.request.*
-import io.ktor.response.*
 import io.ktor.routing.*
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.audit.Auditor
-import zakadabar.stack.backend.audit.LogAuditor
+import zakadabar.stack.backend.audit.AuditorProvider
+import zakadabar.stack.backend.audit.LogAuditorProvider
 import zakadabar.stack.backend.authorize.Authorizer
-import zakadabar.stack.backend.server
-import zakadabar.stack.backend.util.executor
+import zakadabar.stack.backend.ktor.KtorRouterProvider
+import zakadabar.stack.backend.route.Router
+import zakadabar.stack.backend.route.RouterProvider
 import zakadabar.stack.backend.validate.SchemaValidator
 import zakadabar.stack.backend.validate.Validator
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityBoCompanion
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.util.Executor
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObject
@@ -28,6 +29,14 @@ import kotlin.reflect.full.companionObject
  * Base class for entity backends. Supports CRUD, queries and BLOBs.
  */
 abstract class EntityBusinessLogicBase<T : EntityBo<T>> : BackendModule {
+
+    companion object {
+
+        var routerProvider : RouterProvider = KtorRouterProvider()
+
+        val auditorProvider : AuditorProvider = LogAuditorProvider()
+
+    }
 
     /**
      * The class of BO this entity backend servers. Namespace is automatically
@@ -45,12 +54,17 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>> : BackendModule {
     /**
      * The Persistence API this entity business logic uses.
      */
-    abstract val pa: EntityPersistenceApiBase<T>
+    abstract protected val pa: EntityPersistenceApi<T>
 
     /**
      * Logger to use when logging is enabled. Name is [namespace].
      */
     val logger by lazy { LoggerFactory.getLogger(namespace) !! }
+
+    /**
+     * Router routes incoming requests to the proper processor function.
+     */
+    open val router: Router<T> = router {  }
 
     /**
      * Authorizer to call for operation authorization.
@@ -66,16 +80,18 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>> : BackendModule {
     /**
      * Audit records (logs) are creted by this auditor.
      */
-    open val auditor: Auditor<T> = LogAuditor<T>(logger)
+    open val auditor: Auditor<T> = auditor {  }
 
-    /**
-     * Adds cache control directive to GET requests, except BLOB content.
-     * Default implementation calls the function with the same name from the
-     * server. The function in the server sets the Cache-Control header to the
-     * value specified by the server settings. Default is "no-cache, no-store".
-     */
-    open fun apiCacheControl(call: ApplicationCall) {
-        server.apiCacheControl(call)
+    fun router(build : Router<T>.() -> Unit) : Router<T> {
+        val r = routerProvider.businessLogicRouter(this) as Router<T>
+        r.build()
+        return r
+    }
+
+    fun auditor(build : Auditor<T>.() -> Unit) : Auditor<T> {
+        val a = auditorProvider.businessLogicAuditor(this) as Auditor<T>
+        a.build()
+        return a
     }
 
     override fun onModuleLoad() {
@@ -87,105 +103,98 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>> : BackendModule {
     }
 
     override fun onInstallRoutes(route: Route) {
-        with(route) {
-            route("$namespace/entity") {
-
-                get("/{rid?}") {
-                    call.parameters["rid"]?.let { readWrapper(call, it) } ?: listWrapper(call)
-                }
-
-                post {
-                    createWrapper(call)
-                }
-
-                patch("/{rid}") {
-                    updateWrapper(call)
-                }
-
-                delete("/{rid}") {
-                    deleteWrapper(call)
-                }
-            }
-        }
+        router.installRoutes(route)
     }
 
-    suspend fun listWrapper(call: ApplicationCall) {
-
-        val executor = call.executor()
-
-        apiCacheControl(call)
+    fun listWrapper(executor: Executor): List<T> {
 
         authorizer.authorizeList(executor)
 
-        call.respond(list(executor) as Any)
+        val response = pa.withTransaction { list(executor) }
 
         auditor.auditList(executor)
 
+        return response
+
     }
 
-    suspend fun readWrapper(call: ApplicationCall, id: String) {
-
-        val id = call.parameters["rid"] ?: throw BadRequestException("missing id")
-
-        val executor = call.executor()
-        val entityId = EntityId<T>(id)
+    fun readWrapper(executor: Executor, entityId: EntityId<T>): T {
 
         authorizer.authorizeRead(executor, entityId)
 
-        apiCacheControl(call)
-
-        call.respond(read(call, executor, entityId) as Any)
+        val response = pa.withTransaction { read(executor, entityId) }
 
         auditor.auditRead(executor, entityId)
 
+        return response
+
     }
 
-    suspend fun createWrapper(call: ApplicationCall) {
+    fun createWrapper(executor: Executor, bo: T): T {
 
-        val executor = call.executor()
-        val request = call.receive(boClass)
+        validator.validateCreate(executor, bo)
 
-        validator.validateCreate(executor, request)
-        authorizer.authorizeCreate(executor, request)
+        authorizer.authorizeCreate(executor, bo)
 
-        val response = create(executor, request)
-
-        call.respond(response as Any)
+        val response = pa.withTransaction { create(executor, bo) }
 
         auditor.auditCreate(executor, response)
 
+        return response
+
     }
 
-    suspend fun updateWrapper(call: ApplicationCall) {
+    fun updateWrapper(executor: Executor, bo: T): T {
 
-        val executor = call.executor()
-        val request = call.receive(boClass)
+        validator.validateUpdate(executor, bo)
 
-        validator.validateUpdate(executor, request)
-        authorizer.authorizeUpdate(executor, request)
+        authorizer.authorizeUpdate(executor, bo)
 
-        val response = update(executor, request)
-
-        call.respond(response as Any)
+        val response = pa.withTransaction { update(executor, bo) }
 
         auditor.auditUpdate(executor, response)
 
+        return response
     }
 
-    suspend fun deleteWrapper(call: ApplicationCall) {
-
-        val id = call.parameters["rid"] ?: throw BadRequestException("missing id")
-
-        val entityId = EntityId<T>(id)
-
-        val executor = call.executor()
+    fun deleteWrapper(executor: Executor, entityId: EntityId<T>) {
 
         authorizer.authorizeDelete(executor, entityId)
 
-        call.respond(delete(executor, entityId) as Any)
+        pa.withTransaction { delete(executor, entityId) }
 
         auditor.auditDelete(executor, entityId)
 
+    }
+
+    fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> BaseBo, bo: BaseBo) : BaseBo {
+
+        bo as ActionBo<*>
+
+        validator.validateAction(executor, bo)
+
+        authorizer.authorizeAction(executor, bo)
+
+        val response = pa.withTransaction { func(executor, bo) }
+
+        auditor.auditAction(executor, bo)
+
+        return response
+    }
+
+    fun queryWrapper(executor: Executor, func: (Executor, BaseBo) -> Any, bo: BaseBo) : Any {
+
+        bo as QueryBo<*>
+
+        validator.validateQuery(executor, bo)
+
+        authorizer.authorizeQuery(executor, bo)
+
+        val response = pa.withTransaction { func(executor, bo) }
+
+        auditor.auditQuery(executor, bo)
+
+        return response
     }
 
     /**
@@ -214,22 +223,6 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>> : BackendModule {
      */
     open fun read(executor: Executor, entityId: EntityId<T>): T {
         return pa.read(entityId)
-    }
-
-    /**
-     * Read an entity with access to Ktor's application call. The
-     * default implementation simply calls read without [call].
-     *
-     * URL: `GET /api/<namespace>/entity/<entityId>`
-     *
-     * @param call     Ktor's [ApplicationCall].
-     * @param executor Executor of the operation.
-     * @param entityId The id of the entity to read.
-     *
-     * @return BO of the entity
-     */
-    open fun read(call: ApplicationCall, executor: Executor, entityId: EntityId<T>): T {
-        return read(executor, entityId)
     }
 
     /**
@@ -272,5 +265,6 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>> : BackendModule {
     open fun list(executor: Executor): List<T> {
         return pa.list()
     }
+
 
 }

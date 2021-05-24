@@ -3,8 +3,10 @@
  */
 package zakadabar.stack.backend.authorize
 
+import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.util.Executor
 
 /**
@@ -36,5 +38,9 @@ interface Authorizer<T : EntityBo<T>> {
     fun authorizeDelete(executor: Executor, entityId: EntityId<T>) {
         throw Forbidden()
     }
+
+    fun authorizeAction(executor : Executor, actionBo : ActionBo<*>)
+
+    fun authorizeQuery(executor : Executor, queryBo : QueryBo<*>)
 
 }

@@ -3,6 +3,7 @@
  */
 package zakadabar.lib.bender
 
+import kotlinx.datetime.Clock
 import zakadabar.stack.data.schema.descriptor.BoDescriptor
 import zakadabar.stack.text.camelToSnakeCase
 
@@ -142,13 +143,12 @@ import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
 import zakadabar.stack.backend.data.entity.EntityBusinessLogicBase
 import ${packageName}.data.$boName
-${generators.map { it.exposedPaImport() }.flatten().distinct().joinToString("\n")}
 
 class ${baseName}Bl : EntityBusinessLogicBase<${boName}>() {
 
     override val boClass = ${boName}::class
 
-    override val pa = ${baseName}ExposedCrudPa()
+    override val pa = ${baseName}ExposedPaGen()
 
     override val authorizer = SimpleRoleAuthorizer<${boName}> {
         list = StackRoles.siteMember
@@ -164,9 +164,6 @@ class ${baseName}Bl : EntityBusinessLogicBase<${boName}>() {
 fun exposedPaGenerator() = """
 package ${packageName}.backend
 
-import org.jetbrains.exposed.dao.LongEntity
-import org.jetbrains.exposed.dao.LongEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.ResultRow
@@ -175,33 +172,49 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.update
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import zakadabar.stack.backend.data.entity.EntityPersistenceApiBase
+import org.jetbrains.exposed.sql.transactions.transaction
+import zakadabar.stack.backend.data.entity.EntityPersistenceApi
 import zakadabar.stack.backend.data.entity.ExposedPersistenceApi
 import zakadabar.stack.backend.data.entityId
-import zakadabar.stack.backend.data.get
 import zakadabar.stack.data.entity.EntityId
 import ${packageName}.data.$boName
 ${generators.map { it.exposedPaImport() }.flatten().distinct().joinToString("\n")}
 
-class ${baseName}ExposedCrudPa : EntityPersistenceApiBase<${boName}>(), ExposedPersistenceApi {
+/*
+ * Exposed based Persistence API for ${boName}.
+ * 
+ * Generated with Bender at ${Clock.System.now()}.
+ *
+ * IMPORTANT: Please do not modify this file, see extending patterns below.
+ * 
+ * - If you need other fields, add them to the business object and then re-generate.
+ * - If you need other functions, please extend with `Gen` removed from the name.
+ */
+open class ${baseName}ExposedPaGen : EntityPersistenceApi<${boName}>, ExposedPersistenceApi {
 
     override fun onModuleLoad() {
         super.onModuleLoad()
         + ${baseName}ExposedTable
     }
+    
+    override fun <R> withTransaction(func : () -> R) = transaction {
+        func()
+    }
+
+    override fun commit() = exposedCommit()
+
+    override fun rollback() = exposedRollback()
 
     override fun list(): List<${boName}> {
         return ${baseName}ExposedTable
             .selectAll()
-            .map { ${baseName}ExposedTable.toBo(it) }
+            .map { it.toBo() }
     }
 
     override fun create(bo: ${boName}): ${boName} {
-        val id = ${baseName}ExposedTable
-            .insertAndGetId {
-                fromBo(it, bo)
-            }
-        bo.id = EntityId(id.value)
+        ${baseName}ExposedTable
+            .insertAndGetId { it.fromBo(bo) }
+            .also { bo.id = EntityId(it.value) }
         return bo
     }
 
@@ -209,13 +222,12 @@ class ${baseName}ExposedCrudPa : EntityPersistenceApiBase<${boName}>(), ExposedP
         return ${baseName}ExposedTable
             .select { ${baseName}ExposedTable.id eq entityId.toLong() }
             .first()
-            .let { ${baseName}ExposedTable.toBo(it) }
+            .toBo()
     }
 
     override fun update(bo: ${boName}): $boName {
         ${baseName}ExposedTable
-            .update({ ${baseName}ExposedTable.id eq bo.id.toLong() })
-            { fromBo(it, bo) }
+            .update({ ${baseName}ExposedTable.id eq bo.id.toLong() }) { it.fromBo(bo) }
         return bo
     }
 
@@ -223,6 +235,10 @@ class ${baseName}ExposedCrudPa : EntityPersistenceApiBase<${boName}>(), ExposedP
         ${baseName}ExposedTable
             .deleteWhere { ${baseName}ExposedTable.id eq entityId.toLong() }
     }
+    
+    open fun ResultRow.toBo() = ${baseName}ExposedTable.toBo(this)
+
+    open fun UpdateBuilder<*>.fromBo(bo : ${boName}) = ${baseName}ExposedTable.fromBo(this, bo)
 
 }
 

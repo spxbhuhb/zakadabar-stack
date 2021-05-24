@@ -3,4 +3,5 @@
  */
 package zakadabar.lib.accounts.backend
 
+lateinit var accountPrivateBl : AccountPrivateBl
 lateinit var roleBl : RoleBl

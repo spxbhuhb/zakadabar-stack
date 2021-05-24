@@ -21,7 +21,7 @@ class RoleBo(
 
 ) : EntityBo<RoleBo> {
 
-    companion object : EntityBoCompanion<RoleBo>("role")
+    companion object : EntityBoCompanion<RoleBo>("zkl-role")
 
     override fun getBoNamespace() = boNamespace
     override fun comm() = comm

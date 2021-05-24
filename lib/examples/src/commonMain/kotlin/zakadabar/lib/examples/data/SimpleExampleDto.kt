@@ -25,7 +25,7 @@ data class SimpleExampleDto(
 
     override fun schema() = BoSchema {
         + ::id
-        + ::name min 1 max 30 blank false default "Example Name"
+        + ::name min 1 max 30 blank false
     }
 
 }

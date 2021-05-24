@@ -11,5 +11,7 @@ class SimpleRoleAuthorizationBo(
     var read: EntityId<out BaseBo>?,
     var create: EntityId<out BaseBo>?,
     var update: EntityId<out BaseBo>?,
-    var delete: EntityId<out BaseBo>?
+    var delete: EntityId<out BaseBo>?,
+    var query: EntityId<out BaseBo>?,
+    var action: EntityId<out BaseBo>?
 ) : BaseBo

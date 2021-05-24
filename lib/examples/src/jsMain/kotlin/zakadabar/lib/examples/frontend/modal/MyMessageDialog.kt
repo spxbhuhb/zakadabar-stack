@@ -5,24 +5,20 @@ package zakadabar.lib.examples.frontend.modal
 
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.modal.ZkModalBase
-import zakadabar.stack.frontend.builtin.modal.zkModalStyles
 import zakadabar.stack.frontend.util.io
-import zakadabar.stack.frontend.util.plusAssign
 
 open class MyMessageDialog : ZkModalBase<String>() {
 
-    override fun onCreate() {
-        classList += zkModalStyles.modal
+    override fun buildTitle() {
+        + "This is manually built title."
+    }
 
-        + column {
-            + div(zkModalStyles.content) {
-                + "This is my message dialog."
-            }
+    override fun buildContent() {
+        + "This is my message dialog."
+    }
 
-            + row(zkModalStyles.buttons) {
-                + ZkButton("I will use translated strings instead", onClick = ::onOk)
-            }
-        }
+    override fun buildButtons() {
+        + ZkButton("I will use translated strings instead", onClick = ::onOk)
     }
 
     open fun onOk() = io {

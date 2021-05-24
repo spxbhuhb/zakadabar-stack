@@ -4,6 +4,8 @@
 package zakadabar.stack.backend.validate
 
 import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.action.ActionBo
+import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.util.Executor
 
 /**
@@ -17,6 +19,14 @@ interface Validator<T : BaseBo> {
     }
 
     fun validateUpdate(executor: Executor, bo : T) {
+
+    }
+
+    fun validateAction(executor : Executor, bo : ActionBo<*>) {
+
+    }
+
+    fun validateQuery(executor : Executor, bo : QueryBo<*>) {
 
     }
 

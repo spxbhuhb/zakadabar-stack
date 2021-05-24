@@ -22,7 +22,7 @@ class SessionBo(
 
 ) : EntityBo<SessionBo> {
 
-    companion object : EntityBoCompanion<SessionBo>("session")
+    companion object : EntityBoCompanion<SessionBo>("zkl-session")
 
     override fun getBoNamespace() = boNamespace
     override fun comm() = comm

@@ -29,7 +29,6 @@ class AccountPrivateBo(
     var displayName: String?,
     var theme: String?,
     var locale: String,
-    var avatar: Long?,
 
     var organizationName: String?,
     var position: String?,
@@ -37,7 +36,7 @@ class AccountPrivateBo(
 
 ) : EntityBo<AccountPrivateBo> {
 
-    companion object : EntityBoCompanion<AccountPrivateBo>("account-private")
+    companion object : EntityBoCompanion<AccountPrivateBo>("zkl-account-private")
 
     override fun getBoNamespace() = boNamespace
     override fun comm() = comm
@@ -54,7 +53,6 @@ class AccountPrivateBo(
         + ::displayName min 3 max 50
         + ::locale max 20
         + ::theme max 50
-        + ::avatar
 
         + ::organizationName min 2 max 100
         + ::position min 3 max 50
