@@ -259,12 +259,17 @@ open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider, ZkLocalTitleP
     open fun render() {
         build {
             tbody.clear()
+
             this.buildPoint = tbody
 
             firstShownRow = Int.MAX_VALUE
             lastShownRow = - 1
 
-            areas.adjustAreas((filteredData.size * rowHeight).toFloat())
+            val height = filteredData.size * rowHeight
+            areas.adjustAreas(height.toFloat())
+            areas.start = 0f
+            areas.end = areas.areaHeight * areas.activeAreas.size
+            areas.element.scrollIntoView(true)
 
             + placeHolderRow
 
@@ -398,7 +403,7 @@ open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider, ZkLocalTitleP
      * * calls [render]
      */
     open fun onSearch(text: String) {
-        searchText = if (text.isEmpty()) null else text
+        searchText = text.ifEmpty { null }
         filter()
         render()
     }

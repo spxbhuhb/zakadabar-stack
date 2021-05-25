@@ -10,8 +10,22 @@ import zakadabar.stack.data.schema.DtoSchema
 @Serializable
 class SessionBackendSettingsDto(
 
-    var sessionTimeout: Long = 30000,
+    /**
+     * Session timeout in minutes.
+     */
+    var sessionTimeout: Long = 30,
+
+    /**
+     * Session record updates are delayed by this interval if only the time
+     * of last activity changes. This reduces the number of database updates.
+     * Seconds.
+     */
     var updateDelay: Long = 120,
+
+    /**
+     * Session expiration check run interval. Expired sessions are removed
+     * from the in-memory cache and from the database by this check. Seconds.
+     */
     var expirationCheckInterval: Long = 120
 
 ) : DtoBase {

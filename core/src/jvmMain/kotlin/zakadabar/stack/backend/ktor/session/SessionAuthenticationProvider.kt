@@ -9,15 +9,12 @@ import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.sessions.*
 import zakadabar.stack.backend.Server
-import zakadabar.stack.backend.data.builtin.session.LoginTimeout
+import zakadabar.stack.backend.server
 import zakadabar.stack.data.record.LongRecordId
 import zakadabar.stack.util.Executor
 
-class SessionAuthenticationProvider internal constructor(configuration: Configuration) :
-    AuthenticationProvider(configuration) {
-
+class SessionAuthenticationProvider internal constructor(configuration: Configuration) : AuthenticationProvider(configuration) {
     class Configuration internal constructor(name: String?) : AuthenticationProvider.Configuration(name)
-
 }
 
 fun Authentication.Configuration.session(name: String? = null) {
@@ -36,7 +33,7 @@ fun Authentication.Configuration.session(name: String? = null) {
         context.principal(Executor(session.account, session.roleIds, session.roleNames))
 
         if (call.attributes.getOrNull(LoginTimeoutKey) == true) {
-            throw LoginTimeout()
+            server.onLoginTimeout(call)
         }
     }
 

@@ -41,15 +41,25 @@ open class RecordComm<T : RecordDto<T>>(
                 storage = AcceptAllCookiesStorage()
             }
         }
+
+        /**
+         * Called then the server responds with HTTP status 4xx and 5xx.
+         */
+        var onError: suspend (ex: Exception) -> Unit = { }
     }
 
     @PublicApi
     override suspend fun create(dto: T): T {
         require(dto.id.isEmpty()) { "id is not 0 in $dto" }
 
-        val text = client.post<String>("$baseUrl/api/$namespace/record") {
-            header("Content-Type", "application/json")
-            body = Json.encodeToString(serializer, dto)
+        val text = try {
+            client.post<String>("$baseUrl/api/$namespace/record") {
+                header("Content-Type", "application/json")
+                body = Json.encodeToString(serializer, dto)
+            }
+        } catch (ex: Exception) {
+            onError(ex)
+            throw ex
         }
 
         return Json.decodeFromString(serializer, text)
@@ -57,7 +67,12 @@ open class RecordComm<T : RecordDto<T>>(
 
     @PublicApi
     override suspend fun read(id: RecordId<T>): T {
-        val text = client.get<String>("$baseUrl/api/$namespace/record/$id")
+        val text = try {
+            client.get<String>("$baseUrl/api/$namespace/record/$id")
+        } catch (ex: Exception) {
+            onError(ex)
+            throw ex
+        }
 
         return Json.decodeFromString(serializer, text)
     }
@@ -66,9 +81,14 @@ open class RecordComm<T : RecordDto<T>>(
     override suspend fun update(dto: T): T {
         require(! dto.id.isEmpty()) { "ID of the $dto is 0 " }
 
-        val text = client.patch<String>("$baseUrl/api/$namespace/record/${dto.id}") {
-            header("Content-Type", "application/json")
-            body = Json.encodeToString(serializer, dto)
+        val text = try {
+            client.patch<String>("$baseUrl/api/$namespace/record/${dto.id}") {
+                header("Content-Type", "application/json")
+                body = Json.encodeToString(serializer, dto)
+            }
+        } catch (ex: Exception) {
+            onError(ex)
+            throw ex
         }
 
         return Json.decodeFromString(serializer, text)
@@ -76,14 +96,24 @@ open class RecordComm<T : RecordDto<T>>(
 
     @PublicApi
     override suspend fun all(): List<T> {
-        val text = client.get<String>("$baseUrl/api/$namespace/record")
+        val text = try {
+            client.get<String>("$baseUrl/api/$namespace/record")
+        } catch (ex: Exception) {
+            onError(ex)
+            throw ex
+        }
 
         return Json.decodeFromString(ListSerializer(serializer), text)
     }
 
     @PublicApi
     override suspend fun delete(id: RecordId<T>) {
-        client.delete<Unit>("$baseUrl/api/$namespace/record/$id")
+        try {
+            client.delete<Unit>("$baseUrl/api/$namespace/record/$id")
+        } catch (ex: Exception) {
+            onError(ex)
+            throw ex
+        }
     }
 
     @PublicApi
@@ -110,17 +140,23 @@ open class RecordComm<T : RecordDto<T>>(
                 callback(Json.decodeFromString(BlobDto.serializer(), text), BlobCreateState.Done, data.size.toLong())
 
             } catch (ex: Exception) {
-                ex.printStackTrace() // TODO replace this with a function similar to writeLog (from Android project)
                 callback(dto, BlobCreateState.Error, 0L)
+                onError(ex)
+                throw ex
             }
         }
     }
 
     @PublicApi
     override suspend fun blobCreate(dataRecordId: RecordId<T>?, name: String, type: ContentType, data: ByteArray): BlobDto {
-        val text = client.post<String>("$baseUrl/api/$namespace/blob${if (dataRecordId == null) "" else "/$dataRecordId"}") {
-            header("Content-Disposition", """attachment; filename="$name"""")
-            body = ByteArrayContent(data, contentType = type)
+        val text = try {
+            client.post<String>("$baseUrl/api/$namespace/blob${if (dataRecordId == null) "" else "/$dataRecordId"}") {
+                header("Content-Disposition", """attachment; filename="$name"""")
+                body = ByteArrayContent(data, contentType = type)
+            }
+        } catch (ex : Exception) {
+            onError(ex)
+            throw ex
         }
 
         return Json.decodeFromString(BlobDto.serializer(), text)
@@ -128,13 +164,23 @@ open class RecordComm<T : RecordDto<T>>(
 
     @PublicApi
     suspend fun blobRead(blobId: RecordId<BlobDto>): ByteArray {
-        return client.get("$baseUrl/api/$namespace/blob/content/$blobId")
+        try {
+            return client.get("$baseUrl/api/$namespace/blob/content/$blobId")
+        } catch (ex : Exception) {
+            onError(ex)
+            throw ex
+        }
     }
 
     @PublicApi
     override suspend fun blobMetaList(dataRecordId: RecordId<T>): List<BlobDto> {
 
-        val text = client.get<String>("$baseUrl/api/$namespace/blob/list/$dataRecordId")
+        val text = try {
+            client.get<String>("$baseUrl/api/$namespace/blob/list/$dataRecordId")
+        } catch (ex : Exception) {
+            onError(ex)
+            throw ex
+        }
 
         return Json.decodeFromString(ListSerializer(BlobDto.serializer()), text)
     }
@@ -142,7 +188,12 @@ open class RecordComm<T : RecordDto<T>>(
     @PublicApi
     override suspend fun blobMetaRead(blobId: RecordId<BlobDto>): BlobDto {
 
-        val text = client.get<String>("$baseUrl/api/$namespace/blob/meta/$blobId")
+        val text = try {
+            client.get<String>("$baseUrl/api/$namespace/blob/meta/$blobId")
+        } catch (ex : Exception) {
+            onError(ex)
+            throw ex
+        }
 
         return Json.decodeFromString(BlobDto.serializer(), text)
     }
@@ -151,9 +202,14 @@ open class RecordComm<T : RecordDto<T>>(
     override suspend fun blobMetaUpdate(dto: BlobDto): BlobDto {
         require(! dto.id.isEmpty()) { "ID of the $dto is 0 " }
 
-        val text = client.patch<String>("$baseUrl/api/$namespace/blob/meta/${dto.id}") {
-            header("Content-Type", "application/json")
-            body = Json.encodeToString(BlobDto.serializer(), dto)
+        val text = try {
+            client.patch<String>("$baseUrl/api/$namespace/blob/meta/${dto.id}") {
+                header("Content-Type", "application/json")
+                body = Json.encodeToString(BlobDto.serializer(), dto)
+            }
+        } catch (ex : Exception) {
+            onError(ex)
+            throw ex
         }
 
         return Json.decodeFromString(BlobDto.serializer(), text)
@@ -161,7 +217,12 @@ open class RecordComm<T : RecordDto<T>>(
 
     @PublicApi
     override suspend fun blobDelete(blobId: RecordId<BlobDto>) {
-        client.delete<Unit>("$baseUrl/api/$namespace/blob/$blobId")
+        try {
+            client.delete<Unit>("$baseUrl/api/$namespace/blob/$blobId")
+        } catch (ex : Exception) {
+            onError(ex)
+            throw ex
+        }
     }
 
 }
