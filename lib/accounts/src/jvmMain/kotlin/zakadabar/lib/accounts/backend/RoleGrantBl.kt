@@ -9,9 +9,9 @@ import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
 import zakadabar.stack.backend.data.entity.EntityBusinessLogicBase
 
 
-class RoleGrantBl : EntityBusinessLogicBase<RoleGrantBo>() {
-
-    override val boClass = RoleGrantBo::class
+class RoleGrantBl : EntityBusinessLogicBase<RoleGrantBo>(
+    boClass = RoleGrantBo::class
+) {
 
     override val pa = RoleGrantExposedPaGen()
 
@@ -22,5 +22,5 @@ class RoleGrantBl : EntityBusinessLogicBase<RoleGrantBo>() {
         update = StackRoles.securityOfficer
         delete = StackRoles.securityOfficer
     }
-    
+
 }

@@ -35,7 +35,7 @@ open class ClassGenerator {
     // -------------------------------------------------------------------------
 
 fun commonGenerator() = """
-package $packageName
+package $packageName.data
 
 import kotlinx.serialization.Serializable
 import zakadabar.stack.data.entity.EntityBo
@@ -44,11 +44,20 @@ import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoSchema
 ${generators.map { it.commonImport() }.flatten().distinct().joinToString("\n")}
 
+/**
+ * Business Object of $boName.
+ * 
+ * Generated with Bender at ${Clock.System.now()}.
+ *
+ * Please do not implement business logic in this class. If you add fields,
+ * please check the frontend table and form, and also the persistence API on 
+ * the backend.
+ */
 @Serializable
 class ${boName}(
 
     override var id: EntityId<$boName>,
-    ${generators.joinToString(",\n    ") { it.commonDeclaration() }}
+    ${generators.mapNotNull { it.commonDeclaration() }.joinToString(",\n    ")}
 
 ) : EntityBo<$boName> {
 
@@ -80,10 +89,11 @@ import ${packageName}.data.$boName
 
 ${generators.map { it.browserImport() }.flatten().distinct().joinToString("\n")}
 
-// -----------------------------------------------------------------------------
-//  Crud
-// -----------------------------------------------------------------------------
-
+/**
+ * CRUD target for [$boName].
+ * 
+ * Generated with Bender at ${Clock.System.now()}.
+ */
 object $browserCrudName : ZkCrudTarget<$boName>() {
     init {
         companion = $boName.Companion
@@ -93,10 +103,11 @@ object $browserCrudName : ZkCrudTarget<$boName>() {
     }
 }
 
-// -----------------------------------------------------------------------------
-//  Form
-// -----------------------------------------------------------------------------
-
+/**
+ * Form for [$boName].
+ * 
+ * Generated with Bender at ${Clock.System.now()}.
+ */
 class $browserFormName : ZkForm<$boName>() {
     override fun onCreate() {
         super.onCreate()
@@ -109,10 +120,11 @@ class $browserFormName : ZkForm<$boName>() {
     }
 }
 
-// -----------------------------------------------------------------------------
-//  Table
-// -----------------------------------------------------------------------------
-
+/**
+ * Table for [$boName].
+ * 
+ * Generated with Bender at ${Clock.System.now()}.
+ */
 class $browserTableName : ZkTable<$boName>() {
 
     override fun onConfigure() {
@@ -133,7 +145,7 @@ class $browserTableName : ZkTable<$boName>() {
 """.trimIndent()
 
     // -------------------------------------------------------------------------
-    //  Exposed Backend
+    //  Business Logic
     // -------------------------------------------------------------------------
 
 fun businessLogicGenerator() = """
@@ -148,37 +160,36 @@ import ${packageName}.data.$boName
  * Business Logic for ${boName}.
  * 
  * Generated with Bender at ${Clock.System.now()}.
+ *
+ * **IMPORTANT** Please do not modify this class manually. 
+ * 
+ * If you need other functions, please extend with `Gen` removed from the name.
  */
-class ${baseName}Bl : EntityBusinessLogicBase<${boName}>() {
-
-    override val boClass = ${boName}::class
+class ${baseName}BlGen : EntityBusinessLogicBase<${boName}>(
+    boClass = ${boName}::class
+) {
 
     override val pa = ${baseName}ExposedPaGen()
 
     override val authorizer = SimpleRoleAuthorizer<${boName}> {
-        allReads = StackRoles.siteMember
-        allWrites = StackRoles.siteMember
+        all = StackRoles.siteMember
     }
     
 }
 """.trimIndent()
 
+    // -------------------------------------------------------------------------
+    //  Exposed Persistence API
+    // -------------------------------------------------------------------------
+
 fun exposedPaGenerator() = """
 package ${packageName}.backend
 
-import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.update
-import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.stack.backend.data.entity.EntityPersistenceApi
-import zakadabar.stack.backend.data.exposed.ExposedPersistenceApi
 import zakadabar.stack.backend.data.entityId
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.backend.data.exposed.ExposedPaBase
+import zakadabar.stack.backend.data.exposed.ExposedPaTable
 import ${packageName}.data.$boName
 ${generators.map { it.exposedPaImport() }.flatten().distinct().joinToString("\n")}
 
@@ -187,78 +198,39 @@ ${generators.map { it.exposedPaImport() }.flatten().distinct().joinToString("\n"
  * 
  * Generated with Bender at ${Clock.System.now()}.
  *
- * IMPORTANT: Please do not modify this file, see extending patterns below.
+ * **IMPORTANT** Please do not modify this class manually, see extending patterns below.
  * 
  * - If you need other fields, add them to the business object and then re-generate.
  * - If you need other functions, please extend with `Gen` removed from the name.
  */
-open class ${baseName}ExposedPaGen : EntityPersistenceApi<${boName}>, ExposedPersistenceApi {
+open class ${baseName}ExposedPaGen : ExposedPaBase<$boName>(
+    table = ${baseName}ExposedTableGen()
+)
 
-    override fun onModuleLoad() {
-        super.onModuleLoad()
-        + ${baseName}ExposedTable
-    }
-    
-    override fun <R> withTransaction(func : () -> R) = transaction {
-        func()
-    }
+/**
+ * Exposed based SQL table for ${boName}.
+ * 
+ * Generated with Bender at ${Clock.System.now()}.
+ *
+ * **IMPORTANT** Please do not modify this class manually. 
+ * 
+ * If you need other fields, add them to the business object and then re-generate.
+ */
+class ${baseName}ExposedTableGen : ExposedPaTable<$boName>(
+    tableName = "${baseName.camelToSnakeCase()}"
+) {
 
-    override fun commit() = exposedCommit()
+    ${generators.mapNotNull { it.exposedTable()?.let { dl -> "private $dl" }  }.joinToString("\n    ")}
 
-    override fun rollback() = exposedRollback()
-
-    override fun list(): List<${boName}> {
-        return ${baseName}ExposedTable
-            .selectAll()
-            .map { it.toBo() }
-    }
-
-    override fun create(bo: ${boName}): ${boName} {
-        ${baseName}ExposedTable
-            .insertAndGetId { it.fromBo(bo) }
-            .also { bo.id = EntityId(it.value) }
-        return bo
-    }
-
-    override fun read(entityId: EntityId<${boName}>) : $boName {
-        return ${baseName}ExposedTable
-            .select { ${baseName}ExposedTable.id eq entityId.toLong() }
-            .first()
-            .toBo()
-    }
-
-    override fun update(bo: ${boName}): $boName {
-        ${baseName}ExposedTable
-            .update({ ${baseName}ExposedTable.id eq bo.id.toLong() }) { it.fromBo(bo) }
-        return bo
-    }
-
-    override fun delete(entityId: EntityId<${boName}>) {
-        ${baseName}ExposedTable
-            .deleteWhere { ${baseName}ExposedTable.id eq entityId.toLong() }
-    }
-    
-    open fun ResultRow.toBo() = ${baseName}ExposedTable.toBo(this)
-
-    open fun UpdateBuilder<*>.fromBo(bo : ${boName}) = ${baseName}ExposedTable.fromBo(this, bo)
-
-}
-
-object ${baseName}ExposedTable : LongIdTable("${boName.camelToSnakeCase()}") {
-
-    ${generators.mapNotNull { it.exposedTable()  }.joinToString("\n    ")}
-
-    fun toBo(row: ResultRow) = $boName(
+    override fun toBo(row: ResultRow) = $boName(
         ${generators.joinToString(",\n        ") { it.exposedTableToBo() }}
     )
 
-    fun fromBo(statement: UpdateBuilder<*>, bo: $boName) {
+    override fun fromBo(statement: UpdateBuilder<*>, bo: $boName) {
         ${generators.mapNotNull { it.exposedTableFromBo() }.joinToString("\n        ")}
     }
 
 }
-
-
 """.trimIndent()
 
     // @formatter:on

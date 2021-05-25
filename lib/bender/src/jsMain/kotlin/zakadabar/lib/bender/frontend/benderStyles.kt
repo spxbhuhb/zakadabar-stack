@@ -15,16 +15,16 @@ class BenderStyles : ZkCssStyleSheet() {
         maxWidth = "800px"
     }
 
-    val smallInput by cssClass {
-        width = "5em"
-    }
-
     val mediumInput by cssClass {
         width = "10em"
     }
 
     val largeInput by cssClass {
         width = "16em"
+    }
+
+    val extraLargeInput by cssClass {
+        width = "24em"
     }
 
     val editorLabel by cssClass {

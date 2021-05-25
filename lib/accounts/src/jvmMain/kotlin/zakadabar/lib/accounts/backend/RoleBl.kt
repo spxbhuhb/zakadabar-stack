@@ -7,12 +7,14 @@ package zakadabar.lib.accounts.backend
 
 import zakadabar.lib.accounts.data.RoleBo
 import zakadabar.stack.StackRoles
+import zakadabar.stack.backend.authorize.RoleBlProvider
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
 import zakadabar.stack.backend.data.entity.EntityBusinessLogicBase
 
-class RoleBl : EntityBusinessLogicBase<RoleBo>() {
-
-    override val boClass = RoleBo::class
+class RoleBl(
+) : RoleBlProvider, EntityBusinessLogicBase<RoleBo>(
+    boClass = RoleBo::class
+) {
 
     override val pa = RoleExposedPa()
 
@@ -24,11 +26,6 @@ class RoleBl : EntityBusinessLogicBase<RoleBo>() {
         delete = StackRoles.securityOfficer
     }
 
-    override fun onModuleStart() {
-        super.onModuleStart()
-        roleBl = this
-    }
-
-    fun readByName(name: String) = pa.readByName(name)
+    override fun getByName(name: String) = pa.readByName(name).id
 
 }

@@ -13,7 +13,7 @@ abstract class PropertyGenerator(
 ) {
     open fun commonImport(): List<String> = emptyList()
 
-    open fun commonDeclaration() =
+    open fun commonDeclaration() : String? =
         "var ${property.name} : ${typeName}${optional}"
 
     open fun commonSchema() =
@@ -22,7 +22,7 @@ abstract class PropertyGenerator(
     open fun browserImport(): List<String> = emptyList()
 
     open fun browserForm() =
-        "+ dto::${property.name}"
+        "+ bo::${property.name}"
 
     open fun browserTable() =
         "+ ${boDescriptor.className}::${property.name}"
@@ -60,7 +60,7 @@ open class BooleanPropertyGenerator(
 
     override fun browserForm() =
         if (property.optional) {
-            "+ opt(dto::${property.name}, stringStore.trueText, stringStore.falseText)"
+            "+ opt(bo::${property.name}, stringStore.trueText, stringStore.falseText)"
         } else {
             super.browserForm()
         }
@@ -168,16 +168,20 @@ open class EntityIdPropertyGenerator(
 ) : PropertyGenerator(boDescriptor, property, "EntityId") {
 
     override fun commonDeclaration() =
-        "var ${property.name} : EntityId<${property.kClassName}>$optional"
+        if (property.name == "id") {
+           null
+        } else {
+            "var ${property.name} : EntityId<${property.kClassName}>$optional"
+        }
 
     override fun commonSchema() =
         "+ ::${property.name}"
 
     override fun browserForm() =
         if (property.name == "id") {
-            "+ dto::id"
+            "+ bo::id"
         } else {
-            "+ select(dto::${property.name}) { ${property.kClassName}.all().by { it.name } } "
+            "+ select(bo::${property.name}) { ${property.kClassName}.all().by { it.name } } "
         }
 
     override fun browserTable() =

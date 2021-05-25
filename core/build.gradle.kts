@@ -19,7 +19,7 @@ val isSnapshot = version.toString().contains("SNAPSHOT")
 // common
 val ktorVersion = "1.4.3"
 val coroutinesVersion = "1.3.9"
-val serializationVersion = "1.2.1"
+val serializationVersion = "1.0.0-RC2"
 val datetimeVersion = "0.2.0"
 val cliktVersion = "2.8.0"
 

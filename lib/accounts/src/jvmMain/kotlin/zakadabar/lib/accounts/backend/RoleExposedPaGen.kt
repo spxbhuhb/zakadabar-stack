@@ -16,53 +16,58 @@ import zakadabar.stack.data.entity.EntityId
 
 open class RoleExposedPaGen : EntityPersistenceApi<RoleBo>, ExposedPersistenceApi {
 
+    val table = RoleExposedTable()
+
     override fun onModuleLoad() {
         super.onModuleLoad()
-        + RoleExposedTable
+        + table
     }
 
     override fun <R> withTransaction(func: () -> R) = transaction {
         func()
     }
 
+    override fun commit() = exposedCommit()
+
+    override fun rollback() = exposedRollback()
+
     override fun list(): List<RoleBo> {
-        return RoleExposedTable
-            .selectAll()
+        return table.selectAll()
             .map { it.toBo() }
     }
 
     override fun create(bo: RoleBo): RoleBo {
-        RoleExposedTable
+        table
             .insertAndGetId { it.fromBo(bo) }
             .also { bo.id = EntityId(it.value) }
         return bo
     }
 
     override fun read(entityId: EntityId<RoleBo>): RoleBo {
-        return RoleExposedTable
-            .select { RoleExposedTable.id eq entityId.toLong() }
+        return table
+            .select { table.id eq entityId.toLong() }
             .first()
             .toBo()
     }
 
     override fun update(bo: RoleBo): RoleBo {
-        RoleExposedTable
-            .update({ RoleExposedTable.id eq bo.id.toLong() }) { it.fromBo(bo) }
+        table
+            .update({ table.id eq bo.id.toLong() }) { it.fromBo(bo) }
         return bo
     }
 
     override fun delete(entityId: EntityId<RoleBo>) {
-        RoleExposedTable
-            .deleteWhere { RoleExposedTable.id eq entityId.toLong() }
+        table
+            .deleteWhere { table.id eq entityId.toLong() }
     }
 
-    open fun ResultRow.toBo() = RoleExposedTable.toBo(this)
+    open fun ResultRow.toBo() = table.toBo(this)
 
-    open fun UpdateBuilder<*>.fromBo(bo: RoleBo) = RoleExposedTable.fromBo(this, bo)
+    open fun UpdateBuilder<*>.fromBo(bo: RoleBo) = table.fromBo(this, bo)
 
 }
 
-object RoleExposedTable : LongIdTable("role_bo") {
+class RoleExposedTable : LongIdTable("roles") {
 
     val name = varchar("name", 50)
     val description = text("description")

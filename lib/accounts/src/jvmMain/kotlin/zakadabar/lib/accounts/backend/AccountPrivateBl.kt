@@ -13,9 +13,9 @@ import zakadabar.stack.backend.data.entity.EntityBusinessLogicBase
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
 
-class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>() {
-
-    override val boClass = AccountPrivateBo::class
+class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
+    boClass = AccountPrivateBo::class
+) {
 
     override val pa = AccountPrivateExposedPaGen()
 

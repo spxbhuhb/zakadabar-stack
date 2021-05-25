@@ -113,7 +113,7 @@ open class KtorRouter<T : EntityBo<T>>(
         val executor = call.executor()
         val request = call.receive(businessLogic.boClass)
 
-        call.respond(businessLogic.create(executor, request) as Any)
+        call.respond(businessLogic.createWrapper(executor, request) as Any)
 
     }
 

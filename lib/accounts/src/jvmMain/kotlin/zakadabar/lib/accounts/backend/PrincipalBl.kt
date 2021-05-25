@@ -15,11 +15,11 @@ import zakadabar.stack.util.BCrypt
 import zakadabar.stack.util.Executor
 import zakadabar.stack.util.PublicApi
 
-class PrincipalBl : EntityBusinessLogicBase<PrincipalBo>() {
+class PrincipalBl : EntityBusinessLogicBase<PrincipalBo>(
+    boClass = PrincipalBo::class
+) {
 
     private val settings by setting<ModuleSettingsBo>("zakadabar.lib.accounts")
-
-    override val boClass = PrincipalBo::class
 
     override val pa = PrincipalExposedPaGen()
 

@@ -10,22 +10,32 @@ import zakadabar.stack.data.entity.EntityBoCompanion
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoSchema
 
+
+/**
+ * Business Object of SimpleExampleBo.
+ *
+ * Generated with Bender at 2021-05-25T05:26:31.488Z.
+ *
+ * Please do not implement business logic in this class. If you add fields,
+ * please check the frontend table and form, and also the persistence API on
+ * the backend.
+ */
 @Serializable
-data class SimpleExampleDto(
+class SimpleExampleBo(
 
-    override var id: EntityId<SimpleExampleDto>,
-    var name: String
+    override var id: EntityId<SimpleExampleBo>,
+    var name : String
 
-) : EntityBo<SimpleExampleDto> {
+) : EntityBo<SimpleExampleBo> {
 
-    companion object : EntityBoCompanion<SimpleExampleDto>(boNamespace = "simple-example")
+    companion object : EntityBoCompanion<SimpleExampleBo>("zkl-simple-example")
 
     override fun getBoNamespace() = boNamespace
     override fun comm() = comm
 
     override fun schema() = BoSchema {
         + ::id
-        + ::name min 1 max 30 blank false
+        + ::name blank false min 1 max 30
     }
 
 }

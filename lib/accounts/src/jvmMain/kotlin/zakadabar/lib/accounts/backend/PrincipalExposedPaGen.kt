@@ -33,10 +33,14 @@ open class PrincipalExposedPaGen : EntityPersistenceApi<PrincipalBo>, ExposedPer
         super.onModuleLoad()
         + PrincipalExposedTable
     }
-    
-    override fun <R> withTransaction(func : () -> R) = transaction {
+
+    override fun <R> withTransaction(func: () -> R) = transaction {
         func()
     }
+
+    override fun commit() = exposedCommit()
+
+    override fun rollback() = exposedRollback()
 
     override fun list(): List<PrincipalBo> {
         return PrincipalExposedTable

@@ -7,10 +7,6 @@ import org.jetbrains.exposed.sql.select
 
 class RoleExposedPa : RoleExposedPaGen() {
 
-    fun readByName(name: String) =
-        RoleExposedTable
-        .select { RoleExposedTable.name eq name }
-            .first()
-            .let { it.toBo() }
+    fun readByName(name: String) = table.select { table.name eq name }.first().toBo()
 
 }

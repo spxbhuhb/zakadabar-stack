@@ -11,6 +11,7 @@ import zakadabar.lib.examples.frontend.ParallelDownloadExample
 import zakadabar.lib.examples.frontend.button.ButtonExamples
 import zakadabar.lib.examples.frontend.crud.CrudBuiltinExample
 import zakadabar.lib.examples.frontend.crud.CrudReferenceExample
+import zakadabar.lib.examples.frontend.crud.CrudSimpleExample
 import zakadabar.lib.examples.frontend.dock.DockBasicExample
 import zakadabar.lib.examples.frontend.dock.DockRemoveExample
 import zakadabar.lib.examples.frontend.form.FormBooleanExample
@@ -77,6 +78,7 @@ class SiteMarkdownContext(
 
             "CrudBuiltinExample" -> CrudBuiltinExample(htmlElement)
             "CrudReferenceExample" -> CrudReferenceExample(htmlElement)
+            "CrudSimpleExample" -> CrudSimpleExample(htmlElement)
 
             "DockBasicExample" -> DockBasicExample(htmlElement)
             "DockRemoveExample" -> DockRemoveExample(htmlElement)

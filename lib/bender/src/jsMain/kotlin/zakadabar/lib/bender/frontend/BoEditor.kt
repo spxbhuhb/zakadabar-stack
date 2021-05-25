@@ -59,7 +59,7 @@ class BoEditor(
             + row {
                 + div {
                     + div { + "Package" } css benderStyles.editorLabel
-                    + packageName
+                    + packageName css benderStyles.extraLargeInput
                 } marginRight 10
                 + div {
                     + div { + "DTO name" } css benderStyles.editorLabel
@@ -153,7 +153,7 @@ class BoEditor(
                 return@io
             }
 
-            packageName.value = descriptor.packageName
+            packageName.value = descriptor.packageName.let { if (it.endsWith(".data")) it.substringBeforeLast(".data") else it }
             boName.value = descriptor.className
             boNamespace.value = descriptor.boNamespace
 
