@@ -7,7 +7,7 @@ import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.`java-time`.timestamp
-import zakadabar.stack.backend.data.entityId
+import zakadabar.stack.backend.exposed.entityId
 import zakadabar.stack.data.builtin.account.PrincipalBo
 
 object PrincipalTable : LongIdTable("principals") {

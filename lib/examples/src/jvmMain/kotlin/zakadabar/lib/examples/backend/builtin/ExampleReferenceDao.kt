@@ -7,7 +7,7 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
-import zakadabar.stack.backend.data.entityId
+import zakadabar.stack.backend.exposed.entityId
 
 class ExampleReferenceDao(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<ExampleReferenceDao>(ExampleReferenceTable)

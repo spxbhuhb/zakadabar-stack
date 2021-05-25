@@ -7,7 +7,7 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import zakadabar.stack.backend.data.builtin.role.RoleDao
-import zakadabar.stack.backend.data.entityId
+import zakadabar.stack.backend.exposed.entityId
 import zakadabar.stack.data.builtin.resources.SettingBo
 import zakadabar.stack.data.builtin.resources.SettingSource
 

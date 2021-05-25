@@ -1,12 +1,10 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.data
+package zakadabar.stack.backend.exposed
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -16,11 +14,6 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.data.builtin.settings.DatabaseSettingsBo
 import zakadabar.stack.data.entity.EntityId
-
-/**
- * Use this everywhere BUT when handling blob content.
- */
-suspend fun <T> sql(block: () -> T): T = withContext(Dispatchers.IO) { transaction { block() } }
 
 inline operator fun <reified T : LongEntity> LongEntityClass<T>.get(entityId: EntityId<*>) = this[entityId.toLong()]
 

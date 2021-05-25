@@ -72,7 +72,7 @@ object SessionMaintenanceTask {
 
         while (! Server.shutdown) {
             try {
-                val cutoff = Clock.System.now().minus(settings.expirationCheckInterval, DateTimeUnit.SECOND)
+                val cutoff = Clock.System.now().minus(settings.sessionTimeout, DateTimeUnit.MINUTE)
                 val toDelete = transaction {
                     SessionTable
                         .select { SessionTable.lastAccess less cutoff.toJavaInstant() }

@@ -18,7 +18,8 @@ import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantTable
 import zakadabar.stack.backend.data.entity.EntityBackend
-import zakadabar.stack.backend.data.get
+import zakadabar.stack.backend.exposed.Sql
+import zakadabar.stack.backend.exposed.get
 import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.builtin.account.PasswordChangeAction
 import zakadabar.stack.data.builtin.account.PrincipalBo
@@ -36,7 +37,7 @@ object PrincipalBackend : EntityBackend<PrincipalBo>() {
     override var logActions = false
 
     override fun onModuleLoad() {
-        + PrincipalTable
+        Sql.tables += PrincipalTable
     }
 
     override fun onInstallRoutes(route: Route) {

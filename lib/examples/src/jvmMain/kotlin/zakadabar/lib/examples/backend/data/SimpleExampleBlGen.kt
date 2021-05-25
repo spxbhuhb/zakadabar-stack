@@ -5,7 +5,7 @@ package zakadabar.lib.examples.backend.data
 
 import zakadabar.lib.examples.data.SimpleExampleBo
 import zakadabar.stack.backend.authorize.UnsafeAuthorizer
-import zakadabar.stack.backend.data.entity.EntityBusinessLogicBase
+import zakadabar.stack.backend.business.EntityBusinessLogicBase
 
 /**
  * Business Logic for SimpleExampleBo.

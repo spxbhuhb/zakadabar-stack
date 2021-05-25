@@ -13,7 +13,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantTable
 import zakadabar.stack.backend.data.entity.EntityBackend
-import zakadabar.stack.backend.data.get
+import zakadabar.stack.backend.exposed.get
 import zakadabar.stack.data.builtin.account.AccountByRole
 import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.entity.EntityId

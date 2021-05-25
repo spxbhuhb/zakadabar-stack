@@ -16,10 +16,10 @@ import kotlinx.serialization.KSerializer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.custom.CustomBackend
-import zakadabar.stack.backend.data.Sql
 import zakadabar.stack.backend.data.builtin.session.LoginTimeout
 import zakadabar.stack.backend.data.builtin.session.SessionBackend
 import zakadabar.stack.backend.data.entity.EntityBackend
+import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.ktor.buildServer
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.account.AccountPrivateBo

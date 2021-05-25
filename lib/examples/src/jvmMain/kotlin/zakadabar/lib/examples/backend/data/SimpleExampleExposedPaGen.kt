@@ -3,9 +3,9 @@ package zakadabar.lib.examples.backend.data
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import zakadabar.lib.examples.data.SimpleExampleBo
-import zakadabar.stack.backend.data.entityId
-import zakadabar.stack.backend.data.exposed.ExposedPaBase
-import zakadabar.stack.backend.data.exposed.ExposedPaTable
+import zakadabar.stack.backend.exposed.ExposedPaBase
+import zakadabar.stack.backend.exposed.ExposedPaTable
+import zakadabar.stack.backend.exposed.entityId
 
 
 /**

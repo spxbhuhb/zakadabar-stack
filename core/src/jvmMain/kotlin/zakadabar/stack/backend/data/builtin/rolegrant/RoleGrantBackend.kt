@@ -14,7 +14,8 @@ import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
 import zakadabar.stack.backend.data.builtin.role.RoleDao
 import zakadabar.stack.backend.data.entity.EntityBackend
-import zakadabar.stack.backend.data.get
+import zakadabar.stack.backend.exposed.Sql
+import zakadabar.stack.backend.exposed.get
 import zakadabar.stack.data.builtin.account.RoleGrantBo
 import zakadabar.stack.data.builtin.account.RoleGrantsByPrincipal
 import zakadabar.stack.data.entity.EntityId
@@ -25,7 +26,7 @@ object RoleGrantBackend : EntityBackend<RoleGrantBo>() {
     override val boClass = RoleGrantBo::class
 
     override fun onModuleLoad() {
-        + RoleGrantTable
+        Sql.tables += RoleGrantTable
     }
 
     override fun onInstallRoutes(route: Route) {

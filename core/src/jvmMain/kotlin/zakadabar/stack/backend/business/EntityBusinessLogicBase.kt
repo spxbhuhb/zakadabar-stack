@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.data.entity
+package zakadabar.stack.backend.business
 
 import io.ktor.routing.*
 import org.slf4j.LoggerFactory
@@ -11,6 +11,7 @@ import zakadabar.stack.backend.audit.LogAuditorProvider
 import zakadabar.stack.backend.authorize.Authorizer
 import zakadabar.stack.backend.custom.CustomBackend
 import zakadabar.stack.backend.ktor.KtorRouterProvider
+import zakadabar.stack.backend.persistence.EntityPersistenceApi
 import zakadabar.stack.backend.route.Router
 import zakadabar.stack.backend.route.RouterProvider
 import zakadabar.stack.backend.validate.SchemaValidator

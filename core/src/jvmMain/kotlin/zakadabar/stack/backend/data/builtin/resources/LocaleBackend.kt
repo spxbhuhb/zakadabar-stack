@@ -11,7 +11,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.entity.EntityBackend
-import zakadabar.stack.backend.data.get
+import zakadabar.stack.backend.exposed.Sql
+import zakadabar.stack.backend.exposed.get
 import zakadabar.stack.data.builtin.resources.LocaleBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
@@ -21,7 +22,7 @@ object LocaleBackend : EntityBackend<LocaleBo>() {
     override val boClass = LocaleBo::class
 
     override fun onModuleLoad() {
-        + LocaleTable
+        Sql.tables +=  LocaleTable
     }
 
     override fun onInstallRoutes(route: Route) {

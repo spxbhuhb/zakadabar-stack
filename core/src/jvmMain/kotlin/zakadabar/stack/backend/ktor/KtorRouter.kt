@@ -11,7 +11,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
-import zakadabar.stack.backend.data.entity.EntityBusinessLogicBase
+import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.route.Router
 import zakadabar.stack.backend.server
 import zakadabar.stack.backend.util.executor

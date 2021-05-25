@@ -1,14 +1,13 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.util
+package zakadabar.stack.backend.exposed
 
 import org.jetbrains.exposed.sql.IColumnType
 import org.jetbrains.exposed.sql.LongColumnType
 import org.postgresql.PGConnection
 import org.postgresql.largeobject.LargeObject
 import org.postgresql.largeobject.LargeObjectManager
-import zakadabar.stack.backend.data.Sql
 import java.sql.Connection
 
 class OidBlobColumnType : IColumnType by LongColumnType() {

@@ -9,7 +9,7 @@ import zakadabar.lib.accounts.data.RoleBo
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize.RoleBlProvider
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
-import zakadabar.stack.backend.data.entity.EntityBusinessLogicBase
+import zakadabar.stack.backend.business.EntityBusinessLogicBase
 
 class RoleBl(
 ) : RoleBlProvider, EntityBusinessLogicBase<RoleBo>(
