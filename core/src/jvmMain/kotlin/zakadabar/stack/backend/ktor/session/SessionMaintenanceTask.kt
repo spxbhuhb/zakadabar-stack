@@ -51,7 +51,7 @@ object SessionMaintenanceTask {
     private suspend fun expireJob() {
         while (! Server.shutdown) {
             try {
-                val cutoff = Clock.System.now().toJavaInstant().minusMillis(settings.sessionTimeout * 1000)
+                val cutoff = Clock.System.now().toJavaInstant().minusMillis(settings.sessionTimeout * 60000)
                 val toDelete = transaction {
                     SessionTable
                         .select { SessionTable.lastAccess less cutoff }

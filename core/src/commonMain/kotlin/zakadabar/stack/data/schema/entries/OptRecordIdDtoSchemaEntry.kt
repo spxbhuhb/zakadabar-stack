@@ -71,7 +71,7 @@ class OptRecordIdDtoSchemaEntry<T : Any>(
         kProperty.set(defaultValue)
     }
 
-    override fun isOptional() = false
+    override fun isOptional() = true
 
     override fun push(dto: PropertyDto) {
         require(dto is RecordIdPropertyDto)
