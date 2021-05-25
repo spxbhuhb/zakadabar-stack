@@ -15,8 +15,8 @@ import zakadabar.stack.data.entity.EntityId
 /**
  * Persistence API base to be used by Exposed persistence APIs.
  */
-open class ExposedPaBase<T : EntityBo<T>>(
-    val table: ExposedPaTable<T>
+abstract class ExposedPaBase<T : EntityBo<T>, TT : ExposedPaTable<T>>(
+    val table: TT
 ) : EntityPersistenceApi<T> {
 
     override fun onModuleLoad() {
@@ -59,8 +59,8 @@ open class ExposedPaBase<T : EntityBo<T>>(
         table.deleteWhere { table.id eq entityId.toLong() }
     }
 
-    open fun ResultRow.toBo() = table.toBo(this)
+    abstract fun ResultRow.toBo() : T
 
-    open fun UpdateBuilder<*>.fromBo(bo: T) = table.fromBo(this, bo)
+    abstract fun UpdateBuilder<*>.fromBo(bo: T)
 
 }

@@ -1,123 +1,81 @@
-/*
- * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
- */
 package zakadabar.lib.accounts.backend
 
 import kotlinx.datetime.toJavaInstant
 import kotlinx.datetime.toKotlinInstant
-import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.`java-time`.timestamp
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.lib.accounts.data.PrincipalBo
-import zakadabar.stack.backend.data.entity.EntityPersistenceApi
 import zakadabar.stack.backend.data.entityId
-import zakadabar.stack.backend.data.exposed.ExposedPersistenceApi
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.backend.data.exposed.ExposedPaBase
+import zakadabar.stack.backend.data.exposed.ExposedPaTable
 import zakadabar.stack.util.BCrypt
 
-/*
+/**
  * Exposed based Persistence API for PrincipalBo.
- * 
- * Generated with Bender at 2021-05-24T05:50:19.246Z.
  *
- * IMPORTANT: Please do not modify this file, see extending patterns below.
- * 
+ * Generated with Bender at 2021-05-25T19:06:56.247Z.
+ *
+ * **IMPORTANT** Please do not modify this class manually, see extending patterns below.
+ *
  * - If you need other fields, add them to the business object and then re-generate.
  * - If you need other functions, please extend with `Gen` removed from the name.
  */
-open class PrincipalExposedPaGen : EntityPersistenceApi<PrincipalBo>, ExposedPersistenceApi {
-
-    override fun onModuleLoad() {
-        super.onModuleLoad()
-        + PrincipalExposedTable
+open class PrincipalExposedPaGen : ExposedPaBase<PrincipalBo,PrincipalExposedTableGen>(
+    table = PrincipalExposedTableGen
+) {
+    override fun ResultRow.toBo() : PrincipalBo {
+        return PrincipalBo(
+            id = this[table.id].entityId(),
+            validated = this[table.validated],
+            locked = this[table.locked],
+            expired = this[table.expired],
+            credentials = null /* do not send out the secret */,
+            resetKey = null /* do not send out the secret */,
+            resetKeyExpiration = this[table.resetKeyExpiration]?.toKotlinInstant(),
+            lastLoginSuccess = this[table.lastLoginSuccess]?.toKotlinInstant(),
+            loginSuccessCount = this[table.loginSuccessCount],
+            lastLoginFail = this[table.lastLoginFail]?.toKotlinInstant(),
+            loginFailCount = this[table.loginFailCount]
+        )
     }
 
-    override fun <R> withTransaction(func: () -> R) = transaction {
-        func()
+    override fun UpdateBuilder<*>.fromBo(bo: PrincipalBo) {
+        this[table.validated] = bo.validated
+        this[table.locked] = bo.locked
+        this[table.expired] = bo.expired
+        this[table.credentials] = bo.credentials?.let { s -> BCrypt.hashpw(s.value, BCrypt.gensalt()) }
+        this[table.resetKey] = bo.resetKey?.let { s -> BCrypt.hashpw(s.value, BCrypt.gensalt()) }
+        this[table.resetKeyExpiration] = bo.resetKeyExpiration?.toJavaInstant()
+        this[table.lastLoginSuccess] = bo.lastLoginSuccess?.toJavaInstant()
+        this[table.loginSuccessCount] = bo.loginSuccessCount
+        this[table.lastLoginFail] = bo.lastLoginFail?.toJavaInstant()
+        this[table.loginFailCount] = bo.loginFailCount
     }
-
-    override fun commit() = exposedCommit()
-
-    override fun rollback() = exposedRollback()
-
-    override fun list(): List<PrincipalBo> {
-        return PrincipalExposedTable
-            .selectAll()
-            .map { it.toBo() }
-    }
-
-    override fun create(bo: PrincipalBo): PrincipalBo {
-        PrincipalExposedTable
-            .insertAndGetId { it.fromBo(bo) }
-            .also { bo.id = EntityId(it.value) }
-        return bo
-    }
-
-    override fun read(entityId: EntityId<PrincipalBo>) : PrincipalBo {
-        return PrincipalExposedTable
-            .select { PrincipalExposedTable.id eq entityId.toLong() }
-            .first()
-            .toBo()
-    }
-
-    override fun update(bo: PrincipalBo): PrincipalBo {
-        PrincipalExposedTable
-            .update({ PrincipalExposedTable.id eq bo.id.toLong() }) { it.fromBo(bo) }
-        return bo
-    }
-
-    override fun delete(entityId: EntityId<PrincipalBo>) {
-        PrincipalExposedTable
-            .deleteWhere { PrincipalExposedTable.id eq entityId.toLong() }
-    }
-    
-    open fun ResultRow.toBo() = PrincipalExposedTable.toBo(this)
-
-    open fun UpdateBuilder<*>.fromBo(bo : PrincipalBo) = PrincipalExposedTable.fromBo(this, bo)
-
 }
 
-object PrincipalExposedTable : LongIdTable("principal_bo") {
+/**
+ * Exposed based SQL table for PrincipalBo.
+ *
+ * Generated with Bender at 2021-05-25T19:06:56.248Z.
+ *
+ * **IMPORTANT** Please do not modify this class manually.
+ *
+ * If you need other fields, add them to the business object and then re-generate.
+ */
+object PrincipalExposedTableGen : ExposedPaTable<PrincipalBo>(
+    tableName = "principal"
+) {
 
-    val validated = bool("validated")
-    val locked = bool("locked")
-    val expired = bool("expired")
-    val credentials = varchar("credentials", 200).nullable()
-    val resetKey = varchar("reset_key", 200).nullable()
-    val resetKeyExpiration = timestamp("reset_key_expiration").nullable()
-    val lastLoginSuccess = timestamp("last_login_success").nullable()
-    val loginSuccessCount = integer("login_success_count")
-    val lastLoginFail = timestamp("last_login_fail").nullable()
-    val loginFailCount = integer("login_fail_count")
-
-    fun toBo(row: ResultRow) = PrincipalBo(
-        id = row[id].entityId(),
-        validated = row[validated],
-        locked = row[locked],
-        expired = row[expired],
-        credentials = null /* do not send out the secret */,
-        resetKey = null /* do not send out the secret */,
-        resetKeyExpiration = row[resetKeyExpiration]?.toKotlinInstant(),
-        lastLoginSuccess = row[lastLoginSuccess]?.toKotlinInstant(),
-        loginSuccessCount = row[loginSuccessCount],
-        lastLoginFail = row[lastLoginFail]?.toKotlinInstant(),
-        loginFailCount = row[loginFailCount]
-    )
-
-    fun fromBo(statement: UpdateBuilder<*>, bo: PrincipalBo) {
-        statement[validated] = bo.validated
-        statement[locked] = bo.locked
-        statement[expired] = bo.expired
-        statement[credentials] = bo.credentials?.let { s -> BCrypt.hashpw(s.value, BCrypt.gensalt()) }
-        statement[resetKey] = bo.resetKey?.let { s -> BCrypt.hashpw(s.value, BCrypt.gensalt()) }
-        statement[resetKeyExpiration] = bo.resetKeyExpiration?.toJavaInstant()
-        statement[lastLoginSuccess] = bo.lastLoginSuccess?.toJavaInstant()
-        statement[loginSuccessCount] = bo.loginSuccessCount
-        statement[lastLoginFail] = bo.lastLoginFail?.toJavaInstant()
-        statement[loginFailCount] = bo.loginFailCount
-    }
+    internal val validated = bool("validated")
+    internal val locked = bool("locked")
+    internal val expired = bool("expired")
+    internal val credentials = varchar("credentials", 200).nullable()
+    internal val resetKey = varchar("reset_key", 200).nullable()
+    internal val resetKeyExpiration = timestamp("reset_key_expiration").nullable()
+    internal val lastLoginSuccess = timestamp("last_login_success").nullable()
+    internal val loginSuccessCount = integer("login_success_count")
+    internal val lastLoginFail = timestamp("last_login_fail").nullable()
+    internal val loginFailCount = integer("login_fail_count")
 
 }
-

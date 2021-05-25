@@ -7,6 +7,8 @@ plugins {
     kotlin("plugin.serialization")
     id("org.jetbrains.kotlin.plugin.noarg")
     id("org.jetbrains.dokka")
+    signing
+    `maven-publish`
 }
 
 group = "hu.simplexion.zakadabar"

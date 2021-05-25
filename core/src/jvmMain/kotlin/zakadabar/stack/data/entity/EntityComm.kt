@@ -41,15 +41,25 @@ open class EntityComm<T : EntityBo<T>>(
                 storage = AcceptAllCookiesStorage()
             }
         }
+
+        /**
+         * Called then Ktor client throws an exception.
+         */
+        var onError: suspend (ex: Exception) -> Unit = { }
     }
 
     @PublicApi
     override suspend fun create(bo: T): T {
         require(bo.id.isEmpty()) { "id is empty in $bo" }
 
-        val text = client.post<String>("$baseUrl/api/$namespace/entity") {
-            header("Content-Type", "application/json")
-            body = Json.encodeToString(serializer, bo)
+        val text = try {
+            client.post<String>("$baseUrl/api/$namespace/entity") {
+                header("Content-Type", "application/json")
+                body = Json.encodeToString(serializer, bo)
+            }
+        } catch (ex: Exception) {
+            onError(ex)
+            throw ex
         }
 
         return Json.decodeFromString(serializer, text)
@@ -57,7 +67,12 @@ open class EntityComm<T : EntityBo<T>>(
 
     @PublicApi
     override suspend fun read(id: EntityId<T>): T {
-        val text = client.get<String>("$baseUrl/api/$namespace/entity/$id")
+        val text = try {
+            client.get<String>("$baseUrl/api/$namespace/entity/$id")
+        } catch (ex: Exception) {
+            onError(ex)
+            throw ex
+        }
 
         return Json.decodeFromString(serializer, text)
     }
@@ -66,9 +81,14 @@ open class EntityComm<T : EntityBo<T>>(
     override suspend fun update(bo: T): T {
         require(! bo.id.isEmpty()) { "ID of the $bo is 0 " }
 
-        val text = client.patch<String>("$baseUrl/api/$namespace/entity/${bo.id}") {
-            header("Content-Type", "application/json")
-            body = Json.encodeToString(serializer, bo)
+        val text = try {
+            client.patch<String>("$baseUrl/api/$namespace/entity/${bo.id}") {
+                header("Content-Type", "application/json")
+                body = Json.encodeToString(serializer, bo)
+            }
+        } catch (ex: Exception) {
+            onError(ex)
+            throw ex
         }
 
         return Json.decodeFromString(serializer, text)
@@ -76,14 +96,24 @@ open class EntityComm<T : EntityBo<T>>(
 
     @PublicApi
     override suspend fun all(): List<T> {
-        val text = client.get<String>("$baseUrl/api/$namespace/entity")
+        val text = try {
+            client.get<String>("$baseUrl/api/$namespace/entity")
+        } catch (ex: Exception) {
+            onError(ex)
+            throw ex
+        }
 
         return Json.decodeFromString(ListSerializer(serializer), text)
     }
 
     @PublicApi
     override suspend fun delete(id: EntityId<T>) {
-        client.delete<Unit>("$baseUrl/api/$namespace/entity/$id")
+        try {
+            client.delete<Unit>("$baseUrl/api/$namespace/entity/$id")
+        } catch (ex: Exception) {
+            onError(ex)
+            throw ex
+        }
     }
 
     @PublicApi
@@ -107,17 +137,23 @@ open class EntityComm<T : EntityBo<T>>(
                 callback(Json.decodeFromString(BlobBo.serializer(), text), BlobCreateState.Done, data.size.toLong())
 
             } catch (ex: Exception) {
-                ex.printStackTrace() // TODO replace this with a function similar to writeLog (from Android project)
                 callback(dto, BlobCreateState.Error, 0L)
+                onError(ex)
+                throw ex
             }
         }
     }
 
     @PublicApi
     suspend fun blobCreate(dataEntityId: EntityId<T>?, name: String, type: ContentType, data: ByteArray): BlobBo {
-        val text = client.post<String>("$baseUrl/api/$namespace/blob${if (dataEntityId == null) "" else "/$dataEntityId"}") {
-            header("Content-Disposition", """attachment; filename="$name"""")
-            body = ByteArrayContent(data, contentType = type)
+        val text = try {
+            client.post<String>("$baseUrl/api/$namespace/blob${if (dataEntityId == null) "" else "/$dataEntityId"}") {
+                header("Content-Disposition", """attachment; filename="$name"""")
+                body = ByteArrayContent(data, contentType = type)
+            }
+        } catch (ex: Exception) {
+            onError(ex)
+            throw ex
         }
 
         return Json.decodeFromString(BlobBo.serializer(), text)
@@ -125,13 +161,23 @@ open class EntityComm<T : EntityBo<T>>(
 
     @PublicApi
     suspend fun blobRead(blobId: EntityId<BlobBo>): ByteArray {
-        return client.get("$baseUrl/api/$namespace/blob/content/$blobId")
+        try {
+            return client.get("$baseUrl/api/$namespace/blob/content/$blobId")
+        } catch (ex: Exception) {
+            onError(ex)
+            throw ex
+        }
     }
 
     @PublicApi
     override suspend fun blobMetaList(dataEntityId: EntityId<T>): List<BlobBo> {
 
-        val text = client.get<String>("$baseUrl/api/$namespace/blob/list/$dataEntityId")
+        val text = try {
+            client.get<String>("$baseUrl/api/$namespace/blob/list/$dataEntityId")
+        } catch (ex: Exception) {
+            onError(ex)
+            throw ex
+        }
 
         return Json.decodeFromString(ListSerializer(BlobBo.serializer()), text)
     }
@@ -139,7 +185,12 @@ open class EntityComm<T : EntityBo<T>>(
     @PublicApi
     override suspend fun blobMetaRead(blobId: EntityId<BlobBo>): BlobBo {
 
-        val text = client.get<String>("$baseUrl/api/$namespace/blob/meta/$blobId")
+        val text = try {
+            client.get<String>("$baseUrl/api/$namespace/blob/meta/$blobId")
+        } catch (ex: Exception) {
+            onError(ex)
+            throw ex
+        }
 
         return Json.decodeFromString(BlobBo.serializer(), text)
     }
@@ -148,9 +199,14 @@ open class EntityComm<T : EntityBo<T>>(
     override suspend fun blobMetaUpdate(dto: BlobBo): BlobBo {
         require(! dto.id.isEmpty()) { "ID of the $dto is 0 " }
 
-        val text = client.patch<String>("$baseUrl/api/$namespace/blob/meta/${dto.id}") {
-            header("Content-Type", "application/json")
-            body = Json.encodeToString(BlobBo.serializer(), dto)
+        val text = try {
+            client.patch<String>("$baseUrl/api/$namespace/blob/meta/${dto.id}") {
+                header("Content-Type", "application/json")
+                body = Json.encodeToString(BlobBo.serializer(), dto)
+            }
+        } catch (ex: Exception) {
+            onError(ex)
+            throw ex
         }
 
         return Json.decodeFromString(BlobBo.serializer(), text)
@@ -158,7 +214,12 @@ open class EntityComm<T : EntityBo<T>>(
 
     @PublicApi
     override suspend fun blobDelete(blobId: EntityId<BlobBo>) {
-        client.delete<Unit>("$baseUrl/api/$namespace/blob/$blobId")
+        try {
+            client.delete<Unit>("$baseUrl/api/$namespace/blob/$blobId")
+        } catch (ex: Exception) {
+            onError(ex)
+            throw ex
+        }
     }
 
 }

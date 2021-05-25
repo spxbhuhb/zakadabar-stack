@@ -1,6 +1,3 @@
-/*
- * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
- */
 package zakadabar.lib.examples.backend.data
 
 import org.jetbrains.exposed.sql.ResultRow
@@ -13,40 +10,40 @@ import zakadabar.stack.backend.data.exposed.ExposedPaTable
 
 /**
  * Exposed based Persistence API for SimpleExampleBo.
- * 
- * Generated with Bender at 2021-05-25T05:35:31.982Z.
+ *
+ * Generated with Bender at 2021-05-25T19:43:21.158Z.
  *
  * **IMPORTANT** Please do not modify this class manually, see extending patterns below.
- * 
+ *
  * - If you need other fields, add them to the business object and then re-generate.
  * - If you need other functions, please extend with `Gen` removed from the name.
  */
-open class SimpleExampleExposedPaGen : ExposedPaBase<SimpleExampleBo>(
-    table = SimpleExampleExposedTableGen()
-)
+open class SimpleExampleExposedPaGen : ExposedPaBase<SimpleExampleBo, SimpleExampleExposedTableGen>(
+    table = SimpleExampleExposedTableGen
+) {
+    override fun ResultRow.toBo() = SimpleExampleBo(
+        id = this[table.id].entityId(),
+        name = this[SimpleExampleExposedTableGen.name]
+    )
+
+    override fun UpdateBuilder<*>.fromBo(bo: SimpleExampleBo) {
+        this[SimpleExampleExposedTableGen.name] = bo.name
+    }
+}
 
 /**
  * Exposed based SQL table for SimpleExampleBo.
- * 
- * Generated with Bender at 2021-05-25T05:35:31.982Z.
  *
- * **IMPORTANT** Please do not modify this class manually. 
- * 
+ * Generated with Bender at 2021-05-25T19:43:21.158Z.
+ *
+ * **IMPORTANT** Please do not modify this class manually.
+ *
  * If you need other fields, add them to the business object and then re-generate.
  */
-class SimpleExampleExposedTableGen : ExposedPaTable<SimpleExampleBo>(
+object SimpleExampleExposedTableGen : ExposedPaTable<SimpleExampleBo>(
     tableName = "simple_example"
 ) {
 
-    private val name = varchar("name", 30)
-
-    override fun toBo(row: ResultRow) = SimpleExampleBo(
-        id = row[id].entityId(),
-        name = row[name]
-    )
-
-    override fun fromBo(statement: UpdateBuilder<*>, bo: SimpleExampleBo) {
-        statement[name] = bo.name
-    }
+    internal val name = varchar("name", 30)
 
 }

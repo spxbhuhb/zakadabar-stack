@@ -203,9 +203,17 @@ ${generators.map { it.exposedPaImport() }.flatten().distinct().joinToString("\n"
  * - If you need other fields, add them to the business object and then re-generate.
  * - If you need other functions, please extend with `Gen` removed from the name.
  */
-open class ${baseName}ExposedPaGen : ExposedPaBase<$boName>(
-    table = ${baseName}ExposedTableGen()
-)
+open class ${baseName}ExposedPaGen : ExposedPaBase<$boName,${baseName}ExposedTableGen>(
+    table = ${baseName}ExposedTableGen
+) {
+    override fun ResultRow.toBo() = $boName(
+        ${generators.joinToString(",\n        ") { it.exposedTableToBo() }}
+    )  
+
+    override fun UpdateBuilder<*>.fromBo(bo: $boName) {
+        ${generators.mapNotNull { it.exposedTableFromBo() }.joinToString("\n        ")}
+    }
+}
 
 /**
  * Exposed based SQL table for ${boName}.
@@ -216,19 +224,11 @@ open class ${baseName}ExposedPaGen : ExposedPaBase<$boName>(
  * 
  * If you need other fields, add them to the business object and then re-generate.
  */
-class ${baseName}ExposedTableGen : ExposedPaTable<$boName>(
+object ${baseName}ExposedTableGen : ExposedPaTable<$boName>(
     tableName = "${baseName.camelToSnakeCase()}"
 ) {
 
-    ${generators.mapNotNull { it.exposedTable()?.let { dl -> "private $dl" }  }.joinToString("\n    ")}
-
-    override fun toBo(row: ResultRow) = $boName(
-        ${generators.joinToString(",\n        ") { it.exposedTableToBo() }}
-    )
-
-    override fun fromBo(statement: UpdateBuilder<*>, bo: $boName) {
-        ${generators.mapNotNull { it.exposedTableFromBo() }.joinToString("\n        ")}
-    }
+    ${generators.mapNotNull { it.exposedTable()?.let { dl -> "internal $dl" }  }.joinToString("\n    ")}
 
 }
 """.trimIndent()

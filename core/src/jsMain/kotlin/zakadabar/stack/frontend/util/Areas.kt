@@ -30,12 +30,12 @@ import kotlin.math.floor
 class Areas(
     private val id: String,
     private val changed: () -> Unit,
-    private val element: HTMLElement,
+    val element: HTMLElement,
     private val trace: Int = 0,
-    private val areaHeight: Float = 1000f
+    val areaHeight: Float = 1000f
 ) {
     private lateinit var observer: IntersectionObserver
-    private val activeAreas = mutableListOf<Int>()
+    val activeAreas = mutableListOf<Int>()
 
     private var areaNumber = 0
     private var lastAreaHeight = 0f

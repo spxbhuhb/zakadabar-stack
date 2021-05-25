@@ -15,6 +15,7 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.button.buttonPrimary
 import zakadabar.stack.frontend.builtin.input.ZkTextInput
+import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
 import zakadabar.stack.frontend.builtin.toast.toastDanger
 import zakadabar.stack.frontend.builtin.toast.toastInfo
@@ -34,7 +35,7 @@ class BoEditor(
     private val template: String
 ) : ZkElement() {
 
-    val descriptor = BoDescriptor("", "", "", emptyList())
+    var descriptor = BoDescriptor("", "", "", emptyList())
 
     private val packageName = ZkTextInput()
     private val boName = ZkTextInput()
@@ -42,6 +43,7 @@ class BoEditor(
 
     private val entryContainer = ZkElement()
 
+    private val copyContainer = ZkElement()
     private val lastGenerate = ZkElement()
 
     private var commonSource = ""
@@ -92,26 +94,30 @@ class BoEditor(
                         + buttonPrimary("Generate") { generate() } marginRight 20
                     } marginBottom 20
 
-                    + row {
+                    + copyContainer build {
+
+                        + zkLayoutStyles.hidden
+                        + zkLayoutStyles.row
+
                         + ZkButton(text = "Common", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
                             window.navigator.clipboard.writeText(commonSource)
                             toastSuccess { "Common source copied to the clipboard!" }
-                        }.hide() marginRight 20
+                        } marginRight 20
 
                         + ZkButton(text = "Browser", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
                             window.navigator.clipboard.writeText(browserSource)
                             toastSuccess { "Browser source copied to the clipboard!" }
-                        }.hide() marginRight 20
+                        } marginRight 20
 
                         + ZkButton(text = "Business Logic", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
                             window.navigator.clipboard.writeText(blSource)
                             toastSuccess { "Business Logic source copied to the clipboard!" }
-                        }.hide() marginRight 20
+                        } marginRight 20
 
                         + ZkButton(text = "Persistence API", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
                             window.navigator.clipboard.writeText(paSource)
                             toastSuccess { "Persistence API source copied to the clipboard!" }
-                        }.hide() marginRight 20
+                        } marginRight 20
 
                         + lastGenerate css benderStyles.lastGenerated
                     }
@@ -125,25 +131,38 @@ class BoEditor(
         io {
             val confirmed = ZkConfirmDialog("Reset Bender", "Are you sure? All fields will be lost.").run()
             if (confirmed) {
-                packageName.value = ""
-                boName.value = ""
-                boNamespace.value = ""
-
-                entryContainer.clear()
+                doReset()
                 entryContainer += BoPropertyEditor(this@BoEditor)
                 entryContainer += BoPropertyEditor(this@BoEditor)
             }
         }
     }
 
+    private fun doReset() {
+        packageName.value = ""
+        boName.value = ""
+        boNamespace.value = ""
+
+        descriptor = BoDescriptor("","","", emptyList())
+
+        entryContainer.clear()
+        copyContainer.hide()
+
+        resultContainer.clear()
+        resultContainer += MarkdownView(sourceText = template, context = ZkMarkdownContext(toc = false, hashes = false))
+    }
+
     private fun import() {
         io {
+
             val source = ImportDialog().run() ?: return@io
 
             if (source.isEmpty() || ! source.contains("package") || ! source.contains("EntityBoCompanion")) {
                 toastInfo { "There is nothing to import." }
                 return@io
             }
+
+            doReset()
 
             val descriptor = try {
                 KtToBoDescriptor().parse(source)
@@ -156,8 +175,6 @@ class BoEditor(
             packageName.value = descriptor.packageName.let { if (it.endsWith(".data")) it.substringBeforeLast(".data") else it }
             boName.value = descriptor.className
             boNamespace.value = descriptor.boNamespace
-
-            entryContainer.clear()
 
             descriptor.properties.forEach {
                 entryContainer += BoPropertyEditor(this, it)
@@ -213,5 +230,7 @@ class BoEditor(
 
         resultContainer.clear()
         resultContainer += MarkdownView(sourceText = result, context = ZkMarkdownContext(toc = false, hashes = false))
+
+        copyContainer.show()
     }
 }

@@ -12,7 +12,6 @@ import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityBoCompanion
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoSchema
-import zakadabar.stack.data.schema.Formats
 import zakadabar.stack.data.util.OptInstantAsStringSerializer
 
 @Serializable
@@ -48,7 +47,7 @@ class AccountPrivateBo(
 
         + ::accountName min 3 max 50
         + ::fullName min 5 max 100
-        + ::email min 4 max 50 format Formats.EMAIL
+        + ::email min 4 max 50
 
         + ::displayName min 3 max 50
         + ::locale max 20

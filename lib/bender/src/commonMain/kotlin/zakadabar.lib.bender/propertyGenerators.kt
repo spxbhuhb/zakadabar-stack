@@ -32,10 +32,10 @@ abstract class PropertyGenerator(
     abstract fun exposedTable() : String?
 
     open fun exposedTableToBo() =
-        "${property.name} = row[${property.name}]"
+        "${property.name} = this[table.${property.name}]"
 
     open fun exposedTableFromBo() : String? =
-        "statement[${property.name}] = bo.${property.name}"
+        "this[table.${property.name}] = bo.${property.name}"
 
     val optional
         get() = if (property.optional) "?" else ""
@@ -135,10 +135,10 @@ open class InstantPropertyGenerator(
         "val ${property.name} = timestamp(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"
 
     override fun exposedTableToBo() =
-        "${property.name} = row[${property.name}]$optional.toKotlinInstant()"
+        "${property.name} = this[table.${property.name}]$optional.toKotlinInstant()"
 
     override fun exposedTableFromBo() =
-        "statement[${property.name}] = bo.${property.name}$optional.toJavaInstant()"
+        "this[table.${property.name}] = bo.${property.name}$optional.toJavaInstant()"
 
 }
 
@@ -191,17 +191,17 @@ open class EntityIdPropertyGenerator(
         if (property.name == "id") {
             null
         } else {
-            "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutBo()}ExposedTable)$exposedTableOptional"
+            "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutBo()}ExposedTableGen)$exposedTableOptional"
         }
 
     override fun exposedTableToBo() =
-        "${property.name} = row[${property.name}]$optional.entityId()"
+        "${property.name} = this[table.${property.name}]$optional.entityId()"
 
     override fun exposedTableFromBo() =
         if (property.name == "id") {
             null
         } else {
-            "statement[${property.name}] = bo.${property.name}$optional.toLong()"
+            "this[table.${property.name}] = bo.${property.name}$optional.toLong()"
         }
 }
 
@@ -217,7 +217,14 @@ open class SecretPropertyGenerator(
         "// ${super.browserTable()} // not supported yet"
 
     override fun exposedPaImport() =
-        listOf("import zakadabar.stack.data.builtin.misc.Secret")
+        if (property.optional) {
+            listOf("import zakadabar.stack.util.BCrypt")
+        } else {
+            listOf(
+                "import zakadabar.stack.util.BCrypt",
+                "import zakadabar.stack.data.builtin.misc.Secret"
+            )
+        }
 
     override fun exposedTable() =
         "val ${property.name} = varchar(\"${property.name.camelToSnakeCase()}\", 200)$exposedTableOptional"
@@ -231,9 +238,9 @@ open class SecretPropertyGenerator(
 
     override fun exposedTableFromBo() =
         if (property.optional) {
-            "statement[${property.name}] = bo.${property.name}?.let { s -> BCrypt.hashpw(s.value, BCrypt.gensalt()) }"
+            "this[table.${property.name}] = bo.${property.name}?.let { s -> BCrypt.hashpw(s.value, BCrypt.gensalt()) }"
         } else {
-            "statement[${property.name}] = BCrypt.hashpw(bo.${property.name}.value, BCrypt.gensalt())"
+            "this[table.${property.name}] = BCrypt.hashpw(bo.${property.name}.value, BCrypt.gensalt())"
         }
 }
 
@@ -264,8 +271,8 @@ open class UuidPropertyGenerator(
         "val ${property.name} = uuid(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"
 
     override fun exposedTableToBo() =
-        "${property.name} = row[${property.name}]$optional.toStackUuid()"
+        "${property.name} = this[table.${property.name}]$optional.toStackUuid()"
 
     override fun exposedTableFromBo() =
-        "statement[${property.name}] = bo.${property.name}$optional.toJavaUuid()"
+        "this[table.${property.name}] = bo.${property.name}$optional.toJavaUuid()"
 }

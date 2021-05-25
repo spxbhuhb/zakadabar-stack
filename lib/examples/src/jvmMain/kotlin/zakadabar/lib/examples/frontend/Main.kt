@@ -5,9 +5,13 @@ package zakadabar.lib.examples.frontend
 
 import io.ktor.client.features.*
 import zakadabar.lib.examples.data.builtin.BuiltinDto
+import zakadabar.lib.examples.data.builtin.ExampleEnum
 import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
 import zakadabar.stack.backend.util.default
-import zakadabar.stack.data.builtin.account.*
+import zakadabar.stack.data.builtin.account.AccountPrivateBo
+import zakadabar.stack.data.builtin.account.LoginAction
+import zakadabar.stack.data.builtin.account.LogoutAction
+import zakadabar.stack.data.builtin.account.SessionBo
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityComm
 import zakadabar.stack.data.entity.EntityId
@@ -23,10 +27,6 @@ suspend fun crud() {
     println("======== CRUD ========")
     dumpBuiltins("before create")
 
-    val builtin = BuiltinDto.all().first()
-    val reference = ExampleReferenceDto.all().first()
-    val account = AccountPublicBo.all().first()
-
     // with the constructor we have to initialize all fields
 
     val newReference = ExampleReferenceDto(
@@ -37,7 +37,12 @@ suspend fun crud() {
     // with default all fields are initialized with the default values from the schema
 
     val newBuiltin = BuiltinDto.default {
+        enumSelectValue = ExampleEnum.EnumValue1
+        secretValue = Secret("aaa")
         recordSelectValue = newReference.id
+        stringValue = "hello"
+        stringSelectValue = "something"
+        textAreaValue = "something"
     }.create()
 
     dumpBuiltins("after create")
@@ -101,7 +106,25 @@ suspend fun errorHandling() {
     println("\n======== Error Handling ========\n")
     try {
         BuiltinDto.read(EntityId(- 1))
+    } catch (ex: ServerResponseException) {
+        println("    ${ex.response.status}")
     } catch (ex: ClientRequestException) {
         println("    ${ex.response}")
+    }
+
+    println()
+
+    EntityComm.onError = { ex ->
+        when (ex) {
+            is ServerResponseException -> println("    onError:    server exception: ${ex.response.status ?: "status is null"}")
+            is ClientRequestException -> println("    onError:    client exception: ${ex.response.status ?: "status is null"}")
+            else -> println("    onError:    general exception: $ex")
+        }
+    }
+
+    try {
+        BuiltinDto.read(EntityId(- 1))
+    } catch (ex: Exception) {
+        // don't do anything here, the global error handler handled the exception
     }
 }

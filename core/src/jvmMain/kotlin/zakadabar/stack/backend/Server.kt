@@ -50,14 +50,14 @@ open class Server : CliktCommand() {
          * This variable contains the anonymous account. Each server should have one
          * this is used for public access.
          *
-         * For example, check AccountPrivateBackend.
+         * For example, check AccountPrivateBackend in the demo.
          */
         lateinit var anonymous: AccountPublicBo
 
         /**
          * Find an account by its id. Used by [SessionBackend].
          *
-         * For example, check AccountPrivateBackend.
+         * For example, check AccountPrivateBackend in the demo.
          *
          * @return the public account bo and the id of the principal that belongs to this account
          */

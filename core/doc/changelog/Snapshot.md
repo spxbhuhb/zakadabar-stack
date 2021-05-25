@@ -110,5 +110,5 @@ alter table <TABLE_NAME>
 ### Fixed
 
 - Issue 27 - Login timeout mechanics applied to static resources like `index.html`
+- browser: table positioning after search  
 - browser: optional record select field marked mandatory
-
