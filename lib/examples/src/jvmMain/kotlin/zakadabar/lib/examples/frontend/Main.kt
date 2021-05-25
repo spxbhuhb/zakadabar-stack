@@ -5,9 +5,13 @@ package zakadabar.lib.examples.frontend
 
 import io.ktor.client.features.*
 import zakadabar.lib.examples.data.builtin.BuiltinDto
+import zakadabar.lib.examples.data.builtin.ExampleEnum
 import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
 import zakadabar.stack.backend.util.default
-import zakadabar.stack.data.builtin.account.*
+import zakadabar.stack.data.builtin.account.AccountPrivateDto
+import zakadabar.stack.data.builtin.account.LoginAction
+import zakadabar.stack.data.builtin.account.LogoutAction
+import zakadabar.stack.data.builtin.account.SessionDto
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.record.EmptyRecordId
 import zakadabar.stack.data.record.LongRecordId
@@ -15,7 +19,7 @@ import zakadabar.stack.data.record.RecordComm
 import zakadabar.stack.data.record.StringRecordId
 
 suspend fun main() {
-    RecordComm.baseUrl = "http://localhost:8080"
+    RecordComm.baseUrl = "http://localhost:8080/"
     crud()
     login()
     errorHandling()
@@ -24,10 +28,6 @@ suspend fun main() {
 suspend fun crud() {
     println("======== CRUD ========")
     dumpBuiltins("before create")
-
-    val builtin = BuiltinDto.all().first()
-    val reference = ExampleReferenceDto.all().first()
-    val account = AccountPublicDto.all().first()
 
     // with the constructor we have to initialize all fields
 
@@ -39,7 +39,12 @@ suspend fun crud() {
     // with default all fields are initialized with the default values from the schema
 
     val newBuiltin = BuiltinDto.default {
+        enumSelectValue = ExampleEnum.EnumValue1
+        secretValue = Secret("aaa")
         recordSelectValue = newReference.id
+        stringValue = "hello"
+        stringSelectValue = "something"
+        textAreaValue = "something"
     }.create()
 
     dumpBuiltins("after create")
@@ -103,7 +108,25 @@ suspend fun errorHandling() {
     println("\n======== Error Handling ========\n")
     try {
         BuiltinDto.read(LongRecordId(- 1))
+    } catch (ex: ServerResponseException) {
+        println("    ${ex.response?.status}")
     } catch (ex: ClientRequestException) {
         println("    ${ex.response}")
+    }
+
+    println()
+
+    RecordComm.onError = { ex ->
+        when (ex) {
+            is ServerResponseException -> println("    onError:    server exception: ${ex.response?.status ?: "status is null"}")
+            is ClientRequestException -> println("    onError:    client exception: ${ex.response?.status ?: "status is null"}")
+            else -> println("    onError:    general exception: $ex")
+        }
+    }
+
+    try {
+        BuiltinDto.read(LongRecordId(- 1))
+    } catch (ex: Exception) {
+        // don't do anything here, the global error handler handled the exception
     }
 }
