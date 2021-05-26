@@ -3,14 +3,13 @@
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.frontend.application.application
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import kotlin.reflect.KProperty1
 
-open class ZkEnumColumn<T : DtoBase, E : Enum<E>>(
+open class ZkEnumColumn<T : BaseBo, E : Enum<E>>(
     table: ZkTable<T>,
     private val prop: KProperty1<T, E>
 ) : ZkColumn<T>(table) {

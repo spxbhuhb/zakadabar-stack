@@ -5,8 +5,11 @@ package zakadabar.site.backend
 
 import zakadabar.lib.examples.backend.builtin.SiteBuiltinBackend
 import zakadabar.lib.examples.backend.builtin.SiteExampleReferenceBackend
+import zakadabar.lib.examples.backend.data.SimpleExampleBl
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.Server
+import zakadabar.stack.backend.authorize.UnsafeAuthorizer
+import zakadabar.stack.backend.authorize.roleBl
 import zakadabar.stack.backend.custom.ContentBackend
 import zakadabar.stack.backend.data.builtin.account.AccountPrivateBackend
 import zakadabar.stack.backend.data.builtin.account.AccountPublicBackend
@@ -37,6 +40,11 @@ object Module : BackendModule {
 
         Server += SiteBuiltinBackend
         Server += SiteExampleReferenceBackend
+
+        roleBl = RoleBackend
+
+        UnsafeAuthorizer.enabled = true
+        Server += SimpleExampleBl()
     }
 
 }

@@ -11,9 +11,8 @@ import kotlinx.coroutines.sync.withLock
 import zakadabar.lib.examples.backend.builtin.SiteBuiltinBackend.mutex
 import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
 import zakadabar.stack.backend.authorize
-import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.data.record.LongRecordId
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.backend.data.entity.EntityBackend
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
 
 /**
@@ -24,9 +23,9 @@ import zakadabar.stack.util.Executor
  * in this case that is fine as the operations are really fast (in-memory only,
  * on a very short list).
  */
-object SiteExampleReferenceBackend : RecordBackend<ExampleReferenceDto>() {
+object SiteExampleReferenceBackend : EntityBackend<ExampleReferenceDto>() {
 
-    override val dtoClass = ExampleReferenceDto::class
+    override val boClass = ExampleReferenceDto::class
 
     private var nextId = 1L
     private var recordStore = mutableListOf<ExampleReferenceDto>()
@@ -53,47 +52,47 @@ object SiteExampleReferenceBackend : RecordBackend<ExampleReferenceDto>() {
         }
     }
 
-    override fun create(executor: Executor, dto: ExampleReferenceDto) = runBlocking {
+    override fun create(executor: Executor, bo: ExampleReferenceDto) = runBlocking {
 
         authorize(true)
 
         mutex.withLock {
-            dto.id = LongRecordId(nextId++)
-            recordStore.add(dto)
+            bo.id = EntityId(nextId++)
+            recordStore.add(bo)
             clip()
         }
 
-        dto
+        bo
     }
 
-    override fun read(executor: Executor, recordId: RecordId<ExampleReferenceDto>) = runBlocking {
+    override fun read(executor: Executor, entityId: EntityId<ExampleReferenceDto>) = runBlocking {
 
         authorize(true)
 
         mutex.withLock {
-            recordStore.first { it.id == recordId }
+            recordStore.first { it.id == entityId }
         }
     }
 
-    override fun update(executor: Executor, dto: ExampleReferenceDto) = runBlocking {
+    override fun update(executor: Executor, bo: ExampleReferenceDto) = runBlocking {
 
         authorize(true)
 
         mutex.withLock {
-            val index = recordStore.indexOfFirst { it.id == dto.id }
+            val index = recordStore.indexOfFirst { it.id == bo.id }
             if (index == -1) throw NoSuchElementException()
-            recordStore[index] = dto
+            recordStore[index] = bo
         }
 
-        dto
+        bo
     }
 
-    override fun delete(executor: Executor, recordId: RecordId<ExampleReferenceDto>) = runBlocking {
+    override fun delete(executor: Executor, entityId: EntityId<ExampleReferenceDto>) = runBlocking {
 
         authorize(true)
 
         mutex.withLock {
-            recordStore.removeAll { it.id == recordId }
+            recordStore.removeAll { it.id == entityId }
         }
 
         Unit

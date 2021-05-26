@@ -4,10 +4,7 @@
 package zakadabar.stack.backend.data.builtin.resources
 
 import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.sql.ResultRow
 import zakadabar.stack.backend.data.builtin.role.RoleTable
-import zakadabar.stack.data.builtin.resources.SettingDto
-import zakadabar.stack.data.builtin.resources.SettingSource
 
 object SettingTable : LongIdTable("settings") {
 
@@ -16,7 +13,7 @@ object SettingTable : LongIdTable("settings") {
     val className = varchar("path", 100)
     val descriptor = text("descriptor")
 
-    // I decided not to have a toDto here to avoid confusion
+    // I decided not to have a toBo here to avoid confusion
     // about the descriptor. SettingBackend performs quite
     // a few special operations, so it is better to have
     // everything there.

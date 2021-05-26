@@ -3,10 +3,10 @@
  */
 package zakadabar.stack.frontend.application
 
-import zakadabar.stack.data.builtin.account.AccountPublicDto
+import zakadabar.stack.data.builtin.account.AccountPublicBo
 
 class ZkExecutor(
-    val account: AccountPublicDto,
+    val account: AccountPublicBo,
     val anonymous: Boolean,
     val roles: List<String>
 )

@@ -3,19 +3,14 @@
  */
 package zakadabar.site.frontend
 
+import zakadabar.site.frontend.components.HeaderActions
 import zakadabar.site.frontend.components.SiteLogo
 import zakadabar.site.frontend.pages.Landing
-import zakadabar.site.frontend.pages.Roadmap
-import zakadabar.site.frontend.resources.SiteDarkTheme
-import zakadabar.site.frontend.resources.SiteLightTheme
 import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.layout.ZkDefaultLayout
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppHandle
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleBar
-import zakadabar.stack.frontend.builtin.titlebar.actions.DarkLightMode
-import zakadabar.stack.frontend.resources.ZkFlavour
 
 object DefaultLayout : ZkDefaultLayout(spanHeader = true) {
 
@@ -26,16 +21,12 @@ object DefaultLayout : ZkDefaultLayout(spanHeader = true) {
         sideBar = SideBar()
 
         titleBar = ZkAppTitleBar(::onToggleSideBar, fixTitle = PilotTitle())
-        titleBar.globalElements += DarkLightMode({ SiteDarkTheme() }, { SiteLightTheme() })
+        titleBar.globalElements += HeaderActions()
 
     }
 
     class PilotTitle : ZkAppTitle(
         application.serverDescription.version,
-        contextElements = listOf(
-            ZkButton("zakadabar.io runs in pilot, click here for details", ZkFlavour.Warning, capitalize = false) {
-                application.changeNavState(Roadmap)
-            }
-        )
+        contextElements = emptyList()
     )
 }

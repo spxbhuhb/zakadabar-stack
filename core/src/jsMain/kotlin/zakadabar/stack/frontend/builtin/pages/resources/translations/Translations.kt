@@ -3,14 +3,14 @@
  */
 package zakadabar.stack.frontend.builtin.pages.resources.translations
 
-import zakadabar.stack.data.builtin.resources.TranslationDto
+import zakadabar.stack.data.builtin.resources.TranslationBo
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 
-object Translations : ZkCrudTarget<TranslationDto>() {
+object Translations : ZkCrudTarget<TranslationBo>() {
 
     init {
-        companion = TranslationDto.Companion
-        dtoClass = TranslationDto::class
+        companion = TranslationBo.Companion
+        boClass = TranslationBo::class
         tableClass = Table::class
         pageClass = Form::class
     }

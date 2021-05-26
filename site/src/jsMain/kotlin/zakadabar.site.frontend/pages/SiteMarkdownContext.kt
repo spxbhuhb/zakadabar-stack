@@ -11,11 +11,12 @@ import zakadabar.lib.examples.frontend.ParallelDownloadExample
 import zakadabar.lib.examples.frontend.button.ButtonExamples
 import zakadabar.lib.examples.frontend.crud.CrudBuiltinExample
 import zakadabar.lib.examples.frontend.crud.CrudReferenceExample
+import zakadabar.lib.examples.frontend.crud.CrudSimpleExample
 import zakadabar.lib.examples.frontend.dock.DockBasicExample
 import zakadabar.lib.examples.frontend.dock.DockRemoveExample
 import zakadabar.lib.examples.frontend.form.FormBooleanExample
 import zakadabar.lib.examples.frontend.form.FormDoubleExample
-import zakadabar.lib.examples.frontend.form.FormRecordIdExample
+import zakadabar.lib.examples.frontend.form.FormEntityIdExample
 import zakadabar.lib.examples.frontend.form.FormStringExample
 import zakadabar.lib.examples.frontend.icon.IconExamples
 import zakadabar.lib.examples.frontend.input.IntCheckboxListExample
@@ -43,8 +44,10 @@ import zakadabar.stack.frontend.resources.theme
 
 class SiteMarkdownContext(
     viewName: String,
-    val path: String
-) : ZkMarkdownContext(baseURI = "/${application.locale}/$viewName/$path") {
+    val path: String,
+    toc: Boolean = true,
+    hashes : Boolean = true
+) : ZkMarkdownContext(baseURI = "/${application.locale}/$viewName/$path", toc, hashes) {
 
     private val github = "https://github.com/spxbhuhb/zakadabar-stack/tree/master"
     private val coreSrc = "${github}/core/"
@@ -77,6 +80,7 @@ class SiteMarkdownContext(
 
             "CrudBuiltinExample" -> CrudBuiltinExample(htmlElement)
             "CrudReferenceExample" -> CrudReferenceExample(htmlElement)
+            "CrudSimpleExample" -> CrudSimpleExample(htmlElement)
 
             "DockBasicExample" -> DockBasicExample(htmlElement)
             "DockRemoveExample" -> DockRemoveExample(htmlElement)
@@ -85,7 +89,7 @@ class SiteMarkdownContext(
 
             "FormBooleanExample" -> FormBooleanExample(htmlElement)
             "FormDoubleExample" -> FormDoubleExample(htmlElement)
-            "FormRecordIdExample" -> FormRecordIdExample(htmlElement)
+            "FormRecordIdExample" -> FormEntityIdExample(htmlElement)
             "FormStringExample" -> FormStringExample(htmlElement)
 
             "IconExamples" -> IconExamples(htmlElement)

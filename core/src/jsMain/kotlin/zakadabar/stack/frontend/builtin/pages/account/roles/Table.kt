@@ -3,11 +3,11 @@
  */
 package zakadabar.stack.frontend.builtin.pages.account.roles
 
-import zakadabar.stack.data.builtin.account.RoleDto
+import zakadabar.stack.data.builtin.account.RoleBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
-class Table : ZkTable<RoleDto>() {
+class Table : ZkTable<RoleBo>() {
 
     override fun onConfigure() {
         super.onConfigure()
@@ -19,9 +19,9 @@ class Table : ZkTable<RoleDto>() {
         titleText = stringStore.roles
         crud = Roles
 
-        + RoleDto::id
-        + RoleDto::name
-        + RoleDto::description
+        + RoleBo::id
+        + RoleBo::name
+        + RoleBo::description
 
         + actions()
     }

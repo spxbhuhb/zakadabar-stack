@@ -15,7 +15,8 @@ open class ZkConfirmDialog(
 ) : ZkModalBase<Boolean>() {
 
     override fun onCreate() {
-        build(title)
+        titleText = title
+        super.onCreate()
     }
 
     override fun buildContent() {

@@ -17,7 +17,7 @@ class ResultTable : ZkTable<ExampleResult>() {
         search = true
         export = true
 
-        + ExampleResult::recordId
+        + ExampleResult::EntityId
         + ExampleResult::booleanValue
         + ExampleResult::enumSelectValue
         + ExampleResult::intValue
@@ -25,6 +25,6 @@ class ResultTable : ZkTable<ExampleResult>() {
     }
 
     override fun getRowId(row: ExampleResult): String {
-        return row.recordId.toString()
+        return row.EntityId.toString()
     }
 }

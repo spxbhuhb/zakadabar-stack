@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.builtin.crud.ZkInlineCrud
 class BuiltinCrud : ZkInlineCrud<BuiltinDto>() {
     init {
         companion = BuiltinDto.Companion
-        dtoClass = BuiltinDto::class
+        boClass = BuiltinDto::class
         editorClass = BuiltinForm::class
         tableClass = BuiltinTable::class
     }

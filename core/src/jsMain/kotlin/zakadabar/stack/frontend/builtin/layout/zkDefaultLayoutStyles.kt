@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.frontend.builtin.layout
 
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
@@ -35,6 +34,22 @@ open class ZkDefaultLayoutStyles : ZkCssStyleSheet() {
         maxHeight = "100%"
         overflowY = "auto"
         borderRight = theme.border
+
+        on(":not(:hover)") {
+            styles["scrollbar-width"] = "none"
+        }
+
+        on(":hover") {
+            styles["scrollbar-width"] = "4px"
+        }
+
+        on(":not(:hover)::-webkit-scrollbar") {
+            display = "none"
+        }
+
+        on(":hover::-webkit-scrollbar") {
+            width = 4
+        }
     }
 
     open val popupSideBarContainer by cssClass {

@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.5.20"
+version = "2021.5.26"
 
 noArg {
     annotation("kotlinx.serialization.Serializable")
@@ -28,15 +28,15 @@ kotlin {
     }
 
     js {
-        browser()
+        nodejs()
     }
 
     sourceSets["commonMain"].dependencies {
         implementation(project(":core"))
-        api("org.jetbrains:markdown:0.2.0.pre-55")
     }
 
     sourceSets["jsMain"].dependencies {
         implementation(npm("highlight.js", "10.7.2"))
+        api("org.jetbrains:markdown:0.2.4-SNAPSHOT")
     }
 }

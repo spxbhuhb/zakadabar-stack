@@ -8,8 +8,8 @@ import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
 import zakadabar.stack.backend.data.builtin.role.RoleDao
-import zakadabar.stack.backend.data.recordId
-import zakadabar.stack.data.builtin.account.RoleGrantDto
+import zakadabar.stack.backend.exposed.entityId
+import zakadabar.stack.data.builtin.account.RoleGrantBo
 
 class RoleGrantDao(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<RoleGrantDao>(RoleGrantTable)
@@ -17,9 +17,9 @@ class RoleGrantDao(id: EntityID<Long>) : LongEntity(id) {
     var principal by PrincipalDao referencedOn RoleGrantTable.principal
     var role by RoleDao referencedOn RoleGrantTable.role
 
-    fun toDto() = RoleGrantDto(
-        id = id.recordId(),
-        principal = principal.id.recordId(),
-        role = role.id.recordId()
+    fun toBo() = RoleGrantBo(
+        id = id.entityId(),
+        principal = principal.id.entityId(),
+        role = role.id.entityId()
     )
 }

@@ -20,7 +20,7 @@ class BuiltinForm : ZkForm<BuiltinDto>() {
             + ZkFormStyles.twoPanels
 
             + section(strings.mandatoryFields) {
-                with(dto) {
+                with(bo) {
                     + ::id
                     + ::booleanValue
                     + ::doubleValue
@@ -37,7 +37,7 @@ class BuiltinForm : ZkForm<BuiltinDto>() {
             }
 
             + section(strings.optionalFields) {
-                with(dto) {
+                with(bo) {
                     + opt(::optBooleanValue, "true", "false")
                     + ::optDoubleValue
                     + ::optEnumSelectValue

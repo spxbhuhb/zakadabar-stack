@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.`java-time`.timestamp
 import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.lib.examples.data.builtin.ExampleEnum
-import zakadabar.stack.backend.data.recordId
+import zakadabar.stack.backend.exposed.entityId
 import zakadabar.stack.backend.util.toStackUuid
 import zakadabar.stack.data.builtin.misc.Secret
 
@@ -39,7 +39,7 @@ object BuiltinTable : LongIdTable("builtin") {
     val uuidValue = uuid("uuidValue")
 
     fun toDto(row: ResultRow) = BuiltinDto(
-        id = row[id].recordId(),
+        id = row[id].entityId(),
         booleanValue = row[booleanValue],
         doubleValue = row[doubleValue],
         enumSelectValue = row[enumSelectValue],
@@ -51,13 +51,13 @@ object BuiltinTable : LongIdTable("builtin") {
         optInstantValue = row[optInstantValue]?.toKotlinInstant(),
         optIntValue = row[optIntValue],
         optSecretValue = null, // never send out secrets
-        optRecordSelectValue = row[recordSelectValue].recordId(),
+        optRecordSelectValue = row[recordSelectValue].entityId(),
         optStringValue = row[optStringSelectValue],
         optStringSelectValue = row[optStringSelectValue],
         optTextAreaValue = row[optTextAreaValue],
         optUuidValue = row[optUuidValue]?.toStackUuid(),
         secretValue = Secret(""), // never send out secrets
-        recordSelectValue = row[recordSelectValue].recordId(),
+        recordSelectValue = row[recordSelectValue].entityId(),
         stringValue = row[stringValue],
         stringSelectValue = row[stringSelectValue],
         textAreaValue = row[textAreaValue],

@@ -3,14 +3,14 @@
  */
 package zakadabar.stack.frontend.builtin.pages.resources.locales
 
-import zakadabar.stack.data.builtin.resources.LocaleDto
+import zakadabar.stack.data.builtin.resources.LocaleBo
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 
-object Locales : ZkCrudTarget<LocaleDto>() {
+object Locales : ZkCrudTarget<LocaleBo>() {
 
     init {
-        companion = LocaleDto.Companion
-        dtoClass = LocaleDto::class
+        companion = LocaleBo.Companion
+        boClass = LocaleBo::class
         tableClass = Table::class
         pageClass = Form::class
     }

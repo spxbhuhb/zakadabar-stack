@@ -4,25 +4,25 @@
 package zakadabar.stack.data.builtin.account
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.action.ActionDto
-import zakadabar.stack.data.action.ActionDtoCompanion
-import zakadabar.stack.data.builtin.ActionStatusDto
+import zakadabar.stack.data.action.ActionBo
+import zakadabar.stack.data.action.ActionBoCompanion
+import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.schema.BoSchema
 
 @Serializable
-data class LoginAction(
+class LoginAction(
 
     var accountName: String,
     var password: Secret
 
-) : ActionDto<ActionStatusDto> {
+) : ActionBo<ActionStatusBo> {
 
-    override suspend fun execute() = comm.action(this, serializer(), ActionStatusDto.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
 
-    companion object : ActionDtoCompanion<ActionStatusDto>(SessionDto.dtoNamespace)
+    companion object : ActionBoCompanion<ActionStatusBo>(SessionBo.boNamespace)
 
-    override fun schema() = DtoSchema {
+    override fun schema() = BoSchema {
         + ::accountName min 1 max 50 blank false
         + ::password min 1 max 50 blank false
     }

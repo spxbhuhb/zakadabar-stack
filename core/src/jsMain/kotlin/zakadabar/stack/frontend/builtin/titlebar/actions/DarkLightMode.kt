@@ -15,6 +15,7 @@ import zakadabar.stack.frontend.resources.theme
 /**
  * An icon to switch between dark and light themes.
  */
+@Deprecated("use ZkThemeRotate instead")
 open class DarkLightMode(
     open val darkTheme: () -> ZkTheme,
     open val lightTheme: () -> ZkTheme,

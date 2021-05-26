@@ -4,8 +4,8 @@
 package zakadabar.lib.examples.frontend.form
 
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.schema.BoSchema
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.util.default
@@ -22,8 +22,8 @@ class StringExampleDto(
     var readOnlyValue: String,
     var selectValue : String,
     var textAreaValue : String,
-) : DtoBase {
-    override fun schema() = DtoSchema {
+) : BaseBo {
+    override fun schema() = BoSchema {
         + ::value
         + ::optValue
         + ::invalidValue default "invalid content"
@@ -42,7 +42,7 @@ class FormStringExample(
 
     override fun onConfigure() {
         super.onConfigure()
-        dto = default { }
+        bo = default { }
         mode = ZkElementMode.Action
         setAppTitle = false
     }
@@ -51,18 +51,18 @@ class FormStringExample(
         super.onCreate()
 
         + section {
-            + dto::value
-            + dto::optValue
-            + dto::invalidValue
-            + dto::readOnlyValue readOnly true
-            + select(dto::selectValue, options = listOf("Option 1", "Option 2", "Option 3"))
-            + textarea(dto::textAreaValue)
+            + bo::value
+            + bo::optValue
+            + bo::invalidValue
+            + bo::readOnlyValue readOnly true
+            + select(bo::selectValue, options = listOf("Option 1", "Option 2", "Option 3"))
+            + textarea(bo::textAreaValue)
         }
 
         // Make invalidValue touched, so the form will show styles.
         // This is just for the example, not needed in actual code.
 
-        with(dto::invalidValue.find()) {
+        with(bo::invalidValue.find()) {
             touched = true
             invalidInput = true
         }

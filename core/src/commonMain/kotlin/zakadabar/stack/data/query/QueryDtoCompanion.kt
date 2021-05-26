@@ -5,8 +5,9 @@ package zakadabar.stack.data.query
 
 import kotlinx.serialization.KSerializer
 
-abstract class QueryDtoCompanion<RESULT : Any>(
-    val dtoNamespace: String
+
+abstract class QueryBoCompanion<RESULT : Any>(
+    val boNamespace: String
 ) {
 
     abstract fun serializer(): KSerializer<RESULT>

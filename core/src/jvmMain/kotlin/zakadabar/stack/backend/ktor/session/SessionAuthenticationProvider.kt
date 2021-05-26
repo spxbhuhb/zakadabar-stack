@@ -10,7 +10,7 @@ import io.ktor.auth.*
 import io.ktor.sessions.*
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.server
-import zakadabar.stack.data.record.LongRecordId
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
 
 class SessionAuthenticationProvider internal constructor(configuration: Configuration) : AuthenticationProvider(configuration) {
@@ -28,7 +28,7 @@ fun Authentication.Configuration.session(name: String? = null) {
             return@intercept
         }
 
-        val session = StackSession(LongRecordId(Server.anonymous.id.toLong()), emptyList(), emptyList())
+        val session = StackSession(EntityId(Server.anonymous.id.toLong()), emptyList(), emptyList())
         call.sessions.set(session)
         context.principal(Executor(session.account, session.roleIds, session.roleNames))
 

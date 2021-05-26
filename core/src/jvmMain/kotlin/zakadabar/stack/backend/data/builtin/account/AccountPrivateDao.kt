@@ -7,9 +7,9 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
-import zakadabar.stack.backend.data.recordId
-import zakadabar.stack.data.builtin.account.AccountPrivateDto
-import zakadabar.stack.data.builtin.account.AccountPublicDto
+import zakadabar.stack.backend.exposed.entityId
+import zakadabar.stack.data.builtin.account.AccountPrivateBo
+import zakadabar.stack.data.builtin.account.AccountPublicBo
 
 class AccountPrivateDao(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<AccountPrivateDao>(AccountPrivateTable)
@@ -29,10 +29,10 @@ class AccountPrivateDao(id: EntityID<Long>) : LongEntity(id) {
     var position by AccountPrivateTable.position
     var phone by AccountPrivateTable.phone
 
-    fun toDto() = AccountPrivateDto(
-        id = id.recordId(),
+    fun toBo() = AccountPrivateBo(
+        id = id.entityId(),
 
-        principal = principal.id.recordId(),
+        principal = principal.id.entityId(),
 
         accountName = accountName,
         fullName = fullName,
@@ -48,8 +48,8 @@ class AccountPrivateDao(id: EntityID<Long>) : LongEntity(id) {
         phone = phone
     )
 
-    fun toPublicDto(addEmail: Boolean) = AccountPublicDto(
-        id = id.recordId(),
+    fun toPublicBo(addEmail: Boolean) = AccountPublicBo(
+        id = id.entityId(),
 
         accountName = accountName,
         fullName = fullName,

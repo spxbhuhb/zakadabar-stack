@@ -8,6 +8,10 @@ class ZkIconSource(
     val content: String
 ) {
 
-    fun svg(size: Int) = """<svg xmlns="http://www.w3.org/2000/svg" width="$size" height="$size" viewBox="0 0 24 24">$content</svg>"""
-
+    fun svg(size: Int) =
+        if (content.startsWith("<svg")) {
+            content
+        } else {
+            """<svg xmlns="http://www.w3.org/2000/svg" width="$size" height="$size" viewBox="0 0 24 24">$content</svg>"""
+        }
 }

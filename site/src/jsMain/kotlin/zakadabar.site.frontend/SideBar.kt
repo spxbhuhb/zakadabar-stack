@@ -41,8 +41,8 @@ class SideBar : ZkSideBar() {
                 + item(GetHelp)
             }
 
-            + section(strings.kodomat) {
-                + item(KodomatPage, text = strings.record)
+            + section(strings.tools) {
+                + item(BenderPage, text = strings.bender)
             }
 
             + group(DocumentationIntro, strings.documentation, section = true) {
@@ -62,6 +62,7 @@ class SideBar : ZkSideBar() {
                 + item(ServicesAndSupport)
                 + item(LegalNotices)
                 + item(Credits)
+                // + item(Experimental)
             }
 
             withOneOfRoles(StackRoles.securityOfficer, StackRoles.siteAdmin) {

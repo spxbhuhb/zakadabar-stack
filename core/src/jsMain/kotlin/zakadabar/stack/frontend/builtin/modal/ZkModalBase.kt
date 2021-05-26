@@ -9,17 +9,18 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.titlebar.ZkLocalTitleBar
 import zakadabar.stack.frontend.util.plusAssign
 
-open class ZkModalBase<T : Any> : ZkElement() {
+open class ZkModalBase<T : Any?> : ZkElement() {
 
     protected val channel = Channel<T>()
 
-    open fun build(title: String? = null) {
+    open var titleText: String? = null
+
+    override fun onCreate() {
         classList += zkModalStyles.modal
 
         + column {
-            title?.let {
-                + ZkLocalTitleBar(it) css zkModalStyles.title
-            }
+
+            buildTitle()
 
             + div(zkModalStyles.content) {
                 buildContent()
@@ -28,6 +29,12 @@ open class ZkModalBase<T : Any> : ZkElement() {
             + row(zkModalStyles.buttons) {
                 buildButtons()
             }
+        }
+    }
+
+    open fun buildTitle() {
+        titleText?.let {
+            + ZkLocalTitleBar(it) css zkModalStyles.title
         }
     }
 

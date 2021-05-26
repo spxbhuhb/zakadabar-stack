@@ -10,22 +10,23 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import io.ktor.application.*
+import io.ktor.http.*
 import io.ktor.request.*
 import kotlinx.serialization.KSerializer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.custom.CustomBackend
-import zakadabar.stack.backend.data.Sql
 import zakadabar.stack.backend.data.builtin.session.LoginTimeout
 import zakadabar.stack.backend.data.builtin.session.SessionBackend
-import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.backend.data.entity.EntityBackend
+import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.ktor.buildServer
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.builtin.account.AccountPrivateDto
-import zakadabar.stack.data.builtin.account.AccountPublicDto
-import zakadabar.stack.data.builtin.account.PrincipalDto
-import zakadabar.stack.data.builtin.settings.ServerSettingsDto
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.builtin.account.AccountPrivateBo
+import zakadabar.stack.data.builtin.account.AccountPublicBo
+import zakadabar.stack.data.builtin.account.PrincipalBo
+import zakadabar.stack.data.builtin.settings.ServerSettingsBo
+import zakadabar.stack.data.entity.EntityId
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -49,27 +50,27 @@ open class Server : CliktCommand() {
          * This variable contains the anonymous account. Each server should have one
          * this is used for public access.
          *
-         * For example, check AccountPrivateBackend.
+         * For example, check AccountPrivateBackend in the demo.
          */
-        lateinit var anonymous: AccountPublicDto
+        lateinit var anonymous: AccountPublicBo
+
+        /**
+         * Find an account by its id. Used by [SessionBackend].
+         *
+         * For example, check AccountPrivateBackend in the demo.
+         *
+         * @return the public account bo and the id of the principal that belongs to this account
+         */
+        lateinit var findAccountById: (accountId: EntityId<AccountPrivateBo>) -> Pair<AccountPublicBo, EntityId<PrincipalBo>>
 
         /**
          * Find an account by its id. Used by [SessionBackend].
          *
          * For example, check AccountPrivateBackend.
          *
-         * @return the public account dto and the id of the principal that belongs to this account
+         * @return the public account bo and the id of the principal that belongs to this account
          */
-        lateinit var findAccountById: (accountId: RecordId<AccountPrivateDto>) -> Pair<AccountPublicDto, RecordId<PrincipalDto>>
-
-        /**
-         * Find an account by its id. Used by [SessionBackend].
-         *
-         * For example, check AccountPrivateBackend.
-         *
-         * @return the public account dto and the id of the principal that belongs to this account
-         */
-        lateinit var findAccountByName: (accountName: String) -> Pair<AccountPublicDto, RecordId<PrincipalDto>>
+        lateinit var findAccountByName: (accountName: String) -> Pair<AccountPublicBo, EntityId<PrincipalBo>>
 
         /**
          * The directory where setting files are. Set automatically by the configuration loader.
@@ -77,13 +78,13 @@ open class Server : CliktCommand() {
         lateinit var settingsDirectory: Path
 
         /**
-         * When true GET (read and query) requests are logged by DTO backends.
+         * When true GET (read and query) requests are logged by bo backends.
          */
         var logReads: Boolean = true
 
         /**
-         * When true, POST and PATCH handled by RecordBackends and ActionBackends validate
-         * incoming DTO objects. When invalid the request returns with 400 Bad Request.
+         * When true, POST and PATCH handled by EntityBackends and ActionBackends validate
+         * incoming bo objects. When invalid the request returns with 400 Bad Request.
          * Default is true, may be switched off by backend, using the validate property
          * of the backend.
          */
@@ -103,14 +104,14 @@ open class Server : CliktCommand() {
 
         private val modules = mutableListOf<BackendModule>()
 
-        private val recordBackends = mutableListOf<RecordBackend<*>>()
+        private val entityBackends = mutableListOf<EntityBackend<*>>()
 
         private val customBackends = mutableListOf<CustomBackend>()
 
-        operator fun plusAssign(dtoBackend: RecordBackend<*>) {
-            this.modules += dtoBackend
-            this.recordBackends += dtoBackend
-            dtoBackend.onModuleLoad()
+        operator fun plusAssign(boBackend: EntityBackend<*>) {
+            this.modules += boBackend
+            this.entityBackends += boBackend
+            boBackend.onModuleLoad()
         }
 
         operator fun plusAssign(customBackend: CustomBackend) {
@@ -119,7 +120,7 @@ open class Server : CliktCommand() {
             customBackend.onModuleLoad()
         }
 
-        fun <T : DtoBase> loadSettings(namespace: String, serializer: KSerializer<T>): T? {
+        fun <T : BaseBo> loadSettings(namespace: String, serializer: KSerializer<T>): T? {
 
             val p1 = settingsDirectory.resolve("$namespace.yaml")
             val p2 = settingsDirectory.resolve("$namespace.yml")
@@ -140,26 +141,28 @@ open class Server : CliktCommand() {
             .convert { it.path }
             .default("./zakadabar.stack.server.yaml")
 
+    private lateinit var settings : ServerSettingsBo
+
     override fun run() {
 
-        val config = loadServerSettings()
+        settings = loadServerSettings()
 
-        Sql.onCreate(config.database) // initializes SQL connection
+        Sql.onCreate(settings.database) // initializes SQL connection
 
-        loadModules(config) // load modules
+        loadModules(settings) // load modules
 
         Sql.onStart() // create missing tables and columns
 
         startModules() // start the modules
 
-        val server = buildServer(config, recordBackends, customBackends) //  build the Ktor server instance
+        val server = buildServer(settings, entityBackends, customBackends) //  build the Ktor server instance
 
-        staticRoot = config.staticResources
+        staticRoot = settings.staticResources
 
         server.start(wait = true)
     }
 
-    private fun loadServerSettings(): ServerSettingsDto {
+    private fun loadServerSettings(): ServerSettingsBo {
 
         val paths = listOf(
             settingsPath,
@@ -178,13 +181,13 @@ open class Server : CliktCommand() {
             settingsDirectory = path.parent
             val source = Files.readAllBytes(path).decodeToString()
 
-            return Yaml.default.decodeFromString(ServerSettingsDto.serializer(), source)
+            return Yaml.default.decodeFromString(ServerSettingsBo.serializer(), source)
         }
 
         throw IllegalArgumentException("cannot locate server settings file")
     }
 
-    private fun loadModules(config: ServerSettingsDto) {
+    private fun loadModules(config: ServerSettingsBo) {
 
         config.modules.forEach {
 
@@ -198,7 +201,7 @@ open class Server : CliktCommand() {
                 modules += module
 
                 when (module) {
-                    is RecordBackend<*> -> recordBackends += module
+                    is EntityBackend<*> -> entityBackends += module
                     is CustomBackend -> customBackends += module
                     else -> {
                         modules += module
@@ -249,5 +252,14 @@ open class Server : CliktCommand() {
         if (call.request.uri.startsWith("/api")) {
             throw LoginTimeout()
         }
+    }
+
+    /**
+     * Adds the value of the apiCacheControl setting to the response headers.
+     * This is "no-cache, no-store" by default. To change it, modify the
+     * setting in the configuration file or override this method.
+     */
+    open fun apiCacheControl(call : ApplicationCall) {
+        call.response.headers.append(HttpHeaders.CacheControl, settings.apiCacheControl)
     }
 }

@@ -5,7 +5,6 @@
 
 package zakadabar.stack.backend.data.builtin.principal
 
-import io.ktor.features.*
 import io.ktor.routing.*
 import kotlinx.datetime.Clock
 import kotlinx.datetime.toJavaInstant
@@ -18,27 +17,27 @@ import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantTable
-import zakadabar.stack.backend.data.get
-import zakadabar.stack.backend.data.record.RecordBackend
-import zakadabar.stack.data.builtin.ActionStatusDto
+import zakadabar.stack.backend.data.entity.EntityBackend
+import zakadabar.stack.backend.exposed.Sql
+import zakadabar.stack.backend.exposed.get
+import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.builtin.account.PasswordChangeAction
-import zakadabar.stack.data.builtin.account.PrincipalDto
-import zakadabar.stack.data.builtin.account.RoleDto
-import zakadabar.stack.data.record.LongRecordId
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.builtin.account.PrincipalBo
+import zakadabar.stack.data.builtin.account.RoleBo
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.BCrypt
 import zakadabar.stack.util.Executor
 
-object PrincipalBackend : RecordBackend<PrincipalDto>() {
+object PrincipalBackend : EntityBackend<PrincipalBo>() {
 
-    override val dtoClass = PrincipalDto::class
+    override val boClass = PrincipalBo::class
 
     var maxFailCount = 5
 
     override var logActions = false
 
     override fun onModuleLoad() {
-        + PrincipalTable
+        Sql.tables += PrincipalTable
     }
 
     override fun onInstallRoutes(route: Route) {
@@ -52,63 +51,63 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
 
         PrincipalTable
             .selectAll()
-            .map(PrincipalTable::toDto)
+            .map(PrincipalTable::toBo)
     }
 
-    override fun create(executor: Executor, dto: PrincipalDto) = transaction {
+    override fun create(executor: Executor, bo: PrincipalBo) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 
         PrincipalDao.new {
-            validated = dto.validated
-            locked = dto.locked
-            expired = dto.expired
+            validated = bo.validated
+            locked = bo.locked
+            expired = bo.expired
             loginFailCount = 0
-        }.toDto()
+        }.toBo()
     }
 
-    override fun read(executor: Executor, recordId: RecordId<PrincipalDto>) = transaction {
+    override fun read(executor: Executor, entityId: EntityId<PrincipalBo>) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 
-        PrincipalDao[recordId].toDto()
+        PrincipalDao[entityId].toBo()
     }
 
-    override fun update(executor: Executor, dto: PrincipalDto) = transaction {
+    override fun update(executor: Executor, bo: PrincipalBo) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 
-        val dao = PrincipalDao[dto.id.toLong()]
+        val dao = PrincipalDao[bo.id.toLong()]
 
-        if (dao.locked && ! dto.locked) {
+        if (dao.locked && ! bo.locked) {
             dao.loginFailCount = 0
         }
 
-        dao.locked = dto.locked
+        dao.locked = bo.locked
 
-        dao.toDto()
+        dao.toBo()
     }
 
-    override fun delete(executor: Executor, recordId: RecordId<PrincipalDto>) = transaction {
+    override fun delete(executor: Executor, entityId: EntityId<PrincipalBo>) = transaction {
 
         authorize(executor, StackRoles.securityOfficer)
 
-        PrincipalDao[recordId].delete()
+        PrincipalDao[entityId].delete()
     }
 
     private fun action(executor: Executor, action: PasswordChangeAction) = transaction {
 
         authorize(executor, StackRoles.siteMember)
 
-        val (accountDto, principalId) = Server.findAccountById(action.accountId)
+        val (accountBo, principalId) = Server.findAccountById(action.accountId)
 
-        val principalDao = PrincipalDao[principalId.toLong()]
+        val principalDao = PrincipalDao[principalId]
 
         if (executor.accountId == action.accountId) {
             try {
                 authenticate(principalId, action.oldPassword.value)
             } catch (ex: Exception) {
-                return@transaction ActionStatusDto(false)
+                return@transaction ActionStatusBo(false)
             }
         } else {
             authorize(executor, StackRoles.securityOfficer)
@@ -116,9 +115,9 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
 
         principalDao.credentials = encrypt(action.newPassword.value)
 
-        logger.info("${executor.accountId}: ACTION PasswordChangeAction accountId=${action.accountId} accountName=${accountDto.accountName}")
+        logger.info("${executor.accountId}: ACTION PasswordChangeAction accountId=${action.accountId} accountName=${accountBo.accountName}")
 
-        ActionStatusDto()
+        ActionStatusBo()
     }
 
     fun encrypt(password: String) = BCrypt.hashpw(password, BCrypt.gensalt())
@@ -128,7 +127,7 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
     class AccountLockedException : Exception()
     class AccountExpiredException : Exception()
 
-    fun authenticate(principalId: RecordId<PrincipalDto>, password: String) = transaction {
+    fun authenticate(principalId: EntityId<PrincipalBo>, password: String) = transaction {
 
         val principal = PrincipalDao[principalId.toLong()]
 
@@ -159,8 +158,8 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
         principal
     }
 
-    fun roles(principalId: RecordId<PrincipalDto>) = transaction {
-        val roleIds = mutableListOf<RecordId<RoleDto>>()
+    fun roles(principalId: EntityId<PrincipalBo>) = transaction {
+        val roleIds = mutableListOf<EntityId<RoleBo>>()
         val roleNames = mutableListOf<String>()
 
         RoleGrantTable
@@ -168,7 +167,7 @@ object PrincipalBackend : RecordBackend<PrincipalDto>() {
             .slice(RoleTable.name, RoleTable.id)
             .select { RoleGrantTable.principal eq principalId.toLong() }
             .forEach {
-                roleIds += LongRecordId(it[RoleTable.id].value)
+                roleIds += EntityId(it[RoleTable.id].value)
                 roleNames += it[RoleTable.name]
             }
 

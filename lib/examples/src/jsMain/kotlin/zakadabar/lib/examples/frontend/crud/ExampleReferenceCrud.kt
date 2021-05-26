@@ -17,7 +17,7 @@ import zakadabar.stack.frontend.builtin.table.ZkTable
 class ExampleReferenceCrud : ZkInlineCrud<ExampleReferenceDto>() {
     init {
         companion = ExampleReferenceDto.Companion
-        dtoClass = ExampleReferenceDto::class
+        boClass = ExampleReferenceDto::class
         editorClass = ExampleReferenceForm::class
         tableClass = ExampleReferenceTable::class
     }
@@ -33,7 +33,7 @@ class ExampleReferenceForm : ZkForm<ExampleReferenceDto>() {
 
         build(translate<ExampleReferenceForm>()) {
             + section {
-                + dto::name
+                + bo::name
             }
         }
     }

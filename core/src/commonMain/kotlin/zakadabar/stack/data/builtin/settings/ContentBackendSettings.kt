@@ -4,8 +4,8 @@
 package zakadabar.stack.data.builtin.settings
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.schema.BoSchema
 
 /**
  * @property  namespace  The namespace part of the URL this backend serves. For example:
@@ -19,9 +19,9 @@ class ContentBackendSettings(
     var namespace : String,
     var root: String
 
-) : DtoBase {
+) : BaseBo {
 
-    override fun schema() = DtoSchema {
+    override fun schema() = BoSchema {
         + ::namespace blank false max 50
         + ::root
     }

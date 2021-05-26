@@ -21,14 +21,14 @@ import ZkUuidField
 import kotlinx.browser.document
 import kotlinx.datetime.Instant
 import org.w3c.dom.HTMLElement
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.DataConflictException
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.action.ActionDto
+import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.query.QueryDto
-import zakadabar.stack.data.record.RecordDto
-import zakadabar.stack.data.record.RecordId
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.data.query.QueryBo
+import zakadabar.stack.data.schema.BoSchema
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.stringStore
@@ -56,7 +56,7 @@ import zakadabar.stack.util.UUID
 import kotlin.reflect.KMutableProperty0
 
 /**
- * Base class for DTO forms.
+ * Base class for BO forms.
  *
  * @property  setAppTitle   When true (default) the app title bar is set for the table. Function [setAppTitleBar] adds the title bar.
  * @property  addLocalTitle When true, add a local title bar. Default is false.
@@ -64,11 +64,11 @@ import kotlin.reflect.KMutableProperty0
  * @property  titleElement  The element of the title.
  * @property  autoLabel  When true labels are automatically added. When false they are not.
  */
-open class ZkForm<T : DtoBase> (
+open class ZkForm<T : BaseBo> (
     element: HTMLElement = document.createElement("div") as HTMLElement
 ) : ZkElement(element), ZkCrudEditor<T>, ZkAppTitleProvider, ZkLocalTitleProvider {
 
-    override lateinit var dto: T
+    override lateinit var bo: T
     override lateinit var mode: ZkElementMode
 
     override var setAppTitle = true
@@ -84,21 +84,21 @@ open class ZkForm<T : DtoBase> (
     @PublicApi
     var fieldGridRowTemplate: String = "max-content"
 
-    override var openUpdate: ((dto: T) -> Unit)? = null
+    override var openUpdate: ((bo: T) -> Unit)? = null
 
     /**
      * A function to be called when execution of the form operation has a result.
      * This means that the server sent a response which is successful at HTTP level.
      * However, the response may indicate an error.
      */
-    var onExecuteResult: ((resultDto: DtoBase) -> Unit)? = null
+    var onExecuteResult: ((resultBo: BaseBo) -> Unit)? = null
 
     /**
      * Called when the user clicks on the back button.
      */
     override var onBack = { application.back() }
 
-    var schema = lazy { if (! ::dto.isInitialized) DtoSchema.Companion.NO_VALIDATION else dto.schema() }
+    var schema = lazy { if (! ::bo.isInitialized) BoSchema.Companion.NO_VALIDATION else bo.schema() }
 
     val fields = mutableListOf<ZkFieldBase<T, *>>()
 
@@ -170,11 +170,11 @@ open class ZkForm<T : DtoBase> (
     // ------------------------------------------------------------------------
 
     /**
-     * Validates the DTO with the schema. Validation occurs at every
+     * Validates the BO with the schema. Validation occurs at every
      * change. When the user did not touch a field yet a validation
      * fail may not be displayed for that field.
      *
-     * @return true if the DTO is valid, false otherwise
+     * @return true if the BO is valid, false otherwise
      */
     open fun validate(submit: Boolean = false): Boolean {
         if (submit) {
@@ -233,7 +233,7 @@ open class ZkForm<T : DtoBase> (
     }
 
     /**
-     * Callback to finalize the DTO before submit starts. Called before validation.
+     * Callback to finalize the BO before submit starts. Called before validation.
      * Default implementation does nothing.
      *
      * This is a suspend function that allows the form perform validations that require
@@ -257,7 +257,7 @@ open class ZkForm<T : DtoBase> (
 
                 when (mode) {
                     ZkElementMode.Create -> {
-                        val created = (dto as RecordDto<*>).create() as RecordDto<*>
+                        val created = (bo as EntityBo<*>).create() as EntityBo<*>
                         fields.forEach { it.onCreateSuccess(created) }
                         if (goBackAfterCreate) {
                             onBack()
@@ -269,20 +269,20 @@ open class ZkForm<T : DtoBase> (
                         // nothing to do here
                     }
                     ZkElementMode.Update -> {
-                        (dto as RecordDto<*>).update()
+                        (bo as EntityBo<*>).update()
                         resetTouched()
                     }
                     ZkElementMode.Delete -> {
-                        (dto as RecordDto<*>).delete()
+                        (bo as EntityBo<*>).delete()
                         resetTouched()
                     }
                     ZkElementMode.Action -> {
-                        val result = (dto as ActionDto<*>).execute()
+                        val result = (bo as ActionBo<*>).execute()
                         onExecuteResult?.let { it(result) }
                         resetTouched()
                     }
                     ZkElementMode.Query -> {
-                        (dto as QueryDto<*>).execute()
+                        (bo as QueryBo<*>).execute()
                         // TODO do something here with the result
                     }
                     ZkElementMode.Other -> {
@@ -400,13 +400,13 @@ open class ZkForm<T : DtoBase> (
     fun fieldGridSection(title: String, summary: String = "", css: ZkCssStyleRule? = null, builder: ZkElement.() -> Unit) =
         section(title, summary, true, css, builder)
 
-    fun <T : RecordDto<T>> List<T>.by(field: (it: T) -> String) = map { it.id to field(it) }.sortedBy { it.second }
+    fun <T : EntityBo<T>> List<T>.by(field: (it: T) -> String) = map { it.id to field(it) }.sortedBy { it.second }
 
     fun <ST> select(
-        kProperty0: KMutableProperty0<RecordId<ST>>,
+        kProperty0: KMutableProperty0<EntityId<ST>>,
         sortOptions: Boolean = true,
         label: String? = null,
-        options: suspend () -> List<Pair<RecordId<ST>, String>>
+        options: suspend () -> List<Pair<EntityId<ST>, String>>
     ): ZkRecordSelectField<T, ST> {
         val field = ZkRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
         label?.let { field.label = label }
@@ -415,10 +415,10 @@ open class ZkForm<T : DtoBase> (
     }
 
     fun <ST> select(
-        kProperty0: KMutableProperty0<RecordId<ST>?>,
+        kProperty0: KMutableProperty0<EntityId<ST>?>,
         sortOptions: Boolean = true,
         label: String? = null,
-        options: suspend () -> List<Pair<RecordId<ST>, String>>
+        options: suspend () -> List<Pair<EntityId<ST>, String>>
     ): ZkOptRecordSelectField<T, ST> {
         val field = ZkOptRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
         label?.let { field.label = label }
@@ -507,8 +507,8 @@ open class ZkForm<T : DtoBase> (
     //  Property field builder shorthands
     // ------------------------------------------------------------------------
 
-    operator fun KMutableProperty0<RecordId<T>>.unaryPlus(): ZkElement {
-        val field = ZkRecordIdField(this@ZkForm, this)
+    operator fun KMutableProperty0<EntityId<T>>.unaryPlus(): ZkElement {
+        val field = ZkEntityIdField(this@ZkForm, this)
         + field
         fields += field
         if (mode == ZkElementMode.Create) {

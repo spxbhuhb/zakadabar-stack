@@ -1,13 +1,13 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.fields.ZkStringBase
 import zakadabar.stack.util.UUID
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptUuidField<T : DtoBase>(
+open class ZkOptUuidField<T : BaseBo>(
     form: ZkForm<T>,
     prop: KMutableProperty0<UUID?>
 ) : ZkStringBase<T, UUID?>(

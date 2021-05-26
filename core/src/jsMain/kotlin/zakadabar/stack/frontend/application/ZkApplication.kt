@@ -6,7 +6,7 @@ package zakadabar.stack.frontend.application
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.events.Event
-import zakadabar.stack.data.builtin.misc.ServerDescriptionDto
+import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
 import zakadabar.stack.data.builtin.resources.TranslationsByLocale
 import zakadabar.stack.frontend.builtin.dock.ZkDock
 import zakadabar.stack.frontend.builtin.modal.ZkModalContainer
@@ -35,11 +35,6 @@ val stringStore
 inline fun <reified T> translate() = stringStore.getNormalized(T::class.simpleName!!)
 
 /**
- * Check if the executor has the given role.
- */
-fun hasRole(roleName: String) = roleName in application.executor.roles
-
-/**
  * The application that runs in the browser window. This object contains data
  * and resources that are used all over the application.
  *
@@ -51,9 +46,7 @@ fun hasRole(roleName: String) = roleName in application.executor.roles
  *
  * @property  routing    The URL -> page mapping to navigate in the application.
  *
- * @property  themes     List of known UI themes.
- *
- * @property  strings    The string store that contains the strings the application uses.
+ * @property  stringStore    The string store that contains the strings the application uses.
  *
  * @property  dock       A container to show sub-windows such as mail editing in Gmail.
  *
@@ -74,7 +67,7 @@ open class ZkApplication {
 
     lateinit var executor: ZkExecutor
 
-    lateinit var serverDescription: ServerDescriptionDto
+    lateinit var serverDescription: ServerDescriptionBo
 
     lateinit var routing: ZkAppRouting
 

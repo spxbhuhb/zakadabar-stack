@@ -9,7 +9,11 @@ In the Stack, there are none. For all those things we use Kotlin based solutions
   see [index.html](../../../site/src/jsMain/resources/index.html) of the site.
 * For theming and CSS we have our own implementation, please see [Themes, Css](/doc/guides/browser/structure/ThemesCss.md) in the
   documentation.
- 
+  
+## Why Not Semantic Versioning
+
+There are many reasons, for some of them, please read this article without any bias: [Semver Will Not Save You](https://hynek.me/articles/semver-will-not-save-you/).
+
 ## Errors
 
 ### Gradle Is Stuck

@@ -19,7 +19,7 @@ package zakadabar.stack.frontend.builtin.form.fields
 import kotlinx.browser.document
 import kotlinx.datetime.Instant
 import org.w3c.dom.HTMLInputElement
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.zkFormStyles
@@ -27,7 +27,7 @@ import zakadabar.stack.frontend.resources.ZkFormatters.formatInstant
 import zakadabar.stack.frontend.util.plusAssign
 import kotlin.reflect.KMutableProperty0
 
-open class ZkInstantField<T : DtoBase>(
+open class ZkInstantField<T : BaseBo>(
     form: ZkForm<T>,
     val prop: KMutableProperty0<Instant>
 ) : ZkFieldBase<T, Instant>(

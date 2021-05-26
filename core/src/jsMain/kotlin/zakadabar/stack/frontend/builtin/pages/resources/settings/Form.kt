@@ -3,27 +3,27 @@
  */
 package zakadabar.stack.frontend.builtin.pages.resources.settings
 
-import zakadabar.stack.data.builtin.account.RoleDto
-import zakadabar.stack.data.builtin.resources.SettingDto
+import zakadabar.stack.data.builtin.account.RoleBo
+import zakadabar.stack.data.builtin.resources.SettingBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 
-class Form : ZkForm<SettingDto>() {
+class Form : ZkForm<SettingBo>() {
 
     override fun onCreate() {
-        build(dto.className, stringStore.setting, css = ZkFormStyles.onePanel) {
+        build(bo.className, stringStore.setting, css = ZkFormStyles.onePanel) {
             + section(stringStore.basics) {
-                + dto::id
-                //+ select(dto::role, options = ::roles)
-                + dto::className
+                + bo::id
+                //+ select(bo::role, options = ::roles)
+                + bo::className
             }
         }
     }
 
     suspend fun roles() =
         try {
-            RoleDto.all().by { it.name }
+            RoleBo.all().by { it.name }
         } catch (ex: Exception) {
             emptyList()
         }

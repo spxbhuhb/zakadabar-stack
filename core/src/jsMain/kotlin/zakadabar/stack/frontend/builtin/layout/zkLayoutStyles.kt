@@ -42,6 +42,10 @@ class ZkLayoutStyles : ZkCssStyleSheet() {
         border = 0
     }
 
+    val gridGap by cssClass {
+        gap = theme.spacingStep
+    }
+
     /**
      * A switchable border. Use this when you want to give the user the possibility to
      * hide it. The idea behind this is that some people like to have things separated
@@ -76,6 +80,10 @@ class ZkLayoutStyles : ZkCssStyleSheet() {
 
     val justifySelfCenter by cssClass {
         justifySelf = "center"
+    }
+
+    val alignSelfCenter by cssClass {
+        alignSelf = "center"
     }
 
     val p1 by cssClass {

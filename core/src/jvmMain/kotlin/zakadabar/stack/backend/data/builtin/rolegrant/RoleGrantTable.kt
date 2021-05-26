@@ -7,18 +7,18 @@ import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
 import zakadabar.stack.backend.data.builtin.principal.PrincipalTable
 import zakadabar.stack.backend.data.builtin.role.RoleTable
-import zakadabar.stack.backend.data.recordId
-import zakadabar.stack.data.builtin.account.RoleGrantDto
+import zakadabar.stack.backend.exposed.entityId
+import zakadabar.stack.data.builtin.account.RoleGrantBo
 
 object RoleGrantTable : LongIdTable("role_grants") {
 
     val principal = reference("principal", PrincipalTable).index()
     val role = reference("role", RoleTable).index()
 
-    fun toDto(row: ResultRow) = RoleGrantDto(
-        id = row[id].recordId(),
-        principal = row[principal].recordId(),
-        role = row[role].recordId()
+    fun toBo(row: ResultRow) = RoleGrantBo(
+        id = row[id].entityId(),
+        principal = row[principal].entityId(),
+        role = row[role].entityId()
     )
 
 }

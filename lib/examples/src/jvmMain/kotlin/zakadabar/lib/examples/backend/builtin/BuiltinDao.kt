@@ -10,8 +10,8 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import zakadabar.lib.examples.data.builtin.BuiltinDto
-import zakadabar.stack.backend.data.get
-import zakadabar.stack.backend.data.recordId
+import zakadabar.stack.backend.exposed.entityId
+import zakadabar.stack.backend.exposed.get
 import zakadabar.stack.backend.util.toJavaUuid
 import zakadabar.stack.backend.util.toStackUuid
 import zakadabar.stack.data.builtin.misc.Secret
@@ -44,7 +44,7 @@ class BuiltinDao(id: EntityID<Long>) : LongEntity(id) {
     var uuidValue by BuiltinTable.uuidValue
 
     fun toDto() = BuiltinDto(
-        id = id.recordId(),
+        id = id.entityId(),
         booleanValue = booleanValue,
         doubleValue = doubleValue,
         enumSelectValue = enumSelectValue,
@@ -56,13 +56,13 @@ class BuiltinDao(id: EntityID<Long>) : LongEntity(id) {
         optInstantValue = optInstantValue?.toKotlinInstant(),
         optIntValue = optIntValue,
         optSecretValue = null, // never send out secrets
-        optRecordSelectValue = optRecordSelectValue?.id?.recordId(),
+        optRecordSelectValue = optRecordSelectValue?.id?.entityId(),
         optStringValue = optStringSelectValue,
         optStringSelectValue = optStringSelectValue,
         optTextAreaValue = optTextAreaValue,
         optUuidValue = optUuidValue?.toStackUuid(),
         secretValue = Secret(""), // never send out secrets
-        recordSelectValue = recordSelectValue.id.recordId(),
+        recordSelectValue = recordSelectValue.id.entityId(),
         stringValue = stringValue,
         stringSelectValue = stringSelectValue,
         textAreaValue = textAreaValue,

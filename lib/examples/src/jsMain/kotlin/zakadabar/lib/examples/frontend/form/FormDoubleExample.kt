@@ -4,8 +4,8 @@
 package zakadabar.lib.examples.frontend.form
 
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.schema.BoSchema
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.util.default
@@ -20,8 +20,8 @@ class DoubleExampleDto(
     var optValue: Double?,
     var invalidValue: Double,
     var readOnlyValue: Double
-) : DtoBase {
-    override fun schema() = DtoSchema {
+) : BaseBo {
+    override fun schema() = BoSchema {
         + ::value
         + ::optValue
         + ::invalidValue default 1.0 notEquals 1.0
@@ -38,7 +38,7 @@ class FormDoubleExample(
 
     override fun onConfigure() {
         super.onConfigure()
-        dto = default { }
+        bo = default { }
         mode = ZkElementMode.Action
         setAppTitle = false
     }
@@ -47,16 +47,16 @@ class FormDoubleExample(
         super.onCreate()
 
         + section {
-            + dto::value
-            + dto::optValue
-            + dto::invalidValue
-            + dto::readOnlyValue readOnly true
+            + bo::value
+            + bo::optValue
+            + bo::invalidValue
+            + bo::readOnlyValue readOnly true
         }
 
         // Make invalidValue touched, so the form will show styles.
         // This is just for the example, not needed in actual code.
 
-        dto::invalidValue.find().touched = true
+        bo::invalidValue.find().touched = true
         validate()
     }
 

@@ -4,6 +4,7 @@
 @file:Suppress("unused") // main is called by webpack
 
 import zakadabar.site.frontend.Routing
+import zakadabar.site.frontend.resources.GreenBlueTheme
 import zakadabar.site.frontend.resources.SiteDarkTheme
 import zakadabar.site.frontend.resources.SiteLightTheme
 import zakadabar.site.resources.strings
@@ -22,7 +23,7 @@ fun main() {
 
             initSession()
 
-            initTheme(SiteDarkTheme(), SiteLightTheme())
+            initTheme(SiteDarkTheme(), SiteLightTheme(), GreenBlueTheme())
 
             initLocale(strings)
 

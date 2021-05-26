@@ -6,9 +6,9 @@ package zakadabar.stack.backend.data.builtin.account
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
 import zakadabar.stack.backend.data.builtin.principal.PrincipalTable
-import zakadabar.stack.backend.data.recordId
-import zakadabar.stack.data.builtin.account.AccountPrivateDto
-import zakadabar.stack.data.builtin.account.AccountPublicDto
+import zakadabar.stack.backend.exposed.entityId
+import zakadabar.stack.data.builtin.account.AccountPrivateBo
+import zakadabar.stack.data.builtin.account.AccountPublicBo
 
 object AccountPrivateTable : LongIdTable("accounts") {
 
@@ -27,10 +27,10 @@ object AccountPrivateTable : LongIdTable("accounts") {
     val position = varchar("position", 50).nullable()
     val phone = varchar("phone", 50).nullable()
 
-    fun toDto(row: ResultRow) = AccountPrivateDto(
-        id = row[id].recordId(),
+    fun toBo(row: ResultRow) = AccountPrivateBo(
+        id = row[id].entityId(),
 
-        principal = row[principal].recordId(),
+        principal = row[principal].entityId(),
 
         accountName = row[accountName],
         fullName = row[fullName],
@@ -46,8 +46,8 @@ object AccountPrivateTable : LongIdTable("accounts") {
         phone = row[phone]
     )
 
-    fun toPublicDto(row: ResultRow, addEmail: Boolean = false) = AccountPublicDto(
-        id = row[id].recordId(),
+    fun toPublicBo(row: ResultRow, addEmail: Boolean = false) = AccountPublicBo(
+        id = row[id].entityId(),
 
         accountName = row[accountName],
         fullName = row[fullName],

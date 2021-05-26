@@ -3,14 +3,14 @@
  */
 package zakadabar.stack.frontend.builtin.pages.resources.settings
 
-import zakadabar.stack.data.builtin.resources.SettingDto
+import zakadabar.stack.data.builtin.resources.SettingBo
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 
-object Settings : ZkCrudTarget<SettingDto>() {
+object Settings : ZkCrudTarget<SettingBo>() {
 
     init {
-        companion = SettingDto.Companion
-        dtoClass = SettingDto::class
+        companion = SettingBo.Companion
+        boClass = SettingBo::class
         tableClass = Table::class
         pageClass = Form::class
     }

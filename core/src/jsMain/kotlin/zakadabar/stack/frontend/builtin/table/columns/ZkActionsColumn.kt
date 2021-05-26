@@ -4,14 +4,14 @@
 package zakadabar.stack.frontend.builtin.table.columns
 
 import org.w3c.dom.set
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.builtin.table.zkTableStyles
 import zakadabar.stack.frontend.util.plusAssign
 
-open class ZkActionsColumn<T : DtoBase>(
+open class ZkActionsColumn<T : BaseBo>(
     table: ZkTable<T>
 ) : ZkColumn<T>(table) {
 

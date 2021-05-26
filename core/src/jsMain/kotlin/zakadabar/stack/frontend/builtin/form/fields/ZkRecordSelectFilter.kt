@@ -3,31 +3,31 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.builtin.form.ZkForm
 
-open class ZkRecordSelectFilter<T : DtoBase>(
+open class ZkRecordSelectFilter<T : BaseBo>(
     form: ZkForm<T>,
     sortOptions: Boolean = true,
     label: String? = null,
-    var getValue: () -> RecordId<*>?,
-    var options: suspend () -> List<Pair<RecordId<*>, String>>,
-    onSelected: (Pair<RecordId<*>, String>?) -> Unit
-) : ZkSelectBase<T, RecordId<*>>(form, "", sortOptions, options, onSelected) {
+    var getValue: () -> EntityId<*>?,
+    var options: suspend () -> List<Pair<EntityId<*>, String>>,
+    onSelected: (Pair<EntityId<*>, String>?) -> Unit
+) : ZkSelectBase<T, EntityId<*>>(form, "", sortOptions, options, onSelected) {
 
     init {
         // FIXME this is not right, but haven't had time to fix yet
         if (label != null) this.label = label
     }
 
-    override fun fromString(string: String): RecordId<*> {
-        return items.first().first.fromString(string)
+    override fun fromString(string: String): EntityId<*> {
+        return items.first().first
     }
 
     override fun getPropValue() = getValue()
 
-    override fun setPropValue(value: Pair<RecordId<*>, String>?) {
+    override fun setPropValue(value: Pair<EntityId<*>, String>?) {
         // do nothing here, onSelected will be called by ZkSelectBase
     }
 

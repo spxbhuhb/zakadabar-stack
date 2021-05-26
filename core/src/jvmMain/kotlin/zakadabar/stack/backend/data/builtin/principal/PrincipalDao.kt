@@ -7,8 +7,8 @@ import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import zakadabar.stack.backend.data.recordId
-import zakadabar.stack.data.builtin.account.PrincipalDto
+import zakadabar.stack.backend.exposed.entityId
+import zakadabar.stack.data.builtin.account.PrincipalBo
 
 class PrincipalDao(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<PrincipalDao>(PrincipalTable)
@@ -28,8 +28,8 @@ class PrincipalDao(id: EntityID<Long>) : LongEntity(id) {
     var lastLoginFail by PrincipalTable.lastLoginFail
     var loginFailCount by PrincipalTable.loginFailCount
 
-    fun toDto() = PrincipalDto(
-        id = id.recordId(),
+    fun toBo() = PrincipalBo(
+        id = id.entityId(),
 
         validated = validated,
         locked = locked,

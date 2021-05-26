@@ -17,6 +17,7 @@ class LandingStyles : ZkCssStyleSheet() {
         gridTemplateRows = "max-content 1fr max-content"
         width = "100%"
         height = "100%"
+        backgroundColor = theme.backgroundColor
     }
 
     val header by cssClass {
@@ -25,8 +26,8 @@ class LandingStyles : ZkCssStyleSheet() {
         alignItems = "center"
         justifyContent = "space-between"
         height = 60
-        backgroundColor = theme.backgroundColor
-        borderBottom = theme.border
+        backgroundColor = if (theme.name == GreenBlueTheme.NAME) theme.blockBackgroundColor else theme.backgroundColor
+        borderBottom = if (theme.name == GreenBlueTheme.NAME) theme.fixBorder else theme.border
     }
 
     val content by cssClass {

@@ -12,16 +12,16 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantTable
-import zakadabar.stack.backend.data.get
-import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.backend.data.entity.EntityBackend
+import zakadabar.stack.backend.exposed.get
 import zakadabar.stack.data.builtin.account.AccountByRole
-import zakadabar.stack.data.builtin.account.AccountPublicDto
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.builtin.account.AccountPublicBo
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
 
-object AccountPublicBackend : RecordBackend<AccountPublicDto>() {
+object AccountPublicBackend : EntityBackend<AccountPublicBo>() {
 
-    override val dtoClass = AccountPublicDto::class
+    override val boClass = AccountPublicBo::class
 
     override fun onInstallRoutes(route: Route) {
         route.crud()
@@ -41,17 +41,17 @@ object AccountPublicBackend : RecordBackend<AccountPublicDto>() {
                 AccountPrivateTable.email
             )
             .select { RoleTable.name eq query.roleName }
-            .map(AccountPrivateTable::toPublicDto)
+            .map(AccountPrivateTable::toPublicBo)
     }
 
     override fun all(executor: Executor) = transaction {
         AccountPrivateTable
             .selectAll()
-            .map(AccountPrivateTable::toPublicDto)
+            .map(AccountPrivateTable::toPublicBo)
     }
 
-    override fun read(executor: Executor, recordId: RecordId<AccountPublicDto>) = transaction {
-        AccountPrivateDao[recordId].toPublicDto(false)
+    override fun read(executor: Executor, entityId: EntityId<AccountPublicBo>) = transaction {
+        AccountPrivateDao[entityId].toPublicBo(false)
     }
 
 }

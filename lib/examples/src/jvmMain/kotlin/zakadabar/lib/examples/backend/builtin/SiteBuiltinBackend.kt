@@ -12,10 +12,9 @@ import kotlinx.coroutines.sync.withLock
 import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.lib.examples.data.builtin.ExampleQuery
 import zakadabar.stack.backend.authorize
-import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.data.DataConflictException
-import zakadabar.stack.data.record.LongRecordId
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
 
 /**
@@ -26,9 +25,9 @@ import zakadabar.stack.util.Executor
  * in this case that is fine as the operations are really fast (in-memory only,
  * on a very short list).
  */
-object SiteBuiltinBackend : RecordBackend<BuiltinDto>() {
+object SiteBuiltinBackend : EntityBackend<BuiltinDto>() {
 
-    override val dtoClass = BuiltinDto::class
+    override val boClass = BuiltinDto::class
 
     internal val mutex = Mutex()
 
@@ -61,7 +60,7 @@ object SiteBuiltinBackend : RecordBackend<BuiltinDto>() {
         if (dto.stringValue == "conflict") throw DataConflictException("stringValueConflict")
 
         mutex.withLock {
-            dto.id = LongRecordId(nextId++)
+            dto.id = EntityId(nextId++)
             recordStore.add(dto)
             clip()
         }
@@ -69,12 +68,12 @@ object SiteBuiltinBackend : RecordBackend<BuiltinDto>() {
         dto
     }
 
-    override fun read(executor: Executor, recordId: RecordId<BuiltinDto>) = runBlocking {
+    override fun read(executor: Executor, EntityId: EntityId<BuiltinDto>) = runBlocking {
 
         authorize(true)
 
         mutex.withLock {
-            recordStore.first { it.id == recordId }
+            recordStore.first { it.id == EntityId }
         }
     }
 
@@ -91,12 +90,12 @@ object SiteBuiltinBackend : RecordBackend<BuiltinDto>() {
         dto
     }
 
-    override fun delete(executor: Executor, recordId: RecordId<BuiltinDto>) = runBlocking {
+    override fun delete(executor: Executor, EntityId: EntityId<BuiltinDto>) = runBlocking {
 
         authorize(true)
 
         mutex.withLock {
-            recordStore.removeAll { it.id == recordId }
+            recordStore.removeAll { it.id == EntityId }
         }
 
         Unit

@@ -18,7 +18,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import zakadabar.stack.backend.data.builtin.resources.setting
 import zakadabar.stack.backend.data.builtin.session.SessionTable
-import zakadabar.stack.data.builtin.settings.SessionBackendSettingsDto
+import zakadabar.stack.data.builtin.settings.SessionBackendSettingsBo
 import java.io.ByteArrayOutputStream
 import kotlin.coroutines.coroutineContext
 
@@ -31,7 +31,7 @@ import kotlin.coroutines.coroutineContext
  */
 object SessionStorageSql : SessionStorage {
 
-    private val settings by setting<SessionBackendSettingsDto>("zakadabar.stack.session")
+    private val settings by setting<SessionBackendSettingsBo>("zakadabar.stack.session")
 
     /**
      * Cache access is synchronised with this mutex. We use cache for simple lookup

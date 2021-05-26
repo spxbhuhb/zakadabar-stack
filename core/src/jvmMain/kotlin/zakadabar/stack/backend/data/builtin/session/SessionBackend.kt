@@ -11,29 +11,29 @@ import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
 import zakadabar.stack.backend.data.builtin.resources.setting
-import zakadabar.stack.backend.data.record.RecordBackend
+import zakadabar.stack.backend.data.entity.EntityBackend
+import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.ktor.session.StackSession
-import zakadabar.stack.data.builtin.ActionStatusDto
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.builtin.account.*
-import zakadabar.stack.data.builtin.misc.ServerDescriptionDto
-import zakadabar.stack.data.record.EmptyRecordId
-import zakadabar.stack.data.record.LongRecordId
-import zakadabar.stack.data.record.RecordId
+import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
 
 /**
  * Session read (user account, roles), login and logout.
  */
-object SessionBackend : RecordBackend<SessionDto>() {
+object SessionBackend : EntityBackend<SessionBo>() {
 
-    private val serverDescription by setting<ServerDescriptionDto>("zakadabar.server.description")
+    private val serverDescription by setting<ServerDescriptionBo>("zakadabar.server.description")
 
-    override val dtoClass = SessionDto::class
+    override val boClass = SessionBo::class
 
     override var logActions = false // do not log passwords
 
     override fun onModuleLoad() {
-        + SessionTable
+        Sql.tables +=  SessionTable
     }
 
     override fun onInstallRoutes(route: Route) {
@@ -43,14 +43,14 @@ object SessionBackend : RecordBackend<SessionDto>() {
     }
 
     /**
-     * Read session data. Does not use record id as session is identified by Ktor.
+     * Read session data. Does not use entityId id as session is identified by Ktor.
      */
-    override fun read(call: ApplicationCall, executor: Executor, recordId: RecordId<SessionDto>) = transaction {
+    override fun read(call: ApplicationCall, executor: Executor, entityId: EntityId<SessionBo>) = transaction {
         val session = call.sessions.get<StackSession>() ?: throw IllegalStateException()
 
         if (session.account == Server.anonymous.id) {
-            SessionDto(
-                id = EmptyRecordId(),
+            SessionBo(
+                id = EntityId(),
                 account = Server.anonymous,
                 anonymous = true,
                 roles = emptyList(),
@@ -59,8 +59,8 @@ object SessionBackend : RecordBackend<SessionDto>() {
         } else {
             val (account, principalId) = Server.findAccountById(session.account)
             val (_, roleNames) = PrincipalBackend.roles(principalId)
-            SessionDto(
-                id = EmptyRecordId(),
+            SessionBo(
+                id = EntityId(),
                 account = account,
                 anonymous = false,
                 roles = roleNames,
@@ -69,26 +69,26 @@ object SessionBackend : RecordBackend<SessionDto>() {
         }
     }
 
-    private fun action(call: ApplicationCall, executor: Executor, action: LoginAction): ActionStatusDto {
+    private fun action(call: ApplicationCall, executor: Executor, action: LoginAction): ActionStatusBo {
 
         val result = try {
-            authenticate(executor.accountId, action.accountName, action.password.value, throwLocked = true) ?: return ActionStatusDto(false)
+            authenticate(executor.accountId, action.accountName, action.password.value, throwLocked = true) ?: return ActionStatusBo(false)
         } catch (ex: PrincipalBackend.AccountLockedException) {
-            return ActionStatusDto(false, "locked")
+            return ActionStatusBo(false, "locked")
         }
 
         val (account, principalId) = result
 
         val (roleIds, roleNames) = PrincipalBackend.roles(principalId)
 
-        if (StackRoles.siteMember !in roleNames) return ActionStatusDto(false)
+        if (StackRoles.siteMember !in roleNames) return ActionStatusBo(false)
 
-        call.sessions.set(StackSession(LongRecordId(account.id.toLong()), roleIds, roleNames))
+        call.sessions.set(StackSession(EntityId(account.id.toLong()), roleIds, roleNames))
 
-        return ActionStatusDto(true)
+        return ActionStatusBo(true)
     }
 
-    fun authenticate(executorAccountId: RecordId<AccountPrivateDto>, accountName: String, password: String, throwLocked: Boolean = false): Pair<AccountPublicDto, RecordId<PrincipalDto>>? {
+    fun authenticate(executorAccountId: EntityId<out BaseBo>, accountName: String, password: String, throwLocked: Boolean = false): Pair<AccountPublicBo, EntityId<PrincipalBo>>? {
         val (account, principalId) = try {
 
             val (account, principalId) = Server.findAccountByName(accountName)
@@ -123,14 +123,14 @@ object SessionBackend : RecordBackend<SessionDto>() {
     }
 
     @Suppress("UNUSED_PARAMETER") // action is needed here because of route mapping
-    private fun action(call: ApplicationCall, executor: Executor, action: LogoutAction): ActionStatusDto {
+    private fun action(call: ApplicationCall, executor: Executor, action: LogoutAction): ActionStatusBo {
 
         val old = call.sessions.get<StackSession>() !!
 
         logger.info("${executor.accountId}: /logout old=${old.account} new=${Server.anonymous.id}")
 
-        call.sessions.set(StackSession(LongRecordId(Server.anonymous.id.toLong()), emptyList(), emptyList()))
+        call.sessions.set(StackSession(EntityId(Server.anonymous.id.toLong()), emptyList(), emptyList()))
 
-        return ActionStatusDto(success = true)
+        return ActionStatusBo(success = true)
     }
 }

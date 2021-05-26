@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.form.structure
 
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
@@ -14,7 +14,7 @@ import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.util.io
 
-open class ZkFormButtons<T : DtoBase>(
+open class ZkFormButtons<T : BaseBo>(
     private val form: ZkForm<T>,
     private val execute: () -> Unit = { form.submit() },
     private val submitLabel: String? = null
@@ -32,7 +32,7 @@ open class ZkFormButtons<T : DtoBase>(
             ZkElementMode.Read -> {
                 + row(ZkFormStyles.buttons) {
                     + backButton()
-                    form.openUpdate?.let { + submitButton(submitLabel ?: stringStore.edit) { it(form.dto) } }
+                    form.openUpdate?.let { + submitButton(submitLabel ?: stringStore.edit) { it(form.bo) } }
                     + progressIndicator()
                 }
             }

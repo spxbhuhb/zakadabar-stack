@@ -12,15 +12,15 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.5.20.1"
+version = "2021.5.26"
 
 val isSnapshot = version.toString().contains("SNAPSHOT")
 
 // common
-val ktorVersion = "1.4.0"
+val ktorVersion = "1.4.3"
 val coroutinesVersion = "1.3.9"
 val serializationVersion = "1.0.0-RC2"
-val datetimeVersion = "0.1.1"
+val datetimeVersion = "0.2.0"
 val cliktVersion = "2.8.0"
 
 // jvm
@@ -61,8 +61,6 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
                 api("org.jetbrains.kotlinx:kotlinx-datetime:$datetimeVersion")
-                api("io.ktor:ktor-client-core:$ktorVersion")
-                api("io.ktor:ktor-client-websockets:$ktorVersion")
             }
         }
 
@@ -100,9 +98,7 @@ kotlin {
 
         @Suppress("UNUSED_VARIABLE")
         val jsMain by getting {
-            dependencies {
-                api("io.ktor:ktor-client-js:$ktorVersion")
-            }
+
         }
         @Suppress("UNUSED_VARIABLE")
         val jsTest by getting {

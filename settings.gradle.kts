@@ -12,8 +12,14 @@ pluginManagement {
 }
 
 include("core")
+
+include("exp:content")
+
+include("lib:accounts")
+include("lib:blobs")
 include("lib:cards")
-include("lib:kodomat")
+include("lib:bender")
 include("lib:examples")
 include("lib:markdown")
+
 include("site")

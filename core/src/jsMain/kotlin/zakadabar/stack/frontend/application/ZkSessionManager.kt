@@ -6,8 +6,8 @@ package zakadabar.stack.frontend.application
 import kotlinx.browser.window
 import kotlinx.coroutines.channels.Channel
 import zakadabar.stack.data.builtin.account.LogoutAction
-import zakadabar.stack.data.builtin.account.SessionDto
-import zakadabar.stack.data.record.StringRecordId
+import zakadabar.stack.data.builtin.account.SessionBo
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.builtin.modal.ZkMessageDialog
 import zakadabar.stack.frontend.builtin.pages.account.login.RenewLoginDialog
 import zakadabar.stack.frontend.util.io
@@ -30,7 +30,7 @@ class ZkSessionManager {
      */
     suspend fun init() {
         io { renewTask() }
-        val session = SessionDto.read(StringRecordId("own"))
+        val session = SessionBo.read(EntityId("own"))
         application.executor = ZkExecutor(session.account, session.anonymous, session.roles)
         application.serverDescription = session.serverDescription
     }
@@ -76,7 +76,7 @@ class ZkSessionManager {
 
                 // This is the latest session info from the server.
 
-                var session = SessionDto.read(StringRecordId("own"))
+                var session = SessionBo.read(EntityId("own"))
 
                 // When the id is the same we are OK. In this case we have to go on with the
                 // original account information to keep the consistency of the UI. This happens
@@ -95,7 +95,7 @@ class ZkSessionManager {
 
                 // At this point the should have have a proper session.
 
-                session = SessionDto.read(StringRecordId("own"))
+                session = SessionBo.read(EntityId("own"))
 
                 if (session.account.id == application.executor.account.id) {
                     responseChannel.send(true)

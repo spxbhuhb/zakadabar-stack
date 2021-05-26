@@ -16,11 +16,11 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptStringSelectField<T : DtoBase>(
+open class ZkOptStringSelectField<T : BaseBo>(
     form: ZkForm<T>,
     val prop: KMutableProperty0<String?>,
     sortOptions: Boolean = true,

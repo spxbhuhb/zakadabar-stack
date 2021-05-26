@@ -5,8 +5,8 @@ package zakadabar.stack.data.builtin.resources
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
-import zakadabar.stack.data.query.QueryDto
-import zakadabar.stack.data.query.QueryDtoCompanion
+import zakadabar.stack.data.query.QueryBo
+import zakadabar.stack.data.query.QueryBoCompanion
 
 /**
  * Get all strings for the given locale
@@ -14,10 +14,10 @@ import zakadabar.stack.data.query.QueryDtoCompanion
 @Serializable
 data class TranslationsByLocale(
     var locale: String
-) : QueryDto<TranslationDto> {
+) : QueryBo<TranslationBo> {
 
-    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(TranslationDto.serializer()))
+    override suspend fun execute() = comm.query(this, serializer(), ListSerializer(TranslationBo.serializer()))
 
-    companion object : QueryDtoCompanion<TranslationDto>(TranslationDto.dtoNamespace)
+    companion object : QueryBoCompanion<TranslationBo>(TranslationBo.boNamespace)
 
 }

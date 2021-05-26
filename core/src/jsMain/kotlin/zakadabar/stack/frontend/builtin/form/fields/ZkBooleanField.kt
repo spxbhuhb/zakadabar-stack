@@ -17,7 +17,7 @@
 package zakadabar.stack.frontend.builtin.form.fields
 
 import org.w3c.dom.events.KeyboardEvent
-import zakadabar.stack.data.DtoBase
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.zkFormStyles
@@ -25,7 +25,7 @@ import zakadabar.stack.frontend.builtin.input.ZkCheckBox
 import zakadabar.stack.frontend.resources.ZkIcons
 import kotlin.reflect.KMutableProperty0
 
-open class ZkBooleanField<T : DtoBase>(
+open class ZkBooleanField<T : BaseBo>(
     form: ZkForm<T>,
     val prop: KMutableProperty0<Boolean>
 ) : ZkFieldBase<T, Boolean>(

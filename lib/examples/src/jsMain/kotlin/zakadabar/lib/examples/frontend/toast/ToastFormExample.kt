@@ -37,7 +37,7 @@ class ToastFormExample(
     class InlineForm : ZkForm<BuiltinDto>() {
 
         override fun onConfigure() {
-            dto = default { }
+            bo = default { }
             mode = ZkElementMode.Action
             setAppTitle = false
         }
@@ -48,11 +48,11 @@ class ToastFormExample(
             element.style.margin = "20px"
 
             + section("This is a form in a toast!") {
-                + dto::id
-                + dto::doubleValue
-                + dto::instantValue
-                + dto::optInstantValue
-                + dto::stringValue
+                + bo::id
+                + bo::doubleValue
+                + bo::instantValue
+                + bo::optInstantValue
+                + bo::stringValue
             }
         }
     }
