@@ -8,7 +8,7 @@ Most BLs extend [EntityBusinessLogicBase](/src/jvmMain/kotlin/zakadabar/stack/ba
 This class hides most of the implementation details like Ktor routing, serialization, data validation and so on.
 It lets you concentrate on the business code you have to implement.
 
-## Anatomy of EntityBusinessLogicBase
+## EntityBusinessLogicBase
 
 EBLB (`EntityBusinessLogicBase`) provides many functions out-of-the-box:
 
@@ -22,6 +22,8 @@ EBLB (`EntityBusinessLogicBase`) provides many functions out-of-the-box:
 All of these have sensible defaults, except authorization which you have to choose yourself.
 The general pattern is that there is a variable in EBLB which contains the default, and you
 can override it if you want. A very minimal example:
+
+### Minimal EBLB
 
 ```kotlin
 class SimpleExampleBlGen : EntityBusinessLogicBase<SimpleExampleBo>(
@@ -47,50 +49,76 @@ can extend it.
 `authorizer` is an instance of [Authorizer](./Authorizer.md). Each business logic needs one, it 
 performs authorization of incoming requests.
 
-A somewhat more complex example:
+### Complex EBLB
 
 ```kotlin
-class PrincipalBl : EntityBusinessLogicBase<PrincipalBo>(
-    boClass = PrincipalBo::class
+
+class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
+    boClass = SimpleExampleBo::class
 ) {
 
-    private val settings by setting<ModuleSettingsBo>("zakadabar.lib.accounts")
+    override val pa = SimpleExampleExposedPa()
 
-    override val pa = PrincipalExposedPaGen()
-
-    override val authorizer = SimpleRoleAuthorizer<PrincipalBo> {
-        all = StackRoles.securityOfficer
-        action(PasswordChangeAction::class, StackRoles.siteMember)
+    override val authorizer = SimpleRoleAuthorizer<SimpleExampleBo> {
+        all = StackRoles.siteMember
+        action(SimpleExampleAction::class, StackRoles.siteMember)
+        query(SimpleExampleQuery::class, StackRoles.siteMember)
     }
 
     override val router = router {
-        action(PasswordChangeAction::class, ::action)
+        action(SimpleExampleAction::class, ::action)
+        query(SimpleExampleQuery::class, ::query)
+    }
+
+    override val validator = object : Validator<SimpleExampleBo> {
+        override fun validateCreate(executor: Executor, bo: SimpleExampleBo) {
+            println("Incoming BO is ${if (bo.isValid) "valid" else "invalid"}.")
+        }
     }
 
     override val auditor = auditor {
         includeData = false
     }
 
-    override fun update(executor: Executor, bo: PrincipalBo) : PrincipalBo {
-        // ... perform update ...
+    override fun create(executor: Executor, bo: SimpleExampleBo) : SimpleExampleBo {
+        if (pa.count() >= 1000) throw BadRequestException("table limit reached")
+
+        return pa.create(bo)
+            .let {
+                it.name = bo.name.lowercase()
+                pa.update(it)
+            }
     }
 
-    private fun action(executor: Executor, action: PasswordChangeAction) : ActionStatusBo {
-        // ... execute the action ...
+    override fun update(executor: Executor, bo: SimpleExampleBo) =
+        pa.read(bo.id)
+            .let {
+                it.name = bo.name.lowercase()
+                pa.update(it)
+            }
+
+    private fun action(executor: Executor, action: SimpleExampleAction): ActionStatusBo {
+        println("Account ${executor.accountId} executed SimpleExampleAction")
+        return ActionStatusBo(reason = "This is a successful test action invocation.")
     }
+
+    private fun query(executor: Executor, query: SimpleExampleQuery) =
+        pa.query(query)
+
 }
 ```
 
-`settings` - is an instance of `ModuleSettingsBo` (specific to this module) that is loaded
-from a setting file or from persistence. See [Settings](./Settings.md) for details.
-
-`authorizer` - Here it has an action added. When an account wants to perform this action, it
+`authorizer` - Here it has an action and a query added. When an account wants to perform this action, it
 needs the site member role.
 
 `router` - As this business logic provides an action, the routing for that specific action has to 
 be added. This one binds the `PasswordChangeAction` BO to the `action` method of this class
 with the `PasswordChangeAction` parameter. See [Routing](./Routing.md) and [URLs](../common/URLs.md) 
 for more information.
+
+`validator` - Each data modification request is validated by a validator before it is passed to the BL.
+The default validator uses the `isValid` field of the BO. This field calls the standard validation
+from `BoSchema`.
 
 `auditor` - Auditors responsible for auditing system access. Here we configure the auditor
 such a way that the request data is not included in the audit. In this case it is 
@@ -101,3 +129,5 @@ information. See [Auditor](./Auditor.md) for more information.
 processing steps there.
 
 `action` - This is an action the BL offers as an endpoint.
+
+`query` - This is a query the BL offers as an endpoint.

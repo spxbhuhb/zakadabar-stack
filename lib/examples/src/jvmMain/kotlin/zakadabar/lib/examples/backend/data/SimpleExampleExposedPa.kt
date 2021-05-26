@@ -4,19 +4,21 @@
 package zakadabar.lib.examples.backend.data
 
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import zakadabar.lib.examples.data.SimpleExampleQuery
 import zakadabar.lib.examples.data.SimpleQueryResult
 
 class SimpleExampleExposedPa : SimpleExampleExposedPaGen() {
 
+    fun count() = table.selectAll().count()
+
     fun query(query: SimpleExampleQuery) =
         table
-            .select { table.name like query.name }
+            .select { table.name like "%${query.name}%" }
             .map {
                 SimpleQueryResult(
                     name2x = it[table.name] + it[table.name]
                 )
             }
-
 
 }

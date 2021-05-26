@@ -3,12 +3,12 @@
  */
 package zakadabar.lib.examples.backend.data
 
+import io.ktor.features.*
 import zakadabar.lib.examples.data.SimpleExampleAction
 import zakadabar.lib.examples.data.SimpleExampleBo
 import zakadabar.lib.examples.data.SimpleExampleQuery
-import zakadabar.stack.StackRoles
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
-import zakadabar.stack.backend.data.entity.EntityBusinessLogicBase
+import zakadabar.stack.backend.authorize.UnsafeAuthorizer
+import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.validate.Validator
 import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.util.Executor
@@ -19,14 +19,16 @@ class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
 
     override val pa = SimpleExampleExposedPa()
 
-    override val authorizer = SimpleRoleAuthorizer<SimpleExampleBo> {
-        all = StackRoles.siteMember
-        action(SimpleExampleAction::class, StackRoles.siteMember)
-        query(SimpleExampleQuery::class, StackRoles.siteMember)
-    }
+    override val authorizer = UnsafeAuthorizer<SimpleExampleBo>()
+//    SimpleRoleAuthorizer<SimpleExampleBo> {
+//        all = StackRoles.siteMember
+//        action(SimpleExampleAction::class, StackRoles.siteMember)
+//        query(SimpleExampleQuery::class, StackRoles.siteMember)
+//    }
 
     override val router = router {
         action(SimpleExampleAction::class, ::action)
+        query(SimpleExampleQuery::class, ::query)
     }
 
     override val validator = object : Validator<SimpleExampleBo> {
@@ -39,6 +41,16 @@ class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
         includeData = false
     }
 
+    override fun create(executor: Executor, bo: SimpleExampleBo) : SimpleExampleBo {
+        if (pa.count() >= 1000) throw BadRequestException("table limit reached")
+
+        return pa.create(bo)
+            .let {
+                it.name = bo.name.lowercase()
+                pa.update(it)
+            }
+    }
+
     override fun update(executor: Executor, bo: SimpleExampleBo) =
         pa.read(bo.id)
             .let {
@@ -48,7 +60,7 @@ class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
 
     private fun action(executor: Executor, action: SimpleExampleAction): ActionStatusBo {
         println("Account ${executor.accountId} executed SimpleExampleAction")
-        return ActionStatusBo()
+        return ActionStatusBo(reason = "This is a successful test action invocation.")
     }
 
     private fun query(executor: Executor, query: SimpleExampleQuery) =

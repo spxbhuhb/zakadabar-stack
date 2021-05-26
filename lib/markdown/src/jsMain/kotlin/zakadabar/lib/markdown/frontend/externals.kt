@@ -13,3 +13,15 @@ external object hljs {
 @JsModule("highlight.js/lib/languages/kotlin")
 @JsNonModule
 external object hljsKotlin
+
+@JsModule("highlight.js/lib/languages/yaml")
+@JsNonModule
+external object hljsYaml
+
+@JsModule("highlight.js/lib/languages/sql")
+@JsNonModule
+external object hljsSql
+
+@JsModule("highlight.js/lib/languages/xml")
+@JsNonModule
+external object hljsXml

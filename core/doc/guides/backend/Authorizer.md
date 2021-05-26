@@ -12,8 +12,8 @@ of the methods to kick off full processing.
 
 ## Built-in Authorizers
 
-[UnsafeAuthorizer] - Allows everything. Must be explicitly enabled at server startup.
-[SimpleRoleAuthorizer] - Role-based authorization.
+[UnsafeAuthorizer](/src/jvmMain/kotlin/zakadabar/stack/backend/authorize/UnsafeAuthorizer.kt) - Allows everything. Must be explicitly enabled at server startup.
+[SimpleRoleAuthorizer](/src/jvmMain/kotlin/zakadabar/stack/backend/authorize/SimpleRoleAuthorizer.kt)  - Role-based authorization.
 
 ## Write an Authorizer
 

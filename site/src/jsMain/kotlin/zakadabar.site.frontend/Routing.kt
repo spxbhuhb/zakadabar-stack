@@ -39,6 +39,7 @@ class Routing : ZkAppRouting(DefaultLayout, Landing) {
         + LegalNotices
         + Credits
         + ServicesAndSupport
+        + Experimental
 
         + ExampleSideBarTarget
         + ExampleMarkdownSideBarTarget

@@ -78,7 +78,7 @@ This call sets the `executor` property of `ZkApplication`. For details see: [Acc
 
 ## Helper Methods on JavaScript Frontend
 
-[ZkApplication](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt)
+[application](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt):
 
 ```kotlin
 if (hasRole("role-name")) {
@@ -86,7 +86,7 @@ if (hasRole("role-name")) {
 }
 ```
 
-[ZkElement](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/ZkElement.kt)
+[ZkElement](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/ZkElement.kt):
 
 ```kotlin
 ifNotAnonymous {
@@ -108,9 +108,8 @@ withoutRole("role-name") {
 
 ## Get Account of the User on the Backend
 
-For CRUD, queries, actions and BLOBs the called backend method receives
-an [Executor](/src/jvmMain/kotlin/zakadabar/stack/util/Executor.kt)
-instance.
+For CRUD, queries, actions and BLOBs the called business logic method receives
+an [Executor](/src/jvmMain/kotlin/zakadabar/stack/util/Executor.kt) instance.
 
 ```kotlin
 open class Executor internal constructor(
@@ -130,9 +129,24 @@ open class Executor internal constructor(
 }
 ```
 
-## Helper Methods on Backend
+## Business Logic Authorization
 
-[authorize.kt](/src/jvmMain/kotlin/zakadabar/stack/backend/authorize.kt)
+See [Authorizer](../backend/Authorizer.md) for more information about authorization
+in business logic modules.
+
+## Manual Authorization Checks
+
+<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Authorizer Are Preferred">
+
+While these methods are supported, it is better to use the [Authorizer](../backend/Authorizer.md)
+of business logics. The reason is that the authorizer is a single point of authorization
+which can be analyzed programmatically. In the future we plan to implement features based
+on the authorizers like "Endpoint Security Report" or configuration of authorizers from
+the interface (which role is needed for example).
+
+</div>
+
+[authorize.kt](/src/jvmMain/kotlin/zakadabar/stack/backend/authorize/authorize.kt)
 
 ```kotlin
 authorize(executor, "role-name") // throws Unauthorized when doesn't have the role

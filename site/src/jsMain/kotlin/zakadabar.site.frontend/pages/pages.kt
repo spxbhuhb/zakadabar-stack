@@ -69,9 +69,18 @@ object ServicesAndSupport : MarkdownPage(
     SiteMarkdownContext("ServicesAndSupport", "misc/")
 )
 
+object Experimental : MarkdownPage(
+    "/api/$contentNamespace/internals/Experimental.md",
+    SiteMarkdownContext("Experimental", "internals/")
+)
+
 object BenderPage : ZkPage() {
     override fun onCreate() {
-        + Bender(ClassGenerator(), "/api/$contentNamespace/template/bender/bo.md")
+        + Bender(
+            ClassGenerator(),
+            "/api/$contentNamespace/template/bender/bo.md",
+            markdownContext = { SiteMarkdownContext("Documentation", "guides/", toc = false, hashes = false) }
+        )
     }
 }
 

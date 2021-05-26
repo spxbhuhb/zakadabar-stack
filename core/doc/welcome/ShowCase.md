@@ -30,6 +30,10 @@ This page shows the browser frontend components included with the stack.
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="disabled"></div>
 
+# CRUD [documentation](../guides/browser/builtin/Crud.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/crud/CrudSimpleExample.kt)
+
+<div data-zk-enrich="CrudSimpleExample"></div>
+
 # Forms [documentation](../guides/browser/builtin/Forms.md)
 
 ## Boolean Fields [documentation](../guides/browser/builtin/Forms.md) [source code](../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormBooleanExample.kt)

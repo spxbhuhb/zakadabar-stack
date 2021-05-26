@@ -17,7 +17,7 @@ class SimpleExampleAction(
 
 ) : ActionBo<ActionStatusBo> {
 
-    companion object : ActionBoCompanion<SimpleExampleAction>(SimpleExampleAction.boNamespace)
+    companion object : ActionBoCompanion<SimpleExampleAction>(SimpleExampleBo.boNamespace)
 
     override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
 

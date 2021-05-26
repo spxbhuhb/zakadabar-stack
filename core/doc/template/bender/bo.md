@@ -1,34 +1,5 @@
-Bender is a simple tool for generating BO classes for Zakadabar.
-
-Usage:
-
-1. fill the fields above, 
-1. click on the generate button - the source codes will be displayed below,
-1. click on the copy buttons (above) or the copy icons (below, top-right corner of code blocks),
-1. paste what's on the clipboard to the appropriate directory in IDEA.
-
-Bender generates these codes:
-
-* common: data model and schema,
-* browser: table, form, crud,
-* backend: business logic, exposed persistence api
-
-Bender is **experimental**: we hope that it works.
-
-Supported types (case-insensitive):
-
-* Boolean
-* Double
-* Enum
-* Instant
-* Int
-* Long
-* Reference
-* String
-* UUID
-
-Bender preforms all code generation on client side, your data model does not go
-out of your computer.
+Bender is a simple tool for generating BO classes for Zakadabar. For
+the user guide see [Bender](/doc/guides/tools/Bender.md)
 
 ## Common
 

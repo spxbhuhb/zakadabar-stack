@@ -44,8 +44,10 @@ import zakadabar.stack.frontend.resources.theme
 
 class SiteMarkdownContext(
     viewName: String,
-    val path: String
-) : ZkMarkdownContext(baseURI = "/${application.locale}/$viewName/$path") {
+    val path: String,
+    toc: Boolean = true,
+    hashes : Boolean = true
+) : ZkMarkdownContext(baseURI = "/${application.locale}/$viewName/$path", toc, hashes) {
 
     private val github = "https://github.com/spxbhuhb/zakadabar-stack/tree/master"
     private val coreSrc = "${github}/core/"

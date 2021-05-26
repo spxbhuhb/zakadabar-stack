@@ -14,6 +14,7 @@ import zakadabar.stack.frontend.util.io
 class Bender(
     private val classGenerator: ClassGenerator,
     private val templateUrl: String,
+    private val markdownContext : () -> ZkMarkdownContext = { ZkMarkdownContext(toc = false, hashes = false) }
 ) : ZkElement() {
 
     private val resultContainer = ZkElement()
@@ -26,11 +27,11 @@ class Bender(
             template = window.fetch(templateUrl).await().text().await()
 
             + column {
-                + BoEditor(classGenerator, resultContainer, template)
+                + BoEditor(classGenerator, resultContainer, template, markdownContext)
                 + resultContainer
             }
 
-            resultContainer += MarkdownView(sourceText = template, context = ZkMarkdownContext(toc = false, hashes = false))
+            resultContainer += MarkdownView(sourceText = template, context = markdownContext())
         }
 
     }

@@ -5,7 +5,7 @@ package zakadabar.site.backend
 
 import zakadabar.lib.examples.backend.builtin.SiteBuiltinBackend
 import zakadabar.lib.examples.backend.builtin.SiteExampleReferenceBackend
-import zakadabar.lib.examples.backend.data.SimpleExampleBlGen
+import zakadabar.lib.examples.backend.data.SimpleExampleBl
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize.UnsafeAuthorizer
@@ -43,8 +43,8 @@ object Module : BackendModule {
 
         roleBl = RoleBackend
 
-        UnsafeAuthorizer.enabled = false
-        Server += SimpleExampleBlGen()
+        UnsafeAuthorizer.enabled = true
+        Server += SimpleExampleBl()
     }
 
 }

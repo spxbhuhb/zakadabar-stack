@@ -15,6 +15,10 @@ open class MarkdownStyles : ZkCssStyleSheet() {
 
     init {
         hljs.registerLanguage("kotlin", hljsKotlin)
+        hljs.registerLanguage("yaml", hljsYaml)
+        hljs.registerLanguage("sql", hljsSql)
+        hljs.registerLanguage("xml", hljsXml)
+        hljs.registerLanguage("html", hljsXml)
     }
 
     @Suppress("unused") // this is a CSS import, used by hljs
