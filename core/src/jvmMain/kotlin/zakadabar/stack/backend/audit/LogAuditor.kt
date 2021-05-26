@@ -5,7 +5,7 @@ package zakadabar.stack.backend.audit
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
-import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
@@ -17,12 +17,15 @@ import kotlin.reflect.full.createType
  * A simple auditor that writes the audit into the logger (on INFO channel)
  * passed in the constructor.
  *
- * @param  logger       The logger to write into.
- * @param  includeData  When true, content of the BOs is also written for create and update.
+ * @param  forInstance  The instance (typically a BL) that uses the auditor.
+ *
+ * @property  includeData  When true, content of the BOs is also written for create and update.
  */
 open class LogAuditor<T : EntityBo<T>>(
-    private val logger : Logger
+    forInstance : Any
 ) : Auditor<T> {
+
+    private val logger = LoggerFactory.getLogger(forInstance::class.simpleName) !!
 
     override var includeData: Boolean = true
 

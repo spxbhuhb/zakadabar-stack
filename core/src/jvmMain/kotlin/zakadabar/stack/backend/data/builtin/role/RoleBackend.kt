@@ -10,6 +10,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
+import zakadabar.stack.backend.authorize.RoleBlProvider
 import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.exposed.get
@@ -17,7 +18,7 @@ import zakadabar.stack.data.builtin.account.RoleBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
 
-object RoleBackend : EntityBackend<RoleBo>() {
+object RoleBackend : EntityBackend<RoleBo>(), RoleBlProvider {
 
     override val boClass = RoleBo::class
 
@@ -82,4 +83,6 @@ object RoleBackend : EntityBackend<RoleBo>() {
 
         if (value == null) null else EntityId(value)
     }
+
+    override fun getByName(name: String) = findForName(name) ?: throw NoSuchElementException("role $name cannot be found")
 }
