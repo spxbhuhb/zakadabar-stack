@@ -33,4 +33,15 @@ class SiteStyles : ZkCssStyleSheet() {
         alignItems = "center"
     }
 
+    val alphaStyle by cssClass {
+        backgroundColor = theme.warningColor
+        color = theme.warningPair
+        fontSize = "75%"
+        fontFamily = "'JetBrains Mono', fixed"
+        marginLeft = 10
+        padding = "2px 6px 2px 6px"
+        borderRadius = theme.cornerRadius
+        cursor = "pointer"
+    }
+
 }

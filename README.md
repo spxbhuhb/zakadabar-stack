@@ -6,7 +6,7 @@
 
 A Kotlin Multiplatform library for full-stack software development.
 
-Goal is to implement small business applications very fast without re-doing the same programming task again and again.
+Goal is to implement business applications real fast while in the flow, thinking about `what`, not the `how`.
 
 Project status is **alpha**,
 see [components stability](https://kotlinlang.org/docs/reference/evolution/components-stability.html).

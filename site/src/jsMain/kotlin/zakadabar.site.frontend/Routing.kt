@@ -40,6 +40,7 @@ class Routing : ZkAppRouting(DefaultLayout, Landing) {
         + Credits
         + ServicesAndSupport
         + Experimental
+        + ProjectStatus
 
         + ExampleSideBarTarget
         + ExampleMarkdownSideBarTarget

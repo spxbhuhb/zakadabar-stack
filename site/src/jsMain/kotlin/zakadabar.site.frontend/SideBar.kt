@@ -53,6 +53,7 @@ class SideBar : ZkSideBar() {
             }
 
             + section(strings.other) {
+                + item(ProjectStatus)
                 + group(WhatsNew, text = strings.changeLog) {
                     MarkdownNav().parse(changeLogSource).forEach {
                         + it.changelog()

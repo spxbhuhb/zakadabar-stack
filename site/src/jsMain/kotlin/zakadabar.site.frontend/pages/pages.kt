@@ -75,6 +75,11 @@ object Experimental : MarkdownPage(
     SiteMarkdownContext("Experimental", "internals/")
 )
 
+object ProjectStatus : MarkdownPage(
+    "/api/$contentNamespace/misc/ProjectStatus.md",
+    SiteMarkdownContext("ProjectStatus", "misc/")
+)
+
 object BenderPage : ZkPage() {
     override fun onCreate() {
         + Bender(

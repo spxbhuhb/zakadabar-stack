@@ -6,6 +6,8 @@ package zakadabar.site.frontend
 import zakadabar.site.frontend.components.HeaderActions
 import zakadabar.site.frontend.components.SiteLogo
 import zakadabar.site.frontend.pages.Landing
+import zakadabar.site.frontend.pages.ProjectStatus
+import zakadabar.site.frontend.resources.siteStyles
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.layout.ZkDefaultLayout
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppHandle
@@ -26,7 +28,19 @@ object DefaultLayout : ZkDefaultLayout(spanHeader = true) {
     }
 
     class PilotTitle : ZkAppTitle(
-        application.serverDescription.version,
+        application.serverDescription.name,
         contextElements = emptyList()
-    )
+    ) {
+        override fun onCreate() {
+            + row {
+                + application.serverDescription.version
+                + div(siteStyles.alphaStyle) {
+                    + "ALPHA"
+                    on("click") {
+                        application.changeNavState(ProjectStatus)
+                    }
+                }
+            }
+        }
+    }
 }

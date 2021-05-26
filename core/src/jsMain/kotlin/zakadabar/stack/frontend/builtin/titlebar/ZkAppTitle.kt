@@ -6,7 +6,12 @@ package zakadabar.stack.frontend.builtin.titlebar
 import zakadabar.stack.frontend.builtin.ZkElement
 
 /**
- * Element to shown in the application title bar as the title of the current page.
+ * Element to shown in the application title bar as the title of the current page. You can extend
+ * this class and render any kind of title you would like.
+ *
+ * @param  text   The textual title of the application/page. This will be shown in
+ *                the browser title, history, etc.
+ * @param  contextElements  Context elements of the title bar that are active on this specific page.
  */
 open class ZkAppTitle(
     open val text: String,

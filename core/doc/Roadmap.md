@@ -1,19 +1,7 @@
 # Roadmap
 
-<div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Pilot">
-
-zakadabar.io runs in pilot mode, some parts might be incomplete or missing.
-We are trying our best to finish up everything and give you a good experience.
-
-Please let us know in you find any errors, typos, inconsistencies, unclear
-documentation etc. Check [Get Help](/en/GetHelp)  for the channels of communication.
-
-Thank you for your interest, we hope that you enjoy your stay on `zakadabar.io`.
-
-</div>
-
-This roadmap is something we would like to follow but there is <b>no guarantee at all</b>
-that we'll be able to do so.
+This roadmap is something we would like to follow. Please note that we cannot guarantee
+that well able to do so.
 
 ## 2021 May
 
@@ -23,8 +11,6 @@ that we'll be able to do so.
 ### Core
 
 * move all built-in namespaces to "zk-*"
-* add automatic validation for action and query backends  
-* add protection against bots  
 * responsive components:
     * table
     * form
