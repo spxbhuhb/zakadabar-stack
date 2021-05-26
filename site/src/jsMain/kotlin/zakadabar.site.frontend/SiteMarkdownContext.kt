@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.site.frontend.pages
+package zakadabar.site.frontend
 
 import org.intellij.markdown.html.resolveToStringSafe
 import org.w3c.dom.HTMLElement
@@ -28,6 +28,7 @@ import zakadabar.lib.examples.frontend.note.NoteFormExample
 import zakadabar.lib.examples.frontend.pages.PageExample
 import zakadabar.lib.examples.frontend.sidebar.SideBarExample
 import zakadabar.lib.examples.frontend.sidebar.SideBarMarkdownExample
+import zakadabar.lib.examples.frontend.table.TableBigExample
 import zakadabar.lib.examples.frontend.table.TableExample
 import zakadabar.lib.examples.frontend.theme.ThemeExample
 import zakadabar.lib.examples.frontend.toast.ToastAutoHideExample
@@ -119,6 +120,7 @@ class SiteMarkdownContext(
             "TabContainerExample" -> TabContainerExample(htmlElement)
 
             "TableExample" -> TableExample(htmlElement)
+            "TableBigExample" -> TableBigExample(htmlElement)
 
             "ThemeExample" -> ThemeExample(htmlElement)
             "ThemeShowCase" -> ThemeShowCase(htmlElement)

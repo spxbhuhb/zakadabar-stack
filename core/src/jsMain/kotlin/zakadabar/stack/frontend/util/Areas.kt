@@ -8,7 +8,6 @@ import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.util.w3c.IntersectionObserver
 import zakadabar.stack.frontend.util.w3c.IntersectionObserverEntry
-import zakadabar.stack.util.stdoutTrace
 import kotlin.math.floor
 
 /**
@@ -75,7 +74,7 @@ class Areas(
             start = if (activeAreas.size == 0) 0f else activeAreas.first() * areaHeight
             end = if (activeAreas.size == 0) 0f else (activeAreas.last() + 1) * areaHeight
 
-            if (trace > 150) stdoutTrace("areas changed", "start: $start, end: $end, active: $activeAreas")
+            // stdoutTrace("areas changed", "start: $start, end: $end, active: $activeAreas")
 
             changed()
 
@@ -101,6 +100,8 @@ class Areas(
         }
 
         if (areaNumber < neededAreaNumber) {
+            val area = document.getElementById("${id}-area-${areaNumber-1}") as? HTMLElement
+            area?.style?.height = "${areaHeight}px"
             addAreas(neededAreaNumber)
         } else {
             removeAreas(neededAreaNumber)

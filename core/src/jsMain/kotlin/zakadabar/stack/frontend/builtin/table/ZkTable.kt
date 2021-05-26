@@ -268,7 +268,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             areas.adjustAreas(height.toFloat())
             areas.start = 0f
             areas.end = areas.areaHeight * areas.activeAreas.size
-            areas.element.scrollIntoView(true)
+            areas.element.scrollTop = 0.0
 
             + placeHolderRow
 

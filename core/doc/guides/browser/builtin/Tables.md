@@ -202,6 +202,12 @@ class Table : ZkTable<ShipDto>() {
 }
 ```
 
+## Table With Many Rows
+
+This table contains 10.000 generated rows.
+
+<div data-zk-enrich="TableBigExample"></div>
+
 ## Performance
 
 The table should work properly up to 100.000 rows.
