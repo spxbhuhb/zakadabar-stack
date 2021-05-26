@@ -20,7 +20,7 @@ private lateinit var active : ZkTheme
  *                 desired theme in this list.
  */
 fun initTheme(vararg themes : ZkTheme) {
-    val themeName = (executor.account.theme ?: window.sessionStorage.getItem(themeStorageKey)) ?: "default-light"
+    val themeName = (executor.account.theme ?: window.localStorage.getItem(themeStorageKey)) ?: "default-light"
     theme = themes.firstOrNull { it.name == themeName } ?: if (themes.isEmpty()) ZkBuiltinLightTheme() else themes.first()
 }
 
@@ -31,7 +31,7 @@ var theme: ZkTheme
     get() = active
     set(value) {
         active = value
-        window.sessionStorage.setItem(themeStorageKey, value.name)
+        window.localStorage.setItem(themeStorageKey, value.name)
         ZkCssStyleSheet.styleSheets.forEach { it.resetParameters() }
         value.onResume()
         window.requestAnimationFrame {

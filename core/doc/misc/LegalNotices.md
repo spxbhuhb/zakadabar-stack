@@ -19,6 +19,10 @@ We log the following information about network connections:
 * IP address of the computer that connects to zakadabar.io,
 * which pages were visited on the site by the given IP address.
 
+`zakadabar.io` stores the following information on your computer (in the local storage of the web browser):
+
+- the theme you've selected
+
 ## License
 
 Copyright (c) 2020-2021 Simplexion Kft, Hungary and contributors
