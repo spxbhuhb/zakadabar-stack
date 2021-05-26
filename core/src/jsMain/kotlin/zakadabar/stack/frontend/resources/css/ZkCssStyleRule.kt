@@ -627,6 +627,18 @@ class ZkCssStyleRule(
             styles["margin"] = stringOrPx(value)
         }
 
+    var marginBlockStart: Any?
+        get() = styles["margin-block-start"]
+        set(value) {
+            styles["margin-block-start"] = stringOrPx(value)
+        }
+
+    var marginBlockEnd: Any?
+        get() = styles["margin-block-end"]
+        set(value) {
+            styles["margin-block-end"] = stringOrPx(value)
+        }
+
     var marginBottom: Any?
         get() = styles["margin-bottom"]
         set(value) {

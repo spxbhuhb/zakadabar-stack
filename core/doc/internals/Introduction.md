@@ -4,15 +4,19 @@ I'm happy to share our project with the Kotlin community. It is a software
 library for full-stack application development.
 
 We wanted to have a solid platform we build our applications on, with the
-following goals in mind:
+following goals in mind (we've already reached most of them):
 
 - use only Kotlin,
-- work with a strict data model, provide automatic validation and user feedback from the constraints, 
-- don't write even a line of communication code while doing application coding,
+- work with a strict data model:
+    - provide easy, idiomatic binding between the model and the UI,
+    - provide automatic validation and user feedback from the constraints,
+    - have communication automatically generated from the data model,
+    - have common UI and server codes generated from the data model,
+    - use the exact same data model code everywhere: server, browser, mobile.
 - have consistent, modern, customizable UI look and feel,
 - minimize the number of dependencies,
 - deny-first, allow-explicitly approach in security,
-- go from an idea to a deployable application in days while having fun programming.
+- have current, easy-to-use documentation.
 
 It is by no means perfect nor complete. It contains only what we've needed on the way
 for our in-house projects. That said, we think the concept is solid.

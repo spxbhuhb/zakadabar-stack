@@ -135,20 +135,27 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     open val header1 by cssRule(".$content h1") {
         fontSize = 32
         fontWeight = 500
-        marginBottom = 20
         borderBottom = theme.border
-        paddingTop = theme.spacingStep
-        marginBottom = theme.spacingStep * 2
+        marginBlockStart = theme.spacingStep * 2
+        marginBlockEnd = theme.spacingStep
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val header1First by cssRule(".$content h1:first-child") {
-        marginTop = 0
+        marginBlockStart = theme.spacingStep
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val header2 by cssRule(".$content h2") {
-        marginBottom = theme.spacingStep
+        marginBlockStart = theme.spacingStep * 2
+        marginBlockEnd = theme.spacingStep / 2
+        fontWeight = 500
+    }
+
+    @Suppress("unused") // used implicitly by the browser
+    open val header3 by cssRule(".$content h3") {
+        marginBlockStart = theme.spacingStep * 2
+        marginBlockEnd = theme.spacingStep / 2
         fontWeight = 500
     }
 
@@ -176,6 +183,10 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     @Suppress("unused") // used implicitly by the browser
     open val img by cssRule(".$content img") {
         maxWidth = "100%"
+    }
+
+    open val li by cssRule(".$content li") {
+        lineHeight = "1.5"
     }
 
     open val table by cssRule(".$content > table") {

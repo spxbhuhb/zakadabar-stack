@@ -35,7 +35,8 @@ class SideBar : ZkSideBar() {
             val docSource = window.fetch("/api/content/guides/TOC.md").await().text().await()
             val changeLogSource = window.fetch("/api/content/changelog/TOC.md").await().text().await()
 
-            + section(Welcome) {
+            + section(strings.Welcome) {
+                + item(Welcome)
                 + item(GetStarted)
                 + item(ShowCase)
                 + item(GetHelp)
@@ -45,7 +46,7 @@ class SideBar : ZkSideBar() {
                 + item(BenderPage, text = strings.bender)
             }
 
-            + group(DocumentationIntro, strings.documentation, section = true) {
+            + section(strings.documentation) {
                 MarkdownNav().parse(docSource).forEach {
                     + it.doc()
                 }
@@ -54,7 +55,7 @@ class SideBar : ZkSideBar() {
 
             + section(strings.other) {
                 + item(ProjectStatus)
-                + group(WhatsNew, text = strings.changeLog) {
+                + group(text = strings.changeLog) {
                     MarkdownNav().parse(changeLogSource).forEach {
                         + it.changelog()
                     }

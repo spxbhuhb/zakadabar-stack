@@ -77,7 +77,7 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
 
         hover {
             backgroundColor = theme.hoverBackgroundColor
-            color = theme.hoverTextColor
+            color = this@ZkSideBarStyles.hoverTextColor
         }
 
         on(" a") {
@@ -95,15 +95,6 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         fill = this@ZkSideBarStyles.textColor
         color = this@ZkSideBarStyles.textColor
 
-        hover {
-            backgroundColor = theme.hoverBackgroundColor
-            color = theme.hoverTextColor
-        }
-
-        on(" a") {
-            flexGrow = 1
-            color = "inherit"
-        }
     }
 
     open val groupContent by cssClass {
@@ -124,10 +115,21 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         //fill = this@ZkSideBarStyles.textColor.alpha(0.2)
 
         fill = sectionBorderColor
-        borderLeft = "2px solid $sectionBorderColor"
+        borderBottom = "1px solid $sectionBorderColor"
 
+        hover {
+
+        }
         on(":first-child") {
             marginTop = 4
+        }
+    }
+
+    open val sectionCloseIcon by cssClass {
+        opacity = 0
+
+        hover {
+            opacity = 1
         }
     }
 

@@ -138,6 +138,7 @@ Welcome.open()
 [Crud](../builtin/Crud.md) provides multiple open functions.
 
 | Function | Result |
+| --- | --- |
 | `openAll()` | A table of records opens. |
 | `openCreate()` | A form opens to create a new record. |
 | `openRead(id : RecordId<T>)` | A form opens for the given record in read mode. |

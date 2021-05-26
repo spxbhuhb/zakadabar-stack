@@ -93,7 +93,8 @@ open class ZkSideBarGroup(
                     + closeIcon.hide()
                     on("click", ::onHandleGroupClick)
                 }
-                + textElement.on("click", ::onNavigate) css zkLayoutStyles.grow
+                + textElement css zkLayoutStyles.grow
+                on("click", ::onNavigate)
             }
             + zke(zkSideBarStyles.groupContent) {
                 if (! section) hide()
@@ -107,7 +108,7 @@ open class ZkSideBarGroup(
         + column {
             + div(zkSideBarStyles.sectionTitle) {
                 + textElement.on("click", ::onNavigate) css zkLayoutStyles.grow
-                + closeIcon
+                + closeIcon css zkSideBarStyles.sectionCloseIcon
                 closeIcon.on("click", ::onHandleSectionClick)
             }
             + zke(zkSideBarStyles.sectionContent) {
@@ -118,6 +119,7 @@ open class ZkSideBarGroup(
 
     open fun onHandleGroupClick(event: Event) {
         event as MouseEvent
+        event.stopPropagation()
 
         open = if (open) {
             get<ZkElement>(zkSideBarStyles.groupContent).hide()
@@ -149,7 +151,7 @@ open class ZkSideBarGroup(
     }
 
     open fun restore() {
-        if (!open) {
+        if (! open) {
             this.show()
             open = true
         }
