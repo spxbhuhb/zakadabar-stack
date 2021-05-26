@@ -62,6 +62,7 @@ class SideBar : ZkSideBar() {
                 + item(ServicesAndSupport)
                 + item(LegalNotices)
                 + item(Credits)
+                // + item(Experimental)
             }
 
             withOneOfRoles(StackRoles.securityOfficer, StackRoles.siteAdmin) {

@@ -17,7 +17,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.entity.EntityBackend
-import zakadabar.stack.backend.data.get
+import zakadabar.stack.backend.exposed.Sql
+import zakadabar.stack.backend.exposed.get
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.resources.SettingBo
 import zakadabar.stack.data.builtin.resources.SettingSource
@@ -35,7 +36,7 @@ object SettingBackend : EntityBackend<SettingBo>() {
     private val instances = mutableMapOf<Pair<String, KClass<out BaseBo>>, Pair<SettingBo, BaseBo>>()
 
     override fun onModuleLoad() {
-        + SettingTable
+        Sql.tables +=  SettingTable
     }
 
     override fun onInstallRoutes(route: Route) {

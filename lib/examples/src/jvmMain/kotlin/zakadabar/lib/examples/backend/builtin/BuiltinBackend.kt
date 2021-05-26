@@ -15,8 +15,9 @@ import zakadabar.lib.examples.data.builtin.ExampleResult
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
 import zakadabar.stack.backend.data.entity.EntityBackend
-import zakadabar.stack.backend.data.entityId
-import zakadabar.stack.backend.data.get
+import zakadabar.stack.backend.exposed.Sql
+import zakadabar.stack.backend.exposed.entityId
+import zakadabar.stack.backend.exposed.get
 import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Executor
@@ -26,7 +27,7 @@ object BuiltinBackend : EntityBackend<BuiltinDto>() {
     override val boClass = BuiltinDto::class
 
     override fun onModuleLoad() {
-        + BuiltinTable
+        Sql.tables += BuiltinTable
     }
 
     override fun onInstallRoutes(route: Route) {

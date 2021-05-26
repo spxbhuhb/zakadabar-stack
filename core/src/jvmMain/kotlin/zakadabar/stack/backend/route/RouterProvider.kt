@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.backend.route
 
-import zakadabar.stack.backend.data.entity.EntityBusinessLogicBase
+import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.data.entity.EntityBo
 
 interface RouterProvider {

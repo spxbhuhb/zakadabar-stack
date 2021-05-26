@@ -6,7 +6,7 @@ package zakadabar.stack.backend.data.builtin.account
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ResultRow
 import zakadabar.stack.backend.data.builtin.principal.PrincipalTable
-import zakadabar.stack.backend.data.entityId
+import zakadabar.stack.backend.exposed.entityId
 import zakadabar.stack.data.builtin.account.AccountPrivateBo
 import zakadabar.stack.data.builtin.account.AccountPublicBo
 

@@ -14,7 +14,7 @@ code, that is in the business logic components.
 
 **FE** - Frontends can be web browsers, Android devices or plain JVM clients.
 
-**BL** - Business logic components on the backend receive business objects and do
+**BL** - Business logic components on the backend receive business objects and perform
 the business level processing. It is important that business logic components do 
 not handle data persistence, they are pure implementation of business processing.
 

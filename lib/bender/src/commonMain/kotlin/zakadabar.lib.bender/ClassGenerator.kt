@@ -153,7 +153,7 @@ package ${packageName}.backend
 
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
-import zakadabar.stack.backend.data.entity.EntityBusinessLogicBase
+import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import ${packageName}.data.$boName
 
 /**
@@ -187,9 +187,9 @@ package ${packageName}.backend
 
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import zakadabar.stack.backend.data.entityId
-import zakadabar.stack.backend.data.exposed.ExposedPaBase
-import zakadabar.stack.backend.data.exposed.ExposedPaTable
+import zakadabar.stack.backend.exposed.entityId
+import zakadabar.stack.backend.exposed.ExposedPaBase
+import zakadabar.stack.backend.exposed.ExposedPaTable
 import ${packageName}.data.$boName
 ${generators.map { it.exposedPaImport() }.flatten().distinct().joinToString("\n")}
 

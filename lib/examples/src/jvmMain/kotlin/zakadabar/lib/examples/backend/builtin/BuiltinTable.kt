@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.`java-time`.timestamp
 import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.lib.examples.data.builtin.ExampleEnum
-import zakadabar.stack.backend.data.entityId
+import zakadabar.stack.backend.exposed.entityId
 import zakadabar.stack.backend.util.toStackUuid
 import zakadabar.stack.data.builtin.misc.Secret
 

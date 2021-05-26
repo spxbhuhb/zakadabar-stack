@@ -32,7 +32,8 @@ import zakadabar.stack.frontend.util.marginRight
 class BoEditor(
     private val classGenerator: ClassGenerator,
     private val resultContainer: ZkElement,
-    private val template: String
+    private val template: String,
+    private val markdownContext: () -> ZkMarkdownContext
 ) : ZkElement() {
 
     var descriptor = BoDescriptor("", "", "", emptyList())
@@ -64,7 +65,7 @@ class BoEditor(
                     + packageName css benderStyles.extraLargeInput
                 } marginRight 10
                 + div {
-                    + div { + "DTO name" } css benderStyles.editorLabel
+                    + div { + "BO name" } css benderStyles.editorLabel
                     + boName
                 } marginRight 10
                 + div {
@@ -149,7 +150,7 @@ class BoEditor(
         copyContainer.hide()
 
         resultContainer.clear()
-        resultContainer += MarkdownView(sourceText = template, context = ZkMarkdownContext(toc = false, hashes = false))
+        resultContainer += MarkdownView(sourceText = template, context = markdownContext())
     }
 
     private fun import() {
@@ -197,7 +198,7 @@ class BoEditor(
         }
 
         if (descriptor.className.isEmpty()) {
-            toastWarning(hideAfter = 3000) { "Please set the DTO name!" }
+            toastWarning(hideAfter = 3000) { "Please set the BO name!" }
             go = false
         }
 

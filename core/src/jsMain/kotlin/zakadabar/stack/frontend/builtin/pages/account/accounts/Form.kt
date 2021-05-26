@@ -10,7 +10,6 @@ import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.builtin.account.*
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.application.executor
-import zakadabar.stack.frontend.application.hasRole
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode

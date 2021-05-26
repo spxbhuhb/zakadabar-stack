@@ -6,7 +6,7 @@ package zakadabar.lib.accounts.backend
 import zakadabar.lib.accounts.data.RoleGrantBo
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
-import zakadabar.stack.backend.data.entity.EntityBusinessLogicBase
+import zakadabar.stack.backend.business.EntityBusinessLogicBase
 
 
 class RoleGrantBl : EntityBusinessLogicBase<RoleGrantBo>(

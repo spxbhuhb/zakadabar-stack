@@ -11,6 +11,7 @@ import org.w3c.dom.css.CSSStyleDeclaration
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventTarget
 import zakadabar.stack.frontend.application.application
+import zakadabar.stack.frontend.application.executor
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.dock.ZkDockedElement
 import zakadabar.stack.frontend.builtin.dock.ZkDockedElementState
@@ -64,7 +65,7 @@ open class ZkElement(
          * Use this function when you need to fetch data asynchronously during building
          * the element.
          */
-        @Deprecated("use zke { io { ... } } instead", ReplaceWith("zke",))
+        @Deprecated("use zke { io { ... } } instead", ReplaceWith("zke"))
         fun launchBuildNew(builder: suspend ZkElement.() -> Unit) = ZkElement().launchBuild(builder)
 
         /**
@@ -105,6 +106,18 @@ open class ZkElement(
      */
     val displayName
         get() = application.executor.account.displayName
+
+    var gridAutoRows: String
+        get() = buildPoint.style.getPropertyValue("grid-auto-rows")
+        set(value) {
+            buildPoint.style.setProperty("grid-auto-rows", value)
+        }
+
+    var gridAutoColumns: String
+        get() = buildPoint.style.getPropertyValue("grid-auto-columns")
+        set(value) {
+            buildPoint.style.setProperty("grid-auto-columns", value)
+        }
 
     var gridTemplateRows: String
         get() = buildPoint.style.getPropertyValue("grid-template-rows")
@@ -873,14 +886,22 @@ open class ZkElement(
     }
 
     /**
-     * Creates a "div" [HTMLElement] with ZkClasses.grid added and executes the builder on it.
+     * Creates a "div" [HTMLElement]. When [grid] is false, [zkLayoutStyles.row] class
+     * is added. When [grid] is true, [zkLayoutStyles.grid] is added.
      *
      * @param  rule       CSS rule to use. Optional.
+     * @param  grid       When true a "grid" is created when false a "flex-box".
+     * @param  gap        When [grid] is true and [gap] is true [zkLayoutStyles.gridGap] is added.
      * @param  build      The builder function to build the content of the div. Optional.
      */
-    open fun row(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit): HTMLElement {
+    open fun row(rule: ZkCssStyleRule? = null, grid: Boolean = false, gap : Boolean = true, build: ZkElement.() -> Unit): HTMLElement {
         val e = document.createElement("div") as HTMLElement
-        e.classList += zkLayoutStyles.row
+        if (grid) {
+            e.classList += zkLayoutStyles.grid
+            if (gap) e.classList += zkLayoutStyles.gridGap
+        } else {
+            e.classList += zkLayoutStyles.row
+        }
         runBuild(e, rule, build)
         return e
     }
@@ -1046,7 +1067,7 @@ open class ZkElement(
     }
 
     /**
-     * Adds an HTML element.
+     * Adds an HTML element at build point.
      */
     operator fun HTMLElement.unaryPlus(): HTMLElement {
         buildPoint.appendChild(this)
@@ -1066,7 +1087,7 @@ open class ZkElement(
     /**
      * Adds a [ZkElement] as a child.
      */
-    operator fun ZkElement?.unaryPlus() : ZkElement? {
+    operator fun ZkElement?.unaryPlus(): ZkElement? {
         if (this == null) return null
         this@ZkElement.buildPoint.appendChild(this.element)
         this@ZkElement.childElements += this
@@ -1127,6 +1148,12 @@ open class ZkElement(
     // -------------------------------------------------------------------------
     //   Executor permissions, logged in etc
     // -------------------------------------------------------------------------
+
+
+    /**
+     * Check if the executor has the given role.
+     */
+    fun hasRole(roleName: String) = roleName in executor.roles
 
     /**
      * Execute the builder function when the user **is not** the

@@ -48,6 +48,10 @@ class ZkCssStyleRule(
 
     fun hover(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(":hover", builder = builder)
 
+    fun firstChild(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(":first-child", builder = builder)
+
+    fun lastChild(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(":last-child", builder = builder)
+
     fun media(media: String, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = media, builder = builder)
 
     /**
@@ -506,6 +510,13 @@ class ZkCssStyleRule(
         set(value) {
             styles["grid-column-start"] = value.toString()
         }
+
+    var gridGap: Any?
+        get() = styles["grid-gap"]
+        set(value) {
+            styles["grid-column"] = stringOrPx(value)
+        }
+
 
     var gridRowEnd: Int?
         get() = styles["grid-row-end"]?.toInt()

@@ -23,8 +23,8 @@ import zakadabar.stack.backend.Forbidden
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.data.action.ActionBackend
 import zakadabar.stack.backend.data.builtin.BlobTable
-import zakadabar.stack.backend.data.entityId
 import zakadabar.stack.backend.data.query.QueryBackend
+import zakadabar.stack.backend.exposed.entityId
 import zakadabar.stack.backend.server
 import zakadabar.stack.backend.util.executor
 import zakadabar.stack.data.BaseBo

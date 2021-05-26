@@ -11,7 +11,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
-import zakadabar.stack.backend.data.entity.EntityBusinessLogicBase
+import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.route.Router
 import zakadabar.stack.backend.server
 import zakadabar.stack.backend.util.executor
@@ -79,9 +79,9 @@ open class KtorRouter<T : EntityBo<T>>(
                 }
             }
 
-            actionClassList.forEach {
+            queryClassList.forEach {
                 val (boClass, func) = it
-                post("${businessLogic.namespace}/query/${boClass.simpleName}") {
+                get("${businessLogic.namespace}/query/${boClass.simpleName}") {
                     query(call, boClass, func)
                 }
             }
@@ -151,11 +151,13 @@ open class KtorRouter<T : EntityBo<T>>(
 
     private suspend fun query(call: ApplicationCall, queryClass: KClass<out BaseBo>, queryFunc: (Executor, BaseBo) -> Any) {
         val executor = call.executor()
-        val aText = call.receive<String>()
-        val aObj = Json.decodeFromString(serializer(queryClass.createType()), aText) as BaseBo
+
+        val qText = call.parameters["q"]
+        requireNotNull(qText)
+        val qObj = Json.decodeFromString(serializer(queryClass.createType()), qText)
 
         @Suppress("UNCHECKED_CAST")
-        val response = businessLogic.queryWrapper(executor, queryFunc, aObj)
+        val response = businessLogic.queryWrapper(executor, queryFunc, qObj as BaseBo)
 
         @Suppress("UNCHECKED_CAST")
         call.respond(response)

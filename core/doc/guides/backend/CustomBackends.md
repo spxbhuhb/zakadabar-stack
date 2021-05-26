@@ -26,7 +26,7 @@ object PingBackend : CustomBackend() {
 
 You may add custom backends directly from the configuration, without creating a module:
 
-```yaml
+```
 modules:
   - zakadabar.demo.lib.backend.lib.PingBackend
 ```

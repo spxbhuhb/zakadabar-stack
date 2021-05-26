@@ -12,6 +12,7 @@ import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
 import zakadabar.stack.backend.data.builtin.resources.setting
 import zakadabar.stack.backend.data.entity.EntityBackend
+import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.ktor.session.StackSession
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.ActionStatusBo
@@ -32,7 +33,7 @@ object SessionBackend : EntityBackend<SessionBo>() {
     override var logActions = false // do not log passwords
 
     override fun onModuleLoad() {
-        + SessionTable
+        Sql.tables +=  SessionTable
     }
 
     override fun onInstallRoutes(route: Route) {

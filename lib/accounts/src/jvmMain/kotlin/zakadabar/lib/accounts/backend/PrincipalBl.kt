@@ -7,8 +7,8 @@ import zakadabar.lib.accounts.data.PrincipalBo
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
 import zakadabar.stack.backend.authorize.authorize
+import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.data.builtin.resources.setting
-import zakadabar.stack.backend.data.entity.EntityBusinessLogicBase
 import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.BCrypt

@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.backend.ktor
 
-import zakadabar.stack.backend.data.entity.EntityBusinessLogicBase
+import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.route.Router
 import zakadabar.stack.backend.route.RouterProvider
 import zakadabar.stack.data.entity.EntityBo

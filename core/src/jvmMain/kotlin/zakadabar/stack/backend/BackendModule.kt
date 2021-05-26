@@ -4,8 +4,6 @@
 package zakadabar.stack.backend
 
 import io.ktor.routing.*
-import org.jetbrains.exposed.sql.Table
-import zakadabar.stack.backend.data.Sql
 
 interface BackendModule {
 
@@ -37,12 +35,4 @@ interface BackendModule {
      */
     fun onModuleStop() = Unit
 
-    /**
-     * This function registers an SQL table. Call from [onModuleLoad].
-     * After all modules are created the [Server] will call [Sql.createMissingTablesAndColumns]
-     *
-     */
-    operator fun Table.unaryPlus() {
-        Sql.tables += this
-    }
 }
