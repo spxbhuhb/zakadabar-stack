@@ -6,8 +6,6 @@ package zakadabar.stack.backend.authorize
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityId
 
-lateinit var roleBl : RoleBlProvider
-
 interface RoleBlProvider {
     fun getByName(name : String) : EntityId<out BaseBo>
 }

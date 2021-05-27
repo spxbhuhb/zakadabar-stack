@@ -27,16 +27,21 @@ import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.builtin.account.PrincipalBo
 import zakadabar.stack.data.builtin.settings.ServerSettingsBo
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.util.PublicApi
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
 import kotlin.reflect.full.isSubclassOf
 
 val moduleLogger = LoggerFactory.getLogger("modules") !! // log module events
 
 val routingLogger: Logger by lazy { LoggerFactory.getLogger("routing") } // trace routing events
 
-lateinit var server : Server
+lateinit var server: Server
+
+inline fun <reified T : Any> module() = server.ModuleDependency(T::class)
 
 fun main(argv: Array<String>) {
     server = Server()
@@ -104,6 +109,8 @@ open class Server : CliktCommand() {
 
         private val modules = mutableListOf<BackendModule>()
 
+        private val dependencies = mutableListOf<ModuleDependency<*>>()
+
         private val entityBackends = mutableListOf<EntityBackend<*>>()
 
         private val customBackends = mutableListOf<CustomBackend>()
@@ -136,14 +143,16 @@ open class Server : CliktCommand() {
     }
 
     private val settingsPath
-        by option("-s", "--settings", help = "Path to the settings file.")
-            .file(mustExist = true, mustBeReadable = true, canBeDir = false)
-            .convert { it.path }
-            .default("./zakadabar.stack.server.yaml")
+            by option("-s", "--settings", help = "Path to the settings file.")
+                .file(mustExist = true, mustBeReadable = true, canBeDir = false)
+                .convert { it.path }
+                .default("./zakadabar.stack.server.yaml")
 
-    private lateinit var settings : ServerSettingsBo
+    private lateinit var settings: ServerSettingsBo
 
     override fun run() {
+
+        onConfigure()
 
         settings = loadServerSettings()
 
@@ -160,6 +169,14 @@ open class Server : CliktCommand() {
         staticRoot = settings.staticResources
 
         server.start(wait = true)
+    }
+
+    /**
+     * Configuration function for the server. Calling this function is the very
+     * first step of [run]. Default implementation is empty.
+     */
+    open fun onConfigure() {
+
     }
 
     private fun loadServerSettings(): ServerSettingsBo {
@@ -220,6 +237,11 @@ open class Server : CliktCommand() {
     }
 
     private fun startModules() {
+
+        dependencies.forEach {
+            it.resolve()
+        }
+
         modules.forEach {
             try {
                 it.onModuleStart()
@@ -248,7 +270,7 @@ open class Server : CliktCommand() {
      * You can override this method to switch off the login timeout mechanics
      * or to add other paths to it.
      */
-    open fun onLoginTimeout(call : ApplicationCall) {
+    open fun onLoginTimeout(call: ApplicationCall) {
         if (call.request.uri.startsWith("/api")) {
             throw LoginTimeout()
         }
@@ -259,7 +281,72 @@ open class Server : CliktCommand() {
      * This is "no-cache, no-store" by default. To change it, modify the
      * setting in the configuration file or override this method.
      */
-    open fun apiCacheControl(call : ApplicationCall) {
+    open fun apiCacheControl(call: ApplicationCall) {
         call.response.headers.append(HttpHeaders.CacheControl, settings.apiCacheControl)
     }
+
+    /**
+     * Find a module of the given class. The class may be an interface.
+     *
+     * @return   First instance of [T] from the server modules.
+     *
+     * @throws   NoSuchElementException   when there is no such module
+     */
+    inline fun <reified T : Any> first() = first(T::class)
+
+    /**
+     * Find a module of the given class. The class may be an interface.
+     *
+     * @param    kClass      The class to look for
+     *
+     * @return   First instance of [kClass] from the server modules.
+     *
+     * @throws   NoSuchElementException   when there is no such module
+     */
+    fun <T : Any> first(kClass: KClass<T>): T {
+        @Suppress("UNCHECKED_CAST") // checking for class
+        return modules.first { kClass.isInstance(it) } as T
+    }
+
+    /**
+     * Find a module of the given class. The class may be an interface.
+     *
+     * @return   First instance of [T] from the server modules or null if
+     *           no such module exists.
+     */
+    @PublicApi
+    inline fun <reified T : Any> firstOrNull() = firstOrNull(T::class)
+
+    /**
+     * Find a module of the given class. The class may be an interface.
+     *
+     * @param    kClass      The class to look for
+     *
+     * @return   First instance of [kClass] from the server modules or null if
+     *           no such module exists.
+     */
+    fun <T : Any> firstOrNull(kClass: KClass<T>): T? {
+        @Suppress("UNCHECKED_CAST") // checking for class
+        return modules.firstOrNull { kClass.isInstance(it) } as T
+    }
+
+    inner class ModuleDependency<T : Any>(
+        private val moduleClass: KClass<T>
+    ) {
+        private var module: T? = null
+
+        init {
+            dependencies += this
+        }
+
+        fun resolve() {
+            module = first(moduleClass)
+        }
+
+        operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
+            return module!!
+        }
+
+    }
+
 }

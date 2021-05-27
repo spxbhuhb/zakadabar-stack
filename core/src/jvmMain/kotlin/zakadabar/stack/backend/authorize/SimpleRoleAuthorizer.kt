@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.backend.authorize
 
+import zakadabar.stack.backend.module
 import zakadabar.stack.backend.util.default
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
@@ -32,6 +33,8 @@ open class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
     constructor(initializer: SimpleRoleAuthorizer<T>.() -> Unit) : this() {
         this.initializer = initializer
     }
+
+    private val roleBl by module<RoleBlProvider>()
 
     override fun onModuleStart() {
         initializer?.let {

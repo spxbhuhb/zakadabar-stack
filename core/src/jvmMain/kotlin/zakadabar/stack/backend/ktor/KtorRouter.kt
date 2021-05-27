@@ -152,6 +152,8 @@ open class KtorRouter<T : EntityBo<T>>(
     private suspend fun query(call: ApplicationCall, queryClass: KClass<out BaseBo>, queryFunc: (Executor, BaseBo) -> Any) {
         val executor = call.executor()
 
+        apiCacheControl(call)
+
         val qText = call.parameters["q"]
         requireNotNull(qText)
         val qObj = Json.decodeFromString(serializer(queryClass.createType()), qText)

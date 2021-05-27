@@ -1,6 +1,35 @@
 # Backend Modules
 
-Backend modules are packages that contain other backend components:
+Backend modules are the building block of the server. When you decide the functions
+your application provides, you make a list the modules you need for those functions.
+
+Once you have the list, you can set up your application by:
+
+- adding the modules from programmatically, and/or
+- adding the modules from the configuration.
+
+## Add Modules From Configuration
+
+Add the module to the configuration file (etc/zakadabar.stack.server.yaml) as
+the example below shows. You can list as many modules as you want.
+
+```
+modules:
+  - zakadabar.site.backend.Module
+```
+
+## Add Modules Programmatically
+
+To add modules programmatically, use the `server` global variable and simply
+add the modules like this.
+
+```kotlin
+server += SimpleExampleBl()
+```
+
+You can create a module that adds
+
+
 
 - [Business Logic](./BusinessLogic.md) components,
 - [Custom Backend](./CustomBackends.md) components.
@@ -46,14 +75,6 @@ object Module : BackendModule {
 }
 ```
 
-## Use a Backend Module
-
-To include a backend module in your application add them to the configuration file (etc/zakadabar.stack.server.yaml):
-
-```
-modules:
-  - zakadabar.site.backend.Module
-```
 
 During start-up the stack:
 

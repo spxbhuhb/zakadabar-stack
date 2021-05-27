@@ -80,6 +80,8 @@ class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
         includeData = false
     }
 
+    private val roleBl by module<RoleBlProvider>()
+
     override fun create(executor: Executor, bo: SimpleExampleBo) : SimpleExampleBo {
         if (pa.count() >= 1000) throw BadRequestException("table limit reached")
 
@@ -125,9 +127,46 @@ such a way that the request data is not included in the audit. In this case it i
 important, because this is the BL of PrincipalBo, and the requests may contain sensitive
 information. See [Auditor](./Auditor.md) for more information.
 
+`simpleExampleBl` - This is a reference to another ELBL. You can use the `module` function to
+make a reference to another module, so you can call the functions it offers.
+
 `update` - This is an override of the default CRUD update because we want some special
 processing steps there.
 
 `action` - This is an action the BL offers as an endpoint.
 
 `query` - This is a query the BL offers as an endpoint.
+
+## Router Provider
+
+Companion object of ELBL has a `routerProvider` property. This is a function that is used to get a router
+instance when the ELBL instance is created.
+
+You can set this property to your own function, thus providing customized routers for all ELBLs. Please
+note that you have to do this before the ELBL instances are created, so preferably in the `onConfigure`
+method of the server.
+
+## Auditor Provider
+
+Companion object of ELBL has an `auditorProvider` property. This is a function that is used to get an
+auditor instance when the ELBL instance is created.
+
+You can set this property to your own function, thus providing customized auditors for all ELBLs. Please
+note that you have to do this before the ELBL instances are created, so preferably in the `onConfigure`
+method of the server.
+
+## Cache Control
+
+[KtorRouter](/src/jvmMain/kotlin/zakadabar/stack/backend/ktor/KtorRouter.kt) has an `apiCacheControl` function
+which adds a `Cache-Control` header to responses created by `read`, `list`, `query` operations. 
+
+* `apiCacheControl` calls `server.apiCacheControl` by default
+* `server.apiCacheControl` sets the header to the value of `apiCacheControl` in the server settings
+* default of `apiCacheControl` is `no-cache, no-store`
+
+You can change cache control handling:
+
+* globally, by setting the value in the configuration file
+* globally, by extending [Server](/src/jvmMain/kotlin/zakadabar/stack/backend/Server.kt)
+* for all ELBLs, by setting the `routerProvider` in ELBL.Companion
+* locally, by using a router in the BL that extends KtorRouter and overrides `apiCacheControl`
