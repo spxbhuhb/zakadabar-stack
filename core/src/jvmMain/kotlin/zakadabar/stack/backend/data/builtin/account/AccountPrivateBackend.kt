@@ -6,7 +6,6 @@
 package zakadabar.stack.backend.data.builtin.account
 
 import io.ktor.routing.*
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
@@ -23,6 +22,7 @@ import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantDao
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantTable
 import zakadabar.stack.backend.data.entity.EntityBackend
+import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.exposed.get
 import zakadabar.stack.data.builtin.account.AccountPrivateBo
 import zakadabar.stack.data.builtin.account.PrincipalBo
@@ -53,11 +53,7 @@ object AccountPrivateBackend : EntityBackend<AccountPrivateBo>() {
     private val serverDescription by setting<ServerDescriptionBo>("zakadabar.server.description")
 
     override fun onModuleLoad() {
-        transaction {
-            SchemaUtils.createMissingTablesAndColumns(
-                AccountPrivateTable
-            )
-        }
+        Sql.tables += AccountPrivateTable
     }
 
     override fun onModuleStart() {

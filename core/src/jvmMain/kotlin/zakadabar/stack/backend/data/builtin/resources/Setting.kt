@@ -4,6 +4,7 @@
 package zakadabar.stack.backend.data.builtin.resources
 
 import kotlinx.serialization.KSerializer
+import zakadabar.stack.backend.server
 import zakadabar.stack.data.BaseBo
 import kotlin.reflect.KProperty
 
@@ -18,7 +19,8 @@ class Setting<V : BaseBo>(
     operator fun getValue(thisRef: Any?, property: KProperty<*>): V {
         synchronized(this) {
             if (! initialized) {
-                value = SettingBackend.get(value, namespace, serializer)
+                val bl = server.firstOrNull(SettingBackend::class)
+                if (bl != null) value = bl.get(value, namespace, serializer)
                 initialized = true
             }
         }

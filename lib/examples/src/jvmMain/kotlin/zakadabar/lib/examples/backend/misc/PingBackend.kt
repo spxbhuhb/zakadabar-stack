@@ -6,9 +6,9 @@ package zakadabar.lib.examples.backend.misc
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import zakadabar.stack.backend.custom.CustomBackend
+import zakadabar.stack.backend.BackendModule
 
-object PingBackend : CustomBackend() {
+object PingBackend : BackendModule {
 
     override fun onInstallRoutes(route: Route) {
         with(route) {

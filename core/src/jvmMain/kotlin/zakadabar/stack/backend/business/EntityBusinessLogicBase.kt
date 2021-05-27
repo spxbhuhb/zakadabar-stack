@@ -4,12 +4,11 @@
 package zakadabar.stack.backend.business
 
 import io.ktor.routing.*
-import org.slf4j.LoggerFactory
+import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.audit.Auditor
 import zakadabar.stack.backend.audit.AuditorProvider
 import zakadabar.stack.backend.audit.LogAuditorProvider
 import zakadabar.stack.backend.authorize.Authorizer
-import zakadabar.stack.backend.custom.CustomBackend
 import zakadabar.stack.backend.ktor.KtorRouterProvider
 import zakadabar.stack.backend.persistence.EntityPersistenceApi
 import zakadabar.stack.backend.route.Router
@@ -27,7 +26,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObject
 
 /**
- * Base class for entity backends. Supports CRUD, queries and BLOBs.
+ * Base class for entity backends. Supports CRUD, actions and queries.
  */
 abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
     /**
@@ -35,7 +34,7 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
      * set to the namespace defined for this BO class.
      */
     val boClass: KClass<T>
-) : CustomBackend() {
+) : BackendModule {
 
     companion object {
 
@@ -49,18 +48,13 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
      * The namespace this backend serves. Must be unique in a server. Default
      * is the namespace of the BO class.
      */
-    val namespace
+    open val namespace
         get() = (boClass.companionObject !!.objectInstance as EntityBoCompanion<*>).boNamespace
 
     /**
      * The Persistence API this entity business logic uses.
      */
-    abstract protected val pa: EntityPersistenceApi<T>
-
-    /**
-     * Logger to use when logging is enabled. Name is [namespace].
-     */
-    override val logger by lazy { LoggerFactory.getLogger(namespace) !! }
+    protected abstract val pa: EntityPersistenceApi<T>
 
     /**
      * Router routes incoming requests to the proper processor function.
@@ -79,18 +73,18 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
     open val validator: Validator<T> = SchemaValidator()
 
     /**
-     * Audit records (logs) are creted by this auditor.
+     * Audit records (logs) are created by this auditor.
      */
     open val auditor: Auditor<T> = auditor {  }
 
     fun router(build : Router<T>.() -> Unit) : Router<T> {
-        val r = routerProvider.businessLogicRouter(this) as Router<T>
+        val r = routerProvider.businessLogicRouter(this)
         r.build()
         return r
     }
 
     fun auditor(build : Auditor<T>.() -> Unit) : Auditor<T> {
-        val a = auditorProvider.businessLogicAuditor(this) as Auditor<T>
+        val a = auditorProvider.businessLogicAuditor(this)
         a.build()
         return a
     }
@@ -107,7 +101,7 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
         router.installRoutes(route)
     }
 
-    fun listWrapper(executor: Executor): List<T> {
+    open fun listWrapper(executor: Executor): List<T> {
 
         authorizer.authorizeList(executor)
 
@@ -119,7 +113,7 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
 
     }
 
-    fun readWrapper(executor: Executor, entityId: EntityId<T>): T {
+    open fun readWrapper(executor: Executor, entityId: EntityId<T>): T {
 
         authorizer.authorizeRead(executor, entityId)
 
@@ -131,7 +125,7 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
 
     }
 
-    fun createWrapper(executor: Executor, bo: T): T {
+    open fun createWrapper(executor: Executor, bo: T): T {
 
         validator.validateCreate(executor, bo)
 
@@ -145,7 +139,7 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
 
     }
 
-    fun updateWrapper(executor: Executor, bo: T): T {
+    open fun updateWrapper(executor: Executor, bo: T): T {
 
         validator.validateUpdate(executor, bo)
 
@@ -158,7 +152,7 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
         return response
     }
 
-    fun deleteWrapper(executor: Executor, entityId: EntityId<T>) {
+    open fun deleteWrapper(executor: Executor, entityId: EntityId<T>) {
 
         authorizer.authorizeDelete(executor, entityId)
 
@@ -168,7 +162,7 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
 
     }
 
-    fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> BaseBo, bo: BaseBo) : BaseBo {
+    open fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> BaseBo, bo: BaseBo) : BaseBo {
 
         bo as ActionBo<*>
 
@@ -183,7 +177,7 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
         return response
     }
 
-    fun queryWrapper(executor: Executor, func: (Executor, BaseBo) -> Any, bo: BaseBo) : Any {
+    open fun queryWrapper(executor: Executor, func: (Executor, BaseBo) -> Any, bo: BaseBo) : Any {
 
         bo as QueryBo<*>
 

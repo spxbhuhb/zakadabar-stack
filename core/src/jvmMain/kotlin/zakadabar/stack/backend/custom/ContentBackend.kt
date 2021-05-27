@@ -5,6 +5,7 @@ package zakadabar.stack.backend.custom
 
 import io.ktor.http.content.*
 import io.ktor.routing.*
+import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.data.builtin.resources.setting
 import zakadabar.stack.data.builtin.settings.ContentBackendSettings
 import java.io.File
@@ -12,7 +13,7 @@ import java.io.File
 /**
  * A simple backend that serves a directory. Uses `static` of Ktor.
  */
-class ContentBackend(settingNamespace : String = "zakadabar.site.content") : CustomBackend() {
+class ContentBackend(settingNamespace : String = "zakadabar.site.content") : BackendModule {
 
     private val settings by setting<ContentBackendSettings>(settingNamespace)
 

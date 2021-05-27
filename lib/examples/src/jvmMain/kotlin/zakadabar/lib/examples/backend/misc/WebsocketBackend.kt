@@ -5,9 +5,9 @@ package zakadabar.lib.examples.backend.misc
 
 import io.ktor.routing.*
 import io.ktor.websocket.*
-import zakadabar.stack.backend.custom.CustomBackend
+import zakadabar.stack.backend.BackendModule
 
-object WebsocketBackend : CustomBackend() {
+object WebsocketBackend : BackendModule {
 
     override fun onInstallRoutes(route: Route) {
         with(route) {

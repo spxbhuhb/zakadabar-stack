@@ -25,7 +25,7 @@ open class LogAuditor<T : EntityBo<T>>(
     forInstance : Any
 ) : Auditor<T> {
 
-    private val logger = LoggerFactory.getLogger(forInstance::class.simpleName) !!
+    private val logger = LoggerFactory.getLogger(forInstance::class.simpleName ?: "anonymous object") !!
 
     override var includeData: Boolean = true
 

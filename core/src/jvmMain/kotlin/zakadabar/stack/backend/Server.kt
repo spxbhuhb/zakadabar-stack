@@ -7,11 +7,13 @@ import com.charleskorn.kaml.Yaml
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
+import io.ktor.server.netty.*
 import kotlinx.serialization.KSerializer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -39,7 +41,7 @@ val routingLogger: Logger by lazy { LoggerFactory.getLogger("routing") } // trac
 
 lateinit var server: Server
 
-inline fun <reified T : Any> module() = server.ModuleDependency(T::class)
+inline fun <reified T : Any> module() = server.ModuleDependencyProvider(T::class)
 
 fun main(argv: Array<String>) {
     server = Server()
@@ -105,15 +107,6 @@ open class Server : CliktCommand() {
 
         lateinit var staticRoot: String
 
-        private val modules = mutableListOf<BackendModule>()
-
-        private val dependencies = mutableListOf<ModuleDependency<*>>()
-
-        operator fun plusAssign(module: BackendModule) {
-            this.modules += module
-            module.onModuleLoad()
-        }
-
         fun <T : BaseBo> loadSettings(namespace: String, serializer: KSerializer<T>): T? {
 
             val p1 = settingsDirectory.resolve("$namespace.yaml")
@@ -135,7 +128,22 @@ open class Server : CliktCommand() {
                 .convert { it.path }
                 .default("./zakadabar.stack.server.yaml")
 
+    private val test
+            by option("--test", "-t").flag()
+
+
     private lateinit var settings: ServerSettingsBo
+
+    private val modules = mutableListOf<BackendModule>()
+
+    private val dependencies = mutableListOf<ModuleDependency<*>>()
+
+    lateinit var ktorServer: NettyApplicationEngine
+
+    operator fun plusAssign(module: BackendModule) {
+        this.modules += module
+        module.onModuleLoad()
+    }
 
     override fun run() {
 
@@ -151,11 +159,11 @@ open class Server : CliktCommand() {
 
         startModules() // start the modules
 
-        val server = buildServer(settings, modules) //  build the Ktor server instance
+        ktorServer = buildServer(settings, modules) //  build the Ktor server instance
 
         staticRoot = settings.staticResources
 
-        server.start(wait = true)
+        ktorServer.start(wait = ! test)
     }
 
     /**
@@ -215,9 +223,12 @@ open class Server : CliktCommand() {
 
     private fun startModules() {
 
+        var success = true
         dependencies.forEach {
-            it.resolve()
+            success = success && it.resolve()
         }
+
+        if (!success) throw IllegalArgumentException("module dependency resolution failed")
 
         modules.forEach {
             try {
@@ -307,7 +318,16 @@ open class Server : CliktCommand() {
         return modules.firstOrNull { kClass.isInstance(it) } as? T
     }
 
+    inner class ModuleDependencyProvider<T : Any>(
+        private val moduleClass: KClass<T>
+    ) {
+        operator fun provideDelegate(thisRef: Any, property: KProperty<*>) =
+            ModuleDependency(thisRef, property, moduleClass)
+    }
+
     inner class ModuleDependency<T : Any>(
+        private val dependentModule: Any,
+        private val dependentProperty: KProperty<*>,
         private val moduleClass: KClass<T>
     ) {
         private var module: T? = null
@@ -316,12 +336,17 @@ open class Server : CliktCommand() {
             dependencies += this
         }
 
-        fun resolve() {
-            module = first(moduleClass)
-        }
+        fun resolve() =
+            try {
+                module = first(moduleClass)
+                true
+            } catch (ex : NoSuchElementException) {
+                moduleLogger.error("unable to resolve dependency from ${dependentModule::class.simpleName}.${dependentProperty.name} to ${moduleClass.simpleName} ")
+                false
+            }
 
         operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
-            return module!!
+            return module !!
         }
 
     }

@@ -1,21 +1,22 @@
 # Backend Modules
 
-Backend modules are the building block of the server. When you decide the functions
+Backend modules are the building blocks of the server. When you decide the functions
 your application provides, you make a list the modules you need for those functions.
 
 Once you have the list, you can set up your application by:
 
-- adding the modules from programmatically, and/or
+- adding the modules programmatically, and/or
 - adding the modules from the configuration.
 
 ## Add Modules From Configuration
 
 Add the module to the configuration file (etc/zakadabar.stack.server.yaml) as
-the example below shows. You can list as many modules as you want.
+the example below shows.
 
 ```
 modules:
   - zakadabar.site.backend.Module
+  - zakadabar.site.backend.Module2
 ```
 
 ## Add Modules Programmatically
@@ -27,59 +28,76 @@ add the modules like this.
 server += SimpleExampleBl()
 ```
 
-You can create a module that adds
+## Write Module Bundles
 
+To pack a number of modules together, so all of them can be installed at once,
+create a module bundle. This is basically a simple module that adds other
+modules during server startup. 
 
+To write a module bundle:
 
-- [Business Logic](./BusinessLogic.md) components,
-- [Custom Backend](./CustomBackends.md) components.
-
-## Write a Backend Module
-
-Create an object that implements the
-interface [BackendModule](/src/jvmMain/kotlin/zakadabar/stack/backend/BackendModule.kt).
-
-Use the `onModuleLoad` function to add components this module contains:
+- Create an object that implements the interface [BackendModule](/src/jvmMain/kotlin/zakadabar/stack/backend/BackendModule.kt).
+- Use the `onModuleLoad` function to add modules to the server.
 
 ```kotlin
 @PublicApi
 object Module : BackendModule {
     
     override fun onModuleLoad() {
-        Server += SessionBackend
-        Server += AccountBackend
-        Server += RoleBackend
-        Server += RoleGrantBackend
+        server += SessionBackend
+        server += AccountBackend
+        server += RoleBackend
+        server += RoleGrantBackend
 
-        Server += ShipBackend
-        Server += SpeedBackend
+        server += ShipBackend
+        server += SpeedBackend
     }
     
 }
 ```
 
-To perform cleanup during backend shutdown:
+## Module Lifecycle
 
-```kotlin
-@PublicApi
-object Module : BackendModule {
-    
-    override fun onModuleLoad() {
-        // do something here
-    }
-    
-    override fun onModuleStop() {
-        // do the cleanup here
-    }
-    
-}
-```
+There are four module callback functions which are called during startup.
 
+### onModuleLoad
 
-During start-up the stack:
+Called after:
 
-* loads all modules from the configuration file,
-* calls `onModuleLoad` for each module, in the order the configuration file lists the modules,
-* calls `onModuleStart` for each module, in the order the configuration file lists the modules,
-* calls `installRoutes` for each module, in the order the configuration file lists the modules,
-* calls `installStatic` for each module, in the order the configuration file lists the modules,
+- the module is added to the server module list.
+  
+Called before:
+
+- database initialization,
+- load of other modules,
+- settings are ready,
+- `onModuleStart`
+
+Perform only basic initialization in `onModuleStart`. 
+
+### onModuleStart
+
+Called after:
+
+- all modules are loaded with `onModuleLoad` executed,
+- the database is initialized,
+- settings are available.
+
+Called before:
+
+- Ktor is started
+- `onInstallRoutes`
+- `onInstallStatic`
+
+### onInstallRoutes
+
+This function is called to add the routes to Ktor. Most backends delegate setting
+the routes to their `router`. See [Routing](./Routing.md) for more information.
+
+### onInstallStatic
+
+This function is called when adding static resources to Ktor. It provides an
+easy way to register directories for static service. Check
+[ContentBackend](/src/jvmMain/kotlin/zakadabar/stack/backend/custom/ContentBackend.kt)
+for an example.
+
