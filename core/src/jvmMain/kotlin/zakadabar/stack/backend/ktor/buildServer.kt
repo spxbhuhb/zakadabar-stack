@@ -19,11 +19,10 @@ import io.ktor.sessions.*
 import io.ktor.websocket.*
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
+import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.Forbidden
 import zakadabar.stack.backend.Server.Companion.staticRoot
-import zakadabar.stack.backend.custom.CustomBackend
 import zakadabar.stack.backend.data.builtin.session.LoginTimeout
-import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.backend.ktor.session.*
 import zakadabar.stack.backend.routingLogger
 import zakadabar.stack.data.DataConflictException
@@ -33,8 +32,7 @@ import java.time.Duration
 
 fun buildServer(
     config: ServerSettingsBo,
-    entityBackends: List<EntityBackend<*>>,
-    customBackends: List<CustomBackend>
+    modules: List<BackendModule>
 ) = embeddedServer(Netty, port = config.ktor.port) {
 
     install(Sessions) {
@@ -120,15 +118,9 @@ fun buildServer(
 
             route("api") {
 
-                // api installs add routes and the code to serve them
-                entityBackends.forEach {
+                modules.forEach {
                     it.onInstallRoutes(this)
                 }
-
-                customBackends.forEach {
-                    it.onInstallRoutes(this)
-                }
-
                 get("health") {
                     call.respondText("OK", ContentType.Text.Plain)
                 }
@@ -140,14 +132,10 @@ fun buildServer(
                 files(".")
                 default("index.html")
 
-                // api installs add routes and the code to serve them
-                entityBackends.forEach {
+                modules.forEach {
                     it.onInstallStatic(this)
                 }
 
-                customBackends.forEach {
-                    it.onInstallStatic(this)
-                }
             }
 
         }

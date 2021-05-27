@@ -15,10 +15,8 @@ import io.ktor.request.*
 import kotlinx.serialization.KSerializer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import zakadabar.stack.backend.custom.CustomBackend
 import zakadabar.stack.backend.data.builtin.session.LoginTimeout
 import zakadabar.stack.backend.data.builtin.session.SessionBackend
-import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.ktor.buildServer
 import zakadabar.stack.data.BaseBo
@@ -111,20 +109,9 @@ open class Server : CliktCommand() {
 
         private val dependencies = mutableListOf<ModuleDependency<*>>()
 
-        private val entityBackends = mutableListOf<EntityBackend<*>>()
-
-        private val customBackends = mutableListOf<CustomBackend>()
-
-        operator fun plusAssign(boBackend: EntityBackend<*>) {
-            this.modules += boBackend
-            this.entityBackends += boBackend
-            boBackend.onModuleLoad()
-        }
-
-        operator fun plusAssign(customBackend: CustomBackend) {
-            this.modules += customBackend
-            this.customBackends += customBackend
-            customBackend.onModuleLoad()
+        operator fun plusAssign(module: BackendModule) {
+            this.modules += module
+            module.onModuleLoad()
         }
 
         fun <T : BaseBo> loadSettings(namespace: String, serializer: KSerializer<T>): T? {
@@ -164,7 +151,7 @@ open class Server : CliktCommand() {
 
         startModules() // start the modules
 
-        val server = buildServer(settings, entityBackends, customBackends) //  build the Ktor server instance
+        val server = buildServer(settings, modules) //  build the Ktor server instance
 
         staticRoot = settings.staticResources
 
@@ -216,16 +203,6 @@ open class Server : CliktCommand() {
 
                 val module = (installable.objectInstance as BackendModule)
                 modules += module
-
-                when (module) {
-                    is EntityBackend<*> -> entityBackends += module
-                    is CustomBackend -> customBackends += module
-                    else -> {
-                        modules += module
-                        module.onModuleLoad()
-                    }
-                }
-
                 moduleLogger.info("loaded module $it")
 
             } catch (ex: Throwable) {
@@ -327,7 +304,7 @@ open class Server : CliktCommand() {
      */
     fun <T : Any> firstOrNull(kClass: KClass<T>): T? {
         @Suppress("UNCHECKED_CAST") // checking for class
-        return modules.firstOrNull { kClass.isInstance(it) } as T
+        return modules.firstOrNull { kClass.isInstance(it) } as? T
     }
 
     inner class ModuleDependency<T : Any>(
