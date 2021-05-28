@@ -3,14 +3,10 @@
  */
 package zakadabar.lib.accounts.backend
 
-import zakadabar.stack.backend.Server
-import zakadabar.stack.backend.authorize.roleBl
-
-lateinit var accountPrivateBl : AccountPrivateBl
+import zakadabar.stack.backend.server
 
 fun install() {
-    Server += PrincipalBl()
-    Server += AccountPrivateBl()
-    Server += RoleBl().also { roleBl = it }
-    Server += RoleGrantBl()
+    server += AccountPrivateBl()
+    server += RoleBl()
+    server += RoleGrantBl()
 }

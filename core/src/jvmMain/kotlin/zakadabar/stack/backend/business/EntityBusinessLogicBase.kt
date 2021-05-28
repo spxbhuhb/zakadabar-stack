@@ -38,9 +38,9 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
 
     companion object {
 
-        var routerProvider : RouterProvider = KtorRouterProvider()
+        var routerProvider: RouterProvider = KtorRouterProvider()
 
-        val auditorProvider : AuditorProvider = LogAuditorProvider()
+        val auditorProvider: AuditorProvider = LogAuditorProvider()
 
     }
 
@@ -59,7 +59,7 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
     /**
      * Router routes incoming requests to the proper processor function.
      */
-    open val router: Router<T> = router {  }
+    open val router: Router<T> = router { }
 
     /**
      * Authorizer to call for operation authorization.
@@ -75,15 +75,15 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
     /**
      * Audit records (logs) are created by this auditor.
      */
-    open val auditor: Auditor<T> = auditor {  }
+    open val auditor: Auditor<T> = auditor { }
 
-    fun router(build : Router<T>.() -> Unit) : Router<T> {
+    fun router(build: Router<T>.() -> Unit): Router<T> {
         val r = routerProvider.businessLogicRouter(this)
         r.build()
         return r
     }
 
-    fun auditor(build : Auditor<T>.() -> Unit) : Auditor<T> {
+    fun auditor(build: Auditor<T>.() -> Unit): Auditor<T> {
         val a = auditorProvider.businessLogicAuditor(this)
         a.build()
         return a
@@ -101,96 +101,111 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
         router.installRoutes(route)
     }
 
-    open fun listWrapper(executor: Executor): List<T> {
+    open fun listWrapper(executor: Executor): List<T> =
 
-        authorizer.authorizeList(executor)
+        pa.withTransaction {
 
-        val response = pa.withTransaction { list(executor) }
+            authorizer.authorizeList(executor)
 
-        auditor.auditList(executor)
+            val response = list(executor)
 
-        return response
+            auditor.auditList(executor)
 
-    }
+            response
 
-    open fun readWrapper(executor: Executor, entityId: EntityId<T>): T {
+        }
 
-        authorizer.authorizeRead(executor, entityId)
+    open fun readWrapper(executor: Executor, entityId: EntityId<T>): T =
 
-        val response = pa.withTransaction { read(executor, entityId) }
+        pa.withTransaction {
 
-        auditor.auditRead(executor, entityId)
+            authorizer.authorizeRead(executor, entityId)
 
-        return response
+            val response = read(executor, entityId)
 
-    }
+            auditor.auditRead(executor, entityId)
 
-    open fun createWrapper(executor: Executor, bo: T): T {
+            response
 
-        validator.validateCreate(executor, bo)
+        }
 
-        authorizer.authorizeCreate(executor, bo)
+    open fun createWrapper(executor: Executor, bo: T): T =
 
-        val response = pa.withTransaction { create(executor, bo) }
+        pa.withTransaction {
 
-        auditor.auditCreate(executor, response)
+            validator.validateCreate(executor, bo)
 
-        return response
+            authorizer.authorizeCreate(executor, bo)
 
-    }
+            val response = create(executor, bo)
 
-    open fun updateWrapper(executor: Executor, bo: T): T {
+            auditor.auditCreate(executor, response)
 
-        validator.validateUpdate(executor, bo)
+            response
 
-        authorizer.authorizeUpdate(executor, bo)
+        }
 
-        val response = pa.withTransaction { update(executor, bo) }
+    open fun updateWrapper(executor: Executor, bo: T): T =
 
-        auditor.auditUpdate(executor, response)
+        pa.withTransaction {
 
-        return response
-    }
+            validator.validateUpdate(executor, bo)
 
-    open fun deleteWrapper(executor: Executor, entityId: EntityId<T>) {
+            authorizer.authorizeUpdate(executor, bo)
 
-        authorizer.authorizeDelete(executor, entityId)
+            val response = update(executor, bo)
 
-        pa.withTransaction { delete(executor, entityId) }
+            auditor.auditUpdate(executor, response)
 
-        auditor.auditDelete(executor, entityId)
+            response
+        }
 
-    }
+    open fun deleteWrapper(executor: Executor, entityId: EntityId<T>) =
 
-    open fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> BaseBo, bo: BaseBo) : BaseBo {
+        pa.withTransaction {
 
-        bo as ActionBo<*>
+            authorizer.authorizeDelete(executor, entityId)
 
-        validator.validateAction(executor, bo)
+            delete(executor, entityId)
 
-        authorizer.authorizeAction(executor, bo)
+            auditor.auditDelete(executor, entityId)
 
-        val response = pa.withTransaction { func(executor, bo) }
+        }
 
-        auditor.auditAction(executor, bo)
+    open fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> BaseBo, bo: BaseBo): BaseBo =
 
-        return response
-    }
+        pa.withTransaction {
 
-    open fun queryWrapper(executor: Executor, func: (Executor, BaseBo) -> Any, bo: BaseBo) : Any {
+            bo as ActionBo<*>
 
-        bo as QueryBo<*>
+            validator.validateAction(executor, bo)
 
-        validator.validateQuery(executor, bo)
+            authorizer.authorizeAction(executor, bo)
 
-        authorizer.authorizeQuery(executor, bo)
+            val response = func(executor, bo)
 
-        val response = pa.withTransaction { func(executor, bo) }
+            auditor.auditAction(executor, bo)
 
-        auditor.auditQuery(executor, bo)
+            response
 
-        return response
-    }
+        }
+
+    open fun queryWrapper(executor: Executor, func: (Executor, BaseBo) -> Any, bo: BaseBo): Any =
+
+        pa.withTransaction {
+
+            bo as QueryBo<*>
+
+            validator.validateQuery(executor, bo)
+
+            authorizer.authorizeQuery(executor, bo)
+
+            val response = func(executor, bo)
+
+            auditor.auditQuery(executor, bo)
+
+            response
+        }
 
     /**
      * Create a new entity.

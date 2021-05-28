@@ -1,0 +1,12 @@
+/*
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ */
+package zakadabar.lib.accounts.backend
+
+import org.jetbrains.exposed.sql.select
+
+class AccountPrivateExposedPa : AccountPrivateExposedPaGen() {
+
+    fun readByName(name: String) = table.select { table.accountName eq name }.first().toBo()
+
+}

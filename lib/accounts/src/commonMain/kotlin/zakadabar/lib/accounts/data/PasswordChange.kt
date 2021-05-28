@@ -12,11 +12,16 @@ import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoSchema
 
 /**
- * Password change data. Account id is present to allow administrators change the
- * password of other accounts.
+ * Changes the password of an account. Security officers are allowed to change any
+ * passwords without supplying the old password. Exception is their own account
+ * which can be changed only if the old password is provided and correct.
+ *
+ * @param  accountId     The id of the account entity to change the password of.
+ * @param  oldPassword   The current password of the account.
+ * @param  newPassword   The new password of the account.
  */
 @Serializable
-class PasswordChangeAction(
+class PasswordChange(
 
     var accountId: EntityId<AccountPrivateBo>,
     var oldPassword: Secret,
@@ -24,7 +29,7 @@ class PasswordChangeAction(
 
 ) : ActionBo<ActionStatusBo> {
 
-    companion object : ActionBoCompanion<PasswordChangeAction>(PrincipalBo.boNamespace)
+    companion object : ActionBoCompanion<PasswordChange>(AccountPrivateBo.boNamespace)
 
     override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
 

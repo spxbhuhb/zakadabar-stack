@@ -6,8 +6,10 @@
 
 package zakadabar.lib.accounts.data
 
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
+import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityBoCompanion
 import zakadabar.stack.data.entity.EntityId
@@ -19,19 +21,25 @@ class AccountPrivateBo(
 
     override var id: EntityId<AccountPrivateBo>,
 
-    var principal: EntityId<PrincipalBo>,
+    var validated : Boolean,
+    var locked : Boolean,
+    var expired : Boolean,
+    var credentials : Secret?,
+    var resetKey : Secret?,
+    var resetKeyExpiration : Instant?,
+    var lastLoginSuccess : Instant?,
+    var loginSuccessCount : Int,
+    var lastLoginFail : Instant?,
+    var loginFailCount : Int,
 
     var accountName: String,
     var fullName: String,
     var email: String,
+    var phone: String?,
 
     var displayName: String?,
     var theme: String?,
-    var locale: String,
-
-    var organizationName: String?,
-    var position: String?,
-    var phone: String?
+    var locale: String
 
 ) : EntityBo<AccountPrivateBo> {
 
@@ -43,18 +51,24 @@ class AccountPrivateBo(
     override fun schema() = BoSchema {
         + ::id
 
-        + ::principal
+        + ::validated
+        + ::locked
+        + ::expired
+        + ::credentials
+        + ::resetKey
+        + ::resetKeyExpiration
+        + ::lastLoginSuccess
+        + ::loginSuccessCount
+        + ::lastLoginFail
+        + ::loginFailCount
 
         + ::accountName min 3 max 50
         + ::fullName min 5 max 100
         + ::email min 4 max 50
+        + ::phone min 10 max 20
 
         + ::displayName min 3 max 50
         + ::locale max 20
         + ::theme max 50
-
-        + ::organizationName min 2 max 100
-        + ::position min 3 max 50
-        + ::phone min 10 max 20
     }
 }

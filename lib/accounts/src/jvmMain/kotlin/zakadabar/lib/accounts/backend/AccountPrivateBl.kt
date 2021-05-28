@@ -3,34 +3,213 @@
  */
 package zakadabar.lib.accounts.backend
 
-import zakadabar.lib.accounts.data.AccountPrivateBo
-import zakadabar.lib.accounts.data.AccountPublicBo
-import zakadabar.lib.accounts.data.PrincipalBo
+import kotlinx.datetime.Clock
+import zakadabar.lib.accounts.data.*
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize.Forbidden
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
+import zakadabar.stack.backend.authorize.authorize
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
+import zakadabar.stack.backend.data.builtin.resources.setting
+import zakadabar.stack.data.action.ActionBo
+import zakadabar.stack.data.builtin.ActionStatusBo
+import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.util.BCrypt
 import zakadabar.stack.util.Executor
 
-class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
+open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     boClass = AccountPrivateBo::class
 ) {
 
-    override val pa = AccountPrivateExposedPaGen()
+    private val settings by setting<ModuleSettingsBo>("zakadabar.lib.accounts")
+
+    override val pa = AccountPrivateExposedPa()
+
+    private lateinit var anonymous : AccountPrivateBo
 
     override val authorizer = object : SimpleRoleAuthorizer<AccountPrivateBo>({
-        list = StackRoles.securityOfficer
-        allWrites = StackRoles.securityOfficer
+        all = StackRoles.securityOfficer // for non-overridden methods
     }) {
+
         override fun authorizeRead(executor: Executor, entityId: EntityId<AccountPrivateBo>) {
-            if (executor.accountId == entityId || executor.hasRole(StackRoles.securityOfficer)) return
-            throw Forbidden()
+            ownOrSecurityOfficer(executor, entityId)
+        }
+
+        override fun authorizeUpdate(executor: Executor, entity: AccountPrivateBo) {
+            ownOrSecurityOfficer(executor, entity.id)
+        }
+
+        override fun authorizeAction(executor: Executor, actionBo: ActionBo<*>) {
+            when (actionBo) {
+                is UpdateAccountLocked -> authorize(executor, StackRoles.securityOfficer)
+                is PasswordChange -> secureChange(executor, actionBo.accountId, actionBo.oldPassword)
+                is UpdateAccountSecure -> secureChange(executor, actionBo.accountId, actionBo.password)
+                else -> throw Forbidden()
+            }
+        }
+
+        /**
+         * Users can read and update the non-secure fields their own account, if they are not "anonymous".
+         * Security officer can update non-secure fields of all users.
+         */
+        fun ownOrSecurityOfficer(executor: Executor, accountId: EntityId<AccountPrivateBo>) {
+            if (executor.accountId == anonymous.id) throw Forbidden()
+            if (executor.accountId == accountId || executor.hasRole(StackRoles.securityOfficer)) {
+                return
+            } else {
+                throw Forbidden()
+            }
+        }
+
+        /**
+         * For changing security related fields (password, e-mail, phone). Security officer can
+         * change anything without password, except own.
+         */
+        fun secureChange(executor: Executor, accountId: EntityId<AccountPrivateBo>, password: Secret) {
+            if (executor.accountId == accountId) {
+                authenticate(executor, accountId, password.value)
+            } else {
+                authorize(executor, StackRoles.securityOfficer)
+            }
         }
     }
 
-    fun findAccountById(accountId: EntityId<AccountPrivateBo>): Pair<AccountPublicBo,EntityId<PrincipalBo>> {
-        TODO("Not yet implemented")
+    override val router = router {
+        action(PasswordChange::class, ::passwordChange)
+        action(UpdateAccountSecure::class, ::updateAccountSecure)
+        action(UpdateAccountLocked::class, ::updateAccountLocked)
+    }
+
+    override val auditor = auditor {
+        includeData = false
+    }
+
+    class InvalidCredentials : Exception()
+    class AccountNotValidatedException : Exception()
+    class AccountLockedException : Exception()
+    class AccountExpiredException : Exception()
+
+    override fun onModuleStart() {
+        super.onModuleStart()
+        anonymous = pa.withTransaction {
+            pa.readByName("anonymous")
+        }
+    }
+
+    override fun create(executor: Executor, bo: AccountPrivateBo): AccountPrivateBo {
+        throw NotImplementedError("use CreateAccount action instead")
+    }
+
+    /**
+     * Updates only the non-security fields of the account. Security related fields have
+     * their own update methods. Email and password are security related fields.
+     */
+    override fun update(executor: Executor, bo: AccountPrivateBo): AccountPrivateBo {
+        val account = pa.read(bo.id)
+
+        account.accountName = bo.accountName
+        account.fullName = bo.fullName
+        account.displayName = bo.displayName
+        account.theme = bo.theme
+        account.locale = bo.locale
+
+        return pa.update(account)
+    }
+
+    open fun updateAccountSecure(executor: Executor, action: UpdateAccountSecure): ActionStatusBo {
+
+        val account = pa.read(action.accountId)
+
+        account.email = action.email
+        account.phone = action.phone
+
+        pa.update(account)
+
+        return ActionStatusBo()
+    }
+
+    open fun updateAccountLocked(executor: Executor, action: UpdateAccountLocked): ActionStatusBo {
+
+        val account = pa.read(action.accountId)
+
+        if (account.locked && ! action.locked) {
+            account.loginFailCount = 0
+        }
+
+        account.locked = action.locked
+
+        pa.update(account)
+
+        return ActionStatusBo()
+    }
+
+    open fun passwordChange(executor: Executor, action: PasswordChange): ActionStatusBo {
+
+        val bo = pa.read(action.accountId)
+
+        if (executor.accountId == action.accountId) {
+            try {
+                authenticate(executor, bo.id, action.oldPassword.value)
+            } catch (ex: Exception) {
+                return ActionStatusBo(false)
+            }
+        } else {
+            authorize(executor, StackRoles.securityOfficer)
+        }
+
+        bo.credentials = action.newPassword
+
+        pa.update(bo)
+
+        auditor.auditCustom(executor) { "password change accountId=${bo.id} accountName=${bo.accountName}" }
+
+        return ActionStatusBo()
+    }
+
+    /**
+     * Perform password based authentication. Increments success/fail counters according
+     * to the result. Locks the account if login fails surpass [ModuleSettingsBo.maxFailedLogins].
+     *
+     * @param   executor   The executor of the authentication.
+     * @param   accountId  The account id to authenticate.
+     * @param   password   The password to authenticate with.
+     *
+     * @throws  NoSuchElementException        When the account does not exists.
+     * @throws  AccountNotValidatedException  When [AccountPrivateBo.validated] is false.
+     * @throws  AccountLockedException        When [AccountPrivateBo.locale] is true.
+     * @throws  AccountExpiredException       When [AccountPrivateBo.expired] is true.
+     * @throws  InvalidCredentials            When the supplied password is invalid.
+     */
+    open fun authenticate(executor: Executor, accountId: EntityId<AccountPrivateBo>, password: String) {
+
+        val account = pa.read(accountId)
+
+        val credentials = account.credentials ?: throw NoSuchElementException()
+
+        val result = when {
+            ! account.validated -> AccountNotValidatedException()
+            account.locked -> AccountLockedException()
+            account.expired -> AccountExpiredException()
+            ! BCrypt.checkpw(password, credentials.value) -> InvalidCredentials()
+            else -> null
+        }
+
+        if (result != null) {
+            account.loginFailCount ++
+            account.lastLoginFail = Clock.System.now()
+            account.locked = account.locked || (account.loginFailCount > settings.maxFailedLogins)
+            pa.commit()
+            auditor.auditCustom(executor) { "login fail accountId=${account.id} accountName=${account.accountName}" }
+            throw result
+        }
+
+        account.lastLoginSuccess = Clock.System.now()
+        account.loginSuccessCount ++
+
+        account.loginFailCount = 0
+
+        pa.commit()
     }
 
 }

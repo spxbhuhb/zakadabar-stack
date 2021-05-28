@@ -4,9 +4,11 @@ Authorizers are used by [Business Logic](./BusinessLogic.md) classes to
 perform the actual authorization.
 
 <div data-zk-enrich="Note" data-zk-flavour="Danger" data-zk-title="Endpoint Only">
+
 The automatic call of authorizers works for public endpoints only (access from outside).
 If you use cross-BL calls, you have to authorize manually or call the wrapper version
 of the methods to kick off full processing.
+
 </div>
 
 

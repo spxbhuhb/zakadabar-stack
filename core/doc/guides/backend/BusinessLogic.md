@@ -198,6 +198,44 @@ class SimpleStandaloneQueryBl : QueryBusinessLogicBase<SimpleStandaloneQuery, Si
 }
 ```
 
+## Mechanism, Wrappers, Transactions
+
+The EBLB defines these business level functions.
+
+| Wrapped | Non-Wrapped | Default Behaviour |
+| --- | --- | --- |
+| listWrapped | list | Executes `pa.list()`. |
+| readWrapped | read | Executes `pa.read()`. |
+| createWrapped | create |  Executes `pa.create()`. |
+| updateWrapped | update |  Executes `pa.update()`. |
+| deleteWrapped | delete |  Executes `pa.delate()`. |
+| actionWrapped | action | Calls different functions based on action class. |
+| queryWrapped | query |  Calls different functions based on action class. |
+
+Wrapped version of the functions:
+
+1. put everything in a transaction with `pa.withTransaction`
+1. call `validator.validateXX`
+1. call `authorizer.authorizeXX`
+1. call the non-wrapped version
+1. call `auditor.auditXX`
+1. return with the result
+
+This means that everything is in a transaction when a request is routed by
+Ktor or you call the wrapped version of the function.
+
+When you call the non-wrapped version, none of the above is executed.
+
+## Transactions
+
+EBLB functions are wrapped in a transaction when:
+
+- Ktor routing initiates the call
+- you call the `wrapper` version of the function like: `createWrapper`
+
+When you call the non-wrapper function like `create` you have to provide a
+transaction.
+
 ## Router Provider
 
 Companion object of EBLB has a `routerProvider` property. This is a function that is used to get a router

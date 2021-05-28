@@ -7,9 +7,11 @@ quite different from database logs because:
 - they see the request BO data which may be very far from the database.
 
 <div data-zk-enrich="Note" data-zk-flavour="Danger" data-zk-title="Endpoint Only">
+
 The automatic call of auditors works for public endpoints only (access from outside).
-If you use cross-BL calls, you have to audit manually or call the wrapper version
-of the methods to kick off full processing.
+If you use cross-BL calls, you have to audit manually or call the `wrapper` version
+of the functions to kick off full processing.
+
 </div>
 
 ## Built-in Auditors

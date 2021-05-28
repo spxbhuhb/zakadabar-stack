@@ -48,6 +48,12 @@
 - ZkSideBarGroup: clicking close to the highlight border does not open the group
 - ZkSideBarGroup: hover text color is now properly set
 
+## Lib:Accounts
+
+- move account, role, login, logout from core into this P&P package
+- merge principal and account
+- migrate all backend modules to the bl/pa concept
+
 ## Lib:Examples
 
 ### Added
