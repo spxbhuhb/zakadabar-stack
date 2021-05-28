@@ -10,7 +10,32 @@ In the Stack, there are none. For all those things we use Kotlin based solutions
 * For theming and CSS we have our own implementation, please see [Themes, Css](/doc/guides/browser/structure/ThemesCss.md) in the
   documentation.
   
-## Why Not Semantic Versioning
+### Why Not Spring, JPA, etc?
+
+We wanted to be independent of JVM as much as possible. While the backend code is
+in `jvmMain` at the moment, it is structured such a way that we could move it
+to `commonMain` with reasonable effort. This would open the possibility to
+run the backend in Node.js for example.
+
+### Why Not React, Bootstrap, jquery, etc?
+
+There are a few reasons. First, we wanted to be independent (yet again) from any big 
+JavaScript libraries and the way of thinking they enforce.
+
+The second reason is that because of this independence we can take advantage
+many Kotlin features and integrate our components tightly together. This would
+be much harder if we would try to bind existing libraries together.
+
+Third, we wanted a really consistent look and feel. This way we don't have to
+worry about styling other libraries. Everything in the core uses the same 
+style and theme system, and we try to stick to it as much as possible in libs.
+
+It is not realistic to stay away from npm dependencies everywhere, for example
+`lib:markdown` uses `highlight.js` because we really did not want to do that
+by ourselves. When we add a chart library, it will most probably use an NPM
+dependency.
+
+### Why Not Semantic Versioning
 
 There are many reasons, for some of them, please read this article without any bias: [Semver Will Not Save You](https://hynek.me/articles/semver-will-not-save-you/).
 

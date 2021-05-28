@@ -28,7 +28,7 @@ Please give it a look on:
 - [https://zakadabar.io](https://zakadabar.io)
 - [https://github.com/spxbhuhb/zakadabar-stack](https://github.com/spxbhuhb/zakadabar-stack)
 
-Your opinion about and/or contribution would be much welcomed.
+Your opinion and/or contribution would be much welcomed.
 
 Sincerely,
 Tóth, István Zoltán

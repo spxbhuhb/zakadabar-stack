@@ -198,7 +198,7 @@ class SimpleStandaloneQueryBl : QueryBusinessLogicBase<SimpleStandaloneQuery, Si
 }
 ```
 
-## Mechanism, Wrappers, Transactions
+## Mechanism, Wrappers
 
 The EBLB defines these business level functions.
 
@@ -221,9 +221,6 @@ Wrapped version of the functions:
 1. call `auditor.auditXX`
 1. return with the result
 
-This means that everything is in a transaction when a request is routed by
-Ktor or you call the wrapped version of the function.
-
 When you call the non-wrapped version, none of the above is executed.
 
 ## Transactions
@@ -235,6 +232,31 @@ EBLB functions are wrapped in a transaction when:
 
 When you call the non-wrapper function like `create` you have to provide a
 transaction.
+
+## Find Other BLs
+
+Use the `module` delegate to get a reference to another BL. This will create
+a permanent reference to the BL instance with the given class. 
+
+```kotlin
+private val roleBl by module<RoleBlProvider>()
+```
+
+When there may be more than one instances of the given business logic interface or class,
+pass a selector method to get the one you need. Note that here we are looking for 
+a `RoleBlProvider`, not a `RoleBl`. With this pattern you can look up modules
+by interface and select the one you need.
+
+```kotlin
+private val roleBl by module<RoleBlProvider> { it.namespace == "zkl-role" }
+```
+
+If you don't want to bind to the BL instance permanently use `first` or
+`firstOrNull` methods of the server to find the BL you need.
+
+```kotlin
+server.firstOrNull<RoleBl>()?.getByName(StackRoles.securityOfficer)
+```
 
 ## Router Provider
 

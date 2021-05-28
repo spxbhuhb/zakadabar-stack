@@ -2,9 +2,8 @@
 
 Project status is **alpha**.
 
-This means that some migration steps may be needed between releases. 
-We will try really hard to keep these to minimum and give you a clear 
-upgrade path or an upgrade script.
+Some migration steps may be needed between releases. We will try really hard to
+keep these to minimum and give you a clear upgrade path or an upgrade script.
 
 Our goal is to move out of alpha status by end of August 2021.
 
