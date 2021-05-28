@@ -352,10 +352,13 @@ open class Server : CliktCommand() {
     ) {
         operator fun provideDelegate(thisRef: Any, property: KProperty<*>) =
             ModuleDependency(thisRef, property, moduleClass, selector)
+
+        operator fun provideDelegate(thisRef: Nothing?, property: KProperty<*>) =
+            ModuleDependency(thisRef, property, moduleClass, selector)
     }
 
     inner class ModuleDependency<T : Any>(
-        private val dependentModule: Any,
+        private val dependentModule: Any?,
         private val dependentProperty: KProperty<*>,
         private val moduleClass: KClass<T>,
         private val selector: (T) -> Boolean
@@ -371,7 +374,8 @@ open class Server : CliktCommand() {
                 module = first(moduleClass, selector)
                 true
             } catch (ex : NoSuchElementException) {
-                moduleLogger.error("unable to resolve dependency from ${dependentModule::class.simpleName}.${dependentProperty.name} to ${moduleClass.simpleName} ")
+                val name = dependentModule?.let { it::class.qualifiedName + "." } ?: ""
+                moduleLogger.error("unable to resolve dependency from ${name}${dependentProperty.name} to ${moduleClass.simpleName} ")
                 false
             }
 

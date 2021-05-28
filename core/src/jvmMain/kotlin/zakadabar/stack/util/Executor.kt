@@ -15,6 +15,7 @@ import zakadabar.stack.data.entity.EntityId
 open class Executor internal constructor(
 
     val accountId: EntityId<out BaseBo>,
+    val anonymous: Boolean,
     val roleIds: List<EntityId<out BaseBo>>,
     private val roleNames: List<String>
 

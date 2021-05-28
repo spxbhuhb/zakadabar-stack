@@ -6,8 +6,7 @@ package zakadabar.stack.backend.ktor.session
 import io.ktor.sessions.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import zakadabar.stack.data.builtin.account.AccountPrivateBo
-import zakadabar.stack.data.builtin.account.RoleBo
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityId
 
 /**
@@ -17,8 +16,9 @@ import zakadabar.stack.data.entity.EntityId
  */
 @Serializable
 data class StackSession(
-    val account: EntityId<AccountPrivateBo>,
-    val roleIds: List<EntityId<RoleBo>>,
+    val account: EntityId<out BaseBo>,
+    val anonymous: Boolean,
+    val roleIds: List<EntityId<out BaseBo>>,
     val roleNames: List<String>
 )
 

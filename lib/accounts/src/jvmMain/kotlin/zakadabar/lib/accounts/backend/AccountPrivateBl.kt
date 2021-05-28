@@ -6,9 +6,7 @@ package zakadabar.lib.accounts.backend
 import kotlinx.datetime.Clock
 import zakadabar.lib.accounts.data.*
 import zakadabar.stack.StackRoles
-import zakadabar.stack.backend.authorize.Forbidden
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
-import zakadabar.stack.backend.authorize.authorize
+import zakadabar.stack.backend.authorize.*
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.data.builtin.resources.setting
 import zakadabar.stack.data.action.ActionBo
@@ -84,11 +82,6 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     override val auditor = auditor {
         includeData = false
     }
-
-    class InvalidCredentials : Exception()
-    class AccountNotValidatedException : Exception()
-    class AccountLockedException : Exception()
-    class AccountExpiredException : Exception()
 
     override fun onModuleStart() {
         super.onModuleStart()
