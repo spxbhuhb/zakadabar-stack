@@ -9,8 +9,11 @@ import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize.*
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.data.builtin.resources.setting
+import zakadabar.stack.backend.module
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.builtin.ActionStatusBo
+import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.BCrypt
@@ -18,13 +21,15 @@ import zakadabar.stack.util.Executor
 
 open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     boClass = AccountPrivateBo::class
-) {
+), AccountBlProvider {
 
     private val settings by setting<ModuleSettingsBo>("zakadabar.lib.accounts")
 
     override val pa = AccountPrivateExposedPa()
 
-    private lateinit var anonymous : AccountPrivateBo
+    private lateinit var anonymous : AccountPublicBo
+
+    private val roleBl by module<RoleBl>()
 
     override val authorizer = object : SimpleRoleAuthorizer<AccountPrivateBo>({
         all = StackRoles.securityOfficer // for non-overridden methods
@@ -86,7 +91,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     override fun onModuleStart() {
         super.onModuleStart()
         anonymous = pa.withTransaction {
-            pa.readByName("anonymous")
+            pa.readByName("anonymous").toPublic()
         }
     }
 
@@ -203,6 +208,31 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
         account.loginFailCount = 0
 
         pa.commit()
+    }
+
+    private fun AccountPrivateBo.toPublic() =  AccountPublicBo(
+        id = EntityId(id),
+        accountName = accountName,
+        fullName = fullName,
+        email = email,
+        displayName = displayName,
+        organizationName = null,
+        theme = theme,
+        locale = locale
+    )
+    
+    override fun anonymous() = anonymous
+
+    override fun readPublic(account: EntityId<out BaseBo>) = pa.read(EntityId(account)).toPublic()
+
+    override fun authenticate(executor : Executor, accountName: String, password: Secret): AccountPublicBo {
+        val account = pa.readByName(accountName)
+        authenticate(executor, account.id, password.value)
+        return account.toPublic()
+    }
+
+    override fun roles(accountId: EntityId<out BaseBo>): List<Pair<EntityId<out BaseBo>, String>> {
+        return roleBl.rolesOf(EntityId(accountId))
     }
 
 }

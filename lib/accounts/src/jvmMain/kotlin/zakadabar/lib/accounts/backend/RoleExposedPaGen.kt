@@ -1,3 +1,6 @@
+/*
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ */
 package zakadabar.lib.accounts.backend
 
 import org.jetbrains.exposed.sql.ResultRow
@@ -18,20 +21,20 @@ import zakadabar.stack.backend.exposed.entityId
  * - If you need other fields, add them to the business object and then re-generate.
  * - If you need other functions, please extend with `Gen` removed from the name.
  */
-open class RoleExposedPaGen : ExposedPaBase<RoleBo,RoleExposedTableGen>(
+open class RoleExposedPaGen : ExposedPaBase<RoleBo, RoleExposedTableGen>(
     table = RoleExposedTableGen
 ) {
     override fun ResultRow.toBo() : RoleBo {
         return RoleBo(
             id = this[table.id].entityId(),
-            name = this[table.name],
-            description = this[table.description]
+            name = this[RoleExposedTableGen.name],
+            description = this[RoleExposedTableGen.description]
         )
     }
 
     override fun UpdateBuilder<*>.fromBo(bo: RoleBo) {
-        this[table.name] = bo.name
-        this[table.description] = bo.description
+        this[RoleExposedTableGen.name] = bo.name
+        this[RoleExposedTableGen.description] = bo.description
     }
 }
 

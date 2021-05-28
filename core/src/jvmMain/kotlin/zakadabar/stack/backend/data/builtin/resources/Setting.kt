@@ -19,7 +19,7 @@ class Setting<V : BaseBo>(
     operator fun getValue(thisRef: Any?, property: KProperty<*>): V {
         synchronized(this) {
             if (! initialized) {
-                val bl = server.firstOrNull(SettingBackend::class)
+                val bl = server.firstOrNull<SettingBackend>()
                 if (bl != null) value = bl.get(value, namespace, serializer)
                 initialized = true
             }

@@ -4,29 +4,14 @@
 package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityBoCompanion
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.BoSchema
 
+/**
+ * A role grant, used to send the grant to the PA.
+ */
 @Serializable
 class RoleGrantBo(
-
-    override var id: EntityId<RoleGrantBo>,
-    var principal: EntityId<PrincipalBo>,
-    var role: EntityId<RoleBo>
-
-) : EntityBo<RoleGrantBo> {
-
-    companion object : EntityBoCompanion<RoleGrantBo>("zkl-role-grant")
-
-    override fun getBoNamespace() = boNamespace
-    override fun comm() = comm
-
-    override fun schema() = BoSchema {
-        + ::id
-        + ::principal
-        + ::role
-    }
-
-}
+    var account : EntityId<AccountPrivateBo>,
+    var role : EntityId<RoleBo>
+) : BaseBo

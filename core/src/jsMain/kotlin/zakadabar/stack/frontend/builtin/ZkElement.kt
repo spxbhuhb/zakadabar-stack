@@ -705,9 +705,9 @@ open class ZkElement(
     open fun clearChildren(): ZkElement {
         if (::childElements.isInitialized) {
             childElements.forEach { child ->
-                this -= child
                 child.onDestroy()
             }
+            childElements.clear()
         }
         return this
     }

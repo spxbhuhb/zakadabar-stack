@@ -7,6 +7,6 @@ import org.jetbrains.exposed.sql.select
 
 class AccountPrivateExposedPa : AccountPrivateExposedPaGen() {
 
-    fun readByName(name: String) = table.select { table.accountName eq name }.first().toBo()
+    fun readByName(name: String) = table.select { AccountPrivateExposedTableGen.accountName eq name }.first().toBo()
 
 }

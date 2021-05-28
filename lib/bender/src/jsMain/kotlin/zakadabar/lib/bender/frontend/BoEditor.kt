@@ -204,8 +204,6 @@ class BoEditor(
 
         if (! go) return
 
-        find<ZkButton>().forEach { it.show() } // TODO make generate button hide/show smarter
-
         lastGenerate.clear()
         lastGenerate.innerText = "Generated at: ${formatInstant(Clock.System.now())}"
 

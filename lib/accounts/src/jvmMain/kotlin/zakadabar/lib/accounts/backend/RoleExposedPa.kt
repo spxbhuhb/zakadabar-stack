@@ -3,10 +3,57 @@
  */
 package zakadabar.lib.accounts.backend
 
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.sql.*
+import zakadabar.lib.accounts.data.AccountPrivateBo
+import zakadabar.lib.accounts.data.RoleGrantBo
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.entity.EntityId
 
 class RoleExposedPa : RoleExposedPaGen() {
 
-    fun readByName(name: String) = table.select { table.name eq name }.first().toBo()
+    fun readByName(name: String) = table.select { RoleExposedTableGen.name eq name }.first().toBo()
+
+    fun rolesOf(accountId: EntityId<AccountPrivateBl>) =
+        RoleGrantExposedTable
+            .join(table, JoinType.INNER, additionalConstraint = { table.id eq RoleGrantExposedTable.role })
+            .slice(table.name, table.id)
+            .select { RoleGrantExposedTable.account eq accountId.toLong() }
+            .map {
+                EntityId<BaseBo>(it[table.id].value) to it[table.name]
+            }
+
+    fun rolesByAccount(accountId: EntityId<AccountPrivateBo>) =
+        RoleGrantExposedTable
+            .select { RoleGrantExposedTable.account eq accountId.toLong() }
+            .map {
+                RoleGrantBo(
+                    EntityId(it[RoleGrantExposedTable.account].value),
+                    EntityId(it[RoleGrantExposedTable.role].value)
+                )
+            }
+
+    fun grant(grant: RoleGrantBo) {
+        RoleGrantExposedTable.insertIgnore {
+            it[account] = EntityID(grant.account.toLong(), AccountPrivateExposedTableGen)
+            it[role] = EntityID(grant.role.toLong(), RoleExposedTableGen)
+        }
+    }
+
+    fun revoke(revoke: RoleGrantBo) {
+        val grants = RoleGrantExposedTable
+        grants.deleteWhere {
+            (grants.account eq revoke.account.toLong()) and (grants.role eq revoke.role.toLong())
+        }
+    }
+
+}
+
+object RoleGrantExposedTable : Table("role_grant") {
+
+    internal val account = reference("account", AccountPrivateExposedTableGen)
+    internal val role = reference("role", RoleExposedTableGen)
+
+    override val primaryKey = PrimaryKey(account, role)
 
 }

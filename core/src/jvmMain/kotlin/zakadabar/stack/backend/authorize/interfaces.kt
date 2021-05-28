@@ -7,6 +7,7 @@ import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.util.Executor
 
 class InvalidCredentials : Exception()
 class AccountNotValidatedException : Exception()
@@ -20,6 +21,6 @@ interface RoleBlProvider {
 interface AccountBlProvider {
     fun anonymous() : AccountPublicBo
     fun readPublic(account: EntityId<out BaseBo>): AccountPublicBo
-    fun authenticate(accountName : String, password : Secret) : AccountPublicBo
+    fun authenticate(executor : Executor, accountName : String, password : Secret) : AccountPublicBo
     fun roles(accountId: EntityId<out BaseBo>) : List<Pair<EntityId<out BaseBo>,String>>
 }

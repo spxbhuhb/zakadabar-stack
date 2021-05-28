@@ -6,6 +6,7 @@
 package zakadabar.stack.data.entity
 
 import kotlinx.serialization.Serializable
+import zakadabar.stack.data.BaseBo
 
 @Serializable
 class EntityId<T> : Comparable<EntityId<T>> {
@@ -14,6 +15,10 @@ class EntityId<T> : Comparable<EntityId<T>> {
 
     constructor() {
         value = ""
+    }
+
+    constructor(value : EntityId<out BaseBo>) {
+        this.value = value.value
     }
 
     constructor(value : Long) {

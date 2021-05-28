@@ -155,6 +155,7 @@ open class Server : CliktCommand() {
     operator fun plusAssign(module: BackendModule) {
         this.modules += module
         module.onModuleLoad()
+        moduleLogger.info("loaded module $module")
     }
 
     override fun run() {
@@ -222,8 +223,7 @@ open class Server : CliktCommand() {
             try {
 
                 val module = (installable.objectInstance as BackendModule)
-                modules += module
-                moduleLogger.info("loaded module $it")
+                this += module
 
             } catch (ex: Throwable) {
                 moduleLogger.error("failed to load module $it")
@@ -341,9 +341,9 @@ open class Server : CliktCommand() {
      * @return   First instance of [kClass] from the server modules or null if
      *           no such module exists.
      */
-    fun <T : Any> firstOrNull(kClass: KClass<T>): T? {
+    fun <T : Any> firstOrNull(kClass: KClass<T>, selector : (T) -> Boolean = { true }): T? {
         @Suppress("UNCHECKED_CAST") // checking for class
-        return modules.firstOrNull { kClass.isInstance(it) } as? T
+        return modules.firstOrNull { kClass.isInstance(it) && selector(it as T) } as? T
     }
 
     inner class ModuleDependencyProvider<T : Any>(
@@ -363,18 +363,20 @@ open class Server : CliktCommand() {
         private val moduleClass: KClass<T>,
         private val selector: (T) -> Boolean
     ) {
-        private var module: T? = null
+        private var module: T? = firstOrNull(moduleClass, selector)
 
         init {
             dependencies += this
         }
 
+        val name = dependentModule?.let { it::class.qualifiedName + "." } ?: ""
+
         fun resolve() =
             try {
                 module = first(moduleClass, selector)
+                moduleLogger.info("resolved dependency from ${name}${dependentProperty.name} to ${moduleClass.simpleName} ")
                 true
             } catch (ex : NoSuchElementException) {
-                val name = dependentModule?.let { it::class.qualifiedName + "." } ?: ""
                 moduleLogger.error("unable to resolve dependency from ${name}${dependentProperty.name} to ${moduleClass.simpleName} ")
                 false
             }
