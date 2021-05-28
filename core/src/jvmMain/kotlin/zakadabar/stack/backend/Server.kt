@@ -41,7 +41,19 @@ val routingLogger: Logger by lazy { LoggerFactory.getLogger("routing") } // trac
 
 lateinit var server: Server
 
-inline fun <reified T : Any> module() = server.ModuleDependencyProvider(T::class)
+/**
+ * Provides a delegate that is a reference to a backend module. The dependency
+ * is resolved after all modules are loaded and before any modules are started.
+ *
+ * When the dependency cannot be resolved:
+ *
+ * - reports an error on the console,
+ * - aborts server startup.
+ *
+ * @param  selector  Function to select between modules if there are more than one.
+ *                   Default selects the first.
+ */
+inline fun <reified T : Any> module(noinline selector : (T) -> Boolean = { true }) = server.ModuleDependencyProvider(T::class, selector)
 
 fun main(argv: Array<String>) {
     server = Server()
@@ -297,6 +309,22 @@ open class Server : CliktCommand() {
     }
 
     /**
+     * Find a module of the given class with a selector method called
+     * to decided if the module is desired. The class may be an interface.
+     *
+     * @param    kClass      The class to look for
+     * @param    selector    Function to select the instance.
+     *
+     * @return   First instance of [kClass] from the server modules.
+     *
+     * @throws   NoSuchElementException   when there is no such module
+     */
+    fun <T : Any> first(kClass: KClass<T>, selector : (T) -> Boolean): T {
+        @Suppress("UNCHECKED_CAST") // checking for class
+        return modules.first { kClass.isInstance(it) && selector(it as T) } as T
+    }
+
+    /**
      * Find a module of the given class. The class may be an interface.
      *
      * @return   First instance of [T] from the server modules or null if
@@ -319,16 +347,18 @@ open class Server : CliktCommand() {
     }
 
     inner class ModuleDependencyProvider<T : Any>(
-        private val moduleClass: KClass<T>
+        private val moduleClass: KClass<T>,
+        private val selector: (T) -> Boolean
     ) {
         operator fun provideDelegate(thisRef: Any, property: KProperty<*>) =
-            ModuleDependency(thisRef, property, moduleClass)
+            ModuleDependency(thisRef, property, moduleClass, selector)
     }
 
     inner class ModuleDependency<T : Any>(
         private val dependentModule: Any,
         private val dependentProperty: KProperty<*>,
-        private val moduleClass: KClass<T>
+        private val moduleClass: KClass<T>,
+        private val selector: (T) -> Boolean
     ) {
         private var module: T? = null
 
@@ -338,7 +368,7 @@ open class Server : CliktCommand() {
 
         fun resolve() =
             try {
-                module = first(moduleClass)
+                module = first(moduleClass, selector)
                 true
             } catch (ex : NoSuchElementException) {
                 moduleLogger.error("unable to resolve dependency from ${dependentModule::class.simpleName}.${dependentProperty.name} to ${moduleClass.simpleName} ")
