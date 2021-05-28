@@ -61,7 +61,7 @@ inline fun <reified T> translate() = stringStore.getNormalized(T::class.simpleNa
  */
 open class ZkApplication {
 
-    open var sessionManager = ZkSessionManager()
+    lateinit var sessionManager : ZkSessionManager
 
     lateinit var locale: String
 
@@ -116,7 +116,8 @@ open class ZkApplication {
         window.dispatchEvent(Event(navStateChangeEvent))
     }
 
-    suspend fun initSession() {
+    suspend fun initSession(manager : ZkSessionManager) {
+        sessionManager = manager
         sessionManager.init()
     }
 

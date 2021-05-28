@@ -21,11 +21,7 @@ import zakadabar.stack.backend.authorize.LoginTimeout
 import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.ktor.buildServer
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.builtin.account.AccountPrivateBo
-import zakadabar.stack.data.builtin.account.AccountPublicBo
-import zakadabar.stack.data.builtin.account.PrincipalBo
 import zakadabar.stack.data.builtin.settings.ServerSettingsBo
-import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.PublicApi
 import java.nio.file.Files
 import java.nio.file.Path
@@ -65,29 +61,6 @@ inline fun <reified T : Any> module(noinline selector : (T) -> Boolean = { true 
 open class Server : CliktCommand() {
 
     companion object {
-        /**
-         * This variable contains the anonymous account. Each server should have one
-         * this is used for public access.
-         *
-         * For example, check AccountPrivateBackend in the demo.
-         */
-        lateinit var anonymous: AccountPublicBo
-
-        /**
-         *
-         * For example, check AccountPrivateBackend in the demo.
-         *
-         * @return the public account bo and the id of the principal that belongs to this account
-         */
-        lateinit var findAccountById: (accountId: EntityId<AccountPrivateBo>) -> Pair<AccountPublicBo, EntityId<PrincipalBo>>
-
-        /**
-         *
-         * For example, check AccountPrivateBackend.
-         *
-         * @return the public account bo and the id of the principal that belongs to this account
-         */
-        lateinit var findAccountByName: (accountName: String) -> Pair<AccountPublicBo, EntityId<PrincipalBo>>
 
         /**
          * The directory where setting files are. Set automatically by the configuration loader.

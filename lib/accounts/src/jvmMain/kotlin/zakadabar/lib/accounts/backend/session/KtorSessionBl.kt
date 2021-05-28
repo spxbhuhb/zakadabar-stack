@@ -11,6 +11,9 @@ import io.ktor.sessions.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import org.jetbrains.exposed.sql.transactions.transaction
+import zakadabar.lib.accounts.data.LoginAction
+import zakadabar.lib.accounts.data.LogoutAction
+import zakadabar.lib.accounts.data.SessionBo
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize.*
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
@@ -25,9 +28,6 @@ import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.builtin.account.AccountPublicBo
-import zakadabar.stack.data.builtin.account.LoginAction
-import zakadabar.stack.data.builtin.account.LogoutAction
-import zakadabar.stack.data.builtin.account.SessionBo
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
 import zakadabar.stack.data.entity.EntityId
@@ -67,7 +67,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 
         override suspend fun read(call: ApplicationCall, id: String) {
             apiCacheControl(call)
-            read(call)
+            call.respond(read(call) as Any)
         }
 
         override suspend fun action(call: ApplicationCall, actionClass: KClass<out BaseBo>, actionFunc: (Executor, BaseBo) -> BaseBo) {

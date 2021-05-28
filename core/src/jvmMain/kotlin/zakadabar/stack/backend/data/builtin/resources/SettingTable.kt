@@ -4,11 +4,9 @@
 package zakadabar.stack.backend.data.builtin.resources
 
 import org.jetbrains.exposed.dao.id.LongIdTable
-import zakadabar.stack.backend.data.builtin.role.RoleTable
 
 object SettingTable : LongIdTable("settings") {
 
-    val role = reference("role", RoleTable).nullable()
     var namespace = varchar("namespace", 100)
     val className = varchar("path", 100)
     val descriptor = text("descriptor")

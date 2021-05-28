@@ -1,9 +1,9 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.pages.account.accounts
+package zakadabar.lib.accounts.frontend.accounts
 
-import zakadabar.stack.data.builtin.account.AccountPrivateBo
+import zakadabar.lib.accounts.data.AccountPrivateBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.table.ZkTable
 

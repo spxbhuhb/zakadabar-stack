@@ -54,8 +54,12 @@ open class KtorRouter<T : EntityBo<T>>(
         with (context as Route) {
             route("${businessLogic.namespace}/entity") {
 
-                get("/{rid?}") {
-                    call.parameters["rid"]?.let { read(call, it) } ?: list(call)
+                get {
+                    list(call)
+                }
+
+                get("{rid}") {
+                    call.parameters["rid"]?.let { read(call, it) }
                 }
 
                 post {
@@ -103,7 +107,7 @@ open class KtorRouter<T : EntityBo<T>>(
 
         apiCacheControl(call)
 
-        call.respond(businessLogic.readWrapper(executor, EntityId<T>(id)) as Any)
+        call.respond(businessLogic.readWrapper(executor, EntityId(id)) as Any)
 
     }
 
@@ -130,7 +134,7 @@ open class KtorRouter<T : EntityBo<T>>(
         val id = call.parameters["rid"] ?: throw BadRequestException("missing id")
         val executor = call.executor()
 
-        businessLogic.deleteWrapper(executor, EntityId<T>(id))
+        businessLogic.deleteWrapper(executor, EntityId(id))
 
         call.respond(HttpStatusCode.OK)
 

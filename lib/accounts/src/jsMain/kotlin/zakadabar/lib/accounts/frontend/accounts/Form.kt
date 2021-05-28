@@ -1,13 +1,13 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.pages.account.accounts
+package zakadabar.lib.accounts.frontend.accounts
 
 import kotlinx.coroutines.coroutineScope
+import zakadabar.lib.accounts.data.*
 import zakadabar.stack.StackRoles
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.ActionStatusBo
-import zakadabar.stack.data.builtin.account.*
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.application.executor
 import zakadabar.stack.frontend.application.stringStore
@@ -45,7 +45,6 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
     override var titleElement: ZkAppTitle? = null
 
 
-    private lateinit var principalBo: PrincipalBo
     private lateinit var systemRoles: List<RoleBo>
     private lateinit var userRoles: List<RoleGrantBo>
 
@@ -54,10 +53,8 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
         io {
             if (hasRole(StackRoles.securityOfficer) && mode != ZkElementMode.Create) {
                 coroutineScope {
-                    principalBo = PrincipalBo.read(bo.principal)
                     systemRoles = RoleBo.all()
-                    RoleGrantBo.Companion.comm // to initialize comm
-                    userRoles = RoleGrantsByPrincipal(bo.principal).execute()
+                    userRoles = RolesByAccount(bo.id).execute()
                 }
             }
 
@@ -136,13 +133,11 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                 + ::fullName
                 + ::email
                 + ::phone
-                + ::organizationName
-                + ::position
             }
         }
     }
 
-    inner class PasswordChangeForm : ZkForm<PasswordChangeAction>() {
+    inner class PasswordChangeForm : ZkForm<PasswordChange>() {
 
         init {
             bo = default { this.accountId = this@Form.bo.id }
@@ -152,8 +147,6 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
         }
 
         override fun onCreate() {
-            PrincipalBo.Companion.comm // initialize comm
-
             + div(ZkFormStyles.contentContainer) {
                 + column(ZkFormStyles.form) {
                     buildPoint.classList += ZkFormStyles.onePanel
@@ -219,10 +212,10 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
         }
     }
 
-    inner class PrincipalForm : ZkForm<PrincipalBo>() {
+    inner class PrincipalForm : ZkForm<AccountPrivateBo>() {
 
         init {
-            bo = this@Form.principalBo
+            bo = this@Form.bo
             mode = ZkElementMode.Update
             setAppTitle = false
         }
@@ -246,10 +239,10 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
     }
 
-    inner class RolesForm : ZkForm<RoleGrantBo>() {
+    inner class RolesForm : ZkForm<AccountPrivateBo>() {
 
         init {
-            bo = default { principal = this@Form.principalBo.id }
+            bo = this@Form.bo
             mode = ZkElementMode.Other
             setAppTitle = false
         }
@@ -282,7 +275,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                             revoke(it.value)
                         }
                     }
-                    userRoles = RoleGrantsByPrincipal(bo.principal).execute()
+                    userRoles = RolesByAccount(bo.id).execute()
                     onSubmitSuccess()
                 } catch (ex: Exception) {
                     onSubmitError(ex)
@@ -292,13 +285,13 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
         private suspend fun grant(roleId: EntityId<RoleBo>) {
             if (userRoles.firstOrNull { it.role == roleId } != null) return
-            RoleGrantBo(EntityId(), principalBo.id, roleId).create()
+            GrantRole(bo.id, roleId).execute()
         }
 
         private suspend fun revoke(roleId: EntityId<RoleBo>) {
             userRoles.forEach {
                 if (it.role != roleId) return@forEach
-                it.delete()
+                RevokeRole(bo.id, roleId).execute()
             }
         }
     }

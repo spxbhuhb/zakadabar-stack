@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.frontend.builtin.pages.resources.settings
 
-import zakadabar.stack.data.builtin.account.RoleBo
 import zakadabar.stack.data.builtin.resources.SettingBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.form.ZkForm
@@ -20,12 +19,5 @@ class Form : ZkForm<SettingBo>() {
             }
         }
     }
-
-    suspend fun roles() =
-        try {
-            RoleBo.all().by { it.name }
-        } catch (ex: Exception) {
-            emptyList()
-        }
 
 }

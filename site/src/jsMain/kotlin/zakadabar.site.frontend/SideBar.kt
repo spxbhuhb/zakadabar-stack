@@ -5,6 +5,8 @@ package zakadabar.site.frontend
 
 import kotlinx.browser.window
 import kotlinx.coroutines.await
+import zakadabar.lib.accounts.frontend.accounts.Accounts
+import zakadabar.lib.accounts.frontend.roles.Roles
 import zakadabar.lib.examples.frontend.form.FormFieldsGenerated
 import zakadabar.lib.examples.frontend.form.SyntheticForm
 import zakadabar.lib.examples.frontend.layout.TabContainer
@@ -16,8 +18,6 @@ import zakadabar.site.frontend.pages.*
 import zakadabar.site.resources.strings
 import zakadabar.stack.StackRoles
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.pages.account.accounts.Accounts
-import zakadabar.stack.frontend.builtin.pages.account.roles.Roles
 import zakadabar.stack.frontend.builtin.pages.resources.locales.Locales
 import zakadabar.stack.frontend.builtin.pages.resources.settings.Settings
 import zakadabar.stack.frontend.builtin.pages.resources.translations.Translations

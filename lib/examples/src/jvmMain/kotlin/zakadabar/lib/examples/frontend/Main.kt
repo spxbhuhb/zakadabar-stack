@@ -4,14 +4,14 @@
 package zakadabar.lib.examples.frontend
 
 import io.ktor.client.features.*
+import zakadabar.lib.accounts.data.AccountPrivateBo
+import zakadabar.lib.accounts.data.LoginAction
+import zakadabar.lib.accounts.data.LogoutAction
+import zakadabar.lib.accounts.data.SessionBo
 import zakadabar.lib.examples.data.builtin.BuiltinDto
 import zakadabar.lib.examples.data.builtin.ExampleEnum
 import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
 import zakadabar.stack.backend.util.default
-import zakadabar.stack.data.builtin.account.AccountPrivateBo
-import zakadabar.stack.data.builtin.account.LoginAction
-import zakadabar.stack.data.builtin.account.LogoutAction
-import zakadabar.stack.data.builtin.account.SessionBo
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityComm
 import zakadabar.stack.data.entity.EntityId
@@ -65,20 +65,20 @@ suspend fun dumpBuiltins(message: String) {
 suspend fun login() {
     println("\n======== Login ========\n")
 
-    var session = SessionBo.read(EntityId("own"))
+    var session = SessionBo.read(EntityId("current"))
 
     println("    ---- at start ----\n")
     println("        $session\n")
 
     var actionStatus = LoginAction("demo", Secret("wrong")).execute()
-    session = SessionBo.read(EntityId("own"))
+    session = SessionBo.read(EntityId("current"))
 
     println("    ---- unsuccessful login ----\n")
     println("        $actionStatus\n")
     println("        $session\n")
 
     actionStatus = LoginAction("demo", Secret("demo")).execute()
-    session = SessionBo.read(EntityId("own"))
+    session = SessionBo.read(EntityId("current"))
 
     println("    ---- successful login ----\n")
     println("        $actionStatus\n")

@@ -4,20 +4,12 @@
 package zakadabar.stack.backend
 
 import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.data.builtin.account.RoleBo
-import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
 @Deprecated("use Authorizer (preferred) or the one from zakadbar.stack.backend.authorize")
 fun authorize(executor: Executor, roleName: String) {
     if (! executor.hasRole(roleName)) throw Forbidden()
-}
-
-@PublicApi
-@Deprecated("use Authorizer (preferred) or the one from zakadbar.stack.backend.authorize")
-fun authorize(executor: Executor, roleId: EntityId<out RoleBo>) {
-    if (! executor.hasRole(roleId)) throw Forbidden()
 }
 
 @PublicApi

@@ -3,14 +3,11 @@
  */
 package zakadabar.stack.frontend.builtin.pages.resources.locales
 
-import zakadabar.stack.data.builtin.account.RoleBo
 import zakadabar.stack.data.builtin.resources.LocaleBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class Table : ZkTable<LocaleBo>() {
-
-    private val roles by preload { RoleBo.allAsMap() }
 
     override fun onConfigure() {
         super.onConfigure()

@@ -1,9 +1,9 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.pages.account.roles
+package zakadabar.lib.accounts.frontend.roles
 
-import zakadabar.stack.data.builtin.account.RoleBo
+import zakadabar.lib.accounts.data.RoleBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.table.ZkTable
 

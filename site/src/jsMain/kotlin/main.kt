@@ -3,6 +3,7 @@
  */
 @file:Suppress("unused") // main is called by webpack
 
+import zakadabar.lib.accounts.frontend.SessionManager
 import zakadabar.site.frontend.Routing
 import zakadabar.site.frontend.resources.GreenBlueTheme
 import zakadabar.site.frontend.resources.SiteDarkTheme
@@ -21,7 +22,7 @@ fun main() {
 
         with(application) {
 
-            initSession()
+            initSession(SessionManager())
 
             initTheme(SiteDarkTheme(), SiteLightTheme(), GreenBlueTheme())
 

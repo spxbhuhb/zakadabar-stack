@@ -19,7 +19,10 @@ following goals in mind (we've already reached most of them):
 - have current, easy-to-use documentation.
 
 It is by no means perfect nor complete. It contains only what we've needed on the way
-for our in-house projects. That said, we think the concept is solid.
+for our in-house projects.
+
+That said, we think that the concept is solid, and we reached the point when the 
+feedback from the community can help us to smooth the rough edges.
 
 Licence is Apache 2.0.
 

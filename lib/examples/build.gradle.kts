@@ -36,6 +36,7 @@ kotlin {
             dependencies {
                 implementation(project(":core"))
                 implementation(project(":lib:markdown"))
+                implementation(project(":lib:accounts"))
             }
         }
 

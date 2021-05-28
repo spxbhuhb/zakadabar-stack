@@ -6,7 +6,7 @@
  * also protected by copyright, patent, and other intellectual and industrial
  * property laws.
  */
-package zakadabar.stack.frontend.builtin.pages.account.login
+package zakadabar.lib.accounts.frontend.login
 
 import kotlinx.browser.window
 import zakadabar.stack.frontend.application.stringStore

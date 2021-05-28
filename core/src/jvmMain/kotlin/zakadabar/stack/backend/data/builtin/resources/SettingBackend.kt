@@ -5,7 +5,6 @@
 
 package zakadabar.stack.backend.data.builtin.resources
 
-import io.ktor.features.*
 import io.ktor.routing.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
@@ -66,7 +65,7 @@ object SettingBackend : EntityBackend<SettingBo>() {
 
         runBlocking {
             buildMutex.withLock {
-                instances.values.mapNotNull { if (it.first.role in roleIds) it.first else null }
+                instances.values.map { it.first }
             }
         }
 
@@ -88,8 +87,6 @@ object SettingBackend : EntityBackend<SettingBo>() {
         authorize(true) // authorize for all users, throw not found if role is missing
 
         val dao = SettingDao[entityId]
-
-        dao.role?.id?.let { if (! executor.hasRole(EntityId(it.value))) throw NotFoundException() }
 
         dao.toBo()
     }
@@ -159,7 +156,6 @@ object SettingBackend : EntityBackend<SettingBo>() {
     private fun <T : BaseBo> buildBo(source: SettingSource, instance: T, namespace: String, serializer: KSerializer<T>) =
         SettingBo(
             id = EntityId(),
-            role = null, //RoleBackend.findForName(StackRoles.securityOfficer),
             source = SettingSource.Default,
             namespace = namespace,
             className = instance::class.simpleName !!,
