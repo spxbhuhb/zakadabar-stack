@@ -3,11 +3,11 @@
  */
 package zakadabar.stack.backend.audit
 
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.util.Executor
 
 /**
  * Creates an audit record of the operation.

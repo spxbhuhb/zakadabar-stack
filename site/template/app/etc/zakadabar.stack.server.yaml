@@ -4,7 +4,7 @@ database:
   username: test
   password: Almafa.12
 
-traceRouting: false
+traceRouting: true
 staticResources: ./var/static
 
 modules:

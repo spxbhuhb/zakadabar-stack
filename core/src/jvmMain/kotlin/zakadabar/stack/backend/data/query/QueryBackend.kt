@@ -11,8 +11,8 @@ import kotlinx.serialization.serializer
 import org.slf4j.Logger
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.Server
-import zakadabar.stack.backend.util.executor
-import zakadabar.stack.util.Executor
+import zakadabar.stack.backend.authorize.Executor
+import zakadabar.stack.backend.ktor.executor
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
 

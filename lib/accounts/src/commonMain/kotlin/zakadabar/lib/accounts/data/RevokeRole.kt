@@ -23,7 +23,7 @@ class RevokeRole(
 
 ) : ActionBo<ActionStatusBo> {
 
-    override suspend fun execute() = LoginAction.comm.action(this, serializer(), ActionStatusBo.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
 
     companion object : ActionBoCompanion<ActionStatusBo>(RoleBo.boNamespace)
 

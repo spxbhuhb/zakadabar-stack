@@ -13,6 +13,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.data.builtin.account.AccountPrivateBackend.onModuleLoad
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
@@ -28,7 +29,6 @@ import zakadabar.stack.data.builtin.account.AccountPrivateBo
 import zakadabar.stack.data.builtin.account.PrincipalBo
 import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.Executor
 
 /**
  * An account backend for the demo. You probably want to change this class to suit your

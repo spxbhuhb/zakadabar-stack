@@ -11,9 +11,9 @@ import kotlinx.coroutines.sync.withLock
 import zakadabar.lib.examples.backend.builtin.SiteBuiltinBackend.mutex
 import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
 import zakadabar.stack.backend.authorize
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.Executor
 
 /**
  * This backend stores a limited number of records in the memory for testing

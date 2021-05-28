@@ -4,10 +4,10 @@
 package zakadabar.stack.backend.validate
 
 import io.ktor.features.*
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.util.Executor
 
 /**
  * Validates the business object by its schema using `isValid` of `BoSchema`.

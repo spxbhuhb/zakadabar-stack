@@ -11,7 +11,6 @@ import zakadabar.stack.data.builtin.authorize.SimpleRoleAuthorizationBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.util.Executor
 import kotlin.reflect.KClass
 
 /**

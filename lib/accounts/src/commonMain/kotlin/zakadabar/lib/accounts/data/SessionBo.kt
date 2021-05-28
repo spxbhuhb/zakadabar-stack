@@ -6,6 +6,7 @@
 package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
+import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityBoCompanion

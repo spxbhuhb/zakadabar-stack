@@ -7,7 +7,6 @@ import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.Executor
 
 class InvalidCredentials : Exception()
 class AccountNotValidatedException : Exception()

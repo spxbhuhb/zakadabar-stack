@@ -11,11 +11,11 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.exposed.get
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.Executor
 
 object ExampleReferenceBackend : EntityBackend<ExampleReferenceDto>() {
 

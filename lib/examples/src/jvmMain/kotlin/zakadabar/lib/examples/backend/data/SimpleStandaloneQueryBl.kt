@@ -6,10 +6,10 @@ package zakadabar.lib.examples.backend.data
 import zakadabar.lib.examples.data.SimpleQueryResult
 import zakadabar.lib.examples.data.SimpleStandaloneQuery
 import zakadabar.stack.StackRoles
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
 import zakadabar.stack.backend.business.QueryBusinessLogicBase
 import zakadabar.stack.data.entity.EmptyEntityBo
-import zakadabar.stack.util.Executor
 
 class SimpleStandaloneQueryBl : QueryBusinessLogicBase<SimpleStandaloneQuery, SimpleQueryResult>(
     queryBoClass = SimpleStandaloneQuery::class

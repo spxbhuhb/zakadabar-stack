@@ -7,12 +7,12 @@ import io.ktor.features.*
 import zakadabar.lib.examples.data.SimpleExampleAction
 import zakadabar.lib.examples.data.SimpleExampleBo
 import zakadabar.lib.examples.data.SimpleExampleQuery
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.authorize.UnsafeAuthorizer
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.server
 import zakadabar.stack.backend.validate.Validator
 import zakadabar.stack.data.builtin.ActionStatusBo
-import zakadabar.stack.util.Executor
 
 class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
     boClass = SimpleExampleBo::class

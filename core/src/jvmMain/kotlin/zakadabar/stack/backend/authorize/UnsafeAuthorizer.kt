@@ -7,7 +7,6 @@ import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.util.Executor
 
 /**
  * Allows everything when the companion field is set to true.

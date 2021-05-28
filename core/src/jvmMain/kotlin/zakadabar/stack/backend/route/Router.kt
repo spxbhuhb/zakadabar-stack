@@ -3,10 +3,10 @@
  */
 package zakadabar.stack.backend.route
 
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.util.Executor
 import kotlin.reflect.KClass
 
 /**

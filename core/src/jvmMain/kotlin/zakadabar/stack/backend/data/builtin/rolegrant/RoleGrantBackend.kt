@@ -11,6 +11,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.data.builtin.principal.PrincipalDao
 import zakadabar.stack.backend.data.builtin.role.RoleDao
 import zakadabar.stack.backend.data.entity.EntityBackend
@@ -19,7 +20,6 @@ import zakadabar.stack.backend.exposed.get
 import zakadabar.stack.data.builtin.account.RoleGrantBo
 import zakadabar.stack.data.builtin.account.RoleGrantsByPrincipal
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.Executor
 
 object RoleGrantBackend : EntityBackend<RoleGrantBo>() {
 

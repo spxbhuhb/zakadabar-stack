@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.backend.exposed
 
+import ch.qos.logback.classic.Level
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.jetbrains.exposed.dao.LongEntity
@@ -12,6 +13,7 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.slf4j.LoggerFactory
 import zakadabar.stack.data.builtin.settings.DatabaseSettingsBo
 import zakadabar.stack.data.entity.EntityId
 
@@ -43,6 +45,9 @@ object Sql {
     }
 
     fun onStart() {
+        val logger : ch.qos.logback.classic.Logger = LoggerFactory.getLogger("Exposed") as ch.qos.logback.classic.Logger
+        logger.level = Level.DEBUG
+
         transaction {
             SchemaUtils.createMissingTablesAndColumns(*tables.toTypedArray())
         }

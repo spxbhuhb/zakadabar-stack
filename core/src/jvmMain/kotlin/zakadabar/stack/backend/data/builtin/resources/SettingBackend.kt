@@ -16,6 +16,7 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.exposed.get
@@ -24,7 +25,6 @@ import zakadabar.stack.data.builtin.resources.SettingBo
 import zakadabar.stack.data.builtin.resources.SettingSource
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.descriptor.BoDescriptor
-import zakadabar.stack.util.Executor
 import kotlin.reflect.KClass
 
 object SettingBackend : EntityBackend<SettingBo>() {

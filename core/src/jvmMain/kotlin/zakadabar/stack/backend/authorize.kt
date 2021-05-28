@@ -3,9 +3,9 @@
  */
 package zakadabar.stack.backend
 
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.data.builtin.account.RoleBo
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.Executor
 import zakadabar.stack.util.PublicApi
 
 @PublicApi

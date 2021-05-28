@@ -7,7 +7,6 @@ import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.util.Executor
 
 /**
  * Implemented by authorizer classes. These are used by business logic

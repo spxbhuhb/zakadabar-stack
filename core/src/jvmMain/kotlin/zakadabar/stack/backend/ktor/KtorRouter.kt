@@ -11,15 +11,14 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.route.Router
 import zakadabar.stack.backend.server
-import zakadabar.stack.backend.util.executor
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.Executor
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
 
@@ -98,7 +97,7 @@ open class KtorRouter<T : EntityBo<T>>(
 
     }
 
-    suspend fun read(call: ApplicationCall, id: String) {
+    open suspend fun read(call: ApplicationCall, id: String) {
 
         val executor = call.executor()
 
@@ -137,7 +136,7 @@ open class KtorRouter<T : EntityBo<T>>(
 
     }
 
-    private suspend fun action(call: ApplicationCall, actionClass: KClass<out BaseBo>, actionFunc: (Executor, BaseBo) -> BaseBo) {
+    open suspend fun action(call: ApplicationCall, actionClass: KClass<out BaseBo>, actionFunc: (Executor, BaseBo) -> BaseBo) {
         val executor = call.executor()
         val aText = call.receive<String>()
         val aObj = Json.decodeFromString(serializer(actionClass.createType()), aText) as BaseBo

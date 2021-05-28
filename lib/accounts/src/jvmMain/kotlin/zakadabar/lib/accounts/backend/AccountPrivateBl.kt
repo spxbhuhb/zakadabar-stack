@@ -17,7 +17,6 @@ import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.BCrypt
-import zakadabar.stack.util.Executor
 
 open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     boClass = AccountPrivateBo::class

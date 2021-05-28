@@ -5,7 +5,6 @@ package zakadabar.stack.backend.authorize
 
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.Executor
 import zakadabar.stack.util.PublicApi
 
 @PublicApi

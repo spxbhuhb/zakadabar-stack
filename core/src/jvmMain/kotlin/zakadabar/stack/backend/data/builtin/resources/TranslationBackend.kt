@@ -11,13 +11,13 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.data.entity.EntityBackend
 import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.exposed.get
 import zakadabar.stack.data.builtin.resources.TranslationBo
 import zakadabar.stack.data.builtin.resources.TranslationsByLocale
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.Executor
 
 object TranslationBackend : EntityBackend<TranslationBo>() {
 

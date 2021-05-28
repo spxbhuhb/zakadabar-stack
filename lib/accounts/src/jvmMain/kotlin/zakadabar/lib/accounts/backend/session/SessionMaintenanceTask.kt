@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.ktor.session
+package zakadabar.lib.accounts.backend.session
 
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
@@ -19,7 +19,6 @@ import org.jetbrains.exposed.sql.update
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.data.builtin.resources.setting
-import zakadabar.stack.backend.data.builtin.session.SessionTable
 import zakadabar.stack.data.builtin.settings.SessionBackendSettingsBo
 
 object SessionMaintenanceTask {

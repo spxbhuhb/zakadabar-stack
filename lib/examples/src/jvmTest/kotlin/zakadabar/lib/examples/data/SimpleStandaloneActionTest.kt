@@ -10,6 +10,7 @@ import org.junit.Test
 import zakadabar.lib.examples.backend.data.SimpleStandaloneActionBl
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize.Authorizer
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.data.builtin.account.AccountPrivateBackend
 import zakadabar.stack.backend.data.builtin.principal.PrincipalBackend
 import zakadabar.stack.backend.data.builtin.role.RoleBackend
@@ -19,7 +20,6 @@ import zakadabar.stack.backend.server
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.entity.EmptyEntityBo
 import zakadabar.stack.data.entity.EntityComm
-import zakadabar.stack.util.Executor
 import kotlin.test.assertEquals
 
 class SimpleStandaloneActionTest {

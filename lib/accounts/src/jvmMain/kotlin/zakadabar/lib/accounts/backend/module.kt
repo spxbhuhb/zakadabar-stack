@@ -3,10 +3,11 @@
  */
 package zakadabar.lib.accounts.backend
 
+import zakadabar.lib.accounts.backend.session.KtorSessionBl
 import zakadabar.stack.backend.server
 
 fun install() {
     server += AccountPrivateBl()
     server += RoleBl()
-    server += RoleGrantBl()
+    server += KtorSessionBl()
 }

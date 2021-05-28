@@ -9,6 +9,7 @@ import zakadabar.stack.backend.audit.Auditor
 import zakadabar.stack.backend.audit.AuditorProvider
 import zakadabar.stack.backend.audit.LogAuditorProvider
 import zakadabar.stack.backend.authorize.Authorizer
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.ktor.KtorRouterProvider
 import zakadabar.stack.backend.persistence.EntityPersistenceApi
 import zakadabar.stack.backend.route.Router
@@ -21,7 +22,6 @@ import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityBoCompanion
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.util.Executor
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObject
 

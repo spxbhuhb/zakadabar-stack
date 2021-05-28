@@ -22,9 +22,9 @@ import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.Forbidden
 import zakadabar.stack.backend.Server.Companion.staticRoot
-import zakadabar.stack.backend.data.builtin.session.LoginTimeout
-import zakadabar.stack.backend.ktor.session.*
+import zakadabar.stack.backend.authorize.LoginTimeout
 import zakadabar.stack.backend.routingLogger
+import zakadabar.stack.backend.server
 import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.builtin.settings.ServerSettingsBo
 import java.io.File
@@ -35,24 +35,16 @@ fun buildServer(
     modules: List<BackendModule>
 ) = embeddedServer(Netty, port = config.ktor.port) {
 
-    install(Sessions) {
-        val sessionType = StackSession::class
-        val name = "STACK_SESSION"
+    val sessionBl = server.firstOrNull<KtorSessionProvider>()
 
-        @Suppress("DEPRECATION") // as in Ktor code
-        val builder = CookieIdSessionBuilder(sessionType).apply {
-            cookie.path = "/"
+    if (sessionBl != null) {
+        install(Sessions) {
+            sessionBl.configure(this)
         }
-        val transport = SessionTransportCookie(name, builder.cookie, builder.transformers)
-        val tracker = RenewableSessionTrackerById(sessionType, StackSessionSerializer, SessionStorageSql, builder.sessionIdProvider)
-        val provider = SessionProvider(name, sessionType, transport, tracker)
-        register(provider)
 
-        SessionMaintenanceTask.start()
-    }
-
-    install(Authentication) {
-        session()
+        install(Authentication) {
+            sessionBl.configure(this)
+        }
     }
 
     install(ContentNegotiation) {
@@ -69,15 +61,6 @@ fun buildServer(
         timeout = Duration.ofSeconds(c.timeout)
         maxFrameSize = c.maxFrameSize
         masking = c.masking
-    }
-
-    install(CachingHeaders) {
-        options { outgoingContent ->
-            when (outgoingContent.contentType?.withoutParameters()) {
-                ContentType.Text.CSS -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 3600))
-                else -> null
-            }
-        }
     }
 
     install(StatusPages) {

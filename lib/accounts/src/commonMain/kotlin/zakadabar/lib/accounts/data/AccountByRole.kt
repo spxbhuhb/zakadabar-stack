@@ -5,6 +5,7 @@ package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
+import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.data.query.QueryBoCompanion
 

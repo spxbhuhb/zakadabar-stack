@@ -4,13 +4,13 @@
 package zakadabar.stack.backend.business
 
 import zakadabar.stack.backend.authorize.Authorizer
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.persistence.EmptyPersistenceApi
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.action.ActionBoCompanion
 import zakadabar.stack.data.entity.EmptyEntityBo
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.Executor
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObject
 

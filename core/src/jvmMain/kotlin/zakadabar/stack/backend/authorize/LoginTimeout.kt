@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.data.builtin.session
+package zakadabar.stack.backend.authorize
 
 /**
  * Thrown when the client presents a session cookie that is now known

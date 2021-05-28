@@ -21,18 +21,18 @@ import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.Forbidden
 import zakadabar.stack.backend.Server
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.data.action.ActionBackend
 import zakadabar.stack.backend.data.builtin.BlobTable
 import zakadabar.stack.backend.data.query.QueryBackend
 import zakadabar.stack.backend.exposed.entityId
+import zakadabar.stack.backend.ktor.executor
 import zakadabar.stack.backend.server
-import zakadabar.stack.backend.util.executor
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.BlobBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityBoCompanion
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.Executor
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObject
 

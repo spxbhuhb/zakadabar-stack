@@ -17,8 +17,7 @@ import io.ktor.server.netty.*
 import kotlinx.serialization.KSerializer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import zakadabar.stack.backend.data.builtin.session.LoginTimeout
-import zakadabar.stack.backend.data.builtin.session.SessionBackend
+import zakadabar.stack.backend.authorize.LoginTimeout
 import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.ktor.buildServer
 import zakadabar.stack.data.BaseBo
@@ -35,10 +34,18 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 import kotlin.reflect.full.isSubclassOf
 
+fun main(argv: Array<String>) {
+    server = Server()
+    server.main(argv)
+}
+
 val moduleLogger = LoggerFactory.getLogger("modules") !! // log module events
 
 val routingLogger: Logger by lazy { LoggerFactory.getLogger("routing") } // trace routing events
 
+/**
+ * The global server instance.
+ */
 lateinit var server: Server
 
 /**
@@ -55,11 +62,6 @@ lateinit var server: Server
  */
 inline fun <reified T : Any> module(noinline selector : (T) -> Boolean = { true }) = server.ModuleDependencyProvider(T::class, selector)
 
-fun main(argv: Array<String>) {
-    server = Server()
-    server.main(argv)
-}
-
 open class Server : CliktCommand() {
 
     companion object {
@@ -72,7 +74,6 @@ open class Server : CliktCommand() {
         lateinit var anonymous: AccountPublicBo
 
         /**
-         * Find an account by its id. Used by [SessionBackend].
          *
          * For example, check AccountPrivateBackend in the demo.
          *
@@ -81,7 +82,6 @@ open class Server : CliktCommand() {
         lateinit var findAccountById: (accountId: EntityId<AccountPrivateBo>) -> Pair<AccountPublicBo, EntityId<PrincipalBo>>
 
         /**
-         * Find an account by its id. Used by [SessionBackend].
          *
          * For example, check AccountPrivateBackend.
          *

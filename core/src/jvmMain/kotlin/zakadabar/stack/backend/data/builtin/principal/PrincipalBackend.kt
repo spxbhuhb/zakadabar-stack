@@ -15,6 +15,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.data.builtin.role.RoleTable
 import zakadabar.stack.backend.data.builtin.rolegrant.RoleGrantTable
 import zakadabar.stack.backend.data.entity.EntityBackend
@@ -26,7 +27,6 @@ import zakadabar.stack.data.builtin.account.PrincipalBo
 import zakadabar.stack.data.builtin.account.RoleBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.BCrypt
-import zakadabar.stack.util.Executor
 
 object PrincipalBackend : EntityBackend<PrincipalBo>() {
 
