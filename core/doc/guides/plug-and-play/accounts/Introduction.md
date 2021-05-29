@@ -20,10 +20,11 @@ Accounts is a simple module to add basic user account support to the application
 To use accounts in your application:
 
 1. add the gradle dependency,
-1. add the module to your server configuration, for details see [Modules](../backend/Modules.md),
-1. configure settings, for more information, for details see [Settings](../backend/Settings.md).
-1. add the routing to your frontend, for details see [Routing](../browser/structure/Routing.md)
-1. add the navigation to your side to open the pages, see [SideBar](../browser/builtin/SideBar.md)
+1. add the module to your server configuration, for details see [Modules](../../backend/Modules.md),
+1. configure settings, for more information, for details see [Settings](../../backend/Settings.md).
+1. add the session manager to your application, see [Introduction: Browser](../../browser/Introduction.md)   
+1. add the routing to your frontend, for details see [Routing](../../browser/structure/Routing.md)
+1. add the navigation to your side to open the pages, see [SideBar](../../browser/builtin/SideBar.md)
 
 **gradle**
 
@@ -35,6 +36,12 @@ implementation("hu.simplexion.zakadabar:lib-accounts:$accountsVersion")
 
 ```kotlin
 zakadabar.lib.accounts.backend.install()
+```
+
+**session manager**
+
+```kotlin
+initSession(SessionManager())
 ```
 
 **routing**

@@ -64,7 +64,7 @@ fun main() {
 
         with(application) {
 
-            initSession()
+            initSession(SessionManager())
 
             initTheme(SiteDarkTheme(), SiteLightTheme())
 
@@ -98,15 +98,24 @@ class name can be very useful for debugging, may be switched off in production w
 
 ### Session Manager
 
+When you don't use accounts and sessions, you can initialize the session manager of the application as below.
+This way your user will be `anonymous` all the time, there is no login or logout.
+
 ```kotlin
-initSession()
+initSession(EmptySessionManager())
 ```
 
-This line initializes the [session manager](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkSessionManager.kt)
-.
+When you use accounts and sessions, you have to pass a functional session manager to `initSession`. The
+plug-and-play module [lib:accounts](../plug-and-play/accounts/Introduction.md) provides such a session
+manager.
 
-It reads the [SessionDto](/src/commonMain/kotlin/zakadabar/stack/data/builtin/account/SessionDto.kt) from the server.
-This is very important because this contains:
+```kotlin
+initSession(SessionManager())
+```
+
+`initSession` calls `ZkSessionManager.init` to read the session data from the server.
+
+This is very important because it contains:
 
 * `anonymous` flag, when true the user is not logged in
 * data of the user who executes the session: name, account id, language preferences, theme preferences etc.
@@ -118,7 +127,7 @@ After the session data arrived from the server:
 * `application.executor` contains data of the executing user.
 * `application.serverDescription` contains the description of the server.
 
-The session manager also handles session expiration and re-login. See [Sessions](../common/Sessions.md) for details.
+The session manager also handles session expiration and re-login.
 
 ### Themes and Styles
 
