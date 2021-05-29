@@ -5,6 +5,7 @@ package zakadabar.lib.accounts.frontend.accounts
 
 import zakadabar.lib.accounts.data.AccountPrivateBo
 import zakadabar.stack.frontend.application.stringStore
+import zakadabar.stack.frontend.application.target
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class Table : ZkTable<AccountPrivateBo>() {
@@ -17,7 +18,7 @@ class Table : ZkTable<AccountPrivateBo>() {
         export = true
 
         titleText = stringStore.accounts
-        crud = Accounts
+        crud = target<Accounts>()
 
         + AccountPrivateBo::id
         + AccountPrivateBo::accountName

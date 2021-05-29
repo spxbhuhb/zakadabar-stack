@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.`java-time`.timestamp
 /**
  * Stores [StackSession] objects.
  */
-object SessionTable : Table("sessions") {
+object SessionTable : Table("session") {
 
     val id = varchar("id", 50)
     val lastAccess = timestamp("last_access")

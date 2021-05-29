@@ -14,7 +14,7 @@ import zakadabar.stack.data.entity.EntityId
  * @property  roleIds    List of the ids of the roles this account has.
  * @property  roleNames  List of the names of the roles this account has.
  */
-open class Executor internal constructor(
+open class Executor(
 
     val accountId: EntityId<out BaseBo>,
     val anonymous: Boolean,

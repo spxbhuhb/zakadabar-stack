@@ -21,7 +21,7 @@ import zakadabar.stack.frontend.util.marginBottom
  * successful the page is reloaded by the browser to let all
  * components use the proper account information.
  */
-object Login : ZkPage(ZkFullScreenLayout) {
+class Login : ZkPage(ZkFullScreenLayout) {
 
     override fun onCreate() {
 

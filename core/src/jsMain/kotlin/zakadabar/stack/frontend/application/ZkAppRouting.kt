@@ -97,12 +97,41 @@ abstract class ZkAppRouting(
     /**
      * Builds the local URL for the given target.
      */
-    open fun toLocalUrl(target: ZkTarget, subPath: String? = null) : String {
-        return if(subPath == null) {
+    open fun toLocalUrl(target: ZkTarget, subPath: String? = null): String {
+        return if (subPath == null) {
             "/${application.locale}/${target.viewName.trimStart('/')}"
         } else {
             "/${application.locale}/${target.viewName.trimStart('/')}/${subPath.trimStart('/')}"
         }
     }
 
+    /**
+     * Find a target of the given class. The class may be an interface.
+     *
+     * @param    kClass      The class to look for
+     *
+     * @return   First instance of [kClass] from the routing targets.
+     *
+     * @throws   NoSuchElementException   when there is no such target
+     */
+    fun <T : Any> first(kClass: KClass<T>): T {
+        @Suppress("UNCHECKED_CAST") // checking for class
+        return targets.firstNotNullOf { if (kClass.isInstance(it.value)) it.value else null } as T
+    }
+
+    /**
+     * Find a module of the given class with a selector method called
+     * to decided if the module is desired. The class may be an interface.
+     *
+     * @param    kClass      The class to look for
+     * @param    selector    Function to select the instance.
+     *
+     * @return   First instance of [kClass] from the server modules.
+     *
+     * @throws   NoSuchElementException   when there is no such module
+     */
+    fun <T : Any> first(kClass: KClass<T>, selector: (T) -> Boolean): T {
+        @Suppress("UNCHECKED_CAST") // checking for class
+        return targets.firstNotNullOf { if (kClass.isInstance(it.value) && selector(it.value as T)) it.value else null } as T
+    }
 }

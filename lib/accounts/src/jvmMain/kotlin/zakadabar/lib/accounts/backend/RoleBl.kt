@@ -44,7 +44,7 @@ class RoleBl(
         pa.rolesOf(accountId)
     }
 
-    private fun grantRole(executor: Executor, grant: GrantRole): ActionStatusBo {
+    internal fun grantRole(executor: Executor, grant: GrantRole): ActionStatusBo {
         pa.grant(RoleGrantBo(grant.account, grant.role))
         return ActionStatusBo()
     }

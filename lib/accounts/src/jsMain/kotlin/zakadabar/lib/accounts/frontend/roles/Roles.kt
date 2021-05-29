@@ -6,7 +6,7 @@ package zakadabar.lib.accounts.frontend.roles
 import zakadabar.lib.accounts.data.RoleBo
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 
-object Roles : ZkCrudTarget<RoleBo>() {
+class Roles : ZkCrudTarget<RoleBo>() {
 
     init {
         companion = RoleBo.Companion

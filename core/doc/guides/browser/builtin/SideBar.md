@@ -24,6 +24,8 @@ class ExampleSideBar : ZkSideBar() {
         }
         
         + item(ExampleSideBarTarget)
+      
+        + item<ExampleSideBarTarget>()
     }
 
 }
@@ -34,14 +36,27 @@ class ExampleSideBar : ZkSideBar() {
 The shorthands are quite self-explanatory. More important is what's happening with `ExampleSideBarTarget`. If you check
 the source code of the example (link above), you will see that this is a page. Specifically, it is a routing target.
 
-When you pass a routing target to `item` or to `group`, clicking on the text navigates the application to that routing
-target. Basically, you display another page.
+When you pass a routing target to `item`, `group` or`section`, clicking on the text navigates the application to that 
+routing target. Basically, you display another page.
 
 Also, when you pass the target, but don't pass a `text`, the stack looks up the `viewName` of the target in
 the `stringStore` and uses the translated name as text. As the `viewName` defaults to the class name, we can put
 an `ExampleSideBarTarget` entry into the `stringStore` and have automatically translated labels.
 
 In the example above we used `group` with an explicit text while `item` automatically set the text from the target.
+
+You can pass the target two ways: 
+
+- providing an actual instance, this works well when the page is an object.
+- using the `<>` syntax, which will look up the target between the known routing targets.
+
+<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Static Lookup">
+
+The lookup `<>` functions perform is static. If there is a target at the time you
+do the lookup they'll find it, if there is not they won't. We might change this
+in the future to make the application mode dynamic.
+
+</div>
 
 ## Sections
 

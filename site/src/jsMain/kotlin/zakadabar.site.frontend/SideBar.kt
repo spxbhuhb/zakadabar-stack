@@ -79,8 +79,8 @@ class SideBar : ZkSideBar() {
                     }
 
                     withRole(StackRoles.securityOfficer) {
-                        + item(strings.accounts) { Accounts.openAll() }
-                        + item(strings.roles) { Roles.openAll() }
+                        + item<Accounts>()
+                        + item<Roles>()
                     }
 
                 }

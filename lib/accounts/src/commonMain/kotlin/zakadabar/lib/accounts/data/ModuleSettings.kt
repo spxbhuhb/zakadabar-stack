@@ -8,7 +8,7 @@ import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.schema.BoSchema
 
 @Serializable
-class ModuleSettingsBo(
+class ModuleSettings(
 
     /**
      * Maximum number of failed logins before the system locks the account.
@@ -31,7 +31,13 @@ class ModuleSettingsBo(
      * Session expiration check run interval. Expired sessions are removed
      * from the in-memory cache and from the database by this check. Seconds.
      */
-    var expirationCheckInterval: Long = 120
+    var expirationCheckInterval: Long = 120,
+
+    /**
+     * Initial password of the SO account. Used only during first time DB
+     * initialization.
+     */
+    var initialSoPassword: String? = null
 
 ) : BaseBo {
 

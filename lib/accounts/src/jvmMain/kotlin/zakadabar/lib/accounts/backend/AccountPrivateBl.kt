@@ -10,11 +10,13 @@ import zakadabar.stack.backend.authorize.*
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.data.builtin.resources.setting
 import zakadabar.stack.backend.module
+import zakadabar.stack.backend.util.default
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.builtin.misc.Secret
+import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.BCrypt
 
@@ -22,7 +24,9 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     boClass = AccountPrivateBo::class
 ), AccountBlProvider {
 
-    private val settings by setting<ModuleSettingsBo>("zakadabar.lib.accounts")
+    private val settings by setting<ModuleSettings>()
+
+    private val serverDescription by setting<ServerDescriptionBo>()
 
     override val pa = AccountPrivateExposedPa()
 
@@ -89,6 +93,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
 
     override fun onModuleStart() {
         super.onModuleStart()
+        initDb()
         anonymous = pa.withTransaction {
             pa.readByName("anonymous").toPublic()
         }
@@ -166,7 +171,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
 
     /**
      * Perform password based authentication. Increments success/fail counters according
-     * to the result. Locks the account if login fails surpass [ModuleSettingsBo.maxFailedLogins].
+     * to the result. Locks the account if login fails surpass [ModuleSettings.maxFailedLogins].
      *
      * @param   executor   The executor of the authentication.
      * @param   accountId  The account id to authenticate.
@@ -233,5 +238,70 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     override fun roles(accountId: EntityId<out BaseBo>): List<Pair<EntityId<out BaseBo>, String>> {
         return roleBl.rolesOf(EntityId(accountId))
     }
+
+    private fun initDb() {
+
+        try {
+            pa.withTransaction { pa.readByName("so") }
+            return // when there is a security officer, the db is already initialized
+        } catch (ex : NoSuchElementException) {
+            // this is fine, we have to perform the initialization
+        }
+
+        val so : AccountPrivateBo = default {
+            validated = true
+            locked = settings.initialSoPassword != null
+            credentials = settings.initialSoPassword?.let { Secret(it) }
+            accountName = "so"
+            fullName = "Security Officer"
+            email = "so@127.0.0.1"
+            displayName = "SO"
+            locale = serverDescription.defaultLocale
+        }
+
+        val anonymous : AccountPrivateBo = default {
+            validated = true
+            locked = true
+            accountName = "anonymous"
+            fullName = "Security Officer"
+            email = "so@127.0.0.1"
+            displayName = "SO"
+            locale = serverDescription.defaultLocale
+        }
+
+        val securityOfficerRole = RoleBo(EntityId(), StackRoles.securityOfficer, "Security Officer")
+        val siteAdminRole = RoleBo(EntityId(), StackRoles.siteAdmin, "Site Admin")
+        val siteMemberRole = RoleBo(EntityId(), StackRoles.siteMember, "Site Member")
+
+        pa.withTransaction {
+            pa.create(so)
+            pa.create(anonymous)
+
+            val executor = Executor(so.id, false, emptyList(), emptyList())
+
+            auditor.auditCreate(executor, so)
+            auditor.auditCreate(executor, anonymous)
+
+            roleBl.create(executor, securityOfficerRole)
+            roleBl.auditor.auditCreate(executor, securityOfficerRole)
+
+            roleBl.create(executor, siteAdminRole)
+            roleBl.auditor.auditCreate(executor, siteAdminRole)
+
+            roleBl.create(executor, siteMemberRole)
+            roleBl.auditor.auditCreate(executor, siteMemberRole)
+
+            fun grant(role : RoleBo) {
+                val grant = GrantRole(so.id, role.id)
+                roleBl.grantRole(executor, grant)
+                roleBl.auditor.auditAction(executor, grant)
+            }
+
+            grant(securityOfficerRole)
+            grant(siteAdminRole)
+            grant(siteMemberRole)
+        }
+    }
+
 
 }

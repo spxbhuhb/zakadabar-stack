@@ -12,5 +12,5 @@ import zakadabar.stack.data.BaseBo
 import kotlin.reflect.full.createType
 
 @Suppress("UNCHECKED_CAST") // serializer should create KSerializer<T> for sure
-inline fun <reified T : BaseBo> setting(namespace: String) =
+inline fun <reified T : BaseBo> setting(namespace: String = T::class.qualifiedName?.substringBeforeLast('.') ?: "unknown") =
     Setting(default(), namespace, serializer(T::class.createType()) as KSerializer<T>)

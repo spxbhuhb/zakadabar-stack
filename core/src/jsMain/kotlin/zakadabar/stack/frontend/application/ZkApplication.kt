@@ -35,6 +35,13 @@ val stringStore
 inline fun <reified T> translate() = stringStore.getNormalized(T::class.simpleName!!)
 
 /**
+ * Find a routing target.
+ *
+ * @param T Class or interface of the target to find.
+ */
+inline fun <reified T : ZkAppRouting.ZkTarget> target() = application.routing.first(T::class)
+
+/**
  * The application that runs in the browser window. This object contains data
  * and resources that are used all over the application.
  *

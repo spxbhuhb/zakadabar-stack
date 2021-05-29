@@ -2,7 +2,7 @@
 
 ### Added
 
-- global `module` function to get other modules easily
+- global `module` function to bind modules easily
 - Server: `first`, `firstOrNull` functions to find modules
 - Server.ModuleDependency: delegate to handle module references
 - Server.ModuleDependency: delegate to handle module references
@@ -12,18 +12,21 @@
 - QueryBusinessLogicBase: single query BL  
 - EmptyEntityBo: placeholder entity bo to keep type safety
 - EmptyPersistenceApi: persistence API for action and query BLs
+- settings namespace parameter is now optional and automatically set to package name when not passed
 
 ### Changed
 
 - server now have a simple module list instead of multiple lists by module type
 - KtorRouter: calls apiCacheControl for queries as well
 - Setting: if there is no setting backend, returns with the supplied default value
+- Executor constructor is now public instad of internal
 
 ### Removed
 
 - authorize/rules.kt: ruleBl variable, use `module` function instead
 - EntityBusinessLogicBase.logger, auditor has its own logger
 - CustomBackend: replaced with BackendModule everywhere
+- all account and session related code moved into lib:accounts
 
 ### Fixed
 
@@ -35,6 +38,9 @@
 ### Added
 
 - TableBigExample: inline table example with 10.000 rows
+- ZkAppRouting: `first` function to find routing targets
+- global: `target<T>` function to find routing targets
+- sidebar: helpers with `method<T>()` syntax for adding targets
 
 ### Changed
 

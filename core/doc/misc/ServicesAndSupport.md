@@ -21,6 +21,12 @@ If you build your development on a specific version of the stack, you can
 buy long term support to guarantee that problems will be solved on that
 version parallel to the main branch.
 
+## Module Security Review
+
+If you would like to have an open source, Zakadabar based module reviewed from
+security point of view, our CISA certified auditors will make sure that the
+module is safe for use.
+
 ## Training
 
 Online or on-site training for planners, programmers, testers, IT administrators.

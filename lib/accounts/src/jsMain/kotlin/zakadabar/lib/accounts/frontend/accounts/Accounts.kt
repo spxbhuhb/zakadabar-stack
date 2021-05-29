@@ -6,7 +6,7 @@ package zakadabar.lib.accounts.frontend.accounts
 import zakadabar.lib.accounts.data.AccountPrivateBo
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 
-object Accounts : ZkCrudTarget<AccountPrivateBo>() {
+class Accounts : ZkCrudTarget<AccountPrivateBo>() {
     init {
         companion = AccountPrivateBo.Companion
         boClass = AccountPrivateBo::class

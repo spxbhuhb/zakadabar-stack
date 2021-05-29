@@ -4,9 +4,6 @@
 
 package zakadabar.site.frontend
 
-import zakadabar.lib.accounts.frontend.accounts.Accounts
-import zakadabar.lib.accounts.frontend.login.Login
-import zakadabar.lib.accounts.frontend.roles.Roles
 import zakadabar.lib.examples.frontend.form.FormFieldsGenerated
 import zakadabar.lib.examples.frontend.form.SyntheticForm
 import zakadabar.lib.examples.frontend.layout.TabContainer
@@ -53,9 +50,8 @@ class Routing : ZkAppRouting(DefaultLayout, Landing) {
         + QueryPage
         + SyntheticForm
 
-        + Accounts
-        + Login
-        + Roles
+        zakadabar.lib.accounts.frontend.install(this)
+
         + Settings
         + Locales
         + Translations

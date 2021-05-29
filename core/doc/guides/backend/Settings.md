@@ -31,7 +31,7 @@ The directory that contains the server settings file becomes the
 
 1. The backend stops if there is no server settings file.
 1. Once the file is located, the backend loads the content of it into a
-   [ServerSettingsDto](/src/commonMain/kotlin/zakadabar/stack/data/builtin/settings/ServerSettingsDto.kt).
+   [ServerSettingsBo](/src/commonMain/kotlin/zakadabar/stack/data/builtin/settings/ServerSettingsBo.kt).
 1. From the server settings the database connection is initialized.
 1. The setting overrides are loaded for the server settings by calling the `overrideSettings` method of the
    [Server](/src/jvmMain/kotlin/zakadabar/stack/backend/Server.kt). Note that the database connection is already
@@ -40,9 +40,9 @@ The directory that contains the server settings file becomes the
 Default implementation of `overrideSettings` use [SettingsBackend](../../../../core/src/jvmMain/kotlin/zakadabar/stack/backend/data/builtin/resources/SettingBackend.kt)
 to load overrides.
 
-## Write a Setting DTO
+## Write a Setting BO
 
-A setting DTO is just a normal DTO, check [Data](../common/Data.md) for details.
+A setting BO is just a normal BO, check [Data](../common/Data.md) for details.
 
 One thing to mention is the default values in the schema. If your settings are loaded from file, you have to set the defaults in the class constructor. YAML loaders does not use the default from the
 schema so, they need the defaults there.
@@ -72,31 +72,36 @@ class SessionBackendSettingsDto(
 }
 ```
 
-## Use a Setting DTO
+## Use a Setting BO
 
-Create a delegated property:
+Create a delegated property as shown below. In this case the `namespace` of the
+setting will be the package name of the class specified in the type parameter.
 
 ```kotlin
-private val settings by setting<SessionBackendSettingsDto>("zakadabar.stack.session")
+private val settings by setting<ModuleSettings>()
 ```
 
-The type parameter is the DTO class that stores your settings.
+You can specify the `namespace` of the setting explicitly.
 
-The function parameter is the `namespace` that defines:
+```kotlin
+private val settings by setting<ModuleSettings>("zakadabar.lib.accounts")
+```
+
+`namespace` defines:
 
 * the name of the configuration file this setting is loaded from,
 * the content of the `namespace` field in the SQL settings table.
 
 You may use the line above multiple times. Note, that in this case any given (type, namespace)
-pair returns with the **same object instance**.
+pair returns with the **same instance**.
 
-Setting DTOs are loaded with the following mechanism:
+Setting BOs are loaded with the following mechanism:
 
-1. If there is a setting DTO for the given (type, namespace) use that DTO.
-1. Create a setting DTO instance with the default values.
+1. If there is a setting BO already loaded for the given (type, namespace) use that BO.
+1. Create a setting BO instance with the default values.
 1. Check if there is a file in the settings directory (see above) with the name `namespace + ".yaml"` or
    `namespace + ".yml`. If there is such a file, load its content into the settings instance.
 1. Check if there are entries in the database for this namespace. If there are, use them to override the values in the instance.
-1. Validate the settings by checking the `isValid` property of the settings DTO.
+1. Validate the settings by checking the `isValid` property of the settings BO.
 
 If any of the following steps produces an error, an exception is thrown and typically the server won't start.
