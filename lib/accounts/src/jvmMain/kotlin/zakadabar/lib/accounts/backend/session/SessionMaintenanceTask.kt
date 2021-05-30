@@ -17,13 +17,13 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.slf4j.LoggerFactory
+import zakadabar.lib.accounts.data.ModuleSettings
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.setting.setting
-import zakadabar.stack.data.builtin.settings.SessionBackendSettingsBo
 
 object SessionMaintenanceTask {
 
-    private val settings by setting<SessionBackendSettingsBo>("zakadabar.stack.session")
+    private val settings by setting<ModuleSettings>()
 
     val updateChannel = Channel<SessionCacheEntry>()
 

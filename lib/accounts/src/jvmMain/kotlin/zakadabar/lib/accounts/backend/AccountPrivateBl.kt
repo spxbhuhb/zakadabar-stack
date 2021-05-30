@@ -9,6 +9,7 @@ import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize.*
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.module
+import zakadabar.stack.backend.server
 import zakadabar.stack.backend.setting.setting
 import zakadabar.stack.backend.util.default
 import zakadabar.stack.data.BaseBo
@@ -16,7 +17,6 @@ import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.BCrypt
 
@@ -25,8 +25,6 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
 ), AccountBlProvider {
 
     private val settings by setting<ModuleSettings>()
-
-    private val serverDescription by setting<ServerDescriptionBo>()
 
     override val pa = AccountPrivateExposedPa()
 
@@ -187,7 +185,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
 
         val account = pa.read(accountId)
 
-        val credentials = account.credentials ?: throw NoSuchElementException()
+        val credentials = pa.readCredentials(accountId)
 
         val result = when {
             ! account.validated -> AccountNotValidatedException()
@@ -250,13 +248,13 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
 
         val so : AccountPrivateBo = default {
             validated = true
-            locked = settings.initialSoPassword != null
+            locked = settings.initialSoPassword.isNullOrEmpty()
             credentials = settings.initialSoPassword?.let { Secret(it) }
             accountName = "so"
             fullName = "Security Officer"
             email = "so@127.0.0.1"
             displayName = "SO"
-            locale = serverDescription.defaultLocale
+            locale = server.settings.defaultLocale
         }
 
         val anonymous : AccountPrivateBo = default {
@@ -266,7 +264,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
             fullName = "Anonymous"
             email = "anonymous@127.0.0.1"
             displayName = "Anonymous"
-            locale = serverDescription.defaultLocale
+            locale = server.settings.defaultLocale
         }
 
         val securityOfficerRole = RoleBo(EntityId(), StackRoles.securityOfficer, "Security Officer")

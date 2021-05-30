@@ -97,7 +97,13 @@ class SettingBl : EntityBusinessLogicBase<SettingBo>(
             Files.isReadable(p1) -> p1
             Files.isReadable(p2) -> p2
             else -> null
-        } ?: return null
+        }
+
+        if (path == null) {
+            val tried = server.settingsDirectory.resolve(namespace).toString() + "[.yaml,.yml]"
+            settingsLogger.info("no file for namespace $namespace (tried: $tried)")
+            return null
+        }
 
         val source = Files.readAllBytes(path).decodeToString()
 

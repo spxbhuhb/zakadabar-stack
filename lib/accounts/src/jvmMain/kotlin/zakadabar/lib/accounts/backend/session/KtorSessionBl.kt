@@ -75,10 +75,12 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
             val aText = call.receive<String>()
             val aObj = Json.decodeFromString(serializer(actionClass.createType()), aText) as BaseBo
 
-            val response = when (aObj) {
-                is LoginAction -> loginAction(call, executor, aObj)
-                is LogoutAction -> logoutAction(call, executor)
-                else -> throw NotImplementedError()
+            val response = transaction {
+                when (aObj) {
+                    is LoginAction -> loginAction(call, executor, aObj)
+                    is LogoutAction -> logoutAction(call, executor)
+                    else -> throw NotImplementedError()
+                }
             }
 
             @Suppress("UNCHECKED_CAST")

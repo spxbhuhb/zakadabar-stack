@@ -13,7 +13,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
 
 fun KClass<*>.shortPackageName() : String {
-    var qn = this::class.qualifiedName ?: return "unknown"
+    var qn = qualifiedName ?: return "unknown"
     qn = qn.substringAfter("zakadabar.").substringBeforeLast('.')
     return qn.substringBeforeLast(".data")
 }
