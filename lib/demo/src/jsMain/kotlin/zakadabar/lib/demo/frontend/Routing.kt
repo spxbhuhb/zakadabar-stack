@@ -11,6 +11,7 @@ class Routing : ZkAppRouting(DefaultLayout, Home) {
     init {
         + Home
         zakadabar.lib.accounts.frontend.install(this)
+        zakadabar.lib.i18n.frontend.install(this)
     }
 
 }

@@ -9,6 +9,8 @@ import zakadabar.lib.accounts.frontend.accounts.Accounts
 import zakadabar.lib.accounts.frontend.login.Login
 import zakadabar.lib.accounts.frontend.roles.Roles
 import zakadabar.lib.demo.resources.strings
+import zakadabar.lib.i18n.frontend.Locales
+import zakadabar.lib.i18n.frontend.Translations
 import zakadabar.stack.StackRoles
 import zakadabar.stack.frontend.application.translate
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
@@ -36,6 +38,10 @@ class SideBar : ZkSideBar() {
             + group(translate<Accounts>()) {
                 + item<Accounts>()
                 + item<Roles>()
+            }
+            + group(translate<Translations>()) {
+                + item<Locales>()
+                + item<Translations>()
             }
         }
 

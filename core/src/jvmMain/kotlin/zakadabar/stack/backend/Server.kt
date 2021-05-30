@@ -22,7 +22,7 @@ import zakadabar.stack.backend.ktor.buildServer
 import zakadabar.stack.backend.setting.SettingBl
 import zakadabar.stack.backend.setting.SettingProvider
 import zakadabar.stack.data.builtin.settings.ServerSettingsBo
-import zakadabar.stack.util.PublicApi
+import zakadabar.stack.util.InstanceStore
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -123,7 +123,7 @@ open class Server(
 
     lateinit var settings: ServerSettingsBo
 
-    private val modules = mutableListOf<BackendModule>()
+    val modules = InstanceStore<BackendModule>()
 
     private val dependencies = mutableListOf<ModuleDependency<*>>()
 
@@ -225,7 +225,7 @@ open class Server(
 
         if (! success) throw IllegalArgumentException("module dependency resolution failed")
 
-        modules.forEach {
+        modules.instances.forEach {
             try {
                 it.onModuleStart()
                 moduleLogger.info("started module $it")
@@ -275,37 +275,8 @@ open class Server(
      *
      * @throws   NoSuchElementException   when there is no such module
      */
-    inline fun <reified T : Any> first() = first(T::class)
+    inline fun <reified T : Any> first() = modules.first(T::class)
 
-    /**
-     * Find a module of the given class. The class may be an interface.
-     *
-     * @param    kClass      The class to look for
-     *
-     * @return   First instance of [kClass] from the server modules.
-     *
-     * @throws   NoSuchElementException   when there is no such module
-     */
-    fun <T : Any> first(kClass: KClass<T>): T {
-        @Suppress("UNCHECKED_CAST") // checking for class
-        return modules.first { kClass.isInstance(it) } as T
-    }
-
-    /**
-     * Find a module of the given class with a selector method called
-     * to decided if the module is desired. The class may be an interface.
-     *
-     * @param    kClass      The class to look for
-     * @param    selector    Function to select the instance.
-     *
-     * @return   First instance of [kClass] from the server modules.
-     *
-     * @throws   NoSuchElementException   when there is no such module
-     */
-    fun <T : Any> first(kClass: KClass<T>, selector: (T) -> Boolean): T {
-        @Suppress("UNCHECKED_CAST") // checking for class
-        return modules.first { kClass.isInstance(it) && selector(it as T) } as T
-    }
 
     /**
      * Find a module of the given class. The class may be an interface.
@@ -313,21 +284,7 @@ open class Server(
      * @return   First instance of [T] from the server modules or null if
      *           no such module exists.
      */
-    @PublicApi
-    inline fun <reified T : Any> firstOrNull() = firstOrNull(T::class)
-
-    /**
-     * Find a module of the given class. The class may be an interface.
-     *
-     * @param    kClass      The class to look for
-     *
-     * @return   First instance of [kClass] from the server modules or null if
-     *           no such module exists.
-     */
-    fun <T : Any> firstOrNull(kClass: KClass<T>, selector: (T) -> Boolean = { true }): T? {
-        @Suppress("UNCHECKED_CAST") // checking for class
-        return modules.firstOrNull { kClass.isInstance(it) && selector(it as T) } as? T
-    }
+    inline fun <reified T : Any> firstOrNull() = modules.firstOrNull(T::class)
 
     inner class ModuleDependencyProvider<T : Any>(
         private val moduleClass: KClass<T>,
@@ -346,7 +303,7 @@ open class Server(
         private val moduleClass: KClass<T>,
         private val selector: (T) -> Boolean
     ) {
-        private var module: T? = firstOrNull(moduleClass, selector)
+        private var module: T? = modules.firstOrNull(moduleClass, selector)
 
         init {
             dependencies += this
@@ -356,7 +313,7 @@ open class Server(
 
         fun resolve() =
             try {
-                module = first(moduleClass, selector)
+                module = modules.first(moduleClass, selector)
                 moduleLogger.info("resolved dependency from ${name}${dependentProperty.name} to ${moduleClass.simpleName} ")
                 true
             } catch (ex: NoSuchElementException) {

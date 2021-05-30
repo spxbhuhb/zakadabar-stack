@@ -58,6 +58,13 @@ Use any non-string object to get the value for its normalized class name.
 strings.getNormalized(MyElement()) // same as getNormalized("MyElement")
 ```
 
+You can easily translate class names into strings with the `translate` method:
+
+```kotlin
+translate<MyElement>() // same as getNormalized("MyElement")
+```
+
+
 ## Write a String Store [source code](../../../../lib/examples/src/commonMain/kotlin/zakadabar/lib/examples/resources/ExamplesStrings.kt)
 
 1. Extend [ZkBuiltinStrings](/src/commonMain/kotlin/zakadabar/stack/resources/ZkBuiltinStrings.kt). Override anything
@@ -83,29 +90,12 @@ initLocale(strings)
 
 ## Localized Strings (I18N)
 
-The localization is supported by:
-
-* on the backend
-    * [LocaleBackend](/src/jvmMain/kotlin/zakadabar/stack/backend/data/builtin/resources/LocaleBackend.kt)
-    * [TranslationBackend](/src/jvmMain/kotlin/zakadabar/stack/backend/data/builtin/resources/TranslationBackend.kt)
-* on the browser frontend
-    * [Locales](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/pages/resources/locales/Locales.kt)
-    * [Translations](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/pages/resources/translations/Translations.kt)
-
-<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Changing Locales and Translations">
-
-The idea is that the site administrator can create/change locales and translations freely, during runtime, without
-modifying the code of the application. The `Locales` and `Translations` pages on the browser frontend provide this
-management function.
-</div>
+Use the [lib:i18n](/doc/guides/plug-and-play/i18n/Introduction.md) plug-and-play module to provide localized strings.
 
 ### Browser Frontend
 
 The locale of the application is stored in `application.locale`. This field is initialized by `initLocale` from the URL
 of the browser window. For more information see [Introduction](../browser/Introduction.md).
-
-During application startup the stack downloads the localized strings from the server. You can switch off this behaviour
-by passing `false` in the `downloadTranslations` parameter of `application.initLocale`.
 
 Your string store (both `application.stringStore` and `strings`, if you followed the convention) will store the
 localized strings, so everything shows up in the current language.
@@ -148,6 +138,9 @@ With this pattern it would be possible to have string namespaces, so elements ma
 
 ### Changes
 
+* 2021.5.30
+    * introduction of lib:i18n
+    * remove localization backends from core  
 * 2021.5.15
     * introduction of normalized keys
     * documentation update

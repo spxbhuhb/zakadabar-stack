@@ -8,7 +8,7 @@ database:
   password: Almafa.12
   debugSql: false
 
-traceRouting: true
+traceRouting: false
 staticResources: ./var/static
 
 modules:

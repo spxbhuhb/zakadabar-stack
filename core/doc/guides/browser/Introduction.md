@@ -62,9 +62,12 @@ fun main() {
         ZkElement.addKClass = false
         ZkCssStyleSheet.shortNames = true
 
+        zakadabar.lib.accounts.frontend.install(application)
+        zakadabar.lib.i18n.frontend.install(application)
+        
         with(application) {
 
-            initSession(SessionManager())
+            initSession()
 
             initTheme(SiteDarkTheme(), SiteLightTheme())
 
@@ -98,19 +101,23 @@ class name can be very useful for debugging, may be switched off in production w
 
 ### Session Manager
 
-When you don't use accounts and sessions, you can initialize the session manager of the application as below.
+The following line initializes the session manager of the application. If no 
+[ZkSessionManager](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkSessionManager.kt)
+service is installed, `initSession` creates an
+[EmptySessionManager](/src/jsMain/kotlin/zakadabar/stack/frontend/application/EmptySessionManager.kt)
+which does not use sessions but provides the interfaces needed for the application to work.
 This way your user will be `anonymous` all the time, there is no login or logout.
 
 ```kotlin
-initSession(EmptySessionManager())
+initSession()
 ```
 
-When you use accounts and sessions, you have to pass a functional session manager to `initSession`. The
-plug-and-play module [lib:accounts](../plug-and-play/accounts/Introduction.md) provides such a session
-manager.
+When you use accounts and sessions, you have to install a [ZkSessionManager](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkSessionManager.kt)
+service. The plug-and-play module [lib:accounts](../plug-and-play/accounts/Introduction.md) provides such a service. 
+In `main.kt`:
 
 ```kotlin
-initSession(SessionManager())
+zakadabar.lib.accounts.frontend.install(application)
 ```
 
 `initSession` calls `ZkSessionManager.init` to read the session data from the server.
@@ -146,22 +153,34 @@ It is important to call `initTheme` before `init`.
 initLocale(strings)
 ```
 
-This line initializes the locale of the site.
+This line initializes the locale and the string store of the site.
 
-The first segment of the URL path will be the locale of the site. This is a language code like 'hu-HU' or 'en'. For
-example `https://zakadabar.io/en/Welcome` means that this the English version of the page.
+The locale of the site is determined as follows:
 
-Once the locale is set, `initLocale` downloads the translations for that given locale, so automatic translations will
-work. Translation download can be switched off:
+1. The first segment of the URL path if exists. This is a language code like 'hu-HU' or 'en'. For
+   example `https://zakadabar.io/en/Welcome` means that this the English version of the page.
+1. The `executor.account.locale`, if it is not empty.
+1. The `serverDescription.defaultLocale`, if it is not empty.
+1. Value of the `defaultLocale` parameter, if specified.
+1. An error message is shown that the locale cannot be determined.
 
-```kotlin
-initLocale(strings, downloadTranslations = false)
-```
+Once the locale is set, `initLocale` looks up a [TranslationProvider](/src/commonMain/kotlin/zakadabar/stack/text/TranslationProvider.kt) 
+between `application.services` and if found, downloads the translations for that given locale, so automatic translations will
+work. 
 
 If you don't use accounts and sessions, the locale initialization needs a default locale specified:
 
 ```kotlin
-initLocale(strings, downloadTranslations = false, defaultLocale = "en")
+initLocale(strings, defaultLocale = "en")
+```
+
+When you use translations, you have to install a [TranslationProvider](/src/commonMain/kotlin/zakadabar/stack/text/TranslationProvider.kt)
+service. The plug-and-play module [lib:i18n](../plug-and-play/i18n/Introduction.md) provides such a service.
+
+In `main.kt`:
+
+```kotlin
+zakadabar.lib.i18n.frontend.install(application)
 ```
 
 The translated strings are stored in the `stringStore`, but projects usually define their own shorthand variable

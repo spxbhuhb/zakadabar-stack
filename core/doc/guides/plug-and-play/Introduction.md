@@ -7,3 +7,4 @@ They contain all the data model, frontend and backend components. When
 you add them to your configuration, they are ready-to-go.
 
 * [Accounts](./accounts/Introduction.md) - account and role management, login
+* [I18N](./i18n/Introduction.md) - internationalization, locales, translations

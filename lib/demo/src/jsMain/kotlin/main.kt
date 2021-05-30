@@ -3,7 +3,6 @@
  */
 @file:Suppress("unused") // main is called by webpack
 
-import zakadabar.lib.accounts.frontend.SessionManager
 import zakadabar.lib.demo.frontend.Routing
 import zakadabar.lib.demo.resources.strings
 import zakadabar.stack.frontend.application.ZkApplication
@@ -16,15 +15,18 @@ fun main() {
 
     application = ZkApplication()
 
+    zakadabar.lib.accounts.frontend.install(application)
+    zakadabar.lib.i18n.frontend.install(application)
+
     io {
 
         with(application) {
 
-            initSession(SessionManager())
+            initSession()
 
             initTheme(ZkGreenBlueTheme())
 
-            initLocale(strings, downloadTranslations = false)
+            initLocale(strings)
 
             initRouting(Routing())
 

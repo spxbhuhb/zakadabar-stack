@@ -1,11 +1,18 @@
+## Common
+
+## Added
+
+- InstanceStore: store and look up instances easily
+- StringPair: simple bo that holds a string pair
+- TranslationProvider: service interface to be implemented for translators
+
 ## Backend
 
 ### Added
 
 - global `module` function to bind modules easily
 - `main`: loads version info from `zkBuild.properties` resource (if exists)  
-- Server: `first`, `firstOrNull` functions to find modules
-- Server.ModuleDependency: delegate to handle module references
+- Server: `modules` is now an InstanceStore with `first`, `firstOrNull`
 - Server.ModuleDependency: delegate to handle module references
 - Server.dependencies: list of module dependencies
 - Server.settingsLogger: logger for setting load events
@@ -54,18 +61,25 @@
 - global: `target<T>` function to find routing targets
 - sidebar: helpers with `method<T>()` syntax for adding targets
 - ZkGreenBlueTheme: a variation of light theme
+- ZkApplication.services: store general service instances
 
 ### Changed
 
 - sidebar: section style change, close icon shows only on mouse over
 - sidebar: min width to 220px
 - themes: store chosen theme in localStorage instead of sessionStorage
-- application: locale comes from: url, executor, serverDescription (in this order)  
+- application: locale comes from: url, executor, serverDescription, parameter (in this order)  
 - application: displays an error message when the locale cannot be determined
+- application: looks for TranslationProvider to perform translation, when not installed, skips translation
+- application: looks for SessionManager to provide sessions, defaults to EmptySessionManager when no other is installed
 
 ### Removed
 
 - settings: the current UI is removed, will be back after synthetic forms
+- accounts: move all account related UI to 'lib:accounts'
+- locales: move all i18n related UI to 'lib:i18n'
+- `downloadTranslations` parameter of `ZkApplication.initLocale`, use service instead
+- `sessionManager` parameter of `ZkApplication.initSession`, use service instead
 
 ### Fixed
 
@@ -106,6 +120,13 @@
 - SimpleStandaloneQueryBl
 - zakadabar.server.description.yaml - with H2, for unit tests
 - zakadabar.stack.server.yaml - for unit tests
+
+## Lib:I18N
+
+### Added
+
+- new i18n plug-and-play module
+- working locale and translation frontend and backend
 
 ## Lib:Markdown
 

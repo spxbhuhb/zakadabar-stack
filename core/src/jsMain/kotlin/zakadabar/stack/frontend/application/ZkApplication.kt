@@ -7,12 +7,13 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.events.Event
 import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
-import zakadabar.stack.data.builtin.resources.TranslationsByLocale
 import zakadabar.stack.frontend.builtin.dock.ZkDock
 import zakadabar.stack.frontend.builtin.modal.ZkModalContainer
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
 import zakadabar.stack.resources.ZkBuiltinStrings
+import zakadabar.stack.text.TranslationProvider
+import zakadabar.stack.util.InstanceStore
 
 /**
  * The application itself, initialized in main.kt.
@@ -78,6 +79,8 @@ open class ZkApplication {
 
     lateinit var routing: ZkAppRouting
 
+    var services = InstanceStore<Any>()
+
     lateinit var stringStore: ZkBuiltinStrings
 
     lateinit var dock: ZkDock
@@ -123,8 +126,8 @@ open class ZkApplication {
         window.dispatchEvent(Event(navStateChangeEvent))
     }
 
-    suspend fun initSession(manager : ZkSessionManager) {
-        sessionManager = manager
+    suspend fun initSession() {
+        sessionManager = services.firstOrNull() ?: EmptySessionManager()
         sessionManager.init()
     }
 
@@ -133,7 +136,7 @@ open class ZkApplication {
         routing.init()
     }
 
-    suspend fun initLocale(store: ZkBuiltinStrings, downloadTranslations: Boolean = true, defaultLocale : String? = null) {
+    suspend fun initLocale(store: ZkBuiltinStrings, defaultLocale : String? = null) {
         val path = window.location.pathname.trim('/')
 
         locale = when {
@@ -148,11 +151,9 @@ open class ZkApplication {
             throw IllegalStateException()
         }
 
-        stringStore = if (downloadTranslations) {
-            store.merge(TranslationsByLocale(locale).execute())
-        } else {
-            store
-        }
+        services.firstOrNull<TranslationProvider>()?.translate(store, locale)
+
+        stringStore = store
     }
 
     private val onPopState = fun(_: Event) {

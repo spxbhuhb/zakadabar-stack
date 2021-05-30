@@ -74,4 +74,7 @@ that well able to do so.
     * add action to hide/show on desktop
     * move to title bar on mobile as an action, drop down like the sidebar
 
+## Think about
+
+i18n: restrict translation query before login
 

@@ -41,6 +41,7 @@ kotlin {
     sourceSets["commonMain"].dependencies {
         implementation(project(":core"))
         implementation(project(":lib:accounts"))
+        implementation(project(":lib:i18n"))
 
         implementation("com.h2database:h2:1.4.200")
     }

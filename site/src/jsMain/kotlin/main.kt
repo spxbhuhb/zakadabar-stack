@@ -8,7 +8,6 @@ import zakadabar.site.frontend.resources.SiteDarkTheme
 import zakadabar.site.frontend.resources.SiteGreenBlueTheme
 import zakadabar.site.frontend.resources.SiteLightTheme
 import zakadabar.site.resources.strings
-import zakadabar.stack.frontend.application.EmptySessionManager
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.resources.initTheme
@@ -22,11 +21,11 @@ fun main() {
 
         with(application) {
 
-            initSession(EmptySessionManager())
+            initSession()
 
             initTheme(SiteDarkTheme(), SiteLightTheme(), SiteGreenBlueTheme())
 
-            initLocale(strings, downloadTranslations = false, defaultLocale = "en")
+            initLocale(strings, defaultLocale = "en")
 
             initRouting(Routing())
 

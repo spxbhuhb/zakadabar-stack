@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.resources
 
-import zakadabar.stack.data.builtin.resources.TranslationBo
+import zakadabar.stack.data.builtin.misc.StringPair
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -28,7 +28,7 @@ open class ZkStringStore(
 
     operator fun String.provideDelegate(thisRef: ZkStringStore, prop: KProperty<*>): ReadOnlyProperty<ZkStringStore, String> {
         thisRef.map[prop.name] = this
-        thisRef.normalizedKeyMap[prop.name.toLowerCase()] = this
+        thisRef.normalizedKeyMap[prop.name.lowercase()] = this
         return StringsDelegate()
     }
 
@@ -39,12 +39,11 @@ open class ZkStringStore(
      *
      * @return  the string store merge is called on
      */
-    inline fun <reified T> merge(other: List<TranslationBo>): T {
+    fun merge(other: List<StringPair>) {
         other.forEach {
-            map[it.name] = it.value
-            normalizedKeyMap[normalizeKey(it.name)] = it.value
+            map[it.first] = it.second
+            normalizedKeyMap[normalizeKey(it.first)] = it.second
         }
-        return this as T
     }
 
     /**
@@ -76,14 +75,14 @@ open class ZkStringStore(
      * 1. try to get the normalized key from the [normalizedKeyMap].
      * 1. return with the key itself
      *
-     * @param   key  The key to look up.
+     * @param   instance  The instance to look up.
      * @return  the string value that belongs to this key
      */
-    fun getNormalized(any : Any) : String {
-        val key = any::class.simpleName ?: ""
+    fun getNormalized(instance : Any) : String {
+        val key = instance::class.simpleName ?: ""
         return map[key] ?: normalizedKeyMap[normalizeKey(key)] ?: key
     }
 
-    fun normalizeKey(key: String) = key.toLowerCase().replace("-", "")
+    fun normalizeKey(key: String) = key.lowercase().replace("-", "")
 
 }

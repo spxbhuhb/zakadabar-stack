@@ -17,7 +17,7 @@ import zakadabar.stack.data.schema.BoSchema
  * @property  description   Description of the locale.
  */
 @Serializable
-data class LocaleBo(
+class LocaleBo(
     override var id: EntityId<LocaleBo>,
     var name: String,
     var description: String
@@ -29,6 +29,7 @@ data class LocaleBo(
     override fun comm() = comm
 
     override fun schema() = BoSchema {
+        + ::id
         + ::name min 2 max 100 blank false
         + ::description
     }

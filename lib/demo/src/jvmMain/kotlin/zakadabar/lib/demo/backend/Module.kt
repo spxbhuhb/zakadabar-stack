@@ -11,6 +11,7 @@ object Module : BackendModule {
 
     override fun onModuleLoad() {
         zakadabar.lib.accounts.backend.install()
+        zakadabar.lib.i18n.backend.install()
     }
 
 }

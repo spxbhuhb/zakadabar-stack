@@ -20,19 +20,20 @@ import io.ktor.websocket.*
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 import zakadabar.stack.backend.BackendModule
-import zakadabar.stack.backend.Forbidden
 import zakadabar.stack.backend.Server.Companion.staticRoot
+import zakadabar.stack.backend.authorize.Forbidden
 import zakadabar.stack.backend.authorize.LoginTimeout
 import zakadabar.stack.backend.routingLogger
 import zakadabar.stack.backend.server
 import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.builtin.settings.ServerSettingsBo
+import zakadabar.stack.util.InstanceStore
 import java.io.File
 import java.time.Duration
 
 fun buildServer(
     config: ServerSettingsBo,
-    modules: List<BackendModule>
+    modules: InstanceStore<BackendModule>
 ) = embeddedServer(Netty, port = config.ktor.port) {
 
     val sessionBl = server.firstOrNull<KtorSessionProvider>()
@@ -70,9 +71,6 @@ fun buildServer(
         exception<Forbidden> {
             call.respond(HttpStatusCode.Forbidden)
         }
-        exception<zakadabar.stack.backend.authorize.Forbidden> {
-            call.respond(HttpStatusCode.Forbidden)
-        }
         exception<EntityNotFoundException> {
             call.respond(HttpStatusCode.NotFound)
         }
@@ -104,7 +102,7 @@ fun buildServer(
     }
 }
 
-private fun Route.install(config : ServerSettingsBo, modules : List<BackendModule>) {
+private fun Route.install(config : ServerSettingsBo, modules : InstanceStore<BackendModule>) {
 
     get("health") {
         call.respondText("OK", ContentType.Text.Plain)
@@ -112,7 +110,7 @@ private fun Route.install(config : ServerSettingsBo, modules : List<BackendModul
 
     route("api") {
 
-        modules.forEach {
+        modules.instances.forEach {
             it.onInstallRoutes(this)
         }
         get("health") {
@@ -126,7 +124,7 @@ private fun Route.install(config : ServerSettingsBo, modules : List<BackendModul
         files(".")
         default("index.html")
 
-        modules.forEach {
+        modules.instances.forEach {
             it.onInstallStatic(this)
         }
 
