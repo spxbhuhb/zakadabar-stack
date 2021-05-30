@@ -2,19 +2,15 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
-@file:UseSerializers(OptInstantAsStringSerializer::class)
-
 package zakadabar.lib.accounts.data
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityBoCompanion
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoSchema
-import zakadabar.stack.data.util.OptInstantAsStringSerializer
 
 @Serializable
 class AccountPrivateBo(

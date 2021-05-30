@@ -29,7 +29,7 @@ class SiteStrings : ExamplesStrings() {
     val GetStarted by "Get Started"
     val GetHelp by "Get Help"
 
-    val faq by "F.A.Q."
+    val faq by "FAQ"
     val tldr by "TL;DR"
     val normalPeople by "Normal People"
     val jungleWarriors by "Jungle Warriors"

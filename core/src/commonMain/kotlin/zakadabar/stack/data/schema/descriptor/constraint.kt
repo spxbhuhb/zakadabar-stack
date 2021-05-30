@@ -5,7 +5,6 @@ package zakadabar.stack.data.schema.descriptor
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.util.InstantAsStringSerializer
 
 enum class BoConstraintType {
     Min,
@@ -38,7 +37,6 @@ class DoubleBoConstraint(
 @Serializable
 class InstantBoConstraint(
     override val type: BoConstraintType,
-    @Serializable(InstantAsStringSerializer::class)
     val value: Instant?
 ) : BoConstraint()
 

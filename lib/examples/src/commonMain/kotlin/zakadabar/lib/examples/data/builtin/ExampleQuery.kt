@@ -31,7 +31,7 @@ data class ExampleQuery(
 
     override suspend fun execute() = comm.query(this, serializer(), ListSerializer(ExampleResult.serializer()))
 
-    companion object : QueryBoCompanion<BuiltinDto>(BuiltinDto.boNamespace)
+    companion object : QueryBoCompanion<BuiltinBo>(BuiltinBo.boNamespace)
 
     override fun schema() = BoSchema {
         + ::booleanValue

@@ -6,23 +6,16 @@
  * also protected by copyright, patent, and other intellectual and industrial
  * property laws.
  */
-@file:UseSerializers(
-    OptInstantAsStringSerializer::class,
-    InstantAsStringSerializer::class
-)
 
 package zakadabar.lib.examples.data.builtin
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.util.InstantAsStringSerializer
-import zakadabar.stack.data.util.OptInstantAsStringSerializer
 
 @Serializable
 data class ExampleResult(
-    val EntityId: EntityId<BuiltinDto>,
+    val EntityId: EntityId<BuiltinBo>,
     var booleanValue: Boolean,
     var enumSelectValue: ExampleEnum,
     var intValue: Int,

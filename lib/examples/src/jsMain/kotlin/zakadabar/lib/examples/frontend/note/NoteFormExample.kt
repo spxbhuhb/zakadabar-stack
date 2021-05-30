@@ -4,7 +4,7 @@
 package zakadabar.lib.examples.frontend.note
 
 import org.w3c.dom.HTMLElement
-import zakadabar.lib.examples.data.builtin.BuiltinDto
+import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
@@ -29,7 +29,7 @@ class NoteFormExample(
         }
     }
 
-    class InlineForm : ZkForm<BuiltinDto>() {
+    class InlineForm : ZkForm<BuiltinBo>() {
 
         override fun onConfigure() {
             bo = default { }

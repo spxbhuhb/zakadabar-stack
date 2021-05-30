@@ -10,17 +10,27 @@ In the Stack, there are none. For all those things we use Kotlin based solutions
 * For theming and CSS we have our own implementation, please see [Themes, Css](/doc/guides/browser/structure/ThemesCss.md) in the
   documentation.
   
-### Why Not Spring, JPA, etc?
+### Spring, JPA, etc?
+
+Actually, nothing prevents you from using those. We haven't tried, but it
+should work. Spring endpoints might be a bit tricky because of the routing,
+I wouldn't go into that and stick to Ktor. Apart that I don't see any real
+problems. I might be wrong though.
 
 We wanted to be independent of JVM as much as possible. While the backend code is
 in `jvmMain` at the moment, it is structured such a way that we could move it
 to `commonMain` with reasonable effort. This would open the possibility to
 run the backend in Node.js for example.
 
-### Why Not React, Bootstrap, jquery, etc?
+### React, Bootstrap, jquery, etc?
 
-There are a few reasons. First, we wanted to be independent (yet again) from any big 
-JavaScript libraries and the way of thinking they enforce.
+Yet again, feel free to use them. Technically you can ignore all the built-in
+components and use only the communication part of the stack. Or ignore the
+communication and use only the UI components. Your choice.
+
+We do not plan to use any of those in the stack, there are a few reasons for that.
+First, we wanted to be independent (yet again) from any big JavaScript libraries 
+and the way of thinking they enforce.
 
 The second reason is that because of this independence we can take advantage
 many Kotlin features and integrate our components tightly together. This would
@@ -35,9 +45,10 @@ It is not realistic to stay away from npm dependencies everywhere, for example
 by ourselves. When we add a chart library, it will most probably use an NPM
 dependency.
 
-### Why Not Semantic Versioning
+### Not Semantic Versioning?
 
-There are many reasons, for some of them, please read this article without any bias: [Semver Will Not Save You](https://hynek.me/articles/semver-will-not-save-you/).
+There are many reasons, for some of them, please read this article without any bias: 
+[Semver Will Not Save You](https://hynek.me/articles/semver-will-not-save-you/).
 
 ## Errors
 
@@ -133,10 +144,19 @@ ZkElement.addKClass = true
 
 ![kclass](kclass.png)
 
+### Debug SQLs (Exposed)
+
+Set `db.debugSql` in [stack.server.yaml](../../../site/template/app/etc/stack.server.yaml) to true:
+
+```yaml
+db:
+   # other stuff...
+   debugSql: true
+```
+
 ### Trace Ktor Routing
 
-To trace Ktor routing set `tracerouting`
-in [zakadabar.stack.server.yaml](../../../site/template/app/etc/zakadabar.stack.server.yaml) to true:
+Set `tracerouting` in [stack.server.yaml](../../../site/template/app/etc/stack.server.yaml) to true:
 
 ```yaml
 traceRouting: true

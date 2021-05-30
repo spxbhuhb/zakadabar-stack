@@ -3,7 +3,6 @@
  */
 package zakadabar.lib.examples.backend.data
 
-import io.ktor.features.*
 import zakadabar.lib.examples.data.SimpleExampleAction
 import zakadabar.lib.examples.data.SimpleExampleBo
 import zakadabar.lib.examples.data.SimpleExampleQuery
@@ -21,11 +20,6 @@ class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
     override val pa = SimpleExampleExposedPa()
 
     override val authorizer = UnsafeAuthorizer<SimpleExampleBo>()
-//    SimpleRoleAuthorizer<SimpleExampleBo> {
-//        all = StackRoles.siteMember
-//        action(SimpleExampleAction::class, StackRoles.siteMember)
-//        query(SimpleExampleQuery::class, StackRoles.siteMember)
-//    }
 
     override val router = router {
         action(SimpleExampleAction::class, ::action)
@@ -34,7 +28,7 @@ class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
 
     override val validator = object : Validator<SimpleExampleBo> {
         override fun validateCreate(executor: Executor, bo: SimpleExampleBo) {
-            println("Incoming BO is ${if (bo.isValid) "valid" else "invalid"}.")
+            auditor.auditCustom(executor) { "Incoming BO is ${if (bo.isValid) "valid" else "invalid"}." }
         }
     }
 
@@ -45,7 +39,7 @@ class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
     private val simpleExampleBl by lazy { server.first<SimpleExampleBl>() }
 
     override fun create(executor: Executor, bo: SimpleExampleBo) : SimpleExampleBo {
-        if (pa.count() >= 1000) throw BadRequestException("table limit reached")
+        if (pa.count() >= 1000) throw IllegalStateException("table limit reached")
 
         return pa.create(bo)
             .let {

@@ -22,17 +22,17 @@ fun List<BoConstraint>.toCode(): String {
     return parts.joinToString(" ")
 }
 
-fun BooleanBoConstraint.toCode() = "${type.name.toLowerCase()} $value"
+fun BooleanBoConstraint.toCode() = "${type.name.lowercase()} $value"
 
 fun DoubleBoConstraint.toCode() : String {
     val s = value.toString()
-    return "${type.name.toLowerCase()} ${if ('.' in s) s else "$s.0"}"
+    return "${type.name.lowercase()} ${if ('.' in s) s else "$s.0"}"
 }
 
-fun InstantBoConstraint.toCode() = "${type.name.toLowerCase()} $value"
+fun InstantBoConstraint.toCode() = "${type.name.lowercase()} $value"
 
-fun IntBoConstraint.toCode() = "${type.name.toLowerCase()} $value"
+fun IntBoConstraint.toCode() = "${type.name.lowercase()} $value"
 
-fun LongBoConstraint.toCode() = "${type.name.toLowerCase()} $value"
+fun LongBoConstraint.toCode() = "${type.name.lowercase()} $value"
 
-fun StringBoConstraint.toCode() = "${type.name.toLowerCase()} \"$value\""
+fun StringBoConstraint.toCode() = "${type.name.lowercase()} \"$value\""

@@ -84,7 +84,7 @@ import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.application.translate
-
+import zakadabar.stack.frontend.application.target
 import ${packageName}.data.$boName
 
 ${generators.map { it.browserImport() }.flatten().distinct().joinToString("\n")}
@@ -94,7 +94,7 @@ ${generators.map { it.browserImport() }.flatten().distinct().joinToString("\n")}
  * 
  * Generated with Bender at ${Clock.System.now()}.
  */
-object $browserCrudName : ZkCrudTarget<$boName>() {
+class $browserCrudName : ZkCrudTarget<$boName>() {
     init {
         companion = $boName.Companion
         boClass = $boName::class
@@ -129,7 +129,7 @@ class $browserTableName : ZkTable<$boName>() {
 
     override fun onConfigure() {
 
-        crud = $browserCrudName
+        crud = target<$browserCrudName>()
 
         titleText = translate<$browserTableName>()
 
@@ -152,7 +152,7 @@ fun businessLogicGenerator() = """
 package ${packageName}.backend
 
 import zakadabar.stack.StackRoles
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
+import zakadabar.stack.backend.authorize.EmptyAuthorizer
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import ${packageName}.data.$boName
 
@@ -160,20 +160,14 @@ import ${packageName}.data.$boName
  * Business Logic for ${boName}.
  * 
  * Generated with Bender at ${Clock.System.now()}.
- *
- * **IMPORTANT** Please do not modify this class manually. 
- * 
- * If you need other functions, please extend with `Gen` removed from the name.
  */
-class ${baseName}BlGen : EntityBusinessLogicBase<${boName}>(
+open class ${baseName}Bl : EntityBusinessLogicBase<${boName}>(
     boClass = ${boName}::class
 ) {
 
     override val pa = ${baseName}ExposedPaGen()
 
-    override val authorizer = SimpleRoleAuthorizer<${boName}> {
-        all = StackRoles.siteMember
-    }
+    override val authorizer : Authorizer<${boName}> = EmptyAuthorizer()
     
 }
 """.trimIndent()

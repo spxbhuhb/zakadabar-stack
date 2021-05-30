@@ -4,7 +4,7 @@
 package zakadabar.lib.examples.frontend.toast
 
 import org.w3c.dom.HTMLElement
-import zakadabar.lib.examples.data.builtin.BuiltinDto
+import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.button.buttonSecondary
@@ -34,7 +34,7 @@ class ToastFormExample(
         }
     }
 
-    class InlineForm : ZkForm<BuiltinDto>() {
+    class InlineForm : ZkForm<BuiltinBo>() {
 
         override fun onConfigure() {
             bo = default { }

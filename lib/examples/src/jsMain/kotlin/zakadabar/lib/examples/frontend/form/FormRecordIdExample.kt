@@ -4,7 +4,7 @@
 package zakadabar.lib.examples.frontend.form
 
 import org.w3c.dom.HTMLElement
-import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
+import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoSchema
@@ -19,10 +19,10 @@ import zakadabar.stack.frontend.util.default
  */
 class EntityIdExampleDto(
     var id: EntityId<EntityIdExampleDto>,
-    var value: EntityId<ExampleReferenceDto>,
-    var optValue: EntityId<ExampleReferenceDto>?,
-    var invalidValue: EntityId<ExampleReferenceDto>,
-    var readOnlyValue: EntityId<ExampleReferenceDto>
+    var value: EntityId<ExampleReferenceBo>,
+    var optValue: EntityId<ExampleReferenceBo>?,
+    var invalidValue: EntityId<ExampleReferenceBo>,
+    var readOnlyValue: EntityId<ExampleReferenceBo>
 ) : BaseBo {
     override fun schema() = BoSchema {
         + ::id
@@ -59,8 +59,8 @@ class FormEntityIdExample(
 
         + section {
             + bo::id
-            + select(bo::optValue) { ExampleReferenceDto.all().by { it.name } }
-            + select(bo::invalidValue) { ExampleReferenceDto.all().by { it.name } }
+            + select(bo::optValue) { ExampleReferenceBo.all().by { it.name } }
+            + select(bo::invalidValue) { ExampleReferenceBo.all().by { it.name } }
         }
 
         // Make invalidValue touched, so the form will show styles.

@@ -1,49 +1,35 @@
-/*
- * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
- */
 package zakadabar.lib.examples.frontend.crud
 
-import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
+import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
 import zakadabar.stack.frontend.application.translate
 import zakadabar.stack.frontend.builtin.crud.ZkInlineCrud
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 
-// -----------------------------------------------------------------------------
-//  Crud
-// -----------------------------------------------------------------------------
-
-class ExampleReferenceCrud : ZkInlineCrud<ExampleReferenceDto>() {
+class ExampleReferenceCrud : ZkInlineCrud<ExampleReferenceBo>() {
     init {
-        companion = ExampleReferenceDto.Companion
-        boClass = ExampleReferenceDto::class
+        companion = ExampleReferenceBo.Companion
+        boClass = ExampleReferenceBo::class
         editorClass = ExampleReferenceForm::class
         tableClass = ExampleReferenceTable::class
     }
 }
 
-// -----------------------------------------------------------------------------
-//  Form
-// -----------------------------------------------------------------------------
-
-class ExampleReferenceForm : ZkForm<ExampleReferenceDto>() {
+class ExampleReferenceForm : ZkForm<ExampleReferenceBo>() {
     override fun onCreate() {
         super.onCreate()
 
         build(translate<ExampleReferenceForm>()) {
             + section {
+                + bo::id
                 + bo::name
             }
         }
     }
 }
 
-// -----------------------------------------------------------------------------
-//  Table
-// -----------------------------------------------------------------------------
-
-class ExampleReferenceTable : ZkTable<ExampleReferenceDto>() {
+class ExampleReferenceTable : ZkTable<ExampleReferenceBo>() {
 
     override fun onConfigure() {
 
@@ -53,9 +39,9 @@ class ExampleReferenceTable : ZkTable<ExampleReferenceDto>() {
         search = true
         export = true
 
-        + ExampleReferenceDto::id
-        + ExampleReferenceDto::name
-        
+        // ExampleReferenceBo::id // record id and opt record id is not supported yet
+        + ExampleReferenceBo::name
+
         + actions()
     }
 }

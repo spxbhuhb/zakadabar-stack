@@ -17,6 +17,6 @@ class CrudBuiltinExample(
         height = 400
         + zkLayoutStyles.fixBorder
 
-        + BuiltinCrud().apply { openAll() }
+        + BuiltinInlineCrud().apply { openAll() }
     }
 }

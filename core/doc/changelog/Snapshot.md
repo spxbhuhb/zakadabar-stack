@@ -1,10 +1,15 @@
 ## Common
 
-## Added
+### Added
 
 - InstanceStore: store and look up instances easily
 - StringPair: simple bo that holds a string pair
 - TranslationProvider: service interface to be implemented for translators
+
+### Removed
+
+- InstantAsStringSerializer (no need anymore, works out-of-the-box)
+- OptInstantAsStringSerializer r (no need anymore, works out-of-the-box)
 
 ## Backend
 
@@ -23,6 +28,7 @@
 - EmptyPersistenceApi: persistence API for action and query BLs
 - EmptyAuthorizer: denies everything, for BLs that are used internally
 - EmptyRouter: adds no endpoints, for BLs that are used internally  
+- EmptyAuthenticationProvider: for session-less, account-less sites  
 - DatabaseSettingsBo: debugSql - when true Exposed log level is set to `DEBUG`
 - settings namespace parameter is now optional and automatically set to package name when not passed
 - When there is no SettingProvider after module load, the server adds the default SettingBl
@@ -46,6 +52,7 @@
 - EntityBusinessLogicBase.logger, auditor has its own logger
 - CustomBackend: replaced with BackendModule everywhere
 - all account and session related code moved into lib:accounts
+- EntityBackend: replaced everywhere (except blobs) with bl/pa
 
 ### Fixed
 
@@ -101,6 +108,13 @@
 - merge principal and account
 - migrate all backend modules to the bl/pa concept
 
+## Lib:Bender
+
+### Changed
+
+- Instant serialization imports are not in the generated code
+- Frontend CRUD is now a class instead of an object
+
 ## Lib:Demo
 
 ### Added
@@ -113,6 +127,7 @@
 
 ### Added
 
+- Migrate all backends to bl/pa concept
 - SimpleStandaloneAction
 - SimpleStandaloneActionBl
 - SimpleStandaloneActionTest: unit (+integration) test

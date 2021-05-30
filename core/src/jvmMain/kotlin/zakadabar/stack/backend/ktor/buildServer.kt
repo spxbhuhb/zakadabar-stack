@@ -46,6 +46,10 @@ fun buildServer(
         install(Authentication) {
             sessionBl.configure(this)
         }
+    } else {
+        install(Authentication) {
+            configure()
+        }
     }
 
     install(ContentNegotiation) {
@@ -91,11 +95,7 @@ fun buildServer(
     routing {
         if (config.traceRouting) trace { routingLogger.trace(it.buildText()) }
 
-        if (sessionBl != null) {
-            authenticate {
-                install(config, modules)
-            }
-        } else {
+        authenticate {
             install(config, modules)
         }
 

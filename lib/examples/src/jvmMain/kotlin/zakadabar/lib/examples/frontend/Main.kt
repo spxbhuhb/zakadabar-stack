@@ -8,9 +8,9 @@ import zakadabar.lib.accounts.data.AccountPrivateBo
 import zakadabar.lib.accounts.data.LoginAction
 import zakadabar.lib.accounts.data.LogoutAction
 import zakadabar.lib.accounts.data.SessionBo
-import zakadabar.lib.examples.data.builtin.BuiltinDto
+import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.data.builtin.ExampleEnum
-import zakadabar.lib.examples.data.builtin.ExampleReferenceDto
+import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
 import zakadabar.stack.backend.util.default
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityComm
@@ -29,14 +29,14 @@ suspend fun crud() {
 
     // with the constructor we have to initialize all fields
 
-    val newReference = ExampleReferenceDto(
+    val newReference = ExampleReferenceBo(
         EntityId(), // we don't have an id yet
         name = "hello world"
     ).create()
 
     // with default all fields are initialized with the default values from the schema
 
-    val newBuiltin = BuiltinDto.default {
+    val newBuiltin = BuiltinBo.default {
         enumSelectValue = ExampleEnum.EnumValue1
         secretValue = Secret("aaa")
         recordSelectValue = newReference.id
@@ -47,7 +47,7 @@ suspend fun crud() {
 
     dumpBuiltins("after create")
 
-    val builtinRead = BuiltinDto.read(newBuiltin.id)
+    val builtinRead = BuiltinBo.read(newBuiltin.id)
     builtinRead.doubleValue = 5.6
     builtinRead.update()
 
@@ -59,7 +59,7 @@ suspend fun crud() {
 
 suspend fun dumpBuiltins(message: String) {
     println("\n    ---- $message ----\n")
-    BuiltinDto.all().forEach { println("        $it") }
+    BuiltinBo.all().forEach { println("        $it") }
 }
 
 suspend fun login() {
@@ -105,7 +105,7 @@ suspend fun login() {
 suspend fun errorHandling() {
     println("\n======== Error Handling ========\n")
     try {
-        BuiltinDto.read(EntityId(- 1))
+        BuiltinBo.read(EntityId(- 1))
     } catch (ex: ServerResponseException) {
         println("    ${ex.response.status}")
     } catch (ex: ClientRequestException) {
@@ -123,7 +123,7 @@ suspend fun errorHandling() {
     }
 
     try {
-        BuiltinDto.read(EntityId(- 1))
+        BuiltinBo.read(EntityId(- 1))
     } catch (ex: Exception) {
         // don't do anything here, the global error handler handled the exception
     }

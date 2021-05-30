@@ -2,21 +2,13 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
-@file:UseSerializers(
-    InstantAsStringSerializer::class,
-    OptInstantAsStringSerializer::class
-)
-
 package zakadabar.stack.data.schema.descriptor
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.util.InstantAsStringSerializer
-import zakadabar.stack.data.util.OptInstantAsStringSerializer
 import zakadabar.stack.util.UUID
 
 /**
@@ -83,9 +75,7 @@ class InstantBoProperty(
     override val name: String,
     override val optional: Boolean,
     override var constraints: List<BoConstraint>,
-    @Serializable(OptInstantAsStringSerializer::class)
     var defaultValue: Instant?,
-    @Serializable(OptInstantAsStringSerializer::class)
     var value: Instant?
 ) : BoProperty()
 

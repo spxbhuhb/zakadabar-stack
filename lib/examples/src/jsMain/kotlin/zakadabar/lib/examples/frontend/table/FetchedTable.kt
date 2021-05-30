@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.examples.frontend.table
 
-import zakadabar.lib.examples.data.builtin.BuiltinDto
+import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.frontend.crud.BuiltinTable
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
@@ -20,7 +20,7 @@ object FetchedTable : ZkPage(css = zkPageStyles.fixed) {
             // Add the table and set the data. It is not important to use these
             // together, you can add the table and set the data later.
 
-            + BuiltinTable().setData(BuiltinDto.all())
+            + BuiltinTable().setData(BuiltinBo.all())
         }
     }
 

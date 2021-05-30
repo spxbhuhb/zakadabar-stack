@@ -3,14 +3,12 @@
  */
 package zakadabar.site.backend
 
-import zakadabar.lib.examples.backend.builtin.SiteBuiltinBackend
-import zakadabar.lib.examples.backend.builtin.SiteExampleReferenceBackend
+import zakadabar.lib.examples.backend.builtin.BuiltinBl
+import zakadabar.lib.examples.backend.builtin.ExampleReferenceBl
 import zakadabar.lib.examples.backend.data.SimpleExampleBl
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.authorize.UnsafeAuthorizer
 import zakadabar.stack.backend.custom.ContentBackend
-import zakadabar.stack.backend.data.builtin.resources.LocaleBackend
-import zakadabar.stack.backend.data.builtin.resources.TranslationBackend
 import zakadabar.stack.backend.server
 import zakadabar.stack.util.PublicApi
 
@@ -18,13 +16,10 @@ import zakadabar.stack.util.PublicApi
 object Module : BackendModule {
 
     override fun onModuleLoad() {
-        server += LocaleBackend
-        server += TranslationBackend
-
         server += ContentBackend("content")
 
-        server += SiteBuiltinBackend
-        server += SiteExampleReferenceBackend
+        server += BuiltinBl()
+        server += ExampleReferenceBl()
 
         UnsafeAuthorizer.enabled = true
         server += SimpleExampleBl()

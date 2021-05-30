@@ -13,7 +13,7 @@ abstract class PropertyGenerator(
 ) {
     open fun commonImport(): List<String> = emptyList()
 
-    open fun commonDeclaration() : String? =
+    open fun commonDeclaration(): String? =
         "var ${property.name} : ${typeName}${optional}"
 
     open fun commonSchema() =
@@ -29,12 +29,12 @@ abstract class PropertyGenerator(
 
     open fun exposedPaImport(): List<String> = emptyList()
 
-    abstract fun exposedTable() : String?
+    abstract fun exposedTable(): String?
 
     open fun exposedTableToBo() =
         "${property.name} = this[table.${property.name}]"
 
-    open fun exposedTableFromBo() : String? =
+    open fun exposedTableFromBo(): String? =
         "this[table.${property.name}] = bo.${property.name}"
 
     val optional
@@ -43,7 +43,7 @@ abstract class PropertyGenerator(
     val exposedTableOptional
         get() = if (property.optional) ".nullable()" else ""
 
-    fun String.withoutBo() = if (this.lowercase().endsWith("bo")) this.substring(0, this.length-2) else this
+    fun String.withoutBo() = if (this.lowercase().endsWith("bo")) this.substring(0, this.length - 2) else this
 }
 
 open class BooleanPropertyGenerator(
@@ -110,20 +110,7 @@ open class InstantPropertyGenerator(
 ) : PropertyGenerator(boDescriptor, property, "Instant") {
 
     override fun commonImport() =
-         if (property.optional) {
-            listOf("import kotlinx.datetime.Instant", "import zakadabar.stack.data.util.InstantAsStringSerializer")
-        } else {
-            listOf("import kotlinx.datetime.Instant", "import zakadabar.stack.data.util.OptInstantAsStringSerializer")
-        }
-
-
-    override fun commonDeclaration(): String {
-        return if (property.optional) {
-            "@Serializable(OptInstantAsStringSerializer::class)\n    ${super.commonDeclaration()}"
-        } else {
-            "@Serializable(InstantAsStringSerializer::class)\n    ${super.commonDeclaration()}"
-        }
-    }
+        listOf("import kotlinx.datetime.Instant")
 
     override fun exposedPaImport() = listOf(
         "import org.jetbrains.exposed.sql.`java-time`.timestamp",
@@ -169,7 +156,7 @@ open class EntityIdPropertyGenerator(
 
     override fun commonDeclaration() =
         if (property.name == "id") {
-           null
+            null
         } else {
             "var ${property.name} : EntityId<${property.kClassName}>$optional"
         }
@@ -187,6 +174,13 @@ open class EntityIdPropertyGenerator(
     override fun browserTable() =
         "// ${boDescriptor.className}::${property.name} // record id and opt record id is not supported yet "
 
+    override fun exposedPaImport(): List<String> =
+        if (property.optional) {
+            listOf("import org.jetbrains.exposed.dao.id.EntityID")
+        } else {
+            emptyList()
+        }
+
     override fun exposedTable() =
         if (property.name == "id") {
             null
@@ -201,7 +195,11 @@ open class EntityIdPropertyGenerator(
         if (property.name == "id") {
             null
         } else {
-            "this[table.${property.name}] = bo.${property.name}$optional.toLong()"
+            if (property.optional) {
+                "this[table.${property.name}] = bo.${property.name}?.let { EntityID(it.toLong(), ${property.kClassName.withoutBo()}ExposedTableGen) }"
+            } else {
+                "this[table.${property.name}] = bo.${property.name}.toLong()"
+            }
         }
 }
 
@@ -249,7 +247,7 @@ open class StringPropertyGenerator(
     override val property: StringBoProperty
 ) : PropertyGenerator(boDescriptor, property, "String") {
 
-    override fun exposedTable() : String {
+    override fun exposedTable(): String {
         val max = property.constraints.firstOrNull { it.type == BoConstraintType.Max } as? IntBoConstraint
         return if (max?.value != null) {
             "val ${property.name} = varchar(\"${property.name.camelToSnakeCase()}\", ${max.value})$exposedTableOptional"
@@ -266,6 +264,12 @@ open class UuidPropertyGenerator(
 
     override fun commonImport() =
         listOf("import zakadabar.stack.util.UUID")
+
+    override fun exposedPaImport() =
+        listOf(
+            "import zakadabar.stack.backend.util.toStackUuid",
+            "import zakadabar.stack.backend.util.toJavaUuid"
+        )
 
     override fun exposedTable() =
         "val ${property.name} = uuid(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"

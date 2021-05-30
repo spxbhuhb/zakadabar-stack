@@ -10,14 +10,14 @@ import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoSchema
 
 @Serializable
-data class ExampleReferenceDto(
+data class ExampleReferenceBo(
 
-    override var id: EntityId<ExampleReferenceDto>,
+    override var id: EntityId<ExampleReferenceBo>,
     var name: String
 
-) : EntityBo<ExampleReferenceDto> {
+) : EntityBo<ExampleReferenceBo> {
 
-    companion object : EntityBoCompanion<ExampleReferenceDto>("example-reference")
+    companion object : EntityBoCompanion<ExampleReferenceBo>("example-reference")
 
     override fun getBoNamespace() = boNamespace
     override fun comm() = comm

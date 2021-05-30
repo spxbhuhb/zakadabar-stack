@@ -2,13 +2,7 @@
 
 ## Cookies
 
-zakadabar.io does not use any cookies to collect any information of its users.
-
-One strictly technical cookie, named `STACK_SESSION`, is used. This identifies
-the communication session between the web browser and zakadabar.io. 
-
-Content of this cookie is a random number, it is not linked to personally
-identifiable information.
+zakadabar.io does not use any cookies.
 
 ## Privacy
 

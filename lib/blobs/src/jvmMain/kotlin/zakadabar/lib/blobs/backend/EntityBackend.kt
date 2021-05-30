@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.data.entity
+package zakadabar.lib.blobs.backend
 
 import io.ktor.application.*
 import io.ktor.features.*
@@ -23,7 +23,6 @@ import zakadabar.stack.backend.Forbidden
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.data.action.ActionBackend
-import zakadabar.stack.backend.data.builtin.BlobTable
 import zakadabar.stack.backend.data.query.QueryBackend
 import zakadabar.stack.backend.exposed.entityId
 import zakadabar.stack.backend.ktor.executor
