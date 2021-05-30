@@ -5,8 +5,8 @@
 
 import zakadabar.lib.accounts.frontend.SessionManager
 import zakadabar.site.frontend.Routing
-import zakadabar.site.frontend.resources.GreenBlueTheme
 import zakadabar.site.frontend.resources.SiteDarkTheme
+import zakadabar.site.frontend.resources.SiteGreenBlueTheme
 import zakadabar.site.frontend.resources.SiteLightTheme
 import zakadabar.site.resources.strings
 import zakadabar.stack.frontend.application.ZkApplication
@@ -24,7 +24,7 @@ fun main() {
 
             initSession(SessionManager())
 
-            initTheme(SiteDarkTheme(), SiteLightTheme(), GreenBlueTheme())
+            initTheme(SiteDarkTheme(), SiteLightTheme(), SiteGreenBlueTheme())
 
             initLocale(strings)
 

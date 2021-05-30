@@ -6,7 +6,7 @@ package zakadabar.stack.backend.custom
 import io.ktor.http.content.*
 import io.ktor.routing.*
 import zakadabar.stack.backend.BackendModule
-import zakadabar.stack.backend.data.builtin.resources.setting
+import zakadabar.stack.backend.setting.setting
 import zakadabar.stack.data.builtin.settings.ContentBackendSettings
 import java.io.File
 

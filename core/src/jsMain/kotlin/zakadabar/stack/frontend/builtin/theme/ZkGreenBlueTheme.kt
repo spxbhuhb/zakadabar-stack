@@ -1,19 +1,18 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.site.frontend.resources
+package zakadabar.stack.frontend.builtin.theme
 
-import zakadabar.lib.markdown.frontend.markdownStyles
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.zkTabContainerStyles
 import zakadabar.stack.frontend.builtin.layout.zkScrollBarStyles
 import zakadabar.stack.frontend.builtin.sidebar.zkSideBarStyles
 import zakadabar.stack.frontend.builtin.table.zkTableStyles
-import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
 import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
 import zakadabar.stack.frontend.resources.ZkColors
+import zakadabar.stack.frontend.util.after
 import zakadabar.stack.util.alpha
 
-class GreenBlueTheme : ZkBuiltinLightTheme() {
+open class ZkGreenBlueTheme : ZkBuiltinLightTheme() {
 
     companion object {
         const val NAME = "zakadabar.stack.theme.light.green.blue"
@@ -30,7 +29,7 @@ class GreenBlueTheme : ZkBuiltinLightTheme() {
     override var primaryColor = darkGreen
     override var secondaryColor = darkBlue
 
-    override var disabledInputTextColor = textColor
+    override var disabledInputTextColor by after { textColor }
     override var disabledInputBackgroundColor = darkGreen.alpha(0.2)
 
     override var boxShadow = "none" // "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12)"
@@ -69,11 +68,6 @@ class GreenBlueTheme : ZkBuiltinLightTheme() {
 
         with(zkTabContainerStyles) {
             activeLabelBackgroundColor = darkGreen
-        }
-
-        with(markdownStyles) {
-            codeBorderColor = borderColor
-            highlightUrl = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/idea.min.css"
         }
     }
 

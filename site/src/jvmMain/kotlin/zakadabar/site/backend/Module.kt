@@ -10,7 +10,6 @@ import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.authorize.UnsafeAuthorizer
 import zakadabar.stack.backend.custom.ContentBackend
 import zakadabar.stack.backend.data.builtin.resources.LocaleBackend
-import zakadabar.stack.backend.data.builtin.resources.SettingBackend
 import zakadabar.stack.backend.data.builtin.resources.TranslationBackend
 import zakadabar.stack.backend.server
 import zakadabar.stack.util.PublicApi
@@ -19,11 +18,8 @@ import zakadabar.stack.util.PublicApi
 object Module : BackendModule {
 
     override fun onModuleLoad() {
-        zakadabar.lib.accounts.backend.install()
-
         server += LocaleBackend
         server += TranslationBackend
-        server += SettingBackend
 
         server += ContentBackend()
 

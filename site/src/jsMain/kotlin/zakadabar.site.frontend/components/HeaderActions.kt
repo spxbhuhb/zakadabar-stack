@@ -3,8 +3,8 @@
  */
 package zakadabar.site.frontend.components
 
-import zakadabar.site.frontend.resources.GreenBlueTheme
 import zakadabar.site.frontend.resources.SiteDarkTheme
+import zakadabar.site.frontend.resources.SiteGreenBlueTheme
 import zakadabar.site.frontend.resources.SiteLightTheme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.theme.ZkThemeRotate
@@ -16,7 +16,7 @@ class HeaderActions : ZkElement() {
         + ZkThemeRotate(
             ZkIcons.darkMode to SiteDarkTheme(),
             ZkIcons.lightMode to SiteLightTheme(),
-            ZkIcons.leaf to GreenBlueTheme()
+            ZkIcons.leaf to SiteGreenBlueTheme()
         )
     }
 

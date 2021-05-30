@@ -13,7 +13,8 @@ data class DatabaseSettingsBo(
     var driverClassName: String,
     var jdbcUrl: String,
     var username: String,
-    var password: String // FIXME replace this when YAML loader knows how to
+    var password: String, // FIXME replace this when YAML loader knows how to
+    var debugSql: Boolean = false
 
 ) : BaseBo {
 
@@ -22,6 +23,7 @@ data class DatabaseSettingsBo(
         + ::jdbcUrl
         + ::username
         + ::password
+        + ::debugSql
     }
 
 }

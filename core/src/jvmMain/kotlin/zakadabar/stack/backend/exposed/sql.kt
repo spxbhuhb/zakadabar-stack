@@ -41,13 +41,15 @@ object Sql {
 
         dataSource = HikariDataSource(hikariConfig)
 
+        if (config.debugSql) {
+            val logger : ch.qos.logback.classic.Logger = LoggerFactory.getLogger("Exposed") as ch.qos.logback.classic.Logger
+            logger.level = Level.DEBUG
+        }
+
         Database.connect(dataSource)
     }
 
     fun onStart() {
-        val logger : ch.qos.logback.classic.Logger = LoggerFactory.getLogger("Exposed") as ch.qos.logback.classic.Logger
-        logger.level = Level.DEBUG
-
         transaction {
             SchemaUtils.createMissingTablesAndColumns(*tables.toTypedArray())
         }

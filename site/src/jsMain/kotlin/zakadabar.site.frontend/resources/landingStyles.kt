@@ -26,8 +26,8 @@ class LandingStyles : ZkCssStyleSheet() {
         alignItems = "center"
         justifyContent = "space-between"
         height = 60
-        backgroundColor = if (theme.name == GreenBlueTheme.NAME) theme.blockBackgroundColor else theme.backgroundColor
-        borderBottom = if (theme.name == GreenBlueTheme.NAME) theme.fixBorder else theme.border
+        backgroundColor = if (theme.name == SiteGreenBlueTheme.NAME) theme.blockBackgroundColor else theme.backgroundColor
+        borderBottom = if (theme.name == SiteGreenBlueTheme.NAME) theme.fixBorder else theme.border
     }
 
     val content by cssClass {

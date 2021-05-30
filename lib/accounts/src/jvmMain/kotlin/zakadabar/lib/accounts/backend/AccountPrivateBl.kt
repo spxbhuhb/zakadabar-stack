@@ -8,8 +8,8 @@ import zakadabar.lib.accounts.data.*
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize.*
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.backend.data.builtin.resources.setting
 import zakadabar.stack.backend.module
+import zakadabar.stack.backend.setting.setting
 import zakadabar.stack.backend.util.default
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
@@ -92,11 +92,11 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     }
 
     override fun onModuleStart() {
-        super.onModuleStart()
         initDb()
         anonymous = pa.withTransaction {
             pa.readByName("anonymous").toPublic()
         }
+        super.onModuleStart() // this has to be last, so authorizer will find roles after db init
     }
 
     override fun create(executor: Executor, bo: AccountPrivateBo): AccountPrivateBo {
@@ -263,9 +263,9 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
             validated = true
             locked = true
             accountName = "anonymous"
-            fullName = "Security Officer"
-            email = "so@127.0.0.1"
-            displayName = "SO"
+            fullName = "Anonymous"
+            email = "anonymous@127.0.0.1"
+            displayName = "Anonymous"
             locale = serverDescription.defaultLocale
         }
 

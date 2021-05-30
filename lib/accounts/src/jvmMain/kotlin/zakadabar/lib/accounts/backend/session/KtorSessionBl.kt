@@ -17,13 +17,13 @@ import zakadabar.lib.accounts.data.SessionBo
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize.*
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.backend.data.builtin.resources.setting
 import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.ktor.KtorRouter
 import zakadabar.stack.backend.ktor.KtorSessionProvider
 import zakadabar.stack.backend.ktor.executor
 import zakadabar.stack.backend.module
 import zakadabar.stack.backend.persistence.EmptyPersistenceApi
+import zakadabar.stack.backend.server
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.builtin.ActionStatusBo
@@ -87,8 +87,6 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 
     }
 
-    private val serverDescription by setting<ServerDescriptionBo>("zakadabar.server.description")
-
     private val accountBl by module<AccountBlProvider>()
 
     override fun onModuleLoad() {
@@ -99,6 +97,12 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
         val session = call.sessions.get<StackSession>() ?: throw IllegalStateException()
 
         val anonymous = accountBl.anonymous()
+
+        val serverDescription = ServerDescriptionBo(
+            name = server.settings.serverName,
+            version = server.version,
+            defaultLocale = server.settings.defaultLocale,
+        )
 
         if (session.account == anonymous.id) {
             SessionBo(

@@ -18,7 +18,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.Server
-import zakadabar.stack.backend.data.builtin.resources.setting
+import zakadabar.stack.backend.setting.setting
 import zakadabar.stack.data.builtin.settings.SessionBackendSettingsBo
 
 object SessionMaintenanceTask {

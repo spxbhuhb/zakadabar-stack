@@ -7,10 +7,16 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.*
 import zakadabar.lib.accounts.data.AccountPrivateBo
 import zakadabar.lib.accounts.data.RoleGrantBo
+import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityId
 
 class RoleExposedPa : RoleExposedPaGen() {
+
+    override fun onModuleLoad() {
+        super.onModuleLoad()
+        Sql.tables += RoleGrantExposedTable
+    }
 
     fun readByName(name: String) = table.select { RoleExposedTableGen.name eq name }.first().toBo()
 
@@ -34,7 +40,16 @@ class RoleExposedPa : RoleExposedPaGen() {
             }
 
     fun grant(grant: RoleGrantBo) {
-        RoleGrantExposedTable.insertIgnore {
+        val grants = RoleGrantExposedTable
+
+        // TODO Exposed: insertIgnore would be better but not supported out-of-the box
+        val exists = grants
+            .select {  (grants.account eq grant.account.toLong()) and (grants.role eq grant.role.toLong())}
+            .count() != 0L
+
+        if (exists) return
+
+        grants.insert {
             it[account] = EntityID(grant.account.toLong(), AccountPrivateExposedTableGen)
             it[role] = EntityID(grant.role.toLong(), RoleExposedTableGen)
         }

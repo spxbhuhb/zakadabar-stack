@@ -5,6 +5,7 @@ package zakadabar.lib.accounts.frontend.roles
 
 import zakadabar.lib.accounts.data.RoleBo
 import zakadabar.stack.frontend.application.stringStore
+import zakadabar.stack.frontend.application.target
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class Table : ZkTable<RoleBo>() {
@@ -17,7 +18,7 @@ class Table : ZkTable<RoleBo>() {
         export = true
 
         titleText = stringStore.roles
-        crud = Roles
+        crud = target<Roles>()
 
         + RoleBo::id
         + RoleBo::name

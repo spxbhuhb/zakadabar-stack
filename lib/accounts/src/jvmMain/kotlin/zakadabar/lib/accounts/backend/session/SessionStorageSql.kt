@@ -16,7 +16,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-import zakadabar.stack.backend.data.builtin.resources.setting
+import zakadabar.stack.backend.setting.setting
 import zakadabar.stack.data.builtin.settings.SessionBackendSettingsBo
 import java.io.ByteArrayOutputStream
 import kotlin.coroutines.coroutineContext

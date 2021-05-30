@@ -75,6 +75,20 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ```
 
+## Lib: Examples, Lib: Demo
+
+*Backend*
+
+* [H2](https://www.h2database.com/)
+
+### Licenses of the Direct Dependencies
+
+Names and organizations are from the Github project information or from the public we page of the project as of
+2021.05.28. This list is give attribution to the software we depend on, it does not imply any legal/contractual
+connection between the listed projects/authors and Zakadabar Stack/Simplexion.
+
+* H2 is licensed under MPL 2.0 (Mozilla Public License Version 2.0) or EPL 1.0 (Eclipse Public License).
+
 ## Lib: Markdown
 
 *Client side*

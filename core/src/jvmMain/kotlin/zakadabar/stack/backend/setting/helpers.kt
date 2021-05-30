@@ -3,7 +3,7 @@
  */
 @file:JvmName("SettingKt")
 
-package zakadabar.stack.backend.data.builtin.resources
+package zakadabar.stack.backend.setting
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.serializer

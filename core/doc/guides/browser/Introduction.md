@@ -152,7 +152,11 @@ The first segment of the URL path will be the locale of the site. This is a lang
 example `https://zakadabar.io/en/Welcome` means that this the English version of the page.
 
 Once the locale is set, `initLocale` downloads the translations for that given locale, so automatic translations will
-work.
+work. Translation download can be switched off:
+
+```kotlin
+initLocale(SiteStrings(), downloadTranslations = false)
+```
 
 The translated strings are stored in the `stringStore`, but projects usually define their own shorthand variable
 as `strings` which points to the same instance as `stringStore`.

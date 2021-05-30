@@ -16,9 +16,10 @@ include("core")
 include("exp:content")
 
 include("lib:accounts")
+include("lib:bender")
 include("lib:blobs")
 include("lib:cards")
-include("lib:bender")
+include("lib:demo")
 include("lib:examples")
 include("lib:markdown")
 

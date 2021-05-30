@@ -10,7 +10,7 @@ import zakadabar.stack.data.entity.EntityBo
 import kotlin.reflect.KClass
 
 /**
- * Creates an audit record of the operation.
+ * Creates routes incoming requests to the appripriate BL processing method.
  */
 interface Router<T : EntityBo<T>> {
 

@@ -11,6 +11,7 @@ import zakadabar.stack.data.schema.BoSchema
 class ServerSettingsBo(
 
     var serverName: String = "",
+    var defaultLocale: String = "en",
     var database: DatabaseSettingsBo,
     var traceRouting: Boolean = false,
     var staticResources: String = "./var/static",
@@ -22,6 +23,7 @@ class ServerSettingsBo(
 
     override fun schema() = BoSchema {
         + ::serverName default serverName
+        + ::defaultLocale default defaultLocale
         + ::database
         + ::traceRouting default traceRouting
         + ::staticResources default staticResources

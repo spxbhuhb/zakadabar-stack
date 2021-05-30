@@ -137,12 +137,16 @@ open class ZkApplication {
         val path = window.location.pathname.trim('/')
         locale = when {
             path.isNotEmpty() -> path.substringBefore('/')
-            ::executor.isInitialized -> executor.account.locale
-            else -> {
-                document.body?.innerText = "Could not initialize locale."
-                throw IllegalStateException()
-            }
+            ::executor.isInitialized && executor.account.locale.isNotBlank()-> executor.account.locale
+            ::serverDescription.isInitialized -> serverDescription.defaultLocale
+            else -> ""
         }
+
+        if (locale.isBlank()) {
+            document.body?.innerText = "Could not initialize locale."
+            throw IllegalStateException()
+        }
+
         stringStore = if (downloadTranslations) {
             store.merge(TranslationsByLocale(locale).execute())
         } else {

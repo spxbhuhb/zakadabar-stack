@@ -14,30 +14,45 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.server.netty.*
-import kotlinx.serialization.KSerializer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.authorize.LoginTimeout
 import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.ktor.buildServer
-import zakadabar.stack.data.BaseBo
+import zakadabar.stack.backend.setting.SettingBl
+import zakadabar.stack.backend.setting.SettingProvider
 import zakadabar.stack.data.builtin.settings.ServerSettingsBo
 import zakadabar.stack.util.PublicApi
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 import kotlin.reflect.full.isSubclassOf
 
 fun main(argv: Array<String>) {
-    server = Server()
+    val properties = Properties()
+
+    val stream = Server::class.java.getResourceAsStream("/zkBuild.properties")
+    if (stream != null) {
+        properties.load(stream)
+        stream.close()
+    }
+
+    val version : String = properties.getProperty("version") ?: "unknown"
+    val stackVersion : String = properties.getProperty("version") ?: "unknown"
+    val projectName : String = properties.getProperty("version") ?: "unknown"
+
+    moduleLogger.info("server projectName=$projectName version=$version stackVersion=$stackVersion")
+
+    server = Server(version)
     server.main(argv)
 }
 
 val moduleLogger = LoggerFactory.getLogger("modules") !! // log module events
-
 val routingLogger: Logger by lazy { LoggerFactory.getLogger("routing") } // trace routing events
+val settingsLogger = LoggerFactory.getLogger("settings") !! // log settings loads events
 
 /**
  * The global server instance.
@@ -56,16 +71,14 @@ lateinit var server: Server
  * @param  selector  Function to select between modules if there are more than one.
  *                   Default selects the first.
  */
-inline fun <reified T : Any> module(noinline selector : (T) -> Boolean = { true }) = server.ModuleDependencyProvider(T::class, selector)
+inline fun <reified T : Any> module(noinline selector: (T) -> Boolean = { true }) = server.ModuleDependencyProvider(T::class, selector)
 
-open class Server : CliktCommand() {
+open class Server(
+    val version: String
+) : CliktCommand() {
 
     companion object {
 
-        /**
-         * The directory where setting files are. Set automatically by the configuration loader.
-         */
-        lateinit var settingsDirectory: Path
 
         /**
          * When true GET (read and query) requests are logged by bo backends.
@@ -92,19 +105,6 @@ open class Server : CliktCommand() {
 
         lateinit var staticRoot: String
 
-        fun <T : BaseBo> loadSettings(namespace: String, serializer: KSerializer<T>): T? {
-
-            val p1 = settingsDirectory.resolve("$namespace.yaml")
-            val p2 = settingsDirectory.resolve("$namespace.yml")
-
-            val source = when {
-                Files.isReadable(p1) -> Files.readAllBytes(p1).decodeToString()
-                Files.isReadable(p2) -> Files.readAllBytes(p2).decodeToString()
-                else -> null
-            } ?: return null
-
-            return Yaml.default.decodeFromString(serializer, source)
-        }
     }
 
     private val settingsPath
@@ -116,8 +116,12 @@ open class Server : CliktCommand() {
     private val test
             by option("--test", "-t").flag()
 
+    /**
+     * The directory where setting files are. Set automatically by the configuration loader.
+     */
+    lateinit var settingsDirectory: Path
 
-    private lateinit var settings: ServerSettingsBo
+    lateinit var settings: ServerSettingsBo
 
     private val modules = mutableListOf<BackendModule>()
 
@@ -139,9 +143,13 @@ open class Server : CliktCommand() {
 
         Sql.onCreate(settings.database) // initializes SQL connection
 
+        settings.database.password = "" // don't keep DB password in the memory
+
         loadModules(settings) // load modules
 
         Sql.onStart() // create missing tables and columns
+
+        if (firstOrNull<SettingProvider>() == null) this += SettingBl()
 
         startModules() // start the modules
 
@@ -164,12 +172,12 @@ open class Server : CliktCommand() {
 
         val paths = listOf(
             settingsPath,
-            "./zakadabar.stack.server.yml",
-            "./etc/zakadabar.stack.server.yaml",
-            "./etc/zakadabar.stack.server.yml",
-            "../etc/zakadabar.stack.server.yaml",
-            "../etc/zakadabar.stack.server.yml",
-            "./template/app/etc/zakadabar.stack.server.yaml" // this is for development, TODO remove hard-coded development config path
+            "./stack.server.yml",
+            "./etc/stack.server.yaml",
+            "./etc/stack.server.yml",
+            "../etc/stack.server.yaml",
+            "../etc/stack.server.yml",
+            "./template/app/etc/stack.server.yaml" // this is for development, TODO remove hard-coded development config path
         )
 
         for (p in paths) {
@@ -178,6 +186,8 @@ open class Server : CliktCommand() {
 
             settingsDirectory = path.parent
             val source = Files.readAllBytes(path).decodeToString()
+
+            settingsLogger.info("ServerSettingsBo source: ${path.toAbsolutePath()}")
 
             return Yaml.default.decodeFromString(ServerSettingsBo.serializer(), source)
         }
@@ -213,7 +223,7 @@ open class Server : CliktCommand() {
             success = success && it.resolve()
         }
 
-        if (!success) throw IllegalArgumentException("module dependency resolution failed")
+        if (! success) throw IllegalArgumentException("module dependency resolution failed")
 
         modules.forEach {
             try {
@@ -292,7 +302,7 @@ open class Server : CliktCommand() {
      *
      * @throws   NoSuchElementException   when there is no such module
      */
-    fun <T : Any> first(kClass: KClass<T>, selector : (T) -> Boolean): T {
+    fun <T : Any> first(kClass: KClass<T>, selector: (T) -> Boolean): T {
         @Suppress("UNCHECKED_CAST") // checking for class
         return modules.first { kClass.isInstance(it) && selector(it as T) } as T
     }
@@ -314,7 +324,7 @@ open class Server : CliktCommand() {
      * @return   First instance of [kClass] from the server modules or null if
      *           no such module exists.
      */
-    fun <T : Any> firstOrNull(kClass: KClass<T>, selector : (T) -> Boolean = { true }): T? {
+    fun <T : Any> firstOrNull(kClass: KClass<T>, selector: (T) -> Boolean = { true }): T? {
         @Suppress("UNCHECKED_CAST") // checking for class
         return modules.firstOrNull { kClass.isInstance(it) && selector(it as T) } as? T
     }
@@ -331,7 +341,7 @@ open class Server : CliktCommand() {
     }
 
     inner class ModuleDependency<T : Any>(
-        private val dependentModule: Any?,
+        dependentModule: Any?,
         private val dependentProperty: KProperty<*>,
         private val moduleClass: KClass<T>,
         private val selector: (T) -> Boolean
@@ -349,7 +359,7 @@ open class Server : CliktCommand() {
                 module = first(moduleClass, selector)
                 moduleLogger.info("resolved dependency from ${name}${dependentProperty.name} to ${moduleClass.simpleName} ")
                 true
-            } catch (ex : NoSuchElementException) {
+            } catch (ex: NoSuchElementException) {
                 moduleLogger.error("unable to resolve dependency from ${name}${dependentProperty.name} to ${moduleClass.simpleName} ")
                 false
             }

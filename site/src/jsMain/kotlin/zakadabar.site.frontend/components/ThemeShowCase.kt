@@ -4,7 +4,7 @@
 package zakadabar.site.frontend.components
 
 import org.w3c.dom.HTMLElement
-import zakadabar.site.frontend.resources.GreenBlueTheme
+import zakadabar.site.frontend.resources.SiteGreenBlueTheme
 import zakadabar.site.resources.strings
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
@@ -19,7 +19,7 @@ class ThemeShowCase(
         super.onCreate()
 
         + row {
-            + ZkButton(strings.greenBlue) { theme = GreenBlueTheme() }
+            + ZkButton(strings.greenBlue) { theme = SiteGreenBlueTheme() }
         } marginBottom 20
 
     }
