@@ -13,13 +13,15 @@ import java.io.File
 /**
  * A simple backend that serves a directory. Uses `static` of Ktor.
  */
-class ContentBackend(settingNamespace : String = "zakadabar.site.content") : BackendModule {
+class ContentBackend(
+    private val namespace: String
+) : BackendModule {
 
-    private val settings by setting<ContentBackendSettings>(settingNamespace)
+    private val settings by setting<ContentBackendSettings>(namespace)
 
     override fun onInstallStatic(route: Route) {
         with(route) {
-            static("/api/${settings.namespace}") {
+            static("/api/$namespace") {
                 staticRootFolder = File(settings.root)
                 files(".")
             }

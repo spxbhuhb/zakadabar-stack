@@ -8,12 +8,11 @@ import zakadabar.lib.bender.frontend.Bender
 import zakadabar.lib.markdown.frontend.MarkdownPage
 import zakadabar.lib.markdown.frontend.MarkdownPathPage
 import zakadabar.site.frontend.SiteMarkdownContext
+import zakadabar.site.frontend.contentNamespace
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
-
-const val contentNamespace = "content"
 
 object Welcome : MarkdownPage(
     "/api/$contentNamespace/welcome/Welcome.md",

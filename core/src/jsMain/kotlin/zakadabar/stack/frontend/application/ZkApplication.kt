@@ -133,13 +133,14 @@ open class ZkApplication {
         routing.init()
     }
 
-    suspend fun initLocale(store: ZkBuiltinStrings, downloadTranslations: Boolean = true) {
+    suspend fun initLocale(store: ZkBuiltinStrings, downloadTranslations: Boolean = true, defaultLocale : String? = null) {
         val path = window.location.pathname.trim('/')
+
         locale = when {
             path.isNotEmpty() -> path.substringBefore('/')
             ::executor.isInitialized && executor.account.locale.isNotBlank()-> executor.account.locale
-            ::serverDescription.isInitialized -> serverDescription.defaultLocale
-            else -> ""
+            ::serverDescription.isInitialized && serverDescription.defaultLocale.isNotBlank() -> serverDescription.defaultLocale
+            else -> defaultLocale ?: ""
         }
 
         if (locale.isBlank()) {

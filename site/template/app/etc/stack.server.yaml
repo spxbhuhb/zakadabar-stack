@@ -1,8 +1,12 @@
+serverName: Zakadabar Site
+defaultLocale: en
+
 database:
-  driverClassName: org.postgresql.Driver
-  jdbcUrl: jdbc:postgresql://localhost:5432/site
+  driverClassName: org.h2.Driver
+  jdbcUrl: "jdbc:h2:./app/var/db"
   username: test
   password: Almafa.12
+  debugSql: false
 
 traceRouting: true
 staticResources: ./var/static

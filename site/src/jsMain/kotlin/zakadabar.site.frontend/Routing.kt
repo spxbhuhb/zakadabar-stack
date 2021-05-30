@@ -19,6 +19,8 @@ import zakadabar.stack.frontend.builtin.pages.resources.locales.Locales
 import zakadabar.stack.frontend.builtin.pages.resources.settings.Settings
 import zakadabar.stack.frontend.builtin.pages.resources.translations.Translations
 
+const val contentNamespace = "content"
+
 class Routing : ZkAppRouting(DefaultLayout, Landing) {
 
     init {

@@ -21,7 +21,7 @@ object Module : BackendModule {
         server += LocaleBackend
         server += TranslationBackend
 
-        server += ContentBackend()
+        server += ContentBackend("content")
 
         server += SiteBuiltinBackend
         server += SiteExampleReferenceBackend

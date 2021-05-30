@@ -8,6 +8,12 @@ import zakadabar.stack.frontend.builtin.theme.ZkGreenBlueTheme
 
 class SiteGreenBlueTheme : ZkGreenBlueTheme() {
 
+    companion object {
+        const val NAME = "zakadabar.site.theme.light.green.blue"
+    }
+
+    override val name = NAME
+
     override fun onResume() {
         super.onResume()
 

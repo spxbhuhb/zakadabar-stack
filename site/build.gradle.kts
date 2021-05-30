@@ -45,6 +45,10 @@ kotlin {
         implementation(project(":lib:bender"))
         implementation(project(":lib:markdown"))
     }
+    
+    sourceSets["jvmMain"].dependencies {
+        implementation("com.h2database:h2:1.4.200")
+    }
 }
 
 

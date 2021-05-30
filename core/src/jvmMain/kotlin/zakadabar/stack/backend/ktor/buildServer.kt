@@ -93,34 +93,41 @@ fun buildServer(
     routing {
         if (config.traceRouting) trace { routingLogger.trace(it.buildText()) }
 
-        authenticate {
-
-            get("health") {
-                call.respondText("OK", ContentType.Text.Plain)
+        if (sessionBl != null) {
+            authenticate {
+                install(config, modules)
             }
+        } else {
+            install(config, modules)
+        }
 
-            route("api") {
+    }
+}
 
-                modules.forEach {
-                    it.onInstallRoutes(this)
-                }
-                get("health") {
-                    call.respondText("OK", ContentType.Text.Plain)
-                }
+private fun Route.install(config : ServerSettingsBo, modules : List<BackendModule>) {
 
-            }
+    get("health") {
+        call.respondText("OK", ContentType.Text.Plain)
+    }
 
-            static {
-                staticRootFolder = File(config.staticResources)
-                files(".")
-                default("index.html")
+    route("api") {
 
-                modules.forEach {
-                    it.onInstallStatic(this)
-                }
+        modules.forEach {
+            it.onInstallRoutes(this)
+        }
+        get("health") {
+            call.respondText("OK", ContentType.Text.Plain)
+        }
 
-            }
+    }
 
+    static {
+        staticRootFolder = File(config.staticResources)
+        files(".")
+        default("index.html")
+
+        modules.forEach {
+            it.onInstallStatic(this)
         }
 
     }

@@ -21,6 +21,7 @@ include("lib:blobs")
 include("lib:cards")
 include("lib:demo")
 include("lib:examples")
+include("lib:i18n")
 include("lib:markdown")
 
 include("site")

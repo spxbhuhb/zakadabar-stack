@@ -143,7 +143,7 @@ It is important to call `initTheme` before `init`.
 ### Locale
 
 ```kotlin
-initLocale(SiteStrings())
+initLocale(strings)
 ```
 
 This line initializes the locale of the site.
@@ -155,7 +155,13 @@ Once the locale is set, `initLocale` downloads the translations for that given l
 work. Translation download can be switched off:
 
 ```kotlin
-initLocale(SiteStrings(), downloadTranslations = false)
+initLocale(strings, downloadTranslations = false)
+```
+
+If you don't use accounts and sessions, the locale initialization needs a default locale specified:
+
+```kotlin
+initLocale(strings, downloadTranslations = false, defaultLocale = "en")
 ```
 
 The translated strings are stored in the `stringStore`, but projects usually define their own shorthand variable

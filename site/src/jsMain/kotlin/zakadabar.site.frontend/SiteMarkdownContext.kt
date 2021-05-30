@@ -65,8 +65,8 @@ class SiteMarkdownContext(
             dest.contains("../lib/") -> resolveToStringSafe(libSrc, dest.substringAfter("../lib/").trim('/'))
             dest.contains("../site/") -> resolveToStringSafe(siteSrc, dest.substringAfter("../site/").trim('/'))
             dest.contains("/guides/") -> resolveToStringSafe("/${application.locale}/Documentation/guides/", dest.substringAfter("/guides/").trim('/'))
-            dest.endsWith(".png") -> resolveToStringSafe("/api/content/$path", dest.trim('/'))
-            dest.endsWith(".jpg") -> resolveToStringSafe("/api/content/$path", dest.trim('/'))
+            dest.endsWith(".png") -> resolveToStringSafe("/api/$contentNamespace/$path", dest.trim('/'))
+            dest.endsWith(".jpg") -> resolveToStringSafe("/api/$contentNamespace/$path", dest.trim('/'))
             else -> baseURI?.resolveToStringSafe(dest) ?: dest
         }
     }

@@ -1,0 +1,1 @@
+Internationalization plug-and-play module for Zakadabar.
