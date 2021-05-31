@@ -5,8 +5,6 @@ package zakadabar.site.frontend
 
 import kotlinx.browser.window
 import kotlinx.coroutines.await
-import zakadabar.lib.accounts.frontend.accounts.Accounts
-import zakadabar.lib.accounts.frontend.roles.Roles
 import zakadabar.lib.examples.frontend.form.FormFieldsGenerated
 import zakadabar.lib.examples.frontend.form.SyntheticForm
 import zakadabar.lib.examples.frontend.layout.TabContainer
@@ -16,11 +14,7 @@ import zakadabar.lib.examples.frontend.table.FetchedTable
 import zakadabar.lib.examples.frontend.table.GeneratedTable
 import zakadabar.site.frontend.pages.*
 import zakadabar.site.resources.strings
-import zakadabar.stack.StackRoles
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.pages.resources.locales.Locales
-import zakadabar.stack.frontend.builtin.pages.resources.settings.Settings
-import zakadabar.stack.frontend.builtin.pages.resources.translations.Translations
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.text.MarkdownNav
@@ -65,25 +59,6 @@ class SideBar : ZkSideBar() {
                 + item(LegalNotices)
                 + item(Credits)
                 // + item(Experimental)
-            }
-
-            withOneOfRoles(StackRoles.securityOfficer, StackRoles.siteAdmin) {
-
-                + section(strings.administration) {
-
-                    + item(Settings)
-
-                    withRole(StackRoles.siteAdmin) {
-                        + item(strings.locales) { Locales.openAll() }
-                        + item(strings.translations) { Translations.openAll() }
-                    }
-
-                    withRole(StackRoles.securityOfficer) {
-                        + item<Accounts>()
-                        + item<Roles>()
-                    }
-
-                }
             }
         }
     }
@@ -131,7 +106,6 @@ class SideBar : ZkSideBar() {
             }
 
             + item(QueryPage)
-            + item(Settings)
             + item(TabContainer)
 
             + group("Table") {

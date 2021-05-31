@@ -15,9 +15,6 @@ import zakadabar.lib.examples.frontend.table.FetchedTable
 import zakadabar.lib.examples.frontend.table.GeneratedTable
 import zakadabar.site.frontend.pages.*
 import zakadabar.stack.frontend.application.ZkAppRouting
-import zakadabar.stack.frontend.builtin.pages.resources.locales.Locales
-import zakadabar.stack.frontend.builtin.pages.resources.settings.Settings
-import zakadabar.stack.frontend.builtin.pages.resources.translations.Translations
 
 const val contentNamespace = "content"
 
@@ -51,12 +48,6 @@ class Routing : ZkAppRouting(DefaultLayout, Landing) {
         + FetchedTable
         + QueryPage
         + SyntheticForm
-
-        zakadabar.lib.accounts.frontend.install(this)
-
-        + Settings
-        + Locales
-        + Translations
 
         + BenderPage
     }

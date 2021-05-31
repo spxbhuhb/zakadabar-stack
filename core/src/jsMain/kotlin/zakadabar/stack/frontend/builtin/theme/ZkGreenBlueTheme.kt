@@ -9,7 +9,7 @@ import zakadabar.stack.frontend.builtin.sidebar.zkSideBarStyles
 import zakadabar.stack.frontend.builtin.table.zkTableStyles
 import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
 import zakadabar.stack.frontend.resources.ZkColors
-import zakadabar.stack.frontend.util.after
+import zakadabar.stack.util.after
 import zakadabar.stack.util.alpha
 
 open class ZkGreenBlueTheme : ZkBuiltinLightTheme() {

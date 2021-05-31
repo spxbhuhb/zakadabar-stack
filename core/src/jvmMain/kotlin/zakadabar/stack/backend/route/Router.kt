@@ -14,6 +14,8 @@ import kotlin.reflect.KClass
  */
 interface Router<T : EntityBo<T>> {
 
+    var qualifier : String
+
     fun installRoutes(context: Any)
 
     fun <RQ : ActionBo<RS>, RS : BaseBo> action(actionClass: KClass<RQ>, actionFunc: (Executor, RQ) -> RS)

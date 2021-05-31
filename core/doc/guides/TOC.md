@@ -46,6 +46,8 @@
         * [Introduction](./plug-and-play/accounts/Introduction.md)
         * [Use](./plug-and-play/accounts/Use.md)
         * [Sessions](./plug-and-play/accounts/Sessions.md)
+    * [Blobs]()
+      * [Introduction](./plug-and-play/blobs/Introduction.md)
     * [I18N]()
       * [Introduction](./plug-and-play/i18n/Introduction.md)
 * [Tools]()

@@ -12,12 +12,13 @@ import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.data.builtin.ExampleEnum
 import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
 import zakadabar.stack.backend.util.default
+import zakadabar.stack.data.CommBase
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityComm
 import zakadabar.stack.data.entity.EntityId
 
 suspend fun main() {
-    EntityComm.baseUrl = "http://localhost:8080"
+    CommBase.baseUrl = "http://localhost:8080"
     crud()
     login()
     errorHandling()
@@ -114,7 +115,7 @@ suspend fun errorHandling() {
 
     println()
 
-    EntityComm.onError = { ex ->
+    CommBase.onError = { ex ->
         when (ex) {
             is ServerResponseException -> println("    onError:    server exception: ${ex.response.status ?: "status is null"}")
             is ClientRequestException -> println("    onError:    client exception: ${ex.response.status ?: "status is null"}")

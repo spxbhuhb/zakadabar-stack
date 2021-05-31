@@ -15,7 +15,7 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.resources.ZkIcons
-import zakadabar.stack.frontend.util.after
+import zakadabar.stack.util.after
 
 /**
  * A group of sidebar entries. Supports open and close.

@@ -14,6 +14,8 @@ import kotlin.reflect.KClass
  */
 class EmptyRouter<T : EntityBo<T>> : Router<T> {
 
+    override var qualifier = "empty"
+
     override fun installRoutes(context: Any) {
 
     }

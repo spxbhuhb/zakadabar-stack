@@ -1,3 +1,20 @@
+## Overview
+
+<div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-Title="BL/PA refactor closed">
+
+In this release we closed the BL/PA refactor. The major changes that might need migration steps:
+
+- remove of DtoBase, EntityBackend, ActionBackend, QueryBackend and all related classes
+- all account and session related code is now in lib:accounts
+- all blob related code moved is now in lib:blobs
+- all locale related code moved now in lib:i18n
+
+As of now, we do not plan any more major changes. Our apologies for the mess the BL/PA
+migration created, we felt that it is very important to clarify the software model
+before we announce the stack to the public.
+
+</div>
+
 ## Common
 
 ### Added
@@ -5,6 +22,7 @@
 - InstanceStore: store and look up instances easily
 - StringPair: simple bo that holds a string pair
 - TranslationProvider: service interface to be implemented for translators
+- `after` function and `AfterDelegate`
 
 ### Removed
 
@@ -46,12 +64,14 @@
 
 ### Removed
 
+- all account and session related code: moved to lib:accounts
+- all blob related code: moved to lib:blobs
+- all locale and translation related code: moved to lib:i18n  
 - `zakadabar.server.description.yaml`: server name and default locale moved into `stack.server.yaml`
 - SQL storage for settings, SettingDao, SettingTable
 - authorize/rules.kt: ruleBl variable, use `module` function instead
 - EntityBusinessLogicBase.logger, auditor has its own logger
 - CustomBackend: replaced with BackendModule everywhere
-- all account and session related code moved into lib:accounts
 - EntityBackend: replaced everywhere (except blobs) with bl/pa
 
 ### Fixed
@@ -59,7 +79,7 @@
 - AccountPrivateBackend: add table to Sql.tables instead of direct call to SchemaUtils
 - LogAuditor uses "anonymous object" logger for anonymous objects
 
-## Frontend
+## Frontend: Browser
 
 ### Added
 
@@ -85,8 +105,10 @@
 - settings: the current UI is removed, will be back after synthetic forms
 - accounts: move all account related UI to 'lib:accounts'
 - locales: move all i18n related UI to 'lib:i18n'
+- blobs: move all blob related UI to 'lib:blobs'  
 - `downloadTranslations` parameter of `ZkApplication.initLocale`, use service instead
 - `sessionManager` parameter of `ZkApplication.initSession`, use service instead
+- `after`: move to common
 
 ### Fixed
 
@@ -94,6 +116,20 @@
 - ZkSideBarGroup: clicking close to the highlight border does not open the group
 - ZkSideBarGroup: hover text color is now properly set
 - ZkElement.clear: children remove did not remove all children properly 
+
+## Frontend:JVM
+
+### Added
+
+- CommBase: contains global connection data and the HTTP client
+
+### Changed
+
+- blobs: move all blob related functions to 'lib:blobs'
+
+### Remove
+
+- EntityComm.Companion: move properties to CommBase
 
 ## Lib:Accounts
 
@@ -115,6 +151,12 @@
 - Instant serialization imports are not in the generated code
 - Frontend CRUD is now a class instead of an object
 
+## Lib:Blobs
+
+### Added
+
+- blob plug-and-play library
+
 ## Lib:Demo
 
 ### Added
@@ -133,8 +175,8 @@
 - SimpleStandaloneActionTest: unit (+integration) test
 - SimpleStandaloneQuery
 - SimpleStandaloneQueryBl
-- zakadabar.server.description.yaml - with H2, for unit tests
-- zakadabar.stack.server.yaml - for unit tests
+- stack.server.yaml - with H2, for unit tests
+- blob example and test case
 
 ## Lib:I18N
 

@@ -30,6 +30,8 @@ open class KtorRouter<T : EntityBo<T>>(
 
     private val queryClassList = mutableListOf<Pair<KClass<out BaseBo>, (Executor, BaseBo) -> Any>>()
 
+    override var qualifier = "entity"
+
     /**
      * Adds cache control directive to GET requests, except BLOB content.
      * Default implementation calls the function with the same name from the
@@ -52,7 +54,7 @@ open class KtorRouter<T : EntityBo<T>>(
 
     override fun installRoutes(context: Any) {
         with (context as Route) {
-            route("${businessLogic.namespace}/entity") {
+            route("${businessLogic.namespace}/${qualifier}") {
 
                 get {
                     list(call)

@@ -7,7 +7,7 @@ import zakadabar.stack.frontend.builtin.layout.zkScrollBarStyles
 import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
 import zakadabar.stack.frontend.resources.ZkColors
 import zakadabar.stack.frontend.resources.ZkTheme
-import zakadabar.stack.frontend.util.after
+import zakadabar.stack.util.after
 import zakadabar.stack.util.alpha
 
 open class ZkBuiltinDarkTheme : ZkTheme {
