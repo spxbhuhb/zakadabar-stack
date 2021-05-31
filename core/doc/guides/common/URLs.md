@@ -8,7 +8,12 @@ Types:
 On most cases you don't have to worry about making URLs. However, they are useful for debugging and testing.
 
 <div class="zk-note-info">
-ShipDto is the companion object, "dto" is an actual instance of ShipDto.
+In these examples:
+
+- SimpleBo is the companion object
+- `bo` is an actual instance of SimpleBo
+- `{namespace}` is the [Namespace](./Data.md#Namespace)
+
 </div>
 
 ## Backend URLs
@@ -16,42 +21,69 @@ ShipDto is the companion object, "dto" is an actual instance of ShipDto.
 * Used during frontend - backend communication.
 * `namespace` is used to separate different endpoints
 * general backend url formats are:
-  * `/api/{namespace}/record` - for record CRUD operations
-  * `/api/{namespace}/blob` - for blob CRUD operations
+  * `/api/{namespace}/entity` - for entity CRUD operations
+  * `/api/{namespace}/blob` - for blob operations
   * `/api/{namespace}/query` - for queries
   * `/api/{namespace}/action` - for actions
 
-### Record Crud
+### Entity Crud
 
 | Operation | Method | URL | Programmatic Access |
 | ---- | --- | --- | --- |
-| All | GET | `/api/ship/record` | `ShipDto.all()` |
-| Create | POST | `/api/ship/record` | `dto.create()` |
-| Read | GET | `/api/ship/record/12` | `ShipDto.read(12)`
-| Update | PATCH | `/api/ship/record/12` | `dto.update()` |
-| Delete | DELETE | `/api/ship/record/12` | `ShipDto.delete(12)` |
+| All | GET | `/api/{namespace}/entity` | `SimpleBo.all()` |
+| Create | POST | `/api/{namespace}/entity` | `bo.create()` |
+| Read | GET | `/api/{namespace}/entity/12` | `SimpleBo.read(12)`
+| Update | PATCH | `/api/{namespace}/entity/12` | `bo.update()` |
+| Delete | DELETE | `/api/{namespace}/entity/12` | `SimpleBo.delete(12)` |
 
 ### Queries
 
+Method: GET
+
+URL (in the actual URL, special characters are encoded) :
+
+`/api/{namespace}/query/QueryExample?q={"name":"dinky"}`
+
+Programmatic Access: 
+
+`QueryExample("dinky").execute()`
+
+### Actions
+
+Method: GET
+
+URL (in the actual URL, special characters are encoded) :
+
+`/api/{namespace}/action/ActionExample?q={"name":"dinky"}`
+
+Programmatic Access:
+
+`ActionExample("dinky").execute()`
+
+### Blobs
+
+Blobs are handled by the [lib:blobs](../plug-and-play/blobs/Introduction.md) plug-and-play module.
+
 | Operation | Method | URL | Programmatic Access |
 | ---- | --- | --- | --- |
-| Query | GET | `/api/ship/query/SearchByName?q={"name":"dinky"}` | `ShipSearch("dinky").execute()` | 
-| Query | GET | `/api/ship/query/ShipSpeed?q=[]` | `ShipSpeed().execute()`
+| Create | POST | `/api/simple/blob/meta` | `bo.create()` |
+| Create Content | POST | `/api/simple/blob/content/23` | `TestBlobBo.upload(...)` |
+| Read | GET | `/api/simple/blob/meta/23` | `TestBlobBo.read(blobId)` |
+| Read Content | GET | `/api/simple/blob/content/23` | |
+| Update | PATCH | `/api/simple/blob/meta/23` | `bo.update()` |
+| Delete | DELETE | `/api/simple/blob/meta/23` | `TestBlobBo.delete(23)` |
 
-### Blob Content and Meta
+#### Query Blobs by Reference
 
-`12` is the id of the parent ShipDto record
-`23` is the id of the blob
+Method: GET
 
-| Operation | Method | URL | Programmatic Access |
-| ---- | --- | --- | --- |
-| Create without record | POST | `/api/ship/blob` | `ShipDto.blobCreate(...)` |
-| Create with record | POST | `/api/ship/blob/12` | `ShipDto.blobCreate(...)` |
-| Query All Blobs for a Record | GET | `/api/ship/blob/list/12` | `ShipDto.comm().blobMetaRead(dataRecordId)` |
-| Query One Blob Meta | GET | `/api/ship/blob/meta/23` | `ShipDto.comm().blobMetaRead(blobId)` |
-| Update Meta | PATCH | `/api/ship/blob/meta/23` | `ShipDto.comm.blobMetaUpdate()` |
-| Read Binary Content | GET | `/api/ship/blob/content/23` | |
-| Delete | DELETE | `/api/ship/blob/23` | `ShipDto.blobDelete(23)` |
+URL : 
+
+`/api/simple/blob/list/12`
+
+Programmatic Access:
+
+`TestBlobBo.listByReference(12)`
 
 ## Frontend URLs
 
@@ -63,19 +95,22 @@ General structure of a frontend URL:
 
 The `locale` and the `viewName` is mandatory, `segments` and `query` is optional.
 
+For locale handling see [Introduction:Browser](../browser/Introduction.md#Locale) and [lib:i18n](../plug-and-play/i18n/Introduction.md).
+
+View name is the `viewBame` of the [routing target](../browser/structure/Routing.md#Targets)
+
 ### Crud
 
 | View | URL |
 | ---- | --- |
-| Create | `/en/Ships/create` |
-| Read | `/en/Ships/read?id=12` |
-| Update | `/en/Ships/update?id=12` |
-| Delete | `/en/Ships/delete?id=12` |
+| Create | `/hu-HU/Simple/create` |
+| Read | `/hu-HU/Simple/read?id=12` |
+| Update | `/hu-HU/Simple/update?id=12` |
+| Delete | `/hu-HU/Simple/delete?id=12` |
 
 ### Listing and queries
 
 | View | URL |
 | ---- | --- |
-| All | `/en/Ships/all` |
-| Query | `/en/Ships/SearchByName?q={"name":"dinky"}` |
-| Query | `/en/Ships/ShipSpeed?q=[]` |
+| All | `/hu-HU/Simple/all` |
+| Query | `/hu-HU/Simple/QueryExample?q={"name":"dinky"}` |

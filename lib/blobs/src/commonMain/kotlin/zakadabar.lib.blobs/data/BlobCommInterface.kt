@@ -13,5 +13,4 @@ interface BlobCommInterface<T : BlobBo<T>> : EntityCommInterface<T> {
 
     suspend fun listByReference(reference : EntityId<out BaseBo>) : List<T>
 
-
 }

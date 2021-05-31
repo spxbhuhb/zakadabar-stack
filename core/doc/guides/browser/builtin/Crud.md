@@ -1,6 +1,6 @@
 # Crud
 
-CRUDs are advanced components that link the listing and editing of a DTO together. The stack provides
+CRUDs are advanced components that link the listing and editing of BOs together. The stack provides
 two classes for CRUD definition:
 
 * [ZkCrudTarget](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/crud/ZkCrudTarget.kt) is a binding class 
@@ -10,27 +10,28 @@ two classes for CRUD definition:
 
 ## Write a CRUD  [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/crud/SimpleExampleCrud.kt)
 
-### Write With Kod-o-mat
+### Generate With Bender
 
-The easiest way to write a CRUD is to use the [Kod-o-mat](/en/Kodomat) to generate the source code, then copy and paste.
+The easiest way to write a CRUD is to use the [Bender](../../tools/Bender.md) to generate the source code, then copy and paste.
 
 ### Write Manually
 
-1. [Write a Record DTO](../../common/Data.md#Write-a-Record-DTO)
+1. [Write an Entity BO](../../common/Data.md#Write-an-Entity-BO)
 1. [Write a Form](./Forms.md#Write-a-Form)
 1. [Write a Table](./Tables.md#Write-a-Table)
+1. [Write a CRUD Target](#Write-a-CRUD-Target)
 
 #### Write a CRUD Target
 
-1. Bind it all together with a [ZkCrudTarget](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/crud/ZkCrudTarget.kt) see code below.
+1. Extend [ZkCrudTarget](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/crud/ZkCrudTarget.kt) see code below.
 1. [Route the CRUD](#Route-a-CRUD-Target)
 1. [Include the CRUD](#Include-a-CRUD-Target)
 
 ```kotlin
-object SimpleExampleCrud : ZkCrudTarget<SimpleExampleDto>() {
+class SimpleExampleCrud : ZkCrudTarget<SimpleExampleBo>() {
     init {
-        companion = SimpleExampleDto.Companion
-        dtoClass = SimpleExampleDto::class
+        companion = SimpleExampleBo.Companion
+        dtoClass = SimpleExampleBo::class
         pageClass = SimpleExampleForm::class
         tableClass = SimpleExampleTable::class
     }
@@ -39,10 +40,10 @@ object SimpleExampleCrud : ZkCrudTarget<SimpleExampleDto>() {
 
 #### Route a CRUD Target
 
-Add the CRUD the routing. See [Routing](../structure/Routing.md#Write-a-Routing) for details.
+Add the CRUD to the routing. See [Routing](../structure/Routing.md#Write-a-Routing) for details.
 
 ```kotlin
-+ SimpleExampleCrud
++ SimpleExampleCrud()
 ```
 
 #### Include a CRUD Target
@@ -50,7 +51,7 @@ Add the CRUD the routing. See [Routing](../structure/Routing.md#Write-a-Routing)
 Add the crud to your sidebar. See [SideBar](../builtin/SideBar.md) for details.
 
 ```kotlin
-+ item(SimpleExampleCrud)
++ item<SimpleExampleCrud>()
 ```
 
 #### Write an Inline CRUD
@@ -58,25 +59,25 @@ Add the crud to your sidebar. See [SideBar](../builtin/SideBar.md) for details.
 Use [ZkInlineCrud](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/crud/ZkInlineCrud.kt) to write an inline CRUD.
 
 ```kotlin
-class BuiltinCrud : ZkInlineCrud<BuiltinDto>() {
+class BuiltinInlineCrud : ZkInlineCrud<BuiltinBo>() {
     init {
-        companion = BuiltinDto.Companion
-        dtoClass = BuiltinDto::class
+        companion = BuiltinBo.Companion
+        dtoClass = BuiltinBo::class
         pageClass = BuiltinForm::class
         tableClass = BuiltinTable::class
     }
 }
 ```
 
-These two examples are inline CRUDs. One for BuiltinDto and one for ExampleReferenceDto.
-You need two because BuiltinDto contains a mandatory reference to ExampleReferenceDto and
-to set that you need ExampleReferenceDto records.
+These two examples are inline CRUDs. One for BuiltinBo and one for ExampleReferenceBo.
+You need two because BuiltinBo contains a mandatory reference to ExampleReferenceBo and
+to set that you need ExampleReferenceBo records.
 
-CRUD of ExampleReferenceDto [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/crud/CrudRefrenceExample.kt)
+CRUD of ExampleReferenceBo [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/crud/CrudReferenceExample.kt)
 
 <div data-zk-enrich="CrudReferenceExample"></div>
 
-CRUD of BuiltinDto [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/crud/CrudBuiltinExample.kt)
+CRUD of BuiltinBo [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/crud/CrudBuiltinExample.kt)
 
 <div data-zk-enrich="CrudBuiltinExample"></div>
 
@@ -84,6 +85,12 @@ CRUD of BuiltinDto [source code](../../../../../lib/examples/src/jsMain/kotlin/z
 
 ### Changes
 
+* 2021.5.31
+  * bl/pa migration, use Bo instead of Dto 
+  * preferred way is to use class instead of object
+  * sidebar binding methods like `item<SimpleExampleCrud>()`
+  * fix scrollbar issues with inline crud (not perfect yet, title scrolls away)
+  * fix table initial overflow
 * 2021.5.19
   * move crud related classes from `pages` to `crud`
   * introduce ZkInlineCrud

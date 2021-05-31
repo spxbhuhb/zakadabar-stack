@@ -4,6 +4,8 @@
 package zakadabar.lib.blobs.data
 
 import kotlinx.serialization.KSerializer
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.entity.EntityId
 
 abstract class BlobBoCompanion<T : BlobBo<T>>(
     val boNamespace: String
@@ -24,5 +26,11 @@ abstract class BlobBoCompanion<T : BlobBo<T>>(
         }
 
     abstract fun serializer(): KSerializer<T>
+
+    suspend fun upload(bo : T, data: Any, callback: (bo : T, state: BlobCreateState, uploaded: Long) -> Unit) =
+        comm.upload(bo, data, callback)
+
+    suspend fun listByReference(reference : EntityId<out BaseBo>) =
+        comm.listByReference(reference)
 
 }

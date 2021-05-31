@@ -8,7 +8,7 @@ Once you have the list, you can set up your application by:
 - adding the modules programmatically, and/or
 - adding the modules from the configuration.
 
-## Add Modules From Configuration
+## Add From Configuration
 
 Add the module to the configuration file (etc/zakadabar.stack.server.yaml) as
 the example below shows.
@@ -19,7 +19,7 @@ modules:
   - zakadabar.site.backend.Module2
 ```
 
-## Add Modules Programmatically
+## Add Programmatically
 
 To add modules programmatically, use the `server` global variable and simply
 add the modules like this.

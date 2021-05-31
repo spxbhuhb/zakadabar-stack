@@ -27,6 +27,8 @@ abstract class EntityBoCompanion<T : EntityBo<T>>(
 
     suspend fun read(id: EntityId<T>) = comm.read(id)
 
+    suspend fun delete(id: EntityId<T>) = comm.delete(id)
+
     suspend fun all() = comm.all()
 
     suspend fun allAsMap() = comm.all().associateBy { it.id }

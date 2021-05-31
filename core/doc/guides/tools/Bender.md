@@ -42,7 +42,7 @@ any problem.
 
 ### Edit
 
-- add field with the green `+` button
+- add field with the green `+` button (you can tab onto it and press enter)
 - delete fields with the red `x` buttons
 - first column is the field name
 - second column is the field type

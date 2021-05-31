@@ -1,9 +1,10 @@
+# Get Started
+
 ## Introduction
 
-The stack is about sensible defaults. We don't want to force you to use a specific component or walk a specific way. You
-can replace the whole frontend, the whole backend, or both (which makes little sense, but actually it does make sense).
-
-However, the point of sensible defaults is that in most cases we don't want to replace them.
+Zakadabar Stack is about sensible defaults. While you can replace the whole frontend, the whole backend,
+or both (which makes little sense, but actually it does make sense), the point of sensible defaults 
+is that in most cases we don't want to replace them.
 
 The structure of our default application:
 
@@ -20,65 +21,41 @@ The stack is a Kotlin Multiplatform Project and is intended to be used by Kotlin
 ## The Application Template
 
 The best way to start using the stack is to create your own project from
-the [Application Template](https://github.com/spxbhuhb/zakadabar-application-template). Use GitHub's "Use this template"
-function to create your own repository that is a copy of the application template and then follow the steps in the
-README.
+the [Application Template](https://github.com/spxbhuhb/zakadabar-application-template).
+
+Use GitHub's `Use this template` function to create your own repository that is a copy
+of the application template and then follow the steps in the README.
 
 The template is a fully working application which you can customize by setting the project name and running one gradle
 task (see README.md for details).
 
 After customization, you can run another task and have a Zip file and/or Docker images ready for deployment.
 
-Technically you are ready-to-go with the template. If you would like to learn about the main concepts of the stack, read
-on.
+## Bender
 
-## Data Transfer Objects
+When you have a working application, you can start adding functions to it. The fastest way
+to add new functions is to use the [Bender](./guides/tools/Bender.md).
 
-The stack is all about handling DTOs (data transfer objects). These define the API between the frontend and the backend.
+Bender is a little tool which lets you define your data model and generate working, ready-to-go
+frontend and backend code from the model.
 
-Here is a very simple DTO from our marina demo. At first, it might seem a bit too much boilerplate to for that two
-fields, but hold on, much is going on here.
+## Reading On
 
-```kotlin
-@Serializable
-data class SeaDto(
+We suggest that you have a quick look at the topics below to get an idea what's going on.
 
-    override var id: RecordId<SeaDto>,
-    var name: String
+- [Introduction: Software Model](./guides/Introduction.md)
+- [Introduction: Backend](./guides/backend/Introduction.md)  
+- [Introduction: Browser](./guides/browser/Introduction.md)
+- [Introduction: Android](./guides/android/Introduction.md)
+- [Introduction: Plug And Play](./guides/plug-and-play/Introduction.md)
 
-) : RecordDto<SeaDto> {
+## Examples [source code](https://github.com/spxbhuhb/zakadabar-stack/tree/master/lib/examples/src)
 
-    companion object : RecordDtoCompanion<SeaDto>("sea")
+As a general convention, the documentation contains links to the working example codes.
+Look for source code links, in most cases they are next to the title (see above, next to "Examples"). 
+They take you to the actual example source code on GitHub.
 
-    override fun getRecordType() = namespace
-    override fun comm() = comm
+Most of those links go the `lib:examples` or `lib:demo` subproject.
 
-    override fun schema() = DtoSchema {
-        + ::id
-        + ::name min 1 max 30
-    }
-
-}
-```
-
-With the DTO above, the stack:
-
-1. Handles all the communication between the frontend (browser, Android) and the backend.
-1. Provides you with:
-    1. Convenient, type safe data access functions out-of-the-box on the frontend: `SeaDto.all()`, `SeaDto.read(12)`
-       , `dto.update()`
-    1. Convenient, type safe base class on the backend.
-    1. Automatic data validation in forms based on the schema.
-    1. On browser frontends:
-        1. Automatic form generation.
-        1. Automatic label and header translation in forms and tables.
-        1. Convenient builders for forms and tables. A fields with `+ dto::name` and have styles, validation, feedback
-           out-of-the box.
-
-Also, these DTO definitions are placed in `commonMain`. This means that the frontends and backends share the very same
-code, therefore inconsistencies between the backend and the frontend are non-existing.
-
-As we built on Kotlin, everything is types safe, no more why is this `undefined`.
-
-
-
+- [lib:examples](https://github.com/spxbhuhb/zakadabar-stack/tree/master/lib/examples) is a collection of working examples
+- [lib:demo](https://github.com/spxbhuhb/zakadabar-stack/tree/master/lib/demo) is a working demo application

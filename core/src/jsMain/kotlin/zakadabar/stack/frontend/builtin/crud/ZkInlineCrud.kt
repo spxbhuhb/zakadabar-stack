@@ -29,6 +29,12 @@ open class ZkInlineCrud<T : EntityBo<T>> : ZkElement(), ZkCrud<T> {
     lateinit var editorInstance: ZkCrudEditor<T>
     lateinit var tableInstance: ZkTable<T>
 
+    override fun onCreate() {
+        style {
+            height = "100%"
+            overflowY = "auto"
+        }
+    }
     override fun openAll() {
 
         clear()
@@ -46,11 +52,6 @@ open class ZkInlineCrud<T : EntityBo<T>> : ZkElement(), ZkCrud<T> {
 
     private fun newEditor(): ZkCrudEditor<T> {
         clear()
-
-        style {
-            height = "100%"
-            overflowY = "auto"
-        }
 
         editorInstance = editorClass.newInstance()
 

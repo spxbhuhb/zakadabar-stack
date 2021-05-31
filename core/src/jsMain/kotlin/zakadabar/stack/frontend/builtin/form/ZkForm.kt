@@ -156,7 +156,6 @@ open class ZkForm<T : BaseBo> (
 
         if (addLocalTitle) {
             + buildLocalTitleBar()?.let { it marginBottom 10 }
-            style { overflowY = "scroll" }
         }
     }
 

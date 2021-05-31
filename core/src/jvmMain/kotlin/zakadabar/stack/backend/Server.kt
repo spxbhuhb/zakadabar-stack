@@ -18,7 +18,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.authorize.LoginTimeout
 import zakadabar.stack.backend.exposed.Sql
-import zakadabar.stack.backend.ktor.buildServer
+import zakadabar.stack.backend.ktor.KtorServerBuilder
 import zakadabar.stack.backend.setting.SettingBl
 import zakadabar.stack.backend.setting.SettingProvider
 import zakadabar.stack.data.builtin.settings.ServerSettingsBo
@@ -78,21 +78,6 @@ open class Server(
 ) : CliktCommand() {
 
     companion object {
-
-
-        /**
-         * When true GET (read and query) requests are logged by bo backends.
-         */
-        var logReads: Boolean = true
-
-        /**
-         * When true, POST and PATCH handled by EntityBackends and ActionBackends validate
-         * incoming bo objects. When invalid the request returns with 400 Bad Request.
-         * Default is true, may be switched off by backend, using the validate property
-         * of the backend.
-         */
-        var validate = true
-
         /**
          * When true the server is shutting down and background tasks should stop.
          * TODO replace shutdown flag with an event driven system
@@ -153,7 +138,7 @@ open class Server(
 
         startModules() // start the modules
 
-        ktorServer = buildServer(settings, modules) //  build the Ktor server instance
+        ktorServer = onBuildServer()
 
         staticRoot = settings.staticResources
 
@@ -167,6 +152,9 @@ open class Server(
     open fun onConfigure() {
 
     }
+
+    open fun onBuildServer() =
+        KtorServerBuilder(settings, modules).build() //  build the Ktor server instance
 
     private fun loadServerSettings(): ServerSettingsBo {
 

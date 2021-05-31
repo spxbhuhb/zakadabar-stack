@@ -97,9 +97,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         cursor = "pointer"
         paddingTop = 5
         paddingBottom = 5
-        width = "100%"
-        minWidth = 155
-        maxWidth = 200
+        width = 180
 
         on("[data-active=\"true\"]") {
             marginLeft = 0

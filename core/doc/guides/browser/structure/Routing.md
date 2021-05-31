@@ -21,7 +21,7 @@ Important points:
    * is extended by application-specific routing classes
    * `navState` property stores the current navigation state, a [ZkNavState](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkNavState.kt)
    * `targets` property stores the known routing targets
-* [ZkAppRouting.ZkTarget] the interface routing targets implement, see details below
+* [ZkAppRouting.ZkTarget](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkAppRouting.kt) the interface routing targets implement, see details below
 * `/api/` URL is reserved for backend communication    
 
 ## Mechanism

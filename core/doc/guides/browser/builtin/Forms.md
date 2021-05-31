@@ -4,7 +4,7 @@
 
 This documentation page needs rewrite: 
 * it does not provide enough information,
-* the BuiltinDto example is too complex to start with.
+* the BuiltinBo example is too complex to start with.
 </div>
 
 * Features:
@@ -18,7 +18,7 @@ This documentation page needs rewrite:
 
 ## Write a Form
 
-1. create a [DTO](../../common/Data.md) to store the data of the form
+1. create a [BO](../../common/Data.md) to store the data of the form
 1. create a class that extends [ZkForm](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/ZkForm.kt)
 1. override `onCreate` to build the form
 
