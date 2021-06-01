@@ -7,10 +7,12 @@ import zakadabar.lib.accounts.data.AccountPrivateBo
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 
 class Accounts : ZkCrudTarget<AccountPrivateBo>() {
+
     init {
         companion = AccountPrivateBo.Companion
         boClass = AccountPrivateBo::class
         tableClass = Table::class
         pageClass = Form::class
     }
+
 }

@@ -89,6 +89,9 @@ before we announce the stack to the public.
 - sidebar: helpers with `method<T>()` syntax for adding targets
 - ZkGreenBlueTheme: a variation of light theme
 - ZkApplication.services: store general service instances
+- `executor.hasRole`, `executor.withRole` functions
+- `ZkOptSecretVerificationField`
+- `ZkOptSecretField.newSecret`
 
 ### Changed
 
@@ -99,6 +102,7 @@ before we announce the stack to the public.
 - application: displays an error message when the locale cannot be determined
 - application: looks for TranslationProvider to perform translation, when not installed, skips translation
 - application: looks for SessionManager to provide sessions, defaults to EmptySessionManager when no other is installed
+- form: when validation for submit is invalid, print validation dump to the console
 
 ### Removed
 
@@ -143,6 +147,8 @@ before we announce the stack to the public.
 - move account, role, login, logout from core into this P&P package
 - merge principal and account
 - migrate all backend modules to the bl/pa concept
+- `accountName` minimum length is 2
+- `displayName` minimum length is 2
 
 ## Lib:Bender
 

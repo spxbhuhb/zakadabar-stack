@@ -75,6 +75,7 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val loginFailCount by "Failed logins"
     open val loginLocked by "Login has failed because the account is locked."
     open val logout by "Logout"
+    open val password by "Password"
     open val newPassword by "New Password"
     open val newPasswordVerification by "Verification"
     open val oldPassword by "Old Password"
@@ -93,6 +94,8 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val translations by "Translations"
     open val authenticationNeeded by "Authentication needed to access this function. Please log in."
     open val forbiddenExplanation by "This function is unavailable on this account."
+    open val accountTrimSpaces by "Account name has starting or trailing spaces."
+    open val accountNameConflict by "This account name is already used."
 
 }
 

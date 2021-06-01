@@ -64,7 +64,7 @@ import kotlin.reflect.KMutableProperty0
  * @property  titleElement  The element of the title.
  * @property  autoLabel  When true labels are automatically added. When false they are not.
  */
-open class ZkForm<T : BaseBo> (
+open class ZkForm<T : BaseBo>(
     element: HTMLElement = document.createElement("div") as HTMLElement
 ) : ZkElement(element), ZkCrudEditor<T>, ZkAppTitleProvider, ZkLocalTitleProvider {
 
@@ -185,6 +185,11 @@ open class ZkForm<T : BaseBo> (
         }
 
         val report = schema.value.validate()
+
+        if (submit && report.fails.isNotEmpty()) {
+            println("${this::class.simpleName} validation fail:")
+            println(report.dump())
+        }
 
         fields.forEach {
             it.onValidated(report)
@@ -494,6 +499,16 @@ open class ZkForm<T : BaseBo> (
         return field
     }
 
+    /**
+     * Field for a new secret (password). Instructs browsers not to fill the content with old password.
+     */
+    fun newSecret(prop: KMutableProperty0<Secret?>): ZkOptSecretField<T> {
+        val field = ZkOptSecretField(this@ZkForm, prop, newSecret = true)
+        + field
+        fields += field
+        return field
+    }
+
     fun ifNotCreate(build: ZkElement.() -> Unit) {
         if (mode == ZkElementMode.Create) return
         build()
@@ -523,12 +538,12 @@ open class ZkForm<T : BaseBo> (
         return field
     }
 
-    operator fun KMutableProperty0<String?>.unaryPlus(): ZkElement {
-        val field = ZkOptStringField(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
+    operator fun KMutableProperty0<String?>.unaryPlus() =
+        ZkOptStringField(this@ZkForm, this).also {
+            + it
+            fields += it
+        }
+
 
     operator fun KMutableProperty0<Int>.unaryPlus(): ZkElement {
         val field = ZkIntField(this@ZkForm, this)

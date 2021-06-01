@@ -5,6 +5,7 @@ package zakadabar.lib.demo.frontend
 
 import kotlinx.browser.window
 import zakadabar.lib.accounts.data.LogoutAction
+import zakadabar.lib.accounts.frontend.accounts.Account
 import zakadabar.lib.accounts.frontend.accounts.Accounts
 import zakadabar.lib.accounts.frontend.login.Login
 import zakadabar.lib.accounts.frontend.roles.Roles
@@ -25,15 +26,6 @@ class SideBar : ZkSideBar() {
             + item<Login>()
         }
 
-        ifNotAnonymous {
-            + item(strings.logout) {
-                io {
-                    LogoutAction().execute()
-                    window.location.href = "/"
-                }
-            }
-        }
-
         withRole(StackRoles.securityOfficer) {
             + group(translate<Accounts>()) {
                 + item<Accounts>()
@@ -42,6 +34,16 @@ class SideBar : ZkSideBar() {
             + group(translate<Translations>()) {
                 + item<Locales>()
                 + item<Translations>()
+            }
+        }
+
+        ifNotAnonymous {
+            + item<Account>()
+            + item(strings.logout) {
+                io {
+                    LogoutAction().execute()
+                    window.location.href = "/"
+                }
             }
         }
 

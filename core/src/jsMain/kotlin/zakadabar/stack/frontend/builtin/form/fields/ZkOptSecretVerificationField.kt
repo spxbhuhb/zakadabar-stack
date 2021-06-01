@@ -17,21 +17,34 @@
 package zakadabar.stack.frontend.builtin.form.fields
 
 import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.builtin.misc.Secret
+import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptStringField<T : BaseBo>(
+open class ZkOptSecretVerificationField<T : BaseBo>(
     form: ZkForm<T>,
-    prop: KMutableProperty0<String?>
-) : ZkStringBase<T, String?>(
+    prop: KMutableProperty0<Secret?>,
+    label: String = stringStore.getNormalized(prop.name + "Verification")
+) : ZkStringBase<T, Secret?>(
     form = form,
-    prop = prop
+    prop = prop,
+    label = label
 ) {
 
-    override fun getPropValue() = prop.get() ?: ""
+    var verificationValue: String? = ""
+
+    override fun getPropValue() = verificationValue ?: ""
 
     override fun setPropValue(value: String) {
-        prop.set(value.ifEmpty { null })
+        verificationValue = input.value.ifBlank { null }
+        valid = (prop.get()?.value == verificationValue)
+    }
+
+    override fun buildFieldValue() {
+        input.type = "password"
+        input.autocomplete = "new-password"
+        super.buildFieldValue()
     }
 
 }

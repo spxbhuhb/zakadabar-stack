@@ -6,9 +6,8 @@ package zakadabar.lib.accounts.frontend.accounts
 import kotlinx.coroutines.coroutineScope
 import zakadabar.lib.accounts.data.*
 import zakadabar.stack.StackRoles
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.executor
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
@@ -16,6 +15,8 @@ import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.crud.ZkCrudEditor
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.builtin.form.fields.ZkOptSecretField
+import zakadabar.stack.frontend.builtin.form.fields.ZkOptSecretVerificationField
 import zakadabar.stack.frontend.builtin.form.fields.ZkSecretField
 import zakadabar.stack.frontend.builtin.form.fields.ZkSecretVerificationField
 import zakadabar.stack.frontend.builtin.form.structure.ZkFormButtons
@@ -37,38 +38,133 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
     override lateinit var bo: AccountPrivateBo
     override lateinit var mode: ZkElementMode
     override var openUpdate: ((bo: AccountPrivateBo) -> Unit)? = null
-    override var onBack = {  }
+    override var onBack = { }
 
     override var setAppTitle = true
     override var addLocalTitle = false
     override var titleText: String? = null
     override var titleElement: ZkAppTitle? = null
 
-
     private lateinit var systemRoles: List<RoleBo>
     private lateinit var userRoles: List<RoleGrantBo>
 
     override fun onCreate() {
         super.onCreate()
+
+        titleText = if (mode == ZkElementMode.Create) stringStore.account else bo.accountName
+
+
         io {
-            if (hasRole(StackRoles.securityOfficer) && mode != ZkElementMode.Create) {
-                coroutineScope {
-                    systemRoles = RoleBo.all()
-                    userRoles = RolesByAccount(bo.id).execute()
+            if (mode == ZkElementMode.Create) {
+
+                systemRoles = RoleBo.all()
+                userRoles = emptyList()
+
+                + CreateForm()
+
+            } else {
+
+                if (hasRole(StackRoles.securityOfficer)) {
+                    coroutineScope {
+                        systemRoles = RoleBo.all()
+                        userRoles = RolesByAccount(bo.id).execute()
+                    }
                 }
+
+                classList += zkLayoutStyles.grow
+
+                + AccountTabContainer()
+
             }
-
-            classList += zkLayoutStyles.grow
-
-            titleText = if (mode != ZkElementMode.Create) bo.accountName else stringStore.account
-
-            + AccountTabContainer()
         }
     }
 
     override fun onResume() {
         super.onResume()
         setAppTitleBar()
+    }
+
+    inner class CreateForm : ZkForm<CreateAccount>() {
+
+        private val items = systemRoles.sortedBy { it.description }.map { sr ->
+            ZkCheckboxListItem(sr.id, stringStore.getNormalized(sr.description), userRoles.firstOrNull { ur -> ur.role == sr.id } != null)
+        }
+
+        override fun onConfigure() {
+            bo = default { }
+            mode = ZkElementMode.Action
+            setAppTitle = false
+        }
+
+        override fun onCreate() {
+            super.onCreate()
+            + div(ZkFormStyles.contentContainer) {
+                + column(ZkFormStyles.form) {
+                    buildPoint.classList += ZkFormStyles.onePanel
+
+                    + basics()
+
+                    + section(stringStore.password) {
+                        + newSecret(bo::credentials)
+                        + ZkOptSecretVerificationField(this@CreateForm, bo::credentials).also { fields += it }
+                    }
+
+                    + section(stringStore.roles) {
+                        + ZkCheckboxList(items)
+                    }
+
+                    + buttons()
+                    + invalidFieldList()
+                }
+            }
+        }
+
+        private fun basics() = section(stringStore.basics) {
+            with(bo) {
+                + ::accountName
+                + ::fullName
+                + ::email
+                + ::phone
+            }
+        }
+
+        override fun validate(submit: Boolean): Boolean {
+            if (! super.validate(submit)) return false
+
+            if (bo.accountName.trim() != bo.accountName) {
+                bo::accountName.find().valid = false
+                // FIXME replace this with a message integrated with the form
+                if (submit) toastDanger { stringStore.accountTrimSpaces }
+                return false
+            }
+
+            val passwordField = bo::credentials.find() as ZkOptSecretField
+            val verificationField = first<ZkOptSecretVerificationField<*>>()
+
+            if (submit || (passwordField.touched && verificationField.touched)) {
+                if (bo.credentials?.value != verificationField.verificationValue) {
+                    verificationField.valid = false
+                    return false
+                } else {
+                    verificationField.valid = true
+                }
+            }
+
+            return true
+        }
+
+        override suspend fun onSubmitStart() {
+            // TODO replace this with a select of locales
+            bo.locale = application.serverDescription.defaultLocale
+            bo.roles = items.mapNotNull { if (it.selected) it.value else null }
+
+            // TODO make this a real-time check, as the user types
+            val cid = CheckName(bo.accountName).execute().accountId
+            if (cid != null) {
+                toastWarning { stringStore.accountNameConflict }
+                bo::accountName.find().invalidInput = true
+            }
+        }
     }
 
     inner class AccountTabContainer : ZkTabContainer() {
@@ -109,13 +205,14 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
     inner class BasicDataForm : ZkForm<AccountPrivateBo>() {
 
-        init {
+        override fun onConfigure() {
             bo = this@Form.bo
             mode = this@Form.mode
             setAppTitle = false
         }
 
         override fun onCreate() {
+            onConfigure()
             + div(ZkFormStyles.contentContainer) {
                 + column(ZkFormStyles.form) {
                     buildPoint.classList += ZkFormStyles.onePanel
@@ -135,18 +232,27 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                 + ::phone
             }
         }
+
+        override suspend fun onSubmitStart() {
+            // TODO make this a real-time check, as the user types
+            val cid = CheckName(bo.accountName).execute().accountId
+            if (cid != null && cid != bo.id) {
+                toastWarning { stringStore.accountNameConflict }
+                bo::accountName.find().invalidInput = true
+            }
+        }
     }
 
     inner class PasswordChangeForm : ZkForm<PasswordChange>() {
 
-        init {
+        override fun onConfigure() {
             bo = default { this.accountId = this@Form.bo.id }
             mode = ZkElementMode.Action
             setAppTitle = false
-            onExecuteResult = ::onExecuteResult
         }
 
         override fun onCreate() {
+            onConfigure()
             + div(ZkFormStyles.contentContainer) {
                 + column(ZkFormStyles.form) {
                     buildPoint.classList += ZkFormStyles.onePanel
@@ -199,37 +305,38 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
             toastWarning { stringStore.passwordChangeInvalid }
         }
 
-        override fun onSubmitSuccess() {}
+        override fun onSubmitSuccess() {
+            toastSuccess { stringStore.actionSuccess }
+        }
 
-        private fun onExecuteResult(resultBo: BaseBo) {
-            resultBo as ActionStatusBo
-
-            if (! resultBo.success) {
-                toastDanger { stringStore.passwordChangeFail }
-            } else {
-                toastSuccess { stringStore.actionSuccess }
-            }
+        override fun onSubmitError(ex: Exception) {
+            toastDanger { stringStore.passwordChangeFail }
         }
     }
 
-    inner class PrincipalForm : ZkForm<AccountPrivateBo>() {
+    inner class PrincipalForm : ZkForm<UpdateAccountLocked>() {
 
-        init {
-            bo = this@Form.bo
-            mode = ZkElementMode.Update
+        override fun onConfigure() {
+            bo = default {
+                accountId = this@Form.bo.id
+                locked = this@Form.bo.locked
+            }
+            mode = ZkElementMode.Action
             setAppTitle = false
         }
 
         override fun onCreate() {
+            onConfigure()
+
             + div(ZkFormStyles.contentContainer) {
                 + column(ZkFormStyles.form) {
                     buildPoint.classList += ZkFormStyles.onePanel
 
                     + section(stringStore.accountStatus) {
                         + bo::locked
-                        + bo::lastLoginSuccess
-                        + bo::lastLoginFail
-                        + constString(stringStore.loginFailCount) { bo.loginFailCount.toString() }
+                        + this@Form.bo::lastLoginSuccess readOnly true
+                        + this@Form.bo::lastLoginFail readOnly true
+                        + this@Form.bo::loginFailCount readOnly true
                     }
 
                     + buttons()
@@ -241,17 +348,18 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
     inner class RolesForm : ZkForm<AccountPrivateBo>() {
 
-        init {
+        override fun onConfigure() {
             bo = this@Form.bo
             mode = ZkElementMode.Other
             setAppTitle = false
         }
 
-        val items = systemRoles.sortedBy { it.description }.map { sr ->
+        private val items = systemRoles.sortedBy { it.description }.map { sr ->
             ZkCheckboxListItem(sr.id, stringStore.getNormalized(sr.description), userRoles.firstOrNull { ur -> ur.role == sr.id } != null)
         }
 
         override fun onCreate() {
+            onConfigure()
             + div(ZkFormStyles.contentContainer) {
                 + column(ZkFormStyles.form) {
                     buildPoint.classList += ZkFormStyles.onePanel

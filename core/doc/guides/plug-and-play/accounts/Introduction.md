@@ -53,9 +53,25 @@ zakadabar.lib.accounts.frontend.install(this)
 **frontend: navigation** (for sidebar)
 
 ```kotlin
+ifAnonymous {
+  + item<Login>()
+}
+
 withRole(StackRoles.securityOfficer) {
+  + group(translate<Accounts>()) {
     + item<Accounts>()
     + item<Roles>()
+  }
+}
+
+ifNotAnonymous {
+  + item<Account>()
+  + item(strings.logout) {
+    io {
+      LogoutAction().execute()
+      window.location.href = "/"
+    }
+  }
 }
 ```
 

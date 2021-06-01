@@ -58,12 +58,12 @@ class AccountPrivateBo(
         + ::lastLoginFail
         + ::loginFailCount
 
-        + ::accountName min 3 max 50
+        + ::accountName min 2 max 50
         + ::fullName min 5 max 100
         + ::email min 4 max 50
         + ::phone min 10 max 20
 
-        + ::displayName min 3 max 50
+        + ::displayName min 2 max 50
         + ::locale max 20
         + ::theme max 50
     }
