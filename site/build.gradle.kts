@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.5.26"
+version = "2021.6.1"
 
 application {
     mainClassName = "zakadabar.stack.backend.ServerKt"
@@ -55,6 +55,19 @@ kotlin {
 tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
     // seems like this does not work - minimize()
 }
+
+val syncBuildInfo by tasks.registering(Sync::class) {
+    from("$projectDir/template/zkBuild")
+    inputs.property("version", project.version)
+    filter { line: String ->
+        line.replace("@version@", "${project.version}")
+            .replace("@projectName@", project.name)
+            .replace("@stackVersion@", "${rootProject.childProjects["core"]?.version ?: "unknown"}")
+    }
+    into("$projectDir/src/jvmMain/resources")
+}
+
+tasks["compileKotlinJvm"].dependsOn(syncBuildInfo)
 
 val distDir = "$buildDir/${project.name}-$version-server"
 

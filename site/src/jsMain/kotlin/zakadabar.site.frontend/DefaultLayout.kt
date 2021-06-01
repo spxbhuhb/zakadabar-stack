@@ -33,7 +33,7 @@ object DefaultLayout : ZkDefaultLayout(spanHeader = true) {
     ) {
         override fun onCreate() {
             + row {
-                + application.serverDescription.version
+                + "2021.6.1" // FIXME application.serverDescription.version
                 + div(siteStyles.alphaStyle) {
                     + "ALPHA"
                     on("click") {

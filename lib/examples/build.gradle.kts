@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.5.26"
+version = "2021.6.1"
 
 val ktorVersion = "1.4.3"
 
