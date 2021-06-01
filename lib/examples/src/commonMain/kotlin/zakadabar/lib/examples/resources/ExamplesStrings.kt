@@ -40,7 +40,7 @@ open class ExamplesStrings : ZkBuiltinStrings() {
     val optValue by "Optional Value"
     val optionalFields by "Optional Fields"
     val organization by "Organization"
-    val password by "Password"
+    override val password by "Password"
     val phone by "Phone Number"
     val position by "Position"
     val readOnlyValue by "Read Only Value"
