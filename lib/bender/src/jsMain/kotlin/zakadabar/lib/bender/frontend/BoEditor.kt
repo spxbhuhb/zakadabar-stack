@@ -42,7 +42,7 @@ class BoEditor(
     private val boName = ZkTextInput()
     private val boNamespace = ZkTextInput()
 
-    private val entryContainer = ZkElement()
+    val entryContainer = ZkElement()
 
     private val copyContainer = ZkElement()
     private val lastGenerate = ZkElement()
