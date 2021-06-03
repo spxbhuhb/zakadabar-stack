@@ -71,8 +71,6 @@ open class ZkDefaultLayout(
 
         titleBarContainer build { + titleBar }
 
-        contentContainer css zkDefaultLayoutStyles.contentContainer
-
         popupSidebarContainer css zkDefaultLayoutStyles.popupSideBarContainer
 
         on(window, "resize") {
@@ -100,6 +98,10 @@ open class ZkDefaultLayout(
         if (activeMediaSize != MediaSize.Uninitialized) {
             classList -= zkDefaultLayoutStyles.defaultLayoutLarge
             classList -= zkDefaultLayoutStyles.defaultLayoutSmall
+
+            contentContainer.classList -= zkDefaultLayoutStyles.contentContainerSmall
+            contentContainer.classList -= zkDefaultLayoutStyles.contentContainerLarge
+
             this -= appHandleContainer
             this -= sideBarContainer
             this -= titleBarContainer
@@ -128,6 +130,7 @@ open class ZkDefaultLayout(
 
     open fun resumeSmall() {
         classList += zkDefaultLayoutStyles.defaultLayoutSmall
+        contentContainer.classList += zkDefaultLayoutStyles.contentContainerSmall
 
         + titleBarContainer
         + contentContainer
@@ -143,6 +146,7 @@ open class ZkDefaultLayout(
 
     open fun resumeLarge() {
         classList += zkDefaultLayoutStyles.defaultLayoutLarge
+        contentContainer.classList += zkDefaultLayoutStyles.contentContainerLarge
 
         if (spanHeader) {
             + spanHeaderContainer css zkLayoutStyles.row build {
