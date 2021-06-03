@@ -396,9 +396,15 @@ open class ZkForm<T : BaseBo>(
         return if (fieldGrid) {
             ZkFormSection(title, summary, css) { + fieldGrid { builder() } }
         } else {
-            ZkFormSection(title, summary, css, builder)
+            ZkFormSection(title, summary, css) { + withoutFieldGrid { builder() } }
         }
     }
+
+    fun withoutFieldGrid(build: ZkElement.() -> Unit) =
+        div(build = build)
+
+    fun fieldGrid(build: ZkElement.() -> Unit) =
+        grid(style = "grid-template-columns: $fieldGridColumnTemplate; gap: 0; grid-auto-rows: $fieldGridRowTemplate", build = build)
 
     @Deprecated("use simple section instead", ReplaceWith("section(title, summary, builder)"))
     fun fieldGridSection(title: String, summary: String = "", css: ZkCssStyleRule? = null, builder: ZkElement.() -> Unit) =
@@ -413,7 +419,7 @@ open class ZkForm<T : BaseBo>(
         options: suspend () -> List<Pair<EntityId<ST>, String>>
     ): ZkRecordSelectField<T, ST> {
         val field = ZkRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
-        label?.let { field.label = label }
+        label?.let { field.labelText = label }
         fields += field
         return field
     }
@@ -425,21 +431,21 @@ open class ZkForm<T : BaseBo>(
         options: suspend () -> List<Pair<EntityId<ST>, String>>
     ): ZkOptRecordSelectField<T, ST> {
         val field = ZkOptRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
-        label?.let { field.label = label }
+        label?.let { field.labelText = label }
         fields += field
         return field
     }
 
     fun select(kProperty0: KMutableProperty0<String>, label: String? = null, sortOptions: Boolean = true, options: List<String>): ZkStringSelectField<T> {
         val field = ZkStringSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
-        label?.let { field.label = label }
+        label?.let { field.labelText = label }
         fields += field
         return field
     }
 
     fun select(kProperty0: KMutableProperty0<String?>, label: String? = null, sortOptions: Boolean = true, options: List<String>): ZkOptStringSelectField<T> {
         val field = ZkOptStringSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
-        label?.let { field.label = label }
+        label?.let { field.labelText = label }
         fields += field
         return field
     }
@@ -447,7 +453,7 @@ open class ZkForm<T : BaseBo>(
     inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E>, label: String? = null, sortOptions: Boolean = true): ZkEnumSelectField<T, E> {
         val options = enumValues<E>().map { it to stringStore.getNormalized(it.name) } // this is a non-translated to translated mapping
         val field = ZkEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
-        label?.let { field.label = label }
+        label?.let { field.labelText = label }
         fields += field
         return field
     }
@@ -456,7 +462,7 @@ open class ZkForm<T : BaseBo>(
     inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E?>, label: String? = null, sortOptions: Boolean = true): ZkOptEnumSelectField<T, E> {
         val options = enumValues<E>().map { it to stringStore.getNormalized(it.name) } // this is a non-translated to translated mapping
         val field = ZkOptEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
-        label?.let { field.label = label }
+        label?.let { field.labelText = label }
         fields += field
         return field
     }
@@ -492,6 +498,7 @@ open class ZkForm<T : BaseBo>(
     /**
      * Field for a new secret (password). Instructs browsers not to fill the content with old password.
      */
+    @Deprecated("use +bo::field newSecret true")
     fun newSecret(prop: KMutableProperty0<Secret>): ZkSecretField<T> {
         val field = ZkSecretField(this@ZkForm, prop, newSecret = true)
         + field
@@ -502,6 +509,7 @@ open class ZkForm<T : BaseBo>(
     /**
      * Field for a new secret (password). Instructs browsers not to fill the content with old password.
      */
+    @Deprecated("use +bo::field newSecret true")
     fun newSecret(prop: KMutableProperty0<Secret?>): ZkOptSecretField<T> {
         val field = ZkOptSecretField(this@ZkForm, prop, newSecret = true)
         + field
@@ -513,9 +521,6 @@ open class ZkForm<T : BaseBo>(
         if (mode == ZkElementMode.Create) return
         build()
     }
-
-    fun fieldGrid(build: ZkElement.() -> Unit) =
-        grid(style = "grid-template-columns: $fieldGridColumnTemplate; gap: 0; grid-auto-rows: $fieldGridRowTemplate", build = build)
 
     // -------------------------------------------------------------------------
     //  Property field builder shorthands
@@ -661,9 +666,25 @@ open class ZkForm<T : BaseBo>(
     }
 
     /**
+     * Set the field label.
+     */
+    infix fun ZkElement.label(value: String) {
+        if (this is ZkFieldBase<*, *>) this.labelText = value
+    }
+
+    /**
      * Set the field to readonly.
      */
     infix fun ZkElement.readOnly(value: Boolean) {
         if (this is ZkFieldBase<*, *>) this.readOnly = value
     }
+
+    /**
+     * Set autoComplete to "new-password".
+     */
+    infix fun ZkElement.newSecret(value: Boolean) {
+        if (this is ZkSecretField<*>) this.newSecret = value
+        if (this is ZkOptSecretField<*>) this.newSecret = value
+    }
+
 }

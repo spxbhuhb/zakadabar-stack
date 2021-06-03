@@ -5,27 +5,25 @@ package zakadabar.lib.examples.frontend.form
 
 import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.frontend.crud.BuiltinForm
+import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.util.io
+import zakadabar.stack.util.PublicApi
 
-/**
- * This example shows all built in form fields.
- */
-object FormFieldsFetched : ZkPage() {
+@PublicApi // example code
+class FormFieldsFetched(
+    private val entityId : EntityId<BuiltinBo>
+) : ZkElement() {
 
     override fun onCreate() {
         super.onCreate()
 
         io {
-            // Get your id in a more logical way, fetching all records just to get
-            // an id is plain wrong. I just needed one make this example working.
-            val id = BuiltinBo.all().first().id
-
             val form = BuiltinForm()
-            form.bo = BuiltinBo.read(id)
-            form.mode = ZkElementMode.Action
+            form.bo = BuiltinBo.read(entityId)
+            form.mode = ZkElementMode.Update
 
             + div(zkPageStyles.content) {
                 + form

@@ -886,54 +886,6 @@ open class ZkElement(
     }
 
     /**
-     * Creates "h1" [HTMLElement] and executes the builder function on it.
-     *
-     * @param  rule       CSS rule to use. Optional.
-     * @param  build      The builder function to build the content of the div. Optional.
-     */
-    open fun h1(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLElement {
-        val e = document.createElement("h1") as HTMLElement
-        runBuild(e, rule, build)
-        return e
-    }
-
-    /**
-     * Creates "h2" [HTMLElement] and executes the builder function on it.
-     *
-     * @param  rule       CSS rule to use. Optional.
-     * @param  build      The builder function to build the content of the div. Optional.
-     */
-    open fun h2(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLElement {
-        val e = document.createElement("h2") as HTMLElement
-        runBuild(e, rule, build)
-        return e
-    }
-
-    /**
-     * Creates "h3" [HTMLElement] and executes the builder function on it.
-     *
-     * @param  rule       CSS rule to use. Optional.
-     * @param  build      The builder function to build the content of the div. Optional.
-     */
-    open fun h3(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLElement {
-        val e = document.createElement("h3") as HTMLElement
-        runBuild(e, rule, build)
-        return e
-    }
-
-    /**
-     * Creates "h4" [HTMLElement] and executes the builder function on it.
-     *
-     * @param  rule       CSS rule to use. Optional.
-     * @param  build      The builder function to build the content of the div. Optional.
-     */
-    open fun h4(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLElement {
-        val e = document.createElement("h4") as HTMLElement
-        runBuild(e, rule, build)
-        return e
-    }
-
-    /**
      * Creates a "div" [HTMLElement]. When [grid] is false, [zkLayoutStyles.row] class
      * is added. When [grid] is true, [zkLayoutStyles.grid] is added.
      *
@@ -995,6 +947,54 @@ open class ZkElement(
         val e = document.createElement("div") as HTMLElement
         e.style.height = if (height is Int) "${height}px" else height.toString()
         e.style.width = if (width is Int) "${width}px" else width.toString()
+        return e
+    }
+
+    /**
+     * Creates "h1" [HTMLElement] and executes the builder function on it.
+     *
+     * @param  rule       CSS rule to use. Optional.
+     * @param  build      The builder function to build the content of the div. Optional.
+     */
+    open fun h1(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLElement {
+        val e = document.createElement("h1") as HTMLElement
+        runBuild(e, rule, build)
+        return e
+    }
+
+    /**
+     * Creates "h2" [HTMLElement] and executes the builder function on it.
+     *
+     * @param  rule       CSS rule to use. Optional.
+     * @param  build      The builder function to build the content of the div. Optional.
+     */
+    open fun h2(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLElement {
+        val e = document.createElement("h2") as HTMLElement
+        runBuild(e, rule, build)
+        return e
+    }
+
+    /**
+     * Creates "h3" [HTMLElement] and executes the builder function on it.
+     *
+     * @param  rule       CSS rule to use. Optional.
+     * @param  build      The builder function to build the content of the div. Optional.
+     */
+    open fun h3(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLElement {
+        val e = document.createElement("h3") as HTMLElement
+        runBuild(e, rule, build)
+        return e
+    }
+
+    /**
+     * Creates "h4" [HTMLElement] and executes the builder function on it.
+     *
+     * @param  rule       CSS rule to use. Optional.
+     * @param  build      The builder function to build the content of the div. Optional.
+     */
+    open fun h4(rule: ZkCssStyleRule? = null, build: ZkElement.() -> Unit = { }): HTMLElement {
+        val e = document.createElement("h4") as HTMLElement
+        runBuild(e, rule, build)
         return e
     }
 

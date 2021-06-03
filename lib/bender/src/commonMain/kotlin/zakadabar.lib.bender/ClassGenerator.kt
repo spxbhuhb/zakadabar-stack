@@ -100,7 +100,7 @@ class $browserCrudName : ZkCrudTarget<$boName>() {
     init {
         companion = $boName.Companion
         boClass = $boName::class
-        pageClass = $browserFormName::class
+        editorClass = $browserFormName::class
         tableClass = $browserTableName::class
     }
 }

@@ -4,15 +4,14 @@
 package zakadabar.lib.examples.frontend.form
 
 import zakadabar.lib.examples.frontend.crud.BuiltinForm
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.util.default
+import zakadabar.stack.util.PublicApi
 
-/**
- * This example shows all built in form fields.
- */
-object FormFieldsGenerated : ZkPage() {
+@PublicApi // example code
+class FormFieldsDefault : ZkElement() {
 
     override fun onCreate() {
         super.onCreate()

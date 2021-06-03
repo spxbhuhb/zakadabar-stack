@@ -4,7 +4,6 @@
 
 package zakadabar.site.frontend
 
-import zakadabar.lib.examples.frontend.form.FormFieldsGenerated
 import zakadabar.lib.examples.frontend.form.SyntheticForm
 import zakadabar.lib.examples.frontend.layout.TabContainer
 import zakadabar.lib.examples.frontend.pages.ArgPage
@@ -42,7 +41,6 @@ class Routing : ZkAppRouting(DefaultLayout, Landing) {
         + ExampleMarkdownSideBarTarget
 
         + ArgPage
-        + FormFieldsGenerated
         + TabContainer
         + GeneratedTable
         + FetchedTable

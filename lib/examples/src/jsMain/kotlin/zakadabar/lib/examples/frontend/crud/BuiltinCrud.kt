@@ -5,10 +5,12 @@ package zakadabar.lib.examples.frontend.crud
 
 import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
+import zakadabar.lib.examples.resources.strings
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.application.translate
 import zakadabar.stack.frontend.builtin.crud.ZkInlineCrud
 import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.builtin.form.fields.ZkStringField
 import zakadabar.stack.frontend.builtin.table.ZkTable
 
 class BuiltinInlineCrud : ZkInlineCrud<BuiltinBo>() {
@@ -45,14 +47,14 @@ class BuiltinForm : ZkForm<BuiltinBo>() {
                 + bo::optSecretValue
                 + select(bo::optRecordSelectValue) { ExampleReferenceBo.all().by { it.name } }
                 + bo::optStringValue
-                + bo::optStringSelectValue
+                + select(bo::optStringSelectValue, options = listOf("option 1", "option 2", "option3"))
                 + bo::optTextAreaValue
                 + bo::optUuidValue
                 + bo::secretValue
-                + select(bo::recordSelectValue) { ExampleReferenceBo.all().by { it.name } } 
-                + bo::stringValue
-                + bo::stringSelectValue
-                + bo::textAreaValue
+                + select(bo::recordSelectValue) { ExampleReferenceBo.all().by { it.name } }
+                + ZkStringField(this@BuiltinForm, bo::stringValue).also { this@BuiltinForm.fields += it }
+                + select(bo::stringSelectValue, options = listOf("option 1", "option 2", "option3"))
+                + textarea(bo::textAreaValue) label strings.textAreaValue
                 + bo::uuidValue
             }
         }

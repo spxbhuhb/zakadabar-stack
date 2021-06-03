@@ -8,6 +8,18 @@
 - `ZkElement.h2`: builder
 - `ZkElement.h3`: builder
 - `ZkElement.h4`: builder
+- form: `ZkFieldBase.labelText` to store label text, can be changed any time
+- form: `ZkElement.label` to customize labels easily
+- form: `ZkElement.newSecret` to set `autocomplete="new-password"` easily
+- form: `withoutFieldGrid` function to store the fields in the section when fieldGrid = false  
+- form: documentation
+
+### Changed
+
+### Deprecated
+
+- `ZkFieldBase.label` - use `labelText` instead
+- `ZkCrudTarget.pageClass` - use `editorClass` instead
 
 ## Lib:Bender
 
