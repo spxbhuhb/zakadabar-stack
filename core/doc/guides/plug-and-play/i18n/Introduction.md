@@ -22,7 +22,7 @@ To use i18n in your application:
 **gradle**
 
 ```kotlin
-implementation("hu.simplexion.zakadabar:lib-i18n:$i18nVersion")
+implementation("hu.simplexion.zakadabar:i18n:$i18nVersion")
 ```
 
 **backend**

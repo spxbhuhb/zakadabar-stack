@@ -109,6 +109,22 @@ open class Executor internal constructor(
 See [Authorizer](../../backend/Authorizer.md) for more information about authorization
 in business logic modules.
 
+## Foreign Keys (Exposed)
+
+To have foreign keys referencing accounts or roles, use AccountPrivateBo and RoleBo
+in your BO definition. These will generate the following code:
+
+```kotlin
+    internal val account = reference("account", AccountPrivateExposedTableGen)
+    internal val role = reference("role", RoleExposedTableGen)
+```
+
+To set the entity id of an `AccountPriveteBo` field from an `AccountPublicBo` field:
+
+```kotlin
+account = EntityId(publicBo.id)
+```
+
 ## Manual Authorization Checks
 
 <div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Authorizer Are Preferred">

@@ -28,6 +28,9 @@ open class ClassGenerator {
     open val browserFormName
         get() = baseName + "Form"
 
+    open val businessLogicName
+        get() = baseName + "Bl"
+
     // @formatter:off
 
     // -------------------------------------------------------------------------
@@ -56,7 +59,6 @@ ${generators.map { it.commonImport() }.flatten().distinct().joinToString("\n")}
 @Serializable
 class ${boName}(
 
-    override var id: EntityId<$boName>,
     ${generators.mapNotNull { it.commonDeclaration() }.joinToString(",\n    ")}
 
 ) : EntityBo<$boName> {
@@ -78,7 +80,7 @@ class ${boName}(
     // -------------------------------------------------------------------------
 
 fun browserFrontendGenerator() = """
-package ${packageName}.frontend
+package ${packageName}.frontend.pages
 
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.form.ZkForm
@@ -151,7 +153,7 @@ class $browserTableName : ZkTable<$boName>() {
 fun businessLogicGenerator() = """
 package ${packageName}.backend
 
-import zakadabar.stack.StackRoles
+import zakadabar.stack.backend.authorize.Authorizer
 import zakadabar.stack.backend.authorize.EmptyAuthorizer
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import ${packageName}.data.$boName
@@ -161,7 +163,7 @@ import ${packageName}.data.$boName
  * 
  * Generated with Bender at ${Clock.System.now()}.
  */
-open class ${baseName}Bl : EntityBusinessLogicBase<${boName}>(
+open class $businessLogicName : EntityBusinessLogicBase<${boName}>(
     boClass = ${boName}::class
 ) {
 

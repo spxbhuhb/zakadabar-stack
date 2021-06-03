@@ -6,7 +6,6 @@ package zakadabar.lib.bender.frontend
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import zakadabar.lib.bender.ClassGenerator
-import zakadabar.lib.markdown.frontend.MarkdownView
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.io
@@ -30,8 +29,6 @@ class Bender(
                 + BoEditor(classGenerator, resultContainer, template, markdownContext)
                 + resultContainer
             }
-
-            resultContainer += MarkdownView(sourceText = template, context = markdownContext())
         }
 
     }

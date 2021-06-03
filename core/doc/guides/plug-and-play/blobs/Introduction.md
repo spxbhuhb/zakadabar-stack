@@ -17,7 +17,7 @@ To use blobs in your application:
 **gradle**
 
 ```kotlin
-implementation("hu.simplexion.zakadabar:lib-blobs:$blobsVersion")
+implementation("hu.simplexion.zakadabar:blobs:$blobsVersion")
 ```
 
 **extend: common**
