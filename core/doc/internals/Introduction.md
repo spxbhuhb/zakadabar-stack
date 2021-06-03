@@ -18,15 +18,15 @@ following goals in mind (we've already reached most of them):
 - deny-first, allow-explicitly approach in security,
 - have current, easy-to-use documentation.
 
-It is by no means perfect nor complete. It contains only what we've needed on the way
-for our in-house projects.
+It is by no means perfect nor complete, we are at the starting point. It
+contains only what we've needed on the way for our in-house projects.
 
 That said, we think that the concept is solid, and we reached the point when the 
 feedback from the community can help us to smooth the rough edges.
 
 Licence is Apache 2.0.
 
-Please give it a look on:
+Please give it a look at:
 
 - [https://zakadabar.io](https://zakadabar.io)
 - [https://github.com/spxbhuhb/zakadabar-stack](https://github.com/spxbhuhb/zakadabar-stack)
