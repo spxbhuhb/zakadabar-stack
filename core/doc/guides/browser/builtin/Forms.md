@@ -1,13 +1,26 @@
 # Forms
 
-* Features:
-    * component library for common data types and use cases
-    * automatic labeling based on property name
-    * automatic data validation and user feedback based on the schema
-    * automatic handling of CRUD submits
-    * mode-aware builders (for example: don't show ID for create)
-    * automatic translation of titles, explanations
-* Synthetic forms: build forms from the schema automatically
+[ZkForm](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/ZkForm.kt) provides
+the following functions out of the box:
+
+- convenient builder functions
+- component library for common data types and use cases
+- automatic labeling based on property name
+- automatic data validation and user feedback based on the schema
+- automatic handling of CRUD submits
+- mode-aware builders (for example: don't show ID for create)
+- automatic translation of titles, explanations
+
+<div data-zk-enrich="Note" data-zk-flavour="Secondary" data-zk-title="Status">
+
+There are a few common data types that we haven't implemented yet.
+
+Most notably date and time fields are not supported as of now.
+
+These are on the way, local dates are scheduled for June, others we'll add
+when needed.
+
+</div>
 
 ## Write a Form [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormSimpleExample.kt)
 
