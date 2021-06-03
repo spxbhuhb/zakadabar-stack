@@ -109,10 +109,6 @@ open class MarkdownStyles : ZkCssStyleSheet() {
             backgroundColor = theme.hoverBackgroundColor
             color = theme.hoverTextColor
         }
-
-        large {
-            paddingRight = 20
-        }
     }
 
     open val tocText by cssClass {
