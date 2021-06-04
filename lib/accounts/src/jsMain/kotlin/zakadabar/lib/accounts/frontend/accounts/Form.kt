@@ -105,7 +105,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                     + basics()
 
                     + section(stringStore.password) {
-                        + newSecret(bo::credentials)
+                        + bo::credentials newSecret true
                         + ZkOptSecretVerificationField(this@CreateForm, bo::credentials).also { fields += it }
                     }
 
