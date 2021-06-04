@@ -50,6 +50,17 @@ dependency.
 There are many reasons, for some of them, please read this article without any bias: 
 [Semver Will Not Save You](https://hynek.me/articles/semver-will-not-save-you/).
 
+### IR compiler, Ktor 1.5+
+
+We will upgrade to the latest Ktor and serialization when
+
+- [KT-46598](https://youtrack.jetbrains.com/issue/KT-46598) is solved, an
+- Ktor uses a serialization version 1.2.1+
+
+The Stack compiles with KJS IR backend (not on master), we'll provide IR modules when
+
+- Ktor is on 1.5.0+ (see above)
+
 ## Errors
 
 ### Gradle Is Stuck
