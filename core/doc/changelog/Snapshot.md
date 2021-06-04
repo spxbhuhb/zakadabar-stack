@@ -13,13 +13,17 @@
 - form: `ZkElement.newSecret` to set `autocomplete="new-password"` easily
 - form: `withoutFieldGrid` function to store the fields in the section when fieldGrid = false  
 - form: documentation
-
-### Changed
+- ZkDefaultLayout: when used on small screens, add 10px padding to the left
 
 ### Deprecated
 
 - `ZkFieldBase.label` - use `labelText` instead
 - `ZkCrudTarget.pageClass` - use `editorClass` instead
+
+### Fixed
+
+- crud: table scrolling issue
+- sidebar: sidebar scroll issue on small screens
 
 ## Lib:Bender
 
@@ -37,3 +41,28 @@
 
 - deleted fields are in the generated code
 - `id` field is not added to the schema
+
+## Lib:Blobs
+
+### Changed
+
+- documentation improvements
+- ZkImagesField: upgraded to the latest core
+
+### Fixed
+
+- full screen preview icon colors
+
+## Lib:Demo
+
+### Added
+
+- test crud
+- test blob
+- themes
+
+## Lib:Markdown
+
+### Fixed
+
+- Chrome and Firefox displays the page shifted to left

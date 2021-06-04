@@ -20,9 +20,15 @@ To use blobs in your application:
 implementation("hu.simplexion.zakadabar:blobs:$blobsVersion")
 ```
 
-**extend: common**
+**common**
 
 ```kotlin
+import zakadabar.lib.blobs.data.BlobBo
+import zakadabar.lib.blobs.data.BlobBoCompanion
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.entity.EntityId
+import kotlinx.serialization.Serializable
+
 @Serializable
 class TestBlob(
     override var id: EntityId<TestBlob>,
@@ -40,20 +46,28 @@ class TestBlob(
 }
 ```
 
-**extend: business logic**
+**business logic**
 
 ```kotlin
+import zakadabar.lib.blobs.backend.BlobBlBase
+import zakadabar.stack.backend.authorize.Authorizer
+import zakadabar.stack.backend.authorize.EmptyAuthorizer
+
 class TestBlobBl : BlobBlBase<TestBlob>(
-     TestBlob::class,
-     TestBlobExposedPa()
+   TestBlob::class,
+   TestBlobExposedPa()
 ) {
-     override val authorizer: Authorizer<TestBlob> = UnsafeAuthorizer()
+   override val authorizer: Authorizer<TestBlob> = EmptyAuthorizer()
 }
 ```
 
-**extend: persistence api**
+**persistence api**
 
 ```kotlin
+import zakadabar.lib.blobs.backend.BlobExposedPa
+import zakadabar.lib.blobs.backend.BlobExposedTable
+import zakadabar.stack.backend.util.default
+
 class TestBlobExposedPa : BlobExposedPa<TestBlob>(
     table = TestBlobExposedTable,
 ) {
@@ -62,7 +76,7 @@ class TestBlobExposedPa : BlobExposedPa<TestBlob>(
 
 object TestBlobExposedTable : BlobExposedTable<TestBlob>(
     tableName = "test_blob",
-    referenceTable = BuiltinExposedTableGen
+    referenceTable = TestExposedTableGen
 )
 ```
 
@@ -70,6 +84,14 @@ object TestBlobExposedTable : BlobExposedTable<TestBlob>(
 
 ```kotlin
 server += TestBlobBl()
+```
+
+**browser**
+
+```kotlin
++ ZkImagesField(this, TestBlob.comm, bo.id) {
+   TestBlob(EntityId(), bo.id, it.name, it.type, it.size.toLong())
+}
 ```
 
 ## Database

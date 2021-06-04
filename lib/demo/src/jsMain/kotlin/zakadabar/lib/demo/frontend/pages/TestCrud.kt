@@ -3,6 +3,8 @@
  */
 package zakadabar.lib.demo.frontend.pages
 
+import zakadabar.lib.blobs.frontend.image.ZkImagesField
+import zakadabar.lib.demo.data.TestBlob
 import zakadabar.lib.demo.data.TestBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.application.target
@@ -10,7 +12,6 @@ import zakadabar.stack.frontend.application.translate
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.table.ZkTable
-
 
 /**
  * CRUD target for [TestBo].
@@ -21,16 +22,11 @@ class TestCrud : ZkCrudTarget<TestBo>() {
     init {
         companion = TestBo.Companion
         boClass = TestBo::class
-        pageClass = TestForm::class
+        editorClass = TestForm::class
         tableClass = TestTable::class
     }
 }
 
-/**
- * Form for [TestBo].
- * 
- * Generated with Bender at 2021-06-04T02:35:21.583Z.
- */
 class TestForm : ZkForm<TestBo>() {
     override fun onCreate() {
         super.onCreate()
@@ -41,7 +37,12 @@ class TestForm : ZkForm<TestBo>() {
                 + bo::name
                 + bo::value
             }
+
+            + ZkImagesField(this, TestBlob.comm, bo.id) {
+                TestBlob(EntityId(), bo.id, it.name, it.type, it.size.toLong())
+            }
         }
+
     }
 }
 
@@ -69,17 +70,4 @@ class TestTable : ZkTable<TestBo>() {
         + actions()
     }
 
-    override fun onCreate() {
-        super.onCreate()
-
-        val data = (1..10000).map {
-            TestBo(
-                id = EntityId(it.toLong()),
-                name = "Bo $it",
-                value = it
-            )
-        }
-
-        setData(data)
-    }
 }

@@ -451,9 +451,9 @@ Add three themes to rotate to the top title bar:
 
 ```kotlin
 titleBar.globalElements += ZkThemeRotate(
-  ZkIcons.darkMode to SiteDarkTheme(),
-  ZkIcons.lightMode to SiteLightTheme(),
-  ZkIcons.leaf to GreenBlueTheme()
+    ZkIcons.darkMode to ZkBuiltinDarkTheme(),
+    ZkIcons.lightMode to ZkBuiltinLightTheme(),
+    ZkIcons.leaf to ZkGreenBlueTheme()
 )
 ```
 

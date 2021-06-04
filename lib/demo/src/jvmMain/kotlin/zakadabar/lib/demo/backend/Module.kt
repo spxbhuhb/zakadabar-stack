@@ -15,6 +15,7 @@ object Module : BackendModule {
         zakadabar.lib.i18n.backend.install()
 
         server += TestBl()
+        server += TestBlobBl()
     }
 
 }
