@@ -51,6 +51,7 @@ open class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
             roles.query = roleId
             roles.create = roleId
             roles.update = roleId
+            roles.delete = roleId
             roles.action = roleId
         }
 
@@ -69,6 +70,7 @@ open class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
             val roleId = roleBl.getByName(value)
             roles.create = roleId
             roles.update = roleId
+            roles.delete = roleId
             roles.action = roleId
         }
 

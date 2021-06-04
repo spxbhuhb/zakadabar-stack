@@ -15,6 +15,24 @@ class BenderStyles : ZkCssStyleSheet() {
         maxWidth = "800px"
     }
 
+    val header by cssClass {
+        alignItems = "baseline"
+        marginBlockStart = "0.83em"
+        marginBlockEnd = "0.40em"
+    }
+
+    val headerText by cssClass {
+        fontSize = "1.5em"
+        fontWeight = "500"
+    }
+
+    val headerLink by cssClass {
+        color = theme.infoColor
+        paddingLeft = 20
+        fontWeight = 400
+        fontSize = "15px"
+    }
+
     val mediumInput by cssClass {
         width = "10em"
     }

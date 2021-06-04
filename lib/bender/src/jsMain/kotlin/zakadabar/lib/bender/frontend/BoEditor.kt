@@ -6,11 +6,15 @@ package zakadabar.lib.bender.frontend
 import kotlinx.browser.window
 import kotlinx.datetime.Clock
 import zakadabar.lib.bender.ClassGenerator
+import zakadabar.lib.bender.EntityIdPropertyGenerator
 import zakadabar.lib.bender.KtToBoDescriptor
+import zakadabar.lib.bender.PropertyGenerator
 import zakadabar.lib.bender.frontend.property.BoPropertyEditor
+import zakadabar.lib.markdown.frontend.MarkdownModal
 import zakadabar.lib.markdown.frontend.MarkdownView
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
 import zakadabar.stack.data.schema.descriptor.BoDescriptor
+import zakadabar.stack.data.schema.descriptor.EntityIdBoProperty
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.button.buttonPrimary
@@ -42,7 +46,7 @@ class BoEditor(
     private val boName = ZkTextInput()
     private val boNamespace = ZkTextInput()
 
-    private val entryContainer = ZkElement()
+    val entryContainer = ZkElement()
 
     private val copyContainer = ZkElement()
     private val lastGenerate = ZkElement()
@@ -57,7 +61,39 @@ class BoEditor(
 
         + column(benderStyles.editor) {
 
-            ! "<h2>Bender</h2>"
+            + row(benderStyles.header) {
+                + h2 { + "Bender" } marginRight 10
+
+                // these links are pretty dirty, but i don't want to think about it right now
+
+                + ZkButton(
+                    "documentation",
+                    ZkFlavour.Custom,
+                    url = "/en/Documentation/guides/tools/Bender.md",
+                    capitalize = false,
+                ) css benderStyles.headerLink
+
+                + ZkButton(
+                    "change log",
+                    ZkFlavour.Custom,
+                    capitalize = false
+                ) {
+                    io {
+                        MarkdownModal(
+                            title = "Bender ChangeLog",
+                            url = "/api/content/guides/tools/BenderChanges.md",
+                            context = ZkMarkdownContext(toc = false)
+                        ).run()
+                    }
+                } css benderStyles.headerLink
+            }
+
+            + row {
+                + buttonPrimary("Reset") { reset() } marginRight 20
+                + buttonPrimary("Import") { import() } marginRight 20
+                + buttonPrimary("Generate") { generate() } marginRight 20
+                + lastGenerate css benderStyles.lastGenerated
+            } marginBottom 30
 
             + row {
                 + div {
@@ -89,12 +125,6 @@ class BoEditor(
 
                 + column {
 
-                    + row {
-                        + buttonPrimary("Reset") { reset() } marginRight 20
-                        + buttonPrimary("Import") { import() } marginRight 20
-                        + buttonPrimary("Generate") { generate() } marginRight 20
-                    } marginBottom 20
-
                     + copyContainer build {
 
                         + zkLayoutStyles.hidden
@@ -110,17 +140,15 @@ class BoEditor(
                             toastSuccess { "Browser source copied to the clipboard!" }
                         } marginRight 20
 
-                        + ZkButton(text = "Business Logic", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
-                            window.navigator.clipboard.writeText(blSource)
-                            toastSuccess { "Business Logic source copied to the clipboard!" }
-                        } marginRight 20
-
                         + ZkButton(text = "Persistence API", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
                             window.navigator.clipboard.writeText(paSource)
                             toastSuccess { "Persistence API source copied to the clipboard!" }
                         } marginRight 20
 
-                        + lastGenerate css benderStyles.lastGenerated
+                        + ZkButton(text = "Business Logic", iconSource = ZkIcons.contentCopy, flavour = ZkFlavour.Primary) {
+                            window.navigator.clipboard.writeText(blSource)
+                            toastSuccess { "Business Logic source copied to the clipboard!" }
+                        } marginRight 20
                     }
 
                 } marginBottom 20
@@ -144,13 +172,12 @@ class BoEditor(
         boName.value = ""
         boNamespace.value = ""
 
-        descriptor = BoDescriptor("","","", emptyList())
+        descriptor = BoDescriptor("", "", "", emptyList())
 
         entryContainer.clear()
         copyContainer.hide()
 
         resultContainer.clear()
-        resultContainer += MarkdownView(sourceText = template, context = markdownContext())
     }
 
     private fun import() {
@@ -212,8 +239,14 @@ class BoEditor(
             descriptor.boNamespace = descriptor.className
         }
 
+        val generators = entryContainer.find<BoPropertyEditor>().mapNotNull { it.generator() }.toMutableList()
+        if (generators.firstOrNull { it.property.name == "id" } == null) {
+            addId(generators)
+        }
+
         classGenerator.boDescriptor = descriptor
-        classGenerator.generators = entryContainer.find<BoPropertyEditor>().mapNotNull { it.generator() }
+        classGenerator.generators = generators
+
 
         commonSource = classGenerator.commonGenerator()
         browserSource = classGenerator.browserFrontendGenerator()
@@ -221,7 +254,10 @@ class BoEditor(
         paSource = classGenerator.exposedPaGenerator()
 
         val result = template
-            .replace("@packageName@", descriptor.packageName)
+            .replace("@packageName@", descriptor.packageName.replace(".", "/"))
+            .replace("className", descriptor.className)
+            .replace("businessLogicName", classGenerator.businessLogicName)
+            .replace("browserCrudName", classGenerator.browserCrudName)
             .replace("// commonSource", commonSource)
             .replace("// browserSource", browserSource)
             .replace("// blSource", blSource)
@@ -231,5 +267,21 @@ class BoEditor(
         resultContainer += MarkdownView(sourceText = result, context = ZkMarkdownContext(toc = false, hashes = false))
 
         copyContainer.show()
+    }
+
+    private fun addId(generators: MutableList<PropertyGenerator>) {
+        generators.add(
+            0, EntityIdPropertyGenerator(
+                descriptor,
+                EntityIdBoProperty(
+                    name = "id",
+                    optional = false,
+                    constraints = emptyList(),
+                    kClassName = descriptor.className,
+                    defaultValue = null,
+                    value = null
+                )
+            )
+        )
     }
 }

@@ -42,9 +42,9 @@ import zakadabar.stack.frontend.util.io
 open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT>>(
     form: ZkForm<T>,
     private val comm: BlobCommInterface<BT>,
-    private val make: (File) -> BT,
-    private val reference: EntityId<T>,
-    private val imageCountMax: Int? = null
+    private val reference: EntityId<T>? = null,
+    private val imageCountMax: Int? = null,
+    private val make: (File) -> BT
 ) : ZkFieldBase<T, Unit>(
     form = form,
     propName = ""
@@ -60,8 +60,10 @@ open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT>>(
             form.fields += this@ZkImagesField
 
             if (form.mode != ZkElementMode.Create) {
-                comm.listByReference(reference).forEach {
-                    + ZkImagePreview(it, onDelete = { preview -> onDelete(preview) }) marginRight 10 marginBottom 10
+                reference?.let {
+                    comm.listByReference(it).forEach {
+                        + ZkImagePreview(it, onDelete = { preview -> onDelete(preview) }) marginRight 10 marginBottom 10
+                    }
                 }
             }
 

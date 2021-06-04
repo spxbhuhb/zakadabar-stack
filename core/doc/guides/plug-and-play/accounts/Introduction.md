@@ -29,7 +29,7 @@ To use accounts in your application:
 **gradle**
 
 ```kotlin
-implementation("hu.simplexion.zakadabar:lib-accounts:$accountsVersion")
+implementation("hu.simplexion.zakadabar:accounts:$accountsVersion")
 ```
 
 **backend**

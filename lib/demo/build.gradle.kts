@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.6.1"
+version = "2021.6.4"
 
 application {
     mainClassName = "zakadabar.stack.backend.ServerKt"
@@ -42,6 +42,8 @@ kotlin {
         implementation(project(":core"))
         implementation(project(":lib:accounts"))
         implementation(project(":lib:i18n"))
+        implementation(project(":lib:examples"))
+        implementation(project(":lib:blobs"))
 
         implementation("com.h2database:h2:1.4.200")
     }

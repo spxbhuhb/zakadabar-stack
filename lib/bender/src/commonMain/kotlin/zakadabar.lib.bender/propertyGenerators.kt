@@ -156,7 +156,7 @@ open class EntityIdPropertyGenerator(
 
     override fun commonDeclaration() =
         if (property.name == "id") {
-            null
+            "override var ${property.name} : EntityId<${property.kClassName}>$optional"
         } else {
             "var ${property.name} : EntityId<${property.kClassName}>$optional"
         }
@@ -172,7 +172,11 @@ open class EntityIdPropertyGenerator(
         }
 
     override fun browserTable() =
-        "// ${boDescriptor.className}::${property.name} // record id and opt record id is not supported yet "
+        if (property.name == "id") {
+            "+ ${boDescriptor.className}::id"
+        } else {
+            "// ${boDescriptor.className}::${property.name} // record id and opt record id is not supported yet "
+        }
 
     override fun exposedPaImport(): List<String> =
         if (property.optional) {

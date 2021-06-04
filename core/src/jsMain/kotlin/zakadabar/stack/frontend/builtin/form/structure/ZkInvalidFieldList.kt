@@ -23,7 +23,7 @@ open class ZkInvalidFieldList : ZkElement() {
 
         + column {
             + div(ZkFormStyles.invalidFieldListInto) { + stringStore.invalidFieldsExplanation } marginBottom 8
-            + div { + invalid.joinToString(", ") { it.label ?: it.propName } }
+            + div { + invalid.joinToString(", ") { it.labelText ?: it.propName } }
         }
     }
 

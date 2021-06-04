@@ -14,10 +14,7 @@ import zakadabar.lib.examples.frontend.crud.CrudReferenceExample
 import zakadabar.lib.examples.frontend.crud.CrudSimpleExample
 import zakadabar.lib.examples.frontend.dock.DockBasicExample
 import zakadabar.lib.examples.frontend.dock.DockRemoveExample
-import zakadabar.lib.examples.frontend.form.FormBooleanExample
-import zakadabar.lib.examples.frontend.form.FormDoubleExample
-import zakadabar.lib.examples.frontend.form.FormEntityIdExample
-import zakadabar.lib.examples.frontend.form.FormStringExample
+import zakadabar.lib.examples.frontend.form.*
 import zakadabar.lib.examples.frontend.icon.IconExamples
 import zakadabar.lib.examples.frontend.input.IntCheckboxListExample
 import zakadabar.lib.examples.frontend.layout.TabContainerExample
@@ -89,8 +86,11 @@ class SiteMarkdownContext(
             "IntCheckboxListExample" -> IntCheckboxListExample(htmlElement)
 
             "FormBooleanExample" -> FormBooleanExample(htmlElement)
+            "FormBuiltinExample" -> FormBuiltinExample(htmlElement)
             "FormDoubleExample" -> FormDoubleExample(htmlElement)
+            "FormMultiSectionExample" -> FormMultiSectionExample(htmlElement)
             "FormRecordIdExample" -> FormEntityIdExample(htmlElement)
+            "FormSimpleExample" -> FormSimpleExample(htmlElement)
             "FormStringExample" -> FormStringExample(htmlElement)
 
             "IconExamples" -> IconExamples(htmlElement)

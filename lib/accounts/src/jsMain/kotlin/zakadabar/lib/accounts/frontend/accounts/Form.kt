@@ -105,7 +105,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                     + basics()
 
                     + section(stringStore.password) {
-                        + newSecret(bo::credentials)
+                        + bo::credentials newSecret true
                         + ZkOptSecretVerificationField(this@CreateForm, bo::credentials).also { fields += it }
                     }
 
@@ -274,7 +274,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                             bo.oldPassword.value = "*" // so the schema will be valid
                         }
 
-                        + newSecret(bo::newPassword)
+                        + bo::newPassword newSecret true
                         + ZkSecretVerificationField(this@PasswordChangeForm, bo::newPassword)
                     }
 

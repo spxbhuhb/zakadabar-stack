@@ -7,7 +7,7 @@ import kotlinx.browser.document
 import org.w3c.dom.events.KeyboardEvent
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
-import zakadabar.stack.frontend.builtin.button.ZkIconButton
+import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.resources.ZkIcons
 
 class ZkFullScreenImageView(
@@ -23,25 +23,23 @@ class ZkFullScreenImageView(
 
         + image(url, zkImageStyles.image)
 
-        + ZkIconButton(
+        + ZkButton(
             ZkIcons.close,
             buttonSize = 48,
             iconSize = 32,
-            cssClass = zkImageStyles.closeButton,
             round = true
         ) {
             hide()
-        }
+        } css zkImageStyles.closeButton
 
-        + ZkIconButton(
+        + ZkButton(
             ZkIcons.deleteForever,
             buttonSize = 48,
             iconSize = 32,
-            cssClass = zkImageStyles.deleteButton,
             round = true
         ) {
             onDeleteImage(this)
-        }
+        } css zkImageStyles.deleteButton
 
         on("keydown") { event ->
             event as KeyboardEvent

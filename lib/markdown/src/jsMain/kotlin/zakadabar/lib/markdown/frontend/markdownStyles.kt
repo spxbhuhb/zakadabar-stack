@@ -109,10 +109,6 @@ open class MarkdownStyles : ZkCssStyleSheet() {
             backgroundColor = theme.hoverBackgroundColor
             color = theme.hoverTextColor
         }
-
-        large {
-            paddingRight = 20
-        }
     }
 
     open val tocText by cssClass {
@@ -236,7 +232,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     open val codeCopy by cssClass {
         position = "absolute"
         right = 0
-        paddingRight = 4
+        marginRight = 4
         top = 4
         background = theme.backgroundColor
         backgroundColor = theme.blockBackgroundColor
@@ -250,13 +246,6 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         hover {
             backgroundColor = theme.hoverBackgroundColor
         }
-    }
-
-    open val codeCopySuccess by cssClass {
-        fontFamily = theme.fontFamily
-        borderRadius = theme.cornerRadius
-        alignSelf = "center"
-        marginRight = 10
     }
 
     // -------------------------------------------------------------------------

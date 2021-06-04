@@ -19,7 +19,7 @@ object SimpleExampleCrud : ZkCrudTarget<SimpleExampleBo>() {
     init {
         companion = SimpleExampleBo.Companion
         boClass = SimpleExampleBo::class
-        pageClass = SimpleExampleForm::class
+        editorClass = SimpleExampleForm::class
         tableClass = SimpleExampleTable::class
     }
 }

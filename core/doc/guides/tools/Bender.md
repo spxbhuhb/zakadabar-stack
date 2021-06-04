@@ -83,6 +83,35 @@ Bender generates these codes:
 * browser: table, form, crud,
 * backend: business logic, exposed persistence api
 
+### Include
+
+To include the generated codes in your application you have to add them to these
+places (assuming default file names).
+
+**common: strings.kt**
+
+```kotlin
+val generatedCrud by "Generated Crud"
+```
+
+**backend: Module.kt**
+
+```kotlin
+server += GeneratedBl()
+```
+
+**frontend: Routing.kt**
+
+```kotlin
++ GeneratedCrud()
+```
+
+**frontend: SideBar.kt**
+
+```kotlin
+item<GeneratedCrud>()
+```
+
 ## Planned Features
 
 - support multiple BOs, when referencing, offer the known ones

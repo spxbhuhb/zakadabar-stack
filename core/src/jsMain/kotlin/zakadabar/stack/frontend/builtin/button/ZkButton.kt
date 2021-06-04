@@ -35,8 +35,8 @@ import zakadabar.stack.frontend.util.plusAssign
  * @property  onClick       The function to execute when the button is clicked.
  */
 open class ZkButton(
-    open val text: String? = null,
-    open val iconSource: ZkIconSource? = null,
+    open val text: String?,
+    open val iconSource: ZkIconSource?,
     open val flavour: ZkFlavour = ZkFlavour.Primary,
     open val url: String? = null,
     open val round: Boolean = false,
@@ -65,8 +65,9 @@ open class ZkButton(
     )
 
     constructor(
-        iconSource: ZkIconSource,
+        text: String,
         flavour: ZkFlavour = ZkFlavour.Primary,
+        url: String? = null,
         round: Boolean = false,
         fill: Boolean = true,
         border: Boolean = true,
@@ -76,7 +77,23 @@ open class ZkButton(
         tabIndex: Int? = 0,
         onClick: (() -> Unit)? = null
     ) : this(
-        null, iconSource, flavour, null, round, fill, border, capitalize, iconSize, buttonSize, tabIndex, onClick
+        text, null, flavour, url, round, fill, border, capitalize, iconSize, buttonSize, tabIndex, onClick
+    )
+
+    constructor(
+        iconSource: ZkIconSource,
+        flavour: ZkFlavour = ZkFlavour.Primary,
+        url: String? = null,
+        round: Boolean = false,
+        fill: Boolean = true,
+        border: Boolean = true,
+        capitalize: Boolean = true,
+        iconSize: Int? = null,
+        buttonSize: Int? = null,
+        tabIndex: Int? = 0,
+        onClick: (() -> Unit)? = null
+    ) : this(
+        null, iconSource, flavour, url, round, fill, border, capitalize, iconSize, buttonSize, tabIndex, onClick
     )
 
     open val localNav

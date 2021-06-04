@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
+import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import zakadabar.stack.data.BaseBo
@@ -19,11 +20,26 @@ import zakadabar.stack.frontend.util.plusAssign
 abstract class ZkFieldBase<FT : BaseBo, DT>(
     val form: ZkForm<FT>,
     val propName: String,
-    open var label: String? = null,
+    label: String? = null,
     open var readOnly: Boolean = (form.mode == ZkElementMode.Read)
 ) : ZkElement() {
 
     var touched = false
+
+    open val labelContainer = document.createElement("div") as HTMLElement
+
+    @Deprecated("use labelText instead", ReplaceWith("labelText"))
+    open var label
+        get() = labelText
+        set(value) {
+            labelText = value
+        }
+
+    open var labelText: String? = label
+        set(value) {
+            field = value
+            labelContainer.innerText = value ?: ""
+        }
 
     /**
      * True when the input value is invalid itself, without the schema. This
@@ -85,12 +101,14 @@ abstract class ZkFieldBase<FT : BaseBo, DT>(
      * as label.
      */
     open fun buildFieldLabel() {
-        if (label == null) {
-            label = stringStore.getNormalized(propName)
+        if (labelText == null) {
+            labelText = stringStore.getNormalized(propName)
+        } else {
+            labelText = labelText // to initialize label container
         }
 
         + div(ZkFormStyles.fieldLabel) {
-            + label
+            + labelContainer
             mandatoryMark()
             on(buildPoint, "click") { focusValue() }
         }

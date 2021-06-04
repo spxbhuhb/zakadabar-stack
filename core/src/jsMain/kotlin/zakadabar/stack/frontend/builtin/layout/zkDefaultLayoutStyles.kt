@@ -57,12 +57,26 @@ open class ZkDefaultLayoutStyles : ZkCssStyleSheet() {
         zIndex = 100
         position = "absolute"
         width = "100%"
+        overflowY = "auto"
+        maxHeight = "100%"
+
+        styles["scrollbar-width"] = "none"
+        on("::-webkit-scrollbar") {
+            display = "none"
+        }
     }
 
-    open val contentContainer by cssClass {
+    open val contentContainerLarge by cssClass {
         height = "100%"
         maxHeight = "100%"
         overflowY = "hidden"
+    }
+
+    open val contentContainerSmall by cssClass {
+        height = "100%"
+        maxHeight = "100%"
+        overflowY = "hidden"
+        paddingLeft = 10
     }
 
 }

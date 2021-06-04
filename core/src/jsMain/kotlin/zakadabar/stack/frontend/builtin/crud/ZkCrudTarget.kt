@@ -30,8 +30,15 @@ open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
 
     lateinit var companion: EntityBoCompanion<T>
     lateinit var boClass: KClass<T>
-    lateinit var pageClass: KClass<out ZkCrudEditor<T>>
+    lateinit var editorClass: KClass<out ZkCrudEditor<T>>
     lateinit var tableClass: KClass<out ZkTable<T>>
+
+    @Deprecated("use editorClass instead", ReplaceWith("editorClass"))
+    var pageClass
+       get() = editorClass
+       set(value) {
+           editorClass = value
+       }
 
     override fun openAll() = application.changeNavState(this, "all")
     override fun openCreate() = application.changeNavState(this, "create")
@@ -64,6 +71,7 @@ open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
             table.setData(companion.comm.all())
 
             container build {
+                + zkPageStyles.fixed
                 + table
             }
         }

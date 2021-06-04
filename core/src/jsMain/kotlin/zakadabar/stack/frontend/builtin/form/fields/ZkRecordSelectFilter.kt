@@ -18,7 +18,7 @@ open class ZkRecordSelectFilter<T : BaseBo>(
 
     init {
         // FIXME this is not right, but haven't had time to fix yet
-        if (label != null) this.label = label
+        if (label != null) this.labelText = label
     }
 
     override fun fromString(string: String): EntityId<*> {

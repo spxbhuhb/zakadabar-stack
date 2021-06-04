@@ -24,11 +24,17 @@ import kotlin.reflect.KMutableProperty0
 open class ZkSecretField<T : BaseBo>(
     form: ZkForm<T>,
     prop: KMutableProperty0<Secret>,
-    val newSecret: Boolean = false
+    newSecret: Boolean = false
 ) : ZkStringBase<T, Secret>(
     form = form,
     prop = prop
 ) {
+
+    open var newSecret = newSecret
+        set(value) {
+            field = value
+            if (value) input.autocomplete = "new-password"
+        }
 
     override fun getPropValue() = prop.get().value
 

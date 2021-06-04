@@ -1,0 +1,7 @@
+- 2021.6.3
+   - fix: handling of the id field
+   - fix: deleted fields appear in the generated code   
+   - add: documentation and changelog link to the header
+   - add: include instructions to the result
+   - change: package names are set according convention
+   - change: reorganize buttons to be more logical

@@ -7,9 +7,9 @@ package zakadabar.lib.demo.resources
 
 import zakadabar.stack.resources.ZkBuiltinStrings
 
-internal val strings = Strings()
+internal val strings = DemoStrings()
 
-class Strings : ZkBuiltinStrings() {
+class DemoStrings : ZkBuiltinStrings() {
 
     val home by "Demo Home"
 

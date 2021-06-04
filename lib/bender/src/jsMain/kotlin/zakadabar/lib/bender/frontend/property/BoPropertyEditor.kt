@@ -73,7 +73,7 @@ class BoPropertyEditor(
             + div {
                 style { alignSelf = "flex-end" }
                 + ZkButton(flavour = ZkFlavour.Danger, iconSource = ZkIcons.close, fill = true, buttonSize = 18, tabIndex = - 1) {
-                    editor -= this@BoPropertyEditor
+                    editor.entryContainer -= this@BoPropertyEditor
                 } marginRight 10 marginBottom 4
             }
 
