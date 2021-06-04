@@ -11,12 +11,14 @@ This roadmap is something we would like to follow. Please note that we cannot gu
 
 ### Core
 
+* scheduler: schedule and run backend tasks in a multi-node environment
 * responsive components:
     * table
-    * form
+    * form (already works, but that's just happy coincidence)
     * tab container
 * form
     * option to add help tooltip
+    * provide feedback on invalid fields from the schema
 * popup to the user when the server is unavailable
     * short gap: retry
     * long gap: refresh the page and/or ask the user what to do
@@ -37,7 +39,6 @@ This roadmap is something we would like to follow. Please note that we cannot gu
     * form
     * table
     * pages
-    * theme borders and box-shadows
 
 ### Site
 
@@ -47,7 +48,7 @@ This roadmap is something we would like to follow. Please note that we cannot gu
 ## Unscheduled
 
 * synthetic forms (halfway done)
-* settings browser UI (halfway, depends on syntethic forms)
+* settings browser UI (depends on syntethic forms)
 * compile and add css classes on-demand (just an idea, but it is possible to manage)
 * themes and styles
     * make style sheet switches carry the original class name
