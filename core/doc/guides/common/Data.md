@@ -326,6 +326,15 @@ val bo = default<SimpleExampleBo> {
 }
 ```
 
+<div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Not for Many">
+
+Use `default` only when you don't need large number of records. It is not suitable
+for creating tens of thousands of instances. Declare your class as a data class
+instead, create one instance with default and then copy it as many times as you need.
+
+</div>
+
+
 ### Use a Schema
 
 [ZkForm](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/ZkForm.kt) validates the BO automatically.

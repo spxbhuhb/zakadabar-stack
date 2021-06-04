@@ -9,6 +9,7 @@ import zakadabar.lib.accounts.frontend.accounts.Account
 import zakadabar.lib.accounts.frontend.accounts.Accounts
 import zakadabar.lib.accounts.frontend.login.Login
 import zakadabar.lib.accounts.frontend.roles.Roles
+import zakadabar.lib.demo.frontend.pages.TestCrud
 import zakadabar.lib.demo.resources.strings
 import zakadabar.lib.i18n.frontend.Locales
 import zakadabar.lib.i18n.frontend.Translations
@@ -24,6 +25,10 @@ class SideBar : ZkSideBar() {
 
         ifAnonymous {
             + item<Login>()
+        }
+
+        ifNotAnonymous {
+            + item<TestCrud>()
         }
 
         withRole(StackRoles.securityOfficer) {

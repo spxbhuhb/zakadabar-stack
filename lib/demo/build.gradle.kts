@@ -42,6 +42,7 @@ kotlin {
         implementation(project(":core"))
         implementation(project(":lib:accounts"))
         implementation(project(":lib:i18n"))
+        implementation(project(":lib:examples"))
 
         implementation("com.h2database:h2:1.4.200")
     }

@@ -4,12 +4,15 @@
 
 package zakadabar.lib.demo.frontend
 
+import zakadabar.lib.demo.frontend.pages.TestCrud
 import zakadabar.stack.frontend.application.ZkAppRouting
 
 class Routing : ZkAppRouting(DefaultLayout, Home) {
 
     init {
         + Home
+        + TestCrud()
+
         zakadabar.lib.accounts.frontend.install(this)
         zakadabar.lib.i18n.frontend.install(this)
     }
