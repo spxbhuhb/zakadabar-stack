@@ -24,6 +24,7 @@ import org.w3c.files.File
 import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobCommInterface
 import zakadabar.lib.blobs.data.BlobCreateState
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.ValidityReport
@@ -166,5 +167,15 @@ open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT>>(
     override fun onValidated(report: ValidityReport) {
 
     }
+
+    override suspend fun onCreateSuccess(created: EntityBo<*>) {
+        // update blobs with the proper reference id
+        find<ZkImagePreview<*>>().forEach {
+            @Suppress("UNCHECKED_CAST") // form is strictly typed
+            it.bo.reference = created.id as EntityId<out BaseBo>
+            it.bo.update()
+        }
+    }
+
 
 }

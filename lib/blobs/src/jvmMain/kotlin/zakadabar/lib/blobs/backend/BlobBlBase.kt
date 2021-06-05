@@ -15,7 +15,6 @@ import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.ktor.KtorRouter
 import zakadabar.stack.backend.ktor.executor
 import zakadabar.stack.backend.route.Router
-import zakadabar.stack.data.entity.EntityBoCompanion
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.after
 import kotlin.reflect.KClass
@@ -49,7 +48,7 @@ abstract class BlobBlBase<T : BlobBo<T>>(
                         writeContent(call)
                     }
                     get("${namespace}/blob/list/{referenceId}") {
-                        list(call)
+                        listByReference(call)
                     }
                 }
             }
@@ -109,5 +108,22 @@ abstract class BlobBlBase<T : BlobBo<T>>(
         call.respond(HttpStatusCode.OK, "received")
     }
 
+
+    private suspend fun listByReference(call: ApplicationCall) {
+        val blobId = call.parameters["referenceId"]?.let { EntityId<T>(it) } ?: throw BadRequestException("missing reference id")
+
+        val executor = call.executor()
+
+        val result = pa.withTransaction {
+
+            authorizer.authorizeRead(executor, blobId)
+
+            auditor.auditRead(executor, blobId)
+
+            pa.listByReference(blobId)
+        }
+
+        call.respond(result)
+    }
 
 }

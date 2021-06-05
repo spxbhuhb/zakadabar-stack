@@ -22,7 +22,7 @@ abstract class BlobExposedPa<T : BlobBo<T>>(
     table
 ) {
 
-    abstract fun newInstance() : T
+    abstract fun newInstance(): T
 
     override fun ResultRow.toBo() = newInstance().also {
         it.id = EntityId(this[table.id].value)
@@ -33,11 +33,16 @@ abstract class BlobExposedPa<T : BlobBo<T>>(
     }
 
     override fun UpdateBuilder<*>.fromBo(bo: T) {
-        this[table.reference] = bo.reference?.let { EntityID(it.toLong(), table.referenceTable) }
+        this[table.reference] = bo.reference?.let { if (it.isEmpty()) null else EntityID(it.toLong(), table.referenceTable) }
         this[table.name] = bo.name
         this[table.mimeType] = bo.mimeType
         this[table.size] = bo.size
     }
+
+    fun listByReference(id: EntityId<*>) =
+        table
+            .select { table.reference eq id.toLong() }
+            .map { it.toBo() }
 
     fun writeContent(id: EntityId<T>, content: ByteArray) {
         table.update({ table.id eq id.toLong() }) { it[table.content] = ExposedBlob(content) }
