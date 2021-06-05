@@ -13,6 +13,9 @@ private object UNINITIALIZED
  *
  * In those cases the compiler gives a warning, because in extending
  * classes may override the open value.
+ *
+ * Be careful with this delegate, it does not solve all the initialization
+ * dependency problems. Think before you use it.
  */
 fun <T> after(initializer: () -> T) = AfterDelegate(initializer)
 
