@@ -36,6 +36,8 @@ class Routing : ZkAppRouting(DefaultLayout, Landing) {
         + ServicesAndSupport
         + Experimental
         + ProjectStatus
+        + Versioning
+        + UpcomingChanges
 
         + ExampleSideBarTarget
         + ExampleMarkdownSideBarTarget

@@ -4,13 +4,21 @@ actual source codes if you scroll down.
 
 ---
 
-You have to define the authorization, this code rejects everything by default. Example (assumes role based, default authorization):
+You have to define the authorization, this code rejects everything by default.
+
+Example (assumes role based, default authorization):
 
 ```kotlin
 override val authorizer : Authorizer<TestBo> = SimpleRoleAuthorizer {
     allReads = StackRoles.siteMember
     allWrites = StackRoles.siteAdmin
 }
+```
+
+With authorization provider:
+
+```kotlin
+override val authorizer by provider()
 ```
 
 Remember: **deny first, allow explicitly**!

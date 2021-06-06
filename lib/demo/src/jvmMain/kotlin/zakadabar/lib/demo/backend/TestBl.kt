@@ -4,9 +4,7 @@
 package zakadabar.lib.demo.backend
 
 import zakadabar.lib.demo.data.TestBo
-import zakadabar.stack.StackRoles
-import zakadabar.stack.backend.authorize.Authorizer
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
+import zakadabar.stack.backend.authorize.provider
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 
 /**
@@ -20,9 +18,6 @@ open class TestBl : EntityBusinessLogicBase<TestBo>(
 
     override val pa = TestExposedPaGen()
 
-    override val authorizer : Authorizer<TestBo> = SimpleRoleAuthorizer {
-        allReads = StackRoles.siteMember
-        allWrites = StackRoles.siteAdmin
-    }
+    override val authorizer by provider()
     
 }
