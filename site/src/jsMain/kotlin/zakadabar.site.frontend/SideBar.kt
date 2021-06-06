@@ -53,6 +53,8 @@ class SideBar : ZkSideBar() {
                         + it.changelog()
                     }
                 }
+                + item(Versioning)
+                + item(UpcomingChanges)
                 + item(Roadmap)
                 + item(ServicesAndSupport)
                 + item(LegalNotices)

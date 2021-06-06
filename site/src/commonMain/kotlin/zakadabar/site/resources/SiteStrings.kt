@@ -28,6 +28,7 @@ class SiteStrings : ExamplesStrings() {
     val Roadmap by "Roadmap"
     val GetStarted by "Get Started"
     val GetHelp by "Get Help"
+    val UpcomingChanges by "Upcoming Changes"
 
     val faq by "FAQ"
     val tldr by "TL;DR"
