@@ -10,8 +10,6 @@ import zakadabar.stack.data.entity.EntityBo
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-inline fun <reified T : EntityBo<T>> provider() = AuthorizerDelegate<T>()
-
 private object UNINITIALIZED
 
 class AuthorizerDelegate<T : EntityBo<T>> : ReadOnlyProperty<EntityBusinessLogicBase<T>, Authorizer<T>> {

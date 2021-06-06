@@ -4,7 +4,6 @@
 package zakadabar.lib.demo.backend
 
 import zakadabar.lib.demo.data.TestBo
-import zakadabar.stack.backend.authorize.provider
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 
 /**
