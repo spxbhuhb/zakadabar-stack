@@ -24,7 +24,6 @@ import org.w3c.files.File
 import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobCommInterface
 import zakadabar.lib.blobs.data.BlobCreateState
-import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.ValidityReport
@@ -40,9 +39,9 @@ import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.io
 
-open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT>>(
+open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
     form: ZkForm<T>,
-    private val comm: BlobCommInterface<BT>,
+    private val comm: BlobCommInterface<BT,T>,
     private val reference: EntityId<T>? = null,
     private val imageCountMax: Int? = null,
     private val make: (File) -> BT
@@ -170,9 +169,9 @@ open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT>>(
 
     override suspend fun onCreateSuccess(created: EntityBo<*>) {
         // update blobs with the proper reference id
-        find<ZkImagePreview<*>>().forEach {
-            @Suppress("UNCHECKED_CAST") // form is strictly typed
-            it.bo.reference = created.id as EntityId<out BaseBo>
+        find<ZkImagePreview<BT>>().forEach {
+            @Suppress("UNCHECKED_CAST") // it is right
+            it.bo.reference = created.id as EntityId<T>
             it.bo.update()
         }
     }

@@ -5,11 +5,12 @@ package zakadabar.lib.demo.backend
 
 import zakadabar.lib.blobs.backend.BlobBlBase
 import zakadabar.lib.demo.data.TestBlob
+import zakadabar.lib.demo.data.TestBo
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize.Authorizer
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
 
-class TestBlobBl : BlobBlBase<TestBlob>(
+class TestBlobBl : BlobBlBase<TestBlob, TestBo>(
     TestBlob::class,
     TestBlobExposedPa()
 ) {

@@ -13,8 +13,8 @@ import org.w3c.fetch.RequestInit
 import org.w3c.files.Blob
 import org.w3c.xhr.ProgressEvent
 import org.w3c.xhr.XMLHttpRequest
-import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.CommBase
+import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.PublicApi
 
@@ -25,10 +25,10 @@ import zakadabar.stack.util.PublicApi
  *
  */
 @PublicApi
-open class BlobComm<T : BlobBo<T>>(
+open class BlobComm<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
     private val namespace: String,
     private val serializer: KSerializer<T>
-) : CommBase(), BlobCommInterface<T> {
+) : CommBase(), BlobCommInterface<T,RT> {
 
     override suspend fun create(bo: T): T {
         if (! bo.id.isEmpty()) throw RuntimeException("id is not empty in $bo")
@@ -133,9 +133,10 @@ open class BlobComm<T : BlobBo<T>>(
         req.send(data)
     }
 
-    override suspend fun listByReference(reference: EntityId<out BaseBo>): List<T> {
+    override suspend fun listByReference(reference: EntityId<RT>, disposition : String?): List<T> {
+        val q = disposition?.let { "?disposition=$it" } ?: ""
         val response = commBlock {
-            val responsePromise = window.fetch("/api/$namespace/blob/list/$reference")
+            val responsePromise = window.fetch("/api/$namespace/blob/list/$reference$q")
             checkStatus(responsePromise.await())
         }
 

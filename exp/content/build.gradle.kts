@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.5.18-SNAPSHOT"
+version = "2021.6.4-SNAPSHOT"
 
 noArg {
     annotation("kotlinx.serialization.Serializable")
@@ -33,6 +33,9 @@ kotlin {
 
     sourceSets["commonMain"].dependencies {
         implementation(project(":core"))
+        implementation(project(":lib:accounts"))
+        implementation(project(":lib:i18n"))
+        implementation(project(":lib:blobs"))
     }
 
 }

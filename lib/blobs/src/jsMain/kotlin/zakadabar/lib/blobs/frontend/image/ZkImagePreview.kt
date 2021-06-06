@@ -4,12 +4,12 @@
 package zakadabar.lib.blobs.frontend.image
 
 import zakadabar.lib.blobs.data.BlobBo
-import zakadabar.lib.blobs.data.url
 import zakadabar.lib.blobs.data.BlobCreateState
+import zakadabar.lib.blobs.data.url
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.io
 
-open class ZkImagePreview<BT : BlobBo<BT>>(
+open class ZkImagePreview<BT : BlobBo<BT,*>>(
     var bo: BT,
     var createState: BlobCreateState? = null,
     var progress: Long? = null,

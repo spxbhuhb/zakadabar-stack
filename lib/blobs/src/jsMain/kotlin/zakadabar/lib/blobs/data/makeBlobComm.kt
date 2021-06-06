@@ -3,6 +3,8 @@
  */
 package zakadabar.lib.blobs.data
 
-actual fun <T : BlobBo<T>>  makeBlobComm(companion :BlobBoCompanion<T>): BlobCommInterface<T> {
+import zakadabar.stack.data.entity.EntityBo
+
+actual fun <T : BlobBo<T,RT>, RT : EntityBo<RT>>  makeBlobComm(companion :BlobBoCompanion<T,RT>): BlobCommInterface<T,RT> {
     return BlobComm(companion.boNamespace, companion.serializer())
 }

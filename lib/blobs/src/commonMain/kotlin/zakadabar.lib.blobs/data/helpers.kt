@@ -7,4 +7,4 @@ package zakadabar.lib.blobs.data
 /**
  * Get an URL for the a BLOB.
  */
-fun BlobBo<*>.url() = "/api/${getBoNamespace()}/blob/content/$id"
+fun BlobBo<*,*>.url() = "/api/${getBoNamespace()}/blob/content/$id"

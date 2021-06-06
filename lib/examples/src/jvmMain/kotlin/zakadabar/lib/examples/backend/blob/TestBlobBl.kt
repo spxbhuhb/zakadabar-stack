@@ -4,11 +4,12 @@
 package zakadabar.lib.examples.backend.blob
 
 import zakadabar.lib.blobs.backend.BlobBlBase
+import zakadabar.lib.examples.data.SimpleExampleBo
 import zakadabar.lib.examples.data.TestBlob
 import zakadabar.stack.backend.authorize.Authorizer
 import zakadabar.stack.backend.authorize.UnsafeAuthorizer
 
-class TestBlobBl : BlobBlBase<TestBlob>(
+class TestBlobBl : BlobBlBase<TestBlob, SimpleExampleBo>(
      TestBlob::class,
      TestBlobExposedPa()
 ) {
