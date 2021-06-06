@@ -14,6 +14,10 @@ import kotlin.reflect.KClass
  */
 interface Router<T : EntityBo<T>> {
 
+    /**
+     * In the structure `/api/{namespace}/{qualifier}/...` this is the qualifier.
+     * Entity BLs use `entity`, blob BLs use `blob/meta` (will change to `blob\structured`).
+     */
     var qualifier : String
 
     fun installRoutes(context: Any)
