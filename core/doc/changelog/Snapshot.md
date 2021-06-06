@@ -1,6 +1,12 @@
 # Snapshot
 
-# Lib: Blobs
+## Core
+
+added:
+
+- AuthorizerProvider, SimpleRoleAuthorizerProvider, see [Authorizers](/doc/guides/backend/Authorizer.md)
+
+## Lib: Blobs
 
 fixed:
 

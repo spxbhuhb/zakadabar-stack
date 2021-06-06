@@ -5,16 +5,11 @@ package zakadabar.lib.demo.backend
 
 import zakadabar.lib.blobs.backend.BlobBlBase
 import zakadabar.lib.demo.data.TestBlob
-import zakadabar.stack.StackRoles
-import zakadabar.stack.backend.authorize.Authorizer
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
+import zakadabar.stack.backend.authorize.provider
 
 class TestBlobBl : BlobBlBase<TestBlob>(
     TestBlob::class,
     TestBlobExposedPa()
 ) {
-    override val authorizer: Authorizer<TestBlob> = SimpleRoleAuthorizer {
-        allReads = StackRoles.siteMember
-        allWrites = StackRoles.siteAdmin
-    }
+    override val authorizer by provider()
 }
