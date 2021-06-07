@@ -4,27 +4,22 @@
 package zakadabar.stack.backend
 
 import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.util.PublicApi
 
-@PublicApi
-@Deprecated("use Authorizer (preferred) or the one from zakadbar.stack.backend.authorize")
+@Deprecated("EOL: 2021.7.1 use Authorizer (preferred) or the one from zakadbar.stack.backend.authorize")
 fun authorize(executor: Executor, roleName: String) {
     if (! executor.hasRole(roleName)) throw Forbidden()
 }
 
-@PublicApi
-@Deprecated("use Authorizer (preferred) or the one from zakadbar.stack.backend.authorize")
+@Deprecated("EOL: 2021.7.1 use Authorizer (preferred) or the one from zakadbar.stack.backend.authorize")
 fun authorize(executor: Executor, vararg roleNames: String) {
     if (! executor.hasOneOfRoles(roleNames)) throw Forbidden()
 }
 
-@PublicApi
-@Deprecated("use Authorizer (preferred) or the one from zakadbar.stack.backend.authorize")
+@Deprecated("EOL: 2021.7.1 use Authorizer (preferred) or the one from zakadbar.stack.backend.authorize")
 fun authorize(executor: Executor, check: (executor: Executor) -> Boolean) {
     if (! check(executor)) throw Forbidden()
 }
 
-@PublicApi
 /**
  * Authorize directly (without role, check, etc).
  *
@@ -32,10 +27,10 @@ fun authorize(executor: Executor, check: (executor: Executor) -> Boolean) {
  *
  * @throws [Forbidden]
  */
-@Deprecated("use the one from zakadbar.stack.backend.authorize")
+@Deprecated("EOL: 2021.7.1 use the one from zakadbar.stack.backend.authorize")
 fun authorize(authorized: Boolean) {
     if (! authorized) throw Forbidden()
 }
 
-@Deprecated("use the one from zakadbar.stack.backend.authorize")
+@Deprecated("EOL: 2021.7.1 use the one from zakadbar.stack.backend.authorize")
 class Forbidden : Exception()

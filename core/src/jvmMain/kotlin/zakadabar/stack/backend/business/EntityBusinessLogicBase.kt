@@ -9,6 +9,7 @@ import zakadabar.stack.backend.audit.Auditor
 import zakadabar.stack.backend.audit.AuditorProvider
 import zakadabar.stack.backend.audit.LogAuditorProvider
 import zakadabar.stack.backend.authorize.Authorizer
+import zakadabar.stack.backend.authorize.AuthorizerDelegate
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.ktor.KtorRouterProvider
 import zakadabar.stack.backend.persistence.EntityPersistenceApi
@@ -76,6 +77,8 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
      * Audit records (logs) are created by this auditor.
      */
     open val auditor: Auditor<T> = auditor { }
+
+    fun provider() = AuthorizerDelegate<T>()
 
     fun router(build: Router<T>.() -> Unit): Router<T> {
         val r = routerProvider.businessLogicRouter(this)
