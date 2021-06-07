@@ -1,4 +1,6 @@
 * [2021.6.4](./archive/2021.6.4.md)
+* [Next](./Next.md)
+* [Bleeding Edge](./BleedingEdge.md)  
 * [Archive]()
     * [2021.6.1](./archive/2021.6.1.md)
     * [2021.5.26](./archive/2021.5.26.md)
