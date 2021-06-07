@@ -39,7 +39,7 @@ class TestForm : ZkForm<TestBo>() {
             }
 
             + ZkImagesField(this, TestBlob.comm, bo.id) {
-                TestBlob(EntityId(), bo.id, it.name, it.type, it.size.toLong())
+                TestBlob(EntityId(), bo.id, "image", it.name, it.type, it.size.toLong())
             }
         }
 

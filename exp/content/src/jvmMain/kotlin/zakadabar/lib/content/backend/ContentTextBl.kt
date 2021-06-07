@@ -3,22 +3,22 @@
  */
 package zakadabar.lib.content.backend
 
-import zakadabar.lib.content.data.ContentBo
+import zakadabar.lib.content.data.ContentTextBo
 import zakadabar.stack.backend.authorize.Authorizer
 import zakadabar.stack.backend.authorize.EmptyAuthorizer
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 
 /**
- * Business Logic for ContentBo.
+ * Business Logic for ContentTextBo.
  * 
- * Generated with Bender at 2021-06-05T06:12:00.490Z.
+ * Generated with Bender at 2021-06-07T02:56:36.423Z.
  */
-open class ContentBl : EntityBusinessLogicBase<ContentBo>(
-    boClass = ContentBo::class
+open class ContentTextBl : EntityBusinessLogicBase<ContentTextBo>(
+    boClass = ContentTextBo::class
 ) {
 
-    override val pa = ContentExposedPaGen()
+    override val pa = ContentTextExposedPaGen()
 
-    override val authorizer : Authorizer<ContentBo> = EmptyAuthorizer()
+    override val authorizer : Authorizer<ContentTextBo> = EmptyAuthorizer()
     
 }

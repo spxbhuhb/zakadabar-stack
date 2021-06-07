@@ -3,16 +3,14 @@
  */
 package zakadabar.lib.content.backend
 
-import zakadabar.lib.content.backend.sub.ContentBlobBl
-import zakadabar.lib.content.backend.sub.ContentCategoryBl
-import zakadabar.lib.content.backend.sub.ContentStatusBl
 import zakadabar.stack.backend.server
 
 fun install() {
-    server += ContentBl()
+    server += ContentCommonBl()
 
     server += ContentCategoryBl()
     server += ContentStatusBl()
 
+    server += ContentTextBl()
     server += ContentBlobBl()
 }

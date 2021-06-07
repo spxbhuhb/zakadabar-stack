@@ -32,17 +32,44 @@ open class ZkStringStore(
         return StringsDelegate()
     }
 
+    val childStores = mutableListOf<ZkStringStore>()
+
+    operator fun plusAssign(childStore : ZkStringStore) {
+        childStores += childStore
+        childStore.map.forEach {
+            map[it.key] = it.value
+        }
+        childStore.normalizedKeyMap.forEach {
+            normalizedKeyMap[it.key] = it.value
+        }
+    }
+
     /**
      * Merge a list of locale strings into this string store. Overrides any
      * strings that are already in the store. Adds any new strings that are
      * not in the store yet.
      *
+     * Also overrides child stores, but only the keys that are present in them.
+     * This propagates the translations but does not multiply all strings.
+     * We have to improve this on the long run.
+     *
      * @return  the string store merge is called on
      */
     fun merge(other: List<StringPair>) {
         other.forEach {
-            map[it.first] = it.second
-            normalizedKeyMap[normalizeKey(it.first)] = it.second
+            val key = it.first
+            val value = it.second
+            val normalizedKey = normalizeKey(key)
+
+            map[key] = value
+            normalizedKeyMap[normalizedKey] = value
+
+            childStores.forEach { childStore ->
+                if (childStore.map.containsKey(value)) {
+                    childStore.map[key] = value
+                    childStore.normalizedKeyMap[normalizedKey] = value
+                }
+            }
         }
     }
 

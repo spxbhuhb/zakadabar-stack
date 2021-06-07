@@ -3,6 +3,7 @@
  */
 package zakadabar.lib.content.frontend.browser
 
+import zakadabar.lib.content.resources.contentStrings
 import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.application.ZkApplication
 
@@ -10,9 +11,10 @@ fun install(routing: ZkAppRouting) {
     with(routing) {
         + ContentStatusCrud()
         + ContentCategoryCrud()
+        + ContentCrud()
     }
 }
 
-fun install(application : ZkApplication) {
-
+fun install(application: ZkApplication) {
+    application.stringStores += contentStrings
 }

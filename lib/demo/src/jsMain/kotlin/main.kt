@@ -14,9 +14,10 @@ import zakadabar.stack.frontend.util.io
 fun main() {
 
     application = ZkApplication()
-
+    
     zakadabar.lib.accounts.frontend.install(application)
     zakadabar.lib.i18n.frontend.install(application)
+    zakadabar.lib.content.frontend.browser.install(application)
 
     io {
 

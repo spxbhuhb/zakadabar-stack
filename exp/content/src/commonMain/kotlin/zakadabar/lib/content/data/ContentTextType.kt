@@ -3,9 +3,10 @@
  */
 package zakadabar.lib.content.data
 
-object ContentDisposition {
-    const val attachment = "attachment"
-    const val content = "content"
-    const val image = "image"
-    const val thumbnail = "thumbnail"
+enum class ContentTextType {
+    Main,
+    Quote,
+    SubTitle,
+    Summary,
+    Title
 }

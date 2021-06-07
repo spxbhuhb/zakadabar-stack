@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.`java-time`.timestamp
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import zakadabar.lib.accounts.backend.AccountPrivateExposedTableGen
-import zakadabar.lib.content.data.ContentBo
+import zakadabar.lib.content.data.ContentCommonBo
 import zakadabar.lib.i18n.backend.LocaleExposedTableGen
 import zakadabar.stack.backend.exposed.ExposedPaBase
 import zakadabar.stack.backend.exposed.ExposedPaTable
@@ -26,15 +26,17 @@ import zakadabar.stack.backend.exposed.entityId
  * - If you need other fields, add them to the business object and then re-generate.
  * - If you need other functions, please extend with `Gen` removed from the name.
  */
-open class ContentExposedPaGen : ExposedPaBase<ContentBo,ContentExposedTableGen>(
-    table = ContentExposedTableGen
+open class ContentExposedPaGen : ExposedPaBase<ContentCommonBo,ContentCommonExposedTableGen>(
+    table = ContentCommonExposedTableGen
 ) {
-    override fun ResultRow.toBo() = ContentBo(
+
+    override fun ResultRow.toBo() = ContentCommonBo(
         id = this[table.id].entityId(),
         modifiedAt = this[table.modifiedAt].toKotlinInstant(),
         modifiedBy = this[table.modifiedBy].entityId(),
         status = this[table.status].entityId(),
         category = this[table.category].entityId(),
+        master = this[table.master]?.entityId(),
         parent = this[table.parent]?.entityId(),
         locale = this[table.locale].entityId(),
         title = this[table.title],
@@ -42,12 +44,13 @@ open class ContentExposedPaGen : ExposedPaBase<ContentBo,ContentExposedTableGen>
         motto = this[table.motto]
     )  
 
-    override fun UpdateBuilder<*>.fromBo(bo: ContentBo) {
+    override fun UpdateBuilder<*>.fromBo(bo: ContentCommonBo) {
         this[table.modifiedAt] = bo.modifiedAt.toJavaInstant()
         this[table.modifiedBy] = bo.modifiedBy.toLong()
         this[table.status] = bo.status.toLong()
         this[table.category] = bo.category.toLong()
-        this[table.parent] = bo.parent?.let { EntityID(it.toLong(), ContentExposedTableGen) }
+        this[table.master] = bo.master?.let { EntityID(it.toLong(), ContentCommonExposedTableGen) }
+        this[table.parent] = bo.parent?.let { EntityID(it.toLong(), ContentCommonExposedTableGen) }
         this[table.locale] = bo.locale.toLong()
         this[table.title] = bo.title
         this[table.summary] = bo.summary
@@ -64,7 +67,7 @@ open class ContentExposedPaGen : ExposedPaBase<ContentBo,ContentExposedTableGen>
  * 
  * If you need other fields, add them to the business object and then re-generate.
  */
-object ContentExposedTableGen : ExposedPaTable<ContentBo>(
+object ContentCommonExposedTableGen : ExposedPaTable<ContentCommonBo>(
     tableName = "content"
 ) {
 
@@ -72,7 +75,8 @@ object ContentExposedTableGen : ExposedPaTable<ContentBo>(
     internal val modifiedBy = reference("modified_by", AccountPrivateExposedTableGen)
     internal val status = reference("status", ContentStatusExposedTableGen)
     internal val category = reference("category", ContentCategoryExposedTableGen)
-    internal val parent = reference("parent", ContentExposedTableGen).nullable()
+    internal val master = reference("master", ContentCommonExposedTableGen).nullable()
+    internal val parent = reference("parent", ContentCommonExposedTableGen).nullable()
     internal val locale = reference("locale", LocaleExposedTableGen)
     internal val title = varchar("title", 100)
     internal val summary = varchar("summary", 1000)

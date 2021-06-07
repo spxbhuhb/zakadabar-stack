@@ -5,6 +5,7 @@ package zakadabar.lib.demo.backend
 
 import zakadabar.lib.blobs.backend.BlobBlBase
 import zakadabar.lib.demo.data.TestBlob
+import zakadabar.lib.demo.data.TestBo
 
 class TestBlobBl : BlobBlBase<TestBlob, TestBo>(
     TestBlob::class,

@@ -15,12 +15,16 @@ import zakadabar.stack.data.schema.BoSchema
  * @property  id            Id of the locale record.
  * @property  name          Name of the locale.
  * @property  description   Description of the locale.
+ * @property  status        Status of the locale, only public locales are available for general use.
  */
 @Serializable
 class LocaleBo(
-    override var id: EntityId<LocaleBo>,
-    var name: String,
-    var description: String
+
+    override var id : EntityId<LocaleBo>,
+    var name : String,
+    var description : String,
+    var status : LocaleStatus
+
 ) : EntityBo<LocaleBo> {
 
     companion object : EntityBoCompanion<LocaleBo>("locale")
@@ -30,7 +34,9 @@ class LocaleBo(
 
     override fun schema() = BoSchema {
         + ::id
-        + ::name min 2 max 100 blank false
+        + ::name blank false min 2 max 100
         + ::description
+        + ::status
     }
+
 }

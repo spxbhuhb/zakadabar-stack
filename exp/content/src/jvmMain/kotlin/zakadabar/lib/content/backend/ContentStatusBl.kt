@@ -1,11 +1,9 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.content.backend.sub
+package zakadabar.lib.content.backend
 
-import zakadabar.lib.content.data.sub.ContentStatusBo
-import zakadabar.stack.backend.authorize.Authorizer
-import zakadabar.stack.backend.authorize.EmptyAuthorizer
+import zakadabar.lib.content.data.ContentStatusBo
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 
 /**
@@ -19,6 +17,6 @@ open class ContentStatusBl : EntityBusinessLogicBase<ContentStatusBo>(
 
     override val pa = ContentStatusExposedPaGen()
 
-    override val authorizer : Authorizer<ContentStatusBo> = EmptyAuthorizer()
-    
+    override val authorizer by provider()
+
 }

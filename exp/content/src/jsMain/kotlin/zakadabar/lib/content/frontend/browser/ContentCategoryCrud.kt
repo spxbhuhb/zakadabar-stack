@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.content.frontend.browser
 
-import zakadabar.lib.content.data.sub.ContentCategoryBo
+import zakadabar.lib.content.data.ContentCategoryBo
 import zakadabar.stack.frontend.application.target
 import zakadabar.stack.frontend.application.translate
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget

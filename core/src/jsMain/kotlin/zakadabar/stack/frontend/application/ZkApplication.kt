@@ -12,6 +12,7 @@ import zakadabar.stack.frontend.builtin.modal.ZkModalContainer
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
 import zakadabar.stack.resources.ZkBuiltinStrings
+import zakadabar.stack.resources.ZkStringStore
 import zakadabar.stack.text.TranslationProvider
 import zakadabar.stack.util.InstanceStore
 
@@ -81,6 +82,8 @@ open class ZkApplication {
 
     var services = InstanceStore<Any>()
 
+    val stringStores = mutableListOf<ZkStringStore>()
+
     lateinit var stringStore: ZkBuiltinStrings
 
     lateinit var dock: ZkDock
@@ -149,6 +152,10 @@ open class ZkApplication {
         if (locale.isBlank()) {
             document.body?.innerText = "Could not initialize locale."
             throw IllegalStateException()
+        }
+
+        stringStores.forEach {
+            store += it
         }
 
         services.firstOrNull<TranslationProvider>()?.translate(store, locale)

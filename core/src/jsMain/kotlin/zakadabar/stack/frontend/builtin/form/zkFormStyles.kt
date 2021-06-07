@@ -55,7 +55,7 @@ object ZkFormStyles : ZkCssStyleSheet() {
     // -------------------------------------------------------------------------
 
     val buttons by cssClass {
-
+        marginBottom = theme.spacingStep / 2
     }
 
     // -------------------------------------------------------------------------
@@ -289,33 +289,6 @@ object ZkFormStyles : ZkCssStyleSheet() {
     // Iamge
     // -------------------------------------------------------------------------
 
-    val imageDropArea by cssClass {
-        boxSizing = "border-box"
-        flexGrow = 1
-        width = "100%"
-        height = "100%"
-        display = "flex"
-        flexDirection = "row"
-        justifyContent = "center"
-        alignItems = "center"
-        color = ZkColors.Gray.c800
-        fill = ZkColors.Gray.c800
-
-        padding = 20
-
-        borderRadius = theme.cornerRadius
-        border = "1px dotted lightgray"
-
-        on(":hover") {
-            backgroundColor = ZkColors.LightBlue.c50
-        }
-    }
-
-    val imageDropAreaMessage by cssClass {
-        fontSize = 14
-        fontWeight = 400
-        paddingLeft = 6
-    }
 
     // -------------------------------------------------------------------------
     // Invalid field list

@@ -1,6 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
+
 package zakadabar.lib.i18n.frontend
 
 import zakadabar.lib.i18n.data.LocaleBo
@@ -14,13 +15,13 @@ import zakadabar.stack.frontend.builtin.table.ZkTable
 /**
  * CRUD target for [LocaleBo].
  *
- * Generated with Bender at 2021-05-30T09:24:34.063Z.
+ * Generated with Bender at 2021-06-07T02:42:38.715Z.
  */
-class Locales : ZkCrudTarget<LocaleBo>() {
+class LocaleCrud : ZkCrudTarget<LocaleBo>() {
     init {
         companion = LocaleBo.Companion
         boClass = LocaleBo::class
-        pageClass = LocaleForm::class
+        editorClass = LocaleForm::class
         tableClass = LocaleTable::class
     }
 }
@@ -28,7 +29,7 @@ class Locales : ZkCrudTarget<LocaleBo>() {
 /**
  * Form for [LocaleBo].
  *
- * Generated with Bender at 2021-05-30T09:24:34.064Z.
+ * Generated with Bender at 2021-06-07T02:42:38.715Z.
  */
 class LocaleForm : ZkForm<LocaleBo>() {
     override fun onCreate() {
@@ -39,6 +40,7 @@ class LocaleForm : ZkForm<LocaleBo>() {
                 + bo::id
                 + bo::name
                 + bo::description
+                + bo::status
             }
         }
     }
@@ -47,13 +49,13 @@ class LocaleForm : ZkForm<LocaleBo>() {
 /**
  * Table for [LocaleBo].
  *
- * Generated with Bender at 2021-05-30T09:24:34.064Z.
+ * Generated with Bender at 2021-06-07T02:42:38.715Z.
  */
 class LocaleTable : ZkTable<LocaleBo>() {
 
     override fun onConfigure() {
 
-        crud = target<Locales>()
+        crud = target<LocaleCrud>()
 
         titleText = translate<LocaleTable>()
 
@@ -61,9 +63,10 @@ class LocaleTable : ZkTable<LocaleBo>() {
         search = true
         export = true
 
-        // LocaleBo::id // record id and opt record id is not supported yet
+        + LocaleBo::id
         + LocaleBo::name
         + LocaleBo::description
+        + LocaleBo::status
 
         + actions()
     }

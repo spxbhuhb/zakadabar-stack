@@ -1,11 +1,11 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.content.backend.sub
+package zakadabar.lib.content.backend
 
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import zakadabar.lib.content.data.sub.ContentCategoryBo
+import zakadabar.lib.content.data.ContentCategoryBo
 import zakadabar.stack.backend.exposed.ExposedPaBase
 import zakadabar.stack.backend.exposed.ExposedPaTable
 import zakadabar.stack.backend.exposed.entityId

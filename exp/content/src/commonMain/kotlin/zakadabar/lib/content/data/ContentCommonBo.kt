@@ -5,8 +5,6 @@ package zakadabar.lib.content.data
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import zakadabar.lib.content.data.sub.ContentCategoryBo
-import zakadabar.lib.content.data.sub.ContentStatusBo
 import zakadabar.lib.i18n.data.LocaleBo
 import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.entity.EntityBo
@@ -24,22 +22,23 @@ import zakadabar.stack.data.schema.BoSchema
  * the backend.
  */
 @Serializable
-class ContentBo(
+class ContentCommonBo(
 
-    override var id : EntityId<ContentBo>,
+    override var id : EntityId<ContentCommonBo>,
     var modifiedAt : Instant,
     var modifiedBy : EntityId<AccountPublicBo>,
     var status : EntityId<ContentStatusBo>,
     var category : EntityId<ContentCategoryBo>,
-    var parent : EntityId<ContentBo>?,
+    var master: EntityId<ContentCommonBo>?,
+    var parent : EntityId<ContentCommonBo>?,
     var locale : EntityId<LocaleBo>,
     var title : String,
     var summary : String,
     var motto : String
 
-) : EntityBo<ContentBo> {
+) : EntityBo<ContentCommonBo> {
 
-    companion object : EntityBoCompanion<ContentBo>("zkl-content")
+    companion object : EntityBoCompanion<ContentCommonBo>("zkl-content-common")
 
     override fun getBoNamespace() = boNamespace
     override fun comm() = comm
@@ -53,6 +52,7 @@ class ContentBo(
         + ::summary max 1000
         + ::status
         + ::category
+        + ::master
         + ::parent
         + ::motto max 200
     }

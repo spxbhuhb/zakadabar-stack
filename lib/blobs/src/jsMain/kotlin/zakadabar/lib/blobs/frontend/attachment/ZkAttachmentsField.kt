@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.lib.blobs.frontend.image
+package zakadabar.lib.blobs.frontend.attachment
 
 import kotlinx.browser.window
 import org.w3c.dom.DragEvent
@@ -39,11 +39,11 @@ import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.io
 
-open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
+open class ZkAttachmentsField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
     form: ZkForm<T>,
     private val comm: BlobCommInterface<BT,T>,
     private val reference: EntityId<T>? = null,
-    private val imageCountMax: Int? = null,
+    private val attachmentCountMax: Int? = null,
     private val disposition: String? = null,
     private val make: (File) -> BT
 ) : ZkFieldBase<T, Unit>(
@@ -55,15 +55,14 @@ open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
 
     override fun onCreate() {
         io {
-            element.style.display = "flex"
-            element.style.flexDirection = "row"
+            + blobStyles.attachmentField
 
-            form.fields += this@ZkImagesField
+            form.fields += this@ZkAttachmentsField
 
             if (form.mode != ZkElementMode.Create) {
                 reference?.let {
                     comm.listByReference(it, disposition).forEach { blob ->
-                        + ZkImagePreview(blob, onDelete = { preview -> onDelete(preview) }) marginRight 10 marginBottom 10
+                        + ZkAttachmentEntry(blob, onDelete = { preview -> onDelete(preview) }) marginRight 10 marginBottom 10
                     }
                 }
             }
@@ -122,15 +121,15 @@ open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
                     io {
                         val bo = make(file).create()
 
-                        val thumbnail = ZkImagePreview(bo, BlobCreateState.Starting, onDelete = { preview -> onDelete(preview) })
-                        thumbnail marginRight 10 marginBottom 10
+                        val entry = ZkAttachmentEntry(bo, BlobCreateState.Starting, onDelete = { preview -> onDelete(preview) })
+                        entry marginRight 10 marginBottom 10
 
                         // this will insert after the first thumbnail or at the beginning
-                        insertAfter(thumbnail, find<ZkImagePreview<*>>().lastOrNull())
+                        insertAfter(entry, find<ZkAttachmentEntry<*>>().lastOrNull())
                         updateDropArea()
 
                         io { // this second IO block is here, so the the upload will be launched in the background
-                            comm.upload(bo, file, thumbnail::update)
+                            comm.upload(bo, file, entry::update)
                         }
                     }
                 }
@@ -139,7 +138,7 @@ open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
     }
 
     private fun allowUpload(): Boolean {
-        return (imageCountMax == null || imageCountMax - childElements.count { it is ZkImagePreview<*> } > 0)
+        return (attachmentCountMax == null || attachmentCountMax - childElements.count { it is ZkAttachmentEntry<*> } > 0)
     }
 
     private fun updateDropArea() {
@@ -150,14 +149,14 @@ open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
         }
     }
 
-    private suspend fun onDelete(preview: ZkImagePreview<BT>): Boolean {
+    private suspend fun onDelete(preview: ZkAttachmentEntry<BT>): Boolean {
         if (! ZkConfirmDialog(stringStore.confirmation.capitalize(), stringStore.confirmDelete).run()) return false
 
         if (form.mode != ZkElementMode.Create) {
             comm.delete(preview.bo.id)
         }
 
-        this@ZkImagesField -= preview
+        this@ZkAttachmentsField -= preview
 
         updateDropArea()
 
@@ -170,7 +169,7 @@ open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
 
     override suspend fun onCreateSuccess(created: EntityBo<*>) {
         // update blobs with the proper reference id
-        find<ZkImagePreview<BT>>().forEach {
+        find<ZkAttachmentEntry<BT>>().forEach {
             @Suppress("UNCHECKED_CAST") // it is right
             it.bo.reference = created.id as EntityId<T>
             it.bo.update()

@@ -90,7 +90,7 @@ server += TestBlobBl()
 
 ```kotlin
 + ZkImagesField(this, TestBlob.comm, bo.id) {
-   TestBlob(EntityId(), bo.id, it.name, it.type, it.size.toLong())
+   TestBlob(EntityId(), bo.id, "", it.name, it.type, it.size.toLong())
 }
 ```
 

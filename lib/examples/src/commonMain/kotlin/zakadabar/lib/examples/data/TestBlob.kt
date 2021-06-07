@@ -12,6 +12,7 @@ import zakadabar.stack.data.entity.EntityId
 class TestBlob(
     override var id: EntityId<TestBlob>,
     override var reference: EntityId<SimpleExampleBo>?,
+    override var disposition: String,
     override var name: String,
     override var mimeType: String,
     override var size: Long

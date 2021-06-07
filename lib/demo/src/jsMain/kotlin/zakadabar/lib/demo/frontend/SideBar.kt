@@ -9,6 +9,10 @@ import zakadabar.lib.accounts.frontend.accounts.Account
 import zakadabar.lib.accounts.frontend.accounts.Accounts
 import zakadabar.lib.accounts.frontend.login.Login
 import zakadabar.lib.accounts.frontend.roles.Roles
+import zakadabar.lib.content.frontend.browser.ContentCategoryCrud
+import zakadabar.lib.content.frontend.browser.ContentCrud
+import zakadabar.lib.content.frontend.browser.ContentStatusCrud
+import zakadabar.lib.content.resources.contentStrings
 import zakadabar.lib.demo.frontend.pages.TestCrud
 import zakadabar.lib.demo.resources.strings
 import zakadabar.lib.i18n.frontend.Locales
@@ -32,10 +36,18 @@ class SideBar : ZkSideBar() {
         }
 
         withRole(StackRoles.securityOfficer) {
+
+            + group(contentStrings.content) {
+                + item<ContentCrud>()
+                + item<ContentCategoryCrud>()
+                + item<ContentStatusCrud>()
+            }
+
             + group(translate<Accounts>()) {
                 + item<Accounts>()
                 + item<Roles>()
             }
+
             + group(translate<Translations>()) {
                 + item<Locales>()
                 + item<Translations>()
