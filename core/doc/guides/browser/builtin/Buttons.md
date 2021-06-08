@@ -106,6 +106,31 @@ Add a combined button:
 }
 ```
 
+### Click With Event
+
+`onClick` parameter of the constructor is for functions that don't care about the
+event. If you need the event object you can add an event handler with `on`.
+
+This example is for a button that downloads a file. It is good practice using
+the `url` parameter, so search engines can follow the link. On the other hand,
+we really don't want the default behaviour here.
+
+Note that we passed an empty `onClick`, so default behaviour of `ZkButton` is
+also suppressed (it would think that this is a local url and change the nav
+state).
+
+```kotlin
++ ZkButton(
+  iconSource = ZkIcons.fileDownload,
+  flavour = ZkFlavour.Info,
+  url = bo.url(),
+  onClick = {  }
+).on("click") { event ->
+  event.preventDefault()
+  window.location = bo.url()
+}
+```
+
 ## Built-In Variations [source code](../../../../../lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)
 
 ### Primary
