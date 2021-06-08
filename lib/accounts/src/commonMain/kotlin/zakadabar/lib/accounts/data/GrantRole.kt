@@ -25,6 +25,6 @@ class GrantRole(
 
     override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
 
-    companion object : ActionBoCompanion<ActionStatusBo>(RoleBo.boNamespace)
+    companion object : ActionBoCompanion(RoleBo.boNamespace)
 
 }

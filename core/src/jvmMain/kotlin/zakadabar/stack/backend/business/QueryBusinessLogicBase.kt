@@ -23,7 +23,7 @@ abstract class QueryBusinessLogicBase<RQ : QueryBo<RS>, RS : BaseBo>(
     override val pa = EmptyPersistenceApi<EmptyEntityBo>()
 
     override val namespace
-        get() = (queryBoClass.companionObject !!.objectInstance as QueryBoCompanion<*>).boNamespace
+        get() = (queryBoClass.companionObject !!.objectInstance as QueryBoCompanion).boNamespace
 
     override val router = router {
         query(queryBoClass, ::execute)

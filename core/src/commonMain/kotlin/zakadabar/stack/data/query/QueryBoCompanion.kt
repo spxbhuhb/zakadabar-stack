@@ -3,14 +3,9 @@
  */
 package zakadabar.stack.data.query
 
-import kotlinx.serialization.KSerializer
-
-
-abstract class QueryBoCompanion<RESULT : Any>(
+abstract class QueryBoCompanion(
     val boNamespace: String
 ) {
-
-    abstract fun serializer(): KSerializer<RESULT>
 
     private var _comm: QueryCommInterface? = null
 

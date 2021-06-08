@@ -3,6 +3,6 @@
  */
 package zakadabar.stack.data.query
 
-actual fun makeQueryComm(companion: QueryBoCompanion<*>): QueryCommInterface {
+actual fun makeQueryComm(companion: QueryBoCompanion): QueryCommInterface {
     return QueryComm(companion)
 }

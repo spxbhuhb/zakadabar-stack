@@ -27,11 +27,11 @@ data class ExampleQuery(
     var intValue: Int?,
     var stringValue: String?,
     var limit: Int
-) : QueryBo<ExampleResult> {
+) : QueryBo<List<ExampleResult>> {
 
     override suspend fun execute() = comm.query(this, serializer(), ListSerializer(ExampleResult.serializer()))
 
-    companion object : QueryBoCompanion<BuiltinBo>(BuiltinBo.boNamespace)
+    companion object : QueryBoCompanion(BuiltinBo.boNamespace)
 
     override fun schema() = BoSchema {
         + ::booleanValue

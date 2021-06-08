@@ -12,10 +12,10 @@ import zakadabar.stack.data.query.QueryBoCompanion
 @Serializable
 class AccountByRole(
     val roleName: String
-) : QueryBo<AccountPublicBo> {
+) : QueryBo<List<AccountPublicBo>> {
 
     override suspend fun execute() = comm.query(this, serializer(), ListSerializer(AccountPublicBo.serializer()))
 
-    companion object : QueryBoCompanion<AccountPublicBo>(AccountPublicBo.boNamespace)
+    companion object : QueryBoCompanion(AccountPublicBo.boNamespace)
 
 }

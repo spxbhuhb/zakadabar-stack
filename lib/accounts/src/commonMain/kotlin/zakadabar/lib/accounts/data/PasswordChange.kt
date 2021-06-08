@@ -29,7 +29,7 @@ class PasswordChange(
 
 ) : ActionBo<ActionStatusBo> {
 
-    companion object : ActionBoCompanion<ActionStatusBo>(AccountPrivateBo.boNamespace)
+    companion object : ActionBoCompanion(AccountPrivateBo.boNamespace)
 
     override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
 

@@ -9,7 +9,6 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import zakadabar.stack.data.CommBase.Companion.baseUrl
 import zakadabar.stack.data.CommBase.Companion.client
-import zakadabar.stack.data.entity.EntityComm
 import zakadabar.stack.util.PublicApi
 
 /**
@@ -19,7 +18,7 @@ import zakadabar.stack.util.PublicApi
  */
 @PublicApi
 open class QueryComm(
-    private val companion: QueryBoCompanion<*>
+    private val companion: QueryBoCompanion
 ) : QueryCommInterface {
 
     @PublicApi

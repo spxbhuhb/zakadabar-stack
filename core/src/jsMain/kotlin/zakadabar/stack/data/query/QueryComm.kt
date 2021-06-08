@@ -18,7 +18,7 @@ import zakadabar.stack.util.PublicApi
  */
 @PublicApi
 open class QueryComm(
-    private val companion: QueryBoCompanion<*>
+    private val companion: QueryBoCompanion
 ) : CommBase(), QueryCommInterface {
 
     @PublicApi

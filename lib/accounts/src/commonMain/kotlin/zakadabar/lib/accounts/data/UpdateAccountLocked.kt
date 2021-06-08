@@ -25,7 +25,7 @@ class UpdateAccountLocked(
 
 ) : ActionBo<ActionStatusBo> {
 
-    companion object : ActionBoCompanion<PasswordChange>(AccountPrivateBo.boNamespace)
+    companion object : ActionBoCompanion(AccountPrivateBo.boNamespace)
 
     override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
 

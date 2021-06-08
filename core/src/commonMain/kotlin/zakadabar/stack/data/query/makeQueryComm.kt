@@ -6,4 +6,4 @@ package zakadabar.stack.data.query
 /**
  * Global function to make a [QueryCommInterface].
  */
-expect fun makeQueryComm(companion: QueryBoCompanion<*>): QueryCommInterface
+expect fun makeQueryComm(companion: QueryBoCompanion): QueryCommInterface
