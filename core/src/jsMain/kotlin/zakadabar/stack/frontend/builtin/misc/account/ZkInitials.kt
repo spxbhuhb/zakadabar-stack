@@ -16,13 +16,13 @@ class ZkInitials(val name: String) : ZkElement() {
         + zkAccountStyles.avatar
 
         innerText = if (name.length < 2) {
-            name.toUpperCase()
+            name.uppercase()
         } else {
             val e = name.split(" ")
             if (e.size < 2) {
-                name.substring(0, 2).toUpperCase()
+                name.substring(0, 2).uppercase()
             } else {
-                "${e[0][0].toUpperCase()}${e[1][0].toUpperCase()}"
+                "${e[0][0].uppercaseChar()}${e[1][0].uppercaseChar()}"
             }
         }
 

@@ -17,6 +17,7 @@ version = "2021.6.7"
 val isSnapshot = version.toString().contains("SNAPSHOT")
 
 // common
+val kotlinVersion = "1.5.0"
 val ktorVersion = "1.4.3"
 val coroutinesVersion = "1.3.9"
 val serializationVersion = "1.0.0-RC2"
@@ -58,6 +59,7 @@ kotlin {
 
         commonMain {
             dependencies {
+                api("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
                 api("org.jetbrains.kotlinx:kotlinx-datetime:$datetimeVersion")

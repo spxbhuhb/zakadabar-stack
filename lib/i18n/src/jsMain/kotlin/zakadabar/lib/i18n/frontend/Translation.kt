@@ -1,3 +1,6 @@
+/*
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ */
 package zakadabar.lib.i18n.frontend
 
 import zakadabar.lib.i18n.data.LocaleBo
@@ -18,7 +21,7 @@ class TranslationCrud : ZkCrudTarget<TranslationBo>() {
     init {
         companion = TranslationBo.Companion
         boClass = TranslationBo::class
-        pageClass = TranslationForm::class
+        editorClass = TranslationForm::class
         tableClass = TranslationTable::class
     }
 }

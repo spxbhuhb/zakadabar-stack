@@ -12,7 +12,7 @@ class Accounts : ZkCrudTarget<AccountPrivateBo>() {
         companion = AccountPrivateBo.Companion
         boClass = AccountPrivateBo::class
         tableClass = Table::class
-        pageClass = Form::class
+        editorClass = Form::class
     }
 
 }

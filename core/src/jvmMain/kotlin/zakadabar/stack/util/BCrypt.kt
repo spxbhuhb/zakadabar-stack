@@ -600,6 +600,7 @@ class BCrypt {
          * @return    an array containing the decoded bytes
          * @throws IllegalArgumentException if maxolen is invalid
          */
+        @Suppress("SpellCheckingInspection", "SameParameterValue")
         @Throws(IllegalArgumentException::class)
         private fun decode_base64(s: String, maxolen: Int): ByteArray {
             val rs = StringBuffer()
@@ -614,20 +615,20 @@ class BCrypt {
             var o: Int
             require(maxolen > 0) { "Invalid maxolen" }
             while (off < slen - 1 && olen < maxolen) {
-                c1 = char64(s[off ++].toInt())
-                c2 = char64(s[off ++].toInt())
+                c1 = char64(s[off ++].code)
+                c2 = char64(s[off ++].code)
                 if (c1 == - 1 || c2 == - 1) break
                 o = c1 shl 2
                 o = o or (c2 and 0x30 shr 4)
                 rs.append(o.toChar())
                 if (++ olen >= maxolen || off >= slen) break
-                c3 = char64(s[off ++].toInt())
-                if (c3.toInt() == - 1) break
+                c3 = char64(s[off ++].code)
+                if (c3 == - 1) break
                 o = (c2 and 0x0f shl 4)
                 o = o or (c3 and 0x3c shr 2)
                 rs.append(o.toChar())
                 if (++ olen >= maxolen || off >= slen) break
-                c4 = char64(s[off ++].toInt())
+                c4 = char64(s[off ++].code)
                 o = (c3 and 0x03 shl 6)
                 o = o or c4
                 rs.append(o.toChar())
@@ -636,7 +637,7 @@ class BCrypt {
             ret = ByteArray(olen)
             off = 0
             while (off < olen) {
-                ret[off] = rs[off].toByte()
+                ret[off] = rs[off].code.toByte()
                 off ++
             }
             return ret
@@ -679,7 +680,7 @@ class BCrypt {
             val hashed: ByteArray
             var minor = 0.toChar()
             val rounds: Int
-            var off = 0
+            val off : Int
             val rs = StringBuffer()
             require(! (salt[0] != '$' || salt[1] != '2')) { "Invalid salt version" }
             if (salt[2] == '$') off = 3 else {
@@ -725,19 +726,6 @@ class BCrypt {
          * hashing to apply - the work factor therefore increases as
          * 2**log_rounds.
          * @param random        an instance of SecureRandom to use
-         * @return    an encoded salt value
-         */
-        /**
-         * Generate a salt for use with the BCrypt.hashpw() method
-         * @param log_rounds    the log2 of the number of rounds of
-         * hashing to apply - the work factor therefore increases as
-         * 2**log_rounds.
-         * @return    an encoded salt value
-         */
-        /**
-         * Generate a salt for use with the BCrypt.hashpw() method,
-         * selecting a reasonable default for the number of hashing
-         * rounds to apply
          * @return    an encoded salt value
          */
         @JvmOverloads

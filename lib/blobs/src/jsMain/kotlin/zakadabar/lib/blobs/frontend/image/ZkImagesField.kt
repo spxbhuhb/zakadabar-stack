@@ -38,6 +38,7 @@ import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.io
+import zakadabar.stack.text.capitalized
 
 open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
     form: ZkForm<T>,
@@ -151,7 +152,7 @@ open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
     }
 
     private suspend fun onDelete(preview: ZkImagePreview<BT>): Boolean {
-        if (! ZkConfirmDialog(stringStore.confirmation.capitalize(), stringStore.confirmDelete).run()) return false
+        if (! ZkConfirmDialog(stringStore.confirmation.capitalized(), stringStore.confirmDelete).run()) return false
 
         if (form.mode != ZkElementMode.Create) {
             comm.delete(preview.bo.id)

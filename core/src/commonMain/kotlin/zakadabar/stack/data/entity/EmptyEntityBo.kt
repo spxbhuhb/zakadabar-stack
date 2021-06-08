@@ -12,7 +12,7 @@ object EmptyEntityBo : EntityBo<EmptyEntityBo> {
 
     override var id: EntityId<EmptyEntityBo>
         get() = throw IllegalStateException("EmptyEntityBo has no ID.")
-        set(value) {
+        set(_) {
             throw IllegalStateException("EmptyEntityBo has no ID.")
         }
 
