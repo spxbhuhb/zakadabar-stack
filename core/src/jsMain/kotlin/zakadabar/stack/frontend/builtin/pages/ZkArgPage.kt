@@ -5,7 +5,10 @@ package zakadabar.stack.frontend.builtin.pages
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
-import zakadabar.stack.frontend.application.*
+import zakadabar.stack.frontend.application.ZkAppLayout
+import zakadabar.stack.frontend.application.ZkAppRouting
+import zakadabar.stack.frontend.application.ZkNavState
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
@@ -35,7 +38,7 @@ open class ZkArgPage<T>(
 
     open fun open(args: T) {
         val a = encodeURIComponent(Json.encodeToString(serializer, args))
-        application.changeNavState("/$viewName", "args=$a")
+        application.changeNavState(this, "args=$a")
     }
 
     override fun route(routing: ZkAppRouting, state: ZkNavState): ZkElement {
