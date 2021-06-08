@@ -30,7 +30,7 @@ class ContentCommonBo(
     var status : EntityId<ContentStatusBo>,
     var category : EntityId<ContentCategoryBo>,
     var master: EntityId<ContentCommonBo>?,
-    var parent : EntityId<ContentCommonBo>?,
+    var position: Int,
     var locale : EntityId<LocaleBo>?,
     var title : String,
     var summary : String,
@@ -48,13 +48,14 @@ class ContentCommonBo(
         + ::modifiedAt 
         + ::modifiedBy
         + ::locale
-        + ::title max 100
-        + ::summary max 1000
         + ::status
         + ::category
         + ::master
-        + ::parent
+        + ::position
         + ::motto max 200
+        + ::title max 100
+        + ::summary max 1000
+
     }
 
 }

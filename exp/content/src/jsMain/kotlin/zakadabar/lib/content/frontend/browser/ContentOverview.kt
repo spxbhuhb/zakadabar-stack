@@ -12,11 +12,12 @@ import zakadabar.stack.frontend.application.target
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.input.ZkCheckBox
 import zakadabar.stack.frontend.builtin.pages.ZkPage
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.builtin.table.columns.ZkCustomColumn
 import zakadabar.stack.frontend.util.io
 
-class ContentOverview : ZkPage() {
+class ContentOverview : ZkPage(css = zkPageStyles.fixed) {
 
     override fun onConfigure() {
         setAppTitle = false // let the table do it

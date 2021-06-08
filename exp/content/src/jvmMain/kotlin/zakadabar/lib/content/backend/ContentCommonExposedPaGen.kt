@@ -37,7 +37,7 @@ open class ContentExposedPaGen : ExposedPaBase<ContentCommonBo,ContentCommonExpo
         status = this[table.status].entityId(),
         category = this[table.category].entityId(),
         master = this[table.master]?.entityId(),
-        parent = this[table.parent]?.entityId(),
+        position = this[table.position],
         locale = this[table.locale]?.entityId(),
         title = this[table.title],
         summary = this[table.summary],
@@ -50,7 +50,7 @@ open class ContentExposedPaGen : ExposedPaBase<ContentCommonBo,ContentCommonExpo
         this[table.status] = bo.status.toLong()
         this[table.category] = bo.category.toLong()
         this[table.master] = bo.master?.let { EntityID(it.toLong(), ContentCommonExposedTableGen) }
-        this[table.parent] = bo.parent?.let { EntityID(it.toLong(), ContentCommonExposedTableGen) }
+        this[table.position] = bo.position
         this[table.locale] = bo.locale?.let { EntityID(it.toLong(), LocaleExposedTableGen) }
         this[table.title] = bo.title
         this[table.summary] = bo.summary
@@ -76,7 +76,7 @@ object ContentCommonExposedTableGen : ExposedPaTable<ContentCommonBo>(
     internal val status = reference("status", ContentStatusExposedTableGen)
     internal val category = reference("category", ContentCategoryExposedTableGen)
     internal val master = reference("master", ContentCommonExposedTableGen).nullable()
-    internal val parent = reference("parent", ContentCommonExposedTableGen).nullable()
+    internal val position = integer("position")
     internal val locale = reference("locale", LocaleExposedTableGen).nullable()
     internal val title = varchar("title", 100)
     internal val summary = varchar("summary", 1000)
