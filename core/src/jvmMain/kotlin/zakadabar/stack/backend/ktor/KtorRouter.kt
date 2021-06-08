@@ -19,6 +19,7 @@ import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.data.query.QueryBo
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
 
@@ -47,7 +48,7 @@ open class KtorRouter<T : EntityBo<T>>(
         actionClassList += (actionClass to actionFunc) as (Pair<KClass<out BaseBo>, (Executor, BaseBo) -> BaseBo>)
     }
 
-    override fun <RQ : Any, RS : Any> query(queryClass: KClass<RQ>, queryFunc: (Executor, RQ) -> RS) {
+    override fun <RQ : QueryBo<RS>, RS : Any> query(queryClass: KClass<RQ>, queryFunc: (Executor, RQ) -> RS) {
         @Suppress("UNCHECKED_CAST") // the parameter setup above ensures consistency
         queryClassList += (queryClass to queryFunc) as Pair<KClass<out BaseBo>, (Executor, BaseBo) -> Any>
     }

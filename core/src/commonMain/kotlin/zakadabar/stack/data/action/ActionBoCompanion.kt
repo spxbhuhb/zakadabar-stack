@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.data.action
 
-abstract class ActionBoCompanion<RESPONSE : Any>(
+abstract class ActionBoCompanion(
     val boNamespace: String
 ) {
 

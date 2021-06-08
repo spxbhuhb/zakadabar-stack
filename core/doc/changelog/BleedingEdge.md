@@ -14,14 +14,15 @@ next month.
 **lib: blobs**
 
 - `BlobBo.disposition` new property
-- `zkImageStyles` renamed to `blobStyles`
-- `zkFormStyles.imageDropArea` - moved to `blobStyles`
-- `zkFormStyles.imageDropAreaMessage` - moved to `blobStyles`
+- `zkImageStyles` rename to `blobStyles`
+- `zkFormStyles.imageDropArea` - move to `blobStyles`
+- `zkFormStyles.imageDropAreaMessage` - move to `blobStyles`
 
 **lib: i18n**
 
 - `Locale.status` new property
-- `Locales` renamed to `LocalesCrud`
+- `Locales` rename to `LocaleCrud`
+- `Translations` rename to `TranslationCrud`
 
 ## Migration
 
@@ -41,6 +42,12 @@ Search for `QueryBo<T>` and replace it with `QueryBo<List<T>>` (manually).
 
 ---
 
+Search for `QueryBusinessLogicBase` and add `List` to second parameter
+
+`class SimpleStandaloneQueryBl : QueryBusinessLogicBase<SimpleStandaloneQuery, List<SimpleQueryResult>>(`
+
+---
+
 ## Core
 
 added:
@@ -50,9 +57,10 @@ added:
 
 changed:
 
-- QueryBo type parameter is not a list
-- QueryBoCompanion has no type parameter
-- ActionBoCompanion has no type parameter  
+- `QueryBo` type parameter is not a list
+- `QueryBoCompanion` has no type parameter
+- `ActionBoCompanion` has no type parameter  
+- `Router.query` change type parameter RQ from Any to QueryBo<RS> to ensure type safety
 - `ZkStringStore.merge` - also merge into child stores
 
 ## Lib: Blobs

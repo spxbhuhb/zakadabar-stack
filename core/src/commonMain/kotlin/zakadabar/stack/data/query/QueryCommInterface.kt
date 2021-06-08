@@ -18,6 +18,6 @@ interface QueryCommInterface {
      *
      * // TODO add throws docs
      */
-    suspend fun <REQUEST : Any, RESPONSE> query(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<List<RESPONSE>>): List<RESPONSE>
+    suspend fun <REQUEST : Any, RESPONSE> query(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<RESPONSE>): RESPONSE
 
 }

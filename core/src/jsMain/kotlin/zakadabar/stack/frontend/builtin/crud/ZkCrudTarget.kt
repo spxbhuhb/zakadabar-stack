@@ -33,7 +33,7 @@ open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
     lateinit var editorClass: KClass<out ZkCrudEditor<T>>
     lateinit var tableClass: KClass<out ZkTable<T>>
 
-    @Deprecated("use editorClass instead", ReplaceWith("editorClass"))
+    @Deprecated("EOL: 2021.7.1 use editorClass instead", ReplaceWith("editorClass"))
     var pageClass
        get() = editorClass
        set(value) {
@@ -82,24 +82,36 @@ open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
     open fun create(): ZkElement {
         val container = ZkElement()
 
-        val bo = boClass.newInstance()
-        bo.schema().setDefaults()
+        io {
+            val bo = boClass.newInstance()
+            bo.schema().setDefaults()
 
-        val page = pageClass.newInstance()
-        page.bo = bo
-        page.openUpdate = { openUpdate(it.id) }
-        page.mode = ZkElementMode.Create
+            val editor = editorClass.newInstance()
+            editor.bo = bo
+            editor.openUpdate = { openUpdate(it.id) }
+            editor.mode = ZkElementMode.Create
 
-        page as ZkElement
+            onBeforeCreate(editor)
 
-        container build {
-            + zkPageStyles.scrollable
-            + div(zkPageStyles.content) {
-                + page
+            editor as ZkElement
+
+            container build {
+                + zkPageStyles.scrollable
+                + div(zkPageStyles.content) {
+                    + editor
+                }
             }
         }
 
         return container
+    }
+
+    /**
+     * Called after the editor is created but before it is added to the
+     * page. Provides place for last-step adjustments.
+     */
+    open suspend fun onBeforeCreate(editor : ZkCrudEditor<T>) {
+
     }
 
     open fun read(recordId: EntityId<T>): ZkElement {
@@ -107,17 +119,17 @@ open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
         val container = ZkElement()
 
         io {
-            val page = pageClass.newInstance()
-            page.bo = companion.read(recordId)
-            page.openUpdate = { openUpdate(it.id) }
-            page.mode = ZkElementMode.Read
+            val editor = editorClass.newInstance()
+            editor.bo = companion.read(recordId)
+            editor.openUpdate = { openUpdate(it.id) }
+            editor.mode = ZkElementMode.Read
 
-            page as ZkElement
+            editor as ZkElement
 
             container build {
                 + zkPageStyles.scrollable
                 + div(zkPageStyles.content) {
-                    + page
+                    + editor
                 }
             }
 
@@ -131,17 +143,17 @@ open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
         val container = ZkElement()
 
         io {
-            val page = pageClass.newInstance()
-            page.bo = companion.read(recordId)
-            page.openUpdate = { openUpdate(it.id) }
-            page.mode = ZkElementMode.Update
+            val editor = editorClass.newInstance()
+            editor.bo = companion.read(recordId)
+            editor.openUpdate = { openUpdate(it.id) }
+            editor.mode = ZkElementMode.Update
 
-            page as ZkElement
+            editor as ZkElement
 
             container build {
                 + zkPageStyles.scrollable
                 + div(zkPageStyles.content) {
-                    + page
+                    + editor
                 }
             }
 
@@ -155,17 +167,17 @@ open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
         val container = ZkElement()
 
         io {
-            val page = pageClass.newInstance()
-            page.bo = companion.read(recordId)
-            page.openUpdate = { openUpdate(it.id) }
-            page.mode = ZkElementMode.Delete
+            val editor = editorClass.newInstance()
+            editor.bo = companion.read(recordId)
+            editor.openUpdate = { openUpdate(it.id) }
+            editor.mode = ZkElementMode.Delete
 
-            page as ZkElement
+            editor as ZkElement
 
             container build {
                 + zkPageStyles.scrollable
                 + div(zkPageStyles.content) {
-                    + page
+                    + editor
                 }
             }
 

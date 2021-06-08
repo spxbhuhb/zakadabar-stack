@@ -11,7 +11,7 @@ val contentStrings = Strings()
 @Suppress("unused")
 class Strings : ZkStringStore() {
     val content by "Content"
-    val contentCrud by "Contents"
+    val contentOverview by "Content Overview"
     val contentCategoryCrud by "Content Categories"
     val contentStatusCrud by "Content Statuses"
 

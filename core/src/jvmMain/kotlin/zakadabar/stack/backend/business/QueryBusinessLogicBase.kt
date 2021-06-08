@@ -16,7 +16,7 @@ import kotlin.reflect.full.companionObject
 /**
  * Base class for standalone query (without entity) business logics.
  */
-abstract class QueryBusinessLogicBase<RQ : QueryBo<RS>, RS : BaseBo>(
+abstract class QueryBusinessLogicBase<RQ : QueryBo<RS>, RS : Any>(
     private val queryBoClass: KClass<RQ>
 ) : EntityBusinessLogicBase<EmptyEntityBo>(EmptyEntityBo::class) {
 
@@ -29,7 +29,7 @@ abstract class QueryBusinessLogicBase<RQ : QueryBo<RS>, RS : BaseBo>(
         query(queryBoClass, ::execute)
     }
 
-    abstract fun execute(executor : Executor, bo : RQ) : List<RS>
+    abstract fun execute(executor : Executor, bo : RQ) : RS
 
     override fun listWrapper(executor: Executor): List<EmptyEntityBo> {
         throw NotImplementedError("${this::class.simpleName} does not support CRUD operations")

@@ -14,7 +14,7 @@ import zakadabar.stack.frontend.builtin.table.ZkTable
  *
  * Generated with Bender at 2021-05-30T09:38:55.859Z.
  */
-class Translations : ZkCrudTarget<TranslationBo>() {
+class TranslationCrud : ZkCrudTarget<TranslationBo>() {
     init {
         companion = TranslationBo.Companion
         boClass = TranslationBo::class
@@ -52,7 +52,7 @@ class TranslationTable : ZkTable<TranslationBo>() {
 
     override fun onConfigure() {
 
-        crud = target<Translations>()
+        crud = target<TranslationCrud>()
 
         titleText = translate<TranslationTable>()
 

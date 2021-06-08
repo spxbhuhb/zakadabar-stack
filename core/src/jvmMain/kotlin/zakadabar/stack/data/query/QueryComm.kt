@@ -22,7 +22,7 @@ open class QueryComm(
 ) : QueryCommInterface {
 
     @PublicApi
-    override suspend fun <RQ : Any, RS> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<List<RS>>): List<RS> {
+    override suspend fun <RQ : Any, RS> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<RS>): RS {
 
         val q = Json.encodeToString(requestSerializer, request).encodeURLPath()
 

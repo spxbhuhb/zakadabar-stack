@@ -241,6 +241,11 @@ object ZkFormStyles : ZkCssStyleSheet() {
         }
     }
 
+    val disabledSelect by cssClass {
+        backgroundColor = theme.disabledInputBackgroundColor
+        color = theme.disabledInputTextColor
+    }
+
     val selectOptionList by cssClass {
         position = "absolute"
         zIndex = 100

@@ -3,6 +3,6 @@
  */
 package zakadabar.stack.data.action
 
-actual fun makeActionComm(companion: ActionBoCompanion<*>): ActionCommInterface {
+actual fun makeActionComm(companion: ActionBoCompanion): ActionCommInterface {
     return ActionComm(companion)
 }

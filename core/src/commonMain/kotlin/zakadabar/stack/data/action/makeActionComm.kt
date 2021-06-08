@@ -6,4 +6,4 @@ package zakadabar.stack.data.action
 /**
  * Global function to make a [ActionCommInterface].
  */
-expect fun makeActionComm(companion: ActionBoCompanion<*>): ActionCommInterface
+expect fun makeActionComm(companion: ActionBoCompanion): ActionCommInterface

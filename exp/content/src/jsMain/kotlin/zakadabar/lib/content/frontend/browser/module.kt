@@ -11,7 +11,8 @@ fun install(routing: ZkAppRouting) {
     with(routing) {
         + ContentStatusCrud()
         + ContentCategoryCrud()
-        + ContentCrud()
+        + ContentOverview()
+        + ContentEditor()
     }
 }
 

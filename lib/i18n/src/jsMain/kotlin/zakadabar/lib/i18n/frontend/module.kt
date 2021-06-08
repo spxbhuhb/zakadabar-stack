@@ -4,6 +4,7 @@
 package zakadabar.lib.i18n.frontend
 
 import zakadabar.lib.i18n.data.TranslationsByLocale
+import zakadabar.lib.i18n.resources.i18nStrings
 import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.application.ZkApplication
 import zakadabar.stack.resources.ZkStringStore
@@ -11,13 +12,14 @@ import zakadabar.stack.text.TranslationProvider
 
 fun install(routing: ZkAppRouting) {
     with(routing) {
-        + Locales()
-        + Translations()
+        + LocaleCrud()
+        + TranslationCrud()
     }
 }
 
 fun install(application : ZkApplication) {
     application.services += TranslationProviderImpl()
+    application.stringStores += i18nStrings
 }
 
 class TranslationProviderImpl : TranslationProvider {

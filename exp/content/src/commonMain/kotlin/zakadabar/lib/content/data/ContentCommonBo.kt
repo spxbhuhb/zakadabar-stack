@@ -31,7 +31,7 @@ class ContentCommonBo(
     var category : EntityId<ContentCategoryBo>,
     var master: EntityId<ContentCommonBo>?,
     var parent : EntityId<ContentCommonBo>?,
-    var locale : EntityId<LocaleBo>,
+    var locale : EntityId<LocaleBo>?,
     var title : String,
     var summary : String,
     var motto : String

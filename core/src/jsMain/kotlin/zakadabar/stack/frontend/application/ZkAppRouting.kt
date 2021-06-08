@@ -52,6 +52,8 @@ abstract class ZkAppRouting(
 
         nextLayout = defaultLayout // when not specified, use the default layout
 
+        navState = state
+
         val nextTarget = if (state.viewName.isEmpty()) {
             home.route(this, state)
         } else {
@@ -70,8 +72,6 @@ abstract class ZkAppRouting(
         }
 
         activeTarget = nextTarget
-
-        navState = state
 
         if (activeLayout.lifeCycleState == ZkElementState.Initialized) {
             activeLayout.onCreate()
