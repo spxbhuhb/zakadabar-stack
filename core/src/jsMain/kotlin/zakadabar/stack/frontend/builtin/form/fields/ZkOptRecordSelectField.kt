@@ -29,7 +29,7 @@ open class ZkOptRecordSelectField<T : BaseBo, ST>(
 ) : ZkSelectBase<T, EntityId<ST>>(form, prop.name, sortOptions, options) {
 
     override fun fromString(string: String): EntityId<ST> {
-        return items.first().first
+        return EntityId(string)
     }
 
     override fun getPropValue() = prop.get()

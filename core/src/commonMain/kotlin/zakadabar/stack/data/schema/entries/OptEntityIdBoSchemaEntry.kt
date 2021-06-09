@@ -21,10 +21,7 @@ import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoPropertyConstraintImpl
 import zakadabar.stack.data.schema.BoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.descriptor.BoConstraintType
-import zakadabar.stack.data.schema.descriptor.BoProperty
-import zakadabar.stack.data.schema.descriptor.BooleanBoConstraint
-import zakadabar.stack.data.schema.descriptor.EntityIdBoProperty
+import zakadabar.stack.data.schema.descriptor.*
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty0
@@ -83,11 +80,12 @@ class OptEntityIdBoSchemaEntry<T : Any>(
     override fun toBoProperty() = EntityIdBoProperty(
         kProperty.name,
         isOptional(),
-        emptyList(),
+        constraints(),
         kClass.simpleName!!,
         defaultValue as EntityId<BaseBo>,
         kProperty.get() as EntityId<BaseBo>
     )
 
+    override fun constraints() = emptyList<BoConstraint>()
 
 }

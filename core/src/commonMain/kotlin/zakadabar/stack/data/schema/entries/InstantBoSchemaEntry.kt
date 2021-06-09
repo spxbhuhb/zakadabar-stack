@@ -141,9 +141,11 @@ class InstantBoSchemaEntry(val kProperty: KMutableProperty0<Instant>) : BoSchema
     override fun toBoProperty() = InstantBoProperty(
         kProperty.name,
         isOptional(),
-        rules.map { it.toBoConstraint() },
+        constraints(),
         defaultValue,
         kProperty.get()
     )
+
+    override fun constraints() = rules.map { it.toBoConstraint() }
 
 }

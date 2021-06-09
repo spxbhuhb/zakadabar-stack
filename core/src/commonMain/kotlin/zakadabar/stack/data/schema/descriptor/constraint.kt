@@ -14,7 +14,8 @@ enum class BoConstraintType {
     NotEquals,
     After,
     Before,
-    Format
+    Format,
+    Custom
 }
 
 @Serializable

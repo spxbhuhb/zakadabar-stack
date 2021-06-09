@@ -108,8 +108,11 @@ class OptStringBoSchemaEntry(val kProperty: KMutableProperty0<String?>) : BoSche
     override fun toBoProperty() = StringBoProperty(
         kProperty.name,
         isOptional(),
-        rules.map { it.toBoConstraint() },
+        constraints(),
         defaultValue,
         kProperty.get()
     )
+
+    override fun constraints() = rules.map { it.toBoConstraint() }
+
 }
