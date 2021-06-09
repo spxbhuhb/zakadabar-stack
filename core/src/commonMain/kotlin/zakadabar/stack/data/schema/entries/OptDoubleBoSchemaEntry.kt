@@ -107,9 +107,11 @@ class OptDoubleBoSchemaEntry(val kProperty: KMutableProperty0<Double?>) : BoSche
     override fun toBoProperty() = DoubleBoProperty(
         kProperty.name,
         isOptional(),
-        rules.map { it.toBoConstraint() },
+        constraints(),
         defaultValue,
         kProperty.get()
     )
+
+    override fun constraints() = rules.map { it.toBoConstraint() }
 
 }

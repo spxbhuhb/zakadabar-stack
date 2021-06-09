@@ -195,6 +195,24 @@ open class BoSchema() {
         return true
     }
 
+    /**
+     * Get a constraints of a property.
+     *
+     * @param  propName  name of the property
+     *
+     * @return list of constraints, empty when there are no constraints
+     *
+     * @throws NoSuchElementException  when there is no property with the given name
+     */
+    fun constraints(propName: String) : List<BoConstraint> {
+        entries.forEach { entry ->
+            if (entry.key.name == propName) {
+                return entry.value.constraints()
+            }
+        }
+        throw NoSuchElementException()
+    }
+
     // FIXME package and class for BoDescriptor
     fun toBoDescriptor() = BoDescriptor("", "", "", entries.mapNotNull { it.value.toBoProperty() })
 
@@ -214,6 +232,7 @@ interface BoSchemaEntry<T> {
     fun setDefault()
     fun push(bo: BoProperty)
     fun toBoProperty(): BoProperty?
+    fun constraints() : List<BoConstraint>
 }
 
 interface BoPropertyConstraintImpl<T> {

@@ -20,6 +20,7 @@ import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.schema.BoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.data.schema.descriptor.BaseBoBoProperty
+import zakadabar.stack.data.schema.descriptor.BoConstraint
 import zakadabar.stack.data.schema.descriptor.BoProperty
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KMutableProperty0
@@ -52,9 +53,10 @@ class BaseBoBoSchemaEntry<T : BaseBo>(val kProperty: KMutableProperty0<T>) : BoS
     override fun toBoProperty() = BaseBoBoProperty(
         kProperty.name,
         isOptional(),
-        emptyList(),
+        constraints(),
         kProperty.get().schema().toBoDescriptor()
     )
 
+    override fun constraints() = emptyList<BoConstraint>()
 
 }

@@ -106,9 +106,11 @@ class SecretBoSchemaEntry(val kProperty: KMutableProperty0<Secret>) : BoSchemaEn
     override fun toBoProperty() = SecretBoProperty(
         kProperty.name,
         isOptional(),
-        rules.map { it.toBoConstraint() },
+        constraints(),
         defaultValue,
         kProperty.get()
     )
+
+    override fun constraints() = rules.map { it.toBoConstraint() }
 
 }

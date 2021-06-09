@@ -18,6 +18,7 @@ package zakadabar.stack.data.schema.entries
 
 import zakadabar.stack.data.schema.BoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.descriptor.BoConstraint
 import zakadabar.stack.data.schema.descriptor.BoProperty
 import zakadabar.stack.data.schema.descriptor.UuidBoProperty
 import zakadabar.stack.util.PublicApi
@@ -50,8 +51,11 @@ class OptUuidBoSchemaEntry(val kProperty: KMutableProperty0<UUID?>) : BoSchemaEn
     override fun toBoProperty() = UuidBoProperty(
         kProperty.name,
         isOptional(),
-        emptyList(),
+        constraints(),
         defaultValue,
         kProperty.get()
     )
+
+    override fun constraints() = emptyList<BoConstraint>()
+
 }

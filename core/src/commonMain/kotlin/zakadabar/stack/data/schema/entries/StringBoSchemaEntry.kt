@@ -135,8 +135,11 @@ class StringBoSchemaEntry(val kProperty: KMutableProperty0<String>) : BoSchemaEn
     override fun toBoProperty() = StringBoProperty(
         kProperty.name,
         isOptional(),
-        emptyList(),
+        constraints(),
         defaultValue,
         kProperty.get()
     )
+
+    override fun constraints() = rules.map { it.toBoConstraint() }
+
 }

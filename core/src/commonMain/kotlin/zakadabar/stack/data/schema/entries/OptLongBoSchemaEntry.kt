@@ -107,9 +107,11 @@ class OptLongBoSchemaEntry(val kProperty: KMutableProperty0<Long?>) : BoSchemaEn
     override fun toBoProperty() = LongBoProperty(
         kProperty.name,
         isOptional(),
-        rules.map { it.toBoConstraint() },
+        constraints(),
         defaultValue,
         kProperty.get()
     )
+
+    override fun constraints() = rules.map { it.toBoConstraint() }
 
 }
