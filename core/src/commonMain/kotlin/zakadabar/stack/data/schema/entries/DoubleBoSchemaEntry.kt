@@ -96,17 +96,17 @@ class DoubleBoSchemaEntry(val kProperty: KMutableProperty0<Double>) : BoSchemaEn
 
     override fun push(bo: BoProperty) {
         require(bo is DoubleBoProperty)
-        kProperty.set(bo.value!!)
+        kProperty.set(bo.value !!)
     }
-
 
     override fun toBoProperty() = DoubleBoProperty(
         kProperty.name,
         isOptional(),
-        rules.map { it.toBoConstraint() },
+        constraints(),
         defaultValue,
         kProperty.get()
     )
 
+    override fun constraints() = rules.map { it.toBoConstraint() }
 
 }

@@ -18,6 +18,7 @@ package zakadabar.stack.data.schema.entries
 
 import zakadabar.stack.data.schema.BoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.descriptor.BoConstraint
 import zakadabar.stack.data.schema.descriptor.BoProperty
 import zakadabar.stack.data.schema.descriptor.BooleanBoProperty
 import zakadabar.stack.util.PublicApi
@@ -49,9 +50,11 @@ class OptBooleanBoSchemaEntry(val kProperty: KMutableProperty0<Boolean?>) : BoSc
     override fun toBoProperty() = BooleanBoProperty(
         kProperty.name,
         isOptional(),
-        emptyList(),
+        constraints(),
         defaultValue,
         kProperty.get()
     )
+
+    override fun constraints() = emptyList<BoConstraint>()
 
 }

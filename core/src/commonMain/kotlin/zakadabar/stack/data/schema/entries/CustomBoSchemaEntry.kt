@@ -52,4 +52,7 @@ class CustomBoSchemaEntry(function: (report: ValidityReport, rule: BoPropertyCon
     }
 
     override fun toBoProperty(): BoProperty? = null
+
+    override fun constraints() = rules.map { it.toBoConstraint() }
+
 }

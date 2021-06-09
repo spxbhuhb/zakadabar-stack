@@ -107,9 +107,11 @@ class IntBoSchemaEntry(val kProperty: KMutableProperty0<Int>) : BoSchemaEntry<In
     override fun toBoProperty() = IntBoProperty(
         kProperty.name,
         isOptional(),
-        rules.map { it.toBoConstraint() },
+        constraints(),
         defaultValue,
         kProperty.get()
     )
+
+    override fun constraints() = rules.map { it.toBoConstraint() }
 
 }

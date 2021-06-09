@@ -18,6 +18,7 @@ package zakadabar.stack.data.schema.entries
 
 import zakadabar.stack.data.schema.BoSchemaEntry
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.descriptor.BoConstraint
 import zakadabar.stack.data.schema.descriptor.BoProperty
 import zakadabar.stack.data.schema.descriptor.EnumBoProperty
 import zakadabar.stack.util.PublicApi
@@ -56,11 +57,13 @@ class OptEnumBoSchemaEntry<E : Enum<E>>(
     override fun toBoProperty() = EnumBoProperty(
         kProperty.name,
         isOptional(),
-        emptyList(),
+        constraints(),
         values.first()::class.simpleName!!,
         values.map { it.name },
         defaultValue?.name,
         kProperty.get()?.name
     )
+
+    override fun constraints() = emptyList<BoConstraint>()
 
 }
