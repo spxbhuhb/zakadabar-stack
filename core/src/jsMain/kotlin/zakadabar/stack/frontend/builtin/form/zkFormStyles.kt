@@ -55,7 +55,8 @@ object ZkFormStyles : ZkCssStyleSheet() {
     // -------------------------------------------------------------------------
 
     val buttons by cssClass {
-        marginBottom = theme.spacingStep / 2
+        marginBlockStart = theme.spacingStep / 2
+        marginBlockEnd = theme.spacingStep / 2
     }
 
     // -------------------------------------------------------------------------

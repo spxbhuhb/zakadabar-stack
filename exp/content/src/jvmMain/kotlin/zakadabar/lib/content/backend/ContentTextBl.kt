@@ -4,8 +4,6 @@
 package zakadabar.lib.content.backend
 
 import zakadabar.lib.content.data.ContentTextBo
-import zakadabar.stack.backend.authorize.Authorizer
-import zakadabar.stack.backend.authorize.EmptyAuthorizer
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 
 /**
@@ -19,6 +17,6 @@ open class ContentTextBl : EntityBusinessLogicBase<ContentTextBo>(
 
     override val pa = ContentTextExposedPaGen()
 
-    override val authorizer : Authorizer<ContentTextBo> = EmptyAuthorizer()
+    override val authorizer by provider()
     
 }

@@ -10,6 +10,7 @@ next month.
 - `QueryBo` type parameter can be anything (not a list by default)
 - `QueryBoCompanion` has no type parameter
 - `ActionBoCompanion` has no type parameter  
+- `zkFormStyles.buttons` added `marginBlockStart` and `marginBlockEnd`
 
 **lib: blobs**
 

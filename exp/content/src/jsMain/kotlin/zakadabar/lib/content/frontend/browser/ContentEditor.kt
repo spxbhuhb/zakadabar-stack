@@ -15,10 +15,14 @@ import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.executor
 import zakadabar.stack.frontend.application.stringStore
-import zakadabar.stack.frontend.application.translate
+import zakadabar.stack.frontend.builtin.ZkElementMode
+import zakadabar.stack.frontend.builtin.ZkElementState
 import zakadabar.stack.frontend.builtin.crud.ZkCrudEditor
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.form.ZkForm
+import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
+import zakadabar.stack.frontend.util.default
+import zakadabar.stack.frontend.util.io
 
 class ContentEditor : ZkCrudTarget<ContentCommonBo>() {
 
@@ -30,11 +34,11 @@ class ContentEditor : ZkCrudTarget<ContentCommonBo>() {
 
     @Serializable
     class Args(
-        val master : EntityId<ContentCommonBo>?,
-        val locale : EntityId<LocaleBo>?,
+        val master: EntityId<ContentCommonBo>?,
+        val locale: EntityId<LocaleBo>?,
     )
 
-    fun openCreate(args : Args) {
+    fun openCreate(args: Args) {
         application.changeNavState(this, "create", "args=${Json.encodeToString(Args.serializer(), args)}")
     }
 
@@ -64,49 +68,80 @@ class ContentEditorForm : ZkForm<ContentCommonBo>() {
     override fun onCreate() {
         super.onCreate()
 
-        build(translate<ContentEditorForm>(), addButtons = false) {
-            + section(stringStore.basics) {
-                + bo::id
-                + select(bo::status) { ContentStatusBo.all().by { it.name } }
-                + select(bo::category) { ContentCategoryBo.all().by { it.name } } readOnly (bo.master != null)
-                + select(bo::locale) { LocaleBo.all().by { it.name } } readOnly true
-                + bo::title
-                + textarea(bo::summary)
-                + bo::motto
+        // this lets build be called from an IO block after onResume ran
+        if (lifeCycleState == ZkElementState.Resumed && setAppTitle) setAppTitleBar()
+
+        + ZkTabContainer {
+
+            + tab(stringStore.basics) {
+                + fieldGrid {
+                    + bo::id
+                    + select(bo::status) { ContentStatusBo.all().by { it.name } }
+                    + select(bo::category) { ContentCategoryBo.all().by { it.name } } readOnly (bo.master != null)
+                    + select(bo::locale) { LocaleBo.all().by { it.name } } readOnly true
+                    + bo::title
+                    + textarea(bo::summary)
+                    + bo::motto
+                }
+
+                + buttons()
+
             }
 
-            + buttons() // here to make difference between form fields and files
+            + tab(contentStrings.texts) {
 
-            + section(contentStrings.thumbnail) {
-                + ZkImagesField(
-                    this@ContentEditorForm,
-                    ContentBlobBo.comm,
-                    bo.id,
-                    disposition = ContentBlobDisposition.thumbnail
-                ) {
-                    ContentBlobBo(EntityId(), bo.id, ContentBlobDisposition.thumbnail, it.name, it.type, it.size.toLong())
+                io {
+                    ContentTextBo.all().forEach { textBo ->
+                        + ContentTextForm(this@ContentEditorForm).apply {
+                            bo = textBo
+                            mode = ZkElementMode.Update
+                        }
+                    }
+                }
+
+                + h3 { + contentStrings.newTextBlock }
+
+                + ContentTextForm(this@ContentEditorForm).apply {
+                    bo = default {
+                        content = this@ContentEditorForm.bo.id
+                    }
+                    mode = ZkElementMode.Create
                 }
             }
 
-            + section(contentStrings.images) {
-                + ZkImagesField(
-                    this@ContentEditorForm,
-                    ContentBlobBo.comm,
-                    bo.id,
-                    disposition = ContentBlobDisposition.image
-                ) {
-                    ContentBlobBo(EntityId(), bo.id, ContentBlobDisposition.image, it.name, it.type, it.size.toLong())
-                }
-            }
+            + tab(contentStrings.imagesAndAttachments) {
 
-            + section(contentStrings.attachments) {
-                + ZkAttachmentsField(
-                    this@ContentEditorForm,
-                    ContentBlobBo.comm,
-                    bo.id,
-                    disposition = ContentBlobDisposition.attachment
-                ) {
-                    ContentBlobBo(EntityId(), bo.id, ContentBlobDisposition.attachment, it.name, it.type, it.size.toLong())
+                + section(contentStrings.thumbnail) {
+                    + ZkImagesField(
+                        this@ContentEditorForm,
+                        ContentBlobBo.comm,
+                        bo.id,
+                        disposition = ContentBlobDisposition.thumbnail
+                    ) {
+                        ContentBlobBo(EntityId(), bo.id, ContentBlobDisposition.thumbnail, it.name, it.type, it.size.toLong())
+                    }
+                }
+
+                + section(contentStrings.images) {
+                    + ZkImagesField(
+                        this@ContentEditorForm,
+                        ContentBlobBo.comm,
+                        bo.id,
+                        disposition = ContentBlobDisposition.image
+                    ) {
+                        ContentBlobBo(EntityId(), bo.id, ContentBlobDisposition.image, it.name, it.type, it.size.toLong())
+                    }
+                }
+
+                + section(contentStrings.attachments) {
+                    + ZkAttachmentsField(
+                        this@ContentEditorForm,
+                        ContentBlobBo.comm,
+                        bo.id,
+                        disposition = ContentBlobDisposition.attachment
+                    ) {
+                        ContentBlobBo(EntityId(), bo.id, ContentBlobDisposition.attachment, it.name, it.type, it.size.toLong())
+                    }
                 }
             }
 
@@ -118,4 +153,9 @@ class ContentEditorForm : ZkForm<ContentCommonBo>() {
         bo.modifiedAt = Clock.System.now()
         bo.modifiedBy = executor.account.id
     }
+
+    fun onTextCreate(textBo : ContentTextBo) {
+
+    }
+
 }

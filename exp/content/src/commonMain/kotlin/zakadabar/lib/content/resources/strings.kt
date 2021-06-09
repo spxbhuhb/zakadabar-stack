@@ -15,6 +15,10 @@ class Strings : ZkStringStore() {
     val contentCategoryCrud by "Content Categories"
     val contentStatusCrud by "Content Statuses"
 
+    val texts by "Texts"
+    val newTextBlock by "Create a New Text Block"
+
+    val imagesAndAttachments = "Images & Attachments"
     val thumbnail by "Thumbnail"
     val images by "Images"
     val attachments by "Attachments"
