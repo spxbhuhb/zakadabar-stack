@@ -122,6 +122,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
         AccountPrivateDao.new {
             principal = newPrincipal
             fromDto(dto)
+            serverDescription.defaultLocale
         }.toDto()
     }
 
