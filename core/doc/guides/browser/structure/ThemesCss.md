@@ -269,6 +269,23 @@ val myClass by cssClass {
 }
 ```
 
+### Size Values
+
+Credit: I got the idea for this syntax from KVision, credit goes to [Robert Jaros](https://github.com/rjaros).
+
+You can use extension functions to convert numbers to strings:
+
+```kotlin
+10.px
+20.percent
+30.pt
+40.em
+50.rem
+60.vh
+70.vw
+80.fr
+```
+
 ### Shorthands
 
 There are some shorthand selectors defined for convenience. Use them like this:

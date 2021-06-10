@@ -37,11 +37,18 @@ class EntityIdBoSchemaEntry<T : Any>(
 
     override fun validate(report: ValidityReport) {
         val value = kProperty.get()
-        for (rule in rules) {
-            rule.validate(value, report)
+        if (value.isEmpty()) {
+            if (kProperty.name != "id" || ! report.allowEmptyId) {
+                report.fail(kProperty, BooleanBoConstraint(BoConstraintType.Empty, false))
+            }
+        } else {
+            for (rule in rules) {
+                rule.validate(value, report)
+            }
         }
     }
 
+    @Deprecated("EOL: 2021.7.1 - use '?' in the field declaration")
     inner class Empty(@PublicApi val validValue: Boolean) : BoPropertyConstraintImpl<EntityId<*>> {
 
         override fun validate(value: EntityId<*>, report: ValidityReport) {
@@ -53,6 +60,7 @@ class EntityIdBoSchemaEntry<T : Any>(
     }
 
     @PublicApi
+    @Deprecated("EOL: 2021.7.1 - use '?' in the field declaration")
     infix fun empty(validValue: Boolean): EntityIdBoSchemaEntry<T> {
         rules += Empty(validValue)
         return this

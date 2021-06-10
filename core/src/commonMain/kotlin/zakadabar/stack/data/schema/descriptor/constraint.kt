@@ -24,7 +24,7 @@ sealed class BoConstraint {
 }
 
 @Serializable
-class BooleanBoConstraint(
+data class BooleanBoConstraint(
     override val type: BoConstraintType,
     val value: Boolean
 ) : BoConstraint()

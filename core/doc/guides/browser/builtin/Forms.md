@@ -211,6 +211,12 @@ To use a textarea for a string field, use the `textarea` function:
 + textarea(bo::textAreaValue)
 ```
 
+To set the inner area height:
+
+```kotlin
++ textarea(bo::value) { area.style.height = 60.vh }
+```
+
 ### Customization
 
 #### label

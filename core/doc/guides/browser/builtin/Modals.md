@@ -16,6 +16,28 @@ Support for multiple parallel modals is not ready yet.
 
 <div data-zk-enrich="ModalExamples"></div>
 
+## Shorthands
+
+### withConfirm
+
+This shorthand shows a confirmation dialog and if the user confirmed the action, executes the
+passed function.
+
+```kotlin
+withConfirm {
+    println("Action executed!")
+}
+```
+
+The default implementation uses `localizedStrings.confirmation` as title and `localizedStrings.confirmDelete`
+as message. To change this, pass a title and/or a message:
+
+```kotlin
+withConfirm(strings.title, strings.message) {
+    println("Action executed!")
+}
+```
+
 ## Write a Modal With Build
 
 In this case the modal will be similar to the built-in modals: same styled title, content, buttons.
@@ -27,10 +49,9 @@ In this case the modal will be similar to the built-in modals: same styled title
 
 ```kotlin
 open class MyMessageDialog : ZkModalBase<Boolean>() {
-
-    override fun onCreate() {
-        super.onCreate()
-        build("My Title")
+  
+    override fun buildTitle() {
+        + "My Title"
     }
 
     override fun buildContent() {
@@ -103,6 +124,9 @@ io {
 
 ### Changes
 
+* 2021.6.10
+    * Add `withConfirm` shorthand.
+    * Fix build based example.
 * 2021.5.14
     * Add build function to make styled modals easily.
 * 2021.5.12

@@ -175,9 +175,17 @@ open class BoSchema() {
 
     fun custom(function: (report: ValidityReport, rule: BoPropertyConstraintImpl<Unit>) -> Unit) = CustomBoSchemaEntry(function)
 
+    /**
+     * Validates the BO that belogs to this schema.
+     *
+     * @param   allowEmptyId  Allow the "id" property (if exists and is an EntityId) to be empty.
+     *                        Used when creating entities.
+     *
+     * @return  a validity report that contains all failed constraints
+     */
     @PublicApi
-    fun validate(): ValidityReport {
-        val report = ValidityReport()
+    fun validate(allowEmptyId : Boolean = false): ValidityReport {
+        val report = ValidityReport(allowEmptyId)
         entries.forEach { it.value.validate(report) }
         return report
     }
@@ -204,7 +212,7 @@ open class BoSchema() {
      *
      * @throws NoSuchElementException  when there is no property with the given name
      */
-    fun constraints(propName: String) : List<BoConstraint> {
+    fun constraints(propName: String): List<BoConstraint> {
         entries.forEach { entry ->
             if (entry.key.name == propName) {
                 return entry.value.constraints()
@@ -232,7 +240,7 @@ interface BoSchemaEntry<T> {
     fun setDefault()
     fun push(bo: BoProperty)
     fun toBoProperty(): BoProperty?
-    fun constraints() : List<BoConstraint>
+    fun constraints(): List<BoConstraint>
 }
 
 interface BoPropertyConstraintImpl<T> {
@@ -241,17 +249,21 @@ interface BoPropertyConstraintImpl<T> {
 }
 
 class ValidityReport(
-    @PublicApi
-    val fails: MutableMap<String, MutableList<BoPropertyConstraintImpl<*>>> = mutableMapOf()
+    val allowEmptyId : Boolean = false,
+    val fails: MutableMap<String, MutableList<BoConstraint>> = mutableMapOf()
 ) {
-    fun fail(property: KProperty0<*>, validation: BoPropertyConstraintImpl<*>) {
-        fails.getOrPut(property.name) { mutableListOf() } += validation
+    fun fail(property: KProperty0<*>, constraintImpl: BoPropertyConstraintImpl<*>) {
+        fails.getOrPut(property.name) { mutableListOf() } += constraintImpl.toBoConstraint()
+    }
+
+    fun fail(property: KProperty0<*>, constraint: BoConstraint) {
+        fails.getOrPut(property.name) { mutableListOf() } += constraint
     }
 
     @PublicApi
     fun dump(): String {
         val lines = mutableListOf<String>()
-        fails.forEach { lines += "${it.key} : ${it.value.map { v -> v::class.simpleName }.joinToString(", ")}" }
+        fails.forEach { lines += "${it.key} : ${it.value.map { c -> c.toString() }.joinToString(", ")}" }
         return lines.joinToString("\n")
     }
 }

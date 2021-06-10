@@ -17,9 +17,6 @@
 package zakadabar.stack.frontend.builtin.form.fields
 
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.schema.descriptor.BoConstraintType
-import zakadabar.stack.data.schema.descriptor.BooleanBoConstraint
-import zakadabar.stack.data.schema.descriptor.IntBoConstraint
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
@@ -37,24 +34,6 @@ open class ZkStringField<T : BaseBo>(
         prop.set(value)
     }
 
-    override fun mandatoryMark() {
-
-        // Check if there are constraints that actually require a value. If there is no such
-        // constraint, we should not mark this field mandatory as it might confuse the user.
-
-        val constraints = form.schema.value.constraints(propName)
-
-        var mandatory = false
-        constraints.forEach {
-            when {
-                (it.type == BoConstraintType.Min && it is IntBoConstraint && it.value != 0) -> mandatory = true
-                (it.type == BoConstraintType.Blank && it is BooleanBoConstraint && ! it.value) -> mandatory = true
-            }
-        }
-
-        if (mandatory) {
-            super.mandatoryMark()
-        }
-    }
+    override fun needsMandatoryMark() = stringMandatoryMark()
 
 }

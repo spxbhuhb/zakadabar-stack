@@ -3,16 +3,16 @@
  */
 package zakadabar.stack.frontend.builtin.modal
 
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.util.io
+import zakadabar.stack.resources.localizedStrings
 import zakadabar.stack.text.capitalized
 
 open class ZkConfirmDialog(
     open val title: String? = null,
     open val message: String,
-    open val noLabel: String = stringStore.no.capitalized(),
-    open val yesLabel: String = stringStore.yes.capitalized(),
+    open val noLabel: String = localizedStrings.no.capitalized(),
+    open val yesLabel: String = localizedStrings.yes.capitalized(),
 ) : ZkModalBase<Boolean>() {
 
     override fun onCreate() {
