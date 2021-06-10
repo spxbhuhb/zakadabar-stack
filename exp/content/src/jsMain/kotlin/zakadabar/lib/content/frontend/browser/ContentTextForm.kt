@@ -11,9 +11,10 @@ import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.modal.withConfirm
 import zakadabar.stack.frontend.resources.ZkFlavour
+import zakadabar.stack.frontend.resources.ZkIcons
+import zakadabar.stack.frontend.resources.css.px
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.resources.localized
-import zakadabar.stack.resources.localizedStrings
 
 class ContentTextForm(
     private val parent: ZkElement
@@ -26,16 +27,23 @@ class ContentTextForm(
     override fun onCreate() {
         super.onCreate()
 
-        + section {
-            + select(bo::stereotype) { ContentStereotypeBo.all().by { it.key.localized } }
-            + textarea(bo::value) {
-                area.style.resize = "vertical"
+        + grid {
+            gridTemplateColumns = "1fr max-content"
+            gridGap = 20.px
+
+            + section {
+                + select(bo::stereotype) { ContentStereotypeBo.all().by { it.key.localized } }
+                + textarea(bo::value) {
+                    area.style.resize = "vertical"
+                }
             }
+
+            + ZkButton(ZkIcons.close, ZkFlavour.Danger, round = true) {
+                io { withConfirm { parent -= this } }
+            }
+
         }
 
-        + ZkButton(localizedStrings.delete, ZkFlavour.Danger, fill = false) {
-            io { withConfirm { parent -= this } }
-        }
     }
 
     override fun onInvalidSubmit() {

@@ -16,11 +16,12 @@ import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.executor
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
-import zakadabar.stack.frontend.builtin.button.buttonPrimary
+import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.crud.ZkCrudEditor
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
+import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.resources.localizedStrings
 
@@ -76,6 +77,7 @@ class ContentEditorForm : ZkForm<ContentCommonBo>() {
         + ZkTabContainer {
 
             + tab(localizedStrings.basics) {
+
                 + fieldGrid {
                     + bo::id
                     + select(bo::status) { ContentStatusBo.all().by { it.name } }
@@ -97,8 +99,10 @@ class ContentEditorForm : ZkForm<ContentCommonBo>() {
                     + ContentTextForm(textBlocks).apply { bo = it }
                 }
 
-                + buttonPrimary(contentStrings.newTextBlock) {
-                    + ContentTextForm(textBlocks).apply { bo = default { } }
+                + ZkButton(iconSource = ZkIcons.add) {
+                    insertFirst(
+                        ContentTextForm(textBlocks).apply { bo = default { } }
+                    )
                 }
 
             }
@@ -161,7 +165,7 @@ class ContentEditorForm : ZkForm<ContentCommonBo>() {
             textOk = textOk && it.validate(submit)
         }
 
-        return  commonOk && textOk
+        return commonOk && textOk
 
     }
 
