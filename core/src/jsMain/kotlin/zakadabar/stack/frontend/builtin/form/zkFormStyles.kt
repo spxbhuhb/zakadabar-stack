@@ -217,6 +217,7 @@ object ZkFormStyles : ZkCssStyleSheet() {
     // -------------------------------------------------------------------------
 
     val selectContainer by cssClass {
+        position = "relative"
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
@@ -248,7 +249,7 @@ object ZkFormStyles : ZkCssStyleSheet() {
     }
 
     val selectOptionList by cssClass {
-        position = "absolute"
+        position = "fixed"
         zIndex = 100
         outline = "none"
         backgroundColor = theme.inputBackgroundColor
