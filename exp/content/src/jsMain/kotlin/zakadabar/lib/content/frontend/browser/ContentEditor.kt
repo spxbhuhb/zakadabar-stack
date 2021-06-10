@@ -14,15 +14,15 @@ import zakadabar.lib.i18n.data.LocaleBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.executor
-import zakadabar.stack.frontend.application.stringStore
-import zakadabar.stack.frontend.builtin.ZkElementMode
+import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
+import zakadabar.stack.frontend.builtin.button.buttonPrimary
 import zakadabar.stack.frontend.builtin.crud.ZkCrudEditor
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
 import zakadabar.stack.frontend.util.default
-import zakadabar.stack.frontend.util.io
+import zakadabar.stack.resources.localizedStrings
 
 class ContentEditor : ZkCrudTarget<ContentCommonBo>() {
 
@@ -57,13 +57,15 @@ class ContentEditor : ZkCrudTarget<ContentCommonBo>() {
         editor.bo.locale = args.locale
 
         if (args.master != null) {
-            editor.bo.category = ContentCommonBo.read(args.master).category
+            editor.bo.stereotype = ContentCommonBo.read(args.master).stereotype
         }
     }
 
 }
 
 class ContentEditorForm : ZkForm<ContentCommonBo>() {
+
+    lateinit var textBlocks: ZkElement
 
     override fun onCreate() {
         super.onCreate()
@@ -73,15 +75,14 @@ class ContentEditorForm : ZkForm<ContentCommonBo>() {
 
         + ZkTabContainer {
 
-            + tab(stringStore.basics) {
+            + tab(localizedStrings.basics) {
                 + fieldGrid {
                     + bo::id
                     + select(bo::status) { ContentStatusBo.all().by { it.name } }
-                    + select(bo::category) { ContentCategoryBo.all().by { it.name } } readOnly (bo.master != null)
+                    + select(bo::stereotype) { ContentStereotypeBo.all().by { it.key } } readOnly (bo.master != null)
                     + select(bo::locale) { LocaleBo.all().by { it.name } } readOnly true
                     + bo::title
                     + textarea(bo::summary)
-                    + bo::motto
                 }
 
                 + buttons()
@@ -90,23 +91,16 @@ class ContentEditorForm : ZkForm<ContentCommonBo>() {
 
             + tab(contentStrings.texts) {
 
-                io {
-                    ContentTextBo.all().forEach { textBo ->
-                        + ContentTextForm(this@ContentEditorForm).apply {
-                            bo = textBo
-                            mode = ZkElementMode.Update
-                        }
-                    }
+                textBlocks = this
+
+                bo.textBlocks.forEach {
+                    + ContentTextForm(textBlocks).apply { bo = it }
                 }
 
-                + h3 { + contentStrings.newTextBlock }
-
-                + ContentTextForm(this@ContentEditorForm).apply {
-                    bo = default {
-                        content = this@ContentEditorForm.bo.id
-                    }
-                    mode = ZkElementMode.Create
+                + buttonPrimary(contentStrings.newTextBlock) {
+                    + ContentTextForm(textBlocks).apply { bo = default { } }
                 }
+
             }
 
             + tab(contentStrings.imagesAndAttachments) {
@@ -150,11 +144,24 @@ class ContentEditorForm : ZkForm<ContentCommonBo>() {
 
     override suspend fun onSubmitStart() {
         super.onSubmitStart()
+
         bo.modifiedAt = Clock.System.now()
         bo.modifiedBy = executor.account.id
+
+        bo.textBlocks = textBlocks.find<ContentTextForm>().map { it.bo }
+
     }
 
-    fun onTextCreate(textBo : ContentTextBo) {
+    override fun validate(submit: Boolean): Boolean {
+
+        var textOk = true
+        val commonOk = super.validate(submit)
+
+        textBlocks.find<ContentTextForm>().forEach {
+            textOk = textOk && it.validate(submit)
+        }
+
+        return  commonOk && textOk
 
     }
 

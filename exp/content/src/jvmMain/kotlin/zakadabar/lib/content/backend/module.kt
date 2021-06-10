@@ -8,9 +8,8 @@ import zakadabar.stack.backend.server
 fun install() {
     server += ContentCommonBl()
 
-    server += ContentCategoryBl()
+    server += ContentStereotypeBl()
     server += ContentStatusBl()
 
-    server += ContentTextBl()
     server += ContentBlobBl()
 }

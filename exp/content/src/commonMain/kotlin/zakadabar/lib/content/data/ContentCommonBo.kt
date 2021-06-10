@@ -28,13 +28,13 @@ class ContentCommonBo(
     var modifiedAt : Instant,
     var modifiedBy : EntityId<AccountPublicBo>,
     var status : EntityId<ContentStatusBo>,
-    var category : EntityId<ContentCategoryBo>,
+    var stereotype : EntityId<ContentStereotypeBo>,
     var master: EntityId<ContentCommonBo>?,
     var position: Int,
     var locale : EntityId<LocaleBo>?,
     var title : String,
     var summary : String,
-    var motto : String
+    var textBlocks : List<ContentTextBo> = emptyList()
 
 ) : EntityBo<ContentCommonBo> {
 
@@ -49,13 +49,12 @@ class ContentCommonBo(
         + ::modifiedBy
         + ::locale
         + ::status
-        + ::category
+        + ::stereotype
         + ::master
         + ::position
-        + ::motto max 200
         + ::title max 100
         + ::summary max 1000
-
+        // FIXME + ::textBlocks
     }
 
 }

@@ -10,7 +10,7 @@ import zakadabar.stack.frontend.application.ZkApplication
 fun install(routing: ZkAppRouting) {
     with(routing) {
         + ContentStatusCrud()
-        + ContentCategoryCrud()
+        + ContentStereotypeCrud()
         + ContentOverview()
         + ContentEditor()
     }

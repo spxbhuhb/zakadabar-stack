@@ -22,13 +22,13 @@ open class ContentCommonBl : EntityBusinessLogicBase<ContentCommonBo>(
     boClass = ContentCommonBo::class
 ) {
 
-    override val pa = ContentExposedPaGen()
+    override val pa = ContentCommonExposedPa()
 
     override val authorizer by provider()
 
     private val localeBl by module<LocaleBl>()
     private val contentStatusBl by module<ContentStatusBl>()
-    private val contentCategoryBl by module<ContentCategoryBl>()
+    private val contentStereotypeBl by module<ContentStereotypeBl>()
 
     override val router = router {
         query(OverviewQuery::class, ::overview)
@@ -53,7 +53,7 @@ open class ContentCommonBl : EntityBusinessLogicBase<ContentCommonBo>(
 
         val locales = localeBl.list(executor)
         val statuses = contentStatusBl.list(executor).sortedBy { it.id }
-        val categories = contentCategoryBl.list(executor).sortedBy { it.id }
+        val categories = contentStereotypeBl.list(executor).sortedBy { it.id }
 
         val bos = pa.list()
 
@@ -65,7 +65,7 @@ open class ContentCommonBl : EntityBusinessLogicBase<ContentCommonBo>(
             entries += OverviewEntry(
                 bo.id,
                 bo.title,
-                categories.first { it.id == bo.category }.name,
+                categories.first { it.id == bo.stereotype }.key,
                 statuses.first { it.id == bo.status }.name,
                 locales = MutableList(locales.size) { null }
             )

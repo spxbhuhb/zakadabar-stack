@@ -26,7 +26,7 @@ import zakadabar.stack.backend.exposed.entityId
  * - If you need other fields, add them to the business object and then re-generate.
  * - If you need other functions, please extend with `Gen` removed from the name.
  */
-open class ContentExposedPaGen : ExposedPaBase<ContentCommonBo,ContentCommonExposedTableGen>(
+open class ContentCommonExposedPaGen : ExposedPaBase<ContentCommonBo,ContentCommonExposedTableGen>(
     table = ContentCommonExposedTableGen
 ) {
 
@@ -35,26 +35,25 @@ open class ContentExposedPaGen : ExposedPaBase<ContentCommonBo,ContentCommonExpo
         modifiedAt = this[table.modifiedAt].toKotlinInstant(),
         modifiedBy = this[table.modifiedBy].entityId(),
         status = this[table.status].entityId(),
-        category = this[table.category].entityId(),
+        stereotype = this[table.stereotype].entityId(),
         master = this[table.master]?.entityId(),
         position = this[table.position],
         locale = this[table.locale]?.entityId(),
         title = this[table.title],
         summary = this[table.summary],
-        motto = this[table.motto]
-    )  
+        textBlocks = emptyList()
+    )
 
     override fun UpdateBuilder<*>.fromBo(bo: ContentCommonBo) {
         this[table.modifiedAt] = bo.modifiedAt.toJavaInstant()
         this[table.modifiedBy] = bo.modifiedBy.toLong()
         this[table.status] = bo.status.toLong()
-        this[table.category] = bo.category.toLong()
+        this[table.stereotype] = bo.stereotype.toLong()
         this[table.master] = bo.master?.let { EntityID(it.toLong(), ContentCommonExposedTableGen) }
         this[table.position] = bo.position
         this[table.locale] = bo.locale?.let { EntityID(it.toLong(), LocaleExposedTableGen) }
         this[table.title] = bo.title
         this[table.summary] = bo.summary
-        this[table.motto] = bo.motto
     }
 }
 
@@ -74,12 +73,11 @@ object ContentCommonExposedTableGen : ExposedPaTable<ContentCommonBo>(
     internal val modifiedAt = timestamp("modified_at")
     internal val modifiedBy = reference("modified_by", AccountPrivateExposedTableGen)
     internal val status = reference("status", ContentStatusExposedTableGen)
-    internal val category = reference("category", ContentCategoryExposedTableGen)
+    internal val stereotype = reference("stereotype", ContentStereotypeExposedTableGen)
     internal val master = reference("master", ContentCommonExposedTableGen).nullable()
     internal val position = integer("position")
     internal val locale = reference("locale", LocaleExposedTableGen).nullable()
     internal val title = varchar("title", 100)
     internal val summary = varchar("summary", 1000)
-    internal val motto = varchar("motto", 200)
 
 }
