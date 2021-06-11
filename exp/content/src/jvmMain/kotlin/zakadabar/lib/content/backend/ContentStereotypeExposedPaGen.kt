@@ -5,6 +5,7 @@ package zakadabar.lib.content.backend
 
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import zakadabar.lib.content.data.ContentStereotypeBo
 import zakadabar.stack.backend.exposed.ExposedPaBase
@@ -34,6 +35,11 @@ open class ContentStereotypeExposedPaGen : ExposedPaBase<ContentStereotypeBo,Con
         this[table.parent] = bo.parent?.let { EntityID(it.toLong(), ContentStereotypeExposedTableGen) }
         this[table.key] = bo.key
     }
+
+    fun byKey(key : String) =
+        table
+            .select{ table.key eq key }
+            .map { it.toBo() }
 }
 
 /**

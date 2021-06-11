@@ -6,6 +6,7 @@ package zakadabar.stack.frontend.builtin.crud
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityBoCompanion
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.frontend.application.ZkAppLayout
 import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.application.ZkNavState
 import zakadabar.stack.frontend.application.application
@@ -26,6 +27,7 @@ import kotlin.reflect.KClass
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
 open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
 
+    lateinit var layout: ZkAppLayout
     override var viewName = "${this::class.simpleName}"
 
     lateinit var companion: EntityBoCompanion<T>
@@ -48,6 +50,8 @@ open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
 
     @Suppress("UNCHECKED_CAST") // got lost in generics hell, probably fine
     override fun route(routing: ZkAppRouting, state: ZkNavState): ZkElement {
+        if (::layout.isInitialized) routing.nextLayout = layout
+
         if (state.segments.size == 2) return all()
         return when (state.segments[2]) {
             "all" -> all()

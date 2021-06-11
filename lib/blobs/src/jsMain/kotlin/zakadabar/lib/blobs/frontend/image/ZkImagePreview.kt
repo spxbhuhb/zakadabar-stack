@@ -43,14 +43,14 @@ open class ZkImagePreview<BT : BlobBo<BT,*>>(
 
     private fun ZkElement.renderImage() {
         + column {
-            + image(bo.url()) {
+            + image(bo.url) {
                 with(buildPoint.style) {
                     height = "${size}px"
                     width = "${size}px"
                 }
 
                 on(buildPoint, "click") { _ ->
-                    ZkFullScreenImageView(bo.url()) {
+                    ZkFullScreenImageView(bo.url) {
                         io {
                             val deleted = onDelete(this@ZkImagePreview)
                             if (deleted) it.hide()

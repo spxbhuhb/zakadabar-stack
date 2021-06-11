@@ -56,7 +56,7 @@ abstract class BlobBlBase<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
         }
     }
 
-    private suspend fun readContent(call: ApplicationCall) {
+    suspend fun readContent(call: ApplicationCall) {
         val blobId = call.parameters["blobId"]?.let { EntityId<T>(it) } ?: throw BadRequestException("missing blob id")
 
         val executor = call.executor()
@@ -83,7 +83,7 @@ abstract class BlobBlBase<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
     }
 
 
-    private suspend fun writeContent(call: ApplicationCall) {
+    suspend fun writeContent(call: ApplicationCall) {
         val blobId = call.parameters["blobId"]?.let { EntityId<T>(it) } ?: throw BadRequestException("missing blob id")
 
         val executor = call.executor()
@@ -110,7 +110,7 @@ abstract class BlobBlBase<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
     }
 
 
-    private suspend fun listByReference(call: ApplicationCall) {
+    suspend fun listByReference(call: ApplicationCall) {
         val blobId = call.parameters["referenceId"]?.let { EntityId<T>(it) } ?: throw BadRequestException("missing reference id")
         val disposition = call.parameters["disposition"]
 
@@ -127,5 +127,8 @@ abstract class BlobBlBase<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
 
         call.respond(result)
     }
+
+    open fun listByReference(entityId : EntityId<RT>, disposition : String? = null) =
+        pa.listByReference(entityId, disposition)
 
 }

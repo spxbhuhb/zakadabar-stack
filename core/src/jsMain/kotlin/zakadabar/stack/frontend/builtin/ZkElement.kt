@@ -107,6 +107,24 @@ open class ZkElement(
     val displayName
         get() = application.executor.account.displayName
 
+    var justifyContent: String
+        get() = buildPoint.style.getPropertyValue("justify-content")
+        set(value) {
+            buildPoint.style.setProperty("justify-content", value)
+        }
+
+    var alignItems: String
+        get() = buildPoint.style.getPropertyValue("align-items")
+        set(value) {
+            buildPoint.style.setProperty("align-items", value)
+        }
+
+    var alignSelf: String
+        get() = buildPoint.style.getPropertyValue("align-self")
+        set(value) {
+            buildPoint.style.setProperty("align-self", value)
+        }
+
     var gridAutoRows: String
         get() = buildPoint.style.getPropertyValue("grid-auto-rows")
         set(value) {

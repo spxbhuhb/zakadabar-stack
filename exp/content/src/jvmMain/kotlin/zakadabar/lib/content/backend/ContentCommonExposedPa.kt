@@ -7,6 +7,7 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import zakadabar.lib.content.data.ContentCommonBo
+import zakadabar.lib.content.data.ContentStereotypeBo
 import zakadabar.lib.content.data.ContentTextBo
 import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.exposed.entityId
@@ -70,5 +71,10 @@ class ContentCommonExposedPa : ContentCommonExposedPaGen() {
         super.delete(entityId)
         textTable.deleteWhere { textTable.content eq entityId.toLong() }
     }
+
+    fun byStereotype(stereotypeIds : List<ContentStereotypeBo>) =
+        table
+            .select { table.stereotype inList stereotypeIds.map { it.id.toLong() }}
+            .map { it.toBo() }
 
 }

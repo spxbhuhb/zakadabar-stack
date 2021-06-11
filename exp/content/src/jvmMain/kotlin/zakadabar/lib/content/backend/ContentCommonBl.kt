@@ -5,10 +5,7 @@
 package zakadabar.lib.content.backend
 
 import kotlinx.datetime.Clock
-import zakadabar.lib.content.data.ContentCommonBo
-import zakadabar.lib.content.data.Overview
-import zakadabar.lib.content.data.OverviewEntry
-import zakadabar.lib.content.data.OverviewQuery
+import zakadabar.lib.content.data.*
 import zakadabar.lib.i18n.backend.LocaleBl
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
@@ -27,8 +24,8 @@ open class ContentCommonBl : EntityBusinessLogicBase<ContentCommonBo>(
     override val authorizer by provider()
 
     private val localeBl by module<LocaleBl>()
-    private val contentStatusBl by module<ContentStatusBl>()
-    private val contentStereotypeBl by module<ContentStereotypeBl>()
+    private val statusBl by module<ContentStatusBl>()
+    private val stereotypeBl by module<ContentStereotypeBl>()
 
     override val router = router {
         query(OverviewQuery::class, ::overview)
@@ -52,8 +49,8 @@ open class ContentCommonBl : EntityBusinessLogicBase<ContentCommonBo>(
         val entries = mutableListOf<OverviewEntry>()
 
         val locales = localeBl.list(executor)
-        val statuses = contentStatusBl.list(executor).sortedBy { it.id }
-        val categories = contentStereotypeBl.list(executor).sortedBy { it.id }
+        val statuses = statusBl.list(executor).sortedBy { it.id }
+        val categories = stereotypeBl.list(executor).sortedBy { it.id }
 
         val bos = pa.list()
 
@@ -88,5 +85,8 @@ open class ContentCommonBl : EntityBusinessLogicBase<ContentCommonBo>(
             entries = entries
         )
     }
+
+    private fun byStereotype(executor: Executor, query: ByStereotypeKey) =
+        pa.byStereotype(stereotypeBl.byKey(query.key))
 
 }

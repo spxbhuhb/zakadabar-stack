@@ -18,5 +18,7 @@ open class ContentStereotypeBl : EntityBusinessLogicBase<ContentStereotypeBo>(
     override val pa = ContentStereotypeExposedPaGen()
 
     override val authorizer by provider()
-    
+
+    fun byKey(key : String) = pa.byKey(key)
+
 }

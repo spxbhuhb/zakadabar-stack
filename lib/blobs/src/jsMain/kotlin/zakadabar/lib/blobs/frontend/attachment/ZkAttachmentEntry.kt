@@ -50,11 +50,11 @@ open class ZkAttachmentEntry<BT : BlobBo<BT, *>>(
                 + ZkButton(
                     iconSource = ZkIcons.fileDownload,
                     flavour = ZkFlavour.Info,
-                    url = bo.url(),
+                    url = bo.url,
                     onClick = {  }
                 ).on("click") { event ->
                     event.preventDefault()
-                    window.location.href = bo.url()
+                    window.location.href = bo.url
                 }
             }
         }

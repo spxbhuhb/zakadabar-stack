@@ -65,7 +65,7 @@ class TestBlobTest {
 
             assertTrue(channel.receive())
 
-            val readBack = CommBase.client.get<ByteArray>("${CommBase.baseUrl}/${bo.url()}")
+            val readBack = CommBase.client.get<ByteArray>("${CommBase.baseUrl}/${bo.url}")
 
             assertEquals(contentText, readBack.decodeToString())
 
