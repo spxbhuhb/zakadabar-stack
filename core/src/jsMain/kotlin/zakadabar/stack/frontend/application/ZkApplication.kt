@@ -39,7 +39,7 @@ val stringStore
     get() = localizedStrings
 
 @Deprecated("EOL: 2021.8.1 use `localized` from `zakadabar.stack.resources`", ReplaceWith(
-    "localized", "import zakadabar.stack.resources.localized"
+    "localized<T>()", "import zakadabar.stack.resources.localized"
 ))
 inline fun <reified T> translate() = localizedStrings.getNormalized(T::class.simpleName!!)
 

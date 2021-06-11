@@ -9,6 +9,12 @@ import kotlin.reflect.KMutableProperty
 lateinit var localizedStrings: ZkBuiltinStrings
 
 /**
+ * Translates the normalized name of the given type from the string store.
+ * Returns with the type name if there is no translation in the string store.
+ */
+inline fun <reified T> localized() = localizedStrings.getNormalized(T::class.simpleName!!)
+
+/**
  * Translates the given string to the localized version from the string store.
  */
 inline val String.localized
