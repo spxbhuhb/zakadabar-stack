@@ -5,14 +5,14 @@ package zakadabar.lib.content.backend
 
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import zakadabar.lib.content.data.ContentStatusBo
+import zakadabar.lib.content.data.StatusBo
 import zakadabar.stack.backend.exposed.ExposedPaBase
 import zakadabar.stack.backend.exposed.ExposedPaTable
 import zakadabar.stack.backend.exposed.entityId
 
 
 /**
- * Exposed based Persistence API for ContentStatusBo.
+ * Exposed based Persistence API for StatusBo.
  * 
  * Generated with Bender at 2021-06-05T02:07:27.692Z.
  *
@@ -21,21 +21,21 @@ import zakadabar.stack.backend.exposed.entityId
  * - If you need other fields, add them to the business object and then re-generate.
  * - If you need other functions, please extend with `Gen` removed from the name.
  */
-open class ContentStatusExposedPaGen : ExposedPaBase<ContentStatusBo,ContentStatusExposedTableGen>(
-    table = ContentStatusExposedTableGen
+open class StatusExposedPaGen : ExposedPaBase<StatusBo,StatusExposedTableGen>(
+    table = StatusExposedTableGen
 ) {
-    override fun ResultRow.toBo() = ContentStatusBo(
+    override fun ResultRow.toBo() = StatusBo(
         id = this[table.id].entityId(),
         name = this[table.name]
     )  
 
-    override fun UpdateBuilder<*>.fromBo(bo: ContentStatusBo) {
+    override fun UpdateBuilder<*>.fromBo(bo: StatusBo) {
         this[table.name] = bo.name
     }
 }
 
 /**
- * Exposed based SQL table for ContentStatusBo.
+ * Exposed based SQL table for StatusBo.
  * 
  * Generated with Bender at 2021-06-05T02:07:27.693Z.
  *
@@ -43,7 +43,7 @@ open class ContentStatusExposedPaGen : ExposedPaBase<ContentStatusBo,ContentStat
  * 
  * If you need other fields, add them to the business object and then re-generate.
  */
-object ContentStatusExposedTableGen : ExposedPaTable<ContentStatusBo>(
+object StatusExposedTableGen : ExposedPaTable<StatusBo>(
     tableName = "content_status"
 ) {
 

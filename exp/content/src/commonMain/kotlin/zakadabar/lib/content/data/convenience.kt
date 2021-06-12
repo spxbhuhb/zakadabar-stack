@@ -3,5 +3,17 @@
  */
 package zakadabar.lib.content.data
 
-fun ContentCommonBo.firstOrNull(stereotype : ContentStereotypeBo) =
-    textBlocks.firstOrNull { it.stereotype == stereotype.id }?.value
+import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.util.PublicApi
+
+/**
+ * Gets the first text block of a given stereotype (or null if no such
+ * block exists).
+ *
+ * @param  stereotype  The stereotype to get the block for.
+ *
+ * @return the text block or null if no text block exists for the stereotype
+ */
+@PublicApi
+fun ContentBo.firstOrNull(stereotype : EntityId<StereotypeBo>?) =
+    textBlocks.firstOrNull { it.stereotype == stereotype }?.value

@@ -5,10 +5,10 @@ package zakadabar.lib.content.backend
 
 import org.jetbrains.exposed.sql.Table
 
-object ContentTextExposedTable : Table("content_text") {
+object TextBlockExposedTable : Table("content_text") {
 
-    internal val content = reference("content", ContentCommonExposedTableGen).index()
-    internal val stereotype = reference("stereotype", ContentStereotypeExposedTableGen)
+    internal val content = reference("content", ContentExposedTable).index()
+    internal val stereotype = reference("stereotype", StereotypeExposedTableGen)
     internal val value = text("value")
 
 }

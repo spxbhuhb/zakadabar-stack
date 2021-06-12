@@ -8,15 +8,13 @@ import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.data.query.QueryBoCompanion
 
 /**
- * Query contents by stereotype key.
+ * Get an overview of contents defined on the site.
  */
 @Serializable
-class ByStereotypeKey(
-    val key : String
-): QueryBo<ContentCommonBo> {
+class ContentOverviewQuery: QueryBo<ContentOverview> {
 
-    companion object : QueryBoCompanion(ContentCommonBo.boNamespace)
+    companion object : QueryBoCompanion(ContentBo.boNamespace)
 
-    override suspend fun execute() = comm.query(this, serializer(), ContentCommonBo.serializer())
+    override suspend fun execute() = comm.query(this, serializer(), ContentOverview.serializer())
 
 }

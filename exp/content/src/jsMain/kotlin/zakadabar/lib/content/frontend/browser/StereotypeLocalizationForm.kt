@@ -3,8 +3,8 @@
  */
 package zakadabar.lib.content.frontend.browser
 
-import zakadabar.lib.content.data.StereotypeBo
-import zakadabar.lib.content.data.TextBlockBo
+import zakadabar.lib.content.data.StereotypeLocalizationBo
+import zakadabar.lib.i18n.data.LocaleBo
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.button.ZkButton
@@ -14,11 +14,10 @@ import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.resources.css.px
 import zakadabar.stack.frontend.util.io
-import zakadabar.stack.resources.localized
 
-class ContentTextForm(
+class StereotypeLocalizationForm(
     private val parent: ZkElement
-) : ZkForm<TextBlockBo>() {
+) : ZkForm<StereotypeLocalizationBo>() {
 
     override fun onConfigure() {
         mode = ZkElementMode.Other
@@ -32,10 +31,8 @@ class ContentTextForm(
             gridGap = 20.px
 
             + section {
-                + select(bo::stereotype) { StereotypeBo.all().by { it.name.localized } }
-                + textarea(bo::value) {
-                    area.style.resize = "vertical"
-                }
+                + select(bo::locale) { LocaleBo.all().by { it.name } }
+                + bo::localizedName
             }
 
             + ZkButton(ZkIcons.close, ZkFlavour.Danger, round = true) {

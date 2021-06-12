@@ -4,12 +4,12 @@
 package zakadabar.lib.content.backend
 
 import zakadabar.lib.blobs.backend.BlobBlBase
-import zakadabar.lib.content.data.ContentBlobBo
-import zakadabar.lib.content.data.ContentCommonBo
+import zakadabar.lib.content.data.AttachedBlobBo
+import zakadabar.lib.content.data.ContentBo
 
-class ContentBlobBl : BlobBlBase<ContentBlobBo, ContentCommonBo>(
-   ContentBlobBo::class,
-   ContentBlobExposedPa()
+class AttachedBlobBl : BlobBlBase<AttachedBlobBo, ContentBo>(
+   AttachedBlobBo::class,
+   AttachedBlobExposedPa()
 ) {
    override val authorizer by provider()
 }

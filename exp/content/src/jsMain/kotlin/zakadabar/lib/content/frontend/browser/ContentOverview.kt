@@ -3,9 +3,9 @@
  */
 package zakadabar.lib.content.frontend.browser
 
-import zakadabar.lib.content.data.Overview
-import zakadabar.lib.content.data.OverviewEntry
-import zakadabar.lib.content.data.OverviewQuery
+import zakadabar.lib.content.data.ContentOverview
+import zakadabar.lib.content.data.ContentOverviewEntry
+import zakadabar.lib.content.data.ContentOverviewQuery
 import zakadabar.lib.i18n.data.LocaleBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.application.target
@@ -26,7 +26,7 @@ class ContentOverview : ZkPage(css = zkPageStyles.fixed) {
     override fun onResume() {
         super.onResume()
         io {
-            + ContentOverviewTable(OverviewQuery().execute())
+            + ContentOverviewTable(ContentOverviewQuery().execute())
         }
     }
 
@@ -37,8 +37,8 @@ class ContentOverview : ZkPage(css = zkPageStyles.fixed) {
 }
 
 class ContentOverviewTable(
-    private val overview: Overview
-) : ZkTable<OverviewEntry>() {
+    private val overview: ContentOverview
+) : ZkTable<ContentOverviewEntry>() {
 
     override fun onConfigure() {
 
@@ -46,10 +46,10 @@ class ContentOverviewTable(
         search = true
         export = true
 
-        + OverviewEntry::id
-        + OverviewEntry::title
-        + OverviewEntry::category
-        + OverviewEntry::status
+        + ContentOverviewEntry::id
+        + ContentOverviewEntry::title
+        + ContentOverviewEntry::stereotype
+        + ContentOverviewEntry::status
 
         overview.locales.forEachIndexed { index, locale ->
             + LocaleColumn(this, locale.id, index).apply { label = locale.name }
@@ -71,19 +71,19 @@ class ContentOverviewTable(
         target<ContentEditor>().openUpdate(EntityId(id))
     }
 
-    override fun getRowId(row: OverviewEntry) = row.id.value
+    override fun getRowId(row: ContentOverviewEntry) = row.id.value
 
     class LocaleColumn(
-        table: ZkTable<OverviewEntry>,
+        table: ZkTable<ContentOverviewEntry>,
         private val localeId: EntityId<LocaleBo>,
         private val localeIndex: Int
-    ) : ZkCustomColumn<OverviewEntry>(
+    ) : ZkCustomColumn<ContentOverviewEntry>(
         table = table
     ) {
-        override fun render(builder: ZkElement, index: Int, row: OverviewEntry) {
+        override fun render(builder: ZkElement, index: Int, row: ContentOverviewEntry) {
             with(builder) {
 
-                val localizedId = row.locales[localeIndex]
+                val localizedId = row.localizations[localeIndex]
 
                 + ZkCheckBox(readOnly = true, checked = localizedId != null)
                     .on("dblclick") { event ->

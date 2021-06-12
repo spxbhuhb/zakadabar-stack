@@ -13,9 +13,9 @@ import zakadabar.stack.data.schema.BoSchema
  * A text block with a stereotype for a content.
  */
 @Serializable
-class ContentTextBo(
+class TextBlockBo(
 
-    var stereotype : EntityId<ContentStereotypeBo>,
+    var stereotype : EntityId<StereotypeBo>,
     var value : String
 
 ) : BaseBo {

@@ -25,17 +25,17 @@ import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.resources.localizedStrings
 
-class ContentEditor : ZkCrudTarget<ContentCommonBo>() {
+class ContentEditor : ZkCrudTarget<ContentBo>() {
 
     init {
-        companion = ContentCommonBo.Companion
-        boClass = ContentCommonBo::class
+        companion = ContentBo.Companion
+        boClass = ContentBo::class
         editorClass = ContentEditorForm::class
     }
 
     @Serializable
     class Args(
-        val master: EntityId<ContentCommonBo>?,
+        val master: EntityId<ContentBo>?,
         val locale: EntityId<LocaleBo>?,
     )
 
@@ -43,7 +43,7 @@ class ContentEditor : ZkCrudTarget<ContentCommonBo>() {
         application.changeNavState(this, "create", "args=${Json.encodeToString(Args.serializer(), args)}")
     }
 
-    override suspend fun onBeforeCreate(editor: ZkCrudEditor<ContentCommonBo>) {
+    override suspend fun onBeforeCreate(editor: ZkCrudEditor<ContentBo>) {
         editor as ContentEditorForm
 
         val navArgs = application.routing.navState.args
@@ -58,13 +58,13 @@ class ContentEditor : ZkCrudTarget<ContentCommonBo>() {
         editor.bo.locale = args.locale
 
         if (args.master != null) {
-            editor.bo.stereotype = ContentCommonBo.read(args.master).stereotype
+            editor.bo.stereotype = ContentBo.read(args.master).stereotype
         }
     }
 
 }
 
-class ContentEditorForm : ZkForm<ContentCommonBo>() {
+class ContentEditorForm : ZkForm<ContentBo>() {
 
     lateinit var textBlocks: ZkElement
 
@@ -80,8 +80,8 @@ class ContentEditorForm : ZkForm<ContentCommonBo>() {
 
                 + fieldGrid {
                     + bo::id
-                    + select(bo::status) { ContentStatusBo.all().by { it.name } }
-                    + select(bo::stereotype) { ContentStereotypeBo.all().by { it.key } } readOnly (bo.master != null)
+                    + select(bo::status) { StatusBo.all().by { it.name } }
+                    + select(bo::stereotype) { StereotypeBo.all().by { it.name } } readOnly (bo.master != null)
                     + select(bo::locale) { LocaleBo.all().by { it.name } } readOnly true
                     + bo::title
                     + textarea(bo::summary)
@@ -112,33 +112,33 @@ class ContentEditorForm : ZkForm<ContentCommonBo>() {
                 + section(contentStrings.thumbnail) {
                     + ZkImagesField(
                         this@ContentEditorForm,
-                        ContentBlobBo.comm,
+                        AttachedBlobBo.comm,
                         bo.id,
-                        disposition = ContentBlobDisposition.thumbnail
+                        disposition = AttachedBlobDisposition.thumbnail
                     ) {
-                        ContentBlobBo(EntityId(), bo.id, ContentBlobDisposition.thumbnail, it.name, it.type, it.size.toLong())
+                        AttachedBlobBo(EntityId(), bo.id, AttachedBlobDisposition.thumbnail, it.name, it.type, it.size.toLong())
                     }
                 }
 
                 + section(contentStrings.images) {
                     + ZkImagesField(
                         this@ContentEditorForm,
-                        ContentBlobBo.comm,
+                        AttachedBlobBo.comm,
                         bo.id,
-                        disposition = ContentBlobDisposition.image
+                        disposition = AttachedBlobDisposition.image
                     ) {
-                        ContentBlobBo(EntityId(), bo.id, ContentBlobDisposition.image, it.name, it.type, it.size.toLong())
+                        AttachedBlobBo(EntityId(), bo.id, AttachedBlobDisposition.image, it.name, it.type, it.size.toLong())
                     }
                 }
 
                 + section(contentStrings.attachments) {
                     + ZkAttachmentsField(
                         this@ContentEditorForm,
-                        ContentBlobBo.comm,
+                        AttachedBlobBo.comm,
                         bo.id,
-                        disposition = ContentBlobDisposition.attachment
+                        disposition = AttachedBlobDisposition.attachment
                     ) {
-                        ContentBlobBo(EntityId(), bo.id, ContentBlobDisposition.attachment, it.name, it.type, it.size.toLong())
+                        AttachedBlobBo(EntityId(), bo.id, AttachedBlobDisposition.attachment, it.name, it.type, it.size.toLong())
                     }
                 }
             }

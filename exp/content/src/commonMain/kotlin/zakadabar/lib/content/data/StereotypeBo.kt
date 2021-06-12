@@ -20,20 +20,22 @@ import zakadabar.stack.data.schema.BoSchema
  * You can put your stereotypes into a hierarchy, providing a parent to
  * a stereotype.
  *
- * @param   id       Id of the stereotype entity.
- * @param   parent   Id of the parent stereotype.
- * @param   key      Key of the stereotype. Used for translation.
+ * @param   id             Id of the stereotype entity.
+ * @param   parent         Id of the parent stereotype.
+ * @param   name           Name of the stereotype.
+ * @param   localizations  List of stereotype localizations: (locale, localized name) pairs.
  */
 @Serializable
-class ContentStereotypeBo(
+class StereotypeBo(
 
-    override var id : EntityId<ContentStereotypeBo>,
-    var parent : EntityId<ContentStereotypeBo>?,
-    var key : String
+    override var id : EntityId<StereotypeBo>,
+    var parent : EntityId<StereotypeBo>?,
+    var name : String,
+    var localizations : List<StereotypeLocalizationBo>
 
-) : EntityBo<ContentStereotypeBo> {
+) : EntityBo<StereotypeBo> {
 
-    companion object : EntityBoCompanion<ContentStereotypeBo>("zkl-content-stereotype")
+    companion object : EntityBoCompanion<StereotypeBo>("zkl-content-stereotype")
 
     override fun getBoNamespace() = boNamespace
     override fun comm() = comm
@@ -41,7 +43,8 @@ class ContentStereotypeBo(
     override fun schema() = BoSchema {
         + ::id
         + ::parent
-        + ::key blank false min 2 max 100
+        + ::name blank false min 2 max 100
+        // TODO + ::localizations
     }
 
 }

@@ -3,38 +3,38 @@
  */
 package zakadabar.lib.content.frontend.browser
 
-import zakadabar.lib.content.data.ContentStatusBo
+import zakadabar.lib.content.data.StatusBo
 import zakadabar.stack.frontend.application.target
-import zakadabar.stack.frontend.application.translate
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.resources.localized
 
 
 /**
- * CRUD target for [ContentStatusBo].
+ * CRUD target for [StatusBo].
  * 
  * Generated with Bender at 2021-06-05T02:07:27.688Z.
  */
-class ContentStatusCrud : ZkCrudTarget<ContentStatusBo>() {
+class StatusCrud : ZkCrudTarget<StatusBo>() {
     init {
-        companion = ContentStatusBo.Companion
-        boClass = ContentStatusBo::class
-        editorClass = ContentStatusForm::class
-        tableClass = ContentStatusTable::class
+        companion = StatusBo.Companion
+        boClass = StatusBo::class
+        editorClass = StatusForm::class
+        tableClass = StatusTable::class
     }
 }
 
 /**
- * Form for [ContentStatusBo].
+ * Form for [StatusBo].
  * 
  * Generated with Bender at 2021-06-05T02:07:27.689Z.
  */
-class ContentStatusForm : ZkForm<ContentStatusBo>() {
+class StatusForm : ZkForm<StatusBo>() {
     override fun onCreate() {
         super.onCreate()
 
-        build(translate<ContentStatusForm>()) {
+        build(localized<StatusForm>()) {
             + section {
                 + bo::id
                 + bo::name
@@ -44,24 +44,24 @@ class ContentStatusForm : ZkForm<ContentStatusBo>() {
 }
 
 /**
- * Table for [ContentStatusBo].
+ * Table for [StatusBo].
  * 
  * Generated with Bender at 2021-06-05T02:07:27.689Z.
  */
-class ContentStatusTable : ZkTable<ContentStatusBo>() {
+class StatusTable : ZkTable<StatusBo>() {
 
     override fun onConfigure() {
 
-        crud = target<ContentStatusCrud>()
+        crud = target<StatusCrud>()
 
-        titleText = translate<ContentStatusTable>()
+        titleText = localized<StatusTable>()
 
         add = true
         search = true
         export = true
         
-        + ContentStatusBo::id
-        + ContentStatusBo::name
+        + StatusBo::id
+        + StatusBo::name
         
         + actions()
     }

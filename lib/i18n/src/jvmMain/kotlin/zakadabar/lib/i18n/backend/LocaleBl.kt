@@ -19,6 +19,6 @@ class LocaleBl : EntityBusinessLogicBase<LocaleBo>(
         allWrites = StackRoles.siteAdmin
     }
 
-    internal fun localeByName(name : String) = pa.localeByName(name)
+    fun byName(name : String) = pa.byName(name)
 
 }

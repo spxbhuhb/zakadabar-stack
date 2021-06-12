@@ -7,18 +7,22 @@ import kotlinx.serialization.Serializable
 import zakadabar.lib.i18n.data.LocaleBo
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.data.schema.BoSchema
 
+/**
+ * Localization of a stereotype name.
+ */
 @Serializable
-class Overview(
-    val locales : List<LocaleBo>,
-    val entries : List<OverviewEntry>
-): BaseBo
+class StereotypeLocalizationBo(
 
-@Serializable
-class OverviewEntry(
-    val id : EntityId<ContentCommonBo>,
-    val title : String,
-    val category: String,
-    val status: String,
-    val locales : List<EntityId<ContentCommonBo>?>
-) : BaseBo
+    var locale : EntityId<LocaleBo>,
+    var localizedName : String
+
+) : BaseBo {
+
+    override fun schema() = BoSchema {
+        + ::locale
+        + ::localizedName blank false min 2 max 100
+    }
+
+}

@@ -6,10 +6,8 @@ package zakadabar.lib.content.backend
 import zakadabar.stack.backend.server
 
 fun install() {
-    server += ContentCommonBl()
-
-    server += ContentStereotypeBl()
-    server += ContentStatusBl()
-
-    server += ContentBlobBl()
+    server += StatusBl()
+    server += StereotypeBl()
+    server += AttachedBlobBl()
+    server += ContentBl()
 }

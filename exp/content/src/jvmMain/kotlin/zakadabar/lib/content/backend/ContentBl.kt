@@ -15,38 +15,39 @@ import zakadabar.stack.data.entity.EntityId
 /**
  * Business Logic for ContentCommonBo.
  */
-open class ContentCommonBl : EntityBusinessLogicBase<ContentCommonBo>(
-    boClass = ContentCommonBo::class
+open class ContentBl : EntityBusinessLogicBase<ContentBo>(
+    boClass = ContentBo::class
 ) {
 
-    override val pa = ContentCommonExposedPa()
+    override val pa = ContentExposedPa()
 
     override val authorizer by provider()
 
     private val localeBl by module<LocaleBl>()
-    private val statusBl by module<ContentStatusBl>()
-    private val stereotypeBl by module<ContentStereotypeBl>()
+    private val statusBl by module<StatusBl>()
+    private val stereotypeBl by module<StereotypeBl>()
 
     override val router = router {
-        query(OverviewQuery::class, ::overview)
+        query(ContentOverviewQuery::class, ::overview)
+        query(ContentByStereotypeAndTitle::class, ::byStereotypeAndTitle)
     }
 
-    override fun create(executor: Executor, bo: ContentCommonBo): ContentCommonBo {
+    override fun create(executor: Executor, bo: ContentBo): ContentBo {
         bo.modifiedBy = EntityId(executor.accountId)
         bo.modifiedAt = Clock.System.now()
         return super.create(executor, bo)
     }
 
-    override fun update(executor: Executor, bo: ContentCommonBo): ContentCommonBo {
+    override fun update(executor: Executor, bo: ContentBo): ContentBo {
         bo.modifiedBy = EntityId(executor.accountId)
         bo.modifiedAt = Clock.System.now()
         return super.update(executor, bo)
     }
 
     @Suppress("UNUSED_PARAMETER") // this is fine, needed for routing
-    private fun overview(executor: Executor, query: OverviewQuery): Overview {
+    private fun overview(executor: Executor, query: ContentOverviewQuery): ContentOverview {
 
-        val entries = mutableListOf<OverviewEntry>()
+        val entries = mutableListOf<ContentOverviewEntry>()
 
         val locales = localeBl.list(executor)
         val statuses = statusBl.list(executor).sortedBy { it.id }
@@ -59,12 +60,12 @@ open class ContentCommonBl : EntityBusinessLogicBase<ContentCommonBo>(
         bos.forEach { bo ->
             if (bo.master != null) return@forEach
 
-            entries += OverviewEntry(
+            entries += ContentOverviewEntry(
                 bo.id,
                 bo.title,
-                categories.first { it.id == bo.stereotype }.key,
+                categories.first { it.id == bo.stereotype }.name,
                 statuses.first { it.id == bo.status }.name,
-                locales = MutableList(locales.size) { null }
+                localizations = MutableList(locales.size) { null }
             )
 
         }
@@ -76,17 +77,22 @@ open class ContentCommonBl : EntityBusinessLogicBase<ContentCommonBo>(
 
             entries.first { it.id == bo.master }.also { entry ->
                 val index = locales.indexOfFirst { it.id == bo.locale }
-                (entry.locales as MutableList)[index] = bo.id
+                (entry.localizations as MutableList)[index] = bo.id
             }
         }
 
-        return Overview(
+        return ContentOverview(
             locales = locales,
             entries = entries
         )
     }
 
-    private fun byStereotype(executor: Executor, query: ByStereotypeKey) =
-        pa.byStereotype(stereotypeBl.byKey(query.key))
+    @Suppress("UNUSED_PARAMETER")
+    private fun byStereotypeAndTitle(executor: Executor, query: ContentByStereotypeAndTitle): ContentBo {
+        val locale = localeBl.byName(query.localeName) ?: throw NoSuchElementException()
+        val stereotypeId = stereotypeBl.getId(locale.id, query.localizedStereotypeName)
+
+        return pa.byLocalizedTitle(stereotypeId, query.localizedContentTitle)
+    }
 
 }

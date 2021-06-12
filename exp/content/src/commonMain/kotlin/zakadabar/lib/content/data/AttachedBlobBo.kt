@@ -8,17 +8,20 @@ import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobBoCompanion
 import zakadabar.stack.data.entity.EntityId
 
+/**
+ * Blob (thumbnail, images, attachments) that belongs to a content.
+ */
 @Serializable
-class ContentBlobBo(
-    override var id: EntityId<ContentBlobBo>,
-    override var reference: EntityId<ContentCommonBo>?,
+class AttachedBlobBo(
+    override var id: EntityId<AttachedBlobBo>,
+    override var reference: EntityId<ContentBo>?,
     override var disposition: String,
     override var name: String,
     override var mimeType: String,
     override var size: Long
-) : BlobBo<ContentBlobBo, ContentCommonBo> {
+) : BlobBo<AttachedBlobBo, ContentBo> {
 
-    companion object : BlobBoCompanion<ContentBlobBo, ContentCommonBo>(ContentCommonBo.boNamespace)
+    companion object : BlobBoCompanion<AttachedBlobBo, ContentBo>(ContentBo.boNamespace)
 
     override fun getBoNamespace() = boNamespace
     override fun comm() = comm

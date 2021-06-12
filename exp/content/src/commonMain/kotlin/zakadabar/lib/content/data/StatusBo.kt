@@ -20,14 +20,14 @@ import zakadabar.stack.data.schema.BoSchema
  * the backend.
  */
 @Serializable
-class ContentStatusBo(
+class StatusBo(
 
-    override var id : EntityId<ContentStatusBo>,
+    override var id : EntityId<StatusBo>,
     var name : String
 
-) : EntityBo<ContentStatusBo> {
+) : EntityBo<StatusBo> {
 
-    companion object : EntityBoCompanion<ContentStatusBo>("zkl-content-status")
+    companion object : EntityBoCompanion<StatusBo>("zkl-content-status")
 
     override fun getBoNamespace() = boNamespace
     override fun comm() = comm

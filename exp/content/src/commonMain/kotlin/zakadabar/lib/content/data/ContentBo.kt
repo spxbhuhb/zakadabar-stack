@@ -12,33 +12,25 @@ import zakadabar.stack.data.entity.EntityBoCompanion
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoSchema
 
-/**
- * Business Object of ContentBo.
- * 
- * Generated with Bender at 2021-06-05T02:36:16.418Z.
- *
- * Please do not implement business logic in this class. If you add fields,
- * please check the frontend table and form, and also the persistence API on 
- * the backend.
- */
 @Serializable
-class ContentCommonBo(
+class ContentBo(
 
-    override var id : EntityId<ContentCommonBo>,
+    override var id : EntityId<ContentBo>,
     var modifiedAt : Instant,
     var modifiedBy : EntityId<AccountPublicBo>,
-    var status : EntityId<ContentStatusBo>,
-    var stereotype : EntityId<ContentStereotypeBo>,
-    var master: EntityId<ContentCommonBo>?,
+    var status : EntityId<StatusBo>,
+    var stereotype : EntityId<StereotypeBo>,
+    var master: EntityId<ContentBo>?,
     var position: Int,
     var locale : EntityId<LocaleBo>?,
     var title : String,
+    var localizedTitle : String,
     var summary : String,
-    var textBlocks : List<ContentTextBo> = emptyList()
+    var textBlocks : List<TextBlockBo> = emptyList()
 
-) : EntityBo<ContentCommonBo> {
+) : EntityBo<ContentBo> {
 
-    companion object : EntityBoCompanion<ContentCommonBo>("zkl-content-common")
+    companion object : EntityBoCompanion<ContentBo>("zkl-content-common")
 
     override fun getBoNamespace() = boNamespace
     override fun comm() = comm
@@ -53,6 +45,7 @@ class ContentCommonBo(
         + ::master
         + ::position
         + ::title max 100
+        + ::localizedTitle max 100
         + ::summary max 1000
         // FIXME + ::textBlocks
     }

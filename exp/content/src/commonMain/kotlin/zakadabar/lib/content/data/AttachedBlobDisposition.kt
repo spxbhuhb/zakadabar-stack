@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.content.data
 
-object ContentBlobDisposition {
+object AttachedBlobDisposition {
     const val attachment = "attachment"
     const val content = "content"
     const val image = "image"
