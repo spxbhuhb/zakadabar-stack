@@ -36,134 +36,54 @@ open class BoSchema() {
     @Suppress("MemberVisibilityCanBePrivate") // To make extensions possible
     val customEntries = mutableListOf<CustomBoSchemaEntry>()
 
-    inline operator fun <reified T : Any> KMutableProperty0<out EntityId<T>>.unaryPlus(): EntityIdBoSchemaEntry<*> {
-        @Suppress("UNCHECKED_CAST") // at this point out doesn't really matters
-        val ruleList = EntityIdBoSchemaEntry(T::class, this as KMutableProperty0<EntityId<T>>)
-        entries[this] = ruleList
-        return ruleList
-    }
+    @Suppress("UNCHECKED_CAST")
+    inline operator fun <reified T : Any> KMutableProperty0<out EntityId<T>>.unaryPlus() =
+        EntityIdBoSchemaEntry(T::class, this as KMutableProperty0<EntityId<T>>).also { entries[this] = it }
 
-    inline operator fun <reified T : Any> KMutableProperty0<out EntityId<T>?>.unaryPlus(): OptEntityIdBoSchemaEntry<*> {
-        @Suppress("UNCHECKED_CAST") // at this point out doesn't really matters
-        val ruleList = OptEntityIdBoSchemaEntry(T::class, this as KMutableProperty0<EntityId<T>?>)
-        entries[this] = ruleList
-        return ruleList
-    }
+    @Suppress("UNCHECKED_CAST")
+    inline operator fun <reified T : Any> KMutableProperty0<out EntityId<T>?>.unaryPlus(): OptEntityIdBoSchemaEntry<*> =
+        OptEntityIdBoSchemaEntry(T::class, this as KMutableProperty0<EntityId<T>?>).also { entries[this] = it }
 
-    operator fun KMutableProperty0<String>.unaryPlus(): StringBoSchemaEntry {
-        val ruleList = StringBoSchemaEntry(this)
-        entries[this] = ruleList
-        return ruleList
-    }
+    operator fun KMutableProperty0<String>.unaryPlus() = StringBoSchemaEntry(this).also { entries[this] = it }
 
-    operator fun KMutableProperty0<String?>.unaryPlus(): OptStringBoSchemaEntry {
-        val ruleList = OptStringBoSchemaEntry(this)
-        entries[this] = ruleList
-        return ruleList
-    }
+    operator fun KMutableProperty0<String?>.unaryPlus() = OptStringBoSchemaEntry(this).also { entries[this] = it }
 
-    operator fun KMutableProperty0<Boolean>.unaryPlus(): BooleanBoSchemaEntry {
-        val ruleList = BooleanBoSchemaEntry(this)
-        entries[this] = ruleList
-        return ruleList
-    }
+    operator fun KMutableProperty0<Boolean>.unaryPlus() = BooleanBoSchemaEntry(this).also { entries[this] = it }
 
-    operator fun KMutableProperty0<Boolean?>.unaryPlus(): OptBooleanBoSchemaEntry {
-        val ruleList = OptBooleanBoSchemaEntry(this)
-        entries[this] = ruleList
-        return ruleList
-    }
+    operator fun KMutableProperty0<Boolean?>.unaryPlus() = OptBooleanBoSchemaEntry(this).also { entries[this] = it }
 
-    operator fun KMutableProperty0<Int>.unaryPlus(): IntBoSchemaEntry {
-        val ruleList = IntBoSchemaEntry(this)
-        entries[this] = ruleList
-        return ruleList
-    }
+    operator fun KMutableProperty0<Int>.unaryPlus() = IntBoSchemaEntry(this).also { entries[this] = it }
 
-    operator fun KMutableProperty0<Int?>.unaryPlus(): OptIntBoSchemaEntry {
-        val ruleList = OptIntBoSchemaEntry(this)
-        entries[this] = ruleList
-        return ruleList
-    }
+    operator fun KMutableProperty0<Int?>.unaryPlus() = OptIntBoSchemaEntry(this).also { entries[this] = it }
 
-    operator fun KMutableProperty0<Long>.unaryPlus(): LongBoSchemaEntry {
-        val ruleList = LongBoSchemaEntry(this)
-        entries[this] = ruleList
-        return ruleList
-    }
+    operator fun KMutableProperty0<Long>.unaryPlus() = LongBoSchemaEntry(this).also { entries[this] = it }
 
-    operator fun KMutableProperty0<Long?>.unaryPlus(): OptLongBoSchemaEntry {
-        val ruleList = OptLongBoSchemaEntry(this)
-        entries[this] = ruleList
-        return ruleList
-    }
+    operator fun KMutableProperty0<Long?>.unaryPlus() = OptLongBoSchemaEntry(this).also { entries[this] = it }
 
-    operator fun KMutableProperty0<Double>.unaryPlus(): DoubleBoSchemaEntry {
-        val ruleList = DoubleBoSchemaEntry(this)
-        entries[this] = ruleList
-        return ruleList
-    }
+    operator fun KMutableProperty0<Double>.unaryPlus() = DoubleBoSchemaEntry(this).also { entries[this] = it }
 
-    operator fun KMutableProperty0<Double?>.unaryPlus(): OptDoubleBoSchemaEntry {
-        val ruleList = OptDoubleBoSchemaEntry(this)
-        entries[this] = ruleList
-        return ruleList
-    }
+    operator fun KMutableProperty0<Double?>.unaryPlus() = OptDoubleBoSchemaEntry(this).also { entries[this] = it }
 
-    operator fun KMutableProperty0<Instant>.unaryPlus(): InstantBoSchemaEntry {
-        val ruleList = InstantBoSchemaEntry(this)
-        entries[this] = ruleList
-        return ruleList
-    }
+    operator fun KMutableProperty0<Instant>.unaryPlus() = InstantBoSchemaEntry(this).also { entries[this] = it }
 
-    operator fun KMutableProperty0<Instant?>.unaryPlus(): OptInstantBoSchemaEntry {
-        val ruleList = OptInstantBoSchemaEntry(this)
-        entries[this] = ruleList
-        return ruleList
-    }
+    operator fun KMutableProperty0<Instant?>.unaryPlus() = OptInstantBoSchemaEntry(this).also { entries[this] = it }
 
-    operator fun KMutableProperty0<Secret>.unaryPlus(): SecretBoSchemaEntry {
-        val ruleList = SecretBoSchemaEntry(this)
-        entries[this] = ruleList
-        return ruleList
-    }
+    operator fun KMutableProperty0<Secret>.unaryPlus() = SecretBoSchemaEntry(this).also { entries[this] = it }
 
-    operator fun KMutableProperty0<Secret?>.unaryPlus(): OptSecretBoSchemaEntry {
-        val ruleList = OptSecretBoSchemaEntry(this)
-        entries[this] = ruleList
-        return ruleList
-    }
+    operator fun KMutableProperty0<Secret?>.unaryPlus() = OptSecretBoSchemaEntry(this).also { entries[this] = it }
 
-    operator fun KMutableProperty0<UUID>.unaryPlus(): UuidBoSchemaEntry {
-        val ruleList = UuidBoSchemaEntry(this)
-        entries[this] = ruleList
-        return ruleList
-    }
+    operator fun KMutableProperty0<UUID>.unaryPlus() = UuidBoSchemaEntry(this).also { entries[this] = it }
 
-    operator fun KMutableProperty0<UUID?>.unaryPlus(): OptUuidBoSchemaEntry {
-        val ruleList = OptUuidBoSchemaEntry(this)
-        entries[this] = ruleList
-        return ruleList
-    }
+    operator fun KMutableProperty0<UUID?>.unaryPlus() = OptUuidBoSchemaEntry(this).also { entries[this] = it }
 
-    inline operator fun <reified T : BaseBo> KMutableProperty0<T>.unaryPlus(): BaseBoBoSchemaEntry<T> {
-        val ruleList = BaseBoBoSchemaEntry(this)
-        entries[this] = ruleList
-        return ruleList
-    }
+    inline operator fun <reified T : BaseBo> KMutableProperty0<T>.unaryPlus() = BaseBoBoSchemaEntry(this).also { entries[this] = it }
+
+    inline operator fun <reified T : BaseBo> KMutableProperty0<List<T>>.unaryPlus() = ListBoSchemaEntry(this, T::class).also { entries[this] = it }
 
     @JsName("SchemaOptEnumUnaryPlus")
-    inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): EnumBoSchemaEntry<E> {
-        val ruleList = EnumBoSchemaEntry(this, enumValues())
-        entries[this] = ruleList
-        return ruleList
-    }
+    inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus() = EnumBoSchemaEntry(this, enumValues()).also { entries[this] = it }
 
-    inline operator fun <reified E : Enum<E>> KMutableProperty0<E?>.unaryPlus(): OptEnumBoSchemaEntry<E> {
-        val ruleList = OptEnumBoSchemaEntry(this, enumValues())
-        entries[this] = ruleList
-        return ruleList
-    }
+    inline operator fun <reified E : Enum<E>> KMutableProperty0<E?>.unaryPlus() = OptEnumBoSchemaEntry(this, enumValues()).also { entries[this] = it }
 
     operator fun plusAssign(custom: CustomBoSchemaEntry) {
         customEntries += custom
@@ -173,7 +93,11 @@ open class BoSchema() {
         customEntries += this
     }
 
+    @Deprecated("EOL: 2021.8.1  -  use function without the rule parameter")
     fun custom(function: (report: ValidityReport, rule: BoPropertyConstraintImpl<Unit>) -> Unit) = CustomBoSchemaEntry(function)
+
+    fun custom(constraintName : String, function: (constraintName : String, report: ValidityReport) -> Unit) =
+        CustomBoSchemaEntry(constraintName, function)
 
     /**
      * Validates the BO that belogs to this schema.
@@ -184,7 +108,7 @@ open class BoSchema() {
      * @return  a validity report that contains all failed constraints
      */
     @PublicApi
-    fun validate(allowEmptyId : Boolean = false): ValidityReport {
+    fun validate(allowEmptyId: Boolean = false): ValidityReport {
         val report = ValidityReport(allowEmptyId)
         entries.forEach { it.value.validate(report) }
         return report
@@ -249,7 +173,7 @@ interface BoPropertyConstraintImpl<T> {
 }
 
 class ValidityReport(
-    val allowEmptyId : Boolean = false,
+    val allowEmptyId: Boolean = false,
     val fails: MutableMap<String, MutableList<BoConstraint>> = mutableMapOf()
 ) {
     fun fail(property: KProperty0<*>, constraintImpl: BoPropertyConstraintImpl<*>) {

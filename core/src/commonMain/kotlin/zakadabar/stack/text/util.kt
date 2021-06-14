@@ -12,3 +12,11 @@ fun String.camelToSnakeCase(): String {
     }
     return s.trimStart('_')
 }
+
+fun String.lowercaseWithHyphen(): String {
+    val chars = this.toCharArray()
+    chars.forEachIndexed { index, char ->
+        chars[index] = if (char.isWhitespace()) '-' else char.lowercaseChar()
+    }
+    return chars.concatToString()
+}

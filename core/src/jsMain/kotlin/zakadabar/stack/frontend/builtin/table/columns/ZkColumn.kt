@@ -12,6 +12,7 @@ import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.builtin.table.zkTableStyles
+import zakadabar.stack.frontend.resources.css.px
 import zakadabar.stack.frontend.util.minusAssign
 import zakadabar.stack.frontend.util.plusAssign
 import kotlin.math.max
@@ -23,7 +24,9 @@ open class ZkColumn<T : BaseBo>(
 ) {
 
     open val min = 24.0
-    open val fraction = "1fr"
+    open var max = "1fr"
+    @Deprecated("EOL: 2021.8.1  -  use max instead", ReplaceWith("max"))
+    open var fraction by ::max
     open var size = Double.NaN
     open var exportable = true
 
@@ -44,7 +47,7 @@ open class ZkColumn<T : BaseBo>(
     }
 
     fun gridTemplate(): String {
-        return "minmax(${min}px, $fraction)"
+        return "minmax(${min.px}, $max)"
     }
 
     open fun render(builder: ZkElement, index: Int, row: T) {

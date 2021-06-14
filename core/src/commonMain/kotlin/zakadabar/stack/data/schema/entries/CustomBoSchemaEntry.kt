@@ -22,13 +22,35 @@ import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.data.schema.descriptor.BoConstraint
 import zakadabar.stack.data.schema.descriptor.BoProperty
 
-class CustomBoSchemaEntry(function: (report: ValidityReport, rule: BoPropertyConstraintImpl<Unit>) -> Unit) : BoSchemaEntry<Unit> {
+class CustomBoSchemaEntry : BoSchemaEntry<Unit> {
 
-    private val rules = mutableListOf<BoPropertyConstraintImpl<Unit>>(CustomValidation(function))
+    val name : String
+    private val rules = mutableListOf<BoPropertyConstraintImpl<Unit>>()
+
+    @Deprecated("EOL: 2021.8.1  -  use function without the rule parameter")
+    constructor(function: (report: ValidityReport, rule: BoPropertyConstraintImpl<Unit>) -> Unit) {
+        name = "-"
+        rules += CustomValidation(function)
+    }
+
+    constructor(constraintName : String, function: (constraintName : String, report: ValidityReport) -> Unit) {
+        this.name = constraintName
+        rules += CustomConstraint(function)
+    }
 
     inner class CustomValidation(val function: (report: ValidityReport, rule: BoPropertyConstraintImpl<Unit>) -> Unit) : BoPropertyConstraintImpl<Unit> {
         override fun validate(value: Unit, report: ValidityReport) {
             function(report, this)
+        }
+
+        override fun toBoConstraint(): BoConstraint {
+            throw NotImplementedError("serialization of custom validations is not supported")
+        }
+    }
+
+    inner class CustomConstraint(val function: (constraintName : String, report: ValidityReport) -> Unit) : BoPropertyConstraintImpl<Unit> {
+        override fun validate(value: Unit, report: ValidityReport) {
+            function(name, report)
         }
 
         override fun toBoConstraint(): BoConstraint {
