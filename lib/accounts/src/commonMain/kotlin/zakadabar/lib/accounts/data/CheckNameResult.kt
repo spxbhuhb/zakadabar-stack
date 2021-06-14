@@ -5,12 +5,13 @@ package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
 import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.entity.EntityId
 
 @Serializable
 class CheckNameResult(
 
     var accountName: String,
-    var accountId: EntityId<AccountPrivateBo>?
+    var accountId: EntityId<AccountPublicBo>?
 
 ) : BaseBo
