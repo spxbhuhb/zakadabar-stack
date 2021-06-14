@@ -5,7 +5,6 @@ package zakadabar.lib.content.data
 
 import kotlinx.serialization.Serializable
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoSchema
 
 
@@ -15,13 +14,13 @@ import zakadabar.stack.data.schema.BoSchema
 @Serializable
 class TextBlockBo(
 
-    var stereotype : EntityId<StereotypeBo>,
+    var stereotype : String,
     var value : String
 
 ) : BaseBo {
 
     override fun schema() = BoSchema {
-        + ::stereotype
+        + ::stereotype max 100
         + ::value 
     }
 

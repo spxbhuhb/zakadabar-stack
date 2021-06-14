@@ -3,7 +3,6 @@
  */
 package zakadabar.lib.content.data
 
-import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.PublicApi
 
 /**
@@ -15,5 +14,5 @@ import zakadabar.stack.util.PublicApi
  * @return the text block or null if no text block exists for the stereotype
  */
 @PublicApi
-fun ContentBo.firstOrNull(stereotype : EntityId<StereotypeBo>?) =
+fun ContentBo.firstOrNull(stereotype : String?) =
     textBlocks.firstOrNull { it.stereotype == stereotype }?.value

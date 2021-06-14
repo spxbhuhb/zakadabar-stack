@@ -8,20 +8,17 @@ import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.data.query.QueryBoCompanion
 
 /**
- * Query contents by localized properties. This query provides resolution for
- * URLs like: `/hu/megoldások/ipari-automatizálás`. This is an URL in Hungarian
+ * Query contents by SEO titles. This query provides resolution for
+ * URLs like: `/hu/megoldások/ipari-automatizálás`. This is in Hungarian
  * and we have to know which content it points to. The same URL in English
- * is `/en/solutions/industrial-automation`. The two points to the same content.
+ * is `/en/solutions/industrial-automation`. The two points two different,
+ * localized content entities with the same master.
  *
- * @param  localeName               Name of the locale.
- * @param  localizedStereotypeName  Localized name of the stereotype.
- * @param  localizedContentTitle    Localized name of the content.
+ * @param  path               The path to resolve.
  */
 @Serializable
-class ContentByStereotypeAndTitle(
-    val localeName : String,
-    val localizedStereotypeName : String,
-    val localizedContentTitle: String
+class BySeoPath(
+    val path : String
 ): QueryBo<ContentBo> {
 
     companion object : QueryBoCompanion(ContentBo.boNamespace)

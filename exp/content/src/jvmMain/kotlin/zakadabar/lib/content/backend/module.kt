@@ -7,7 +7,6 @@ import zakadabar.stack.backend.server
 
 fun install() {
     server += StatusBl()
-    server += StereotypeBl()
     server += AttachedBlobBl()
     server += ContentBl()
 }

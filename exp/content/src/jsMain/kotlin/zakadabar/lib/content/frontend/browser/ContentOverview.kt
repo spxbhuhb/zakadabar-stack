@@ -15,6 +15,7 @@ import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.builtin.table.columns.ZkCustomColumn
+import zakadabar.stack.frontend.resources.css.em
 import zakadabar.stack.frontend.util.io
 
 class ContentOverview : ZkPage(css = zkPageStyles.fixed) {
@@ -46,21 +47,21 @@ class ContentOverviewTable(
         search = true
         export = true
 
-        + ContentOverviewEntry::id
-        + ContentOverviewEntry::title
-        + ContentOverviewEntry::stereotype
-        + ContentOverviewEntry::status
+        + ContentOverviewEntry::id size 6.em
+        + ContentOverviewEntry::path
+        + ContentOverviewEntry::status size 10.em
 
         overview.locales.forEachIndexed { index, locale ->
-            + LocaleColumn(this, locale.id, index).apply { label = locale.name }
+            + LocaleColumn(this, locale.id, index).apply { label = locale.name } size 3.em
         }
 
-        + actions()
+        + actions() size 6.em
+
     }
 
     override fun onResume() {
         super.onResume()
-        setData(overview.entries)
+        setData(overview.entries.sortedBy { it.path })
     }
 
     override fun onAddRow() {

@@ -3,7 +3,6 @@
  */
 package zakadabar.lib.content.frontend.browser
 
-import zakadabar.lib.content.data.StereotypeBo
 import zakadabar.lib.content.data.TextBlockBo
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
@@ -14,7 +13,6 @@ import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.resources.css.px
 import zakadabar.stack.frontend.util.io
-import zakadabar.stack.resources.localized
 
 class ContentTextForm(
     private val parent: ZkElement
@@ -32,7 +30,7 @@ class ContentTextForm(
             gridGap = 20.px
 
             + section {
-                + select(bo::stereotype) { StereotypeBo.all().by { it.name.localized } }
+                + select(bo::stereotype, options = textBlockStereotypes)
                 + textarea(bo::value) {
                     area.style.resize = "vertical"
                 }

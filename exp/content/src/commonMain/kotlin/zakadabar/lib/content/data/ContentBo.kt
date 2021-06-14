@@ -11,22 +11,51 @@ import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityBoCompanion
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoSchema
+import zakadabar.stack.data.schema.descriptor.CustomBoConstraint
 
+/**
+ * Content entity. There are master versions and localized versions.
+ *
+ * Master versions:
+ *
+ * - form a tree, the tree structure is stored in the [parent] property
+ * - have `null` as [locale]
+ * - have `null` as [master]
+ * - may have attachments, images shared between localized versions
+ *
+ * Localized versions:
+ *
+ * - are linked to the master by the [master] property
+ * - have `null` as [parent]
+ * - have `non-null` [locale]
+ *
+ * @param   id
+ * @param   modifiedAt        Time of the last modification.
+ * @param   modifiedBy        Executor of the last modification.
+ * @param   status            Status of the content.
+ * @param   parent            If of the parent master content (if any). Null for localized versions and for top-level masters.
+ * @param   master            Id of the master content. Null for masters, non-null for localized versions.
+ * @param   position          Order of the master between the children of a parent.
+ * @param   locale            Locale of a localized version, null for masters.
+ * @param   title             Title of the content.
+ * @param   seoTitle          Localized, SEO ready version of the title.
+ * @param   textBlocks        Text blocks of the content.
+ */
 @Serializable
 class ContentBo(
 
-    override var id : EntityId<ContentBo>,
-    var modifiedAt : Instant,
-    var modifiedBy : EntityId<AccountPublicBo>,
-    var status : EntityId<StatusBo>,
-    var stereotype : EntityId<StereotypeBo>,
+    override var id: EntityId<ContentBo>,
+    var modifiedAt: Instant,
+    var modifiedBy: EntityId<AccountPublicBo>,
+    var status: EntityId<StatusBo>,
+    var parent: EntityId<ContentBo>?,
     var master: EntityId<ContentBo>?,
-    var position: Int,
-    var locale : EntityId<LocaleBo>?,
-    var title : String,
-    var localizedTitle : String,
-    var summary : String,
-    var textBlocks : List<TextBlockBo> = emptyList()
+    var folder: Boolean,
+    var position: Long,
+    var locale: EntityId<LocaleBo>?,
+    var title: String,
+    var seoTitle: String,
+    var textBlocks: List<TextBlockBo>
 
 ) : EntityBo<ContentBo> {
 
@@ -37,17 +66,35 @@ class ContentBo(
 
     override fun schema() = BoSchema {
         + ::id
-        + ::modifiedAt 
+        + ::modifiedAt
         + ::modifiedBy
         + ::locale
         + ::status
-        + ::stereotype
+        + ::folder
+        + ::parent
         + ::master
         + ::position
         + ::title max 100
-        + ::localizedTitle max 100
-        + ::summary max 1000
-        // FIXME + ::textBlocks
+        + ::seoTitle max 100
+        + ::textBlocks
+
+        + custom("locale is not null when master") { name, report ->
+            if (master == null) {
+                if (locale != null) report.fail(::locale, CustomBoConstraint(name = name))
+            }
+        }
+
+        + custom("locale is null when localized") { name, report ->
+            if (master != null) {
+                if (locale == null) report.fail(::locale, CustomBoConstraint(name = name))
+            }
+        }
+
+        + custom("parent is not null when localized") { name, report ->
+            if (master != null) {
+                if (parent != null) report.fail(::parent, CustomBoConstraint(name = name))
+            }
+        }
     }
 
 }

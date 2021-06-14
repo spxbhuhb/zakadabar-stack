@@ -14,6 +14,8 @@ plugins {
 group = "hu.simplexion.zakadabar"
 version = "2021.7.1-SNAPSHOT"
 
+val ktorVersion = "1.4.3"
+
 noArg {
     annotation("kotlinx.serialization.Serializable")
 }
@@ -36,6 +38,19 @@ kotlin {
         implementation(project(":lib:accounts"))
         implementation(project(":lib:i18n"))
         implementation(project(":lib:blobs"))
+    }
+
+    sourceSets["commonTest"].dependencies {
+            implementation(kotlin("test-common"))
+            implementation(kotlin("test-annotations-common"))
+            implementation(kotlin("test-junit"))
+    }
+    
+    sourceSets["jvmTest"].dependencies {
+        dependencies {
+            implementation("io.ktor:ktor-server-netty:$ktorVersion")
+            implementation("com.h2database:h2:1.4.200")
+        }
     }
 
 }

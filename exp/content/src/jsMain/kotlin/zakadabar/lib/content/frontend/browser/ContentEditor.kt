@@ -23,6 +23,7 @@ import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.default
+import zakadabar.stack.frontend.util.io
 import zakadabar.stack.resources.localizedStrings
 
 class ContentEditor : ZkCrudTarget<ContentBo>() {
@@ -58,7 +59,8 @@ class ContentEditor : ZkCrudTarget<ContentBo>() {
         editor.bo.locale = args.locale
 
         if (args.master != null) {
-            editor.bo.stereotype = ContentBo.read(args.master).stereotype
+            editor.master = ContentBo.read(args.master)
+            editor.bo.parent = editor.master.parent
         }
     }
 
@@ -66,6 +68,7 @@ class ContentEditor : ZkCrudTarget<ContentBo>() {
 
 class ContentEditorForm : ZkForm<ContentBo>() {
 
+    lateinit var master: ContentBo
     lateinit var textBlocks: ZkElement
 
     override fun onCreate() {
@@ -81,10 +84,10 @@ class ContentEditorForm : ZkForm<ContentBo>() {
                 + fieldGrid {
                     + bo::id
                     + select(bo::status) { StatusBo.all().by { it.name } }
-                    + select(bo::stereotype) { StereotypeBo.all().by { it.name } } readOnly (bo.master != null)
+                    if (bo.master == null) + bo::folder
+                    + select(bo::parent) { FolderQuery().execute().map { it.id to it.title } } readOnly (bo.master != null)
                     + select(bo::locale) { LocaleBo.all().by { it.name } } readOnly true
                     + bo::title
-                    + textarea(bo::summary)
                 }
 
                 + buttons()
@@ -143,6 +146,17 @@ class ContentEditorForm : ZkForm<ContentBo>() {
                 }
             }
 
+        }
+    }
+
+    override fun setAppTitleBar(contextElements: List<ZkElement>) {
+        io {
+            titleText = if (::master.isInitialized) {
+                "${master.title} : ${LocaleBo.read(bo.locale!!).name}"
+            } else {
+                "${bo.title} : ${contentStrings.master}"
+            }
+            super.setAppTitleBar(contextElements)
         }
     }
 

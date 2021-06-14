@@ -22,4 +22,6 @@ class Strings : ZkStringStore() {
     val thumbnail by "Thumbnail"
     val images by "Images"
     val attachments by "Attachments"
+
+    val master by "Master"
 }

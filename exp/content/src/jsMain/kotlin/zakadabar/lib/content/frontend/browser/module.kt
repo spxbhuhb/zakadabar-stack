@@ -7,11 +7,11 @@ import zakadabar.lib.content.resources.contentStrings
 import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.application.ZkApplication
 
+var textBlockStereotypes = mutableListOf<String>()
+
 fun install(routing: ZkAppRouting) {
     with(routing) {
         + StatusCrud()
-        + StereotypeOverview()
-        + StereotypeEditor()
         + ContentOverview()
         + ContentEditor()
     }

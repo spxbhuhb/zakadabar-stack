@@ -11,16 +11,16 @@ import zakadabar.lib.accounts.frontend.login.Login
 import zakadabar.lib.accounts.frontend.roles.Roles
 import zakadabar.lib.content.frontend.browser.ContentOverview
 import zakadabar.lib.content.frontend.browser.StatusCrud
-import zakadabar.lib.content.frontend.browser.StereotypeEditor
 import zakadabar.lib.content.resources.contentStrings
+import zakadabar.lib.demo.frontend.pages.ContentNavTest
 import zakadabar.lib.demo.frontend.pages.TestCrud
 import zakadabar.lib.demo.resources.strings
 import zakadabar.lib.i18n.frontend.LocaleCrud
 import zakadabar.lib.i18n.frontend.TranslationCrud
 import zakadabar.stack.StackRoles
-import zakadabar.stack.frontend.application.translate
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
 import zakadabar.stack.frontend.util.io
+import zakadabar.stack.resources.localized
 
 class SideBar : ZkSideBar() {
 
@@ -39,16 +39,16 @@ class SideBar : ZkSideBar() {
 
             + group(contentStrings.content) {
                 + item<ContentOverview>()
-                + item<StereotypeEditor>()
                 + item<StatusCrud>()
+                + item<ContentNavTest>()
             }
 
-            + group(translate<Accounts>()) {
+            + group(localized<Accounts>()) {
                 + item<Accounts>()
                 + item<Roles>()
             }
 
-            + group(translate<TranslationCrud>()) {
+            + group(localized<TranslationCrud>()) {
                 + item<LocaleCrud>()
                 + item<TranslationCrud>()
             }
