@@ -128,15 +128,17 @@ open class Server(
 
         Sql.onCreate(settings.database) // initializes SQL connection
 
-        settings.database.password = "" // don't keep DB password in the memory
+        settings.database.password = "" // don't keep DB password in the config
 
-        loadModules(settings) // load modules
-
-        Sql.onStart() // create missing tables and columns
+        loadModules(settings)
 
         if (firstOrNull<SettingProvider>() == null) this += SettingBl()
 
-        startModules() // start the modules
+        resolveDependencies()
+
+        initializeDb()
+
+        startModules()
 
         ktorServer = onBuildServer()
 
@@ -204,15 +206,30 @@ open class Server(
         }
     }
 
-    private fun startModules() {
-
+    private fun resolveDependencies() {
         var success = true
         dependencies.forEach {
             success = success && it.resolve()
         }
 
         if (! success) throw IllegalArgumentException("module dependency resolution failed")
+    }
 
+    private fun initializeDb() {
+        Sql.onStart() // create missing tables and columns
+
+        modules.instances.forEach {
+            try {
+                it.onInitializeDb()
+                moduleLogger.debug("initialized DB for module $it")
+            } catch (ex: Throwable) {
+                moduleLogger.error("failed to initialize DB for module $it")
+                throw ex
+            }
+        }
+    }
+
+    private fun startModules() {
         modules.instances.forEach {
             try {
                 it.onModuleStart()

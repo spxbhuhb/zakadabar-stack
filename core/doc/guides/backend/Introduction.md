@@ -31,9 +31,9 @@ is basically a very simplistic way of injection, see
 1. load settings, see [Settings](./Settings.md)
 1. create SQL connection pool (HikariCP)
 1. load modules, see [Modules](./Modules.md)
-1. initialize SQL:
-   1. create missing tables and columns (Exposed)
-   1. initialize DB if empty
+1. create missing tables and columns (Exposed)
+1. resolve module dependencies
+1. initialize DB (if necessary)
 1. start modules, see [Modules](./Modules.md)
 1. build the Ktor configuration
 1. start the Ktor server

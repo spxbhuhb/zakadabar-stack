@@ -94,17 +94,120 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
         includeData = false
     }
 
+    // -------------------------------------------------------------------------
+    // Lifecycle
+    // -------------------------------------------------------------------------
+
+    override fun onInitializeDb() {
+
+        val firstInit = try {
+            pa.withTransaction { pa.readByName("so") }
+            false
+        } catch (ex: NoSuchElementException) {
+            true
+        }
+
+        if (firstInit) {
+            val so: AccountPrivateBo = default {
+                validated = true
+                locked = settings.initialSoPassword.isNullOrEmpty()
+                credentials = settings.initialSoPassword?.let { Secret(it) }
+                accountName = "so"
+                fullName = "Security Officer"
+                email = "so@127.0.0.1"
+                displayName = "SO"
+                locale = server.settings.defaultLocale
+            }
+
+            val anonymous: AccountPrivateBo = default {
+                validated = true
+                locked = true
+                accountName = "anonymous"
+                fullName = "Anonymous"
+                email = "anonymous@127.0.0.1"
+                displayName = "Anonymous"
+                locale = server.settings.defaultLocale
+            }
+
+            pa.withTransaction {
+                pa.create(so)
+                pa.create(anonymous)
+
+                val executor = Executor(so.id, false, emptyList(), emptyList())
+
+                auditor.auditCreate(executor, so)
+                auditor.auditCreate(executor, anonymous)
+
+                fun grant(account: AccountPrivateBo, role: RoleBo) {
+                    val grant = GrantRole(account.id, role.id)
+                    roleBl.grantRole(executor, grant)
+                    roleBl.auditor.auditAction(executor, grant)
+                }
+
+                StackRoles.map.forEach {
+                    val roleName = it.value
+
+                    try {
+                        roleBl.getByName(roleName)
+                        return@forEach // when exists we don't want to re-create it
+                    } catch (ex : NoSuchElementException) {
+                        // this is fine, we have to create the role
+                    }
+
+                    val bo = roleBl.create(executor, RoleBo(EntityId(), roleName, roleName))
+                    roleBl.auditor.auditCreate(executor, bo)
+
+                    if (firstInit) {
+                        when (it.value) {
+                            StackRoles.securityOfficer -> grant(so, bo)
+                            StackRoles.siteAdmin -> grant(so, bo)
+                            StackRoles.siteMember -> grant(so, bo)
+                            StackRoles.anonymous -> grant(anonymous, bo)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     override fun onModuleStart() {
-        initDb()
         anonymous = pa.withTransaction {
             pa.readByName("anonymous").toPublic()
         }
         super.onModuleStart() // this has to be last, so authorizer will find roles after db init
     }
 
+    // -------------------------------------------------------------------------
+    // Crud
+    // -------------------------------------------------------------------------
+
     override fun create(executor: Executor, bo: AccountPrivateBo): AccountPrivateBo {
         throw NotImplementedError("use CreateAccount action instead")
     }
+
+    /**
+     * Updates only the non-security fields of the account. Security related fields have
+     * their own update methods. Email and password are security related fields.
+     */
+    override fun update(executor: Executor, bo: AccountPrivateBo): AccountPrivateBo {
+        val account = pa.read(bo.id)
+        val credentials = pa.readCredentials(account.id)
+
+        account.accountName = bo.accountName
+        account.fullName = bo.fullName
+        account.displayName = bo.displayName
+        account.theme = bo.theme
+        account.locale = bo.locale
+
+        pa.update(account)
+        pa.writeCredentials(account.id, credentials)
+
+        return account
+    }
+
+    // -------------------------------------------------------------------------
+    // Actions
+    // -------------------------------------------------------------------------
 
     open fun checkName(executor: Executor, action: CheckName): CheckNameResult {
 
@@ -148,27 +251,6 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
         }
 
         return ActionStatusBo()
-    }
-
-
-    /**
-     * Updates only the non-security fields of the account. Security related fields have
-     * their own update methods. Email and password are security related fields.
-     */
-    override fun update(executor: Executor, bo: AccountPrivateBo): AccountPrivateBo {
-        val account = pa.read(bo.id)
-        val credentials = pa.readCredentials(account.id)
-
-        account.accountName = bo.accountName
-        account.fullName = bo.fullName
-        account.displayName = bo.displayName
-        account.theme = bo.theme
-        account.locale = bo.locale
-
-        pa.update(account)
-        pa.writeCredentials(account.id, credentials)
-
-        return account
     }
 
     open fun updateAccountSecure(executor: Executor, action: UpdateAccountSecure): ActionStatusBo {
@@ -225,6 +307,10 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
         return ActionStatusBo()
     }
 
+    // -------------------------------------------------------------------------
+    // Internal functions
+    // -------------------------------------------------------------------------
+
     /**
      * Perform password based authentication. Increments success/fail counters according
      * to the result. Locks the account if login fails surpass [ModuleSettings.maxFailedLogins].
@@ -270,6 +356,12 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
         pa.commit()
     }
 
+    override fun authenticate(executor: Executor, accountName: String, password: Secret): AccountPublicBo {
+        val account = pa.readByName(accountName)
+        authenticate(executor, account.id, password.value)
+        return account.toPublic()
+    }
+
     private fun AccountPrivateBo.toPublic() = AccountPublicBo(
         id = EntityId(id),
         accountName = accountName,
@@ -285,79 +377,10 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
 
     override fun readPublic(account: EntityId<out BaseBo>) = pa.read(EntityId(account)).toPublic()
 
-    override fun authenticate(executor: Executor, accountName: String, password: Secret): AccountPublicBo {
-        val account = pa.readByName(accountName)
-        authenticate(executor, account.id, password.value)
-        return account.toPublic()
-    }
-
     override fun roles(accountId: EntityId<out BaseBo>): List<Pair<EntityId<out BaseBo>, String>> {
         return roleBl.rolesOf(EntityId(accountId))
     }
 
-    private fun initDb() {
-
-        try {
-            pa.withTransaction { pa.readByName("so") }
-            return // when there is a security officer, the db is already initialized
-        } catch (ex: NoSuchElementException) {
-            // this is fine, we have to perform the initialization
-        }
-
-        val so: AccountPrivateBo = default {
-            validated = true
-            locked = settings.initialSoPassword.isNullOrEmpty()
-            credentials = settings.initialSoPassword?.let { Secret(it) }
-            accountName = "so"
-            fullName = "Security Officer"
-            email = "so@127.0.0.1"
-            displayName = "SO"
-            locale = server.settings.defaultLocale
-        }
-
-        val anonymous: AccountPrivateBo = default {
-            validated = true
-            locked = true
-            accountName = "anonymous"
-            fullName = "Anonymous"
-            email = "anonymous@127.0.0.1"
-            displayName = "Anonymous"
-            locale = server.settings.defaultLocale
-        }
-
-        val securityOfficerRole = RoleBo(EntityId(), StackRoles.securityOfficer, "Security Officer")
-        val siteAdminRole = RoleBo(EntityId(), StackRoles.siteAdmin, "Site Admin")
-        val siteMemberRole = RoleBo(EntityId(), StackRoles.siteMember, "Site Member")
-
-        pa.withTransaction {
-            pa.create(so)
-            pa.create(anonymous)
-
-            val executor = Executor(so.id, false, emptyList(), emptyList())
-
-            auditor.auditCreate(executor, so)
-            auditor.auditCreate(executor, anonymous)
-
-            roleBl.create(executor, securityOfficerRole)
-            roleBl.auditor.auditCreate(executor, securityOfficerRole)
-
-            roleBl.create(executor, siteAdminRole)
-            roleBl.auditor.auditCreate(executor, siteAdminRole)
-
-            roleBl.create(executor, siteMemberRole)
-            roleBl.auditor.auditCreate(executor, siteMemberRole)
-
-            fun grant(role: RoleBo) {
-                val grant = GrantRole(so.id, role.id)
-                roleBl.grantRole(executor, grant)
-                roleBl.auditor.auditAction(executor, grant)
-            }
-
-            grant(securityOfficerRole)
-            grant(siteAdminRole)
-            grant(siteMemberRole)
-        }
-    }
-
+    fun byName(accountName : String) = pa.readByName(accountName)
 
 }

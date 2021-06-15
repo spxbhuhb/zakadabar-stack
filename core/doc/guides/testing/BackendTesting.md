@@ -14,6 +14,21 @@ To create the environment for your tests:
 1. add a test server setup
 1. add a companion to your test class
 
+### Gradle Dependencies
+
+```kotlin
+sourceSets["commonTest"].dependencies {
+    implementation(kotlin("test-common"))
+    implementation(kotlin("test-annotations-common"))
+    implementation(kotlin("test-junit"))
+}
+
+sourceSets["jvmTest"].dependencies {
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("com.h2database:h2:1.4.200")
+}
+```
+
 ### Configuration Files
 
 The following picture shows how to add the configuration files for your tests.

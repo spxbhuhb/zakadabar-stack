@@ -4,34 +4,16 @@ This roadmap is something we would like to follow. Please note that we cannot gu
 
 ## 2021 June
 
-* public release on the 4th
-    * discussion topic
-    * Kotlin Marketplace
-    * https://github.com/AAkira/Kotlin-Multiplatform-Libraries
-
 ### Core
 
-* scheduler: schedule and run backend tasks in a multi-node environment
-* responsive components:
-    * table
-    * form (already works, but that's just happy coincidence)
-    * tab container
+* minor improvements
+* date and time editors for the frontend
 * form
-    * option to add help tooltip
-    * provide feedback on invalid fields from the schema
-* popup to the user when the server is unavailable
-    * short gap: retry
-    * long gap: refresh the page and/or ask the user what to do
+     * option to add help tooltip
+  
+### Lib: Content
 
-### Lib
-
-* `lib:redis` - option to use Redis for session handling
-
-* `lib:search`
-    * index static content
-    * optionally index data
-    * search action for application title bar
-    * use Lucene or Solr
+* implementation of a SEO-ready, multi-language content backend and admin frontend
 
 ### Documentation
 
@@ -39,13 +21,38 @@ This roadmap is something we would like to follow. Please note that we cannot gu
     * form
     * table
     * pages
+  
+## Unscheduled
+
+### Core
+
+* scheduler: schedule and run backend tasks in a multi-node environment
+* responsive components:
+  * table
+  * form (already works, but that's just happy coincidence)
+  * tab container
+* form
+  * provide feedback on invalid fields from the schema
+* popup to the user when the server is unavailable
+  * short gap: retry
+  * long gap: refresh the page and/or ask the user what to do
+
+### Lib
+
+* `lib:redis` - option to use Redis for session handling
+
+* `lib:search`
+  * index static content
+  * optionally index data
+  * search action for application title bar
+  * use Lucene or Solr
 
 ### Site
 
 * search function
 * clean up site routing and page structure, now it is a bit confused (/en/GetHelp for example)
 
-## Unscheduled
+### Uncategorized
 
 * synthetic forms (halfway done)
 * settings browser UI (depends on syntethic forms)

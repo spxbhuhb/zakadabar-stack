@@ -46,6 +46,7 @@ class ModuleSettings(
         + ::sessionTimeout
         + ::updateDelay
         + ::expirationCheckInterval
+        + ::initialSoPassword
     }
 
 }

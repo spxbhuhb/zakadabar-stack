@@ -1,12 +1,31 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack
 
-object StackRoles : RolesBase()
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
+
+lateinit var StackRoles : RolesBase
 
 open class RolesBase {
-    val securityOfficer = "security-officer"
-    val siteMember = "site-member"
-    val siteAdmin = "site-admin"
+
+    val map: MutableMap<String, String> = mutableMapOf()
+
+    open val securityOfficer by "security-officer"
+    open val siteMember by "site-member"
+    open val siteAdmin by "site-admin"
+    open val anonymous by "anonymous"
+
+    class RoleDelegate : ReadOnlyProperty<RolesBase, String> {
+        override fun getValue(thisRef: RolesBase, property: KProperty<*>): String {
+            return thisRef.map[property.name] !!
+        }
+    }
+
+    operator fun String.provideDelegate(thisRef: RolesBase, prop: KProperty<*>): ReadOnlyProperty<RolesBase, String> {
+        thisRef.map[prop.name] = this
+        return RoleDelegate()
+    }
+
 }

@@ -63,13 +63,12 @@ open class KtorServerBuilder(
             install(Sessions) {
                 sessionBl.configure(this)
             }
-
             install(Authentication) {
                 sessionBl.configure(this)
             }
         } else {
             install(Authentication) {
-                configure()
+                configureEmpty()
             }
         }
     }

@@ -19,38 +19,93 @@ Accounts is a simple module to add basic user account support to the application
 
 To use accounts in your application:
 
-1. add the gradle dependency,
-1. add the module to your server configuration, for details see [Modules](../../backend/Modules.md),
-1. configure settings, for more information, for details see [Settings](../../backend/Settings.md).
-1. add the service to your application, see [Introduction: Browser](../../browser/Introduction.md)   
+**common**
+
+1. add the gradle dependency
+
+**backend**
+
+1. (optional) define additional roles
+1. add the module to your server configuration, for details see [Modules](../../backend/Modules.md)
+1. configure settings, for more information, for details see [Settings](../../backend/Settings.md)
+
+**frontend**
+
+1. add the service to your application, see [Introduction: Browser](../../browser/Introduction.md)  
 1. add the routing to your frontend, for details see [Routing](../../browser/structure/Routing.md)
 1. add the navigation to your side to open the pages, see [SideBar](../../browser/builtin/SideBar.md)
 
-**gradle**
+### Common
+
+#### gradle
 
 ```kotlin
 implementation("hu.simplexion.zakadabar:accounts:$accountsVersion")
 ```
 
-**backend**
+### Backend
+
+#### additional roles
+
+By default, the four roles defined in the stack are added
+
+- security-officer
+- site-admin
+- site-member
+- anonymous
+
+For additional roles, extend the RolesBase class and pass it for install (see below):
+
+```kotlin
+object Roles : RolesBase() {
+    val myRole1 by "my-role-1"
+    val myRole2 by "my-role-2"
+}
+```
+
+#### add module
+
+If you have additional roles:
+
+```kotlin
+zakadabar.lib.accounts.backend.install(Roles)
+```
+
+Otherwise (this will use an instance of [RolesBase](/src/commonMain/kotlin/zakadabar/stack/StackRoles.kt)):
 
 ```kotlin
 zakadabar.lib.accounts.backend.install()
 ```
 
-**frontend: application**
+
+#### configure settings
+
+For customized settings create a 'lib.account.yaml' file in your settings directory:
+
+```yaml
+initialSoPassword: so
+# maxFailedLogins: 5
+# sessionTimeout: 30
+# updateDelay: 120
+# expirationCheckInterval: 120
+```
+
+
+### Frontend
+
+#### application
 
 ```kotlin
 zakadabar.lib.accounts.frontend.install(application)
 ```
 
-**frontend: routing**
+#### routing
 
 ```kotlin
 zakadabar.lib.accounts.frontend.install(this)
 ```
 
-**frontend: navigation** (for sidebar)
+#### navigation (for sidebar)
 
 ```kotlin
 ifAnonymous {
@@ -100,3 +155,5 @@ Three roles are automatically created and granted to `so`:
 - `security-officer` - responsible for security related management
 - `site-admin` - responsible for business related management
 - `site-member` - member of the site
+
+The role `anonymous` is automatically granted to `anonymous`.
