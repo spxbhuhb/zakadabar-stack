@@ -14,6 +14,12 @@ interface BackendModule {
     fun onModuleLoad() = Unit
 
     /**
+     * Called after all modules are loaded, all SQL tables are created, but before
+     * any modules are started.
+     */
+    fun onInitializeDb() = Unit
+
+    /**
      * Called when the module is started. It is safe to use other modules here.
      */
     fun onModuleStart() = Unit

@@ -58,36 +58,26 @@ object Module : BackendModule {
 
 ## Module Lifecycle
 
-There are four module callback functions which are called during startup.
+This picture summarizes the module startup sequence.
+
+![Module Startup](module-init.png)
 
 ### onModuleLoad
 
-Called after:
+Perform only basic initialization in `onModuleLoad`.
 
-- the module is added to the server module list.
-  
-Called before:
+### onInitializeDb
 
-- database initialization,
-- load of other modules,
-- settings are ready,
-- `onModuleStart`
-
-Perform only basic initialization in `onModuleStart`. 
+First time DB initialization and DB upgrades (if necessary).
 
 ### onModuleStart
 
 Called after:
 
-- all modules are loaded with `onModuleLoad` executed,
-- the database is initialized,
-- settings are available.
-
-Called before:
-
-- Ktor is started
-- `onInstallRoutes`
-- `onInstallStatic`
+- all modules are loaded with `onModuleLoad` executed
+- all module references are resolved
+- the database is initialized, `onInitializeDb` executed for all modules
+- settings are available
 
 ### onInstallRoutes
 

@@ -14,6 +14,8 @@ plugins {
 group = "hu.simplexion.zakadabar"
 version = "2021.6.9"
 
+val ktorVersion = "1.4.3"
+
 val isSnapshot = version.toString().contains("SNAPSHOT")
 
 noArg {
@@ -34,6 +36,17 @@ kotlin {
 
     sourceSets["commonMain"].dependencies {
         implementation(project(":core"))
+    }
+
+    sourceSets["commonTest"].dependencies {
+        implementation(kotlin("test-common"))
+        implementation(kotlin("test-annotations-common"))
+        implementation(kotlin("test-junit"))
+    }
+
+    sourceSets["jvmTest"].dependencies {
+        implementation("io.ktor:ktor-server-netty:$ktorVersion")
+        implementation("com.h2database:h2:1.4.200")
     }
 
 }

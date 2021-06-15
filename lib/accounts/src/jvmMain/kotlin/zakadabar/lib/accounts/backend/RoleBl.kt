@@ -33,16 +33,16 @@ class RoleBl(
         query(RolesByAccount::class, ::rolesByAccount)
     }
 
-    override fun getByName(name: String) = pa.withTransaction {
-        pa.readByName(name).id
-    }
+    // -------------------------------------------------------------------------
+    // Queries
+    // -------------------------------------------------------------------------
 
     private fun rolesByAccount(executor: Executor, query: RolesByAccount) =
         pa.rolesByAccount(query.accountId)
 
-    fun rolesOf(accountId: EntityId<AccountPrivateBl>) = pa.withTransaction {
-        pa.rolesOf(accountId)
-    }
+    // -------------------------------------------------------------------------
+    // Actions
+    // -------------------------------------------------------------------------
 
     internal fun grantRole(executor: Executor, grant: GrantRole): ActionStatusBo {
         pa.grant(RoleGrantBo(grant.account, grant.role))
@@ -53,4 +53,18 @@ class RoleBl(
         pa.revoke(RoleGrantBo(revoke.account, revoke.role))
         return ActionStatusBo()
     }
+
+    // -------------------------------------------------------------------------
+    // Internal
+    // -------------------------------------------------------------------------
+
+    fun rolesOf(accountId: EntityId<AccountPrivateBl>) = pa.withTransaction {
+        pa.rolesOf(accountId)
+    }
+
+    override fun getByName(name: String) = pa.withTransaction {
+        pa.readByName(name).id
+    }
+
+
 }
