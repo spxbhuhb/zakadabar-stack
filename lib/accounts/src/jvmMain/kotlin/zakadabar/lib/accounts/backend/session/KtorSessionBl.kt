@@ -134,11 +134,24 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 
     private fun loginAction(call: ApplicationCall, executor: Executor, action: LoginAction): ActionStatusBo {
 
-        val account = try {
-            authenticate(executor, action.accountName, action.password) ?: return ActionStatusBo(false)
-        } catch (ex: AccountLockedException) {
-            return ActionStatusBo(false, "locked")
+        val session = try {
+            login(executor, action)
+        } catch (ex : AccountLockedException) {
+            return ActionStatusBo(false, reason = "locked")
+        } catch (ex : Exception) {
+            return ActionStatusBo(false)
         }
+
+        if (StackRoles.siteMember !in session.roleNames) return ActionStatusBo(false)
+
+        call.sessions.set(session)
+
+        return ActionStatusBo(true)
+    }
+
+    fun login(executor: Executor, action: LoginAction): StackSession {
+
+        val account = authenticate(executor, action.accountName, action.password) ?: throw InvalidCredentials()
 
         val roleIds = mutableListOf<EntityId<out BaseBo>>()
         val roleNames = mutableListOf<String>()
@@ -148,11 +161,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
             roleNames += it.second
         }
 
-        if (StackRoles.siteMember !in roleNames) return ActionStatusBo(false)
-
-        call.sessions.set(StackSession(account.id, accountBl.anonymous().id == account.id, roleIds, roleNames))
-
-        return ActionStatusBo(true)
+        return StackSession(account.id, accountBl.anonymous().id == account.id, roleIds, roleNames)
     }
 
     private fun authenticate(executor: Executor, accountName: String, password: Secret): AccountPublicBo? {
@@ -204,7 +213,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 
     }
 
-    override fun configure(conf : Sessions.Configuration) {
+    override fun configure(conf: Sessions.Configuration) {
         with(conf) {
             val sessionType = StackSession::class
             val name = "ZKL_SESSION"
@@ -223,7 +232,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
     }
 
     override fun configure(conf: Authentication.Configuration) {
-        conf.configure()
+        conf.configureSession()
     }
 
 }

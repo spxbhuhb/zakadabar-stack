@@ -44,6 +44,10 @@ kotlin {
         implementation(kotlin("test-junit"))
     }
 
+    sourceSets["jvmMain"].dependencies {
+        implementation("io.ktor:ktor-client-auth:$ktorVersion")
+    }
+
     sourceSets["jvmTest"].dependencies {
         implementation("io.ktor:ktor-server-netty:$ktorVersion")
         implementation("com.h2database:h2:1.4.200")
