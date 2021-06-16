@@ -48,12 +48,12 @@ class ModuleSettings(
 ) : BaseBo {
 
     override fun schema() = BoSchema {
-        + ::maxFailedLogins
-        + ::sessionTimeout
-        + ::updateDelay
-        + ::expirationCheckInterval
-        + ::initialSoPassword
-        + ::emailInAccountPublic
+        + ::maxFailedLogins default maxFailedLogins
+        + ::sessionTimeout default sessionTimeout
+        + ::updateDelay default updateDelay
+        + ::expirationCheckInterval default expirationCheckInterval
+        + ::initialSoPassword default initialSoPassword
+        + ::emailInAccountPublic default emailInAccountPublic
     }
 
 }
