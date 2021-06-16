@@ -220,16 +220,27 @@ object ZkFormStyles : ZkCssStyleSheet() {
         flexDirection = "row"
         alignItems = "center"
         outline = "none"
+
+        border = "1px solid ${theme.borderColor}"
+        borderRadius = theme.cornerRadius
+        color = theme.inputTextColor
+        backgroundColor = theme.inputBackgroundColor
+
+        decorators()
     }
 
     val selectedOption by cssClass {
         display = "flex"
 
         fieldDefault()
-        decorators()
+
+        // these are set but the container
+        border = "none"
+        color = "inherit"
+        backgroundColor = "inherit"
 
         lineHeight = "1" // to prevent conversion to px
-        height = rowHeight
+        height = "${rowHeight - 2}px" // -2 to compensate border from container
         fill = theme.inputTextColor
         paddingRight = "0.3em"
 
