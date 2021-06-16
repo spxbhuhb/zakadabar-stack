@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.6.7"
+version = rootProject.extra["stackVersion"] as String
 
 noArg {
     annotation("kotlinx.serialization.Serializable")

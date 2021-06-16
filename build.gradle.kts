@@ -12,6 +12,15 @@ plugins {
     `maven-publish`
 }
 
+buildscript {
+    extra["stackVersion"] = "2021.6.16"
+
+    extra["ktorVersion"] = "1.4.3"
+    extra["coroutinesVersion"] = "1.3.9"
+    extra["serializationVersion"] = "1.0.0-RC2"
+    extra["datetimeVersion"] = "0.2.0"
+}
+
 subprojects {
 
     repositories {

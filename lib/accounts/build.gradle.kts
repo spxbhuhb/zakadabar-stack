@@ -12,11 +12,12 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.6.15"
-
-val ktorVersion = "1.4.3"
+version = rootProject.extra["stackVersion"] as String
 
 val isSnapshot = version.toString().contains("SNAPSHOT")
+
+// common
+val ktorVersion = rootProject.extra["ktorVersion"] as String
 
 noArg {
     annotation("kotlinx.serialization.Serializable")

@@ -12,15 +12,15 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.6.15"
+version = rootProject.extra["stackVersion"] as String
 
 val isSnapshot = version.toString().contains("SNAPSHOT")
 
 // common
-val ktorVersion = "1.4.3"
-val coroutinesVersion = "1.3.9"
-val serializationVersion = "1.0.0-RC2"
-val datetimeVersion = "0.2.0"
+val ktorVersion = rootProject.extra["ktorVersion"] as String
+val coroutinesVersion = rootProject.extra["coroutinesVersion"] as String
+val serializationVersion = rootProject.extra["serializationVersion"] as String
+val datetimeVersion = rootProject.extra["datetimeVersion"] as String
 val cliktVersion = "2.8.0"
 
 // jvm
