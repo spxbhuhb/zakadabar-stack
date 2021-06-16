@@ -88,6 +88,7 @@ initialSoPassword: so
 # sessionTimeout: 30
 # updateDelay: 120
 # expirationCheckInterval: 120
+# emailInAccountPublic: false
 ```
 
 

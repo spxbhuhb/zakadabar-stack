@@ -37,7 +37,13 @@ class ModuleSettings(
      * Initial password of the SO account. Used only during first time DB
      * initialization.
      */
-    var initialSoPassword: String? = null
+    var initialSoPassword: String? = null,
+
+    /**
+     * When true email addresses are put into AccountPublicBo objects.
+     * Default is false.
+     */
+     var emailInAccountPublic : Boolean = false
 
 ) : BaseBo {
 
@@ -47,6 +53,7 @@ class ModuleSettings(
         + ::updateDelay
         + ::expirationCheckInterval
         + ::initialSoPassword
+        + ::emailInAccountPublic
     }
 
 }

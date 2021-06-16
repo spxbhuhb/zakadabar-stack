@@ -6,12 +6,19 @@ package zakadabar.lib.accounts.backend
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.*
 import zakadabar.lib.accounts.data.AccountPrivateBo
+import zakadabar.lib.accounts.data.ModuleSettings
+import zakadabar.lib.accounts.data.RoleBo
 import zakadabar.lib.accounts.data.RoleGrantBo
 import zakadabar.stack.backend.exposed.Sql
+import zakadabar.stack.backend.exposed.entityId
+import zakadabar.stack.backend.setting.setting
 import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.entity.EntityId
 
 class RoleExposedPa : RoleExposedPaGen() {
+
+    private val settings by setting<ModuleSettings>()
 
     override fun onModuleLoad() {
         super.onModuleLoad()
@@ -39,12 +46,35 @@ class RoleExposedPa : RoleExposedPaGen() {
                 )
             }
 
+
+    fun accountsByRole(roleId: EntityId<RoleBo>): List<AccountPublicBo> {
+        val grants = RoleGrantExposedTable
+        val accounts = AccountPrivateExposedTableGen
+
+        return grants
+            .innerJoin(accounts, { grants.account }, { accounts.id })
+            .select { RoleGrantExposedTable.role eq roleId.toLong() }
+            .map {
+                AccountPublicBo(
+                    it[accounts.id].entityId(),
+                    accountName = it[accounts.accountName],
+                    fullName = it[accounts.fullName],
+                    email = if (settings.emailInAccountPublic) it[accounts.email] else "",
+                    displayName = it[accounts.displayName],
+                    organizationName = "", // FIXME this is not stored yet
+                    theme = it[accounts.theme],
+                    locale = it[accounts.locale]
+                )
+            }
+    }
+
+
     fun grant(grant: RoleGrantBo) {
         val grants = RoleGrantExposedTable
 
         // TODO Exposed: insertIgnore would be better but not supported out-of-the box
         val exists = grants
-            .select {  (grants.account eq grant.account.toLong()) and (grants.role eq grant.role.toLong())}
+            .select { (grants.account eq grant.account.toLong()) and (grants.role eq grant.role.toLong()) }
             .count() != 0L
 
         if (exists) return

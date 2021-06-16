@@ -9,13 +9,16 @@ import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.data.query.QueryBoCompanion
 
+@Deprecated("EOL: 2021.7.1  -  use AccountsByRole instead", ReplaceWith("AccountsByRole(roleName)"))
+class AccountByRole(roleName: String) : AccountsByRole(roleName)
+
 @Serializable
-class AccountByRole(
+open class AccountsByRole(
     val roleName: String
 ) : QueryBo<AccountPublicBo> {
 
     override suspend fun execute() = comm.query(this, serializer(), ListSerializer(AccountPublicBo.serializer()))
 
-    companion object : QueryBoCompanion<AccountPublicBo>(AccountPublicBo.boNamespace)
+    companion object : QueryBoCompanion<AccountPublicBo>(RoleBo.boNamespace)
 
 }

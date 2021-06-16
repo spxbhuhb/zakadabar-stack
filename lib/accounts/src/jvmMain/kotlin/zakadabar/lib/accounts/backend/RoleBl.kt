@@ -25,11 +25,14 @@ class RoleBl(
         all = StackRoles.securityOfficer
         action(GrantRole::class, StackRoles.securityOfficer)
         action(RevokeRole::class, StackRoles.securityOfficer)
+        query(AccountsByRole::class, StackRoles.siteMember)
+        query(RolesByAccount::class, StackRoles.securityOfficer)
     }
 
     override val router = router {
         action(GrantRole::class, ::grantRole)
         action(RevokeRole::class, ::revokeRole)
+        query(AccountsByRole::class, ::accountsByRole)
         query(RolesByAccount::class, ::rolesByAccount)
     }
 
@@ -39,6 +42,9 @@ class RoleBl(
 
     private fun rolesByAccount(executor: Executor, query: RolesByAccount) =
         pa.rolesByAccount(query.accountId)
+
+    private fun accountsByRole(executor: Executor, query: AccountsByRole) =
+        pa.accountsByRole(pa.readByName(query.roleName).id)
 
     // -------------------------------------------------------------------------
     // Actions
