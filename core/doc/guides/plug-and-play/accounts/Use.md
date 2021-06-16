@@ -28,6 +28,17 @@ if (actionStatus.success) {
 session = SessionBo.read(EntityId("current")) // returns with the roles of the logged in user
 ```
 
+## Basic Authentication (JVM client)
+
+To use basic authentication from a client, assign an authenticating HTTP client
+to `CommBase.client`. This method authenticates the client with an `Authentication`
+HTTP header. No session is created and no login is required.
+
+```kotlin
+CommBase.client = httpClientWithAuth("so", "so")
+AccountPrivateBo.all()
+```
+
 ## Use on the Frontend
 
 Use the `executor` global value. It is an instance of [ZkExecutor](/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkExecutor.kt):

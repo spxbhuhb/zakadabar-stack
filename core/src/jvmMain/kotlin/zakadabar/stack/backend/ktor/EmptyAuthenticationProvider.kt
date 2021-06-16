@@ -12,7 +12,7 @@ class EmptyAuthenticationProvider internal constructor(configuration: Configurat
     class Configuration internal constructor(name: String?) : AuthenticationProvider.Configuration(name)
 }
 
-fun Authentication.Configuration.configure(name: String? = null) {
+fun Authentication.Configuration.configureEmpty(name: String? = null) {
 
     val provider = AuthenticationProvider(EmptyAuthenticationProvider.Configuration(name))
 

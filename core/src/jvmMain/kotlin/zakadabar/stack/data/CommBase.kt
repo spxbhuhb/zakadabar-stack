@@ -13,17 +13,20 @@ open class CommBase {
     companion object {
         lateinit var baseUrl: String
 
-        val client = HttpClient {
-            install(HttpCookies) {
-                // Will keep an in-memory map with all the cookies from previous requests.
-                storage = AcceptAllCookiesStorage()
-            }
-        }
+        var client = httpClient()
 
         /**
          * Called then Ktor client throws an exception.
          */
         var onError: suspend (ex: Exception) -> Unit = { }
+
+        @PublicApi
+        fun httpClient() = HttpClient {
+            install(HttpCookies) {
+                // Will keep an in-memory map with all the cookies from previous requests.
+                storage = AcceptAllCookiesStorage()
+            }
+        }
     }
 
 }

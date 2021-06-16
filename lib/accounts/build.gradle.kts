@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.6.9"
+version = "2021.6.15"
 
 val ktorVersion = "1.4.3"
 
@@ -42,6 +42,10 @@ kotlin {
         implementation(kotlin("test-common"))
         implementation(kotlin("test-annotations-common"))
         implementation(kotlin("test-junit"))
+    }
+
+    sourceSets["jvmMain"].dependencies {
+        implementation("io.ktor:ktor-client-auth:$ktorVersion")
     }
 
     sourceSets["jvmTest"].dependencies {

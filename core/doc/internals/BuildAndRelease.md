@@ -10,7 +10,7 @@ Switch to the `ak/kt-15` branch, then `gradle publishToMavenLocal`
 ## Release Branch
 
 - create a release branch: `release-YYYY.MM.DD`
-- rename [Snapshot](/doc/changelog/Snapshot.md)` to `YYYY.MM.DD.md`, move to archive
+- rename [Next](/doc/changelog/Next.md)` to `YYYY.MM.DD.md`, move to archive
 - edit [TOC](/doc/changelog/TOC.md)
     - move current to archive
     - add 'YYYY.MM.DD.md' as current
