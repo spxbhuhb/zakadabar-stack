@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
@@ -39,6 +39,10 @@ open class ZkInstantColumn<T : DtoBase>(
     override fun matches(row: T, string: String?): Boolean {
         if (string == null) return false
         return (string in format(row))
+    }
+
+    override fun exportCsv(row: T): String {
+        return format(row)
     }
 
     open fun format(row: T): String {

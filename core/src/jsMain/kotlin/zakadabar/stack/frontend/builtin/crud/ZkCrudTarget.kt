@@ -64,6 +64,7 @@ open class ZkCrudTarget<T : RecordDto<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
             table.setData(companion.comm.all())
 
             container build {
+                + zkPageStyles.fixed
                 + table
             }
         }
