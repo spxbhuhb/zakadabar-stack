@@ -19,7 +19,7 @@ class ZkSyntheticForm(
         buildPoint.classList += ZkFormStyles.onePanel
 
         + section {
-            boDescriptor.properties.forEach { dProperty ->
+            boDescriptor.properties.forEach { _ ->
 
 //                val field = when (dProperty) {
 //                    is IntPropertyBo -> ZkIntField(this@ZkSyntheticForm, dProperty::value)

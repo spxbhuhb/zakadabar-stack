@@ -44,7 +44,7 @@ kotlin {
         implementation(project(":lib:i18n"))
         implementation(project(":lib:examples"))
         implementation(project(":lib:blobs"))
-
+        implementation(project(":exp:content"))
         implementation("com.h2database:h2:1.4.200")
     }
 }

@@ -18,11 +18,11 @@ import zakadabar.stack.util.PublicApi
  */
 @PublicApi
 open class QueryComm(
-    private val companion: QueryBoCompanion<*>
+    private val companion: QueryBoCompanion
 ) : CommBase(), QueryCommInterface {
 
     @PublicApi
-    override suspend fun <RQ : Any, RS> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<List<RS>>): List<RS> {
+    override suspend fun <RQ : Any, RS> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<RS>): RS {
 
         val q = encodeURIComponent(Json.encodeToString(requestSerializer, request))
 

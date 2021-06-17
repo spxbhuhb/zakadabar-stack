@@ -20,7 +20,7 @@ class CheckName(
 
     override suspend fun execute() = comm.action(this, serializer(), CheckNameResult.serializer())
 
-    companion object : ActionBoCompanion<CheckNameResult>(AccountPrivateBo.boNamespace)
+    companion object : ActionBoCompanion(AccountPrivateBo.boNamespace)
 
     override fun schema() = BoSchema {
         + ::accountName min 1 max 50 blank false

@@ -9,6 +9,9 @@ import org.w3c.dom.get
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.data.schema.descriptor.BoConstraintType
+import zakadabar.stack.data.schema.descriptor.BooleanBoConstraint
+import zakadabar.stack.data.schema.descriptor.IntBoConstraint
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
@@ -114,8 +117,10 @@ abstract class ZkFieldBase<FT : BaseBo, DT>(
         }
     }
 
+    open fun needsMandatoryMark() = ! form.schema.value.isOptional(propName)
+
     open fun mandatoryMark() {
-        if (! form.schema.value.isOptional(propName)) {
+        if (needsMandatoryMark()) {
             + div(ZkFormStyles.mandatoryMark) { ! "&nbsp;*" }
         }
     }
@@ -196,4 +201,26 @@ abstract class ZkFieldBase<FT : BaseBo, DT>(
      * Called after a successful form submit in create mode.
      */
     open suspend fun onCreateSuccess(created: EntityBo<*>) = Unit
+
+    /**
+     * Checks if there are constraints that actually require a value. If there is no such
+     * constraint, we should not mark this field mandatory as it might confuse the user.
+     *
+     * To use this function, override [needsMandatoryMark] and call this from there.
+     */
+    fun stringMandatoryMark(): Boolean {
+
+        val constraints = form.schema.value.constraints(propName)
+
+        var mandatory = false
+        constraints.forEach {
+            when {
+                (it.type == BoConstraintType.Min && it is IntBoConstraint && it.value != 0) -> mandatory = true
+                (it.type == BoConstraintType.Blank && it is BooleanBoConstraint && ! it.value) -> mandatory = true
+            }
+        }
+
+        return mandatory
+    }
+
 }

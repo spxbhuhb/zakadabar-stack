@@ -17,7 +17,7 @@ class SimpleStandaloneAction(
 
 ) : ActionBo<ActionStatusBo> {
 
-    companion object : ActionBoCompanion<SimpleStandaloneAction>("zkl-simple-standalone-action")
+    companion object : ActionBoCompanion("zkl-simple-standalone-action")
 
     override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
 

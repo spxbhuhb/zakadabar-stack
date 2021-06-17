@@ -184,7 +184,7 @@ open class ZkForm<T : BaseBo>(
             submitTouched = true
         }
 
-        val report = schema.value.validate()
+        val report = schema.value.validate(mode == ZkElementMode.Create)
 
         if (submit && report.fails.isNotEmpty()) {
             println("${this::class.simpleName} validation fail:")
@@ -467,7 +467,7 @@ open class ZkForm<T : BaseBo>(
         return field
     }
 
-    fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkElement.() -> Unit = { }): ZkTextAreaField<T> {
+    fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkTextAreaField<T>.() -> Unit = { }): ZkTextAreaField<T> {
         val field = ZkTextAreaField(this@ZkForm, kProperty0)
         fields += field
         field.builder()

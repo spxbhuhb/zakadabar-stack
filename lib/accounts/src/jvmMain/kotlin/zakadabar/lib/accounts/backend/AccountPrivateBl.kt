@@ -214,7 +214,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
         return try {
             CheckNameResult(
                 action.accountName,
-                accountId = pa.readByName(action.accountName).id
+                accountId = EntityId(pa.readByName(action.accountName).id)
             )
         } catch (ex: NoSuchElementException) {
             CheckNameResult(

@@ -12,7 +12,7 @@ class Roles : ZkCrudTarget<RoleBo>() {
         companion = RoleBo.Companion
         boClass = RoleBo::class
         tableClass = Table::class
-        pageClass = Form::class
+        editorClass = Form::class
     }
 
 }

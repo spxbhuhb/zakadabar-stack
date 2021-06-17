@@ -34,7 +34,7 @@ class UpdateAccountSecure(
 
 ) : ActionBo<ActionStatusBo> {
 
-    companion object : ActionBoCompanion<UpdateAccountSecure>(AccountPrivateBo.boNamespace)
+    companion object : ActionBoCompanion(AccountPrivateBo.boNamespace)
 
     override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
 

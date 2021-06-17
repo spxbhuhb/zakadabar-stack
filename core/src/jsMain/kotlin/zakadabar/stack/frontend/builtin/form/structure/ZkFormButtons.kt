@@ -13,6 +13,7 @@ import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.util.io
+import zakadabar.stack.text.capitalized
 
 open class ZkFormButtons<T : BaseBo>(
     private val form: ZkForm<T>,
@@ -74,7 +75,7 @@ open class ZkFormButtons<T : BaseBo>(
 
             if (touched) {
                 io {
-                    if (ZkConfirmDialog(stringStore.confirmation.capitalize(), stringStore.notSaved).run()) {
+                    if (ZkConfirmDialog(stringStore.confirmation.capitalized(), stringStore.notSaved).run()) {
                         form.onBack()
                     }
                 }

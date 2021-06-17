@@ -17,16 +17,9 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
     open var appHandleText by cssParameter{ theme.textColor }
     open var appHandleBorder by cssParameter { theme.border }
 
-    @Deprecated("use appTitleBarBackground instead", ReplaceWith("appTitleBarBackground"))
-    open var titleBarBackground by cssParameter { theme.backgroundColor }
-    @Deprecated("use appTitleBarText instead", ReplaceWith("appTitleBarText"))
-    open var titleBarText by cssParameter { theme.textColor }
-    @Deprecated("use appTitleBarBorder instead", ReplaceWith("appTitleBarBorder"))
-    open var titleBarBorder by cssParameter { theme.border }
-
-    open var appTitleBarBackground by cssParameter { titleBarBackground }
-    open var appTitleBarText by cssParameter { titleBarText }
-    open var appTitleBarBorder by cssParameter { titleBarBorder }
+    open var appTitleBarBackground by cssParameter { theme.backgroundColor }
+    open var appTitleBarText by cssParameter { theme.textColor }
+    open var appTitleBarBorder by cssParameter { theme.border }
 
     open var localTitleBarBackground by cssParameter { theme.textColor.alpha(0.1) }
     open var localTitleBarHeight by cssParameter { 32 }

@@ -1,14 +1,55 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.blobs.frontend.image
+package zakadabar.lib.blobs.frontend
 
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 
-val zkImageStyles by cssStyleSheet(ZkImageStyles())
+val blobStyles by cssStyleSheet(BlobStyles())
 
-class ZkImageStyles : ZkCssStyleSheet() {
+class BlobStyles : ZkCssStyleSheet() {
+
+    val attachmentField by cssClass {
+        display = "grid"
+        gridTemplateColumns = "repeat(4, max-content)"
+        gap = theme.spacingStep
+        alignItems = "center"
+    }
+
+    val attachmentEntry by cssClass {
+        display = "contents"
+    }
+
+    val imageDropArea by cssClass {
+        boxSizing = "border-box"
+        flexGrow = 1
+        width = "100%"
+        height = "100%"
+        display = "flex"
+        flexDirection = "row"
+        justifyContent = "center"
+        alignItems = "center"
+        color = theme.textColor
+        fill = theme.textColor
+
+        padding = 20
+
+        borderRadius = theme.cornerRadius
+        border = "1px dotted lightgray"
+
+        on(":hover") {
+            backgroundColor = theme.hoverBackgroundColor
+            color = theme.hoverTextColor
+            fill = theme.hoverTextColor
+        }
+    }
+
+    val imageDropAreaMessage by cssClass {
+        fontSize = 14
+        fontWeight = 400
+        paddingLeft = 6
+    }
 
     val outerView by cssClass {
         boxSizing = "border-box"

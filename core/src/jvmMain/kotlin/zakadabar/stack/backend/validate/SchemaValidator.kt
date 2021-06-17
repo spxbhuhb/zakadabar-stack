@@ -16,7 +16,7 @@ import zakadabar.stack.data.query.QueryBo
 class SchemaValidator<T : BaseBo> : Validator<T> {
 
     override fun validateCreate(executor: Executor, bo : T) {
-        if (! bo.isValid) throw BadRequestException("invalid request data")
+        if (bo.schema().validate(allowEmptyId = true).fails.isNotEmpty()) throw BadRequestException("invalid request data")
     }
 
     override fun validateUpdate(executor: Executor, bo : T) {

@@ -15,9 +15,9 @@ class SimpleStandaloneQuery(
 
     var name : String
 
-) : QueryBo<SimpleQueryResult> {
+) : QueryBo<List<SimpleQueryResult>> {
 
-    companion object : QueryBoCompanion<SimpleQueryResult>("zkl-simple-standalone-query")
+    companion object : QueryBoCompanion("zkl-simple-standalone-query")
 
     override suspend fun execute() = comm.query(this, serializer(), ListSerializer(SimpleQueryResult.serializer()))
 

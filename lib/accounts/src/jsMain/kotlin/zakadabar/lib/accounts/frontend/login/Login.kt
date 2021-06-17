@@ -9,12 +9,14 @@
 package zakadabar.lib.accounts.frontend.login
 
 import kotlinx.browser.window
-import zakadabar.stack.frontend.application.stringStore
+import zakadabar.stack.frontend.application.ZkAppRouting
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.layout.ZkFullScreenLayout
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
 import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.util.marginBottom
+import zakadabar.stack.resources.localizedStrings
 
 /**
  * A simple username / password login page. When the login is
@@ -22,6 +24,8 @@ import zakadabar.stack.frontend.util.marginBottom
  * components use the proper account information.
  */
 class Login : ZkPage(ZkFullScreenLayout) {
+
+    lateinit var target : ZkAppRouting.ZkTarget
 
     override fun onCreate() {
 
@@ -47,11 +51,18 @@ class Login : ZkPage(ZkFullScreenLayout) {
                         maxHeight = "unset"
                         padding = "${theme.spacingStep / 2}px"
                     }
-                    + stringStore.applicationName
+                    + localizedStrings.applicationName
                 } marginBottom 20
 
                 + LoginForm(
-                    onSuccess = { window.location.pathname = "/" }
+                    onSuccess = {
+                        if (::target.isInitialized) {
+                            application.changeNavState(target)
+                            window.location.reload()
+                        } else {
+                            window.location.pathname = "/"
+                        }
+                    }
                 )
             }
         }

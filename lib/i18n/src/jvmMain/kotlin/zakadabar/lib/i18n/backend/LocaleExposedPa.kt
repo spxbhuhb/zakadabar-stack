@@ -7,7 +7,7 @@ import org.jetbrains.exposed.sql.select
 
 class LocaleExposedPa : LocaleExposedPaGen() {
 
-    fun localeByName(name : String) =
+    fun byName(name : String) =
         table
             .select { table.name eq name }
             .map { it.toBo() }

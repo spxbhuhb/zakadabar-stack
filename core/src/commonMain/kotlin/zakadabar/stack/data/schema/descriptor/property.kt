@@ -71,6 +71,14 @@ class EnumBoProperty(
 ) : BoProperty()
 
 @Serializable
+class ListBoProperty(
+    override val name: String,
+    override val optional: Boolean,
+    override var constraints: List<BoConstraint>,
+    val kClassName: String?
+) : BoProperty()
+
+@Serializable
 class InstantBoProperty(
     override val name: String,
     override val optional: Boolean,

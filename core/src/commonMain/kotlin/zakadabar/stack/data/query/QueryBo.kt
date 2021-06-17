@@ -6,5 +6,5 @@ package zakadabar.stack.data.query
 import zakadabar.stack.data.BaseBo
 
 interface QueryBo<RESULT> : BaseBo {
-    suspend fun execute(): List<RESULT>
+    suspend fun execute(): RESULT
 }

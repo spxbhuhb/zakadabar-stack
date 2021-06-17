@@ -11,7 +11,7 @@ import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
 import zakadabar.stack.backend.business.QueryBusinessLogicBase
 import zakadabar.stack.data.entity.EmptyEntityBo
 
-class SimpleStandaloneQueryBl : QueryBusinessLogicBase<SimpleStandaloneQuery, SimpleQueryResult>(
+class SimpleStandaloneQueryBl : QueryBusinessLogicBase<SimpleStandaloneQuery, List<SimpleQueryResult>>(
     queryBoClass = SimpleStandaloneQuery::class
 ) {
 

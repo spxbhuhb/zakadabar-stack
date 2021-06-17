@@ -35,7 +35,7 @@ class TestBo(
 
     override fun schema() = BoSchema {
         + ::id
-        + ::name 
+        + ::name blank false
         + ::value 
     }
 

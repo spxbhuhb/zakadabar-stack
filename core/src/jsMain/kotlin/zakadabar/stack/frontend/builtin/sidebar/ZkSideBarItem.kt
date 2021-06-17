@@ -11,6 +11,7 @@ import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.text.capitalized
 
 /**
  * A sidebar item.
@@ -53,7 +54,7 @@ open class ZkSideBarItem(
             url?.let { (textElement as HTMLAnchorElement).href = it }
         }
 
-        textElement.innerText = if (capitalize) text.capitalize() else text
+        textElement.innerText = if (capitalize) text.capitalized() else text
 
         + textElement
 

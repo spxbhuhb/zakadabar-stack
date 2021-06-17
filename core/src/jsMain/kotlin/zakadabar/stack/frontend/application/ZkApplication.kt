@@ -12,6 +12,8 @@ import zakadabar.stack.frontend.builtin.modal.ZkModalContainer
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
 import zakadabar.stack.resources.ZkBuiltinStrings
+import zakadabar.stack.resources.ZkStringStore
+import zakadabar.stack.resources.localizedStrings
 import zakadabar.stack.text.TranslationProvider
 import zakadabar.stack.util.InstanceStore
 
@@ -30,10 +32,16 @@ val executor
  * Global string store that contains the translated strings to show to the user.
  * This is usually not a ZkBuiltinStrings in itself but an extension of it.
  */
+@Deprecated("EOL: 2021.8.1 import stringStore from `zakadabar.stack.resources`", ReplaceWith(
+    "localizedStrings", "import zakadabar.stack.resources.localizedStrings"
+))
 val stringStore
-    get() = application.stringStore
+    get() = localizedStrings
 
-inline fun <reified T> translate() = stringStore.getNormalized(T::class.simpleName!!)
+@Deprecated("EOL: 2021.8.1 use `localized` from `zakadabar.stack.resources`", ReplaceWith(
+    "localized<T>()", "import zakadabar.stack.resources.localized"
+))
+inline fun <reified T> translate() = localizedStrings.getNormalized(T::class.simpleName!!)
 
 /**
  * Find a routing target.
@@ -81,6 +89,9 @@ open class ZkApplication {
 
     var services = InstanceStore<Any>()
 
+    val stringStores = mutableListOf<ZkStringStore>()
+
+    @Deprecated("EOL: 2021.8.1 import stringStore from `zakadabar.stack.resources`")
     lateinit var stringStore: ZkBuiltinStrings
 
     lateinit var dock: ZkDock
@@ -151,9 +162,13 @@ open class ZkApplication {
             throw IllegalStateException()
         }
 
+        stringStores.forEach {
+            store += it
+        }
+
         services.firstOrNull<TranslationProvider>()?.translate(store, locale)
 
-        stringStore = store
+        localizedStrings = store
     }
 
     private val onPopState = fun(_: Event) {

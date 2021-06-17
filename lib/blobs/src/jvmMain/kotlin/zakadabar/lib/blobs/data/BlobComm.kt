@@ -11,10 +11,10 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.CommBase.Companion.baseUrl
 import zakadabar.stack.data.CommBase.Companion.client
 import zakadabar.stack.data.CommBase.Companion.onError
+import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.PublicApi
 
@@ -27,10 +27,10 @@ import zakadabar.stack.util.PublicApi
  *                         sent/received.
  */
 @PublicApi
-open class BlobComm<T : BlobBo<T>>(
+open class BlobComm<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
     private val namespace: String,
     private val serializer: KSerializer<T>
-) : BlobCommInterface<T> {
+) : BlobCommInterface<T,RT> {
 
     @PublicApi
     override suspend fun create(bo: T): T {
@@ -124,9 +124,10 @@ open class BlobComm<T : BlobBo<T>>(
     }
 
     @PublicApi
-    override suspend fun listByReference(reference: EntityId<out BaseBo>): List<T> {
+    override suspend fun listByReference(reference: EntityId<RT>, disposition : String?): List<T> {
+        val q = disposition?.let { "?disposition=$it" } ?: ""
         val text = try {
-            client.get<String>("$baseUrl/api/$namespace/blob/list/$reference")
+            client.get<String>("$baseUrl/api/$namespace/blob/list/$reference$q")
         } catch (ex: Exception) {
             onError(ex)
             throw ex

@@ -24,7 +24,7 @@ import org.w3c.files.File
 import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobCommInterface
 import zakadabar.lib.blobs.data.BlobCreateState
-import zakadabar.stack.data.BaseBo
+import zakadabar.lib.blobs.frontend.blobStyles
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.ValidityReport
@@ -33,18 +33,19 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.fields.ZkFieldBase
 import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.io
+import zakadabar.stack.text.capitalized
 
-open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT>>(
+open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
     form: ZkForm<T>,
-    private val comm: BlobCommInterface<BT>,
+    private val comm: BlobCommInterface<BT,T>,
     private val reference: EntityId<T>? = null,
     private val imageCountMax: Int? = null,
+    private val disposition: String? = null,
     private val make: (File) -> BT
 ) : ZkFieldBase<T, Unit>(
     form = form,
@@ -62,16 +63,16 @@ open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT>>(
 
             if (form.mode != ZkElementMode.Create) {
                 reference?.let {
-                    comm.listByReference(it).forEach {
-                        + ZkImagePreview(it, onDelete = { preview -> onDelete(preview) }) marginRight 10 marginBottom 10
+                    comm.listByReference(it, disposition).forEach { blob ->
+                        + ZkImagePreview(blob, onDelete = { preview -> onDelete(preview) }) marginRight 10 marginBottom 10
                     }
                 }
             }
 
             droparea = zke {
 
-                + div(ZkFormStyles.imageDropArea) {
-                    + column(ZkFormStyles.imageDropAreaMessage) {
+                + div(blobStyles.imageDropArea) {
+                    + column(blobStyles.imageDropAreaMessage) {
                         style {
                             alignItems = "center"
                         }
@@ -151,7 +152,7 @@ open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT>>(
     }
 
     private suspend fun onDelete(preview: ZkImagePreview<BT>): Boolean {
-        if (! ZkConfirmDialog(stringStore.confirmation.capitalize(), stringStore.confirmDelete).run()) return false
+        if (! ZkConfirmDialog(stringStore.confirmation.capitalized(), stringStore.confirmDelete).run()) return false
 
         if (form.mode != ZkElementMode.Create) {
             comm.delete(preview.bo.id)
@@ -170,9 +171,9 @@ open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT>>(
 
     override suspend fun onCreateSuccess(created: EntityBo<*>) {
         // update blobs with the proper reference id
-        find<ZkImagePreview<*>>().forEach {
-            @Suppress("UNCHECKED_CAST") // form is strictly typed
-            it.bo.reference = created.id as EntityId<out BaseBo>
+        find<ZkImagePreview<BT>>().forEach {
+            @Suppress("UNCHECKED_CAST") // it is right
+            it.bo.reference = created.id as EntityId<T>
             it.bo.update()
         }
     }

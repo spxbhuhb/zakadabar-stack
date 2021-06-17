@@ -12,6 +12,7 @@ import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.server
 import zakadabar.stack.backend.validate.Validator
 import zakadabar.stack.data.builtin.ActionStatusBo
+import zakadabar.stack.util.after
 
 class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
     boClass = SimpleExampleBo::class
@@ -36,7 +37,8 @@ class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
         includeData = false
     }
 
-    private val simpleExampleBl by lazy { server.first<SimpleExampleBl>() }
+    @Suppress("unused")
+    private val simpleExampleBl by after { server.first<SimpleExampleBl>() }
 
     override fun create(executor: Executor, bo: SimpleExampleBo) : SimpleExampleBo {
         if (pa.count() >= 1000) throw IllegalStateException("table limit reached")
@@ -55,11 +57,13 @@ class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
                 pa.update(it)
             }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun action(executor: Executor, action: SimpleExampleAction): ActionStatusBo {
         println("Account ${executor.accountId} executed SimpleExampleAction")
         return ActionStatusBo(reason = "This is a successful test action invocation.")
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun query(executor: Executor, query: SimpleExampleQuery) =
         pa.query(query)
 

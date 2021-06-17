@@ -7,6 +7,7 @@ import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.data.query.QueryBo
 import kotlin.reflect.KClass
 
 /**
@@ -24,6 +25,6 @@ interface Router<T : EntityBo<T>> {
 
     fun <RQ : ActionBo<RS>, RS : BaseBo> action(actionClass: KClass<RQ>, actionFunc: (Executor, RQ) -> RS)
 
-    fun <RQ : Any, RS : Any> query(queryClass: KClass<RQ>, queryFunc: (Executor, RQ) -> RS)
+    fun <RQ : QueryBo<RS>, RS : Any> query(queryClass: KClass<RQ>, queryFunc: (Executor, RQ) -> RS)
 
 }

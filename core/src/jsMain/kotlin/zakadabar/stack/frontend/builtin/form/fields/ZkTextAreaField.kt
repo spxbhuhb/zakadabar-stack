@@ -32,7 +32,7 @@ open class ZkTextAreaField<T : BaseBo>(
     propName = prop.name
 ) {
 
-    private val area = document.createElement("textarea") as HTMLTextAreaElement
+    open val area = document.createElement("textarea") as HTMLTextAreaElement
 
     @Suppress("DuplicatedCode") // i don't want to mix this with string field
     override fun buildFieldValue() {
@@ -40,8 +40,6 @@ open class ZkTextAreaField<T : BaseBo>(
         buildPoint.style.display = "flex"
 
         area.classList += ZkFormStyles.textarea
-        area.style.flexGrow = "1"
-        area.style.resize = "none"
 
         if (readOnly) area.readOnly = true
 
@@ -61,5 +59,7 @@ open class ZkTextAreaField<T : BaseBo>(
     override fun focusValue() {
         area.focus()
     }
+
+    override fun needsMandatoryMark() = stringMandatoryMark()
 
 }

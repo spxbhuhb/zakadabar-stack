@@ -136,7 +136,7 @@ class SimpleExampleQuery(
 
 ) : QueryBo<SimpleQueryResult> {
 
-    companion object : QueryBoCompanion<SimpleQueryResult>(SimpleExampleBo.boNamespace)
+    companion object : QueryBoCompanion(SimpleExampleBo.boNamespace)
 
     override suspend fun execute() = comm.query(this, serializer(), ListSerializer(SimpleQueryResult.serializer()))
 
@@ -199,7 +199,7 @@ class SimpleExampleAction(
 
 ) : ActionBo<ActionStatusBo> {
 
-    companion object : ActionBoCompanion<SimpleExampleAction>(SimpleExampleBo.boNamespace)
+    companion object : ActionBoCompanion(SimpleExampleBo.boNamespace)
 
     override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
 

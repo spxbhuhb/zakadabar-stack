@@ -15,10 +15,10 @@ import zakadabar.stack.data.query.QueryBoCompanion
 @Serializable
 class TranslationsByLocale(
     var locale: String
-) : QueryBo<StringPair> {
+) : QueryBo<List<StringPair>> {
 
     override suspend fun execute() = comm.query(this, serializer(), ListSerializer(StringPair.serializer()))
 
-    companion object : QueryBoCompanion<StringPair>(TranslationBo.boNamespace)
+    companion object : QueryBoCompanion(TranslationBo.boNamespace)
 
 }

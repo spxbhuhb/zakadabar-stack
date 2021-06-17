@@ -3,13 +3,9 @@
  */
 package zakadabar.stack.data.action
 
-import kotlinx.serialization.KSerializer
-
-abstract class ActionBoCompanion<RESPONSE : Any>(
+abstract class ActionBoCompanion(
     val boNamespace: String
 ) {
-
-    abstract fun serializer(): KSerializer<RESPONSE>
 
     private var _comm: ActionCommInterface? = null
 

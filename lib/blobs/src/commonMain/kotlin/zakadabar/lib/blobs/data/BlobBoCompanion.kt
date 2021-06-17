@@ -4,22 +4,22 @@
 package zakadabar.lib.blobs.data
 
 import kotlinx.serialization.KSerializer
-import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
 
-abstract class BlobBoCompanion<T : BlobBo<T>>(
+abstract class BlobBoCompanion<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
     val boNamespace: String
 ) {
 
-    private var _comm: BlobCommInterface<T>? = null
+    private var _comm: BlobCommInterface<T,RT>? = null
 
-    private fun makeComm(): BlobCommInterface<T> {
+    private fun makeComm(): BlobCommInterface<T,RT> {
         val nc = makeBlobComm(this)
         _comm = nc
         return nc
     }
 
-    var comm: BlobCommInterface<T>
+    var comm: BlobCommInterface<T,RT>
         get() = _comm ?: makeComm()
         set(value) {
             _comm = value
@@ -30,7 +30,7 @@ abstract class BlobBoCompanion<T : BlobBo<T>>(
     suspend fun upload(bo : T, data: Any, callback: (bo : T, state: BlobCreateState, uploaded: Long) -> Unit) =
         comm.upload(bo, data, callback)
 
-    suspend fun listByReference(reference : EntityId<out BaseBo>) =
+    suspend fun listByReference(reference : EntityId<RT>) =
         comm.listByReference(reference)
 
 }

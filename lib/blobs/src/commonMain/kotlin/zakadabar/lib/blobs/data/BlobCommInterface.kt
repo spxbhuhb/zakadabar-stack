@@ -3,14 +3,14 @@
  */
 package zakadabar.lib.blobs.data
 
-import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityCommInterface
 import zakadabar.stack.data.entity.EntityId
 
-interface BlobCommInterface<T : BlobBo<T>> : EntityCommInterface<T> {
+interface BlobCommInterface<T : BlobBo<T,RT>, RT : EntityBo<RT>> : EntityCommInterface<T> {
 
     suspend fun upload(bo : T, data: Any, callback: (bo : T, state: BlobCreateState, uploaded: Long) -> Unit)
 
-    suspend fun listByReference(reference : EntityId<out BaseBo>) : List<T>
+    suspend fun listByReference(reference : EntityId<RT>, disposition : String? = null) : List<T>
 
 }

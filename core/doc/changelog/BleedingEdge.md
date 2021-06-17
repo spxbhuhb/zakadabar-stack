@@ -5,13 +5,49 @@ next month.
 
 ## Breaking Changes
 
-- QueryBo type parameter can be anything (list is not enforced)
+**core**
+
+- `QueryBo` type parameter can be anything (not a list by default)
+- `QueryBoCompanion` has no type parameter
+- `ActionBoCompanion` has no type parameter  
+- `zkFormStyles.buttons` added `marginBlockStart` and `marginBlockEnd`
+
+**lib: blobs**
+
 - `BlobBo.disposition` new property
-- `zkImageStyles` renamed to `blobStyles`
-- `Locale.status` new property  
-- `Locales` renamed to `LocalesCrud`
-- `zkFormStyles.imageDropArea` - moved to `blobStyles`
-- `zkFormStyles.imageDropAreaMessage` - moved to `blobStyles`
+- `zkImageStyles` rename to `blobStyles`
+- `zkFormStyles.imageDropArea` - move to `blobStyles`
+- `zkFormStyles.imageDropAreaMessage` - move to `blobStyles`
+
+**lib: i18n**
+
+- `Locale.status` new property
+- `Locales` rename to `LocaleCrud`
+- `Translations` rename to `TranslationCrud`
+
+## Migration
+
+Use search & replace **with regex** on the whole project and replace:
+
+`QueryBoCompanion<[^>]+>` with `QueryBoCompanion`
+
+---
+
+Use search & replace **with regex** on the whole project and replace:
+
+`ActionBoCompanion<[a-zA-Z0-9]+>` with `ActionBoCompanion`
+
+---
+
+Search for `QueryBo<T>` and replace it with `QueryBo<List<T>>` (manually).
+
+---
+
+Search for `QueryBusinessLogicBase` and add `List` to second parameter
+
+`class SimpleStandaloneQueryBl : QueryBusinessLogicBase<SimpleStandaloneQuery, List<SimpleQueryResult>>(`
+
+---
 
 ## Core
 
@@ -20,8 +56,12 @@ added:
 - `application.stringStores`
 - `ZkStringStore.childStores`
 
-changes:
+changed:
 
+- `QueryBo` type parameter is not a list
+- `QueryBoCompanion` has no type parameter
+- `ActionBoCompanion` has no type parameter  
+- `Router.query` change type parameter RQ from Any to QueryBo<RS> to ensure type safety
 - `ZkStringStore.merge` - also merge into child stores
 
 ## Lib: Blobs

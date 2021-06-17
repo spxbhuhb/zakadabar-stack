@@ -6,15 +6,16 @@ package zakadabar.lib.demo.backend
 import zakadabar.lib.blobs.backend.BlobExposedPa
 import zakadabar.lib.blobs.backend.BlobExposedTable
 import zakadabar.lib.demo.data.TestBlob
+import zakadabar.lib.demo.data.TestBo
 import zakadabar.stack.backend.util.default
 
-class TestBlobExposedPa : BlobExposedPa<TestBlob>(
+class TestBlobExposedPa : BlobExposedPa<TestBlob, TestBo>(
     table = TestBlobExposedTable,
 ) {
     override fun newInstance() = default<TestBlob> {  }
 }
 
-object TestBlobExposedTable : BlobExposedTable<TestBlob>(
+object TestBlobExposedTable : BlobExposedTable<TestBlob, TestBo>(
     tableName = "test_blob",
     referenceTable = TestExposedTableGen
 )

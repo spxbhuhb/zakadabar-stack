@@ -8,4 +8,4 @@ import zakadabar.stack.data.entity.EntityBo
 /**
  * Global function to make a [BlobCommInterface].
  */
-expect fun <T : BlobBo<T>> makeBlobComm(companion: BlobBoCompanion<T>): BlobCommInterface<T>
+expect fun <T : BlobBo<T,RT>, RT : EntityBo<RT>> makeBlobComm(companion: BlobBoCompanion<T,RT>): BlobCommInterface<T,RT>

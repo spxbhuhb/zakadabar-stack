@@ -13,6 +13,7 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIconSource
 import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.stack.text.capitalized
 
 /**
  * A simple clickable button with label and/or icon.
@@ -170,7 +171,7 @@ open class ZkButton(
     open fun buildText() {
         classList += zkButtonStyles.text
 
-        + if (capitalize) text?.capitalize() else text
+        + if (capitalize) text?.capitalized() else text
     }
 
     open fun buildCombined() {
@@ -182,7 +183,7 @@ open class ZkButton(
             innerHTML = svg
         }
 
-        + if (capitalize) text?.capitalize() else text
+        + if (capitalize) text?.capitalized() else text
     }
 
     open fun setFlavourStyles() {

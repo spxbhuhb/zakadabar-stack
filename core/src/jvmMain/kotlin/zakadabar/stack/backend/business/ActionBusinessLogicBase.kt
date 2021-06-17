@@ -26,7 +26,7 @@ abstract class ActionBusinessLogicBase<RQ : ActionBo<RS>, RS : BaseBo>(
     abstract override val authorizer: Authorizer<EmptyEntityBo>
 
     override val namespace
-        get() = (actionBoClass.companionObject !!.objectInstance as ActionBoCompanion<*>).boNamespace
+        get() = (actionBoClass.companionObject !!.objectInstance as ActionBoCompanion).boNamespace
 
     override val router = router {
         action(actionBoClass, ::execute)

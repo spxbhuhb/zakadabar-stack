@@ -7,6 +7,7 @@ import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.data.query.QueryBo
 import kotlin.reflect.KClass
 
 /**
@@ -24,7 +25,7 @@ class EmptyRouter<T : EntityBo<T>> : Router<T> {
         throw IllegalArgumentException("EmptyRouter cannot route actions")
     }
 
-    override fun <RQ : Any, RS : Any> query(queryClass: KClass<RQ>, queryFunc: (Executor, RQ) -> RS) {
+    override fun <RQ : QueryBo<RS>, RS : Any> query(queryClass: KClass<RQ>, queryFunc: (Executor, RQ) -> RS) {
         throw IllegalArgumentException("EmptyRouter cannot route queries")
     }
 

@@ -23,6 +23,7 @@ import org.w3c.dom.get
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.zkFormStyles
@@ -31,6 +32,8 @@ import zakadabar.stack.frontend.builtin.popup.alignPopup
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.escape
 import zakadabar.stack.frontend.util.io
+import zakadabar.stack.frontend.util.minusAssign
+import zakadabar.stack.frontend.util.plusAssign
 
 abstract class ZkSelectBase<T : BaseBo, VT>(
     form: ZkForm<T>,
@@ -46,6 +49,16 @@ abstract class ZkSelectBase<T : BaseBo, VT>(
     companion object {
         private const val DATASET_KEY = "value"
     }
+
+    override var readOnly: Boolean = (form.mode == ZkElementMode.Read)
+        set(value) {
+            if (value) {
+                container.firstElementChild?.classList?.plusAssign(zkFormStyles.disabledSelect)
+            } else {
+                container.firstElementChild?.classList?.minusAssign(zkFormStyles.disabledSelect)
+            }
+            field = value
+        }
 
     abstract fun fromString(string: String): VT
 
@@ -144,6 +157,8 @@ abstract class ZkSelectBase<T : BaseBo, VT>(
     override fun focusValue() = toggleOptions()
 
     private fun toggleOptions() {
+        if (readOnly) return
+
         optionList.toggle()
         if (optionList.isShown()) {
             alignPopup(optionList.element, selectedOption.element, zkFormStyles.rowHeight * 5)

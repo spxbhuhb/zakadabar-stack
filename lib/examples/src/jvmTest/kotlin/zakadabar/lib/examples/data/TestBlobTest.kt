@@ -49,7 +49,7 @@ class TestBlobTest {
             val contentText = "almafa"
             val contentBytes = contentText.encodeToByteArray()
 
-            val bo = TestBlob(EntityId(), null, "test.txt", "text/plain", contentBytes.size.toLong()).create()
+            val bo = TestBlob(EntityId(), null, "text", "test.txt", "text/plain", contentBytes.size.toLong()).create()
 
             val channel = Channel<Boolean>()
 
@@ -65,7 +65,7 @@ class TestBlobTest {
 
             assertTrue(channel.receive())
 
-            val readBack = CommBase.client.get<ByteArray>("${CommBase.baseUrl}/${bo.url()}")
+            val readBack = CommBase.client.get<ByteArray>("${CommBase.baseUrl}/${bo.url}")
 
             assertEquals(contentText, readBack.decodeToString())
 

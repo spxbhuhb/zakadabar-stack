@@ -15,9 +15,9 @@ class SimpleExampleQuery(
 
     var name : String
 
-) : QueryBo<SimpleQueryResult> {
+) : QueryBo<List<SimpleQueryResult>> {
 
-    companion object : QueryBoCompanion<SimpleQueryResult>(SimpleExampleBo.boNamespace)
+    companion object : QueryBoCompanion(SimpleExampleBo.boNamespace)
 
     override suspend fun execute() = comm.query(this, serializer(), ListSerializer(SimpleQueryResult.serializer()))
 

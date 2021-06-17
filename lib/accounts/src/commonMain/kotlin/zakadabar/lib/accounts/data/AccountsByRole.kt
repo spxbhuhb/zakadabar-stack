@@ -15,10 +15,10 @@ class AccountByRole(roleName: String) : AccountsByRole(roleName)
 @Serializable
 open class AccountsByRole(
     val roleName: String
-) : QueryBo<AccountPublicBo> {
+) : QueryBo<List<AccountPublicBo>> {
 
     override suspend fun execute() = comm.query(this, serializer(), ListSerializer(AccountPublicBo.serializer()))
 
-    companion object : QueryBoCompanion<AccountPublicBo>(RoleBo.boNamespace)
+    companion object : QueryBoCompanion(RoleBo.boNamespace)
 
 }

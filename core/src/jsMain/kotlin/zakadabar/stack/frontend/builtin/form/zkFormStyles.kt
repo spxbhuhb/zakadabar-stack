@@ -55,7 +55,8 @@ object ZkFormStyles : ZkCssStyleSheet() {
     // -------------------------------------------------------------------------
 
     val buttons by cssClass {
-
+        marginBlockStart = theme.spacingStep / 2
+        marginBlockEnd = theme.spacingStep / 2
     }
 
     // -------------------------------------------------------------------------
@@ -216,6 +217,7 @@ object ZkFormStyles : ZkCssStyleSheet() {
     // -------------------------------------------------------------------------
 
     val selectContainer by cssClass {
+        position = "relative"
         display = "flex"
         flexDirection = "row"
         alignItems = "center"
@@ -252,8 +254,13 @@ object ZkFormStyles : ZkCssStyleSheet() {
         }
     }
 
+    val disabledSelect by cssClass {
+        backgroundColor = theme.disabledInputBackgroundColor
+        color = theme.disabledInputTextColor
+    }
+
     val selectOptionList by cssClass {
-        position = "absolute"
+        position = "fixed"
         zIndex = 100
         outline = "none"
         backgroundColor = theme.inputBackgroundColor
@@ -300,33 +307,6 @@ object ZkFormStyles : ZkCssStyleSheet() {
     // Iamge
     // -------------------------------------------------------------------------
 
-    val imageDropArea by cssClass {
-        boxSizing = "border-box"
-        flexGrow = 1
-        width = "100%"
-        height = "100%"
-        display = "flex"
-        flexDirection = "row"
-        justifyContent = "center"
-        alignItems = "center"
-        color = ZkColors.Gray.c800
-        fill = ZkColors.Gray.c800
-
-        padding = 20
-
-        borderRadius = theme.cornerRadius
-        border = "1px dotted lightgray"
-
-        on(":hover") {
-            backgroundColor = ZkColors.LightBlue.c50
-        }
-    }
-
-    val imageDropAreaMessage by cssClass {
-        fontSize = 14
-        fontWeight = 400
-        paddingLeft = 6
-    }
 
     // -------------------------------------------------------------------------
     // Invalid field list

@@ -29,6 +29,19 @@ class BooleanBoConstraint(
     val value: Boolean
 ) : BoConstraint()
 
+/**
+ * A custom constraint, typically implemented with a code specific to
+ * the given BO.
+ *
+ * @param  type  Type of the constraint, [BoConstraintType.Custom].
+ * @param  name  Name of the constraint, anything that identifies the check.
+ */
+@Serializable
+class CustomBoConstraint(
+    override val type: BoConstraintType = BoConstraintType.Custom,
+    val name : String
+) : BoConstraint()
+
 @Serializable
 class DoubleBoConstraint(
     override val type: BoConstraintType,

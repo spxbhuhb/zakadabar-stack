@@ -574,4 +574,16 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         return ZkActionsColumn(this@ZkTable)
     }
 
+    // -------------------------------------------------------------------------
+    //  Convenience
+    // -------------------------------------------------------------------------
+
+    /**
+     * Set the field to readonly.
+     */
+    infix fun ZkElement.size(size: String) {
+        if (this !is ZkColumn<*>) return
+        this.max = size
+    }
+
 }

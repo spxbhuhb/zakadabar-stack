@@ -13,6 +13,6 @@ class LogoutAction : ActionBo<ActionStatusBo> {
 
     override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
 
-    companion object : ActionBoCompanion<ActionStatusBo>(SessionBo.boNamespace)
+    companion object : ActionBoCompanion(SessionBo.boNamespace)
 
 }

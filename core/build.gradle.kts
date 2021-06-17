@@ -17,6 +17,7 @@ version = rootProject.extra["stackVersion"] as String
 val isSnapshot = version.toString().contains("SNAPSHOT")
 
 // common
+val kotlinVersion = rootProject.extra["kotlinVersion"] as String
 val ktorVersion = rootProject.extra["ktorVersion"] as String
 val coroutinesVersion = rootProject.extra["coroutinesVersion"] as String
 val serializationVersion = rootProject.extra["serializationVersion"] as String
@@ -58,6 +59,7 @@ kotlin {
 
         commonMain {
             dependencies {
+                api("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
                 api("org.jetbrains.kotlinx:kotlinx-datetime:$datetimeVersion")
