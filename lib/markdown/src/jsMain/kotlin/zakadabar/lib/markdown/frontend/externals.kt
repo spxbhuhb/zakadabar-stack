@@ -10,6 +10,10 @@ external object hljs {
     fun registerLanguage(name : String, language: dynamic)
 }
 
+@JsModule("highlight.js/lib/languages/plaintext")
+@JsNonModule
+external object hljsText
+
 @JsModule("highlight.js/lib/languages/kotlin")
 @JsNonModule
 external object hljsKotlin
