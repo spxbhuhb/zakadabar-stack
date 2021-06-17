@@ -16,6 +16,7 @@ fun List<BoConstraint>.toCode(): String {
             is IntBoConstraint -> it.toCode()
             is LongBoConstraint -> it.toCode()
             is StringBoConstraint -> it.toCode()
+            is CustomBoConstraint -> it.toCode()
         }
     }
 
@@ -23,6 +24,10 @@ fun List<BoConstraint>.toCode(): String {
 }
 
 fun BooleanBoConstraint.toCode() = "${type.name.lowercase()} $value"
+
+fun CustomBoConstraint.toCode() : String {
+    return "custom(\"${name}\") { ${value ?: ""} }"
+}
 
 fun DoubleBoConstraint.toCode() : String {
     val s = value.toString()

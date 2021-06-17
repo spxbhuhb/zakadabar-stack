@@ -35,11 +35,13 @@ class BooleanBoConstraint(
  *
  * @param  type  Type of the constraint, [BoConstraintType.Custom].
  * @param  name  Name of the constraint, anything that identifies the check.
+ * @param  value Source code of the custom check (optional).
  */
 @Serializable
 class CustomBoConstraint(
     override val type: BoConstraintType = BoConstraintType.Custom,
-    val name : String
+    val name : String,
+    val value : String? = null
 ) : BoConstraint()
 
 @Serializable

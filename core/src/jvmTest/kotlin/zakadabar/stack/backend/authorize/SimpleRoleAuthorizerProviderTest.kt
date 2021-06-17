@@ -29,11 +29,11 @@ internal object WithDefault : EntityBusinessLogicBase<EmptyEntityBo>(EmptyEntity
 
 @Serializable
 class Query : QueryBo<Query> {
-    override suspend fun execute(): List<Query> {
+    override suspend fun execute(): Query {
         throw NotImplementedError("this is just a test query")
     }
 
-    companion object : QueryBoCompanion<Query>("not-used")
+    companion object : QueryBoCompanion("not-used")
 }
 
 internal object WithQuery : EntityBusinessLogicBase<EmptyEntityBo>(EmptyEntityBo::class) {
