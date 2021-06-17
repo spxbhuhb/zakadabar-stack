@@ -11,22 +11,41 @@ of the methods to kick off full processing.
 
 </div>
 
-## Authorizer Provider
+## Authorizer Provider [unit test](/src/jvmTest/kotlin/zakadabar/stack/backend/authorize/SimpleRoleAuthorizerProviderTest.kt)
 
-An authorizer provider is a module you can use to centralize authorization setup.
-It implements the [AuthorizerProvider](/src/jvmMain/kotlin/zakadabar/stack/backend/authorize/SimpleRoleAuthorizer.kt)
-interface and is reached with the `authorizer` function from a business logic.
+An authorizer provider:
+
+- is a module you can use to centralize authorization setup
+- implements the [AuthorizerProvider](/src/jvmMain/kotlin/zakadabar/stack/backend/authorize/SimpleRoleAuthorizer.kt) interface 
+- used by the `provider` function from a business logic
+- creates a new authorizer instance for each business logic
+- returns with an EmptyAuthorizer (which denies everything) when it cannot find an authorizer
 
 ```kotlin
-override val authorizer by provider()
+class MyBusinessLogic : EntityBusinessLogicBase<MyBo>(MyBo::class){
+    override val authorizer by provider()
+}
 ```
 
-When the provider cannot find an authorizer for the given BL it should return with an EmptyAuthorizer (which
-denies everything).
+You can customize the actual authorizer instance further by passing a builder
+method to `provider`. In this case you have to check / assume which kind
+of authorizer you work with.
 
-### SimpleRoleAuthorizerProvider
+```kotlin
+class MyBusinessLogic : EntityBusinessLogicBase<MyBo>(MyBo::class){
+  
+    override val authorizer by provider {
+        this as SimpleRoleAuthorizer
+        query(Query::class, StackRoles.siteMember)
+    }
 
-This module provides a [SimpleRoleAuthorizer](#SimpleRoleAuthorizer) instance for each class. You can add it easily:
+}
+```
+
+### SimpleRoleAuthorizerProvider [unit test](/src/jvmTest/kotlin/zakadabar/stack/backend/authorize/SimpleRoleAuthorizerProviderTest.kt)
+
+This module provides a [SimpleRoleAuthorizer](#SimpleRoleAuthorizer) instance for each class. You can add it easily
+from your server configuration module (see [Modules](./Modules.md)):
 
 ```kotlin
 server += SimpleRoleAuthorizerProvider {
@@ -57,7 +76,7 @@ During startup the authorizer looks for a `RoleBlProvider` between the server
 modules and resolves all names to role ids. Then it uses those ids to perform
 the actual authorization.
 
-**Operations not specified are denied.**
+**Operations not specified explicitly are denied.**
 
 Operations:
 
@@ -129,15 +148,3 @@ class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
 Most cases you don't have to worry about using an authorizer. Once it is assigned
 to a business logic, it will be called automatically whenever the endpoints 
 offered by the BL receive a request.
-
-
-## Timeline
-
-### Changes
-
-- 2021.6.6
-    - add AuthorizerProvider and SimpleRoleAuthorizerProvider
-    
-### Possible Improvements
-
-- add an authorization report function that generates an auditor-ready report of authorizers

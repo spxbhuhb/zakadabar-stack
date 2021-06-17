@@ -12,7 +12,9 @@ import kotlin.reflect.KProperty
 
 private object UNINITIALIZED
 
-class AuthorizerDelegate<T : EntityBo<T>> : ReadOnlyProperty<EntityBusinessLogicBase<T>, Authorizer<T>> {
+class AuthorizerDelegate<T : EntityBo<T>>(
+    var build: (Authorizer<T>.() -> Unit)? = null
+) : ReadOnlyProperty<EntityBusinessLogicBase<T>, Authorizer<T>> {
 
     private var authorizer: Any = UNINITIALIZED
 
@@ -24,7 +26,9 @@ class AuthorizerDelegate<T : EntityBo<T>> : ReadOnlyProperty<EntityBusinessLogic
                 moduleLogger.warn("Cannot find authorizer provider, requests will be denied!")
                 EmptyAuthorizer()
             } else {
-                provider.businessLogicAuthorizer(thisRef)
+                provider
+                    .businessLogicAuthorizer(thisRef)
+                    .apply { build?.let { it() }  }
             }
         }
         return authorizer as Authorizer<T>

@@ -96,6 +96,10 @@ kotlin {
             }
         }
 
+        sourceSets["jvmTest"].dependencies {
+            implementation("com.h2database:h2:1.4.200")
+        }
+
         @Suppress("UNUSED_VARIABLE")
         val jsMain by getting {
 

@@ -78,7 +78,7 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
      */
     open val auditor: Auditor<T> = auditor { }
 
-    fun provider() = AuthorizerDelegate<T>()
+    fun provider(build: (Authorizer<T>.() -> Unit)? = null) = AuthorizerDelegate(build)
 
     fun router(build: Router<T>.() -> Unit): Router<T> {
         val r = routerProvider.businessLogicRouter(this)

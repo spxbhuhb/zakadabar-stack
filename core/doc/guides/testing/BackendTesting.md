@@ -172,3 +172,16 @@ class ContentBlTest {
     
 }
 ```
+
+### Troubleshooting
+
+This usually means that the configuration files are missing:
+
+```text
+FAILURE: Build failed with an exception.
+* What went wrong:
+Execution failed for task ':core:jvmTest'.
+> Process 'Gradle Test Executor 1' finished with non-zero exit value 1
+  This problem might be caused by incorrect test process configuration.
+```
+
