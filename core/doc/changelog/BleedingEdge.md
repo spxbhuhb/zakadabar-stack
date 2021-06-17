@@ -65,6 +65,10 @@ changed:
 - `Router.query` change type parameter RQ from Any to QueryBo<RS> to ensure type safety
 - `ZkStringStore.merge` - also merge into child stores
 
+## Lib : Accounts
+
+- CheckName is now a query
+
 ## Lib: Blobs
 
 added:

@@ -19,6 +19,7 @@ import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.util.BCrypt
 
 open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
@@ -45,9 +46,14 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
             ownOrSecurityOfficer(executor, entity.id)
         }
 
+        override fun authorizeQuery(executor: Executor, queryBo: QueryBo<*>) {
+            when (queryBo) {
+                is CheckName -> authorize(executor, StackRoles.siteMember)
+            }
+        }
+
         override fun authorizeAction(executor: Executor, actionBo: ActionBo<*>) {
             when (actionBo) {
-                is CheckName -> authorize(executor, StackRoles.siteMember)
                 is CreateAccount -> authorize(executor, StackRoles.securityOfficer)
                 is UpdateAccountLocked -> authorize(executor, StackRoles.securityOfficer)
                 is PasswordChange -> secureChange(executor, actionBo.accountId, actionBo.oldPassword)
@@ -83,7 +89,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     }
 
     override val router = router {
-        action(CheckName::class, ::checkName)
+        query(CheckName::class, ::checkName)
         action(CreateAccount::class, ::createAccount)
         action(PasswordChange::class, ::passwordChange)
         action(UpdateAccountSecure::class, ::updateAccountSecure)
@@ -209,16 +215,16 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     // Actions
     // -------------------------------------------------------------------------
 
-    open fun checkName(executor: Executor, action: CheckName): CheckNameResult {
+    open fun checkName(executor: Executor, query: CheckName): CheckNameResult {
 
         return try {
             CheckNameResult(
-                action.accountName,
-                accountId = EntityId(pa.readByName(action.accountName).id)
+                query.accountName,
+                accountId = EntityId(pa.readByName(query.accountName).id)
             )
         } catch (ex: NoSuchElementException) {
             CheckNameResult(
-                action.accountName,
+                query.accountName,
                 accountId = null
             )
         }

@@ -16,7 +16,7 @@ class CheckName(
 
     var accountName: String
 
-) : ActionBo<CheckNameResult> {
+) : QueryBo<CheckNameResult> {
 
     override suspend fun execute() = comm.query(this, serializer(), CheckNameResult.serializer())
 
