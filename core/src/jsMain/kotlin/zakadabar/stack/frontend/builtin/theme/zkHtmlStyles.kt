@@ -5,6 +5,7 @@ package zakadabar.stack.frontend.builtin.theme
 
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.percent
 import zakadabar.stack.util.PublicApi
 
 val zkHtmlStyles by cssStyleSheet(ZkHtmlStyles())
@@ -13,8 +14,8 @@ open class ZkHtmlStyles : ZkCssStyleSheet() {
 
     @PublicApi
     open val bodyStyle by cssRule("html, body") {
-        width = "100%"
-        height = "100%"
+        width = 100.percent
+        height = 100.percent
         margin = "0 !important"
         padding = "0 !important"
 

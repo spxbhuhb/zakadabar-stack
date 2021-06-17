@@ -3,9 +3,9 @@
  */
 package zakadabar.stack.frontend.builtin.layout
 
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.px
 
 var zkScrollBarStyles by cssStyleSheet(ZkScrollBarStyles())
 
@@ -20,8 +20,8 @@ open class ZkScrollBarStyles : ZkCssStyleSheet() {
 
     open val webkitScrollBar by cssRule("::-webkit-scrollbar") {
         if (enabled) {
-            width = scrollBarWidth
-            height = scrollBarHeight
+            width = scrollBarWidth.px
+            height = scrollBarHeight.px
         }
     }
 

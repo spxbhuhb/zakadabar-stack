@@ -36,13 +36,14 @@ import zakadabar.stack.frontend.builtin.form.fields.ZkFieldBase
 import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
+import zakadabar.stack.frontend.resources.css.AlignItems
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.resources.localizedStrings
 import zakadabar.stack.text.capitalized
 
-open class ZkAttachmentsField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
+open class ZkAttachmentsField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
     form: ZkForm<T>,
-    private val comm: BlobCommInterface<BT,T>,
+    private val comm: BlobCommInterface<BT, T>,
     private val reference: EntityId<T>? = null,
     private val attachmentCountMax: Int? = null,
     private val disposition: String? = null,
@@ -72,9 +73,7 @@ open class ZkAttachmentsField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
 
                 + div(blobStyles.imageDropArea) {
                     + column(blobStyles.imageDropAreaMessage) {
-                        style {
-                            alignItems = "center"
-                        }
+                        + AlignItems.center
                         + ZkButton(ZkIcons.cloudUpload, flavour = ZkFlavour.Custom) marginBottom 10
                         + div {
                             buildPoint.style.whiteSpace = "nowrap"

@@ -3,9 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.layout.tabcontainer
 
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssParameter
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.*
 
 val zkTabContainerStyles by cssStyleSheet(ZkTabContainerStyles())
 
@@ -19,33 +17,36 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
     open var labelBottomBorder by cssParameter { "none" }
 
     open val container by cssClass {
-        position = "relative"
-        display = "flex"
-        flexDirection = "column"
+        + Position.relative
+        + Display.flex
+        + FlexDirection.column
     }
 
     open val labels by cssClass {
-        display = "flex"
-        flexDirection = "row"
+        + Display.flex
+        + FlexDirection.row
         borderBottom = labelBottomBorder
     }
 
     open val label by cssClass {
-        boxSizing = "border-box"
-        fontWeight = 400
-        fontSize = 14
-        height = labelHeight
-        minWidth = 100
+        + BoxSizing.borderBox
+        + Display.flex
+        + FlexDirection.column
+        + JustifyContent.flexEnd
+        + WhiteSpace.nowrap
+
+        + Cursor.pointer
+
+        fontWeight = 400.weight
+        fontSize = 14.px
+        height = labelHeight.px
+        minWidth = 100.px
         backgroundColor = labelBackgroundColor
         color = labelTextColor
-        paddingLeft = theme.spacingStep
-        paddingRight = theme.spacingStep
-        paddingBottom = 6
-        cursor = "pointer"
-        display = "flex"
-        flexDirection = "column"
-        justifyContent = "flex-end"
-        whiteSpace = "nowrap"
+        paddingLeft = theme.spacingStep.px
+        paddingRight = theme.spacingStep.px
+        paddingBottom = 6.px
+
         borderRight = theme.border
         borderTop = theme.border
 
@@ -67,16 +68,16 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
     }
 
     open val contentContainer by cssClass {
-        position = "relative"
+        + Position.relative
+        + Display.flex
         flex = "1 1"
-        display = "flex"
         minHeight = "0"
         height = "calc(100% - ${labelHeight}px)" // TODO think about tab container height management
     }
 
     open val scrolledContent by cssClass {
-        boxSizing = "border-box"
-        flexGrow = 1
-        overflowY = "auto"
+        + BoxSizing.borderBox
+        flexGrow = 1.0
+        + OverflowY.auto
     }
 }

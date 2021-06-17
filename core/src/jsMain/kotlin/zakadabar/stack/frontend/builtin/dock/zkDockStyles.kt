@@ -4,9 +4,7 @@
 package zakadabar.stack.frontend.builtin.dock
 
 import zakadabar.stack.frontend.resources.ZkColors
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssParameter
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.*
 
 val zkDockStyles by cssStyleSheet(ZkDockStyles())
 
@@ -20,66 +18,76 @@ open class ZkDockStyles : ZkCssStyleSheet() {
     open var headerHeight by cssParameter { 26 }
 
     val dock by cssClass {
-        position = "fixed"
-        right = 0
-        bottom = 0
-        display = "flex"
-        flexDirection = "row"
-        width = "100%"
-        zIndex = 1000
-        justifyContent = "flex-end"
+        + Position.fixed
+        + Display.flex
+        + FlexDirection.row
+        + JustifyContent.flexEnd
+
+        right = 0.px
+        bottom = 0.px
+        width = 100.percent
+        zIndex = 1000.zIndex
     }
 
     val dockItem by cssClass {
+        + Display.flex
+        + FlexDirection.column
+
         backgroundColor = dockBackground
-        display = "flex"
-        flexDirection = "column"
     }
 
     val header by cssClass {
-        display = "flex"
-        flexDirection = "row"
-        boxSizing = "border-box"
-        minHeight = headerHeight
-        height = headerHeight
-        alignItems = "center"
+        + BoxSizing.borderBox
+
+        + Display.flex
+        + FlexDirection.row
+        + AlignItems.center
+
+        + Overflow.hidden
+
+        minHeight = headerHeight.px
+        height = headerHeight.px
         backgroundColor = headerBackground
-        overflow = "hidden"
     }
 
     val headerIcon by cssClass {
-        boxSizing = "border-box"
+
+        + BoxSizing.borderBox
+
         backgroundColor = headerIconBackground
         fill = headerIconFill
-        marginLeft = 8
-        marginRight = 8
+        marginLeft = 8.px
+        marginRight = 8.px
     }
 
     val text by cssClass {
-        display = "flex"
-        flexDirection = "row"
-        alignItems = "center"
+        + Display.flex
+        + FlexDirection.row
+        + AlignItems.center
+
         color = headerForeground
         fontSize = theme.fontSize
-        height = 21
+        height = 21.px
     }
 
     val extensions by cssClass {
-        flexGrow = 1
-        display = "flex"
-        flexDirection = "row"
-        justifyContent = "flex-end"
-        alignItems = "center"
-        paddingLeft = 8
+        + Display.flex
+        + FlexDirection.row
+        + JustifyContent.flexEnd
+        + AlignItems.center
+        flexGrow = 1.0
+        paddingLeft = 8.px
     }
 
     val extensionIcon by cssClass {
-        boxSizing = "border-box"
+        + BoxSizing.borderBox
+
+        + Cursor.pointer
+        + UserSelect.none
+
         backgroundColor = headerIconBackground
         fill = headerIconFill
-        strokeWidth = 2
-        cursor = "pointer"
-        userSelect = "none"
-        marginRight = 12
+        strokeWidth = 2.px
+        marginRight = 12.px
     }
 }

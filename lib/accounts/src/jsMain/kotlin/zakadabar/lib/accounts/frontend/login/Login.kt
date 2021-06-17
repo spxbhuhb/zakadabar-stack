@@ -14,6 +14,10 @@ import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.layout.ZkFullScreenLayout
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
+import zakadabar.stack.frontend.resources.css.AlignItems
+import zakadabar.stack.frontend.resources.css.px
+import zakadabar.stack.frontend.resources.css.vh
+import zakadabar.stack.frontend.resources.css.vw
 import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.util.marginBottom
 import zakadabar.stack.resources.localizedStrings
@@ -25,25 +29,22 @@ import zakadabar.stack.resources.localizedStrings
  */
 class Login : ZkPage(ZkFullScreenLayout) {
 
-    lateinit var target : ZkAppRouting.ZkTarget
+    lateinit var target: ZkAppRouting.ZkTarget
 
     override fun onCreate() {
 
         + column {
 
-            style {
-                alignItems = "center"
-                height = "100vh"
-                width = "100vw"
-            }
+            + AlignItems.center
 
-            + gap(height = 60)
+            height = 100.vh
+            width = 100.vw
+
+            + gap(height = 60.px)
 
             + div {
 
-                style {
-                    width = "300px"
-                }
+                width = 300.px
 
                 + div(zkTitleBarStyles.appTitleBar) {
                     style {

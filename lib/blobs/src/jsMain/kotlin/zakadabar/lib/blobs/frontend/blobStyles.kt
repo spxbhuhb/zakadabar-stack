@@ -3,39 +3,41 @@
  */
 package zakadabar.lib.blobs.frontend
 
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.*
 
 val blobStyles by cssStyleSheet(BlobStyles())
 
 class BlobStyles : ZkCssStyleSheet() {
 
     val attachmentField by cssClass {
-        display = "grid"
+        + Display.grid
+        + AlignItems.center
+
         gridTemplateColumns = "repeat(4, max-content)"
-        gap = theme.spacingStep
-        alignItems = "center"
+        gap = theme.spacingStep.px
     }
 
     val attachmentEntry by cssClass {
-        display = "contents"
+        + Display.contents
     }
 
     val imageDropArea by cssClass {
-        boxSizing = "border-box"
-        flexGrow = 1
-        width = "100%"
-        height = "100%"
-        display = "flex"
-        flexDirection = "row"
-        justifyContent = "center"
-        alignItems = "center"
+        + BoxSizing.borderBox
+        + Display.flex
+        + JustifyContent.center
+        + AlignItems.center
+
+        flexGrow = 1.0
+
+        width = 100.percent
+        height = 100.percent
+
         color = theme.textColor
         fill = theme.textColor
 
-        padding = 20
+        padding = 20.px
 
-        borderRadius = theme.cornerRadius
+        borderRadius = theme.cornerRadius.px
         border = "1px dotted lightgray"
 
         on(":hover") {
@@ -46,49 +48,53 @@ class BlobStyles : ZkCssStyleSheet() {
     }
 
     val imageDropAreaMessage by cssClass {
-        fontSize = 14
-        fontWeight = 400
-        paddingLeft = 6
+        fontSize = 14.px
+        fontWeight = 400.weight
+        paddingLeft = 6.px
     }
 
     val outerView by cssClass {
-        boxSizing = "border-box"
-        position = "absolute"
-        top = "0"
-        left = "0"
-        height = "100vh"
-        width = "100vw"
-        display = "flex"
+        + BoxSizing.borderBox
+
+        + Position.absolute
+
+        + Display.flex
+        + FlexDirection.row
+        + JustifyContent.center
+        + AlignItems.center
+
+        top = 0.px
+        left = 0.px
+        height = 100.vh
+        width = 100.vw
         background = "rgba(0, 0, 0, 0.8)"
-        zIndex = 1000
-        justifyContent = "center"
-        alignItems = "center"
+        zIndex = 1000.zIndex
         outline = "none" // this is here because we have a tabindex on ZkFullScreenImageView
     }
 
     val image by cssClass {
-        maxWidth = "100%"
-        maxHeight = "100%"
+        maxWidth = 100.percent
+        maxHeight = 100.percent
     }
 
     val actions by cssClass {
-        display = "flex"
-        flexDirection = "row"
-        justifyContent = "space-around"
+        + Display.flex
+        + FlexDirection.row
+        + JustifyContent.spaceAround
     }
 
     val closeButton by cssClass {
-        position = "absolute"
-        top = 20
-        right = 20
-        zIndex = 1001
+        + Position.absolute
+        top = 20.px
+        right = 20.px
+        zIndex = 1001.zIndex
     }
 
     val deleteButton by cssClass {
-        position = "absolute"
-        top = 20
-        left = 20
-        zIndex = 1001
+        + Position.absolute
+        top = 20.px
+        left = 20.px
+        zIndex = 1001.zIndex
     }
 
 }

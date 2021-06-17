@@ -3,8 +3,7 @@
  */
 package zakadabar.lib.markdown.frontend
 
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.*
 
 val markdownStyles by cssStyleSheet(MarkdownStyles())
 
@@ -28,16 +27,17 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     }
 
     val container by cssClass {
-        display = "flex"
-        flexDirection = "row"
-        justifyContent = "center"
+        + Display.flex
+        + FlexDirection.row
+        + JustifyContent.center
     }
 
     val content by cssClass {
-        overflowX = "auto"
-        overflowY = "hidden"
-        maxWidth = 600
-        flexGrow = 1
+        + OverflowX.auto
+        + OverflowY.hidden
+
+        maxWidth = 600.px
+        flexGrow = 1.0
         margin = "auto"
 
 //        small {
@@ -61,48 +61,54 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     // -------------------------------------------------------------------------
 
     open val tocContainer by cssClass {
-        boxSizing = "border-box"
-        marginRight = theme.spacingStep
-        fontSize = "80%"
-        paddingTop = theme.spacingStep / 2
-        paddingBottom = theme.spacingStep / 2
-        minWidth = 160 + theme.spacingStep
-        display = "flex"
-        flexDirection = "row"
+        + BoxSizing.borderBox
+        + Display.flex
+        + FlexDirection.row
+
+        minWidth = (160 + theme.spacingStep).px
+
+        marginRight = theme.spacingStep.px
+        paddingTop = (theme.spacingStep / 2).px
+        paddingBottom = (theme.spacingStep / 2).px
+
+        fontSize = 80.percent
 
         small {
-            display = "none" // TODO markdown toc on small displays
+            + Display.none // TODO markdown toc on small displays
         }
 
         medium {
-            display = "none" // TODO markdown toc on medium displays
+            + Display.none // TODO markdown toc on medium displays
         }
 
     }
 
     open val tocContent by cssClass {
-        position = "absolute"
-        overflowY = "auto"
-        overflowX = "hidden"
-        flexGrow = 1
+        + Position.absolute
+        + OverflowY.auto
+        + OverflowX.hidden
+
+        flexGrow = 1.0
+
         styles["scrollbar-width"] = "none"
         on("::-webkit-scrollbar") {
-            display = "none"
+            + Display.none
         }
     }
 
     open val tocEntry by cssClass {
-        marginLeft = 1
+        + Cursor.pointer
+
+        marginLeft = 1.px
         borderLeft = "1px solid ${theme.borderColor}"
-        paddingLeft = theme.spacingStep
-        cursor = "pointer"
-        paddingTop = 5
-        paddingBottom = 5
-        width = 180
+        paddingLeft = theme.spacingStep.px
+        paddingTop = 5.px
+        paddingBottom = 5.px
+        width = 180.px
 
         on("[data-active=\"true\"]") {
-            marginLeft = 0
-            paddingLeft = theme.spacingStep - 1
+            marginLeft = 0.px
+            paddingLeft = (theme.spacingStep - 1).px
             borderLeft = "3px solid ${theme.textColor}"
         }
 
@@ -128,56 +134,56 @@ open class MarkdownStyles : ZkCssStyleSheet() {
 
     @Suppress("unused") // used implicitly by the browser
     open val header1 by cssRule(".$content h1") {
-        fontSize = 32
-        fontWeight = 500
+        fontSize = 32.px
+        fontWeight = 500.weight
         borderBottom = theme.border
-        marginBlockStart = theme.spacingStep * 2
-        marginBlockEnd = theme.spacingStep
+        marginBlockStart = (theme.spacingStep * 2).px
+        marginBlockEnd = theme.spacingStep.px
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val header1First by cssRule(".$content h1:first-child") {
-        marginBlockStart = theme.spacingStep
+        marginBlockStart = theme.spacingStep.px
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val header2 by cssRule(".$content h2") {
-        marginBlockStart = theme.spacingStep * 2
-        marginBlockEnd = theme.spacingStep / 2
-        fontWeight = 500
+        marginBlockStart = (theme.spacingStep * 2).px
+        marginBlockEnd = (theme.spacingStep / 2).px
+        fontWeight = 500.weight
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val header3 by cssRule(".$content h3") {
-        marginBlockStart = theme.spacingStep * 2
-        marginBlockEnd = theme.spacingStep / 2
-        fontWeight = 500
+        marginBlockStart = (theme.spacingStep * 2).px
+        marginBlockEnd = (theme.spacingStep / 2).px
+        fontWeight = 500.weight
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val header1Link by cssRule(".$content h1 > a") {
-        paddingLeft = 20
-        fontWeight = 400
-        fontSize = "15px"
+        paddingLeft = 20.px
+        fontWeight = 400.weight
+        fontSize = 15.px
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val header2Link by cssRule(".$content h2 > a") {
-        paddingLeft = 20
-        fontWeight = 400
-        fontSize = "15px"
+        paddingLeft = 20.px
+        fontWeight = 400.weight
+        fontSize = 15.px
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val header3Link by cssRule(".$content h3 > a") {
-        paddingLeft = 20
-        fontWeight = 400
-        fontSize = "15px"
+        paddingLeft = 20.px
+        fontWeight = 400.weight
+        fontSize = 15.px
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val img by cssRule(".$content img") {
-        maxWidth = "100%"
+        maxWidth = 100.percent
     }
 
     open val li by cssRule(".$content li") {
@@ -188,40 +194,40 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         border = "1px solid ${theme.borderColor}"
         borderCollapse = "collapse"
         overflow = "auto"
-        marginTop = 10
-        marginBottom = 10
+        marginTop = 10.px
+        marginBottom = 10.px
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val td by cssRule(".$content > table td") {
         border = "1px solid ${theme.borderColor}"
-        paddingTop = 4
-        paddingBottom = 4
-        paddingLeft = 8
-        paddingRight = 8
+        paddingTop = 4.px
+        paddingBottom = 4.px
+        paddingLeft = 8.px
+        paddingRight = 8.px
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val inlineCode by cssRule(".$content code") {
         fontFamily = "JetBrains Mono, monospace"
-        fontSize = 13
-        paddingLeft = 4
-        paddingRight = 4
-        borderRadius = 2
+        fontSize = 13.px
+        paddingLeft = 4.px
+        paddingRight = 4.px
+        borderRadius = 2.px
         backgroundColor = theme.blockBackgroundColor
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val codeBlock by cssRule(".$content pre > code") {
-        position = "relative"
-        padding = 12
-        paddingLeft = theme.spacingStep
-        lineHeight = 13 * 1.4
-        marginBottom = theme.spacingStep
+        + Position.relative
+        padding = 12.px
+        paddingLeft = theme.spacingStep.px
+        lineHeight = (13 * 1.4).px
+        marginBottom = theme.spacingStep.px
         this@MarkdownStyles.codeBorderColor?.let {
             borderLeft = "2px solid $it"
-            borderTopLeftRadius = 0
-            borderBottomLeftRadius = 0
+            borderTopLeftRadius = 0.px
+            borderBottomLeftRadius = 0.px
         }
         backgroundColor = theme.blockBackgroundColor
     }
@@ -231,18 +237,18 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     // -------------------------------------------------------------------------
 
     open val codeCopy by cssClass {
-        position = "absolute"
-        right = 0
-        marginRight = 4
-        top = 4
+        + Position.absolute
+        right = 0.px
+        marginRight = 4.px
+        top = 4.px
         background = theme.backgroundColor
         backgroundColor = theme.blockBackgroundColor
     }
 
     open val codeCopyIcon by cssClass {
-        cursor = "pointer"
-        padding = 6
-        borderRadius = 2
+        + Cursor.pointer
+        padding = 6.px
+        borderRadius = 2.px
 
         hover {
             backgroundColor = theme.hoverBackgroundColor

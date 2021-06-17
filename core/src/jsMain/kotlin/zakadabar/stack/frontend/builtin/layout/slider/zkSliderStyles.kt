@@ -3,9 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.layout.slider
 
-import zakadabar.stack.frontend.resources.ZkTheme
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.*
 
 val zkSliderStyles by cssStyleSheet(ZkSliderStyles())
 
@@ -14,24 +12,28 @@ class ZkSliderStyles : ZkCssStyleSheet() {
     // FIXME these colors are wrong
 
     val horizontalSlider by cssClass {
-        boxSizing = "border-box"
-        width = "100%"
-        height = 3
-        minHeight = 3
+        + BoxSizing.borderBox
+        + Cursor.rowResize
+
+        width = 100.percent
+        height = 3.px
+        minHeight = 3.px
         backgroundColor = theme.textColor
-        cursor = "row-resize"
+
         on(":hover") {
             backgroundColor = theme.hoverBackgroundColor
         }
     }
 
     val verticalSlider by cssClass {
-        boxSizing = "border-box"
-        height = "100%"
-        width = 3
-        minWidth = 3
+        + BoxSizing.borderBox
+        + Cursor.colResize
+
+        height = 100.percent
+        width = 3.px
+        minWidth = 3.px
         backgroundColor = theme.textColor
-        cursor = "col-resize"
+
         on(":hover") {
             backgroundColor = theme.hoverBackgroundColor
         }

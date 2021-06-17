@@ -3,8 +3,7 @@
  */
 package zakadabar.site.frontend.resources
 
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.*
 
 val siteStyles by cssStyleSheet(SiteStyles())
 
@@ -13,35 +12,35 @@ class SiteStyles : ZkCssStyleSheet() {
     val developerLogoUrl: String = "/simplexion_logo.svg"
 
     val logo by cssClass {
-        cursor = "pointer"
-        height = 22
+        + Cursor.pointer
+        height = 22.px
         fill = theme.textColor
     }
 
     val headerActions by cssClass {
-        alignItems = "center"
+        + AlignItems.center
     }
 
     val developerLogo by cssClass {
-        width = 48
-        height = 48
+        width = 48.px
+        height = 48.px
         fill = theme.textColor
     }
 
     val title by cssClass {
-        justifyContent = "space-around"
-        alignItems = "center"
+        + JustifyContent.spaceAround
+        + AlignItems.center
     }
 
     val alphaStyle by cssClass {
         backgroundColor = theme.warningColor
         color = theme.warningPair
-        fontSize = "75%"
+        fontSize = 75.percent
         fontFamily = "'JetBrains Mono', fixed"
-        marginLeft = 10
+        marginLeft = 10.px
         padding = "2px 6px 2px 6px"
-        borderRadius = theme.cornerRadius
-        cursor = "pointer"
+        borderRadius = theme.cornerRadius.px
+        + Cursor.pointer
     }
 
 }

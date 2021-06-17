@@ -6,6 +6,8 @@ package zakadabar.lib.bender.frontend
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.input.ZkTextAreaInput
 import zakadabar.stack.frontend.builtin.modal.ZkModalBase
+import zakadabar.stack.frontend.resources.css.percent
+import zakadabar.stack.frontend.resources.css.px
 import zakadabar.stack.frontend.util.io
 
 open class ImportDialog : ZkModalBase<String?>() {
@@ -15,8 +17,8 @@ open class ImportDialog : ZkModalBase<String?>() {
     override fun buildContent() {
         + "Copy the source code of your BO into the text area, then click on Import"
         + ZkTextAreaInput() build {
-            height = 400
-            width = "100%"
+            height = 400.px
+            width = 100.percent
         }
     }
 

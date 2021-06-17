@@ -13,6 +13,8 @@ import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.fields.ZkConstStringField
 import zakadabar.stack.frontend.builtin.toast.toastDanger
 import zakadabar.stack.frontend.builtin.toast.toastWarning
+import zakadabar.stack.frontend.resources.css.JustifyContent
+import zakadabar.stack.frontend.resources.css.percent
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.marginBottom
 import zakadabar.stack.resources.localizedStrings
@@ -49,10 +51,9 @@ class LoginForm(
         } marginBottom 20
 
         + row {
-            style {
-                width = "100%"
-                justifyContent = "space-between"
-            }
+            + JustifyContent.spaceBetween
+            width = 100.percent
+
             if (onCancel != null) {
                 + ZkButton(localizedStrings.cancel) { onCancel.invoke() }
             } else {

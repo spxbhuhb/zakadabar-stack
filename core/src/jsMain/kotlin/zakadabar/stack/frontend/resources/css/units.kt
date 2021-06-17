@@ -40,3 +40,16 @@ inline val Number.vw
 @PublicApi
 inline val Number.fr
     get() = "${this}fr"
+
+@PublicApi
+inline val Number.opacity
+    get() = "$this"
+
+@PublicApi
+inline val Number.zIndex
+    get() = "$this"
+
+@PublicApi
+inline val Number.weight
+    get() = "$this"
+

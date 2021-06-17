@@ -8,6 +8,7 @@ import org.w3c.dom.DOMTokenList
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
+import zakadabar.stack.frontend.resources.css.percent
 import zakadabar.stack.util.PublicApi
 import kotlin.math.max
 
@@ -46,7 +47,7 @@ infix fun HTMLElement.marginBottom(size: Any): HTMLElement {
 }
 
 infix fun HTMLElement.width(value: Any): HTMLElement {
-    if (value == "100%") {
+    if (value == 100.percent) {
         classList += zkLayoutStyles.w100
     } else {
         this.style.width = value.toString()

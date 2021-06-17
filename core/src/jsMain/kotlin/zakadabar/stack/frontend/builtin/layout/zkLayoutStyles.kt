@@ -3,19 +3,18 @@
  */
 package zakadabar.stack.frontend.builtin.layout
 
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.*
 
 val zkLayoutStyles by cssStyleSheet(ZkLayoutStyles())
 
 class ZkLayoutStyles : ZkCssStyleSheet() {
 
     val w100 by cssClass {
-        width = "100%"
+        width = 100.percent
     }
 
     val h100 by cssClass {
-        height = "100%"
+        height = 100.percent
     }
 
     val hidden by cssClass {
@@ -23,27 +22,27 @@ class ZkLayoutStyles : ZkCssStyleSheet() {
     }
 
     val row by cssClass {
-        display = "flex"
-        flexDirection = "row"
+        + Display.flex
+        + FlexDirection.row
     }
 
     val column by cssClass {
-        display = "flex"
-        flexDirection = "column"
+        + Display.flex
+        + FlexDirection.column
     }
 
     val grow by cssClass {
-        flexGrow = 1
+        flexGrow = 1.0
     }
 
     val grid by cssClass {
-        display = "grid"
+        + Display.grid
         borderCollapse = "collapse"
-        border = 0
+        border = "none"
     }
 
     val gridGap by cssClass {
-        gap = theme.spacingStep
+        gap = theme.spacingStep.px
     }
 
     /**
@@ -79,32 +78,32 @@ class ZkLayoutStyles : ZkCssStyleSheet() {
     }
 
     val justifySelfCenter by cssClass {
-        justifySelf = "center"
+        + JustifySelf.center
     }
 
     val alignSelfCenter by cssClass {
-        alignSelf = "center"
+        + AlignSelf.center
     }
 
     val p1 by cssClass {
-        padding = theme.spacingStep
+        padding = theme.spacingStep.px
     }
 
     val pl1 by cssClass {
-        paddingLeft = theme.spacingStep
+        paddingLeft = theme.spacingStep.px
     }
 
     val fs80 by cssClass {
-        fontSize = "80%"
+        fontSize = 80.percent
     }
 
     val layout by cssClass {
-        position = "absolute"
-        top = 0
-        left = 0
-        width = "100%"
-        height = "100%"
-        overflow = "hidden"
+        + Position.absolute
+        top = 0.px
+        left = 0.px
+        width = 100.percent
+        height = 100.percent
+        + Overflow.hidden
     }
 
 }

@@ -3,9 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.table
 
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssParameter
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.*
 
 val zkTableStyles by cssStyleSheet(ZkTableStyles())
 
@@ -25,102 +23,106 @@ open class ZkTableStyles : ZkCssStyleSheet() {
     open var controlColor by cssParameter { theme.primaryColor }
 
     val outerContainer by cssClass {
-        display = "flex"
-        flexDirection = "column"
-        width = "100%"
-        height = "100%"
+        + Display.flex
+        + FlexDirection.column
+        width = 100.percent
+        height = 100.percent
     }
 
     val contentContainer by cssClass {
-        position = "relative"
+        + Position.relative
+
+        flexGrow = 1.0
+
+        + Overflow.auto
+
         backgroundColor = theme.backgroundColor
-        flexGrow = 1
-        overflow = "auto"
         boxShadow = theme.boxShadow
-        borderRadius = 2
+        borderRadius = 2.px
     }
 
     val resizeHandle by cssClass {
-        boxSizing = "border-box"
-        position = "absolute"
-        top = 0
-        right = 0
-        bottom = 0
+        + BoxSizing.borderBox
+        + Position.absolute
+        top = 0.px
+        right = 0.px
+        bottom = 0.px
         borderRight = "1px solid $controlColor"
         borderLeft = "1px solid $controlColor"
         backgroundColor = headerBackground
-        marginTop = 4
-        marginBottom = 4
-        marginRight = 8
-        opacity = 0
-        width = 5
+        marginTop = 4.px
+        marginBottom = 4.px
+        marginRight = 8.px
+        opacity = 0.opacity
+        width = 5.px
         cursor = "col-resize"
 
         on(":hover") {
-            opacity = 1
+            opacity = 1.opacity
         }
     }
 
     val beingResized by cssClass {
         on(" .$resizeHandle") {
-            opacity = 1
+            opacity = 1.opacity
         }
     }
 
     val noSelect by cssClass {
-        userSelect = "none"
+        + UserSelect.none
+
         styles["-moz-user-select"] = "none"
         styles["-webkit-user-select"] = "none"
         styles["-ms-user-select"] = "none"
     }
 
     val sortSign by cssClass {
-        boxSizing = "border-box"
-        position = "absolute"
-        top = 0
-        right = 10
-        bottom = 0
+        + BoxSizing.borderBox
+        + Position.absolute
+        top = 0.px
+        right = 10.px
+        bottom = 0.px
     }
 
     val sortedDescending by cssClass {
-        marginTop = 16
-        marginRight = 12
-        width = 0
-        height = 0
+        marginTop = 16.px
+        marginRight = 12.px
+        width = 0.px
+        height = 0.px
         borderLeft = "6px solid transparent"
         borderRight = "6px solid transparent"
         borderTop = "6px solid $controlColor"
     }
 
     val sortedAscending by cssClass {
-        marginTop = 16
-        marginRight = 12
-        width = 0
-        height = 0
+        marginTop = 16.px
+        marginRight = 12.px
+        width = 0.px
+        height = 0.px
         borderLeft = "6px solid transparent"
         borderRight = "6px solid transparent"
         borderBottom = "6px solid $controlColor"
     }
 
     val table by cssClass {
-        boxSizing = "border-box"
+        + BoxSizing.borderBox
+        + Display.grid
 
-        display = "grid"
         borderCollapse = "collapse"
-        minWidth = "100%"
+        minWidth = 100.percent
 
         backgroundColor = tableBackgroundColor
 
         on(" thead") {
-            display = "contents"
+            + Display.contents
         }
 
         on(" tbody") {
-            display = "contents"
+            + Display.contents
         }
 
         on(" tr") {
-            display = "contents"
+            + Display.contents
         }
 
         on(" tr:hover td") {
@@ -129,31 +131,35 @@ open class ZkTableStyles : ZkCssStyleSheet() {
         }
 
         on(" th") {
-            paddingTop = 10
-            paddingBottom = 10
-            paddingRight = 8
-            overflow = "hidden"
+
+            + Position.sticky
+            + Overflow.hidden
+            + WhiteSpace.nowrap
+            + TextAlign.left
+
+            + Cursor.pointer
+
+            paddingTop = 10.px
+            paddingBottom = 10.px
+            paddingRight = 8.px
             textOverflow = "ellipsis"
             textTransform = "uppercase"
-            fontSize = "75%"
-            fontWeight = 400
-            whiteSpace = "nowrap"
-            position = "sticky"
-            top = 0
+            fontSize = 75.percent
+            fontWeight = 400.weight
+            top = 0.px
             background = headerBackground
-            textAlign = "left"
+
             color = headerText
             borderBottom = headerBottomBorder
-            cursor = "pointer"
-            zIndex = 30
+            zIndex = 30.zIndex
         }
 
         on(" th:hover .$resizeHandle") {
-            opacity = 1
+            opacity = 1.opacity
         }
 
         on(" th:first-child") {
-            paddingLeft = 10
+            paddingLeft = 10.px
         }
 
         on(" th:last-child") {
@@ -161,15 +167,18 @@ open class ZkTableStyles : ZkCssStyleSheet() {
         }
 
         on(" td") {
-            paddingTop = 10
-            paddingBottom = 10
-            overflow = "hidden"
+
+            + Overflow.hidden
+            + WhiteSpace.nowrap
+
+            zIndex = 20.zIndex
+
+            paddingTop = 10.px
+            paddingBottom = 10.px
             textOverflow = "ellipsis"
-            whiteSpace = "nowrap"
             color = textColor
             borderBottom = "1px solid $rowBorderColor"
             backgroundColor = oddRowBackground
-            zIndex = 20
         }
 
         if (this@ZkTableStyles.border != null) {
@@ -192,27 +201,29 @@ open class ZkTableStyles : ZkCssStyleSheet() {
 //        }
 
         on(" td:first-child") {
-            paddingLeft = 10
+            paddingLeft = 10.px
         }
 
         on(" tr:last-child td:first-child") {
-            borderBottomLeftRadius = 4
+            borderBottomLeftRadius = 4.px
         }
 
         on(" tr:last-child td:last-child") {
-            borderBottomRightRadius = 4
+            borderBottomRightRadius = 4.px
         }
     }
 
     val action by cssClass {
-        display = "flex"
-        alignItems = "center"
+        + Display.flex
+        + AlignItems.center
+
+        + WhiteSpace.nowrap
+        + Cursor.pointer
+
         textTransform = "uppercase"
         fontSize = "75%"
         lineHeight = "1.3em"
         fontWeight = "400 !important"
-        whiteSpace = "nowrap"
-        cursor = "pointer"
         color = "$actionTextColor !important"
     }
 

@@ -5,6 +5,7 @@ package zakadabar.stack.frontend.resources.css
 
 import zakadabar.stack.frontend.resources.ZkTheme
 import kotlin.properties.ReadOnlyProperty
+import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 @Suppress("unused") // may be used by other modules
@@ -41,6 +42,10 @@ class ZkCssStyleRule(
     override fun getValue(thisRef: ZkCssStyleSheet, property: KProperty<*>) = this
 
     override fun toString() = cssClassname
+
+    operator fun CssValueConst.unaryPlus() {
+        styles[name] = value
+    }
 
     // -------------------------------------------------------------------------
     // Pseudo-class and media methods
@@ -142,20 +147,21 @@ class ZkCssStyleRule(
     // Build helpers
     // -------------------------------------------------------------------------
 
+    class CssValueDelegate : ReadWriteProperty<ZkCssStyleRule, String> {
+        override fun getValue(thisRef: ZkCssStyleRule, property: KProperty<*>): String {
+            TODO("Not yet implemented")
+        }
+
+        override fun setValue(thisRef: ZkCssStyleRule, property: KProperty<*>, value: String) {
+            TODO("Not yet implemented")
+        }
+
+    }
+
     /**
      * [MDN: align-items](https://developer.mozilla.org/en-US/docs/Web/CSS/align-items)
      *
-     * ```
-     *
-     *   align-items <=> flex cross axis
-     *
-     *   flex-start
-     *   flex-end
-     *   center
-     *   baseline
-     *   stretch
-     *
-     * ```
+     * align-items <=> flex cross axis
      */
     var alignItems
         get() = styles["align-items"]
@@ -238,7 +244,7 @@ class ZkCssStyleRule(
             styles["background-size"] = value
         }
 
-    var border: Any?
+    var border
         get() = styles["border"]
         set(value) {
             styles["border"] = value.toString()
@@ -266,34 +272,34 @@ class ZkCssStyleRule(
             styles["border-collapse"] = value
         }
 
-    var borderTop: Any?
+    var borderTop
         get() = styles["border-top"]
         set(value) {
-            styles["border-top"] = value.toString()
+            styles["border-top"] = value
         }
 
-    var borderRight: Any?
+    var borderRight
         get() = styles["border-right"]
         set(value) {
-            styles["border-right"] = value.toString()
+            styles["border-right"] = value
         }
 
-    var borderBottom: Any?
+    var borderBottom
         get() = styles["border-bottom"]
         set(value) {
-            styles["border-bottom"] = value.toString()
+            styles["border-bottom"] = value
         }
 
-    var borderLeft: Any?
+    var borderLeft
         get() = styles["border-left"]
         set(value) {
-            styles["border-left"] = value.toString()
+            styles["border-left"] = value
         }
 
-    var borderRadius: Any?
+    var borderRadius: String?
         get() = styles["border-radius"]
         set(value) {
-            styles["border-radius"] = stringOrPx(value)
+            styles["border-radius"] = value
         }
 
     var borderStyle
@@ -302,51 +308,44 @@ class ZkCssStyleRule(
             styles["border-style"] = value
         }
 
-    var borderWidth: Any?
+    var borderWidth
         get() = styles["border-width"]
         set(value) {
-            styles["border-width"] = stringOrPx(value)
+            styles["border-width"] = value
         }
 
-    var borderBottomWidth: Any?
+    var borderBottomWidth
         get() = styles["border-bottom-width"]
         set(value) {
-            styles["border-bottom-width"] = stringOrPx(value)
+            styles["border-bottom-width"] = value
         }
 
-    var borderBottomLeftRadius: Any?
+    var borderBottomLeftRadius
         get() = styles["border-bottom-left-radius"]
         set(value) {
-            styles["border-bottom-left-radius"] = stringOrPx(value)
+            styles["border-bottom-left-radius"] = value
         }
 
-    var borderTopLeftRadius: Any?
+    var borderTopLeftRadius
         get() = styles["border-top-left-radius"]
         set(value) {
-            styles["border-top-left-radius"] = stringOrPx(value)
+            styles["border-top-left-radius"] = value
         }
 
-    var borderBottomRightRadius: Any?
+    var borderBottomRightRadius
         get() = styles["border-bottom-right-radius"]
         set(value) {
-            styles["border-bottom-right-radius"] = stringOrPx(value)
+            styles["border-bottom-right-radius"] = value
         }
 
-    var borderTopRightRadius: Any?
+    var borderTopRightRadius
         get() = styles["border-top-right-radius"]
         set(value) {
-            styles["border-top-right-radius"] = stringOrPx(value)
+            styles["border-top-right-radius"] = value
         }
 
     /**
      * [MDN: box-sizing](https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing)
-     *
-     * ```
-     *
-     *   border-box
-     *   content-box
-     *
-     * ```
      */
     var boxSizing
         get() = styles["box-sizing"]
@@ -427,8 +426,8 @@ class ZkCssStyleRule(
             styles["flex-direction"] = value
         }
 
-    var flexGrow: Any?
-        get() = styles["flex-grow"]
+    var flexGrow : Double?
+        get() = styles["flex-grow"]?.toDouble()
         set(value) {
             styles["flex-grow"] = value.toString()
         }
@@ -445,13 +444,13 @@ class ZkCssStyleRule(
             styles["font-family"] = value
         }
 
-    var fontSize: Any?
+    var fontSize
         get() = styles["font-size"]
         set(value) {
-            styles["font-size"] = stringOrPx(value)
+            styles["font-size"] = value
         }
 
-    var fontWeight: Any?
+    var fontWeight
         get() = styles["font-weight"]
         set(value) {
             styles["font-weight"] = value.toString()
@@ -475,10 +474,10 @@ class ZkCssStyleRule(
             styles["font-stretch"] = value
         }
 
-    var gap: Any?
+    var gap
         get() = styles["gap"]
         set(value) {
-            styles["gap"] = stringOrPx(value)
+            styles["gap"] = value
         }
 
     var gridAutoColumns
@@ -511,10 +510,10 @@ class ZkCssStyleRule(
             styles["grid-column-start"] = value.toString()
         }
 
-    var gridGap: Any?
+    var gridGap
         get() = styles["grid-gap"]
         set(value) {
-            styles["grid-column"] = stringOrPx(value)
+            styles["grid-column"] = value
         }
 
 
@@ -542,27 +541,16 @@ class ZkCssStyleRule(
             styles["grid-template-rows"] = value
         }
 
-    var height: Any?
+    var height
         get() = styles["height"]
         set(value) {
-            styles["height"] = stringOrPx(value)
+            styles["height"] = value
         }
 
     /**
      * [MDN: justify-content](https://developer.mozilla.org/en-US/docs/Web/CSS/justify-content)
      *
-     * ```
-     *
-     *   justify-content <=> flex main axis
-     *
-     *   flex-start
-     *   flex-end
-     *   center
-     *   space-between
-     *   space-around
-     *   space-evenly
-     *
-     * ```
+     * justify-content <=> flex main axis
      */
     var justifyContent
         get() = styles["justify-content"]
@@ -615,70 +603,70 @@ class ZkCssStyleRule(
             styles["justify-self"] = value
         }
 
-    var lineHeight: Any?
+    var lineHeight
         get() = styles["line-height"]
         set(value) {
-            styles["line-height"] = stringOrPx(value)
+            styles["line-height"] = value
         }
 
-    var margin: Any?
+    var margin
         get() = styles["margin"]
         set(value) {
-            styles["margin"] = stringOrPx(value)
+            styles["margin"] = value
         }
 
-    var marginBlockStart: Any?
+    var marginBlockStart
         get() = styles["margin-block-start"]
         set(value) {
-            styles["margin-block-start"] = stringOrPx(value)
+            styles["margin-block-start"] = value
         }
 
-    var marginBlockEnd: Any?
+    var marginBlockEnd
         get() = styles["margin-block-end"]
         set(value) {
-            styles["margin-block-end"] = stringOrPx(value)
+            styles["margin-block-end"] = value
         }
 
-    var marginBottom: Any?
+    var marginBottom
         get() = styles["margin-bottom"]
         set(value) {
-            styles["margin-bottom"] = stringOrPx(value)
+            styles["margin-bottom"] = value
         }
 
-    var marginTop: Any?
+    var marginTop
         get() = styles["margin-top"]
         set(value) {
-            styles["margin-top"] = stringOrPx(value)
+            styles["margin-top"] = value
         }
 
-    var marginLeft: Any?
+    var marginLeft
         get() = styles["margin-left"]
         set(value) {
-            styles["margin-left"] = stringOrPx(value)
+            styles["margin-left"] = value
         }
 
-    var marginRight: Any?
+    var marginRight
         get() = styles["margin-right"]
         set(value) {
-            styles["margin-right"] = stringOrPx(value)
+            styles["margin-right"] = value
         }
 
-    var maxHeight: Any?
+    var maxHeight
         get() = styles["max-height"]
         set(value) {
-            styles["max-height"] = stringOrPx(value)
+            styles["max-height"] = value
         }
 
-    var maxWidth: Any?
+    var maxWidth
         get() = styles["max-width"]
         set(value) {
-            styles["max-width"] = stringOrPx(value)
+            styles["max-width"] = value
         }
 
-    var minHeight: Any?
+    var minHeight
         get() = styles["min-height"]
         set(value) {
-            styles["min-height"] = stringOrPx(value)
+            styles["min-height"] = value
         }
 
     var mozAppearance
@@ -687,13 +675,13 @@ class ZkCssStyleRule(
             styles["-moz-appearance"] = value
         }
 
-    var minWidth: Any?
+    var minWidth
         get() = styles["min-width"]
         set(value) {
-            styles["min-width"] = stringOrPx(value)
+            styles["min-width"] = value
         }
 
-    var opacity: Any?
+    var opacity
         get() = styles["opacity"]
         set(value) {
             styles["opacity"] = value.toString()
@@ -723,34 +711,34 @@ class ZkCssStyleRule(
             styles["overflow-y"] = value
         }
 
-    var padding: Any?
+    var padding
         get() = styles["padding"]
         set(value) {
-            styles["padding"] = stringOrPx(value)
+            styles["padding"] = value
         }
 
-    var paddingBottom: Any?
+    var paddingBottom
         get() = styles["padding-bottom"]
         set(value) {
-            styles["padding-bottom"] = stringOrPx(value)
+            styles["padding-bottom"] = value
         }
 
-    var paddingTop: Any?
+    var paddingTop
         get() = styles["padding-top"]
         set(value) {
-            styles["padding-top"] = stringOrPx(value)
+            styles["padding-top"] = value
         }
 
-    var paddingLeft: Any?
+    var paddingLeft
         get() = styles["padding-left"]
         set(value) {
-            styles["padding-left"] = stringOrPx(value)
+            styles["padding-left"] = value
         }
 
-    var paddingRight: Any?
+    var paddingRight
         get() = styles["padding-right"]
         set(value) {
-            styles["padding-right"] = stringOrPx(value)
+            styles["padding-right"] = value
         }
 
     var pointerEvents
@@ -771,10 +759,10 @@ class ZkCssStyleRule(
             styles["resize"] = value
         }
 
-    var strokeWidth: Any?
+    var strokeWidth
         get() = styles["stroke-width"]
         set(value) {
-            styles["stroke-width"] = stringOrPx(value)
+            styles["stroke-width"] = value
         }
 
     var textAlign
@@ -815,28 +803,28 @@ class ZkCssStyleRule(
             styles["text-transform"] = value
         }
 
-    var top: Any?
+    var top
         get() = styles["top"]
         set(value) {
-            styles["top"] = stringOrPx(value)
+            styles["top"] = value
         }
 
-    var right: Any?
+    var right
         get() = styles["right"]
         set(value) {
-            styles["right"] = stringOrPx(value)
+            styles["right"] = value
         }
 
-    var bottom: Any?
+    var bottom
         get() = styles["bottom"]
         set(value) {
-            styles["bottom"] = stringOrPx(value)
+            styles["bottom"] = value
         }
 
-    var left: Any?
+    var left
         get() = styles["left"]
         set(value) {
-            styles["left"] = stringOrPx(value)
+            styles["left"] = value
         }
 
     var transform
@@ -928,13 +916,13 @@ class ZkCssStyleRule(
             styles["white-space"] = value
         }
 
-    var width: Any?
+    var width
         get() = styles["width"]
         set(value) {
-            styles["width"] = stringOrPx(value)
+            styles["width"] = value
         }
 
-    var zIndex: Any?
+    var zIndex
         get() = styles["z-index"]
         set(value) {
             styles["z-index"] = value.toString()

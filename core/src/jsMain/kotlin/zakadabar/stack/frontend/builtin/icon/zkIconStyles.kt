@@ -4,9 +4,10 @@
 package zakadabar.stack.frontend.builtin.icon
 
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.resources.ZkTheme
+import zakadabar.stack.frontend.resources.css.BoxSizing
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.px
 
 val zkIconStyles by cssStyleSheet(ZkIconStyles())
 
@@ -21,27 +22,27 @@ open class ZkIconStyles : ZkCssStyleSheet() {
     }
 
     val icon18 by cssClass {
-        boxSizing = "border-box"
-        width = 18
-        height = 18
+        + BoxSizing.borderBox
+        width = 18.px
+        height = 18.px
     }
 
     val icon20 by cssClass {
-        boxSizing = "border-box"
-        width = 20
-        height = 20
+        + BoxSizing.borderBox
+        width = 20.px
+        height = 20.px
     }
 
     val icon22 by cssClass {
-        boxSizing = "border-box"
-        width = 22
-        height = 22
+        + BoxSizing.borderBox
+        width = 22.px
+        height = 22.px
     }
 
     val icon24 by cssClass {
-        boxSizing = "border-box"
-        width = 24
-        height = 24
+        + BoxSizing.borderBox
+        width = 24.px
+        height = 24.px
     }
 
 }

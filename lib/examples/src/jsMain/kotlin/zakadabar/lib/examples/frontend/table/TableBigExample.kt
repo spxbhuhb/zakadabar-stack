@@ -6,6 +6,8 @@ package zakadabar.lib.examples.frontend.table
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
+import zakadabar.stack.frontend.resources.css.OverflowY
+import zakadabar.stack.frontend.resources.css.Position
 
 /**
  * This example shows a table with 10.000 rows.
@@ -17,11 +19,9 @@ class TableBigExample(
     override fun onCreate() {
         super.onCreate()
 
-        style {
-            position = "relative"
-            height = "400px"
-            overflowY = "hidden"
-        }
+        + Position.relative
+        + OverflowY.hidden
+        height = "400px"
 
         + zkLayoutStyles.fixBorder
 

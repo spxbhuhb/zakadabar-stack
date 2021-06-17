@@ -4,8 +4,8 @@
 package zakadabar.lib.examples.frontend.theme
 
 import zakadabar.stack.frontend.resources.ZkColors
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.stack.frontend.resources.css.px
 
 /**
  * CSS styles are usually defined in objects.
@@ -41,13 +41,13 @@ object DemoStyles : ZkCssStyleSheet() {
         // You can use media queries with [media]
 
         media("(min-width: 800px)") {
-            width = 300
+            width = 300.px
         }
 
         // You can use [on] directly for media queries
 
         on(media = "(min-width: 1200px)") {
-            width = 600
+            width = 600.px
         }
 
         // small = (max-width: 600px)
@@ -55,15 +55,15 @@ object DemoStyles : ZkCssStyleSheet() {
         // large = (min-width: 1200px)
 
         small {
-            fontSize = 12
+            fontSize = 12.px
         }
 
         medium {
-            fontSize = 14
+            fontSize = 14.px
         }
 
         large {
-            fontSize = 16
+            fontSize = 16.px
         }
     }
 

@@ -3,9 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.modal
 
-import zakadabar.stack.frontend.resources.ZkTheme
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.*
 
 var zkModalStyles by cssStyleSheet(ZkModalStyles())
 
@@ -13,15 +11,15 @@ class ZkModalStyles : ZkCssStyleSheet() {
 
     val modalContainer by cssClass {
         position = "fixed"
-        top = 0
-        left = 0
-        height = "100vh"
-        width = "100vw"
-        justifyContent = "center"
-        alignItems = "center"
-        display = "flex"
+        top = 0.px
+        left = 0.px
+        height = 100.vh
+        width = 100.vw
+        + JustifyContent.center
+        + AlignItems.center
+        + Display.flex
         backgroundColor = "rgba(0,0,0,0.5)"
-        zIndex = 1900
+        zIndex = 1900.zIndex
     }
 
     val modal by cssClass {
@@ -30,21 +28,21 @@ class ZkModalStyles : ZkCssStyleSheet() {
     }
 
     val title by cssClass {
-        paddingLeft = theme.spacingStep
-        paddingRight = theme.spacingStep
+        paddingLeft = theme.spacingStep.px
+        paddingRight = theme.spacingStep.px
         borderBottom = theme.border
     }
 
     val content by cssClass {
-        padding = theme.spacingStep
+        padding = theme.spacingStep.px
     }
 
     val buttons by cssClass {
-        display = "flex"
-        flexDirection = "row"
-        justifyContent = "space-around"
-        paddingTop = theme.spacingStep
-        paddingBottom = theme.spacingStep
+        + Display.flex
+        + FlexDirection.row
+        + JustifyContent.spaceAround
+        paddingTop = theme.spacingStep.px
+        paddingBottom = theme.spacingStep.px
     }
 
 }

@@ -3,9 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.toast
 
-import zakadabar.stack.frontend.resources.ZkTheme
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.*
 
 val zkToastStyles by cssStyleSheet(ZkToastStyles())
 
@@ -15,53 +13,55 @@ open class ZkToastStyles : ZkCssStyleSheet() {
      * Style for [ZkToastContainer].
      */
     open val appToastContainer by cssClass {
-        position = "fixed"
-        right = 20
-        bottom = 20
-        display = "flex"
-        flexDirection = "column"
-        zIndex = 2000
-        justifyContent = "flex-end"
+        + Position.fixed
+        + Display.flex
+        + FlexDirection.column
+        + JustifyContent.flexEnd
+
+        right = 20.px
+        bottom = 20.px
+        zIndex = 2000.zIndex
     }
 
     open val toastOuter by cssClass {
         backgroundColor = theme.backgroundColor
-        marginRight = 10
-        marginBottom = 10
+        marginRight = 10.px
+        marginBottom = 10.px
     }
 
     /**
      * Style for one toast.
      */
     open val toastInner by cssClass {
-        display = "flex"
-        flexDirection = "row"
-        alignItems = "center"
+        + Display.flex
+        + FlexDirection.row
+        + AlignItems.center
         boxShadow = theme.boxShadow
-        borderRadius = 2
+        borderRadius = 2.px
     }
 
     /**
      * For the icon at the left side of the toast.
      */
     open val iconContainer by cssClass {
-        width = 32
-        alignSelf = "stretch"
-        display = "flex"
-        flexDirection = "row"
-        justifyContent = "center"
-        alignItems = "center"
+        + Display.flex
+        + FlexDirection.row
+        + JustifyContent.center
+        + AlignItems.center
+        + AlignSelf.stretch
+
+        width = 32.px
     }
 
     /**
      * For the text of the toast.
      */
     open val text by cssClass {
-        paddingTop = 8
-        paddingBottom = 8
-        paddingLeft = 10
-        paddingRight = 10
-        flexGrow = 1
+        paddingTop = 8.px
+        paddingBottom = 8.px
+        paddingLeft = 10.px
+        paddingRight = 10.px
+        flexGrow = 1.0
     }
 
     /**
@@ -69,7 +69,7 @@ open class ZkToastStyles : ZkCssStyleSheet() {
      */
     open val closeIcon by cssClass {
         fill = theme.textColor
-        marginRight = 6
+        marginRight = 6.px
     }
 
     open val primaryInner by cssClass {

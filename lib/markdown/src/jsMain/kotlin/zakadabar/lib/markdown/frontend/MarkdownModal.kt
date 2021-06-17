@@ -6,6 +6,9 @@ package zakadabar.lib.markdown.frontend
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.modal.ZkModalBase
+import zakadabar.stack.frontend.resources.css.OverflowY
+import zakadabar.stack.frontend.resources.css.percent
+import zakadabar.stack.frontend.resources.css.px
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.resources.localizedStrings
 
@@ -24,9 +27,9 @@ class MarkdownModal(
     override fun buildContent() {
         + div {
             style {
-                maxHeight = "500px"
-                width = "100%"
-                overflowY = "auto"
+                maxHeight = 500.px
+                width = 100.percent
+                + OverflowY.auto
             }
             + MarkdownView(url, content, context)
         }

@@ -3,22 +3,20 @@
  */
 package zakadabar.stack.frontend.builtin.misc.dropdown
 
-import zakadabar.stack.frontend.resources.ZkTheme
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.*
 
 val zkDropdownStyles by cssStyleSheet(ZkDropdownStyles())
 
 class ZkDropdownStyles : ZkCssStyleSheet() {
 
     val dropdown by cssClass {
-        position = "relative"
+        + Position.relative
     }
 
     val dropdownContent by cssClass {
-        position = "absolute"
-        display = "none"
-        zIndex = 100
+        + Position.absolute
+        + Display.none
+        zIndex = 100.zIndex
         outline = "none"
     }
 

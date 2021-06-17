@@ -74,7 +74,7 @@ open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
                 + div(blobStyles.imageDropArea) {
                     + column(blobStyles.imageDropAreaMessage) {
                         style {
-                            alignItems = "center"
+                             alignItems = "center"
                         }
                         + ZkButton(ZkIcons.cloudUpload, flavour = ZkFlavour.Custom) marginBottom 10
                         + div {

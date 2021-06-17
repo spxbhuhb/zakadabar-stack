@@ -16,7 +16,9 @@ import zakadabar.stack.frontend.builtin.dock.ZkDockedElement
 import zakadabar.stack.frontend.builtin.dock.ZkDockedElementState
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.resources.ZkIconSource
+import zakadabar.stack.frontend.resources.css.CssValueConst
 import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
+import zakadabar.stack.frontend.resources.css.percent
 import zakadabar.stack.frontend.resources.css.stringOrPx
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.minusAssign
@@ -853,6 +855,13 @@ open class ZkElement(
     }
 
     /**
+     * Set the style at the current build point.
+     */
+    operator fun CssValueConst.unaryPlus() {
+        buildPoint.style.setProperty(this.name, this.value)
+    }
+
+    /**
      * Creates "span" [HTMLElement] and executes the builder function on it.
      *
      * @param  rule       CSS rule to use. Optional.
@@ -958,13 +967,13 @@ open class ZkElement(
      * Be careful as Safari (and perhaps Chrome) collapses the gap when you
      * use percent and the parent container is not sized properly.
      *
-     * @param  width   Width of the gap. String or Int. Defaults is "100%".
-     * @param  height  Height of the gap. String or Int. Defaults is "100%".
+     * @param  width   Width of the gap. String or Int. Defaults is 100.percent.
+     * @param  height  Height of the gap. String or Int. Defaults is 100.percent.
      */
-    open fun gap(width: Any = "100%", height: Any = "100%"): HTMLElement {
+    open fun gap(width: String = 100.percent, height: String = 100.percent): HTMLElement {
         val e = document.createElement("div") as HTMLElement
-        e.style.height = if (height is Int) "${height}px" else height.toString()
-        e.style.width = if (width is Int) "${width}px" else width.toString()
+        e.style.height = height
+        e.style.width = width
         return e
     }
 

@@ -10,6 +10,9 @@ import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.resources.ZkColors
+import zakadabar.stack.frontend.resources.css.Display
+import zakadabar.stack.frontend.resources.css.FlexDirection
+import zakadabar.stack.frontend.resources.css.OverflowY
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.plusAssign
 
@@ -25,10 +28,8 @@ object TabContainer : ZkPage(css = zkPageStyles.fixed) {
 
         // To make our tab container grow and shrink with the page.
 
-        style {
-            display = "flex"
-            flexDirection = "column"
-        }
+        + Display.flex
+        + FlexDirection.column
 
         + ZkTabContainer().apply {
 
@@ -52,8 +53,8 @@ object TabContainer : ZkPage(css = zkPageStyles.fixed) {
 
             + tab("tab1") {
                 style {
+                    + OverflowY.scroll
                     flex = "1" // this is horizontal grow here!
-                    overflowY = "scroll"
                     backgroundColor = ZkColors.white
                     border = "1px solid ${ZkColors.LightBlue.a100}"
                     borderTop = "0px"
@@ -74,7 +75,7 @@ object TabContainer : ZkPage(css = zkPageStyles.fixed) {
             + tab("somewhat longer tab name") {
 
                 style {
-                    overflowY = "scroll"
+                    + OverflowY.scroll
                     // you'll see that this color is not shown actually
                     // that is because the form grows into the available space
                     // and it has it's own background color

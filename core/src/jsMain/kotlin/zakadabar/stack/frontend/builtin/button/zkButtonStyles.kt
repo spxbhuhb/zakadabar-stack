@@ -3,9 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.button
 
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssParameter
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.*
 
 val zkButtonStyles by cssStyleSheet(ZkButtonStyles())
 
@@ -15,17 +13,21 @@ open class ZkButtonStyles : ZkCssStyleSheet() {
     open val buttonHeight by cssParameter { 30 }
 
     open val text by cssClass {
-        boxSizing = "border-box"
-        height = buttonHeight
+        + BoxSizing.borderBox
+
+        + Display.flex
+        + JustifyContent.center
+        + AlignItems.center
+
+        + WhiteSpace.nowrap
+        + Cursor.pointer
+
+        height = buttonHeight.px
         width = "max-content"
-        cursor = "pointer"
-        display = "flex"
-        justifyContent = "center"
-        alignItems = "center"
-        borderRadius = theme.cornerRadius
-        paddingLeft = 10
-        paddingRight = 10
-        whiteSpace = "nowrap"
+
+        borderRadius = theme.cornerRadius.px
+        paddingLeft = 10.px
+        paddingRight = 10.px
 
         on(":focus") {
             outline = "1px solid ${theme.infoColor}"
@@ -34,17 +36,21 @@ open class ZkButtonStyles : ZkCssStyleSheet() {
     }
 
     open val combined by cssClass {
-        boxSizing = "border-box"
-        height = buttonHeight
+        + BoxSizing.borderBox
+
+        + Display.flex
+        + FlexDirection.row
+        + JustifyContent.center
+        + AlignItems.center
+
+        + Cursor.pointer
+        + WhiteSpace.nowrap
+
+        height = buttonHeight.px
         width = "max-content"
-        cursor = "pointer"
-        display = "flex"
-        flexDirection = "row"
-        justifyContent = "center"
-        alignItems = "center"
-        borderRadius = theme.cornerRadius
-        paddingRight = 10
-        whiteSpace = "nowrap"
+
+        borderRadius = theme.cornerRadius.px
+        paddingRight = 10.px
 
         on(":focus") {
             outline = "1px solid ${theme.infoColor}"
@@ -54,13 +60,16 @@ open class ZkButtonStyles : ZkCssStyleSheet() {
     }
 
     open val icon by cssClass {
-        boxSizing = "border-box"
-        display = "flex"
-        justifyContent = "center"
-        alignItems = "center"
-        cursor = "pointer"
-        width = buttonHeight
-        height = buttonHeight
+        + BoxSizing.borderBox
+
+        + Display.flex
+        + JustifyContent.center
+        + AlignItems.center
+
+        + Cursor.pointer
+
+        width = buttonHeight.px
+        height = buttonHeight.px
 
         on(":focus") {
             outline = "1px solid ${theme.infoColor}"
@@ -69,12 +78,12 @@ open class ZkButtonStyles : ZkCssStyleSheet() {
     }
 
     open val square by cssClass {
-        borderRadius = theme.cornerRadius
-        paddingTop = 0.25
+        borderRadius = theme.cornerRadius.px
+        paddingTop = 0.25.px
     }
 
     open val round by cssClass {
-        borderRadius = buttonHeight / 2
+        borderRadius = (buttonHeight / 2).px
     }
 
     open val primaryFill by cssClass {

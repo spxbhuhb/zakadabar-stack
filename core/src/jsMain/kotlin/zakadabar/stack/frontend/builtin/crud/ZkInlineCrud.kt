@@ -9,6 +9,8 @@ import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.frontend.resources.css.OverflowY
+import zakadabar.stack.frontend.resources.css.percent
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.newInstance
 import kotlin.reflect.KClass
@@ -30,11 +32,10 @@ open class ZkInlineCrud<T : EntityBo<T>> : ZkElement(), ZkCrud<T> {
     lateinit var tableInstance: ZkTable<T>
 
     override fun onCreate() {
-        style {
-            height = "100%"
-            overflowY = "auto"
-        }
+        + OverflowY.auto
+        height = 100.percent
     }
+
     override fun openAll() {
 
         clear()

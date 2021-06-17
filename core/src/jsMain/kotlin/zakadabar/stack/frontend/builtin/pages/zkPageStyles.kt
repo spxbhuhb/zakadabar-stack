@@ -3,9 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.pages
 
-import zakadabar.stack.frontend.resources.ZkTheme
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.*
 
 val zkPageStyles by cssStyleSheet(ZkPageStyles())
 
@@ -16,9 +14,9 @@ class ZkPageStyles : ZkCssStyleSheet() {
      * The overflow is `hidden`.
      */
     val fixed by cssClass {
-        height = "100%"
-        maxHeight = "100%"
-        overflow = "hidden"
+        height = 100.percent
+        maxHeight = 100.percent
+        + Overflow.hidden
     }
 
     /**
@@ -27,15 +25,15 @@ class ZkPageStyles : ZkCssStyleSheet() {
      */
 
     val scrollable by cssClass {
-        maxHeight = "100%"
-        overflowY = "auto"
+        maxHeight = 100.percent
+        + OverflowY.auto
     }
 
     /**
      * Adds the default margin.
      */
     val content by cssClass {
-        margin = theme.spacingStep
+        margin = theme.spacingStep.px
     }
 
 }

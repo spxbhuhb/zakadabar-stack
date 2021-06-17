@@ -4,9 +4,7 @@
 package zakadabar.stack.frontend.builtin.form
 
 import zakadabar.stack.frontend.resources.ZkColors
-import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.*
 import zakadabar.stack.util.alpha
 
 val zkFormStyles by cssStyleSheet(ZkFormStyles)
@@ -20,14 +18,15 @@ object ZkFormStyles : ZkCssStyleSheet() {
     // -------------------------------------------------------------------------
 
     val outerContainer by cssClass {
-        boxSizing = "border-box"
-        display = "flex"
-        flexDirection = "column"
-        width = "100%"
+        + BoxSizing.borderBox
+        + Display.flex
+        + FlexDirection.column
+
+        width = 100.percent
     }
 
     val contentContainer by cssClass {
-        flexGrow = "1"
+        flexGrow = 1.0
     }
 
     val form by cssClass {
@@ -35,15 +34,17 @@ object ZkFormStyles : ZkCssStyleSheet() {
     }
 
     val onePanel by cssClass {
-        display = "grid"
-        gridTemplateColumns = "1fr"
-        gap = theme.spacingStep
+        + Display.grid
+
+        gridTemplateColumns = 1.fr
+        gap = theme.spacingStep.px
     }
 
     val twoPanels by cssClass {
-        display = "grid"
+        + Display.grid
+
         gridTemplateColumns = "1fr 1fr"
-        gap = theme.spacingStep
+        gap = theme.spacingStep.px
     }
 
     val spanTwoPanels by cssClass {
@@ -55,8 +56,8 @@ object ZkFormStyles : ZkCssStyleSheet() {
     // -------------------------------------------------------------------------
 
     val buttons by cssClass {
-        marginBlockStart = theme.spacingStep / 2
-        marginBlockEnd = theme.spacingStep / 2
+        marginBlockStart = (theme.spacingStep / 2).px
+        marginBlockEnd = (theme.spacingStep / 2).px
     }
 
     // -------------------------------------------------------------------------
@@ -64,27 +65,29 @@ object ZkFormStyles : ZkCssStyleSheet() {
     // -------------------------------------------------------------------------
 
     val section by cssClass {
-        display = "flex"
-        flexDirection = "column"
-        padding = 12
-        paddingLeft = 20
-        paddingBottom = 8
+        + Display.flex
+        + FlexDirection.column
+
+        padding = 12.px
+        paddingLeft = 20.px
+        paddingBottom = 8.px
+        marginBottom = (theme.spacingStep / 2).px
+
         boxShadow = theme.boxShadow
-        borderRadius = theme.cornerRadius
+        borderRadius = theme.cornerRadius.px
         backgroundColor = theme.blockBackgroundColor
         border = theme.fixBorder
-        marginBottom = theme.spacingStep / 2
     }
 
     val sectionTitle by cssClass {
         color = theme.textColor
-        fontWeight = 500
-        paddingBottom = 4
+        fontWeight = 500.weight
+        paddingBottom = 4.px
     }
 
     val sectionSummary by cssClass {
         color = theme.textColor
-        paddingBottom = 16
+        paddingBottom = 16.px
     }
 
     // -------------------------------------------------------------------------
@@ -92,20 +95,22 @@ object ZkFormStyles : ZkCssStyleSheet() {
     // -------------------------------------------------------------------------
 
     val fieldContainer by cssClass {
-        boxSizing = "border-box"
-        display = "contents"
+        + BoxSizing.borderBox
+        + Display.contents
     }
 
     val fieldLabel by cssClass {
+        + Display.flex
+        + AlignItems.center
+
+        + Cursor.default
+
+        fontSize = 90.percent
+        fontWeight = 400.weight
+
         color = theme.textColor
-        fontSize = "90%"
-        fontWeight = "400"
-        display = "flex"
-        alignItems = "center"
-        minHeight = rowHeight
-        paddingRight = 8
-        // this is problematic with ZkCheckboxList, paddingLeft = 8
-        cursor = "default"
+        minHeight = rowHeight.px
+        paddingRight = 8.px
     }
 
     val mandatoryMark by cssClass {
@@ -113,14 +118,14 @@ object ZkFormStyles : ZkCssStyleSheet() {
     }
 
     val fieldValue by cssClass {
-        minHeight = rowHeight
+        minHeight = rowHeight.px
         color = theme.inputTextColor
-        marginBottom = 6
+        marginBottom = 6.px
     }
 
     val fieldError by cssClass {
         color = ZkColors.Gray.c700
-        fontSize = "90%"
+        fontSize = 90.percent
         borderBottom = "1px solid ${ZkColors.Gray.c600}"
     }
 
@@ -129,21 +134,22 @@ object ZkFormStyles : ZkCssStyleSheet() {
     // -------------------------------------------------------------------------
 
     private fun ZkCssStyleRule.fieldDefault() {
+        + Display.block
+        + BoxSizing.borderBox
+
         fontFamily = theme.fontFamily
         fontSize = theme.fontSize
-        fontWeight = 300
-        display = "block"
+        fontWeight = 300.weight
         lineHeight = "1.3"
         padding = ".6em 1.4em .5em .4em"
-        width = "100%"
-        maxWidth = "100%"
-        boxSizing = "border-box"
-        margin = 0
+        width = 100.percent
+        maxWidth = 100.percent
+        margin = 0.px
         mozAppearance = "none"
         webkitAppearance = "none"
         appearance = "none"
         border = "1px solid ${theme.borderColor}"
-        borderRadius = theme.cornerRadius
+        borderRadius = theme.cornerRadius.px
         color = theme.inputTextColor
         backgroundColor = theme.inputBackgroundColor
     }
@@ -170,12 +176,12 @@ object ZkFormStyles : ZkCssStyleSheet() {
 
         on(":focus") {
             border = "1px solid ${theme.infoColor}"
-            borderRadius = theme.cornerRadius
+            borderRadius = theme.cornerRadius.px
             outline = "none"
         }
 
         on(" option") {
-            fontWeight = "normal"
+            + FontWeight.normal
         }
 
         on(":disabled") {
@@ -184,7 +190,7 @@ object ZkFormStyles : ZkCssStyleSheet() {
 
             // https://stackoverflow.com/questions/262158/disabled-input-text-color-on-ios
             styles["-webkit-text-fill-color"] = theme.disabledInputTextColor
-            opacity = 1 /* required on iOS */
+            opacity = 1.opacity /* required on iOS */
         }
 
     }
@@ -194,7 +200,7 @@ object ZkFormStyles : ZkCssStyleSheet() {
 
         // https://stackoverflow.com/questions/262158/disabled-input-text-color-on-ios
         styles["-webkit-text-fill-color"] = theme.disabledInputTextColor
-        opacity = 1 /* required on iOS */
+        opacity = 1.opacity /* required on iOS */
 
         color = theme.disabledInputTextColor
         backgroundColor = theme.disabledInputBackgroundColor
@@ -217,14 +223,15 @@ object ZkFormStyles : ZkCssStyleSheet() {
     // -------------------------------------------------------------------------
 
     val selectContainer by cssClass {
-        position = "relative"
-        display = "flex"
-        flexDirection = "row"
-        alignItems = "center"
+        + Position.relative
+        + Display.flex
+        + FlexDirection.row
+        + AlignItems.center
+
         outline = "none"
 
         border = "1px solid ${theme.borderColor}"
-        borderRadius = theme.cornerRadius
+        borderRadius = theme.cornerRadius.px
         color = theme.inputTextColor
         backgroundColor = theme.inputBackgroundColor
 
@@ -232,9 +239,13 @@ object ZkFormStyles : ZkCssStyleSheet() {
     }
 
     val selectedOption by cssClass {
-        display = "flex"
+        + Display.flex
 
         fieldDefault()
+
+        // these have to be after fieldDefault
+        + JustifyContent.spaceBetween
+        + AlignItems.center
 
         // these are set but the container
         border = "none"
@@ -242,15 +253,13 @@ object ZkFormStyles : ZkCssStyleSheet() {
         backgroundColor = "inherit"
 
         lineHeight = "1" // to prevent conversion to px
-        height = "${rowHeight - 2}px" // -2 to compensate border from container
+        height = (rowHeight - 2).px// -2 to compensate border from container
         fill = theme.inputTextColor
-        paddingRight = "0.3em"
+        paddingRight = 0.3.em
 
-        justifyContent = "space-between"
-        alignItems = "center"
 
         on(" option") {
-            fontWeight = "normal"
+            + FontWeight.normal
         }
     }
 
@@ -260,25 +269,28 @@ object ZkFormStyles : ZkCssStyleSheet() {
     }
 
     val selectOptionList by cssClass {
-        position = "fixed"
-        zIndex = 100
+        + Position.fixed
+
+        + OverflowY.auto
+        + OverflowX.hidden
+
+        zIndex = 100.zIndex
         outline = "none"
         backgroundColor = theme.inputBackgroundColor
         boxShadow = "0 0 32px 12px rgba(0, 0, 0, 0.2) "
-        borderRadius = theme.cornerRadius
-        overflowY = "auto"
-        overflowX = "hidden"
+        borderRadius = theme.cornerRadius.px
     }
 
     val selectEntry by cssClass {
+        + Display.flex
+        + AlignItems.center
+        + Cursor.pointer
+
         color = theme.inputTextColor
-        width = 200
-        minHeight = rowHeight
+        width = 200.px
+        minHeight = rowHeight.px
         borderBottom = "1px solid ${theme.borderColor}"
-        display = "flex"
-        alignItems = "center"
-        paddingLeft = 8
-        cursor = "pointer"
+        paddingLeft = 8.px
 
         on(":hover") {
             color = theme.hoverTextColor
@@ -296,10 +308,11 @@ object ZkFormStyles : ZkCssStyleSheet() {
     // -------------------------------------------------------------------------
 
     val booleanField by cssClass {
-        display = "flex"
-        paddingLeft = ".8em"
-        height = rowHeight
-        alignItems = "center"
+        + Display.flex
+        + AlignItems.center
+
+        paddingLeft = .8.em
+        height = rowHeight.px
         outline = "none"
     }
 
@@ -313,16 +326,16 @@ object ZkFormStyles : ZkCssStyleSheet() {
     // -------------------------------------------------------------------------
 
     val invalidFieldList by cssClass {
-        padding = 12
-        margin = 8
+        padding = 12.px
+        margin = 8.px
         boxShadow = theme.boxShadow
-        borderRadius = theme.cornerRadius
+        borderRadius = theme.cornerRadius.px
         backgroundColor = ZkColors.white
     }
 
     val invalidFieldListInto by cssClass {
-        fontSize = "80%"
+        fontSize = 80.percent
         color = ZkColors.Gray.c600
-        paddingBottom = 16
+        paddingBottom = 16.px
     }
 }

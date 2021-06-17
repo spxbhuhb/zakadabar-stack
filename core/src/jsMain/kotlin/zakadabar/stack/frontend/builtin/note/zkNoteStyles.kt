@@ -3,9 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.note
 
-import zakadabar.stack.frontend.resources.ZkTheme
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.*
 
 val zkNoteStyles by cssStyleSheet(ZkNoteStyles())
 
@@ -13,38 +11,39 @@ open class ZkNoteStyles : ZkCssStyleSheet() {
 
     open val noteOuter by cssClass {
         backgroundColor = theme.backgroundColor
-        marginRight = 10
-        marginBottom = 10
+        marginRight = 10.px
+        marginBottom = 10.px
     }
 
     open val noteInner by cssClass {
-        display = "flex"
-        flexDirection = "column"
+        + Display.flex
+        + FlexDirection.column
         boxShadow = theme.boxShadow
-        borderRadius = 2
+        borderRadius = 2.px
     }
 
     open val titleOuter by cssClass {
-        alignSelf = "stretch"
-        display = "flex"
-        flexDirection = "row"
-        alignItems = "center"
-        paddingTop = 4
-        paddingBottom = 4
-        paddingRight = 10
+        + Display.flex
+        + FlexDirection.row
+        + AlignItems.center
+        + AlignSelf.stretch
+
+        paddingTop = 4.px
+        paddingBottom = 4.px
+        paddingRight = 10.px
     }
 
     open val titleIcon by cssClass {
-        marginLeft = 8
-        marginRight = 8
+        marginLeft = 8.px
+        marginRight = 8.px
     }
 
     open val contentOuter by cssClass {
-        paddingTop = 8
-        paddingBottom = 8
-        paddingLeft = 10
-        paddingRight = 10
-        flexGrow = 1
+        paddingTop = 8.px
+        paddingBottom = 8.px
+        paddingLeft = 10.px
+        paddingRight = 10.px
+        flexGrow = 1.0
     }
 
     open val primaryInner by cssClass {

@@ -16,6 +16,8 @@ import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.builtin.toast.toastDanger
 import zakadabar.stack.frontend.builtin.toast.toastSuccess
+import zakadabar.stack.frontend.resources.css.OverflowY
+import zakadabar.stack.frontend.resources.css.Position
 import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.io
@@ -43,10 +45,8 @@ object QueryPage : ZkPage(css = zkPageStyles.fixed) {
 
         + form marginBottom (theme.spacingStep)
         + div {
-            style {
-                position = "relative"
-                overflowY = "hidden"
-            }
+            + Position.relative
+            + OverflowY.hidden
             + table
         }
 

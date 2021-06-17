@@ -3,8 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.layout
 
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.*
 
 val zkDefaultLayoutStyles by cssStyleSheet(ZkDefaultLayoutStyles())
 
@@ -13,26 +12,28 @@ open class ZkDefaultLayoutStyles : ZkCssStyleSheet() {
     open var appTitleBarHeight = "44px"
 
     open val defaultLayoutSmall by cssClass {
-        display = "flex"
-        flexDirection = "column"
-        height = "100%"
-        width = "100%"
-        overflow = "hidden"
+        + Display.flex
+        + FlexDirection.column
+        
+        height = 100.percent
+        width = 100.percent
+
+        + Overflow.hidden
     }
 
     open val defaultLayoutLarge by cssClass {
-        display = "grid"
+        + Display.grid
         gridTemplateColumns = "max-content 1fr"
         gridTemplateRows = "$appTitleBarHeight 1fr"
-        height = "100%"
-        width = "100%"
-        overflow = "hidden"
+        height = 100.percent
+        width = 100.percent
+        + Overflow.hidden
     }
 
     open val sideBarContainer by cssClass {
-        minWidth = 220
-        maxHeight = "100%"
-        overflowY = "auto"
+        minWidth = 220.px
+        maxHeight = 100.percent
+        + OverflowY.auto
         borderRight = theme.border
 
         on(":not(:hover)") {
@@ -44,39 +45,42 @@ open class ZkDefaultLayoutStyles : ZkCssStyleSheet() {
         }
 
         on(":not(:hover)::-webkit-scrollbar") {
-            display = "none"
+            + Display.none
         }
 
         on(":hover::-webkit-scrollbar") {
-            width = 4
+            width = 4.px
         }
     }
 
     open val popupSideBarContainer by cssClass {
+        + Position.absolute
+        + OverflowY.auto
+
+        zIndex = 100.zIndex
+
+        width = 100.percent
+        maxHeight = 100.percent
+
         background = theme.backgroundColor
-        zIndex = 100
-        position = "absolute"
-        width = "100%"
-        overflowY = "auto"
-        maxHeight = "100%"
 
         styles["scrollbar-width"] = "none"
         on("::-webkit-scrollbar") {
-            display = "none"
+            + Display.none
         }
     }
 
     open val contentContainerLarge by cssClass {
-        height = "100%"
-        maxHeight = "100%"
-        overflowY = "hidden"
+        height = 100.percent
+        maxHeight = 100.percent
+        + OverflowY.hidden
     }
 
     open val contentContainerSmall by cssClass {
-        height = "100%"
-        maxHeight = "100%"
-        overflowY = "hidden"
-        paddingLeft = 10
+        height = 100.percent
+        maxHeight = 100.percent
+        + OverflowY.hidden
+        paddingLeft = 10.px
     }
 
 }
