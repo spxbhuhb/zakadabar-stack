@@ -11,6 +11,7 @@ import zakadabar.stack.frontend.builtin.sidebar.zkSideBarStyles
 import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
 import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
 import zakadabar.stack.frontend.resources.ZkColors
+import zakadabar.stack.frontend.resources.css.px
 import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.util.marginBottom
 
@@ -62,7 +63,7 @@ class ThemeExample(
         + grid {
 
             gridTemplateColumns = "repeat(4, max-content)"
-            gridGap = 10
+            gridGap = 10.px
 
             + ZkButton(strings.green) { theme = ExampleThemeGreen() }
             + ZkButton(strings.red) { theme = ExampleThemeRed() }

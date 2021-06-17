@@ -19,7 +19,6 @@ import zakadabar.stack.frontend.resources.ZkIconSource
 import zakadabar.stack.frontend.resources.css.CssValueConst
 import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.frontend.resources.css.percent
-import zakadabar.stack.frontend.resources.css.stringOrPx
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.minusAssign
 import zakadabar.stack.frontend.util.plusAssign
@@ -109,24 +108,6 @@ open class ZkElement(
     val displayName
         get() = application.executor.account.displayName
 
-    var justifyContent: String
-        get() = buildPoint.style.getPropertyValue("justify-content")
-        set(value) {
-            buildPoint.style.setProperty("justify-content", value)
-        }
-
-    var alignItems: String
-        get() = buildPoint.style.getPropertyValue("align-items")
-        set(value) {
-            buildPoint.style.setProperty("align-items", value)
-        }
-
-    var alignSelf: String
-        get() = buildPoint.style.getPropertyValue("align-self")
-        set(value) {
-            buildPoint.style.setProperty("align-self", value)
-        }
-
     var gridAutoRows: String
         get() = buildPoint.style.getPropertyValue("grid-auto-rows")
         set(value) {
@@ -151,22 +132,22 @@ open class ZkElement(
             buildPoint.style.setProperty("grid-template-columns", value)
         }
 
-    var gridGap: Any
+    var gridGap: String
         get() = buildPoint.style.getPropertyValue("grid-gap")
         set(value) {
-            buildPoint.style.setProperty("grid-gap", stringOrPx(value))
+            buildPoint.style.setProperty("grid-gap", value)
         }
 
-    var height: Any
+    var height: String
         get() = buildPoint.style.height
         set(value) {
-            buildPoint.style.setProperty("height", stringOrPx(value))
+            buildPoint.style.setProperty("height", value)
         }
 
-    var width: Any
+    var width: String
         get() = buildPoint.style.width
         set(value) {
-            buildPoint.style.setProperty("width", stringOrPx(value))
+            buildPoint.style.setProperty("width", value)
         }
 
     // -------------------------------------------------------------------------
@@ -913,12 +894,12 @@ open class ZkElement(
     }
 
     /**
-     * Creates a "div" [HTMLElement]. When [grid] is false, [zkLayoutStyles.row] class
-     * is added. When [grid] is true, [zkLayoutStyles.grid] is added.
+     * Creates a "div" [HTMLElement]. When [grid] is false, zkLayoutStyles.row class
+     * is added. When [grid] is true, zkLayoutStyles.grid is added.
      *
      * @param  rule       CSS rule to use. Optional.
      * @param  grid       When true a "grid" is created when false a "flex-box".
-     * @param  gap        When [grid] is true and [gap] is true [zkLayoutStyles.gridGap] is added.
+     * @param  gap        When [grid] is true and [gap] is true zkLayoutStyles.gridGap is added.
      * @param  build      The builder function to build the content of the div. Optional.
      */
     open fun row(rule: ZkCssStyleRule? = null, grid: Boolean = false, gap : Boolean = true, build: ZkElement.() -> Unit): HTMLElement {

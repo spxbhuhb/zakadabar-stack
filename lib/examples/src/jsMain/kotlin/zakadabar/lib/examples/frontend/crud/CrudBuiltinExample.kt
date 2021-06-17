@@ -6,6 +6,7 @@ package zakadabar.lib.examples.frontend.crud
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
+import zakadabar.stack.frontend.resources.css.px
 
 class CrudBuiltinExample(
     element: HTMLElement
@@ -14,7 +15,7 @@ class CrudBuiltinExample(
     override fun onCreate() {
         super.onCreate()
 
-        height = 400
+        height = 400.px
         + zkLayoutStyles.fixBorder
 
         + BuiltinInlineCrud().apply { openAll() }

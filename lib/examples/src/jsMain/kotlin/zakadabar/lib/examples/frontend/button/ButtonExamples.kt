@@ -9,6 +9,7 @@ import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.toast.toastSuccess
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
+import zakadabar.stack.frontend.resources.css.px
 import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.util.marginBottom
 
@@ -26,7 +27,7 @@ class ButtonExamples(
 
         + grid {
             gridTemplateColumns = "repeat(5,max-content)"
-            gridGap = theme.spacingStep / 2
+            gridGap = (theme.spacingStep / 2).px
 
             + "Text"
             + ZkButton("Default", flavour) { onButtonClick() }

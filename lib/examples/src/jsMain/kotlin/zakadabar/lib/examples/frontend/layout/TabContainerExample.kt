@@ -12,6 +12,7 @@ import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
 import zakadabar.stack.frontend.builtin.note.noteInfo
 import zakadabar.stack.frontend.builtin.toast.toastSuccess
+import zakadabar.stack.frontend.resources.css.px
 import zakadabar.stack.frontend.util.default
 
 class TabContainerExample(
@@ -23,7 +24,7 @@ class TabContainerExample(
 
         + ZkTabContainer {
 
-            height = 400
+            height = 400.px
 
             + tab("First Tab") {
                 (0..10).forEach { _ -> + p { + strings.loremIpsum } }

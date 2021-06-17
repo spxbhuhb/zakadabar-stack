@@ -16,6 +16,7 @@ import zakadabar.stack.frontend.builtin.layout.tabcontainer.zkTabContainerStyles
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPathPage
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
+import zakadabar.stack.frontend.resources.css.px
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.resources.localizedStrings
 import zakadabar.stack.text.MarkdownNav
@@ -73,7 +74,7 @@ class SideBarMarkdownExample(
 
         + ZkTabContainer {
 
-            height = 400
+            height = 400.px
 
             + tab("Side Bar") {
 

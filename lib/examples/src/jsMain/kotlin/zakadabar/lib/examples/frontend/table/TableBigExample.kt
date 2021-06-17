@@ -8,6 +8,7 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.resources.css.OverflowY
 import zakadabar.stack.frontend.resources.css.Position
+import zakadabar.stack.frontend.resources.css.px
 
 /**
  * This example shows a table with 10.000 rows.
@@ -21,7 +22,7 @@ class TableBigExample(
 
         + Position.relative
         + OverflowY.hidden
-        height = "400px"
+        height = 400.px
 
         + zkLayoutStyles.fixBorder
 

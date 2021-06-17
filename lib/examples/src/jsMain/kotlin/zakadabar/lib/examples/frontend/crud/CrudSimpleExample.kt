@@ -13,6 +13,7 @@ import zakadabar.stack.frontend.builtin.crud.ZkInlineCrud
 import zakadabar.stack.frontend.builtin.input.ZkTextInput
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.note.noteSecondary
+import zakadabar.stack.frontend.resources.css.px
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.marginBottom
 
@@ -39,7 +40,7 @@ class CrudSimpleExample(
         } marginBottom 10
 
         + div {
-            height = 400
+            height = 400.px
             + zkLayoutStyles.fixBorder
             + SimpleExampleInlineCrud().apply { openAll() }
         } marginBottom 10

@@ -12,6 +12,7 @@ import zakadabar.stack.frontend.builtin.toast.ZkToast
 import zakadabar.stack.frontend.builtin.toast.toastDanger
 import zakadabar.stack.frontend.builtin.toast.toastInfo
 import zakadabar.stack.frontend.resources.ZkFlavour
+import zakadabar.stack.frontend.resources.css.px
 import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.util.marginBottom
 
@@ -29,7 +30,7 @@ class ToastAutoHideExample(
 
             + grid {
                 gridTemplateColumns = "repeat(2,max-content)"
-                gridGap = theme.spacingStep
+                gridGap = theme.spacingStep.px
 
                 + ZkTextInput(
                     enter = true,

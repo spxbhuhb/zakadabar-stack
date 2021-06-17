@@ -9,6 +9,7 @@ import zakadabar.stack.frontend.builtin.button.*
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.builtin.toast.*
 import zakadabar.stack.frontend.resources.ZkFlavour
+import zakadabar.stack.frontend.resources.css.px
 import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.util.marginBottom
 
@@ -26,7 +27,7 @@ class ToastBasicExamples(
 
             + grid {
                 gridTemplateColumns = "repeat(2,max-content)"
-                gridGap = theme.spacingStep
+                gridGap = theme.spacingStep.px
 
                 + ZkToast("This is a primary toast!", flavour = ZkFlavour.Primary)
 

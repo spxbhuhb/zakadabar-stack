@@ -4,13 +4,13 @@
 package zakadabar.lib.examples.frontend.icon
 
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
-import zakadabar.stack.frontend.resources.ZkTheme
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.stack.frontend.resources.css.px
 import zakadabar.stack.frontend.resources.iconSources
+import zakadabar.stack.frontend.resources.theme
 import zakadabar.stack.frontend.util.marginBottom
 import zakadabar.stack.frontend.util.plusAssign
 
@@ -36,7 +36,7 @@ class IconExamples(
 
         + grid {
             gridTemplateColumns = "repeat(6,max-content)"
-            gridGap = theme.spacingStep
+            gridGap = theme.spacingStep.px
 
             classList += iconExampleStyles.exampleStyles
 
