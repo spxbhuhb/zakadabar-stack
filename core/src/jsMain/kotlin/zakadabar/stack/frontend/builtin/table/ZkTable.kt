@@ -423,7 +423,7 @@ open class ZkTable<T : DtoBase> : ZkElement(), ZkAppTitleProvider, ZkLocalTitleP
         fullData.forEach { row ->
             val fields = mutableListOf<String>()
             columns.forEach { if (it.exportable) fields += it.exportCsv(row.data) }
-            lines += fields.joinToString(",")
+            lines += fields.joinToString(";")
         }
 
         val csv = lines.joinToString("\n")
