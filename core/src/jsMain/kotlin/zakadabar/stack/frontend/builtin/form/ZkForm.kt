@@ -16,8 +16,6 @@
  */
 package zakadabar.stack.frontend.builtin.form
 
-import ZkOptUuidField
-import ZkUuidField
 import kotlinx.browser.document
 import kotlinx.datetime.Instant
 import org.w3c.dom.HTMLElement
@@ -31,7 +29,6 @@ import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.data.schema.BoSchema
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.ZkElementState
@@ -51,6 +48,7 @@ import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.log
 import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.stack.resources.localizedStrings
 import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.UUID
 import kotlin.reflect.KMutableProperty0
@@ -298,7 +296,7 @@ open class ZkForm<T : BaseBo>(
 
             } catch (ex: DataConflictException) {
 
-                toastDanger { stringStore[ex.message] }
+                toastDanger { localizedStrings[ex.message] }
 
             } catch (ex: Exception) {
 
@@ -327,7 +325,7 @@ open class ZkForm<T : BaseBo>(
      * Default implementation shows a toast with a message.
      */
     open fun onInvalidSubmit() {
-        invalidToast = toastWarning(hideAfter = 3000) { stringStore.invalidFieldsToast }
+        invalidToast = toastWarning(hideAfter = 3000) { localizedStrings.invalidFieldsToast }
     }
 
     /**
@@ -337,13 +335,13 @@ open class ZkForm<T : BaseBo>(
      */
     open fun onSubmitSuccess() {
         when (mode) {
-            ZkElementMode.Create -> toastSuccess { stringStore.createSuccess }
+            ZkElementMode.Create -> toastSuccess { localizedStrings.createSuccess }
             ZkElementMode.Read -> Unit
-            ZkElementMode.Update -> toastSuccess { stringStore.updateSuccess }
-            ZkElementMode.Delete -> toastSuccess { stringStore.deleteSuccess }
-            ZkElementMode.Action -> toastSuccess { stringStore.actionSuccess }
+            ZkElementMode.Update -> toastSuccess { localizedStrings.updateSuccess }
+            ZkElementMode.Delete -> toastSuccess { localizedStrings.deleteSuccess }
+            ZkElementMode.Action -> toastSuccess { localizedStrings.actionSuccess }
             ZkElementMode.Query -> Unit
-            ZkElementMode.Other -> toastSuccess { stringStore.actionSuccess }
+            ZkElementMode.Other -> toastSuccess { localizedStrings.actionSuccess }
         }
     }
 
@@ -354,13 +352,13 @@ open class ZkForm<T : BaseBo>(
      */
     open fun onSubmitError(ex: Exception) {
         when (mode) {
-            ZkElementMode.Create -> toastDanger { stringStore.createFail }
+            ZkElementMode.Create -> toastDanger { localizedStrings.createFail }
             ZkElementMode.Read -> Unit
-            ZkElementMode.Update -> toastDanger { stringStore.updateFail }
-            ZkElementMode.Delete -> toastDanger { stringStore.deleteFail }
-            ZkElementMode.Action -> toastDanger { stringStore.actionFail }
-            ZkElementMode.Query -> toastDanger { stringStore.queryFail }
-            ZkElementMode.Other -> toastDanger { stringStore.actionFail }
+            ZkElementMode.Update -> toastDanger { localizedStrings.updateFail }
+            ZkElementMode.Delete -> toastDanger { localizedStrings.deleteFail }
+            ZkElementMode.Action -> toastDanger { localizedStrings.actionFail }
+            ZkElementMode.Query -> toastDanger { localizedStrings.queryFail }
+            ZkElementMode.Other -> toastDanger { localizedStrings.actionFail }
         }
     }
 
@@ -451,7 +449,7 @@ open class ZkForm<T : BaseBo>(
     }
 
     inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E>, label: String? = null, sortOptions: Boolean = true): ZkEnumSelectField<T, E> {
-        val options = enumValues<E>().map { it to stringStore.getNormalized(it.name) } // this is a non-translated to translated mapping
+        val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) } // this is a non-translated to translated mapping
         val field = ZkEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
         label?.let { field.labelText = label }
         fields += field
@@ -460,7 +458,7 @@ open class ZkForm<T : BaseBo>(
 
     @JsName("FormOptEnumSelect")
     inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E?>, label: String? = null, sortOptions: Boolean = true): ZkOptEnumSelectField<T, E> {
-        val options = enumValues<E>().map { it to stringStore.getNormalized(it.name) } // this is a non-translated to translated mapping
+        val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) } // this is a non-translated to translated mapping
         val field = ZkOptEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
         label?.let { field.labelText = label }
         fields += field

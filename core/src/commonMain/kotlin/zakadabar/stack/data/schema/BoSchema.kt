@@ -93,6 +93,7 @@ open class BoSchema() {
         customEntries += this
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
     @Deprecated("EOL: 2021.8.1  -  use function without the rule parameter")
     fun custom(function: (report: ValidityReport, rule: BoPropertyConstraintImpl<Unit>) -> Unit) = CustomBoSchemaEntry(function)
 

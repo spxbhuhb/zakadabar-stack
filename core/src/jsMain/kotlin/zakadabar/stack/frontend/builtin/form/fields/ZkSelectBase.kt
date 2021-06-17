@@ -21,7 +21,6 @@ import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.get
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
@@ -34,6 +33,7 @@ import zakadabar.stack.frontend.util.escape
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.minusAssign
 import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.stack.resources.localizedStrings
 
 abstract class ZkSelectBase<T : BaseBo, VT>(
     form: ZkForm<T>,
@@ -136,10 +136,10 @@ abstract class ZkSelectBase<T : BaseBo, VT>(
         var s = ""
 
         if (value == null || value == 0L) {
-            s += """<div class="${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-${DATASET_KEY}="">${stringStore.notSelected}</div>"""
-            selectedOption.innerText = stringStore.notSelected
+            s += """<div class="${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-${DATASET_KEY}="">${localizedStrings.notSelected}</div>"""
+            selectedOption.innerText = localizedStrings.notSelected
         } else {
-            s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="">${stringStore.notSelected}</div>"""
+            s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="">${localizedStrings.notSelected}</div>"""
         }
 
         items.forEach {

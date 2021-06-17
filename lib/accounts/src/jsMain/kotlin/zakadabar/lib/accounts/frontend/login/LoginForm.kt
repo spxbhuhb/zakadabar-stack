@@ -7,7 +7,6 @@ import kotlinx.browser.window
 import zakadabar.lib.accounts.data.LoginAction
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.ActionStatusBo
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
@@ -16,6 +15,7 @@ import zakadabar.stack.frontend.builtin.toast.toastDanger
 import zakadabar.stack.frontend.builtin.toast.toastWarning
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.marginBottom
+import zakadabar.stack.resources.localizedStrings
 
 class LoginForm(
     private val accountName: String? = null,
@@ -43,7 +43,7 @@ class LoginForm(
             if (accountName == null) {
                 + bo::accountName
             } else {
-                + ZkConstStringField(this@LoginForm, stringStore.account, bo.accountName)
+                + ZkConstStringField(this@LoginForm, localizedStrings.account, bo.accountName)
             }
             + bo::password
         } marginBottom 20
@@ -54,11 +54,11 @@ class LoginForm(
                 justifyContent = "space-between"
             }
             if (onCancel != null) {
-                + ZkButton(stringStore.cancel) { onCancel.invoke() }
+                + ZkButton(localizedStrings.cancel) { onCancel.invoke() }
             } else {
                 + div {  }
             }
-            + ZkButton(stringStore.login) { this@LoginForm.submit() }
+            + ZkButton(localizedStrings.login) { this@LoginForm.submit() }
         }
     }
 
@@ -74,13 +74,13 @@ class LoginForm(
     }
 
     override fun onInvalidSubmit() {
-        invalidToast = toastWarning { stringStore.loginFail }
+        invalidToast = toastWarning { localizedStrings.loginFail }
     }
 
     override fun onSubmitSuccess() {}
 
     override fun onSubmitError(ex: Exception) {
-        invalidToast = toastDanger { stringStore.loginFail }
+        invalidToast = toastDanger { localizedStrings.loginFail }
     }
 
     private fun onExecuteResult(resultBo: BaseBo) {
@@ -89,9 +89,9 @@ class LoginForm(
 
         if (! resultBo.success) {
             if (resultBo.reason == "locked") {
-                toastDanger { stringStore.loginLocked }
+                toastDanger { localizedStrings.loginLocked }
             } else {
-                toastDanger { stringStore.loginFail }
+                toastDanger { localizedStrings.loginFail }
             }
             return
         }

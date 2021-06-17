@@ -1,6 +1,8 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
+@file:Suppress("ClassName", "SpellCheckingInspection") // this is an import file
+
 package zakadabar.lib.markdown.frontend
 
 @JsModule("highlight.js/lib/core")

@@ -6,12 +6,12 @@ package zakadabar.lib.examples.frontend.crud
 import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
 import zakadabar.lib.examples.resources.strings
-import zakadabar.stack.frontend.application.stringStore
-import zakadabar.stack.frontend.application.translate
 import zakadabar.stack.frontend.builtin.crud.ZkInlineCrud
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.fields.ZkStringField
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.resources.localized
+import zakadabar.stack.resources.localizedStrings
 
 class BuiltinInlineCrud : ZkInlineCrud<BuiltinBo>() {
     init {
@@ -31,7 +31,7 @@ class BuiltinForm : ZkForm<BuiltinBo>() {
     override fun onCreate() {
         super.onCreate()
 
-        build(translate<BuiltinForm>()) {
+        build(localized<BuiltinForm>()) {
             + section {
                 + bo::id
                 + bo::booleanValue
@@ -39,7 +39,7 @@ class BuiltinForm : ZkForm<BuiltinBo>() {
                 + bo::enumSelectValue
                 + bo::intValue
                 + bo::instantValue
-                + opt(bo::optBooleanValue, stringStore.trueText, stringStore.falseText)
+                + opt(bo::optBooleanValue, localizedStrings.trueText, localizedStrings.falseText)
                 + bo::optDoubleValue
                 + bo::optEnumSelectValue
                 + bo::optInstantValue
@@ -70,12 +70,12 @@ class BuiltinTable : ZkTable<BuiltinBo>() {
 
     override fun onConfigure() {
 
-        titleText = translate<BuiltinTable>()
+        titleText = localized<BuiltinTable>()
 
         add = true
         search = true
         export = true
-        
+
         // BuiltinBo::id // record id and opt record id is not supported yet 
         + BuiltinBo::booleanValue
         + BuiltinBo::doubleValue
@@ -99,7 +99,7 @@ class BuiltinTable : ZkTable<BuiltinBo>() {
         + BuiltinBo::stringSelectValue
         + BuiltinBo::textAreaValue
         + BuiltinBo::uuidValue
-        
+
         + actions()
     }
 }

@@ -6,10 +6,10 @@ package zakadabar.lib.i18n.frontend
 import zakadabar.lib.i18n.data.LocaleBo
 import zakadabar.lib.i18n.data.TranslationBo
 import zakadabar.stack.frontend.application.target
-import zakadabar.stack.frontend.application.translate
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.resources.localized
 
 
 /**
@@ -35,7 +35,7 @@ class TranslationForm : ZkForm<TranslationBo>() {
     override fun onCreate() {
         super.onCreate()
 
-        build(translate<TranslationForm>()) {
+        build(localized<TranslationForm>()) {
             + section {
                 + bo::id
                 + bo::key
@@ -57,7 +57,7 @@ class TranslationTable : ZkTable<TranslationBo>() {
 
         crud = target<TranslationCrud>()
 
-        titleText = translate<TranslationTable>()
+        titleText = localized<TranslationTable>()
 
         add = true
         search = true

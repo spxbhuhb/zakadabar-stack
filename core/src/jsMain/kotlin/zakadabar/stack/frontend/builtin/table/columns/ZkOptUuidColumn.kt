@@ -1,12 +1,12 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.resources.localizedStrings
 import zakadabar.stack.util.UUID
 import kotlin.reflect.KProperty1
 
@@ -16,7 +16,7 @@ open class ZkOptUuidColumn<T : BaseBo>(
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {
-        label = stringStore.getNormalized(prop.name)
+        label = localizedStrings.getNormalized(prop.name)
         super.onCreate()
     }
 

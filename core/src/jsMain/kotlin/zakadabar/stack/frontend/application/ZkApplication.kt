@@ -33,13 +33,13 @@ val executor
  * This is usually not a ZkBuiltinStrings in itself but an extension of it.
  */
 @Deprecated("EOL: 2021.8.1 import stringStore from `zakadabar.stack.resources`", ReplaceWith(
-    "localizedStrings", "import zakadabar.stack.resources.localizedStrings"
+    "localizedStrings", "zakadabar.stack.resources.localizedStrings"
 ))
 val stringStore
     get() = localizedStrings
 
 @Deprecated("EOL: 2021.8.1 use `localized` from `zakadabar.stack.resources`", ReplaceWith(
-    "localized<T>()", "import zakadabar.stack.resources.localized"
+    "localized<T>()", "zakadabar.stack.resources.localized"
 ))
 inline fun <reified T> translate() = localizedStrings.getNormalized(T::class.simpleName!!)
 

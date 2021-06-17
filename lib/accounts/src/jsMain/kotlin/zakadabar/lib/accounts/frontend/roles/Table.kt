@@ -4,9 +4,9 @@
 package zakadabar.lib.accounts.frontend.roles
 
 import zakadabar.lib.accounts.data.RoleBo
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.application.target
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.resources.localizedStrings
 
 class Table : ZkTable<RoleBo>() {
 
@@ -17,7 +17,7 @@ class Table : ZkTable<RoleBo>() {
         search = true
         export = true
 
-        titleText = stringStore.roles
+        titleText = localizedStrings.roles
         crud = target<Roles>()
 
         + RoleBo::id

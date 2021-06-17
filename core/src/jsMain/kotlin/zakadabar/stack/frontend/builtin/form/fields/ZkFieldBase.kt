@@ -12,13 +12,13 @@ import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.data.schema.descriptor.BoConstraintType
 import zakadabar.stack.data.schema.descriptor.BooleanBoConstraint
 import zakadabar.stack.data.schema.descriptor.IntBoConstraint
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.util.minusAssign
 import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.stack.resources.localizedStrings
 
 abstract class ZkFieldBase<FT : BaseBo, DT>(
     val form: ZkForm<FT>,
@@ -105,7 +105,7 @@ abstract class ZkFieldBase<FT : BaseBo, DT>(
      */
     open fun buildFieldLabel() {
         if (labelText == null) {
-            labelText = stringStore.getNormalized(propName)
+            labelText = localizedStrings.getNormalized(propName)
         } else {
             labelText = labelText // to initialize label container
         }
@@ -193,7 +193,7 @@ abstract class ZkFieldBase<FT : BaseBo, DT>(
     open fun showErrors() {
         errors.clearChildren() // to clean up previous errors
         // TODO add the actual errors
-        errors.innerHTML = stringStore.invalidValue
+        errors.innerHTML = localizedStrings.invalidValue
         errors.show()
     }
 

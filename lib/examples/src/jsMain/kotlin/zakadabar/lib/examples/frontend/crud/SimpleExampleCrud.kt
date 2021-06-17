@@ -4,10 +4,10 @@
 package zakadabar.lib.examples.frontend.crud
 
 import zakadabar.lib.examples.data.SimpleExampleBo
-import zakadabar.stack.frontend.application.translate
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.resources.localized
 
 
 /**
@@ -33,7 +33,7 @@ class SimpleExampleForm : ZkForm<SimpleExampleBo>() {
     override fun onCreate() {
         super.onCreate()
 
-        build(translate<SimpleExampleForm>()) {
+        build(localized<SimpleExampleForm>()) {
             + section {
                 + bo::id
                 + bo::name
@@ -51,15 +51,15 @@ class SimpleExampleTable : ZkTable<SimpleExampleBo>() {
 
     override fun onConfigure() {
 
-        titleText = translate<SimpleExampleTable>()
+        titleText = localized<SimpleExampleTable>()
 
         add = true
         search = true
         export = true
-        
+
         + SimpleExampleBo::id // record id and opt record id is not supported yet
         + SimpleExampleBo::name
-        
+
         + actions()
     }
 }

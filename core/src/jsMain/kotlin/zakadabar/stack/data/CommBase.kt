@@ -6,8 +6,8 @@ package zakadabar.stack.data
 import kotlinx.coroutines.await
 import org.w3c.fetch.Response
 import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.toast.toastDanger
+import zakadabar.stack.resources.localizedStrings
 
 /**
  * Common functions for all comm classes.
@@ -28,7 +28,7 @@ abstract class CommBase {
          * Default implementation displays a toast.
          */
         var onForbidden: suspend () -> Unit = {
-            toastDanger { stringStore.forbiddenExplanation }
+            toastDanger { localizedStrings.forbiddenExplanation }
         }
 
         /**
@@ -36,7 +36,7 @@ abstract class CommBase {
          * error codes that are not 440 or 403. Default implementation displays a toast.
          */
         var onError : suspend () -> Unit = {
-            toastDanger { stringStore.executeError }
+            toastDanger { localizedStrings.executeError }
         }
     }
 

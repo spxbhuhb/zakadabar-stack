@@ -12,7 +12,6 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventTarget
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.executor
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.dock.ZkDockedElement
 import zakadabar.stack.frontend.builtin.dock.ZkDockedElementState
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
@@ -22,6 +21,7 @@ import zakadabar.stack.frontend.resources.css.stringOrPx
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.minusAssign
 import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.stack.resources.localizedStrings
 import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KClass
 
@@ -1206,7 +1206,7 @@ open class ZkElement(
      */
     fun dock(iconSource: ZkIconSource, title: String? = null) = ZkDockedElement(
         iconSource,
-        title ?: stringStore.getNormalized(this::class.simpleName !!),
+        title ?: localizedStrings.getNormalized(this::class.simpleName !!),
         ZkDockedElementState.Normal,
         this
     ).run()

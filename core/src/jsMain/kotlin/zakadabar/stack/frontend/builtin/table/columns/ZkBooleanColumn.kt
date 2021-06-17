@@ -4,10 +4,10 @@
 package zakadabar.stack.frontend.builtin.table.columns
 
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.input.ZkCheckBox
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.resources.localizedStrings
 import kotlin.reflect.KProperty1
 
 open class ZkBooleanColumn<T : BaseBo>(
@@ -16,7 +16,7 @@ open class ZkBooleanColumn<T : BaseBo>(
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {
-        label = stringStore.getNormalized(prop.name)
+        label = localizedStrings.getNormalized(prop.name)
         super.onCreate()
     }
 

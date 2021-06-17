@@ -5,9 +5,9 @@ package zakadabar.stack.frontend.builtin.table.columns
 
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.resources.localizedStrings
 import kotlin.reflect.KProperty1
 
 open class ZkOptEntityIdColumn<T : BaseBo, IT>(
@@ -16,7 +16,7 @@ open class ZkOptEntityIdColumn<T : BaseBo, IT>(
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {
-        label = stringStore.getNormalized(prop.name)
+        label = localizedStrings.getNormalized(prop.name)
         super.onCreate()
     }
 

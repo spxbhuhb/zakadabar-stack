@@ -4,7 +4,6 @@
 package zakadabar.lib.examples.frontend.input
 
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.buttonSecondary
 import zakadabar.stack.frontend.builtin.input.ZkCheckboxList
@@ -15,6 +14,7 @@ import zakadabar.stack.frontend.builtin.note.noteSuccess
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.util.marginRight
+import zakadabar.stack.resources.localizedStrings
 
 /**
  * This example shows how to create checkbox lists.
@@ -39,7 +39,7 @@ class StringCheckboxListExample(
 
         + column(zkPageStyles.content) {
             + noteSuccess("Strings", stringCheckboxList) marginBottom 20
-            + buttonSecondary(stringStore.execute, onClick = ::onSave) marginBottom 20
+            + buttonSecondary(localizedStrings.execute, onClick = ::onSave) marginBottom 20
             + noteSecondary("Output", "")
         }
     }

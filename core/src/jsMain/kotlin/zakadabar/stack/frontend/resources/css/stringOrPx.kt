@@ -5,6 +5,7 @@ package zakadabar.stack.frontend.resources.css
 
 import zakadabar.stack.util.PublicApi
 
+@Suppress("DeprecatedCallableAddReplaceWith")
 @Deprecated("EOL: 2021.8.1 use '.px' instead")
 fun stringOrPx(value: Any?) = if (value is String) value else "${value}px"
 

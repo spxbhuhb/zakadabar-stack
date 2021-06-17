@@ -5,18 +5,18 @@ package zakadabar.stack.frontend.builtin.table.columns
 
 import org.w3c.dom.set
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.builtin.table.zkTableStyles
 import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.stack.resources.localizedStrings
 
 open class ZkActionsColumn<T : BaseBo>(
     table: ZkTable<T>
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {
-        label = stringStore.actions
+        label = localizedStrings.actions
         exportable = false
         super.onCreate()
     }
@@ -25,7 +25,7 @@ open class ZkActionsColumn<T : BaseBo>(
         with(builder) {
             buildPoint.classList += zkTableStyles.action
             buildPoint.dataset["action"] = "update"
-            + stringStore.details
+            + localizedStrings.details
         }
     }
 

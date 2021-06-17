@@ -55,6 +55,7 @@ added:
 
 - `application.stringStores`
 - `ZkStringStore.childStores`
+- ListBoSchemaEntry - basic support for lists in schemas
 
 changed:
 

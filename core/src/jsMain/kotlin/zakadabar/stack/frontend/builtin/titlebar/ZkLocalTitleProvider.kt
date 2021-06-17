@@ -3,8 +3,8 @@
  */
 package zakadabar.stack.frontend.builtin.titlebar
 
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.resources.localizedStrings
 
 /**
  * Implemented by elements that are able to provide a local title.
@@ -24,6 +24,6 @@ interface ZkLocalTitleProvider {
 
         titleElement?.let { return it }
 
-        return ZkLocalTitleBar(titleText ?: stringStore.getNormalized(this::class.simpleName ?: ""), contextElements)
+        return ZkLocalTitleBar(titleText ?: localizedStrings.getNormalized(this::class.simpleName ?: ""), contextElements)
     }
 }

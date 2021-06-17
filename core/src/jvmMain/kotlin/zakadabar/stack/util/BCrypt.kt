@@ -11,6 +11,8 @@
 // WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 // ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 // OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+@file:Suppress("DuplicatedCode")
+
 package zakadabar.stack.util
 
 import java.io.UnsupportedEncodingException
@@ -64,8 +66,8 @@ import java.security.SecureRandom
  */
 class BCrypt {
     // Expanded Blowfish key
-    private lateinit var P: IntArray
-    private lateinit var S: IntArray
+    private lateinit var kP: IntArray
+    private lateinit var kS: IntArray
 
     /**
      * Blowfish encipher a single 64-bit block encoded as
@@ -74,38 +76,37 @@ class BCrypt {
      * @param off    the position in the array of the blocks
      */
     private fun encipher(lr: IntArray, off: Int) {
-        var i: Int
         var n: Int
         var l = lr[off]
         var r = lr[off + 1]
-        l = l xor P[0]
-        i = 0
+        l = l xor kP[0]
+        var i = 0
         while (i <= BLOWFISH_NUM_ROUNDS - 2) {
 
             // Feistel substitution on left word
-            n = S[l shr 24 and 0xff]
-            n += S[0x100 or (l shr 16 and 0xff)]
-            n = n xor S[0x200 or (l shr 8 and 0xff)]
-            n += S[0x300 or (l and 0xff)]
-            r = r xor (n xor P[++ i])
+            n = kS[l shr 24 and 0xff]
+            n += kS[0x100 or (l shr 16 and 0xff)]
+            n = n xor kS[0x200 or (l shr 8 and 0xff)]
+            n += kS[0x300 or (l and 0xff)]
+            r = r xor (n xor kP[++ i])
 
             // Feistel substitution on right word
-            n = S[r shr 24 and 0xff]
-            n += S[0x100 or (r shr 16 and 0xff)]
-            n = n xor S[0x200 or (r shr 8 and 0xff)]
-            n += S[0x300 or (r and 0xff)]
-            l = l xor (n xor P[++ i])
+            n = kS[r shr 24 and 0xff]
+            n += kS[0x100 or (r shr 16 and 0xff)]
+            n = n xor kS[0x200 or (r shr 8 and 0xff)]
+            n += kS[0x300 or (r and 0xff)]
+            l = l xor (n xor kP[++ i])
         }
-        lr[off] = r xor P[BLOWFISH_NUM_ROUNDS + 1]
+        lr[off] = r xor kP[BLOWFISH_NUM_ROUNDS + 1]
         lr[off + 1] = l
     }
 
     /**
      * Initialise the Blowfish key schedule
      */
-    private fun init_key() {
-        P = P_orig.clone()
-        S = S_orig.clone()
+    private fun initKey() {
+        kP = P_orig.clone()
+        kS = S_orig.clone()
     }
 
     /**
@@ -113,28 +114,27 @@ class BCrypt {
      * @param key    an array containing the key
      */
     private fun key(key: ByteArray) {
-        var i: Int
         val koffp = intArrayOf(0)
         val lr = intArrayOf(0, 0)
-        val plen = P.size
-        val slen = S.size
-        i = 0
+        val plen = kP.size
+        val slen = kS.size
+        var i = 0
         while (i < plen) {
-            P[i] = P[i] xor streamtoword(key, koffp)
+            kP[i] = kP[i] xor streamtoword(key, koffp)
             i ++
         }
         i = 0
         while (i < plen) {
             encipher(lr, 0)
-            P[i] = lr[0]
-            P[i + 1] = lr[1]
+            kP[i] = lr[0]
+            kP[i + 1] = lr[1]
             i += 2
         }
         i = 0
         while (i < slen) {
             encipher(lr, 0)
-            S[i] = lr[0]
-            S[i + 1] = lr[1]
+            kS[i] = lr[0]
+            kS[i + 1] = lr[1]
             i += 2
         }
     }
@@ -147,15 +147,14 @@ class BCrypt {
      * @param key    password information
      */
     private fun ekskey(data: ByteArray, key: ByteArray) {
-        var i: Int
         val koffp = intArrayOf(0)
         val doffp = intArrayOf(0)
         val lr = intArrayOf(0, 0)
-        val plen = P.size
-        val slen = S.size
-        i = 0
+        val plen = kP.size
+        val slen = kS.size
+        var i = 0
         while (i < plen) {
-            P[i] = P[i] xor streamtoword(key, koffp)
+            kP[i] = kP[i] xor streamtoword(key, koffp)
             i ++
         }
         i = 0
@@ -163,8 +162,8 @@ class BCrypt {
             lr[0] = lr[0] xor streamtoword(data, doffp)
             lr[1] = lr[1] xor streamtoword(data, doffp)
             encipher(lr, 0)
-            P[i] = lr[0]
-            P[i + 1] = lr[1]
+            kP[i] = lr[0]
+            kP[i + 1] = lr[1]
             i += 2
         }
         i = 0
@@ -172,8 +171,8 @@ class BCrypt {
             lr[0] = lr[0] xor streamtoword(data, doffp)
             lr[1] = lr[1] xor streamtoword(data, doffp)
             encipher(lr, 0)
-            S[i] = lr[0]
-            S[i + 1] = lr[1]
+            kS[i] = lr[0]
+            kS[i + 1] = lr[1]
             i += 2
         }
     }
@@ -188,21 +187,18 @@ class BCrypt {
      * @param cdata         the plaintext to encrypt
      * @return    an array containing the binary hashed password
      */
-    fun crypt_raw(
+    fun cryptRaw(
         password: ByteArray, salt: ByteArray, log_rounds: Int,
         cdata: IntArray
     ): ByteArray {
-        val rounds: Int
-        var i: Int
         var j: Int
         val clen = cdata.size
-        val ret: ByteArray
         require(! (log_rounds < 4 || log_rounds > 30)) { "Bad number of rounds" }
-        rounds = 1 shl log_rounds
+        val rounds: Int = 1 shl log_rounds
         require(salt.size == BCRYPT_SALT_LEN) { "Bad salt length" }
-        init_key()
+        initKey()
         ekskey(salt, password)
-        i = 0
+        var i = 0
         while (i != rounds) {
             key(password)
             key(salt)
@@ -217,7 +213,7 @@ class BCrypt {
             }
             i ++
         }
-        ret = ByteArray(clen * 4)
+        val ret = ByteArray(clen * 4)
         i = 0
         j = 0
         while (i < clen) {
@@ -551,7 +547,7 @@ class BCrypt {
          * @exception IllegalArgumentException if the length is invalid
          */
         @Throws(IllegalArgumentException::class)
-        private fun encode_base64(d: ByteArray, len: Int): String {
+        private fun encodeBase64(d: ByteArray, len: Int): String {
             var off = 0
             val rs = StringBuffer()
             var c1: Int
@@ -602,12 +598,11 @@ class BCrypt {
          */
         @Suppress("SpellCheckingInspection", "SameParameterValue")
         @Throws(IllegalArgumentException::class)
-        private fun decode_base64(s: String, maxolen: Int): ByteArray {
+        private fun decodeBase64(s: String, maxolen: Int): ByteArray {
             val rs = StringBuffer()
             var off = 0
             val slen = s.length
             var olen = 0
-            val ret: ByteArray
             var c1: Int
             var c2: Int
             var c3: Int
@@ -634,7 +629,7 @@ class BCrypt {
                 rs.append(o.toChar())
                 ++ olen
             }
-            ret = ByteArray(olen)
+            val ret = ByteArray(olen)
             off = 0
             while (off < olen) {
                 ret[off] = rs[off].code.toByte()
@@ -651,10 +646,9 @@ class BCrypt {
          * @return    the next word of material from data
          */
         private fun streamtoword(data: ByteArray, offp: IntArray): Int {
-            var i: Int
             var word = 0
             var off = offp[0]
-            i = 0
+            var i = 0
             while (i < 4) {
                 word = word shl 8 or (data[off].toUByte().toInt())
                 off = (off + 1) % data.size
@@ -673,10 +667,8 @@ class BCrypt {
          */
         @JvmStatic
         fun hashpw(password: String, salt: String): String {
-            val B: BCrypt
-            val real_salt: String
+            val realSalt: String
             val passwordb: ByteArray
-            val saltb: ByteArray
             val hashed: ByteArray
             var minor = 0.toChar()
             val rounds: Int
@@ -692,15 +684,14 @@ class BCrypt {
             // Extract number of rounds
             require(salt[off + 2] <= '$') { "Missing salt rounds" }
             rounds = salt.substring(off, off + 2).toInt()
-            real_salt = salt.substring(off + 3, off + 25)
+            realSalt = salt.substring(off + 3, off + 25)
             passwordb = try {
                 (password + if (minor >= 'a') "\u0000" else "").toByteArray(charset("UTF-8"))
             } catch (uee: UnsupportedEncodingException) {
                 throw AssertionError("UTF-8 is not supported")
             }
-            saltb = decode_base64(real_salt, BCRYPT_SALT_LEN)
-            B = BCrypt()
-            hashed = B.crypt_raw(
+            val saltb: ByteArray = decodeBase64(realSalt, BCRYPT_SALT_LEN)
+            hashed = BCrypt().cryptRaw(
                 passwordb, saltb, rounds,
                 bf_crypt_ciphertext.clone()
             )
@@ -709,11 +700,11 @@ class BCrypt {
             rs.append("$")
             if (rounds < 10) rs.append("0")
             require(rounds <= 30) { "rounds exceeds maximum (30)" }
-            rs.append(Integer.toString(rounds))
+            rs.append(rounds.toString())
             rs.append("$")
-            rs.append(encode_base64(saltb, saltb.size))
+            rs.append(encodeBase64(saltb, saltb.size))
             rs.append(
-                encode_base64(
+                encodeBase64(
                     hashed,
                     bf_crypt_ciphertext.size * 4 - 1
                 )
@@ -736,9 +727,9 @@ class BCrypt {
             rs.append("$2a$")
             if (log_rounds < 10) rs.append("0")
             require(log_rounds <= 30) { "log_rounds exceeds maximum (30)" }
-            rs.append(Integer.toString(log_rounds))
+            rs.append(log_rounds.toString())
             rs.append("$")
-            rs.append(encode_base64(rnd, rnd.size))
+            rs.append(encodeBase64(rnd, rnd.size))
             return rs.toString()
         }
 
@@ -751,20 +742,20 @@ class BCrypt {
          */
         @JvmStatic
         fun checkpw(plaintext: String, hashed: String): Boolean {
-            val hashed_bytes: UByteArray
-            val try_bytes: UByteArray
+            val hashedBytes: UByteArray
+            val tryBytes: UByteArray
             try {
-                val try_pw = hashpw(plaintext, hashed)
-                hashed_bytes = hashed.toByteArray(charset("UTF-8")).asUByteArray()
-                try_bytes = try_pw.toByteArray(charset("UTF-8")).asUByteArray()
+                val tryPw = hashpw(plaintext, hashed)
+                hashedBytes = hashed.toByteArray(charset("UTF-8")).asUByteArray()
+                tryBytes = tryPw.toByteArray(charset("UTF-8")).asUByteArray()
             } catch (uee: UnsupportedEncodingException) {
                 return false
             }
-            if (hashed_bytes.size != try_bytes.size) return false
+            if (hashedBytes.size != tryBytes.size) return false
 
             var ret: UByte = 0u
-            for (i in try_bytes.indices) {
-                ret = ret or (hashed_bytes[i] xor try_bytes[i])
+            for (i in tryBytes.indices) {
+                ret = ret or (hashedBytes[i] xor tryBytes[i])
             }
             return ret.toInt() == 0
         }

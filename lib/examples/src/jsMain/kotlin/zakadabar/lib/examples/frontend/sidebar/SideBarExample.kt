@@ -6,7 +6,6 @@ package zakadabar.lib.examples.frontend.sidebar
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.markdown.frontend.markdownStyles
 import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.buttonPrimary
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
@@ -14,6 +13,7 @@ import zakadabar.stack.frontend.builtin.pages.ZkPathPage
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
 import zakadabar.stack.frontend.builtin.toast.toastSuccess
 import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.stack.resources.localizedStrings
 
 
 object ExampleSideBarTarget : ZkPathPage() {
@@ -22,7 +22,7 @@ object ExampleSideBarTarget : ZkPathPage() {
         + column {
             + "The path is: $path"
             + "Click on the button to go back."
-            + buttonPrimary(stringStore.back) { application.back() }
+            + buttonPrimary(localizedStrings.back) { application.back() }
         }
     }
 }

@@ -6,6 +6,7 @@ package zakadabar.stack.frontend.application
 import kotlinx.browser.document
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
+import zakadabar.stack.resources.localizedStrings
 import zakadabar.stack.util.after
 import kotlin.reflect.KClass
 
@@ -91,7 +92,7 @@ abstract class ZkAppRouting(
      * Reports a missing route to the user.
      */
     open fun onMissingRoute() {
-        document.body?.innerHTML = stringStore.missingRoute
+        document.body?.innerHTML = localizedStrings.missingRoute
     }
 
     /**

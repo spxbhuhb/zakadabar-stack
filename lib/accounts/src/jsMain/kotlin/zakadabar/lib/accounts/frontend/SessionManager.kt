@@ -12,10 +12,10 @@ import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.application.ZkExecutor
 import zakadabar.stack.frontend.application.ZkSessionManager
 import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.modal.ZkMessageDialog
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.log
+import zakadabar.stack.resources.localizedStrings
 
 /**
  * Handles session renewal.
@@ -110,8 +110,8 @@ class SessionManager : ZkSessionManager {
                 // a message to the user, logout and then refresh the page.
 
                 ZkMessageDialog(
-                    title = stringStore.actionFail,
-                    message = stringStore.sessionRenewError
+                    title = localizedStrings.actionFail,
+                    message = localizedStrings.sessionRenewError
                 ).run()
 
                 LogoutAction().execute()

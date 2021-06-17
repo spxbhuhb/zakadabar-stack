@@ -9,7 +9,6 @@ import zakadabar.stack.StackRoles
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.executor
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.crud.ZkCrudEditor
@@ -32,6 +31,7 @@ import zakadabar.stack.frontend.builtin.toast.toastWarning
 import zakadabar.stack.frontend.util.default
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.stack.resources.localizedStrings
 
 class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
@@ -51,7 +51,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
     override fun onCreate() {
         super.onCreate()
 
-        titleText = if (mode == ZkElementMode.Create) stringStore.account else bo.accountName
+        titleText = if (mode == ZkElementMode.Create) localizedStrings.account else bo.accountName
 
 
         io {
@@ -87,7 +87,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
     inner class CreateForm : ZkForm<CreateAccount>() {
 
         private val items = systemRoles.sortedBy { it.description }.map { sr ->
-            ZkCheckboxListItem(sr.id, stringStore.getNormalized(sr.description), userRoles.firstOrNull { ur -> ur.role == sr.id } != null)
+            ZkCheckboxListItem(sr.id, localizedStrings.getNormalized(sr.description), userRoles.firstOrNull { ur -> ur.role == sr.id } != null)
         }
 
         override fun onConfigure() {
@@ -104,12 +104,12 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
                     + basics()
 
-                    + section(stringStore.password) {
+                    + section(localizedStrings.password) {
                         + bo::credentials newSecret true
                         + ZkOptSecretVerificationField(this@CreateForm, bo::credentials).also { fields += it }
                     }
 
-                    + section(stringStore.roles) {
+                    + section(localizedStrings.roles) {
                         + ZkCheckboxList(items)
                     }
 
@@ -119,7 +119,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
             }
         }
 
-        private fun basics() = section(stringStore.basics) {
+        private fun basics() = section(localizedStrings.basics) {
             with(bo) {
                 + ::accountName
                 + ::fullName
@@ -134,7 +134,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
             if (bo.accountName.trim() != bo.accountName) {
                 bo::accountName.find().valid = false
                 // FIXME replace this with a message integrated with the form
-                if (submit) toastDanger { stringStore.accountTrimSpaces }
+                if (submit) toastDanger { localizedStrings.accountTrimSpaces }
                 return false
             }
 
@@ -161,7 +161,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
             // TODO make this a real-time check, as the user types
             val cid = CheckName(bo.accountName).execute().accountId
             if (cid != null) {
-                toastWarning { stringStore.accountNameConflict }
+                toastWarning { localizedStrings.accountNameConflict }
                 bo::accountName.find().invalidInput = true
             }
         }
@@ -184,19 +184,19 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                 minHeight = "0px"
             }
 
-            + tab(stringStore.basics) {
+            + tab(localizedStrings.basics) {
                 + BasicDataForm()
             }
 
             if (mode != ZkElementMode.Create) {
 
-                + tab(stringStore.passwordChange) {
+                + tab(localizedStrings.passwordChange) {
                     + PasswordChangeForm()
                 }
 
                 if (hasRole(StackRoles.securityOfficer)) {
-                    + tab(stringStore.roles) { + RolesForm() }
-                    + tab(stringStore.accountStatus) { + PrincipalForm() }
+                    + tab(localizedStrings.roles) { + RolesForm() }
+                    + tab(localizedStrings.accountStatus) { + PrincipalForm() }
                 }
             }
         }
@@ -223,7 +223,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
             }
         }
 
-        private fun basics() = section(stringStore.basics) {
+        private fun basics() = section(localizedStrings.basics) {
             with(bo) {
                 + ::id
                 + ::accountName
@@ -237,7 +237,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
             // TODO make this a real-time check, as the user types
             val cid = CheckName(bo.accountName).execute().accountId
             if (cid != null && cid != bo.id) {
-                toastWarning { stringStore.accountNameConflict }
+                toastWarning { localizedStrings.accountNameConflict }
                 bo::accountName.find().invalidInput = true
             }
         }
@@ -258,12 +258,12 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                     buildPoint.classList += ZkFormStyles.onePanel
 
                     val expl = if (executor.account.id == bo.accountId) {
-                        stringStore.passwordChangeExpOwn
+                        localizedStrings.passwordChangeExpOwn
                     } else {
-                        stringStore.passwordChangeExpSo
+                        localizedStrings.passwordChangeExpSo
                     }
 
-                    + section(stringStore.passwordChange, expl) {
+                    + section(localizedStrings.passwordChange, expl) {
 
                         // when the user changes his/her own password ask for the old one
                         // when security officer changes the password of someone else, this
@@ -302,15 +302,15 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
         }
 
         override fun onInvalidSubmit() {
-            toastWarning { stringStore.passwordChangeInvalid }
+            toastWarning { localizedStrings.passwordChangeInvalid }
         }
 
         override fun onSubmitSuccess() {
-            toastSuccess { stringStore.actionSuccess }
+            toastSuccess { localizedStrings.actionSuccess }
         }
 
         override fun onSubmitError(ex: Exception) {
-            toastDanger { stringStore.passwordChangeFail }
+            toastDanger { localizedStrings.passwordChangeFail }
         }
     }
 
@@ -332,7 +332,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                 + column(ZkFormStyles.form) {
                     buildPoint.classList += ZkFormStyles.onePanel
 
-                    + section(stringStore.accountStatus) {
+                    + section(localizedStrings.accountStatus) {
                         + bo::locked
                         + this@Form.bo::lastLoginSuccess readOnly true
                         + this@Form.bo::lastLoginFail readOnly true
@@ -355,7 +355,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
         }
 
         private val items = systemRoles.sortedBy { it.description }.map { sr ->
-            ZkCheckboxListItem(sr.id, stringStore.getNormalized(sr.description), userRoles.firstOrNull { ur -> ur.role == sr.id } != null)
+            ZkCheckboxListItem(sr.id, localizedStrings.getNormalized(sr.description), userRoles.firstOrNull { ur -> ur.role == sr.id } != null)
         }
 
         override fun onCreate() {
@@ -364,7 +364,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                 + column(ZkFormStyles.form) {
                     buildPoint.classList += ZkFormStyles.onePanel
 
-                    + section(stringStore.roles) {
+                    + section(localizedStrings.roles) {
                         + ZkCheckboxList(items)
                     }
 

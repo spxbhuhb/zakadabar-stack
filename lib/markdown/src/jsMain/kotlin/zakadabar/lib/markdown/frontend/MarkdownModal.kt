@@ -4,10 +4,10 @@
 package zakadabar.lib.markdown.frontend
 
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.modal.ZkModalBase
 import zakadabar.stack.frontend.util.io
+import zakadabar.stack.resources.localizedStrings
 
 class MarkdownModal(
     private val title: String? = null,
@@ -33,7 +33,7 @@ class MarkdownModal(
     }
 
     override fun buildButtons() {
-        + ZkButton(stringStore.ok, onClick = ::onOk)
+        + ZkButton(localizedStrings.ok, onClick = ::onOk)
     }
 
     private fun onOk() = io {

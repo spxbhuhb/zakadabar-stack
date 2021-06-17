@@ -9,7 +9,6 @@ import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.markdown.frontend.markdownStyles
 import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.button.buttonPrimary
 import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
@@ -18,6 +17,7 @@ import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPathPage
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
 import zakadabar.stack.frontend.util.io
+import zakadabar.stack.resources.localizedStrings
 import zakadabar.stack.text.MarkdownNav
 
 class ExampleMarkdownSideBar : ZkSideBar() {
@@ -56,7 +56,7 @@ object ExampleMarkdownSideBarTarget : ZkPathPage() {
         + column {
             + div { + "The path is: $path" }
             + div { + "Click on the button to go back." }
-            + buttonPrimary(stringStore.back) { application.back() }
+            + buttonPrimary(localizedStrings.back) { application.back() }
         }
     }
 }

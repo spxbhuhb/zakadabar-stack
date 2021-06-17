@@ -28,7 +28,6 @@ import zakadabar.lib.blobs.frontend.blobStyles
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.button.ZkButton
@@ -38,6 +37,8 @@ import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.io
+import zakadabar.stack.resources.localizedStrings
+import zakadabar.stack.text.capitalized
 
 open class ZkAttachmentsField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
     form: ZkForm<T>,
@@ -77,7 +78,7 @@ open class ZkAttachmentsField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
                         + ZkButton(ZkIcons.cloudUpload, flavour = ZkFlavour.Custom) marginBottom 10
                         + div {
                             buildPoint.style.whiteSpace = "nowrap"
-                            + stringStore.dropFilesHere
+                            + localizedStrings.dropFilesHere
                         }
                     }
                 }
@@ -101,7 +102,7 @@ open class ZkAttachmentsField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
         event.preventDefault()
 
         if (! allowUpload()) {
-            window.alert(stringStore.cannotAttachMoreImage)
+            window.alert(localizedStrings.cannotAttachMoreImage)
             return
         }
 
@@ -150,7 +151,7 @@ open class ZkAttachmentsField<T : EntityBo<T>, BT : BlobBo<BT,T>>(
     }
 
     private suspend fun onDelete(preview: ZkAttachmentEntry<BT>): Boolean {
-        if (! ZkConfirmDialog(stringStore.confirmation.capitalize(), stringStore.confirmDelete).run()) return false
+        if (! ZkConfirmDialog(localizedStrings.confirmation.capitalized(), localizedStrings.confirmDelete).run()) return false
 
         if (form.mode != ZkElementMode.Create) {
             comm.delete(preview.bo.id)

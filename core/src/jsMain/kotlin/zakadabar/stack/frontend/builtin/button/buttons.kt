@@ -7,8 +7,8 @@ package zakadabar.stack.frontend.builtin.button
 
 import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.resources.ZkFlavour
+import zakadabar.stack.resources.localizedStrings
 
 fun buttonPrimary(text: String, onClick: () -> Unit) = ZkButton(text, onClick = onClick)
 fun buttonSecondary(text: String, onClick: () -> Unit) = ZkButton(text, flavour = ZkFlavour.Secondary, onClick = onClick)
@@ -28,7 +28,7 @@ fun buttonCustom(target: ZkAppRouting.ZkTarget) = button(target, ZkFlavour.Custo
 
 fun button(target: ZkAppRouting.ZkTarget, flavour: ZkFlavour) =
     ZkButton(
-        stringStore.getNormalized(target.viewName),
+        localizedStrings.getNormalized(target.viewName),
         url = application.routing.toLocalUrl(target),
         flavour = flavour,
         onClick = {

@@ -11,7 +11,6 @@ import org.w3c.dom.events.MouseEvent
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
 import zakadabar.stack.frontend.builtin.crud.ZkCrud
@@ -28,6 +27,7 @@ import zakadabar.stack.frontend.util.Areas
 import zakadabar.stack.frontend.util.downloadCsv
 import zakadabar.stack.frontend.util.getDatasetEntry
 import zakadabar.stack.frontend.util.io
+import zakadabar.stack.resources.localizedStrings
 import zakadabar.stack.util.UUID
 import kotlin.math.min
 import kotlin.reflect.KProperty1
@@ -207,7 +207,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     override fun buildLocalTitleBar(contextElements: List<ZkElement>): ZkElement? =
         if (addLocalTitle) {
-            ZkLocalTitleBar(titleText ?: stringStore.getNormalized(this::class.simpleName ?: ""), titleActions() + contextElements)
+            ZkLocalTitleBar(titleText ?: localizedStrings.getNormalized(this::class.simpleName ?: ""), titleActions() + contextElements)
         } else {
             null
         }

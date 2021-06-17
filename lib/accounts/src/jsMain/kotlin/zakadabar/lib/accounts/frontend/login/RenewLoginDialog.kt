@@ -7,7 +7,6 @@ import kotlinx.browser.window
 import kotlinx.coroutines.channels.Channel
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.executor
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.modal.zkModalStyles
@@ -15,6 +14,7 @@ import zakadabar.stack.frontend.builtin.titlebar.ZkLocalTitleBar
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.marginBottom
 import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.stack.resources.localizedStrings
 
 /**
  * Shows a login dialog to let the user renew his/her session.
@@ -40,7 +40,7 @@ class RenewLoginDialog : ZkElement() {
     override fun onCreate() {
         classList += zkModalStyles.modal
 
-        + ZkLocalTitleBar(stringStore.applicationName) css zkModalStyles.title
+        + ZkLocalTitleBar(localizedStrings.applicationName) css zkModalStyles.title
 
         + column(zkModalStyles.content) {
             style {
@@ -48,7 +48,7 @@ class RenewLoginDialog : ZkElement() {
             }
 
             + div(ZkFormStyles.sectionSummary) {
-                + stringStore.sessionRenew
+                + localizedStrings.sessionRenew
             } marginBottom 5
 
             + LoginForm(

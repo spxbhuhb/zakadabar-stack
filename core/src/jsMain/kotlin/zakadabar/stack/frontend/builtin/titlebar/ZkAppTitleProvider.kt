@@ -4,8 +4,8 @@
 package zakadabar.stack.frontend.builtin.titlebar
 
 import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.resources.localizedStrings
 
 /**
  * Implemented by elements that are able to set the application title.
@@ -30,6 +30,6 @@ interface ZkAppTitleProvider {
             return
         }
 
-        application.title = ZkAppTitle(titleText ?: stringStore.getNormalized(this::class.simpleName ?: ""), contextElements)
+        application.title = ZkAppTitle(titleText ?: localizedStrings.getNormalized(this::class.simpleName ?: ""), contextElements)
     }
 }

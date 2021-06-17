@@ -3,10 +3,10 @@
  */
 package zakadabar.stack.frontend.builtin.layout.tabcontainer
 
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.stack.resources.localizedStrings
 import zakadabar.stack.util.PublicApi
 
 open class ZkTabContainer(
@@ -48,7 +48,7 @@ open class ZkTabContainer(
                 if (scroll) + zkTabContainerStyles.scrolledContent
                 if (border) + zkLayoutStyles.fixBorder
                 if (pad) + zkLayoutStyles.p1
-            }, title ?: stringStore.getNormalized(element))
+            }, title ?: localizedStrings.getNormalized(element))
         } else {
             TabItem(this, element, title)
         }

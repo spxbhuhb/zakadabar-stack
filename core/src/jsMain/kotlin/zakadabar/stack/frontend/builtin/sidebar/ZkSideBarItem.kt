@@ -9,8 +9,8 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.resources.localizedStrings
 import zakadabar.stack.text.capitalized
 
 /**
@@ -36,7 +36,7 @@ open class ZkSideBarItem(
         text: String? = null,
         onClick: (() -> Unit)? = null
     ) : this(
-        text = text ?: stringStore.getNormalized(target.viewName),
+        text = text ?: localizedStrings.getNormalized(target.viewName),
         url = application.routing.toLocalUrl(target, subPath),
         onClick = onClick
     )

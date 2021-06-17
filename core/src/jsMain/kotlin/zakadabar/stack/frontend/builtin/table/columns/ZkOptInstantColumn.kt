@@ -7,9 +7,9 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.resources.localizedStrings
 import kotlin.reflect.KProperty1
 
 open class ZkOptInstantColumn<T : BaseBo>(
@@ -18,7 +18,7 @@ open class ZkOptInstantColumn<T : BaseBo>(
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {
-        label = stringStore.getNormalized(prop.name)
+        label = localizedStrings.getNormalized(prop.name)
         super.onCreate()
     }
 

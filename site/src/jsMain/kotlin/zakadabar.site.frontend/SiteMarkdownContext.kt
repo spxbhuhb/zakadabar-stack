@@ -39,6 +39,7 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.note.ZkNote
 import zakadabar.stack.frontend.resources.ZkFlavour
 import zakadabar.stack.frontend.resources.theme
+import zakadabar.stack.text.capitalized
 
 class SiteMarkdownContext(
     viewName: String,
@@ -70,7 +71,7 @@ class SiteMarkdownContext(
 
     override fun enrich(htmlElement: HTMLElement): ZkElement? {
         val type = htmlElement.dataset["zkEnrich"] ?: return null
-        val flavour = htmlElement.dataset["zkFlavour"]?.let { ZkFlavour.valueOf(it.capitalize()) } ?: ZkFlavour.Primary
+        val flavour = htmlElement.dataset["zkFlavour"]?.let { ZkFlavour.valueOf(it.capitalized()) } ?: ZkFlavour.Primary
 
         return when (type) {
 

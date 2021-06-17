@@ -1,12 +1,12 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.resources.localizedStrings
 import kotlin.reflect.KProperty1
 
 open class ZkEnumColumn<T : BaseBo, E : Enum<E>>(
@@ -15,7 +15,7 @@ open class ZkEnumColumn<T : BaseBo, E : Enum<E>>(
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {
-        label = stringStore.getNormalized(prop.name)
+        label = localizedStrings.getNormalized(prop.name)
         super.onCreate()
     }
 
@@ -42,5 +42,5 @@ open class ZkEnumColumn<T : BaseBo, E : Enum<E>>(
         return "\"${format(row).replace("\"", "\"\"")}\""
     }
 
-    open fun format(row: T) = stringStore.getNormalized(prop.get(row).name)
+    open fun format(row: T) = localizedStrings.getNormalized(prop.get(row).name)
 }

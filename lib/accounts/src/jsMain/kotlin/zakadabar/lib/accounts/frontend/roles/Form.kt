@@ -4,15 +4,15 @@
 package zakadabar.lib.accounts.frontend.roles
 
 import zakadabar.lib.accounts.data.RoleBo
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.resources.localizedStrings
 
 class Form : ZkForm<RoleBo>() {
 
     override fun onCreate() {
-        build(bo.description, stringStore.role, css = ZkFormStyles.onePanel) {
-            + section(stringStore.basics) {
+        build(bo.description, localizedStrings.role, css = ZkFormStyles.onePanel) {
+            + section(localizedStrings.basics) {
                 + bo::id
                 + bo::name
                 + bo::description

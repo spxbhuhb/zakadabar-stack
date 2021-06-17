@@ -4,8 +4,8 @@
 package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.action.ActionBoCompanion
+import zakadabar.stack.data.query.QueryBo
+import zakadabar.stack.data.query.QueryBoCompanion
 import zakadabar.stack.data.schema.BoSchema
 
 /**
@@ -18,9 +18,9 @@ class CheckName(
 
 ) : ActionBo<CheckNameResult> {
 
-    override suspend fun execute() = comm.action(this, serializer(), CheckNameResult.serializer())
+    override suspend fun execute() = comm.query(this, serializer(), CheckNameResult.serializer())
 
-    companion object : ActionBoCompanion(AccountPrivateBo.boNamespace)
+    companion object : QueryBoCompanion(AccountPrivateBo.boNamespace)
 
     override fun schema() = BoSchema {
         + ::accountName min 1 max 50 blank false

@@ -3,15 +3,15 @@
  */
 package zakadabar.stack.frontend.builtin.modal
 
-import zakadabar.stack.frontend.application.stringStore
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.util.io
+import zakadabar.stack.resources.localizedStrings
 import zakadabar.stack.text.capitalized
 
 open class ZkMessageDialog(
     open val title: String? = null,
     open val message: String,
-    open val okLabel: String = stringStore.ok.capitalized(),
+    open val okLabel: String = localizedStrings.ok.capitalized(),
 ) : ZkModalBase<Boolean>() {
 
     override fun onCreate() {
