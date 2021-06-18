@@ -32,7 +32,8 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
     override val router = router {
         query(ContentOverviewQuery::class, ::overview)
         query(BySeoPath::class, ::bySeoPath)
-        query(FolderQuery::class, ::mastersQuery)
+        query(MastersQuery::class, ::mastersQuery)
+        query(FolderQuery::class, ::foldersQuery)
         query(NavQuery::class, ::navQuery)
     }
 
@@ -175,9 +176,12 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
     }
 
     @Suppress("UNUSED_PARAMETER")
-    private fun mastersQuery(executor: Executor, folderQuery: FolderQuery): List<FolderEntry> =
-        pa.folderQuery()
+    private fun mastersQuery(executor: Executor, query: MastersQuery): List<MastersEntry> =
+        pa.mastersQuery()
 
+    @Suppress("UNUSED_PARAMETER")
+    private fun foldersQuery(executor: Executor, query: FolderQuery): List<FolderEntry> =
+        pa.folderQuery()
 
     @Suppress("UNUSED_PARAMETER")
     private fun navQuery(executor: Executor, query: NavQuery): List<NavEntry> {

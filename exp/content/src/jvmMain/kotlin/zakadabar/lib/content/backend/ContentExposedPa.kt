@@ -10,10 +10,7 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.`java-time`.timestamp
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import zakadabar.lib.accounts.backend.AccountPrivateExposedTableGen
-import zakadabar.lib.content.data.ContentBo
-import zakadabar.lib.content.data.FolderEntry
-import zakadabar.lib.content.data.NavEntry
-import zakadabar.lib.content.data.TextBlockBo
+import zakadabar.lib.content.data.*
 import zakadabar.lib.i18n.backend.LocaleExposedTableGen
 import zakadabar.lib.i18n.data.LocaleBo
 import zakadabar.stack.backend.exposed.ExposedPaBase
@@ -99,6 +96,17 @@ open class ContentExposedPa : ExposedPaBase<ContentBo, ContentExposedTable>(
             .select { (table.master eq master.toLong()) and (table.locale eq locale.toLong()) }
             .first()
             .toBo()
+
+    fun mastersQuery(): List<MastersEntry> =
+        table
+            .slice(table.id, table.title)
+            .select { table.master.isNull() }
+            .map {
+                MastersEntry(
+                    it[table.id].entityId(),
+                    it[table.title]
+                )
+            }
 
     fun folderQuery(): List<FolderEntry> =
         table
