@@ -164,7 +164,7 @@ object AccountPrivateBackend : RecordBackend<AccountPrivateDto>() {
 
         displayName = dto.displayName
         theme = dto.theme
-        locale = dto.locale
+        locale = dto.locale.ifEmpty { serverDescription.defaultLocale ?: "hu" }
         avatar = avatarId?.let { AccountImageDao[avatarId] }
 
         organizationName = dto.organizationName
