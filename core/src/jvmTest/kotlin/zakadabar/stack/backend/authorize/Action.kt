@@ -13,5 +13,5 @@ class Action : ActionBo<Action> {
         throw NotImplementedError("this is just a test action")
     }
 
-    companion object : ActionBoCompanion<Action>("not-used")
+    companion object : ActionBoCompanion("not-used")
 }
