@@ -106,75 +106,80 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
 
     override fun onInitializeDb() {
 
-        val firstInit = try {
-            pa.withTransaction { pa.readByName("so") }
-            false
-        } catch (ex: NoSuchElementException) {
-            true
+        val so = pa.withTransaction {
+            try {
+                pa.readByName("so")
+            } catch (ex: NoSuchElementException) {
+                pa.create(
+                    default {
+                        validated = true
+                        locked = settings.initialSoPassword.isNullOrEmpty()
+                        credentials = settings.initialSoPassword?.let { Secret(it) }
+                        accountName = "so"
+                        fullName = "Security Officer"
+                        email = "so@127.0.0.1"
+                        displayName = "SO"
+                        locale = server.settings.defaultLocale
+                    }
+                )
+            }
         }
 
-        if (firstInit) {
-            val so: AccountPrivateBo = default {
-                validated = true
-                locked = settings.initialSoPassword.isNullOrEmpty()
-                credentials = settings.initialSoPassword?.let { Secret(it) }
-                accountName = "so"
-                fullName = "Security Officer"
-                email = "so@127.0.0.1"
-                displayName = "SO"
-                locale = server.settings.defaultLocale
+        val anonymous = pa.withTransaction {
+            try {
+                pa.readByName("anonymous")
+            } catch (ex: NoSuchElementException) {
+                pa.create(
+                    default {
+                        validated = true
+                        locked = true
+                        accountName = "anonymous"
+                        fullName = "Anonymous"
+                        email = "anonymous@127.0.0.1"
+                        displayName = "Anonymous"
+                        locale = server.settings.defaultLocale
+                    }
+                )
+            }
+        }
+
+        pa.withTransaction {
+
+            val executor = Executor(so.id, false, emptyList(), emptyList())
+
+            auditor.auditCreate(executor, so)
+            auditor.auditCreate(executor, anonymous)
+
+            fun grant(account: AccountPrivateBo, role: RoleBo) {
+                val grant = GrantRole(account.id, role.id)
+                roleBl.grantRole(executor, grant)
+                roleBl.auditor.auditAction(executor, grant)
             }
 
-            val anonymous: AccountPrivateBo = default {
-                validated = true
-                locked = true
-                accountName = "anonymous"
-                fullName = "Anonymous"
-                email = "anonymous@127.0.0.1"
-                displayName = "Anonymous"
-                locale = server.settings.defaultLocale
-            }
+            StackRoles.map.forEach {
+                val roleName = it.value
 
-            pa.withTransaction {
-                pa.create(so)
-                pa.create(anonymous)
-
-                val executor = Executor(so.id, false, emptyList(), emptyList())
-
-                auditor.auditCreate(executor, so)
-                auditor.auditCreate(executor, anonymous)
-
-                fun grant(account: AccountPrivateBo, role: RoleBo) {
-                    val grant = GrantRole(account.id, role.id)
-                    roleBl.grantRole(executor, grant)
-                    roleBl.auditor.auditAction(executor, grant)
+                try {
+                    roleBl.getByName(roleName)
+                    return@forEach // when exists we don't want to re-create it
+                } catch (ex: NoSuchElementException) {
+                    // this is fine, we have to create the role
                 }
 
-                StackRoles.map.forEach {
-                    val roleName = it.value
+                val bo = roleBl.create(executor, RoleBo(EntityId(), roleName, roleName))
+                roleBl.auditor.auditCreate(executor, bo)
 
-                    try {
-                        roleBl.getByName(roleName)
-                        return@forEach // when exists we don't want to re-create it
-                    } catch (ex : NoSuchElementException) {
-                        // this is fine, we have to create the role
-                    }
-
-                    val bo = roleBl.create(executor, RoleBo(EntityId(), roleName, roleName))
-                    roleBl.auditor.auditCreate(executor, bo)
-
-                    if (firstInit) {
-                        when (it.value) {
-                            StackRoles.securityOfficer -> grant(so, bo)
-                            StackRoles.siteAdmin -> grant(so, bo)
-                            StackRoles.siteMember -> grant(so, bo)
-                            StackRoles.anonymous -> grant(anonymous, bo)
-                        }
-                    }
+                when (it.value) {
+                    StackRoles.securityOfficer -> grant(so, bo)
+                    StackRoles.siteAdmin -> grant(so, bo)
+                    StackRoles.siteMember -> grant(so, bo)
+                    StackRoles.anonymous -> grant(anonymous, bo)
                 }
+
             }
         }
     }
+
 
     override fun onModuleStart() {
         anonymous = pa.withTransaction {
@@ -387,6 +392,6 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
         return roleBl.rolesOf(EntityId(accountId))
     }
 
-    fun byName(accountName : String) = pa.readByName(accountName)
+    fun byName(accountName: String) = pa.readByName(accountName)
 
 }
