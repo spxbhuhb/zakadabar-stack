@@ -15,6 +15,7 @@ import org.junit.Test
 import zakadabar.lib.content.data.*
 import zakadabar.lib.i18n.data.LocaleBo
 import zakadabar.lib.i18n.data.LocaleStatus
+import zakadabar.stack.backend.server
 import zakadabar.stack.backend.util.default
 import kotlin.test.assertEquals
 
@@ -93,7 +94,7 @@ class ContentBlTest {
         assertNavEntry(result2[0], localeHu, localizedHu1, 2, localizedHu1)
     }
 
-    private fun assertNavEntry(entry: NavEntry, locale: LocaleBo, bo :ContentBo, childrenCount: Int, vararg segments: ContentBo) {
+    private fun assertNavEntry(entry: NavEntry, locale: LocaleBo, bo: ContentBo, childrenCount: Int, vararg segments: ContentBo) {
         assertEquals(bo.id, entry.localizedId)
         assertEquals(childrenCount, entry.children.size)
         assertEquals(bo.title, entry.title)
@@ -187,4 +188,32 @@ class ContentBlTest {
 
         return Triple(masterContent, localizedHu, localizedEn)
     }
+
+    @Test
+    fun testConvenience() = runBlocking {
+        transaction {
+            ContentExposedTable.deleteAll()
+        }
+
+        val (master1, localizedHu1, localizedEn1) = make("master 1")
+
+        val contentBl = server.first<ContentBl>()
+
+        transaction {
+            assertEquals(localizedHu1.id, contentBl.localized(localeHu.id, master1.id).id)
+            assertEquals(localizedEn1.id, contentBl.localized(localeEn.id, master1.id).id)
+
+            assertEquals(
+                master1.id to localizedHu1.id,
+                contentBl.masterAndLocalized(localeHu.id, master1.id).let { it.first.id to it.second.id }
+            )
+
+            assertEquals(
+                master1.id to localizedHu1.id,
+                contentBl.masterAndLocalized(localeHu.id, localizedHu1.id).let { it.first.id to it.second.id }
+            )
+
+        }
+    }
+
 }

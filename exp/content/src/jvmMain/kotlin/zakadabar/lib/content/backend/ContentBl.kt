@@ -8,12 +8,14 @@ import io.ktor.features.*
 import kotlinx.datetime.Clock
 import zakadabar.lib.content.data.*
 import zakadabar.lib.i18n.backend.LocaleBl
+import zakadabar.lib.i18n.data.LocaleBo
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.module
 import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.text.lowercaseWithHyphen
+import zakadabar.stack.util.PublicApi
 
 /**
  * Business Logic for ContentCommonBo.
@@ -28,6 +30,7 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
 
     private val localeBl by module<LocaleBl>()
     private val statusBl by module<StatusBl>()
+    private val blobBl by module<AttachedBlobBl>()
 
     override val router = router {
         query(ContentOverviewQuery::class, ::overview)
@@ -37,15 +40,9 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
         query(NavQuery::class, ::navQuery)
     }
 
-    override fun create(executor: Executor, bo: ContentBo): ContentBo {
-        bo.modifiedBy = EntityId(executor.accountId)
-        bo.modifiedAt = Clock.System.now()
-        bo.seoTitle = bo.title.lowercaseWithHyphen()
-
-        checkConsistency(bo)
-
-        return super.create(executor, bo)
-    }
+    // -------------------------------------------------------------------------
+    // CRUD
+    // -------------------------------------------------------------------------
 
     /**
      * Verifies that there is no document under the same parent with the
@@ -64,6 +61,16 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
         throw DataConflictException("SEO title conflict")
     }
 
+    override fun create(executor: Executor, bo: ContentBo): ContentBo {
+        bo.modifiedBy = EntityId(executor.accountId)
+        bo.modifiedAt = Clock.System.now()
+        bo.seoTitle = bo.title.lowercaseWithHyphen()
+
+        checkConsistency(bo)
+
+        return super.create(executor, bo)
+    }
+
     override fun update(executor: Executor, bo: ContentBo): ContentBo {
         bo.modifiedBy = EntityId(executor.accountId)
         bo.modifiedAt = Clock.System.now()
@@ -78,6 +85,10 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
 
         return super.update(executor, bo)
     }
+
+    // -------------------------------------------------------------------------
+    // Queries
+    // -------------------------------------------------------------------------
 
     @Suppress("UNUSED_PARAMETER") // this is fine, needed for routing
     private fun overview(executor: Executor, query: ContentOverviewQuery): ContentOverview {
@@ -199,4 +210,111 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
         return pa.navQuery(locale.id, master.id, "/${locale.name}/${seoPath(localized).joinToString("/")}")
     }
 
+    // -------------------------------------------------------------------------
+    // Functions for other business logic modules
+    // -------------------------------------------------------------------------
+
+    /**
+     * Read the localized version of the content based on the
+     * locale of the executor and the id of the master.
+     *
+     * @param   executor  Executor of the operation.
+     * @param   masterId  Id of the master content.
+     *
+     * @throws  NoSuchElementException  when the locale is unknown
+     *                                  when there is no localized version
+     */
+    @PublicApi
+    fun localized(executor: Executor, masterId: EntityId<ContentBo>) =
+        localized(
+            localeBl.byName(executor.locale)?.id ?: throw IllegalStateException("missing locale: ${executor.locale}"),
+            masterId
+        )
+
+    /**
+     * Read the  localized version of the content based on the
+     * locale of the executor and the id of the master.
+     *
+     * @param   localeId  Id of the locale to get the localized version for.
+     * @param   masterId  Id of the master content.
+     *
+     * @throws  NoSuchElementException  when the locale is unknown
+     *                                  when there is no localized version
+     */
+    @PublicApi
+    fun localized(localeId: EntityId<LocaleBo>, masterId: EntityId<ContentBo>) =
+        pa.readLocalized(masterId, localeId)
+
+    /**
+     * Read the master and the localized versions of the content based on the
+     * locale of the executor.
+     *
+     * @param   executor  Executor of the operation.
+     * @param   entityId  Id of the content to read. May be the master or the
+     *                    localized version, the function sorts it out.
+     *
+     * @throws  NoSuchElementException  when the locale is unknown
+     *                                  when there is no master version
+     *                                  when there is no localized version
+     */
+    @PublicApi
+    fun masterAndLocalized(executor: Executor, entityId: EntityId<ContentBo>): Pair<ContentBo, ContentBo> =
+        masterAndLocalized(
+            localeBl.byName(executor.locale)?.id ?: throw IllegalStateException("missing locale: ${executor.locale}"),
+            entityId
+        )
+
+    /**
+     * Read the master and the localized versions of the content.
+     *
+     * @param   localeId  Id of the locale to get the localized version for.
+     * @param   entityId  Id of the content to read. May be the master or the
+     *                    localized version, the function sorts it out.
+     *
+     * @throws  NoSuchElementException  when the locale is unknown
+     *                                  when there is no master version
+     *                                  when there is no localized version
+     */
+    @PublicApi
+    fun masterAndLocalized(localeId: EntityId<LocaleBo>, entityId: EntityId<ContentBo>): Pair<ContentBo, ContentBo> {
+        val base = pa.read(entityId)
+
+        val master = base.master?.let { pa.read(it) } ?: base
+        val localized = base.locale?.let { base } ?: pa.readLocalized(master.id, localeId)
+
+        return master to localized
+    }
+
+    /**
+     * Find images. Handles disposition and localization.
+     *
+     * @param   disposition   The disposition to filter images for.
+     * @param   master        The master content BO to get images for.
+     * @param   localized     The localized content Bo to get images for.
+     *
+     * @return  List of images for the disposition. When there is at least one localized
+     *          image for the disposition, only the localized images are in the list.
+     *          When there is no localized image, master images are in the list.
+     */
+    @PublicApi
+    fun findImages(disposition: String?, master: ContentBo, localized: ContentBo) =
+        findImages(disposition, master.id, localized.id)
+
+    /**
+     * Find images. Handles disposition and localization.
+     *
+     * @param   disposition     The disposition to filter images for.
+     * @param   masterId        The id of the master content BO to get images for.
+     * @param   localizedId     The id of the localized content Bo to get images for.
+     *
+     * @return  List of images for the disposition. When there is at least one localized
+     *          image for the disposition, only the localized images are in the list.
+     *          When there is no localized image, master images are in the list.
+     */
+    @PublicApi
+    fun findImages(disposition: String?, masterId: EntityId<ContentBo>, localizedId: EntityId<ContentBo>): List<AttachedBlobBo> {
+        val list = blobBl.byReference(localizedId, disposition)
+        if (list.isNotEmpty()) return list
+        return blobBl.byReference(masterId)
+    }
 }

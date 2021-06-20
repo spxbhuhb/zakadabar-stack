@@ -17,6 +17,7 @@ import zakadabar.stack.backend.ktor.executor
 import zakadabar.stack.backend.route.Router
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.after
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObject
@@ -49,7 +50,7 @@ abstract class BlobBlBase<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
                         writeContent(call)
                     }
                     get("${namespace}/blob/list/{referenceId}") {
-                        listByReference(call)
+                        byReference(call)
                     }
                 }
             }
@@ -110,7 +111,7 @@ abstract class BlobBlBase<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
     }
 
 
-    suspend fun listByReference(call: ApplicationCall) {
+    suspend fun byReference(call: ApplicationCall) {
         val blobId = call.parameters["referenceId"]?.let { EntityId<T>(it) } ?: throw BadRequestException("missing reference id")
         val disposition = call.parameters["disposition"]
 
@@ -128,7 +129,16 @@ abstract class BlobBlBase<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
         call.respond(result)
     }
 
-    open fun listByReference(entityId : EntityId<RT>, disposition : String? = null) =
+    /**
+     * List blobs with the given reference and entity id.
+     *
+     * @param  entityId  The reference to list the blobs for,
+     * @param  disposition   The disposition to filter for, when `null`, all blobs are included.
+     *
+     * @return list of blob BOs for the given entity with the given disposition
+     */
+    @PublicApi
+    open fun byReference(entityId : EntityId<RT>, disposition : String? = null) =
         pa.listByReference(entityId, disposition)
 
 }
