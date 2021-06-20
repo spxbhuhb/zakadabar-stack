@@ -112,6 +112,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
                 account = anonymous,
                 anonymous = true,
                 roles = emptyList(),
+                locale = anonymous.locale,
                 serverDescription = serverDescription
             )
         } else {
@@ -122,6 +123,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
                 account = account,
                 anonymous = false,
                 roles = roles.map { it.second },
+                locale = account.locale,
                 serverDescription = serverDescription
             )
         }
@@ -161,7 +163,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
             roleNames += it.second
         }
 
-        return StackSession(account.id, accountBl.anonymous().id == account.id, roleIds, roleNames)
+        return StackSession(account.id, accountBl.anonymous().id == account.id, roleIds, roleNames, account.locale)
     }
 
     private fun authenticate(executor: Executor, accountName: String, password: Secret): AccountPublicBo? {
@@ -207,7 +209,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 
         auditor.auditCustom(executor) { "logout old=${old.account} new=${anonymous.id}" }
 
-        call.sessions.set(StackSession(anonymous.id, true, emptyList(), emptyList()))
+        call.sessions.set(StackSession(anonymous.id, true, emptyList(), emptyList(), anonymous.locale))
 
         return ActionStatusBo(success = true)
 

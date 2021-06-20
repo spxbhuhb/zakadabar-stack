@@ -19,7 +19,8 @@ data class StackSession(
     val account: EntityId<out BaseBo>,
     val anonymous: Boolean,
     val roleIds: List<EntityId<out BaseBo>>,
-    val roleNames: List<String>
+    val roleNames: List<String>,
+    val locale: String
 )
 
 object StackSessionSerializer : SessionSerializer<StackSession> {

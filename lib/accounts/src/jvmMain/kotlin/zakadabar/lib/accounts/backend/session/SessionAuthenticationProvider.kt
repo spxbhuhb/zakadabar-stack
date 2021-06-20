@@ -16,8 +16,6 @@ import zakadabar.stack.backend.module
 import zakadabar.stack.backend.server
 import zakadabar.stack.data.builtin.misc.Secret
 
-private val accountBl by module<AccountBlProvider>()
-
 class SessionAuthenticationProvider internal constructor(configuration: Configuration) : AuthenticationProvider(configuration) {
     class Configuration internal constructor(name: String?) : AuthenticationProvider.Configuration(name)
 }
@@ -26,7 +24,9 @@ fun Authentication.Configuration.configureSession(name: String? = null) {
 
     val sessionBl by module<KtorSessionBl>()
     val accountBl by module<AccountBlProvider>()
-    val executor = KtorExecutor(accountBl.anonymous().id, true, emptyList(), emptyList())
+    val executor = accountBl.anonymous().let {
+        KtorExecutor(it.id, true, emptyList(), emptyList(), it.locale)
+    }
 
     val provider = AuthenticationProvider(SessionAuthenticationProvider.Configuration(name))
 
@@ -35,7 +35,7 @@ fun Authentication.Configuration.configureSession(name: String? = null) {
         // when there is a session, use it
 
         call.sessions.get<StackSession>()?.let {
-            context.principal(KtorExecutor(it.account, it.anonymous, it.roleIds, it.roleNames))
+            context.principal(KtorExecutor(it.account, it.anonymous, it.roleIds, it.roleNames, it.locale))
             return@intercept
         }
 
@@ -46,16 +46,16 @@ fun Authentication.Configuration.configureSession(name: String? = null) {
         credentials?.let {
             transaction {
                 val session = sessionBl.login(executor, LoginAction(credentials.name, Secret(credentials.password)))
-                context.principal(KtorExecutor(session.account, session.anonymous, session.roleIds, session.roleNames))
+                context.principal(KtorExecutor(session.account, session.anonymous, session.roleIds, session.roleNames, session.locale))
             }
             return@intercept
         }
 
         val anonymous = accountBl.anonymous()
-        val session = StackSession(anonymous.id, true, emptyList(), emptyList())
+        val session = StackSession(anonymous.id, true, emptyList(), emptyList(), anonymous.locale)
 
         call.sessions.set(session)
-        context.principal(KtorExecutor(session.account, session.anonymous, session.roleIds, session.roleNames))
+        context.principal(KtorExecutor(session.account, session.anonymous, session.roleIds, session.roleNames, session.locale))
 
         if (call.attributes.getOrNull(LoginTimeoutKey) == true) {
             server.onLoginTimeout(call)
