@@ -11,6 +11,17 @@ of the methods to kick off full processing.
 
 </div>
 
+<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="RoleBlProvider">
+
+Most of these examples use `SimpleRoleAuthorizer`. This authorizer needs a backend
+module that implements `RoleBlProvider`. For example,
+[RoleBl](../../../../lib/accounts/src/jvmMain/kotlin/zakadabar/lib/accounts/backend/RoleBl.kt) of
+[Lib: Accounts](/doc/guides/plug-and-play/accounts/Introduction.md) implements
+this interface. If you do not use `Lib: Accounts`, you have to add a module that implements
+`RoleBlProvider` or your server won't start.
+
+</div>
+
 ## Authorizer Provider [unit test](/src/jvmTest/kotlin/zakadabar/stack/backend/authorize/SimpleRoleAuthorizerProviderTest.kt)
 
 An authorizer provider:
@@ -103,6 +114,18 @@ override val authorizer: Authorizer<TestBlob> = SimpleRoleAuthorizer {
 }
 ```
 
+### PUBLIC
+
+SimpleRoleAuthorizer supports the special value of `PUBLIC`. This is not an
+actual role, but may be used to provide access for everyone:
+
+```kotlin
+override val authorizer: Authorizer<TestBlob> = SimpleRoleAuthorizer {
+    allReads = PUBLIC
+    allWrites = StackRoles.siteMember
+}
+```
+
 ## Write an Authorizer
 
 <div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Data Access">
@@ -148,3 +171,14 @@ class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
 Most cases you don't have to worry about using an authorizer. Once it is assigned
 to a business logic, it will be called automatically whenever the endpoints 
 offered by the BL receive a request.
+
+You can call the authorizer directly if needed:
+
+```kotlin
+val otherModule by module<OtherBusinessLogic>()
+
+fun authorizeOther(executor, id) = 
+    otherModule
+        .authorizer
+        .authorizeRead(executor, id)
+```
