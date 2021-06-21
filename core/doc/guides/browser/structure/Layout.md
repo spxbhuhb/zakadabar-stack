@@ -102,14 +102,3 @@ object DefaultLayout : ZkDefaultLayout() {
 
 This button is tied to the side bar. When the side bar is shown the button is hidden. When the side bar is hidden, the
 button is shown. `ZkAppTitleBar` automatically handles these states.
-
-## Timeline
-
-* 2021.5.18
-  * Introduce `fixTitle` parameter for `ZkAppTitleBar`
-* 2021.5.15
-  * Introduce ZkAppTitleProvider interface.
-* 2021.5.12
-  * Move css classes of the default layout into `zkDefaultLayoutStyles`.
-  * Add `spanHeader` function to `ZkDefaultLayout`.
-  * Change sidebar sizing to shrink until 160px.

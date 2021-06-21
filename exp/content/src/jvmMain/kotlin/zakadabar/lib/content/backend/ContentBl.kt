@@ -6,6 +6,7 @@ package zakadabar.lib.content.backend
 
 import io.ktor.features.*
 import kotlinx.datetime.Clock
+import zakadabar.lib.blobs.data.url
 import zakadabar.lib.content.data.*
 import zakadabar.lib.i18n.backend.LocaleBl
 import zakadabar.lib.i18n.data.LocaleBo
@@ -38,6 +39,7 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
         query(MastersQuery::class, ::mastersQuery)
         query(FolderQuery::class, ::foldersQuery)
         query(NavQuery::class, ::navQuery)
+        query(ThumbnailQuery::class, ::thumbnailQuery)
     }
 
     // -------------------------------------------------------------------------
@@ -195,7 +197,8 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
         pa.folderQuery()
 
     @Suppress("UNUSED_PARAMETER")
-    private fun navQuery(executor: Executor, query: NavQuery): List<NavEntry> {
+    @PublicApi
+    fun navQuery(executor: Executor, query: NavQuery): List<NavEntry> {
         val locale = localeBl.byName(query.localeName) ?: throw NoSuchElementException()
 
         if (query.from == null) {
@@ -208,6 +211,22 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
         val localized = if (from.master == null) pa.readLocalized(master.id, locale.id) else from
 
         return pa.navQuery(locale.id, master.id, "/${locale.name}/${seoPath(localized).joinToString("/")}")
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    @PublicApi
+    fun thumbnailQuery(executor: Executor, query: ThumbnailQuery): List<ThumbnailEntry> {
+        val locale = localeBl.byName(query.localeName) ?: throw NoSuchElementException()
+
+        val (master, localized) = masterAndLocalized(locale.id, query.parent)
+
+        val list = pa.thumbnailQuery(locale.id, master.id, "/${locale.name}/${seoPath(localized).joinToString("/")}")
+
+        list.forEach {
+            it.thumbnailImageUrl = findImages(AttachedBlobDisposition.thumbnail, it.masterId, it.localizedId).firstOrNull()?.url
+        }
+
+        return list
     }
 
     // -------------------------------------------------------------------------

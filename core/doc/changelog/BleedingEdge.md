@@ -56,6 +56,7 @@ added:
 - `application.stringStores`
 - `ZkStringStore.childStores`
 - ListBoSchemaEntry - basic support for lists in schemas
+-`zkScrollBarStyles.hideScrollBar`
 
 changed:
 

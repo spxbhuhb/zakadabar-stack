@@ -59,6 +59,25 @@ open class ContentExposedPa : ExposedPaBase<ContentBo, ContentExposedTable>(
         return bo
     }
 
+    fun readLocalized(master: EntityId<ContentBo>, locale: EntityId<LocaleBo>) : ContentBo {
+        val bo = table
+            .select { (table.master eq master.toLong()) and (table.locale eq locale.toLong()) }
+            .first()
+            .toBo()
+
+        bo.textBlocks = textTable
+            .select { textTable.content eq bo.id.toLong() }
+            .map {
+                TextBlockBo(
+                    it[textTable.stereotype],
+                    it[textTable.value]
+                )
+            }
+
+        return bo
+    }
+
+
     override fun update(bo: ContentBo): ContentBo {
         super.update(bo)
 
@@ -90,12 +109,6 @@ open class ContentExposedPa : ExposedPaBase<ContentBo, ContentExposedTable>(
             .firstOrNull()
             ?.toBo()
     }
-
-    fun readLocalized(master: EntityId<ContentBo>, locale: EntityId<LocaleBo>) =
-        table
-            .select { (table.master eq master.toLong()) and (table.locale eq locale.toLong()) }
-            .first()
-            .toBo()
 
     fun mastersQuery(): List<MastersEntry> =
         table
@@ -145,6 +158,24 @@ open class ContentExposedPa : ExposedPaBase<ContentBo, ContentExposedTable>(
             }
     }
 
+    fun thumbnailQuery(localeId: EntityId<LocaleBo>, parentMasterId : EntityId<ContentBo>?, parentSeoPath : String): List<ThumbnailEntry> {
+        val jt = table.alias("jt")
+
+        return table
+            .innerJoin(jt, { table.master }, { jt[table.id] })
+            .slice(table.id, table.title, table.seoTitle, jt[table.id])
+            .select { jt[table.parent] eq parentMasterId?.toLong() }
+            .andWhere { table.locale eq localeId.toLong() }
+            .map {
+                ThumbnailEntry(
+                    it[jt[table.id]].entityId(),
+                    it[table.id].entityId(),
+                    it[table.title],
+                    "${parentSeoPath}/${it[table.seoTitle]}",
+                    "" // this will be filled later
+                )
+            }
+    }
 
     override fun ResultRow.toBo() = ContentBo(
         id = this[table.id].entityId(),

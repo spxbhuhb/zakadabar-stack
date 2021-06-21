@@ -44,7 +44,7 @@ class ContentEditor : ZkCrudTarget<ContentBo>() {
         application.changeNavState(this, "create", "args=${Json.encodeToString(Args.serializer(), args)}")
     }
 
-    override suspend fun onBeforeCreate(editor: ZkCrudEditor<ContentBo>) {
+    override suspend fun onBeforeAddedCreate(editor: ZkCrudEditor<ContentBo>) {
         editor as ContentEditorForm
 
         val navArgs = application.routing.navState.args
@@ -60,7 +60,17 @@ class ContentEditor : ZkCrudTarget<ContentBo>() {
 
         if (args.master != null) {
             editor.master = ContentBo.read(args.master)
-            editor.bo.parent = editor.master.parent
+        }
+    }
+
+    override suspend fun onBeforeAddedUpdate(editor: ZkCrudEditor<ContentBo>) {
+        editor as ContentEditorForm
+
+        editor.bo.master?.let {
+            editor.master = ContentBo.read(it)
+            editor.master.parent?.let { parentId ->
+                editor.parent = ContentBo.read(parentId)
+            }
         }
     }
 
@@ -69,6 +79,7 @@ class ContentEditor : ZkCrudTarget<ContentBo>() {
 class ContentEditorForm : ZkForm<ContentBo>() {
 
     lateinit var master: ContentBo
+    lateinit var parent: ContentBo
     lateinit var textBlocks: ZkElement
 
     override fun onCreate() {
@@ -85,7 +96,13 @@ class ContentEditorForm : ZkForm<ContentBo>() {
                     + bo::id
                     + select(bo::status) { StatusBo.all().by { it.name } }
                     if (bo.master == null) + bo::folder
-                    + select(bo::parent) { FolderQuery().execute().map { it.id to it.title } } readOnly (bo.master != null)
+
+                    if (bo.master == null) {
+                        + select(bo::parent) { FolderQuery().execute().map { it.id to it.title } }
+                    } else {
+                        + constString(localizedStrings["parent"]) { if (::parent.isInitialized) parent.title else "" }
+                    }
+
                     + select(bo::locale) { LocaleBo.all().by { it.name } } readOnly true
                     + bo::title
                 }
@@ -107,6 +124,8 @@ class ContentEditorForm : ZkForm<ContentBo>() {
                         ContentTextForm(textBlocks).apply { bo = default { } }
                     )
                 }
+
+                + buttons()
 
             }
 

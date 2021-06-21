@@ -95,7 +95,7 @@ open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
             editor.openUpdate = { openUpdate(it.id) }
             editor.mode = ZkElementMode.Create
 
-            onBeforeCreate(editor)
+            onBeforeAddedCreate(editor)
 
             editor as ZkElement
 
@@ -114,7 +114,7 @@ open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
      * Called after the editor is created but before it is added to the
      * page. Provides place for last-step adjustments.
      */
-    open suspend fun onBeforeCreate(editor : ZkCrudEditor<T>) {
+    open suspend fun onBeforeAddedCreate(editor : ZkCrudEditor<T>) {
 
     }
 
@@ -128,6 +128,8 @@ open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
             editor.openUpdate = { openUpdate(it.id) }
             editor.mode = ZkElementMode.Read
 
+            onBeforeAddedRead(editor)
+
             editor as ZkElement
 
             container build {
@@ -140,6 +142,14 @@ open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
         }
 
         return container
+    }
+
+    /**
+     * Called after the editor is created but before it is added to the
+     * page. Provides place for last-step adjustments.
+     */
+    open suspend fun onBeforeAddedRead(editor : ZkCrudEditor<T>) {
+
     }
 
     open fun update(recordId: EntityId<T>): ZkElement {
@@ -152,6 +162,8 @@ open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
             editor.openUpdate = { openUpdate(it.id) }
             editor.mode = ZkElementMode.Update
 
+            onBeforeAddedUpdate(editor)
+
             editor as ZkElement
 
             container build {
@@ -166,6 +178,14 @@ open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
         return container
     }
 
+    /**
+     * Called after the editor is created but before it is added to the
+     * page. Provides place for last-step adjustments.
+     */
+    open suspend fun onBeforeAddedUpdate(editor : ZkCrudEditor<T>) {
+
+    }
+
     open fun delete(recordId: EntityId<T>): ZkElement {
 
         val container = ZkElement()
@@ -175,6 +195,8 @@ open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
             editor.bo = companion.read(recordId)
             editor.openUpdate = { openUpdate(it.id) }
             editor.mode = ZkElementMode.Delete
+
+            onBeforeAddedDelete(editor)
 
             editor as ZkElement
 
@@ -188,5 +210,13 @@ open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
         }
 
         return container
+    }
+
+    /**
+     * Called after the editor is created but before it is added to the
+     * page. Provides place for last-step adjustments.
+     */
+    open suspend fun onBeforeAddedDelete(editor : ZkCrudEditor<T>) {
+
     }
 }

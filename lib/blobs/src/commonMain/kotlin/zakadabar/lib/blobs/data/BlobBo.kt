@@ -18,6 +18,8 @@ interface BlobBo<T : BlobBo<T,RT>, RT : EntityBo<RT>> : EntityBo<T> {
 
     override fun comm() : BlobCommInterface<T,RT>
 
+    suspend fun download() = comm().download(id)
+
     override fun schema() = BoSchema {
         + ::disposition max 200
         + ::name min 1 max 200

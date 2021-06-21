@@ -6,7 +6,9 @@ package zakadabar.lib.blobs.frontend.image
 import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobCreateState
 import zakadabar.lib.blobs.data.url
+import zakadabar.lib.blobs.frontend.blobStyles
 import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.stack.frontend.resources.css.px
 import zakadabar.stack.frontend.util.io
 
 open class ZkImagePreview<BT : BlobBo<BT,*>>(
@@ -43,20 +45,39 @@ open class ZkImagePreview<BT : BlobBo<BT,*>>(
 
     private fun ZkElement.renderImage() {
         + column {
-            + image(bo.url) {
-                with(buildPoint.style) {
-                    height = "${size}px"
-                    width = "${size}px"
-                }
-
-                on(buildPoint, "click") { _ ->
-                    ZkFullScreenImageView(bo.url) {
-                        io {
-                            val deleted = onDelete(this@ZkImagePreview)
-                            if (deleted) it.hide()
+//            if (bo.mimeType == "image/svg+xml") {
+//                + zke {
+//                    io {
+//                        ! bo.download().decodeToString()
+//                    }
+//                }
+//            } else {
+                + image(bo.url) {
+                    with(buildPoint.style) {
+                        if (height > width) {
+                            height = size.px
+                            width = "auto"
+                        } else {
+                            height = "auto"
+                            width = size.px
                         }
-                    }.show()
+                    }
+
+                    on(buildPoint, "click") { _ ->
+                        ZkFullScreenImageView(bo.url) {
+                            io {
+                                val deleted = onDelete(this@ZkImagePreview)
+                                if (deleted) it.hide()
+                            }
+                        }.show()
+                    }
                 }
+ //           }
+            + div(blobStyles.imageName) {
+                + bo.name
+            }
+            + div(blobStyles.imageMimeType) {
+                + bo.mimeType
             }
         }
     }

@@ -157,6 +157,15 @@ object TextAlign {
     val matchParent = CssValueConst("text-align", "match-parent")
 }
 
+object TextTransform {
+    val none = CssValueConst("text-transform", "none")
+    val capitalize = CssValueConst("text-transform", "capitalize")
+    val uppercase = CssValueConst("text-transform", "uppercase")
+    val lowercase = CssValueConst("text-transform", "lowercase")
+    val fullWidth = CssValueConst("text-transform", "full-width")
+    val fullSizeKana = CssValueConst("text-transform", "full-size-kana")
+}
+
 object UserSelect {
     val none = CssValueConst("user-select", "none")
     val auto = CssValueConst("user-select", "auto")

@@ -77,6 +77,18 @@ class BlobStyles : ZkCssStyleSheet() {
         maxHeight = 100.percent
     }
 
+    val imageName by cssClass {
+        + AlignSelf.center
+        marginBlockStart = 4.px
+        marginBlockEnd = 4.px
+        fontSize = 85.percent
+    }
+
+    val imageMimeType by cssClass {
+        + AlignSelf.center
+        fontSize = 70.percent
+    }
+
     val actions by cssClass {
         + Display.flex
         + FlexDirection.row

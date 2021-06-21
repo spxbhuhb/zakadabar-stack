@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.layout
 
+import zakadabar.stack.frontend.resources.css.Display
 import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
 import zakadabar.stack.frontend.resources.css.cssStyleSheet
 import zakadabar.stack.frontend.resources.css.px
@@ -34,6 +35,13 @@ open class ZkScrollBarStyles : ZkCssStyleSheet() {
     open val webkitScrollBarTrack by cssRule("::-webkit-scrollbar-track") {
         if (enabled) {
             backgroundColor = trackColor
+        }
+    }
+
+    open val hideScrollBar by cssClass {
+        styles["scrollbar-width"] = "none"
+        on("::-webkit-scrollbar") {
+            + Display.none
         }
     }
 

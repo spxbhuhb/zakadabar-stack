@@ -25,15 +25,15 @@ import kotlin.reflect.full.companionObject
 /**
  * Base class for BLOB business logics.
  */
-abstract class BlobBlBase<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
-    boClass : KClass<T>,
+abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
+    boClass: KClass<T>,
     override val pa: BlobExposedPa<T, RT>
 ) : EntityBusinessLogicBase<T>(
     boClass
 ) {
 
     override val namespace
-        get() = (boClass.companionObject !!.objectInstance as BlobBoCompanion<*,*>).boNamespace
+        get() = (boClass.companionObject !!.objectInstance as BlobBoCompanion<*, *>).boNamespace
 
     override val router: Router<T> by after {
         object : KtorRouter<T>(this) {
@@ -62,7 +62,7 @@ abstract class BlobBlBase<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
 
         val executor = call.executor()
 
-        val bytes = pa.withTransaction {
+        val (bytes, mimeType) = pa.withTransaction {
             val bo = pa.read(blobId)
 
             authorizer.authorizeRead(executor, bo.id)
@@ -77,10 +77,10 @@ abstract class BlobBlBase<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
                     .toString()
             )
 
-            pa.readContent(bo.id)
+            pa.readContent(bo.id) to bo.mimeType
         }
 
-        call.respondBytes(bytes)
+        call.respondBytes(bytes, ContentType.parse(mimeType))
     }
 
 
@@ -138,7 +138,7 @@ abstract class BlobBlBase<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
      * @return list of blob BOs for the given entity with the given disposition
      */
     @PublicApi
-    open fun byReference(entityId : EntityId<RT>, disposition : String? = null) =
+    open fun byReference(entityId: EntityId<RT>, disposition: String? = null) =
         pa.listByReference(entityId, disposition)
 
 }

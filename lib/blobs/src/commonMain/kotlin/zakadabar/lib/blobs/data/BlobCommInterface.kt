@@ -11,6 +11,8 @@ interface BlobCommInterface<T : BlobBo<T,RT>, RT : EntityBo<RT>> : EntityCommInt
 
     suspend fun upload(bo : T, data: Any, callback: (bo : T, state: BlobCreateState, uploaded: Long) -> Unit)
 
+    suspend fun download(id : EntityId<T>) : ByteArray
+
     suspend fun listByReference(reference : EntityId<RT>, disposition : String? = null) : List<T>
 
 }

@@ -124,6 +124,16 @@ open class BlobComm<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
     }
 
     @PublicApi
+    override suspend fun download(id: EntityId<T>): ByteArray {
+        return try {
+            client.get<ByteArray>("$baseUrl/api/$namespace/blob/content/$id")
+        } catch (ex: Exception) {
+            onError(ex)
+            throw ex
+        }
+    }
+
+    @PublicApi
     override suspend fun listByReference(reference: EntityId<RT>, disposition : String?): List<T> {
         val q = disposition?.let { "?disposition=$it" } ?: ""
         val text = try {

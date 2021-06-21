@@ -216,4 +216,25 @@ class ContentBlTest {
         }
     }
 
+    @Test
+    fun testTextBlock() = runBlocking {
+        transaction {
+            ContentExposedTable.deleteAll()
+        }
+
+        val (master1, localizedHu1, localizedEn1) = make("master 1")
+
+        val block = TextBlockBo("stereotype", "value")
+
+        localizedHu1.textBlocks = listOf(block)
+        localizedHu1.update()
+
+        val contentBl = server.first<ContentBl>()
+
+        transaction {
+            val value = contentBl.localized(localeHu.id, localizedHu1.master!!).firstOrNull(block.stereotype)
+            assertEquals(block.value, value)
+        }
+    }
+
 }

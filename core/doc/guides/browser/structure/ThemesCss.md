@@ -452,10 +452,18 @@ by [ZkScrollBarStyles](/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/layou
 
 The default is to use scroll bar colors aligned with the theme.
 
-To switch off scroll bar set `scrollBarStyles.enabled` to `false`.
+To switch off scroll bar styling set `scrollBarStyles.enabled` to `false`.
 
 ```kotlin
-scrollBarStyles.enabled = false
+zkScrollBarStyles.enabled = false
+```
+
+## Hiding the scroll bar
+
+To hide the scroll bar on one component:
+
+```kotlin
++ zkScrollBarStyles.hideScrollBar
 ```
 
 ## Theme Rotate
@@ -473,13 +481,3 @@ titleBar.globalElements += ZkThemeRotate(
     ZkIcons.leaf to ZkGreenBlueTheme()
 )
 ```
-
-## Timeline
-
-### Changes
-
-* 2021.5.18
-    * introduce `cssParameter`, changes applied in `theme.onResume` are independent
-* 2021.5.16
-    * change delegated property type from string to ZkCssStyleRule
-    * operators to add/remove rules easily

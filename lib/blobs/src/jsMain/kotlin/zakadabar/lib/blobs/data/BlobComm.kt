@@ -8,6 +8,7 @@ import kotlinx.coroutines.await
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
+import org.khronos.webgl.Int8Array
 import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
 import org.w3c.files.Blob
@@ -131,6 +132,16 @@ open class BlobComm<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
         req.setRequestHeader("Content-Type", bo.mimeType)
         req.setRequestHeader("Content-Disposition", """attachment; filename="${bo.name}"""")
         req.send(data)
+    }
+
+    override suspend fun download(id: EntityId<T>) : ByteArray {
+        val response = commBlock {
+            val responsePromise = window.fetch("/api/$namespace/blob/content/$id")
+            checkStatus(responsePromise.await())
+        }
+
+        val ab = response.arrayBuffer().await()
+        return Int8Array(ab).unsafeCast<ByteArray>()
     }
 
     override suspend fun listByReference(reference: EntityId<RT>, disposition : String?): List<T> {
