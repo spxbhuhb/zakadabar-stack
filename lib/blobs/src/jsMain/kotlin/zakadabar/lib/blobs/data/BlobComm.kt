@@ -4,7 +4,11 @@
 package zakadabar.lib.blobs.data
 
 import kotlinx.browser.window
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.await
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
@@ -114,7 +118,26 @@ open class BlobComm<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
         return Json.decodeFromString(serializer, text)
     }
 
-    override suspend fun upload(bo: T, data: Any, callback: (bo: T, state: BlobCreateState, uploaded: Long) -> Unit) {
+    @PublicApi
+    override suspend fun upload(bo : T, data: Any) : T {
+        val channel = Channel<Boolean>()
+
+        upload(bo, data) { _, state, _ ->
+            GlobalScope.launch(Dispatchers.Default) {
+                when (state) {
+                    BlobCreateState.Error -> channel.send(false)
+                    BlobCreateState.Done -> channel.send(true)
+                    else -> Unit
+                }
+            }
+        }
+
+        if (!channel.receive()) throw RuntimeException("blob upload error")
+
+        return bo
+    }
+
+    override suspend fun upload(bo: T, data: Any, callback: (bo: T, state: BlobCreateState, uploaded: Long) -> Unit) : T {
         require(data is Blob)
 
         val req = XMLHttpRequest()
@@ -132,6 +155,10 @@ open class BlobComm<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
         req.setRequestHeader("Content-Type", bo.mimeType)
         req.setRequestHeader("Content-Disposition", """attachment; filename="${bo.name}"""")
         req.send(data)
+
+        bo.size = data.size.toLong()
+
+        return bo
     }
 
     override suspend fun download(id: EntityId<T>) : ByteArray {
@@ -144,10 +171,10 @@ open class BlobComm<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
         return Int8Array(ab).unsafeCast<ByteArray>()
     }
 
-    override suspend fun listByReference(reference: EntityId<RT>, disposition : String?): List<T> {
+    override suspend fun byReference(reference: EntityId<RT>?, disposition : String?): List<T> {
         val q = disposition?.let { "?disposition=$it" } ?: ""
         val response = commBlock {
-            val responsePromise = window.fetch("/api/$namespace/blob/list/$reference$q")
+            val responsePromise = window.fetch("/api/$namespace/blob/list${if (reference == null) "" else "/$reference"}$q")
             checkStatus(responsePromise.await())
         }
 

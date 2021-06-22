@@ -7,6 +7,7 @@ import io.ktor.client.request.*
 import io.ktor.http.content.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
@@ -101,7 +102,26 @@ open class BlobComm<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
     }
 
     @PublicApi
-    override suspend fun upload(bo : T, data: Any, callback: (bo: T, state: BlobCreateState, uploaded: Long) -> Unit) {
+    override suspend fun upload(bo : T, data: Any) : T {
+        val channel = Channel<Boolean>()
+
+        upload(bo, data) { _, state, _ ->
+            GlobalScope.launch(Dispatchers.Default) {
+                when (state) {
+                    BlobCreateState.Error -> channel.send(false)
+                    BlobCreateState.Done -> channel.send(true)
+                    else -> Unit
+                }
+            }
+        }
+
+        if (!channel.receive()) throw RuntimeException("blob upload error")
+
+        return bo
+    }
+
+    @PublicApi
+    override suspend fun upload(bo : T, data: Any, callback: (bo: T, state: BlobCreateState, uploaded: Long) -> Unit) : T {
         require(data is ByteArray)
 
         callback(bo, BlobCreateState.Starting, 0)
@@ -121,12 +141,16 @@ open class BlobComm<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
                 throw ex
             }
         }
+
+        bo.size = data.size.toLong()
+
+        return bo
     }
 
     @PublicApi
     override suspend fun download(id: EntityId<T>): ByteArray {
         return try {
-            client.get<ByteArray>("$baseUrl/api/$namespace/blob/content/$id")
+            client.get("$baseUrl/api/$namespace/blob/content/$id")
         } catch (ex: Exception) {
             onError(ex)
             throw ex
@@ -134,10 +158,10 @@ open class BlobComm<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
     }
 
     @PublicApi
-    override suspend fun listByReference(reference: EntityId<RT>, disposition : String?): List<T> {
+    override suspend fun byReference(reference: EntityId<RT>?, disposition : String?): List<T> {
         val q = disposition?.let { "?disposition=$it" } ?: ""
         val text = try {
-            client.get<String>("$baseUrl/api/$namespace/blob/list/$reference$q")
+            client.get<String>("$baseUrl/api/$namespace/blob/list/${if (reference == null) "" else "/$reference"}$q")
         } catch (ex: Exception) {
             onError(ex)
             throw ex

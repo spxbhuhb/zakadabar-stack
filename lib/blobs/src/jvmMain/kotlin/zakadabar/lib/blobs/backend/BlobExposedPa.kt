@@ -42,7 +42,7 @@ abstract class BlobExposedPa<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
         this[table.size] = bo.size
     }
 
-    open fun listByReference(id: EntityId<*>, disposition : String? = null) : List<T> {
+    open fun byReference(id: EntityId<*>, disposition : String? = null) : List<T> {
 
         val select = table.select { table.reference eq id.toLong() }
 
@@ -51,6 +51,7 @@ abstract class BlobExposedPa<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
         return select.map { it.toBo() }
 
     }
+
 
     open fun writeContent(id: EntityId<T>, content: ByteArray) {
         table.update({ table.id eq id.toLong() }) { it[table.content] = ExposedBlob(content) }
@@ -62,7 +63,6 @@ abstract class BlobExposedPa<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
             .select { table.id eq id.toLong() }
             .mapNotNull { it[table.content]?.bytes }
             .first()
-
 }
 
 

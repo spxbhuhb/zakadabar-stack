@@ -11,6 +11,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobBoCompanion
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.ktor.KtorRouter
 import zakadabar.stack.backend.ktor.executor
@@ -49,12 +50,17 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
                     post("${namespace}/blob/content/{blobId}") {
                         writeContent(call)
                     }
-                    get("${namespace}/blob/list/{referenceId}") {
+                    get("${namespace}/blob/list/{referenceId?}") {
                         byReference(call)
                     }
                 }
             }
         }
+    }
+
+    override fun create(executor: Executor, bo: T): T {
+        bo.size = 0 // there is no data uploaded yet
+        return super.create(executor, bo)
     }
 
     suspend fun readContent(call: ApplicationCall) {
@@ -100,11 +106,12 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
 
             authorizer.authorizeCreate(executor, bo)
 
-            if (length != bo.size.toInt()) throw BadRequestException("content length is not the same as in BO")
-
-            auditor.auditUpdate(executor, bo)
+            bo.size = length.toLong()
+            pa.update(bo)
 
             pa.writeContent(blobId, bytes)
+
+            auditor.auditUpdate(executor, bo)
         }
 
         call.respond(HttpStatusCode.OK, "received")
@@ -112,18 +119,20 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
 
 
     suspend fun byReference(call: ApplicationCall) {
-        val blobId = call.parameters["referenceId"]?.let { EntityId<T>(it) } ?: throw BadRequestException("missing reference id")
+        val referenceId = call.parameters["referenceId"]?.let { EntityId<T>(it) }
         val disposition = call.parameters["disposition"]
 
         val executor = call.executor()
 
         val result = pa.withTransaction {
 
-            authorizer.authorizeRead(executor, blobId)
+            // FIXME this should use the authorizer of the reference
 
-            auditor.auditRead(executor, blobId)
+            authorizer.authorizeList(executor)
 
-            pa.listByReference(blobId, disposition)
+            auditor.auditList(executor)
+
+            pa.byReference(referenceId, disposition)
         }
 
         call.respond(result)

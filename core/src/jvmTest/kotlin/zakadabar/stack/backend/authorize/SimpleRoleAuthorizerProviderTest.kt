@@ -7,11 +7,11 @@ import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
-import zakadabar.stack.RolesBase
 import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.persistence.EmptyPersistenceApi
 import zakadabar.stack.backend.server
+import zakadabar.stack.backend.testing.TestCompanionBase
 import zakadabar.stack.data.entity.EmptyEntityBo
 import zakadabar.stack.data.entity.EntityId
 import kotlin.test.assertFailsWith
@@ -33,16 +33,11 @@ internal object WithQuery : EntityBusinessLogicBase<EmptyEntityBo>(EmptyEntityBo
 
 class SimpleRoleAuthorizerProviderTest {
 
-    companion object : TestCompanion() {
+    companion object : TestCompanionBase(
+        allPublic = false
+    ) {
 
-        @BeforeClass
-        @JvmStatic
-        fun setup() = super.setup {
-
-            StackRoles = RolesBase()
-
-            server += MockRoleBlProvider
-
+        override fun addModules() {
             server += SimpleRoleAuthorizerProvider {
                 all = StackRoles.siteMember
             }
@@ -50,6 +45,10 @@ class SimpleRoleAuthorizerProviderTest {
             server += WithDefault
             server += WithQuery
         }
+
+        @BeforeClass
+        @JvmStatic
+        override fun setup() = super.setup()
 
         @AfterClass
         @JvmStatic
