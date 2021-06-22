@@ -3,11 +3,14 @@
  */
 package zakadabar.stack.data.entity
 
+import kotlinx.serialization.Serializable
+
 /**
  * This BO is a global empty entity. It is used when we need a BO for type safety
  * but we actually don't want one, most notably in ActionBusinessLogicBase and
  * QueryBusinessLogicBase.
  */
+@Serializable
 object EmptyEntityBo : EntityBo<EmptyEntityBo> {
 
     override var id: EntityId<EmptyEntityBo>

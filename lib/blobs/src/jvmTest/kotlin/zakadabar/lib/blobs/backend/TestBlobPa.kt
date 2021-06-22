@@ -5,14 +5,15 @@ package zakadabar.lib.blobs.backend
 
 import org.jetbrains.exposed.dao.id.LongIdTable
 import zakadabar.stack.backend.util.default
+import zakadabar.stack.data.entity.EmptyEntityBo
 
-class TestBlobExposedPa : BlobExposedPa<TestBlob>(
+class TestBlobExposedPa : BlobExposedPa<TestBlob, EmptyEntityBo>(
     table = TestBlobExposedTable,
 ) {
     override fun newInstance() = default<TestBlob> {  }
 }
 
-object TestBlobExposedTable : BlobExposedTable<TestBlob>(
+object TestBlobExposedTable : BlobExposedTable<TestBlob, EmptyEntityBo>(
     tableName = "test_blob",
     referenceTable = TestBlobReferenceExposedTable
 )

@@ -3,7 +3,9 @@
  */
 package zakadabar.lib.blobs.backend
 
-class TestBlobBl : BlobBlBase<TestBlob>(
+import zakadabar.stack.data.entity.EmptyEntityBo
+
+class TestBlobBl : BlobBlBase<TestBlob, EmptyEntityBo>(
      TestBlob::class,
      TestBlobExposedPa()
 ) {

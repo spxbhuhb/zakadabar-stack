@@ -41,8 +41,8 @@ abstract class BlobBoCompanion<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
     suspend fun download(id : EntityId<T>) =
         comm.download(id)
 
-    suspend fun byReference(reference : EntityId<RT>?) =
-        comm.byReference(reference)
+    suspend fun byReference(reference : EntityId<RT>?, disposition : String? = null) =
+        comm.byReference(reference, disposition)
 
     @Deprecated("EOL: 2021.7.1  --  use byReference instead", ReplaceWith("byReference(reference)"))
     suspend fun listByReference(reference : EntityId<RT>) =

@@ -35,7 +35,7 @@ class BlobBlTest {
         val contentText = "almafa"
         val contentBytes = contentText.encodeToByteArray()
 
-        val bo = TestBlob(EntityId(), null, "test.txt", "text/plain", 0)
+        val bo = TestBlob(EntityId(), "", null, "test.txt", "text/plain", 0)
             .create()
             .upload(contentBytes)
 

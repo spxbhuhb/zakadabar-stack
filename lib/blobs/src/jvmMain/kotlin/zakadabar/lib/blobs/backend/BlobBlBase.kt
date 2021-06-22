@@ -148,6 +148,6 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
      */
     @PublicApi
     open fun byReference(entityId: EntityId<RT>, disposition: String? = null) =
-        pa.listByReference(entityId, disposition)
+        pa.byReference(entityId, disposition)
 
 }

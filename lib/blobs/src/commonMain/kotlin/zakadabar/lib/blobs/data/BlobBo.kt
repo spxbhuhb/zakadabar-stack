@@ -18,8 +18,6 @@ interface BlobBo<T : BlobBo<T,RT>, RT : EntityBo<RT>> : EntityBo<T> {
 
     override fun comm() : BlobCommInterface<T,RT>
 
-    suspend fun download() = comm().download(id)
-
     /**
      * Uploads binary data for this blob. Overrides existing data.
      *
