@@ -39,9 +39,9 @@ abstract class BlobExposedPa<T : BlobBo<T>>(
         this[table.size] = bo.size
     }
 
-    fun listByReference(id: EntityId<*>) =
+    fun byReference(id: EntityId<*>?) =
         table
-            .select { table.reference eq id.toLong() }
+            .select { table.reference eq id?.toLong() }
             .map { it.toBo() }
 
     fun writeContent(id: EntityId<T>, content: ByteArray) {
@@ -54,7 +54,6 @@ abstract class BlobExposedPa<T : BlobBo<T>>(
             .select { table.id eq id.toLong() }
             .mapNotNull { it[table.content]?.bytes }
             .first()
-
 }
 
 

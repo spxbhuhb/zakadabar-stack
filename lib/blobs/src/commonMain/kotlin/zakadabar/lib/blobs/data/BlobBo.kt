@@ -18,6 +18,16 @@ interface BlobBo<T : BlobBo<T>> : EntityBo<T> {
 
     override fun comm() : BlobCommInterface<T>
 
+    /**
+     * Uploads binary data for this blob. Overrides existing data.
+     *
+     * @param   data   ByteArray for JVM, Blob for JavaScript.
+     */
+    @Suppress("UNCHECKED_CAST")
+    suspend fun upload(data : Any) = comm().upload(this as T, data)
+
+    suspend fun download() = comm().download(id)
+
     override fun schema() = BoSchema {
         + ::name min 1 max 200
         + ::mimeType min 1 max 100

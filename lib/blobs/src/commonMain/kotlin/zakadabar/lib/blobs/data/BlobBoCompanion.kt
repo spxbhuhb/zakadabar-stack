@@ -25,12 +25,27 @@ abstract class BlobBoCompanion<T : BlobBo<T>>(
             _comm = value
         }
 
+    suspend fun read(id: EntityId<T>) = comm.read(id)
+
+    suspend fun delete(id: EntityId<T>) = comm.delete(id)
+
+    suspend fun all() = comm.all()
+
+    suspend fun allAsMap() = comm.all().associateBy { it.id }
+
     abstract fun serializer(): KSerializer<T>
 
     suspend fun upload(bo : T, data: Any, callback: (bo : T, state: BlobCreateState, uploaded: Long) -> Unit) =
         comm.upload(bo, data, callback)
 
+    suspend fun download(id : EntityId<T>) =
+        comm.download(id)
+
+    suspend fun byReference(reference : EntityId<out BaseBo>?) =
+        comm.byReference(reference)
+
+    @Deprecated("EOL: 2021.7.1  --  use byReference instead", ReplaceWith("byReference(reference)"))
     suspend fun listByReference(reference : EntityId<out BaseBo>) =
-        comm.listByReference(reference)
+        byReference(reference)
 
 }

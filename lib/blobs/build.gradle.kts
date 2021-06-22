@@ -16,6 +16,8 @@ version = rootProject.extra["stackVersion"] as String
 
 val isSnapshot = version.toString().contains("SNAPSHOT")
 
+val ktorVersion = rootProject.extra["ktorVersion"] as String
+
 noArg {
     annotation("kotlinx.serialization.Serializable")
 }
@@ -34,6 +36,17 @@ kotlin {
 
     sourceSets["commonMain"].dependencies {
         implementation(project(":core"))
+    }
+
+    sourceSets["commonTest"].dependencies {
+        implementation(kotlin("test-common"))
+        implementation(kotlin("test-annotations-common"))
+        implementation(kotlin("test-junit"))
+    }
+
+    sourceSets["jvmTest"].dependencies {
+        implementation("io.ktor:ktor-server-netty:$ktorVersion")
+        implementation("com.h2database:h2:1.4.200")
     }
 
 }

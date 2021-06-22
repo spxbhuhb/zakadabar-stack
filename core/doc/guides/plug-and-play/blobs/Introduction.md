@@ -2,6 +2,15 @@
 
 Blobs is a simple module to handle files and images.
 
+## General Concept
+
+Blobs are entities that store metadata and binary data. The metadata contains:
+
+- name of the blob
+- mime type of the binary data
+- size of the binary data
+- optionally, a reference to another entity
+
 ## Setup
 
 To use blobs in your application:
@@ -63,6 +72,16 @@ class TestBlobBl : BlobBlBase<TestBlob>(
 
 **persistence api**
 
+<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Reference Table">
+
+In the example below a reference table named `TextExposedTableGen` is used. You 
+should replace this with an Exposed ID table which stores the entities that
+may be referenced by these blobs. If you do not plan on using references
+(which is actually quite rare) just create an empty table as reference table.
+
+</div>
+
+
 ```kotlin
 import zakadabar.lib.blobs.backend.BlobExposedPa
 import zakadabar.lib.blobs.backend.BlobExposedTable
@@ -91,6 +110,60 @@ server += TestBlobBl()
 ```kotlin
 + ZkImagesField(this, TestBlob.comm, bo.id) {
    TestBlob(EntityId(), bo.id, it.name, it.type, it.size.toLong())
+}
+```
+
+## Use
+
+### Create
+
+```kotlin
+val content = "almafa".encodeToByteArray()
+val name = "test.txt"
+val mimeType = "text/plain"
+val reference : TestReferenceBo = null
+
+val bo = TestBlob(EntityId(), reference, name, mimeType, 0)
+   .create()
+   .upload(content)
+```
+
+### Update
+
+This update is **not transactional**.
+
+```kotlin
+val bo = TestBlob
+   .read(id)
+   .apply { name = "newtest.txt" }
+   .update()
+   .upload(newContent)
+```
+
+### Download
+
+```kotlin
+val bo = TestBlob.read(id)
+val bytes = bo.download()
+```
+
+Shorthand with `id`:
+
+```kotlin
+TestBlob.download(bo.id)
+```
+
+### Delete
+
+```kotlin
+TestBlob.delete(id)
+```
+
+### List By Reference
+
+```kotlin
+TestBlob.byReference(referenceId).forEach { bo ->
+    val bytes = bo.download()
 }
 ```
 
