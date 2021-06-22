@@ -6,6 +6,7 @@ This roadmap is something we would like to follow. Please note that we cannot gu
 
 ### Core
 
+* upgrade to Ktor 1.6.0
 * minor improvements
 * date and time editors for the frontend
 * form
