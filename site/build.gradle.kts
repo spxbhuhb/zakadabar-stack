@@ -12,6 +12,10 @@ plugins {
     application
     signing
     `maven-publish`
+
+    id("zk-sync-build-info") apply false
+    id("site-compose-app") apply false
+    id("site-docker") apply false
 }
 
 group = "hu.simplexion.zakadabar"
@@ -56,78 +60,23 @@ tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJ
     // seems like this does not work - minimize()
 }
 
-val syncBuildInfo by tasks.registering(Sync::class) {
-    from("$projectDir/template/zkBuild")
-    inputs.property("version", project.version)
-    filter { line: String ->
-        line.replace("@version@", "${project.version}")
-            .replace("@projectName@", project.name)
-            .replace("@stackVersion@", "${rootProject.childProjects["core"]?.version ?: "unknown"}")
-    }
-    into("$projectDir/src/jvmMain/resources")
+apply(plugin = "zk-sync-build-info")
+apply(plugin = "site-compose-app")
+apply(plugin = "site-docker")
+
+docker {
+
+    dependsOn(tasks["zkBuild"], tasks["zkDockerPrepare"], tasks["zkDockerCopy"])
+
+    name = project.name
+    // this throws unsupported operation exception -- tags.add(version.toString())
+
+    pull(true)
+    setDockerfile(file("Dockerfile"))
+
 }
 
-tasks["compileKotlinJvm"].dependsOn(syncBuildInfo)
-
-val distDir = "$buildDir/${project.name}-$version-server"
-
-val copyAppStruct by tasks.registering(Copy::class) {
-    from("$projectDir/template/app")
-    into(distDir)
-    include("**")
-    exclude("**/.gitignore")
-
-    filter { line: String ->
-        line.replace("@version@", "${project.version}")
-    }
-}
-
-val copyAppLib by tasks.registering(Copy::class) {
-    from("$buildDir/libs")
-    into("$distDir/lib")
-    include("${base.archivesBaseName}-${project.version}-all.jar")
-}
-
-val copyAppIndex by tasks.registering(Copy::class) {
-    from("$buildDir/distributions")
-    into("$distDir/var/static")
-    include("index.html")
-    filter { line: String ->
-        line.replace("""src="/${project.name}.js"""", """src="/${project.name}-${project.version}.js"""")
-    }
-}
-
-val copyAppStatic by tasks.registering(Copy::class) {
-    from("$buildDir/distributions")
-    into("$distDir/var/static")
-    include("**")
-
-    exclude("index.html")
-    exclude("*.tar")
-    exclude("*.zip")
-
-    rename("${project.name}.js", "${project.name}-${project.version}.js")
-}
-
-val copyMarkdown by tasks.registering(Copy::class) {
-    from("${rootProject.projectDir}/core/doc")
-    into("$distDir/var/static/doc")
-    include("**/*")
-    includeEmptyDirs = false
-}
-
-val copyAppUsr by tasks.registering(Copy::class) {
-    from("$projectDir")
-    into("$distDir/usr")
-    include("README.md")
-    include("LICENSE.txt")
-}
-
-val appDistZip by tasks.registering(Zip::class) {
-    dependsOn(copyAppStruct, copyAppLib, copyAppStatic, copyAppIndex, copyMarkdown, copyAppUsr)
-
-    archiveFileName.set("${base.archivesBaseName}-${project.version}-app.zip")
-    destinationDirectory.set(file("$buildDir/app"))
-
-    from("$buildDir/appDist")
+val zkDocker by tasks.creating(Task::class) {
+    group = "zakadabar"
+    dependsOn(tasks.getByName("docker"))
 }
