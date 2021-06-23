@@ -2,6 +2,7 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
+import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
@@ -24,7 +25,7 @@ abstract class DockerPrepareTask : DefaultTask() {
         val fromPath = Paths.get(rootDir, "template/docker/Dockerfile")
         val toPath = Paths.get(buildDir, "docker/Dockerfile")
 
-        val content = Files.readString(fromPath)
+        val content = String(Files.readAllBytes(fromPath), StandardCharsets.UTF_8)
 
         val newContent = content
             .replace("@projectName@", project.name)
