@@ -47,6 +47,6 @@ object StatusExposedTableGen : ExposedPaTable<StatusBo>(
     tableName = "content_status"
 ) {
 
-    internal val name = varchar("name", 100)
+    val name = varchar("name", 100)
 
 }

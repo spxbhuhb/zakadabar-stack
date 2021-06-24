@@ -73,11 +73,11 @@ open class BlobExposedTable<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
     tableName
 ) {
 
-    internal val reference = reference("reference", referenceTable).nullable()
-    internal val disposition = varchar("disposition", 200)
-    internal val name = varchar("name", 200)
-    internal val mimeType = varchar("mime_type", 100)
-    internal val size = long("size")
-    internal val content = blob("content").nullable()
+    val reference = reference("reference", referenceTable).nullable()
+    val disposition = varchar("disposition", 200)
+    val name = varchar("name", 200)
+    val mimeType = varchar("mime_type", 100)
+    val size = long("size")
+    val content = blob("content").nullable()
 
 }

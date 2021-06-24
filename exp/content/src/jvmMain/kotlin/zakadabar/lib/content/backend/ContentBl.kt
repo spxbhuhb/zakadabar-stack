@@ -167,7 +167,9 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
         return localized
     }
 
-    private fun seoPath(bo: ContentBo): List<String> {
+    private fun seoPath(bo: ContentBo) = seoPathOrNull(bo) ?: throw NoSuchElementException()
+
+    private fun seoPathOrNull(bo: ContentBo): List<String>? {
         val locale = bo.locale
             ?: throw IllegalArgumentException("localized BO ${bo.id} locale is null, cannot find SEO path")
 
@@ -179,7 +181,7 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
 
         while (master.parent != null) {
             master = pa.read(master.parent !!)
-            localized = pa.readLocalized(master.id, locale)
+            localized = pa.readLocalizedOrNull(master.id, locale) ?: return null
             seoPath += localized.seoTitle
         }
 
@@ -234,6 +236,31 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
     // -------------------------------------------------------------------------
 
     /**
+     * Get the SEO path for the given locale and master id.
+     *
+     * @param   localeId  Id of the locale to get the SEO path version for.
+     * @param   masterId  Id of the master content.
+     *
+     * @return  the seo path or null if it cannot be built because a localized version is missing
+     */
+    @PublicApi
+    fun seoPathOrNull(localeId: EntityId<LocaleBo>, masterId: EntityId<ContentBo>) =
+        localizedOrNull(localeId, masterId)?.let { seoPathOrNull(it)?.joinToString("/") }
+
+    /**
+     * Get the SEO path for the given locale and master id.
+     *
+     * @param   localeId  Id of the locale to get the SEO path version for.
+     * @param   masterId  Id of the master content.
+     *
+     * @throws  NoSuchElementException  when the locale is unknown
+     *                                  when there is no localized version
+     */
+    @PublicApi
+    fun seoPath(localeId: EntityId<LocaleBo>, masterId: EntityId<ContentBo>) =
+        seoPath(localized(localeId, masterId)).joinToString("/")
+
+    /**
      * Read the localized version of the content based on the
      * locale of the executor and the id of the master.
      *
@@ -263,6 +290,19 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
     @PublicApi
     fun localized(localeId: EntityId<LocaleBo>, masterId: EntityId<ContentBo>) =
         pa.readLocalized(masterId, localeId)
+
+    /**
+     * Read the  localized version of the content based on the
+     * locale of the executor and the id of the master.
+     *
+     * @param   localeId  Id of the locale to get the localized version for.
+     * @param   masterId  Id of the master content.
+     *
+     * @return  the localized version or null if no localized version found
+     */
+    @PublicApi
+    fun localizedOrNull(localeId: EntityId<LocaleBo>, masterId: EntityId<ContentBo>) =
+        pa.readLocalizedOrNull(masterId, localeId)
 
     /**
      * Read the master and the localized versions of the content based on the

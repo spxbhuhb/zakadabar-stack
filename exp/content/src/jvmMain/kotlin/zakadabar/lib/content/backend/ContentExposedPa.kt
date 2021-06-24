@@ -59,11 +59,15 @@ open class ContentExposedPa : ExposedPaBase<ContentBo, ContentExposedTable>(
         return bo
     }
 
-    fun readLocalized(master: EntityId<ContentBo>, locale: EntityId<LocaleBo>) : ContentBo {
+    fun readLocalized(master: EntityId<ContentBo>, locale: EntityId<LocaleBo>) =
+        readLocalizedOrNull(master, locale) ?: throw NoSuchElementException("masterId=$master localeId=$locale")
+
+    fun readLocalizedOrNull(master: EntityId<ContentBo>, locale: EntityId<LocaleBo>): ContentBo? {
         val bo = table
             .select { (table.master eq master.toLong()) and (table.locale eq locale.toLong()) }
-            .first()
-            .toBo()
+            .firstOrNull()
+            ?.toBo()
+            ?: return null
 
         bo.textBlocks = textTable
             .select { textTable.content eq bo.id.toLong() }
@@ -132,14 +136,14 @@ open class ContentExposedPa : ExposedPaBase<ContentBo, ContentExposedTable>(
                 )
             }
 
-    fun navQuery(localeId: EntityId<LocaleBo>, parentMasterId : EntityId<ContentBo>?, parentSeoPath : String) : List<NavEntry> =
+    fun navQuery(localeId: EntityId<LocaleBo>, parentMasterId: EntityId<ContentBo>?, parentSeoPath: String): List<NavEntry> =
         localizedChildrenNav(localeId, parentMasterId, parentSeoPath).onEach { entry ->
             if (entry.folder) {
                 entry.children = navQuery(localeId, entry.masterId, entry.seoPath)
             }
         }
 
-    private fun localizedChildrenNav(locale: EntityId<LocaleBo>, parentMasterId : EntityId<ContentBo>?, parentSeoPath : String): List<NavEntry> {
+    private fun localizedChildrenNav(locale: EntityId<LocaleBo>, parentMasterId: EntityId<ContentBo>?, parentSeoPath: String): List<NavEntry> {
         val jt = table.alias("jt")
         return table
             .innerJoin(jt, { table.master }, { jt[table.id] })
@@ -158,7 +162,7 @@ open class ContentExposedPa : ExposedPaBase<ContentBo, ContentExposedTable>(
             }
     }
 
-    fun thumbnailQuery(localeId: EntityId<LocaleBo>, parentMasterId : EntityId<ContentBo>?, parentSeoPath : String): List<ThumbnailEntry> {
+    fun thumbnailQuery(localeId: EntityId<LocaleBo>, parentMasterId: EntityId<ContentBo>?, parentSeoPath: String): List<ThumbnailEntry> {
         val jt = table.alias("jt")
 
         return table
@@ -211,23 +215,23 @@ object ContentExposedTable : ExposedPaTable<ContentBo>(
     tableName = "content"
 ) {
 
-    internal val modifiedAt = timestamp("modified_at")
-    internal val modifiedBy = reference("modified_by", AccountPrivateExposedTableGen)
-    internal val status = reference("status", StatusExposedTableGen)
-    internal val folder = bool("folder")
-    internal val parent = reference("parent", ContentExposedTable).nullable()
-    internal val master = reference("master", ContentExposedTable).nullable()
-    internal val position = long("position")
-    internal val locale = reference("locale", LocaleExposedTableGen).nullable()
-    internal val title = varchar("title", 100)
-    internal val seoTitle = varchar("seo_title", 100).index()
+    val modifiedAt = timestamp("modified_at")
+    val modifiedBy = reference("modified_by", AccountPrivateExposedTableGen)
+    val status = reference("status", StatusExposedTableGen)
+    val folder = bool("folder")
+    val parent = reference("parent", ContentExposedTable).nullable()
+    val master = reference("master", ContentExposedTable).nullable()
+    val position = long("position")
+    val locale = reference("locale", LocaleExposedTableGen).nullable()
+    val title = varchar("title", 100)
+    val seoTitle = varchar("seo_title", 100).index()
 
 }
 
 object TextBlockExposedTable : Table("content_text") {
 
-    internal val content = reference("content", ContentExposedTable).index()
-    internal val stereotype = varchar("stereotype", 100)
-    internal val value = text("value")
+    val content = reference("content", ContentExposedTable).index()
+    val stereotype = varchar("stereotype", 100)
+    val value = text("value")
 
 }
