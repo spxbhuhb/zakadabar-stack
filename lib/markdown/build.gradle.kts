@@ -37,6 +37,6 @@ kotlin {
 
     sourceSets["jsMain"].dependencies {
         implementation(npm("highlight.js", "10.7.2"))
-        api("org.jetbrains:markdown:0.2.4-SNAPSHOT")
+        api("org.jetbrains:markdown:0.2.4")
     }
 }

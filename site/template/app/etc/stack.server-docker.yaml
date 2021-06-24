@@ -1,0 +1,23 @@
+serverName: Zakadabar Site
+defaultLocale: en
+
+database:
+  driverClassName: org.h2.Driver
+  jdbcUrl: "jdbc:h2:./app/var/db"
+  username: test
+  password: Almafa.12
+  debugSql: false
+
+traceRouting: false
+staticResources: /local/site/var/static
+
+modules:
+  - zakadabar.site.backend.Module
+
+#ktor:
+#  port: 8080
+#  websocket:
+#    pingPeriod: 60
+#    timeout: 15
+#    maxFrameSize: 1000000
+#    masking: false

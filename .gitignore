@@ -23,7 +23,6 @@
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
-gradle
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
@@ -95,6 +94,9 @@ fabric.properties
 *.rar
 *.tar
 *.zip
+
+## Commit wrapper as per Gradle convention
+!gradle/wrapper/gradle-wrapper.jar
 
 # Logs and databases #
 ######################
