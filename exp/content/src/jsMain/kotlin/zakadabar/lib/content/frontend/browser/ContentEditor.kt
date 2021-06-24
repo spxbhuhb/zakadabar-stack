@@ -104,7 +104,7 @@ class ContentEditorForm : ZkForm<ContentBo>() {
                     }
 
                     + select(bo::locale) { LocaleBo.all().by { it.name } } readOnly true
-                    + bo::title
+                    + textarea(bo::title)
                 }
 
                 + buttons()
