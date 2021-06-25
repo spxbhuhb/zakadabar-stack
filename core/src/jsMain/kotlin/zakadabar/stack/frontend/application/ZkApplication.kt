@@ -11,6 +11,7 @@ import zakadabar.stack.frontend.builtin.dock.ZkDock
 import zakadabar.stack.frontend.builtin.modal.ZkModalContainer
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
+import zakadabar.stack.frontend.util.decodeURIComponent
 import zakadabar.stack.resources.ZkBuiltinStrings
 import zakadabar.stack.resources.ZkStringStore
 import zakadabar.stack.resources.localizedStrings
@@ -32,16 +33,20 @@ val executor
  * Global string store that contains the translated strings to show to the user.
  * This is usually not a ZkBuiltinStrings in itself but an extension of it.
  */
-@Deprecated("EOL: 2021.8.1 import stringStore from `zakadabar.stack.resources`", ReplaceWith(
-    "localizedStrings", "zakadabar.stack.resources.localizedStrings"
-))
+@Deprecated(
+    "EOL: 2021.8.1 import stringStore from `zakadabar.stack.resources`", ReplaceWith(
+        "localizedStrings", "zakadabar.stack.resources.localizedStrings"
+    )
+)
 val stringStore
     get() = localizedStrings
 
-@Deprecated("EOL: 2021.8.1 use `localized` from `zakadabar.stack.resources`", ReplaceWith(
-    "localized<T>()", "zakadabar.stack.resources.localized"
-))
-inline fun <reified T> translate() = localizedStrings.getNormalized(T::class.simpleName!!)
+@Deprecated(
+    "EOL: 2021.8.1 use `localized` from `zakadabar.stack.resources`", ReplaceWith(
+        "localized<T>()", "zakadabar.stack.resources.localized"
+    )
+)
+inline fun <reified T> translate() = localizedStrings.getNormalized(T::class.simpleName !!)
 
 /**
  * Find a routing target.
@@ -77,7 +82,7 @@ inline fun <reified T : ZkAppRouting.ZkTarget> target() = application.routing.fi
  */
 open class ZkApplication {
 
-    lateinit var sessionManager : ZkSessionManager
+    lateinit var sessionManager: ZkSessionManager
 
     lateinit var locale: String
 
@@ -133,7 +138,9 @@ open class ZkApplication {
         }
 
         window.addEventListener("popstate", onPopState)
-        routing.onNavStateChange(ZkNavState(window.location.pathname, window.location.search, window.location.hash))
+
+        val path = decodeURIComponent(window.location.pathname)
+        routing.onNavStateChange(ZkNavState(path, window.location.search, window.location.hash))
         window.dispatchEvent(Event(navStateChangeEvent))
     }
 
@@ -147,12 +154,12 @@ open class ZkApplication {
         routing.init()
     }
 
-    suspend fun initLocale(store: ZkBuiltinStrings, defaultLocale : String? = null) {
-        val path = window.location.pathname.trim('/')
+    suspend fun initLocale(store: ZkBuiltinStrings, defaultLocale: String? = null) {
+        val path = decodeURIComponent(window.location.pathname).trim('/')
 
         locale = when {
             path.isNotEmpty() -> path.substringBefore('/')
-            ::executor.isInitialized && executor.account.locale.isNotBlank()-> executor.account.locale
+            ::executor.isInitialized && executor.account.locale.isNotBlank() -> executor.account.locale
             ::serverDescription.isInitialized && serverDescription.defaultLocale.isNotBlank() -> serverDescription.defaultLocale
             else -> defaultLocale ?: ""
         }
@@ -172,7 +179,9 @@ open class ZkApplication {
     }
 
     private val onPopState = fun(_: Event) {
-        routing.onNavStateChange(ZkNavState(window.location.pathname, window.location.search, window.location.hash))
+        // FIXME clarify use of decodeURIComponent
+        val path = decodeURIComponent(window.location.pathname)
+        routing.onNavStateChange(ZkNavState(path, window.location.search, window.location.hash))
         window.dispatchEvent(Event(navStateChangeEvent))
     }
 

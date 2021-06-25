@@ -1,10 +1,12 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.util
 
 import zakadabar.stack.data.BaseBo
 import kotlin.reflect.KClass
+
+external fun decodeURIComponent(encodedURI: String): String
 
 /**
  * Creates a new instance of the given class.
