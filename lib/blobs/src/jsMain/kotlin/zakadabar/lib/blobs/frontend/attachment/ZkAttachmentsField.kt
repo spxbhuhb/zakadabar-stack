@@ -16,165 +16,58 @@
  */
 package zakadabar.lib.blobs.frontend.attachment
 
-import kotlinx.browser.window
-import org.w3c.dom.DragEvent
-import org.w3c.dom.events.Event
-import org.w3c.dom.get
 import org.w3c.files.File
 import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobCommInterface
 import zakadabar.lib.blobs.data.BlobCreateState
+import zakadabar.lib.blobs.frontend.ZkBlobField
+import zakadabar.lib.blobs.frontend.ZkBlobFieldEntry
 import zakadabar.lib.blobs.frontend.blobStyles
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.fields.ZkFieldBase
-import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
-import zakadabar.stack.frontend.resources.ZkFlavour
-import zakadabar.stack.frontend.resources.ZkIcons
-import zakadabar.stack.frontend.resources.css.AlignItems
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.resources.localizedStrings
-import zakadabar.stack.text.capitalized
+import kotlin.reflect.KClass
 
+/**
+ * Form field to handle attachments.
+ *
+ * Ways to create the blob instances (in order of precedence):
+ *
+ * - override [makeBlob]
+ * - pass [makeBlobCb]
+ * - pass [blobClass]
+ *
+ * When none of the above is used, an [IllegalStateException] is thrown on
+ * blob create attempts.
+ *
+ * @param   form             The form this field belongs to.
+ * @param   reference        The entity to which these images belong.
+ * @param   blobCountMax     Maximum number of images allowed.
+ * @param   disposition      Disposition of images, saved to the `disposition` field of the image.
+ * @param   blobClass        The class of blob instances. When no special initialization is needed,
+ *                           the field can create the blobs by itself from this class.
+ * @param   makeBlobCb       Callback function to make a blob instance.
+ */
 open class ZkAttachmentsField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
     form: ZkForm<T>,
-    private val comm: BlobCommInterface<BT, T>,
-    private val reference: EntityId<T>? = null,
-    private val attachmentCountMax: Int? = null,
-    private val disposition: String? = null,
-    private val make: (File) -> BT
-) : ZkFieldBase<T, Unit>(
-    form = form,
-    propName = ""
+    comm: BlobCommInterface<BT, T>,
+    reference: EntityId<T>? = null,
+    blobCountMax: Int? = null,
+    disposition: String? = null,
+    blobClass: KClass<BT>? = null,
+    makeBlobCb: ((File) -> BT)? = null
+) : ZkBlobField<T,BT>(
+    form, comm, reference, blobCountMax, disposition, blobClass, makeBlobCb
 ) {
 
-    open lateinit var droparea: ZkElement
-
     override fun onCreate() {
-        io {
-            + blobStyles.attachmentField
-
-            form.fields += this@ZkAttachmentsField
-
-            if (form.mode != ZkElementMode.Create) {
-                reference?.let {
-                    comm.listByReference(it, disposition).forEach { blob ->
-                        + ZkAttachmentEntry(blob, onDelete = { preview -> onDelete(preview) }) marginRight 10 marginBottom 10
-                    }
-                }
-            }
-
-            droparea = zke {
-
-                + div(blobStyles.imageDropArea) {
-                    + column(blobStyles.imageDropAreaMessage) {
-                        + AlignItems.center
-                        + ZkButton(ZkIcons.cloudUpload, flavour = ZkFlavour.Custom) marginBottom 10
-                        + div {
-                            buildPoint.style.whiteSpace = "nowrap"
-                            + localizedStrings.dropFilesHere
-                        }
-                    }
-                }
-
-                on("drop", ::onDrop)
-                on("dragover", ::onDragOver)
-
-            } marginRight 10 marginBottom 10
-
-            + droparea
-            updateDropArea()
-        }
+        super.onCreate()
+        + blobStyles.attachmentField
     }
 
-    private fun onDragOver(event: Event) {
-        event.preventDefault()
+    override fun makeEntry(blob: BT, state : BlobCreateState?): ZkBlobFieldEntry<BT> {
+        return ZkAttachmentEntry(blob, state, onDelete = { preview -> onDelete(preview) })
+            .apply { this marginRight 10 marginBottom 10 }
     }
-
-    private fun onDrop(event: Event) {
-        event.stopPropagation()
-        event.preventDefault()
-
-        if (! allowUpload()) {
-            window.alert(localizedStrings.cannotAttachMoreImage)
-            return
-        }
-
-        if (event !is DragEvent) return
-
-        val dataTransfer = event.dataTransfer ?: return
-
-        for (index in 0..dataTransfer.items.length) {
-
-            val item = dataTransfer.items[index] ?: continue
-
-            when (item.kind) {
-                "file" -> {
-                    val file = item.getAsFile() ?: continue
-
-                    // template::class(EntityId(), null, "", file.name, file.type, file.size.toLong())
-                    io {
-                        val bo = make(file).create()
-
-                        val entry = ZkAttachmentEntry(bo, BlobCreateState.Starting, onDelete = { preview -> onDelete(preview) })
-                        entry marginRight 10 marginBottom 10
-
-                        // this will insert after the first thumbnail or at the beginning
-                        insertAfter(entry, find<ZkAttachmentEntry<*>>().lastOrNull())
-                        updateDropArea()
-
-                        io { // this second IO block is here, so the the upload will be launched in the background
-                            comm.upload(bo, file, entry::update)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun allowUpload(): Boolean {
-        return (attachmentCountMax == null || attachmentCountMax - childElements.count { it is ZkAttachmentEntry<*> } > 0)
-    }
-
-    private fun updateDropArea() {
-        if (allowUpload()) {
-            droparea.show()
-        } else {
-            droparea.hide()
-        }
-    }
-
-    private suspend fun onDelete(preview: ZkAttachmentEntry<BT>): Boolean {
-        if (! ZkConfirmDialog(localizedStrings.confirmation.capitalized(), localizedStrings.confirmDelete).run()) return false
-
-        if (form.mode != ZkElementMode.Create) {
-            comm.delete(preview.bo.id)
-        }
-
-        this@ZkAttachmentsField -= preview
-
-        updateDropArea()
-
-        return true
-    }
-
-    override fun onValidated(report: ValidityReport) {
-
-    }
-
-    override suspend fun onCreateSuccess(created: EntityBo<*>) {
-        // update blobs with the proper reference id
-        find<ZkAttachmentEntry<BT>>().forEach {
-            @Suppress("UNCHECKED_CAST") // it is right
-            it.bo.reference = created.id as EntityId<T>
-            it.bo.update()
-        }
-    }
-
 
 }

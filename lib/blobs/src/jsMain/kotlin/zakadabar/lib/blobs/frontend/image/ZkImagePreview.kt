@@ -6,31 +6,24 @@ package zakadabar.lib.blobs.frontend.image
 import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobCreateState
 import zakadabar.lib.blobs.data.url
+import zakadabar.lib.blobs.frontend.ZkBlobFieldEntry
 import zakadabar.lib.blobs.frontend.blobStyles
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.resources.css.px
 import zakadabar.stack.frontend.util.io
 
 open class ZkImagePreview<BT : BlobBo<BT,*>>(
-    var bo: BT,
-    var createState: BlobCreateState? = null,
-    var progress: Long? = null,
-    var size: Int = 200,
-    var onDelete: suspend (preview: ZkImagePreview<BT>) -> Boolean = { false }
-) : ZkElement() {
+    bo: BT,
+    createState: BlobCreateState? = null,
+    progress: Long? = null,
+    size: Int = 200,
+    private val showMeta : Boolean = false,
+    onDelete: suspend (preview: ZkBlobFieldEntry<BT>) -> Boolean = { false }
+) : ZkBlobFieldEntry<BT>(
+    bo, createState, progress, size, onDelete
+) {
 
-    override fun onCreate() {
-        render()
-    }
-
-    fun update(bo: BT, createState: BlobCreateState, progress: Long) {
-        this.bo = bo
-        this.createState = createState
-        this.progress = progress
-        render()
-    }
-
-    private fun render() = build {
+    override fun render() {
         clear()
 
         when (createState) {
@@ -73,11 +66,13 @@ open class ZkImagePreview<BT : BlobBo<BT,*>>(
                     }
                 }
  //           }
-            + div(blobStyles.imageName) {
-                + bo.name
-            }
-            + div(blobStyles.imageMimeType) {
-                + bo.mimeType
+            if (showMeta) {
+                + div(blobStyles.imageName) {
+                    + bo.name
+                }
+                + div(blobStyles.imageMimeType) {
+                    + bo.mimeType
+                }
             }
         }
     }

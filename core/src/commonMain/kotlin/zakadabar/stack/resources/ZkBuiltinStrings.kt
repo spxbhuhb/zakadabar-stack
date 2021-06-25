@@ -22,7 +22,9 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val actions by "Actions"
     open val back by "Back"
     open val cancel by "cancel"
+    @Deprecated("EOL: 2021.8.1  -  replace with cannotAddMore", ReplaceWith("cannotAddMore"))
     open val cannotAttachMoreImage by "Image count maximum reached, cannot add more images."
+    open val cannotAddMore by "Maximum reached, cannot add more."
     open val close by "close"
     open val confirmDelete by "Are you sure you want to delete?"
     open val confirmation by "Please Confirm"
