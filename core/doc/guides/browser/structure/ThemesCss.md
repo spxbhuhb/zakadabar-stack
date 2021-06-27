@@ -139,12 +139,12 @@ val exampleStyles by cssStyleSheet(ExampleStyles())
 
 open class ExampleStyles : ZkCssStyleSheet() {
 
-    open var myStyleParameter by cssParameter { 10 }
+    open var myStyleParameter by cssParameter { 10.px }
     open var backgroundColor by cssParameter { theme.dangerColor }
 
     open val exampleStyle by cssClass {
         height = myStyleParameter
-        width = 20
+        width = 20.px
         backgroundColor = this@ExampleStyles.backgroundColor
     }
 
@@ -286,7 +286,44 @@ You can use extension functions to convert numbers to strings:
 80.fr
 ```
 
-### Shorthands
+### Value Shorthands
+
+There are few shorthands to use CSS keywords. You can use these in CSS rules
+or directly on ZkElements. 
+
+- AlignItems
+- AlignSelf
+- BoxSizing
+- Cursor
+- Display
+- FlexDirection
+- FontWeight
+- JustifyContent
+- JustifySelf
+- Position
+- Overflow
+- OverflowX
+- OverflowY
+- TextAlign
+- TextTransform
+- UserSelect  
+- WhiteSpace
+
+```kotlin
+val myClass by cssClass {
+    + JustifyContent.spaceAround
+}
+```
+
+```kotlin
+class MyElement : ZkElement() {
+    open fun onCreate() {
+        + JustifyContent.spaceAround
+    }
+}
+```
+
+### Selector Shorthands
 
 There are some shorthand selectors defined for convenience. Use them like this:
 

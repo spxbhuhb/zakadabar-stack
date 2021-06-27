@@ -6,10 +6,26 @@ Blobs is a simple module to handle files and images.
 
 Blobs are entities that store metadata and binary data. The metadata contains:
 
-- name of the blob
-- mime type of the binary data
-- size of the binary data
-- optionally, a reference to another entity
+- `disposition` (**do not confuse** with disposition of Content-Type, see below)
+- `name` of the blob, usually the name of the file
+- `mimeType` of the binary data
+- `size` of the binary data
+- `reference` a reference to another entity, optional
+
+This library offers a base class for blobs which you have to extend.
+
+### Disposition
+
+`disposition` is a free, optinal string you may use to categorize the blobs.
+For example "thumbnail", "icon", "background" may be used to categorize images.
+
+You can pass the disposition to the `byReference` method, this querying only
+the blobs of the given disposition.
+
+Also, you can pass the disposition to `ZkImagesField` and `ZkAttachmentsField`
+form fields which will query and add blobs with that disposition. Adding more
+than one of these fields with disposition makes it possible to separate 
+the blobs on the UI.
 
 ## Setup
 
@@ -19,9 +35,9 @@ To use blobs in your application:
 1. extend BlobBo, BL and PA classes (see below)
 1. add the module to your server configuration, for details see [Modules](../../backend/Modules.md),
 1. use these classes in your UI code as needed:
-    - [ZkFullScreenImageView](../../../../../lib/blobs/src/jsMain/kotlin/zakadabar/lib/blobs/frontend/image/ZkFullScreenImageView.kt)
-    - [ZkImagePreview](../../../../../lib/blobs/src/jsMain/kotlin/zakadabar/lib/blobs/frontend/image/ZkImagePreview.kt)
-    - [ZkImagesField](../../../../../lib/blobs/src/jsMain/kotlin/zakadabar/lib/blobs/frontend/image/ZkImagesField.kt)
+    - [ZkFullScreenImageView](../../../../../lib/blobs/src/jsMain/kotlin/zakadabar/lib/blobs/frontend/image/ZkFullScreenImageView.kt) - full screen image view modal
+    - [ZkImagesField](../../../../../lib/blobs/src/jsMain/kotlin/zakadabar/lib/blobs/frontend/image/ZkImagesField.kt) - form field for images
+    - [ZkAttachmentsField](../../../../../lib/blobs/src/jsMain/kotlin/zakadabar/lib/blobs/frontend/attachment/ZkAttachmentsField.kt) - form field for attachments
 
 **gradle**
 
@@ -38,19 +54,22 @@ import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityId
 import kotlinx.serialization.Serializable
 
+// FIXME replace EmptyEntityBo with your referenced BO
+// FIXME change namespace
 @Serializable
 class TestBlob(
-    override var id: EntityId<TestBlob>,
-    override var reference: EntityId<out BaseBo>?,
-    override var name: String,
-    override var mimeType: String,
-    override var size: Long
-) : BlobBo<TestBlob> {
+   override var id: EntityId<TestBlob>,
+   override var disposition: String,
+   override var reference: EntityId<EmptyEntityBo>?,
+   override var name: String,
+   override var mimeType: String,
+   override var size: Long
+) : BlobBo<TestBlob, EmptyEntityBo> {
 
-    companion object : BlobBoCompanion<TestBlob>("zkl-test-blob")
+   companion object : BlobBoCompanion<TestBlob, EmptyEntityBo>("zkl-test-blob")
 
-    override fun getBoNamespace() = boNamespace
-    override fun comm() = comm
+   override fun getBoNamespace() = boNamespace
+   override fun comm() = comm
 
 }
 ```
@@ -58,15 +77,14 @@ class TestBlob(
 **business logic**
 
 ```kotlin
-import zakadabar.lib.blobs.backend.BlobBlBase
-import zakadabar.stack.backend.authorize.Authorizer
-import zakadabar.stack.backend.authorize.EmptyAuthorizer
+import zakadabar.stack.data.entity.EmptyEntityBo
 
-class TestBlobBl : BlobBlBase<TestBlob>(
+// FIXME replace EmptyEntityBo with your referenced BO
+class TestBlobBl : BlobBlBase<TestBlob, EmptyEntityBo>(
    TestBlob::class,
    TestBlobExposedPa()
 ) {
-   override val authorizer: Authorizer<TestBlob> = EmptyAuthorizer()
+   override val authorizer by provider()
 }
 ```
 
@@ -74,8 +92,8 @@ class TestBlobBl : BlobBlBase<TestBlob>(
 
 <div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Reference Table">
 
-In the example below a reference table named `TextExposedTableGen` is used. You 
-should replace this with an Exposed ID table which stores the entities that
+In the example below a reference table named `TestBlobReferenceExposedTable` is 
+used. You should replace this with an Exposed ID table which stores the entities that
 may be referenced by these blobs. If you do not plan on using references
 (which is actually quite rare) just create an empty table as reference table.
 
@@ -83,19 +101,28 @@ may be referenced by these blobs. If you do not plan on using references
 
 
 ```kotlin
-import zakadabar.lib.blobs.backend.BlobExposedPa
-import zakadabar.lib.blobs.backend.BlobExposedTable
+import org.jetbrains.exposed.dao.id.LongIdTable
 import zakadabar.stack.backend.util.default
+import zakadabar.stack.data.entity.EmptyEntityBo
 
-class TestBlobExposedPa : BlobExposedPa<TestBlob>(
-    table = TestBlobExposedTable,
+// FIXME replace EmptyEntityBo with your reference BO
+class TestBlobExposedPa : BlobExposedPa<TestBlob, EmptyEntityBo>(
+   table = TestBlobExposedTable,
 ) {
-    override fun newInstance() = default<TestBlob> {  }
+   override fun newInstance() = default<TestBlob> {  }
 }
 
-object TestBlobExposedTable : BlobExposedTable<TestBlob>(
-    tableName = "test_blob",
-    referenceTable = TestExposedTableGen
+// FIXME set table name
+// FIXME replace EmptyEntityBo with your reference class
+// FIXME replace reference table with your reference BO table
+object TestBlobExposedTable : BlobExposedTable<TestBlob, EmptyEntityBo>(
+   tableName = "test_blob",
+   referenceTable = TestBlobReferenceExposedTable
+)
+
+// FIXME remove this table 
+object TestBlobReferenceExposedTable : LongIdTable(
+   "test_blob_ref",
 )
 ```
 
@@ -107,10 +134,53 @@ server += TestBlobBl()
 
 **browser**
 
+Image field:
+
 ```kotlin
-+ ZkImagesField(this, TestBlob.comm, bo.id) {
-   TestBlob(EntityId(), bo.id, "", it.name, it.type, it.size.toLong())
-}
+ + ZkImagesField(
+     this@Form,
+     comm = TestBlob.comm,
+     reference = bo.id,
+     blobClass = TestBlob::class
+)
+```
+
+Image field with additional settings:
+
+```kotlin
++ ZkImagesField(
+   this@Form,
+   comm = TestBlob.comm,
+   reference = bo.id,
+   blobCountMax = 2,
+   disposition = TestDisposition.image,
+   blobClass = TestBlob::class,
+   showMeta = true
+)
+```
+
+Attachment field:
+
+```kotlin
++ ZkAttachmentsField(
+   this@ContentEditorForm,
+   comm = TestBlob.comm,
+   reference = bo.id,
+   blobClass = TestBlob::class
+)
+```
+
+Attachment field with additional settings:
+
+```kotlin
++ ZkAttachmentsField(
+   this@Form,
+   comm = TestBlob.comm,
+   reference = bo.id,
+   blobCountMax = 2,
+   disposition = TestDisposition.attachment,
+   blobClass = TestBlob::class
+)
 ```
 
 ## Use
@@ -161,15 +231,23 @@ TestBlob.delete(id)
 
 ### List By Reference
 
+All referenced blobs:
+
 ```kotlin
 TestBlob.byReference(referenceId).forEach { bo ->
     val bytes = bo.download()
 }
 ```
 
+Blobs with given disposition:
+
+```kotlin
+TestBlob.byReference(referenceId, "my-disposition").forEach { bo ->
+    val bytes = bo.download()
+}
+```
+
 ## Database
 
-The module uses SQL for data persistence. At first run it creates these SQL
-objects automatically.
-
-The tables created depend on the table objects you create.
+The module uses SQL for data persistence. At first run the business logic creates
+the SQL table used by the PA automatically.

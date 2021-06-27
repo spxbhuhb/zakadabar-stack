@@ -17,7 +17,7 @@ fun Authentication.Configuration.configureEmpty(name: String? = null) {
     val provider = AuthenticationProvider(EmptyAuthenticationProvider.Configuration(name))
 
     provider.pipeline.intercept(AuthenticationPipeline.RequestAuthentication) { context ->
-        context.principal(KtorExecutor(EntityId("anonymous"), true, emptyList(), emptyList(), ""))
+        context.principal(KtorExecutor(EntityId("anonymous"), true, emptyList(), emptyList()))
     }
 
     register(provider)

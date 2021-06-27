@@ -13,7 +13,6 @@ import zakadabar.stack.data.entity.EntityId
  * @property  anonymous  True when this executor is the anonymous account (public, not logged in).
  * @property  roleIds    List of the ids of the roles this account has.
  * @property  roleNames  List of the names of the roles this account has.
- * @property  locale     Id of the locale this account prefers.
  */
 open class Executor(
 
@@ -21,7 +20,6 @@ open class Executor(
     val anonymous: Boolean,
     val roleIds: List<EntityId<out BaseBo>>,
     val roleNames: List<String>,
-    val locale: String
 
 ) {
 

@@ -134,34 +134,32 @@ class ContentEditorForm : ZkForm<ContentBo>() {
                 + section(contentStrings.thumbnail) {
                     + ZkImagesField(
                         this@ContentEditorForm,
-                        AttachedBlobBo.comm,
-                        bo.id,
-                        disposition = AttachedBlobDisposition.thumbnail
-                    ) {
-                        AttachedBlobBo(EntityId(), bo.id, AttachedBlobDisposition.thumbnail, it.name, it.type, it.size.toLong())
-                    }
+                        comm = AttachedBlobBo.comm,
+                        blobCountMax = 1,
+                        reference = bo.id,
+                        disposition = AttachedBlobDisposition.thumbnail,
+                        blobClass = AttachedBlobBo::class
+                    )
                 }
 
                 + section(contentStrings.images) {
                     + ZkImagesField(
                         this@ContentEditorForm,
-                        AttachedBlobBo.comm,
-                        bo.id,
-                        disposition = AttachedBlobDisposition.image
-                    ) {
-                        AttachedBlobBo(EntityId(), bo.id, AttachedBlobDisposition.image, it.name, it.type, it.size.toLong())
-                    }
+                        comm = AttachedBlobBo.comm,
+                        reference = bo.id,
+                        disposition = AttachedBlobDisposition.image,
+                        blobClass = AttachedBlobBo::class
+                    )
                 }
 
                 + section(contentStrings.attachments) {
                     + ZkAttachmentsField(
                         this@ContentEditorForm,
-                        AttachedBlobBo.comm,
-                        bo.id,
-                        disposition = AttachedBlobDisposition.attachment
-                    ) {
-                        AttachedBlobBo(EntityId(), bo.id, AttachedBlobDisposition.attachment, it.name, it.type, it.size.toLong())
-                    }
+                        comm = AttachedBlobBo.comm,
+                        reference = bo.id,
+                        disposition = AttachedBlobDisposition.attachment,
+                        blobClass = AttachedBlobBo::class
+                    )
                 }
             }
 

@@ -145,7 +145,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
 
         pa.withTransaction {
 
-            val executor = Executor(so.id, false, emptyList(), emptyList(), so.locale)
+            val executor = Executor(so.id, false, emptyList(), emptyList())
 
             auditor.auditCreate(executor, so)
             auditor.auditCreate(executor, anonymous)

@@ -19,7 +19,6 @@ class SessionBo(
     val account: AccountPublicBo,
     val anonymous: Boolean,
     val roles: List<String>,
-    val locale: String,
     val serverDescription: ServerDescriptionBo
 
 ) : EntityBo<SessionBo> {

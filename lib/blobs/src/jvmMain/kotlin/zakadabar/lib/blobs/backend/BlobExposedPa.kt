@@ -52,7 +52,6 @@ abstract class BlobExposedPa<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
 
     }
 
-
     open fun writeContent(id: EntityId<T>, content: ByteArray) {
         table.update({ table.id eq id.toLong() }) { it[table.content] = ExposedBlob(content) }
     }

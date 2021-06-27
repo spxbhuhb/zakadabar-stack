@@ -25,7 +25,7 @@ fun Authentication.Configuration.configureSession(name: String? = null) {
     val sessionBl by module<KtorSessionBl>()
     val accountBl by module<AccountBlProvider>()
     val executor = accountBl.anonymous().let {
-        KtorExecutor(it.id, true, emptyList(), emptyList(), it.locale)
+        KtorExecutor(it.id, true, emptyList(), emptyList())
     }
 
     val provider = AuthenticationProvider(SessionAuthenticationProvider.Configuration(name))
@@ -35,7 +35,7 @@ fun Authentication.Configuration.configureSession(name: String? = null) {
         // when there is a session, use it
 
         call.sessions.get<StackSession>()?.let {
-            context.principal(KtorExecutor(it.account, it.anonymous, it.roleIds, it.roleNames, it.locale))
+            context.principal(KtorExecutor(it.account, it.anonymous, it.roleIds, it.roleNames))
             return@intercept
         }
 
@@ -46,16 +46,16 @@ fun Authentication.Configuration.configureSession(name: String? = null) {
         credentials?.let {
             transaction {
                 val session = sessionBl.login(executor, LoginAction(credentials.name, Secret(credentials.password)))
-                context.principal(KtorExecutor(session.account, session.anonymous, session.roleIds, session.roleNames, session.locale))
+                context.principal(KtorExecutor(session.account, session.anonymous, session.roleIds, session.roleNames))
             }
             return@intercept
         }
 
         val anonymous = accountBl.anonymous()
-        val session = StackSession(anonymous.id, true, emptyList(), emptyList(), anonymous.locale)
+        val session = StackSession(anonymous.id, true, emptyList(), emptyList())
 
         call.sessions.set(session)
-        context.principal(KtorExecutor(session.account, session.anonymous, session.roleIds, session.roleNames, session.locale))
+        context.principal(KtorExecutor(session.account, session.anonymous, session.roleIds, session.roleNames))
 
         if (call.attributes.getOrNull(LoginTimeoutKey) == true) {
             server.onLoginTimeout(call)
