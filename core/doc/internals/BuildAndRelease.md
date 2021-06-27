@@ -15,7 +15,7 @@ Switch to the `ak/kt-15` branch, then `gradle publishToMavenLocal`
     - move current to archive
     - add 'YYYY.MM.DD.md' as current
     - change title in the markdown file from Snapshot to YYYY.MM.DD
-- change version numbers in `build.gradle.kts` of all published projects
+- change version numbers in root `build.gradle.kts`
 
 ## Build and Publish
 
