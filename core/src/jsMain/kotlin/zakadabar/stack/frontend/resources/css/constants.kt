@@ -115,7 +115,7 @@ object FontWeight {
 object WhiteSpace {
     val normal = CssValueConst("white-space", "normal")
     val nowrap = CssValueConst("white-space", "nowrap")
-    val pre = CssValueConst("white-space", "nowrap")
+    val pre = CssValueConst("white-space", "pre")
     val preWrap = CssValueConst("white-space", "pre-wrap")
     val preLine = CssValueConst("white-space", "pre-line")
     val breakSpaces = CssValueConst("white-space", "break-spaces")

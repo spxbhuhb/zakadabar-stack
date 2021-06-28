@@ -35,9 +35,15 @@ class ZkNavState(val urlPath: String, val urlQuery: String, val urlHashtag: Stri
 
         if (segments.size < 2) {
 
-            locale = ""
+            if (segments.isEmpty()) {
+                locale = ""
+                hash = ""
+            } else {
+                val parts = segments[0].split('#')
+                locale = parts[0]
+                hash = (if (parts.size > 1) parts[1] else urlHashtag).trim('#')
+            }
             viewName = ""
-            hash = ""
             recordId = EntityId<BaseBo>()
             query = null
             args = null
