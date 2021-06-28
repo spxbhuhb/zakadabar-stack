@@ -261,23 +261,6 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
         seoPath(localized(localeId, masterId)).joinToString("/")
 
     /**
-     * Read the localized version of the content based on the
-     * locale of the executor and the id of the master.
-     *
-     * @param   executor  Executor of the operation.
-     * @param   masterId  Id of the master content.
-     *
-     * @throws  NoSuchElementException  when the locale is unknown
-     *                                  when there is no localized version
-     */
-    @PublicApi
-    fun localized(executor: Executor, masterId: EntityId<ContentBo>) =
-        localized(
-            localeBl.byName(executor.locale)?.id ?: throw IllegalStateException("missing locale: ${executor.locale}"),
-            masterId
-        )
-
-    /**
      * Read the  localized version of the content based on the
      * locale of the executor and the id of the master.
      *
@@ -303,25 +286,6 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
     @PublicApi
     fun localizedOrNull(localeId: EntityId<LocaleBo>, masterId: EntityId<ContentBo>) =
         pa.readLocalizedOrNull(masterId, localeId)
-
-    /**
-     * Read the master and the localized versions of the content based on the
-     * locale of the executor.
-     *
-     * @param   executor  Executor of the operation.
-     * @param   entityId  Id of the content to read. May be the master or the
-     *                    localized version, the function sorts it out.
-     *
-     * @throws  NoSuchElementException  when the locale is unknown
-     *                                  when there is no master version
-     *                                  when there is no localized version
-     */
-    @PublicApi
-    fun masterAndLocalized(executor: Executor, entityId: EntityId<ContentBo>): Pair<ContentBo, ContentBo> =
-        masterAndLocalized(
-            localeBl.byName(executor.locale)?.id ?: throw IllegalStateException("missing locale: ${executor.locale}"),
-            entityId
-        )
 
     /**
      * Read the master and the localized versions of the content.
