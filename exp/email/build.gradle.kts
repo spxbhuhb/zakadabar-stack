@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
 plugins {
@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.5.18-SNAPSHOT"
+version = "2021.6.29"
 
 noArg {
     annotation("kotlinx.serialization.Serializable")
@@ -35,4 +35,7 @@ kotlin {
         implementation(project(":core"))
     }
 
+    sourceSets["jvmMain"].dependencies {
+        implementation("javax.mail:mail:1.5.0-b01")
+    }
 }
