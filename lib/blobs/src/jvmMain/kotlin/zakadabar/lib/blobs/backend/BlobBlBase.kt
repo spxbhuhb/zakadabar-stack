@@ -132,7 +132,10 @@ abstract class BlobBlBase<T : BlobBo<T>>(
             pa.byReference(referenceId)
         }
 
-        call.respond(result)
+        // Without Any the compiler throws an exception because non-reified
+        // types with recursive bounds are not supported yet.
+
+        call.respond(result as Any)
     }
 
 }
