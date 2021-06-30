@@ -14,11 +14,12 @@ pluginManagement {
 include("core")
 
 include("exp:content")
+include("exp:email")
+include("exp:scheduler")
 
 include("lib:accounts")
 include("lib:bender")
 include("lib:blobs")
-include("lib:cards")
 include("lib:demo")
 include("lib:examples")
 include("lib:i18n")

@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.7.1-SNAPSHOT"
+version = "2021.6.29"
 
 noArg {
     annotation("kotlinx.serialization.Serializable")
@@ -35,4 +35,7 @@ kotlin {
         implementation(project(":core"))
     }
 
+    sourceSets["jvmMain"].dependencies {
+        implementation("javax.mail:mail:1.5.0-b01")
+    }
 }
