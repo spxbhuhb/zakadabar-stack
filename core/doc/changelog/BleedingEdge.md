@@ -54,6 +54,11 @@ Search for `QueryBusinessLogicBase` and add `List` to second parameter
 
 ---
 
+Search for `ZkCssStyleSheet` and fix errors:
+
+- add unit numbers, see [Size Values](/doc/guides/browser/structure/ThemesCss.md#Size-Values)
+- add `.0` for double values (flexGrow)
+
 ## Core
 
 added:

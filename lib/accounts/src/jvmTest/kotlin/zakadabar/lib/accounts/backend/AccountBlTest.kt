@@ -8,14 +8,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
-import zakadabar.stack.RolesBase
 import zakadabar.stack.backend.server
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-object Roles : RolesBase() {
-    val myRole by "my-role"
-}
 
 class AccountBlTest {
 
@@ -40,7 +36,6 @@ class AccountBlTest {
             roleBl.getByName(Roles.securityOfficer)
             roleBl.getByName(Roles.siteAdmin)
             roleBl.getByName(Roles.siteMember)
-            roleBl.getByName(Roles.anonymous)
             roleBl.getByName(Roles.myRole)
 
             val so = accountBl.byName("so")
@@ -53,8 +48,7 @@ class AccountBlTest {
             assertTrue(Roles.siteMember in soRoles)
 
             val anonymousRoles = accountBl.roles(anonymous.id).map { it.second }
-            assertEquals(1, anonymousRoles.size)
-            assertTrue(Roles.anonymous in anonymousRoles)
+            assertEquals(0, anonymousRoles.size)
         }
     }
 

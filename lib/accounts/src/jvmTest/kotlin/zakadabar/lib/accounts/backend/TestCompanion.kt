@@ -5,7 +5,7 @@ package zakadabar.lib.accounts.backend
 
 import kotlinx.coroutines.runBlocking
 import zakadabar.lib.accounts.data.LoginAction
-import zakadabar.stack.StackRoles
+import zakadabar.stack.DefaultRoles
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizerProvider
@@ -41,7 +41,7 @@ object TestModule : BackendModule {
         install(Roles)
 
         server += SimpleRoleAuthorizerProvider {
-            all = StackRoles.siteMember
+            all = DefaultRoles().siteMember
         }
     }
 

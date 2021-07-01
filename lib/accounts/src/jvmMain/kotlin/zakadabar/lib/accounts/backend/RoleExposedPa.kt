@@ -10,7 +10,6 @@ import zakadabar.lib.accounts.data.ModuleSettings
 import zakadabar.lib.accounts.data.RoleBo
 import zakadabar.lib.accounts.data.RoleGrantBo
 import zakadabar.stack.backend.exposed.Sql
-import zakadabar.stack.backend.exposed.entityId
 import zakadabar.stack.backend.setting.setting
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.account.AccountPublicBo
@@ -49,7 +48,7 @@ class RoleExposedPa : RoleExposedPaGen() {
 
     fun accountsByRole(roleId: EntityId<RoleBo>): List<AccountPublicBo> {
         val grants = RoleGrantExposedTable
-        val accounts = AccountPrivateExposedTableGen
+        val accounts = AccountPrivateExposedTable
 
         return grants
             .innerJoin(accounts, { grants.account }, { accounts.id })
@@ -80,7 +79,7 @@ class RoleExposedPa : RoleExposedPaGen() {
         if (exists) return
 
         grants.insert {
-            it[account] = EntityID(grant.account.toLong(), AccountPrivateExposedTableGen)
+            it[account] = EntityID(grant.account.toLong(), AccountPrivateExposedTable)
             it[role] = EntityID(grant.role.toLong(), RoleExposedTableGen)
         }
     }
@@ -96,7 +95,7 @@ class RoleExposedPa : RoleExposedPaGen() {
 
 object RoleGrantExposedTable : Table("role_grant") {
 
-    internal val account = reference("account", AccountPrivateExposedTableGen)
+    internal val account = reference("account", AccountPrivateExposedTable)
     internal val role = reference("role", RoleExposedTableGen)
 
     override val primaryKey = PrimaryKey(account, role)

@@ -8,14 +8,10 @@ import kotlin.reflect.KProperty
 
 lateinit var StackRoles : RolesBase
 
-open class RolesBase {
+abstract class RolesBase {
 
     val map: MutableMap<String, String> = mutableMapOf()
 
-    open val securityOfficer by "security-officer"
-    open val siteMember by "site-member"
-    open val siteAdmin by "site-admin"
-    open val anonymous by "anonymous"
 
     class RoleDelegate : ReadOnlyProperty<RolesBase, String> {
         override fun getValue(thisRef: RolesBase, property: KProperty<*>): String {

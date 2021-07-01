@@ -7,7 +7,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
-import zakadabar.stack.StackRoles
+import zakadabar.stack.DefaultRoles
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.PUBLIC
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.persistence.EmptyPersistenceApi
@@ -50,11 +50,10 @@ class SimpleRoleAuthorizerTest {
 
         val withPublic = server.first<WithPublic>()
 
-        val anonymousRoleId = server.first<RoleBlProvider>().getByName(StackRoles.anonymous)
-        val siteMemberRoleId = server.first<RoleBlProvider>().getByName(StackRoles.siteMember)
+        val siteMemberRoleId = server.first<RoleBlProvider>().getByName(DefaultRoles().siteMember)
 
-        val siteMember = Executor(EntityId(1), false, listOf(siteMemberRoleId), listOf(StackRoles.siteMember))
-        val anonymous = Executor(EntityId(2), true, listOf(anonymousRoleId), listOf(StackRoles.anonymous))
+        val siteMember = Executor(EntityId(1), false, listOf(siteMemberRoleId), listOf(DefaultRoles().siteMember))
+        val anonymous = Executor(EntityId(2), true, emptyList(), emptyList())
 
         with(withPublic.authorizer) {
             authorizeList(anonymous)

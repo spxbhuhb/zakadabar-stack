@@ -9,7 +9,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.`java-time`.timestamp
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import zakadabar.lib.accounts.backend.AccountPrivateExposedTableGen
+import zakadabar.lib.accounts.backend.AccountPrivateExposedTable
 import zakadabar.lib.content.data.*
 import zakadabar.lib.i18n.backend.LocaleExposedTableGen
 import zakadabar.lib.i18n.data.LocaleBo
@@ -216,7 +216,7 @@ object ContentExposedTable : ExposedPaTable<ContentBo>(
 ) {
 
     val modifiedAt = timestamp("modified_at")
-    val modifiedBy = reference("modified_by", AccountPrivateExposedTableGen)
+    val modifiedBy = reference("modified_by", AccountPrivateExposedTable)
     val status = reference("status", StatusExposedTableGen)
     val folder = bool("folder")
     val parent = reference("parent", ContentExposedTable).nullable()

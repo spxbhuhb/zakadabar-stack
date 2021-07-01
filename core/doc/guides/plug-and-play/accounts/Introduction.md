@@ -65,10 +65,13 @@ object Roles : RolesBase() {
 
 #### add module
 
-If you have additional roles:
+If you have additional roles and/or extended AccountPrivateBl:
 
 ```kotlin
-zakadabar.lib.accounts.backend.install(Roles)
+zakadabar.lib.accounts.backend.install(
+  roles = Roles,
+  accountPrivateBl = MyAccountPrivateBl()
+)
 ```
 
 Otherwise (this will use an instance of [RolesBase](/src/commonMain/kotlin/zakadabar/stack/StackRoles.kt)):
@@ -89,8 +92,8 @@ initialSoPassword: so
 # updateDelay: 120
 # expirationCheckInterval: 120
 # emailInAccountPublic: false
+# loginActionRole: ""
 ```
-
 
 ### Frontend
 

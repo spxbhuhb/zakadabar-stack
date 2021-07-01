@@ -28,10 +28,6 @@ class RoleBlTest {
 
     @Test
     fun testAccounsByRole() = runBlocking {
-        var anonymous = AccountsByRole(Roles.anonymous).execute()
-        assertEquals(1, anonymous.size)
-        assertEquals("anonymous", anonymous.first().accountName)
-
         var siteMember = AccountsByRole(Roles.siteMember).execute()
         assertEquals(1, siteMember.size)
         assertEquals("so", siteMember.first().accountName)
@@ -47,10 +43,6 @@ class RoleBlTest {
             locale = "en",
             roles = listOf(RoleBo.all().first { it.name == Roles.siteMember }.id)
         ).execute()
-
-        anonymous = AccountsByRole(Roles.anonymous).execute()
-        assertEquals(1, anonymous.size)
-        assertEquals("anonymous", anonymous.first().accountName)
 
         siteMember = AccountsByRole(Roles.siteMember).execute().sortedBy { it.accountName }
         assertEquals(2, siteMember.size)

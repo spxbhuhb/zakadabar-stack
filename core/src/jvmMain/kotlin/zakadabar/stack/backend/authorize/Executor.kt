@@ -9,6 +9,7 @@ import zakadabar.stack.data.entity.EntityId
 /**
  * Ktor authentication principal id.
  *
+ * @property  isLoggedIn True when the executor is logged in (not anonymous).
  * @property  accountId  The id of the account this executor describes.
  * @property  anonymous  True when this executor is the anonymous account (public, not logged in).
  * @property  roleIds    List of the ids of the roles this account has.
@@ -22,6 +23,8 @@ open class Executor(
     val roleNames: List<String>,
 
 ) {
+
+    val isLoggedIn = ! anonymous
 
     fun hasRole(roleName: String) = roleName in roleNames
 

@@ -26,6 +26,8 @@ open class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
     companion object {
         const val PUBLIC = ""
         private val PUBLIC_ID = EntityId<BaseBo>()
+        const val LOGGED_IN = ""
+        private val LOGGED_IN_ID = EntityId<BaseBo>()
     }
 
     private val roles: SimpleRoleAuthorizationBo = default { }
@@ -49,7 +51,11 @@ open class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
         }
     }
 
-    private fun String.toRoleId() = if (this === PUBLIC) PUBLIC_ID else roleBl.getByName(this)
+    private fun String.toRoleId() = when {
+        this === PUBLIC -> PUBLIC_ID
+        this == LOGGED_IN -> LOGGED_IN_ID
+        else -> roleBl.getByName(this)
+    }
 
     var all: String
         get() = throw NotImplementedError()
@@ -123,6 +129,7 @@ open class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
 
     override fun authorizeList(executor: Executor) {
         if (roles.list === PUBLIC_ID) return
+        if (roles.list === LOGGED_IN_ID && executor.isLoggedIn()) return
         roles.list?.let { authorize(executor, it) } ?: throw Forbidden()
     }
 

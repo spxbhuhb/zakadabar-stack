@@ -11,12 +11,17 @@ import zakadabar.stack.backend.server
 /**
  * @param   roles  Hard-coded roles this application handles. During application
  *                 startup missing roles are added automatically.
+ * @param   accountPrivateBl  The BL instance that provides the account business
+ *                            logic. Defaults to a new [AccountPrivateBl] instance.
  */
-fun install(roles : RolesBase = RolesBase()) {
+fun install(
+    roles : RolesBase = RolesBase(),
+    accountPrivateBl : AccountPrivateBl= AccountPrivateBl()
+) {
 
     StackRoles = roles
 
-    server += AccountPrivateBl()
+    server += accountPrivateBl
     server += RoleBl()
     server += KtorSessionBl()
 

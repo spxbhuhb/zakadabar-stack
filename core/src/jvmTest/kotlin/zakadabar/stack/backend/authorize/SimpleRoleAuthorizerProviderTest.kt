@@ -59,11 +59,10 @@ class SimpleRoleAuthorizerProviderTest {
     @Test
     fun testProvider() = runBlocking {
 
-        val anonymousRoleId = server.first<RoleBlProvider>().getByName(StackRoles.anonymous)
         val siteMemberRoleId = server.first<RoleBlProvider>().getByName(StackRoles.siteMember)
 
         val siteMember = Executor(EntityId(1), false, listOf(siteMemberRoleId), listOf(StackRoles.siteMember))
-        val anonymous = Executor(EntityId(2), true, listOf(anonymousRoleId), listOf(StackRoles.anonymous))
+        val anonymous = Executor(EntityId(2), true, emptyList(), emptyList())
 
         WithDefault.authorizer.authorizeRead(siteMember, EntityId(1))
 

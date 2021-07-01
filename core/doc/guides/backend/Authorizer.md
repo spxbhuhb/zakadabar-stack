@@ -126,6 +126,18 @@ override val authorizer: Authorizer<TestBlob> = SimpleRoleAuthorizer {
 }
 ```
 
+### LOGGED_IN
+
+SimpleRoleAuthorizer supports the special value of `LOGGED_IN`. This is not an
+actual role, but may be used to provide access for all logged-in users:
+
+```kotlin
+override val authorizer: Authorizer<TestBlob> = SimpleRoleAuthorizer {
+    allReads = LOGGED_IN
+    allWrites = StackRoles.siteMember
+}
+```
+
 ## Write an Authorizer
 
 <div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Data Access">

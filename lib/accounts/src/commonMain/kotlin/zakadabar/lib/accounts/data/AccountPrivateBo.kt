@@ -13,7 +13,7 @@ import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoSchema
 
 @Serializable
-class AccountPrivateBo(
+open class AccountPrivateBo(
 
     override var id: EntityId<AccountPrivateBo>,
 

@@ -43,7 +43,13 @@ class ModuleSettings(
      * When true email addresses are put into AccountPublicBo objects.
      * Default is false.
      */
-     var emailInAccountPublic : Boolean = false
+     var emailInAccountPublic : Boolean = false,
+
+    /**
+     * When not empty, this role is required for the user to execute the
+     * LoginAction.
+     */
+    var loginActionRole : String = ""
 
 ) : BaseBo {
 
@@ -54,6 +60,7 @@ class ModuleSettings(
         + ::expirationCheckInterval default expirationCheckInterval
         + ::initialSoPassword default initialSoPassword
         + ::emailInAccountPublic default emailInAccountPublic
+        + ::loginActionRole default loginActionRole
     }
 
 }

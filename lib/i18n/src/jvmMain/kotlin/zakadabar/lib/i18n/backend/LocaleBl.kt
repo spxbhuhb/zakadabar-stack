@@ -4,8 +4,6 @@
 package zakadabar.lib.i18n.backend
 
 import zakadabar.lib.i18n.data.LocaleBo
-import zakadabar.stack.StackRoles
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 
 class LocaleBl : EntityBusinessLogicBase<LocaleBo>(
@@ -14,10 +12,7 @@ class LocaleBl : EntityBusinessLogicBase<LocaleBo>(
 
     override val pa = LocaleExposedPa()
 
-    override val authorizer = SimpleRoleAuthorizer<LocaleBo> {
-        allReads = StackRoles.siteMember
-        allWrites = StackRoles.siteAdmin
-    }
+    override val authorizer by provider()
 
     fun byName(name : String) = pa.byName(name)
 
