@@ -41,8 +41,8 @@ fun main(argv: Array<String>) {
     }
 
     val version : String = properties.getProperty("version") ?: "unknown"
-    val stackVersion : String = properties.getProperty("version") ?: "unknown"
-    val projectName : String = properties.getProperty("version") ?: "unknown"
+    val stackVersion : String = properties.getProperty("stackVersion") ?: "unknown"
+    val projectName : String = properties.getProperty("projectName") ?: "unknown"
 
     moduleLogger.info("server projectName=$projectName version=$version stackVersion=$stackVersion")
 
