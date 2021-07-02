@@ -5,19 +5,25 @@ package zakadabar.lib.accounts.backend
 
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import zakadabar.lib.accounts.data.ModuleSettings
 import zakadabar.lib.accounts.data.RoleBo
 import zakadabar.lib.accounts.data.RoleGrantBo
+import zakadabar.stack.backend.exposed.ExposedPaBase
+import zakadabar.stack.backend.exposed.ExposedPaTable
 import zakadabar.stack.backend.exposed.Sql
+import zakadabar.stack.backend.exposed.entityId
 import zakadabar.stack.backend.setting.setting
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.entity.EntityId
 
 open class RoleExposedPa(
-    open val accountTable : AccountPrivateExposedTable,
-    open val grantTable : RoleGrantExposedTable
-) : RoleExposedPaGen() {
+    open val accountTable: AccountPrivateExposedTable = AccountPrivateExposedTableCommon,
+    open val grantTable: RoleGrantExposedTable = RoleGrantExposedTableCommon
+) : ExposedPaBase<RoleBo, RoleExposedTable>(
+    table = RoleExposedTableCommon
+) {
 
     private val settings by setting<ModuleSettings>()
 
@@ -78,7 +84,7 @@ open class RoleExposedPa(
 
         grantTable.insert {
             it[account] = EntityID(grant.account.toLong(), accountTable)
-            it[role] = EntityID(grant.role.toLong(), RoleExposedTableGen)
+            it[role] = EntityID(grant.role.toLong(), table)
         }
     }
 
@@ -88,14 +94,37 @@ open class RoleExposedPa(
         }
     }
 
+    override fun ResultRow.toBo(): RoleBo {
+        return RoleBo(
+            id = this[table.id].entityId(),
+            name = this[table.name],
+            description = this[table.description]
+        )
+    }
+
+    override fun UpdateBuilder<*>.fromBo(bo: RoleBo) {
+        this[table.name] = bo.name
+        this[table.description] = bo.description
+    }
 }
 
+object RoleExposedTableCommon : RoleExposedTable()
+
+open class RoleExposedTable : ExposedPaTable<RoleBo>(
+    tableName = "role"
+) {
+    val name = varchar("name", 50).index()
+    val description = text("description")
+}
+
+object RoleGrantExposedTableCommon : RoleGrantExposedTable(AccountPrivateExposedTableCommon)
+
 open class RoleGrantExposedTable(
-    accountTable : AccountPrivateExposedTable
+    accountTable: AccountPrivateExposedTable
 ) : Table("role_grant") {
 
     val account = reference("account", accountTable)
-    val role = reference("role", RoleExposedTableGen)
+    val role = reference("role", RoleExposedTableCommon)
 
     override val primaryKey = PrimaryKey(account, role)
 

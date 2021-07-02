@@ -11,6 +11,9 @@ val syncBuildInfo by tasks.registering(Copy::class) {
             .replace("@stackVersion@", "${rootProject.childProjects["core"]?.version ?: "unknown"}")
     }
     into("$projectDir/src/jvmMain/resources")
+}
+
+tasks.named<Copy>("jvmProcessResources") {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 

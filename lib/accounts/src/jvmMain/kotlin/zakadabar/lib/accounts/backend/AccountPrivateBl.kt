@@ -22,13 +22,13 @@ import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.util.BCrypt
 
-open class AccountPrivateBl(
-    override val pa : AccountPrivateExposedPa
-) : EntityBusinessLogicBase<AccountPrivateBo>(
+open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     boClass = AccountPrivateBo::class,
 ), AccountBlProvider {
 
     private val settings by setting<ModuleSettings>()
+
+    override val pa =  AccountPrivateExposedPa()
 
     private lateinit var anonymous: AccountPublicBo
 
@@ -351,7 +351,8 @@ open class AccountPrivateBl(
             account.lastLoginFail = Clock.System.now()
             account.locked = account.locked || (account.loginFailCount > settings.maxFailedLogins)
             pa.commit()
-            auditor.auditCustom(executor) { "login fail accountId=${account.id} accountName=${account.accountName}" }
+            auditor.auditCustom(executor) { "login fail accountId=${account.id} accountName=${account.accountName} count=${account.loginFailCount} locked=${account.locked}" }
+            pa.commit()
             throw result
         }
 
@@ -359,6 +360,8 @@ open class AccountPrivateBl(
         account.loginSuccessCount ++
 
         account.loginFailCount = 0
+
+        pa.update(account)
 
         pa.commit()
     }

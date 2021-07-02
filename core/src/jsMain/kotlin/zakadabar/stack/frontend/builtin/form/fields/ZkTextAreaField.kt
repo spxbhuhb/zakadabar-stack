@@ -19,6 +19,7 @@ package zakadabar.stack.frontend.builtin.form.fields
 import kotlinx.browser.document
 import org.w3c.dom.HTMLTextAreaElement
 import zakadabar.stack.data.BaseBo
+import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.util.plusAssign
@@ -34,6 +35,12 @@ open class ZkTextAreaField<T : BaseBo>(
 
     open val area = document.createElement("textarea") as HTMLTextAreaElement
 
+    override var readOnly: Boolean = (form.mode == ZkElementMode.Read)
+        set(value) {
+            area.disabled = value
+            field = value
+        }
+
     @Suppress("DuplicatedCode") // i don't want to mix this with string field
     override fun buildFieldValue() {
         buildPoint.style.flexGrow = "1"
@@ -41,7 +48,9 @@ open class ZkTextAreaField<T : BaseBo>(
 
         area.classList += ZkFormStyles.textarea
 
-        if (readOnly) area.readOnly = true
+        if (readOnly) {
+            area.disabled = true
+        }
 
         area.value = prop.get()
 

@@ -126,8 +126,8 @@ To have foreign keys referencing accounts or roles, use AccountPrivateBo and Rol
 in your BO definition. These will generate the following code:
 
 ```kotlin
-    internal val account = reference("account", AccountPrivateExposedTableGen)
-    internal val role = reference("role", RoleExposedTableGen)
+    internal val account = reference("account", AccountPrivateExposedTableCommon)
+    internal val role = reference("role", RoleExposedTableCommon)
 ```
 
 To set the entity id of an `AccountPriveteBo` field from an `AccountPublicBo` field:

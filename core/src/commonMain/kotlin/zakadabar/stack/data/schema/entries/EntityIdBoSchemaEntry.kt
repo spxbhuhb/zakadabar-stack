@@ -48,7 +48,7 @@ class EntityIdBoSchemaEntry<T : Any>(
         }
     }
 
-    @Deprecated("EOL: 2021.7.1 - use '?' in the field declaration")
+    @Deprecated("EOL: 2021.7.1  -  use '?' in the field declaration", level = DeprecationLevel.ERROR)
     inner class Empty(@PublicApi val validValue: Boolean) : BoPropertyConstraintImpl<EntityId<*>> {
 
         override fun validate(value: EntityId<*>, report: ValidityReport) {
@@ -60,10 +60,9 @@ class EntityIdBoSchemaEntry<T : Any>(
     }
 
     @PublicApi
-    @Deprecated("EOL: 2021.7.1 - use '?' in the field declaration")
+    @Deprecated("EOL: 2021.7.1  -  use '?' in the field declaration", level = DeprecationLevel.ERROR)
     infix fun empty(validValue: Boolean): EntityIdBoSchemaEntry<T> {
-        rules += Empty(validValue)
-        return this
+        throw NotImplementedError()
     }
 
     @PublicApi

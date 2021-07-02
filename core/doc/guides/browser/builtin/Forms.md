@@ -235,6 +235,8 @@ Use the `readOnly` function to set a field read-only:
 + bo::name readOnly true
 ```
 
+<div data-zk-enrich="ReadOnlyBuiltinForm"></div>
+
 #### newSecret
 
 Use the `newSecret` function to set autocomplete of secret fields to `new-password`.

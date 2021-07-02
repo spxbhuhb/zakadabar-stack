@@ -66,7 +66,7 @@ open class ZkElement(
          * Use this function when you need to fetch data asynchronously during building
          * the element.
          */
-        @Deprecated("use zke { io { ... } } instead", ReplaceWith("zke"))
+        @Deprecated("EOL: 2021.8.1  -  use zke { io { ... } } instead", ReplaceWith("zke"))
         fun launchBuildNew(builder: suspend ZkElement.() -> Unit) = ZkElement().launchBuild(builder)
 
         /**
@@ -75,7 +75,7 @@ open class ZkElement(
          *
          * Use this function when there is no need to asynchronous data fetch.
          */
-        @Deprecated("use zke { ... } instead", ReplaceWith("zke"))
+        @Deprecated("EOL: 2021.8.1  -  use zke { ... } instead", ReplaceWith("zke"))
         fun buildNew(builder: ZkElement.() -> Unit) = ZkElement().build(builder)
 
         @PublicApi
@@ -768,7 +768,7 @@ open class ZkElement(
         return childElements.filter { kClass.isInstance(it) } as List<T>
     }
 
-    @Deprecated("use first instead", ReplaceWith("first<T>()"))
+    @Deprecated("EOL: 2021.8.1  -  use first instead", ReplaceWith("first<T>()"))
     inline fun <reified T : ZkElement> findFirst(): T {
         val kClass = T::class
         @Suppress("UNCHECKED_CAST") // checking for class

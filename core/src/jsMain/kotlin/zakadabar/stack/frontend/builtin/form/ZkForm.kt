@@ -261,6 +261,9 @@ open class ZkForm<T : BaseBo>(
                     ZkElementMode.Create -> {
                         val created = (bo as EntityBo<*>).create() as EntityBo<*>
                         fields.forEach { it.onCreateSuccess(created) }
+                        @Suppress("UNCHECKED_CAST")
+                        onCreateSuccess(created as T)
+
                         if (goBackAfterCreate) {
                             onBack()
                         } else {
@@ -326,6 +329,15 @@ open class ZkForm<T : BaseBo>(
      */
     open fun onInvalidSubmit() {
         invalidToast = toastWarning(hideAfter = 3000) { localizedStrings.invalidFieldsToast }
+    }
+
+    /**
+     * Called after a create submit succeeded.
+     *
+     * @param  created  The BO that the server sent back.
+     */
+    open fun onCreateSuccess(created: T) {
+
     }
 
     /**
@@ -404,7 +416,7 @@ open class ZkForm<T : BaseBo>(
     fun fieldGrid(build: ZkElement.() -> Unit) =
         grid(style = "grid-template-columns: $fieldGridColumnTemplate; gap: 0; grid-auto-rows: $fieldGridRowTemplate", build = build)
 
-    @Deprecated("use simple section instead", ReplaceWith("section(title, summary, builder)"))
+    @Deprecated("EOL: 2021.8.1  -  use simple section instead", ReplaceWith("section(title, summary, builder)"))
     fun fieldGridSection(title: String, summary: String = "", css: ZkCssStyleRule? = null, builder: ZkElement.() -> Unit) =
         section(title, summary, true, css, builder)
 
@@ -496,7 +508,7 @@ open class ZkForm<T : BaseBo>(
     /**
      * Field for a new secret (password). Instructs browsers not to fill the content with old password.
      */
-    @Deprecated("use +bo::field newSecret true")
+    @Deprecated("EOL: 2021.8.1  -  use +bo::field newSecret true")
     fun newSecret(prop: KMutableProperty0<Secret>): ZkSecretField<T> {
         val field = ZkSecretField(this@ZkForm, prop, newSecret = true)
         + field
@@ -507,7 +519,7 @@ open class ZkForm<T : BaseBo>(
     /**
      * Field for a new secret (password). Instructs browsers not to fill the content with old password.
      */
-    @Deprecated("use +bo::field newSecret true")
+    @Deprecated("EOL: 2021.8.1  -  use +bo::field newSecret true")
     fun newSecret(prop: KMutableProperty0<Secret?>): ZkOptSecretField<T> {
         val field = ZkOptSecretField(this@ZkForm, prop, newSecret = true)
         + field
@@ -666,23 +678,26 @@ open class ZkForm<T : BaseBo>(
     /**
      * Set the field label.
      */
-    infix fun ZkElement.label(value: String) {
+    infix fun ZkElement.label(value: String): ZkElement {
         if (this is ZkFieldBase<*, *>) this.labelText = value
+        return this
     }
 
     /**
      * Set the field to readonly.
      */
-    infix fun ZkElement.readOnly(value: Boolean) {
+    infix fun ZkElement.readOnly(value: Boolean): ZkElement {
         if (this is ZkFieldBase<*, *>) this.readOnly = value
+        return this
     }
 
     /**
      * Set autoComplete to "new-password".
      */
-    infix fun ZkElement.newSecret(value: Boolean) {
+    infix fun ZkElement.newSecret(value: Boolean): ZkElement {
         if (this is ZkSecretField<*>) this.newSecret = value
         if (this is ZkOptSecretField<*>) this.newSecret = value
+        return this
     }
 
 }

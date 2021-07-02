@@ -16,13 +16,13 @@ import zakadabar.stack.backend.server
  */
 fun install(
     roles: AppRolesBase = AppRolesBase(),
-    accountPrivateBl: AccountPrivateBl = AccountPrivateBl(AccountPrivateExposedPa(AccountPrivateExposedTable()))
+    accountPrivateBl: AccountPrivateBl = AccountPrivateBl()
 ) {
 
     appRoles = roles
 
     server += accountPrivateBl
-    server += RoleBl(RoleExposedPa(accountPrivateBl.pa.table, RoleGrantExposedTable(accountPrivateBl.pa.table)))
+    server += RoleBl()
     server += KtorSessionBl()
 
 }

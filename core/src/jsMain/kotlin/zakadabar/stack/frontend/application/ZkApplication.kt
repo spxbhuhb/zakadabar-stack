@@ -96,7 +96,7 @@ open class ZkApplication {
 
     val stringStores = mutableListOf<ZkStringStore>()
 
-    @Deprecated("EOL: 2021.8.1 import stringStore from `zakadabar.stack.resources`")
+    @Deprecated("EOL: 2021.8.1  -  import stringStore from `zakadabar.stack.resources`")
     lateinit var stringStore: ZkBuiltinStrings
 
     lateinit var dock: ZkDock

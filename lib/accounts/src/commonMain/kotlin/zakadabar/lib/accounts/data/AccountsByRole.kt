@@ -9,7 +9,7 @@ import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.data.query.QueryBoCompanion
 
-@Deprecated("EOL: 2021.7.1  -  use AccountsByRole instead", ReplaceWith("AccountsByRole(roleName)"))
+@Deprecated("EOL: 2021.7.1  -  use AccountsByRole instead", ReplaceWith("AccountsByRole(roleName)"), level = DeprecationLevel.ERROR)
 class AccountByRole(roleName: String) : AccountsByRole(roleName)
 
 @Serializable

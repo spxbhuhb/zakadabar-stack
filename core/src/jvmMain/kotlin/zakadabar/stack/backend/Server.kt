@@ -42,9 +42,9 @@ fun main(argv: Array<String>) {
         stream.close()
     }
 
-    val version : String = properties.getProperty("version") ?: "unknown"
-    val stackVersion : String = properties.getProperty("stackVersion") ?: "unknown"
-    val projectName : String = properties.getProperty("projectName") ?: "unknown"
+    val version: String = properties.getProperty("version") ?: "unknown"
+    val stackVersion: String = properties.getProperty("stackVersion") ?: "unknown"
+    val projectName: String = properties.getProperty("projectName") ?: "unknown"
 
     moduleLogger.info("server projectName=$projectName version=$version stackVersion=$stackVersion")
 
@@ -76,7 +76,7 @@ lateinit var server: Server
 inline fun <reified T : Any> module(noinline selector: (T) -> Boolean = { true }) = server.ModuleDependencyProvider(T::class, selector)
 
 open class Server(
-    version: String
+    val version: String
 ) : CliktCommand() {
 
     companion object {
@@ -110,6 +110,8 @@ open class Server(
 
     lateinit var settings: ServerSettingsBo
 
+    lateinit var description: ServerDescriptionBo
+
     val modules = InstanceStore<BackendModule>()
 
     private val dependencies = mutableListOf<ModuleDependency<*>>()
@@ -127,6 +129,12 @@ open class Server(
         onConfigure()
 
         settings = loadServerSettings()
+
+        description = ServerDescriptionBo(
+            name = settings.serverName,
+            version = version,
+            defaultLocale = settings.defaultLocale,
+        )
 
         Sql.onCreate(settings.database) // initializes SQL connection
 
@@ -335,9 +343,4 @@ open class Server(
 
     }
 
-    open val description = ServerDescriptionBo(
-        name = settings.serverName,
-        version = version,
-        defaultLocale = settings.defaultLocale,
-    )
 }

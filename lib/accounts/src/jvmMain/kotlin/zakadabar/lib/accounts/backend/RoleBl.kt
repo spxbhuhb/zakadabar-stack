@@ -15,11 +15,11 @@ import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.entity.EntityId
 
-open class RoleBl(
-    override val pa: RoleExposedPa
-) : RoleBlProvider, EntityBusinessLogicBase<RoleBo>(
+open class RoleBl : RoleBlProvider, EntityBusinessLogicBase<RoleBo>(
     boClass = RoleBo::class
 ) {
+
+    override val pa = RoleExposedPa()
 
     override val authorizer = SimpleRoleAuthorizer<RoleBo> {
         all = appRoles.securityOfficer

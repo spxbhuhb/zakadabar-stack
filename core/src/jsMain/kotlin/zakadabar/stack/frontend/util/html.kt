@@ -64,7 +64,7 @@ infix fun HTMLElement.height(value: Any): HTMLElement {
     return this
 }
 
-@Deprecated("feels useless")
+@Deprecated("EOL: 2021.8.1  -  replace with css")
 infix fun HTMLElement.flex(value: String): HTMLElement {
     if (value == "grow") {
         classList += zkLayoutStyles.grow
@@ -74,7 +74,7 @@ infix fun HTMLElement.flex(value: String): HTMLElement {
     return this
 }
 
-@Deprecated("feels useless")
+@Deprecated("EOL: 2021.8.1  -  replace with css")
 infix fun HTMLElement.style(value: String): HTMLElement {
     style.cssText = value
     return this

@@ -1,11 +1,10 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.stack.frontend.builtin.table
 
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.log
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
@@ -22,7 +21,7 @@ open class ZkTablePreload<T : Any>(val loader: suspend () -> T) : ReadOnlyProper
         this.table = table
         table.preloads += this
 
-        job = GlobalScope.launch {
+        job = io {
             try {
                 value = loader()
             } catch (ex: Exception) {

@@ -31,7 +31,7 @@ abstract class ZkFieldBase<FT : BaseBo, DT>(
 
     open val labelContainer = document.createElement("div") as HTMLElement
 
-    @Deprecated("EOL: 2021.8.1 use labelText instead", ReplaceWith("labelText"))
+    @Deprecated("EOL: 2021.8.1  -  use labelText instead", ReplaceWith("labelText"))
     open var label
         get() = labelText
         set(value) {

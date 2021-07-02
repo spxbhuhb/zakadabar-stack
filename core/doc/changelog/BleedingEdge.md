@@ -19,16 +19,14 @@ next month.
 - `ValidityReport` now stores BOs instead of implementations
 - `zkFormStyles.buttons` added `marginBlockStart` and `marginBlockEnd`
 - `ZkCssStyleRule` values now are plain strings (instead of any)
-- `Server.version` - remove, use server.description.version instead
 
 **lib: accounts**
 
 - `RolesByAccount` contains `AccountPublicBo` instead of `AccountPrivateBo`
-- `AccountPrivateExposedTable` is now a class instead of object
 - `KtorSessionBl` now checks for `ModuleSettings.loginActionRole` instead of `appRoles.siteMember`
-- `RoleBl` constructor now requires a persistence api
-- `RoleExposedPa` constructor now requires an account and a grant table
-- `RoleGrantExposedTable` is now a class instead of an object
+- `RoleGrantExposedTable` is now a class instead of an object, use `RoleGrantExposedTableCommon` instead
+- `AccountPrivateExposedTable` is now a class instead of object, use `AccountPrivateExposedTableCommon` instead
+- `AccountbyRole` is now called `AccountsByRole`
 
 **lib: blobs**
 
@@ -103,9 +101,15 @@ added:
 - Make server description available without a session #32  
 - `ServerDescriptionQuery` - reads `ServerDescriptionBo` from the server
 - `ServerDescriptionBl` - handles `ServerDescriptionQuery`, added automatically
+- `ZkForm.onCreateSuccess`
 
 changed:
 
+- Kotlin 1.5.20
+- Ktor 1.6.1
+- serialization 1.2.1
+- coroutines 1.5.0
+- datetime 0.2.1  
 - `QueryBo` type parameter is not a list
 - `QueryBoCompanion` has no type parameter
 - `ActionBoCompanion` has no type parameter  
@@ -130,12 +134,14 @@ deprecated:
 
 removed:
 
-- `Server.version` - use `server.description.version` instead
+- `stdlib-jdk8` gradle dependency
 
 fixed:
 
 - The server parameters (stack version and project name) are incorrect #51
 - The GitHub task number is misleading in release note 2021.6.16. #50
+- all form fields support readOnly
+- can chain form field decorator functions (readOnly, label, etc.)
 
 ## Lib : Accounts
 

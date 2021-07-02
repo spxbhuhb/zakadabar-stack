@@ -19,9 +19,9 @@ import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.BCrypt
 
 open class AccountPrivateExposedPa(
-    table : AccountPrivateExposedTable
+    table : AccountPrivateExposedTable = AccountPrivateExposedTableCommon
 ) : ExposedPaBase<AccountPrivateBo, AccountPrivateExposedTable>(
-    table
+    table = table
 ) {
     open fun readByName(name: String) = table.select { table.accountName eq name }.first().toBo()
 
@@ -80,7 +80,9 @@ open class AccountPrivateExposedPa(
     }
 }
 
-class AccountPrivateExposedTable : ExposedPaTable<AccountPrivateBo>(
+object AccountPrivateExposedTableCommon : AccountPrivateExposedTable()
+
+open class AccountPrivateExposedTable : ExposedPaTable<AccountPrivateBo>(
     tableName = "account_private"
 ) {
 

@@ -10,9 +10,8 @@ import io.ktor.client.features.auth.providers.*
 fun httpClientWithAuth(username : String, password: String) = HttpClient {
     install(Auth) {
         basic {
-            sendWithoutRequest = true
-            this.username = username
-            this.password = password
+            credentials { BasicAuthCredentials(username, password) }
+            sendWithoutRequest { true }
         }
     }
 }

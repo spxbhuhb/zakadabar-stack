@@ -90,6 +90,7 @@ class SiteMarkdownContext(
             "FormBuiltinExample" -> FormBuiltinExample(htmlElement)
             "FormDoubleExample" -> FormDoubleExample(htmlElement)
             "FormMultiSectionExample" -> FormMultiSectionExample(htmlElement)
+            "ReadOnlyBuiltinForm" -> FormReadOnlyExample(htmlElement)
             "FormRecordIdExample" -> FormEntityIdExample(htmlElement)
             "FormSimpleExample" -> FormSimpleExample(htmlElement)
             "FormStringExample" -> FormStringExample(htmlElement)

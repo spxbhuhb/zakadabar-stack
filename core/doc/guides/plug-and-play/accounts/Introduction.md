@@ -47,17 +47,14 @@ implementation("hu.simplexion.zakadabar:accounts:$accountsVersion")
 
 #### additional roles
 
-By default, the four roles defined in the stack are added
+By default, one role defined in the stack is added
 
 - security-officer
-- site-admin
-- site-member
-- anonymous
 
 For additional roles, extend the RolesBase class and pass it for install (see below):
 
 ```kotlin
-object Roles : RolesBase() {
+object Roles : AppRolesBase() {
     val myRole1 by "my-role-1"
     val myRole2 by "my-role-2"
 }
@@ -74,7 +71,7 @@ zakadabar.lib.accounts.backend.install(
 )
 ```
 
-Otherwise (this will use an instance of [RolesBase](/src/commonMain/kotlin/zakadabar/stack/StackRoles.kt)):
+Otherwise, (this will use an instance of [AppRolesBase](/src/commonMain/kotlin/zakadabar/stack/authorize/roles.kt)):
 
 ```kotlin
 zakadabar.lib.accounts.backend.install()
@@ -83,7 +80,10 @@ zakadabar.lib.accounts.backend.install()
 
 #### configure settings
 
-For customized settings create a 'lib.account.yaml' file in your settings directory:
+For customized settings create a 'lib.account.yaml' file in your settings directory, 
+check [ModuleSettings](../../../../../lib/accounts/src/commonMain/kotlin/zakadabar/lib/accounts/data/ModuleSettings.kt)
+for description of parameters.
+
 
 ```yaml
 initialSoPassword: so
@@ -154,10 +154,4 @@ Two accounts are automatically created:
 If the settings does not contain an initial `so` password, the account
 will be locked with no password.
 
-Three roles are automatically created and granted to `so`:
-
-- `security-officer` - responsible for security related management
-- `site-admin` - responsible for business related management
-- `site-member` - member of the site
-
-The role `anonymous` is automatically granted to `anonymous`.
+The `security-officer` role is automatically created and granted to `so`:

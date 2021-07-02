@@ -35,7 +35,7 @@ open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
     lateinit var editorClass: KClass<out ZkCrudEditor<T>>
     lateinit var tableClass: KClass<out ZkTable<T>>
 
-    @Deprecated("EOL: 2021.7.1 use editorClass instead", ReplaceWith("editorClass"))
+    @Deprecated("EOL: 2021.7.1  -  use editorClass instead", ReplaceWith("editorClass"), level = DeprecationLevel.ERROR)
     var pageClass
        get() = editorClass
        set(value) {

@@ -8,5 +8,5 @@ import zakadabar.stack.data.entity.EntityBo
 /**
  * Provides common functions used in most CRUD implementations.
  */
-@Deprecated("use zakadabar.stack.frontend.builtin.crud.ZkCrudTarget instead")
+@Deprecated("EOL: 2021.8.1  -  use zakadabar.stack.frontend.builtin.crud.ZkCrudTarget instead")
 open class ZkCrudTarget<T : EntityBo<T>> : zakadabar.stack.frontend.builtin.crud.ZkCrudTarget<T>()
