@@ -30,7 +30,6 @@ import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
 import zakadabar.stack.data.entity.EntityId
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
@@ -103,11 +102,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 
         val anonymous = accountBl.anonymous()
 
-        val serverDescription = ServerDescriptionBo(
-            name = server.settings.serverName,
-            version = server.version,
-            defaultLocale = server.settings.defaultLocale,
-        )
+        val serverDescription = server.description
 
         if (session.account == anonymous.id) {
             SessionBo(

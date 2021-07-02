@@ -4,7 +4,7 @@
 package zakadabar.stack.frontend.application
 
 import zakadabar.stack.data.builtin.account.AccountPublicBo
-import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
+import zakadabar.stack.data.builtin.misc.ServerDescriptionQuery
 import zakadabar.stack.data.entity.EntityId
 
 /**
@@ -29,12 +29,7 @@ class EmptySessionManager : ZkSessionManager {
             roles = emptyList()
         )
 
-        application.serverDescription = ServerDescriptionBo(
-            name = "",
-            version =  "",
-            defaultLocale = ""
-        )
-
+        application.serverDescription = ServerDescriptionQuery().execute()
     }
 
     override suspend fun renew() {

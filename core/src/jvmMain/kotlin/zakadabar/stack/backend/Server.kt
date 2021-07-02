@@ -17,10 +17,12 @@ import io.ktor.server.netty.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.authorize.LoginTimeout
+import zakadabar.stack.backend.builtin.ServerDescriptionBl
 import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.ktor.KtorServerBuilder
 import zakadabar.stack.backend.setting.SettingBl
 import zakadabar.stack.backend.setting.SettingProvider
+import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
 import zakadabar.stack.data.builtin.settings.ServerSettingsBo
 import zakadabar.stack.util.InstanceStore
 import java.nio.file.Files
@@ -74,7 +76,7 @@ lateinit var server: Server
 inline fun <reified T : Any> module(noinline selector: (T) -> Boolean = { true }) = server.ModuleDependencyProvider(T::class, selector)
 
 open class Server(
-    val version: String
+    version: String
 ) : CliktCommand() {
 
     companion object {
@@ -134,6 +136,8 @@ open class Server(
 
         if (firstOrNull<SettingProvider>() == null) this += SettingBl()
 
+        if (firstOrNull<ServerDescriptionBl>() == null) this += ServerDescriptionBl()
+
         resolveDependencies()
 
         initializeDb()
@@ -155,8 +159,7 @@ open class Server(
 
     }
 
-    open fun onBuildServer() =
-        KtorServerBuilder(settings, modules).build() //  build the Ktor server instance
+    open fun onBuildServer() = KtorServerBuilder(settings, modules).build() //  build the Ktor server instance
 
     private fun loadServerSettings(): ServerSettingsBo {
 
@@ -332,4 +335,9 @@ open class Server(
 
     }
 
+    open val description = ServerDescriptionBo(
+        name = settings.serverName,
+        version = version,
+        defaultLocale = settings.defaultLocale,
+    )
 }

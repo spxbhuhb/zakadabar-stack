@@ -19,6 +19,7 @@ next month.
 - `ValidityReport` now stores BOs instead of implementations
 - `zkFormStyles.buttons` added `marginBlockStart` and `marginBlockEnd`
 - `ZkCssStyleRule` values now are plain strings (instead of any)
+- `Server.version` - remove, use server.description.version instead
 
 **lib: accounts**
 
@@ -99,6 +100,9 @@ added:
 - `ZkCrudTarget.onBeforeAddedUpdate` - last minute customization of the editor for update
 - `ZkCrudTarget.onBeforeAddedDelete` - last minute customization of the editor for delete
 - `withConfirm`  -  convenience for executing a code block after user confirmation
+- Make server description available without a session #32  
+- `ServerDescriptionQuery` - reads `ServerDescriptionBo` from the server
+- `ServerDescriptionBl` - handles `ServerDescriptionQuery`, added automatically
 
 changed:
 
@@ -117,11 +121,21 @@ changed:
 - `ZkTextArea` - do not show mandatory mark when empty value is allowed
 - `ZkTextArea` - remove hard-coded `flexGrow = 1` and `resize = "none"`
 - `zkFormStyles.buttons` - added margin before and after
+- `EmptySessionManager` - reads server description with `ServerDescriptionQuery`
 
 deprecated:
 
 - `BoSchema.custom` old function with a function parameter 
 - `BuiltinStrings.cannotAttachMoreImage` replaced by `cannotAddMore`
+
+removed:
+
+- `Server.version` - use `server.description.version` instead
+
+fixed:
+
+- The server parameters (stack version and project name) are incorrect #51
+- The GitHub task number is misleading in release note 2021.6.16. #50
 
 ## Lib : Accounts
 
@@ -136,6 +150,10 @@ changed:
 - `RoleBl` constructor now requires a persistence api
 - `RoleGrantExposedTable` fields are now public
 - `AccountPrivateTable` fields are now public
+
+fixed:
+
+- Additional roles are added only when the database is empty #48
 
 ## Lib: Blobs
 
