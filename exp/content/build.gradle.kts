@@ -14,7 +14,7 @@ plugins {
 group = "hu.simplexion.zakadabar"
 version = "2021.7.1-SNAPSHOT"
 
-val ktorVersion = "1.4.3"
+val ktorVersion = rootProject.extra["ktorVersion"] as String
 
 noArg {
     annotation("kotlinx.serialization.Serializable")
@@ -35,7 +35,6 @@ kotlin {
 
     sourceSets["commonMain"].dependencies {
         implementation(project(":core"))
-        implementation(project(":lib:accounts"))
         implementation(project(":lib:i18n"))
         implementation(project(":lib:blobs"))
     }

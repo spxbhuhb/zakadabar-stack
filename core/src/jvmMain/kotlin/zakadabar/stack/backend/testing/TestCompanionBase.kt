@@ -3,8 +3,8 @@
  */
 package zakadabar.stack.backend.testing
 
-import zakadabar.stack.RolesBase
-import zakadabar.stack.StackRoles
+import zakadabar.stack.authorize.AppRolesBase
+import zakadabar.stack.authorize.appRoles
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize.RoleBlProvider
@@ -27,7 +27,7 @@ import zakadabar.stack.data.entity.EntityId
  * @param   allPublic           When true (default), a [SimpleRoleAuthorizerProvider] is added to the server
  *                              with `all=PUBLIC`.
  * @param   mockRoleBlProvider  When true (default), a [MockRoleBlProvider] is added to the server.
- * @param   roles               Roles to use, defaults to [RolesBase].
+ * @param   roles               Roles to use, defaults to [AppRolesBase].
  * @param   settings            Server settings file, defaults to "./template/test/stack.server.yaml".
  * @param   baseUrl             The URL on which the Ktor instance is available, defaults to `http://127.0.0.1:8888`.
  */
@@ -36,7 +36,7 @@ open class TestCompanionBase(
     val timeoutMillis : Long = 2000,
     val allPublic : Boolean = true,
     val mockRoleBlProvider : Boolean = true,
-    val roles : RolesBase = RolesBase(),
+    val roles : AppRolesBase = AppRolesBase(),
     val settings : String = "./template/test/stack.server.yaml",
     val baseUrl : String = "http://127.0.0.1:8888"
 ) {
@@ -52,7 +52,7 @@ open class TestCompanionBase(
     open fun setup() {
         server = Server("test")
 
-        StackRoles = roles
+        appRoles = roles
 
         if (allPublic) {
             server += SimpleRoleAuthorizerProvider {
@@ -78,13 +78,17 @@ open class TestCompanionBase(
     }
 
     object MockRoleBlProvider : BackendModule, RoleBlProvider {
-        override fun getByName(name: String): EntityId<BaseBo> = when (name) {
-            StackRoles.anonymous -> EntityId(1)
-            StackRoles.siteMember -> EntityId(2)
-            StackRoles.siteAdmin -> EntityId(3)
-            StackRoles.securityOfficer -> EntityId(4)
-            else -> throw NoSuchElementException()
+
+        private val roleIds = mutableMapOf<String,EntityId<BaseBo>>()
+
+        override fun onModuleLoad() {
+            appRoles.map.forEach {
+                roleIds[it.value] = EntityId(roleIds.size + 1L)
+            }
         }
+
+        override fun getByName(name: String): EntityId<BaseBo> =
+            roleIds[name] ?: throw NoSuchElementException()
     }
 
 }

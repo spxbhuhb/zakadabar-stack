@@ -7,6 +7,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
+import zakadabar.lib.accounts.backend.testing.AuthTestCompanionBase
 import zakadabar.lib.accounts.data.AccountsByRole
 import zakadabar.lib.accounts.data.CreateAccount
 import zakadabar.lib.accounts.data.RoleBo
@@ -14,11 +15,11 @@ import kotlin.test.assertEquals
 
 class RoleBlTest {
 
-    companion object : TestCompanion() {
+    companion object : AuthTestCompanionBase() {
 
         @BeforeClass
         @JvmStatic
-        fun setup() = super.setup("so", "so")
+        override fun setup() = super.setup()
 
         @AfterClass
         @JvmStatic
@@ -27,8 +28,8 @@ class RoleBlTest {
     }
 
     @Test
-    fun testAccounsByRole() = runBlocking {
-        var siteMember = AccountsByRole(Roles.siteMember).execute()
+    fun testAccountsByRole() = runBlocking {
+        var siteMember = AccountsByRole(Roles.securityOfficer).execute()
         assertEquals(1, siteMember.size)
         assertEquals("so", siteMember.first().accountName)
 
@@ -41,10 +42,10 @@ class RoleBlTest {
             displayName = null,
             theme = null,
             locale = "en",
-            roles = listOf(RoleBo.all().first { it.name == Roles.siteMember }.id)
+            roles = listOf(RoleBo.all().first { it.name == Roles.securityOfficer }.id)
         ).execute()
 
-        siteMember = AccountsByRole(Roles.siteMember).execute().sortedBy { it.accountName }
+        siteMember = AccountsByRole(Roles.securityOfficer).execute().sortedBy { it.accountName }
         assertEquals(2, siteMember.size)
         assertEquals("so", siteMember.first().accountName)
         assertEquals("test1", siteMember[1].accountName)

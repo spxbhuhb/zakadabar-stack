@@ -8,8 +8,8 @@ import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.action.ActionBoCompanion
 
 @Serializable
-class Action : ActionBo<Action> {
-    override suspend fun execute(): Action {
+class TestAction : ActionBo<TestAction> {
+    override suspend fun execute(): TestAction {
         throw NotImplementedError("this is just a test action")
     }
 

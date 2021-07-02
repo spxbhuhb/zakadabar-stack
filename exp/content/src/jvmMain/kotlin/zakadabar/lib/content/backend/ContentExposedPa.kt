@@ -3,13 +3,9 @@
  */
 package zakadabar.lib.content.backend
 
-import kotlinx.datetime.toJavaInstant
-import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.`java-time`.timestamp
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import zakadabar.lib.accounts.backend.AccountPrivateExposedTable
 import zakadabar.lib.content.data.*
 import zakadabar.lib.i18n.backend.LocaleExposedTableGen
 import zakadabar.lib.i18n.data.LocaleBo
@@ -27,7 +23,7 @@ open class ContentExposedPa : ExposedPaBase<ContentBo, ContentExposedTable>(
 
     override fun onModuleLoad() {
         super.onModuleLoad()
-        Sql.tables += TextBlockExposedTable
+        Sql.tables += textTable
     }
 
     override fun create(bo: ContentBo): ContentBo {
@@ -183,8 +179,6 @@ open class ContentExposedPa : ExposedPaBase<ContentBo, ContentExposedTable>(
 
     override fun ResultRow.toBo() = ContentBo(
         id = this[table.id].entityId(),
-        modifiedAt = this[table.modifiedAt].toKotlinInstant(),
-        modifiedBy = this[table.modifiedBy].entityId(),
         status = this[table.status].entityId(),
         folder = this[table.folder],
         parent = this[table.parent]?.entityId(),
@@ -197,12 +191,10 @@ open class ContentExposedPa : ExposedPaBase<ContentBo, ContentExposedTable>(
     )
 
     override fun UpdateBuilder<*>.fromBo(bo: ContentBo) {
-        this[table.modifiedAt] = bo.modifiedAt.toJavaInstant()
-        this[table.modifiedBy] = bo.modifiedBy.toLong()
         this[table.status] = bo.status.toLong()
         this[table.folder] = bo.folder
-        this[table.parent] = bo.parent?.let { EntityID(it.toLong(), ContentExposedTable) }
-        this[table.master] = bo.master?.let { EntityID(it.toLong(), ContentExposedTable) }
+        this[table.parent] = bo.parent?.let { EntityID(it.toLong(), table) }
+        this[table.master] = bo.master?.let { EntityID(it.toLong(), table) }
         this[table.position] = bo.position
         this[table.locale] = bo.locale?.let { EntityID(it.toLong(), LocaleExposedTableGen) }
         this[table.title] = bo.title
@@ -215,12 +207,10 @@ object ContentExposedTable : ExposedPaTable<ContentBo>(
     tableName = "content"
 ) {
 
-    val modifiedAt = timestamp("modified_at")
-    val modifiedBy = reference("modified_by", AccountPrivateExposedTable)
     val status = reference("status", StatusExposedTableGen)
     val folder = bool("folder")
-    val parent = reference("parent", ContentExposedTable).nullable()
-    val master = reference("master", ContentExposedTable).nullable()
+    val parent = reference("parent", this).nullable()
+    val master = reference("master", this).nullable()
     val position = long("position")
     val locale = reference("locale", LocaleExposedTableGen).nullable()
     val title = varchar("title", 100)

@@ -7,13 +7,27 @@ next month.
 
 **core**
 
-- `QueryBo` type parameter can be anything (not a list by default)
-- `QueryBoCompanion` has no type parameter
-- `ActionBoCompanion` has no type parameter
+- `QueryBo` - type parameter can be anything (not a list by default)
+- `QueryBoCompanion` - has no type parameter
+- `ActionBoCompanion` - has no type parameter
+- `StackRoles` - change name to `appRoles` and move into `.authorize` package
+- `RolesBase` - change name to `AppRolesBase` and move into `.authorize` package  
+- `StackRoles.siteMember` - replace with `SimpleRoleAuthorizer.Companion.LOGGED_IN`
+- `StackRoles.siteAdmin` - remove  
+- `StackRoles.anonymous` - remove
 - `BoSchema` does not accept empty `EntityId` by default
 - `ValidityReport` now stores BOs instead of implementations
 - `zkFormStyles.buttons` added `marginBlockStart` and `marginBlockEnd`
 - `ZkCssStyleRule` values now are plain strings (instead of any)
+
+**lib: accounts**
+
+- `RolesByAccount` contains `AccountPublicBo` instead of `AccountPrivateBo`
+- `AccountPrivateExposedTable` is now a class instead of object
+- `KtorSessionBl` now checks for `ModuleSettings.loginActionRole` instead of `appRoles.siteMember`
+- `RoleBl` constructor now requires a persistence api
+- `RoleExposedPa` constructor now requires an account and a grant table
+- `RoleGrantExposedTable` is now a class instead of an object
 
 **lib: blobs**
 
@@ -29,6 +43,7 @@ next month.
 - `Locale.status` new property
 - `Locales` rename to `LocaleCrud`
 - `Translations` rename to `TranslationCrud`
+- `TranslationBl` now requires security officer for translation changes
 
 ## Migration
 
@@ -36,11 +51,15 @@ Use search & replace **with regex** on the whole project and replace:
 
 `QueryBoCompanion<[^>]+>` with `QueryBoCompanion`
 
----
-
-Use search & replace **with regex** on the whole project and replace:
-
 `ActionBoCompanion<[a-zA-Z0-9]+>` with `ActionBoCompanion`
+
+`import zakadabar\.stack\.StackRoles` with `import zakadabar.stack.authorize.appRoles`
+
+`StackRoles` with `appRoles`
+
+`import zakadabar\.stack\.RolesBase` with `import zakadabar.stack.authorize.AppRolesBase`
+
+`StackRoles\.siteMember` with `LOGGED_IN` + add import manually
 
 ---
 
@@ -86,7 +105,9 @@ changed:
 - `QueryBo` type parameter is not a list
 - `QueryBoCompanion` has no type parameter
 - `ActionBoCompanion` has no type parameter  
-- `ValidityReport` now stores BOs instead of implementations  
+- `ValidityReport` now stores BOs instead of implementations
+- `EntityBusinessLogicBase.pa` is now public
+- `SimpleRoleAuthorizer` supports `LOGGED_IN` special value  
 - `Router.query` change type parameter RQ from Any to QueryBo<RS> to ensure type safety
 - `ZkStringStore.merge` - also merge into child stores
 - `ZkAppication` - `window.path.location` is now decoded with `decodeUriComponent` before routing
@@ -104,10 +125,17 @@ deprecated:
 
 ## Lib : Accounts
 
-changes:
+changed:
 
 - `CheckName` is now a query
 - `CheckNameResult` contains `AccountPublicBo` instead of `AccountPrivateBo`
+- `RolesByAccount` contains `AccountPublicBo` instead of `AccountPrivateBo`
+- `AccountPrivateExposedTable` is now a class instead of object
+- `KtorSessionBl` now checks for `ModuleSettings.loginActionRole` instead of `appRoles.siteMember`
+- `install` now accepts `accountPrivateBl` as parameter
+- `RoleBl` constructor now requires a persistence api
+- `RoleGrantExposedTable` fields are now public
+- `AccountPrivateTable` fields are now public
 
 ## Lib: Blobs
 

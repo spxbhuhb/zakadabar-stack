@@ -7,6 +7,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
+import zakadabar.lib.accounts.backend.testing.AuthTestCompanionBase
 import zakadabar.lib.accounts.data.AccountPrivateBo
 import zakadabar.lib.accounts.data.LoginAction
 import zakadabar.lib.accounts.data.LogoutAction
@@ -17,11 +18,13 @@ import zakadabar.stack.data.builtin.misc.Secret
 
 class KtorSessionBlTest {
 
-    companion object : TestCompanion() {
+    companion object : AuthTestCompanionBase(
+        credentials = null
+    ) {
 
         @BeforeClass
         @JvmStatic
-        fun setup() = super.setup(null, null)
+        override fun setup() = super.setup()
 
         @AfterClass
         @JvmStatic

@@ -13,8 +13,8 @@ import kotlinx.serialization.serializer
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.lib.accounts.data.LoginAction
 import zakadabar.lib.accounts.data.LogoutAction
+import zakadabar.lib.accounts.data.ModuleSettings
 import zakadabar.lib.accounts.data.SessionBo
-import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.authorize.*
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.exposed.Sql
@@ -24,6 +24,7 @@ import zakadabar.stack.backend.ktor.executor
 import zakadabar.stack.backend.module
 import zakadabar.stack.backend.persistence.EmptyPersistenceApi
 import zakadabar.stack.backend.server
+import zakadabar.stack.backend.setting.setting
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.builtin.ActionStatusBo
@@ -39,6 +40,8 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 ), KtorSessionProvider {
 
     override val pa = EmptyPersistenceApi<SessionBo>()
+
+    private val settings by setting<ModuleSettings>()
 
     override val authorizer = object : Authorizer<SessionBo> {
         override fun authorizeRead(executor: Executor, entityId: EntityId<SessionBo>) {
@@ -142,7 +145,9 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
             return ActionStatusBo(false)
         }
 
-        if (StackRoles.siteMember !in session.roleNames) return ActionStatusBo(false)
+        if (settings.loginActionRole.isNotEmpty() && settings.loginActionRole !in session.roleNames) {
+            return ActionStatusBo(false)
+        }
 
         call.sessions.set(session)
 

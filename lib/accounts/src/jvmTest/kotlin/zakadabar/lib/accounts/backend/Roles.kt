@@ -3,8 +3,9 @@
  */
 package zakadabar.lib.accounts.backend
 
-import zakadabar.stack.DefaultRoles
+import zakadabar.stack.authorize.AppRolesBase
 
-object Roles : DefaultRoles() {
+
+object Roles : AppRolesBase() {
     val myRole by "my-role"
 }

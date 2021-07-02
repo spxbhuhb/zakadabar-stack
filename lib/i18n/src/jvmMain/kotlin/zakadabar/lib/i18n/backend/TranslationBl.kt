@@ -5,9 +5,10 @@ package zakadabar.lib.i18n.backend
 
 import zakadabar.lib.i18n.data.TranslationBo
 import zakadabar.lib.i18n.data.TranslationsByLocale
-import zakadabar.stack.StackRoles
+import zakadabar.stack.authorize.appRoles
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
+import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.LOGGED_IN
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.PUBLIC
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.module
@@ -23,8 +24,8 @@ class TranslationBl : EntityBusinessLogicBase<TranslationBo>(
 
     override val authorizer by provider {
         if (this is SimpleRoleAuthorizer) {
-            allReads = StackRoles.siteMember
-            allWrites = StackRoles.siteAdmin
+            allReads = LOGGED_IN
+            allWrites = appRoles.securityOfficer
             query(TranslationsByLocale::class, PUBLIC)
         }
     }

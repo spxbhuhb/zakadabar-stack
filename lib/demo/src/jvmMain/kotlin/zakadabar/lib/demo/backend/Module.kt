@@ -3,8 +3,8 @@
  */
 package zakadabar.lib.demo.backend
 
-import zakadabar.stack.StackRoles
 import zakadabar.stack.backend.BackendModule
+import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.LOGGED_IN
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizerProvider
 import zakadabar.stack.backend.server
 import zakadabar.stack.util.PublicApi
@@ -18,7 +18,7 @@ object Module : BackendModule {
         zakadabar.lib.content.backend.install()
 
         server += SimpleRoleAuthorizerProvider {
-            all = StackRoles.siteMember
+            all = LOGGED_IN
         }
 
         server += TestBl()

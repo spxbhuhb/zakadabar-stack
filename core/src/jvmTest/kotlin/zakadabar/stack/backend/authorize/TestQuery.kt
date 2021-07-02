@@ -8,8 +8,8 @@ import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.data.query.QueryBoCompanion
 
 @Serializable
-class Query : QueryBo<Query> {
-    override suspend fun execute(): Query {
+class TestQuery : QueryBo<TestQuery> {
+    override suspend fun execute(): TestQuery {
         throw NotImplementedError("this is just a test query")
     }
 

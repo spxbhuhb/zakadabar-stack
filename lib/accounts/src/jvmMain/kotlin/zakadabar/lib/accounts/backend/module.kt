@@ -4,8 +4,8 @@
 package zakadabar.lib.accounts.backend
 
 import zakadabar.lib.accounts.backend.session.KtorSessionBl
-import zakadabar.stack.RolesBase
-import zakadabar.stack.StackRoles
+import zakadabar.stack.authorize.AppRolesBase
+import zakadabar.stack.authorize.appRoles
 import zakadabar.stack.backend.server
 
 /**
@@ -15,14 +15,14 @@ import zakadabar.stack.backend.server
  *                            logic. Defaults to a new [AccountPrivateBl] instance.
  */
 fun install(
-    roles : RolesBase = RolesBase(),
-    accountPrivateBl : AccountPrivateBl= AccountPrivateBl()
+    roles: AppRolesBase = AppRolesBase(),
+    accountPrivateBl: AccountPrivateBl = AccountPrivateBl(AccountPrivateExposedPa(AccountPrivateExposedTable()))
 ) {
 
-    StackRoles = roles
+    appRoles = roles
 
     server += accountPrivateBl
-    server += RoleBl()
+    server += RoleBl(RoleExposedPa(accountPrivateBl.pa.table, RoleGrantExposedTable(accountPrivateBl.pa.table)))
     server += KtorSessionBl()
 
 }

@@ -10,7 +10,7 @@ import zakadabar.lib.content.data.ContentBo
 import zakadabar.stack.backend.util.default
 
 class AttachedBlobExposedPa : BlobExposedPa<AttachedBlobBo, ContentBo>(
-    table = AttachedBlobExposedTable,
+    table = AttachedBlobExposedTable
 ) {
     override fun newInstance() = default<AttachedBlobBo> {  }
 }

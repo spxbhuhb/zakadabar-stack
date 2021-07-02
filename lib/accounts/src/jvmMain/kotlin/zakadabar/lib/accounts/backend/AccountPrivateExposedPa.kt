@@ -18,8 +18,10 @@ import zakadabar.stack.backend.exposed.entityId
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.BCrypt
 
-open class AccountPrivateExposedPa : ExposedPaBase<AccountPrivateBo, AccountPrivateExposedTable>(
-    table = AccountPrivateExposedTable()
+open class AccountPrivateExposedPa(
+    table : AccountPrivateExposedTable
+) : ExposedPaBase<AccountPrivateBo, AccountPrivateExposedTable>(
+    table
 ) {
     open fun readByName(name: String) = table.select { table.accountName eq name }.first().toBo()
 

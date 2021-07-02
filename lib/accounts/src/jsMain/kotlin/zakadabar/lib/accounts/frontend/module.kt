@@ -7,8 +7,8 @@ import zakadabar.lib.accounts.frontend.accounts.Account
 import zakadabar.lib.accounts.frontend.accounts.Accounts
 import zakadabar.lib.accounts.frontend.login.Login
 import zakadabar.lib.accounts.frontend.roles.Roles
-import zakadabar.stack.RolesBase
-import zakadabar.stack.StackRoles
+import zakadabar.stack.authorize.AppRolesBase
+import zakadabar.stack.authorize.appRoles
 import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.application.ZkApplication
 
@@ -21,7 +21,7 @@ fun install(routing: ZkAppRouting) {
     }
 }
 
-fun install(application : ZkApplication, roles : RolesBase = RolesBase()) {
-    StackRoles = roles
+fun install(application : ZkApplication, roles : AppRolesBase = AppRolesBase()) {
+    appRoles = roles
     application.services += SessionManager()
 }

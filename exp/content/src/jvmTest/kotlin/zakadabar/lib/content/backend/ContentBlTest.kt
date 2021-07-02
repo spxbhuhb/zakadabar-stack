@@ -6,7 +6,6 @@ package zakadabar.lib.content.backend
 import io.ktor.client.features.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
-import kotlinx.datetime.Clock
 import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.AfterClass
@@ -16,22 +15,24 @@ import zakadabar.lib.content.data.*
 import zakadabar.lib.i18n.data.LocaleBo
 import zakadabar.lib.i18n.data.LocaleStatus
 import zakadabar.stack.backend.server
+import zakadabar.stack.backend.testing.TestCompanionBase
 import zakadabar.stack.backend.util.default
 import kotlin.test.assertEquals
 
 class ContentBlTest {
 
-    companion object : TestCompanion() {
+    companion object : TestCompanionBase() {
+
+        override fun addModules() {
+            zakadabar.lib.i18n.backend.install()
+            install()
+        }
 
         lateinit var localeHu: LocaleBo
         lateinit var localeEn: LocaleBo
         lateinit var statusPublic: StatusBo
 
-        @BeforeClass
-        @JvmStatic
-        fun setup() {
-            super.setup("so", "so")
-
+        override fun onAfterStarted() {
             runBlocking {
                 localeHu = default<LocaleBo> {
                     name = "hu"
@@ -48,6 +49,10 @@ class ContentBlTest {
                 }.create()
             }
         }
+
+        @BeforeClass
+        @JvmStatic
+        override fun setup() = super.setup()
 
         @AfterClass
         @JvmStatic
@@ -161,16 +166,12 @@ class ContentBlTest {
         }
 
         val masterContent = default<ContentBo> {
-            modifiedAt = Clock.System.now()
-            modifiedBy = session.account.id
             parent = pParent?.id
             status = statusPublic.id
             title = "title master $postfix"
         }.create()
 
         val localizedHu = default<ContentBo> {
-            modifiedAt = Clock.System.now()
-            modifiedBy = session.account.id
             status = statusPublic.id
             master = masterContent.id
             locale = localeHu.id
@@ -178,8 +179,6 @@ class ContentBlTest {
         }.create()
 
         val localizedEn = default<ContentBo> {
-            modifiedAt = Clock.System.now()
-            modifiedBy = session.account.id
             status = statusPublic.id
             master = masterContent.id
             locale = localeEn.id

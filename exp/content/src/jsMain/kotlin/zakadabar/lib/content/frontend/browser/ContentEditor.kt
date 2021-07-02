@@ -3,7 +3,6 @@
  */
 package zakadabar.lib.content.frontend.browser
 
-import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import zakadabar.lib.blobs.frontend.attachment.ZkAttachmentsField
@@ -13,7 +12,6 @@ import zakadabar.lib.content.resources.contentStrings
 import zakadabar.lib.i18n.data.LocaleBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.application.executor
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
 import zakadabar.stack.frontend.builtin.button.ZkButton
@@ -179,12 +177,7 @@ class ContentEditorForm : ZkForm<ContentBo>() {
 
     override suspend fun onSubmitStart() {
         super.onSubmitStart()
-
-        bo.modifiedAt = Clock.System.now()
-        bo.modifiedBy = executor.account.id
-
         bo.textBlocks = textBlocks.find<ContentTextForm>().map { it.bo }
-
     }
 
     override fun validate(submit: Boolean): Boolean {

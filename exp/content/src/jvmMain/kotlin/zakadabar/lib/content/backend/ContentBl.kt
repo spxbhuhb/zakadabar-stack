@@ -5,7 +5,6 @@
 package zakadabar.lib.content.backend
 
 import io.ktor.features.*
-import kotlinx.datetime.Clock
 import zakadabar.lib.blobs.data.url
 import zakadabar.lib.content.data.*
 import zakadabar.lib.i18n.backend.LocaleBl
@@ -64,8 +63,6 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
     }
 
     override fun create(executor: Executor, bo: ContentBo): ContentBo {
-        bo.modifiedBy = EntityId(executor.accountId)
-        bo.modifiedAt = Clock.System.now()
         bo.seoTitle = bo.title.lowercaseWithHyphen()
 
         checkConsistency(bo)
@@ -74,8 +71,6 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
     }
 
     override fun update(executor: Executor, bo: ContentBo): ContentBo {
-        bo.modifiedBy = EntityId(executor.accountId)
-        bo.modifiedAt = Clock.System.now()
         bo.seoTitle = bo.title.lowercaseWithHyphen()
 
         // check that there is no loop

@@ -55,7 +55,7 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
     /**
      * The Persistence API this entity business logic uses.
      */
-    protected abstract val pa: EntityPersistenceApi<T>
+    abstract val pa: EntityPersistenceApi<T>
 
     /**
      * Router routes incoming requests to the proper processor function.

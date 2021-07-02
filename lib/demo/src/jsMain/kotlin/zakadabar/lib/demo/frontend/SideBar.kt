@@ -17,7 +17,7 @@ import zakadabar.lib.demo.frontend.pages.TestCrud
 import zakadabar.lib.demo.resources.strings
 import zakadabar.lib.i18n.frontend.LocaleCrud
 import zakadabar.lib.i18n.frontend.TranslationCrud
-import zakadabar.stack.StackRoles
+import zakadabar.stack.authorize.appRoles
 import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.resources.localized
@@ -35,7 +35,7 @@ class SideBar : ZkSideBar() {
             + item<TestCrud>()
         }
 
-        withRole(StackRoles.securityOfficer) {
+        withRole(appRoles.securityOfficer) {
 
             + group(contentStrings.content) {
                 + item<ContentOverview>()

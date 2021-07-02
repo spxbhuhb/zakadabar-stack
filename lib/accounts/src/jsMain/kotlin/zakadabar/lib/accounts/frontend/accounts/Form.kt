@@ -5,7 +5,7 @@ package zakadabar.lib.accounts.frontend.accounts
 
 import kotlinx.coroutines.coroutineScope
 import zakadabar.lib.accounts.data.*
-import zakadabar.stack.StackRoles
+import zakadabar.stack.authorize.appRoles
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.application.executor
@@ -64,10 +64,10 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
             } else {
 
-                if (hasRole(StackRoles.securityOfficer)) {
+                if (hasRole(appRoles.securityOfficer)) {
                     coroutineScope {
                         systemRoles = RoleBo.all()
-                        userRoles = RolesByAccount(bo.id).execute()
+                        userRoles = RolesByAccount(EntityId(bo.id)).execute()
                     }
                 }
 
@@ -194,7 +194,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                     + PasswordChangeForm()
                 }
 
-                if (hasRole(StackRoles.securityOfficer)) {
+                if (hasRole(appRoles.securityOfficer)) {
                     + tab(localizedStrings.roles) { + RolesForm() }
                     + tab(localizedStrings.accountStatus) { + PrincipalForm() }
                 }
@@ -383,7 +383,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                             revoke(it.value)
                         }
                     }
-                    userRoles = RolesByAccount(bo.id).execute()
+                    userRoles = RolesByAccount(EntityId(bo.id)).execute()
                     onSubmitSuccess()
                 } catch (ex: Exception) {
                     onSubmitError(ex)

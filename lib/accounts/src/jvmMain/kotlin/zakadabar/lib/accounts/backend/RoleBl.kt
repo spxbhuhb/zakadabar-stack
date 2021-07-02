@@ -6,27 +6,27 @@
 package zakadabar.lib.accounts.backend
 
 import zakadabar.lib.accounts.data.*
-import zakadabar.stack.StackRoles
+import zakadabar.stack.authorize.appRoles
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.authorize.RoleBlProvider
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
+import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.LOGGED_IN
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.entity.EntityId
 
-class RoleBl(
+open class RoleBl(
+    override val pa: RoleExposedPa
 ) : RoleBlProvider, EntityBusinessLogicBase<RoleBo>(
     boClass = RoleBo::class
 ) {
 
-    override val pa = RoleExposedPa()
-
     override val authorizer = SimpleRoleAuthorizer<RoleBo> {
-        all = StackRoles.securityOfficer
-        action(GrantRole::class, StackRoles.securityOfficer)
-        action(RevokeRole::class, StackRoles.securityOfficer)
-        query(AccountsByRole::class, StackRoles.siteMember)
-        query(RolesByAccount::class, StackRoles.securityOfficer)
+        all = appRoles.securityOfficer
+        action(GrantRole::class, appRoles.securityOfficer)
+        action(RevokeRole::class, appRoles.securityOfficer)
+        query(AccountsByRole::class, LOGGED_IN)
+        query(RolesByAccount::class, appRoles.securityOfficer)
     }
 
     override val router = router {

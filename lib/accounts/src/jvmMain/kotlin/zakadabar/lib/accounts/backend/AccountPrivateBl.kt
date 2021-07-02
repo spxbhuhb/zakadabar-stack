@@ -6,7 +6,7 @@ package zakadabar.lib.accounts.backend
 import io.ktor.features.*
 import kotlinx.datetime.Clock
 import zakadabar.lib.accounts.data.*
-import zakadabar.stack.StackRoles
+import zakadabar.stack.authorize.appRoles
 import zakadabar.stack.backend.authorize.*
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.module
@@ -23,21 +23,19 @@ import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.util.BCrypt
 
 open class AccountPrivateBl(
-    val securityOfficerRole: String
+    override val pa : AccountPrivateExposedPa
 ) : EntityBusinessLogicBase<AccountPrivateBo>(
     boClass = AccountPrivateBo::class,
 ), AccountBlProvider {
 
     private val settings by setting<ModuleSettings>()
 
-    override val pa = AccountPrivateExposedPa()
-
     private lateinit var anonymous: AccountPublicBo
 
     private val roleBl by module<RoleBl>()
 
     override val authorizer = object : SimpleRoleAuthorizer<AccountPrivateBo>({
-        all = securityOfficerRole // for non-overridden methods
+        all = appRoles.securityOfficer // for non-overridden methods
     }) {
 
         override fun authorizeRead(executor: Executor, entityId: EntityId<AccountPrivateBo>) {
@@ -56,8 +54,8 @@ open class AccountPrivateBl(
 
         override fun authorizeAction(executor: Executor, actionBo: ActionBo<*>) {
             when (actionBo) {
-                is CreateAccount -> authorize(executor, securityOfficerRole)
-                is UpdateAccountLocked -> authorize(executor, securityOfficerRole)
+                is CreateAccount -> authorize(executor, appRoles.securityOfficer)
+                is UpdateAccountLocked -> authorize(executor, appRoles.securityOfficer)
                 is PasswordChange -> secureChange(executor, actionBo.accountId, actionBo.oldPassword)
                 is UpdateAccountSecure -> secureChange(executor, actionBo.accountId, actionBo.password)
                 else -> throw Forbidden()
@@ -70,7 +68,7 @@ open class AccountPrivateBl(
          */
         fun ownOrSecurityOfficer(executor: Executor, accountId: EntityId<AccountPrivateBo>) {
             if (executor.accountId == anonymous.id) throw Forbidden()
-            if (executor.accountId == accountId || executor.hasRole(securityOfficerRole)) {
+            if (executor.accountId == accountId || executor.hasRole(appRoles.securityOfficer)) {
                 return
             } else {
                 throw Forbidden()
@@ -85,7 +83,7 @@ open class AccountPrivateBl(
             if (executor.accountId == accountId) {
                 authenticate(executor, accountId, password.value)
             } else {
-                authorize(executor, securityOfficerRole)
+                authorize(executor, appRoles.securityOfficer)
             }
         }
     }
@@ -158,7 +156,7 @@ open class AccountPrivateBl(
                 roleBl.auditor.auditAction(executor, grant)
             }
 
-            StackRoles.map.forEach {
+            appRoles.map.forEach {
                 val roleName = it.value
 
                 try {
@@ -171,12 +169,9 @@ open class AccountPrivateBl(
                 val bo = roleBl.create(executor, RoleBo(EntityId(), roleName, roleName))
                 roleBl.auditor.auditCreate(executor, bo)
 
-                when (it.value) {
-                    StackRoles.securityOfficer -> grant(so, bo)
-                    StackRoles.siteAdmin -> grant(so, bo)
-                    StackRoles.siteMember -> grant(so, bo)
+                if (it.value == appRoles.securityOfficer) {
+                    grant(so, bo)
                 }
-
             }
         }
     }
@@ -307,7 +302,7 @@ open class AccountPrivateBl(
                 return ActionStatusBo(false)
             }
         } else {
-            authorize(executor, StackRoles.securityOfficer)
+            authorize(executor, appRoles.securityOfficer)
         }
 
         bo.credentials = action.newPassword

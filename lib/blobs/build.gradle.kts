@@ -51,35 +51,32 @@ kotlin {
 
 }
 
+if (! isSnapshot && properties["zakadabar.publisher"] != null) {
 
-tasks.withType<Jar> {
-    manifest {
-        attributes += sortedMapOf(
-            "Built-By" to System.getProperty("user.name"),
-            "Build-Jdk" to System.getProperty("java.version"),
-            "Implementation-Vendor" to "Simplexion Kft.",
-            "Implementation-Version" to archiveVersion.get(),
-            "Created-By" to org.gradle.util.GradleVersion.current()
-        )
+    tasks.withType<Jar> {
+        manifest {
+            attributes += sortedMapOf(
+                "Built-By" to System.getProperty("user.name"),
+                "Build-Jdk" to System.getProperty("java.version"),
+                "Implementation-Vendor" to "Simplexion Kft.",
+                "Implementation-Version" to archiveVersion.get(),
+                "Created-By" to org.gradle.util.GradleVersion.current()
+            )
+        }
     }
-}
 
-val dokkaHtml by tasks.getting(org.jetbrains.dokka.gradle.DokkaTask::class)
+    val dokkaHtml by tasks.getting(org.jetbrains.dokka.gradle.DokkaTask::class)
 
-val javadocJar: TaskProvider<Jar> by tasks.registering(Jar::class) {
-    dependsOn(dokkaHtml)
-    archiveBaseName.set("blobs")
-    archiveClassifier.set("javadoc")
-    from(dokkaHtml.outputDirectory)
-}
+    val javadocJar: TaskProvider<Jar> by tasks.registering(Jar::class) {
+        dependsOn(dokkaHtml)
+        archiveBaseName.set("blobs")
+        archiveClassifier.set("javadoc")
+        from(dokkaHtml.outputDirectory)
+    }
 
-tasks.getByName("build") {
-    dependsOn(javadocJar)
-}
-
-// add sign and publish only if the user is a zakadabar publisher
-
-if (properties["zakadabar.publisher"] != null) {
+    tasks.getByName("build") {
+        dependsOn(javadocJar)
+    }
 
     signing {
         useGpgCmd()

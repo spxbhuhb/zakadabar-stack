@@ -7,7 +7,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
-import zakadabar.stack.DefaultRoles
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.PUBLIC
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.persistence.EmptyPersistenceApi
@@ -22,8 +21,8 @@ internal object WithPublic : EntityBusinessLogicBase<EmptyEntityBo>(EmptyEntityB
     override val namespace = "not-used"
     override val authorizer = SimpleRoleAuthorizer<EmptyEntityBo> {
         all = PUBLIC
-        action(Action::class, PUBLIC)
-        query(Query::class, PUBLIC)
+        action(TestAction::class, PUBLIC)
+        query(TestQuery::class, PUBLIC)
     }
 }
 
@@ -50,9 +49,7 @@ class SimpleRoleAuthorizerTest {
 
         val withPublic = server.first<WithPublic>()
 
-        val siteMemberRoleId = server.first<RoleBlProvider>().getByName(DefaultRoles().siteMember)
-
-        val siteMember = Executor(EntityId(1), false, listOf(siteMemberRoleId), listOf(DefaultRoles().siteMember))
+        val siteMember = Executor(EntityId(1), false, emptyList(), emptyList())
         val anonymous = Executor(EntityId(2), true, emptyList(), emptyList())
 
         with(withPublic.authorizer) {
@@ -66,10 +63,10 @@ class SimpleRoleAuthorizerTest {
             authorizeUpdate(siteMember, EmptyEntityBo)
             authorizeDelete(anonymous, EntityId(1))
             authorizeDelete(siteMember, EntityId(1))
-            authorizeAction(anonymous, Action())
-            authorizeAction(siteMember, Action())
-            authorizeQuery(anonymous, Query())
-            authorizeQuery(siteMember, Query())
+            authorizeAction(anonymous, TestAction())
+            authorizeAction(siteMember, TestAction())
+            authorizeQuery(anonymous, TestQuery())
+            authorizeQuery(siteMember, TestQuery())
         }
 
         with(SimpleRoleAuthorizer<EmptyEntityBo>()) {
@@ -83,10 +80,10 @@ class SimpleRoleAuthorizerTest {
             assertFailsWith<Forbidden> { authorizeUpdate(siteMember, EmptyEntityBo) }
             assertFailsWith<Forbidden> { authorizeDelete(anonymous, EntityId(1)) }
             assertFailsWith<Forbidden> { authorizeDelete(siteMember, EntityId(1)) }
-            assertFailsWith<Forbidden> { authorizeAction(anonymous, Action()) }
-            assertFailsWith<Forbidden> { authorizeAction(siteMember, Action()) }
-            assertFailsWith<Forbidden> { authorizeQuery(anonymous, Query()) }
-            assertFailsWith<Forbidden> { authorizeQuery(siteMember, Query()) }
+            assertFailsWith<Forbidden> { authorizeAction(anonymous, TestAction()) }
+            assertFailsWith<Forbidden> { authorizeAction(siteMember, TestAction()) }
+            assertFailsWith<Forbidden> { authorizeQuery(anonymous, TestQuery()) }
+            assertFailsWith<Forbidden> { authorizeQuery(siteMember, TestQuery()) }
         }
 
         Unit

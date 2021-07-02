@@ -3,10 +3,8 @@
  */
 package zakadabar.lib.content.data
 
-import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import zakadabar.lib.i18n.data.LocaleBo
-import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityBoCompanion
 import zakadabar.stack.data.entity.EntityId
@@ -30,8 +28,6 @@ import zakadabar.stack.data.schema.descriptor.CustomBoConstraint
  * - have `non-null` [locale]
  *
  * @param   id
- * @param   modifiedAt        Time of the last modification.
- * @param   modifiedBy        Executor of the last modification.
  * @param   status            Status of the content.
  * @param   parent            If of the parent master content (if any). Null for localized versions and for top-level masters.
  * @param   master            Id of the master content. Null for masters, non-null for localized versions.
@@ -45,8 +41,6 @@ import zakadabar.stack.data.schema.descriptor.CustomBoConstraint
 class ContentBo(
 
     override var id: EntityId<ContentBo>,
-    var modifiedAt: Instant,
-    var modifiedBy: EntityId<AccountPublicBo>,
     var status: EntityId<StatusBo>,
     var parent: EntityId<ContentBo>?,
     var master: EntityId<ContentBo>?,
@@ -66,8 +60,6 @@ class ContentBo(
 
     override fun schema() = BoSchema {
         + ::id
-        + ::modifiedAt
-        + ::modifiedBy
         + ::locale
         + ::status
         + ::folder
