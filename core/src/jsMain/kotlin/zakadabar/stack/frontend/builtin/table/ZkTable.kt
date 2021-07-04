@@ -11,6 +11,7 @@ import org.w3c.dom.events.MouseEvent
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
 import zakadabar.stack.frontend.builtin.crud.ZkCrud
@@ -229,6 +230,12 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     fun <RT : Any> preload(loader: suspend () -> RT) = ZkTablePreload(loader)
 
+    /**
+     * Set data of the table. Asynchronous, waits for the preloads
+     * to finish before the data is actually set.
+     *
+     * @param  data  The data to set.
+     */
     fun setData(data: List<T>): ZkTable<T> {
         io {
             preloads.forEach {
@@ -245,6 +252,21 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         }
 
         return this
+    }
+
+    /**
+     * Execute the given query and set the table data to its
+     * result. Asynchronous, waits for the preloads to finish
+     * before the data is actually set.
+     *
+     * Calls the list version of [setData] with the query result.
+     *
+     * @param  query  The query to execute
+     */
+    fun setData(query : QueryBo<List<T>>) {
+        io {
+            setData(query.execute())
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -579,7 +601,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     // -------------------------------------------------------------------------
 
     /**
-     * Set the field to readonly.
+     * Set the column to size.
      */
     infix fun ZkElement.size(size: String) {
         if (this !is ZkColumn<*>) return

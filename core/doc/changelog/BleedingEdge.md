@@ -5,28 +5,51 @@ next month.
 
 ## Breaking Changes
 
+<div data-zk-enrich="Note" data-zk-flavour="Success" data-zk-title="Don't Worry">
+
+While the list of changes is long, the upgrade is quite straightforward, don't 
+worry about it.
+
+</div>
+
 **core**
 
-- `QueryBo` - type parameter can be anything (not a list by default)
-- `QueryBoCompanion` - has no type parameter
+- Kotlin 1.5.20
+- Ktor 1.6.1
+- serialization 1.2.1
+- coroutines 1.5.0
+- Gradle 7.1
+- `AccountPublicBo.displayName` - remove
+- `AccountPublicBo.id` - rename to `accountId`  
+- `AccountPublicBo.organizationName` - remove
+- `AccountPublicBo.phone` - new property
+- `AccountPublicBo` - is BaseBo instead of EntityBo  
 - `ActionBoCompanion` - has no type parameter
-- `StackRoles` - change name to `appRoles` and move into `.authorize` package
-- `RolesBase` - change name to `AppRolesBase` and move into `.authorize` package  
-- `StackRoles.siteMember` - replace with `SimpleRoleAuthorizer.Companion.LOGGED_IN`
-- `StackRoles.siteAdmin` - remove  
-- `StackRoles.anonymous` - remove
 - `BoSchema` does not accept empty `EntityId` by default
+- `DataConflictException` - rename to `DataConflict` and move to `zakadabar.stack.exceptions` package  
+- `QueryBoCompanion` - has no type parameter
+- `QueryBo` - type parameter can be anything (not a list by default)
+- `RolesBase` - change name to `AppRolesBase` and move into `.authorize` package  
+- `StackRoles.anonymous` - remove
+- `StackRoles.siteAdmin` - remove  
+- `StackRoles.siteMember` - replace with `SimpleRoleAuthorizer.Companion.LOGGED_IN`
+- `StackRoles` - change name to `appRoles` and move into `.authorize` package
 - `ValidityReport` now stores BOs instead of implementations
-- `zkFormStyles.buttons` added `marginBlockStart` and `marginBlockEnd`
 - `ZkCssStyleRule` values now are plain strings (instead of any)
+- `ZkElement.displayName` - remove
+- `zkFormStyles.buttons` added `marginBlockStart` and `marginBlockEnd`
+- `CommBase` (JS) - 401 throws `Unauthorized`
+- `Forbidden` (JVM) - moved to common
 
 **lib: accounts**
 
-- `RolesByAccount` contains `AccountPublicBo` instead of `AccountPrivateBo`
-- `KtorSessionBl` now checks for `ModuleSettings.loginActionRole` instead of `appRoles.siteMember`
-- `RoleGrantExposedTable` is now a class instead of an object, use `RoleGrantExposedTableCommon` instead
+- `AccountPrivateBo` - move fields to `AccountStateBo` and `AccountCredentialsBo`
 - `AccountPrivateExposedTable` is now a class instead of object, use `AccountPrivateExposedTableCommon` instead
 - `AccountbyRole` is now called `AccountsByRole`
+- `KtorSessionBl` now checks for `ModuleSettings.loginActionRole` instead of `appRoles.siteMember`
+- `LoginAction` now throws exception for all fails (even for locked)
+- `RoleGrantExposedTable` is now a class instead of an object, use `RoleGrantExposedTableCommon` instead
+- `RolesByAccount` contains `AccountPublicBo` instead of `AccountPrivateBo`
 
 **lib: blobs**
 
@@ -81,27 +104,35 @@ Search for `ZkCssStyleSheet` and fix errors:
 
 added:
 
-- `BoSchema.custom` - new function signature
-- `CustomBoConstraint` - new constraint class  
-- `ListBoSchemaEntry` - basic support for lists in schemas
-- `ListBoProperty` - property class for lists
-- `BoSchema.validate` - `allowEmptyId` parameter to allow empty `EntityId` 
-- `ValidityReport.allowEmptyId` - when true, empty `EntityId` is allowed even for mandatory fields
-- CSS value postfixes: `.px`, `.em`, see [Size Values](/doc/guides/browser/structure/ThemesCss.md#Size-Values)
 - CSS convenience classes, see [Value Shorthands](/doc/guides/browser/structure/ThemesCss.md#Value-Shorthands)
-- `application.stringStores`
-- `ZkStringStore.childStores`
-- `zkScrollBarStyles.hideScrollBar` - style to hide the scrollbar completely
-- `decodeURIComponent` import from JavaScript
+- CSS value postfixes: `.px`, `.em`, see [Size Values](/doc/guides/browser/structure/ThemesCss.md#Size-Values)
+- Make server description available without a session #32  
+- `BoSchema.custom` - new function signature
+- `BoSchema.validate` - `allowEmptyId` parameter to allow empty `EntityId` 
+- `CustomBoConstraint` - new constraint class  
+- `Forbidden` - common exception (frontend and backend)
+- `ListBoProperty` - property class for lists
+- `ListBoSchemaEntry` - basic support for lists in schemas
+- `ServerDescriptionBl` - handles `ServerDescriptionQuery`, added automatically
+- `ServerDescriptionQuery` - reads `ServerDescriptionBo` from the server
+- `Unauthorized` - common exception (frontend and backend)
+- `ValidityReport.allowEmptyId` - when true, empty `EntityId` is allowed even for mandatory fields
+- `ZkBuiltinStrings.loginMissingRole`
 - `ZkCrudTarget.onBeforeAddedCreate` - last minute customization of the editor for create
+- `ZkCrudTarget.onBeforeAddedDelete` - last minute customization of the editor for delete
 - `ZkCrudTarget.onBeforeAddedRead` - last minute customization of the editor for read
 - `ZkCrudTarget.onBeforeAddedUpdate` - last minute customization of the editor for update
-- `ZkCrudTarget.onBeforeAddedDelete` - last minute customization of the editor for delete
-- `withConfirm`  -  convenience for executing a code block after user confirmation
-- Make server description available without a session #32  
-- `ServerDescriptionQuery` - reads `ServerDescriptionBo` from the server
-- `ServerDescriptionBl` - handles `ServerDescriptionQuery`, added automatically
 - `ZkForm.onCreateSuccess`
+- `ZkStringStore.childStores`
+- `application.stringStores`
+- `decodeURIComponent` import from JavaScript
+- `withConfirm`  -  convenience for executing a code block after user confirmation
+- `zkScrollBarStyles.hideScrollBar` - style to hide the scrollbar completely
+- `ZkQueryCrudTarget` - crud target with a customized (not all fields) query for table
+- `ZkTable.setData(query)` - convenience to set data of a table from a query
+- `KtorServerBuilder` - handle Unauthorized
+- `LinkedExposedPaBase` - base persistence API for data linked to entities
+- `LinkedExposedPaTable` - base exposed table for data linked to entities
 
 changed:
 
@@ -110,22 +141,32 @@ changed:
 - serialization 1.2.1
 - coroutines 1.5.0
 - datetime 0.2.1  
-- `QueryBo` type parameter is not a list
-- `QueryBoCompanion` has no type parameter
+- Gradle 7.1  
+- `AccountPublicBo.displayName` - remove
+- `AccountPublicBo.id` - rename to `accountId`
+- `AccountPublicBo.organizationName` - remove
+- `AccountPublicBo.phone` - new property
+- `AccountPublicBo` - is BaseBo instead of EntityBo
 - `ActionBoCompanion` has no type parameter  
-- `ValidityReport` now stores BOs instead of implementations
+- `CommBase` (JS) - 401 throws `Unauthorized`
+- `DataConflictException` - rename to `DataConflict` and move to `zakadabar.stack.exceptions` package
+- `EmptySessionManager` - reads server description with `ServerDescriptionQuery`
 - `EntityBusinessLogicBase.pa` is now public
-- `SimpleRoleAuthorizer` supports `LOGGED_IN` special value  
+- `QueryBoCompanion` has no type parameter
+- `QueryBo` type parameter is not a list
 - `Router.query` change type parameter RQ from Any to QueryBo<RS> to ensure type safety
-- `ZkStringStore.merge` - also merge into child stores
+- `SimpleRoleAuthorizer` supports `LOGGED_IN` special value  
+- `ValidityReport` now stores BOs instead of implementations
 - `ZkAppication` - `window.path.location` is now decoded with `decodeUriComponent` before routing
 - `ZkBuiltinStrings.confirmDelete` - default text is "Are you sure you want to delete?"
 - `ZkBuiltinStrings.confirmation` - default text is "Please Confirm"
+- `ZkElement.displayName` - remove
 - `ZkStringField` - do not show mandatory mark when empty value is allowed
+- `ZkStringStore.merge` - also merge into child stores
 - `ZkTextArea` - do not show mandatory mark when empty value is allowed
 - `ZkTextArea` - remove hard-coded `flexGrow = 1` and `resize = "none"`
 - `zkFormStyles.buttons` - added margin before and after
-- `EmptySessionManager` - reads server description with `ServerDescriptionQuery`
+- `Forbidden` - moved from JVM to common
 
 deprecated:
 
@@ -145,8 +186,33 @@ fixed:
 
 ## Lib : Accounts
 
+added:
+
+- `AccountCredentialsBo` (common)
+- `AccountList` (common)
+- `AccountListSecure` (common)
+- `AccountStateBo` (common)
+- `CredentialTypes` (common)
+- `GetAccountState` (common)
+- `ModuleSettings.loginActionRole` (common)
+- `ModuleSettings.autoValidate` (common)
+- `ModuleSettings.enableAccountList` (common)
+- `ModuleSettings.phoneInAccountPublic` (common)
+- `AccountCredentialsExposedPa` (JVM)
+- `AccountCredentialsExposedTable`  (JVM)
+- `AccountStateExposedPa`  (JVM)
+- `AccountStateExposedTable`    (JVM)
+- `AccountPrivateBlAuthorizer`  (JVM)
+- `AccountPrivateBl.authorize`  (JVM) - audit for fail and success  
+- many unit tests  (JVM)
+- `AccountSecure` (JS) - account management CRUD for security officers
+- `AccountTableSecure` (JS) - list of accounts for security officers
+
 changed:
 
+- `AccountPrivateBl` - move authorization into `AccountPrivateBlAuthorizer`
+- `CreateAccount` - contains `validated` and `locked`
+- `AccountPrivateBo` - move fields to `AccountStateBo` and `AccountCredentialsBo`
 - `CheckName` is now a query
 - `CheckNameResult` contains `AccountPublicBo` instead of `AccountPrivateBo`
 - `RolesByAccount` contains `AccountPublicBo` instead of `AccountPrivateBo`
@@ -156,6 +222,10 @@ changed:
 - `RoleBl` constructor now requires a persistence api
 - `RoleGrantExposedTable` fields are now public
 - `AccountPrivateTable` fields are now public
+- `LoginAction` now throws exception for all fails (even for locked)
+- `KtorSessionBl` - move audit into AccountPrivateBl
+- `Accounts` - rename to `AccountSecure`
+- `Form` - add state fields
 
 fixed:
 

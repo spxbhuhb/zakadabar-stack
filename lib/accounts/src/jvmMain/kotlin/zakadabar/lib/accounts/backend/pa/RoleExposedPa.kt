@@ -6,14 +6,15 @@ package zakadabar.lib.accounts.backend
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import zakadabar.lib.accounts.data.ModuleSettings
+import zakadabar.lib.accounts.backend.bl.AccountPrivateBl
+import zakadabar.lib.accounts.backend.pa.AccountPrivateExposedTable
+import zakadabar.lib.accounts.backend.pa.AccountPrivateExposedTableCommon
 import zakadabar.lib.accounts.data.RoleBo
 import zakadabar.lib.accounts.data.RoleGrantBo
 import zakadabar.stack.backend.exposed.ExposedPaBase
 import zakadabar.stack.backend.exposed.ExposedPaTable
 import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.exposed.entityId
-import zakadabar.stack.backend.setting.setting
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.entity.EntityId
@@ -24,8 +25,6 @@ open class RoleExposedPa(
 ) : ExposedPaBase<RoleBo, RoleExposedTable>(
     table = RoleExposedTableCommon
 ) {
-
-    private val settings by setting<ModuleSettings>()
 
     override fun onModuleLoad() {
         super.onModuleLoad()
@@ -55,18 +54,25 @@ open class RoleExposedPa(
             }
 
 
-    fun accountsByRole(roleId: EntityId<RoleBo>): List<AccountPublicBo> {
+    fun accountsByRole(roleId: EntityId<RoleBo>, withEmail : Boolean, withPhone : Boolean): List<AccountPublicBo> {
         return grantTable
             .innerJoin(accountTable, { grantTable.account }, { accountTable.id })
+            .slice(
+                accountTable.id,
+                accountTable.accountName,
+                accountTable.fullName,
+                accountTable.email,
+                accountTable.theme,
+                accountTable.locale
+            )
             .select { grantTable.role eq roleId.toLong() }
             .map {
                 AccountPublicBo(
                     EntityId(it[accountTable.id].value),
                     accountName = it[accountTable.accountName],
                     fullName = it[accountTable.fullName],
-                    email = if (settings.emailInAccountPublic) it[accountTable.email] else "",
-                    displayName = it[accountTable.displayName],
-                    organizationName = "", // FIXME this is not stored yet
+                    email = if (withEmail) it[accountTable.email] else null,
+                    phone = if (withPhone) it[accountTable.phone] else null,
                     theme = it[accountTable.theme],
                     locale = it[accountTable.locale]
                 )

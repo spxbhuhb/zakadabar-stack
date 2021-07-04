@@ -102,12 +102,6 @@ open class ZkElement(
     //   Shorthands variables
     // -------------------------------------------------------------------------
 
-    /**
-     * Display name of the current user.
-     */
-    val displayName
-        get() = application.executor.account.displayName
-
     var gridAutoRows: String
         get() = buildPoint.style.getPropertyValue("grid-auto-rows")
         set(value) {

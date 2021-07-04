@@ -13,7 +13,7 @@ class ModuleSettings(
     /**
      * Maximum number of failed logins before the system locks the account.
      */
-    var maxFailedLogins : Int = 5,
+    var maxFailedLogins: Int = 5,
 
     /**
      * Session timeout in minutes.
@@ -40,16 +40,35 @@ class ModuleSettings(
     var initialSoPassword: String? = null,
 
     /**
-     * When true email addresses are put into AccountPublicBo objects.
-     * Default is false.
-     */
-     var emailInAccountPublic : Boolean = false,
-
-    /**
      * When not empty, this role is required for the user to execute the
      * LoginAction.
      */
-    var loginActionRole : String = ""
+    var loginActionRole: String = "",
+
+    /**
+     * Validate accounts automatically. When true no external validation
+     * is required, the `validated` field of the account state is set
+     * to `true` automatically.
+     */
+    var autoValidate: Boolean = true,
+
+    /**
+     * Enable the [AccountList] query to be run by the users. Default
+     * is `false` (the list is not enabled by default).
+     */
+    var enableAccountList: Boolean = false,
+
+    /**
+     * When true email addresses are put into AccountPublicBo objects.
+     * Default is false.
+     */
+    var emailInAccountPublic: Boolean = false,
+
+    /**
+     * When true phone numbers are put into AccountPublicBo objects.
+     * Default is false.
+     */
+    var phoneInAccountPublic: Boolean = false
 
 ) : BaseBo {
 
@@ -59,8 +78,11 @@ class ModuleSettings(
         + ::updateDelay default updateDelay
         + ::expirationCheckInterval default expirationCheckInterval
         + ::initialSoPassword default initialSoPassword
-        + ::emailInAccountPublic default emailInAccountPublic
         + ::loginActionRole default loginActionRole
+        + ::autoValidate default autoValidate
+        + ::enableAccountList default enableAccountList
+        + ::emailInAccountPublic default emailInAccountPublic
+        + ::phoneInAccountPublic default phoneInAccountPublic
     }
 
 }

@@ -10,6 +10,9 @@ import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.schema.BoSchema
 
+/**
+ * Action BO for login.
+ */
 @Serializable
 class LoginAction(
 
@@ -18,6 +21,14 @@ class LoginAction(
 
 ) : ActionBo<ActionStatusBo> {
 
+    /**
+     * Executes the login.
+     *
+     * @throws  Unauthorized  When the login fails. Data of unauthorized shows if
+     *                        the login failed because the account is locked, the
+     *                        account does not have the necessary role to log in
+     *                        with this action, or for other reason.
+     */
     override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
 
     companion object : ActionBoCompanion(SessionBo.boNamespace)

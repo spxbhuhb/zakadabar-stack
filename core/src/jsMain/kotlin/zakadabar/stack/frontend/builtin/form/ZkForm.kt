@@ -20,7 +20,6 @@ import kotlinx.browser.document
 import kotlinx.datetime.Instant
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityBo
@@ -28,6 +27,7 @@ import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.data.schema.BoSchema
 import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.stack.exceptions.DataConflict
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementMode
@@ -297,7 +297,7 @@ open class ZkForm<T : BaseBo>(
 
                 onSubmitSuccess()
 
-            } catch (ex: DataConflictException) {
+            } catch (ex: DataConflict) {
 
                 toastDanger { localizedStrings[ex.message] }
 

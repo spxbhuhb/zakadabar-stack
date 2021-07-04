@@ -4,7 +4,11 @@
 package zakadabar.stack.data
 
 import kotlinx.coroutines.await
+import kotlinx.serialization.json.Json
 import org.w3c.fetch.Response
+import zakadabar.stack.exceptions.DataConflict
+import zakadabar.stack.exceptions.Unauthorized
+import zakadabar.stack.exceptions.UnauthorizedData
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.toast.toastDanger
 import zakadabar.stack.resources.localizedStrings
@@ -76,9 +80,10 @@ abstract class CommBase {
         if (code >= 400) {
             when (code) {
                 400 -> throw IllegalArgumentException()
+                401 -> throw Unauthorized(data = Json.decodeFromString(UnauthorizedData.serializer(), response.text().await()))
                 403 -> throw Forbidden()
                 404 -> throw NoSuchElementException()
-                409 -> throw DataConflictException(response.text().await())
+                409 -> throw DataConflict(response.text().await())
                 440 -> throw LoginTimeout()
                 501 -> throw NotImplementedError()
                 else -> throw RuntimeException()

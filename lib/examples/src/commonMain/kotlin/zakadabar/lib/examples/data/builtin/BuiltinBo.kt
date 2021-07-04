@@ -47,6 +47,7 @@ data class BuiltinBo(
     override fun getBoNamespace() = boNamespace
     override fun comm() = comm
 
+    @Suppress("DuplicatedCode")
     override fun schema() = BoSchema {
         + ::id
         + ::booleanValue

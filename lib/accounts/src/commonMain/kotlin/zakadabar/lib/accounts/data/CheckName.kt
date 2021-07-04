@@ -4,12 +4,17 @@
 package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
+import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.builtin.account.AccountPublicBo
+import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.data.query.QueryBoCompanion
 import zakadabar.stack.data.schema.BoSchema
 
 /**
  * Checks if an account name is valid or is it already used.
+ *
+ * TODO restrict checkName call number per session
  */
 @Serializable
 class CheckName(
@@ -27,3 +32,10 @@ class CheckName(
     }
 
 }
+
+@Serializable
+class CheckNameResult(
+
+    var accountId: EntityId<AccountPublicBo>?
+
+) : BaseBo

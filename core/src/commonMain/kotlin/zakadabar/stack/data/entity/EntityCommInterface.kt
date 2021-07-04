@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.data.entity
 
-import zakadabar.stack.data.DataConflictException
+import zakadabar.stack.exceptions.DataConflict
 
 /**
  * Interface to be implemented on the client side for communication.
@@ -18,7 +18,7 @@ interface EntityCommInterface<T> {
      * @return The BO of the created entity.
      *
      * @throws IllegalArgumentException the bo is invalid (HTTP status code 400)
-     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
+     * @throws DataConflict the server reported a data conflict (HTTP status code 409)
      * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
      * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
      */
@@ -33,7 +33,7 @@ interface EntityCommInterface<T> {
      *
      * @throws IllegalArgumentException the bo is invalid (HTTP status code 400)
      * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
-     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
+     * @throws DataConflict the server reported a data conflict (HTTP status code 409)
      * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
      * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
      */
@@ -48,7 +48,7 @@ interface EntityCommInterface<T> {
      *
      * @throws IllegalArgumentException the bo is invalid (HTTP status code 400)
      * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
-     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
+     * @throws DataConflict the server reported a data conflict (HTTP status code 409)
      * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
      * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
      */
@@ -63,7 +63,7 @@ interface EntityCommInterface<T> {
      *
      * @throws IllegalArgumentException the bo is invalid (HTTP status code 400)
      * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
-     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
+     * @throws DataConflict the server reported a data conflict (HTTP status code 409)
      * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
      * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
      */
@@ -78,7 +78,7 @@ interface EntityCommInterface<T> {
      *
      * @throws IllegalArgumentException the bo is invalid (HTTP status code 400)
      * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
-     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
+     * @throws DataConflict the server reported a data conflict (HTTP status code 409)
      * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
      * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
      */
@@ -91,7 +91,7 @@ interface EntityCommInterface<T> {
      *
      * @throws IllegalArgumentException the bo is invalid (HTTP status code 400)
      * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
-     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
+     * @throws DataConflict the server reported a data conflict (HTTP status code 409)
      * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
      * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
      */
@@ -104,7 +104,7 @@ interface EntityCommInterface<T> {
      *
      * @throws IllegalArgumentException the bo is invalid (HTTP status code 400)
      * @throws NoSuchElementException if the record with the given id does not exists (HTTP status code 404)
-     * @throws DataConflictException the server reported a data conflict (HTTP status code 409)
+     * @throws DataConflict the server reported a data conflict (HTTP status code 409)
      * @throws NotImplementedError this function is not implemented on the server side (HTTP status code 501)
      * @throws RuntimeException if there is a general server side processing error (HTTP status code 4xx, 5xx)
      */

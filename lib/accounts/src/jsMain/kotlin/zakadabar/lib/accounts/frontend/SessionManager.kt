@@ -86,7 +86,7 @@ class SessionManager : ZkSessionManager {
                 // original account information to keep the consistency of the UI. This happens
                 // when more requests receive login timeout response.
 
-                if (session.account.id == application.executor.account.id) {
+                if (session.account.accountId == application.executor.account.accountId) {
                     responseChannel.send(true)
                     continue
                 }
@@ -101,7 +101,7 @@ class SessionManager : ZkSessionManager {
 
                 session = SessionBo.read(EntityId("current"))
 
-                if (session.account.id == application.executor.account.id) {
+                if (session.account.accountId == application.executor.account.accountId) {
                     responseChannel.send(true)
                     continue
                 }

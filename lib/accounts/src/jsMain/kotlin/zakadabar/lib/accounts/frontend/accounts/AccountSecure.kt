@@ -3,15 +3,19 @@
  */
 package zakadabar.lib.accounts.frontend.accounts
 
+import zakadabar.lib.accounts.data.AccountListSecureEntry
 import zakadabar.lib.accounts.data.AccountPrivateBo
-import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
+import zakadabar.stack.frontend.builtin.crud.ZkQueryCrudTarget
 
-class Accounts : ZkCrudTarget<AccountPrivateBo>() {
+/**
+ * CRUD for security officers to manage accounts.
+ */
+class AccountSecure : ZkQueryCrudTarget<AccountPrivateBo, AccountListSecureEntry>() {
 
     init {
         companion = AccountPrivateBo.Companion
         boClass = AccountPrivateBo::class
-        tableClass = Table::class
+        queryTableClass = AccountsTableSecure::class
         editorClass = Form::class
     }
 

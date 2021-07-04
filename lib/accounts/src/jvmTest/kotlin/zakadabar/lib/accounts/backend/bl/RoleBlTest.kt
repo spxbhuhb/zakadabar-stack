@@ -1,12 +1,13 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.accounts.backend
+package zakadabar.lib.accounts.backend.bl
 
 import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
+import zakadabar.lib.accounts.backend.Roles
 import zakadabar.lib.accounts.backend.testing.AuthTestCompanionBase
 import zakadabar.lib.accounts.data.AccountsByRole
 import zakadabar.lib.accounts.data.CreateAccount
@@ -34,12 +35,13 @@ class RoleBlTest {
         assertEquals("so", siteMember.first().accountName)
 
         CreateAccount(
+            locked = false,
+            validated = true,
             credentials = null,
             accountName = "test1",
             fullName = "test1",
             email = "email@a.b",
             phone = "12345678901234",
-            displayName = null,
             theme = null,
             locale = "en",
             roles = listOf(RoleBo.all().first { it.name == Roles.securityOfficer }.id)

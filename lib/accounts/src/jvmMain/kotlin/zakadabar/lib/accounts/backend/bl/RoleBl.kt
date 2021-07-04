@@ -3,8 +3,9 @@
  */
 @file:Suppress("UNUSED_PARAMETER", "unused")
 
-package zakadabar.lib.accounts.backend
+package zakadabar.lib.accounts.backend.bl
 
+import zakadabar.lib.accounts.backend.RoleExposedPa
 import zakadabar.lib.accounts.data.*
 import zakadabar.stack.authorize.appRoles
 import zakadabar.stack.backend.authorize.Executor
@@ -12,12 +13,15 @@ import zakadabar.stack.backend.authorize.RoleBlProvider
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.LOGGED_IN
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
+import zakadabar.stack.backend.setting.setting
 import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.entity.EntityId
 
 open class RoleBl : RoleBlProvider, EntityBusinessLogicBase<RoleBo>(
     boClass = RoleBo::class
 ) {
+
+    private val settings by setting<ModuleSettings>()
 
     override val pa = RoleExposedPa()
 
@@ -44,7 +48,11 @@ open class RoleBl : RoleBlProvider, EntityBusinessLogicBase<RoleBo>(
         pa.rolesByAccount(query.accountId)
 
     private fun accountsByRole(executor: Executor, query: AccountsByRole) =
-        pa.accountsByRole(pa.readByName(query.roleName).id)
+        pa.accountsByRole(
+            pa.readByName(query.roleName).id,
+            withEmail = settings.emailInAccountPublic,
+            withPhone = settings.phoneInAccountPublic,
+        )
 
     // -------------------------------------------------------------------------
     // Actions

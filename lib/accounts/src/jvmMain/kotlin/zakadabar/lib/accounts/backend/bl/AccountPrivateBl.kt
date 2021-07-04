@@ -1,95 +1,55 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.accounts.backend
+
+package zakadabar.lib.accounts.backend.bl
 
 import io.ktor.features.*
 import kotlinx.datetime.Clock
+import zakadabar.lib.accounts.backend.pa.AccountCredentialsExposedPa
+import zakadabar.lib.accounts.backend.pa.AccountPrivateExposedPa
+import zakadabar.lib.accounts.backend.pa.AccountStateExposedPa
 import zakadabar.lib.accounts.data.*
 import zakadabar.stack.authorize.appRoles
-import zakadabar.stack.backend.authorize.*
+import zakadabar.stack.backend.authorize.AccountBlProvider
+import zakadabar.stack.backend.authorize.Executor
+import zakadabar.stack.backend.authorize.authorize
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.module
 import zakadabar.stack.backend.server
 import zakadabar.stack.backend.setting.setting
 import zakadabar.stack.backend.util.default
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.query.QueryBo
+import zakadabar.stack.exceptions.Unauthorized
+import zakadabar.stack.exceptions.UnauthorizedData
 import zakadabar.stack.util.BCrypt
 
 open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     boClass = AccountPrivateBo::class,
 ), AccountBlProvider {
 
-    private val settings by setting<ModuleSettings>()
+    open val settings by setting<ModuleSettings>()
 
-    override val pa =  AccountPrivateExposedPa()
+    override val pa = AccountPrivateExposedPa()
+    open val statePa = AccountStateExposedPa()
+    open val credentialsPa = AccountCredentialsExposedPa()
 
     private lateinit var anonymous: AccountPublicBo
 
     private val roleBl by module<RoleBl>()
 
-    override val authorizer = object : SimpleRoleAuthorizer<AccountPrivateBo>({
-        all = appRoles.securityOfficer // for non-overridden methods
-    }) {
-
-        override fun authorizeRead(executor: Executor, entityId: EntityId<AccountPrivateBo>) {
-            ownOrSecurityOfficer(executor, entityId)
-        }
-
-        override fun authorizeUpdate(executor: Executor, entity: AccountPrivateBo) {
-            ownOrSecurityOfficer(executor, entity.id)
-        }
-
-        override fun authorizeQuery(executor: Executor, queryBo: QueryBo<*>) {
-            when (queryBo) {
-                is CheckName -> authorize(! executor.anonymous)
-            }
-        }
-
-        override fun authorizeAction(executor: Executor, actionBo: ActionBo<*>) {
-            when (actionBo) {
-                is CreateAccount -> authorize(executor, appRoles.securityOfficer)
-                is UpdateAccountLocked -> authorize(executor, appRoles.securityOfficer)
-                is PasswordChange -> secureChange(executor, actionBo.accountId, actionBo.oldPassword)
-                is UpdateAccountSecure -> secureChange(executor, actionBo.accountId, actionBo.password)
-                else -> throw Forbidden()
-            }
-        }
-
-        /**
-         * Users can read and update the non-secure fields their own account, if they are not "anonymous".
-         * Security officer can update non-secure fields of all users.
-         */
-        fun ownOrSecurityOfficer(executor: Executor, accountId: EntityId<AccountPrivateBo>) {
-            if (executor.accountId == anonymous.id) throw Forbidden()
-            if (executor.accountId == accountId || executor.hasRole(appRoles.securityOfficer)) {
-                return
-            } else {
-                throw Forbidden()
-            }
-        }
-
-        /**
-         * For changing security related fields (password, e-mail, phone). Security officer can
-         * change anything without password, except own.
-         */
-        fun secureChange(executor: Executor, accountId: EntityId<AccountPrivateBo>, password: Secret) {
-            if (executor.accountId == accountId) {
-                authenticate(executor, accountId, password.value)
-            } else {
-                authorize(executor, appRoles.securityOfficer)
-            }
-        }
-    }
+    @Suppress("LeakingThis") // this is fine here as authorizer not called during init
+    override val authorizer = AccountPrivateBlAuthorizer(this)
 
     override val router = router {
         query(CheckName::class, ::checkName)
+        query(GetAccountState::class, ::getAccountState)
+        query(AccountListSecure::class, ::accountListSecure)
+        query(AccountList::class, ::accountList)
         action(CreateAccount::class, ::createAccount)
         action(PasswordChange::class, ::passwordChange)
         action(UpdateAccountSecure::class, ::updateAccountSecure)
@@ -104,21 +64,26 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     // Lifecycle
     // -------------------------------------------------------------------------
 
+    override fun onModuleLoad() {
+        super.onModuleLoad()
+        statePa.onModuleLoad()
+        credentialsPa.onModuleLoad()
+    }
+
     override fun onInitializeDb() {
 
         val so = pa.withTransaction {
             try {
                 pa.readByName("so")
             } catch (ex: NoSuchElementException) {
-                pa.create(
+                create(
                     default {
                         validated = true
-                        locked = settings.initialSoPassword.isNullOrEmpty()
+                        locked = settings.initialSoPassword == null
                         credentials = settings.initialSoPassword?.let { Secret(it) }
                         accountName = "so"
                         fullName = "Security Officer"
                         email = "so@127.0.0.1"
-                        displayName = "SO"
                         locale = server.settings.defaultLocale
                     }
                 )
@@ -129,14 +94,13 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
             try {
                 pa.readByName("anonymous")
             } catch (ex: NoSuchElementException) {
-                pa.create(
+                create(
                     default {
                         validated = true
                         locked = true
                         accountName = "anonymous"
                         fullName = "Anonymous"
                         email = "anonymous@127.0.0.1"
-                        displayName = "Anonymous"
                         locale = server.settings.defaultLocale
                     }
                 )
@@ -185,52 +149,38 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     }
 
     // -------------------------------------------------------------------------
-    // Crud
-    // -------------------------------------------------------------------------
-
-    override fun create(executor: Executor, bo: AccountPrivateBo): AccountPrivateBo {
-        throw NotImplementedError("use CreateAccount action instead")
-    }
-
-    /**
-     * Updates only the non-security fields of the account. Security related fields have
-     * their own update methods. Email and password are security related fields.
-     */
-    override fun update(executor: Executor, bo: AccountPrivateBo): AccountPrivateBo {
-        val account = pa.read(bo.id)
-        val credentials = pa.readCredentials(account.id)
-
-        account.accountName = bo.accountName
-        account.fullName = bo.fullName
-        account.displayName = bo.displayName
-        account.theme = bo.theme
-        account.locale = bo.locale
-
-        pa.update(account)
-        pa.writeCredentials(account.id, credentials)
-
-        return account
-    }
-
-    // -------------------------------------------------------------------------
-    // Actions
+    // Queries
     // -------------------------------------------------------------------------
 
     open fun checkName(executor: Executor, query: CheckName): CheckNameResult {
 
         return try {
             CheckNameResult(
-                query.accountName,
                 accountId = EntityId(pa.readByName(query.accountName).id)
             )
         } catch (ex: NoSuchElementException) {
             CheckNameResult(
-                query.accountName,
                 accountId = null
             )
         }
 
     }
+
+    open fun getAccountState(executor: Executor, query: GetAccountState): AccountStateBo =
+        statePa.read(query.accountId)
+
+    open fun accountListSecure(executor: Executor, query: AccountListSecure): List<AccountListSecureEntry> =
+        pa.accountListSecure(statePa.table)
+
+    open fun accountList(executor: Executor, query: AccountList): List<AccountPublicBo> =
+        pa.accountList(
+            withEmail = settings.emailInAccountPublic,
+            withPhone = settings.phoneInAccountPublic
+        )
+
+    // -------------------------------------------------------------------------
+    // Actions
+    // -------------------------------------------------------------------------
 
     open fun createAccount(executor: Executor, action: CreateAccount): ActionStatusBo {
 
@@ -241,63 +191,82 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
             // this is fine, this is what we want
         }
 
-        val account = default<AccountPrivateBo> {
-            validated = true
-            credentials = action.credentials
-            accountName = action.accountName
-            fullName = action.fullName
-            email = action.email
-            phone = action.phone
-            locale = action.locale
-        }
-
-        pa.create(account)
+        val accountPrivate = create(action)
 
         action.roles.forEach {
-            roleBl.grantRole(executor, GrantRole(account.id, it))
+            roleBl.grantRole(executor, GrantRole(accountPrivate.id, it))
         }
 
         return ActionStatusBo()
     }
 
+    /**
+     * Creates private, state, credentials from a [CreateAccount] action BO.
+     */
+    fun create(action: CreateAccount): AccountPrivateBo {
+
+        val accountPrivate = pa.create(
+            default {
+                accountName = action.accountName
+                fullName = action.fullName
+                email = action.email
+                phone = action.phone
+                locale = action.locale
+            }
+        )
+
+        statePa.create(
+            default {
+                accountId = accountPrivate.id
+                validated = settings.autoValidate
+            }
+        )
+
+        action.credentials?.let {
+            credentialsPa.create(
+                default {
+                    accountId = accountPrivate.id
+                    type = CredentialTypes.password
+                    value = it
+                }
+            )
+        }
+
+        return accountPrivate
+    }
+
     open fun updateAccountSecure(executor: Executor, action: UpdateAccountSecure): ActionStatusBo {
 
         val account = pa.read(action.accountId)
-        val credentials = pa.readCredentials(account.id)
 
         account.email = action.email
         account.phone = action.phone
 
         pa.update(account)
-        pa.writeCredentials(account.id, credentials)
 
         return ActionStatusBo()
     }
 
     open fun updateAccountLocked(executor: Executor, action: UpdateAccountLocked): ActionStatusBo {
 
-        val account = pa.read(action.accountId)
-        val credentials = pa.readCredentials(account.id)
+        val state = statePa.read(action.accountId)
 
-        if (account.locked && ! action.locked) {
-            account.loginFailCount = 0
+        if (state.locked && ! action.locked) {
+            state.loginFailCount = 0
         }
 
-        account.locked = action.locked
+        state.locked = action.locked
 
-        pa.update(account)
-        pa.writeCredentials(account.id, credentials)
+        statePa.update(state)
 
         return ActionStatusBo()
     }
 
     open fun passwordChange(executor: Executor, action: PasswordChange): ActionStatusBo {
 
-        val bo = pa.read(action.accountId)
-
         if (executor.accountId == action.accountId) {
             try {
-                authenticate(executor, bo.id, action.oldPassword.value)
+                authenticate(executor, action.accountId, action.oldPassword.value)
             } catch (ex: Exception) {
                 return ActionStatusBo(false)
             }
@@ -305,11 +274,16 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
             authorize(executor, appRoles.securityOfficer)
         }
 
-        bo.credentials = action.newPassword
+        credentialsPa
+            .read(action.accountId, CredentialTypes.password)
+            .apply {
+                value = action.newPassword
+            }
+            .also {
+                credentialsPa.update(it)
+            }
 
-        pa.update(bo)
-
-        auditor.auditCustom(executor) { "password change accountId=${bo.id} accountName=${bo.accountName}" }
+        auditor.auditCustom(executor) { "password change accountId=${action.accountId} executorId=${executor.accountId}" }
 
         return ActionStatusBo()
     }
@@ -326,44 +300,45 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
      * @param   accountId  The account id to authenticate.
      * @param   password   The password to authenticate with.
      *
-     * @throws  NoSuchElementException        When the account does not exists.
-     * @throws  AccountNotValidatedException  When [AccountPrivateBo.validated] is false.
-     * @throws  AccountLockedException        When [AccountPrivateBo.locale] is true.
-     * @throws  AccountExpiredException       When [AccountPrivateBo.expired] is true.
-     * @throws  InvalidCredentials            When the supplied password is invalid.
+     * @throws  NoSuchElementException   When the account does not exists.
+     * @throws  Unauthorized             When the login fails.
      */
     open fun authenticate(executor: Executor, accountId: EntityId<AccountPrivateBo>, password: String) {
 
-        val account = pa.read(accountId)
-
-        val credentials = pa.readCredentials(accountId) ?: throw NoSuchElementException()
+        val state = statePa.read(accountId)
+        val credentials = credentialsPa.read(accountId, CredentialTypes.password)
 
         val result = when {
-            ! account.validated -> AccountNotValidatedException()
-            account.locked -> AccountLockedException()
-            account.expired -> AccountExpiredException()
-            ! BCrypt.checkpw(password, credentials) -> InvalidCredentials()
+            ! state.validated -> Unauthorized("NotValidated")
+            state.locked -> Unauthorized("Locked", UnauthorizedData(true))
+            state.expired -> Unauthorized("Expired")
+            state.anonymized -> Unauthorized("Anonymized")
+            ! BCrypt.checkpw(password, credentials.value.value) -> Unauthorized("InvalidCredentials")
             else -> null
         }
 
         if (result != null) {
-            account.loginFailCount ++
-            account.lastLoginFail = Clock.System.now()
-            account.locked = account.locked || (account.loginFailCount > settings.maxFailedLogins)
+            state.loginFailCount ++
+            state.lastLoginFail = Clock.System.now()
+            state.locked = state.locked || (state.loginFailCount > settings.maxFailedLogins)
+
+            statePa.update(state)
             pa.commit()
-            auditor.auditCustom(executor) { "login fail accountId=${account.id} accountName=${account.accountName} count=${account.loginFailCount} locked=${account.locked}" }
-            pa.commit()
+
+            auditor.auditCustom(executor) { "login fail accountId=${accountId} reason=${result.reason}" }
+            pa.commit() // the two commits are intentional, we don't want to loose the locking mechanism in case audit fails
+
             throw result
         }
 
-        account.lastLoginSuccess = Clock.System.now()
-        account.loginSuccessCount ++
+        state.lastLoginSuccess = Clock.System.now()
+        state.loginSuccessCount ++
 
-        account.loginFailCount = 0
+        state.loginFailCount = 0
 
-        pa.update(account)
+        auditor.auditCustom(executor) { ("login success accountId=${accountId}") }
 
-        pa.commit()
+        statePa.update(state)
     }
 
     override fun authenticate(executor: Executor, accountName: String, password: Secret): AccountPublicBo {
@@ -373,12 +348,11 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     }
 
     open fun AccountPrivateBo.toPublic() = AccountPublicBo(
-        id = EntityId(id),
+        accountId = EntityId(id),
         accountName = accountName,
         fullName = fullName,
-        email = email,
-        displayName = displayName,
-        organizationName = null,
+        email = if (settings.emailInAccountPublic) email else null,
+        phone = if (settings.phoneInAccountPublic) phone else null,
         theme = theme,
         locale = locale
     )

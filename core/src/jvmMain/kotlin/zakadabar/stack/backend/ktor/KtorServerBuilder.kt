@@ -21,12 +21,13 @@ import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 import zakadabar.stack.backend.BackendModule
 import zakadabar.stack.backend.Server.Companion.staticRoot
-import zakadabar.stack.backend.authorize.Forbidden
 import zakadabar.stack.backend.authorize.LoginTimeout
 import zakadabar.stack.backend.routingLogger
 import zakadabar.stack.backend.server
-import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.builtin.settings.ServerSettingsBo
+import zakadabar.stack.exceptions.DataConflict
+import zakadabar.stack.exceptions.Forbidden
+import zakadabar.stack.exceptions.Unauthorized
 import zakadabar.stack.util.InstanceStore
 import java.io.File
 import java.time.Duration
@@ -78,13 +79,16 @@ open class KtorServerBuilder(
             exception<LoginTimeout> {
                 call.respond(HttpStatusCode(440, "Login Timeout"))
             }
-            exception<Forbidden> {
-                call.respond(HttpStatusCode.Forbidden)
-            }
             exception<EntityNotFoundException> {
                 call.respond(HttpStatusCode.NotFound)
             }
-            exception<DataConflictException> {
+            exception<Forbidden> {
+                call.respond(HttpStatusCode.Forbidden)
+            }
+            exception<Unauthorized> {
+                call.respond(HttpStatusCode.Unauthorized, it.data)
+            }
+            exception<DataConflict> {
                 call.respond(HttpStatusCode.Conflict, it.message)
             }
             status(HttpStatusCode.NotFound) {

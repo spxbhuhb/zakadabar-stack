@@ -86,7 +86,7 @@ suspend fun login() {
 
     println("    ---- after successful login ----\n")
 
-    val account = AccountPrivateBo.read(EntityId(session.account.id.toLong()))
+    val account = AccountPrivateBo.read(EntityId(session.account.accountId))
     println("        $account\n")
 
     actionStatus = LogoutAction().execute()
@@ -95,7 +95,7 @@ suspend fun login() {
     println("        $actionStatus\n")
 
     try {
-        AccountPrivateBo.read(EntityId(session.account.id.toLong()))
+        AccountPrivateBo.read(EntityId(session.account.accountId))
     } catch (ex: ClientRequestException) {
         println("    ---- after logout ----\n")
         println("        ${ex.response}")

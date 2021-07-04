@@ -7,6 +7,7 @@ import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.frontend.resources.css.em
 import zakadabar.stack.resources.localizedStrings
 import kotlin.reflect.KProperty1
 
@@ -14,6 +15,8 @@ open class ZkEntityIdColumn<T : BaseBo, IT>(
     table: ZkTable<T>,
     private val prop: KProperty1<T, EntityId<IT>>
 ) : ZkColumn<T>(table) {
+
+    override var max = 8.em
 
     override fun onCreate() {
         label = localizedStrings.getNormalized(prop.name)

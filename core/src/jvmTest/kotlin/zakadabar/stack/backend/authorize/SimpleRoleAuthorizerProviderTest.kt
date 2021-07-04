@@ -15,6 +15,7 @@ import zakadabar.stack.backend.server
 import zakadabar.stack.backend.testing.TestCompanionBase
 import zakadabar.stack.data.entity.EmptyEntityBo
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.exceptions.Forbidden
 import kotlin.test.assertFailsWith
 
 object Roles : AppRolesBase() {

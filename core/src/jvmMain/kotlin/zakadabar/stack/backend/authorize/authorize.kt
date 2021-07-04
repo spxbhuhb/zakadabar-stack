@@ -5,6 +5,7 @@ package zakadabar.stack.backend.authorize
 
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.exceptions.Forbidden
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
@@ -39,4 +40,3 @@ fun authorize(authorized: Boolean) {
     if (! authorized) throw Forbidden()
 }
 
-class Forbidden : Exception()

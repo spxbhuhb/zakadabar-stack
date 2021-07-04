@@ -16,12 +16,11 @@ class EmptySessionManager : ZkSessionManager {
 
         application.executor = ZkExecutor(
             account = AccountPublicBo(
-                id = EntityId(),
+                accountId = EntityId(),
                 accountName = "anonymous",
                 fullName = "Anonymous",
                 email = null,
-                displayName = null,
-                organizationName = null,
+                phone = null,
                 theme = null,
                 locale = ""
             ),

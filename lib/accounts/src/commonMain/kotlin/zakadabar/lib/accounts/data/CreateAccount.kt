@@ -26,9 +26,11 @@ class CreateAccount(
     var email: String,
     var phone: String?,
 
-    var displayName: String?,
     var theme: String?,
     var locale: String,
+
+    var validated : Boolean,
+    var locked : Boolean,
 
     var roles: List<EntityId<RoleBo>>
 
@@ -46,9 +48,11 @@ class CreateAccount(
         + ::email min 4 max 50
         + ::phone min 10 max 20
 
-        + ::displayName min 3 max 50
         + ::locale max 20
         + ::theme max 50
+
+        + ::validated
+        + ::locked
     }
 
 

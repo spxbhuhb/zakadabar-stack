@@ -11,6 +11,9 @@ import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPage
 import zakadabar.stack.frontend.util.io
 
+/**
+ * Page for the users to view/change their own account information.
+ */
 class Account : ZkPage() {
 
     override fun onCreate() {
@@ -18,7 +21,7 @@ class Account : ZkPage() {
 
         io {
             + Form().also {
-                it.bo = AccountPrivateBo.read(EntityId(executor.account.id))
+                it.bo = AccountPrivateBo.read(EntityId(executor.account.accountId))
                 it.mode = ZkElementMode.Update
             }
         }

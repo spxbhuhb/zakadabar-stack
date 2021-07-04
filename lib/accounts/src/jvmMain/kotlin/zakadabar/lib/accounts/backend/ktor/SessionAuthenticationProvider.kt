@@ -3,12 +3,13 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package zakadabar.lib.accounts.backend.session
+package zakadabar.lib.accounts.backend.ktor
 
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.sessions.*
 import org.jetbrains.exposed.sql.transactions.transaction
+import zakadabar.lib.accounts.backend.bl.KtorSessionBl
 import zakadabar.lib.accounts.data.LoginAction
 import zakadabar.stack.backend.authorize.AccountBlProvider
 import zakadabar.stack.backend.ktor.KtorExecutor
@@ -25,7 +26,7 @@ fun Authentication.Configuration.configureSession(name: String? = null) {
     val sessionBl by module<KtorSessionBl>()
     val accountBl by module<AccountBlProvider>()
     val executor = accountBl.anonymous().let {
-        KtorExecutor(it.id, true, emptyList(), emptyList())
+        KtorExecutor(it.accountId, true, emptyList(), emptyList())
     }
 
     val provider = AuthenticationProvider(SessionAuthenticationProvider.Configuration(name))
@@ -52,7 +53,7 @@ fun Authentication.Configuration.configureSession(name: String? = null) {
         }
 
         val anonymous = accountBl.anonymous()
-        val session = StackSession(anonymous.id, true, emptyList(), emptyList())
+        val session = StackSession(anonymous.accountId, true, emptyList(), emptyList())
 
         call.sessions.set(session)
         context.principal(KtorExecutor(session.account, session.anonymous, session.roleIds, session.roleNames))

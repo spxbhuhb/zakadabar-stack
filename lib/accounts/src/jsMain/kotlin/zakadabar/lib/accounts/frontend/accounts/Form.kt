@@ -48,11 +48,12 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
     private lateinit var systemRoles: List<RoleBo>
     private lateinit var userRoles: List<RoleGrantBo>
 
+    private lateinit var accountState : AccountStateBo
+
     override fun onCreate() {
         super.onCreate()
 
         titleText = if (mode == ZkElementMode.Create) localizedStrings.account else bo.accountName
-
 
         io {
             if (mode == ZkElementMode.Create) {
@@ -66,6 +67,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
                 if (hasRole(appRoles.securityOfficer)) {
                     coroutineScope {
+                        accountState = GetAccountState(bo.id).execute()
                         systemRoles = RoleBo.all()
                         userRoles = RolesByAccount(EntityId(bo.id)).execute()
                     }
@@ -196,7 +198,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
                 if (hasRole(appRoles.securityOfficer)) {
                     + tab(localizedStrings.roles) { + RolesForm() }
-                    + tab(localizedStrings.accountStatus) { + PrincipalForm() }
+                    + tab(localizedStrings.accountStatus) { + StateForm() }
                 }
             }
         }
@@ -257,7 +259,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                 + column(ZkFormStyles.form) {
                     buildPoint.classList += ZkFormStyles.onePanel
 
-                    val expl = if (executor.account.id == bo.accountId) {
+                    val expl = if (executor.account.accountId == bo.accountId) {
                         localizedStrings.passwordChangeExpOwn
                     } else {
                         localizedStrings.passwordChangeExpSo
@@ -268,7 +270,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                         // when the user changes his/her own password ask for the old one
                         // when security officer changes the password of someone else, this
                         // field won't be shown as the account id is different
-                        if (executor.account.id == bo.accountId) {
+                        if (executor.account.accountId == bo.accountId) {
                             + bo::oldPassword
                         } else {
                             bo.oldPassword.value = "*" // so the schema will be valid
@@ -314,12 +316,12 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
         }
     }
 
-    inner class PrincipalForm : ZkForm<UpdateAccountLocked>() {
+    inner class StateForm : ZkForm<UpdateAccountLocked>() {
 
         override fun onConfigure() {
             bo = default {
                 accountId = this@Form.bo.id
-                locked = this@Form.bo.locked
+                locked = this@Form.accountState.locked
             }
             mode = ZkElementMode.Action
             setAppTitle = false
@@ -334,9 +336,15 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
                     + section(localizedStrings.accountStatus) {
                         + bo::locked
-                        + this@Form.bo::lastLoginSuccess readOnly true
-                        + this@Form.bo::lastLoginFail readOnly true
-                        + this@Form.bo::loginFailCount readOnly true
+                        with (this@Form.accountState) {
+                            + ::validated readOnly true
+                            + ::expired readOnly true
+                            + ::anonymized readOnly true
+                            + ::lastLoginSuccess readOnly true
+                            + ::loginSuccessCount readOnly true
+                            + ::lastLoginFail readOnly true
+                            + ::loginFailCount readOnly true
+                        }
                     }
 
                     + buttons()

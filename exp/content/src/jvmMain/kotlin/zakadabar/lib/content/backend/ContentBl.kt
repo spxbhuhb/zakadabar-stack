@@ -12,8 +12,8 @@ import zakadabar.lib.i18n.data.LocaleBo
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.module
-import zakadabar.stack.data.DataConflictException
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.exceptions.DataConflict
 import zakadabar.stack.text.lowercaseWithHyphen
 import zakadabar.stack.util.PublicApi
 
@@ -49,7 +49,7 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
      * Verifies that there is no document under the same parent with the
      * same locale and same SEO title.
      *
-     * @throws  DataConflictException   if there is a title conflict
+     * @throws  DataConflict   if there is a title conflict
      */
     private fun checkConsistency(bo: ContentBo) {
         val master = bo.master?.let { pa.read(it) } ?: return // masters does not have to obey collision
@@ -59,7 +59,7 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
 
         if (localized.id == bo.id) return // this is an update
 
-        throw DataConflictException("SEO title conflict")
+        throw DataConflict("SEO title conflict")
     }
 
     override fun create(executor: Executor, bo: ContentBo): ContentBo {

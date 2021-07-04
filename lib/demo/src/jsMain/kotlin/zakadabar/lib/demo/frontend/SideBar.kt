@@ -6,7 +6,7 @@ package zakadabar.lib.demo.frontend
 import kotlinx.browser.window
 import zakadabar.lib.accounts.data.LogoutAction
 import zakadabar.lib.accounts.frontend.accounts.Account
-import zakadabar.lib.accounts.frontend.accounts.Accounts
+import zakadabar.lib.accounts.frontend.accounts.AccountSecure
 import zakadabar.lib.accounts.frontend.login.Login
 import zakadabar.lib.accounts.frontend.roles.Roles
 import zakadabar.lib.content.frontend.browser.ContentOverview
@@ -43,8 +43,8 @@ class SideBar : ZkSideBar() {
                 + item<ContentNavTest>()
             }
 
-            + group(localized<Accounts>()) {
-                + item<Accounts>()
+            + group(localized<AccountSecure>()) {
+                + item<AccountSecure>()
                 + item<Roles>()
             }
 

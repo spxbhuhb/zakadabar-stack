@@ -1,16 +1,16 @@
 # Plug and Play: Accounts
 
-Accounts is a simple module to add basic user account support to the application.
+Accounts is a module to add basic user account support to the application. It includes:
 
 * Session handling.
 * User functions:
     * Login.
-    * Account information update.
+    * Account update.
     * Change password.
 * Administrator functions:
     * List accounts.
     * Add new account, update existing ones.
-    * Grant and revoke roles.  
+    * Grant and revoke roles.
     * Change password on any accounts.
     * Lock and unlock accounts.
     * List, add and change roles.
@@ -47,9 +47,7 @@ implementation("hu.simplexion.zakadabar:accounts:$accountsVersion")
 
 #### additional roles
 
-By default, one role defined in the stack is added
-
-- security-officer
+The `security-officer` role is added by default.
 
 For additional roles, extend the RolesBase class and pass it for install (see below):
 
@@ -66,8 +64,8 @@ If you have additional roles and/or extended AccountPrivateBl:
 
 ```kotlin
 zakadabar.lib.accounts.backend.install(
-  roles = Roles,
-  accountPrivateBl = MyAccountPrivateBl()
+    roles = Roles,
+    accountPrivateBl = MyAccountPrivateBl()
 )
 ```
 
@@ -77,13 +75,11 @@ Otherwise, (this will use an instance of [AppRolesBase](/src/commonMain/kotlin/z
 zakadabar.lib.accounts.backend.install()
 ```
 
-
 #### configure settings
 
 For customized settings create a 'lib.account.yaml' file in your settings directory, 
 check [ModuleSettings](../../../../../lib/accounts/src/commonMain/kotlin/zakadabar/lib/accounts/data/ModuleSettings.kt)
 for description of parameters.
-
 
 ```yaml
 initialSoPassword: so
@@ -91,8 +87,11 @@ initialSoPassword: so
 # sessionTimeout: 30
 # updateDelay: 120
 # expirationCheckInterval: 120
-# emailInAccountPublic: false
 # loginActionRole: ""
+# autoValidate: true
+# enableAccountList: false
+# emailInAccountPublic: false
+# phoneInAccountPublic: false
 ```
 
 ### Frontend
@@ -141,7 +140,9 @@ objects automatically.
 
 | Table | Content |
 | --- | --- |
-| `account_private` | Account entities. |
+| `account_private` | Private account information. |
+| `account_state` | Account state (locked, expired, etc.) |
+| `account_credential` | Account credentials. |
 | `role` | Roles defined in the system. |
 | `role_grant` | Account - role pairs. |
 | `session` | Client session data. |

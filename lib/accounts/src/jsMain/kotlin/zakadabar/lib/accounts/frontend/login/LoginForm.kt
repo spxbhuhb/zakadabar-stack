@@ -6,7 +6,7 @@ package zakadabar.lib.accounts.frontend.login
 import kotlinx.browser.window
 import zakadabar.lib.accounts.data.LoginAction
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.builtin.ActionStatusBo
+import zakadabar.stack.exceptions.Unauthorized
 import zakadabar.stack.frontend.builtin.ZkElementMode
 import zakadabar.stack.frontend.builtin.button.ZkButton
 import zakadabar.stack.frontend.builtin.form.ZkForm
@@ -57,7 +57,7 @@ class LoginForm(
             if (onCancel != null) {
                 + ZkButton(localizedStrings.cancel) { onCancel.invoke() }
             } else {
-                + div {  }
+                + div { }
             }
             + ZkButton(localizedStrings.login) { this@LoginForm.submit() }
         }
@@ -81,22 +81,16 @@ class LoginForm(
     override fun onSubmitSuccess() {}
 
     override fun onSubmitError(ex: Exception) {
-        invalidToast = toastDanger { localizedStrings.loginFail }
+        invalidToast = when {
+            ex !is Unauthorized -> toastDanger { localizedStrings.loginFail }
+            ex.data.locked -> toastDanger { localizedStrings.loginLocked }
+            ex.data.missingRole -> toastDanger { localizedStrings.loginMissingRole }
+            else -> toastDanger { localizedStrings.loginFail }
+        }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun onExecuteResult(resultBo: BaseBo) {
-
-        resultBo as ActionStatusBo
-
-        if (! resultBo.success) {
-            if (resultBo.reason == "locked") {
-                toastDanger { localizedStrings.loginLocked }
-            } else {
-                toastDanger { localizedStrings.loginFail }
-            }
-            return
-        }
-
         onSuccess()
     }
 }

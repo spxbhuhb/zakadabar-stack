@@ -4,7 +4,7 @@
 package zakadabar.lib.accounts.frontend
 
 import zakadabar.lib.accounts.frontend.accounts.Account
-import zakadabar.lib.accounts.frontend.accounts.Accounts
+import zakadabar.lib.accounts.frontend.accounts.AccountSecure
 import zakadabar.lib.accounts.frontend.login.Login
 import zakadabar.lib.accounts.frontend.roles.Roles
 import zakadabar.stack.authorize.AppRolesBase
@@ -14,7 +14,7 @@ import zakadabar.stack.frontend.application.ZkApplication
 
 fun install(routing: ZkAppRouting) {
     with(routing) {
-        + Accounts()
+        + AccountSecure()
         + Account()
         + Roles()
         + Login()

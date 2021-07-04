@@ -7,6 +7,7 @@ import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.input.ZkCheckBox
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.frontend.resources.css.em
 import zakadabar.stack.resources.localizedStrings
 import kotlin.reflect.KProperty1
 
@@ -14,6 +15,8 @@ open class ZkBooleanColumn<T : BaseBo>(
     table: ZkTable<T>,
     private val prop: KProperty1<T, Boolean>
 ) : ZkColumn<T>(table) {
+
+    override var max = 3.em
 
     override fun onCreate() {
         label = localizedStrings.getNormalized(prop.name)
