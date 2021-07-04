@@ -2,31 +2,13 @@
 
 This roadmap is something we would like to follow. Please note that we cannot guarantee that well able to do so.
 
-## 2021 June
-
-### Core
-
-* upgrade to Ktor 1.6.0
-* minor improvements
-* date and time editors for the frontend
-* form
-     * option to add help tooltip
-  
-### Lib: Content
-
-* implementation of a SEO-ready, multi-language content backend and admin frontend
-
-### Documentation
-
-* write more about
-    * form
-    * table
-    * pages
-  
 ## Unscheduled
 
 ### Core
 
+* date and time editors for the frontend
+* form
+  * option to add help tooltip
 * scheduler: schedule and run backend tasks in a multi-node environment
 * responsive components:
   * table

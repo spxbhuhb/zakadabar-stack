@@ -13,7 +13,7 @@ plugins {
 }
 
 buildscript {
-    extra["stackVersion"] = "2021.7.1-SNAPSHOT"
+    extra["stackVersion"] = "2021.7.5"
 
     extra["kotlinVersion"] = "1.5.20"
     extra["ktorVersion"] = "1.6.1"
