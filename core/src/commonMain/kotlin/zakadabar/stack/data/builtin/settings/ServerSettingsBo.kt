@@ -10,6 +10,7 @@ import zakadabar.stack.data.schema.BoSchema
 @Serializable
 class ServerSettingsBo(
 
+    var settingsDirectory : String = "",
     var serverName: String = "",
     var defaultLocale: String = "en",
     var database: DatabaseSettingsBo,
@@ -22,6 +23,7 @@ class ServerSettingsBo(
 ) : BaseBo {
 
     override fun schema() = BoSchema {
+        + ::settingsDirectory default settingsDirectory
         + ::serverName default serverName
         + ::defaultLocale default defaultLocale
         + ::database

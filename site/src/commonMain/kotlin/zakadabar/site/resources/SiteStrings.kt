@@ -16,6 +16,7 @@ class SiteStrings : ExamplesStrings() {
     val servicesAndSupport by "Services And Support"
     val greenBlue by "Green/Blue Theme"
     val changeLog by "Change Log"
+    val upgrade by "Upgrade"
     val legalNotices by "Legal Notices"
     val record by "Record"
     val bender by "Bender"

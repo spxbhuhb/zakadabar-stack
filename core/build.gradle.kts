@@ -153,7 +153,6 @@ if (! isSnapshot && properties["zakadabar.publisher"] != null) {
         dependsOn(javadocJar)
     }
 
-
     signing {
         useGpgCmd()
         sign(publishing.publications)

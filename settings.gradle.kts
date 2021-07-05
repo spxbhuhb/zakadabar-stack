@@ -25,3 +25,5 @@ include("lib:i18n")
 include("lib:markdown")
 
 include("site")
+
+include("upgrade:2021-6-to-2021-7")
