@@ -118,6 +118,18 @@ suspend fun assertForbiddenForAnonymous(func: suspend () -> Unit): ClientRequest
 }
 
 /**
+ * Logout, then execute an action as anonymous and assert that this returns with
+ * HTTP status code 401 Unauthorized.
+ *
+ * @param  func          The function to run as anonymous.
+ */
+suspend fun assertUnauthorizedForAnonymous(func: suspend () -> Unit): ClientRequestException {
+    LogoutAction().execute()
+    return assertUnauthorized(func)
+}
+
+
+/**
  * Create a new user, log in with that user and execute the action assert that this
  * returns with HTTP status code 403 Forbidden.
  *

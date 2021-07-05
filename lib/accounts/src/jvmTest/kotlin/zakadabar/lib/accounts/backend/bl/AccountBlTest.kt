@@ -59,7 +59,7 @@ class AccountBlTest {
     @Test
     fun testCreateAccount() = runBlocking {
 
-        assertForbiddenForAnonymous {
+        assertUnauthorizedForAnonymous {
             createAccount(useSo = false)
         }
 
@@ -81,7 +81,7 @@ class AccountBlTest {
         val (accountName, password, bo) = createAccount()
         assertTrue(LoginAction(accountName, password).execute().success)
 
-        assertForbiddenForAnonymous {
+        assertUnauthorizedForAnonymous {
             UpdateAccountLocked(bo.id, true).execute()
         }
 
@@ -149,7 +149,7 @@ class AccountBlTest {
 
         val account = createAccount().third
 
-        assertForbiddenForAnonymous {
+        assertUnauthorizedForAnonymous {
             GetAccountState(account.id).execute()
         }
 
@@ -171,7 +171,7 @@ class AccountBlTest {
 
         // don't allow from anonymous
 
-        assertForbidden {
+        assertUnauthorizedForAnonymous {
             withAnonymous {
                 PasswordChange(account.id, password, Secret("new password")).execute()
             }
@@ -229,7 +229,7 @@ class AccountBlTest {
 
         val settings = server.first<AccountPrivateBl>().settings
 
-        assertForbiddenForAnonymous {
+        assertUnauthorizedForAnonymous {
             AccountList().execute()
         }
 
