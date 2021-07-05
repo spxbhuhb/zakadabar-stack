@@ -3,12 +3,12 @@
  */
 package zakadabar.stack.backend
 
-import com.charleskorn.kaml.Yaml
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.file
 import io.ktor.application.*
 import io.ktor.http.*
@@ -20,12 +20,12 @@ import zakadabar.stack.backend.authorize.LoginTimeout
 import zakadabar.stack.backend.builtin.ServerDescriptionBl
 import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.ktor.KtorServerBuilder
+import zakadabar.stack.backend.setting.ServerSettingLoader
 import zakadabar.stack.backend.setting.SettingBl
 import zakadabar.stack.backend.setting.SettingProvider
 import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
 import zakadabar.stack.data.builtin.settings.ServerSettingsBo
 import zakadabar.stack.util.InstanceStore
-import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
@@ -75,6 +75,17 @@ lateinit var server: Server
  */
 inline fun <reified T : Any> module(noinline selector: (T) -> Boolean = { true }) = server.ModuleDependencyProvider(T::class, selector)
 
+enum class StartPhases(
+    val optionName : String
+) {
+    SettingsLoad("settings-load"),
+    ConnectDb("connect-db"),
+    ModuleLoad("module-load"),
+    InitializeDb("initialize-db"),
+    ModuleStart("module-start"),
+    Complete("complete")
+}
+
 open class Server(
     val version: String
 ) : CliktCommand() {
@@ -98,7 +109,12 @@ open class Server(
             by option("-s", "--settings", help = "Path to the settings file.")
                 .file(mustExist = true, mustBeReadable = true, canBeDir = false)
                 .convert { it.path }
-                .default("./zakadabar.stack.server.yaml")
+                .default("./stack.server.yaml")
+
+    private val startUntil
+            by option("--start-until", help = "Start up until the given state (inclusive).")
+                .choice(*StartPhases.values().map { it.optionName }.toTypedArray())
+                .default(StartPhases.Complete.optionName)
 
     private val test
             by option("--test", "-t").flag()
@@ -128,7 +144,7 @@ open class Server(
 
         onConfigure()
 
-        settings = loadServerSettings()
+        loadSettings()
 
         description = ServerDescriptionBo(
             name = settings.serverName,
@@ -136,9 +152,13 @@ open class Server(
             defaultLocale = settings.defaultLocale,
         )
 
+        if (startUntil == StartPhases.SettingsLoad.optionName) return
+
         Sql.onCreate(settings.database) // initializes SQL connection
 
         settings.database.password = "" // don't keep DB password in the config
+
+        if (startUntil == StartPhases.ConnectDb.optionName) return
 
         loadModules(settings)
 
@@ -146,11 +166,17 @@ open class Server(
 
         if (firstOrNull<ServerDescriptionBl>() == null) this += ServerDescriptionBl()
 
+        if (startUntil == StartPhases.ModuleLoad.optionName) return
+
         resolveDependencies()
 
         initializeDb()
 
+        if (startUntil == StartPhases.InitializeDb.optionName) return
+
         startModules()
+
+        if (startUntil == StartPhases.ModuleStart.optionName) return
 
         ktorServer = onBuildServer()
 
@@ -167,34 +193,12 @@ open class Server(
 
     }
 
-    open fun onBuildServer() = KtorServerBuilder(settings, modules).build() //  build the Ktor server instance
-
-    private fun loadServerSettings(): ServerSettingsBo {
-
-        val paths = listOf(
-            settingsPath,
-            "./stack.server.yml",
-            "./etc/stack.server.yaml",
-            "./etc/stack.server.yml",
-            "../etc/stack.server.yaml",
-            "../etc/stack.server.yml",
-            "./template/app/etc/stack.server.yaml" // this is for development, TODO remove hard-coded development config path
-        )
-
-        for (p in paths) {
-            val path = Paths.get(p)
-            if (! Files.exists(path)) continue
-
-            settingsDirectory = path.parent
-            val source = Files.readAllBytes(path).decodeToString()
-
-            settingsLogger.info("ServerSettingsBo source: ${path.toAbsolutePath()}")
-
-            return Yaml.default.decodeFromString(ServerSettingsBo.serializer(), source)
-        }
-
-        throw IllegalArgumentException("cannot locate server settings file")
+    open fun loadSettings() {
+        settings = ServerSettingLoader().load(settingsPath)
+        settingsDirectory = Paths.get(settings.settingsDirectory)
     }
+
+    open fun onBuildServer() = KtorServerBuilder(settings, modules).build() //  build the Ktor server instance
 
     private fun loadModules(config: ServerSettingsBo) {
 
