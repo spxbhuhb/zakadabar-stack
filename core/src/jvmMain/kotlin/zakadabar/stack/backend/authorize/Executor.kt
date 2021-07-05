@@ -32,7 +32,7 @@ open class Executor(
 
     fun hasOneOfRoles(roleNames: Array<out String>): Boolean {
         roleNames.forEach {
-            if (it in roleNames) return true
+            if (it in this.roleNames) return true
         }
         return false
     }
