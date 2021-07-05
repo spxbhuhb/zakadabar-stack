@@ -20,6 +20,7 @@ class SideBar : ZkSideBar() {
         io {
             val docSource = window.fetch("/api/content/guides/TOC.md").await().text().await()
             val changeLogSource = window.fetch("/api/content/changelog/TOC.md").await().text().await()
+            val upgradeSource = window.fetch("/api/content/upgrade/TOC.md").await().text().await()
 
             + section(strings.Welcome) {
                 + item(Welcome)
@@ -46,13 +47,17 @@ class SideBar : ZkSideBar() {
                         + it.changelog()
                     }
                 }
+                + group(text = strings.upgrade) {
+                    MarkdownNav().parse(upgradeSource).forEach {
+                        + it.upgrade()
+                    }
+                }
                 + item(Versioning)
                 + item(UpcomingChanges)
                 + item(Roadmap)
                 + item(ServicesAndSupport)
                 + item(LegalNotices)
                 + item(Credits)
-                // + item(Experimental)
             }
         }
     }
@@ -81,6 +86,20 @@ class SideBar : ZkSideBar() {
         } else {
             group(label) {
                 children.forEach { + it.changelog() }
+            }
+        }
+    }
+
+    private fun MarkdownNav.MarkdownNavItem.upgrade(): ZkElement {
+        return if (children.isEmpty()) {
+            item(
+                Documentation,
+                "upgrade/" + if (url.startsWith("./")) url.substring(2) else url,
+                label
+            )
+        } else {
+            group(label) {
+                children.forEach { + it.upgrade() }
             }
         }
     }
