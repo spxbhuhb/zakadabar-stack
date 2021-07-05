@@ -28,6 +28,7 @@ import zakadabar.stack.data.builtin.settings.ServerSettingsBo
 import zakadabar.stack.exceptions.DataConflict
 import zakadabar.stack.exceptions.Forbidden
 import zakadabar.stack.exceptions.Unauthorized
+import zakadabar.stack.exceptions.UnauthorizedData
 import zakadabar.stack.util.InstanceStore
 import java.io.File
 import java.time.Duration
@@ -83,7 +84,11 @@ open class KtorServerBuilder(
                 call.respond(HttpStatusCode.NotFound)
             }
             exception<Forbidden> {
-                call.respond(HttpStatusCode.Forbidden)
+                if (call.principal<KtorExecutor>()?.anonymous != false) {
+                    call.respond(HttpStatusCode.Unauthorized, UnauthorizedData())
+                } else {
+                    call.respond(HttpStatusCode.Forbidden)
+                }
             }
             exception<Unauthorized> {
                 call.respond(HttpStatusCode.Unauthorized, it.data)
