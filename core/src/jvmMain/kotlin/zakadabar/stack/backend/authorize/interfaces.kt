@@ -8,11 +8,6 @@ import zakadabar.stack.data.builtin.account.AccountPublicBo
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityId
 
-class InvalidCredentials : Exception()
-class AccountNotValidatedException : Exception()
-class AccountLockedException : Exception()
-class AccountExpiredException : Exception()
-
 interface RoleBlProvider {
     fun getByName(name : String) : EntityId<out BaseBo>
 }

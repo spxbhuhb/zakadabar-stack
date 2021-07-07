@@ -14,7 +14,7 @@ include("core")
 
 include("exp:content")
 include("exp:email")
-include("exp:scheduler")
+include("exp:schedule")
 
 include("lib:accounts")
 include("lib:bender")

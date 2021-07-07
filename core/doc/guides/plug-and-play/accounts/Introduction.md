@@ -115,7 +115,7 @@ ifAnonymous {
   + item<Login>()
 }
 
-withRole(StackRoles.securityOfficer) {
+withRole(appRoles.securityOfficer) {
   + group(translate<Accounts>()) {
     + item<Accounts>()
     + item<Roles>()
