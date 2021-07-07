@@ -12,7 +12,7 @@ import io.ktor.routing.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
+import zakadabar.stack.backend.business.EntityBusinessLogicCommon
 import zakadabar.stack.backend.route.Router
 import zakadabar.stack.backend.server
 import zakadabar.stack.data.BaseBo
@@ -24,7 +24,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
 
 open class KtorRouter<T : EntityBo<T>>(
-    private val businessLogic : EntityBusinessLogicBase<T>
+    private val businessLogic : EntityBusinessLogicCommon<T>
 ) : Router<T> {
 
     private val actionClassList = mutableListOf<Pair<KClass<out BaseBo>, (Executor, BaseBo) -> BaseBo>>()

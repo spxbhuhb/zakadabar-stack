@@ -5,7 +5,7 @@ package zakadabar.stack.backend.testing
 
 import zakadabar.stack.authorize.AppRolesBase
 import zakadabar.stack.authorize.appRoles
-import zakadabar.stack.backend.BackendModule
+import zakadabar.stack.backend.RoutedModule
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize.RoleBlProvider
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.PUBLIC
@@ -74,10 +74,10 @@ open class TestCompanionBase(
     }
 
     open fun teardown() {
-        server.ktorServer.stop(gracePeriodMillis, timeoutMillis)
+        server.shutdown()
     }
 
-    object MockRoleBlProvider : BackendModule, RoleBlProvider {
+    object MockRoleBlProvider : RoutedModule, RoleBlProvider {
 
         private val roleIds = mutableMapOf<String,EntityId<BaseBo>>()
 

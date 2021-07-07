@@ -24,31 +24,31 @@ open class UnsafeAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
     }
 
     override fun authorizeList(executor: Executor) {
-        if (!enabled) throw Forbidden()
+        if (! enabled) throw Forbidden()
     }
 
     override fun authorizeRead(executor: Executor, entityId: EntityId<T>) {
-        if (!enabled) throw Forbidden()
+        if (! enabled) throw Forbidden()
     }
 
     override fun authorizeCreate(executor: Executor, entity: T) {
-        if (!enabled) throw Forbidden()
+        if (! enabled) throw Forbidden()
     }
 
     override fun authorizeUpdate(executor: Executor, entity: T) {
-        if (!enabled) throw Forbidden()
+        if (! enabled) throw Forbidden()
     }
 
     override fun authorizeDelete(executor: Executor, entityId: EntityId<T>) {
-        if (!enabled) throw Forbidden()
+        if (! enabled) throw Forbidden()
     }
 
     override fun authorizeAction(executor: Executor, actionBo: ActionBo<*>) {
-        if (!enabled) throw Forbidden()
+        if (! enabled) throw Forbidden()
     }
 
     override fun authorizeQuery(executor: Executor, queryBo: QueryBo<*>) {
-        if (!enabled) throw Forbidden()
+        if (! enabled) throw Forbidden()
     }
 
 }

@@ -5,7 +5,7 @@ package zakadabar.stack.backend.custom
 
 import io.ktor.http.content.*
 import io.ktor.routing.*
-import zakadabar.stack.backend.BackendModule
+import zakadabar.stack.backend.RoutedModule
 import zakadabar.stack.backend.setting.setting
 import zakadabar.stack.data.builtin.settings.ContentBackendSettings
 import java.io.File
@@ -15,11 +15,12 @@ import java.io.File
  */
 class ContentBackend(
     private val namespace: String
-) : BackendModule {
+) : RoutedModule {
 
     private val settings by setting<ContentBackendSettings>(namespace)
 
-    override fun onInstallStatic(route: Route) {
+    override fun onInstallStatic(route: Any) {
+        route as Route
         with(route) {
             static("/api/$namespace") {
                 staticRootFolder = File(settings.root)

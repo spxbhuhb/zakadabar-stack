@@ -3,14 +3,14 @@
  */
 package zakadabar.lib.demo.backend
 
-import zakadabar.stack.backend.BackendModule
+import zakadabar.stack.backend.RoutedModule
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.LOGGED_IN
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizerProvider
 import zakadabar.stack.backend.server
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
-object Module : BackendModule {
+object Module : RoutedModule {
 
     override fun onModuleLoad() {
         zakadabar.lib.accounts.backend.install()

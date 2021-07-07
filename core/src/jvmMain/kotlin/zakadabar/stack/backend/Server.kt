@@ -25,12 +25,11 @@ import zakadabar.stack.backend.setting.SettingBl
 import zakadabar.stack.backend.setting.SettingProvider
 import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
 import zakadabar.stack.data.builtin.settings.ServerSettingsBo
-import zakadabar.stack.util.InstanceStore
+import zakadabar.stack.module.CommonModule
+import zakadabar.stack.module.dependencies
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
-import kotlin.reflect.KClass
-import kotlin.reflect.KProperty
 import kotlin.reflect.full.isSubclassOf
 
 fun main(argv: Array<String>) {
@@ -61,22 +60,8 @@ val settingsLogger = LoggerFactory.getLogger("settings") !! // log settings load
  */
 lateinit var server: Server
 
-/**
- * Provides a delegate that is a reference to a backend module. The dependency
- * is resolved after all modules are loaded and before any modules are started.
- *
- * When the dependency cannot be resolved:
- *
- * - reports an error on the console,
- * - aborts server startup.
- *
- * @param  selector  Function to select between modules if there are more than one.
- *                   Default selects the first.
- */
-inline fun <reified T : Any> module(noinline selector: (T) -> Boolean = { true }) = server.ModuleDependencyProvider(T::class, selector)
-
 enum class StartPhases(
-    val optionName : String
+    val optionName: String
 ) {
     SettingsLoad("settings-load"),
     ConnectDb("connect-db"),
@@ -128,13 +113,12 @@ open class Server(
 
     lateinit var description: ServerDescriptionBo
 
-    val modules = InstanceStore<BackendModule>()
-
-    private val dependencies = mutableListOf<ModuleDependency<*>>()
+    val modules
+        get() = zakadabar.stack.module.modules
 
     lateinit var ktorServer: NettyApplicationEngine
 
-    operator fun plusAssign(module: BackendModule) {
+    operator fun plusAssign(module: CommonModule) {
         this.modules += module
         module.onModuleLoad()
         moduleLogger.info("loaded module $module")
@@ -206,11 +190,11 @@ open class Server(
 
             val installable = Server::class.java.classLoader.loadClass(it).kotlin
 
-            require(installable.isSubclassOf(BackendModule::class)) { "module $it is not instance of BackendModule (maybe the name is wrong)" }
+            require(installable.isSubclassOf(RoutedModule::class)) { "module $it is not instance of BackendModule (maybe the name is wrong)" }
 
             try {
 
-                val module = (installable.objectInstance as BackendModule)
+                val module = (installable.objectInstance as RoutedModule)
                 this += module
 
             } catch (ex: Throwable) {
@@ -221,16 +205,11 @@ open class Server(
         }
     }
 
-    private fun resolveDependencies() {
-        var success = true
-        dependencies.forEach {
-            success = success && it.resolve()
-        }
-
-        if (! success) throw IllegalArgumentException("module dependency resolution failed")
+    open fun resolveDependencies() {
+        zakadabar.stack.module.resolveDependencies()
     }
 
-    private fun initializeDb() {
+    open fun initializeDb() {
         Sql.onStart() // create missing tables and columns
 
         modules.instances.forEach {
@@ -244,7 +223,7 @@ open class Server(
         }
     }
 
-    private fun startModules() {
+    open fun startModules() {
         modules.instances.forEach {
             try {
                 it.onModuleStart()
@@ -254,6 +233,21 @@ open class Server(
                 throw ex
             }
         }
+    }
+
+    fun shutdown(gracePeriodMillis : Long = 0, timeoutMillis : Long = 2000) {
+        server.ktorServer.stop(gracePeriodMillis, timeoutMillis)
+        modules.instances.forEach {
+            try {
+                it.onModuleStop()
+                moduleLogger.info("stopped module $it")
+            } catch (ex: Throwable) {
+                moduleLogger.error("failed to stop module $it")
+                throw ex
+            }
+        }
+        modules.instances.clear()
+        dependencies.clear()
     }
 
     /**
@@ -305,46 +299,5 @@ open class Server(
      *           no such module exists.
      */
     inline fun <reified T : Any> firstOrNull() = modules.firstOrNull(T::class)
-
-    inner class ModuleDependencyProvider<T : Any>(
-        private val moduleClass: KClass<T>,
-        private val selector: (T) -> Boolean
-    ) {
-        operator fun provideDelegate(thisRef: Any, property: KProperty<*>) =
-            ModuleDependency(thisRef, property, moduleClass, selector)
-
-        operator fun provideDelegate(thisRef: Nothing?, property: KProperty<*>) =
-            ModuleDependency(thisRef, property, moduleClass, selector)
-    }
-
-    inner class ModuleDependency<T : Any>(
-        dependentModule: Any?,
-        private val dependentProperty: KProperty<*>,
-        private val moduleClass: KClass<T>,
-        private val selector: (T) -> Boolean
-    ) {
-        private var module: T? = modules.firstOrNull(moduleClass, selector)
-
-        init {
-            dependencies += this
-        }
-
-        val name = dependentModule?.let { it::class.qualifiedName + "." } ?: ""
-
-        fun resolve() =
-            try {
-                module = modules.first(moduleClass, selector)
-                moduleLogger.info("resolved dependency from ${name}${dependentProperty.name} to ${moduleClass.simpleName} ")
-                true
-            } catch (ex: NoSuchElementException) {
-                moduleLogger.error("unable to resolve dependency from ${name}${dependentProperty.name} to ${moduleClass.simpleName} ")
-                false
-            }
-
-        operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
-            return module !!
-        }
-
-    }
 
 }

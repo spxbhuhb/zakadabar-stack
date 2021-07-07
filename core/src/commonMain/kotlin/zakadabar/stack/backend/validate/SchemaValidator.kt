@@ -3,11 +3,11 @@
  */
 package zakadabar.stack.backend.validate
 
-import io.ktor.features.*
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.query.QueryBo
+import zakadabar.stack.exceptions.BadRequest
 
 /**
  * Validates the business object by its schema using `isValid` of `BoSchema`.
@@ -16,19 +16,23 @@ import zakadabar.stack.data.query.QueryBo
 class SchemaValidator<T : BaseBo> : Validator<T> {
 
     override fun validateCreate(executor: Executor, bo : T) {
-        if (bo.schema().validate(allowEmptyId = true).fails.isNotEmpty()) throw BadRequestException("invalid request data")
+        validate(bo, true)
     }
 
     override fun validateUpdate(executor: Executor, bo : T) {
-        if (! bo.isValid) throw BadRequestException("invalid request data")
+        validate(bo)
     }
 
     override fun validateAction(executor : Executor, bo : ActionBo<*>) {
-        if (! bo.isValid) throw BadRequestException("invalid request data")
+        validate(bo)
     }
 
     override fun validateQuery(executor : Executor, bo : QueryBo<*>) {
-        if (! bo.isValid) throw BadRequestException("invalid request data")
+        validate(bo)
     }
 
+    fun validate(bo : BaseBo, allowEmptyId : Boolean = false) {
+        val report = bo.schema().validate(allowEmptyId)
+        if (report.fails.isNotEmpty()) throw BadRequest(report)
+    }
 }

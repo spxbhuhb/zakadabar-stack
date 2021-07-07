@@ -4,8 +4,6 @@
 package zakadabar.stack.backend.authorize
 
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.PUBLIC
-import zakadabar.stack.backend.module
-import zakadabar.stack.backend.util.default
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.builtin.authorize.SimpleRoleAuthorizationBo
@@ -13,7 +11,9 @@ import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.exceptions.Forbidden
+import zakadabar.stack.module.module
 import zakadabar.stack.util.UUID
+import zakadabar.stack.util.default
 import kotlin.reflect.KClass
 
 /**
@@ -27,9 +27,10 @@ open class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
 
     companion object {
         val PUBLIC = UUID().toString()
-        private val PUBLIC_ID = EntityId<BaseBo>()
+        private val PUBLIC_ID = EntityId<BaseBo>(PUBLIC)
+
         val LOGGED_IN = UUID().toString()
-        private val LOGGED_IN_ID = EntityId<BaseBo>()
+        private val LOGGED_IN_ID = EntityId<BaseBo>(LOGGED_IN)
     }
 
     private val roles: SimpleRoleAuthorizationBo = default { }
@@ -54,15 +55,17 @@ open class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
     }
 
     private fun String.toRoleId() = when {
-        this === PUBLIC -> PUBLIC_ID
-        this === LOGGED_IN -> LOGGED_IN_ID
+        this == PUBLIC -> PUBLIC_ID
+        this == LOGGED_IN -> LOGGED_IN_ID
         else -> roleBl.getByName(this)
     }
 
     var all: String
         get() = throw NotImplementedError()
         set(value) {
+            println("SRA: all $value")
             val roleId = value.toRoleId()
+            println("SRA: all $roleId")
             roles.list = roleId
             roles.read = roleId
             roles.query = roleId
@@ -142,6 +145,7 @@ open class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
     }
 
     override fun authorizeCreate(executor: Executor, entity: T) {
+        println("create: ${roles.create}")
         if (roles.create === PUBLIC_ID) return
         if (roles.create === LOGGED_IN_ID && executor.isLoggedIn) return
         roles.create?.let { authorize(executor, it) } ?: throw Forbidden()

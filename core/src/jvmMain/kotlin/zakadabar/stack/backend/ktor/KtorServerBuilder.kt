@@ -19,16 +19,14 @@ import io.ktor.sessions.*
 import io.ktor.websocket.*
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
-import zakadabar.stack.backend.BackendModule
+import zakadabar.stack.backend.RoutedModule
 import zakadabar.stack.backend.Server.Companion.staticRoot
 import zakadabar.stack.backend.authorize.LoginTimeout
 import zakadabar.stack.backend.routingLogger
 import zakadabar.stack.backend.server
 import zakadabar.stack.data.builtin.settings.ServerSettingsBo
-import zakadabar.stack.exceptions.DataConflict
-import zakadabar.stack.exceptions.Forbidden
-import zakadabar.stack.exceptions.Unauthorized
-import zakadabar.stack.exceptions.UnauthorizedData
+import zakadabar.stack.exceptions.*
+import zakadabar.stack.module.CommonModule
 import zakadabar.stack.util.InstanceStore
 import java.io.File
 import java.time.Duration
@@ -38,7 +36,7 @@ import java.time.Duration
  */
 open class KtorServerBuilder(
     open val config: ServerSettingsBo,
-    open val modules: InstanceStore<BackendModule>
+    open val modules: InstanceStore<CommonModule>
 ) {
 
     fun build() = embeddedServer(Netty, port = config.ktor.port) {
@@ -96,6 +94,9 @@ open class KtorServerBuilder(
             exception<DataConflict> {
                 call.respond(HttpStatusCode.Conflict, it.message)
             }
+            exception<BadRequest> {
+                call.respond(HttpStatusCode.BadRequest, it.validityReport)
+            }
             status(HttpStatusCode.NotFound) {
                 val uri = call.request.uri
                 // this check is here so we will redirect only when needed
@@ -129,7 +130,7 @@ open class KtorServerBuilder(
         }
     }
 
-    open fun Route.install(config: ServerSettingsBo, modules: InstanceStore<BackendModule>) {
+    open fun Route.install(config: ServerSettingsBo, modules: InstanceStore<CommonModule>) {
 
         get("health") {
             call.respondText("OK", ContentType.Text.Plain)
@@ -138,7 +139,9 @@ open class KtorServerBuilder(
         route("api") {
 
             modules.instances.forEach {
-                it.onInstallRoutes(this)
+                if (it is RoutedModule) {
+                    it.onInstallRoutes(this)
+                }
             }
             get("health") {
                 call.respondText("OK", ContentType.Text.Plain)
@@ -152,7 +155,9 @@ open class KtorServerBuilder(
             default("index.html")
 
             modules.instances.forEach {
-                it.onInstallStatic(this)
+                if (it is RoutedModule) {
+                    it.onInstallStatic(this)
+                }
             }
 
         }

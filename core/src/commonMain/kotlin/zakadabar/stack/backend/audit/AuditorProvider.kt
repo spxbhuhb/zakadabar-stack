@@ -3,11 +3,11 @@
  */
 package zakadabar.stack.backend.audit
 
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
+import zakadabar.stack.backend.business.EntityBusinessLogicCommon
 import zakadabar.stack.data.entity.EntityBo
 
 interface AuditorProvider {
 
-    fun <T : EntityBo<T>> businessLogicAuditor(businessLogic : EntityBusinessLogicBase<T>) : Auditor<T>
+    fun <T : EntityBo<T>> businessLogicAuditor(businessLogic : EntityBusinessLogicCommon<T>) : Auditor<T>
 
 }

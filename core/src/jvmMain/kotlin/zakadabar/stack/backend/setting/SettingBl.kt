@@ -10,6 +10,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
+import zakadabar.stack.backend.RoutedModule
 import zakadabar.stack.backend.authorize.EmptyAuthorizer
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.persistence.EmptyPersistenceApi
@@ -30,7 +31,7 @@ import kotlin.reflect.KClass
  */
 class SettingBl : EntityBusinessLogicBase<SettingBo>(
     boClass = SettingBo::class
-), SettingProvider {
+), SettingProvider, RoutedModule {
 
     override val pa = EmptyPersistenceApi<SettingBo>()
 

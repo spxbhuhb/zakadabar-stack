@@ -15,7 +15,6 @@ import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.UUID
 import kotlin.js.JsName
 import kotlin.reflect.KMutableProperty0
-import kotlin.reflect.KProperty0
 
 /**
  * A data model schema that may be used to validate a business object.
@@ -171,24 +170,4 @@ interface BoSchemaEntry<T> {
 interface BoPropertyConstraintImpl<T> {
     fun validate(value: T, report: ValidityReport)
     fun toBoConstraint(): BoConstraint
-}
-
-class ValidityReport(
-    val allowEmptyId: Boolean = false,
-    val fails: MutableMap<String, MutableList<BoConstraint>> = mutableMapOf()
-) {
-    fun fail(property: KProperty0<*>, constraintImpl: BoPropertyConstraintImpl<*>) {
-        fails.getOrPut(property.name) { mutableListOf() } += constraintImpl.toBoConstraint()
-    }
-
-    fun fail(property: KProperty0<*>, constraint: BoConstraint) {
-        fails.getOrPut(property.name) { mutableListOf() } += constraint
-    }
-
-    @PublicApi
-    fun dump(): String {
-        val lines = mutableListOf<String>()
-        fails.forEach { lines += "${it.key} : ${it.value.map { c -> c.toString() }.joinToString(", ")}" }
-        return lines.joinToString("\n")
-    }
 }
