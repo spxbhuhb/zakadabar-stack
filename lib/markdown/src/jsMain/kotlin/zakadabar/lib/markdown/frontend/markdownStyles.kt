@@ -36,7 +36,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         + OverflowX.auto
         + OverflowY.hidden
 
-        maxWidth = 600.px
+        //maxWidth = 600.px
         flexGrow = 1.0
         margin = "auto"
 
@@ -127,6 +127,13 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     // -------------------------------------------------------------------------
 
     @Suppress("unused") // used implicitly by the browser
+    open val p by cssRule(".$content p") {
+        maxWidth = 600.px
+        marginLeft = "auto"
+        marginRight = "auto"
+    }
+
+    @Suppress("unused") // used implicitly by the browser
     open val link by cssRule(".$content a") {
         color = theme.infoColor
         textDecoration = "none"
@@ -134,6 +141,8 @@ open class MarkdownStyles : ZkCssStyleSheet() {
 
     @Suppress("unused") // used implicitly by the browser
     open val header1 by cssRule(".$content h1") {
+        maxWidth = 600.px
+        margin = "auto"
         fontSize = 32.px
         fontWeight = 500.weight
         borderBottom = theme.border
@@ -147,17 +156,53 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     }
 
     @Suppress("unused") // used implicitly by the browser
-    open val header2 by cssRule(".$content h2") {
+    open val h2 by cssRule(".$content h2") {
+        maxWidth = 600.px
+        margin = "auto"
         marginBlockStart = (theme.spacingStep * 2).px
         marginBlockEnd = (theme.spacingStep / 2).px
         fontWeight = 500.weight
     }
 
     @Suppress("unused") // used implicitly by the browser
-    open val header3 by cssRule(".$content h3") {
+    open val h3 by cssRule(".$content h3") {
+        maxWidth = 600.px
+        margin = "auto"
         marginBlockStart = (theme.spacingStep * 2).px
         marginBlockEnd = (theme.spacingStep / 2).px
         fontWeight = 500.weight
+    }
+
+    @Suppress("unused") // used implicitly by the browser
+    open val h4 by cssRule(".$content h4") {
+        maxWidth = 600.px
+        margin = "auto"
+    }
+
+    @Suppress("unused") // used implicitly by the browser
+    open val h5 by cssRule(".$content h5") {
+        maxWidth = 600.px
+        margin = "auto"
+    }
+
+    @Suppress("unused") // used implicitly by the browser
+    open val h6 by cssRule(".$content h6") {
+        maxWidth = 600.px
+        margin = "auto"
+    }
+
+    @Suppress("unused") // used implicitly by the browser
+    open val ul by cssRule(".$content ul") {
+        maxWidth = 600.px
+        margin = "auto"
+        marginBlockEnd = theme.spacingStep.px
+    }
+
+    @Suppress("unused") // used implicitly by the browser
+    open val ol by cssRule(".$content ol") {
+        maxWidth = 600.px
+        margin = "auto"
+        marginBlockEnd = theme.spacingStep.px
     }
 
     @Suppress("unused") // used implicitly by the browser
@@ -196,6 +241,9 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         overflow = "auto"
         marginTop = 10.px
         marginBottom = 10.px
+        maxWidth = 90.percent
+        marginLeft = "auto"
+        marginRight = "auto"
     }
 
     @Suppress("unused") // used implicitly by the browser
@@ -230,6 +278,10 @@ open class MarkdownStyles : ZkCssStyleSheet() {
             borderBottomLeftRadius = 0.px
         }
         backgroundColor = theme.blockBackgroundColor
+
+        maxWidth = 90.percent
+        marginLeft = "auto"
+        marginRight = "auto"
     }
 
     // -------------------------------------------------------------------------
@@ -263,6 +315,12 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         on(" a") {
             color = "${theme.textColor} !important"
         }
+    }
+
+    val enrichElement by cssClass {
+        maxWidth = 600.px
+        margin = "auto"
+        marginBlockStart = 20.px
     }
 
 }
