@@ -3,10 +3,24 @@
  */
 package zakadabar.stack.backend
 
+import io.ktor.routing.*
 import zakadabar.stack.module.CommonModule
 
-@Deprecated("EOL: 2021.8.1  -  use RoutedModule instead", ReplaceWith("RoutedModule"))
-interface BackendModule : RoutedModule
+@Deprecated(
+    "EOL: 2021.8.1  -  use RoutedModule instead, use \"if(route is Route)\" or \"route as Route\" for Ktor specific routing",
+    ReplaceWith("RoutedModule"),
+)
+interface BackendModule : RoutedModule {
+
+    fun onInstallRoutes(route: Route) {
+        onInstallRoutes(route as Any)
+    }
+
+    fun onInstallStatic(route: Route) {
+        onInstallStatic(route as Any)
+    }
+
+}
 
 interface RoutedModule : CommonModule {
 

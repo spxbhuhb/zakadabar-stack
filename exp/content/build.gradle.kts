@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.7.1-SNAPSHOT"
+version = rootProject.extra["stackVersion"] as String
 
 val ktorVersion = rootProject.extra["ktorVersion"] as String
 

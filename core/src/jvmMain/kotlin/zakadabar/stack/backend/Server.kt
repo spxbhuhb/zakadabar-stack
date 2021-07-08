@@ -194,7 +194,7 @@ open class Server(
 
             try {
 
-                val module = (installable.objectInstance as RoutedModule)
+                val module = (installable.objectInstance as CommonModule)
                 this += module
 
             } catch (ex: Throwable) {

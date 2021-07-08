@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.backend.builtin
 
-import zakadabar.stack.backend.RoutedModule
 import zakadabar.stack.backend.authorize.EmptyAuthorizer
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.business.QueryBusinessLogicBase
@@ -15,7 +14,7 @@ import zakadabar.stack.data.query.QueryBo
 
 class ServerDescriptionBl : QueryBusinessLogicBase<ServerDescriptionQuery, ServerDescriptionBo>(
     queryBoClass = ServerDescriptionQuery::class
-), RoutedModule {
+) {
 
     override val authorizer = object : EmptyAuthorizer<EmptyEntityBo>() {
         override fun authorizeQuery(executor: Executor, queryBo: QueryBo<*>) {
