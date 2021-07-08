@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.backend.authorize
 
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.PUBLIC
 import zakadabar.stack.backend.module
 import zakadabar.stack.backend.util.default
 import zakadabar.stack.data.BaseBo
@@ -31,6 +30,12 @@ open class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
         val LOGGED_IN = UUID().toString()
         private val LOGGED_IN_ID = EntityId<BaseBo>()
     }
+
+    @Suppress("PropertyName")
+    val LOGGED_IN = Companion.LOGGED_IN
+
+    @Suppress("PropertyName")
+    val PUBLIC = Companion.PUBLIC
 
     private val roles: SimpleRoleAuthorizationBo = default { }
 
