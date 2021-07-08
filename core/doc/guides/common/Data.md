@@ -163,7 +163,7 @@ QueryBo<SimpleQueryResult>
 ```
 
 ```kotlin
-QueryBo<List<SimpleQueryResult?>
+QueryBo<List<SimpleQueryResult?>>
 ```
 
 ### Use a Query

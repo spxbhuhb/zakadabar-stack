@@ -1,3 +1,5 @@
+# Signatures
+
 Our builds are signed with a GPG key that belongs to `build@simplexion.hu`.
 
 To verify the signature you need a gpg program and our public key. The key of
@@ -5,17 +7,17 @@ To verify the signature you need a gpg program and our public key. The key of
 
 To download the public key, use the site above or the command below:
 
-```shell
+```text
 gpg --recv-keys DE894262C98DC23860292C8C7213DCE1CDE7FA07
 ```
 
-```shell
+```text
 gpg --verify filename.asc filename
 ```
 
 Example:
 
-```shell
+```text
 gpg --verify 2021.6-to-2021.7.5.jar.asc 2021.6-to-2021.7.5.jar
 ```
 
