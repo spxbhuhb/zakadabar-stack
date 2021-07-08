@@ -7,14 +7,11 @@ Types:
 
 On most cases you don't have to worry about making URLs. However, they are useful for debugging and testing.
 
-<div class="zk-note-info">
 In these examples:
 
 - SimpleBo is the companion object
 - `bo` is an actual instance of SimpleBo
 - `{namespace}` is the [Namespace](./Data.md#Namespace)
-
-</div>
 
 ## Backend URLs
 

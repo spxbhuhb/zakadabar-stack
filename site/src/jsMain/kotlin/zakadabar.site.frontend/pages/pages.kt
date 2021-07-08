@@ -84,11 +84,6 @@ object Versioning : MarkdownPage(
     SiteMarkdownContext("Versioning", "misc/")
 )
 
-object UpcomingChanges : MarkdownPage(
-    "/api/$contentNamespace/misc/UpcomingChanges.md",
-    SiteMarkdownContext("UpcomingChanges", "misc/")
-)
-
 object BenderPage : ZkPage() {
     override fun onCreate() {
         + Bender(
