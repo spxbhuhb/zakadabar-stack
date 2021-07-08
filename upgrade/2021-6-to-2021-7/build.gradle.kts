@@ -46,7 +46,6 @@ kotlin {
 
 tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
     archiveFileName.set("2021.6-to-${project.version}.jar")
-    minimize()
 }
 
 signing {
