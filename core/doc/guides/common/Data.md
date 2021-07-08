@@ -134,7 +134,7 @@ class SimpleExampleQuery(
 
     var name : String
 
-) : QueryBo<SimpleQueryResult> {
+) : QueryBo<List<SimpleQueryResult>> {
 
     companion object : QueryBoCompanion(SimpleExampleBo.boNamespace)
 
@@ -154,14 +154,17 @@ independent of entities.
 
 ### Query Result
 
-Queries always return with a list of result BOs. The type of result bo is
-specified in the type parameter of `QueryBo` (and also in some other lines).
+The type of result is specified in the type parameter of `QueryBo` 
+(and also in some other lines). Queries may return with a single BO
+or with list of BOs.
 
 ```kotlin
 QueryBo<SimpleQueryResult>
 ```
 
-The result BO can be any kind of BO.
+```kotlin
+QueryBo<List<SimpleQueryResult?>
+```
 
 ### Use a Query
 

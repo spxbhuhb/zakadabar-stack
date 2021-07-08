@@ -446,10 +446,10 @@ a style sheet.
 ZkElement provides a number of shorthand variables to set inline styles:
 
 ```kotlin
-height = 400 // will be "400px"
-height = "1em"
-width = 400 // will be "400px"
-width = "1em"
+height = 400.px
+height = 1.em
+width = 400.px
+width = 1.em
 gridTemplateRows = "100px max-content"
 gridTemplateColumns = "100px max-content"
 gridGap = theme.spacingStep
@@ -465,7 +465,7 @@ on [CSSStyleDeclaration](https://developer.mozilla.org/en-US/docs/Web/API/CSSSty
 ```kotlin
 + div {
     styles {
-        height = "400px"
+        height = 400.px
         setProperty(
             "grid-template-rows",
             "100px 100px"
