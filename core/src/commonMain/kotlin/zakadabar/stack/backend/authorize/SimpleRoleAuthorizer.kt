@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.backend.authorize
 
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.PUBLIC
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.builtin.authorize.SimpleRoleAuthorizationBo
@@ -32,6 +31,12 @@ open class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
         val LOGGED_IN = UUID().toString()
         private val LOGGED_IN_ID = EntityId<BaseBo>(LOGGED_IN)
     }
+
+    @Suppress("PropertyName")
+    val LOGGED_IN = Companion.LOGGED_IN
+
+    @Suppress("PropertyName")
+    val PUBLIC = Companion.PUBLIC
 
     private val roles: SimpleRoleAuthorizationBo = default { }
 
@@ -63,9 +68,7 @@ open class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
     var all: String
         get() = throw NotImplementedError()
         set(value) {
-            println("SRA: all $value")
             val roleId = value.toRoleId()
-            println("SRA: all $roleId")
             roles.list = roleId
             roles.read = roleId
             roles.query = roleId
@@ -145,7 +148,6 @@ open class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
     }
 
     override fun authorizeCreate(executor: Executor, entity: T) {
-        println("create: ${roles.create}")
         if (roles.create === PUBLIC_ID) return
         if (roles.create === LOGGED_IN_ID && executor.isLoggedIn) return
         roles.create?.let { authorize(executor, it) } ?: throw Forbidden()

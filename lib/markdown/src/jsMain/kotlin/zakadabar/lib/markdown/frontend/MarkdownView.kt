@@ -92,7 +92,9 @@ open class MarkdownView(
 
     private fun enrich() {
         element.querySelectorAll("[data-zk-enrich]").asList().forEach {
-            context.enrich(it as HTMLElement)?.let { child -> addChildSkipDOM(child) }
+            it as HTMLElement
+            context.enrich(it)?.let { child -> addChildSkipDOM(child) }
+            it.css(markdownStyles.enrichElement)
         }
     }
 
