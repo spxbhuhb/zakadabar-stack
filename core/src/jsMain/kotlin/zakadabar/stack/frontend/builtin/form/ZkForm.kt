@@ -446,6 +446,15 @@ open class ZkForm<T : BaseBo>(
 
     fun <ST> select(
         kProperty0: KMutableProperty0<EntityId<ST>?>,
+        optionProvider: SelectOptionProvider<ST>
+    ): ZkOptRecordSelectField<T, ST> {
+        val field = ZkOptRecordSelectField(this@ZkForm, kProperty0, true, optionProvider::asSelectOptions)
+        fields += field
+        return field
+    }
+
+    fun <ST> select(
+        kProperty0: KMutableProperty0<EntityId<ST>?>,
         sortOptions: Boolean = true,
         label: String? = null,
         options: suspend () -> List<Pair<EntityId<ST>, String>>

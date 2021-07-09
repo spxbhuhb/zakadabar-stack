@@ -65,8 +65,8 @@ abstract class QueryBusinessLogicBase<RQ : QueryBo<RS>, RS : Any>(
         throw NoSuchElementException("${this::class.simpleName} does not support CRUD operations")
     }
 
-    override fun queryWrapper(executor: Executor, func: (Executor, BaseBo) -> Any, bo: BaseBo): Any {
-        throw NoSuchElementException("${this::class.simpleName} does not support queries")
+    override fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> BaseBo, bo: BaseBo) : BaseBo {
+        throw NoSuchElementException("${this::class.simpleName} does not support actions")
     }
 
     override fun create(executor: Executor, bo: EmptyEntityBo): EmptyEntityBo {
