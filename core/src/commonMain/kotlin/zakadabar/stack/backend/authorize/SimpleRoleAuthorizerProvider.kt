@@ -3,14 +3,14 @@
  */
 package zakadabar.stack.backend.authorize
 
-import zakadabar.stack.backend.BackendModule
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
+import zakadabar.stack.backend.business.EntityBusinessLogicCommon
 import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.module.CommonModule
 
 /**
  * Provides a [SimpleRoleAuthorizer] for all BL modules.
  */
-class SimpleRoleAuthorizerProvider() : AuthorizerProvider, BackendModule {
+class SimpleRoleAuthorizerProvider() : AuthorizerProvider, CommonModule {
 
     private var initializer: (SimpleRoleAuthorizer<*>.() -> Unit)? = null
 
@@ -18,7 +18,7 @@ class SimpleRoleAuthorizerProvider() : AuthorizerProvider, BackendModule {
         this.initializer = initializer
     }
 
-    override fun <T : EntityBo<T>> businessLogicAuthorizer(businessLogic : EntityBusinessLogicBase<T>) : Authorizer<T> {
+    override fun <T : EntityBo<T>> businessLogicAuthorizer(businessLogic : EntityBusinessLogicCommon<T>) : Authorizer<T> {
         return SimpleRoleAuthorizer(initializer as SimpleRoleAuthorizer<T>.() -> Unit)
     }
 

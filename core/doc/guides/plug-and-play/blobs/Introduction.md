@@ -16,7 +16,7 @@ This library offers a base class for blobs which you have to extend.
 
 ### Disposition
 
-`disposition` is a free, optinal string you may use to categorize the blobs.
+`disposition` is a free, optional string you may use to categorize the blobs.
 For example "thumbnail", "icon", "background" may be used to categorize images.
 
 You can pass the disposition to the `byReference` method, this querying only
@@ -188,12 +188,13 @@ Attachment field with additional settings:
 ### Create
 
 ```kotlin
+val disposition = null
 val content = "almafa".encodeToByteArray()
 val name = "test.txt"
 val mimeType = "text/plain"
 val reference : TestReferenceBo = null
 
-val bo = TestBlob(EntityId(), reference, name, mimeType, 0)
+val bo = TestBlob(EntityId(), disposition, reference, name, mimeType, 0)
    .create()
    .upload(content)
 ```
@@ -224,6 +225,10 @@ TestBlob.download(bo.id)
 ```
 
 ### Delete
+
+```kotlin
+blobBo.delete()
+```
 
 ```kotlin
 TestBlob.delete(id)

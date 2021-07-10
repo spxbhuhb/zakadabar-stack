@@ -3,11 +3,11 @@
  */
 package zakadabar.stack.backend.route
 
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
+import zakadabar.stack.backend.business.EntityBusinessLogicCommon
 import zakadabar.stack.data.entity.EntityBo
 
 interface RouterProvider {
 
-    fun <T : EntityBo<T>> businessLogicRouter(businessLogic : EntityBusinessLogicBase<T>) : Router<T>
+    fun <T : EntityBo<T>> businessLogicRouter(businessLogic : EntityBusinessLogicCommon<T>) : Router<T>
 
 }

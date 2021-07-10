@@ -21,7 +21,7 @@ The default configuration is in [logback.xml](/src/jvmMain/resources/logback.xml
 To create your own configuration write a modified logback.xml file, place it in the
 `etc` directory of the backend and use the following command line argument to when starting the backend:
 
-```shell script
+```text
 java -Dlogback.configurationFile=etc/logback.xml
 ```
 

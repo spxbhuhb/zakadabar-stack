@@ -29,7 +29,6 @@ class Routing : ZkAppRouting(DefaultLayout, Landing) {
         + Experimental
         + ProjectStatus
         + Versioning
-        + UpcomingChanges
         + Upgrade
         + BenderPage
     }

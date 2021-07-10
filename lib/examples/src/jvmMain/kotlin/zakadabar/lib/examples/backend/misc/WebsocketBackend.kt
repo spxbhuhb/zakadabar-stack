@@ -5,11 +5,12 @@ package zakadabar.lib.examples.backend.misc
 
 import io.ktor.routing.*
 import io.ktor.websocket.*
-import zakadabar.stack.backend.BackendModule
+import zakadabar.stack.backend.RoutedModule
 
-object WebsocketBackend : BackendModule {
+object WebsocketBackend : RoutedModule {
 
-    override fun onInstallRoutes(route: Route) {
+    override fun onInstallRoutes(route: Any) {
+        route as Route
         with(route) {
             webSocket("ws") { // available at /api/ws
                 println("connection to ws")

@@ -20,6 +20,7 @@ import kotlinx.browser.document
 import kotlinx.datetime.Instant
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.SelectOptionProvider
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityBo
@@ -430,6 +431,24 @@ open class ZkForm<T : BaseBo>(
     ): ZkRecordSelectField<T, ST> {
         val field = ZkRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
         label?.let { field.labelText = label }
+        fields += field
+        return field
+    }
+
+    fun <ST> select(
+        kProperty0: KMutableProperty0<EntityId<ST>>,
+        optionProvider: SelectOptionProvider<ST>
+    ): ZkRecordSelectField<T, ST> {
+        val field = ZkRecordSelectField(this@ZkForm, kProperty0, true, optionProvider::asSelectOptions)
+        fields += field
+        return field
+    }
+
+    fun <ST> select(
+        kProperty0: KMutableProperty0<EntityId<ST>?>,
+        optionProvider: SelectOptionProvider<ST>
+    ): ZkOptRecordSelectField<T, ST> {
+        val field = ZkOptRecordSelectField(this@ZkForm, kProperty0, true, optionProvider::asSelectOptions)
         fields += field
         return field
     }

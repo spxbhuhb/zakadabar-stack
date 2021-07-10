@@ -73,7 +73,7 @@ open class BlobExposedTable<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
 ) {
 
     val reference = reference("reference", referenceTable).nullable()
-    val disposition = varchar("disposition", 200)
+    val disposition = varchar("disposition", 200).default("")
     val name = varchar("name", 200)
     val mimeType = varchar("mime_type", 100)
     val size = long("size")

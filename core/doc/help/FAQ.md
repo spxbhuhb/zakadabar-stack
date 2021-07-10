@@ -50,17 +50,6 @@ dependency.
 There are many reasons, for some of them, please read this article without any bias: 
 [Semver Will Not Save You](https://hynek.me/articles/semver-will-not-save-you/).
 
-### IR compiler, Ktor 1.5+
-
-We will upgrade to the latest Ktor and serialization when
-
-- [KT-46598](https://youtrack.jetbrains.com/issue/KT-46598) is solved, an
-- Ktor uses a serialization version 1.2.1+
-
-The Stack compiles with KJS IR backend (not on master), we'll provide IR modules when
-
-- Ktor is on 1.5.0+ (see above)
-
 ## Errors
 
 ### Gradle Is Stuck
@@ -71,6 +60,19 @@ others it doesn't. We have no IDEA (pun intended) why this is happening.
 Open the `Terminal` of your IDEA (or a normal terminal of your operating system) and use `./gradlew run` from the project
 directory. This will start the backend in the terminal and you'll be able to start the frontend from IDEA (or from
 another terminal.)
+
+### Compiler Thorws IllegalStateException after 2021.7.9 upgrade
+
+```text
+> Task :webapp:compileCommonMainKotlinMetadata FAILED
+e: java.lang.IllegalStateException: e: Failed to resolve Kotlin library: /Users/tiz/src/inwa.ammeter/webapp/build/kotlinSourceSetMetadata/commonMain/hu.simplexion.zakadabar-core/hu.simplexion.zakadabar-core-commonMain.klib
+at org.jetbrains.kotlin.library.SingleFileResolveKt$resolveSingleFileKlib$1.error(SingleFileResolve.kt:19)
+at org.jetbrains.kotlin.library.SingleFileResolveKt$resolveSingleFileKlib$1.error(SingleFileResolve.kt:17)
+at org.jetbrains.kotlin.library.KotlinLibrarySearchPathResolver.resolve(SearchPathResolver.kt:154)
+...
+```
+
+Upgrade your project to Kotlin 1.5.20.
 
 ### Backend Throws NoClassDefFoundError
 
