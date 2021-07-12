@@ -76,6 +76,14 @@ Add a companion object to your test class extending [TestCompanionBase](/src/jvm
 In the tests you can work just as you would do in a frontend module.
 
 ```kotlin
+import kotlinx.coroutines.runBlocking
+import org.junit.AfterClass
+import org.junit.BeforeClass
+import org.junit.Test
+import zakadabar.stack.backend.server
+import zakadabar.stack.backend.testing.TestCompanionBase
+import zakadabar.stack.util.default
+
 class MyBlTest {
 
     companion object : TestCompanionBase() {

@@ -7,7 +7,11 @@ import zakadabar.stack.backend.audit.AuditorProvider
 import zakadabar.stack.backend.audit.LogAuditorProvider
 import zakadabar.stack.backend.ktor.KtorRouterProvider
 import zakadabar.stack.backend.route.RouterProvider
+import zakadabar.stack.backend.validate.SchemaValidatorProvider
+import zakadabar.stack.backend.validate.ValidatorProvider
 
-var routerProvider: RouterProvider = KtorRouterProvider()
+actual var routerProvider: RouterProvider = KtorRouterProvider()
 
-val auditorProvider: AuditorProvider = LogAuditorProvider()
+actual var auditorProvider: AuditorProvider = LogAuditorProvider()
+
+actual var validatorProvider: ValidatorProvider = SchemaValidatorProvider()

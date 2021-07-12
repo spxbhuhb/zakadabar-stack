@@ -86,9 +86,11 @@ open class ZkForm<T : BaseBo>(
     override var openUpdate: ((bo: T) -> Unit)? = null
 
     /**
-     * A function to be called when execution of the form operation has a result.
+     * A function to be called when execution of the form operation has a BO result.
      * This means that the server sent a response which is successful at HTTP level.
      * However, the response may indicate an error.
+     *
+     * **Not executed when the result is not a Business Object.**
      */
     var onExecuteResult: ((resultBo: BaseBo) -> Unit)? = null
 
@@ -284,7 +286,9 @@ open class ZkForm<T : BaseBo>(
                     }
                     ZkElementMode.Action -> {
                         val result = (bo as ActionBo<*>).execute()
-                        onExecuteResult?.let { it(result) }
+                        if (result is BaseBo) {
+                            onExecuteResult?.let { it(result) }
+                        }
                         resetTouched()
                     }
                     ZkElementMode.Query -> {

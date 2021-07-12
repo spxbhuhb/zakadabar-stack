@@ -3,11 +3,11 @@
  */
 package zakadabar.stack.backend.authorize
 
-import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.data.BaseBo
 
 /**
  * Rejects everything.
  *
  * Throws [Forbidden] when rejected.
  */
-open class EmptyAuthorizer<T : EntityBo<T>> : Authorizer<T>
+open class EmptyAuthorizer<T : BaseBo> : Authorizer<T>

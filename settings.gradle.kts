@@ -12,6 +12,8 @@ pluginManagement {
 
 include("core")
 
+include("cookbook")
+
 include("exp:content")
 include("exp:email")
 include("exp:scheduler")

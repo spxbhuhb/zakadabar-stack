@@ -1,26 +1,11 @@
-# Font Files
-
-1. Create the directory `jsMain/resources/fonts`
-1. Copy your font files into this directory.
-1. Add `onInstallStatic` to `jvmMain/src/zakadabar.examples.browser/Module.kt`
-1. Add necessary styles to `index.html`
-
-**Module.kt**
-
-```kotlin
-override fun onInstallStatic(route: Route) {
-    with (route) {
-        static("fonts") {
-            files("fonts")
-        }
-    }
-}
-```
-
-**index.html**
-
-```html
+<!--
+  ~ Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+  -->
 <!doctype html>
+<!--
+  ~ Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+  -->
+
 <!--suppress ALL -->
 <html lang="hu">
 <head>
@@ -48,5 +33,8 @@ override fun onInstallStatic(route: Route) {
             font-display: swap;
         }
     </style>
-    ...
-```
+</head>
+<body>
+</body>
+<script src="/your-module.js"></script>
+</html>

@@ -3,73 +3,40 @@
  */
 package zakadabar.stack.backend.business
 
-import zakadabar.stack.backend.authorize.Authorizer
 import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.persistence.EmptyPersistenceApi
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.entity.EmptyEntityBo
-import zakadabar.stack.data.entity.EntityId
 import kotlin.reflect.KClass
 
 /**
- * Base class for standalone action (without entity) business logics.
+ * Convenience base class for standalone action (without entity) business logics.
  */
-abstract class ActionBusinessLogicCommon<RQ : ActionBo<RS>, RS : BaseBo>(
+abstract class ActionBusinessLogicCommon<RQ : ActionBo<RS>, RS : Any>(
     open val actionBoClass: KClass<RQ>
-) : EntityBusinessLogicCommon<EmptyEntityBo>(EmptyEntityBo::class) {
-
-    override val pa = EmptyPersistenceApi<EmptyEntityBo>()
-
-    abstract override val authorizer: Authorizer<EmptyEntityBo>
+) : BusinessLogicCommon<BaseBo>(), ActionBusinessLogicWrapper {
 
     override val router = router {
         action(actionBoClass, ::execute)
     }
 
-    abstract fun execute(executor : Executor, bo : RQ) : RS
+    abstract fun execute(executor: Executor, bo: RQ): RS
 
-    override fun listWrapper(executor: Executor): List<EmptyEntityBo> {
-        throw NotImplementedError("${this::class.simpleName} does not support CRUD operations")
-    }
+    override fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> Any, bo: BaseBo): Any {
 
-    override fun readWrapper(executor: Executor, entityId: EntityId<EmptyEntityBo>): EmptyEntityBo {
-        throw NoSuchElementException("${this::class.simpleName} does not support CRUD operations")
-    }
+        check(actionBoClass.isInstance(bo))
 
-    override fun createWrapper(executor: Executor, bo: EmptyEntityBo): EmptyEntityBo {
-        throw NoSuchElementException("${this::class.simpleName} does not support CRUD operations")
-    }
+        @Suppress("UNCHECKED_CAST") // check above
+        bo as RQ
 
-    override fun updateWrapper(executor: Executor, bo: EmptyEntityBo): EmptyEntityBo {
-        throw NoSuchElementException("${this::class.simpleName} does not support CRUD operations")
-    }
+        validator.validateAction(executor, bo)
 
-    override fun deleteWrapper(executor: Executor, entityId: EntityId<EmptyEntityBo>) {
-        throw NoSuchElementException("${this::class.simpleName} does not support CRUD operations")
-    }
+        authorizer.authorizeAction(executor, bo)
 
-    override fun queryWrapper(executor: Executor, func: (Executor, BaseBo) -> Any, bo: BaseBo) : Any {
-        throw NoSuchElementException("${this::class.simpleName} does not support queries")
-    }
+        val response = execute(executor, bo)
 
-    override fun create(executor: Executor, bo: EmptyEntityBo): EmptyEntityBo {
-        throw NoSuchElementException("${this::class.simpleName} does not support CRUD operations")
-    }
+        auditor.auditAction(executor, bo)
 
-    override fun read(executor: Executor, entityId: EntityId<EmptyEntityBo>): EmptyEntityBo {
-        throw NoSuchElementException("${this::class.simpleName} does not support CRUD operations")
-    }
+        return response
 
-    override fun update(executor: Executor, bo: EmptyEntityBo): EmptyEntityBo {
-        throw NoSuchElementException("${this::class.simpleName} does not support CRUD operations")
-    }
-
-    override fun delete(executor: Executor, entityId: EntityId<EmptyEntityBo>) {
-        throw NoSuchElementException("${this::class.simpleName} does not support CRUD operations")
-    }
-
-    override fun list(executor: Executor): List<EmptyEntityBo> {
-        throw NoSuchElementException("${this::class.simpleName} does not support CRUD operations")
     }
 }

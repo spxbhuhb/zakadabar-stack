@@ -8,6 +8,13 @@ BLs extend [EntityBusinessLogicBase](/src/jvmMain/kotlin/zakadabar/stack/backend
 This class hides most of the implementation details like Ktor routing, serialization, data validation and so on.
 It lets you concentrate on the business code you have to implement.
 
+## Classes
+
+This picture summarizes the class hierarchy of blocking business logic classes.
+Blocking means that these classes use non-suspend functions.
+
+![Business Logic Classes](business-logic-blocking.png)
+
 ## EntityBusinessLogicBase
 
 EBLB (`EntityBusinessLogicBase`) provides many functions out-of-the-box:

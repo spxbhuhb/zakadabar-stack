@@ -6,14 +6,13 @@ package zakadabar.stack.backend.route
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.query.QueryBo
 import kotlin.reflect.KClass
 
 /**
  * Creates routes incoming requests to the appripriate BL processing method.
  */
-interface Router<T : EntityBo<T>> {
+interface Router<T : BaseBo> {
 
     /**
      * In the structure `/api/{namespace}/{qualifier}/...` this is the qualifier.
@@ -23,7 +22,7 @@ interface Router<T : EntityBo<T>> {
 
     fun installRoutes(context: Any)
 
-    fun <RQ : ActionBo<RS>, RS : BaseBo> action(actionClass: KClass<RQ>, actionFunc: (Executor, RQ) -> RS)
+    fun <RQ : ActionBo<RS>, RS : Any> action(actionClass: KClass<RQ>, actionFunc: (Executor, RQ) -> RS)
 
     fun <RQ : QueryBo<RS>, RS : Any> query(queryClass: KClass<RQ>, queryFunc: (Executor, RQ) -> RS)
 

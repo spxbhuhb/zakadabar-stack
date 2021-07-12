@@ -3,8 +3,8 @@
  */
 package zakadabar.stack.backend.authorize
 
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.exceptions.Forbidden
@@ -13,7 +13,7 @@ import zakadabar.stack.exceptions.Forbidden
  * Implemented by authorizer classes. These are used by business logic
  * modules to authorize access.
  */
-interface Authorizer<T : EntityBo<T>> {
+interface Authorizer<T : BaseBo> {
 
     fun onModuleStart() {
 

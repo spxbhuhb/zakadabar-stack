@@ -12,9 +12,9 @@ import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize.Authorizer
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.server
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.CommBase
 import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.entity.EmptyEntityBo
 import kotlin.test.assertEquals
 
 class SimpleStandaloneActionTest {
@@ -26,7 +26,7 @@ class SimpleStandaloneActionTest {
         fun setup() {
             server = Server("test")
             server += object : SimpleStandaloneActionBl() {
-                override val authorizer = object : Authorizer<EmptyEntityBo> {
+                override val authorizer = object : Authorizer<BaseBo> {
                     override fun authorizeAction(executor: Executor, actionBo: ActionBo<*>) {
                         // allow the action
                     }

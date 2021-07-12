@@ -5,6 +5,6 @@ package zakadabar.stack.data.action
 
 import zakadabar.stack.data.BaseBo
 
-interface ActionBo<RESPONSE : BaseBo> : BaseBo {
+interface ActionBo<RESPONSE : Any> : BaseBo {
     suspend fun execute(): RESPONSE
 }

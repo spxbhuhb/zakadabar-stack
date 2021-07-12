@@ -4,30 +4,30 @@
 package zakadabar.stack.backend.ktor
 
 import io.ktor.application.*
-import io.ktor.features.*
-import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.EntityBusinessLogicCommon
+import zakadabar.stack.backend.business.ActionBusinessLogicWrapper
+import zakadabar.stack.backend.business.BusinessLogicCommon
+import zakadabar.stack.backend.business.QueryBusinessLogicWrapper
 import zakadabar.stack.backend.route.Router
 import zakadabar.stack.backend.server
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.query.QueryBo
+import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
 
-open class KtorRouter<T : EntityBo<T>>(
-    private val businessLogic : EntityBusinessLogicCommon<T>
+open class KtorRouter<T : BaseBo>(
+    @PublicApi
+    protected val businessLogic: BusinessLogicCommon<out BaseBo>
 ) : Router<T> {
 
-    private val actionClassList = mutableListOf<Pair<KClass<out BaseBo>, (Executor, BaseBo) -> BaseBo>>()
+    private val actionClassList = mutableListOf<Pair<KClass<out BaseBo>, (Executor, BaseBo) -> Any>>()
 
     private val queryClassList = mutableListOf<Pair<KClass<out BaseBo>, (Executor, BaseBo) -> Any>>()
 
@@ -43,40 +43,20 @@ open class KtorRouter<T : EntityBo<T>>(
         server.apiCacheControl(call)
     }
 
-    override fun <RQ : ActionBo<RS>, RS : BaseBo> action(actionClass : KClass<RQ>, actionFunc : (Executor, RQ) -> RS) {
+    override fun <RQ : ActionBo<RS>, RS : Any> action(actionClass: KClass<RQ>, actionFunc: (Executor, RQ) -> RS) {
+        if (businessLogic !is ActionBusinessLogicWrapper) throw IllegalArgumentException("cannot add actions to a non-action BL")
         @Suppress("UNCHECKED_CAST") // the parameter setup above ensures consistency
-        actionClassList += (actionClass to actionFunc) as (Pair<KClass<out BaseBo>, (Executor, BaseBo) -> BaseBo>)
+        actionClassList += (actionClass to actionFunc) as (Pair<KClass<out BaseBo>, (Executor, BaseBo) -> Any>)
     }
 
     override fun <RQ : QueryBo<RS>, RS : Any> query(queryClass: KClass<RQ>, queryFunc: (Executor, RQ) -> RS) {
+        if (businessLogic !is QueryBusinessLogicWrapper) throw IllegalArgumentException("cannot add queries to a non-query BL")
         @Suppress("UNCHECKED_CAST") // the parameter setup above ensures consistency
         queryClassList += (queryClass to queryFunc) as Pair<KClass<out BaseBo>, (Executor, BaseBo) -> Any>
     }
 
     override fun installRoutes(context: Any) {
-        with (context as Route) {
-            route("${businessLogic.namespace}/${qualifier}") {
-
-                get {
-                    list(call)
-                }
-
-                get("{rid}") {
-                    call.parameters["rid"]?.let { read(call, it) }
-                }
-
-                post {
-                    create(call)
-                }
-
-                patch("/{rid}") {
-                    update(call)
-                }
-
-                delete("/{rid}") {
-                    delete(call)
-                }
-            }
+        with(context as Route) {
 
             actionClassList.forEach {
                 val (boClass, func) = it
@@ -94,56 +74,9 @@ open class KtorRouter<T : EntityBo<T>>(
         }
     }
 
-    suspend fun list(call: ApplicationCall) {
+    open suspend fun action(call: ApplicationCall, actionClass: KClass<out BaseBo>, actionFunc: (Executor, BaseBo) -> Any) {
+        businessLogic as ActionBusinessLogicWrapper
 
-        val executor = call.executor()
-
-        apiCacheControl(call)
-
-        call.respond(businessLogic.listWrapper(executor) as Any)
-
-    }
-
-    open suspend fun read(call: ApplicationCall, id: String) {
-
-        val executor = call.executor()
-
-        apiCacheControl(call)
-
-        call.respond(businessLogic.readWrapper(executor, EntityId(id)) as Any)
-
-    }
-
-    suspend fun create(call: ApplicationCall) {
-
-        val executor = call.executor()
-        val request = call.receive(businessLogic.boClass)
-
-        call.respond(businessLogic.createWrapper(executor, request) as Any)
-
-    }
-
-    suspend fun update(call: ApplicationCall) {
-
-        val executor = call.executor()
-        val request = call.receive(businessLogic.boClass)
-
-        call.respond(businessLogic.updateWrapper(executor, request) as Any)
-
-    }
-
-    suspend fun delete(call: ApplicationCall) {
-
-        val id = call.parameters["rid"] ?: throw BadRequestException("missing id")
-        val executor = call.executor()
-
-        businessLogic.deleteWrapper(executor, EntityId(id))
-
-        call.respond(HttpStatusCode.OK)
-
-    }
-
-    open suspend fun action(call: ApplicationCall, actionClass: KClass<out BaseBo>, actionFunc: (Executor, BaseBo) -> BaseBo) {
         val executor = call.executor()
         val aText = call.receive<String>()
         val aObj = Json.decodeFromString(serializer(actionClass.createType()), aText) as BaseBo
@@ -151,11 +84,12 @@ open class KtorRouter<T : EntityBo<T>>(
         @Suppress("UNCHECKED_CAST")
         val response = businessLogic.actionWrapper(executor, actionFunc, aObj)
 
-        @Suppress("UNCHECKED_CAST")
-        call.respond(response as Any)
+        call.respond(response)
     }
 
     private suspend fun query(call: ApplicationCall, queryClass: KClass<out BaseBo>, queryFunc: (Executor, BaseBo) -> Any) {
+        businessLogic as QueryBusinessLogicWrapper
+
         val executor = call.executor()
 
         apiCacheControl(call)
@@ -167,7 +101,6 @@ open class KtorRouter<T : EntityBo<T>>(
         @Suppress("UNCHECKED_CAST")
         val response = businessLogic.queryWrapper(executor, queryFunc, qObj as BaseBo)
 
-        @Suppress("UNCHECKED_CAST")
         call.respond(response)
     }
 

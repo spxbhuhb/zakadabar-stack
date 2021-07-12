@@ -7,6 +7,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import org.slf4j.LoggerFactory
 import zakadabar.stack.backend.authorize.Executor
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
@@ -21,7 +22,7 @@ import kotlin.reflect.full.createType
  *
  * @property  includeData  When true, content of the BOs is also written for create and update.
  */
-open class LogAuditor<T : EntityBo<T>>(
+open class LogAuditor<T : BaseBo>(
     forInstance : Any
 ) : Auditor<T> {
 
@@ -39,12 +40,20 @@ open class LogAuditor<T : EntityBo<T>>(
 
     override fun auditCreate(executor: Executor, entity: T) {
         val text = if (includeData) Json.encodeToString(serializer(entity::class.createType()), entity) else ""
-        logger.info("${executor.accountId}: CREATE ${entity.id} // $text")
+        if (entity is EntityBo<*>) {
+            logger.info("${executor.accountId}: CREATE ${entity.id} // $text")
+        } else {
+            logger.info("${executor.accountId}: CREATE // $text")
+        }
     }
 
     override fun auditUpdate(executor: Executor, entity: T) {
         val text = if (includeData) Json.encodeToString(serializer(entity::class.createType()), entity) else ""
-        logger.info("${executor.accountId}: UPDATE ${entity.id} // $text")
+        if (entity is EntityBo<*>) {
+            logger.info("${executor.accountId}: UPDATE ${entity.id} // $text")
+        } else {
+            logger.info("${executor.accountId}: UPDATE // $text")
+        }
     }
 
     override fun auditDelete(executor: Executor, entityId: EntityId<T>) {

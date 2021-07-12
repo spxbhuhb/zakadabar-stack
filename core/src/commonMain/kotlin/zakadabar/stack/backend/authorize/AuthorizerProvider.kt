@@ -3,8 +3,8 @@
  */
 package zakadabar.stack.backend.authorize
 
-import zakadabar.stack.backend.business.EntityBusinessLogicCommon
-import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.backend.business.BusinessLogicCommon
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.module.moduleLogger
 import zakadabar.stack.module.modules
 import kotlin.properties.ReadOnlyProperty
@@ -12,14 +12,14 @@ import kotlin.reflect.KProperty
 
 private object UNINITIALIZED
 
-class AuthorizerDelegate<T : EntityBo<T>>(
+class AuthorizerDelegate<T : BaseBo>(
     var build: (Authorizer<T>.() -> Unit)? = null
-) : ReadOnlyProperty<EntityBusinessLogicCommon<T>, Authorizer<T>> {
+) : ReadOnlyProperty<BusinessLogicCommon<T>, Authorizer<T>> {
 
     private var authorizer: Any = UNINITIALIZED
 
     @Suppress("UNCHECKED_CAST") // this is how "lazy" does it...
-    override operator fun getValue(thisRef: EntityBusinessLogicCommon<T>, property: KProperty<*>): Authorizer<T> {
+    override operator fun getValue(thisRef: BusinessLogicCommon<T>, property: KProperty<*>): Authorizer<T> {
         if (authorizer === UNINITIALIZED) {
             val provider = modules.firstOrNull<AuthorizerProvider>()
             authorizer = if (provider == null) {
@@ -41,7 +41,7 @@ interface AuthorizerProvider {
     /**
      * Create an [Authorizer] for the given business logic.
      */
-    fun <T : EntityBo<T>> businessLogicAuthorizer(businessLogic: EntityBusinessLogicCommon<T>): Authorizer<T>
+    fun <T : BaseBo> businessLogicAuthorizer(businessLogic: BusinessLogicCommon<T>): Authorizer<T>
 
 
 }

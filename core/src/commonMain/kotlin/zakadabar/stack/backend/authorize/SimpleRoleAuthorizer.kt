@@ -6,7 +6,6 @@ package zakadabar.stack.backend.authorize
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.builtin.authorize.SimpleRoleAuthorizationBo
-import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.exceptions.Forbidden
@@ -22,7 +21,7 @@ import kotlin.reflect.KClass
  *
  * Throws [Forbidden] when rejected.
  */
-open class SimpleRoleAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
+open class SimpleRoleAuthorizer<T : BaseBo>() : Authorizer<T> {
 
     companion object {
         val PUBLIC = UUID().toString()

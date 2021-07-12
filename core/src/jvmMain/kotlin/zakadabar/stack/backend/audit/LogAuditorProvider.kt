@@ -3,12 +3,12 @@
  */
 package zakadabar.stack.backend.audit
 
-import zakadabar.stack.backend.business.EntityBusinessLogicCommon
-import zakadabar.stack.data.entity.EntityBo
+import zakadabar.stack.backend.business.BusinessLogicCommon
+import zakadabar.stack.data.BaseBo
 
 class LogAuditorProvider : AuditorProvider {
 
-    override fun <T : EntityBo<T>> businessLogicAuditor(businessLogic : EntityBusinessLogicCommon<T>) : Auditor<T> {
+    override fun <T : BaseBo> businessLogicAuditor(businessLogic : BusinessLogicCommon<T>) : Auditor<T> {
         return LogAuditor(businessLogic)
     }
 

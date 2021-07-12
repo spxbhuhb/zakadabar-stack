@@ -7,15 +7,14 @@ import zakadabar.lib.examples.data.SimpleQueryResult
 import zakadabar.lib.examples.data.SimpleStandaloneQuery
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.LOGGED_IN
 import zakadabar.stack.backend.business.QueryBusinessLogicBase
-import zakadabar.stack.data.entity.EmptyEntityBo
+import zakadabar.stack.data.BaseBo
 
 class SimpleStandaloneQueryBl : QueryBusinessLogicBase<SimpleStandaloneQuery, List<SimpleQueryResult>>(
     queryBoClass = SimpleStandaloneQuery::class
 ) {
 
-    override val authorizer = SimpleRoleAuthorizer<EmptyEntityBo> {
+    override val authorizer = SimpleRoleAuthorizer<BaseBo> {
         query(SimpleStandaloneQuery::class, LOGGED_IN)
     }
 
