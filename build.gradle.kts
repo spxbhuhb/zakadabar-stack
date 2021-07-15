@@ -20,6 +20,8 @@ buildscript {
     extra["coroutinesVersion"] = "1.5.0"
     extra["serializationVersion"] = "1.2.1"
     extra["datetimeVersion"] = "0.2.1"
+
+    extra["androidSdk"] = properties["android.sdk.path"]?.toString() ?: System.getenv("ANDROID_SDK_PATH")
 }
 
 subprojects {

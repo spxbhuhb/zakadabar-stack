@@ -28,4 +28,9 @@ include("lib:markdown")
 
 include("site")
 
+val androidSdk: String? = extra["android.sdk.path"]?.toString() ?: System.getenv("ANDROID_SDK_PATH")
+if (androidSdk != null) {
+    include("exp:android-util")
+}
+
 //include("upgrade:2021-6-to-2021-7")
