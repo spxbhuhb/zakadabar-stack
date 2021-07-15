@@ -22,9 +22,11 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
-    private var lastColumnRead // JDBC style column index starting from 1
-            = 0
+class SQLDroidResultSet(
+    private val c: Cursor
+) : ResultSet {
+
+    private var lastColumnRead = 0 // JDBC style column index starting from 1
 
     // TODO: Implement behavior (as Xerial driver)
     private var limitRows = 0
@@ -71,7 +73,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     @Throws(java.sql.SQLException::class)
     override fun afterLast() {
         try {
-            c !!.moveToLast()
+            c.moveToLast()
             c.moveToNext()
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
@@ -81,7 +83,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     @Throws(java.sql.SQLException::class)
     override fun beforeFirst() {
         try {
-            c !!.moveToFirst()
+            c.moveToFirst()
             c.moveToPrevious()
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
@@ -103,7 +105,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     @Throws(java.sql.SQLException::class)
     override fun close() {
         try {
-            c?.close()
+            c.close()
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -119,7 +121,9 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     override fun findColumn(columnName: String): Int {
         return try {
             // JDBC style column index starts from 1; Android database cursor has zero-based index
-            c !!.getColumnIndexOrThrow(columnName) + 1
+            c.getColumnIndexOrThrow(columnName) + 1
+        } catch (e : IllegalArgumentException) {
+            throw java.sql.SQLException("unknown column $columnName")
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -128,7 +132,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     @Throws(java.sql.SQLException::class)
     override fun first(): Boolean {
         return try {
-            c !!.moveToFirst()
+            c.moveToFirst()
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -204,7 +208,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     override fun getBoolean(index: Int): Boolean {
         return try {
             lastColumnRead = index
-            c !!.getInt(ci(index)) != 0
+            c.getInt(ci(index)) != 0
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -220,7 +224,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     override fun getByte(index: Int): Byte {
         return try {
             lastColumnRead = index
-            c !!.getShort(ci(index)).toByte()
+            c.getShort(ci(index)).toByte()
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -236,7 +240,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     override fun getBytes(index: Int): ByteArray? {
         return try {
             lastColumnRead = index
-            var bytes: ByteArray? = c !!.getBlob(ci(index))
+            var bytes: ByteArray? = c.getBlob(ci(index))
             // SQLite includes the zero-byte at the end for Strings.
             if (bytes != null && SQLDroidResultSetMetaData.getType(c, ci(index)) == 3) { //  Cursor.FIELD_TYPE_STRING
                 bytes = Arrays.copyOf(bytes, bytes.size - 1)
@@ -331,7 +335,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     override fun getDouble(index: Int): Double {
         return try {
             lastColumnRead = index
-            c !!.getDouble(ci(index))
+            c.getDouble(ci(index))
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -357,7 +361,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     override fun getFloat(index: Int): Float {
         return try {
             lastColumnRead = index
-            c !!.getFloat(ci(index))
+            c.getFloat(ci(index))
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -373,7 +377,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     override fun getInt(index: Int): Int {
         return try {
             lastColumnRead = index
-            c !!.getInt(ci(index))
+            c.getInt(ci(index))
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -389,7 +393,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     override fun getLong(index: Int): Long {
         return try {
             lastColumnRead = index
-            c !!.getLong(ci(index))
+            c.getLong(ci(index))
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -412,12 +416,12 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
         val newIndex = ci(colID)
         return when (SQLDroidResultSetMetaData.getType(c, newIndex)) {
             4 ->                 //CONVERT TO BYTE[] OBJECT
-                SQLDroidBlob(c !!.getBlob(newIndex))
-            2 -> c !!.getFloat(newIndex)
-            1 -> c !!.getInt(newIndex)
-            3 -> c !!.getString(newIndex)
+                SQLDroidBlob(c.getBlob(newIndex))
+            2 -> c.getFloat(newIndex)
+            1 -> c.getInt(newIndex)
+            3 -> c.getString(newIndex)
             0 -> null
-            else -> c !!.getString(newIndex)
+            else -> c.getString(newIndex)
         }
     }
 
@@ -464,7 +468,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     override fun getRow(): Int {
         return try {
             // convert to jdbc standard (counting from one)
-            c !!.position + 1
+            c.position + 1
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -474,7 +478,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     override fun getShort(index: Int): Short {
         return try {
             lastColumnRead = index
-            c !!.getShort(ci(index))
+            c.getShort(ci(index))
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -496,7 +500,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     override fun getString(index: Int): String? {
         return try {
             lastColumnRead = index
-            c !!.getString(ci(index))
+            c.getString(ci(index))
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -621,7 +625,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
         return if (isClosed) {
             false
         } else try {
-            c !!.isAfterLast
+            c.isAfterLast
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -632,7 +636,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
         return if (isClosed) {
             false
         } else try {
-            c !!.isBeforeFirst
+            c.isBeforeFirst
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -643,7 +647,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
         return if (isClosed) {
             false
         } else try {
-            c !!.isFirst
+            c.isFirst
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -654,7 +658,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
         return if (isClosed) {
             false
         } else try {
-            c !!.isLast
+            c.isLast
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -663,7 +667,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     @Throws(java.sql.SQLException::class)
     override fun last(): Boolean {
         return try {
-            c !!.moveToLast()
+            c.moveToLast()
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -682,7 +686,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     @Throws(java.sql.SQLException::class)
     override fun next(): Boolean {
         return try {
-            c !!.moveToNext()
+            c.moveToNext()
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -691,7 +695,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     @Throws(java.sql.SQLException::class)
     override fun previous(): Boolean {
         return try {
-            c !!.moveToPrevious()
+            c.moveToPrevious()
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -700,7 +704,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     @Throws(java.sql.SQLException::class)
     override fun refreshRow() {
         try {
-            c !!.requery()
+            c.requery()
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -980,7 +984,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
     @Throws(java.sql.SQLException::class)
     override fun wasNull(): Boolean {
         return try {
-            c !!.isNull(ci(lastColumnRead))
+            c.isNull(ci(lastColumnRead))
         } catch (e: SQLException) {
             throw SQLDroidConnection.chainException(e)
         }
@@ -1057,7 +1061,7 @@ class SQLDroidResultSet(private val c: Cursor?) : ResultSet {
 
     @Throws(java.sql.SQLException::class)
     override fun isClosed(): Boolean {
-        return c !!.isClosed
+        return c.isClosed
     }
 
     @Throws(java.sql.SQLException::class)

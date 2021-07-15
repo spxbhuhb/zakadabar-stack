@@ -51,6 +51,7 @@ class SQLDroidDriver : Driver {
         // making the code hard to read and easy to mistype.
         var xerialPrefix = "jdbc:sqlite:"
 
+        var className = SQLDroidDriver::class.qualifiedName!!
         var driverName = "SQLDroid"
         var databaseProductName = "SQLite for Android"
 

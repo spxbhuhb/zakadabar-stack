@@ -21,8 +21,7 @@ import java.util.*
 open class SQLDroidConnection(url: String, info: Properties?) : Connection {
     /** Returns the delegate SQLiteDatabase.  */
     /** The Android sqlitedb.  */
-    var db: SQLiteDatabase? = null
-        private set
+    val db: SQLiteDatabase
     private var autoCommit = true
 
     /**
@@ -36,6 +35,7 @@ open class SQLDroidConnection(url: String, info: Properties?) : Connection {
     private var generatedRowIdStatement: PreparedStatement? = null
     private val url: String
     private var transactionIsolation = Connection.TRANSACTION_SERIALIZABLE
+
     @Throws(java.sql.SQLException::class)
     private fun ensureDbFileCreation(dbQname: String) {
         val dbFile = File(dbQname)
@@ -58,20 +58,19 @@ open class SQLDroidConnection(url: String, info: Properties?) : Connection {
     @Throws(java.sql.SQLException::class)
     override fun close() {
         Log.v("SQLDroidConnection.close(): " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
-        if (db != null) {
-            synchronized(dbMap) {
-                clientMap.remove(this)
-                if (! clientMap.containsValue(db)) {
-                    Log.i("SQLDroidConnection.close(): " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this + " Closing the database since since last connection was closed.")
-                    setAutoCommit(true)
-                    db !!.close()
-                    dbMap.remove(db !!.dbQname)
-                }
+
+        // FIXME check for duplicated close
+
+        synchronized(dbMap) {
+            clientMap.remove(this)
+            if (! clientMap.containsValue(db)) {
+                Log.i("SQLDroidConnection.close(): " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this + " Closing the database since since last connection was closed.")
+                setAutoCommit(true)
+                db.close()
+                dbMap.remove(db.dbQname)
             }
-            db = null
-        } else {
-            Log.e("SQLDroidConnection.close(): " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this + " Duplicate close!")
         }
+
     }
 
     @Throws(java.sql.SQLException::class)
@@ -79,11 +78,11 @@ open class SQLDroidConnection(url: String, info: Properties?) : Connection {
         if (autoCommit) {
             throw java.sql.SQLException("database in auto-commit mode")
         }
-        db !!.setTransactionSuccessful()
+        db.setTransactionSuccessful()
         Log.d("END TRANSACTION  (commit) " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
-        db !!.endTransaction()
+        db.endTransaction()
         Log.d("BEGIN TRANSACTION (after commit) " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
-        db !!.beginTransaction()
+        db.beginTransaction()
     }
 
     @Throws(java.sql.SQLException::class)
@@ -153,7 +152,7 @@ open class SQLDroidConnection(url: String, info: Properties?) : Connection {
     @Throws(java.sql.SQLException::class)
     override fun isClosed(): Boolean {
         // assuming that "isOpen" doesn't throw a locked exception..
-        return db?.sqliteDatabase?.isOpen == false
+        return db.sqliteDatabase?.isOpen == false
     }
 
     @Throws(java.sql.SQLException::class)
@@ -202,12 +201,14 @@ open class SQLDroidConnection(url: String, info: Properties?) : Connection {
 
     @Throws(java.sql.SQLException::class)
     override fun prepareStatement(sql: String, columnIndexes: IntArray): PreparedStatement {
-        throw SQLFeatureNotSupportedException("prepareStatement(String,int[]) not supported")
+        // this does not feel right, but xerial does the same
+        return SQLDroidPreparedStatement(sql, this, PreparedStatement.RETURN_GENERATED_KEYS)
     }
 
     @Throws(java.sql.SQLException::class)
     override fun prepareStatement(sql: String, columnNames: Array<String>): PreparedStatement {
-        throw SQLFeatureNotSupportedException("prepareStatement(String,String[]) not supported")
+        // this does not feel right, but xerial does the same
+        return SQLDroidPreparedStatement(sql, this, PreparedStatement.RETURN_GENERATED_KEYS)
     }
 
     @Throws(java.sql.SQLException::class)
@@ -259,14 +260,14 @@ open class SQLDroidConnection(url: String, info: Properties?) : Connection {
         }
         this.autoCommit = autoCommit
         if (autoCommit) {
-            if (db !!.inTransaction()) { // to be on safe side.
-                db !!.setTransactionSuccessful()
+            if (db.inTransaction()) { // to be on safe side.
+                db.setTransactionSuccessful()
                 Log.d("END TRANSACTION (autocommit on) " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
-                db !!.endTransaction()
+                db.endTransaction()
             }
         } else {
             Log.d("BEGIN TRANSACTION (autocommit off) " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
-            db !!.beginTransaction()
+            db.beginTransaction()
         }
     }
 
@@ -450,7 +451,7 @@ open class SQLDroidConnection(url: String, info: Properties?) : Connection {
     val generatedRowIdResultSet: ResultSet
         get() {
             if (generatedRowIdStatement == null) {
-                generatedRowIdStatement = prepareStatement("select last_insert_rowid();")
+                generatedRowIdStatement = prepareStatement("select last_insert_rowid() as id;")
             }
             return generatedRowIdStatement !!.executeQuery()
         }
@@ -590,13 +591,14 @@ open class SQLDroidConnection(url: String, info: Properties?) : Connection {
             }
         }
         synchronized(dbMap) {
-            db = dbMap[dbQname]
-            if (db == null) {
+            var cdb = dbMap[dbQname]
+            if (cdb == null) {
                 Log.i("SQLDroidConnection: " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this + " Opening new database: " + dbQname)
-                db = SQLiteDatabase(dbQname, timeout, retryInterval, flags)
-                dbMap[dbQname] = db !!
+                cdb = SQLiteDatabase(dbQname, timeout, retryInterval, flags)
+                dbMap[dbQname] = cdb
             }
-            clientMap.put(this, db !!)
+            clientMap.put(this, cdb)
+            db = cdb
         }
     }
 }

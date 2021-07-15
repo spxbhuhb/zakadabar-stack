@@ -14,7 +14,7 @@ class SQLDroidStatement(private var sqldroidConnection: SQLDroidConnection) : St
         val selectPattern = Regex("(?m)(?s)\\s*(SELECT|PRAGMA|EXPLAIN QUERY PLAN).*")
     }
 
-    private var db: SQLiteDatabase?
+    private val db: SQLiteDatabase
     private var rs: SQLDroidResultSet? = null
     protected var sqlBatch = StringBuffer()
     private var maxRows: Int? = null
@@ -35,6 +35,7 @@ class SQLDroidStatement(private var sqldroidConnection: SQLDroidConnection) : St
      */
     private var _updateCount = - 1
     private var poolable = false
+
     @Throws(SQLException::class)
     override fun addBatch(sql: String) {
         //sql must be a static sql
@@ -60,7 +61,6 @@ class SQLDroidStatement(private var sqldroidConnection: SQLDroidConnection) : St
     @Throws(SQLException::class)
     override fun close() {
         closeResultSet()
-        db = null
     }
 
     /** Close the result set (if open) and null the rs variable.  */
@@ -82,17 +82,15 @@ class SQLDroidStatement(private var sqldroidConnection: SQLDroidConnection) : St
     override fun execute(sql: String): Boolean {
         _updateCount = - 1 // default outcome.  If the sql is a query or any other sql fails.
         closeResultSet()
+
         val isSelect = sql.uppercase(Locale.getDefault()).matches(selectPattern)
-        if (rs != null && ! rs !!.isClosed) {
-            rs !!.close()
-        }
         if (isSelect) {
             val limitedSql = sql + if (maxRows != null) " LIMIT $maxRows" else ""
-            val c = db !!.rawQuery(limitedSql, arrayOfNulls(0))
+            val c = db.rawQuery(limitedSql, arrayOfNulls(0))
             rs = SQLDroidResultSet(c)
             if (c.count == 0) return false
         } else {
-            db !!.execSQL(sql)
+            db.execSQL(sql)
             rs = null
             _updateCount = sqldroidConnection.changedRowsCount()
         }
@@ -120,7 +118,7 @@ class SQLDroidStatement(private var sqldroidConnection: SQLDroidConnection) : St
         _updateCount = - 1
         val results = IntArray(1)
         results[0] = Statement.EXECUTE_FAILED
-        db !!.execSQL(sqlBatch.toString())
+        db.execSQL(sqlBatch.toString())
         results[0] = sqldroidConnection.changedRowsCount()
         _updateCount = results[0]
         return results
@@ -129,7 +127,7 @@ class SQLDroidStatement(private var sqldroidConnection: SQLDroidConnection) : St
     @Throws(SQLException::class)
     override fun executeQuery(sql: String): ResultSet {
         closeResultSet()
-        val c = db !!.rawQuery(sql, null)
+        val c = db.rawQuery(sql, null)
         rs = SQLDroidResultSet(c)
         return rs !!
     }
@@ -137,7 +135,7 @@ class SQLDroidStatement(private var sqldroidConnection: SQLDroidConnection) : St
     @Throws(SQLException::class)
     override fun executeUpdate(sql: String): Int {
         closeResultSet()
-        db !!.execSQL(sql)
+        db.execSQL(sql)
         _updateCount = sqldroidConnection.changedRowsCount()
         return _updateCount
     }
@@ -214,8 +212,8 @@ class SQLDroidStatement(private var sqldroidConnection: SQLDroidConnection) : St
     }
 
     @Throws(SQLException::class)
-    override fun getResultSet(): ResultSet {
-        return rs !!
+    override fun getResultSet(): ResultSet? {
+        return rs
     }
 
     @Throws(SQLException::class)

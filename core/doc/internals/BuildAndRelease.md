@@ -1,5 +1,27 @@
 # Build and Release
 
+## Prerequisites
+
+### Android SDK
+
+For a full-build you need an Android SDK installed and the path to the sdk
+set in Gradle properties or as an environment variable.
+
+The build does work without the SDK, but the modules that depend on it are
+skipped.
+
+Properties:
+
+```text
+android.sdk.path=/Users/tiz/Library/Android/sdk/platforms/android-30
+```
+
+Environment variable (Unix, Mac OS):
+
+```text
+export ANDROID_SDK_PATH=/Users/tiz/Library/Android/sdk/platforms/android-30
+```
+
 ## Release Branch
 
 - create a release branch: `release-YYYY.MM.DD`

@@ -29,6 +29,7 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
     private var getTableTypes: PreparedStatement? = null
     private var getUDTs: PreparedStatement? = null
     private var getVersionColumns: PreparedStatement? = null
+
     @Throws(SQLException::class)
     override fun allProceduresAreCallable(): Boolean {
         return false
@@ -190,7 +191,7 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
         val db = con.db
         val types = arrayOf(TABLE_TYPE, VIEW_TYPE)
         var rs: ResultSet? = null
-        val cursorList: MutableList<Cursor> = ArrayList()
+        val cursors = mutableListOf<Cursor>()
         try {
             rs = getTables(catalog, schemaPattern, tableNamePattern, types) ?: throw SQLException("cannot get tables")
             while (rs.next()) {
@@ -198,7 +199,7 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
                 try {
                     val tableName = rs.getString(3)
                     val pragmaStatement = "PRAGMA table_info('$tableName')" // ?)";  substitutions don't seem to work in a pragma statment...
-                    c = db !!.rawQuery(pragmaStatement, arrayOf())
+                    c = db.rawQuery(pragmaStatement, arrayOf())
                     val mc = MatrixCursor(columnNames, c.count)
                     while (c.moveToNext()) {
                         val column = columnValues.clone()
@@ -233,7 +234,7 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
                         column[12] = c.getString(4) // we should check the type for this, but I'm not going to.
                         mc.addRow(column)
                     }
-                    cursorList.add(mc)
+                    cursors.add(mc)
                 } catch (e: SQLException) {
                     // failure of one query will no affect the others...
                     // this will already have been printed.  e.printStackTrace();
@@ -250,20 +251,12 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
                 }
             }
         }
-        val resultSet: SQLDroidResultSet
-        val cursors = arrayOfNulls<Cursor>(cursorList.size)
-        resultSet = when {
-            cursors.isEmpty() -> {
-                SQLDroidResultSet(MatrixCursor(columnNames, 0))
-            }
-            cursors.size == 1 -> {
-                SQLDroidResultSet(cursors[0])
-            }
-            else -> {
-                SQLDroidResultSet(MergeCursor(cursors))
-            }
+
+        return when {
+            cursors.isEmpty() -> SQLDroidResultSet(MatrixCursor(columnNames, 0))
+            cursors.size == 1 -> SQLDroidResultSet(cursors[0])
+            else -> SQLDroidResultSet(MergeCursor(cursors.toTypedArray()))
         }
-        return resultSet
     }
 
     @Throws(SQLException::class)
@@ -291,7 +284,7 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
 
     @Throws(SQLException::class)
     override fun getDatabaseMajorVersion(): Int {
-        return con.db!!.sqliteDatabase!!.version
+        return con.db !!.sqliteDatabase !!.version
     }
 
     @Throws(SQLException::class)
@@ -561,19 +554,23 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
     ): ResultSet {
         var rs: ResultSet?
         val stat = con.createStatement()
-        val sql = StringBuilder(500)
-        sql.append("select null as TABLE_CAT, null as TABLE_SCHEM, '")
-            .append(escape(table)).append("' as TABLE_NAME, un as NON_UNIQUE, null as INDEX_QUALIFIER, n as INDEX_NAME, ")
-            .append(DatabaseMetaData.tableIndexOther.toInt().toString()).append(" as TYPE, op as ORDINAL_POSITION, ")
-            .append("cn as COLUMN_NAME, null as ASC_OR_DESC, 0 as CARDINALITY, 0 as PAGES, null as FILTER_CONDITION from (")
+        var sql = """
+            select 
+                null as TABLE_CAT, null as TABLE_SCHEM, '${escape(table)}' as TABLE_NAME, 
+                un as NON_UNIQUE, null as INDEX_QUALIFIER, n as INDEX_NAME, 
+                ${DatabaseMetaData.tableIndexOther.toInt()} as TYPE, op as ORDINAL_POSITION, 
+                cn as COLUMN_NAME, null as ASC_OR_DESC, 0 as CARDINALITY, 0 as PAGES, null as FILTER_CONDITION 
+             from
+            """.trimIndent()
 
         // Use a try catch block to avoid "query does not return ResultSet" error
         rs = try {
             stat.executeQuery("pragma index_list('" + escape(table) + "');")
         } catch (e: SQLException) {
-            sql.append("select null as un, null as n, null as op, null as cn) limit 0;")
-            return stat.executeQuery(sql.toString())
+            sql += "(select null as un, null as n, null as op, null as cn limit 0)"
+            return stat.executeQuery(sql)
         } ?: throw SQLException("result set is null")
+
         val indexList = ArrayList<ArrayList<Any>>()
         while (rs.next()) {
             indexList.add(ArrayList())
@@ -581,8 +578,15 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
             indexList[indexList.size - 1].add(rs.getInt(3))
         }
         rs.close()
+
+        if (indexList.isEmpty()) {
+            sql += "(select null as un, null as n, null as op, null as cn limit 0)"
+            return stat.executeQuery(sql)
+        }
+
+        var from = ""
         var i = 0
-        val indexIterator: Iterator<ArrayList<Any>> = indexList.iterator()
+        val indexIterator = indexList.iterator()
         var currentIndex: ArrayList<Any>
         while (indexIterator.hasNext()) {
             currentIndex = indexIterator.next()
@@ -590,16 +594,21 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
             rs = stat.executeQuery("pragma index_info('" + escape(indexName) + "');")
             while (rs.next()) {
                 if (i ++ > 0) {
-                    sql.append(" union all ")
+                    from += " union all "
                 }
-                sql.append("select ").append(Integer.toString(1 - currentIndex[1] as Int)).append(" as un,'")
-                    .append(escape(indexName)).append("' as n,")
-                    .append(Integer.toString(rs.getInt(1) + 1)).append(" as op,'")
-                    .append(escape(rs.getString(3))).append("' as cn")
+                from += """
+                   select 
+                       ${(1 - currentIndex[1] as Int)} as un,
+                       '${escape(indexName)}' as n,
+                       ${rs.getInt(1) + 1} as op, '${escape(rs.getString(3))}' as cn
+                   """.trimIndent()
             }
             rs.close()
         }
-        return stat.executeQuery(sql.append(");").toString())
+
+        sql += "($from);"
+
+        return stat.executeQuery(sql)
     }
 
     @Throws(SQLException::class)
@@ -709,7 +718,7 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
         val columnNames = arrayOf("TABLE_CAT", "TABLE_SCHEM", "TABLE_NAME", "COLUMN_NAME", "KEY_SEQ", "PK_NAME")
         val columnValues = arrayOf<Any?>(null, null, null, null, null, null)
         val db = con.db
-        val c = db !!.rawQuery("pragma table_info('$table')", arrayOf())
+        val c = db.rawQuery("pragma table_info('$table')", arrayOf())
         val mc = MatrixCursor(columnNames)
         while (c.moveToNext()) {
             if (c.getInt(5) > 0) {
@@ -886,7 +895,7 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
         val selectStringEnd = "' as TABLE_TYPE, 'No Comment' as REMARKS, null as TYPE_CAT, null as TYPE_SCHEM, null as TYPE_NAME, null as SELF_REFERENCING_COL_NAME, null as REF_GENERATION" +
                 " FROM sqlite_temp_master WHERE tbl_name LIKE ? AND name NOT LIKE 'android_metadata' AND upper(type) = ? ORDER BY 3"
         val db = con.db
-        val cursorList: MutableList<Cursor?> = ArrayList()
+        val cursors = mutableListOf<Cursor>()
         for (tableType in types ?: arrayOf(TABLE_TYPE)) {
             val selectString = StringBuffer()
             selectString.append(selectStringStart)
@@ -894,24 +903,19 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
             selectString.append(selectStringMiddle)
             selectString.append(tableType)
             selectString.append(selectStringEnd)
-            val c = db !!.rawQuery(
+            val c = db.rawQuery(
                 selectString.toString(), arrayOf(
                     tableNamePattern ?: "%", tableType.uppercase(Locale.getDefault()),
                     tableNamePattern ?: "%", tableType.uppercase(Locale.getDefault())
                 )
             )
-            cursorList.add(c)
+            cursors.add(c)
         }
-        val resultSet: SQLDroidResultSet?
-        val cursors = arrayOfNulls<Cursor>(cursorList.size)
-        if (cursors.isEmpty()) {
-            resultSet = null // is this a valid return?? I think this can only occur on a SQL exception
-        } else if (cursors.size == 1) {
-            resultSet = SQLDroidResultSet(cursors[0])
-        } else {
-            resultSet = SQLDroidResultSet(MergeCursor(cursors))
+        return when {
+            cursors.isEmpty() -> null // is this a valid return?? I think this can only occur on a SQL exception
+            cursors.size == 1 -> SQLDroidResultSet(cursors[0])
+            else -> SQLDroidResultSet(MergeCursor(cursors.toTypedArray()))
         }
-        return resultSet
     }
 
     @Throws(SQLException::class)
@@ -954,7 +958,7 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
 //
 //        getTypeInfo.clearParameters();
 //        return getTypeInfo.executeQuery();
-        return SQLDroidResultSet(con.db?.rawQuery(sql, arrayOfNulls(0)))
+        return SQLDroidResultSet(con.db.rawQuery(sql, arrayOfNulls(0)))
     }
 
     @Throws(SQLException::class)
