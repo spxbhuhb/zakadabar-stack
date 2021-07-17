@@ -5,6 +5,7 @@ rootProject.name = "zakadabar-stack"
 
 pluginManagement {
     repositories {
+        google()
         gradlePluginPortal()
         mavenCentral()
     }

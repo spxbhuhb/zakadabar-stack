@@ -8,7 +8,6 @@ import zakadabar.stack.authorize.appRoles
 import zakadabar.stack.backend.RoutedModule
 import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.authorize.RoleBlProvider
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.PUBLIC
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizerProvider
 import zakadabar.stack.backend.server
 import zakadabar.stack.backend.testing.TestCompanionBase.MockRoleBlProvider

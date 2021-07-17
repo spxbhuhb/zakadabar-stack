@@ -20,7 +20,6 @@ noArg {
 kotlin {
 
     jvm {
-        withJava()
         compilations.all {
             kotlinOptions.jvmTarget = "1.8"
         }
@@ -34,9 +33,6 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":core"))
-                implementation(project(":lib:markdown"))
-                implementation(project(":lib:accounts"))
-                implementation(project(":lib:blobs"))
             }
         }
 
