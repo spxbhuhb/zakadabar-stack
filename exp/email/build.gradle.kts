@@ -2,6 +2,8 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
+import zakadabar.gradle.dependencies.Versions
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
@@ -12,7 +14,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.6.29"
+version = Versions.zakadabar
 
 noArg {
     annotation("kotlinx.serialization.Serializable")
@@ -36,6 +38,6 @@ kotlin {
     }
 
     sourceSets["jvmMain"].dependencies {
-        implementation("javax.mail:mail:1.5.0-b01")
+        implementation("javax.mail:mail:${Versions.javamail}")
     }
 }

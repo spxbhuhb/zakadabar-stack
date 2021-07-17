@@ -2,6 +2,8 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
+import zakadabar.gradle.dependencies.Versions
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
@@ -12,23 +14,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = rootProject.extra["stackVersion"] as String
-
-val isSnapshot = version.toString().contains("SNAPSHOT")
-
-// common
-val kotlinVersion = rootProject.extra["kotlinVersion"] as String
-val ktorVersion = rootProject.extra["ktorVersion"] as String
-val coroutinesVersion = rootProject.extra["coroutinesVersion"] as String
-val serializationVersion = rootProject.extra["serializationVersion"] as String
-val datetimeVersion = rootProject.extra["datetimeVersion"] as String
-val cliktVersion = "2.8.0"
-
-// jvm
-val exposedVersion = "0.31.1"
-val postgresqlVersion = "42.2.14"
-val hikariVersion = "3.4.5"
-val kamlVersion = "0.19.0"
+version = Versions.zakadabar
 
 kotlin {
 
@@ -59,10 +45,10 @@ kotlin {
 
         commonMain {
             dependencies {
-                api("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
-                api("org.jetbrains.kotlinx:kotlinx-datetime:$datetimeVersion")
+                api("org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.serialization}")
+                api("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.datetime}")
             }
         }
 
@@ -77,28 +63,28 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val jvmMain by getting {
             dependencies {
-                api("io.ktor:ktor-server-core:$ktorVersion")
-                implementation("io.ktor:ktor-server-netty:$ktorVersion")
-                implementation("io.ktor:ktor-server-sessions:$ktorVersion")
-                api("io.ktor:ktor-websockets:$ktorVersion")
-                api("io.ktor:ktor-auth:$ktorVersion")
-                api("io.ktor:ktor-serialization:$ktorVersion")
-                api("io.ktor:ktor-client-serialization:$ktorVersion")
-                api("io.ktor:ktor-client-cio:$ktorVersion") // TODO check if we want this one (CIO) or another
+                api("io.ktor:ktor-server-core:${Versions.ktor}")
+                implementation("io.ktor:ktor-server-netty:${Versions.ktor}")
+                implementation("io.ktor:ktor-server-sessions:${Versions.ktor}")
+                api("io.ktor:ktor-websockets:${Versions.ktor}")
+                api("io.ktor:ktor-auth:${Versions.ktor}")
+                api("io.ktor:ktor-serialization:${Versions.ktor}")
+                api("io.ktor:ktor-client-serialization:${Versions.ktor}")
+                api("io.ktor:ktor-client-cio:${Versions.ktor}") // TODO check if we want this one (CIO) or another
                 api("ch.qos.logback:logback-classic:1.2.3")
-                api("org.jetbrains.exposed:exposed-core:$exposedVersion")
-                api("org.jetbrains.exposed:exposed-dao:$exposedVersion")
-                api("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
-                api("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
-                implementation("org.postgresql:postgresql:$postgresqlVersion")
-                implementation("com.zaxxer:HikariCP:$hikariVersion")
-                api("com.github.ajalt:clikt-multiplatform:$cliktVersion")
-                api("com.charleskorn.kaml:kaml:$kamlVersion")
+                api("org.jetbrains.exposed:exposed-core:${Versions.exposed}")
+                api("org.jetbrains.exposed:exposed-dao:${Versions.exposed}")
+                api("org.jetbrains.exposed:exposed-jdbc:${Versions.exposed}")
+                api("org.jetbrains.exposed:exposed-java-time:${Versions.exposed}")
+                implementation("org.postgresql:postgresql:${Versions.postgresql}")
+                implementation("com.zaxxer:HikariCP:${Versions.hikari}")
+                api("com.github.ajalt:clikt-multiplatform:${Versions.clikt}")
+                api("com.charleskorn.kaml:kaml:${Versions.kaml}")
             }
         }
 
         sourceSets["jvmTest"].dependencies {
-            implementation("com.h2database:h2:1.4.200")
+            implementation("com.h2database:h2:${Versions.h2}")
         }
 
         @Suppress("UNUSED_VARIABLE")
@@ -126,7 +112,7 @@ noArg {
 
 // add sign and publish only if the user is a zakadabar publisher
 
-if (! isSnapshot && properties["zakadabar.publisher"] != null) {
+if (! Versions.isSnapshot && properties["zakadabar.publisher"] != null) {
 
     tasks.withType<Jar> {
         manifest {
@@ -165,7 +151,7 @@ if (! isSnapshot && properties["zakadabar.publisher"] != null) {
         repositories {
             maven {
                 name = "MavenCentral"
-                url = if (isSnapshot) {
+                url = if (Versions.isSnapshot) {
                     uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
                 } else {
                     uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")

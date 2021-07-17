@@ -2,6 +2,8 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
+import zakadabar.gradle.dependencies.Versions
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
@@ -19,10 +21,10 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = rootProject.extra["stackVersion"] as String
+version = Versions.zakadabar
 
 application {
-    mainClassName = "zakadabar.stack.backend.ServerKt"
+    mainClass.set("zakadabar.stack.backend.ServerKt")
 }
 
 noArg {
@@ -51,7 +53,7 @@ kotlin {
     }
     
     sourceSets["jvmMain"].dependencies {
-        implementation("com.h2database:h2:1.4.200")
+        implementation("com.h2database:h2:${Versions.h2}")
     }
 }
 
