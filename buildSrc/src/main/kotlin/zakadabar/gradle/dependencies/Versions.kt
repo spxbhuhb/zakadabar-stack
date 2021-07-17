@@ -26,4 +26,18 @@ object Versions {
     const val highlightJs = "10.7.2"
     const val markdown = "0.2.4"
 
+    object Android {
+        const val compileSdk = 31
+        const val minSdk = 24
+        const val targetSdk = 31
+        val versionCode = zakadabar.toVersionCode()
+        const val versionName = zakadabar
+    }
+
+    fun String.toVersionCode() : Int {
+        val e = this.substringBefore("-").split(".")
+        val sub = if (e.size == 3) 0 else e[3].toInt()
+        check(sub < 100) { "cannot have sub version larger than 10"}
+        return e[0].toInt() * 1000000 + e[1].toInt() + 10000 + e[2].toInt() * 100 + sub
+    }
 }

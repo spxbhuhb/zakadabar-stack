@@ -22,10 +22,13 @@ include("exp:scheduler")
 include("lib:accounts")
 include("lib:bender")
 include("lib:blobs")
-include("lib:demo")
 include("lib:examples")
 include("lib:i18n")
 include("lib:markdown")
+
+include("demo:demo-basic")
+include("demo:demo-basic-mobile")
+include("demo:demo-content")
 
 include("site")
 

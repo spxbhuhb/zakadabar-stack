@@ -14,7 +14,6 @@ to be included in the core.
 
 | Module | Description |
 | --- | --- |
-| demo | Demo and test application. |
 | examples | Examples for `site`. |
 
 ## Other
