@@ -6,14 +6,14 @@ package zakadabar.android.jdbc.sqlite
 import java.sql.*
 import java.util.*
 
-class SQLDroidStatement(private var sqldroidConnection: SQLDroidConnection) : Statement {
+class ZkLiteStatement(private var sqldroidConnection: ZkLiteConnection) : Statement {
 
     companion object {
         val selectPattern = Regex("(?m)(?s)\\s*(SELECT|PRAGMA|EXPLAIN QUERY PLAN).*")
     }
 
-    private val db: SQLiteDatabase
-    private var rs: SQLDroidResultSet? = null
+    private val db: ZkLiteDatabase
+    private var rs: ZkLiteResultSet? = null
     protected var sqlBatch = StringBuffer()
     private var maxRows: Int? = null
 
@@ -85,7 +85,7 @@ class SQLDroidStatement(private var sqldroidConnection: SQLDroidConnection) : St
         if (isSelect) {
             val limitedSql = sql + if (maxRows != null) " LIMIT $maxRows" else ""
             val c = db.rawQuery(limitedSql, arrayOfNulls(0))
-            rs = SQLDroidResultSet(c)
+            rs = ZkLiteResultSet(c)
             if (c.count == 0) return false
         } else {
             db.execSQL(sql)
@@ -126,7 +126,7 @@ class SQLDroidStatement(private var sqldroidConnection: SQLDroidConnection) : St
     override fun executeQuery(sql: String): ResultSet {
         closeResultSet()
         val c = db.rawQuery(sql, null)
-        rs = SQLDroidResultSet(c)
+        rs = ZkLiteResultSet(c)
         return rs !!
     }
 

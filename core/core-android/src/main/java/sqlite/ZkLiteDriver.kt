@@ -6,7 +6,7 @@ package zakadabar.android.jdbc.sqlite
 import java.sql.*
 import java.util.*
 
-class SQLDroidDriver : Driver {
+class ZkLiteDriver : Driver {
     companion object {
         /** Key passed when the SQLDroidConnection is created.  The value of this key should be an
          * String containing a numeric value which is the complete value of the flags to be passed to the Android SQLite database
@@ -49,13 +49,13 @@ class SQLDroidDriver : Driver {
         // making the code hard to read and easy to mistype.
         var xerialPrefix = "jdbc:sqlite:"
 
-        var className = SQLDroidDriver::class.qualifiedName!!
+        var className = ZkLiteDriver::class.qualifiedName!!
         var driverName = "SQLDroid"
         var databaseProductName = "SQLite for Android"
 
         init {
             try {
-                DriverManager.registerDriver(SQLDroidDriver())
+                DriverManager.registerDriver(ZkLiteDriver())
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -74,7 +74,7 @@ class SQLDroidDriver : Driver {
 
     @Throws(SQLException::class)
     override fun connect(url: String, info: Properties): Connection {
-        return SQLDroidConnection(url, info)
+        return ZkLiteConnection(url, info)
     }
 
     override fun getMajorVersion(): Int {

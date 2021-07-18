@@ -20,7 +20,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class SQLDroidResultSet(
+class ZkLiteResultSet(
     private val c: Cursor
 ) : ResultSet {
 
@@ -74,7 +74,7 @@ class SQLDroidResultSet(
             c.moveToLast()
             c.moveToNext()
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -84,7 +84,7 @@ class SQLDroidResultSet(
             c.moveToFirst()
             c.moveToPrevious()
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -105,7 +105,7 @@ class SQLDroidResultSet(
         try {
             c.close()
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -123,7 +123,7 @@ class SQLDroidResultSet(
         } catch (e : IllegalArgumentException) {
             throw java.sql.SQLException("unknown column $columnName")
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -132,7 +132,7 @@ class SQLDroidResultSet(
         return try {
             c.moveToFirst()
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -190,9 +190,9 @@ class SQLDroidResultSet(
     @Throws(java.sql.SQLException::class)
     override fun getBlob(index: Int): Blob? {
         return try {
-            getBytes(index)?.let { SQLDroidBlob(it) }
+            getBytes(index)?.let { ZkLiteBlob(it) }
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -208,7 +208,7 @@ class SQLDroidResultSet(
             lastColumnRead = index
             c.getInt(ci(index)) != 0
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -224,7 +224,7 @@ class SQLDroidResultSet(
             lastColumnRead = index
             c.getShort(ci(index)).toByte()
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -240,12 +240,12 @@ class SQLDroidResultSet(
             lastColumnRead = index
             var bytes: ByteArray? = c.getBlob(ci(index))
             // SQLite includes the zero-byte at the end for Strings.
-            if (bytes != null && SQLDroidResultSetMetaData.getType(c, ci(index)) == 3) { //  Cursor.FIELD_TYPE_STRING
+            if (bytes != null && ZkLiteResultSetMetaData.getType(c, ci(index)) == 3) { //  Cursor.FIELD_TYPE_STRING
                 bytes = Arrays.copyOf(bytes, bytes.size - 1)
             }
             bytes
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -266,8 +266,8 @@ class SQLDroidResultSet(
     }
 
     @Throws(java.sql.SQLException::class)
-    override fun getClob(colID: Int): SQLDroidClob? {
-        return getString(colID)?.let { SQLDroidClob(it) }
+    override fun getClob(colID: Int): ZkLiteClob? {
+        return getString(colID)?.let { ZkLiteClob(it) }
     }
 
     @Throws(java.sql.SQLException::class)
@@ -307,7 +307,7 @@ class SQLDroidResultSet(
             }
             date !!
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -335,7 +335,7 @@ class SQLDroidResultSet(
             lastColumnRead = index
             c.getDouble(ci(index))
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -361,7 +361,7 @@ class SQLDroidResultSet(
             lastColumnRead = index
             c.getFloat(ci(index))
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -377,7 +377,7 @@ class SQLDroidResultSet(
             lastColumnRead = index
             c.getInt(ci(index))
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -393,7 +393,7 @@ class SQLDroidResultSet(
             lastColumnRead = index
             c.getLong(ci(index))
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -405,16 +405,16 @@ class SQLDroidResultSet(
 
     @Throws(java.sql.SQLException::class)
     override fun getMetaData(): ResultSetMetaData {
-        return SQLDroidResultSetMetaData(c)
+        return ZkLiteResultSetMetaData(c)
     }
 
     @Throws(java.sql.SQLException::class)
     override fun getObject(colID: Int): Any? {
         lastColumnRead = colID
         val newIndex = ci(colID)
-        return when (SQLDroidResultSetMetaData.getType(c, newIndex)) {
+        return when (ZkLiteResultSetMetaData.getType(c, newIndex)) {
             4 ->                 //CONVERT TO BYTE[] OBJECT
-                SQLDroidBlob(c.getBlob(newIndex))
+                ZkLiteBlob(c.getBlob(newIndex))
             2 -> c.getFloat(newIndex)
             1 -> c.getInt(newIndex)
             3 -> c.getString(newIndex)
@@ -468,7 +468,7 @@ class SQLDroidResultSet(
             // convert to jdbc standard (counting from one)
             c.position + 1
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -478,7 +478,7 @@ class SQLDroidResultSet(
             lastColumnRead = index
             c.getShort(ci(index))
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -500,7 +500,7 @@ class SQLDroidResultSet(
             lastColumnRead = index
             c.getString(ci(index))
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -558,7 +558,7 @@ class SQLDroidResultSet(
                 }
             }
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -625,7 +625,7 @@ class SQLDroidResultSet(
         } else try {
             c.isAfterLast
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -636,7 +636,7 @@ class SQLDroidResultSet(
         } else try {
             c.isBeforeFirst
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -647,7 +647,7 @@ class SQLDroidResultSet(
         } else try {
             c.isFirst
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -658,7 +658,7 @@ class SQLDroidResultSet(
         } else try {
             c.isLast
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -667,7 +667,7 @@ class SQLDroidResultSet(
         return try {
             c.moveToLast()
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -686,7 +686,7 @@ class SQLDroidResultSet(
         return try {
             c.moveToNext()
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -695,7 +695,7 @@ class SQLDroidResultSet(
         return try {
             c.moveToPrevious()
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -704,7 +704,7 @@ class SQLDroidResultSet(
         try {
             c.requery()
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 
@@ -984,7 +984,7 @@ class SQLDroidResultSet(
         return try {
             c.isNull(ci(lastColumnRead))
         } catch (e: SQLException) {
-            throw SQLDroidConnection.chainException(e)
+            throw ZkLiteConnection.chainException(e)
         }
     }
 

@@ -9,7 +9,7 @@ import java.sql.ResultSetMetaData
 import java.sql.SQLException
 import java.sql.Types
 
-class SQLDroidResultSetMetaData(cursor: Cursor?) : ResultSetMetaData {
+class ZkLiteResultSetMetaData(cursor: Cursor?) : ResultSetMetaData {
     private val cursor: Cursor
 
     companion object {

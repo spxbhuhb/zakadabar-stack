@@ -10,7 +10,7 @@ import java.sql.Blob
 import java.sql.SQLException
 import java.sql.SQLFeatureNotSupportedException
 
-class SQLDroidBlob(
+class ZkLiteBlob(
     private var b: ByteArray
 ) : Blob {
     @Throws(SQLException::class)

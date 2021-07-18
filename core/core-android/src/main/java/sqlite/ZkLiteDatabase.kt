@@ -5,6 +5,7 @@ package zakadabar.android.jdbc.sqlite
 
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteDatabaseLockedException
 import android.database.sqlite.SQLiteException
 import java.lang.reflect.Method
 import java.sql.SQLException
@@ -40,7 +41,7 @@ import java.sql.SQLException
  * @throws SQLException thrown if the attempt to connect to the database throws an exception
  * other than a locked exception or throws a locked exception after the timeout has expired.
  */
-class SQLiteDatabase(
+class ZkLiteDatabase(
     /** The name of the database.  */
     var dbQname: String,
     /** The timeout in milliseconds.  Zero indicated that there should be no retries.
@@ -68,16 +69,8 @@ class SQLiteDatabase(
     /** Returns true if the exception is an instance of "SQLiteDatabaseLockedException".  Since this exception does not exist
      * in APIs below 11 this code uses reflection to check the exception type.
      */
-    protected fun isLockedException(maybeLocked: SQLiteException): Boolean {
-        try {
-            if (Class.forName("android.database.sqlite.SQLiteDatabaseLockedException", false, javaClass.classLoader).isAssignableFrom(maybeLocked.javaClass)) {
-                return true
-            }
-        } catch (e: ClassNotFoundException) {
-            // no android.database.sqlite.SQLiteDatabaseLockedException
-        }
-        return false
-    }
+    protected fun isLockedException(maybeLocked: SQLiteException) =
+        maybeLocked is SQLiteDatabaseLockedException
 
     /** Proxy for the "rawQuery" command.
      * @throws SQLException
@@ -96,7 +89,7 @@ class SQLiteDatabase(
                 if (isLockedException(e)) {
                     System.currentTimeMillis() - queryStart
                 } else {
-                    throw SQLDroidConnection.chainException(e)
+                    throw ZkLiteConnection.chainException(e)
                 }
             }
         } while (delta < timeout)
@@ -120,7 +113,7 @@ class SQLiteDatabase(
                 if (isLockedException(e)) {
                     System.currentTimeMillis() - timeNow
                 } else {
-                    throw SQLDroidConnection.chainException(e)
+                    throw ZkLiteConnection.chainException(e)
                 }
             }
         } while (delta < timeout)
@@ -144,7 +137,7 @@ class SQLiteDatabase(
                 if (isLockedException(e)) {
                     System.currentTimeMillis() - timeNow
                 } else {
-                    throw SQLDroidConnection.chainException(e)
+                    throw ZkLiteConnection.chainException(e)
                 }
             }
         } while (delta < timeout)
@@ -190,7 +183,7 @@ class SQLiteDatabase(
                 delta = if (isLockedException(e)) {
                     System.currentTimeMillis() - timeNow
                 } else {
-                    throw SQLDroidConnection.chainException(e)
+                    throw ZkLiteConnection.chainException(e)
                 }
             }
         } while (delta < timeout)
@@ -272,10 +265,10 @@ class SQLiteDatabase(
                     }
                     delta = System.currentTimeMillis() - timeNow
                     if (delta >= timeout) {
-                        throw SQLDroidConnection.chainException(e)
+                        throw ZkLiteConnection.chainException(e)
                     }
                 } else {
-                    throw SQLDroidConnection.chainException(e)
+                    throw ZkLiteConnection.chainException(e)
                 }
             }
         }

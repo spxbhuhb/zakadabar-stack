@@ -12,7 +12,7 @@ var initialized = false
 
 fun Database.connectSqlite() {
     synchronized(initialized) {
-        if (!initialized) DriverManager.registerDriver(SQLDroidDriver() as Driver)
+        if (!initialized) DriverManager.registerDriver(ZkLiteDriver() as Driver)
         initialized = true
     }
 }

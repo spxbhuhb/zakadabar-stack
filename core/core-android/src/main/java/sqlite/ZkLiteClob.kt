@@ -28,7 +28,7 @@ import java.sql.SQLException
  *
  * @param string The string.
  */
-class SQLDroidClob(string: String?) : Clob, NClob {
+class ZkLiteClob(string: String?) : Clob, NClob {
     private var string: String?
     private val length: Long
 

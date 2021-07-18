@@ -13,7 +13,7 @@ import java.util.*
 import java.util.logging.Logger
 import javax.sql.DataSource
 
-open class DroidDataSource : DataSource {
+open class ZkLiteDataSource : DataSource {
 
     var description = "Android Sqlite Data Source"
     var packageName: String? = null
@@ -28,7 +28,7 @@ open class DroidDataSource : DataSource {
 
     override fun getConnection() : Connection {
         val url = "jdbc:sqldroid:/data/data/$packageName/$databaseName.db"
-        return SQLDroidDriver().connect(url, Properties())
+        return ZkLiteDriver().connect(url, Properties())
     }
 
     @Throws(SQLException::class)

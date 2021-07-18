@@ -17,7 +17,7 @@ import java.util.regex.Pattern
  * @param table The table for which to get find a primary key.
  * @throws SQLException
  */
-class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
+class ZkLiteDatabaseMetaData(var con: ZkLiteConnection) : DatabaseMetaData {
     private var getAttributes: PreparedStatement? = null
     private var getBestRowIdentifier: PreparedStatement? = null
     private var getCatalogs: PreparedStatement? = null
@@ -253,9 +253,9 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
         }
 
         return when {
-            cursors.isEmpty() -> SQLDroidResultSet(MatrixCursor(columnNames, 0))
-            cursors.size == 1 -> SQLDroidResultSet(cursors[0])
-            else -> SQLDroidResultSet(MergeCursor(cursors.toTypedArray()))
+            cursors.isEmpty() -> ZkLiteResultSet(MatrixCursor(columnNames, 0))
+            cursors.size == 1 -> ZkLiteResultSet(cursors[0])
+            else -> ZkLiteResultSet(MergeCursor(cursors.toTypedArray()))
         }
     }
 
@@ -294,7 +294,7 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
 
     @Throws(SQLException::class)
     override fun getDatabaseProductName(): String {
-        return SQLDroidDriver.databaseProductName
+        return ZkLiteDriver.databaseProductName
     }
 
     @Throws(SQLException::class)
@@ -317,7 +317,7 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
 
     @Throws(SQLException::class)
     override fun getDriverName(): String {
-        return SQLDroidDriver.driverName
+        return ZkLiteDriver.driverName
     }
 
     @Throws(SQLException::class)
@@ -730,7 +730,7 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
         }
         // The matrix cursor should be sorted by column name, but isn't
         c.close()
-        return SQLDroidResultSet(mc)
+        return ZkLiteResultSet(mc)
     }
 
     @Throws(SQLException::class)
@@ -913,8 +913,8 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
         }
         return when {
             cursors.isEmpty() -> null // is this a valid return?? I think this can only occur on a SQL exception
-            cursors.size == 1 -> SQLDroidResultSet(cursors[0])
-            else -> SQLDroidResultSet(MergeCursor(cursors.toTypedArray()))
+            cursors.size == 1 -> ZkLiteResultSet(cursors[0])
+            else -> ZkLiteResultSet(MergeCursor(cursors.toTypedArray()))
         }
     }
 
@@ -958,7 +958,7 @@ class SQLDroidDatabaseMetaData(var con: SQLDroidConnection) : DatabaseMetaData {
 //
 //        getTypeInfo.clearParameters();
 //        return getTypeInfo.executeQuery();
-        return SQLDroidResultSet(con.db.rawQuery(sql, arrayOfNulls(0)))
+        return ZkLiteResultSet(con.db.rawQuery(sql, arrayOfNulls(0)))
     }
 
     @Throws(SQLException::class)

@@ -7,7 +7,7 @@ import android.database.SQLException
 import java.io.PrintStream
 import java.io.PrintWriter
 
-class SQLDroidSQLException
+class ZkLiteSQLException
 /** Create a hard java.sql.SQLException from the RuntimeException android.database.SQLException.  */(
     /** The exception that this exception was created for.  */
     var sqlException: SQLException
