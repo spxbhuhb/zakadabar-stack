@@ -11,7 +11,8 @@ pluginManagement {
     }
 }
 
-include("core")
+include("core:core-core")
+include("core:core-android")
 
 include("cookbook")
 

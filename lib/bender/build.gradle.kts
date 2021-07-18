@@ -35,7 +35,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(project(":core"))
+                implementation(project(":core:core-core"))
                 implementation(project(":lib:markdown"))
             }
         }

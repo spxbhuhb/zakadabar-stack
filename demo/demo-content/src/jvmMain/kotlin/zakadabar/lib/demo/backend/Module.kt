@@ -14,7 +14,7 @@ object Module : RoutedModule {
     override fun onModuleLoad() {
         zakadabar.lib.accounts.backend.install()
         zakadabar.lib.i18n.backend.install()
-        zakadabar.lib.backend.backend.install()
+        zakadabar.lib.content.backend.install()
 
         server += SimpleRoleAuthorizerProvider {
             all = LOGGED_IN

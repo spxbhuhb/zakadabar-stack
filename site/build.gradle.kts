@@ -45,7 +45,7 @@ kotlin {
     }
 
     sourceSets["commonMain"].dependencies {
-        implementation(project(":core"))
+        implementation(project(":core:core-core"))
         implementation(project(":lib:accounts"))
         implementation(project(":lib:examples"))
         implementation(project(":lib:bender"))

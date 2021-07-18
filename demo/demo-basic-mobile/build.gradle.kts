@@ -19,7 +19,7 @@ noArg {
 }
 
 dependencies {
-    implementation(project(":core")) {
+    implementation(project(":core:core-core")) {
         exclude(group="org.slf4j", module="slf4j-api")
         exclude(group="ch.qos.logback", module= "logback-classic")
     }

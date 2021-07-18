@@ -8,7 +8,6 @@ plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
     id("org.jetbrains.kotlin.plugin.noarg")
-    id("com.android.library")
     id("org.jetbrains.dokka")
     signing
     `maven-publish`
@@ -31,10 +30,6 @@ kotlin {
                 enabled = false // complains about missing DOM, TODO fix that, maybe, I'm not sure that I want the dependency
             }
         }
-    }
-
-    android {
-
     }
 
     sourceSets {
@@ -66,31 +61,7 @@ kotlin {
         }
 
         @Suppress("UNUSED_VARIABLE")
-        val androidMain by getting {
-            kotlin.srcDir("src/commonJvmAndroid/kotlin")
-            dependencies {
-                api("io.ktor:ktor-server-core:${Versions.ktor}")
-                implementation("io.ktor:ktor-server-netty:${Versions.ktor}")
-                implementation("io.ktor:ktor-server-sessions:${Versions.ktor}")
-                api("io.ktor:ktor-websockets:${Versions.ktor}")
-                api("io.ktor:ktor-auth:${Versions.ktor}")
-                api("io.ktor:ktor-serialization:${Versions.ktor}")
-                api("io.ktor:ktor-client-serialization:${Versions.ktor}")
-                api("io.ktor:ktor-client-cio:${Versions.ktor}") // TODO check if we want this one (CIO) or another
-                api("ch.qos.logback:logback-classic:1.2.3")
-                api("org.jetbrains.exposed:exposed-core:${Versions.exposed}")
-                api("org.jetbrains.exposed:exposed-dao:${Versions.exposed}")
-                api("org.jetbrains.exposed:exposed-jdbc:${Versions.exposed}")
-                api("org.jetbrains.exposed:exposed-java-time:${Versions.exposed}")
-                implementation("com.zaxxer:HikariCP:${Versions.hikari}")
-                api("com.github.ajalt:clikt-multiplatform:${Versions.clikt}")
-                api("com.charleskorn.kaml:kaml:${Versions.kaml}")
-            }
-        }
-
-        @Suppress("UNUSED_VARIABLE")
         val jvmMain by getting {
-            kotlin.srcDir("src/commonJvmAndroid/kotlin")
             dependencies {
                 api("io.ktor:ktor-server-core:${Versions.ktor}")
                 implementation("io.ktor:ktor-server-netty:${Versions.ktor}")
@@ -127,15 +98,6 @@ kotlin {
                 implementation(kotlin("test-js"))
             }
         }
-    }
-}
-
-android {
-    compileSdk = 31
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    defaultConfig {
-        minSdk = 24
-        targetSdk = 31
     }
 }
 

@@ -33,12 +33,6 @@ see the [example source code](../../../../lib/examples/src/jvmMain/kotlin/zakada
 
 You can use the Exposed SQL library with the native SQLite database of Android.
 
-Gradle dependency:
-
-```kotlin
-implementation("hu.simplexion.zakadabar:sqldroid:2021.7.16")
-```
-
 Initialization: 
 
 ```kotlin
