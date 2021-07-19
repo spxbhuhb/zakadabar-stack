@@ -1,6 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
+import zakadabar.gradle.dependencies.Versions
 
 plugins {
     kotlin("multiplatform")
@@ -12,11 +13,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = rootProject.extra["stackVersion"] as String
-
-val isSnapshot = version.toString().contains("SNAPSHOT")
-
-val ktorVersion = rootProject.extra["ktorVersion"] as String
+version = Versions.zakadabar
 
 noArg {
     annotation("kotlinx.serialization.Serializable")
@@ -35,7 +32,7 @@ kotlin {
     }
 
     sourceSets["commonMain"].dependencies {
-        implementation(project(":core"))
+        implementation(project(":core:core-core"))
     }
 
     sourceSets["commonTest"].dependencies {
@@ -45,13 +42,13 @@ kotlin {
     }
 
     sourceSets["jvmTest"].dependencies {
-        implementation("io.ktor:ktor-server-netty:$ktorVersion")
-        implementation("com.h2database:h2:1.4.200")
+        implementation("io.ktor:ktor-server-netty:${Versions.ktor}")
+        implementation("com.h2database:h2:${Versions.h2}")
     }
 
 }
 
-if (! isSnapshot && properties["zakadabar.publisher"] != null) {
+if (! Versions.isSnapshot && properties["zakadabar.publisher"] != null) {
 
     tasks.withType<Jar> {
         manifest {
@@ -90,7 +87,7 @@ if (! isSnapshot && properties["zakadabar.publisher"] != null) {
         repositories {
             maven {
                 name = "MavenCentral"
-                url = if (isSnapshot) {
+                url = if (Versions.isSnapshot) {
                     uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
                 } else {
                     uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")

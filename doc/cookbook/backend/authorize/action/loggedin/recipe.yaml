@@ -1,0 +1,10 @@
+title: Standalone Action BL For Logged-In Users
+level: Beginner
+targets:
+  - jvm
+tags:
+  - business logic
+  - action
+  - standalone
+  - authorize
+  - logged in
