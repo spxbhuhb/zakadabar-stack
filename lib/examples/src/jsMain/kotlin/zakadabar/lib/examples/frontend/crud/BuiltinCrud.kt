@@ -6,12 +6,22 @@ package zakadabar.lib.examples.frontend.crud
 import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
 import zakadabar.lib.examples.resources.strings
+import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.crud.ZkInlineCrud
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.fields.ZkStringField
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.resources.localized
 import zakadabar.stack.resources.localizedStrings
+
+class BuiltinCrud : ZkCrudTarget<BuiltinBo>()  {
+    init {
+        companion = BuiltinBo.Companion
+        boClass = BuiltinBo::class
+        editorClass = BuiltinForm::class
+        tableClass = BuiltinTable::class
+    }
+}
 
 class BuiltinInlineCrud : ZkInlineCrud<BuiltinBo>() {
     init {
@@ -37,13 +47,17 @@ class BuiltinForm : ZkForm<BuiltinBo>() {
                 + bo::booleanValue
                 + bo::doubleValue
                 + bo::enumSelectValue
-                + bo::intValue
                 + bo::instantValue
+                + bo::intValue
+                + bo::localDateValue
+                + bo::localDateTimeValue
                 + opt(bo::optBooleanValue, localizedStrings.trueText, localizedStrings.falseText)
                 + bo::optDoubleValue
                 + bo::optEnumSelectValue
                 + bo::optInstantValue
                 + bo::optIntValue
+                + bo::optLocalDateValue
+                + bo::optLocalDateTimeValue
                 + bo::optSecretValue
                 + select(bo::optRecordSelectValue) { ExampleReferenceBo.all().by { it.name } }
                 + bo::optStringValue
@@ -80,13 +94,17 @@ class BuiltinTable : ZkTable<BuiltinBo>() {
         + BuiltinBo::booleanValue
         + BuiltinBo::doubleValue
         + BuiltinBo::enumSelectValue
-        + BuiltinBo::intValue
         + BuiltinBo::instantValue
+        + BuiltinBo::intValue
+        + BuiltinBo::localDateValue
+        + BuiltinBo::localDateTimeValue
         // + BuiltinBo::optBooleanValue // opt boolean is not supported yet
         + BuiltinBo::optDoubleValue
         // + BuiltinBo::optEnumSelectValue // opt enum is not supported yet
-        + BuiltinBo::optInstantValue
         + BuiltinBo::optIntValue
+        + BuiltinBo::optInstantValue
+        + BuiltinBo::optLocalDateValue
+        + BuiltinBo::optLocalDateTimeValue
         // + BuiltinBo::optSecretValue // not supported yet
         // BuiltinBo::optRecordSelectValue // record id and opt record id is not supported yet 
         + BuiltinBo::optStringValue

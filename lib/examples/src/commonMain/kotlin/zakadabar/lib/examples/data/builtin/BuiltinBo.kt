@@ -5,6 +5,8 @@
 package zakadabar.lib.examples.data.builtin
 
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityBo
@@ -22,11 +24,15 @@ data class BuiltinBo(
     var enumSelectValue: ExampleEnum,
     var intValue: Int,
     var instantValue: Instant,
+    var localDateValue: LocalDate,
+    var localDateTimeValue: LocalDateTime,
     var optBooleanValue: Boolean?,
     var optDoubleValue: Double?,
     var optEnumSelectValue: ExampleEnum?,
     var optInstantValue: Instant?,
     var optIntValue: Int?,
+    var optLocalDateValue: LocalDate?,
+    var optLocalDateTimeValue: LocalDateTime?,
     var optSecretValue: Secret?,
     var optRecordSelectValue: EntityId<ExampleReferenceBo>?,
     var optStringValue: String?,
@@ -55,10 +61,14 @@ data class BuiltinBo(
         + ::enumSelectValue
         + ::intValue
         + ::instantValue
+        + ::localDateValue
+        + ::localDateTimeValue
         + ::optBooleanValue
         + ::optDoubleValue
         + ::optEnumSelectValue
         + ::optInstantValue
+        + ::optLocalDateValue
+        + ::optLocalDateTimeValue
         + ::optIntValue
         + ::optSecretValue max 50
         + ::optRecordSelectValue

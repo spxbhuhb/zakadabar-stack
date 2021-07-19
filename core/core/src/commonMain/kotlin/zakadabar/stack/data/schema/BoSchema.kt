@@ -4,6 +4,8 @@
 package zakadabar.stack.data.schema
 
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityId
@@ -54,6 +56,14 @@ open class BoSchema() {
     operator fun KMutableProperty0<Int>.unaryPlus() = IntBoSchemaEntry(this).also { entries[this] = it }
 
     operator fun KMutableProperty0<Int?>.unaryPlus() = OptIntBoSchemaEntry(this).also { entries[this] = it }
+
+    operator fun KMutableProperty0<LocalDate>.unaryPlus() = LocalDateBoSchemaEntry(this).also { entries[this] = it }
+
+    operator fun KMutableProperty0<LocalDate?>.unaryPlus() = OptLocalDateBoSchemaEntry(this).also { entries[this] = it }
+
+    operator fun KMutableProperty0<LocalDateTime>.unaryPlus() = LocalDateTimeBoSchemaEntry(this).also { entries[this] = it }
+
+    operator fun KMutableProperty0<LocalDateTime?>.unaryPlus() = OptLocalDateTimeBoSchemaEntry(this).also { entries[this] = it }
 
     operator fun KMutableProperty0<Long>.unaryPlus() = LongBoSchemaEntry(this).also { entries[this] = it }
 

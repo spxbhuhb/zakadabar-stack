@@ -7,7 +7,7 @@ import zakadabar.lib.examples.backend.builtin.BuiltinBl
 import zakadabar.lib.examples.backend.builtin.ExampleReferenceBl
 import zakadabar.lib.examples.backend.data.SimpleExampleBl
 import zakadabar.stack.backend.RoutedModule
-import zakadabar.stack.backend.authorize.UnsafeAuthorizer
+import zakadabar.stack.backend.authorize.SimpleRoleAuthorizerProvider
 import zakadabar.stack.backend.custom.ContentBackend
 import zakadabar.stack.backend.server
 import zakadabar.stack.util.PublicApi
@@ -18,10 +18,12 @@ object Module : RoutedModule {
     override fun onModuleLoad() {
         server += ContentBackend("content")
 
+        server += SimpleRoleAuthorizerProvider {
+            all = PUBLIC
+        }
+
         server += BuiltinBl()
         server += ExampleReferenceBl()
-
-        UnsafeAuthorizer.enabled = true
         server += SimpleExampleBl()
     }
 

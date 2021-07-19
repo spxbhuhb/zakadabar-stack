@@ -3,10 +3,11 @@
  */
 package zakadabar.lib.examples.backend.builtin
 
-import kotlinx.datetime.toJavaInstant
-import kotlinx.datetime.toKotlinInstant
+import kotlinx.datetime.*
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.`java-time`.date
+import org.jetbrains.exposed.sql.`java-time`.datetime
 import org.jetbrains.exposed.sql.`java-time`.timestamp
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import zakadabar.lib.examples.data.builtin.BuiltinBo
@@ -39,10 +40,14 @@ open class BuiltinExposedPaGen : ExposedPaBase<BuiltinBo,BuiltinExposedTableGen>
         enumSelectValue = this[table.enumSelectValue],
         intValue = this[table.intValue],
         instantValue = this[table.instantValue].toKotlinInstant(),
+        localDateValue = this[table.localDateValue].toKotlinLocalDate(),
+        localDateTimeValue = this[table.localDateTimeValue].toKotlinLocalDateTime(),
         optBooleanValue = this[table.optBooleanValue],
         optDoubleValue = this[table.optDoubleValue],
         optEnumSelectValue = this[table.optEnumSelectValue],
         optInstantValue = this[table.optInstantValue]?.toKotlinInstant(),
+        optLocalDateValue = this[table.optLocalDateValue]?.toKotlinLocalDate(),
+        optLocalDateTimeValue = this[table.optLocalDateTimeValue]?.toKotlinLocalDateTime(),
         optIntValue = this[table.optIntValue],
         optSecretValue = null /* do not send out the secret */,
         optRecordSelectValue = this[table.optRecordSelectValue]?.entityId(),
@@ -64,10 +69,14 @@ open class BuiltinExposedPaGen : ExposedPaBase<BuiltinBo,BuiltinExposedTableGen>
         this[table.enumSelectValue] = bo.enumSelectValue
         this[table.intValue] = bo.intValue
         this[table.instantValue] = bo.instantValue.toJavaInstant()
+        this[table.localDateValue] = bo.localDateValue.toJavaLocalDate()
+        this[table.localDateTimeValue] = bo.localDateTimeValue.toJavaLocalDateTime()
         this[table.optBooleanValue] = bo.optBooleanValue
         this[table.optDoubleValue] = bo.optDoubleValue
         this[table.optEnumSelectValue] = bo.optEnumSelectValue
         this[table.optInstantValue] = bo.optInstantValue?.toJavaInstant()
+        this[table.optLocalDateValue] = bo.optLocalDateValue?.toJavaLocalDate()
+        this[table.optLocalDateTimeValue] = bo.optLocalDateTimeValue?.toJavaLocalDateTime()
         this[table.optIntValue] = bo.optIntValue
         this[table.optSecretValue] = bo.optSecretValue?.let { s -> BCrypt.hashpw(s.value, BCrypt.gensalt()) }
         this[table.optRecordSelectValue] = bo.optRecordSelectValue?.let { EntityID(it.toLong(), ExampleReferenceExposedTableGen) }
@@ -97,27 +106,31 @@ object BuiltinExposedTableGen : ExposedPaTable<BuiltinBo>(
     tableName = "builtin"
 ) {
 
-    internal val booleanValue = bool("boolean_value")
-    internal val doubleValue = double("double_value")
-    internal val enumSelectValue = enumerationByName("enum_select_value", 20, ExampleEnum::class) // TODO check size of ExampleEnum in the exposed table
-    internal val intValue = integer("int_value")
-    internal val instantValue = timestamp("instant_value")
-    internal val optBooleanValue = bool("opt_boolean_value").nullable()
-    internal val optDoubleValue = double("opt_double_value").nullable()
-    internal val optEnumSelectValue = enumerationByName("opt_enum_select_value", 20, ExampleEnum::class).nullable() // TODO check size of ExampleEnum in the exposed table
-    internal val optInstantValue = timestamp("opt_instant_value").nullable()
-    internal val optIntValue = integer("opt_int_value").nullable()
-    internal val optSecretValue = varchar("opt_secret_value", 200).nullable()
-    internal val optRecordSelectValue = reference("opt_record_select_value", ExampleReferenceExposedTableGen).nullable()
-    internal val optStringValue = varchar("opt_string_value", 100).nullable()
-    internal val optStringSelectValue = varchar("opt_string_select_value", 100).nullable()
-    internal val optTextAreaValue = varchar("opt_text_area_value", 100000).nullable()
-    internal val optUuidValue = uuid("opt_uuid_value").nullable()
-    internal val secretValue = varchar("secret_value", 200)
-    internal val recordSelectValue = reference("record_select_value", ExampleReferenceExposedTableGen)
-    internal val stringValue = varchar("string_value", 50)
-    internal val stringSelectValue = varchar("string_select_value", 50)
-    internal val textAreaValue = varchar("text_area_value", 2000)
-    internal val uuidValue = uuid("uuid_value")
+    val booleanValue = bool("boolean_value")
+    val doubleValue = double("double_value")
+    val enumSelectValue = enumerationByName("enum_select_value", 20, ExampleEnum::class) // TODO check size of ExampleEnum in the exposed table
+    val intValue = integer("int_value")
+    val instantValue = timestamp("instant_value")
+    val localDateValue = date("local_date_value")
+    val localDateTimeValue = datetime("local_date_time_value")
+    val optBooleanValue = bool("opt_boolean_value").nullable()
+    val optDoubleValue = double("opt_double_value").nullable()
+    val optEnumSelectValue = enumerationByName("opt_enum_select_value", 20, ExampleEnum::class).nullable() // TODO check size of ExampleEnum in the exposed table
+    val optInstantValue = timestamp("opt_instant_value").nullable()
+    val optLocalDateValue = date("opt_local_date_value").nullable()
+    val optLocalDateTimeValue = datetime("opt_local_date_time_value").nullable()
+    val optIntValue = integer("opt_int_value").nullable()
+    val optSecretValue = varchar("opt_secret_value", 200).nullable()
+    val optRecordSelectValue = reference("opt_record_select_value", ExampleReferenceExposedTableGen).nullable()
+    val optStringValue = varchar("opt_string_value", 100).nullable()
+    val optStringSelectValue = varchar("opt_string_select_value", 100).nullable()
+    val optTextAreaValue = varchar("opt_text_area_value", 100000).nullable()
+    val optUuidValue = uuid("opt_uuid_value").nullable()
+    val secretValue = varchar("secret_value", 200)
+    val recordSelectValue = reference("record_select_value", ExampleReferenceExposedTableGen)
+    val stringValue = varchar("string_value", 50)
+    val stringSelectValue = varchar("string_select_value", 50)
+    val textAreaValue = varchar("text_area_value", 2000)
+    val uuidValue = uuid("uuid_value")
 
 }

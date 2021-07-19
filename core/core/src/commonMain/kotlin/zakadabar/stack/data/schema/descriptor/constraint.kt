@@ -4,6 +4,8 @@
 package zakadabar.stack.data.schema.descriptor
 
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 enum class BoConstraintType {
@@ -60,6 +62,18 @@ class InstantBoConstraint(
 class IntBoConstraint(
     override val type: BoConstraintType,
     val value: Int?
+) : BoConstraint()
+
+@Serializable
+class LocalDateBoConstraint(
+    override val type: BoConstraintType,
+    val value: LocalDate?
+) : BoConstraint()
+
+@Serializable
+class LocalDateTimeBoConstraint(
+    override val type: BoConstraintType,
+    val value: LocalDateTime?
 ) : BoConstraint()
 
 @Serializable

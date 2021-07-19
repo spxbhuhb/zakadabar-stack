@@ -11,6 +11,8 @@ import zakadabar.lib.accounts.frontend.login.Login
 import zakadabar.lib.accounts.frontend.roles.Roles
 import zakadabar.lib.demo.frontend.pages.DemoCrud
 import zakadabar.lib.demo.resources.strings
+import zakadabar.lib.examples.frontend.crud.BuiltinCrud
+import zakadabar.lib.examples.frontend.crud.ExampleReferenceCrud
 import zakadabar.lib.i18n.frontend.LocaleCrud
 import zakadabar.lib.i18n.frontend.TranslationCrud
 import zakadabar.stack.authorize.appRoles
@@ -29,6 +31,8 @@ class SideBar : ZkSideBar() {
 
         ifNotAnonymous {
             + item<DemoCrud>()
+            + item<BuiltinCrud>()
+            + item<ExampleReferenceCrud>()
         }
 
         withRole(appRoles.securityOfficer) {

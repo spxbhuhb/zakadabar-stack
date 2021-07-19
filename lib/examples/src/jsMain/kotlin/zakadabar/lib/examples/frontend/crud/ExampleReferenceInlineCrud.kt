@@ -4,13 +4,22 @@
 package zakadabar.lib.examples.frontend.crud
 
 import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
+import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.crud.ZkInlineCrud
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.resources.localized
 
+class ExampleReferenceCrud : ZkCrudTarget<ExampleReferenceBo>() {
+    init {
+        companion = ExampleReferenceBo.Companion
+        boClass = ExampleReferenceBo::class
+        editorClass = ExampleReferenceForm::class
+        tableClass = ExampleReferenceTable::class
+    }
+}
 
-class ExampleReferenceCrud : ZkInlineCrud<ExampleReferenceBo>() {
+class ExampleReferenceInlineCrud : ZkInlineCrud<ExampleReferenceBo>() {
     init {
         companion = ExampleReferenceBo.Companion
         boClass = ExampleReferenceBo::class

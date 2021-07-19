@@ -54,6 +54,8 @@ Supported types (case-insensitive):
 * Enum
 * Instant
 * Int
+* LocalDate
+* LocalDateTime  
 * Long
 * Reference
 * String

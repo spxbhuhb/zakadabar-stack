@@ -139,6 +139,56 @@ open class IntPropertyGenerator(
 
 }
 
+open class LocalDatePropertyGenerator(
+    boDescriptor: BoDescriptor,
+    override val property: LocalDateBoProperty
+) : PropertyGenerator(boDescriptor, property, "LocalDate") {
+
+    override fun commonImport() =
+        listOf("import kotlinx.datetime.LocalDate")
+
+    override fun exposedPaImport() = listOf(
+        "import org.jetbrains.exposed.sql.`java-time`.date",
+        "import kotlinx.datetime.toJavaLocalDate",
+        "import kotlinx.datetime.toKotlinLocalDate"
+    )
+
+    override fun exposedTable() =
+        "val ${property.name} = date(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"
+
+    override fun exposedTableToBo() =
+        "${property.name} = this[table.${property.name}]$optional.toKotlinLocalDate()"
+
+    override fun exposedTableFromBo() =
+        "this[table.${property.name}] = bo.${property.name}$optional.toJavaLocalDate()"
+
+}
+
+open class LocalDateTimePropertyGenerator(
+    boDescriptor: BoDescriptor,
+    override val property: LocalDateTimeBoProperty
+) : PropertyGenerator(boDescriptor, property, "LocalDateTime") {
+
+    override fun commonImport() =
+        listOf("import kotlinx.datetime.LocalDateTime")
+
+    override fun exposedPaImport() = listOf(
+        "import org.jetbrains.exposed.sql.`java-time`.datetime",
+        "import kotlinx.datetime.toJavaLocalDateTime",
+        "import kotlinx.datetime.toKotlinLocalDateTime"
+    )
+
+    override fun exposedTable() =
+        "val ${property.name} = date(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"
+
+    override fun exposedTableToBo() =
+        "${property.name} = this[table.${property.name}]$optional.toKotlinLocalDateTime()"
+
+    override fun exposedTableFromBo() =
+        "this[table.${property.name}] = bo.${property.name}$optional.toJavaLocalDateTime()"
+
+}
+
 open class LongPropertyGenerator(
     boDescriptor: BoDescriptor,
     override val property: LongBoProperty

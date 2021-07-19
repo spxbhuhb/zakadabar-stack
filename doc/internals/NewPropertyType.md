@@ -15,6 +15,8 @@ To add a new property type Xx:
     * fields
         * `ZkXxField`
         * `ZkOptXxField`
+    * ZkForm.kt
+        * `unaryPlus`
 * table
     * columns
         * `ZkXxColumn`
@@ -22,8 +24,15 @@ To add a new property type Xx:
 * bender
     * propertyConstraintEditors.kt
         * `XxPropertyConstraintsEditor`
+    * KtToBoDescriptor.kt
+        * add to `buildProperty`
     * BoPropertyEditor
         * add to `typeMap`
+    * documentation 
 * examples
-    * BuildinDto.kt
+    * BuiltinBo
+        * add fields
         * form
+        * table
+        * BL
+        * PA

@@ -5,7 +5,6 @@ package zakadabar.lib.examples.backend.builtin
 
 import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.authorize.UnsafeAuthorizer
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 
 open class BuiltinBl : EntityBusinessLogicBase<BuiltinBo>(
@@ -14,7 +13,7 @@ open class BuiltinBl : EntityBusinessLogicBase<BuiltinBo>(
 
     override val pa = BuiltinExposedPa()
 
-    override val authorizer = UnsafeAuthorizer<BuiltinBo>()
+    override val authorizer by provider()
 
     override fun create(executor: Executor, bo: BuiltinBo): BuiltinBo {
         if (pa.count() >= 1000) throw IllegalStateException("table limit reached")

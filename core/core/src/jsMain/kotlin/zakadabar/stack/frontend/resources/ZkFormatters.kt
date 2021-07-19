@@ -5,6 +5,8 @@ package zakadabar.stack.frontend.resources
 
 import kotlinx.datetime.*
 
+
+@Deprecated("use localizedFormats global variable instead")
 object ZkFormatters {
 
     fun formatInstant(value: Instant): String {
@@ -24,8 +26,7 @@ object ZkFormatters {
         return LocalDate.parse(value)
     }
 
-
-    fun formatLocalDateTime(value: LocalDate): String {
+    fun formatLocalDateTime(value: LocalDateTime): String {
         return value.toString()
     }
 

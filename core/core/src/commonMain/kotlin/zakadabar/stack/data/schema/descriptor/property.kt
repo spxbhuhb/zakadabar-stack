@@ -5,6 +5,8 @@
 package zakadabar.stack.data.schema.descriptor
 
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.misc.Secret
@@ -94,6 +96,24 @@ class IntBoProperty(
     override var constraints: List<BoConstraint>,
     var defaultValue: Int?,
     var value: Int?
+) : BoProperty()
+
+@Serializable
+class LocalDateBoProperty(
+    override val name: String,
+    override val optional: Boolean,
+    override var constraints: List<BoConstraint>,
+    var defaultValue: LocalDate?,
+    var value: LocalDate?
+) : BoProperty()
+
+@Serializable
+class LocalDateTimeBoProperty(
+    override val name: String,
+    override val optional: Boolean,
+    override var constraints: List<BoConstraint>,
+    var defaultValue: LocalDateTime?,
+    var value: LocalDateTime?
 ) : BoProperty()
 
 @Serializable

@@ -3,7 +3,7 @@
  */
 package zakadabar.stack.frontend.builtin.table.columns
 
-import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
@@ -11,9 +11,9 @@ import zakadabar.stack.resources.localized
 import zakadabar.stack.resources.localizedStrings
 import kotlin.reflect.KProperty1
 
-open class ZkOptInstantColumn<T : BaseBo>(
+open class ZkOptLocalDateTimeColumn<T : BaseBo>(
     table: ZkTable<T>,
-    private val prop: KProperty1<T, Instant?>
+    private val prop: KProperty1<T, LocalDateTime?>
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {

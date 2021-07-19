@@ -5,6 +5,8 @@ package zakadabar.stack.frontend.builtin.table
 
 import kotlinx.browser.document
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.dom.clear
 import org.w3c.dom.*
 import org.w3c.dom.events.MouseEvent
@@ -568,6 +570,18 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         columns += column
         return column
     }
+
+    operator fun KProperty1<T, LocalDate>.unaryPlus(): ZkLocalDateColumn<T> =
+        ZkLocalDateColumn(this@ZkTable, this).also { columns += it }
+
+    operator fun KProperty1<T, LocalDate?>.unaryPlus(): ZkOptLocalDateColumn<T> =
+        ZkOptLocalDateColumn(this@ZkTable, this).also { columns += it }
+
+    operator fun KProperty1<T, LocalDateTime>.unaryPlus(): ZkLocalDateTimeColumn<T> =
+        ZkLocalDateTimeColumn(this@ZkTable, this).also { columns += it }
+
+    operator fun KProperty1<T, LocalDateTime?>.unaryPlus(): ZkOptLocalDateTimeColumn<T> =
+        ZkOptLocalDateTimeColumn(this@ZkTable, this).also { columns += it }
 
     operator fun KProperty1<T, UUID>.unaryPlus(): ZkUuidColumn<T> {
         val column = ZkUuidColumn(this@ZkTable, this)

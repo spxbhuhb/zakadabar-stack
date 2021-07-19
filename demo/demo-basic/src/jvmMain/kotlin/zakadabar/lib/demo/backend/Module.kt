@@ -3,6 +3,8 @@
  */
 package zakadabar.lib.demo.backend
 
+import zakadabar.lib.examples.backend.builtin.BuiltinBl
+import zakadabar.lib.examples.backend.builtin.ExampleReferenceBl
 import zakadabar.stack.backend.RoutedModule
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizerProvider
 import zakadabar.stack.backend.server
@@ -21,6 +23,9 @@ object Module : RoutedModule {
 
         server += DemoBl()
         server += DemoBlobBl()
+
+        server += ExampleReferenceBl()
+        server += BuiltinBl()
     }
 
 }

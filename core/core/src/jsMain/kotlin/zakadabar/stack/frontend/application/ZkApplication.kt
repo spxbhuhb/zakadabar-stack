@@ -12,9 +12,7 @@ import zakadabar.stack.frontend.builtin.modal.ZkModalContainer
 import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
 import zakadabar.stack.frontend.util.decodeURIComponent
-import zakadabar.stack.resources.ZkBuiltinStrings
-import zakadabar.stack.resources.ZkStringStore
-import zakadabar.stack.resources.localizedStrings
+import zakadabar.stack.resources.*
 import zakadabar.stack.text.TranslationProvider
 import zakadabar.stack.util.InstanceStore
 
@@ -176,6 +174,7 @@ open class ZkApplication {
         services.firstOrNull<TranslationProvider>()?.translate(store, locale)
 
         localizedStrings = store
+        localizedFormats = BuiltinLocalizedFormats()
     }
 
     private val onPopState = fun(_: Event) {

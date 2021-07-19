@@ -4,11 +4,10 @@
 package zakadabar.stack.frontend.builtin.table.columns
 
 import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.resources.localized
 import zakadabar.stack.resources.localizedStrings
 import kotlin.reflect.KProperty1
 
@@ -42,16 +41,10 @@ open class ZkInstantColumn<T : BaseBo>(
     }
 
     override fun exportCsv(row: T): String {
-        // FIXME proper formatting, Kotlin datetime supports only ISO for now
-        val value = prop.get(row)
-        val s = value.toLocalDateTime(TimeZone.currentSystemDefault()).toString()
-        return "${s.substring(0, 10)} ${s.substring(11, 19)}"
+        return prop.get(row).localized
     }
 
     open fun format(row: T): String {
-        // FIXME proper formatting, Kotlin datetime supports only ISO for now
-        val value = prop.get(row)
-        val s = value.toLocalDateTime(TimeZone.currentSystemDefault()).toString()
-        return "${s.substring(0, 10)} ${s.substring(11, 16)}"
+        return prop.get(row).localized
     }
 }

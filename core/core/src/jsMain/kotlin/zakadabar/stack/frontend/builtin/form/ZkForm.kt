@@ -18,6 +18,8 @@ package zakadabar.stack.frontend.builtin.form
 
 import kotlinx.browser.document
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import org.w3c.dom.HTMLElement
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.SelectOptionProvider
@@ -569,19 +571,17 @@ open class ZkForm<T : BaseBo>(
         return field
     }
 
-    operator fun KMutableProperty0<String>.unaryPlus(): ZkElement {
-        val field = ZkStringField(this@ZkForm, this)
-        + field
-        fields += field
-        return field
-    }
-
-    operator fun KMutableProperty0<String?>.unaryPlus() =
-        ZkOptStringField(this@ZkForm, this).also {
+    operator fun KMutableProperty0<String>.unaryPlus(): ZkStringField<T> =
+        ZkStringField(this@ZkForm, this).also {
             + it
             fields += it
         }
 
+    operator fun KMutableProperty0<String?>.unaryPlus() : ZkOptStringField<T> =
+        ZkOptStringField(this@ZkForm, this).also {
+            + it
+            fields += it
+        }
 
     operator fun KMutableProperty0<Int>.unaryPlus(): ZkElement {
         val field = ZkIntField(this@ZkForm, this)
@@ -645,6 +645,30 @@ open class ZkForm<T : BaseBo>(
         fields += field
         return field
     }
+
+    operator fun KMutableProperty0<LocalDate>.unaryPlus(): ZkLocalDateField<T> =
+        ZkLocalDateField(this@ZkForm, this).also {
+            + it
+            fields += it
+        }
+
+    operator fun KMutableProperty0<LocalDate?>.unaryPlus() : ZkOptLocalDateField<T> =
+        ZkOptLocalDateField(this@ZkForm, this).also {
+            + it
+            fields += it
+        }
+
+    operator fun KMutableProperty0<LocalDateTime>.unaryPlus(): ZkLocalDateTimeField<T> =
+        ZkLocalDateTimeField(this@ZkForm, this).also {
+            + it
+            fields += it
+        }
+
+    operator fun KMutableProperty0<LocalDateTime?>.unaryPlus() : ZkOptLocalDateTimeField<T> =
+        ZkOptLocalDateTimeField(this@ZkForm, this).also {
+            + it
+            fields += it
+        }
 
     operator fun KMutableProperty0<Secret>.unaryPlus(): ZkElement {
         val field = ZkSecretField(this@ZkForm, this)
