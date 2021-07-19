@@ -16,6 +16,10 @@ change we will set and publish the EOL of each deprecation.
 
 ## Breaking Changes
 
-We may introduce breaking changes only in the first release of a month. All
-other releases will maintain compatibility (hotfixes may be an exception if
-really needed).
+As the stack is most probably not used by anyone else besides us, I feel 
+pointless to spend effort on scheduling the breaking changes.
+
+I don't have the time to keep different branches alive, so for now
+I'll just go on and change things as needed.
+
+When this becomes a real problem, I'll adjust the policy again.
