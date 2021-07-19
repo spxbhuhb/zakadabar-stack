@@ -16,7 +16,7 @@ group = "hu.simplexion.zakadabar"
 version = Versions.zakadabar
 
 dependencies {
-    api(project(":core:core-core"))
+    api(project(":core:core"))
 }
 
 android {

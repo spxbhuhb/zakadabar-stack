@@ -32,7 +32,7 @@ kotlin {
     }
 
     sourceSets["commonMain"].dependencies {
-        implementation(project(":core:core-core"))
+        implementation(project(":core:core"))
     }
 
     sourceSets["commonTest"].dependencies {

@@ -34,7 +34,7 @@ kotlin {
     }
 
     sourceSets["commonMain"].dependencies {
-        implementation(project(":core:core-core"))
+        implementation(project(":core:core"))
         implementation(project(":lib:i18n"))
         implementation(project(":lib:blobs"))
     }

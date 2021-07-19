@@ -42,7 +42,7 @@ kotlin {
     }
 
     sourceSets["commonMain"].dependencies {
-        api(project(":core:core-core"))
+        api(project(":core:core"))
         api(project(":lib:accounts"))
         api(project(":lib:i18n"))
         api(project(":lib:blobs"))
