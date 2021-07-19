@@ -19,15 +19,9 @@ noArg {
 }
 
 dependencies {
-    implementation(project(":core:core-core")) {
-        exclude(group="org.slf4j", module="slf4j-api")
-        exclude(group="ch.qos.logback", module= "logback-classic")
-    }
-    implementation(project(":demo:demo-basic")) {
-        exclude(group="org.slf4j", module="slf4j-api")
-        exclude(group="ch.qos.logback", module= "logback-classic")
-    }
 
+    implementation(project(":demo:demo-basic"))
+    implementation(project(":core:core-android"))
     implementation("com.google.android.material:material:1.4.0")
     implementation("androidx.appcompat:appcompat:1.3.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")

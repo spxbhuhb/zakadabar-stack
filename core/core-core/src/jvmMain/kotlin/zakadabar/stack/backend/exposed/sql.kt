@@ -12,8 +12,10 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
+import zakadabar.stack.backend.sql.SqlProvider
 import zakadabar.stack.data.builtin.settings.DatabaseSettingsBo
 import zakadabar.stack.data.entity.EntityId
 
@@ -21,13 +23,13 @@ inline operator fun <reified T : LongEntity> LongEntityClass<T>.get(entityId: En
 
 inline fun <reified T> EntityID<Long>.entityId() = EntityId<T>(this.value)
 
-object Sql {
+object Sql : SqlProvider {
 
     lateinit var dataSource: HikariDataSource
 
-    val tables = mutableListOf<Table>()
+    override val tables = mutableListOf<Table>()
 
-    fun onCreate(config: DatabaseSettingsBo) {
+    override fun onCreate(config: DatabaseSettingsBo) {
         val hikariConfig = HikariConfig()
 
         hikariConfig.driverClassName = config.driverClassName
@@ -46,10 +48,10 @@ object Sql {
             logger.level = Level.DEBUG
         }
 
-        Database.connect(dataSource)
+        TransactionManager.defaultDatabase = Database.connect(dataSource)
     }
 
-    fun onStart() {
+    override fun onStart() {
         transaction {
             SchemaUtils.createMissingTablesAndColumns(*tables.toTypedArray())
         }

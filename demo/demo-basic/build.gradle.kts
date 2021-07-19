@@ -42,10 +42,10 @@ kotlin {
     }
 
     sourceSets["commonMain"].dependencies {
-        implementation(project(":core:core-core"))
-        implementation(project(":lib:accounts"))
-        implementation(project(":lib:i18n"))
-        implementation(project(":lib:blobs"))
+        api(project(":core:core-core"))
+        api(project(":lib:accounts"))
+        api(project(":lib:i18n"))
+        api(project(":lib:blobs"))
         implementation("com.h2database:h2:${Versions.h2}")
     }
 }

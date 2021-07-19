@@ -25,7 +25,6 @@ class ServerSettingLoader {
 
         for (p in paths) {
             val path = Paths.get(p)
-            println(path.toAbsolutePath())
             if (! Files.exists(path)) continue
 
             val source = Files.readAllBytes(path).decodeToString()

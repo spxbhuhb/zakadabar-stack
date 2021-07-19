@@ -33,6 +33,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":core:core-core"))
+                implementation(project(":lib:blobs"))
             }
         }
 
@@ -45,10 +46,12 @@ kotlin {
         }
     }
 
-    sourceSets["jvmTest"].dependencies {
+    sourceSets["jvmMain"].dependencies {
         dependencies {
             implementation("io.ktor:ktor-server-netty:${Versions.ktor}")
             implementation("com.h2database:h2:${Versions.h2}")
+            implementation("org.xerial:sqlite-jdbc:${Versions.sqliteJdbc}")
         }
     }
+
 }

@@ -16,10 +16,12 @@ object Versions {
     const val exposed = "0.31.1"
 
     const val clikt = "2.8.0"
-    const val postgresql = "42.2.14"
-    const val hikari = "3.4.5"
     const val kaml = "0.19.0"
+
+    const val hikari = "3.4.5"
+    const val postgresql = "42.2.14"
     const val h2 = "1.4.200"
+    const val sqliteJdbc = "3.36.0.1"
 
     const val javamail = "1.5.0-b01"
 
@@ -28,7 +30,7 @@ object Versions {
 
     object Android {
         const val compileSdk = 31
-        const val minSdk = 24
+        const val minSdk = 26
         const val targetSdk = 31
         val versionCode = zakadabar.toVersionCode()
         const val versionName = zakadabar

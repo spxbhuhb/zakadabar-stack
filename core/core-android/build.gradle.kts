@@ -26,4 +26,20 @@ android {
         minSdk = 24
         targetSdk = 31
     }
+
+    packagingOptions {
+        exclude("META-INF/DEPENDENCIES")
+        exclude("META-INF/LICENSE")
+        exclude("META-INF/LICENSE.md")
+        exclude("META-INF/license.txt")
+        exclude("META-INF/NOTICE")
+        exclude("META-INF/NOTICE.md")
+        exclude("META-INF/notice.txt")
+        exclude("META-INF/ASL2.0")
+        exclude("META-INF/hk2-locator/default")
+        exclude("license/*")
+        exclude("license/LICENSE.dom-documentation.txt")
+        exclude("META-INF/io.netty.versions.properties")
+        exclude("META-INF/INDEX.LIST")
+    }
 }
