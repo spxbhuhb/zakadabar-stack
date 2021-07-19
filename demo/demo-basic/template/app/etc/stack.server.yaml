@@ -3,7 +3,7 @@ defaultLocale: en
 
 database:
   driverClassName: org.h2.Driver
-  jdbcUrl: "jdbc:h2:./app/var/db"
+  jdbcUrl: "jdbc:h2:./app/var/db;AUTO_SERVER=TRUE"
   username: test
   password: Almafa.12
   debugSql: false
