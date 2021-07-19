@@ -37,7 +37,7 @@ class ExampleBundleBl : EntityBusinessLogicBase<ExampleBundle>(
 
             transaction(db) {
                 bos.forEach {
-                    examplePa.create(it)
+                    examplePa.createWithId(it)
                 }
             }
         }

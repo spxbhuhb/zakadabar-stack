@@ -10,6 +10,12 @@ next month.
 - `SimpleRoleAuthorizer<EmptyEntityBo>` has to be replaced with `SimpleRoleAuthorizer<BaseBo>`
 - `object : KtorRouter<T>(this) {` has to be replaces with `object : KtorEntityRouter<T>(this)`
 
+## Project
+
+- move dependency versions into buildSrc:Versions.kt
+- split core into core-core and core-android
+- move doc out of core
+
 ## Core
 
 added:
@@ -18,6 +24,7 @@ added:
 - `schemaValidator` global variable
 - `ValidatorProvider` interface
 - `SchemaValidatorProvider` class
+- ZkLite: JDBC driver for Android SQLite
 
 changed:
 
@@ -39,3 +46,8 @@ added:
 - Standalone Query BL With Public Access
 - Access Server Description On the Frontend
 - Use Font Files
+- Database Transfer
+
+## Site
+
+- doc is not bundled with the site but pulled from git

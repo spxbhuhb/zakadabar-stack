@@ -21,10 +21,10 @@ Android frontends have access to:
 
 The android project declares a dependency on the main project.
 
-## Use the Data Models
+## Business Objects
 
-When you declare a dependency on the main project, all data models in
-`commonMain` will be automatically available in the android project.
+When you declare a dependency on the main project, all business object
+definitions in `commonMain` are automatically available in the android project.
 
 You can use the same communication calls as on the browser frontend,
 see the [example source code](/lib/examples/src/jvmMain/kotlin/zakadabar/lib/examples/frontend/Main.kt)
@@ -76,4 +76,4 @@ and download it to the frontend in one request. Table definitions can be
 shared, so it is possible to define most database related operations in
 the main project and use them in client code.
 
-For a working example check the 
+For a working example check the "Sqlite Bundle" cookbook recipe.

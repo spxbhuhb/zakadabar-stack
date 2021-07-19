@@ -43,6 +43,10 @@ interface EntityPersistenceApi<T : EntityBo<T>> {
         throw NotImplementedError()
     }
 
+    fun createWithId(bo: T): T {
+        throw NotImplementedError()
+    }
+
     fun create(bo: T): T {
         throw NotImplementedError()
     }

@@ -1,5 +1,14 @@
 # Build and Release
 
+## Prerequisites
+
+The build requires the Android 31 SDK installed.
+Path to the SDK has to be set in the `local.properties` file:
+
+```text
+sdk.dir=/Users/tiz/Library/Android/sdk
+```
+
 ## Release Branch
 
 - create a release branch: `release-YYYY.MM.DD`

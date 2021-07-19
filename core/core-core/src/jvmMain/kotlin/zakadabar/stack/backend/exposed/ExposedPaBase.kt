@@ -36,6 +36,14 @@ abstract class ExposedPaBase<T : EntityBo<T>, TT : ExposedPaTable<T>>(
             .selectAll()
             .map { it.toBo() }
 
+    override fun createWithId(bo: T) =
+        table
+            .insert {
+                it[id] = bo.id.toLong()
+                it.fromBo(bo)
+            }
+            .let { bo }
+
     override fun create(bo: T) =
         table
             .insertAndGetId { it.fromBo(bo) }

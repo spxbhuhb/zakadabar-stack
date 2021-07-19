@@ -11,6 +11,7 @@ import java.io.File
  * transferred over the network.
  *
  * @param  path            The path to the directory that contains the database file.
+ *                         If the directory does not exists, it will be created.
  * @param  databaseName    Name of the database to connect to. The actual file name
  *                         is: `$databaseName.db`.
  * @param  databaseBundle  The content of the database file. Typically built with
@@ -24,6 +25,10 @@ fun deployBundle(path : String, databaseName: String, databaseBundle: ByteArray,
     val dir = File(path)
     val fileName = "${databaseName}.db"
     val file = File(dir, fileName)
+
+    if (!dir.exists()) {
+        dir.mkdirs() // TODO permissions on this
+    }
 
     if (file.exists()) {
         if (! overwrite) throw IllegalStateException("database file $file already exists")
