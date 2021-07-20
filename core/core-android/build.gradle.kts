@@ -20,11 +20,14 @@ dependencies {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = Versions.Android.compileSdk
     sourceSets["main"].manifest.srcFile("src/main/AndroidManifest.xml")
+
     defaultConfig {
-        minSdk = 24
-        targetSdk = 31
+        minSdk = Versions.Android.minSdk
+        targetSdk = Versions.Android.targetSdk
+        versionCode = Versions.Android.versionCode
+        versionName = Versions.Android.versionName
     }
 
     packagingOptions {
@@ -72,59 +75,66 @@ if (! Versions.isSnapshot && properties["zakadabar.publisher"] != null) {
         dependsOn(javadocJar)
     }
 
-    signing {
-        useGpgCmd()
-        sign(publishing.publications)
-    }
+    afterEvaluate {
 
-    publishing {
-
-        val path = "spxbhuhb/zakadabar-stack"
-
-        repositories {
-            maven {
-                name = "MavenCentral"
-                url = if (Versions.isSnapshot) {
-                    uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-                } else {
-                    uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-                }
-                credentials {
-                    username = (properties["central.user"] ?: System.getenv("CENTRAL_USERNAME")).toString()
-                    password = (properties["central.password"] ?: System.getenv("CENTRAL_PASSWORD")).toString()
-                }
-            }
+        signing {
+            useGpgCmd()
+            sign(publishing.publications)
         }
 
-        publications.withType<MavenPublication>().all {
-            artifact(javadocJar.get())
-            pom {
-                description.set("Kotlin/Ktor based full-stack platform - Android")
-                name.set("Zakadabar Stack")
-                url.set("https://github.com/$path")
-                scm {
-                    url.set("https://github.com/$path")
-                    connection.set("scm:git:git://github.com/$path.git")
-                    developerConnection.set("scm:git:ssh://git@github.com/$path.git")
-                }
-                licenses {
-                    license {
-                        name.set("Apache 2.0")
-                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-                        distribution.set("repo")
+        publishing {
+
+            val path = "spxbhuhb/zakadabar-stack"
+
+            repositories {
+                maven {
+                    name = "MavenCentral"
+                    url = if (Versions.isSnapshot) {
+                        uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+                    } else {
+                        uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
                     }
-                }
-                developers {
-                    developer {
-                        id.set("toth-istvan-zoltan")
-                        name.set("Tóth István Zoltán")
-                        url.set("https://github.com/toth-istvan-zoltan")
-                        organization.set("Simplexion Kft.")
-                        organizationUrl.set("https://www.simplexion.hu")
+                    credentials {
+                        username = (properties["central.user"] ?: System.getenv("CENTRAL_USERNAME")).toString()
+                        password = (properties["central.password"] ?: System.getenv("CENTRAL_PASSWORD")).toString()
                     }
                 }
             }
+
+            publications {
+
+                create<MavenPublication>("release") {
+                    artifactId = "core-android"
+                    from(components.getByName("release"))
+                    artifact(javadocJar.get())
+                    pom {
+                        description.set("Kotlin/Ktor based full-stack platform - Android")
+                        name.set("Zakadabar Stack")
+                        url.set("https://github.com/$path")
+                        scm {
+                            url.set("https://github.com/$path")
+                            connection.set("scm:git:git://github.com/$path.git")
+                            developerConnection.set("scm:git:ssh://git@github.com/$path.git")
+                        }
+                        licenses {
+                            license {
+                                name.set("Apache 2.0")
+                                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                                distribution.set("repo")
+                            }
+                        }
+                        developers {
+                            developer {
+                                id.set("toth-istvan-zoltan")
+                                name.set("Tóth István Zoltán")
+                                url.set("https://github.com/toth-istvan-zoltan")
+                                organization.set("Simplexion Kft.")
+                                organizationUrl.set("https://www.simplexion.hu")
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
-
 }
