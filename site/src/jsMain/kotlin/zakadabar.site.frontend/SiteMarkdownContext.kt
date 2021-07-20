@@ -57,6 +57,7 @@ class SiteMarkdownContext(
         return when {
             dest.startsWith('#') -> dest
             dest.startsWith("/cookbook/") -> resolveToStringSafe(github, dest.trim('/'))
+            dest.startsWith("/demo/") -> resolveToStringSafe(github, dest.trim('/'))
             dest.startsWith("/core/") -> resolveToStringSafe(github, dest.trim('/'))
             dest.startsWith("/lib/") -> resolveToStringSafe(github, dest.trim('/'))
             dest.startsWith("/site/") -> resolveToStringSafe(github, dest.trim('/'))

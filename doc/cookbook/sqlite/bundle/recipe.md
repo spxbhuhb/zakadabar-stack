@@ -19,4 +19,16 @@
 
 ## Android
 
+On Android you have to download the data somehow. The example in `demo-sandbox-mobile` 
+bends backwards to get the data from the server. Here is a bit clearer code:
+
+```kotlin
+val bundle = ExampleBundle.read(bundleId)
+deployBundle(this.databasesPath, "test", bundle.content)
+val db = Database.connectSqlite(this, "test")
+```
+
+I coded the activity belo really-really quick and really-really dirty. It works, but
+it's a mess.
+
 - [MainActivity.kt](/demo/demo-sandbox-mobile/src/main/java/zakadabar/demo/basic/android/MainActivity.kt)

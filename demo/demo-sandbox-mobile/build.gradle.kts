@@ -19,7 +19,6 @@ noArg {
 }
 
 dependencies {
-
     implementation(project(":demo:demo-sandbox"))
     implementation(project(":core:core-android"))
     implementation("com.google.android.material:material:1.4.0")

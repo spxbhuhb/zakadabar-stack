@@ -33,13 +33,19 @@ see the [example source code](/lib/examples/src/jvmMain/kotlin/zakadabar/lib/exa
 
 You can use the Exposed SQL library with the native SQLite database of Android.
 
+Gradle dependency:
+
+```kotlin
+implementation("hu.simplexion.zakadabar:core-android:$stackVersion")
+```
+
 Initialization: 
 
 ```kotlin
 Database.connectSqlite(this, "test")
 ```
 
-After initialization the usual Exposed functions are available.
+After initialization, the usual Exposed functions are available.
 
 Also, business logics and persistence apis are available from the
 main project. 
@@ -69,6 +75,25 @@ val readBack = pa.withTransaction {
 }
 ```
 
+### Database Inspector
+
+The database inspector shows the database closed by default. To keep it open,
+you can add this line to your main activity:
+
+**Use this for DEBUG only, not for production!**
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+
+    lateinit var connection: Connection // Only for DEBUG
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val db = Database.connectSqlite(this, "test")
+        connection = DriverManager.getConnection(db.url)
+    }
+}
+```
+
 ### Database Transfer
 
 For some use cases it is very convenient to build a database on the backend
@@ -76,4 +101,4 @@ and download it to the frontend in one request. Table definitions can be
 shared, so it is possible to define most database related operations in
 the main project and use them in client code.
 
-For a working example check the "Sqlite Bundle" cookbook recipe.
+For a working example check the Database Transfer cookbook recipe.
