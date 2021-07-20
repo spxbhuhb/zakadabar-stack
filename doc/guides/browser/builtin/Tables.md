@@ -24,7 +24,7 @@ This documentation page needs rewrite:
 ## Write a Table
 
 1. create a [DTO](../../common/Data.md) to store the data of one row
-1. create a class that extends [ZkTable](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/table/ZkTable.kt)
+1. create a class that extends [ZkTable](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/table/ZkTable.kt)
 1. override `onConfigure` to set up the table
 
 ```kotlin

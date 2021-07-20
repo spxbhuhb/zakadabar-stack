@@ -1,8 +1,8 @@
 # Buttons
 
-* Use [ZkButton](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/button/ZkButton.kt) to add buttons in different
+* Use [ZkButton](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/button/ZkButton.kt) to add buttons in different
   shapes and flavours.
-* Extend [ZkButtonStyles](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/button/zkButtonStyles.kt) to override
+* Extend [ZkButtonStyles](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/button/zkButtonStyles.kt) to override
   default styles and dimensions.
 
 ## Shorthands
@@ -62,7 +62,7 @@ profile on facebook or a link on reddit.
 
 ## Fine Tuning
 
-Use constructor parameters of [ZkButton](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/button/ZkButton.kt) to
+Use constructor parameters of [ZkButton](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/button/ZkButton.kt) to
 create fine-tuned buttons:
 
 | Parameter | Description |

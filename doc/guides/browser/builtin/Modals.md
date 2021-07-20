@@ -1,11 +1,11 @@
 # Modals
 
 Modal dialogs are handled through the `modals` property of
-the `application` ([ZkApplication](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt)).
+the `application` ([ZkApplication](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt)).
 The `modals` property is an instance
-of [ZkModalContainer](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/modal/ZkModalContainer.kt).
+of [ZkModalContainer](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/modal/ZkModalContainer.kt).
 
-Modals that extend [ZkModalBase](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/modal/ZkModalBase.kt)
+Modals that extend [ZkModalBase](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/modal/ZkModalBase.kt)
 have show, hide and data handling out-of-the-box.
 
 <div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Note">
@@ -42,7 +42,7 @@ withConfirm(strings.title, strings.message) {
 
 In this case the modal will be similar to the built-in modals: same styled title, content, buttons.
 
-* extend [ZkModalBase](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/modal/ZkModalBase.kt)
+* extend [ZkModalBase](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/modal/ZkModalBase.kt)
 * call `build` from `onCreate` with the title
 * override `buildContent` to build the content
 * override `buildButtons` to build the buttons
@@ -102,7 +102,7 @@ open class MyMessageDialog : ZkModalBase<String>() {
 
 ## Use a Modal
 
-Modals that extend [ZkModalBase](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/modal/ZkModalBase.kt) has a `run`
+Modals that extend [ZkModalBase](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/modal/ZkModalBase.kt) has a `run`
 method. When called, `run`:
 
 * calls `show` of `application.modals`

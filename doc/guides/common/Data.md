@@ -166,6 +166,25 @@ QueryBo<SimpleQueryResult>
 QueryBo<List<SimpleQueryResult?>>
 ```
 
+It is possible to return with null values directly, but in that case
+you have to use the `queryOrNull` method instead of `query`.
+
+```kotlin
+@Serializable
+class SimpleExampleQuery(
+    var name : String
+) : QueryBo<SimpleQueryResult?> {
+    
+    override suspend fun execute() = comm.queryOrNull(this, serializer(), SimpleQueryResult.serializer())
+
+    companion object : QueryBoCompanion(SimpleExampleBo.boNamespace)
+
+    override fun schema() = BoSchema {
+        + ::name blank false min 1 max 30
+    }
+}
+```
+
 ### Use a Query
 
 Call the `execute` method:
@@ -258,7 +277,7 @@ Blobs are handled by the [lib:blobs](../plug-and-play/blobs/Introduction.md) plu
 
 ## Data Validation
 
-Data validation uses [BoSchema](/core/core-core/src/commonMain/kotlin/zakadabar/stack/data/schema/BoSchema.kt)
+Data validation uses [BoSchema](/core/core/src/commonMain/kotlin/zakadabar/stack/data/schema/BoSchema.kt)
 definitions.
 
 BoSchema focuses more on programmer convenience than on performance. It is not really suitable for validating large
@@ -340,7 +359,7 @@ instead, create one instance with default and then copy it as many times as you 
 
 ### Use a Schema
 
-[ZkForm](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/ZkForm.kt) validates the BO automatically.
+[ZkForm](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/ZkForm.kt) validates the BO automatically.
 
 To validate manually:
 

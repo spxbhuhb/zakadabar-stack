@@ -1,6 +1,6 @@
 # Elements
 
-The browser UI heavily uses the [ZkElement](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/ZkElement.kt) class.
+The browser UI heavily uses the [ZkElement](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/ZkElement.kt) class.
 Almost all built-in components extend `ZkElement` because it provides convenient builtin functions.
 
 ZkElement properties
@@ -9,7 +9,7 @@ ZkElement properties
 | --- | --- |
 | `id`  | ID of the ZkElement. All ZkElements have a unique, auto-generated id. |
 | `element` | The HTML DOM node that belongs to this ZkElement.<br>The `id` of this DOM node is "zk-$id" where `id` is the value of the `id` property. |
-| `lifeCycleState` | [ZkElementState](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/ZkElementState.kt) state of the ZkElement.<br>Used to prevent un-intentional reuse of elements and to manage element swapping. |
+| `lifeCycleState` | [ZkElementState](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/ZkElementState.kt) state of the ZkElement.<br>Used to prevent un-intentional reuse of elements and to manage element swapping. |
 | `childElements` | ZkElements that are child of this one. Child management functions are there to add / remove children easily. |
 | `buildPoint` | The HTML DOM element that is currently built. This may change a lot during the build process as DIVs are usually added to build a visual layout. |
 
@@ -36,7 +36,7 @@ This behaviour is intentional.
 ## Build
 
 It is very common, that a frontend element has an internal layout with a lot of `div`s, other elements, etc. To support
-this [ZkElement](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/ZkElement.kt)
+this [ZkElement](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/ZkElement.kt)
 provides a number of builder methods.
 
 ### Operators [source code](/lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/button/ButtonExamples.kt)

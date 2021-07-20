@@ -30,7 +30,7 @@ The directory that contains the server settings file becomes the
 
 1. The backend stops if there is no server settings file.
 1. Once the file is located, the backend loads the content of it into a
-   [ServerSettingsBo](/core/core-core/src/commonMain/kotlin/zakadabar/stack/data/builtin/settings/ServerSettingsBo.kt).
+   [ServerSettingsBo](/core/core/src/commonMain/kotlin/zakadabar/stack/data/builtin/settings/ServerSettingsBo.kt).
 1. From the server settings the database connection is initialized.
 
 ## Write a Setting BO

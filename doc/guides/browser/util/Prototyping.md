@@ -1,6 +1,6 @@
 # Prototyping
 
-To create frontend prototypes fast, use the [NYI](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/misc/NYI.kt)
+To create frontend prototypes fast, use the [NYI](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/misc/NYI.kt)
 element.
 
 NYI is just a simple element with a message that act as a placeholder until you write the actual element:

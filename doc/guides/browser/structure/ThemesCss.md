@@ -2,18 +2,18 @@
 
 The stack contains a dynamic theme and style system.
 
-* [theme](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt)
+* [theme](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt)
     * stores the active theme
     * when changes, all styles are rebuilt
-* [ZkTheme](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt)
+* [ZkTheme](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt)
     * interface for themes to implement
-* [ZkCssStyleSheet](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleSheet.kt)
+* [ZkCssStyleSheet](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleSheet.kt)
     * CSS style sheet builder / manager
-* [ZkCssStyleRule](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleRule.kt)
+* [ZkCssStyleRule](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleRule.kt)
     * one CSS rule (with possible variations)
-* [ZkColors](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/ZkColors.kt)
+* [ZkColors](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/ZkColors.kt)
     * Color constants, palettes from Material Colors and the Zakadabar palette
-* [zkHtmlStyles](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/zkHtmlStyles.kt)
+* [zkHtmlStyles](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/zkHtmlStyles.kt)
     * global HTML styles (on "body", "a" etc. tags)
 
 ## Theme
@@ -26,14 +26,14 @@ The stack contains a dynamic theme and style system.
     * rebuilds all attached style sheets.
     * **does not** change the DOM (except the `zk-styles` node under `body`)
 * Built-in themes:
-    * [ZkBuiltinLightTheme](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkBuiltinLightTheme.kt)
+    * [ZkBuiltinLightTheme](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkBuiltinLightTheme.kt)
         - light theme
-    * [ZkBuiltinDarkTheme](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkBuiltinDarkTheme.kt)
+    * [ZkBuiltinDarkTheme](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkBuiltinDarkTheme.kt)
         - dark theme
 
 ### Initial Theme Selection
 
-[initTheme](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt),
+[initTheme](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt),
 called from `jsMain/main.kt`, selects the theme during application startup.
 
 Algorithm:
@@ -68,7 +68,7 @@ with(application) {
 ### Write a theme
 
 * Extend one of the built-in themes or
-  implement [ZkTheme](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt)
+  implement [ZkTheme](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt)
   .
 * Use `onResume` to fine tune style variables.
 * Calling `super.onResume` is not mandatory. It applies the style modifications of the
@@ -112,7 +112,7 @@ This is a fine-tuned example, that can be used to replace one of the default the
 ## CSS
 
 * CSS style sheets are written in Kotlin.
-* Extend [ZkCssStyleSheet](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleSheet.kt) to write a new one.
+* Extend [ZkCssStyleSheet](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleSheet.kt) to write a new one.
 * Use `val yourStyles by cssStyleSheet(YourStyleSheet())` to make an instance of the style sheet.
 * When the theme changes, all style sheets are recompiled.
     * During recompile the style names remain the same.
@@ -484,7 +484,7 @@ as in `cssClass`.
 ## Scroll Bar Styles
 
 Scroll bars are styled
-by [ZkScrollBarStyles](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/layout/zkScrollBarStyles.kt)
+by [ZkScrollBarStyles](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/layout/zkScrollBarStyles.kt)
 .
 
 The default is to use scroll bar colors aligned with the theme.
@@ -505,7 +505,7 @@ To hide the scroll bar on one component:
 
 ## Theme Rotate
 
-Use [ZkThemeRotate](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkThemeRotate.kt) element to
+Use [ZkThemeRotate](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkThemeRotate.kt) element to
 rotate between themes. This element is configured with a list of icons and themes. When the user clicks
 on an icon, the theme paired with the icon is activated and the icon of the next theme is shown.
 

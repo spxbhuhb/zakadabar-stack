@@ -1,6 +1,6 @@
 # Forms
 
-[ZkForm](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/ZkForm.kt) provides
+[ZkForm](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/ZkForm.kt) provides
 the following functions out of the box:
 
 - convenient builder functions
@@ -28,7 +28,7 @@ To start quickly, you can use the  [Bender](../../tools/Bender.md) to generate a
 Alternatively, you can build your form manually:
 
 1. create a [BO](../../common/Data.md) to store the data of the form
-1. create a class that extends [ZkForm](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/ZkForm.kt)
+1. create a class that extends [ZkForm](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/ZkForm.kt)
 1. override `onCreate` to build the form
 
 ```kotlin
@@ -259,7 +259,7 @@ the context, you might have to qualify `this` as the example does.
 ### Write a Field
 
 You can easily write your own form field types by extending
-[ZkFieldBase](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/fields/ZkFieldBase.kt).
+[ZkFieldBase](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/fields/ZkFieldBase.kt).
 
 Check the built-in fields for examples.
 

@@ -36,7 +36,7 @@ modules during server startup.
 
 To write a module bundle:
 
-- Create an object that implements the interface [CommonModule](/core/core-core/src/commonMain/kotlin/zakadabar/stack/module/CommonModule.kt).
+- Create an object that implements the interface [CommonModule](/core/core/src/commonMain/kotlin/zakadabar/stack/module/CommonModule.kt).
 - Use the `onModuleLoad` function to add modules to the server.
 
 ```kotlin
@@ -88,6 +88,6 @@ the routes to their `router`. See [Routing](./Routing.md) for more information.
 
 This function is called when adding static resources to Ktor. It provides an
 easy way to register directories for static service. Check
-[ContentBackend](/core/core-core/src/jvmMain/kotlin/zakadabar/stack/backend/custom/ContentBackend.kt)
+[ContentBackend](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/custom/ContentBackend.kt)
 for an example.
 

@@ -69,7 +69,7 @@ zakadabar.lib.accounts.backend.install(
 )
 ```
 
-Otherwise, (this will use an instance of [AppRolesBase](/core/core-core/src/commonMain/kotlin/zakadabar/stack/authorize/roles.kt)):
+Otherwise, (this will use an instance of [AppRolesBase](/core/core/src/commonMain/kotlin/zakadabar/stack/authorize/roles.kt)):
 
 ```kotlin
 zakadabar.lib.accounts.backend.install()

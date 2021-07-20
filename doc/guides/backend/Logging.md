@@ -6,7 +6,7 @@ Business logics log events through auditors. See [Auditor](./Auditor.md) for mor
 
 ## Configure Logback
 
-The default configuration is in [logback.xml](/core/core-core/src/jvmMain/resources/logback.xml).
+The default configuration is in [logback.xml](/core/core/src/jvmMain/resources/logback.xml).
 
 To create your own configuration write a modified logback.xml file, place it in the
 `etc` directory of the backend and use the following command line argument to when starting the backend:

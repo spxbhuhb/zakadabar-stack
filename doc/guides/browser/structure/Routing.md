@@ -12,16 +12,16 @@ user. See [URLs](../../common/URLs.md) for more information.
 
 Important points:
 
-* `application` ([ZkApplication](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt))
+* `application` ([ZkApplication](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt))
    * `routing` property stores the routing of the application
    * handles the `back` and `forward` button of the browser
    * provides functions to switch locations
    * notifies elements when the location changes
-* [ZkAppRouting](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkAppRouting.kt)
+* [ZkAppRouting](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkAppRouting.kt)
    * is extended by application-specific routing classes
-   * `navState` property stores the current navigation state, a [ZkNavState](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkNavState.kt)
+   * `navState` property stores the current navigation state, a [ZkNavState](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkNavState.kt)
    * `targets` property stores the known routing targets
-* [ZkAppRouting.ZkTarget](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkAppRouting.kt) the interface routing targets implement, see details below
+* [ZkAppRouting.ZkTarget](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkAppRouting.kt) the interface routing targets implement, see details below
 * `/api/` URL is reserved for backend communication    
 
 ## Mechanism
@@ -32,7 +32,7 @@ Important points:
 1. `application.init`, called from `main.kt` initializes the routing.
     1. Add an event listener to the `popstate` browser event.
     1. Analyze [Window.location](https://developer.mozilla.org/en-US/docs/Web/API/Location) and create a
-       [ZkNavState](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkNavState.kt).
+       [ZkNavState](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkNavState.kt).
     1. Call routing to route the application to the given navigation state.
     1. Create a browser event of type `zk-navstate-change` and dispatches it on the browser `window`
 
@@ -82,7 +82,7 @@ with (ZkApplication) {
 
 ## Targets
 
-Routing targets implement the [ZkAppRouting.ZkTarget](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkAppRouting.kt) interface.
+Routing targets implement the [ZkAppRouting.ZkTarget](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkAppRouting.kt) interface.
 
 This interface is pretty straightforward:
 
@@ -98,7 +98,7 @@ This interface is pretty straightforward:
 
 The routing process is as follows.
 
-* Create a nav state (decomposed URL, [ZkNavState](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkNavState.kt).
+* Create a nav state (decomposed URL, [ZkNavState](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkNavState.kt).
 * Find the target for the view name in the nav state.
 * Call `route` function of the target. `route`
     * finds or creates a ZkElement to display,

@@ -3,9 +3,9 @@
 CRUDs are advanced components that link the listing and editing of BOs together. The stack provides
 two classes for CRUD definition:
 
-* [ZkCrudTarget](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/crud/ZkCrudTarget.kt) is a binding class 
+* [ZkCrudTarget](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/crud/ZkCrudTarget.kt) is a binding class 
   that provides easy configuration of CRUD routing on the frontend.
-* [ZkInlineCrud](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/crud/ZkInlineCrud.kt)
+* [ZkInlineCrud](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/crud/ZkInlineCrud.kt)
   is an element to be included somewhere on a page, but it is not the page itself.
 
 ## Write a CRUD  [source code](/lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/crud/SimpleExampleCrud.kt)
@@ -23,7 +23,7 @@ The easiest way to write a CRUD is to use the [Bender](../../tools/Bender.md) to
 
 #### Write a CRUD Target
 
-1. Extend [ZkCrudTarget](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/crud/ZkCrudTarget.kt) see code below.
+1. Extend [ZkCrudTarget](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/crud/ZkCrudTarget.kt) see code below.
 1. [Route the CRUD](#Route-a-CRUD-Target)
 1. [Include the CRUD](#Include-a-CRUD-Target)
 
@@ -56,7 +56,7 @@ Add the crud to your sidebar. See [SideBar](../builtin/SideBar.md) for details.
 
 #### Write an Inline CRUD
 
-Use [ZkInlineCrud](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/crud/ZkInlineCrud.kt) to write an inline CRUD.
+Use [ZkInlineCrud](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/crud/ZkInlineCrud.kt) to write an inline CRUD.
 
 ```kotlin
 class BuiltinInlineCrud : ZkInlineCrud<BuiltinBo>() {

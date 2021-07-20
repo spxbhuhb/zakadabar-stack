@@ -8,8 +8,8 @@ method to allow the query for everyone.
 
 ## Business Object
 
-[Query.kt](/cookbook/src/commonMain/kotlin/zakadabar/cookbook/backend/authorize/query/anonymous/Query.kt)
+[Query.kt](/cookbook/src/commonMain/kotlin/zakadabar/cookbook/query/anonymous/Query.kt)
 
 ## Business Logic
 
-[Query.kt](/cookbook/src/jvmMain/kotlin/zakadabar/cookbook/backend/authorize/query/anonymous/QueryBl.kt)
+[Query.kt](/cookbook/src/jvmMain/kotlin/zakadabar/cookbook/query/anonymous/QueryBl.kt)

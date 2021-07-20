@@ -16,13 +16,13 @@ of the functions to kick off full processing.
 
 ## Built-in Auditors
 
-[LogAuditor](/core/core-core/src/jvmMain/kotlin/zakadabar/stack/backend/audit/LogAuditor.kt) - writes the audit records to the standard log
+[LogAuditor](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/audit/LogAuditor.kt) - writes the audit records to the standard log
 
 ## Write an Auditor
 
 Three options to write auditors:
 
-- write a re-usable one by implementing the [Auditor](/core/core-core/src/commonMain/kotlin/zakadabar/stack/backend/audit/Auditor.kt) interface,
+- write a re-usable one by implementing the [Auditor](/core/core/src/commonMain/kotlin/zakadabar/stack/backend/audit/Auditor.kt) interface,
 - write a re-usable one by extending one,
 - write an anonymous one specific to one business logic class.
 

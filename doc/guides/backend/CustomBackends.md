@@ -1,7 +1,7 @@
 # Custom Backends
 
 * are fully customizable request handlers,
-* are Kotlin objects that extend [RoutedModule](/core/core-core/src/jvmMain/kotlin/zakadabar/stack/backend/RoutedModule.kt),
+* are Kotlin objects that extend [RoutedModule](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/RoutedModule.kt),
 * **are not** added automatically.
 
 Examples:
@@ -36,7 +36,7 @@ To add a custom backend from a module see: [Modules](./Modules.md)
 ## Add Custom Backend Programmatically
 
 You can add a backend module programmatically by adding it
-to [Server](/core/core-core/src/jvmMain/kotlin/zakadabar/stack/backend/Server.kt)
+to [Server](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/Server.kt)
 
 The Server calls the `onModuleLoad` method of CustomBackend when it is added.
 

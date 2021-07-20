@@ -22,12 +22,12 @@ this interface. If you do not use `Lib: Accounts`, you have to add a module that
 
 </div>
 
-## Authorizer Provider [unit test](/core/core-core/src/jvmTest/kotlin/zakadabar/stack/backend/authorize/SimpleRoleAuthorizerProviderTest.kt)
+## Authorizer Provider [unit test](/core/core/src/jvmTest/kotlin/zakadabar/stack/backend/authorize/SimpleRoleAuthorizerProviderTest.kt)
 
 An authorizer provider:
 
 - is a module you can use to centralize authorization setup
-- implements the [AuthorizerProvider](/core/core-core/src/commonMain/kotlin/zakadabar/stack/backend/authorize/SimpleRoleAuthorizer.kt) interface 
+- implements the [AuthorizerProvider](/core/core/src/commonMain/kotlin/zakadabar/stack/backend/authorize/SimpleRoleAuthorizer.kt) interface 
 - used by the `provider` function from a business logic
 - creates a new authorizer instance for each business logic
 - returns with an EmptyAuthorizer (which denies everything) when it cannot find an authorizer
@@ -53,7 +53,7 @@ class MyBusinessLogic : EntityBusinessLogicBase<MyBo>(MyBo::class){
 }
 ```
 
-### SimpleRoleAuthorizerProvider [unit test](/core/core-core/src/jvmTest/kotlin/zakadabar/stack/backend/authorize/SimpleRoleAuthorizerProviderTest.kt)
+### SimpleRoleAuthorizerProvider [unit test](/core/core/src/jvmTest/kotlin/zakadabar/stack/backend/authorize/SimpleRoleAuthorizerProviderTest.kt)
 
 This module provides a [SimpleRoleAuthorizer](#SimpleRoleAuthorizer) instance for each class. You can add it easily
 from your server configuration module (see [Modules](./Modules.md)):
@@ -66,13 +66,13 @@ server += SimpleRoleAuthorizerProvider {
 
 ## Built-in Authorizers
 
-- [SimpleRoleAuthorizer](/core/core-core/src/commonMain/kotlin/zakadabar/stack/backend/authorize/SimpleRoleAuthorizer.kt)  - Role-based authorization, see below.
-- [EmptyAuthorizer](/core/core-core/src/commonMain/kotlin/zakadabar/stack/backend/authorize/EmptyAuthorizer.kt) - Denies everything.
-- [UnsafeAuthorizer](/core/core-core/src/commonMain/kotlin/zakadabar/stack/backend/authorize/UnsafeAuthorizer.kt) - Allows everything. Must be explicitly enabled at server startup.
+- [SimpleRoleAuthorizer](/core/core/src/commonMain/kotlin/zakadabar/stack/backend/authorize/SimpleRoleAuthorizer.kt)  - Role-based authorization, see below.
+- [EmptyAuthorizer](/core/core/src/commonMain/kotlin/zakadabar/stack/backend/authorize/EmptyAuthorizer.kt) - Denies everything.
+- [UnsafeAuthorizer](/core/core/src/commonMain/kotlin/zakadabar/stack/backend/authorize/UnsafeAuthorizer.kt) - Allows everything. Must be explicitly enabled at server startup.
 
 ## SimpleRoleAuthorizer
 
-[SimpleRoleAuthorizer](/core/core-core/src/commonMain/kotlin/zakadabar/stack/backend/authorize/SimpleRoleAuthorizer.kt) uses roles
+[SimpleRoleAuthorizer](/core/core/src/commonMain/kotlin/zakadabar/stack/backend/authorize/SimpleRoleAuthorizer.kt) uses roles
 of the executor to make the authorization decisions. It is very easy to set up: you assign role names
 to operations. This example uses stack roles, but you can use any role name.
 
@@ -150,7 +150,7 @@ the authorizer.
 
 Three options to write authorizers:
 
-- write a re-usable one by implementing the [Authorizer](/core/core-core/src/commonMain/kotlin/zakadabar/stack/backend/authorize/Authorizer.kt) interface,
+- write a re-usable one by implementing the [Authorizer](/core/core/src/commonMain/kotlin/zakadabar/stack/backend/authorize/Authorizer.kt) interface,
 - write a re-usable one by extending one,
 - write an anonymous one specific to one business logic class.
 

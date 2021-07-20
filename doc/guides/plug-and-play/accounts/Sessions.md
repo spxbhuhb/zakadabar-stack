@@ -58,7 +58,7 @@ A background task - started by [KtorSessionBl.configure](/lib/accounts/src/jvmMa
 looks for expired sessions and removes them from the session storage.
 
 When the backend receives an unknown session cookie it creates a new session and then calls
-`onLoginTimeout` method of the [Server](/core/core-core/src/jvmMain/kotlin/zakadabar/stack/backend/Server.kt).
+`onLoginTimeout` method of the [Server](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/Server.kt).
 
 `onLoginTimeout` decides what to do with this request, in the default implementation API
 requests (uri starts with `/api`) respond with 440 Login Timeout, non-API requests are
@@ -83,7 +83,7 @@ On the client side, comm instances:
 
 * Check if the response code is 440.
 * If so, call `renew` function of the session manager (`sessionManager` property of `ZkApplication`, default:
-  [ZkSessionManager](/core/core-core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkSessionManager.kt))
+  [ZkSessionManager](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkSessionManager.kt))
 * The `renew` method displays a modal login window to ask the user for re-login.
 * When renewal is successful, the comm retries the failed call.
 
