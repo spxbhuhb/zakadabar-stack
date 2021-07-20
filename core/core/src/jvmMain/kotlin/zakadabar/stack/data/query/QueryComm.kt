@@ -21,14 +21,21 @@ open class QueryComm(
     private val companion: QueryBoCompanion
 ) : QueryCommInterface {
 
-    @PublicApi
-    override suspend fun <RQ : Any, RS> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<RS>): RS {
-
+    override suspend fun <RQ : Any, RS : Any?> queryOrNull(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<RS>): RS? {
         val q = Json.encodeToString(requestSerializer, request).encodeURLPath()
 
         val text = client.get<String>("${baseUrl}/api/${companion.boNamespace}/query/${request::class.simpleName}?q=${q}")
 
-        return Json.decodeFromString(responseSerializer, text)
+        return if (text == "null") {
+            null
+        } else {
+            Json.decodeFromString(responseSerializer, text)
+        }
+    }
+
+    @PublicApi
+    override suspend fun <RQ : Any, RS : Any> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<RS>): RS {
+        return queryOrNull(request, requestSerializer, responseSerializer) ?: throw NoSuchElementException()
     }
 
 }

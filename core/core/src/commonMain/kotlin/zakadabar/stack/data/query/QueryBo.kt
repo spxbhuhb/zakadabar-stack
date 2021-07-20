@@ -5,6 +5,8 @@ package zakadabar.stack.data.query
 
 import zakadabar.stack.data.BaseBo
 
-interface QueryBo<RESULT> : BaseBo {
+interface QueryBo<RESULT : Any?> : BaseBo {
+
     suspend fun execute(): RESULT
+
 }

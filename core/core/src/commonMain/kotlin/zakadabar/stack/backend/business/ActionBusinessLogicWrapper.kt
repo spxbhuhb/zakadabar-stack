@@ -7,5 +7,5 @@ import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.data.BaseBo
 
 interface ActionBusinessLogicWrapper {
-    fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> Any, bo: BaseBo): Any
+    fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> Any?, bo: BaseBo): Any?
 }

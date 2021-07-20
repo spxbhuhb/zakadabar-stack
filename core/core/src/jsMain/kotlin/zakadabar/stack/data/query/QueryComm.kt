@@ -22,7 +22,7 @@ open class QueryComm(
 ) : CommBase(), QueryCommInterface {
 
     @PublicApi
-    override suspend fun <RQ : Any, RS> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<RS>): RS {
+    override suspend fun <RQ : Any, RS : Any?> queryOrNull(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<RS>): RS? {
 
         val q = encodeURIComponent(Json.encodeToString(requestSerializer, request))
 
@@ -34,7 +34,17 @@ open class QueryComm(
         val textPromise = response.text()
         val text = textPromise.await()
 
-        return Json.decodeFromString(responseSerializer, text)
+        return if (text == "null") {
+            null
+        } else {
+            Json.decodeFromString(responseSerializer, text)
+        }
     }
+
+    @PublicApi
+    override suspend fun <RQ : Any, RS : Any> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<RS>): RS {
+        return queryOrNull(request, requestSerializer, responseSerializer) ?: throw NoSuchElementException()
+    }
+
 
 }

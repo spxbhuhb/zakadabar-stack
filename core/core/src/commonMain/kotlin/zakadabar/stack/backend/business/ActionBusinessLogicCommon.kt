@@ -11,7 +11,7 @@ import kotlin.reflect.KClass
 /**
  * Convenience base class for standalone action (without entity) business logics.
  */
-abstract class ActionBusinessLogicCommon<RQ : ActionBo<RS>, RS : Any>(
+abstract class ActionBusinessLogicCommon<RQ : ActionBo<RS>, RS : Any?>(
     open val actionBoClass: KClass<RQ>
 ) : BusinessLogicCommon<BaseBo>(), ActionBusinessLogicWrapper {
 
@@ -21,7 +21,7 @@ abstract class ActionBusinessLogicCommon<RQ : ActionBo<RS>, RS : Any>(
 
     abstract fun execute(executor: Executor, bo: RQ): RS
 
-    override fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> Any, bo: BaseBo): Any {
+    override fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> Any?, bo: BaseBo): Any? {
 
         check(actionBoClass.isInstance(bo))
 

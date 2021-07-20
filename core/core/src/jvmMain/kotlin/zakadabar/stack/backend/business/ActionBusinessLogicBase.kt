@@ -14,7 +14,7 @@ import kotlin.reflect.full.companionObject
  * Base class for standalone action (without entity) business logics.
  */
 @PublicApi
-abstract class ActionBusinessLogicBase<RQ : ActionBo<RS>, RS : Any>(
+abstract class ActionBusinessLogicBase<RQ : ActionBo<RS>, RS : Any?>(
     actionBoClass: KClass<RQ>
 ) : ActionBusinessLogicCommon<RQ, RS>(actionBoClass), RoutedModule {
 

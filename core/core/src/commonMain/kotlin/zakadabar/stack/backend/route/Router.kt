@@ -22,8 +22,8 @@ interface Router<T : BaseBo> {
 
     fun installRoutes(context: Any)
 
-    fun <RQ : ActionBo<RS>, RS : Any> action(actionClass: KClass<RQ>, actionFunc: (Executor, RQ) -> RS)
+    fun <RQ : ActionBo<RS>, RS : Any?> action(actionClass: KClass<RQ>, actionFunc: (Executor, RQ) -> RS)
 
-    fun <RQ : QueryBo<RS>, RS : Any> query(queryClass: KClass<RQ>, queryFunc: (Executor, RQ) -> RS)
+    fun <RQ : QueryBo<RS>, RS : Any?> query(queryClass: KClass<RQ>, queryFunc: (Executor, RQ) -> RS)
 
 }

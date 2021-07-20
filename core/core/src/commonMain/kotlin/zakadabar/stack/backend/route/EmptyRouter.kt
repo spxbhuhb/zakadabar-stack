@@ -20,11 +20,11 @@ class EmptyRouter<T : EntityBo<T>> : Router<T> {
 
     }
 
-    override fun <RQ : ActionBo<RS>, RS : Any> action(actionClass: KClass<RQ>, actionFunc: (Executor, RQ) -> RS) {
+    override fun <RQ : ActionBo<RS>, RS : Any?> action(actionClass: KClass<RQ>, actionFunc: (Executor, RQ) -> RS) {
         throw IllegalArgumentException("EmptyRouter cannot route actions")
     }
 
-    override fun <RQ : QueryBo<RS>, RS : Any> query(queryClass: KClass<RQ>, queryFunc: (Executor, RQ) -> RS) {
+    override fun <RQ : QueryBo<RS>, RS : Any?> query(queryClass: KClass<RQ>, queryFunc: (Executor, RQ) -> RS) {
         throw IllegalArgumentException("EmptyRouter cannot route queries")
     }
 

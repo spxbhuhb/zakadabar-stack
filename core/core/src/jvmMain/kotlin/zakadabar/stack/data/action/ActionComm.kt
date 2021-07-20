@@ -21,13 +21,21 @@ open class ActionComm(
 ) : ActionCommInterface {
 
     @PublicApi
-    override suspend fun <REQUEST : Any, RESPONSE> action(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<RESPONSE>): RESPONSE {
+    override suspend fun <REQUEST : Any, RESPONSE> actionOrNull(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<RESPONSE>): RESPONSE? {
         val text = client.post<String>("${baseUrl}/api/${companion.boNamespace}/action/${request::class.simpleName}") {
             header("Content-Type", "application/json; charset=UTF-8")
             body = Json.encodeToString(requestSerializer, request)
         }
+        return if (text == "null") {
+            null
+        } else {
+            Json.decodeFromString(responseSerializer, text)
+        }
+    }
 
-        return Json.decodeFromString(responseSerializer, text)
+    @PublicApi
+    override suspend fun <REQUEST : Any, RESPONSE> action(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<RESPONSE>): RESPONSE {
+        return actionOrNull(request, requestSerializer, responseSerializer)!!
     }
 
 }

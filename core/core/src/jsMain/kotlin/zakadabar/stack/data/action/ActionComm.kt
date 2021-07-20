@@ -23,7 +23,7 @@ open class ActionComm(
 ) : CommBase(), ActionCommInterface {
 
     @PublicApi
-    override suspend fun <REQUEST : Any, RESPONSE> action(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<RESPONSE>): RESPONSE {
+    override suspend fun <REQUEST : Any, RESPONSE> actionOrNull(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<RESPONSE>): RESPONSE? {
 
         val headers = Headers()
 
@@ -45,7 +45,16 @@ open class ActionComm(
         val textPromise = response.text()
         val text = textPromise.await()
 
-        return Json.decodeFromString(responseSerializer, text)
+        return if (text == "null") {
+            null
+        } else {
+            Json.decodeFromString(responseSerializer, text)
+        }
+    }
+
+    @PublicApi
+    override suspend fun <REQUEST : Any, RESPONSE> action(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<RESPONSE>): RESPONSE {
+        return actionOrNull(request, requestSerializer, responseSerializer)!!
     }
 
 }

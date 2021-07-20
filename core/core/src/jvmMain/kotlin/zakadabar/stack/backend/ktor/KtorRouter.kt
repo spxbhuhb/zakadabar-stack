@@ -8,6 +8,7 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.serializer
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.business.ActionBusinessLogicWrapper
@@ -27,9 +28,9 @@ open class KtorRouter<T : BaseBo>(
     protected val businessLogic: BusinessLogicCommon<out BaseBo>
 ) : Router<T> {
 
-    private val actionClassList = mutableListOf<Pair<KClass<out BaseBo>, (Executor, BaseBo) -> Any>>()
+    private val actionClassList = mutableListOf<Pair<KClass<out BaseBo>, (Executor, BaseBo) -> Any?>>()
 
-    private val queryClassList = mutableListOf<Pair<KClass<out BaseBo>, (Executor, BaseBo) -> Any>>()
+    private val queryClassList = mutableListOf<Pair<KClass<out BaseBo>, (Executor, BaseBo) -> Any?>>()
 
     override var qualifier = "entity"
 
@@ -43,16 +44,16 @@ open class KtorRouter<T : BaseBo>(
         server.apiCacheControl(call)
     }
 
-    override fun <RQ : ActionBo<RS>, RS : Any> action(actionClass: KClass<RQ>, actionFunc: (Executor, RQ) -> RS) {
+    override fun <RQ : ActionBo<RS>, RS : Any?> action(actionClass: KClass<RQ>, actionFunc: (Executor, RQ) -> RS) {
         if (businessLogic !is ActionBusinessLogicWrapper) throw IllegalArgumentException("cannot add actions to a non-action BL")
         @Suppress("UNCHECKED_CAST") // the parameter setup above ensures consistency
-        actionClassList += (actionClass to actionFunc) as (Pair<KClass<out BaseBo>, (Executor, BaseBo) -> Any>)
+        actionClassList += (actionClass to actionFunc) as (Pair<KClass<out BaseBo>, (Executor, BaseBo) -> Any?>)
     }
 
-    override fun <RQ : QueryBo<RS>, RS : Any> query(queryClass: KClass<RQ>, queryFunc: (Executor, RQ) -> RS) {
+    override fun <RQ : QueryBo<RS>, RS : Any?> query(queryClass: KClass<RQ>, queryFunc: (Executor, RQ) -> RS) {
         if (businessLogic !is QueryBusinessLogicWrapper) throw IllegalArgumentException("cannot add queries to a non-query BL")
         @Suppress("UNCHECKED_CAST") // the parameter setup above ensures consistency
-        queryClassList += (queryClass to queryFunc) as Pair<KClass<out BaseBo>, (Executor, BaseBo) -> Any>
+        queryClassList += (queryClass to queryFunc) as Pair<KClass<out BaseBo>, (Executor, BaseBo) -> Any?>
     }
 
     override fun installRoutes(context: Any) {
@@ -74,7 +75,7 @@ open class KtorRouter<T : BaseBo>(
         }
     }
 
-    open suspend fun action(call: ApplicationCall, actionClass: KClass<out BaseBo>, actionFunc: (Executor, BaseBo) -> Any) {
+    open suspend fun action(call: ApplicationCall, actionClass: KClass<out BaseBo>, actionFunc: (Executor, BaseBo) -> Any?) {
         businessLogic as ActionBusinessLogicWrapper
 
         val executor = call.executor()
@@ -84,10 +85,14 @@ open class KtorRouter<T : BaseBo>(
         @Suppress("UNCHECKED_CAST")
         val response = businessLogic.actionWrapper(executor, actionFunc, aObj)
 
-        call.respond(response)
+        if (response == null) {
+            call.respond(JsonNull)
+        } else {
+            call.respond(response)
+        }
     }
 
-    private suspend fun query(call: ApplicationCall, queryClass: KClass<out BaseBo>, queryFunc: (Executor, BaseBo) -> Any) {
+    private suspend fun query(call: ApplicationCall, queryClass: KClass<out BaseBo>, queryFunc: (Executor, BaseBo) -> Any?) {
         businessLogic as QueryBusinessLogicWrapper
 
         val executor = call.executor()
@@ -101,7 +106,11 @@ open class KtorRouter<T : BaseBo>(
         @Suppress("UNCHECKED_CAST")
         val response = businessLogic.queryWrapper(executor, queryFunc, qObj as BaseBo)
 
-        call.respond(response)
+        if (response == null) {
+            call.respond(JsonNull)
+        } else {
+            call.respond(response)
+        }
     }
 
 

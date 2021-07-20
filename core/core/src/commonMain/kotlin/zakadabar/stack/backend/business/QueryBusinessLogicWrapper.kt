@@ -7,5 +7,5 @@ import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.data.BaseBo
 
 interface QueryBusinessLogicWrapper {
-    fun queryWrapper(executor: Executor, func: (Executor, BaseBo) -> Any, bo: BaseBo): Any
+    fun queryWrapper(executor: Executor, func: (Executor, BaseBo) -> Any?, bo: BaseBo): Any?
 }

@@ -1,8 +1,9 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.cookbook.backend.authorize.action.loggedin
+package zakadabar.cookbook.action.loggedin
 
+import zakadabar.cookbook.action.loggedin.Action
 import zakadabar.stack.backend.authorize.Authorizer
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.authorize.authorize

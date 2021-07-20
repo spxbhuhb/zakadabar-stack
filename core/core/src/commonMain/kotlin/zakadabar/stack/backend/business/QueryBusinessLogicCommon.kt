@@ -11,7 +11,7 @@ import kotlin.reflect.KClass
 /**
  * Convenience base class for standalone query (without entity) business logics.
  */
-abstract class QueryBusinessLogicCommon<RQ : QueryBo<RS>, RS : Any>(
+abstract class QueryBusinessLogicCommon<RQ : QueryBo<RS>, RS : Any?>(
     protected val queryBoClass: KClass<RQ>
 ) : BusinessLogicCommon<BaseBo>(), QueryBusinessLogicWrapper {
 
@@ -21,7 +21,7 @@ abstract class QueryBusinessLogicCommon<RQ : QueryBo<RS>, RS : Any>(
 
     abstract fun execute(executor: Executor, bo: RQ): RS
 
-    override fun queryWrapper(executor: Executor, func: (Executor, BaseBo) -> Any, bo: BaseBo): Any {
+    override fun queryWrapper(executor: Executor, func: (Executor, BaseBo) -> Any?, bo: BaseBo): Any? {
 
         check(queryBoClass.isInstance(bo))
 

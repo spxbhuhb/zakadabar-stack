@@ -103,7 +103,7 @@ abstract class EntityBusinessLogicCommon<T : EntityBo<T>>  (
 
         }
 
-    override fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> Any, bo: BaseBo): Any =
+    override fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> Any?, bo: BaseBo): Any? =
 
         pa.withTransaction {
 
@@ -121,7 +121,7 @@ abstract class EntityBusinessLogicCommon<T : EntityBo<T>>  (
 
         }
 
-    override fun queryWrapper(executor: Executor, func: (Executor, BaseBo) -> Any, bo: BaseBo): Any =
+    override fun queryWrapper(executor: Executor, func: (Executor, BaseBo) -> Any?, bo: BaseBo): Any? =
 
         pa.withTransaction {
 
