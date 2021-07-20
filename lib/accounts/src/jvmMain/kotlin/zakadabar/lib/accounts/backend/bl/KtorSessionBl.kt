@@ -78,7 +78,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
             call.respond(read(call) as Any)
         }
 
-        override suspend fun action(call: ApplicationCall, actionClass: KClass<out BaseBo>, actionFunc: (Executor, BaseBo) -> Any) {
+        override suspend fun action(call: ApplicationCall, actionClass: KClass<out BaseBo>, actionFunc: (Executor, BaseBo) -> Any?) {
             val executor = call.executor()
             val aText = call.receive<String>()
             val aObj = Json.decodeFromString(serializer(actionClass.createType()), aText) as BaseBo

@@ -5,6 +5,7 @@ package zakadabar.site.frontend
 
 import kotlinx.browser.window
 import kotlinx.coroutines.await
+import zakadabar.site.frontend.cookbook.Cookbook
 import zakadabar.site.frontend.pages.*
 import zakadabar.site.resources.strings
 import zakadabar.stack.frontend.builtin.ZkElement
@@ -31,6 +32,7 @@ class SideBar : ZkSideBar() {
 
             + section(strings.tools) {
                 + item(BenderPage, text = strings.bender)
+                + item<Cookbook>()
             }
 
             + section(strings.documentation) {

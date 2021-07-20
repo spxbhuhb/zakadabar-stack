@@ -24,6 +24,8 @@ To add a new property type Xx:
 * bender
     * propertyConstraintEditors.kt
         * `XxPropertyConstraintsEditor`
+    * constraintGenerators.kt
+        * add `toCode`
     * KtToBoDescriptor.kt
         * add to `buildProperty`
     * BoPropertyEditor

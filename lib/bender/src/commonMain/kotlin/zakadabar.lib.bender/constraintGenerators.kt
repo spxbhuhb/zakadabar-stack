@@ -17,6 +17,8 @@ fun List<BoConstraint>.toCode(): String {
             is LongBoConstraint -> it.toCode()
             is StringBoConstraint -> it.toCode()
             is CustomBoConstraint -> it.toCode()
+            is LocalDateBoConstraint -> it.toCode()
+            is LocalDateTimeBoConstraint -> it.toCode()
         }
     }
 
@@ -35,6 +37,10 @@ fun DoubleBoConstraint.toCode() : String {
 }
 
 fun InstantBoConstraint.toCode() = "${type.name.lowercase()} $value"
+
+fun LocalDateBoConstraint.toCode() = "${type.name.lowercase()} $value"
+
+fun LocalDateTimeBoConstraint.toCode() = "${type.name.lowercase()} $value"
 
 fun IntBoConstraint.toCode() = "${type.name.lowercase()} $value"
 

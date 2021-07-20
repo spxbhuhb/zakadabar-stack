@@ -6,6 +6,7 @@ package zakadabar.site.backend
 import zakadabar.lib.examples.backend.builtin.BuiltinBl
 import zakadabar.lib.examples.backend.builtin.ExampleReferenceBl
 import zakadabar.lib.examples.backend.data.SimpleExampleBl
+import zakadabar.site.backend.business.RecipeBl
 import zakadabar.stack.backend.RoutedModule
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizerProvider
 import zakadabar.stack.backend.custom.ContentBackend
@@ -17,6 +18,7 @@ object Module : RoutedModule {
 
     override fun onModuleLoad() {
         server += ContentBackend("content")
+        server += RecipeBl()
 
         server += SimpleRoleAuthorizerProvider {
             all = PUBLIC

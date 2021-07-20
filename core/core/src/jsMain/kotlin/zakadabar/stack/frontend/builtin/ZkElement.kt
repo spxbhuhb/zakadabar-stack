@@ -1154,6 +1154,14 @@ open class ZkElement(
     }
 
     /**
+     * Removes a [ZkElement] child.
+     */
+    operator fun ZkElement?.unaryMinus(): ZkElement? {
+        this@ZkElement -= this
+        return this
+    }
+
+    /**
      * Creates "div" [HTMLElement] and executes the builder function on it.
      *
      * @param  build      The builder function to build the content of the div. Optional.

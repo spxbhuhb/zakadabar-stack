@@ -1,5 +1,7 @@
 title : Standalone Query BL With Public Access
 level: Beginner
+targets:
+  - jvm
 tags:
   - business logic
   - query
