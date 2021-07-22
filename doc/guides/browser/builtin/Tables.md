@@ -1,5 +1,7 @@
 # Tables
 
+<div data-zk-enrich="Recipes" data-zk-targets="browser" data-zk-tags="table"></div>
+
 <div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Note">
 
 This documentation page needs rewrite: 
@@ -20,10 +22,10 @@ This documentation page needs rewrite:
   * search (type into search field and Enter or click the icon)
   * CSV export
   * preload data dependencies before render
-
+  
 ## Write a Table
 
-1. create a [DTO](../../common/Data.md) to store the data of one row
+1. create a [Business Object](../../common/Data.md) to store the data of one row
 1. create a class that extends [ZkTable](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/table/ZkTable.kt)
 1. override `onConfigure` to set up the table
 
@@ -221,8 +223,6 @@ With 1.000.000:
 The solution for these would be to use fewer areas and improve row position handling. However, in that case the
 scrollbar position problems might arise.
 
-## Timeline
-
 ### Known problems
 
 * Sort indicator:
@@ -230,15 +230,3 @@ scrollbar position problems might arise.
 * Header resize handle:
    * jumps a bit when start to move,
    * can appear when moving another handle.
-
-### Possible Improvements
-
-* Initial column size could depend on data type.
-* In-line editing.
-
-### Changes
-
-* 2021.5.14
-  * dark theme
-* 2021.5.12
-  * replace default ui checkbox with ZkCheckBox

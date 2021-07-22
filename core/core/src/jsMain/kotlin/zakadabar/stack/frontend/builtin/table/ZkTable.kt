@@ -43,6 +43,8 @@ import kotlin.reflect.KProperty1
  * @property  crud          The [ZkCrudTarget] that is linked with the table. When specified the functions
  *                          of the table (onCreate, onDblClick for example) will use it to open the
  *                          appropriate page.
+ * @property  query         When initialized, the table automatically executes this query during onResume to fill
+ *                          the table with data.
  * @property  setAppTitle   When true (default) the app title bar is set for the table. Function [setAppTitleBar] adds the title bar.
  * @property  addLocalTitle When true, add a local title bar. Default is false.
  * @property  titleText     Title text to show in the title bar. Used when [titleElement] is not set.
@@ -79,6 +81,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     open var rowHeight = 42
 
     val columns = mutableListOf<ZkColumn<T>>()
+
+    var query: QueryBo<List<T>>? = null
 
     open val exportFileName: String
         get() {
@@ -192,9 +196,16 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
         setAppTitleBar()
 
-        // this means that setData has been called before onResume
-        if (::fullData.isInitialized) {
-            render()
+        val query = this.query
+
+        when {
+            query != null -> {
+                setData(emptyList())
+                io {
+                    setData(query.execute())
+                }
+            }
+            ::fullData.isInitialized -> render() // this means that setData has been called before onResume
         }
     }
 
@@ -265,7 +276,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      *
      * @param  query  The query to execute
      */
-    fun setData(query : QueryBo<List<T>>) {
+    fun setData(query: QueryBo<List<T>>) {
         io {
             setData(query.execute())
         }
