@@ -571,13 +571,25 @@ open class ZkForm<T : BaseBo>(
         return field
     }
 
+    inline operator fun <reified ST : EntityBo<ST>> KMutableProperty0<EntityId<ST>>.unaryPlus(): ZkEntitySelectField<T, ST> =
+        ZkEntitySelectField(this@ZkForm, this, ST::class).also {
+            + it // adds to the current build point
+            fields += it // adds to the form fields
+        }
+
+    inline operator fun <reified ST : EntityBo<ST>> KMutableProperty0<EntityId<ST>?>.unaryPlus(): ZkOptEntitySelectField<T, ST> =
+        ZkOptEntitySelectField(this@ZkForm, this, ST::class).also {
+            + it
+            fields += it
+        }
+
     operator fun KMutableProperty0<String>.unaryPlus(): ZkStringField<T> =
         ZkStringField(this@ZkForm, this).also {
             + it
             fields += it
         }
 
-    operator fun KMutableProperty0<String?>.unaryPlus() : ZkOptStringField<T> =
+    operator fun KMutableProperty0<String?>.unaryPlus(): ZkOptStringField<T> =
         ZkOptStringField(this@ZkForm, this).also {
             + it
             fields += it
@@ -652,7 +664,7 @@ open class ZkForm<T : BaseBo>(
             fields += it
         }
 
-    operator fun KMutableProperty0<LocalDate?>.unaryPlus() : ZkOptLocalDateField<T> =
+    operator fun KMutableProperty0<LocalDate?>.unaryPlus(): ZkOptLocalDateField<T> =
         ZkOptLocalDateField(this@ZkForm, this).also {
             + it
             fields += it
@@ -664,7 +676,7 @@ open class ZkForm<T : BaseBo>(
             fields += it
         }
 
-    operator fun KMutableProperty0<LocalDateTime?>.unaryPlus() : ZkOptLocalDateTimeField<T> =
+    operator fun KMutableProperty0<LocalDateTime?>.unaryPlus(): ZkOptLocalDateTimeField<T> =
         ZkOptLocalDateTimeField(this@ZkForm, this).also {
             + it
             fields += it
@@ -711,9 +723,9 @@ open class ZkForm<T : BaseBo>(
         return field
     }
 
-    // -------------------------------------------------------------------------
-    //  Property field convenience methods
-    // ------------------------------------------------------------------------
+// -------------------------------------------------------------------------
+//  Property field convenience methods
+// ------------------------------------------------------------------------
 
     /**
      * Find a field for this property.
