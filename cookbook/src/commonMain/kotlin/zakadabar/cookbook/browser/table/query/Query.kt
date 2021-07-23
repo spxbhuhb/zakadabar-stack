@@ -5,7 +5,7 @@ package zakadabar.cookbook.browser.table.query
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
-import zakadabar.cookbook.ExampleBo
+import zakadabar.cookbook.entity.builtin.ExampleBo
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.query.QueryBo

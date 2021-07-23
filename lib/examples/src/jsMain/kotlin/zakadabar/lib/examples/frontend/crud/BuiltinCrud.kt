@@ -56,7 +56,7 @@ class BuiltinForm : ZkForm<BuiltinBo>() {
                 + bo::optInstantValue
                 + bo::optIntValue
                 + bo::optLocalDateValue
-                + bo::optLocalDateTimeValue
+                + bo::optLocalDateTimeValue readOnly true
                 + bo::optSecretValue
                 + bo::optRecordSelectValue options { selectBy { it.name } }
                 + bo::optStringValue

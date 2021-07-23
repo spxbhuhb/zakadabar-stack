@@ -18,7 +18,7 @@ class ExampleBundle(
 
 ) : EntityBo<ExampleBundle> {
 
-    companion object : EntityBoCompanion<ExampleBundle>("example-bundle")
+    companion object : EntityBoCompanion<ExampleBundle>("zkc-example-bundle")
 
     override fun getBoNamespace() = boNamespace
     override fun comm() = comm

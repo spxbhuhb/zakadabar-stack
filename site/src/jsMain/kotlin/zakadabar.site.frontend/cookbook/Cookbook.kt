@@ -7,34 +7,23 @@ import zakadabar.lib.markdown.frontend.MarkdownView
 import zakadabar.site.cookbook.GetContent
 import zakadabar.site.cookbook.Recipe
 import zakadabar.site.frontend.SiteMarkdownContext
-import zakadabar.site.frontend.resources.siteStyles
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.pages.ZkPathPage
+import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.frontend.resources.css.em
+import zakadabar.stack.frontend.resources.css.fr
 import zakadabar.stack.frontend.util.io
 
 object Cookbook : ZkPathPage() {
 
-    val list = zke {
-        io {
-            Recipe.all().forEach {
-                + RecipeCard(it)
-            }
-        }
-    }
-
-    override fun onCreate() {
-
-    }
-
     override fun onResume() {
         super.onResume()
         if (path.isEmpty()) {
-            + siteStyles.cookbook
-            + list
+            + Table()
             - firstOrNull<MarkdownView>()
         } else {
-            - siteStyles.cookbook
-            - list
+            - firstOrNull<Table>()
             io {
                 val md = GetContent(EntityId(path)).execute().value
                 + MarkdownView(
@@ -43,5 +32,43 @@ object Cookbook : ZkPathPage() {
                 )
             }
         }
+    }
+
+    class Table : ZkTable<Recipe>() {
+
+        override fun onConfigure() {
+
+            search = true
+            addLocalTitle = true
+            titleText = "Recipes"
+
+            + Recipe::title size 1.fr
+            + Recipe::level size 10.em
+
+            + custom {
+                label = "Targets"
+                render = { + it.targets.joinToString(", ") }
+            } size 10.em
+
+            + custom {
+                label = "Tags"
+                render = { + it.tags.joinToString(", ") }
+            } size "max-content"
+        }
+
+        override fun onCreate() {
+            super.onCreate()
+            io {
+                setData(Recipe.all())
+            }
+        }
+
+        override fun getRowId(row: Recipe): String {
+            return row.title
+        }
+        override fun onDblClick(id: String) {
+            application.changeNavState(Cookbook, id)
+        }
+
     }
 }

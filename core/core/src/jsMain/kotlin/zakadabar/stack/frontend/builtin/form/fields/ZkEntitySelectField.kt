@@ -30,15 +30,21 @@ import kotlin.reflect.KMutableProperty0
 open class ZkEntitySelectField<T : BaseBo, ST : EntityBo<ST>>(
     form: ZkForm<T>,
     val prop: KMutableProperty0<EntityId<ST>>,
-    val entityClass : KClass<ST>
+    val entityClass: KClass<ST>
 ) : ZkSelect2Base<T, EntityId<ST>>(form, prop.name) {
 
-    lateinit var selectBy : (ST) -> String
+    lateinit var selectBy: (ST) -> String
 
     override suspend fun getOptions(): List<Pair<EntityId<ST>, String>> {
         val comm = entityClass.newInstance().comm()
         return if (readOnly) {
-            prop.get().let { listOf(it to selectBy(comm.read(it))) }
+            prop.get().let {
+                if (it.isEmpty()) {
+                    emptyList()
+                } else {
+                    listOf(it to selectBy(comm.read(it)))
+                }
+            }
         } else {
             comm.all().by(selectBy)
         }
@@ -60,22 +66,22 @@ open class ZkEntitySelectField<T : BaseBo, ST : EntityBo<ST>>(
         form.validate()
     }
 
-    infix fun options(func: ZkEntitySelectField<T, ST>.() ->  Unit): ZkEntitySelectField<T, ST> {
-        func()
+    override fun onAfterOptions() {
         io {
             items = getOptions()
             render(getPropValue())
         }
-        return this
     }
 
     @PublicApi
-    infix fun selectBy(func: (ST) -> String): ZkEntitySelectField<T, ST> {
+    infix fun ZkEntitySelectField<T, ST>?.selectBy(func: (ST) -> String): ZkEntitySelectField<T, ST>? {
+        if (this == null) return this
         selectBy = func
         return this
     }
 
-    infix fun readOnly(value: Boolean): ZkEntitySelectField<T, ST> {
+    infix fun ZkEntitySelectField<T, ST>?.readOnly(value: Boolean): ZkEntitySelectField<T, ST>? {
+        if (this == null) return this
         readOnly = value
         return this
     }

@@ -3,7 +3,7 @@
  */
 package zakadabar.cookbook.browser.table.query
 
-import zakadabar.cookbook.ExampleBo
+import zakadabar.cookbook.entity.builtin.ExampleBo
 import zakadabar.stack.data.entity.toEntityId
 import zakadabar.stack.frontend.application.target
 import zakadabar.stack.frontend.builtin.pages.ZkEntityPage
