@@ -896,7 +896,7 @@ open class ZkElement(
      * @param  gap        When [grid] is true and [gap] is true zkLayoutStyles.gridGap is added.
      * @param  build      The builder function to build the content of the div. Optional.
      */
-    open fun row(rule: ZkCssStyleRule? = null, grid: Boolean = false, gap : Boolean = true, build: ZkElement.() -> Unit): HTMLElement {
+    open fun row(rule: ZkCssStyleRule? = null, grid: Boolean = false, gap: Boolean = true, build: ZkElement.() -> Unit): HTMLElement {
         val e = document.createElement("div") as HTMLElement
         if (grid) {
             e.classList += zkLayoutStyles.grid
@@ -1121,6 +1121,14 @@ open class ZkElement(
      */
     operator fun HTMLElement.unaryPlus(): HTMLElement {
         buildPoint.appendChild(this)
+        return this
+    }
+
+    /**
+     * Adds an optional HTML element at build point.
+     */
+    operator fun HTMLElement?.unaryPlus(): HTMLElement? {
+        if (this != null) buildPoint.appendChild(this)
         return this
     }
 
