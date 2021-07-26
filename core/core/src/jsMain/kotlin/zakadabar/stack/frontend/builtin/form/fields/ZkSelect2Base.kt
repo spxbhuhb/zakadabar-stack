@@ -51,8 +51,10 @@ abstract class ZkSelect2Base<T : BaseBo, VT>(
         set(value) {
             if (value) {
                 container.firstElementChild?.classList?.plusAssign(zkFormStyles.disabledSelect)
+                arrow.hide()
             } else {
                 container.firstElementChild?.classList?.minusAssign(zkFormStyles.disabledSelect)
+                arrow.show()
             }
             field = value
         }
@@ -66,6 +68,7 @@ abstract class ZkSelect2Base<T : BaseBo, VT>(
     abstract fun setPropValue(value: Pair<VT, String>?)
 
     private lateinit var container: HTMLElement
+    private lateinit var arrow : ZkElement
     private val selectedOption = ZkElement()
     private val optionList = ZkElement().css(ZkFormStyles.selectOptionList)
 
@@ -94,7 +97,7 @@ abstract class ZkSelect2Base<T : BaseBo, VT>(
         container = div(ZkFormStyles.selectContainer) {
             + row(ZkFormStyles.selectedOption) {
                 + selectedOption
-                + ZkIcon(ZkIcons.arrowDropDown, size = 24)
+                + ZkIcon(ZkIcons.arrowDropDown, size = 24).also { arrow = it }
                 on("click") { toggleOptions() }
             }
             + optionList.hide()
@@ -125,6 +128,7 @@ abstract class ZkSelect2Base<T : BaseBo, VT>(
             }
         }
 
+        if (readOnly) arrow.hide()
         + container
     }
 
