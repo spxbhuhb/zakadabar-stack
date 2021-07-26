@@ -6,7 +6,6 @@ package zakadabar.site.frontend
 import org.intellij.markdown.html.resolveToStringSafe
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
-import zakadabar.cookbook.browser.form.conditional.ConditionalFormExample
 import zakadabar.lib.examples.frontend.OperatorExample
 import zakadabar.lib.examples.frontend.ParallelDownloadExample
 import zakadabar.lib.examples.frontend.button.ButtonExamples
@@ -75,7 +74,7 @@ class SiteMarkdownContext(
         return when (type) {
 
             // cookbook
-            "ConditionalFormExample" -> ZkElement(htmlElement) build { + ConditionalFormExample() }
+            // "ConditionalFormExample" -> ZkElement(htmlElement) build { + ConditionalFormExample() }
 
             // lib:examples
 

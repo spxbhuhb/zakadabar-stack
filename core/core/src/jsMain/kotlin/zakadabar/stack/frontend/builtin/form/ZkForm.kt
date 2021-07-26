@@ -52,7 +52,6 @@ import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.log
 import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.resources.localizedStrings
-import zakadabar.stack.util.PropertyList
 import zakadabar.stack.util.PublicApi
 import zakadabar.stack.util.UUID
 import kotlin.reflect.KMutableProperty0
@@ -104,10 +103,6 @@ open class ZkForm<T : BaseBo>(
     override var onBack = { application.back() }
 
     var schema = lazy { if (! ::bo.isInitialized) BoSchema.Companion.NO_VALIDATION else bo.schema() }
-
-    open val readOnly: PropertyList = emptyList<String>()
-    open val writable: PropertyList = emptyList<String>()
-    open val excluded: PropertyList = emptyList<String>()
 
     val fields = mutableListOf<ZkFieldBase<*, *>>()
 
@@ -392,63 +387,13 @@ open class ZkForm<T : BaseBo>(
     // ------------------------------------------------------------------------
 
     /**
-     * Create and add a form field based on the content of [writable], [readOnly]
-     * and [excluded].
-     *
-     * Logic:
-     *
-     * When all three are empty (which is the default) the field is added.
-     *
-     * When [excluded] is not empty:
-     *
-     * - Fields are added when [excluded] **does not** contain their property.
-     * - Content of [writable] and [readOnly] does not count.
-     *
-     * When [excluded] is empty but either [writable] or [readOnly] is not:
-     *
-     * - The field is added as writable when the property is in [writable].
-     * - The field is added as read only when the property is in [readOnly].
-     * - The field is not added when the property is not in [writable] nor [readOnly].
+     * Create and add a form field.
      */
-    open fun <T : ZkFieldBase<*, *>, PT : KProperty<*>> conditionalAdd(property: PT, function: (PT) -> T?): T? {
-
-        if (writable.isEmpty() && readOnly.isEmpty() && excluded.isEmpty()) {
-            return function(property)?.also {
-                + it
-                fields += it
-            }
+    open fun <T : ZkFieldBase<*, *>, PT : KProperty<*>> add(property: PT, function: (PT) -> T?): T? =
+        function(property)?.also {
+            + it
+            fields += it
         }
-
-        val name = property.name
-
-        if (excluded.isNotEmpty()) {
-            return if (name in excluded) {
-                null
-            } else {
-                function(property)?.also {
-                    + it
-                    fields += it
-                }
-            }
-        }
-
-        if (name in writable) {
-            return function(property)?.also {
-                + it
-                fields += it
-            }
-        }
-
-        if (name in readOnly) {
-            return function(property)?.also {
-                it.readOnly = true
-                + it
-                fields += it
-            }
-        }
-
-        return null
-    }
 
     open fun build(title: String, createTitle: String = title, css: ZkCssStyleRule? = null, addButtons: Boolean = true, builder: () -> Unit) {
         this.titleText = if (mode == ZkElementMode.Create) createTitle else title
@@ -627,7 +572,7 @@ open class ZkForm<T : BaseBo>(
     // ------------------------------------------------------------------------
 
     operator fun KMutableProperty0<EntityId<T>>.unaryPlus(): ZkEntityIdField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             if (mode == ZkElementMode.Create && it.name == "id") {
                 null
             } else {
@@ -636,119 +581,119 @@ open class ZkForm<T : BaseBo>(
         }
 
     inline operator fun <reified ST : EntityBo<ST>> KMutableProperty0<EntityId<ST>>.unaryPlus(): ZkEntitySelectField<T, ST>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkEntitySelectField(this@ZkForm, it, ST::class)
         }
 
     inline operator fun <reified ST : EntityBo<ST>> KMutableProperty0<EntityId<ST>?>.unaryPlus(): ZkOptEntitySelectField<T, ST>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkOptEntitySelectField(this@ZkForm, it, ST::class)
         }
 
     operator fun KMutableProperty0<String>.unaryPlus(): ZkStringField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkStringField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<String?>.unaryPlus(): ZkOptStringField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkOptStringField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<Int>.unaryPlus(): ZkIntField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkIntField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<Int?>.unaryPlus(): ZkOptIntField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkOptIntField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<Long>.unaryPlus(): ZkLongField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkLongField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<Long?>.unaryPlus(): ZkOptLongField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkOptLongField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<Double>.unaryPlus(): ZkDoubleField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkDoubleField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<Double?>.unaryPlus(): ZkOptDoubleField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkOptDoubleField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<Boolean>.unaryPlus(): ZkBooleanField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkBooleanField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<Instant>.unaryPlus(): ZkInstantField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkInstantField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<Instant?>.unaryPlus(): ZkOptInstantField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkOptInstantField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<LocalDate>.unaryPlus(): ZkLocalDateField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkLocalDateField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<LocalDate?>.unaryPlus(): ZkOptLocalDateField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkOptLocalDateField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<LocalDateTime>.unaryPlus(): ZkLocalDateTimeField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkLocalDateTimeField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<LocalDateTime?>.unaryPlus(): ZkOptLocalDateTimeField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkOptLocalDateTimeField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<Secret>.unaryPlus(): ZkSecretField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkSecretField(this@ZkForm, this)
         }
 
     operator fun KMutableProperty0<Secret?>.unaryPlus(): ZkOptSecretField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkOptSecretField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<UUID>.unaryPlus(): ZkUuidField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkUuidField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<UUID?>.unaryPlus(): ZkOptUuidField<T>? =
-        conditionalAdd(this) {
+        add(this) {
             ZkOptUuidField(this@ZkForm, it)
         }
 
     inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): ZkEnumSelectField<T, E>? =
-        conditionalAdd(this) {
+        add(this) {
             select(it)
         }
 
 
     @JsName("FormOptEnumUnaryPlus")
     inline operator fun <reified E : Enum<E>> KMutableProperty0<E?>.unaryPlus(): ZkOptEnumSelectField<T, E>? =
-        conditionalAdd(this) {
+        add(this) {
             select(it)
         }
 

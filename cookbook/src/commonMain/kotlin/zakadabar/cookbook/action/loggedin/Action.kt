@@ -4,17 +4,17 @@
 package zakadabar.cookbook.action.loggedin
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.serializer
 import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.query.QueryBoCompanion
+import zakadabar.stack.data.action.ActionBoCompanion
+import zakadabar.stack.data.builtin.LongValue
 import zakadabar.stack.util.UUID
 
 @Serializable
-class Action : ActionBo<Long> {
+class Action : ActionBo<LongValue> {
 
-    override suspend fun execute() = comm.query(this, serializer(), Long.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), LongValue.serializer())
 
     // TODO change the namespace
-    companion object : QueryBoCompanion(UUID().toString())
+    companion object : ActionBoCompanion(UUID().toString())
 
 }

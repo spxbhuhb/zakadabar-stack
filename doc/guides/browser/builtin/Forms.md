@@ -177,27 +177,6 @@ Read only version:
 + bo::referenceField options { selectBy { it.name } readOnly true }
 ```
 
-#### Add Fields Conditionally
-
-All property shorthands perform a "last minute" adjustment before
-adding the field to the form based on the content of `writable`, `readOnly`
-and `excluded` lists of the form.
-
-**Logic**
-
-When all three lists are empty (which is the default), the field is added.
-
-When `excluded` is not empty:
-
-- Fields are added when `excluded` does not contain their property.
-- Content of `writable` and `readOnly` does not count.
-
-When `excluded` is empty but either `writable` or `readOnly` is not:
-
-- The field is added as writable when the property is in `writable`.
-- The field is added as read only when the property is in `readOnly`.
-- The field is not added when the property is not in `writable` nor `readOnly`.
-
 ### Helper functions
 
 #### constString
