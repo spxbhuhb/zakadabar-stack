@@ -6,6 +6,9 @@ package zakadabar.stack.util
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityBoCompanion
+import kotlin.reflect.KClass
+
+actual inline fun <reified T : Any> KClass<T>.newInstance() = T::class.java.getDeclaredConstructor().newInstance()
 
 /**
  * Creates an instance of the given bo with defaults from the schema.
