@@ -25,10 +25,11 @@ import zakadabar.stack.frontend.util.plusAssign
 open class ZkArgPage<T>(
     val serializer: KSerializer<T>,
     val layout: ZkAppLayout? = null,
-    cssClass: ZkCssStyleRule? = null
+    css: ZkCssStyleRule? = null
 ) : ZkElement(), ZkAppRouting.ZkTarget, ZkAppTitleProvider {
 
-    var args: T? = null
+    var argsOrNull : T? = null
+    val args: T get() = argsOrNull!!
 
     override var viewName = "${this::class.simpleName}"
 
@@ -42,7 +43,7 @@ open class ZkArgPage<T>(
     }
 
     override fun route(routing: ZkAppRouting, state: ZkNavState): ZkElement {
-        args = try {
+        argsOrNull = try {
             state.args?.let { Json.decodeFromString(serializer, it) }
         } catch (ex: Exception) {
             log(ex)
@@ -55,7 +56,7 @@ open class ZkArgPage<T>(
     }
 
     init {
-        classList += cssClass ?: zkPageStyles.scrollable
+        classList += css ?: zkPageStyles.scrollable
     }
 
     override fun onResume() {
