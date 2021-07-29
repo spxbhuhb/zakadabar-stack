@@ -4,7 +4,7 @@
 package zakadabar.gradle.dependencies
 
 object Versions {
-    const val zakadabar = "2021.8.1-SNAPSHOT"
+    const val zakadabar = "2021.7.29"
 
     val isSnapshot = zakadabar.contains("SNAPSHOT")
 

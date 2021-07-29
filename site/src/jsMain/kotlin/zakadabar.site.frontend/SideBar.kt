@@ -54,6 +54,7 @@ class SideBar : ZkSideBar() {
                         + it.upgrade()
                     }
                 }
+                + item(BuildAndRelease)
                 + item(Versioning)
                 + item(Roadmap)
                 + item(ServicesAndSupport)

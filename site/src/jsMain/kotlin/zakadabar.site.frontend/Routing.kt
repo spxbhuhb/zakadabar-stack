@@ -34,6 +34,7 @@ class Routing : ZkAppRouting(DefaultLayout, Landing) {
         + Upgrade
         + BenderPage
         + Cookbook
+        + BuildAndRelease
 
         + ArgPage()
     }

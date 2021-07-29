@@ -12,16 +12,16 @@ sdk.dir=/Users/tiz/Library/Android/sdk
 ## Release Branch
 
 - create a release branch: `release-YYYY.MM.DD`
-- rename [Next](/doc/changelog/Next.md)` to `YYYY.MM.DD.md`, move to archive
+- copy [Next](/doc/changelog/Next.md) into `archive/YYYY.MM.DD.md`
+- delete current entries from `Next`
 - edit [TOC](/doc/changelog/TOC.md)
-    - move current to archive
-    - add 'YYYY.MM.DD.md' as current
-    - change title in the markdown file from Snapshot to YYYY.MM.DD
-- change version numbers in root `build.gradle.kts`
+    - change current to `archive/YYYY.MM.DD.md`
+    - add `YYYY.MM.DD.md` to archive
+- change version number in `buildSrc/../Versions.kt`
 
-## Build and Publish
+## Build And Publish
 
-```shell
+```text
 ./gradlew clean
 ./gradlew build
 ./gradlew publish
@@ -42,7 +42,7 @@ sdk.dir=/Users/tiz/Library/Android/sdk
 
 ## Site
 
-```shell
+```text
 ./gradlew site:zkBuild
 ```
 

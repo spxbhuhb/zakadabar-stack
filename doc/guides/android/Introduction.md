@@ -39,6 +39,15 @@ Gradle dependency:
 implementation("hu.simplexion.zakadabar:core-android:$stackVersion")
 ```
 
+If your Android project depends on another project that uses SQLite (a server project for
+example), you may have to exclude the serial driver from the dependency.
+
+```kotlin
+implementation(project(":demo:demo-sandbox")) {
+    exclude(group="org.xerial", module="sqlite-jdbc")
+}
+```
+
 Initialization: 
 
 ```kotlin

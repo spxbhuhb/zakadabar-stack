@@ -68,8 +68,6 @@ server += ContentNegotiation
 ```
 
 ```kotlin
-import zakadabar.stack.backend.ktor.*
-
 server += ContentNegotiation {
     json(Json)
 }
