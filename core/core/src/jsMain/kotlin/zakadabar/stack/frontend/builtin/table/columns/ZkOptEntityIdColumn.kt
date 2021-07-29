@@ -41,7 +41,7 @@ open class ZkOptEntityIdColumn<T : BaseBo, IT>(
 
     override fun matches(row: T, string: String?): Boolean {
         if (string == null) return false
-        return (string in prop.get(row).toString())
+        return (string in prop.get(row).toString().lowercase())
     }
 
     override fun exportCsv(row: T): String {

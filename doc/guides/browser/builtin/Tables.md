@@ -145,10 +145,24 @@ object Table : ZkPage() {
 }
 ```
 
-## Custom rendering
+## Custom Columns
 
-* Use the `custom` function to add a column with custom rendering.
-* Check the preload section about how to fetch data for building complex values.
+Add custom columns by:
+
+- using the `custom` shorthand, or
+- extending ZkColumn.
+
+## Shorthand
+
+Use the `custom` function to add a column:
+
+```kotlin
++ custom {
+    label = "Tags"
+    render = { + it.tags.joinToString(", ") }
+    matcher = { row, filter -> row.tags.firstOrNull { filter in it } != null}
+} size "max-content"
+```
 
 ## Preload
 

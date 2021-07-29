@@ -35,7 +35,7 @@ open class ZkStringColumn<T : BaseBo>(
 
     override fun matches(row: T, string: String?): Boolean {
         if (string == null) return false
-        return (string in prop.get(row))
+        return (string in prop.get(row).lowercase())
     }
 
     override fun exportCsv(row: T): String {

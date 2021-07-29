@@ -260,7 +260,7 @@ class ZkLiteResultSet(
             when (md.getColumnType(index)) {
                 Types.NULL -> return null
                 Types.INTEGER, Types.BIGINT -> date = Date(getLong(index))
-                Types.DATE -> date = getDate(index)?.let { Date(it.time) }
+                Types.DATE -> date = c.getDate(index)?.let { Date(it.time) }
                 else ->           // format 2011-07-11 11:36:30.009
                     try {
                         val dateFormat = SimpleDateFormat(DATE_PATTERN)
@@ -365,7 +365,7 @@ class ZkLiteResultSet(
         return when (c.getType(newIndex)) {
             4 -> ZkLiteBlob(c.getBlob(newIndex)) //CONVERT TO BYTE[] OBJECT
             2 -> c.getFloat(newIndex)
-            1 -> c.getInt(newIndex)
+            1 -> c.getLong(newIndex)
             3 -> c.getString(newIndex)
             0 -> null
             else -> c.getString(newIndex)

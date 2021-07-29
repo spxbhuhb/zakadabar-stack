@@ -36,7 +36,7 @@ open class ZkOptUuidColumn<T : BaseBo>(
 
     override fun matches(row: T, string: String?): Boolean {
         if (string == null) return false
-        return (prop.get(row)?.toString()?.contains(string)) ?: false
+        return (prop.get(row)?.toString()?.lowercase()?.contains(string)) ?: false
     }
 
     override fun exportCsv(row: T): String {

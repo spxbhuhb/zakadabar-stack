@@ -48,11 +48,13 @@ object Cookbook : ZkPathPage() {
             + custom {
                 label = "Targets"
                 render = { + it.targets.joinToString(", ") }
+                matcher = { row, filter -> row.targets.firstOrNull { filter in it } != null}
             } size 10.em
 
             + custom {
                 label = "Tags"
                 render = { + it.tags.joinToString(", ") }
+                matcher = { row, filter -> row.tags.firstOrNull { filter in it } != null}
             } size "max-content"
         }
 
