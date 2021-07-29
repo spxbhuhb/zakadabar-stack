@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.demo.backend
 
-import zakadabar.cookbook.sqlite.bundle.business.ExampleBl
+import zakadabar.cookbook.entity.builtin.ExampleBl
 import zakadabar.cookbook.sqlite.bundle.business.ExampleBundleBl
 import zakadabar.stack.backend.RoutedModule
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizerProvider

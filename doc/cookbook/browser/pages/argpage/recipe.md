@@ -2,7 +2,7 @@
 
 You can use `ZkArgPage` to pass and receive URL parameters in a type-safe way.
 
-[Demo](https://zakadabar.io:3000/en/ArgPage)
+[Demo](https://zakadabar.io/en/ArgPage)
 
 ## Guides
 
@@ -10,9 +10,8 @@ You can use `ZkArgPage` to pass and receive URL parameters in a type-safe way.
 
 ## JavaScript
 
-[ArgPage.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/pages/argpage/ArgPage.kt)
-
-[Args.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/pages/argpage/Args.kt)
+- [ArgPage.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/pages/argpage/ArgPage.kt)
+- [Args.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/pages/argpage/Args.kt)
 
 
 

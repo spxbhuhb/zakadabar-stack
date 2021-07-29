@@ -20,6 +20,7 @@ import io.ktor.websocket.*
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 import zakadabar.stack.backend.RoutedModule
+import zakadabar.stack.backend.Server
 import zakadabar.stack.backend.Server.Companion.staticRoot
 import zakadabar.stack.backend.authorize.LoginTimeout
 import zakadabar.stack.backend.routingLogger
@@ -31,18 +32,41 @@ import zakadabar.stack.util.InstanceStore
 import java.io.File
 import java.time.Duration
 
+class KtorFeatureWithConfig<B : Any>(
+    val feature : ApplicationFeature<Application,B,*>,
+    val config : (B.() -> Unit)?
+)
+
+val features = mutableListOf<KtorFeatureWithConfig<*>>()
+
+operator fun Server.plusAssign(feature : ApplicationFeature<Application,Any,*>) {
+    features += KtorFeatureWithConfig(feature) { }
+}
+
+operator fun Server.plusAssign(feature : KtorFeatureWithConfig<*>) {
+    features += feature
+}
+
+operator fun <B : Any, F : ApplicationFeature<Application,B,*>> F.invoke(config : B.() -> Unit) =
+    KtorFeatureWithConfig(this, config)
+
 /**
  * Build a Ktor server instance.
  */
 open class KtorServerBuilder(
     open val config: ServerSettingsBo,
-    open val modules: InstanceStore<CommonModule>
+    open val modules: InstanceStore<CommonModule>,
 ) {
 
     fun build() = embeddedServer(Netty, port = config.ktor.port) {
 
+        features.forEach {
+            @Suppress("UNCHECKED_CAST")
+            install(it.feature, it.config as (Any.() -> Unit))
+        }
+
         install(ContentNegotiation) {
-            json(Json { })
+            json(Json)
         }
 
         install(Compression) {
