@@ -10,58 +10,86 @@ import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.application.ZkNavState
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
 import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
 import zakadabar.stack.frontend.util.encodeURIComponent
 import zakadabar.stack.frontend.util.log
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.stack.frontend.util.newInstance
 
 /**
- * Provides common functions used in most page implementations which
- * receive arguments in the URL.
+ * Base class for pages that receive parameters in the URL, such as queries
+ * or pages with state that can be opened directly with the URL.
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate") // API class
-open class ZkArgPage<T>(
-    val serializer: KSerializer<T>,
-    val layout: ZkAppLayout? = null,
-    css: ZkCssStyleRule? = null
-) : ZkElement(), ZkAppRouting.ZkTarget, ZkAppTitleProvider {
+open class ZkArgPage<T>() : ZkPage() {
 
+    lateinit var serializer: KSerializer<T>
+
+    /**
+     * The arguments passed to this page in the URL. Null, when the arguments cannot
+     * be loaded or are not in the URL.
+     */
     var argsOrNull : T? = null
+
+    /**
+     * The arguments passed to this page in the URL. When the arguments cannot
+     * be loaded or are not in the URL access throws an exception.
+     */
     val args: T get() = argsOrNull!!
 
-    override var viewName = "${this::class.simpleName}"
+    /**
+     * When true (default) URL decoding exceptions at caught and are treated
+     * as there would be no arguments in the URL. When false, the exceptions
+     * go though.
+     */
+    open val hideUrlError = true
 
-    override var setAppTitle = true
-    override var titleText: String? = null
-    override var titleElement: ZkAppTitle? = null
+    constructor(
+        serializer : KSerializer<T>,
+        layout: ZkAppLayout? = null,
+        css: ZkCssStyleRule? = null
+    ) : this() {
+        init(serializer, layout, css)
+    }
 
-    open fun open(args: T) {
-        val a = encodeURIComponent(Json.encodeToString(serializer, args))
-        application.changeNavState(this, "args=$a")
+    fun init(
+        serializer: KSerializer<T>,
+        layout: ZkAppLayout? = null,
+        css: ZkCssStyleRule? = null
+    ) {
+        this.serializer = serializer
+        init(layout, css)
     }
 
     override fun route(routing: ZkAppRouting, state: ZkNavState): ZkElement {
-        argsOrNull = try {
+        val argsOrNull = try {
             state.args?.let { Json.decodeFromString(serializer, it) }
         } catch (ex: Exception) {
-            log(ex)
-            null
+            if (hideUrlError) {
+                log(ex)
+                null
+            } else {
+                throw ex
+            }
         }
 
-        if (layout != null) routing.nextLayout = layout
-
-        return this
-    }
-
-    init {
-        classList += css ?: zkPageStyles.scrollable
+        return if (factory) {
+            this::class.newInstance().also {
+                it.init(serializer, layout, css)
+                it.argsOrNull = argsOrNull
+            }
+        } else {
+            this
+        }
     }
 
     override fun onResume() {
         super.onResume()
         setAppTitleBar()
+    }
+
+    open fun open(args: T) {
+        val a = encodeURIComponent(Json.encodeToString(serializer, args))
+        application.changeNavState(this, "", "args=$a")
     }
 
 }
