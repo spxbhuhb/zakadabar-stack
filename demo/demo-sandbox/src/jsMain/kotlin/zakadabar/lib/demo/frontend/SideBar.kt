@@ -5,7 +5,6 @@ package zakadabar.lib.demo.frontend
 
 import kotlinx.browser.window
 import zakadabar.cookbook.sqlite.bundle.ExampleBundleCrud
-import zakadabar.cookbook.sqlite.bundle.ExampleCrud
 import zakadabar.lib.accounts.data.LogoutAction
 import zakadabar.lib.accounts.frontend.accounts.Account
 import zakadabar.lib.accounts.frontend.accounts.AccountSecure
@@ -31,7 +30,6 @@ class SideBar : ZkSideBar() {
 
         ifNotAnonymous {
             + item<DemoCrud>()
-            + item<ExampleCrud>()
             + item<ExampleBundleCrud>()
         }
 
