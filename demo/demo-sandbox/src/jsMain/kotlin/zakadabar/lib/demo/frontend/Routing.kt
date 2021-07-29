@@ -5,7 +5,6 @@
 package zakadabar.lib.demo.frontend
 
 import zakadabar.cookbook.sqlite.bundle.ExampleBundleCrud
-import zakadabar.cookbook.sqlite.bundle.ExampleCrud
 import zakadabar.lib.demo.frontend.pages.DemoCrud
 import zakadabar.stack.frontend.application.ZkAppRouting
 
@@ -15,7 +14,6 @@ class Routing : ZkAppRouting(DefaultLayout, Home) {
         + Home
         + DemoCrud()
 
-        + ExampleCrud()
         + ExampleBundleCrud()
 
         zakadabar.lib.accounts.frontend.install(this)

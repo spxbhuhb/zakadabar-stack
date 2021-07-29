@@ -12,8 +12,8 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.android.jdbc.zklite.connectSqlite
 import zakadabar.android.jdbc.zklite.databasesPath
+import zakadabar.cookbook.entity.builtin.ExamplePa
 import zakadabar.cookbook.sqlite.bundle.ExampleBundle
-import zakadabar.cookbook.sqlite.bundle.persistence.ExamplePa
 import zakadabar.lib.accounts.backend.pa.AccountPrivateExposedTableCommon
 import zakadabar.lib.blobs.sqlite.deployBundle
 import zakadabar.lib.demo.backend.DemoBlobExposedPa
@@ -41,9 +41,9 @@ class MainActivity : AppCompatActivity() {
 
         CommBase.baseUrl = "http://10.0.2.2:8080"
 
-        //val db = exposed()
+        val db = exposed()
 
-        downloadDb()
+        //downloadDb()
     }
 
     fun exposed(): Database {
@@ -74,6 +74,11 @@ class MainActivity : AppCompatActivity() {
 
         if (readBack.name != created.name) throw RuntimeException("exposed test failed")
 
+        pa.withTransaction {
+            readBack.name = "Updated Hello"
+            pa.update(readBack)
+        }
+
         val blobPa = DemoBlobExposedPa()
 
         val text = "almafa"
@@ -98,6 +103,8 @@ class MainActivity : AppCompatActivity() {
         val readBackText = readBackBlob.decodeToString()
 
         if (text != readBackText) throw RuntimeException("exposed test failed")
+
+        connection = DriverManager.getConnection(db.url)
 
         return db
     }

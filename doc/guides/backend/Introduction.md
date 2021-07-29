@@ -47,5 +47,32 @@ At the end of server startup the `onBuildServer` function of the server creates
 a [KtorServerBuilder](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/ktor/KtorServerBuilder.kt)
 and calls its `build` function to build the Ktor instance.
 
-To change the Ktor configuration you can simply override `onBuildServer` to
-build a customized Ktor.
+### Add Ktor Plugins
+
+There are two ways to add Ktor plugins to the server: 
+
+- extend the `Server` and `KtorServerBuilder` classes,
+- use the shorthand as described below.
+
+To use the shorthand you have to add an import (IDEA cannot figure
+out what to import automatically):
+
+```kotlin
+import zakadabar.stack.backend.ktor.*
+```
+
+Then add the plugins to `server`:
+
+```kotlin
+server += ContentNegotiation
+```
+
+```kotlin
+import zakadabar.stack.backend.ktor.*
+
+server += ContentNegotiation {
+    json(Json)
+}
+```
+
+These result in an `install` call during Ktor configuration.

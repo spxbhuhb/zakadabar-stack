@@ -125,6 +125,14 @@ abstract class ZkFieldBase<FT : BaseBo, DT>(
         }
     }
 
+    /**
+     * Form calls this method after an `options` block is added to the
+     * field.
+     */
+    open fun onAfterOptions() {
+
+    }
+
     open fun focusEvents(element: HTMLElement) {
         on(element, "blur") {
             form.validate()

@@ -513,7 +513,7 @@ class ZkCssStyleRule(
     var gridGap
         get() = styles["grid-gap"]
         set(value) {
-            styles["grid-column"] = value
+            styles["grid-gap"] = value
         }
 
 

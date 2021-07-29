@@ -24,11 +24,12 @@ import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.zkFormStyles
 import zakadabar.stack.frontend.util.plusAssign
-import kotlin.reflect.KMutableProperty0
+import kotlin.reflect.KMutableProperty
+import kotlin.reflect.KProperty0
 
 open class ZkEntityIdField<T : BaseBo>(
     form: ZkForm<T>,
-    private val prop: KMutableProperty0<EntityId<T>>
+    private val prop: KProperty0<EntityId<T>>
 ) : ZkFieldBase<T, EntityId<T>>(
     form = form,
     propName = prop.name
@@ -36,7 +37,7 @@ open class ZkEntityIdField<T : BaseBo>(
 
     private val input = document.createElement("input") as HTMLInputElement
 
-    override var readOnly: Boolean = true
+    override var readOnly: Boolean = prop !is KMutableProperty<*>
 
     override fun buildFieldValue() {
         input.classList += zkFormStyles.disabledString

@@ -37,7 +37,7 @@ open class ZkOptLocalDateTimeColumn<T : BaseBo>(
 
     override fun matches(row: T, string: String?): Boolean {
         if (string == null) return false
-        return (string in format(row))
+        return (string in format(row).lowercase())
     }
 
     override fun exportCsv(row: T): String {

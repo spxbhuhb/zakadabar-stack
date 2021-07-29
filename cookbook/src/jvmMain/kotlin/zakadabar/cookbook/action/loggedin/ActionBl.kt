@@ -10,10 +10,11 @@ import zakadabar.stack.backend.authorize.authorize
 import zakadabar.stack.backend.business.ActionBusinessLogicBase
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
+import zakadabar.stack.data.builtin.LongValue
 import zakadabar.stack.util.PublicApi
 
 @PublicApi
-class ActionBl : ActionBusinessLogicBase<Action, Long>(
+class ActionBl : ActionBusinessLogicBase<Action, LongValue>(
     actionBoClass = Action::class
 ) {
 
@@ -23,6 +24,6 @@ class ActionBl : ActionBusinessLogicBase<Action, Long>(
         }
     }
 
-    override fun execute(executor: Executor, bo: Action): Long = 43
+    override fun execute(executor: Executor, bo: Action): LongValue = LongValue(43)
 
 }

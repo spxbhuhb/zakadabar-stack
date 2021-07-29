@@ -123,6 +123,7 @@ open class ZkTableStyles : ZkCssStyleSheet() {
 
         on(" tr") {
             + Display.contents
+            + Cursor.pointer
         }
 
         on(" tr:hover td") {

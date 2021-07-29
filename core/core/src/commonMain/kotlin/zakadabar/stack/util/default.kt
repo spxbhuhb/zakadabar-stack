@@ -4,5 +4,8 @@
 package zakadabar.stack.util
 
 import zakadabar.stack.data.BaseBo
+import kotlin.reflect.KClass
+
+expect inline fun <reified T : Any> KClass<T>.newInstance(): T
 
 expect inline fun <reified T : BaseBo> default(builder: T.() -> Unit): T

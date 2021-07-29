@@ -74,6 +74,11 @@ class SiteMarkdownContext(
 
         return when (type) {
 
+            // cookbook
+            // "ConditionalFormExample" -> ZkElement(htmlElement) build { + ConditionalFormExample() }
+
+            // lib:examples
+
             "ButtonExamples" -> ButtonExamples(htmlElement, flavour = flavour)
 
             "CrudBuiltinExample" -> CrudBuiltinExample(htmlElement)

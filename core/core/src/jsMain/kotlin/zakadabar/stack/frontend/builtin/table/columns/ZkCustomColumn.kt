@@ -12,9 +12,15 @@ open class ZkCustomColumn<T : BaseBo>(
 ) : ZkColumn<T>(table) {
 
     lateinit var render: ZkElement.(T) -> Unit
+    var matcher: (row: T, string: String) -> Boolean = { _,_ -> false }
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         builder.render(row)
+    }
+
+    override fun matches(row: T, string: String?): Boolean {
+        if (string == null) return false
+        return matcher(row, string)
     }
 
 }

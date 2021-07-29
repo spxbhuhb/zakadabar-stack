@@ -11,7 +11,7 @@ external fun decodeURIComponent(encodedURI: String): String
 /**
  * Creates a new instance of the given class.
  */
-fun <T : Any> KClass<T>.newInstance(): T = callCtor(this.js) as T
+actual inline fun <reified T : Any> KClass<T>.newInstance(): T = callCtor(this.js) as T
 
 /**
  * Creates an instance of the given Bo with the default set in the

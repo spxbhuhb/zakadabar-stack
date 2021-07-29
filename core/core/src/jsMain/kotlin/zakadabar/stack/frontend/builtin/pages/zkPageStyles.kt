@@ -14,9 +14,11 @@ class ZkPageStyles : ZkCssStyleSheet() {
      * The overflow is `hidden`.
      */
     val fixed by cssClass {
+        + Position.relative
+        + Overflow.hidden
+
         height = 100.percent
         maxHeight = 100.percent
-        + Overflow.hidden
     }
 
     /**

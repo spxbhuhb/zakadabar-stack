@@ -145,6 +145,7 @@ Types that support the property shorthand:
 
 - own entity id
 - Boolean
+- EntityId, EntityId?  
 - Enum, Enum?
 - Int, Int?
 - Long, Long?
@@ -153,6 +154,28 @@ Types that support the property shorthand:
 - Secret, Secret?
 - String, String?
 - UUID, UUID?
+
+#### Select For References
+
+Add a read-write select for an `EntityId` field use the code below. This
+results in a select element that
+
+- automatically executes:
+    - `comm.all()` for the referenced type if the field is read-write
+    - `comm.read(id)` for the referenced type if the field is read-only
+- creates the option labels by calling the function passed to `selectBy`
+
+Read-Write version:
+
+```kotlin
++ bo::referenceField options { selectBy { it.name } }
+```
+
+Read only version:
+
+```kotlin
++ bo::referenceField options { selectBy { it.name } readOnly true }
+```
 
 ### Helper functions
 

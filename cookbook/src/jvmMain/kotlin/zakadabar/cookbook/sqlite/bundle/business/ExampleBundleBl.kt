@@ -4,10 +4,10 @@
 package zakadabar.cookbook.sqlite.bundle.business
 
 import org.jetbrains.exposed.sql.transactions.transaction
+import zakadabar.cookbook.entity.builtin.ExamplePa
+import zakadabar.cookbook.entity.builtin.ExampleTable
 import zakadabar.cookbook.sqlite.bundle.ExampleBundle
 import zakadabar.cookbook.sqlite.bundle.persistence.ExampleBundlePa
-import zakadabar.cookbook.sqlite.bundle.persistence.ExamplePa
-import zakadabar.cookbook.sqlite.bundle.persistence.ExampleTable
 import zakadabar.lib.blobs.sqlite.buildBundle
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.business.EntityBusinessLogicBase

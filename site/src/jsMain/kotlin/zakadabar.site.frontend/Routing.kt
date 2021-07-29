@@ -4,6 +4,7 @@
 
 package zakadabar.site.frontend
 
+import zakadabar.cookbook.browser.pages.argpage.ArgPage
 import zakadabar.site.frontend.cookbook.Cookbook
 import zakadabar.site.frontend.pages.*
 import zakadabar.stack.frontend.application.ZkAppRouting
@@ -33,6 +34,8 @@ class Routing : ZkAppRouting(DefaultLayout, Landing) {
         + Upgrade
         + BenderPage
         + Cookbook
+
+        + ArgPage()
     }
 
 }
