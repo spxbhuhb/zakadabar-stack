@@ -260,7 +260,7 @@ class ZkLiteResultSet(
             when (md.getColumnType(index)) {
                 Types.NULL -> return null
                 Types.INTEGER, Types.BIGINT -> date = Date(getLong(index))
-                Types.DATE -> date = c.getDate(index)?.let { Date(it.time) }
+                Types.DATE -> date = c.getLong(index).let { Date(it) }
                 else ->           // format 2011-07-11 11:36:30.009
                     try {
                         val dateFormat = SimpleDateFormat(DATE_PATTERN)
