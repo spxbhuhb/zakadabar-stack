@@ -10,8 +10,8 @@ Example (assumes role based, default authorization):
 
 ```kotlin
 override val authorizer : Authorizer<TestBo> = SimpleRoleAuthorizer {
-    allReads = StackRoles.siteMember
-    allWrites = StackRoles.siteAdmin
+    allReads = appRoles.siteMember
+    allWrites = appRoles.securityOfficer
 }
 ```
 

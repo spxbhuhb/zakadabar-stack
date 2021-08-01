@@ -38,7 +38,7 @@ open class ClassGenerator {
     // -------------------------------------------------------------------------
 
 fun commonGenerator() = """
-package $packageName.data
+package $packageName
 
 import kotlinx.serialization.Serializable
 import zakadabar.stack.data.entity.EntityBo
@@ -47,15 +47,6 @@ import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoSchema
 ${generators.map { it.commonImport() }.flatten().distinct().joinToString("\n")}
 
-/**
- * Business Object of $boName.
- * 
- * Generated with Bender at ${Clock.System.now()}.
- *
- * Please do not implement business logic in this class. If you add fields,
- * please check the frontend table and form, and also the persistence API on 
- * the backend.
- */
 @Serializable
 class ${boName}(
 
@@ -80,22 +71,16 @@ class ${boName}(
     // -------------------------------------------------------------------------
 
 fun browserFrontendGenerator() = """
-package ${packageName}.frontend.pages
+package ${packageName}.browser
 
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.table.ZkTable
-import zakadabar.stack.frontend.application.translate
+import zakadabar.stack.resources.localized
 import zakadabar.stack.frontend.application.target
-import ${packageName}.data.$boName
-
+import ${packageName}.$boName
 ${generators.map { it.browserImport() }.flatten().distinct().joinToString("\n")}
 
-/**
- * CRUD target for [$boName].
- * 
- * Generated with Bender at ${Clock.System.now()}.
- */
 class $browserCrudName : ZkCrudTarget<$boName>() {
     init {
         companion = $boName.Companion
@@ -105,16 +90,11 @@ class $browserCrudName : ZkCrudTarget<$boName>() {
     }
 }
 
-/**
- * Form for [$boName].
- * 
- * Generated with Bender at ${Clock.System.now()}.
- */
 class $browserFormName : ZkForm<$boName>() {
     override fun onCreate() {
         super.onCreate()
 
-        build(translate<$browserFormName>()) {
+        build(localized<$browserFormName>()) {
             + section {
                 ${generators.joinToString("\n                ") { it.browserForm() }}
             }
@@ -122,18 +102,13 @@ class $browserFormName : ZkForm<$boName>() {
     }
 }
 
-/**
- * Table for [$boName].
- * 
- * Generated with Bender at ${Clock.System.now()}.
- */
 class $browserTableName : ZkTable<$boName>() {
 
     override fun onConfigure() {
 
         crud = target<$browserCrudName>()
 
-        titleText = translate<$browserTableName>()
+        titleText = localized<$browserTableName>()
 
         add = true
         search = true
@@ -151,23 +126,18 @@ class $browserTableName : ZkTable<$boName>() {
     // -------------------------------------------------------------------------
 
 fun businessLogicGenerator() = """
-package ${packageName}.backend
+package $packageName
 
 import zakadabar.stack.backend.authorize.Authorizer
 import zakadabar.stack.backend.authorize.EmptyAuthorizer
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import ${packageName}.data.$boName
+import ${packageName}.$boName
 
-/**
- * Business Logic for ${boName}.
- * 
- * Generated with Bender at ${Clock.System.now()}.
- */
 open class $businessLogicName : EntityBusinessLogicBase<${boName}>(
     boClass = ${boName}::class
 ) {
 
-    override val pa = ${baseName}ExposedPaGen()
+    override val pa = ${baseName}Pa()
 
     override val authorizer : Authorizer<${boName}> = EmptyAuthorizer()
     
@@ -179,28 +149,20 @@ open class $businessLogicName : EntityBusinessLogicBase<${boName}>(
     // -------------------------------------------------------------------------
 
 fun exposedPaGenerator() = """
-package ${packageName}.backend
+package $packageName
 
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import zakadabar.stack.backend.exposed.entityId
 import zakadabar.stack.backend.exposed.ExposedPaBase
 import zakadabar.stack.backend.exposed.ExposedPaTable
-import ${packageName}.data.$boName
+import ${packageName}.$boName
 ${generators.map { it.exposedPaImport() }.flatten().distinct().joinToString("\n")}
 
-/**
- * Exposed based Persistence API for ${boName}.
- * 
- * Generated with Bender at ${Clock.System.now()}.
- *
- * **IMPORTANT** Please do not modify this class manually, see extending patterns below.
- * 
- * - If you need other fields, add them to the business object and then re-generate.
- * - If you need other functions, please extend with `Gen` removed from the name.
- */
-open class ${baseName}ExposedPaGen : ExposedPaBase<$boName,${baseName}ExposedTableGen>(
-    table = ${baseName}ExposedTableGen
+open class ${baseName}Pa(
+    table : ${baseName}Table = ${baseName}Table()
+) : ExposedPaBase<$boName,${baseName}Table>(
+    table = table
 ) {
     override fun ResultRow.toBo() = $boName(
         ${generators.joinToString(",\n        ") { it.exposedTableToBo() }}
@@ -211,20 +173,13 @@ open class ${baseName}ExposedPaGen : ExposedPaBase<$boName,${baseName}ExposedTab
     }
 }
 
-/**
- * Exposed based SQL table for ${boName}.
- * 
- * Generated with Bender at ${Clock.System.now()}.
- *
- * **IMPORTANT** Please do not modify this class manually. 
- * 
- * If you need other fields, add them to the business object and then re-generate.
- */
-object ${baseName}ExposedTableGen : ExposedPaTable<$boName>(
-    tableName = "${baseName.camelToSnakeCase()}"
+open class ${baseName}Table(
+    tableName : String = "${baseName.camelToSnakeCase()}"
+) : ExposedPaTable<$boName>(
+    tableName = tableName
 ) {
 
-    ${generators.mapNotNull { it.exposedTable()?.let { dl -> "internal $dl" }  }.joinToString("\n    ")}
+    ${generators.mapNotNull { it.exposedTable()  }.joinToString("\n    ")}
 
 }
 """.trimIndent()

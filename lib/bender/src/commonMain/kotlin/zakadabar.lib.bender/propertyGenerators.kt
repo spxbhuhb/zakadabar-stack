@@ -239,7 +239,7 @@ open class EntityIdPropertyGenerator(
         if (property.name == "id") {
             null
         } else {
-            "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutBo()}ExposedTableGen)$exposedTableOptional"
+            "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutBo()}Table)$exposedTableOptional"
         }
 
     override fun exposedTableToBo() =
@@ -250,7 +250,7 @@ open class EntityIdPropertyGenerator(
             null
         } else {
             if (property.optional) {
-                "this[table.${property.name}] = bo.${property.name}?.let { EntityID(it.toLong(), ${property.kClassName.withoutBo()}ExposedTableGen) }"
+                "this[table.${property.name}] = bo.${property.name}?.let { EntityID(it.toLong(), ${property.kClassName.withoutBo()}Table) }"
             } else {
                 "this[table.${property.name}] = bo.${property.name}.toLong()"
             }
