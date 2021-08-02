@@ -41,6 +41,14 @@ class OptUuidBoSchemaEntry(val kProperty: KMutableProperty0<UUID?>) : BoSchemaEn
         kProperty.set(defaultValue)
     }
 
+    override fun decodeFromText(text : String?) : UUID? {
+        return text?.let { UUID(text) }
+    }
+
+    override fun setFromText(text: String?) {
+        kProperty.set(decodeFromText(text))
+    }
+
     override fun isOptional() = true
 
     override fun push(bo: BoProperty) {

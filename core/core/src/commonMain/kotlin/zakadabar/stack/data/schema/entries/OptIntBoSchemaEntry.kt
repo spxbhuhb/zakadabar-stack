@@ -97,6 +97,14 @@ class OptIntBoSchemaEntry(val kProperty: KMutableProperty0<Int?>) : BoSchemaEntr
         kProperty.set(defaultValue)
     }
 
+    override fun decodeFromText(text : String?) : Int? {
+        return text?.toInt()
+    }
+
+    override fun setFromText(text: String?) {
+        kProperty.set(decodeFromText(text))
+    }
+
     override fun isOptional() = true
 
     override fun push(bo: BoProperty) {

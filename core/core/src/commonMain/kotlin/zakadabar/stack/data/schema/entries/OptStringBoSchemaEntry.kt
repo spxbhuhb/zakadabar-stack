@@ -98,6 +98,14 @@ class OptStringBoSchemaEntry(val kProperty: KMutableProperty0<String?>) : BoSche
         kProperty.set(defaultValue)
     }
 
+    override fun decodeFromText(text : String?) : String? {
+        return text
+    }
+
+    override fun setFromText(text: String?) {
+        kProperty.set(decodeFromText(text))
+    }
+
     override fun isOptional() = true
 
     override fun push(bo: BoProperty) {

@@ -131,6 +131,14 @@ class InstantBoSchemaEntry(val kProperty: KMutableProperty0<Instant>) : BoSchema
         kProperty.set(defaultValue ?: Clock.System.now())
     }
 
+    override fun decodeFromText(text : String?) : Instant {
+        return Instant.parse(text!!)
+    }
+
+    override fun setFromText(text: String?) {
+        kProperty.set(decodeFromText(text))
+    }
+
     override fun isOptional() = false
 
     override fun push(bo: BoProperty) {

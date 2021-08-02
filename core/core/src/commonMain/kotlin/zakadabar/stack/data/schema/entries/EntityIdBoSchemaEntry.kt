@@ -75,6 +75,15 @@ class EntityIdBoSchemaEntry<T : Any>(
         kProperty.set(defaultValue)
     }
 
+    override fun decodeFromText(text : String?) : EntityId<T> {
+        requireNotNull(text)
+        return EntityId(text)
+    }
+
+    override fun setFromText(text: String?) {
+        kProperty.set(decodeFromText(text))
+    }
+
     override fun isOptional() = false
 
     override fun push(bo: BoProperty) {

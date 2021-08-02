@@ -1,17 +1,16 @@
 # Settings
 
-On the backend, settings are used customize the backend for specific deployments.
+Settings provide customization for specific deployments.
 
-There are two layers of settings:
+There are three layers:
 
 1. defaults (hard-coded),
-1. configuration files.
-
-**Override of nested instances and enums is not supported yet.**
+1. configuration files,
+1. environment variables.
 
 ## Startup
 
-When the backend starts, it looks for the server settings file:
+When the application starts, it looks for the server settings file:
 
 1. value of the "--settings" program argument
 2. one of the files:
@@ -26,12 +25,14 @@ When the backend starts, it looks for the server settings file:
 ```
 
 The directory that contains the server settings file becomes the
-"settings directory". All other setting files has to be in this directory.
+"settings directory". All other setting files have to be in this directory.
 
-1. The backend stops if there is no server settings file.
-1. Once the file is located, the backend loads the content of it into a
+1. The application stops if there is no server settings file.
+1. [Server](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/Server.kt) uses 
+   [ServerSettingLoader](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/setting/ServerSettingLoader.kt) 
+   to load the server settings file into a
    [ServerSettingsBo](/core/core/src/commonMain/kotlin/zakadabar/stack/data/builtin/settings/ServerSettingsBo.kt).
-1. From the server settings the database connection is initialized.
+1. The application initializes the database connection with the loaded settings.
 
 ## Write a Setting BO
 
@@ -96,6 +97,26 @@ Setting BOs are loaded with the following mechanism:
 1. Create a setting BO instance with the default values.
 1. Check if there is a file in the settings directory (see above) with the name `namespace` + `.yaml` or
    `namespace` + `.yml`. If there is such a file, load its content into the settings instance.
+1. Merge environment variables.   
 1. Validate the settings by checking the `isValid` property of the settings BO.
 
 If any of the following steps produces an error, an exception is thrown and typically the server won't start.
+
+## Environment Variables
+
+The setting loader merges environment variables into setting BOs. If the variable
+does not exist, the appropriate BO field remains unchanged.
+
+The merge of environment variables does not happen if you start application with 
+the `--ignore-environment` option.
+
+Environment variable name construction:
+
+1. uppercase `namespace` and the `propertyName`
+1. replace `.` with `_` in the `namespace`
+1. if namespace is not empty: `<namespace>_<propertyName>` else `propertyName`
+
+Environment variable merge **does not support** override of:
+
+- nested instances
+- lists

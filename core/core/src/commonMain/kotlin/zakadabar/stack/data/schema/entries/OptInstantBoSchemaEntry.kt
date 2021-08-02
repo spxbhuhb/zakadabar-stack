@@ -130,6 +130,14 @@ class OptInstantBoSchemaEntry(val kProperty: KMutableProperty0<Instant?>) : BoSc
         kProperty.set(defaultValue)
     }
 
+    override fun decodeFromText(text : String?) : Instant? {
+        return text?.let { Instant.parse(text) }
+    }
+
+    override fun setFromText(text: String?) {
+        kProperty.set(decodeFromText(text))
+    }
+
     override fun isOptional() = true
 
     override fun push(bo: BoProperty) {

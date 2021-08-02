@@ -2,6 +2,21 @@
 
 This page contains the changes included in the next release.
 
+## Core
+
+added:
+
+- merge environment variables into settings
+- `--ignore-environment` server option to ignore environment variables
+- `critical` function to provide a multiplatform synchronization primitive
+- `BoSchemaEntry<T>.decodeFromText` 
+- `BoSchemaEntry<T>.setFromText`
+- `EntityBoCompanion<T>.create(func: T.() -> Unit)` convenience function
+
+changed:
+
+- `ExposedPaTable.table` is now open
+
 ## Bender
 
 changed:

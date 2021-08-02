@@ -92,6 +92,14 @@ class DoubleBoSchemaEntry(val kProperty: KMutableProperty0<Double>) : BoSchemaEn
         kProperty.set(defaultValue)
     }
 
+    override fun decodeFromText(text : String?) : Double {
+        return text!!.toDouble()
+    }
+
+    override fun setFromText(text: String?) {
+        kProperty.set(decodeFromText(text))
+    }
+
     override fun isOptional() = false
 
     override fun push(bo: BoProperty) {

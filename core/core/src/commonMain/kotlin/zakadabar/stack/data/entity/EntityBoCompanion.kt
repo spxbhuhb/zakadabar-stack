@@ -32,5 +32,4 @@ abstract class EntityBoCompanion<T : EntityBo<T>>(
     suspend fun all() = comm.all()
 
     suspend fun allAsMap() = comm.all().associateBy { it.id }
-
 }

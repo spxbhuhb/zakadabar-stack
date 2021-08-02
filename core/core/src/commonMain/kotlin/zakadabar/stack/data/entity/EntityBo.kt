@@ -18,6 +18,11 @@ interface EntityBo<T> : BaseBo {
 
     suspend fun update() = comm().update(this as T)
 
+    suspend fun update(func : T.() -> Unit) {
+        (this as T).func()
+        update()
+    }
+
     suspend fun delete() = comm().delete(id)
 
 }

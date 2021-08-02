@@ -133,6 +133,14 @@ class LocalDateTimeBoSchemaEntry(val kProperty: KMutableProperty0<LocalDateTime>
         kProperty.set(defaultValue ?: Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()))
     }
 
+    override fun decodeFromText(text : String?) : LocalDateTime {
+        return LocalDateTime.parse(text!!)
+    }
+
+    override fun setFromText(text: String?) {
+        kProperty.set(decodeFromText(text))
+    }
+
     override fun isOptional() = false
 
     override fun push(bo: BoProperty) {

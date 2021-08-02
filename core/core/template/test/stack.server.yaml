@@ -1,3 +1,4 @@
+# This configuration is used for unit tests.
 database:
   driverClassName: org.h2.Driver
   jdbcUrl: "jdbc:h2:mem:"

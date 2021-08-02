@@ -28,10 +28,14 @@ import kotlin.reflect.KClass
 
 /**
  * BL for setting management.
+ *
+ * @param  useEnv  When true, environment variables are merged into setting BOs.
  */
-class SettingBl : EntityBusinessLogicBase<SettingBo>(
-    boClass = SettingBo::class
-), SettingProvider, RoutedModule {
+open class SettingBl(
+    val useEnv : Boolean = true
+) : EntityBusinessLogicBase<SettingBo>(
+    boClass = SettingBo::class,
+), SettingProvider, RoutedModule, SystemEnvHandler {
 
     override val pa = EmptyPersistenceApi<SettingBo>()
 
@@ -39,9 +43,9 @@ class SettingBl : EntityBusinessLogicBase<SettingBo>(
 
     override val router = EmptyRouter<SettingBo>()
 
-    private val buildMutex = Mutex()
+    open val buildMutex = Mutex()
 
-    private val instances = mutableMapOf<Pair<String, KClass<out BaseBo>>, Pair<SettingBo, BaseBo>>()
+    open val instances = mutableMapOf<Pair<String, KClass<out BaseBo>>, Pair<SettingBo, BaseBo>>()
 
     @Suppress("UNCHECKED_CAST") // key contains class
     override fun <T : BaseBo> get(default: T, namespace: String, serializer: KSerializer<T>) = runBlocking {
@@ -50,46 +54,35 @@ class SettingBl : EntityBusinessLogicBase<SettingBo>(
 
         buildMutex.withLock {
 
-            val entry = instances[key]
-            var instance = entry?.second as? T
+            instances[key]?.let { return@runBlocking it.second as T }
 
-            if (instance != null) return@runBlocking instance
+            val fromFile = loadFile(namespace, serializer)
 
-            // this is an old code that loaded settings from SQL, as of know this is not
-            // supported because we don't have the necessary form building capabilities
+            val instance: T
+            val source: SettingSource
 
-//            val bo = transaction {
-//                SettingDao
-//                    .find { (SettingTable.namespace eq namespace) and (SettingTable.className eq default::class.simpleName !!) }
-//                    .firstOrNull()
-//                    ?.toBo()
-//            }
-//
-//            if (bo != null) {
-//                val descriptor = Json.decodeFromString(BoDescriptor.serializer(), bo.descriptor !!)
-//                instance = default
-//                instance.schema().push(descriptor)
-//                instances[key] = bo to instance
-//                return@runBlocking instance
-//            }
-
-            instance = loadFile(namespace, serializer)
-
-            if (instance != null) {
-                instance.schema().validate()
-                instances[key] = buildBo(SettingSource.File, instance, namespace) to instance
-                return@runBlocking instance
+            if (fromFile == null) {
+                instance = default
+                source = SettingSource.Default
+            } else {
+                instance = fromFile
+                source = SettingSource.File
             }
 
-            instance = default
+            if (useEnv) {
+                mergeEnvironment(instance, namespace, System.getenv())
+            }
+
             instance.schema().validate()
-            instances[key] = buildBo(SettingSource.Default, instance, namespace) to instance
+
+            instances[key] = buildBo(source, instance, namespace) to instance
+
             return@runBlocking instance
         }
 
     }
 
-    private fun <T : BaseBo> loadFile(namespace: String, serializer: KSerializer<T>): T? {
+    open fun <T : BaseBo> loadFile(namespace: String, serializer: KSerializer<T>): T? {
 
         val p1 = server.settingsDirectory.resolve("$namespace.yaml")
         val p2 = server.settingsDirectory.resolve("$namespace.yml")
@@ -112,20 +105,18 @@ class SettingBl : EntityBusinessLogicBase<SettingBo>(
             val sObj = Yaml.default.decodeFromString(serializer, source)
             settingsLogger.info("${sObj::class.simpleName} source: ${path.toAbsolutePath()}")
             sObj
-        } catch (ex : Exception) {
+        } catch (ex: Exception) {
             settingsLogger.error("could not load ${path.toAbsolutePath()}")
             throw ex
         }
     }
 
-    private fun <T : BaseBo> buildBo(source: SettingSource, instance: T, namespace: String) =
-        SettingBo(
-            id = EntityId(),
-            source = source,
-            namespace = namespace,
-            className = instance::class.simpleName !!,
-            descriptor = Json.encodeToString(BoDescriptor.serializer(), instance.schema().toBoDescriptor())
-        )
-
+    open fun <T : BaseBo> buildBo(source: SettingSource, instance: T, namespace: String) = SettingBo(
+        id = EntityId(),
+        source = source,
+        namespace = namespace,
+        className = instance::class.simpleName !!,
+        descriptor = Json.encodeToString(BoDescriptor.serializer(), instance.schema().toBoDescriptor())
+    )
 
 }

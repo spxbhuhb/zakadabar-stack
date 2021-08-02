@@ -36,6 +36,14 @@ class OptBooleanBoSchemaEntry(val kProperty: KMutableProperty0<Boolean?>) : BoSc
         return this
     }
 
+    override fun decodeFromText(text : String?) : Boolean? {
+        return text?.toBooleanStrict()
+    }
+
+    override fun setFromText(text: String?) {
+        kProperty.set(decodeFromText(text))
+    }
+
     override fun setDefault() {
         kProperty.set(defaultValue)
     }

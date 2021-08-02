@@ -27,7 +27,7 @@ import kotlin.reflect.KMutableProperty0
 class OptEnumBoSchemaEntry<E : Enum<E>>(
     val kProperty: KMutableProperty0<E?>,
     val values : Array<E>
-) : BoSchemaEntry<E> {
+) : BoSchemaEntry<E?> {
 
     var defaultValue: E? = null
 
@@ -41,6 +41,14 @@ class OptEnumBoSchemaEntry<E : Enum<E>>(
 
     override fun setDefault() {
         kProperty.set(defaultValue)
+    }
+
+    override fun decodeFromText(text : String?) : E? {
+        return text?.let { values.find { it.name == text } }
+    }
+
+    override fun setFromText(text: String?) {
+        kProperty.set(decodeFromText(text))
     }
 
     override fun isOptional() = true

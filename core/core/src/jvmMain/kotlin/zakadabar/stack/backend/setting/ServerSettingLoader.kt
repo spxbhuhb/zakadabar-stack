@@ -9,9 +9,16 @@ import zakadabar.stack.data.builtin.settings.ServerSettingsBo
 import java.nio.file.Files
 import java.nio.file.Paths
 
-class ServerSettingLoader {
+/**
+ * Bootstrap settings loader which runs before anything else.
+ *
+ * @param  useEnv  When true, environment variables are merged into setting BOs.
+ */
+open class ServerSettingLoader(
+    open val useEnv : Boolean = true
+) : SystemEnvHandler {
 
-    fun load(settingsPath : String): ServerSettingsBo {
+    open fun load(settingsPath : String): ServerSettingsBo {
 
         val paths = listOf(
             settingsPath,
@@ -33,10 +40,17 @@ class ServerSettingLoader {
 
             val bo = Yaml.default.decodeFromString(ServerSettingsBo.serializer(), source)
             bo.settingsDirectory = path.parent.toAbsolutePath().toString()
+
+            if (useEnv) {
+                mergeEnvironment(bo, "stack.server", System.getenv())
+            }
+
             return bo
         }
 
         throw IllegalArgumentException("cannot locate server settings file")
     }
+
+
 
 }

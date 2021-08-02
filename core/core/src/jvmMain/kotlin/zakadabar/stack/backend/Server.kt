@@ -102,6 +102,10 @@ open class Server(
                 .choice(*StartPhases.values().map { it.optionName }.toTypedArray())
                 .default(StartPhases.Complete.optionName)
 
+    private val ignoreEnvironment
+            by option("--ignore-environment", help = "Do not use environment variables when loading settings.")
+                .flag(default = false)
+
     private val test
             by option("--test", "-t").flag()
 
@@ -147,7 +151,7 @@ open class Server(
 
         loadModules(settings)
 
-        if (firstOrNull<SettingProvider>() == null) this += SettingBl()
+        if (firstOrNull<SettingProvider>() == null) this += SettingBl(!ignoreEnvironment)
 
         if (firstOrNull<ServerDescriptionBl>() == null) this += ServerDescriptionBl()
 
@@ -179,7 +183,7 @@ open class Server(
     }
 
     open fun loadSettings() {
-        settings = ServerSettingLoader().load(settingsPath)
+        settings = ServerSettingLoader(!ignoreEnvironment).load(settingsPath)
         settingsDirectory = Paths.get(settings.settingsDirectory)
     }
 

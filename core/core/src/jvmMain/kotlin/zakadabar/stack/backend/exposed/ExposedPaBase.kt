@@ -15,7 +15,7 @@ import zakadabar.stack.data.entity.EntityId
  * Persistence API base to be used by Exposed persistence APIs.
  */
 abstract class ExposedPaBase<T : EntityBo<T>, TT : ExposedPaTable<T>>(
-    val table: TT
+    open val table: TT
 ) : EntityPersistenceApi<T> {
 
     override fun onModuleLoad() {
