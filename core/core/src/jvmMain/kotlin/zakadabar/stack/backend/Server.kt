@@ -25,8 +25,10 @@ import zakadabar.stack.backend.setting.SettingBl
 import zakadabar.stack.backend.setting.SettingProvider
 import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
 import zakadabar.stack.data.builtin.settings.ServerSettingsBo
+import zakadabar.stack.log.Slf4jLogger
 import zakadabar.stack.module.CommonModule
 import zakadabar.stack.module.dependencies
+import zakadabar.stack.module.moduleLogger
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
@@ -45,14 +47,14 @@ fun main(argv: Array<String>) {
     val stackVersion: String = properties.getProperty("stackVersion") ?: "unknown"
     val projectName: String = properties.getProperty("projectName") ?: "unknown"
 
-    moduleLogger.info("server started in: ${System.getProperty("user.dir")}")
-    moduleLogger.info("server projectName=$projectName version=$version stackVersion=$stackVersion")
+    moduleLogger = Slf4jLogger(LoggerFactory.getLogger("modules") !!) // replace the stdout logger with LOGBack
+    moduleLogger.info("working directory: ${System.getProperty("user.dir")}")
+    moduleLogger.info("projectName=$projectName version=$version stackVersion=$stackVersion")
 
     server = Server(version)
     server.main(argv)
 }
 
-val moduleLogger = LoggerFactory.getLogger("modules") !! // log module events
 val routingLogger: Logger by lazy { LoggerFactory.getLogger("routing") } // trace routing events
 val settingsLogger = LoggerFactory.getLogger("settings") !! // log settings loads events
 
@@ -125,12 +127,9 @@ open class Server(
 
     operator fun plusAssign(module: CommonModule) {
         this.modules += module
-        module.onModuleLoad()
-        moduleLogger.info("loaded module $module")
     }
 
     override fun run() {
-
         onConfigure()
 
         loadSettings()
@@ -151,9 +150,9 @@ open class Server(
 
         loadModules(settings)
 
-        if (firstOrNull<SettingProvider>() == null) this += SettingBl(!ignoreEnvironment)
+        if (firstOrNull<SettingProvider>() == null) modules += SettingBl(!ignoreEnvironment)
 
-        if (firstOrNull<ServerDescriptionBl>() == null) this += ServerDescriptionBl()
+        if (firstOrNull<ServerDescriptionBl>() == null) modules += ServerDescriptionBl()
 
         if (startUntil == StartPhases.ModuleLoad.optionName) return
 
@@ -195,12 +194,11 @@ open class Server(
 
             val installable = Server::class.java.classLoader.loadClass(it).kotlin
 
-            require(installable.isSubclassOf(RoutedModule::class)) { "module $it is not instance of BackendModule (maybe the name is wrong)" }
+            require(installable.isSubclassOf(CommonModule::class)) { "module $it is not instance of CommonModule (maybe the name is wrong)" }
 
             try {
 
-                val module = (installable.objectInstance as CommonModule)
-                this += module
+                modules += installable.objectInstance as CommonModule
 
             } catch (ex: Throwable) {
                 moduleLogger.error("failed to load module $it")

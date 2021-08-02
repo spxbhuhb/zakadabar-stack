@@ -55,7 +55,7 @@ class ConstraintBooleanEditor(
     }
 
     override fun update(constraints: List<BoConstraint>) {
-        val c = constraints.firstOrNull { it.type == constraintType }
+        val c = constraints.firstOrNull { it.constraintType == constraintType }
         if (c is BooleanBoConstraint) first<ZkCheckBox>().checked = c.value
     }
 
@@ -82,7 +82,7 @@ class ConstraintDoubleEditor(
     }
 
     override fun update(constraints: List<BoConstraint>) {
-        val c = constraints.firstOrNull { it.type == constraintType }
+        val c = constraints.firstOrNull { it.constraintType == constraintType }
         if (c is DoubleBoConstraint) first<ZkTextInput>().value = c.value?.toString() ?: ""
     }
 
@@ -109,7 +109,7 @@ class ConstraintIntEditor(
     }
 
     override fun update(constraints: List<BoConstraint>) {
-        val c = constraints.firstOrNull { it.type == constraintType }
+        val c = constraints.firstOrNull { it.constraintType == constraintType }
         if (c is IntBoConstraint) first<ZkTextInput>().value = c.value?.toString() ?: ""
     }
 
@@ -136,7 +136,7 @@ class ConstraintLongEditor(
     }
 
     override fun update(constraints: List<BoConstraint>) {
-        val c = constraints.firstOrNull { it.type == constraintType }
+        val c = constraints.firstOrNull { it.constraintType == constraintType }
         if (c is LongBoConstraint) first<ZkTextInput>().value = c.value?.toString() ?: ""
     }
 
@@ -164,7 +164,7 @@ class ConstraintStringEditor(
     }
 
     override fun update(constraints: List<BoConstraint>) {
-        val c = constraints.firstOrNull { it.type == constraintType }
+        val c = constraints.firstOrNull { it.constraintType == constraintType }
         if (c is StringBoConstraint) first<ZkTextInput>().value = c.value ?: ""
     }
 

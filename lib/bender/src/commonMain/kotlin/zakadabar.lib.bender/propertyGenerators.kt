@@ -302,7 +302,7 @@ open class StringPropertyGenerator(
 ) : PropertyGenerator(boDescriptor, property, "String") {
 
     override fun exposedTable(): String {
-        val max = property.constraints.firstOrNull { it.type == BoConstraintType.Max } as? IntBoConstraint
+        val max = property.constraints.firstOrNull { it.constraintType == BoConstraintType.Max } as? IntBoConstraint
         return if (max?.value != null) {
             "val ${property.name} = varchar(\"${property.name.camelToSnakeCase()}\", ${max.value})$exposedTableOptional"
         } else {

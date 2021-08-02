@@ -223,8 +223,8 @@ abstract class ZkFieldBase<FT : BaseBo, DT>(
         var mandatory = false
         constraints.forEach {
             when {
-                (it.type == BoConstraintType.Min && it is IntBoConstraint && it.value != 0) -> mandatory = true
-                (it.type == BoConstraintType.Blank && it is BooleanBoConstraint && ! it.value) -> mandatory = true
+                (it.constraintType == BoConstraintType.Min && it is IntBoConstraint && it.value != 0) -> mandatory = true
+                (it.constraintType == BoConstraintType.Blank && it is BooleanBoConstraint && ! it.value) -> mandatory = true
             }
         }
 

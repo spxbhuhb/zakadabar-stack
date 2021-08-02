@@ -35,9 +35,23 @@ kotlin {
 
     sourceSets["commonMain"].dependencies {
         implementation(project(":core:core"))
+        implementation(project(":lib:accounts"))
+        implementation(project(":lib:blobs"))
+    }
+
+    sourceSets["commonTest"].dependencies {
+        implementation(kotlin("test-common"))
+        implementation(kotlin("test-annotations-common"))
+        implementation(kotlin("test-junit"))
     }
 
     sourceSets["jvmMain"].dependencies {
         implementation("javax.mail:mail:${Versions.javamail}")
+    }
+
+    sourceSets["jvmTest"].dependencies {
+        implementation("io.ktor:ktor-server-netty:${Versions.ktor}")
+        implementation("com.h2database:h2:${Versions.h2}")
+        implementation("org.subethamail:subethasmtp:3.1.7")
     }
 }

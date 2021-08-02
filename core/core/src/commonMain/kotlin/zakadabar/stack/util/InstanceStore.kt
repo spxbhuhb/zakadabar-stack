@@ -9,7 +9,7 @@ open class InstanceStore<IT : Any> {
 
     open val instances = mutableListOf<IT>()
 
-    operator fun plusAssign(instance: IT) {
+    open operator fun plusAssign(instance: IT) {
         instances.add(instance)
     }
 

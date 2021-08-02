@@ -22,12 +22,12 @@ enum class BoConstraintType {
 
 @Serializable
 sealed class BoConstraint {
-    abstract val type: BoConstraintType
+    abstract val constraintType: BoConstraintType
 }
 
 @Serializable
 class BooleanBoConstraint(
-    override val type: BoConstraintType,
+    override val constraintType: BoConstraintType,
     val value: Boolean
 ) : BoConstraint()
 
@@ -35,55 +35,55 @@ class BooleanBoConstraint(
  * A custom constraint, typically implemented with a code specific to
  * the given BO.
  *
- * @param  type  Type of the constraint, [BoConstraintType.Custom].
+ * @param  constraintType  Type of the constraint, [BoConstraintType.Custom].
  * @param  name  Name of the constraint, anything that identifies the check.
  * @param  value Source code of the custom check (optional).
  */
 @Serializable
 class CustomBoConstraint(
-    override val type: BoConstraintType = BoConstraintType.Custom,
+    override val constraintType: BoConstraintType = BoConstraintType.Custom,
     val name : String,
     val value : String? = null
 ) : BoConstraint()
 
 @Serializable
 class DoubleBoConstraint(
-    override val type: BoConstraintType,
+    override val constraintType: BoConstraintType,
     val value: Double?
 ) : BoConstraint()
 
 @Serializable
 class InstantBoConstraint(
-    override val type: BoConstraintType,
+    override val constraintType: BoConstraintType,
     val value: Instant?
 ) : BoConstraint()
 
 @Serializable
 class IntBoConstraint(
-    override val type: BoConstraintType,
+    override val constraintType: BoConstraintType,
     val value: Int?
 ) : BoConstraint()
 
 @Serializable
 class LocalDateBoConstraint(
-    override val type: BoConstraintType,
+    override val constraintType: BoConstraintType,
     val value: LocalDate?
 ) : BoConstraint()
 
 @Serializable
 class LocalDateTimeBoConstraint(
-    override val type: BoConstraintType,
+    override val constraintType: BoConstraintType,
     val value: LocalDateTime?
 ) : BoConstraint()
 
 @Serializable
 class LongBoConstraint(
-    override val type: BoConstraintType,
+    override val constraintType: BoConstraintType,
     val value: Long?
 ) : BoConstraint()
 
 @Serializable
 class StringBoConstraint(
-    override val type: BoConstraintType,
+    override val constraintType: BoConstraintType,
     val value: String?
 ) : BoConstraint()

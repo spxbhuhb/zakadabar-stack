@@ -5,13 +5,12 @@ package zakadabar.stack.module
 
 import zakadabar.stack.log.Logger
 import zakadabar.stack.log.StdOutLogger
-import zakadabar.stack.util.InstanceStore
 
 /**
  * Modules of the application. This store is used both for backend and
  * frontend to store general application modules.
  */
-val modules = InstanceStore<CommonModule>()
+val modules = ModuleStore()
 
 /**
  * Inter module dependencies of the application.

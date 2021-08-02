@@ -12,10 +12,31 @@ added:
 - `BoSchemaEntry<T>.decodeFromText` 
 - `BoSchemaEntry<T>.setFromText`
 - `EntityBoCompanion<T>.create(func: T.() -> Unit)` convenience function
+- `Logger.debug` to log debug messages
+- `Slf4jLogger` wrapper around `org.slf4j.Logger`
+
 
 changed:
 
 - `ExposedPaTable.table` is now open
+- `BoConstraint.type` to `constraintType` because of serialization conflict
+- `modules` is now a `ModuleStore` and calls `onModuleLoad` when the module is added
+- `StdOutLogger` now adds severity label
+- 
+
+## Lib: Blobs
+
+added:
+
+- `BlobBoCompanion<T,RT>.create(content : ByteArray, func: T.() -> Unit)` convenience function
+
+## Lib: Email
+
+New module for email sending.
+
+## Cookbook
+
+- module bundle recipe
 
 ## Bender
 

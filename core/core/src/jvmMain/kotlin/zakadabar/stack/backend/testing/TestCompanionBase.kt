@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.backend.testing
 
+import org.slf4j.LoggerFactory
 import zakadabar.stack.authorize.AppRolesBase
 import zakadabar.stack.authorize.appRoles
 import zakadabar.stack.backend.RoutedModule
@@ -14,6 +15,9 @@ import zakadabar.stack.backend.testing.TestCompanionBase.MockRoleBlProvider
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.CommBase
 import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.log.Slf4jLogger
+import zakadabar.stack.module.moduleLogger
+import zakadabar.stack.module.modules
 
 /**
  * Helper class for unit tests. Starts a Ktor server with an
@@ -49,18 +53,21 @@ open class TestCompanionBase(
     }
 
     open fun setup() {
+        moduleLogger = Slf4jLogger(LoggerFactory.getLogger("modules") !!) // replace the stdout logger with LOGBack
+        moduleLogger.info("working directory: ${System.getProperty("user.dir")}")
+
         server = Server("test")
 
         appRoles = roles
 
         if (allPublic) {
-            server += SimpleRoleAuthorizerProvider {
+            modules += SimpleRoleAuthorizerProvider {
                 all = PUBLIC
             }
         }
 
         if (mockRoleBlProvider) {
-            server += MockRoleBlProvider
+            modules += MockRoleBlProvider
         }
 
         addModules()

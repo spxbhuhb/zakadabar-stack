@@ -24,8 +24,8 @@ sourceSets["commonTest"].dependencies {
 }
 
 sourceSets["jvmTest"].dependencies {
-    implementation("io.ktor:ktor-server-netty:$ktorVersion")
-    implementation("com.h2database:h2:1.4.200")
+    implementation("io.ktor:ktor-server-netty:${Versions.ktor}")
+    implementation("com.h2database:h2:${Versions.h2}")
 }
 ```
 
