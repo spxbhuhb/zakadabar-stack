@@ -5,7 +5,6 @@ package zakadabar.stack.backend.authorize
 
 import zakadabar.stack.backend.business.BusinessLogicCommon
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.module.moduleLogger
 import zakadabar.stack.module.modules
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
@@ -23,7 +22,7 @@ class AuthorizerDelegate<T : BaseBo>(
         if (authorizer === UNINITIALIZED) {
             val provider = modules.firstOrNull<AuthorizerProvider>()
             authorizer = if (provider == null) {
-                moduleLogger.warn("Cannot find authorizer provider, requests will be denied!")
+                modules.logger.warn("Cannot find authorizer provider, requests will be denied!")
                 EmptyAuthorizer()
             } else {
                 provider

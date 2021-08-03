@@ -3,11 +3,27 @@
  */
 package zakadabar.stack.log
 
-class Slf4jLogger(
-    val slf4jLogger: org.slf4j.Logger
+open class Slf4jLogger(
+    open val slf4jLogger: org.slf4j.Logger
 ) : Logger {
-    override fun info(message : String) { slf4jLogger.info(message) }
-    override fun warn(message : String) { slf4jLogger.warn(message) }
-    override fun error(message : String) { slf4jLogger.error(message) }
-    override fun debug(message: String) { slf4jLogger.debug(message) }
+
+    override fun info(message : String) {
+        slf4jLogger.info(message)
+    }
+
+    override fun warn(message : String) {
+        slf4jLogger.warn(message)
+    }
+
+    override fun error(message : String) {
+        slf4jLogger.error(message)
+    }
+
+    override fun error(message : String, ex : Throwable) {
+        slf4jLogger.error(message, ex)
+    }
+
+    override fun debug(message: String) {
+        slf4jLogger.debug(message)
+    }
 }

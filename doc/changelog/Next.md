@@ -8,13 +8,12 @@ added:
 
 - merge environment variables into settings
 - `--ignore-environment` server option to ignore environment variables
-- `critical` function to provide a multiplatform synchronization primitive
+- `Lock` class for multiplatform
 - `BoSchemaEntry<T>.decodeFromText` 
 - `BoSchemaEntry<T>.setFromText`
 - `EntityBoCompanion<T>.create(func: T.() -> Unit)` convenience function
 - `Logger.debug` to log debug messages
 - `Slf4jLogger` wrapper around `org.slf4j.Logger`
-
 
 changed:
 
@@ -22,7 +21,6 @@ changed:
 - `BoConstraint.type` to `constraintType` because of serialization conflict
 - `modules` is now a `ModuleStore` and calls `onModuleLoad` when the module is added
 - `StdOutLogger` now adds severity label
-- 
 
 ## Lib: Blobs
 

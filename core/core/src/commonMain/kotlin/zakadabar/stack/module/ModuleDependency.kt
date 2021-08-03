@@ -15,7 +15,7 @@ class ModuleDependency<T : Any>(
     private var module: T? = modules.firstOrNull(moduleClass, selector)
 
     init {
-        dependencies += this
+        modules += this
     }
 
     val name = dependentModule?.let { moduleName(it::class) + "." } ?: ""
@@ -24,10 +24,10 @@ class ModuleDependency<T : Any>(
     fun resolve() =
         try {
             module = modules.first(moduleClass, selector)
-            moduleLogger.info("resolved dependency from ${name}${dependentProperty.name} to ${moduleClass.simpleName} ")
+            modules.logger.info("resolved dependency from ${name}${dependentProperty.name} to ${moduleClass.simpleName} ")
             true
         } catch (ex: NoSuchElementException) {
-            moduleLogger.error("unable to resolve dependency from ${name}${dependentProperty.name} to ${moduleClass.simpleName} ")
+            modules.logger.error("unable to resolve dependency from ${name}${dependentProperty.name} to ${moduleClass.simpleName} ")
             false
         }
 

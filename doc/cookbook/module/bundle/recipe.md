@@ -7,12 +7,12 @@ Most libraries provide a module bundle class, so you can add the library to the 
 easily, like this:
 
 ```kotlin
-modules += MailModuleBundle()
+modules += ExampleModuleBundle()
 ```
 
 ## Guides
 
-[Modules](/doc/guides/backend/Modules.md)
+[Modules](/doc/guides/common/Modules.md)
 
 ## JVM
 

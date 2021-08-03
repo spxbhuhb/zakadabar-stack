@@ -22,6 +22,7 @@ import zakadabar.stack.data.builtin.resources.SettingBo
 import zakadabar.stack.data.builtin.resources.SettingSource
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.descriptor.BoDescriptor
+import zakadabar.stack.setting.SettingProvider
 import java.nio.file.Files
 import kotlin.collections.set
 import kotlin.reflect.KClass
@@ -35,7 +36,7 @@ open class SettingBl(
     val useEnv : Boolean = true
 ) : EntityBusinessLogicBase<SettingBo>(
     boClass = SettingBo::class,
-), SettingProvider, RoutedModule, SystemEnvHandler {
+), SettingProvider, RoutedModule, JvmSystemEnvHandler {
 
     override val pa = EmptyPersistenceApi<SettingBo>()
 

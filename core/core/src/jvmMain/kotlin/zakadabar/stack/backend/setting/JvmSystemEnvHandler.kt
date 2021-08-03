@@ -8,7 +8,7 @@ import zakadabar.stack.data.BaseBo
 /**
  * Provides functions to related to environment variables and settings.
  */
-interface SystemEnvHandler {
+interface JvmSystemEnvHandler {
 
     /**
      * Merges environment variables into a BO. If the variable does not exist,

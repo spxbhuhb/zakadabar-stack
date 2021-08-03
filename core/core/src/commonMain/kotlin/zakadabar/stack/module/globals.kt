@@ -3,19 +3,11 @@
  */
 package zakadabar.stack.module
 
-import zakadabar.stack.log.Logger
-import zakadabar.stack.log.StdOutLogger
-
 /**
  * Modules of the application. This store is used both for backend and
  * frontend to store general application modules.
  */
 val modules = ModuleStore()
-
-/**
- * Inter module dependencies of the application.
- */
-val dependencies = mutableListOf<ModuleDependency<*>>()
 
 /**
  * Provides a delegate that is a reference to a backend module. The dependency
@@ -30,29 +22,3 @@ val dependencies = mutableListOf<ModuleDependency<*>>()
  *                   Default selects the first.
  */
 inline fun <reified T : Any> module(noinline selector: (T) -> Boolean = { true }) = ModuleDependencyProvider(T::class, selector)
-
-/**
- * Logger to use for module related log entries.
- */
-var moduleLogger : Logger = StdOutLogger()
-
-/**
- * Resolves all dependencies registered in "dependencies"
- */
-fun resolveDependencies() {
-    var success = true
-
-    dependencies.forEach {
-        success = success && it.resolve()
-    }
-
-    if (! success) throw IllegalArgumentException("module dependency resolution failed")
-}
-
-fun clearModules() {
-    modules.instances.forEach {
-        it.onModuleStop()
-    }
-    modules.instances.clear()
-    dependencies.clear()
-}

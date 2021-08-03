@@ -22,13 +22,12 @@ import zakadabar.stack.backend.exposed.Sql
 import zakadabar.stack.backend.ktor.KtorServerBuilder
 import zakadabar.stack.backend.setting.ServerSettingLoader
 import zakadabar.stack.backend.setting.SettingBl
-import zakadabar.stack.backend.setting.SettingProvider
 import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
 import zakadabar.stack.data.builtin.settings.ServerSettingsBo
 import zakadabar.stack.log.Slf4jLogger
 import zakadabar.stack.module.CommonModule
-import zakadabar.stack.module.dependencies
-import zakadabar.stack.module.moduleLogger
+import zakadabar.stack.module.modules
+import zakadabar.stack.setting.SettingProvider
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
@@ -47,14 +46,16 @@ fun main(argv: Array<String>) {
     val stackVersion: String = properties.getProperty("stackVersion") ?: "unknown"
     val projectName: String = properties.getProperty("projectName") ?: "unknown"
 
-    moduleLogger = Slf4jLogger(LoggerFactory.getLogger("modules") !!) // replace the stdout logger with LOGBack
-    moduleLogger.info("working directory: ${System.getProperty("user.dir")}")
-    moduleLogger.info("projectName=$projectName version=$version stackVersion=$stackVersion")
+    modules.logger = Slf4jLogger(LoggerFactory.getLogger("modules") !!) // replace the stdout logger with LOGBack
+
+    serverLogger.info("working directory: ${System.getProperty("user.dir")}")
+    serverLogger.info("projectName=$projectName version=$version stackVersion=$stackVersion")
 
     server = Server(version)
     server.main(argv)
 }
 
+val serverLogger: Logger by lazy { LoggerFactory.getLogger("server") } // trace server events
 val routingLogger: Logger by lazy { LoggerFactory.getLogger("routing") } // trace routing events
 val settingsLogger = LoggerFactory.getLogger("settings") !! // log settings loads events
 
@@ -156,7 +157,7 @@ open class Server(
 
         if (startUntil == StartPhases.ModuleLoad.optionName) return
 
-        resolveDependencies()
+        modules.resolveDependencies()
 
         initializeDb()
 
@@ -186,8 +187,6 @@ open class Server(
         settingsDirectory = Paths.get(settings.settingsDirectory)
     }
 
-    open fun onBuildServer() = KtorServerBuilder(settings, modules).build() //  build the Ktor server instance
-
     private fun loadModules(config: ServerSettingsBo) {
 
         config.modules.forEach {
@@ -196,61 +195,26 @@ open class Server(
 
             require(installable.isSubclassOf(CommonModule::class)) { "module $it is not instance of CommonModule (maybe the name is wrong)" }
 
-            try {
-
-                modules += installable.objectInstance as CommonModule
-
-            } catch (ex: Throwable) {
-                moduleLogger.error("failed to load module $it")
-                throw ex
-            }
-
+            modules += installable.objectInstance as CommonModule
         }
-    }
 
-    open fun resolveDependencies() {
-        zakadabar.stack.module.resolveDependencies()
     }
 
     open fun initializeDb() {
         Sql.onStart() // create missing tables and columns
-
-        modules.instances.forEach {
-            try {
-                it.onInitializeDb()
-                moduleLogger.debug("initialized DB for module $it")
-            } catch (ex: Throwable) {
-                moduleLogger.error("failed to initialize DB for module $it")
-                throw ex
-            }
-        }
+        modules.initializeDb()
     }
 
     open fun startModules() {
-        modules.instances.forEach {
-            try {
-                it.onModuleStart()
-                moduleLogger.info("started module $it")
-            } catch (ex: Throwable) {
-                moduleLogger.error("failed to start module $it")
-                throw ex
-            }
-        }
+        modules.start()
     }
+
+    open fun onBuildServer() = KtorServerBuilder(settings, modules).build() //  build the Ktor server instance
 
     fun shutdown(gracePeriodMillis : Long = 0, timeoutMillis : Long = 2000) {
         server.ktorServer.stop(gracePeriodMillis, timeoutMillis)
-        modules.instances.forEach {
-            try {
-                it.onModuleStop()
-                moduleLogger.info("stopped module $it")
-            } catch (ex: Throwable) {
-                moduleLogger.error("failed to stop module $it")
-                throw ex
-            }
-        }
-        modules.instances.clear()
-        dependencies.clear()
+        modules.stop()
+        modules.clear()
     }
 
     /**

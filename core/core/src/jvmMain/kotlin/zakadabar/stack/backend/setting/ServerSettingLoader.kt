@@ -16,7 +16,7 @@ import java.nio.file.Paths
  */
 open class ServerSettingLoader(
     open val useEnv : Boolean = true
-) : SystemEnvHandler {
+) : JvmSystemEnvHandler {
 
     open fun load(settingsPath : String): ServerSettingsBo {
 

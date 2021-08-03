@@ -16,7 +16,6 @@ import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.CommBase
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.log.Slf4jLogger
-import zakadabar.stack.module.moduleLogger
 import zakadabar.stack.module.modules
 
 /**
@@ -53,8 +52,8 @@ open class TestCompanionBase(
     }
 
     open fun setup() {
-        moduleLogger = Slf4jLogger(LoggerFactory.getLogger("modules") !!) // replace the stdout logger with LOGBack
-        moduleLogger.info("working directory: ${System.getProperty("user.dir")}")
+        modules.logger = Slf4jLogger(LoggerFactory.getLogger("modules") !!) // replace the stdout logger with LOGBack
+        modules.logger.info("working directory: ${System.getProperty("user.dir")}")
 
         server = Server("test")
 

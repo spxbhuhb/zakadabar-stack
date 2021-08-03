@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 
 open class InstanceStore<IT : Any> {
 
-    open val instances = mutableListOf<IT>()
+    protected val instances = mutableListOf<IT>()
 
     open operator fun plusAssign(instance: IT) {
         instances.add(instance)
@@ -18,9 +18,9 @@ open class InstanceStore<IT : Any> {
      *
      * @param    T      The class to look for
      *
-     * @return   First instance of [T] from the routing targets.
+     * @return   First instance of [T] from the instances.
      *
-     * @throws   NoSuchElementException   when there is no such target
+     * @throws   NoSuchElementException   when there is no such instance
      */
     inline fun <reified T : Any> first() = first(T::class)
 
@@ -29,9 +29,9 @@ open class InstanceStore<IT : Any> {
      *
      * @param    kClass      The class to look for
      *
-     * @return   First instance of [kClass] from the routing targets.
+     * @return   First instance of [kClass] from the instances.
      *
-     * @throws   NoSuchElementException   when there is no such target
+     * @throws   NoSuchElementException   when there is no such instance
      */
     open fun <T : Any> first(kClass: KClass<T>): T {
         @Suppress("UNCHECKED_CAST") // checking for class
@@ -45,9 +45,9 @@ open class InstanceStore<IT : Any> {
      * @param    kClass      The class to look for
      * @param    selector    Function to select the instance.
      *
-     * @return   First instance of [kClass] from the server modules.
+     * @return   First instance of [kClass] from the instances.
      *
-     * @throws   NoSuchElementException   when there is no such module
+     * @throws   NoSuchElementException   when there is no such instance
      */
     open fun <T : Any> first(kClass: KClass<T>, selector: (T) -> Boolean): T {
         @Suppress("UNCHECKED_CAST") // checking for class
@@ -60,7 +60,7 @@ open class InstanceStore<IT : Any> {
      *
      * @param    T      The class to look for
      *
-     * @return   First instance of [T] from the server modules or null.
+     * @return   First instance of [T] from the instances or null.
      */
     inline fun <reified T : Any> firstOrNull() = firstOrNull(T::class)
 
@@ -70,7 +70,7 @@ open class InstanceStore<IT : Any> {
      *
      * @param    kClass      The class to look for
      *
-     * @return   First instance of [kClass] from the server modules or null.
+     * @return   First instance of [kClass] from the instances or null.
      */
     open fun <T : Any> firstOrNull(kClass: KClass<T>): T? {
         @Suppress("UNCHECKED_CAST") // checking for class
@@ -85,7 +85,7 @@ open class InstanceStore<IT : Any> {
      * @param    kClass      The class to look for
      * @param    selector    Function to select the instance.
      *
-     * @return   First instance of [kClass] from the server modules or null.
+     * @return   First instance of [kClass] from the instances or null.
      */
     open fun <T : Any> firstOrNull(kClass: KClass<T>, selector: (T) -> Boolean): T? {
         @Suppress("UNCHECKED_CAST") // checking for class

@@ -1,0 +1,10 @@
+title: Module Bundle
+level: Beginner
+targets:
+  - jvm
+tags:
+  - module
+  - bundle
+  - package
+  - server
+  - backend

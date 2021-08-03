@@ -27,8 +27,7 @@ import zakadabar.stack.backend.routingLogger
 import zakadabar.stack.backend.server
 import zakadabar.stack.data.builtin.settings.ServerSettingsBo
 import zakadabar.stack.exceptions.*
-import zakadabar.stack.module.CommonModule
-import zakadabar.stack.util.InstanceStore
+import zakadabar.stack.module.ModuleStore
 import java.io.File
 import java.time.Duration
 
@@ -55,7 +54,7 @@ operator fun <B : Any, F : ApplicationFeature<Application,B,*>> F.invoke(config 
  */
 open class KtorServerBuilder(
     open val config: ServerSettingsBo,
-    open val modules: InstanceStore<CommonModule>,
+    open val modules: ModuleStore,
 ) {
 
     fun build() = embeddedServer(Netty, port = config.ktor.port) {
@@ -154,7 +153,7 @@ open class KtorServerBuilder(
         }
     }
 
-    open fun Route.install(config: ServerSettingsBo, modules: InstanceStore<CommonModule>) {
+    open fun Route.install(config: ServerSettingsBo, modules: ModuleStore) {
 
         get("health") {
             call.respondText("OK", ContentType.Text.Plain)
@@ -162,7 +161,7 @@ open class KtorServerBuilder(
 
         route("api") {
 
-            modules.instances.forEach {
+            modules.forEach {
                 if (it is RoutedModule) {
                     it.onInstallRoutes(this)
                 }
@@ -178,7 +177,7 @@ open class KtorServerBuilder(
             files(".")
             default("index.html")
 
-            modules.instances.forEach {
+            modules.forEach {
                 if (it is RoutedModule) {
                     it.onInstallStatic(this)
                 }

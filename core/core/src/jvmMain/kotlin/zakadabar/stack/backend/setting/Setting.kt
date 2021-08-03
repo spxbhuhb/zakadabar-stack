@@ -10,6 +10,7 @@ import kotlinx.serialization.KSerializer
 import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.UNINITIALIZED
 import zakadabar.stack.module.modules
+import zakadabar.stack.setting.SettingProvider
 import kotlin.reflect.KProperty
 
 open class Setting<V : BaseBo>(
