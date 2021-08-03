@@ -37,6 +37,12 @@ abstract class LinkedExposedPaBase<T : BaseBo, ET : EntityBo<ET>, TT : LinkedExp
             .first()
             .toBo()
 
+    open fun readOrNull(entityId: EntityId<ET>) =
+        table
+            .select { table.entityId eq entityId.toLong() }
+            .firstOrNull()
+            ?.toBo()
+
     open fun update(bo: T) =
         table
             .update({ table.entityId eq linkedId(bo).toLong() }) { it.fromBo(bo) }

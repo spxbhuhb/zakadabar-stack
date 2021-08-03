@@ -2,6 +2,11 @@
 
 This page contains the changes included in the next release.
 
+## General
+
+Clarification of visibility policy. From now on we use `open` and `protected`,
+`private` is not recommended.
+
 ## Core
 
 added:
@@ -14,6 +19,10 @@ added:
 - `EntityBoCompanion<T>.create(func: T.() -> Unit)` convenience function
 - `Logger.debug` to log debug messages
 - `Slf4jLogger` wrapper around `org.slf4j.Logger`
+- `ModuleStartupBucket`
+- `Logger.error(message, ex)` function
+- `Lock` for common code
+- `DefaultSettingProvider` setting provider for common code
 
 changed:
 
@@ -21,6 +30,17 @@ changed:
 - `BoConstraint.type` to `constraintType` because of serialization conflict
 - `modules` is now a `ModuleStore` and calls `onModuleLoad` when the module is added
 - `StdOutLogger` now adds severity label
+- move `dependencies`, `moduleLogger`, `resolveDependencies`, `clearModules` from global into `ModuleStore`
+- `ModuleStore` does not extend `InstanceStore`
+- `ModuleStore` is now thread safe
+- move `SettingProvider` from `backend` to `stack`
+- `InstanceStore` instances is now `protected`
+
+## Lib: Accounts
+
+- `AccountBl.authorize` throws Unauthorized when the account does not exist
+- `AccountBl.authorize` throws Unauthorized when the account state does not exist
+- security officer can create password credential record for other users even when there is no existing record 
 
 ## Lib: Blobs
 

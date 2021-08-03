@@ -1,10 +1,7 @@
-title: Module Bundle
+title: Modules Without Server
 level: Beginner
 targets:
-  - jvm
+  - common
 tags:
   - module
-  - bundle
-  - package
-  - server
-  - backend
+  - serverless

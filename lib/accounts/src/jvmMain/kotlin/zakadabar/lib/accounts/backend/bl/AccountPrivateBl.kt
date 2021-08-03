@@ -15,7 +15,6 @@ import zakadabar.stack.backend.authorize.AccountBlProvider
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.authorize.authorize
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.backend.module
 import zakadabar.stack.backend.server
 import zakadabar.stack.backend.setting.setting
 import zakadabar.stack.backend.util.default
@@ -26,6 +25,7 @@ import zakadabar.stack.data.builtin.misc.Secret
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.exceptions.Unauthorized
 import zakadabar.stack.exceptions.UnauthorizedData
+import zakadabar.stack.module.module
 import zakadabar.stack.util.BCrypt
 
 open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
@@ -275,12 +275,24 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
         }
 
         credentialsPa
-            .read(action.accountId, CredentialTypes.password)
-            .apply {
+            .readOrNull(action.accountId, CredentialTypes.password)
+            ?.apply {
                 value = action.newPassword
             }
-            .also {
+            ?.also {
                 credentialsPa.update(it)
+            }
+            ?: run {
+                if (executor.accountId == action.accountId) throw Unauthorized("NoPasswordRecord")
+
+                credentialsPa.create(
+                    AccountCredentialsBo(
+                        accountId = action.accountId,
+                        type = CredentialTypes.password,
+                        value = action.newPassword,
+                        expiration = null
+                    )
+                )
             }
 
         auditor.auditCustom(executor) { "password change accountId=${action.accountId} executorId=${executor.accountId}" }
@@ -305,10 +317,11 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
      */
     open fun authenticate(executor: Executor, accountId: EntityId<AccountPrivateBo>, password: String) {
 
-        val state = statePa.read(accountId)
+        val state = statePa.readOrNull(accountId)
         val credentials = credentialsPa.read(accountId, CredentialTypes.password)
 
         val result = when {
+            state == null -> throw Unauthorized("NoState")
             ! state.validated -> Unauthorized("NotValidated")
             state.locked -> Unauthorized("Locked", UnauthorizedData(true))
             state.expired -> Unauthorized("Expired")
@@ -342,7 +355,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     }
 
     override fun authenticate(executor: Executor, accountName: String, password: Secret): AccountPublicBo {
-        val account = pa.readByName(accountName)
+        val account = pa.readByNameOrNull(accountName) ?: throw Unauthorized("UnknownAccount")
         authenticate(executor, account.id, password.value)
         return account.toPublic()
     }

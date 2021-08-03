@@ -29,6 +29,12 @@ open class AccountCredentialsExposedPa(
 
     override fun linkedId(bo: AccountCredentialsBo) = bo.accountId
 
+    fun readOrNull(entityId: EntityId<AccountPrivateBo>, type : String) =
+        table
+            .select { (table.entityId eq entityId.toLong()) and (table.type eq type) }
+            .firstOrNull()
+            ?.toBo()
+
     fun read(entityId: EntityId<AccountPrivateBo>, type : String) =
         table
             .select { (table.entityId eq entityId.toLong()) and (table.type eq type) }

@@ -31,13 +31,6 @@ package zakadabar.stack.module
  * class ExamplePublishModule() : CommonModule, PublishBucket
  * class ExampleSteadyModule() : CommonModule, SteadyBucket
  * ```
- *
- * You can specify the bucket directly when you add a module. This overrides
- * the bucket specified in module class (see below).
- *
- * ```kotlin
- * modules += ExampleBl() to ModuleStartupBucket.BOOTSTRAP
- * ```
  */
 open class ModuleStartupBucket(
     val order : Int,
