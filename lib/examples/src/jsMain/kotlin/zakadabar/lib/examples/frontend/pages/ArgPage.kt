@@ -34,6 +34,8 @@ object ArgPage : ZkArgPage<ArgPage.Args>(
     Args.serializer()
 ) {
 
+    override val factory = false
+
     val content = ZkElement() css zkPageStyles.content
 
     @Serializable

@@ -2,6 +2,8 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
+import zakadabar.gradle.dependencies.Versions
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
@@ -12,7 +14,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = rootProject.extra["stackVersion"] as String
+version = Versions.zakadabar
 
 noArg {
     annotation("kotlinx.serialization.Serializable")
@@ -32,11 +34,11 @@ kotlin {
     }
 
     sourceSets["commonMain"].dependencies {
-        implementation(project(":core"))
+        implementation(project(":core:core"))
     }
 
     sourceSets["jsMain"].dependencies {
-        implementation(npm("highlight.js", "10.7.2"))
-        api("org.jetbrains:markdown:0.2.4")
+        implementation(npm("highlight.js", Versions.highlightJs))
+        api("org.jetbrains:markdown:${Versions.markdown}")
     }
 }

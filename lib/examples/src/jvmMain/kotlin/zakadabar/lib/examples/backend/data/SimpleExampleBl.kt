@@ -7,7 +7,6 @@ import zakadabar.lib.examples.data.SimpleExampleAction
 import zakadabar.lib.examples.data.SimpleExampleBo
 import zakadabar.lib.examples.data.SimpleExampleQuery
 import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.authorize.UnsafeAuthorizer
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.server
 import zakadabar.stack.backend.validate.Validator
@@ -20,7 +19,7 @@ class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
 
     override val pa = SimpleExampleExposedPa()
 
-    override val authorizer = UnsafeAuthorizer<SimpleExampleBo>()
+    override val authorizer by provider()
 
     override val router = router {
         action(SimpleExampleAction::class, ::action)

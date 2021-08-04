@@ -27,7 +27,7 @@ import zakadabar.stack.resources.localizedStrings
  * successful the page is reloaded by the browser to let all
  * components use the proper account information.
  */
-class Login : ZkPage(ZkFullScreenLayout) {
+open class Login : ZkPage(ZkFullScreenLayout) {
 
     lateinit var target: ZkAppRouting.ZkTarget
 
@@ -55,17 +55,20 @@ class Login : ZkPage(ZkFullScreenLayout) {
                     + localizedStrings.applicationName
                 } marginBottom 20
 
-                + LoginForm(
-                    onSuccess = {
-                        if (::target.isInitialized) {
-                            application.changeNavState(target)
-                            window.location.reload()
-                        } else {
-                            window.location.pathname = "/"
-                        }
-                    }
-                )
+                + LoginForm(onSuccess = ::onSuccess)
             }
+        }
+    }
+
+    /**
+     * Called after a successful login.
+     */
+    open fun onSuccess() {
+        if (::target.isInitialized) {
+            application.changeNavState(target)
+            window.location.reload()
+        } else {
+            window.location.pathname = "/"
         }
     }
 

@@ -1,0 +1,7 @@
+host: localhost
+port: 2500
+username: "noreply@simplexion.hu"
+password: "helloworld"
+protocol: smtp
+tls: false
+auth: true

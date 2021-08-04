@@ -30,6 +30,7 @@ class SiteStrings : ExamplesStrings() {
     val GetStarted by "Get Started"
     val GetHelp by "Get Help"
     val UpcomingChanges by "Upcoming Changes"
+    val BuildAndRelease by "Build And Release"
 
     val faq by "FAQ"
     val tldr by "TL;DR"

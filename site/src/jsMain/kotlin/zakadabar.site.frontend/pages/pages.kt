@@ -84,6 +84,11 @@ object Versioning : MarkdownPage(
     SiteMarkdownContext("Versioning", "misc/")
 )
 
+object BuildAndRelease : MarkdownPage(
+    "/api/$contentNamespace/internals/BuildAndRelease.md",
+    SiteMarkdownContext("BuildAndRelease", "internals/")
+)
+
 object BenderPage : ZkPage() {
     override fun onCreate() {
         + Bender(

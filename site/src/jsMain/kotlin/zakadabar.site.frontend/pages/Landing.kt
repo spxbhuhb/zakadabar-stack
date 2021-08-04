@@ -19,7 +19,6 @@ import zakadabar.stack.frontend.util.plusAssign
 
 object Landing : ZkPage(ZkFullScreenLayout) {
 
-
     override fun onCreate() {
         classList += landingStyles.landing
 

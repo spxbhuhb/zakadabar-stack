@@ -18,7 +18,7 @@ val copyAppStruct by tasks.registering(Copy::class) {
 val copyAppLib by tasks.registering(Copy::class) {
     from("$buildDir/libs")
     into("$distDir/lib")
-    include("*-${project.version}-all.jar")
+    include("${project.name}-${project.version}-all.jar")
 }
 
 val copyAppIndex by tasks.registering(Copy::class) {
@@ -42,13 +42,6 @@ val copyAppStatic by tasks.registering(Copy::class) {
     rename("${project.name}.js", "${project.name}-${project.version}.js")
 }
 
-val copyMarkdown by tasks.registering(Copy::class) {
-    from("${rootProject.projectDir}/core/doc")
-    into("$distDir/var/static/doc")
-    include("**/*")
-    includeEmptyDirs = false
-}
-
 val copyAppUsr by tasks.registering(Copy::class) {
     from("$projectDir")
     into("$distDir/usr")
@@ -59,7 +52,7 @@ val copyAppUsr by tasks.registering(Copy::class) {
 val zkBuild by tasks.registering(Zip::class) {
     group = "zakadabar"
 
-    dependsOn(tasks["build"], copyAppStruct, copyAppLib, copyAppStatic, copyAppIndex, copyMarkdown, copyAppUsr)
+    dependsOn(tasks["shadowJar"], copyAppStruct, copyAppLib, copyAppStatic, copyAppIndex, copyAppUsr)
 
     archiveFileName.set("${project.name}-${project.version}-server.zip")
     destinationDirectory.set(file("$buildDir/app"))
