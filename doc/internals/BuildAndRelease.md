@@ -13,6 +13,7 @@ sdk.dir=/Users/tiz/Library/Android/sdk
 
 - create a release branch: `release-YYYY.MM.DD`
 - copy [Next](/doc/changelog/Next.md) into `archive/YYYY.MM.DD.md`
+- add release date and delete first content line from `archive/YYYY.MM.DD.md`
 - delete current entries from `Next`
 - edit [TOC](/doc/changelog/TOC.md)
     - change current to `archive/YYYY.MM.DD.md`
