@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.schedule.data
+package zakadabar.lib.schedule
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
@@ -18,9 +18,8 @@ import zakadabar.stack.util.UUID
  *  @param  completedAt      Completion time of this job entity.
  *  @param  startAt          Desired start time of this job. When null the job
  *                           may be started immediately.
- *  @param  specificPoll     When true, this job can be polled only with a
- *                           [Poll] that specifically requests for a namespace
- *                           and/or action type.
+ *  @param  specific         When true, this job can be sent to subscribers which
+ *                           specifically process this namespace and/or action type.
  *  @param  actionNamespace  Namespace of the action that performs this job.
  *  @param  actionType       Type of the action that performs this job.
  *  @param  actionData       JSON data of the action that performs this job.
@@ -41,7 +40,7 @@ class Job(
     var createdAt : Instant,
     var completedAt : Instant?,
     var startAt : Instant?,
-    var specificPoll : Boolean,
+    var specific : Boolean,
     var actionNamespace : String,
     var actionType : String,
     var actionData : String,
@@ -66,7 +65,7 @@ class Job(
         + ::createdAt
         + ::completedAt
         + ::startAt
-        + ::specificPoll
+        + ::specific
         + ::actionNamespace blank false min 1 max 100
         + ::actionType blank false min 1 max 100
         + ::actionData blank false

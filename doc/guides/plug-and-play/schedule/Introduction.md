@@ -1,12 +1,12 @@
-# Plug and Play: Schedule
+# Lib: Schedule
 
-Schedules and executes jobs in single-node or multi-node environment.
+Schedules and executes jobs in single or multi-node environment.
 
 ## Terminology
 
 ### Job
 
-A [Job](../../../../../exp/schedule/src/commonMain/kotlin/zakadabar/lib/schedule/model/Job.kt) is a managed action execution:
+A [Job](/exp/schedule/src/commonMain/kotlin/zakadabar/lib/schedule/data/Job.kt) is a managed action execution:
 
 - starts at a given time (or after)
 - may be retried automatically after a failure (if retry policy allows)
