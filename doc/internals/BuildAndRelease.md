@@ -46,7 +46,6 @@ sdk.dir=/Users/tiz/Library/Android/sdk
 ./gradlew site:zkBuild
 ```
 
-Change version number in DefaultLayout.
 Upload to server.
 
 ## GitHub
