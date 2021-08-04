@@ -12,12 +12,27 @@ import zakadabar.stack.authorize.appRoles
 import zakadabar.stack.frontend.application.ZkAppRouting
 import zakadabar.stack.frontend.application.ZkApplication
 
-fun install(routing: ZkAppRouting) {
+/**
+ * Installs the module. Parameters can be used to override default instances.
+ *
+ * @param  routing        Routing of the application.
+ * @param  login          Login page.
+ * @param  account        Account self-management for individual users.
+ * @param  accountSecure  Account management CRUD for security officers.
+ * @param  roles          Role management CRUD for security officers.
+ */
+fun install(
+    routing: ZkAppRouting,
+    login : Login = Login(),
+    account : Account = Account(),
+    accountSecure : AccountSecure = AccountSecure(),
+    roles : Roles = Roles()
+) {
     with(routing) {
-        + AccountSecure()
-        + Account()
-        + Roles()
-        + Login()
+        + login
+        + account
+        + accountSecure
+        + roles
     }
 }
 

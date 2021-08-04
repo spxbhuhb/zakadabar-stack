@@ -48,10 +48,7 @@ class SiteMarkdownContext(
     hashes : Boolean = true
 ) : ZkMarkdownContext(baseURI = "/${application.locale}/$viewName/$path", toc, hashes) {
 
-    private val github = "https://github.com/spxbhuhb/zakadabar-stack/tree/master"
-    private val coreSrc = "${github}/core/"
-    private val libSrc = "${github}/lib/"
-    private val siteSrc = "${github}/site/"
+    private val github = "https://github.com/spxbhuhb/zakadabar-stack/tree/master/"
 
     override fun makeUrl(destination: CharSequence): String {
 
@@ -59,10 +56,12 @@ class SiteMarkdownContext(
 
         return when {
             dest.startsWith('#') -> dest
-            dest.startsWith("/src") -> resolveToStringSafe(coreSrc, dest.trim('/'))
-            dest.contains("../lib/") -> resolveToStringSafe(libSrc, dest.substringAfter("../lib/").trim('/'))
-            dest.contains("../site/") -> resolveToStringSafe(siteSrc, dest.substringAfter("../site/").trim('/'))
-            dest.contains("/guides/") -> resolveToStringSafe("/${application.locale}/Documentation/guides/", dest.substringAfter("/guides/").trim('/'))
+            dest.startsWith("/cookbook/") -> resolveToStringSafe(github, dest.trim('/'))
+            dest.startsWith("/demo/") -> resolveToStringSafe(github, dest.trim('/'))
+            dest.startsWith("/core/") -> resolveToStringSafe(github, dest.trim('/'))
+            dest.startsWith("/lib/") -> resolveToStringSafe(github, dest.trim('/'))
+            dest.startsWith("/site/") -> resolveToStringSafe(github, dest.trim('/'))
+            dest.startsWith("/doc/guides/") -> resolveToStringSafe("/${application.locale}/Documentation/guides/", dest.substringAfter("/guides/").trim('/'))
             dest.endsWith(".png") -> resolveToStringSafe("/api/$contentNamespace/$path", dest.trim('/'))
             dest.endsWith(".jpg") -> resolveToStringSafe("/api/$contentNamespace/$path", dest.trim('/'))
             else -> baseURI?.resolveToStringSafe(dest) ?: dest
@@ -74,6 +73,11 @@ class SiteMarkdownContext(
         val flavour = htmlElement.dataset["zkFlavour"]?.let { ZkFlavour.valueOf(it.capitalized()) } ?: ZkFlavour.Primary
 
         return when (type) {
+
+            // cookbook
+            // "ConditionalFormExample" -> ZkElement(htmlElement) build { + ConditionalFormExample() }
+
+            // lib:examples
 
             "ButtonExamples" -> ButtonExamples(htmlElement, flavour = flavour)
 

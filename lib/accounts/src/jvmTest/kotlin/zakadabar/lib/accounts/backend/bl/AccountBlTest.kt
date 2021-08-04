@@ -132,6 +132,22 @@ class AccountBlTest {
     }
 
     @Test
+    fun testAuthFail() = runBlocking {
+
+        val (accountName, _, _) = createAccount()
+
+        assertUnauthorized {
+            LoginAction(UUID().toString(), Secret("")).execute()
+        }
+
+        assertUnauthorized {
+            LoginAction(accountName, Secret(UUID.toString())).execute()
+        }
+
+        Unit
+    }
+
+    @Test
     fun testCheckName() = runBlocking {
         val (accountName, _, account) = createAccount()
 

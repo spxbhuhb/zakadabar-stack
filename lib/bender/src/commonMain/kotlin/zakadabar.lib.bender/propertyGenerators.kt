@@ -139,6 +139,56 @@ open class IntPropertyGenerator(
 
 }
 
+open class LocalDatePropertyGenerator(
+    boDescriptor: BoDescriptor,
+    override val property: LocalDateBoProperty
+) : PropertyGenerator(boDescriptor, property, "LocalDate") {
+
+    override fun commonImport() =
+        listOf("import kotlinx.datetime.LocalDate")
+
+    override fun exposedPaImport() = listOf(
+        "import org.jetbrains.exposed.sql.`java-time`.date",
+        "import kotlinx.datetime.toJavaLocalDate",
+        "import kotlinx.datetime.toKotlinLocalDate"
+    )
+
+    override fun exposedTable() =
+        "val ${property.name} = date(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"
+
+    override fun exposedTableToBo() =
+        "${property.name} = this[table.${property.name}]$optional.toKotlinLocalDate()"
+
+    override fun exposedTableFromBo() =
+        "this[table.${property.name}] = bo.${property.name}$optional.toJavaLocalDate()"
+
+}
+
+open class LocalDateTimePropertyGenerator(
+    boDescriptor: BoDescriptor,
+    override val property: LocalDateTimeBoProperty
+) : PropertyGenerator(boDescriptor, property, "LocalDateTime") {
+
+    override fun commonImport() =
+        listOf("import kotlinx.datetime.LocalDateTime")
+
+    override fun exposedPaImport() = listOf(
+        "import org.jetbrains.exposed.sql.`java-time`.datetime",
+        "import kotlinx.datetime.toJavaLocalDateTime",
+        "import kotlinx.datetime.toKotlinLocalDateTime"
+    )
+
+    override fun exposedTable() =
+        "val ${property.name} = date(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"
+
+    override fun exposedTableToBo() =
+        "${property.name} = this[table.${property.name}]$optional.toKotlinLocalDateTime()"
+
+    override fun exposedTableFromBo() =
+        "this[table.${property.name}] = bo.${property.name}$optional.toJavaLocalDateTime()"
+
+}
+
 open class LongPropertyGenerator(
     boDescriptor: BoDescriptor,
     override val property: LongBoProperty
@@ -189,7 +239,7 @@ open class EntityIdPropertyGenerator(
         if (property.name == "id") {
             null
         } else {
-            "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutBo()}ExposedTableGen)$exposedTableOptional"
+            "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutBo()}Table)$exposedTableOptional"
         }
 
     override fun exposedTableToBo() =
@@ -200,7 +250,7 @@ open class EntityIdPropertyGenerator(
             null
         } else {
             if (property.optional) {
-                "this[table.${property.name}] = bo.${property.name}?.let { EntityID(it.toLong(), ${property.kClassName.withoutBo()}ExposedTableGen) }"
+                "this[table.${property.name}] = bo.${property.name}?.let { EntityID(it.toLong(), ${property.kClassName.withoutBo()}Table) }"
             } else {
                 "this[table.${property.name}] = bo.${property.name}.toLong()"
             }
@@ -252,7 +302,7 @@ open class StringPropertyGenerator(
 ) : PropertyGenerator(boDescriptor, property, "String") {
 
     override fun exposedTable(): String {
-        val max = property.constraints.firstOrNull { it.type == BoConstraintType.Max } as? IntBoConstraint
+        val max = property.constraints.firstOrNull { it.constraintType == BoConstraintType.Max } as? IntBoConstraint
         return if (max?.value != null) {
             "val ${property.name} = varchar(\"${property.name.camelToSnakeCase()}\", ${max.value})$exposedTableOptional"
         } else {

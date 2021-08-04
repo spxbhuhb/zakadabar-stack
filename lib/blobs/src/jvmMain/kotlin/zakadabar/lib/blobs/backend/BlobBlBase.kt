@@ -13,7 +13,7 @@ import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobBoCompanion
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.backend.ktor.KtorRouter
+import zakadabar.stack.backend.ktor.KtorEntityRouter
 import zakadabar.stack.backend.ktor.executor
 import zakadabar.stack.backend.route.Router
 import zakadabar.stack.data.entity.EntityBo
@@ -37,7 +37,7 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
         get() = (boClass.companionObject !!.objectInstance as BlobBoCompanion<*, *>).boNamespace
 
     override val router: Router<T> by after {
-        object : KtorRouter<T>(this) {
+        object : KtorEntityRouter<T>(this) {
 
             override var qualifier = "blob/meta"
 

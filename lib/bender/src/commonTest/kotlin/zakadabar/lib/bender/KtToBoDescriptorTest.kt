@@ -57,7 +57,7 @@ internal class KtToBoDescriptorTest {
 
     private fun assertConstraint(c : BoConstraint, kClass : KClass<out BoConstraint>, cType: BoConstraintType, value : Any) {
         assertTrue(kClass.isInstance(c))
-        assertEquals(cType, c.type)
+        assertEquals(cType, c.constraintType)
         when (c) {
             is IntBoConstraint -> assertEquals(value as Int, c.value)
             is BooleanBoConstraint -> assertEquals(value as Boolean, c.value)

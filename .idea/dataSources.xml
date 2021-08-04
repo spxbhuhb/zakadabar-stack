@@ -21,18 +21,25 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/site</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="H2 - db" uuid="bab3150e-895a-433b-a415-bf1e80f05876">
-      <driver-ref>h2.unified</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.h2.Driver</jdbc-driver>
-      <jdbc-url>jdbc:h2:./lib/demo/app/var/db</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
     <data-source source="LOCAL" name="H2 - content" uuid="be84d4de-9a3b-498c-a7ff-dd7962b60888">
       <driver-ref>h2.unified</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.h2.Driver</jdbc-driver>
       <jdbc-url>jdbc:h2:./exp/content/app/var/db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="H2 - sandbox" uuid="b483b7b8-e607-4c42-902a-fe5cb4921d7d">
+      <driver-ref>h2.unified</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.h2.Driver</jdbc-driver>
+      <jdbc-url>jdbc:h2:./demo/demo-sandbox/app/var/db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="H2 - basic" uuid="6725fece-025b-4693-bb67-280a3785e4ce">
+      <driver-ref>h2.unified</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.h2.Driver</jdbc-driver>
+      <jdbc-url>jdbc:h2:./demo/demo-basic/app/var/db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

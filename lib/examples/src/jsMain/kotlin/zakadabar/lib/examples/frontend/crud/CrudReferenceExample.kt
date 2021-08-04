@@ -18,6 +18,6 @@ class CrudReferenceExample(
         height = 400.px
         + zkLayoutStyles.fixBorder
         
-        + ExampleReferenceCrud().apply { openAll() }
+        + ExampleReferenceInlineCrud().apply { openAll() }
     }
 }

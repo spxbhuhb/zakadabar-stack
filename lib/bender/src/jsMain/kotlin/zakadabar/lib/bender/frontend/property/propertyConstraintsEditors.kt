@@ -137,6 +137,43 @@ class InstantPropertyConstraintsEditor : PropertyConstraintsEditor() {
 
 }
 
+
+class LocalDatePropertyConstraintsEditor : PropertyConstraintsEditor() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        + row {
+            + Optional()
+        }
+    }
+
+    override fun generator(name: String, boDescriptor: BoDescriptor) =
+        LocalDatePropertyGenerator(
+            boDescriptor,
+            LocalDateBoProperty(name, optional, constraints, null, null)
+        )
+
+}
+
+class LocalDateTimePropertyConstraintsEditor : PropertyConstraintsEditor() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        + row {
+            + Optional()
+        }
+    }
+
+    override fun generator(name: String, boDescriptor: BoDescriptor) =
+        LocalDateTimePropertyGenerator(
+            boDescriptor,
+            LocalDateTimeBoProperty(name, optional, constraints, null, null)
+        )
+
+}
+
 class LongPropertyConstraintsEditor : PropertyConstraintsEditor() {
 
     override fun onCreate() {

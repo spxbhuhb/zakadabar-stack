@@ -1,0 +1,14 @@
+# This configuration is used for unit tests.
+database:
+  driverClassName: org.h2.Driver
+  jdbcUrl: "jdbc:h2:mem:"
+  # Use this to save the DB for inspection. Remember to delete it before runs!
+  #  jdbcUrl: "jdbc:h2:./app/var/db"
+  username: test
+  password: Almafa.12
+
+traceRouting: false
+staticResources: ./var/static
+
+ktor:
+  port: 8888

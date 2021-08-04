@@ -23,6 +23,8 @@ open class AccountPrivateExposedPa(
 ) {
     open fun readByName(name: String) = table.select { table.accountName eq name }.first().toBo()
 
+    open fun readByNameOrNull(name: String) = table.select { table.accountName eq name }.firstOrNull()?.toBo()
+
     open fun accountListSecure(states: AccountStateExposedTable): List<AccountListSecureEntry> =
         table
             .join(states, JoinType.INNER) { table.id eq states.entityId }

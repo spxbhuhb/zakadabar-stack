@@ -21,10 +21,9 @@ import zakadabar.stack.backend.authorize.Authorizer
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.backend.exposed.Sql
-import zakadabar.stack.backend.ktor.KtorRouter
+import zakadabar.stack.backend.ktor.KtorEntityRouter
 import zakadabar.stack.backend.ktor.KtorSessionProvider
 import zakadabar.stack.backend.ktor.executor
-import zakadabar.stack.backend.module
 import zakadabar.stack.backend.persistence.EmptyPersistenceApi
 import zakadabar.stack.backend.server
 import zakadabar.stack.backend.setting.setting
@@ -37,6 +36,7 @@ import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.exceptions.Forbidden
 import zakadabar.stack.exceptions.Unauthorized
 import zakadabar.stack.exceptions.UnauthorizedData
+import zakadabar.stack.module.module
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
 
@@ -66,7 +66,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
         includeData = false
     }
 
-    override val router = object : KtorRouter<SessionBo>(this) {
+    override val router = object : KtorEntityRouter<SessionBo>(this) {
 
         init {
             action(LoginAction::class, ::loginAction)
@@ -78,7 +78,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
             call.respond(read(call) as Any)
         }
 
-        override suspend fun action(call: ApplicationCall, actionClass: KClass<out BaseBo>, actionFunc: (Executor, BaseBo) -> BaseBo) {
+        override suspend fun action(call: ApplicationCall, actionClass: KClass<out BaseBo>, actionFunc: (Executor, BaseBo) -> Any?) {
             val executor = call.executor()
             val aText = call.receive<String>()
             val aObj = Json.decodeFromString(serializer(actionClass.createType()), aText) as BaseBo

@@ -2,6 +2,8 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
+import zakadabar.gradle.dependencies.Versions
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
@@ -12,7 +14,7 @@ plugins {
 }
 
 group = "hu.simplexion.zakadabar"
-version = "2021.6.29"
+version = Versions.zakadabar
 
 noArg {
     annotation("kotlinx.serialization.Serializable")
@@ -32,10 +34,24 @@ kotlin {
     }
 
     sourceSets["commonMain"].dependencies {
-        implementation(project(":core"))
+        implementation(project(":core:core"))
+        implementation(project(":lib:accounts"))
+        implementation(project(":lib:blobs"))
+    }
+
+    sourceSets["commonTest"].dependencies {
+        implementation(kotlin("test-common"))
+        implementation(kotlin("test-annotations-common"))
+        implementation(kotlin("test-junit"))
     }
 
     sourceSets["jvmMain"].dependencies {
-        implementation("javax.mail:mail:1.5.0-b01")
+        implementation("javax.mail:mail:${Versions.javamail}")
+    }
+
+    sourceSets["jvmTest"].dependencies {
+        implementation("io.ktor:ktor-server-netty:${Versions.ktor}")
+        implementation("com.h2database:h2:${Versions.h2}")
+        implementation("org.subethamail:subethasmtp:3.1.7")
     }
 }

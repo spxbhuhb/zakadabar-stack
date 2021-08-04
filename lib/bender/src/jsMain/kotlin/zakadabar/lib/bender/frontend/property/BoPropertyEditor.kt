@@ -39,6 +39,8 @@ class BoPropertyEditor(
             Type("reference", EntityIdPropertyConstraintsEditor::class, EntityIdBoProperty::class),
             Type("int", IntPropertyConstraintsEditor::class, IntBoProperty::class),
             Type("instant", InstantPropertyConstraintsEditor::class, InstantBoProperty::class),
+            Type("localdate", LocalDatePropertyConstraintsEditor::class, LocalDateBoProperty::class),
+            Type("localdatetime", LocalDateTimePropertyConstraintsEditor::class, LocalDateTimeBoProperty::class),
             Type("long", LongPropertyConstraintsEditor::class, LongBoProperty::class),
             Type("secret", SecretPropertyConstraintsEditor::class, SecretBoProperty::class),
             Type("uuid", UuidPropertyConstraintsEditor::class, UuidBoProperty::class)

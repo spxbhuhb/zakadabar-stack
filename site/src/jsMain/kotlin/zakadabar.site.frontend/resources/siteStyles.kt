@@ -43,4 +43,25 @@ class SiteStyles : ZkCssStyleSheet() {
         + Cursor.pointer
     }
 
+    val cookbook by cssClass {
+        + Display.flex
+        + FlexDirection.column
+        + AlignItems.center
+        paddingTop = theme.spacingStep.px
+        paddingBottom = theme.spacingStep.px
+    }
+
+    val cookbookCard by cssClass {
+        width = 800.px
+        padding = theme.spacingStep.px
+        margin = theme.spacingStep.px
+        border = "1px solid ${theme.borderColor}"
+        borderRadius = theme.cornerRadius.px
+        boxShadow = theme.boxShadow
+    }
+
+    val cookbookCardTitle by cssClass {
+        fontWeight = 500.weight
+    }
+
 }

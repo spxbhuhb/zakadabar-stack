@@ -1,0 +1,9 @@
+title: Standalone Query BL With Null Result
+level: Beginner
+targets:
+  - jvm
+tags:
+  - business logic
+  - action
+  - standalone
+  - "null"
