@@ -61,3 +61,22 @@ modules.clear()
 ## Guides
 
 [Modules](/doc/guides/common/Modules.md)
+
+## Common, JS, JVM
+
+[Serverless.kt](/cookbook/src/commonMain/kotlin/zakadabar/cookbook/module/serverless/Serverless.kt)
+
+## JS
+
+On browser, you can put the following line into `main.kt`.
+
+```kotlin
+Serverless().start()
+```
+
+If you want to stop the modules properly (in node.js for example), you can use the 
+same pattern as on JVM (see below).
+
+## JVM
+
+[main.kt](/cookbook/src/jvmMain/kotlin/zakadabar/cookbook/module/serverless/main.kt)

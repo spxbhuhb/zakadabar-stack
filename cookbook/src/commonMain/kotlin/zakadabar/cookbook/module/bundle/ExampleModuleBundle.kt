@@ -3,18 +3,16 @@
  */
 package zakadabar.cookbook.module.bundle
 
-import zakadabar.cookbook.entity.builtin.ExampleBl
-import zakadabar.cookbook.entity.builtin.ExampleReferenceBl
+import zakadabar.cookbook.module.ExampleModule1
+import zakadabar.cookbook.module.ExampleModule2
 import zakadabar.stack.module.CommonModule
 import zakadabar.stack.module.modules
 
 class ExampleModuleBundle : CommonModule {
 
     override fun onModuleLoad() {
-
-        modules += ExampleReferenceBl()
-        modules += ExampleBl()
-
+        modules += ExampleModule1()
+        modules += ExampleModule2()
     }
 
 }
