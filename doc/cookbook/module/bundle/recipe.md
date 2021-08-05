@@ -14,6 +14,6 @@ modules += ExampleModuleBundle()
 
 [Modules](/doc/guides/common/Modules.md)
 
-## JVM
+## Common, JS, JVM
 
-[module.kt](/cookbook/src/jvmMain/kotlin/zakadabar/cookbook/module/bundle/ExampleModuleBundle.kt)
+[ExampleModuleBundle.kt](/cookbook/src/commonMain/kotlin/zakadabar/cookbook/module/bundle/ExampleModuleBundle.kt)

@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.schedule.data
+package zakadabar.lib.schedule
 
 import kotlinx.serialization.Serializable
 import zakadabar.stack.data.action.ActionBo
@@ -11,20 +11,16 @@ import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoSchema
 
 /**
- * Used by the dispatcher to push a job to a worker. If the worker accepts the job
- * it should return with a successful action status. If it cannot accept the job
- * for any reasons it may return with an unsuccessful action status.
+ * Update status of the job. Used by workers to send status to the dispatcher
+ * after/during job execution.
  */
 @Serializable
-class PushJob(
+class StatusUpdate(
 
     var jobId : EntityId<Job>,
-    var actionNamespace : String,
-    var actionType : String,
-    var actionData : String,
-    var failPolicy : String?,
-    var failCount: Int,
-    var failData : String?,
+    var status : JobStatus,
+    var progress : Double,
+    var responseData : String
 
 ) : ActionBo<ActionStatusBo> {
 
@@ -34,12 +30,9 @@ class PushJob(
 
     override fun schema() = BoSchema {
         + ::jobId
-        + ::actionNamespace
-        + ::actionType
-        + ::actionData
-        + ::failPolicy
-        + ::failCount
-        + ::failData
+        + ::status
+        + ::progress min 0.0 max 100.0
+        + ::responseData
     }
 
 }

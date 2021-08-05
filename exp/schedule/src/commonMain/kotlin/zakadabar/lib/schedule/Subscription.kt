@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.schedule.data
+package zakadabar.lib.schedule
 
 import kotlinx.serialization.Serializable
 import zakadabar.stack.data.entity.EntityBo
@@ -15,7 +15,7 @@ import zakadabar.stack.util.UUID
  * may push a job to this subscription at any time.
  *
  * @param  id               Id of the subscription.
- * @param  nodeAddress      The network address of the node that creates the subscription.
+ * @param  nodeUrl          The root URL of the node that creates the subscription.
  * @param  nodeId           The ID of the node that creates this subscription.
  * @param  actionNamespace  Filters the jobs this subscription applies to.
  * @param  actionType       Filters the jobs this subscription appies to.
@@ -24,7 +24,7 @@ import zakadabar.stack.util.UUID
 class Subscription(
 
     override var id: EntityId<Subscription>,
-    var nodeAddress: String,
+    var nodeUrl: String,
     var nodeId : UUID,
     var actionNamespace : String?,
     var actionType : String?
@@ -38,7 +38,7 @@ class Subscription(
 
     override fun schema() = BoSchema {
         + ::id
-        + ::nodeAddress
+        + ::nodeUrl
         + ::nodeId
         + ::actionNamespace
         + ::actionType
