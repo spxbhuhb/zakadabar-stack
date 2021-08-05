@@ -69,6 +69,7 @@ open class ModuleStore {
      */
     open operator fun plusAssign(dependency: ModuleDependency<*>) {
         lock.use {
+            // ModuleDependency is an open class, do not do anything else here
             dependencies += dependency
         }
     }
@@ -109,10 +110,10 @@ open class ModuleStore {
             var success = true
 
             dependencies.forEach {
-                success = success && it.resolve()
+                success = it.resolve() && success
             }
 
-            if (! success) throw IllegalArgumentException("module dependency resolution failed")
+            if (! success) throw IllegalStateException("module dependency resolution failed")
         }
     }
 
@@ -236,11 +237,25 @@ open class ModuleStore {
      * [modules] under [lock] and executes [block] on that snapshot, so it is
      * guaranteed that the list does not change between [block] calls.
      */
-    open fun forEach(block : (it : CommonModule) -> Unit) {
+    open fun forEach(block: (it: CommonModule) -> Unit) {
         val snapshot = lock.use {
             modules.toMutableList() // using toMutableList because it guarantees a new list
         }
         snapshot.forEach { block(it) }
+    }
+
+    /**
+     * Find a dependency between the known dependencies.
+     */
+    inline fun <reified CONSUMER : Any, reified PROVIDER : Any> dependencies(): List<ModuleDependency<PROVIDER>> =
+        dependencies(CONSUMER::class, PROVIDER::class)
+
+    /**
+     * Find a dependency between the known dependencies.
+     */
+    @Suppress("UNCHECKED_CAST")
+    open fun <PROVIDER : Any> dependencies(consumer: KClass<out Any>, producer: KClass<out Any>): List<ModuleDependency<PROVIDER>> {
+        return (dependencies as List<ModuleDependency<PROVIDER>>).filter { consumer.isInstance(it.consumerModule) && producer == it.providerClass }
     }
 
 }
