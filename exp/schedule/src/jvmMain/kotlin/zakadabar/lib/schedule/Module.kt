@@ -12,7 +12,6 @@ class Module : CommonModule {
     override fun onModuleLoad() {
         modules += JobBl(appRoles.securityOfficer, appRoles.securityOfficer, appRoles.securityOfficer)
         modules += SubscriptionBl()
-        modules += Dispatcher()
     }
 
 }

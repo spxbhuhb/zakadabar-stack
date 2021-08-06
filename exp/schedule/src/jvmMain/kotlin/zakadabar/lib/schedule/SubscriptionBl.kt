@@ -3,7 +3,6 @@
  */
 package zakadabar.lib.schedule
 
-import kotlinx.coroutines.channels.trySendBlocking
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.data.entity.EntityId
@@ -17,21 +16,19 @@ open class SubscriptionBl : EntityBusinessLogicBase<Subscription>(
 
     override val authorizer by provider()
 
-    open val dispatcher by module<Dispatcher>()
+    open val jobBl by module<JobBl>()
 
     override fun create(executor: Executor, bo: Subscription): Subscription =
         pa
             .create(bo)
             .also {
-                dispatcher.events.trySendBlocking(
-                    SubscriptionCreateEvent(
-                        actionNamespace = it.actionNamespace,
-                        actionType = it.actionType,
-                        subscriptionId = it.id,
-                        nodeUrl = it.nodeUrl,
-                        nodeId = it.nodeId
-                    )
-                ).getOrThrow() // abort create if can't send to dispatcher
+                SubscriptionCreateEvent(
+                    actionNamespace = it.actionNamespace,
+                    actionType = it.actionType,
+                    subscriptionId = it.id,
+                    nodeUrl = it.nodeUrl,
+                    nodeId = it.nodeId
+                ).dispatch()
             }
 
 
@@ -45,13 +42,13 @@ open class SubscriptionBl : EntityBusinessLogicBase<Subscription>(
 
         pa.delete(entityId)
 
-        dispatcher.events.trySendBlocking(
-            SubscriptionDeleteEvent(
-                bo.actionNamespace,
-                bo.actionType,
-                bo.id
-            ) // doesn't matter if this fails
-        )
+        SubscriptionDeleteEvent(
+            bo.actionNamespace,
+            bo.actionType,
+            bo.id
+        ).dispatch()
     }
+
+    fun DispatcherEvent.dispatch() = jobBl.dispatchEvent(this)
 
 }

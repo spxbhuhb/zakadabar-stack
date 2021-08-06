@@ -4,13 +4,21 @@
 package zakadabar.lib.schedule
 
 import kotlinx.coroutines.channels.trySendBlocking
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
+import kotlinx.serialization.Serializable
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.module.module
+import zakadabar.stack.util.Lock
+import zakadabar.stack.util.UUID
+import zakadabar.stack.util.use
+import kotlin.coroutines.coroutineContext
 
 /**
  * Business Logic for Job.
@@ -29,7 +37,21 @@ open class JobBl(
 
     override val pa = JobPa()
 
-    open val dispatcher by module<Dispatcher>()
+    protected val dispatcherLock = Lock()
+
+    protected val pendingCheckEvent = PendingCheckEvent()
+
+    @Serializable
+    data class DispatcherKey( // data class, so hash and equals uses fields
+        val actionNamespace: String?,
+        val actionType: String?
+    )
+
+    protected val dispatchers = mutableMapOf<DispatcherKey, Dispatcher>()
+
+    protected val pendingDispatchers = mutableListOf<Dispatcher>()
+
+    protected lateinit var periodic: kotlinx.coroutines.Job
 
     override val authorizer = SimpleRoleAuthorizer<Job> {
         all = adminRole
@@ -55,20 +77,55 @@ open class JobBl(
     val Job.completed
         get() = status == JobStatus.Succeeded || status == JobStatus.Failed || status == JobStatus.Cancelled
 
+    override fun onModuleStart() {
+        super.onModuleStart()
+        periodic = runBlocking { launch { run() } }
+    }
+
+    override fun onModuleStop() {
+        periodic.cancel()
+        // TODO stop and join dispatchers
+        super.onModuleStop()
+    }
+
+    open suspend fun run() {
+        while (coroutineContext.isActive) {
+            dispatcherLock.use {
+                pendingDispatchers.forEach {
+                    it.events.send(pendingCheckEvent)
+                }
+            }
+            delay(500)
+        }
+    }
+
+    fun removePending(dispatcher : Dispatcher) {
+        dispatcherLock.use {
+            pendingDispatchers.removeAll { it == dispatcher }
+        }
+    }
+
+    fun addPending(dispatcher : Dispatcher) {
+        dispatcherLock.use {
+            pendingDispatchers
+                .indexOf(dispatcher)
+                .let {
+                    if (it == -1) pendingDispatchers.add(dispatcher)
+                }
+        }
+    }
 
     override fun create(executor: Executor, bo: Job): Job {
         return super.create(executor, bo)
             .also {
-                dispatcher.events.trySendBlocking(
-                    JobCreateEvent(
-                        jobId = it.id,
-                        startAt = it.startAt,
-                        specific = it.specific,
-                        actionNamespace = it.actionNamespace,
-                        actionType = it.actionType,
-                        actionData = it.actionData
-                    )
-                ) // create the job even if sending to the dispatcher fails
+                JobCreateEvent(
+                    jobId = it.id,
+                    startAt = it.startAt,
+                    specific = it.specific,
+                    actionNamespace = it.actionNamespace,
+                    actionType = it.actionType,
+                    actionData = it.actionData
+                ).dispatch()
             }
     }
 
@@ -93,14 +150,12 @@ open class JobBl(
 
         pa.update(job)
 
-        dispatcher.events.trySendBlocking(
-            JobSuccessEvent(
-                actionNamespace = job.actionNamespace,
-                actionType = job.actionType,
-                jobId = job.id,
-                specific = job.specific
-            )
-        ) // ignore errors, can't do much at this point
+        JobSuccessEvent(
+            actionNamespace = job.actionNamespace,
+            actionType = job.actionType,
+            jobId = job.id,
+            specific = job.specific
+        ).dispatch()
 
         return ActionStatusBo()
     }
@@ -138,37 +193,40 @@ open class JobBl(
 
         pa.update(job)
 
-        dispatcher.events.trySendBlocking(
-            JobFailEvent(
-                actionNamespace = job.actionNamespace,
-                actionType = job.actionType,
-                jobId = job.id,
-                specific = job.specific,
-                retryAt = action.retryAt,
-                actionData = job.actionData
-            )
-        ) // ignore errors, can't do much at this point
+        JobFailEvent(
+            actionNamespace = job.actionNamespace,
+            actionType = job.actionType,
+            jobId = job.id,
+            specific = job.specific,
+            retryAt = action.retryAt,
+            actionData = job.actionData
+        ).dispatch()
 
         return ActionStatusBo()
     }
 
-    open fun jobCancel(executor: Executor, action: JobCancel): ActionStatusBo {
-        val job = pa.read(action.jobId)
+    open fun jobCancel(executor: Executor, action: JobCancel): ActionStatusBo =
+        jobCancel(action.jobId)
 
-        check(! job.completed) { "job has been already completed" }
+    open fun jobCancel(id: EntityId<Job>): ActionStatusBo {
 
-        job.status = JobStatus.Cancelled
+        pa.withTransaction { // jobCancel is called from Dispatchers, so we need a transaction
 
-        pa.update(job)
+            val job = pa.read(id)
 
-        dispatcher.events.trySendBlocking(
+            check(! job.completed) { "job has been already completed" }
+
+            job.status = JobStatus.Cancelled
+
+            pa.update(job)
+
             JobCancelEvent(
                 actionNamespace = job.actionNamespace,
                 actionType = job.actionType,
                 jobId = job.id,
                 specific = job.specific
-            )
-        ) // ignore errors, can't do much at this point
+            ).dispatch()
+        }
 
         return ActionStatusBo()
     }
@@ -178,15 +236,50 @@ open class JobBl(
 
         check(! job.completed) { "job has been already completed" }
 
-        dispatcher.events.trySendBlocking(
-            RequestJobCancelEvent(
-                actionNamespace = job.actionNamespace,
-                actionType = job.actionType,
-                jobId = job.id,
-                specific = job.specific
-            )
-        ) // ignore errors, can't do much at this point
+        RequestJobCancelEvent(
+            actionNamespace = job.actionNamespace,
+            actionType = job.actionType,
+            jobId = job.id,
+            specific = job.specific
+        ).dispatch()
 
         return ActionStatusBo()
+    }
+
+    open fun assignNode(jobId: EntityId<Job>, node: UUID) {
+        pa.withTransaction {
+            pa.assignNode(jobId, node)
+        }
+    }
+
+    open fun dispatchEvent(event: DispatcherEvent) {
+        event.dispatch()
+    }
+
+    open fun DispatcherEvent.dispatch() {
+
+        // Jobs are specific only when marked as specific explicitly.
+        // Subscriptions are specific when namespace or type is specified.
+
+        val specific = if (this is JobEvent) {
+            specific
+        } else {
+            actionNamespace != null || actionType != null
+        }
+
+        // All non-specific events go to the default dispatcher
+
+        val key = if (specific) {
+            DispatcherKey(actionNamespace, actionType)
+        } else {
+            DispatcherKey(null, null)
+        }
+
+        dispatcherLock.use {
+            dispatchers
+                .getOrPut(key) { Dispatcher(this@JobBl) }
+                .events
+        }.trySendBlocking(this)
+
     }
 }

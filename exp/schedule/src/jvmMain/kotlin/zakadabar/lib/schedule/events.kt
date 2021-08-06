@@ -78,3 +78,8 @@ open class PushFailEvent(
     override val jobId: EntityId<Job>,
     override val specific: Boolean
 ) : JobEvent
+
+open class PendingCheckEvent(
+    override val actionNamespace: String? = null,
+    override val actionType: String? = null
+) : DispatcherEvent

@@ -7,10 +7,13 @@ import kotlinx.datetime.toJavaInstant
 import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
+import org.jetbrains.exposed.sql.update
 import zakadabar.stack.backend.exposed.ExposedPaBase
 import zakadabar.stack.backend.exposed.entityId
 import zakadabar.stack.backend.util.toJavaUuid
 import zakadabar.stack.backend.util.toStackUuid
+import zakadabar.stack.data.entity.EntityId
+import zakadabar.stack.util.UUID
 
 open class JobPa(
     table: JobTable = JobTable()
@@ -55,5 +58,11 @@ open class JobPa(
         this[table.progressText] = bo.progressText
         this[table.lastProgressAt] = bo.lastProgressAt?.toJavaInstant()
         this[table.responseData] = bo.responseData
+    }
+
+    fun assignNode(jobId : EntityId<Job>, node : UUID) {
+        table.update({ table.id eq jobId.toLong() }) {
+            it[table.node] = node.toJavaUuid()
+        }
     }
 }
