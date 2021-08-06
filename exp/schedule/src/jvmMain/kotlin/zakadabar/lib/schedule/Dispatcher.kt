@@ -38,34 +38,34 @@ open class Dispatcher : CommonModule {
 
     open suspend fun timedStart() {
         partitions.forEach {
-            it.value.pendingToRunnable()
+
         }
     }
 
     open suspend fun dispatch() {
         for (event in events) {
-            when (event) {
-                is JobCreateEvent -> onJobCreate(event)
-                is JobStatusUpdateEvent -> onJobStatusUpdate(event)
-                is SubscriptionCreateEvent -> onSubscriptionCreate(event)
-                is SubscriptionDeleteEvent -> onSubscriptionDelete(event)
+
+            // Jobs are specific only when marked as specific explicitly.
+            // Subscriptions are specific when namespace or type is specified.
+
+            val specific = if (event is JobEvent) {
+                event.specific
+            } else {
+                event.actionNamespace != null || event.actionType != null
             }
+
+            // All non-specific events go to the default partition
+
+            val key = if (specific) {
+                PartitionKey(event.actionNamespace, event.actionType)
+            } else {
+                PartitionKey(null, null)
+            }
+
+            partitions
+                .getOrPut(key) { Partition(key) }
+                .events.send(event)
         }
     }
 
-    protected fun onJobCreate(event: JobCreateEvent) {
-        TODO("Not yet implemented")
-    }
-
-    protected fun onJobStatusUpdate(event: JobStatusUpdateEvent) {
-        TODO("Not yet implemented")
-    }
-
-    private fun onSubscriptionCreate(event: SubscriptionCreateEvent) {
-        TODO("Not yet implemented")
-    }
-
-    private fun onSubscriptionDelete(event: SubscriptionDeleteEvent) {
-        TODO("Not yet implemented")
-    }
 }

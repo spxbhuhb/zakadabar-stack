@@ -19,11 +19,12 @@ class JobTable : ExposedPaTable<Job>(
     val actionType = varchar("action_type", 100)
     val actionData = text("action_data")
     val node = uuid("node").nullable()
-    val failPolicy = varchar("fail_policy", 100).nullable()
     val failCount = integer("fail_count")
-    val failData = text("fail_data").nullable()
+    val lastFailData = text("fail_data").nullable()
     val deleteOnSuccess = bool("delete_on_success")
     val progress = double("progress")
+    val progressText = text("progress_text").nullable()
+    val lastProgressAt = timestamp("last_progress_at").nullable()
     val responseData = text("response_data").nullable()
 
     init {

@@ -21,12 +21,18 @@ interface ActionCommInterface {
      * @param   request              The action parameters to send.
      * @param   requestSerializer    Serializer for the request.
      * @param   responseSerializer   Serializer for the response.
+     * @param   baseUrl              Server url to use instead of default base URL.
      *
      * @return  The response sent by the server.
      *
      * // TODO add throws docs
      */
-    suspend fun <REQUEST : Any, RESPONSE> action(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<RESPONSE>): RESPONSE
+    suspend fun <REQUEST : Any, RESPONSE> action(
+        request: REQUEST,
+        requestSerializer: KSerializer<REQUEST>,
+        responseSerializer: KSerializer<RESPONSE>,
+        baseUrl : String? = null
+    ): RESPONSE
 
     /**
      * Executes an action. Use this method when there is complex business logic behind the
@@ -43,10 +49,16 @@ interface ActionCommInterface {
      * @param   request              The action parameters to send.
      * @param   requestSerializer    Serializer for the request.
      * @param   responseSerializer   Serializer for the response.
+     * @param   baseUrl              Server url to use instead of default base URL.
      *
      * @return  The response sent by the server or null.
      *
      * // TODO add throws docs
      */
-    suspend fun <REQUEST : Any, RESPONSE> actionOrNull(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<RESPONSE>): RESPONSE?
+    suspend fun <REQUEST : Any, RESPONSE> actionOrNull(
+        request: REQUEST,
+        requestSerializer: KSerializer<REQUEST>,
+        responseSerializer: KSerializer<RESPONSE>,
+        baseUrl : String? = null
+    ): RESPONSE?
 }

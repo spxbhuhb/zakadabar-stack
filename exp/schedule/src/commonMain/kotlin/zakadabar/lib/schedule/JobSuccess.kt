@@ -10,18 +10,11 @@ import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoSchema
 
-/**
- * Used by the dispatcher to push a job to a worker. If the worker accepts the job
- * it should return with a successful action status. If it cannot accept the job
- * for any reasons it may return with an unsuccessful action status.
- */
 @Serializable
-class PushJob(
+class JobSuccess(
 
-    var jobId: EntityId<Job>,
-    var actionNamespace: String,
-    var actionType: String,
-    var actionData: String
+    var jobId : EntityId<Job>,
+    var responseData : String
 
 ) : ActionBo<ActionStatusBo> {
 
@@ -29,13 +22,9 @@ class PushJob(
 
     override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
 
-    suspend fun execute(baseUrl : String) = comm.action(this, serializer(), ActionStatusBo.serializer(), baseUrl)
-
     override fun schema() = BoSchema {
         + ::jobId
-        + ::actionNamespace
-        + ::actionType
-        + ::actionData
+        + ::responseData
     }
 
 }

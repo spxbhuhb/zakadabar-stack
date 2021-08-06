@@ -11,17 +11,25 @@ import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoSchema
 
 /**
- * Used by the dispatcher to push a job to a worker. If the worker accepts the job
- * it should return with a successful action status. If it cannot accept the job
- * for any reasons it may return with an unsuccessful action status.
+ * Requests a job cancellation. Successful execution of this action does not
+ * mean that the job has been cancelled, as that might not be possible.
+ *
+ * When this action is executed, the dispatcher is notifier that this job
+ * should be cancelled.
+ *
+ * If the job is pending or waiting for a worker the cancellation is immediate.
+ *
+ * If a worker already works on this job the dispatcher will send this request
+ * to the worker and the worker decides if cancellation is possible or not.
+ *
+ * If cancellation is possible, the worker interrupts the job and executes
+ * the [JobCancel] action to let the scheduler know that this job was indeed
+ * cancelled.
  */
 @Serializable
-class PushJob(
+class RequestJobCancel(
 
-    var jobId: EntityId<Job>,
-    var actionNamespace: String,
-    var actionType: String,
-    var actionData: String
+    var jobId : EntityId<Job>
 
 ) : ActionBo<ActionStatusBo> {
 
@@ -29,13 +37,8 @@ class PushJob(
 
     override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
 
-    suspend fun execute(baseUrl : String) = comm.action(this, serializer(), ActionStatusBo.serializer(), baseUrl)
-
     override fun schema() = BoSchema {
         + ::jobId
-        + ::actionNamespace
-        + ::actionType
-        + ::actionData
     }
 
 }

@@ -23,7 +23,12 @@ open class ActionComm(
 ) : CommBase(), ActionCommInterface {
 
     @PublicApi
-    override suspend fun <REQUEST : Any, RESPONSE> actionOrNull(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<RESPONSE>): RESPONSE? {
+    override suspend fun <REQUEST : Any, RESPONSE> actionOrNull(
+        request: REQUEST,
+        requestSerializer: KSerializer<REQUEST>,
+        responseSerializer: KSerializer<RESPONSE>,
+        baseUrl : String?
+    ): RESPONSE? {
 
         val headers = Headers()
 
@@ -38,7 +43,9 @@ open class ActionComm(
         )
 
         val response = commBlock {
-            val responsePromise = window.fetch("/api/${companion.boNamespace}/action/${request::class.simpleName}", requestInit)
+            val base = baseUrl?.trim('/') ?: ""
+            val url = "$base/api/${companion.boNamespace}/action/${request::class.simpleName}"
+            val responsePromise = window.fetch(url, requestInit)
             checkStatus(responsePromise.await())
         }
 
@@ -53,7 +60,12 @@ open class ActionComm(
     }
 
     @PublicApi
-    override suspend fun <REQUEST : Any, RESPONSE> action(request: REQUEST, requestSerializer: KSerializer<REQUEST>, responseSerializer: KSerializer<RESPONSE>): RESPONSE {
+    override suspend fun <REQUEST : Any, RESPONSE> action(
+        request: REQUEST,
+        requestSerializer: KSerializer<REQUEST>,
+        responseSerializer: KSerializer<RESPONSE>,
+        baseUrl : String?
+    ): RESPONSE {
         return actionOrNull(request, requestSerializer, responseSerializer)!!
     }
 

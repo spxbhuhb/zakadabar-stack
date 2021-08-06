@@ -56,6 +56,11 @@ abstract class ExposedPaBase<T : EntityBo<T>, TT : ExposedPaTable<T>>(
             .first()
             .toBo()
 
+    override fun readOrNull(entityId: EntityId<T>) =
+        table
+            .select { table.id eq entityId.toLong() }
+            .firstOrNull()
+            ?.toBo()
 
     override fun update(bo: T) =
         table

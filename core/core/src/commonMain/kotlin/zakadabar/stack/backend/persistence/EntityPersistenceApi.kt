@@ -55,6 +55,10 @@ interface EntityPersistenceApi<T : EntityBo<T>> {
         throw NotImplementedError()
     }
 
+    fun readOrNull(entityId: EntityId<T>) : T? {
+        throw NotImplementedError()
+    }
+
     fun update(bo: T): T {
         throw NotImplementedError()
     }

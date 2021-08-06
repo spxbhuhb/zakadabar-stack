@@ -3,29 +3,78 @@
  */
 package zakadabar.lib.schedule
 
+import kotlinx.datetime.Instant
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.UUID
 
-interface DispatcherEvent
+interface DispatcherEvent {
+    val actionNamespace: String?
+    val actionType: String?
+}
+
+interface JobEvent : DispatcherEvent {
+    override val actionNamespace: String
+    override val actionType: String
+    val jobId: EntityId<Job>
+    val specific: Boolean
+}
 
 open class JobCreateEvent(
-   partitionJobEntry: PartitionJobEntry
-) : DispatcherEvent
+    override val actionNamespace: String,
+    override val actionType: String,
+    override val jobId: EntityId<Job>,
+    override val specific: Boolean,
+    val actionData : String,
+    val startAt: Instant?
+) : JobEvent
 
-open class JobStatusUpdateEvent(
-    open val jobId: EntityId<Job>,
-    open val status: JobStatus
-) : DispatcherEvent
+open class JobSuccessEvent(
+    override val actionNamespace: String,
+    override val actionType: String,
+    override val jobId: EntityId<Job>,
+    override val specific: Boolean,
+) : JobEvent
+
+open class JobFailEvent(
+    override val actionNamespace: String,
+    override val actionType: String,
+    override val jobId: EntityId<Job>,
+    override val specific: Boolean,
+    val retryAt: Instant?,
+    val actionData : String
+) : JobEvent
+
+open class JobCancelEvent(
+    override val actionNamespace: String,
+    override val actionType: String,
+    override val jobId: EntityId<Job>,
+    override val specific: Boolean
+) : JobEvent
+
+open class RequestJobCancelEvent(
+    override val actionNamespace: String,
+    override val actionType: String,
+    override val jobId: EntityId<Job>,
+    override val specific: Boolean
+) : JobEvent
 
 open class SubscriptionCreateEvent(
-    open var subscriptionId: EntityId<Subscription>,
-    open var nodeUrl: String,
-    open var nodeId : UUID,
-    open val actionNamespace: String?,
-    open val actionType: String?
+    override val actionNamespace: String?,
+    override val actionType: String?,
+    var subscriptionId: EntityId<Subscription>,
+    var nodeUrl: String,
+    var nodeId: UUID,
 ) : DispatcherEvent
 
 open class SubscriptionDeleteEvent(
-    open var subscriptionId: EntityId<Subscription>
+    override val actionNamespace: String?,
+    override val actionType: String?,
+    var subscriptionId: EntityId<Subscription>
 ) : DispatcherEvent
 
+open class PushFailEvent(
+    override val actionNamespace: String,
+    override val actionType: String,
+    override val jobId: EntityId<Job>,
+    override val specific: Boolean
+) : JobEvent

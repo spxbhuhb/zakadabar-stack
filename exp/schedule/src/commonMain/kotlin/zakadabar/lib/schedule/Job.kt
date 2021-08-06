@@ -26,7 +26,7 @@ import zakadabar.stack.util.UUID
  *  @param  node             The node this job runs or will run on.
  *  @param  failPolicy       Specifies what should happen when the job fails.
  *  @param  failCount        Number of failed run attempts.
- *  @param  failData         JSON data that belongs to the fail policy and contains
+ *  @param  lastFailData         JSON data that belongs to the fail policy and contains
  *                           details about the last failure.
  *  @param  deleteOnSuccess  Delete this job if it finishes successfully.
  *  @param  progress         For a long running job the progress of the job (percent).
@@ -45,11 +45,12 @@ class Job(
     var actionType : String,
     var actionData : String,
     var node : UUID?,
-    var failPolicy : String?,
     var failCount: Int,
-    var failData : String?,
+    var lastFailData : String?,
     var deleteOnSuccess : Boolean,
     var progress : Double,
+    var progressText : String?,
+    var lastProgressAt : Instant?,
     var responseData : String?
 
 ) : EntityBo<Job> {
@@ -70,11 +71,12 @@ class Job(
         + ::actionType blank false min 1 max 100
         + ::actionData blank false
         + ::node
-        + ::failPolicy blank false max 100
         + ::failCount
-        + ::failData blank false
+        + ::lastFailData blank false
         + ::deleteOnSuccess
         + ::progress min 0.0 max 100.0
+        + ::progressText
+        + ::lastProgressAt
         + ::responseData blank false
     }
 

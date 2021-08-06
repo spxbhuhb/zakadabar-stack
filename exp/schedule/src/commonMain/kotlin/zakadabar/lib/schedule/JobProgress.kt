@@ -10,17 +10,12 @@ import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.schema.BoSchema
 
-/**
- * Update status of the job. Used by workers to send status to the dispatcher
- * after/during job execution.
- */
 @Serializable
-class StatusUpdate(
+class JobProgress(
 
     var jobId : EntityId<Job>,
-    var status : JobStatus,
     var progress : Double,
-    var responseData : String
+    var progressText : String?
 
 ) : ActionBo<ActionStatusBo> {
 
@@ -30,9 +25,8 @@ class StatusUpdate(
 
     override fun schema() = BoSchema {
         + ::jobId
-        + ::status
         + ::progress min 0.0 max 100.0
-        + ::responseData
+        + ::progressText
     }
 
 }

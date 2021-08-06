@@ -5,8 +5,8 @@ package zakadabar.lib.schedule
 
 enum class JobStatus {
     Pending,
-    Runnable,
     Running,
     Failed,
-    Succeeded
+    Succeeded,
+    Cancelled
 }

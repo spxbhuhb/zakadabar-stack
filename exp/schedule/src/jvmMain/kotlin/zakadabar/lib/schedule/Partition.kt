@@ -4,121 +4,204 @@
 package zakadabar.lib.schedule
 
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.Lock
-import zakadabar.stack.util.use
+import zakadabar.stack.util.UUID
 import kotlin.math.absoluteValue
 
-/**
- * Stores jobs and subscriptions for the given namespace, type pair.
- *
- * @property  pendingJobs   Jobs that has a start time and it is in the future.
- * @property  runnableJobs  Jobs that can be started right now.
- * @property  runningJobs   Jobs that are currently running.
- */
-open class Partition(
-    val actionNamespace: String?,
-    val actionType: String?
+class Partition(
+    val key: PartitionKey
 ) {
-    protected val lock = Lock()
+    val events = Channel<DispatcherEvent>()
 
-    protected var pendingJobs = mutableListOf<PartitionJobEntry>()
-    protected val runnableJobs = mutableListOf<PartitionJobEntry>()
-    protected val runningJobs = mutableListOf<PartitionJobEntry>()
+    var coroutine = runBlocking { launch { run() } }
 
-    protected val idleSubscriptions = mutableListOf<Subscription>()
-    protected val busySubscriptions = mutableListOf<Subscription>()
+    class JobEntry(
+        val id: EntityId<Job>,
+        val startAt: Instant?,
+        val actionNamespace: String,
+        val actionType: String,
+        val actionData: String
+    )
+
+    class SubscriptionEntry(
+        val id: EntityId<Subscription>,
+        val nodeUrl: String,
+        val nodeId: UUID,
+        var reuse: Boolean
+    )
+
+    class RunEntry(
+        val job: JobEntry,
+        val subscription: SubscriptionEntry
+    )
+
+    var pendingJobs = mutableListOf<JobEntry>()
+    val runnableJobs = mutableListOf<JobEntry>()
+    val runningJobs = mutableListOf<RunEntry>()
+    val idleSubscriptions = mutableListOf<SubscriptionEntry>()
+
+    suspend fun run() {
+        for (event in events) {
+            when (event) {
+                is JobCreateEvent -> onJobCreate(event)
+                is JobSuccessEvent -> onJobSuccess(event)
+                is JobFailEvent -> onJobFail(event)
+                is RequestJobCancelEvent -> onRequestJobCancel(event)
+                is SubscriptionCreateEvent -> onSubscriptionCreate(event)
+                is SubscriptionDeleteEvent -> onSubscriptionDelete(event)
+                is PushFailEvent -> onPushFail(event)
+            }
+        }
+    }
 
     /**
      * Add a job to [pendingJobs] or [runnableJobs], depending on
      * [Job.startAt]
      */
-    fun add(entry: PartitionJobEntry) {
+    fun onJobCreate(event: JobCreateEvent) {
+        addJobEntry(event, event.actionData, event.startAt)
+    }
 
-        // I opted to for two 'lock.use' instead of one so getting the time
-        // from the clock is not under the lock.
+    fun addJobEntry(event: JobEvent, actionData: String, startAt: Instant?) {
+        val entry = JobEntry(
+            event.jobId,
+            startAt,
+            event.actionNamespace,
+            event.actionType,
+            actionData
+        )
 
-        if (entry.runnable) {
-            lock.use { runnableJobs.add(entry) }
+        if (startAt == null || startAt <= Clock.System.now()) {
+            runnableJobs.add(entry)
             return
         }
 
-        lock.use {
-            val index = pendingJobs.binarySearch {
-                val es = it.startAt
-                val js = entry.startAt
-                if (es == null) {
-                    return@binarySearch if (js == null) 0 else - 1
-                }
-                if (js == null) {
-                    return@binarySearch 1
-                }
-                es.compareTo(js)
-            }.absoluteValue
+        val index = pendingJobs.binarySearch {
+            it.startAt !!.compareTo(startAt)
+        }.absoluteValue
 
-            pendingJobs.add(index, entry)
+        pendingJobs.add(index, entry)
+    }
+
+    fun takeRunEntry(jobId: EntityId<Job>): RunEntry? {
+        val index = runningJobs.indexOfFirst { it.job.id == jobId }
+        if (index == - 1) return null
+
+        val entry = runningJobs.removeAt(index)
+        if (entry.subscription.reuse) idleSubscriptions += entry.subscription
+
+        return entry
+    }
+
+    fun onJobSuccess(event: JobSuccessEvent) {
+        takeRunEntry(event.jobId)
+    }
+
+    fun onJobFail(event: JobFailEvent) {
+        takeRunEntry(event.jobId) ?: return
+        if (event.retryAt != null) {
+            addJobEntry(event, event.actionData, event.retryAt)
         }
     }
 
-    /**
-     * Remove a job from the jobs this partition handles.
-     *
-     * @param  jobId  Id of the job to remove.
-     *
-     * @throws  IllegalStateException  When the job is currently running.
-     */
-    fun removeJob(jobId: EntityId<Job>) {
-        lock.use {
-            if (pendingJobs.removeAll { it.jobId == jobId }) return
-            if (runnableJobs.removeAll { it.jobId == jobId }) return
-            if (runningJobs.find { it.jobId == jobId } != null) throw IllegalStateException("job is running")
+    fun onRequestJobCancel(event: RequestJobCancelEvent) {
+        val id = event.jobId
+
+        pendingJobs.indexOfFirst { it.id == id }.takeIf { it != - 1 }?.also {
+            val entry = pendingJobs.removeAt(it)
+            runBlocking { launch { JobCancel(entry.id).execute() } }
+            return
         }
+
+        runnableJobs.indexOfFirst { it.id == id }.takeIf { it != - 1 }?.also {
+            val entry = runnableJobs.removeAt(it)
+            runBlocking { launch { JobCancel(entry.id).execute() } }
+            return
+        }
+
+        // TODO send cancel request to the worker
     }
 
-    fun add(subscription: Subscription) {
-        lock.use {
-            idleSubscriptions += subscription
-        }
+    fun onSubscriptionCreate(event: SubscriptionCreateEvent) {
+        idleSubscriptions += SubscriptionEntry(
+            id = event.subscriptionId,
+            nodeUrl = event.nodeUrl,
+            nodeId = event.nodeId,
+            reuse = true
+        )
     }
 
-    /**
-     * Remove a subscription from the subscriptions this partition handles.
-     *
-     * @param  subscriptionId  Id of the subscription to remove.
-     *
-     * @throws  IllegalStateException  When the subscription is currently busy.
-     */
-    fun removeSubscription(subscriptionId: EntityId<Subscription>) {
-        lock.use {
-            if (idleSubscriptions.removeAll { it.id == subscriptionId }) return
-            if (busySubscriptions.firstOrNull { it.id == subscriptionId } != null) throw IllegalStateException("subscription is busy")
-        }
-    }
+    fun onSubscriptionDelete(event: SubscriptionDeleteEvent) {
+        if (idleSubscriptions.removeAll { it.id == event.subscriptionId }) return
 
-    /**
-     * True when the [Job.startAt] is null or is before now.
-     */
-    val PartitionJobEntry.runnable: Boolean
-        get() = startAt?.let { it <= Clock.System.now() } != false
+        runningJobs
+            .firstOrNull { it.subscription.id == event.subscriptionId }
+            ?.subscription
+            ?.reuse = false
+    }
 
     /**
      * Move jobs from [pendingJobs] to [runnableJobs] when [Job.startAt] in the past.
      */
     fun pendingToRunnable(events: Channel<DispatcherEvent>) {
-        lock.use {
-            if (pendingJobs.isEmpty()) return
+        if (pendingJobs.isEmpty()) return
 
-            val now = Clock.System.now()
+        val now = Clock.System.now()
 
-            val jobs = pendingJobs.takeWhile { entry ->
-                entry.startAt?.let { it <= now } ?: true
+        val jobs = pendingJobs.takeWhile { entry ->
+            entry.startAt?.let { it <= now } ?: true
+        }
+
+        if (jobs.isEmpty()) return
+
+        pendingJobs = pendingJobs.drop(jobs.size).toMutableList()
+        runnableJobs.addAll(jobs)
+    }
+
+
+    fun pushJobs() {
+        runBlocking {
+            while (idleSubscriptions.isNotEmpty() && runnableJobs.isNotEmpty()) {
+                val entry = RunEntry(runnableJobs.first(), idleSubscriptions.first())
+                runningJobs += entry
+
+                launch { pushJob(entry) }
             }
-
-            if (jobs.isEmpty()) return
-
-            pendingJobs = pendingJobs.drop(jobs.size).toMutableList()
-            runnableJobs.addAll(jobs)
         }
     }
+
+    suspend fun pushJob(entry: RunEntry) {
+        val job = entry.job
+        val subscription = entry.subscription
+
+        try {
+            PushJob(
+                jobId = job.id,
+                actionNamespace = job.actionNamespace,
+                actionType = job.actionType,
+                actionData = job.actionData
+            ).execute(baseUrl = subscription.nodeUrl)
+        } catch (ex: Exception) {
+            events.send(
+                PushFailEvent(
+                    jobId = job.id,
+                    actionNamespace = job.actionNamespace,
+                    actionType = job.actionType,
+                    specific = false
+                )
+            )
+            return
+        }
+    }
+
+    fun onPushFail(event : PushFailEvent) {
+        val entry = takeRunEntry(event.jobId) ?: return
+        runnableJobs.add(0, entry.job)
+        pushJobs()
+    }
+
 }

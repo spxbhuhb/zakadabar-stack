@@ -29,11 +29,12 @@ open class JobPa(
         actionType = this[table.actionType],
         actionData = this[table.actionData],
         node = this[table.node]?.toStackUuid(),
-        failPolicy = this[table.failPolicy],
         failCount = this[table.failCount],
-        failData = this[table.failData],
+        lastFailData = this[table.lastFailData],
         deleteOnSuccess = this[table.deleteOnSuccess],
         progress = this[table.progress],
+        progressText = this[table.progressText],
+        lastProgressAt = this[table.lastProgressAt]?.toKotlinInstant(),
         responseData = this[table.responseData]
     )
 
@@ -47,11 +48,12 @@ open class JobPa(
         this[table.actionType] = bo.actionType
         this[table.actionData] = bo.actionData
         this[table.node] = bo.node?.toJavaUuid()
-        this[table.failPolicy] = bo.failPolicy
         this[table.failCount] = bo.failCount
-        this[table.failData] = bo.failData
+        this[table.lastFailData] = bo.lastFailData
         this[table.deleteOnSuccess] = bo.deleteOnSuccess
         this[table.progress] = bo.progress
+        this[table.progressText] = bo.progressText
+        this[table.lastProgressAt] = bo.lastProgressAt?.toJavaInstant()
         this[table.responseData] = bo.responseData
     }
 }

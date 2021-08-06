@@ -19,28 +19,38 @@ open class SubscriptionBl : EntityBusinessLogicBase<Subscription>(
 
     open val dispatcher by module<Dispatcher>()
 
-    override fun create(executor: Executor, bo: Subscription): Subscription {
-        return super.create(executor, bo).also {
-            dispatcher.events.trySendBlocking(
-                SubscriptionCreateEvent(
-                    subscriptionId = it.id,
-                    nodeUrl = it.nodeUrl,
-                    nodeId = it.nodeId,
-                    actionNamespace = it.actionNamespace,
-                    actionType = it.actionType
-                )
-            ).getOrThrow() // abort create if can't send to dispatcher
-        }
-    }
+    override fun create(executor: Executor, bo: Subscription): Subscription =
+        pa
+            .create(bo)
+            .also {
+                dispatcher.events.trySendBlocking(
+                    SubscriptionCreateEvent(
+                        actionNamespace = it.actionNamespace,
+                        actionType = it.actionType,
+                        subscriptionId = it.id,
+                        nodeUrl = it.nodeUrl,
+                        nodeId = it.nodeId
+                    )
+                ).getOrThrow() // abort create if can't send to dispatcher
+            }
+
 
     override fun update(executor: Executor, bo: Subscription): Subscription {
         throw NotImplementedError("subscriptions cannot be updated, delete and create a new")
     }
 
     override fun delete(executor: Executor, entityId: EntityId<Subscription>) {
-        super.delete(executor, entityId)
+
+        val bo = pa.readOrNull(entityId) ?: return
+
+        pa.delete(entityId)
+
         dispatcher.events.trySendBlocking(
-            SubscriptionDeleteEvent(entityId) // doesn't matter if this fails
+            SubscriptionDeleteEvent(
+                bo.actionNamespace,
+                bo.actionType,
+                bo.id
+            ) // doesn't matter if this fails
         )
     }
 
