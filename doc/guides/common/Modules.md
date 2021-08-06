@@ -94,6 +94,80 @@ Add static resources to Ktor. It provides an easy way to register directories fo
 [ContentBackend](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/custom/ContentBackend.kt)
 for an example.
 
+## Dependencies
+
+A module can declare a dependency on another module. The `module` helper function
+creates a delegate that provides an instance of the type parameter of the function.
+
+```kotlin
+val secondModule by module<SecondModule>()
+```
+
+After this declaration `secondModule` is an actual instance of `SecondModule`. You
+can call its functions, access its properties.
+
+During system startup the  function of 
+[ModuleStore.resolveDependencies](/core/core/src/commonMain/kotlin/zakadabar/stack/module/ModuleStore.kt)
+tries to resolve all module dependencies and throws an exception when there are missing non-optional
+dependencies.
+
+### Optional Dependencies
+
+There are two ways to make dependencies optional:
+
+- do it right: use the `optionalModule` function to declare the dependency
+- hack it out: turn a mandatory dependency optional
+
+You can do these anywhere, but it has to be done before `resolveDependencies` is called.
+
+#### Declare a Dependency as Optional
+
+Use the `optionalDependency` function to declare an optional dependency. In this
+case the variable will be nullable, and you have to handle the cases when the
+dependency is missing:
+
+```kotlin
+val provider2 by optionalModule<ProviderModule2>()
+
+fun doSomething() {
+    // you could use provider2?.doSomethingElse()
+    provider2?.let { it.doSomethingElse() }
+}
+```
+
+This is the preferred way as the code that uses this dependency won't compile
+until you cover all cases.
+
+#### Turn a Mandatory Dependency Optional
+
+You can turn a mandatory dependency optional. Use this way only when you are 
+not in position to do it right (see above).
+
+Turning a mandatory dependency optional will make `resolveDependencies` finish 
+without an error, but you may face runtime errors if you call functions that would
+use this dependency.
+
+```kotlin
+modules.dependencies<ConsumerModule,ProviderModule>().optional = true
+```
+
+This way exists because sometimes you might not be in position to change the
+provider module itself, you have to use it as it is.
+
+### Dependency Resolution Failures
+
+Dependency resolution throws `IllegalArgumentException`  when it is not able to
+resolve the dependencies:
+
+```text
+2021-08-05 08:00:48.168565Z [INFO ]  loaded module zakadabar.cookbook.module.optional.ConsumerModule@1c2c22f3
+2021-08-05 08:00:48.168565Z [ERROR]  unable to resolve dependency from zakadabar.cookbook.module.optional.ConsumerModule.provider1 to ProviderModule1 
+2021-08-05 08:00:48.168565Z [INFO ]  unable to resolve optional dependency from zakadabar.cookbook.module.optional.ConsumerModule.provider2 to ProviderModule2 
+Exception in thread "main" java.lang.IllegalStateException: module dependency resolution failed
+	at zakadabar.stack.module.ModuleStore.resolveDependencies(ModuleStore.kt:116)
+	at zakadabar.cookbook.module.optional.MainKt.main(main.kt:15)
+```
+
 ## Internals
 
 ### Module Store
