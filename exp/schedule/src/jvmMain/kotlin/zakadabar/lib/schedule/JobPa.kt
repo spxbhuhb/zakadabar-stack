@@ -33,6 +33,8 @@ open class JobPa(
         actionData = this[table.actionData],
         node = this[table.node]?.toStackUuid(),
         failCount = this[table.failCount],
+        lastFailedAt = this[table.lastFailedAt]?.toKotlinInstant(),
+        lastFailMessage = this[table.lastFailMessage],
         lastFailData = this[table.lastFailData],
         deleteOnSuccess = this[table.deleteOnSuccess],
         progress = this[table.progress],
@@ -52,6 +54,8 @@ open class JobPa(
         this[table.actionData] = bo.actionData
         this[table.node] = bo.node?.toJavaUuid()
         this[table.failCount] = bo.failCount
+        this[table.lastFailedAt] = bo.lastFailedAt?.toJavaInstant()
+        this[table.lastFailMessage] = bo.lastFailMessage
         this[table.lastFailData] = bo.lastFailData
         this[table.deleteOnSuccess] = bo.deleteOnSuccess
         this[table.progress] = bo.progress

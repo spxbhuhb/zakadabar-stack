@@ -14,7 +14,7 @@ import zakadabar.stack.data.schema.BoSchema
 class JobSuccess(
 
     var jobId : EntityId<Job>,
-    var responseData : String
+    var responseData : String?
 
 ) : ActionBo<ActionStatusBo> {
 

@@ -15,7 +15,8 @@ import zakadabar.stack.data.schema.BoSchema
 class JobFail(
 
     var jobId : EntityId<Job>,
-    var lastFailData : String,
+    var lastFailMessage : String?,
+    var lastFailData : String?,
     var retryAt : Instant?,
 
 ) : ActionBo<ActionStatusBo> {
@@ -26,6 +27,7 @@ class JobFail(
 
     override fun schema() = BoSchema {
         + ::jobId
+        + ::lastFailMessage
         + ::lastFailData
         + ::retryAt
     }

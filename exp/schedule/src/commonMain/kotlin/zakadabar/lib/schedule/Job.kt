@@ -38,14 +38,16 @@ class Job(
     override var id : EntityId<Job>,
     var status : JobStatus,
     var createdAt : Instant,
-    var completedAt : Instant?,
     var startAt : Instant?,
+    var completedAt : Instant?,
     var specific : Boolean,
     var actionNamespace : String,
     var actionType : String,
     var actionData : String,
     var node : UUID?,
     var failCount: Int,
+    var lastFailedAt: Instant?,
+    var lastFailMessage : String?,
     var lastFailData : String?,
     var deleteOnSuccess : Boolean,
     var progress : Double,
@@ -64,15 +66,17 @@ class Job(
         + ::id
         + ::status
         + ::createdAt
-        + ::completedAt
         + ::startAt
+        + ::completedAt
         + ::specific
         + ::actionNamespace blank false min 1 max 100
         + ::actionType blank false min 1 max 100
         + ::actionData blank false
         + ::node
         + ::failCount
-        + ::lastFailData blank false
+        + ::lastFailedAt
+        + ::lastFailMessage
+        + ::lastFailData
         + ::deleteOnSuccess
         + ::progress min 0.0 max 100.0
         + ::progressText
