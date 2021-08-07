@@ -24,6 +24,11 @@ interface Router<T : BaseBo> {
 
     fun <RQ : ActionBo<RS>, RS : Any?> action(actionClass: KClass<RQ>, actionFunc: (Executor, RQ) -> RS)
 
+    fun prepareAction(
+        actionType : String,
+        actionData : String
+    ) : Pair<(Executor, BaseBo) -> Any?,BaseBo>
+
     fun <RQ : QueryBo<RS>, RS : Any?> query(queryClass: KClass<RQ>, queryFunc: (Executor, RQ) -> RS)
 
 }

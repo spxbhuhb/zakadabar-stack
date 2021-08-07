@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.backend.business
 
+import zakadabar.stack.alarm.AlarmSupportProvider
 import zakadabar.stack.backend.audit.AuditorProvider
 import zakadabar.stack.backend.route.RouterProvider
 import zakadabar.stack.backend.validate.ValidatorProvider
@@ -16,5 +17,9 @@ actual var auditorProvider: AuditorProvider
     set(value) {}
 
 actual var validatorProvider: ValidatorProvider
+    get() = TODO("Not yet implemented")
+    set(value) {}
+
+actual var alarmSupportProvider: AlarmSupportProvider
     get() = TODO("Not yet implemented")
     set(value) {}

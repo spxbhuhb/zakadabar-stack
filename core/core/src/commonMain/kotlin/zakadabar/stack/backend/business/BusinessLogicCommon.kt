@@ -3,6 +3,8 @@
  */
 package zakadabar.stack.backend.business
 
+import zakadabar.stack.alarm.AlarmSupport
+import zakadabar.stack.backend.RoutedModule
 import zakadabar.stack.backend.audit.Auditor
 import zakadabar.stack.backend.authorize.Authorizer
 import zakadabar.stack.backend.authorize.AuthorizerDelegate
@@ -15,7 +17,7 @@ import zakadabar.stack.util.PublicApi
 /**
  * Base class for entity backends. Supports CRUD, actions and queries.
  */
-abstract class BusinessLogicCommon<T : BaseBo> : CommonModule {
+abstract class BusinessLogicCommon<T : BaseBo> : CommonModule, RoutedModule {
 
     /**
      * The namespace this backend serves. Must be unique in a server. Default
@@ -115,6 +117,30 @@ abstract class BusinessLogicCommon<T : BaseBo> : CommonModule {
     }
 
     // -------------------------------------------------------------------------
+    // Alarm Support
+    // -------------------------------------------------------------------------
+
+    /**
+     * Provides functions to create and manage alarms.
+     */
+    open val alarmSupport: AlarmSupport = alarmSupport { }
+
+    /**
+     * Provides an alarm support in none specified explicitly.
+     */
+    open fun alarmSupportProvider() = alarmSupportProvider
+
+    /**
+     * Convenience function to get an alarm support from the provider and run a
+     * customization function.
+     */
+    fun alarmSupport(build: AlarmSupport.() -> Unit): AlarmSupport {
+        val a = alarmSupportProvider().businessLogicAlarmSupport(this)
+        a.build()
+        return a
+    }
+
+    // -------------------------------------------------------------------------
     // Lifecycle
     // -------------------------------------------------------------------------
 
@@ -123,5 +149,10 @@ abstract class BusinessLogicCommon<T : BaseBo> : CommonModule {
     override fun onModuleStart() {
         authorizer.onModuleStart()
     }
+
+    override fun onInstallRoutes(route: Any) {
+        router.installRoutes(route)
+    }
+
 
 }

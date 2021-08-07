@@ -3,7 +3,6 @@
  */
 package zakadabar.stack.backend.business
 
-import zakadabar.stack.backend.RoutedModule
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.action.ActionBoCompanion
 import zakadabar.stack.util.PublicApi
@@ -14,15 +13,12 @@ import kotlin.reflect.full.companionObject
  * Base class for standalone action (without entity) business logics.
  */
 @PublicApi
+@Deprecated("use BusinessLogicCommon instead")
 abstract class ActionBusinessLogicBase<RQ : ActionBo<RS>, RS : Any?>(
     actionBoClass: KClass<RQ>
-) : ActionBusinessLogicCommon<RQ, RS>(actionBoClass), RoutedModule {
+) : ActionBusinessLogicCommon<RQ, RS>(actionBoClass) {
 
     override val namespace
         get() = (actionBoClass.companionObject !!.objectInstance as ActionBoCompanion).boNamespace
-
-    override fun onInstallRoutes(route: Any) {
-        router.installRoutes(route)
-    }
 
 }

@@ -92,6 +92,19 @@ open class KtorRouter<T : BaseBo>(
         }
     }
 
+    override fun prepareAction(
+        actionType : String,
+        actionData : String
+    ) : Pair<(Executor, BaseBo) -> Any?,BaseBo> {
+
+        val (actionClass, actionFunc) = actionClassList.firstOrNull { it.first.simpleName == actionType }
+            ?: throw NotImplementedError("no action found for action type '$actionType'")
+
+        val aObj = Json.decodeFromString(serializer(actionClass.createType()), actionData) as BaseBo
+
+        return actionFunc to aObj
+    }
+
     private suspend fun query(call: ApplicationCall, queryClass: KClass<out BaseBo>, queryFunc: (Executor, BaseBo) -> Any?) {
         businessLogic as QueryBusinessLogicWrapper
 

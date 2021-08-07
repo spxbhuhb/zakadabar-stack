@@ -4,6 +4,7 @@
 package zakadabar.stack.backend.route
 
 import zakadabar.stack.backend.authorize.Executor
+import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.query.QueryBo
@@ -21,6 +22,13 @@ class EmptyRouter<T : EntityBo<T>> : Router<T> {
     }
 
     override fun <RQ : ActionBo<RS>, RS : Any?> action(actionClass: KClass<RQ>, actionFunc: (Executor, RQ) -> RS) {
+        throw IllegalArgumentException("EmptyRouter cannot route actions")
+    }
+
+    override fun prepareAction(
+        actionType : String,
+        actionData : String
+    ) : Pair<(Executor, BaseBo) -> Any?, BaseBo> {
         throw IllegalArgumentException("EmptyRouter cannot route actions")
     }
 

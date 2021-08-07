@@ -3,6 +3,8 @@
  */
 package zakadabar.stack.backend.business
 
+import zakadabar.stack.alarm.AlarmSupportProvider
+import zakadabar.stack.alarm.LogAlarmSupportProvider
 import zakadabar.stack.backend.audit.AuditorProvider
 import zakadabar.stack.backend.audit.LogAuditorProvider
 import zakadabar.stack.backend.ktor.KtorRouterProvider
@@ -15,3 +17,5 @@ actual var routerProvider: RouterProvider = KtorRouterProvider()
 actual var auditorProvider: AuditorProvider = LogAuditorProvider()
 
 actual var validatorProvider: ValidatorProvider = SchemaValidatorProvider()
+
+actual var alarmSupportProvider: AlarmSupportProvider = LogAlarmSupportProvider()

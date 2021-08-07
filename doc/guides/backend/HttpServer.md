@@ -24,16 +24,15 @@ served by default. See the next section about how to include them.
 
 ## Sub-Folders
 
-To server sub-folders, override the `onInstallRoutes` method in one of your
-modules (Module.kt by convention).
+To serve sub-folders, override the `onInstallStatic` method in one of your
+modules.
 
 This example adds the `fonts` folder to the served resources.
 
 ```kotlin
-override fun onInstallStatic(route: Route) {
-    with (route) {
-        static {
-            staticRootFolder = File(server.settings.staticResources)
+override fun onInstallStatic(route: Any) {
+    with (route as Route) {
+        static("fonts") {
             files("fonts")
         }
     }
