@@ -1,5 +1,14 @@
 # Modules Without Server
 
+```yaml
+level: Intermediate
+targets:
+  - common
+tags:
+  - module
+  - serverless
+```
+
 By default, the global module store `modules` stores application modules.
 
 This is an instance of [ModuleStore](/core/core/src/commonMain/kotlin/zakadabar/stack/module/ModuleStore.kt)
@@ -60,23 +69,10 @@ modules.clear()
 
 ## Guides
 
-[Modules](/doc/guides/common/Modules.md)
+- [Modules](/doc/guides/common/Modules.md)
 
-## Common, JS, JVM
+## Code
 
-[Serverless.kt](/cookbook/src/commonMain/kotlin/zakadabar/cookbook/module/serverless/Serverless.kt)
-
-## JS
-
-On browser, you can put the following line into `main.kt`.
-
-```kotlin
-Serverless().start()
-```
-
-If you want to stop the modules properly (in node.js for example), you can use the 
-same pattern as on JVM (see below).
-
-## JVM
-
-[main.kt](/cookbook/src/jvmMain/kotlin/zakadabar/cookbook/module/serverless/main.kt)
+- [Serverless.kt](/cookbook/src/commonMain/kotlin/zakadabar/cookbook/module/serverless/Serverless.kt)
+- [main.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/module/serverless/main.kt)
+- [main.kt](/cookbook/src/jvmMain/kotlin/zakadabar/cookbook/module/serverless/main.kt)

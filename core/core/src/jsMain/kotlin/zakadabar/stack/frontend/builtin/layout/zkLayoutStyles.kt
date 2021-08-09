@@ -63,6 +63,13 @@ class ZkLayoutStyles : ZkCssStyleSheet() {
     }
 
     /**
+     * A rounded border.
+     */
+    val roundBorder by cssClass {
+        borderRadius = theme.cornerRadius.px
+    }
+
+    /**
      * Switch off the border with "!important".
      */
     val noBorder by cssClass {
@@ -106,4 +113,30 @@ class ZkLayoutStyles : ZkCssStyleSheet() {
         + Overflow.hidden
     }
 
+    val grid1 by cssClass {
+        + Position.relative
+        + BoxSizing.borderBox
+        + Display.grid
+        gridTemplateRows = "1fr"
+        gridGap = theme.spacingStep.px
+        padding = theme.spacingStep.px
+    }
+
+    val grid2 by cssClass {
+        + Position.relative
+        + BoxSizing.borderBox
+        + Display.grid
+        gridTemplateRows = "max-content 1fr"
+        gridGap = theme.spacingStep.px
+        padding = theme.spacingStep.px
+    }
+
+    val grid3 by cssClass {
+        + Position.relative
+        + BoxSizing.borderBox
+        + Display.grid
+        gridTemplateRows = "max-content 1fr max-content"
+        gridGap = theme.spacingStep.px
+        padding = theme.spacingStep.px
+    }
 }

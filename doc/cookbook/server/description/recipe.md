@@ -1,9 +1,16 @@
-# Access Server Description On the Frontend
+# Access Server Description
 
-## JavaScript
+```yaml
+level: Beginner
+targets:
+  - js
+  - jvm
+tags:
+  - server description
+  - frontend
+```
 
-[AccessServerDescription.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/server/description/AccessServerDescription.kt)
+## Code
 
-## JVM
-
-[AccessServerDescription.kt](/cookbook/src/jvmMain/kotlin/zakadabar/cookbook/server/description/AccessServerDescription.kt)
+- [AccessServerDescription.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/server/description/AccessServerDescription.kt)
+- [AccessServerDescription.kt](/cookbook/src/jvmMain/kotlin/zakadabar/cookbook/server/description/AccessServerDescription.kt)

@@ -24,7 +24,7 @@ class CodeCopy(
             + ZkIcon(ZkIcons.contentCopy, 18)
         }
 
-        block.appendChild(this.element)
+        block.parentElement!!.appendChild(this.element)
 
         on("click") {
             window.navigator.clipboard.writeText(block.innerText)

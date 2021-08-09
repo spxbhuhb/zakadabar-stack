@@ -12,6 +12,8 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     open var codeBorderColor: String? = null
     open var highlightUrl = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/idea.min.css"
 
+    open var defaultWidth by cssParameter { 600 }
+
     init {
         hljs.registerLanguage("kotlin", hljsKotlin)
         hljs.registerLanguage("yaml", hljsYaml)
@@ -128,7 +130,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
 
     @Suppress("unused") // used implicitly by the browser
     open val p by cssRule(".$content p") {
-        maxWidth = 600.px
+        maxWidth = defaultWidth.px
         marginLeft = "auto"
         marginRight = "auto"
     }
@@ -141,7 +143,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
 
     @Suppress("unused") // used implicitly by the browser
     open val header1 by cssRule(".$content h1") {
-        maxWidth = 600.px
+        maxWidth = defaultWidth.px
         margin = "auto"
         fontSize = 32.px
         fontWeight = 500.weight
@@ -157,7 +159,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
 
     @Suppress("unused") // used implicitly by the browser
     open val h2 by cssRule(".$content h2") {
-        maxWidth = 600.px
+        maxWidth = defaultWidth.px
         margin = "auto"
         marginBlockStart = (theme.spacingStep * 2).px
         marginBlockEnd = (theme.spacingStep / 2).px
@@ -166,7 +168,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
 
     @Suppress("unused") // used implicitly by the browser
     open val h3 by cssRule(".$content h3") {
-        maxWidth = 600.px
+        maxWidth = defaultWidth.px
         margin = "auto"
         marginBlockStart = (theme.spacingStep * 2).px
         marginBlockEnd = (theme.spacingStep / 2).px
@@ -175,32 +177,32 @@ open class MarkdownStyles : ZkCssStyleSheet() {
 
     @Suppress("unused") // used implicitly by the browser
     open val h4 by cssRule(".$content h4") {
-        maxWidth = 600.px
+        maxWidth = defaultWidth.px
         margin = "auto"
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val h5 by cssRule(".$content h5") {
-        maxWidth = 600.px
+        maxWidth = defaultWidth.px
         margin = "auto"
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val h6 by cssRule(".$content h6") {
-        maxWidth = 600.px
+        maxWidth = defaultWidth.px
         margin = "auto"
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val ul by cssRule(".$content ul") {
-        maxWidth = 600.px
+        maxWidth = defaultWidth.px
         margin = "auto"
         marginBlockEnd = theme.spacingStep.px
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val ol by cssRule(".$content ol") {
-        maxWidth = 600.px
+        maxWidth = defaultWidth.px
         margin = "auto"
         marginBlockEnd = theme.spacingStep.px
     }
@@ -231,6 +233,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         maxWidth = 100.percent
     }
 
+    @Suppress("unused") // used implicitly by the browser
     open val li by cssRule(".$content li") {
         lineHeight = "1.5"
     }
@@ -266,8 +269,17 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     }
 
     @Suppress("unused") // used implicitly by the browser
-    open val codeBlock by cssRule(".$content pre > code") {
+    open val codeBlockContainer by cssRule(".$content pre") {
         + Position.relative
+        width = "max-content"
+        maxWidth = 90.percent
+        marginLeft = "auto"
+        marginRight = "auto"
+        paddingRight = 34.px
+    }
+    
+    @Suppress("unused") // used implicitly by the browser
+    open val codeBlock by cssRule(".$content pre > code") {
         padding = 12.px
         paddingLeft = theme.spacingStep.px
         lineHeight = (13 * 1.4).px
@@ -279,9 +291,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         }
         backgroundColor = theme.blockBackgroundColor
 
-        maxWidth = 90.percent
-        marginLeft = "auto"
-        marginRight = "auto"
+        minWidth = (defaultWidth - 34).px
     }
 
     // -------------------------------------------------------------------------
@@ -291,8 +301,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     open val codeCopy by cssClass {
         + Position.absolute
         right = 0.px
-        marginRight = 4.px
-        top = 4.px
+        top = 0.px
         background = theme.backgroundColor
         backgroundColor = theme.blockBackgroundColor
     }

@@ -1,5 +1,17 @@
 # Module Bundle
 
+```yaml
+level: Beginner
+targets:
+  - jvm
+tags:
+  - module
+  - bundle
+  - package
+  - server
+  - backend
+```
+
 Module bundles pack other modules together. This makes installation and configuration
 easier.
 
@@ -12,8 +24,8 @@ modules += ExampleModuleBundle()
 
 ## Guides
 
-[Modules](/doc/guides/common/Modules.md)
+- [Modules](/doc/guides/common/Modules.md)
 
-## Common, JS, JVM
+## Code
 
-[ExampleModuleBundle.kt](/cookbook/src/commonMain/kotlin/zakadabar/cookbook/module/bundle/ExampleModuleBundle.kt)
+- [ExampleModuleBundle.kt](/cookbook/src/commonMain/kotlin/zakadabar/cookbook/module/bundle/ExampleModuleBundle.kt)

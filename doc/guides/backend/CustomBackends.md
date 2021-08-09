@@ -1,8 +1,8 @@
 # Custom Backends
 
 * are fully customizable request handlers,
-* are Kotlin objects that extend [RoutedModule](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/RoutedModule.kt),
-* **are not** added automatically.
+* are Kotlin objects that extend [RoutedModule](/core/core/src/commonMain/kotlin/zakadabar/stack/backend/RoutedModule.kt),
+* **are not** added automatically (see: [Modules](../common/Modules.md))
 
 Examples:
 
@@ -12,7 +12,7 @@ Examples:
 ```kotlin
 object PingBackend : RoutedModule {
 
-    override fun install(route: Any) {
+    override fun onInstallRoutes(route: Any) {
         with(route as Route) {
             get("ping") {
                 call.respond("pong")
@@ -20,26 +20,4 @@ object PingBackend : RoutedModule {
         }
     }
 }
-```
-
-## Add Custom Backend From Configuration
-
-You may add custom backends directly from the configuration, without creating a module:
-
-```
-modules:
-  - zakadabar.demo.lib.backend.lib.PingBackend
-```
-
-To add a custom backend from a module see: [Modules](./Modules.md)
-
-## Add Custom Backend Programmatically
-
-You can add a backend module programmatically by adding it
-to [Server](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/Server.kt)
-
-The Server calls the `onModuleLoad` method of CustomBackend when it is added.
-
-```kotlin
-server += PingBackend
 ```

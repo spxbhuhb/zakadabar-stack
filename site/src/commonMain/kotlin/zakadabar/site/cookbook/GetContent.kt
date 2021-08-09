@@ -4,6 +4,7 @@
 package zakadabar.site.cookbook
 
 import kotlinx.serialization.Serializable
+import zakadabar.cookbook.Recipe
 import zakadabar.stack.data.builtin.StringValue
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.query.QueryBo

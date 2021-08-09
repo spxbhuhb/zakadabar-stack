@@ -147,24 +147,36 @@ open class ModuleStore {
     }
 
     /**
-     * Find a instance of the given class. The class may be an interface.
+     * Find a module of the given class. The class may be an interface.
      *
      * @param    T      The class to look for
      *
-     * @return   First instance of [T] from the routing targets.
+     * @return   First module of [T] from the module store.
      *
-     * @throws   NoSuchElementException   when there is no such target
+     * @throws   NoSuchElementException   when there is no such module
      */
     inline fun <reified T : Any> first() = first(T::class)
 
     /**
-     * Find a instance of the given class. The class may be an interface.
+     * Find a module of the given class. The class may be an interface.
      *
-     * @param    kClass      The class to look for
+     * @param    T           The class to look for
+     * @param    selector    Function to select the module.
      *
-     * @return   First instance of [kClass] from the routing targets.
+     * @return   First module of [T] from the module store.
      *
-     * @throws   NoSuchElementException   when there is no such target
+     * @throws   NoSuchElementException   when there is no such module
+     */
+    inline fun <reified T : Any> first(noinline selector: (T) -> Boolean) = first(T::class, selector)
+
+    /*
+     * Find a module of the given class. The class may be an interface.
+     *
+     * @param    T      The class to look for
+     *
+     * @return   First module of [T] from the module store.
+     *
+     * @throws   NoSuchElementException   when there is no such module
      */
     open fun <T : Any> first(kClass: KClass<T>): T {
         lock.use {
@@ -173,15 +185,14 @@ open class ModuleStore {
         }
     }
 
-
     /**
      * Find a instance of the given class with a selector method called
      * to decided if the instance is desired. The class may be an interface.
      *
      * @param    kClass      The class to look for
-     * @param    selector    Function to select the instance.
+     * @param    selector    Function to select the module.
      *
-     * @return   First instance of [kClass] from the server modules.
+     * @return   First instance of [kClass] from the module store.
      *
      * @throws   NoSuchElementException   when there is no such module
      */
@@ -196,7 +207,7 @@ open class ModuleStore {
      *
      * @param    T      The class to look for
      *
-     * @return   First instance of [T] from the server modules or null.
+     * @return   First instance of [T] from the module store or null.
      */
     inline fun <reified T : Any> firstOrNull() = firstOrNull(T::class)
 
@@ -204,9 +215,20 @@ open class ModuleStore {
      * Find a instance of the given class, return with null when not found.
      * The class may be an interface.
      *
+     * @param    T      The class to look for
+     * @param    selector    Function to select the module.
+     *
+     * @return   First module of [T] from the module store or null.
+     */
+    inline fun <reified T : Any> firstOrNull(noinline selector: (T) -> Boolean) = firstOrNull(T::class, selector)
+
+    /**
+     * Find a instance of the given class, return with null when not found.
+     * The class may be an interface.
+     *
      * @param    kClass      The class to look for
      *
-     * @return   First instance of [kClass] from the server modules or null.
+     * @return   First instance of [kClass] from the module store or null.
      */
     open fun <T : Any> firstOrNull(kClass: KClass<T>): T? {
         lock.use {
@@ -223,7 +245,7 @@ open class ModuleStore {
      * @param    kClass      The class to look for
      * @param    selector    Function to select the module.
      *
-     * @return   First instance of [kClass] from the server modules or null.
+     * @return   First instance of [kClass] from the the module store or null.
      */
     open fun <T : Any> firstOrNull(kClass: KClass<T>, selector: (T) -> Boolean): T? {
         lock.use {

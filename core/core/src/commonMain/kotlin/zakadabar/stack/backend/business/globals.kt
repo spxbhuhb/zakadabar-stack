@@ -3,6 +3,7 @@
  */
 package zakadabar.stack.backend.business
 
+import zakadabar.stack.alarm.AlarmSupportProvider
 import zakadabar.stack.backend.audit.AuditorProvider
 import zakadabar.stack.backend.route.RouterProvider
 import zakadabar.stack.backend.validate.ValidatorProvider
@@ -12,3 +13,5 @@ expect var routerProvider: RouterProvider
 expect var auditorProvider: AuditorProvider
 
 expect var validatorProvider: ValidatorProvider
+
+expect var alarmSupportProvider: AlarmSupportProvider

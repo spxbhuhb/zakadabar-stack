@@ -206,11 +206,15 @@ open class ZkTableStyles : ZkCssStyleSheet() {
         }
 
         on(" tr:last-child td:first-child") {
-            borderBottomLeftRadius = 4.px
+            if (this@ZkTableStyles.border != null) {
+                borderBottomLeftRadius = 4.px
+            }
         }
 
         on(" tr:last-child td:last-child") {
-            borderBottomRightRadius = 4.px
+            if (this@ZkTableStyles.border != null) {
+                borderBottomRightRadius = 4.px
+            }
         }
     }
 
