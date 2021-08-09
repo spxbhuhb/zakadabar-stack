@@ -1,12 +1,11 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.schedule
+package zakadabar.lib.schedule.business
 
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
+import zakadabar.lib.schedule.api.*
 import zakadabar.stack.backend.RoutedModule
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.business.ActionBusinessLogicWrapper
@@ -15,6 +14,9 @@ import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.module.modules
+import zakadabar.stack.util.Lock
+import zakadabar.stack.util.fork
+import zakadabar.stack.util.use
 import kotlin.reflect.full.createType
 
 open class WorkerBl : BusinessLogicCommon<BaseBo>(), RoutedModule {
@@ -28,9 +30,9 @@ open class WorkerBl : BusinessLogicCommon<BaseBo>(), RoutedModule {
         action(RequestJobCancel::class, ::requestJobCancel)
     }
 
-    override fun onInstallRoutes(route: Any) {
-        router.installRoutes(route)
-    }
+    val lock = Lock()
+
+    var job: kotlinx.coroutines.Job? = null
 
     open fun pushJob(executor: Executor, action: PushJob): ActionStatusBo {
         val module = modules.firstOrNull<BusinessLogicCommon<*>> { it.namespace == action.actionNamespace }
@@ -38,10 +40,10 @@ open class WorkerBl : BusinessLogicCommon<BaseBo>(), RoutedModule {
 
         val (actionFunc, actionData) = module.router.prepareAction(action.actionType, action.actionData)
 
-        module as ActionBusinessLogicWrapper
+        check(job == null) { "this worker already executes a job" }
 
-        runBlocking {
-            launch {
+        lock.use {
+            job = fork {
                 ActionExecution(action.jobId, executor, module, actionFunc, actionData).execute()
             }
         }
@@ -53,7 +55,7 @@ open class WorkerBl : BusinessLogicCommon<BaseBo>(), RoutedModule {
         TODO("Not yet implemented")
     }
 
-    class ActionExecution(
+    inner class ActionExecution(
         val jobId: EntityId<Job>,
         val executor: Executor,
         val module: ActionBusinessLogicWrapper,
@@ -66,12 +68,12 @@ open class WorkerBl : BusinessLogicCommon<BaseBo>(), RoutedModule {
                 val response = module.actionWrapper(executor, actionFunc, actionData)
 
                 val responseData = response?.let {
-                    Json.encodeToString(serializer(it::class.createType()), actionData)
+                    Json.encodeToString(serializer(response::class.createType()), response)
                 }
 
                 JobSuccess(jobId, responseData).execute()
 
-            } catch (ex : JobFailException) {
+            } catch (ex: JobFailException) {
 
                 JobFail(
                     jobId,
@@ -91,6 +93,10 @@ open class WorkerBl : BusinessLogicCommon<BaseBo>(), RoutedModule {
                     retryAt = null
                 ).execute()
 
+            }
+
+            lock.use {
+                job = null
             }
         }
     }

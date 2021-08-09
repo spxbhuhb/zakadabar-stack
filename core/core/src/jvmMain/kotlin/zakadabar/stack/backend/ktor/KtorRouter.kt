@@ -11,9 +11,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.serializer
 import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.ActionBusinessLogicWrapper
 import zakadabar.stack.backend.business.BusinessLogicCommon
-import zakadabar.stack.backend.business.QueryBusinessLogicWrapper
 import zakadabar.stack.backend.route.Router
 import zakadabar.stack.backend.server
 import zakadabar.stack.data.BaseBo
@@ -45,13 +43,11 @@ open class KtorRouter<T : BaseBo>(
     }
 
     override fun <RQ : ActionBo<RS>, RS : Any?> action(actionClass: KClass<RQ>, actionFunc: (Executor, RQ) -> RS) {
-        if (businessLogic !is ActionBusinessLogicWrapper) throw IllegalArgumentException("cannot add actions to a non-action BL")
         @Suppress("UNCHECKED_CAST") // the parameter setup above ensures consistency
         actionClassList += (actionClass to actionFunc) as (Pair<KClass<out BaseBo>, (Executor, BaseBo) -> Any?>)
     }
 
     override fun <RQ : QueryBo<RS>, RS : Any?> query(queryClass: KClass<RQ>, queryFunc: (Executor, RQ) -> RS) {
-        if (businessLogic !is QueryBusinessLogicWrapper) throw IllegalArgumentException("cannot add queries to a non-query BL")
         @Suppress("UNCHECKED_CAST") // the parameter setup above ensures consistency
         queryClassList += (queryClass to queryFunc) as Pair<KClass<out BaseBo>, (Executor, BaseBo) -> Any?>
     }
@@ -76,8 +72,6 @@ open class KtorRouter<T : BaseBo>(
     }
 
     open suspend fun action(call: ApplicationCall, actionClass: KClass<out BaseBo>, actionFunc: (Executor, BaseBo) -> Any?) {
-        businessLogic as ActionBusinessLogicWrapper
-
         val executor = call.executor()
         val aText = call.receive<String>()
         val aObj = Json.decodeFromString(serializer(actionClass.createType()), aText) as BaseBo
@@ -106,8 +100,6 @@ open class KtorRouter<T : BaseBo>(
     }
 
     private suspend fun query(call: ApplicationCall, queryClass: KClass<out BaseBo>, queryFunc: (Executor, BaseBo) -> Any?) {
-        businessLogic as QueryBusinessLogicWrapper
-
         val executor = call.executor()
 
         apiCacheControl(call)

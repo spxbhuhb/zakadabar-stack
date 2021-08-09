@@ -1,22 +1,22 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.schedule
+package zakadabar.lib.schedule.business
 
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
+import zakadabar.lib.schedule.api.*
+import zakadabar.lib.schedule.peristence.JobPa
 import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.data.builtin.ActionStatusBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.Lock
 import zakadabar.stack.util.UUID
+import zakadabar.stack.util.fork
 import zakadabar.stack.util.use
 import kotlin.coroutines.coroutineContext
 
@@ -53,17 +53,19 @@ open class JobBl(
 
     protected lateinit var periodic: kotlinx.coroutines.Job
 
-    override val authorizer = SimpleRoleAuthorizer<Job> {
-        all = adminRole
-        update = createRole
+    override val authorizer by provider()
 
-        action(JobSuccess::class, workerRole)
-        action(JobFail::class, workerRole)
-        action(JobProgress::class, workerRole)
-        action(JobCancel::class, workerRole)
-
-        action(RequestJobCancel::class, adminRole)
-    }
+//        SimpleRoleAuthorizer<Job> {
+//        all = adminRole
+//        update = createRole
+//
+//        action(JobSuccess::class, workerRole)
+//        action(JobFail::class, workerRole)
+//        action(JobProgress::class, workerRole)
+//        action(JobCancel::class, workerRole)
+//
+//        action(RequestJobCancel::class, adminRole)
+//    }
 
     override val router = router {
         action(JobSuccess::class, ::jobSuccess)
@@ -79,7 +81,7 @@ open class JobBl(
 
     override fun onModuleStart() {
         super.onModuleStart()
-        periodic = runBlocking { launch { run() } }
+        periodic = fork { run() }
     }
 
     override fun onModuleStop() {

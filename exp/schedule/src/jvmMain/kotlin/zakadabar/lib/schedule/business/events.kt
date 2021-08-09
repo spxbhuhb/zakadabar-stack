@@ -1,9 +1,11 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.schedule
+package zakadabar.lib.schedule.business
 
 import kotlinx.datetime.Instant
+import zakadabar.lib.schedule.api.Job
+import zakadabar.lib.schedule.api.Subscription
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.UUID
 

@@ -6,10 +6,8 @@ package zakadabar.stack.backend.business
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.persistence.EntityPersistenceApi
 import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.action.ActionBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.query.QueryBo
 import kotlin.reflect.KClass
 
 /**
@@ -21,7 +19,7 @@ abstract class EntityBusinessLogicCommon<T : EntityBo<T>>  (
      * set to the namespace defined for this BO class.
      */
     val boClass: KClass<T>
-) : BusinessLogicCommon<T>(), ActionBusinessLogicWrapper, QueryBusinessLogicWrapper {
+) : BusinessLogicCommon<T>() {
 
     /**
      * The Persistence API this entity business logic uses.
@@ -103,41 +101,6 @@ abstract class EntityBusinessLogicCommon<T : EntityBo<T>>  (
 
         }
 
-    override fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> Any?, bo: BaseBo): Any? =
-
-        pa.withTransaction {
-
-            bo as ActionBo<*>
-
-            validator.validateAction(executor, bo)
-
-            authorizer.authorizeAction(executor, bo)
-
-            val response = func(executor, bo)
-
-            auditor.auditAction(executor, bo)
-
-            response
-
-        }
-
-    override fun queryWrapper(executor: Executor, func: (Executor, BaseBo) -> Any?, bo: BaseBo): Any? =
-
-        pa.withTransaction {
-
-            bo as QueryBo<*>
-
-            validator.validateQuery(executor, bo)
-
-            authorizer.authorizeQuery(executor, bo)
-
-            val response = func(executor, bo)
-
-            auditor.auditQuery(executor, bo)
-
-            response
-        }
-
     /**
      * Create a new entity.
      *
@@ -207,5 +170,14 @@ abstract class EntityBusinessLogicCommon<T : EntityBo<T>>  (
         return pa.list()
     }
 
+    override fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> Any?, bo: BaseBo): Any? =
+        pa.withTransaction {
+            super.actionWrapper(executor, func, bo)
+        }
+
+    override fun queryWrapper(executor: Executor, func: (Executor, BaseBo) -> Any?, bo: BaseBo): Any? =
+        pa.withTransaction {
+            super.queryWrapper(executor, func, bo)
+        }
 
 }

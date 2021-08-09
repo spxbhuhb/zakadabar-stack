@@ -1,8 +1,10 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.schedule
+package zakadabar.lib.schedule.business
 
+import zakadabar.lib.schedule.api.Subscription
+import zakadabar.lib.schedule.peristence.SubscriptionPa
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
 import zakadabar.stack.data.entity.EntityId

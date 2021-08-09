@@ -18,8 +18,4 @@ abstract class EntityBusinessLogicBase<T : EntityBo<T>>(
     override val namespace: String
         get() = (boClass.companionObject !!.objectInstance as EntityBoCompanion<*>).boNamespace
 
-    override fun onInstallRoutes(route: Any) {
-        router.installRoutes(route)
-    }
-
 }

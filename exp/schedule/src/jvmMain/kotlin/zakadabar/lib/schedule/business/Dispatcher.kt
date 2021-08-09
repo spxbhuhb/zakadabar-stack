@@ -1,18 +1,19 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.schedule
+package zakadabar.lib.schedule.business
 
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
+import zakadabar.lib.schedule.api.Job
+import zakadabar.lib.schedule.api.PushJob
+import zakadabar.lib.schedule.api.Subscription
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.util.UUID
+import zakadabar.stack.util.fork
 import kotlin.math.absoluteValue
 
 class Dispatcher(
@@ -20,7 +21,7 @@ class Dispatcher(
 ) {
     val events = Channel<DispatcherEvent>(UNLIMITED)
 
-    var coroutine = runBlocking { launch { run() } }
+    var coroutine = fork { run() }
 
     @Serializable
     class JobEntry(
@@ -52,6 +53,7 @@ class Dispatcher(
 
     suspend fun run() {
         for (event in events) {
+            println("dispatcher event: $event")
             when (event) {
                 is PendingCheckEvent -> onPendingCheck()
                 is JobCreateEvent -> onJobCreate(event)
@@ -84,6 +86,7 @@ class Dispatcher(
 
         if (startAt == null || startAt <= Clock.System.now()) {
             runnableJobs.add(entry)
+            pushJobs()
             return
         }
 
@@ -98,12 +101,12 @@ class Dispatcher(
         pushJobs()
     }
 
-    fun takeRunEntry(jobId: EntityId<Job>): RunEntry? {
+    fun takeRunEntry(jobId: EntityId<Job>, reuse : Boolean = true): RunEntry? {
         val index = runningJobs.indexOfFirst { it.job.id == jobId }
         if (index == - 1) return null
 
         val entry = runningJobs.removeAt(index)
-        if (entry.subscription.reuse) idleSubscriptions += entry.subscription
+        if (reuse && entry.subscription.reuse) idleSubscriptions += entry.subscription
 
         return entry
     }
@@ -125,13 +128,13 @@ class Dispatcher(
 
         pendingJobs.indexOfFirst { it.id == id }.takeIf { it != - 1 }?.also {
             pendingJobs.removeAt(it)
-            runBlocking { launch { jobBl.jobCancel(id) } }
+            fork { jobBl.jobCancel(id) }
             return
         }
 
         runnableJobs.indexOfFirst { it.id == id }.takeIf { it != - 1 }?.also {
             runnableJobs.removeAt(it)
-            runBlocking { launch { jobBl.jobCancel(id) } }
+            fork { jobBl.jobCancel(id) }
             return
         }
 
@@ -181,12 +184,10 @@ class Dispatcher(
     }
 
     fun pushJobs() {
-        runBlocking {
-            while (idleSubscriptions.isNotEmpty() && runnableJobs.isNotEmpty()) {
-                val entry = RunEntry(runnableJobs.first(), idleSubscriptions.first())
-                runningJobs += entry
-                launch(Dispatchers.IO) { pushJob(entry) }
-            }
+        while (idleSubscriptions.isNotEmpty() && runnableJobs.isNotEmpty()) {
+            val entry = RunEntry(runnableJobs.removeAt(0), idleSubscriptions.removeAt(0))
+            runningJobs += entry
+            fork { pushJob(entry) }
         }
     }
 
@@ -204,6 +205,7 @@ class Dispatcher(
                 actionData = job.actionData
             ).execute(baseUrl = subscription.nodeUrl)
         } catch (ex: Exception) {
+            jobBl.alarmSupport.create(ex)
             events.send(
                 PushFailEvent(
                     jobId = job.id,
@@ -218,7 +220,9 @@ class Dispatcher(
     }
 
     fun onPushFail(event: PushFailEvent) {
-        val entry = takeRunEntry(event.jobId) ?: return
+        // do not reuse this subscription
+        // FIXME what if the error is because of the job
+        val entry = takeRunEntry(event.jobId, false) ?: return
         runnableJobs.add(0, entry.job)
         pushJobs()
     }

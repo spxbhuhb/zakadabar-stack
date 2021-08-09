@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.schedule
+package zakadabar.lib.schedule.api
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
@@ -81,7 +81,7 @@ class Job(
         + ::progress min 0.0 max 100.0
         + ::progressText
         + ::lastProgressAt
-        + ::responseData blank false
+        + ::responseData
     }
 
 }

@@ -8,16 +8,19 @@ import zakadabar.stack.backend.RoutedModule
 import zakadabar.stack.backend.audit.Auditor
 import zakadabar.stack.backend.authorize.Authorizer
 import zakadabar.stack.backend.authorize.AuthorizerDelegate
+import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.route.Router
 import zakadabar.stack.backend.validate.Validator
 import zakadabar.stack.data.BaseBo
+import zakadabar.stack.data.action.ActionBo
+import zakadabar.stack.data.query.QueryBo
 import zakadabar.stack.module.CommonModule
 import zakadabar.stack.util.PublicApi
 
 /**
  * Base class for entity backends. Supports CRUD, actions and queries.
  */
-abstract class BusinessLogicCommon<T : BaseBo> : CommonModule, RoutedModule {
+abstract class BusinessLogicCommon<T : BaseBo> : CommonModule, RoutedModule, ActionBusinessLogicWrapper, QueryBusinessLogicWrapper {
 
     /**
      * The namespace this backend serves. Must be unique in a server. Default
@@ -152,6 +155,41 @@ abstract class BusinessLogicCommon<T : BaseBo> : CommonModule, RoutedModule {
 
     override fun onInstallRoutes(route: Any) {
         router.installRoutes(route)
+    }
+
+    // -------------------------------------------------------------------------
+    // Wrappers for actions and queries
+    // -------------------------------------------------------------------------
+
+    override fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> Any?, bo: BaseBo): Any? {
+
+        bo as ActionBo<*>
+
+        validator.validateAction(executor, bo)
+
+        authorizer.authorizeAction(executor, bo)
+
+        val response = func(executor, bo)
+
+        auditor.auditAction(executor, bo)
+
+        return response
+
+    }
+
+    override fun queryWrapper(executor: Executor, func: (Executor, BaseBo) -> Any?, bo: BaseBo): Any? {
+
+        bo as QueryBo<*>
+
+        validator.validateQuery(executor, bo)
+
+        authorizer.authorizeQuery(executor, bo)
+
+        val response = func(executor, bo)
+
+        auditor.auditQuery(executor, bo)
+
+        return response
     }
 
 

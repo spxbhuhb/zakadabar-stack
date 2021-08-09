@@ -43,8 +43,8 @@ open class ActionComm(
         )
 
         val response = commBlock {
-            val base = baseUrl?.trim('/') ?: ""
-            val url = "$base/api/${companion.boNamespace}/action/${request::class.simpleName}"
+            val base = baseUrl?.trim('/') ?: "/api/${companion.boNamespace}"
+            val url = "$base/action/${request::class.simpleName}"
             val responsePromise = window.fetch(url, requestInit)
             checkStatus(responsePromise.await())
         }

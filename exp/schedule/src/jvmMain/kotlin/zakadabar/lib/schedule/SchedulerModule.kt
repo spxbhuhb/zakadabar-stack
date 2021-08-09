@@ -3,11 +3,13 @@
  */
 package zakadabar.lib.schedule
 
+import zakadabar.lib.schedule.business.JobBl
+import zakadabar.lib.schedule.business.SubscriptionBl
 import zakadabar.stack.authorize.appRoles
 import zakadabar.stack.module.CommonModule
 import zakadabar.stack.module.modules
 
-class Module : CommonModule {
+class SchedulerModule : CommonModule {
 
     override fun onModuleLoad() {
         modules += JobBl(appRoles.securityOfficer, appRoles.securityOfficer, appRoles.securityOfficer)

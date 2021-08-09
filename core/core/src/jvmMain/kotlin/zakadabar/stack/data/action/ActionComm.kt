@@ -27,8 +27,8 @@ open class ActionComm(
         responseSerializer: KSerializer<RESPONSE>,
         baseUrl : String?
     ): RESPONSE? {
-        val base = baseUrl?.trim('/') ?: CommBase.baseUrl
-        val url = "$base/api/${companion.boNamespace}/action/${request::class.simpleName}"
+        val base = baseUrl?.trim('/') ?: CommBase.baseUrl + "/api/${companion.boNamespace}"
+        val url = "$base/action/${request::class.simpleName}"
 
         val text = client.post<String>(url) {
             header("Content-Type", "application/json; charset=UTF-8")

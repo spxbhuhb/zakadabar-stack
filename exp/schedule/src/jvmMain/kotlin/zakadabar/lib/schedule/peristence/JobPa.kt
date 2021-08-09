@@ -1,13 +1,14 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.schedule
+package zakadabar.lib.schedule.peristence
 
 import kotlinx.datetime.toJavaInstant
 import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.update
+import zakadabar.lib.schedule.api.Job
 import zakadabar.stack.backend.exposed.ExposedPaBase
 import zakadabar.stack.backend.exposed.entityId
 import zakadabar.stack.backend.util.toJavaUuid

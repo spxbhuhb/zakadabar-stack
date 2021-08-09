@@ -27,22 +27,4 @@ abstract class ActionBusinessLogicCommon<RQ : ActionBo<RS>, RS : Any?>(
 
     abstract fun execute(executor: Executor, bo: RQ): RS
 
-    override fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> Any?, bo: BaseBo): Any? {
-
-        check(actionBoClass.isInstance(bo))
-
-        @Suppress("UNCHECKED_CAST") // check above
-        bo as RQ
-
-        validator.validateAction(executor, bo)
-
-        authorizer.authorizeAction(executor, bo)
-
-        val response = execute(executor, bo)
-
-        auditor.auditAction(executor, bo)
-
-        return response
-
-    }
 }

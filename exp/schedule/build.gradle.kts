@@ -36,4 +36,16 @@ kotlin {
     sourceSets["commonMain"].dependencies {
         implementation(project(":core:core"))
     }
+
+    sourceSets["commonTest"].dependencies {
+        implementation(kotlin("test-common"))
+        implementation(kotlin("test-annotations-common"))
+        implementation(kotlin("test-junit"))
+    }
+
+    sourceSets["jvmTest"].dependencies {
+        implementation("io.ktor:ktor-server-netty:${Versions.ktor}")
+        implementation("com.h2database:h2:${Versions.h2}")
+    }
+
 }
