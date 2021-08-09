@@ -50,7 +50,7 @@ class BuiltinTable : ZkTable<BuiltinDto>() {
     add = true
     search = true
     export = true
-
+    
     // Add columns to the table. Column types are automatically
     // derived from the property type.
 
@@ -82,6 +82,20 @@ class BuiltinTable : ZkTable<BuiltinDto>() {
     + actions()
   }
 
+}
+```
+
+## Customization
+
+### Single Click Open
+
+By default, the table opens the detail page on double click. The `oneClick` 
+parameter changes this behaviour. When it is true, the table treats single clicks 
+as double clicks.
+
+```kotlin
+override fun onConfigure() {
+    oneClick = true
 }
 ```
 

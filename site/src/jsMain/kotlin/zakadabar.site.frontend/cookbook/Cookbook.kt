@@ -3,22 +3,27 @@
  */
 package zakadabar.site.frontend.cookbook
 
+import zakadabar.cookbook.Recipe
 import zakadabar.lib.markdown.frontend.MarkdownView
 import zakadabar.site.cookbook.GetContent
-import zakadabar.site.cookbook.Recipe
 import zakadabar.site.frontend.SiteMarkdownContext
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.frontend.application.application
+import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPathPage
+import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.builtin.table.ZkTable
 import zakadabar.stack.frontend.resources.css.em
 import zakadabar.stack.frontend.resources.css.fr
 import zakadabar.stack.frontend.util.io
 
-object Cookbook : ZkPathPage() {
+object Cookbook : ZkPathPage(cssClass = zkPageStyles.fixed) {
 
     override fun onResume() {
         super.onResume()
+
+        + zkLayoutStyles.grid1
+
         if (path.isEmpty()) {
             + Table()
             - firstOrNull<MarkdownView>()
@@ -38,7 +43,12 @@ object Cookbook : ZkPathPage() {
 
         override fun onConfigure() {
 
+            + zkLayoutStyles.fixBorder
+            + zkLayoutStyles.roundBorder
+
             search = true
+            oneClick = true
+
             addLocalTitle = true
             titleText = "Recipes"
 

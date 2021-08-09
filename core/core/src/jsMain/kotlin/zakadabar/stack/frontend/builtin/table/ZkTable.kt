@@ -52,6 +52,7 @@ import kotlin.reflect.KProperty1
  * @property  add           When true a plus icon is added to the title bar. Click on the icon calls [onAddRow].
  * @property  search        When true a search input and icon is added to the title bar. Enter in the search field
  *                          or click on the icon calls [onSearch].
+ * @property  oneClick      When true single clicks are treated as double clicks (call onDblClick).
  * @property  export        When true an export icon is added to the title bar. Calls [onExportCsv].
  * @property  rowHeight     Height (in pixels) of one table row, used when calculating row positions for virtualization.
  * @property  columns       Column definitions.
@@ -77,6 +78,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     var add = false
     var search = false
     var export = false
+    var oneClick = false
 
     open var rowHeight = 42
 
@@ -183,10 +185,15 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
             val target = event.target as? HTMLElement ?: return@on
             val rid = target.getDatasetEntry("rid") ?: return@on
-            val action = target.getDatasetEntry("action") ?: return@on
 
-            if (action == "update") {
+            if (oneClick) {
                 onDblClick(rid)
+            } else {
+                val action = target.getDatasetEntry("action") ?: return@on
+
+                if (action == "update") {
+                    onDblClick(rid)
+                }
             }
         }
     }

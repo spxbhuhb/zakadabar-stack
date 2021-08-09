@@ -3,10 +3,10 @@
  */
 package zakadabar.site.backend.business
 
-import com.charleskorn.kaml.Yaml
 import org.slf4j.LoggerFactory
+import zakadabar.cookbook.Recipe
+import zakadabar.cookbook.RecipeParser
 import zakadabar.site.cookbook.GetContent
-import zakadabar.site.cookbook.Recipe
 import zakadabar.stack.backend.authorize.Authorizer
 import zakadabar.stack.backend.authorize.Executor
 import zakadabar.stack.backend.business.EntityBusinessLogicBase
@@ -15,6 +15,7 @@ import zakadabar.stack.backend.setting.setting
 import zakadabar.stack.data.builtin.StringValue
 import zakadabar.stack.data.builtin.settings.ContentBackendSettings
 import zakadabar.stack.data.entity.EntityId
+import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -47,34 +48,29 @@ open class RecipeBl : EntityBusinessLogicBase<Recipe>(
     }
 
     open fun loadRecipes() {
+
         Files.walk(Paths.get(settings.root).resolve("cookbook")).forEach { path ->
+            try {
 
-            if (path.fileName.toString() != "recipe.yaml") return@forEach
+                if (path.fileName.toString() != "recipe.md") return@forEach
 
-            val recipe = try {
-                Yaml.default.decodeFromString(Recipe.serializer(), Files.readAllBytes(path).decodeToString())
+                val parser = RecipeParser(Files.readAllLines(path, StandardCharsets.UTF_8))
+                parser.parse()
+
+                val recipe = parser.recipe
+
+                if (recipes.containsKey(parser.recipe.id)) {
+                    logger.warn("duplicated recipe title: ${recipe.title}")
+                    return@forEach
+                }
+
+                recipes[recipe.id] = recipe to parser.content
+
             } catch (ex: Exception) {
                 logger.error("error while loading $path", ex)
                 return@forEach
             }
 
-            recipe.id = EntityId(recipe.title)
-
-            val contentPath = path.resolveSibling("recipe.md")
-
-            val content = try {
-                Files.readAllBytes(contentPath).decodeToString()
-            } catch (ex: Exception) {
-                logger.error("error while loading $contentPath", ex)
-                return@forEach
-            }
-
-            if (recipes.containsKey(recipe.id)) {
-                logger.warn("duplicated recipe title: ${recipe.title}")
-                return@forEach
-            }
-
-            recipes[recipe.id] = recipe to content
         }
 
     }
@@ -85,5 +81,6 @@ open class RecipeBl : EntityBusinessLogicBase<Recipe>(
 
     open fun getContent(executor: Executor, query: GetContent): StringValue =
         recipes[query.recipeId]?.let { StringValue(it.second) } ?: throw NoSuchElementException()
+
 
 }

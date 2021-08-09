@@ -3,7 +3,7 @@
  */
 package zakadabar.site.frontend.cookbook
 
-import zakadabar.site.cookbook.Recipe
+import zakadabar.cookbook.Recipe
 import zakadabar.site.frontend.resources.siteStyles
 import zakadabar.stack.frontend.application.application
 import zakadabar.stack.frontend.builtin.ZkElement
