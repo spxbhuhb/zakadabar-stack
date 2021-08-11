@@ -17,25 +17,22 @@
 package zakadabar.stack.frontend.builtin.form.fields
 
 import org.w3c.dom.events.KeyboardEvent
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.zkFormStyles
 import zakadabar.stack.frontend.builtin.input.ZkCheckBox
 import zakadabar.stack.frontend.resources.ZkIcons
 import kotlin.reflect.KMutableProperty0
 
-open class ZkBooleanField<T : BaseBo>(
-    form: ZkForm<T>,
+open class ZkBooleanField(
+    context: ZkFieldContext,
     val prop: KMutableProperty0<Boolean>
-) : ZkFieldBase<T, Boolean>(
-    form = form,
+) : ZkFieldBase<Boolean>(
+    context = context,
     propName = prop.name
 ) {
 
     private val checkbox = ZkCheckBox(ZkIcons.check)
 
-    override var readOnly: Boolean = (form.mode == ZkElementMode.Read)
+    override var readOnly: Boolean = context.readOnly
         set(value) {
             checkbox.disabled = value
             field = value
@@ -55,7 +52,7 @@ open class ZkBooleanField<T : BaseBo>(
             on(checkbox.checkbox, "change") {
                 prop.set(checkbox.checked)
                 touched = true
-                form.validate()
+                context.validate()
             }
 
             on(buildPoint, "keypress") {

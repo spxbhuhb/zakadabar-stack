@@ -141,7 +141,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
             }
 
             val passwordField = bo::credentials.find() as ZkOptSecretField
-            val verificationField = first<ZkOptSecretVerificationField<*>>()
+            val verificationField = first<ZkOptSecretVerificationField>()
 
             if (submit || (passwordField.touched && verificationField.touched)) {
                 if (bo.credentials?.value != verificationField.verificationValue) {

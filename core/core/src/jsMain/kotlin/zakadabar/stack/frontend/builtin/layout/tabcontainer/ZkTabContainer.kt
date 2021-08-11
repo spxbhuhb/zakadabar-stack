@@ -13,11 +13,11 @@ open class ZkTabContainer(
     private val builder: (ZkTabContainer.() -> Unit)? = null
 ) : ZkElement() {
 
-    private val tabLabels = ZkElement()
-    val tabContents = ZkElement()
+    open val tabLabels = ZkElement()
+    open val tabContents = ZkElement()
 
-    private val items = mutableListOf<TabItem>()
-    private lateinit var activeItem: TabItem
+    open val items = mutableListOf<TabItem>()
+    open lateinit var activeItem: TabItem
 
     override fun onCreate() {
         classList += zkTabContainerStyles.container
@@ -56,7 +56,7 @@ open class ZkTabContainer(
 
 
 
-    operator fun TabItem.unaryPlus() {
+    open operator fun TabItem.unaryPlus() {
         items += this
         tabLabels += this.label
 
@@ -67,7 +67,7 @@ open class ZkTabContainer(
         }
     }
 
-    fun switchTo(item: TabItem) {
+    open fun switchTo(item: TabItem) {
         if (activeItem == item) return
 
         activeItem.label.active = false

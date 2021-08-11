@@ -7,12 +7,12 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.util.minusAssign
 import zakadabar.stack.frontend.util.plusAssign
 
-class ZkTabLabel(
-    private val container: ZkTabContainer,
-    val item: TabItem
+open class ZkTabLabel(
+    open val container: ZkTabContainer,
+    open val item: TabItem
 ) : ZkElement() {
 
-    var active = false
+    open var active = false
         set(value) {
             if (value) {
                 classList += zkTabContainerStyles.activeLabel

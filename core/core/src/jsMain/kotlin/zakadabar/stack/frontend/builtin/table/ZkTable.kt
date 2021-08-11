@@ -14,10 +14,12 @@ import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
 import zakadabar.stack.data.query.QueryBo
+import zakadabar.stack.data.schema.BoSchema
 import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.ZkElementState
 import zakadabar.stack.frontend.builtin.crud.ZkCrud
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
+import zakadabar.stack.frontend.builtin.form.fields.ZkFieldContext
 import zakadabar.stack.frontend.builtin.table.actions.ZkAddRowAction
 import zakadabar.stack.frontend.builtin.table.actions.ZkExportCsvAction
 import zakadabar.stack.frontend.builtin.table.actions.ZkSearchAction
@@ -58,7 +60,7 @@ import kotlin.reflect.KProperty1
  * @property  columns       Column definitions.
  * @property  preloads      Data load jobs which has to be performed before the table is rendered.
  */
-open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitleProvider {
+open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitleProvider, ZkFieldContext {
 
     // -------------------------------------------------------------------------
     //  Configuration -- meant to set by onConfigure
@@ -91,6 +93,22 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             val titleText = titleElement?.text
             return (if (titleText.isNullOrEmpty()) "content" else titleText) + ".csv"
         }
+
+    // -------------------------------------------------------------------------
+    //  ZkFieldBackend
+    // -------------------------------------------------------------------------
+
+    override val readOnly = false
+
+    override val useShadow = false
+
+    override val addLabel = false
+
+    override val dense = true
+
+    override val schema = BoSchema.NO_VALIDATION
+
+    override fun validate() {  }
 
     // -------------------------------------------------------------------------
     //  DOM

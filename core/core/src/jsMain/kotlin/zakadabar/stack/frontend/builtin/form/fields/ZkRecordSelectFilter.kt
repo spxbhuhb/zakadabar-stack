@@ -3,18 +3,16 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.frontend.builtin.form.ZkForm
 
-open class ZkRecordSelectFilter<T : BaseBo>(
-    form: ZkForm<T>,
+open class ZkRecordSelectFilter(
+    context : ZkFieldContext,
     sortOptions: Boolean = true,
     label: String? = null,
     var getValue: () -> EntityId<*>?,
     var options: suspend () -> List<Pair<EntityId<*>, String>>,
     onSelected: (Pair<EntityId<*>, String>?) -> Unit
-) : ZkSelectBase<T, EntityId<*>>(form, "", sortOptions, options, onSelected) {
+) : ZkSelectBase< EntityId<*>>(context, "", sortOptions, options, onSelected) {
 
     init {
         // FIXME this is not right, but haven't had time to fix yet

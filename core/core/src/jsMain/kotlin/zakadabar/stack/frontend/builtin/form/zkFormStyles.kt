@@ -123,6 +123,11 @@ object ZkFormStyles : ZkCssStyleSheet() {
         marginBottom = 6.px
     }
 
+    val fieldValueDense by cssClass {
+        minHeight = rowHeight.px
+        color = theme.inputTextColor
+    }
+
     val fieldError by cssClass {
         color = ZkColors.Gray.c700
         fontSize = 90.percent

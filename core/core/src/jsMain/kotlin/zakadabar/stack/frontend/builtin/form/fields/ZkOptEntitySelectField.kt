@@ -16,10 +16,8 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.util.by
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.newInstance
@@ -29,11 +27,11 @@ import kotlin.reflect.KMutableProperty0
 
 // FIXME merge common functions with ZkEntitySelectField
 
-open class ZkOptEntitySelectField<T : BaseBo, ST : EntityBo<ST>>(
-    form: ZkForm<T>,
+open class ZkOptEntitySelectField<ST : EntityBo<ST>>(
+    context : ZkFieldContext,
     val prop: KMutableProperty0<EntityId<ST>?>,
     val entityClass : KClass<ST>
-) : ZkSelect2Base<T, EntityId<ST>>(form, prop.name) {
+) : ZkSelect2Base<EntityId<ST>>(context, prop.name) {
 
     lateinit var selectBy : (ST) -> String
 
@@ -54,25 +52,25 @@ open class ZkOptEntitySelectField<T : BaseBo, ST : EntityBo<ST>>(
 
     override fun setPropValue(value: Pair<EntityId<ST>, String>?) {
         prop.set(value?.first)
-        form.validate()
+        context.validate()
     }
 
-    infix fun options(func:  ZkOptEntitySelectField<T, ST>.() ->  Unit): ZkOptEntitySelectField<T, ST> {
-        func()
+    override fun onAfterOptions() {
         io {
             items = getOptions()
             render(getPropValue())
         }
-        return this
     }
 
     @PublicApi
-    infix fun selectBy(func: (ST) -> String): ZkOptEntitySelectField<T, ST> {
+    infix fun ZkOptEntitySelectField<ST>?.selectBy(func: (ST) -> String): ZkOptEntitySelectField<ST>? {
+        if (this == null) return this
         selectBy = func
         return this
     }
 
-    infix fun readOnly(value: Boolean): ZkOptEntitySelectField<T, ST> {
+    infix fun ZkOptEntitySelectField<ST>?.readOnly(value: Boolean): ZkOptEntitySelectField<ST>? {
+        if (this == null) return this
         readOnly = value
         return this
     }

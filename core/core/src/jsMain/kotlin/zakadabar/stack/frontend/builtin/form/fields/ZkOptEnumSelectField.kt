@@ -16,17 +16,15 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptEnumSelectField<T : BaseBo, E : Enum<E>>(
-    form: ZkForm<T>,
+open class ZkOptEnumSelectField<E : Enum<E>>(
+    context : ZkFieldContext,
     val prop: KMutableProperty0<E?>,
     val toEnum: (String) -> E,
     sortOptions: Boolean = true,
     options: suspend () -> List<Pair<E, String>>
-) : ZkSelectBase<T, E>(form, prop.name, sortOptions, options) {
+) : ZkSelectBase<E>(context, prop.name, sortOptions, options) {
 
     override fun fromString(string: String) = toEnum(string)
 
@@ -34,7 +32,7 @@ open class ZkOptEnumSelectField<T : BaseBo, E : Enum<E>>(
 
     override fun setPropValue(value: Pair<E, String>?) {
         prop.set(value?.first)
-        form.validate()
+        context.validate()
     }
 
 }

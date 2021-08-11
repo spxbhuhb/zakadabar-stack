@@ -4,16 +4,14 @@
 
 package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.util.UUID
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptUuidField<T : BaseBo>(
-    form: ZkForm<T>,
+open class ZkOptUuidField(
+    context : ZkFieldContext,
     prop: KMutableProperty0<UUID?>
-) : ZkStringBase<T, UUID?>(
-    form = form,
+) : ZkStringBase<UUID?>(
+    context = context,
     prop = prop
 ) {
 

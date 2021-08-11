@@ -20,10 +20,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.get
-import zakadabar.stack.data.BaseBo
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.zkFormStyles
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
@@ -34,12 +31,12 @@ import zakadabar.stack.frontend.util.minusAssign
 import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.resources.localizedStrings
 
-abstract class ZkSelect2Base<T : BaseBo, VT>(
-    form: ZkForm<T>,
+abstract class ZkSelect2Base<VT>(
+    context: ZkFieldContext,
     propName: String,
     var onSelected: (Pair<VT, String>?) -> Unit = { }
-) : ZkFieldBase<T, VT>(
-    form = form,
+) : ZkFieldBase<VT>(
+    context = context,
     propName = propName
 ) {
 
@@ -47,7 +44,7 @@ abstract class ZkSelect2Base<T : BaseBo, VT>(
         private const val DATASET_KEY = "value"
     }
 
-    override var readOnly: Boolean = (form.mode == ZkElementMode.Read)
+    override var readOnly = context.readOnly
         set(value) {
             if (value) {
                 container.firstElementChild?.classList?.plusAssign(zkFormStyles.disabledSelect)

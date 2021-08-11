@@ -12,10 +12,15 @@ added:
 - `Router.prepareAction function (convert strings to action function and parameter)
 - `zkLayoutStyles` styles `grid1`, `grid2`, `grid3`
 - `ZkTable.oneClick` open details with one click
+- `ZkTable` now implements ZkFieldBackend
 
 changed:
 
 - move RoutedModule from jvmMain to commonMain
+- fields and methods of tab container classes are now open
+- `ZkFieldBase` now has no type parameter
+- `ZkFieldBase` uses ZkFieldBackend instead the form itself  
+- `ZkFieldBase.readOnly` is not an abstract field
 
 ## Lib: Markdown
 

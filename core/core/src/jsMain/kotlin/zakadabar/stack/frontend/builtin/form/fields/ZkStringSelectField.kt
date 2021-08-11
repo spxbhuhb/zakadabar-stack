@@ -16,16 +16,14 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-open class ZkStringSelectField<T : BaseBo>(
-    form: ZkForm<T>,
+open class ZkStringSelectField(
+    context : ZkFieldContext,
     val prop: KMutableProperty0<String>,
     sortOptions: Boolean = true,
     options: suspend () -> List<Pair<String, String>>
-) : ZkSelectBase<T, String>(form, prop.name, sortOptions, options) {
+) : ZkSelectBase<String>(context, prop.name, sortOptions, options) {
 
     override fun fromString(string: String): String {
         return string
@@ -40,7 +38,7 @@ open class ZkStringSelectField<T : BaseBo>(
             invalidInput = false
             prop.set(value.first)
         }
-        form.validate()
+        context.validate()
     }
 
 }

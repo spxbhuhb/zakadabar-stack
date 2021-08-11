@@ -13,8 +13,10 @@ import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.stack.frontend.builtin.pages.ZkPathPage
 import zakadabar.stack.frontend.builtin.pages.zkPageStyles
 import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.stack.frontend.resources.css.OverflowY
 import zakadabar.stack.frontend.resources.css.em
 import zakadabar.stack.frontend.resources.css.fr
+import zakadabar.stack.frontend.resources.css.percent
 import zakadabar.stack.frontend.util.io
 
 object Cookbook : ZkPathPage(cssClass = zkPageStyles.fixed) {
@@ -45,6 +47,9 @@ object Cookbook : ZkPathPage(cssClass = zkPageStyles.fixed) {
 
             + zkLayoutStyles.fixBorder
             + zkLayoutStyles.roundBorder
+
+            + OverflowY.auto
+            height = 100.percent
 
             search = true
             oneClick = true

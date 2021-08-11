@@ -17,16 +17,14 @@
 package zakadabar.stack.frontend.builtin.form.fields
 
 import kotlinx.datetime.LocalDateTime
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.resources.toLocalDateTimeOrNull
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptLocalDateTimeField<T : BaseBo>(
-    form: ZkForm<T>,
+open class ZkOptLocalDateTimeField(
+    context : ZkFieldContext,
     prop: KMutableProperty0<LocalDateTime?>
-) : ZkStringBase<T, LocalDateTime?>(
-    form = form,
+) : ZkStringBase<LocalDateTime?>(
+    context = context,
     prop = prop
 ) {
 

@@ -218,6 +218,10 @@ open class ZkTableStyles : ZkCssStyleSheet() {
         }
     }
 
+    val dense by cssClass {
+        padding = "0 !important"
+    }
+
     val action by cssClass {
         + Display.flex
         + AlignItems.center

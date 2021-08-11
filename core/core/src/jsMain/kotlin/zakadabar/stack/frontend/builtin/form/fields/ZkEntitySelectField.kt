@@ -16,10 +16,8 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.util.by
 import zakadabar.stack.frontend.util.io
 import zakadabar.stack.frontend.util.newInstance
@@ -27,11 +25,11 @@ import zakadabar.stack.util.PublicApi
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty0
 
-open class ZkEntitySelectField<T : BaseBo, ST : EntityBo<ST>>(
-    form: ZkForm<T>,
+open class ZkEntitySelectField<ST : EntityBo<ST>>(
+    context : ZkFieldContext,
     val prop: KMutableProperty0<EntityId<ST>>,
     val entityClass: KClass<ST>
-) : ZkSelect2Base<T, EntityId<ST>>(form, prop.name) {
+) : ZkSelect2Base<EntityId<ST>>(context, prop.name) {
 
     lateinit var selectBy: (ST) -> String
 
@@ -63,7 +61,7 @@ open class ZkEntitySelectField<T : BaseBo, ST : EntityBo<ST>>(
             invalidInput = false
             prop.set(value.first)
         }
-        form.validate()
+        context.validate()
     }
 
     override fun onAfterOptions() {
@@ -74,13 +72,13 @@ open class ZkEntitySelectField<T : BaseBo, ST : EntityBo<ST>>(
     }
 
     @PublicApi
-    infix fun ZkEntitySelectField<T, ST>?.selectBy(func: (ST) -> String): ZkEntitySelectField<T, ST>? {
+    infix fun ZkEntitySelectField<ST>?.selectBy(func: (ST) -> String): ZkEntitySelectField<ST>? {
         if (this == null) return this
         selectBy = func
         return this
     }
 
-    infix fun ZkEntitySelectField<T, ST>?.readOnly(value: Boolean): ZkEntitySelectField<T, ST>? {
+    infix fun ZkEntitySelectField<ST>?.readOnly(value: Boolean): ZkEntitySelectField<ST>? {
         if (this == null) return this
         readOnly = value
         return this

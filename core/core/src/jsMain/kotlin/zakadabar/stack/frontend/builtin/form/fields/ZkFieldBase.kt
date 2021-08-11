@@ -6,26 +6,25 @@ package zakadabar.stack.frontend.builtin.form.fields
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
-import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityBo
 import zakadabar.stack.data.schema.ValidityReport
 import zakadabar.stack.data.schema.descriptor.BoConstraintType
 import zakadabar.stack.data.schema.descriptor.BooleanBoConstraint
 import zakadabar.stack.data.schema.descriptor.IntBoConstraint
 import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
+import zakadabar.stack.frontend.builtin.form.zkFormStyles
 import zakadabar.stack.frontend.util.minusAssign
 import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.resources.localizedStrings
 
-abstract class ZkFieldBase<FT : BaseBo, DT>(
-    val form: ZkForm<FT>,
+abstract class ZkFieldBase<DT>(
+    val context: ZkFieldContext,
     val propName: String,
-    label: String? = null,
-    open var readOnly: Boolean = (form.mode == ZkElementMode.Read)
+    label: String? = null
 ) : ZkElement() {
+
+    abstract var readOnly: Boolean
 
     var touched = false
 
@@ -74,11 +73,13 @@ abstract class ZkFieldBase<FT : BaseBo, DT>(
      * Call this function from [onResume] or simply write your own implementation.
      */
     open fun buildSectionField() {
-        classList += ZkFormStyles.fieldContainer
+        classList += zkFormStyles.fieldContainer
 
-        buildFieldLabel()
+        if (context.addLabel) {
+            buildFieldLabel()
+        }
 
-        + div(ZkFormStyles.fieldValue) {
+        + div(if (context.dense) zkFormStyles.fieldValueDense else zkFormStyles.fieldValue) {
             buildFieldValue()
         }
 
@@ -117,7 +118,7 @@ abstract class ZkFieldBase<FT : BaseBo, DT>(
         }
     }
 
-    open fun needsMandatoryMark() = ! form.schema.value.isOptional(propName)
+    open fun needsMandatoryMark() = ! context.schema.isOptional(propName)
 
     open fun mandatoryMark() {
         if (needsMandatoryMark()) {
@@ -135,7 +136,7 @@ abstract class ZkFieldBase<FT : BaseBo, DT>(
 
     open fun focusEvents(element: HTMLElement) {
         on(element, "blur") {
-            form.validate()
+            context.validate()
         }
     }
 
@@ -218,7 +219,7 @@ abstract class ZkFieldBase<FT : BaseBo, DT>(
      */
     fun stringMandatoryMark(): Boolean {
 
-        val constraints = form.schema.value.constraints(propName)
+        val constraints = context.schema.constraints(propName)
 
         var mandatory = false
         constraints.forEach {

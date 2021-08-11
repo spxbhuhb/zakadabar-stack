@@ -16,15 +16,13 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-open class ZkDoubleField<T : BaseBo>(
-    form: ZkForm<T>,
+open class ZkDoubleField(
+    context: ZkFieldContext,
     prop: KMutableProperty0<Double>
-) : ZkStringBase<T, Double>(
-    form = form,
+) : ZkStringBase<Double>(
+    context = context,
     prop = prop
 ) {
 

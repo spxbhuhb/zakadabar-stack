@@ -18,21 +18,25 @@ package zakadabar.stack.frontend.builtin.form.fields
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLTextAreaElement
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.util.plusAssign
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptTextAreaField<T : BaseBo>(
-    form: ZkForm<T>,
+open class ZkOptTextAreaField(
+    context: ZkFieldContext,
     private val prop: KMutableProperty0<String?>
-) : ZkFieldBase<T, String>(
-    form = form,
+) : ZkFieldBase<String>(
+    context = context,
     propName = prop.name
 ) {
 
     private val area = document.createElement("textarea") as HTMLTextAreaElement
+
+    override var readOnly = context.readOnly
+        set(value) {
+            area.disabled = value
+            field = value
+        }
 
     @Suppress("DuplicatedCode") // i don't want to mix this with string field
     override fun buildFieldValue() {
@@ -50,7 +54,7 @@ open class ZkOptTextAreaField<T : BaseBo>(
         on(area, "input") {
             touched = true
             prop.set(area.value)
-            form.validate()
+            context.validate()
         }
 
         focusEvents(area)

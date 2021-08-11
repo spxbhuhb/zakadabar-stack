@@ -16,17 +16,15 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-open class ZkSecretField<T : BaseBo>(
-    form: ZkForm<T>,
+open class ZkSecretField(
+    context : ZkFieldContext,
     prop: KMutableProperty0<Secret>,
     newSecret: Boolean = false
-) : ZkStringBase<T, Secret>(
-    form = form,
+) : ZkStringBase<Secret>(
+    context = context,
     prop = prop
 ) {
 

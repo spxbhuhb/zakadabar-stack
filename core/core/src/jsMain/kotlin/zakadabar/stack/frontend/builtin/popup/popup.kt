@@ -66,5 +66,5 @@ fun alignPopup(popupElement: HTMLElement, anchorElement: HTMLElement, minHeight:
         }
     }
 
-
+    popupElement.style.left = anchorRect.left.px
 }

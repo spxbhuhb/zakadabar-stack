@@ -16,17 +16,15 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.data.BaseBo
 import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptRecordSelectField<T : BaseBo, ST>(
-    form: ZkForm<T>,
+open class ZkOptRecordSelectField<ST>(
+    context : ZkFieldContext,
     val prop: KMutableProperty0<EntityId<ST>?>,
     sortOptions: Boolean = true,
     options: suspend () -> List<Pair<EntityId<ST>, String>>
-) : ZkSelectBase<T, EntityId<ST>>(form, prop.name, sortOptions, options) {
+) : ZkSelectBase<EntityId<ST>>(context, prop.name, sortOptions, options) {
 
     override fun fromString(string: String): EntityId<ST> {
         return EntityId(string)
@@ -40,7 +38,7 @@ open class ZkOptRecordSelectField<T : BaseBo, ST>(
         } else {
             prop.set(value.first)
         }
-        form.validate()
+        context.validate()
     }
 
 }

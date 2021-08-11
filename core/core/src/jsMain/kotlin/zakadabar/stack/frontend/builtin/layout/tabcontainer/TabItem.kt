@@ -5,7 +5,7 @@ package zakadabar.stack.frontend.builtin.layout.tabcontainer
 
 import zakadabar.stack.frontend.builtin.ZkElement
 
-class TabItem(
+open class TabItem(
     container: ZkTabContainer,
     val content: ZkElement,
     val title: String? = null,

@@ -16,9 +16,6 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
 /**
@@ -28,15 +25,13 @@ import kotlin.reflect.KMutableProperty0
  * BO contains the first enum value which is not selected by the user but set
  * by the schema.
  */
-open class ZkEnumSelectField<T : BaseBo, E : Enum<E>>(
-    form: ZkForm<T>,
+open class ZkEnumSelectField<E : Enum<E>>(
+    context : ZkFieldContext,
     val prop: KMutableProperty0<E>,
     val toEnum: (String) -> E,
     sortOptions: Boolean = true,
     options: suspend () -> List<Pair<E, String>>
-) : ZkSelectBase<T, E>(form, prop.name, sortOptions, options) {
-
-    var useShadow = form.mode in listOf(ZkElementMode.Create, ZkElementMode.Action, ZkElementMode.Query)
+) : ZkSelectBase<E>(context, prop.name, sortOptions, options) {
 
     var shadowValue: E? = null
 
@@ -44,11 +39,11 @@ open class ZkEnumSelectField<T : BaseBo, E : Enum<E>>(
 
     override fun onResume() {
         super.onResume()
-        invalidInput = (useShadow && shadowValue == null)
+        invalidInput = (context.useShadow && shadowValue == null)
     }
 
     override fun getPropValue(): E? {
-        return if (useShadow) {
+        return if (context.useShadow) {
             shadowValue
         } else {
             prop.get()
@@ -66,7 +61,7 @@ open class ZkEnumSelectField<T : BaseBo, E : Enum<E>>(
             prop.set(value.first)
         }
 
-        form.validate()
+        context.validate()
     }
 
 }

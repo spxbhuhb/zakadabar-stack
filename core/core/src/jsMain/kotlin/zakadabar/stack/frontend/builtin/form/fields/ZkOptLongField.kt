@@ -16,15 +16,13 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.builtin.form.ZkForm
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptLongField<T : BaseBo>(
-    form: ZkForm<T>,
+open class ZkOptLongField(
+    context : ZkFieldContext,
     prop: KMutableProperty0<Long?>
-) : ZkStringBase<T, Long?>(
-    form = form,
+) : ZkStringBase<Long?>(
+    context = context,
     prop = prop
 ) {
 

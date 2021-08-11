@@ -18,8 +18,6 @@ package zakadabar.stack.frontend.builtin.form.fields
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.builtin.form.ZkForm
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.util.plusAssign
 import zakadabar.stack.util.PublicApi
@@ -28,16 +26,18 @@ import zakadabar.stack.util.PublicApi
  * A field that displays a constant, readonly string.
  */
 @PublicApi
-open class ZkConstStringField<T : BaseBo>(
-    form: ZkForm<T>,
+open class ZkConstStringField(
+    context: ZkFieldContext,
     label: String,
     val value: String
-) : ZkFieldBase<T, String>(
-    form = form,
+) : ZkFieldBase<String>(
+    context = context,
     propName = "",
     label = label
 ) {
     private val input = document.createElement("input") as HTMLInputElement
+
+    override var readOnly = true
 
     override fun buildFieldValue() {
         input.classList += ZkFormStyles.disabledString

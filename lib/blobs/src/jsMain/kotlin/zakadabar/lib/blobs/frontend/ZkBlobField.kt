@@ -64,7 +64,7 @@ import kotlin.reflect.KClass
  * @param   makeBlobCb       Callback function to make a blob instance.
  */
 abstract class ZkBlobField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
-    form: ZkForm<T>,
+    val form: ZkForm<T>,
     open val comm: BlobCommInterface<BT, T>,
     open val reference: EntityId<T>? = null,
     open val blobCountMax: Int? = null,
@@ -73,12 +73,14 @@ abstract class ZkBlobField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
     @Deprecated("EOL: 2021.8.1  -  use blobClass or makeBlobCb instead")
     open val make: ((File) -> BT)? = null,
     open val makeBlobCb: ((File) -> BT)? = make
-) : ZkFieldBase<T, Unit>(
-    form = form,
+) : ZkFieldBase<Unit>(
+    context = form,
     propName = ""
 ) {
 
     open lateinit var droparea: ZkElement
+
+    override var readOnly = form.readOnly
 
     override fun onCreate() {
         io {

@@ -67,10 +67,20 @@ import kotlin.reflect.KProperty
  * @property  autoLabel  When true labels are automatically added. When false they are not.
  */
 open class ZkForm<T : BaseBo>(
-    element: HTMLElement = document.createElement("div") as HTMLElement
-) : ZkElement(element), ZkCrudEditor<T>, ZkAppTitleProvider, ZkLocalTitleProvider {
+    element: HTMLElement = document.createElement("div") as HTMLElement,
+) : ZkElement(element), ZkCrudEditor<T>, ZkAppTitleProvider, ZkLocalTitleProvider, ZkFieldContext {
 
-    override lateinit var bo: T
+    private var _bo: T? = null
+
+    override var bo: T
+        get() = _bo ?: throw IllegalStateException("bo is not initialized yet")
+        set(value) {
+            _bo = value
+            schema = value.schema()
+        }
+
+    override var schema = BoSchema.Companion.NO_VALIDATION
+
     override lateinit var mode: ZkElementMode
 
     override var setAppTitle = true
@@ -102,9 +112,7 @@ open class ZkForm<T : BaseBo>(
      */
     override var onBack = { application.back() }
 
-    var schema = lazy { if (! ::bo.isInitialized) BoSchema.Companion.NO_VALIDATION else bo.schema() }
-
-    val fields = mutableListOf<ZkFieldBase<*, *>>()
+    val fields = mutableListOf<ZkFieldBase<*>>()
 
     /**
      * False until the first time the user clicks on the submit button.
@@ -142,6 +150,20 @@ open class ZkForm<T : BaseBo>(
     var goBackAfterCreate: Boolean = true
 
     // -------------------------------------------------------------------------
+    //  ZkFieldBackend
+    // -------------------------------------------------------------------------
+
+    override val readOnly
+        get() = mode == ZkElementMode.Read
+
+    override val useShadow
+        get() = mode in listOf(ZkElementMode.Create, ZkElementMode.Action, ZkElementMode.Query)
+
+    override val addLabel = true
+
+    override val dense = false
+
+    // -------------------------------------------------------------------------
     //  Lifecycle functions
     // -------------------------------------------------------------------------
 
@@ -173,6 +195,13 @@ open class ZkForm<T : BaseBo>(
     // ------------------------------------------------------------------------
 
     /**
+     * Parameter-less version of submit for [ZkFieldContext].
+     */
+    override fun validate() {
+        validate(submit = false)
+    }
+
+    /**
      * Validates the BO with the schema. Validation occurs at every
      * change. When the user did not touch a field yet a validation
      * fail may not be displayed for that field.
@@ -188,7 +217,7 @@ open class ZkForm<T : BaseBo>(
             submitTouched = true
         }
 
-        val report = schema.value.validate(mode == ZkElementMode.Create)
+        val report = schema.validate(mode == ZkElementMode.Create)
 
         if (submit && report.fails.isNotEmpty()) {
             println("${this::class.simpleName} validation fail:")
@@ -218,8 +247,8 @@ open class ZkForm<T : BaseBo>(
         return true
     }
 
-    open fun invalidTouchedFields(report: ValidityReport): List<ZkFieldBase<*, *>> {
-        val invalid = mutableListOf<ZkFieldBase<*, *>>()
+    open fun invalidTouchedFields(report: ValidityReport): List<ZkFieldBase<*>> {
+        val invalid = mutableListOf<ZkFieldBase<*>>()
 
         report.fails.keys.forEach { propName ->
             val field = fields.firstOrNull { it.propName == propName } ?: return@forEach
@@ -389,7 +418,7 @@ open class ZkForm<T : BaseBo>(
     /**
      * Create and add a form field.
      */
-    open fun <T : ZkFieldBase<*, *>, PT : KProperty<*>> add(property: PT, function: (PT) -> T?): T? =
+    open fun <T : ZkFieldBase<*>, PT : KProperty<*>> add(property: PT, function: (PT) -> T?): T? =
         function(property)?.also {
             + it
             fields += it
@@ -444,7 +473,7 @@ open class ZkForm<T : BaseBo>(
         sortOptions: Boolean = true,
         label: String? = null,
         options: suspend () -> List<Pair<EntityId<ST>, String>>
-    ): ZkRecordSelectField<T, ST> {
+    ): ZkRecordSelectField<ST> {
         val field = ZkRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
         label?.let { field.labelText = label }
         fields += field
@@ -454,7 +483,7 @@ open class ZkForm<T : BaseBo>(
     fun <ST> select(
         kProperty0: KMutableProperty0<EntityId<ST>>,
         optionProvider: SelectOptionProvider<ST>
-    ): ZkRecordSelectField<T, ST> {
+    ): ZkRecordSelectField<ST> {
         val field = ZkRecordSelectField(this@ZkForm, kProperty0, true, optionProvider::asSelectOptions)
         fields += field
         return field
@@ -463,7 +492,7 @@ open class ZkForm<T : BaseBo>(
     fun <ST> select(
         kProperty0: KMutableProperty0<EntityId<ST>?>,
         optionProvider: SelectOptionProvider<ST>
-    ): ZkOptRecordSelectField<T, ST> {
+    ): ZkOptRecordSelectField<ST> {
         val field = ZkOptRecordSelectField(this@ZkForm, kProperty0, true, optionProvider::asSelectOptions)
         fields += field
         return field
@@ -474,28 +503,28 @@ open class ZkForm<T : BaseBo>(
         sortOptions: Boolean = true,
         label: String? = null,
         options: suspend () -> List<Pair<EntityId<ST>, String>>
-    ): ZkOptRecordSelectField<T, ST> {
+    ): ZkOptRecordSelectField<ST> {
         val field = ZkOptRecordSelectField(this@ZkForm, kProperty0, sortOptions, options)
         label?.let { field.labelText = label }
         fields += field
         return field
     }
 
-    fun select(kProperty0: KMutableProperty0<String>, label: String? = null, sortOptions: Boolean = true, options: List<String>): ZkStringSelectField<T> {
+    fun select(kProperty0: KMutableProperty0<String>, label: String? = null, sortOptions: Boolean = true, options: List<String>): ZkStringSelectField {
         val field = ZkStringSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
         label?.let { field.labelText = label }
         fields += field
         return field
     }
 
-    fun select(kProperty0: KMutableProperty0<String?>, label: String? = null, sortOptions: Boolean = true, options: List<String>): ZkOptStringSelectField<T> {
+    fun select(kProperty0: KMutableProperty0<String?>, label: String? = null, sortOptions: Boolean = true, options: List<String>): ZkOptStringSelectField {
         val field = ZkOptStringSelectField(this@ZkForm, kProperty0, sortOptions, suspend { options.map { Pair(it, it) } })
         label?.let { field.labelText = label }
         fields += field
         return field
     }
 
-    inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E>, label: String? = null, sortOptions: Boolean = true): ZkEnumSelectField<T, E> {
+    inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E>, label: String? = null, sortOptions: Boolean = true): ZkEnumSelectField<E> {
         val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) } // this is a non-translated to translated mapping
         val field = ZkEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
         label?.let { field.labelText = label }
@@ -504,7 +533,7 @@ open class ZkForm<T : BaseBo>(
     }
 
     @JsName("FormOptEnumSelect")
-    inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E?>, label: String? = null, sortOptions: Boolean = true): ZkOptEnumSelectField<T, E> {
+    inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E?>, label: String? = null, sortOptions: Boolean = true): ZkOptEnumSelectField<E> {
         val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) } // this is a non-translated to translated mapping
         val field = ZkOptEnumSelectField(this@ZkForm, kProperty0, { enumValueOf(it) }, sortOptions, suspend { options })
         label?.let { field.labelText = label }
@@ -512,21 +541,21 @@ open class ZkForm<T : BaseBo>(
         return field
     }
 
-    fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkTextAreaField<T>.() -> Unit = { }): ZkTextAreaField<T> {
+    fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkTextAreaField.() -> Unit = { }): ZkTextAreaField {
         val field = ZkTextAreaField(this@ZkForm, kProperty0)
         fields += field
         field.builder()
         return field
     }
 
-    fun textarea(kProperty0: KMutableProperty0<String?>, builder: ZkElement.() -> Unit = { }): ZkOptTextAreaField<T> {
+    fun textarea(kProperty0: KMutableProperty0<String?>, builder: ZkElement.() -> Unit = { }): ZkOptTextAreaField {
         val field = ZkOptTextAreaField(this@ZkForm, kProperty0)
         fields += field
         field.builder()
         return field
     }
 
-    fun opt(kProperty0: KMutableProperty0<Boolean?>, trueText: String, falseText: String, builder: ZkOptBooleanField<T>.() -> Unit = { }): ZkOptBooleanField<T> {
+    fun opt(kProperty0: KMutableProperty0<Boolean?>, trueText: String, falseText: String, builder: ZkOptBooleanField.() -> Unit = { }): ZkOptBooleanField {
         val options = listOf(true to trueText, false to falseText)
         val field = ZkOptBooleanField(this@ZkForm, kProperty0) { options }
         fields += field
@@ -534,7 +563,7 @@ open class ZkForm<T : BaseBo>(
         return field
     }
 
-    fun constString(label: String, value: () -> String): ZkConstStringField<T> {
+    fun constString(label: String, value: () -> String): ZkConstStringField {
         val field = ZkConstStringField(this@ZkForm, label, value())
         fields += field
         return field
@@ -544,7 +573,7 @@ open class ZkForm<T : BaseBo>(
      * Field for a new secret (password). Instructs browsers not to fill the content with old password.
      */
     @Deprecated("EOL: 2021.8.1  -  use +bo::field newSecret true")
-    fun newSecret(prop: KMutableProperty0<Secret>): ZkSecretField<T> {
+    fun newSecret(prop: KMutableProperty0<Secret>): ZkSecretField {
         val field = ZkSecretField(this@ZkForm, prop, newSecret = true)
         + field
         fields += field
@@ -555,7 +584,7 @@ open class ZkForm<T : BaseBo>(
      * Field for a new secret (password). Instructs browsers not to fill the content with old password.
      */
     @Deprecated("EOL: 2021.8.1  -  use +bo::field newSecret true")
-    fun newSecret(prop: KMutableProperty0<Secret?>): ZkOptSecretField<T> {
+    fun newSecret(prop: KMutableProperty0<Secret?>): ZkOptSecretField{
         val field = ZkOptSecretField(this@ZkForm, prop, newSecret = true)
         + field
         fields += field
@@ -580,119 +609,119 @@ open class ZkForm<T : BaseBo>(
             }
         }
 
-    inline operator fun <reified ST : EntityBo<ST>> KMutableProperty0<EntityId<ST>>.unaryPlus(): ZkEntitySelectField<T, ST>? =
+    inline operator fun <reified ST : EntityBo<ST>> KMutableProperty0<EntityId<ST>>.unaryPlus(): ZkEntitySelectField<ST>? =
         add(this) {
             ZkEntitySelectField(this@ZkForm, it, ST::class)
         }
 
-    inline operator fun <reified ST : EntityBo<ST>> KMutableProperty0<EntityId<ST>?>.unaryPlus(): ZkOptEntitySelectField<T, ST>? =
+    inline operator fun <reified ST : EntityBo<ST>> KMutableProperty0<EntityId<ST>?>.unaryPlus(): ZkOptEntitySelectField<ST>? =
         add(this) {
             ZkOptEntitySelectField(this@ZkForm, it, ST::class)
         }
 
-    operator fun KMutableProperty0<String>.unaryPlus(): ZkStringField<T>? =
+    operator fun KMutableProperty0<String>.unaryPlus(): ZkStringField? =
         add(this) {
             ZkStringField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<String?>.unaryPlus(): ZkOptStringField<T>? =
+    operator fun KMutableProperty0<String?>.unaryPlus(): ZkOptStringField? =
         add(this) {
             ZkOptStringField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Int>.unaryPlus(): ZkIntField<T>? =
+    operator fun KMutableProperty0<Int>.unaryPlus(): ZkIntField? =
         add(this) {
             ZkIntField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Int?>.unaryPlus(): ZkOptIntField<T>? =
+    operator fun KMutableProperty0<Int?>.unaryPlus(): ZkOptIntField? =
         add(this) {
             ZkOptIntField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Long>.unaryPlus(): ZkLongField<T>? =
+    operator fun KMutableProperty0<Long>.unaryPlus(): ZkLongField? =
         add(this) {
             ZkLongField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Long?>.unaryPlus(): ZkOptLongField<T>? =
+    operator fun KMutableProperty0<Long?>.unaryPlus(): ZkOptLongField? =
         add(this) {
             ZkOptLongField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Double>.unaryPlus(): ZkDoubleField<T>? =
+    operator fun KMutableProperty0<Double>.unaryPlus(): ZkDoubleField? =
         add(this) {
             ZkDoubleField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Double?>.unaryPlus(): ZkOptDoubleField<T>? =
+    operator fun KMutableProperty0<Double?>.unaryPlus(): ZkOptDoubleField? =
         add(this) {
             ZkOptDoubleField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Boolean>.unaryPlus(): ZkBooleanField<T>? =
+    operator fun KMutableProperty0<Boolean>.unaryPlus(): ZkBooleanField? =
         add(this) {
             ZkBooleanField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Instant>.unaryPlus(): ZkInstantField<T>? =
+    operator fun KMutableProperty0<Instant>.unaryPlus(): ZkInstantField? =
         add(this) {
             ZkInstantField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Instant?>.unaryPlus(): ZkOptInstantField<T>? =
+    operator fun KMutableProperty0<Instant?>.unaryPlus(): ZkOptInstantField? =
         add(this) {
             ZkOptInstantField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<LocalDate>.unaryPlus(): ZkLocalDateField<T>? =
+    operator fun KMutableProperty0<LocalDate>.unaryPlus(): ZkLocalDateField? =
         add(this) {
             ZkLocalDateField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<LocalDate?>.unaryPlus(): ZkOptLocalDateField<T>? =
+    operator fun KMutableProperty0<LocalDate?>.unaryPlus(): ZkOptLocalDateField? =
         add(this) {
             ZkOptLocalDateField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<LocalDateTime>.unaryPlus(): ZkLocalDateTimeField<T>? =
+    operator fun KMutableProperty0<LocalDateTime>.unaryPlus(): ZkLocalDateTimeField? =
         add(this) {
             ZkLocalDateTimeField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<LocalDateTime?>.unaryPlus(): ZkOptLocalDateTimeField<T>? =
+    operator fun KMutableProperty0<LocalDateTime?>.unaryPlus(): ZkOptLocalDateTimeField? =
         add(this) {
             ZkOptLocalDateTimeField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Secret>.unaryPlus(): ZkSecretField<T>? =
+    operator fun KMutableProperty0<Secret>.unaryPlus(): ZkSecretField? =
         add(this) {
             ZkSecretField(this@ZkForm, this)
         }
 
-    operator fun KMutableProperty0<Secret?>.unaryPlus(): ZkOptSecretField<T>? =
+    operator fun KMutableProperty0<Secret?>.unaryPlus(): ZkOptSecretField? =
         add(this) {
             ZkOptSecretField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<UUID>.unaryPlus(): ZkUuidField<T>? =
+    operator fun KMutableProperty0<UUID>.unaryPlus(): ZkUuidField? =
         add(this) {
             ZkUuidField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<UUID?>.unaryPlus(): ZkOptUuidField<T>? =
+    operator fun KMutableProperty0<UUID?>.unaryPlus(): ZkOptUuidField? =
         add(this) {
             ZkOptUuidField(this@ZkForm, it)
         }
 
-    inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): ZkEnumSelectField<T, E>? =
+    inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): ZkEnumSelectField<E>? =
         add(this) {
             select(it)
         }
 
 
     @JsName("FormOptEnumUnaryPlus")
-    inline operator fun <reified E : Enum<E>> KMutableProperty0<E?>.unaryPlus(): ZkOptEnumSelectField<T, E>? =
+    inline operator fun <reified E : Enum<E>> KMutableProperty0<E?>.unaryPlus(): ZkOptEnumSelectField<E>? =
         add(this) {
             select(it)
         }
@@ -704,7 +733,7 @@ open class ZkForm<T : BaseBo>(
     /**
      * Find a field for this property.
      */
-    fun KMutableProperty0<*>.find(): ZkFieldBase<*, *> {
+    fun KMutableProperty0<*>.find(): ZkFieldBase<*> {
         return fields.first { it.propName == this.name }
     }
 
@@ -712,7 +741,7 @@ open class ZkForm<T : BaseBo>(
      * Set the field label.
      */
     infix fun ZkElement?.label(value: String): ZkElement? {
-        if (this is ZkFieldBase<*, *>) this.labelText = value
+        if (this is ZkFieldBase<*>) this.labelText = value
         return this
     }
 
@@ -720,7 +749,7 @@ open class ZkForm<T : BaseBo>(
      * Set the field to readonly.
      */
     infix fun ZkElement?.readOnly(value: Boolean): ZkElement? {
-        if (this is ZkFieldBase<*, *>) this.readOnly = value
+        if (this is ZkFieldBase<*>) this.readOnly = value
         return this
     }
 
@@ -728,15 +757,15 @@ open class ZkForm<T : BaseBo>(
      * Set autoComplete to "new-password".
      */
     infix fun ZkElement?.newSecret(value: Boolean): ZkElement? {
-        if (this is ZkSecretField<*>) this.newSecret = value
-        if (this is ZkOptSecretField<*>) this.newSecret = value
+        if (this is ZkSecretField) this.newSecret = value
+        if (this is ZkOptSecretField) this.newSecret = value
         return this
     }
 
     /**
      * General `option` block for field customization.
      */
-    inline infix fun <reified T : ZkFieldBase<*, *>> T?.options(func: T.() -> Unit): T? {
+    inline infix fun <reified T : ZkFieldBase<*>> T?.options(func: T.() -> Unit): T? {
         if (this != null) {
             func()
             onAfterOptions()
