@@ -33,7 +33,7 @@ class TableEditInline : ZkTable<ExampleBo>() {
             label = "Inline Select"
             render = {
                 + zkTableStyles.dense
-                + ZkStringSelectField(this@TableEditInline, it::stringSelectValue, false) { values }
+                + ZkStringSelectField(this@TableEditInline, it::stringSelectValue).apply { fetch = { values } }
             }
         }
 

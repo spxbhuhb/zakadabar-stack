@@ -16,7 +16,6 @@
  */
 package zakadabar.stack.frontend.builtin.form.fields
 
-import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.events.MouseEvent
@@ -25,7 +24,7 @@ import zakadabar.stack.frontend.builtin.ZkElement
 import zakadabar.stack.frontend.builtin.form.ZkFormStyles
 import zakadabar.stack.frontend.builtin.form.zkFormStyles
 import zakadabar.stack.frontend.builtin.icon.ZkIcon
-import zakadabar.stack.frontend.builtin.popup.alignPopup
+import zakadabar.stack.frontend.builtin.popup.ZkPopUp
 import zakadabar.stack.frontend.resources.ZkIcons
 import zakadabar.stack.frontend.util.escape
 import zakadabar.stack.frontend.util.io
@@ -36,8 +35,6 @@ import zakadabar.stack.resources.localizedStrings
 abstract class ZkSelectBase<VT>(
     context: ZkFieldContext,
     propName: String,
-    private val sortOptions: Boolean = true,
-    private val options: suspend () -> List<Pair<VT, String>>,
     var onSelected: (Pair<VT, String>?) -> Unit = { }
 ) : ZkFieldBase<VT>(
     context = context,
@@ -47,6 +44,24 @@ abstract class ZkSelectBase<VT>(
     companion object {
         private const val DATASET_KEY = "value"
     }
+
+    var sort = true
+
+    var fetch: (suspend () -> List<Pair<VT, String>>)? = null
+        set(value) {
+            field = value
+            fetchAndRender()
+        }
+
+    open lateinit var container: HTMLElement
+
+    open lateinit var arrow: ZkElement
+
+    open val selectedOption = ZkElement()
+
+    open val itemList = ZkPopUp { + ZkFormStyles.selectOptionList }
+
+    lateinit var items: List<Pair<VT, String>>
 
     override var readOnly = context.readOnly
         set(value) {
@@ -60,36 +75,27 @@ abstract class ZkSelectBase<VT>(
             field = value
         }
 
+    override fun onPause() {
+        super.onPause()
+        if (itemList.isShown()) itemList.hide()
+    }
+
+    open suspend fun getItems(): List<Pair<VT, String>> {
+        return fetch?.invoke() ?: throw NotImplementedError()
+    }
+
+    open fun sortItems() {
+        if (sort) items = items.sortedBy { it.second }
+    }
+
     abstract fun fromString(string: String): VT
 
     abstract fun getPropValue(): VT?
 
     abstract fun setPropValue(value: Pair<VT, String>?)
 
-    private lateinit var container: HTMLElement
-    private lateinit var arrow: ZkElement
-    private val selectedOption = ZkElement()
-    private val optionList = ZkElement().css(ZkFormStyles.selectOptionList)
-
-    lateinit var items: List<Pair<VT, String>>
-
-    override fun onPause() {
-        super.onPause()
-        optionList.hide()
-        optionList.element.remove()
-    }
-
     override fun buildFieldValue() {
-        io {
-            items = if (sortOptions) options().sortedBy { it.second } else options()
-            renderOptionList(getPropValue())
-        }
-
-        optionList.on("onmousedown") {
-            it.preventDefault() // https://stackoverflow.com/a/57630197
-        }
-
-        optionList.on("click") {
+        itemList.on("click") {
             it as MouseEvent
 
             val target = it.target
@@ -99,17 +105,11 @@ abstract class ZkSelectBase<VT>(
             val entryId = if (entryIdString.isNullOrEmpty()) null else fromString(entryIdString)
             val value = entryId?.let { items.firstOrNull { item -> item.first == entryId } }
 
-            if (value == null) {
-                selectedOption.innerText = localizedStrings.notSelected
-            } else {
-                selectedOption.innerText = value.second
-            }
-
             touched = true
             setPropValue(value)
             onSelected(value)
-            renderOptionList(value?.first) // FIXME this re-rendering is a bit too expensive I think
-            optionList.hide()
+            render(value?.first) // FIXME this re-rendering is a bit too expensive I think
+            itemList.hide()
         }
 
         container = div(ZkFormStyles.selectContainer) {
@@ -121,11 +121,10 @@ abstract class ZkSelectBase<VT>(
         }
 
         container.tabIndex = 0
-        optionList.element.tabIndex = 0
+        itemList.element.tabIndex = 0
 
-        optionList.on("blur") {
-            optionList.element.remove()
-            optionList.hide()
+        itemList.on("blur") {
+            itemList.hide()
         }
 
         on(container, "keydown") {
@@ -136,29 +135,36 @@ abstract class ZkSelectBase<VT>(
             when (it.key) {
                 "Enter", "ArrowDown" -> {
                     it.preventDefault()
-                    if (optionList.isHidden()) {
-                        toggleOptions()
+                    if (itemList.isHidden()) {
+                        itemList.show()
                     }
                 }
                 "Escape" -> {
                     it.preventDefault()
-                    optionList.element.remove()
-                    optionList.hide()
+                    itemList.hide()
                 }
             }
         }
 
         if (readOnly) arrow.hide()
 
-        optionList.hide()
+        itemList.hide()
         + container
     }
 
-    open fun renderOptionList(value: VT?) {
+    open fun fetchAndRender() {
+        io {
+            items = getItems()
+            render(getPropValue())
+        }
+    }
+
+    open fun render(value: VT?) {
         var s = ""
 
-        if (value == null || value == 0L) {
+        if (value == null) {
             s += """<div class="${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-${DATASET_KEY}="">${localizedStrings.notSelected}</div>"""
+            selectedOption.innerText = localizedStrings.notSelected
         } else {
             s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="">${localizedStrings.notSelected}</div>"""
         }
@@ -166,27 +172,25 @@ abstract class ZkSelectBase<VT>(
         items.forEach {
             if (it.first == value) {
                 s += """<div class=" ${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-${DATASET_KEY}="${it.first}">${escape(it.second)}</div>"""
+                selectedOption.innerText = it.second
             } else {
                 s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="${it.first}">${escape(it.second)}</div>"""
             }
         }
 
-        optionList.innerHTML = s
+        itemList.innerHTML = s
     }
 
     override fun focusValue() = toggleOptions()
 
-    private fun toggleOptions() {
+    open fun toggleOptions() {
         if (readOnly) return
 
-        optionList.toggle()
+        itemList.toggle(selectedOption.element, zkFormStyles.rowHeight * 5)
 
-        if (optionList.isShown()) {
-            document.body?.appendChild(optionList.element)
-            alignPopup(optionList.element, selectedOption.element, zkFormStyles.rowHeight * 5)
-            optionList.focus()
-        } else {
-            optionList.element.remove()
+        if (itemList.isShown()) {
+            itemList.focus()
         }
     }
+
 }

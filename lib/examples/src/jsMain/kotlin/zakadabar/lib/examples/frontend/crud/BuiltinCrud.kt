@@ -4,6 +4,7 @@
 package zakadabar.lib.examples.frontend.crud
 
 import zakadabar.lib.examples.data.builtin.BuiltinBo
+import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
 import zakadabar.lib.examples.resources.strings
 import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
 import zakadabar.stack.frontend.builtin.crud.ZkInlineCrud
@@ -58,14 +59,14 @@ class BuiltinForm : ZkForm<BuiltinBo>() {
                 + bo::optLocalDateValue
                 + bo::optLocalDateTimeValue readOnly true
                 + bo::optSecretValue
-                + bo::optRecordSelectValue options { selectBy { it.name } }
+                + bo::optRecordSelectValue query { ExampleReferenceBo.all().by { it.name } }
                 + bo::optStringValue
                 + select(bo::optStringSelectValue, options = listOf("option 1", "option 2", "option3"))
                 + bo::optTextAreaValue
                 + bo::optUuidValue
                 + bo::secretValue
-                + bo::recordSelectValue options { selectBy { it.name } }
-                + bo::recordSelectValue options { selectBy { it.name } readOnly true }
+                + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } }
+                + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } } readOnly true
                 + ZkStringField(this@BuiltinForm, bo::stringValue).also { this@BuiltinForm.fields += it }
                 + select(bo::stringSelectValue, options = listOf("option 1", "option 2", "option3"))
                 + textarea(bo::textAreaValue) label strings.textAreaValue

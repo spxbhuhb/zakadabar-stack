@@ -5,6 +5,7 @@ package zakadabar.stack.frontend.application
 
 import kotlinx.browser.document
 import kotlinx.browser.window
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
 import zakadabar.stack.frontend.builtin.dock.ZkDock
@@ -103,7 +104,9 @@ open class ZkApplication {
 
     lateinit var modals: ZkModalContainer
 
-    private var _title: ZkAppTitle? = null
+    lateinit var popup: HTMLElement
+
+    var _title: ZkAppTitle? = null
 
     var title: ZkAppTitle
         get() = _title !!
@@ -134,6 +137,9 @@ open class ZkApplication {
             onCreate()
             onResume()
         }
+
+        popup = document.createElement("div") as HTMLElement
+        document.body?.appendChild(popup)
 
         window.addEventListener("popstate", onPopState)
 

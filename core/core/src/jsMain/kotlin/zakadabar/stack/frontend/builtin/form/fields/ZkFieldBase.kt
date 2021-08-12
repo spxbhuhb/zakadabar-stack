@@ -125,15 +125,7 @@ abstract class ZkFieldBase<DT>(
             + div(ZkFormStyles.mandatoryMark) { ! "&nbsp;*" }
         }
     }
-
-    /**
-     * Form calls this method after an `options` block is added to the
-     * field.
-     */
-    open fun onAfterOptions() {
-
-    }
-
+    
     open fun focusEvents(element: HTMLElement) {
         on(element, "blur") {
             context.validate()

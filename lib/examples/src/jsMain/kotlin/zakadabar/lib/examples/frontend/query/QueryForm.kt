@@ -27,7 +27,7 @@ class QueryForm(
                     + row {
                         + fieldGrid {
                             // opt boolean field is used to provide a "do not filter on this" function for the user
-                            + ZkOptBooleanField(this@QueryForm, bo::booleanValue, options = suspend { statusOptions() })
+                            + ZkOptBooleanField(this@QueryForm, bo::booleanValue).apply { fetch = suspend { statusOptions() } }
                             + bo::enumSelectValue
                         } marginRight 24
 

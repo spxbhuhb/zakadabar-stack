@@ -55,13 +55,13 @@ class ReadOnlyBuiltinForm : ZkForm<BuiltinBo>() {
                 + bo::optInstantValue readOnly true
                 + bo::optIntValue readOnly true
                 + bo::optSecretValue readOnly true
-                + select(bo::optRecordSelectValue) { ExampleReferenceBo.all().by { it.name } } readOnly true
+                + bo::optRecordSelectValue query { ExampleReferenceBo.all().by { it.name } } readOnly true
                 + bo::optStringValue readOnly true
                 + select(bo::optStringSelectValue, options = listOf("option 1", "option 2", "option3")) readOnly true
                 + bo::optTextAreaValue readOnly true
                 + bo::optUuidValue readOnly true
                 + bo::secretValue readOnly true
-                + select(bo::recordSelectValue) { ExampleReferenceBo.all().by { it.name } } readOnly true
+                + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } } readOnly true
                 + ZkStringField(this@ReadOnlyBuiltinForm, bo::stringValue).also { this@ReadOnlyBuiltinForm.fields += it } readOnly true
                 + select(bo::stringSelectValue, options = listOf("option 1", "option 2", "option3")) readOnly true
                 + textarea(bo::textAreaValue) label strings.textAreaValue readOnly true

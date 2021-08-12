@@ -20,10 +20,8 @@ import kotlin.reflect.KMutableProperty0
 
 open class ZkStringSelectField(
     context : ZkFieldContext,
-    val prop: KMutableProperty0<String>,
-    sortOptions: Boolean = true,
-    options: suspend () -> List<Pair<String, String>>
-) : ZkSelectBase<String>(context, prop.name, sortOptions, options) {
+    val prop: KMutableProperty0<String>
+) : ZkSelectBase<String>(context, prop.name) {
 
     override fun fromString(string: String): String {
         return string

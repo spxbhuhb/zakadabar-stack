@@ -59,8 +59,8 @@ class FormEntityIdExample(
 
         + section {
             + bo::id
-            + select(bo::optValue) { ExampleReferenceBo.all().by { it.name } }
-            + select(bo::invalidValue) { ExampleReferenceBo.all().by { it.name } }
+            + bo::optValue query { ExampleReferenceBo.all().by { it.name } }
+            + bo::invalidValue query { ExampleReferenceBo.all().by { it.name } }
         }
 
         // Make invalidValue touched, so the form will show styles.

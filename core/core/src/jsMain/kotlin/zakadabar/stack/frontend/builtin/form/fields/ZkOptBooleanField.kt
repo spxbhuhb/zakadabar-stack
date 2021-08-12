@@ -22,12 +22,10 @@ import kotlin.reflect.KMutableProperty0
 @PublicApi
 open class ZkOptBooleanField(
     context : ZkFieldContext,
-    val prop: KMutableProperty0<Boolean?>,
-    options: suspend () -> List<Pair<Boolean, String>>
+    val prop: KMutableProperty0<Boolean?>
 ) : ZkSelectBase<Boolean>(
     context = context,
-    propName = prop.name,
-    options = options
+    propName = prop.name
 ) {
     override fun fromString(string: String) = when (string) {
         "true" -> true

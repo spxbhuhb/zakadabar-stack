@@ -46,4 +46,12 @@ open class ZkOptSecretField(
         super.buildFieldValue()
     }
 
+    /**
+     * Set autoComplete to "new-password".
+     */
+    infix fun newSecret(value: Boolean): ZkOptSecretField {
+        this.newSecret = value
+        return this
+    }
+
 }

@@ -5,19 +5,11 @@ package zakadabar.stack.frontend.builtin.form.fields
 
 import zakadabar.stack.data.entity.EntityId
 
-open class ZkRecordSelectFilter(
+open class ZkEntitySelectFilter(
     context : ZkFieldContext,
-    sortOptions: Boolean = true,
-    label: String? = null,
     var getValue: () -> EntityId<*>?,
-    var options: suspend () -> List<Pair<EntityId<*>, String>>,
     onSelected: (Pair<EntityId<*>, String>?) -> Unit
-) : ZkSelectBase< EntityId<*>>(context, "", sortOptions, options, onSelected) {
-
-    init {
-        // FIXME this is not right, but haven't had time to fix yet
-        if (label != null) this.labelText = label
-    }
+) : ZkSelectBase< EntityId<*>>(context, "", onSelected = onSelected) {
 
     override fun fromString(string: String): EntityId<*> {
         return items.first().first
