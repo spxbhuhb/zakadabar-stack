@@ -6,7 +6,7 @@ package zakadabar.core.frontend.builtin.layout.tabcontainer
 import zakadabar.core.frontend.builtin.ZkElement
 import zakadabar.core.frontend.builtin.layout.zkLayoutStyles
 import zakadabar.core.frontend.util.plusAssign
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 import zakadabar.core.util.PublicApi
 
 open class ZkTabContainer(

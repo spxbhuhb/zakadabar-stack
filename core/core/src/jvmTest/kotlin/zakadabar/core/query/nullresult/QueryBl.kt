@@ -3,9 +3,9 @@
  */
 package zakadabar.core.query.nullresult
 
-import zakadabar.core.backend.authorize.BusinessLogicAuthorizer
-import zakadabar.core.backend.authorize.Executor
-import zakadabar.core.backend.business.QueryBusinessLogicBase
+import zakadabar.core.authorize.BusinessLogicAuthorizer
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.QueryBusinessLogicBase
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.builtin.StringValue
 import zakadabar.core.data.query.QueryBo

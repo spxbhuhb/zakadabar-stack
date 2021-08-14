@@ -13,7 +13,7 @@ import zakadabar.core.frontend.builtin.modal.ZkModalContainer
 import zakadabar.core.frontend.builtin.titlebar.ZkAppTitle
 import zakadabar.core.frontend.builtin.toast.ZkToastContainer
 import zakadabar.core.frontend.util.decodeURIComponent
-import zakadabar.core.resources.*
+import zakadabar.core.resource.*
 import zakadabar.core.text.TranslationProvider
 import zakadabar.core.util.InstanceStore
 

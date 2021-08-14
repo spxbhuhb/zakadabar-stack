@@ -30,7 +30,7 @@ import zakadabar.core.frontend.util.escape
 import zakadabar.core.frontend.util.io
 import zakadabar.core.frontend.util.minusAssign
 import zakadabar.core.frontend.util.plusAssign
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 
 abstract class ZkSelectBase<VT>(
     context: ZkFieldContext,

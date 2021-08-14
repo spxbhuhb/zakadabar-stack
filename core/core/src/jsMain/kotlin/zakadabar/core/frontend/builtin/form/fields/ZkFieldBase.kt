@@ -16,7 +16,7 @@ import zakadabar.core.frontend.builtin.form.ZkFormStyles
 import zakadabar.core.frontend.builtin.form.zkFormStyles
 import zakadabar.core.frontend.util.minusAssign
 import zakadabar.core.frontend.util.plusAssign
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 
 abstract class ZkFieldBase<DT>(
     val context: ZkFieldContext,

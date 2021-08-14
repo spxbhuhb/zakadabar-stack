@@ -12,7 +12,7 @@ import zakadabar.core.frontend.builtin.form.ZkFormStyles
 import zakadabar.core.frontend.builtin.modal.ZkConfirmDialog
 import zakadabar.core.frontend.resources.ZkFlavour
 import zakadabar.core.frontend.util.io
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 import zakadabar.core.text.capitalized
 
 open class ZkFormButtons<T : BaseBo>(

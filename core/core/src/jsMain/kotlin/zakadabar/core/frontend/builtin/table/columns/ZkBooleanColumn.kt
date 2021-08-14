@@ -8,7 +8,7 @@ import zakadabar.core.frontend.builtin.ZkElement
 import zakadabar.core.frontend.builtin.input.ZkCheckBox
 import zakadabar.core.frontend.builtin.table.ZkTable
 import zakadabar.core.frontend.resources.css.em
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 import kotlin.reflect.KProperty1
 
 open class ZkBooleanColumn<T : BaseBo>(

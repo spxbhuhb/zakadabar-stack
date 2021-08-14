@@ -6,12 +6,12 @@ package zakadabar.core.data
 import kotlinx.coroutines.await
 import kotlinx.serialization.json.Json
 import org.w3c.fetch.Response
-import zakadabar.core.exceptions.DataConflict
-import zakadabar.core.exceptions.Unauthorized
-import zakadabar.core.exceptions.UnauthorizedData
+import zakadabar.core.exception.DataConflict
+import zakadabar.core.exception.Unauthorized
+import zakadabar.core.exception.UnauthorizedData
 import zakadabar.core.frontend.application.application
 import zakadabar.core.frontend.builtin.toast.toastDanger
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 
 /**
  * Common functions for all comm classes.

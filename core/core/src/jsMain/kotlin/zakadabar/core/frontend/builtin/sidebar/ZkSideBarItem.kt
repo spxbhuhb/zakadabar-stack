@@ -10,7 +10,7 @@ import org.w3c.dom.events.Event
 import zakadabar.core.frontend.application.ZkAppRouting
 import zakadabar.core.frontend.application.application
 import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 import zakadabar.core.text.capitalized
 
 /**

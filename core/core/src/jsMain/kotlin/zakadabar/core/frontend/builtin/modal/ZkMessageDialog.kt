@@ -5,7 +5,7 @@ package zakadabar.core.frontend.builtin.modal
 
 import zakadabar.core.frontend.builtin.button.ZkButton
 import zakadabar.core.frontend.util.io
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 import zakadabar.core.text.capitalized
 
 open class ZkMessageDialog(

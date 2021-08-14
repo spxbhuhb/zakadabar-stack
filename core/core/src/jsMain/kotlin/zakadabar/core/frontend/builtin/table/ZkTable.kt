@@ -32,7 +32,7 @@ import zakadabar.core.frontend.util.Areas
 import zakadabar.core.frontend.util.downloadCsv
 import zakadabar.core.frontend.util.getDatasetEntry
 import zakadabar.core.frontend.util.io
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 import zakadabar.core.util.UUID
 import kotlin.math.min
 import kotlin.reflect.KProperty1

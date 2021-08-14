@@ -3,7 +3,7 @@
  */
 package zakadabar.core.data.entity
 
-import zakadabar.core.exceptions.DataConflict
+import zakadabar.core.exception.DataConflict
 
 /**
  * Interface to be implemented on the client side for communication.

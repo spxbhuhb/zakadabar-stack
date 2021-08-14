@@ -6,7 +6,7 @@ package zakadabar.core.frontend.application
 import kotlinx.browser.document
 import zakadabar.core.frontend.builtin.ZkElement
 import zakadabar.core.frontend.builtin.ZkElementState
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 import zakadabar.core.util.after
 import kotlin.reflect.KClass
 

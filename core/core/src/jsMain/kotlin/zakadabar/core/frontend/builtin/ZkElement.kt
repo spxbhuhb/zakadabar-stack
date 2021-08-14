@@ -22,7 +22,7 @@ import zakadabar.core.frontend.resources.css.percent
 import zakadabar.core.frontend.util.io
 import zakadabar.core.frontend.util.minusAssign
 import zakadabar.core.frontend.util.plusAssign
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KClass
 

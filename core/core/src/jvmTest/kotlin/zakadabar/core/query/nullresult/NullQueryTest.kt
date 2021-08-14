@@ -7,8 +7,8 @@ import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
-import zakadabar.core.backend.server
-import zakadabar.core.backend.testing.TestCompanionBase
+import zakadabar.core.server.server
+import zakadabar.core.testing.TestCompanionBase
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 

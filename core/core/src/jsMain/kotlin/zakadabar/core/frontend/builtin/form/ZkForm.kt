@@ -29,7 +29,7 @@ import zakadabar.core.data.entity.EntityId
 import zakadabar.core.data.query.QueryBo
 import zakadabar.core.data.schema.BoSchema
 import zakadabar.core.data.schema.ValidityReport
-import zakadabar.core.exceptions.DataConflict
+import zakadabar.core.exception.DataConflict
 import zakadabar.core.frontend.application.application
 import zakadabar.core.frontend.builtin.ZkElement
 import zakadabar.core.frontend.builtin.ZkElementMode
@@ -50,7 +50,7 @@ import zakadabar.core.frontend.resources.css.ZkCssStyleRule
 import zakadabar.core.frontend.util.io
 import zakadabar.core.frontend.util.log
 import zakadabar.core.frontend.util.plusAssign
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 import zakadabar.core.util.PublicApi
 import zakadabar.core.util.UUID
 import kotlin.reflect.KMutableProperty0

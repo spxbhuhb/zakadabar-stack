@@ -5,7 +5,7 @@ package zakadabar.core.frontend.builtin.titlebar
 
 import zakadabar.core.frontend.application.application
 import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 
 /**
  * Implemented by elements that are able to set the application title.

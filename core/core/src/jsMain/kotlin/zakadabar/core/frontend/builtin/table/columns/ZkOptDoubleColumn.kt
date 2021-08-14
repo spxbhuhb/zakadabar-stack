@@ -6,7 +6,7 @@ package zakadabar.core.frontend.builtin.table.columns
 import zakadabar.core.data.BaseBo
 import zakadabar.core.frontend.builtin.ZkElement
 import zakadabar.core.frontend.builtin.table.ZkTable
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 import kotlin.reflect.KProperty1
 
 open class ZkOptDoubleColumn<T : BaseBo>(

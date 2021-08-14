@@ -6,7 +6,7 @@ package zakadabar.core.frontend.builtin.table.columns
 import zakadabar.core.data.BaseBo
 import zakadabar.core.frontend.builtin.ZkElement
 import zakadabar.core.frontend.builtin.table.ZkTable
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 import zakadabar.core.util.UUID
 import kotlin.reflect.KProperty1
 

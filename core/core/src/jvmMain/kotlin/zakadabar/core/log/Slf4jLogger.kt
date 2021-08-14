@@ -3,9 +3,13 @@
  */
 package zakadabar.core.log
 
+import org.slf4j.LoggerFactory
+
 open class Slf4jLogger(
-    open val slf4jLogger: org.slf4j.Logger
+    val namespace : String
 ) : Logger {
+
+    open val slf4jLogger by lazy<org.slf4j.Logger> { LoggerFactory.getLogger(namespace) }
 
     override fun info(message : String) {
         slf4jLogger.info(message)

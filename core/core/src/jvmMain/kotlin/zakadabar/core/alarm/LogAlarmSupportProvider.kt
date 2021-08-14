@@ -3,7 +3,7 @@
  */
 package zakadabar.core.alarm
 
-import zakadabar.core.backend.business.BusinessLogicCommon
+import zakadabar.core.business.BusinessLogicCommon
 
 class LogAlarmSupportProvider : AlarmSupportProvider {
 

@@ -3,7 +3,7 @@
  */
 package zakadabar.core.frontend.builtin.modal
 
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 
 /**
  * Shows a confirmation dialog and executes the function only if the

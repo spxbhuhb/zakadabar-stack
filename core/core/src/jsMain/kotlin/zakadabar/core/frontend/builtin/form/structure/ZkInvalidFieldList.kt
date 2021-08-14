@@ -8,7 +8,7 @@ import zakadabar.core.frontend.builtin.form.ZkFormStyles
 import zakadabar.core.frontend.builtin.form.fields.ZkFieldBase
 import zakadabar.core.frontend.util.marginBottom
 import zakadabar.core.frontend.util.plusAssign
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 
 open class ZkInvalidFieldList : ZkElement() {
 

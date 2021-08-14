@@ -33,6 +33,8 @@ class EntityId<T> : Comparable<EntityId<T>> {
 
     fun isEmpty() = value.isEmpty()
 
+    fun isNotEmpty() = value.isNotEmpty()
+
     override fun equals(other: Any?) = if (other is EntityId<*>) other.value == this.value else false
 
     override fun hashCode() = value.hashCode()

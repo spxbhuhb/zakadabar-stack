@@ -17,7 +17,7 @@
 package zakadabar.core.frontend.builtin.form.fields
 
 import kotlinx.datetime.LocalDateTime
-import zakadabar.core.resources.toLocalDateTimeOrNull
+import zakadabar.core.resource.toLocalDateTimeOrNull
 import kotlin.reflect.KMutableProperty0
 
 open class ZkOptLocalDateTimeField(

@@ -4,7 +4,7 @@
 package zakadabar.core.alarm
 
 import org.slf4j.LoggerFactory
-import zakadabar.core.backend.business.BusinessLogicCommon
+import zakadabar.core.business.BusinessLogicCommon
 
 /**
  * Uses an sfl4j logger to write out the alarms as errors.

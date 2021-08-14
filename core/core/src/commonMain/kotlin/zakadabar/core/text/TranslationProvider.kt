@@ -3,7 +3,7 @@
  */
 package zakadabar.core.text
 
-import zakadabar.core.resources.ZkStringStore
+import zakadabar.core.resource.ZkStringStore
 
 interface TranslationProvider {
     suspend fun <T : ZkStringStore> translate(store : T, locale : String) : T

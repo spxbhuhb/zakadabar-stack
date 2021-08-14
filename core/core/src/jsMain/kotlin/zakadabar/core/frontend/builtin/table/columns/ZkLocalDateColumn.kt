@@ -7,8 +7,8 @@ import kotlinx.datetime.LocalDate
 import zakadabar.core.data.BaseBo
 import zakadabar.core.frontend.builtin.ZkElement
 import zakadabar.core.frontend.builtin.table.ZkTable
-import zakadabar.core.resources.localized
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localized
+import zakadabar.core.resource.localizedStrings
 import kotlin.reflect.KProperty1
 
 open class ZkLocalDateColumn<T : BaseBo>(

@@ -8,7 +8,7 @@ package zakadabar.core.frontend.builtin.button
 import zakadabar.core.frontend.application.ZkAppRouting
 import zakadabar.core.frontend.application.application
 import zakadabar.core.frontend.resources.ZkFlavour
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 
 fun buttonPrimary(text: String, onClick: () -> Unit) = ZkButton(text, onClick = onClick)
 fun buttonSecondary(text: String, onClick: () -> Unit) = ZkButton(text, flavour = ZkFlavour.Secondary, onClick = onClick)

@@ -9,7 +9,7 @@ import zakadabar.core.frontend.builtin.ZkElement
 import zakadabar.core.frontend.builtin.table.ZkTable
 import zakadabar.core.frontend.builtin.table.zkTableStyles
 import zakadabar.core.frontend.util.plusAssign
-import zakadabar.core.resources.localizedStrings
+import zakadabar.core.resource.localizedStrings
 
 open class ZkActionsColumn<T : BaseBo>(
     table: ZkTable<T>
