@@ -18,10 +18,10 @@ import org.w3c.fetch.RequestInit
 import org.w3c.files.Blob
 import org.w3c.xhr.ProgressEvent
 import org.w3c.xhr.XMLHttpRequest
-import zakadabar.stack.data.CommBase
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.data.CommBase
+import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.util.PublicApi
 
 /**
  * Communication functions for blobs.

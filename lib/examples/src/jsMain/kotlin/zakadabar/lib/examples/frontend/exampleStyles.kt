@@ -3,8 +3,8 @@
  */
 package zakadabar.lib.examples.frontend
 
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
+import zakadabar.core.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.core.frontend.resources.css.cssStyleSheet
 
 val exampleStyles by cssStyleSheet(ExampleStyles())
 

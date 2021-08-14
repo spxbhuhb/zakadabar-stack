@@ -11,15 +11,15 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobBoCompanion
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.backend.ktor.KtorEntityRouter
-import zakadabar.stack.backend.ktor.executor
-import zakadabar.stack.backend.route.Router
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.PublicApi
-import zakadabar.stack.util.after
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.EntityBusinessLogicBase
+import zakadabar.core.server.ktor.KtorEntityRouter
+import zakadabar.core.server.ktor.executor
+import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.route.BusinessLogicRouter
+import zakadabar.core.util.PublicApi
+import zakadabar.core.util.after
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObject
 
@@ -36,7 +36,7 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
     override val namespace
         get() = (boClass.companionObject !!.objectInstance as BlobBoCompanion<*, *>).boNamespace
 
-    override val router: Router<T> by after {
+    override val router: BusinessLogicRouter<T> by after {
         object : KtorEntityRouter<T>(this) {
 
             override var qualifier = "blob/meta"

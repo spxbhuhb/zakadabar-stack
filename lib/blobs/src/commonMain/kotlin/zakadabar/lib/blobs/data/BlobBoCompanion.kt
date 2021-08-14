@@ -4,8 +4,8 @@
 package zakadabar.lib.blobs.data
 
 import kotlinx.serialization.KSerializer
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.entity.EntityId
 
 abstract class BlobBoCompanion<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
     val boNamespace: String

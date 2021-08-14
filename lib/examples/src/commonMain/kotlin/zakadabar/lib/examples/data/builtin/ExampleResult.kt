@@ -10,8 +10,8 @@
 package zakadabar.lib.examples.data.builtin
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.entity.EntityId
 
 @Serializable
 data class ExampleResult(

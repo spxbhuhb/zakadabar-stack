@@ -6,13 +6,13 @@ package zakadabar.lib.examples.frontend.crud
 import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
 import zakadabar.lib.examples.resources.strings
-import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
-import zakadabar.stack.frontend.builtin.crud.ZkInlineCrud
-import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.fields.ZkStringField
-import zakadabar.stack.frontend.builtin.table.ZkTable
-import zakadabar.stack.resources.localized
-import zakadabar.stack.resources.localizedStrings
+import zakadabar.core.frontend.builtin.crud.ZkCrudTarget
+import zakadabar.core.frontend.builtin.crud.ZkInlineCrud
+import zakadabar.core.frontend.builtin.form.ZkForm
+import zakadabar.core.frontend.builtin.form.fields.ZkStringField
+import zakadabar.core.frontend.builtin.table.ZkTable
+import zakadabar.core.resource.localized
+import zakadabar.core.resource.localizedStrings
 
 class BuiltinCrud : ZkCrudTarget<BuiltinBo>()  {
     init {

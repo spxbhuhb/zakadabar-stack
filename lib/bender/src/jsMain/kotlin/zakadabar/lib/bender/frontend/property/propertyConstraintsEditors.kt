@@ -5,11 +5,11 @@ package zakadabar.lib.bender.frontend.property
 
 import zakadabar.lib.bender.*
 import zakadabar.lib.bender.frontend.benderStyles
-import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.descriptor.*
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.input.ZkTextInput
+import zakadabar.core.data.builtin.misc.Secret
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.schema.descriptor.*
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.input.ZkTextInput
 
 open class PropertyConstraintsEditor : ZkElement() {
 

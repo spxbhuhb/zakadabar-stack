@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.i18n.backend
 
-import zakadabar.stack.backend.server
+import zakadabar.core.server.server
 
 fun install() {
     server += LocaleBl()

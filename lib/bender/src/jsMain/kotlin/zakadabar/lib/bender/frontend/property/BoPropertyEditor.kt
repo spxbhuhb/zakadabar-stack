@@ -8,15 +8,15 @@ import org.w3c.dom.events.KeyboardEvent
 import zakadabar.lib.bender.PropertyGenerator
 import zakadabar.lib.bender.frontend.BoEditor
 import zakadabar.lib.bender.frontend.benderStyles
-import zakadabar.stack.data.schema.descriptor.*
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.input.ZkTextInput
-import zakadabar.stack.frontend.builtin.toast.toastDanger
-import zakadabar.stack.frontend.resources.ZkFlavour
-import zakadabar.stack.frontend.resources.ZkIcons
-import zakadabar.stack.frontend.util.marginRight
-import zakadabar.stack.frontend.util.newInstance
+import zakadabar.core.data.schema.descriptor.*
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.button.ZkButton
+import zakadabar.core.frontend.builtin.input.ZkTextInput
+import zakadabar.core.frontend.builtin.toast.toastDanger
+import zakadabar.core.frontend.resources.ZkFlavour
+import zakadabar.core.frontend.resources.ZkIcons
+import zakadabar.core.frontend.util.marginRight
+import zakadabar.core.frontend.util.newInstance
 import kotlin.reflect.KClass
 
 class BoPropertyEditor(

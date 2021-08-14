@@ -6,11 +6,11 @@
 package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.builtin.account.AccountPublicBo
-import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityBoCompanion
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.data.builtin.account.AccountPublicBo
+import zakadabar.core.data.builtin.misc.ServerDescriptionBo
+import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.entity.EntityBoCompanion
+import zakadabar.core.data.entity.EntityId
 
 @Serializable
 class SessionBo(

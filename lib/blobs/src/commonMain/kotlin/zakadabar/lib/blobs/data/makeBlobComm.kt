@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.blobs.data
 
-import zakadabar.stack.data.entity.EntityBo
+import zakadabar.core.data.entity.EntityBo
 
 /**
  * Global function to make a [BlobCommInterface].

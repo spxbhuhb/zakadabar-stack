@@ -7,14 +7,14 @@ import kotlinx.coroutines.runBlocking
 import zakadabar.lib.accounts.backend.install
 import zakadabar.lib.accounts.data.LoginAction
 import zakadabar.lib.accounts.data.SessionBo
-import zakadabar.stack.authorize.AppRolesBase
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.LOGGED_IN
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizerProvider
-import zakadabar.stack.backend.server
-import zakadabar.stack.backend.testing.TestCompanionBase
-import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.authorize.AppRolesBase
+import zakadabar.core.authorize.SimpleRoleAuthorizer.Companion.LOGGED_IN
+import zakadabar.core.authorize.SimpleRoleAuthorizerProvider
+import zakadabar.core.server.server
+import zakadabar.core.testing.TestCompanionBase
+import zakadabar.core.data.builtin.misc.Secret
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.util.PublicApi
 
 /**
  * Helper class for unit tests with full authentication.

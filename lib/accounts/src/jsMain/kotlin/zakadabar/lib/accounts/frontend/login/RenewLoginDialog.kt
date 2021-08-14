@@ -5,17 +5,17 @@ package zakadabar.lib.accounts.frontend.login
 
 import kotlinx.browser.window
 import kotlinx.coroutines.channels.Channel
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.application.executor
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.form.ZkFormStyles
-import zakadabar.stack.frontend.builtin.modal.zkModalStyles
-import zakadabar.stack.frontend.builtin.titlebar.ZkLocalTitleBar
-import zakadabar.stack.frontend.resources.css.AlignItems
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.frontend.util.marginBottom
-import zakadabar.stack.frontend.util.plusAssign
-import zakadabar.stack.resources.localizedStrings
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.application.executor
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.form.ZkFormStyles
+import zakadabar.core.frontend.builtin.modal.zkModalStyles
+import zakadabar.core.frontend.builtin.titlebar.ZkLocalTitleBar
+import zakadabar.core.frontend.resources.css.AlignItems
+import zakadabar.core.frontend.util.io
+import zakadabar.core.frontend.util.marginBottom
+import zakadabar.core.frontend.util.plusAssign
+import zakadabar.core.resource.localizedStrings
 
 /**
  * Shows a login dialog to let the user renew his/her session.

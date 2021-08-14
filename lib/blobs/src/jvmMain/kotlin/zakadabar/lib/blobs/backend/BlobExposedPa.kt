@@ -12,10 +12,10 @@ import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.update
 import zakadabar.lib.blobs.data.BlobBo
-import zakadabar.stack.backend.exposed.ExposedPaBase
-import zakadabar.stack.backend.exposed.ExposedPaTable
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.persistence.exposed.ExposedPaBase
+import zakadabar.core.persistence.exposed.ExposedPaTable
+import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.entity.EntityId
 
 abstract class BlobExposedPa<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
     table: BlobExposedTable<T, RT>

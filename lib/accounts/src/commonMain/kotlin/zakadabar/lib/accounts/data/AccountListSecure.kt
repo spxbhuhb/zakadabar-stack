@@ -5,10 +5,10 @@ package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.data.query.QueryBoCompanion
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.query.QueryBo
+import zakadabar.core.data.query.QueryBoCompanion
 
 /**
  * List accounts for management. Caller must have the security officer role.

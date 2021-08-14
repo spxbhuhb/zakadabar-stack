@@ -6,7 +6,7 @@ package zakadabar.lib.markdown.frontend.flavour
 import org.intellij.markdown.html.URI
 import org.intellij.markdown.html.resolveToStringSafe
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.ZkElement
 
 /**
  * Context for the markdown rendering process. Main purposes of this class is

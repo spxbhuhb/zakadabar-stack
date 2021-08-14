@@ -4,8 +4,8 @@
 package zakadabar.lib.examples.backend.builtin
 
 import zakadabar.lib.examples.data.builtin.BuiltinBo
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.EntityBusinessLogicBase
 
 open class BuiltinBl : EntityBusinessLogicBase<BuiltinBo>(
     boClass = BuiltinBo::class

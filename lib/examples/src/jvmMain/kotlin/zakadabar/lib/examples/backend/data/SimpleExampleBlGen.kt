@@ -4,8 +4,8 @@
 package zakadabar.lib.examples.backend.data
 
 import zakadabar.lib.examples.data.SimpleExampleBo
-import zakadabar.stack.backend.authorize.UnsafeAuthorizer
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
+import zakadabar.core.authorize.UnsafeAuthorizer
+import zakadabar.core.business.EntityBusinessLogicBase
 
 /**
  * Business Logic for SimpleExampleBo.

@@ -5,15 +5,15 @@ package zakadabar.lib.examples.frontend.theme
 
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.examples.resources.strings
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.sidebar.zkSideBarStyles
-import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
-import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
-import zakadabar.stack.frontend.resources.ZkColors
-import zakadabar.stack.frontend.resources.css.px
-import zakadabar.stack.frontend.resources.theme
-import zakadabar.stack.frontend.util.marginBottom
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.button.ZkButton
+import zakadabar.core.frontend.builtin.sidebar.zkSideBarStyles
+import zakadabar.core.frontend.builtin.theme.ZkBuiltinLightTheme
+import zakadabar.core.frontend.builtin.titlebar.zkTitleBarStyles
+import zakadabar.core.frontend.resources.ZkColors
+import zakadabar.core.frontend.resources.css.px
+import zakadabar.core.frontend.resources.theme
+import zakadabar.core.frontend.util.marginBottom
 
 class ExampleThemeRed : ZkBuiltinLightTheme() {
 

@@ -15,10 +15,10 @@ import org.w3c.dom.asList
 import org.w3c.dom.events.Event
 import zakadabar.lib.markdown.frontend.flavour.ZkFlavourDescriptor
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.util.io
+import zakadabar.core.util.PublicApi
 
 open class MarkdownView(
     private val sourceUrl: String? = null,

@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.i18n.resources
 
-import zakadabar.stack.resources.ZkStringStore
+import zakadabar.core.resource.ZkStringStore
 
 
 val i18nStrings = Strings()

@@ -4,13 +4,13 @@
 package zakadabar.lib.markdown.frontend
 
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
-import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.modal.ZkModalBase
-import zakadabar.stack.frontend.resources.css.OverflowY
-import zakadabar.stack.frontend.resources.css.percent
-import zakadabar.stack.frontend.resources.css.px
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.resources.localizedStrings
+import zakadabar.core.frontend.builtin.button.ZkButton
+import zakadabar.core.frontend.builtin.modal.ZkModalBase
+import zakadabar.core.frontend.resources.css.OverflowY
+import zakadabar.core.frontend.resources.css.percent
+import zakadabar.core.frontend.resources.css.px
+import zakadabar.core.frontend.util.io
+import zakadabar.core.resource.localizedStrings
 
 class MarkdownModal(
     private val title: String? = null,

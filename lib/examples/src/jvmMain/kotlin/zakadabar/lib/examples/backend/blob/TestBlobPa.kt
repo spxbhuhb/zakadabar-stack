@@ -8,7 +8,7 @@ import zakadabar.lib.blobs.backend.BlobExposedTable
 import zakadabar.lib.examples.backend.data.SimpleExampleExposedTableGen
 import zakadabar.lib.examples.data.SimpleExampleBo
 import zakadabar.lib.examples.data.TestBlob
-import zakadabar.stack.backend.util.default
+import zakadabar.core.util.default
 
 class TestBlobExposedPa : BlobExposedPa<TestBlob, SimpleExampleBo>(
     table = TestBlobExposedTable,

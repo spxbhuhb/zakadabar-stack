@@ -6,25 +6,19 @@ package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
-import zakadabar.stack.data.SelectOptionProvider
-import zakadabar.stack.data.builtin.account.AccountPublicBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.data.query.QueryBoCompanion
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.data.builtin.account.AccountPublicBo
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.query.QueryBo
+import zakadabar.core.data.query.QueryBoCompanion
+import zakadabar.core.util.PublicApi
 
 /**
  * Query accounts. Requires the user to be logged in.
  */
 @Serializable
-class AccountList : QueryBo<List<AccountPublicBo>>, SelectOptionProvider<AccountPublicBo> {
+class AccountList : QueryBo<List<AccountPublicBo>> {
 
     override suspend fun execute() = comm.query(this, serializer(), ListSerializer(AccountPublicBo.serializer()))
-
-    @PublicApi
-    @Suppress("UNCHECKED_CAST")
-    override suspend fun asSelectOptions() =
-        execute().map { it.accountId as EntityId<AccountPublicBo> to it.fullName }
 
     companion object : QueryBoCompanion(AccountPrivateBo.boNamespace)
 

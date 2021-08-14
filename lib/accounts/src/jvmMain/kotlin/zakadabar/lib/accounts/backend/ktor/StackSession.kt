@@ -6,8 +6,8 @@ package zakadabar.lib.accounts.backend.ktor
 import io.ktor.sessions.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.entity.EntityId
 
 /**
  * Session data class passed to Ktor.

@@ -4,14 +4,14 @@
 package zakadabar.lib.examples.frontend.toast
 
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.*
-import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.builtin.toast.*
-import zakadabar.stack.frontend.resources.ZkFlavour
-import zakadabar.stack.frontend.resources.css.px
-import zakadabar.stack.frontend.resources.theme
-import zakadabar.stack.frontend.util.marginBottom
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.button.*
+import zakadabar.core.frontend.builtin.pages.zkPageStyles
+import zakadabar.core.frontend.builtin.toast.*
+import zakadabar.core.frontend.resources.ZkFlavour
+import zakadabar.core.frontend.resources.css.px
+import zakadabar.core.frontend.resources.theme
+import zakadabar.core.frontend.util.marginBottom
 
 /**
  * This example shows how to create toasts.

@@ -12,12 +12,12 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import zakadabar.stack.data.CommBase.Companion.baseUrl
-import zakadabar.stack.data.CommBase.Companion.client
-import zakadabar.stack.data.CommBase.Companion.onError
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.data.CommBase.Companion.baseUrl
+import zakadabar.core.data.CommBase.Companion.client
+import zakadabar.core.data.CommBase.Companion.onError
+import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.util.PublicApi
 
 /**
  * REST communication functions for entities.

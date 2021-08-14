@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.blobs.frontend
 
-import zakadabar.stack.frontend.resources.css.*
+import zakadabar.core.frontend.resources.css.*
 
 val blobStyles by cssStyleSheet(BlobStyles())
 

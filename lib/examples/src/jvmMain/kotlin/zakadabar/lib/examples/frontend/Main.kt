@@ -11,10 +11,10 @@ import zakadabar.lib.accounts.data.SessionBo
 import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.data.builtin.ExampleEnum
 import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
-import zakadabar.stack.backend.util.default
-import zakadabar.stack.data.CommBase
-import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.util.default
+import zakadabar.core.data.CommBase
+import zakadabar.core.data.builtin.misc.Secret
+import zakadabar.core.data.entity.EntityId
 
 suspend fun main() {
     CommBase.baseUrl = "http://localhost:8080"

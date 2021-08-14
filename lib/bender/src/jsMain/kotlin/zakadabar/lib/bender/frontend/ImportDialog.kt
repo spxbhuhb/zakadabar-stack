@@ -3,12 +3,12 @@
  */
 package zakadabar.lib.bender.frontend
 
-import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.input.ZkTextAreaInput
-import zakadabar.stack.frontend.builtin.modal.ZkModalBase
-import zakadabar.stack.frontend.resources.css.percent
-import zakadabar.stack.frontend.resources.css.px
-import zakadabar.stack.frontend.util.io
+import zakadabar.core.frontend.builtin.button.ZkButton
+import zakadabar.core.frontend.builtin.input.ZkTextAreaInput
+import zakadabar.core.frontend.builtin.modal.ZkModalBase
+import zakadabar.core.frontend.resources.css.percent
+import zakadabar.core.frontend.resources.css.px
+import zakadabar.core.frontend.util.io
 
 open class ImportDialog : ZkModalBase<String?>() {
 

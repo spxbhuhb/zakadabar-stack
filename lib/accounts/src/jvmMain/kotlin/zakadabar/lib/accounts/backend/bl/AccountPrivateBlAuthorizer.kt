@@ -4,15 +4,15 @@
 package zakadabar.lib.accounts.backend.bl
 
 import zakadabar.lib.accounts.data.*
-import zakadabar.stack.authorize.appRoles
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
-import zakadabar.stack.backend.authorize.authorize
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.exceptions.Forbidden
+import zakadabar.core.authorize.appRoles
+import zakadabar.core.authorize.Executor
+import zakadabar.core.authorize.SimpleRoleAuthorizer
+import zakadabar.core.authorize.authorize
+import zakadabar.core.data.action.ActionBo
+import zakadabar.core.data.builtin.misc.Secret
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.query.QueryBo
+import zakadabar.core.exception.Forbidden
 
 /**
  * The authorizer for [AccountPrivateBl].

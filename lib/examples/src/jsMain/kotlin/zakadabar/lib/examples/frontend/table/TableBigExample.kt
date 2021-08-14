@@ -4,11 +4,11 @@
 package zakadabar.lib.examples.frontend.table
 
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.resources.css.OverflowY
-import zakadabar.stack.frontend.resources.css.Position
-import zakadabar.stack.frontend.resources.css.px
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.layout.zkLayoutStyles
+import zakadabar.core.frontend.resources.css.OverflowY
+import zakadabar.core.frontend.resources.css.Position
+import zakadabar.core.frontend.resources.css.px
 
 /**
  * This example shows a table with 10.000 rows.

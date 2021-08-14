@@ -4,10 +4,10 @@
 package zakadabar.lib.examples.frontend.pages
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.pages.ZkArgPage
-import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.util.marginRight
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.pages.ZkArgPage
+import zakadabar.core.frontend.builtin.pages.zkPageStyles
+import zakadabar.core.frontend.util.marginRight
 
 /**
  * This example shows how to create a page with arguments passed in the

@@ -5,19 +5,19 @@ package zakadabar.lib.accounts.frontend.login
 
 import kotlinx.browser.window
 import zakadabar.lib.accounts.data.LoginAction
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.exceptions.Unauthorized
-import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.fields.ZkConstStringField
-import zakadabar.stack.frontend.builtin.toast.toastDanger
-import zakadabar.stack.frontend.builtin.toast.toastWarning
-import zakadabar.stack.frontend.resources.css.JustifyContent
-import zakadabar.stack.frontend.resources.css.percent
-import zakadabar.stack.frontend.util.default
-import zakadabar.stack.frontend.util.marginBottom
-import zakadabar.stack.resources.localizedStrings
+import zakadabar.core.data.BaseBo
+import zakadabar.core.exception.Unauthorized
+import zakadabar.core.frontend.builtin.ZkElementMode
+import zakadabar.core.frontend.builtin.button.ZkButton
+import zakadabar.core.frontend.builtin.form.ZkForm
+import zakadabar.core.frontend.builtin.form.fields.ZkConstStringField
+import zakadabar.core.frontend.builtin.toast.toastDanger
+import zakadabar.core.frontend.builtin.toast.toastWarning
+import zakadabar.core.frontend.resources.css.JustifyContent
+import zakadabar.core.frontend.resources.css.percent
+import zakadabar.core.frontend.util.default
+import zakadabar.core.frontend.util.marginBottom
+import zakadabar.core.resource.localizedStrings
 
 class LoginForm(
     private val accountName: String? = null,

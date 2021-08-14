@@ -4,10 +4,10 @@
 package zakadabar.lib.examples.data.builtin
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityBoCompanion
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.BoSchema
+import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.entity.EntityBoCompanion
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.schema.BoSchema
 
 @Serializable
 data class ExampleReferenceBo(

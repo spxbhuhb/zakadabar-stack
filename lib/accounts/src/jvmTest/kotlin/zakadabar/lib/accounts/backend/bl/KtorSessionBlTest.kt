@@ -12,9 +12,9 @@ import zakadabar.lib.accounts.data.AccountPrivateBo
 import zakadabar.lib.accounts.data.LoginAction
 import zakadabar.lib.accounts.data.LogoutAction
 import zakadabar.lib.accounts.data.httpClientWithAuth
-import zakadabar.stack.data.CommBase
-import zakadabar.stack.data.CommBase.Companion.httpClient
-import zakadabar.stack.data.builtin.misc.Secret
+import zakadabar.core.data.CommBase
+import zakadabar.core.data.CommBase.Companion.httpClient
+import zakadabar.core.data.builtin.misc.Secret
 
 class KtorSessionBlTest {
 

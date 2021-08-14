@@ -16,27 +16,27 @@ import zakadabar.lib.accounts.data.LoginAction
 import zakadabar.lib.accounts.data.LogoutAction
 import zakadabar.lib.accounts.data.ModuleSettings
 import zakadabar.lib.accounts.data.SessionBo
-import zakadabar.stack.backend.authorize.AccountBlProvider
-import zakadabar.stack.backend.authorize.Authorizer
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.backend.exposed.Sql
-import zakadabar.stack.backend.ktor.KtorEntityRouter
-import zakadabar.stack.backend.ktor.KtorSessionProvider
-import zakadabar.stack.backend.ktor.executor
-import zakadabar.stack.backend.persistence.EmptyPersistenceApi
-import zakadabar.stack.backend.server
-import zakadabar.stack.backend.setting.setting
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.builtin.ActionStatusBo
-import zakadabar.stack.data.builtin.account.AccountPublicBo
-import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.exceptions.Forbidden
-import zakadabar.stack.exceptions.Unauthorized
-import zakadabar.stack.exceptions.UnauthorizedData
-import zakadabar.stack.module.module
+import zakadabar.core.authorize.AccountBlProvider
+import zakadabar.core.authorize.BusinessLogicAuthorizer
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.EntityBusinessLogicBase
+import zakadabar.core.persistence.exposed.Sql
+import zakadabar.core.server.ktor.KtorEntityRouter
+import zakadabar.core.server.ktor.KtorSessionProvider
+import zakadabar.core.server.ktor.executor
+import zakadabar.core.persistence.EmptyPersistenceApi
+import zakadabar.core.server.server
+import zakadabar.core.setting.setting
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.action.ActionBo
+import zakadabar.core.data.builtin.ActionStatusBo
+import zakadabar.core.data.builtin.account.AccountPublicBo
+import zakadabar.core.data.builtin.misc.Secret
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.exception.Forbidden
+import zakadabar.core.exception.Unauthorized
+import zakadabar.core.exception.UnauthorizedData
+import zakadabar.core.module.module
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
 
@@ -48,7 +48,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 
     private val settings by setting<ModuleSettings>()
 
-    override val authorizer = object : Authorizer<SessionBo> {
+    override val authorizer = object : BusinessLogicAuthorizer<SessionBo> {
         override fun authorizeRead(executor: Executor, entityId: EntityId<SessionBo>) {
             // everyone can read their own session
         }

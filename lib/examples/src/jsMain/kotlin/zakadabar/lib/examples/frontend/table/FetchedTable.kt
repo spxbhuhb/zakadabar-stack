@@ -5,9 +5,9 @@ package zakadabar.lib.examples.frontend.table
 
 import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.frontend.crud.BuiltinTable
-import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.util.io
+import zakadabar.core.frontend.builtin.pages.ZkPage
+import zakadabar.core.frontend.builtin.pages.zkPageStyles
+import zakadabar.core.frontend.util.io
 
 /**
  * This example shows all built in table columns with generated table data.

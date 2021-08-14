@@ -8,7 +8,7 @@ import zakadabar.core.business.BusinessLogicCommon
 class Slf4jLoggerProvider : LoggerProvider {
 
     override fun businessLogicLogger(businessLogic: BusinessLogicCommon<*>): Logger {
-        return Slf4jLogger(businessLogic::class.simpleName !!)
+        return Slf4jLogger(businessLogic::class.simpleName)
     }
 
 }

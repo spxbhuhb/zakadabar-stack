@@ -4,17 +4,17 @@
 package zakadabar.lib.examples.frontend.layout
 
 import zakadabar.lib.examples.frontend.crud.BuiltinForm
-import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.resources.ZkColors
-import zakadabar.stack.frontend.resources.css.Display
-import zakadabar.stack.frontend.resources.css.FlexDirection
-import zakadabar.stack.frontend.resources.css.OverflowY
-import zakadabar.stack.frontend.util.default
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.core.frontend.builtin.ZkElementMode
+import zakadabar.core.frontend.builtin.layout.tabcontainer.ZkTabContainer
+import zakadabar.core.frontend.builtin.layout.zkLayoutStyles
+import zakadabar.core.frontend.builtin.pages.ZkPage
+import zakadabar.core.frontend.builtin.pages.zkPageStyles
+import zakadabar.core.frontend.resources.ZkColors
+import zakadabar.core.frontend.resources.css.Display
+import zakadabar.core.frontend.resources.css.FlexDirection
+import zakadabar.core.frontend.resources.css.OverflowY
+import zakadabar.core.frontend.util.default
+import zakadabar.core.frontend.util.plusAssign
 
 /**
  * This example shows how to create a tabbed container.

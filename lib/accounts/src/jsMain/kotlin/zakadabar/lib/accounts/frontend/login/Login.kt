@@ -9,18 +9,18 @@
 package zakadabar.lib.accounts.frontend.login
 
 import kotlinx.browser.window
-import zakadabar.stack.frontend.application.ZkAppRouting
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.layout.ZkFullScreenLayout
-import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
-import zakadabar.stack.frontend.resources.css.AlignItems
-import zakadabar.stack.frontend.resources.css.px
-import zakadabar.stack.frontend.resources.css.vh
-import zakadabar.stack.frontend.resources.css.vw
-import zakadabar.stack.frontend.resources.theme
-import zakadabar.stack.frontend.util.marginBottom
-import zakadabar.stack.resources.localizedStrings
+import zakadabar.core.frontend.application.ZkAppRouting
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.builtin.layout.ZkFullScreenLayout
+import zakadabar.core.frontend.builtin.pages.ZkPage
+import zakadabar.core.frontend.builtin.titlebar.zkTitleBarStyles
+import zakadabar.core.frontend.resources.css.AlignItems
+import zakadabar.core.frontend.resources.css.px
+import zakadabar.core.frontend.resources.css.vh
+import zakadabar.core.frontend.resources.css.vw
+import zakadabar.core.frontend.resources.theme
+import zakadabar.core.frontend.util.marginBottom
+import zakadabar.core.resource.localizedStrings
 
 /**
  * A simple username / password login page. When the login is

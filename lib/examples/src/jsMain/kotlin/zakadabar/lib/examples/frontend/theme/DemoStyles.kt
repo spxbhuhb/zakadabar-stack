@@ -3,9 +3,9 @@
  */
 package zakadabar.lib.examples.frontend.theme
 
-import zakadabar.stack.frontend.resources.ZkColors
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.px
+import zakadabar.core.frontend.resources.ZkColors
+import zakadabar.core.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.core.frontend.resources.css.px
 
 /**
  * CSS styles are usually defined in objects.

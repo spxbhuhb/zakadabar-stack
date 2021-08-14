@@ -11,13 +11,13 @@ import zakadabar.lib.accounts.backend.pa.AccountPrivateExposedTable
 import zakadabar.lib.accounts.backend.pa.AccountPrivateExposedTableCommon
 import zakadabar.lib.accounts.data.RoleBo
 import zakadabar.lib.accounts.data.RoleGrantBo
-import zakadabar.stack.backend.exposed.ExposedPaBase
-import zakadabar.stack.backend.exposed.ExposedPaTable
-import zakadabar.stack.backend.exposed.Sql
-import zakadabar.stack.backend.exposed.entityId
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.builtin.account.AccountPublicBo
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.persistence.exposed.ExposedPaBase
+import zakadabar.core.persistence.exposed.ExposedPaTable
+import zakadabar.core.persistence.exposed.Sql
+import zakadabar.core.persistence.exposed.entityId
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.builtin.account.AccountPublicBo
+import zakadabar.core.data.entity.EntityId
 
 open class RoleExposedPa(
     open val accountTable: AccountPrivateExposedTable = AccountPrivateExposedTableCommon,

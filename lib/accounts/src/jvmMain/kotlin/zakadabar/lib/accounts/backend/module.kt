@@ -6,9 +6,9 @@ package zakadabar.lib.accounts.backend
 import zakadabar.lib.accounts.backend.bl.AccountPrivateBl
 import zakadabar.lib.accounts.backend.bl.KtorSessionBl
 import zakadabar.lib.accounts.backend.bl.RoleBl
-import zakadabar.stack.authorize.AppRolesBase
-import zakadabar.stack.authorize.appRoles
-import zakadabar.stack.backend.server
+import zakadabar.core.authorize.AppRolesBase
+import zakadabar.core.authorize.appRoles
+import zakadabar.core.server.server
 
 /**
  * @param   roles  Hard-coded roles this application handles. During application

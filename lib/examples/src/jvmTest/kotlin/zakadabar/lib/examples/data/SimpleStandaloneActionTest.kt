@@ -7,14 +7,14 @@ import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
+import zakadabar.core.authorize.BusinessLogicAuthorizer
 import zakadabar.lib.examples.backend.data.SimpleStandaloneActionBl
-import zakadabar.stack.backend.Server
-import zakadabar.stack.backend.authorize.Authorizer
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.server
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.CommBase
-import zakadabar.stack.data.action.ActionBo
+import zakadabar.core.server.Server
+import zakadabar.core.authorize.Executor
+import zakadabar.core.server.server
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.CommBase
+import zakadabar.core.data.action.ActionBo
 import kotlin.test.assertEquals
 
 class SimpleStandaloneActionTest {
@@ -26,7 +26,7 @@ class SimpleStandaloneActionTest {
         fun setup() {
             server = Server("test")
             server += object : SimpleStandaloneActionBl() {
-                override val authorizer = object : Authorizer<BaseBo> {
+                override val authorizer = object : BusinessLogicAuthorizer<BaseBo> {
                     override fun authorizeAction(executor: Executor, actionBo: ActionBo<*>) {
                         // allow the action
                     }

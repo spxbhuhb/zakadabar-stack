@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.util.PublicApi
 import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.io.path.absolute

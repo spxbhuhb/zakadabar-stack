@@ -4,12 +4,12 @@
 package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.action.ActionBoCompanion
-import zakadabar.stack.data.builtin.ActionStatusBo
-import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.BoSchema
+import zakadabar.core.data.action.ActionBo
+import zakadabar.core.data.action.ActionBoCompanion
+import zakadabar.core.data.builtin.ActionStatusBo
+import zakadabar.core.data.builtin.misc.Secret
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.schema.BoSchema
 
 /**
  * Changes the password of an account. Security officers are allowed to change any

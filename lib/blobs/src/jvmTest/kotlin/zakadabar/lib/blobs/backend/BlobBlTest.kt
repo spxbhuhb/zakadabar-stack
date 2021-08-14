@@ -7,9 +7,9 @@ import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
-import zakadabar.stack.backend.server
-import zakadabar.stack.backend.testing.TestCompanionBase
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.server.server
+import zakadabar.core.testing.TestCompanionBase
+import zakadabar.core.data.entity.EntityId
 import kotlin.test.assertEquals
 
 class BlobBlTest {

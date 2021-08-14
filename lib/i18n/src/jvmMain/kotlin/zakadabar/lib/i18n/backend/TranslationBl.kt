@@ -5,14 +5,14 @@ package zakadabar.lib.i18n.backend
 
 import zakadabar.lib.i18n.data.TranslationBo
 import zakadabar.lib.i18n.data.TranslationsByLocale
-import zakadabar.stack.authorize.appRoles
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.LOGGED_IN
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.PUBLIC
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.backend.module
-import zakadabar.stack.data.builtin.misc.StringPair
+import zakadabar.core.authorize.appRoles
+import zakadabar.core.authorize.Executor
+import zakadabar.core.authorize.SimpleRoleAuthorizer
+import zakadabar.core.authorize.SimpleRoleAuthorizer.Companion.LOGGED_IN
+import zakadabar.core.authorize.SimpleRoleAuthorizer.Companion.PUBLIC
+import zakadabar.core.business.EntityBusinessLogicBase
+import zakadabar.core.module.module
+import zakadabar.core.data.builtin.misc.StringPair
 
 class TranslationBl : EntityBusinessLogicBase<TranslationBo>(
     boClass = TranslationBo::class

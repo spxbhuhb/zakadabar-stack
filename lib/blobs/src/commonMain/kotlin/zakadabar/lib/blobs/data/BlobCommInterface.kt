@@ -3,9 +3,9 @@
  */
 package zakadabar.lib.blobs.data
 
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityCommInterface
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.entity.EntityCommInterface
+import zakadabar.core.data.entity.EntityId
 
 interface BlobCommInterface<T : BlobBo<T,RT>, RT : EntityBo<RT>> : EntityCommInterface<T> {
 

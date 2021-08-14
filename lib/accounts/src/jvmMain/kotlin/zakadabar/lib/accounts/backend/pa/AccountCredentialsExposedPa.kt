@@ -13,13 +13,13 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import zakadabar.lib.accounts.data.AccountCredentialsBo
 import zakadabar.lib.accounts.data.AccountPrivateBo
-import zakadabar.stack.backend.exposed.LinkedExposedPaBase
-import zakadabar.stack.backend.exposed.LinkedExposedPaTable
-import zakadabar.stack.backend.exposed.entityId
-import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.BCrypt
-import zakadabar.stack.util.after
+import zakadabar.core.persistence.exposed.LinkedExposedPaBase
+import zakadabar.core.persistence.exposed.LinkedExposedPaTable
+import zakadabar.core.persistence.exposed.entityId
+import zakadabar.core.data.builtin.misc.Secret
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.util.BCrypt
+import zakadabar.core.util.after
 
 open class AccountCredentialsExposedPa(
     table: AccountCredentialsExposedTable = AccountCredentialsExposedTable()

@@ -5,9 +5,9 @@ package zakadabar.lib.i18n.data
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
-import zakadabar.stack.data.builtin.misc.StringPair
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.data.query.QueryBoCompanion
+import zakadabar.core.data.builtin.misc.StringPair
+import zakadabar.core.data.query.QueryBo
+import zakadabar.core.data.query.QueryBoCompanion
 
 /**
  * Get all strings for the given locale

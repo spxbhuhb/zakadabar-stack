@@ -5,10 +5,10 @@ package zakadabar.lib.i18n.frontend
 
 import zakadabar.lib.i18n.data.TranslationsByLocale
 import zakadabar.lib.i18n.resources.i18nStrings
-import zakadabar.stack.frontend.application.ZkAppRouting
-import zakadabar.stack.frontend.application.ZkApplication
-import zakadabar.stack.resources.ZkStringStore
-import zakadabar.stack.text.TranslationProvider
+import zakadabar.core.frontend.application.ZkAppRouting
+import zakadabar.core.frontend.application.ZkApplication
+import zakadabar.core.resource.ZkStringStore
+import zakadabar.core.text.TranslationProvider
 
 fun install(routing: ZkAppRouting) {
     with(routing) {

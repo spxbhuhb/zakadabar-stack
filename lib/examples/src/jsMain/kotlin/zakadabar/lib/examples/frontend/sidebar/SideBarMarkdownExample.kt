@@ -8,18 +8,18 @@ import kotlinx.browser.window
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.markdown.frontend.markdownStyles
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.buttonPrimary
-import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
-import zakadabar.stack.frontend.builtin.layout.tabcontainer.zkTabContainerStyles
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.builtin.pages.ZkPathPage
-import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
-import zakadabar.stack.frontend.resources.css.px
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.resources.localizedStrings
-import zakadabar.stack.text.MarkdownNav
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.button.buttonPrimary
+import zakadabar.core.frontend.builtin.layout.tabcontainer.ZkTabContainer
+import zakadabar.core.frontend.builtin.layout.tabcontainer.zkTabContainerStyles
+import zakadabar.core.frontend.builtin.layout.zkLayoutStyles
+import zakadabar.core.frontend.builtin.pages.ZkPathPage
+import zakadabar.core.frontend.builtin.sidebar.ZkSideBar
+import zakadabar.core.frontend.resources.css.px
+import zakadabar.core.frontend.util.io
+import zakadabar.core.resource.localizedStrings
+import zakadabar.core.text.MarkdownNav
 
 class ExampleMarkdownSideBar : ZkSideBar() {
 

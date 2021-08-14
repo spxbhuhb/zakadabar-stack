@@ -5,9 +5,9 @@ package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
-import zakadabar.stack.data.builtin.account.AccountPublicBo
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.data.query.QueryBoCompanion
+import zakadabar.core.data.builtin.account.AccountPublicBo
+import zakadabar.core.data.query.QueryBo
+import zakadabar.core.data.query.QueryBoCompanion
 
 @Deprecated("EOL: 2021.7.1  -  use AccountsByRole instead", ReplaceWith("AccountsByRole(roleName)"), level = DeprecationLevel.ERROR)
 class AccountByRole(roleName: String) : AccountsByRole(roleName)

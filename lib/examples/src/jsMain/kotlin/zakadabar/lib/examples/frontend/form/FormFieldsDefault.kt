@@ -4,11 +4,11 @@
 package zakadabar.lib.examples.frontend.form
 
 import zakadabar.lib.examples.frontend.crud.BuiltinForm
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.util.default
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.ZkElementMode
+import zakadabar.core.frontend.builtin.pages.zkPageStyles
+import zakadabar.core.frontend.util.default
+import zakadabar.core.util.PublicApi
 
 @PublicApi // example code
 class FormFieldsDefault : ZkElement() {

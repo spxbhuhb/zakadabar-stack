@@ -11,11 +11,11 @@ import org.junit.Test
 import zakadabar.lib.accounts.backend.*
 import zakadabar.lib.accounts.backend.testing.AuthTestCompanionBase
 import zakadabar.lib.accounts.data.*
-import zakadabar.stack.backend.server
-import zakadabar.stack.backend.setting.setting
-import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.UUID
+import zakadabar.core.server.server
+import zakadabar.core.setting.setting
+import zakadabar.core.data.builtin.misc.Secret
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue

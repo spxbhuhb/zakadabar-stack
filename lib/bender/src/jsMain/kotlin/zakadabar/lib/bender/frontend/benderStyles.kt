@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.bender.frontend
 
-import zakadabar.stack.frontend.resources.css.*
+import zakadabar.core.frontend.resources.css.*
 
 val benderStyles by cssStyleSheet(BenderStyles())
 

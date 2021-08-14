@@ -10,9 +10,9 @@ import zakadabar.lib.blobs.data.url
 import zakadabar.lib.blobs.frontend.ZkBlobFieldEntry
 import zakadabar.lib.blobs.frontend.blobStyles
 import zakadabar.lib.blobs.resources.blobStrings
-import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.resources.ZkFlavour
-import zakadabar.stack.frontend.resources.ZkIcons
+import zakadabar.core.frontend.builtin.button.ZkButton
+import zakadabar.core.frontend.resources.ZkFlavour
+import zakadabar.core.frontend.resources.ZkIcons
 
 open class ZkAttachmentEntry<BT : BlobBo<BT, *>>(
     bo: BT,

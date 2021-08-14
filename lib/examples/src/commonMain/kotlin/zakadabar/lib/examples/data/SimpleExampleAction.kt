@@ -5,10 +5,10 @@
 package zakadabar.lib.examples.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.action.ActionBoCompanion
-import zakadabar.stack.data.builtin.ActionStatusBo
-import zakadabar.stack.data.schema.BoSchema
+import zakadabar.core.data.action.ActionBo
+import zakadabar.core.data.action.ActionBoCompanion
+import zakadabar.core.data.builtin.ActionStatusBo
+import zakadabar.core.data.schema.BoSchema
 
 @Serializable
 class SimpleExampleAction(

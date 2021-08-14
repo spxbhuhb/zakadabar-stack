@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.blobs.sqlite
 
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.util.PublicApi
 import java.io.File
 
 /**

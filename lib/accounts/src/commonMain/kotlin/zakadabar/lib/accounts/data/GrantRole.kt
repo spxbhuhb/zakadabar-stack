@@ -4,10 +4,10 @@
 package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.action.ActionBoCompanion
-import zakadabar.stack.data.builtin.ActionStatusBo
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.data.action.ActionBo
+import zakadabar.core.data.action.ActionBoCompanion
+import zakadabar.core.data.builtin.ActionStatusBo
+import zakadabar.core.data.entity.EntityId
 
 /**
  * Grant a role for an account.

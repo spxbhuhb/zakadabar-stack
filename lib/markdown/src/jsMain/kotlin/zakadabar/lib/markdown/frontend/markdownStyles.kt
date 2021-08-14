@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.markdown.frontend
 
-import zakadabar.stack.frontend.resources.css.*
+import zakadabar.core.frontend.resources.css.*
 
 val markdownStyles by cssStyleSheet(MarkdownStyles())
 

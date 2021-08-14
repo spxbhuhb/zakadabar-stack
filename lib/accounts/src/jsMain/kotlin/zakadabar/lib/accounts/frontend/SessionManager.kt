@@ -8,14 +8,14 @@ import kotlinx.coroutines.channels.Channel
 import zakadabar.lib.accounts.data.LogoutAction
 import zakadabar.lib.accounts.data.SessionBo
 import zakadabar.lib.accounts.frontend.login.RenewLoginDialog
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.frontend.application.ZkExecutor
-import zakadabar.stack.frontend.application.ZkSessionManager
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.modal.ZkMessageDialog
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.frontend.util.log
-import zakadabar.stack.resources.localizedStrings
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.frontend.application.ZkExecutor
+import zakadabar.core.frontend.application.ZkSessionManager
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.builtin.modal.ZkMessageDialog
+import zakadabar.core.frontend.util.io
+import zakadabar.core.frontend.util.log
+import zakadabar.core.resource.localizedStrings
 
 /**
  * Handles session renewal.

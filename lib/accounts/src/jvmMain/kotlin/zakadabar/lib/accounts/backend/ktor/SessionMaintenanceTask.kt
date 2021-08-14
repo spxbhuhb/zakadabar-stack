@@ -18,8 +18,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.slf4j.LoggerFactory
 import zakadabar.lib.accounts.data.ModuleSettings
-import zakadabar.stack.backend.Server
-import zakadabar.stack.backend.setting.setting
+import zakadabar.core.server.Server
+import zakadabar.core.setting.setting
 
 object SessionMaintenanceTask {
 

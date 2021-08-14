@@ -11,10 +11,10 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import zakadabar.lib.accounts.data.AccountListSecureEntry
 import zakadabar.lib.accounts.data.AccountPrivateBo
-import zakadabar.stack.backend.exposed.ExposedPaBase
-import zakadabar.stack.backend.exposed.ExposedPaTable
-import zakadabar.stack.backend.exposed.entityId
-import zakadabar.stack.data.builtin.account.AccountPublicBo
+import zakadabar.core.persistence.exposed.ExposedPaBase
+import zakadabar.core.persistence.exposed.ExposedPaTable
+import zakadabar.core.persistence.exposed.entityId
+import zakadabar.core.data.builtin.account.AccountPublicBo
 
 open class AccountPrivateExposedPa(
     table: AccountPrivateExposedTable = AccountPrivateExposedTableCommon

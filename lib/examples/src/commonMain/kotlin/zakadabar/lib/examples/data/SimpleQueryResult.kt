@@ -5,7 +5,7 @@
 package zakadabar.lib.examples.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.BaseBo
+import zakadabar.core.data.BaseBo
 
 @Serializable
 class SimpleQueryResult(

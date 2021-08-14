@@ -17,7 +17,7 @@ import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import zakadabar.lib.accounts.data.ModuleSettings
-import zakadabar.stack.backend.setting.setting
+import zakadabar.core.setting.setting
 import java.io.ByteArrayOutputStream
 import kotlin.coroutines.coroutineContext
 

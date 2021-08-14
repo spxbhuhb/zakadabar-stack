@@ -4,17 +4,17 @@
 package zakadabar.lib.examples.frontend.input
 
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.buttonSecondary
-import zakadabar.stack.frontend.builtin.input.ZkCheckboxList
-import zakadabar.stack.frontend.builtin.input.ZkCheckboxListItem
-import zakadabar.stack.frontend.builtin.note.ZkNote
-import zakadabar.stack.frontend.builtin.note.noteSecondary
-import zakadabar.stack.frontend.builtin.note.noteSuccess
-import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.resources.ZkFlavour
-import zakadabar.stack.frontend.util.marginRight
-import zakadabar.stack.resources.localizedStrings
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.button.buttonSecondary
+import zakadabar.core.frontend.builtin.input.ZkCheckboxList
+import zakadabar.core.frontend.builtin.input.ZkCheckboxListItem
+import zakadabar.core.frontend.builtin.note.ZkNote
+import zakadabar.core.frontend.builtin.note.noteSecondary
+import zakadabar.core.frontend.builtin.note.noteSuccess
+import zakadabar.core.frontend.builtin.pages.zkPageStyles
+import zakadabar.core.frontend.resources.ZkFlavour
+import zakadabar.core.frontend.util.marginRight
+import zakadabar.core.resource.localizedStrings
 
 /**
  * This example shows how to create checkbox lists.

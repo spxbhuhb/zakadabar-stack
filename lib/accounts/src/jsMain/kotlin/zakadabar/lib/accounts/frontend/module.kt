@@ -7,10 +7,10 @@ import zakadabar.lib.accounts.frontend.accounts.Account
 import zakadabar.lib.accounts.frontend.accounts.AccountSecure
 import zakadabar.lib.accounts.frontend.login.Login
 import zakadabar.lib.accounts.frontend.roles.Roles
-import zakadabar.stack.authorize.AppRolesBase
-import zakadabar.stack.authorize.appRoles
-import zakadabar.stack.frontend.application.ZkAppRouting
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.core.authorize.AppRolesBase
+import zakadabar.core.authorize.appRoles
+import zakadabar.core.frontend.application.ZkAppRouting
+import zakadabar.core.frontend.application.ZkApplication
 
 /**
  * Installs the module. Parameters can be used to override default instances.

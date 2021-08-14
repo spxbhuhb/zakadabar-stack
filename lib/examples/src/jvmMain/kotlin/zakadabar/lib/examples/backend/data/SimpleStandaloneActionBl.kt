@@ -4,9 +4,9 @@
 package zakadabar.lib.examples.backend.data
 
 import zakadabar.lib.examples.data.SimpleStandaloneAction
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.ActionBusinessLogicBase
-import zakadabar.stack.data.builtin.ActionStatusBo
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.ActionBusinessLogicBase
+import zakadabar.core.data.builtin.ActionStatusBo
 
 abstract class SimpleStandaloneActionBl : ActionBusinessLogicBase<SimpleStandaloneAction, ActionStatusBo>(
     actionBoClass = SimpleStandaloneAction::class

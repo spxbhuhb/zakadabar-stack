@@ -7,15 +7,15 @@ package zakadabar.lib.accounts.backend.bl
 
 import zakadabar.lib.accounts.backend.RoleExposedPa
 import zakadabar.lib.accounts.data.*
-import zakadabar.stack.authorize.appRoles
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.authorize.RoleBlProvider
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer.Companion.LOGGED_IN
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.backend.setting.setting
-import zakadabar.stack.data.builtin.ActionStatusBo
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.authorize.appRoles
+import zakadabar.core.authorize.Executor
+import zakadabar.core.authorize.RoleBlProvider
+import zakadabar.core.authorize.SimpleRoleAuthorizer
+import zakadabar.core.authorize.SimpleRoleAuthorizer.Companion.LOGGED_IN
+import zakadabar.core.business.EntityBusinessLogicBase
+import zakadabar.core.setting.setting
+import zakadabar.core.data.builtin.ActionStatusBo
+import zakadabar.core.data.entity.EntityId
 
 open class RoleBl : RoleBlProvider, EntityBusinessLogicBase<RoleBo>(
     boClass = RoleBo::class

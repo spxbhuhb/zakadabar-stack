@@ -11,9 +11,9 @@ import zakadabar.lib.accounts.data.AccountPrivateBo
 import zakadabar.lib.accounts.data.CreateAccount
 import zakadabar.lib.accounts.data.LoginAction
 import zakadabar.lib.accounts.data.LogoutAction
-import zakadabar.stack.backend.server
-import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.util.UUID
+import zakadabar.core.server.server
+import zakadabar.core.data.builtin.misc.Secret
+import zakadabar.core.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue

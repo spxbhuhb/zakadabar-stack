@@ -5,11 +5,11 @@ package zakadabar.lib.markdown.frontend
 
 import kotlinx.browser.window
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.icon.ZkIcon
-import zakadabar.stack.frontend.builtin.toast.toastSuccess
-import zakadabar.stack.frontend.resources.ZkIcons
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.icon.ZkIcon
+import zakadabar.core.frontend.builtin.toast.toastSuccess
+import zakadabar.core.frontend.resources.ZkIcons
+import zakadabar.core.frontend.util.plusAssign
 
 class CodeCopy(
     private val block: HTMLElement

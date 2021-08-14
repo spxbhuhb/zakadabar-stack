@@ -3,11 +3,11 @@
  */
 package zakadabar.lib.examples.frontend.form
 
-import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.form.synthetic.ZkSyntheticForm
-import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.util.default
+import zakadabar.core.frontend.builtin.ZkElementMode
+import zakadabar.core.frontend.builtin.form.synthetic.ZkSyntheticForm
+import zakadabar.core.frontend.builtin.pages.ZkPage
+import zakadabar.core.frontend.builtin.pages.zkPageStyles
+import zakadabar.core.frontend.util.default
 
 /**
  * This example shows all built in form fields.

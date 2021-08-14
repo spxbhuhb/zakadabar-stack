@@ -5,8 +5,8 @@ package zakadabar.lib.i18n.backend
 
 import org.jetbrains.exposed.sql.select
 import zakadabar.lib.i18n.data.LocaleBo
-import zakadabar.stack.data.builtin.misc.StringPair
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.data.builtin.misc.StringPair
+import zakadabar.core.data.entity.EntityId
 
 open class TranslationExposedPa : TranslationExposedPaGen() {
 

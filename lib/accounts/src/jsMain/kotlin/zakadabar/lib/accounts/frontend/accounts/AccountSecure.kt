@@ -5,7 +5,7 @@ package zakadabar.lib.accounts.frontend.accounts
 
 import zakadabar.lib.accounts.data.AccountListSecureEntry
 import zakadabar.lib.accounts.data.AccountPrivateBo
-import zakadabar.stack.frontend.builtin.crud.ZkQueryCrudTarget
+import zakadabar.core.frontend.builtin.crud.ZkQueryCrudTarget
 
 /**
  * CRUD for security officers to manage accounts.

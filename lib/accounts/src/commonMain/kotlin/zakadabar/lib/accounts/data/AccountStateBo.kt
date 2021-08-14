@@ -6,9 +6,9 @@ package zakadabar.lib.accounts.data
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.BoSchema
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.schema.BoSchema
 
 /**
  * State of an account.

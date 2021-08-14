@@ -5,10 +5,10 @@ package zakadabar.lib.examples.frontend.table
 
 import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.frontend.crud.BuiltinTable
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.util.default
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.frontend.builtin.pages.ZkPage
+import zakadabar.core.frontend.builtin.pages.zkPageStyles
+import zakadabar.core.frontend.util.default
 
 /**
  * This example shows all built in table columns with generated table data.

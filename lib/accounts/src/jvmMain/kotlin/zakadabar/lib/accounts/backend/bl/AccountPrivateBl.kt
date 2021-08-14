@@ -10,23 +10,23 @@ import zakadabar.lib.accounts.backend.pa.AccountCredentialsExposedPa
 import zakadabar.lib.accounts.backend.pa.AccountPrivateExposedPa
 import zakadabar.lib.accounts.backend.pa.AccountStateExposedPa
 import zakadabar.lib.accounts.data.*
-import zakadabar.stack.authorize.appRoles
-import zakadabar.stack.backend.authorize.AccountBlProvider
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.authorize.authorize
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.backend.server
-import zakadabar.stack.backend.setting.setting
-import zakadabar.stack.backend.util.default
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.builtin.ActionStatusBo
-import zakadabar.stack.data.builtin.account.AccountPublicBo
-import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.exceptions.Unauthorized
-import zakadabar.stack.exceptions.UnauthorizedData
-import zakadabar.stack.module.module
-import zakadabar.stack.util.BCrypt
+import zakadabar.core.authorize.appRoles
+import zakadabar.core.authorize.AccountBlProvider
+import zakadabar.core.authorize.Executor
+import zakadabar.core.authorize.authorize
+import zakadabar.core.business.EntityBusinessLogicBase
+import zakadabar.core.server.server
+import zakadabar.core.setting.setting
+import zakadabar.core.util.default
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.builtin.ActionStatusBo
+import zakadabar.core.data.builtin.account.AccountPublicBo
+import zakadabar.core.data.builtin.misc.Secret
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.exception.Unauthorized
+import zakadabar.core.exception.UnauthorizedData
+import zakadabar.core.module.module
+import zakadabar.core.util.BCrypt
 
 open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     boClass = AccountPrivateBo::class,

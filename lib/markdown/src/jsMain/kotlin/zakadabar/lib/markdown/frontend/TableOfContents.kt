@@ -9,13 +9,13 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import org.w3c.dom.set
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.resources.theme
-import zakadabar.stack.frontend.util.getElementId
-import zakadabar.stack.frontend.util.plusAssign
-import zakadabar.stack.frontend.util.w3c.IntersectionObserver
-import zakadabar.stack.frontend.util.w3c.IntersectionObserverEntry
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.resources.theme
+import zakadabar.core.frontend.util.getElementId
+import zakadabar.core.frontend.util.plusAssign
+import zakadabar.core.frontend.util.w3c.IntersectionObserver
+import zakadabar.core.frontend.util.w3c.IntersectionObserverEntry
 
 class TableOfContents(
     val context: ZkMarkdownContext,

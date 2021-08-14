@@ -6,14 +6,14 @@ package zakadabar.lib.examples.frontend.layout
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.resources.strings
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
-import zakadabar.stack.frontend.builtin.note.noteInfo
-import zakadabar.stack.frontend.builtin.toast.toastSuccess
-import zakadabar.stack.frontend.resources.css.px
-import zakadabar.stack.frontend.util.default
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.ZkElementMode
+import zakadabar.core.frontend.builtin.form.ZkForm
+import zakadabar.core.frontend.builtin.layout.tabcontainer.ZkTabContainer
+import zakadabar.core.frontend.builtin.note.noteInfo
+import zakadabar.core.frontend.builtin.toast.toastSuccess
+import zakadabar.core.frontend.resources.css.px
+import zakadabar.core.frontend.util.default
 
 class TabContainerExample(
     element: HTMLElement

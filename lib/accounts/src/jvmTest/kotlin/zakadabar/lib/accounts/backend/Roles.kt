@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.accounts.backend
 
-import zakadabar.stack.authorize.AppRolesBase
+import zakadabar.core.authorize.AppRolesBase
 
 
 object Roles : AppRolesBase() {

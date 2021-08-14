@@ -6,10 +6,10 @@ package zakadabar.core.log
 import org.slf4j.LoggerFactory
 
 open class Slf4jLogger(
-    val namespace : String
+    val namespace : String?
 ) : Logger {
 
-    open val slf4jLogger by lazy<org.slf4j.Logger> { LoggerFactory.getLogger(namespace) }
+    open val slf4jLogger by lazy<org.slf4j.Logger> { LoggerFactory.getLogger(namespace ?: "inline-object") }
 
     override fun info(message : String) {
         slf4jLogger.info(message)

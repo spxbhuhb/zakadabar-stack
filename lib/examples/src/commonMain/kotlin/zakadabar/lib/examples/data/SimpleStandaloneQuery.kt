@@ -6,9 +6,9 @@ package zakadabar.lib.examples.data
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.data.query.QueryBoCompanion
-import zakadabar.stack.data.schema.BoSchema
+import zakadabar.core.data.query.QueryBo
+import zakadabar.core.data.query.QueryBoCompanion
+import zakadabar.core.data.schema.BoSchema
 
 @Serializable
 class SimpleStandaloneQuery(

@@ -11,11 +11,11 @@ import io.ktor.sessions.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.lib.accounts.backend.bl.KtorSessionBl
 import zakadabar.lib.accounts.data.LoginAction
-import zakadabar.stack.backend.authorize.AccountBlProvider
-import zakadabar.stack.backend.ktor.KtorExecutor
-import zakadabar.stack.backend.module
-import zakadabar.stack.backend.server
-import zakadabar.stack.data.builtin.misc.Secret
+import zakadabar.core.authorize.AccountBlProvider
+import zakadabar.core.server.ktor.KtorExecutor
+import zakadabar.core.module.module
+import zakadabar.core.server.server
+import zakadabar.core.data.builtin.misc.Secret
 
 class SessionAuthenticationProvider internal constructor(configuration: Configuration) : AuthenticationProvider(configuration) {
     class Configuration internal constructor(name: String?) : AuthenticationProvider.Configuration(name)

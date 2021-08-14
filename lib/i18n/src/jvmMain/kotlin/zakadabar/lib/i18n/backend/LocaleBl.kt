@@ -4,7 +4,7 @@
 package zakadabar.lib.i18n.backend
 
 import zakadabar.lib.i18n.data.LocaleBo
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
+import zakadabar.core.business.EntityBusinessLogicBase
 
 class LocaleBl : EntityBusinessLogicBase<LocaleBo>(
     boClass = LocaleBo::class
