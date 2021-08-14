@@ -12,7 +12,7 @@ import zakadabar.core.data.query.QueryBo
  * Implemented by business object validators used by business logic modules
  * to validate incoming business objects.
  */
-interface Validator<T : BaseBo> {
+interface BusinessLogicValidator<T : BaseBo> {
 
     fun validateCreate(executor: Executor, bo : T) {
 

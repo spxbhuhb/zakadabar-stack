@@ -13,7 +13,7 @@ import kotlin.reflect.KClass
 /**
  * Does not add any endpoints.
  */
-class EmptyRouter<T : EntityBo<T>> : Router<T> {
+class EmptyRouter<T : EntityBo<T>> : BusinessLogicRouter<T> {
 
     override var qualifier = "empty"
 

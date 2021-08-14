@@ -21,7 +21,7 @@ import kotlin.reflect.KClass
  *
  * Throws [Forbidden] when rejected.
  */
-open class SimpleRoleAuthorizer<T : BaseBo>() : Authorizer<T> {
+open class SimpleRoleAuthorizer<T : BaseBo>() : BusinessLogicAuthorizer<T> {
 
     companion object {
         val PUBLIC = UUID().toString()

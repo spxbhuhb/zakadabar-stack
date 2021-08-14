@@ -2,6 +2,17 @@
 
 This page contains the changes included in the next release.
 
+## Major Breaking Changes
+
+- rename `zakadabar.stack` to `zakadabar.core`
+- move packages from `zakadabar.core.backend` to `zakadabar.core`
+- rename business login plugin classes:
+    - `Auditor` to `BusinessLogicAuditor`
+    - `Authorizer` to `BusinessLogicAuthorizer`
+    - `Router` to `BusinessLogicRouter`
+    - `Validator` to `BusinessLogicValidator`
+    
+
 ## Core
 
 added:

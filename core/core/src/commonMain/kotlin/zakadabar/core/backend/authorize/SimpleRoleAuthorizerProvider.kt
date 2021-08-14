@@ -18,7 +18,7 @@ class SimpleRoleAuthorizerProvider() : AuthorizerProvider, CommonModule {
         this.initializer = initializer
     }
 
-    override fun <T : BaseBo> businessLogicAuthorizer(businessLogic : BusinessLogicCommon<T>) : Authorizer<T> {
+    override fun <T : BaseBo> businessLogicAuthorizer(businessLogic : BusinessLogicCommon<T>) : BusinessLogicAuthorizer<T> {
         return SimpleRoleAuthorizer(initializer as SimpleRoleAuthorizer<T>.() -> Unit)
     }
 

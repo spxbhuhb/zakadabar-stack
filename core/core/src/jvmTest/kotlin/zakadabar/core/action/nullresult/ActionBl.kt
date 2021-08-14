@@ -3,7 +3,7 @@
  */
 package zakadabar.core.action.nullresult
 
-import zakadabar.core.backend.authorize.Authorizer
+import zakadabar.core.backend.authorize.BusinessLogicAuthorizer
 import zakadabar.core.backend.authorize.Executor
 import zakadabar.core.backend.business.ActionBusinessLogicBase
 import zakadabar.core.data.BaseBo
@@ -16,7 +16,7 @@ class ActionBl : ActionBusinessLogicBase<Action, StringValue?>(
     actionBoClass = Action::class
 ) {
 
-    override val authorizer = object : Authorizer<BaseBo> {
+    override val authorizer = object : BusinessLogicAuthorizer<BaseBo> {
         override fun authorizeAction(executor: Executor, actionBo: ActionBo<*>) {
             return
         }

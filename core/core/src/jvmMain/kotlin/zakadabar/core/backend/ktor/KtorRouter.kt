@@ -12,7 +12,7 @@ import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.serializer
 import zakadabar.core.backend.authorize.Executor
 import zakadabar.core.backend.business.BusinessLogicCommon
-import zakadabar.core.backend.route.Router
+import zakadabar.core.backend.route.BusinessLogicRouter
 import zakadabar.core.backend.server
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.action.ActionBo
@@ -24,7 +24,7 @@ import kotlin.reflect.full.createType
 open class KtorRouter<T : BaseBo>(
     @PublicApi
     protected val businessLogic: BusinessLogicCommon<out BaseBo>
-) : Router<T> {
+) : BusinessLogicRouter<T> {
 
     private val actionClassList = mutableListOf<Pair<KClass<out BaseBo>, (Executor, BaseBo) -> Any?>>()
 

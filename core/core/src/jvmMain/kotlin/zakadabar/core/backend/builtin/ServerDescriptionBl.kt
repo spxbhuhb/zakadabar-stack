@@ -3,7 +3,7 @@
  */
 package zakadabar.core.backend.builtin
 
-import zakadabar.core.backend.authorize.Authorizer
+import zakadabar.core.backend.authorize.BusinessLogicAuthorizer
 import zakadabar.core.backend.authorize.Executor
 import zakadabar.core.backend.business.QueryBusinessLogicBase
 import zakadabar.core.backend.server
@@ -16,7 +16,7 @@ class ServerDescriptionBl : QueryBusinessLogicBase<ServerDescriptionQuery, Serve
     queryBoClass = ServerDescriptionQuery::class
 ) {
 
-    override val authorizer = object : Authorizer<BaseBo> {
+    override val authorizer = object : BusinessLogicAuthorizer<BaseBo> {
         override fun authorizeQuery(executor: Executor, queryBo: QueryBo<*>) {
             return
         }

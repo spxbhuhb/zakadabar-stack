@@ -7,6 +7,14 @@ import java.nio.file.StandardOpenOption
 
 abstract class Upgrade20210815 : DefaultTask() {
 
+    private val map = listOf(
+        "package zakadabar.stack." to "package zakadabar.core.",
+        "import zakadabar.stack." to "import zakadabar.core.",
+        "import zakadabar.core.backend.module" to "import zakadabar.core.module.module",
+        "import zakadabar.core.frontend.builtin.pages.ZkCrudTarget" to "import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget",
+        "import zakadabar.core.backend." to "import zakadabar.core."
+    )
+
     @TaskAction
     private fun upgrade() {
         File(this.project.projectDir.absolutePath, "src").walk().forEach {
@@ -15,11 +23,12 @@ abstract class Upgrade20210815 : DefaultTask() {
 
             val content = Files.readAllBytes(it.toPath()).decodeToString()
 
-            val newContent = content
-                .replace("package zakadabar.stack.", "package zakadabar.core.")
-                .replace("import zakadabar.stack.", "import zakadabar.core.")
-                .replace("import zakadabar.core.backend.module", "import zakadabar.core.module.module",)
-                .replace("import zakadabar.core.frontend.builtin.pages.ZkCrudTarget", "import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget",)
+            var newContent = content
+            for (mapping in map) {
+                newContent = newContent.replace(mapping.first, mapping.second)
+            }
+
+
 
             Files.write(it.toPath(), newContent.toByteArray(), StandardOpenOption.TRUNCATE_EXISTING)
         }

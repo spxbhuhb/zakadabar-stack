@@ -13,7 +13,7 @@ import zakadabar.core.exceptions.Forbidden
  * Implemented by authorizer classes. These are used by business logic
  * modules to authorize access.
  */
-interface Authorizer<T : BaseBo> {
+interface BusinessLogicAuthorizer<T : BaseBo> {
 
     fun onModuleStart() {
 

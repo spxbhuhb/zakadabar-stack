@@ -17,7 +17,7 @@ import zakadabar.core.exceptions.Forbidden
  *
  * Throws [Forbidden] when rejected.
  */
-open class UnsafeAuthorizer<T : EntityBo<T>>() : Authorizer<T> {
+open class UnsafeAuthorizer<T : EntityBo<T>>() : BusinessLogicAuthorizer<T> {
 
     companion object {
         var enabled = false

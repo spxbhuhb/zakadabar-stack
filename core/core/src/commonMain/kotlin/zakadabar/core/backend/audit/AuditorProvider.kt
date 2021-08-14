@@ -8,6 +8,6 @@ import zakadabar.core.data.BaseBo
 
 interface AuditorProvider {
 
-    fun <T : BaseBo> businessLogicAuditor(businessLogic : BusinessLogicCommon<T>) : Auditor<T>
+    fun <T : BaseBo> businessLogicAuditor(businessLogic : BusinessLogicCommon<T>) : BusinessLogicAuditor<T>
 
 }

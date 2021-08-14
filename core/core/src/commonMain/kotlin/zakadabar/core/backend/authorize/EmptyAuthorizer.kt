@@ -10,4 +10,4 @@ import zakadabar.core.data.BaseBo
  *
  * Throws [Forbidden] when rejected.
  */
-open class EmptyAuthorizer<T : BaseBo> : Authorizer<T>
+open class EmptyAuthorizer<T : BaseBo> : BusinessLogicAuthorizer<T>

@@ -8,6 +8,6 @@ import zakadabar.core.data.BaseBo
 
 interface RouterProvider {
 
-    fun <T : BaseBo> businessLogicRouter(businessLogic : BusinessLogicCommon<T>) : Router<T>
+    fun <T : BaseBo> businessLogicRouter(businessLogic : BusinessLogicCommon<T>) : BusinessLogicRouter<T>
 
 }

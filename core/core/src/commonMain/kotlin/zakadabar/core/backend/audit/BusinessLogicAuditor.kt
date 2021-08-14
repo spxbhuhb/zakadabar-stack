@@ -12,7 +12,7 @@ import zakadabar.core.data.query.QueryBo
 /**
  * Creates an audit record of the operation.
  */
-interface Auditor<T : BaseBo> {
+interface BusinessLogicAuditor<T : BaseBo> {
 
     var includeData : Boolean
 

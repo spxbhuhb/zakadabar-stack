@@ -24,7 +24,7 @@ import kotlin.reflect.full.createType
  */
 open class LogAuditor<T : BaseBo>(
     forInstance : Any
-) : Auditor<T> {
+) : BusinessLogicAuditor<T> {
 
     private val logger = LoggerFactory.getLogger(forInstance::class.simpleName ?: "anonymous object") !!
 

@@ -10,9 +10,9 @@ import zakadabar.core.data.query.QueryBo
 import kotlin.reflect.KClass
 
 /**
- * Creates routes incoming requests to the appripriate BL processing method.
+ * Routes incoming requests to the appropriate BL processing method.
  */
-interface Router<T : BaseBo> {
+interface BusinessLogicRouter<T : BaseBo> {
 
     /**
      * In the structure `/api/{namespace}/{qualifier}/...` this is the qualifier.

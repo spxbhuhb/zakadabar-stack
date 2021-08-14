@@ -8,7 +8,7 @@ import zakadabar.core.data.BaseBo
 
 class SchemaValidatorProvider : ValidatorProvider {
 
-    override fun <T : BaseBo> businessLogicRouter(businessLogic : BusinessLogicCommon<T>) : Validator<T> {
+    override fun <T : BaseBo> businessLogicValidator(businessLogic : BusinessLogicCommon<T>) : BusinessLogicValidator<T> {
         return SchemaValidator()
     }
 

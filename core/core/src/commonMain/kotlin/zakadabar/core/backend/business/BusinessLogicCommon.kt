@@ -5,12 +5,12 @@ package zakadabar.core.backend.business
 
 import zakadabar.core.alarm.AlarmSupport
 import zakadabar.core.backend.RoutedModule
-import zakadabar.core.backend.audit.Auditor
-import zakadabar.core.backend.authorize.Authorizer
-import zakadabar.core.backend.authorize.AuthorizerDelegate
+import zakadabar.core.backend.audit.BusinessLogicAuditor
+import zakadabar.core.backend.authorize.BusinessLogicAuthorizer
+import zakadabar.core.backend.authorize.BusinessLogicAuthorizerDelegate
 import zakadabar.core.backend.authorize.Executor
-import zakadabar.core.backend.route.Router
-import zakadabar.core.backend.validate.Validator
+import zakadabar.core.backend.route.BusinessLogicRouter
+import zakadabar.core.backend.validate.BusinessLogicValidator
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.action.ActionBo
 import zakadabar.core.data.query.QueryBo
@@ -36,7 +36,7 @@ abstract class BusinessLogicCommon<T : BaseBo> : CommonModule, RoutedModule, Act
     /**
      * Routes incoming requests to the proper processor function.
      */
-    open val router: Router<T> = router { }
+    open val router: BusinessLogicRouter<T> = router { }
 
     /**
      * Provides a router when none specified explicitly.
@@ -47,7 +47,7 @@ abstract class BusinessLogicCommon<T : BaseBo> : CommonModule, RoutedModule, Act
      * Convenience function to get a router from a provider and run a
      * customization function.
      */
-    fun router(build: Router<T>.() -> Unit): Router<T> {
+    fun router(build: BusinessLogicRouter<T>.() -> Unit): BusinessLogicRouter<T> {
         val r = routerProvider().businessLogicRouter(this)
         r.build()
         return r
@@ -62,7 +62,7 @@ abstract class BusinessLogicCommon<T : BaseBo> : CommonModule, RoutedModule, Act
      * by calling the `validateCreate` and `validateUpdate` methods.
      */
     @PublicApi
-    open val validator: Validator<T> = validator { }
+    open val validator: BusinessLogicValidator<T> = validator { }
 
     /**
      * Provides an validator in none specified explicitly.
@@ -74,8 +74,8 @@ abstract class BusinessLogicCommon<T : BaseBo> : CommonModule, RoutedModule, Act
      * customization function.
      */
     @PublicApi
-    fun validator(build: Validator<T>.() -> Unit): Validator<T> {
-        val r = validatorProvider().businessLogicRouter(this)
+    fun validator(build: BusinessLogicValidator<T>.() -> Unit): BusinessLogicValidator<T> {
+        val r = validatorProvider().businessLogicValidator(this)
         r.build()
         return r
     }
@@ -87,13 +87,13 @@ abstract class BusinessLogicCommon<T : BaseBo> : CommonModule, RoutedModule, Act
     /**
      * Authorizer to call for operation authorization.
      */
-    abstract val authorizer: Authorizer<T>
+    abstract val authorizer: BusinessLogicAuthorizer<T>
 
     /**
      * Convenience function to get an authorizer from a provider, and customize
      * it with a function.
      */
-    fun provider(build: (Authorizer<T>.() -> Unit)? = null) = AuthorizerDelegate(build)
+    fun provider(build: (BusinessLogicAuthorizer<T>.() -> Unit)? = null) = BusinessLogicAuthorizerDelegate(build)
 
     // -------------------------------------------------------------------------
     // Auditor
@@ -102,7 +102,7 @@ abstract class BusinessLogicCommon<T : BaseBo> : CommonModule, RoutedModule, Act
     /**
      * Audit records (logs) are created by this auditor.
      */
-    open val auditor: Auditor<T> = auditor { }
+    open val auditor: BusinessLogicAuditor<T> = auditor { }
 
     /**
      * Provides an auditor in none specified explicitly.
@@ -113,7 +113,7 @@ abstract class BusinessLogicCommon<T : BaseBo> : CommonModule, RoutedModule, Act
      * Convenience function to get an auditor from the provider and run a
      * customization function.
      */
-    fun auditor(build: Auditor<T>.() -> Unit): Auditor<T> {
+    fun auditor(build: BusinessLogicAuditor<T>.() -> Unit): BusinessLogicAuditor<T> {
         val a = auditorProvider().businessLogicAuditor(this)
         a.build()
         return a

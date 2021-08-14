@@ -5,16 +5,16 @@ package zakadabar.core.backend.ktor
 
 import zakadabar.core.backend.business.BusinessLogicCommon
 import zakadabar.core.backend.business.EntityBusinessLogicCommon
-import zakadabar.core.backend.route.Router
+import zakadabar.core.backend.route.BusinessLogicRouter
 import zakadabar.core.backend.route.RouterProvider
 import zakadabar.core.data.BaseBo
 
 class KtorRouterProvider : RouterProvider {
 
-    override fun <T : BaseBo> businessLogicRouter(businessLogic: BusinessLogicCommon<T>): Router<T> {
+    override fun <T : BaseBo> businessLogicRouter(businessLogic: BusinessLogicCommon<T>): BusinessLogicRouter<T> {
         return if (businessLogic is EntityBusinessLogicCommon) {
             @Suppress("UNCHECKED_CAST") // types are actually OK here, but we have to erase them
-            entityRouter(businessLogic) as Router<T>
+            entityRouter(businessLogic) as BusinessLogicRouter<T>
         } else {
             KtorRouter(businessLogic)
         }

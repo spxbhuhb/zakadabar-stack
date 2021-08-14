@@ -13,7 +13,7 @@ import zakadabar.core.exceptions.BadRequest
  * Validates the business object by its schema using `isValid` of `BoSchema`.
  * Throws BadRequestException if the BO is invalid.
  */
-class SchemaValidator<T : BaseBo> : Validator<T> {
+class SchemaValidator<T : BaseBo> : BusinessLogicValidator<T> {
 
     override fun validateCreate(executor: Executor, bo : T) {
         validate(bo, true)

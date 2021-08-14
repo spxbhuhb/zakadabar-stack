@@ -8,7 +8,7 @@ import zakadabar.core.data.BaseBo
 
 class LogAuditorProvider : AuditorProvider {
 
-    override fun <T : BaseBo> businessLogicAuditor(businessLogic : BusinessLogicCommon<T>) : Auditor<T> {
+    override fun <T : BaseBo> businessLogicAuditor(businessLogic : BusinessLogicCommon<T>) : BusinessLogicAuditor<T> {
         return LogAuditor(businessLogic)
     }
 

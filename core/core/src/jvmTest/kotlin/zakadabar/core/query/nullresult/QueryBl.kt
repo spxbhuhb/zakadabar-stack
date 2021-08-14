@@ -3,7 +3,7 @@
  */
 package zakadabar.core.query.nullresult
 
-import zakadabar.core.backend.authorize.Authorizer
+import zakadabar.core.backend.authorize.BusinessLogicAuthorizer
 import zakadabar.core.backend.authorize.Executor
 import zakadabar.core.backend.business.QueryBusinessLogicBase
 import zakadabar.core.data.BaseBo
@@ -16,7 +16,7 @@ class QueryBl : QueryBusinessLogicBase<Query, StringValue?>(
     queryBoClass = Query::class
 ) {
 
-    override val authorizer = object : Authorizer<BaseBo> {
+    override val authorizer = object : BusinessLogicAuthorizer<BaseBo> {
         override fun authorizeQuery(executor: Executor, queryBo: QueryBo<*>) {
             return
         }

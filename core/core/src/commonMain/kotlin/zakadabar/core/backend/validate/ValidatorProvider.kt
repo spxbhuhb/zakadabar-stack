@@ -8,6 +8,6 @@ import zakadabar.core.data.BaseBo
 
 interface ValidatorProvider {
 
-    fun <T : BaseBo> businessLogicRouter(businessLogic : BusinessLogicCommon<T>) : Validator<T>
+    fun <T : BaseBo> businessLogicValidator(businessLogic : BusinessLogicCommon<T>) : BusinessLogicValidator<T>
 
 }
