@@ -2,12 +2,12 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package zakadabar.stack.frontend.resources
+package zakadabar.core.frontend.resources
 
 import kotlinx.browser.window
-import zakadabar.stack.frontend.application.executor
-import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.core.frontend.application.executor
+import zakadabar.core.frontend.builtin.theme.ZkBuiltinLightTheme
+import zakadabar.core.frontend.resources.css.ZkCssStyleSheet
 
 private const val themeStorageKey = "zk-theme-name"
 

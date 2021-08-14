@@ -1,12 +1,12 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.input
+package zakadabar.core.frontend.builtin.input
 
-import zakadabar.stack.frontend.builtin.form.ZkFormStyles
-import zakadabar.stack.frontend.builtin.form.zkFormStyles
-import zakadabar.stack.frontend.resources.css.*
-import zakadabar.stack.util.alpha
+import zakadabar.core.frontend.builtin.form.ZkFormStyles
+import zakadabar.core.frontend.builtin.form.zkFormStyles
+import zakadabar.core.frontend.resources.css.*
+import zakadabar.core.util.alpha
 
 val zkInputStyles by cssStyleSheet(ZkInputStyles())
 

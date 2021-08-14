@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.data.action
+package zakadabar.core.data.action
 
 import kotlinx.browser.window
 import kotlinx.coroutines.await
@@ -9,8 +9,8 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
-import zakadabar.stack.data.CommBase
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.data.CommBase
+import zakadabar.core.util.PublicApi
 
 /**
  * Communication functions for records.

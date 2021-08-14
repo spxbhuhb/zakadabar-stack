@@ -3,12 +3,12 @@
  */
 @file:JvmName("SettingKt")
 
-package zakadabar.stack.backend.setting
+package zakadabar.core.backend.setting
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.serializer
-import zakadabar.stack.backend.util.default
-import zakadabar.stack.data.BaseBo
+import zakadabar.core.backend.util.default
+import zakadabar.core.data.BaseBo
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
 

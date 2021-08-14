@@ -1,16 +1,16 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.builtin
+package zakadabar.core.backend.builtin
 
-import zakadabar.stack.backend.authorize.Authorizer
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.QueryBusinessLogicBase
-import zakadabar.stack.backend.server
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
-import zakadabar.stack.data.builtin.misc.ServerDescriptionQuery
-import zakadabar.stack.data.query.QueryBo
+import zakadabar.core.backend.authorize.Authorizer
+import zakadabar.core.backend.authorize.Executor
+import zakadabar.core.backend.business.QueryBusinessLogicBase
+import zakadabar.core.backend.server
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.builtin.misc.ServerDescriptionBo
+import zakadabar.core.data.builtin.misc.ServerDescriptionQuery
+import zakadabar.core.data.query.QueryBo
 
 class ServerDescriptionBl : QueryBusinessLogicBase<ServerDescriptionQuery, ServerDescriptionBo>(
     queryBoClass = ServerDescriptionQuery::class

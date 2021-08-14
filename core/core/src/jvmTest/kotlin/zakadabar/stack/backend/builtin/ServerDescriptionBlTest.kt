@@ -1,15 +1,15 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.builtin
+package zakadabar.core.backend.builtin
 
 import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
-import zakadabar.stack.backend.server
-import zakadabar.stack.backend.testing.TestCompanionBase
-import zakadabar.stack.data.builtin.misc.ServerDescriptionQuery
+import zakadabar.core.backend.server
+import zakadabar.core.backend.testing.TestCompanionBase
+import zakadabar.core.data.builtin.misc.ServerDescriptionQuery
 import kotlin.test.assertEquals
 
 class ServerDescriptionBlTest {

@@ -1,12 +1,12 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.layout
+package zakadabar.core.frontend.builtin.layout
 
-import zakadabar.stack.frontend.resources.css.Display
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
-import zakadabar.stack.frontend.resources.css.px
+import zakadabar.core.frontend.resources.css.Display
+import zakadabar.core.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.core.frontend.resources.css.cssStyleSheet
+import zakadabar.core.frontend.resources.css.px
 
 var zkScrollBarStyles by cssStyleSheet(ZkScrollBarStyles())
 

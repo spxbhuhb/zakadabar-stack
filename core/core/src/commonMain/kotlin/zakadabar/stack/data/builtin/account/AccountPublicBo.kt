@@ -1,11 +1,11 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.data.builtin.account
+package zakadabar.core.data.builtin.account
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.entity.EntityId
 
 /**
  * A public account BO which is used to share user information between users.

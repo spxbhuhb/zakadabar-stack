@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.table
+package zakadabar.core.frontend.builtin.table
 
 import kotlinx.browser.document
 import kotlinx.datetime.Instant
@@ -10,30 +10,30 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.dom.clear
 import org.w3c.dom.*
 import org.w3c.dom.events.MouseEvent
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.data.schema.BoSchema
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.ZkElementState
-import zakadabar.stack.frontend.builtin.crud.ZkCrud
-import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
-import zakadabar.stack.frontend.builtin.form.fields.ZkFieldContext
-import zakadabar.stack.frontend.builtin.table.actions.ZkAddRowAction
-import zakadabar.stack.frontend.builtin.table.actions.ZkExportCsvAction
-import zakadabar.stack.frontend.builtin.table.actions.ZkSearchAction
-import zakadabar.stack.frontend.builtin.table.columns.*
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
-import zakadabar.stack.frontend.builtin.titlebar.ZkLocalTitleBar
-import zakadabar.stack.frontend.builtin.titlebar.ZkLocalTitleProvider
-import zakadabar.stack.frontend.util.Areas
-import zakadabar.stack.frontend.util.downloadCsv
-import zakadabar.stack.frontend.util.getDatasetEntry
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.resources.localizedStrings
-import zakadabar.stack.util.UUID
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.query.QueryBo
+import zakadabar.core.data.schema.BoSchema
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.ZkElementState
+import zakadabar.core.frontend.builtin.crud.ZkCrud
+import zakadabar.core.frontend.builtin.crud.ZkCrudTarget
+import zakadabar.core.frontend.builtin.form.fields.ZkFieldContext
+import zakadabar.core.frontend.builtin.table.actions.ZkAddRowAction
+import zakadabar.core.frontend.builtin.table.actions.ZkExportCsvAction
+import zakadabar.core.frontend.builtin.table.actions.ZkSearchAction
+import zakadabar.core.frontend.builtin.table.columns.*
+import zakadabar.core.frontend.builtin.titlebar.ZkAppTitle
+import zakadabar.core.frontend.builtin.titlebar.ZkAppTitleProvider
+import zakadabar.core.frontend.builtin.titlebar.ZkLocalTitleBar
+import zakadabar.core.frontend.builtin.titlebar.ZkLocalTitleProvider
+import zakadabar.core.frontend.util.Areas
+import zakadabar.core.frontend.util.downloadCsv
+import zakadabar.core.frontend.util.getDatasetEntry
+import zakadabar.core.frontend.util.io
+import zakadabar.core.resources.localizedStrings
+import zakadabar.core.util.UUID
 import kotlin.math.min
 import kotlin.reflect.KProperty1
 

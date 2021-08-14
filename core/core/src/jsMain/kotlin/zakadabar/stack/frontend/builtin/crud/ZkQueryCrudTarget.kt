@@ -1,15 +1,15 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.crud
+package zakadabar.core.frontend.builtin.crud
 
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.builtin.table.ZkTable
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.frontend.util.newInstance
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.pages.zkPageStyles
+import zakadabar.core.frontend.builtin.table.ZkTable
+import zakadabar.core.frontend.util.io
+import zakadabar.core.frontend.util.newInstance
 import kotlin.reflect.KClass
 
 /**

@@ -1,11 +1,11 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.application
+package zakadabar.core.frontend.application
 
-import zakadabar.stack.data.builtin.account.AccountPublicBo
-import zakadabar.stack.data.builtin.misc.ServerDescriptionQuery
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.data.builtin.account.AccountPublicBo
+import zakadabar.core.data.builtin.misc.ServerDescriptionQuery
+import zakadabar.core.data.entity.EntityId
 
 /**
  * This session manager is for applications that does not use sessions.

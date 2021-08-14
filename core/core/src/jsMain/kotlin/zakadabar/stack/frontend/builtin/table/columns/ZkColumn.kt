@@ -1,20 +1,20 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.table.columns
+package zakadabar.core.frontend.builtin.table.columns
 
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.table.ZkTable
-import zakadabar.stack.frontend.builtin.table.zkTableStyles
-import zakadabar.stack.frontend.resources.css.px
-import zakadabar.stack.frontend.util.minusAssign
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.core.data.BaseBo
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.table.ZkTable
+import zakadabar.core.frontend.builtin.table.zkTableStyles
+import zakadabar.core.frontend.resources.css.px
+import zakadabar.core.frontend.util.minusAssign
+import zakadabar.core.frontend.util.plusAssign
 import kotlin.math.max
 
 open class ZkColumn<T : BaseBo>(

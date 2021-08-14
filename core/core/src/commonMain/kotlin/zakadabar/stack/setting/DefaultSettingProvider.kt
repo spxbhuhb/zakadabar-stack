@@ -2,12 +2,12 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package zakadabar.stack.setting
+package zakadabar.core.setting
 
 import kotlinx.serialization.KSerializer
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.util.Lock
-import zakadabar.stack.util.use
+import zakadabar.core.data.BaseBo
+import zakadabar.core.util.Lock
+import zakadabar.core.util.use
 import kotlin.collections.set
 import kotlin.reflect.KClass
 

@@ -1,9 +1,9 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.persistence
+package zakadabar.core.backend.persistence
 
-import zakadabar.stack.data.entity.EntityBo
+import zakadabar.core.data.entity.EntityBo
 
 /**
  * This persistence API simply skips everything.

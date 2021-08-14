@@ -1,9 +1,9 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.resources
+package zakadabar.core.resources
 
-import zakadabar.stack.data.builtin.misc.StringPair
+import zakadabar.core.data.builtin.misc.StringPair
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 

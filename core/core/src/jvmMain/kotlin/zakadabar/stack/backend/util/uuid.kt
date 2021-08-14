@@ -1,10 +1,10 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.util
+package zakadabar.core.backend.util
 
-import zakadabar.stack.util.PublicApi
-import zakadabar.stack.util.UUID
+import zakadabar.core.util.PublicApi
+import zakadabar.core.util.UUID
 
 @PublicApi
 fun UUID.toJavaUuid() = java.util.UUID(msb, lsb)

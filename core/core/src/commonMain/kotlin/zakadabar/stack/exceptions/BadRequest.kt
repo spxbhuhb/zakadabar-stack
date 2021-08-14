@@ -1,9 +1,9 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.exceptions
+package zakadabar.core.exceptions
 
-import zakadabar.stack.data.schema.ValidityReport
+import zakadabar.core.data.schema.ValidityReport
 
 /**
  * On the backend [BadRequest] is converted into HTTP response with status 400.

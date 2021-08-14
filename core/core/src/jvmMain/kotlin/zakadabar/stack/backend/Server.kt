@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend
+package zakadabar.core.backend
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
@@ -16,18 +16,18 @@ import io.ktor.request.*
 import io.ktor.server.netty.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import zakadabar.stack.backend.authorize.LoginTimeout
-import zakadabar.stack.backend.builtin.ServerDescriptionBl
-import zakadabar.stack.backend.exposed.Sql
-import zakadabar.stack.backend.ktor.KtorServerBuilder
-import zakadabar.stack.backend.setting.ServerSettingLoader
-import zakadabar.stack.backend.setting.SettingBl
-import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
-import zakadabar.stack.data.builtin.settings.ServerSettingsBo
-import zakadabar.stack.log.Slf4jLogger
-import zakadabar.stack.module.CommonModule
-import zakadabar.stack.module.modules
-import zakadabar.stack.setting.SettingProvider
+import zakadabar.core.backend.authorize.LoginTimeout
+import zakadabar.core.backend.builtin.ServerDescriptionBl
+import zakadabar.core.backend.exposed.Sql
+import zakadabar.core.backend.ktor.KtorServerBuilder
+import zakadabar.core.backend.setting.ServerSettingLoader
+import zakadabar.core.backend.setting.SettingBl
+import zakadabar.core.data.builtin.misc.ServerDescriptionBo
+import zakadabar.core.data.builtin.settings.ServerSettingsBo
+import zakadabar.core.log.Slf4jLogger
+import zakadabar.core.module.CommonModule
+import zakadabar.core.module.modules
+import zakadabar.core.setting.SettingProvider
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*

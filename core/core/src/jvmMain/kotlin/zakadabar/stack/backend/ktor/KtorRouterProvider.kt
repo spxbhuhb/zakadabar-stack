@@ -1,13 +1,13 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.ktor
+package zakadabar.core.backend.ktor
 
-import zakadabar.stack.backend.business.BusinessLogicCommon
-import zakadabar.stack.backend.business.EntityBusinessLogicCommon
-import zakadabar.stack.backend.route.Router
-import zakadabar.stack.backend.route.RouterProvider
-import zakadabar.stack.data.BaseBo
+import zakadabar.core.backend.business.BusinessLogicCommon
+import zakadabar.core.backend.business.EntityBusinessLogicCommon
+import zakadabar.core.backend.route.Router
+import zakadabar.core.backend.route.RouterProvider
+import zakadabar.core.data.BaseBo
 
 class KtorRouterProvider : RouterProvider {
 

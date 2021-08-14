@@ -2,9 +2,9 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package zakadabar.stack.frontend.builtin.toast
+package zakadabar.core.frontend.builtin.toast
 
-import zakadabar.stack.frontend.resources.ZkFlavour
+import zakadabar.core.frontend.resources.ZkFlavour
 
 fun toastPrimary(hideAfter: Long? = null, message: () -> String) = ZkToast(message(), flavour = ZkFlavour.Primary, hideAfter = hideAfter).run()
 fun toastSecondary(hideAfter: Long? = null, message: () -> String) = ZkToast(message(), flavour = ZkFlavour.Secondary, hideAfter = hideAfter).run()

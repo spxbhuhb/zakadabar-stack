@@ -1,13 +1,13 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.input
+package zakadabar.core.frontend.builtin.input
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.KeyboardEvent
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.util.PublicApi
 
 /**
  * A simple input text field.

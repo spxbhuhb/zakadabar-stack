@@ -1,16 +1,16 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.theme
+package zakadabar.core.frontend.builtin.theme
 
-import zakadabar.stack.frontend.builtin.layout.tabcontainer.zkTabContainerStyles
-import zakadabar.stack.frontend.builtin.layout.zkScrollBarStyles
-import zakadabar.stack.frontend.builtin.sidebar.zkSideBarStyles
-import zakadabar.stack.frontend.builtin.table.zkTableStyles
-import zakadabar.stack.frontend.builtin.titlebar.zkTitleBarStyles
-import zakadabar.stack.frontend.resources.ZkColors
-import zakadabar.stack.util.after
-import zakadabar.stack.util.alpha
+import zakadabar.core.frontend.builtin.layout.tabcontainer.zkTabContainerStyles
+import zakadabar.core.frontend.builtin.layout.zkScrollBarStyles
+import zakadabar.core.frontend.builtin.sidebar.zkSideBarStyles
+import zakadabar.core.frontend.builtin.table.zkTableStyles
+import zakadabar.core.frontend.builtin.titlebar.zkTitleBarStyles
+import zakadabar.core.frontend.resources.ZkColors
+import zakadabar.core.util.after
+import zakadabar.core.util.alpha
 
 open class ZkGreenBlueTheme : ZkBuiltinLightTheme() {
 

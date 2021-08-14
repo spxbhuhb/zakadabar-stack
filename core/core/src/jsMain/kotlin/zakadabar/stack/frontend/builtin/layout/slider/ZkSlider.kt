@@ -1,12 +1,12 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.layout.slider
+package zakadabar.core.frontend.builtin.layout.slider
 
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.util.PublicApi
 import kotlin.math.max
 import kotlin.math.min
 

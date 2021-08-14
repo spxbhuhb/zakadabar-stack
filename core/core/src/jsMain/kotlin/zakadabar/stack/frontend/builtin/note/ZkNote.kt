@@ -1,16 +1,16 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.note
+package zakadabar.core.frontend.builtin.note
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.icon.ZkIcon
-import zakadabar.stack.frontend.resources.ZkFlavour
-import zakadabar.stack.frontend.resources.ZkIcons
-import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.icon.ZkIcon
+import zakadabar.core.frontend.resources.ZkFlavour
+import zakadabar.core.frontend.resources.ZkIcons
+import zakadabar.core.frontend.resources.css.ZkCssStyleRule
+import zakadabar.core.frontend.util.plusAssign
 
 open class ZkNote(
     val flavour: ZkFlavour = ZkFlavour.Info,

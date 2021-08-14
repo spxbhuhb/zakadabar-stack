@@ -1,15 +1,15 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.action.nullresult
+package zakadabar.core.action.nullresult
 
-import zakadabar.stack.backend.authorize.Authorizer
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.ActionBusinessLogicBase
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.builtin.StringValue
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.backend.authorize.Authorizer
+import zakadabar.core.backend.authorize.Executor
+import zakadabar.core.backend.business.ActionBusinessLogicBase
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.action.ActionBo
+import zakadabar.core.data.builtin.StringValue
+import zakadabar.core.util.PublicApi
 
 @PublicApi
 class ActionBl : ActionBusinessLogicBase<Action, StringValue?>(

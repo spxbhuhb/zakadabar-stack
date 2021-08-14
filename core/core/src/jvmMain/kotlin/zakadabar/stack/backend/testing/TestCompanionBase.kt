@@ -1,22 +1,22 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.testing
+package zakadabar.core.backend.testing
 
 import org.slf4j.LoggerFactory
-import zakadabar.stack.authorize.AppRolesBase
-import zakadabar.stack.authorize.appRoles
-import zakadabar.stack.backend.RoutedModule
-import zakadabar.stack.backend.Server
-import zakadabar.stack.backend.authorize.RoleBlProvider
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizerProvider
-import zakadabar.stack.backend.server
-import zakadabar.stack.backend.testing.TestCompanionBase.MockRoleBlProvider
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.CommBase
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.log.Slf4jLogger
-import zakadabar.stack.module.modules
+import zakadabar.core.authorize.AppRolesBase
+import zakadabar.core.authorize.appRoles
+import zakadabar.core.backend.RoutedModule
+import zakadabar.core.backend.Server
+import zakadabar.core.backend.authorize.RoleBlProvider
+import zakadabar.core.backend.authorize.SimpleRoleAuthorizerProvider
+import zakadabar.core.backend.server
+import zakadabar.core.backend.testing.TestCompanionBase.MockRoleBlProvider
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.CommBase
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.log.Slf4jLogger
+import zakadabar.core.module.modules
 
 /**
  * Helper class for unit tests. Starts a Ktor server with an

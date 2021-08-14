@@ -3,12 +3,12 @@
  */
 @file:Suppress("unused") // these are library functions offered for the public
 
-package zakadabar.stack.frontend.builtin.button
+package zakadabar.core.frontend.builtin.button
 
-import zakadabar.stack.frontend.application.ZkAppRouting
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.resources.ZkFlavour
-import zakadabar.stack.resources.localizedStrings
+import zakadabar.core.frontend.application.ZkAppRouting
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.resources.ZkFlavour
+import zakadabar.core.resources.localizedStrings
 
 fun buttonPrimary(text: String, onClick: () -> Unit) = ZkButton(text, onClick = onClick)
 fun buttonSecondary(text: String, onClick: () -> Unit) = ZkButton(text, flavour = ZkFlavour.Secondary, onClick = onClick)

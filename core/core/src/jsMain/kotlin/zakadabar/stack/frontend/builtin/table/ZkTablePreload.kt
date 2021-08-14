@@ -1,11 +1,11 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.table
+package zakadabar.core.frontend.builtin.table
 
 import kotlinx.coroutines.Job
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.frontend.util.log
+import zakadabar.core.frontend.util.io
+import zakadabar.core.frontend.util.log
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 

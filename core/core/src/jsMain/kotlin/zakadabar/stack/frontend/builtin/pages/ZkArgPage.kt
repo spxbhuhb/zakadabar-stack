@@ -1,19 +1,19 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.pages
+package zakadabar.core.frontend.builtin.pages
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
-import zakadabar.stack.frontend.application.ZkAppLayout
-import zakadabar.stack.frontend.application.ZkAppRouting
-import zakadabar.stack.frontend.application.ZkNavState
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
-import zakadabar.stack.frontend.util.encodeURIComponent
-import zakadabar.stack.frontend.util.log
-import zakadabar.stack.frontend.util.newInstance
+import zakadabar.core.frontend.application.ZkAppLayout
+import zakadabar.core.frontend.application.ZkAppRouting
+import zakadabar.core.frontend.application.ZkNavState
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.resources.css.ZkCssStyleRule
+import zakadabar.core.frontend.util.encodeURIComponent
+import zakadabar.core.frontend.util.log
+import zakadabar.core.frontend.util.newInstance
 
 /**
  * Base class for pages that receive parameters in the URL, such as queries

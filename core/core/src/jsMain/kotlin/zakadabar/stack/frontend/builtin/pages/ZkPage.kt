@@ -1,18 +1,18 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.pages
+package zakadabar.core.frontend.builtin.pages
 
-import zakadabar.stack.frontend.application.ZkAppLayout
-import zakadabar.stack.frontend.application.ZkAppRouting
-import zakadabar.stack.frontend.application.ZkNavState
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleProvider
-import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
-import zakadabar.stack.frontend.util.newInstance
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.core.frontend.application.ZkAppLayout
+import zakadabar.core.frontend.application.ZkAppRouting
+import zakadabar.core.frontend.application.ZkNavState
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.titlebar.ZkAppTitle
+import zakadabar.core.frontend.builtin.titlebar.ZkAppTitleProvider
+import zakadabar.core.frontend.resources.css.ZkCssStyleRule
+import zakadabar.core.frontend.util.newInstance
+import zakadabar.core.frontend.util.plusAssign
 
 /**
  * Provides common functions used in most page implementations.

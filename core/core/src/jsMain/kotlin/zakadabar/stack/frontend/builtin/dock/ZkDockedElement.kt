@@ -3,15 +3,15 @@
  */
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-package zakadabar.stack.frontend.builtin.dock
+package zakadabar.core.frontend.builtin.dock
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLHtmlElement
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.icon.ZkIcon
-import zakadabar.stack.frontend.resources.ZkIconSource
-import zakadabar.stack.frontend.resources.ZkIcons
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.icon.ZkIcon
+import zakadabar.core.frontend.resources.ZkIconSource
+import zakadabar.core.frontend.resources.ZkIcons
 
 /**
  * An element to put into the dock with a header, minimize, normal, maximize, close actions.

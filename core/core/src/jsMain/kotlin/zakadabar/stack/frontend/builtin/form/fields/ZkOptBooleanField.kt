@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.frontend.builtin.form.fields
+package zakadabar.core.frontend.builtin.form.fields
 
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
 @PublicApi

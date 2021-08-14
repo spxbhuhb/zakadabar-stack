@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.ktor
+package zakadabar.core.backend.ktor
 
 import io.ktor.application.*
 import io.ktor.request.*
@@ -10,14 +10,14 @@ import io.ktor.routing.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.serializer
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.BusinessLogicCommon
-import zakadabar.stack.backend.route.Router
-import zakadabar.stack.backend.server
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.backend.authorize.Executor
+import zakadabar.core.backend.business.BusinessLogicCommon
+import zakadabar.core.backend.route.Router
+import zakadabar.core.backend.server
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.action.ActionBo
+import zakadabar.core.data.query.QueryBo
+import zakadabar.core.util.PublicApi
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
 

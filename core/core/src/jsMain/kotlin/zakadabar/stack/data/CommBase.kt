@@ -1,17 +1,17 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.data
+package zakadabar.core.data
 
 import kotlinx.coroutines.await
 import kotlinx.serialization.json.Json
 import org.w3c.fetch.Response
-import zakadabar.stack.exceptions.DataConflict
-import zakadabar.stack.exceptions.Unauthorized
-import zakadabar.stack.exceptions.UnauthorizedData
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.toast.toastDanger
-import zakadabar.stack.resources.localizedStrings
+import zakadabar.core.exceptions.DataConflict
+import zakadabar.core.exceptions.Unauthorized
+import zakadabar.core.exceptions.UnauthorizedData
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.builtin.toast.toastDanger
+import zakadabar.core.resources.localizedStrings
 
 /**
  * Common functions for all comm classes.

@@ -11,12 +11,12 @@
 // WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 // ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 // OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-package zakadabar.stack.util
+package zakadabar.core.util
 
 import junit.framework.TestCase
 import junit.textui.TestRunner
-import zakadabar.stack.util.BCrypt.Companion.checkpw
-import zakadabar.stack.util.BCrypt.Companion.hashpw
+import zakadabar.core.util.BCrypt.Companion.checkpw
+import zakadabar.core.util.BCrypt.Companion.hashpw
 
 /**
  * JUnit unit tests for BCrypt routines

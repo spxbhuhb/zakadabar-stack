@@ -3,10 +3,10 @@
  */
 @file:Suppress("UNUSED_TYPEALIAS_PARAMETER", "unused") // entity id should be type bound
 
-package zakadabar.stack.data.entity
+package zakadabar.core.data.entity
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.BaseBo
+import zakadabar.core.data.BaseBo
 
 @Serializable
 class EntityId<T> : Comparable<EntityId<T>> {

@@ -1,16 +1,16 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.data.entity
+package zakadabar.core.data.entity
 
 import io.ktor.client.request.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import zakadabar.stack.data.CommBase.Companion.baseUrl
-import zakadabar.stack.data.CommBase.Companion.client
-import zakadabar.stack.data.CommBase.Companion.onError
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.data.CommBase.Companion.baseUrl
+import zakadabar.core.data.CommBase.Companion.client
+import zakadabar.core.data.CommBase.Companion.onError
+import zakadabar.core.util.PublicApi
 
 /**
  * REST communication functions for entities.

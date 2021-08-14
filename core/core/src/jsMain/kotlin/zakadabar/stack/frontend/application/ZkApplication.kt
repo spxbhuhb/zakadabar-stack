@@ -1,21 +1,21 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.application
+package zakadabar.core.frontend.application
 
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
-import zakadabar.stack.data.builtin.misc.ServerDescriptionBo
-import zakadabar.stack.frontend.builtin.dock.ZkDock
-import zakadabar.stack.frontend.builtin.modal.ZkModalContainer
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
-import zakadabar.stack.frontend.builtin.toast.ZkToastContainer
-import zakadabar.stack.frontend.util.decodeURIComponent
-import zakadabar.stack.resources.*
-import zakadabar.stack.text.TranslationProvider
-import zakadabar.stack.util.InstanceStore
+import zakadabar.core.data.builtin.misc.ServerDescriptionBo
+import zakadabar.core.frontend.builtin.dock.ZkDock
+import zakadabar.core.frontend.builtin.modal.ZkModalContainer
+import zakadabar.core.frontend.builtin.titlebar.ZkAppTitle
+import zakadabar.core.frontend.builtin.toast.ZkToastContainer
+import zakadabar.core.frontend.util.decodeURIComponent
+import zakadabar.core.resources.*
+import zakadabar.core.text.TranslationProvider
+import zakadabar.core.util.InstanceStore
 
 /**
  * The application itself, initialized in main.kt.

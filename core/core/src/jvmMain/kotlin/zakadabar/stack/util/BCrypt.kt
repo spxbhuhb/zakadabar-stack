@@ -13,7 +13,7 @@
 // OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 @file:Suppress("DuplicatedCode")
 
-package zakadabar.stack.util
+package zakadabar.core.util
 
 import java.io.UnsupportedEncodingException
 import java.security.SecureRandom

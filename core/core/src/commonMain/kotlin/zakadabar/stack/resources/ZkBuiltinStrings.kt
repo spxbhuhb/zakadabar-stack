@@ -3,7 +3,7 @@
  */
 @file:Suppress("unused") // automatic detection does not work here because many strings are auto bound
 
-package zakadabar.stack.resources
+package zakadabar.core.resources
 
 open class ZkBuiltinStrings : ZkStringStore() {
 

@@ -1,13 +1,13 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.application
+package zakadabar.core.frontend.application
 
 import kotlinx.browser.document
 import org.w3c.dom.set
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.layout.zkLayoutStyles
+import zakadabar.core.frontend.util.plusAssign
 
 /**
  * Base class for layouts of the application. Typically there are only

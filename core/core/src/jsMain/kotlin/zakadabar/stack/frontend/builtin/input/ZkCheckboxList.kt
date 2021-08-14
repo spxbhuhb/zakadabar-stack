@@ -1,12 +1,12 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.input
+package zakadabar.core.frontend.builtin.input
 
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.form.zkFormStyles
-import zakadabar.stack.frontend.resources.ZkIcons
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.form.zkFormStyles
+import zakadabar.core.frontend.resources.ZkIcons
+import zakadabar.core.util.PublicApi
 
 /**
  * Displays a list of items as checkboxes, each item may be switched on/off individually.

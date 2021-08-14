@@ -1,12 +1,12 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.misc.dropdown
+package zakadabar.core.frontend.builtin.misc.dropdown
 
 import org.w3c.dom.events.Event
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.util.minusAssign
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.util.minusAssign
+import zakadabar.core.util.PublicApi
 
 /**
  * A wrapper around a simple element which is the [controller] that shows

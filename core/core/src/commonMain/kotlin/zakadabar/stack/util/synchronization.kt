@@ -2,7 +2,7 @@
  * Copyright 2014-2021 JetBrains s.r.o and contributors. Use of this source code is governed by the Apache 2.0 license.
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.util
+package zakadabar.core.util
 
 /**
  * This is a copy of Ktor multiplatform lock as we clearly need it.

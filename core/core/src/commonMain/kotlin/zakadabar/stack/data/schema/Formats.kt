@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.data.schema
+package zakadabar.core.data.schema
 
 object Formats {
     // source: https://stackoverflow.com/questions/1819142/how-should-i-validate-an-e-mail-address

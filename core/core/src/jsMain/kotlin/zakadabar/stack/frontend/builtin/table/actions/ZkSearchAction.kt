@@ -1,15 +1,15 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.table.actions
+package zakadabar.core.frontend.builtin.table.actions
 
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.input.ZkTextInput
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.resources.ZkFlavour
-import zakadabar.stack.frontend.resources.ZkIcons
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.button.ZkButton
+import zakadabar.core.frontend.builtin.input.ZkTextInput
+import zakadabar.core.frontend.builtin.layout.zkLayoutStyles
+import zakadabar.core.frontend.resources.ZkFlavour
+import zakadabar.core.frontend.resources.ZkIcons
+import zakadabar.core.frontend.util.plusAssign
 
 open class ZkSearchAction(
     private val onExecute: (searchText: String) -> Unit

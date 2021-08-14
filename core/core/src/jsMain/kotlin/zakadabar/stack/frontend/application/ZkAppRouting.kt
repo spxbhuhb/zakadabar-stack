@@ -1,13 +1,13 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.application
+package zakadabar.core.frontend.application
 
 import kotlinx.browser.document
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.ZkElementState
-import zakadabar.stack.resources.localizedStrings
-import zakadabar.stack.util.after
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.ZkElementState
+import zakadabar.core.resources.localizedStrings
+import zakadabar.core.util.after
 import kotlin.reflect.KClass
 
 abstract class ZkAppRouting(

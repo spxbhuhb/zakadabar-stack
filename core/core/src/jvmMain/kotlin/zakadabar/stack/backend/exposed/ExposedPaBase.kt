@@ -1,15 +1,15 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.exposed
+package zakadabar.core.backend.exposed
 
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.stack.backend.persistence.EntityPersistenceApi
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.backend.persistence.EntityPersistenceApi
+import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.entity.EntityId
 
 /**
  * Persistence API base to be used by Exposed persistence APIs.

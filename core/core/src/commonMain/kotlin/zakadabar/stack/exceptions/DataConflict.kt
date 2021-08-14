@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.exceptions
+package zakadabar.core.exceptions
 
 /**
  * On the backend [DataConflict] is converted into HTTP response with status 409.

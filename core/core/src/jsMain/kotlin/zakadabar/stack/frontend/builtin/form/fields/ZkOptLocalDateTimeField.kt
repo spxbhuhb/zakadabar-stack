@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.frontend.builtin.form.fields
+package zakadabar.core.frontend.builtin.form.fields
 
 import kotlinx.datetime.LocalDateTime
-import zakadabar.stack.resources.toLocalDateTimeOrNull
+import zakadabar.core.resources.toLocalDateTimeOrNull
 import kotlin.reflect.KMutableProperty0
 
 open class ZkOptLocalDateTimeField(

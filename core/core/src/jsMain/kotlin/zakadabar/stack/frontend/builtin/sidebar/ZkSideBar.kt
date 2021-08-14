@@ -1,11 +1,11 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.sidebar
+package zakadabar.core.frontend.builtin.sidebar
 
-import zakadabar.stack.frontend.application.ZkAppRouting
-import zakadabar.stack.frontend.application.target
-import zakadabar.stack.frontend.builtin.ZkElement
+import zakadabar.core.frontend.application.ZkAppRouting
+import zakadabar.core.frontend.application.target
+import zakadabar.core.frontend.builtin.ZkElement
 
 open class ZkSideBar : ZkElement() {
 

@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.ktor
+package zakadabar.core.backend.ktor
 
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -19,15 +19,15 @@ import io.ktor.sessions.*
 import io.ktor.websocket.*
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
-import zakadabar.stack.backend.RoutedModule
-import zakadabar.stack.backend.Server
-import zakadabar.stack.backend.Server.Companion.staticRoot
-import zakadabar.stack.backend.authorize.LoginTimeout
-import zakadabar.stack.backend.routingLogger
-import zakadabar.stack.backend.server
-import zakadabar.stack.data.builtin.settings.ServerSettingsBo
-import zakadabar.stack.exceptions.*
-import zakadabar.stack.module.ModuleStore
+import zakadabar.core.backend.RoutedModule
+import zakadabar.core.backend.Server
+import zakadabar.core.backend.Server.Companion.staticRoot
+import zakadabar.core.backend.authorize.LoginTimeout
+import zakadabar.core.backend.routingLogger
+import zakadabar.core.backend.server
+import zakadabar.core.data.builtin.settings.ServerSettingsBo
+import zakadabar.core.exceptions.*
+import zakadabar.core.module.ModuleStore
 import java.io.File
 import java.time.Duration
 

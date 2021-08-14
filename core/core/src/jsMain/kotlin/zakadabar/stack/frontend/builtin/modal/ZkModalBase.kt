@@ -1,13 +1,13 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.modal
+package zakadabar.core.frontend.builtin.modal
 
 import kotlinx.coroutines.channels.Channel
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.titlebar.ZkLocalTitleBar
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.titlebar.ZkLocalTitleBar
+import zakadabar.core.frontend.util.plusAssign
 
 open class ZkModalBase<T : Any?> : ZkElement() {
 

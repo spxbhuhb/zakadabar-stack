@@ -14,17 +14,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema.entries
+package zakadabar.core.data.schema.entries
 
 import kotlinx.datetime.Instant
-import zakadabar.stack.data.schema.BoPropertyConstraintImpl
-import zakadabar.stack.data.schema.BoSchemaEntry
-import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.descriptor.BoConstraintType
-import zakadabar.stack.data.schema.descriptor.BoProperty
-import zakadabar.stack.data.schema.descriptor.InstantBoConstraint
-import zakadabar.stack.data.schema.descriptor.InstantBoProperty
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.data.schema.BoPropertyConstraintImpl
+import zakadabar.core.data.schema.BoSchemaEntry
+import zakadabar.core.data.schema.ValidityReport
+import zakadabar.core.data.schema.descriptor.BoConstraintType
+import zakadabar.core.data.schema.descriptor.BoProperty
+import zakadabar.core.data.schema.descriptor.InstantBoConstraint
+import zakadabar.core.data.schema.descriptor.InstantBoProperty
+import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
 class OptInstantBoSchemaEntry(val kProperty: KMutableProperty0<Instant?>) : BoSchemaEntry<Instant?> {

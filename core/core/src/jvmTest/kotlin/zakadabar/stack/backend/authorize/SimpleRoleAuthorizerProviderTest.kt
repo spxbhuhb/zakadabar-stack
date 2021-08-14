@@ -1,20 +1,20 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.authorize
+package zakadabar.core.backend.authorize
 
 import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
-import zakadabar.stack.authorize.AppRolesBase
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.backend.persistence.EmptyPersistenceApi
-import zakadabar.stack.backend.server
-import zakadabar.stack.backend.testing.TestCompanionBase
-import zakadabar.stack.data.entity.EmptyEntityBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.exceptions.Forbidden
+import zakadabar.core.authorize.AppRolesBase
+import zakadabar.core.backend.business.EntityBusinessLogicBase
+import zakadabar.core.backend.persistence.EmptyPersistenceApi
+import zakadabar.core.backend.server
+import zakadabar.core.backend.testing.TestCompanionBase
+import zakadabar.core.data.entity.EmptyEntityBo
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.exceptions.Forbidden
 import kotlin.test.assertFailsWith
 
 object Roles : AppRolesBase() {

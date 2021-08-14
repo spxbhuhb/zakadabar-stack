@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.data.schema.entries
+package zakadabar.core.data.schema.entries
 
-import zakadabar.stack.data.schema.BoPropertyConstraintImpl
-import zakadabar.stack.data.schema.BoSchemaEntry
-import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.descriptor.*
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.data.schema.BoPropertyConstraintImpl
+import zakadabar.core.data.schema.BoSchemaEntry
+import zakadabar.core.data.schema.ValidityReport
+import zakadabar.core.data.schema.descriptor.*
+import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
 class StringBoSchemaEntry(val kProperty: KMutableProperty0<String>) : BoSchemaEntry<String> {

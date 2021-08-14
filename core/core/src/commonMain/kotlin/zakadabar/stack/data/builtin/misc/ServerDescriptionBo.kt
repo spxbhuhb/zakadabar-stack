@@ -6,11 +6,11 @@
  * also protected by copyright, patent, and other intellectual and industrial
  * property laws.
  */
-package zakadabar.stack.data.builtin.misc
+package zakadabar.core.data.builtin.misc
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.schema.BoSchema
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.schema.BoSchema
 
 @Serializable
 class ServerDescriptionBo(

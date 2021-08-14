@@ -1,12 +1,12 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.authorize
+package zakadabar.core.backend.authorize
 
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.exceptions.Forbidden
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.exceptions.Forbidden
+import zakadabar.core.util.PublicApi
 
 @PublicApi
 fun authorize(executor: Executor, roleName: String) {

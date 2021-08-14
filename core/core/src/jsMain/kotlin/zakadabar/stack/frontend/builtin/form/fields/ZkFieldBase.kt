@@ -1,22 +1,22 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.form.fields
+package zakadabar.core.frontend.builtin.form.fields
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.data.schema.descriptor.BoConstraintType
-import zakadabar.stack.data.schema.descriptor.BooleanBoConstraint
-import zakadabar.stack.data.schema.descriptor.IntBoConstraint
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.form.ZkFormStyles
-import zakadabar.stack.frontend.builtin.form.zkFormStyles
-import zakadabar.stack.frontend.util.minusAssign
-import zakadabar.stack.frontend.util.plusAssign
-import zakadabar.stack.resources.localizedStrings
+import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.schema.ValidityReport
+import zakadabar.core.data.schema.descriptor.BoConstraintType
+import zakadabar.core.data.schema.descriptor.BooleanBoConstraint
+import zakadabar.core.data.schema.descriptor.IntBoConstraint
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.form.ZkFormStyles
+import zakadabar.core.frontend.builtin.form.zkFormStyles
+import zakadabar.core.frontend.util.minusAssign
+import zakadabar.core.frontend.util.plusAssign
+import zakadabar.core.resources.localizedStrings
 
 abstract class ZkFieldBase<DT>(
     val context: ZkFieldContext,

@@ -1,11 +1,11 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.util
+package zakadabar.core.util
 
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityBoCompanion
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.entity.EntityBoCompanion
 import kotlin.reflect.KClass
 
 actual inline fun <reified T : Any> KClass<T>.newInstance() = T::class.java.getDeclaredConstructor().newInstance()

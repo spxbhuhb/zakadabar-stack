@@ -1,11 +1,11 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.pages
+package zakadabar.core.frontend.builtin.pages
 
-import zakadabar.stack.frontend.application.ZkAppLayout
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
+import zakadabar.core.frontend.application.ZkAppLayout
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.resources.css.ZkCssStyleRule
 
 /**
  * A page that provides convenience methods for serving hierarchic URLs.

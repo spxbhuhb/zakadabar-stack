@@ -1,12 +1,12 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.icon
+package zakadabar.core.frontend.builtin.icon
 
 import org.w3c.dom.events.Event
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.resources.ZkIconSource
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.resources.ZkIconSource
+import zakadabar.core.frontend.util.plusAssign
 
 /**
  * A simple icon without any extra.

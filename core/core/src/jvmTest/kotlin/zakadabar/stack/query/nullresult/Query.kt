@@ -1,14 +1,14 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.query.nullresult
+package zakadabar.core.query.nullresult
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.builtin.StringValue
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.data.query.QueryBoCompanion
-import zakadabar.stack.data.schema.BoSchema
-import zakadabar.stack.util.UUID
+import zakadabar.core.data.builtin.StringValue
+import zakadabar.core.data.query.QueryBo
+import zakadabar.core.data.query.QueryBoCompanion
+import zakadabar.core.data.schema.BoSchema
+import zakadabar.core.util.UUID
 
 @Serializable
 class Query(

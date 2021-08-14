@@ -1,14 +1,14 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.data.action
+package zakadabar.core.data.action
 
 import io.ktor.client.request.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
-import zakadabar.stack.data.CommBase
-import zakadabar.stack.data.CommBase.Companion.client
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.data.CommBase
+import zakadabar.core.data.CommBase.Companion.client
+import zakadabar.core.util.PublicApi
 
 /**
  * Communication functions for Action DTOs.

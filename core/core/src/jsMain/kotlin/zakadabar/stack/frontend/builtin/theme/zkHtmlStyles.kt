@@ -1,12 +1,12 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.theme
+package zakadabar.core.frontend.builtin.theme
 
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
-import zakadabar.stack.frontend.resources.css.percent
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.core.frontend.resources.css.cssStyleSheet
+import zakadabar.core.frontend.resources.css.percent
+import zakadabar.core.util.PublicApi
 
 val zkHtmlStyles by cssStyleSheet(ZkHtmlStyles())
 

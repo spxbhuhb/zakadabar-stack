@@ -1,17 +1,17 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.layout
+package zakadabar.core.frontend.builtin.layout
 
 import kotlinx.browser.window
-import zakadabar.stack.frontend.application.ZkAppLayout
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.ZkElementState
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleBar
-import zakadabar.stack.frontend.util.minusAssign
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.core.frontend.application.ZkAppLayout
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.ZkElementState
+import zakadabar.core.frontend.builtin.titlebar.ZkAppTitle
+import zakadabar.core.frontend.builtin.titlebar.ZkAppTitleBar
+import zakadabar.core.frontend.util.minusAssign
+import zakadabar.core.frontend.util.plusAssign
 
 /**
  * Default layout with app handle, title bar, sidebar and content.

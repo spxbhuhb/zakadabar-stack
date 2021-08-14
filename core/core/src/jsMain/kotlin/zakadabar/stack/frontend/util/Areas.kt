@@ -2,14 +2,14 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package zakadabar.stack.frontend.util
+package zakadabar.core.frontend.util
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.resources.css.percent
-import zakadabar.stack.frontend.resources.css.px
-import zakadabar.stack.frontend.util.w3c.IntersectionObserver
-import zakadabar.stack.frontend.util.w3c.IntersectionObserverEntry
+import zakadabar.core.frontend.resources.css.percent
+import zakadabar.core.frontend.resources.css.px
+import zakadabar.core.frontend.util.w3c.IntersectionObserver
+import zakadabar.core.frontend.util.w3c.IntersectionObserverEntry
 import kotlin.math.floor
 
 /**

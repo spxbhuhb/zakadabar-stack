@@ -1,11 +1,11 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.popup
+package zakadabar.core.frontend.builtin.popup
 
 import kotlinx.browser.window
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.resources.css.px
+import zakadabar.core.frontend.resources.css.px
 
 /**
  * Positions [popupElement] relative to [anchorElement] according to the space

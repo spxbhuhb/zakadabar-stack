@@ -1,17 +1,17 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.input
+package zakadabar.core.frontend.builtin.input
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLLabelElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.resources.ZkIconSource
-import zakadabar.stack.frontend.resources.ZkIcons
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.resources.ZkIconSource
+import zakadabar.core.frontend.resources.ZkIcons
+import zakadabar.core.frontend.util.plusAssign
 
 open class ZkCheckBox(
     open val iconSource: ZkIconSource = ZkIcons.check,

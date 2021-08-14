@@ -1,10 +1,10 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.crud
+package zakadabar.core.frontend.builtin.crud
 
-import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.titlebar.ZkLocalTitleProvider
+import zakadabar.core.frontend.builtin.ZkElementMode
+import zakadabar.core.frontend.builtin.titlebar.ZkLocalTitleProvider
 
 /**
  * Elements capable of editing the BO content implement this interface.

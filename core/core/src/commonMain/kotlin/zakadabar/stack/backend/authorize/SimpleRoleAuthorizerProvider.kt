@@ -1,11 +1,11 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.authorize
+package zakadabar.core.backend.authorize
 
-import zakadabar.stack.backend.business.BusinessLogicCommon
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.module.CommonModule
+import zakadabar.core.backend.business.BusinessLogicCommon
+import zakadabar.core.data.BaseBo
+import zakadabar.core.module.CommonModule
 
 /**
  * Provides a [SimpleRoleAuthorizer] for all BL modules.

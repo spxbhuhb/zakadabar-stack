@@ -1,19 +1,19 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.form.structure
+package zakadabar.core.frontend.builtin.form.structure
 
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.ZkFormStyles
-import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
-import zakadabar.stack.frontend.resources.ZkFlavour
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.resources.localizedStrings
-import zakadabar.stack.text.capitalized
+import zakadabar.core.data.BaseBo
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.ZkElementMode
+import zakadabar.core.frontend.builtin.button.ZkButton
+import zakadabar.core.frontend.builtin.form.ZkForm
+import zakadabar.core.frontend.builtin.form.ZkFormStyles
+import zakadabar.core.frontend.builtin.modal.ZkConfirmDialog
+import zakadabar.core.frontend.resources.ZkFlavour
+import zakadabar.core.frontend.util.io
+import zakadabar.core.resources.localizedStrings
+import zakadabar.core.text.capitalized
 
 open class ZkFormButtons<T : BaseBo>(
     private val form: ZkForm<T>,

@@ -1,11 +1,11 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.business
+package zakadabar.core.backend.business
 
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.action.ActionBoCompanion
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.data.action.ActionBo
+import zakadabar.core.data.action.ActionBoCompanion
+import zakadabar.core.util.PublicApi
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObject
 

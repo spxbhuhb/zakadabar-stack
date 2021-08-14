@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.ktor
+package zakadabar.core.backend.ktor
 
 import io.ktor.application.*
 import io.ktor.features.*
@@ -9,9 +9,9 @@ import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import zakadabar.stack.backend.business.EntityBusinessLogicCommon
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.backend.business.EntityBusinessLogicCommon
+import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.entity.EntityId
 
 open class KtorEntityRouter<T : EntityBo<T>>(
     private val entityBusinessLogic: EntityBusinessLogicCommon<T>

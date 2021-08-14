@@ -14,15 +14,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.frontend.builtin.form.fields
+package zakadabar.core.frontend.builtin.form.fields
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.ValidityReport
-import zakadabar.stack.frontend.builtin.form.zkFormStyles
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.schema.ValidityReport
+import zakadabar.core.frontend.builtin.form.zkFormStyles
+import zakadabar.core.frontend.util.plusAssign
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KProperty0
 

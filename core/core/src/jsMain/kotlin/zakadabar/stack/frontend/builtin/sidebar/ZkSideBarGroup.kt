@@ -1,21 +1,21 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.sidebar
+package zakadabar.core.frontend.builtin.sidebar
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLAnchorElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
-import zakadabar.stack.frontend.application.ZkAppRouting
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.icon.ZkIcon
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.resources.ZkIcons
-import zakadabar.stack.resources.localizedStrings
-import zakadabar.stack.util.after
+import zakadabar.core.frontend.application.ZkAppRouting
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.icon.ZkIcon
+import zakadabar.core.frontend.builtin.layout.zkLayoutStyles
+import zakadabar.core.frontend.resources.ZkIcons
+import zakadabar.core.resources.localizedStrings
+import zakadabar.core.util.after
 
 /**
  * A group of sidebar entries. Supports open and close.

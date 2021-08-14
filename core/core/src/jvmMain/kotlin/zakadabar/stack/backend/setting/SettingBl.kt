@@ -2,7 +2,7 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package zakadabar.stack.backend.setting
+package zakadabar.core.backend.setting
 
 import com.charleskorn.kaml.Yaml
 import kotlinx.coroutines.runBlocking
@@ -10,19 +10,19 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
-import zakadabar.stack.backend.RoutedModule
-import zakadabar.stack.backend.authorize.EmptyAuthorizer
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.backend.persistence.EmptyPersistenceApi
-import zakadabar.stack.backend.route.EmptyRouter
-import zakadabar.stack.backend.server
-import zakadabar.stack.backend.settingsLogger
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.builtin.resources.SettingBo
-import zakadabar.stack.data.builtin.resources.SettingSource
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.descriptor.BoDescriptor
-import zakadabar.stack.setting.SettingProvider
+import zakadabar.core.backend.RoutedModule
+import zakadabar.core.backend.authorize.EmptyAuthorizer
+import zakadabar.core.backend.business.EntityBusinessLogicBase
+import zakadabar.core.backend.persistence.EmptyPersistenceApi
+import zakadabar.core.backend.route.EmptyRouter
+import zakadabar.core.backend.server
+import zakadabar.core.backend.settingsLogger
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.builtin.resources.SettingBo
+import zakadabar.core.data.builtin.resources.SettingSource
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.schema.descriptor.BoDescriptor
+import zakadabar.core.setting.SettingProvider
 import java.nio.file.Files
 import kotlin.collections.set
 import kotlin.reflect.KClass

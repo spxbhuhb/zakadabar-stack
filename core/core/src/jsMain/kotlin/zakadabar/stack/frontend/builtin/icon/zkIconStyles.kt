@@ -1,13 +1,13 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.icon
+package zakadabar.core.frontend.builtin.icon
 
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.resources.css.BoxSizing
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.cssStyleSheet
-import zakadabar.stack.frontend.resources.css.px
+import zakadabar.core.frontend.resources.css.BoxSizing
+import zakadabar.core.frontend.resources.css.ZkCssStyleSheet
+import zakadabar.core.frontend.resources.css.cssStyleSheet
+import zakadabar.core.frontend.resources.css.px
 
 val zkIconStyles by cssStyleSheet(ZkIconStyles())
 

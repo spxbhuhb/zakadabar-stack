@@ -1,13 +1,13 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.audit
+package zakadabar.core.backend.audit
 
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.query.QueryBo
+import zakadabar.core.backend.authorize.Executor
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.action.ActionBo
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.query.QueryBo
 
 /**
  * Creates an audit record of the operation.

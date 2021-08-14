@@ -1,16 +1,16 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.setting
+package zakadabar.core.backend.setting
 
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.KSerializer
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.UNINITIALIZED
-import zakadabar.stack.module.modules
-import zakadabar.stack.setting.SettingProvider
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.UNINITIALIZED
+import zakadabar.core.module.modules
+import zakadabar.core.setting.SettingProvider
 import kotlin.reflect.KProperty
 
 open class Setting<V : BaseBo>(

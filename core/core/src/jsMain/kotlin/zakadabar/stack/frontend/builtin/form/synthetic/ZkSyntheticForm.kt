@@ -1,13 +1,13 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.form.synthetic
+package zakadabar.core.frontend.builtin.form.synthetic
 
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.schema.descriptor.BoDescriptor
-import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.ZkFormStyles
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.schema.descriptor.BoDescriptor
+import zakadabar.core.frontend.builtin.form.ZkForm
+import zakadabar.core.frontend.builtin.form.ZkFormStyles
+import zakadabar.core.frontend.util.plusAssign
 
 class ZkSyntheticForm(
     private val boDescriptor: BoDescriptor

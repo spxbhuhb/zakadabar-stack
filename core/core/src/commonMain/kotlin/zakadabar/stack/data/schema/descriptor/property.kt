@@ -2,16 +2,16 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package zakadabar.stack.data.schema.descriptor
+package zakadabar.core.data.schema.descriptor
 
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.UUID
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.builtin.misc.Secret
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.util.UUID
 
 /**
  * Base class for property BOs. Decided to go with putting [optional] into

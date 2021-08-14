@@ -1,13 +1,13 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.resources.css
+package zakadabar.core.frontend.resources.css
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.resources.ZkTheme
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet.Companion.styleSheets
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.resources.ZkTheme
+import zakadabar.core.frontend.resources.css.ZkCssStyleSheet.Companion.styleSheets
 import kotlin.properties.ReadOnlyProperty
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty

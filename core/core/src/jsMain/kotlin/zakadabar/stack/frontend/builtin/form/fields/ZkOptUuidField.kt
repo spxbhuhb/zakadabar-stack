@@ -2,9 +2,9 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package zakadabar.stack.frontend.builtin.form.fields
+package zakadabar.core.frontend.builtin.form.fields
 
-import zakadabar.stack.util.UUID
+import zakadabar.core.util.UUID
 import kotlin.reflect.KMutableProperty0
 
 open class ZkOptUuidField(

@@ -1,11 +1,11 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.setting
+package zakadabar.core.backend.setting
 
 import com.charleskorn.kaml.Yaml
-import zakadabar.stack.backend.settingsLogger
-import zakadabar.stack.data.builtin.settings.ServerSettingsBo
+import zakadabar.core.backend.settingsLogger
+import zakadabar.core.data.builtin.settings.ServerSettingsBo
 import java.nio.file.Files
 import java.nio.file.Paths
 

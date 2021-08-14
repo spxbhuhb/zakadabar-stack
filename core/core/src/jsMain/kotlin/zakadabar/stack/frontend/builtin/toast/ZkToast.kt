@@ -3,18 +3,18 @@
  */
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-package zakadabar.stack.frontend.builtin.toast
+package zakadabar.core.frontend.builtin.toast
 
 import kotlinx.coroutines.delay
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.icon.ZkIcon
-import zakadabar.stack.frontend.resources.ZkFlavour
-import zakadabar.stack.frontend.resources.ZkIcons
-import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.button.ZkButton
+import zakadabar.core.frontend.builtin.icon.ZkIcon
+import zakadabar.core.frontend.resources.ZkFlavour
+import zakadabar.core.frontend.resources.ZkIcons
+import zakadabar.core.frontend.resources.css.ZkCssStyleRule
+import zakadabar.core.frontend.util.io
+import zakadabar.core.frontend.util.plusAssign
 
 /**
  * A toast to show a message to the user.

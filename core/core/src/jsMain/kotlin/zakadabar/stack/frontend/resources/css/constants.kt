@@ -3,7 +3,7 @@
  */
 @file:Suppress("unused")
 
-package zakadabar.stack.frontend.resources.css
+package zakadabar.core.frontend.resources.css
 
 object BoxSizing {
     val borderBox = CssValueConst("box-sizing", "border-box")

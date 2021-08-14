@@ -1,11 +1,11 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.data
+package zakadabar.core.data
 
 import io.ktor.client.*
 import io.ktor.client.features.cookies.*
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.util.PublicApi
 
 @PublicApi
 open class CommBase {

@@ -14,23 +14,23 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package zakadabar.stack.frontend.builtin.form.fields
+package zakadabar.core.frontend.builtin.form.fields
 
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.get
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.form.ZkFormStyles
-import zakadabar.stack.frontend.builtin.form.zkFormStyles
-import zakadabar.stack.frontend.builtin.icon.ZkIcon
-import zakadabar.stack.frontend.builtin.popup.ZkPopUp
-import zakadabar.stack.frontend.resources.ZkIcons
-import zakadabar.stack.frontend.util.escape
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.frontend.util.minusAssign
-import zakadabar.stack.frontend.util.plusAssign
-import zakadabar.stack.resources.localizedStrings
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.form.ZkFormStyles
+import zakadabar.core.frontend.builtin.form.zkFormStyles
+import zakadabar.core.frontend.builtin.icon.ZkIcon
+import zakadabar.core.frontend.builtin.popup.ZkPopUp
+import zakadabar.core.frontend.resources.ZkIcons
+import zakadabar.core.frontend.util.escape
+import zakadabar.core.frontend.util.io
+import zakadabar.core.frontend.util.minusAssign
+import zakadabar.core.frontend.util.plusAssign
+import zakadabar.core.resources.localizedStrings
 
 abstract class ZkSelectBase<VT>(
     context: ZkFieldContext,

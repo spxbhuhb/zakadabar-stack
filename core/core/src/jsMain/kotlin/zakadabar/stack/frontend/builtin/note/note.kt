@@ -3,10 +3,10 @@
  */
 @file:Suppress("unused")
 
-package zakadabar.stack.frontend.builtin.note
+package zakadabar.core.frontend.builtin.note
 
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.resources.ZkFlavour
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.resources.ZkFlavour
 
 fun notePrimary(title: String, text: String) = ZkNote(ZkFlavour.Primary, title, text)
 fun noteSecondary(title: String, text: String) = ZkNote(ZkFlavour.Secondary, title, text)

@@ -1,9 +1,9 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.resources.css
+package zakadabar.core.frontend.resources.css
 
-import zakadabar.stack.frontend.resources.ZkTheme
+import zakadabar.core.frontend.resources.ZkTheme
 import kotlin.properties.ReadOnlyProperty
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty

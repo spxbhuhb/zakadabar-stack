@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin
+package zakadabar.core.frontend.builtin
 
 import kotlinx.browser.document
 import kotlinx.dom.appendText
@@ -10,20 +10,20 @@ import org.w3c.dom.*
 import org.w3c.dom.css.CSSStyleDeclaration
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventTarget
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.application.executor
-import zakadabar.stack.frontend.builtin.dock.ZkDockedElement
-import zakadabar.stack.frontend.builtin.dock.ZkDockedElementState
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.resources.ZkIconSource
-import zakadabar.stack.frontend.resources.css.CssValueConst
-import zakadabar.stack.frontend.resources.css.ZkCssStyleRule
-import zakadabar.stack.frontend.resources.css.percent
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.frontend.util.minusAssign
-import zakadabar.stack.frontend.util.plusAssign
-import zakadabar.stack.resources.localizedStrings
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.application.executor
+import zakadabar.core.frontend.builtin.dock.ZkDockedElement
+import zakadabar.core.frontend.builtin.dock.ZkDockedElementState
+import zakadabar.core.frontend.builtin.layout.zkLayoutStyles
+import zakadabar.core.frontend.resources.ZkIconSource
+import zakadabar.core.frontend.resources.css.CssValueConst
+import zakadabar.core.frontend.resources.css.ZkCssStyleRule
+import zakadabar.core.frontend.resources.css.percent
+import zakadabar.core.frontend.util.io
+import zakadabar.core.frontend.util.minusAssign
+import zakadabar.core.frontend.util.plusAssign
+import zakadabar.core.resources.localizedStrings
+import zakadabar.core.util.PublicApi
 import kotlin.reflect.KClass
 
 /**

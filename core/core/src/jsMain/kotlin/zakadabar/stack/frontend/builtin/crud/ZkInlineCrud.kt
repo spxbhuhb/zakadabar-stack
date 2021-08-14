@@ -1,18 +1,18 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.crud
+package zakadabar.core.frontend.builtin.crud
 
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityBoCompanion
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.table.ZkTable
-import zakadabar.stack.frontend.resources.css.OverflowY
-import zakadabar.stack.frontend.resources.css.percent
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.frontend.util.newInstance
+import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.entity.EntityBoCompanion
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.ZkElementMode
+import zakadabar.core.frontend.builtin.table.ZkTable
+import zakadabar.core.frontend.resources.css.OverflowY
+import zakadabar.core.frontend.resources.css.percent
+import zakadabar.core.frontend.util.io
+import zakadabar.core.frontend.util.newInstance
 import kotlin.reflect.KClass
 
 /**

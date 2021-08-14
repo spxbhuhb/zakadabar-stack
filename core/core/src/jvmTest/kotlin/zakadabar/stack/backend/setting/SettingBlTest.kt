@@ -1,14 +1,14 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.setting
+package zakadabar.core.backend.setting
 
 import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
-import zakadabar.stack.backend.testing.TestCompanionBase
-import zakadabar.stack.module.modules
+import zakadabar.core.backend.testing.TestCompanionBase
+import zakadabar.core.module.modules
 import kotlin.test.assertEquals
 
 

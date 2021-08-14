@@ -1,16 +1,16 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.module
+package zakadabar.core.module
 
-import zakadabar.stack.log.Logger
-import zakadabar.stack.log.StdOutLogger
-import zakadabar.stack.module.ModuleStartupBucket.Companion.BOOTSTRAP
-import zakadabar.stack.module.ModuleStartupBucket.Companion.DEFAULT
-import zakadabar.stack.module.ModuleStartupBucket.Companion.PUBLISH
-import zakadabar.stack.module.ModuleStartupBucket.Companion.STEADY
-import zakadabar.stack.util.Lock
-import zakadabar.stack.util.use
+import zakadabar.core.log.Logger
+import zakadabar.core.log.StdOutLogger
+import zakadabar.core.module.ModuleStartupBucket.Companion.BOOTSTRAP
+import zakadabar.core.module.ModuleStartupBucket.Companion.DEFAULT
+import zakadabar.core.module.ModuleStartupBucket.Companion.PUBLISH
+import zakadabar.core.module.ModuleStartupBucket.Companion.STEADY
+import zakadabar.core.util.Lock
+import zakadabar.core.util.use
 import kotlin.reflect.KClass
 
 /**

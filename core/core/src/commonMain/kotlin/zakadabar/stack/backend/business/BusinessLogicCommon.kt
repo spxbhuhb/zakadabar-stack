@@ -1,21 +1,21 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.backend.business
+package zakadabar.core.backend.business
 
-import zakadabar.stack.alarm.AlarmSupport
-import zakadabar.stack.backend.RoutedModule
-import zakadabar.stack.backend.audit.Auditor
-import zakadabar.stack.backend.authorize.Authorizer
-import zakadabar.stack.backend.authorize.AuthorizerDelegate
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.route.Router
-import zakadabar.stack.backend.validate.Validator
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.module.CommonModule
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.alarm.AlarmSupport
+import zakadabar.core.backend.RoutedModule
+import zakadabar.core.backend.audit.Auditor
+import zakadabar.core.backend.authorize.Authorizer
+import zakadabar.core.backend.authorize.AuthorizerDelegate
+import zakadabar.core.backend.authorize.Executor
+import zakadabar.core.backend.route.Router
+import zakadabar.core.backend.validate.Validator
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.action.ActionBo
+import zakadabar.core.data.query.QueryBo
+import zakadabar.core.module.CommonModule
+import zakadabar.core.util.PublicApi
 
 /**
  * Base class for entity backends. Supports CRUD, actions and queries.

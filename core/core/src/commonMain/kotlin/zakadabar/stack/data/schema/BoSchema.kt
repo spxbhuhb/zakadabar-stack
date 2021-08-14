@@ -1,20 +1,20 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.data.schema
+package zakadabar.core.data.schema
 
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.descriptor.BoConstraint
-import zakadabar.stack.data.schema.descriptor.BoDescriptor
-import zakadabar.stack.data.schema.descriptor.BoProperty
-import zakadabar.stack.data.schema.entries.*
-import zakadabar.stack.util.PublicApi
-import zakadabar.stack.util.UUID
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.builtin.misc.Secret
+import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.schema.descriptor.BoConstraint
+import zakadabar.core.data.schema.descriptor.BoDescriptor
+import zakadabar.core.data.schema.descriptor.BoProperty
+import zakadabar.core.data.schema.entries.*
+import zakadabar.core.util.PublicApi
+import zakadabar.core.util.UUID
 import kotlin.js.JsName
 import kotlin.reflect.KMutableProperty0
 

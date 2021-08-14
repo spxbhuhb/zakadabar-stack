@@ -1,12 +1,12 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.data.schema
+package zakadabar.core.data.schema
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.schema.descriptor.BoConstraint
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.schema.descriptor.BoConstraint
+import zakadabar.core.util.PublicApi
 import kotlin.reflect.KProperty0 as KProperty01
 
 @Serializable

@@ -1,19 +1,19 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.button
+package zakadabar.core.frontend.builtin.button
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLAnchorElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.resources.ZkFlavour
-import zakadabar.stack.frontend.resources.ZkIconSource
-import zakadabar.stack.frontend.util.plusAssign
-import zakadabar.stack.text.capitalized
+import zakadabar.core.frontend.application.application
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.resources.ZkFlavour
+import zakadabar.core.frontend.resources.ZkIconSource
+import zakadabar.core.frontend.util.plusAssign
+import zakadabar.core.text.capitalized
 
 /**
  * A simple clickable button with label and/or icon.

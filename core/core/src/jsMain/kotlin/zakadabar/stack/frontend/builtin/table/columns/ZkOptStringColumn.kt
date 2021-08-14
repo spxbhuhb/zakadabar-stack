@@ -1,12 +1,12 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.stack.frontend.builtin.table.columns
+package zakadabar.core.frontend.builtin.table.columns
 
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.table.ZkTable
-import zakadabar.stack.resources.localizedStrings
+import zakadabar.core.data.BaseBo
+import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.frontend.builtin.table.ZkTable
+import zakadabar.core.resources.localizedStrings
 import kotlin.reflect.KProperty1
 
 open class ZkOptStringColumn<T : BaseBo>(
