@@ -64,11 +64,10 @@ open class Login : ZkPage(ZkFullScreenLayout) {
      * Called after a successful login.
      */
     open fun onSuccess() {
-        if (::target.isInitialized) {
-            application.changeNavState(target)
-            window.location.reload()
+        window.location.href = if (::target.isInitialized) {
+            application.routing.toLocalUrl(target)
         } else {
-            window.location.pathname = "/"
+            "/"
         }
     }
 

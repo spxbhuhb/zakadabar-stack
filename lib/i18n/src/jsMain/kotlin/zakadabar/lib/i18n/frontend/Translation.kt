@@ -39,7 +39,7 @@ class TranslationForm : ZkForm<TranslationBo>() {
             + section {
                 + bo::id
                 + bo::key
-                + select(bo::locale) { LocaleBo.all().by { it.name } }
+                + bo::locale query { LocaleBo.all().by { it.name } }
                 + bo::value
             }
         }

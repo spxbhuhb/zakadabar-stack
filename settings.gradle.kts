@@ -27,7 +27,7 @@ include("lib:examples")
 include("lib:i18n")
 include("lib:markdown")
 //
-//include("demo:demo-basic")
+include("demo:demo-basic")
 //include("demo:demo-basic-mobile")
 //include("demo:demo-content")
 //include("demo:demo-sandbox")
