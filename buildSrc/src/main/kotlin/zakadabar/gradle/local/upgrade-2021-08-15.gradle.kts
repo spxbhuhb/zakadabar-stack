@@ -18,6 +18,7 @@ abstract class Upgrade20210815 : DefaultTask() {
             val newContent = content
                 .replace("package zakadabar.stack.", "package zakadabar.core.")
                 .replace("import zakadabar.stack.", "import zakadabar.core.")
+                .replace("import zakadabar.core.backend.module", "import zakadabar.core.module.module",)
 
             Files.write(it.toPath(), newContent.toByteArray(), StandardOpenOption.TRUNCATE_EXISTING)
         }
