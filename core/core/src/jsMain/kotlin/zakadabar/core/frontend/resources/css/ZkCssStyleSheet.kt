@@ -52,7 +52,7 @@ open class ZkCssStyleSheet {
     }
 
     open val theme: ZkTheme
-        get() = zakadabar.stack.frontend.resources.theme
+        get() = zakadabar.core.frontend.resources.theme
 
     internal val rules = mutableMapOf<String, ZkCssStyleRule>() // key is property name
 

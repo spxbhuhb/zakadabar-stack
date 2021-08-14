@@ -19,6 +19,7 @@ abstract class Upgrade20210815 : DefaultTask() {
                 .replace("package zakadabar.stack.", "package zakadabar.core.")
                 .replace("import zakadabar.stack.", "import zakadabar.core.")
                 .replace("import zakadabar.core.backend.module", "import zakadabar.core.module.module",)
+                .replace("import zakadabar.core.frontend.builtin.pages.ZkCrudTarget", "import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget",)
 
             Files.write(it.toPath(), newContent.toByteArray(), StandardOpenOption.TRUNCATE_EXISTING)
         }

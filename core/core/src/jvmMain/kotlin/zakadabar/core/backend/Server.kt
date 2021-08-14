@@ -122,7 +122,7 @@ open class Server(
     lateinit var description: ServerDescriptionBo
 
     val modules
-        get() = zakadabar.stack.module.modules
+        get() = zakadabar.core.module.modules
 
     lateinit var ktorServer: NettyApplicationEngine
 
