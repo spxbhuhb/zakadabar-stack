@@ -13,8 +13,8 @@ import zakadabar.lib.accounts.backend.testing.AuthTestCompanionBase
 import zakadabar.lib.accounts.data.*
 import zakadabar.core.server.server
 import zakadabar.core.setting.setting
-import zakadabar.core.data.builtin.misc.Secret
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.Secret
+import zakadabar.core.data.EntityId
 import zakadabar.core.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

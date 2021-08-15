@@ -16,8 +16,8 @@ import zakadabar.lib.accounts.data.AccountPrivateBo
 import zakadabar.core.persistence.exposed.LinkedExposedPaBase
 import zakadabar.core.persistence.exposed.LinkedExposedPaTable
 import zakadabar.core.persistence.exposed.entityId
-import zakadabar.core.data.builtin.misc.Secret
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.Secret
+import zakadabar.core.data.EntityId
 import zakadabar.core.util.BCrypt
 import zakadabar.core.util.after
 

@@ -19,10 +19,10 @@ import zakadabar.core.server.server
 import zakadabar.core.setting.setting
 import zakadabar.core.util.default
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.builtin.ActionStatusBo
-import zakadabar.core.data.builtin.account.AccountPublicBo
-import zakadabar.core.data.builtin.misc.Secret
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.ActionStatus
+import zakadabar.core.authorize.AccountPublicBo
+import zakadabar.core.data.Secret
+import zakadabar.core.data.EntityId
 import zakadabar.core.exception.Unauthorized
 import zakadabar.core.exception.UnauthorizedData
 import zakadabar.core.module.module
@@ -182,7 +182,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     // Actions
     // -------------------------------------------------------------------------
 
-    open fun createAccount(executor: Executor, action: CreateAccount): ActionStatusBo {
+    open fun createAccount(executor: Executor, action: CreateAccount): ActionStatus {
 
         try {
             pa.readByName(action.accountName)
@@ -197,7 +197,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
             roleBl.grantRole(executor, GrantRole(accountPrivate.id, it))
         }
 
-        return ActionStatusBo()
+        return ActionStatus()
     }
 
     /**
@@ -235,7 +235,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
         return accountPrivate
     }
 
-    open fun updateAccountSecure(executor: Executor, action: UpdateAccountSecure): ActionStatusBo {
+    open fun updateAccountSecure(executor: Executor, action: UpdateAccountSecure): ActionStatus {
 
         val account = pa.read(action.accountId)
 
@@ -244,10 +244,10 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
 
         pa.update(account)
 
-        return ActionStatusBo()
+        return ActionStatus()
     }
 
-    open fun updateAccountLocked(executor: Executor, action: UpdateAccountLocked): ActionStatusBo {
+    open fun updateAccountLocked(executor: Executor, action: UpdateAccountLocked): ActionStatus {
 
         val state = statePa.read(action.accountId)
 
@@ -259,16 +259,16 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
 
         statePa.update(state)
 
-        return ActionStatusBo()
+        return ActionStatus()
     }
 
-    open fun passwordChange(executor: Executor, action: PasswordChange): ActionStatusBo {
+    open fun passwordChange(executor: Executor, action: PasswordChange): ActionStatus {
 
         if (executor.accountId == action.accountId) {
             try {
                 authenticate(executor, action.accountId, action.oldPassword.value)
             } catch (ex: Exception) {
-                return ActionStatusBo(false)
+                return ActionStatus(false)
             }
         } else {
             authorize(executor, appRoles.securityOfficer)
@@ -297,7 +297,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
 
         auditor.auditCustom(executor) { "password change accountId=${action.accountId} executorId=${executor.accountId}" }
 
-        return ActionStatusBo()
+        return ActionStatus()
     }
 
     // -------------------------------------------------------------------------

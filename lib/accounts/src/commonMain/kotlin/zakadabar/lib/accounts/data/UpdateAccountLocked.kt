@@ -4,11 +4,11 @@
 package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.core.data.action.ActionBo
-import zakadabar.core.data.action.ActionBoCompanion
-import zakadabar.core.data.builtin.ActionStatusBo
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.data.schema.BoSchema
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.ActionBoCompanion
+import zakadabar.core.data.ActionStatus
+import zakadabar.core.data.EntityId
+import zakadabar.core.schema.BoSchema
 
 /**
  * Updates the locked status of the account. When switching from locked
@@ -23,11 +23,11 @@ class UpdateAccountLocked(
     var accountId : EntityId<AccountPrivateBo>,
     var locked : Boolean
 
-) : ActionBo<ActionStatusBo> {
+) : ActionBo<ActionStatus> {
 
     companion object : ActionBoCompanion(AccountPrivateBo.boNamespace)
 
-    override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), ActionStatus.serializer())
 
     override fun schema() = BoSchema {
         + ::accountId

@@ -12,8 +12,8 @@ import zakadabar.core.authorize.SimpleRoleAuthorizer.Companion.LOGGED_IN
 import zakadabar.core.authorize.SimpleRoleAuthorizerProvider
 import zakadabar.core.server.server
 import zakadabar.core.testing.TestCompanionBase
-import zakadabar.core.data.builtin.misc.Secret
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.Secret
+import zakadabar.core.data.EntityId
 import zakadabar.core.util.PublicApi
 
 /**

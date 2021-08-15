@@ -5,10 +5,10 @@ package zakadabar.lib.accounts.frontend.accounts
 
 import zakadabar.lib.accounts.data.AccountListSecure
 import zakadabar.lib.accounts.data.AccountListSecureEntry
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.frontend.application.target
-import zakadabar.core.frontend.builtin.table.ZkTable
-import zakadabar.core.frontend.resources.css.em
+import zakadabar.core.data.EntityId
+import zakadabar.core.browser.application.target
+import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.resource.css.em
 import zakadabar.core.resource.localizedStrings
 
 class AccountsTableSecure : ZkTable<AccountListSecureEntry>() {

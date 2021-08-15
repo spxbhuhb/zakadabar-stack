@@ -14,8 +14,8 @@ import zakadabar.core.authorize.SimpleRoleAuthorizer
 import zakadabar.core.authorize.SimpleRoleAuthorizer.Companion.LOGGED_IN
 import zakadabar.core.business.EntityBusinessLogicBase
 import zakadabar.core.setting.setting
-import zakadabar.core.data.builtin.ActionStatusBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.ActionStatus
+import zakadabar.core.data.EntityId
 
 open class RoleBl : RoleBlProvider, EntityBusinessLogicBase<RoleBo>(
     boClass = RoleBo::class
@@ -58,14 +58,14 @@ open class RoleBl : RoleBlProvider, EntityBusinessLogicBase<RoleBo>(
     // Actions
     // -------------------------------------------------------------------------
 
-    internal fun grantRole(executor: Executor, grant: GrantRole): ActionStatusBo {
+    internal fun grantRole(executor: Executor, grant: GrantRole): ActionStatus {
         pa.grant(RoleGrantBo(grant.account, grant.role))
-        return ActionStatusBo()
+        return ActionStatus()
     }
 
-    private fun revokeRole(executor: Executor, revoke: RevokeRole): ActionStatusBo {
+    private fun revokeRole(executor: Executor, revoke: RevokeRole): ActionStatus {
         pa.revoke(RoleGrantBo(revoke.account, revoke.role))
-        return ActionStatusBo()
+        return ActionStatus()
     }
 
     // -------------------------------------------------------------------------

@@ -28,11 +28,11 @@ import zakadabar.core.persistence.EmptyPersistenceApi
 import zakadabar.core.server.server
 import zakadabar.core.setting.setting
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.action.ActionBo
-import zakadabar.core.data.builtin.ActionStatusBo
-import zakadabar.core.data.builtin.account.AccountPublicBo
-import zakadabar.core.data.builtin.misc.Secret
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.ActionStatus
+import zakadabar.core.authorize.AccountPublicBo
+import zakadabar.core.data.Secret
+import zakadabar.core.data.EntityId
 import zakadabar.core.exception.Forbidden
 import zakadabar.core.exception.Unauthorized
 import zakadabar.core.exception.UnauthorizedData
@@ -132,11 +132,11 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
     }
 
     @Suppress("UNUSED_PARAMETER") // action is needed here because of route mapping
-    private fun loginAction(executor: Executor, action: LoginAction): ActionStatusBo {
+    private fun loginAction(executor: Executor, action: LoginAction): ActionStatus {
         throw IllegalStateException("reached placeholder action")
     }
 
-    private fun loginAction(call: ApplicationCall, executor: Executor, action: LoginAction): ActionStatusBo {
+    private fun loginAction(call: ApplicationCall, executor: Executor, action: LoginAction): ActionStatus {
 
         val session = login(executor, action)
 
@@ -146,7 +146,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 
         call.sessions.set(session)
 
-        return ActionStatusBo(true)
+        return ActionStatus(true)
     }
 
     fun login(executor: Executor, action: LoginAction): StackSession {
@@ -168,11 +168,11 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
         accountBl.authenticate(executor, accountName, password)
 
     @Suppress("UNUSED_PARAMETER") // action is needed here because of route mapping
-    private fun logoutAction(executor: Executor, action: LogoutAction): ActionStatusBo {
+    private fun logoutAction(executor: Executor, action: LogoutAction): ActionStatus {
         throw IllegalStateException("reached placeholder action")
     }
 
-    private fun logoutAction(call: ApplicationCall, executor: Executor): ActionStatusBo {
+    private fun logoutAction(call: ApplicationCall, executor: Executor): ActionStatus {
 
         val old = call.sessions.get<StackSession>() !!
 
@@ -182,7 +182,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 
         call.sessions.set(StackSession(anonymous.accountId, true, emptyList(), emptyList()))
 
-        return ActionStatusBo(success = true)
+        return ActionStatus(success = true)
 
     }
 

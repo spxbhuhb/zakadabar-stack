@@ -7,7 +7,7 @@ import io.ktor.sessions.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityId
 
 /**
  * Session data class passed to Ktor.

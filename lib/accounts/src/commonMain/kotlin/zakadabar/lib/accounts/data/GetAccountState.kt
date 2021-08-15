@@ -4,9 +4,9 @@
 package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.data.query.QueryBo
-import zakadabar.core.data.query.QueryBoCompanion
+import zakadabar.core.data.EntityId
+import zakadabar.core.data.QueryBo
+import zakadabar.core.data.QueryBoCompanion
 
 /**
  * Get the state of one account. Intended for management, requires

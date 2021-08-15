@@ -5,7 +5,7 @@ package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityId
 
 /**
  * A role grant, used to send the grant to the PA.

@@ -5,11 +5,11 @@ package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.builtin.account.AccountPublicBo
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.data.query.QueryBo
-import zakadabar.core.data.query.QueryBoCompanion
-import zakadabar.core.data.schema.BoSchema
+import zakadabar.core.authorize.AccountPublicBo
+import zakadabar.core.data.EntityId
+import zakadabar.core.data.QueryBo
+import zakadabar.core.data.QueryBoCompanion
+import zakadabar.core.schema.BoSchema
 
 /**
  * Checks if an account name is valid or is it already used.

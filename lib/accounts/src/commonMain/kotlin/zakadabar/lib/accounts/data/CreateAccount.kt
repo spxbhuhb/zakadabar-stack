@@ -5,12 +5,12 @@
 package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.core.data.action.ActionBo
-import zakadabar.core.data.action.ActionBoCompanion
-import zakadabar.core.data.builtin.ActionStatusBo
-import zakadabar.core.data.builtin.misc.Secret
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.data.schema.BoSchema
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.ActionBoCompanion
+import zakadabar.core.data.ActionStatus
+import zakadabar.core.data.Secret
+import zakadabar.core.data.EntityId
+import zakadabar.core.schema.BoSchema
 
 /**
  * Action to create a new account. This is fundamentally different than
@@ -34,9 +34,9 @@ class CreateAccount(
 
     var roles: List<EntityId<RoleBo>>
 
-) : ActionBo<ActionStatusBo> {
+) : ActionBo<ActionStatus> {
 
-    override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), ActionStatus.serializer())
 
     companion object : ActionBoCompanion(AccountPrivateBo.boNamespace)
 

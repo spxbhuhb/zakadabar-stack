@@ -8,13 +8,13 @@ import kotlinx.coroutines.channels.Channel
 import zakadabar.lib.accounts.data.LogoutAction
 import zakadabar.lib.accounts.data.SessionBo
 import zakadabar.lib.accounts.frontend.login.RenewLoginDialog
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.frontend.application.ZkExecutor
-import zakadabar.core.frontend.application.ZkSessionManager
-import zakadabar.core.frontend.application.application
-import zakadabar.core.frontend.builtin.modal.ZkMessageDialog
-import zakadabar.core.frontend.util.io
-import zakadabar.core.frontend.util.log
+import zakadabar.core.data.EntityId
+import zakadabar.core.browser.application.ZkExecutor
+import zakadabar.core.browser.application.ZkSessionManager
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.modal.ZkMessageDialog
+import zakadabar.core.browser.util.io
+import zakadabar.core.browser.util.log
 import zakadabar.core.resource.localizedStrings
 
 /**

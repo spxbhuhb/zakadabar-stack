@@ -4,10 +4,10 @@
 package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.core.data.action.ActionBo
-import zakadabar.core.data.action.ActionBoCompanion
-import zakadabar.core.data.builtin.ActionStatusBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.ActionBoCompanion
+import zakadabar.core.data.ActionStatus
+import zakadabar.core.data.EntityId
 
 /**
  * Grant a role for an account.
@@ -21,9 +21,9 @@ class GrantRole(
     var account : EntityId<AccountPrivateBo>,
     var role : EntityId<RoleBo>
 
-) : ActionBo<ActionStatusBo> {
+) : ActionBo<ActionStatus> {
 
-    override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), ActionStatus.serializer())
 
     companion object : ActionBoCompanion(RoleBo.boNamespace)
 

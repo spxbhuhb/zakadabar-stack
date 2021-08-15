@@ -4,7 +4,7 @@
 package zakadabar.lib.accounts.frontend.roles
 
 import zakadabar.lib.accounts.data.RoleBo
-import zakadabar.core.frontend.builtin.crud.ZkCrudTarget
+import zakadabar.core.browser.crud.ZkCrudTarget
 
 class Roles : ZkCrudTarget<RoleBo>() {
 

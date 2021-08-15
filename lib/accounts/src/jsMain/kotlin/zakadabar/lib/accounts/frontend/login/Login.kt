@@ -9,17 +9,17 @@
 package zakadabar.lib.accounts.frontend.login
 
 import kotlinx.browser.window
-import zakadabar.core.frontend.application.ZkAppRouting
-import zakadabar.core.frontend.application.application
-import zakadabar.core.frontend.builtin.layout.ZkFullScreenLayout
-import zakadabar.core.frontend.builtin.pages.ZkPage
-import zakadabar.core.frontend.builtin.titlebar.zkTitleBarStyles
-import zakadabar.core.frontend.resources.css.AlignItems
-import zakadabar.core.frontend.resources.css.px
-import zakadabar.core.frontend.resources.css.vh
-import zakadabar.core.frontend.resources.css.vw
-import zakadabar.core.frontend.resources.theme
-import zakadabar.core.frontend.util.marginBottom
+import zakadabar.core.browser.application.ZkAppRouting
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.layout.ZkFullScreenLayout
+import zakadabar.core.browser.page.ZkPage
+import zakadabar.core.browser.titlebar.zkTitleBarStyles
+import zakadabar.core.resource.css.AlignItems
+import zakadabar.core.resource.css.px
+import zakadabar.core.resource.css.vh
+import zakadabar.core.resource.css.vw
+import zakadabar.core.resource.theme
+import zakadabar.core.browser.util.marginBottom
 import zakadabar.core.resource.localizedStrings
 
 /**

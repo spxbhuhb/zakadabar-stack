@@ -4,8 +4,8 @@
 package zakadabar.lib.accounts.frontend.roles
 
 import zakadabar.lib.accounts.data.RoleBo
-import zakadabar.core.frontend.builtin.form.ZkForm
-import zakadabar.core.frontend.builtin.form.ZkFormStyles
+import zakadabar.core.browser.form.ZkForm
+import zakadabar.core.browser.form.ZkFormStyles
 import zakadabar.core.resource.localizedStrings
 
 class Form : ZkForm<RoleBo>() {

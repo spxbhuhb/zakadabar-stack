@@ -4,8 +4,8 @@
 package zakadabar.lib.accounts.frontend.roles
 
 import zakadabar.lib.accounts.data.RoleBo
-import zakadabar.core.frontend.application.target
-import zakadabar.core.frontend.builtin.table.ZkTable
+import zakadabar.core.browser.application.target
+import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.resource.localizedStrings
 
 class Table : ZkTable<RoleBo>() {

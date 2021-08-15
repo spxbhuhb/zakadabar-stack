@@ -4,12 +4,12 @@
 package zakadabar.lib.accounts.frontend.accounts
 
 import zakadabar.lib.accounts.data.AccountPrivateBo
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.frontend.application.executor
-import zakadabar.core.frontend.builtin.ZkElementMode
-import zakadabar.core.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.core.frontend.builtin.pages.ZkPage
-import zakadabar.core.frontend.util.io
+import zakadabar.core.data.EntityId
+import zakadabar.core.browser.application.executor
+import zakadabar.core.browser.ZkElementMode
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.page.ZkPage
+import zakadabar.core.browser.util.io
 
 /**
  * Page for the users to view/change their own account information.

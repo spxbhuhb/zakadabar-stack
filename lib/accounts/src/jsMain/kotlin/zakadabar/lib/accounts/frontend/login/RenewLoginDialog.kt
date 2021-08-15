@@ -5,16 +5,16 @@ package zakadabar.lib.accounts.frontend.login
 
 import kotlinx.browser.window
 import kotlinx.coroutines.channels.Channel
-import zakadabar.core.frontend.application.application
-import zakadabar.core.frontend.application.executor
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.form.ZkFormStyles
-import zakadabar.core.frontend.builtin.modal.zkModalStyles
-import zakadabar.core.frontend.builtin.titlebar.ZkLocalTitleBar
-import zakadabar.core.frontend.resources.css.AlignItems
-import zakadabar.core.frontend.util.io
-import zakadabar.core.frontend.util.marginBottom
-import zakadabar.core.frontend.util.plusAssign
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.application.executor
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.form.ZkFormStyles
+import zakadabar.core.browser.modal.zkModalStyles
+import zakadabar.core.browser.titlebar.ZkLocalTitleBar
+import zakadabar.core.resource.css.AlignItems
+import zakadabar.core.browser.util.io
+import zakadabar.core.browser.util.marginBottom
+import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.localizedStrings
 
 /**

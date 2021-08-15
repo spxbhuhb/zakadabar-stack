@@ -15,7 +15,7 @@ import zakadabar.core.authorize.AccountBlProvider
 import zakadabar.core.server.ktor.KtorExecutor
 import zakadabar.core.module.module
 import zakadabar.core.server.server
-import zakadabar.core.data.builtin.misc.Secret
+import zakadabar.core.data.Secret
 
 class SessionAuthenticationProvider internal constructor(configuration: Configuration) : AuthenticationProvider(configuration) {
     class Configuration internal constructor(name: String?) : AuthenticationProvider.Configuration(name)

@@ -14,7 +14,7 @@ import zakadabar.lib.accounts.data.AccountPrivateBo
 import zakadabar.core.persistence.exposed.ExposedPaBase
 import zakadabar.core.persistence.exposed.ExposedPaTable
 import zakadabar.core.persistence.exposed.entityId
-import zakadabar.core.data.builtin.account.AccountPublicBo
+import zakadabar.core.authorize.AccountPublicBo
 
 open class AccountPrivateExposedPa(
     table: AccountPrivateExposedTable = AccountPrivateExposedTableCommon

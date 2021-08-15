@@ -8,10 +8,10 @@ import zakadabar.core.authorize.appRoles
 import zakadabar.core.authorize.Executor
 import zakadabar.core.authorize.SimpleRoleAuthorizer
 import zakadabar.core.authorize.authorize
-import zakadabar.core.data.action.ActionBo
-import zakadabar.core.data.builtin.misc.Secret
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.data.query.QueryBo
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.Secret
+import zakadabar.core.data.EntityId
+import zakadabar.core.data.QueryBo
 import zakadabar.core.exception.Forbidden
 
 /**

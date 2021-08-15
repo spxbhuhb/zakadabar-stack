@@ -4,14 +4,14 @@
 package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.core.data.action.ActionBo
-import zakadabar.core.data.action.ActionBoCompanion
-import zakadabar.core.data.builtin.ActionStatusBo
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.ActionBoCompanion
+import zakadabar.core.data.ActionStatus
 
 @Serializable
-class LogoutAction : ActionBo<ActionStatusBo> {
+class LogoutAction : ActionBo<ActionStatus> {
 
-    override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), ActionStatus.serializer())
 
     companion object : ActionBoCompanion(SessionBo.boNamespace)
 

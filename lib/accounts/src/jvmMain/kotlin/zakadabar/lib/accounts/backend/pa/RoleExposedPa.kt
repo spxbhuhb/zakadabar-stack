@@ -16,8 +16,8 @@ import zakadabar.core.persistence.exposed.ExposedPaTable
 import zakadabar.core.persistence.exposed.Sql
 import zakadabar.core.persistence.exposed.entityId
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.builtin.account.AccountPublicBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.authorize.AccountPublicBo
+import zakadabar.core.data.EntityId
 
 open class RoleExposedPa(
     open val accountTable: AccountPrivateExposedTable = AccountPrivateExposedTableCommon,

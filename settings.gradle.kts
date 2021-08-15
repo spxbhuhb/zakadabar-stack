@@ -20,7 +20,7 @@ include("core:core")
 //include("exp:email")
 //include("exp:schedule")
 //
-//include("lib:accounts")
+include("lib:accounts")
 //include("lib:bender")
 //include("lib:blobs")
 //include("lib:examples")
