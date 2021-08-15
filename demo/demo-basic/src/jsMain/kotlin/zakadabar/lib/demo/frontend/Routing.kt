@@ -7,7 +7,7 @@ package zakadabar.lib.demo.frontend
 import zakadabar.lib.demo.frontend.pages.DemoCrud
 import zakadabar.lib.examples.frontend.crud.BuiltinCrud
 import zakadabar.lib.examples.frontend.crud.ExampleReferenceCrud
-import zakadabar.stack.frontend.application.ZkAppRouting
+import zakadabar.core.browser.application.ZkAppRouting
 
 class Routing : ZkAppRouting(DefaultLayout, Home) {
 

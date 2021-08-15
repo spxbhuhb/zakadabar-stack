@@ -14,10 +14,10 @@ import zakadabar.lib.demo.frontend.pages.DemoCrud
 import zakadabar.lib.demo.resources.strings
 import zakadabar.lib.i18n.frontend.LocaleCrud
 import zakadabar.lib.i18n.frontend.TranslationCrud
-import zakadabar.stack.authorize.appRoles
-import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.resources.localized
+import zakadabar.core.authorize.appRoles
+import zakadabar.core.browser.sidebar.ZkSideBar
+import zakadabar.core.browser.util.io
+import zakadabar.core.resource.localized
 
 class SideBar : ZkSideBar() {
 

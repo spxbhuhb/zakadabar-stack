@@ -7,7 +7,7 @@ import zakadabar.lib.blobs.backend.BlobExposedPa
 import zakadabar.lib.blobs.backend.BlobExposedTable
 import zakadabar.lib.demo.data.DemoBlob
 import zakadabar.lib.demo.data.DemoBo
-import zakadabar.stack.backend.util.default
+import zakadabar.core.util.default
 
 class DemoBlobExposedPa : BlobExposedPa<DemoBlob, DemoBo>(
     table = DemoBlobExposedPaTable,

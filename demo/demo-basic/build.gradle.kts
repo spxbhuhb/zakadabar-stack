@@ -15,13 +15,14 @@ plugins {
     signing
 
     id("zk-sync-build-info") apply false
+    id("upgrade-2021-08-15")
 }
 
 group = "hu.simplexion.zakadabar"
 version = Versions.zakadabar
 
 application {
-    mainClass.set("zakadabar.stack.backend.ServerKt")
+    mainClass.set("zakadabar.core.server.ServerKt")
 }
 
 noArg {

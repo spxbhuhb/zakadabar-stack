@@ -6,7 +6,7 @@ package zakadabar.lib.demo.frontend
 
 import zakadabar.cookbook.sqlite.bundle.ExampleBundleCrud
 import zakadabar.lib.demo.frontend.pages.DemoCrud
-import zakadabar.stack.frontend.application.ZkAppRouting
+import zakadabar.core.browser.application.ZkAppRouting
 
 class Routing : ZkAppRouting(DefaultLayout, Home) {
 

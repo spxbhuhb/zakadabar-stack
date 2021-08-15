@@ -7,9 +7,9 @@ import zakadabar.lib.content.data.FolderQuery
 import zakadabar.lib.content.data.NavEntry
 import zakadabar.lib.content.data.NavQuery
 import zakadabar.lib.i18n.data.LocaleBo
-import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.resources.css.px
-import zakadabar.stack.frontend.util.io
+import zakadabar.core.browser.page.ZkPage
+import zakadabar.core.resource.css.px
+import zakadabar.core.browser.util.io
 
 class ContentNavTest : ZkPage() {
 

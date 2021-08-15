@@ -22,8 +22,8 @@ import zakadabar.lib.demo.backend.DemoExposedPaGen
 import zakadabar.lib.demo.backend.DemoExposedTableGen
 import zakadabar.lib.i18n.backend.LocaleExposedTableGen
 import zakadabar.lib.i18n.backend.TranslationExposedTableGen
-import zakadabar.stack.data.CommBase
-import zakadabar.stack.util.default
+import zakadabar.core.comm.CommBase
+import zakadabar.core.util.default
 import java.sql.Connection
 import java.sql.DriverManager
 

@@ -4,7 +4,7 @@
 package zakadabar.lib.demo.backend
 
 import zakadabar.lib.demo.data.DemoBo
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
+import zakadabar.core.business.EntityBusinessLogicBase
 
 /**
  * Business Logic for DemoBo.

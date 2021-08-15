@@ -5,7 +5,7 @@
 
 package zakadabar.lib.demo.resources
 
-import zakadabar.stack.resources.ZkBuiltinStrings
+import zakadabar.core.resource.ZkBuiltinStrings
 
 internal val strings = DemoStrings()
 

@@ -6,12 +6,12 @@ package zakadabar.lib.demo.frontend.pages
 import zakadabar.lib.blobs.frontend.image.ZkImagesField
 import zakadabar.lib.demo.data.DemoBlob
 import zakadabar.lib.demo.data.DemoBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.frontend.application.target
-import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
-import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.table.ZkTable
-import zakadabar.stack.resources.localized
+import zakadabar.core.data.EntityId
+import zakadabar.core.browser.application.target
+import zakadabar.core.browser.crud.ZkCrudTarget
+import zakadabar.core.browser.form.ZkForm
+import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.resource.localized
 
 /**
  * CRUD target for [DemoBo].

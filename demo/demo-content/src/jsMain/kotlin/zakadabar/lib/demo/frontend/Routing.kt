@@ -6,7 +6,7 @@ package zakadabar.lib.demo.frontend
 
 import zakadabar.lib.demo.frontend.pages.ContentNavTest
 import zakadabar.lib.demo.frontend.pages.TestCrud
-import zakadabar.stack.frontend.application.ZkAppRouting
+import zakadabar.core.browser.application.ZkAppRouting
 
 class Routing : ZkAppRouting(DefaultLayout, Home) {
 
