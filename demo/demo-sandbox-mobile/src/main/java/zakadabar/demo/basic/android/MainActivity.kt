@@ -14,7 +14,7 @@ import zakadabar.android.jdbc.zklite.connectSqlite
 import zakadabar.android.jdbc.zklite.databasesPath
 import zakadabar.cookbook.entity.builtin.ExamplePa
 import zakadabar.cookbook.sqlite.bundle.ExampleBundle
-import zakadabar.lib.accounts.backend.pa.AccountPrivateExposedTableCommon
+import zakadabar.lib.accounts.persistence.AccountPrivateExposedTableCommon
 import zakadabar.lib.blobs.sqlite.deployBundle
 import zakadabar.lib.demo.backend.DemoBlobExposedPa
 import zakadabar.lib.demo.backend.DemoBlobExposedPaTable

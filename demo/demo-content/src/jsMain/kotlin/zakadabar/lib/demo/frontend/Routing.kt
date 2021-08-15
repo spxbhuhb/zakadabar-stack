@@ -15,7 +15,7 @@ class Routing : ZkAppRouting(DefaultLayout, Home) {
         + TestCrud()
         + ContentNavTest()
 
-        zakadabar.lib.accounts.frontend.install(this)
+        zakadabar.lib.accounts.browser.install(this)
         zakadabar.lib.i18n.frontend.install(this)
         zakadabar.lib.content.frontend.browser.install(this)
     }

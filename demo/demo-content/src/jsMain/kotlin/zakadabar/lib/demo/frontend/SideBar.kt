@@ -5,10 +5,10 @@ package zakadabar.lib.demo.frontend
 
 import kotlinx.browser.window
 import zakadabar.lib.accounts.data.LogoutAction
-import zakadabar.lib.accounts.frontend.accounts.Account
-import zakadabar.lib.accounts.frontend.accounts.AccountSecure
-import zakadabar.lib.accounts.frontend.login.Login
-import zakadabar.lib.accounts.frontend.roles.Roles
+import zakadabar.lib.accounts.browser.accounts.Account
+import zakadabar.lib.accounts.browser.accounts.AccountSecure
+import zakadabar.lib.accounts.browser.login.Login
+import zakadabar.lib.accounts.browser.roles.Roles
 import zakadabar.lib.content.frontend.browser.ContentOverview
 import zakadabar.lib.content.frontend.browser.StatusCrud
 import zakadabar.lib.content.resources.contentStrings

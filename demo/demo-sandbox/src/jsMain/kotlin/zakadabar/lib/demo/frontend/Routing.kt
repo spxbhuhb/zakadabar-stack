@@ -16,7 +16,7 @@ class Routing : ZkAppRouting(DefaultLayout, Home) {
 
         + ExampleBundleCrud()
 
-        zakadabar.lib.accounts.frontend.install(this)
+        zakadabar.lib.accounts.browser.install(this)
         zakadabar.lib.i18n.frontend.install(this)
     }
 

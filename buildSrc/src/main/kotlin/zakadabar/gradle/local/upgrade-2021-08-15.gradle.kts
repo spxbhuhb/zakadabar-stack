@@ -46,8 +46,15 @@ abstract class Upgrade20210815 : DefaultTask() {
         "import zakadabar.core.browser.form.structure" to "import zakadabar.core.browser.form",
         "import zakadabar.core.browser.layout.slider" to "import zakadabar.core.browser.slider",
         "import zakadabar.core.browser.layout.tabcontainer" to "import zakadabar.core.browser.tabcontainer",
-        "import zakadabar.core.browser.pages" to "import zakadabar.core.browser.page"
-    )
+        "import zakadabar.core.browser.pages" to "import zakadabar.core.browser.page",
+        "import zakadabar.lib.accounts.frontend" to "import zakadabar.lib.accounts.browser",
+        "import zakadabar.lib.accounts.data.AuthHttpClient" to "import zakadabar.lib.accounts.comm.AuthHttpClient",
+        "import zakadabar.lib.accounts.backend.bl" to "import zakadabar.lib.accounts.business",
+        "import zakadabar.lib.accounts.backend.pa" to "import zakadabar.lib.accounts.persistence",
+        "import zakadabar.lib.accounts.backend.testing" to "import zakadabar.lib.accounts.testing",
+        "import zakadabar.lib.accounts.server.ktor" to "import zakadabar.lib.accounts.server.ktor",
+
+        )
 
     @TaskAction
     private fun upgrade() {

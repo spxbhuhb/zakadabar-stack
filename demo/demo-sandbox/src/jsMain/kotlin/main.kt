@@ -15,7 +15,7 @@ fun main() {
 
     application = ZkApplication()
     
-    zakadabar.lib.accounts.frontend.install(application)
+    zakadabar.lib.accounts.browser.install(application)
     zakadabar.lib.i18n.frontend.install(application)
 
     io {
