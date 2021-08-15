@@ -5,11 +5,11 @@ package zakadabar.lib.examples.frontend.form
 
 import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.frontend.crud.BuiltinForm
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.ZkElementMode
-import zakadabar.core.frontend.builtin.pages.zkPageStyles
-import zakadabar.core.frontend.util.io
+import zakadabar.core.data.EntityId
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.ZkElementMode
+import zakadabar.core.browser.page.zkPageStyles
+import zakadabar.core.browser.util.io
 import zakadabar.core.util.PublicApi
 
 @PublicApi // example code

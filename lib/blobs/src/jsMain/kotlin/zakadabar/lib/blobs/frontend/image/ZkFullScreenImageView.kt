@@ -6,10 +6,10 @@ package zakadabar.lib.blobs.frontend.image
 import kotlinx.browser.document
 import org.w3c.dom.events.KeyboardEvent
 import zakadabar.lib.blobs.frontend.blobStyles
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.ZkElementState
-import zakadabar.core.frontend.builtin.button.ZkButton
-import zakadabar.core.frontend.resources.ZkIcons
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.ZkElementState
+import zakadabar.core.browser.button.ZkButton
+import zakadabar.core.resource.ZkIcons
 
 class ZkFullScreenImageView(
     val url: String,

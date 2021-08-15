@@ -18,6 +18,7 @@ plugins {
     id("zk-sync-build-info") apply false
     id("site-compose-app") apply false
     id("site-docker") apply false
+    id("upgrade-2021-08-15")
 }
 
 group = "hu.simplexion.zakadabar"

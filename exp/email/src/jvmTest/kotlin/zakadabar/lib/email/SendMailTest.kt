@@ -8,8 +8,8 @@ import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
 import org.subethamail.wiser.Wiser
-import zakadabar.stack.backend.testing.TestCompanionBase
-import zakadabar.stack.module.modules
+import zakadabar.core.testing.TestCompanionBase
+import zakadabar.core.module.modules
 import javax.mail.Part
 import javax.mail.internet.MimeMultipart
 import javax.mail.util.SharedByteArrayInputStream

@@ -14,11 +14,11 @@ import zakadabar.lib.schedule.SchedulerModule
 import zakadabar.lib.schedule.api.Job
 import zakadabar.lib.schedule.api.JobStatus
 import zakadabar.lib.schedule.api.Subscription
-import zakadabar.stack.backend.server
-import zakadabar.stack.backend.testing.TestCompanionBase
-import zakadabar.stack.module.modules
-import zakadabar.stack.util.UUID
-import zakadabar.stack.util.default
+import zakadabar.core.server.server
+import zakadabar.core.testing.TestCompanionBase
+import zakadabar.core.module.modules
+import zakadabar.core.util.UUID
+import zakadabar.core.util.default
 import kotlin.test.assertEquals
 
 class DispatcherTest {

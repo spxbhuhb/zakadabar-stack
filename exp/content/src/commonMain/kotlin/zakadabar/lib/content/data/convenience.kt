@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.content.data
 
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.util.PublicApi
 
 /**
  * Gets the first text block of a given stereotype (or null if no such

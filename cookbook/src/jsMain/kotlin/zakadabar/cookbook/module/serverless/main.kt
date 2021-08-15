@@ -4,7 +4,7 @@
 package zakadabar.cookbook.module.serverless
 
 import zakadabar.cookbook.module.ExampleModule2
-import zakadabar.stack.module.modules
+import zakadabar.core.module.modules
 
 val serverless = Serverless()
 

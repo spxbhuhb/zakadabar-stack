@@ -5,7 +5,7 @@ package zakadabar.lib.email
 
 import org.jetbrains.exposed.sql.`java-time`.timestamp
 import zakadabar.lib.accounts.backend.pa.AccountPrivateExposedTableCommon
-import zakadabar.stack.backend.exposed.ExposedPaTable
+import zakadabar.core.persistence.exposed.ExposedPaTable
 
 open class MailTable(
     tableName : String = "mail"

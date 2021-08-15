@@ -9,9 +9,9 @@ import zakadabar.cookbook.entity.builtin.ExampleTable
 import zakadabar.cookbook.sqlite.bundle.ExampleBundle
 import zakadabar.cookbook.sqlite.bundle.persistence.ExampleBundlePa
 import zakadabar.lib.blobs.sqlite.buildBundle
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.util.UUID
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.EntityBusinessLogicBase
+import zakadabar.core.util.UUID
 
 class ExampleBundleBl : EntityBusinessLogicBase<ExampleBundle>(
     boClass = ExampleBundle::class

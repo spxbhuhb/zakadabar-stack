@@ -3,12 +3,12 @@
  */
 package zakadabar.cookbook.business.action.loggedin
 
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
-import zakadabar.stack.backend.business.BusinessLogicCommon
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.builtin.LongValue
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.authorize.Executor
+import zakadabar.core.authorize.SimpleRoleAuthorizer
+import zakadabar.core.business.BusinessLogicCommon
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.LongValue
+import zakadabar.core.util.PublicApi
 
 @PublicApi
 class ActionSraBl : BusinessLogicCommon<BaseBo>() {

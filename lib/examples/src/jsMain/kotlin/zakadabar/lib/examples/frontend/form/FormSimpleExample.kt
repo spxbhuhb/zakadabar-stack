@@ -6,13 +6,13 @@ package zakadabar.lib.examples.frontend.form
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.examples.data.SimpleExampleBo
 import zakadabar.lib.examples.resources.strings
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.ZkElementMode
-import zakadabar.core.frontend.builtin.form.ZkForm
-import zakadabar.core.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.core.frontend.builtin.toast.toastSuccess
-import zakadabar.core.frontend.util.default
+import zakadabar.core.data.EntityId
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.ZkElementMode
+import zakadabar.core.browser.form.ZkForm
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.toast.toastSuccess
+import zakadabar.core.browser.util.default
 import zakadabar.core.resource.localized
 
 class SimpleExampleForm : ZkForm<SimpleExampleBo>() {

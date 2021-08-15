@@ -15,8 +15,8 @@ import zakadabar.core.authorize.Executor
 import zakadabar.core.business.EntityBusinessLogicBase
 import zakadabar.core.server.ktor.KtorEntityRouter
 import zakadabar.core.server.ktor.executor
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityId
 import zakadabar.core.route.BusinessLogicRouter
 import zakadabar.core.util.PublicApi
 import zakadabar.core.util.after

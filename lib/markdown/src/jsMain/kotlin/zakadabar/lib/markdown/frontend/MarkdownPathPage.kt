@@ -4,8 +4,8 @@
 package zakadabar.lib.markdown.frontend
 
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
-import zakadabar.core.frontend.builtin.pages.ZkPathPage
-import zakadabar.core.frontend.util.io
+import zakadabar.core.browser.page.ZkPathPage
+import zakadabar.core.browser.util.io
 
 /**
  * Displays markdown files of a file hierarchy, one by one.

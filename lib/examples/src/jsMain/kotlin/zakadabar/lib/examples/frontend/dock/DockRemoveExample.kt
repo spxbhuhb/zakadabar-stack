@@ -4,11 +4,11 @@
 package zakadabar.lib.examples.frontend.dock
 
 import org.w3c.dom.HTMLElement
-import zakadabar.core.frontend.application.application
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.button.buttonDanger
-import zakadabar.core.frontend.builtin.button.buttonSecondary
-import zakadabar.core.frontend.resources.ZkIcons
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.button.buttonDanger
+import zakadabar.core.browser.button.buttonSecondary
+import zakadabar.core.resource.ZkIcons
 
 class DockRemoveExample(
     element: HTMLElement

@@ -6,17 +6,17 @@ package zakadabar.lib.schedule.business
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import zakadabar.lib.schedule.api.*
-import zakadabar.stack.backend.RoutedModule
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.ActionBusinessLogicWrapper
-import zakadabar.stack.backend.business.BusinessLogicCommon
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.builtin.ActionStatusBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.module.modules
-import zakadabar.stack.util.Lock
-import zakadabar.stack.util.fork
-import zakadabar.stack.util.use
+import zakadabar.core.route.RoutedModule
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.ActionBusinessLogicWrapper
+import zakadabar.core.business.BusinessLogicCommon
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.ActionStatus
+import zakadabar.core.data.EntityId
+import zakadabar.core.module.modules
+import zakadabar.core.util.Lock
+import zakadabar.core.util.fork
+import zakadabar.core.util.use
 import kotlin.reflect.full.createType
 
 open class WorkerBl : BusinessLogicCommon<BaseBo>(), RoutedModule {
@@ -34,7 +34,7 @@ open class WorkerBl : BusinessLogicCommon<BaseBo>(), RoutedModule {
 
     var job: kotlinx.coroutines.Job? = null
 
-    open fun pushJob(executor: Executor, action: PushJob): ActionStatusBo {
+    open fun pushJob(executor: Executor, action: PushJob): ActionStatus {
         val module = modules.firstOrNull<BusinessLogicCommon<*>> { it.namespace == action.actionNamespace }
             ?: throw NotImplementedError("no module found for namespace '${action.actionNamespace}'")
 
@@ -48,10 +48,10 @@ open class WorkerBl : BusinessLogicCommon<BaseBo>(), RoutedModule {
             }
         }
 
-        return ActionStatusBo()
+        return ActionStatus()
     }
 
-    open fun requestJobCancel(executor: Executor, requestJobCancel: RequestJobCancel): ActionStatusBo {
+    open fun requestJobCancel(executor: Executor, requestJobCancel: RequestJobCancel): ActionStatus {
         TODO("Not yet implemented")
     }
 

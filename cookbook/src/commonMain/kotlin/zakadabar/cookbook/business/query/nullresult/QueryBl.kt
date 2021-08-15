@@ -3,11 +3,11 @@
  */
 package zakadabar.cookbook.business.query.nullresult
 
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.BusinessLogicCommon
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.builtin.StringValue
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.BusinessLogicCommon
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.StringValue
+import zakadabar.core.util.PublicApi
 
 @PublicApi
 class QueryBl : BusinessLogicCommon<BaseBo>() {

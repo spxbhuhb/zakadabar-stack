@@ -7,17 +7,17 @@ import zakadabar.cookbook.Recipe
 import zakadabar.lib.markdown.frontend.MarkdownView
 import zakadabar.site.cookbook.GetContent
 import zakadabar.site.frontend.SiteMarkdownContext
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.builtin.pages.ZkPathPage
-import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.builtin.table.ZkTable
-import zakadabar.stack.frontend.resources.css.OverflowY
-import zakadabar.stack.frontend.resources.css.em
-import zakadabar.stack.frontend.resources.css.fr
-import zakadabar.stack.frontend.resources.css.percent
-import zakadabar.stack.frontend.util.io
+import zakadabar.core.data.EntityId
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.page.ZkPathPage
+import zakadabar.core.browser.page.zkPageStyles
+import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.resource.css.OverflowY
+import zakadabar.core.resource.css.em
+import zakadabar.core.resource.css.fr
+import zakadabar.core.resource.css.percent
+import zakadabar.core.browser.util.io
 
 object Cookbook : ZkPathPage(cssClass = zkPageStyles.fixed) {
 

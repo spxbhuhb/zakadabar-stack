@@ -3,9 +3,9 @@
  */
 package zakadabar.cookbook.module.optional
 
-import zakadabar.stack.module.CommonModule
-import zakadabar.stack.module.module
-import zakadabar.stack.module.optionalModule
+import zakadabar.core.module.CommonModule
+import zakadabar.core.module.module
+import zakadabar.core.module.optionalModule
 
 class ConsumerModule : CommonModule {
 

@@ -5,13 +5,13 @@ package zakadabar.lib.schedule.business
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.trySendBlocking
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.BusinessLogicCommon
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.builtin.IntValue
-import zakadabar.stack.util.Lock
-import zakadabar.stack.util.PublicApi
-import zakadabar.stack.util.use
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.BusinessLogicCommon
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.IntValue
+import zakadabar.core.util.Lock
+import zakadabar.core.util.PublicApi
+import zakadabar.core.util.use
 
 @PublicApi
 class ActionBl : BusinessLogicCommon<BaseBo>() {

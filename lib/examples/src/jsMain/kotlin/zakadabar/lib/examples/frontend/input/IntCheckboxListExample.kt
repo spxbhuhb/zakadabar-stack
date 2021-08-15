@@ -4,16 +4,16 @@
 package zakadabar.lib.examples.frontend.input
 
 import org.w3c.dom.HTMLElement
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.button.buttonSecondary
-import zakadabar.core.frontend.builtin.input.ZkCheckboxList
-import zakadabar.core.frontend.builtin.input.ZkCheckboxListItem
-import zakadabar.core.frontend.builtin.note.ZkNote
-import zakadabar.core.frontend.builtin.note.noteSecondary
-import zakadabar.core.frontend.builtin.note.noteSuccess
-import zakadabar.core.frontend.builtin.pages.zkPageStyles
-import zakadabar.core.frontend.resources.ZkFlavour
-import zakadabar.core.frontend.util.marginRight
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.button.buttonSecondary
+import zakadabar.core.browser.input.ZkCheckboxList
+import zakadabar.core.browser.input.ZkCheckboxListItem
+import zakadabar.core.browser.note.ZkNote
+import zakadabar.core.browser.note.noteSecondary
+import zakadabar.core.browser.note.noteSuccess
+import zakadabar.core.browser.page.zkPageStyles
+import zakadabar.core.resource.ZkFlavour
+import zakadabar.core.browser.util.marginRight
 import zakadabar.core.resource.localizedStrings
 
 /**

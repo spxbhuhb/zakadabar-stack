@@ -3,8 +3,8 @@
  */
 package zakadabar.site.frontend.resources
 
-import zakadabar.stack.frontend.resources.ZkColors
-import zakadabar.stack.frontend.resources.css.*
+import zakadabar.core.resource.ZkColors
+import zakadabar.core.resource.css.*
 
 val landingStyles by cssStyleSheet(LandingStyles())
 

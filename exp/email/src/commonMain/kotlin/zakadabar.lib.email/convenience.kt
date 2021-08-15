@@ -4,9 +4,9 @@
 package zakadabar.lib.email
 
 import zakadabar.lib.blobs.data.create
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.entity.create
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.data.EntityId
+import zakadabar.core.data.create
+import zakadabar.core.util.PublicApi
 
 /**
  * Create a mail with a plain text or HTML content and queue it for sending.

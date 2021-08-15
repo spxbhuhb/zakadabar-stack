@@ -18,9 +18,9 @@ import org.w3c.fetch.RequestInit
 import org.w3c.files.Blob
 import org.w3c.xhr.ProgressEvent
 import org.w3c.xhr.XMLHttpRequest
-import zakadabar.core.data.CommBase
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.comm.CommBase
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityId
 import zakadabar.core.util.PublicApi
 
 /**

@@ -6,7 +6,7 @@ package zakadabar.lib.schedule.peristence
 import org.jetbrains.exposed.sql.`java-time`.timestamp
 import zakadabar.lib.schedule.api.Job
 import zakadabar.lib.schedule.api.JobStatus
-import zakadabar.stack.backend.exposed.ExposedPaTable
+import zakadabar.core.persistence.exposed.ExposedPaTable
 
 class JobTable : ExposedPaTable<Job>(
     tableName = "schedule_job"

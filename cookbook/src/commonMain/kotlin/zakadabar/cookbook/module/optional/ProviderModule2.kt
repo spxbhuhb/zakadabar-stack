@@ -3,7 +3,7 @@
  */
 package zakadabar.cookbook.module.optional
 
-import zakadabar.stack.module.CommonModule
+import zakadabar.core.module.CommonModule
 
 class ProviderModule2 : CommonModule {
 

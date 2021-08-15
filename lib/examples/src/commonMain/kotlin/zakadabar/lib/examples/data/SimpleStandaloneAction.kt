@@ -5,21 +5,21 @@
 package zakadabar.lib.examples.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.core.data.action.ActionBo
-import zakadabar.core.data.action.ActionBoCompanion
-import zakadabar.core.data.builtin.ActionStatusBo
-import zakadabar.core.data.schema.BoSchema
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.ActionBoCompanion
+import zakadabar.core.data.ActionStatus
+import zakadabar.core.schema.BoSchema
 
 @Serializable
 class SimpleStandaloneAction(
 
     var name : String
 
-) : ActionBo<ActionStatusBo> {
+) : ActionBo<ActionStatus> {
 
     companion object : ActionBoCompanion("zkl-simple-standalone-action")
 
-    override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), ActionStatus.serializer())
 
     override fun schema() = BoSchema {
         + ::name blank false min 1 max 30

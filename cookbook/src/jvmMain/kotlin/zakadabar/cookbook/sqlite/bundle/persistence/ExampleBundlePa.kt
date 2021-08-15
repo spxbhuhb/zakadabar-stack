@@ -7,9 +7,9 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import zakadabar.cookbook.sqlite.bundle.ExampleBundle
-import zakadabar.stack.backend.exposed.ExposedPaBase
-import zakadabar.stack.backend.exposed.ExposedPaTable
-import zakadabar.stack.backend.exposed.entityId
+import zakadabar.core.persistence.exposed.ExposedPaBase
+import zakadabar.core.persistence.exposed.ExposedPaTable
+import zakadabar.core.persistence.exposed.entityId
 
 open class ExampleBundlePa : ExposedPaBase<ExampleBundle, ExampleBundleTable>(
     table = ExampleBundleTable

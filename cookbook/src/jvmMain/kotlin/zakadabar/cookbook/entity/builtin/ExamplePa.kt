@@ -11,13 +11,13 @@ import org.jetbrains.exposed.sql.`java-time`.datetime
 import org.jetbrains.exposed.sql.`java-time`.timestamp
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import zakadabar.stack.backend.exposed.ExposedPaBase
-import zakadabar.stack.backend.exposed.ExposedPaTable
-import zakadabar.stack.backend.exposed.entityId
-import zakadabar.stack.backend.util.toJavaUuid
-import zakadabar.stack.backend.util.toStackUuid
-import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.util.BCrypt
+import zakadabar.core.persistence.exposed.ExposedPaBase
+import zakadabar.core.persistence.exposed.ExposedPaTable
+import zakadabar.core.persistence.exposed.entityId
+import zakadabar.core.util.toJavaUuid
+import zakadabar.core.util.toStackUuid
+import zakadabar.core.data.Secret
+import zakadabar.core.util.BCrypt
 
 open class ExamplePa : ExposedPaBase<ExampleBo,ExampleTable>(
     table = ExampleTable

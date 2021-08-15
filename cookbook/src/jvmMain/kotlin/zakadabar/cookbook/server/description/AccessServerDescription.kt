@@ -3,8 +3,8 @@
  */
 package zakadabar.cookbook.server.description
 
-import zakadabar.stack.backend.server
-import zakadabar.stack.data.builtin.misc.ServerDescriptionQuery
+import zakadabar.core.server.server
+import zakadabar.core.server.ServerDescriptionQuery
 
 class AccessServerDescription {
 

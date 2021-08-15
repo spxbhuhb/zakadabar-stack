@@ -15,9 +15,9 @@ import org.w3c.dom.asList
 import org.w3c.dom.events.Event
 import zakadabar.lib.markdown.frontend.flavour.ZkFlavourDescriptor
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
-import zakadabar.core.frontend.application.application
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.util.io
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.util.io
 import zakadabar.core.util.PublicApi
 
 open class MarkdownView(

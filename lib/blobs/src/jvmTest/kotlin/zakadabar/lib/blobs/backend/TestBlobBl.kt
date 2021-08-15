@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.blobs.backend
 
-import zakadabar.core.data.entity.EmptyEntityBo
+import zakadabar.core.data.EmptyEntityBo
 
 class TestBlobBl : BlobBlBase<TestBlob, EmptyEntityBo>(
      TestBlob::class,

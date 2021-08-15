@@ -4,9 +4,9 @@
 package zakadabar.lib.examples.frontend.note
 
 import org.w3c.dom.HTMLElement
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.note.*
-import zakadabar.core.frontend.builtin.pages.zkPageStyles
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.note.*
+import zakadabar.core.browser.page.zkPageStyles
 
 /**
  * This example shows how to create basic notes.

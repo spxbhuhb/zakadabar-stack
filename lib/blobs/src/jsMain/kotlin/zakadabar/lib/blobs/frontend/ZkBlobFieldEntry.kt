@@ -5,7 +5,7 @@ package zakadabar.lib.blobs.frontend
 
 import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobCreateState
-import zakadabar.core.frontend.builtin.ZkElement
+import zakadabar.core.browser.ZkElement
 
 abstract class ZkBlobFieldEntry<BT : BlobBo<BT, *>>(
     var bo: BT,

@@ -5,12 +5,12 @@ package zakadabar.lib.examples.frontend.query
 
 import zakadabar.lib.examples.data.builtin.ExampleQuery
 import zakadabar.lib.examples.resources.strings
-import zakadabar.core.frontend.builtin.button.ZkButton
-import zakadabar.core.frontend.builtin.form.ZkForm
-import zakadabar.core.frontend.builtin.form.fields.ZkOptBooleanField
-import zakadabar.core.frontend.util.io
-import zakadabar.core.frontend.util.marginBottom
-import zakadabar.core.frontend.util.marginRight
+import zakadabar.core.browser.button.ZkButton
+import zakadabar.core.browser.form.ZkForm
+import zakadabar.core.browser.field.ZkOptBooleanField
+import zakadabar.core.browser.util.io
+import zakadabar.core.browser.util.marginBottom
+import zakadabar.core.browser.util.marginRight
 
 class QueryForm(
     val runQuery: (dto: ExampleQuery) -> Unit

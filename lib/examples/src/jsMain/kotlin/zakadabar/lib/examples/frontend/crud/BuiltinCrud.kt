@@ -6,11 +6,11 @@ package zakadabar.lib.examples.frontend.crud
 import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
 import zakadabar.lib.examples.resources.strings
-import zakadabar.core.frontend.builtin.crud.ZkCrudTarget
-import zakadabar.core.frontend.builtin.crud.ZkInlineCrud
-import zakadabar.core.frontend.builtin.form.ZkForm
-import zakadabar.core.frontend.builtin.form.fields.ZkStringField
-import zakadabar.core.frontend.builtin.table.ZkTable
+import zakadabar.core.browser.crud.ZkCrudTarget
+import zakadabar.core.browser.crud.ZkInlineCrud
+import zakadabar.core.browser.form.ZkForm
+import zakadabar.core.browser.field.ZkStringField
+import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.resource.localized
 import zakadabar.core.resource.localizedStrings
 

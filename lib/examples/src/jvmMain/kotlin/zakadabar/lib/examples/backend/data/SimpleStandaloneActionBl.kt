@@ -6,14 +6,14 @@ package zakadabar.lib.examples.backend.data
 import zakadabar.lib.examples.data.SimpleStandaloneAction
 import zakadabar.core.authorize.Executor
 import zakadabar.core.business.ActionBusinessLogicBase
-import zakadabar.core.data.builtin.ActionStatusBo
+import zakadabar.core.data.ActionStatus
 
-abstract class SimpleStandaloneActionBl : ActionBusinessLogicBase<SimpleStandaloneAction, ActionStatusBo>(
+abstract class SimpleStandaloneActionBl : ActionBusinessLogicBase<SimpleStandaloneAction, ActionStatus>(
     actionBoClass = SimpleStandaloneAction::class
 ) {
 
-    override fun execute(executor: Executor, bo: SimpleStandaloneAction): ActionStatusBo {
-        return ActionStatusBo(reason = "test action")
+    override fun execute(executor: Executor, bo: SimpleStandaloneAction): ActionStatus {
+        return ActionStatus(reason = "test action")
     }
 
 }

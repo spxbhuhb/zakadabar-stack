@@ -5,11 +5,11 @@ package zakadabar.lib.examples.frontend.table
 
 import org.w3c.dom.HTMLElement
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.schema.BoSchema
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.core.frontend.builtin.table.ZkTable
-import zakadabar.core.frontend.builtin.toast.toastSuccess
+import zakadabar.core.schema.BoSchema
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.browser.toast.toastSuccess
 
 
 class ExampleTable : ZkTable<TableExampleDto>() {

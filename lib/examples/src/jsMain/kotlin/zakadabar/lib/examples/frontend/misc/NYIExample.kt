@@ -4,9 +4,9 @@
 package zakadabar.lib.examples.frontend.misc
 
 import org.w3c.dom.HTMLElement
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.misc.NYI
-import zakadabar.core.frontend.builtin.note.noteSecondary
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.misc.NYI
+import zakadabar.core.browser.note.noteSecondary
 
 class NYIExample(
     element: HTMLElement

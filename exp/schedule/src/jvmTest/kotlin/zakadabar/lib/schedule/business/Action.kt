@@ -4,10 +4,10 @@
 package zakadabar.lib.schedule.business
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.action.ActionBoCompanion
-import zakadabar.stack.data.builtin.IntValue
-import zakadabar.stack.data.schema.BoSchema
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.ActionBoCompanion
+import zakadabar.core.data.IntValue
+import zakadabar.core.schema.BoSchema
 
 @Serializable
 class Action(

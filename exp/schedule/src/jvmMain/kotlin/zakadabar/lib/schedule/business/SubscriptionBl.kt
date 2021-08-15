@@ -5,10 +5,10 @@ package zakadabar.lib.schedule.business
 
 import zakadabar.lib.schedule.api.Subscription
 import zakadabar.lib.schedule.peristence.SubscriptionPa
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.module.module
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.EntityBusinessLogicBase
+import zakadabar.core.data.EntityId
+import zakadabar.core.module.module
 
 open class SubscriptionBl : EntityBusinessLogicBase<Subscription>(
     boClass = Subscription::class

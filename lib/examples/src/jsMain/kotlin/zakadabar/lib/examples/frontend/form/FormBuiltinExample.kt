@@ -5,11 +5,11 @@ package zakadabar.lib.examples.frontend.form
 
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.examples.frontend.crud.BuiltinForm
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.ZkElementMode
-import zakadabar.core.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.core.frontend.builtin.toast.toastSuccess
-import zakadabar.core.frontend.util.default
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.ZkElementMode
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.toast.toastSuccess
+import zakadabar.core.browser.util.default
 
 class FormBuiltinExample(
     element: HTMLElement

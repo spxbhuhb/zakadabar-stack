@@ -4,8 +4,8 @@
 package zakadabar.lib.content.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.data.query.QueryBoCompanion
+import zakadabar.core.data.QueryBo
+import zakadabar.core.data.QueryBoCompanion
 
 /**
  * Query contents by SEO titles. This query provides resolution for

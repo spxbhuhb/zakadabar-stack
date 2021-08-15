@@ -9,7 +9,7 @@ import org.junit.BeforeClass
 import org.junit.Test
 import zakadabar.core.server.server
 import zakadabar.core.testing.TestCompanionBase
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityId
 import kotlin.test.assertEquals
 
 class BlobBlTest {

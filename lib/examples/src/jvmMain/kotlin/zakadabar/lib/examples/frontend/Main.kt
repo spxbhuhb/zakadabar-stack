@@ -12,9 +12,9 @@ import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.data.builtin.ExampleEnum
 import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
 import zakadabar.core.util.default
-import zakadabar.core.data.CommBase
-import zakadabar.core.data.builtin.misc.Secret
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.comm.CommBase
+import zakadabar.core.data.Secret
+import zakadabar.core.data.EntityId
 
 suspend fun main() {
     CommBase.baseUrl = "http://localhost:8080"

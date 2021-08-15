@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.content.resources
 
-import zakadabar.stack.resources.ZkStringStore
+import zakadabar.core.resource.ZkStringStore
 
 
 val contentStrings = Strings()

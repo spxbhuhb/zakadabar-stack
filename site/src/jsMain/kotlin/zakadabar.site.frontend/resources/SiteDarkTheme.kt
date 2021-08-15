@@ -4,7 +4,7 @@
 package zakadabar.site.frontend.resources
 
 import zakadabar.lib.markdown.frontend.markdownStyles
-import zakadabar.stack.frontend.builtin.theme.ZkBuiltinDarkTheme
+import zakadabar.core.browser.theme.ZkBuiltinDarkTheme
 
 class SiteDarkTheme : ZkBuiltinDarkTheme() {
 

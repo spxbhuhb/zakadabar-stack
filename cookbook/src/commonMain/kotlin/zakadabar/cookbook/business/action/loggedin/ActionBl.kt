@@ -3,15 +3,15 @@
  */
 package zakadabar.cookbook.business.action.loggedin
 
-import zakadabar.stack.backend.authorize.Authorizer
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.authorize.authorize
-import zakadabar.stack.backend.business.BusinessLogicCommon
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.builtin.LongValue
-import zakadabar.stack.exceptions.Unauthorized
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.authorize.BusinessLogicAuthorizer
+import zakadabar.core.authorize.Executor
+import zakadabar.core.authorize.authorize
+import zakadabar.core.business.BusinessLogicCommon
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.LongValue
+import zakadabar.core.exception.Unauthorized
+import zakadabar.core.util.PublicApi
 
 @PublicApi
 class ActionBl : BusinessLogicCommon<BaseBo>() {
@@ -22,7 +22,7 @@ class ActionBl : BusinessLogicCommon<BaseBo>() {
         action(Action::class, ::action)
     }
 
-    override val authorizer = object : Authorizer<BaseBo> {
+    override val authorizer = object : BusinessLogicAuthorizer<BaseBo> {
         override fun authorizeAction(executor: Executor, actionBo: ActionBo<*>) {
             if (actionBo is Action) {
                 authorize(executor.isLoggedIn)

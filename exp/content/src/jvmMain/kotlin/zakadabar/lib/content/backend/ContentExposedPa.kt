@@ -9,11 +9,11 @@ import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import zakadabar.lib.content.data.*
 import zakadabar.lib.i18n.backend.LocaleExposedTableGen
 import zakadabar.lib.i18n.data.LocaleBo
-import zakadabar.stack.backend.exposed.ExposedPaBase
-import zakadabar.stack.backend.exposed.ExposedPaTable
-import zakadabar.stack.backend.exposed.Sql
-import zakadabar.stack.backend.exposed.entityId
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.persistence.exposed.ExposedPaBase
+import zakadabar.core.persistence.exposed.ExposedPaTable
+import zakadabar.core.persistence.exposed.Sql
+import zakadabar.core.persistence.exposed.entityId
+import zakadabar.core.data.EntityId
 
 open class ContentExposedPa : ExposedPaBase<ContentBo, ContentExposedTable>(
     table = ContentExposedTable

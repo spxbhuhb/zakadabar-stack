@@ -4,7 +4,7 @@
 package zakadabar.lib.bender
 
 import kotlinx.datetime.Clock
-import zakadabar.core.data.schema.descriptor.BoDescriptor
+import zakadabar.core.schema.descriptor.BoDescriptor
 import zakadabar.core.text.camelToSnakeCase
 
 open class ClassGenerator {
@@ -41,9 +41,9 @@ fun commonGenerator() = """
 package $packageName
 
 import kotlinx.serialization.Serializable
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.entity.EntityBoCompanion
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityBoCompanion
+import zakadabar.core.data.EntityId
 import zakadabar.core.schema.BoSchema
 ${generators.map { it.commonImport() }.flatten().distinct().joinToString("\n")}
 
@@ -73,9 +73,9 @@ class ${boName}(
 fun browserFrontendGenerator() = """
 package ${packageName}.browser
 
-import zakadabar.core.frontend.builtin.crud.ZkCrudTarget
-import zakadabar.core.frontend.builtin.form.ZkForm
-import zakadabar.core.frontend.builtin.table.ZkTable
+import zakadabar.core.browser.crud.ZkCrudTarget
+import zakadabar.core.browser.form.ZkForm
+import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.resource.localized
 import zakadabar.core.browser.application.target
 import ${packageName}.$boName

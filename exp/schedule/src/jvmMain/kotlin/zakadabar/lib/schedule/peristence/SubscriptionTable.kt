@@ -4,7 +4,7 @@
 package zakadabar.lib.schedule.peristence
 
 import zakadabar.lib.schedule.api.Subscription
-import zakadabar.stack.backend.exposed.ExposedPaTable
+import zakadabar.core.persistence.exposed.ExposedPaTable
 
 class SubscriptionTable : ExposedPaTable<Subscription>(
     tableName = "subscription"

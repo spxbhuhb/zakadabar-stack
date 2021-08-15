@@ -7,16 +7,16 @@ import zakadabar.lib.content.data.ContentOverview
 import zakadabar.lib.content.data.ContentOverviewEntry
 import zakadabar.lib.content.data.ContentOverviewQuery
 import zakadabar.lib.i18n.data.LocaleBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.frontend.application.target
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.input.ZkCheckBox
-import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.builtin.table.ZkTable
-import zakadabar.stack.frontend.builtin.table.columns.ZkCustomColumn
-import zakadabar.stack.frontend.resources.css.em
-import zakadabar.stack.frontend.util.io
+import zakadabar.core.data.EntityId
+import zakadabar.core.browser.application.target
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.input.ZkCheckBox
+import zakadabar.core.browser.page.ZkPage
+import zakadabar.core.browser.page.zkPageStyles
+import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.browser.table.columns.ZkCustomColumn
+import zakadabar.core.resource.css.em
+import zakadabar.core.browser.util.io
 
 class ContentOverview : ZkPage(css = zkPageStyles.fixed) {
 

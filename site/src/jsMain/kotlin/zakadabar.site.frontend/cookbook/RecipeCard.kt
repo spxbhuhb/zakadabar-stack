@@ -5,10 +5,10 @@ package zakadabar.site.frontend.cookbook
 
 import zakadabar.cookbook.Recipe
 import zakadabar.site.frontend.resources.siteStyles
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.resources.css.JustifyContent
-import zakadabar.stack.frontend.util.marginBottom
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.resource.css.JustifyContent
+import zakadabar.core.browser.util.marginBottom
 
 class RecipeCard(
     val recipe: Recipe

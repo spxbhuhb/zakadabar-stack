@@ -11,7 +11,7 @@ package zakadabar.lib.examples.data.builtin
 
 import kotlinx.serialization.Serializable
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityId
 
 @Serializable
 data class ExampleResult(

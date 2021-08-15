@@ -3,8 +3,8 @@
  */
 package zakadabar.cookbook.module
 
-import zakadabar.stack.module.CommonModule
-import zakadabar.stack.module.module
+import zakadabar.core.module.CommonModule
+import zakadabar.core.module.module
 
 class ExampleModule2 : CommonModule {
 

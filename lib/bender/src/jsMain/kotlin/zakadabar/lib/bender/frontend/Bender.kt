@@ -7,8 +7,8 @@ import kotlinx.browser.window
 import kotlinx.coroutines.await
 import zakadabar.lib.bender.ClassGenerator
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.util.io
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.util.io
 
 class Bender(
     private val classGenerator: ClassGenerator,

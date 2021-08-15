@@ -7,11 +7,11 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.w3c.dom.HTMLElement
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.button.buttonInfo
-import zakadabar.core.frontend.builtin.button.buttonSecondary
-import zakadabar.core.frontend.builtin.note.noteSecondary
-import zakadabar.core.frontend.util.io
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.button.buttonInfo
+import zakadabar.core.browser.button.buttonSecondary
+import zakadabar.core.browser.note.noteSecondary
+import zakadabar.core.browser.util.io
 
 class ParallelDownload : ZkElement() {
 

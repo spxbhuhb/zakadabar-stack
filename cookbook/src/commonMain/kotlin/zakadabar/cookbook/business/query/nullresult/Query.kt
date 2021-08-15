@@ -4,11 +4,11 @@
 package zakadabar.cookbook.business.query.nullresult
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.builtin.StringValue
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.data.query.QueryBoCompanion
-import zakadabar.stack.data.schema.BoSchema
-import zakadabar.stack.util.UUID
+import zakadabar.core.data.StringValue
+import zakadabar.core.data.QueryBo
+import zakadabar.core.data.QueryBoCompanion
+import zakadabar.core.schema.BoSchema
+import zakadabar.core.util.UUID
 
 @Serializable
 class Query(

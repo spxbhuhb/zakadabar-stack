@@ -10,14 +10,14 @@ import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
 import zakadabar.lib.schedule.api.*
 import zakadabar.lib.schedule.peristence.JobPa
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.data.builtin.ActionStatusBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.Lock
-import zakadabar.stack.util.UUID
-import zakadabar.stack.util.fork
-import zakadabar.stack.util.use
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.EntityBusinessLogicBase
+import zakadabar.core.data.ActionStatus
+import zakadabar.core.data.EntityId
+import zakadabar.core.util.Lock
+import zakadabar.core.util.UUID
+import zakadabar.core.util.fork
+import zakadabar.core.util.use
 import kotlin.coroutines.coroutineContext
 
 /**
@@ -141,7 +141,7 @@ open class JobBl(
         // no need to notify the dispatcher, succeeded or failed jobs are not in it
     }
 
-    open fun jobSuccess(executor: Executor, action: JobSuccess): ActionStatusBo {
+    open fun jobSuccess(executor: Executor, action: JobSuccess): ActionStatus {
         val job = pa.read(action.jobId)
 
         check(! job.completed) { "job has been already completed" }
@@ -159,10 +159,10 @@ open class JobBl(
             specific = job.specific
         ).dispatch()
 
-        return ActionStatusBo()
+        return ActionStatus()
     }
 
-    open fun jobProgress(executor: Executor, action: JobProgress): ActionStatusBo {
+    open fun jobProgress(executor: Executor, action: JobProgress): ActionStatus {
         val job = pa.read(action.jobId)
 
         check(! job.completed) { "job has been already completed" }
@@ -174,10 +174,10 @@ open class JobBl(
 
         pa.update(job)
 
-        return ActionStatusBo()
+        return ActionStatus()
     }
 
-    open fun jobFail(executor: Executor, action: JobFail): ActionStatusBo {
+    open fun jobFail(executor: Executor, action: JobFail): ActionStatus {
         val job = pa.read(action.jobId)
 
         check(! job.completed) { "job has been already completed" }
@@ -204,13 +204,13 @@ open class JobBl(
             actionData = job.actionData
         ).dispatch()
 
-        return ActionStatusBo()
+        return ActionStatus()
     }
 
-    open fun jobCancel(executor: Executor, action: JobCancel): ActionStatusBo =
+    open fun jobCancel(executor: Executor, action: JobCancel): ActionStatus =
         jobCancel(action.jobId)
 
-    open fun jobCancel(id: EntityId<Job>): ActionStatusBo {
+    open fun jobCancel(id: EntityId<Job>): ActionStatus {
 
         pa.withTransaction { // jobCancel is called from Dispatchers, so we need a transaction
 
@@ -230,10 +230,10 @@ open class JobBl(
             ).dispatch()
         }
 
-        return ActionStatusBo()
+        return ActionStatus()
     }
 
-    open fun requestJobCancel(executor: Executor, action: RequestJobCancel): ActionStatusBo {
+    open fun requestJobCancel(executor: Executor, action: RequestJobCancel): ActionStatus {
         val job = pa.read(action.jobId)
 
         check(! job.completed) { "job has been already completed" }
@@ -245,7 +245,7 @@ open class JobBl(
             specific = job.specific
         ).dispatch()
 
-        return ActionStatusBo()
+        return ActionStatus()
     }
 
     open fun assignNode(jobId: EntityId<Job>, node: UUID) {

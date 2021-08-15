@@ -5,10 +5,10 @@ package zakadabar.lib.content.data
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.data.query.QueryBoCompanion
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.EntityId
+import zakadabar.core.data.QueryBo
+import zakadabar.core.data.QueryBoCompanion
 
 /**
  * Query navigation links from a given starting point.

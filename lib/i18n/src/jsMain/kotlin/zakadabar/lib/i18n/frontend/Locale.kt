@@ -5,10 +5,10 @@
 package zakadabar.lib.i18n.frontend
 
 import zakadabar.lib.i18n.data.LocaleBo
-import zakadabar.core.frontend.application.target
-import zakadabar.core.frontend.builtin.crud.ZkCrudTarget
-import zakadabar.core.frontend.builtin.form.ZkForm
-import zakadabar.core.frontend.builtin.table.ZkTable
+import zakadabar.core.browser.application.target
+import zakadabar.core.browser.crud.ZkCrudTarget
+import zakadabar.core.browser.form.ZkForm
+import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.resource.localized
 
 

@@ -10,9 +10,9 @@ package zakadabar.lib.examples.data.builtin
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
-import zakadabar.core.data.query.QueryBo
-import zakadabar.core.data.query.QueryBoCompanion
-import zakadabar.core.data.schema.BoSchema
+import zakadabar.core.data.QueryBo
+import zakadabar.core.data.QueryBoCompanion
+import zakadabar.core.schema.BoSchema
 
 /**
  * Query class that defines the filters the query supports.

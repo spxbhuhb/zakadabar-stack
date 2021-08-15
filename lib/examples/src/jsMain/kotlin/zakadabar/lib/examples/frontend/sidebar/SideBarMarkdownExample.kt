@@ -8,16 +8,16 @@ import kotlinx.browser.window
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.markdown.frontend.markdownStyles
-import zakadabar.core.frontend.application.application
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.button.buttonPrimary
-import zakadabar.core.frontend.builtin.layout.tabcontainer.ZkTabContainer
-import zakadabar.core.frontend.builtin.layout.tabcontainer.zkTabContainerStyles
-import zakadabar.core.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.core.frontend.builtin.pages.ZkPathPage
-import zakadabar.core.frontend.builtin.sidebar.ZkSideBar
-import zakadabar.core.frontend.resources.css.px
-import zakadabar.core.frontend.util.io
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.button.buttonPrimary
+import zakadabar.core.browser.tabcontainer.ZkTabContainer
+import zakadabar.core.browser.tabcontainer.zkTabContainerStyles
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.page.ZkPathPage
+import zakadabar.core.browser.sidebar.ZkSideBar
+import zakadabar.core.resource.css.px
+import zakadabar.core.browser.util.io
 import zakadabar.core.resource.localizedStrings
 import zakadabar.core.text.MarkdownNav
 

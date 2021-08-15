@@ -8,9 +8,9 @@ import zakadabar.lib.blobs.data.BlobCreateState
 import zakadabar.lib.blobs.data.url
 import zakadabar.lib.blobs.frontend.ZkBlobFieldEntry
 import zakadabar.lib.blobs.frontend.blobStyles
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.resources.css.px
-import zakadabar.core.frontend.util.io
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.resource.css.px
+import zakadabar.core.browser.util.io
 
 open class ZkImagePreview<BT : BlobBo<BT,*>>(
     bo: BT,

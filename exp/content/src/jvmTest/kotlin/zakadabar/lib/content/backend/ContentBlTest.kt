@@ -14,9 +14,9 @@ import org.junit.Test
 import zakadabar.lib.content.data.*
 import zakadabar.lib.i18n.data.LocaleBo
 import zakadabar.lib.i18n.data.LocaleStatus
-import zakadabar.stack.backend.server
-import zakadabar.stack.backend.testing.TestCompanionBase
-import zakadabar.stack.backend.util.default
+import zakadabar.core.server.server
+import zakadabar.core.testing.TestCompanionBase
+import zakadabar.core.util.default
 import kotlin.test.assertEquals
 
 class ContentBlTest {

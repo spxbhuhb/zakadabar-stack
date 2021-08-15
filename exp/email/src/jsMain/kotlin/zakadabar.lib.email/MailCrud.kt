@@ -5,11 +5,11 @@ package zakadabar.lib.email
 
 import zakadabar.lib.accounts.data.AccountPrivateBo
 import zakadabar.lib.email.Mail
-import zakadabar.stack.frontend.application.target
-import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
-import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.table.ZkTable
-import zakadabar.stack.resources.localized
+import zakadabar.core.browser.application.target
+import zakadabar.core.browser.crud.ZkCrudTarget
+import zakadabar.core.browser.form.ZkForm
+import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.resource.localized
 
 
 class MailCrud : ZkCrudTarget<Mail>() {
@@ -28,7 +28,7 @@ class MailForm : ZkForm<Mail>() {
         build(localized<MailForm>()) {
             + section {
                 + bo::id
-                + select(bo::createdBy) { AccountPrivateBo.all().by { it.fullName } }
+                + bo::createdBy query { AccountPrivateBo.all().by { it.fullName } }
                 + bo::createdAt
                 + bo::status
                 + bo::recipients

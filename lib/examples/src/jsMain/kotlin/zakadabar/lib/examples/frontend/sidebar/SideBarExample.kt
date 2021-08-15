@@ -5,14 +5,14 @@ package zakadabar.lib.examples.frontend.sidebar
 
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.markdown.frontend.markdownStyles
-import zakadabar.core.frontend.application.application
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.button.buttonPrimary
-import zakadabar.core.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.core.frontend.builtin.pages.ZkPathPage
-import zakadabar.core.frontend.builtin.sidebar.ZkSideBar
-import zakadabar.core.frontend.builtin.toast.toastSuccess
-import zakadabar.core.frontend.util.plusAssign
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.button.buttonPrimary
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.page.ZkPathPage
+import zakadabar.core.browser.sidebar.ZkSideBar
+import zakadabar.core.browser.toast.toastSuccess
+import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.localizedStrings
 
 

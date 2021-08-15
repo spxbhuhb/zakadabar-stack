@@ -3,18 +3,17 @@
  */
 package zakadabar.site.backend.business
 
-import org.slf4j.LoggerFactory
 import zakadabar.cookbook.Recipe
 import zakadabar.cookbook.RecipeParser
 import zakadabar.site.cookbook.GetContent
-import zakadabar.stack.backend.authorize.Authorizer
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.backend.persistence.EmptyPersistenceApi
-import zakadabar.stack.backend.setting.setting
-import zakadabar.stack.data.builtin.StringValue
-import zakadabar.stack.data.builtin.settings.ContentBackendSettings
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.authorize.BusinessLogicAuthorizer
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.EntityBusinessLogicBase
+import zakadabar.core.persistence.EmptyPersistenceApi
+import zakadabar.core.setting.setting
+import zakadabar.core.data.StringValue
+import zakadabar.core.server.ContentBackendSettings
+import zakadabar.core.data.EntityId
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -28,13 +27,11 @@ open class RecipeBl : EntityBusinessLogicBase<Recipe>(
     boClass = Recipe::class
 ) {
 
-    open val logger = LoggerFactory.getLogger("RecipeBl") !!
-
     open val settings by setting<ContentBackendSettings>("content")
 
     override val pa = EmptyPersistenceApi<Recipe>()
 
-    override val authorizer: Authorizer<Recipe> by provider()
+    override val authorizer: BusinessLogicAuthorizer<Recipe> by provider()
 
     override val router = router {
         query(GetContent::class, ::getContent)

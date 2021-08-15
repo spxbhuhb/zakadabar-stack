@@ -4,10 +4,10 @@
 package zakadabar.lib.bender.frontend.property
 
 import zakadabar.lib.bender.frontend.benderStyles
-import zakadabar.core.data.schema.descriptor.*
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.input.ZkCheckBox
-import zakadabar.core.frontend.builtin.input.ZkTextInput
+import zakadabar.core.schema.descriptor.*
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.input.ZkCheckBox
+import zakadabar.core.browser.input.ZkTextInput
 
 abstract class SingleConstraintEditor : ZkElement() {
     abstract fun toBoConstraint() : BoConstraint?

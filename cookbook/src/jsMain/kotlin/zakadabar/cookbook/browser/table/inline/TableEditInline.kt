@@ -5,12 +5,12 @@
 package zakadabar.cookbook.browser.table.inline
 
 import zakadabar.cookbook.entity.builtin.ExampleBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.frontend.builtin.form.fields.ZkBooleanField
-import zakadabar.stack.frontend.builtin.form.fields.ZkStringSelectField
-import zakadabar.stack.frontend.builtin.table.ZkTable
-import zakadabar.stack.frontend.builtin.table.zkTableStyles
-import zakadabar.stack.util.default
+import zakadabar.core.data.EntityId
+import zakadabar.core.browser.field.ZkBooleanField
+import zakadabar.core.browser.field.ZkStringSelectField
+import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.browser.table.zkTableStyles
+import zakadabar.core.util.default
 
 class TableEditInline : ZkTable<ExampleBo>() {
 

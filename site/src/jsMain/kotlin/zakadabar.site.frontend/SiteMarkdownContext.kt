@@ -35,14 +35,14 @@ import zakadabar.lib.examples.frontend.toast.ToastCustomExample
 import zakadabar.lib.examples.frontend.toast.ToastFormExample
 import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
 import zakadabar.site.frontend.components.ThemeShowCase
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.builtin.note.ZkNote
-import zakadabar.stack.frontend.resources.ZkFlavour
-import zakadabar.stack.frontend.resources.css.px
-import zakadabar.stack.frontend.resources.theme
-import zakadabar.stack.text.capitalized
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.note.ZkNote
+import zakadabar.core.resource.ZkFlavour
+import zakadabar.core.resource.css.px
+import zakadabar.core.resource.theme
+import zakadabar.core.text.capitalized
 
 class SiteMarkdownContext(
     viewName: String,

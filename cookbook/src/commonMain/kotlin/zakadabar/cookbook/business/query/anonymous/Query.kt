@@ -6,9 +6,9 @@ package zakadabar.cookbook.business.query.anonymous
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.data.query.QueryBoCompanion
-import zakadabar.stack.util.UUID
+import zakadabar.core.data.QueryBo
+import zakadabar.core.data.QueryBoCompanion
+import zakadabar.core.util.UUID
 
 @Serializable
 class Query : QueryBo<List<String>> {

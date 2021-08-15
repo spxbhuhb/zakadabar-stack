@@ -12,11 +12,11 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import zakadabar.core.data.CommBase.Companion.baseUrl
-import zakadabar.core.data.CommBase.Companion.client
-import zakadabar.core.data.CommBase.Companion.onError
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.comm.CommBase.Companion.baseUrl
+import zakadabar.core.comm.CommBase.Companion.client
+import zakadabar.core.comm.CommBase.Companion.onError
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityId
 import zakadabar.core.util.PublicApi
 
 /**

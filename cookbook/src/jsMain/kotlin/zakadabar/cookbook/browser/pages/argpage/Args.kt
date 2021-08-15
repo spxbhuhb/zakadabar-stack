@@ -4,8 +4,8 @@
 package zakadabar.cookbook.browser.pages.argpage
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.schema.BoSchema
+import zakadabar.core.data.BaseBo
+import zakadabar.core.schema.BoSchema
 
 @Serializable
 data class Args(

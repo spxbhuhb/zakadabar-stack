@@ -3,8 +3,8 @@
  */
 package zakadabar.cookbook.module.optional
 
-import zakadabar.stack.module.modules
-import zakadabar.stack.module.optional
+import zakadabar.core.module.modules
+import zakadabar.core.module.optional
 
 fun main(argv: Array<String>) {
 

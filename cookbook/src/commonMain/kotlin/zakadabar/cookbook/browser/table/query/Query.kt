@@ -6,11 +6,11 @@ package zakadabar.cookbook.browser.table.query
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
 import zakadabar.cookbook.entity.builtin.ExampleBo
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.data.query.QueryBoCompanion
-import zakadabar.stack.util.UUID
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.EntityId
+import zakadabar.core.data.QueryBo
+import zakadabar.core.data.QueryBoCompanion
+import zakadabar.core.util.UUID
 
 @Serializable
 class Query : QueryBo<List<QueryResultEntry>> {

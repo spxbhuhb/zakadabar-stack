@@ -3,11 +3,11 @@
  */
 package zakadabar.cookbook.business.query.anonymous
 
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizer
-import zakadabar.stack.backend.business.BusinessLogicCommon
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.authorize.Executor
+import zakadabar.core.authorize.SimpleRoleAuthorizer
+import zakadabar.core.business.BusinessLogicCommon
+import zakadabar.core.data.BaseBo
+import zakadabar.core.util.PublicApi
 
 @PublicApi
 class QuerySraBl : BusinessLogicCommon<BaseBo>() {

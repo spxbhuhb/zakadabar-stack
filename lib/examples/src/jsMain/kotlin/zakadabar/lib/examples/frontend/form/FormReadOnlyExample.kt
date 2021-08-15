@@ -7,13 +7,13 @@ import org.w3c.dom.HTMLElement
 import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
 import zakadabar.lib.examples.resources.strings
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.ZkElementMode
-import zakadabar.core.frontend.builtin.form.ZkForm
-import zakadabar.core.frontend.builtin.form.fields.ZkStringField
-import zakadabar.core.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.core.frontend.builtin.toast.toastSuccess
-import zakadabar.core.frontend.util.default
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.ZkElementMode
+import zakadabar.core.browser.form.ZkForm
+import zakadabar.core.browser.field.ZkStringField
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.toast.toastSuccess
+import zakadabar.core.browser.util.default
 import zakadabar.core.resource.localized
 import zakadabar.core.resource.localizedStrings
 

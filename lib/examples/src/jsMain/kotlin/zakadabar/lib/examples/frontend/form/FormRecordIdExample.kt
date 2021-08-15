@@ -6,11 +6,11 @@ package zakadabar.lib.examples.frontend.form
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.data.schema.BoSchema
-import zakadabar.core.frontend.builtin.ZkElementMode
-import zakadabar.core.frontend.builtin.form.ZkForm
-import zakadabar.core.frontend.util.default
+import zakadabar.core.data.EntityId
+import zakadabar.core.schema.BoSchema
+import zakadabar.core.browser.ZkElementMode
+import zakadabar.core.browser.form.ZkForm
+import zakadabar.core.browser.util.default
 
 /**
  * DTO classes are usually defined in commonMain. This one here is to make the

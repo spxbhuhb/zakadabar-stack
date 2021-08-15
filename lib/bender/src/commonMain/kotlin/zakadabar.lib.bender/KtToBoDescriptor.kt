@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.bender
 
-import zakadabar.core.data.schema.descriptor.*
+import zakadabar.core.schema.descriptor.*
 
 /**
  * Converts Kotlin source code into a BoDescriptor. Quick and very dirty

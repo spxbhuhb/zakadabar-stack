@@ -4,7 +4,7 @@
 package zakadabar.site.frontend.resources
 
 import zakadabar.lib.markdown.frontend.markdownStyles
-import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
+import zakadabar.core.browser.theme.ZkBuiltinLightTheme
 
 class SiteLightTheme : ZkBuiltinLightTheme() {
 

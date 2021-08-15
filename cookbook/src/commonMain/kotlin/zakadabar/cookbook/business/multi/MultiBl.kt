@@ -3,10 +3,10 @@
  */
 package zakadabar.cookbook.business.multi
 
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.BusinessLogicCommon
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.builtin.LongValue
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.BusinessLogicCommon
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.LongValue
 
 open class MultiBl : BusinessLogicCommon<BaseBo>() {
 

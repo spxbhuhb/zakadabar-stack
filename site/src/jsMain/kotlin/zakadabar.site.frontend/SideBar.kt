@@ -8,10 +8,10 @@ import kotlinx.coroutines.await
 import zakadabar.site.frontend.cookbook.Cookbook
 import zakadabar.site.frontend.pages.*
 import zakadabar.site.resources.strings
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.text.MarkdownNav
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.sidebar.ZkSideBar
+import zakadabar.core.browser.util.io
+import zakadabar.core.text.MarkdownNav
 
 class SideBar : ZkSideBar() {
 

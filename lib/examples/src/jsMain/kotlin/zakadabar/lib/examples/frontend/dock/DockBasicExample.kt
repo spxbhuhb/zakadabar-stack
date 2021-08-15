@@ -4,9 +4,9 @@
 package zakadabar.lib.examples.frontend.dock
 
 import org.w3c.dom.HTMLElement
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.button.buttonSecondary
-import zakadabar.core.frontend.resources.ZkIcons
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.button.buttonSecondary
+import zakadabar.core.resource.ZkIcons
 
 class DockBasicExample(
     element: HTMLElement

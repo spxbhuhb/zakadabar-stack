@@ -4,11 +4,11 @@
 package zakadabar.lib.schedule.api
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityBoCompanion
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.BoSchema
-import zakadabar.stack.util.UUID
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityBoCompanion
+import zakadabar.core.data.EntityId
+import zakadabar.core.schema.BoSchema
+import zakadabar.core.util.UUID
 
 /**
  * Subscription for jobs of the given type. When subscribed, the dispatcher

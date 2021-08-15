@@ -5,9 +5,9 @@ package zakadabar.lib.schedule
 
 import zakadabar.lib.schedule.business.JobBl
 import zakadabar.lib.schedule.business.SubscriptionBl
-import zakadabar.stack.authorize.appRoles
-import zakadabar.stack.module.CommonModule
-import zakadabar.stack.module.modules
+import zakadabar.core.authorize.appRoles
+import zakadabar.core.module.CommonModule
+import zakadabar.core.module.modules
 
 class SchedulerModule : CommonModule {
 

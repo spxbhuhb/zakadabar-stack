@@ -4,14 +4,14 @@
 package zakadabar.lib.examples.frontend.button
 
 import org.w3c.dom.HTMLElement
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.button.ZkButton
-import zakadabar.core.frontend.builtin.toast.toastSuccess
-import zakadabar.core.frontend.resources.ZkFlavour
-import zakadabar.core.frontend.resources.ZkIcons
-import zakadabar.core.frontend.resources.css.px
-import zakadabar.core.frontend.resources.theme
-import zakadabar.core.frontend.util.marginBottom
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.button.ZkButton
+import zakadabar.core.browser.toast.toastSuccess
+import zakadabar.core.resource.ZkFlavour
+import zakadabar.core.resource.ZkIcons
+import zakadabar.core.resource.css.px
+import zakadabar.core.resource.theme
+import zakadabar.core.browser.util.marginBottom
 
 /**
  * This example shows how to create buttons.

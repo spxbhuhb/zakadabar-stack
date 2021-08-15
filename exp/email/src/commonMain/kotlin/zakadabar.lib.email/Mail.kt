@@ -6,10 +6,10 @@ package zakadabar.lib.email
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import zakadabar.lib.accounts.data.AccountPrivateBo
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityBoCompanion
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.BoSchema
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityBoCompanion
+import zakadabar.core.data.EntityId
+import zakadabar.core.schema.BoSchema
 
 @Serializable
 class Mail(

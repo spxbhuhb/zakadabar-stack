@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.bender
 
-import zakadabar.core.data.schema.descriptor.*
+import zakadabar.core.schema.descriptor.*
 import kotlin.reflect.KClass
 import kotlin.test.Test
 import kotlin.test.assertEquals

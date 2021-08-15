@@ -11,9 +11,9 @@ import kotlinx.serialization.Serializable
 import zakadabar.lib.schedule.api.Job
 import zakadabar.lib.schedule.api.PushJob
 import zakadabar.lib.schedule.api.Subscription
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.UUID
-import zakadabar.stack.util.fork
+import zakadabar.core.data.EntityId
+import zakadabar.core.util.UUID
+import zakadabar.core.util.fork
 import kotlin.math.absoluteValue
 
 class Dispatcher(

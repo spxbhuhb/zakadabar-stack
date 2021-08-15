@@ -3,11 +3,11 @@
  */
 package zakadabar.cookbook.business.action.nullresult
 
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.BusinessLogicCommon
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.builtin.IntValue
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.BusinessLogicCommon
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.IntValue
+import zakadabar.core.util.PublicApi
 
 @PublicApi
 class ActionBl : BusinessLogicCommon<BaseBo>() {

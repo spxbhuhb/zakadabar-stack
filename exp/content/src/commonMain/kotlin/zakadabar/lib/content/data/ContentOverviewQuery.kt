@@ -5,10 +5,10 @@ package zakadabar.lib.content.data
 
 import kotlinx.serialization.Serializable
 import zakadabar.lib.i18n.data.LocaleBo
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.data.query.QueryBoCompanion
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.EntityId
+import zakadabar.core.data.QueryBo
+import zakadabar.core.data.QueryBoCompanion
 
 /**
  * Get an overview of contents defined on the site.

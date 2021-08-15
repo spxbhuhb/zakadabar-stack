@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.bender
 
-import zakadabar.core.data.schema.descriptor.*
+import zakadabar.core.schema.descriptor.*
 import zakadabar.core.text.camelToSnakeCase
 
 abstract class PropertyGenerator(
@@ -263,7 +263,7 @@ open class SecretPropertyGenerator(
 ) : PropertyGenerator(boDescriptor, property, "Secret") {
 
     override fun commonImport() =
-        listOf("import zakadabar.core.data.builtin.misc.Secret")
+        listOf("import zakadabar.core.data.Secret")
 
     override fun browserTable() =
         "// ${super.browserTable()} // not supported yet"
@@ -274,7 +274,7 @@ open class SecretPropertyGenerator(
         } else {
             listOf(
                 "import zakadabar.core.util.BCrypt",
-                "import zakadabar.core.data.builtin.misc.Secret"
+                "import zakadabar.core.data.Secret"
             )
         }
 

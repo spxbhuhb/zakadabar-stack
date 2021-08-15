@@ -4,11 +4,11 @@
 package zakadabar.lib.schedule.api
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.action.ActionBoCompanion
-import zakadabar.stack.data.builtin.ActionStatusBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.BoSchema
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.ActionBoCompanion
+import zakadabar.core.data.ActionStatus
+import zakadabar.core.data.EntityId
+import zakadabar.core.schema.BoSchema
 
 /**
  * Requests a job cancellation. Successful execution of this action does not
@@ -31,11 +31,11 @@ class RequestJobCancel(
 
     var jobId : EntityId<Job>
 
-) : ActionBo<ActionStatusBo> {
+) : ActionBo<ActionStatus> {
 
     companion object : ActionBoCompanion(Job.boNamespace)
 
-    override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), ActionStatus.serializer())
 
     override fun schema() = BoSchema {
         + ::jobId

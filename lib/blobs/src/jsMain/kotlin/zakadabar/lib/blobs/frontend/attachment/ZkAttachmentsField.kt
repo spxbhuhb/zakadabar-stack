@@ -23,9 +23,9 @@ import zakadabar.lib.blobs.data.BlobCreateState
 import zakadabar.lib.blobs.frontend.ZkBlobField
 import zakadabar.lib.blobs.frontend.ZkBlobFieldEntry
 import zakadabar.lib.blobs.frontend.blobStyles
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.frontend.builtin.form.ZkForm
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityId
+import zakadabar.core.browser.form.ZkForm
 import kotlin.reflect.KClass
 
 /**

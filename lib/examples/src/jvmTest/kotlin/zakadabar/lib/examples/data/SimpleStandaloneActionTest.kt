@@ -13,8 +13,8 @@ import zakadabar.core.server.Server
 import zakadabar.core.authorize.Executor
 import zakadabar.core.server.server
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.CommBase
-import zakadabar.core.data.action.ActionBo
+import zakadabar.core.comm.CommBase
+import zakadabar.core.data.ActionBo
 import kotlin.test.assertEquals
 
 class SimpleStandaloneActionTest {

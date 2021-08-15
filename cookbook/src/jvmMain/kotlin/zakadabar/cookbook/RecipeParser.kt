@@ -4,7 +4,7 @@
 package zakadabar.cookbook
 
 import com.charleskorn.kaml.Yaml
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.data.EntityId
 
 class RecipeParser(
     val lines: List<String>

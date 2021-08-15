@@ -16,8 +16,8 @@ import zakadabar.lib.examples.backend.blob.TestBlobBl
 import zakadabar.core.server.Server
 import zakadabar.core.authorize.UnsafeAuthorizer
 import zakadabar.core.server.server
-import zakadabar.core.data.CommBase
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.comm.CommBase
+import zakadabar.core.data.EntityId
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

@@ -3,15 +3,15 @@
  */
 package zakadabar.cookbook.browser.pages.argpage
 
-import zakadabar.stack.frontend.application.target
-import zakadabar.stack.frontend.builtin.button.buttonPrimary
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.builtin.pages.ZkArgPage
-import zakadabar.stack.frontend.resources.css.px
-import zakadabar.stack.frontend.resources.theme
-import zakadabar.stack.frontend.util.marginBottom
-import zakadabar.stack.util.default
-import zakadabar.stack.util.fourRandomInt
+import zakadabar.core.browser.application.target
+import zakadabar.core.browser.button.buttonPrimary
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.page.ZkArgPage
+import zakadabar.core.resource.css.px
+import zakadabar.core.resource.theme
+import zakadabar.core.browser.util.marginBottom
+import zakadabar.core.util.default
+import zakadabar.core.util.fourRandomInt
 
 /**
  * This example shows how to create a page with arguments passed in the

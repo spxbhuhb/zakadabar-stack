@@ -4,10 +4,10 @@
 package zakadabar.cookbook.business.action.loggedin
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.action.ActionBoCompanion
-import zakadabar.stack.data.builtin.LongValue
-import zakadabar.stack.util.UUID
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.ActionBoCompanion
+import zakadabar.core.data.LongValue
+import zakadabar.core.util.UUID
 
 @Serializable
 class Action : ActionBo<LongValue> {

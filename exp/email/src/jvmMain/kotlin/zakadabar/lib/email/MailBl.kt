@@ -3,11 +3,11 @@
  */
 package zakadabar.lib.email
 
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.backend.setting.setting
-import zakadabar.stack.data.builtin.ActionStatusBo
-import zakadabar.stack.module.module
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.EntityBusinessLogicBase
+import zakadabar.core.setting.setting
+import zakadabar.core.data.ActionStatus
+import zakadabar.core.module.module
 import java.util.*
 import javax.activation.DataHandler
 import javax.mail.*
@@ -38,7 +38,7 @@ open class MailBl : EntityBusinessLogicBase<Mail>(
         action(Process::class, ::process)
     }
 
-    open fun process(executor: Executor, action: Process): ActionStatusBo {
+    open fun process(executor: Executor, action: Process): ActionStatus {
 
         val mail = pa.read(action.mail)
 
@@ -49,12 +49,12 @@ open class MailBl : EntityBusinessLogicBase<Mail>(
                 mail.status = MailStatus.Sent
             }
 
-            ActionStatusBo(true)
+            ActionStatus(true)
 
         } catch (ex : Exception) {
             mail.status = MailStatus.RetryWait
             ex.printStackTrace() // FIXME log mail send errors through a logger
-            ActionStatusBo(false)
+            ActionStatus(false)
         }
     }
 

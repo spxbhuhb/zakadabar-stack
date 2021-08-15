@@ -11,6 +11,7 @@ plugins {
     id("org.jetbrains.dokka")
     signing
     `maven-publish`
+    id("upgrade-2021-08-15")
 }
 
 group = "hu.simplexion.zakadabar"

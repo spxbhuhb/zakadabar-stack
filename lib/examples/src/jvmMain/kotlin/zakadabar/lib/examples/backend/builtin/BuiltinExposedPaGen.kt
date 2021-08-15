@@ -17,7 +17,7 @@ import zakadabar.core.persistence.exposed.ExposedPaTable
 import zakadabar.core.persistence.exposed.entityId
 import zakadabar.core.util.toJavaUuid
 import zakadabar.core.util.toStackUuid
-import zakadabar.core.data.builtin.misc.Secret
+import zakadabar.core.data.Secret
 import zakadabar.core.util.BCrypt
 
 /**

@@ -9,7 +9,7 @@ import zakadabar.lib.examples.data.SimpleExampleQuery
 import zakadabar.core.authorize.Executor
 import zakadabar.core.business.EntityBusinessLogicBase
 import zakadabar.core.server.server
-import zakadabar.core.data.builtin.ActionStatusBo
+import zakadabar.core.data.ActionStatus
 import zakadabar.core.util.after
 import zakadabar.core.validate.BusinessLogicValidator
 
@@ -57,9 +57,9 @@ class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
             }
 
     @Suppress("UNUSED_PARAMETER")
-    private fun action(executor: Executor, action: SimpleExampleAction): ActionStatusBo {
+    private fun action(executor: Executor, action: SimpleExampleAction): ActionStatus {
         println("Account ${executor.accountId} executed SimpleExampleAction")
-        return ActionStatusBo(reason = "This is a successful test action invocation.")
+        return ActionStatus(reason = "This is a successful test action invocation.")
     }
 
     @Suppress("UNUSED_PARAMETER")

@@ -3,13 +3,13 @@
  */
 package zakadabar.cookbook.business.query.anonymous
 
-import zakadabar.stack.backend.authorize.Authorizer
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.BusinessLogicCommon
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.exceptions.Unauthorized
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.authorize.BusinessLogicAuthorizer
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.BusinessLogicCommon
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.QueryBo
+import zakadabar.core.exception.Unauthorized
+import zakadabar.core.util.PublicApi
 
 @PublicApi
 class QueryBl : BusinessLogicCommon<BaseBo>() {
@@ -20,7 +20,7 @@ class QueryBl : BusinessLogicCommon<BaseBo>() {
         query(Query::class, ::query)
     }
 
-    override val authorizer = object : Authorizer<BaseBo> {
+    override val authorizer = object : BusinessLogicAuthorizer<BaseBo> {
         override fun authorizeQuery(executor: Executor, queryBo: QueryBo<*>) {
             if (queryBo is Query) return
             throw Unauthorized()

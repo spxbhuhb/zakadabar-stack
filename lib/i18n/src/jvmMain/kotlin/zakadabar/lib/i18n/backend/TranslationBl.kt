@@ -12,7 +12,7 @@ import zakadabar.core.authorize.SimpleRoleAuthorizer.Companion.LOGGED_IN
 import zakadabar.core.authorize.SimpleRoleAuthorizer.Companion.PUBLIC
 import zakadabar.core.business.EntityBusinessLogicBase
 import zakadabar.core.module.module
-import zakadabar.core.data.builtin.misc.StringPair
+import zakadabar.core.data.StringPair
 
 class TranslationBl : EntityBusinessLogicBase<TranslationBo>(
     boClass = TranslationBo::class

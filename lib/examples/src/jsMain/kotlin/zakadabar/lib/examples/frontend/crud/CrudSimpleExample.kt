@@ -7,15 +7,15 @@ import org.w3c.dom.HTMLElement
 import zakadabar.lib.examples.data.SimpleExampleAction
 import zakadabar.lib.examples.data.SimpleExampleBo
 import zakadabar.lib.examples.data.SimpleExampleQuery
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.button.buttonPrimary
-import zakadabar.core.frontend.builtin.crud.ZkInlineCrud
-import zakadabar.core.frontend.builtin.input.ZkTextInput
-import zakadabar.core.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.core.frontend.builtin.note.noteSecondary
-import zakadabar.core.frontend.resources.css.px
-import zakadabar.core.frontend.util.io
-import zakadabar.core.frontend.util.marginBottom
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.button.buttonPrimary
+import zakadabar.core.browser.crud.ZkInlineCrud
+import zakadabar.core.browser.input.ZkTextInput
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.note.noteSecondary
+import zakadabar.core.resource.css.px
+import zakadabar.core.browser.util.io
+import zakadabar.core.browser.util.marginBottom
 
 class SimpleExampleInlineCrud : ZkInlineCrud<SimpleExampleBo>() {
     init {

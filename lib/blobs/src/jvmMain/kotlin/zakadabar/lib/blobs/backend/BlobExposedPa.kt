@@ -14,8 +14,8 @@ import org.jetbrains.exposed.sql.update
 import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.core.persistence.exposed.ExposedPaBase
 import zakadabar.core.persistence.exposed.ExposedPaTable
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityId
 
 abstract class BlobExposedPa<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
     table: BlobExposedTable<T, RT>

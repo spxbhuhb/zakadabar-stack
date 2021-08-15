@@ -9,12 +9,12 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.update
 import zakadabar.lib.schedule.api.Job
-import zakadabar.stack.backend.exposed.ExposedPaBase
-import zakadabar.stack.backend.exposed.entityId
-import zakadabar.stack.backend.util.toJavaUuid
-import zakadabar.stack.backend.util.toStackUuid
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.util.UUID
+import zakadabar.core.persistence.exposed.ExposedPaBase
+import zakadabar.core.persistence.exposed.entityId
+import zakadabar.core.util.toJavaUuid
+import zakadabar.core.util.toStackUuid
+import zakadabar.core.data.EntityId
+import zakadabar.core.util.UUID
 
 open class JobPa(
     table: JobTable = JobTable()

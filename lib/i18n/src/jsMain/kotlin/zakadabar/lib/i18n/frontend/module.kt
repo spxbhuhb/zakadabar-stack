@@ -5,8 +5,8 @@ package zakadabar.lib.i18n.frontend
 
 import zakadabar.lib.i18n.data.TranslationsByLocale
 import zakadabar.lib.i18n.resources.i18nStrings
-import zakadabar.core.frontend.application.ZkAppRouting
-import zakadabar.core.frontend.application.ZkApplication
+import zakadabar.core.browser.application.ZkAppRouting
+import zakadabar.core.browser.application.ZkApplication
 import zakadabar.core.resource.ZkStringStore
 import zakadabar.core.text.TranslationProvider
 

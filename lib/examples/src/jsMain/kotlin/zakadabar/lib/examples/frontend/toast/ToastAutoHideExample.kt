@@ -4,17 +4,17 @@
 package zakadabar.lib.examples.frontend.toast
 
 import org.w3c.dom.HTMLElement
-import zakadabar.core.frontend.builtin.ZkElement
-import zakadabar.core.frontend.builtin.button.buttonSecondary
-import zakadabar.core.frontend.builtin.input.ZkTextInput
-import zakadabar.core.frontend.builtin.pages.zkPageStyles
-import zakadabar.core.frontend.builtin.toast.ZkToast
-import zakadabar.core.frontend.builtin.toast.toastDanger
-import zakadabar.core.frontend.builtin.toast.toastInfo
-import zakadabar.core.frontend.resources.ZkFlavour
-import zakadabar.core.frontend.resources.css.px
-import zakadabar.core.frontend.resources.theme
-import zakadabar.core.frontend.util.marginBottom
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.button.buttonSecondary
+import zakadabar.core.browser.input.ZkTextInput
+import zakadabar.core.browser.page.zkPageStyles
+import zakadabar.core.browser.toast.ZkToast
+import zakadabar.core.browser.toast.toastDanger
+import zakadabar.core.browser.toast.toastInfo
+import zakadabar.core.resource.ZkFlavour
+import zakadabar.core.resource.css.px
+import zakadabar.core.resource.theme
+import zakadabar.core.browser.util.marginBottom
 
 /**
  * This example shows how to change auto-hide time for a toast.

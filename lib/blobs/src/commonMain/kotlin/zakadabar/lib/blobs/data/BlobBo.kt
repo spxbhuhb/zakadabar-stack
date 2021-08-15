@@ -3,9 +3,9 @@
  */
 package zakadabar.lib.blobs.data
 
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.data.schema.BoSchema
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityId
+import zakadabar.core.schema.BoSchema
 
 interface BlobBo<T : BlobBo<T,RT>, RT : EntityBo<RT>> : EntityBo<T> {
 
