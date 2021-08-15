@@ -4,8 +4,8 @@
 package zakadabar.core.util
 
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.entity.EntityBoCompanion
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityBoCompanion
 import kotlin.reflect.KClass
 
 expect inline fun <reified T : Any> KClass<T>.newInstance(): T

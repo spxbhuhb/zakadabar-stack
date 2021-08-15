@@ -3,7 +3,7 @@
  */
 package zakadabar.core.resource
 
-import zakadabar.core.data.builtin.misc.StringPair
+import zakadabar.core.data.StringPair
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 

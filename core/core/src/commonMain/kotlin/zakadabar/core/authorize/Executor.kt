@@ -4,7 +4,7 @@
 package zakadabar.core.authorize
 
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityId
 
 /**
  * Ktor authentication principal id.

@@ -4,10 +4,9 @@
 package zakadabar.core.authorize
 
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.action.ActionBo
-import zakadabar.core.data.builtin.authorize.SimpleRoleAuthorizationBo
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.data.query.QueryBo
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.EntityId
+import zakadabar.core.data.QueryBo
 import zakadabar.core.exception.Forbidden
 import zakadabar.core.module.module
 import zakadabar.core.util.UUID

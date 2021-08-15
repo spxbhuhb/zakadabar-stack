@@ -7,9 +7,7 @@ import zakadabar.core.authorize.BusinessLogicAuthorizer
 import zakadabar.core.authorize.Executor
 import zakadabar.core.business.QueryBusinessLogicBase
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.builtin.misc.ServerDescriptionBo
-import zakadabar.core.data.builtin.misc.ServerDescriptionQuery
-import zakadabar.core.data.query.QueryBo
+import zakadabar.core.data.QueryBo
 
 class ServerDescriptionBl : QueryBusinessLogicBase<ServerDescriptionQuery, ServerDescriptionBo>(
     queryBoClass = ServerDescriptionQuery::class

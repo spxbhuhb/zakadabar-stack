@@ -4,7 +4,7 @@
 package zakadabar.core.persistence.sql
 
 import org.jetbrains.exposed.sql.Table
-import zakadabar.core.data.builtin.settings.DatabaseSettingsBo
+import zakadabar.core.server.DatabaseSettingsBo
 
 interface SqlProvider {
     val tables : MutableList<Table>

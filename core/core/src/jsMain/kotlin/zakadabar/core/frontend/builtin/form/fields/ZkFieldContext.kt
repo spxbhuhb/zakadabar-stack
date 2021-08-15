@@ -3,7 +3,7 @@
  */
 package zakadabar.core.frontend.builtin.form.fields
 
-import zakadabar.core.data.schema.BoSchema
+import zakadabar.core.schema.BoSchema
 
 interface ZkFieldContext {
 

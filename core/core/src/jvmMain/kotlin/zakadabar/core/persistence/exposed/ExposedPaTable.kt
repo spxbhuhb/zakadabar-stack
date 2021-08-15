@@ -4,7 +4,7 @@
 package zakadabar.core.persistence.exposed
 
 import org.jetbrains.exposed.dao.id.LongIdTable
-import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.EntityBo
 
 /**
  * Exposed table used by generated tables. This layer is here so we can extend

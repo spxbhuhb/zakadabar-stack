@@ -3,7 +3,7 @@
  */
 package zakadabar.core.frontend.builtin.crud
 
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityId
 
 
 /**

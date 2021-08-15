@@ -5,7 +5,7 @@ package zakadabar.core.frontend.application
 
 import org.w3c.dom.url.URLSearchParams
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityId
 
 /**
  * Stores the current navigation state of the browser window.

@@ -16,7 +16,7 @@
  */
 package zakadabar.core.frontend.builtin.form.fields
 
-import zakadabar.core.data.builtin.misc.Secret
+import zakadabar.core.data.Secret
 import zakadabar.core.resource.localizedStrings
 import kotlin.reflect.KMutableProperty0
 

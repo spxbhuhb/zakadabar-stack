@@ -4,8 +4,8 @@
 package zakadabar.core.authorize
 
 import kotlinx.serialization.Serializable
-import zakadabar.core.data.action.ActionBo
-import zakadabar.core.data.action.ActionBoCompanion
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.ActionBoCompanion
 
 @Serializable
 class TestAction : ActionBo<TestAction> {

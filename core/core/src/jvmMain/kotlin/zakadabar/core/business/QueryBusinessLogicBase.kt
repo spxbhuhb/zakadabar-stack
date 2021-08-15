@@ -4,8 +4,8 @@
 package zakadabar.core.business
 
 import zakadabar.core.route.RoutedModule
-import zakadabar.core.data.query.QueryBo
-import zakadabar.core.data.query.QueryBoCompanion
+import zakadabar.core.data.QueryBo
+import zakadabar.core.data.QueryBoCompanion
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObject

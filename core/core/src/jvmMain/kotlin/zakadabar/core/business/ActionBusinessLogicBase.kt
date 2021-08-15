@@ -3,8 +3,8 @@
  */
 package zakadabar.core.business
 
-import zakadabar.core.data.action.ActionBo
-import zakadabar.core.data.action.ActionBoCompanion
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.ActionBoCompanion
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObject

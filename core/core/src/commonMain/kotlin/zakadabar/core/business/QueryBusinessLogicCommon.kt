@@ -5,7 +5,7 @@ package zakadabar.core.business
 
 import zakadabar.core.authorize.Executor
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.query.QueryBo
+import zakadabar.core.data.QueryBo
 import kotlin.reflect.KClass
 
 /**

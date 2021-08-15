@@ -11,10 +11,10 @@ import kotlinx.dom.clear
 import org.w3c.dom.*
 import org.w3c.dom.events.MouseEvent
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.data.query.QueryBo
-import zakadabar.core.data.schema.BoSchema
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityId
+import zakadabar.core.data.QueryBo
+import zakadabar.core.schema.BoSchema
 import zakadabar.core.frontend.builtin.ZkElement
 import zakadabar.core.frontend.builtin.ZkElementState
 import zakadabar.core.frontend.builtin.crud.ZkCrud

@@ -4,7 +4,6 @@
 package zakadabar.core.server
 
 import com.charleskorn.kaml.Yaml
-import zakadabar.core.data.builtin.settings.ServerSettingsBo
 import zakadabar.core.setting.JvmSystemEnvHandler
 import java.nio.file.Files
 import java.nio.file.Paths

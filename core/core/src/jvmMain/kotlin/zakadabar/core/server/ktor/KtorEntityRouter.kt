@@ -10,8 +10,8 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import zakadabar.core.business.EntityBusinessLogicCommon
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityId
 
 open class KtorEntityRouter<T : EntityBo<T>>(
     private val entityBusinessLogic: EntityBusinessLogicCommon<T>

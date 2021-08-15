@@ -3,7 +3,7 @@
  */
 package zakadabar.core.frontend.builtin.form.fields
 
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityId
 
 open class ZkEntitySelectFilter(
     context : ZkFieldContext,

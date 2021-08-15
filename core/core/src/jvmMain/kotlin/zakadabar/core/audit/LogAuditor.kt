@@ -8,10 +8,10 @@ import kotlinx.serialization.serializer
 import org.slf4j.LoggerFactory
 import zakadabar.core.authorize.Executor
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.action.ActionBo
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.data.query.QueryBo
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityId
+import zakadabar.core.data.QueryBo
 import kotlin.reflect.full.createType
 
 /**

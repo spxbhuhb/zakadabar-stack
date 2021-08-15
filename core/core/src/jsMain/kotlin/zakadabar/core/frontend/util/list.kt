@@ -3,7 +3,7 @@
  */
 package zakadabar.core.frontend.util
 
-import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.EntityBo
 
 fun <T : EntityBo<T>> List<T>.by(field: (it: T) -> String) =
     map { it.id to field(it) }.sortedBy { it.second }

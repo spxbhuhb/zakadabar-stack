@@ -3,8 +3,8 @@
  */
 package zakadabar.core.persistence
 
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityId
 
 /**
  * Entity persistence APIs

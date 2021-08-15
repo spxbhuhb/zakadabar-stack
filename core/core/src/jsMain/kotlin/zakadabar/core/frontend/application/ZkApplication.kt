@@ -7,7 +7,7 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
-import zakadabar.core.data.builtin.misc.ServerDescriptionBo
+import zakadabar.core.server.ServerDescriptionBo
 import zakadabar.core.frontend.builtin.dock.ZkDock
 import zakadabar.core.frontend.builtin.modal.ZkModalContainer
 import zakadabar.core.frontend.builtin.titlebar.ZkAppTitle

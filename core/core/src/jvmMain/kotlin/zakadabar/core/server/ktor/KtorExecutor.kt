@@ -7,7 +7,7 @@ import io.ktor.application.*
 import io.ktor.auth.*
 import zakadabar.core.authorize.Executor
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityId
 
 fun ApplicationCall.executor() = authentication.principal<KtorExecutor>() !!
 

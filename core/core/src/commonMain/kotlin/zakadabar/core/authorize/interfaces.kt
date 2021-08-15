@@ -4,9 +4,8 @@
 package zakadabar.core.authorize
 
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.builtin.account.AccountPublicBo
-import zakadabar.core.data.builtin.misc.Secret
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.Secret
+import zakadabar.core.data.EntityId
 
 interface RoleBlProvider {
     fun getByName(name : String) : EntityId<out BaseBo>

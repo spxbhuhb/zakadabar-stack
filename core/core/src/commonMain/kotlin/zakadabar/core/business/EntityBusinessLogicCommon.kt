@@ -6,8 +6,8 @@ package zakadabar.core.business
 import zakadabar.core.authorize.Executor
 import zakadabar.core.persistence.EntityPersistenceApi
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityId
 import kotlin.reflect.KClass
 
 /**

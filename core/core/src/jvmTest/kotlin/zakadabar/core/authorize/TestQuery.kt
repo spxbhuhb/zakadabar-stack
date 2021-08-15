@@ -4,8 +4,8 @@
 package zakadabar.core.authorize
 
 import kotlinx.serialization.Serializable
-import zakadabar.core.data.query.QueryBo
-import zakadabar.core.data.query.QueryBoCompanion
+import zakadabar.core.data.QueryBo
+import zakadabar.core.data.QueryBoCompanion
 
 @Serializable
 class TestQuery : QueryBo<TestQuery> {

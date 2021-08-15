@@ -6,7 +6,7 @@ package zakadabar.core.business
 import zakadabar.core.route.RoutedModule
 import zakadabar.core.authorize.Executor
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.action.ActionBo
+import zakadabar.core.data.ActionBo
 import kotlin.reflect.KClass
 
 /**

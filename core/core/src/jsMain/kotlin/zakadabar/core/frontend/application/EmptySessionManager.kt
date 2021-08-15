@@ -3,9 +3,9 @@
  */
 package zakadabar.core.frontend.application
 
-import zakadabar.core.data.builtin.account.AccountPublicBo
-import zakadabar.core.data.builtin.misc.ServerDescriptionQuery
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.authorize.AccountPublicBo
+import zakadabar.core.server.ServerDescriptionQuery
+import zakadabar.core.data.EntityId
 
 /**
  * This session manager is for applications that does not use sessions.

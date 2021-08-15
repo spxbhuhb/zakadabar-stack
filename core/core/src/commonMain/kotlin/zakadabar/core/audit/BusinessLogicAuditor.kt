@@ -5,9 +5,9 @@ package zakadabar.core.audit
 
 import zakadabar.core.authorize.Executor
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.action.ActionBo
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.data.query.QueryBo
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.EntityId
+import zakadabar.core.data.QueryBo
 
 /**
  * Creates an audit record of the operation.

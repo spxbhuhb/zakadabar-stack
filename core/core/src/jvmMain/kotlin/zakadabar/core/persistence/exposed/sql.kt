@@ -15,8 +15,8 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
-import zakadabar.core.data.builtin.settings.DatabaseSettingsBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.server.DatabaseSettingsBo
+import zakadabar.core.data.EntityId
 import zakadabar.core.persistence.sql.SqlProvider
 
 inline operator fun <reified T : LongEntity> LongEntityClass<T>.get(entityId: EntityId<*>) = this[entityId.toLong()]

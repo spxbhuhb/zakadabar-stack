@@ -6,11 +6,11 @@ package zakadabar.core.frontend.builtin.form.fields
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.schema.ValidityReport
-import zakadabar.core.data.schema.descriptor.BoConstraintType
-import zakadabar.core.data.schema.descriptor.BooleanBoConstraint
-import zakadabar.core.data.schema.descriptor.IntBoConstraint
+import zakadabar.core.data.EntityBo
+import zakadabar.core.schema.ValidityReport
+import zakadabar.core.schema.descriptor.BoConstraintType
+import zakadabar.core.schema.descriptor.BooleanBoConstraint
+import zakadabar.core.schema.descriptor.IntBoConstraint
 import zakadabar.core.frontend.builtin.ZkElement
 import zakadabar.core.frontend.builtin.form.ZkFormStyles
 import zakadabar.core.frontend.builtin.form.zkFormStyles

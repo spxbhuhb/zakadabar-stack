@@ -13,10 +13,8 @@ import kotlinx.serialization.json.Json
 import zakadabar.core.authorize.EmptyAuthorizer
 import zakadabar.core.business.EntityBusinessLogicBase
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.builtin.resources.SettingBo
-import zakadabar.core.data.builtin.resources.SettingSource
-import zakadabar.core.data.entity.EntityId
-import zakadabar.core.data.schema.descriptor.BoDescriptor
+import zakadabar.core.data.EntityId
+import zakadabar.core.schema.descriptor.BoDescriptor
 import zakadabar.core.persistence.EmptyPersistenceApi
 import zakadabar.core.route.EmptyRouter
 import zakadabar.core.route.RoutedModule

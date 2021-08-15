@@ -11,8 +11,8 @@ import zakadabar.core.business.EntityBusinessLogicBase
 import zakadabar.core.persistence.EmptyPersistenceApi
 import zakadabar.core.server.server
 import zakadabar.core.testing.TestCompanionBase
-import zakadabar.core.data.entity.EmptyEntityBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EmptyEntityBo
+import zakadabar.core.data.EntityId
 import zakadabar.core.exception.Forbidden
 import kotlin.test.assertFailsWith
 

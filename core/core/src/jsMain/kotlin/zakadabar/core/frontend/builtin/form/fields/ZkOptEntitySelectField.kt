@@ -4,8 +4,8 @@
 
 package zakadabar.core.frontend.builtin.form.fields
 
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityId
 import kotlin.reflect.KMutableProperty0
 
 open class ZkOptEntitySelectField<ST : EntityBo<ST>>(

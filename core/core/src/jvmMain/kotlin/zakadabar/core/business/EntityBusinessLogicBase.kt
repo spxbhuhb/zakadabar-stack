@@ -4,8 +4,8 @@
 package zakadabar.core.business
 
 import zakadabar.core.route.RoutedModule
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.entity.EntityBoCompanion
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityBoCompanion
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObject
 

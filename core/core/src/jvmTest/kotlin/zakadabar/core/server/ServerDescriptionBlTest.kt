@@ -8,7 +8,6 @@ import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
 import zakadabar.core.testing.TestCompanionBase
-import zakadabar.core.data.builtin.misc.ServerDescriptionQuery
 import kotlin.test.assertEquals
 
 class ServerDescriptionBlTest {

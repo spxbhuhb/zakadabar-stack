@@ -25,7 +25,7 @@ import zakadabar.core.server.Server.Companion.staticRoot
 import zakadabar.core.authorize.LoginTimeout
 import zakadabar.core.server.routingLogger
 import zakadabar.core.server.server
-import zakadabar.core.data.builtin.settings.ServerSettingsBo
+import zakadabar.core.server.ServerSettingsBo
 import zakadabar.core.exception.*
 import zakadabar.core.module.ModuleStore
 import java.io.File

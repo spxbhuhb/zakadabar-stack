@@ -17,12 +17,28 @@ abstract class Upgrade20210815 : DefaultTask() {
         "import zakadabar.core.backend." to "import zakadabar.core.",
         "import zakadabar.core.RoutedModule" to "import zakadabar.core.route.RoutedModule",
         "import zakadabar.core.server" to "import zakadabar.core.server.server",
+        "import zakadabar.core.server.server." to "import zakadabar.core.server.", // one above is recursive
         "import zakadabar.core.Server" to "import zakadabar.core.server.Server",
         "import zakadabar.core.ktor." to "import zakadabar.core.server.ktor.",
         "import zakadabar.core.exposed." to "import zakadabar.core.persistence.exposed.",
         "import zakadabar.core.sql." to "import zakadabar.core.persistence.sql.",
         "import zakadabar.core.builtin." to "import zakadabar.core.server.",
-    )
+        "import zakadabar.core.data.action." to "import zakadabar.core.data.",
+        "import zakadabar.core.data.entity." to "import zakadabar.core.data.",
+        "import zakadabar.core.data.query." to "import zakadabar.core.data.",
+        "import zakadabar.core.data.schema." to "import zakadabar.core.schema.",
+        "import zakadabar.core.data.builtin.account" to "import zakadabar.core.authorize.",
+        "import zakadabar.core.data.builtin.authorize" to "import zakadabar.core.authorize.",
+        "import zakadabar.core.data.builtin.resources" to "import zakadabar.core.setting.",
+        "import zakadabar.core.data.builtin.settings" to "import zakadabar.core.server.",
+        "import zakadabar.core.data.builtin.misc.ServerDescription" to "import zakadabar.core.server.ServerDescription",
+        "import zakadabar.core.data.builtin.misc.Secret" to "import zakadabar.core.data.Secret",
+        "import zakadabar.core.data.builtin.misc.StringPair" to "import zakadabar.core.data.StringPair",
+        "import zakadabar.core.data.builtin.misc.ActionStatusBo" to "import zakadabar.core.data.ActionStatusBo",
+        "ActionStatusBo" to "ActionStatus",
+        "import zakadabar.core.data.builtin." to "import zakadabar.core.data."
+
+        )
 
     @TaskAction
     private fun upgrade() {

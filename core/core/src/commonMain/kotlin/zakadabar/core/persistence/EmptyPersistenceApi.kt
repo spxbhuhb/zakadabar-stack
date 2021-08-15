@@ -3,7 +3,7 @@
  */
 package zakadabar.core.persistence
 
-import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.EntityBo
 
 /**
  * This persistence API simply skips everything.

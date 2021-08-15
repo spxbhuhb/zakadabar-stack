@@ -20,8 +20,6 @@ import zakadabar.core.authorize.LoginTimeout
 import zakadabar.core.persistence.exposed.Sql
 import zakadabar.core.server.ktor.KtorServerBuilder
 import zakadabar.core.setting.SettingBl
-import zakadabar.core.data.builtin.misc.ServerDescriptionBo
-import zakadabar.core.data.builtin.settings.ServerSettingsBo
 import zakadabar.core.log.Slf4jLogger
 import zakadabar.core.module.CommonModule
 import zakadabar.core.module.modules

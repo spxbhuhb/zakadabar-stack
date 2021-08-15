@@ -6,8 +6,8 @@ package zakadabar.core.persistence.exposed
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityId
 
 /**
  * Persistence API base to be used by Exposed persistence APIs that do

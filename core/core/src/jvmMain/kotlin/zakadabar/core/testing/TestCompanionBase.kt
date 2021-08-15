@@ -8,8 +8,8 @@ import zakadabar.core.authorize.RoleBlProvider
 import zakadabar.core.authorize.SimpleRoleAuthorizerProvider
 import zakadabar.core.authorize.appRoles
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.CommBase
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.comm.CommBase
+import zakadabar.core.data.EntityId
 import zakadabar.core.log.Slf4jLogger
 import zakadabar.core.module.modules
 import zakadabar.core.route.RoutedModule

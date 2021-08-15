@@ -7,7 +7,7 @@ import io.ktor.http.content.*
 import io.ktor.routing.*
 import zakadabar.core.route.RoutedModule
 import zakadabar.core.setting.setting
-import zakadabar.core.data.builtin.settings.ContentBackendSettings
+import zakadabar.core.server.ContentBackendSettings
 import java.io.File
 
 /**

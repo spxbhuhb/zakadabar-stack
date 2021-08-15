@@ -6,7 +6,7 @@
 package zakadabar.core.server.ktor
 
 import io.ktor.auth.*
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityId
 
 class EmptyAuthenticationProvider internal constructor(configuration: Configuration) : AuthenticationProvider(configuration) {
     class Configuration internal constructor(name: String?) : AuthenticationProvider.Configuration(name)

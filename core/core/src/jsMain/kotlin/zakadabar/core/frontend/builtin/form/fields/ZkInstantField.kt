@@ -19,7 +19,7 @@ package zakadabar.core.frontend.builtin.form.fields
 import kotlinx.browser.document
 import kotlinx.datetime.Instant
 import org.w3c.dom.HTMLInputElement
-import zakadabar.core.data.schema.ValidityReport
+import zakadabar.core.schema.ValidityReport
 import zakadabar.core.frontend.builtin.form.zkFormStyles
 import zakadabar.core.frontend.resources.ZkFormatters.formatInstant
 import zakadabar.core.frontend.util.plusAssign

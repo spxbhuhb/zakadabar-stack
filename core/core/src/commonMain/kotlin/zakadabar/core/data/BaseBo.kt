@@ -3,7 +3,7 @@
  */
 package zakadabar.core.data
 
-import zakadabar.core.data.schema.BoSchema
+import zakadabar.core.schema.BoSchema
 
 interface BaseBo {
     fun schema() = BoSchema.NO_VALIDATION

@@ -3,7 +3,7 @@
  */
 package zakadabar.core.exception
 
-import zakadabar.core.data.schema.ValidityReport
+import zakadabar.core.schema.ValidityReport
 
 /**
  * On the backend [BadRequest] is converted into HTTP response with status 400.

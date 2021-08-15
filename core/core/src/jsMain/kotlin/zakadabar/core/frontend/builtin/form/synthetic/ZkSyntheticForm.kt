@@ -4,7 +4,7 @@
 package zakadabar.core.frontend.builtin.form.synthetic
 
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.schema.descriptor.BoDescriptor
+import zakadabar.core.schema.descriptor.BoDescriptor
 import zakadabar.core.frontend.builtin.form.ZkForm
 import zakadabar.core.frontend.builtin.form.ZkFormStyles
 import zakadabar.core.frontend.util.plusAssign

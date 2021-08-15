@@ -44,7 +44,7 @@ import kotlinx.serialization.Serializable
 import zakadabar.core.data.entity.EntityBo
 import zakadabar.core.data.entity.EntityBoCompanion
 import zakadabar.core.data.entity.EntityId
-import zakadabar.core.data.schema.BoSchema
+import zakadabar.core.schema.BoSchema
 ${generators.map { it.commonImport() }.flatten().distinct().joinToString("\n")}
 
 @Serializable

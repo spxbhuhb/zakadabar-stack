@@ -7,8 +7,8 @@ import zakadabar.core.authorize.BusinessLogicAuthorizer
 import zakadabar.core.authorize.Executor
 import zakadabar.core.business.ActionBusinessLogicBase
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.action.ActionBo
-import zakadabar.core.data.builtin.StringValue
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.StringValue
 import zakadabar.core.util.PublicApi
 
 @PublicApi

@@ -4,7 +4,7 @@
 package zakadabar.core.authorize
 
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityId
 import zakadabar.core.exception.Forbidden
 import zakadabar.core.util.PublicApi
 

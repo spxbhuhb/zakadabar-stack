@@ -8,11 +8,9 @@ import zakadabar.core.alarm.LogAlarmSupportProvider
 import zakadabar.core.audit.AuditorProvider
 import zakadabar.core.audit.LogAuditorProvider
 import zakadabar.core.log.LoggerProvider
-import zakadabar.core.log.Slf4jLogger
 import zakadabar.core.log.Slf4jLoggerProvider
-import zakadabar.core.log.StdOutLogger
-import zakadabar.core.server.ktor.KtorRouterProvider
 import zakadabar.core.route.RouterProvider
+import zakadabar.core.server.ktor.KtorRouterProvider
 import zakadabar.core.validate.SchemaValidatorProvider
 import zakadabar.core.validate.ValidatorProvider
 

@@ -3,9 +3,9 @@
  */
 package zakadabar.core.frontend.builtin.crud
 
-import zakadabar.core.data.entity.EntityBo
-import zakadabar.core.data.entity.EntityBoCompanion
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityBoCompanion
+import zakadabar.core.data.EntityId
 import zakadabar.core.frontend.builtin.ZkElement
 import zakadabar.core.frontend.builtin.ZkElementMode
 import zakadabar.core.frontend.builtin.table.ZkTable

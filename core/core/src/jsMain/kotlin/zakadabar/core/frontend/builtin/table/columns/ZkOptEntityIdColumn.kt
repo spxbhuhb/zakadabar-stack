@@ -4,7 +4,7 @@
 package zakadabar.core.frontend.builtin.table.columns
 
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.entity.EntityId
+import zakadabar.core.data.EntityId
 import zakadabar.core.frontend.builtin.ZkElement
 import zakadabar.core.frontend.builtin.table.ZkTable
 import zakadabar.core.resource.localizedStrings

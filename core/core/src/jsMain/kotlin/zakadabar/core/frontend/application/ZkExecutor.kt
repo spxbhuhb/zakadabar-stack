@@ -3,7 +3,7 @@
  */
 package zakadabar.core.frontend.application
 
-import zakadabar.core.data.builtin.account.AccountPublicBo
+import zakadabar.core.authorize.AccountPublicBo
 import zakadabar.core.util.PublicApi
 
 class ZkExecutor(

@@ -5,8 +5,8 @@ package zakadabar.core.validate
 
 import zakadabar.core.authorize.Executor
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.action.ActionBo
-import zakadabar.core.data.query.QueryBo
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.QueryBo
 import zakadabar.core.exception.BadRequest
 
 /**

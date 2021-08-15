@@ -4,7 +4,7 @@
 package zakadabar.core.frontend.builtin.crud
 
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.entity.EntityBo
+import zakadabar.core.data.EntityBo
 import zakadabar.core.frontend.builtin.ZkElement
 import zakadabar.core.frontend.builtin.pages.zkPageStyles
 import zakadabar.core.frontend.builtin.table.ZkTable

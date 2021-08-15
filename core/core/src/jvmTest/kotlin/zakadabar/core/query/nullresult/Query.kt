@@ -4,10 +4,10 @@
 package zakadabar.core.query.nullresult
 
 import kotlinx.serialization.Serializable
-import zakadabar.core.data.builtin.StringValue
-import zakadabar.core.data.query.QueryBo
-import zakadabar.core.data.query.QueryBoCompanion
-import zakadabar.core.data.schema.BoSchema
+import zakadabar.core.data.StringValue
+import zakadabar.core.data.QueryBo
+import zakadabar.core.data.QueryBoCompanion
+import zakadabar.core.schema.BoSchema
 import zakadabar.core.util.UUID
 
 @Serializable
