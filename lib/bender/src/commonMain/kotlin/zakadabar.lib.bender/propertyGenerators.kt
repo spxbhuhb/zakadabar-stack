@@ -53,7 +53,7 @@ open class BooleanPropertyGenerator(
 
     override fun browserImport() =
         if (property.optional) {
-            listOf("import zakadabar.core.frontend.application.stringStore")
+            listOf("import zakadabar.core.browser.application.stringStore")
         } else {
             emptyList()
         }

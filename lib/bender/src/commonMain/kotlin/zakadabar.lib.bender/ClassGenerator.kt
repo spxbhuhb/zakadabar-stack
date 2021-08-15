@@ -77,7 +77,7 @@ import zakadabar.core.frontend.builtin.crud.ZkCrudTarget
 import zakadabar.core.frontend.builtin.form.ZkForm
 import zakadabar.core.frontend.builtin.table.ZkTable
 import zakadabar.core.resource.localized
-import zakadabar.core.frontend.application.target
+import zakadabar.core.browser.application.target
 import ${packageName}.$boName
 ${generators.map { it.browserImport() }.flatten().distinct().joinToString("\n")}
 

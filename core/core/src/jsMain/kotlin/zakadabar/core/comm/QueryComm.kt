@@ -8,7 +8,7 @@ import kotlinx.coroutines.await
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import zakadabar.core.data.QueryBoCompanion
-import zakadabar.core.frontend.util.encodeURIComponent
+import zakadabar.core.browser.util.encodeURIComponent
 import zakadabar.core.util.PublicApi
 
 /**

@@ -36,9 +36,17 @@ abstract class Upgrade20210815 : DefaultTask() {
         "import zakadabar.core.data.builtin.misc.StringPair" to "import zakadabar.core.data.StringPair",
         "import zakadabar.core.data.builtin.misc.ActionStatusBo" to "import zakadabar.core.data.ActionStatusBo",
         "ActionStatusBo" to "ActionStatus",
-        "import zakadabar.core.data.builtin." to "import zakadabar.core.data."
-
-        )
+        "import zakadabar.core.data.builtin." to "import zakadabar.core.data.",
+        "import zakadabar.core.frontend.application." to "import zakadabar.core.browser.application.",
+        "import zakadabar.core.frontend.builtin." to "import zakadabar.core.browser.",
+        "import zakadabar.core.frontend.resources." to "import zakadabar.core.resource.",
+        "import zakadabar.core.frontend.util" to "import zakadabar.core.browser.util",
+        "import zakadabar.core.browser.form.fields" to "import zakadabar.core.browser.field",
+        "import zakadabar.core.browser.form.structure" to "import zakadabar.core.browser.form",
+        "import zakadabar.core.browser.layout.slider" to "import zakadabar.core.browser.slider",
+        "import zakadabar.core.browser.layout.tabcontainer" to "import zakadabar.core.browser.tabcontainer",
+        "import zakadabar.core.browser.pages" to "import zakadabar.core.browser.page"
+    )
 
     @TaskAction
     private fun upgrade() {
