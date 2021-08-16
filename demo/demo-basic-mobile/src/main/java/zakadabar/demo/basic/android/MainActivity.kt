@@ -10,15 +10,15 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.android.jdbc.zklite.connectSqlite
+import zakadabar.core.comm.CommBase
+import zakadabar.core.util.default
 import zakadabar.lib.accounts.persistence.AccountPrivateExposedTableCommon
 import zakadabar.lib.demo.backend.DemoBlobExposedPa
 import zakadabar.lib.demo.backend.DemoBlobExposedPaTable
 import zakadabar.lib.demo.backend.DemoExposedPaGen
 import zakadabar.lib.demo.backend.DemoExposedTableGen
-import zakadabar.lib.i18n.backend.LocaleExposedTableGen
-import zakadabar.lib.i18n.backend.TranslationExposedTableGen
-import zakadabar.core.comm.CommBase
-import zakadabar.core.util.default
+import zakadabar.lib.i18n.persistence.LocaleExposedTableGen
+import zakadabar.lib.i18n.persistence.TranslationExposedTableGen
 import java.sql.Connection
 import java.sql.DriverManager
 

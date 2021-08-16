@@ -4,16 +4,15 @@
 package zakadabar.lib.accounts.testing
 
 import kotlinx.coroutines.runBlocking
-import zakadabar.lib.accounts.backend.install
-import zakadabar.lib.accounts.data.LoginAction
-import zakadabar.lib.accounts.data.SessionBo
 import zakadabar.core.authorize.AppRolesBase
 import zakadabar.core.authorize.SimpleRoleAuthorizerProvider
+import zakadabar.core.data.EntityId
+import zakadabar.core.data.Secret
 import zakadabar.core.server.server
 import zakadabar.core.testing.TestCompanionBase
-import zakadabar.core.data.Secret
-import zakadabar.core.data.EntityId
 import zakadabar.core.util.PublicApi
+import zakadabar.lib.accounts.data.LoginAction
+import zakadabar.lib.accounts.data.SessionBo
 
 /**
  * Helper class for unit tests with full authentication.
@@ -52,7 +51,7 @@ open class AuthTestCompanionBase(
     lateinit var session : SessionBo
 
     override fun addModules() {
-        install(roles)
+        zakadabar.lib.accounts.install(roles)
 
         if (simpleProvider) {
             server += SimpleRoleAuthorizerProvider {

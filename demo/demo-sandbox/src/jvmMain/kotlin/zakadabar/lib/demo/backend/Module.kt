@@ -5,8 +5,8 @@ package zakadabar.lib.demo.backend
 
 import zakadabar.cookbook.entity.builtin.ExampleBl
 import zakadabar.cookbook.sqlite.bundle.business.ExampleBundleBl
-import zakadabar.core.route.RoutedModule
 import zakadabar.core.authorize.SimpleRoleAuthorizerProvider
+import zakadabar.core.route.RoutedModule
 import zakadabar.core.server.server
 import zakadabar.core.util.PublicApi
 
@@ -14,8 +14,8 @@ import zakadabar.core.util.PublicApi
 object Module : RoutedModule {
 
     override fun onModuleLoad() {
-        zakadabar.lib.accounts.backend.install()
-        zakadabar.lib.i18n.backend.install()
+        zakadabar.lib.accounts.install()
+        zakadabar.lib.i18n.install()
 
         server += SimpleRoleAuthorizerProvider {
             all = PUBLIC

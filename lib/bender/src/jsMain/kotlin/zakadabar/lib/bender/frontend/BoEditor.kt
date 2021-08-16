@@ -5,16 +5,6 @@ package zakadabar.lib.bender.frontend
 
 import kotlinx.browser.window
 import kotlinx.datetime.Clock
-import zakadabar.lib.bender.ClassGenerator
-import zakadabar.lib.bender.EntityIdPropertyGenerator
-import zakadabar.lib.bender.KtToBoDescriptor
-import zakadabar.lib.bender.PropertyGenerator
-import zakadabar.lib.bender.frontend.property.BoPropertyEditor
-import zakadabar.lib.markdown.frontend.MarkdownModal
-import zakadabar.lib.markdown.frontend.MarkdownView
-import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
-import zakadabar.core.schema.descriptor.BoDescriptor
-import zakadabar.core.schema.descriptor.EntityIdBoProperty
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.button.ZkButton
 import zakadabar.core.browser.button.buttonPrimary
@@ -25,13 +15,23 @@ import zakadabar.core.browser.toast.toastDanger
 import zakadabar.core.browser.toast.toastInfo
 import zakadabar.core.browser.toast.toastSuccess
 import zakadabar.core.browser.toast.toastWarning
-import zakadabar.core.resource.ZkFlavour
-import zakadabar.core.resource.ZkFormatters.formatInstant
-import zakadabar.core.resource.ZkIcons
 import zakadabar.core.browser.util.io
 import zakadabar.core.browser.util.log
 import zakadabar.core.browser.util.marginBottom
 import zakadabar.core.browser.util.marginRight
+import zakadabar.core.resource.ZkFlavour
+import zakadabar.core.resource.ZkFormatters.formatInstant
+import zakadabar.core.resource.ZkIcons
+import zakadabar.core.schema.descriptor.BoDescriptor
+import zakadabar.core.schema.descriptor.EntityIdBoProperty
+import zakadabar.lib.bender.ClassGenerator
+import zakadabar.lib.bender.EntityIdPropertyGenerator
+import zakadabar.lib.bender.KtToBoDescriptor
+import zakadabar.lib.bender.PropertyGenerator
+import zakadabar.lib.bender.frontend.property.BoPropertyEditor
+import zakadabar.lib.markdown.browser.MarkdownModal
+import zakadabar.lib.markdown.browser.MarkdownView
+import zakadabar.lib.markdown.browser.flavour.ZkMarkdownContext
 
 class BoEditor(
     private val classGenerator: ClassGenerator,

@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.content.backend
 
-import zakadabar.lib.blobs.backend.BlobBlBase
+import zakadabar.lib.blobs.business.BlobBlBase
 import zakadabar.lib.content.data.AttachedBlobBo
 import zakadabar.lib.content.data.ContentBo
 

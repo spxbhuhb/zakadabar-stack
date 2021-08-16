@@ -4,9 +4,9 @@
 
 package zakadabar.lib.demo.frontend
 
+import zakadabar.core.browser.application.ZkAppRouting
 import zakadabar.lib.demo.frontend.pages.ContentNavTest
 import zakadabar.lib.demo.frontend.pages.TestCrud
-import zakadabar.core.browser.application.ZkAppRouting
 
 class Routing : ZkAppRouting(DefaultLayout, Home) {
 
@@ -16,7 +16,7 @@ class Routing : ZkAppRouting(DefaultLayout, Home) {
         + ContentNavTest()
 
         zakadabar.lib.accounts.browser.install(this)
-        zakadabar.lib.i18n.frontend.install(this)
+        zakadabar.lib.i18n.browser.install(this)
         zakadabar.lib.content.frontend.browser.install(this)
     }
 

@@ -6,6 +6,7 @@ package zakadabar.lib.blobs.data
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.schema.BoSchema
+import zakadabar.lib.blobs.comm.BlobCommInterface
 
 interface BlobBo<T : BlobBo<T,RT>, RT : EntityBo<RT>> : EntityBo<T> {
 
@@ -16,7 +17,7 @@ interface BlobBo<T : BlobBo<T,RT>, RT : EntityBo<RT>> : EntityBo<T> {
     var mimeType: String
     var size: Long
 
-    override fun comm() : BlobCommInterface<T,RT>
+    override fun comm() : BlobCommInterface<T, RT>
 
     /**
      * Uploads binary data for this blob. Overrides existing data.

@@ -7,6 +7,14 @@ import org.intellij.markdown.html.resolveToStringSafe
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import zakadabar.cookbook.browser.table.inline.TableEditInline
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.note.ZkNote
+import zakadabar.core.resource.ZkFlavour
+import zakadabar.core.resource.css.px
+import zakadabar.core.resource.theme
+import zakadabar.core.text.capitalized
 import zakadabar.lib.examples.frontend.OperatorExample
 import zakadabar.lib.examples.frontend.ParallelDownloadExample
 import zakadabar.lib.examples.frontend.button.ButtonExamples
@@ -33,16 +41,8 @@ import zakadabar.lib.examples.frontend.toast.ToastAutoHideExample
 import zakadabar.lib.examples.frontend.toast.ToastBasicExamples
 import zakadabar.lib.examples.frontend.toast.ToastCustomExample
 import zakadabar.lib.examples.frontend.toast.ToastFormExample
-import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
+import zakadabar.lib.markdown.browser.flavour.ZkMarkdownContext
 import zakadabar.site.frontend.components.ThemeShowCase
-import zakadabar.core.browser.application.application
-import zakadabar.core.browser.ZkElement
-import zakadabar.core.browser.layout.zkLayoutStyles
-import zakadabar.core.browser.note.ZkNote
-import zakadabar.core.resource.ZkFlavour
-import zakadabar.core.resource.css.px
-import zakadabar.core.resource.theme
-import zakadabar.core.text.capitalized
 
 class SiteMarkdownContext(
     viewName: String,
