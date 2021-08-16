@@ -3,6 +3,7 @@
  */
 package zakadabar.lib.email
 
+import kotlinx.datetime.toJavaInstant
 import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ResultRow
