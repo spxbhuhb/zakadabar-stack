@@ -24,7 +24,7 @@ class ContentBlTest {
     companion object : TestCompanionBase() {
 
         override fun addModules() {
-            zakadabar.lib.i18n.persistence.install()
+            zakadabar.lib.i18n.install()
             install()
         }
 

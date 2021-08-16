@@ -12,7 +12,7 @@ import zakadabar.core.util.PublicApi
 fun ZkElement.withHelp(func: () -> ZkElement?): HTMLElement? {
 
     return func()?.let {
-        + div {
+        + row {
             + it
             + buttonSecondary("?") { }
         }

@@ -4,7 +4,7 @@
 package zakadabar.lib.email
 
 import zakadabar.core.util.default
-import zakadabar.lib.blobs.business.BlobExposedPa
+import zakadabar.lib.blobs.persistence.BlobExposedPa
 
 class MailPartPa(
    referenceTable : MailTable,

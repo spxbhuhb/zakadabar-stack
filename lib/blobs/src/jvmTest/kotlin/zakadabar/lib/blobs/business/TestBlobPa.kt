@@ -6,6 +6,8 @@ package zakadabar.lib.blobs.business
 import org.jetbrains.exposed.dao.id.LongIdTable
 import zakadabar.core.data.EmptyEntityBo
 import zakadabar.core.util.default
+import zakadabar.lib.blobs.persistence.BlobExposedPa
+import zakadabar.lib.blobs.persistence.BlobExposedTable
 
 class TestBlobExposedPa : BlobExposedPa<TestBlob, EmptyEntityBo>(
     table = TestBlobExposedTable,
