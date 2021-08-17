@@ -14,7 +14,7 @@ management function.
 To use i18n in your application:
 
 1. add the gradle dependency,
-1. add the module to your server configuration, for details see [Modules](../../backend/Modules.md),
+1. add the module to your server configuration, for details see [Modules](../../common/Modules.md),
 1. add the service to your application, see [Introduction: Browser](../../browser/Introduction.md)   
 1. add the routing to your frontend, for details see [Routing](../../browser/structure/Routing.md)
 1. add the navigation to your side to open the pages, see [SideBar](../../browser/builtin/SideBar.md)

@@ -8,7 +8,7 @@ Toasts are small pop-up messages displayed to the user to provide information ab
 * Extend [zkToastStyles](/core/core/src/jsMain/kotlin/zakadabar/core/browser/toast/zkToastStyles.kt) to override default
   styles.
 * Toasts are added to the `toasts` property
-  of the `application` ([ZkApplication](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt)).
+  of the `application` ([ZkApplication](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkApplication.kt)).
 * The `toast` property is an instance
   of [ZkToastContainer](/core/core/src/jsMain/kotlin/zakadabar/core/browser/toast/ZkToastContainer.kt).
 

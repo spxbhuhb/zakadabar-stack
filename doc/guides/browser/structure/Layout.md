@@ -2,9 +2,9 @@
 
 An application may have any number of layouts. A layout defines the general structure of the page.
 
-* Layout classes extend [ZkAppLayout](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkAppLayout.kt).
+* Layout classes extend [ZkAppLayout](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkAppLayout.kt).
 * There is one active layout at one time, others are in the DOM but hidden.
-* [ZkAppRouting](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkAppRouting.kt) handles layout changes
+* [ZkAppRouting](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkAppRouting.kt) handles layout changes
 
 There are two pre-defined layouts:
 

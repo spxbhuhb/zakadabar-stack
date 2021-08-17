@@ -4,8 +4,8 @@ In Zakadabar the "static" strings your application presents to the users come fr
 buttons, table headers, form field labels, or strings in an Excel file you generate on the backend and send in an
 e-mail.
 
-Most string stores extend [ZkBuiltinStrings](/core/core/src/commonMain/kotlin/zakadabar/stack/resources/ZkBuiltinStrings.kt),
-which in turn is an extension of [ZkStringStore](/core/core/src/commonMain/kotlin/zakadabar/stack/resources/ZkStringStore.kt).
+Most string stores extend [ZkBuiltinStrings](/core/core/src/commonMain/kotlin/zakadabar/core/resource/ZkBuiltinStrings.kt),
+which in turn is an extension of [ZkStringStore](/core/core/src/commonMain/kotlin/zakadabar/core/resource/ZkStringStore.kt).
 
 The built-in string store contains strings the stack uses by itself, for example label of the "back" buttons, so it is a
 good practice to extend it when you write your own string store.
@@ -18,7 +18,7 @@ really want.
 <div data-zk-enrich="Note" data-zk-flavour="Success" data-zk-title="strings and stringStore">
 
 If you follow the conventions, the variable `strings` and `stringStore`
-in [ZkApplication.kt](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt) will be the exact same
+in [ZkApplication.kt](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkApplication.kt) will be the exact same
 instance.
 
 This is quite convenient when writing code because:
@@ -67,7 +67,7 @@ translate<MyElement>() // same as getNormalized("MyElement")
 
 ## Write a String Store [source code](/lib/examples/src/commonMain/kotlin/zakadabar/lib/examples/resources/ExamplesStrings.kt)
 
-1. Extend [ZkBuiltinStrings](/core/core/src/commonMain/kotlin/zakadabar/stack/resources/ZkBuiltinStrings.kt). Override anything
+1. Extend [ZkBuiltinStrings](/core/core/src/commonMain/kotlin/zakadabar/core/resource/ZkBuiltinStrings.kt). Override anything
    you would like and add new ones as needed.
 1. On the browser frontend:
     1. define a internal `strings` variable that stores that instance (this is just a convention, to make the strings
@@ -105,7 +105,7 @@ localized strings, so everything shows up in the current language.
 ### Browser
 
 Form, tables, navigation components can automatically look up the labels and headers, based on the name of the property
-or target. This uses the [stringStore](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt). In
+or target. This uses the [stringStore](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkApplication.kt). In
 consequence localization affects forms and tables automatically.
 
 These automatic lookups use `getNormalized`.

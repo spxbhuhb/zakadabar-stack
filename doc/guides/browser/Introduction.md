@@ -49,7 +49,7 @@ for more information about the topic.
 The `main` function in [main.kt](/site/src/jsMain/kotlin/main.kt) is the entry point of the application.
 
 As first step, it creates the application instance and stores it in the `application` variable which is defined
-in [ZkApplication.kt](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt).
+in [ZkApplication.kt](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkApplication.kt).
 
 You can extend `ZkApplication` and use your own class here if you would like.
 
@@ -102,9 +102,9 @@ class name can be very useful for debugging, may be switched off in production w
 ### Session Manager
 
 The following line initializes the session manager of the application. If no 
-[ZkSessionManager](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkSessionManager.kt)
+[ZkSessionManager](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkSessionManager.kt)
 service is installed, `initSession` creates an
-[EmptySessionManager](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/EmptySessionManager.kt)
+[EmptySessionManager](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/EmptySessionManager.kt)
 which does not use sessions but provides the interfaces needed for the application to work.
 This way your user will be `anonymous` all the time, there is no login or logout.
 
@@ -112,7 +112,7 @@ This way your user will be `anonymous` all the time, there is no login or logout
 initSession()
 ```
 
-When you use accounts and sessions, you have to install a [ZkSessionManager](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkSessionManager.kt)
+When you use accounts and sessions, you have to install a [ZkSessionManager](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkSessionManager.kt)
 service. The plug-and-play module [lib:accounts](../plug-and-play/accounts/Introduction.md) provides such a service. 
 In `main.kt`:
 
@@ -164,7 +164,7 @@ The locale of the site is determined as follows:
 1. Value of the `defaultLocale` parameter, if specified.
 1. An error message is shown that the locale cannot be determined.
 
-Once the locale is set, `initLocale` looks up a [TranslationProvider](/core/core/src/commonMain/kotlin/zakadabar/stack/text/TranslationProvider.kt) 
+Once the locale is set, `initLocale` looks up a [TranslationProvider](/core/core/src/commonMain/kotlin/zakadabar/core/text/TranslationProvider.kt) 
 between `application.services` and if found, downloads the translations for that given locale, so automatic translations will
 work. 
 
@@ -174,7 +174,7 @@ If you don't use accounts and sessions, the locale initialization needs a defaul
 initLocale(strings, defaultLocale = "en")
 ```
 
-When you use translations, you have to install a [TranslationProvider](/core/core/src/commonMain/kotlin/zakadabar/stack/text/TranslationProvider.kt)
+When you use translations, you have to install a [TranslationProvider](/core/core/src/commonMain/kotlin/zakadabar/core/text/TranslationProvider.kt)
 service. The plug-and-play module [lib:i18n](../plug-and-play/i18n/Introduction.md) provides such a service.
 
 In `main.kt`:

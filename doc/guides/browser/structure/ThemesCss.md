@@ -2,16 +2,16 @@
 
 The stack contains a dynamic theme and style system.
 
-* [theme](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt)
+* [theme](/core/core/src/jsMain/kotlin/zakadabar/core/resource/theme.kt)
     * stores the active theme
     * when changes, all styles are rebuilt
-* [ZkTheme](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt)
+* [ZkTheme](/core/core/src/jsMain/kotlin/zakadabar/core/resource/theme.kt)
     * interface for themes to implement
-* [ZkCssStyleSheet](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleSheet.kt)
+* [ZkCssStyleSheet](/core/core/src/jsMain/kotlin/zakadabar/core/resource/css/ZkCssStyleSheet.kt)
     * CSS style sheet builder / manager
-* [ZkCssStyleRule](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleRule.kt)
+* [ZkCssStyleRule](/core/core/src/jsMain/kotlin/zakadabar/core/resource/css/ZkCssStyleRule.kt)
     * one CSS rule (with possible variations)
-* [ZkColors](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/ZkColors.kt)
+* [ZkColors](/core/core/src/jsMain/kotlin/zakadabar/core/resource/ZkColors.kt)
     * Color constants, palettes from Material Colors and the Zakadabar palette
 * [zkHtmlStyles](/core/core/src/jsMain/kotlin/zakadabar/core/browser/theme/zkHtmlStyles.kt)
     * global HTML styles (on "body", "a" etc. tags)
@@ -33,7 +33,7 @@ The stack contains a dynamic theme and style system.
 
 ### Initial Theme Selection
 
-[initTheme](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt),
+[initTheme](/core/core/src/jsMain/kotlin/zakadabar/core/resource/theme.kt),
 called from `jsMain/main.kt`, selects the theme during application startup.
 
 Algorithm:
@@ -68,7 +68,7 @@ with(application) {
 ### Write a theme
 
 * Extend one of the built-in themes or
-  implement [ZkTheme](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/theme.kt)
+  implement [ZkTheme](/core/core/src/jsMain/kotlin/zakadabar/core/resource/theme.kt)
   .
 * Use `onResume` to fine tune style variables.
 * Calling `super.onResume` is not mandatory. It applies the style modifications of the
@@ -112,7 +112,7 @@ This is a fine-tuned example, that can be used to replace one of the default the
 ## CSS
 
 * CSS style sheets are written in Kotlin.
-* Extend [ZkCssStyleSheet](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/css/ZkCssStyleSheet.kt) to write a new one.
+* Extend [ZkCssStyleSheet](/core/core/src/jsMain/kotlin/zakadabar/core/resource/css/ZkCssStyleSheet.kt) to write a new one.
 * Use `val yourStyles by cssStyleSheet(YourStyleSheet())` to make an instance of the style sheet.
 * When the theme changes, all style sheets are recompiled.
     * During recompile the style names remain the same.
@@ -405,7 +405,7 @@ theme-aware.
 For example `Lib:Markdown` uses `highlight.js` for code syntax highlight. The
 colors have to be different in dark and light mode. `highlight.js` does not
 support multiple themes,
-so [MarkdownStyles](/lib/markdown/src/jsMain/kotlin/zakadabar/lib/markdown/frontend/markdownStyles.kt)
+so [MarkdownStyles](/lib/markdown/src/jsMain/kotlin/zakadabar/lib/markdown/browser/markdownStyles.kt)
 use a variable and the themes can set whatever URL they want.
 
 ```kotlin

@@ -11,7 +11,7 @@ tags:
 
 By default, the global module store `modules` stores application modules.
 
-This is an instance of [ModuleStore](/core/core/src/commonMain/kotlin/zakadabar/stack/module/ModuleStore.kt)
+This is an instance of [ModuleStore](/core/core/src/commonMain/kotlin/zakadabar/core/module/ModuleStore.kt)
 and you can use it to manage, start, stop modules without having a server instance.
 
 Use cases:
@@ -31,11 +31,11 @@ modules += ExampleBl()
 ## Settings
 
 If your modules use [Settings](/doc/guides/backend/Settings.md), add a
-[SettingProvider](/core/core/src/commonMain/kotlin/zakadabar/stack/setting/SettingProvider.kt). Providers 
+[SettingProvider](/core/core/src/commonMain/kotlin/zakadabar/core/setting/SettingProvider.kt). Providers 
 included with the stack:
 
 - [SettingBl](/core/core/src/jvmMain/kotlin/zakadabar/core/setting/SettingBl.kt) for JVM
-- [DefaultSettingProvider](/core/core/src/commonMain/kotlin/zakadabar/stack/setting/DefaultSettingProvider.kt) for Common
+- [DefaultSettingProvider](/core/core/src/commonMain/kotlin/zakadabar/core/setting/DefaultSettingProvider.kt) for Common
 
 ```kotlin
 modules += SettingBl()

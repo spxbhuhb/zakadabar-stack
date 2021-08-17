@@ -1,7 +1,7 @@
 # Modals
 
 Modal dialogs are handled through the `modals` property of
-the `application` ([ZkApplication](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt)).
+the `application` ([ZkApplication](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkApplication.kt)).
 The `modals` property is an instance
 of [ZkModalContainer](/core/core/src/jsMain/kotlin/zakadabar/core/browser/modal/ZkModalContainer.kt).
 

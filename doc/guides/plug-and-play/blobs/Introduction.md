@@ -33,11 +33,11 @@ To use blobs in your application:
 
 1. add the gradle dependency,
 1. extend BlobBo, BL and PA classes (see below)
-1. add the module to your server configuration, for details see [Modules](../../backend/Modules.md),
+1. add the module to your server configuration, for details see [Modules](../../common/Modules.md),
 1. use these classes in your UI code as needed:
-    - [ZkFullScreenImageView](/lib/blobs/src/jsMain/kotlin/zakadabar/lib/blobs/frontend/image/ZkFullScreenImageView.kt) - full screen image view modal
-    - [ZkImagesField](/lib/blobs/src/jsMain/kotlin/zakadabar/lib/blobs/frontend/image/ZkImagesField.kt) - form field for images
-    - [ZkAttachmentsField](/lib/blobs/src/jsMain/kotlin/zakadabar/lib/blobs/frontend/attachment/ZkAttachmentsField.kt) - form field for attachments
+    - [ZkFullScreenImageView](/lib/blobs/src/jsMain/kotlin/zakadabar/lib/blobs/browser/image/ZkFullScreenImageView.kt) - full screen image view modal
+    - [ZkImagesField](/lib/blobs/src/jsMain/kotlin/zakadabar/lib/blobs/browser/image/ZkImagesField.kt) - form field for images
+    - [ZkAttachmentsField](/lib/blobs/src/jsMain/kotlin/zakadabar/lib/blobs/browser/attachment/ZkAttachmentsField.kt) - form field for attachments
 
 **gradle**
 

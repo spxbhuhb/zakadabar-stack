@@ -39,7 +39,7 @@ on the same node as the business logic that actually executes the job.
 
 **backend**
 
-1. add the module to your server configuration, for details see [Modules](../../backend/Modules.md)
+1. add the module to your server configuration, for details see [Modules](../../common/Modules.md)
 1. configure settings, for more information, for details see [Settings](../../backend/Settings.md)
 
 **frontend**
