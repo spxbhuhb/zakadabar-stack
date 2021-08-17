@@ -1,7 +1,7 @@
 # Custom Backends
 
 * are fully customizable request handlers,
-* are Kotlin objects that extend [RoutedModule](/core/core/src/commonMain/kotlin/zakadabar/stack/backend/RoutedModule.kt),
+* are Kotlin objects that extend [RoutedModule](/core/core/src/commonMain/kotlin/zakadabar/core/route/RoutedModule.kt),
 * **are not** added automatically (see: [Modules](../common/Modules.md))
 
 Examples:

@@ -13,7 +13,7 @@ The stack contains a dynamic theme and style system.
     * one CSS rule (with possible variations)
 * [ZkColors](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/resources/ZkColors.kt)
     * Color constants, palettes from Material Colors and the Zakadabar palette
-* [zkHtmlStyles](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/zkHtmlStyles.kt)
+* [zkHtmlStyles](/core/core/src/jsMain/kotlin/zakadabar/core/browser/theme/zkHtmlStyles.kt)
     * global HTML styles (on "body", "a" etc. tags)
 
 ## Theme
@@ -26,9 +26,9 @@ The stack contains a dynamic theme and style system.
     * rebuilds all attached style sheets.
     * **does not** change the DOM (except the `zk-styles` node under `body`)
 * Built-in themes:
-    * [ZkBuiltinLightTheme](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkBuiltinLightTheme.kt)
+    * [ZkBuiltinLightTheme](/core/core/src/jsMain/kotlin/zakadabar/core/browser/theme/ZkBuiltinLightTheme.kt)
         - light theme
-    * [ZkBuiltinDarkTheme](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkBuiltinDarkTheme.kt)
+    * [ZkBuiltinDarkTheme](/core/core/src/jsMain/kotlin/zakadabar/core/browser/theme/ZkBuiltinDarkTheme.kt)
         - dark theme
 
 ### Initial Theme Selection
@@ -484,7 +484,7 @@ as in `cssClass`.
 ## Scroll Bar Styles
 
 Scroll bars are styled
-by [ZkScrollBarStyles](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/layout/zkScrollBarStyles.kt)
+by [ZkScrollBarStyles](/core/core/src/jsMain/kotlin/zakadabar/core/browser/layout/zkScrollBarStyles.kt)
 .
 
 The default is to use scroll bar colors aligned with the theme.
@@ -505,7 +505,7 @@ To hide the scroll bar on one component:
 
 ## Theme Rotate
 
-Use [ZkThemeRotate](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/theme/ZkThemeRotate.kt) element to
+Use [ZkThemeRotate](/core/core/src/jsMain/kotlin/zakadabar/core/browser/theme/ZkThemeRotate.kt) element to
 rotate between themes. This element is configured with a list of icons and themes. When the user clicks
 on an icon, the theme paired with the icon is activated and the icon of the next theme is shown.
 

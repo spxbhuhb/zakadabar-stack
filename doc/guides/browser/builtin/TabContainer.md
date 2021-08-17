@@ -1,7 +1,7 @@
 # TabContainer
 
-* [ZkTabContainer](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/layout/tabcontainer/ZkTabContainer.kt) provides display for tabbed content,
-* [zkTabContainerStyles](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/layout/tabcontainer/zkTabContainerStyles.kt) contains the styles.
+* [ZkTabContainer](/core/core/src/jsMain/kotlin/zakadabar/core/browser/layout/tabcontainer/ZkTabContainer.kt) provides display for tabbed content,
+* [zkTabContainerStyles](/core/core/src/jsMain/kotlin/zakadabar/core/browser/layout/tabcontainer/zkTabContainerStyles.kt) contains the styles.
 
 Use the `tab` function to add tabs to the container. There are two variations:
 

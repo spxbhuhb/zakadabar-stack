@@ -8,8 +8,8 @@ An application may have any number of layouts. A layout defines the general stru
 
 There are two pre-defined layouts:
 
-* [ZkFullScreenLayout](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/layout/ZkFullScreenLayout.kt)
-* [ZkDefaultLayout](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/layout/ZkDefaultLayout.kt)
+* [ZkFullScreenLayout](/core/core/src/jsMain/kotlin/zakadabar/core/browser/layout/ZkFullScreenLayout.kt)
+* [ZkDefaultLayout](/core/core/src/jsMain/kotlin/zakadabar/core/browser/layout/ZkDefaultLayout.kt)
 
 ## The Default Layout
 
@@ -47,11 +47,11 @@ The default layout has an application title bar which has 4 areas:
 * global elements - global actions, shown all the time
 
 Default application title bar
-implementation: [ZkAppTitleBar](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/titlebar/ZkTitleBar.kt)
+implementation: [ZkAppTitleBar](/core/core/src/jsMain/kotlin/zakadabar/core/browser/titlebar/ZkTitleBar.kt)
 
 Pages, tables and forms use `application.title` to set the title and context elements of the title bar.
 
-All high level elements (ZkPage, ZkArgPage, ZkForm, ZkTable) implement the [ZkAppTitleProvider](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/titlebar/ZkAppTitleProvider.kt)
+All high level elements (ZkPage, ZkArgPage, ZkForm, ZkTable) implement the [ZkAppTitleProvider](/core/core/src/jsMain/kotlin/zakadabar/core/browser/titlebar/ZkAppTitleProvider.kt)
 interface which declares the following fields:
 
 | Field | Type | Description |
@@ -61,7 +61,7 @@ interface which declares the following fields:
 | `titleElement` | String | Element content of the title. When set `titleText` is ignored. |
 
 Elements that implement `ZkAppTitleProvider` usually call the `setAppTitleBar` function from `onResume`.
-Some may override this function to add actions. Check [ZkTable](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/table/ZkTable.kt) for example.
+Some may override this function to add actions. Check [ZkTable](/core/core/src/jsMain/kotlin/zakadabar/core/browser/table/ZkTable.kt) for example.
 
 ### Fix Title Bar
 

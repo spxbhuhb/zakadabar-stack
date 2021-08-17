@@ -45,7 +45,7 @@ modules += ExampleModuleBundle()
 
 To write a module bundle:
 
-- Create an object that implements the interface [CommonModule](/core/core/src/commonMain/kotlin/zakadabar/stack/module/CommonModule.kt).
+- Create an object that implements the interface [CommonModule](/core/core/src/commonMain/kotlin/zakadabar/core/module/CommonModule.kt).
 - Use the `onModuleLoad` function to add modules that are part of the bundle.
 
 ```kotlin
@@ -91,7 +91,7 @@ the routes to their `router`. See [Routing](../backend/Routing.md) for more info
 ### onInstallStatic (RoutedModule only)
 
 Add static resources to Ktor. It provides an easy way to register directories for static service. Check
-[ContentBackend](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/custom/ContentBackend.kt)
+[ContentBackend](/core/core/src/jvmMain/kotlin/zakadabar/core/server/util/ContentBackend.kt)
 for an example.
 
 ## Dependencies
@@ -107,7 +107,7 @@ After this declaration `secondModule` is an actual instance of `SecondModule`. Y
 can call its functions, access its properties.
 
 During system startup the  function of 
-[ModuleStore.resolveDependencies](/core/core/src/commonMain/kotlin/zakadabar/stack/module/ModuleStore.kt)
+[ModuleStore.resolveDependencies](/core/core/src/commonMain/kotlin/zakadabar/core/module/ModuleStore.kt)
 tries to resolve all module dependencies and throws an exception when there are missing non-optional
 dependencies.
 
@@ -172,7 +172,7 @@ Exception in thread "main" java.lang.IllegalStateException: module dependency re
 
 ### Module Store
 
-The application uses [ModuleStore](/core/core/src/commonMain/kotlin/zakadabar/stack/module/ModuleStore.kt)
+The application uses [ModuleStore](/core/core/src/commonMain/kotlin/zakadabar/core/module/ModuleStore.kt)
 instances to store modules.
 
 The default module store is created automatically and assigned to the global variable `modules`.
@@ -182,9 +182,9 @@ more.
 
 ### Module Startup Buckets
 
-[ModuleStartupBuckets](/core/core/src/commonMain/kotlin/zakadabar/stack/module/ModuleStartupBucket.kt) define 
+[ModuleStartupBuckets](/core/core/src/commonMain/kotlin/zakadabar/core/module/ModuleStartupBucket.kt) define 
 the order in which modules start and stop.
-[ModuleStore](/core/core/src/commonMain/kotlin/zakadabar/stack/module/ModuleStore.kt)
+[ModuleStore](/core/core/src/commonMain/kotlin/zakadabar/core/module/ModuleStore.kt)
 contains the list of buckets in the `buckets` property.
 
 Buckets are ordered by their `order` property: lower the order, earlier the modules 

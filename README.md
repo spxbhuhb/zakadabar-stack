@@ -4,12 +4,7 @@
 [![GitHub License](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
 ![Kotlin](https://img.shields.io/github/languages/top/spxbhuhb/zakadabar-stack)
 
-A Kotlin Multiplatform library for full-stack software development.
-
-Goal is to implement business applications real fast while in the flow, thinking about `what`, not the `how`.
-
-Project status is **alpha**,
-see [components stability](https://kotlinlang.org/docs/reference/evolution/components-stability.html).
+Zakadabar is a multiplatform application development library written in Kotlin (100%).
 
 ## Documentation
 
@@ -31,7 +26,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation("hu.simplexion.zakadabar:core:2021.8.4")
+                implementation("hu.simplexion.zakadabar:core:2021.8.17")
             }
         }
     }
@@ -56,4 +51,4 @@ kotlin {
 
 ## Credits
 
-[Credits](core/doc/misc/Credits.md) to the projects we built on.
+[Credits](/doc/misc/Credits.md) to the projects we built on.

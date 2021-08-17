@@ -34,7 +34,7 @@ If your modules use [Settings](/doc/guides/backend/Settings.md), add a
 [SettingProvider](/core/core/src/commonMain/kotlin/zakadabar/stack/setting/SettingProvider.kt). Providers 
 included with the stack:
 
-- [SettingBl](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/setting/SettingBl.kt) for JVM
+- [SettingBl](/core/core/src/jvmMain/kotlin/zakadabar/core/setting/SettingBl.kt) for JVM
 - [DefaultSettingProvider](/core/core/src/commonMain/kotlin/zakadabar/stack/setting/DefaultSettingProvider.kt) for Common
 
 ```kotlin

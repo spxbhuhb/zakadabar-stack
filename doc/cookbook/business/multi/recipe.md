@@ -14,7 +14,7 @@ tags:
 You can write business logics that are independent of entities and provide
 only queries and actions.
 
-1. use [BusinessLogicCommon](/core/core/src/commonMain/kotlin/zakadabar/stack/backend/business/BusinessLogicCommon.kt) with `BaseBo` as type parameter
+1. use [BusinessLogicCommon](/core/core/src/commonMain/kotlin/zakadabar/core/business/BusinessLogicCommon.kt) with `BaseBo` as type parameter
 1. set `namespace`   
 1. add actions and queries to the router and the authorizer
 

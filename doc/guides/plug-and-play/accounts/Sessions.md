@@ -58,7 +58,7 @@ A background task - started by [KtorSessionBl.configure](/lib/accounts/src/jvmMa
 looks for expired sessions and removes them from the session storage.
 
 When the backend receives an unknown session cookie it creates a new session and then calls
-`onLoginTimeout` method of the [Server](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/Server.kt).
+`onLoginTimeout` method of the [Server](/core/core/src/jvmMain/kotlin/zakadabar/core/Server.kt).
 
 `onLoginTimeout` decides what to do with this request, in the default implementation API
 requests (uri starts with `/api`) respond with 440 Login Timeout, non-API requests are

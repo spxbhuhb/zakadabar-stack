@@ -28,8 +28,8 @@ The directory that contains the server settings file becomes the
 "settings directory". All other setting files have to be in this directory.
 
 1. The application stops if there is no server settings file.
-1. [Server](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/Server.kt) uses 
-   [ServerSettingLoader](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/setting/ServerSettingLoader.kt) 
+1. [Server](/core/core/src/jvmMain/kotlin/zakadabar/core/Server.kt) uses 
+   [ServerSettingLoader](/core/core/src/jvmMain/kotlin/zakadabar/core/setting/ServerSettingLoader.kt) 
    to load the server settings file into a
    [ServerSettingsBo](/core/core/src/commonMain/kotlin/zakadabar/stack/data/builtin/settings/ServerSettingsBo.kt).
 1. The application initializes the database connection with the loaded settings.

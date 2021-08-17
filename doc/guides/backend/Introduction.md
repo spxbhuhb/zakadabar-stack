@@ -11,7 +11,7 @@ or the persistence API if you wish.
 
 ## Server.kt
 
-[Server.kt](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/Server.kt) contains
+[Server.kt](/core/core/src/jvmMain/kotlin/zakadabar/core/server/Server.kt) contains
 the entry point of the backend application: the `main` function. 
 
 You are free to extend this class and define your own main function as you wish.
@@ -44,7 +44,7 @@ All Ktor related code of the core is in the `zakadabar.stack.backend.ktor` packa
 In addition `lib:accounts` contains Ktor specific code for session handling.
 
 At the end of server startup the `onBuildServer` function of the server creates
-a [KtorServerBuilder](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/ktor/KtorServerBuilder.kt)
+a [KtorServerBuilder](/core/core/src/jvmMain/kotlin/zakadabar/core/ktor/KtorServerBuilder.kt)
 and calls its `build` function to build the Ktor instance.
 
 ### Add Ktor Plugins

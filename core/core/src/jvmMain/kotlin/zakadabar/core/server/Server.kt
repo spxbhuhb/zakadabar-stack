@@ -17,12 +17,14 @@ import io.ktor.server.netty.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import zakadabar.core.authorize.LoginTimeout
-import zakadabar.core.persistence.exposed.Sql
-import zakadabar.core.server.ktor.KtorServerBuilder
-import zakadabar.core.setting.SettingBl
 import zakadabar.core.log.Slf4jLogger
 import zakadabar.core.module.CommonModule
 import zakadabar.core.module.modules
+import zakadabar.core.persistence.exposed.Sql
+import zakadabar.core.server.ktor.KtorServerBuilder
+import zakadabar.core.server.ktor.configBuilders
+import zakadabar.core.server.ktor.features
+import zakadabar.core.setting.SettingBl
 import zakadabar.core.setting.SettingProvider
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -209,6 +211,8 @@ open class Server(
 
     fun shutdown(gracePeriodMillis : Long = 0, timeoutMillis : Long = 2000) {
         server.ktorServer.stop(gracePeriodMillis, timeoutMillis)
+        features.clear()
+        configBuilders.clear()
         modules.stop()
         modules.clear()
     }
