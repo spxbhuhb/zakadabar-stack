@@ -41,7 +41,7 @@ AccountPrivateBo.all()
 
 ## Use on the Frontend
 
-Use the `executor` global value. It is an instance of [ZkExecutor](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkExecutor.kt):
+Use the `executor` global value. It is an instance of [ZkExecutor](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkExecutor.kt):
 
 ```kotlin
 class ZkExecutor(
@@ -64,7 +64,7 @@ This call sets the `executor` property of `ZkApplication`. For details see: [Use
 
 ## Helper Methods on JavaScript Frontend
 
-[application](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt):
+[application](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkApplication.kt):
 
 ```kotlin
 if (hasRole("role-name")) {
@@ -72,7 +72,7 @@ if (hasRole("role-name")) {
 }
 ```
 
-[ZkElement](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/ZkElement.kt):
+[ZkElement](/core/core/src/jsMain/kotlin/zakadabar/core/browser/ZkElement.kt):
 
 ```kotlin
 ifNotAnonymous {
@@ -95,7 +95,7 @@ withoutRole("role-name") {
 ## Get Account of the User on the Backend
 
 For CRUD, queries, actions and BLOBs the called business logic method receives
-an [Executor](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/authorize/Executor.kt) instance.
+an [Executor](/core/core/src/commonMain/kotlin/zakadabar/core/authorize/Executor.kt) instance.
 
 ```kotlin
 open class Executor internal constructor(
@@ -148,7 +148,7 @@ the interface (which role is needed for example).
 
 </div>
 
-[authorize.kt](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/authorize/authorize.kt)
+[authorize.kt](/core/core/src/commonMain/kotlin/zakadabar/core/authorize/authorize.kt)
 
 ```kotlin
 authorize(executor, "role-name") // throws Unauthorized when doesn't have the role
@@ -167,7 +167,7 @@ authorize(true) // throws Unauthorized when the parameter is false, use this to 
 ## Get Account in Custom Backends
 
 The backend provides an extension function to Ktor's `ApplicationCall` that returns with
-an [Executor](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/authorize/Executor.kt) instance.
+an [Executor](/core/core/src/commonMain/kotlin/zakadabar/core/authorize/Executor.kt) instance.
 
 This instance has an `accountId` field which stores the id of the account that executes the code.
 
@@ -186,7 +186,7 @@ override fun onInstallRoutes(route: Route) {
 ## Public Account Information
 
 To provide generic account data, implement a backend
-for [AccountPublicBo](/core/core/src/commonMain/kotlin/zakadabar/stack/data/builtin/account/AccountPublicBo.kt).
+for [AccountPublicBo](/core/core/src/commonMain/kotlin/zakadabar/core/authorize/AccountPublicBo.kt).
 
 This BO is meant to provide public account information for displaying names, avatars etc.
 

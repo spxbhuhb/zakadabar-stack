@@ -3,19 +3,19 @@
  */
 package zakadabar.lib.demo.backend
 
+import zakadabar.core.authorize.SimpleRoleAuthorizerProvider
+import zakadabar.core.route.RoutedModule
+import zakadabar.core.server.server
+import zakadabar.core.util.PublicApi
 import zakadabar.lib.examples.backend.builtin.BuiltinBl
 import zakadabar.lib.examples.backend.builtin.ExampleReferenceBl
-import zakadabar.stack.backend.RoutedModule
-import zakadabar.stack.backend.authorize.SimpleRoleAuthorizerProvider
-import zakadabar.stack.backend.server
-import zakadabar.stack.util.PublicApi
 
 @PublicApi
 object Module : RoutedModule {
 
     override fun onModuleLoad() {
-        zakadabar.lib.accounts.backend.install()
-        zakadabar.lib.i18n.backend.install()
+        zakadabar.lib.accounts.install()
+        zakadabar.lib.i18n.install()
 
         server += SimpleRoleAuthorizerProvider {
             all = LOGGED_IN

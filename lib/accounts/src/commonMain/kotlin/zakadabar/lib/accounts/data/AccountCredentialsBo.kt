@@ -6,10 +6,10 @@ package zakadabar.lib.accounts.data
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.BoSchema
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.Secret
+import zakadabar.core.data.EntityId
+import zakadabar.core.schema.BoSchema
 
 /**
  * Account credentials. Each credential has a type that defines the context

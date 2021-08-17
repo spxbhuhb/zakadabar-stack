@@ -3,9 +3,9 @@
  */
 package zakadabar.lib.examples.frontend.modal
 
-import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.modal.ZkModalBase
-import zakadabar.stack.frontend.util.io
+import zakadabar.core.browser.button.ZkButton
+import zakadabar.core.browser.modal.ZkModalBase
+import zakadabar.core.browser.util.io
 
 open class MyMessageDialog : ZkModalBase<String>() {
 

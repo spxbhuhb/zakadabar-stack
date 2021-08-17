@@ -4,8 +4,8 @@
 package zakadabar.lib.bender
 
 import kotlinx.datetime.Clock
-import zakadabar.stack.data.schema.descriptor.BoDescriptor
-import zakadabar.stack.text.camelToSnakeCase
+import zakadabar.core.schema.descriptor.BoDescriptor
+import zakadabar.core.text.camelToSnakeCase
 
 open class ClassGenerator {
 
@@ -41,10 +41,10 @@ fun commonGenerator() = """
 package $packageName
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityBoCompanion
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.BoSchema
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityBoCompanion
+import zakadabar.core.data.EntityId
+import zakadabar.core.schema.BoSchema
 ${generators.map { it.commonImport() }.flatten().distinct().joinToString("\n")}
 
 @Serializable
@@ -73,11 +73,11 @@ class ${boName}(
 fun browserFrontendGenerator() = """
 package ${packageName}.browser
 
-import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
-import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.table.ZkTable
-import zakadabar.stack.resources.localized
-import zakadabar.stack.frontend.application.target
+import zakadabar.core.browser.crud.ZkCrudTarget
+import zakadabar.core.browser.form.ZkForm
+import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.resource.localized
+import zakadabar.core.browser.application.target
 import ${packageName}.$boName
 ${generators.map { it.browserImport() }.flatten().distinct().joinToString("\n")}
 
@@ -128,9 +128,9 @@ class $browserTableName : ZkTable<$boName>() {
 fun businessLogicGenerator() = """
 package $packageName
 
-import zakadabar.stack.backend.authorize.Authorizer
-import zakadabar.stack.backend.authorize.EmptyAuthorizer
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
+import zakadabar.core.authorize.Authorizer
+import zakadabar.core.authorize.EmptyAuthorizer
+import zakadabar.core.business.EntityBusinessLogicBase
 import ${packageName}.$boName
 
 open class $businessLogicName : EntityBusinessLogicBase<${boName}>(
@@ -153,9 +153,9 @@ package $packageName
 
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import zakadabar.stack.backend.exposed.entityId
-import zakadabar.stack.backend.exposed.ExposedPaBase
-import zakadabar.stack.backend.exposed.ExposedPaTable
+import zakadabar.core.persistence.exposed.entityId
+import zakadabar.core.persistence.exposed.ExposedPaBase
+import zakadabar.core.persistence.exposed.ExposedPaTable
 import ${packageName}.$boName
 ${generators.map { it.exposedPaImport() }.flatten().distinct().joinToString("\n")}
 

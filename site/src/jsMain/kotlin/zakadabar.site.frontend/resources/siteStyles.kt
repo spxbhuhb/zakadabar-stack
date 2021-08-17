@@ -3,7 +3,7 @@
  */
 package zakadabar.site.frontend.resources
 
-import zakadabar.stack.frontend.resources.css.*
+import zakadabar.core.resource.css.*
 
 val siteStyles by cssStyleSheet(SiteStyles())
 

@@ -5,24 +5,24 @@ package zakadabar.lib.content.frontend.browser
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import zakadabar.lib.blobs.frontend.attachment.ZkAttachmentsField
-import zakadabar.lib.blobs.frontend.image.ZkImagesField
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.ZkElementState
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.button.ZkButton
+import zakadabar.core.browser.crud.ZkCrudEditor
+import zakadabar.core.browser.crud.ZkCrudTarget
+import zakadabar.core.browser.form.ZkForm
+import zakadabar.core.browser.tabcontainer.ZkTabContainer
+import zakadabar.core.browser.util.default
+import zakadabar.core.browser.util.io
+import zakadabar.core.data.EntityId
+import zakadabar.core.resource.ZkIcons
+import zakadabar.core.resource.localizedStrings
+import zakadabar.lib.blobs.browser.attachment.ZkAttachmentsField
+import zakadabar.lib.blobs.browser.image.ZkImagesField
 import zakadabar.lib.content.data.*
 import zakadabar.lib.content.resources.contentStrings
 import zakadabar.lib.i18n.data.LocaleBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.ZkElementState
-import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.crud.ZkCrudEditor
-import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
-import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.layout.tabcontainer.ZkTabContainer
-import zakadabar.stack.frontend.resources.ZkIcons
-import zakadabar.stack.frontend.util.default
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.resources.localizedStrings
 
 class ContentEditor : ZkCrudTarget<ContentBo>() {
 
@@ -92,16 +92,16 @@ class ContentEditorForm : ZkForm<ContentBo>() {
 
                 + fieldGrid {
                     + bo::id
-                    + select(bo::status) { StatusBo.all().by { it.name } }
+                    + bo::status query { StatusBo.all().by { it.name } }
                     if (bo.master == null) + bo::folder
 
                     if (bo.master == null) {
-                        + select(bo::parent) { FolderQuery().execute().map { it.id to it.title } }
+                        + bo::parent query { FolderQuery().execute().map { it.id to it.title } }
                     } else {
                         + constString(localizedStrings["parent"]) { if (::parent.isInitialized) parent.title else "" }
                     }
 
-                    + select(bo::locale) { LocaleBo.all().by { it.name } } readOnly true
+                    + bo::locale query { LocaleBo.all().by { it.name } } readOnly true
                     + textarea(bo::title)
                 }
 

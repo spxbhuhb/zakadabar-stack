@@ -3,7 +3,7 @@
  */
 package zakadabar.cookbook.module
 
-import zakadabar.stack.module.CommonModule
+import zakadabar.core.module.CommonModule
 
 class ExampleModule1 : CommonModule {
     override fun onModuleStart() {

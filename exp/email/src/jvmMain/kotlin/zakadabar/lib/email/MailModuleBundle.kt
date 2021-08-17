@@ -3,8 +3,8 @@
  */
 package zakadabar.lib.email
 
-import zakadabar.stack.module.CommonModule
-import zakadabar.stack.module.modules
+import zakadabar.core.module.CommonModule
+import zakadabar.core.module.modules
 
 class MailModuleBundle : CommonModule {
 

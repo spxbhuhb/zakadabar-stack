@@ -6,10 +6,10 @@ package zakadabar.cookbook.server.ktor.plugin
 import io.ktor.features.*
 import io.ktor.serialization.*
 import kotlinx.serialization.json.Json
-import zakadabar.stack.backend.ktor.invoke
-import zakadabar.stack.backend.ktor.plusAssign
-import zakadabar.stack.backend.server
-import zakadabar.stack.module.CommonModule
+import zakadabar.core.server.ktor.invoke
+import zakadabar.core.server.ktor.plusAssign
+import zakadabar.core.server.server
+import zakadabar.core.module.CommonModule
 
 class Module : CommonModule {
 

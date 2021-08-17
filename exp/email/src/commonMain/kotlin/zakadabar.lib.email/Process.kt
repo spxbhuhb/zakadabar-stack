@@ -4,10 +4,10 @@
 package zakadabar.lib.email
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.action.ActionBoCompanion
-import zakadabar.stack.data.builtin.ActionStatusBo
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.ActionBoCompanion
+import zakadabar.core.data.ActionStatus
+import zakadabar.core.data.EntityId
 
 /**
  * Processes a mail. This is the actual send that connects to the SMTP server
@@ -20,9 +20,9 @@ import zakadabar.stack.data.entity.EntityId
 @Serializable
 class Process(
     var mail : EntityId<Mail>
-) : ActionBo<ActionStatusBo> {
+) : ActionBo<ActionStatus> {
 
-    override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), ActionStatus.serializer())
 
     companion object : ActionBoCompanion(Mail.boNamespace)
 

@@ -2,10 +2,10 @@
 
 Toasts are small, constant messages pass important or auxiliary information to the user.
 
-* Use [note convenience functions](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/note/note.kt) to display basic
+* Use [note convenience functions](/core/core/src/jsMain/kotlin/zakadabar/core/browser/note/note.kt) to display basic
   notes.
-* Use [ZkNote](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/note/ZkNote.kt) to display fine-tuned toasts.
-* Extend [zkNoteStyles](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/note/zkNoteStyles.kt) to override default
+* Use [ZkNote](/core/core/src/jsMain/kotlin/zakadabar/core/browser/note/ZkNote.kt) to display fine-tuned toasts.
+* Extend [zkNoteStyles](/core/core/src/jsMain/kotlin/zakadabar/core/browser/note/zkNoteStyles.kt) to override default
   styles.
 
 For basic notes, simply call the appropriate convenience function:
@@ -25,7 +25,7 @@ noteDanger("title", "message")
 noteInfo("title", "message")
 ```
 
-Use constructor parameters of [ZkNote](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/note/ZkNote.kt) to create
+Use constructor parameters of [ZkNote](/core/core/src/jsMain/kotlin/zakadabar/core/browser/note/ZkNote.kt) to create
 fine-tuned toasts.
 
 | Parameter | Description |
@@ -35,7 +35,7 @@ fine-tuned toasts.
 | iconClass | The CSS class to add to the icon, overrides flavour icon class. |
 | innerClass | The CSS class to add to the inner container, overrides flavour inner class. |
 
-To display a note built from [ZkNote](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/note/ZkNote.kt) use the `run`
+To display a note built from [ZkNote](/core/core/src/jsMain/kotlin/zakadabar/core/browser/note/ZkNote.kt) use the `run`
 method:
 
 ```kotlin

@@ -8,14 +8,14 @@ import zakadabar.site.frontend.components.HeaderActions
 import zakadabar.site.frontend.components.SiteLogo
 import zakadabar.site.frontend.resources.landingStyles
 import zakadabar.site.resources.strings
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.button.buttonCustom
-import zakadabar.stack.frontend.builtin.layout.ZkFullScreenLayout
-import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.resources.ZkFlavour
-import zakadabar.stack.frontend.util.marginBottom
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.button.ZkButton
+import zakadabar.core.browser.button.buttonCustom
+import zakadabar.core.browser.layout.ZkFullScreenLayout
+import zakadabar.core.browser.page.ZkPage
+import zakadabar.core.resource.ZkFlavour
+import zakadabar.core.browser.util.marginBottom
+import zakadabar.core.browser.util.plusAssign
 
 object Landing : ZkPage(ZkFullScreenLayout) {
 

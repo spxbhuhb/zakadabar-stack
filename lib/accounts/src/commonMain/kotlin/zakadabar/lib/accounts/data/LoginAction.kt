@@ -4,11 +4,11 @@
 package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.action.ActionBoCompanion
-import zakadabar.stack.data.builtin.ActionStatusBo
-import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.schema.BoSchema
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.ActionBoCompanion
+import zakadabar.core.data.ActionStatus
+import zakadabar.core.data.Secret
+import zakadabar.core.schema.BoSchema
 
 /**
  * Action BO for login.
@@ -19,7 +19,7 @@ class LoginAction(
     var accountName: String,
     var password: Secret
 
-) : ActionBo<ActionStatusBo> {
+) : ActionBo<ActionStatus> {
 
     /**
      * Executes the login.
@@ -29,7 +29,7 @@ class LoginAction(
      *                        account does not have the necessary role to log in
      *                        with this action, or for other reason.
      */
-    override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), ActionStatus.serializer())
 
     companion object : ActionBoCompanion(SessionBo.boNamespace)
 

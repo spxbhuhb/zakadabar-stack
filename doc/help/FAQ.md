@@ -146,7 +146,7 @@ This happens if you commit with "organize imports" on. Add an `import kotlinx.se
 
 ### ZkElement addKClass
 
-If you set addKClass in [ZkElement](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/ZkElement.kt) to `true` you will
+If you set addKClass in [ZkElement](/core/core/src/jsMain/kotlin/zakadabar/core/browser/ZkElement.kt) to `true` you will
 see the Kotlin class of your elements in the browser inspector.
 
 Best place to add this setting is the application bootstrap.

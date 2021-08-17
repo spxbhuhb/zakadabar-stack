@@ -5,17 +5,17 @@ package zakadabar.lib.examples.frontend.modal
 
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.examples.resources.strings
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.modal.ZkConfirmDialog
-import zakadabar.stack.frontend.builtin.modal.ZkMessageDialog
-import zakadabar.stack.frontend.builtin.note.ZkNote
-import zakadabar.stack.frontend.builtin.note.noteSecondary
-import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.resources.css.px
-import zakadabar.stack.frontend.resources.theme
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.frontend.util.marginBottom
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.button.ZkButton
+import zakadabar.core.browser.modal.ZkConfirmDialog
+import zakadabar.core.browser.modal.ZkMessageDialog
+import zakadabar.core.browser.note.ZkNote
+import zakadabar.core.browser.note.noteSecondary
+import zakadabar.core.browser.page.zkPageStyles
+import zakadabar.core.resource.css.px
+import zakadabar.core.resource.theme
+import zakadabar.core.browser.util.io
+import zakadabar.core.browser.util.marginBottom
 
 /**
  * This example shows how to create checkbox lists.

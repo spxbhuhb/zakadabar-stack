@@ -5,10 +5,10 @@
 package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityBoCompanion
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.BoSchema
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityBoCompanion
+import zakadabar.core.data.EntityId
+import zakadabar.core.schema.BoSchema
 
 /**
  * Base class for private account information. This information is meant to

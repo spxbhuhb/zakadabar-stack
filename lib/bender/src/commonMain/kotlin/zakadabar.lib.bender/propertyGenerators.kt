@@ -3,8 +3,8 @@
  */
 package zakadabar.lib.bender
 
-import zakadabar.stack.data.schema.descriptor.*
-import zakadabar.stack.text.camelToSnakeCase
+import zakadabar.core.schema.descriptor.*
+import zakadabar.core.text.camelToSnakeCase
 
 abstract class PropertyGenerator(
     open val boDescriptor: BoDescriptor,
@@ -53,7 +53,7 @@ open class BooleanPropertyGenerator(
 
     override fun browserImport() =
         if (property.optional) {
-            listOf("import zakadabar.stack.frontend.application.stringStore")
+            listOf("import zakadabar.core.browser.application.stringStore")
         } else {
             emptyList()
         }
@@ -263,18 +263,18 @@ open class SecretPropertyGenerator(
 ) : PropertyGenerator(boDescriptor, property, "Secret") {
 
     override fun commonImport() =
-        listOf("import zakadabar.stack.data.builtin.misc.Secret")
+        listOf("import zakadabar.core.data.Secret")
 
     override fun browserTable() =
         "// ${super.browserTable()} // not supported yet"
 
     override fun exposedPaImport() =
         if (property.optional) {
-            listOf("import zakadabar.stack.util.BCrypt")
+            listOf("import zakadabar.core.util.BCrypt")
         } else {
             listOf(
-                "import zakadabar.stack.util.BCrypt",
-                "import zakadabar.stack.data.builtin.misc.Secret"
+                "import zakadabar.core.util.BCrypt",
+                "import zakadabar.core.data.Secret"
             )
         }
 
@@ -317,12 +317,12 @@ open class UuidPropertyGenerator(
 ) : PropertyGenerator(boDescriptor, property, "UUID") {
 
     override fun commonImport() =
-        listOf("import zakadabar.stack.util.UUID")
+        listOf("import zakadabar.core.util.UUID")
 
     override fun exposedPaImport() =
         listOf(
-            "import zakadabar.stack.backend.util.toStackUuid",
-            "import zakadabar.stack.backend.util.toJavaUuid"
+            "import zakadabar.core.util.toStackUuid",
+            "import zakadabar.core.util.toJavaUuid"
         )
 
     override fun exposedTable() =

@@ -4,10 +4,10 @@
 package zakadabar.cookbook.browser.table.query
 
 import zakadabar.cookbook.entity.builtin.ExampleBo
-import zakadabar.stack.data.entity.toEntityId
-import zakadabar.stack.frontend.application.target
-import zakadabar.stack.frontend.builtin.pages.ZkEntityPage
-import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.core.data.toEntityId
+import zakadabar.core.browser.application.target
+import zakadabar.core.browser.page.ZkEntityPage
+import zakadabar.core.browser.table.ZkTable
 
 class Table : ZkTable<QueryResultEntry>() {
 

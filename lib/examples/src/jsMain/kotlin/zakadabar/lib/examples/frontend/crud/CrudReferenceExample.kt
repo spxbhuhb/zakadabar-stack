@@ -4,9 +4,9 @@
 package zakadabar.lib.examples.frontend.crud
 
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.resources.css.px
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.resource.css.px
 
 class CrudReferenceExample(
     element: HTMLElement

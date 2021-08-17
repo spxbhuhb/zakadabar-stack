@@ -5,12 +5,12 @@ package zakadabar.lib.examples.frontend.form
 
 import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.frontend.crud.BuiltinForm
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.data.EntityId
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.ZkElementMode
+import zakadabar.core.browser.page.zkPageStyles
+import zakadabar.core.browser.util.io
+import zakadabar.core.util.PublicApi
 
 @PublicApi // example code
 class FormFieldsFetched(

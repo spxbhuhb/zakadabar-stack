@@ -5,7 +5,7 @@ package zakadabar.lib.examples.backend.misc
 
 import io.ktor.routing.*
 import io.ktor.websocket.*
-import zakadabar.stack.backend.RoutedModule
+import zakadabar.core.route.RoutedModule
 
 object WebsocketBackend : RoutedModule {
 

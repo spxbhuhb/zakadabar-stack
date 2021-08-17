@@ -4,8 +4,10 @@
 package zakadabar.lib.blobs.data
 
 import kotlinx.serialization.KSerializer
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityId
+import zakadabar.lib.blobs.comm.BlobCommInterface
+import zakadabar.lib.blobs.comm.makeBlobComm
 
 abstract class BlobBoCompanion<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
     val boNamespace: String
@@ -19,7 +21,7 @@ abstract class BlobBoCompanion<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
         return nc
     }
 
-    var comm: BlobCommInterface<T,RT>
+    var comm: BlobCommInterface<T, RT>
         get() = _comm ?: makeComm()
         set(value) {
             _comm = value

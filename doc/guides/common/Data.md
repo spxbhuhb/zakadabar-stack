@@ -277,7 +277,7 @@ Blobs are handled by the [lib:blobs](../plug-and-play/blobs/Introduction.md) plu
 
 ## Data Validation
 
-Data validation uses [BoSchema](/core/core/src/commonMain/kotlin/zakadabar/stack/data/schema/BoSchema.kt)
+Data validation uses [BoSchema](/core/core/src/commonMain/kotlin/zakadabar/core/schema/BoSchema.kt)
 definitions.
 
 BoSchema focuses more on programmer convenience than on performance. It is not really suitable for validating large
@@ -359,7 +359,7 @@ instead, create one instance with default and then copy it as many times as you 
 
 ### Use a Schema
 
-[ZkForm](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/form/ZkForm.kt) validates the BO automatically.
+[ZkForm](/core/core/src/jsMain/kotlin/zakadabar/core/browser/form/ZkForm.kt) validates the BO automatically.
 
 To validate manually:
 

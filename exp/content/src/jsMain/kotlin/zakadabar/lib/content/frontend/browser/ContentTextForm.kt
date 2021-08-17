@@ -4,15 +4,15 @@
 package zakadabar.lib.content.frontend.browser
 
 import zakadabar.lib.content.data.TextBlockBo
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.modal.withConfirm
-import zakadabar.stack.frontend.resources.ZkFlavour
-import zakadabar.stack.frontend.resources.ZkIcons
-import zakadabar.stack.frontend.resources.css.px
-import zakadabar.stack.frontend.util.io
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.ZkElementMode
+import zakadabar.core.browser.button.ZkButton
+import zakadabar.core.browser.form.ZkForm
+import zakadabar.core.browser.modal.withConfirm
+import zakadabar.core.resource.ZkFlavour
+import zakadabar.core.resource.ZkIcons
+import zakadabar.core.resource.css.px
+import zakadabar.core.browser.util.io
 
 class ContentTextForm(
     private val parent: ZkElement

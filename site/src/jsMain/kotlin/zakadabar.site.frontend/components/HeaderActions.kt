@@ -6,9 +6,9 @@ package zakadabar.site.frontend.components
 import zakadabar.site.frontend.resources.SiteDarkTheme
 import zakadabar.site.frontend.resources.SiteGreenBlueTheme
 import zakadabar.site.frontend.resources.SiteLightTheme
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.theme.ZkThemeRotate
-import zakadabar.stack.frontend.resources.ZkIcons
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.theme.ZkThemeRotate
+import zakadabar.core.resource.ZkIcons
 
 class HeaderActions : ZkElement() {
 

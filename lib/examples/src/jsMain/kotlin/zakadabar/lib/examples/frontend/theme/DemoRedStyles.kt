@@ -3,9 +3,9 @@
  */
 package zakadabar.lib.examples.frontend.theme
 
-import zakadabar.stack.frontend.resources.ZkColors
-import zakadabar.stack.frontend.resources.css.ZkCssStyleSheet
-import zakadabar.stack.frontend.resources.css.px
+import zakadabar.core.resource.ZkColors
+import zakadabar.core.resource.css.ZkCssStyleSheet
+import zakadabar.core.resource.css.px
 
 class DemoRedStyles : ZkCssStyleSheet() {
 

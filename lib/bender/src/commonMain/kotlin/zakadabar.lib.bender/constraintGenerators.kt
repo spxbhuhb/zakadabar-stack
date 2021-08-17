@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.bender
 
-import zakadabar.stack.data.schema.descriptor.*
+import zakadabar.core.schema.descriptor.*
 
 fun List<BoConstraint>.toCode(): String {
     val parts = mutableListOf<String>()

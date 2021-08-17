@@ -4,16 +4,16 @@
 package zakadabar.lib.examples.frontend.sidebar
 
 import org.w3c.dom.HTMLElement
-import zakadabar.lib.markdown.frontend.markdownStyles
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.buttonPrimary
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.builtin.pages.ZkPathPage
-import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
-import zakadabar.stack.frontend.builtin.toast.toastSuccess
-import zakadabar.stack.frontend.util.plusAssign
-import zakadabar.stack.resources.localizedStrings
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.button.buttonPrimary
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.page.ZkPathPage
+import zakadabar.core.browser.sidebar.ZkSideBar
+import zakadabar.core.browser.toast.toastSuccess
+import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.resource.localizedStrings
+import zakadabar.lib.markdown.browser.markdownStyles
 
 
 object ExampleSideBarTarget : ZkPathPage() {

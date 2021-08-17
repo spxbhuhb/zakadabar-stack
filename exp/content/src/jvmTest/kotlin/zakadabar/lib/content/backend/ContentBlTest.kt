@@ -11,12 +11,12 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
+import zakadabar.core.server.server
+import zakadabar.core.testing.TestCompanionBase
+import zakadabar.core.util.default
 import zakadabar.lib.content.data.*
 import zakadabar.lib.i18n.data.LocaleBo
 import zakadabar.lib.i18n.data.LocaleStatus
-import zakadabar.stack.backend.server
-import zakadabar.stack.backend.testing.TestCompanionBase
-import zakadabar.stack.backend.util.default
 import kotlin.test.assertEquals
 
 class ContentBlTest {
@@ -24,7 +24,7 @@ class ContentBlTest {
     companion object : TestCompanionBase() {
 
         override fun addModules() {
-            zakadabar.lib.i18n.backend.install()
+            zakadabar.lib.i18n.install()
             install()
         }
 

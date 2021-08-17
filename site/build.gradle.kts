@@ -24,7 +24,7 @@ group = "hu.simplexion.zakadabar"
 version = Versions.zakadabar
 
 application {
-    mainClass.set("zakadabar.stack.backend.ServerKt")
+    mainClass.set("zakadabar.core.server.ServerKt")
 }
 
 noArg {

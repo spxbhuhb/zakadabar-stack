@@ -5,7 +5,7 @@
 
 package zakadabar.lib.examples.resources
 
-import zakadabar.stack.resources.ZkBuiltinStrings
+import zakadabar.core.resource.ZkBuiltinStrings
 
 internal var strings = ExamplesStrings()
 

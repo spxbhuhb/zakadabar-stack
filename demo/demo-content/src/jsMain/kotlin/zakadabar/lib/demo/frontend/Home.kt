@@ -4,8 +4,8 @@
 package zakadabar.lib.demo.frontend
 
 import zakadabar.lib.demo.resources.strings
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.builtin.pages.ZkPage
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.page.ZkPage
 
 object Home : ZkPage() {
 

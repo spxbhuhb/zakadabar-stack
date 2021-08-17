@@ -5,7 +5,7 @@ package zakadabar.lib.examples.frontend.query
 
 import kotlinx.datetime.internal.JSJoda.DateTimeFormatter
 import zakadabar.lib.examples.data.builtin.ExampleResult
-import zakadabar.stack.frontend.builtin.table.ZkTable
+import zakadabar.core.browser.table.ZkTable
 
 class ResultTable : ZkTable<ExampleResult>() {
 

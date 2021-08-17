@@ -54,12 +54,12 @@ There are a few things to mention that is not trivial looking at the example.
 When you use ZkPage without any constructor parameters it will use:
 
 * the default layout (comes from [Routing](../structure/Routing.md),
-* the [zkPageStyles.scrollable](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/pages/zkPageStyles.kt) CSS class.
+* the [zkPageStyles.scrollable](/core/core/src/jsMain/kotlin/zakadabar/core/browser/page/zkPageStyles.kt) CSS class.
 
 You can override both by passing the appropriate constructor parameter. The other built-in values defined are:
 
-* [ZkFullScreenLayout](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/layout/ZkFullScreenLayout.kt)
-* [zkPageStyles.fixed](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/pages/zkPageStyles.kt)
+* [ZkFullScreenLayout](/core/core/src/jsMain/kotlin/zakadabar/core/browser/layout/ZkFullScreenLayout.kt)
+* [zkPageStyles.fixed](/core/core/src/jsMain/kotlin/zakadabar/core/browser/page/zkPageStyles.kt)
 
 ## ZkArgPage
 

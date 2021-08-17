@@ -5,8 +5,8 @@ package zakadabar.cookbook.module.bundle
 
 import zakadabar.cookbook.module.ExampleModule1
 import zakadabar.cookbook.module.ExampleModule2
-import zakadabar.stack.module.CommonModule
-import zakadabar.stack.module.modules
+import zakadabar.core.module.CommonModule
+import zakadabar.core.module.modules
 
 class ExampleModuleBundle : CommonModule {
 

@@ -4,12 +4,12 @@
 package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.action.ActionBo
-import zakadabar.stack.data.action.ActionBoCompanion
-import zakadabar.stack.data.builtin.ActionStatusBo
-import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.BoSchema
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.ActionBoCompanion
+import zakadabar.core.data.ActionStatus
+import zakadabar.core.data.Secret
+import zakadabar.core.data.EntityId
+import zakadabar.core.schema.BoSchema
 
 /**
  * Changes the password of an account. Security officers are allowed to change any
@@ -27,11 +27,11 @@ class PasswordChange(
     var oldPassword: Secret,
     var newPassword: Secret
 
-) : ActionBo<ActionStatusBo> {
+) : ActionBo<ActionStatus> {
 
     companion object : ActionBoCompanion(AccountPrivateBo.boNamespace)
 
-    override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), ActionStatus.serializer())
 
     override fun schema() = BoSchema {
         + ::accountId

@@ -66,9 +66,9 @@ ktor:
 
 ### Test Class Without Authorization
 
-Add a companion object to your test class extending [TestCompanionBase](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/testing/TestCompanionBase.kt).
+Add a companion object to your test class extending [TestCompanionBase](/core/core/src/jvmMain/kotlin/zakadabar/core/testing/TestCompanionBase.kt).
 
-[TestCompanionBase](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/testing/TestCompanionBase.kt):
+[TestCompanionBase](/core/core/src/jvmMain/kotlin/zakadabar/core/testing/TestCompanionBase.kt):
 
 - create and start a test Ktor Server with a test H2 instance
 - set `CommBase.baseUrl` to the created Ktor instance
@@ -122,14 +122,14 @@ class MyBlTest {
 
 For this you need to add the dependency for `Lib: Accounts`.
 
-Add a companion object to your test class, extending [AuthTestCompanionBase](/lib/accounts/src/jvmMain/kotlin/zakadabar/lib/accounts/backend/testing/AuthTestCompanionBase.kt).
+Add a companion object to your test class, extending [AuthTestCompanionBase](/lib/accounts/src/jvmMain/kotlin/zakadabar/lib/accounts/testing/AuthTestCompanionBase.kt).
 
-[AuthTestCompanionBase](/lib/accounts/src/jvmMain/kotlin/zakadabar/lib/accounts/backend/testing/AuthTestCompanionBase.kt):
+[AuthTestCompanionBase](/lib/accounts/src/jvmMain/kotlin/zakadabar/lib/accounts/testing/AuthTestCompanionBase.kt):
 
 - create and start a test Ktor Server with a test H2 instance
 - set `CommBase.baseUrl` to the created Ktor instance
 - install the `Lib: Accounts` plug-and-play module
-- adds a [SimpleRoleAuthorizerProvider](/core/core/src/commonMain/kotlin/zakadabar/stack/backend/authorize/SimpleRoleAuthorizerProvider.kt) with `all = roles.siteMember`.
+- adds a [SimpleRoleAuthorizerProvider](/core/core/src/commonMain/kotlin/zakadabar/core/authorize/SimpleRoleAuthorizerProvider.kt) with `all = roles.siteMember`.
 - performs a login for the `so` account
 
 In the tests you can work just as you would do in a frontend module.

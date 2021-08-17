@@ -8,9 +8,9 @@ import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import zakadabar.lib.accounts.backend.pa.AccountPrivateExposedTableCommon
-import zakadabar.stack.backend.exposed.ExposedPaBase
-import zakadabar.stack.backend.exposed.entityId
+import zakadabar.core.persistence.exposed.ExposedPaBase
+import zakadabar.core.persistence.exposed.entityId
+import zakadabar.lib.accounts.persistence.AccountPrivateExposedTableCommon
 
 open class MailPa(
     table: MailTable = MailTable()

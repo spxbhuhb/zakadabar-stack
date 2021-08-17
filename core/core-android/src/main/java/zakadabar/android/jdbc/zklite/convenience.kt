@@ -7,7 +7,7 @@ package zakadabar.android.jdbc.zklite
 import android.content.Context
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.vendors.SQLiteDialect
-import zakadabar.stack.util.PublicApi
+import zakadabar.core.util.PublicApi
 
 /**
  * Connect to an SQLite database through the ZkLite JDBC driver.

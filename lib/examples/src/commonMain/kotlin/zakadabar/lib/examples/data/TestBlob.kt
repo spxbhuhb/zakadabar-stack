@@ -6,7 +6,7 @@ package zakadabar.lib.examples.data
 import kotlinx.serialization.Serializable
 import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobBoCompanion
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.data.EntityId
 
 @Serializable
 class TestBlob(

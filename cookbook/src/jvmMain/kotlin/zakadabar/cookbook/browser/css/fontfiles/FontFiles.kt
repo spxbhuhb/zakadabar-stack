@@ -5,7 +5,7 @@ package zakadabar.cookbook.browser.css.fontfiles
 
 import io.ktor.http.content.*
 import io.ktor.routing.*
-import zakadabar.stack.backend.RoutedModule
+import zakadabar.core.route.RoutedModule
 
 class FontFiles : RoutedModule {
 

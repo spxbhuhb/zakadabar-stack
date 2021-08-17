@@ -3,15 +3,15 @@
  */
 package zakadabar.cookbook.entity.builtin
 
-import zakadabar.stack.frontend.builtin.crud.ZkCrudTarget
-import zakadabar.stack.frontend.builtin.crud.ZkInlineCrud
-import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.form.fields.ZkStringField
-import zakadabar.stack.frontend.builtin.table.ZkTable
-import zakadabar.stack.resources.localized
-import zakadabar.stack.resources.localizedStrings
+import zakadabar.core.browser.crud.ZkCrudTarget
+import zakadabar.core.browser.crud.ZkInlineCrud
+import zakadabar.core.browser.form.ZkForm
+import zakadabar.core.browser.field.ZkStringField
+import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.resource.localized
+import zakadabar.core.resource.localizedStrings
 
-class ExampleBoCrud : ZkCrudTarget<ExampleBo>()  {
+class ExampleBoCrud : ZkCrudTarget<ExampleBo>() {
     init {
         companion = ExampleBo.Companion
         boClass = ExampleBo::class
@@ -51,14 +51,14 @@ class ExampleBoForm : ZkForm<ExampleBo>() {
                 + bo::optLocalDateValue
                 + bo::optLocalDateTimeValue readOnly true
                 + bo::optSecretValue
-                + bo::optRecordSelectValue options { selectBy { it.name } }
+                + bo::optRecordSelectValue query { ExampleReferenceBo.all().by { it.name } }
                 + bo::optStringValue
                 + select(bo::optStringSelectValue, options = listOf("option 1", "option 2", "option3"))
                 + bo::optTextAreaValue
                 + bo::optUuidValue
                 + bo::secretValue
-                + bo::recordSelectValue options { selectBy { it.name } }
-                + bo::recordSelectValue options { selectBy { it.name } readOnly true }
+                + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } }
+                + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } } readOnly true
                 + ZkStringField(this@ExampleBoForm, bo::stringValue).also { this@ExampleBoForm.fields += it }
                 + select(bo::stringSelectValue, options = listOf("option 1", "option 2", "option3"))
                 + textarea(bo::textAreaValue)

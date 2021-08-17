@@ -4,8 +4,8 @@
 package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.schema.BoSchema
+import zakadabar.core.data.BaseBo
+import zakadabar.core.schema.BoSchema
 
 @Serializable
 class ModuleSettings(

@@ -6,9 +6,9 @@ package zakadabar.site.frontend.components
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import zakadabar.site.frontend.resources.siteStyles
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.util.io
+import zakadabar.core.browser.util.plusAssign
 
 class SiteLogo : ZkElement() {
 

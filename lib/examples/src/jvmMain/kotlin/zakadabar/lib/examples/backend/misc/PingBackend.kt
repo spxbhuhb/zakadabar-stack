@@ -6,7 +6,7 @@ package zakadabar.lib.examples.backend.misc
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import zakadabar.stack.backend.RoutedModule
+import zakadabar.core.route.RoutedModule
 
 object PingBackend : RoutedModule {
 

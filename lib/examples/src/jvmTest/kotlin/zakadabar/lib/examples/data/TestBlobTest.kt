@@ -13,11 +13,11 @@ import org.junit.Test
 import zakadabar.lib.blobs.data.BlobCreateState
 import zakadabar.lib.blobs.data.url
 import zakadabar.lib.examples.backend.blob.TestBlobBl
-import zakadabar.stack.backend.Server
-import zakadabar.stack.backend.authorize.UnsafeAuthorizer
-import zakadabar.stack.backend.server
-import zakadabar.stack.data.CommBase
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.server.Server
+import zakadabar.core.authorize.UnsafeAuthorizer
+import zakadabar.core.server.server
+import zakadabar.core.comm.CommBase
+import zakadabar.core.data.EntityId
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

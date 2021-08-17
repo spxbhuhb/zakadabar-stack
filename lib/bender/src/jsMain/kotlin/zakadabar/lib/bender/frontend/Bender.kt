@@ -5,10 +5,10 @@ package zakadabar.lib.bender.frontend
 
 import kotlinx.browser.window
 import kotlinx.coroutines.await
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.util.io
 import zakadabar.lib.bender.ClassGenerator
-import zakadabar.lib.markdown.frontend.flavour.ZkMarkdownContext
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.util.io
+import zakadabar.lib.markdown.browser.flavour.ZkMarkdownContext
 
 class Bender(
     private val classGenerator: ClassGenerator,

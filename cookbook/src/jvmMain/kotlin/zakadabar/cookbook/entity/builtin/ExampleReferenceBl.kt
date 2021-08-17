@@ -3,8 +3,8 @@
  */
 package zakadabar.cookbook.entity.builtin
 
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.EntityBusinessLogicBase
 
 open class ExampleReferenceBl : EntityBusinessLogicBase<ExampleReferenceBo>(
     boClass = ExampleReferenceBo::class

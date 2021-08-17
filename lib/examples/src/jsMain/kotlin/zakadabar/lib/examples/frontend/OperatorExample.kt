@@ -5,12 +5,12 @@ package zakadabar.lib.examples.frontend
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.buttonSuccess
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.builtin.note.ZkNote
-import zakadabar.stack.frontend.builtin.note.noteSuccess
-import zakadabar.stack.frontend.util.marginBottom
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.button.buttonSuccess
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.note.ZkNote
+import zakadabar.core.browser.note.noteSuccess
+import zakadabar.core.browser.util.marginBottom
 
 class OperatorExample(
     element: HTMLElement

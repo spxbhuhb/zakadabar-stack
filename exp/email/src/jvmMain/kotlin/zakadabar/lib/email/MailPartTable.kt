@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.email
 
-import zakadabar.lib.blobs.backend.BlobExposedTable
+import zakadabar.lib.blobs.persistence.BlobExposedTable
 
 class MailPartTable(
    tableName : String = "mail_part",

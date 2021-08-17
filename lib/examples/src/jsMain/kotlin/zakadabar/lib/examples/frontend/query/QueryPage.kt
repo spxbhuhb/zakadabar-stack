@@ -10,19 +10,19 @@ package zakadabar.lib.examples.frontend.query
 
 import zakadabar.lib.examples.data.builtin.ExampleQuery
 import zakadabar.lib.examples.resources.strings
-import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.builtin.toast.toastDanger
-import zakadabar.stack.frontend.builtin.toast.toastSuccess
-import zakadabar.stack.frontend.resources.css.OverflowY
-import zakadabar.stack.frontend.resources.css.Position
-import zakadabar.stack.frontend.resources.theme
-import zakadabar.stack.frontend.util.default
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.frontend.util.log
-import zakadabar.stack.frontend.util.plusAssign
+import zakadabar.core.browser.ZkElementMode
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.page.ZkPage
+import zakadabar.core.browser.page.zkPageStyles
+import zakadabar.core.browser.toast.toastDanger
+import zakadabar.core.browser.toast.toastSuccess
+import zakadabar.core.resource.css.OverflowY
+import zakadabar.core.resource.css.Position
+import zakadabar.core.resource.theme
+import zakadabar.core.browser.util.default
+import zakadabar.core.browser.util.io
+import zakadabar.core.browser.util.log
+import zakadabar.core.browser.util.plusAssign
 
 object QueryPage : ZkPage(css = zkPageStyles.fixed) {
 

@@ -8,11 +8,11 @@ import zakadabar.site.frontend.components.SiteLogo
 import zakadabar.site.frontend.pages.Landing
 import zakadabar.site.frontend.pages.ProjectStatus
 import zakadabar.site.frontend.resources.siteStyles
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.layout.ZkDefaultLayout
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppHandle
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleBar
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.layout.ZkDefaultLayout
+import zakadabar.core.browser.titlebar.ZkAppHandle
+import zakadabar.core.browser.titlebar.ZkAppTitle
+import zakadabar.core.browser.titlebar.ZkAppTitleBar
 
 object DefaultLayout : ZkDefaultLayout(spanHeader = true) {
 

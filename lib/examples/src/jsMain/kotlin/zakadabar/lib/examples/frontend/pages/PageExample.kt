@@ -4,9 +4,9 @@
 package zakadabar.lib.examples.frontend.pages
 
 import org.w3c.dom.HTMLElement
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.layout.zkLayoutStyles
-import zakadabar.stack.frontend.builtin.pages.ZkPage
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.page.ZkPage
 
 class ExamplePage : ZkPage() {
 

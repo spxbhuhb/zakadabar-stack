@@ -5,19 +5,19 @@ package zakadabar.lib.demo.frontend
 
 import kotlinx.browser.window
 import zakadabar.cookbook.sqlite.bundle.ExampleBundleCrud
+import zakadabar.core.authorize.appRoles
+import zakadabar.core.browser.sidebar.ZkSideBar
+import zakadabar.core.browser.util.io
+import zakadabar.core.resource.localized
+import zakadabar.lib.accounts.browser.accounts.Account
+import zakadabar.lib.accounts.browser.accounts.AccountSecure
+import zakadabar.lib.accounts.browser.login.Login
+import zakadabar.lib.accounts.browser.roles.Roles
 import zakadabar.lib.accounts.data.LogoutAction
-import zakadabar.lib.accounts.frontend.accounts.Account
-import zakadabar.lib.accounts.frontend.accounts.AccountSecure
-import zakadabar.lib.accounts.frontend.login.Login
-import zakadabar.lib.accounts.frontend.roles.Roles
 import zakadabar.lib.demo.frontend.pages.DemoCrud
 import zakadabar.lib.demo.resources.strings
-import zakadabar.lib.i18n.frontend.LocaleCrud
-import zakadabar.lib.i18n.frontend.TranslationCrud
-import zakadabar.stack.authorize.appRoles
-import zakadabar.stack.frontend.builtin.sidebar.ZkSideBar
-import zakadabar.stack.frontend.util.io
-import zakadabar.stack.resources.localized
+import zakadabar.lib.i18n.browser.LocaleCrud
+import zakadabar.lib.i18n.browser.TranslationCrud
 
 class SideBar : ZkSideBar() {
 

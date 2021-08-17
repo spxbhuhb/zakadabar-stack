@@ -8,12 +8,12 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.builtin.misc.Secret
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityBoCompanion
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.BoSchema
-import zakadabar.stack.util.UUID
+import zakadabar.core.data.Secret
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityBoCompanion
+import zakadabar.core.data.EntityId
+import zakadabar.core.schema.BoSchema
+import zakadabar.core.util.UUID
 
 @Serializable
 data class BuiltinBo(

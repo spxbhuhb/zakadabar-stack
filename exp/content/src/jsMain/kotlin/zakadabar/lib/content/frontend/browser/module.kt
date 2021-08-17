@@ -4,8 +4,8 @@
 package zakadabar.lib.content.frontend.browser
 
 import zakadabar.lib.content.resources.contentStrings
-import zakadabar.stack.frontend.application.ZkAppRouting
-import zakadabar.stack.frontend.application.ZkApplication
+import zakadabar.core.browser.application.ZkAppRouting
+import zakadabar.core.browser.application.ZkApplication
 
 var textBlockStereotypes = mutableListOf<String>()
 

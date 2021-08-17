@@ -5,10 +5,10 @@ package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
-import zakadabar.stack.data.builtin.account.AccountPublicBo
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.query.QueryBo
-import zakadabar.stack.data.query.QueryBoCompanion
+import zakadabar.core.authorize.AccountPublicBo
+import zakadabar.core.data.EntityId
+import zakadabar.core.data.QueryBo
+import zakadabar.core.data.QueryBoCompanion
 
 @Serializable
 class RolesByAccount(

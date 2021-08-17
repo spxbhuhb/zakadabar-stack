@@ -5,12 +5,12 @@ package zakadabar.lib.examples.frontend.note
 
 import org.w3c.dom.HTMLElement
 import zakadabar.lib.examples.data.builtin.BuiltinBo
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.ZkElementMode
-import zakadabar.stack.frontend.builtin.form.ZkForm
-import zakadabar.stack.frontend.builtin.note.noteWarning
-import zakadabar.stack.frontend.builtin.pages.zkPageStyles
-import zakadabar.stack.frontend.util.default
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.ZkElementMode
+import zakadabar.core.browser.form.ZkForm
+import zakadabar.core.browser.note.noteWarning
+import zakadabar.core.browser.page.zkPageStyles
+import zakadabar.core.browser.util.default
 
 /**
  * This example shows how to create a note with a compex content.

@@ -4,8 +4,8 @@
 package zakadabar.lib.email
 
 import org.jetbrains.exposed.sql.`java-time`.timestamp
-import zakadabar.lib.accounts.backend.pa.AccountPrivateExposedTableCommon
-import zakadabar.stack.backend.exposed.ExposedPaTable
+import zakadabar.core.persistence.exposed.ExposedPaTable
+import zakadabar.lib.accounts.persistence.AccountPrivateExposedTableCommon
 
 open class MailTable(
     tableName : String = "mail"

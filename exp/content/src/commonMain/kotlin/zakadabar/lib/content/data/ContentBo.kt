@@ -5,11 +5,11 @@ package zakadabar.lib.content.data
 
 import kotlinx.serialization.Serializable
 import zakadabar.lib.i18n.data.LocaleBo
-import zakadabar.stack.data.entity.EntityBo
-import zakadabar.stack.data.entity.EntityBoCompanion
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.data.schema.BoSchema
-import zakadabar.stack.data.schema.descriptor.CustomBoConstraint
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityBoCompanion
+import zakadabar.core.data.EntityId
+import zakadabar.core.schema.BoSchema
+import zakadabar.core.schema.descriptor.CustomBoConstraint
 
 /**
  * Content entity. There are master versions and localized versions.

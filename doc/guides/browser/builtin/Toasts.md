@@ -2,15 +2,15 @@
 
 Toasts are small pop-up messages displayed to the user to provide information about something.
 
-* Use [toast convenience functions](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/toast.kt) to display basic
+* Use [toast convenience functions](/core/core/src/jsMain/kotlin/zakadabar/core/browser/toast/toast.kt) to display basic
   toasts.
-* Use [ZkToast](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/ZkToast.kt) to display fine-tuned toasts.
-* Extend [zkToastStyles](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/zkToastStyles.kt) to override default
+* Use [ZkToast](/core/core/src/jsMain/kotlin/zakadabar/core/browser/toast/ZkToast.kt) to display fine-tuned toasts.
+* Extend [zkToastStyles](/core/core/src/jsMain/kotlin/zakadabar/core/browser/toast/zkToastStyles.kt) to override default
   styles.
 * Toasts are added to the `toasts` property
-  of the `application` ([ZkApplication](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/application/ZkApplication.kt)).
+  of the `application` ([ZkApplication](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkApplication.kt)).
 * The `toast` property is an instance
-  of [ZkToastContainer](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/ZkToastContainer.kt).
+  of [ZkToastContainer](/core/core/src/jsMain/kotlin/zakadabar/core/browser/toast/ZkToastContainer.kt).
 
 For basic toasts, simply call the appropriate convenience function:
 
@@ -35,7 +35,7 @@ toastDanger { "message" }
 toastInfo { "message" }
 ```
 
-Use constructor parameters of [ZkToast](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/ZkToast.kt) to create
+Use constructor parameters of [ZkToast](/core/core/src/jsMain/kotlin/zakadabar/core/browser/toast/ZkToast.kt) to create
 fine-tuned toasts.
 
 | Parameter | Description |
@@ -48,7 +48,7 @@ fine-tuned toasts.
 | iconClass | The CSS class to add to the icon, overrides flavour icon class. |
 | innerClass | The CSS class to add to the inner container, overrides flavour inner class. |
 
-To display a toast built from  [ZkToast](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/ZkToast.kt) use
+To display a toast built from  [ZkToast](/core/core/src/jsMain/kotlin/zakadabar/core/browser/toast/ZkToast.kt) use
 the `run` method:
 
 ```kotlin
@@ -65,7 +65,7 @@ Toasts may disappear automatically after a while. The mechanism works as follows
   * otherwise, it specifies the number of milliseconds until auto-hide.
 * otherwise, default values are used.
 
-[ZkToast.autoHideDefaults](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/ZkToast.kt) contains the default
+[ZkToast.autoHideDefaults](/core/core/src/jsMain/kotlin/zakadabar/core/browser/toast/ZkToast.kt) contains the default
 settings for each flavour:
 
 | Flavour | Auto Hide |
@@ -96,7 +96,7 @@ Try it out, set a timeout value click on the button:
 
 You can customize the icon and the colors easily by setting the appropriate constructor parameters. For example styles
 check the source code of the example
-or [ZkToastStyles](/core/core/src/jsMain/kotlin/zakadabar/stack/frontend/builtin/toast/zkToastStyles.kt).
+or [ZkToastStyles](/core/core/src/jsMain/kotlin/zakadabar/core/browser/toast/zkToastStyles.kt).
 
 ```kotlin
 ZkToast(

@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.examples.frontend.theme
 
-import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
+import zakadabar.core.browser.theme.ZkBuiltinLightTheme
 
 class DemoThemeLight : ZkBuiltinLightTheme() {
 

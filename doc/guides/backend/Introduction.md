@@ -11,7 +11,7 @@ or the persistence API if you wish.
 
 ## Server.kt
 
-[Server.kt](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/Server.kt) contains
+[Server.kt](/core/core/src/jvmMain/kotlin/zakadabar/core/server/Server.kt) contains
 the entry point of the backend application: the `main` function. 
 
 You are free to extend this class and define your own main function as you wish.
@@ -30,11 +30,11 @@ is basically a very simplistic way of injection, see
 1. `onConfigure`, this is a method to override if you extend the server
 1. load settings, see [Settings](./Settings.md)
 1. create SQL connection pool (HikariCP)
-1. load modules, see [Modules](./Modules.md)
+1. load modules, see [Modules](../common/Modules.md)
 1. create missing tables and columns (Exposed)
 1. resolve module dependencies
 1. initialize DB (if necessary)
-1. start modules, see [Modules](./Modules.md)
+1. start modules, see [Modules](../common/Modules.md)
 1. build the Ktor configuration
 1. start the Ktor server
 
@@ -44,7 +44,7 @@ All Ktor related code of the core is in the `zakadabar.stack.backend.ktor` packa
 In addition `lib:accounts` contains Ktor specific code for session handling.
 
 At the end of server startup the `onBuildServer` function of the server creates
-a [KtorServerBuilder](/core/core/src/jvmMain/kotlin/zakadabar/stack/backend/ktor/KtorServerBuilder.kt)
+a [KtorServerBuilder](/core/core/src/jvmMain/kotlin/zakadabar/core/server/ktor/KtorServerBuilder.kt)
 and calls its `build` function to build the Ktor instance.
 
 ### Add Ktor Plugins

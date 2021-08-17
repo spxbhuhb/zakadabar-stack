@@ -4,14 +4,14 @@
 package zakadabar.lib.demo.frontend
 
 import zakadabar.lib.demo.resources.strings
-import zakadabar.stack.frontend.builtin.layout.ZkDefaultLayout
-import zakadabar.stack.frontend.builtin.theme.ZkBuiltinDarkTheme
-import zakadabar.stack.frontend.builtin.theme.ZkBuiltinLightTheme
-import zakadabar.stack.frontend.builtin.theme.ZkGreenBlueTheme
-import zakadabar.stack.frontend.builtin.theme.ZkThemeRotate
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppHandle
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitleBar
-import zakadabar.stack.frontend.resources.ZkIcons
+import zakadabar.core.browser.layout.ZkDefaultLayout
+import zakadabar.core.browser.theme.ZkBuiltinDarkTheme
+import zakadabar.core.browser.theme.ZkBuiltinLightTheme
+import zakadabar.core.browser.theme.ZkGreenBlueTheme
+import zakadabar.core.browser.theme.ZkThemeRotate
+import zakadabar.core.browser.titlebar.ZkAppHandle
+import zakadabar.core.browser.titlebar.ZkAppTitleBar
+import zakadabar.core.resource.ZkIcons
 
 object DefaultLayout : ZkDefaultLayout(spanHeader = false) {
 

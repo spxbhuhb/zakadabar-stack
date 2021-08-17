@@ -4,7 +4,7 @@
 package zakadabar.lib.content.backend
 
 import zakadabar.lib.content.data.StatusBo
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
+import zakadabar.core.business.EntityBusinessLogicBase
 
 /**
  * Business Logic for StatusBo.

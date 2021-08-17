@@ -3,16 +3,16 @@
  */
 package zakadabar.site.frontend.pages
 
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.page.ZkPage
+import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.lib.bender.ClassGenerator
 import zakadabar.lib.bender.frontend.Bender
-import zakadabar.lib.markdown.frontend.MarkdownPage
-import zakadabar.lib.markdown.frontend.MarkdownPathPage
+import zakadabar.lib.markdown.browser.MarkdownPage
+import zakadabar.lib.markdown.browser.MarkdownPathPage
 import zakadabar.site.frontend.SiteMarkdownContext
 import zakadabar.site.frontend.contentNamespace
-import zakadabar.stack.frontend.application.application
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.pages.ZkPage
-import zakadabar.stack.frontend.builtin.titlebar.ZkAppTitle
 
 object Welcome : MarkdownPage(
     "/api/$contentNamespace/welcome/Welcome.md",

@@ -6,12 +6,12 @@ package zakadabar.lib.examples.backend.data
 import zakadabar.lib.examples.data.SimpleExampleAction
 import zakadabar.lib.examples.data.SimpleExampleBo
 import zakadabar.lib.examples.data.SimpleExampleQuery
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.backend.server
-import zakadabar.stack.backend.validate.Validator
-import zakadabar.stack.data.builtin.ActionStatusBo
-import zakadabar.stack.util.after
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.EntityBusinessLogicBase
+import zakadabar.core.server.server
+import zakadabar.core.data.ActionStatus
+import zakadabar.core.util.after
+import zakadabar.core.validate.BusinessLogicValidator
 
 class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
     boClass = SimpleExampleBo::class
@@ -26,7 +26,7 @@ class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
         query(SimpleExampleQuery::class, ::query)
     }
 
-    override val validator = object : Validator<SimpleExampleBo> {
+    override val validator = object : BusinessLogicValidator<SimpleExampleBo> {
         override fun validateCreate(executor: Executor, bo: SimpleExampleBo) {
             auditor.auditCustom(executor) { "Incoming BO is ${if (bo.isValid) "valid" else "invalid"}." }
         }
@@ -57,9 +57,9 @@ class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
             }
 
     @Suppress("UNUSED_PARAMETER")
-    private fun action(executor: Executor, action: SimpleExampleAction): ActionStatusBo {
+    private fun action(executor: Executor, action: SimpleExampleAction): ActionStatus {
         println("Account ${executor.accountId} executed SimpleExampleAction")
-        return ActionStatusBo(reason = "This is a successful test action invocation.")
+        return ActionStatus(reason = "This is a successful test action invocation.")
     }
 
     @Suppress("UNUSED_PARAMETER")

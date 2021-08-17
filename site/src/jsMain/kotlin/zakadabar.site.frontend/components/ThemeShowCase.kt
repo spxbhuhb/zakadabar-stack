@@ -6,10 +6,10 @@ package zakadabar.site.frontend.components
 import org.w3c.dom.HTMLElement
 import zakadabar.site.frontend.resources.SiteGreenBlueTheme
 import zakadabar.site.resources.strings
-import zakadabar.stack.frontend.builtin.ZkElement
-import zakadabar.stack.frontend.builtin.button.ZkButton
-import zakadabar.stack.frontend.resources.theme
-import zakadabar.stack.frontend.util.marginBottom
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.button.ZkButton
+import zakadabar.core.resource.theme
+import zakadabar.core.browser.util.marginBottom
 
 class ThemeShowCase(
     element: HTMLElement

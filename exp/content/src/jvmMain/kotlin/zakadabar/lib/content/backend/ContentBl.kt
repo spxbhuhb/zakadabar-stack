@@ -5,17 +5,17 @@
 package zakadabar.lib.content.backend
 
 import io.ktor.features.*
+import zakadabar.core.authorize.Executor
+import zakadabar.core.business.EntityBusinessLogicBase
+import zakadabar.core.data.EntityId
+import zakadabar.core.exception.DataConflict
+import zakadabar.core.module.module
+import zakadabar.core.text.lowercaseWithHyphen
+import zakadabar.core.util.PublicApi
 import zakadabar.lib.blobs.data.url
 import zakadabar.lib.content.data.*
-import zakadabar.lib.i18n.backend.LocaleBl
+import zakadabar.lib.i18n.business.LocaleBl
 import zakadabar.lib.i18n.data.LocaleBo
-import zakadabar.stack.backend.authorize.Executor
-import zakadabar.stack.backend.business.EntityBusinessLogicBase
-import zakadabar.stack.backend.module
-import zakadabar.stack.data.entity.EntityId
-import zakadabar.stack.exceptions.DataConflict
-import zakadabar.stack.text.lowercaseWithHyphen
-import zakadabar.stack.util.PublicApi
 
 /**
  * Business Logic for ContentCommonBo.

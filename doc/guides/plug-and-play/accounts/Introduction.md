@@ -26,7 +26,7 @@ To use accounts in your application:
 **backend**
 
 1. (optional) define additional roles
-1. add the module to your server configuration, for details see [Modules](../../backend/Modules.md)
+1. add the module to your server configuration, for details see [Modules](../../common/Modules.md)
 1. configure settings, for more information, for details see [Settings](../../backend/Settings.md)
 
 **frontend**
@@ -63,7 +63,7 @@ object Roles : AppRolesBase() {
 If you have additional roles and/or extended AccountPrivateBl:
 
 ```kotlin
-zakadabar.lib.accounts.backend.install(
+zakadabar.lib.accounts.install(
     roles = Roles,
     accountPrivateBl = MyAccountPrivateBl()
 )
@@ -72,7 +72,7 @@ zakadabar.lib.accounts.backend.install(
 Otherwise, (this will use an instance of [AppRolesBase](/core/core/src/commonMain/kotlin/zakadabar/stack/authorize/roles.kt)):
 
 ```kotlin
-zakadabar.lib.accounts.backend.install()
+zakadabar.lib.accounts.install()
 ```
 
 #### configure settings
@@ -115,7 +115,7 @@ ifAnonymous {
   + item<Login>()
 }
 
-withRole(StackRoles.securityOfficer) {
+withRole(appRoles.securityOfficer) {
   + group(translate<Accounts>()) {
     + item<Accounts>()
     + item<Roles>()

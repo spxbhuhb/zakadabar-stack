@@ -3,8 +3,8 @@
  */
 package zakadabar.lib.email
 
-import zakadabar.lib.blobs.backend.BlobExposedPa
-import zakadabar.stack.backend.util.default
+import zakadabar.core.util.default
+import zakadabar.lib.blobs.persistence.BlobExposedPa
 
 class MailPartPa(
    referenceTable : MailTable,
