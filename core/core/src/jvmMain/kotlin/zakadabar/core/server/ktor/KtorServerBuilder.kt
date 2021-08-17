@@ -135,6 +135,10 @@ open class KtorServerBuilder(
         routing {
             if (config.traceRouting) trace { routingLogger.trace(it.buildText()) }
 
+            configBuilders.forEach {
+                if (it is KtorRouteConfig) it.runBuild(this)
+            }
+
             authenticate {
                 install(config, modules)
             }

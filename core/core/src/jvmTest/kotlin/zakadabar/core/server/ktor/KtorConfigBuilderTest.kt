@@ -3,7 +3,10 @@
  */
 package zakadabar.core.server.ktor
 
+import io.ktor.application.*
 import io.ktor.auth.*
+import io.ktor.response.*
+import io.ktor.routing.*
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
@@ -18,6 +21,12 @@ class KtorConfigBuilderTest {
             server += KtorAuthConfig {
                 basic {
 
+                }
+            }
+
+            server += KtorRouteConfig {
+                get("hello") {
+                    call.respondText("world")
                 }
             }
         }

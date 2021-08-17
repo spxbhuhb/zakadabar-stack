@@ -5,6 +5,7 @@ package zakadabar.core.server.ktor
 
 import io.ktor.application.*
 import io.ktor.auth.*
+import io.ktor.routing.*
 import zakadabar.core.server.Server
 
 interface KtorConfigBuilder
@@ -14,6 +15,16 @@ class KtorAuthConfig(
 ) : KtorConfigBuilder {
 
     fun runBuild(config : Authentication.Configuration) {
+        config.build()
+    }
+
+}
+
+class KtorRouteConfig(
+    val build : (Route.() -> Unit)
+) : KtorConfigBuilder {
+
+    fun runBuild(config : Route) {
         config.build()
     }
 
