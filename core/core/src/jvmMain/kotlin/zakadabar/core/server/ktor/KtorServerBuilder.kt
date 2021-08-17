@@ -19,35 +19,16 @@ import io.ktor.sessions.*
 import io.ktor.websocket.*
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
-import zakadabar.core.route.RoutedModule
-import zakadabar.core.server.Server
-import zakadabar.core.server.Server.Companion.staticRoot
 import zakadabar.core.authorize.LoginTimeout
-import zakadabar.core.server.routingLogger
-import zakadabar.core.server.server
-import zakadabar.core.server.ServerSettingsBo
 import zakadabar.core.exception.*
 import zakadabar.core.module.ModuleStore
+import zakadabar.core.route.RoutedModule
+import zakadabar.core.server.Server.Companion.staticRoot
+import zakadabar.core.server.ServerSettingsBo
+import zakadabar.core.server.routingLogger
+import zakadabar.core.server.server
 import java.io.File
 import java.time.Duration
-
-class KtorFeatureWithConfig<B : Any>(
-    val feature : ApplicationFeature<Application,B,*>,
-    val config : (B.() -> Unit)?
-)
-
-val features = mutableListOf<KtorFeatureWithConfig<*>>()
-
-operator fun Server.plusAssign(feature : ApplicationFeature<Application,Any,*>) {
-    features += KtorFeatureWithConfig(feature) { }
-}
-
-operator fun Server.plusAssign(feature : KtorFeatureWithConfig<*>) {
-    features += feature
-}
-
-operator fun <B : Any, F : ApplicationFeature<Application,B,*>> F.invoke(config : B.() -> Unit) =
-    KtorFeatureWithConfig(this, config)
 
 /**
  * Build a Ktor server instance.
@@ -88,10 +69,18 @@ open class KtorServerBuilder(
             }
             install(Authentication) {
                 sessionBl.configure(this)
+                configBuilders.forEach { if (it is KtorAuthConfig) it.runBuild(this) }
             }
         } else {
             install(Authentication) {
-                configureEmpty()
+                var configured = false
+                configBuilders.forEach {
+                    if (it is KtorAuthConfig) {
+                        it.runBuild(this)
+                        configured = true
+                    }
+                }
+                if (!configured) configureEmpty()
             }
         }
     }
