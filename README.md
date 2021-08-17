@@ -4,7 +4,12 @@
 [![GitHub License](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
 ![Kotlin](https://img.shields.io/github/languages/top/spxbhuhb/zakadabar-stack)
 
-Zakadabar is a multiplatform application development library written.
+Zakadabar is a multiplatform application development library.
+
+## Status
+
+As of now I add breaking changes quite freely as I assume that no-one uses this library beside us. If you use Zakadabar, let me know and
+I'll take it into account.
 
 ## Documentation
 
