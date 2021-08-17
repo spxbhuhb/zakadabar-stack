@@ -21,19 +21,10 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import org.w3c.dom.HTMLElement
-import zakadabar.core.data.BaseBo
-import zakadabar.core.data.ActionBo
-import zakadabar.core.data.Secret
-import zakadabar.core.data.EntityBo
-import zakadabar.core.data.EntityId
-import zakadabar.core.data.QueryBo
-import zakadabar.core.schema.BoSchema
-import zakadabar.core.schema.ValidityReport
-import zakadabar.core.exception.DataConflict
-import zakadabar.core.browser.application.application
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.ZkElementMode
 import zakadabar.core.browser.ZkElementState
+import zakadabar.core.browser.application.application
 import zakadabar.core.browser.crud.ZkCrudEditor
 import zakadabar.core.browser.field.*
 import zakadabar.core.browser.titlebar.ZkAppTitle
@@ -43,11 +34,15 @@ import zakadabar.core.browser.toast.ZkToast
 import zakadabar.core.browser.toast.toastDanger
 import zakadabar.core.browser.toast.toastSuccess
 import zakadabar.core.browser.toast.toastWarning
-import zakadabar.core.resource.css.ZkCssStyleRule
 import zakadabar.core.browser.util.io
 import zakadabar.core.browser.util.log
 import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.data.*
+import zakadabar.core.exception.DataConflict
+import zakadabar.core.resource.css.ZkCssStyleRule
 import zakadabar.core.resource.localizedStrings
+import zakadabar.core.schema.BoSchema
+import zakadabar.core.schema.ValidityReport
 import zakadabar.core.util.PublicApi
 import zakadabar.core.util.UUID
 import kotlin.reflect.KMutableProperty0
@@ -664,26 +659,24 @@ open class ZkForm<T : BaseBo>(
             ZkOptUuidField(this@ZkForm, it)
         }
 
-    inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): ZkEnumSelectField<E> =
-        add(this) { prop ->
-            val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) } // this is a non-translated to translated mapping
-            add(this) {
-                ZkEnumSelectField(this@ZkForm, prop) { enumValueOf(it) }.apply {
-                    fetch = { options }
-                }
+    inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): ZkEnumSelectField<E> {
+        val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) } // this is a non-translated to translated mapping
+        return add(this) { prop ->
+            ZkEnumSelectField(this@ZkForm, prop) { enumValueOf(it) }.apply {
+                fetch = { options }
             }
         }
+    }
 
     @JsName("FormOptEnumUnaryPlus")
-    inline operator fun <reified E : Enum<E>> KMutableProperty0<E?>.unaryPlus(): ZkOptEnumSelectField<E> =
-        add(this) { prop ->
-            val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) } // this is a non-translated to translated mapping
-            add(this) {
-                ZkOptEnumSelectField(this@ZkForm, prop) { enumValueOf(it) }.apply {
-                    fetch = { options }
-                }
+    inline operator fun <reified E : Enum<E>> KMutableProperty0<E?>.unaryPlus(): ZkOptEnumSelectField<E> {
+        val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) } // this is a non-translated to translated mapping
+        return add(this) { prop ->
+            ZkOptEnumSelectField(this@ZkForm, prop) { enumValueOf(it) }.apply {
+                fetch = { options }
             }
         }
+    }
 
     // -------------------------------------------------------------------------
     //  Property field convenience methods
