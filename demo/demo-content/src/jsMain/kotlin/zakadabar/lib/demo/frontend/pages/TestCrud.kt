@@ -3,15 +3,15 @@
  */
 package zakadabar.lib.demo.frontend.pages
 
-import zakadabar.lib.blobs.frontend.image.ZkImagesField
-import zakadabar.lib.demo.data.DemoBlob
-import zakadabar.lib.demo.data.DemoBo
-import zakadabar.core.data.EntityId
 import zakadabar.core.browser.application.target
 import zakadabar.core.browser.crud.ZkCrudTarget
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.data.EntityId
 import zakadabar.core.resource.localized
+import zakadabar.lib.blobs.browser.image.ZkImagesField
+import zakadabar.lib.demo.data.DemoBlob
+import zakadabar.lib.demo.data.DemoBo
 
 /**
  * CRUD target for [DemoBo].

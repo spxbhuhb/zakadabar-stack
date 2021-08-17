@@ -14,16 +14,16 @@ import zakadabar.android.jdbc.zklite.connectSqlite
 import zakadabar.android.jdbc.zklite.databasesPath
 import zakadabar.cookbook.entity.builtin.ExamplePa
 import zakadabar.cookbook.sqlite.bundle.ExampleBundle
+import zakadabar.core.comm.CommBase
+import zakadabar.core.util.default
 import zakadabar.lib.accounts.persistence.AccountPrivateExposedTableCommon
-import zakadabar.lib.blobs.sqlite.deployBundle
+import zakadabar.lib.blobs.persistence.sqlite.deployBundle
 import zakadabar.lib.demo.backend.DemoBlobExposedPa
 import zakadabar.lib.demo.backend.DemoBlobExposedPaTable
 import zakadabar.lib.demo.backend.DemoExposedPaGen
 import zakadabar.lib.demo.backend.DemoExposedTableGen
-import zakadabar.lib.i18n.backend.LocaleExposedTableGen
-import zakadabar.lib.i18n.backend.TranslationExposedTableGen
-import zakadabar.core.comm.CommBase
-import zakadabar.core.util.default
+import zakadabar.lib.i18n.persistence.LocaleExposedTableGen
+import zakadabar.lib.i18n.persistence.TranslationExposedTableGen
 import java.sql.Connection
 import java.sql.DriverManager
 

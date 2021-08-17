@@ -4,10 +4,10 @@
 
 package zakadabar.lib.demo.frontend
 
+import zakadabar.core.browser.application.ZkAppRouting
 import zakadabar.lib.demo.frontend.pages.DemoCrud
 import zakadabar.lib.examples.frontend.crud.BuiltinCrud
 import zakadabar.lib.examples.frontend.crud.ExampleReferenceCrud
-import zakadabar.core.browser.application.ZkAppRouting
 
 class Routing : ZkAppRouting(DefaultLayout, Home) {
 
@@ -18,7 +18,7 @@ class Routing : ZkAppRouting(DefaultLayout, Home) {
         + ExampleReferenceCrud()
 
         zakadabar.lib.accounts.browser.install(this)
-        zakadabar.lib.i18n.frontend.install(this)
+        zakadabar.lib.i18n.browser.install(this)
     }
 
 }

@@ -8,7 +8,6 @@ plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
     id("org.jetbrains.kotlin.plugin.noarg")
-    id("upgrade-2021-08-15")
 }
 
 group = "hu.simplexion.zakadabar"

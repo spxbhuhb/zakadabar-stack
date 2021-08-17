@@ -10,9 +10,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.noarg")
     id("org.jetbrains.dokka")
     signing
-    `maven-publish`
-    id("upgrade-2021-08-15")
-}
+    `maven-publish` }
 
 group = "hu.simplexion.zakadabar"
 version = Versions.zakadabar

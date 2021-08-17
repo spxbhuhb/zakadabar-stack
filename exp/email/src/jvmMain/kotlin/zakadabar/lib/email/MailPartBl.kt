@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.email
 
-import zakadabar.lib.blobs.backend.BlobBlBase
+import zakadabar.lib.blobs.business.BlobBlBase
 
 class MailPartBl(
    mailTable : MailTable

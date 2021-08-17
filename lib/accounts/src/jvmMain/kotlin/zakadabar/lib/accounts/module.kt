@@ -1,14 +1,14 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.accounts.backend
+package zakadabar.lib.accounts
 
-import zakadabar.lib.accounts.business.AccountPrivateBl
-import zakadabar.lib.accounts.business.KtorSessionBl
-import zakadabar.lib.accounts.business.RoleBl
 import zakadabar.core.authorize.AppRolesBase
 import zakadabar.core.authorize.appRoles
 import zakadabar.core.server.server
+import zakadabar.lib.accounts.business.AccountPrivateBl
+import zakadabar.lib.accounts.business.KtorSessionBl
+import zakadabar.lib.accounts.business.RoleBl
 
 /**
  * @param   roles  Hard-coded roles this application handles. During application

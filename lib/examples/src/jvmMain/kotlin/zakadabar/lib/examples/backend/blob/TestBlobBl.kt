@@ -4,10 +4,10 @@
 package zakadabar.lib.examples.backend.blob
 
 import zakadabar.core.authorize.BusinessLogicAuthorizer
-import zakadabar.lib.blobs.backend.BlobBlBase
+import zakadabar.core.authorize.UnsafeAuthorizer
+import zakadabar.lib.blobs.business.BlobBlBase
 import zakadabar.lib.examples.data.SimpleExampleBo
 import zakadabar.lib.examples.data.TestBlob
-import zakadabar.core.authorize.UnsafeAuthorizer
 
 class TestBlobBl : BlobBlBase<TestBlob, SimpleExampleBo>(
      TestBlob::class,

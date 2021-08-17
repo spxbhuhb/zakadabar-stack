@@ -3,11 +3,11 @@
  */
 package zakadabar.lib.content.backend
 
-import zakadabar.lib.blobs.backend.BlobExposedPa
-import zakadabar.lib.blobs.backend.BlobExposedTable
+import zakadabar.core.util.default
+import zakadabar.lib.blobs.persistence.BlobExposedPa
+import zakadabar.lib.blobs.persistence.BlobExposedTable
 import zakadabar.lib.content.data.AttachedBlobBo
 import zakadabar.lib.content.data.ContentBo
-import zakadabar.core.util.default
 
 class AttachedBlobExposedPa : BlobExposedPa<AttachedBlobBo, ContentBo>(
     table = AttachedBlobExposedTable

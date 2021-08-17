@@ -53,8 +53,15 @@ abstract class Upgrade20210815 : DefaultTask() {
         "import zakadabar.lib.accounts.backend.pa" to "import zakadabar.lib.accounts.persistence",
         "import zakadabar.lib.accounts.backend.testing" to "import zakadabar.lib.accounts.testing",
         "import zakadabar.lib.accounts.server.ktor" to "import zakadabar.lib.accounts.server.ktor",
-
-        )
+        "zakadabar.lib.accounts.backend.install" to "zakadabar.lib.accounts.install",
+        "import zakadabar.lib.blobs.backend.BlobBlBase" to "import zakadabar.lib.blobs.business.BlobBlBase",
+        "import zakadabar.lib.blobs.backend.BlobExposedPa" to "import zakadabar.lib.blobs.persistence.BlobExposedPa",
+        "import zakadabar.lib.blobs.backend.BlobExposedTable" to "import zakadabar.lib.blobs.persistence.BlobExposedTable",
+        "zakadabar.lib.i18n.frontend.install" to "zakadabar.lib.i18n.browser.install",
+        "import zakadabar.lib.i18n.frontend.LocaleCrud" to "import zakadabar.lib.i18n.browser.LocaleCrud",
+        "import zakadabar.lib.i18n.frontend.TranslationCrud" to "import zakadabar.lib.i18n.browser.TranslationCrud",
+        "zakadabar.lib.i18n.backend.install()" to "zakadabar.lib.i18n.install()"
+    )
 
     @TaskAction
     private fun upgrade() {

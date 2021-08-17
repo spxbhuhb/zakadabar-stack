@@ -63,7 +63,7 @@ object Roles : AppRolesBase() {
 If you have additional roles and/or extended AccountPrivateBl:
 
 ```kotlin
-zakadabar.lib.accounts.backend.install(
+zakadabar.lib.accounts.install(
     roles = Roles,
     accountPrivateBl = MyAccountPrivateBl()
 )
@@ -72,7 +72,7 @@ zakadabar.lib.accounts.backend.install(
 Otherwise, (this will use an instance of [AppRolesBase](/core/core/src/commonMain/kotlin/zakadabar/stack/authorize/roles.kt)):
 
 ```kotlin
-zakadabar.lib.accounts.backend.install()
+zakadabar.lib.accounts.install()
 ```
 
 #### configure settings

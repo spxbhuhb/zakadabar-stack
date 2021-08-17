@@ -5,24 +5,24 @@ package zakadabar.lib.content.frontend.browser
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import zakadabar.lib.blobs.frontend.attachment.ZkAttachmentsField
-import zakadabar.lib.blobs.frontend.image.ZkImagesField
-import zakadabar.lib.content.data.*
-import zakadabar.lib.content.resources.contentStrings
-import zakadabar.lib.i18n.data.LocaleBo
-import zakadabar.core.data.EntityId
-import zakadabar.core.browser.application.application
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.ZkElementState
+import zakadabar.core.browser.application.application
 import zakadabar.core.browser.button.ZkButton
 import zakadabar.core.browser.crud.ZkCrudEditor
 import zakadabar.core.browser.crud.ZkCrudTarget
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.tabcontainer.ZkTabContainer
-import zakadabar.core.resource.ZkIcons
 import zakadabar.core.browser.util.default
 import zakadabar.core.browser.util.io
+import zakadabar.core.data.EntityId
+import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.localizedStrings
+import zakadabar.lib.blobs.browser.attachment.ZkAttachmentsField
+import zakadabar.lib.blobs.browser.image.ZkImagesField
+import zakadabar.lib.content.data.*
+import zakadabar.lib.content.resources.contentStrings
+import zakadabar.lib.i18n.data.LocaleBo
 
 class ContentEditor : ZkCrudTarget<ContentBo>() {
 

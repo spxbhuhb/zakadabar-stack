@@ -7,19 +7,19 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import org.w3c.dom.HTMLElement
-import zakadabar.lib.markdown.frontend.markdownStyles
-import zakadabar.core.browser.application.application
 import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.application.application
 import zakadabar.core.browser.button.buttonPrimary
-import zakadabar.core.browser.tabcontainer.ZkTabContainer
-import zakadabar.core.browser.tabcontainer.zkTabContainerStyles
 import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.browser.page.ZkPathPage
 import zakadabar.core.browser.sidebar.ZkSideBar
-import zakadabar.core.resource.css.px
+import zakadabar.core.browser.tabcontainer.ZkTabContainer
+import zakadabar.core.browser.tabcontainer.zkTabContainerStyles
 import zakadabar.core.browser.util.io
+import zakadabar.core.resource.css.px
 import zakadabar.core.resource.localizedStrings
 import zakadabar.core.text.MarkdownNav
+import zakadabar.lib.markdown.browser.markdownStyles
 
 class ExampleMarkdownSideBar : ZkSideBar() {
 

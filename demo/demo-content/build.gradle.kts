@@ -16,8 +16,6 @@ plugins {
     `maven-publish`
 
     id("zk-sync-build-info") apply false
-    id("upgrade-2021-08-15")
-
 }
 
 group = "hu.simplexion.zakadabar"
