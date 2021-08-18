@@ -6,13 +6,18 @@ package zakadabar.core.resource
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import zakadabar.core.data.StringPair
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty
 
 /**
  * Stores localized version of application strings (messages, labels, etc).
  */
-lateinit var localizedStrings: ZkBuiltinStrings
+var localizedStrings: ZkBuiltinStrings = ZkBuiltinStrings()
+    set(value) {
+        value.merge(field.map.map { StringPair(it.key, it.value) })
+        field = value
+    }
 
 /**
  * Stores an instance that is able to format and parse different data types
