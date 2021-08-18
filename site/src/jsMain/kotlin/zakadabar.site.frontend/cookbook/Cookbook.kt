@@ -7,7 +7,6 @@ import zakadabar.cookbook.Recipe
 import zakadabar.core.browser.application.application
 import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.browser.page.ZkPathPage
-import zakadabar.core.browser.page.zkPageStyles
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.browser.util.io
 import zakadabar.core.data.EntityId
@@ -19,7 +18,7 @@ import zakadabar.lib.markdown.browser.MarkdownView
 import zakadabar.site.cookbook.GetContent
 import zakadabar.site.frontend.SiteMarkdownContext
 
-object Cookbook : ZkPathPage(cssClass = zkPageStyles.fixed) {
+object Cookbook : ZkPathPage() {
 
     override fun onResume() {
         super.onResume()

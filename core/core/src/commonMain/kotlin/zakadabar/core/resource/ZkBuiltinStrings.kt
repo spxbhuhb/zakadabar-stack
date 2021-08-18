@@ -61,6 +61,12 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val yes by "yes"
     open val executeError by "Error while executing the function."
 
+    // Help
+
+    open val noHelpProvider by "Cannot find help provider."
+    open val noHelpProvided by "Help topic does not exists."
+    open val helpTitle by "Help"
+
     // -------------------------------------------------------------------------
     // Values for the build-in administration UI
     // -------------------------------------------------------------------------

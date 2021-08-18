@@ -6,11 +6,11 @@ package zakadabar.site.frontend
 import org.intellij.markdown.html.resolveToStringSafe
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
-import zakadabar.cookbook.browser.table.inline.TableEditInline
+import zakadabar.cookbook.Cookbook
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.application
-import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.browser.note.ZkNote
+import zakadabar.core.module.modules
 import zakadabar.core.resource.ZkFlavour
 import zakadabar.core.resource.css.px
 import zakadabar.core.resource.theme
@@ -75,14 +75,10 @@ class SiteMarkdownContext(
         val type = htmlElement.dataset["zkEnrich"] ?: return null
         val flavour = htmlElement.dataset["zkFlavour"]?.let { ZkFlavour.valueOf(it.capitalized()) } ?: ZkFlavour.Primary
 
-        return when (type) {
+        val cbe = modules.firstOrNull<Cookbook>()?.enrich(htmlElement, type, flavour)
+        if (cbe != null) return (cbe marginBottom theme.spacingStep.px)
 
-            // cookbook
-            "TableEditInline" -> ZkElement(htmlElement) build {
-                height = 400.px
-                + zkLayoutStyles.fixBorder
-                + TableEditInline()
-            }
+        return when (type) {
 
             // lib:examples
 

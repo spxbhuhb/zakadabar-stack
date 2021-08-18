@@ -12,13 +12,23 @@ import zakadabar.core.resource.localizedStrings
  * @return  true if the the action was executed, false if not
  */
 suspend fun withConfirm(
-    title : String = localizedStrings.confirmation,
-    message : String =  localizedStrings.confirmDelete,
-    func : () -> Unit
-) : Boolean {
+    title: String = localizedStrings.confirmation,
+    message: String = localizedStrings.confirmDelete,
+    func: () -> Unit
+): Boolean {
     val confirmed = ZkConfirmDialog(title, message).run()
     if (confirmed) {
         func()
     }
     return confirmed
+}
+
+/**
+ * Shows a message in a modal dialog.
+ */
+suspend fun modalMessage(
+    title: String = localizedStrings.confirmation,
+    message: String = localizedStrings.confirmDelete,
+) {
+    ZkMessageDialog(title, message).run()
 }

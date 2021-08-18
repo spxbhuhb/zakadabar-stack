@@ -8,11 +8,11 @@ import org.w3c.dom.HTMLAnchorElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
-import zakadabar.core.browser.application.application
 import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.ZkFlavour
 import zakadabar.core.resource.ZkIconSource
-import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.text.capitalized
 
 /**
@@ -48,7 +48,7 @@ open class ZkButton(
     open val buttonSize: Int? = null,
     open val tabIndex: Int? = 0,
     open val onClick: (() -> Unit)? = null
-) : ZkElement(document.createElement(if (url == null) "div" else "a") as HTMLElement)  {
+) : ZkElement(document.createElement(if (url == null) "div" else "a") as HTMLElement) {
 
     constructor(
         text: String,
@@ -170,6 +170,7 @@ open class ZkButton(
 
     open fun buildText() {
         classList += zkButtonStyles.text
+        if (round) + zkButtonStyles.round
 
         + if (capitalize) text?.capitalized() else text
     }

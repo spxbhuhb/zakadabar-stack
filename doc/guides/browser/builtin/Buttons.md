@@ -160,13 +160,3 @@ state).
 ### Disabled
 
 <div data-zk-enrich="ButtonExamples" data-zk-flavour="disabled"></div>
-
-## Timeline
-
-### Changes
-
-* 2021.5.14
-    * shorthands for create with routing targets
-    * use `a` tag when target or url is given
-* 2021.5.12
-    * rename convenience functions from buttonXX to XXbutton

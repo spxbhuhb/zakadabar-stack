@@ -3,19 +3,15 @@
  */
 package zakadabar.core.browser.help
 
-import org.w3c.dom.HTMLElement
 import zakadabar.core.browser.ZkElement
-import zakadabar.core.browser.button.buttonSecondary
 import zakadabar.core.util.PublicApi
 
+/**
+ * Convenience for creating a [InlineHelpWrapper].
+ *
+ * @param  args            Arguments to pass to the help provider.
+ * @param  contentBuilder  Function to build the content that has the help attached to it.
+ */
 @PublicApi
-fun ZkElement.withHelp(func: () -> ZkElement?): HTMLElement? {
-
-    return func()?.let {
-        + row {
-            + it
-            + buttonSecondary("?") { }
-        }
-    }
-
-}
+inline fun <reified T : Any> withHelp(args: T, noinline contentBuilder: () -> ZkElement?): InlineHelpWrapper<T> =
+    InlineHelpWrapper(args, contentBuilder = contentBuilder)

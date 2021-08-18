@@ -7,13 +7,14 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
-import zakadabar.core.server.ServerDescriptionBo
 import zakadabar.core.browser.dock.ZkDock
 import zakadabar.core.browser.modal.ZkModalContainer
 import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.toast.ZkToastContainer
 import zakadabar.core.browser.util.decodeURIComponent
+import zakadabar.core.module.modules
 import zakadabar.core.resource.*
+import zakadabar.core.server.ServerDescriptionBo
 import zakadabar.core.text.TranslationProvider
 import zakadabar.core.util.InstanceStore
 
@@ -140,6 +141,9 @@ open class ZkApplication {
 
         popup = document.createElement("div") as HTMLElement
         document.body?.appendChild(popup)
+
+        modules.resolveDependencies()
+        modules.start()
 
         window.addEventListener("popstate", onPopState)
 
