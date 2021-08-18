@@ -64,7 +64,13 @@ open class ZkTableStyles : ZkCssStyleSheet() {
 
     val beingResized by cssClass {
         on(" .$resizeHandle") {
-            opacity = 1.opacity
+            opacity = 1.opacity + " !important"
+        }
+    }
+
+    val otherBeingResized by cssClass {
+        on(" .$resizeHandle") {
+            opacity = 0.opacity + " !important"
         }
     }
 

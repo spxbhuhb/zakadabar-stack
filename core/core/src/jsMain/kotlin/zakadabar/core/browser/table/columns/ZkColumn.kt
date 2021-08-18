@@ -8,13 +8,13 @@ import kotlinx.browser.window
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
-import zakadabar.core.data.BaseBo
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.browser.table.zkTableStyles
-import zakadabar.core.resource.css.px
 import zakadabar.core.browser.util.minusAssign
 import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.data.BaseBo
+import zakadabar.core.resource.css.px
 import kotlin.math.max
 
 open class ZkColumn<T : BaseBo>(
@@ -25,6 +25,7 @@ open class ZkColumn<T : BaseBo>(
 
     open val min = 24.0
     open var max = "1fr"
+
     @Deprecated("EOL: 2021.8.1  -  use max instead", ReplaceWith("max"))
     open var fraction by ::max
     open var size = Double.NaN
@@ -34,6 +35,8 @@ open class ZkColumn<T : BaseBo>(
     var sortSign = ZkElement() css zkTableStyles.sortSign
 
     var beingResized = false
+    var beenResized = false
+    var lastX: Int = 0
 
     var sortAscending = false
 
@@ -55,6 +58,11 @@ open class ZkColumn<T : BaseBo>(
     }
 
     open fun onClick(event: Event) {
+        if (beenResized) {
+            beenResized = false
+            return
+        }
+
         sortAscending = ! sortAscending
 
         if (! table::fullData.isInitialized) return
@@ -80,7 +88,16 @@ open class ZkColumn<T : BaseBo>(
     }
 
     open fun onResizeMouseDown(event: Event) {
+        event as MouseEvent
+
         beingResized = true
+        beenResized = true
+        lastX = event.clientX
+
+        table.columns.forEach {
+            if (it.id != id) it.classList += zkTableStyles.otherBeingResized
+        }
+
         classList += zkTableStyles.beingResized
         table.classList += zkTableStyles.noSelect
 
@@ -92,10 +109,19 @@ open class ZkColumn<T : BaseBo>(
 
     open fun onMouseUp(event: Event) {
         beingResized = false
+        lastX = 0
+
+        table.columns.forEach {
+            it.classList -= zkTableStyles.otherBeingResized
+        }
+
         classList -= zkTableStyles.beingResized
         table.classList -= zkTableStyles.noSelect
+
         window.removeEventListener("mouseup", mouseUpWrapper)
         window.removeEventListener("mousemove", mouseMoveWrapper)
+
+        event.preventDefault()
     }
 
     private val mouseMoveWrapper = { event: Event -> onMouseMove(event) }
@@ -106,11 +132,10 @@ open class ZkColumn<T : BaseBo>(
 
             event as MouseEvent
 
-            val horizontalScrollOffset = document.documentElement !!.scrollLeft
-            val parentOffset = findParentOffset()
-            val elementOffset = element.offsetLeft
+            val distance = event.clientX - lastX
+            lastX = event.clientX
 
-            size = max(min, horizontalScrollOffset + event.clientX - parentOffset - elementOffset)
+            size = max(min, if (size.isNaN()) element.clientWidth.toDouble() else size + distance)
 
             val tableWidth = table.tableElement.clientWidth
             var sumWidth = 0.0
@@ -122,23 +147,28 @@ open class ZkColumn<T : BaseBo>(
                 sumWidth += it.size
             }
 
+            // When the table is smaller than the sum of colum widths, use 1 fraction for the
+            // last column. When larger, use exact pixel widths for each column.
+
             val template = if (sumWidth >= tableWidth || table.columns.size == 0) {
                 "grid-template-columns: " + table.columns.joinToString(" ") { "${it.size}px" }
             } else {
                 "grid-template-columns: " + table.columns.subList(0, table.columns.size - 1).joinToString(" ") { "${it.size}px" } + " 1fr"
             }
 
+            table.tableElement.width = sumWidth.px
             table.tableElement.style.cssText = template
         }
     }
 
     private fun findParentOffset(): Int {
+        var offset = 0
         var current = element.offsetParent as? HTMLElement
         while (current != null) {
-            if (current.offsetLeft != 0) return current.offsetLeft
+            if (current.offsetLeft != 0) offset += current.offsetLeft
             current = current.offsetParent as? HTMLElement
         }
-        return 0
+        return offset
     }
 
     /**

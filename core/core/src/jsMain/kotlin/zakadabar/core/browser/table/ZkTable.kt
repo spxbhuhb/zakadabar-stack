@@ -10,11 +10,6 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.dom.clear
 import org.w3c.dom.*
 import org.w3c.dom.events.MouseEvent
-import zakadabar.core.data.BaseBo
-import zakadabar.core.data.EntityBo
-import zakadabar.core.data.EntityId
-import zakadabar.core.data.QueryBo
-import zakadabar.core.schema.BoSchema
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.ZkElementState
 import zakadabar.core.browser.crud.ZkCrud
@@ -32,7 +27,12 @@ import zakadabar.core.browser.util.Areas
 import zakadabar.core.browser.util.downloadCsv
 import zakadabar.core.browser.util.getDatasetEntry
 import zakadabar.core.browser.util.io
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityId
+import zakadabar.core.data.QueryBo
 import zakadabar.core.resource.localizedStrings
+import zakadabar.core.schema.BoSchema
 import zakadabar.core.util.UUID
 import kotlin.math.min
 import kotlin.reflect.KProperty1
@@ -166,16 +166,16 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
                 areas = Areas(element.id, ::onAreasChange, buildPoint, 0).apply { onCreate() }
             }
 
-            tableElement = table(zkTableStyles.table) {
+            + table(zkTableStyles.table) {
 
                 buildPoint.style.cssText = inlineCss()
                 + thead {
                     columns.forEach { + it }
                 }
                 + tbody
+            }.also {
+                tableElement = it
             }
-
-            + tableElement
         }
 
         // this is here to prevent text selection on double click
