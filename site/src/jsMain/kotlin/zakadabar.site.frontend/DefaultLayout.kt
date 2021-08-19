@@ -3,16 +3,15 @@
  */
 package zakadabar.site.frontend
 
-import zakadabar.site.frontend.components.HeaderActions
-import zakadabar.site.frontend.components.SiteLogo
-import zakadabar.site.frontend.pages.Landing
-import zakadabar.site.frontend.pages.ProjectStatus
-import zakadabar.site.frontend.resources.siteStyles
 import zakadabar.core.browser.application.application
 import zakadabar.core.browser.layout.ZkDefaultLayout
 import zakadabar.core.browser.titlebar.ZkAppHandle
 import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.titlebar.ZkAppTitleBar
+import zakadabar.site.frontend.components.HeaderActions
+import zakadabar.site.frontend.components.SiteLogo
+import zakadabar.site.frontend.pages.Landing
+import zakadabar.site.frontend.resources.siteStyles
 
 object DefaultLayout : ZkDefaultLayout(spanHeader = true) {
 
@@ -36,9 +35,6 @@ object DefaultLayout : ZkDefaultLayout(spanHeader = true) {
                 + application.serverDescription.version
                 + div(siteStyles.alphaStyle) {
                     + "ALPHA"
-                    on("click") {
-                        application.changeNavState(ProjectStatus)
-                    }
                 }
             }
         }
