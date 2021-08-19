@@ -3,20 +3,20 @@
  */
 package zakadabar.core.browser.popup
 
-
-import kotlinx.dom.clear
 import org.w3c.dom.HTMLElement
-import zakadabar.core.browser.application.application
 import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.application.application
 
 open class ZkPopUp() : ZkElement() {
 
-    constructor(builder : ZkPopUp.() -> Unit) : this() {
+    var shown: Boolean = false
+
+    constructor(builder: ZkPopUp.() -> Unit) : this() {
         this.builder()
     }
 
     open fun toggle(anchorElement: HTMLElement, minHeight: Int) {
-        if (isShown()) {
+        if (shown) {
             hide()
         } else {
             show(anchorElement, minHeight)
@@ -24,15 +24,17 @@ open class ZkPopUp() : ZkElement() {
     }
 
     open fun show(anchorElement: HTMLElement, minHeight: Int) {
-        application.popup.clear()
+        shown = true
         application.popup.appendChild(this.element)
-        super.show()
         alignPopup(this.element, anchorElement, minHeight)
     }
 
-    override fun hide() : ZkElement {
-        application.popup.clear()
-        return super.hide()
+    override fun hide(): ZkElement {
+        if (shown) {
+            shown = false
+            element.remove()
+        }
+        return this
     }
 
 }

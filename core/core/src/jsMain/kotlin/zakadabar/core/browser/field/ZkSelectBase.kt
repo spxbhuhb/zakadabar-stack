@@ -79,7 +79,7 @@ abstract class ZkSelectBase<VT>(
 
     override fun onPause() {
         super.onPause()
-        if (itemList.isShown()) itemList.hide()
+        itemList.hide()
     }
 
     open suspend fun getItems(): List<Pair<VT, String>> {
@@ -123,7 +123,7 @@ abstract class ZkSelectBase<VT>(
             + row(ZkFormStyles.selectedOption) {
                 + selectedOption
                 + ZkIcon(ZkIcons.arrowDropDown, size = 24).also { arrow = it }
-                on("click") { toggleOptions() }
+                on("click") { toggleItems() }
             }
         }
 
@@ -143,7 +143,7 @@ abstract class ZkSelectBase<VT>(
                 "Enter", "ArrowDown" -> {
                     it.preventDefault()
                     if (itemList.isHidden()) {
-                        itemList.show()
+                        toggleItems()
                     }
                 }
                 "Escape" -> {
@@ -155,7 +155,6 @@ abstract class ZkSelectBase<VT>(
 
         if (readOnly) arrow.hide()
 
-        itemList.hide()
         + container
     }
 
@@ -190,19 +189,15 @@ abstract class ZkSelectBase<VT>(
         itemList.innerHTML = s
     }
 
-    override fun focusValue() = toggleOptions()
+    override fun focusValue() = toggleItems()
 
-    open fun toggleOptions() {
+    open fun toggleItems() {
         if (readOnly) return
 
         itemList.element.style.height = "auto"
         itemList.element.style.maxHeight = "auto"
 
         itemList.toggle(selectedOption.element, zkFormStyles.rowHeight * 5)
-
-        if (itemList.isShown()) {
-            itemList.focus()
-        }
     }
 
 }
