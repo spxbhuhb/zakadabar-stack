@@ -4,12 +4,13 @@
 
 package zakadabar.cookbook.browser.table.inline
 
+import zakadabar.cookbook.cookbookStyles
 import zakadabar.cookbook.entity.builtin.ExampleBo
-import zakadabar.core.data.EntityId
 import zakadabar.core.browser.field.ZkBooleanField
 import zakadabar.core.browser.field.ZkStringSelectField
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.browser.table.zkTableStyles
+import zakadabar.core.data.EntityId
 import zakadabar.core.util.default
 
 class TableEditInline : ZkTable<ExampleBo>() {
@@ -42,6 +43,8 @@ class TableEditInline : ZkTable<ExampleBo>() {
 
     override fun onCreate() {
         super.onCreate()
+
+        + cookbookStyles.inlineTable
 
         val template = default<ExampleBo> { }
         setData((1..50).map { template.copy(id = EntityId(it.toLong()), stringValue = "string $it", booleanValue = (it % 2 == 0)) })

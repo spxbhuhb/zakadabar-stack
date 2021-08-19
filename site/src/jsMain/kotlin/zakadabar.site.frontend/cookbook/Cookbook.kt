@@ -23,12 +23,12 @@ object Cookbook : ZkPathPage() {
     override fun onResume() {
         super.onResume()
 
-        + zkLayoutStyles.grid1
-
         if (path.isEmpty()) {
+            + zkLayoutStyles.grid1
             + Table()
             - firstOrNull<MarkdownView>()
         } else {
+            - zkLayoutStyles.grid1
             - firstOrNull<Table>()
             io {
                 val md = GetContent(EntityId(path)).execute().value

@@ -4,17 +4,17 @@
 package zakadabar.cookbook
 
 import org.w3c.dom.HTMLElement
+import zakadabar.cookbook.browser.form.select.BoSelectFilter
+import zakadabar.cookbook.browser.form.select.StringSelectFilter
 import zakadabar.cookbook.browser.help.TextHelpModal
 import zakadabar.cookbook.browser.table.inline.TableEditInline
 import zakadabar.cookbook.resource.strings
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.application
 import zakadabar.core.browser.help.TextHelpProvider
-import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.module.CommonModule
 import zakadabar.core.module.modules
 import zakadabar.core.resource.ZkFlavour
-import zakadabar.core.resource.css.px
 
 class Cookbook : CommonModule {
 
@@ -24,21 +24,16 @@ class Cookbook : CommonModule {
         modules += TextHelpProvider()
     }
 
-    fun enrich(htmlElement: HTMLElement, type: String, flavour: ZkFlavour): ZkElement? {
-        return when (type) {
-            "TextHelpModal" -> htmlElement.zk { + TextHelpModal() }
+    fun enrich(htmlElement: HTMLElement, type: String, flavour: ZkFlavour): ZkElement? =
+        when (type) {
 
-            "TableEditInline" -> htmlElement.zk {
-                height = 400.px
-                + zkLayoutStyles.fixBorder
-                + TableEditInline()
-            }
+            "BoSelectFilter" -> BoSelectFilter()
+            "StringSelectFilter" -> StringSelectFilter()
+            "TextHelpModal" -> TextHelpModal()
+            "TableEditInline" -> TableEditInline()
 
             else -> null
-        }
-    }
 
-    fun HTMLElement.zk(builder : ZkElement.() -> Unit) : ZkElement =
-        ZkElement(this) build { builder() }
+        }?.let { ZkElement(htmlElement) build { + it } }
 
 }

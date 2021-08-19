@@ -27,7 +27,7 @@ fun main() {
 
             initSession()
 
-            initTheme(SiteGreenBlueTheme(), SiteDarkTheme(), SiteLightTheme())
+            initTheme(SiteDarkTheme(), SiteLightTheme(), SiteGreenBlueTheme())
 
             initLocale(strings, defaultLocale = "en")
 

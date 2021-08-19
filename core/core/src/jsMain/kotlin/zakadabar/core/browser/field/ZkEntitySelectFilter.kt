@@ -6,10 +6,10 @@ package zakadabar.core.browser.field
 import zakadabar.core.data.EntityId
 
 open class ZkEntitySelectFilter(
-    context : ZkFieldContext,
+    context: ZkFieldContext,
     var getValue: () -> EntityId<*>?,
     onSelected: (Pair<EntityId<*>, String>?) -> Unit
-) : ZkSelectBase< EntityId<*>>(context, "", onSelected = onSelected) {
+) : ZkSelectBase<EntityId<*>>(context, "", onSelectCallback = onSelected) {
 
     override fun fromString(string: String): EntityId<*> {
         return items.first().first

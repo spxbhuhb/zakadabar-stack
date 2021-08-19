@@ -31,3 +31,8 @@ infix fun <VT> ZkSelectBase<VT>.query(block: suspend () -> List<Pair<VT, String>
     fetch = block
     return this
 }
+
+infix fun <VT> ZkSelectBase<VT>.onSelect(onSelect: (Pair<VT, String>?) -> Unit): ZkSelectBase<VT> {
+    this.onSelectCallback = onSelect
+    return this
+}

@@ -415,6 +415,12 @@ open class ZkForm<T : BaseBo>(
             fields += it
         }
 
+    open fun <T : ZkFieldBase<*>> add(field: T): T =
+        field.also {
+            + it
+            fields += it
+        }
+
     open fun build(title: String, createTitle: String = title, css: ZkCssStyleRule? = null, addButtons: Boolean = true, builder: () -> Unit) {
         this.titleText = if (mode == ZkElementMode.Create) createTitle else title
 
@@ -678,6 +684,20 @@ open class ZkForm<T : BaseBo>(
         }
     }
 
+
+    // -------------------------------------------------------------------------
+    //  Transformed adds
+    // ------------------------------------------------------------------------
+
+    inline operator fun <reified T> ZkSelectBase<T>.unaryPlus(): ZkSelectBase<T> =
+        add(this)
+
+    fun KMutableProperty0<String>.asSelect(): ZkStringSelectField =
+        ZkStringSelectField(this@ZkForm, this)
+
+    fun KMutableProperty0<String?>.asSelect(): ZkOptStringSelectField =
+        ZkOptStringSelectField(this@ZkForm, this)
+
     // -------------------------------------------------------------------------
     //  Property field convenience methods
     // ------------------------------------------------------------------------
@@ -713,6 +733,11 @@ open class ZkForm<T : BaseBo>(
 
     infix fun <VT> ZkSelectBase<VT>.query(block: suspend () -> List<Pair<VT, String>>): ZkSelectBase<VT> {
         fetch = block
+        return this
+    }
+
+    infix fun <VT> ZkSelectBase<VT>.saveAs(block: (it : ZkSelectBase<VT>) -> Unit): ZkSelectBase<VT> {
+        block(this)
         return this
     }
 

@@ -25,17 +25,17 @@ import zakadabar.core.browser.form.ZkFormStyles
 import zakadabar.core.browser.form.zkFormStyles
 import zakadabar.core.browser.icon.ZkIcon
 import zakadabar.core.browser.popup.ZkPopUp
-import zakadabar.core.resource.ZkIcons
 import zakadabar.core.browser.util.escape
 import zakadabar.core.browser.util.io
 import zakadabar.core.browser.util.minusAssign
 import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.localizedStrings
 
 abstract class ZkSelectBase<VT>(
     context: ZkFieldContext,
     propName: String,
-    var onSelected: (Pair<VT, String>?) -> Unit = { }
+    var onSelectCallback: (Pair<VT, String>?) -> Unit = { }
 ) : ZkFieldBase<VT>(
     context = context,
     propName = propName
@@ -62,6 +62,8 @@ abstract class ZkSelectBase<VT>(
     open val itemList = ZkPopUp { + ZkFormStyles.selectOptionList }
 
     lateinit var items: List<Pair<VT, String>>
+
+    var selectedItem : Pair<VT,String>? = null
 
     override var readOnly = context.readOnly
         set(value) {
@@ -94,6 +96,14 @@ abstract class ZkSelectBase<VT>(
 
     abstract fun setPropValue(value: Pair<VT, String>?)
 
+    open fun update(items: List<Pair<VT, String>>, value: Pair<VT, String>?) {
+        this.items = items
+        setPropValue(value)
+        onSelectCallback(value)
+        render(value?.first) // FIXME this re-rendering is a bit too expensive I think
+        itemList.hide()
+    }
+
     override fun buildFieldValue() {
         itemList.on("click") {
             it as MouseEvent
@@ -106,10 +116,7 @@ abstract class ZkSelectBase<VT>(
             val value = entryId?.let { items.firstOrNull { item -> item.first == entryId } }
 
             touched = true
-            setPropValue(value)
-            onSelected(value)
-            render(value?.first) // FIXME this re-rendering is a bit too expensive I think
-            itemList.hide()
+            update(this.items, value)
         }
 
         container = div(ZkFormStyles.selectContainer) {
@@ -165,6 +172,7 @@ abstract class ZkSelectBase<VT>(
         if (value == null) {
             s += """<div class="${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-${DATASET_KEY}="">${localizedStrings.notSelected}</div>"""
             selectedOption.innerText = localizedStrings.notSelected
+            selectedItem = null
         } else {
             s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="">${localizedStrings.notSelected}</div>"""
         }
@@ -173,6 +181,7 @@ abstract class ZkSelectBase<VT>(
             if (it.first == value) {
                 s += """<div class=" ${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-${DATASET_KEY}="${it.first}">${escape(it.second)}</div>"""
                 selectedOption.innerText = it.second
+                selectedItem = it
             } else {
                 s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="${it.first}">${escape(it.second)}</div>"""
             }
@@ -185,6 +194,9 @@ abstract class ZkSelectBase<VT>(
 
     open fun toggleOptions() {
         if (readOnly) return
+
+        itemList.element.style.height = "auto"
+        itemList.element.style.maxHeight = "auto"
 
         itemList.toggle(selectedOption.element, zkFormStyles.rowHeight * 5)
 
