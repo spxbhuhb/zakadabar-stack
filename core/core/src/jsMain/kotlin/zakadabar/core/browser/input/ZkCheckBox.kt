@@ -9,9 +9,9 @@ import org.w3c.dom.HTMLLabelElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
 import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.ZkIconSource
 import zakadabar.core.resource.ZkIcons
-import zakadabar.core.browser.util.plusAssign
 
 open class ZkCheckBox(
     open val iconSource: ZkIconSource = ZkIcons.check,
@@ -75,6 +75,11 @@ open class ZkCheckBox(
     }
 
     open fun onChange(event: Event) {
+        if (readOnly) {
+            event.preventDefault()
+            return
+        }
+
         checked = checkbox.checked
         onChange?.invoke(checkbox.checked)
     }

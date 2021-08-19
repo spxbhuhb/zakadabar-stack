@@ -199,7 +199,6 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
         on("click") { event ->
             event as MouseEvent
-            event.preventDefault()
 
             val target = event.target as? HTMLElement ?: return@on
             val rid = target.getDatasetEntry("rid") ?: return@on
@@ -208,6 +207,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
                 onDblClick(rid)
             } else {
                 val action = target.getDatasetEntry("action") ?: return@on
+
+                event.preventDefault()
 
                 if (action == "update") {
                     onDblClick(rid)
