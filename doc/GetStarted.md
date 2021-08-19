@@ -2,15 +2,15 @@
 
 ## Introduction
 
-Zakadabar Stack is about sensible defaults. While you can replace the whole frontend, the whole backend,
+Zakadabar is about sensible defaults. While you can replace the whole frontend, the whole backend,
 or both (which makes little sense, but actually it does make sense), the point of sensible defaults 
 is that in most cases we don't want to replace them.
 
 The structure of our default application:
 
-* The frontend stands on its own, we don't use third party libraries such as react.
+* The browser frontend stands on its own, we don't use third party libraries such as react.
     * The stack provides UI components for the browser frontend.
-* The backend uses [Ktor](https://ktor.io) as a web server.
+* The server runs in JVM and uses [Ktor](https://ktor.io) as a web server.
     * It is configured automatically, you don't have to know Ktor to use the stack.
 * The built-in backend modules use [Exposed](https://github.com/JetBrains/Exposed)
   with [HikariCP](https://github.com/brettwooldridge/HikariCP) and an SQL database.

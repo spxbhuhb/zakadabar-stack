@@ -19,24 +19,14 @@ object Welcome : MarkdownPage(
     SiteMarkdownContext("/Welcome", "welcome/")
 )
 
-object WhatsNew : MarkdownPage(
-    "/api/$contentNamespace/changelog/WhatsNew.md",
-    SiteMarkdownContext("/WhatsNew", "/")
+object GetStarted : MarkdownPage(
+    "/api/$contentNamespace/GetStarted.md",
+    SiteMarkdownContext("/GetStarted", "/")
 )
 
 object ShowCase : MarkdownPage(
     "/api/$contentNamespace/welcome/ShowCase.md",
     SiteMarkdownContext("/ShowCase", "welcome/")
-)
-
-object Roadmap : MarkdownPage(
-    "/api/$contentNamespace/Roadmap.md",
-    SiteMarkdownContext("/Roadmap", "/")
-)
-
-object GetStarted : MarkdownPage(
-    "/api/$contentNamespace/GetStarted.md",
-    SiteMarkdownContext("/GetStarted", "/")
 )
 
 object GetHelp : MarkdownPage(
@@ -62,21 +52,6 @@ object DocumentationIntro : MarkdownPage(
 object FAQ : MarkdownPage(
     "/api/$contentNamespace/help/FAQ.md",
     SiteMarkdownContext("FAQ", "help/")
-)
-
-object ServicesAndSupport : MarkdownPage(
-    "/api/$contentNamespace/misc/ServicesAndSupport.md",
-    SiteMarkdownContext("ServicesAndSupport", "misc/")
-)
-
-object Experimental : MarkdownPage(
-    "/api/$contentNamespace/internals/Experimental.md",
-    SiteMarkdownContext("Experimental", "internals/")
-)
-
-object ProjectStatus : MarkdownPage(
-    "/api/$contentNamespace/misc/ProjectStatus.md",
-    SiteMarkdownContext("ProjectStatus", "misc/")
 )
 
 object Versioning : MarkdownPage(

@@ -31,7 +31,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation("hu.simplexion.zakadabar:core:2021.8.17.1")
+                implementation("hu.simplexion.zakadabar:core:2021.8.19.1")
             }
         }
     }

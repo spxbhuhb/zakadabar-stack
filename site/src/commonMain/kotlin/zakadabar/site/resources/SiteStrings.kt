@@ -43,7 +43,7 @@ class SiteStrings : ExamplesStrings() {
 
     val examples by "Examples (outdated)"
     val searchShips by "Search Ships"
-    val siteTitle by "A Kotlin Multiplatform library for full-stack software development."
+    val siteTitle by "Multiplatform Application Development Library written in Kotlin"
 
     val documentation by "Documentation"
     val sourceCode by "Source Code"

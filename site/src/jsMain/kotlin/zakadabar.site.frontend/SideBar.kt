@@ -5,13 +5,13 @@ package zakadabar.site.frontend
 
 import kotlinx.browser.window
 import kotlinx.coroutines.await
-import zakadabar.site.frontend.cookbook.Cookbook
-import zakadabar.site.frontend.pages.*
-import zakadabar.site.resources.strings
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.sidebar.ZkSideBar
 import zakadabar.core.browser.util.io
 import zakadabar.core.text.MarkdownNav
+import zakadabar.site.frontend.cookbook.Cookbook
+import zakadabar.site.frontend.pages.*
+import zakadabar.site.resources.strings
 
 class SideBar : ZkSideBar() {
 
@@ -43,7 +43,6 @@ class SideBar : ZkSideBar() {
             }
 
             + section(strings.other) {
-                + item(ProjectStatus)
                 + group(text = strings.changeLog) {
                     MarkdownNav().parse(changeLogSource).forEach {
                         + it.changelog()
@@ -56,8 +55,6 @@ class SideBar : ZkSideBar() {
                 }
                 + item(BuildAndRelease)
                 + item(Versioning)
-                + item(Roadmap)
-                + item(ServicesAndSupport)
                 + item(LegalNotices)
                 + item(Credits)
             }
