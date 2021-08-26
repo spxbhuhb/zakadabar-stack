@@ -58,13 +58,16 @@ open class ZkCssStyleSheet {
 
     internal val parameters = mutableListOf<ZkCssParameter<*>>()
 
-    fun cssImport(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, "@import", builder)
+    fun cssImport(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, "@import", null, builder)
 
-    fun cssRule(selector: String, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, selector, builder)
+    fun cssRule(selector: String, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, selector, null, builder)
 
-    fun cssClass(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, null, builder)
+    fun cssClass(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(null, null, null, builder)
 
-    fun cssClass(name: String? = null, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(name, null, builder)
+    fun cssClass(on: () -> String, builder: ZkCssStyleRule.(ZkTheme) -> Unit) =
+        CssDelegateProvider(null, null, on, builder)
+
+    fun cssClass(name: String? = null, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = CssDelegateProvider(name, null, null, builder)
 
     /**
      * Reset all the parameters to their initial value.
@@ -164,7 +167,8 @@ class CssStyleSheetDelegate<S : ZkCssStyleSheet>(
  */
 class CssDelegateProvider(
     val name: String? = null,
-    private val selector: String? = null,
+    val selectorString: String? = null,
+    val selectorFunc: (() -> String)? = null,
     val builder: ZkCssStyleRule.(ZkTheme) -> Unit
 ) {
 
@@ -172,7 +176,16 @@ class CssDelegateProvider(
 
         val cssClassName = name ?: if (ZkCssStyleSheet.shortNames) "zks${ZkCssStyleSheet.nextId ++}" else "${thisRef::class.simpleName}-${prop.name}-${ZkCssStyleSheet.nextId ++}"
 
-        val rule = ZkCssStyleRule(thisRef, prop.name, cssClassName, selector, builder)
+        // this is pretty hackish, but direct selectors are rarely used
+        // TODO check the performance impact of selector manipulation
+
+        val sf = when {
+            selectorFunc != null -> selectorFunc
+            selectorString != null -> fun() : String { return selectorString }
+            else -> null
+        }
+
+        val rule = ZkCssStyleRule(thisRef, prop.name, cssClassName, sf, builder)
 
         thisRef.rules[prop.name] = rule
 
@@ -186,12 +199,6 @@ class CssDelegateProvider(
  * function the theme switching and state saving will work seamlessly.
  */
 fun <T> cssParameter(initializer: () -> T) = CssParameterProvider(initializer)
-
-/**
- * Use this function to define style sheet parameters. When defined with this
- * function the theme switching and state saving will work seamlessly.
- */
-fun cssOptStringParameter() = CssParameterProvider<String?> { null }
 
 /**
  * Provides the ZkCssStyleRule as a delegate. I decided to go this way because I think it is important
@@ -226,6 +233,7 @@ class ZkCssParameter<T>(
         }
         return _value as T
     }
+
     override fun setValue(thisRef: ZkCssStyleSheet, property: KProperty<*>, value: T) {
         this._value = value
     }
