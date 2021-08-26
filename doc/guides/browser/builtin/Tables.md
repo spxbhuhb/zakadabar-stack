@@ -87,6 +87,14 @@ class BuiltinTable : ZkTable<BuiltinDto>() {
 
 ## Customization
 
+### Column Size
+
+Change the column size with the `size` configuration option:
+
+```kotlin
++ ExampleBo::stringValue size 10.em
+```
+
 ### Single Click Open
 
 By default, the table opens the detail page on double click. The `oneClick` 
@@ -99,65 +107,21 @@ override fun onConfigure() {
 }
 ```
 
-## Use a Table - CRUD
+### Styling
 
-Set `tableClass` of the crud object.
+The `styles` property of `ZkTable` contains the style sheet that table instance
+uses. This defaults to the value of the
+[zkTableStyles](/core/core/src/jsMain/kotlin/zakadabar/core/browser/table/zkTableStyles.kt) global variable.
 
-```kotlin
-object BuiltinCrud : ZkCrudTarget<BuiltinDto>() {
-  init {
-    companion = BuiltinDto.Companion
-    dtoClass = BuiltinDto::class
-    pageClass = BuiltinForm::class
-    tableClass = BuiltinTable::class
-  }
-}
-```
+To change the styles of all tables, extend [ZkTableStyles](/core/core/src/jsMain/kotlin/zakadabar/core/browser/table/zkTableStyles.kt)
+and assign an instance of the extended class to `zkTableStyles`.
 
-## Use a Table - Direct, Fetched Data
+You can also change the styles of a few or just one specific table by:
 
-```kotlin
-object FetchedTable : ZkPage(cssClasses = arrayOf(grow)) {
+- overriding the `styles` property
+- assigning a new value to `styles` before `onCreate` runs
 
-  override fun onCreate() {
-    super.onCreate()
-    io {
-      // Add the table and set the data. It is not important to use these
-      // together, you can add the table and set the data later.
-
-      + BuiltinTable().setData(BuiltinDto.all())
-    }
-  }
-
-}
-```
-
-## Use a Table - Direct, Generated Data
-
-```kotlin
-object Table : ZkPage() {
-
-  override fun onCreate() {
-    super.onCreate()
-
-    classList += grow
-
-    // Create a template DTO.
-
-    val template: BuiltinDto = default { }
-
-    // Create the data to display.
-
-    val data = (1..100).map { template.copy(id = it.toLong()) }
-
-    // Add the table and set the data. It is not important to use these
-    // together, you can add the table and set the data later.
-
-    + BuiltinTable().setData(data)
-  }
-
-}
-```
+Example: [Vertical Table Cell Border](/doc/cookbook/browser/table/border/vertical/recipe.md)
 
 ## Custom Columns
 
@@ -166,7 +130,7 @@ Add custom columns by:
 - using the `custom` shorthand, or
 - extending ZkColumn.
 
-## Shorthand
+### Shorthand
 
 Use the `custom` function to add a column:
 
@@ -232,7 +196,69 @@ class Table : ZkTable<ShipDto>() {
 }
 ```
 
-## Table With Many Rows
+## Examples
+
+### Crud
+
+Set `tableClass` of the crud object.
+
+```kotlin
+object BuiltinCrud : ZkCrudTarget<BuiltinDto>() {
+  init {
+    companion = BuiltinDto.Companion
+    dtoClass = BuiltinDto::class
+    pageClass = BuiltinForm::class
+    tableClass = BuiltinTable::class
+  }
+}
+```
+
+### Direct, Fetched Data
+
+```kotlin
+object FetchedTable : ZkPage(cssClasses = arrayOf(grow)) {
+
+  override fun onCreate() {
+    super.onCreate()
+    io {
+      // Add the table and set the data. It is not important to use these
+      // together, you can add the table and set the data later.
+
+      + BuiltinTable().setData(BuiltinDto.all())
+    }
+  }
+
+}
+```
+
+### Direct, Generated Data
+
+```kotlin
+object Table : ZkPage() {
+
+  override fun onCreate() {
+    super.onCreate()
+
+    classList += grow
+
+    // Create a template DTO.
+
+    val template: BuiltinDto = default { }
+
+    // Create the data to display.
+
+    val data = (1..100).map { template.copy(id = it.toLong()) }
+
+    // Add the table and set the data. It is not important to use these
+    // together, you can add the table and set the data later.
+
+    + BuiltinTable().setData(data)
+  }
+
+}
+```
+
+### Table With Many Rows
 
 This table contains 10.000 generated rows.
 
@@ -255,6 +281,3 @@ scrollbar position problems might arise.
 
 * Sort indicator:
    * transparent background overlaps header text.
-* Header resize handle:
-   * jumps a bit when start to move,
-   * can appear when moving another handle.

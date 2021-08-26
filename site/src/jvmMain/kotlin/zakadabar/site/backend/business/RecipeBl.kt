@@ -5,17 +5,19 @@ package zakadabar.site.backend.business
 
 import zakadabar.cookbook.Recipe
 import zakadabar.cookbook.RecipeParser
-import zakadabar.site.cookbook.GetContent
 import zakadabar.core.authorize.BusinessLogicAuthorizer
 import zakadabar.core.authorize.Executor
 import zakadabar.core.business.EntityBusinessLogicBase
-import zakadabar.core.persistence.EmptyPersistenceApi
-import zakadabar.core.setting.setting
-import zakadabar.core.data.StringValue
-import zakadabar.core.server.ContentBackendSettings
 import zakadabar.core.data.EntityId
+import zakadabar.core.data.StringValue
+import zakadabar.core.data.toStringValue
+import zakadabar.core.persistence.EmptyPersistenceApi
+import zakadabar.core.server.ContentBackendSettings
+import zakadabar.core.setting.setting
+import zakadabar.site.cookbook.GetContent
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 
 /**
@@ -37,7 +39,7 @@ open class RecipeBl : EntityBusinessLogicBase<Recipe>(
         query(GetContent::class, ::getContent)
     }
 
-    open val recipes = mutableMapOf<EntityId<Recipe>, Pair<Recipe, String>>()
+    open val recipes = mutableMapOf<EntityId<Recipe>, Pair<Recipe, Path>>()
 
     override fun onModuleStart() {
         super.onModuleStart()
@@ -61,7 +63,8 @@ open class RecipeBl : EntityBusinessLogicBase<Recipe>(
                     return@forEach
                 }
 
-                recipes[recipe.id] = recipe to parser.content
+                recipe.id = EntityId(path.toString().substringAfter("/cookbook/"))
+                recipes[recipe.id] = recipe to path
 
             } catch (ex: Exception) {
                 logger.error("error while loading $path", ex)
@@ -77,7 +80,12 @@ open class RecipeBl : EntityBusinessLogicBase<Recipe>(
     }
 
     open fun getContent(executor: Executor, query: GetContent): StringValue =
-        recipes[query.recipeId]?.let { StringValue(it.second) } ?: throw NoSuchElementException()
+        recipes[query.recipeId]?.let {
+            RecipeParser(Files.readAllLines(it.second, StandardCharsets.UTF_8))
+                .parse()
+                .content
+                .toStringValue()
+        } ?: throw NoSuchElementException()
 
 
 }

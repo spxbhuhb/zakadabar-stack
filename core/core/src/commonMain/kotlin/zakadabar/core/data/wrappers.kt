@@ -4,7 +4,6 @@
 package zakadabar.core.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.core.data.BaseBo
 import zakadabar.core.util.PublicApi
 
 @PublicApi
@@ -30,3 +29,6 @@ class LongValue(val value: Long) : BaseBo
 @PublicApi
 @Serializable
 class StringValue(val value: String) : BaseBo
+
+@PublicApi
+fun String.toStringValue() = StringValue(this)

@@ -151,6 +151,16 @@ open class ExampleStyles : ZkCssStyleSheet() {
 }
 ```
 
+### onConfigure
+
+During the CSS build process the style sheet calls the `onConfigure` function to apply
+last-minute modifications to the CSS rules. 
+
+This happens after the build function of the CSS rule ran, so changes in `onConfigure`
+can override everything set by the builder functions.
+
+Example: [Vertical Table Cell Border](/doc/cookbook/browser/table/border/vertical/recipe.md)
+
 ### Use a CSS Class
 
 Use operators to add and remove CSS classes:
@@ -213,19 +223,19 @@ val myClass by cssClass {
 
 ### Class And Selectors
 
-You can use the `on` method to define styles with additional selectors:
+Use the "selector" version of `cssClass` to specify complex CSS rules:
 
 ```kotlin
 open val exampleStyle by cssClass {
     color = ZkColors.white
+}
 
-    on(" a") {
-        color = ZkColors.black
-    }
+open val a by cssClass({ ".$exampleStyle a" }) {
+    color = ZkColors.black
+}
 
-    on(":active") {
-        color = ZkColors.black
-    }
+open val active by cssClass({ ".$exampleStyle:active" }) {
+    color = ZkColors.black
 }
 ```
 
@@ -245,15 +255,28 @@ In compiled CSS this looks like:
 }
 ```
 
-<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Space Before">
-Note the space before the "a". It is important as the stack does not add anything
-between the style name and the parameter of "on".
-</div>
-
 <div data-zk-enrich="Note" data-zk-flavour="Success" data-zk-title="zk-styles">
 If you open your browser inspector, there is a div with id "zk-styles" under
 the body. This contains all styles compiled by the stack.
 </div>
+
+You can also use the `on` method to define styles with additional selectors, but
+this makes your class hard to extend. For easily extendable CSS style sheets, use
+the "selector" version of `cssClass` (see above.)
+
+```kotlin
+open val exampleClass by cssClass {
+    color = ZkColors.white
+
+    on(" a") {
+        color = ZkColors.black
+    }
+
+    on(":active") {
+        color = ZkColors.black
+    }
+}
+```
 
 ### Media Queries
 
@@ -353,7 +376,7 @@ val myClass by cssClass("fixed-class-name") { }
 
 ### Selector Only Rules
 
-The function `cssRule` let you specify whatever selector you would like instead
+The function `cssRule` lets you specify whatever selector you would like instead
 of a class name.
 
 <div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Space Before">
@@ -368,26 +391,6 @@ val link by cssRule("a") {
     textDecoration = "none"
 }
 ```
-
-You can combine your classes with selectors. The example below will set the
-styles for `<a>` tags under the element that has the `content` css class. Note that the
-actual CSS class name of `content` is automatically generated.
-
-```kotlin
-val content by cssClass {
-
-}
-
-val link by cssRule(".$content a") {
-    color = theme.color.info
-    textDecoration = "none"
-}
-```
-
-<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Accessing non-final property content in constructor">
-You may get this warning if you use the combination like above and your variable is declared "open". Fix this
-by setting the variable final.
-</div>
 
 ### Import
 

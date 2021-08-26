@@ -80,7 +80,7 @@ object Cookbook : ZkPathPage() {
         }
 
         override fun getRowId(row: Recipe): String {
-            return row.title
+            return row.id.value
         }
         override fun onDblClick(id: String) {
             application.changeNavState(Cookbook, id)

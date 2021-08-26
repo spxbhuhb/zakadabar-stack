@@ -7,7 +7,7 @@ import zakadabar.core.resource.css.*
 
 val zkLayoutStyles by cssStyleSheet(ZkLayoutStyles())
 
-class ZkLayoutStyles : ZkCssStyleSheet() {
+open class ZkLayoutStyles : ZkCssStyleSheet() {
 
     val w100 by cssClass {
         width = 100.percent
