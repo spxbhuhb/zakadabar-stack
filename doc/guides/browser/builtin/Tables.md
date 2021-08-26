@@ -123,6 +123,18 @@ You can also change the styles of a few or just one specific table by:
 
 Example: [Vertical Table Cell Border](/doc/cookbook/browser/table/border/vertical/recipe.md)
 
+## Extension Columns
+
+Extension columns make it possible to add editable columns to the table without having
+the corresponding field in the business object.
+
+Implemented extension columns:
+
+- [ZkBooleanExtensionColumn](/core/core/src/jsMain/kotlin/zakadabar/core/browser/table/columns/ZkBooleanExtensionColumn.kt)
+- [ZkStringExtensionColumn](/core/core/src/jsMain/kotlin/zakadabar/core/browser/table/columns/ZkStringExtensionColumn.kt)
+
+Example: [Vertical Table Cell Border](/doc/cookbook/browser/table/border/vertical/recipe.md)
+
 ## Custom Columns
 
 Add custom columns by:

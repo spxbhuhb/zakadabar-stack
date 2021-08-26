@@ -24,29 +24,27 @@ class TableEditInline : ZkTable<ExampleBo>() {
         + custom {
             label = "Inline Checkbox"
             render = {
-                + styles.dense
                 + ZkBooleanField(this@TableEditInline, it::booleanValue)
             }
-        }
+        } size "min-content"
 
         + custom {
             label = "Inline Select"
             render = {
-                + styles.dense
-                + ZkStringSelectField(this@TableEditInline, it::stringSelectValue).apply { fetch = { values } }
+                + ZkStringSelectField(this@TableEditInline, it::stringSelectValue).apply {
+                    fetch = { values }
+                }
             }
         }
-
-        actions()
     }
 
     override fun onCreate() {
         super.onCreate()
 
-        + cookbookStyles.inlineTable
+        + cookbookStyles.smallInlineTable
 
         val template = default<ExampleBo> { }
-        setData((1..50).map { template.copy(id = EntityId(it.toLong()), stringValue = "string $it", booleanValue = (it % 2 == 0)) })
+        setData((1..50).map { template.copy(id = EntityId(it.toLong()), stringValue = "row $it", booleanValue = (it % 2 == 0)) })
 
     }
 

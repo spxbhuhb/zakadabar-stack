@@ -22,7 +22,7 @@ open class ZkInvalidFieldList : ZkElement() {
 
         + column {
             + div(ZkFormStyles.invalidFieldListInto) { + localizedStrings.invalidFieldsExplanation } marginBottom 8
-            + div { + invalid.joinToString(", ") { it.labelText ?: it.propName } }
+            + div { + invalid.joinToString(", ") { it.labelText ?: it.propName ?: "NA" } }
         }
     }
 

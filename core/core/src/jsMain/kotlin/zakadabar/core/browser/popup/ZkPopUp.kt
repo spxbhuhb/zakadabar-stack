@@ -27,6 +27,7 @@ open class ZkPopUp() : ZkElement() {
         shown = true
         application.popup.appendChild(this.element)
         alignPopup(this.element, anchorElement, minHeight)
+        element.focus()
     }
 
     override fun hide(): ZkElement {

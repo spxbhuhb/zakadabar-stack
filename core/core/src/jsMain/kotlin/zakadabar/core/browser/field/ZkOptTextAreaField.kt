@@ -18,7 +18,6 @@ package zakadabar.core.browser.field
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLTextAreaElement
-import zakadabar.core.browser.form.ZkFormStyles
 import zakadabar.core.browser.util.plusAssign
 import kotlin.reflect.KMutableProperty0
 
@@ -43,7 +42,7 @@ open class ZkOptTextAreaField(
         buildPoint.style.flexGrow = "1"
         buildPoint.style.display = "flex"
 
-        area.classList += ZkFormStyles.textarea
+        area.classList += context.styles.textarea
         area.style.flexGrow = "1"
         area.style.resize = "none"
 

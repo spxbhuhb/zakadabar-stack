@@ -18,7 +18,6 @@ package zakadabar.core.browser.field
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
-import zakadabar.core.browser.form.ZkFormStyles
 import zakadabar.core.browser.util.plusAssign
 import kotlin.reflect.KMutableProperty0
 
@@ -48,9 +47,9 @@ abstract class ZkStringBase<VT>(
 
         if (readOnly) {
             input.readOnly = true
-            input.classList += ZkFormStyles.disabledString
+            input.classList += context.styles.disabledString
         } else {
-            input.classList += ZkFormStyles.text
+            input.classList += context.styles.text
         }
 
         input.value = getPropValue()

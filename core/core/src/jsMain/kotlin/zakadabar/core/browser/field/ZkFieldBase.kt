@@ -6,21 +6,19 @@ package zakadabar.core.browser.field
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.util.minusAssign
+import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.data.EntityBo
+import zakadabar.core.resource.localizedStrings
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.BoConstraintType
 import zakadabar.core.schema.descriptor.BooleanBoConstraint
 import zakadabar.core.schema.descriptor.IntBoConstraint
-import zakadabar.core.browser.ZkElement
-import zakadabar.core.browser.form.ZkFormStyles
-import zakadabar.core.browser.form.zkFormStyles
-import zakadabar.core.browser.util.minusAssign
-import zakadabar.core.browser.util.plusAssign
-import zakadabar.core.resource.localizedStrings
 
 abstract class ZkFieldBase<DT>(
     val context: ZkFieldContext,
-    val propName: String,
+    val propName: String?,
     label: String? = null
 ) : ZkElement() {
 
@@ -60,7 +58,7 @@ abstract class ZkFieldBase<DT>(
 
     lateinit var hint: String
 
-    private val errors = ZkElement().css(ZkFormStyles.fieldError)
+    private val errors = ZkElement().css(context.styles.fieldError)
 
     override fun onCreate() {
         buildSectionField()
@@ -73,13 +71,13 @@ abstract class ZkFieldBase<DT>(
      * Call this function from [onResume] or simply write your own implementation.
      */
     open fun buildSectionField() {
-        classList += zkFormStyles.fieldContainer
+        classList += context.styles.fieldContainer
 
         if (context.addLabel) {
             buildFieldLabel()
         }
 
-        + div(if (context.dense) zkFormStyles.fieldValueDense else zkFormStyles.fieldValue) {
+        + div(context.styles.fieldValue) {
             buildFieldValue()
         }
 
@@ -106,23 +104,23 @@ abstract class ZkFieldBase<DT>(
      */
     open fun buildFieldLabel() {
         if (labelText == null) {
-            labelText = localizedStrings.getNormalized(propName)
+            labelText = propName?.let { localizedStrings.getNormalized(it) } ?: ""
         } else {
             labelText = labelText // to initialize label container
         }
 
-        + div(ZkFormStyles.fieldLabel) {
+        + div(context.styles.fieldLabel) {
             + labelContainer
             mandatoryMark()
             on(buildPoint, "click") { focusValue() }
         }
     }
 
-    open fun needsMandatoryMark() = ! context.schema.isOptional(propName)
+    open fun needsMandatoryMark() = propName?.let { ! context.schema.isOptional(propName) } ?: false
 
     open fun mandatoryMark() {
         if (needsMandatoryMark()) {
-            + div(ZkFormStyles.mandatoryMark) { ! "&nbsp;*" }
+            + div(context.styles.mandatoryMark) { ! "&nbsp;*" }
         }
     }
     
@@ -210,6 +208,8 @@ abstract class ZkFieldBase<DT>(
      * To use this function, override [needsMandatoryMark] and call this from there.
      */
     fun stringMandatoryMark(): Boolean {
+
+        if (propName == null) return false
 
         val constraints = context.schema.constraints(propName)
 

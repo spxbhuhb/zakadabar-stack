@@ -17,20 +17,20 @@
 package zakadabar.core.browser.field
 
 import org.w3c.dom.events.KeyboardEvent
-import zakadabar.core.browser.form.zkFormStyles
 import zakadabar.core.browser.input.ZkCheckBox
 import zakadabar.core.resource.ZkIcons
 import kotlin.reflect.KMutableProperty0
 
 open class ZkBooleanField(
     context: ZkFieldContext,
-    val prop: KMutableProperty0<Boolean>
+    val prop: KMutableProperty0<Boolean>,
+    val onChangeCallback : ((Boolean) -> Unit)? = null
 ) : ZkFieldBase<Boolean>(
     context = context,
     propName = prop.name
 ) {
 
-    private val checkbox = ZkCheckBox(ZkIcons.check)
+    open val checkbox = ZkCheckBox(ZkIcons.check)
 
     override var readOnly: Boolean = context.readOnly
         set(value) {
@@ -39,20 +39,16 @@ open class ZkBooleanField(
         }
 
     override fun buildFieldValue() {
-        + div(zkFormStyles.booleanField) {
+        + div(context.styles.booleanField) {
 
             buildPoint.tabIndex = 0
 
-            val value: Boolean = prop.get()
-
             if (readOnly) checkbox.checkbox.readOnly = true
 
-            checkbox.checked = value
+            checkbox.checked = prop.get()
 
             on(checkbox.checkbox, "change") {
-                prop.set(checkbox.checked)
-                touched = true
-                context.validate()
+               changeValue(checkbox.checked)
             }
 
             on(buildPoint, "keypress") {
@@ -60,7 +56,7 @@ open class ZkBooleanField(
                 when (it.key) {
                     "Enter", " " -> {
                         checkbox.checked = ! checkbox.checked
-                        touched = true
+                        changeValue(checkbox.checked)
                     }
                 }
             }
@@ -72,5 +68,16 @@ open class ZkBooleanField(
     override fun mandatoryMark() {
         // do not show mandatory mark for checkboxes, in most cases it is
         // useless as they always have a value (true or false)
+    }
+
+    open fun changeValue(newValue : Boolean) {
+        prop.set(newValue)
+        touched = true
+        onChange(newValue)
+        context.validate()
+    }
+
+    open fun onChange(value : Boolean) {
+        onChangeCallback?.invoke(value)
     }
 }

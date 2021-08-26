@@ -152,7 +152,7 @@ open class ZkForm<T : BaseBo>(
 
     override val addLabel = true
 
-    override val dense = false
+    override val styles = zkFormStyles
 
     // -------------------------------------------------------------------------
     //  Lifecycle functions

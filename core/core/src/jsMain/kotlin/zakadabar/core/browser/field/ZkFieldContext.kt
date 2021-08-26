@@ -5,17 +5,26 @@ package zakadabar.core.browser.field
 
 import zakadabar.core.schema.BoSchema
 
+object READONLY : ZkFieldContext {
+    override val readOnly = true
+    override val useShadow = false
+    override val schema = BoSchema.NO_VALIDATION
+    override val addLabel = true
+    override val styles = zkFieldStyles
+    override fun validate() {}
+}
+
 interface ZkFieldContext {
 
-    val readOnly : Boolean
+    val readOnly: Boolean
 
-    val useShadow : Boolean
+    val useShadow: Boolean
 
-    val schema : BoSchema
+    val schema: BoSchema
 
-    val addLabel : Boolean
+    val addLabel: Boolean
 
-    val dense : Boolean
+    val styles: ZkFieldStyles
 
     fun validate()
 

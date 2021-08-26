@@ -30,7 +30,7 @@ open class ZkColumn<T : BaseBo>(
     open var size = Double.NaN
     open var exportable = true
 
-    lateinit var label: String
+    open var label: String = ""
     var sortSign = ZkElement() css table.styles.sortSign
 
     var beingResized = false
@@ -46,6 +46,13 @@ open class ZkColumn<T : BaseBo>(
             on(buildPoint, "mousedown", ::onResizeMouseDown)
         }
         on("click", ::onClick)
+    }
+
+    /**
+     * [ZkTable] calls this method whenever [ZkTable.setData] runs.
+     */
+    open fun onTableSetData() {
+
     }
 
     fun gridTemplate(): String {
@@ -150,13 +157,13 @@ open class ZkColumn<T : BaseBo>(
             // last column. When larger, use exact pixel widths for each column.
 
             val template = if (sumWidth >= tableWidth || table.columns.size == 0) {
-                "grid-template-columns: " + table.columns.joinToString(" ") { "${it.size}px" }
+                table.columns.joinToString(" ") { "${it.size}px" }
             } else {
-                "grid-template-columns: " + table.columns.subList(0, table.columns.size - 1).joinToString(" ") { "${it.size}px" } + " 1fr"
+                table.columns.subList(0, table.columns.size - 1).joinToString(" ") { "${it.size}px" } + " 1fr"
             }
 
             table.tableElement.width = sumWidth.px
-            table.tableElement.style.cssText = template
+            table.tableElement.style.setProperty("grid-template-columns", template)
         }
     }
 

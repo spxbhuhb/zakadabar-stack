@@ -3,8 +3,8 @@
  */
 package zakadabar.core.browser.input
 
+import zakadabar.core.browser.field.zkFieldStyles
 import zakadabar.core.browser.form.ZkFormStyles
-import zakadabar.core.browser.form.zkFormStyles
 import zakadabar.core.resource.css.*
 import zakadabar.core.util.alpha
 
@@ -17,7 +17,7 @@ open class ZkInputStyles : ZkCssStyleSheet() {
         + AlignItems.center
 
         paddingLeft = .8.em
-        height = zkFormStyles.rowHeight.px
+        height = zkFieldStyles.fieldHeight.px
     }
 
     @Suppress("DuplicatedCode") // better to keep form an standalone styles separated
@@ -25,6 +25,7 @@ open class ZkInputStyles : ZkCssStyleSheet() {
         + Display.block
         + BoxSizing.borderBox
 
+        minWidth = 2.em
         fontFamily = theme.fontFamily
         fontSize = 80.percent
         fontWeight = 300.weight
@@ -55,6 +56,7 @@ open class ZkInputStyles : ZkCssStyleSheet() {
     val checkBoxOuter by cssClass {
         width = "max-content"
         outline = "none"
+        border = "1px solid transparent"
 
         on(":focus") {
             border = "1px solid ${theme.infoColor}"

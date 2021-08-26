@@ -82,9 +82,10 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     var export = false
     var oneClick = false
 
-    open var rowHeight = 42
+    override var styles = zkTableStyles
 
-    open var styles = zkTableStyles
+    open val rowHeight
+        get() = styles.rowHeight
 
     val columns = mutableListOf<ZkColumn<T>>()
 
@@ -105,8 +106,6 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     override val useShadow = false
 
     override val addLabel = false
-
-    override val dense = true
 
     override val schema = BoSchema.NO_VALIDATION
 
@@ -169,7 +168,6 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             }
 
             + table(styles.table) {
-
                 buildPoint.style.cssText = inlineCss()
                 + thead {
                     columns.forEach { + it }
@@ -193,7 +191,9 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             event as MouseEvent
             event.preventDefault()
 
-            val target = event.target as HTMLElement
+            val target = event.target
+            if (target !is HTMLElement) return@on
+
             val rid = target.getDatasetEntry("rid") ?: return@on
 
             onDblClick(rid)
@@ -284,6 +284,9 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             }
 
             fullData = data.map { ZkTableRow(it) }
+
+            columns.forEach { it.onTableSetData() }
+
             filter()
 
             // this means that onResume has been called before setData
@@ -314,7 +317,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     //  Rendering, intersection observer callback
     // -------------------------------------------------------------------------
 
-    private fun inlineCss() = """
+    open fun inlineCss() = """
         grid-template-columns: ${columns.joinToString(" ") { it.gridTemplate() }};
     """.trimIndent()
 
@@ -636,7 +639,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         return column
     }
 
-    operator fun ZkCustomColumn<T>.unaryPlus(): ZkCustomColumn<T> {
+    operator fun ZkColumn<T>.unaryPlus(): ZkColumn<T> {
         columns += this
         return this
     }

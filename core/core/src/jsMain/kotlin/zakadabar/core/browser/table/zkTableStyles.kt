@@ -3,12 +3,13 @@
  */
 package zakadabar.core.browser.table
 
+import zakadabar.core.browser.field.ZkFieldStyles
 import zakadabar.core.resource.css.*
 import zakadabar.core.util.PublicApi
 
 val zkTableStyles by cssStyleSheet(ZkTableStyles())
 
-open class ZkTableStyles : ZkCssStyleSheet() {
+open class ZkTableStyles : ZkFieldStyles() {
 
     open var tableBackgroundColor by cssParameter { theme.backgroundColor }
     open var headerBackground by cssParameter { theme.backgroundColor }
@@ -22,6 +23,14 @@ open class ZkTableStyles : ZkCssStyleSheet() {
     open var border by cssParameter<String?> { null }
     open var actionTextColor by cssParameter { theme.primaryColor }
     open var controlColor by cssParameter { theme.primaryColor }
+    open var rowHeight by cssParameter { 42 }
+
+    override var fieldHeight by cssParameter { 32 }
+
+    override fun onConfigure() {
+        super.onConfigure()
+        selectedOption.height = (fieldHeight - 2).px// -2 to compensate border from container
+    }
 
     open val outerContainer by cssClass {
         + Display.flex
@@ -149,22 +158,25 @@ open class ZkTableStyles : ZkCssStyleSheet() {
         + Overflow.hidden
         + WhiteSpace.nowrap
         + TextAlign.left
-
+        + Display.flex
+        + AlignItems.center
         + Cursor.pointer
+        + BoxSizing.borderBox
 
-        paddingTop = 10.px
-        paddingBottom = 10.px
-        paddingRight = 8.px
+        height = rowHeight.px
+        top = 0.px
+
+        zIndex = 30.zIndex
+
+        paddingLeft = 10.px
         textOverflow = "ellipsis"
         textTransform = "uppercase"
         fontSize = 75.percent
         fontWeight = 400.weight
-        top = 0.px
         background = headerBackground
 
         color = headerText
         borderBottom = headerBottomBorder
-        zIndex = 30.zIndex
     }
 
     @PublicApi
@@ -173,19 +185,18 @@ open class ZkTableStyles : ZkCssStyleSheet() {
     }
 
     @PublicApi
-    open val firstCellOfHeader by cssClass({ ".$table th:first-child" }) {
-        paddingLeft = 10.px
-    }
-
-    @PublicApi
     open val cell by cssClass({ ".$table td" }) {
         + Overflow.hidden
         + WhiteSpace.nowrap
+        + Display.flex
+        + AlignItems.center
+        + BoxSizing.borderBox
 
         zIndex = 20.zIndex
 
-        paddingTop = 10.px
-        paddingBottom = 10.px
+        height = rowHeight.px
+
+        paddingLeft = 10.px
         textOverflow = "ellipsis"
         color = textColor
         borderBottom = "1px solid $rowBorderColor"
@@ -197,7 +208,6 @@ open class ZkTableStyles : ZkCssStyleSheet() {
         if (this@ZkTableStyles.border != null) {
             borderLeft = this@ZkTableStyles.border
         }
-        paddingLeft = 10.px
     }
 
     @PublicApi
@@ -228,7 +238,8 @@ open class ZkTableStyles : ZkCssStyleSheet() {
     }
 
     open val dense by cssClass {
-        padding = "0 !important"
+        paddingTop = "0 !important"
+        paddingBottom = "0 !important"
     }
 
     open val action by cssClass {

@@ -10,6 +10,7 @@ import zakadabar.cookbook.browser.help.TextHelpModal
 import zakadabar.cookbook.browser.table.border.vertical.TableVerticalBorderOne
 import zakadabar.cookbook.browser.table.border.vertical.TableVerticalBorderSome
 import zakadabar.cookbook.browser.table.inline.TableEditInline
+import zakadabar.cookbook.browser.table.inline.TableEditInlineNoBo
 import zakadabar.cookbook.resource.strings
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.application
@@ -33,6 +34,7 @@ class Cookbook : CommonModule {
             "StringSelectFilter" -> StringSelectFilter()
             "TextHelpModal" -> TextHelpModal()
             "TableEditInline" -> TableEditInline()
+            "TableEditInlineNoBo" -> TableEditInlineNoBo()
             "TableVerticalBorderOne" -> TableVerticalBorderOne()
             "TableVerticalBorderSome" -> TableVerticalBorderSome()
 

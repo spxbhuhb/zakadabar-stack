@@ -8,27 +8,27 @@ import zakadabar.core.util.PublicApi
 
 @PublicApi
 @Serializable
-class BooleanValue(val value: Boolean) : BaseBo
+class BooleanValue(var value: Boolean) : BaseBo
 
 @PublicApi
 @Serializable
-class DoubleValue(val value: Double) : BaseBo
+class DoubleValue(var value: Double) : BaseBo
 
 @PublicApi
 @Serializable
-class FloatValue(val value: Float) : BaseBo
+class FloatValue(var value: Float) : BaseBo
 
 @PublicApi
 @Serializable
-class IntValue(val value: Int) : BaseBo
+class IntValue(var value: Int) : BaseBo
 
 @PublicApi
 @Serializable
-class LongValue(val value: Long) : BaseBo
+class LongValue(var value: Long) : BaseBo
 
 @PublicApi
 @Serializable
-class StringValue(val value: String) : BaseBo
+class StringValue(var value: String) : BaseBo
 
 @PublicApi
 fun String.toStringValue() = StringValue(this)

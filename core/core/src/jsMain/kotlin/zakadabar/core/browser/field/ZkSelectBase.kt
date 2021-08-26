@@ -21,8 +21,6 @@ import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.get
 import zakadabar.core.browser.ZkElement
-import zakadabar.core.browser.form.ZkFormStyles
-import zakadabar.core.browser.form.zkFormStyles
 import zakadabar.core.browser.icon.ZkIcon
 import zakadabar.core.browser.popup.ZkPopUp
 import zakadabar.core.browser.util.escape
@@ -59,7 +57,7 @@ abstract class ZkSelectBase<VT>(
 
     open val selectedOption = ZkElement()
 
-    open val itemList = ZkPopUp { + ZkFormStyles.selectOptionList }
+    open val itemList = ZkPopUp { + context.styles.selectOptionList }
 
     lateinit var items: List<Pair<VT, String>>
 
@@ -68,10 +66,10 @@ abstract class ZkSelectBase<VT>(
     override var readOnly = context.readOnly
         set(value) {
             if (value) {
-                container.firstElementChild?.classList?.plusAssign(zkFormStyles.disabledSelect)
+                container.firstElementChild?.classList?.plusAssign(context.styles.disabledSelect)
                 arrow.hide()
             } else {
-                container.firstElementChild?.classList?.minusAssign(zkFormStyles.disabledSelect)
+                container.firstElementChild?.classList?.minusAssign(context.styles.disabledSelect)
                 arrow.show()
             }
             field = value
@@ -119,8 +117,8 @@ abstract class ZkSelectBase<VT>(
             update(this.items, value)
         }
 
-        container = div(ZkFormStyles.selectContainer) {
-            + row(ZkFormStyles.selectedOption) {
+        container = div(context.styles.selectContainer) {
+            + row(context.styles.selectedOption) {
                 + selectedOption
                 + ZkIcon(ZkIcons.arrowDropDown, size = 24).also { arrow = it }
                 on("click") { toggleItems() }
@@ -169,20 +167,20 @@ abstract class ZkSelectBase<VT>(
         var s = ""
 
         if (value == null) {
-            s += """<div class="${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-${DATASET_KEY}="">${localizedStrings.notSelected}</div>"""
+            s += """<div class="${context.styles.selectEntry} ${context.styles.selected}" data-${DATASET_KEY}="">${localizedStrings.notSelected}</div>"""
             selectedOption.innerText = localizedStrings.notSelected
             selectedItem = null
         } else {
-            s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="">${localizedStrings.notSelected}</div>"""
+            s += """<div class="${context.styles.selectEntry}" data-${DATASET_KEY}="">${localizedStrings.notSelected}</div>"""
         }
 
         items.forEach {
             if (it.first == value) {
-                s += """<div class=" ${ZkFormStyles.selectEntry} ${ZkFormStyles.selected}" data-${DATASET_KEY}="${it.first}">${escape(it.second)}</div>"""
+                s += """<div class=" ${context.styles.selectEntry} ${context.styles.selected}" data-${DATASET_KEY}="${it.first}">${escape(it.second)}</div>"""
                 selectedOption.innerText = it.second
                 selectedItem = it
             } else {
-                s += """<div class="${ZkFormStyles.selectEntry}" data-${DATASET_KEY}="${it.first}">${escape(it.second)}</div>"""
+                s += """<div class="${context.styles.selectEntry}" data-${DATASET_KEY}="${it.first}">${escape(it.second)}</div>"""
             }
         }
 
@@ -197,7 +195,7 @@ abstract class ZkSelectBase<VT>(
         itemList.element.style.height = "auto"
         itemList.element.style.maxHeight = "auto"
 
-        itemList.toggle(selectedOption.element, zkFormStyles.rowHeight * 5)
+        itemList.toggle(selectedOption.element, context.styles.fieldHeight * 5)
     }
 
 }

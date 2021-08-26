@@ -19,10 +19,9 @@ package zakadabar.core.browser.field
 import kotlinx.browser.document
 import kotlinx.datetime.Instant
 import org.w3c.dom.HTMLInputElement
-import zakadabar.core.schema.ValidityReport
-import zakadabar.core.browser.form.zkFormStyles
-import zakadabar.core.resource.ZkFormatters.formatInstant
 import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.resource.localized
+import zakadabar.core.schema.ValidityReport
 import kotlin.reflect.KMutableProperty0
 
 open class ZkInstantField(
@@ -38,10 +37,10 @@ open class ZkInstantField(
     override var readOnly: Boolean = true
 
     override fun buildFieldValue() {
-        input.classList += zkFormStyles.disabledString
+        input.classList += context.styles.disabledString
         input.readOnly = true
         input.disabled = true
-        input.value = formatInstant(prop.get())
+        input.value = prop.get().localized
         input.tabIndex = - 1
         + input
     }

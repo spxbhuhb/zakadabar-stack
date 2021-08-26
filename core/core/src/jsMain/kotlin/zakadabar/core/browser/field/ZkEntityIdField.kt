@@ -18,11 +18,10 @@ package zakadabar.core.browser.field
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
+import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.schema.ValidityReport
-import zakadabar.core.browser.form.zkFormStyles
-import zakadabar.core.browser.util.plusAssign
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KProperty0
 
@@ -39,7 +38,7 @@ open class ZkEntityIdField<T : BaseBo>(
     override var readOnly = context.readOnly || prop !is KMutableProperty<*>
 
     override fun buildFieldValue() {
-        input.classList += zkFormStyles.disabledString
+        input.classList += context.styles.disabledString
         input.disabled = true
         input.value = prop.get().toString()
         input.tabIndex = - 1

@@ -18,7 +18,6 @@ package zakadabar.core.browser.field
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
-import zakadabar.core.browser.form.ZkFormStyles
 import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.util.PublicApi
 
@@ -40,7 +39,7 @@ open class ZkConstStringField(
     override var readOnly = true
 
     override fun buildFieldValue() {
-        input.classList += ZkFormStyles.disabledString
+        input.classList += context.styles.disabledString
         input.disabled = true
         input.value = value
         input.tabIndex = - 1
