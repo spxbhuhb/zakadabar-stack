@@ -4,6 +4,7 @@
 package zakadabar.core.browser.table
 
 import zakadabar.core.resource.css.*
+import zakadabar.core.util.PublicApi
 
 val zkTableStyles by cssStyleSheet(ZkTableStyles())
 
@@ -22,14 +23,14 @@ open class ZkTableStyles : ZkCssStyleSheet() {
     open var actionTextColor by cssParameter { theme.primaryColor }
     open var controlColor by cssParameter { theme.primaryColor }
 
-    val outerContainer by cssClass {
+    open val outerContainer by cssClass {
         + Display.flex
         + FlexDirection.column
         width = 100.percent
         height = 100.percent
     }
 
-    val contentContainer by cssClass {
+    open val contentContainer by cssClass {
         + Position.relative
 
         flexGrow = 1.0
@@ -41,7 +42,7 @@ open class ZkTableStyles : ZkCssStyleSheet() {
         borderRadius = 2.px
     }
 
-    val resizeHandle by cssClass {
+    open val resizeHandle by cssClass {
         + BoxSizing.borderBox
         + Position.absolute
         top = 0.px
@@ -62,19 +63,19 @@ open class ZkTableStyles : ZkCssStyleSheet() {
         }
     }
 
-    val beingResized by cssClass {
+    open val beingResized by cssClass {
         on(" .$resizeHandle") {
             opacity = 1.opacity + " !important"
         }
     }
 
-    val otherBeingResized by cssClass {
+    open val otherBeingResized by cssClass {
         on(" .$resizeHandle") {
             opacity = 0.opacity + " !important"
         }
     }
 
-    val noSelect by cssClass {
+    open val noSelect by cssClass {
         + UserSelect.none
 
         styles["-moz-user-select"] = "none"
@@ -82,7 +83,7 @@ open class ZkTableStyles : ZkCssStyleSheet() {
         styles["-ms-user-select"] = "none"
     }
 
-    val sortSign by cssClass {
+    open val sortSign by cssClass {
         + BoxSizing.borderBox
         + Position.absolute
         top = 0.px
@@ -90,7 +91,7 @@ open class ZkTableStyles : ZkCssStyleSheet() {
         bottom = 0.px
     }
 
-    val sortedDescending by cssClass {
+    open val sortedDescending by cssClass {
         marginTop = 16.px
         marginRight = 12.px
         width = 0.px
@@ -100,7 +101,7 @@ open class ZkTableStyles : ZkCssStyleSheet() {
         borderTop = "6px solid $controlColor"
     }
 
-    val sortedAscending by cssClass {
+    open val sortedAscending by cssClass {
         marginTop = 16.px
         marginRight = 12.px
         width = 0.px
@@ -110,7 +111,7 @@ open class ZkTableStyles : ZkCssStyleSheet() {
         borderBottom = "6px solid $controlColor"
     }
 
-    val table by cssClass {
+    open val table by cssClass {
         + BoxSizing.borderBox
         + Display.grid
 
@@ -118,117 +119,119 @@ open class ZkTableStyles : ZkCssStyleSheet() {
         minWidth = 100.percent
 
         backgroundColor = tableBackgroundColor
+    }
 
-        on(" thead") {
-            + Display.contents
-        }
+    @PublicApi
+    open val head by cssClass({ ".$table thead" }) {
+        + Display.contents
+    }
 
-        on(" tbody") {
-            + Display.contents
-        }
+    @PublicApi
+    open val body by cssClass({ ".$table tbody" }) {
+        + Display.contents
+    }
 
-        on(" tr") {
-            + Display.contents
-            + Cursor.pointer
-        }
+    @PublicApi
+    open val row by cssClass({ ".$table tr" }) {
+        + Display.contents
+        + Cursor.pointer
+    }
 
-        on(" tr:hover td") {
-            backgroundColor = hoverBackgroundColor
-            color = hoverTextColor
-        }
+    @PublicApi
+    open val hoverOverRow by cssClass({ ".$table tr:hover td" }) {
+        backgroundColor = hoverBackgroundColor
+        color = hoverTextColor
+    }
 
-        on(" th") {
+    @PublicApi
+    open val headerCell by cssClass({ ".$table th" }) {
+        + Position.sticky
+        + Overflow.hidden
+        + WhiteSpace.nowrap
+        + TextAlign.left
 
-            + Position.sticky
-            + Overflow.hidden
-            + WhiteSpace.nowrap
-            + TextAlign.left
+        + Cursor.pointer
 
-            + Cursor.pointer
+        paddingTop = 10.px
+        paddingBottom = 10.px
+        paddingRight = 8.px
+        textOverflow = "ellipsis"
+        textTransform = "uppercase"
+        fontSize = 75.percent
+        fontWeight = 400.weight
+        top = 0.px
+        background = headerBackground
 
-            paddingTop = 10.px
-            paddingBottom = 10.px
-            paddingRight = 8.px
-            textOverflow = "ellipsis"
-            textTransform = "uppercase"
-            fontSize = 75.percent
-            fontWeight = 400.weight
-            top = 0.px
-            background = headerBackground
+        color = headerText
+        borderBottom = headerBottomBorder
+        zIndex = 30.zIndex
+    }
 
-            color = headerText
-            borderBottom = headerBottomBorder
-            zIndex = 30.zIndex
-        }
+    @PublicApi
+    open val resizeHandleOn by cssClass({ ".$table th:hover .$resizeHandle" }) {
+        opacity = 1.opacity
+    }
 
-        on(" th:hover .$resizeHandle") {
-            opacity = 1.opacity
-        }
+    @PublicApi
+    open val firstCellOfHeader by cssClass({ ".$table th:first-child" }) {
+        paddingLeft = 10.px
+    }
 
-        on(" th:first-child") {
-            paddingLeft = 10.px
-        }
+    @PublicApi
+    open val cell by cssClass({ ".$table td" }) {
+        + Overflow.hidden
+        + WhiteSpace.nowrap
 
-        on(" th:last-child") {
+        zIndex = 20.zIndex
 
-        }
+        paddingTop = 10.px
+        paddingBottom = 10.px
+        textOverflow = "ellipsis"
+        color = textColor
+        borderBottom = "1px solid $rowBorderColor"
+        backgroundColor = oddRowBackground
+    }
 
-        on(" td") {
-
-            + Overflow.hidden
-            + WhiteSpace.nowrap
-
-            zIndex = 20.zIndex
-
-            paddingTop = 10.px
-            paddingBottom = 10.px
-            textOverflow = "ellipsis"
-            color = textColor
-            borderBottom = "1px solid $rowBorderColor"
-            backgroundColor = oddRowBackground
-        }
-
+    @PublicApi
+    open val firstCellOfRow by cssClass({ ".$table tr td:first-child" }) {
         if (this@ZkTableStyles.border != null) {
-
-            on(" tr td:first-child") {
-                borderLeft = this@ZkTableStyles.border
-            }
-
-            on(" tr td:last-child") {
-                borderRight = this@ZkTableStyles.border
-            }
-
-            on(" tr:last-child td") {
-                borderBottom = this@ZkTableStyles.border
-            }
+            borderLeft = this@ZkTableStyles.border
         }
+        paddingLeft = 10.px
+    }
 
-//        on(" tr:nth-child(even) td") {
-//            background = evenRowBackground
-//        }
-
-        on(" td:first-child") {
-            paddingLeft = 10.px
-        }
-
-        on(" tr:last-child td:first-child") {
-            if (this@ZkTableStyles.border != null) {
-                borderBottomLeftRadius = 4.px
-            }
-        }
-
-        on(" tr:last-child td:last-child") {
-            if (this@ZkTableStyles.border != null) {
-                borderBottomRightRadius = 4.px
-            }
+    @PublicApi
+    open val lastCellOfRow by cssClass({ ".$table tr td:last-child" }) {
+        if (this@ZkTableStyles.border != null) {
+            borderRight = this@ZkTableStyles.border
         }
     }
 
-    val dense by cssClass {
+    @PublicApi
+    open val cellOfLastRowOfTable by cssClass({ ".$table tr:last-child td" }) {
+        if (this@ZkTableStyles.border != null) {
+            borderBottom = this@ZkTableStyles.border
+        }
+    }
+
+    @PublicApi
+    open val leftBottomCellOfTable by cssClass({ ".$table tr:last-child td:first-child" }) {
+        if (this@ZkTableStyles.border != null) {
+            borderBottomLeftRadius = 4.px
+        }
+    }
+
+    open val rightBottomCellOfTable by cssClass({ ".$table tr:last-child td:last-child" }) {
+        if (this@ZkTableStyles.border != null) {
+            borderBottomRightRadius = 4.px
+        }
+    }
+
+    open val dense by cssClass {
         padding = "0 !important"
     }
 
-    val action by cssClass {
+    open val action by cssClass {
         + Display.flex
         + AlignItems.center
 

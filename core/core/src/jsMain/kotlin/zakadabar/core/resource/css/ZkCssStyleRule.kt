@@ -5,7 +5,6 @@ package zakadabar.core.resource.css
 
 import zakadabar.core.resource.ZkTheme
 import kotlin.properties.ReadOnlyProperty
-import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 @Suppress("unused") // may be used by other modules
@@ -20,16 +19,16 @@ import kotlin.reflect.KProperty
  * @property  sheet          The CSS Style Sheet this rule is part of.
  * @property  propName       Name of the property in the CSS style sheet.
  * @property  cssClassname   Name of the CSS class to use.
- * @property  cssSelector    The CSS selector to include in the style sheet. When [cssSelector]
- *                           is not null [cssClassName] is skipped. Using [on] for a rule
- *                           with [cssSelector] does not work.
+ * @property  cssSelector    A function to build the CSS selector to include in the style sheet.
+ *                           When [cssSelector] is not null [cssClassName] is skipped.
+ *                           Using [on] for a rule with [cssSelector] does not work.
  * @property  builder        The function to build the CSS text for the rule.
  */
-class ZkCssStyleRule(
-    private val sheet: ZkCssStyleSheet,
+open class ZkCssStyleRule(
+    val sheet: ZkCssStyleSheet,
     val propName: String,
     val cssClassname: String,
-    val cssSelector: String? = null,
+    val cssSelector: (() -> String)? = null,
     var builder: ZkCssStyleRule.(ZkTheme) -> Unit
 ) : ReadOnlyProperty<ZkCssStyleSheet, ZkCssStyleRule> {
     var media: String? = null
@@ -43,7 +42,7 @@ class ZkCssStyleRule(
 
     override fun toString() = cssClassname
 
-    operator fun CssValueConst.unaryPlus() {
+    open operator fun CssValueConst.unaryPlus() {
         styles[name] = value
     }
 
@@ -51,30 +50,30 @@ class ZkCssStyleRule(
     // Pseudo-class and media methods
     // -------------------------------------------------------------------------
 
-    fun hover(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(":hover", builder = builder)
+    open fun hover(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(":hover", builder = builder)
 
-    fun firstChild(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(":first-child", builder = builder)
+    open fun firstChild(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(":first-child", builder = builder)
 
-    fun lastChild(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(":last-child", builder = builder)
+    open fun lastChild(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(":last-child", builder = builder)
 
-    fun media(media: String, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = media, builder = builder)
+    open fun media(media: String, builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = media, builder = builder)
 
     /**
      * Applies the style on screens that are less then 600px wide.
      */
-    fun small(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = "(max-width: 600px)", builder = builder)
+    open fun small(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = "(max-width: 600px)", builder = builder)
 
     /**
      * Applies the style on screens that are less then 800px wide.
      */
-    fun medium(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = "(max-width: 800px)", builder = builder)
+    open fun medium(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = "(max-width: 800px)", builder = builder)
 
     /**
      * Applies the style on screens that are more then 800px wide.
      */
-    fun large(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = "(min-width: 800px)", builder = builder)
+    open fun large(builder: ZkCssStyleRule.(ZkTheme) -> Unit) = on(media = "(min-width: 800px)", builder = builder)
 
-    fun on(pseudoClass: String? = null, media: String? = null, builder: ZkCssStyleRule.(ZkTheme) -> Unit) {
+    open fun on(pseudoClass: String? = null, media: String? = null, builder: ZkCssStyleRule.(ZkTheme) -> Unit) {
         require(pseudoClass != null || media != null) { "both pseudoClass and media is null" }
 
         if (! ::variations.isInitialized) variations = mutableListOf()
@@ -91,7 +90,7 @@ class ZkCssStyleRule(
     // Compilation
     // -------------------------------------------------------------------------
 
-    fun compile(): String {
+    open fun compile(): String {
 
         styles.clear()
         if (::variations.isInitialized) variations.clear()
@@ -109,12 +108,14 @@ class ZkCssStyleRule(
         return strings.joinToString("\n")
     }
 
-    private fun toCssString(): String {
+    open fun toCssString(): String {
         val styleStrings = styles.map { style -> "    ${style.key}: ${style.value};" }.joinToString("\n")
 
         var s = ""
 
-        when (cssSelector) {
+        val selector = cssSelector?.invoke()
+
+        when (selector) {
             null -> {
                 if (media != null) s += "@media $media {\n"
                 s += "."
@@ -126,7 +127,7 @@ class ZkCssStyleRule(
                 return "@import url(\"${url}\");"
             }
             else -> {
-                s += cssSelector
+                s += selector
             }
         }
 
@@ -138,7 +139,7 @@ class ZkCssStyleRule(
         return s
     }
 
-    fun copyFrom(from: ZkCssStyleRule) {
+    open fun copyFrom(from: ZkCssStyleRule) {
         styles.clear()
         styles.putAll(from.styles)
     }
@@ -146,17 +147,6 @@ class ZkCssStyleRule(
     // -------------------------------------------------------------------------
     // Build helpers
     // -------------------------------------------------------------------------
-
-    class CssValueDelegate : ReadWriteProperty<ZkCssStyleRule, String> {
-        override fun getValue(thisRef: ZkCssStyleRule, property: KProperty<*>): String {
-            TODO("Not yet implemented")
-        }
-
-        override fun setValue(thisRef: ZkCssStyleRule, property: KProperty<*>, value: String) {
-            TODO("Not yet implemented")
-        }
-
-    }
 
     /**
      * [MDN: align-items](https://developer.mozilla.org/en-US/docs/Web/CSS/align-items)

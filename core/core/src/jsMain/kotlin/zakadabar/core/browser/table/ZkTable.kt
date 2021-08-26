@@ -501,7 +501,9 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             return
         }
 
-        filteredData = fullData.filter { filterRow(it.data, searchText) }
+        val lc = searchText?.lowercase()
+
+        filteredData = fullData.filter { filterRow(it.data, lc) }
     }
 
     /**
