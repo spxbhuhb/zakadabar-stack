@@ -84,6 +84,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     open var rowHeight = 42
 
+    open var styles = zkTableStyles
+
     val columns = mutableListOf<ZkColumn<T>>()
 
     var query: QueryBo<List<T>>? = null
@@ -155,18 +157,18 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     override fun onCreate() {
         onConfigure()
 
-        + zkTableStyles.outerContainer
-        + zkTableStyles.noSelect
+        + styles.outerContainer
+        + styles.noSelect
 
         + buildLocalTitleBar()
 
-        + div(zkTableStyles.contentContainer) {
+        + div(styles.contentContainer) {
 
             + div {
                 areas = Areas(element.id, ::onAreasChange, buildPoint, 0).apply { onCreate() }
             }
 
-            + table(zkTableStyles.table) {
+            + table(styles.table) {
 
                 buildPoint.style.cssText = inlineCss()
                 + thead {

@@ -11,6 +11,11 @@ val cookbookStyles by cssStyleSheet(CookbookStyles())
 
 open class CookbookStyles : ZkCssStyleSheet() {
 
+    val smallInlineTable by cssClass {
+        height = 200.px
+        border = theme.fixBorder
+    }
+
     val inlineTable by cssClass {
         height = 400.px
         border = theme.fixBorder

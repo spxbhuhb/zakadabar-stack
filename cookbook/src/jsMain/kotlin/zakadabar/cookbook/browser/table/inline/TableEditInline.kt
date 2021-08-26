@@ -9,7 +9,6 @@ import zakadabar.cookbook.entity.builtin.ExampleBo
 import zakadabar.core.browser.field.ZkBooleanField
 import zakadabar.core.browser.field.ZkStringSelectField
 import zakadabar.core.browser.table.ZkTable
-import zakadabar.core.browser.table.zkTableStyles
 import zakadabar.core.data.EntityId
 import zakadabar.core.util.default
 
@@ -25,7 +24,7 @@ class TableEditInline : ZkTable<ExampleBo>() {
         + custom {
             label = "Inline Checkbox"
             render = {
-                + zkTableStyles.dense
+                + styles.dense
                 + ZkBooleanField(this@TableEditInline, it::booleanValue)
             }
         }
@@ -33,7 +32,7 @@ class TableEditInline : ZkTable<ExampleBo>() {
         + custom {
             label = "Inline Select"
             render = {
-                + zkTableStyles.dense
+                + styles.dense
                 + ZkStringSelectField(this@TableEditInline, it::stringSelectValue).apply { fetch = { values } }
             }
         }

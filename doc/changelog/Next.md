@@ -6,6 +6,8 @@ This page contains the changes included in the next release.
 
 added:
 
+- `ZkCssStyleSheet.onConfigure` hook for last minute style changes
+- `ZkTable.styles` property to provide style customization per table
 - `cssClass(on:()->String, builder)` convenience for building complex css class selectors
 
 changed:
@@ -17,3 +19,15 @@ changed:
 fixed:
 
 - Search in uppercase #61
+
+## Cookbook
+
+added:
+
+- Vertical Table Cell Border
+
+## Site
+
+fixed:
+
+- broken build script links

@@ -36,7 +36,7 @@ open class ZkCssStyleRule(
 
     val styles = mutableMapOf<String, String?>()
 
-    private lateinit var variations: MutableList<ZkCssStyleRule>
+    private var variations : MutableList<ZkCssStyleRule>? = null
 
     override fun getValue(thisRef: ZkCssStyleSheet, property: KProperty<*>) = this
 
@@ -76,34 +76,46 @@ open class ZkCssStyleRule(
     open fun on(pseudoClass: String? = null, media: String? = null, builder: ZkCssStyleRule.(ZkTheme) -> Unit) {
         require(pseudoClass != null || media != null) { "both pseudoClass and media is null" }
 
-        if (! ::variations.isInitialized) variations = mutableListOf()
+        if (variations == null) variations = mutableListOf()
 
         val rule = ZkCssStyleRule(sheet, this.propName, cssClassname, cssSelector, builder)
 
         rule.pseudoClass = pseudoClass
         rule.media = media
 
-        variations.add(rule)
+        variations?.add(rule)
     }
 
     // -------------------------------------------------------------------------
     // Compilation
     // -------------------------------------------------------------------------
 
-    open fun compile(): String {
-
+    /**
+     * Clear styles and run the [builder] to create them.
+     */
+    open fun build() {
         styles.clear()
-        if (::variations.isInitialized) variations.clear()
+
+        variations?.clear()
 
         builder(sheet.theme)
 
-        if (! ::variations.isInitialized) {
+        variations?.forEach {
+            it.build()
+        }
+    }
+
+    /**
+     * Compile the rule into actual CSS.
+     */
+    open fun compile(): String {
+        if (variations == null) {
             return toCssString()
         }
 
         val strings = mutableListOf(toCssString())
 
-        variations.forEach { strings += it.compile() }
+        variations?.forEach { strings += it.compile() }
 
         return strings.joinToString("\n")
     }

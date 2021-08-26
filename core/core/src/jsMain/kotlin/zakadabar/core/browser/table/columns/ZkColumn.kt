@@ -10,7 +10,6 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.table.ZkTable
-import zakadabar.core.browser.table.zkTableStyles
 import zakadabar.core.browser.util.minusAssign
 import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.data.BaseBo
@@ -32,7 +31,7 @@ open class ZkColumn<T : BaseBo>(
     open var exportable = true
 
     lateinit var label: String
-    var sortSign = ZkElement() css zkTableStyles.sortSign
+    var sortSign = ZkElement() css table.styles.sortSign
 
     var beingResized = false
     var beenResized = false
@@ -43,7 +42,7 @@ open class ZkColumn<T : BaseBo>(
     override fun onCreate() {
         + label
         + sortSign
-        + span(zkTableStyles.resizeHandle) {
+        + span(table.styles.resizeHandle) {
             on(buildPoint, "mousedown", ::onResizeMouseDown)
         }
         on("click", ::onClick)
@@ -74,11 +73,11 @@ open class ZkColumn<T : BaseBo>(
         }
 
         if (sortAscending) {
-            sortSign.classList -= zkTableStyles.sortedDescending
-            sortSign.classList += zkTableStyles.sortedAscending
+            sortSign.classList -= table.styles.sortedDescending
+            sortSign.classList += table.styles.sortedAscending
         } else {
-            sortSign.classList += zkTableStyles.sortedDescending
-            sortSign.classList -= zkTableStyles.sortedAscending
+            sortSign.classList += table.styles.sortedDescending
+            sortSign.classList -= table.styles.sortedAscending
         }
 
         sortSign.show()
@@ -95,11 +94,11 @@ open class ZkColumn<T : BaseBo>(
         lastX = event.clientX
 
         table.columns.forEach {
-            if (it.id != id) it.classList += zkTableStyles.otherBeingResized
+            if (it.id != id) it.classList += table.styles.otherBeingResized
         }
 
-        classList += zkTableStyles.beingResized
-        table.classList += zkTableStyles.noSelect
+        classList += table.styles.beingResized
+        table.classList += table.styles.noSelect
 
         on(window, "mouseup", mouseUpWrapper)
         on(window, "mousemove", mouseMoveWrapper)
@@ -112,11 +111,11 @@ open class ZkColumn<T : BaseBo>(
         lastX = 0
 
         table.columns.forEach {
-            it.classList -= zkTableStyles.otherBeingResized
+            it.classList -= table.styles.otherBeingResized
         }
 
-        classList -= zkTableStyles.beingResized
-        table.classList -= zkTableStyles.noSelect
+        classList -= table.styles.beingResized
+        table.classList -= table.styles.noSelect
 
         window.removeEventListener("mouseup", mouseUpWrapper)
         window.removeEventListener("mousemove", mouseMoveWrapper)

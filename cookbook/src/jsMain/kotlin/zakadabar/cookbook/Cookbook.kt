@@ -7,6 +7,8 @@ import org.w3c.dom.HTMLElement
 import zakadabar.cookbook.browser.form.select.BoSelectFilter
 import zakadabar.cookbook.browser.form.select.StringSelectFilter
 import zakadabar.cookbook.browser.help.TextHelpModal
+import zakadabar.cookbook.browser.table.border.vertical.TableVerticalBorderOne
+import zakadabar.cookbook.browser.table.border.vertical.TableVerticalBorderSome
 import zakadabar.cookbook.browser.table.inline.TableEditInline
 import zakadabar.cookbook.resource.strings
 import zakadabar.core.browser.ZkElement
@@ -31,6 +33,8 @@ class Cookbook : CommonModule {
             "StringSelectFilter" -> StringSelectFilter()
             "TextHelpModal" -> TextHelpModal()
             "TableEditInline" -> TableEditInline()
+            "TableVerticalBorderOne" -> TableVerticalBorderOne()
+            "TableVerticalBorderSome" -> TableVerticalBorderSome()
 
             else -> null
 

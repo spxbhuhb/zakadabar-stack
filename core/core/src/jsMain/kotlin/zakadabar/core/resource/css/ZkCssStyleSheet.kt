@@ -76,6 +76,14 @@ open class ZkCssStyleSheet {
         parameters.forEach { it.reset() }
     }
 
+    /**
+     * Called before the compilation of the style sheet. Short, last-minute CSS
+     * rule modifications may be put here.
+     */
+    open fun onConfigure() {
+
+    }
+
     fun attach() {
 
         if (document.getElementById(element.id) != null) {
@@ -106,6 +114,12 @@ open class ZkCssStyleSheet {
     }
 
     private fun refresh() {
+        rules.forEach {
+            it.value.build()
+        }
+
+        onConfigure()
+
         element.innerHTML = rules.map { it.value.compile() }.joinToString("\n")
     }
 
@@ -181,7 +195,7 @@ class CssDelegateProvider(
 
         val sf = when {
             selectorFunc != null -> selectorFunc
-            selectorString != null -> fun() : String { return selectorString }
+            selectorString != null -> fun(): String { return selectorString }
             else -> null
         }
 

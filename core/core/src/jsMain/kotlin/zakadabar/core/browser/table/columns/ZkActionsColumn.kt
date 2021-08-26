@@ -4,11 +4,10 @@
 package zakadabar.core.browser.table.columns
 
 import org.w3c.dom.set
-import zakadabar.core.data.BaseBo
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.table.ZkTable
-import zakadabar.core.browser.table.zkTableStyles
 import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.data.BaseBo
 import zakadabar.core.resource.localizedStrings
 
 open class ZkActionsColumn<T : BaseBo>(
@@ -23,7 +22,7 @@ open class ZkActionsColumn<T : BaseBo>(
 
     override fun render(builder: ZkElement, index: Int, row: T) {
         with(builder) {
-            buildPoint.classList += zkTableStyles.action
+            buildPoint.classList += table.styles.action
             buildPoint.dataset["action"] = "update"
             + localizedStrings.details
         }
