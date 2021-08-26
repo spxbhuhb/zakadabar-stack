@@ -4,9 +4,9 @@
 package zakadabar.core.browser.table.columns
 
 import kotlinx.datetime.LocalDateTime
-import zakadabar.core.data.BaseBo
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.data.BaseBo
 import zakadabar.core.resource.localized
 import zakadabar.core.resource.localizedStrings
 import kotlin.reflect.KProperty1
@@ -21,8 +21,8 @@ open class ZkOptLocalDateTimeColumn<T : BaseBo>(
         super.onCreate()
     }
 
-    override fun render(builder: ZkElement, index: Int, row: T) {
-        with(builder) {
+    override fun render(cell: ZkElement, index: Int, row: T) {
+        with(cell) {
             + format(row)
         }
     }

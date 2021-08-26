@@ -24,8 +24,8 @@ class ZkStringExtensionColumn<T : BaseBo>(
         values.clear()
     }
 
-    override fun render(builder: ZkElement, index: Int, row: T) {
-        with(builder) {
+    override fun render(cell: ZkElement, index: Int, row: T) {
+        with(cell) {
             + table.styles.dense
             + ZkTextInput(value = values[table.getRowId(row)] ?: "") {
                 values[table.getRowId(row)] = it

@@ -3,10 +3,10 @@
  */
 package zakadabar.core.browser.table.columns
 
-import zakadabar.core.data.BaseBo
-import zakadabar.core.data.EntityId
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.EntityId
 import zakadabar.core.resource.css.em
 import zakadabar.core.resource.localizedStrings
 import kotlin.reflect.KProperty1
@@ -23,8 +23,8 @@ open class ZkEntityIdColumn<T : BaseBo, IT>(
         super.onCreate()
     }
 
-    override fun render(builder: ZkElement, index: Int, row: T) {
-        with(builder) {
+    override fun render(cell: ZkElement, index: Int, row: T) {
+        with(cell) {
             + "# ${prop.get(row)}"
         }
     }

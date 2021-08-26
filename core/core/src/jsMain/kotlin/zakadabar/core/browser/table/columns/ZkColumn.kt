@@ -59,7 +59,7 @@ open class ZkColumn<T : BaseBo>(
         return "minmax(${min.px}, $max)"
     }
 
-    open fun render(builder: ZkElement, index: Int, row: T) {
+    open fun render(cell: ZkElement, index: Int, row: T) {
 
     }
 

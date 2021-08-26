@@ -3,10 +3,10 @@
  */
 package zakadabar.core.browser.table.columns
 
-import zakadabar.core.data.BaseBo
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.input.ZkCheckBox
 import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.data.BaseBo
 import zakadabar.core.resource.css.em
 import zakadabar.core.resource.localizedStrings
 import kotlin.reflect.KProperty1
@@ -23,13 +23,13 @@ open class ZkBooleanColumn<T : BaseBo>(
         super.onCreate()
     }
 
-    override fun render(builder: ZkElement, index: Int, row: T) {
+    override fun render(cell: ZkElement, index: Int, row: T) {
 //        val checkbox = document.createElement("input") as HTMLInputElement
 //        checkbox.type = "checkbox"
 //        checkbox.value = prop.get(row).toString()
 //        checkbox.checked = prop.get(row)
 //        checkbox.style.cssText = "pointer-events:none"
-        with(builder) {
+        with(cell) {
             + ZkCheckBox(readOnly = true, checked = prop.get(row))
         }
     }

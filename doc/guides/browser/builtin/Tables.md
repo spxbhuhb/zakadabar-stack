@@ -135,6 +135,26 @@ Implemented extension columns:
 
 Example: [Vertical Table Cell Border](/doc/cookbook/browser/table/border/vertical/recipe.md)
 
+## Custom Actions
+
+The `actions` shorthand of the table accepts a builder function that may be used to
+override the default "Details" action and/or add more actions.
+
+You can use the "action" shorthand to add a new 
+
+```kotlin
++ actions {
+    + action("hello") { index, row ->
+        toastSuccess { "You clicked on 'hello' of ${row.stringValue} (index: $index)." }
+    }
+    + action("world") { index, row ->
+        toastSuccess { "You clicked on 'world' of ${row.stringValue} (index: $index)." }
+    }
+}
+```
+
+Example: [Custom Table Actions](/doc/cookbook/browser/table/action/recipe.md)
+
 ## Custom Columns
 
 Add custom columns by:

@@ -3,20 +3,20 @@
  */
 package zakadabar.lib.content.frontend.browser
 
-import zakadabar.lib.content.data.ContentOverview
-import zakadabar.lib.content.data.ContentOverviewEntry
-import zakadabar.lib.content.data.ContentOverviewQuery
-import zakadabar.lib.i18n.data.LocaleBo
-import zakadabar.core.data.EntityId
-import zakadabar.core.browser.application.target
 import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.application.target
 import zakadabar.core.browser.input.ZkCheckBox
 import zakadabar.core.browser.page.ZkPage
 import zakadabar.core.browser.page.zkPageStyles
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.browser.table.columns.ZkCustomColumn
-import zakadabar.core.resource.css.em
 import zakadabar.core.browser.util.io
+import zakadabar.core.data.EntityId
+import zakadabar.core.resource.css.em
+import zakadabar.lib.content.data.ContentOverview
+import zakadabar.lib.content.data.ContentOverviewEntry
+import zakadabar.lib.content.data.ContentOverviewQuery
+import zakadabar.lib.i18n.data.LocaleBo
 
 class ContentOverview : ZkPage(css = zkPageStyles.fixed) {
 
@@ -81,8 +81,8 @@ class ContentOverviewTable(
     ) : ZkCustomColumn<ContentOverviewEntry>(
         table = table
     ) {
-        override fun render(builder: ZkElement, index: Int, row: ContentOverviewEntry) {
-            with(builder) {
+        override fun render(cell: ZkElement, index: Int, row: ContentOverviewEntry) {
+            with(cell) {
 
                 val localizedId = row.localizations[localeIndex]
 

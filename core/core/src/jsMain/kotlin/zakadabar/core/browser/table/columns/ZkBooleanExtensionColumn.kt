@@ -24,8 +24,8 @@ class ZkBooleanExtensionColumn<T : BaseBo>(
         values.clear()
     }
 
-    override fun render(builder: ZkElement, index: Int, row: T) {
-        with(builder) {
+    override fun render(cell: ZkElement, index: Int, row: T) {
+        with(cell) {
             + table.styles.dense
             + ZkCheckBox(checked = values[table.getRowId(row)] ?: false) {
                 values[table.getRowId(row)] = it

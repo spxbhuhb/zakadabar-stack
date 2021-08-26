@@ -2,42 +2,19 @@
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package zakadabar.cookbook.browser.table.border.vertical
+package zakadabar.cookbook.browser.table.action
 
 import zakadabar.cookbook.cookbookStyles
 import zakadabar.cookbook.entity.builtin.ExampleBo
 import zakadabar.core.browser.table.ZkTable
-import zakadabar.core.browser.table.ZkTableStyles
+import zakadabar.core.browser.toast.toastSuccess
 import zakadabar.core.data.EntityId
-import zakadabar.core.resource.css.cssStyleSheet
 import zakadabar.core.resource.css.em
 import zakadabar.core.resource.css.fr
-import zakadabar.core.util.PublicApi
 import zakadabar.core.util.default
 
-class ExampleStyles : ZkTableStyles() {
 
-    // We don't want to rewrite the whole cell class, it is better to
-    // use onConfigure and change these rules.
-
-    override fun onConfigure() {
-        cell.borderRight = theme.fixBorder
-    }
-
-    // This adds the border to the last header cell, so it is
-    // separated from the scroll area.
-
-    @PublicApi
-    val lastHeaderCell by cssClass({ ".$table th:last-child"}) {
-        borderRight = theme.fixBorder
-    }
-}
-
-val exampleStyles by cssStyleSheet(ExampleStyles())
-
-class TableVerticalBorderSome : ZkTable<ExampleBo>() {
-
-    override var styles: ZkTableStyles = exampleStyles
+class TableCustomActions : ZkTable<ExampleBo>() {
 
     override fun onConfigure() {
         super.onConfigure()
@@ -45,7 +22,14 @@ class TableVerticalBorderSome : ZkTable<ExampleBo>() {
         + ExampleBo::stringValue size 10.em
         + ExampleBo::booleanValue size 1.fr
 
-        + actions()
+        + actions {
+            + action("hello") { index, row ->
+                toastSuccess { "You clicked on 'hello' of ${row.stringValue} (index: $index)." }
+            }
+            + action("world") { index, row ->
+                toastSuccess { "You clicked on 'world' of ${row.stringValue} (index: $index)." }
+            }
+        }
     }
 
     override fun onCreate() {

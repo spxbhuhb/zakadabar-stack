@@ -254,6 +254,15 @@ open class ZkTableStyles : ZkFieldStyles() {
         lineHeight = "1.3em"
         fontWeight = "400 !important"
         color = "$actionTextColor !important"
+        paddingLeft = 0.px
+    }
+
+    open val actionEntry by cssClass {
+        + Display.flex
+        + AlignItems.center
+        height = 100.percent
+
+        marginRight = theme.spacingStep.px
     }
 
 }

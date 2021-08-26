@@ -9,16 +9,17 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.dom.clear
 import org.w3c.dom.*
+import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.ZkElementState
 import zakadabar.core.browser.crud.ZkCrud
 import zakadabar.core.browser.crud.ZkCrudTarget
 import zakadabar.core.browser.field.ZkFieldContext
-import zakadabar.core.browser.table.actions.ZkAddRowAction
-import zakadabar.core.browser.table.actions.ZkExportCsvAction
-import zakadabar.core.browser.table.actions.ZkSearchAction
 import zakadabar.core.browser.table.columns.*
+import zakadabar.core.browser.table.header.ZkAddRowAction
+import zakadabar.core.browser.table.header.ZkExportCsvAction
+import zakadabar.core.browser.table.header.ZkSearchAction
 import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.titlebar.ZkAppTitleProvider
 import zakadabar.core.browser.titlebar.ZkLocalTitleBar
@@ -109,7 +110,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     override val schema = BoSchema.NO_VALIDATION
 
-    override fun validate() {  }
+    override fun validate() {}
 
     // -------------------------------------------------------------------------
     //  DOM
@@ -178,45 +179,9 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             }
         }
 
-        // this is here to prevent text selection on double click
-        on("mousedown") { event ->
-            event as MouseEvent
-            if (event.detail > 1) {
-                event.preventDefault()
-            }
-        }
-
-        // this handles the double click itself
-        on("dblclick") { event ->
-            event as MouseEvent
-            event.preventDefault()
-
-            val target = event.target
-            if (target !is HTMLElement) return@on
-
-            val rid = target.getDatasetEntry("rid") ?: return@on
-
-            onDblClick(rid)
-        }
-
-        on("click") { event ->
-            event as MouseEvent
-
-            val target = event.target as? HTMLElement ?: return@on
-            val rid = target.getDatasetEntry("rid") ?: return@on
-
-            if (oneClick) {
-                onDblClick(rid)
-            } else {
-                val action = target.getDatasetEntry("action") ?: return@on
-
-                event.preventDefault()
-
-                if (action == "update") {
-                    onDblClick(rid)
-                }
-            }
-        }
+        on("mousedown", ::onMouseDown)
+        on("dblclick", ::onDblClick)
+        on("click", ::onClick)
     }
 
     override fun onResume() {
@@ -263,6 +228,38 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         if (search) actions += ZkSearchAction(::onSearch)
 
         return actions
+    }
+
+    // -------------------------------------------------------------------------
+    //  Event Handlers
+    // -------------------------------------------------------------------------
+
+    open fun getRowId(event : Event) : String? {
+        if (event !is MouseEvent) return null
+
+        val target = event.target
+        if (target !is HTMLElement) return null
+
+        return target.getDatasetEntry("rid")
+    }
+
+    open fun onClick(event: Event) {
+        if (oneClick) getRowId(event)?.let { onDblClick(it) }
+    }
+
+    /**
+     * Prevent text selection on double click.
+     */
+    open fun onMouseDown(event: Event) {
+        event as MouseEvent
+        if (event.detail > 1) {
+            event.preventDefault()
+        }
+    }
+
+    open fun onDblClick(event: Event) {
+        event.preventDefault()
+        getRowId(event)?.let { onDblClick(it) }
     }
 
     // -------------------------------------------------------------------------
@@ -455,7 +452,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      * @param  id  Id of the row as given by [getRowId].
      */
     open fun onDblClick(id: String) {
-        crud?.openUpdate(EntityId<T>(id))
+        crud?.openUpdate(EntityId(id))
     }
 
     /**
@@ -650,8 +647,16 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         return column
     }
 
-    fun actions(): ZkActionsColumn<T> {
-        return ZkActionsColumn(this@ZkTable)
+    fun actions(builder : (ZkActionsColumn<T>.() -> Unit)? = null): ZkActionsColumn<T> {
+        return if (builder != null) {
+            ZkActionsColumn(this@ZkTable, builder)
+        } else {
+            ZkActionsColumn(this@ZkTable) {
+                + action(localizedStrings.details) { _, row ->
+                    onDblClick(getRowId(row))
+                }
+            }
+        }
     }
 
     // -------------------------------------------------------------------------

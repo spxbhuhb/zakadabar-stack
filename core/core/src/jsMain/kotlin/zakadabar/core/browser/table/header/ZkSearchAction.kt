@@ -1,15 +1,15 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.core.browser.table.actions
+package zakadabar.core.browser.table.header
 
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.button.ZkButton
 import zakadabar.core.browser.input.ZkTextInput
 import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.ZkFlavour
 import zakadabar.core.resource.ZkIcons
-import zakadabar.core.browser.util.plusAssign
 
 open class ZkSearchAction(
     private val onExecute: (searchText: String) -> Unit

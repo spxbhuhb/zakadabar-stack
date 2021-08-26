@@ -3,29 +3,51 @@
  */
 package zakadabar.core.browser.table.columns
 
-import org.w3c.dom.set
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.table.ZkTable
-import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.data.BaseBo
 import zakadabar.core.resource.localizedStrings
 
 open class ZkActionsColumn<T : BaseBo>(
-    table: ZkTable<T>
+    table: ZkTable<T>,
+    val builder: ZkActionsColumn<T>.() -> Unit
 ) : ZkColumn<T>(table) {
+
+    class Action<T : BaseBo>(
+        val label: String,
+        val callback: (Int, T) -> Unit
+    )
+
+    val actions = mutableListOf<Action<T>>()
 
     override fun onCreate() {
         label = localizedStrings.actions
         exportable = false
+
         super.onCreate()
+
+        builder.invoke(this)
     }
 
-    override fun render(builder: ZkElement, index: Int, row: T) {
-        with(builder) {
-            buildPoint.classList += table.styles.action
-            buildPoint.dataset["action"] = "update"
-            + localizedStrings.details
+    override fun render(cell: ZkElement, index: Int, row: T) {
+        with(cell) {
+            + table.styles.action
+
+            actions.forEach { action ->
+                + div(table.styles.actionEntry) {
+                    + action.label
+                    on(buildPoint, "click") { action.callback(index, row) }
+                }
+            }
         }
     }
+
+    open fun action(label: String, callback: (Int, T) -> Unit) =
+        Action(label, callback)
+
+    operator fun Action<T>.unaryPlus() {
+        actions += this
+    }
+
 
 }

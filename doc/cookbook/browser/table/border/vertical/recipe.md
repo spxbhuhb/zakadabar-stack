@@ -30,10 +30,6 @@ but instead of declaring the style variable `exampleStyles`, change `zkTableStyl
 Override the `styles` variable of the table with your extended style or change it in `onConfigure` as in
 [TableVerticalBorderSome](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/table/border/vertical/TableVerticalBorderSome.kt).
 
-### For One Table
-
-Use an anonymous style object as in [TableVerticalBorderOne](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/table/border/vertical/TableVerticalBorderOne.kt).
-
 ## Guides
 
 - [Themes, Css](/doc/guides/browser/structure/ThemesCss.md)
@@ -42,4 +38,3 @@ Use an anonymous style object as in [TableVerticalBorderOne](/cookbook/src/jsMai
 ## Code
 
 - [TableVerticalBorderSome](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/table/border/vertical/TableVerticalBorderSome.kt)
-- [TableVerticalBorderOne](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/table/border/vertical/TableVerticalBorderOne.kt)
