@@ -21,7 +21,7 @@ import kotlin.reflect.KMutableProperty0
 open class ZkOptStringSelectField(
     context: ZkFieldContext,
     val prop: KMutableProperty0<String?>
-) : ZkSelectBase<String, ZkOptStringSelectField>(context, prop.name) {
+) : ZkSelectBase<String?, ZkOptStringSelectField>(context, prop.name) {
 
     override fun fromString(string: String): String {
         return string
@@ -29,13 +29,10 @@ open class ZkOptStringSelectField(
 
     override fun getPropValue() = prop.get()
 
-    override fun setPropValue(value: Pair<String, String>?) {
-        if (value == null) {
-            prop.set(null)
-        } else {
-            prop.set(value.first)
-        }
-        context.validate()
+    override fun setPropValue(value: Pair<String?, String>?) {
+        val iv = value?.first
+        prop.set(iv)
+        onUserChange(iv)
     }
 
 }

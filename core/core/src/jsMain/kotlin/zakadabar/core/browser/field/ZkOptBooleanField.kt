@@ -23,7 +23,7 @@ import kotlin.reflect.KMutableProperty0
 open class ZkOptBooleanField(
     context : ZkFieldContext,
     val prop: KMutableProperty0<Boolean?>
-) : ZkSelectBase<Boolean, ZkOptBooleanField>(
+) : ZkSelectBase<Boolean?, ZkOptBooleanField>(
     context = context,
     propName = prop.name
 ) {
@@ -36,6 +36,9 @@ open class ZkOptBooleanField(
 
     override fun getPropValue() = prop.get()
 
-    override fun setPropValue(value: Pair<Boolean, String>?) = prop.set(value?.first)
+    override fun setPropValue(value: Pair<Boolean?, String>?) {
+        prop.set(value?.first)
+        onUserChange(value?.first)
+    }
 
 }

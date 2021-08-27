@@ -55,9 +55,7 @@ abstract class ZkStringBase<VT, FT : ZkStringBase<VT,FT>>(
         input.value = getPropValue()
 
         on(input, "input") {
-            touched = true
             setPropValue(input.value)
-            context.validate()
         }
 
         focusEvents(input)

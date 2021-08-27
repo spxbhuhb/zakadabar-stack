@@ -60,7 +60,7 @@ open class ZkOptTextAreaField(
         on(area, "input") {
             touched = true
             prop.set(area.value)
-            context.validate()
+            onUserChange(area.value)
         }
 
         focusEvents(area)

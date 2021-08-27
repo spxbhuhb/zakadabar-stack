@@ -3,15 +3,15 @@
  */
 package zakadabar.site.backend
 
+import zakadabar.core.authorize.SimpleRoleAuthorizerProvider
+import zakadabar.core.route.RoutedModule
+import zakadabar.core.server.server
+import zakadabar.core.server.util.ContentBackend
+import zakadabar.core.util.PublicApi
 import zakadabar.lib.examples.backend.builtin.BuiltinBl
 import zakadabar.lib.examples.backend.builtin.ExampleReferenceBl
 import zakadabar.lib.examples.backend.data.SimpleExampleBl
 import zakadabar.site.backend.business.RecipeBl
-import zakadabar.core.route.RoutedModule
-import zakadabar.core.authorize.SimpleRoleAuthorizerProvider
-import zakadabar.core.server.util.ContentBackend
-import zakadabar.core.server.server
-import zakadabar.core.util.PublicApi
 
 @PublicApi
 object Module : RoutedModule {
@@ -26,6 +26,7 @@ object Module : RoutedModule {
 
         server += BuiltinBl()
         server += ExampleReferenceBl()
+        server += zakadabar.cookbook.entity.builtin.ExampleReferenceBl()
         server += SimpleExampleBl()
     }
 

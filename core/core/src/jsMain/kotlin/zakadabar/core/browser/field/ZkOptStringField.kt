@@ -36,7 +36,9 @@ open class ZkOptStringField(
     override fun getPropValue() = prop.get() ?: ""
 
     override fun setPropValue(value: String) {
-        prop.set(value.ifEmpty { null })
+        val iv = value.ifEmpty { null }
+        prop.set(iv)
+        onUserChange(iv)
     }
 
 }

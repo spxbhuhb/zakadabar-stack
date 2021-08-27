@@ -37,6 +37,7 @@ open class ZkStringField(
 
     override fun setPropValue(value: String) {
         prop.set(value)
+        onUserChange(value)
     }
 
     override fun needsMandatoryMark() = stringMandatoryMark()

@@ -44,9 +44,11 @@ open class ZkOptLocalDateField(
 
         if (iv == null && input.value.isNotEmpty()) {
             invalidInput = true
+            context.validate()
         } else {
             invalidInput = false
             prop.set(iv)
+            onUserChange(iv)
         }
     }
 }

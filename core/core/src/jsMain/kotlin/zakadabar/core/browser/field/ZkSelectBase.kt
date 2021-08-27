@@ -121,7 +121,6 @@ abstract class ZkSelectBase<VT, FT : ZkSelectBase<VT, FT>>(
             val entryId = if (entryIdString.isNullOrEmpty()) null else fromString(entryIdString)
             val value = entryId?.let { items.firstOrNull { item -> item.first == entryId } }
 
-            touched = true
             update(this.items, value)
         }
 

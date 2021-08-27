@@ -16,7 +16,7 @@ import zakadabar.core.schema.descriptor.BoConstraintType
 import zakadabar.core.schema.descriptor.BooleanBoConstraint
 import zakadabar.core.schema.descriptor.IntBoConstraint
 
-abstract class ZkFieldBase<DT,FT : ZkFieldBase<DT,FT>>(
+abstract class ZkFieldBase<DT, FT : ZkFieldBase<DT, FT>>(
     val context: ZkFieldContext,
     val propName: String?,
     label: String? = null
@@ -24,27 +24,21 @@ abstract class ZkFieldBase<DT,FT : ZkFieldBase<DT,FT>>(
 
     abstract var readOnly: Boolean
 
-    enum class ChangeOrigin {
-        User,
-        Code
-    }
-
     /**
      * Function to execute then the value changes.
      *
-     * Parameters:
-     *
-     * 1. origin of the change
-     * 1. the new value
-     * 1. the field that changed
+     * @param origin origin of the change
+     * @param value the new value
+     * @param field the field that changed
      */
-    var onChangeCallback : ((ChangeOrigin, DT, ZkFieldBase<DT,FT>) -> Unit)? = null
+    var onChangeCallback: ((origin: ChangeOrigin, value: DT, field: FT) -> Unit)? = null
 
     /**
      * The UI value of the field or null when it is not set or [invalidInput] is true.
      * The setter of this property has to perform null checks when necessary.
      */
-    protected abstract var valueOrNull: DT?
+    abstract var valueOrNull: DT?
+        protected set
 
     /**
      * Value of the field. Assigning to this property:
@@ -65,7 +59,8 @@ abstract class ZkFieldBase<DT,FT : ZkFieldBase<DT,FT>>(
         set(value) {
             valueOrNull = value
             context.validate()
-            onChangeCallback?.invoke(ChangeOrigin.Code, value, this)
+            @Suppress("UNCHECKED_CAST")
+            onChangeCallback?.invoke(ChangeOrigin.Code, value, this as FT)
         }
 
     var touched = false
@@ -202,10 +197,11 @@ abstract class ZkFieldBase<DT,FT : ZkFieldBase<DT,FT>>(
      * - calls [ZkFieldContext.validate]
      * - calls [onChangeCallback] with [ChangeOrigin.User]
      */
-    open fun onUserChange(newValue : DT) {
+    open fun onUserChange(newValue: DT) {
         touched = true
         context.validate()
-        onChangeCallback?.invoke(ChangeOrigin.User, value, this)
+        @Suppress("UNCHECKED_CAST")
+        onChangeCallback?.invoke(ChangeOrigin.User, newValue, this as FT)
     }
 
     open fun onValidated(report: ValidityReport) {
@@ -269,7 +265,7 @@ abstract class ZkFieldBase<DT,FT : ZkFieldBase<DT,FT>>(
 
         if (propName == null) return false
 
-        val constraints = context.schema.constraints(propName)
+        val constraints = context.schema.constraintsOrNull(propName) ?: return false
 
         var mandatory = false
         constraints.forEach {

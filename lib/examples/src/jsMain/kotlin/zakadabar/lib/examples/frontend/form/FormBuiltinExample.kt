@@ -4,12 +4,12 @@
 package zakadabar.lib.examples.frontend.form
 
 import org.w3c.dom.HTMLElement
-import zakadabar.lib.examples.frontend.crud.BuiltinForm
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.ZkElementMode
 import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.browser.toast.toastSuccess
-import zakadabar.core.browser.util.default
+import zakadabar.core.util.default
+import zakadabar.lib.examples.frontend.crud.BuiltinForm
 
 class FormBuiltinExample(
     element: HTMLElement

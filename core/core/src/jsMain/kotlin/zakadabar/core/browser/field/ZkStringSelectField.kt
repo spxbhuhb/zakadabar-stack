@@ -32,11 +32,12 @@ open class ZkStringSelectField(
     override fun setPropValue(value: Pair<String, String>?) {
         if (value == null) {
             invalidInput = true
+            context.validate()
         } else {
             invalidInput = false
             prop.set(value.first)
+            onUserChange(value.first)
         }
-        context.validate()
     }
 
 }

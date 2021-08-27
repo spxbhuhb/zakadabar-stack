@@ -4,6 +4,7 @@
 package zakadabar.cookbook
 
 import org.w3c.dom.HTMLElement
+import zakadabar.cookbook.browser.field.onchange.FieldOnChangeForm
 import zakadabar.cookbook.browser.form.select.BoSelectFilter
 import zakadabar.cookbook.browser.form.select.StringSelectFilter
 import zakadabar.cookbook.browser.help.TextHelpModal
@@ -31,12 +32,13 @@ class Cookbook : CommonModule {
         when (type) {
 
             "BoSelectFilter" -> BoSelectFilter()
+            "FieldOnChangeForm" -> FieldOnChangeForm()
             "StringSelectFilter" -> StringSelectFilter()
-            "TextHelpModal" -> TextHelpModal()
             "TableCustomActions" -> TableCustomActions()
             "TableEditInline" -> TableEditInline()
             "TableEditInlineNoBo" -> TableEditInlineNoBo()
             "TableVerticalBorderSome" -> TableVerticalBorderSome()
+            "TextHelpModal" -> TextHelpModal()
 
             else -> null
 

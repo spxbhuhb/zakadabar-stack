@@ -31,12 +31,15 @@ open class ZkUuidField(
     override fun setPropValue(value: String) {
         if (value.isBlank() || ! value.matches(pattern)) {
             invalidInput = true
+            context.validate()
             return
         }
 
         invalidInput = false
 
-        prop.set(UUID(value))
+        val iv = UUID(value)
+        prop.set(iv)
+        onUserChange(iv)
     }
 
 }

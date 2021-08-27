@@ -22,11 +22,12 @@ open class ZkEntitySelectField<ST : EntityBo<ST>>(
     override fun setPropValue(value: Pair<EntityId<ST>, String>?) {
         if (value == null) {
             invalidInput = true
+            context.validate()
         } else {
             invalidInput = false
             prop.set(value.first)
+            onUserChange(value.first)
         }
-        context.validate()
     }
 
 }

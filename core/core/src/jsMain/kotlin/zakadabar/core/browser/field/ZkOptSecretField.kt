@@ -44,7 +44,9 @@ open class ZkOptSecretField(
     override fun getPropValue() = prop.get()?.value ?: ""
 
     override fun setPropValue(value: String) {
-        prop.set(Secret(input.value))
+        val iv = Secret(input.value)
+        prop.set(iv)
+        onUserChange(iv)
     }
 
     override fun buildFieldValue() {

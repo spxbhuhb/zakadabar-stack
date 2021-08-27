@@ -33,16 +33,20 @@ open class ZkOptUuidField(
         if (value.isEmpty()) {
             invalidInput = false
             prop.set(null)
+            onUserChange(null)
+            return
         }
 
         if (! value.matches(pattern)) {
             invalidInput = true
+            context.validate()
             return
         }
 
         invalidInput = false
-
-        prop.set(UUID(value))
+        val iv = UUID(value)
+        prop.set(iv)
+        onUserChange(iv)
     }
 
 }

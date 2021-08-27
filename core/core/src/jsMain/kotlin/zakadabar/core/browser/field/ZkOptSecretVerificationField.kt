@@ -44,6 +44,7 @@ open class ZkOptSecretVerificationField(
     override fun setPropValue(value: String) {
         verificationValue = input.value.ifBlank { null }
         valid = (prop.get()?.value == verificationValue)
+        onUserChange(verificationValue?.let { Secret(it) })
     }
 
     override fun buildFieldValue() {

@@ -20,7 +20,7 @@ import zakadabar.core.data.Secret
 import kotlin.reflect.KMutableProperty0
 
 open class ZkSecretField(
-    context : ZkFieldContext,
+    context: ZkFieldContext,
     prop: KMutableProperty0<Secret>,
     newSecret: Boolean = false
 ) : ZkStringBase<Secret, ZkSecretField>(
@@ -28,10 +28,10 @@ open class ZkSecretField(
     prop = prop
 ) {
 
-    override var valueOrNull : Secret?
+    override var valueOrNull: Secret?
         get() = Secret(input.value)
         set(value) {
-            prop.set(value!!)
+            prop.set(value !!)
             input.value = value.toString()
         }
 
@@ -44,7 +44,9 @@ open class ZkSecretField(
     override fun getPropValue() = prop.get().value
 
     override fun setPropValue(value: String) {
-        prop.set(Secret(input.value))
+        val iv = Secret(input.value)
+        prop.set(iv)
+        onUserChange(iv)
     }
 
     override fun buildFieldValue() {

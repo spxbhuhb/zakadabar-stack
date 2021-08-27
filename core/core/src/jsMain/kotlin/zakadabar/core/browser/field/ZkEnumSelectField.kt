@@ -54,12 +54,12 @@ open class ZkEnumSelectField<E : Enum<E>>(
 
         if (value == null) {
             invalidInput = true
+            context.validate()
         } else {
             invalidInput = false
             prop.set(value.first)
+            onUserChange(value.first)
         }
-
-        context.validate()
     }
 
 }

@@ -3,18 +3,18 @@
  */
 package zakadabar.lib.examples.frontend.crud
 
-import zakadabar.lib.examples.data.builtin.BuiltinBo
-import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
-import zakadabar.lib.examples.resources.strings
 import zakadabar.core.browser.crud.ZkCrudTarget
 import zakadabar.core.browser.crud.ZkInlineCrud
-import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.field.ZkStringField
+import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.resource.localized
 import zakadabar.core.resource.localizedStrings
+import zakadabar.lib.examples.data.builtin.BuiltinBo
+import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
+import zakadabar.lib.examples.resources.strings
 
-class BuiltinCrud : ZkCrudTarget<BuiltinBo>()  {
+class BuiltinCrud : ZkCrudTarget<BuiltinBo>() {
     init {
         companion = BuiltinBo.Companion
         boClass = BuiltinBo::class
@@ -34,10 +34,13 @@ class BuiltinInlineCrud : ZkInlineCrud<BuiltinBo>() {
 
 /**
  * Form for [BuiltinBo].
- * 
+ *
  * Generated with Bender at 2021-05-30T14:32:03.693Z.
  */
 class BuiltinForm : ZkForm<BuiltinBo>() {
+
+    val options = listOf("option 1", "option 2", "option3").map { it to it }
+
     override fun onCreate() {
         super.onCreate()
 
@@ -61,14 +64,14 @@ class BuiltinForm : ZkForm<BuiltinBo>() {
                 + bo::optSecretValue
                 + bo::optRecordSelectValue query { ExampleReferenceBo.all().by { it.name } }
                 + bo::optStringValue
-                + select(bo::optStringSelectValue, options = listOf("option 1", "option 2", "option3"))
+                + bo::optStringSelectValue.asSelect() query { options }
                 + bo::optTextAreaValue
                 + bo::optUuidValue
                 + bo::secretValue
                 + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } }
                 + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } } readOnly true
                 + ZkStringField(this@BuiltinForm, bo::stringValue).also { this@BuiltinForm.fields += it }
-                + select(bo::stringSelectValue, options = listOf("option 1", "option 2", "option3"))
+                + bo::stringSelectValue.asSelect() query { options }
                 + textarea(bo::textAreaValue) label strings.textAreaValue
                 + bo::uuidValue
             }
@@ -78,7 +81,7 @@ class BuiltinForm : ZkForm<BuiltinBo>() {
 
 /**
  * Table for [BuiltinBo].
- * 
+ *
  * Generated with Bender at 2021-05-30T14:32:03.693Z.
  */
 class BuiltinTable : ZkTable<BuiltinBo>() {

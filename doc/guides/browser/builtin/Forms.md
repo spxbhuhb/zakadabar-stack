@@ -1,7 +1,10 @@
 # Forms
 
-[ZkForm](/core/core/src/jsMain/kotlin/zakadabar/core/browser/form/ZkForm.kt) provides
-the following functions out of the box:
+Base class for forms is [ZkForm](/core/core/src/jsMain/kotlin/zakadabar/core/browser/form/ZkForm.kt). This is
+a rather complex implementation of web browser forms with many-many functions to make form building as 
+much comfortable as possible.
+
+Features:
 
 - convenient builder functions
 - component library for common data types and use cases
@@ -11,25 +14,31 @@ the following functions out of the box:
 - mode-aware builders (for example: don't show ID for create)
 - automatic translation of titles, explanations
 
-<div data-zk-enrich="Note" data-zk-flavour="Secondary" data-zk-title="Status">
+The form builder uses inline functions heavily. The reason for this is that readability of the code
+is always a big problem for complex forms, so we've tried to make it as readable as possible.
 
-There are a few common data types that we haven't implemented yet.
+For example, a complex field definition may look like:
 
-Most notably date and time fields are not supported as of now.
+```kotlin
++ bo::recordSelectValue query ::queryRecords onChange3 ::onRecordSelectChange saveAs ::recordSelectField
+```
 
-These are on the way, local dates are scheduled for June, others we'll add
-when needed.
+This also can be also written below. However, the syntax coloring (in IDEA) makes the one-liner above very
+much easier to read.
 
-</div>
+```kotlin
+bo::recordSelectValue
+    .unaryPlus()
+    .query(::queryRecords)
+    .onChange3(::onRecordSelectChange)
+    .saveAs(::recordSelectField)
+```
 
 ## Write a Form [source code](/lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormSimpleExample.kt)
 
-To start quickly, you can use the  [Bender](../../tools/Bender.md) to generate a form. 
-Alternatively, you can build your form manually:
-
-1. create a [BO](../../common/Data.md) to store the data of the form
-1. create a class that extends [ZkForm](/core/core/src/jsMain/kotlin/zakadabar/core/browser/form/ZkForm.kt)
-1. override `onCreate` to build the form
+Forms are linked to a business object, the type parameter of `ZkForm` is this business
+object. The example below shows a very simple form, note that `build` and `section`
+is optional, it sets the title, adds surrounding borders etc.
 
 ```kotlin
 class SimpleExampleForm : ZkForm<SimpleExampleBo>() {
@@ -48,7 +57,7 @@ class SimpleExampleForm : ZkForm<SimpleExampleBo>() {
 }
 ```
 
-This simple form above looks like this:
+The form above looks like this:
 
 <div data-zk-enrich="FormSimpleExample"></div>
 
@@ -105,9 +114,9 @@ therefore the labels and the inputs are not in a grid, but below each other.
 Fields of a form are usually bound to a property of the BO the form handles. When
 the user changes the value of an input, the value in the BO also changes.
 
-This does not work the other way, if you change the value in the BO, the form field
-does not update automatically. Please do not build on this behaviour because
-we might change this in the future.
+However, if you change the value in the BO, the form field does not update 
+automatically. To update the form field you have to set the `value` property
+of the field.
 
 ### Built-In Fields [source code](/lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormBuiltinExample.kt)
 
@@ -117,11 +126,44 @@ This form shows all built in field types.
 
 ### Find Fields
 
-Use the `find` extension function to find the field element that belongs to a 
-given property easily:
+Use the `find` extension function to find the field that belongs to a given
+property easily.
+
+This function returns with `ZkFieldBase` type, so you have to use `as` if 
+you need field type specific access.
 
 ```kotlin
-+ bo::name.find()
+(bo::intValue.find() as ZkIntField).value = 15
+```
+
+### Save As
+
+Convenience functions provided to save the field into a variable or a property easily:
+
+```kotlin
+class Form : ZkForm() {
+    
+    lateinit var intValue : ZkIntField
+    
+    override fun onCreate() {
+        
+        + bo::intValue saveAs ::intField
+        
+    }
+}
+```
+
+```kotlin
+class Form : ZkForm() {
+    
+    override fun onCreate() {
+    
+        lateinit var intValue : ZkIntField
+   
+        + bo::intValue saveAs { intValue = it }
+   
+    }
+}
 ```
 
 ### Add Fields
@@ -157,37 +199,45 @@ Types that support the property shorthand:
 
 #### Select For References
 
-Add a read-write select for an `EntityId` field use the code below. This
-results in a select element that
+To add a select for an `EntityId` property use the code below. This
+results in a select element on the UI.
 
-- automatically executes:
-    - `comm.all()` for the referenced type if the field is read-write
-    - `comm.read(id)` for the referenced type if the field is read-only
-- creates the option labels by calling the function passed to `selectBy`
-
-Read-Write version:
+The block after `query` is a suspend function that is used to get the 
+items to shown in the select.
 
 ```kotlin
-+ bo::referenceField options { selectBy { it.name } }
++ bo::referenceField query { /* select data */ }
 ```
 
-Read only version:
+To include all possible referenced entities:
 
 ```kotlin
-+ bo::referenceField options { selectBy { it.name } readOnly true }
++ bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } }
 ```
 
-### Helper functions
+#### Select For Strings
 
-#### constString
+To add a select for `String` and `String?` fields, use the `asSelect` 
+transform function.
+
+The block after `query` is a suspend function that is used to get the
+items to shown in the select.
+
+```kotlin
+val options = listOf("option 1", "option 2", "option3").map { it to it }
+
++ bo::stringSelectValue.asSelect() query { options }
+```
+
+#### Constant String
 
 To add a constant string as a field, use the `constString` function:
 
 ```kotlin
-constString("label") { "value" }
++ constString("label") { "value" }
 ```
 
-#### opt(Boolean)
+#### Optional Boolean
 
 To add an optional boolean property use the `opt` function. This function
 lets the user select from three values:
@@ -202,31 +252,7 @@ You can customize the true and false texts with the function parameters.
 + opt(bo::optBooleanValue, stringStore.trueText, stringStore.falseText)
 ```
 
-#### select(EntityId)
-
-To add a select for `EntityId` and `EntityId?` fields, use the `select` helper function.
-Fetching all references works for small data sets, but consider more advanced
-approaches (cached entity comm, global pre-fetch, filtered select) when the
-number of options is high.
-
-```kotlin
-+ select(bo::recordSelectValue) { 
-    ExampleReferenceBo.all().by { it.name }
-}
-```
-
-#### select(String)
-
-To add a select for `String` and `String?` fields, use the `select` helper function.
-
-```kotlin
-+ select(
-    bo::stringSelectValue, 
-    options = listOf("option 1", "option 2", "option3")
-)
-```
-
-#### textarea
+#### TextArea
 
 To use a textarea for a string field, use the `textarea` function:
 
@@ -278,6 +304,67 @@ the context, you might have to qualify `this` as the example does.
     this@BuiltinForm.fields += it 
 }
 ```
+
+## Field Value Change
+
+### Change Callback
+
+Each field have an `onChangeCallback` property that may store a function. The field
+executes this function whenever the value changes.
+
+The `onChange` and `onChange3` transform functions set `onChangeCallback` when applied to a 
+field. You can also set the `onChangeCallback` property directly.
+
+- `onChange` has one parameter: the changed value
+- `onChange3` has three parameters: origin of the change, the value and the field itself
+
+Origin of the change is a [ChangeOrigin](/core/core/src/jsMain/kotlin/zakadabar/core/browser/field/ChangeOrigin.kt).
+This enumeration has two values `User` and `Code`. 
+
+- `User` means the origin of the change is a browser event.
+- `Code` means the origin of the change is an assignment to the `value` property
+
+```kotlin
++ bo::booleanValue onChange ::onBooleanChange
+```
+
+```kotlin
++ bo::stringValue onChange3 { origin, value, field -> toastSuccess { value } }
+```
+
+Example: [Field Change Event](/doc/cookbook/browser/field/onchange/recipe.md)
+
+### Field Value
+
+Each field has a `value` and a `valueOrNull` property. These can be used to get 
+or set the value of the field.
+
+Assigning to the `value` property:
+
+- changes the value in the BO (except constant fields)
+- updates the UI
+- calls `ZkFieldContext.validate`
+- calls `onChangeCallback` with `ChangeOrigin.Code`
+- 
+Reading the `value` property:
+
+- throws `IllegalStateException` when `invalidInput` is true
+- throws `NoSuchElementException` when the field is not set
+
+```kotlin
++ bo::intValue saveAs ::intField
+
++ buttonPrimary("Change intValue to 15") {
+    intField.value = 15
+}
+```
+
+The `valueOrNull` property may be uses to read the value without exceptions
+thrown. 
+
+`valueOrNull` does not allow writes to prevent null pointer exceptions (it
+has a protected setter available only for classes that extend `ZkFieldBase`).
+
 
 ### Write a Field
 
@@ -350,6 +437,8 @@ class FormFieldsDefault : ZkElement() {
 }
 ```
 
-## Images
+## Images And Attachments
 
-TBW
+Use [ZkImageField](/lib/blobs/src/jsMain/kotlin/zakadabar/lib/blobs/browser/image/ZkImagesField.kt) 
+and [ZkAttachmentsField](/lib/blobs/src/jsMain/kotlin/zakadabar/lib/blobs/browser/attachment/ZkAttachmentsField.kt) 
+to provide image or attachment handling.

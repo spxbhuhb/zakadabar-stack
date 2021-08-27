@@ -22,15 +22,15 @@ open class ZkOptEnumSelectField<E : Enum<E>>(
     context : ZkFieldContext,
     val prop: KMutableProperty0<E?>,
     val toEnum: (String) -> E
-) : ZkSelectBase<E,ZkOptEnumSelectField<E>>(context, prop.name) {
+) : ZkSelectBase<E?,ZkOptEnumSelectField<E>>(context, prop.name) {
 
     override fun fromString(string: String) = toEnum(string)
 
     override fun getPropValue() = prop.get()
 
-    override fun setPropValue(value: Pair<E, String>?) {
+    override fun setPropValue(value: Pair<E?, String>?) {
         prop.set(value?.first)
-        context.validate()
+        onUserChange(value?.first)
     }
 
 }

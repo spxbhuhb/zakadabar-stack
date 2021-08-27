@@ -7,8 +7,8 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import zakadabar.core.data.BaseBo
-import zakadabar.core.data.Secret
 import zakadabar.core.data.EntityId
+import zakadabar.core.data.Secret
 import zakadabar.core.schema.descriptor.BoConstraint
 import zakadabar.core.schema.descriptor.BoDescriptor
 import zakadabar.core.schema.descriptor.BoProperty
@@ -146,13 +146,23 @@ open class BoSchema() {
      *
      * @throws NoSuchElementException  when there is no property with the given name
      */
-    fun constraints(propName: String): List<BoConstraint> {
+    fun constraints(propName: String): List<BoConstraint> =
+        constraintsOrNull(propName) ?: throw NoSuchElementException()
+
+    /**
+     * Get a constraints of a property.
+     *
+     * @param  propName  name of the property
+     *
+     * @return list of constraints, empty when there are no constraints, null when there is no such property
+     */
+    fun constraintsOrNull(propName: String): List<BoConstraint>? {
         entries.forEach { entry ->
             if (entry.key.name == propName) {
                 return entry.value.constraints()
             }
         }
-        throw NoSuchElementException()
+        return null
     }
 
     // FIXME package and class for BoDescriptor

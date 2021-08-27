@@ -103,7 +103,7 @@ open class ZkForm<T : BaseBo>(
      */
     override var onBack = { application.back() }
 
-    val fields = mutableListOf<ZkFieldBase<*,*>>()
+    val fields = mutableListOf<ZkFieldBase<*, *>>()
 
     /**
      * False until the first time the user clicks on the submit button.
@@ -238,8 +238,8 @@ open class ZkForm<T : BaseBo>(
         return true
     }
 
-    open fun invalidTouchedFields(report: ValidityReport): List<ZkFieldBase<*,*>> {
-        val invalid = mutableListOf<ZkFieldBase<*,*>>()
+    open fun invalidTouchedFields(report: ValidityReport): List<ZkFieldBase<*, *>> {
+        val invalid = mutableListOf<ZkFieldBase<*, *>>()
 
         report.fails.keys.forEach { propName ->
             val field = fields.firstOrNull { it.propName == propName } ?: return@forEach
@@ -409,13 +409,13 @@ open class ZkForm<T : BaseBo>(
     /**
      * Create and add a form field.
      */
-    open fun <T : ZkFieldBase<*,*>, PT : KProperty<*>> add(property: PT, function: (PT) -> T): T =
+    open fun <T : ZkFieldBase<*, *>, PT : KProperty<*>> add(property: PT, function: (PT) -> T): T =
         function(property).also {
             + it
             fields += it
         }
 
-    open fun <T : ZkFieldBase<*,*>> add(field: T): T =
+    open fun <T : ZkFieldBase<*, *>> add(field: T): T =
         field.also {
             + it
             fields += it
@@ -465,6 +465,7 @@ open class ZkForm<T : BaseBo>(
 
     fun <T : EntityBo<T>> List<T>.by(field: (it: T) -> String) = map { it.id to field(it) }.sortedBy { it.second }
 
+    @Deprecated("use '.asSelect' instead")
     fun select(kProperty0: KMutableProperty0<String>, label: String? = null, sortOptions: Boolean = true, options: List<String>): ZkStringSelectField {
         return add(kProperty0) {
             ZkStringSelectField(this@ZkForm, kProperty0).apply {
@@ -473,6 +474,7 @@ open class ZkForm<T : BaseBo>(
         }
     }
 
+    @Deprecated("use '.asSelect' instead")
     fun select(kProperty0: KMutableProperty0<String?>, options: List<String>): ZkOptStringSelectField {
         return add(kProperty0) {
             ZkOptStringSelectField(this@ZkForm, kProperty0).apply {
@@ -689,14 +691,22 @@ open class ZkForm<T : BaseBo>(
     //  Transformed adds
     // ------------------------------------------------------------------------
 
-    inline operator fun <reified VT,FT:ZkSelectBase<VT,FT>> ZkSelectBase<VT,FT>.unaryPlus(): ZkSelectBase<VT,FT> =
-        add(this)
+    /**
+     * This class is used to wrap transformed adds so form specific `unaryPlus`
+     * is called instead of the one from [ZkElement].
+     */
+    inner class FormFieldWrapper<FT : ZkFieldBase<*, *>>(
+        val field: FT
+    )
 
-    fun KMutableProperty0<String>.asSelect(): ZkStringSelectField =
-        ZkStringSelectField(this@ZkForm, this)
+    inline operator fun <reified FT : ZkFieldBase<*, *>> FormFieldWrapper<FT>.unaryPlus(): FT =
+        add(this.field)
 
-    fun KMutableProperty0<String?>.asSelect(): ZkOptStringSelectField =
-        ZkOptStringSelectField(this@ZkForm, this)
+    fun KMutableProperty0<String>.asSelect(): FormFieldWrapper<ZkStringSelectField> =
+        FormFieldWrapper(ZkStringSelectField(this@ZkForm, this))
+
+    fun KMutableProperty0<String?>.asSelect(): FormFieldWrapper<ZkOptStringSelectField> =
+        FormFieldWrapper(ZkOptStringSelectField(this@ZkForm, this))
 
     // -------------------------------------------------------------------------
     //  Property field convenience methods
@@ -705,7 +715,7 @@ open class ZkForm<T : BaseBo>(
     /**
      * Find a field for this property.
      */
-    fun KMutableProperty0<*>.find(): ZkFieldBase<*,*> {
+    fun KMutableProperty0<*>.find(): ZkFieldBase<*, *> {
         return fields.first { it.propName == this.name }
     }
 
@@ -717,27 +727,46 @@ open class ZkForm<T : BaseBo>(
     // I know this is a minor detail, but I feel it makes the form code much more readable.
 
     infix fun ZkElement?.label(value: String): ZkElement? {
-        if (this is ZkFieldBase<*,*>) this.labelText = value
+        if (this is ZkFieldBase<*, *>) this.labelText = value
         return this
     }
 
     infix fun ZkElement?.readOnly(value: Boolean): ZkElement? {
-        if (this is ZkFieldBase<*,*>) this.readOnly = value
+        if (this is ZkFieldBase<*, *>) this.readOnly = value
         return this
     }
 
-    infix fun <VT,FT:ZkSelectBase<VT,FT>> ZkSelectBase<VT,FT>.sort(value: Boolean): ZkSelectBase<VT,FT> {
+    infix fun <VT, FT : ZkSelectBase<VT, FT>> ZkSelectBase<VT, FT>.sort(value: Boolean): ZkSelectBase<VT, FT> {
         sort = value
         return this
     }
 
-    infix fun <VT,FT:ZkSelectBase<VT,FT>> ZkSelectBase<VT,FT>.query(block: suspend () -> List<Pair<VT, String>>): ZkSelectBase<VT,FT> {
+    infix fun <VT, FT : ZkSelectBase<VT, FT>> ZkSelectBase<VT, FT>.query(block: suspend () -> List<Pair<VT, String>>): ZkSelectBase<VT, FT> {
         fetch = block
         return this
     }
 
-    infix fun <VT,FT:ZkSelectBase<VT,FT>> ZkSelectBase<VT,FT>.saveAs(block: (it : ZkSelectBase<VT,FT>) -> Unit): ZkSelectBase<VT,FT> {
+    @Suppress("UNCHECKED_CAST")
+    infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.saveAs(block: (it: FT) -> Unit): FT {
+        this as FT
         block(this)
+        return this
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.saveAs(prop : KMutableProperty0<FT>): FT {
+        this as FT
+        prop.set(this)
+        return this
+    }
+
+    infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.onChange(block: (DT) -> Unit): ZkFieldBase<DT, FT> {
+        onChangeCallback = { _,value,_ -> block(value) }
+        return this
+    }
+
+    infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.onChange3(block: (ChangeOrigin, DT, FT) -> Unit): ZkFieldBase<DT, FT> {
+        onChangeCallback = block
         return this
     }
 
