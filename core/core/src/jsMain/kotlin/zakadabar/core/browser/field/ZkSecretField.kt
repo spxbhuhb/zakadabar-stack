@@ -23,10 +23,17 @@ open class ZkSecretField(
     context : ZkFieldContext,
     prop: KMutableProperty0<Secret>,
     newSecret: Boolean = false
-) : ZkStringBase<Secret>(
+) : ZkStringBase<Secret, ZkSecretField>(
     context = context,
     prop = prop
 ) {
+
+    override var valueOrNull : Secret?
+        get() = Secret(input.value)
+        set(value) {
+            prop.set(value!!)
+            input.value = value.toString()
+        }
 
     open var newSecret = newSecret
         set(value) {

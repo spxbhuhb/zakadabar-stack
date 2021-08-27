@@ -29,7 +29,7 @@ open class ZkEnumSelectField<E : Enum<E>>(
     context : ZkFieldContext,
     val prop: KMutableProperty0<E>,
     val toEnum: (String) -> E
-) : ZkSelectBase<E>(context, prop.name) {
+) : ZkSelectBase<E,ZkEnumSelectField<E>>(context, prop.name) {
 
     var shadowValue: E? = null
 

@@ -10,7 +10,7 @@ import kotlin.reflect.KMutableProperty0
 open class ZkOptUuidField(
     context : ZkFieldContext,
     prop: KMutableProperty0<UUID?>
-) : ZkStringBase<UUID?>(
+) : ZkStringBase<UUID?, ZkOptUuidField>(
     context = context,
     prop = prop
 ) {
@@ -18,6 +18,13 @@ open class ZkOptUuidField(
     companion object {
         val pattern = Regex("^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}\$")
     }
+
+    override var valueOrNull : UUID?
+        get() = input.value.ifEmpty { null }?.let { UUID(it) }
+        set(value) {
+            prop.set(value)
+            input.value = value?.toString() ?: ""
+        }
 
     override fun getPropValue() = prop.get()?.toString() ?: ""
 

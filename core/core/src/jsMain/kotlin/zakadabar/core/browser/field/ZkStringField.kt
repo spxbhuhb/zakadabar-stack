@@ -21,10 +21,17 @@ import kotlin.reflect.KMutableProperty0
 open class ZkStringField(
     context : ZkFieldContext,
     prop: KMutableProperty0<String>
-) : ZkStringBase<String>(
+) : ZkStringBase<String,ZkStringField>(
     context = context,
     prop = prop
 ) {
+
+    override var valueOrNull : String?
+        get() = input.value
+        set(value) {
+            prop.set(value!!)
+            input.value = value
+        }
 
     override fun getPropValue() = prop.get()
 

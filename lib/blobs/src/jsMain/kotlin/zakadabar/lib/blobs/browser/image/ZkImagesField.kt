@@ -62,6 +62,12 @@ open class ZkImagesField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
     form, comm, reference, blobCountMax, disposition, blobClass, makeBlobCb
 ) {
 
+    override var valueOrNull: Unit?
+        get() = throw NotImplementedError()
+        set(value) {
+            throw NotImplementedError()
+        }
+
     override fun onCreate() {
         super.onCreate()
 

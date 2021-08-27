@@ -73,7 +73,7 @@ abstract class ZkBlobField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
     @Deprecated("EOL: 2021.8.1  -  use blobClass or makeBlobCb instead")
     open val make: ((File) -> BT)? = null,
     open val makeBlobCb: ((File) -> BT)? = make
-) : ZkFieldBase<Unit>(
+) : ZkFieldBase<Unit,ZkBlobField<T,BT>>(
     context = form,
     propName = ""
 ) {

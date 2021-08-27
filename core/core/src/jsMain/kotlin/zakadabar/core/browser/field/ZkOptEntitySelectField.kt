@@ -11,7 +11,7 @@ import kotlin.reflect.KMutableProperty0
 open class ZkOptEntitySelectField<ST : EntityBo<ST>>(
     context : ZkFieldContext,
     val prop: KMutableProperty0<EntityId<ST>?>
-) : ZkSelectBase<EntityId<ST>>(context, prop.name) {
+) : ZkSelectBase<EntityId<ST>,ZkOptEntitySelectField<ST>>(context, prop.name) {
 
     override fun fromString(string: String): EntityId<ST> {
         return EntityId(string)

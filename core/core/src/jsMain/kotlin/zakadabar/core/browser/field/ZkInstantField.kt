@@ -27,7 +27,7 @@ import kotlin.reflect.KMutableProperty0
 open class ZkInstantField(
     context: ZkFieldContext,
     val prop: KMutableProperty0<Instant>
-) : ZkFieldBase<Instant>(
+) : ZkFieldBase<Instant,ZkInstantField>(
     context = context,
     propName = prop.name
 ) {
@@ -35,6 +35,12 @@ open class ZkInstantField(
     private val input = document.createElement("input") as HTMLInputElement
 
     override var readOnly: Boolean = true
+
+    override var valueOrNull : Instant?
+        get() = prop.get()
+        set(value) {
+           throw IllegalStateException("instants cannot be changed")
+        }
 
     override fun buildFieldValue() {
         input.classList += context.styles.disabledString

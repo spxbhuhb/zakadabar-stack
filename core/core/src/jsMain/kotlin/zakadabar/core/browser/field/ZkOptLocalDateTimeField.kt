@@ -17,16 +17,25 @@
 package zakadabar.core.browser.field
 
 import kotlinx.datetime.LocalDateTime
+import zakadabar.core.resource.localized
 import zakadabar.core.resource.toLocalDateTimeOrNull
 import kotlin.reflect.KMutableProperty0
 
 open class ZkOptLocalDateTimeField(
     context : ZkFieldContext,
     prop: KMutableProperty0<LocalDateTime?>
-) : ZkStringBase<LocalDateTime?>(
+) : ZkStringBase<LocalDateTime?,ZkOptLocalDateTimeField>(
     context = context,
     prop = prop
 ) {
+
+    override var valueOrNull : LocalDateTime?
+        get() = input.value.toLocalDateTimeOrNull
+        set(value) {
+            prop.set(value)
+            input.value = value?.localized ?: ""
+            invalidInput = false
+        }
 
     override fun getPropValue() = prop.get()?.toString() ?: ""
 

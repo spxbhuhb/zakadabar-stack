@@ -28,7 +28,7 @@ import kotlin.reflect.KProperty0
 open class ZkEntityIdField<T : BaseBo>(
     context : ZkFieldContext,
     private val prop: KProperty0<EntityId<T>>
-) : ZkFieldBase<EntityId<T>>(
+) : ZkFieldBase<EntityId<T>,ZkEntityIdField<T>>(
     context = context,
     propName = prop.name
 ) {
@@ -36,6 +36,12 @@ open class ZkEntityIdField<T : BaseBo>(
     private val input = document.createElement("input") as HTMLInputElement
 
     override var readOnly = context.readOnly || prop !is KMutableProperty<*>
+
+    override var valueOrNull : EntityId<T>?
+        get() = EntityId(input.value)
+        set(value) {
+            throw IllegalStateException("cannot set a read-only entity id")
+        }
 
     override fun buildFieldValue() {
         input.classList += context.styles.disabledString

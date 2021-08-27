@@ -24,11 +24,18 @@ open class ZkSecretVerificationField(
     context : ZkFieldContext,
     prop: KMutableProperty0<Secret>,
     label: String = localizedStrings.getNormalized(prop.name + "Verification")
-) : ZkStringBase<Secret>(
+) : ZkStringBase<Secret, ZkSecretVerificationField>(
     context = context,
     prop = prop,
     label = label
 ) {
+
+    override var valueOrNull : Secret?
+        get() = Secret(verificationValue)
+        set(value) {
+            verificationValue = value!!.value
+            input.value = value.value
+        }
 
     var verificationValue = ""
 

@@ -34,7 +34,7 @@ class StringSelectFilter : ZkForm<ExampleStringFormBo>() {
 
     // the select we want to filter
 
-    lateinit var filteredField: ZkSelectBase<String>
+    lateinit var filteredField: ZkSelectBase<String,*>
 
     override fun onCreate() {
         super.onCreate()

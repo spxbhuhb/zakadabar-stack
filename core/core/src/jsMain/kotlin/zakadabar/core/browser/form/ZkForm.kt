@@ -103,7 +103,7 @@ open class ZkForm<T : BaseBo>(
      */
     override var onBack = { application.back() }
 
-    val fields = mutableListOf<ZkFieldBase<*>>()
+    val fields = mutableListOf<ZkFieldBase<*,*>>()
 
     /**
      * False until the first time the user clicks on the submit button.
@@ -238,8 +238,8 @@ open class ZkForm<T : BaseBo>(
         return true
     }
 
-    open fun invalidTouchedFields(report: ValidityReport): List<ZkFieldBase<*>> {
-        val invalid = mutableListOf<ZkFieldBase<*>>()
+    open fun invalidTouchedFields(report: ValidityReport): List<ZkFieldBase<*,*>> {
+        val invalid = mutableListOf<ZkFieldBase<*,*>>()
 
         report.fails.keys.forEach { propName ->
             val field = fields.firstOrNull { it.propName == propName } ?: return@forEach
@@ -409,13 +409,13 @@ open class ZkForm<T : BaseBo>(
     /**
      * Create and add a form field.
      */
-    open fun <T : ZkFieldBase<*>, PT : KProperty<*>> add(property: PT, function: (PT) -> T): T =
+    open fun <T : ZkFieldBase<*,*>, PT : KProperty<*>> add(property: PT, function: (PT) -> T): T =
         function(property).also {
             + it
             fields += it
         }
 
-    open fun <T : ZkFieldBase<*>> add(field: T): T =
+    open fun <T : ZkFieldBase<*,*>> add(field: T): T =
         field.also {
             + it
             fields += it
@@ -689,7 +689,7 @@ open class ZkForm<T : BaseBo>(
     //  Transformed adds
     // ------------------------------------------------------------------------
 
-    inline operator fun <reified T> ZkSelectBase<T>.unaryPlus(): ZkSelectBase<T> =
+    inline operator fun <reified VT,FT:ZkSelectBase<VT,FT>> ZkSelectBase<VT,FT>.unaryPlus(): ZkSelectBase<VT,FT> =
         add(this)
 
     fun KMutableProperty0<String>.asSelect(): ZkStringSelectField =
@@ -705,7 +705,7 @@ open class ZkForm<T : BaseBo>(
     /**
      * Find a field for this property.
      */
-    fun KMutableProperty0<*>.find(): ZkFieldBase<*> {
+    fun KMutableProperty0<*>.find(): ZkFieldBase<*,*> {
         return fields.first { it.propName == this.name }
     }
 
@@ -717,26 +717,26 @@ open class ZkForm<T : BaseBo>(
     // I know this is a minor detail, but I feel it makes the form code much more readable.
 
     infix fun ZkElement?.label(value: String): ZkElement? {
-        if (this is ZkFieldBase<*>) this.labelText = value
+        if (this is ZkFieldBase<*,*>) this.labelText = value
         return this
     }
 
     infix fun ZkElement?.readOnly(value: Boolean): ZkElement? {
-        if (this is ZkFieldBase<*>) this.readOnly = value
+        if (this is ZkFieldBase<*,*>) this.readOnly = value
         return this
     }
 
-    infix fun <VT> ZkSelectBase<VT>.sort(value: Boolean): ZkSelectBase<VT> {
+    infix fun <VT,FT:ZkSelectBase<VT,FT>> ZkSelectBase<VT,FT>.sort(value: Boolean): ZkSelectBase<VT,FT> {
         sort = value
         return this
     }
 
-    infix fun <VT> ZkSelectBase<VT>.query(block: suspend () -> List<Pair<VT, String>>): ZkSelectBase<VT> {
+    infix fun <VT,FT:ZkSelectBase<VT,FT>> ZkSelectBase<VT,FT>.query(block: suspend () -> List<Pair<VT, String>>): ZkSelectBase<VT,FT> {
         fetch = block
         return this
     }
 
-    infix fun <VT> ZkSelectBase<VT>.saveAs(block: (it : ZkSelectBase<VT>) -> Unit): ZkSelectBase<VT> {
+    infix fun <VT,FT:ZkSelectBase<VT,FT>> ZkSelectBase<VT,FT>.saveAs(block: (it : ZkSelectBase<VT,FT>) -> Unit): ZkSelectBase<VT,FT> {
         block(this)
         return this
     }

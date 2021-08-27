@@ -24,12 +24,19 @@ import kotlin.reflect.KMutableProperty0
 open class ZkTextAreaField(
     context : ZkFieldContext,
     private val prop: KMutableProperty0<String>
-) : ZkFieldBase<String>(
+) : ZkFieldBase<String,ZkTextAreaField>(
     context = context,
     propName = prop.name
 ) {
 
     open val area = document.createElement("textarea") as HTMLTextAreaElement
+
+    override var valueOrNull : String?
+        get() = area.value
+        set(value) {
+            prop.set(value!!)
+            area.value = value
+        }
 
     override var readOnly = context.readOnly
         set(value) {

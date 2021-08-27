@@ -16,13 +16,57 @@ import zakadabar.core.schema.descriptor.BoConstraintType
 import zakadabar.core.schema.descriptor.BooleanBoConstraint
 import zakadabar.core.schema.descriptor.IntBoConstraint
 
-abstract class ZkFieldBase<DT>(
+abstract class ZkFieldBase<DT,FT : ZkFieldBase<DT,FT>>(
     val context: ZkFieldContext,
     val propName: String?,
     label: String? = null
 ) : ZkElement() {
 
     abstract var readOnly: Boolean
+
+    enum class ChangeOrigin {
+        User,
+        Code
+    }
+
+    /**
+     * Function to execute then the value changes.
+     *
+     * Parameters:
+     *
+     * 1. origin of the change
+     * 1. the new value
+     * 1. the field that changed
+     */
+    var onChangeCallback : ((ChangeOrigin, DT, ZkFieldBase<DT,FT>) -> Unit)? = null
+
+    /**
+     * The UI value of the field or null when it is not set or [invalidInput] is true.
+     * The setter of this property has to perform null checks when necessary.
+     */
+    protected abstract var valueOrNull: DT?
+
+    /**
+     * Value of the field. Assigning to this property:
+     *
+     * - changes the value in the BO (except constant fields)
+     * - updates the UI
+     * - calls [ZkFieldContext.validate]
+     * - calls [onChangeCallback] with [ChangeOrigin.Code]
+     *
+     * @throws IllegalStateException When [invalidInput] is true.
+     * @throws NoSuchElementException When the field is not set.
+     */
+    open var value: DT
+        get() {
+            if (invalidInput) throw IllegalStateException()
+            return valueOrNull ?: throw NoSuchElementException()
+        }
+        set(value) {
+            valueOrNull = value
+            context.validate()
+            onChangeCallback?.invoke(ChangeOrigin.Code, value, this)
+        }
 
     var touched = false
 
@@ -123,7 +167,7 @@ abstract class ZkFieldBase<DT>(
             + div(context.styles.mandatoryMark) { ! "&nbsp;*" }
         }
     }
-    
+
     open fun focusEvents(element: HTMLElement) {
         on(element, "blur") {
             context.validate()
@@ -148,6 +192,20 @@ abstract class ZkFieldBase<DT>(
      */
     open fun buildFieldValue() {
 
+    }
+
+    /**
+     * The field calls this method whenever the user changes the value of
+     * the field. Default implementation:
+     *
+     * - sets [touched] to true
+     * - calls [ZkFieldContext.validate]
+     * - calls [onChangeCallback] with [ChangeOrigin.User]
+     */
+    open fun onUserChange(newValue : DT) {
+        touched = true
+        context.validate()
+        onChangeCallback?.invoke(ChangeOrigin.User, value, this)
     }
 
     open fun onValidated(report: ValidityReport) {
@@ -223,5 +281,4 @@ abstract class ZkFieldBase<DT>(
 
         return mandatory
     }
-
 }

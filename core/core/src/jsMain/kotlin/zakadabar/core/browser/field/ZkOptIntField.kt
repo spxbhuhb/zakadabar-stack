@@ -21,10 +21,18 @@ import kotlin.reflect.KMutableProperty0
 open class ZkOptIntField(
     context : ZkFieldContext,
     prop: KMutableProperty0<Int?>
-) : ZkStringBase<Int?>(
+) : ZkStringBase<Int?,ZkOptIntField>(
     context = context,
     prop = prop
 ) {
+
+    override var valueOrNull : Int?
+        get() = input.value.toIntOrNull()
+        set(value) {
+            prop.set(value)
+            input.value = value.toString()
+            invalidInput = false
+        }
 
     override fun getPropValue() = prop.get()?.toString() ?: ""
 

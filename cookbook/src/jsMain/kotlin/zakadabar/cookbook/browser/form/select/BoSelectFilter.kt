@@ -54,7 +54,7 @@ class BoSelectFilter : ZkForm<ExampleReferenceFormBo>() {
 
     // the select we want to filter
 
-    lateinit var filteredField: ZkSelectBase<EntityId<ExampleFilteredBo>>
+    lateinit var filteredField: ZkSelectBase<EntityId<ExampleFilteredBo>,*>
 
     override fun onCreate() {
         super.onCreate()

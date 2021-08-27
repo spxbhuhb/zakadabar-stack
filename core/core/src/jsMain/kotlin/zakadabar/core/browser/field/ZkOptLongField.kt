@@ -21,10 +21,18 @@ import kotlin.reflect.KMutableProperty0
 open class ZkOptLongField(
     context : ZkFieldContext,
     prop: KMutableProperty0<Long?>
-) : ZkStringBase<Long?>(
+) : ZkStringBase<Long?,ZkOptLongField>(
     context = context,
     prop = prop
 ) {
+
+    override var valueOrNull : Long?
+        get() = input.value.toLongOrNull()
+        set(value) {
+            prop.set(value)
+            input.value = value?.toString() ?: ""
+            invalidInput = false
+        }
 
     override fun getPropValue() = prop.get()?.toString() ?: ""
 

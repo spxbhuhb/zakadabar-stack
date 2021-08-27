@@ -19,9 +19,9 @@ package zakadabar.core.browser.field
 import kotlin.reflect.KMutableProperty0
 
 open class ZkOptStringSelectField(
-    context : ZkFieldContext,
+    context: ZkFieldContext,
     val prop: KMutableProperty0<String?>
-) : ZkSelectBase<String>(context, prop.name) {
+) : ZkSelectBase<String, ZkOptStringSelectField>(context, prop.name) {
 
     override fun fromString(string: String): String {
         return string

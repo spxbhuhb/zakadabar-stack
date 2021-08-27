@@ -21,10 +21,18 @@ import kotlin.reflect.KMutableProperty0
 open class ZkDoubleField(
     context: ZkFieldContext,
     prop: KMutableProperty0<Double>
-) : ZkStringBase<Double>(
+) : ZkStringBase<Double, ZkDoubleField>(
     context = context,
     prop = prop
 ) {
+
+    override var valueOrNull : Double?
+        get() = input.value.toDoubleOrNull()
+        set(value) {
+            prop.set(value!!)
+            input.value = value.toString()
+            invalidInput = false
+        }
 
     override fun getPropValue() = prop.get().toString()
 

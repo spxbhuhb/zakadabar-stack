@@ -23,14 +23,20 @@ import kotlin.reflect.KMutableProperty0
 
 open class ZkBooleanField(
     context: ZkFieldContext,
-    val prop: KMutableProperty0<Boolean>,
-    val onChangeCallback : ((Boolean) -> Unit)? = null
-) : ZkFieldBase<Boolean>(
+    val prop: KMutableProperty0<Boolean>
+) : ZkFieldBase<Boolean, ZkBooleanField>(
     context = context,
     propName = prop.name
 ) {
 
     open val checkbox = ZkCheckBox(ZkIcons.check)
+
+    override var valueOrNull : Boolean?
+        get() = checkbox.checked
+        set(value) {
+            prop.set(value!!)
+            checkbox.checked = value
+        }
 
     override var readOnly: Boolean = context.readOnly
         set(value) {
@@ -72,12 +78,7 @@ open class ZkBooleanField(
 
     open fun changeValue(newValue : Boolean) {
         prop.set(newValue)
-        touched = true
-        onChange(newValue)
-        context.validate()
+        onUserChange(newValue)
     }
 
-    open fun onChange(value : Boolean) {
-        onChangeCallback?.invoke(value)
-    }
 }

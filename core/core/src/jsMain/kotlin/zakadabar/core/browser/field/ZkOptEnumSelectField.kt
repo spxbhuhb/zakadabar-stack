@@ -22,7 +22,7 @@ open class ZkOptEnumSelectField<E : Enum<E>>(
     context : ZkFieldContext,
     val prop: KMutableProperty0<E?>,
     val toEnum: (String) -> E
-) : ZkSelectBase<E>(context, prop.name) {
+) : ZkSelectBase<E,ZkOptEnumSelectField<E>>(context, prop.name) {
 
     override fun fromString(string: String) = toEnum(string)
 

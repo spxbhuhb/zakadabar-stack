@@ -9,7 +9,7 @@ open class ZkEntitySelectFilter(
     context: ZkFieldContext,
     var getValue: () -> EntityId<*>?,
     onSelected: (Pair<EntityId<*>, String>?) -> Unit
-) : ZkSelectBase<EntityId<*>>(context, "", onSelectCallback = onSelected) {
+) : ZkSelectBase<EntityId<*>,ZkEntitySelectFilter>(context, "", onSelectCallback = onSelected) {
 
     override fun fromString(string: String): EntityId<*> {
         return items.first().first

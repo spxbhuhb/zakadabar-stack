@@ -21,17 +21,17 @@ import org.w3c.dom.HTMLInputElement
 import zakadabar.core.browser.util.plusAssign
 import kotlin.reflect.KMutableProperty0
 
-abstract class ZkStringBase<VT>(
-    context : ZkFieldContext,
-    protected val prop: KMutableProperty0<VT>,
+abstract class ZkStringBase<VT, FT : ZkStringBase<VT,FT>>(
+    context: ZkFieldContext,
+    open val prop: KMutableProperty0<VT>,
     label: String? = null
-) : ZkFieldBase<VT>(
+) : ZkFieldBase<VT,FT>(
     context = context,
     propName = prop.name,
     label = label
 ) {
 
-    protected val input = document.createElement("input") as HTMLInputElement
+    open val input = document.createElement("input") as HTMLInputElement
 
     override var readOnly = context.readOnly
         set(value) {

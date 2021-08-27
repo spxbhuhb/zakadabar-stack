@@ -28,8 +28,8 @@ import zakadabar.core.util.PublicApi
 open class ZkConstStringField(
     context: ZkFieldContext,
     label: String,
-    val value: String
-) : ZkFieldBase<String>(
+    value: String
+) : ZkFieldBase<String, ZkConstStringField>(
     context = context,
     propName = "",
     label = label
@@ -37,6 +37,16 @@ open class ZkConstStringField(
     private val input = document.createElement("input") as HTMLInputElement
 
     override var readOnly = true
+
+    override var valueOrNull: String?
+        get() = input.value
+        set(value) {
+            input.value = value!!
+        }
+
+    init {
+        input.value = value
+    }
 
     override fun buildFieldValue() {
         input.classList += context.styles.disabledString

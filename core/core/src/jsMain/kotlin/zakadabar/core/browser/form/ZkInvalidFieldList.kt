@@ -15,7 +15,7 @@ open class ZkInvalidFieldList : ZkElement() {
         classList += ZkFormStyles.invalidFieldList
     }
 
-    fun show(invalid: List<ZkFieldBase<*>>) {
+    fun show(invalid: List<ZkFieldBase<*,*>>) {
         super.show()
 
         clear()

@@ -30,11 +30,11 @@ import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.localizedStrings
 
-abstract class ZkSelectBase<VT>(
+abstract class ZkSelectBase<VT, FT : ZkSelectBase<VT, FT>>(
     context: ZkFieldContext,
     propName: String,
     var onSelectCallback: (Pair<VT, String>?) -> Unit = { }
-) : ZkFieldBase<VT>(
+) : ZkFieldBase<VT, FT>(
     context = context,
     propName = propName
 ) {
@@ -61,7 +61,7 @@ abstract class ZkSelectBase<VT>(
 
     lateinit var items: List<Pair<VT, String>>
 
-    var selectedItem : Pair<VT,String>? = null
+    var selectedItem: Pair<VT, String>? = null
 
     override var readOnly = context.readOnly
         set(value) {
@@ -73,6 +73,14 @@ abstract class ZkSelectBase<VT>(
                 arrow.show()
             }
             field = value
+        }
+
+    override var valueOrNull: VT?
+        get() = selectedItem?.first
+        set(value) {
+            val item = value?.let { v -> items.firstOrNull { it.first == v } }
+            setPropValue(item)
+            render(item?.first)
         }
 
     override fun onPause() {
