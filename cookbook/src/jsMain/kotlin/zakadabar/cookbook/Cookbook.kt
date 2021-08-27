@@ -5,6 +5,7 @@ package zakadabar.cookbook
 
 import org.w3c.dom.HTMLElement
 import zakadabar.cookbook.browser.field.onchange.FieldOnChangeForm
+import zakadabar.cookbook.browser.field.update.FieldUpdateForm
 import zakadabar.cookbook.browser.form.select.BoSelectFilter
 import zakadabar.cookbook.browser.form.select.StringSelectFilter
 import zakadabar.cookbook.browser.help.TextHelpModal
@@ -33,6 +34,7 @@ class Cookbook : CommonModule {
 
             "BoSelectFilter" -> BoSelectFilter()
             "FieldOnChangeForm" -> FieldOnChangeForm()
+            "FieldUpdateForm" -> FieldUpdateForm()
             "StringSelectFilter" -> StringSelectFilter()
             "TableCustomActions" -> TableCustomActions()
             "TableEditInline" -> TableEditInline()

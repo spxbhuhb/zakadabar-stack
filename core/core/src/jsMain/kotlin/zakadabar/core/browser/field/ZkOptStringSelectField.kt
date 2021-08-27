@@ -29,10 +29,10 @@ open class ZkOptStringSelectField(
 
     override fun getPropValue() = prop.get()
 
-    override fun setPropValue(value: Pair<String?, String>?) {
+    override fun setPropValue(value: Pair<String?, String>?, user : Boolean) {
         val iv = value?.first
         prop.set(iv)
-        onUserChange(iv)
+        if (user) onUserChange(iv)
     }
 
 }

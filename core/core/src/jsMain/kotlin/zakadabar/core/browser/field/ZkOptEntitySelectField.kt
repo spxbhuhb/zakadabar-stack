@@ -19,9 +19,9 @@ open class ZkOptEntitySelectField<ST : EntityBo<ST>>(
 
     override fun getPropValue() = prop.get()
 
-    override fun setPropValue(value: Pair<EntityId<ST>?, String>?) {
+    override fun setPropValue(value: Pair<EntityId<ST>?, String>?, user : Boolean) {
         prop.set(value?.first)
-        onUserChange(value?.first)
+        if (user) onUserChange(value?.first)
     }
 
 }

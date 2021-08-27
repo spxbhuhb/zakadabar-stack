@@ -48,17 +48,17 @@ open class ZkEnumSelectField<E : Enum<E>>(
         }
     }
 
-    override fun setPropValue(value: Pair<E, String>?) {
+    override fun setPropValue(value: Pair<E, String>?, user : Boolean) {
 
         shadowValue = value?.first
 
         if (value == null) {
             invalidInput = true
-            context.validate()
+            if (user) context.validate()
         } else {
             invalidInput = false
             prop.set(value.first)
-            onUserChange(value.first)
+            if (user) onUserChange(value.first)
         }
     }
 

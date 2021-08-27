@@ -50,7 +50,7 @@ class StringSelectFilter : ZkForm<ExampleStringFormBo>() {
 
         // when filter is "not selected", clear filtered items and value
 
-        val filterBy = value?.first ?: return filteredField.update(emptyList(), null)
+        val filterBy = value?.first ?: return filteredField.update(emptyList(), null, false)
 
         // when filter is selected, create a new item list for the filtered select
 
@@ -64,6 +64,6 @@ class StringSelectFilter : ZkForm<ExampleStringFormBo>() {
 
         // update the filtered select
 
-        filteredField.update(newItems, newValue)
+        filteredField.update(newItems, newValue, false)
     }
 }

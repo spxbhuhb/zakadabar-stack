@@ -36,9 +36,9 @@ open class ZkOptBooleanField(
 
     override fun getPropValue() = prop.get()
 
-    override fun setPropValue(value: Pair<Boolean?, String>?) {
+    override fun setPropValue(value: Pair<Boolean?, String>?, user : Boolean) {
         prop.set(value?.first)
-        onUserChange(value?.first)
+        if (user) onUserChange(value?.first)
     }
 
 }

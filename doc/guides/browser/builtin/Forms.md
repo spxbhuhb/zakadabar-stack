@@ -310,7 +310,7 @@ the context, you might have to qualify `this` as the example does.
 ### Change Callback
 
 Each field have an `onChangeCallback` property that may store a function. The field
-executes this function whenever the value changes.
+executes this function when the value of the field changes and is not an `invalidInput`.
 
 The `onChange` and `onChange3` transform functions set `onChangeCallback` when applied to a 
 field. You can also set the `onChangeCallback` property directly.
@@ -321,8 +321,14 @@ field. You can also set the `onChangeCallback` property directly.
 Origin of the change is a [ChangeOrigin](/core/core/src/jsMain/kotlin/zakadabar/core/browser/field/ChangeOrigin.kt).
 This enumeration has two values `User` and `Code`. 
 
-- `User` means the origin of the change is a browser event.
+- `User` means the origin of the change is a browser event
 - `Code` means the origin of the change is an assignment to the `value` property
+
+**Note**
+
+1. The user changes a field with a callback.
+2. The callback changes another field with a callback.
+3. Origin of the second callback is `Code`.
 
 ```kotlin
 + bo::booleanValue onChange ::onBooleanChange

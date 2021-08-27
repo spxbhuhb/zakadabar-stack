@@ -79,7 +79,8 @@ abstract class ZkSelectBase<VT, FT : ZkSelectBase<VT, FT>>(
         get() = selectedItem?.first
         set(value) {
             val item = value?.let { v -> items.firstOrNull { it.first == v } }
-            setPropValue(item)
+            selectedItem = item
+            setPropValue(item, false)
             render(item?.first)
         }
 
@@ -100,11 +101,11 @@ abstract class ZkSelectBase<VT, FT : ZkSelectBase<VT, FT>>(
 
     abstract fun getPropValue(): VT?
 
-    abstract fun setPropValue(value: Pair<VT, String>?)
+    abstract fun setPropValue(value: Pair<VT, String>?, user : Boolean)
 
-    open fun update(items: List<Pair<VT, String>>, value: Pair<VT, String>?) {
+    open fun update(items: List<Pair<VT, String>>, value: Pair<VT, String>?, user : Boolean) {
         this.items = items
-        setPropValue(value)
+        setPropValue(value, user)
         onSelectCallback(value)
         render(value?.first) // FIXME this re-rendering is a bit too expensive I think
         itemList.hide()
@@ -121,7 +122,7 @@ abstract class ZkSelectBase<VT, FT : ZkSelectBase<VT, FT>>(
             val entryId = if (entryIdString.isNullOrEmpty()) null else fromString(entryIdString)
             val value = entryId?.let { items.firstOrNull { item -> item.first == entryId } }
 
-            update(this.items, value)
+            update(this.items, value, true)
         }
 
         container = div(context.styles.selectContainer) {

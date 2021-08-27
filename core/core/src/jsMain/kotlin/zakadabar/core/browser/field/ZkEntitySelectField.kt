@@ -19,14 +19,14 @@ open class ZkEntitySelectField<ST : EntityBo<ST>>(
 
     override fun getPropValue() = prop.get()
 
-    override fun setPropValue(value: Pair<EntityId<ST>, String>?) {
+    override fun setPropValue(value: Pair<EntityId<ST>, String>?, user : Boolean) {
         if (value == null) {
             invalidInput = true
-            context.validate()
+            if (user) context.validate()
         } else {
             invalidInput = false
             prop.set(value.first)
-            onUserChange(value.first)
+            if (user) onUserChange(value.first)
         }
     }
 

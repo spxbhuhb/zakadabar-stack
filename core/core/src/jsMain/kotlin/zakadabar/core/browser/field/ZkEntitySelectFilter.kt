@@ -17,7 +17,7 @@ open class ZkEntitySelectFilter(
 
     override fun getPropValue() = getValue()
 
-    override fun setPropValue(value: Pair<EntityId<*>, String>?) {
+    override fun setPropValue(value: Pair<EntityId<*>, String>?, user : Boolean) {
         // do nothing here, onSelected will be called by ZkSelectBase
     }
 

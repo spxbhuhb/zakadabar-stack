@@ -10,14 +10,11 @@ tags:
   - change
 ```
 
-To execute a callback when the value of a field changes use one of these methods:
-
-- use one of the `onChange` transform function specify a callback function
-- set te `onChangeCallback` property of the field
+Use the `value` property to change the value of in the field **and** in the BO.
 
 ## Example
 
-<div data-zk-enrich="FieldOnChangeForm"></div>
+<div data-zk-enrich="FieldUpdateForm"></div>
 
 ## Guides
 
@@ -25,4 +22,4 @@ To execute a callback when the value of a field changes use one of these methods
 
 ## Code
 
-- [FieldOnChangeForm.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/field/onchange/FieldOnChangeForm.kt)
+- [FieldUpdateForm.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/field/onchange/FieldUpdateForm.kt)
