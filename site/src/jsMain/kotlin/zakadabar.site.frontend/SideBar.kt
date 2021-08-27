@@ -39,6 +39,7 @@ class SideBar : ZkSideBar() {
                 MarkdownNav().parse(docSource).forEach {
                     + it.doc()
                 }
+                // + item(AllGuides)
                 + item(FAQ)
             }
 

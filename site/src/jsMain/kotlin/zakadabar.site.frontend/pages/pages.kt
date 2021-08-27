@@ -6,11 +6,15 @@ package zakadabar.site.frontend.pages
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.application
 import zakadabar.core.browser.page.ZkPage
+import zakadabar.core.browser.page.ZkPathPage
 import zakadabar.core.browser.titlebar.ZkAppTitle
+import zakadabar.core.browser.util.io
 import zakadabar.lib.bender.ClassGenerator
 import zakadabar.lib.bender.frontend.Bender
 import zakadabar.lib.markdown.browser.MarkdownPage
 import zakadabar.lib.markdown.browser.MarkdownPathPage
+import zakadabar.lib.markdown.browser.MarkdownView
+import zakadabar.site.frontend.PrintLayout
 import zakadabar.site.frontend.SiteMarkdownContext
 import zakadabar.site.frontend.contentNamespace
 
@@ -113,5 +117,18 @@ object Upgrade : MarkdownPathPage() {
     }
 
     override fun context() = SiteMarkdownContext(viewName, path)
+
+}
+
+object AllGuides : ZkPathPage(layout = PrintLayout) {
+
+    override fun onCreate() {
+        io {
+            + MarkdownView(
+                "/api/$contentNamespace/guides/All.md",
+                context = SiteMarkdownContext(viewName, path, toc = false)
+            )
+        }
+    }
 
 }
