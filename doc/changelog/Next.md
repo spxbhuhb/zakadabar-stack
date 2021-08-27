@@ -13,6 +13,14 @@ added:
 - `ZkStringExtensionColumn`
 - add `styles` to `ZkFieldContext`
 - `ZkTable` calls `ZkColumn.onTableSetData` from `setData`
+- `ZkFieldBase.onChangeCallback` called whenever bo value changes
+- `ZkFieldBase.value` current value
+- `ZkFieldBase.valueOrNull` current value or null
+- `onChange` form field transform function
+- `onChange3` form field transform function
+- `BoSchema.constraintsOrNull`
+- `ChangeOrigin` for browser fields to pass event origin
+- `ZkForm.saveAs` property convenience version
 
 changed:
 
@@ -24,7 +32,7 @@ changed:
 - change BO primitive wrapper fields to `var`
 - `ZkFormStyles` and `ZkTableStyles` extends `ZkFieldStyles`
 - rework select styles to support table and form use cases
-
+- `ZkFieldBase` now has a second type parameter, the field type itself
 
 removed:
 
@@ -39,6 +47,11 @@ fixed:
 added:
 
 - Vertical Table Cell Border
+- Field Change Event
+
+changed:
+
+- Inline Table Edit
 
 ## Site
 
