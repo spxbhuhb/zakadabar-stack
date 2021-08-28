@@ -3,9 +3,9 @@
  */
 
 plugins {
-    kotlin("multiplatform") version "1.5.21" apply false
-    kotlin("plugin.serialization") version "1.5.21" apply false
-    id("org.jetbrains.kotlin.plugin.noarg") version "1.5.21" apply false
+    kotlin("multiplatform") version "1.5.30" apply false
+    kotlin("plugin.serialization") version "1.5.30" apply false
+    id("org.jetbrains.kotlin.plugin.noarg") version "1.5.30" apply false
     id("org.jetbrains.dokka") version "1.4.32" apply false
     id("com.github.johnrengelman.shadow") version "7.0.0" apply false
     signing
@@ -19,7 +19,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.30")
         classpath("com.android.tools.build:gradle:4.1.3")
     }
 }

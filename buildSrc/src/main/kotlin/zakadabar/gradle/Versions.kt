@@ -1,14 +1,14 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.gradle.dependencies
+package zakadabar.gradle
 
 object Versions {
-    const val zakadabar = "2021.8.19.1"
+    const val zakadabar = "2021.8.30-SNAPSHOT"
 
     val isSnapshot = zakadabar.contains("SNAPSHOT")
 
-    const val kotlin = "1.5.20"
+    const val kotlin = "1.5.30"
     const val ktor = "1.6.1"
     const val coroutines = "1.5.0"
     const val serialization = "1.2.1"
