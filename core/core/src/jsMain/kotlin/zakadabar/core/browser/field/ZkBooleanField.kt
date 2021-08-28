@@ -40,6 +40,7 @@ open class ZkBooleanField(
 
     override var readOnly: Boolean = context.readOnly
         set(value) {
+            checkbox.readOnly = value
             checkbox.disabled = value
             field = value
         }
@@ -49,7 +50,10 @@ open class ZkBooleanField(
 
             buildPoint.tabIndex = 0
 
-            if (readOnly) checkbox.checkbox.readOnly = true
+            if (readOnly) {
+                checkbox.readOnly = true
+                checkbox.disabled = true
+            }
 
             checkbox.checked = prop.get()
 

@@ -242,19 +242,9 @@ open class ZkTableStyles : ZkFieldStyles() {
         paddingBottom = "0 !important"
     }
 
-    open val action by cssClass {
+    open val actions by cssClass {
         + Display.flex
         + AlignItems.center
-
-        + WhiteSpace.nowrap
-        + Cursor.pointer
-
-        textTransform = "uppercase"
-        fontSize = "75%"
-        lineHeight = "1.3em"
-        fontWeight = "400 !important"
-        color = "$actionTextColor !important"
-        paddingLeft = 0.px
     }
 
     open val actionEntry by cssClass {
@@ -262,7 +252,18 @@ open class ZkTableStyles : ZkFieldStyles() {
         + AlignItems.center
         height = 100.percent
 
+        + WhiteSpace.nowrap
+
+        paddingLeft = 0.px
         marginRight = theme.spacingStep.px
+
+        fontSize = 75.percent
+        lineHeight = 1.3.em
+        fontWeight = 400.weight
+        color = actionTextColor
+
+        + TextTransform.uppercase
+        + Cursor.pointer
     }
 
 }

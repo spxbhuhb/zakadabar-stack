@@ -31,7 +31,7 @@ open class ZkActionsColumn<T : BaseBo>(
 
     override fun render(cell: ZkElement, index: Int, row: T) {
         with(cell) {
-            + table.styles.action
+            + table.styles.actions
 
             actions.forEach { action ->
                 + div(table.styles.actionEntry) {

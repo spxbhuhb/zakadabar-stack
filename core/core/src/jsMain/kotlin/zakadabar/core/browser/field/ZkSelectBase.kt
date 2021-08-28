@@ -159,7 +159,7 @@ abstract class ZkSelectBase<VT, FT : ZkSelectBase<VT, FT>>(
             }
         }
 
-        if (readOnly) arrow.hide()
+        readOnly = context.readOnly // initialization does not execute setter
 
         + container
     }

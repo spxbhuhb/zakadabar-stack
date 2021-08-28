@@ -41,6 +41,8 @@ removed:
 fixed:
 
 - Search in uppercase #61
+- `ZkBooleanField` styles for read mode form
+- `ZkSelectBase` styles for read mode form
 
 ## Cookbook
 
