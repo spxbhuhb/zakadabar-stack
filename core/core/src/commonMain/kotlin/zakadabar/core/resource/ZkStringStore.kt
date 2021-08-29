@@ -74,6 +74,23 @@ open class ZkStringStore(
     }
 
     /**
+     * Add strings from the other store if they don't already exists in this
+     * store.
+     *
+     * Does not override child stores.
+     */
+    fun addMissing(other: ZkStringStore) {
+        other.map.forEach { (key, value) ->
+            if (key in this.map) return@forEach
+
+            val normalizedKey = normalizeKey(key)
+
+            map[key] = value
+            normalizedKeyMap[normalizedKey] = value
+        }
+    }
+
+    /**
      * Get a value for the given key.
      *
      * @param   key  The key to look up.

@@ -6,7 +6,6 @@ package zakadabar.core.resource
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
-import zakadabar.core.data.StringPair
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty
 
@@ -15,7 +14,7 @@ import kotlin.reflect.KMutableProperty
  */
 var localizedStrings: ZkBuiltinStrings = ZkBuiltinStrings()
     set(value) {
-        value.merge(field.map.map { StringPair(it.key, it.value) })
+        value.addMissing(field)
         field = value
     }
 

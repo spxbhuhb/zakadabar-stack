@@ -21,6 +21,7 @@ added:
 - `BoSchema.constraintsOrNull`
 - `ChangeOrigin` for browser fields to pass event origin
 - `ZkForm.saveAs` property convenience version
+- `ZkStringStore.addMissing` copy missing keys from another string store
 
 changed:
 
@@ -43,6 +44,8 @@ fixed:
 - Search in uppercase #61
 - `ZkBooleanField` styles for read mode form
 - `ZkSelectBase` styles for read mode form
+- `localizedStrings` defaults override application values
+- login redirect does not work in production mode
 
 ## Cookbook
 

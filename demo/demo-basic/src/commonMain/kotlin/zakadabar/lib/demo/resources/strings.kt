@@ -11,6 +11,7 @@ internal val strings = DemoStrings()
 
 class DemoStrings : ZkBuiltinStrings() {
 
+    override val applicationName = "Basic Demo"
     val home by "Demo Home"
 
 }
