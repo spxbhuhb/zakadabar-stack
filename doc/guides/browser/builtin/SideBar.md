@@ -58,6 +58,13 @@ in the future to make the application mode dynamic.
 
 </div>
 
+## Icons
+
+All `group` and `item` builders have a version with a [ZkIconSource](/core/core/src/jsMain/kotlin/zakadabar/core/resource/ZkIconSource.kt)
+as first parameter. These versions add an icon before the text.
+
+Example: [SideBar With Icons](/doc/cookbook/browser/sidebar/icons/recipe.md)
+
 ## Sections
 
 Sections are groups that are not closed but minimized and restored. When you minimize a section, the first
@@ -77,10 +84,3 @@ The loader is not a full-featured markdown parser, but a simple regex that proce
 shows the documentation tree of this site.
 
 <div data-zk-enrich="SideBarMarkdownExample"></div>
-
-## Timeline
-
-### Changes
-
-* 2021.5.18
-  * add sections

@@ -22,6 +22,7 @@ added:
 - `ChangeOrigin` for browser fields to pass event origin
 - `ZkForm.saveAs` property convenience version
 - `ZkStringStore.addMissing` copy missing keys from another string store
+- icons to sidebar groups and items
 
 changed:
 
@@ -53,6 +54,7 @@ added:
 
 - Vertical Table Cell Border
 - Field Change Event
+- SideBar With Icons
 
 changed:
 

@@ -7,9 +7,12 @@ import kotlinx.browser.document
 import org.w3c.dom.HTMLAnchorElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
+import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.ZkAppRouting
 import zakadabar.core.browser.application.application
-import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.icon.ZkIcon
+import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.resource.ZkIconSource
 import zakadabar.core.resource.localizedStrings
 import zakadabar.core.text.capitalized
 
@@ -22,27 +25,30 @@ import zakadabar.core.text.capitalized
  * @property  onClick  A function to call when the user clicks on the item text.
  */
 open class ZkSideBarItem(
-    private val text: String,
-    open val url: String? = null,
-    private val capitalize: Boolean = true,
-    private val onClick: (() -> Unit)? = null
+    val text: String,
+    val icon: ZkIconSource? = null,
+    val url: String? = null,
+    val capitalize: Boolean = true,
+    val onClick: (() -> Unit)? = null
 ) : ZkElement() {
 
     open lateinit var textElement: HTMLElement
 
     constructor(
         target: ZkAppRouting.ZkTarget,
+        icon: ZkIconSource? = null,
         subPath: String? = null,
         text: String? = null,
         onClick: (() -> Unit)? = null
     ) : this(
         text = text ?: localizedStrings.getNormalized(target.viewName),
+        icon = icon,
         url = application.routing.toLocalUrl(target, subPath),
         onClick = onClick
     )
 
     open val localNav
-        get() = url == null || (url?.startsWith("https://") != true && url?.startsWith("http://") != true)
+        get() = url == null || (! url.startsWith("https://") && ! url.startsWith("http://"))
 
     override fun onCreate() {
         + zkSideBarStyles.item
@@ -51,10 +57,15 @@ open class ZkSideBarItem(
             textElement = document.createElement("div") as HTMLElement
         } else {
             textElement = document.createElement("a") as HTMLElement
-            url?.let { (textElement as HTMLAnchorElement).href = it }
+            url.let { (textElement as HTMLAnchorElement).href = it }
         }
 
+        textElement.classList += zkSideBarStyles.itemText
         textElement.innerText = if (capitalize) text.capitalized() else text
+
+        icon?.let {
+            + ZkIcon(icon) css zkSideBarStyles.icon
+        }
 
         + textElement
 
@@ -63,7 +74,7 @@ open class ZkSideBarItem(
 
     }
 
-    private fun onClick(event: Event) {
+    open fun onClick(event: Event) {
         if (localNav) {
             event.preventDefault()
             if (onClick != null) {
@@ -74,7 +85,7 @@ open class ZkSideBarItem(
         }
     }
 
-    private fun onMouseDown(event: Event) {
+    open fun onMouseDown(event: Event) {
         event.preventDefault() // to prevent focus change
     }
 

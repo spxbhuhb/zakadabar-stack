@@ -8,11 +8,12 @@ import org.w3c.dom.HTMLAnchorElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
+import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.ZkAppRouting
 import zakadabar.core.browser.application.application
-import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.icon.ZkIcon
 import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.resource.ZkIconSource
 import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.localizedStrings
 import zakadabar.core.util.after
@@ -21,6 +22,7 @@ import zakadabar.core.util.after
  * A group of sidebar entries. Supports open and close.
  *
  * @property  text     The text to display.
+ * @property  icon     An optional icon to show in front of the text.
  * @property  section  When true this group is a section in the sidebar. This means that the styling
  *                     is different. Default is false.
  * @property  url      The URL the group points to. When specified, the group uses an "a" tag instead of
@@ -32,12 +34,13 @@ import zakadabar.core.util.after
  * @property  builder  The builder function that builds the content of the group.
  */
 open class ZkSideBarGroup(
-    open val text: String,
-    open val section: Boolean = false,
-    open val url: String? = null,
-    open var onClick: ((Boolean) -> Unit)? = null,
+    val text: String,
+    val icon : ZkIconSource? = null,
+    val section: Boolean = false,
+    val url: String? = null,
+    var onClick: ((Boolean) -> Unit)? = null,
     open val sideBar: ZkSideBar? = null,
-    open val builder: ZkElement.() -> Unit
+    val builder: ZkElement.() -> Unit
 ) : ZkElement() {
 
     open var open = false
@@ -49,6 +52,7 @@ open class ZkSideBarGroup(
 
     constructor(
         target: ZkAppRouting.ZkTarget,
+        icon: ZkIconSource? = null,
         subPath: String? = null,
         text: String? = null,
         section: Boolean = false,
@@ -57,6 +61,7 @@ open class ZkSideBarGroup(
         builder: ZkElement.() -> Unit
     ) : this(
         text = text ?: localizedStrings.getNormalized(target.viewName),
+        icon = icon,
         section = section,
         url = application.routing.toLocalUrl(target, subPath),
         onClick = onClick,
@@ -65,7 +70,7 @@ open class ZkSideBarGroup(
     )
 
     open val localNav
-        get() = url == null || (url?.startsWith("https://") != true && url?.startsWith("http://") != true)
+        get() = url == null || (! url.startsWith("https://") && ! url.startsWith("http://"))
 
     override fun onCreate() {
 
@@ -73,7 +78,7 @@ open class ZkSideBarGroup(
             textElement = ZkElement(document.createElement("div") as HTMLElement)
         } else {
             textElement = ZkElement(document.createElement("a") as HTMLElement)
-            url?.let { (textElement.element as HTMLAnchorElement).href = it }
+            url.let { (textElement.element as HTMLAnchorElement).href = it }
         }
 
         textElement.innerText = text
@@ -93,6 +98,9 @@ open class ZkSideBarGroup(
                     + closeIcon.hide()
                     on("click", ::onHandleGroupClick)
                 }
+                icon?.let {
+                    + ZkIcon(icon) css zkSideBarStyles.icon
+                }
                 + textElement css zkLayoutStyles.grow
                 on("click", ::onNavigate)
             }
@@ -107,6 +115,9 @@ open class ZkSideBarGroup(
         open = true
         + column {
             + div(zkSideBarStyles.sectionTitle) {
+                icon?.let {
+                    + ZkIcon(icon).on("click", ::onNavigate) css zkSideBarStyles.icon
+                }
                 + textElement.on("click", ::onNavigate) css zkLayoutStyles.grow
                 + closeIcon css zkSideBarStyles.sectionCloseIcon
                 closeIcon.on("click", ::onHandleSectionClick)

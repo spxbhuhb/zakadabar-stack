@@ -48,23 +48,25 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
 
         minHeight = 28.px
         paddingRight = 8.px
+        paddingLeft = 20.px
+
         color = this@ZkSideBarStyles.textColor
 
         hover {
             backgroundColor = theme.hoverBackgroundColor
             color = this@ZkSideBarStyles.hoverTextColor
         }
+    }
 
-        on(" a") {
-            paddingLeft = 20.px
-            flexGrow = 1.0
-            color = "inherit"
-        }
+    open val itemText by cssClass {
+        flexGrow = 1.0
+        color = "inherit"
+    }
 
-        on(" > div") {
-            paddingLeft = 20.px
-            flexGrow = 1.0
-        }
+    open val icon by cssClass {
+        fill = this@ZkSideBarStyles.textColor
+        maxWidth = 28.px
+        marginRight = (theme.spacingStep / 2).px
     }
 
     fun ZkCssStyleRule.title() {

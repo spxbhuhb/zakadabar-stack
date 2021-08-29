@@ -9,6 +9,7 @@ import zakadabar.cookbook.browser.field.update.FieldUpdateForm
 import zakadabar.cookbook.browser.form.select.BoSelectFilter
 import zakadabar.cookbook.browser.form.select.StringSelectFilter
 import zakadabar.cookbook.browser.help.TextHelpModal
+import zakadabar.cookbook.browser.sidebar.icons.SideBarWithIcons
 import zakadabar.cookbook.browser.table.action.TableCustomActions
 import zakadabar.cookbook.browser.table.border.vertical.TableVerticalBorderSome
 import zakadabar.cookbook.browser.table.inline.TableEditInline
@@ -35,6 +36,7 @@ class Cookbook : CommonModule {
             "BoSelectFilter" -> BoSelectFilter()
             "FieldOnChangeForm" -> FieldOnChangeForm()
             "FieldUpdateForm" -> FieldUpdateForm()
+            "SideBarWithIcons" -> SideBarWithIcons()
             "StringSelectFilter" -> StringSelectFilter()
             "TableCustomActions" -> TableCustomActions()
             "TableEditInline" -> TableEditInline()
