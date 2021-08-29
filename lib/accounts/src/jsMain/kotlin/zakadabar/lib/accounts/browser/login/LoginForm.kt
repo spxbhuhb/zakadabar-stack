@@ -4,20 +4,21 @@
 package zakadabar.lib.accounts.browser.login
 
 import kotlinx.browser.window
-import zakadabar.lib.accounts.data.LoginAction
-import zakadabar.core.data.BaseBo
-import zakadabar.core.exception.Unauthorized
 import zakadabar.core.browser.ZkElementMode
 import zakadabar.core.browser.button.ZkButton
-import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.field.ZkConstStringField
+import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.toast.toastDanger
 import zakadabar.core.browser.toast.toastWarning
+import zakadabar.core.browser.util.marginBottom
+import zakadabar.core.data.ActionStatus
+import zakadabar.core.data.BaseBo
+import zakadabar.core.exception.Unauthorized
 import zakadabar.core.resource.css.JustifyContent
 import zakadabar.core.resource.css.percent
-import zakadabar.core.browser.util.default
-import zakadabar.core.browser.util.marginBottom
 import zakadabar.core.resource.localizedStrings
+import zakadabar.core.util.default
+import zakadabar.lib.accounts.data.LoginAction
 
 class LoginForm(
     private val accountName: String? = null,
@@ -91,6 +92,8 @@ class LoginForm(
 
     @Suppress("UNUSED_PARAMETER")
     private fun onExecuteResult(resultBo: BaseBo) {
+        // TODO remove this when fixed in compiler
+        if (resultBo is ActionStatus && resultBo.success) println("login successful")
         onSuccess()
     }
 }
