@@ -5,16 +5,16 @@ package zakadabar.core.browser.help
 
 import zakadabar.core.resource.css.*
 
-val zkHelpStyles by cssStyleSheet(ZkHelpStyles())
+var zkHelpStyles by cssStyleSheet(ZkHelpStyles())
 
 open class ZkHelpStyles : ZkCssStyleSheet() {
 
-    val withHelpContainer by cssClass {
+    open val withHelpContainer by cssClass {
         + Display.inlineFlex
         + FlexDirection.row
     }
 
-    val helpButton by cssClass {
+    open val helpButton by cssClass {
         marginLeft = (theme.spacingStep / 2).px
     }
 

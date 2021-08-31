@@ -27,7 +27,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
      * Application handle, the button and application name at the top left.
      * [appHandleContainer] is the style for the whole container.
      */
-    val appHandleContainer by cssClass {
+    open val appHandleContainer by cssClass {
         + BoxSizing.borderBox
 
         + Display.flex
@@ -54,7 +54,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
     /**
      * Style for the button (a hamburger menu) in the application handle.
      */
-    val appHandleButton by cssClass {
+    open val appHandleButton by cssClass {
         background = "transparent !important"
         fill = "$appHandleText !important"
         marginLeft = (theme.spacingStep / 2).px
@@ -64,7 +64,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
     /**
      * Style for the application title bar. This is the title bar above the content.
      */
-    val appTitleBar by cssClass {
+    open val appTitleBar by cssClass {
         + BoxSizing.borderBox
         + Display.flex
         + FlexDirection.row
@@ -83,7 +83,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
      * When the side bar is closed a button is shown in the application title
      * bar that opens the sidebar again.
      */
-    val sidebarHandle by cssClass {
+    open val sidebarHandle by cssClass {
         + Display.flex
         + AlignItems.center
         + JustifyContent.center
@@ -98,7 +98,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
     /**
      * Container for the title in the application title bar.
      */
-    val titleContainer by cssClass {
+    open val titleContainer by cssClass {
         marginLeft = theme.spacingStep.px
         + AlignItems.center
     }
@@ -106,7 +106,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
     /**
      * Container for the context elements in the application title bar.
      */
-    val contextElementContainer by cssClass {
+    open val contextElementContainer by cssClass {
         + Display.flex
         + FlexDirection.row
         + AlignItems.center
@@ -115,14 +115,14 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
     /**
      * Container for the global elements in the application title bar.
      */
-    val globalElementContainer by cssClass {
+    open val globalElementContainer by cssClass {
         + Display.flex
         + FlexDirection.row
         + AlignItems.center
         paddingRight = 10.px
     }
 
-    val iconButton by cssClass {
+    open val iconButton by cssClass {
         fill = "${theme.textColor} !important"
         backgroundColor = "transparent !important"
     }
@@ -130,7 +130,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
     /**
      * Style for the application title bar. This is the title bar above the content.
      */
-    val localTitleBar by cssClass {
+    open val localTitleBar by cssClass {
         + BoxSizing.borderBox
 
         + Display.flex

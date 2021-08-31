@@ -5,13 +5,13 @@ package zakadabar.core.browser.slider
 
 import zakadabar.core.resource.css.*
 
-val zkSliderStyles by cssStyleSheet(ZkSliderStyles())
+var zkSliderStyles by cssStyleSheet(ZkSliderStyles())
 
-class ZkSliderStyles : ZkCssStyleSheet() {
+open class ZkSliderStyles : ZkCssStyleSheet() {
 
     // FIXME these colors are wrong
 
-    val horizontalSlider by cssClass {
+    open val horizontalSlider by cssClass {
         + BoxSizing.borderBox
         + Cursor.rowResize
 
@@ -25,7 +25,7 @@ class ZkSliderStyles : ZkCssStyleSheet() {
         }
     }
 
-    val verticalSlider by cssClass {
+    open val verticalSlider by cssClass {
         + BoxSizing.borderBox
         + Cursor.colResize
 

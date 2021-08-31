@@ -5,7 +5,7 @@ package zakadabar.core.browser.note
 
 import zakadabar.core.resource.css.*
 
-val zkNoteStyles by cssStyleSheet(ZkNoteStyles())
+var zkNoteStyles by cssStyleSheet(ZkNoteStyles())
 
 open class ZkNoteStyles : ZkCssStyleSheet() {
 

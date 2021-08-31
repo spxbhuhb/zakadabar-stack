@@ -514,7 +514,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      */
     open fun filterRow(row: T, text: String?): Boolean {
         columns.forEach {
-            if (it.matches(row, searchText)) return true
+            if (it.matches(row, text)) return true
         }
         return false
     }

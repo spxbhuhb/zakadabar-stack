@@ -3,15 +3,15 @@
  */
 package zakadabar.lib.accounts.browser.roles
 
-import zakadabar.lib.accounts.data.RoleBo
 import zakadabar.core.browser.form.ZkForm
-import zakadabar.core.browser.form.ZkFormStyles
+import zakadabar.core.browser.form.zkFormStyles
 import zakadabar.core.resource.localizedStrings
+import zakadabar.lib.accounts.data.RoleBo
 
 class Form : ZkForm<RoleBo>() {
 
     override fun onCreate() {
-        build(bo.description, localizedStrings.role, css = ZkFormStyles.onePanel) {
+        build(bo.description, localizedStrings.role, css = zkFormStyles.onePanel) {
             + section(localizedStrings.basics) {
                 + bo::id
                 + bo::name

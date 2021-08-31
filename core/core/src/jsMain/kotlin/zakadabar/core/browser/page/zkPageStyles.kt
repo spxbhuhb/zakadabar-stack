@@ -5,15 +5,15 @@ package zakadabar.core.browser.page
 
 import zakadabar.core.resource.css.*
 
-val zkPageStyles by cssStyleSheet(ZkPageStyles())
+var zkPageStyles by cssStyleSheet(ZkPageStyles())
 
-class ZkPageStyles : ZkCssStyleSheet() {
+open class ZkPageStyles : ZkCssStyleSheet() {
 
     /**
      * This style is meant for pages where the content of the page scrolls itself.
      * The overflow is `hidden`.
      */
-    val fixed by cssClass {
+    open val fixed by cssClass {
         + Position.relative
         + Overflow.hidden
 
@@ -26,7 +26,7 @@ class ZkPageStyles : ZkCssStyleSheet() {
      * The overflow is `auto`.
      */
 
-    val scrollable by cssClass {
+    open val scrollable by cssClass {
         maxHeight = 100.percent
         + OverflowY.auto
     }
@@ -34,7 +34,7 @@ class ZkPageStyles : ZkCssStyleSheet() {
     /**
      * Adds the default margin.
      */
-    val content by cssClass {
+    open val content by cssClass {
         margin = theme.spacingStep.px
     }
 

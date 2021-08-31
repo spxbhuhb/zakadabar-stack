@@ -5,7 +5,7 @@ package zakadabar.core.browser.toast
 
 import zakadabar.core.resource.css.*
 
-val zkToastStyles by cssStyleSheet(ZkToastStyles())
+var zkToastStyles by cssStyleSheet(ZkToastStyles())
 
 open class ZkToastStyles : ZkCssStyleSheet() {
 

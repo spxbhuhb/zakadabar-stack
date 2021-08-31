@@ -169,7 +169,7 @@ open class ZkForm<T : BaseBo>(
     override fun onCreate() {
         super.onCreate()
         onConfigure()
-        classList += ZkFormStyles.outerContainer
+        + zkFormStyles.outerContainer
 
         if (addLocalTitle) {
             + buildLocalTitleBar()?.let { it marginBottom 10 }
@@ -427,8 +427,8 @@ open class ZkForm<T : BaseBo>(
         // this lets build be called from an IO block after onResume ran
         if (lifeCycleState == ZkElementState.Resumed && setAppTitle) setAppTitleBar()
 
-        + div(ZkFormStyles.contentContainer) {
-            + column(ZkFormStyles.form) {
+        + div(zkFormStyles.contentContainer) {
+            + column(zkFormStyles.form) {
                 css?.let { buildPoint.classList += it }
 
                 builder()
@@ -558,7 +558,7 @@ open class ZkForm<T : BaseBo>(
     operator fun KMutableProperty0<EntityId<T>>.unaryPlus(): ZkEntityIdField<T> =
         add(this) { prop ->
             ZkEntityIdField(this@ZkForm, prop).also {
-                if (readOnly) it.hide()
+                if (mode == ZkElementMode.Create && prop.name == "id") it.hide()
             }
         }
 

@@ -4,15 +4,14 @@
 package zakadabar.core.browser.input
 
 import zakadabar.core.browser.field.zkFieldStyles
-import zakadabar.core.browser.form.ZkFormStyles
 import zakadabar.core.resource.css.*
 import zakadabar.core.util.alpha
 
-val zkInputStyles by cssStyleSheet(ZkInputStyles())
+var zkInputStyles by cssStyleSheet(ZkInputStyles())
 
 open class ZkInputStyles : ZkCssStyleSheet() {
 
-    val checkboxList by ZkFormStyles.cssClass {
+    open val checkboxList by cssClass {
         + Display.flex
         + AlignItems.center
 
@@ -53,7 +52,7 @@ open class ZkInputStyles : ZkCssStyleSheet() {
 
     }
 
-    val checkBoxOuter by cssClass {
+    open val checkBoxOuter by cssClass {
         width = "max-content"
         outline = "none"
         border = "1px solid transparent"
@@ -66,7 +65,7 @@ open class ZkInputStyles : ZkCssStyleSheet() {
 
     }
 
-    val checkBoxNative by cssClass {
+    open val checkBoxNative by cssClass {
         + Display.none
 
         on(":hover:not(:disabled) + label") {
@@ -85,7 +84,7 @@ open class ZkInputStyles : ZkCssStyleSheet() {
         }
     }
 
-    val checkboxLabel by cssClass {
+    open val checkboxLabel by cssClass {
         + Display.flex
         + JustifyContent.center
         + AlignItems.center
@@ -100,7 +99,7 @@ open class ZkInputStyles : ZkCssStyleSheet() {
 
 
     @Suppress("unused") // CSS selector, used by the browser
-    val checkBoxMark by cssRule(
+    open val checkBoxMark by cssRule(
         """
             [type="checkbox"]:not(:checked) + label > svg
         """.trimIndent()

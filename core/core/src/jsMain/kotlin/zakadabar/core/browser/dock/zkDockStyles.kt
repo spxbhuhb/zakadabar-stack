@@ -6,7 +6,7 @@ package zakadabar.core.browser.dock
 import zakadabar.core.resource.ZkColors
 import zakadabar.core.resource.css.*
 
-val zkDockStyles by cssStyleSheet(ZkDockStyles())
+var zkDockStyles by cssStyleSheet(ZkDockStyles())
 
 open class ZkDockStyles : ZkCssStyleSheet() {
 

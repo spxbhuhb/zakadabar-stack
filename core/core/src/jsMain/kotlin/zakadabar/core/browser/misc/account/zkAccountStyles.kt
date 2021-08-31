@@ -5,11 +5,11 @@ package zakadabar.core.browser.misc.account
 
 import zakadabar.core.resource.css.*
 
-val zkAccountStyles by cssStyleSheet(ZkAccountStyles())
+var zkAccountStyles by cssStyleSheet(ZkAccountStyles())
 
-class ZkAccountStyles : ZkCssStyleSheet() {
+open class ZkAccountStyles : ZkCssStyleSheet() {
 
-    val avatar by cssClass {
+    open val avatar by cssClass {
         width = 28.px
         height = 28.px
         fontSize = 14.px

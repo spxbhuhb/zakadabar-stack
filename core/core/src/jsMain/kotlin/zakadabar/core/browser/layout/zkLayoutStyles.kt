@@ -5,43 +5,43 @@ package zakadabar.core.browser.layout
 
 import zakadabar.core.resource.css.*
 
-val zkLayoutStyles by cssStyleSheet(ZkLayoutStyles())
+var zkLayoutStyles by cssStyleSheet(ZkLayoutStyles())
 
 open class ZkLayoutStyles : ZkCssStyleSheet() {
 
-    val w100 by cssClass {
+    open val w100 by cssClass {
         width = 100.percent
     }
 
-    val h100 by cssClass {
+    open val h100 by cssClass {
         height = 100.percent
     }
 
-    val hidden by cssClass {
+    open val hidden by cssClass {
         display = "none !important"
     }
 
-    val row by cssClass {
+    open val row by cssClass {
         + Display.flex
         + FlexDirection.row
     }
 
-    val column by cssClass {
+    open val column by cssClass {
         + Display.flex
         + FlexDirection.column
     }
 
-    val grow by cssClass {
+    open val grow by cssClass {
         flexGrow = 1.0
     }
 
-    val grid by cssClass {
+    open val grid by cssClass {
         + Display.grid
         borderCollapse = "collapse"
         border = "none"
     }
 
-    val gridGap by cssClass {
+    open val gridGap by cssClass {
         gap = theme.spacingStep.px
     }
 
@@ -50,7 +50,7 @@ open class ZkLayoutStyles : ZkCssStyleSheet() {
      * hide it. The idea behind this is that some people like to have things separated
      * by borders, some don't.
      */
-    val border by cssClass {
+    open val border by cssClass {
         border = theme.border
     }
 
@@ -58,7 +58,7 @@ open class ZkLayoutStyles : ZkCssStyleSheet() {
      * A fix border. Use this when you want the border, no matter what. This is different
      * than [border] because border is meant to switchable by the user.
      */
-    val fixBorder by cssClass {
+    open val fixBorder by cssClass {
         border = theme.fixBorder
     }
 
@@ -72,39 +72,39 @@ open class ZkLayoutStyles : ZkCssStyleSheet() {
     /**
      * Switch off the border with "!important".
      */
-    val noBorder by cssClass {
+    open val noBorder by cssClass {
         border = "none !important"
     }
 
     /**
      * A block with background color from the theme and a fix border around it.
      */
-    val block by cssClass {
+    open val block by cssClass {
         border = theme.fixBorder
         backgroundColor = theme.blockBackgroundColor
     }
 
-    val justifySelfCenter by cssClass {
+    open val justifySelfCenter by cssClass {
         + JustifySelf.center
     }
 
-    val alignSelfCenter by cssClass {
+    open val alignSelfCenter by cssClass {
         + AlignSelf.center
     }
 
-    val p1 by cssClass {
+    open val p1 by cssClass {
         padding = theme.spacingStep.px
     }
 
-    val pl1 by cssClass {
+    open val pl1 by cssClass {
         paddingLeft = theme.spacingStep.px
     }
 
-    val fs80 by cssClass {
+    open val fs80 by cssClass {
         fontSize = 80.percent
     }
 
-    val layout by cssClass {
+    open val layout by cssClass {
         + Position.absolute
         top = 0.px
         left = 0.px
@@ -113,7 +113,7 @@ open class ZkLayoutStyles : ZkCssStyleSheet() {
         + Overflow.hidden
     }
 
-    val grid1 by cssClass {
+    open val grid1 by cssClass {
         + Position.relative
         + BoxSizing.borderBox
         + Display.grid
@@ -122,7 +122,7 @@ open class ZkLayoutStyles : ZkCssStyleSheet() {
         padding = theme.spacingStep.px
     }
 
-    val grid2 by cssClass {
+    open val grid2 by cssClass {
         + Position.relative
         + BoxSizing.borderBox
         + Display.grid
@@ -131,7 +131,7 @@ open class ZkLayoutStyles : ZkCssStyleSheet() {
         padding = theme.spacingStep.px
     }
 
-    val grid3 by cssClass {
+    open val grid3 by cssClass {
         + Position.relative
         + BoxSizing.borderBox
         + Display.grid

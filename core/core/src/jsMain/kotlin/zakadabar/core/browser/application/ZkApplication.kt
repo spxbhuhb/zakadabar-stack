@@ -16,7 +16,6 @@ import zakadabar.core.module.modules
 import zakadabar.core.resource.*
 import zakadabar.core.server.ServerDescriptionBo
 import zakadabar.core.text.TranslationProvider
-import zakadabar.core.util.InstanceStore
 
 /**
  * The application itself, initialized in main.kt.
@@ -92,7 +91,8 @@ open class ZkApplication {
 
     lateinit var routing: ZkAppRouting
 
-    var services = InstanceStore<Any>()
+    @Deprecated("use global modules instead")
+    var services = modules
 
     val stringStores = mutableListOf<ZkStringStore>()
 
@@ -153,7 +153,7 @@ open class ZkApplication {
     }
 
     suspend fun initSession() {
-        sessionManager = services.firstOrNull() ?: EmptySessionManager()
+        sessionManager = modules.firstOrNull() ?: EmptySessionManager()
         sessionManager.init()
     }
 
