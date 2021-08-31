@@ -9,8 +9,13 @@ changed:
 - change ZkFormStyles from object to class
 - ZkSideBar arrow alignment
   
+deprecated:
+
+- ZkApplication.services (use modules instead)
+  
 fixed:
 
 - Can't place id on form in read mode #63
 - zkTableStyles is val instead of var #64
 - Search in uppercase #61
+- accessing settings from different thread than main during module start deadlocks

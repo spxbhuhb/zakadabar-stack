@@ -3,7 +3,9 @@
  */
 package zakadabar.core.browser.application
 
-interface ZkSessionManager {
+import zakadabar.core.module.CommonModule
+
+interface ZkSessionManager : CommonModule {
     suspend fun init()
     suspend fun renew()
 }

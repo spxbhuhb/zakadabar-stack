@@ -21,14 +21,14 @@ open class Setting<V : BaseBo>(
 
     operator fun getValue(thisRef: Any?, property: KProperty<*>): V {
         if (value === UNINITIALIZED) {
+            val module = modules.firstOrNull<SettingProvider>()
             runBlocking {
                 mutex.withLock {
                     // This second check is protected by the mutex. If another thread tries to change
                     // initialize the value at the same time, it will wait until this one finishes.
                     // Then it goes into the protected block and realize that the value is already set.
                     if (value === UNINITIALIZED) {
-                        value = modules
-                            .firstOrNull<SettingProvider>()
+                        value = module
                             ?.get(default, namespace, serializer)
                             ?: throw IllegalStateException(noProvider)
                     }
