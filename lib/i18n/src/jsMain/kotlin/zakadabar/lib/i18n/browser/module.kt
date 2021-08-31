@@ -5,6 +5,7 @@ package zakadabar.lib.i18n.browser
 
 import zakadabar.core.browser.application.ZkAppRouting
 import zakadabar.core.browser.application.ZkApplication
+import zakadabar.core.module.modules
 import zakadabar.core.resource.ZkStringStore
 import zakadabar.core.text.TranslationProvider
 import zakadabar.lib.i18n.data.TranslationsByLocale
@@ -18,7 +19,7 @@ fun install(routing: ZkAppRouting) {
 }
 
 fun install(application : ZkApplication) {
-    application.services += TranslationProviderImpl()
+    modules += TranslationProviderImpl()
     application.stringStores += i18nStrings
 }
 

@@ -165,7 +165,7 @@ The locale of the site is determined as follows:
 1. An error message is shown that the locale cannot be determined.
 
 Once the locale is set, `initLocale` looks up a [TranslationProvider](/core/core/src/commonMain/kotlin/zakadabar/core/text/TranslationProvider.kt) 
-between `application.services` and if found, downloads the translations for that given locale, so automatic translations will
+between `modules` and if found, downloads the translations for that given locale, so automatic translations will
 work. 
 
 If you don't use accounts and sessions, the locale initialization needs a default locale specified:

@@ -181,7 +181,7 @@ open class ZkApplication {
             store += it
         }
 
-        services.firstOrNull<TranslationProvider>()?.translate(store, locale)
+        modules.firstOrNull<TranslationProvider>()?.translate(store, locale)
 
         localizedStrings = store
         localizedFormats = BuiltinLocalizedFormats()
