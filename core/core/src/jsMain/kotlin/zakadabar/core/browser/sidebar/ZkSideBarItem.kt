@@ -64,7 +64,7 @@ open class ZkSideBarItem(
         textElement.innerText = if (capitalize) text.capitalized() else text
 
         icon?.let {
-            + ZkIcon(icon) css zkSideBarStyles.icon
+            + ZkIcon(icon, size = zkSideBarStyles.iconSize) css zkSideBarStyles.icon
         }
 
         + textElement

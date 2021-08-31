@@ -11,7 +11,9 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
 
     open var backgroundColor by cssParameter { theme.backgroundColor }
     open var textColor by cssParameter { theme.textColor }
+    open var itemMinHeight by cssParameter { 28 }
     open var fontSize by cssParameter { "80%" }
+    open var iconSize by cssParameter { 18 }
     open var hoverTextColor by cssParameter { theme.hoverTextColor }
     open var sectionBackgroundColor by cssParameter { theme.blockBackgroundColor }
     open var sectionTextColor by cssParameter { theme.textColor }
@@ -46,7 +48,7 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
 
         + Cursor.pointer
 
-        minHeight = 28.px
+        minHeight = itemMinHeight.px
         paddingRight = 8.px
         paddingLeft = 20.px
 
@@ -65,7 +67,8 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
 
     open val icon by cssClass {
         fill = this@ZkSideBarStyles.textColor
-        maxWidth = 28.px
+        width = iconSize.px
+        height = iconSize.px
         marginRight = (theme.spacingStep / 2).px
     }
 
@@ -79,7 +82,7 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
 
         + Cursor.pointer
 
-        minHeight = 28.px
+        minHeight = itemMinHeight.px
 
         hover {
             backgroundColor = theme.hoverBackgroundColor
@@ -96,11 +99,16 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         title()
 
         paddingRight = 8.px
-        paddingLeft = 14.px
+        //paddingLeft = 14.px
 
         fill = this@ZkSideBarStyles.textColor
         color = this@ZkSideBarStyles.textColor
 
+    }
+
+    open val groupArrow by cssClass {
+        width = 20.px
+        paddingLeft = 2.px
     }
 
     open val groupContent by cssClass {
@@ -123,9 +131,6 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         fill = sectionBorderColor
         borderBottom = "1px solid $sectionBorderColor"
 
-        hover {
-
-        }
         on(":first-child") {
             marginTop = 4.px
         }

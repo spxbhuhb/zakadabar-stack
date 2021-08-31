@@ -35,7 +35,7 @@ import zakadabar.core.util.after
  */
 open class ZkSideBarGroup(
     val text: String,
-    val icon : ZkIconSource? = null,
+    val icon: ZkIconSource? = null,
     val section: Boolean = false,
     val url: String? = null,
     var onClick: ((Boolean) -> Unit)? = null,
@@ -91,23 +91,23 @@ open class ZkSideBarGroup(
     }
 
     open fun buildGroup() {
-        + column {
-            + div(zkSideBarStyles.groupTitle) {
-                + div {
-                    + openIcon
-                    + closeIcon.hide()
-                    on("click", ::onHandleGroupClick)
-                }
-                icon?.let {
-                    + ZkIcon(icon) css zkSideBarStyles.icon
-                }
-                + textElement css zkLayoutStyles.grow
-                on("click", ::onNavigate)
+        + zkLayoutStyles.column
+
+        + div(zkSideBarStyles.groupTitle) {
+            + div(zkSideBarStyles.groupArrow) {
+                + openIcon
+                + closeIcon.hide()
+                on("click", ::onHandleGroupClick)
             }
-            + zke(zkSideBarStyles.groupContent) {
-                if (! section) hide()
-                builder()
+            icon?.let {
+                + ZkIcon(icon) css zkSideBarStyles.icon
             }
+            + textElement css zkLayoutStyles.grow
+            on("click", ::onNavigate)
+        }
+        + zke(zkSideBarStyles.groupContent) {
+            if (! section) hide()
+            builder()
         }
     }
 

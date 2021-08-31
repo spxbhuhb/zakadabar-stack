@@ -7,6 +7,7 @@ This page contains the changes included in the next release.
 changed:
 
 - change ZkFormStyles from object to class
+- ZkSideBar arrow alignment
   
 fixed:
 
