@@ -5,16 +5,16 @@ package zakadabar.lib.accounts.browser.login
 
 import kotlinx.browser.window
 import kotlinx.coroutines.channels.Channel
+import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.application
 import zakadabar.core.browser.application.executor
-import zakadabar.core.browser.ZkElement
-import zakadabar.core.browser.form.ZkFormStyles
+import zakadabar.core.browser.form.zkFormStyles
 import zakadabar.core.browser.modal.zkModalStyles
 import zakadabar.core.browser.titlebar.ZkLocalTitleBar
-import zakadabar.core.resource.css.AlignItems
 import zakadabar.core.browser.util.io
 import zakadabar.core.browser.util.marginBottom
 import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.resource.css.AlignItems
 import zakadabar.core.resource.localizedStrings
 
 /**
@@ -46,7 +46,7 @@ class RenewLoginDialog : ZkElement() {
         + column(zkModalStyles.content) {
             + AlignItems.center
 
-            + div(ZkFormStyles.sectionSummary) {
+            + div(zkFormStyles.sectionSummary) {
                 + localizedStrings.sessionRenew
             } marginBottom 5
 

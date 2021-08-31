@@ -3,13 +3,13 @@
  */
 package zakadabar.core.browser.form
 
-import zakadabar.core.data.BaseBo
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.ZkElementMode
 import zakadabar.core.browser.button.ZkButton
 import zakadabar.core.browser.modal.ZkConfirmDialog
-import zakadabar.core.resource.ZkFlavour
 import zakadabar.core.browser.util.io
+import zakadabar.core.data.BaseBo
+import zakadabar.core.resource.ZkFlavour
 import zakadabar.core.resource.localizedStrings
 import zakadabar.core.text.capitalized
 
@@ -22,33 +22,33 @@ open class ZkFormButtons<T : BaseBo>(
     override fun onCreate() {
         when (form.mode) {
             ZkElementMode.Create ->
-                + row(ZkFormStyles.buttons) {
+                + row(zkFormStyles.buttons) {
                     + backButton()
                     + submitButton(submitLabel ?: localizedStrings.save, execute)
                     + progressIndicator()
                 }
 
             ZkElementMode.Read -> {
-                + row(ZkFormStyles.buttons) {
+                + row(zkFormStyles.buttons) {
                     + backButton()
                     form.openUpdate?.let { + submitButton(submitLabel ?: localizedStrings.edit) { it(form.bo) } }
                     + progressIndicator()
                 }
             }
             ZkElementMode.Update ->
-                + row(ZkFormStyles.buttons) {
+                + row(zkFormStyles.buttons) {
                     + backButton()
                     + submitButton(submitLabel ?: localizedStrings.save, execute)
                     + progressIndicator()
                 }
             ZkElementMode.Delete ->
-                + row(ZkFormStyles.buttons) {
+                + row(zkFormStyles.buttons) {
                     + backButton()
                     + submitButton(submitLabel ?: localizedStrings.delete, execute)
                     + progressIndicator()
                 }
             ZkElementMode.Action -> {
-                + row(ZkFormStyles.buttons) {
+                + row(zkFormStyles.buttons) {
                     + backButton()
                     + submitButton(submitLabel ?: localizedStrings.execute, execute)
                     + progressIndicator()
@@ -57,7 +57,7 @@ open class ZkFormButtons<T : BaseBo>(
             ZkElementMode.Query -> {
             }
             ZkElementMode.Other -> {
-                + row(ZkFormStyles.buttons) {
+                + row(zkFormStyles.buttons) {
                     + backButton()
                     + submitButton(submitLabel ?: localizedStrings.execute, execute)
                     + progressIndicator()

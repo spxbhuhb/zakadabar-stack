@@ -4,25 +4,23 @@
 package zakadabar.lib.accounts.browser.accounts
 
 import kotlinx.coroutines.coroutineScope
-import zakadabar.lib.accounts.data.*
 import zakadabar.core.authorize.appRoles
-import zakadabar.core.data.EntityId
-import zakadabar.core.browser.application.application
-import zakadabar.core.browser.application.executor
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.ZkElementMode
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.application.executor
 import zakadabar.core.browser.crud.ZkCrudEditor
-import zakadabar.core.browser.form.ZkForm
-import zakadabar.core.browser.form.ZkFormStyles
 import zakadabar.core.browser.field.ZkOptSecretField
 import zakadabar.core.browser.field.ZkOptSecretVerificationField
 import zakadabar.core.browser.field.ZkSecretField
 import zakadabar.core.browser.field.ZkSecretVerificationField
+import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.form.ZkFormButtons
+import zakadabar.core.browser.form.zkFormStyles
 import zakadabar.core.browser.input.ZkCheckboxList
 import zakadabar.core.browser.input.ZkCheckboxListItem
-import zakadabar.core.browser.tabcontainer.ZkTabContainer
 import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.tabcontainer.ZkTabContainer
 import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.titlebar.ZkAppTitleProvider
 import zakadabar.core.browser.toast.toastDanger
@@ -31,7 +29,9 @@ import zakadabar.core.browser.toast.toastWarning
 import zakadabar.core.browser.util.default
 import zakadabar.core.browser.util.io
 import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.data.EntityId
 import zakadabar.core.resource.localizedStrings
+import zakadabar.lib.accounts.data.*
 
 class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
@@ -100,9 +100,9 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
         override fun onCreate() {
             super.onCreate()
-            + div(ZkFormStyles.contentContainer) {
-                + column(ZkFormStyles.form) {
-                    buildPoint.classList += ZkFormStyles.onePanel
+            + div(zkFormStyles.contentContainer) {
+                + column(zkFormStyles.form) {
+                    buildPoint.classList += zkFormStyles.onePanel
 
                     + basics()
 
@@ -215,9 +215,9 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
         override fun onCreate() {
             onConfigure()
-            + div(ZkFormStyles.contentContainer) {
-                + column(ZkFormStyles.form) {
-                    buildPoint.classList += ZkFormStyles.onePanel
+            + div(zkFormStyles.contentContainer) {
+                + column(zkFormStyles.form) {
+                    buildPoint.classList += zkFormStyles.onePanel
                     + basics()
                     + buttons()
                     + invalidFieldList()
@@ -255,9 +255,9 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
         override fun onCreate() {
             onConfigure()
-            + div(ZkFormStyles.contentContainer) {
-                + column(ZkFormStyles.form) {
-                    buildPoint.classList += ZkFormStyles.onePanel
+            + div(zkFormStyles.contentContainer) {
+                + column(zkFormStyles.form) {
+                    buildPoint.classList += zkFormStyles.onePanel
 
                     val expl = if (executor.account.accountId == bo.accountId) {
                         localizedStrings.passwordChangeExpOwn
@@ -330,9 +330,9 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
         override fun onCreate() {
             onConfigure()
 
-            + div(ZkFormStyles.contentContainer) {
-                + column(ZkFormStyles.form) {
-                    buildPoint.classList += ZkFormStyles.onePanel
+            + div(zkFormStyles.contentContainer) {
+                + column(zkFormStyles.form) {
+                    buildPoint.classList += zkFormStyles.onePanel
 
                     + section(localizedStrings.accountStatus) {
                         + bo::locked
@@ -368,9 +368,9 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
         override fun onCreate() {
             onConfigure()
-            + div(ZkFormStyles.contentContainer) {
-                + column(ZkFormStyles.form) {
-                    buildPoint.classList += ZkFormStyles.onePanel
+            + div(zkFormStyles.contentContainer) {
+                + column(zkFormStyles.form) {
+                    buildPoint.classList += zkFormStyles.onePanel
 
                     + section(localizedStrings.roles) {
                         + ZkCheckboxList(items)

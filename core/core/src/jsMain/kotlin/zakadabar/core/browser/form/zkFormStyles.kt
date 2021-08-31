@@ -7,9 +7,9 @@ import zakadabar.core.browser.field.ZkFieldStyles
 import zakadabar.core.resource.ZkColors
 import zakadabar.core.resource.css.*
 
-var zkFormStyles by cssStyleSheet(ZkFormStyles)
+var zkFormStyles by cssStyleSheet(ZkFormStyles())
 
-class ZkFormStyles : ZkFieldStyles() {
+open class ZkFormStyles : ZkFieldStyles() {
 
     override var fieldHeight by cssParameter { 38 }
 

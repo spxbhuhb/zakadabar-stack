@@ -4,11 +4,10 @@
 package zakadabar.core.browser.form
 
 import zakadabar.core.browser.ZkElement
-import zakadabar.core.browser.form.ZkFormStyles
-import zakadabar.core.resource.css.ZkCssStyleRule
-import zakadabar.core.resource.theme
 import zakadabar.core.browser.util.marginBottom
 import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.resource.css.ZkCssStyleRule
+import zakadabar.core.resource.theme
 
 class ZkFormSection(
     private val title: String? = null,
@@ -18,18 +17,18 @@ class ZkFormSection(
 ) : ZkElement() {
 
     override fun onCreate() {
-        + ZkFormStyles.section
+        + zkFormStyles.section
 
         classList += css
 
         if (title != null) {
-            + div(ZkFormStyles.sectionTitle) {
+            + div(zkFormStyles.sectionTitle) {
                 + title
             } marginBottom (if (summary == null) theme.spacingStep / 2 else 0)
         }
 
         if (summary != null) {
-            + div(ZkFormStyles.sectionSummary) {
+            + div(zkFormStyles.sectionSummary) {
                 + summary
             } marginBottom theme.spacingStep / 2
         }

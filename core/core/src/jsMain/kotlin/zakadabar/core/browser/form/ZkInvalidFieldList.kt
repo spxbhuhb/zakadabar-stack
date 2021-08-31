@@ -6,13 +6,12 @@ package zakadabar.core.browser.form
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.field.ZkFieldBase
 import zakadabar.core.browser.util.marginBottom
-import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.localizedStrings
 
 open class ZkInvalidFieldList : ZkElement() {
 
     override fun onCreate() {
-        classList += ZkFormStyles.invalidFieldList
+       + zkFormStyles.invalidFieldList
     }
 
     fun show(invalid: List<ZkFieldBase<*,*>>) {
@@ -21,7 +20,7 @@ open class ZkInvalidFieldList : ZkElement() {
         clear()
 
         + column {
-            + div(ZkFormStyles.invalidFieldListInto) { + localizedStrings.invalidFieldsExplanation } marginBottom 8
+            + div(zkFormStyles.invalidFieldListInto) { + localizedStrings.invalidFieldsExplanation } marginBottom 8
             + div { + invalid.joinToString(", ") { it.labelText ?: it.propName ?: "NA" } }
         }
     }
