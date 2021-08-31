@@ -8,7 +8,7 @@ import zakadabar.core.resource.css.cssStyleSheet
 import zakadabar.core.resource.css.percent
 import zakadabar.core.util.PublicApi
 
-val zkHtmlStyles by cssStyleSheet(ZkHtmlStyles())
+var zkHtmlStyles by cssStyleSheet(ZkHtmlStyles())
 
 open class ZkHtmlStyles : ZkCssStyleSheet() {
 

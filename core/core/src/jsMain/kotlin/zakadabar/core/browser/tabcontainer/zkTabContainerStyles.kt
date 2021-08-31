@@ -5,7 +5,7 @@ package zakadabar.core.browser.tabcontainer
 
 import zakadabar.core.resource.css.*
 
-val zkTabContainerStyles by cssStyleSheet(ZkTabContainerStyles())
+var zkTabContainerStyles by cssStyleSheet(ZkTabContainerStyles())
 
 open class ZkTabContainerStyles : ZkCssStyleSheet() {
 

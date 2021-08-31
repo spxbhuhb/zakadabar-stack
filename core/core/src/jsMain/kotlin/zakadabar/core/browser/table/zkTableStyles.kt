@@ -7,7 +7,7 @@ import zakadabar.core.browser.field.ZkFieldStyles
 import zakadabar.core.resource.css.*
 import zakadabar.core.util.PublicApi
 
-val zkTableStyles by cssStyleSheet(ZkTableStyles())
+var zkTableStyles by cssStyleSheet(ZkTableStyles())
 
 open class ZkTableStyles : ZkFieldStyles() {
 

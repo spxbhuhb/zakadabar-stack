@@ -9,7 +9,7 @@ import zakadabar.core.resource.css.ZkCssStyleSheet
 import zakadabar.core.resource.css.cssStyleSheet
 import zakadabar.core.resource.css.px
 
-val zkIconStyles by cssStyleSheet(ZkIconStyles())
+var zkIconStyles by cssStyleSheet(ZkIconStyles())
 
 open class ZkIconStyles : ZkCssStyleSheet() {
 
@@ -21,25 +21,25 @@ open class ZkIconStyles : ZkCssStyleSheet() {
         }
     }
 
-    val icon18 by cssClass {
+    open val icon18 by cssClass {
         + BoxSizing.borderBox
         width = 18.px
         height = 18.px
     }
 
-    val icon20 by cssClass {
+    open val icon20 by cssClass {
         + BoxSizing.borderBox
         width = 20.px
         height = 20.px
     }
 
-    val icon22 by cssClass {
+    open val icon22 by cssClass {
         + BoxSizing.borderBox
         width = 22.px
         height = 22.px
     }
 
-    val icon24 by cssClass {
+    open val icon24 by cssClass {
         + BoxSizing.borderBox
         width = 24.px
         height = 24.px

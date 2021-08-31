@@ -7,9 +7,9 @@ import zakadabar.core.resource.css.*
 
 var zkModalStyles by cssStyleSheet(ZkModalStyles())
 
-class ZkModalStyles : ZkCssStyleSheet() {
+open class ZkModalStyles : ZkCssStyleSheet() {
 
-    val modalContainer by cssClass {
+    open val modalContainer by cssClass {
         position = "fixed"
         top = 0.px
         left = 0.px
@@ -22,22 +22,22 @@ class ZkModalStyles : ZkCssStyleSheet() {
         zIndex = 1900.zIndex
     }
 
-    val modal by cssClass {
+    open val modal by cssClass {
         background = theme.backgroundColor
         border = theme.border
     }
 
-    val title by cssClass {
+    open val title by cssClass {
         paddingLeft = theme.spacingStep.px
         paddingRight = theme.spacingStep.px
         borderBottom = theme.border
     }
 
-    val content by cssClass {
+    open val content by cssClass {
         padding = theme.spacingStep.px
     }
 
-    val buttons by cssClass {
+    open val buttons by cssClass {
         + Display.flex
         + FlexDirection.row
         + JustifyContent.spaceAround

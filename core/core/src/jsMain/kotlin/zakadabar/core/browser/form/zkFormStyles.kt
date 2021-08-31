@@ -7,9 +7,9 @@ import zakadabar.core.browser.field.ZkFieldStyles
 import zakadabar.core.resource.ZkColors
 import zakadabar.core.resource.css.*
 
-val zkFormStyles by cssStyleSheet(ZkFormStyles)
+var zkFormStyles by cssStyleSheet(ZkFormStyles)
 
-object ZkFormStyles : ZkFieldStyles() {
+class ZkFormStyles : ZkFieldStyles() {
 
     override var fieldHeight by cssParameter { 38 }
 
@@ -23,7 +23,7 @@ object ZkFormStyles : ZkFieldStyles() {
     // Containers and layouts
     // -------------------------------------------------------------------------
 
-    val outerContainer by cssClass {
+    open val outerContainer by cssClass {
         + BoxSizing.borderBox
         + Display.flex
         + FlexDirection.column
@@ -31,29 +31,29 @@ object ZkFormStyles : ZkFieldStyles() {
         width = 100.percent
     }
 
-    val contentContainer by cssClass {
+    open val contentContainer by cssClass {
         flexGrow = 1.0
     }
 
-    val form by cssClass {
+    open val form by cssClass {
 
     }
 
-    val onePanel by cssClass {
+    open val onePanel by cssClass {
         + Display.grid
 
         gridTemplateColumns = 1.fr
         gap = theme.spacingStep.px
     }
 
-    val twoPanels by cssClass {
+    open val twoPanels by cssClass {
         + Display.grid
 
         gridTemplateColumns = "1fr 1fr"
         gap = theme.spacingStep.px
     }
 
-    val spanTwoPanels by cssClass {
+    open val spanTwoPanels by cssClass {
         gridColumn = "1 / span 2"
     }
 
@@ -61,7 +61,7 @@ object ZkFormStyles : ZkFieldStyles() {
     // Buttons
     // -------------------------------------------------------------------------
 
-    val buttons by cssClass {
+    open val buttons by cssClass {
         marginBlockStart = (theme.spacingStep / 2).px
         marginBlockEnd = (theme.spacingStep / 2).px
     }
@@ -70,7 +70,7 @@ object ZkFormStyles : ZkFieldStyles() {
     // Section
     // -------------------------------------------------------------------------
 
-    val section by cssClass {
+    open val section by cssClass {
         + Display.flex
         + FlexDirection.column
 
@@ -85,13 +85,13 @@ object ZkFormStyles : ZkFieldStyles() {
         border = theme.fixBorder
     }
 
-    val sectionTitle by cssClass {
+    open val sectionTitle by cssClass {
         color = theme.textColor
         fontWeight = 500.weight
         paddingBottom = 4.px
     }
 
-    val sectionSummary by cssClass {
+    open val sectionSummary by cssClass {
         color = theme.textColor
         paddingBottom = 16.px
     }
@@ -100,7 +100,7 @@ object ZkFormStyles : ZkFieldStyles() {
     // Invalid field list
     // -------------------------------------------------------------------------
 
-    val invalidFieldList by cssClass {
+    open val invalidFieldList by cssClass {
         padding = 12.px
         margin = 8.px
         boxShadow = theme.boxShadow
@@ -108,7 +108,7 @@ object ZkFormStyles : ZkFieldStyles() {
         backgroundColor = ZkColors.white
     }
 
-    val invalidFieldListInto by cssClass {
+    open val invalidFieldListInto by cssClass {
         fontSize = 80.percent
         color = ZkColors.Gray.c600
         paddingBottom = 16.px

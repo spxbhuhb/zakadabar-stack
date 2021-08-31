@@ -5,7 +5,7 @@ package zakadabar.core.browser.button
 
 import zakadabar.core.resource.css.*
 
-val zkButtonStyles by cssStyleSheet(ZkButtonStyles())
+var zkButtonStyles by cssStyleSheet(ZkButtonStyles())
 
 open class ZkButtonStyles : ZkCssStyleSheet() {
 

@@ -113,7 +113,7 @@ This is a fine-tuned example, that can be used to replace one of the default the
 
 * CSS style sheets are written in Kotlin.
 * Extend [ZkCssStyleSheet](/core/core/src/jsMain/kotlin/zakadabar/core/resource/css/ZkCssStyleSheet.kt) to write a new one.
-* Use `val yourStyles by cssStyleSheet(YourStyleSheet())` to make an instance of the style sheet.
+* Use `var yourStyles by cssStyleSheet(YourStyleSheet())` to make an instance of the style sheet.
 * When the theme changes, all style sheets are recompiled.
     * During recompile the style names remain the same.
     * All style sheet parameters are reset before call of `theme.onResume`. 
@@ -135,7 +135,7 @@ to pay attention to the assignment. In the example `backgroundColor` shows
 how to do this properly.
 
 ```kotlin
-val exampleStyles by cssStyleSheet(ExampleStyles())
+var exampleStyles by cssStyleSheet(ExampleStyles())
 
 open class ExampleStyles : ZkCssStyleSheet() {
 

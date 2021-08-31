@@ -5,7 +5,7 @@ package zakadabar.core.browser.sidebar
 
 import zakadabar.core.resource.css.*
 
-val zkSideBarStyles by cssStyleSheet(ZkSideBarStyles())
+var zkSideBarStyles by cssStyleSheet(ZkSideBarStyles())
 
 open class ZkSideBarStyles : ZkCssStyleSheet() {
 
@@ -69,7 +69,7 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         marginRight = (theme.spacingStep / 2).px
     }
 
-    fun ZkCssStyleRule.title() {
+    open fun ZkCssStyleRule.title() {
         + BoxSizing.borderBox
 
         + Display.flex

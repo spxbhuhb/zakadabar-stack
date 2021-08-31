@@ -5,22 +5,22 @@ package zakadabar.core.browser.misc.dropdown
 
 import zakadabar.core.resource.css.*
 
-val zkDropdownStyles by cssStyleSheet(ZkDropdownStyles())
+var zkDropdownStyles by cssStyleSheet(ZkDropdownStyles())
 
-class ZkDropdownStyles : ZkCssStyleSheet() {
+open class ZkDropdownStyles : ZkCssStyleSheet() {
 
-    val dropdown by cssClass {
+    open val dropdown by cssClass {
         + Position.relative
     }
 
-    val dropdownContent by cssClass {
+    open val dropdownContent by cssClass {
         + Position.absolute
         + Display.none
         zIndex = 100.zIndex
         outline = "none"
     }
 
-    val dropdownActive by cssClass {
+    open val dropdownActive by cssClass {
         display = "initial"
     }
 }

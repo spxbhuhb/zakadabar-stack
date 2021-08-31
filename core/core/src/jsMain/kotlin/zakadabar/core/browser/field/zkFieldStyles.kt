@@ -7,7 +7,7 @@ import zakadabar.core.resource.ZkColors
 import zakadabar.core.resource.css.*
 import zakadabar.core.util.alpha
 
-val zkFieldStyles by cssStyleSheet(ZkFieldStyles())
+var zkFieldStyles by cssStyleSheet(ZkFieldStyles())
 
 open class ZkFieldStyles : ZkCssStyleSheet() {
 
@@ -17,12 +17,12 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
     // Field Base
     // -------------------------------------------------------------------------
 
-    val fieldContainer by cssClass {
+    open val fieldContainer by cssClass {
         + BoxSizing.borderBox
         + Display.contents
     }
 
-    val fieldLabel by cssClass {
+    open val fieldLabel by cssClass {
         + Display.flex
         + AlignItems.center
 
@@ -36,17 +36,17 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         paddingRight = 8.px
     }
 
-    val mandatoryMark by cssClass {
+    open val mandatoryMark by cssClass {
         color = ZkColors.Red.c400
     }
 
-    val fieldValue by cssClass {
+    open val fieldValue by cssClass {
         minHeight = fieldHeight.px
         color = theme.inputTextColor
         width = 100.percent
     }
 
-    val fieldError by cssClass {
+    open val fieldError by cssClass {
         color = ZkColors.Gray.c700
         fontSize = 90.percent
         borderBottom = "1px solid ${ZkColors.Gray.c600}"
@@ -56,7 +56,7 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
     // Text
     // -------------------------------------------------------------------------
 
-    private fun ZkCssStyleRule.fieldDefault() {
+    open fun ZkCssStyleRule.fieldDefault() {
         + Display.block
         + BoxSizing.borderBox
 
@@ -77,7 +77,7 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         backgroundColor = theme.inputBackgroundColor
     }
 
-    private fun ZkCssStyleRule.decorators() {
+    open fun ZkCssStyleRule.decorators() {
         on(".invalid") {
             backgroundColor = theme.dangerColor.alpha(0.1)
             border = "1px solid ${theme.dangerColor}"
@@ -118,7 +118,7 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
 
     }
 
-    val disabledString by cssClass {
+    open val disabledString by cssClass {
         fieldDefault()
 
         // https://stackoverflow.com/questions/262158/disabled-input-text-color-on-ios
@@ -131,12 +131,12 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         outline = "none"
     }
 
-    val text by cssClass {
+    open val text by cssClass {
         fieldDefault()
         decorators()
     }
 
-    val textarea by cssClass {
+    open val textarea by cssClass {
         fieldDefault()
         decorators()
     }
@@ -145,7 +145,7 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
     // Selects
     // -------------------------------------------------------------------------
 
-    val selectContainer by cssClass {
+    open val selectContainer by cssClass {
         + Position.relative
         + Display.flex
         + FlexDirection.row
@@ -161,7 +161,7 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         decorators()
     }
 
-    val selectedOption by cssClass {
+    open val selectedOption by cssClass {
         fieldDefault()
 
         // these have to be after fieldDefault
@@ -186,12 +186,12 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         }
     }
 
-    val disabledSelect by cssClass {
+    open val disabledSelect by cssClass {
         backgroundColor = theme.disabledInputBackgroundColor
         color = theme.disabledInputTextColor
     }
 
-    val selectOptionList by cssClass {
+    open val selectOptionList by cssClass {
         + Position.fixed
 
         + OverflowY.auto
@@ -207,7 +207,7 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         borderRadius = theme.cornerRadius.px
     }
 
-    val selectEntry by cssClass {
+    open val selectEntry by cssClass {
         + Display.flex
         + AlignItems.center
         + Cursor.pointer
@@ -224,7 +224,7 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         }
     }
 
-    val selected by cssClass {
+    open val selected by cssClass {
         color = ZkColors.white
         backgroundColor = theme.infoColor
     }
@@ -233,7 +233,7 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
     // Boolean
     // -------------------------------------------------------------------------
 
-    val booleanField by cssClass {
+    open val booleanField by cssClass {
         + Display.flex
         + AlignItems.center
 
