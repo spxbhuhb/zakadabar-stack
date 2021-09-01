@@ -4,16 +4,16 @@
 package zakadabar.core.business
 
 import zakadabar.core.authorize.Executor
-import zakadabar.core.persistence.EntityPersistenceApi
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
+import zakadabar.core.persistence.EntityPersistenceApi
 import kotlin.reflect.KClass
 
 /**
  * Base class for entity backends. Supports CRUD, actions and queries.
  */
-abstract class EntityBusinessLogicCommon<T : EntityBo<T>>  (
+abstract class EntityBusinessLogicCommon<T : EntityBo<T>>(
     /**
      * The class of BO this entity backend servers. Namespace is automatically
      * set to the namespace defined for this BO class.
@@ -111,9 +111,9 @@ abstract class EntityBusinessLogicCommon<T : EntityBo<T>>  (
      *
      * @return BO of the entity created
      */
-    open fun create(executor: Executor, bo: T): T {
-        return pa.create(bo)
-    }
+    open fun create(executor: Executor, bo: T): T = create(bo)
+
+    open fun create(bo : T) : T = pa.create(bo)
 
     /**
      * Read an entity.
@@ -125,9 +125,9 @@ abstract class EntityBusinessLogicCommon<T : EntityBo<T>>  (
      *
      * @return BO of the entity
      */
-    open fun read(executor: Executor, entityId: EntityId<T>): T {
-        return pa.read(entityId)
-    }
+    open fun read(executor: Executor, entityId: EntityId<T>): T = read(entityId)
+
+    open fun read(entityId: EntityId<T>) = pa.read(entityId)
 
     /**
      * Update an existing entity.
@@ -141,9 +141,9 @@ abstract class EntityBusinessLogicCommon<T : EntityBo<T>>  (
      *
      * @return BO of the updated entity.
      */
-    open fun update(executor: Executor, bo: T): T {
-        return pa.update(bo)
-    }
+    open fun update(executor: Executor, bo: T): T = update(bo)
+
+    open fun update(bo: T) : T = pa.update(bo)
 
     /**
      * Delete an entity.
@@ -153,9 +153,9 @@ abstract class EntityBusinessLogicCommon<T : EntityBo<T>>  (
      * @param executor Executor of the operation.
      * @param entityId Id of the entity to delete.
      */
-    open fun delete(executor: Executor, entityId: EntityId<T>) {
-        pa.delete(entityId)
-    }
+    open fun delete(executor: Executor, entityId: EntityId<T>) = delete(entityId)
+
+    open fun delete( entityId: EntityId<T>) = pa.delete(entityId)
 
     /**
      * List all entities of this namespace.
@@ -166,9 +166,9 @@ abstract class EntityBusinessLogicCommon<T : EntityBo<T>>  (
      *
      * @return list of BOs of all entities
      */
-    open fun list(executor: Executor): List<T> {
-        return pa.list()
-    }
+    open fun list(executor: Executor): List<T> = list()
+
+    open fun list() = pa.list()
 
     override fun actionWrapper(executor: Executor, func: (Executor, BaseBo) -> Any?, bo: BaseBo): Any? =
         pa.withTransaction {

@@ -3,13 +3,13 @@
  */
 package zakadabar.lib.email
 
-import zakadabar.lib.accounts.data.AccountPrivateBo
-import zakadabar.lib.email.Mail
 import zakadabar.core.browser.application.target
 import zakadabar.core.browser.crud.ZkCrudTarget
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.resource.localized
+import zakadabar.lib.accounts.data.AccountPrivateBo
+import zakadabar.lib.email.Mail
 
 
 class MailCrud : ZkCrudTarget<Mail>() {

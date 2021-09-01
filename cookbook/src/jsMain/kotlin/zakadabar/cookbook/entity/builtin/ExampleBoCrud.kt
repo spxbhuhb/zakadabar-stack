@@ -5,8 +5,8 @@ package zakadabar.cookbook.entity.builtin
 
 import zakadabar.core.browser.crud.ZkCrudTarget
 import zakadabar.core.browser.crud.ZkInlineCrud
-import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.field.ZkStringField
+import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.resource.localized
 import zakadabar.core.resource.localizedStrings

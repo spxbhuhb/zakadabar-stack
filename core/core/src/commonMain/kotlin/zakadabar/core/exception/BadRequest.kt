@@ -4,6 +4,7 @@
 package zakadabar.core.exception
 
 import zakadabar.core.schema.ValidityReport
+import kotlin.reflect.KProperty
 
 /**
  * On the backend [BadRequest] is converted into HTTP response with status 400.
@@ -17,4 +18,13 @@ import zakadabar.core.schema.ValidityReport
  */
 class BadRequest(
     val validityReport: ValidityReport
-) : Exception()
+) : Exception() {
+
+    /**
+     * Convenience constructor that creates a validity report and adds a custom
+     * constraint fail for the given property.
+     */
+    constructor(property: KProperty<*>, customConstraintName : String) : this(ValidityReport()) {
+        validityReport.fail(property, customConstraintName)
+    }
+}

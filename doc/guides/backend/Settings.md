@@ -45,19 +45,19 @@ To prevent the schema overriding the defaults with zeros, you also have to set s
 
 ```kotlin
 import kotlinx.serialization.Serializable
-import zakadabar.stack.data.DtoBase
-import zakadabar.stack.data.schema.DtoSchema
+import zakadabar.core.data.BaseBo
+import zakadabar.core.schema.BoSchema
 
 @Serializable
-class SessionBackendSettingsDto(
+class SessionBackendSettingsBo(
 
    var sessionTimeout: Long = 30000,
    var updateDelay: Long = 120,
    var expirationCheckInterval: Long = 120
 
-) : DtoBase {
+) : BaseBo {
 
-   override fun schema() = DtoSchema {
+   override fun schema() = BoSchema {
         + ::sessionTimeout default sessionTimeout
         + ::updateDelay default updateDelay
         + ::expirationCheckInterval default expirationCheckInterval

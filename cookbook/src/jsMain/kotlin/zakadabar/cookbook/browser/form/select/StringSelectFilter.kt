@@ -6,7 +6,6 @@ package zakadabar.cookbook.browser.form.select
 import zakadabar.cookbook.cookbookStyles
 import zakadabar.core.browser.ZkElementMode
 import zakadabar.core.browser.field.ZkSelectBase
-import zakadabar.core.browser.field.onSelect
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.data.BaseBo
 import zakadabar.core.util.default

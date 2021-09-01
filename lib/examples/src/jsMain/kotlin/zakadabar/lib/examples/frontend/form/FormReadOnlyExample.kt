@@ -4,18 +4,18 @@
 package zakadabar.lib.examples.frontend.form
 
 import org.w3c.dom.HTMLElement
-import zakadabar.lib.examples.data.builtin.BuiltinBo
-import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
-import zakadabar.lib.examples.resources.strings
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.ZkElementMode
-import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.field.ZkStringField
+import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.browser.toast.toastSuccess
 import zakadabar.core.browser.util.default
 import zakadabar.core.resource.localized
 import zakadabar.core.resource.localizedStrings
+import zakadabar.lib.examples.data.builtin.BuiltinBo
+import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
+import zakadabar.lib.examples.resources.strings
 
 class FormReadOnlyExample(
     element: HTMLElement
@@ -49,7 +49,7 @@ class ReadOnlyBuiltinForm : ZkForm<BuiltinBo>() {
                 + bo::enumSelectValue readOnly true
                 + bo::intValue readOnly true
                 + bo::instantValue readOnly true
-                + opt(bo::optBooleanValue, localizedStrings.trueText, localizedStrings.falseText) readOnly true
+                + opt(bo::optBooleanValue, localizedStrings.trueText, localizedStrings.falseText).also { it.readOnly = true }
                 + bo::optDoubleValue readOnly true
                 + bo::optEnumSelectValue readOnly true
                 + bo::optInstantValue readOnly true
@@ -57,14 +57,14 @@ class ReadOnlyBuiltinForm : ZkForm<BuiltinBo>() {
                 + bo::optSecretValue readOnly true
                 + bo::optRecordSelectValue query { ExampleReferenceBo.all().by { it.name } } readOnly true
                 + bo::optStringValue readOnly true
-                + select(bo::optStringSelectValue, options = listOf("option 1", "option 2", "option3")) readOnly true
+                + bo::optStringSelectValue.asSelect() query { listOf("option 1", "option 2", "option3").map { it to it } } readOnly true
                 + bo::optTextAreaValue readOnly true
                 + bo::optUuidValue readOnly true
                 + bo::secretValue readOnly true
                 + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } } readOnly true
-                + ZkStringField(this@ReadOnlyBuiltinForm, bo::stringValue).also { this@ReadOnlyBuiltinForm.fields += it } readOnly true
-                + select(bo::stringSelectValue, options = listOf("option 1", "option 2", "option3")) readOnly true
-                + textarea(bo::textAreaValue) label strings.textAreaValue readOnly true
+                + ZkStringField(this@ReadOnlyBuiltinForm, bo::stringValue).also { this@ReadOnlyBuiltinForm.fields += it } .also { it.readOnly = true }
+                + bo::stringSelectValue.asSelect() query { listOf("option 1", "option 2", "option3").map { it to it } } readOnly true
+                + bo::textAreaValue.asTextArea() label strings.textAreaValue readOnly true
                 + bo::uuidValue readOnly true
             }
         }

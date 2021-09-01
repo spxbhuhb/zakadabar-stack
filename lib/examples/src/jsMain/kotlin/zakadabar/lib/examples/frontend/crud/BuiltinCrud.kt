@@ -72,7 +72,7 @@ class BuiltinForm : ZkForm<BuiltinBo>() {
                 + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } } readOnly true
                 + ZkStringField(this@BuiltinForm, bo::stringValue).also { this@BuiltinForm.fields += it }
                 + bo::stringSelectValue.asSelect() query { options }
-                + textarea(bo::textAreaValue) label strings.textAreaValue
+                + bo::textAreaValue.asTextArea() label strings.textAreaValue
                 + bo::uuidValue
             }
         }

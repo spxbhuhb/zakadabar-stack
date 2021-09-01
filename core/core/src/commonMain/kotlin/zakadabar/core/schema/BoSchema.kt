@@ -11,7 +11,6 @@ import zakadabar.core.data.EntityId
 import zakadabar.core.data.Secret
 import zakadabar.core.schema.descriptor.BoConstraint
 import zakadabar.core.schema.descriptor.BoDescriptor
-import zakadabar.core.schema.descriptor.BoProperty
 import zakadabar.core.schema.entries.*
 import zakadabar.core.util.PublicApi
 import zakadabar.core.util.UUID
@@ -176,20 +175,4 @@ open class BoSchema() {
             )
         }
     }
-}
-
-interface BoSchemaEntry<T> {
-    fun validate(report: ValidityReport)
-    fun isOptional(): Boolean
-    fun setDefault()
-    fun decodeFromText(text : String?) : T { throw NotImplementedError() }
-    fun setFromText(text : String?) { throw NotImplementedError() }
-    fun push(bo: BoProperty)
-    fun toBoProperty(): BoProperty?
-    fun constraints(): List<BoConstraint>
-}
-
-interface BoPropertyConstraintImpl<T> {
-    fun validate(value: T, report: ValidityReport)
-    fun toBoConstraint(): BoConstraint
 }

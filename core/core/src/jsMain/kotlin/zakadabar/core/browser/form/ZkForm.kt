@@ -708,6 +708,12 @@ open class ZkForm<T : BaseBo>(
     fun KMutableProperty0<String?>.asSelect(): FormFieldWrapper<ZkOptStringSelectField> =
         FormFieldWrapper(ZkOptStringSelectField(this@ZkForm, this))
 
+    fun KMutableProperty0<String>.asTextArea(): FormFieldWrapper<ZkTextAreaField> =
+        FormFieldWrapper(ZkTextAreaField(this@ZkForm, this))
+
+    fun KMutableProperty0<String?>.asTextArea(): FormFieldWrapper<ZkOptTextAreaField> =
+        FormFieldWrapper(ZkOptTextAreaField(this@ZkForm, this))
+
     // -------------------------------------------------------------------------
     //  Property field convenience methods
     // ------------------------------------------------------------------------
@@ -719,31 +725,24 @@ open class ZkForm<T : BaseBo>(
         return fields.first { it.propName == this.name }
     }
 
-    // -------------------------------------------------------------------------
-    //  Option setters
-    // ------------------------------------------------------------------------
 
-    // These setters are here because I want the editor to show the setter in different color.
-    // I know this is a minor detail, but I feel it makes the form code much more readable.
+// -------------------------------------------------------------------------
+//  Option setters
+// ------------------------------------------------------------------------
 
-    infix fun ZkElement?.label(value: String): ZkElement? {
-        if (this is ZkFieldBase<*, *>) this.labelText = value
-        return this
+// These setters are here because I want the editor to show the setter in different color.
+// I know this is a minor detail, but I feel it makes the form code much more readable.
+
+    @Suppress("UNCHECKED_CAST")
+    infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.label(value: String): FT {
+        this.labelText = value
+        return this as FT
     }
 
-    infix fun ZkElement?.readOnly(value: Boolean): ZkElement? {
-        if (this is ZkFieldBase<*, *>) this.readOnly = value
-        return this
-    }
-
-    infix fun <VT, FT : ZkSelectBase<VT, FT>> ZkSelectBase<VT, FT>.sort(value: Boolean): ZkSelectBase<VT, FT> {
-        sort = value
-        return this
-    }
-
-    infix fun <VT, FT : ZkSelectBase<VT, FT>> ZkSelectBase<VT, FT>.query(block: suspend () -> List<Pair<VT, String>>): ZkSelectBase<VT, FT> {
-        fetch = block
-        return this
+    @Suppress("UNCHECKED_CAST")
+    infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.readOnly(value: Boolean): FT {
+        this.readOnly = value
+        return this as FT
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -760,14 +759,35 @@ open class ZkForm<T : BaseBo>(
         return this
     }
 
-    infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.onChange(block: (DT) -> Unit): ZkFieldBase<DT, FT> {
+    @Suppress("UNCHECKED_CAST")
+    infix fun <VT, FT : ZkSelectBase<VT, FT>> ZkSelectBase<VT, FT>.sort(value: Boolean): FT {
+        sort = value
+        return this as FT
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    infix fun <VT, FT : ZkSelectBase<VT, FT>> ZkSelectBase<VT, FT>.query(block: suspend () -> List<Pair<VT, String>>): FT {
+        fetch = block
+        return this as FT
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    infix fun <VT, FT : ZkSelectBase<VT, FT>> ZkSelectBase<VT, FT>.onSelect(onSelect: (Pair<VT, String>?) -> Unit): FT {
+        this.onSelectCallback = onSelect
+        return this as FT
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    @PublicApi
+    infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.onChange(block: (DT) -> Unit): FT {
         onChangeCallback = { _,value,_ -> block(value) }
-        return this
+        return this as FT
     }
 
-    infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.onChange3(block: (ChangeOrigin, DT, FT) -> Unit): ZkFieldBase<DT, FT> {
+    @Suppress("UNCHECKED_CAST")
+    @PublicApi
+    infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.onChange3(block: (ChangeOrigin, DT, FT) -> Unit): FT {
         onChangeCallback = block
-        return this
+        return this as FT
     }
-
 }
