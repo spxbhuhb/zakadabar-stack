@@ -3,14 +3,15 @@
  */
 package zakadabar.lib.accounts.browser
 
-import zakadabar.lib.accounts.browser.accounts.Account
-import zakadabar.lib.accounts.browser.accounts.AccountSecure
-import zakadabar.lib.accounts.browser.login.Login
-import zakadabar.lib.accounts.browser.roles.Roles
 import zakadabar.core.authorize.AppRolesBase
 import zakadabar.core.authorize.appRoles
 import zakadabar.core.browser.application.ZkAppRouting
 import zakadabar.core.browser.application.ZkApplication
+import zakadabar.core.module.modules
+import zakadabar.lib.accounts.browser.accounts.Account
+import zakadabar.lib.accounts.browser.accounts.AccountSecure
+import zakadabar.lib.accounts.browser.login.Login
+import zakadabar.lib.accounts.browser.roles.Roles
 
 /**
  * Installs the module. Parameters can be used to override default instances.
@@ -23,10 +24,10 @@ import zakadabar.core.browser.application.ZkApplication
  */
 fun install(
     routing: ZkAppRouting,
-    login : Login = Login(),
-    account : Account = Account(),
-    accountSecure : AccountSecure = AccountSecure(),
-    roles : Roles = Roles()
+    login: Login = Login(),
+    account: Account = Account(),
+    accountSecure: AccountSecure = AccountSecure(),
+    roles: Roles = Roles()
 ) {
     with(routing) {
         + login
@@ -36,7 +37,7 @@ fun install(
     }
 }
 
-fun install(application : ZkApplication, roles : AppRolesBase = AppRolesBase()) {
+fun install(application: ZkApplication, roles: AppRolesBase = AppRolesBase()) {
     appRoles = roles
-    application.services += SessionManager()
+    modules += SessionManager()
 }
