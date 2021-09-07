@@ -54,14 +54,49 @@ if (project.isPublishing) {
 
     manifestAndDokka(tasks)
 
-    signing { config(publishing.publications) }
+    afterEvaluate {
+        signing { config(publishing.publications) }
 
-    publishing {
-        config(project)
+        publishing {
 
-        publications.withType<MavenPublication>().all {
-            config(tasks["javadocJar"], "Zakadabar Core Android")
+            config(project)
+
+            val path = "spxbhuhb/zakadabar-stack"
+
+            publications {
+
+                create<MavenPublication>("release") {
+                    artifactId = "core-android"
+                    from(components.getByName("release"))
+                    artifact(tasks["javadocJar"])
+                    pom {
+                        description.set("Kotlin/Ktor based full-stack platform")
+                        name.set("Zakadabar Core Android")
+                        url.set("https://github.com/$path")
+                        scm {
+                            url.set("https://github.com/$path")
+                            connection.set("scm:git:git://github.com/$path.git")
+                            developerConnection.set("scm:git:ssh://git@github.com/$path.git")
+                        }
+                        licenses {
+                            license {
+                                name.set("Apache 2.0")
+                                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                                distribution.set("repo")
+                            }
+                        }
+                        developers {
+                            developer {
+                                id.set("toth-istvan-zoltan")
+                                name.set("Tóth István Zoltán")
+                                url.set("https://github.com/toth-istvan-zoltan")
+                                organization.set("Simplexion Kft.")
+                                organizationUrl.set("https://www.simplexion.hu")
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
-
 }
