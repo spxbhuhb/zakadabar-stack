@@ -24,16 +24,8 @@ interface BusinessLogicRouter<T : BaseBo> {
 
     fun <RQ : ActionBo<RS>, RS : Any?> action(actionClass: KClass<RQ>, actionFunc: (Executor, RQ) -> RS)
 
-    fun <RQ : ActionBo<RS>, RS : Any?> action(actionClass: KClass<RQ>, actionFunc: (RQ) -> RS) {
-        action(actionClass) { _:Executor,req:RQ -> actionFunc(req) }
-    }
-
     fun <RQ : QueryBo<RS>, RS : Any?> query(queryClass: KClass<RQ>, queryFunc: (Executor, RQ) -> RS)
-
-    fun <RQ : QueryBo<RS>, RS : Any?> query(queryClass: KClass<RQ>, queryFunc: (RQ) -> RS) {
-        query(queryClass) { _:Executor,req:RQ -> queryFunc(req) }
-    }
-
+    
     fun prepareAction(
         actionType : String,
         actionData : String
