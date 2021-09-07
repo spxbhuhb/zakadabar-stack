@@ -3,6 +3,9 @@
  */
 
 import zakadabar.gradle.Versions
+import zakadabar.gradle.config
+import zakadabar.gradle.isPublishing
+import zakadabar.gradle.manifestAndDokka
 
 plugins {
     kotlin("multiplatform")
@@ -35,12 +38,12 @@ kotlin {
     sourceSets {
 
         all {
-            languageSettings.useExperimentalAnnotation("kotlin.time.ExperimentalTime")
-            languageSettings.useExperimentalAnnotation("kotlin.ExperimentalStdlibApi")
-            languageSettings.useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
-            languageSettings.useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
-            languageSettings.useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
-            languageSettings.useExperimentalAnnotation("io.ktor.util.KtorExperimentalAPI")
+            languageSettings.optIn("kotlin.time.ExperimentalTime")
+            languageSettings.optIn("kotlin.ExperimentalStdlibApi")
+            languageSettings.optIn("kotlin.contracts.ExperimentalContracts")
+            languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
+            languageSettings.optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+            languageSettings.optIn("io.ktor.util.KtorExperimentalAPI")
         }
 
         commonMain {
@@ -110,87 +113,17 @@ noArg {
     annotation("kotlinx.serialization.Serializable")
 }
 
-// add sign and publish only if the user is a zakadabar publisher
+if (project.isPublishing) {
 
-if (! Versions.isSnapshot && properties["zakadabar.publisher"] != null) {
+    manifestAndDokka(tasks)
 
-    tasks.withType<Jar> {
-        manifest {
-            attributes += sortedMapOf(
-                "Built-By" to System.getProperty("user.name"),
-                "Build-Jdk" to System.getProperty("java.version"),
-                "Implementation-Vendor" to "Simplexion Kft.",
-                "Implementation-Version" to archiveVersion.get(),
-                "Created-By" to org.gradle.util.GradleVersion.current()
-            )
-        }
-    }
-
-    val dokkaHtml by tasks.getting(org.jetbrains.dokka.gradle.DokkaTask::class)
-
-    val javadocJar: TaskProvider<Jar> by tasks.registering(Jar::class) {
-        dependsOn(dokkaHtml)
-        archiveBaseName.set("core")
-        archiveClassifier.set("javadoc")
-        from(dokkaHtml.outputDirectory)
-    }
-
-    tasks.getByName("build") {
-        dependsOn(javadocJar)
-    }
-
-    signing {
-        useGpgCmd()
-        sign(publishing.publications)
-    }
+    signing { config(publishing.publications) }
 
     publishing {
-
-        val path = "spxbhuhb/zakadabar-stack"
-
-        repositories {
-            maven {
-                name = "MavenCentral"
-                url = if (Versions.isSnapshot) {
-                    uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-                } else {
-                    uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-                }
-                credentials {
-                    username = (properties["central.user"] ?: System.getenv("CENTRAL_USERNAME")).toString()
-                    password = (properties["central.password"] ?: System.getenv("CENTRAL_PASSWORD")).toString()
-                }
-            }
-        }
+        config(project)
 
         publications.withType<MavenPublication>().all {
-            artifact(javadocJar.get())
-            pom {
-                description.set("Kotlin/Ktor based full-stack platform")
-                name.set("Zakadabar Stack")
-                url.set("https://github.com/$path")
-                scm {
-                    url.set("https://github.com/$path")
-                    connection.set("scm:git:git://github.com/$path.git")
-                    developerConnection.set("scm:git:ssh://git@github.com/$path.git")
-                }
-                licenses {
-                    license {
-                        name.set("Apache 2.0")
-                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-                        distribution.set("repo")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("toth-istvan-zoltan")
-                        name.set("Tóth István Zoltán")
-                        url.set("https://github.com/toth-istvan-zoltan")
-                        organization.set("Simplexion Kft.")
-                        organizationUrl.set("https://www.simplexion.hu")
-                    }
-                }
-            }
+            config(tasks["javadocJar"], "Zakadabar Core")
         }
     }
 
