@@ -5,8 +5,14 @@ package zakadabar.core.schema
 
 import zakadabar.core.schema.descriptor.BoConstraint
 import zakadabar.core.schema.descriptor.BoProperty
+import kotlin.reflect.KProperty
 
-interface BoSchemaEntry<T> {
+interface BoSchemaEntry<T,ET : BoSchemaEntry<T,ET>> {
+    val propName : String get() = kProperty.name
+    val kProperty : KProperty<T>
+    val rules : MutableList<BoPropertyConstraintImpl<T>>
+    val extensions : MutableList<BoSchemaEntryExtension<T>>
+    var defaultValue : T
     fun validate(report: ValidityReport)
     fun isOptional(): Boolean
     fun setDefault()

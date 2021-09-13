@@ -18,6 +18,7 @@ package zakadabar.core.schema.entries
 
 import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
+import zakadabar.core.schema.BoSchemaEntryExtension
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.BoConstraintType
 import zakadabar.core.schema.descriptor.BoProperty
@@ -26,11 +27,15 @@ import zakadabar.core.schema.descriptor.DoubleBoProperty
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class OptDoubleBoSchemaEntry(val kProperty: KMutableProperty0<Double?>) : BoSchemaEntry<Double?> {
+class OptDoubleBoSchemaEntry(
+    override val kProperty: KMutableProperty0<Double?>
+) : BoSchemaEntry<Double?, OptDoubleBoSchemaEntry> {
 
-    var defaultValue: Double? = null
+    override val rules = mutableListOf<BoPropertyConstraintImpl<Double?>>()
 
-    private val rules = mutableListOf<BoPropertyConstraintImpl<Double?>>()
+    override val extensions = mutableListOf<BoSchemaEntryExtension<Double?>>()
+
+    override var defaultValue: Double? = null
 
     inner class Max(@PublicApi val limit: Double) : BoPropertyConstraintImpl<Double?> {
 
@@ -97,7 +102,7 @@ class OptDoubleBoSchemaEntry(val kProperty: KMutableProperty0<Double?>) : BoSche
         kProperty.set(defaultValue)
     }
 
-    override fun decodeFromText(text : String?) : Double? {
+    override fun decodeFromText(text: String?): Double? {
         return text?.toDouble()
     }
 

@@ -81,7 +81,7 @@ kotlin {
                 api("org.jetbrains.exposed:exposed-java-time:${Versions.exposed}")
                 implementation("org.postgresql:postgresql:${Versions.postgresql}")
                 implementation("com.zaxxer:HikariCP:${Versions.hikari}")
-                api("com.github.ajalt:clikt-multiplatform:${Versions.clikt}")
+                api("com.github.ajalt.clikt:clikt:${Versions.clikt}")
                 api("com.charleskorn.kaml:kaml:${Versions.kaml}")
             }
         }

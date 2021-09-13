@@ -18,6 +18,7 @@ package zakadabar.core.schema.entries
 
 import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
+import zakadabar.core.schema.BoSchemaEntryExtension
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.BoConstraintType
 import zakadabar.core.schema.descriptor.BoProperty
@@ -26,11 +27,15 @@ import zakadabar.core.schema.descriptor.LongBoProperty
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class LongBoSchemaEntry(val kProperty: KMutableProperty0<Long>) : BoSchemaEntry<Long> {
+class LongBoSchemaEntry(
+    override val kProperty: KMutableProperty0<Long>
+) : BoSchemaEntry<Long, LongBoSchemaEntry> {
 
-    var defaultValue = 0L
+    override val rules = mutableListOf<BoPropertyConstraintImpl<Long>>()
 
-    private val rules = mutableListOf<BoPropertyConstraintImpl<Long>>()
+    override val extensions = mutableListOf<BoSchemaEntryExtension<Long>>()
+
+    override var defaultValue = 0L
 
     inner class Max(@PublicApi val limit: Long) : BoPropertyConstraintImpl<Long> {
 
@@ -97,8 +102,8 @@ class LongBoSchemaEntry(val kProperty: KMutableProperty0<Long>) : BoSchemaEntry<
         kProperty.set(defaultValue)
     }
 
-    override fun decodeFromText(text : String?) : Long {
-        return text!!.toLong()
+    override fun decodeFromText(text: String?): Long {
+        return text !!.toLong()
     }
 
     override fun setFromText(text: String?) {
@@ -109,7 +114,7 @@ class LongBoSchemaEntry(val kProperty: KMutableProperty0<Long>) : BoSchemaEntry<
 
     override fun push(bo: BoProperty) {
         require(bo is LongBoProperty)
-        kProperty.set(bo.value!!)
+        kProperty.set(bo.value !!)
     }
 
     override fun toBoProperty() = LongBoProperty(

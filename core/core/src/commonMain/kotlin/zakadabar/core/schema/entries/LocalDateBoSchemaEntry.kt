@@ -16,12 +16,10 @@
  */
 package zakadabar.core.schema.entries
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.todayAt
+import kotlinx.datetime.*
 import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
+import zakadabar.core.schema.BoSchemaEntryExtension
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.BoConstraintType
 import zakadabar.core.schema.descriptor.BoProperty
@@ -30,11 +28,15 @@ import zakadabar.core.schema.descriptor.LocalDateBoProperty
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class LocalDateBoSchemaEntry(val kProperty: KMutableProperty0<LocalDate>) : BoSchemaEntry<LocalDate> {
+class LocalDateBoSchemaEntry(
+    override val kProperty: KMutableProperty0<LocalDate>
+) : BoSchemaEntry<LocalDate, LocalDateBoSchemaEntry> {
 
-    var defaultValue: LocalDate? = null
+    override val rules = mutableListOf<BoPropertyConstraintImpl<LocalDate>>()
 
-    private val rules = mutableListOf<BoPropertyConstraintImpl<LocalDate>>()
+    override val extensions = mutableListOf<BoSchemaEntryExtension<LocalDate>>()
+
+    override var defaultValue: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
 
     inner class Max(@PublicApi val limit: LocalDate) : BoPropertyConstraintImpl<LocalDate> {
 
@@ -133,8 +135,8 @@ class LocalDateBoSchemaEntry(val kProperty: KMutableProperty0<LocalDate>) : BoSc
         kProperty.set(defaultValue ?: Clock.System.todayAt(TimeZone.currentSystemDefault()))
     }
 
-    override fun decodeFromText(text : String?) : LocalDate {
-        return LocalDate.parse(text!!)
+    override fun decodeFromText(text: String?): LocalDate {
+        return LocalDate.parse(text !!)
     }
 
     override fun setFromText(text: String?) {
@@ -145,7 +147,7 @@ class LocalDateBoSchemaEntry(val kProperty: KMutableProperty0<LocalDate>) : BoSc
 
     override fun push(bo: BoProperty) {
         require(bo is LocalDateBoProperty)
-        kProperty.set(bo.value!!)
+        kProperty.set(bo.value !!)
     }
 
     override fun toBoProperty() = LocalDateBoProperty(

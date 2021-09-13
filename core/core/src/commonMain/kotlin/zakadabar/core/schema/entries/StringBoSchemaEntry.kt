@@ -18,16 +18,21 @@ package zakadabar.core.schema.entries
 
 import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
+import zakadabar.core.schema.BoSchemaEntryExtension
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.*
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class StringBoSchemaEntry(val kProperty: KMutableProperty0<String>) : BoSchemaEntry<String> {
+class StringBoSchemaEntry(
+    override val kProperty: KMutableProperty0<String>
+    ) : BoSchemaEntry<String, StringBoSchemaEntry> {
 
-    var defaultValue = ""
+    override val rules = mutableListOf<BoPropertyConstraintImpl<String>>()
 
-    private val rules = mutableListOf<BoPropertyConstraintImpl<String>>()
+    override val extensions = mutableListOf<BoSchemaEntryExtension<String>>()
+
+    override var defaultValue = ""
 
     inner class Max(@PublicApi val limit: Int) : BoPropertyConstraintImpl<String> {
 
@@ -69,7 +74,7 @@ class StringBoSchemaEntry(val kProperty: KMutableProperty0<String>) : BoSchemaEn
 
     }
 
-    inner class Format(@PublicApi val pattern : String) : BoPropertyConstraintImpl<String> {
+    inner class Format(@PublicApi val pattern: String) : BoPropertyConstraintImpl<String> {
 
         override fun validate(value: String, report: ValidityReport) {
             if (Regex(pattern).matchEntire(value) == null) report.fail(kProperty, this)
@@ -125,8 +130,8 @@ class StringBoSchemaEntry(val kProperty: KMutableProperty0<String>) : BoSchemaEn
         kProperty.set(defaultValue)
     }
 
-    override fun decodeFromText(text : String?) : String {
-        return text!!
+    override fun decodeFromText(text: String?): String {
+        return text !!
     }
 
     override fun setFromText(text: String?) {
@@ -137,7 +142,7 @@ class StringBoSchemaEntry(val kProperty: KMutableProperty0<String>) : BoSchemaEn
 
     override fun push(bo: BoProperty) {
         require(bo is StringBoProperty)
-        kProperty.set(bo.value!!)
+        kProperty.set(bo.value !!)
     }
 
     override fun toBoProperty() = StringBoProperty(

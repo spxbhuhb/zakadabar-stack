@@ -17,7 +17,9 @@
 package zakadabar.core.schema.entries
 
 import zakadabar.core.data.BaseBo
+import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
+import zakadabar.core.schema.BoSchemaEntryExtension
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.BoConstraint
 import zakadabar.core.schema.descriptor.BoProperty
@@ -27,11 +29,15 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty0
 
 class ListBoSchemaEntry<E : BaseBo>(
-    val kProperty: KMutableProperty0<List<E>>,
-    private val entryClass : KClass<E>
-) : BoSchemaEntry<E> {
+    override val kProperty: KMutableProperty0<List<E>>,
+    private val entryClass: KClass<E>
+) : BoSchemaEntry<List<E>, ListBoSchemaEntry<E>> {
 
-    var defaultValue = emptyList<E>()
+    override val rules = mutableListOf<BoPropertyConstraintImpl<List<E>>>()
+
+    override val extensions = mutableListOf<BoSchemaEntryExtension<List<E>>>()
+
+    override var defaultValue = emptyList<E>()
 
     override fun validate(report: ValidityReport) {}
 

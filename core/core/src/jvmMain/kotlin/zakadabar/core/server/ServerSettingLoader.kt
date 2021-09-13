@@ -11,13 +11,15 @@ import java.nio.file.Paths
 /**
  * Bootstrap settings loader which runs before anything else.
  *
- * @param  useEnv  When true, environment variables are merged into setting BOs.
+ * @param  useEnvAuto  When true, environment variables are merged into setting BOs with automatic naming.
+ * @param  useEnvExplicit  When true, environment variables are merged into setting BOs with explicit naming.
  */
 open class ServerSettingLoader(
-    open val useEnv : Boolean = true
+    val useEnvAuto: Boolean = false,
+    val useEnvExplicit: Boolean = false
 ) : JvmSystemEnvHandler {
 
-    open fun load(settingsPath : String): ServerSettingsBo {
+    open fun load(settingsPath: String): ServerSettingsBo {
 
         val paths = listOf(
             settingsPath,
@@ -40,8 +42,10 @@ open class ServerSettingLoader(
             val bo = Yaml.default.decodeFromString(ServerSettingsBo.serializer(), source)
             bo.settingsDirectory = path.parent.toAbsolutePath().toString()
 
-            if (useEnv) {
-                mergeEnvironment(bo, "stack.server", System.getenv())
+            if (useEnvAuto || useEnvExplicit) {
+                val env = System.getenv()
+                if (useEnvAuto) mergeEnvironmentAuto(bo, "stack.server", env)
+                if (useEnvExplicit) mergeEnvironmentExplicit(bo, env)
             }
 
             return bo
@@ -49,7 +53,6 @@ open class ServerSettingLoader(
 
         throw IllegalArgumentException("cannot locate server settings file")
     }
-
 
 
 }

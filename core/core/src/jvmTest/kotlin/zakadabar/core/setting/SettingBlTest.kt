@@ -7,8 +7,8 @@ import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
-import zakadabar.core.testing.TestCompanionBase
 import zakadabar.core.module.modules
+import zakadabar.core.testing.TestCompanionBase
 import java.nio.file.Paths
 import kotlin.test.assertEquals
 
@@ -36,11 +36,23 @@ class SettingBlTest {
         val s by setting<SettingTestBo>("setting.test")
 
         assertEquals("hello", s.fromFile)
+        assertEquals("hello2", s.nested.fromFile)
 
-        val env = mapOf("SETTING_TEST_FROMENV" to "world")
-        modules.first<SettingBl>().mergeEnvironment(s, "setting.test", env)
+        val env = mapOf(
+            "SETTING_TEST_FROMENVAUTO" to "world1",
+            "FROM_ENV_EXP" to "world2",
+            "SETTING_TEST_NESTED_FROMENVAUTO" to "world3",
+            "NESTED_FROM_ENV_EXP" to "world4"
+        )
 
-        assertEquals("world", s.fromEnv)
+        modules.first<SettingBl>().mergeEnvironmentAuto(s, "setting.test", env)
+        modules.first<SettingBl>().mergeEnvironmentExplicit(s, env)
+
+        assertEquals("world1", s.fromEnvAuto)
+        assertEquals("world2", s.fromEnvExplicit)
+        assertEquals("world3", s.nested.fromEnvAuto)
+        assertEquals("world4", s.nested.fromEnvExplicit)
+
     }
 
 }

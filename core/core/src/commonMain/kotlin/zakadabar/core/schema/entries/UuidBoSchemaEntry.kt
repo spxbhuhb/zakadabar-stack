@@ -16,7 +16,9 @@
  */
 package zakadabar.core.schema.entries
 
+import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
+import zakadabar.core.schema.BoSchemaEntryExtension
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.BoConstraint
 import zakadabar.core.schema.descriptor.BoProperty
@@ -25,9 +27,15 @@ import zakadabar.core.util.PublicApi
 import zakadabar.core.util.UUID
 import kotlin.reflect.KMutableProperty0
 
-class UuidBoSchemaEntry(val kProperty: KMutableProperty0<UUID>) : BoSchemaEntry<UUID> {
+class UuidBoSchemaEntry(
+    override val kProperty: KMutableProperty0<UUID>
+) : BoSchemaEntry<UUID, UuidBoSchemaEntry> {
 
-    var defaultValue = UUID.NIL
+    override val rules = mutableListOf<BoPropertyConstraintImpl<UUID>>()
+
+    override val extensions = mutableListOf<BoSchemaEntryExtension<UUID>>()
+
+    override var defaultValue = UUID.NIL
 
     override fun validate(report: ValidityReport) {}
 
@@ -41,8 +49,8 @@ class UuidBoSchemaEntry(val kProperty: KMutableProperty0<UUID>) : BoSchemaEntry<
         kProperty.set(defaultValue)
     }
 
-    override fun decodeFromText(text : String?) : UUID {
-        return UUID(text!!)
+    override fun decodeFromText(text: String?): UUID {
+        return UUID(text !!)
     }
 
     override fun setFromText(text: String?) {
@@ -53,7 +61,7 @@ class UuidBoSchemaEntry(val kProperty: KMutableProperty0<UUID>) : BoSchemaEntry<
 
     override fun push(bo: BoProperty) {
         require(bo is UuidBoProperty)
-        kProperty.set(bo.value!!)
+        kProperty.set(bo.value !!)
     }
 
     override fun toBoProperty() = UuidBoProperty(

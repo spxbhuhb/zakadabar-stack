@@ -17,7 +17,9 @@
 package zakadabar.core.schema.entries
 
 import zakadabar.core.data.BaseBo
+import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
+import zakadabar.core.schema.BoSchemaEntryExtension
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.BaseBoBoProperty
 import zakadabar.core.schema.descriptor.BoConstraint
@@ -25,9 +27,14 @@ import zakadabar.core.schema.descriptor.BoProperty
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class BaseBoBoSchemaEntry<T : BaseBo>(val kProperty: KMutableProperty0<T>) : BoSchemaEntry<T> {
+class BaseBoBoSchemaEntry<T : BaseBo>(
+    override val kProperty: KMutableProperty0<T>,
+    override var defaultValue : T
+) : BoSchemaEntry<T, BaseBoBoSchemaEntry<T>> {
 
-    var defaultValue = kProperty.get()
+    override val rules = mutableListOf<BoPropertyConstraintImpl<T>>()
+
+    override val extensions = mutableListOf<BoSchemaEntryExtension<T>>()
 
     override fun validate(report: ValidityReport) {
         kProperty.get().schema().validate()
@@ -47,7 +54,7 @@ class BaseBoBoSchemaEntry<T : BaseBo>(val kProperty: KMutableProperty0<T>) : BoS
 
     override fun push(bo: BoProperty) {
         require(bo is BaseBoBoProperty)
-        kProperty.get().schema().push(bo.value!!)
+        kProperty.get().schema().push(bo.value !!)
     }
 
     override fun toBoProperty() = BaseBoBoProperty(

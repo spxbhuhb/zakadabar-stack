@@ -14,7 +14,9 @@ import zakadabar.core.schema.descriptor.BoDescriptor
 import zakadabar.core.schema.entries.*
 import zakadabar.core.util.PublicApi
 import zakadabar.core.util.UUID
+import zakadabar.core.util.default
 import kotlin.js.JsName
+import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty0
 
 /**
@@ -31,7 +33,7 @@ open class BoSchema() {
     }
 
     @Suppress("MemberVisibilityCanBePrivate") // To make extensions possible
-    val entries = mutableMapOf<KMutableProperty0<*>, BoSchemaEntry<*>>()
+    val entries = mutableMapOf<KMutableProperty0<*>, BoSchemaEntry<*, *>>()
 
     @Suppress("MemberVisibilityCanBePrivate") // To make extensions possible
     val customEntries = mutableListOf<CustomBoSchemaEntry>()
@@ -84,7 +86,7 @@ open class BoSchema() {
 
     operator fun KMutableProperty0<UUID?>.unaryPlus() = OptUuidBoSchemaEntry(this).also { entries[this] = it }
 
-    inline operator fun <reified T : BaseBo> KMutableProperty0<T>.unaryPlus() = BaseBoBoSchemaEntry(this).also { entries[this] = it }
+    inline operator fun <reified T : BaseBo> KMutableProperty0<T>.unaryPlus() = BaseBoBoSchemaEntry(this, default()).also { entries[this] = it }
 
     inline operator fun <reified T : BaseBo> KMutableProperty0<List<T>>.unaryPlus() = ListBoSchemaEntry(this, T::class).also { entries[this] = it }
 
@@ -101,11 +103,7 @@ open class BoSchema() {
         customEntries += this
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("EOL: 2021.8.1  -  use function without the rule parameter")
-    fun custom(function: (report: ValidityReport, rule: BoPropertyConstraintImpl<Unit>) -> Unit) = CustomBoSchemaEntry(function)
-
-    fun custom(constraintName : String, function: (constraintName : String, report: ValidityReport) -> Unit) =
+    fun custom(constraintName: String, function: (constraintName: String, report: ValidityReport) -> Unit) =
         CustomBoSchemaEntry(constraintName, function)
 
     /**
@@ -162,6 +160,32 @@ open class BoSchema() {
             }
         }
         return null
+    }
+
+    /**
+     * Collect extensions of a given type. This function is recursive, it collects
+     * extensions of sub-schemas as well.
+     *
+     * @param extensionClass The type of extension to collect.
+     *
+     * @return A list of (schema entry, extension) pairs in which all extensions are
+     *         instances of extensionClass.
+     */
+    fun <ET : BoSchemaEntryExtension<*>> extensions(extensionClass : KClass<ET>): List<Pair<BoSchemaEntry<*, *>, ET>> {
+        val result = mutableListOf<Pair<BoSchemaEntry<*, *>, ET>>()
+
+        entries.forEach { entry ->
+            val v = entry.value
+            v.extensions.filter { extensionClass.isInstance(it) }.forEach {
+                @Suppress("UNCHECKED_CAST") // checked in the line above
+                result += (v to (it as ET))
+            }
+            if (v is BaseBoBoSchemaEntry) {
+                result += (v.kProperty.get() as BaseBo).schema().extensions(extensionClass)
+            }
+        }
+
+        return result
     }
 
     // FIXME package and class for BoDescriptor

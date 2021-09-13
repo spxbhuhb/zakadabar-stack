@@ -15,9 +15,9 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
-import zakadabar.core.server.DatabaseSettingsBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.persistence.sql.SqlProvider
+import zakadabar.core.server.DatabaseSettingsBo
 
 inline operator fun <reified T : LongEntity> LongEntityClass<T>.get(entityId: EntityId<*>) = this[entityId.toLong()]
 
@@ -51,7 +51,8 @@ object Sql : SqlProvider {
         TransactionManager.defaultDatabase = Database.connect(dataSource)
     }
 
-    override fun onStart() {
+    override fun onStart(noDbSchemaUpdate : Boolean) {
+        if (noDbSchemaUpdate) return
         transaction {
             SchemaUtils.createMissingTablesAndColumns(*tables.toTypedArray())
         }
