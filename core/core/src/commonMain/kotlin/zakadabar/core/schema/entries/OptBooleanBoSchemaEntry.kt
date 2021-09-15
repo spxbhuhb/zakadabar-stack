@@ -16,7 +16,9 @@
  */
 package zakadabar.core.schema.entries
 
+import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
+import zakadabar.core.schema.BoSchemaEntryExtension
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.BoConstraint
 import zakadabar.core.schema.descriptor.BoProperty
@@ -24,9 +26,15 @@ import zakadabar.core.schema.descriptor.BooleanBoProperty
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class OptBooleanBoSchemaEntry(val kProperty: KMutableProperty0<Boolean?>) : BoSchemaEntry<Boolean?> {
+class OptBooleanBoSchemaEntry(
+    override val kProperty: KMutableProperty0<Boolean?>
+) : BoSchemaEntry<Boolean?, OptBooleanBoSchemaEntry> {
 
-    var defaultValue: Boolean? = null
+    override val rules = mutableListOf<BoPropertyConstraintImpl<Boolean?>>()
+
+    override val extensions = mutableListOf<BoSchemaEntryExtension<Boolean?>>()
+
+    override var defaultValue: Boolean? = null
 
     override fun validate(report: ValidityReport) {}
 
@@ -36,7 +44,7 @@ class OptBooleanBoSchemaEntry(val kProperty: KMutableProperty0<Boolean?>) : BoSc
         return this
     }
 
-    override fun decodeFromText(text : String?) : Boolean? {
+    override fun decodeFromText(text: String?): Boolean? {
         return text?.toBooleanStrict()
     }
 

@@ -22,6 +22,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
+import zakadabar.core.schema.BoSchemaEntryExtension
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.BoConstraintType
 import zakadabar.core.schema.descriptor.BoProperty
@@ -30,11 +31,15 @@ import zakadabar.core.schema.descriptor.LocalDateTimeBoProperty
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class LocalDateTimeBoSchemaEntry(val kProperty: KMutableProperty0<LocalDateTime>) : BoSchemaEntry<LocalDateTime> {
+class LocalDateTimeBoSchemaEntry(
+    override val kProperty: KMutableProperty0<LocalDateTime>
+) : BoSchemaEntry<LocalDateTime, LocalDateTimeBoSchemaEntry> {
 
-    var defaultValue: LocalDateTime? = null
+    override val rules = mutableListOf<BoPropertyConstraintImpl<LocalDateTime>>()
 
-    private val rules = mutableListOf<BoPropertyConstraintImpl<LocalDateTime>>()
+    override val extensions = mutableListOf<BoSchemaEntryExtension<LocalDateTime>>()
+
+    override var defaultValue: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
     inner class Max(@PublicApi val limit: LocalDateTime) : BoPropertyConstraintImpl<LocalDateTime> {
 
@@ -133,8 +138,8 @@ class LocalDateTimeBoSchemaEntry(val kProperty: KMutableProperty0<LocalDateTime>
         kProperty.set(defaultValue ?: Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()))
     }
 
-    override fun decodeFromText(text : String?) : LocalDateTime {
-        return LocalDateTime.parse(text!!)
+    override fun decodeFromText(text: String?): LocalDateTime {
+        return LocalDateTime.parse(text !!)
     }
 
     override fun setFromText(text: String?) {

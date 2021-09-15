@@ -26,6 +26,7 @@ open class ZkCheckBox(
     open var readOnly: Boolean = readOnly
         set(value) {
             checkbox.readOnly = value
+            checkbox.disabled = value
             field = value
         }
 
@@ -51,6 +52,7 @@ open class ZkCheckBox(
         checkbox.classList += zkInputStyles.checkBoxNative
         checkbox.checked = checked
         checkbox.readOnly = readOnly
+        checkbox.disabled = readOnly
         + checkbox
 
         label.htmlFor = checkbox.id

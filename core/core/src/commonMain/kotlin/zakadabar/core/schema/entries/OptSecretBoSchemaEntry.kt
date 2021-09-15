@@ -19,16 +19,21 @@ package zakadabar.core.schema.entries
 import zakadabar.core.data.Secret
 import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
+import zakadabar.core.schema.BoSchemaEntryExtension
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.*
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class OptSecretBoSchemaEntry(val kProperty: KMutableProperty0<Secret?>) : BoSchemaEntry<Secret?> {
+class OptSecretBoSchemaEntry(
+    override val kProperty: KMutableProperty0<Secret?>
+) : BoSchemaEntry<Secret?, OptSecretBoSchemaEntry> {
 
-    var defaultValue: Secret? = null
+    override val rules = mutableListOf<BoPropertyConstraintImpl<Secret?>>()
 
-    private val rules = mutableListOf<BoPropertyConstraintImpl<Secret?>>()
+    override val extensions = mutableListOf<BoSchemaEntryExtension<Secret?>>()
+
+    override var defaultValue: Secret? = null
 
     inner class Max(@PublicApi val limit: Int) : BoPropertyConstraintImpl<Secret?> {
 
@@ -101,7 +106,7 @@ class OptSecretBoSchemaEntry(val kProperty: KMutableProperty0<Secret?>) : BoSche
         kProperty.set(defaultValue)
     }
 
-    override fun decodeFromText(text : String?) : Secret? {
+    override fun decodeFromText(text: String?): Secret? {
         return text?.let { Secret(it) }
     }
 

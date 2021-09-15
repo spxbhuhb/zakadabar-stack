@@ -9,5 +9,5 @@ import zakadabar.core.server.DatabaseSettingsBo
 interface SqlProvider {
     val tables : MutableList<Table>
     fun onCreate(config: DatabaseSettingsBo)
-    fun onStart()
+    fun onStart(noDbSchemaUpdate : Boolean)
 }

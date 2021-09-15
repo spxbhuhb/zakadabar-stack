@@ -229,6 +229,20 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         backgroundColor = theme.infoColor
     }
 
+
+    open val radioGroupContainer by cssClass {
+        fieldDefault()
+        decorators()
+
+        + Position.relative
+        + Display.flex
+        + FlexDirection.column
+    }
+
+    open val radioGroupItem by cssClass {
+        height = fieldHeight.px
+    }
+
     // -------------------------------------------------------------------------
     // Boolean
     // -------------------------------------------------------------------------

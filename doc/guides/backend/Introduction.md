@@ -1,10 +1,10 @@
 # Introduction: Backend
 
-The stack is designed to separate the different layers of the backend:
+Zakadabar is designed to separate different layers of the server infrastructure:
 
 - service architecture (Ktor with Netty)
 - the business logic (written by you)
-- the persistence api (written by you, generated code uses Exposed)
+- the persistence api (written by you)
 
 This separation makes it possible to replace the service architecture
 or the persistence API if you wish.
@@ -12,7 +12,7 @@ or the persistence API if you wish.
 ## Server.kt
 
 [Server.kt](/core/core/src/jvmMain/kotlin/zakadabar/core/server/Server.kt) contains
-the entry point of the backend application: the `main` function. 
+the entry point of the server applications: the `main` function. 
 
 You are free to extend this class and define your own main function as you wish.
 
@@ -24,6 +24,68 @@ use to link the components of your application together.
 `module` - is a function to find a module between the known modules, this
 is basically a very simplistic way of injection, see
 [Find Other BLs](./BusinessLogic.md#Find-Other-BLs) for more information.
+
+### Command Line Parameters
+
+When started from the command line, `Server.kt` accepts the following parameters:
+
+#### Settings
+
+`--settings <settings-file>`
+
+Paths to the server settings file. See [Settings](./Settings.md) for more information.
+Default is "./stack.server.yaml".
+
+#### Start Until
+
+`--start-until <server-state>`
+
+Start the server up until a given state (inclusive). With this parameter it is possible
+to stop server startup at a given point.
+
+States:
+
+- `settings-load`
+- `connect-db`
+- `module-load`
+- `initialize-db`
+- `module-start`
+- `complete` (accepting connections)
+
+#### No DB Schema Update
+
+`--no-db-schema-update`
+
+When this flag is present, the server won't perform DB schema update at startup.
+
+#### Env Auto
+
+`--env-auto`
+
+When this flag is present, the server will perform automatic environment variable
+to setting mapping, see [Settings](./Settings.md) for details.
+
+#### Env Explicit
+
+`--env-explicit`
+
+When this flag is present, the server will perform explicit environment variable
+to setting mapping, see [Settings](./Settings.md) for details.
+
+### Settings By Environment Variables
+
+When the `--env-explicit` flag is present, the server merges the following environment
+variables into server settings (see [Settings](./Settings.md) for details).
+
+- ZK_SERVER_NAME
+- ZK_SERVER_LOCALE
+- ZK_STATIC_RESOURCES  
+- ZK_DB_DRIVER
+- ZK_DB_JDBC_URL
+- ZK_DB_USERNAME
+- ZK_DB_PASSWORD
+- ZK_DB_DEBUG
+- ZK_KTOR_PORT
 
 ## Startup Sequence
 

@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.cookbook.browser.form.select
+package zakadabar.cookbook.browser.form.select.filter
 
 import zakadabar.cookbook.cookbookStyles
 import zakadabar.core.browser.ZkElementMode

@@ -15,7 +15,7 @@ object Versions {
     const val datetime = "0.2.1"
     const val exposed = "0.31.1"
 
-    const val clikt = "2.8.0"
+    const val clikt = "3.2.0"
     const val kaml = "0.19.0"
 
     const val hikari = "3.4.5"

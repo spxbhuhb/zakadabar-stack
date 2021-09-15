@@ -47,6 +47,7 @@ object ZkIcons {
     val arrowRight by iconSource("""<path d="M10 17l5-5-5-5v10z"/><path d="M0 24V0h24v24H0z" fill="none"/>""")
     val arrowDropDown by iconSource("""<path d="M0 0h24v24H0z" fill="none"/><path d="M7 10l5 5 5-5z"/>""")
     val arrowDropUp by iconSource("""<path d="M0 0h24v24H0z" fill="none"/><path d="M7 14l5-5 5 5z"/>""")
+    val circle by iconSource("""<path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2z"/>""")
     val check by iconSource("""<path d="M0 0h24v24H0z" fill="none"/><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>""")
     val checkCircle by iconSource("""<path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>""")
     val contentCopy by iconSource("""<path d="M0 0h24v24H0z" fill="none"/><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>""")

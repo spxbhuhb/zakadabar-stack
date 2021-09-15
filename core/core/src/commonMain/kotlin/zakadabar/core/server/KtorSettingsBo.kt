@@ -6,6 +6,7 @@ package zakadabar.core.server
 import kotlinx.serialization.Serializable
 import zakadabar.core.data.BaseBo
 import zakadabar.core.schema.BoSchema
+import zakadabar.core.setting.envVar
 
 @Serializable
 data class KtorSettingsBo(
@@ -16,7 +17,7 @@ data class KtorSettingsBo(
 ) : BaseBo {
 
     override fun schema() = BoSchema {
-        + ::port default port
+        + ::port default port envVar "ZK_KTOR_PORT"
         + ::websocket
     }
 

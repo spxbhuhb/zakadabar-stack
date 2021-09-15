@@ -7,6 +7,7 @@ import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.input.ZkCheckBox
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.data.BaseBo
+import zakadabar.core.resource.ZkIcons
 
 /**
  * A column that contains data that is independent of the BO presented
@@ -27,9 +28,15 @@ class ZkBooleanExtensionColumn<T : BaseBo>(
     override fun render(cell: ZkElement, index: Int, row: T) {
         with(cell) {
             + table.styles.dense
-            + ZkCheckBox(checked = values[table.getRowId(row)] ?: false) {
-                values[table.getRowId(row)] = it
-                onChange?.invoke(row, it)
+            if (onChange != null) {
+                + ZkCheckBox(checked = values[table.getRowId(row)] ?: false) {
+                    values[table.getRowId(row)] = it
+                    onChange.invoke(row, it)
+                }
+            } else {
+                + div {
+                    buildPoint.innerHTML = ZkIcons.check.svg(18)
+                }
             }
         }
     }

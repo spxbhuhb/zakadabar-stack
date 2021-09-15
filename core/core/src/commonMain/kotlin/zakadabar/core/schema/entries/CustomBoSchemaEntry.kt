@@ -18,34 +18,28 @@ package zakadabar.core.schema.entries
 
 import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
+import zakadabar.core.schema.BoSchemaEntryExtension
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.BoConstraint
 import zakadabar.core.schema.descriptor.BoProperty
+import kotlin.reflect.KProperty
 
-class CustomBoSchemaEntry : BoSchemaEntry<Unit> {
+class CustomBoSchemaEntry(
+    val name: String,
+    function: (constraintName: String, report: ValidityReport) -> Unit
+) : BoSchemaEntry<Unit, CustomBoSchemaEntry> {
 
-    val name : String
-    private val rules = mutableListOf<BoPropertyConstraintImpl<Unit>>()
+    override val kProperty: KProperty<Unit>
+        get() = throw IllegalStateException("custom schema entries have no property")
 
-    @Deprecated("EOL: 2021.8.1  -  use function without the rule parameter")
-    constructor(function: (report: ValidityReport, rule: BoPropertyConstraintImpl<Unit>) -> Unit) {
-        name = "-"
-        rules += CustomValidation(function)
-    }
+    override val rules = mutableListOf<BoPropertyConstraintImpl<Unit>>()
 
-    constructor(constraintName : String, function: (constraintName : String, report: ValidityReport) -> Unit) {
-        this.name = constraintName
+    override val extensions = mutableListOf<BoSchemaEntryExtension<Unit>>()
+
+    override var defaultValue = Unit
+
+    init {
         rules += CustomConstraint(function)
-    }
-
-    inner class CustomValidation(val function: (report: ValidityReport, rule: BoPropertyConstraintImpl<Unit>) -> Unit) : BoPropertyConstraintImpl<Unit> {
-        override fun validate(value: Unit, report: ValidityReport) {
-            function(report, this)
-        }
-
-        override fun toBoConstraint(): BoConstraint {
-            throw NotImplementedError("serialization of custom validations is not supported")
-        }
     }
 
     inner class CustomConstraint(val function: (constraintName : String, report: ValidityReport) -> Unit) : BoPropertyConstraintImpl<Unit> {

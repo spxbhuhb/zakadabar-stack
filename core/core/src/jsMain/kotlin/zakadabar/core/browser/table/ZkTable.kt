@@ -83,8 +83,6 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     var export = false
     var oneClick = false
 
-    override var styles = zkTableStyles
-
     open val rowHeight
         get() = styles.rowHeight
 
@@ -106,11 +104,15 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     override val useShadow = false
 
-    override val addLabel = false
-
     override val schema = BoSchema.NO_VALIDATION
 
+    override val addLabel = false
+
+    override var styles = zkTableStyles
+
     override fun validate() {}
+
+    override fun submit() {}
 
     // -------------------------------------------------------------------------
     //  DOM
@@ -158,7 +160,6 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         onConfigure()
 
         + styles.outerContainer
-        + styles.noSelect
 
         + buildLocalTitleBar()
 
@@ -171,6 +172,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             + table(styles.table) {
                 buildPoint.style.cssText = inlineCss()
                 + thead {
+                    + styles.noSelect
                     columns.forEach { + it }
                 }
                 + tbody
@@ -252,6 +254,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      */
     open fun onMouseDown(event: Event) {
         event as MouseEvent
+        println(event.detail)
         if (event.detail > 1) {
             event.preventDefault()
         }

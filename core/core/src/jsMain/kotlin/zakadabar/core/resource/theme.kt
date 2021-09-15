@@ -13,6 +13,9 @@ private const val themeStorageKey = "zk-theme-name"
 
 private lateinit var active : ZkTheme
 
+val themeIsInitialized : Boolean
+    get() = ::active.isInitialized
+
 /**
  * Initializes the theme.
  *

@@ -48,7 +48,7 @@ class LoginForm(
             } else {
                 + ZkConstStringField(this@LoginForm, localizedStrings.account, bo.accountName)
             }
-            + bo::password
+            + bo::password submitOnEnter true
         } marginBottom 20
 
         + row {
@@ -92,7 +92,7 @@ class LoginForm(
 
     @Suppress("UNUSED_PARAMETER")
     private fun onExecuteResult(resultBo: BaseBo) {
-        // TODO remove this when fixed in compiler
+        // TODO remove this when fixed in compiler, when not here onExecuteResult is not executed
         if (resultBo is ActionStatus && resultBo.success) println("login successful")
         onSuccess()
     }

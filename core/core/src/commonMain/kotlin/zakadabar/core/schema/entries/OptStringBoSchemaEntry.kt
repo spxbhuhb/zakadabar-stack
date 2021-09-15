@@ -5,16 +5,21 @@ package zakadabar.core.schema.entries
 
 import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
+import zakadabar.core.schema.BoSchemaEntryExtension
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.*
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class OptStringBoSchemaEntry(val kProperty: KMutableProperty0<String?>) : BoSchemaEntry<String?> {
+class OptStringBoSchemaEntry(
+    override val kProperty: KMutableProperty0<String?>
+    ) : BoSchemaEntry<String?, OptStringBoSchemaEntry> {
 
-    var defaultValue: String? = null
+    override var defaultValue: String? = null
 
-    private val rules = mutableListOf<BoPropertyConstraintImpl<String?>>()
+    override val rules = mutableListOf<BoPropertyConstraintImpl<String?>>()
+
+    override val extensions = mutableListOf<BoSchemaEntryExtension<String?>>()
 
     inner class Max(@PublicApi val limit: Int) : BoPropertyConstraintImpl<String?> {
 

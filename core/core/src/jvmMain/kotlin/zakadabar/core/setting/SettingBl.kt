@@ -14,10 +14,10 @@ import zakadabar.core.authorize.EmptyAuthorizer
 import zakadabar.core.business.EntityBusinessLogicBase
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityId
-import zakadabar.core.schema.descriptor.BoDescriptor
 import zakadabar.core.persistence.EmptyPersistenceApi
 import zakadabar.core.route.EmptyRouter
 import zakadabar.core.route.RoutedModule
+import zakadabar.core.schema.descriptor.BoDescriptor
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.collections.set
@@ -26,10 +26,12 @@ import kotlin.reflect.KClass
 /**
  * BL for setting management.
  *
- * @param  useEnv  When true, environment variables are merged into setting BOs.
+ * @param  useEnvAuto  When true, environment variables are merged into setting BOs with automatic naming.
+ * @param  useEnvExplicit  When true, environment variables are merged into setting BOs with explicit naming.
  */
 open class SettingBl(
-    val useEnv : Boolean = true,
+    val useEnvAuto : Boolean = false,
+    val useEnvExplicit : Boolean = false,
     val settingsDirectory : Path?
 ) : EntityBusinessLogicBase<SettingBo>(
     boClass = SettingBo::class,
@@ -67,8 +69,10 @@ open class SettingBl(
                 source = SettingSource.File
             }
 
-            if (useEnv) {
-                mergeEnvironment(instance, namespace, System.getenv())
+            if (useEnvAuto || useEnvExplicit) {
+                val env = System.getenv()
+                if (useEnvAuto) mergeEnvironmentAuto(instance, namespace, env)
+                if (useEnvExplicit) mergeEnvironmentExplicit(instance, env)
             }
 
             instance.schema().validate()

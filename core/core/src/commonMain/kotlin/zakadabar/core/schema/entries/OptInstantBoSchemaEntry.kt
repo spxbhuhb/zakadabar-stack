@@ -19,6 +19,7 @@ package zakadabar.core.schema.entries
 import kotlinx.datetime.Instant
 import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
+import zakadabar.core.schema.BoSchemaEntryExtension
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.BoConstraintType
 import zakadabar.core.schema.descriptor.BoProperty
@@ -27,11 +28,15 @@ import zakadabar.core.schema.descriptor.InstantBoProperty
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class OptInstantBoSchemaEntry(val kProperty: KMutableProperty0<Instant?>) : BoSchemaEntry<Instant?> {
+class OptInstantBoSchemaEntry(
+    override val kProperty: KMutableProperty0<Instant?>
+) : BoSchemaEntry<Instant?, OptInstantBoSchemaEntry> {
 
-    var defaultValue: Instant? = null
+    override val rules = mutableListOf<BoPropertyConstraintImpl<Instant?>>()
 
-    private val rules = mutableListOf<BoPropertyConstraintImpl<Instant?>>()
+    override val extensions = mutableListOf<BoSchemaEntryExtension<Instant?>>()
+
+    override var defaultValue: Instant? = null
 
     inner class Max(@PublicApi val limit: Instant) : BoPropertyConstraintImpl<Instant?> {
 
@@ -130,7 +135,7 @@ class OptInstantBoSchemaEntry(val kProperty: KMutableProperty0<Instant?>) : BoSc
         kProperty.set(defaultValue)
     }
 
-    override fun decodeFromText(text : String?) : Instant? {
+    override fun decodeFromText(text: String?): Instant? {
         return text?.let { Instant.parse(text) }
     }
 

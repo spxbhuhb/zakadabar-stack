@@ -5,9 +5,10 @@ package zakadabar.core.resource.css
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
-import zakadabar.core.browser.application.application
 import zakadabar.core.resource.ZkTheme
 import zakadabar.core.resource.css.ZkCssStyleSheet.Companion.styleSheets
+import zakadabar.core.resource.theme
+import zakadabar.core.resource.themeIsInitialized
 import kotlin.properties.ReadOnlyProperty
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -142,34 +143,38 @@ class CssStyleSheetDelegate<S : ZkCssStyleSheet>(
 ) {
 
     init {
-        sheet?.let { styleSheets.add(it) }
-
-        if (::application.isInitialized) {
-            sheet?.attach()
-        } else {
-            sheet?.attachOnRefresh = true
+        sheet?.let {
+            styleSheets.add(it)
+            if (themeIsInitialized) {
+                it.attach()
+            } else {
+                it.attachOnRefresh = true
+            }
         }
     }
 
-    operator fun getValue(thisRef: Nothing?, property: KProperty<*>): S {
-        return sheet ?: throw IllegalStateException("style sheet not initialized yet")
-    }
+    operator fun getValue(thisRef: Nothing?, property: KProperty<*>): S = get()
 
-    operator fun setValue(thisRef: Nothing?, property: KProperty<*>, value: S) {
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): S = get()
+
+    operator fun setValue(thisRef: Nothing?, property: KProperty<*>, value: S) = set(value)
+
+    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: S) = set(value)
+
+    fun get() : S = sheet ?: throw IllegalStateException("style sheet not initialized yet")
+
+    fun set(value: S) {
         sheet?.detach()
-        sheet = value
-        value.attach()
-    }
 
-    operator fun getValue(thisRef: Any?, property: KProperty<*>): S {
-        return sheet ?: throw IllegalStateException("style sheet not initialized yet")
-    }
-
-    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: S) {
-        sheet?.detach()
         sheet = value
-        sheet?.theme?.onResume() // FIXME make this sheet specific
-        value.attach()
+        styleSheets.add(value)
+
+        if (themeIsInitialized) {
+            theme.onResume() // FIXME make this sheet specific
+            value.attach()
+        } else {
+            sheet?.attachOnRefresh = true
+        }
     }
 
 }

@@ -8,7 +8,7 @@ import kotlin.reflect.KClass
 /**
  * Creates a new instance of the given class.
  */
-actual inline fun <reified T : Any> KClass<T>.newInstance(): T = callCtor(this.js) as T
+actual fun <T: Any> KClass<T>.newInstance(): T = callCtor(this.js) as T
 
 @Suppress("UNUSED_PARAMETER") // it is used actually, but it's a JS hack
 fun callCtor(ctor: dynamic) = js("new ctor()")

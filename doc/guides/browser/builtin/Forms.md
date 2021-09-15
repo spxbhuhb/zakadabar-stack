@@ -229,6 +229,24 @@ val options = listOf("option 1", "option 2", "option3").map { it to it }
 + bo::stringSelectValue.asSelect() query { options }
 ```
 
+#### Select With Radio Buttons
+
+Use the `asRadioGroup` transform function to change a select form the usual dropdown
+into a list of radio buttons.
+
+`asRadioGroup` supports:
+
+- Enum
+- Enum?  
+- String
+- String?
+
+```kotlin
++ bo::enumSelectValue.asRadioGroup()
+```
+
+Recipe: [Select As Radio Buttons](/doc/cookbook/browser/form/select/radio/recipe.md)
+
 #### Constant String
 
 To add a constant string as a field, use the `constString` function:
@@ -254,23 +272,24 @@ You can customize the true and false texts with the function parameters.
 
 #### TextArea
 
-To use a textarea for a string field, use the `textarea` function:
+To use the `asTextArea` transform function for a string field to convert it
+into a text area.
 
 ```kotlin
-+ textarea(bo::textAreaValue)
++ bo::textAreaValue.asTextArea()
 ```
 
 To set the inner area height:
 
 ```kotlin
-+ textarea(bo::value) { area.style.height = 60.vh }
++ bo::textAreaValue.asTextArea { area.style.height = 40.px }
 ```
 
 ### Customization
 
 #### label
 
-Use the `label` function to specify a customized label:
+Use the `label` configuration function to specify a customized label:
 
 ```kotlin
 + textarea(bo::textAreaValue) label "My Label"
@@ -278,7 +297,7 @@ Use the `label` function to specify a customized label:
 
 #### readOnly
 
-Use the `readOnly` function to set a field read-only:
+Use the `readOnly` configuration function to set a field read-only:
 
 ```kotlin
 + bo::name readOnly true
@@ -286,9 +305,18 @@ Use the `readOnly` function to set a field read-only:
 
 <div data-zk-enrich="ReadOnlyBuiltinForm"></div>
 
+#### submitOnEnter
+
+Use the `submitOnEnter` configuration function on any ZkStringBase fields
+to let the user submit the form with Enter.
+
+```kotlin
++ bo::password submitOnEnter true
+```
+
 #### newSecret
 
-Use the `newSecret` function to set autocomplete of secret fields to `new-password`.
+Use the `newSecret` configuration function to set autocomplete of secret fields to `new-password`.
 
 ```kotlin
 + bo::password newSecret true
@@ -338,7 +366,7 @@ This enumeration has two values `User` and `Code`.
 + bo::stringValue onChange3 { origin, value, field -> toastSuccess { value } }
 ```
 
-Example: [Field Change Event](/doc/cookbook/browser/field/onchange/recipe.md)
+Example: [Field Change Event]/doc/cookbook/browser/field/onchange/recipe.md
 
 ### Field Value
 

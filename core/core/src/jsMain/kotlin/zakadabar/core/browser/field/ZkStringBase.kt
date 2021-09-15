@@ -18,6 +18,7 @@ package zakadabar.core.browser.field
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.events.KeyboardEvent
 import zakadabar.core.browser.util.plusAssign
 import kotlin.reflect.KMutableProperty0
 
@@ -39,6 +40,8 @@ abstract class ZkStringBase<VT, FT : ZkStringBase<VT,FT>>(
             field = value
         }
 
+    open var submitOnEnter : Boolean = false
+
     abstract fun getPropValue(): String
 
     abstract fun setPropValue(value: String)
@@ -56,6 +59,11 @@ abstract class ZkStringBase<VT, FT : ZkStringBase<VT,FT>>(
 
         on(input, "input") {
             setPropValue(input.value)
+        }
+
+        on("keydown") { event ->
+            event as KeyboardEvent
+            if (submitOnEnter && event.key == "Enter") context.submit()
         }
 
         focusEvents(input)

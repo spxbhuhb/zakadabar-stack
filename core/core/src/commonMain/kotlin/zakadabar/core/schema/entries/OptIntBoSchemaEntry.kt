@@ -18,6 +18,7 @@ package zakadabar.core.schema.entries
 
 import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
+import zakadabar.core.schema.BoSchemaEntryExtension
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.BoConstraintType
 import zakadabar.core.schema.descriptor.BoProperty
@@ -26,11 +27,15 @@ import zakadabar.core.schema.descriptor.IntBoProperty
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class OptIntBoSchemaEntry(val kProperty: KMutableProperty0<Int?>) : BoSchemaEntry<Int?> {
+class OptIntBoSchemaEntry(
+    override val kProperty: KMutableProperty0<Int?>
+) : BoSchemaEntry<Int?, OptIntBoSchemaEntry> {
 
-    var defaultValue: Int? = null
+    override val rules = mutableListOf<BoPropertyConstraintImpl<Int?>>()
 
-    private val rules = mutableListOf<BoPropertyConstraintImpl<Int?>>()
+    override val extensions = mutableListOf<BoSchemaEntryExtension<Int?>>()
+
+    override var defaultValue: Int? = null
 
     inner class Max(@PublicApi val limit: Int) : BoPropertyConstraintImpl<Int?> {
 
@@ -97,7 +102,7 @@ class OptIntBoSchemaEntry(val kProperty: KMutableProperty0<Int?>) : BoSchemaEntr
         kProperty.set(defaultValue)
     }
 
-    override fun decodeFromText(text : String?) : Int? {
+    override fun decodeFromText(text: String?): Int? {
         return text?.toInt()
     }
 

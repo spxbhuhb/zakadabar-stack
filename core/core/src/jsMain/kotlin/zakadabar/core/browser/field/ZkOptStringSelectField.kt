@@ -16,12 +16,15 @@
  */
 package zakadabar.core.browser.field
 
+import zakadabar.core.browser.field.select.DropdownRenderer
+import zakadabar.core.browser.field.select.SelectRenderer
 import kotlin.reflect.KMutableProperty0
 
 open class ZkOptStringSelectField(
     context: ZkFieldContext,
-    val prop: KMutableProperty0<String?>
-) : ZkSelectBase<String?, ZkOptStringSelectField>(context, prop.name) {
+    val prop: KMutableProperty0<String?>,
+    renderer : SelectRenderer<String?, ZkOptStringSelectField> = DropdownRenderer()
+) : ZkSelectBase<String?, ZkOptStringSelectField>(context, prop.name, renderer) {
 
     override fun fromString(string: String): String {
         return string

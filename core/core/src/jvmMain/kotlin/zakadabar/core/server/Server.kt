@@ -103,8 +103,16 @@ open class Server(
                 .choice(*StartPhases.values().map { it.optionName }.toTypedArray())
                 .default(StartPhases.Complete.optionName)
 
-    private val ignoreEnvironment
-            by option("--ignore-environment", help = "Do not use environment variables when loading settings.")
+    private val noDbSchemaUpdate
+            by option("--no-db-schema-update", help = "Do not attempt to update the database schema.")
+                .flag(default = false)
+
+    private val envAuto
+            by option("--env-auto", help = "Use automatic environment variable to setting mapping.")
+                .flag(default = false)
+
+    private val envExplicit
+            by option("--env-explicit", help = "Use explicit environment varialbe to setting mapping.")
                 .flag(default = false)
 
     private val test
@@ -149,7 +157,7 @@ open class Server(
 
         loadModules(settings)
 
-        if (firstOrNull<SettingProvider>() == null) modules += SettingBl(!ignoreEnvironment, settingsDirectory)
+        if (firstOrNull<SettingProvider>() == null) modules += SettingBl(envAuto, envExplicit, settingsDirectory)
 
         if (firstOrNull<ServerDescriptionBl>() == null) modules += ServerDescriptionBl()
 
@@ -181,7 +189,7 @@ open class Server(
     }
 
     open fun loadSettings() {
-        settings = ServerSettingLoader(!ignoreEnvironment).load(settingsPath)
+        settings = ServerSettingLoader(envAuto, envExplicit).load(settingsPath)
         settingsDirectory = Paths.get(settings.settingsDirectory)
     }
 
@@ -199,7 +207,7 @@ open class Server(
     }
 
     open fun initializeDb() {
-        Sql.onStart() // create missing tables and columns
+        Sql.onStart(noDbSchemaUpdate) // create missing tables and columns
         modules.initializeDb()
     }
 

@@ -6,6 +6,7 @@ package zakadabar.core.server
 import kotlinx.serialization.Serializable
 import zakadabar.core.data.BaseBo
 import zakadabar.core.schema.BoSchema
+import zakadabar.core.setting.envVar
 
 @Serializable
 data class DatabaseSettingsBo(
@@ -19,11 +20,11 @@ data class DatabaseSettingsBo(
 ) : BaseBo {
 
     override fun schema() = BoSchema {
-        + ::driverClassName
-        + ::jdbcUrl
-        + ::username
-        + ::password
-        + ::debugSql
+        + ::driverClassName envVar "ZK_DB_DRIVER"
+        + ::jdbcUrl envVar "ZK_DB_JDBC_URL"
+        + ::username envVar "ZK_DB_USERNAME"
+        + ::password envVar "ZK_DB_PASSWORD"
+        + ::debugSql envVar "ZK_DB_DEBUG"
     }
 
 }

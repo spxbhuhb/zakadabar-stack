@@ -20,6 +20,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
+import zakadabar.core.schema.BoSchemaEntryExtension
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.BoConstraintType
 import zakadabar.core.schema.descriptor.BoProperty
@@ -28,11 +29,15 @@ import zakadabar.core.schema.descriptor.InstantBoProperty
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class InstantBoSchemaEntry(val kProperty: KMutableProperty0<Instant>) : BoSchemaEntry<Instant> {
+class InstantBoSchemaEntry(
+    override val kProperty: KMutableProperty0<Instant>
+    ) : BoSchemaEntry<Instant, InstantBoSchemaEntry> {
 
-    var defaultValue: Instant? = null
+    override val rules = mutableListOf<BoPropertyConstraintImpl<Instant>>()
 
-    private val rules = mutableListOf<BoPropertyConstraintImpl<Instant>>()
+    override val extensions = mutableListOf<BoSchemaEntryExtension<Instant>>()
+
+    override var defaultValue: Instant = Clock.System.now()
 
     inner class Max(@PublicApi val limit: Instant) : BoPropertyConstraintImpl<Instant> {
 

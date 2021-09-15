@@ -1,1 +1,3 @@
 fromFile: hello
+nested:
+  fromFile: hello2

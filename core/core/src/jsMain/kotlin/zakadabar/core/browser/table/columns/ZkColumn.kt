@@ -133,10 +133,12 @@ open class ZkColumn<T : BaseBo>(
     private val mouseMoveWrapper = { event: Event -> onMouseMove(event) }
 
     open fun onMouseMove(event: Event) {
-        window.requestAnimationFrame {
-            if (! beingResized) return@requestAnimationFrame
+        if (!beingResized) return
 
-            event as MouseEvent
+        event as MouseEvent
+        event.preventDefault() // prevents text select during column resize
+
+        window.requestAnimationFrame {
 
             val distance = event.clientX - lastX
             lastX = event.clientX

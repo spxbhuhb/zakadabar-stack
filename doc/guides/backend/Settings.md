@@ -38,10 +38,12 @@ The directory that contains the server settings file becomes the
 
 A setting BO is just a normal BO, check [Data](../common/Data.md) for details.
 
-One thing to mention is the default values in the schema. If your settings are loaded from file, you have to set the defaults in the class constructor. YAML loaders does not use the default from the
-schema so, they need the defaults there.
+One thing to mention is the default values in the schema. If your settings are loaded 
+from file, you have to set the defaults in the class constructor. YAML loaders does 
+not use the default from the schema so, they need the defaults there.
 
-To prevent the schema overriding the defaults with zeros, you also have to set schema defaults. Best is to use the instance value directly like this:
+To prevent the schema overriding the defaults with zeros, you also have to set schema
+defaults. Best is to use the instance value directly like this:
 
 ```kotlin
 import kotlinx.serialization.Serializable
@@ -104,11 +106,32 @@ If any of the following steps produces an error, an exception is thrown and typi
 
 ## Environment Variables
 
-The setting loader merges environment variables into setting BOs. If the variable
-does not exist, the appropriate BO field remains unchanged.
+It is possible to provide settings to the server by environment variables:
 
-The merge of environment variables does not happen if you start application with 
-the `--ignore-environment` option.
+- the `--env-auto` server flag enables automatic mapping,
+- the `--env-expicit` server flag enables explicit mapping.
+
+When both flag is present, the server first applies the automatic mapping,
+then the explicit mapping.
+
+### Text Format
+
+The mapper loads the content of the environment variable by using the
+`decodeFromText` method of the BO schema entry. You can check the
+appropriate schema entry class (for example:
+[DoubleBoSchemaEntry](/core/core/src/commonMain/kotlin/zakadabar/core/schema/entries/DoubleBoSchemaEntry.kt))
+for the exact conversion.
+
+`decodeFromText` is **not supported** for:
+
+- nested BOs (you can map fields of the nested BO, see below)
+- lists
+
+### Automatic Mapping
+
+The`--env-auto` server flag instructs the server to merge environment variables 
+into setting BOs. If the variable does not exist, the appropriate BO field 
+remains unchanged.
 
 Environment variable name construction:
 
@@ -116,7 +139,50 @@ Environment variable name construction:
 1. replace `.` with `_` in the `namespace`
 1. if namespace is not empty: `<namespace>_<propertyName>` else `propertyName`
 
-Environment variable merge **does not support** override of:
+Environment variable merge **does not support** override of lists.
 
-- nested instances
-- lists
+Example:
+
+- namespace = settings.test
+- property = fromEnv
+- environment name = SETTINGS_TEST_FROMENV
+  
+For nested BOs the mapping concatenates the names:
+   
+- namespace = settings.test
+- property = nested.fromEnv
+- environment name = "SETTINGS_TEST_NESTED_FROMENV
+
+### Explicit Mapping
+
+With explicit mapping the name of the BO schema explicitly defines the 
+environment variable.
+
+In this case the mapping does not use the namespace of the setting, nor the
+path to the field (in case of nested BOs).
+
+```kotlin
+class SettingTestBo(
+    var fromEnvExplicit : String? = null,
+) : BaseBo {
+
+    override fun schema() = BoSchema {
+        + ::fromEnvExplicit envVar "FROM_ENV_EXP"
+    }
+
+}
+```
+
+With default:
+
+```kotlin
+class SettingTestBo(
+    var fromEnvExplicit : String = "myDefault",
+) : BaseBo {
+
+    override fun schema() = BoSchema {
+        + ::fromEnvExplicit envVar "FROM_ENV_EXP" default fromEnvExplicit
+    }
+
+}
+```

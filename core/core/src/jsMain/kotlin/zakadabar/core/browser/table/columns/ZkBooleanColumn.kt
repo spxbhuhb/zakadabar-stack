@@ -4,9 +4,9 @@
 package zakadabar.core.browser.table.columns
 
 import zakadabar.core.browser.ZkElement
-import zakadabar.core.browser.input.ZkCheckBox
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.data.BaseBo
+import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.css.em
 import zakadabar.core.resource.localizedStrings
 import kotlin.reflect.KProperty1
@@ -30,7 +30,9 @@ open class ZkBooleanColumn<T : BaseBo>(
 //        checkbox.checked = prop.get(row)
 //        checkbox.style.cssText = "pointer-events:none"
         with(cell) {
-            + ZkCheckBox(readOnly = true, checked = prop.get(row))
+            + div {
+                buildPoint.innerHTML = ZkIcons.check.svg(18)
+            }
         }
     }
 

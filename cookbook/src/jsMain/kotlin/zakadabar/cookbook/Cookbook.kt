@@ -6,8 +6,10 @@ package zakadabar.cookbook
 import org.w3c.dom.HTMLElement
 import zakadabar.cookbook.browser.field.onchange.FieldOnChangeForm
 import zakadabar.cookbook.browser.field.update.FieldUpdateForm
-import zakadabar.cookbook.browser.form.select.BoSelectFilter
-import zakadabar.cookbook.browser.form.select.StringSelectFilter
+import zakadabar.cookbook.browser.form.select.filter.BoSelectFilter
+import zakadabar.cookbook.browser.form.select.filter.StringSelectFilter
+import zakadabar.cookbook.browser.form.select.radio.RadioGroupSelect
+import zakadabar.cookbook.browser.form.submit.enter.SubmitOnEnter
 import zakadabar.cookbook.browser.help.TextHelpModal
 import zakadabar.cookbook.browser.sidebar.icons.SideBarWithIcons
 import zakadabar.cookbook.browser.table.action.TableCustomActions
@@ -34,10 +36,12 @@ class Cookbook : CommonModule {
         when (type) {
 
             "BoSelectFilter" -> BoSelectFilter()
+            "RadioGroupSelect" -> RadioGroupSelect()
             "FieldOnChangeForm" -> FieldOnChangeForm()
             "FieldUpdateForm" -> FieldUpdateForm()
             "SideBarWithIcons" -> SideBarWithIcons()
             "StringSelectFilter" -> StringSelectFilter()
+            "SubmitOnEnter" -> SubmitOnEnter()
             "TableCustomActions" -> TableCustomActions()
             "TableEditInline" -> TableEditInline()
             "TableEditInlineNoBo" -> TableEditInlineNoBo()

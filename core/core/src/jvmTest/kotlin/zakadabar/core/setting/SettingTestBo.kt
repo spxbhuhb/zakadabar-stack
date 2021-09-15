@@ -10,12 +10,16 @@ import zakadabar.core.schema.BoSchema
 @Serializable
 class SettingTestBo(
     var fromFile: String,
-    var fromEnv: String? = null
+    var fromEnvAuto: String? = null,
+    var fromEnvExplicit : String? = null,
+    var nested : SettingTestNestedBo = SettingTestNestedBo()
 ) : BaseBo {
 
     override fun schema() = BoSchema {
         + ::fromFile
-        + ::fromEnv
+        + ::fromEnvAuto
+        + ::fromEnvExplicit envVar "FROM_ENV_EXP"
+        + ::nested
     }
 
 }

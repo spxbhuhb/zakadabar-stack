@@ -20,6 +20,7 @@ import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
+import zakadabar.core.schema.BoSchemaEntryExtension
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.*
 import zakadabar.core.util.PublicApi
@@ -28,12 +29,14 @@ import kotlin.reflect.KMutableProperty0
 
 class EntityIdBoSchemaEntry<T : Any>(
     val kClass: KClass<T>,
-    val kProperty: KMutableProperty0<EntityId<T>>
-) : BoSchemaEntry<EntityId<T>> {
+    override val kProperty: KMutableProperty0<EntityId<T>>
+) : BoSchemaEntry<EntityId<T>, EntityIdBoSchemaEntry<T>> {
 
-    var defaultValue: EntityId<T> = EntityId()
+    override val rules = mutableListOf<BoPropertyConstraintImpl<EntityId<T>>>()
 
-    private val rules = mutableListOf<BoPropertyConstraintImpl<EntityId<*>>>()
+    override val extensions = mutableListOf<BoSchemaEntryExtension<EntityId<T>>>()
+
+    override var defaultValue: EntityId<T> = EntityId()
 
     override fun validate(report: ValidityReport) {
         val value = kProperty.get()

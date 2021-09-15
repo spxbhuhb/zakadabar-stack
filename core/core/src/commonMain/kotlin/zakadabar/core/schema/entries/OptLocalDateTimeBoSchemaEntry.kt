@@ -19,6 +19,7 @@ package zakadabar.core.schema.entries
 import kotlinx.datetime.LocalDateTime
 import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
+import zakadabar.core.schema.BoSchemaEntryExtension
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.schema.descriptor.BoConstraintType
 import zakadabar.core.schema.descriptor.BoProperty
@@ -27,11 +28,15 @@ import zakadabar.core.schema.descriptor.LocalDateTimeBoProperty
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-class OptLocalDateTimeBoSchemaEntry(val kProperty: KMutableProperty0<LocalDateTime?>) : BoSchemaEntry<LocalDateTime?> {
+class OptLocalDateTimeBoSchemaEntry(
+    override val kProperty: KMutableProperty0<LocalDateTime?>
+) : BoSchemaEntry<LocalDateTime?, OptLocalDateTimeBoSchemaEntry> {
 
-    var defaultValue: LocalDateTime? = null
+    override val rules = mutableListOf<BoPropertyConstraintImpl<LocalDateTime?>>()
 
-    private val rules = mutableListOf<BoPropertyConstraintImpl<LocalDateTime?>>()
+    override val extensions = mutableListOf<BoSchemaEntryExtension<LocalDateTime?>>()
+
+    override var defaultValue: LocalDateTime? = null
 
     inner class Max(@PublicApi val limit: LocalDateTime) : BoPropertyConstraintImpl<LocalDateTime?> {
 
@@ -130,7 +135,7 @@ class OptLocalDateTimeBoSchemaEntry(val kProperty: KMutableProperty0<LocalDateTi
         kProperty.set(defaultValue)
     }
 
-    override fun decodeFromText(text : String?) : LocalDateTime? {
+    override fun decodeFromText(text: String?): LocalDateTime? {
         return text?.let { LocalDateTime.parse(it) }
     }
 
@@ -142,7 +147,7 @@ class OptLocalDateTimeBoSchemaEntry(val kProperty: KMutableProperty0<LocalDateTi
 
     override fun push(bo: BoProperty) {
         require(bo is LocalDateTimeBoProperty)
-        kProperty.set(bo.value!!)
+        kProperty.set(bo.value !!)
     }
 
     override fun toBoProperty() = LocalDateTimeBoProperty(

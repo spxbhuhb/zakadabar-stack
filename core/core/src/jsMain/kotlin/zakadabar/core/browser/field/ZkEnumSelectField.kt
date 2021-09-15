@@ -16,6 +16,8 @@
  */
 package zakadabar.core.browser.field
 
+import zakadabar.core.browser.field.select.DropdownRenderer
+import zakadabar.core.browser.field.select.SelectRenderer
 import kotlin.reflect.KMutableProperty0
 
 /**
@@ -28,8 +30,9 @@ import kotlin.reflect.KMutableProperty0
 open class ZkEnumSelectField<E : Enum<E>>(
     context : ZkFieldContext,
     val prop: KMutableProperty0<E>,
+    renderer: SelectRenderer<E,ZkEnumSelectField<E>> = DropdownRenderer(),
     val toEnum: (String) -> E
-) : ZkSelectBase<E,ZkEnumSelectField<E>>(context, prop.name) {
+) : ZkSelectBase<E,ZkEnumSelectField<E>>(context, prop.name, renderer) {
 
     var shadowValue: E? = null
 
