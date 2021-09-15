@@ -49,15 +49,15 @@ fun manifestAndDokka(tasks: TaskContainer): Task {
 }
 
 fun SigningExtension.config(publications: PublicationContainer) {
-    val signingKeyId: String? = System.getenv("SIGN_KEY_ID")?.toString()
-    val signingKey: String? = System.getenv("SIGN_KEY")?.toString()
-    val signingPassword: String? = System.getenv("SIGN_PASSWORD")?.toString()
-
-    if (signingKeyId != null && signingKey != null && signingPassword != null) {
-        useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-    } else {
+//    val signingKeyId: String? = System.getenv("SIGN_KEY_ID")?.toString()
+//    val signingKey: String? = System.getenv("SIGN_KEY")?.toString()
+//    val signingPassword: String? = System.getenv("SIGN_PASSWORD")?.toString()
+//
+//    if (signingKeyId != null && signingKey != null && signingPassword != null) {
+//        useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+//    } else {
         useGpgCmd()
-    }
+//    }
 
     sign(publications)
 }
