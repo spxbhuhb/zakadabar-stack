@@ -160,7 +160,6 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         onConfigure()
 
         + styles.outerContainer
-        + styles.noSelect
 
         + buildLocalTitleBar()
 
@@ -173,6 +172,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             + table(styles.table) {
                 buildPoint.style.cssText = inlineCss()
                 + thead {
+                    + styles.noSelect
                     columns.forEach { + it }
                 }
                 + tbody
@@ -254,6 +254,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      */
     open fun onMouseDown(event: Event) {
         event as MouseEvent
+        println(event.detail)
         if (event.detail > 1) {
             event.preventDefault()
         }
