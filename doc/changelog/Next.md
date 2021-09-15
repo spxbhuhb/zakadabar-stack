@@ -13,6 +13,10 @@ added:
 - `--env-auto` server parameter for automatic BO mapping
 - `--env-explicit` server parameter for explicit BO mapping
 - `--no-db-schema-update` server parameter to disable automatic DB updates
+- `submitOnEnter` configuration function for text based fields
+- `ZkFieldContext.submit` to provide submit initiation for fields
+- `STANDALONE` field context for standalone, editable fields
+- builder function parameter for `asTextArea`
 
 changed:
 
@@ -29,7 +33,15 @@ changed:
     - defaultValue
 - Clikt dependency to 3.2.0
 
+deprecated:
+
+- `ZkForm.textarea` (replace with `.asTextArea()`)
+
 removed:
 
 - deprecated methods from schema classes
 - `--ignore-environment` server parameter (replaced with `--env-auto` and `--env-explicit`)
+
+## Cookbook
+
+- Submit On Enter recipe

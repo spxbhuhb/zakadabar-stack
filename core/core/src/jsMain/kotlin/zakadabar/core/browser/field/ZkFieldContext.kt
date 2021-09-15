@@ -4,7 +4,11 @@
 package zakadabar.core.browser.field
 
 import zakadabar.core.schema.BoSchema
+import zakadabar.core.util.PublicApi
 
+/**
+ * Field context for standalone, readonly fields.
+ */
 object READONLY : ZkFieldContext {
     override val readOnly = true
     override val useShadow = false
@@ -12,6 +16,21 @@ object READONLY : ZkFieldContext {
     override val addLabel = true
     override val styles = zkFieldStyles
     override fun validate() {}
+    override fun submit() {}
+}
+
+/**
+ * Field context for standalone, writable fields.
+ */
+@PublicApi
+object STANDALONE : ZkFieldContext {
+    override val readOnly = false
+    override val useShadow = false
+    override val schema = BoSchema.NO_VALIDATION
+    override val addLabel = true
+    override val styles = zkFieldStyles
+    override fun validate() {}
+    override fun submit() {}
 }
 
 interface ZkFieldContext {
@@ -27,5 +46,7 @@ interface ZkFieldContext {
     val styles: ZkFieldStyles
 
     fun validate()
+
+    fun submit()
 
 }

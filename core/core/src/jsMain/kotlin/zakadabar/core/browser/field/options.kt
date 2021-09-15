@@ -70,3 +70,10 @@ infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.onChange3(block: (C
     onChangeCallback = block
     return this as FT
 }
+
+@Suppress("UNCHECKED_CAST")
+@PublicApi
+infix fun <DT, FT : ZkStringBase<DT, FT>> ZkStringBase<DT, FT>.submitOnEnter(submit : Boolean): FT {
+    submitOnEnter = submit
+    return this as FT
+}

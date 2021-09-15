@@ -271,7 +271,7 @@ open class ZkForm<T : BaseBo>(
 
     }
 
-    fun submit() {
+    override fun submit() {
 
         submitButton?.hide()
         progressIndicator?.show()
@@ -494,6 +494,7 @@ open class ZkForm<T : BaseBo>(
         return (+ kProperty0)
     }
 
+    @Deprecated("Use '.asTextArea()' instead")
     fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkTextAreaField.() -> Unit = { }): ZkTextAreaField {
         val field = ZkTextAreaField(this@ZkForm, kProperty0)
         fields += field
@@ -501,6 +502,7 @@ open class ZkForm<T : BaseBo>(
         return field
     }
 
+    @Deprecated("Use '.asTextArea()' instead")
     fun textarea(kProperty0: KMutableProperty0<String?>, builder: ZkElement.() -> Unit = { }): ZkOptTextAreaField {
         val field = ZkOptTextAreaField(this@ZkForm, kProperty0)
         fields += field
@@ -708,11 +710,11 @@ open class ZkForm<T : BaseBo>(
     fun KMutableProperty0<String?>.asSelect(): FormFieldWrapper<ZkOptStringSelectField> =
         FormFieldWrapper(ZkOptStringSelectField(this@ZkForm, this))
 
-    fun KMutableProperty0<String>.asTextArea(): FormFieldWrapper<ZkTextAreaField> =
-        FormFieldWrapper(ZkTextAreaField(this@ZkForm, this))
+    fun KMutableProperty0<String>.asTextArea(builder: ZkTextAreaField.() -> Unit = { }): FormFieldWrapper<ZkTextAreaField> =
+        FormFieldWrapper(ZkTextAreaField(this@ZkForm, this).also(builder))
 
-    fun KMutableProperty0<String?>.asTextArea(): FormFieldWrapper<ZkOptTextAreaField> =
-        FormFieldWrapper(ZkOptTextAreaField(this@ZkForm, this))
+    fun KMutableProperty0<String?>.asTextArea(builder: ZkOptTextAreaField.() -> Unit = { }): FormFieldWrapper<ZkOptTextAreaField> =
+        FormFieldWrapper(ZkOptTextAreaField(this@ZkForm, this).also(builder))
 
     // -------------------------------------------------------------------------
     //  Property field convenience methods
@@ -788,6 +790,13 @@ open class ZkForm<T : BaseBo>(
     @PublicApi
     infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.onChange3(block: (ChangeOrigin, DT, FT) -> Unit): FT {
         onChangeCallback = block
+        return this as FT
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    @PublicApi
+    infix fun <DT, FT : ZkStringBase<DT, FT>> ZkStringBase<DT, FT>.submitOnEnter(submit : Boolean): FT {
+        submitOnEnter = submit
         return this as FT
     }
 }
