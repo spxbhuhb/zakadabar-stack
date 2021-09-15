@@ -16,13 +16,16 @@
  */
 package zakadabar.core.browser.field
 
+import zakadabar.core.browser.field.select.DropdownRenderer
+import zakadabar.core.browser.field.select.SelectRenderer
 import kotlin.reflect.KMutableProperty0
 
 open class ZkOptEnumSelectField<E : Enum<E>>(
     context : ZkFieldContext,
     val prop: KMutableProperty0<E?>,
+    renderer : SelectRenderer<E?,ZkOptEnumSelectField<E>> = DropdownRenderer(),
     val toEnum: (String) -> E
-) : ZkSelectBase<E?,ZkOptEnumSelectField<E>>(context, prop.name) {
+) : ZkSelectBase<E?,ZkOptEnumSelectField<E>>(context, prop.name, renderer) {
 
     override fun fromString(string: String) = toEnum(string)
 

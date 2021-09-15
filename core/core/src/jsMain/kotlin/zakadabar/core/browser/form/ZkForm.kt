@@ -27,6 +27,7 @@ import zakadabar.core.browser.ZkElementState
 import zakadabar.core.browser.application.application
 import zakadabar.core.browser.crud.ZkCrudEditor
 import zakadabar.core.browser.field.*
+import zakadabar.core.browser.field.select.RadioGroupRenderer
 import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.titlebar.ZkAppTitleProvider
 import zakadabar.core.browser.titlebar.ZkLocalTitleProvider
@@ -688,7 +689,6 @@ open class ZkForm<T : BaseBo>(
         }
     }
 
-
     // -------------------------------------------------------------------------
     //  Transformed adds
     // ------------------------------------------------------------------------
@@ -710,11 +710,36 @@ open class ZkForm<T : BaseBo>(
     fun KMutableProperty0<String?>.asSelect(): FormFieldWrapper<ZkOptStringSelectField> =
         FormFieldWrapper(ZkOptStringSelectField(this@ZkForm, this))
 
+    fun KMutableProperty0<String>.asRadioGroup(): FormFieldWrapper<ZkStringSelectField> =
+        FormFieldWrapper(ZkStringSelectField(this@ZkForm, this, RadioGroupRenderer()))
+
+    fun KMutableProperty0<String?>.asRadioGroup(): FormFieldWrapper<ZkOptStringSelectField> =
+        FormFieldWrapper(ZkOptStringSelectField(this@ZkForm, this, RadioGroupRenderer()))
+
     fun KMutableProperty0<String>.asTextArea(builder: ZkTextAreaField.() -> Unit = { }): FormFieldWrapper<ZkTextAreaField> =
         FormFieldWrapper(ZkTextAreaField(this@ZkForm, this).also(builder))
 
     fun KMutableProperty0<String?>.asTextArea(builder: ZkOptTextAreaField.() -> Unit = { }): FormFieldWrapper<ZkOptTextAreaField> =
         FormFieldWrapper(ZkOptTextAreaField(this@ZkForm, this).also(builder))
+
+    inline fun <reified E : Enum<E>> KMutableProperty0<E>.asRadioGroup(): FormFieldWrapper<ZkEnumSelectField<E>> {
+        val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) } // this is a non-translated to translated mapping
+        return FormFieldWrapper(
+            ZkEnumSelectField(this@ZkForm, this, RadioGroupRenderer()) { enumValueOf(it) }.apply {
+                fetch = { options }
+            }
+        )
+    }
+
+    @JsName("FormOptEnumAsChoice")
+    inline fun <reified E : Enum<E>> KMutableProperty0<E?>.asRadioGroup(): FormFieldWrapper<ZkOptEnumSelectField<E>> {
+        val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) } // this is a non-translated to translated mapping
+        return FormFieldWrapper(
+            ZkOptEnumSelectField(this@ZkForm, this, RadioGroupRenderer()) { enumValueOf(it) }.apply {
+                fetch = { options }
+            }
+        )
+    }
 
     // -------------------------------------------------------------------------
     //  Property field convenience methods
@@ -755,7 +780,7 @@ open class ZkForm<T : BaseBo>(
     }
 
     @Suppress("UNCHECKED_CAST")
-    infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.saveAs(prop : KMutableProperty0<FT>): FT {
+    infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.saveAs(prop: KMutableProperty0<FT>): FT {
         this as FT
         prop.set(this)
         return this
@@ -782,7 +807,7 @@ open class ZkForm<T : BaseBo>(
     @Suppress("UNCHECKED_CAST")
     @PublicApi
     infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.onChange(block: (DT) -> Unit): FT {
-        onChangeCallback = { _,value,_ -> block(value) }
+        onChangeCallback = { _, value, _ -> block(value) }
         return this as FT
     }
 
@@ -795,7 +820,7 @@ open class ZkForm<T : BaseBo>(
 
     @Suppress("UNCHECKED_CAST")
     @PublicApi
-    infix fun <DT, FT : ZkStringBase<DT, FT>> ZkStringBase<DT, FT>.submitOnEnter(submit : Boolean): FT {
+    infix fun <DT, FT : ZkStringBase<DT, FT>> ZkStringBase<DT, FT>.submitOnEnter(submit: Boolean): FT {
         submitOnEnter = submit
         return this as FT
     }

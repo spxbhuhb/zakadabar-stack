@@ -16,16 +16,20 @@
  */
 package zakadabar.core.browser.field
 
+import zakadabar.core.browser.field.select.DropdownRenderer
+import zakadabar.core.browser.field.select.SelectRenderer
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
 @PublicApi
 open class ZkOptBooleanField(
     context : ZkFieldContext,
-    val prop: KMutableProperty0<Boolean?>
+    val prop: KMutableProperty0<Boolean?>,
+    renderer: SelectRenderer<Boolean?, ZkOptBooleanField> = DropdownRenderer()
 ) : ZkSelectBase<Boolean?, ZkOptBooleanField>(
     context = context,
-    propName = prop.name
+    propName = prop.name,
+    renderer = renderer
 ) {
 
     override fun fromString(string: String) = when (string) {

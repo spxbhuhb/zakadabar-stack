@@ -13,61 +13,71 @@ import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.ZkIconSource
 import zakadabar.core.resource.ZkIcons
 
-open class ZkCheckBox(
-    open val iconSource: ZkIconSource = ZkIcons.check,
+open class ZkRadioButton(
+    open val iconSource: ZkIconSource = ZkIcons.circle,
+    val group : String,
+    val text : String,
     checked: Boolean = false,
     readOnly: Boolean = false,
     val onChange: ((Boolean) -> Unit)? = null
 ) : ZkElement() {
 
-    open val checkbox = document.createElement("input") as HTMLInputElement
+    open val radio = document.createElement("input") as HTMLInputElement
     open val label = document.createElement("label") as HTMLLabelElement
 
     open var readOnly: Boolean = readOnly
         set(value) {
-            checkbox.readOnly = value
-            checkbox.disabled = value
+            radio.readOnly = value
+            radio.disabled = value
             field = value
         }
 
     open var disabled: Boolean
-        get() = checkbox.disabled
+        get() = radio.disabled
         set(value) {
-            checkbox.disabled = value
+            radio.disabled = value
         }
 
     open var checked: Boolean = checked
         set(value) {
-            if (checkbox.checked != value) checkbox.checked = value
+            if (radio.checked != value) radio.checked = value
             field = value
         }
 
     override fun onCreate() {
         buildPoint.tabIndex = 0
 
-        classList += zkInputStyles.checkBoxOuter
+        + zkInputStyles.radioOuter
 
-        checkbox.id = "${this.id}-checkbox"
-        checkbox.type = "checkbox"
-        checkbox.classList += zkInputStyles.checkBoxNative
-        checkbox.checked = checked
-        checkbox.readOnly = readOnly
-        checkbox.disabled = readOnly
-        + checkbox
+        + div(zkInputStyles.radioControlContainer) {
 
-        label.htmlFor = checkbox.id
-        label.classList += zkInputStyles.checkboxLabel
-        + label
+            radio.id = "${this.id}-radio"
+            radio.type = "radio"
+            radio.name = group
+            radio.classList += zkInputStyles.radioNative
+            radio.checked = checked
+            radio.readOnly = readOnly
+            radio.disabled = readOnly
+            + radio
 
-        label.innerHTML = iconSource.svg(18)
+            label.htmlFor = radio.id
+            label.classList += zkInputStyles.radioLabel
+            + label
 
-        on(checkbox, "click", ::onChange)
+            label.innerHTML = iconSource.svg(13)
+        }
+
+        + div(zkInputStyles.radioText) {
+            + text
+        }
+
+        on(radio, "click", ::onChange)
 
         on(buildPoint, "keypress") { event ->
             event as KeyboardEvent
             when (event.key) {
                 "Enter", " " -> {
-                    checkbox.checked = ! checkbox.checked
+                    radio.checked = ! radio.checked
                     onChange(event)
                     event.preventDefault()
                 }
@@ -82,8 +92,8 @@ open class ZkCheckBox(
             return
         }
 
-        checked = checkbox.checked
-        onChange?.invoke(checkbox.checked)
+        checked = radio.checked
+        onChange?.invoke(radio.checked)
     }
 
 }

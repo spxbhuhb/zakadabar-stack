@@ -17,6 +17,8 @@ added:
 - `ZkFieldContext.submit` to provide submit initiation for fields
 - `STANDALONE` field context for standalone, editable fields
 - builder function parameter for `asTextArea`
+- `ZkRadioButton` input
+- radio group renderer for select fields
 
 changed:
 
@@ -34,6 +36,8 @@ changed:
 - Clikt dependency to 3.2.0
 - `ZkTable` content text is now selectable
 - `ZkTable` resize handle is at the very end of column
+- move rendering from `ZkSelectBase` to `DropdownRenderer`
+- `ZkCheckBox` now sets disabled also when read only
 
 deprecated:
 

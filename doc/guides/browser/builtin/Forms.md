@@ -229,6 +229,24 @@ val options = listOf("option 1", "option 2", "option3").map { it to it }
 + bo::stringSelectValue.asSelect() query { options }
 ```
 
+#### Select With Radio Buttons
+
+Use the `asRadioGroup` transform function to change a select form the usual dropdown
+into a list of radio buttons.
+
+`asRadioGroup` supports:
+
+- Enum
+- Enum?  
+- String
+- String?
+
+```kotlin
++ bo::enumSelectValue.asRadioGroup()
+```
+
+Recipe: [Select As Radio Buttons](/doc/cookbook/browser/form/select/radio/recipe.md)
+
 #### Constant String
 
 To add a constant string as a field, use the `constString` function:
@@ -348,7 +366,7 @@ This enumeration has two values `User` and `Code`.
 + bo::stringValue onChange3 { origin, value, field -> toastSuccess { value } }
 ```
 
-Example: [Field Change Event](/doc/cookbook/browser/field/onchange/recipe.md)
+Example: [Field Change Event]/doc/cookbook/browser/field/onchange/recipe.md
 
 ### Field Value
 

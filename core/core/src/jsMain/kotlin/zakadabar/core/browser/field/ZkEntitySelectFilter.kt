@@ -3,13 +3,16 @@
  */
 package zakadabar.core.browser.field
 
+import zakadabar.core.browser.field.select.DropdownRenderer
+import zakadabar.core.browser.field.select.SelectRenderer
 import zakadabar.core.data.EntityId
 
 open class ZkEntitySelectFilter(
     context: ZkFieldContext,
     var getValue: () -> EntityId<*>?,
+    renderer : SelectRenderer<EntityId<*>,ZkEntitySelectFilter> = DropdownRenderer(),
     onSelected: (Pair<EntityId<*>, String>?) -> Unit
-) : ZkSelectBase<EntityId<*>,ZkEntitySelectFilter>(context, "", onSelectCallback = onSelected) {
+) : ZkSelectBase<EntityId<*>,ZkEntitySelectFilter>(context, "", renderer, onSelected) {
 
     override fun fromString(string: String): EntityId<*> {
         return items.first().first
