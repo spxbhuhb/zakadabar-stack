@@ -198,6 +198,7 @@ open class ZkTableStyles : ZkFieldStyles() {
         paddingLeft = 10.px
         textOverflow = "ellipsis"
         color = textColor
+        fill = textColor
         borderBottom = "1px solid $rowBorderColor"
         backgroundColor = oddRowBackground
     }
