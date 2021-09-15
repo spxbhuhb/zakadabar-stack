@@ -5,5 +5,5 @@ package zakadabar.core.util
 
 import kotlin.reflect.KClass
 
-actual inline fun <reified T : Any> KClass<T>.newInstance(): T = T::class.java.getDeclaredConstructor().newInstance()
+actual fun <T : Any> KClass<T>.newInstance(): T = this.java.getDeclaredConstructor().newInstance()
 

@@ -62,7 +62,6 @@ open class ZkTableStyles : ZkFieldStyles() {
         backgroundColor = headerBackground
         marginTop = 4.px
         marginBottom = 4.px
-        marginRight = 8.px
         opacity = 0.opacity
         width = 5.px
         cursor = "col-resize"

@@ -3,16 +3,16 @@
  */
 package zakadabar.core.browser.crud
 
-import zakadabar.core.data.EntityBo
-import zakadabar.core.data.EntityBoCompanion
-import zakadabar.core.data.EntityId
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.ZkElementMode
 import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.browser.util.io
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityBoCompanion
+import zakadabar.core.data.EntityId
 import zakadabar.core.resource.css.OverflowY
 import zakadabar.core.resource.css.percent
-import zakadabar.core.browser.util.io
-import zakadabar.core.browser.util.newInstance
+import zakadabar.core.util.newInstance
 import kotlin.reflect.KClass
 
 /**

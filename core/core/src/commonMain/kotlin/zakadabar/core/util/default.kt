@@ -8,7 +8,7 @@ import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityBoCompanion
 import kotlin.reflect.KClass
 
-expect inline fun <reified T : Any> KClass<T>.newInstance(): T
+expect fun <T : Any> KClass<T>.newInstance(): T
 
 /**
  * Creates an instance of the given Bo with the default set in the

@@ -32,6 +32,8 @@ changed:
     - extensions
     - defaultValue
 - Clikt dependency to 3.2.0
+- `ZkTable` content text is now selectable
+- `ZkTable` resize handle is at the very end of column
 
 deprecated:
 
@@ -41,6 +43,10 @@ removed:
 
 - deprecated methods from schema classes
 - `--ignore-environment` server parameter (replaced with `--env-auto` and `--env-explicit`)
+
+fixed:
+
+- change of top level style sheets before application init now works
 
 ## Cookbook
 
