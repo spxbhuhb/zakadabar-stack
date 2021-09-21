@@ -80,16 +80,16 @@ import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
-import zakadabar.stack.backend.server
-import zakadabar.stack.backend.testing.TestCompanionBase
-import zakadabar.stack.util.default
+import zakadabar.core.server.server
+import zakadabar.core.server.testing.TestCompanionBase
+import zakadabar.core.util.default
 
 class MyBlTest {
 
     companion object : TestCompanionBase() {
 
         override fun addModules() {
-            server += MyBl
+            modules += MyBl
         }
 
         override fun onAfterStarted() {
@@ -141,7 +141,7 @@ class MyBlTest {
 
         override fun addModules() {
             super.addModules() // to install lib:accounts
-            server += MyBl
+            modules += MyBl
         }
 
         override fun onAfterStarted() {
@@ -172,7 +172,7 @@ class MyBlTest {
 
 ### Troubleshooting
 
-This usually means that the configuration files are missing:
+This usually means that [Configuration Files](#configuration-files) are missing:
 
 ```text
 FAILURE: Build failed with an exception.

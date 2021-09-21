@@ -14,14 +14,15 @@ import zakadabar.core.browser.application.application
 import zakadabar.core.browser.application.executor
 import zakadabar.core.browser.dock.ZkDockedElement
 import zakadabar.core.browser.dock.ZkDockedElementState
+import zakadabar.core.browser.field.ZkFieldBase
 import zakadabar.core.browser.layout.zkLayoutStyles
+import zakadabar.core.browser.util.io
+import zakadabar.core.browser.util.minusAssign
+import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.ZkIconSource
 import zakadabar.core.resource.css.CssValueConst
 import zakadabar.core.resource.css.ZkCssStyleRule
 import zakadabar.core.resource.css.percent
-import zakadabar.core.browser.util.io
-import zakadabar.core.browser.util.minusAssign
-import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.localizedStrings
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KClass
@@ -1130,6 +1131,17 @@ open class ZkElement(
     operator fun HTMLElement?.unaryPlus(): HTMLElement? {
         if (this != null) buildPoint.appendChild(this)
         return this
+    }
+
+    /**
+     * Adds a [ZkFieldBase] as a child, keeps field type.
+     */
+    operator fun <T,FT : ZkFieldBase<T, FT>> ZkFieldBase<T,FT>.unaryPlus(): FT {
+        this@ZkElement.buildPoint.appendChild(this.element)
+        this@ZkElement.childElements += this
+        this@ZkElement.syncChildrenState(this)
+        @Suppress("UNCHECKED_CAST")
+        return this as FT
     }
 
     /**
