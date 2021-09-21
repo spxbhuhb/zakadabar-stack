@@ -46,6 +46,7 @@ kotlin {
         api(project(":lib:accounts"))
         api(project(":lib:i18n"))
         api(project(":lib:blobs"))
+        api(project(":exp:liveview"))
         api(project(":cookbook"))
         implementation("com.h2database:h2:${Versions.h2}")
     }

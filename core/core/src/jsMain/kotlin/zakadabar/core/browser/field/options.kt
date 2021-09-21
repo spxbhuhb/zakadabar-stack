@@ -3,6 +3,7 @@
  */
 package zakadabar.core.browser.field
 
+import zakadabar.core.browser.ZkElement
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
@@ -12,6 +13,20 @@ import kotlin.reflect.KMutableProperty0
 
 // These setters are here because I want the editor to show the setter in different color.
 // I know this is a minor detail, but I feel it makes the form code much more readable.
+
+infix fun ZkElement.label(value: String): ZkElement {
+    if (this is ZkFieldBase<*,*>) {
+        this.labelText = value
+    }
+    return this
+}
+
+infix fun ZkElement.readOnly(value: Boolean): ZkElement {
+    if (this is ZkFieldBase<*,*>) {
+        this.readOnly = value
+    }
+    return this
+}
 
 @Suppress("UNCHECKED_CAST")
 infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.label(value: String): FT {

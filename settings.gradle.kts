@@ -19,6 +19,7 @@ include("cookbook")
 include("exp:content")
 include("exp:email")
 include("exp:schedule")
+include("exp:liveview")
 
 include("lib:accounts")
 include("lib:bender")
