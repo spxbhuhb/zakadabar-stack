@@ -49,7 +49,9 @@ fun manifestAndDokka(tasks: TaskContainer): Task {
 }
 
 fun SigningExtension.config(publications: PublicationContainer) {
-    useGpgCmd()
+    if (project.properties["signing.keyId"] == null) {
+        useGpgCmd()
+    }
     sign(publications)
 }
 
