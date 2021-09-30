@@ -64,8 +64,8 @@ fun PublishingExtension.config(project: Project) {
                 project.uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             }
             credentials {
-                username = (project.properties["central.user"] ?: System.getenv("CENTRAL_USERNAME")).toString()
-                password = (project.properties["central.password"] ?: System.getenv("CENTRAL_PASSWORD")).toString()
+                username = (project.properties["zk.publish.username"] ?: System.getenv("ZK_PUBLISH_USERNAME")).toString()
+                password = (project.properties["zk.publish.password"] ?: System.getenv("ZK_PUBLISH_PASSWORD")).toString()
             }
         }
     }
