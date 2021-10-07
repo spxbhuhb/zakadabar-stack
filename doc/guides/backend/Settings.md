@@ -109,7 +109,7 @@ If any of the following steps produces an error, an exception is thrown and typi
 It is possible to provide settings to the server by environment variables:
 
 - the `--env-auto` server flag enables automatic mapping,
-- the `--env-expicit` server flag enables explicit mapping.
+- the `--env-explicit` server flag enables explicit mapping.
 
 When both flag is present, the server first applies the automatic mapping,
 then the explicit mapping.
@@ -151,12 +151,13 @@ For nested BOs the mapping concatenates the names:
    
 - namespace = settings.test
 - property = nested.fromEnv
-- environment name = "SETTINGS_TEST_NESTED_FROMENV
+- environment name = SETTINGS_TEST_NESTED_FROMENV
 
 ### Explicit Mapping
 
-With explicit mapping the name of the BO schema explicitly defines the 
-environment variable.
+The `--env-explicit` server flag enables explicit mapping.
+
+With explicit mapping the name of the BO schema explicitly defines the environment variable.
 
 In this case the mapping does not use the namespace of the setting, nor the
 path to the field (in case of nested BOs).
