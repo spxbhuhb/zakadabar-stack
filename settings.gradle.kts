@@ -17,16 +17,16 @@ include("core:core-android")
 include("cookbook")
 
 include("exp:content")
-include("exp:email")
-include("exp:schedule")
 include("exp:liveview")
 
 include("lib:accounts")
 include("lib:bender")
 include("lib:blobs")
+include("lib:email")
 include("lib:examples")
 include("lib:i18n")
 include("lib:markdown")
+include("lib:schedule")
 
 include("demo:demo-basic")
 include("demo:demo-basic-mobile")
