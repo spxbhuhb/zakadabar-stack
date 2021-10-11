@@ -16,7 +16,7 @@ import org.gradle.kotlin.dsl.withType
 import org.gradle.plugins.signing.SigningExtension
 
 val Project.isPublishing
-    get() = project.properties["zakadabar.publisher"] != null || System.getenv("ZAKADABAR_PUBLISH") != null
+    get() = project.properties["zk.publish"] != null || System.getenv("ZK_PUBLISH") != null
 
 fun manifestAndDokka(tasks: TaskContainer): Task {
 
@@ -49,16 +49,9 @@ fun manifestAndDokka(tasks: TaskContainer): Task {
 }
 
 fun SigningExtension.config(publications: PublicationContainer) {
-//    val signingKeyId: String? = System.getenv("SIGN_KEY_ID")?.toString()
-//    val signingKey: String? = System.getenv("SIGN_KEY")?.toString()
-//    val signingPassword: String? = System.getenv("SIGN_PASSWORD")?.toString()
-//
-//    if (signingKeyId != null && signingKey != null && signingPassword != null) {
-//        useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-//    } else {
+    if (project.properties["signing.keyId"] == null) {
         useGpgCmd()
-//    }
-
+    }
     sign(publications)
 }
 
@@ -73,8 +66,8 @@ fun PublishingExtension.config(project: Project) {
                 project.uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             }
             credentials {
-                username = (project.properties["central.user"] ?: System.getenv("CENTRAL_USERNAME")).toString()
-                password = (project.properties["central.password"] ?: System.getenv("CENTRAL_PASSWORD")).toString()
+                username = (project.properties["zk.publish.username"] ?: System.getenv("ZK_PUBLISH_USERNAME")).toString()
+                password = (project.properties["zk.publish.password"] ?: System.getenv("ZK_PUBLISH_PASSWORD")).toString()
             }
         }
     }
