@@ -23,10 +23,10 @@ import zakadabar.lib.schedule.data.*
 import kotlin.reflect.full.createType
 
 open class WorkerBl(
-    settingsNamespace: String = "schedule.worker.yaml"
+    name : String = "schedule.worker"
 ) : BusinessLogicCommon<BaseBo>() {
 
-    override val namespace = "zkl-schedule-worker"
+    override val namespace : String = name
 
     override val authorizer by provider()
 
@@ -35,7 +35,7 @@ open class WorkerBl(
         action(RequestJobCancel::class, ::requestJobCancel)
     }
 
-    val settings by setting<WorkerSettings>(settingsNamespace)
+    open val settings by setting<WorkerSettings>(name)
 
     val lock = Lock()
 
@@ -47,7 +47,7 @@ open class WorkerBl(
         super.onAfterOpen()
         runBlocking {
             subscription = default<Subscription> {
-                nodeUrl = settings.nodeUrl ?: "http://127.0.0.1:${server.settings.ktor.port}/api/" + namespace
+                nodeUrl = settings.nodeUrl ?: ("http://127.0.0.1:${server.settings.ktor.port}/api/" + namespace)
                 nodeId = settings.nodeId
                 actionNamespace = settings.actionNamespace
                 actionType = settings.actionType

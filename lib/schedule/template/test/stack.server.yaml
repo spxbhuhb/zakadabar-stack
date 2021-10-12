@@ -1,6 +1,6 @@
 database:
   driverClassName: org.h2.Driver
-  jdbcUrl: "jdbc:h2:mem:"
+  jdbcUrl: "jdbc:h2:mem:db"
   # Use this to save the DB for inspection. Remember to delete it before runs!
   #  jdbcUrl: "jdbc:h2:./app/var/db"
   username: test

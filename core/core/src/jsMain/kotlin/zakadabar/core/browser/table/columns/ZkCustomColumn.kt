@@ -12,6 +12,8 @@ open class ZkCustomColumn<T : BaseBo>(
 ) : ZkColumn<T>(table) {
 
     lateinit var render: ZkElement.(T) -> Unit
+    lateinit var exportCsv: T.() -> String
+
     var matcher: (row: T, string: String) -> Boolean = { _,_ -> false }
 
     override fun render(cell: ZkElement, index: Int, row: T) {
@@ -22,5 +24,7 @@ open class ZkCustomColumn<T : BaseBo>(
         if (string == null) return false
         return matcher(row, string)
     }
+
+    override fun exportCsv(row: T) = row.exportCsv()
 
 }

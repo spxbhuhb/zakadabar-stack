@@ -8,7 +8,6 @@ import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
 import org.subethamail.wiser.Wiser
-import zakadabar.core.module.modules
 import zakadabar.core.testing.TestCompanionBase
 import javax.mail.Part
 import javax.mail.internet.MimeMultipart
@@ -23,7 +22,7 @@ class SendMailTest {
         val wiser = Wiser()
 
         override fun addModules() {
-            modules += MailModuleBundle()
+            install()
         }
 
         @BeforeClass
@@ -48,7 +47,7 @@ class SendMailTest {
 
         wiser.messages.clear()
 
-        val mailId = sendMail("noreply@simplexion.hu", "Hello", "World")
+        val mailId = buildMail("noreply@simplexion.hu", "Hello", "World")
 
         Process(mailId).execute()
 
@@ -73,7 +72,7 @@ class SendMailTest {
         wiser.messages.clear()
 
         val html = "<html><body>World</body></html>"
-        val mailId = sendMail("noreply@simplexion.hu", "Hello", html, "text/html")
+        val mailId = buildMail("noreply@simplexion.hu", "Hello", html, "text/html")
 
         Process(mailId).execute()
 
@@ -101,7 +100,7 @@ class SendMailTest {
         val a2 = "attachment 2".encodeToByteArray()
 
         val html = "<html><body>World</body></html>"
-        val mailId = sendMail(
+        val mailId = buildMail(
             "noreply@simplexion.hu", "Hello", html, "text/html",
             listOf(
                 Triple(a1, "a1.bin", "application/binary"),

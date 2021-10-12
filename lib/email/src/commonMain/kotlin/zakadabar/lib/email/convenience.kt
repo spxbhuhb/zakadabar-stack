@@ -3,10 +3,13 @@
  */
 package zakadabar.lib.email
 
+import kotlinx.serialization.json.Json
 import zakadabar.core.data.EntityId
 import zakadabar.core.data.create
 import zakadabar.core.util.PublicApi
+import zakadabar.core.util.default
 import zakadabar.lib.blobs.data.create
+import zakadabar.lib.schedule.data.Job
 
 /**
  * Create a mail with a plain text or HTML content and queue it for sending.
@@ -17,8 +20,37 @@ import zakadabar.lib.blobs.data.create
  * @param  contentMimeType  Mime type of the content, defaults to "text/plain".
  * @param  attachments      Attachments of the mail, if any: (data, name, mimeType).
  */
-@PublicApi
 suspend fun sendMail(
+    recipients: String,
+    subject: String,
+    content: String,
+    contentMimeType: String = "text/plain",
+    attachments: List<Triple<ByteArray,String,String>> = emptyList()
+) {
+
+    val id = buildMail(recipients, subject, content, contentMimeType, attachments)
+
+    default<Job> {
+        actionNamespace = Process.boNamespace
+        actionType = Process::class.simpleName!!
+        actionData = Json.encodeToString(Process.serializer(), Process(id))
+    }.create()
+
+}
+
+/**
+ * Create a mail with a plain text or HTML content.
+ *
+ * **This method does not send the mail**, use [sendMail] for that.
+ *
+ * @param  recipients       Recipients of the mail, RFC822 syntax (comma separated addresses).
+ * @param  subject          Subject of the mail.
+ * @param  content          Content of the mail.
+ * @param  contentMimeType  Mime type of the content, defaults to "text/plain".
+ * @param  attachments      Attachments of the mail, if any: (data, name, mimeType).
+ */
+@PublicApi
+suspend fun buildMail(
     recipients: String,
     subject: String,
     content: String,

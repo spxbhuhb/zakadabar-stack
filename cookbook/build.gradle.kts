@@ -34,6 +34,8 @@ kotlin {
             dependencies {
                 implementation(project(":core:core"))
                 implementation(project(":lib:blobs"))
+                implementation(project(":lib:schedule"))
+                implementation(project(":lib:email"))
             }
         }
 

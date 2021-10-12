@@ -24,12 +24,11 @@ import zakadabar.core.util.UUID
  *  @param  actionType       Type of the action that performs this job.
  *  @param  actionData       JSON data of the action that performs this job.
  *  @param  node             The node this job runs or will run on.
- *  @param  failPolicy       Specifies what should happen when the job fails.
  *  @param  failCount        Number of failed run attempts.
- *  @param  lastFailData         JSON data that belongs to the fail policy and contains
+ *  @param  lastFailData     JSON data that belongs to the fail policy and contains
  *                           details about the last failure.
  *  @param  deleteOnSuccess  Delete this job if it finishes successfully.
- *  @param  progress         For a long running job the progress of the job (percent).
+ *  @param  progress         For a long-running job the progress of the job (percent).
  *  @param  responseData     Response data as received from the action execution.
  */
 @Serializable
@@ -64,7 +63,7 @@ class Job(
 
     override fun schema() = BoSchema {
         + ::id
-        + ::status
+        + ::status default JobStatus.Pending
         + ::createdAt
         + ::startAt
         + ::completedAt

@@ -20,3 +20,5 @@ fun String.lowercaseWithHyphen(): String {
     }
     return chars.concatToString()
 }
+
+fun String?.csvEscape() = "\"${(this ?: "").replace("\"", "\"\"")}\""

@@ -11,12 +11,11 @@ import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
 import zakadabar.core.module.modules
-import zakadabar.core.server.server
 import zakadabar.core.testing.TestCompanionBase
 import zakadabar.core.util.default
 import zakadabar.lib.schedule.data.Job
 import zakadabar.lib.schedule.data.JobStatus
-import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class DispatcherTest {
 
@@ -24,8 +23,10 @@ class DispatcherTest {
 
         override fun addModules() {
             zakadabar.lib.schedule.install()
-            server += WorkerBl()
-            server += ActionBl()
+            modules += WorkerBl()
+            modules += WorkerBl("worker1")
+            modules += WorkerBl("worker2")
+            modules += ActionBl()
         }
 
         override fun onAfterStarted() {
@@ -49,29 +50,34 @@ class DispatcherTest {
         val actionBl = modules.first<ActionBl>()
         actionBl.channel = Channel()
 
-        default<Job> {
-            status = JobStatus.Pending
-            actionNamespace = Action.boNamespace
-            actionType = Action::class.simpleName !!
-            actionData = Json.encodeToString(Action.serializer(), Action(12L))
-        }.create()
+        val values = mutableListOf<Long>()
+
+        for (i in 0..2) {
+            default<Job> {
+                status = JobStatus.Pending
+                actionNamespace = Action.boNamespace
+                actionType = Action::class.simpleName !!
+                actionData = Json.encodeToString(Action.serializer(), Action(12L + i))
+            }.create()
+            values += 12L + i
+        }
 
         var value: Long? = null
 
-        for (i in 1..200) {
-            value = actionBl.channel.tryReceive().getOrNull()
-            if (value != null) break
-            delay(10)
+        for (i in 0..2) {
+            for (j in 1..200) {
+                value = actionBl.channel.tryReceive().getOrNull()
+                if (value != null) break
+                delay(10)
+            }
+            assertTrue(values.remove(value), "value = $value")
         }
-
-        assertEquals(12L, value)
 
         // wait until the job completes, so we avoid exceptions
         // FIXME this should be handled by onModuleStop
 
-        modules.first<WorkerBl>().job?.join()
+        modules.find<WorkerBl>().forEach { it.job?.join() }
 
-        Unit
     }
 
 

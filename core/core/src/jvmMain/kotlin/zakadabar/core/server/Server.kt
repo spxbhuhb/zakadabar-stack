@@ -93,30 +93,30 @@ open class Server(
 
     }
 
-    private val settingsPath
+    protected val settingsPath
             by option("-s", "--settings", help = "Path to the settings file.")
                 .file(mustExist = true, mustBeReadable = true, canBeDir = false)
                 .convert { it.path }
                 .default("./stack.server.yaml")
 
-    private val startUntil
+    protected val startUntil
             by option("--start-until", help = "Start up until the given state (inclusive).")
                 .choice(*StartPhases.values().map { it.optionName }.toTypedArray())
                 .default(StartPhases.Complete.optionName)
 
-    private val noDbSchemaUpdate
+    protected val noDbSchemaUpdate
             by option("--no-db-schema-update", help = "Do not attempt to update the database schema.")
                 .flag(default = false)
 
-    private val envAuto
+    protected val envAuto
             by option("--env-auto", help = "Use automatic environment variable to setting mapping.")
                 .flag(default = false)
 
-    private val envExplicit
+    protected val envExplicit
             by option("--env-explicit", help = "Use explicit environment varialbe to setting mapping.")
                 .flag(default = false)
 
-    private val test
+    protected val test
             by option("--test", "-t").flag()
 
     /**

@@ -14,6 +14,8 @@ import zakadabar.cookbook.browser.help.TextHelpModal
 import zakadabar.cookbook.browser.sidebar.icons.SideBarWithIcons
 import zakadabar.cookbook.browser.table.action.TableCustomActions
 import zakadabar.cookbook.browser.table.border.vertical.TableVerticalBorderSome
+import zakadabar.cookbook.browser.table.exportCustomColumn.TableExportCustomColumn
+import zakadabar.cookbook.browser.table.exportFileName.TableExportFileName
 import zakadabar.cookbook.browser.table.inline.TableEditInline
 import zakadabar.cookbook.browser.table.inline.TableEditInlineNoBo
 import zakadabar.cookbook.resource.strings
@@ -45,6 +47,8 @@ class Cookbook : CommonModule {
             "TableCustomActions" -> TableCustomActions()
             "TableEditInline" -> TableEditInline()
             "TableEditInlineNoBo" -> TableEditInlineNoBo()
+            "TableExportFileName" -> TableExportFileName()
+            "TableExportCustomColumn" -> TableExportCustomColumn()
             "TableVerticalBorderSome" -> TableVerticalBorderSome()
             "TextHelpModal" -> TextHelpModal()
 

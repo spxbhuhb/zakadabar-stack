@@ -4,16 +4,14 @@
 
 package zakadabar.cookbook.browser.table.border.vertical
 
-import zakadabar.cookbook.cookbookStyles
+import zakadabar.cookbook.browser.table.demoData
 import zakadabar.cookbook.entity.builtin.ExampleBo
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.browser.table.ZkTableStyles
-import zakadabar.core.data.EntityId
 import zakadabar.core.resource.css.cssStyleSheet
 import zakadabar.core.resource.css.em
 import zakadabar.core.resource.css.fr
 import zakadabar.core.util.PublicApi
-import zakadabar.core.util.default
 
 class ExampleStyles : ZkTableStyles() {
 
@@ -50,16 +48,7 @@ class TableVerticalBorderSome : ZkTable<ExampleBo>() {
 
     override fun onCreate() {
         super.onCreate()
-
-        + cookbookStyles.smallInlineTable
-
-        val template = default<ExampleBo> { }
-
-        val data = (1..50).map {
-            template.copy(id = EntityId(it.toLong()), stringValue = "row $it", booleanValue = (it % 2 == 0))
-        }
-
-        setData(data)
+        demoData()
     }
 
     override fun getRowId(row: ExampleBo) =

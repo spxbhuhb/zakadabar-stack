@@ -47,9 +47,13 @@
         * [Use](./libraries/accounts/Use.md)
         * [Sessions](./libraries/accounts/Sessions.md)
     * [Blobs]()
-      * [Introduction](./libraries/blobs/Introduction.md)
+        * [Introduction](./libraries/blobs/Introduction.md)
+    * [E-mail]()
+        * [Introduction](./libraries/email/Introduction.md)
     * [I18N]()
-      * [Introduction](./libraries/i18n/Introduction.md)
+        * [Introduction](./libraries/i18n/Introduction.md)
+    * [Schedule]()
+        * [Introduction](./libraries/schedule/Introduction.md)
 * [Testing]()
     * [Backend Testing](./testing/BackendTesting.md)
 * [Tools]()
@@ -59,5 +63,3 @@
 * [Site]()
     * [Introduction](./site/Introduction.md)
     * [Cookbook](./site/Cookbook.md)
-      
-      

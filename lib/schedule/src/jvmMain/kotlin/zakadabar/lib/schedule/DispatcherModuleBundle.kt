@@ -9,7 +9,7 @@ import zakadabar.core.module.modules
 import zakadabar.lib.schedule.business.JobBl
 import zakadabar.lib.schedule.business.SubscriptionBl
 
-class SchedulerModule : CommonModule {
+class DispatcherModuleBundle : CommonModule {
 
     override fun onModuleLoad() {
         modules += JobBl(appRoles.securityOfficer, appRoles.securityOfficer, appRoles.securityOfficer)

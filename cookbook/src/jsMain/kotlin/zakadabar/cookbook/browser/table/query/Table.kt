@@ -4,10 +4,10 @@
 package zakadabar.cookbook.browser.table.query
 
 import zakadabar.cookbook.entity.builtin.ExampleBo
-import zakadabar.core.data.toEntityId
 import zakadabar.core.browser.application.target
 import zakadabar.core.browser.page.ZkEntityPage
 import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.data.toEntityId
 
 class Table : ZkTable<QueryResultEntry>() {
 
@@ -15,6 +15,9 @@ class Table : ZkTable<QueryResultEntry>() {
         super.onConfigure()
 
         query = Query()
+
+        export = true
+        addLocalTitle = true
 
         + QueryResultEntry::field1
         + QueryResultEntry::field2

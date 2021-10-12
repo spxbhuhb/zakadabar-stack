@@ -12,6 +12,7 @@ import zakadabar.core.data.IntValue
 import zakadabar.core.util.Lock
 import zakadabar.core.util.PublicApi
 import zakadabar.core.util.use
+import java.lang.Thread.sleep
 
 @PublicApi
 class ActionBl : BusinessLogicCommon<BaseBo>() {
@@ -33,6 +34,7 @@ class ActionBl : BusinessLogicCommon<BaseBo>() {
         }
 
     fun action(executor: Executor, bo: Action): IntValue? {
+        sleep(100)
         channel.trySendBlocking(bo.returnValue)
         return bo.returnValue?.let { IntValue(it.toInt()) }
     }

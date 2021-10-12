@@ -39,6 +39,7 @@ kotlin {
         implementation(project(":core:core"))
         implementation(project(":lib:accounts"))
         implementation(project(":lib:blobs"))
+        implementation(project(":lib:schedule"))
     }
 
     sourceSets["commonTest"].dependencies {

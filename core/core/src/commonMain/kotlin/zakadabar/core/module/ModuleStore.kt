@@ -204,6 +204,29 @@ open class ModuleStore {
     }
 
     /**
+     * Find modules of the given class. The class may be an interface.
+     *
+     * @param    T      The class to look for
+     *
+     * @return   List of modules of [T] from the module store.
+     */
+    inline fun <reified T : Any> find() = find(T::class)
+
+    /*
+     * Find modules of the given class. The class may be an interface.
+     *
+     * @param    T      The class to look for
+     *
+     * @return   List of modules of [T] from the module store.
+     */
+    open fun <T : Any> find(kClass: KClass<T>): List<T> {
+        lock.use {
+            @Suppress("UNCHECKED_CAST") // checking for class
+            return modules.filter { kClass.isInstance(it) } as List<T>
+        }
+    }
+
+    /**
      * Find a instance of the given class with a selector method called
      * to decided if the instance is desired. The class may be an interface.
      *

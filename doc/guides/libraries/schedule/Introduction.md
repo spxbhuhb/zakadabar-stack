@@ -7,7 +7,12 @@ Schedules and executes jobs in single or multi-node environment.
 This module defines two node types:
 
 - dispatcher: manages jobs, sends them to workers for execution
+  - [JobBl](/lib/schedule/src/jvmMain/kotlin/zakadabar/lib/schedule/business/JobBl.kt)
+  - [SubscriptionBl](/lib/schedule/src/jvmMain/kotlin/zakadabar/lib/schedule/business/SubscriptionBl.kt)
+  - [Dispatcher](/lib/schedule/src/jvmMain/kotlin/zakadabar/lib/schedule/business/Dispatcher.kt) - part of JobBl, one dispatcher for each (`actionNamespace`, `actionType`) pair
 - worker: calls actual business logic modules to execute jobs, sends back the results to the dispatcher
+  - [WorkerBl](/lib/schedule/src/jvmMain/kotlin/zakadabar/lib/schedule/business/WorkerBl.kt) - bridge between the dispatcher and business logic
+  - business logic - actual action execution
 
 In a typical setup you have one dispatcher and many workers.
 
@@ -30,24 +35,30 @@ This picture summarizes the life of a job:
 
 ![Job Sequence](sequence.png)
 
-#### Job Store (JobBl)
-
-The job store is a backend component that provides persistence and management interface
-for jobs.
+### API
 
 Consumers of the schedule service use:
 
-- CRUD
+- [Job](/lib/schedule/src/commonMain/kotlin/zakadabar/lib/schedule/data/Job.kt) CRUD
 - [RequestJobCancel](/lib/schedule/src/commonMain/kotlin/zakadabar/lib/schedule/data/RequestJobCancel.kt) action
 
 Workers use:
 
+- [Subscription](/lib/schedule/src/commonMain/kotlin/zakadabar/lib/schedule/data/Subscription.kt) CRUD
 - [JobProgress](/lib/schedule/src/commonMain/kotlin/zakadabar/lib/schedule/data/JobProgress.kt) action
 - [JobCancel](/lib/schedule/src/commonMain/kotlin/zakadabar/lib/schedule/data/JobCancel.kt) action
 - [JobSuccess](/lib/schedule/src/commonMain/kotlin/zakadabar/lib/schedule/data/JobSuccess.kt) action
 - [JobFail](/lib/schedule/src/commonMain/kotlin/zakadabar/lib/schedule/data/JobFail.kt) action
 
+JobBl uses:
+
+- [PushJob](/lib/schedule/src/commonMain/kotlin/zakadabar/lib/schedule/data/PushJob.kt) action
+
 The default job store uses SQL to store the jobs.
+
+## Recipes
+
+- [Submit a Job](/doc/cookbook/schedule/submit/recipe.md)
 
 ## Setup
 
@@ -57,7 +68,8 @@ The default job store uses SQL to store the jobs.
 
 **backend**
 
-1. add the module to your server configuration, for details see [Modules](../../common/Modules.md)
+1. add the dispatcher modules to your server configuration, for details see [Modules](../../common/Modules.md)
+1. add a worker module(s) to your server configuration, for details see [Modules](../../common/Modules.md)
 
 ### Common
 
@@ -73,6 +85,8 @@ implementation("hu.simplexion.zakadabar:schedule:$stackVersion")
 
 ```kotlin
 zakadabar.lib.schedule.install()
+modules += WorkerBl("worker1")
+modules += WorkerBl("worker2")
 ```
 
 ## Database

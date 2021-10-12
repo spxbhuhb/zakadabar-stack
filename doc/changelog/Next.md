@@ -2,8 +2,36 @@
 
 This page contains the changes included in the next release.
 
+## General
+
+- move schedule from exp to lib
+- move email from exp to lib
+
 ## Core
 
 **added**
 
 - `CommonModule.onAfterOpen` - executed then the system is open for external access
+- `CommonModule.onBeforeclose` - executed then the system about to close for external access
+- `ModuleStore.find` - convenience function to find modules of a given class or interface
+- 'String?.csvEscape' - convenience to escape strings for CSV
+- `ZkCustomColumn.exportCsv` - set export function for custom columns
+
+## Lib: Email
+
+**changed**
+
+- `sendMail` function now creates a job to automatically send the mail after create
+- `buildMail` function simply creates the e-mail
+
+## Lib: Schedule
+
+**added**
+
+- guide for setup
+- recipe for submit
+
+**changed**
+
+- `SchedulerModule` rename to `DispatcherModuleBundle`
+- `WorkerBl` now has a `name` constructor parameter, this is used for namespace and settings
