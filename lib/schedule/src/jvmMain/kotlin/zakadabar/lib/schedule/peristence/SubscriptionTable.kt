@@ -4,10 +4,10 @@
 package zakadabar.lib.schedule.peristence
 
 import zakadabar.core.persistence.exposed.ExposedPaTable
-import zakadabar.lib.schedule.api.Subscription
+import zakadabar.lib.schedule.data.Subscription
 
 class SubscriptionTable : ExposedPaTable<Subscription>(
-    tableName = "subscription"
+    tableName = "schedule_subscription"
 ) {
 
     val nodeUrl = text("node_address")

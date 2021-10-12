@@ -1,21 +1,20 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.schedule.api
+package zakadabar.lib.schedule.data
 
+import kotlinx.serialization.Serializable
 import zakadabar.core.data.ActionBo
 import zakadabar.core.data.ActionBoCompanion
 import zakadabar.core.data.ActionStatus
 import zakadabar.core.data.EntityId
 import zakadabar.core.schema.BoSchema
 
-/**
- * Sent by the worker to Job BL to inform about a successful job cancellation.
- */
 @Serializable
-class JobCancel(
+class JobSuccess(
 
-    var jobId : EntityId<Job>
+    var jobId : EntityId<Job>,
+    var responseData : String?
 
 ) : ActionBo<ActionStatus> {
 
@@ -25,6 +24,7 @@ class JobCancel(
 
     override fun schema() = BoSchema {
         + ::jobId
+        + ::responseData
     }
 
 }

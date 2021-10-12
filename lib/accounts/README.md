@@ -1,1 +1,1 @@
-User account plug and play module for Zakadabar.
+User account library module for Zakadabar.

@@ -1,1 +1,1 @@
-Internationalization plug-and-play module for Zakadabar.
+Internationalization library module for Zakadabar.

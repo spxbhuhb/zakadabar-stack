@@ -3,6 +3,7 @@
  */
 package zakadabar.lib.email
 
+import kotlinx.serialization.Serializable
 import zakadabar.core.data.EntityId
 import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobBoCompanion

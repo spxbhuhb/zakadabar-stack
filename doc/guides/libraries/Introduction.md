@@ -1,6 +1,6 @@
-# Introduction: Plug And Play
+# Introduction: Libraries
 
-Plug and play modules of Zakadabar implement usual functions an application needs,
+Library modules of Zakadabar implement usual functions an application needs,
 account management for example.
 
 They contain all the data model, frontend and backend components. When

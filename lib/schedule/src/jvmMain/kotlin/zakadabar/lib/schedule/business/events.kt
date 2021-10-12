@@ -6,8 +6,8 @@ package zakadabar.lib.schedule.business
 import kotlinx.datetime.Instant
 import zakadabar.core.data.EntityId
 import zakadabar.core.util.UUID
-import zakadabar.lib.schedule.api.Job
-import zakadabar.lib.schedule.api.Subscription
+import zakadabar.lib.schedule.data.Job
+import zakadabar.lib.schedule.data.Subscription
 
 interface DispatcherEvent {
     val actionNamespace: String?

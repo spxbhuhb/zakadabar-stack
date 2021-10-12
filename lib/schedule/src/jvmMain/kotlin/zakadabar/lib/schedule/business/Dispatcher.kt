@@ -11,9 +11,9 @@ import kotlinx.serialization.Serializable
 import zakadabar.core.data.EntityId
 import zakadabar.core.util.UUID
 import zakadabar.core.util.fork
-import zakadabar.lib.schedule.api.Job
-import zakadabar.lib.schedule.api.PushJob
-import zakadabar.lib.schedule.api.Subscription
+import zakadabar.lib.schedule.data.Job
+import zakadabar.lib.schedule.data.PushJob
+import zakadabar.lib.schedule.data.Subscription
 import kotlin.math.absoluteValue
 
 class Dispatcher(
@@ -53,7 +53,7 @@ class Dispatcher(
 
     suspend fun run() {
         for (event in events) {
-            println("dispatcher event: $event")
+            jobBl.logger.debug("dispatcher event: $event")
             when (event) {
                 is PendingCheckEvent -> onPendingCheck()
                 is JobCreateEvent -> onJobCreate(event)

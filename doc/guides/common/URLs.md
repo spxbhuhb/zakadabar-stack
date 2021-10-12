@@ -59,7 +59,7 @@ Programmatic Access:
 
 ### Blobs
 
-Blobs are handled by the [lib:blobs](../plug-and-play/blobs/Introduction.md) plug-and-play module.
+Blobs are handled by the [lib:blobs](../libraries/blobs/Introduction.md) library module.
 
 | Operation | Method | URL | Programmatic Access |
 | ---- | --- | --- | --- |
@@ -92,7 +92,7 @@ General structure of a frontend URL:
 
 The `locale` and the `viewName` is mandatory, `segments` and `query` is optional.
 
-For locale handling see [Introduction:Browser](../browser/Introduction.md#Locale) and [lib:i18n](../plug-and-play/i18n/Introduction.md).
+For locale handling see [Introduction:Browser](../browser/Introduction.md#Locale) and [lib:i18n](../libraries/i18n/Introduction.md).
 
 View name is the `viewBame` of the [routing target](../browser/structure/Routing.md#Targets)
 

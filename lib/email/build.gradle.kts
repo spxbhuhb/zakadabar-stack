@@ -3,6 +3,8 @@
  */
 
 import zakadabar.gradle.Versions
+import zakadabar.gradle.config
+import zakadabar.gradle.isPublishing
 
 plugins {
     kotlin("multiplatform")
@@ -54,4 +56,20 @@ kotlin {
         implementation("com.h2database:h2:${Versions.h2}")
         implementation("org.subethamail:subethasmtp:3.1.7")
     }
+}
+
+if (project.isPublishing) {
+
+    zakadabar.gradle.manifestAndDokka(tasks)
+
+    signing { config(publishing.publications) }
+
+    publishing {
+        config(project)
+
+        publications.withType<MavenPublication>().all {
+            config(tasks["javadocJar"], "Zakadabar Lib Email")
+        }
+    }
+
 }

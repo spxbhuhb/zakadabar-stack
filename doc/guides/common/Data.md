@@ -273,7 +273,7 @@ if (!result.success) {
 
 ## Blob BO
 
-Blobs are handled by the [lib:blobs](../plug-and-play/blobs/Introduction.md) plug-and-play module.
+Blobs are handled by the [lib:blobs](../libraries/blobs/Introduction.md) library module.
 
 ## Data Validation
 

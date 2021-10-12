@@ -26,6 +26,16 @@ interface CommonModule {
     fun onModuleStart() = Unit
 
     /**
+     * Called when the system is open for external access.
+     */
+    fun onAfterOpen() = Unit
+
+    /**
+     * Called before the system closes for external access.
+     */
+    fun onBeforeClose() = Unit
+
+    /**
      * A function that is called when the module is unloaded.
      */
     fun onModuleStop() = Unit

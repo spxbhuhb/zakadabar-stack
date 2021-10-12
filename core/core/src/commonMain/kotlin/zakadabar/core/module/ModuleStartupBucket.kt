@@ -74,6 +74,36 @@ open class ModuleStartupBucket(
     }
 
     /**
+     * Call `onAfterOpen` for each module.
+     */
+    open fun afterOpen(store : ModuleStore) {
+        modules.forEach {
+            try {
+                it.onAfterOpen()
+                store.logger.debug("module open $it")
+            } catch (ex: Throwable) {
+                store.logger.error("module open failed $it", ex)
+                throw ex
+            }
+        }
+    }
+
+    /**
+     * Call `onBeforeClose` for each module.
+     */
+    open fun beforeClose(store : ModuleStore) {
+        modules.forEach {
+            try {
+                it.onBeforeClose()
+                store.logger.debug("module close $it")
+            } catch (ex: Throwable) {
+                store.logger.error("module close failed $it", ex)
+                throw ex
+            }
+        }
+    }
+
+    /**
      * Call `onModuleStop` for all modules.
      */
     open fun stop(store : ModuleStore) {

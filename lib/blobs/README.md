@@ -1,1 +1,1 @@
-Images and files plug and play module for Zakadabar.
+Images and files library module for Zakadabar.

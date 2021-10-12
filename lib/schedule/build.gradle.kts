@@ -3,6 +3,8 @@
  */
 
 import zakadabar.gradle.Versions
+import zakadabar.gradle.config
+import zakadabar.gradle.isPublishing
 
 plugins {
     kotlin("multiplatform")
@@ -46,6 +48,22 @@ kotlin {
     sourceSets["jvmTest"].dependencies {
         implementation("io.ktor:ktor-server-netty:${Versions.ktor}")
         implementation("com.h2database:h2:${Versions.h2}")
+    }
+
+}
+
+if (project.isPublishing) {
+
+    zakadabar.gradle.manifestAndDokka(tasks)
+
+    signing { config(publishing.publications) }
+
+    publishing {
+        config(project)
+
+        publications.withType<MavenPublication>().all {
+            config(tasks["javadocJar"], "Zakadabar Lib Schedule")
+        }
     }
 
 }

@@ -7,7 +7,7 @@ import zakadabar.core.authorize.Executor
 import zakadabar.core.business.EntityBusinessLogicBase
 import zakadabar.core.data.EntityId
 import zakadabar.core.module.module
-import zakadabar.lib.schedule.api.Subscription
+import zakadabar.lib.schedule.data.Subscription
 import zakadabar.lib.schedule.peristence.SubscriptionPa
 
 open class SubscriptionBl : EntityBusinessLogicBase<Subscription>(

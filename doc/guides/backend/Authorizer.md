@@ -16,7 +16,7 @@ of the methods to kick off full processing.
 Most of these examples use `SimpleRoleAuthorizer`. This authorizer needs a backend
 module that implements `RoleBlProvider`. For example,
 [RoleBl](/lib/accounts/src/jvmMain/kotlin/zakadabar/lib/accounts/business/RoleBl.kt) of
-[Lib: Accounts](/doc/guides/plug-and-play/accounts/Introduction.md) implements
+[Lib: Accounts](/doc/guides/libraries/accounts/Introduction.md) implements
 this interface. If you do not use `Lib: Accounts`, you have to add a module that implements
 `RoleBlProvider` or your server won't start.
 

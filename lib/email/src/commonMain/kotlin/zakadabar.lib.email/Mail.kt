@@ -4,6 +4,7 @@
 package zakadabar.lib.email
 
 import kotlinx.datetime.Instant
+import kotlinx.serialization.Serializable
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityBoCompanion
 import zakadabar.core.data.EntityId

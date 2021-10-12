@@ -34,7 +34,7 @@ For special cases you can access the Ktor routing logic directly. Have a look at
 All non-static backend routes:
 
 * are under `/api`
-* are authenticated (see [Accounts](/doc/guides/plug-and-play/accounts/Introduction.md) for more information)
+* are authenticated (see [Accounts](/doc/guides/libraries/accounts/Introduction.md) for more information)
 
 ### Handle Non-BL
 

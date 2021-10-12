@@ -3,6 +3,7 @@
  */
 package zakadabar.lib.schedule.business
 
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import zakadabar.core.authorize.Executor
@@ -12,14 +13,18 @@ import zakadabar.core.data.ActionStatus
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.module.modules
-import zakadabar.core.route.RoutedModule
+import zakadabar.core.server.server
+import zakadabar.core.setting.setting
 import zakadabar.core.util.Lock
+import zakadabar.core.util.default
 import zakadabar.core.util.fork
 import zakadabar.core.util.use
-import zakadabar.lib.schedule.api.*
+import zakadabar.lib.schedule.data.*
 import kotlin.reflect.full.createType
 
-open class WorkerBl : BusinessLogicCommon<BaseBo>(), RoutedModule {
+open class WorkerBl(
+    settingsNamespace: String = "schedule.worker.yaml"
+) : BusinessLogicCommon<BaseBo>() {
 
     override val namespace = "zkl-schedule-worker"
 
@@ -30,9 +35,32 @@ open class WorkerBl : BusinessLogicCommon<BaseBo>(), RoutedModule {
         action(RequestJobCancel::class, ::requestJobCancel)
     }
 
+    val settings by setting<WorkerSettings>(settingsNamespace)
+
     val lock = Lock()
 
     var job: kotlinx.coroutines.Job? = null
+
+    var subscription: Subscription? = null
+
+    override fun onAfterOpen() {
+        super.onAfterOpen()
+        runBlocking {
+            subscription = default<Subscription> {
+                nodeUrl = settings.nodeUrl ?: "http://127.0.0.1:${server.settings.ktor.port}/api/" + namespace
+                nodeId = settings.nodeId
+                actionNamespace = settings.actionNamespace
+                actionType = settings.actionType
+            }.create()
+        }
+    }
+
+    override fun onBeforeClose() {
+        super.onBeforeClose()
+        runBlocking {
+            subscription?.delete()
+        }
+    }
 
     open fun pushJob(executor: Executor, action: PushJob): ActionStatus {
         val module = modules.firstOrNull<BusinessLogicCommon<*>> { it.namespace == action.actionNamespace }

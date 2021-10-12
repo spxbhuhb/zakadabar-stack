@@ -128,7 +128,7 @@ Add a companion object to your test class, extending [AuthTestCompanionBase](/li
 
 - create and start a test Ktor Server with a test H2 instance
 - set `CommBase.baseUrl` to the created Ktor instance
-- install the `Lib: Accounts` plug-and-play module
+- install the `Lib: Accounts` library module
 - adds a [SimpleRoleAuthorizerProvider](/core/core/src/commonMain/kotlin/zakadabar/core/authorize/SimpleRoleAuthorizerProvider.kt) with `all = roles.siteMember`.
 - performs a login for the `so` account
 

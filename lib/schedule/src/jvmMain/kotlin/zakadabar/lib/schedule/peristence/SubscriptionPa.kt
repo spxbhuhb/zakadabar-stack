@@ -9,7 +9,7 @@ import zakadabar.core.persistence.exposed.ExposedPaBase
 import zakadabar.core.persistence.exposed.entityId
 import zakadabar.core.util.toJavaUuid
 import zakadabar.core.util.toStackUuid
-import zakadabar.lib.schedule.api.Subscription
+import zakadabar.lib.schedule.data.Subscription
 
 open class SubscriptionPa : ExposedPaBase<Subscription, SubscriptionTable>(
     table = SubscriptionTable()

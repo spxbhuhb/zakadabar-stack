@@ -14,7 +14,7 @@ import zakadabar.core.persistence.exposed.entityId
 import zakadabar.core.util.UUID
 import zakadabar.core.util.toJavaUuid
 import zakadabar.core.util.toStackUuid
-import zakadabar.lib.schedule.api.Job
+import zakadabar.lib.schedule.data.Job
 
 open class JobPa(
     table: JobTable = JobTable()

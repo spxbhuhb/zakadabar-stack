@@ -127,6 +127,24 @@ open class ModuleStore {
     }
 
     /**
+     * Call onAfterOpen for all modules in the store.
+     */
+    open fun afterOpen() {
+        lock.use {
+            buckets.forEach { it.afterOpen(this) }
+        }
+    }
+
+    /**
+     * Call onBeforeClose for all modules in the store.
+     */
+    open fun beforeClose() {
+        lock.use {
+            buckets.forEach { it.beforeClose(this) }
+        }
+    }
+
+    /**
      * Call `onModuleStop` for all modules.
      */
     open fun stop() {

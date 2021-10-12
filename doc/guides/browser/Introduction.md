@@ -113,7 +113,7 @@ initSession()
 ```
 
 When you use accounts and sessions, you have to install a [ZkSessionManager](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkSessionManager.kt)
-service. The plug-and-play module [lib:accounts](../plug-and-play/accounts/Introduction.md) provides such a service. 
+service. The library module [lib:accounts](../libraries/accounts/Introduction.md) provides such a service. 
 In `main.kt`:
 
 ```kotlin
@@ -175,7 +175,7 @@ initLocale(strings, defaultLocale = "en")
 ```
 
 When you use translations, you have to install a [TranslationProvider](/core/core/src/commonMain/kotlin/zakadabar/core/text/TranslationProvider.kt)
-service. The plug-and-play module [lib:i18n](../plug-and-play/i18n/Introduction.md) provides such a service.
+service. The library module [lib:i18n](../libraries/i18n/Introduction.md) provides such a service.
 
 In `main.kt`:
 

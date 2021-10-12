@@ -3,6 +3,7 @@
  */
 package zakadabar.lib.email
 
+import kotlinx.serialization.Serializable
 import zakadabar.core.data.ActionBo
 import zakadabar.core.data.ActionBoCompanion
 import zakadabar.core.data.ActionStatus

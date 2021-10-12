@@ -1,4 +1,4 @@
-# Plug and Play: Blobs
+# Library: Blobs
 
 Blobs is a simple module to handle files and images.
 

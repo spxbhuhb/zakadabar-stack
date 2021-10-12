@@ -47,7 +47,7 @@ We suggest that you have a quick look at the topics below to get an idea what's 
 - [Introduction: Backend](./guides/backend/Introduction.md)  
 - [Introduction: Browser](./guides/browser/Introduction.md)
 - [Introduction: Android](./guides/android/Introduction.md)
-- [Introduction: Plug And Play](./guides/plug-and-play/Introduction.md)
+- [Introduction: Libraries](./guides/libraries/Introduction.md)
 
 ## Examples [source code](https://github.com/spxbhuhb/zakadabar-stack/tree/master/lib/examples/src)
 

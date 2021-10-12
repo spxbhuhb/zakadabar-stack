@@ -7,8 +7,8 @@ import zakadabar.core.authorize.AppRolesBase
 import zakadabar.core.authorize.RoleBlProvider
 import zakadabar.core.authorize.SimpleRoleAuthorizerProvider
 import zakadabar.core.authorize.appRoles
-import zakadabar.core.data.BaseBo
 import zakadabar.core.comm.CommBase
+import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.log.Slf4jLogger
 import zakadabar.core.module.modules
@@ -68,11 +68,11 @@ open class TestCompanionBase(
             modules += MockRoleBlProvider
         }
 
+        CommBase.baseUrl = baseUrl
+
         addModules()
 
         server.main(arrayOf("--test", "--settings", settings))
-
-        CommBase.baseUrl = baseUrl
 
         onAfterStarted()
     }

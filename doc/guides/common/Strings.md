@@ -12,7 +12,7 @@ The string stores:
 - are updated from the server during application startup
 - provide compile-time checking of string variables
 
-The [i18n](/doc/guides/plug-and-play/i18n/Introduction.md) library module provides
+The [i18n](/doc/guides/libraries/i18n/Introduction.md) library module provides
 basic localized string handling: management UI, business logic and persistence.
 
 String stores work without the i18n module, but then you have no localization, all strings

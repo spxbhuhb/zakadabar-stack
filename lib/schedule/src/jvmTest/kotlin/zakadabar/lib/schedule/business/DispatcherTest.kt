@@ -13,12 +13,9 @@ import org.junit.Test
 import zakadabar.core.module.modules
 import zakadabar.core.server.server
 import zakadabar.core.testing.TestCompanionBase
-import zakadabar.core.util.UUID
 import zakadabar.core.util.default
-import zakadabar.lib.schedule.SchedulerModule
-import zakadabar.lib.schedule.api.Job
-import zakadabar.lib.schedule.api.JobStatus
-import zakadabar.lib.schedule.api.Subscription
+import zakadabar.lib.schedule.data.Job
+import zakadabar.lib.schedule.data.JobStatus
 import kotlin.test.assertEquals
 
 class DispatcherTest {
@@ -26,7 +23,7 @@ class DispatcherTest {
     companion object : TestCompanionBase() {
 
         override fun addModules() {
-            server += SchedulerModule()
+            zakadabar.lib.schedule.install()
             server += WorkerBl()
             server += ActionBl()
         }
@@ -48,11 +45,6 @@ class DispatcherTest {
 
     @Test
     fun testJob() = runBlocking {
-
-        default<Subscription> {
-            nodeUrl = "$baseUrl/api/zkl-schedule-worker"
-            nodeId = UUID()
-        }.create()
 
         val actionBl = modules.first<ActionBl>()
         actionBl.channel = Channel()

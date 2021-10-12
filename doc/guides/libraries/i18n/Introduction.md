@@ -1,4 +1,4 @@
-# Plug and Play: I18N
+# Library: I18N
 
 I18N is a simple internationalization module to provide translations for different locales.
 

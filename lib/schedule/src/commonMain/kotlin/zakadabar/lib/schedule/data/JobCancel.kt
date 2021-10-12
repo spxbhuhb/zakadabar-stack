@@ -1,24 +1,24 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.schedule.api
+package zakadabar.lib.schedule.data
 
-import kotlinx.datetime.Instant
+import kotlinx.serialization.Serializable
 import zakadabar.core.data.ActionBo
 import zakadabar.core.data.ActionBoCompanion
 import zakadabar.core.data.ActionStatus
 import zakadabar.core.data.EntityId
 import zakadabar.core.schema.BoSchema
 
+/**
+ * Sent by the worker to Job BL to inform about a successful job cancellation.
+ */
 @Serializable
-class JobFail(
+class JobCancel(
 
-    var jobId : EntityId<Job>,
-    var lastFailMessage : String?,
-    var lastFailData : String?,
-    var retryAt : Instant?,
+    var jobId : EntityId<Job>
 
-    ) : ActionBo<ActionStatus> {
+) : ActionBo<ActionStatus> {
 
     companion object : ActionBoCompanion(Job.boNamespace)
 
@@ -26,9 +26,6 @@ class JobFail(
 
     override fun schema() = BoSchema {
         + ::jobId
-        + ::lastFailMessage
-        + ::lastFailData
-        + ::retryAt
     }
 
 }

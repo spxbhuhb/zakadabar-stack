@@ -26,6 +26,7 @@ import zakadabar.core.server.ktor.configBuilders
 import zakadabar.core.server.ktor.features
 import zakadabar.core.setting.SettingBl
 import zakadabar.core.setting.SettingProvider
+import java.lang.Thread.sleep
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
@@ -177,7 +178,13 @@ open class Server(
 
         staticRoot = settings.staticResources
 
-        ktorServer.start(wait = ! test)
+        ktorServer.start(wait = false)
+
+        openModules()
+
+        while (!test) {
+            sleep(1000)
+        }
     }
 
     /**
@@ -215,9 +222,14 @@ open class Server(
         modules.start()
     }
 
+    open fun openModules() {
+        modules.afterOpen()
+    }
+
     open fun onBuildServer() = KtorServerBuilder(settings, modules).build() //  build the Ktor server instance
 
     fun shutdown(gracePeriodMillis : Long = 0, timeoutMillis : Long = 2000) {
+        modules.beforeClose()
         server.ktorServer.stop(gracePeriodMillis, timeoutMillis)
         features.clear()
         configBuilders.clear()

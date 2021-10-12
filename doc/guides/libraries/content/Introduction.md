@@ -1,4 +1,4 @@
-# Plug and Play: Content
+# Library: Content
 
 Content is a simple content module to provide basic content management functions.
 

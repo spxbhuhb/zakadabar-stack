@@ -3,6 +3,7 @@
  */
 package zakadabar.lib.email
 
+import kotlinx.serialization.Serializable
 import zakadabar.core.data.BaseBo
 import zakadabar.core.schema.BoSchema
 

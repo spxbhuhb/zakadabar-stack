@@ -1,4 +1,4 @@
-# Plug and Play: Accounts
+# Library: Accounts
 
 Accounts is a module to add basic user account support to the application. It includes:
 
