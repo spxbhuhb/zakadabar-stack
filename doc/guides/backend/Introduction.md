@@ -34,7 +34,8 @@ When started from the command line, `Server.kt` accepts the following parameters
 `--settings <settings-file>`
 
 Paths to the server settings file. See [Settings](./Settings.md) for more information.
-Default is "./stack.server.yaml".
+Default is "./stack.server.yaml". Check [ServerSettings](/core/core/src/commonMain/kotlin/zakadabar/core/server/ServerSettingsBo.kt)
+for the possible settings.
 
 #### Start Until
 
@@ -88,6 +89,7 @@ variables into server settings (see [Settings](./Settings.md) for details).
 - ZK_INTERNAL_SERVER_URL
 - ZK_EXTERNAL_SERVER_URL  
 - ZK_KTOR_PORT
+- ZK_KTOR_PORT_COOKIE
 
 ## Startup Sequence
 

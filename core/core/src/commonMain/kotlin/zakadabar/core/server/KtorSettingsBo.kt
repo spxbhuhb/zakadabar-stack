@@ -12,12 +12,14 @@ import zakadabar.core.setting.envVar
 data class KtorSettingsBo(
 
     var port: Int = 8080,
+    var portCookie: Boolean = false,
     var websocket: WebSocketSettingsBo = WebSocketSettingsBo()
 
 ) : BaseBo {
 
     override fun schema() = BoSchema {
         + ::port default port envVar "ZK_KTOR_PORT"
+        + ::portCookie default portCookie envVar "ZK_KTOR_PORT_COOKIE"
         + ::websocket
     }
 

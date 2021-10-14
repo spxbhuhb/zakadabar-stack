@@ -11,32 +11,28 @@ import io.ktor.sessions.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.lib.accounts.server.ktor.*
-import zakadabar.lib.accounts.data.LoginAction
-import zakadabar.lib.accounts.data.LogoutAction
-import zakadabar.lib.accounts.data.ModuleSettings
-import zakadabar.lib.accounts.data.SessionBo
 import zakadabar.core.authorize.AccountBlProvider
+import zakadabar.core.authorize.AccountPublicBo
 import zakadabar.core.authorize.BusinessLogicAuthorizer
 import zakadabar.core.authorize.Executor
 import zakadabar.core.business.EntityBusinessLogicBase
-import zakadabar.core.persistence.exposed.Sql
-import zakadabar.core.server.ktor.KtorEntityRouter
-import zakadabar.core.server.ktor.KtorSessionProvider
-import zakadabar.core.server.ktor.executor
-import zakadabar.core.persistence.EmptyPersistenceApi
-import zakadabar.core.server.server
-import zakadabar.core.setting.setting
-import zakadabar.core.data.BaseBo
-import zakadabar.core.data.ActionBo
-import zakadabar.core.data.ActionStatus
-import zakadabar.core.authorize.AccountPublicBo
-import zakadabar.core.data.Secret
-import zakadabar.core.data.EntityId
+import zakadabar.core.data.*
 import zakadabar.core.exception.Forbidden
 import zakadabar.core.exception.Unauthorized
 import zakadabar.core.exception.UnauthorizedData
 import zakadabar.core.module.module
+import zakadabar.core.persistence.EmptyPersistenceApi
+import zakadabar.core.persistence.exposed.Sql
+import zakadabar.core.server.ktor.KtorEntityRouter
+import zakadabar.core.server.ktor.KtorSessionProvider
+import zakadabar.core.server.ktor.executor
+import zakadabar.core.server.server
+import zakadabar.core.setting.setting
+import zakadabar.lib.accounts.data.LoginAction
+import zakadabar.lib.accounts.data.LogoutAction
+import zakadabar.lib.accounts.data.ModuleSettings
+import zakadabar.lib.accounts.data.SessionBo
+import zakadabar.lib.accounts.server.ktor.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
 
@@ -189,7 +185,10 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
     override fun configure(conf: Sessions.Configuration) {
         with(conf) {
             val sessionType = StackSession::class
-            val name = "ZKL_SESSION"
+
+            val name = with(server.settings.ktor) {
+                if (portCookie) "ZKL_SESSION_$port" else "ZKL_SESSION"
+            }
 
             @Suppress("DEPRECATION") // as in Ktor code
             val builder = CookieIdSessionBuilder(sessionType).apply {

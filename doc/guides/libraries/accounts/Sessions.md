@@ -13,6 +13,23 @@
         * [LoginAction](/lib/accounts/src/commonMain/kotlin/zakadabar/lib/accounts/data/LoginAction.kt)
         * [LogoutAction](/lib/accounts/src/commonMain/kotlin/zakadabar/lib/accounts/data/LogoutAction.kt)
 
+## Session Cookie
+
+[KtorSessionBl](/lib/accounts/src/jvmMain/kotlin/zakadabar/lib/accounts/business/KtorSessionBl.kt) sets the session cookie
+depending on the value of the `portCookie` server setting:
+
+- when `portCookie` is `true`, the cookie name is `ZKL_SESSION_${port}`, where port is the port Ktor serves
+- when `portCookie` is `false`, the cookie name is `ZKL_SESSION`
+
+Default is `false`. Change in `stack.server.yaml` or with `--env-explicit` and `ZK_KTOR_PORT_COOKIE`, 
+see [Introduction: Backend](/doc/guides/backend/Introduction.md) and [Settings](/doc/guides/backend/Settings.md).
+
+`true` makes it possible to run independent servers with the same address but different port number.
+
+`false` makes it possible to share cookies between the servers as browsers do not differentiate between ports
+when looking at cookies.
+
+
 ## Browser Frontend
 
 The browser frontend usually fetches the session data in `main.kt` by calling `initSession(SessionManager())`.
