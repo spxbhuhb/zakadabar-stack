@@ -52,6 +52,7 @@ class RenewLoginDialog : ZkElement() {
 
             + LoginForm(
                 accountName = executor.account.accountName,
+                setAppTitle = false,
                 onCancel = { window.location.href = "/" },
                 onSuccess = { io { channel.send(true) } }
             )

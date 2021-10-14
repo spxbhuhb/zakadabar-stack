@@ -22,6 +22,7 @@ import zakadabar.lib.accounts.data.LoginAction
 
 class LoginForm(
     private val accountName: String? = null,
+    override var setAppTitle: Boolean = true,
     val onCancel: (() -> Unit)? = null,
     val onSuccess: () -> Unit
 ) : ZkForm<LoginAction>() {
