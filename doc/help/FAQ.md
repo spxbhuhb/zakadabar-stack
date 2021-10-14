@@ -61,7 +61,7 @@ Open the `Terminal` of your IDEA (or a normal terminal of your operating system)
 directory. This will start the backend in the terminal and you'll be able to start the frontend from IDEA (or from
 another terminal.)
 
-### Compiler Thorws IllegalStateException after 2021.7.9 upgrade
+### Compiler Throws IllegalStateException after 2021.7.9 upgrade
 
 ```text
 > Task :webapp:compileCommonMainKotlinMetadata FAILED
@@ -137,6 +137,19 @@ No idea why this happens, Just add the import manually:
 ```
 
 * Gradle Clean
+
+### Netty Response Was Already Completed
+
+The following error message happens when you have two BLs with the same namespace.
+
+```text
+2021-10-12 16:08:17.048 [eventLoopGroupProxy-4-6       ] ERROR ktor.application - 200 OK: GET - /api/test-system/entity
+java.lang.UnsupportedOperationException: Headers can no longer be set because response was already completed
+	at io.ktor.server.netty.http1.NettyHttp1ApplicationResponse$headers$1.engineAppendHeader(NettyHttp1ApplicationResponse.kt:42)
+	at io.ktor.response.ResponseHeaders.append(ResponseHeaders.kt:47)
+	at io.ktor.response.ResponseHeaders.append$default(ResponseHeaders.kt:41)
+
+```
 
 ### kotlinx.serializer stuff cannot be imported after Gradle clean
 

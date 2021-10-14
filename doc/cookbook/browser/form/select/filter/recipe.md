@@ -29,5 +29,5 @@ one of them changes the others.
 
 ## Code
 
-- [BoSelectFilter.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/form/select/BoSelectFilter.kt)
-- [StringSelectFilter.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/form/select/StringSelectFilter.kt)
+- [BoSelectFilter.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/form/select/filter/BoSelectFilter.kt)
+- [StringSelectFilter.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/form/select/filter/StringSelectFilter.kt)

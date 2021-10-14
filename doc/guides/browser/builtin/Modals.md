@@ -81,14 +81,14 @@ In this case you are free to put whatever into the modal.
 open class MyMessageDialog : ZkModalBase<String>() {
 
     override fun onCreate() {
-        classList += ZkModalStyles.modal
+        classList += zkModalStyles.modal
 
         + column {
-            + div(ZkModalStyles.content) {
+            + div(zkModalStyles.content) {
                 + "This is my message dialog."
             }
 
-            + row(ZkModalStyles.buttons) {
+            + row(zkModalStyles.buttons) {
                 + ZkButton("I will use translated strings instead", onClick = ::onOk)
             }
         }

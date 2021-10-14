@@ -123,7 +123,7 @@ clear()
 
 ### Get and Find
 
-To find a child you can use the getter / finder functons. These functions find only direct children.
+To find a child you can use the getter / finder functions. These functions find only direct children.
 
 Get the first child of a given class. Throws `NoSuchElementException` if there is no such child.
 

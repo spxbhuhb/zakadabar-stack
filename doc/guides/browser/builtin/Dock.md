@@ -5,7 +5,7 @@ The dock is not finished yet.
 </div>
 
 The dock contains docked items and shows them over the normal content. The items
-may be minimized, normal sized or maximized. Useful to pick out elements from the 
+may be minimized, normal-sized or maximized. Useful to pick out elements from the 
 normal document flow, mostly for editing.
 
 The `application` adds the dock when its `init` method runs.
@@ -41,7 +41,7 @@ If you use ZkDockedElement, the user can remove the docked element by clicking o
 
 The close icon calls `onClose` of the DockedItem.
 
-To remove the docked item programmatically substract it from `application.dock`.
+To remove the docked item programmatically subtract it from `application.dock`.
 
 ```kotlin
 val docked = zke { + "hello world" }.dock(ZkIcons.menu, "hello")

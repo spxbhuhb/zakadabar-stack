@@ -2,7 +2,7 @@
 
 We would like to say thank you for every person / organization who contributed to the software we include.
 
-Names and organizations are from Github project information or from the public we page of the project.
+Names and organizations are from GitHub project information or from the public we page of the project.
 This list is to give attribution to the software we depend on, it does not imply any legal/contractual
 connection between the listed projects/authors and Zakadabar Stack/Simplexion.
 

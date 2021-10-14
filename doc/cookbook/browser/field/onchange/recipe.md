@@ -22,4 +22,4 @@ Use the `value` property to change the value of in the field **and** in the BO.
 
 ## Code
 
-- [FieldUpdateForm.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/field/onchange/FieldUpdateForm.kt)
+- [FieldUpdateForm.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/field/update/FieldUpdateForm.kt)

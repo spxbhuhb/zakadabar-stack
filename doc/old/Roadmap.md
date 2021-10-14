@@ -38,7 +38,7 @@ This roadmap is something we would like to follow. Please note that we cannot gu
 ### Uncategorized
 
 * synthetic forms (halfway done)
-* settings browser UI (depends on syntethic forms)
+* settings browser UI (depends on synthetic forms)
 * compile and add css classes on-demand (just an idea, but it is possible to manage)
 * themes and styles
     * make style sheet switches carry the original class name

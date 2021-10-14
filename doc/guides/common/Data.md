@@ -370,7 +370,7 @@ if (! bo.isValid) {
 }
 ```
 
-The schema actually builds a validation report. You can get this reportby
+The schema actually builds a validation report. You can get this report by
 using `bo.schema().validate()` instead of `isValid`:
 
 ```kotlin
