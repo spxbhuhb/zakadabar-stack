@@ -12,12 +12,12 @@ import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobCreateState
 import zakadabar.lib.blobs.data.url
 
-open class ZkImagePreview<BT : BlobBo<BT,*>>(
+open class ZkImagePreview<BT : BlobBo<BT, *>>(
     bo: BT,
     createState: BlobCreateState? = null,
     progress: Long? = null,
     size: Int = 200,
-    private val showMeta : Boolean = false,
+    private val showMeta: Boolean = false,
     onDelete: suspend (preview: ZkBlobFieldEntry<BT>) -> Boolean = { false }
 ) : ZkBlobFieldEntry<BT>(
     bo, createState, progress, size, onDelete
@@ -38,34 +38,28 @@ open class ZkImagePreview<BT : BlobBo<BT,*>>(
 
     private fun ZkElement.renderImage() {
         + column {
-//            if (bo.mimeType == "image/svg+xml") {
-//                + zke {
-//                    io {
-//                        ! bo.download().decodeToString()
-//                    }
-//                }
-//            } else {
-                + image(bo.url) {
-                    with(buildPoint.style) {
-                        if (height > width) {
-                            height = size.px
-                            width = "auto"
-                        } else {
-                            height = "auto"
-                            width = size.px
-                        }
-                    }
 
-                    on(buildPoint, "click") { _ ->
-                        ZkFullScreenImageView(bo.url) {
-                            io {
-                                val deleted = onDelete(this@ZkImagePreview)
-                                if (deleted) it.hide()
-                            }
-                        }.show()
+            + image(bo.url) {
+                with(buildPoint.style) {
+                    if (height > width) {
+                        height = size.px
+                        width = "auto"
+                    } else {
+                        height = "auto"
+                        width = size.px
                     }
                 }
- //           }
+
+                on(buildPoint, "click") { _ ->
+                    ZkFullScreenImageView(bo.url) {
+                        io {
+                            val deleted = onDelete(this@ZkImagePreview)
+                            if (deleted) it.hide()
+                        }
+                    }.show()
+                }
+            }
+
             if (showMeta) {
                 + div(blobStyles.imageName) {
                     + bo.name
