@@ -1,9 +1,3 @@
 # Next
 
 This page contains the changes included in the next release.
-
-# Core
-
-**changed**
-
-- jsMain: convert `private val` to `public`, `private var` and `fun` to protected
