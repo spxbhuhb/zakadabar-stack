@@ -10,7 +10,7 @@ import zakadabar.core.resource.localizedStrings
 import zakadabar.core.util.PublicApi
 
 open class ZkTabContainer(
-    private val builder: (ZkTabContainer.() -> Unit)? = null
+    val builder: (ZkTabContainer.() -> Unit)? = null
 ) : ZkElement() {
 
     open val tabLabels = ZkElement()

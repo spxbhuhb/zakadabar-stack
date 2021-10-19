@@ -13,7 +13,7 @@ import kotlin.reflect.KProperty1
 
 open class ZkInstantColumn<T : BaseBo>(
     table: ZkTable<T>,
-    private val prop: KProperty1<T, Instant>
+    val prop: KProperty1<T, Instant>
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {

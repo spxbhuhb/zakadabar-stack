@@ -813,7 +813,7 @@ open class ZkElement(
     //   Builder
     // -------------------------------------------------------------------------
 
-    private fun runBuild(e: HTMLElement, rule: ZkCssStyleRule?, build: ZkElement.() -> Unit) {
+    protected fun runBuild(e: HTMLElement, rule: ZkCssStyleRule?, build: ZkElement.() -> Unit) {
         e.classList += rule
         val original = buildPoint
         buildPoint = e

@@ -14,9 +14,9 @@ import zakadabar.core.resource.localizedStrings
 import zakadabar.core.text.capitalized
 
 open class ZkFormButtons<T : BaseBo>(
-    private val form: ZkForm<T>,
-    private val execute: () -> Unit = { form.submit() },
-    private val submitLabel: String? = null
+    val form: ZkForm<T>,
+    val execute: () -> Unit = { form.submit() },
+    val submitLabel: String? = null
 ) : ZkElement() {
 
     override fun onCreate() {

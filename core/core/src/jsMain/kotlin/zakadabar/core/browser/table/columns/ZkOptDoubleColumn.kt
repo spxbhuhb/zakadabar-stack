@@ -11,7 +11,7 @@ import kotlin.reflect.KProperty1
 
 open class ZkOptDoubleColumn<T : BaseBo>(
     table: ZkTable<T>,
-    private val prop: KProperty1<T, Double?>
+    val prop: KProperty1<T, Double?>
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {

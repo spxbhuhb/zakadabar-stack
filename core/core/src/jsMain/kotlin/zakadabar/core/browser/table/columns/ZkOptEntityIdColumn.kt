@@ -12,7 +12,7 @@ import kotlin.reflect.KProperty1
 
 open class ZkOptEntityIdColumn<T : BaseBo, IT>(
     table: ZkTable<T>,
-    private val prop: KProperty1<T, EntityId<IT>?>
+    val prop: KProperty1<T, EntityId<IT>?>
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {

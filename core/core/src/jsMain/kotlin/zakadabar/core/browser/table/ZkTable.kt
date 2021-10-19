@@ -122,15 +122,15 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     lateinit var tableElement: HTMLTableElement
 
-    private val tbody = document.createElement("tbody") as HTMLTableSectionElement
+    val tbody = document.createElement("tbody") as HTMLTableSectionElement
 
     // gap before the first row, used to virtualize rows
 
-    private val placeHolderCell = document.createElement("td") as HTMLTableCellElement
-    private val placeHolderRow = (document.createElement("tr") as HTMLTableRowElement).also { it.appendChild(placeHolderCell) }
+    val placeHolderCell = document.createElement("td") as HTMLTableCellElement
+    val placeHolderRow = (document.createElement("tr") as HTMLTableRowElement).also { it.appendChild(placeHolderCell) }
 
-    private var firstShownRow = Int.MAX_VALUE
-    private var lastShownRow = - 1
+    protected var firstShownRow = Int.MAX_VALUE
+    protected var lastShownRow = - 1
 
     // -------------------------------------------------------------------------
     //  State -- data of the table, search text, preloaded data
@@ -221,7 +221,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             null
         }
 
-    private fun titleActions(): List<ZkElement> {
+    protected fun titleActions(): List<ZkElement> {
 
         val actions = mutableListOf<ZkElement>()
 
@@ -254,7 +254,6 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      */
     open fun onMouseDown(event: Event) {
         event as MouseEvent
-        println(event.detail)
         if (event.detail > 1) {
             event.preventDefault()
         }

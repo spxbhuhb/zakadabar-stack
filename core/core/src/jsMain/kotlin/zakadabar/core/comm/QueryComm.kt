@@ -7,8 +7,8 @@ import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
-import zakadabar.core.data.QueryBoCompanion
 import zakadabar.core.browser.util.encodeURIComponent
+import zakadabar.core.data.QueryBoCompanion
 import zakadabar.core.util.PublicApi
 
 /**
@@ -18,7 +18,7 @@ import zakadabar.core.util.PublicApi
  */
 @PublicApi
 open class QueryComm(
-    private val companion: QueryBoCompanion
+    val companion: QueryBoCompanion
 ) : CommBase(), QueryCommInterface {
 
     @PublicApi

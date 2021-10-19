@@ -32,7 +32,7 @@ open class ZkSidebarMinimizedSection(
         }
     }
 
-    private fun restore() {
+    protected fun restore() {
         section.restore()
         section.sideBar?.let {
             it.minimizedSections -= this

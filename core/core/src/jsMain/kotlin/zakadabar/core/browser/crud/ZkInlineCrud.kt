@@ -18,7 +18,7 @@ import kotlin.reflect.KClass
 /**
  * Provides common functions used in most CRUD implementations.
  */
-@Suppress("unused", "MemberVisibilityCanBePrivate") // API class
+@Suppress("unused") // API class
 open class ZkInlineCrud<T : EntityBo<T>> : ZkElement(), ZkCrud<T> {
 
     lateinit var companion: EntityBoCompanion<T>
@@ -51,7 +51,7 @@ open class ZkInlineCrud<T : EntityBo<T>> : ZkElement(), ZkCrud<T> {
         }
     }
 
-    private fun newEditor(): ZkCrudEditor<T> {
+    protected fun newEditor(): ZkCrudEditor<T> {
         clear()
 
         editorInstance = editorClass.newInstance()

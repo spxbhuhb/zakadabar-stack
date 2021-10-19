@@ -13,7 +13,7 @@ import kotlin.reflect.KProperty1
 
 open class ZkOptLocalDateTimeColumn<T : BaseBo>(
     table: ZkTable<T>,
-    private val prop: KProperty1<T, LocalDateTime?>
+    val prop: KProperty1<T, LocalDateTime?>
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {

@@ -11,7 +11,7 @@ import zakadabar.core.browser.ZkElement
  * @since 2020.9.14
  */
 class ZkDropdownContent(
-    private val content: ZkElement
+    val content: ZkElement
 ) : ZkElement() {
 
     override fun onCreate() {

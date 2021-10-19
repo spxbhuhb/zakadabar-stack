@@ -5,7 +5,7 @@ package zakadabar.core.browser.misc
 
 import zakadabar.core.browser.ZkElement
 
-class NYI(private val message: String = "not yet implemented") : ZkElement() {
+class NYI(val message: String = "not yet implemented") : ZkElement() {
 
     override fun onCreate() {
         style {

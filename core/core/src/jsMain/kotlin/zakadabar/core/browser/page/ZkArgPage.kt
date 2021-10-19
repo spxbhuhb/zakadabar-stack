@@ -5,21 +5,21 @@ package zakadabar.core.browser.page
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
+import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.ZkAppLayout
 import zakadabar.core.browser.application.ZkAppRouting
 import zakadabar.core.browser.application.ZkNavState
 import zakadabar.core.browser.application.application
-import zakadabar.core.browser.ZkElement
-import zakadabar.core.resource.css.ZkCssStyleRule
 import zakadabar.core.browser.util.encodeURIComponent
 import zakadabar.core.browser.util.log
 import zakadabar.core.browser.util.newInstance
+import zakadabar.core.resource.css.ZkCssStyleRule
 
 /**
  * Base class for pages that receive parameters in the URL, such as queries
  * or pages with state that can be opened directly with the URL.
  */
-@Suppress("unused", "MemberVisibilityCanBePrivate") // API class
+@Suppress("unused") // API class
 open class ZkArgPage<T>() : ZkPage() {
 
     lateinit var serializer: KSerializer<T>

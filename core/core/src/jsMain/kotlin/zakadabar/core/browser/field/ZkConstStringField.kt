@@ -34,7 +34,7 @@ open class ZkConstStringField(
     propName = "",
     label = label
 ) {
-    private val input = document.createElement("input") as HTMLInputElement
+    val input = document.createElement("input") as HTMLInputElement
 
     override var readOnly = true
 

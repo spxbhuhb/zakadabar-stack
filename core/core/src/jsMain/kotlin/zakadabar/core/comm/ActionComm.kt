@@ -19,7 +19,7 @@ import zakadabar.core.util.PublicApi
  */
 @PublicApi
 open class ActionComm(
-    private val companion: ActionBoCompanion
+    val companion: ActionBoCompanion
 ) : CommBase(), ActionCommInterface {
 
     @PublicApi

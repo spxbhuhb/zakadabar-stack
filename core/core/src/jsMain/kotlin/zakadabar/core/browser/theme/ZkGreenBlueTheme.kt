@@ -3,9 +3,9 @@
  */
 package zakadabar.core.browser.theme
 
-import zakadabar.core.browser.tabcontainer.zkTabContainerStyles
 import zakadabar.core.browser.layout.zkScrollBarStyles
 import zakadabar.core.browser.sidebar.zkSideBarStyles
+import zakadabar.core.browser.tabcontainer.zkTabContainerStyles
 import zakadabar.core.browser.table.zkTableStyles
 import zakadabar.core.browser.titlebar.zkTitleBarStyles
 import zakadabar.core.resource.ZkColors
@@ -20,9 +20,9 @@ open class ZkGreenBlueTheme : ZkBuiltinLightTheme() {
 
     override val name = NAME
 
-    private val darkGreen = "#538d34"
-    private val lightGreen = "#78b641"
-    private val darkBlue = "#1d3457"
+    val darkGreen = "#538d34"
+    val lightGreen = "#78b641"
+    val darkBlue = "#1d3457"
 
     override var fontFamily = "Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif, Lato"
 

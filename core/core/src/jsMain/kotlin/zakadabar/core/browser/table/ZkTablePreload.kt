@@ -11,7 +11,7 @@ import kotlin.reflect.KProperty
 
 open class ZkTablePreload<T : Any>(val loader: suspend () -> T) : ReadOnlyProperty<ZkTable<*>, T> {
 
-    private lateinit var table: ZkTable<*>
+    protected lateinit var table: ZkTable<*>
 
     protected lateinit var value: T
 

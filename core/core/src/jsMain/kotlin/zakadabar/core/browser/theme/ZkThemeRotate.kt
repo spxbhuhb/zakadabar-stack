@@ -27,7 +27,7 @@ open class ZkThemeRotate(
         } css buttonStyle
     }
 
-    private fun switchTo(index: Int) {
+    protected fun switchTo(index: Int) {
         this -= firstOrNull<ZkButton>()
         + buttons[index % buttons.size]
     }

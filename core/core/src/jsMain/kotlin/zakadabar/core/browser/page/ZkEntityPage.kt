@@ -3,16 +3,16 @@
  */
 package zakadabar.core.browser.page
 
-import zakadabar.core.data.EntityBo
-import zakadabar.core.data.EntityId
 import zakadabar.core.browser.application.ZkAppLayout
 import zakadabar.core.browser.application.application
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityId
 import zakadabar.core.resource.css.ZkCssStyleRule
 
 /**
  * Page that displays an entity in some form.
  */
-@Suppress("unused", "MemberVisibilityCanBePrivate") // API class
+@Suppress("unused") // API class
 open class ZkEntityPage<T : EntityBo<T>>(
     layout: ZkAppLayout? = null,
     css: ZkCssStyleRule? = null

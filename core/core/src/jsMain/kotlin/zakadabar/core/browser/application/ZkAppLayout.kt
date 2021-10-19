@@ -36,7 +36,7 @@ import zakadabar.core.browser.util.plusAssign
  */
 abstract class ZkAppLayout(val name: String) : ZkElement() {
 
-    private var activeElement: ZkElement? = null
+    protected var activeElement: ZkElement? = null
     protected var contentContainer = ZkElement()
 
     init {

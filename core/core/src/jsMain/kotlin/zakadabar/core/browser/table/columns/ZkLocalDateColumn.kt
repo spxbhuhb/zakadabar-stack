@@ -13,7 +13,7 @@ import kotlin.reflect.KProperty1
 
 open class ZkLocalDateColumn<T : BaseBo>(
     table: ZkTable<T>,
-    private val prop: KProperty1<T, LocalDate>
+    val prop: KProperty1<T, LocalDate>
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {

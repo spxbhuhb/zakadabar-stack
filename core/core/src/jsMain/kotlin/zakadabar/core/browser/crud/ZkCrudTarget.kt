@@ -3,20 +3,20 @@
  */
 package zakadabar.core.browser.crud
 
-import zakadabar.core.data.EntityBo
-import zakadabar.core.data.EntityBoCompanion
-import zakadabar.core.data.EntityId
+import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.ZkElementMode
 import zakadabar.core.browser.application.ZkAppLayout
 import zakadabar.core.browser.application.ZkAppRouting
 import zakadabar.core.browser.application.ZkNavState
 import zakadabar.core.browser.application.application
-import zakadabar.core.browser.ZkElement
-import zakadabar.core.browser.ZkElementMode
 import zakadabar.core.browser.misc.NYI
 import zakadabar.core.browser.page.zkPageStyles
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.browser.util.io
 import zakadabar.core.browser.util.newInstance
+import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityBoCompanion
+import zakadabar.core.data.EntityId
 import kotlin.reflect.KClass
 
 /**
@@ -24,7 +24,7 @@ import kotlin.reflect.KClass
  * "all" uses table, others use form. Intended for top-level pages.
  * If you would like to include a crud on a page, use [ZkInlineCrud].
  */
-@Suppress("unused", "MemberVisibilityCanBePrivate") // API class
+@Suppress("unused") // API class
 open class ZkCrudTarget<T : EntityBo<T>> : ZkAppRouting.ZkTarget, ZkCrud<T> {
 
     lateinit var layout: ZkAppLayout

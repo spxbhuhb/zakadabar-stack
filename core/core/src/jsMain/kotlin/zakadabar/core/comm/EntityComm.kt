@@ -24,8 +24,8 @@ import zakadabar.core.util.PublicApi
  */
 @PublicApi
 open class EntityComm<T : EntityBo<T>>(
-    private val namespace: String,
-    private val serializer: KSerializer<T>
+    val namespace: String,
+    val serializer: KSerializer<T>
 ) : CommBase(), EntityCommInterface<T> {
 
     override suspend fun create(bo: T): T {
@@ -99,7 +99,7 @@ open class EntityComm<T : EntityBo<T>>(
         }
     }
 
-    private suspend fun sendAndReceive(path: String, requestInit: RequestInit): T {
+    protected suspend fun sendAndReceive(path: String, requestInit: RequestInit): T {
         val response = commBlock {
             val responsePromise = window.fetch(path, requestInit)
             checkStatus(responsePromise.await())

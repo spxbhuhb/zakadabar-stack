@@ -1,20 +1,18 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-@file:Suppress("MemberVisibilityCanBePrivate")
-
 package zakadabar.core.browser.toast
 
 import kotlinx.coroutines.delay
-import zakadabar.core.browser.application.application
 import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.application.application
 import zakadabar.core.browser.button.ZkButton
 import zakadabar.core.browser.icon.ZkIcon
+import zakadabar.core.browser.util.io
+import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.ZkFlavour
 import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.css.ZkCssStyleRule
-import zakadabar.core.browser.util.io
-import zakadabar.core.browser.util.plusAssign
 
 /**
  * A toast to show a message to the user.

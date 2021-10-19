@@ -34,20 +34,20 @@ import kotlin.math.min
  */
 @PublicApi
 open class ZkSlider(
-    private val container: ZkElement,
-    private val subject: ZkElement,
-    private val attached: List<ZkElement> = emptyList(),
-    private val orientation: ZkOrientation = ZkOrientation.Vertical,
-    private val reverse: Boolean = false,
-    private val minSize: Double = 26.0, // TODO this comes from the style/theme: header icon dimensions
-    private val maxSize: Double = Double.POSITIVE_INFINITY,
-    private val minRemaining: Double = 26.0, // TODO this comes from the style/theme header icon dimensions
-    private val threshold: Double = 1.0,
-    private val onBelow: () -> Unit = { },
-    private val onAbove: () -> Unit = { }
+    val container: ZkElement,
+    val subject: ZkElement,
+    val attached: List<ZkElement> = emptyList(),
+    val orientation: ZkOrientation = ZkOrientation.Vertical,
+    val reverse: Boolean = false,
+    val minSize: Double = 26.0, // TODO this comes from the style/theme: header icon dimensions
+    val maxSize: Double = Double.POSITIVE_INFINITY,
+    val minRemaining: Double = 26.0, // TODO this comes from the style/theme header icon dimensions
+    val threshold: Double = 1.0,
+    val onBelow: () -> Unit = { },
+    val onAbove: () -> Unit = { }
 ) : ZkElement() {
 
-    private var active = false
+    protected var active = false
     var position = 0.0
 
     override fun onCreate() {
@@ -59,20 +59,20 @@ open class ZkSlider(
         container.on("mouseleave", ::onMouseLeave)
     }
 
-    private fun onMouseDown(event: Event) {
+    protected fun onMouseDown(event: Event) {
         active = true
         position = getPosition(event)
     }
 
-    private fun onMouseUp(@Suppress("UNUSED_PARAMETER") event: Event) {
+    protected fun onMouseUp(@Suppress("UNUSED_PARAMETER") event: Event) {
         active = false
     }
 
-    private fun onMouseLeave(@Suppress("UNUSED_PARAMETER") event: Event) {
+    protected fun onMouseLeave(@Suppress("UNUSED_PARAMETER") event: Event) {
         active = false
     }
 
-    private fun onMouseMove(event: Event) {
+    protected fun onMouseMove(event: Event) {
         if (! active) return
 
         val newPosition = getPosition(event)
@@ -85,7 +85,7 @@ open class ZkSlider(
     }
 
     @Suppress("DuplicatedCode") // silly, with and height are not interchangeable
-    private fun onSliderMove(delta: Double) {
+    protected fun onSliderMove(delta: Double) {
         val boundingRect = subject.element.getBoundingClientRect()
         val containerBoundingRect = container.element.getBoundingClientRect()
 
@@ -128,12 +128,12 @@ open class ZkSlider(
 
     }
 
-    private fun getPosition(event: Event): Double {
+    protected fun getPosition(event: Event): Double {
         event as MouseEvent
         return if (orientation == ZkOrientation.Horizontal) event.y else event.x
     }
 
-    private fun newSize(size: Double, containerSize: Double, delta: Double): String {
+    protected fun newSize(size: Double, containerSize: Double, delta: Double): String {
 
         var newSize = size + delta
 

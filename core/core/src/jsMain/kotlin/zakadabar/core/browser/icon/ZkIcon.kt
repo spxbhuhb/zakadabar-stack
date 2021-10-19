@@ -5,8 +5,8 @@ package zakadabar.core.browser.icon
 
 import org.w3c.dom.events.Event
 import zakadabar.core.browser.ZkElement
-import zakadabar.core.resource.ZkIconSource
 import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.resource.ZkIconSource
 
 /**
  * A simple icon without any extra.
@@ -44,7 +44,7 @@ open class ZkIcon(
         }
     }
 
-    private fun onMouseDown(event: Event) {
+    protected fun onMouseDown(event: Event) {
         event.preventDefault() // to prevent focus change
     }
 

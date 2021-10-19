@@ -4,13 +4,13 @@
 package zakadabar.core.browser.titlebar
 
 import org.w3c.dom.events.Event
+import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.ZkAppRouting
 import zakadabar.core.browser.application.application
-import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.button.ZkButton
+import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.ZkFlavour
 import zakadabar.core.resource.ZkIcons
-import zakadabar.core.browser.util.plusAssign
 
 /**
  * The top-left part of the default layout, a button to close the menu and the title of the application.
@@ -39,7 +39,7 @@ open class ZkAppHandle(
         on("mousedown", ::onMouseDown)
     }
 
-    private fun onMouseDown(event: Event) {
+    protected fun onMouseDown(event: Event) {
         event.preventDefault() // to prevent focus change
     }
 

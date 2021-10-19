@@ -27,13 +27,13 @@ import kotlin.reflect.KProperty0
 
 open class ZkEntityIdField<T : BaseBo>(
     context : ZkFieldContext,
-    private val prop: KProperty0<EntityId<T>>
+    val prop: KProperty0<EntityId<T>>
 ) : ZkFieldBase<EntityId<T>,ZkEntityIdField<T>>(
     context = context,
     propName = prop.name
 ) {
 
-    private val input = document.createElement("input") as HTMLInputElement
+    val input = document.createElement("input") as HTMLInputElement
 
     override var readOnly = context.readOnly || prop !is KMutableProperty<*>
 

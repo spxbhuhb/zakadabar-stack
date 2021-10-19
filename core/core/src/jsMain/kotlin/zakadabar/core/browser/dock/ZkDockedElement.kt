@@ -1,14 +1,12 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-@file:Suppress("MemberVisibilityCanBePrivate")
-
 package zakadabar.core.browser.dock
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLHtmlElement
-import zakadabar.core.browser.application.application
 import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.application.application
 import zakadabar.core.browser.icon.ZkIcon
 import zakadabar.core.resource.ZkIconSource
 import zakadabar.core.resource.ZkIcons

@@ -5,9 +5,9 @@ package zakadabar.core.browser.button
 
 import org.w3c.dom.events.Event
 import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.ZkIconSource
 import zakadabar.core.resource.css.ZkCssStyleRule
-import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.util.PublicApi
 
 /**
@@ -21,13 +21,13 @@ import zakadabar.core.util.PublicApi
 @PublicApi
 @Deprecated("EOL: 2021.8.1  -  use ZkButton(ZkIcons.notes, flavour = ZkFlavour.Custom, onClick = ::onHandleClick) instead")
 open class ZkIconButton(
-    private val icon: ZkIconSource,
-    private val iconSize: Int = 18,
-    private val buttonSize: Int = 22,
-    private val cssClass: ZkCssStyleRule? = null,
-    private val fill: String? = null,
-    private val round: Boolean = false,
-    private val onClick: (() -> Unit)? = null
+    val icon: ZkIconSource,
+    val iconSize: Int = 18,
+    val buttonSize: Int = 22,
+    val cssClass: ZkCssStyleRule? = null,
+    val fill: String? = null,
+    val round: Boolean = false,
+    val onClick: (() -> Unit)? = null
 ) : ZkElement() {
 
     override fun onCreate() {

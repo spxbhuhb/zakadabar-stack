@@ -10,10 +10,10 @@ import zakadabar.core.resource.css.ZkCssStyleRule
 import zakadabar.core.resource.theme
 
 class ZkFormSection(
-    private val title: String? = null,
-    private val summary: String? = null,
-    private val css: ZkCssStyleRule? = null,
-    private val builder: ZkElement.() -> Unit
+    val title: String? = null,
+    val summary: String? = null,
+    val css: ZkCssStyleRule? = null,
+    val builder: ZkElement.() -> Unit
 ) : ZkElement() {
 
     override fun onCreate() {

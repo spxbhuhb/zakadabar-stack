@@ -36,7 +36,7 @@ open class ZkCssStyleRule(
 
     val styles = mutableMapOf<String, String?>()
 
-    private var variations : MutableList<ZkCssStyleRule>? = null
+    protected var variations : MutableList<ZkCssStyleRule>? = null
 
     override fun getValue(thisRef: ZkCssStyleSheet, property: KProperty<*>) = this
 

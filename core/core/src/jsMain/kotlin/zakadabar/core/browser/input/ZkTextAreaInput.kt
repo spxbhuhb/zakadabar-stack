@@ -17,7 +17,7 @@ import zakadabar.core.util.PublicApi
 @PublicApi
 open class ZkTextAreaInput(
     value: String = "",
-    private val onChange: (String) -> Unit = { }
+    val onChange: (String) -> Unit = { }
 ) : ZkElement(
     element = document.createElement("textarea") as HTMLTextAreaElement
 ) {

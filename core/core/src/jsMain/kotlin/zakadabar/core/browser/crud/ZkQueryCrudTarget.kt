@@ -3,13 +3,13 @@
  */
 package zakadabar.core.browser.crud
 
-import zakadabar.core.data.BaseBo
-import zakadabar.core.data.EntityBo
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.page.zkPageStyles
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.browser.util.io
 import zakadabar.core.browser.util.newInstance
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.EntityBo
 import kotlin.reflect.KClass
 
 /**
@@ -20,7 +20,7 @@ import kotlin.reflect.KClass
  * This class **does not** handle the table automatically as [ZkCrudTarget]
  * does, you have to do it yourself. See the documentation for details.
  */
-@Suppress("unused", "MemberVisibilityCanBePrivate") // API class
+@Suppress("unused") // API class
 open class ZkQueryCrudTarget<T : EntityBo<T>, ET : BaseBo> : ZkCrudTarget<T>() {
 
     lateinit var queryTableClass: KClass<out ZkTable<ET>>

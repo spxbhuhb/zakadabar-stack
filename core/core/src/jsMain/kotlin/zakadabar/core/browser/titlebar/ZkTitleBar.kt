@@ -10,7 +10,7 @@ import zakadabar.core.util.PublicApi
 @Deprecated("EOL: 2021.8.1  -  use a local or the application title instead")
 open class ZkTitleBar() : ZkElement() {
 
-    private val _title = ZkElement()
+    val _title = ZkElement()
 
     var title: String = ""
         set(value) {

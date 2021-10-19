@@ -26,13 +26,13 @@ import kotlin.reflect.KMutableProperty0
 
 open class ZkOptInstantField(
     context: ZkFieldContext,
-    private val prop: KMutableProperty0<Instant?>
+    val prop: KMutableProperty0<Instant?>
 ) : ZkFieldBase<Instant?,ZkOptInstantField>(
     context = context,
     propName = prop.name
 ) {
 
-    private val input = document.createElement("input") as HTMLInputElement
+    val input = document.createElement("input") as HTMLInputElement
 
     override var readOnly: Boolean = true
 

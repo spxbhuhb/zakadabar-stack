@@ -111,7 +111,7 @@ open class ZkColumn<T : BaseBo>(
         on(window, "mousemove", mouseMoveWrapper)
     }
 
-    private val mouseUpWrapper = { event: Event -> onMouseUp(event) }
+    val mouseUpWrapper = { event: Event -> onMouseUp(event) }
 
     open fun onMouseUp(event: Event) {
         beingResized = false
@@ -130,7 +130,7 @@ open class ZkColumn<T : BaseBo>(
         event.preventDefault()
     }
 
-    private val mouseMoveWrapper = { event: Event -> onMouseMove(event) }
+    val mouseMoveWrapper = { event: Event -> onMouseMove(event) }
 
     open fun onMouseMove(event: Event) {
         if (!beingResized) return
@@ -169,7 +169,7 @@ open class ZkColumn<T : BaseBo>(
         }
     }
 
-    private fun findParentOffset(): Int {
+    protected fun findParentOffset(): Int {
         var offset = 0
         var current = element.offsetParent as? HTMLElement
         while (current != null) {

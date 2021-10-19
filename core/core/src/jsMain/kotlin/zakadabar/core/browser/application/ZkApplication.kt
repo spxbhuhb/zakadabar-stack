@@ -118,7 +118,6 @@ open class ZkApplication {
 
     var onTitleChange: ((newTitle: ZkAppTitle) -> Unit)? = null
 
-    @Suppress("MemberVisibilityCanBePrivate")
     val navStateChangeEvent = "zk-navstate-change"
 
     fun run() {
@@ -187,7 +186,7 @@ open class ZkApplication {
         localizedFormats = BuiltinLocalizedFormats()
     }
 
-    private val onPopState = fun(_: Event) {
+    val onPopState = fun(_: Event) {
         // FIXME clarify use of decodeURIComponent
         val path = decodeURIComponent(window.location.pathname)
         routing.onNavStateChange(ZkNavState(path, window.location.search, window.location.hash))

@@ -4,10 +4,10 @@
 package zakadabar.core.browser.layout
 
 import kotlinx.browser.window
-import zakadabar.core.browser.application.ZkAppLayout
-import zakadabar.core.browser.application.application
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.ZkElementState
+import zakadabar.core.browser.application.ZkAppLayout
+import zakadabar.core.browser.application.application
 import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.titlebar.ZkAppTitleBar
 import zakadabar.core.browser.util.minusAssign
@@ -53,12 +53,12 @@ open class ZkDefaultLayout(
 
     var activeMediaSize = MediaSize.Uninitialized
 
-    private var appHandleContainer = ZkElement()
-    private var sideBarContainer = ZkElement()
-    private var titleBarContainer = ZkElement()
+    protected var appHandleContainer = ZkElement()
+    protected var sideBarContainer = ZkElement()
+    protected var titleBarContainer = ZkElement()
 
-    private var spanHeaderContainer = ZkElement()
-    private var popupSidebarContainer = ZkElement()
+    protected var spanHeaderContainer = ZkElement()
+    protected var popupSidebarContainer = ZkElement()
 
     override fun onCreate() {
         super.onCreate()
@@ -170,7 +170,7 @@ open class ZkDefaultLayout(
         super.onPause()
     }
 
-    private fun onTitleChange(newTitle: ZkAppTitle) {
+    protected fun onTitleChange(newTitle: ZkAppTitle) {
         this.titleBar.title = newTitle
     }
 

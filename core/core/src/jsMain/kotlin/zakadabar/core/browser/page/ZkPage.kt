@@ -3,21 +3,21 @@
  */
 package zakadabar.core.browser.page
 
+import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.ZkAppLayout
 import zakadabar.core.browser.application.ZkAppRouting
 import zakadabar.core.browser.application.ZkNavState
 import zakadabar.core.browser.application.application
-import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.titlebar.ZkAppTitleProvider
-import zakadabar.core.resource.css.ZkCssStyleRule
 import zakadabar.core.browser.util.newInstance
 import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.resource.css.ZkCssStyleRule
 
 /**
  * Provides common functions used in most page implementations.
  */
-@Suppress("unused", "MemberVisibilityCanBePrivate") // API class
+@Suppress("unused") // API class
 open class ZkPage() : ZkElement(), ZkAppRouting.ZkTarget, ZkAppTitleProvider {
 
     /**

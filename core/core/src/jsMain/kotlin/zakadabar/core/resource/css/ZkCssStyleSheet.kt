@@ -114,7 +114,7 @@ open class ZkCssStyleSheet {
         styleSheets -= this
     }
 
-    private fun refresh() {
+    protected fun refresh() {
         rules.forEach {
             it.value.build()
         }
@@ -139,7 +139,7 @@ fun <S : ZkCssStyleSheet> cssStyleSheet(sheet: S) = CssStyleSheetDelegate(sheet)
  * the sheet.
  */
 class CssStyleSheetDelegate<S : ZkCssStyleSheet>(
-    private var sheet: S?
+    protected var sheet: S?
 ) {
 
     init {
@@ -224,7 +224,7 @@ fun <T> cssParameter(initializer: () -> T) = CssParameterProvider(initializer)
  * for the rule to know the property name and that's not possible with a simple assignment. Performance
  * overhead should be minimal.
  */
-class CssParameterProvider<T>(private val initializer: () -> T) {
+class CssParameterProvider<T>(val initializer: () -> T) {
 
     operator fun provideDelegate(thisRef: ZkCssStyleSheet, prop: KProperty<*>) =
         ZkCssParameter(initializer).also { thisRef.parameters += it }
@@ -241,8 +241,8 @@ class ZkCssParameter<T>(
     val initializer: () -> T
 ) : ReadWriteProperty<ZkCssStyleSheet, T> {
 
-    private var _value: Any? = UNINITIALIZED
-    private var _initializer: (() -> T)? = initializer
+    protected var _value: Any? = UNINITIALIZED
+    protected var _initializer: (() -> T)? = initializer
 
     @Suppress("UNCHECKED_CAST") // initializer will be checked
     override fun getValue(thisRef: ZkCssStyleSheet, property: KProperty<*>): T {

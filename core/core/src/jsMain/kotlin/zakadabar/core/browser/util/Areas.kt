@@ -6,10 +6,10 @@ package zakadabar.core.browser.util
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
-import zakadabar.core.resource.css.percent
-import zakadabar.core.resource.css.px
 import zakadabar.core.browser.util.w3c.IntersectionObserver
 import zakadabar.core.browser.util.w3c.IntersectionObserverEntry
+import zakadabar.core.resource.css.percent
+import zakadabar.core.resource.css.px
 import kotlin.math.floor
 
 /**
@@ -29,17 +29,17 @@ import kotlin.math.floor
  * Trace level above 100 shows area changes.
  */
 class Areas(
-    private val id: String,
-    private val changed: () -> Unit,
+    val id: String,
+    val changed: () -> Unit,
     val element: HTMLElement,
-    private val trace: Int = 0,
+    val trace: Int = 0,
     val areaHeight: Float = 1000f
 ) {
     private lateinit var observer: IntersectionObserver
     val activeAreas = mutableListOf<Int>()
 
-    private var areaNumber = 0
-    private var lastAreaHeight = 0f
+    protected var areaNumber = 0
+    protected var lastAreaHeight = 0f
 
     internal var start = 0f
     internal var end = 0f
@@ -58,7 +58,7 @@ class Areas(
         observer.disconnect()
     }
 
-    private val observerCallback = fun(entries: Array<IntersectionObserverEntry>, _: IntersectionObserver) {
+    val observerCallback = fun(entries: Array<IntersectionObserverEntry>, _: IntersectionObserver) {
         try {
             entries.forEach {
                 val target = it.target as HTMLElement
@@ -115,7 +115,7 @@ class Areas(
         lastArea.style.height = "${lastAreaHeight}px"
     }
 
-    private fun addAreas(neededAreaNumber: Int) {
+    protected fun addAreas(neededAreaNumber: Int) {
         for (i in areaNumber until neededAreaNumber) {
             val area = document.createElement("div") as HTMLElement
             area.id = "${id}-area-$i"
@@ -129,7 +129,7 @@ class Areas(
         }
     }
 
-    private fun removeAreas(neededAreaNumber: Int) {
+    protected fun removeAreas(neededAreaNumber: Int) {
         for (i in neededAreaNumber until areaNumber) {
             val area = document.getElementById("${id}-area-$i") ?: continue
             observer.unobserve(area)

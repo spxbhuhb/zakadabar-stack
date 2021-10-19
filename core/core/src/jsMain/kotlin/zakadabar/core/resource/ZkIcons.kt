@@ -8,7 +8,7 @@ import kotlin.reflect.KProperty
 
 val iconSources = mutableMapOf<String, ZkIconSource>() // key is property name
 
-class IconSourceDelegate(private var source: ZkIconSource) : ReadOnlyProperty<Any?, ZkIconSource> {
+class IconSourceDelegate(protected var source: ZkIconSource) : ReadOnlyProperty<Any?, ZkIconSource> {
     override fun getValue(thisRef: Any?, property: KProperty<*>) = source
 }
 
@@ -37,7 +37,7 @@ fun iconSource(source: String) = IconSourceDelegateProvider(source)
  * On the long run icons should be downloaded from the server as part of the user
  * theme.
  */
-@Suppress("MemberVisibilityCanBePrivate", "unused")
+@Suppress("unused")
 object ZkIcons {
 
     //@formatter:off

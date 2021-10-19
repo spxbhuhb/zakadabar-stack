@@ -18,14 +18,14 @@ import zakadabar.core.util.PublicApi
  */
 @PublicApi
 class ZkDropdown(
-    private val content: ZkElement,
-    private val controller: ZkElement,
-    private val initialPosition: String
+    val content: ZkElement,
+    val controller: ZkElement,
+    val initialPosition: String
 ) : ZkElement() {
 
-    private var temporaryPosition: String = ""
+    protected var temporaryPosition: String = ""
 
-    private val dropdownContent: ZkElement = ZkDropdownContent(content)
+    val dropdownContent: ZkElement = ZkDropdownContent(content)
 
     override fun onCreate() {
         this css zkDropdownStyles.dropdown build {
@@ -43,7 +43,7 @@ class ZkDropdown(
         dropdownContent.on("blur") { close() }
     }
 
-    private fun setPositions(position: String) {
+    protected fun setPositions(position: String) {
 
         val offsetHeight = controller.element.offsetHeight.toString() + "px"
         val offsetWidth = controller.element.offsetWidth.toString() + "px"
@@ -107,11 +107,11 @@ class ZkDropdown(
 
     }
 
-    private fun setPosition(propName: String, value: String) {
+    protected fun setPosition(propName: String, value: String) {
         dropdownContent.element.style.setProperty(propName, value)
     }
 
-    private fun hasDistance(): Boolean {
+    protected fun hasDistance(): Boolean {
         val contentEl = dropdownContent.element
         val controllerEl = controller.element
 
@@ -137,7 +137,7 @@ class ZkDropdown(
 
     }
 
-    private fun onControllerClick() {
+    protected fun onControllerClick() {
         dropdownContent.classList.toggle(zkDropdownStyles.dropdownActive.cssClassname)
 
         val hasPlace = hasDistance()
@@ -167,7 +167,7 @@ class ZkDropdown(
         dropdownContent.classList -= zkDropdownStyles.dropdownActive
     }
 
-    private fun onMouseDown(event: Event) {
+    protected fun onMouseDown(event: Event) {
         event.preventDefault() // to prevent focus change
     }
 

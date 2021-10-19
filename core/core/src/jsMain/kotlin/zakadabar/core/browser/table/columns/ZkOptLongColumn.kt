@@ -11,7 +11,7 @@ import kotlin.reflect.KProperty1
 
 open class ZkOptLongColumn<T : BaseBo>(
     table: ZkTable<T>,
-    private val prop: KProperty1<T, Long?>
+    val prop: KProperty1<T, Long?>
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {

@@ -20,9 +20,9 @@ import zakadabar.core.util.PublicApi
  */
 @PublicApi
 open class ZkTextInput(
-    private val enter: Boolean = false,
+    val enter: Boolean = false,
     value: String = "",
-    private val onChange: (String) -> Unit = { }
+    val onChange: (String) -> Unit = { }
 ) : ZkElement(
     element = document.createElement("input") as HTMLInputElement
 ) {

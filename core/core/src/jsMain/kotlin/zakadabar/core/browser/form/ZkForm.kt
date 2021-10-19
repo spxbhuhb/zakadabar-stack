@@ -62,7 +62,7 @@ open class ZkForm<T : BaseBo>(
     element: HTMLElement = document.createElement("div") as HTMLElement,
 ) : ZkElement(element), ZkCrudEditor<T>, ZkAppTitleProvider, ZkLocalTitleProvider, ZkFieldContext {
 
-    private var _bo: T? = null
+    protected var _bo: T? = null
 
     override var bo: T
         get() = _bo ?: throw IllegalStateException("bo is not initialized yet")
@@ -344,7 +344,7 @@ open class ZkForm<T : BaseBo>(
         }
     }
 
-    private fun resetTouched() {
+    protected fun resetTouched() {
         submitTouched = false
         fields.forEach {
             it.touched = false

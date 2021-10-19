@@ -11,7 +11,7 @@ import kotlin.reflect.KProperty1
 
 open class ZkEnumColumn<T : BaseBo, E : Enum<E>>(
     table: ZkTable<T>,
-    private val prop: KProperty1<T, E>
+    val prop: KProperty1<T, E>
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {

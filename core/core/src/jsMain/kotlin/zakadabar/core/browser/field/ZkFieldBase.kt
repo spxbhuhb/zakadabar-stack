@@ -97,7 +97,7 @@ abstract class ZkFieldBase<DT, FT : ZkFieldBase<DT, FT>>(
 
     lateinit var hint: String
 
-    private val errors = ZkElement().css(context.styles.fieldError)
+    val errors = ZkElement().css(context.styles.fieldError)
 
     override fun onCreate() {
         buildSectionField()

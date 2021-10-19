@@ -13,7 +13,7 @@ import kotlin.reflect.KProperty1
 
 open class ZkBooleanColumn<T : BaseBo>(
     table: ZkTable<T>,
-    private val prop: KProperty1<T, Boolean>
+    val prop: KProperty1<T, Boolean>
 ) : ZkColumn<T>(table) {
 
     override var max = 3.em

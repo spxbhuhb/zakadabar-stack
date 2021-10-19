@@ -32,7 +32,7 @@ open class ZkInstantField(
     propName = prop.name
 ) {
 
-    private val input = document.createElement("input") as HTMLInputElement
+    val input = document.createElement("input") as HTMLInputElement
 
     override var readOnly: Boolean = true
 

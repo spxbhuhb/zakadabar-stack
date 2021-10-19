@@ -20,7 +20,7 @@ import zakadabar.core.data.EntityId
  */
 class ZkNavState(val urlPath: String, val urlQuery: String, val urlHashtag: String = "") {
 
-    private val locale: String
+    val locale: String
     val viewName: String
     val segments: List<String>
     val hash: String

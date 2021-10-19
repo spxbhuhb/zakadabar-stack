@@ -12,7 +12,7 @@ import zakadabar.core.resource.ZkFlavour
 import zakadabar.core.resource.ZkIcons
 
 open class ZkSearchAction(
-    private val onExecute: (searchText: String) -> Unit
+    val onExecute: (searchText: String) -> Unit
 ) : ZkElement() {
 
     override fun onCreate() {

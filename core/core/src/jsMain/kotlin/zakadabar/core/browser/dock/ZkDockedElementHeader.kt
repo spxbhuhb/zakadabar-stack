@@ -12,7 +12,7 @@ open class ZkDockedElementHeader(
     title: String = "",
     val icon: ZkElement? = null,
     @PublicApi val titleElement: ZkElement = ZkElement().also { it.build { + title } },
-    private val tools: List<ZkElement> = emptyList()
+    val tools: List<ZkElement> = emptyList()
 ) : ZkElement() {
 
     val toolElement = ZkElement()

@@ -12,7 +12,7 @@ import kotlin.reflect.KProperty1
 
 open class ZkOptUuidColumn<T : BaseBo>(
     table: ZkTable<T>,
-    private val prop: KProperty1<T, UUID?>
+    val prop: KProperty1<T, UUID?>
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {

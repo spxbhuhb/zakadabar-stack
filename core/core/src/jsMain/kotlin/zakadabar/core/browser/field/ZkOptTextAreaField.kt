@@ -23,7 +23,7 @@ import kotlin.reflect.KMutableProperty0
 
 open class ZkOptTextAreaField(
     context: ZkFieldContext,
-    private val prop: KMutableProperty0<String?>
+    val prop: KMutableProperty0<String?>
 ) : ZkFieldBase<String, ZkOptTextAreaField>(
     context = context,
     propName = prop.name

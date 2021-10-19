@@ -11,7 +11,7 @@ import kotlin.reflect.KProperty1
 
 open class ZkIntColumn<T : BaseBo>(
     table: ZkTable<T>,
-    private val prop: KProperty1<T, Int>
+    val prop: KProperty1<T, Int>
 ) : ZkColumn<T>(table) {
 
     override fun onCreate() {
