@@ -18,7 +18,7 @@ import zakadabar.lib.i18n.business.LocaleBl
 import zakadabar.lib.i18n.data.LocaleBo
 
 /**
- * Business Logic for ContentCommonBo.
+ * Business Logic for ContentBo.
  */
 open class ContentBl : EntityBusinessLogicBase<ContentBo>(
     boClass = ContentBo::class
@@ -62,12 +62,30 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
         throw DataConflict("SEO title conflict")
     }
 
+    override fun list(executor: Executor): List<ContentBo> {
+        throw NotImplementedError("direct content listing is not implemented, use queries")
+    }
+
     override fun create(executor: Executor, bo: ContentBo): ContentBo {
         bo.seoTitle = bo.title.lowercaseWithHyphen()
 
         checkConsistency(bo)
 
         return super.create(executor, bo)
+    }
+
+    override fun read(executor: Executor, entityId: EntityId<ContentBo>): ContentBo {
+        val bo = super.read(executor, entityId)
+
+        val master = bo.master
+
+        bo.attachments = if (master == null) {
+            blobBl.byReference(bo.id)
+        } else {
+            findImages(null, master, bo.id)
+        }
+
+        return bo
     }
 
     override fun update(executor: Executor, bo: ContentBo): ContentBo {
@@ -145,7 +163,9 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
     }
 
     @Suppress("UNUSED_PARAMETER")
-    private fun bySeoPath(executor: Executor, query: BySeoPath): ContentBo {
+    fun bySeoPath(executor: Executor, query: BySeoPath) : ContentBo = bySeoPath(query)
+
+    fun bySeoPath(query: BySeoPath): ContentBo {
         val segments = query.path.trim('/').split("/")
         if (segments.size < 2) throw NoSuchElementException()
 
@@ -159,12 +179,14 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
             master = pa.read(localized.master !!)
         }
 
+        localized.attachments = findImages(null, master, localized)
+
         return localized
     }
 
-    private fun seoPath(bo: ContentBo) = seoPathOrNull(bo) ?: throw NoSuchElementException()
+    fun seoPath(bo: ContentBo) = seoPathOrNull(bo) ?: throw NoSuchElementException()
 
-    private fun seoPathOrNull(bo: ContentBo): List<String>? {
+    fun seoPathOrNull(bo: ContentBo): List<String>? {
         val locale = bo.locale
             ?: throw IllegalArgumentException("localized BO ${bo.id} locale is null, cannot find SEO path")
 

@@ -65,6 +65,12 @@ open class ContentExposedPa : ExposedPaBase<ContentBo, ContentExposedTable>(
             ?.toBo()
             ?: return null
 
+        readTextBlocks(bo)
+
+        return bo
+    }
+
+    private fun readTextBlocks(bo: ContentBo) {
         bo.textBlocks = textTable
             .select { textTable.content eq bo.id.toLong() }
             .map {
@@ -73,10 +79,7 @@ open class ContentExposedPa : ExposedPaBase<ContentBo, ContentExposedTable>(
                     it[textTable.value]
                 )
             }
-
-        return bo
     }
-
 
     override fun update(bo: ContentBo): ContentBo {
         super.update(bo)
@@ -101,13 +104,18 @@ open class ContentExposedPa : ExposedPaBase<ContentBo, ContentExposedTable>(
 
     fun bySeoTitle(locale: EntityId<LocaleBo>, parent: EntityId<ContentBo>?, seoTitle: String): ContentBo? {
         val jt = table.alias("jt")
-        return table
+        val bo = table
             .innerJoin(jt, { table.master }, { jt[table.id] })
             .select { table.seoTitle eq seoTitle }
             .andWhere { jt[table.parent] eq parent?.toLong() }
             .andWhere { table.locale eq locale.toLong() }
             .firstOrNull()
             ?.toBo()
+            ?: return null
+
+        readTextBlocks(bo)
+
+        return bo
     }
 
     fun mastersQuery(): List<MastersEntry> =
@@ -187,7 +195,8 @@ open class ContentExposedPa : ExposedPaBase<ContentBo, ContentExposedTable>(
         locale = this[table.locale]?.entityId(),
         title = this[table.title],
         seoTitle = this[table.seoTitle],
-        textBlocks = emptyList()
+        textBlocks = emptyList(),
+        attachments = emptyList()
     )
 
     override fun UpdateBuilder<*>.fromBo(bo: ContentBo) {

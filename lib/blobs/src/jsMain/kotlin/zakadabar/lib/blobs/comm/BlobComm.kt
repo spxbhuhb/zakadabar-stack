@@ -22,6 +22,7 @@ import zakadabar.core.comm.CommBase
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.util.PublicApi
+import zakadabar.core.util.encodeURIComponent
 import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobCreateState
 
@@ -155,7 +156,7 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
 
         req.open("POST", url, true)
         req.setRequestHeader("Content-Type", bo.mimeType)
-        req.setRequestHeader("Content-Disposition", """attachment; filename="${bo.name}"""")
+        req.setRequestHeader("Content-Disposition", """attachment; filename*=utf-8"${encodeURIComponent(bo.name)}"""")
         req.send(data)
 
         bo.size = data.size.toLong()

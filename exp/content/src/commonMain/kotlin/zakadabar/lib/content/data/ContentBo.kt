@@ -4,12 +4,12 @@
 package zakadabar.lib.content.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.lib.i18n.data.LocaleBo
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityBoCompanion
 import zakadabar.core.data.EntityId
 import zakadabar.core.schema.BoSchema
 import zakadabar.core.schema.descriptor.CustomBoConstraint
+import zakadabar.lib.i18n.data.LocaleBo
 
 /**
  * Content entity. There are master versions and localized versions.
@@ -49,7 +49,8 @@ class ContentBo(
     var locale: EntityId<LocaleBo>?,
     var title: String,
     var seoTitle: String,
-    var textBlocks: List<TextBlockBo>
+    var textBlocks: List<TextBlockBo>,
+    var attachments: List<AttachedBlobBo>
 
 ) : EntityBo<ContentBo> {
 
@@ -69,6 +70,7 @@ class ContentBo(
         + ::title max 100
         + ::seoTitle max 100
         + ::textBlocks
+        + ::attachments
 
         + custom("locale is not null when master") { name, report ->
             if (master == null) {
