@@ -5,17 +5,12 @@ package zakadabar.lib.content.backend
 
 import zakadabar.core.util.default
 import zakadabar.lib.blobs.persistence.BlobExposedPa
-import zakadabar.lib.blobs.persistence.BlobExposedTable
 import zakadabar.lib.content.data.AttachedBlobBo
 import zakadabar.lib.content.data.ContentBo
 
-class AttachedBlobExposedPa : BlobExposedPa<AttachedBlobBo, ContentBo>(
-    table = AttachedBlobExposedTable
+class AttachedBlobPa : BlobExposedPa<AttachedBlobBo, ContentBo>(
+    table = AttachedBlobTable
 ) {
     override fun newInstance() = default<AttachedBlobBo> {  }
 }
 
-object AttachedBlobExposedTable : BlobExposedTable<AttachedBlobBo, ContentBo>(
-    tableName = "content_blob",
-    referenceTable = ContentExposedTable
-)

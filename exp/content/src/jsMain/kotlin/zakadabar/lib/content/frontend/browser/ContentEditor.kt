@@ -97,12 +97,12 @@ class ContentEditorForm : ZkForm<ContentBo>() {
 
                     if (bo.master == null) {
                         + bo::parent query { FolderQuery().execute().map { it.id to it.title } }
-                    } else {
-                        + constString(localizedStrings["parent"]) { if (::parent.isInitialized) parent.title else "" }
                     }
 
+                    + constString(localizedStrings["parent"]) { if (::parent.isInitialized) parent.title else "" }
+
                     + bo::locale query { LocaleBo.all().by { it.name } } readOnly true
-                    + textarea(bo::title)
+                    + bo::title.asTextArea()
                 }
 
                 + buttons()
@@ -167,7 +167,7 @@ class ContentEditorForm : ZkForm<ContentBo>() {
     override fun setAppTitleBar(contextElements: List<ZkElement>) {
         io {
             titleText = if (::master.isInitialized) {
-                "${master.title} : ${LocaleBo.read(bo.locale!!).name}"
+                "${master.title} : ${LocaleBo.read(bo.locale !!).name}"
             } else {
                 "${bo.title} : ${contentStrings.master}"
             }

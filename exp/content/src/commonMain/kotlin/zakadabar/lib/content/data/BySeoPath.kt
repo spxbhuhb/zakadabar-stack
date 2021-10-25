@@ -9,15 +9,16 @@ import zakadabar.core.data.QueryBoCompanion
 
 /**
  * Query contents by SEO titles. This query provides resolution for
- * URLs like: `/hu/megoldások/ipari-automatizálás`. This is in Hungarian
+ * URLs like: `/megoldások/ipari-automatizálás`. This is in Hungarian
  * and we have to know which content it points to. The same URL in English
- * is `/en/solutions/industrial-automation`. The two points two different,
+ * is `/solutions/industrial-automation`. The two points two different,
  * localized content entities with the same master.
  *
  * @param  path               The path to resolve.
  */
 @Serializable
 class BySeoPath(
+    val locale : String,
     val path : String
 ): QueryBo<ContentBo> {
 

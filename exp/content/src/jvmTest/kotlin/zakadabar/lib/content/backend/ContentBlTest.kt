@@ -72,10 +72,7 @@ class ContentBlTest {
     }
 
     @Test
-    fun testNavQuery() = runBlocking {
-        transaction {
-            ContentExposedTable.deleteAll()
-        }
+    fun testNavQuery() = test {
 
         val (master1, localizedHu1, _) = make("nav 1")
         val (master1c1, localizedHu1c1, _) = make("nav 1.1", master1)
@@ -107,7 +104,7 @@ class ContentBlTest {
     }
 
     @Test
-    fun testByLocalizedPath() = runBlocking {
+    fun testByLocalizedPath() = test {
 
         // content 1 -----------------------------------------------------------
 
@@ -153,9 +150,96 @@ class ContentBlTest {
 
     }
 
+
+    @Test
+    fun testConvenience() = test {
+
+        val (master1, localizedHu1, localizedEn1) = make("master 1")
+
+        val contentBl = server.first<ContentBl>()
+
+        transaction {
+            assertEquals(localizedHu1.id, contentBl.localized(localeHu.id, master1.id).id)
+            assertEquals(localizedEn1.id, contentBl.localized(localeEn.id, master1.id).id)
+
+            assertEquals(
+                master1.id to localizedHu1.id,
+                contentBl.masterAndLocalized(localeHu.id, master1.id).let { it.first.id to it.second.id }
+            )
+
+            assertEquals(
+                master1.id to localizedHu1.id,
+                contentBl.masterAndLocalized(localeHu.id, localizedHu1.id).let { it.first.id to it.second.id }
+            )
+
+        }
+    }
+
+    @Test
+    fun testTextBlock() = test {
+
+        val (_, localizedHu1, _) = make("master 1")
+
+        val block = TextBlockBo("stereotype", "value")
+
+        localizedHu1.textBlocks = listOf(block)
+        localizedHu1.update()
+
+        val contentBl = server.first<ContentBl>()
+
+        transaction {
+            val value = contentBl.localized(localeHu.id, localizedHu1.master !!).firstOrNull(block.stereotype)
+            assertEquals(block.value, value)
+        }
+    }
+
+    @Test
+    fun testTextBlockBySeoPath() = test {
+
+        val (_, localizedHu1, _) = make("master 1")
+
+        val block = TextBlockBo("stereotype", "value")
+
+        localizedHu1.textBlocks = listOf(block)
+        localizedHu1.update()
+
+        val contentBl = server.first<ContentBl>()
+
+        transaction {
+            val path = contentBl.seoPath(localizedHu1)
+            val value = contentBl.bySeoPath(localeHu.name, path).firstOrNull(block.stereotype)
+            assertEquals(block.value, value)
+        }
+    }
+
+    @Test
+    fun `locale change query`() = test {
+
+        val (_, localizedHu1, localizedEn1) = make("master 1")
+
+        val contentBl = server.first<ContentBl>()
+
+        val huPath = transaction { contentBl.seoPath(localizedHu1) }
+        val enPath = transaction { contentBl.seoPath(localizedEn1) }
+
+        assertEquals(enPath, LocaleChangeQuery(localeHu.name, huPath, localeEn.name).execute().value)
+    }
+
     private suspend fun assertResolve(expected: ContentBo, locale: LocaleBo, vararg segments: ContentBo) {
-        val resolved = BySeoPath("/${locale.name}/${segments.joinToString("/") { it.seoTitle }}").execute()
-        assertEquals(expected.id, resolved.content.id)
+        val resolved = BySeoPath(locale.name, segments.joinToString("/") { it.seoTitle }).execute()
+        assertEquals(expected.id, resolved.id)
+    }
+
+    fun test(block : suspend () -> Unit) {
+        transaction {
+            AttachedBlobTable.deleteAll()
+            TextBlockTable.deleteAll()
+            ContentTable.deleteAll()
+        }
+
+        runBlocking {
+            block()
+        }
     }
 
     private suspend fun make(postfix: String, pParent: ContentBo? = null): Triple<ContentBo, ContentBo, ContentBo> {
@@ -187,75 +271,4 @@ class ContentBlTest {
 
         return Triple(masterContent, localizedHu, localizedEn)
     }
-
-    @Test
-    fun testConvenience() = runBlocking {
-        transaction {
-            ContentExposedTable.deleteAll()
-        }
-
-        val (master1, localizedHu1, localizedEn1) = make("master 1")
-
-        val contentBl = server.first<ContentBl>()
-
-        transaction {
-            assertEquals(localizedHu1.id, contentBl.localized(localeHu.id, master1.id).id)
-            assertEquals(localizedEn1.id, contentBl.localized(localeEn.id, master1.id).id)
-
-            assertEquals(
-                master1.id to localizedHu1.id,
-                contentBl.masterAndLocalized(localeHu.id, master1.id).let { it.first.id to it.second.id }
-            )
-
-            assertEquals(
-                master1.id to localizedHu1.id,
-                contentBl.masterAndLocalized(localeHu.id, localizedHu1.id).let { it.first.id to it.second.id }
-            )
-
-        }
-    }
-
-    @Test
-    fun testTextBlock() = runBlocking {
-        transaction {
-            ContentExposedTable.deleteAll()
-        }
-
-        val (_, localizedHu1, _) = make("master 1")
-
-        val block = TextBlockBo("stereotype", "value")
-
-        localizedHu1.textBlocks = listOf(block)
-        localizedHu1.update()
-
-        val contentBl = server.first<ContentBl>()
-
-        transaction {
-            val value = contentBl.localized(localeHu.id, localizedHu1.master!!).firstOrNull(block.stereotype)
-            assertEquals(block.value, value)
-        }
-    }
-
-    @Test
-    fun testTextBlockBySeoPath() = runBlocking {
-        transaction {
-            ContentExposedTable.deleteAll()
-        }
-
-        val (_, localizedHu1, _) = make("master 1")
-
-        val block = TextBlockBo("stereotype", "value")
-
-        localizedHu1.textBlocks = listOf(block)
-        localizedHu1.update()
-
-        val contentBl = server.first<ContentBl>()
-
-        transaction {
-            val path = "/${localeHu.name}/" + contentBl.seoPath(localizedHu1).joinToString("/")
-            val value = contentBl.bySeoPath(BySeoPath(path)).content.firstOrNull(block.stereotype)
-            assertEquals(block.value, value)
-        }
-    }
-
 }

@@ -17,3 +17,4 @@ modules:
 
 ktor:
   port: 8080
+  portCookie: true

@@ -15,7 +15,7 @@ import zakadabar.core.data.QueryBoCompanion
  */
 @Serializable
 class NavQuery(
-    val localeName : String,
+    val locale : String,
     val from : EntityId<ContentBo>?
 ): QueryBo<List<NavEntry>> {
 

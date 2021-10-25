@@ -9,13 +9,14 @@ import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.data.QueryBo
 import zakadabar.core.data.QueryBoCompanion
+import zakadabar.core.util.PublicApi
 
 /**
  * Query thumbnail images and titles of children of a given parent.
  */
 @Serializable
 class ThumbnailQuery(
-    val localeName : String,
+    val locale : String,
     val parent : EntityId<ContentBo>
 ): QueryBo<List<ThumbnailEntry>> {
 
@@ -33,6 +34,7 @@ class ThumbnailEntry(
     val masterId : EntityId<ContentBo>,
     val localizedId : EntityId<ContentBo>,
     val title : String,
+    @PublicApi
     val seoPath : String,
     var thumbnailImageUrl: String?
 ) : BaseBo

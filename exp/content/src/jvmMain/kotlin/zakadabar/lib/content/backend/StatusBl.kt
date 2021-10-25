@@ -3,8 +3,8 @@
  */
 package zakadabar.lib.content.backend
 
-import zakadabar.lib.content.data.StatusBo
 import zakadabar.core.business.EntityBusinessLogicBase
+import zakadabar.lib.content.data.StatusBo
 
 /**
  * Business Logic for StatusBo.
@@ -15,7 +15,7 @@ open class StatusBl : EntityBusinessLogicBase<StatusBo>(
     boClass = StatusBo::class
 ) {
 
-    override val pa = StatusExposedPaGen()
+    override val pa = StatusPa()
 
     override val authorizer by provider()
 

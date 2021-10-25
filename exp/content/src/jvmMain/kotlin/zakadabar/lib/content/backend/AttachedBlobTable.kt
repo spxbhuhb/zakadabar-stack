@@ -3,13 +3,11 @@
  */
 package zakadabar.lib.content.backend
 
-import zakadabar.lib.blobs.business.BlobBlBase
+import zakadabar.lib.blobs.persistence.BlobExposedTable
 import zakadabar.lib.content.data.AttachedBlobBo
 import zakadabar.lib.content.data.ContentBo
 
-class AttachedBlobBl : BlobBlBase<AttachedBlobBo, ContentBo>(
-   AttachedBlobBo::class,
-   AttachedBlobPa()
-) {
-   override val authorizer by provider()
-}
+object AttachedBlobTable : BlobExposedTable<AttachedBlobBo, ContentBo>(
+    tableName = "content_blob",
+    referenceTable = ContentTable
+)

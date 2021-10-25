@@ -8,6 +8,7 @@ import io.ktor.features.*
 import zakadabar.core.authorize.Executor
 import zakadabar.core.business.EntityBusinessLogicBase
 import zakadabar.core.data.EntityId
+import zakadabar.core.data.StringValue
 import zakadabar.core.exception.DataConflict
 import zakadabar.core.module.module
 import zakadabar.core.text.lowercaseWithHyphen
@@ -24,7 +25,7 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
     boClass = ContentBo::class
 ) {
 
-    override val pa = ContentExposedPa()
+    override val pa = ContentPa()
 
     override val authorizer by provider()
 
@@ -39,6 +40,7 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
         query(FolderQuery::class, ::foldersQuery)
         query(NavQuery::class, ::navQuery)
         query(ThumbnailQuery::class, ::thumbnailQuery)
+        query(LocaleChangeQuery::class, ::localeChangeQuery)
     }
 
     // -------------------------------------------------------------------------
@@ -163,21 +165,22 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun bySeoPath(executor: Executor, query: BySeoPath) : ContentBo = bySeoPath(query)
+    fun bySeoPath(executor: Executor, query: BySeoPath) : ContentBo = bySeoPath(query.locale, query.path)
 
-    fun bySeoPath(query: BySeoPath): ContentBo {
-        val segments = query.path.trim('/').split("/")
-        if (segments.size < 2) throw NoSuchElementException()
+    fun bySeoPath(localeName : String, path: String, returnWithMaster : Boolean = false): ContentBo {
+        val segments = path.trim('/').split("/")
 
-        val locale = localeBl.byName(segments[0])?.id ?: throw NoSuchElementException()
+        val locale = localeBl.byName(localeName)?.id ?: throw NoSuchElementException()
 
-        var localized = pa.bySeoTitle(locale, null, segments[1]) ?: throw NoSuchElementException()
+        var localized = pa.bySeoTitle(locale, null, segments[0]) ?: throw NoSuchElementException()
         var master = pa.read(localized.master !!)
 
-        for (i in 2 until segments.size) {
+        for (i in 1 until segments.size) {
             localized = pa.bySeoTitle(locale, master.id, segments[i]) ?: throw NoSuchElementException()
             master = pa.read(localized.master !!)
         }
+
+        if (returnWithMaster) return master
 
         localized.attachments = findImages(null, master, localized)
 
@@ -186,7 +189,7 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
 
     fun seoPath(bo: ContentBo) = seoPathOrNull(bo) ?: throw NoSuchElementException()
 
-    fun seoPathOrNull(bo: ContentBo): List<String>? {
+    fun seoPathOrNull(bo: ContentBo): String? {
         val locale = bo.locale
             ?: throw IllegalArgumentException("localized BO ${bo.id} locale is null, cannot find SEO path")
 
@@ -204,7 +207,7 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
 
         seoPath.reverse()
 
-        return seoPath
+        return seoPath.joinToString("/")
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -218,7 +221,7 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
     @Suppress("UNUSED_PARAMETER")
     @PublicApi
     fun navQuery(executor: Executor, query: NavQuery): List<NavEntry> {
-        val locale = localeBl.byName(query.localeName) ?: throw NoSuchElementException()
+        val locale = localeBl.byName(query.locale) ?: throw NoSuchElementException()
 
         if (query.from == null) {
             return pa.navQuery(locale.id, null, "/${locale.name}")
@@ -229,17 +232,17 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
         val master = from.master?.let { pa.read(it) } ?: from
         val localized = if (from.master == null) pa.readLocalized(master.id, locale.id) else from
 
-        return pa.navQuery(locale.id, master.id, "/${locale.name}/${seoPath(localized).joinToString("/")}")
+        return pa.navQuery(locale.id, master.id, "/${locale.name}/${seoPath(localized)}")
     }
 
     @Suppress("UNUSED_PARAMETER")
     @PublicApi
     fun thumbnailQuery(executor: Executor, query: ThumbnailQuery): List<ThumbnailEntry> {
-        val locale = localeBl.byName(query.localeName) ?: throw NoSuchElementException()
+        val locale = localeBl.byName(query.locale) ?: throw NoSuchElementException()
 
         val (master, localized) = masterAndLocalized(locale.id, query.parent)
 
-        val list = pa.thumbnailQuery(locale.id, master.id, "/${locale.name}/${seoPath(localized).joinToString("/")}")
+        val list = pa.thumbnailQuery(locale.id, master.id, "/${locale.name}/${seoPath(localized)}")
 
         list.forEach {
             it.thumbnailImageUrl = findImages(AttachedBlobDisposition.thumbnail, it.masterId, it.localizedId).firstOrNull()?.url
@@ -248,7 +251,18 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
         return list
     }
 
-    // -------------------------------------------------------------------------
+    @Suppress("UNUSED_PARAMETER")
+    @PublicApi
+    fun localeChangeQuery(executor: Executor, query: LocaleChangeQuery): StringValue {
+        val locale = localeBl.byName(query.toLocale) ?: throw NoSuchElementException()
+
+        val master = bySeoPath(query.fromLocale, query.fromPath, returnWithMaster = true)
+        val localized = pa.readLocalizedOrNull(master.id, locale.id) ?: throw NoSuchElementException()
+
+        return StringValue(seoPath(localized))
+    }
+
+        // -------------------------------------------------------------------------
     // Functions for other business logic modules
     // -------------------------------------------------------------------------
 
@@ -262,7 +276,7 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
      */
     @PublicApi
     fun seoPathOrNull(localeId: EntityId<LocaleBo>, masterId: EntityId<ContentBo>) =
-        localizedOrNull(localeId, masterId)?.let { seoPathOrNull(it)?.joinToString("/") }
+        localizedOrNull(localeId, masterId)?.let { seoPathOrNull(it) }
 
     /**
      * Get the SEO path for the given locale and master id.
@@ -275,7 +289,7 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
      */
     @PublicApi
     fun seoPath(localeId: EntityId<LocaleBo>, masterId: EntityId<ContentBo>) =
-        seoPath(localized(localeId, masterId)).joinToString("/")
+        seoPath(localized(localeId, masterId))
 
     /**
      * Read the  localized version of the content based on the
