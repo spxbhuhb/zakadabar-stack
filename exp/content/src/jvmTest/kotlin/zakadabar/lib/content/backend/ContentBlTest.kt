@@ -225,6 +225,21 @@ class ContentBlTest {
         assertEquals(enPath, LocaleChangeQuery(localeHu.name, huPath, localeEn.name).execute().value)
     }
 
+    @Test
+    fun `locale options query`() = test {
+
+        val (_, localizedHu1, localizedEn1) = make("master 1")
+
+        val contentBl = server.first<ContentBl>()
+
+        val huPath = transaction { contentBl.seoPath(localizedHu1) }
+        val enPath = transaction { contentBl.seoPath(localizedEn1) }
+
+        val options = LocaleOptionsQuery(localeHu.name, huPath).execute()
+        assertEquals(enPath, options.find { it.locale == localeEn.name }?.path)
+        assertEquals(huPath, options.find { it.locale == localeHu.name }?.path)
+    }
+
     private suspend fun assertResolve(expected: ContentBo, locale: LocaleBo, vararg segments: ContentBo) {
         val resolved = BySeoPath(locale.name, segments.joinToString("/") { it.seoTitle }).execute()
         assertEquals(expected.id, resolved.id)

@@ -51,7 +51,7 @@ Elements that want to receive navigation events has to add an event listener:
 ```kotlin
 class NavLog : ZkElement() {
     override fun onCreate() {
-        on(window, application.NAVSTATE_CHANGE) { console.log(ZkApplication.routing.navState) }
+        on(window, application.navStateChangeEvent) { console.log(application.routing.navState) }
     }
 }
 ```
@@ -98,7 +98,7 @@ This interface is pretty straightforward:
 
 The routing process is as follows.
 
-* Create a nav state (decomposed URL, [ZkNavState](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkNavState.kt).
+* Create a nav state (decomposed URL, [ZkNavState](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkNavState.kt)).
 * Find the target for the view name in the nav state.
 * Call `route` function of the target. `route`
     * finds or creates a ZkElement to display,
@@ -106,6 +106,7 @@ The routing process is as follows.
 * Remove the active target from the active layout.    
 * If necessary switch the layout.
 * Add the new target to the active layout.
+* Create a window event with type `zk-navstate-change`.
 
 <div data-zk-enrich="Note" data-zk-flavour="Success" data-zk-title="No Hierarchy">
 The application routing does not handle hierarchies. Each target may implement

@@ -69,6 +69,11 @@ open class ContentPa : ExposedPaBase<ContentBo, ContentTable>(
         return bo
     }
 
+    fun listLocalized(master: EntityId<ContentBo>): List<ContentBo> =
+        table
+            .select { table.master eq master.toLong() }
+            .map { it.toBo() }
+
     private fun readTextBlocks(bo: ContentBo) {
         bo.textBlocks = textTable
             .select { textTable.content eq bo.id.toLong() }

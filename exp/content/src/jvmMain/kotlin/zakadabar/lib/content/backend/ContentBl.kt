@@ -41,6 +41,7 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
         query(NavQuery::class, ::navQuery)
         query(ThumbnailQuery::class, ::thumbnailQuery)
         query(LocaleChangeQuery::class, ::localeChangeQuery)
+        query(LocaleOptionsQuery::class, ::localeOptionsQuery)
     }
 
     // -------------------------------------------------------------------------
@@ -165,9 +166,9 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun bySeoPath(executor: Executor, query: BySeoPath) : ContentBo = bySeoPath(query.locale, query.path)
+    fun bySeoPath(executor: Executor, query: BySeoPath): ContentBo = bySeoPath(query.locale, query.path)
 
-    fun bySeoPath(localeName : String, path: String, returnWithMaster : Boolean = false): ContentBo {
+    fun bySeoPath(localeName: String, path: String, returnWithMaster: Boolean = false): ContentBo {
         val segments = path.trim('/').split("/")
 
         val locale = localeBl.byName(localeName)?.id ?: throw NoSuchElementException()
@@ -262,7 +263,21 @@ open class ContentBl : EntityBusinessLogicBase<ContentBo>(
         return StringValue(seoPath(localized))
     }
 
-        // -------------------------------------------------------------------------
+    @Suppress("UNUSED_PARAMETER")
+    @PublicApi
+    fun localeOptionsQuery(executor: Executor, query: LocaleOptionsQuery): List<LocaleAndPath> {
+        val locales = localeBl.list(executor)
+
+        val master = bySeoPath(query.fromLocale, query.fromPath, returnWithMaster = true)
+
+        return pa
+            .listLocalized(master.id)
+            .map { bo ->
+                LocaleAndPath(locales.first { it.id == bo.locale }.name, seoPath(bo))
+            }
+    }
+
+    // -------------------------------------------------------------------------
     // Functions for other business logic modules
     // -------------------------------------------------------------------------
 
