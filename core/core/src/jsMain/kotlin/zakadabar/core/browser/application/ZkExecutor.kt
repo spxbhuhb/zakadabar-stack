@@ -13,7 +13,7 @@ class ZkExecutor(
 ) {
 
     @PublicApi
-    fun hasRole(role : String) = role !in roles
+    fun hasRole(role : String) = role in roles
 
     /**
      * Execute the builder function when the user **has**

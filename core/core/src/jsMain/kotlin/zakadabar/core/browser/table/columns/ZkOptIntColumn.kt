@@ -27,9 +27,9 @@ open class ZkOptIntColumn<T : BaseBo>(
 
     override fun sort() {
         table.fullData = if (sortAscending) {
-            table.fullData.sortedBy { format(it.data) }
+            table.fullData.sortedBy { prop.get(it.data) }
         } else {
-            table.fullData.sortedByDescending { format(it.data) }
+            table.fullData.sortedByDescending { prop.get(it.data) }
         }
     }
 
