@@ -31,7 +31,8 @@ open class ZkBooleanColumn<T : BaseBo>(
 //        checkbox.style.cssText = "pointer-events:none"
         with(cell) {
             + div {
-                buildPoint.innerHTML = ZkIcons.check.svg(18)
+                buildPoint.innerHTML = if (prop.get(row)) ZkIcons.check.svg(18)
+                else ZkIcons.close.svg(18)
             }
         }
     }

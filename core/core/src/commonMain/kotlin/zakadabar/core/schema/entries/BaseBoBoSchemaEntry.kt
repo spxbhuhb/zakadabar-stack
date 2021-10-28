@@ -37,7 +37,9 @@ class BaseBoBoSchemaEntry<T : BaseBo>(
     override val extensions = mutableListOf<BoSchemaEntryExtension<T>>()
 
     override fun validate(report: ValidityReport) {
-        kProperty.get().schema().validate()
+        // TODO: possible property name clash, should be prefixed ?
+        report.fails +=
+            kProperty.get().schema().validate(report.allowEmptyId).fails
     }
 
     @PublicApi
