@@ -18,6 +18,8 @@ import zakadabar.lib.markdown.browser.MarkdownView
 import zakadabar.site.cookbook.GetContent
 import zakadabar.site.frontend.SiteMarkdownContext
 
+var savedTable: Cookbook.Table? = null
+
 object Cookbook : ZkPathPage() {
 
     override fun onResume() {
@@ -25,7 +27,13 @@ object Cookbook : ZkPathPage() {
 
         if (path.isEmpty()) {
             + zkLayoutStyles.grid1
-            + Table()
+
+            if (savedTable == null) {
+                + Table().also { savedTable = it }
+            } else {
+                + savedTable?.apply { rebuild() }
+            }
+
             - firstOrNull<MarkdownView>()
         } else {
             - zkLayoutStyles.grid1
@@ -62,13 +70,13 @@ object Cookbook : ZkPathPage() {
             + custom {
                 label = "Targets"
                 render = { + it.targets.joinToString(", ") }
-                matcher = { row, filter -> row.targets.firstOrNull { filter in it } != null}
+                matcher = { row, filter -> row.targets.firstOrNull { filter in it } != null }
             } size 10.em
 
             + custom {
                 label = "Tags"
                 render = { + it.tags.joinToString(", ") }
-                matcher = { row, filter -> row.tags.firstOrNull { filter in it } != null}
+                matcher = { row, filter -> row.tags.firstOrNull { filter in it } != null }
             } size "max-content"
         }
 
@@ -82,6 +90,7 @@ object Cookbook : ZkPathPage() {
         override fun getRowId(row: Recipe): String {
             return row.id.value
         }
+
         override fun onDblClick(id: String) {
             application.changeNavState(Cookbook, id)
         }

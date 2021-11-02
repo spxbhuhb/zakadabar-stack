@@ -18,6 +18,7 @@ import zakadabar.cookbook.browser.table.exportCustomColumn.TableExportCustomColu
 import zakadabar.cookbook.browser.table.exportFileName.TableExportFileName
 import zakadabar.cookbook.browser.table.inline.TableEditInline
 import zakadabar.cookbook.browser.table.inline.TableEditInlineNoBo
+import zakadabar.cookbook.browser.table.saveElement.TableSaveElement
 import zakadabar.cookbook.resource.strings
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.application
@@ -50,6 +51,7 @@ class Cookbook : CommonModule {
             "TableExportFileName" -> TableExportFileName()
             "TableExportCustomColumn" -> TableExportCustomColumn()
             "TableVerticalBorderSome" -> TableVerticalBorderSome()
+            "TableSaveElement" -> TableSaveElement()
             "TextHelpModal" -> TextHelpModal()
 
             else -> null

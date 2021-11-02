@@ -4,6 +4,7 @@
 package zakadabar.core.browser.table
 
 import kotlinx.browser.document
+import kotlinx.browser.window
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -120,6 +121,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     private lateinit var areas: Areas // areas for intersection observer
 
+    lateinit var contentContainer : ZkElement
+
     lateinit var tableElement: HTMLTableElement
 
     val tbody = document.createElement("tbody") as HTMLTableSectionElement
@@ -128,6 +131,9 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     val placeHolderCell = document.createElement("td") as HTMLTableCellElement
     val placeHolderRow = (document.createElement("tr") as HTMLTableRowElement).also { it.appendChild(placeHolderCell) }
+
+    var contentScrollTop : Double = 0.0
+    var contentScrollLeft : Double = 0.0
 
     protected var firstShownRow = Int.MAX_VALUE
     protected var lastShownRow = - 1
@@ -163,7 +169,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
         + buildLocalTitleBar()
 
-        + div(styles.contentContainer) {
+        + zke(styles.contentContainer) {
 
             + div {
                 areas = Areas(element.id, ::onAreasChange, buildPoint, 0).apply { onCreate() }
@@ -179,6 +185,14 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             }.also {
                 tableElement = it
             }
+
+            on("scroll") {
+                contentScrollTop = this.element.scrollTop
+                contentScrollLeft = this.element.scrollLeft
+            }
+
+        }.also {
+            contentContainer = it
         }
 
         on("mousedown", ::onMouseDown)
@@ -236,7 +250,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     //  Event Handlers
     // -------------------------------------------------------------------------
 
-    open fun getRowId(event : Event) : String? {
+    open fun getRowId(event: Event): String? {
         if (event !is MouseEvent) return null
 
         val target = event.target
@@ -341,6 +355,20 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         }
     }
 
+    fun rebuild(): ZkTable<T> {
+        for (row in fullData) {
+            row.element = null
+        }
+
+        // without requestAnimationFrame nothing happens
+
+        window.requestAnimationFrame {
+            contentContainer.element.scrollBy(contentScrollLeft, contentScrollTop)
+        }
+
+        return this
+    }
+
     open fun onAreasChange() {
 
         // First and last row to show on the screen. Added [min] to lastRowIndex
@@ -437,6 +465,21 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         } else {
             throw NotImplementedError("please override ${this::class}.getRowId when not using crud")
         }
+    }
+
+    /**
+     * Get the data of a given row by row ID.
+     */
+    open fun getRowData(id: String): T =
+        fullData.first { getRowId(it.data) == id }.data
+
+    /**
+     * Set the data of a given row by row ID. Does not update the UI,
+     * call [rebuild] for that.
+     */
+    open fun setRowData(data: T) {
+        val id = getRowId(data)
+        fullData.first { getRowId(it.data) == id }.data = data
     }
 
     /**
@@ -649,7 +692,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         return column
     }
 
-    fun actions(builder : (ZkActionsColumn<T>.() -> Unit)? = null): ZkActionsColumn<T> {
+    fun actions(builder: (ZkActionsColumn<T>.() -> Unit)? = null): ZkActionsColumn<T> {
         return if (builder != null) {
             ZkActionsColumn(this@ZkTable, builder)
         } else {

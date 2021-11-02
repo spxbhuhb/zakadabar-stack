@@ -6,7 +6,7 @@ package zakadabar.core.browser.table
 import org.w3c.dom.HTMLTableRowElement
 
 class ZkTableRow<T>(
-    val data: T,
+    var data: T,
     var element: HTMLTableRowElement? = null,
     var searchData: Array<String>? = null
 )
