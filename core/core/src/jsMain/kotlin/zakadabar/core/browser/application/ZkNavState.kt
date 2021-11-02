@@ -13,12 +13,27 @@ import zakadabar.core.data.EntityId
  * @property  locale        The locale of the site, first segment of the URL.
  * @property  viewName      The name of the view in the URL, selects the Element to use.
  * @property  segments      The segments of the URL path (parts between '/' characters).
- * @property  hash       The hashtag from the URL path.
+ * @property  hash          The hashtag from the URL path.
  * @property  recordId      Id of the record when specified in the URL.
  * @property  query         The query object when specified in the URL.
  * @property  args          The args object when specified in the URL.
+ * @property  new           True when the page is opened by normal navigation. Normal means
+ *                          not forward nor backward (not history-based).
+ * @property  forward       True when the navigation state has been reached by the user navigating
+ *                          forward (click on the browser's forward button, an element calling
+ *                          [ZkApplication.forward], etc.).
+ * @property  backward      True when the navigation state has been reached by the user navigating
+ *                          back (click on the browser's back button, an element calling
+ *                          [ZkApplication.back], etc.).
  */
-class ZkNavState(val urlPath: String, val urlQuery: String, val urlHashtag: String = "") {
+class ZkNavState(
+    val urlPath: String,
+    val urlQuery: String,
+    val urlHashtag: String = "",
+    val new : Boolean = false,
+    val forward : Boolean = false,
+    val backward : Boolean = false,
+) {
 
     val locale: String
     val viewName: String

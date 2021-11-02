@@ -78,6 +78,7 @@ open class ZkArgPage<T>() : ZkPage() {
                 it.argsOrNull = argsOrNull
             }
         } else {
+            this.argsOrNull = argsOrNull
             this
         }
     }

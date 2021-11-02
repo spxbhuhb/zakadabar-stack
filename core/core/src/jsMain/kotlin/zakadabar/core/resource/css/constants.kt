@@ -166,6 +166,12 @@ object TextTransform {
     val fullSizeKana = CssValueConst("text-transform", "full-size-kana")
 }
 
+object TextOverflow {
+    val clip = CssValueConst("text-overflow", "clip")
+    val ellipsis = CssValueConst("text-overflow", "ellipsis")
+    val fade = CssValueConst("text-overflow", "fade")
+}
+
 object UserSelect {
     val none = CssValueConst("user-select", "none")
     val auto = CssValueConst("user-select", "auto")

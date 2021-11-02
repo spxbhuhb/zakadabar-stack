@@ -7,6 +7,8 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
+import org.w3c.dom.get
+import org.w3c.dom.set
 import zakadabar.core.browser.dock.ZkDock
 import zakadabar.core.browser.modal.ZkModalContainer
 import zakadabar.core.browser.titlebar.ZkAppTitle
@@ -146,8 +148,15 @@ open class ZkApplication {
 
         window.addEventListener("popstate", onPopState)
 
+        val current = window.history.state?.toString() ?: ""
+        if (current.isEmpty()) {
+            window.history.replaceState(incrementNavCounter(), "")
+        } else {
+            window.sessionStorage["zk-nav-last-shown"] = current
+        }
+
         val path = decodeURIComponent(window.location.pathname)
-        routing.onNavStateChange(ZkNavState(path, window.location.search, window.location.hash))
+        routing.onNavStateChange(ZkNavState(path, window.location.search, window.location.hash, new = true))
         window.dispatchEvent(Event(navStateChangeEvent))
     }
 
@@ -186,24 +195,52 @@ open class ZkApplication {
         localizedFormats = BuiltinLocalizedFormats()
     }
 
+    /**
+     * Called when:
+     *  - the user clicks on the "Back" button
+     *  - the user clicks on the "Forward" button
+     *  - the [back] function is called
+     *  - direct call to window.history.back
+     *  - direct call to window.history.forward
+     */
     val onPopState = fun(_: Event) {
-        // FIXME clarify use of decodeURIComponent
+
+        val current = (window.history.state as? Int) ?: 0
+        val last = window.sessionStorage["zk-nav-last-shown"]?.toInt() ?: 0
+        window.sessionStorage["zk-nav-last-shown"] = current.toString()
+
+        val backward = last > current
+
         val path = decodeURIComponent(window.location.pathname)
-        routing.onNavStateChange(ZkNavState(path, window.location.search, window.location.hash))
+
+        routing.onNavStateChange(
+            ZkNavState(
+                path,
+                window.location.search,
+                window.location.hash,
+                forward = ! backward,
+                backward = backward
+            )
+        )
+
         window.dispatchEvent(Event(navStateChangeEvent))
     }
 
-    fun changeNavState(path: String, query: String = "") {
-        val url = if (query.isEmpty()) path else "$path?$query"
-        window.history.pushState("", "", url)
-        routing.onNavStateChange(ZkNavState(path, query))
-        window.dispatchEvent(Event(navStateChangeEvent))
+    protected fun incrementNavCounter(): Int {
+        val navCounter = (window.sessionStorage["zk-nav-counter"]?.toInt() ?: window.history.length) + 1
+        window.sessionStorage["zk-nav-counter"] = navCounter.toString()
+        window.sessionStorage["zk-nav-last-shown"] = navCounter.toString()
+        return navCounter
     }
 
-    fun replaceNavState(path: String = routing.navState.urlPath, query: String = routing.navState.urlQuery, hash: String = routing.navState.urlHashtag) {
+    fun changeNavState(path: String, query: String = "", hash: String = "") {
         var url = if (hash.isEmpty()) path else "$path#$hash"
         url = if (query.isEmpty()) url else "$url?$query"
-        window.history.replaceState("", "", url)
+
+        window.history.pushState(incrementNavCounter(), "", url)
+
+        routing.onNavStateChange(ZkNavState(path, query, hash, new = true))
+        window.dispatchEvent(Event(navStateChangeEvent))
     }
 
     fun changeNavState(target: ZkAppRouting.ZkTarget, path: String? = null, query: String = "") {
@@ -214,6 +251,14 @@ open class ZkApplication {
         }
         changeNavState(url, query)
     }
+
+    fun replaceNavState(path: String = routing.navState.urlPath, query: String = routing.navState.urlQuery, hash: String = routing.navState.urlHashtag) {
+        var url = if (hash.isEmpty()) path else "$path#$hash"
+        url = if (query.isEmpty()) url else "$url?$query"
+        window.history.replaceState(window.history.state, "", url)
+    }
+
+    fun forward() = window.history.forward()
 
     fun back() = window.history.back()
 

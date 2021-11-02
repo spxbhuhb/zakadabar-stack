@@ -11,6 +11,7 @@ import zakadabar.cookbook.browser.form.select.filter.StringSelectFilter
 import zakadabar.cookbook.browser.form.select.radio.RadioGroupSelect
 import zakadabar.cookbook.browser.form.submit.enter.SubmitOnEnter
 import zakadabar.cookbook.browser.help.TextHelpModal
+import zakadabar.cookbook.browser.navigation.direction.NavigationDirection
 import zakadabar.cookbook.browser.sidebar.icons.SideBarWithIcons
 import zakadabar.cookbook.browser.table.action.TableCustomActions
 import zakadabar.cookbook.browser.table.border.vertical.TableVerticalBorderSome
@@ -38,6 +39,7 @@ class Cookbook : CommonModule {
     fun enrich(htmlElement: HTMLElement, type: String, flavour: ZkFlavour): ZkElement? =
         when (type) {
 
+            "NavigationDirection" -> NavigationDirection()
             "BoSelectFilter" -> BoSelectFilter()
             "RadioGroupSelect" -> RadioGroupSelect()
             "FieldOnChangeForm" -> FieldOnChangeForm()

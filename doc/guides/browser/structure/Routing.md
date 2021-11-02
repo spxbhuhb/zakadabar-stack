@@ -125,8 +125,6 @@ for an example.
 Add-And-Forget navigation means that you add a clickable element and then forget about it. If the user clicks on it,
 navigation happens, if the user doesn't click, nothing happens.
 
-
-
 ## Programmatic Navigation
 
 [Pages](../builtin/Pages.md) usually have an `open` function. When you call this the
@@ -160,6 +158,13 @@ change and load the target that belongs to the new state.
 application.back()
 ```
 
+Use `application.forward` to step forward in the browser history. The stack will handle the navigation state
+change and load the target that belongs to the new state.
+
+```kotlin
+application.forward()
+```
+
 Use `application.changeNavState` to route the application to any target.
 
 ```kotlin
@@ -171,3 +176,68 @@ Use `application.changeNavState` to route the application to any given path and 
 ```kotlin
 application.changeNavState("/Welcome","")
 ```
+
+## Navigation State
+
+The [ZkNavState](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkNavState.kt) class contains the
+navigation state of the application.
+
+The actual navigation state available through the application:
+
+```kotlin
+val navState = application.routing.navState
+```
+
+### Direction of Navigation
+
+[ZkNavState](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkNavState.kt) contains fields
+that show how the user reached the current state.
+
+Check the [Navigation Direction](/doc/cookbook/browser/navigation/direction/recipe.md) recipe for an example.
+
+<div data-zk-enrich="Note" data-zk-title="External Pages" data-zk-flavour="Warning">
+
+Navigating to external pages may give unexpected results. For example in Safari:
+
+1. open the recipe page above, copy the URL
+2. type `google.com` into the browser URL bar
+3. paste the URL into the browser URL bar
+4. use the "Back" button of the browser twice
+5. use the "Forward" button of the browser twice
+
+At this point the direction is "new". This is OK.
+
+4. use the "Back" button of the browser **once**
+5. use the "Forward" button of the browser **once**
+
+At this point the direction is "forward". This is a bit strange, it happens
+because `google.com` does not update the last page shown and the browser
+does not initialize the application again.
+
+Seems like Firefox and Chrome works as expected and the direction is "new".
+</div>
+
+#### new
+
+True when the state is reached by navigating to a new URL:
+
+- open page directly with URL
+- click on a link
+- click on a button
+- page refresh
+
+#### forward
+
+True when the state is reached by:
+
+- clicking on the browser's forward button
+- an element calling `application.forward()`
+- an element calling `window.history.forward()`
+
+#### backward
+
+True when the state is reached by:
+
+- clicking on the browser's back button
+- an element calling `application.back()`
+- an element calling `window.history.back()`
