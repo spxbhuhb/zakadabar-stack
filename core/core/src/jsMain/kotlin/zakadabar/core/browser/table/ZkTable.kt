@@ -215,8 +215,15 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
                     setData(query.execute())
                 }
             }
-            ::fullData.isInitialized -> render() // this means that setData has been called before onResume
+            ::fullData.isInitialized -> {
+                render() // this means that setData has been called before onResume
+                window.requestAnimationFrame {
+                    contentContainer.element.scrollBy(contentScrollLeft, contentScrollTop)
+                }
+            }
         }
+
+
     }
 
     override fun onDestroy() {
@@ -326,6 +333,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             setData(query.execute())
         }
     }
+
+    //Kenyerlangos2021!
 
     // -------------------------------------------------------------------------
     //  Rendering, intersection observer callback

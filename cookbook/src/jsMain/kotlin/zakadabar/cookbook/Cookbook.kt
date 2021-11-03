@@ -22,6 +22,7 @@ import zakadabar.cookbook.browser.table.exportFileName.TableExportFileName
 import zakadabar.cookbook.browser.table.inline.TableEditInline
 import zakadabar.cookbook.browser.table.inline.TableEditInlineNoBo
 import zakadabar.cookbook.browser.table.saveElement.TableSaveElement
+import zakadabar.cookbook.browser.table.tableInTab.TableInTab
 import zakadabar.cookbook.resource.strings
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.application
@@ -43,21 +44,22 @@ class Cookbook : CommonModule {
 
             "BasicCrud" -> BasicCrud()
             "BasicTable" -> BasicTable()
-            "NavigationDirection" -> NavigationDirection()
             "BoSelectFilter" -> BoSelectFilter()
-            "RadioGroupSelect" -> RadioGroupSelect()
             "FieldOnChangeForm" -> FieldOnChangeForm()
             "FieldUpdateForm" -> FieldUpdateForm()
+            "NavigationDirection" -> NavigationDirection()
+            "RadioGroupSelect" -> RadioGroupSelect()
             "SideBarWithIcons" -> SideBarWithIcons()
             "StringSelectFilter" -> StringSelectFilter()
             "SubmitOnEnter" -> SubmitOnEnter()
             "TableCustomActions" -> TableCustomActions()
+            "TableCustomColumn" -> TableCustomColumn()
             "TableEditInline" -> TableEditInline()
             "TableEditInlineNoBo" -> TableEditInlineNoBo()
             "TableExportFileName" -> TableExportFileName()
-            "TableCustomColumn" -> TableCustomColumn()
-            "TableVerticalBorderSome" -> TableVerticalBorderSome()
+            "TableInTab" -> TableInTab()
             "TableSaveElement" -> TableSaveElement()
+            "TableVerticalBorderSome" -> TableVerticalBorderSome()
             "TextHelpModal" -> TextHelpModal()
 
             else -> null
