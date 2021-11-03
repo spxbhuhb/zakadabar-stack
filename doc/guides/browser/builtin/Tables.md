@@ -1,15 +1,5 @@
 # Tables
 
-<div data-zk-enrich="Recipes" data-zk-targets="browser" data-zk-tags="table"></div>
-
-<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Note">
-
-This documentation page needs rewrite: 
-* it does not provide enough information,
-* the BuiltinDto example is too complex to start with,
-* the old ship examples should not be used here.
-</div>
-
 * CSS grid for layout
 * virtualization
   * intersection observer based
@@ -30,56 +20,56 @@ This documentation page needs rewrite:
 1. override `onConfigure` to set up the table
 
 ```kotlin
-class BuiltinTable : ZkTable<BuiltinDto>() {
+class BasicTable : ZkTable<ExampleBo>() {
 
   override fun onConfigure() {
 
-    // Sets the CRUD the table uses. When set add and double click on rows
-    // calls this crud to create a new record or open the record for update.
+    // These are not necessary, I've added them so the recipe looks better.
 
-    crud = BuiltinCrud
+    height = 400.px
+    + zkLayoutStyles.fixBorder
 
-    // Set the title of the table.
+    // Options for the table.
 
-    title = t("builtin")
+    add = false // do not show the add action in the title
+    search = true // show the search action in the title
+    export = true // show the export action in the title
 
-    // Enable the add button (plus icon in the header).
-    // Enable search (input field in the header).
-    // Enable CSV export (download icon in the header).
+    // This is the title of the table. As we use the local title bar
+    // we want to show some title.
 
-    add = true
-    search = true
-    export = true
-    
-    // Add columns to the table. Column types are automatically
-    // derived from the property type.
+    titleText = localized<BasicTable>()
+    addLocalTitle = true
 
-    + BuiltinDto::id
-    + BuiltinDto::booleanValue
-    + BuiltinDto::doubleValue
-    + BuiltinDto::enumSelectValue
-    + BuiltinDto::instantValue
-    + BuiltinDto::stringValue
-    + BuiltinDto::uuidValue
-    + BuiltinDto::optUuidValue
+    // This is the query the table uses to fetch the data.
 
-    // Add a custom column
+    query = ExampleQuery()
 
-    + custom {
-      label = t("custom")
-      render = { row ->
-        if ((row.id % 2L) == 0L) {
-          + t("odd")
-        } else {
-          + t("even")
-        }
-      }
-    }
+    // You can add columns by the properties. If you don't set a label, the
+    // table will use the localized property name.
 
-    // Add an actions column, this will contain a "Details" link
-    // that calls openUpdate of the crud.
+    + ExampleBo::id size 4.em
+    + ExampleBo::doubleValue size 4.em
+    + ExampleBo::enumSelectValue
+    + ExampleBo::localDateValue label "Date".localized
+
+    // Or you can add them with getters, useful for nested data structures.
+    // In this case label is necessary as the property name does not exists,
+    // so it is not possible to translate it properly.
+
+    + boolean { booleanValue } label "Boolean".localized
+    + optBoolean { optBooleanValue } label "OptBoolean".localized
+    + optEntityId { optRecordSelectValue } size 4.em label "Reference".localized
+
+    // Actions for the user to execute on the given row. The default shows
+    // a "DETAILS" link. Details performs the same action as the
+    // "onDblClick" of the table.
 
     + actions()
+  }
+
+  override fun onDblClick(id: String) {
+    toastSuccess { "You clicked on details of $id!" }
   }
 
 }
@@ -93,6 +83,14 @@ Change the column size with the `size` configuration option:
 
 ```kotlin
 + ExampleBo::stringValue size 10.em
+```
+
+### Column Label
+
+Change the column label with the `label` configuration option:
+
+```kotlin
++ ExampleBo::stringValue label "MyLabel".localized
 ```
 
 ### Single Click Open
@@ -171,8 +169,11 @@ Use the `custom` function to add a column:
     label = "Tags"
     render = { + it.tags.joinToString(", ") }
     matcher = { row, filter -> row.tags.firstOrNull { filter in it } != null}
+    sorter = { }
 } size "max-content"
 ```
+
+Example: [Custom Table Column](/doc/cookbook/browser/table/customColumn/recipe.md)
 
 ## Preload
 
@@ -308,8 +309,3 @@ With 1.000.000:
 
 The solution for these would be to use fewer areas and improve row position handling. However, in that case the
 scrollbar position problems might arise.
-
-### Known problems
-
-* Sort indicator:
-   * transparent background overlaps header text.

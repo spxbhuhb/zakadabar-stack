@@ -35,6 +35,7 @@ import zakadabar.core.data.EntityId
 import zakadabar.core.data.QueryBo
 import zakadabar.core.resource.localizedStrings
 import zakadabar.core.schema.BoSchema
+import zakadabar.core.util.PublicApi
 import zakadabar.core.util.UUID
 import kotlin.math.min
 import kotlin.reflect.KProperty1
@@ -121,7 +122,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     private lateinit var areas: Areas // areas for intersection observer
 
-    lateinit var contentContainer : ZkElement
+    lateinit var contentContainer: ZkElement
 
     lateinit var tableElement: HTMLTableElement
 
@@ -132,8 +133,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     val placeHolderCell = document.createElement("td") as HTMLTableCellElement
     val placeHolderRow = (document.createElement("tr") as HTMLTableRowElement).also { it.appendChild(placeHolderCell) }
 
-    var contentScrollTop : Double = 0.0
-    var contentScrollLeft : Double = 0.0
+    var contentScrollTop: Double = 0.0
+    var contentScrollLeft: Double = 0.0
 
     protected var firstShownRow = Int.MAX_VALUE
     protected var lastShownRow = - 1
@@ -477,9 +478,13 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      * Set the data of a given row by row ID. Does not update the UI,
      * call [rebuild] for that.
      */
-    open fun setRowData(data: T) {
+    open fun setRowData(data: T, optional: Boolean = false) {
         val id = getRowId(data)
-        fullData.first { getRowId(it.data) == id }.data = data
+        if (optional) {
+            fullData.firstOrNull { getRowId(it.data) == id }?.data = data
+        } else {
+            fullData.first { getRowId(it.data) == id }.data = data
+        }
     }
 
     /**
@@ -568,16 +573,10 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     //  Column builders
     // -------------------------------------------------------------------------
 
-    operator fun <IT> KProperty1<T, EntityId<IT>>.unaryPlus(): ZkEntityIdColumn<T, IT> {
-        val column = ZkEntityIdColumn(this@ZkTable, this)
-        columns += column
-        return column
-    }
-
-    operator fun <IT> KProperty1<T, EntityId<IT>?>.unaryPlus(): ZkOptEntityIdColumn<T, IT> {
-        val column = ZkOptEntityIdColumn(this@ZkTable, this)
-        columns += column
-        return column
+    inline fun <reified CT : ZkColumn<T>> CT.add(prop: KProperty1<T, *>): CT {
+        label = localizedStrings.getNormalized(prop.name)
+        columns += this
+        return this
     }
 
     operator fun ZkActionsColumn<T>.unaryPlus(): ZkActionsColumn<T> {
@@ -585,101 +584,170 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         return this
     }
 
-    operator fun KProperty1<T, String>.unaryPlus(): ZkStringColumn<T> {
-        val column = ZkStringColumn(this@ZkTable, this)
-        columns += column
-        return column
-    }
+    fun <IT> entityId(getter: T.() -> EntityId<IT>): ZkEntityIdColumnV2<T, IT> =
+        ZkEntityIdColumnV2(this@ZkTable, getter)
 
-    operator fun KProperty1<T, String?>.unaryPlus(): ZkOptStringColumn<T> {
-        val column = ZkOptStringColumn(this@ZkTable, this)
-        columns += column
-        return column
-    }
+    operator fun <IT> KProperty1<T, EntityId<IT>>.unaryPlus(): ZkEntityIdColumnV2<T, IT> =
+        ZkEntityIdColumnV2(this@ZkTable) { this.get(it) }
+            .add(this)
 
-    operator fun KProperty1<T, Int>.unaryPlus(): ZkIntColumn<T> {
-        val column = ZkIntColumn(this@ZkTable, this)
-        columns += column
-        return column
-    }
+    fun <IT> optEntityId(getter: T.() -> EntityId<IT>?): ZkOptEntityIdColumnV2<T, IT> =
+        ZkOptEntityIdColumnV2(this@ZkTable, getter)
 
-    operator fun KProperty1<T, Int?>.unaryPlus(): ZkOptIntColumn<T> {
-        val column = ZkOptIntColumn(this@ZkTable, this)
-        columns += column
-        return column
-    }
+    operator fun <IT> KProperty1<T, EntityId<IT>?>.unaryPlus(): ZkOptEntityIdColumnV2<T, IT> =
+        ZkOptEntityIdColumnV2(this@ZkTable) { this.get(it) }
+            .add(this)
 
-    operator fun KProperty1<T, Long>.unaryPlus(): ZkLongColumn<T> {
-        val column = ZkLongColumn(this@ZkTable, this)
-        columns += column
-        return column
-    }
+    fun string(getter: T.() -> String): ZkStringColumnV2<T> =
+        ZkStringColumnV2(this@ZkTable, getter)
 
-    operator fun KProperty1<T, Long?>.unaryPlus(): ZkOptLongColumn<T> {
-        val column = ZkOptLongColumn(this@ZkTable, this)
-        columns += column
-        return column
-    }
+    operator fun KProperty1<T, String>.unaryPlus(): ZkStringColumnV2<T> =
+        ZkStringColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
 
-    operator fun KProperty1<T, Double>.unaryPlus(): ZkDoubleColumn<T> {
-        val column = ZkDoubleColumn(this@ZkTable, this)
-        columns += column
-        return column
-    }
+    @PublicApi
+    fun optString(getter: T.() -> String?): ZkOptStringColumnV2<T> =
+        ZkOptStringColumnV2(this@ZkTable, getter)
 
-    operator fun KProperty1<T, Double?>.unaryPlus(): ZkOptDoubleColumn<T> {
-        val column = ZkOptDoubleColumn(this@ZkTable, this)
-        columns += column
-        return column
-    }
+    operator fun KProperty1<T, String?>.unaryPlus(): ZkOptStringColumnV2<T> =
+        ZkOptStringColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
 
-    operator fun KProperty1<T, Boolean>.unaryPlus(): ZkBooleanColumn<T> {
-        val column = ZkBooleanColumn(this@ZkTable, this)
-        columns += column
-        return column
-    }
+    fun int(getter: T.() -> Int): ZkIntColumnV2<T> =
+        ZkIntColumnV2(this@ZkTable, getter)
 
-    inline operator fun <reified E : Enum<E>> KProperty1<T, E>.unaryPlus(): ZkEnumColumn<T, E> {
-        val column = ZkEnumColumn(this@ZkTable, this)
-        columns += column
-        return column
-    }
+    operator fun KProperty1<T, Int>.unaryPlus(): ZkIntColumnV2<T> =
+        ZkIntColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
 
-    operator fun KProperty1<T, Instant>.unaryPlus(): ZkInstantColumn<T> {
-        val column = ZkInstantColumn(this@ZkTable, this)
-        columns += column
-        return column
-    }
+    @PublicApi
+    fun optInt(getter: T.() -> Int?): ZkOptIntColumnV2<T> =
+        ZkOptIntColumnV2(this@ZkTable, getter)
 
-    operator fun KProperty1<T, Instant?>.unaryPlus(): ZkOptInstantColumn<T> {
-        val column = ZkOptInstantColumn(this@ZkTable, this)
-        columns += column
-        return column
-    }
+    operator fun KProperty1<T, Int?>.unaryPlus(): ZkOptIntColumnV2<T> =
+        ZkOptIntColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
 
-    operator fun KProperty1<T, LocalDate>.unaryPlus(): ZkLocalDateColumn<T> =
-        ZkLocalDateColumn(this@ZkTable, this).also { columns += it }
+    fun long(getter: T.() -> Long): ZkLongColumnV2<T> =
+        ZkLongColumnV2(this@ZkTable, getter)
 
-    operator fun KProperty1<T, LocalDate?>.unaryPlus(): ZkOptLocalDateColumn<T> =
-        ZkOptLocalDateColumn(this@ZkTable, this).also { columns += it }
+    operator fun KProperty1<T, Long>.unaryPlus(): ZkLongColumnV2<T> =
+        ZkLongColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
 
-    operator fun KProperty1<T, LocalDateTime>.unaryPlus(): ZkLocalDateTimeColumn<T> =
-        ZkLocalDateTimeColumn(this@ZkTable, this).also { columns += it }
+    @PublicApi
+    fun optLong(getter: T.() -> Long?): ZkOptLongColumnV2<T> =
+        ZkOptLongColumnV2(this@ZkTable, getter)
 
-    operator fun KProperty1<T, LocalDateTime?>.unaryPlus(): ZkOptLocalDateTimeColumn<T> =
-        ZkOptLocalDateTimeColumn(this@ZkTable, this).also { columns += it }
+    operator fun KProperty1<T, Long?>.unaryPlus(): ZkOptLongColumnV2<T> =
+        ZkOptLongColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
 
-    operator fun KProperty1<T, UUID>.unaryPlus(): ZkUuidColumn<T> {
-        val column = ZkUuidColumn(this@ZkTable, this)
-        columns += column
-        return column
-    }
+    fun double(getter: T.() -> Double): ZkDoubleColumnV2<T> =
+        ZkDoubleColumnV2(this@ZkTable, getter)
 
-    operator fun KProperty1<T, UUID?>.unaryPlus(): ZkOptUuidColumn<T> {
-        val column = ZkOptUuidColumn(this@ZkTable, this)
-        columns += column
-        return column
-    }
+    operator fun KProperty1<T, Double>.unaryPlus(): ZkDoubleColumnV2<T> =
+        ZkDoubleColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
+
+    @PublicApi
+    fun optDouble(getter: T.() -> Double?): ZkOptDoubleColumnV2<T> =
+        ZkOptDoubleColumnV2(this@ZkTable, getter)
+
+    operator fun KProperty1<T, Double?>.unaryPlus(): ZkOptDoubleColumnV2<T> =
+        ZkOptDoubleColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
+
+    fun boolean(getter: T.() -> Boolean): ZkBooleanColumnV2<T> =
+        ZkBooleanColumnV2(this@ZkTable, getter)
+
+    operator fun KProperty1<T, Boolean>.unaryPlus(): ZkBooleanColumnV2<T> =
+        ZkBooleanColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
+
+    fun optBoolean(getter: T.() -> Boolean?): ZkOptBooleanColumnV2<T> =
+        ZkOptBooleanColumnV2(this@ZkTable, getter)
+
+    operator fun KProperty1<T, Boolean?>.unaryPlus(): ZkOptBooleanColumnV2<T> =
+        ZkOptBooleanColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
+
+    fun <E : Enum<E>> enum(getter: T.() -> E): ZkEnumColumnV2<T, E> =
+        ZkEnumColumnV2(this@ZkTable, getter)
+
+    inline operator fun <reified E : Enum<E>> KProperty1<T, E>.unaryPlus(): ZkEnumColumnV2<T, E> =
+        ZkEnumColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
+
+    @PublicApi
+    @JsName("columnOptEnum")
+    fun <E : Enum<E>> optEnum(getter: T.() -> E?): ZkOptEnumColumnV2<T, E> =
+        ZkOptEnumColumnV2(this@ZkTable, getter)
+
+    @JsName("columnOptEnumProp")
+    inline operator fun <reified E : Enum<E>> KProperty1<T, E?>.unaryPlus(): ZkOptEnumColumnV2<T, E> =
+        ZkOptEnumColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
+
+    fun instant(getter: T.() -> Instant): ZkInstantColumnV2<T> =
+        ZkInstantColumnV2(this@ZkTable, getter)
+
+    operator fun KProperty1<T, Instant>.unaryPlus(): ZkInstantColumnV2<T> =
+        ZkInstantColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
+
+    @PublicApi
+    fun optInstant(getter: T.() -> Instant?): ZkOptInstantColumnV2<T> =
+        ZkOptInstantColumnV2(this@ZkTable, getter)
+
+    operator fun KProperty1<T, Instant?>.unaryPlus(): ZkOptInstantColumnV2<T> =
+        ZkOptInstantColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
+
+    fun localDate(getter: T.() -> LocalDate): ZkLocalDateColumnV2<T> =
+        ZkLocalDateColumnV2(this@ZkTable, getter)
+
+    operator fun KProperty1<T, LocalDate>.unaryPlus(): ZkLocalDateColumnV2<T> =
+        ZkLocalDateColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
+
+    @PublicApi
+    fun optLocalDate(getter: T.() -> LocalDate?): ZkOptLocalDateColumnV2<T> =
+        ZkOptLocalDateColumnV2(this@ZkTable, getter)
+
+    operator fun KProperty1<T, LocalDate?>.unaryPlus(): ZkOptLocalDateColumnV2<T> =
+        ZkOptLocalDateColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
+
+    fun localDateTime(getter: T.() -> LocalDateTime): ZkLocalDateTimeColumnV2<T> =
+        ZkLocalDateTimeColumnV2(this@ZkTable, getter)
+
+    operator fun KProperty1<T, LocalDateTime>.unaryPlus(): ZkLocalDateTimeColumnV2<T> =
+        ZkLocalDateTimeColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
+
+    @PublicApi
+    fun optLocalDateTime(getter: T.() -> LocalDateTime?): ZkOptLocalDateTimeColumnV2<T> =
+        ZkOptLocalDateTimeColumnV2(this@ZkTable, getter)
+
+    operator fun KProperty1<T, LocalDateTime?>.unaryPlus(): ZkOptLocalDateTimeColumnV2<T> =
+        ZkOptLocalDateTimeColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
+
+    @PublicApi
+    fun uuid(getter: T.() -> UUID): ZkUuidColumnV2<T> =
+        ZkUuidColumnV2(this@ZkTable, getter)
+
+    operator fun KProperty1<T, UUID>.unaryPlus(): ZkUuidColumnV2<T> =
+        ZkUuidColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
+
+    fun optUuid(getter: (T) -> UUID?): ZkOptUuidColumnV2<T> =
+        ZkOptUuidColumnV2(this@ZkTable, getter)
+
+    operator fun KProperty1<T, UUID?>.unaryPlus(): ZkOptUuidColumnV2<T> =
+        ZkOptUuidColumnV2(this@ZkTable) { row -> this.get(row) }
+            .add(this)
 
     operator fun ZkColumn<T>.unaryPlus(): ZkColumn<T> {
         columns += this
@@ -711,9 +779,17 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     /**
      * Set the column to size.
      */
-    infix fun ZkElement.size(size: String) {
-        if (this !is ZkColumn<*>) return
+    infix fun ZkColumn<T>.size(size: String) : ZkColumn<T> {
         this.max = size
+        return this
+    }
+
+    /**
+     * Set the column to size.
+     */
+    infix fun ZkColumn<T>.label(text: String) : ZkColumn<T> {
+        this.label = text
+        return this
     }
 
 }

@@ -1,17 +1,16 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.cookbook.browser.table.exportCustomColumn
+package zakadabar.cookbook.browser.table.basic
 
-import zakadabar.cookbook.browser.table.demoData
 import zakadabar.cookbook.entity.builtin.ExampleBo
 import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.data.EntityId
 import zakadabar.core.resource.css.em
 import zakadabar.core.resource.css.fr
-import zakadabar.core.text.csvEscape
+import zakadabar.core.util.default
 
-
-class TableExportCustomColumn : ZkTable<ExampleBo>() {
+class BasicTableDirect : ZkTable<ExampleBo>() {
 
     override fun onConfigure() {
         super.onConfigure()
@@ -20,21 +19,26 @@ class TableExportCustomColumn : ZkTable<ExampleBo>() {
         export = true
 
         + ExampleBo::stringValue size 10.em
-        + custom {
-            render = { if (it.booleanValue) + "custom value 1" else + "custom value 2" }
-            exportCsv = { if (booleanValue) "export value 1".csvEscape() else "export value 2".csvEscape() }
-        } size 1.fr
+        + ExampleBo::booleanValue size 1.fr
     }
 
     override fun onCreate() {
         super.onCreate()
-        demoData()
+
+        val template = default<ExampleBo> { }
+
+        val data = (1..50).map {
+            template.copy(id = EntityId(it.toLong()), stringValue = "row $it", booleanValue = (it % 2 == 0))
+        }
+
+        setData(data)
     }
 
     override fun getRowId(row: ExampleBo) =
         row.id.toString()
 
     override fun onDblClick(id: String) = Unit
+
 }
 
 

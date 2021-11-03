@@ -14,7 +14,8 @@ open class ZkCustomColumn<T : BaseBo>(
     lateinit var render: ZkElement.(T) -> Unit
     lateinit var exportCsv: T.() -> String
 
-    var matcher: (row: T, string: String) -> Boolean = { _,_ -> false }
+    var matcher: (row: T, string: String) -> Boolean = { _, _ -> false }
+    var sorter: () -> Unit = { }
 
     override fun render(cell: ZkElement, index: Int, row: T) {
         cell.render(row)
@@ -23,6 +24,10 @@ open class ZkCustomColumn<T : BaseBo>(
     override fun matches(row: T, string: String?): Boolean {
         if (string == null) return false
         return matcher(row, string)
+    }
+
+    override fun sort() {
+        sorter()
     }
 
     override fun exportCsv(row: T) = row.exportCsv()
