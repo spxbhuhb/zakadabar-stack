@@ -4,6 +4,7 @@
 package zakadabar.cookbook
 
 import org.w3c.dom.HTMLElement
+import zakadabar.cookbook.browser.crud.basic.BasicCrud
 import zakadabar.cookbook.browser.field.onchange.FieldOnChangeForm
 import zakadabar.cookbook.browser.field.update.FieldUpdateForm
 import zakadabar.cookbook.browser.form.select.filter.BoSelectFilter
@@ -13,8 +14,9 @@ import zakadabar.cookbook.browser.form.submit.enter.SubmitOnEnter
 import zakadabar.cookbook.browser.help.TextHelpModal
 import zakadabar.cookbook.browser.sidebar.icons.SideBarWithIcons
 import zakadabar.cookbook.browser.table.action.TableCustomActions
+import zakadabar.cookbook.browser.table.basic.BasicTable
 import zakadabar.cookbook.browser.table.border.vertical.TableVerticalBorderSome
-import zakadabar.cookbook.browser.table.exportCustomColumn.TableExportCustomColumn
+import zakadabar.cookbook.browser.table.customColumn.TableCustomColumn
 import zakadabar.cookbook.browser.table.exportFileName.TableExportFileName
 import zakadabar.cookbook.browser.table.inline.TableEditInline
 import zakadabar.cookbook.browser.table.inline.TableEditInlineNoBo
@@ -38,6 +40,8 @@ class Cookbook : CommonModule {
     fun enrich(htmlElement: HTMLElement, type: String, flavour: ZkFlavour): ZkElement? =
         when (type) {
 
+            "BasicCrud" -> BasicCrud()
+            "BasicTable" -> BasicTable()
             "BoSelectFilter" -> BoSelectFilter()
             "RadioGroupSelect" -> RadioGroupSelect()
             "FieldOnChangeForm" -> FieldOnChangeForm()
@@ -49,7 +53,7 @@ class Cookbook : CommonModule {
             "TableEditInline" -> TableEditInline()
             "TableEditInlineNoBo" -> TableEditInlineNoBo()
             "TableExportFileName" -> TableExportFileName()
-            "TableExportCustomColumn" -> TableExportCustomColumn()
+            "TableCustomColumn" -> TableCustomColumn()
             "TableVerticalBorderSome" -> TableVerticalBorderSome()
             "TableSaveElement" -> TableSaveElement()
             "TextHelpModal" -> TextHelpModal()

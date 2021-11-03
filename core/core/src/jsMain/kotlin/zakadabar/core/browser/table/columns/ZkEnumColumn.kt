@@ -3,7 +3,6 @@
  */
 package zakadabar.core.browser.table.columns
 
-import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.data.BaseBo
 import zakadabar.core.resource.localizedStrings
@@ -12,35 +11,14 @@ import kotlin.reflect.KProperty1
 open class ZkEnumColumn<T : BaseBo, E : Enum<E>>(
     table: ZkTable<T>,
     val prop: KProperty1<T, E>
-) : ZkColumn<T>(table) {
+) : ZkEnumColumnV2<T,E>(
+    table,
+    { row -> prop.get(row) }
+) {
 
     override fun onCreate() {
         label = localizedStrings.getNormalized(prop.name)
         super.onCreate()
     }
 
-    override fun render(cell: ZkElement, index: Int, row: T) {
-        with(cell) {
-            + format(row)
-        }
-    }
-
-    override fun sort() {
-        table.fullData = if (sortAscending) {
-            table.fullData.sortedBy { format(it.data) }
-        } else {
-            table.fullData.sortedByDescending { format(it.data) }
-        }
-    }
-
-    override fun matches(row: T, string: String?): Boolean {
-        if (string == null) return false
-        return (string in format(row).lowercase())
-    }
-
-    override fun exportCsv(row: T): String {
-        return "\"${format(row).replace("\"", "\"\"")}\""
-    }
-
-    open fun format(row: T) = localizedStrings.getNormalized(prop.get(row).name)
 }

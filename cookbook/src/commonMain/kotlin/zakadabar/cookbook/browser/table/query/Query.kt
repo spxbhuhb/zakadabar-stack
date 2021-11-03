@@ -17,7 +17,6 @@ class Query : QueryBo<List<QueryResultEntry>> {
 
     override suspend fun execute() = comm.query(this, serializer(), ListSerializer(QueryResultEntry.serializer()))
 
-    // TODO change the namespace
     companion object : QueryBoCompanion(UUID().toString())
 
 }

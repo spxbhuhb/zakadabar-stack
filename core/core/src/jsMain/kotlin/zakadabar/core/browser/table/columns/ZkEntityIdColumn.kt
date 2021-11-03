@@ -3,52 +3,23 @@
  */
 package zakadabar.core.browser.table.columns
 
-import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityId
-import zakadabar.core.resource.css.em
 import zakadabar.core.resource.localizedStrings
 import kotlin.reflect.KProperty1
 
 open class ZkEntityIdColumn<T : BaseBo, IT>(
     table: ZkTable<T>,
     val prop: KProperty1<T, EntityId<IT>>
-) : ZkColumn<T>(table) {
-
-    override var max = 8.em
+) : ZkEntityIdColumnV2<T, IT>(
+    table,
+    { row -> prop.get(row) }
+) {
 
     override fun onCreate() {
         label = localizedStrings.getNormalized(prop.name)
         super.onCreate()
-    }
-
-    override fun render(cell: ZkElement, index: Int, row: T) {
-        with(cell) {
-            + "# ${prop.get(row)}"
-        }
-    }
-
-    infix fun build(builder: ZkEntityIdColumn<T, IT>.() -> Unit): ZkEntityIdColumn<T, IT> {
-        this.builder()
-        return this
-    }
-
-    override fun sort() {
-        table.fullData = if (sortAscending) {
-            table.fullData.sortedBy { prop.get(it.data) }
-        } else {
-            table.fullData.sortedByDescending { prop.get(it.data) }
-        }
-    }
-
-    override fun matches(row: T, string: String?): Boolean {
-        if (string == null) return false
-        return (string in prop.get(row).toString().lowercase())
-    }
-
-    override fun exportCsv(row: T): String {
-        return prop.get(row).toString()
     }
 
 }

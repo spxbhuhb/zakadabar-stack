@@ -80,17 +80,3 @@ CRUD of ExampleReferenceBo [source code](/lib/examples/src/jsMain/kotlin/zakadab
 CRUD of BuiltinBo [source code](/lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/crud/CrudBuiltinExample.kt)
 
 <div data-zk-enrich="CrudBuiltinExample"></div>
-
-## TimeLine
-
-### Changes
-
-* 2021.5.31
-  * bl/pa migration, use Bo instead of Dto 
-  * preferred way is to use class instead of object
-  * sidebar binding methods like `item<SimpleExampleCrud>()`
-  * fix scrollbar issues with inline crud (not perfect yet, title scrolls away)
-  * fix table initial overflow
-* 2021.5.19
-  * move crud related classes from `pages` to `crud`
-  * introduce ZkInlineCrud
