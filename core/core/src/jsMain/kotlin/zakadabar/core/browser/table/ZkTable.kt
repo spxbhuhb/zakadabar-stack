@@ -85,6 +85,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     var export = false
     var oneClick = false
 
+    var runQueryOnResume = true
+
     open val rowHeight
         get() = styles.rowHeight
 
@@ -209,21 +211,19 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         val query = this.query
 
         when {
-            query != null -> {
+            query != null && runQueryOnResume -> {
                 setData(emptyList())
                 io {
-                    setData(query.execute())
+                    setData(query.execute()) // calls render
                 }
             }
             ::fullData.isInitialized -> {
                 render() // this means that setData has been called before onResume
                 window.requestAnimationFrame {
-                    contentContainer.element.scrollBy(contentScrollLeft, contentScrollTop)
+                    contentContainer.element.scrollTo(contentScrollTop, contentScrollLeft)
                 }
             }
         }
-
-
     }
 
     override fun onDestroy() {
@@ -365,15 +365,33 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         }
     }
 
-    fun rebuild(): ZkTable<T> {
+    /**
+     * Redraws the currently shown rows of the table.
+     * Deletes all cached row renders.
+     * Sets scroll position to the latest known value
+     */
+    fun redraw(): ZkTable<T> {
+
+        // clear the body of the table
+
+        tbody.clear()
+        + placeHolderRow
+
+        // clear all cached renders
+
         for (row in fullData) {
             row.element = null
         }
 
-        // without requestAnimationFrame nothing happens
+        for (index in firstShownRow..lastShownRow) {
+            tbody.appendChild(
+                getRowElement(index, filteredData[index])
+            )
+        }
 
+        // render and add the shown row
         window.requestAnimationFrame {
-            contentContainer.element.scrollBy(contentScrollLeft, contentScrollTop)
+            contentContainer.element.scrollTo(contentScrollTop, contentScrollLeft)
         }
 
         return this
@@ -485,7 +503,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     /**
      * Set the data of a given row by row ID. Does not update the UI,
-     * call [rebuild] for that.
+     * call [redraw] for that.
      */
     open fun setRowData(data: T, optional: Boolean = false) {
         val id = getRowId(data)
@@ -751,6 +769,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         ZkUuidColumnV2(this@ZkTable) { row -> this.get(row) }
             .add(this)
 
+    @PublicApi
     fun optUuid(getter: (T) -> UUID?): ZkOptUuidColumnV2<T> =
         ZkOptUuidColumnV2(this@ZkTable, getter)
 

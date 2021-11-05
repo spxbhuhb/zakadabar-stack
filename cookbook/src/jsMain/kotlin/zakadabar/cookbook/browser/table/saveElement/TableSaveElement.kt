@@ -61,7 +61,7 @@ class TableSaveElement : ZkElement() {
 
             + savedTable?.apply {
                 openEditor = ::openEditor
-                rebuild()
+                redraw()
             }
         }
     }
@@ -85,7 +85,7 @@ class TableSaveElement : ZkElement() {
 
     fun backToTable() {
         - first<Editor>()
-        + savedTable?.apply { rebuild() }
+        + savedTable?.apply { redraw() }
     }
 }
 

@@ -31,7 +31,7 @@ object Cookbook : ZkPathPage() {
             if (savedTable == null) {
                 + Table().also { savedTable = it }
             } else {
-                + savedTable?.apply { rebuild() }
+                + savedTable?.apply { redraw() }
             }
 
             - firstOrNull<MarkdownView>()
