@@ -85,6 +85,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     var export = false
     var oneClick = false
 
+    var firstOnResume = true
     var runQueryOnResume = true
 
     open val rowHeight
@@ -192,6 +193,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             on("scroll") {
                 contentScrollTop = this.element.scrollTop
                 contentScrollLeft = this.element.scrollLeft
+                println("scroll left: $contentScrollLeft top: $contentScrollTop")
+                println(JSON.stringify(tableElement.getBoundingClientRect()))
             }
 
         }.also {
@@ -211,19 +214,27 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         val query = this.query
 
         when {
-            query != null && runQueryOnResume -> {
+            query != null && (runQueryOnResume || firstOnResume) -> {
                 setData(emptyList())
                 io {
                     setData(query.execute()) // calls render
                 }
             }
-            ::fullData.isInitialized -> {
-                render() // this means that setData has been called before onResume
-                window.requestAnimationFrame {
-                    contentContainer.element.scrollTo(contentScrollTop, contentScrollLeft)
-                }
+
+            // this means that setData has been called before onResume
+            ::fullData.isInitialized  && firstOnResume -> {
+                render()
             }
         }
+
+        if (!firstOnResume) {
+            window.requestAnimationFrame {
+                contentContainer.element.scrollTo(contentScrollLeft, contentScrollTop)
+            }
+        }
+
+        firstOnResume = false
+
     }
 
     override fun onDestroy() {
@@ -353,7 +364,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             firstShownRow = Int.MAX_VALUE
             lastShownRow = - 1
 
-            val height = filteredData.size * rowHeight
+            val height = (filteredData.size + 1) * rowHeight
             areas.adjustAreas(height.toFloat())
             areas.start = 0f
             areas.end = areas.areaHeight * areas.activeAreas.size
@@ -371,7 +382,6 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      * Sets scroll position to the latest known value
      */
     fun redraw(): ZkTable<T> {
-
         // clear the body of the table
 
         tbody.clear()
@@ -389,9 +399,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             )
         }
 
-        // render and add the shown row
         window.requestAnimationFrame {
-            contentContainer.element.scrollTo(contentScrollTop, contentScrollLeft)
+            contentContainer.element.scrollTo(contentScrollLeft, contentScrollTop)
         }
 
         return this
