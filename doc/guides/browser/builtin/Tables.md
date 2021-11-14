@@ -105,6 +105,18 @@ override fun onConfigure() {
 }
 ```
 
+### Export
+
+By default, the export action includes all rows in the export, no matter what filtering
+the use applied on the data. This behavior can be changed with the `exportFiltered` table
+configuration:
+
+```kotlin
+override fun onConfigure() {
+    exportFiltered = true
+}
+```
+
 ### Styling
 
 The `styles` property of `ZkTable` contains the style sheet that table instance

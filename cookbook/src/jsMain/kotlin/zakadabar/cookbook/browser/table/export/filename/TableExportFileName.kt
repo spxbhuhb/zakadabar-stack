@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.cookbook.browser.table.exportFileName
+package zakadabar.cookbook.browser.table.export.filename
 
 import zakadabar.cookbook.browser.table.demoData
 import zakadabar.cookbook.entity.builtin.ExampleBo

@@ -45,23 +45,24 @@ import kotlin.reflect.KProperty1
  *
  * Override [onConfigure] to set table configuration properties such as title, icons, etc.
  *
- * @property  crud          The [ZkCrudTarget] that is linked with the table. When specified the functions
- *                          of the table (onCreate, onDblClick for example) will use it to open the
- *                          appropriate page.
- * @property  query         When initialized, the table automatically executes this query during onResume to fill
- *                          the table with data.
- * @property  setAppTitle   When true (default) the app title bar is set for the table. Function [setAppTitleBar] adds the title bar.
- * @property  addLocalTitle When true, add a local title bar. Default is false.
- * @property  titleText     Title text to show in the title bar. Used when [titleElement] is not set.
- * @property  titleElement  The element of the title.
- * @property  add           When true a plus icon is added to the title bar. Click on the icon calls [onAddRow].
- * @property  search        When true a search input and icon is added to the title bar. Enter in the search field
- *                          or click on the icon calls [onSearch].
- * @property  oneClick      When true single clicks are treated as double clicks (call onDblClick).
- * @property  export        When true an export icon is added to the title bar. Calls [onExportCsv].
- * @property  rowHeight     Height (in pixels) of one table row, used when calculating row positions for virtualization.
- * @property  columns       Column definitions.
- * @property  preloads      Data load jobs which has to be performed before the table is rendered.
+ * @property  crud            The [ZkCrudTarget] that is linked with the table. When specified the functions
+ *                            of the table (onCreate, onDblClick for example) will use it to open the
+ *                            appropriate page.
+ * @property  query           When initialized, the table automatically executes this query during onResume to fill
+ *                            the table with data.
+ * @property  setAppTitle     When true (default) the app title bar is set for the table. Function [setAppTitleBar] adds the title bar.
+ * @property  addLocalTitle   When true, add a local title bar. Default is false.
+ * @property  titleText       Title text to show in the title bar. Used when [titleElement] is not set.
+ * @property  titleElement    The element of the title.
+ * @property  add             When true a plus icon is added to the title bar. Click on the icon calls [onAddRow].
+ * @property  search          When true a search input and icon is added to the title bar. Enter in the search field
+ *                            or click on the icon calls [onSearch].
+ * @property  oneClick        When true single clicks are treated as double clicks (call onDblClick).
+ * @property  export          When true an export icon is added to the title bar. Calls [onExportCsv].
+ * @property  exportFiltered  When true, the table exports only rows matching the current filter.
+ * @property  rowHeight       Height (in pixels) of one table row, used when calculating row positions for virtualization.
+ * @property  columns         Column definitions.
+ * @property  preloads        Data load jobs which has to be performed before the table is rendered.
  */
 open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitleProvider, ZkFieldContext {
 
@@ -84,6 +85,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     var search = false
     var export = false
     var oneClick = false
+    var exportFiltered = false
 
     var firstOnResume = true
     var runQueryOnResume = true
@@ -561,14 +563,16 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      *
      * Default implementation:
      *
-     * * exports all the data, not the filtered state
+     * * exports all the data, not the filtered state, can be changed with [exportFiltered]
      * * calls [ZkColumn.exportCsv] for each row to build the csv line
      * * pops a download in the browser with the file name set to [exportFileName]
      */
     open fun onExportCsv() {
         val lines = mutableListOf<String>()
 
-        fullData.forEach { row ->
+        val data = if (exportFiltered) filteredData else fullData
+
+        data.forEach { row ->
             val fields = mutableListOf<String>()
             columns.forEach { if (it.exportable) fields += it.exportCsv(row.data) }
             lines += fields.joinToString(";")

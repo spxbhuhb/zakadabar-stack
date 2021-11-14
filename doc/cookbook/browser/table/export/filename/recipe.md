@@ -21,4 +21,4 @@ tags:
 
 ## Code
 
-- [TableExportFileName](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/table/exportFileName/TableExportFileName.kt)
+- [TableExportFileName](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/table/export/filename/TableExportFileName.kt)
