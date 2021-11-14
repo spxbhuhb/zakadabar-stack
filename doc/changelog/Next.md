@@ -7,3 +7,7 @@ This page contains the changes included in the next release.
 **added**
 
 - `ZkTable.exportFiltered` when true, CSV export includes only the filtered rows
+
+**fixed**
+
+- `ZkTable` boolean and extension columns now export their values

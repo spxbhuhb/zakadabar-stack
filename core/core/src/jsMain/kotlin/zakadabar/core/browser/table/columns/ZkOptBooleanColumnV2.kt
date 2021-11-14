@@ -8,6 +8,7 @@ import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.data.BaseBo
 import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.css.em
+import zakadabar.core.resource.localizedStrings
 
 open class ZkOptBooleanColumnV2<T : BaseBo>(
     table: ZkTable<T>,
@@ -36,4 +37,10 @@ open class ZkOptBooleanColumnV2<T : BaseBo>(
         }
     }
 
+    override fun exportCsv(row: T): String =
+        when (getter(row)) {
+            null -> ""
+            true -> localizedStrings.trueText
+            false -> localizedStrings.falseText
+        }
 }

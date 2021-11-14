@@ -42,4 +42,9 @@ class ZkStringExtensionColumn<T : BaseBo>(
         }
     }
 
+    override fun exportCsv(row: T): String =
+        values[table.getRowId(row)].let {
+            it ?: ""
+        }
+
 }

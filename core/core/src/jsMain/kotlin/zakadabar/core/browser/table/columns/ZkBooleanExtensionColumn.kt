@@ -8,6 +8,7 @@ import zakadabar.core.browser.input.ZkCheckBox
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.data.BaseBo
 import zakadabar.core.resource.ZkIcons
+import zakadabar.core.resource.localizedStrings
 
 /**
  * A column that contains data that is independent of the BO presented
@@ -48,5 +49,8 @@ class ZkBooleanExtensionColumn<T : BaseBo>(
             table.fullData.sortedByDescending { values[table.getRowId(it.data)] ?: false }
         }
     }
+
+    override fun exportCsv(row: T): String =
+        if (values[table.getRowId(row)] == true) localizedStrings.trueText else localizedStrings.falseText
 
 }
