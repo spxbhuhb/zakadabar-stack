@@ -20,7 +20,9 @@ open class ZkEntitySelectField<ST : EntityBo<ST>>(
         return EntityId(string)
     }
 
-    override fun getPropValue() = prop.get()
+    override fun getPropValue() = prop.get().let {
+        if (it.isEmpty()) null else it
+    }
 
     override fun setPropValue(value: Pair<EntityId<ST>, String>?, user : Boolean) {
         if (value == null) {
