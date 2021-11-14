@@ -10,6 +10,7 @@ import zakadabar.core.resource.localizedStrings
 import zakadabar.core.util.PublicApi
 
 open class ZkTabContainer(
+    open val styles: ZkTabContainerStyles = zkTabContainerStyles,
     val builder: (ZkTabContainer.() -> Unit)? = null
 ) : ZkElement() {
 
@@ -20,9 +21,9 @@ open class ZkTabContainer(
     open lateinit var activeItem: TabItem
 
     override fun onCreate() {
-        classList += zkTabContainerStyles.container
-        + tabLabels css zkTabContainerStyles.labels
-        + tabContents css zkTabContainerStyles.contentContainer
+        classList += styles.container
+        + tabLabels css styles.labels
+        + tabContents css styles.contentContainer
 
         builder?.invoke(this)
     }
@@ -31,7 +32,7 @@ open class ZkTabContainer(
     open fun tab(title: String, scroll: Boolean = true, border: Boolean = true, pad: Boolean = true, builder: ZkElement.() -> Unit) : TabItem {
         return if (scroll || border || pad) {
             TabItem(this, zke {
-                if (scroll) + zkTabContainerStyles.scrolledContent
+                if (scroll) + styles.scrolledContent
                 if (border) + zkLayoutStyles.fixBorder
                 if (pad) + zkLayoutStyles.p1
                 builder()
@@ -45,7 +46,7 @@ open class ZkTabContainer(
     open fun tab(element: ZkElement, title : String? = null, scroll: Boolean = true, border: Boolean = true, pad: Boolean = true) : TabItem {
         return if (scroll || border || pad) {
             TabItem(this, element build {
-                if (scroll) + zkTabContainerStyles.scrolledContent
+                if (scroll) + styles.scrolledContent
                 if (border) + zkLayoutStyles.fixBorder
                 if (pad) + zkLayoutStyles.p1
             }, title ?: localizedStrings.getNormalized(element))
@@ -53,8 +54,6 @@ open class ZkTabContainer(
             TabItem(this, element, title)
         }
     }
-
-
 
     open operator fun TabItem.unaryPlus() {
         items += this

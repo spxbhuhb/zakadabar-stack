@@ -15,6 +15,7 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
     open var activeLabelTextColor by cssParameter { theme.infoPair }
     open var activeLabelBackgroundColor by cssParameter { theme.infoColor }
     open var labelBottomBorder by cssParameter { "none" }
+    open var tabBackgroundColor by cssParameter { theme.backgroundColor }
 
     open val container by cssClass {
         + Position.relative
@@ -73,6 +74,8 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
         flex = "1 1"
         minHeight = "0"
         height = "calc(100% - ${labelHeight}px)" // TODO think about tab container height management
+
+        if (tabBackgroundColor.isNotEmpty()) { backgroundColor = tabBackgroundColor }
     }
 
     open val scrolledContent by cssClass {
