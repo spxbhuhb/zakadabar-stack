@@ -107,7 +107,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
                     + section(localizedStrings.password) {
                         + bo::credentials newSecret true
-                        + ZkOptSecretVerificationField(this@CreateForm, bo::credentials).also { fields += it }
+                        + ZkSecretVerificationField(this@CreateForm, bo::credentials).also { fields += it }
                     }
 
                     + section(localizedStrings.roles) {
@@ -130,6 +130,12 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
         }
 
         override fun validate(submit: Boolean): Boolean {
+            if (! submit) {
+                // invalidInput is set by the account name duplication checker.
+                // if the user edits the field it should turn to false
+                bo::accountName.find().invalidInput = false
+            }
+
             if (! super.validate(submit)) return false
 
             if (bo.accountName.trim() != bo.accountName) {
@@ -143,7 +149,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
             val verificationField = first<ZkOptSecretVerificationField>()
 
             if (submit || (passwordField.touched && verificationField.touched)) {
-                if (bo.credentials?.value != verificationField.verificationValue) {
+                if (bo.credentials.value != verificationField.verificationValue) {
                     verificationField.valid = false
                     return false
                 } else {
@@ -159,11 +165,20 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
             bo.locale = application.serverDescription.defaultLocale
             bo.roles = items.mapNotNull { if (it.selected) it.value else null }
 
+            if (bo.accountName.isEmpty()) {
+                fields.find { it.propName == "accountName" } !!.invalidInput = true
+                // for some reason this does not work, throws an exception :S
+                // bo::accountName.find().invalidInput = true
+                return
+            }
+
             // TODO make this a real-time check, as the user types
             val cid = CheckName(bo.accountName).execute().accountId
             if (cid != null) {
                 toastWarning { localizedStrings.accountNameConflict }
-                bo::accountName.find().invalidInput = true
+                fields.find { it.propName == "accountName" } !!.invalidInput = true
+                // for some reason this does not work, throws an exception :S
+                // bo::accountName.find().invalidInput = true
             }
         }
     }

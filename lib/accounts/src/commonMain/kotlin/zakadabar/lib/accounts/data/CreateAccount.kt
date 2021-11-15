@@ -5,11 +5,7 @@
 package zakadabar.lib.accounts.data
 
 import kotlinx.serialization.Serializable
-import zakadabar.core.data.ActionBo
-import zakadabar.core.data.ActionBoCompanion
-import zakadabar.core.data.ActionStatus
-import zakadabar.core.data.Secret
-import zakadabar.core.data.EntityId
+import zakadabar.core.data.*
 import zakadabar.core.schema.BoSchema
 
 /**
@@ -19,7 +15,7 @@ import zakadabar.core.schema.BoSchema
 @Serializable
 class CreateAccount(
 
-    var credentials : Secret?,
+    var credentials : Secret,
 
     var accountName: String,
     var fullName: String,
@@ -41,7 +37,7 @@ class CreateAccount(
     companion object : ActionBoCompanion(AccountPrivateBo.boNamespace)
 
     override fun schema() = BoSchema {
-        + ::credentials
+        + ::credentials min 8
 
         + ::accountName min 2 max 50
         + ::fullName min 5 max 100

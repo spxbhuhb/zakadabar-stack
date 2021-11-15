@@ -26,6 +26,11 @@ This page contains the changes included in the next release.
 **changed**
 
 - password change validation now shows a toast if the verification is invalid
+- `CreateAccount.credentials` is now mandatory and minimum 8 characters length #79
+
+**fixed**
+
+- account creation form does not show invalid fields #79
 
 ## Cookbook
 
