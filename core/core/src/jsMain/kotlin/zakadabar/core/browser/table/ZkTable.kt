@@ -262,7 +262,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
         if (add) actions += ZkAddRowAction(::onAddRow)
         if (export) actions += ZkExportCsvAction(::onExportCsv)
-        if (search) actions += ZkSearchAction(::onSearch)
+        if (search) actions += ZkSearchAction(searchText ?: "", ::onSearch)
 
         return actions
     }
@@ -346,8 +346,6 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             setData(query.execute())
         }
     }
-
-    //Kenyerlangos2021!
 
     // -------------------------------------------------------------------------
     //  Rendering, intersection observer callback

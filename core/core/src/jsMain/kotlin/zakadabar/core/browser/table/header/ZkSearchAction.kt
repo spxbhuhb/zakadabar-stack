@@ -12,13 +12,14 @@ import zakadabar.core.resource.ZkFlavour
 import zakadabar.core.resource.ZkIcons
 
 open class ZkSearchAction(
+    val initialValue : String = "",
     val onExecute: (searchText: String) -> Unit
 ) : ZkElement() {
 
     override fun onCreate() {
         classList += zkLayoutStyles.row
 
-        + ZkTextInput(onChange = onExecute, enter = true) marginRight 8
+        + ZkTextInput(onChange = onExecute, value = initialValue, enter = true) marginRight 8
         + ZkButton(ZkIcons.search, ZkFlavour.Primary, buttonSize = 24, iconSize = 18) {
             val value = this@ZkSearchAction[ZkTextInput::class].value
             onExecute(value)
