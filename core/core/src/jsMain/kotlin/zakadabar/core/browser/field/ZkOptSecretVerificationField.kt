@@ -18,6 +18,7 @@ package zakadabar.core.browser.field
 
 import zakadabar.core.data.Secret
 import zakadabar.core.resource.localizedStrings
+import zakadabar.core.schema.ValidityReport
 import kotlin.reflect.KMutableProperty0
 
 open class ZkOptSecretVerificationField(
@@ -51,6 +52,11 @@ open class ZkOptSecretVerificationField(
         input.type = "password"
         input.autocomplete = "new-password"
         super.buildFieldValue()
+    }
+
+    override fun onValidated(report: ValidityReport) {
+        // secret verification fields are not in the schema, so the report
+        // never contains fail for them
     }
 
 }

@@ -12,7 +12,6 @@ import zakadabar.core.browser.application.executor
 import zakadabar.core.browser.crud.ZkCrudEditor
 import zakadabar.core.browser.field.ZkOptSecretField
 import zakadabar.core.browser.field.ZkOptSecretVerificationField
-import zakadabar.core.browser.field.ZkSecretField
 import zakadabar.core.browser.field.ZkSecretVerificationField
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.form.ZkFormButtons
@@ -26,11 +25,11 @@ import zakadabar.core.browser.titlebar.ZkAppTitleProvider
 import zakadabar.core.browser.toast.toastDanger
 import zakadabar.core.browser.toast.toastSuccess
 import zakadabar.core.browser.toast.toastWarning
-import zakadabar.core.browser.util.default
 import zakadabar.core.browser.util.io
 import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.data.EntityId
 import zakadabar.core.resource.localizedStrings
+import zakadabar.core.util.default
 import zakadabar.lib.accounts.data.*
 
 class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
@@ -48,7 +47,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
     private lateinit var systemRoles: List<RoleBo>
     private lateinit var userRoles: List<RoleGrantBo>
 
-    private lateinit var accountState : AccountStateBo
+    private lateinit var accountState: AccountStateBo
 
     override fun onCreate() {
         super.onCreate()
@@ -277,7 +276,9 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                         }
 
                         + bo::newPassword newSecret true
-                        + ZkSecretVerificationField(this@PasswordChangeForm, bo::newPassword)
+                        + ZkSecretVerificationField(this@PasswordChangeForm, bo::newPassword).also {
+                            fields += it
+                        }
                     }
 
                     + buttons()
@@ -288,19 +289,17 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
         override fun validate(submit: Boolean): Boolean {
             if (! super.validate(submit)) return false
 
-            val newField = fields.find { it.propName == "newPassword" } as ZkSecretField
-            val verificationField = get(ZkSecretVerificationField::class)
+            val verificationField = first<ZkSecretVerificationField>()
 
-            if (submit || (newField.touched && verificationField.touched)) {
-                if (bo.newPassword.value != verificationField.verificationValue) {
-                    verificationField.valid = false
-                    return false
-                } else {
-                    verificationField.valid = true
-                }
+            if (submit || verificationField.touched) {
+                verificationField.valid = (bo.newPassword.value == verificationField.verificationValue)
             }
 
-            return true
+            if (submit && ! verificationField.valid) {
+                onInvalidSubmit()
+            }
+
+            return verificationField.valid
         }
 
         override fun onInvalidSubmit() {
@@ -336,7 +335,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
                     + section(localizedStrings.accountStatus) {
                         + bo::locked
-                        with (this@Form.accountState) {
+                        with(this@Form.accountState) {
                             + ::validated readOnly true
                             + ::expired readOnly true
                             + ::anonymized readOnly true

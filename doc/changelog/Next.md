@@ -7,15 +7,25 @@ This page contains the changes included in the next release.
 **added**
 
 - `ZkTable.exportFiltered` when true, CSV export includes only the filtered rows #84
+- `ZkTabContainerStyles.tabBackgroundColor` CSS parameter
 
 **changed**
 
-- `ZkTabContainer` tab background is now the theme default background, see [Tab Container Background](/doc/cookbook/browser/tabcontainer/background/recipe.md) #81
-
+- `ZkTabContainer`
+    - tab background is now the theme default background, see [Tab Container Background](/doc/cookbook/browser/tabcontainer/background/recipe.md) #81
+    - now has a `styles` parameter, defaults to `zkTabContainerStyles`
+    
 **fixed**
 
 - `ZkTable` boolean and extension columns now export their values #83
 - `ZkForm` entity select does not show "not selected" #82
+- `ZkSecretVerificationField` now sets touched properly #78
+
+## Lib: Accounts
+
+**changed**
+
+- password change validation now shows a toast if the verification is invalid
 
 ## Cookbook
 
