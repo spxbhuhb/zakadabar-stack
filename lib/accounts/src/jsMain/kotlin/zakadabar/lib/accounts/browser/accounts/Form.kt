@@ -10,8 +10,7 @@ import zakadabar.core.browser.ZkElementMode
 import zakadabar.core.browser.application.application
 import zakadabar.core.browser.application.executor
 import zakadabar.core.browser.crud.ZkCrudEditor
-import zakadabar.core.browser.field.ZkOptSecretField
-import zakadabar.core.browser.field.ZkOptSecretVerificationField
+import zakadabar.core.browser.field.ZkSecretField
 import zakadabar.core.browser.field.ZkSecretVerificationField
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.form.ZkFormButtons
@@ -145,8 +144,8 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                 return false
             }
 
-            val passwordField = bo::credentials.find() as ZkOptSecretField
-            val verificationField = first<ZkOptSecretVerificationField>()
+            val passwordField = bo::credentials.find() as ZkSecretField
+            val verificationField = first<ZkSecretVerificationField>()
 
             if (submit || (passwordField.touched && verificationField.touched)) {
                 if (bo.credentials.value != verificationField.verificationValue) {

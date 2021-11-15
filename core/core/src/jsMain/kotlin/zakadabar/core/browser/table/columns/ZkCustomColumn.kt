@@ -12,10 +12,10 @@ open class ZkCustomColumn<T : BaseBo>(
 ) : ZkColumn<T>(table) {
 
     lateinit var render: ZkElement.(T) -> Unit
-    lateinit var exportCsv: T.() -> String
 
     var matcher: (row: T, string: String) -> Boolean = { _, _ -> false }
     var sorter: () -> Unit = { }
+    var exportCsv: T.() -> String = { "" }
 
     override fun render(cell: ZkElement, index: Int, row: T) {
         cell.render(row)
