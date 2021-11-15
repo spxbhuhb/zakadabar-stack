@@ -18,6 +18,7 @@ import zakadabar.core.module.module
 import zakadabar.core.server.server
 import zakadabar.core.setting.setting
 import zakadabar.core.util.BCrypt
+import zakadabar.core.util.UUID
 import zakadabar.core.util.default
 import zakadabar.lib.accounts.data.*
 import zakadabar.lib.accounts.persistence.AccountCredentialsExposedPa
@@ -76,7 +77,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
                     default {
                         validated = true
                         locked = settings.initialSoPassword == null
-                        credentials = settings.initialSoPassword?.let { Secret(it) }
+                        credentials = Secret(settings.initialSoPassword ?: UUID().toString())
                         accountName = "so"
                         fullName = "Security Officer"
                         email = "so@127.0.0.1"
@@ -218,7 +219,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
             }
         )
 
-        action.credentials?.let {
+        action.credentials.let {
             credentialsPa.create(
                 default {
                     accountId = accountPrivate.id

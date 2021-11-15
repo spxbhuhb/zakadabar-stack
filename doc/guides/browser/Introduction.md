@@ -211,9 +211,33 @@ When called, run:
 * adds containers for toasts, modals, docked elements,
 * calls the routing to route the application to the state specified by the browser window URL.
 
-## Timeline
+## Pending Modifications
 
-### Known Problems
+`ZkApplication` has a built-in functionality to ask the user whenever he/she tries
+to navigate from a page with unsaved changes. 
+
+To enable this function, set `pendingModificationsEnabled` to true in `main.kt`.
+
+```kotlin
+application.pendingModificationsEnabled = true
+```
+
+With pending modifications enabled, each navigation attempt checks the 
+`pendingModification` boolean field. When the field value is `true` a
+confirmation dialog is shown to the user before the navigation.
+
+`ZkForm` automatically sets and clears `pendingModification`. Other components
+have to maintain it properly for this function to work.
+
+The actual check happens when:
+
+- the user uses the "Back" or "Forward" button of the browser
+- some code calls `ZkApplication.navStateChange`, this includes
+    - "Back" button of forms
+    - click on the sidebar that loads a new target
+    - click on a button that changes the current target
+
+## Known Problems
 
 `ZkCssStyleSheet.shortNames = true` does not work. More specifically, it does
 not work from `main.kt`. The problem is, that basic initialization of styles
