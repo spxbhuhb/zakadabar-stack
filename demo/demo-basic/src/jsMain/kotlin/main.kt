@@ -14,6 +14,8 @@ import zakadabar.lib.demo.resources.strings
 fun main() {
 
     application = ZkApplication()
+
+    application.pendingModificationsEnabled = true
     
     zakadabar.lib.accounts.browser.install(application)
     zakadabar.lib.i18n.browser.install(application)

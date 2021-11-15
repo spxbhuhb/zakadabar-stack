@@ -10,14 +10,17 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.get
 import org.w3c.dom.set
 import zakadabar.core.browser.dock.ZkDock
+import zakadabar.core.browser.modal.ZkConfirmDialog
 import zakadabar.core.browser.modal.ZkModalContainer
 import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.toast.ZkToastContainer
 import zakadabar.core.browser.util.decodeURIComponent
+import zakadabar.core.browser.util.io
 import zakadabar.core.module.modules
 import zakadabar.core.resource.*
 import zakadabar.core.server.ServerDescriptionBo
 import zakadabar.core.text.TranslationProvider
+import zakadabar.core.text.capitalized
 
 /**
  * The application itself, initialized in main.kt.
@@ -122,6 +125,10 @@ open class ZkApplication {
 
     val navStateChangeEvent = "zk-navstate-change"
 
+    var pendingModificationsEnabled = false
+
+    var pendingModifications = false
+
     fun run() {
         title = ZkAppTitle("")
 
@@ -204,26 +211,36 @@ open class ZkApplication {
      *  - direct call to window.history.forward
      */
     val onPopState = fun(_: Event) {
+        io {
+            if (pendingModificationsEnabled && pendingModifications) {
+                if (! ZkConfirmDialog(localizedStrings.confirmation.capitalized(), localizedStrings.notSaved).run()) {
+                    window.history.pushState(null, "", null)
+                    return@io
+                } else {
+                    pendingModifications = false
+                }
+            }
 
-        val current = (window.history.state as? Int) ?: 0
-        val last = window.sessionStorage["zk-nav-last-shown"]?.toInt() ?: 0
-        window.sessionStorage["zk-nav-last-shown"] = current.toString()
+            val current = (window.history.state as? Int) ?: 0
+            val last = window.sessionStorage["zk-nav-last-shown"]?.toInt() ?: 0
+            window.sessionStorage["zk-nav-last-shown"] = current.toString()
 
-        val backward = last > current
+            val backward = last > current
 
-        val path = decodeURIComponent(window.location.pathname)
+            val path = decodeURIComponent(window.location.pathname)
 
-        routing.onNavStateChange(
-            ZkNavState(
-                path,
-                window.location.search,
-                window.location.hash,
-                forward = ! backward,
-                backward = backward
+            routing.onNavStateChange(
+                ZkNavState(
+                    path,
+                    window.location.search,
+                    window.location.hash,
+                    forward = ! backward,
+                    backward = backward
+                )
             )
-        )
 
-        window.dispatchEvent(Event(navStateChangeEvent))
+            window.dispatchEvent(Event(navStateChangeEvent))
+        }
     }
 
     protected fun incrementNavCounter(): Int {
@@ -234,13 +251,23 @@ open class ZkApplication {
     }
 
     fun changeNavState(path: String, query: String = "", hash: String = "") {
-        var url = if (hash.isEmpty()) path else "$path#$hash"
-        url = if (query.isEmpty()) url else "$url?$query"
+        io {
+            if (pendingModificationsEnabled && pendingModifications) {
+                if ( ! ZkConfirmDialog(localizedStrings.confirmation.capitalized(), localizedStrings.notSaved).run()) {
+                    return@io
+                }
+            }
 
-        window.history.pushState(incrementNavCounter(), "", url)
+            application.pendingModifications = false
 
-        routing.onNavStateChange(ZkNavState(path, query, hash, new = true))
-        window.dispatchEvent(Event(navStateChangeEvent))
+            var url = if (hash.isEmpty()) path else "$path#$hash"
+            url = if (query.isEmpty()) url else "$url?$query"
+
+            window.history.pushState(incrementNavCounter(), "", url)
+
+            routing.onNavStateChange(ZkNavState(path, query, hash, new = true))
+            window.dispatchEvent(Event(navStateChangeEvent))
+        }
     }
 
     fun changeNavState(target: ZkAppRouting.ZkTarget, path: String? = null, query: String = "") {

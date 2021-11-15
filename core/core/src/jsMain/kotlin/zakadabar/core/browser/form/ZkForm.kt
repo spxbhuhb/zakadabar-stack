@@ -201,6 +201,10 @@ open class ZkForm<T : BaseBo>(
      * @return true if the BO is valid, false otherwise
      */
     open fun validate(submit: Boolean = false): Boolean {
+        var touched = false
+        fields.forEach { touched = touched || it.touched }
+        application.pendingModifications = touched
+
         if (submit) {
             // submit marks all fields touched to show all invalid fields for the user
             fields.forEach {
@@ -349,6 +353,7 @@ open class ZkForm<T : BaseBo>(
         fields.forEach {
             it.touched = false
         }
+        application.pendingModifications = false
     }
 
     /**

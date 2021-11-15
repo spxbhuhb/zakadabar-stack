@@ -5,6 +5,7 @@ package zakadabar.core.browser.form
 
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.ZkElementMode
+import zakadabar.core.browser.application.application
 import zakadabar.core.browser.button.ZkButton
 import zakadabar.core.browser.modal.ZkConfirmDialog
 import zakadabar.core.browser.util.io
@@ -74,6 +75,7 @@ open class ZkFormButtons<T : BaseBo>(
             if (touched) {
                 io {
                     if (ZkConfirmDialog(localizedStrings.confirmation.capitalized(), localizedStrings.notSaved).run()) {
+                        application.pendingModifications = false
                         form.onBack()
                     }
                 }
