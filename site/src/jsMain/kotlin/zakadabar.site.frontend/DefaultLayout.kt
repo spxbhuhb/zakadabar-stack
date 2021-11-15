@@ -11,7 +11,6 @@ import zakadabar.core.browser.titlebar.ZkAppTitleBar
 import zakadabar.site.frontend.components.HeaderActions
 import zakadabar.site.frontend.components.SiteLogo
 import zakadabar.site.frontend.pages.Landing
-import zakadabar.site.frontend.resources.siteStyles
 
 object DefaultLayout : ZkDefaultLayout(spanHeader = true) {
 
@@ -33,9 +32,6 @@ object DefaultLayout : ZkDefaultLayout(spanHeader = true) {
         override fun onCreate() {
             + row {
                 + application.serverDescription.version
-                + div(siteStyles.alphaStyle) {
-                    + "ALPHA"
-                }
             }
         }
     }
