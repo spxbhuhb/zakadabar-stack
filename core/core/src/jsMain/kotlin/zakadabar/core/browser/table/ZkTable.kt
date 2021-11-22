@@ -59,7 +59,8 @@ import kotlin.reflect.KProperty1
  *                            or click on the icon calls [onSearch].
  * @property  oneClick        When true single clicks are treated as double clicks (call onDblClick).
  * @property  export          When true an export icon is added to the title bar. Calls [onExportCsv].
- * @property  exportFiltered  When true, the table exports only rows matching the current filter.
+ * @property  exportFiltered  When true, the table exports only rows matching the current filter. Default is false.
+ * @property  exportHeaders    When true, CSV export contains header row with header labels. Default is false.
  * @property  rowHeight       Height (in pixels) of one table row, used when calculating row positions for virtualization.
  * @property  columns         Column definitions.
  * @property  preloads        Data load jobs which has to be performed before the table is rendered.
@@ -83,9 +84,12 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     var add = false
     var search = false
+
     var export = false
-    var oneClick = false
     var exportFiltered = false
+    var exportHeaders = false
+
+    var oneClick = false
 
     var firstOnResume = true
     var runQueryOnResume = true
@@ -570,6 +574,12 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
         val data = if (exportFiltered) filteredData else fullData
 
+        if (exportHeaders) {
+            val fields = mutableListOf<String>()
+            columns.forEach { if (it.exportable) fields += it.exportCsvHeader() }
+            lines += fields.joinToString(";")
+        }
+
         data.forEach { row ->
             val fields = mutableListOf<String>()
             columns.forEach { if (it.exportable) fields += it.exportCsv(row.data) }
@@ -828,6 +838,14 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      */
     infix fun ZkColumn<T>.label(text: String) : ZkColumn<T> {
         this.label = text
+        return this
+    }
+
+    /**
+     * Marks the column as exportable or non-exportable.
+     */
+    infix fun ZkColumn<T>.exportable(isExportable: Boolean) : ZkColumn<T> {
+        this.exportable = isExportable
         return this
     }
 

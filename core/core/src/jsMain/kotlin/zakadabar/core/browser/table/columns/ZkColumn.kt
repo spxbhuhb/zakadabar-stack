@@ -193,6 +193,10 @@ open class ZkColumn<T : BaseBo>(
         return false
     }
 
+    open fun exportCsvHeader(): String {
+        return label
+    }
+
     open fun exportCsv(row: T): String {
         return ""
     }

@@ -107,8 +107,28 @@ override fun onConfigure() {
 
 ### Export
 
+The export action exports the data in the table into CSV file and offers it for
+download. 
+
+`exportCsv` function of the table performs the export. It goes over the rows and 
+calls the `exportCsv` function of each column for the given row to produce the
+fields of the row.
+
+#### Action
+
+The export action in the table header may be turned off/on with the `export` configuration
+variable:
+
+```kotlin
+override fun onConfigure() {
+    export = true
+}
+```
+
+#### Filtered Only
+
 By default, the export action includes all rows in the export, no matter what filtering
-the use applied on the data. This behavior can be changed with the `exportFiltered` table
+the user applied on the data. This behavior can be changed with the `exportFiltered` table
 configuration:
 
 ```kotlin
@@ -116,6 +136,36 @@ override fun onConfigure() {
     exportFiltered = true
 }
 ```
+
+Example: [Export Only Filtered Rows](/doc/cookbook/browser/table/export/filtered/recipe.md)
+
+#### Headers
+
+To include header labels in the exported CSV file, use the `exportHeaders` configuration variable:
+
+```kotlin
+override fun onConfigure() {
+    exportHeaders = true
+}
+```
+
+Example: [Table Export Headers](/doc/cookbook/browser/table/export/headers/recipe.md)
+
+#### Exclude a Column
+
+To exclude a column from the export, set its `exportable` configuration variable to `false`:
+
+```kotlin
+override fun onConfigure() {
+    + ExampleBo::intValue exportable false
+}
+```
+
+#### File Name
+
+To change the name of the generated file, override the getter of the `exportFileName` variable.
+
+Example: [Table Export File Name](/doc/cookbook/browser/table/export/filename/recipe.md)
 
 ### Styling
 
