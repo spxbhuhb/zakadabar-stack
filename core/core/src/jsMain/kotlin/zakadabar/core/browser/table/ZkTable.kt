@@ -228,12 +228,12 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             }
 
             // this means that setData has been called before onResume
-            ::fullData.isInitialized  && firstOnResume -> {
+            ::fullData.isInitialized && firstOnResume -> {
                 render()
             }
         }
 
-        if (!firstOnResume) {
+        if (! firstOnResume) {
             window.requestAnimationFrame {
                 contentContainer.element.scrollTo(contentScrollLeft, contentScrollTop)
             }
@@ -362,6 +362,13 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     open fun render() {
         build {
             tbody.clear()
+
+            // clear all cached row renders as sorting calls render and
+            // it may change the column index
+
+            for (row in fullData) {
+                row.element = null
+            }
 
             this.buildPoint = tbody
 
@@ -821,6 +828,14 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         }
     }
 
+    fun index(builder: (ZkElement.(index: Int,) -> Unit)? = null): ZkIndexColumn<T> {
+        return if (builder != null) {
+            ZkIndexColumn(this@ZkTable, builder)
+        } else {
+            ZkIndexColumn(this@ZkTable) { index -> + (index + 1).toString() }
+        }
+    }
+
     // -------------------------------------------------------------------------
     //  Convenience
     // -------------------------------------------------------------------------
@@ -828,7 +843,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     /**
      * Set the column to size.
      */
-    infix fun ZkColumn<T>.size(size: String) : ZkColumn<T> {
+    infix fun ZkColumn<T>.size(size: String): ZkColumn<T> {
         this.max = size
         return this
     }
@@ -836,7 +851,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     /**
      * Set the column to size.
      */
-    infix fun ZkColumn<T>.label(text: String) : ZkColumn<T> {
+    infix fun ZkColumn<T>.label(text: String): ZkColumn<T> {
         this.label = text
         return this
     }
@@ -844,7 +859,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     /**
      * Marks the column as exportable or non-exportable.
      */
-    infix fun ZkColumn<T>.exportable(isExportable: Boolean) : ZkColumn<T> {
+    infix fun ZkColumn<T>.exportable(isExportable: Boolean): ZkColumn<T> {
         this.exportable = isExportable
         return this
     }

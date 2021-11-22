@@ -183,6 +183,8 @@ You can also change the styles of a few or just one specific table by:
 
 Example: [Vertical Table Cell Border](/doc/cookbook/browser/table/border/vertical/recipe.md)
 
+<div data-zk-enrich="TableVerticalBorderSome"></div>
+
 ## Extension Columns
 
 Extension columns make it possible to add editable columns to the table without having
@@ -193,7 +195,9 @@ Implemented extension columns:
 - [ZkBooleanExtensionColumn](/core/core/src/jsMain/kotlin/zakadabar/core/browser/table/columns/ZkBooleanExtensionColumn.kt)
 - [ZkStringExtensionColumn](/core/core/src/jsMain/kotlin/zakadabar/core/browser/table/columns/ZkStringExtensionColumn.kt)
 
-Example: [Vertical Table Cell Border](/doc/cookbook/browser/table/border/vertical/recipe.md)
+Example: [Inline Table Edit](/doc/cookbook/browser/table/inline/recipe.md)
+
+<div data-zk-enrich="TableEditInlineNoBo"></div>
 
 ## Custom Actions
 
@@ -214,6 +218,18 @@ You can use the "action" shorthand to add a new
 ```
 
 Example: [Custom Table Actions](/doc/cookbook/browser/table/action/recipe.md)
+
+## Index Column
+
+Add an index column with the `index` builder function.
+
+The index column displays the current index (plus one) of the row in the table.
+
+Sort and filter resets the value displayed by the index column.
+
+Example: [Table Index Column](/doc/cookbook/browser/table/indexColumn/recipe.md)
+
+<div data-zk-enrich="TableIndexColumn"></div>
 
 ## Custom Columns
 

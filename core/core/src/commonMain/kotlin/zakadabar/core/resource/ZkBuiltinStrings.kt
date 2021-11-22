@@ -60,6 +60,7 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val updateSuccess by "Update success."
     open val yes by "yes"
     open val executeError by "Error while executing the function."
+    open val index by "#"
 
     // Help
 
