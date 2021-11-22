@@ -213,7 +213,8 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         + Cursor.pointer
 
         color = theme.inputTextColor
-        width = 200.px
+        minWidth = 200.px
+        maxWidth = 100.percent
         minHeight = fieldHeight.px
         borderBottom = "1px solid ${theme.borderColor}"
         paddingLeft = 8.px
