@@ -15,6 +15,7 @@ data class DatabaseSettingsBo(
     var jdbcUrl: String,
     var username: String,
     var password: String, // FIXME replace this when YAML loader knows how to
+    var isolationLevel: String = "TRANSACTION_REPEATABLE_READ",
     var debugSql: Boolean = false
 
 ) : BaseBo {
@@ -24,7 +25,8 @@ data class DatabaseSettingsBo(
         + ::jdbcUrl envVar "ZK_DB_JDBC_URL"
         + ::username envVar "ZK_DB_USERNAME"
         + ::password envVar "ZK_DB_PASSWORD"
-        + ::debugSql envVar "ZK_DB_DEBUG"
+        + ::isolationLevel envVar "ZK_DB_ISOLATION_LEVEL" default isolationLevel
+        + ::debugSql envVar "ZK_DB_DEBUG" default debugSql
     }
 
 }

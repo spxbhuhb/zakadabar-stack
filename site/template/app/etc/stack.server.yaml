@@ -6,6 +6,7 @@ database:
   jdbcUrl: "jdbc:h2:./app/var/db"
   username: test
   password: Almafa.12
+  isolationLevel: TRANSACTION_REPEATABLE_READ
   debugSql: false
 
 traceRouting: false

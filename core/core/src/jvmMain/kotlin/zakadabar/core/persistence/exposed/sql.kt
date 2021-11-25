@@ -38,7 +38,7 @@ object Sql : SqlProvider {
         hikariConfig.password = config.password
         hikariConfig.maximumPoolSize = 10
         hikariConfig.isAutoCommit = false
-        hikariConfig.transactionIsolation = "TRANSACTION_REPEATABLE_READ"
+        hikariConfig.transactionIsolation = config.isolationLevel
         hikariConfig.validate()
 
         dataSource = HikariDataSource(hikariConfig)

@@ -85,6 +85,7 @@ variables into server settings (see [Settings](./Settings.md) for details).
 - ZK_DB_JDBC_URL
 - ZK_DB_USERNAME
 - ZK_DB_PASSWORD
+- ZK_DB_ISOLATION_LEVEL
 - ZK_DB_DEBUG
 - ZK_INTERNAL_SERVER_URL
 - ZK_EXTERNAL_SERVER_URL  
