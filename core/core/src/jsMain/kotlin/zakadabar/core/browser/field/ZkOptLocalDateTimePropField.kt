@@ -16,30 +16,31 @@
  */
 package zakadabar.core.browser.field
 
+import kotlinx.datetime.LocalDateTime
+import zakadabar.core.resource.localized
+import zakadabar.core.resource.toLocalDateTimeOrNull
 import kotlin.reflect.KMutableProperty0
 
-open class ZkLongField(
+open class ZkOptLocalDateTimePropField(
     context : ZkFieldContext,
-    prop: KMutableProperty0<Long>
-) : ZkStringBase<Long,ZkLongField>(
+    prop: KMutableProperty0<LocalDateTime?>
+) : ZkStringBase<LocalDateTime?,ZkOptLocalDateTimePropField>(
     context = context,
     prop = prop
 ) {
 
-    override var valueOrNull : Long?
-        get() = input.value.toLongOrNull()
+    override var valueOrNull : LocalDateTime?
+        get() = input.value.toLocalDateTimeOrNull
         set(value) {
-            prop.set(value!!)
-            input.value = value.toString()
+            prop.set(value)
+            input.value = value?.localized ?: ""
             invalidInput = false
         }
 
-    override fun getPropValue() = prop.get().toString()
+    override fun setBackingValue(value: String) {
+        val iv = input.value.toLocalDateTimeOrNull
 
-    override fun setPropValue(value: String) {
-        val iv = input.value.toLongOrNull()
-
-        if (iv == null) {
+        if (iv == null && input.value.isNotEmpty()) {
             invalidInput = true
             context.validate()
         } else {
@@ -48,5 +49,4 @@ open class ZkLongField(
             onUserChange(iv)
         }
     }
-
 }

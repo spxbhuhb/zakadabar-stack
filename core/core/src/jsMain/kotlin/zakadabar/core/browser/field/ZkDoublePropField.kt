@@ -18,10 +18,10 @@ package zakadabar.core.browser.field
 
 import kotlin.reflect.KMutableProperty0
 
-open class ZkDoubleField(
+open class ZkDoublePropField(
     context: ZkFieldContext,
     prop: KMutableProperty0<Double>
-) : ZkStringBase<Double, ZkDoubleField>(
+) : ZkStringBase<Double, ZkDoublePropField>(
     context = context,
     prop = prop
 ) {
@@ -34,9 +34,7 @@ open class ZkDoubleField(
             invalidInput = false
         }
 
-    override fun getPropValue() = prop.get().toString()
-
-    override fun setPropValue(value: String) {
+    override fun setBackingValue(value: String) {
         val iv = input.value.toDoubleOrNull()
 
         if (iv == null) {

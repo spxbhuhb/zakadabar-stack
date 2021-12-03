@@ -26,9 +26,7 @@ open class ZkUuidField(
             input.value = value.toString()
         }
 
-    override fun getPropValue() = prop.get().toString()
-
-    override fun setPropValue(value: String) {
+    override fun setBackingValue(value: String) {
         if (value.isBlank() || ! value.matches(pattern)) {
             invalidInput = true
             context.validate()

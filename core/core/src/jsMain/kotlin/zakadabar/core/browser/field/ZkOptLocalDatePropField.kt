@@ -21,10 +21,10 @@ import zakadabar.core.resource.localized
 import zakadabar.core.resource.toLocalDateOrNull
 import kotlin.reflect.KMutableProperty0
 
-open class ZkLocalDateField(
+open class ZkOptLocalDatePropField(
     context : ZkFieldContext,
-    prop: KMutableProperty0<LocalDate>
-) : ZkStringBase<LocalDate,ZkLocalDateField>(
+    prop: KMutableProperty0<LocalDate?>
+) : ZkStringBase<LocalDate?,ZkOptLocalDatePropField>(
     context = context,
     prop = prop
 ) {
@@ -40,7 +40,7 @@ open class ZkLocalDateField(
     override fun setBackingValue(value: String) {
         val iv = input.value.toLocalDateOrNull
 
-        if (iv == null) {
+        if (iv == null && input.value.isNotEmpty()) {
             invalidInput = true
             context.validate()
         } else {
@@ -49,5 +49,4 @@ open class ZkLocalDateField(
             onUserChange(iv)
         }
     }
-
 }

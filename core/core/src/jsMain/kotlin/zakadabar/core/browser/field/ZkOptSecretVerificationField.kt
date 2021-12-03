@@ -40,9 +40,7 @@ open class ZkOptSecretVerificationField(
 
     var verificationValue: String? = ""
 
-    override fun getPropValue() = verificationValue ?: ""
-
-    override fun setPropValue(value: String) {
+    override fun setBackingValue(value: String) {
         verificationValue = input.value.ifBlank { null }
         valid = (prop.get()?.value == verificationValue)
         onUserChange(verificationValue?.let { Secret(it) })

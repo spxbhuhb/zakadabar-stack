@@ -28,6 +28,7 @@ import zakadabar.core.browser.application.application
 import zakadabar.core.browser.crud.ZkCrudEditor
 import zakadabar.core.browser.field.*
 import zakadabar.core.browser.field.select.RadioGroupRenderer
+import zakadabar.core.browser.table.columns.ZkStringColumnV2
 import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.titlebar.ZkAppTitleProvider
 import zakadabar.core.browser.titlebar.ZkLocalTitleProvider
@@ -580,39 +581,39 @@ open class ZkForm<T : BaseBo>(
             ZkOptEntitySelectField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<String>.unaryPlus(): ZkStringField =
+    operator fun KMutableProperty0<String>.unaryPlus(): ZkStringPropField =
         add(this) {
-            ZkStringField(this@ZkForm, it)
+            ZkStringPropField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<String?>.unaryPlus(): ZkOptStringField =
+    operator fun KMutableProperty0<String?>.unaryPlus(): ZkOptStringPropField =
         add(this) {
-            ZkOptStringField(this@ZkForm, it)
+            ZkOptStringPropField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Int>.unaryPlus(): ZkIntField =
+    operator fun KMutableProperty0<Int>.unaryPlus(): ZkIntPropField =
         add(this) {
-            ZkIntField(this@ZkForm, it)
+            ZkIntPropField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Int?>.unaryPlus(): ZkOptIntField =
+    operator fun KMutableProperty0<Int?>.unaryPlus(): ZkOptIntPropField =
         add(this) {
-            ZkOptIntField(this@ZkForm, it)
+            ZkOptIntPropField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Long>.unaryPlus(): ZkLongField =
+    operator fun KMutableProperty0<Long>.unaryPlus(): ZkLongPropField =
         add(this) {
-            ZkLongField(this@ZkForm, it)
+            ZkLongPropField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Long?>.unaryPlus(): ZkOptLongField =
+    operator fun KMutableProperty0<Long?>.unaryPlus(): ZkOptLongPropField =
         add(this) {
-            ZkOptLongField(this@ZkForm, it)
+            ZkOptLongPropField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Double>.unaryPlus(): ZkDoubleField =
+    operator fun KMutableProperty0<Double>.unaryPlus(): ZkDoublePropField =
         add(this) {
-            ZkDoubleField(this@ZkForm, it)
+            ZkDoublePropField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<Double?>.unaryPlus(): ZkOptDoubleField =
@@ -640,9 +641,9 @@ open class ZkForm<T : BaseBo>(
             ZkLocalDateField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<LocalDate?>.unaryPlus(): ZkOptLocalDateField =
+    operator fun KMutableProperty0<LocalDate?>.unaryPlus(): ZkOptLocalDatePropField =
         add(this) {
-            ZkOptLocalDateField(this@ZkForm, it)
+            ZkOptLocalDatePropField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<LocalDateTime>.unaryPlus(): ZkLocalDateTimeField =
@@ -650,9 +651,9 @@ open class ZkForm<T : BaseBo>(
             ZkLocalDateTimeField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<LocalDateTime?>.unaryPlus(): ZkOptLocalDateTimeField =
+    operator fun KMutableProperty0<LocalDateTime?>.unaryPlus(): ZkOptLocalDateTimePropField =
         add(this) {
-            ZkOptLocalDateTimeField(this@ZkForm, it)
+            ZkOptLocalDateTimePropField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<Secret>.unaryPlus(): ZkSecretField =
@@ -843,4 +844,10 @@ open class ZkForm<T : BaseBo>(
         submitOnEnter = submit
         return this as FT
     }
+
+    fun string(propName: String, propValue: String, setter: (String) -> Unit = {}): ZkStringValueField =
+        ZkStringValueField(this@ZkForm, propName, propValue, setter)
+
+    fun optString(propName: String, propValue: String?, setter: (String?) -> Unit = {}): ZkOptStringValueField =
+        ZkOptStringValueField(this@ZkForm, propName, propValue, setter)
 }

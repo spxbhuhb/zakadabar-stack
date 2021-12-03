@@ -37,9 +37,7 @@ open class ZkLocalDateTimeField(
             invalidInput = false
         }
 
-    override fun getPropValue() = prop.get().toString()
-
-    override fun setPropValue(value: String) {
+    override fun setBackingValue(value: String) {
         val iv = input.value.toLocalDateTimeOrNull
 
         if (iv == null) {

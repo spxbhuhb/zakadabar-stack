@@ -41,13 +41,12 @@ open class ZkOptSecretField(
             if (value) input.autocomplete = "new-password"
         }
 
-    override fun getPropValue() = prop.get()?.value ?: ""
-
-    override fun setPropValue(value: String) {
+    override fun setBackingValue(value: String) {
         val iv = Secret(input.value)
         prop.set(iv)
         onUserChange(iv)
     }
+
 
     override fun buildFieldValue() {
         input.type = "password"

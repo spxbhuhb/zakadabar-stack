@@ -18,10 +18,10 @@ package zakadabar.core.browser.field
 
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptLongField(
+open class ZkOptLongPropField(
     context : ZkFieldContext,
     prop: KMutableProperty0<Long?>
-) : ZkStringBase<Long?,ZkOptLongField>(
+) : ZkStringBase<Long?,ZkOptLongPropField>(
     context = context,
     prop = prop
 ) {
@@ -34,9 +34,7 @@ open class ZkOptLongField(
             invalidInput = false
         }
 
-    override fun getPropValue() = prop.get()?.toString() ?: ""
-
-    override fun setPropValue(value: String) {
+    override fun setBackingValue(value: String) {
         val iv = input.value.toLongOrNull()
 
         if (iv == null && input.value.isNotEmpty()) {

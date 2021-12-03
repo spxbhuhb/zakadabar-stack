@@ -26,10 +26,7 @@ open class ZkOptUuidField(
             input.value = value?.toString() ?: ""
         }
 
-    override fun getPropValue() = prop.get()?.toString() ?: ""
-
-    override fun setPropValue(value: String) {
-
+    override fun setBackingValue(value: String) {
         if (value.isEmpty()) {
             invalidInput = false
             prop.set(null)

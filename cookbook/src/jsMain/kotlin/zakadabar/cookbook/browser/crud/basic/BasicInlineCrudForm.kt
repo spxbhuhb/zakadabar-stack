@@ -6,7 +6,7 @@ package zakadabar.cookbook.browser.crud.basic
 import zakadabar.cookbook.entity.builtin.ExampleBo
 import zakadabar.cookbook.entity.builtin.ExampleReferenceBo
 import zakadabar.cookbook.resource.strings
-import zakadabar.core.browser.field.ZkStringField
+import zakadabar.core.browser.field.ZkStringPropField
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.resource.localized
 import zakadabar.core.resource.localizedStrings
@@ -44,7 +44,7 @@ class BasicInlineCrudForm : ZkForm<ExampleBo>() {
                 + bo::secretValue
                 + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } }
                 + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } } readOnly true
-                + ZkStringField(this@BasicInlineCrudForm, bo::stringValue).also { this@BasicInlineCrudForm.fields += it }
+                + ZkStringPropField(this@BasicInlineCrudForm, bo::stringValue).also { this@BasicInlineCrudForm.fields += it }
                 + bo::stringSelectValue.asSelect() query { options }
                 + bo::textAreaValue.asTextArea() label strings.textAreaValue
                 + bo::uuidValue

@@ -26,53 +26,9 @@ abstract class ZkStringBase<VT, FT : ZkStringBase<VT,FT>>(
     context: ZkFieldContext,
     open val prop: KMutableProperty0<VT>,
     label: String? = null
-) : ZkFieldBase<VT,FT>(
+) : ZkStringBaseV2<VT, FT>(
     context = context,
-    propName = prop.name,
-    label = label
-) {
+    title = label ?: prop.name,
+    getter = { prop.get().toString() }
 
-    open val input = document.createElement("input") as HTMLInputElement
-
-    override var readOnly = context.readOnly
-        set(value) {
-            input.disabled = value
-            field = value
-        }
-
-    open var submitOnEnter : Boolean = false
-
-    abstract fun getPropValue(): String
-
-    abstract fun setPropValue(value: String)
-
-    override fun buildFieldValue() {
-
-        if (readOnly) {
-            input.readOnly = true
-            input.classList += context.styles.disabledString
-        } else {
-            input.classList += context.styles.text
-        }
-
-        input.value = getPropValue()
-
-        on(input, "input") {
-            setPropValue(input.value)
-        }
-
-        on("keydown") { event ->
-            event as KeyboardEvent
-            if (submitOnEnter && event.key == "Enter") context.submit()
-        }
-
-        focusEvents(input)
-
-        + input
-    }
-
-    override fun focusValue() {
-        input.focus()
-    }
-
-}
+)

@@ -18,35 +18,26 @@ package zakadabar.core.browser.field
 
 import kotlin.reflect.KMutableProperty0
 
-open class ZkIntField(
-    context : ZkFieldContext,
-    prop: KMutableProperty0<Int>
-) : ZkStringBase<Int,ZkIntField>(
+open class ZkStringPropField(
+    context: ZkFieldContext,
+    prop: KMutableProperty0<String>
+) : ZkStringBase<String, ZkStringPropField>(
     context = context,
     prop = prop
 ) {
 
-    override var valueOrNull : Int?
-        get() = input.value.toIntOrNull()
+    override var valueOrNull: String?
+        get() = input.value
         set(value) {
-            prop.set(value!!)
-            input.value = value.toString()
-            invalidInput = false
+            prop.set(value !!)
+            input.value = value
         }
 
-    override fun getPropValue() = prop.get().toString()
-
-    override fun setPropValue(value: String) {
-        val iv = input.value.toIntOrNull()
-
-        if (iv == null) {
-            invalidInput = true
-            context.validate()
-        } else {
-            invalidInput = false
-            prop.set(iv)
-            onUserChange(iv)
-        }
+    override fun setBackingValue(value: String) {
+        prop.set(value)
+        onUserChange(value)
     }
+
+    override fun needsMandatoryMark() = stringMandatoryMark()
 
 }

@@ -6,7 +6,7 @@ package zakadabar.lib.examples.frontend.form
 import org.w3c.dom.HTMLElement
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.ZkElementMode
-import zakadabar.core.browser.field.ZkStringField
+import zakadabar.core.browser.field.ZkStringPropField
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.browser.toast.toastSuccess
@@ -62,7 +62,7 @@ class ReadOnlyBuiltinForm : ZkForm<BuiltinBo>() {
                 + bo::optUuidValue readOnly true
                 + bo::secretValue readOnly true
                 + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } } readOnly true
-                + ZkStringField(this@ReadOnlyBuiltinForm, bo::stringValue).also { this@ReadOnlyBuiltinForm.fields += it } .also { it.readOnly = true }
+                + ZkStringPropField(this@ReadOnlyBuiltinForm, bo::stringValue).also { this@ReadOnlyBuiltinForm.fields += it } .also { it.readOnly = true }
                 + bo::stringSelectValue.asSelect() query { listOf("option 1", "option 2", "option3").map { it to it } } readOnly true
                 + bo::textAreaValue.asTextArea() label strings.textAreaValue readOnly true
                 + bo::uuidValue readOnly true

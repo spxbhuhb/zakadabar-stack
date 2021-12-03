@@ -18,10 +18,10 @@ package zakadabar.core.browser.field
 
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptStringField(
+open class ZkOptStringPropField(
     context: ZkFieldContext,
     prop: KMutableProperty0<String?>
-) : ZkStringBase<String?, ZkOptStringField>(
+) : ZkStringBase<String?, ZkOptStringPropField>(
     context = context,
     prop = prop
 ) {
@@ -33,12 +33,9 @@ open class ZkOptStringField(
             input.value = value ?: ""
         }
 
-    override fun getPropValue() = prop.get() ?: ""
-
-    override fun setPropValue(value: String) {
+    override fun setBackingValue(value: String) {
         val iv = value.ifEmpty { null }
         prop.set(iv)
         onUserChange(iv)
     }
-
 }

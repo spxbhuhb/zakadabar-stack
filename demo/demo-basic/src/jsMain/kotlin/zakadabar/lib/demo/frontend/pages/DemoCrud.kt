@@ -36,6 +36,7 @@ class DemoForm : ZkForm<DemoBo>() {
                 + bo::id
                 + bo::name
                 + bo::value
+                + string("Name", "Value") {  }
             }
 
             + ZkImagesField(this, DemoBlob.comm, bo.id) {

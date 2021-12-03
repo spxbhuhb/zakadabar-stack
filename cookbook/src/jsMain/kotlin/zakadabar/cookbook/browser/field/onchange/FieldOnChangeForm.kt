@@ -43,7 +43,7 @@ open class FieldOnChangeForm : ZkForm<ExampleBo>() {
         }
 
         + buttonPrimary("Change intValue to 15") {
-            (bo::intValue.find() as ZkIntField).value = 15
+            (bo::intValue.find() as ZkIntPropField).value = 15
         }
     }
 
@@ -62,7 +62,7 @@ open class FieldOnChangeForm : ZkForm<ExampleBo>() {
         toastSuccess { "booleanValue = $value" }
     }
 
-    open fun onIntValueChange(origin: ChangeOrigin, value: Int, field: ZkFieldBase<Int, ZkIntField>) {
+    open fun onIntValueChange(origin: ChangeOrigin, value: Int, field: ZkFieldBase<Int, ZkIntPropField>) {
         toastSuccess { "intValue = $value, origin = $origin" }
     }
 
