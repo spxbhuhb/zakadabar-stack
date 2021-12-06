@@ -7,21 +7,21 @@ import zakadabar.core.browser.field.select.DropdownRenderer
 import zakadabar.core.browser.field.select.SelectRenderer
 import zakadabar.core.data.EntityId
 
-open class ZkEntitySelectFilter(
-    context: ZkFieldContext,
-    var getValue: () -> EntityId<*>?,
-    renderer : SelectRenderer<EntityId<*>,ZkEntitySelectFilter> = DropdownRenderer(),
-    onSelected: (Pair<EntityId<*>, String>?) -> Unit
-) : ZkSelectBase<EntityId<*>,ZkEntitySelectFilter>(context, "", renderer, onSelected) {
-
-    override fun fromString(string: String): EntityId<*> {
-        return items.first().first
-    }
-
-    override fun getPropValue() = getValue()
-
-    override fun setPropValue(value: Pair<EntityId<*>, String>?, user : Boolean) {
-        // do nothing here, onSelected will be called by ZkSelectBase
-    }
-
-}
+//open class ZkEntitySelectFilter(
+//    context: ZkFieldContext,
+//    var getValue: () -> EntityId<*>?,
+//    renderer : SelectRenderer<EntityId<*>,ZkEntitySelectFilter> = DropdownRenderer(),
+//    onSelected: (Pair<EntityId<*>, String>?) -> Unit
+//) : ZkSelectBaseV2<EntityId<*>,ZkEntitySelectFilter>(context, "", renderer, onSelected) {
+//
+//    override fun fromString(string: String): EntityId<*> {
+//        return items.first().first
+//    }
+//
+//    override fun getPropValue() = getValue()
+//
+//    override fun setPropValue(value: Pair<EntityId<*>, String>?, user : Boolean) {
+//        // do nothing here, onSelected will be called by ZkSelectBase
+//    }
+//
+//}

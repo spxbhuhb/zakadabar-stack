@@ -30,7 +30,6 @@ open class ZkValueLongField(
     override var valueOrNull : Long?
         get() = input.value.toLongOrNull()
         set(value) {
-            getter = { value!!.toString() }
             input.value = value.toString()
             invalidInput = false
         }
@@ -44,7 +43,6 @@ open class ZkValueLongField(
         } else {
             invalidInput = false
             setter(iv)
-            getter = { value }
             onUserChange(iv)
         }
     }

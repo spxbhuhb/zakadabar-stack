@@ -19,7 +19,7 @@ open class FieldOnChangeForm : ZkForm<ExampleBo>() {
     override var mode = ZkElementMode.Other
     override var bo = default<ExampleBo>()
 
-    lateinit var recordSelectField: ZkEntitySelectField<ExampleReferenceBo>
+    lateinit var recordSelectField: ZkPropEntitySelectField<ExampleReferenceBo>
 
     val options = listOf("option 1", "option 2", "option3").map { it to it }
 
@@ -53,7 +53,7 @@ open class FieldOnChangeForm : ZkForm<ExampleBo>() {
     open fun onRecordSelectChange(
         origin: ChangeOrigin,
         value: EntityId<ExampleReferenceBo>,
-        field: ZkEntitySelectField<ExampleReferenceBo>
+        field: ZkPropEntitySelectField<ExampleReferenceBo>
     ) {
         toastSuccess { "recordSelectValue = $value, field.selectedItem (OLD VALUE) = ${field.selectedItem}" }
     }
@@ -69,7 +69,7 @@ open class FieldOnChangeForm : ZkForm<ExampleBo>() {
     open fun onStringSelectChange(
         origin: ChangeOrigin,
         value: String,
-        field: ZkStringSelectField
+        field: ZkPropStringSelectField
     ) {
         toastSuccess { "stringSelectValue = $value, field.selectedItem (OLD VALUE) = ${field.selectedItem} " }
     }

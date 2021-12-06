@@ -32,7 +32,6 @@ open class ZkValueOptIntField(
     override var valueOrNull : Int?
         get() = input.value.toIntOrNull()
         set(value) {
-            getter = { value?.toString() }
             input.value = value.toString()
             invalidInput = false
         }
@@ -46,7 +45,6 @@ open class ZkValueOptIntField(
         } else {
             invalidInput = false
             setter(iv)
-            getter = { value }
             onUserChange(iv)
         }
     }

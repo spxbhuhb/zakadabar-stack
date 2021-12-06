@@ -36,7 +36,6 @@ open class ZkValueLocalDateTimeField(
     override var valueOrNull : LocalDateTime?
         get() = input.value.toLocalDateTimeOrNull
         set(value) {
-            getter =  { value!!.localized }
             input.value = value!!.localized
             invalidInput = false
         }
@@ -50,7 +49,6 @@ open class ZkValueLocalDateTimeField(
         } else {
             invalidInput = false
             setter(iv)
-            getter = {value }
             onUserChange(iv)
         }
     }

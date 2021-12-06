@@ -36,7 +36,6 @@ open class ZkValueTextAreaField(
     override var valueOrNull : String?
         get() = area.value
         set(value) {
-            getter = { value!! }
             area.value = value!!
         }
 
@@ -62,7 +61,6 @@ open class ZkValueTextAreaField(
         on(area, "input") {
             touched = true
             setter(area.value)
-            getter = { area.value }
             onUserChange(area.value)
         }
 

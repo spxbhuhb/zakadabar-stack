@@ -36,7 +36,6 @@ open class ZkValueBooleanField(
     override var valueOrNull : Boolean?
         get() = checkbox.checked
         set(value) {
-            getter = { value!! }
             checkbox.checked = value!!
         }
 
@@ -83,7 +82,6 @@ open class ZkValueBooleanField(
     }
 
     open fun changeValue(newValue : Boolean) {
-        getter = { newValue }
         setter(newValue)
         onUserChange(newValue)
     }

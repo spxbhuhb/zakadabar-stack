@@ -35,7 +35,6 @@ open class ZkValueOptLocalDateField(
     override var valueOrNull : LocalDate?
         get() = input.value.toLocalDateOrNull
         set(value) {
-            getter = { value?.localized }
             input.value = value!!.localized
             invalidInput = false
         }
@@ -49,7 +48,6 @@ open class ZkValueOptLocalDateField(
         } else {
             invalidInput = false
             setter(iv)
-            getter = { value }
             onUserChange(iv)
         }
     }

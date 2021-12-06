@@ -55,19 +55,19 @@ infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.saveAs(prop : KMuta
 }
 
 @Suppress("UNCHECKED_CAST")
-infix fun <VT, FT : ZkSelectBase<VT, FT>> ZkSelectBase<VT, FT>.sort(value: Boolean): FT {
+infix fun <VT, FT : ZkSelectBaseV2<VT, FT>> ZkSelectBaseV2<VT, FT>.sort(value: Boolean): FT {
     sort = value
     return this as FT
 }
 
 @Suppress("UNCHECKED_CAST")
-infix fun <VT, FT : ZkSelectBase<VT, FT>> ZkSelectBase<VT, FT>.query(block: suspend () -> List<Pair<VT, String>>): FT {
+infix fun <VT, FT : ZkSelectBaseV2<VT, FT>> ZkSelectBaseV2<VT, FT>.query(block: suspend () -> List<Pair<VT, String>>): FT {
     fetch = block
     return this as FT
 }
 
 @Suppress("UNCHECKED_CAST")
-infix fun <VT, FT : ZkSelectBase<VT, FT>> ZkSelectBase<VT, FT>.onSelect(onSelect: (Pair<VT, String>?) -> Unit): FT {
+infix fun <VT, FT : ZkSelectBaseV2<VT, FT>> ZkSelectBaseV2<VT, FT>.onSelect(onSelect: (Pair<VT, String>?) -> Unit): FT {
     this.onSelectCallback = onSelect
     return this as FT
 }

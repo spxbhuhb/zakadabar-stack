@@ -16,37 +16,27 @@
  */
 package zakadabar.core.browser.field
 
+import zakadabar.core.browser.field.select.DropdownRenderer
+import zakadabar.core.browser.field.select.SelectRenderer
 import kotlin.reflect.KMutableProperty0
 
-open class ZkValueOptLongField(
+open class ZkPropOptEnumSelectField<E : Enum<E>>(
     context : ZkFieldContext,
-    label : String,
-    getter:() -> Long?,
-    var setter: (Long?) -> Unit = {}
-) : ZkStringBaseV2<Long?,ZkValueOptLongField>(
+    val prop: KMutableProperty0<E?>,
+    renderer : SelectRenderer<E?,ZkPropOptEnumSelectField<E>> = DropdownRenderer(),
+    val toEnum: (String) -> E
+) : ZkSelectBaseV2<E?,ZkPropOptEnumSelectField<E>>(
     context = context,
-    label = label,
-    getter = { getter()?.toString() }
+    label = prop.name,
+    renderer = renderer,
+    getter = { prop.get() }
 ) {
 
-    override var valueOrNull : Long?
-        get() = input.value.toLongOrNull()
-        set(value) {
-            input.value = value?.toString() ?: ""
-            invalidInput = false
-        }
+    override fun fromString(string: String) = toEnum(string)
 
-    override fun setBackingValue(value: String) {
-        val iv = input.value.toLongOrNull()
-
-        if (iv == null && input.value.isNotEmpty()) {
-            invalidInput = true
-            context.validate()
-        } else {
-            invalidInput = false
-            setter(iv)
-            onUserChange(iv)
-        }
+    override fun setBackingValue(value: Pair<E?, String>?, user : Boolean) {
+        prop.set(value?.first)
+        if (user) onUserChange(value?.first)
     }
 
 }

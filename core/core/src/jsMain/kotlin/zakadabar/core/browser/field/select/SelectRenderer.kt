@@ -4,11 +4,11 @@
 
 package zakadabar.core.browser.field.select
 
-import zakadabar.core.browser.field.ZkSelectBase
+import zakadabar.core.browser.field.ZkSelectBaseV2
 
-interface SelectRenderer<VT, FT : ZkSelectBase<VT, FT>> {
+interface SelectRenderer<VT, FT : ZkSelectBaseV2<VT, FT>> {
 
-    var field: ZkSelectBase<VT, FT>
+    var field: ZkSelectBaseV2<VT, FT>
 
     val context get() = field.context
 

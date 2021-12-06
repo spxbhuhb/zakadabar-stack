@@ -30,14 +30,12 @@ open class ZkValueOptStringField(
     override var valueOrNull : String?
         get() = input.value.ifEmpty { null }
         set(value) {
-            getter = { value }
             input.value = value ?: ""
         }
 
     override fun setBackingValue(value: String) {
         val iv = value.ifEmpty { null }
         setter(iv)
-        getter = { iv }
         onUserChange(iv)
     }
 }

@@ -7,7 +7,7 @@ package zakadabar.cookbook.browser.table.inline
 import zakadabar.cookbook.browser.table.demoData
 import zakadabar.cookbook.entity.builtin.ExampleBo
 import zakadabar.core.browser.field.ZkPropBooleanField
-import zakadabar.core.browser.field.ZkStringSelectField
+import zakadabar.core.browser.field.ZkPropStringSelectField
 import zakadabar.core.browser.table.ZkTable
 
 class TableEditInline : ZkTable<ExampleBo>() {
@@ -29,7 +29,7 @@ class TableEditInline : ZkTable<ExampleBo>() {
         + custom {
             label = "Inline Select"
             render = {
-                + ZkStringSelectField(this@TableEditInline, it::stringSelectValue).apply {
+                + ZkPropStringSelectField(this@TableEditInline, it::stringSelectValue).apply {
                     fetch = { values }
                 }
             }

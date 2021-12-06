@@ -4,13 +4,13 @@
 package zakadabar.core.browser.field.select
 
 import zakadabar.core.browser.ZkElement
-import zakadabar.core.browser.field.ZkSelectBase
+import zakadabar.core.browser.field.ZkSelectBaseV2
 import zakadabar.core.browser.input.ZkRadioButton
 import zakadabar.core.resource.localizedStrings
 
-open class RadioGroupRenderer<VT, FT : ZkSelectBase<VT, FT>> : SelectRenderer<VT, FT> {
+open class RadioGroupRenderer<VT, FT : ZkSelectBaseV2<VT, FT>> : SelectRenderer<VT, FT> {
 
-    override lateinit var field: ZkSelectBase<VT, FT>
+    override lateinit var field: ZkSelectBaseV2<VT, FT>
 
     open var container = ZkElement()
 

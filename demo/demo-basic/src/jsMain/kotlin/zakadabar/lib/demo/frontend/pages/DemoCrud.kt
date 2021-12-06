@@ -17,6 +17,7 @@ import zakadabar.core.util.UUID
 import zakadabar.lib.blobs.browser.image.ZkImagesField
 import zakadabar.lib.demo.data.DemoBlob
 import zakadabar.lib.demo.data.DemoBo
+import zakadabar.lib.demo.enums.Test
 
 /**
  * CRUD target for [DemoBo].
@@ -60,6 +61,14 @@ class DemoForm : ZkForm<DemoBo>() {
                 + optTextAreaField { null } label "no text area"
                 + uuidField { UUID() } label "uuid"
                 + optUuidField { null } label "no uuid"
+
+                val list = listOf(Pair("A", "A"), Pair("B", "B"), Pair("C", "C"))
+                val booleanList = listOf(Pair(true, "true"), Pair(false, "false"))
+                + stringSelectField { list[0].first } label "string select" query { list }
+                + optStringSelectField { null } label "no string select" query { list }
+                + optBooleanSelectField { null } label "no boolean select" query { booleanList}
+                + enumSelectField { Test.A } label "enum"
+                + optEnumSelectField<Test> { null } label "no enum"
             }
 
             + ZkImagesField(this, DemoBlob.comm, bo.id) {

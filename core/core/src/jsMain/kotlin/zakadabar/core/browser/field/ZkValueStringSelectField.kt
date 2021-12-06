@@ -16,36 +16,35 @@
  */
 package zakadabar.core.browser.field
 
+import zakadabar.core.browser.field.select.DropdownRenderer
+import zakadabar.core.browser.field.select.SelectRenderer
 import kotlin.reflect.KMutableProperty0
 
-open class ZkValueOptLongField(
+open class ZkValueStringSelectField(
     context : ZkFieldContext,
-    label : String,
-    getter:() -> Long?,
-    var setter: (Long?) -> Unit = {}
-) : ZkStringBaseV2<Long?,ZkValueOptLongField>(
+    label: String,
+    getter: () -> String,
+    var setter: (String) -> Unit = {},
+    renderer : SelectRenderer<String, ZkValueStringSelectField> = DropdownRenderer()
+) : ZkSelectBaseV2<String, ZkValueStringSelectField>(
     context = context,
     label = label,
-    getter = { getter()?.toString() }
+    renderer = renderer,
+    getter = getter
 ) {
 
-    override var valueOrNull : Long?
-        get() = input.value.toLongOrNull()
-        set(value) {
-            input.value = value?.toString() ?: ""
-            invalidInput = false
-        }
+    override fun fromString(string: String): String {
+        return string
+    }
 
-    override fun setBackingValue(value: String) {
-        val iv = input.value.toLongOrNull()
-
-        if (iv == null && input.value.isNotEmpty()) {
+    override fun setBackingValue(value: Pair<String, String>?, user : Boolean) {
+        if (value == null) {
             invalidInput = true
-            context.validate()
+            if (user) context.validate()
         } else {
             invalidInput = false
-            setter(iv)
-            onUserChange(iv)
+            setter(value.first)
+            if (user) onUserChange(value.first)
         }
     }
 

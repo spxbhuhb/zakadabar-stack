@@ -17,13 +17,11 @@ open class ZkValueStringField(
     override var valueOrNull : String?
         get() = input.value
         set(value) {
-            getter = { value }
             input.value = value!!
         }
 
     override fun setBackingValue(value: String) {
         setter(value)
-        getter = { value }
         onUserChange(value)
     }
 

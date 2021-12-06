@@ -25,7 +25,6 @@ open class ZkValueUuidField(
     override var valueOrNull : UUID?
         get() = input.value.ifEmpty { null }?.let { UUID(it) }
         set(value) {
-            getter = { value.toString() }
             input.value = value.toString()
         }
 
@@ -39,7 +38,6 @@ open class ZkValueUuidField(
         invalidInput = false
 
         val iv = UUID(value)
-        getter = { value }
         setter(iv)
         onUserChange(iv)
     }

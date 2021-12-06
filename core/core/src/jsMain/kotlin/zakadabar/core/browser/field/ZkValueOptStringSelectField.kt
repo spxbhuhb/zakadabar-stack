@@ -20,27 +20,27 @@ import zakadabar.core.browser.field.select.DropdownRenderer
 import zakadabar.core.browser.field.select.SelectRenderer
 import kotlin.reflect.KMutableProperty0
 
-open class ZkStringSelectField(
-    context : ZkFieldContext,
-    val prop: KMutableProperty0<String>,
-    renderer : SelectRenderer<String, ZkStringSelectField> = DropdownRenderer()
-) : ZkSelectBase<String, ZkStringSelectField>(context, prop.name, renderer) {
+open class ZkValueOptStringSelectField(
+    context: ZkFieldContext,
+    label: String,
+    getter: () -> String?,
+    var setter: (String?) -> Unit = {},
+    renderer: SelectRenderer<String?, ZkValueOptStringSelectField> = DropdownRenderer()
+) : ZkSelectBaseV2<String?, ZkValueOptStringSelectField>(
+    context = context,
+    label = label,
+    renderer = renderer,
+    getter = getter
+) {
 
     override fun fromString(string: String): String {
         return string
     }
 
-    override fun getPropValue() = prop.get()
-
-    override fun setPropValue(value: Pair<String, String>?, user : Boolean) {
-        if (value == null) {
-            invalidInput = true
-            if (user) context.validate()
-        } else {
-            invalidInput = false
-            prop.set(value.first)
-            if (user) onUserChange(value.first)
-        }
+    override fun setBackingValue(value: Pair<String?, String>?, user: Boolean) {
+        val iv = value?.first
+        setter(iv)
+        if (user) onUserChange(iv)
     }
 
 }

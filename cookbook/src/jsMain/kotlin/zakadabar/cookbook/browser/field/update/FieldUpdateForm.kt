@@ -9,7 +9,7 @@ import zakadabar.cookbook.entity.builtin.ExampleReferenceBo
 import zakadabar.core.browser.ZkElementMode
 import zakadabar.core.browser.button.buttonPrimary
 import zakadabar.core.browser.field.ChangeOrigin
-import zakadabar.core.browser.field.ZkEntitySelectField
+import zakadabar.core.browser.field.ZkPropEntitySelectField
 import zakadabar.core.browser.field.ZkFieldBase
 import zakadabar.core.browser.field.ZkPropIntField
 import zakadabar.core.browser.form.ZkForm
@@ -23,7 +23,7 @@ open class FieldUpdateForm : ZkForm<ExampleBo>() {
     override var mode = ZkElementMode.Other
     override var bo = default<ExampleBo>()
 
-    lateinit var recordSelectField: ZkEntitySelectField<ExampleReferenceBo>
+    lateinit var recordSelectField: ZkPropEntitySelectField<ExampleReferenceBo>
 
     override fun onCreate() {
         super.onCreate()
@@ -53,7 +53,7 @@ open class FieldUpdateForm : ZkForm<ExampleBo>() {
     open fun onRecordSelectChange(
         origin: ChangeOrigin,
         value: EntityId<ExampleReferenceBo>,
-        field: ZkEntitySelectField<ExampleReferenceBo>
+        field: ZkPropEntitySelectField<ExampleReferenceBo>
     ) {
         toastSuccess { "recordSelectValue = $value, origin = $origin" }
     }

@@ -472,31 +472,31 @@ open class ZkForm<T : BaseBo>(
     fun <T : EntityBo<T>> List<T>.by(field: (it: T) -> String) = map { it.id to field(it) }.sortedBy { it.second }
 
     @Deprecated("use '.asSelect' instead")
-    fun select(kProperty0: KMutableProperty0<String>, label: String? = null, sortOptions: Boolean = true, options: List<String>): ZkStringSelectField {
+    fun select(kProperty0: KMutableProperty0<String>, label: String? = null, sortOptions: Boolean = true, options: List<String>): ZkPropStringSelectField {
         return add(kProperty0) {
-            ZkStringSelectField(this@ZkForm, kProperty0).apply {
+            ZkPropStringSelectField(this@ZkForm, kProperty0).apply {
                 fetch = suspend { options.map { Pair(it, it) } }
             }
         }
     }
 
     @Deprecated("use '.asSelect' instead")
-    fun select(kProperty0: KMutableProperty0<String?>, options: List<String>): ZkOptStringSelectField {
+    fun select(kProperty0: KMutableProperty0<String?>, options: List<String>): ZkPropOptStringSelectField {
         return add(kProperty0) {
-            ZkOptStringSelectField(this@ZkForm, kProperty0).apply {
+            ZkPropOptStringSelectField(this@ZkForm, kProperty0).apply {
                 fetch = suspend { options.map { Pair(it, it) } }
             }
         }
     }
 
     @Deprecated("Use '+' instead.")
-    inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E>): ZkEnumSelectField<E> {
+    inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E>): ZkPropEnumSelectField<E> {
         return (+ kProperty0)
     }
 
     @JsName("FormOptEnumSelect")
     @Deprecated("Use '+' instead.")
-    inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E?>): ZkOptEnumSelectField<E> {
+    inline fun <reified E : Enum<E>> select(kProperty0: KMutableProperty0<E?>): ZkPropOptEnumSelectField<E> {
         return (+ kProperty0)
     }
 
@@ -516,9 +516,9 @@ open class ZkForm<T : BaseBo>(
         return field
     }
 
-    fun opt(kProperty0: KMutableProperty0<Boolean?>, trueText: String, falseText: String, builder: ZkOptBooleanSelectField.() -> Unit = { }): ZkOptBooleanSelectField {
+    fun opt(kProperty0: KMutableProperty0<Boolean?>, trueText: String, falseText: String, builder: ZkPropOptBooleanSelectField.() -> Unit = { }): ZkPropOptBooleanSelectField {
         val options = listOf(true to trueText, false to falseText)
-        val field = ZkOptBooleanSelectField(this@ZkForm, kProperty0).also {
+        val field = ZkPropOptBooleanSelectField(this@ZkForm, kProperty0).also {
             it.fetch = { options }
         }
         fields += field
@@ -570,14 +570,14 @@ open class ZkForm<T : BaseBo>(
             }
         }
 
-    operator fun <ST : EntityBo<ST>> KMutableProperty0<EntityId<ST>>.unaryPlus(): ZkEntitySelectField<ST> =
+    operator fun <ST : EntityBo<ST>> KMutableProperty0<EntityId<ST>>.unaryPlus(): ZkPropEntitySelectField<ST> =
         add(this) {
-            ZkEntitySelectField(this@ZkForm, it)
+            ZkPropEntitySelectField(this@ZkForm, it)
         }
 
-    operator fun <ST : EntityBo<ST>> KMutableProperty0<EntityId<ST>?>.unaryPlus(): ZkOptEntitySelectField<ST> =
+    operator fun <ST : EntityBo<ST>> KMutableProperty0<EntityId<ST>?>.unaryPlus(): ZkPropOptEntitySelectField<ST> =
         add(this) {
-            ZkOptEntitySelectField(this@ZkForm, it)
+            ZkPropOptEntitySelectField(this@ZkForm, it)
         }
 
     operator fun KMutableProperty0<String>.unaryPlus(): ZkPropStringField =
@@ -675,20 +675,20 @@ open class ZkForm<T : BaseBo>(
             ZkPropOptUuidField(this@ZkForm, it)
         }
 
-    inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): ZkEnumSelectField<E> {
+    inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): ZkPropEnumSelectField<E> {
         val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) } // this is a non-translated to translated mapping
         return add(this) { prop ->
-            ZkEnumSelectField(this@ZkForm, prop) { enumValueOf(it) }.apply {
+            ZkPropEnumSelectField(this@ZkForm, prop) { enumValueOf(it) }.apply {
                 fetch = { options }
             }
         }
     }
 
     @JsName("FormOptEnumUnaryPlus")
-    inline operator fun <reified E : Enum<E>> KMutableProperty0<E?>.unaryPlus(): ZkOptEnumSelectField<E> {
+    inline operator fun <reified E : Enum<E>> KMutableProperty0<E?>.unaryPlus(): ZkPropOptEnumSelectField<E> {
         val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) } // this is a non-translated to translated mapping
         return add(this) { prop ->
-            ZkOptEnumSelectField(this@ZkForm, prop) { enumValueOf(it) }.apply {
+            ZkPropOptEnumSelectField(this@ZkForm, prop) { enumValueOf(it) }.apply {
                 fetch = { options }
             }
         }
@@ -709,17 +709,17 @@ open class ZkForm<T : BaseBo>(
     inline operator fun <reified FT : ZkFieldBase<*, *>> FormFieldWrapper<FT>.unaryPlus(): FT =
         add(this.field)
 
-    fun KMutableProperty0<String>.asSelect(): FormFieldWrapper<ZkStringSelectField> =
-        FormFieldWrapper(ZkStringSelectField(this@ZkForm, this))
+    fun KMutableProperty0<String>.asSelect(): FormFieldWrapper<ZkPropStringSelectField> =
+        FormFieldWrapper(ZkPropStringSelectField(this@ZkForm, this))
 
-    fun KMutableProperty0<String?>.asSelect(): FormFieldWrapper<ZkOptStringSelectField> =
-        FormFieldWrapper(ZkOptStringSelectField(this@ZkForm, this))
+    fun KMutableProperty0<String?>.asSelect(): FormFieldWrapper<ZkPropOptStringSelectField> =
+        FormFieldWrapper(ZkPropOptStringSelectField(this@ZkForm, this))
 
-    fun KMutableProperty0<String>.asRadioGroup(): FormFieldWrapper<ZkStringSelectField> =
-        FormFieldWrapper(ZkStringSelectField(this@ZkForm, this, RadioGroupRenderer()))
+    fun KMutableProperty0<String>.asRadioGroup(): FormFieldWrapper<ZkPropStringSelectField> =
+        FormFieldWrapper(ZkPropStringSelectField(this@ZkForm, this, RadioGroupRenderer()))
 
-    fun KMutableProperty0<String?>.asRadioGroup(): FormFieldWrapper<ZkOptStringSelectField> =
-        FormFieldWrapper(ZkOptStringSelectField(this@ZkForm, this, RadioGroupRenderer()))
+    fun KMutableProperty0<String?>.asRadioGroup(): FormFieldWrapper<ZkPropOptStringSelectField> =
+        FormFieldWrapper(ZkPropOptStringSelectField(this@ZkForm, this, RadioGroupRenderer()))
 
     fun KMutableProperty0<String>.asTextArea(builder: ZkPropTextAreaField.() -> Unit = { }): FormFieldWrapper<ZkPropTextAreaField> =
         FormFieldWrapper(ZkPropTextAreaField(this@ZkForm, this).also(builder))
@@ -727,20 +727,20 @@ open class ZkForm<T : BaseBo>(
     fun KMutableProperty0<String?>.asTextArea(builder: ZkPropOptTextAreaField.() -> Unit = { }): FormFieldWrapper<ZkPropOptTextAreaField> =
         FormFieldWrapper(ZkPropOptTextAreaField(this@ZkForm, this).also(builder))
 
-    inline fun <reified E : Enum<E>> KMutableProperty0<E>.asRadioGroup(): FormFieldWrapper<ZkEnumSelectField<E>> {
+    inline fun <reified E : Enum<E>> KMutableProperty0<E>.asRadioGroup(): FormFieldWrapper<ZkPropEnumSelectField<E>> {
         val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) } // this is a non-translated to translated mapping
         return FormFieldWrapper(
-            ZkEnumSelectField(this@ZkForm, this, RadioGroupRenderer()) { enumValueOf(it) }.apply {
+            ZkPropEnumSelectField(this@ZkForm, this, RadioGroupRenderer()) { enumValueOf(it) }.apply {
                 fetch = { options }
             }
         )
     }
 
     @JsName("FormOptEnumAsChoice")
-    inline fun <reified E : Enum<E>> KMutableProperty0<E?>.asRadioGroup(): FormFieldWrapper<ZkOptEnumSelectField<E>> {
+    inline fun <reified E : Enum<E>> KMutableProperty0<E?>.asRadioGroup(): FormFieldWrapper<ZkPropOptEnumSelectField<E>> {
         val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) } // this is a non-translated to translated mapping
         return FormFieldWrapper(
-            ZkOptEnumSelectField(this@ZkForm, this, RadioGroupRenderer()) { enumValueOf(it) }.apply {
+            ZkPropOptEnumSelectField(this@ZkForm, this, RadioGroupRenderer()) { enumValueOf(it) }.apply {
                 fetch = { options }
             }
         )
@@ -806,19 +806,19 @@ open class ZkForm<T : BaseBo>(
     }
 
     @Suppress("UNCHECKED_CAST")
-    infix fun <VT, FT : ZkSelectBase<VT, FT>> ZkSelectBase<VT, FT>.sort(value: Boolean): FT {
+    infix fun <VT, FT : ZkSelectBaseV2<VT, FT>> ZkSelectBaseV2<VT, FT>.sort(value: Boolean): FT {
         sort = value
         return this as FT
     }
 
     @Suppress("UNCHECKED_CAST")
-    infix fun <VT, FT : ZkSelectBase<VT, FT>> ZkSelectBase<VT, FT>.query(block: suspend () -> List<Pair<VT, String>>): FT {
+    infix fun <VT, FT : ZkSelectBaseV2<VT, FT>> ZkSelectBaseV2<VT, FT>.query(block: suspend () -> List<Pair<VT, String>>): FT {
         fetch = block
         return this as FT
     }
 
     @Suppress("UNCHECKED_CAST")
-    infix fun <VT, FT : ZkSelectBase<VT, FT>> ZkSelectBase<VT, FT>.onSelect(onSelect: (Pair<VT, String>?) -> Unit): FT {
+    infix fun <VT, FT : ZkSelectBaseV2<VT, FT>> ZkSelectBaseV2<VT, FT>.onSelect(onSelect: (Pair<VT, String>?) -> Unit): FT {
         this.onSelectCallback = onSelect
         return this as FT
     }
@@ -869,6 +869,9 @@ open class ZkForm<T : BaseBo>(
         setter = block
         return this
     }
+
+    // to set label, use label infix
+    // to set setter, use onChange infix
 
     fun stringField(getter:() -> String): ZkValueStringField =
         ZkValueStringField(this@ZkForm, "", getter)
@@ -926,4 +929,30 @@ open class ZkForm<T : BaseBo>(
 
     fun optUuidField(getter:() -> UUID?): ZkValueOptUuidField =
         ZkValueOptUuidField(this@ZkForm, "", getter)
+
+    inline fun <reified E: Enum<E>> enumSelectField(noinline getter:() -> E): ZkValueEnumSelectField<E> {
+        val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) }
+        return ZkValueEnumSelectField(this@ZkForm, "", getter, toEnum = { enumValueOf(getter().name) }).apply {
+            fetch = { options }
+        }
+    }  //todo: stg wrong, the field not changes its value when the user selects
+
+    inline fun <reified E: Enum<E>> optEnumSelectField(noinline getter:() -> E?): ZkValueOptEnumSelectField<E> {
+        val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) }
+        return ZkValueOptEnumSelectField(this@ZkForm, "", getter, toEnum = { getter()?.name?.let { enumValueOf(it)} }).apply {
+            fetch = { options }
+        }
+    } //todo: stg wrong, the field not changes its value when the user selects
+
+
+    // to set options, use query infix
+
+    fun stringSelectField(getter:()-> String) : ZkValueStringSelectField =
+        ZkValueStringSelectField(this@ZkForm, "", getter)
+
+    fun optStringSelectField(getter:()-> String?) : ZkValueOptStringSelectField =
+        ZkValueOptStringSelectField(this@ZkForm, "", getter)
+
+    fun optBooleanSelectField(getter:() -> Boolean?): ZkValueOptBooleanSelectField =
+        ZkValueOptBooleanSelectField(this@ZkForm, "", getter)
 }

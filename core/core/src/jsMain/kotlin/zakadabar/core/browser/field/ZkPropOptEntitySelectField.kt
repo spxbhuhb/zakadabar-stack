@@ -10,19 +10,22 @@ import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptEntitySelectField<ST : EntityBo<ST>>(
+open class ZkPropOptEntitySelectField<ST : EntityBo<ST>>(
     context : ZkFieldContext,
     val prop: KMutableProperty0<EntityId<ST>?>,
-    renderer : SelectRenderer<EntityId<ST>?,ZkOptEntitySelectField<ST>> = DropdownRenderer()
-) : ZkSelectBase<EntityId<ST>?,ZkOptEntitySelectField<ST>>(context, prop.name, renderer) {
+    renderer : SelectRenderer<EntityId<ST>?,ZkPropOptEntitySelectField<ST>> = DropdownRenderer()
+) : ZkSelectBaseV2<EntityId<ST>?,ZkPropOptEntitySelectField<ST>>(
+    context = context,
+    label = prop.name,
+    renderer = renderer,
+    getter = { prop.get() }
+) {
 
     override fun fromString(string: String): EntityId<ST> {
         return EntityId(string)
     }
 
-    override fun getPropValue() = prop.get()
-
-    override fun setPropValue(value: Pair<EntityId<ST>?, String>?, user : Boolean) {
+    override fun setBackingValue(value: Pair<EntityId<ST>?, String>?, user : Boolean) {
         prop.set(value?.first)
         if (user) onUserChange(value?.first)
     }

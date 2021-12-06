@@ -19,15 +19,18 @@ package zakadabar.core.browser.field
 import zakadabar.core.browser.field.select.SelectRenderer
 import zakadabar.core.browser.util.io
 
-abstract class ZkSelectBase<VT, FT : ZkSelectBase<VT, FT>>(
+abstract class ZkSelectBaseV2<VT, FT : ZkSelectBaseV2<VT, FT>>(
     context: ZkFieldContext,
-    propName: String,
+    label: String,
     val renderer : SelectRenderer<VT, FT>,
     var onSelectCallback: (Pair<VT, String>?) -> Unit = { },
+    getter: () -> VT?
 ) : ZkFieldBase<VT, FT>(
     context = context,
-    propName = propName
+    propName = label
 ) {
+
+    open var getter = getter
 
     var sort = true
 
@@ -52,7 +55,7 @@ abstract class ZkSelectBase<VT, FT : ZkSelectBase<VT, FT>>(
         set(value) {
             val item = value?.let { v -> items.firstOrNull { it.first == v } }
             selectedItem = item
-            setPropValue(item, false)
+            setBackingValue(item, false)
             renderer.render(item?.first)
         }
 
@@ -77,13 +80,11 @@ abstract class ZkSelectBase<VT, FT : ZkSelectBase<VT, FT>>(
 
     abstract fun fromString(string: String): VT
 
-    abstract fun getPropValue(): VT?
-
-    abstract fun setPropValue(value: Pair<VT, String>?, user : Boolean)
+    abstract fun setBackingValue(value: Pair<VT, String>?, user : Boolean)
 
     open fun update(items: List<Pair<VT, String>>, value: Pair<VT, String>?, user : Boolean) {
         this.items = items
-        setPropValue(value, user)
+        setBackingValue(value, user)
         onSelectCallback(value)
         renderer.render(value?.first) // FIXME this re-rendering is a bit too expensive I think
     }
@@ -97,7 +98,7 @@ abstract class ZkSelectBase<VT, FT : ZkSelectBase<VT, FT>>(
     open fun fetchAndRender() {
         io {
             items = getItems()
-            renderer.render(getPropValue())
+            renderer.render(getter())
         }
     }
 

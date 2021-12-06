@@ -9,7 +9,7 @@ import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.get
 import zakadabar.core.browser.ZkElement
-import zakadabar.core.browser.field.ZkSelectBase
+import zakadabar.core.browser.field.ZkSelectBaseV2
 import zakadabar.core.browser.icon.ZkIcon
 import zakadabar.core.browser.popup.ZkPopUp
 import zakadabar.core.browser.util.escape
@@ -18,13 +18,13 @@ import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.localizedStrings
 
-open class DropdownRenderer<VT, FT : ZkSelectBase<VT, FT>> : SelectRenderer<VT,FT> {
+open class DropdownRenderer<VT, FT : ZkSelectBaseV2<VT, FT>> : SelectRenderer<VT,FT> {
 
     companion object {
         private const val DATASET_KEY = "value"
     }
 
-    override lateinit var field: ZkSelectBase<VT, FT>
+    override lateinit var field: ZkSelectBaseV2<VT, FT>
 
     open lateinit var container: HTMLElement
 

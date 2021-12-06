@@ -25,14 +25,13 @@ open class ZkValueOptUuidField(
     override var valueOrNull : UUID?
         get() = input.value.ifEmpty { null }?.let { UUID(it) }
         set(value) {
-            getter = {value.toString() }
             input.value = value?.toString() ?: ""
         }
 
     override fun setBackingValue(value: String) {
         if (value.isEmpty()) {
             invalidInput = false
-            getter = { null }
+            setter(null)
             onUserChange(null)
             return
         }
@@ -46,7 +45,6 @@ open class ZkValueOptUuidField(
         invalidInput = false
         val iv = UUID(value)
         setter(iv)
-        getter = { value }
         onUserChange(iv)
     }
 

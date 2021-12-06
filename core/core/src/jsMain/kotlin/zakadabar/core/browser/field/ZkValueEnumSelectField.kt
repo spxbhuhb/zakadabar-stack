@@ -27,12 +27,19 @@ import kotlin.reflect.KMutableProperty0
  * BO contains the first enum value which is not selected by the user but set
  * by the schema.
  */
-open class ZkEnumSelectField<E : Enum<E>>(
+open class ZkValueEnumSelectField<E : Enum<E>>(
     context : ZkFieldContext,
-    val prop: KMutableProperty0<E>,
-    renderer: SelectRenderer<E,ZkEnumSelectField<E>> = DropdownRenderer(),
+    label: String,
+    getter: () -> E,
+    var setter: (E) -> Unit = {},
+    renderer: SelectRenderer<E,ZkValueEnumSelectField<E>> = DropdownRenderer(),
     val toEnum: (String) -> E
-) : ZkSelectBase<E,ZkEnumSelectField<E>>(context, prop.name, renderer) {
+) : ZkSelectBaseV2<E,ZkValueEnumSelectField<E>>(
+    context = context,
+    label = label,
+    renderer = renderer,
+    getter = getter
+) {
 
     var shadowValue: E? = null
 
@@ -43,15 +50,15 @@ open class ZkEnumSelectField<E : Enum<E>>(
         invalidInput = (context.useShadow && shadowValue == null)
     }
 
-    override fun getPropValue(): E? {
-        return if (context.useShadow) {
+    override var getter = {
+       if (context.useShadow) {
             shadowValue
         } else {
-            prop.get()
+            getter()
         }
     }
 
-    override fun setPropValue(value: Pair<E, String>?, user : Boolean) {
+    override fun setBackingValue(value: Pair<E, String>?, user : Boolean) {
 
         shadowValue = value?.first
 
@@ -60,7 +67,7 @@ open class ZkEnumSelectField<E : Enum<E>>(
             if (user) context.validate()
         } else {
             invalidInput = false
-            prop.set(value.first)
+            setter(value.first)
             if (user) onUserChange(value.first)
         }
     }

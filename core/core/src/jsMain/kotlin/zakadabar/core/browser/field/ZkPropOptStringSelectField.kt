@@ -20,20 +20,25 @@ import zakadabar.core.browser.field.select.DropdownRenderer
 import zakadabar.core.browser.field.select.SelectRenderer
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptEnumSelectField<E : Enum<E>>(
-    context : ZkFieldContext,
-    val prop: KMutableProperty0<E?>,
-    renderer : SelectRenderer<E?,ZkOptEnumSelectField<E>> = DropdownRenderer(),
-    val toEnum: (String) -> E
-) : ZkSelectBase<E?,ZkOptEnumSelectField<E>>(context, prop.name, renderer) {
+open class ZkPropOptStringSelectField(
+    context: ZkFieldContext,
+    val prop: KMutableProperty0<String?>,
+    renderer: SelectRenderer<String?, ZkPropOptStringSelectField> = DropdownRenderer()
+) : ZkSelectBaseV2<String?, ZkPropOptStringSelectField>(
+    context = context,
+    label = prop.name,
+    renderer = renderer,
+    getter = { prop.get() }
+) {
 
-    override fun fromString(string: String) = toEnum(string)
+    override fun fromString(string: String): String {
+        return string
+    }
 
-    override fun getPropValue() = prop.get()
-
-    override fun setPropValue(value: Pair<E?, String>?, user : Boolean) {
-        prop.set(value?.first)
-        if (user) onUserChange(value?.first)
+    override fun setBackingValue(value: Pair<String?, String>?, user: Boolean) {
+        val iv = value?.first
+        prop.set(iv)
+        if (user) onUserChange(iv)
     }
 
 }

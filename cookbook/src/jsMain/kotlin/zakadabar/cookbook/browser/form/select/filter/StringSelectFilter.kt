@@ -5,7 +5,7 @@ package zakadabar.cookbook.browser.form.select.filter
 
 import zakadabar.cookbook.cookbookStyles
 import zakadabar.core.browser.ZkElementMode
-import zakadabar.core.browser.field.ZkSelectBase
+import zakadabar.core.browser.field.ZkSelectBaseV2
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.data.BaseBo
 import zakadabar.core.util.default
@@ -33,7 +33,7 @@ class StringSelectFilter : ZkForm<ExampleStringFormBo>() {
 
     // the select we want to filter
 
-    lateinit var filteredField: ZkSelectBase<String,*>
+    lateinit var filteredField: ZkSelectBaseV2<String,*>
 
     override fun onCreate() {
         super.onCreate()

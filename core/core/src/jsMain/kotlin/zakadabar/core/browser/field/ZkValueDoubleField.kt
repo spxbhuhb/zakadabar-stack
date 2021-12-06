@@ -32,7 +32,6 @@ open class ZkValueDoubleField(
     override var valueOrNull : Double?
         get() = input.value.toDoubleOrNull()
         set(value) {
-            getter = { value.toString() }
             input.value = value.toString()
             invalidInput = false
         }
@@ -46,7 +45,6 @@ open class ZkValueDoubleField(
         } else {
             invalidInput = false
             setter(iv)
-            getter = { value }
             onUserChange(iv)
         }
     }

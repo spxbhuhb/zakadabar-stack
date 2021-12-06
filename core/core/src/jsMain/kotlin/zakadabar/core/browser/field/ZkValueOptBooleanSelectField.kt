@@ -22,14 +22,17 @@ import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
 @PublicApi
-open class ZkOptBooleanSelectField(
+open class ZkValueOptBooleanSelectField(
     context : ZkFieldContext,
-    val prop: KMutableProperty0<Boolean?>,
-    renderer: SelectRenderer<Boolean?, ZkOptBooleanSelectField> = DropdownRenderer()
-) : ZkSelectBase<Boolean?, ZkOptBooleanSelectField>(
+    label: String,
+    getter: () -> Boolean?,
+    var setter: (Boolean?) -> Unit = {},
+    renderer: SelectRenderer<Boolean?, ZkValueOptBooleanSelectField> = DropdownRenderer()
+) : ZkSelectBaseV2<Boolean?, ZkValueOptBooleanSelectField>(
     context = context,
-    propName = prop.name,
-    renderer = renderer
+    label = label,
+    renderer = renderer,
+    getter = getter
 ) {
 
     override fun fromString(string: String) = when (string) {
@@ -38,10 +41,8 @@ open class ZkOptBooleanSelectField(
         else -> throw IllegalStateException()
     }
 
-    override fun getPropValue() = prop.get()
-
-    override fun setPropValue(value: Pair<Boolean?, String>?, user : Boolean) {
-        prop.set(value?.first)
+    override fun setBackingValue(value: Pair<Boolean?, String>?, user : Boolean) {
+        setter(value?.first)
         if (user) onUserChange(value?.first)
     }
 

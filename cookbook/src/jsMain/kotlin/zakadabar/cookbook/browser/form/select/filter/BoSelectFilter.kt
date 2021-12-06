@@ -5,7 +5,7 @@ package zakadabar.cookbook.browser.form.select.filter
 
 import zakadabar.cookbook.cookbookStyles
 import zakadabar.core.browser.ZkElementMode
-import zakadabar.core.browser.field.ZkSelectBase
+import zakadabar.core.browser.field.ZkSelectBaseV2
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityBo
@@ -53,7 +53,7 @@ class BoSelectFilter : ZkForm<ExampleReferenceFormBo>() {
 
     // the select we want to filter
 
-    lateinit var filteredField: ZkSelectBase<EntityId<ExampleFilteredBo>,*>
+    lateinit var filteredField: ZkSelectBaseV2<EntityId<ExampleFilteredBo>,*>
 
     override fun onCreate() {
         super.onCreate()
