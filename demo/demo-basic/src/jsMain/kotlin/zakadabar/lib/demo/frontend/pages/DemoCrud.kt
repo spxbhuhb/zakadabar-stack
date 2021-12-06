@@ -3,12 +3,17 @@
  */
 package zakadabar.lib.demo.frontend.pages
 
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import zakadabar.core.browser.application.target
 import zakadabar.core.browser.crud.ZkCrudTarget
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.browser.toast.toastInfo
 import zakadabar.core.data.EntityId
 import zakadabar.core.resource.localized
+import zakadabar.core.util.UUID
 import zakadabar.lib.blobs.browser.image.ZkImagesField
 import zakadabar.lib.demo.data.DemoBlob
 import zakadabar.lib.demo.data.DemoBo
@@ -34,9 +39,27 @@ class DemoForm : ZkForm<DemoBo>() {
         build(localized<DemoForm>()) {
             + section {
                 + bo::id
-                + bo::name
-                + bo::value
-                + string("Name", "Value") {  }
+//                + bo::name
+//                + bo::value
+                + stringField { "Name" } label "name" onChange { value -> bo.name = value }
+                + optStringField { null } label "NoName"
+                + intField { 5 } label "int" onChange { value -> bo.value = value}
+                + optIntField { null } label "NoValue"
+                + doubleField { 5.5 } label "double"
+                + optDoubleField { null } label "no double"
+                + longField { 555555L } label "long"
+                + optLongField { null } label "no long"
+                + booleanField { true } label "boolean"
+                + localDateField { Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date } label "local date"
+                + optLocalDateField { null } label "no local date"
+                + localDateTimeField { Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()) } label "local date time"
+                + optLocalDateField { null } label "no local date time"
+                + instantField { Clock.System.now() } label "instant"
+                + optIntField { null } label "no instant"
+                + textAreaField { "lalalala" } label "text area"
+                + optTextAreaField { null } label "no text area"
+                + uuidField { UUID() } label "uuid"
+                + optUuidField { null } label "no uuid"
             }
 
             + ZkImagesField(this, DemoBlob.comm, bo.id) {

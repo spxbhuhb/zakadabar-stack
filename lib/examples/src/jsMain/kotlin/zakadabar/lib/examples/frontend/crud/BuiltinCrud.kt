@@ -5,7 +5,7 @@ package zakadabar.lib.examples.frontend.crud
 
 import zakadabar.core.browser.crud.ZkCrudTarget
 import zakadabar.core.browser.crud.ZkInlineCrud
-import zakadabar.core.browser.field.ZkStringPropField
+import zakadabar.core.browser.field.ZkPropStringField
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.resource.localized
@@ -70,7 +70,7 @@ class BuiltinForm : ZkForm<BuiltinBo>() {
                 + bo::secretValue
                 + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } }
                 + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } } readOnly true
-                + ZkStringPropField(this@BuiltinForm, bo::stringValue).also { this@BuiltinForm.fields += it }
+                + ZkPropStringField(this@BuiltinForm, bo::stringValue).also { this@BuiltinForm.fields += it }
                 + bo::stringSelectValue.asSelect() query { options }
                 + bo::textAreaValue.asTextArea() label strings.textAreaValue
                 + bo::uuidValue

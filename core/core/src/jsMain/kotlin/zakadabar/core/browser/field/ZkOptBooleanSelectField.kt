@@ -16,19 +16,33 @@
  */
 package zakadabar.core.browser.field
 
-import kotlinx.browser.document
-import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.events.KeyboardEvent
-import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.browser.field.select.DropdownRenderer
+import zakadabar.core.browser.field.select.SelectRenderer
+import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
 
-abstract class ZkStringBase<VT, FT : ZkStringBase<VT,FT>>(
-    context: ZkFieldContext,
-    open val prop: KMutableProperty0<VT>,
-    label: String? = null
-) : ZkStringBaseV2<VT, FT>(
+@PublicApi
+open class ZkOptBooleanSelectField(
+    context : ZkFieldContext,
+    val prop: KMutableProperty0<Boolean?>,
+    renderer: SelectRenderer<Boolean?, ZkOptBooleanSelectField> = DropdownRenderer()
+) : ZkSelectBase<Boolean?, ZkOptBooleanSelectField>(
     context = context,
-    label = label ?: prop.name,
-    getter = { prop.get().toString() }
+    propName = prop.name,
+    renderer = renderer
+) {
 
-)
+    override fun fromString(string: String) = when (string) {
+        "true" -> true
+        "false" -> false
+        else -> throw IllegalStateException()
+    }
+
+    override fun getPropValue() = prop.get()
+
+    override fun setPropValue(value: Pair<Boolean?, String>?, user : Boolean) {
+        prop.set(value?.first)
+        if (user) onUserChange(value?.first)
+    }
+
+}

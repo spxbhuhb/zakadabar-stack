@@ -11,7 +11,7 @@ import zakadabar.core.browser.button.buttonPrimary
 import zakadabar.core.browser.field.ChangeOrigin
 import zakadabar.core.browser.field.ZkEntitySelectField
 import zakadabar.core.browser.field.ZkFieldBase
-import zakadabar.core.browser.field.ZkIntPropField
+import zakadabar.core.browser.field.ZkPropIntField
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.toast.toastSuccess
 import zakadabar.core.data.EntityId
@@ -38,7 +38,7 @@ open class FieldUpdateForm : ZkForm<ExampleBo>() {
 
         + row {
             + buttonPrimary("Change intValue to 15") {
-                (bo::intValue.find() as ZkIntPropField).value = 15
+                (bo::intValue.find() as ZkPropIntField).value = 15
             } marginRight 20.px
 
             + buttonPrimary("Change recordSelectValue to first option") {
@@ -58,7 +58,7 @@ open class FieldUpdateForm : ZkForm<ExampleBo>() {
         toastSuccess { "recordSelectValue = $value, origin = $origin" }
     }
 
-    open fun onIntValueChange(origin: ChangeOrigin, value: Int, field: ZkFieldBase<Int, ZkIntPropField>) {
+    open fun onIntValueChange(origin: ChangeOrigin, value: Int, field: ZkFieldBase<Int, ZkPropIntField>) {
         toastSuccess { "intValue = $value, origin = $origin" }
     }
 

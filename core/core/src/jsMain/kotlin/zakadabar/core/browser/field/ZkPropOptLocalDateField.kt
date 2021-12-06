@@ -16,19 +16,38 @@
  */
 package zakadabar.core.browser.field
 
-import kotlinx.browser.document
-import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.events.KeyboardEvent
-import zakadabar.core.browser.util.plusAssign
+import kotlinx.datetime.LocalDate
+import zakadabar.core.resource.localized
+import zakadabar.core.resource.toLocalDateOrNull
 import kotlin.reflect.KMutableProperty0
 
-abstract class ZkStringBase<VT, FT : ZkStringBase<VT,FT>>(
-    context: ZkFieldContext,
-    open val prop: KMutableProperty0<VT>,
-    label: String? = null
-) : ZkStringBaseV2<VT, FT>(
+open class ZkPropOptLocalDateField(
+    context : ZkFieldContext,
+    var prop: KMutableProperty0<LocalDate?>
+) : ZkStringBaseV2<LocalDate?,ZkPropOptLocalDateField>(
     context = context,
-    label = label ?: prop.name,
+    label = prop.name,
     getter = { prop.get().toString() }
+) {
 
-)
+    override var valueOrNull : LocalDate?
+        get() = input.value.toLocalDateOrNull
+        set(value) {
+            prop.set(value!!)
+            input.value = value.localized
+            invalidInput = false
+        }
+
+    override fun setBackingValue(value: String) {
+        val iv = input.value.toLocalDateOrNull
+
+        if (iv == null && input.value.isNotEmpty()) {
+            invalidInput = true
+            context.validate()
+        } else {
+            invalidInput = false
+            prop.set(iv)
+            onUserChange(iv)
+        }
+    }
+}

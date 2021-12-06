@@ -6,7 +6,7 @@ package zakadabar.cookbook.browser.table.inline
 
 import zakadabar.cookbook.browser.table.demoData
 import zakadabar.cookbook.entity.builtin.ExampleBo
-import zakadabar.core.browser.field.ZkBooleanField
+import zakadabar.core.browser.field.ZkPropBooleanField
 import zakadabar.core.browser.field.ZkStringSelectField
 import zakadabar.core.browser.table.ZkTable
 
@@ -22,7 +22,7 @@ class TableEditInline : ZkTable<ExampleBo>() {
         + custom {
             label = "Inline Checkbox"
             render = {
-                + ZkBooleanField(this@TableEditInline, it::booleanValue)
+                + ZkPropBooleanField(this@TableEditInline, it::booleanValue)
             }
         } size "min-content"
 

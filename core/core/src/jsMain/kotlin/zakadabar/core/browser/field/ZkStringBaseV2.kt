@@ -3,8 +3,6 @@
  */
 package zakadabar.core.browser.field
 
-import zakadabar.core.browser.field.ZkFieldBase
-import zakadabar.core.browser.field.ZkFieldContext
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.KeyboardEvent
@@ -12,12 +10,12 @@ import zakadabar.core.browser.util.plusAssign
 
 abstract class ZkStringBaseV2<VT, FT : ZkStringBaseV2<VT,FT>>(
     context: ZkFieldContext,
-    private val title: String,
-    val getter: () -> String?
+    label: String,
+    var getter: () -> String?
 ) : ZkFieldBase<VT, FT>(
     context = context,
-    propName = title,
-    label = title
+    propName = label,
+    label = label
 ) {
 
     open val input = document.createElement("input") as HTMLInputElement
@@ -42,7 +40,7 @@ abstract class ZkStringBaseV2<VT, FT : ZkStringBaseV2<VT,FT>>(
         }
 
         getter()?.let {
-            input.value = it // todo: ask Zoli if its ok like this..
+            input.value = it
         }
 
         on(input, "input") {

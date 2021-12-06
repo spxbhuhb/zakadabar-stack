@@ -7,7 +7,7 @@ import zakadabar.lib.examples.data.builtin.ExampleQuery
 import zakadabar.lib.examples.resources.strings
 import zakadabar.core.browser.button.ZkButton
 import zakadabar.core.browser.form.ZkForm
-import zakadabar.core.browser.field.ZkOptBooleanField
+import zakadabar.core.browser.field.ZkOptBooleanSelectField
 import zakadabar.core.browser.util.io
 import zakadabar.core.browser.util.marginBottom
 import zakadabar.core.browser.util.marginRight
@@ -27,7 +27,7 @@ class QueryForm(
                     + row {
                         + fieldGrid {
                             // opt boolean field is used to provide a "do not filter on this" function for the user
-                            + ZkOptBooleanField(this@QueryForm, bo::booleanValue).apply { fetch = suspend { statusOptions() } }
+                            + ZkOptBooleanSelectField(this@QueryForm, bo::booleanValue).apply { fetch = suspend { statusOptions() } }
                             + bo::enumSelectValue
                         } marginRight 24
 

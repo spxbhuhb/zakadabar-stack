@@ -17,18 +17,43 @@
 package zakadabar.core.browser.field
 
 import kotlinx.browser.document
+import kotlinx.datetime.Instant
 import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.events.KeyboardEvent
 import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.resource.localized
+import zakadabar.core.schema.ValidityReport
 import kotlin.reflect.KMutableProperty0
 
-abstract class ZkStringBase<VT, FT : ZkStringBase<VT,FT>>(
+open class ZkValueOptInstantField(
     context: ZkFieldContext,
-    open val prop: KMutableProperty0<VT>,
-    label: String? = null
-) : ZkStringBaseV2<VT, FT>(
+    label : String,
+    var getter:() -> Instant?
+) : ZkFieldBase<Instant?,ZkValueOptInstantField>(
     context = context,
-    label = label ?: prop.name,
-    getter = { prop.get().toString() }
+    propName = label
+) {
 
-)
+    val input = document.createElement("input") as HTMLInputElement
+
+    override var readOnly: Boolean = true
+
+    override var valueOrNull : Instant?
+        get() = getter()
+        set(value) {
+            throw IllegalStateException("instants cannot be changed")
+        }
+
+    override fun buildFieldValue() {
+        input.classList += context.styles.disabledString
+        input.readOnly = true
+        input.disabled = true
+        input.value = getter()?.localized ?: ""
+        input.tabIndex = - 1
+        + input
+    }
+
+    override fun onValidated(report: ValidityReport) {
+        // instants are read only
+    }
+
+}

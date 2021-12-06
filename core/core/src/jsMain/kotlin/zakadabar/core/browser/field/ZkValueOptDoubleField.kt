@@ -16,19 +16,38 @@
  */
 package zakadabar.core.browser.field
 
-import kotlinx.browser.document
-import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.events.KeyboardEvent
-import zakadabar.core.browser.util.plusAssign
 import kotlin.reflect.KMutableProperty0
 
-abstract class ZkStringBase<VT, FT : ZkStringBase<VT,FT>>(
+open class ZkValueOptDoubleField(
     context: ZkFieldContext,
-    open val prop: KMutableProperty0<VT>,
-    label: String? = null
-) : ZkStringBaseV2<VT, FT>(
+    label: String,
+    getter: () -> Double?,
+    var setter: (Double?) -> Unit = { }
+) : ZkStringBaseV2<Double?, ZkValueOptDoubleField>(
     context = context,
-    label = label ?: prop.name,
-    getter = { prop.get().toString() }
+    label = label,
+    getter = { getter()?.toString() }
+) {
 
-)
+    override var valueOrNull : Double?
+        get() = input.value.toDoubleOrNull()
+        set(value) {
+            getter = { value?.toString() }
+            input.value = value?.toString() ?: ""
+            invalidInput = false
+        }
+
+    override fun setBackingValue(value: String) {
+        val iv = input.value.toDoubleOrNull()
+
+        if (iv == null && input.value.isNotEmpty()) {
+            invalidInput = true
+            context.validate()
+        } else {
+            invalidInput = false
+            setter(iv)
+            getter = { value }
+            onUserChange(iv)
+        }
+    }
+}

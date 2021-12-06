@@ -28,7 +28,6 @@ import zakadabar.core.browser.application.application
 import zakadabar.core.browser.crud.ZkCrudEditor
 import zakadabar.core.browser.field.*
 import zakadabar.core.browser.field.select.RadioGroupRenderer
-import zakadabar.core.browser.table.columns.ZkStringColumnV2
 import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.titlebar.ZkAppTitleProvider
 import zakadabar.core.browser.titlebar.ZkLocalTitleProvider
@@ -502,24 +501,24 @@ open class ZkForm<T : BaseBo>(
     }
 
     @Deprecated("Use '.asTextArea()' instead")
-    fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkTextAreaField.() -> Unit = { }): ZkTextAreaField {
-        val field = ZkTextAreaField(this@ZkForm, kProperty0)
+    fun textarea(kProperty0: KMutableProperty0<String>, builder: ZkPropTextAreaField.() -> Unit = { }): ZkPropTextAreaField {
+        val field = ZkPropTextAreaField(this@ZkForm, kProperty0)
         fields += field
         field.builder()
         return field
     }
 
     @Deprecated("Use '.asTextArea()' instead")
-    fun textarea(kProperty0: KMutableProperty0<String?>, builder: ZkElement.() -> Unit = { }): ZkOptTextAreaField {
-        val field = ZkOptTextAreaField(this@ZkForm, kProperty0)
+    fun textarea(kProperty0: KMutableProperty0<String?>, builder: ZkElement.() -> Unit = { }): ZkPropOptTextAreaField {
+        val field = ZkPropOptTextAreaField(this@ZkForm, kProperty0)
         fields += field
         field.builder()
         return field
     }
 
-    fun opt(kProperty0: KMutableProperty0<Boolean?>, trueText: String, falseText: String, builder: ZkOptBooleanField.() -> Unit = { }): ZkOptBooleanField {
+    fun opt(kProperty0: KMutableProperty0<Boolean?>, trueText: String, falseText: String, builder: ZkOptBooleanSelectField.() -> Unit = { }): ZkOptBooleanSelectField {
         val options = listOf(true to trueText, false to falseText)
-        val field = ZkOptBooleanField(this@ZkForm, kProperty0).also {
+        val field = ZkOptBooleanSelectField(this@ZkForm, kProperty0).also {
             it.fetch = { options }
         }
         fields += field
@@ -537,8 +536,8 @@ open class ZkForm<T : BaseBo>(
      * Field for a new secret (password). Instructs browsers not to fill the content with old password.
      */
     @Deprecated("EOL: 2021.8.1  -  use +bo::field newSecret true")
-    fun newSecret(prop: KMutableProperty0<Secret>): ZkSecretField {
-        val field = ZkSecretField(this@ZkForm, prop, newSecret = true)
+    fun newSecret(prop: KMutableProperty0<Secret>): ZkPropSecretField {
+        val field = ZkPropSecretField(this@ZkForm, prop, newSecret = true)
         + field
         fields += field
         return field
@@ -564,9 +563,9 @@ open class ZkForm<T : BaseBo>(
     //  Property field builder shorthands
     // ------------------------------------------------------------------------
 
-    operator fun KMutableProperty0<EntityId<T>>.unaryPlus(): ZkEntityIdField<T> =
+    operator fun KMutableProperty0<EntityId<T>>.unaryPlus(): ZkPropEntityIdField<T> =
         add(this) { prop ->
-            ZkEntityIdField(this@ZkForm, prop).also {
+            ZkPropEntityIdField(this@ZkForm, prop).also {
                 if (mode == ZkElementMode.Create && prop.name == "id") it.hide()
             }
         }
@@ -581,84 +580,84 @@ open class ZkForm<T : BaseBo>(
             ZkOptEntitySelectField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<String>.unaryPlus(): ZkStringPropField =
+    operator fun KMutableProperty0<String>.unaryPlus(): ZkPropStringField =
         add(this) {
-            ZkStringPropField(this@ZkForm, it)
+            ZkPropStringField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<String?>.unaryPlus(): ZkOptStringPropField =
+    operator fun KMutableProperty0<String?>.unaryPlus(): ZkPropOptStringField =
         add(this) {
-            ZkOptStringPropField(this@ZkForm, it)
+            ZkPropOptStringField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Int>.unaryPlus(): ZkIntPropField =
+    operator fun KMutableProperty0<Int>.unaryPlus(): ZkPropIntField =
         add(this) {
-            ZkIntPropField(this@ZkForm, it)
+            ZkPropIntField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Int?>.unaryPlus(): ZkOptIntPropField =
+    operator fun KMutableProperty0<Int?>.unaryPlus(): ZkPropOptIntField =
         add(this) {
-            ZkOptIntPropField(this@ZkForm, it)
+            ZkPropOptIntField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Long>.unaryPlus(): ZkLongPropField =
+    operator fun KMutableProperty0<Long>.unaryPlus(): ZkPropLongField =
         add(this) {
-            ZkLongPropField(this@ZkForm, it)
+            ZkPropLongField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Long?>.unaryPlus(): ZkOptLongPropField =
+    operator fun KMutableProperty0<Long?>.unaryPlus(): ZkPropOptLongField =
         add(this) {
-            ZkOptLongPropField(this@ZkForm, it)
+            ZkPropOptLongField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Double>.unaryPlus(): ZkDoublePropField =
+    operator fun KMutableProperty0<Double>.unaryPlus(): ZkPropDoubleField =
         add(this) {
-            ZkDoublePropField(this@ZkForm, it)
+            ZkPropDoubleField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Double?>.unaryPlus(): ZkOptDoubleField =
+    operator fun KMutableProperty0<Double?>.unaryPlus(): ZkPropOptDoubleField =
         add(this) {
-            ZkOptDoubleField(this@ZkForm, it)
+            ZkPropOptDoubleField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Boolean>.unaryPlus(): ZkBooleanField =
+    operator fun KMutableProperty0<Boolean>.unaryPlus(): ZkPropBooleanField =
         add(this) {
-            ZkBooleanField(this@ZkForm, it)
+            ZkPropBooleanField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Instant>.unaryPlus(): ZkInstantField =
+    operator fun KMutableProperty0<Instant>.unaryPlus(): ZkPropInstantField =
         add(this) {
-            ZkInstantField(this@ZkForm, it)
+            ZkPropInstantField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Instant?>.unaryPlus(): ZkOptInstantField =
+    operator fun KMutableProperty0<Instant?>.unaryPlus(): ZkPropOptInstantField =
         add(this) {
-            ZkOptInstantField(this@ZkForm, it)
+            ZkPropOptInstantField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<LocalDate>.unaryPlus(): ZkLocalDateField =
+    operator fun KMutableProperty0<LocalDate>.unaryPlus(): ZkPropLocalDateField =
         add(this) {
-            ZkLocalDateField(this@ZkForm, it)
+            ZkPropLocalDateField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<LocalDate?>.unaryPlus(): ZkOptLocalDatePropField =
+    operator fun KMutableProperty0<LocalDate?>.unaryPlus(): ZkPropOptLocalDateField =
         add(this) {
-            ZkOptLocalDatePropField(this@ZkForm, it)
+            ZkPropOptLocalDateField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<LocalDateTime>.unaryPlus(): ZkLocalDateTimeField =
+    operator fun KMutableProperty0<LocalDateTime>.unaryPlus(): ZkPropLocalDateTimeField =
         add(this) {
-            ZkLocalDateTimeField(this@ZkForm, it)
+            ZkPropLocalDateTimeField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<LocalDateTime?>.unaryPlus(): ZkOptLocalDateTimePropField =
+    operator fun KMutableProperty0<LocalDateTime?>.unaryPlus(): ZkPropOptLocalDateTimeField =
         add(this) {
-            ZkOptLocalDateTimePropField(this@ZkForm, it)
+            ZkPropOptLocalDateTimeField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<Secret>.unaryPlus(): ZkSecretField =
+    operator fun KMutableProperty0<Secret>.unaryPlus(): ZkPropSecretField =
         add(this) {
-            ZkSecretField(this@ZkForm, this)
+            ZkPropSecretField(this@ZkForm, this)
         }
 
     operator fun KMutableProperty0<Secret?>.unaryPlus(): ZkOptSecretField =
@@ -666,14 +665,14 @@ open class ZkForm<T : BaseBo>(
             ZkOptSecretField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<UUID>.unaryPlus(): ZkUuidField =
+    operator fun KMutableProperty0<UUID>.unaryPlus(): ZkPropUuidField =
         add(this) {
-            ZkUuidField(this@ZkForm, it)
+            ZkPropUuidField(this@ZkForm, it)
         }
 
-    operator fun KMutableProperty0<UUID?>.unaryPlus(): ZkOptUuidField =
+    operator fun KMutableProperty0<UUID?>.unaryPlus(): ZkPropOptUuidField =
         add(this) {
-            ZkOptUuidField(this@ZkForm, it)
+            ZkPropOptUuidField(this@ZkForm, it)
         }
 
     inline operator fun <reified E : Enum<E>> KMutableProperty0<E>.unaryPlus(): ZkEnumSelectField<E> {
@@ -722,11 +721,11 @@ open class ZkForm<T : BaseBo>(
     fun KMutableProperty0<String?>.asRadioGroup(): FormFieldWrapper<ZkOptStringSelectField> =
         FormFieldWrapper(ZkOptStringSelectField(this@ZkForm, this, RadioGroupRenderer()))
 
-    fun KMutableProperty0<String>.asTextArea(builder: ZkTextAreaField.() -> Unit = { }): FormFieldWrapper<ZkTextAreaField> =
-        FormFieldWrapper(ZkTextAreaField(this@ZkForm, this).also(builder))
+    fun KMutableProperty0<String>.asTextArea(builder: ZkPropTextAreaField.() -> Unit = { }): FormFieldWrapper<ZkPropTextAreaField> =
+        FormFieldWrapper(ZkPropTextAreaField(this@ZkForm, this).also(builder))
 
-    fun KMutableProperty0<String?>.asTextArea(builder: ZkOptTextAreaField.() -> Unit = { }): FormFieldWrapper<ZkOptTextAreaField> =
-        FormFieldWrapper(ZkOptTextAreaField(this@ZkForm, this).also(builder))
+    fun KMutableProperty0<String?>.asTextArea(builder: ZkPropOptTextAreaField.() -> Unit = { }): FormFieldWrapper<ZkPropOptTextAreaField> =
+        FormFieldWrapper(ZkPropOptTextAreaField(this@ZkForm, this).also(builder))
 
     inline fun <reified E : Enum<E>> KMutableProperty0<E>.asRadioGroup(): FormFieldWrapper<ZkEnumSelectField<E>> {
         val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) } // this is a non-translated to translated mapping
@@ -827,9 +826,28 @@ open class ZkForm<T : BaseBo>(
     @Suppress("UNCHECKED_CAST")
     @PublicApi
     infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.onChange(block: (DT) -> Unit): FT {
-        onChangeCallback = { _, value, _ -> block(value) }
+        when(this){
+            is ZkValueStringField -> {
+                this.setter = block as (String) -> Unit
+                onChangeCallback = { _, _,_ -> setter }
+            }
+            is ZkValueOptStringField -> {
+                this.setter = block as (String?) -> Unit
+                onChangeCallback = { _, _,_ -> setter }
+            }
+            is ZkValueIntField -> {
+                this.setter = block as (Int) -> Unit
+                onChangeCallback = { _, _,_ -> setter }
+            }
+            //todo: how to do this better...
+        // options
+        // add setter generic type
+        // make infix fro every field
+        }
+//        onChangeCallback = { _, value, _ -> block(value) }
         return this as FT
     }
+
 
     @Suppress("UNCHECKED_CAST")
     @PublicApi
@@ -840,14 +858,72 @@ open class ZkForm<T : BaseBo>(
 
     @Suppress("UNCHECKED_CAST")
     @PublicApi
-    infix fun <DT, FT : ZkStringBase<DT, FT>> ZkStringBase<DT, FT>.submitOnEnter(submit: Boolean): FT {
+    infix fun <DT, FT : ZkStringBaseV2<DT, FT>> ZkStringBaseV2<DT, FT>.submitOnEnter(submit: Boolean): FT {
         submitOnEnter = submit
         return this as FT
     }
 
-    fun string(propName: String, propValue: String, setter: (String) -> Unit = {}): ZkStringValueField =
-        ZkStringValueField(this@ZkForm, propName, propValue, setter)
+    @Suppress("UNCHECKED_CAST")
+    @PublicApi
+    infix fun ZkValueStringField.onSet(block: (String) -> Unit): ZkValueStringField {
+        setter = block
+        return this
+    }
 
-    fun optString(propName: String, propValue: String?, setter: (String?) -> Unit = {}): ZkOptStringValueField =
-        ZkOptStringValueField(this@ZkForm, propName, propValue, setter)
+    fun stringField(getter:() -> String): ZkValueStringField =
+        ZkValueStringField(this@ZkForm, "", getter)
+
+    fun optStringField(getter:() -> String?): ZkValueOptStringField =
+        ZkValueOptStringField(this@ZkForm, "", getter)
+
+    fun intField(getter:() -> Int): ZkValueIntField =
+        ZkValueIntField(this@ZkForm, "", getter)
+
+    fun optIntField(getter:() -> Int?): ZkValueOptIntField =
+        ZkValueOptIntField(this@ZkForm, "", getter)
+
+    fun doubleField(getter:() -> Double): ZkValueDoubleField =
+        ZkValueDoubleField(this@ZkForm, "", getter)
+
+    fun optDoubleField(getter:() -> Double?): ZkValueOptDoubleField =
+        ZkValueOptDoubleField(this@ZkForm, "", getter)
+
+    fun longField(getter:() -> Long): ZkValueLongField =
+        ZkValueLongField(this@ZkForm, "", getter)
+
+    fun optLongField(getter:() -> Long?): ZkValueOptLongField =
+        ZkValueOptLongField(this@ZkForm, "", getter)
+
+    fun booleanField(getter:() -> Boolean): ZkValueBooleanField =
+        ZkValueBooleanField(this@ZkForm, "", getter)
+
+    fun localDateField(getter:() -> LocalDate): ZkValueLocalDateField =
+        ZkValueLocalDateField(this@ZkForm, "", getter)
+
+    fun optLocalDateField(getter:() -> LocalDate?): ZkValueOptLocalDateField =
+        ZkValueOptLocalDateField(this@ZkForm, "", getter)
+
+    fun localDateTimeField(getter:() -> LocalDateTime): ZkValueLocalDateTimeField =
+        ZkValueLocalDateTimeField(this@ZkForm, "", getter)
+
+    fun optLocalDateTimeField(getter:() -> LocalDateTime?): ZkValueOptLocalDateTimeField =
+        ZkValueOptLocalDateTimeField(this@ZkForm, "", getter)
+
+    fun instantField(getter:() -> Instant): ZkValueInstantField =
+        ZkValueInstantField(this@ZkForm, "", getter)
+
+    fun optInstantField(getter:() -> Instant?): ZkValueOptInstantField =
+        ZkValueOptInstantField(this@ZkForm, "", getter)
+
+    fun textAreaField(getter:() -> String): ZkValueTextAreaField =
+        ZkValueTextAreaField(this@ZkForm, "", getter)
+
+    fun optTextAreaField(getter:() -> String?): ZkValueOptTextAreaField =
+        ZkValueOptTextAreaField(this@ZkForm, "", getter)
+
+    fun uuidField(getter:() -> UUID): ZkValueUuidField =
+        ZkValueUuidField(this@ZkForm, "", getter)
+
+    fun optUuidField(getter:() -> UUID?): ZkValueOptUuidField =
+        ZkValueOptUuidField(this@ZkForm, "", getter)
 }

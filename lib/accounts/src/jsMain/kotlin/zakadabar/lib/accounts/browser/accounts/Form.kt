@@ -10,8 +10,8 @@ import zakadabar.core.browser.ZkElementMode
 import zakadabar.core.browser.application.application
 import zakadabar.core.browser.application.executor
 import zakadabar.core.browser.crud.ZkCrudEditor
-import zakadabar.core.browser.field.ZkSecretField
-import zakadabar.core.browser.field.ZkSecretVerificationField
+import zakadabar.core.browser.field.ZkPropSecretField
+import zakadabar.core.browser.field.ZkPropSecretVerificationField
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.form.ZkFormButtons
 import zakadabar.core.browser.form.zkFormStyles
@@ -106,7 +106,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
                     + section(localizedStrings.password) {
                         + bo::credentials newSecret true
-                        + ZkSecretVerificationField(this@CreateForm, bo::credentials).also { fields += it }
+                        + ZkPropSecretVerificationField(this@CreateForm, bo::credentials).also { fields += it }
                     }
 
                     + section(localizedStrings.roles) {
@@ -144,8 +144,8 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                 return false
             }
 
-            val passwordField = bo::credentials.find() as ZkSecretField
-            val verificationField = first<ZkSecretVerificationField>()
+            val passwordField = bo::credentials.find() as ZkPropSecretField
+            val verificationField = first<ZkPropSecretVerificationField>()
 
             if (submit || (passwordField.touched && verificationField.touched)) {
                 if (bo.credentials.value != verificationField.verificationValue) {
@@ -290,7 +290,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                         }
 
                         + bo::newPassword newSecret true
-                        + ZkSecretVerificationField(this@PasswordChangeForm, bo::newPassword).also {
+                        + ZkPropSecretVerificationField(this@PasswordChangeForm, bo::newPassword).also {
                             fields += it
                         }
                     }
@@ -303,7 +303,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
         override fun validate(submit: Boolean): Boolean {
             if (! super.validate(submit)) return false
 
-            val verificationField = first<ZkSecretVerificationField>()
+            val verificationField = first<ZkPropSecretVerificationField>()
 
             if (submit || verificationField.touched) {
                 verificationField.valid = (bo.newPassword.value == verificationField.verificationValue)
