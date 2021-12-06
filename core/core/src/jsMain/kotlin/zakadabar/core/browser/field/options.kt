@@ -88,7 +88,7 @@ infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.onChange3(block: (C
 
 @Suppress("UNCHECKED_CAST")
 @PublicApi
-infix fun <DT, FT : ZkStringBase<DT, FT>> ZkStringBase<DT, FT>.submitOnEnter(submit : Boolean): FT {
+infix fun <DT, FT : ZkStringBaseV2<DT, FT>> ZkStringBaseV2<DT, FT>.submitOnEnter(submit : Boolean): FT {
     submitOnEnter = submit
     return this as FT
 }

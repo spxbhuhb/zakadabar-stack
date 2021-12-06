@@ -21,11 +21,12 @@ import kotlin.reflect.KMutableProperty0
 
 open class ZkOptSecretField(
     context : ZkFieldContext,
-    prop: KMutableProperty0<Secret?>,
+    var prop: KMutableProperty0<Secret?>,
     newSecret: Boolean = false
-) : ZkStringBase<Secret?, ZkOptSecretField>(
+) : ZkStringBaseV2<Secret?, ZkOptSecretField>(
     context = context,
-    prop = prop
+    label = prop.name,
+    getter = { prop.get()?.value }
 ) {
 
     override var valueOrNull : Secret?
