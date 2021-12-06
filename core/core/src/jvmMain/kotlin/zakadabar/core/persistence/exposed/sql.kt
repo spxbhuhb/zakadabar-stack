@@ -1,3 +1,4 @@
+
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory
 import zakadabar.core.data.EntityId
 import zakadabar.core.persistence.sql.SqlProvider
 import zakadabar.core.server.DatabaseSettingsBo
+import java.sql.Connection
 
 inline operator fun <reified T : LongEntity> LongEntityClass<T>.get(entityId: EntityId<*>) = this[entityId.toLong()]
 
@@ -49,6 +51,17 @@ object Sql : SqlProvider {
         }
 
         TransactionManager.defaultDatabase = Database.connect(dataSource)
+
+        when (config.isolationLevel) {
+            "TRANSACTION_NONE" -> Connection.TRANSACTION_NONE
+            "TRANSACTION_READ_COMMITTED" -> Connection.TRANSACTION_READ_COMMITTED
+            "TRANSACTION_READ_UNCOMMITTED" -> Connection.TRANSACTION_READ_UNCOMMITTED
+            "TRANSACTION_REPEATABLE_READ" -> Connection.TRANSACTION_REPEATABLE_READ
+            "TRANSACTION_SERIALIZABLE" -> Connection.TRANSACTION_SERIALIZABLE
+            else -> null
+        }?.let {
+            TransactionManager.manager.defaultIsolationLevel = it
+        }
     }
 
     override fun onStart(noDbSchemaUpdate : Boolean) {
