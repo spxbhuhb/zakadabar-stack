@@ -932,18 +932,17 @@ open class ZkForm<T : BaseBo>(
 
     inline fun <reified E: Enum<E>> enumSelectField(noinline getter:() -> E): ZkValueEnumSelectField<E> {
         val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) }
-        return ZkValueEnumSelectField(this@ZkForm, "", getter, toEnum = { enumValueOf(getter().name) }).apply {
+        return ZkValueEnumSelectField(this@ZkForm, "", getter, toEnum = { name ->  enumValueOf(name) }).apply {
             fetch = { options }
         }
-    }  //todo: stg wrong, the field not changes its value when the user selects
+    }
 
     inline fun <reified E: Enum<E>> optEnumSelectField(noinline getter:() -> E?): ZkValueOptEnumSelectField<E> {
         val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) }
-        return ZkValueOptEnumSelectField(this@ZkForm, "", getter, toEnum = { getter()?.name?.let { enumValueOf(it)} }).apply {
+        return ZkValueOptEnumSelectField(this@ZkForm, "", getter, toEnum = { name ->  enumValueOf(name) }).apply {
             fetch = { options }
         }
-    } //todo: stg wrong, the field not changes its value when the user selects
-
+    }
 
     // to set options, use query infix
 

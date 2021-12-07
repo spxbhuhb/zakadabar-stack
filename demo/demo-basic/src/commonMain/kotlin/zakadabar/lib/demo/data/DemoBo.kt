@@ -8,6 +8,7 @@ import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityBoCompanion
 import zakadabar.core.data.EntityId
 import zakadabar.core.schema.BoSchema
+import zakadabar.lib.demo.enums.Test
 
 
 /**
@@ -24,7 +25,8 @@ class DemoBo(
 
     override var id : EntityId<DemoBo>,
     var name : String,
-    var value : Int
+    var value : Int,
+    var test: Test?
 
 ) : EntityBo<DemoBo> {
 
@@ -36,7 +38,8 @@ class DemoBo(
     override fun schema() = BoSchema {
         + ::id
         + ::name blank false
-        + ::value 
+        + ::value
+        + ::test
     }
 
 }

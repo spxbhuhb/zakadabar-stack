@@ -7,11 +7,11 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/zakadabar</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="demo@localhost" uuid="907615bb-3c3e-4dca-90db-a2f570490dd9">
+    <data-source source="LOCAL" name="db" uuid="907615bb-3c3e-4dca-90db-a2f570490dd9">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:25432/demo</jdbc-url>
+      <jdbc-url>jdbc:postgresql://app:9000/var/db;AUTO_SERVER=TRUE</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
     <data-source source="LOCAL" name="site@localhost" uuid="d68d21e5-48cc-48e3-a0b4-54d8a7a2e348">

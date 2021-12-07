@@ -42,6 +42,7 @@ class DemoForm : ZkForm<DemoBo>() {
                 + bo::id
 //                + bo::name
 //                + bo::value
+//                + bo::test
                 + stringField { "Name" } label "name" onChange { value -> bo.name = value }
                 + optStringField { null } label "NoName"
                 + intField { 5 } label "int" onChange { value -> bo.value = value}
@@ -69,6 +70,7 @@ class DemoForm : ZkForm<DemoBo>() {
                 + optBooleanSelectField { null } label "no boolean select" query { booleanList}
                 + enumSelectField { Test.A } label "enum"
                 + optEnumSelectField<Test> { null } label "no enum"
+
             }
 
             + ZkImagesField(this, DemoBlob.comm, bo.id) {

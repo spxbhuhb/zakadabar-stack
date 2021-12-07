@@ -9,6 +9,7 @@ import zakadabar.lib.demo.data.DemoBo
 import zakadabar.core.persistence.exposed.ExposedPaBase
 import zakadabar.core.persistence.exposed.ExposedPaTable
 import zakadabar.core.persistence.exposed.entityId
+import zakadabar.lib.demo.enums.Test
 
 
 /**
@@ -27,12 +28,14 @@ open class DemoExposedPaGen : ExposedPaBase<DemoBo,DemoExposedTableGen>(
     override fun ResultRow.toBo() = DemoBo(
         id = this[table.id].entityId(),
         name = this[table.name],
-        value = this[table.value]
+        value = this[table.value],
+        test = this[table.test]
     )  
 
     override fun UpdateBuilder<*>.fromBo(bo: DemoBo) {
         this[table.name] = bo.name
         this[table.value] = bo.value
+        this[table.test] = bo.test
     }
 }
 
@@ -51,5 +54,6 @@ object DemoExposedTableGen : ExposedPaTable<DemoBo>(
 
     internal val name = text("name")
     internal val value = integer("value")
+    internal val test = enumerationByName("test", 20, Test::class).index().nullable()
 
 }
