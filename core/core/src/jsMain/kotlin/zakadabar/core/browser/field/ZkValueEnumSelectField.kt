@@ -31,7 +31,7 @@ open class ZkValueEnumSelectField<E : Enum<E>>(
     context : ZkFieldContext,
     label: String,
     getter: () -> E,
-    var setter: (E) -> Unit = {},
+    setter: (E) -> Unit = {},
     renderer: SelectRenderer<E,ZkValueEnumSelectField<E>> = DropdownRenderer(),
     val toEnum: (String) -> E
 ) : ZkSelectBaseV2<E,ZkValueEnumSelectField<E>>(

@@ -29,10 +29,11 @@ open class ZkValueEntityIdField<T : BaseBo>(
     context : ZkFieldContext,
     label: String,
     var getter: () -> EntityId<T>,
-    var setter: (EntityId<T>) -> Unit
+    setter: (EntityId<T>) -> Unit
 ) : ZkFieldBase<EntityId<T>,ZkValueEntityIdField<T>>(
     context = context,
-    propName = label
+    propName = label,
+    setter = setter
 ) {
 
     val input = document.createElement("input") as HTMLInputElement

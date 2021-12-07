@@ -27,10 +27,12 @@ import kotlin.reflect.KMutableProperty0
 open class ZkValueInstantField(
     context: ZkFieldContext,
     label : String,
-    var getter:() -> Instant
+    var getter:() -> Instant,
+    setter:(Instant) -> Unit = {}
 ) : ZkFieldBase<Instant,ZkValueInstantField>(
     context = context,
-    propName = label
+    propName = label,
+    setter = setter
 ) {
 
     val input = document.createElement("input") as HTMLInputElement

@@ -25,10 +25,11 @@ open class ZkValueTextAreaField(
     context : ZkFieldContext,
     label: String,
     var getter:() -> String,
-    var setter:(String) -> Unit = {}
+    setter:(String) -> Unit = {}
 ) : ZkFieldBase<String,ZkValueTextAreaField>(
     context = context,
-    propName = label
+    propName = label,
+    setter = setter
 ) {
 
     open val area = document.createElement("textarea") as HTMLTextAreaElement

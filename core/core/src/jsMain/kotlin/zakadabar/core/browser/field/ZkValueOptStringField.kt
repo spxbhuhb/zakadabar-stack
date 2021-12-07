@@ -20,11 +20,12 @@ open class ZkValueOptStringField(
     context: ZkFieldContext,
     propName: String,
     getter: () -> String?,
-    var setter: (String?) -> Unit = { }
+    setter: (String?) -> Unit = { }
 ) : ZkStringBaseV2<String?, ZkValueOptStringField>(
     context = context,
     label = propName,
-    getter
+    getter = getter,
+    setter = setter
 ) {
 
     override var valueOrNull : String?

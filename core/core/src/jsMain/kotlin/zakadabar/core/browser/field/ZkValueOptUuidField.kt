@@ -11,11 +11,12 @@ open class ZkValueOptUuidField(
     context : ZkFieldContext,
     label: String,
     getter: () -> UUID?,
-    var setter: (UUID?) -> Unit = { }
+    setter: (UUID?) -> Unit = { }
 ) : ZkStringBaseV2<UUID?, ZkValueOptUuidField>(
     context = context,
     label = label,
-    getter = {getter()?.toString()}
+    getter = {getter()?.toString()},
+    setter = setter
 ) {
 
     companion object {

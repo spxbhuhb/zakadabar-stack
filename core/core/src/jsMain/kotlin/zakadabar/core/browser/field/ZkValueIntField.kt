@@ -20,11 +20,12 @@ open class ZkValueIntField(
     context : ZkFieldContext,
     label: String,
     getter: () -> Int,
-    var setter: (Int) -> Unit = { }
+    setter: (Int) -> Unit = { }
 ) : ZkStringBaseV2<Int,ZkValueIntField>(
     context = context,
     label = label,
-    getter = { getter().toString() }
+    getter = { getter().toString() },
+    setter = setter
 ) {
 
     override var valueOrNull : Int?

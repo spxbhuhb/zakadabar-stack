@@ -7,11 +7,12 @@ open class ZkValueStringField(
     context : ZkFieldContext,
     label: String,
     getter: () -> String,
-    var setter: (String) -> Unit = { }
+    setter: (String) -> Unit = { }
 ) : ZkStringBaseV2<String, ZkValueStringField>(
     context = context,
     getter =  getter,
-    label = label
+    label = label,
+    setter = setter
 ) {
 
     override var valueOrNull : String?

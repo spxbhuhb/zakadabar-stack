@@ -11,11 +11,13 @@ import zakadabar.core.browser.util.plusAssign
 abstract class ZkStringBaseV2<VT, FT : ZkStringBaseV2<VT,FT>>(
     context: ZkFieldContext,
     label: String,
-    var getter: () -> String?
+    var getter: () -> String?,
+    setter:(VT) -> Unit = { }
 ) : ZkFieldBase<VT, FT>(
     context = context,
     propName = label,
-    label = label
+    label = label,
+    setter = setter
 ) {
 
     open val input = document.createElement("input") as HTMLInputElement

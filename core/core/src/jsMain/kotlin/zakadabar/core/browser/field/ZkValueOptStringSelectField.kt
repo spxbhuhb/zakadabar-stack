@@ -24,7 +24,7 @@ open class ZkValueOptStringSelectField(
     context: ZkFieldContext,
     label: String,
     getter: () -> String?,
-    var setter: (String?) -> Unit = {},
+    setter: (String?) -> Unit = {},
     renderer: SelectRenderer<String?, ZkValueOptStringSelectField> = DropdownRenderer()
 ) : ZkSelectBaseV2<String?, ZkValueOptStringSelectField>(
     context = context,

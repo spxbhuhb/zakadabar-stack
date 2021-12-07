@@ -25,11 +25,12 @@ open class ZkValueOptLocalDateField(
     context : ZkFieldContext,
     label: String,
     getter:() -> LocalDate?,
-    var setter: (LocalDate?) -> Unit = {}
+    setter: (LocalDate?) -> Unit = {}
 ) : ZkStringBaseV2<LocalDate?,ZkValueOptLocalDateField>(
     context = context,
     label = label,
-    getter = { getter()?.localized }
+    getter = { getter()?.localized },
+    setter = setter
 ) {
 
     override var valueOrNull : LocalDate?

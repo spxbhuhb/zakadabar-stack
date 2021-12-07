@@ -25,7 +25,7 @@ open class ZkValueBooleanField(
     context: ZkFieldContext,
     label: String,
     var getter:() -> Boolean,
-    var setter:(Boolean) -> Unit = {}
+    setter:(Boolean) -> Unit = {}
 ) : ZkFieldBase<Boolean, ZkValueBooleanField>(
     context = context,
     propName = label

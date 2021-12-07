@@ -22,11 +22,12 @@ open class ZkValueDoubleField(
     context: ZkFieldContext,
     label: String,
     getter: () -> Double,
-    var setter: (Double) -> Unit = { }
+    setter: (Double) -> Unit = { }
 ) : ZkStringBaseV2<Double, ZkValueDoubleField>(
     context = context,
     label = label,
-    getter = { getter().toString() }
+    getter = { getter().toString() },
+    setter = setter
 ) {
 
     override var valueOrNull : Double?

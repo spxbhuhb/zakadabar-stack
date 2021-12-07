@@ -26,7 +26,7 @@ open class ZkValueOptBooleanSelectField(
     context : ZkFieldContext,
     label: String,
     getter: () -> Boolean?,
-    var setter: (Boolean?) -> Unit = {},
+    setter: (Boolean?) -> Unit = {},
     renderer: SelectRenderer<Boolean?, ZkValueOptBooleanSelectField> = DropdownRenderer()
 ) : ZkSelectBaseV2<Boolean?, ZkValueOptBooleanSelectField>(
     context = context,

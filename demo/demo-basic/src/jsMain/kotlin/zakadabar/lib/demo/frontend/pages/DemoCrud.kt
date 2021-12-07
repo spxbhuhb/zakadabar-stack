@@ -43,7 +43,10 @@ class DemoForm : ZkForm<DemoBo>() {
 //                + bo::name
 //                + bo::value
 //                + bo::test
-                + stringField { "Name" } label "name" onChange { value -> bo.name = value }
+                + stringField { "Name" } label "name" onChange { value ->
+                    toastInfo { value }
+                    bo.name = value
+                }
                 + optStringField { null } label "NoName"
                 + intField { 5 } label "int" onChange { value -> bo.value = value}
                 + optIntField { null } label "NoValue"
@@ -57,17 +60,17 @@ class DemoForm : ZkForm<DemoBo>() {
                 + localDateTimeField { Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()) } label "local date time"
                 + optLocalDateField { null } label "no local date time"
                 + instantField { Clock.System.now() } label "instant"
-                + optIntField { null } label "no instant"
+                + optIntField { null } label "no instant" onChange { value ->  toastInfo { value.toString() }}
+
                 + textAreaField { "lalalala" } label "text area"
                 + optTextAreaField { null } label "no text area"
                 + uuidField { UUID() } label "uuid"
                 + optUuidField { null } label "no uuid"
 
                 val list = listOf(Pair("A", "A"), Pair("B", "B"), Pair("C", "C"))
-                val booleanList = listOf(Pair(true, "true"), Pair(false, "false"))
                 + stringSelectField { list[0].first } label "string select" query { list }
                 + optStringSelectField { null } label "no string select" query { list }
-                + optBooleanSelectField { null } label "no boolean select" query { booleanList}
+                + optBooleanSelectField { null } label "no boolean select"
                 + enumSelectField { Test.A } label "enum"
                 + optEnumSelectField<Test> { null } label "no enum"
 

@@ -20,11 +20,12 @@ open class ZkValueLongField(
     context : ZkFieldContext,
     label : String,
     getter:() -> Long,
-    var setter: (Long) -> Unit = {}
+    setter: (Long) -> Unit = {}
 ) : ZkStringBaseV2<Long,ZkValueLongField>(
     context = context,
     label = label,
-    getter = { getter().toString() }
+    getter = { getter().toString() },
+    setter = setter
 ) {
 
     override var valueOrNull : Long?

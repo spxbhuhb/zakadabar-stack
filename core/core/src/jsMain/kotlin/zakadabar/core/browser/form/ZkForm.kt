@@ -826,25 +826,8 @@ open class ZkForm<T : BaseBo>(
     @Suppress("UNCHECKED_CAST")
     @PublicApi
     infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.onChange(block: (DT) -> Unit): FT {
-        when(this){
-            is ZkValueStringField -> {
-                this.setter = block as (String) -> Unit
-                onChangeCallback = { _, _,_ -> setter }
-            }
-            is ZkValueOptStringField -> {
-                this.setter = block as (String?) -> Unit
-                onChangeCallback = { _, _,_ -> setter }
-            }
-            is ZkValueIntField -> {
-                this.setter = block as (Int) -> Unit
-                onChangeCallback = { _, _,_ -> setter }
-            }
-            //todo: how to do this better...
-        // options
-        // add setter generic type
-        // make infix fro every field
-        }
-//        onChangeCallback = { _, value, _ -> block(value) }
+        this.setter = block
+        onChangeCallback = { _, _,_ -> setter }
         return this as FT
     }
 
@@ -952,6 +935,11 @@ open class ZkForm<T : BaseBo>(
     fun optStringSelectField(getter:()-> String?) : ZkValueOptStringSelectField =
         ZkValueOptStringSelectField(this@ZkForm, "", getter)
 
-    fun optBooleanSelectField(getter:() -> Boolean?): ZkValueOptBooleanSelectField =
-        ZkValueOptBooleanSelectField(this@ZkForm, "", getter)
+    fun optBooleanSelectField(getter:() -> Boolean?): ZkValueOptBooleanSelectField {
+        return ZkValueOptBooleanSelectField(this@ZkForm, "", getter).apply {
+            fetch = { listOf(
+                Pair(true, localizedStrings["true"]), Pair(false, localizedStrings["false"]))
+            }
+        }
+    }
 }

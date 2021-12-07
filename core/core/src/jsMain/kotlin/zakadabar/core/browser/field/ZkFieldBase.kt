@@ -19,7 +19,8 @@ import zakadabar.core.schema.descriptor.IntBoConstraint
 abstract class ZkFieldBase<DT, FT : ZkFieldBase<DT, FT>>(
     val context: ZkFieldContext,
     val propName: String?,
-    label: String? = null
+    label: String? = null,
+    var setter:(DT) -> Unit = { }
 ) : ZkElement() {
 
     abstract var readOnly: Boolean
