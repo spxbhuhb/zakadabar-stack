@@ -57,7 +57,7 @@ class StringSelectFilter : ZkForm<ExampleStringFormBo>() {
 
         // also, check if the currently selected value is in the new item list
 
-        val newValue = filteredField.getPropValue()?.let { current ->
+        val newValue = filteredField.getter()?.let { current ->
             newItems.firstOrNull { it.first == current }
         }
 

@@ -5,6 +5,8 @@ package zakadabar.cookbook
 
 import org.w3c.dom.HTMLElement
 import zakadabar.cookbook.browser.crud.basic.BasicCrud
+import zakadabar.cookbook.browser.field.custom.CustomInputFieldForm
+import zakadabar.cookbook.browser.field.custom.CustomSelectFieldForm
 import zakadabar.cookbook.browser.field.onchange.FieldOnChangeForm
 import zakadabar.cookbook.browser.field.update.FieldUpdateForm
 import zakadabar.cookbook.browser.form.select.filter.BoSelectFilter
@@ -69,6 +71,8 @@ class Cookbook : CommonModule {
             "TableSaveElement" -> TableSaveElement()
             "TableVerticalBorderSome" -> TableVerticalBorderSome()
             "TextHelpModal" -> TextHelpModal()
+            "CustomInputFieldForm" -> CustomInputFieldForm()
+            "CustomSelectFieldForm" -> CustomSelectFieldForm()
 
             else -> null
 
