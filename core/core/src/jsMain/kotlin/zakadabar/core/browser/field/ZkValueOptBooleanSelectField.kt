@@ -32,7 +32,8 @@ open class ZkValueOptBooleanSelectField(
     context = context,
     label = label,
     renderer = renderer,
-    getter = getter
+    getter = getter,
+    setter = setter
 ) {
 
     override fun fromString(string: String) = when (string) {

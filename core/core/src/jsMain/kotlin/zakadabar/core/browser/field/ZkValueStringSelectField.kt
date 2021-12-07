@@ -30,7 +30,8 @@ open class ZkValueStringSelectField(
     context = context,
     label = label,
     renderer = renderer,
-    getter = getter
+    getter = getter,
+    setter = { value ->  value?.let { setter(it) }}
 ) {
 
     override fun fromString(string: String): String {
@@ -47,5 +48,4 @@ open class ZkValueStringSelectField(
             if (user) onUserChange(value.first)
         }
     }
-
 }

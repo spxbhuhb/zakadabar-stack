@@ -31,7 +31,8 @@ open class ZkValueOptEnumSelectField<E : Enum<E>>(
     context = context,
     label = label,
     renderer = renderer,
-    getter = getter
+    getter = getter,
+    setter = setter
 ) {
 
     override fun fromString(string: String) = toEnum(string)

@@ -24,7 +24,8 @@ abstract class ZkSelectBaseV2<VT, FT : ZkSelectBaseV2<VT, FT>>(
     label: String,
     val renderer : SelectRenderer<VT, FT>,
     var onSelectCallback: (Pair<VT, String>?) -> Unit = { },
-    getter: () -> VT?
+    getter: () -> VT?,
+    setter: (VT?) -> Unit = {}
 ) : ZkFieldBase<VT, FT>(
     context = context,
     propName = label

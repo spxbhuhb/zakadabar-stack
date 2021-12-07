@@ -38,7 +38,8 @@ open class ZkValueEnumSelectField<E : Enum<E>>(
     context = context,
     label = label,
     renderer = renderer,
-    getter = getter
+    getter = getter,
+    setter = { value ->  value?.let { setter(it) } }
 ) {
 
     var shadowValue: E? = null
