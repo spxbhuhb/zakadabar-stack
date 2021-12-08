@@ -20,7 +20,7 @@ open class ZkToastStyles : ZkCssStyleSheet() {
 
         right = 20.px
         bottom = 20.px
-        zIndex = 2000.zIndex
+        zIndex = 2200.zIndex
     }
 
     open val toastOuter by cssClass {

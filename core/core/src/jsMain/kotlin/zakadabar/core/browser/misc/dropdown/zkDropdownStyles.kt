@@ -16,7 +16,7 @@ open class ZkDropdownStyles : ZkCssStyleSheet() {
     open val dropdownContent by cssClass {
         + Position.absolute
         + Display.none
-        zIndex = 100.zIndex
+        zIndex = 2000.zIndex
         outline = "none"
     }
 
