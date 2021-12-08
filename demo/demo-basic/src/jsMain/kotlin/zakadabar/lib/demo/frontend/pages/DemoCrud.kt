@@ -40,39 +40,9 @@ class DemoForm : ZkForm<DemoBo>() {
         build(localized<DemoForm>()) {
             + section {
                 + bo::id
-//                + bo::name
-//                + bo::value
-//                + bo::test
-                + stringField { "Name" } label "name" onChange { value ->
-                    toastInfo { value }
-                    bo.name = value
-                }
-                + optStringField { null } label "NoName"
-                + intField { 5 } label "int" onChange { value -> bo.value = value}
-                + optIntField { null } label "NoValue"
-                + doubleField { 5.5 } label "double"
-                + optDoubleField { null } label "no double"
-                + longField { 555555L } label "long"
-                + optLongField { null } label "no long"
-                + booleanField { true } label "boolean"
-                + localDateField { Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date } label "local date"
-                + optLocalDateField { null } label "no local date"
-                + localDateTimeField { Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()) } label "local date time"
-                + optLocalDateField { null } label "no local date time"
-                + instantField { Clock.System.now() } label "instant"
-                + optIntField { null } label "no instant" onChange { value ->  toastInfo { value.toString() }}
-
-                + textAreaField { "lalalala" } label "text area"
-                + optTextAreaField { null } label "no text area"
-                + uuidField { UUID() } label "uuid"
-                + optUuidField { null } label "no uuid"
-
-                val list = listOf(Pair("A", "A"), Pair("B", "B"), Pair("C", "C"))
-                + stringSelectField { list[0].first } label "string select" query { list }
-                + optStringSelectField { null } label "no string select" query { list }
-                + optBooleanSelectField { null } label "no boolean select"
-                + enumSelectField { Test.A } label "enum"
-                + optEnumSelectField<Test> { null } label "no enum"
+                + bo::name
+                + bo::value
+                + bo::test
 
             }
 
