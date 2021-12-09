@@ -3,16 +3,16 @@
  */
 package zakadabar.lib.content.frontend.browser
 
-import zakadabar.lib.content.data.TextBlockBo
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.ZkElementMode
 import zakadabar.core.browser.button.ZkButton
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.modal.withConfirm
+import zakadabar.core.browser.util.io
 import zakadabar.core.resource.ZkFlavour
 import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.css.px
-import zakadabar.core.browser.util.io
+import zakadabar.lib.content.data.TextBlockBo
 
 class ContentTextForm(
     private val parent: ZkElement
@@ -30,8 +30,8 @@ class ContentTextForm(
             gridGap = 20.px
 
             + section {
-                + select(bo::stereotype, options = textBlockStereotypes)
-                + textarea(bo::value) {
+                + bo::stereotype.asSelect() options { textBlockStereotypes }
+                + bo::value.asTextArea {
                     area.style.resize = "vertical"
                 }
             }

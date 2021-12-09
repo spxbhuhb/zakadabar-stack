@@ -55,8 +55,8 @@ class FormStringExample(
             + bo::optValue
             + bo::invalidValue
             + bo::readOnlyValue readOnly true
-            + select(bo::selectValue, options = listOf("Option 1", "Option 2", "Option 3"))
-            + textarea(bo::textAreaValue)
+            + bo::selectValue.asSelect() options { listOf("Option 1", "Option 2", "Option 3") }
+            + bo::textAreaValue.asTextArea()
         }
 
         // Make invalidValue touched, so the form will show styles.

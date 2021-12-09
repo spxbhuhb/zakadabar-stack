@@ -111,12 +111,46 @@ therefore the labels and the inputs are not in a grid, but below each other.
 
 ## Fields
 
-Fields of a form are usually bound to a property of the BO the form handles. When
-the user changes the value of an input, the value in the BO also changes.
+You can add different kind of fields to forms:
 
-However, if you change the value in the BO, the form field does not update 
-automatically. To update the form field you have to set the `value` property
-of the field.
+- fields for properties of object instances
+- fields for individual values
+- special fields like filters
+
+### Property Based Fields
+
+These fields are linked to a property, typically one in the BO the form handles,
+but that is actually not necessary. To add such a field to a form, simply use:
+
+```kotlin
++ bo::stringValue
+```
+
+The line above creates a `ZkPropStringField` element and adds it to the form.
+
+Behaviour of property based fields:
+
+- When the user changes the value of an input, the value in the property also changes.
+- The form validates its BO after each change. Validation provides user feedback automatically.
+- Changing the BO value **does not change** the UI field content. Use the `value` of the field for the change.
+
+### Value Based Fields
+
+Value based fields are not linked to any properties, you provide a value and handle changes yourself.
+
+```kotlin
++ stringField("initial content") onChange { value -> toastSuccess { "new value: $value" } }
+```
+
+The helper functions follow the simple pattern `<dataType>Field`. Check the recipe
+below for an example.
+
+Behaviour of value based fields:
+
+- When the user changes the input, the field calls the callback passed to `onChange`.
+- The form still validates the BO after each change.
+
+Recipe: [Form With Custom Fields](/doc/cookbook/browser/field/custom/recipe.md)
 
 ### Built-In Fields [source code](/lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/form/FormBuiltinExample.kt)
 
@@ -224,9 +258,7 @@ The block after `query` is a suspend function that is used to get the
 items to shown in the select.
 
 ```kotlin
-val options = listOf("option 1", "option 2", "option3").map { it to it }
-
-+ bo::stringSelectValue.asSelect() query { options }
++ bo::stringSelectValue.asSelect() options { listOf("option 1", "option 2", "option3") }
 ```
 
 #### Select With Radio Buttons

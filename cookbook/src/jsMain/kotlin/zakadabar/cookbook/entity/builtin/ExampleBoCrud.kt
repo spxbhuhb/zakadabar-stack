@@ -53,15 +53,15 @@ class ExampleBoForm : ZkForm<ExampleBo>() {
                 + bo::optSecretValue
                 + bo::optRecordSelectValue query { ExampleReferenceBo.all().by { it.name } }
                 + bo::optStringValue
-                + select(bo::optStringSelectValue, options = listOf("option 1", "option 2", "option3"))
+                + bo::optStringSelectValue.asSelect() options { listOf("option 1", "option 2", "option3") }
                 + bo::optTextAreaValue
                 + bo::optUuidValue
                 + bo::secretValue
                 + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } }
                 + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } } readOnly true
                 + ZkPropStringField(this@ExampleBoForm, bo::stringValue).also { this@ExampleBoForm.fields += it }
-                + select(bo::stringSelectValue, options = listOf("option 1", "option 2", "option3"))
-                + textarea(bo::textAreaValue)
+                + bo::stringSelectValue.asSelect() options { listOf("option 1", "option 2", "option3") }
+                + bo::textAreaValue.asTextArea()
                 + bo::uuidValue
             }
         }

@@ -19,11 +19,11 @@ package zakadabar.core.browser.field
 import zakadabar.core.data.Secret
 import kotlin.reflect.KMutableProperty0
 
-open class ZkOptSecretField(
+open class ZkPropOptSecretField(
     context : ZkFieldContext,
     var prop: KMutableProperty0<Secret?>,
     newSecret: Boolean = false
-) : ZkStringBaseV2<Secret?, ZkOptSecretField>(
+) : ZkStringBaseV2<Secret?, ZkPropOptSecretField>(
     context = context,
     label = prop.name,
     getter = { prop.get()?.value }
@@ -58,7 +58,7 @@ open class ZkOptSecretField(
     /**
      * Set autoComplete to "new-password".
      */
-    infix fun newSecret(value: Boolean): ZkOptSecretField {
+    infix fun newSecret(value: Boolean): ZkPropOptSecretField {
         this.newSecret = value
         return this
     }
