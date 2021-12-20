@@ -11,6 +11,7 @@ plugins {
     id("org.jetbrains.dokka")
     id("com.github.johnrengelman.shadow")
     id("com.palantir.docker") version "0.25.0"
+    id("org.jetbrains.compose") version "1.0.1-rc2"
     application
     signing
 
@@ -39,6 +40,7 @@ kotlin {
 
     js(IR) {
         browser()
+        binaries.executable()
     }
 
     sourceSets["commonMain"].dependencies {
@@ -49,6 +51,11 @@ kotlin {
         api(project(":exp:liveview"))
         api(project(":cookbook"))
         implementation("com.h2database:h2:${Versions.h2}")
+        implementation(compose.runtime)
+    }
+
+    sourceSets["jsMain"].dependencies {
+        implementation(compose.web.core)
     }
 }
 

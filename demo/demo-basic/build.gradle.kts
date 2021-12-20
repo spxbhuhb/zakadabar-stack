@@ -21,8 +21,7 @@ group = "hu.simplexion.zakadabar"
 version = Versions.zakadabar
 
 application {
-    mainClass.set("zakadabar.core.server" +
-            ".ServerKt")
+    mainClass.set("zakadabar.core.server.ServerKt")
 }
 
 noArg {
@@ -40,6 +39,7 @@ kotlin {
 
     js(IR) {
         browser()
+        binaries.executable()
     }
 
     sourceSets["commonMain"].dependencies {
