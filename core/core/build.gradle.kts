@@ -27,7 +27,7 @@ kotlin {
         }
     }
 
-    js {
+    js(BOTH) {
         nodejs {
             testTask {
                 enabled = false // complains about missing DOM, TODO fix that, maybe, I'm not sure that I want the dependency
@@ -104,10 +104,10 @@ kotlin {
     }
 }
 
-tasks.named("compileKotlinJs") {
-    this as org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
-    kotlinOptions.moduleKind = "umd"
-}
+//tasks.named("compileKotlinJs") {
+//    this as org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
+//    kotlinOptions.moduleKind = "umd"
+//}
 
 noArg {
     annotation("kotlinx.serialization.Serializable")

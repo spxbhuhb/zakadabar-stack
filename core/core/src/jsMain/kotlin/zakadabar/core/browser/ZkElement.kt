@@ -97,7 +97,7 @@ open class ZkElement(
         if (addKClass) element.dataset["kclass"] = this::class.simpleName.toString()
     }
 
-    val childElements by lazy { mutableListOf<ZkElement>() }
+    val childElements = mutableListOf<ZkElement>()
 
     // -------------------------------------------------------------------------
     //   Shorthands variables
@@ -699,12 +699,10 @@ open class ZkElement(
      * each child.
      */
     open fun clearChildren(): ZkElement {
-        if (::childElements.isInitialized) {
-            childElements.forEach { child ->
-                child.onDestroy()
-            }
-            childElements.clear()
+        childElements.forEach { child ->
+            child.onDestroy()
         }
+        childElements.clear()
         return this
     }
 
@@ -1136,7 +1134,7 @@ open class ZkElement(
     /**
      * Adds a [ZkFieldBase] as a child, keeps field type.
      */
-    operator fun <T,FT : ZkFieldBase<T, FT>> ZkFieldBase<T,FT>.unaryPlus(): FT {
+    operator fun <T, FT : ZkFieldBase<T, FT>> ZkFieldBase<T, FT>.unaryPlus(): FT {
         this@ZkElement.buildPoint.appendChild(this.element)
         this@ZkElement.childElements += this
         this@ZkElement.syncChildrenState(this)

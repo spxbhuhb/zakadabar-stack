@@ -24,7 +24,7 @@ kotlin {
 
     jvm { }
 
-    js {
+    js(BOTH) {
         nodejs {
             testTask {
                 enabled = false // complains about missing DOM, TODO fix that, maybe, I'm not sure that I want the dependency

@@ -25,7 +25,7 @@ kotlin {
         }
     }
 
-    js {
+    js(BOTH) {
         nodejs()
     }
 

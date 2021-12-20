@@ -37,7 +37,7 @@ kotlin {
         }
     }
 
-    js {
+    js(IR) {
         browser()
     }
 
