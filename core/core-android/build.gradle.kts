@@ -26,11 +26,13 @@ android {
     compileSdk = Versions.Android.compileSdk
     sourceSets["main"].manifest.srcFile("src/main/AndroidManifest.xml")
 
+    kotlinOptions {
+        languageVersion = "1.6"
+    }
+
     defaultConfig {
         minSdk = Versions.Android.minSdk
         targetSdk = Versions.Android.targetSdk
-        versionCode = Versions.Android.versionCode
-        versionName = Versions.Android.versionName
     }
 
     packagingOptions {

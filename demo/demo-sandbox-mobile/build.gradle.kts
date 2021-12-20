@@ -19,18 +19,21 @@ noArg {
 }
 
 dependencies {
-
     implementation(project(":demo:demo-sandbox")) {
         exclude(group="org.xerial", module="sqlite-jdbc")
     }
     implementation(project(":core:core-android"))
     implementation("com.google.android.material:material:1.4.0")
-    implementation("androidx.appcompat:appcompat:1.3.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
+    implementation("androidx.appcompat:appcompat:1.4.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.2")
 }
 
 android {
     compileSdk = Versions.Android.compileSdk
+
+    kotlinOptions {
+        languageVersion = "1.6"
+    }
 
     defaultConfig {
         minSdk = Versions.Android.minSdk
