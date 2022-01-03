@@ -981,8 +981,7 @@ open class ZkForm<T : BaseBo>(
     fun stringRadioGroupField(getter: () -> String): FormFieldWrapper<ZkValueStringSelectField> =
         FormFieldWrapper(ZkValueStringSelectField(this@ZkForm, "", getter, renderer = RadioGroupRenderer()))
 
-
-    fun optStringRadioGroupField(getter: () -> String): FormFieldWrapper<ZkValueOptStringSelectField> =
+    fun optStringRadioGroupField(getter: () -> String?): FormFieldWrapper<ZkValueOptStringSelectField> =
         FormFieldWrapper(ZkValueOptStringSelectField(this@ZkForm, "", getter, renderer = RadioGroupRenderer()))
 
     // to set options, use query infix
