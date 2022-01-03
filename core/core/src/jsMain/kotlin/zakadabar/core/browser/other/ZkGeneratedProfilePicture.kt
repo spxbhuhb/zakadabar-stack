@@ -8,7 +8,7 @@ import zakadabar.core.resource.*
 import zakadabar.core.resource.css.*
 import zakadabar.core.util.alpha
 
-class GeneratedProfilePicture(
+class ZkGeneratedProfilePicture(
     val name: String,
     val backGroundColor: String = ZkColors.white.alpha(0.5),
     val letterColor: String = theme.primaryColor

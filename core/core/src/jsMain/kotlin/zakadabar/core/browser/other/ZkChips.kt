@@ -12,7 +12,7 @@ import zakadabar.core.resource.css.AlignItems
 import zakadabar.core.resource.css.Display
 import zakadabar.core.resource.css.JustifyContent
 
-class Chips(
+class ZkChips(
     val name: String,
     val button: ZkButton? = null,
     val color: String = theme.primaryColor,
