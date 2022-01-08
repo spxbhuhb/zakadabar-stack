@@ -77,7 +77,7 @@ of the executor to make the authorization decisions. It is very easy to set up: 
 to operations. This example uses stack roles, but you can use any role name.
 
 ```kotlin
-override val authorizer: Authorizer<TestBlob> = SimpleRoleAuthorizer {
+override val authorizer: BusinessLogicAuthorizer<TestBlob> = SimpleRoleAuthorizer {
     allReads = StackRoles.siteMember
     allWrites = StackRoles.siteAdmin
 }
@@ -108,7 +108,7 @@ You can authorize actions and queries one-by-one. These have precedence over
 the general operation settings from the table above.
 
 ```kotlin
-override val authorizer: Authorizer<TestBlob> = SimpleRoleAuthorizer {
+override val authorizer: BusinessLogicAuthorizer<TestBlob> = SimpleRoleAuthorizer {
     query(TestQuery::class, StackRoles.siteMember)
     action(TestAction::class, StackRoles.siteAdmin)
 }
@@ -120,7 +120,7 @@ SimpleRoleAuthorizer supports the special value of `PUBLIC`. This is not an
 actual role, but may be used to provide access for everyone:
 
 ```kotlin
-override val authorizer: Authorizer<TestBlob> = SimpleRoleAuthorizer {
+override val authorizer: BusinessLogicAuthorizer<TestBlob> = SimpleRoleAuthorizer {
     allReads = PUBLIC
     allWrites = StackRoles.siteMember
 }
@@ -132,7 +132,7 @@ SimpleRoleAuthorizer supports the special value of `LOGGED_IN`. This is not an
 actual role, but may be used to provide access for all logged-in users:
 
 ```kotlin
-override val authorizer: Authorizer<TestBlob> = SimpleRoleAuthorizer {
+override val authorizer: BusinessLogicAuthorizer<TestBlob> = SimpleRoleAuthorizer {
     allReads = LOGGED_IN
     allWrites = StackRoles.siteMember
 }
@@ -150,11 +150,11 @@ the authorizer.
 
 Three options to write authorizers:
 
-- write a re-usable one by implementing the [Authorizer](/core/core/src/commonMain/kotlin/zakadabar/core/authorize/BusinessLogicAuthorizer.kt) interface,
+- write a re-usable one by implementing the [BusinessLogicAuthorizer](/core/core/src/commonMain/kotlin/zakadabar/core/authorize/BusinessLogicAuthorizer.kt) interface,
 - write a re-usable one by extending one,
 - write an anonymous one specific to one business logic class.
 
-The first two are trivial, the third is also simple. The example below extends the Authorizer interface itself
+The first two are trivial, the third is also simple. The example below extends the BusinessLogicAuthorizer interface itself
 and allows read for all users (public and logged in likewise). You could extend an existing authorizer the
 same way.
 
@@ -168,7 +168,7 @@ class SimpleExampleBl : EntityBusinessLogicBase<SimpleExampleBo>(
 
     override val pa = SimpleExampleBoExposedPaGen()
 
-    override val authorizer = object : Authorizer<SimpleExampleBo> {
+    override val authorizer = object : BusinessLogicAuthorizer<SimpleExampleBo> {
         override fun authorizeRead(executor: Executor, entityId: EntityId<SimpleExampleBo>) {
             // pass
         }
