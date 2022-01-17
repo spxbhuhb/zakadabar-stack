@@ -6,25 +6,13 @@
 
 Zakadabar is a multiplatform application development library.
 
-## Status
+## News
 
-As of 2021.11.15 I removed the alpha marker from the library as I feel we've
-reached a point when we do not add structural changes often.
+2021.12.26 uses Kotlin 1.6.10 and Kotin/Js successfully compiles for IR. This 
+gives us the possibility to add IR compiler plugins which will be the next step.
 
-There are a missing pieces (i.e. rich text editor, date picker), and a few areas
-could be made better with some cleanup. However, I don't really plan to work 
-on these in the near future.
-
-The next step will be a rather significant change: adding our own compiler plugin
-to support declarative UI building with proper state management, automatic re-render
-on state changes and transform function optimization.
-
-I plan to keep the current UI as is, adding bugfixes and then create the same
-functionality with a declarative UI that is able to refresh on state changes
-(same as in React, Compose, Flutter).
-
-I also plan to keep most of the concepts from the current UI, the code
-will look like quite similar, but elements will re-render on state changes.
+As of now the Kotlin/Js target is BOTH, I plan to switch this to IR only by end
+of March.
 
 ## Documentation
 
@@ -46,7 +34,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation("hu.simplexion.zakadabar:core:2021.12.9")
+                implementation("hu.simplexion.zakadabar:core:2021.12.26")
             }
         }
     }
@@ -55,7 +43,7 @@ kotlin {
 
 ## License
 
-> Copyright (c) 2020-2021 Simplexion Kft, Hungary and contributors
+> Copyright (c) 2020-2022 Simplexion Kft, Hungary and contributors
 >
 > Licensed under the Apache License, Version 2.0 (the "License");
 > you may not use this work except in compliance with the License.
