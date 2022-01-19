@@ -128,8 +128,8 @@ class $browserTableName : ZkTable<$boName>() {
 fun businessLogicGenerator() = """
 package $packageName
 
-import zakadabar.core.authorize.Authorizer
-import zakadabar.core.authorize.EmptyAuthorizer
+import zakadabar.core.authorize.BusinessLogicBusinessLogicAuthorizer
+import zakadabar.core.authorize.EmptyBusinessLogicAuthorizer
 import zakadabar.core.business.EntityBusinessLogicBase
 import ${packageName}.$boName
 
@@ -139,7 +139,7 @@ open class $businessLogicName : EntityBusinessLogicBase<${boName}>(
 
     override val pa = ${baseName}Pa()
 
-    override val authorizer : Authorizer<${boName}> = EmptyAuthorizer()
+    override val BusinessLogicAuthorizer : BusinessLogicAuthorizer<${boName}> = EmptyAuthorizer()
     
 }
 """.trimIndent()
