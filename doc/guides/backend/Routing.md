@@ -16,7 +16,7 @@ class PrincipalBl : EntityBusinessLogicBase<PrincipalBo>(
         query(PrincipalByEyeColor::class, ::query)
     }
     
-    private fun action(executor: Executor, action: PasswordChangeAction) : ActionStatusBo {
+    private fun action(executor: Executor, action: PasswordChangeAction) : ActionStatus {
         // ... execute the action ...
     }
 

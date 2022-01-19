@@ -219,11 +219,11 @@ class SimpleExampleAction(
 
     var name : String
 
-) : ActionBo<ActionStatusBo> {
+) : ActionBo<ActionStatus> {
 
     companion object : ActionBoCompanion(SimpleExampleBo.boNamespace)
 
-    override suspend fun execute() = comm.action(this, serializer(), ActionStatusBo.serializer())
+    override suspend fun execute() = comm.action(this, serializer(), ActionStatus.serializer())
 
     override fun schema() = BoSchema {
         + ::name blank false min 1 max 30
@@ -243,15 +243,15 @@ Actions always return with a single result BO. The type of the result bo is
 specified in the type parameter of `ActionBo` (and also in some other lines).
 
 ```kotlin
-ActionBo<ActionStatusBo>
+ActionBo<ActionStatus>
 ```
 
-The result BO can be any kind of BO, `ActionStatusBo` is a generic class provided
+The result BO can be any kind of BO, `ActionStatus` is a generic class provided
 for actions which have a simple `success` flag and `reason` for explanation:
 
 ```kotlin
 @Serializable
-class ActionStatusBo(
+class ActionStatus(
     val success: Boolean = true,
     val reason: String? = null
 ) : BaseBo
