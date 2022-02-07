@@ -33,6 +33,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":core:core"))
+                implementation(project(":lib:accounts"))
                 implementation(project(":lib:blobs"))
                 implementation(project(":lib:schedule"))
                 implementation(project(":lib:email"))
