@@ -23,7 +23,7 @@ open class ZkPropOptStringField(
     var prop: KMutableProperty0<String?>
 ) : ZkStringBaseV2<String?, ZkPropOptStringField>(
     context = context,
-    label = prop.name,
+    propName = prop.name,
     getter = { prop.get() }
 ) {
 

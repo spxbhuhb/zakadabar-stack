@@ -890,91 +890,88 @@ open class ZkForm<T : BaseBo>(
     // to set setter, use onChange infix
 
     fun stringField(getter: () -> String): ZkValueStringField =
-        ZkValueStringField(this@ZkForm, "", getter)
+        add(ZkValueStringField(this@ZkForm, "", getter))
 
     fun optStringField(getter: () -> String?): ZkValueOptStringField =
-        ZkValueOptStringField(this@ZkForm, "", getter)
+        add(ZkValueOptStringField(this@ZkForm, "", getter))
 
     fun intField(getter: () -> Int): ZkValueIntField =
-        ZkValueIntField(this@ZkForm, "", getter)
+        add(ZkValueIntField(this@ZkForm, "", getter))
 
     fun optIntField(getter: () -> Int?): ZkValueOptIntField =
-        ZkValueOptIntField(this@ZkForm, "", getter)
+        add(ZkValueOptIntField(this@ZkForm, "", getter))
 
     fun doubleField(getter: () -> Double): ZkValueDoubleField =
-        ZkValueDoubleField(this@ZkForm, "", getter)
+        add(ZkValueDoubleField(this@ZkForm, "", getter))
 
     fun optDoubleField(getter: () -> Double?): ZkValueOptDoubleField =
-        ZkValueOptDoubleField(this@ZkForm, "", getter)
+        add(ZkValueOptDoubleField(this@ZkForm, "", getter))
 
     fun longField(getter: () -> Long): ZkValueLongField =
-        ZkValueLongField(this@ZkForm, "", getter)
+        add(ZkValueLongField(this@ZkForm, "", getter))
 
     fun optLongField(getter: () -> Long?): ZkValueOptLongField =
-        ZkValueOptLongField(this@ZkForm, "", getter)
+        add(ZkValueOptLongField(this@ZkForm, "", getter))
 
     fun booleanField(getter: () -> Boolean): ZkValueBooleanField =
-        ZkValueBooleanField(this@ZkForm, "", getter)
+        add(ZkValueBooleanField(this@ZkForm, "", getter))
 
     fun localDateField(getter: () -> LocalDate): ZkValueLocalDateField =
-        ZkValueLocalDateField(this@ZkForm, "", getter)
+        add(ZkValueLocalDateField(this@ZkForm, "", getter))
 
     fun optLocalDateField(getter: () -> LocalDate?): ZkValueOptLocalDateField =
-        ZkValueOptLocalDateField(this@ZkForm, "", getter)
+        add(ZkValueOptLocalDateField(this@ZkForm, "", getter))
 
     fun localDateTimeField(getter: () -> LocalDateTime): ZkValueLocalDateTimeField =
-        ZkValueLocalDateTimeField(this@ZkForm, "", getter)
+        add(ZkValueLocalDateTimeField(this@ZkForm, "", getter))
 
     fun optLocalDateTimeField(getter: () -> LocalDateTime?): ZkValueOptLocalDateTimeField =
-        ZkValueOptLocalDateTimeField(this@ZkForm, "", getter)
+        add(ZkValueOptLocalDateTimeField(this@ZkForm, "", getter))
 
     fun instantField(getter: () -> Instant): ZkValueInstantField =
-        ZkValueInstantField(this@ZkForm, "", getter)
+        add(ZkValueInstantField(this@ZkForm, "", getter))
 
     fun optInstantField(getter: () -> Instant?): ZkValueOptInstantField =
-        ZkValueOptInstantField(this@ZkForm, "", getter)
+        add(ZkValueOptInstantField(this@ZkForm, "", getter))
 
     fun textAreaField(getter: () -> String): ZkValueTextAreaField =
-        ZkValueTextAreaField(this@ZkForm, "", getter)
+        add(ZkValueTextAreaField(this@ZkForm, "", getter))
 
     fun optTextAreaField(getter: () -> String?): ZkValueOptTextAreaField =
-        ZkValueOptTextAreaField(this@ZkForm, "", getter)
+        add(ZkValueOptTextAreaField(this@ZkForm, "", getter))
 
     fun uuidField(getter: () -> UUID): ZkValueUuidField =
-        ZkValueUuidField(this@ZkForm, "", getter)
+        add(ZkValueUuidField(this@ZkForm, "", getter))
 
     fun optUuidField(getter: () -> UUID?): ZkValueOptUuidField =
-        ZkValueOptUuidField(this@ZkForm, "", getter)
+        add(ZkValueOptUuidField(this@ZkForm, "", getter))
 
     inline fun <reified E : Enum<E>> enumSelectField(noinline getter: () -> E): ZkValueEnumSelectField<E> {
         val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) }
-        return ZkValueEnumSelectField(this@ZkForm, "", getter, toEnum = { name -> enumValueOf(name) }).apply {
+        return add(ZkValueEnumSelectField(this@ZkForm, "", getter, toEnum = { name -> enumValueOf(name) }).apply {
             fetch = { options }
-        }
+        })
     }
 
     inline fun <reified E : Enum<E>> optEnumSelectField(noinline getter: () -> E?): ZkValueOptEnumSelectField<E> {
         val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) }
-        return ZkValueOptEnumSelectField(this@ZkForm, "", getter, toEnum = { name -> enumValueOf(name) }).apply {
+        return add(ZkValueOptEnumSelectField(this@ZkForm, "", getter, toEnum = { name -> enumValueOf(name) }).apply {
             fetch = { options }
-        }
+        })
     }
 
     // to set options, use query infix
 
     fun stringSelectField(getter: () -> String): ZkValueStringSelectField =
-        ZkValueStringSelectField(this@ZkForm, "", getter)
+        add(ZkValueStringSelectField(this@ZkForm, "", getter))
 
     fun optStringSelectField(getter: () -> String?): ZkValueOptStringSelectField =
-        ZkValueOptStringSelectField(this@ZkForm, "", getter)
+        add(ZkValueOptStringSelectField(this@ZkForm, "", getter))
 
-    fun optBooleanSelectField(getter: () -> Boolean?): ZkValueOptBooleanSelectField {
-        return ZkValueOptBooleanSelectField(this@ZkForm, "", getter).apply {
+    fun optBooleanSelectField(getter: () -> Boolean?): ZkValueOptBooleanSelectField =
+        add(ZkValueOptBooleanSelectField(this@ZkForm, "", getter)).apply {
             fetch = {
-                listOf(
-                    Pair(true, localizedStrings["true"]), Pair(false, localizedStrings["false"])
-                )
+                listOf(Pair(true, localizedStrings["true"]), Pair(false, localizedStrings["false"]))
             }
         }
-    }
 }

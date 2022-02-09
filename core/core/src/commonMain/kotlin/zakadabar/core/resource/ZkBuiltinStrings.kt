@@ -73,8 +73,10 @@ open class ZkBuiltinStrings : ZkStringStore() {
     // -------------------------------------------------------------------------
 
     open val account by "Account"
+    open val accountName by "Account Name"
     open val accountStatus by "Account Status"
     open val accounts by "Accounts"
+    open val accountSecure by "Accounts"
     open val administration by "Administration"
     open val basics by "Basics"
     open val fullName by "Full Name"
@@ -106,6 +108,15 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val forbiddenExplanation by "This function is unavailable on this account."
     open val accountTrimSpaces by "Account name has starting or trailing spaces."
     open val accountNameConflict by "This account name is already used."
-
+    open val email by "Email"
+    open val phone by "Phone Number"
+    open val locked by "Locked"
+    open val validated by "Validated"
+    open val expired by "Expired"
+    open val anonymized by "Anonymized"
+    open val lastLoginSuccess by "Last Login Success"
+    open val loginSuccessCount by "Login Success Count"
+    open val lastLoginFail by "Last Login Fail"
+    open val failedLogins by "Failed Logins"
 }
 

@@ -27,7 +27,7 @@ open class ZkPropSecretVerificationField(
     label: String = localizedStrings.getNormalized(prop.name + "Verification")
 ) : ZkStringBaseV2<Secret, ZkPropSecretVerificationField>(
     context = context,
-    label = label,
+    propName = prop.name,
     getter = { prop.get().value }
 ) {
 

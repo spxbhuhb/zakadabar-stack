@@ -23,7 +23,7 @@ open class ZkPropIntField(
     var prop: KMutableProperty0<Int>
 ) : ZkStringBaseV2<Int,ZkPropIntField>(
     context = context,
-    label = prop.name,
+    propName = prop.name,
     getter = { prop.get().toString() }
 ) {
 

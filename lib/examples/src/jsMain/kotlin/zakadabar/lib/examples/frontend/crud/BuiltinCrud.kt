@@ -12,7 +12,6 @@ import zakadabar.core.resource.localized
 import zakadabar.core.resource.localizedStrings
 import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
-import zakadabar.lib.examples.resources.strings
 
 class BuiltinCrud : ZkCrudTarget<BuiltinBo>() {
     init {
@@ -72,7 +71,7 @@ class BuiltinForm : ZkForm<BuiltinBo>() {
                 + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } } readOnly true
                 + ZkPropStringField(this@BuiltinForm, bo::stringValue).also { this@BuiltinForm.fields += it }
                 + bo::stringSelectValue.asSelect() query { options }
-                + bo::textAreaValue.asTextArea() label strings.textAreaValue
+                + bo::textAreaValue.asTextArea()
                 + bo::uuidValue
             }
         }

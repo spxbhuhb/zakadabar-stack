@@ -23,8 +23,8 @@ open class ZkPropStringField(
     var prop: KMutableProperty0<String>
 ) : ZkStringBaseV2<String, ZkPropStringField>(
     context = context,
+    propName = prop.name,
     getter = { prop.get() },
-    label = prop.name
 ) {
 
     override var valueOrNull: String?
