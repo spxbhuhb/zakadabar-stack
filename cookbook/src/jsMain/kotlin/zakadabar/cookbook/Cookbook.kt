@@ -8,6 +8,7 @@ import zakadabar.cookbook.browser.crud.basic.BasicCrud
 import zakadabar.cookbook.browser.field.custom.CustomInputFieldForm
 import zakadabar.cookbook.browser.field.custom.CustomSelectFieldForm
 import zakadabar.cookbook.browser.field.onchange.FieldOnChangeForm
+import zakadabar.cookbook.browser.field.select.filter.SelectWithFilter
 import zakadabar.cookbook.browser.field.update.FieldUpdateForm
 import zakadabar.cookbook.browser.form.select.filter.BoSelectFilter
 import zakadabar.cookbook.browser.form.select.filter.StringSelectFilter
@@ -73,6 +74,7 @@ class Cookbook : CommonModule {
             "TextHelpModal" -> TextHelpModal()
             "CustomInputFieldForm" -> CustomInputFieldForm()
             "CustomSelectFieldForm" -> CustomSelectFieldForm()
+            "SelectWithFilter" -> SelectWithFilter()
 
             else -> null
 

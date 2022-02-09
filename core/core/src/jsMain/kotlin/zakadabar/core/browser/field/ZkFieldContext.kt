@@ -33,6 +33,20 @@ object STANDALONE : ZkFieldContext {
     override fun submit() {}
 }
 
+/**
+ * Field context for standalone, writable fields without labels.
+ */
+@PublicApi
+object STANDALONE_NOLABEL : ZkFieldContext {
+    override val readOnly = false
+    override val useShadow = false
+    override val schema = BoSchema.NO_VALIDATION
+    override val addLabel = false
+    override val styles = zkFieldStyles
+    override fun validate() {}
+    override fun submit() {}
+}
+
 interface ZkFieldContext {
 
     val readOnly: Boolean

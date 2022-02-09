@@ -5,23 +5,50 @@
 package zakadabar.core.browser.field.select
 
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.events.FocusEvent
 import org.w3c.dom.events.KeyboardEvent
-import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.get
+import org.w3c.dom.set
 import zakadabar.core.browser.ZkElement
-import zakadabar.core.browser.field.ZkSelectBaseV2
+import zakadabar.core.browser.field.*
 import zakadabar.core.browser.icon.ZkIcon
+import zakadabar.core.browser.layout.ZkFullScreenLayout.zke
 import zakadabar.core.browser.popup.ZkPopUp
-import zakadabar.core.browser.util.escape
 import zakadabar.core.browser.util.minusAssign
 import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.localizedStrings
 
-open class DropdownRenderer<VT, FT : ZkSelectBaseV2<VT, FT>> : SelectRenderer<VT,FT> {
+open class DropdownRenderer<VT, FT : ZkSelectBaseV2<VT, FT>>(
+    var itemRenderer: (field: ZkSelectBaseV2<VT, FT>, item: Pair<VT, String>?, selected: Boolean) -> ZkElement = ::stringItemRenderer
+) : SelectRenderer<VT, FT> {
 
     companion object {
         private const val DATASET_KEY = "value"
+
+        /**
+         * The default select renderer, displays a simple div with a string.
+         *
+         * @param field     The select field this renderer belongs to.
+         * @param item      The item to render.
+         * @param selected  When true this is the selected item.
+         */
+        fun <VT, FT : ZkSelectBaseV2<VT, FT>> stringItemRenderer(field: ZkSelectBaseV2<VT, FT>, item: Pair<VT, String>?, selected: Boolean): ZkElement = zke {
+
+            element.dataset[DATASET_KEY] = item?.first?.toString() ?: ""
+            element.tabIndex = - 1
+
+            + field.context.styles.selectEntry
+
+            if (selected) + field.context.styles.selected
+
+            if (item == null) {
+                + localizedStrings.notSelected
+            } else {
+                + item.second
+            }
+        }
+
     }
 
     override lateinit var field: ZkSelectBaseV2<VT, FT>
@@ -30,11 +57,13 @@ open class DropdownRenderer<VT, FT : ZkSelectBaseV2<VT, FT>> : SelectRenderer<VT
 
     open lateinit var arrow: ZkElement
 
-    open lateinit var itemList : ZkPopUp
+    open lateinit var itemList: ZkPopUp
 
     open val selectedOption = ZkElement()
 
     override fun readOnly(value: Boolean) {
+        if (! ::container.isInitialized) return
+
         val cl = container.firstElementChild?.classList
 
         if (value) {
@@ -51,21 +80,8 @@ open class DropdownRenderer<VT, FT : ZkSelectBaseV2<VT, FT>> : SelectRenderer<VT
 
         itemList.element.tabIndex = 0
 
-        itemList.on("click") {
-            it as MouseEvent
-
-            val target = it.target
-            if (target !is HTMLElement) return@on
-
-            val entryIdString = target.dataset[DATASET_KEY]
-            val entryId = if (entryIdString.isNullOrEmpty()) null else field.fromString(entryIdString)
-            val value = entryId?.let { items.firstOrNull { item -> item.first == entryId } }
-
-            field.update(items, value, true)
-        }
-
         itemList.on("blur") {
-            itemList.hide()
+            onBlur(it as FocusEvent) // this one is in effect when there is no filter
         }
     }
 
@@ -110,30 +126,66 @@ open class DropdownRenderer<VT, FT : ZkSelectBaseV2<VT, FT>> : SelectRenderer<VT
         }
     }
 
+    /**
+     * Called when there is a filter and the user clicks outside it.
+     */
+    fun onBlur(event: FocusEvent) {
+        val target = event.relatedTarget
+
+        if (target !is HTMLElement) {
+            itemList.hide()
+            return
+        }
+
+        onClick(target)
+    }
+
+    /**
+     * Called by onFilterBlur and itemList.onClick. When the user
+     *
+     * - clicks outside the select list -> close the popup
+     * - clicks on the filter -> give focus to the filter
+     * - clicks on an item -> select the item
+     */
+    fun onClick(target: HTMLElement) {
+        val itemIdString = target.dataset[DATASET_KEY] ?: return
+
+        val itemId = if (itemIdString.isEmpty()) null else field.fromString(itemIdString)
+        val value = itemId?.let { items.firstOrNull { item -> item.first == itemId } }
+
+        field.update(items, value, true)
+
+        itemList.hide()
+    }
+
     override fun render(value: VT?) {
         itemList.hide()
+        itemList.clear()
 
-        var s = ""
+        if (field.filter) {
+            itemList += ZkValueStringField(STANDALONE_NOLABEL, "", { "" }, { }).also {
+                it.onBlur { event,_ -> onBlur(event) }
+                it.onChange {   }
+            }
+        }
 
         if (value == null) {
-            s += """<div class="${context.styles.selectEntry} ${context.styles.selected}" data-$DATASET_KEY="">${localizedStrings.notSelected}</div>"""
+            itemList += itemRenderer(field, null, true)
             selectedOption.innerText = localizedStrings.notSelected
             field.selectedItem = null
         } else {
-            s += """<div class="${context.styles.selectEntry}" data-$DATASET_KEY="">${localizedStrings.notSelected}</div>"""
+            itemList += itemRenderer(field, null, false)
         }
 
         items.forEach {
             if (it.first == value) {
-                s += """<div class=" ${context.styles.selectEntry} ${context.styles.selected}" data-$DATASET_KEY="${it.first}">${escape(it.second)}</div>"""
+                itemList += itemRenderer(field, it, true)
                 selectedOption.innerText = it.second
                 field.selectedItem = it
             } else {
-                s += """<div class="${context.styles.selectEntry}" data-$DATASET_KEY="${it.first}">${escape(it.second)}</div>"""
+                itemList += itemRenderer(field, it, false)
             }
         }
-
-        itemList.innerHTML = s
     }
 
     override fun focusValue() = toggleItems()
@@ -145,6 +197,8 @@ open class DropdownRenderer<VT, FT : ZkSelectBaseV2<VT, FT>> : SelectRenderer<VT
         itemList.element.style.maxHeight = "auto"
 
         itemList.toggle(selectedOption.element, context.styles.fieldHeight * 5)
+
+        itemList.firstOrNull<ZkValueStringField>()?.focusValue()
     }
 
 }

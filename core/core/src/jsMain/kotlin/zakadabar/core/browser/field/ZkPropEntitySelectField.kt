@@ -18,7 +18,9 @@ open class ZkPropEntitySelectField<ST : EntityBo<ST>>(
     context = context,
     label = prop.name,
     renderer = renderer,
-    getter = { prop.get().let { if (it.isEmpty()) null else it } }
+    // prop.get() returns with undefined, without the check the code fails, have to check why
+    // TODO check prop entity select null prop value
+    getter = { prop.get()?.let { if (it.isEmpty()) null else it } }
 ) {
 
     override fun fromString(string: String): EntityId<ST> {

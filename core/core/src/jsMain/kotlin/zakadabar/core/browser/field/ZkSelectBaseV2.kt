@@ -19,21 +19,28 @@ package zakadabar.core.browser.field
 import zakadabar.core.browser.field.select.SelectRenderer
 import zakadabar.core.browser.util.io
 
+/**
+ * @property   filter   When true, add a filter input to the top of the select field.
+ */
 abstract class ZkSelectBaseV2<VT, FT : ZkSelectBaseV2<VT, FT>>(
     context: ZkFieldContext,
     label: String,
     val renderer : SelectRenderer<VT, FT>,
     var onSelectCallback: (Pair<VT, String>?) -> Unit = { },
-    getter: () -> VT?,
+    open var getter: () -> VT?,
     setter: (VT?) -> Unit = {}
 ) : ZkFieldBase<VT, FT>(
     context = context,
     propName = label
 ) {
 
-    open var getter = getter
-
     var sort = true
+
+    var filter = false
+
+    infix fun filter(value : Boolean) {
+        filter = value
+    }
 
     var fetch: (suspend () -> List<Pair<VT, String>>)? = null
         set(value) {

@@ -5,6 +5,7 @@ package zakadabar.core.browser.field
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.events.FocusEvent
 import org.w3c.dom.get
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.util.minusAssign
@@ -33,6 +34,11 @@ abstract class ZkFieldBase<DT, FT : ZkFieldBase<DT, FT>>(
      * @param field the field that changed
      */
     var onChangeCallback: ((origin: ChangeOrigin, value: DT, field: FT) -> Unit)? = null
+
+    /**
+     * Function to execute when the "blur" event is generated on the field.
+     */
+    var onBlurCallback: ((event : FocusEvent, field : FT) -> Unit)? = null
 
     /**
      * The UI value of the field or null when it is not set or [invalidInput] is true.

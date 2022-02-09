@@ -3,6 +3,7 @@
  */
 package zakadabar.core.browser.field
 
+import org.w3c.dom.events.FocusEvent
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KMutableProperty0
@@ -90,5 +91,12 @@ infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.onChange3(block: (C
 @PublicApi
 infix fun <DT, FT : ZkStringBaseV2<DT, FT>> ZkStringBaseV2<DT, FT>.submitOnEnter(submit : Boolean): FT {
     submitOnEnter = submit
+    return this as FT
+}
+
+@Suppress("UNCHECKED_CAST")
+@PublicApi
+infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.onBlur(block: (event : FocusEvent, field : FT) -> Unit): FT {
+    onBlurCallback = block
     return this as FT
 }

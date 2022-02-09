@@ -1,10 +1,11 @@
 /*
- * Copyright © 2020, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 package zakadabar.core.browser.field
 
 import kotlinx.browser.document
 import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.events.FocusEvent
 import org.w3c.dom.events.KeyboardEvent
 import zakadabar.core.browser.util.plusAssign
 
@@ -47,6 +48,11 @@ abstract class ZkStringBaseV2<VT, FT : ZkStringBaseV2<VT,FT>>(
 
         on(input, "input") {
             setBackingValue(input.value)
+        }
+
+        on(input, "blur") {
+            @Suppress("UNCHECKED_CAST") // this should be ok as this is the field type itself
+            onBlurCallback?.invoke(it as FocusEvent, this as FT)
         }
 
         on("keydown") { event ->
