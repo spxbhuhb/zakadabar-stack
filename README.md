@@ -8,6 +8,14 @@ Zakadabar is a multiplatform application development library.
 
 ## News
 
+2022.2.9 has some minor breaking changes, listed in the changelog.
+
+During this month I plan to add enhancements to browser components. I'll try to
+keep compatibility as much as possible, but most probably there are some
+breaking changes coming.
+
+----
+
 2021.12.26 uses Kotlin 1.6.10 and Kotin/Js successfully compiles for IR. This 
 gives us the possibility to add IR compiler plugins which will be the next step.
 
@@ -34,7 +42,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation("hu.simplexion.zakadabar:core:2021.12.26")
+                implementation("hu.simplexion.zakadabar:core:2022.2.9")
             }
         }
     }
