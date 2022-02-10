@@ -866,11 +866,9 @@ open class ZkForm<T : BaseBo>(
     @Suppress("UNCHECKED_CAST")
     @PublicApi
     infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.onChange(block: (DT) -> Unit): FT {
-        this.setter = block
-        onChangeCallback = { _, _, _ -> setter }
+        onChangeCallback = { _, value, _ -> block(value) }
         return this as FT
     }
-
 
     @Suppress("UNCHECKED_CAST")
     @PublicApi
