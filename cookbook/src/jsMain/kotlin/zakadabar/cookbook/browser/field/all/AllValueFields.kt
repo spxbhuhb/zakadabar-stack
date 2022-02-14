@@ -42,6 +42,8 @@ class AllValueFields : ZkForm<ExampleBo>() {
             + textAreaField { bo.textAreaValue } label "Text Area"
             + uuidField { bo.uuidValue } label "UUID"
         }
+
+       + fieldTable()
     }
 
 }
