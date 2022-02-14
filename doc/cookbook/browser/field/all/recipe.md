@@ -23,6 +23,10 @@ All implemented fields.
 
 <div data-zk-enrich="AllValueFields"></div>
 
+## Value, Manual Labels, in IO Block
+
+<div data-zk-enrich="AllValueFieldsIo"></div>
+
 ## Guides
 
 - [Form](/doc/guides/browser/builtin/Forms.md)
@@ -32,3 +36,4 @@ All implemented fields.
 - [AllPropFields.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/field/all/AllPropFields.kt)
 - [AllPropFieldsWithLabel.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/field/all/AllPropFieldsWithLabel.kt)
 - [AllValueFields.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/field/all/AllValueFields.kt)
+- [AllValueFieldsIo.kt](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/field/all/AllValueFieldsIo.kt)

@@ -49,6 +49,8 @@ class AllPropFieldsWithLabel : ZkForm<ExampleBo>() {
             + bo::textAreaValue.asTextArea() label strings.textAreaValue label "Text Area 2"
             + bo::uuidValue label "UUID 2"
         }
+
+        + fieldTable()
     }
 
 }

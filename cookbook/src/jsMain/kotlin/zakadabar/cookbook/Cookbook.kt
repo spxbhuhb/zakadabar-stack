@@ -8,6 +8,7 @@ import zakadabar.cookbook.browser.crud.basic.BasicCrud
 import zakadabar.cookbook.browser.field.all.AllPropFields
 import zakadabar.cookbook.browser.field.all.AllPropFieldsWithLabel
 import zakadabar.cookbook.browser.field.all.AllValueFields
+import zakadabar.cookbook.browser.field.all.AllValueFieldsIo
 import zakadabar.cookbook.browser.field.custom.CustomInputFieldForm
 import zakadabar.cookbook.browser.field.custom.CustomSelectFieldForm
 import zakadabar.cookbook.browser.field.onchange.FieldOnChangeForm
@@ -79,6 +80,7 @@ class Cookbook : CommonModule {
             "AllPropFields" -> AllPropFields()
             "AllPropFieldsWithLabel" -> AllPropFieldsWithLabel()
             "AllValueFields" -> AllValueFields()
+            "AllValueFieldsIo" -> AllValueFieldsIo()
 
             else -> null
 
