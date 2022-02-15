@@ -11,7 +11,7 @@ internal var strings = ExamplesStrings()
 
 open class ExamplesStrings : ZkBuiltinStrings() {
 
-    val accountName by "Account Name"
+    override val accountName by "Account Name"
     val active by "Active"
     val builtin by "Built-in"
     val confirmDialog by "Confirm Dialog"
@@ -20,7 +20,6 @@ open class ExamplesStrings : ZkBuiltinStrings() {
     val description by "Description"
     val display by "Display"
     val displayName by "Displayed Name"
-    val email by "Email"
     val errorToast by "Error"
     val exampleDialog by "Example Dialog"
     val exampleSideBarTarget by "Example Target"
@@ -41,7 +40,6 @@ open class ExamplesStrings : ZkBuiltinStrings() {
     val optionalFields by "Optional Fields"
     val organization by "Organization"
     override val password by "Password"
-    val phone by "Phone Number"
     val position by "Position"
     val readOnlyValue by "Read Only Value"
     val red by "Red"
@@ -53,7 +51,6 @@ open class ExamplesStrings : ZkBuiltinStrings() {
     val style1 by "Style 1"
     val style2 by "Style 2"
     val successToast by "Success"
-    val textAreaValue by "Text Area"
     val textForFalse by "this is false"
     val textForTrue by "this is true"
     val validate by "Validate"

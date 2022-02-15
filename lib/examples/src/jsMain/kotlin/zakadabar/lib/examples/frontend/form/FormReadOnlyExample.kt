@@ -15,7 +15,6 @@ import zakadabar.core.resource.localized
 import zakadabar.core.resource.localizedStrings
 import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
-import zakadabar.lib.examples.resources.strings
 
 class FormReadOnlyExample(
     element: HTMLElement
@@ -64,7 +63,7 @@ class ReadOnlyBuiltinForm : ZkForm<BuiltinBo>() {
                 + bo::recordSelectValue query { ExampleReferenceBo.all().by { it.name } } readOnly true
                 + ZkPropStringField(this@ReadOnlyBuiltinForm, bo::stringValue).also { this@ReadOnlyBuiltinForm.fields += it } .also { it.readOnly = true }
                 + bo::stringSelectValue.asSelect() query { listOf("option 1", "option 2", "option3").map { it to it } } readOnly true
-                + bo::textAreaValue.asTextArea() label strings.textAreaValue readOnly true
+                + bo::textAreaValue.asTextArea() readOnly true
                 + bo::uuidValue readOnly true
             }
         }

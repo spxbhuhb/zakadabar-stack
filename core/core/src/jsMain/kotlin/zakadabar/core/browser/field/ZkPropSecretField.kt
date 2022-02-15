@@ -25,7 +25,7 @@ open class ZkPropSecretField(
     newSecret: Boolean = false
 ) : ZkStringBaseV2<Secret, ZkPropSecretField>(
     context = context,
-    label = prop.name,
+    propName = prop.name,
     getter = { prop.get().value }
 ) {
 

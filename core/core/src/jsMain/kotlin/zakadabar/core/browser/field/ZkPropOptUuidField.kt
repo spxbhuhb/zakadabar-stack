@@ -12,7 +12,7 @@ open class ZkPropOptUuidField(
     var prop: KMutableProperty0<UUID?>
 ) : ZkStringBaseV2<UUID?, ZkPropOptUuidField>(
     context = context,
-    label = prop.name,
+    propName = prop.name,
     getter = {prop.get()?.toString()}
 ) {
 

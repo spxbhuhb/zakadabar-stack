@@ -26,7 +26,7 @@ open class ZkPropOptLocalDateField(
     var prop: KMutableProperty0<LocalDate?>
 ) : ZkStringBaseV2<LocalDate?,ZkPropOptLocalDateField>(
     context = context,
-    label = prop.name,
+    propName = prop.name,
     getter = { prop.get().toString() }
 ) {
 

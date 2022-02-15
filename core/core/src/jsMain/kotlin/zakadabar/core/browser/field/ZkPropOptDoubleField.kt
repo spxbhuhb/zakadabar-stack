@@ -23,7 +23,7 @@ open class ZkPropOptDoubleField(
     var prop: KMutableProperty0<Double?>
 ) : ZkStringBaseV2<Double?, ZkPropOptDoubleField>(
     context = context,
-    label = prop.name,
+    propName = prop.name,
     getter = { prop.get()?.toString() }
 ) {
 

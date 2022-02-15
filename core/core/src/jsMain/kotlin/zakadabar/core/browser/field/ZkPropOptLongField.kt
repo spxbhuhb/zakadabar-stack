@@ -23,7 +23,7 @@ open class ZkPropOptLongField(
     var prop: KMutableProperty0<Long?>
 ) : ZkStringBaseV2<Long?,ZkPropOptLongField>(
     context = context,
-    label = prop.name,
+    propName = prop.name,
     getter = { prop.get()?.toString() }
 ) {
 

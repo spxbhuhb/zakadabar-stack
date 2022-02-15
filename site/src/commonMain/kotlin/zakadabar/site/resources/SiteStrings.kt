@@ -62,5 +62,34 @@ class SiteStrings : ExamplesStrings() {
     val goTillItsReadyText by "From start to finish: we give you templates, examples, how-tos. In the end you'll have an enterprise grade software system."
 
     val developedBy by "by Simplexion"
+    
+    // example bo fields
+
+    val booleanValue by "Boolean"
+    val doubleValue by "Double"
+    val enumSelectValue by "Enum Select"
+    val instantValue by "Instant"
+    val intValue by "Int"
+    val localDateValue by "Local Date"
+    val localDateTimeValue by "Local Date Time"
+    val optBooleanValue by "Opt Boolean"
+    val optDoubleValue by "Opt Double"
+    val optEnumSelectValue by "Opt Enum Select"
+    val optInstantValue by "Opt Instant"
+    val optIntValue by "Opt Int"
+    val optLocalDateValue by "Opt Local Date"
+    val optLocalDateTimeValue by "Opt Local Date Time"
+    val optSecretValue by "Opt Secret"
+    val optRecordSelectValue by "Opt Record Select"
+    val optStringValue by "Opt String"
+    val optStringSelectValue by "Opt String Select"
+    val optTextAreaValue by "Opt Text Area"
+    val optUuidValue by "Opt Uuid"
+    val secretValue by "Secret"
+    val recordSelectValue by "Record Select"
+    val stringValue by "String"
+    val stringSelectValue by "String Select"
+    val textAreaValue by "Text Area"
+    val uuidValue by "UUID"
 }
 
