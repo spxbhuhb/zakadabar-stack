@@ -328,7 +328,7 @@ open class ZkElement(
     }
 
     /**
-     * Clears the children and the HTML node of this element. Childrens are paused
+     * Clears the children and the HTML node of this element. Children are paused
      * and then destroyed.
      */
     open fun clear() {

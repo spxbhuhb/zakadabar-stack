@@ -57,9 +57,36 @@ open class DropdownRenderer<VT, FT : ZkSelectBaseV2<VT, FT>>(
 
     open lateinit var arrow: ZkElement
 
-    open lateinit var itemList: ZkPopUp
-
     open val selectedOption = ZkElement()
+
+    /**
+     * List of options and an filter (when field.filter is true).
+     */
+    open lateinit var popup: ZkPopUp
+
+    /**
+     * Filter to let the user search between options. List of options
+     * are updated real time as the user types into the filter.
+     */
+    open val filter: ZkFieldBase<String, *> =
+        ZkValueStringField(STANDALONE_NOLABEL, "", { "" }).apply {
+            + context.styles.selectOptionFilter
+            this.onFocusOut { event, _ -> onFocusOut(event) }
+            this.onChange { filterValue -> onFilterChange(filterValue) }
+        }
+
+    /**
+     * List of the options to show when the user clicks on the down arrow.
+     */
+    open val list = ZkElement()
+
+    /**
+     * List of items to display.
+     *
+     * When filtering is enabled this list contains the filtered items only.
+     * When filtering is disabled this list contains all items.
+     */
+    open var filteredItems: List<Pair<VT, String>>? = null
 
     override fun readOnly(value: Boolean) {
         if (! ::container.isInitialized) return
@@ -76,21 +103,26 @@ open class DropdownRenderer<VT, FT : ZkSelectBaseV2<VT, FT>>(
     }
 
     override fun onCreate() {
-        itemList = ZkPopUp { + context.styles.selectOptionList }
+        popup = ZkPopUp {
+            + context.styles.selectOptionPopup
 
-        itemList.element.tabIndex = 0
+            element.tabIndex = 0
 
-        itemList.on("blur") {
-            onBlur(it as FocusEvent) // this one is in effect when there is no filter
+            on("focusout") {
+                onFocusOut(it as FocusEvent) // this one is in effect when there is no filter
+            }
         }
+
+        list.apply { + context.styles.selectOptionList }
     }
 
     override fun onPause() {
-        itemList.hide()
+        popup.hide()
     }
 
     override fun buildFieldValue() {
         with(field) {
+
             container = div(context.styles.selectContainer) {
                 + row(context.styles.selectedOption) {
                     + selectedOption
@@ -109,13 +141,13 @@ open class DropdownRenderer<VT, FT : ZkSelectBaseV2<VT, FT>>(
                 when (it.key) {
                     "Enter", "ArrowDown" -> {
                         it.preventDefault()
-                        if (itemList.isHidden()) {
+                        if (popup.isHidden()) {
                             toggleItems()
                         }
                     }
                     "Escape" -> {
                         it.preventDefault()
-                        itemList.hide()
+                        popup.hide()
                     }
                 }
             }
@@ -127,21 +159,22 @@ open class DropdownRenderer<VT, FT : ZkSelectBaseV2<VT, FT>>(
     }
 
     /**
-     * Called when there is a filter and the user clicks outside it.
+     * Called when the filter or the select looses focus. The relatedTarget is
+     * the element that looses the focus. When it is inside the popup, try
+     * to interpret it as a click. When it is outside the popup, hide the popup.
      */
-    fun onBlur(event: FocusEvent) {
-        val target = event.relatedTarget
+    fun onFocusOut(event: FocusEvent) {
+        val relatedTarget = event.relatedTarget
 
-        if (target !is HTMLElement) {
-            itemList.hide()
-            return
+        if (relatedTarget is HTMLElement && popup.element.contains(relatedTarget)) {
+            onClick(relatedTarget)
+        } else {
+            popup.hide()
         }
-
-        onClick(target)
     }
 
     /**
-     * Called by onFilterBlur and itemList.onClick. When the user
+     * Called by onFocusOut and itemList.onClick. When the user
      *
      * - clicks outside the select list -> close the popup
      * - clicks on the filter -> give focus to the filter
@@ -155,50 +188,73 @@ open class DropdownRenderer<VT, FT : ZkSelectBaseV2<VT, FT>>(
 
         field.update(items, value, true)
 
-        itemList.hide()
+        popup.hide()
     }
 
-    override fun render(value: VT?) {
-        itemList.hide()
-        itemList.clear()
+    override fun render(value: VT?, hide: Boolean) {
+        if (hide) popup.hide()
 
-        if (field.filter) {
-            itemList += ZkValueStringField(STANDALONE_NOLABEL, "", { "" }, { }).also {
-                it.onBlur { event,_ -> onBlur(event) }
-                it.onChange {   }
-            }
-        }
+        if (field.filter && filter !in popup.childElements) popup += filter
+        if (list !in popup.childElements) popup += list
+
+        list.clear()
 
         if (value == null) {
-            itemList += itemRenderer(field, null, true)
+            list += itemRenderer(field, null, true)
             selectedOption.innerText = localizedStrings.notSelected
             field.selectedItem = null
         } else {
-            itemList += itemRenderer(field, null, false)
+            list += itemRenderer(field, null, false)
         }
 
-        items.forEach {
+        (filteredItems ?: items).forEach {
             if (it.first == value) {
-                itemList += itemRenderer(field, it, true)
+                list += itemRenderer(field, it, true)
                 selectedOption.innerText = it.second
                 field.selectedItem = it
             } else {
-                itemList += itemRenderer(field, it, false)
+                list += itemRenderer(field, it, false)
             }
         }
+
+        popup.element.style.height = "auto"
+        popup.element.style.maxHeight = "auto"
+        popup.align(selectedOption.element, context.styles.fieldHeight * 5)
     }
 
     override fun focusValue() = toggleItems()
 
+    open fun onFilterChange(filterValue: String) {
+        val lowercaseFilterValue = filterValue.lowercase()
+
+        filteredItems = if (lowercaseFilterValue.isEmpty()) {
+            items
+        } else {
+            items.filter { lowercaseFilterValue in it.second.lowercase() }
+        }
+
+        render(field.selectedItem?.first, false)
+
+        focus()
+    }
+
     open fun toggleItems() {
         if (field.readOnly) return
 
-        itemList.element.style.height = "auto"
-        itemList.element.style.maxHeight = "auto"
+        popup.element.style.height = "auto"
+        popup.element.style.maxHeight = "auto"
 
-        itemList.toggle(selectedOption.element, context.styles.fieldHeight * 5)
+        popup.toggle(selectedOption.element, context.styles.fieldHeight * 5)
 
-        itemList.firstOrNull<ZkValueStringField>()?.focusValue()
+        focus()
+    }
+
+    open fun focus() {
+        if (field.filter) {
+            filter.focusValue()
+        } else {
+            popup.focus()
+        }
     }
 
 }

@@ -191,20 +191,36 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         color = theme.disabledInputTextColor
     }
 
-    open val selectOptionList by cssClass {
+    open val selectOptionPopup by cssClass {
         + Position.fixed
 
-        + OverflowY.auto
+        + Display.flex
+        + FlexDirection.column
+
+        + OverflowY.hidden
         + OverflowX.hidden
 
         zIndex = 100.zIndex
 
         outline = "none"
-        backgroundColor = theme.inputBackgroundColor
         boxShadow = "0 0 32px 12px rgba(0, 0, 0, 0.4) "
+    }
+
+    open val selectOptionFilter by cssClass {
+        marginBottom = 10.px
+    }
+
+    open val selectOptionList by cssClass {
+
+        + OverflowY.auto
+        + OverflowX.hidden
+
+        flexGrow = 1.0
 
         border = "1px solid ${theme.infoColor}"
         borderRadius = theme.cornerRadius.px
+
+        backgroundColor = theme.inputBackgroundColor
     }
 
     open val selectEntry by cssClass {

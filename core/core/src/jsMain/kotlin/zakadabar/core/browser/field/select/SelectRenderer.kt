@@ -22,7 +22,12 @@ interface SelectRenderer<VT, FT : ZkSelectBaseV2<VT, FT>> {
 
     fun buildFieldValue()
 
-    fun render(value: VT?)
+    /**
+     * Rebuilds the content of the select. When [hide] is `true` (default) the popup that
+     * contains the possible options is closed by the render. This has no effect for renderers
+     * without popup.
+     */
+    fun render(value: VT?, hide : Boolean = true)
 
     fun focusValue()
 

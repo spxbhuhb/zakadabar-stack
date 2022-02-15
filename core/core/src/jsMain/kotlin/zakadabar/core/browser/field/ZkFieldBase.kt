@@ -36,9 +36,9 @@ abstract class ZkFieldBase<DT, FT : ZkFieldBase<DT, FT>>(
     var onChangeCallback: ((origin: ChangeOrigin, value: DT, field: FT) -> Unit)? = null
 
     /**
-     * Function to execute when the "blur" event is generated on the field.
+     * Function to execute when the "focusout" event is generated on the field.
      */
-    var onBlurCallback: ((event : FocusEvent, field : FT) -> Unit)? = null
+    var onFocusOut: ((event : FocusEvent, field : FT) -> Unit)? = null
 
     /**
      * The UI value of the field or null when it is not set or [invalidInput] is true.

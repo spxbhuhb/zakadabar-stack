@@ -279,6 +279,19 @@ into a list of radio buttons.
 
 Recipe: [Select As Radio Buttons](/doc/cookbook/browser/form/select/radio/recipe.md)
 
+#### Select With Option Filter
+
+When the `filter` option of a dropdown select is true, the user can filter the
+options by typing in characters.
+
+```kotlin
++ bo::recordSelectValue query ::queryRecords saveAs ::recordSelectField filter true
+```
+
+<div data-zk-enrich="SelectWithFilter"></div>
+
+Recipe: [Select With Filter](/doc/cookbook/browser/field/select/filter/recipe.md)
+
 #### Constant String
 
 To add a constant string as a field, use the `constString` function:

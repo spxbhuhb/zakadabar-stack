@@ -58,9 +58,9 @@ abstract class ZkStringBaseV2<VT, FT : ZkStringBaseV2<VT,FT>>(
             setBackingValue(input.value)
         }
 
-        on(input, "blur") {
+        on(input, "focusout") {
             @Suppress("UNCHECKED_CAST") // this should be ok as this is the field type itself
-            onBlurCallback?.invoke(it as FocusEvent, this as FT)
+            onFocusOut?.invoke(it as FocusEvent, this as FT)
         }
 
         on("keydown") { event ->

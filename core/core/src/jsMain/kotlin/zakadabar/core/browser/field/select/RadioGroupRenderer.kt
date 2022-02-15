@@ -26,7 +26,7 @@ open class RadioGroupRenderer<VT, FT : ZkSelectBaseV2<VT, FT>> : SelectRenderer<
         }
     }
 
-    override fun render(value: VT?) {
+    override fun render(value: VT?, hide : Boolean) {
         container.clear()
 
         if (! field.needsMandatoryMark()) {

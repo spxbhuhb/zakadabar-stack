@@ -30,6 +30,10 @@ open class ZkPopUp() : ZkElement() {
         element.focus()
     }
 
+    open fun align(anchorElement: HTMLElement, minHeight: Int) {
+        alignPopup(this.element, anchorElement, minHeight)
+    }
+
     override fun hide(): ZkElement {
         if (shown) {
             shown = false

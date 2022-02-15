@@ -96,7 +96,7 @@ infix fun <DT, FT : ZkStringBaseV2<DT, FT>> ZkStringBaseV2<DT, FT>.submitOnEnter
 
 @Suppress("UNCHECKED_CAST")
 @PublicApi
-infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.onBlur(block: (event : FocusEvent, field : FT) -> Unit): FT {
-    onBlurCallback = block
+infix fun <DT, FT : ZkFieldBase<DT, FT>> ZkFieldBase<DT, FT>.onFocusOut(block: (event : FocusEvent, field : FT) -> Unit): FT {
+    onFocusOut = block
     return this as FT
 }
