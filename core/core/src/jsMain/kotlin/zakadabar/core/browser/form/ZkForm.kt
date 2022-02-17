@@ -968,6 +968,30 @@ open class ZkForm<T : BaseBo>(
         })
     }
 
+    inline fun <reified E : Enum<E>> enumRadioGroupField(noinline getter: () -> E): FormFieldWrapper<ZkValueEnumSelectField<E>> {
+        val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) }
+        return FormFieldWrapper(
+            ZkValueEnumSelectField(this@ZkForm, "", getter, renderer = RadioGroupRenderer()) { enumValueOf(it) }.apply {
+                fetch = { options }
+            }
+        )
+    }
+
+    inline fun <reified E : Enum<E>> optEnumRadioGroupField(noinline getter: () -> E): FormFieldWrapper<ZkValueOptEnumSelectField<E>> {
+        val options = enumValues<E>().map { it to localizedStrings.getNormalized(it.name) }
+        return FormFieldWrapper(
+            ZkValueOptEnumSelectField(this@ZkForm, "", getter, renderer = RadioGroupRenderer()) { enumValueOf(it) }.apply {
+                fetch = { options }
+            }
+        )
+    }
+
+    fun stringRadioGroupField(getter: () -> String): FormFieldWrapper<ZkValueStringSelectField> =
+        FormFieldWrapper(ZkValueStringSelectField(this@ZkForm, "", getter, renderer = RadioGroupRenderer()))
+
+    fun optStringRadioGroupField(getter: () -> String?): FormFieldWrapper<ZkValueOptStringSelectField> =
+        FormFieldWrapper(ZkValueOptStringSelectField(this@ZkForm, "", getter, renderer = RadioGroupRenderer()))
+
     // to set options, use query infix
 
     fun stringSelectField(getter: () -> String): ZkValueStringSelectField =
