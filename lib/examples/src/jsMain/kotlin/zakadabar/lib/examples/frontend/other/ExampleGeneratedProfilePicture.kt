@@ -3,10 +3,11 @@
  */
 package zakadabar.lib.examples.frontend.other
 
+import org.w3c.dom.HTMLElement
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.other.ZkGeneratedProfilePicture
 
-class ExampleGeneratedProfilePicture: ZkElement() {
+class ExampleGeneratedProfilePicture(element : HTMLElement): ZkElement(element) {
 
     override fun onCreate() {
         super.onCreate()

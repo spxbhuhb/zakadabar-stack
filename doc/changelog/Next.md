@@ -6,16 +6,16 @@ This page contains the changes included in the next release.
 
 **added**
 
-- option filter for dropdown select
-- `onFocusOut` callback property for `ZkFieldBase`
-- `align` function for `ZkPopUp`
+- `ZkChip` chip browser component
+- `ZkGeneratedProfilePicture`
+- radio group option for string and enum
 
-**changed**
+## Markdown
 
-- `SelectRenderer.render` now has a `hide` parameter
+- publish to Maven central
 
-## Cookbook
+## Site
 
 **added**
 
-- Select With Filter recipe
+- `/doc/guides/browser/builtin/Others.md`

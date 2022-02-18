@@ -33,6 +33,7 @@
         * [Icons](./browser/builtin/Icons.md)
         * [Modals](./browser/builtin/Modals.md)
         * [Notes](./browser/builtin/Notes.md)
+        * [Other](./browser/builtin/Other.md)
         * [Pages](./browser/builtin/Pages.md)
         * [SideBar](./browser/builtin/SideBar.md)
         * [TabContainer](./browser/builtin/TabContainer.md)

@@ -11,32 +11,52 @@ var zkOtherStyles by cssStyleSheet(ZkOtherStyles())
 
 open class ZkOtherStyles : ZkCssStyleSheet() {
 
-    open val chipsContainer by cssClass {
-        borderRadius = "24px"
-        backgroundColor = theme.primaryColor
+    open val chipContainerWithOutButton by cssClass {
         + Display.flex
         + AlignItems.center
-        paddingLeft = "20px"
+        + JustifyContent.center
+
+        width = "fit-content"
+        height = 32.px
+
+        borderRadius = 24.px
+        backgroundColor = theme.primaryColor
+        paddingLeft = 16.px
+        paddingRight = 16.px
     }
 
-    open val chipsLetters by cssClass {
+    open val chipContainerWithButton by cssClass {
+        + Display.flex
+        + AlignItems.center
+        + JustifyContent.center
+
+        width = "fit-content"
+        height = 32.px
+
+        borderRadius = 24.px
+        backgroundColor = theme.primaryColor
+        paddingLeft = 16.px
+        paddingRight = 16.px
+    }
+
+    open val chipLetters by cssClass {
         fontWeight = "400"
         color = ZkColors.white
-        padding = "3px"
+        padding = 3.px
     }
 
     open val profContainer by cssClass {
         backgroundColor = ZkColors.white.alpha(0.5)
-        borderRadius = "50%"
-        width = "42px"
-        height = "36px"
+        borderRadius = 50.percent
+        width = 42.px
+        height = 36.px
     }
 
     open val profLetters by cssClass {
-        padding = "4px"
+        padding = 4.px
         fontWeight = "600"
         color = theme.primaryColor
-        fontSize = "150%"
+        fontSize = 150.percent
         textAlign = "center"
     }
 }

@@ -3,6 +3,8 @@
  */
 
 import zakadabar.gradle.Versions
+import zakadabar.gradle.config
+import zakadabar.gradle.isPublishing
 
 plugins {
     kotlin("multiplatform")
@@ -41,4 +43,21 @@ kotlin {
         implementation(npm("highlight.js", Versions.highlightJs))
         api("org.jetbrains:markdown:${Versions.markdown}")
     }
+}
+
+
+if (project.isPublishing) {
+
+    zakadabar.gradle.manifestAndDokka(tasks)
+
+    signing { config(publishing.publications) }
+
+    publishing {
+        config(project)
+
+        publications.withType<MavenPublication>().all {
+            config(tasks["javadocJar"], "Zakadabar Lib Markdown")
+        }
+    }
+
 }

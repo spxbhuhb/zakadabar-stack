@@ -31,6 +31,7 @@ import zakadabar.lib.examples.frontend.misc.NYIExample
 import zakadabar.lib.examples.frontend.modal.ModalExamples
 import zakadabar.lib.examples.frontend.note.NoteBasicExamples
 import zakadabar.lib.examples.frontend.note.NoteFormExample
+import zakadabar.lib.examples.frontend.other.*
 import zakadabar.lib.examples.frontend.pages.PageExample
 import zakadabar.lib.examples.frontend.sidebar.SideBarExample
 import zakadabar.lib.examples.frontend.sidebar.SideBarMarkdownExample
@@ -140,6 +141,13 @@ class SiteMarkdownContext(
             "ToastCustomExample" -> ToastCustomExample(htmlElement)
             "ToastBasicExamples" -> ToastBasicExamples(htmlElement)
             "ToastFormExample" -> ToastFormExample(htmlElement)
+
+            "ExampleChip" -> ExampleChip(htmlElement)
+            "ExampleChipWithButton" -> ExampleChipWithButton(htmlElement)
+            "ExampleChipWithIcon" -> ExampleChipWithIcon(htmlElement)
+            "ExampleChipWithIconAndButton" -> ExampleChipWithIconAndButton(htmlElement)
+
+            "ExampleGeneratedProfilePicture" -> ExampleGeneratedProfilePicture(htmlElement)
 
             else -> null
         }?.marginBottom(theme.spacingStep)
