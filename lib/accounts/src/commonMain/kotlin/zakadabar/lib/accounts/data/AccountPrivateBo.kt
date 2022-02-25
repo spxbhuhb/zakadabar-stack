@@ -9,6 +9,7 @@ import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityBoCompanion
 import zakadabar.core.data.EntityId
 import zakadabar.core.schema.BoSchema
+import zakadabar.core.util.UUID
 
 /**
  * Base class for private account information. This information is meant to
@@ -22,6 +23,8 @@ import zakadabar.core.schema.BoSchema
  * @property  phone         Phone number.
  * @property  theme         Theme this account prefers.
  * @property  locale        The locale this account prefers.
+ * @property  uuid          Uuid of the account. Generated automatically by account creation.
+ *                          Contains [UUID.NIL] For accounts created before Zakadabar version 2022.2.25.
  */
 @Serializable
 open class AccountPrivateBo(
@@ -34,7 +37,8 @@ open class AccountPrivateBo(
     var phone: String?,
 
     var theme: String?,
-    var locale: String
+    var locale: String,
+    var uuid: UUID
 
 ) : EntityBo<AccountPrivateBo> {
 
@@ -53,5 +57,6 @@ open class AccountPrivateBo(
 
         + ::locale max 20
         + ::theme max 50
+        + ::uuid
     }
 }

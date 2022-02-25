@@ -30,6 +30,7 @@ class JobTable : ExposedPaTable<Job>(
     val progressText = text("progress_text").nullable()
     val lastProgressAt = timestamp("last_progress_at").nullable()
     val responseData = text("response_data").nullable()
+    val origin = text("origin").nullable()
 
     init {
         index(isUnique = false, status, startAt)

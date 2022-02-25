@@ -41,7 +41,8 @@ open class JobPa(
         progress = this[table.progress],
         progressText = this[table.progressText],
         lastProgressAt = this[table.lastProgressAt]?.toKotlinInstant(),
-        responseData = this[table.responseData]
+        responseData = this[table.responseData],
+        origin = this[table.origin]
     )
 
     override fun UpdateBuilder<*>.fromBo(bo: Job) {
@@ -63,6 +64,7 @@ open class JobPa(
         this[table.progressText] = bo.progressText
         this[table.lastProgressAt] = bo.lastProgressAt?.toJavaInstant()
         this[table.responseData] = bo.responseData
+        this[table.origin] = bo.origin
     }
 
     fun assignNode(jobId : EntityId<Job>, node : UUID) {

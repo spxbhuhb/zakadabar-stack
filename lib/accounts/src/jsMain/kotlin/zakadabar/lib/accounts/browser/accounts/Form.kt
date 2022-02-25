@@ -245,6 +245,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                 + ::fullName
                 + ::email
                 + ::phone
+                + ::uuid readOnly true
             }
         }
 

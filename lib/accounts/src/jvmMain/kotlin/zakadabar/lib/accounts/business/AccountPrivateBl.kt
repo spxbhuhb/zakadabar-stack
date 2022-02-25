@@ -137,7 +137,6 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
         }
     }
 
-
     override fun onModuleStart() {
         anonymous = pa.withTransaction {
             pa.readByName("anonymous").toPublic()
@@ -209,6 +208,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
                 email = action.email
                 phone = action.phone
                 locale = action.locale
+                uuid = UUID()
             }
         )
 

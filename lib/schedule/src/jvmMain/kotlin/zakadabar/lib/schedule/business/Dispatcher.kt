@@ -92,7 +92,7 @@ class Dispatcher(
 
         val index = pendingJobs.binarySearch {
             it.startAt !!.compareTo(startAt)
-        }.absoluteValue
+        }.let { (it + 1).absoluteValue }
 
         pendingJobs.add(index, entry)
 
@@ -101,7 +101,7 @@ class Dispatcher(
         pushJobs()
     }
 
-    fun takeRunEntry(jobId: EntityId<Job>, reuse : Boolean = true): RunEntry? {
+    fun takeRunEntry(jobId: EntityId<Job>, reuse: Boolean = true): RunEntry? {
         val index = runningJobs.indexOfFirst { it.job.id == jobId }
         if (index == - 1) return null
 

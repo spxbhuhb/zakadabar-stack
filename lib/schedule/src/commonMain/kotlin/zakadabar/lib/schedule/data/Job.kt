@@ -30,6 +30,7 @@ import zakadabar.core.util.UUID
  *  @param  deleteOnSuccess  Delete this job if it finishes successfully.
  *  @param  progress         For a long-running job the progress of the job (percent).
  *  @param  responseData     Response data as received from the action execution.
+ *  @param  origin           Origin of the job. For example, the id of the schedule that generated this job.
  */
 @Serializable
 class Job(
@@ -52,7 +53,8 @@ class Job(
     var progress : Double,
     var progressText : String?,
     var lastProgressAt : Instant?,
-    var responseData : String?
+    var responseData : String?,
+    var origin: String?
 
 ) : EntityBo<Job> {
 
@@ -81,6 +83,7 @@ class Job(
         + ::progressText
         + ::lastProgressAt
         + ::responseData
+        + ::origin
     }
 
 }

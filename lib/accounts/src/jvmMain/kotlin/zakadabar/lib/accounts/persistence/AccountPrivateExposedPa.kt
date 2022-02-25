@@ -4,17 +4,17 @@
 
 package zakadabar.lib.accounts.persistence
 
-import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import zakadabar.lib.accounts.data.AccountListSecureEntry
-import zakadabar.lib.accounts.data.AccountPrivateBo
+import zakadabar.core.authorize.AccountPublicBo
 import zakadabar.core.persistence.exposed.ExposedPaBase
 import zakadabar.core.persistence.exposed.ExposedPaTable
 import zakadabar.core.persistence.exposed.entityId
-import zakadabar.core.authorize.AccountPublicBo
+import zakadabar.core.util.UUID
+import zakadabar.core.util.toJavaUuid
+import zakadabar.core.util.toStackUuid
+import zakadabar.lib.accounts.data.AccountListSecureEntry
+import zakadabar.lib.accounts.data.AccountPrivateBo
 
 open class AccountPrivateExposedPa(
     table: AccountPrivateExposedTable = AccountPrivateExposedTableCommon
@@ -80,6 +80,19 @@ open class AccountPrivateExposedPa(
                 )
             }
 
+    override fun update(bo: AccountPrivateBo) =
+        table
+            .update({ table.id eq bo.id.toLong() }) {
+                it[table.accountName] = bo.accountName
+                it[table.fullName] = bo.fullName
+                it[table.email] = bo.email
+                it[table.phone] = bo.phone
+                it[table.theme] = bo.theme
+                it[table.locale] = bo.locale
+                // DO not update UUID
+            }
+            .let { bo }
+
     override fun ResultRow.toBo() = AccountPrivateBo(
         id = this[table.id].entityId(),
         accountName = this[table.accountName],
@@ -87,7 +100,9 @@ open class AccountPrivateExposedPa(
         email = this[table.email],
         phone = this[table.phone],
         theme = this[table.theme],
-        locale = this[table.locale]
+        locale = this[table.locale],
+        uuid = this[table.uuid].toStackUuid()
+        // do not forget to add fields also to update (above)
     )
 
     override fun UpdateBuilder<*>.fromBo(bo: AccountPrivateBo) {
@@ -97,6 +112,7 @@ open class AccountPrivateExposedPa(
         this[table.phone] = bo.phone
         this[table.theme] = bo.theme
         this[table.locale] = bo.locale
+        this[table.uuid] = bo.uuid.toJavaUuid()
     }
 }
 
@@ -112,6 +128,7 @@ object AccountPrivateExposedTableCommon : AccountPrivateExposedTable()
  * @property  phone         Phone number.
  * @property  theme         Theme this account prefers.
  * @property  locale        The locale this account prefers.
+ * @property  uuid          UUID of the account.
  */
 open class AccountPrivateExposedTable : ExposedPaTable<AccountPrivateBo>(
     tableName = "account_private"
@@ -123,5 +140,6 @@ open class AccountPrivateExposedTable : ExposedPaTable<AccountPrivateBo>(
     val phone = varchar("phone", 20).nullable()
     val theme = varchar("theme", 50).nullable()
     val locale = varchar("locale", 20)
+    val uuid = uuid("uuid").default(UUID.NIL.toJavaUuid()).index()
 
 }
