@@ -14,6 +14,7 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.ZkElementState
+import zakadabar.core.browser.counterbar.CounterBar
 import zakadabar.core.browser.crud.ZkCrud
 import zakadabar.core.browser.crud.ZkCrudTarget
 import zakadabar.core.browser.field.ZkFieldContext
@@ -94,6 +95,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     var firstOnResume = true
     var runQueryOnResume = true
 
+    var counter = false
+
     open val rowHeight
         get() = styles.rowHeight
 
@@ -160,6 +163,10 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     open var searchText: String? = null
 
+    open var counterBar = CounterBar("")
+    open var allCount: Int? = null // if the full data size of the very first query is not equal to all count, it is possible to set here
+    open var needToSetAllCounter = true
+
     // -------------------------------------------------------------------------
     //  Lifecycle functions
     // -------------------------------------------------------------------------
@@ -210,6 +217,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         on("mousedown", ::onMouseDown)
         on("dblclick", ::onDblClick)
         on("click", ::onClick)
+
+        if (counter) + counterBar
     }
 
     override fun onResume() {
@@ -269,6 +278,21 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         if (search) actions += ZkSearchAction(searchText ?: "", ::onSearch)
 
         return actions
+    }
+
+    private fun setCounter() {
+
+        if (needToSetAllCounter && allCount == null && ::fullData.isInitialized && fullData.isNotEmpty()){
+            allCount = fullData.size
+            needToSetAllCounter = false
+        }
+
+        val all = allCount ?: ""
+        val count = if (::filteredData.isInitialized) filteredData.size.toString() else all
+
+        counterBar.text = "${localizedStrings.counterTitle} $count/$all"
+        counterBar.onCreate()
+
     }
 
     // -------------------------------------------------------------------------
@@ -384,6 +408,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             + placeHolderRow
 
             onAreasChange()
+
+            if (counter) setCounter()
         }
     }
 

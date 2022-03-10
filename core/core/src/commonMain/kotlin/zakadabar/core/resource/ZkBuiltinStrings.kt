@@ -119,5 +119,6 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val lastLoginFail by "Last Login Fail"
     open val failedLogins by "Failed Logins"
     open val uuid by "UUID"
+    open val counterTitle by "Counter:"
 }
 
