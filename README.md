@@ -6,13 +6,21 @@
 
 Zakadabar is a multiplatform application development library.
 
+## Status
+
+We use software built on Zakadabar in production, with happy customers. It is not perfect nor complete,
+there are areas in need of refactoring, some others are a bit confused. That said, it works, we've been
+able to ship quality software based on it.
+
+It is under continuous development, we add features as needed for our projects. If you need something
+feel free to open an issue.
+
 ## News
 
-2022.2.9 has some minor breaking changes, listed in the changelog.
+2022.3.21 minor improvements and bug fixes, listed in changelog
 
-During this month I plan to add enhancements to browser components. I'll try to
-keep compatibility as much as possible, but most probably there are some
-breaking changes coming.
+- table counter (filtered rows / all rows)
+- stacking modals (open modal from a modal)
 
 ----
 
@@ -42,7 +50,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation("hu.simplexion.zakadabar:core:2022.2.9")
+                implementation("hu.simplexion.zakadabar:core:2022.3.21")
             }
         }
     }
