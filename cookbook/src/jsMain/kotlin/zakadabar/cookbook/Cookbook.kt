@@ -26,6 +26,7 @@ import zakadabar.cookbook.browser.tabcontainer.background.TabContainerBackground
 import zakadabar.cookbook.browser.table.action.TableCustomActions
 import zakadabar.cookbook.browser.table.basic.BasicTable
 import zakadabar.cookbook.browser.table.border.vertical.TableVerticalBorderSome
+import zakadabar.cookbook.browser.table.counter.TableWithCounter
 import zakadabar.cookbook.browser.table.customColumn.TableCustomColumn
 import zakadabar.cookbook.browser.table.export.filename.TableExportFileName
 import zakadabar.cookbook.browser.table.export.filtered.TableExportFiltered
@@ -73,6 +74,7 @@ class Cookbook : CommonModule {
             "TableExportFiltered" -> TableExportFiltered()
             "TableExportHeaders" -> TableExportHeaders()
             "TableIndexColumn" -> TableIndexColumn()
+            "TableWithCounter" -> TableWithCounter()
             "TableInTab" -> TableInTab()
             "TableSaveElement" -> TableSaveElement()
             "TableVerticalBorderSome" -> TableVerticalBorderSome()
