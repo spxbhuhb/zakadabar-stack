@@ -8,10 +8,6 @@ of [ZkModalContainer](/core/core/src/jsMain/kotlin/zakadabar/core/browser/modal/
 Modals that extend [ZkModalBase](/core/core/src/jsMain/kotlin/zakadabar/core/browser/modal/ZkModalBase.kt)
 have show, hide and data handling out-of-the-box.
 
-<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Note">
-Support for multiple parallel modals is not ready yet.
-</div>
-
 ## Built-In Modals [source code](/lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/modal/ModalExamples.kt)
 
 <div data-zk-enrich="ModalExamples"></div>
@@ -120,14 +116,14 @@ io {
 }
 ```
 
-## Timeline
+## Multiple Modals
 
-### Changes
+It is possible to open more than one modal at the same time.
 
-* 2021.6.10
-    * Add `withConfirm` shorthand.
-    * Fix build based example.
-* 2021.5.14
-    * Add build function to make styled modals easily.
-* 2021.5.12
-    * Change opacity of overlay background from 0.2 to 0.5 to make the modal more distinct.
+Consequent modals are placed over previous ones and have to be closed
+before the previous modals are closed.
+
+In other words, only the latest modal is active until it is closed.
+
+For an example check the [Open a Form in a Modal Dialog](/doc/cookbook/browser/form/modal/recipe.md).
+(Click on `Open`, `Execute`, `Back`, in this order.)

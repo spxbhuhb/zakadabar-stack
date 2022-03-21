@@ -77,13 +77,22 @@ open class ZkModalBase<T : Any?> : ZkElement() {
      * sent by the dialog is the return value of the function.
      */
     open suspend fun run(): T {
+        //
+        // WARNING
+        //
+        // Before you modify or override this method check:
+        //
+        // - ZkModalContainer.unaryPlus
+        // - ZkModalContainer.unaryMinus
+        // - Form In Modal cookbook recipe, especially the back button confirmation
+        //
+
         application.modals.show()
         application.modals += this
 
         val value = channel.receive()
 
         application.modals -= this
-        application.modals.hide()
 
         return value
     }

@@ -411,7 +411,7 @@ This enumeration has two values `User` and `Code`.
 + bo::stringValue onChange3 { origin, value, field -> toastSuccess { value } }
 ```
 
-Example: [Field Change Event]/doc/cookbook/browser/field/onchange/recipe.md
+Example: [Field Change Event](/doc/cookbook/browser/field/onchange/recipe.md)
 
 ### Field Value
 

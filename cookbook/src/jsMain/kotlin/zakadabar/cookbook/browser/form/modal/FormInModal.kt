@@ -13,6 +13,7 @@ import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.modal.ZkModalBase
 import zakadabar.core.browser.toast.toastSuccess
 import zakadabar.core.browser.util.io
+import zakadabar.core.data.EntityId
 import zakadabar.core.util.default
 
 open class FormInModalOpen : ZkElement() {
@@ -52,7 +53,7 @@ class FormInModal: ZkForm<SmallExampleBo>() {
 
     lateinit var onSuccess : (bo : SmallExampleBo) -> Unit
     override var mode = ZkElementMode.Other
-    override var bo : SmallExampleBo = default()
+    override var bo : SmallExampleBo = default { id = EntityId(1L) }
     override var schema = bo.schema()
 
     override fun onCreate() {

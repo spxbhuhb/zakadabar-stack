@@ -26,7 +26,6 @@ data class SmallExampleBo(
 
     @Suppress("DuplicatedCode")
     override fun schema() = BoSchema {
-        + ::id
         + ::enumSelectValue
         + ::stringValue blank false max 50
     }
