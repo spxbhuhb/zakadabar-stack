@@ -22,6 +22,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
     open var localTitleBarBackground by cssParameter { theme.textColor.alpha(0.1) }
     open var localTitleBarHeight by cssParameter { 32 }
     open var localTitleBarBorder by cssParameter { theme.fixBorder }
+    open var localTitleBarText by cssParameter { theme.textColor }
 
     /**
      * Application handle, the button and application name at the top left.
@@ -77,6 +78,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
         borderBottom = appTitleBarBorder
         fontSize = 16.px
         backgroundColor = appTitleBarBackground
+        color = appTitleBarText
     }
 
     /**
@@ -123,7 +125,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
     }
 
     open val iconButton by cssClass {
-        fill = "${theme.textColor} !important"
+        fill = "$appTitleBarText !important"
         backgroundColor = "transparent !important"
     }
 
@@ -150,5 +152,6 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
         fontSize = 16.px
 
         background = localTitleBarBackground
+        color = localTitleBarText
     }
 }

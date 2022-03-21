@@ -48,7 +48,7 @@ class ReadOnlyBuiltinForm : ZkForm<BuiltinBo>() {
                 + bo::enumSelectValue readOnly true
                 + bo::intValue readOnly true
                 + bo::instantValue readOnly true
-                + opt(bo::optBooleanValue, localizedStrings.trueText, localizedStrings.falseText).also { it.readOnly = true }
+                + opt(bo::optBooleanValue, localizedStrings.trueText, localizedStrings.falseText) readOnly true
                 + bo::optDoubleValue readOnly true
                 + bo::optEnumSelectValue readOnly true
                 + bo::optInstantValue readOnly true

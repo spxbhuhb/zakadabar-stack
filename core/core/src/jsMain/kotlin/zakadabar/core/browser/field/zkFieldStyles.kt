@@ -200,7 +200,7 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         + OverflowY.hidden
         + OverflowX.hidden
 
-        zIndex = 100.zIndex
+        zIndex = 2000.zIndex
 
         outline = "none"
         boxShadow = "0 0 32px 12px rgba(0, 0, 0, 0.4) "

@@ -3,12 +3,13 @@
  */
 package zakadabar.site.frontend.components
 
-import zakadabar.site.frontend.resources.SiteDarkTheme
-import zakadabar.site.frontend.resources.SiteGreenBlueTheme
-import zakadabar.site.frontend.resources.SiteLightTheme
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.theme.ZkThemeRotate
 import zakadabar.core.resource.ZkIcons
+import zakadabar.site.frontend.resources.SiteBlueTheme
+import zakadabar.site.frontend.resources.SiteDarkTheme
+import zakadabar.site.frontend.resources.SiteGreenBlueTheme
+import zakadabar.site.frontend.resources.SiteLightTheme
 
 class HeaderActions : ZkElement() {
 
@@ -16,6 +17,7 @@ class HeaderActions : ZkElement() {
         + ZkThemeRotate(
             ZkIcons.darkMode to SiteDarkTheme(),
             ZkIcons.lightMode to SiteLightTheme(),
+            ZkIcons.globe to SiteBlueTheme(),
             ZkIcons.leaf to SiteGreenBlueTheme()
         )
     }

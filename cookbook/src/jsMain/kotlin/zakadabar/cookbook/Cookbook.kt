@@ -14,6 +14,7 @@ import zakadabar.cookbook.browser.field.custom.CustomSelectFieldForm
 import zakadabar.cookbook.browser.field.onchange.FieldOnChangeForm
 import zakadabar.cookbook.browser.field.select.filter.SelectWithFilter
 import zakadabar.cookbook.browser.field.update.FieldUpdateForm
+import zakadabar.cookbook.browser.form.modal.FormInModalOpen
 import zakadabar.cookbook.browser.form.select.filter.BoSelectFilter
 import zakadabar.cookbook.browser.form.select.filter.StringSelectFilter
 import zakadabar.cookbook.browser.form.select.radio.RadioGroupSelect
@@ -83,6 +84,7 @@ class Cookbook : CommonModule {
             "AllValueFields" -> AllValueFields()
             "AllValueFieldsIo" -> AllValueFieldsIo()
             "SelectWithFilter" -> SelectWithFilter()
+            "FormInModalOpen" -> FormInModalOpen()
 
             else -> null
 

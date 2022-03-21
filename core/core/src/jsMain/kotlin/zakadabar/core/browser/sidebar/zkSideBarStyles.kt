@@ -108,7 +108,6 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
 
     open val groupArrow by cssClass {
         width = 20.px
-        paddingLeft = 2.px
     }
 
     open val groupContent by cssClass {

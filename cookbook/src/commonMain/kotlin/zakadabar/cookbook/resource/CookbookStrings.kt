@@ -10,6 +10,8 @@ import zakadabar.core.resource.ZkStringStore
 internal val strings = CookbookStrings()
 
 class CookbookStrings : ZkStringStore() {
+    val formInModal by "Form In Modal"
+    val open by "Open"
     val exampleButton by "Example Button"
     val exampleHelpContent by "This is the content of the help dialog."
     val clicked by "A very successful button click."

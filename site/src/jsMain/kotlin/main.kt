@@ -10,6 +10,7 @@ import zakadabar.core.browser.util.io
 import zakadabar.core.module.modules
 import zakadabar.core.resource.initTheme
 import zakadabar.site.frontend.Routing
+import zakadabar.site.frontend.resources.SiteBlueTheme
 import zakadabar.site.frontend.resources.SiteDarkTheme
 import zakadabar.site.frontend.resources.SiteGreenBlueTheme
 import zakadabar.site.frontend.resources.SiteLightTheme
@@ -27,7 +28,7 @@ fun main() {
 
             initSession()
 
-            initTheme(SiteDarkTheme(), SiteLightTheme(), SiteGreenBlueTheme())
+            initTheme(SiteDarkTheme(), SiteLightTheme(), SiteGreenBlueTheme(), SiteBlueTheme())
 
             initLocale(strings, defaultLocale = "en")
 
