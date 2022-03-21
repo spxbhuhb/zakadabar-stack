@@ -4,13 +4,15 @@
 package zakadabar.core.browser.counterbar
 
 import zakadabar.core.browser.field.ZkFieldStyles
-import zakadabar.core.browser.table.ZkTableStyles
-import zakadabar.core.browser.titlebar.zkTitleBarStyles
 import zakadabar.core.resource.css.*
+import zakadabar.core.util.alpha
 
 var zkCounterBarStyles by cssStyleSheet(ZkCounterBarStyles())
 
-class ZkCounterBarStyles: ZkFieldStyles() {
+open class ZkCounterBarStyles: ZkFieldStyles() {
+
+    open var borderTop by cssParameter { theme.fixBorder }
+    open var backgroundColor by cssParameter { theme.textColor.alpha(0.1) }
 
     open val tableCounterBar by cssClass {
         + BoxSizing.borderBox
@@ -29,6 +31,7 @@ class ZkCounterBarStyles: ZkFieldStyles() {
         fontWeight = 400.weight
         fontSize = 12.px
 
-        background = zkTitleBarStyles.localTitleBarBackground
+        borderTop = this@ZkCounterBarStyles.borderTop
+        backgroundColor = this@ZkCounterBarStyles.backgroundColor
     }
 }

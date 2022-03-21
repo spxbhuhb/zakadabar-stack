@@ -8,11 +8,14 @@ import zakadabar.cookbook.entity.builtin.ExampleBo
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.resource.css.em
 import zakadabar.core.resource.css.fr
+import zakadabar.core.resource.css.px
 
 class TableWithCounter : ZkTable<ExampleBo>() {
 
     override fun onConfigure() {
         super.onConfigure()
+
+        height = 400.px
 
         addLocalTitle = true
         search = true

@@ -9,6 +9,7 @@ This page contains the changes included in the next release.
 - `ZkTitleBarStyles.localTitleBarText` CSS parameter
 - `ZkModalBase.addButtons` property - hides the button row completely
 - `ZkModalBase.launch` function - launches the dialog without waiting for close
+- `ZkTable` counter option, see "Table With Counter" recipe
 
 **changed**
 
@@ -31,3 +32,4 @@ This page contains the changes included in the next release.
 **added**
 
 - new recipe: Form In a Modal
+- new recipe: Table With Counter

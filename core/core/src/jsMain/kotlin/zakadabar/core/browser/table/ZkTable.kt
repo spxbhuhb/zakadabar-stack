@@ -14,7 +14,7 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.ZkElementState
-import zakadabar.core.browser.counterbar.CounterBar
+import zakadabar.core.browser.counterbar.ZkCounterBar
 import zakadabar.core.browser.crud.ZkCrud
 import zakadabar.core.browser.crud.ZkCrudTarget
 import zakadabar.core.browser.field.ZkFieldContext
@@ -163,7 +163,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     open var searchText: String? = null
 
-    open var counterBar = CounterBar("")
+    open var counterBar = ZkCounterBar("")
     open var allCount: Int? = null // if the full data size of the very first query is not equal to all count, it is possible to set here
     open var needToSetAllCounter = true
 
@@ -280,7 +280,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         return actions
     }
 
-    private fun setCounter() {
+    open fun setCounter() {
 
         if (needToSetAllCounter && allCount == null && ::fullData.isInitialized && fullData.isNotEmpty()){
             allCount = fullData.size

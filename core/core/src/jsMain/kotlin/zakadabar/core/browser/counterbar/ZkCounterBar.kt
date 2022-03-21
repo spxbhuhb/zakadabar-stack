@@ -4,9 +4,8 @@
 package zakadabar.core.browser.counterbar
 
 import zakadabar.core.browser.ZkElement
-import zakadabar.core.browser.table.zkTableStyles
 
-open class CounterBar(
+open class ZkCounterBar(
     open var text: String,
     open val contextElements: List<ZkElement> = emptyList()
 ) : ZkElement() {
