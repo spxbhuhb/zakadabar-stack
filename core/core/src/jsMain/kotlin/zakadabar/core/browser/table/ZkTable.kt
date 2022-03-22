@@ -206,8 +206,6 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             on("scroll") {
                 contentScrollTop = this.element.scrollTop
                 contentScrollLeft = this.element.scrollLeft
-                println("scroll left: $contentScrollLeft top: $contentScrollTop")
-                println(JSON.stringify(tableElement.getBoundingClientRect()))
             }
 
         }.also {
