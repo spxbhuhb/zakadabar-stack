@@ -179,7 +179,7 @@ open class LocalDateTimePropertyGenerator(
     )
 
     override fun exposedTable() =
-        "val ${property.name} = date(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"
+        "val ${property.name} = datetime(\"${property.name.camelToSnakeCase()}\")$exposedTableOptional"
 
     override fun exposedTableToBo() =
         "${property.name} = this[table.${property.name}]$optional.toKotlinLocalDateTime()"
@@ -218,7 +218,7 @@ open class EntityIdPropertyGenerator(
         if (property.name == "id") {
             "+ bo::id"
         } else {
-            "+ select(bo::${property.name}) { ${property.kClassName}.all().by { it.name } } "
+            "+ bo::${property.name} query { ${property.kClassName}.all().by { it.name } } "
         }
 
     override fun browserTable() =
@@ -239,7 +239,7 @@ open class EntityIdPropertyGenerator(
         if (property.name == "id") {
             null
         } else {
-            "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutBo()}Table)$exposedTableOptional"
+            "val ${property.name} = reference(\"${property.name.camelToSnakeCase()}\", ${property.kClassName.withoutBo()}TableDefault)$exposedTableOptional"
         }
 
     override fun exposedTableToBo() =

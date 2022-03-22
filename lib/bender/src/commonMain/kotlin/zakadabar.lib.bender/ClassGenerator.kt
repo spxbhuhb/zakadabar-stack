@@ -3,7 +3,6 @@
  */
 package zakadabar.lib.bender
 
-import kotlinx.datetime.Clock
 import zakadabar.core.schema.descriptor.BoDescriptor
 import zakadabar.core.text.camelToSnakeCase
 
@@ -128,8 +127,7 @@ class $browserTableName : ZkTable<$boName>() {
 fun businessLogicGenerator() = """
 package $packageName
 
-import zakadabar.core.authorize.BusinessLogicBusinessLogicAuthorizer
-import zakadabar.core.authorize.EmptyBusinessLogicAuthorizer
+import zakadabar.core.authorize.BusinessLogicAuthorizer
 import zakadabar.core.business.EntityBusinessLogicBase
 import ${packageName}.$boName
 
@@ -139,7 +137,7 @@ open class $businessLogicName : EntityBusinessLogicBase<${boName}>(
 
     override val pa = ${baseName}Pa()
 
-    override val BusinessLogicAuthorizer : BusinessLogicAuthorizer<${boName}> = EmptyAuthorizer()
+    override val authorizer by provider()
     
 }
 """.trimIndent()
@@ -160,7 +158,7 @@ import ${packageName}.$boName
 ${generators.map { it.exposedPaImport() }.flatten().distinct().joinToString("\n")}
 
 open class ${baseName}Pa(
-    table : ${baseName}Table = ${baseName}Table()
+    table : ${baseName}Table = ${baseName}TableDefault
 ) : ExposedPaBase<$boName,${baseName}Table>(
     table = table
 ) {
@@ -172,6 +170,8 @@ open class ${baseName}Pa(
         ${generators.mapNotNull { it.exposedTableFromBo() }.joinToString("\n        ")}
     }
 }
+
+object ${baseName}TableDefault : ${baseName}Table()
 
 open class ${baseName}Table(
     tableName : String = "${baseName.camelToSnakeCase()}"
