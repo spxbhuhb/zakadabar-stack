@@ -27,7 +27,7 @@ open class ZkPropLocalDateTimeField(
 ) : ZkStringBaseV2<LocalDateTime,ZkPropLocalDateTimeField>(
     context = context,
     propName = prop.name,
-    getter = { prop.get().toString() }
+    getter = { prop.get().localized }
 ) {
 
     override var valueOrNull : LocalDateTime?

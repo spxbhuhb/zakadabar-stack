@@ -41,7 +41,7 @@ class BuiltinLocalizedFormats : LocalizedFormats {
     }
 
     override fun format(value: LocalDateTime): String {
-        return value.toString()
+        return value.toString().replace('T', ' ')
     }
 
     override fun toLocalDateTime(value: String): LocalDateTime {
@@ -49,8 +49,9 @@ class BuiltinLocalizedFormats : LocalizedFormats {
     }
 
     override fun toLocalDateTimeOrNull(value: String): LocalDateTime? {
+        val fixedValue = value.replace(' ', 'T')
         return try {
-            toLocalDateTime(value)
+            toLocalDateTime(fixedValue)
         } catch (ex : Exception) {
             null
         }
