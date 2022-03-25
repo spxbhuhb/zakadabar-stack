@@ -22,6 +22,7 @@ import zakadabar.cookbook.browser.form.submit.enter.SubmitOnEnter
 import zakadabar.cookbook.browser.help.TextHelpModal
 import zakadabar.cookbook.browser.navigation.direction.NavigationDirection
 import zakadabar.cookbook.browser.sidebar.icons.SideBarWithIcons
+import zakadabar.cookbook.browser.sidebar.icons.SideBarWithNotificationIcons
 import zakadabar.cookbook.browser.tabcontainer.background.TabContainerBackground
 import zakadabar.cookbook.browser.table.action.TableCustomActions
 import zakadabar.cookbook.browser.table.basic.BasicTable
@@ -63,6 +64,7 @@ class Cookbook : CommonModule {
             "NavigationDirection" -> NavigationDirection()
             "RadioGroupSelect" -> RadioGroupSelect()
             "SideBarWithIcons" -> SideBarWithIcons()
+            "SideBarWithNotificationIcons" -> SideBarWithNotificationIcons()
             "StringSelectFilter" -> StringSelectFilter()
             "SubmitOnEnter" -> SubmitOnEnter()
             "TabContainerBackground" -> TabContainerBackground()
