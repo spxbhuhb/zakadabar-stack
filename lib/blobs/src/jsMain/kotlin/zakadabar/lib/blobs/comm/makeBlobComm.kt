@@ -8,5 +8,5 @@ import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobBoCompanion
 
 actual fun <T : BlobBo<T, RT>, RT : EntityBo<RT>>  makeBlobComm(companion : BlobBoCompanion<T, RT>): BlobCommInterface<T, RT> {
-    return BlobComm(companion.boNamespace, companion.serializer())
+    return BlobComm(companion, companion.serializer())
 }

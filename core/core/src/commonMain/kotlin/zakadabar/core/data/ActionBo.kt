@@ -3,6 +3,15 @@
  */
 package zakadabar.core.data
 
+import zakadabar.core.authorize.Executor
+import zakadabar.core.comm.CommConfig
+
 interface ActionBo<RESPONSE : Any?> : BaseBo {
-    suspend fun execute(): RESPONSE
+
+    suspend fun execute(): RESPONSE = execute(executor = null, callConfig = null)
+
+    suspend fun execute(executor : Executor? = null, callConfig : CommConfig?= null): RESPONSE {
+        throw NotImplementedError()
+    }
+
 }

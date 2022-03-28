@@ -6,16 +6,21 @@ package zakadabar.core.data
 import zakadabar.core.comm.CommConfig
 import zakadabar.core.comm.QueryCommInterface
 import zakadabar.core.comm.makeQueryComm
+import zakadabar.core.util.use
 
 abstract class QueryBoCompanion(
     val boNamespace: String,
-    val commConfig : CommConfig? = null
+    commConfig : CommConfig? = null
 ) {
 
     private var _comm: QueryCommInterface? = null
 
+    var commConfig = commConfig
+        get() = CommConfig.configLock.use { field }
+        set(value) = CommConfig.configLock.use { field = value }
+
     private fun makeComm(): QueryCommInterface {
-        val nc = makeQueryComm(this, commConfig)
+        val nc = makeQueryComm(this)
         _comm = nc
         return nc
     }

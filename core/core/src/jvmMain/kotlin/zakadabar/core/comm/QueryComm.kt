@@ -22,8 +22,7 @@ import zakadabar.core.util.PublicApi
  */
 @PublicApi
 open class QueryComm(
-    val companion: QueryBoCompanion,
-    val config : CommConfig?
+    val companion: QueryBoCompanion
 ) : QueryCommInterface {
 
     override suspend fun <RQ : Any, RS : Any?> queryOrNull(
@@ -34,7 +33,7 @@ open class QueryComm(
         config : CommConfig?
     ): RS? {
 
-        localCommonBl(companion.boNamespace, config, this.config)?.let {
+        localCommonBl(companion.boNamespace, config, companion.commConfig)?.let {
             requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
 
             val func =  it.router.funcForQuery(request as BaseBo)
@@ -45,7 +44,7 @@ open class QueryComm(
 
         val q = Json.encodeToString(requestSerializer, request).encodeURLPath()
 
-        val url = merge("/query/${request::class.simpleName}?q=${q}", companion.boNamespace, config, this.config)
+        val url = merge("/query/${request::class.simpleName}?q=${q}", companion.boNamespace, config, companion.commConfig)
 
         val text = client.get<String>(url)
 

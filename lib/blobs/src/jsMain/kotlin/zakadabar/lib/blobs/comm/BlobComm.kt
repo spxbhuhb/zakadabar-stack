@@ -18,27 +18,28 @@ import org.w3c.fetch.RequestInit
 import org.w3c.files.Blob
 import org.w3c.xhr.ProgressEvent
 import org.w3c.xhr.XMLHttpRequest
+import zakadabar.core.authorize.Executor
 import zakadabar.core.comm.CommBase
+import zakadabar.core.comm.CommConfig
+import zakadabar.core.comm.CommConfig.Companion.merge
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.util.PublicApi
 import zakadabar.core.util.encodeURIComponent
 import zakadabar.lib.blobs.data.BlobBo
+import zakadabar.lib.blobs.data.BlobBoCompanion
 import zakadabar.lib.blobs.data.BlobCreateState
 
 /**
  * Communication functions for blobs.
- *
- * @property  namespace    Namespace of the entity this comm handles.
- *
  */
 @PublicApi
 open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
-    private val namespace: String,
-    private val serializer: KSerializer<T>
+     val companion: BlobBoCompanion<T, RT>,
+     val serializer: KSerializer<T>
 ) : CommBase(), BlobCommInterface<T,RT> {
 
-    override suspend fun create(bo: T): T {
+    override suspend fun create(bo: T, executor: Executor?, config: CommConfig?): T {
         if (! bo.id.isEmpty()) throw RuntimeException("id is not empty in $bo")
 
         val headers = Headers()
@@ -53,11 +54,11 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
             body = body
         )
 
-        return sendAndReceive("/api/$namespace/blob/meta", requestInit)
+        return sendAndReceive(config, "/blob/meta", requestInit)
     }
 
     @PublicApi
-    override suspend fun read(id: EntityId<T>): T {
+    override suspend fun read(id: EntityId<T>, executor: Executor?, config: CommConfig?): T {
 
         val headers = Headers()
 
@@ -66,11 +67,11 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
             headers = headers,
         )
 
-        return sendAndReceive("/api/$namespace/blob/meta/$id", requestInit)
+        return sendAndReceive(config, "/blob/meta/$id", requestInit)
     }
 
     @PublicApi
-    override suspend fun update(bo: T): T {
+    override suspend fun update(bo: T, executor: Executor?, config: CommConfig?): T {
         if (bo.id.isEmpty()) throw RuntimeException("ID of the $bo is empty")
 
         val headers = Headers()
@@ -85,13 +86,16 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
             body = body
         )
 
-        return sendAndReceive("/api/$namespace/blob/meta/${bo.id}", requestInit)
+        return sendAndReceive(config, "/blob/meta/${bo.id}", requestInit)
     }
 
     @PublicApi
-    override suspend fun all(): List<T> {
+    override suspend fun all(executor: Executor?, config: CommConfig?): List<T> {
+
+        val url = merge("/blob/meta", companion.boNamespace, config, companion.commConfig)
+
         val response = commBlock {
-            val responsePromise = window.fetch("/api/$namespace/blob/meta")
+            val responsePromise = window.fetch(url)
             checkStatus(responsePromise.await())
         }
 
@@ -102,16 +106,21 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
     }
 
     @PublicApi
-    override suspend fun delete(id: EntityId<T>) {
+    override suspend fun delete(id: EntityId<T>, executor: Executor?, config: CommConfig?) {
+        val url = merge("/blob/meta/$id", companion.boNamespace, config, companion.commConfig)
+
         commBlock {
-            val responsePromise = window.fetch("/api/$namespace/blob/meta/$id", RequestInit(method = "DELETE"))
+            val responsePromise = window.fetch(url, RequestInit(method = "DELETE"))
             checkStatus(responsePromise.await())
         }
     }
 
-    private suspend fun sendAndReceive(path: String, requestInit: RequestInit): T {
+    private suspend fun sendAndReceive(config: CommConfig?, path: String, requestInit: RequestInit): T {
+
+        val url = merge(path, companion.boNamespace, config, companion.commConfig)
+
         val response = commBlock {
-            val responsePromise = window.fetch(path, requestInit)
+            val responsePromise = window.fetch(url, requestInit)
             checkStatus(responsePromise.await())
         }
 
@@ -122,10 +131,10 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
     }
 
     @PublicApi
-    override suspend fun upload(bo : T, data: Any) : T {
+    override suspend fun upload(bo : T, data: Any, executor: Executor?, config: CommConfig?) : T {
         val channel = Channel<Boolean>()
 
-        upload(bo, data) { _, state, _ ->
+        upload(bo, data, executor, config) { _, state, _ ->
             GlobalScope.launch(Dispatchers.Default) {
                 when (state) {
                     BlobCreateState.Error -> channel.send(false)
@@ -140,7 +149,13 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
         return bo
     }
 
-    override suspend fun upload(bo: T, data: Any, callback: (bo: T, state: BlobCreateState, uploaded: Long) -> Unit) : T {
+    override suspend fun upload(
+        bo: T,
+        data: Any,
+        executor: Executor?,
+        config: CommConfig?,
+        callback: (bo: T, state: BlobCreateState, uploaded: Long) -> Unit
+    ) : T {
         require(data is Blob)
 
         val req = XMLHttpRequest()
@@ -152,7 +167,7 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
         req.addEventListener("abort", { callback(bo, BlobCreateState.Abort, 0) })
         req.addEventListener("load", { callback(bo, BlobCreateState.Done, data.size.toLong()) })
 
-        val url = "/api/$namespace/blob/content/${bo.id}"
+        val url = merge("/blob/content/${bo.id}", companion.boNamespace, config, companion.commConfig)
 
         req.open("POST", url, true)
         req.setRequestHeader("Content-Type", bo.mimeType)
@@ -164,9 +179,12 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
         return bo
     }
 
-    override suspend fun download(id: EntityId<T>) : ByteArray {
+    override suspend fun download(id: EntityId<T>, executor: Executor?, config: CommConfig?) : ByteArray {
+
+        val url = merge("/blob/content/$id", companion.boNamespace, config, companion.commConfig)
+
         val response = commBlock {
-            val responsePromise = window.fetch("/api/$namespace/blob/content/$id")
+            val responsePromise = window.fetch(url)
             checkStatus(responsePromise.await())
         }
 
@@ -174,10 +192,13 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
         return Int8Array(ab).unsafeCast<ByteArray>()
     }
 
-    override suspend fun byReference(reference: EntityId<RT>?, disposition : String?): List<T> {
+    override suspend fun byReference(reference: EntityId<RT>?, disposition : String?, executor: Executor?, config: CommConfig?): List<T> {
         val q = disposition?.let { "?disposition=$it" } ?: ""
+
+        val url = merge("/blob/list${if (reference == null) "" else "/$reference"}$q", companion.boNamespace, config, companion.commConfig)
+
         val response = commBlock {
-            val responsePromise = window.fetch("/api/$namespace/blob/list${if (reference == null) "" else "/$reference"}$q")
+            val responsePromise = window.fetch(url)
             checkStatus(responsePromise.await())
         }
 

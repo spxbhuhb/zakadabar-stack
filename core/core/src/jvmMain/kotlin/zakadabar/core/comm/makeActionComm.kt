@@ -5,6 +5,6 @@ package zakadabar.core.comm
 
 import zakadabar.core.data.ActionBoCompanion
 
-actual fun makeActionComm(companion: ActionBoCompanion, config : CommConfig?): ActionCommInterface {
-    return ActionComm(companion, config)
+actual fun makeActionComm(companion: ActionBoCompanion): ActionCommInterface {
+    return ActionComm(companion)
 }

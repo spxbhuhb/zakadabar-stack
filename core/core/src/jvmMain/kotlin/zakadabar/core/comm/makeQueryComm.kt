@@ -5,6 +5,6 @@ package zakadabar.core.comm
 
 import zakadabar.core.data.QueryBoCompanion
 
-actual fun makeQueryComm(companion: QueryBoCompanion, config : CommConfig?): QueryCommInterface {
-    return QueryComm(companion, config)
+actual fun makeQueryComm(companion: QueryBoCompanion): QueryCommInterface {
+    return QueryComm(companion)
 }

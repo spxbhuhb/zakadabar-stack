@@ -8,16 +8,21 @@ import zakadabar.core.authorize.Executor
 import zakadabar.core.comm.CommConfig
 import zakadabar.core.comm.EntityCommInterface
 import zakadabar.core.comm.makeEntityComm
+import zakadabar.core.util.use
 
 abstract class EntityBoCompanion<T : EntityBo<T>>(
     val boNamespace: String,
-    val commConfig : CommConfig? = null
+    commConfig : CommConfig? = null
 ) {
 
     private var _comm: EntityCommInterface<T>? = null
 
+    var commConfig = commConfig
+        get() = CommConfig.configLock.use { field }
+        set(value) = CommConfig.configLock.use { field = value }
+
     private fun makeComm(): EntityCommInterface<T> {
-        val nc = makeEntityComm(this,commConfig)
+        val nc = makeEntityComm(this)
         _comm = nc
         return nc
     }

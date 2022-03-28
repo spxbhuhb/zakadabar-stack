@@ -21,8 +21,7 @@ import zakadabar.core.util.PublicApi
  */
 @PublicApi
 open class ActionComm(
-    val companion: ActionBoCompanion,
-    val config : CommConfig?
+    val companion: ActionBoCompanion
 ) : ActionCommInterface {
 
     @PublicApi
@@ -34,16 +33,16 @@ open class ActionComm(
         config: CommConfig?
     ): RESPONSE? {
 
-        localCommonBl(companion.boNamespace, config, this.config)?.let {
+        localCommonBl(companion.boNamespace, config, companion.commConfig)?.let {
             requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
 
-            val func =  it.router.funcForQuery(request as BaseBo)
+            val func =  it.router.funcForAction(request as BaseBo)
 
             @Suppress("UNCHECKED_CAST") // router register methods should ensure that this is right
             return it.actionWrapper(executor, func, request) as RESPONSE?
         }
 
-        val url = merge("/action/${request::class.simpleName}", companion.boNamespace, config, this.config)
+        val url = merge("/action/${request::class.simpleName}", companion.boNamespace, config, companion.commConfig)
 
         val text = client.post<String>(url) {
             header("Content-Type", "application/json; charset=UTF-8")

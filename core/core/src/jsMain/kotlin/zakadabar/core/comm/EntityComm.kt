@@ -13,22 +13,22 @@ import org.w3c.fetch.RequestInit
 import zakadabar.core.authorize.Executor
 import zakadabar.core.comm.CommConfig.Companion.merge
 import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityBoCompanion
 import zakadabar.core.data.EntityId
 import zakadabar.core.util.PublicApi
 
 /**
  * Communication functions for entities.
  *
- * @property  namespace    Namespace of the entity this comm handles.
+ * @property  companion    The companion object for this entity BO.
  *
  * @property  serializer   The serializer to serialize/deserialize objects
  *                         sent/received.
  */
 @PublicApi
 open class EntityComm<T : EntityBo<T>>(
-    val namespace: String,
-    val serializer: KSerializer<T>,
-    val config: CommConfig?
+    val companion: EntityBoCompanion<T>,
+    val serializer: KSerializer<T>
 ) : CommBase(), EntityCommInterface<T> {
 
     override suspend fun create(bo: T, executor: Executor?, config: CommConfig?): T {
@@ -84,7 +84,7 @@ open class EntityComm<T : EntityBo<T>>(
     @PublicApi
     override suspend fun all(executor: Executor?, config: CommConfig?): List<T> {
 
-        val url = merge("/entity", namespace, config, this.config)
+        val url = merge("/entity", companion.boNamespace, config, companion.commConfig)
 
         val response = commBlock {
             val responsePromise = window.fetch(url)
@@ -100,7 +100,7 @@ open class EntityComm<T : EntityBo<T>>(
     @PublicApi
     override suspend fun delete(id: EntityId<T>, executor: Executor?, config: CommConfig?) {
 
-        val url = merge("/entity/$id", namespace, config, this.config)
+        val url = merge("/entity/$id", companion.boNamespace, config, companion.commConfig)
 
         commBlock {
             val responsePromise = window.fetch(url, RequestInit(method = "DELETE"))
@@ -110,7 +110,7 @@ open class EntityComm<T : EntityBo<T>>(
 
     protected suspend fun sendAndReceive(config: CommConfig?, path: String, requestInit: RequestInit): T {
 
-        val url = merge(path, namespace, config, this.config)
+        val url = merge(path, companion.boNamespace, config, companion.commConfig)
 
         val response = commBlock {
             val responsePromise = window.fetch(url, requestInit)

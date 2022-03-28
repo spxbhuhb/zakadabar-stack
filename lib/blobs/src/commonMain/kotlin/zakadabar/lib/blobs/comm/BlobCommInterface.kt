@@ -3,6 +3,8 @@
  */
 package zakadabar.lib.blobs.comm
 
+import zakadabar.core.authorize.Executor
+import zakadabar.core.comm.CommConfig
 import zakadabar.core.comm.EntityCommInterface
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
@@ -19,7 +21,12 @@ interface BlobCommInterface<T : BlobBo<T, RT>, RT : EntityBo<RT>> : EntityCommIn
      *
      * @return  the [bo]
      */
-    suspend fun upload(bo : T, data: Any) : T
+    suspend fun upload(
+        bo : T,
+        data: Any,
+        executor: Executor? = null,
+        config : CommConfig? = null
+    ) : T
 
     /**
      * Upload data for the given blob.
@@ -30,17 +37,24 @@ interface BlobCommInterface<T : BlobBo<T, RT>, RT : EntityBo<RT>> : EntityCommIn
      *
      * @return  the [bo]
      */
-    suspend fun upload(bo : T, data: Any, callback: (bo : T, state: BlobCreateState, uploaded: Long) -> Unit) : T
+    suspend fun upload(
+        bo : T,
+        data: Any,
+        executor: Executor? = null,
+        config : CommConfig? = null,
+        callback: (bo : T, state: BlobCreateState, uploaded: Long) -> Unit
+    ) : T
 
     /**
      * Download the data of the blob into a ByteArray.
      */
-    suspend fun download(id : EntityId<T>) : ByteArray
+    suspend fun download(id : EntityId<T>, executor: Executor?, config : CommConfig?) : ByteArray
 
-    suspend fun byReference(reference : EntityId<RT>?, disposition : String? = null) : List<T>
-
-    @Deprecated("EOL: 2021.7.1  -  use byReference instead", ReplaceWith("byReference(reference)"), level = DeprecationLevel.ERROR)
-    suspend fun listByReference(reference : EntityId<RT>, disposition : String? = null) =
-        byReference(reference, disposition)
+    suspend fun byReference(
+        reference : EntityId<RT>?,
+        disposition : String? = null,
+        executor: Executor? = null,
+        config : CommConfig? = null
+    ) : List<T>
 
 }

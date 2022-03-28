@@ -64,7 +64,7 @@ class TestBl : EntityBusinessLogicBase<TestBo>(
     }
 
     fun testAction(executor: Executor, bo : TestAction) : StringValue {
-        return StringValue("test action result")
+        return StringValue(bo.returnValue)
     }
 
     fun testActionNull(executor: Executor, bo : TestActionNull) : StringValue? {

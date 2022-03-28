@@ -13,7 +13,8 @@ import zakadabar.lib.blobs.browser.blobStyles
 
 class ZkFullScreenImageView(
     val url: String,
-    val onDeleteImage: (preview: ZkFullScreenImageView) -> Unit
+    val onDeleteImage: (preview: ZkFullScreenImageView) -> Unit,
+    val deleteButton: Boolean = true
 ) : ZkElement() {
 
     override fun onCreate() {
@@ -33,20 +34,22 @@ class ZkFullScreenImageView(
             hide()
         } css blobStyles.closeButton
 
-        + ZkButton(
-            ZkIcons.deleteForever,
-            buttonSize = 48,
-            iconSize = 32,
-            round = true
-        ) {
-            onDeleteImage(this)
-        } css blobStyles.deleteButton
+        if (deleteButton) {
+            + ZkButton(
+                ZkIcons.deleteForever,
+                buttonSize = 48,
+                iconSize = 32,
+                round = true
+            ) {
+                onDeleteImage(this)
+            } css blobStyles.deleteButton
 
-        on("keydown") { event ->
-            event as KeyboardEvent
-            when (event.key) {
-                "Escape" -> {
-                    hide()
+            on("keydown") { event ->
+                event as KeyboardEvent
+                when (event.key) {
+                    "Escape" -> {
+                        hide()
+                    }
                 }
             }
         }

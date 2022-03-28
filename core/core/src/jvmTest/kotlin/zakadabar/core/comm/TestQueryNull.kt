@@ -4,11 +4,11 @@
 package zakadabar.core.comm
 
 import kotlinx.serialization.Serializable
+import zakadabar.core.authorize.Executor
 import zakadabar.core.data.QueryBo
 import zakadabar.core.data.QueryBoCompanion
 import zakadabar.core.data.StringValue
 import zakadabar.core.schema.BoSchema
-import zakadabar.core.util.UUID
 
 @Serializable
 class TestQueryNull(
@@ -17,7 +17,10 @@ class TestQueryNull(
 
     override suspend fun execute() = comm.queryOrNull(this, serializer(), StringValue.serializer())
 
-    companion object : QueryBoCompanion(UUID().toString())
+    override suspend fun execute(executor : Executor?, callConfig : CommConfig?) =
+        comm.queryOrNull(this, serializer(), StringValue.serializer(), executor, callConfig)
+
+    companion object : QueryBoCompanion(TestBo.boNamespace)
 
     override fun schema() = BoSchema {
         + ::returnValue

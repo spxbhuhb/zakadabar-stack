@@ -20,8 +20,7 @@ import zakadabar.core.util.encodeURIComponent
  */
 @PublicApi
 open class QueryComm(
-    val companion: QueryBoCompanion,
-    val config : CommConfig?
+    val companion: QueryBoCompanion
 ) : CommBase(), QueryCommInterface {
 
     @PublicApi
@@ -35,7 +34,7 @@ open class QueryComm(
 
         val q = encodeURIComponent(Json.encodeToString(requestSerializer, request))
 
-        val url = merge("/query/${request::class.simpleName}?q=${q}", companion.boNamespace, config, this.config)
+        val url = merge("/query/${request::class.simpleName}?q=${q}", companion.boNamespace, config, companion.commConfig)
 
         val response = commBlock {
             val responsePromise = window.fetch(url)

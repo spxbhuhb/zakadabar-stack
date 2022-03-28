@@ -21,8 +21,7 @@ import zakadabar.core.util.PublicApi
  */
 @PublicApi
 open class ActionComm(
-    val companion: ActionBoCompanion,
-    val config : CommConfig?
+    val companion: ActionBoCompanion
 ) : CommBase(), ActionCommInterface {
 
     @PublicApi
@@ -46,7 +45,7 @@ open class ActionComm(
             body = body
         )
 
-        val url = merge("/action/${request::class.simpleName}", companion.boNamespace, config, this.config)
+        val url = merge("/action/${request::class.simpleName}", companion.boNamespace, config, companion.commConfig)
 
         val response = commBlock {
             val responsePromise = window.fetch(url, requestInit)

@@ -4,16 +4,24 @@
 package zakadabar.lib.blobs.data
 
 import kotlinx.serialization.KSerializer
+import zakadabar.core.authorize.Executor
+import zakadabar.core.comm.CommConfig
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
+import zakadabar.core.util.use
 import zakadabar.lib.blobs.comm.BlobCommInterface
 import zakadabar.lib.blobs.comm.makeBlobComm
 
 abstract class BlobBoCompanion<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
-    val boNamespace: String
+    val boNamespace: String,
+    commConfig : CommConfig? = null
 ) {
 
     private var _comm: BlobCommInterface<T,RT>? = null
+
+    var commConfig = commConfig
+        get() = CommConfig.configLock.use { field }
+        set(value) = CommConfig.configLock.use { field = value }
 
     private fun makeComm(): BlobCommInterface<T,RT> {
         val nc = makeBlobComm(this)
@@ -27,27 +35,23 @@ abstract class BlobBoCompanion<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
             _comm = value
         }
 
-    suspend fun read(id: EntityId<T>) = comm.read(id)
+    suspend fun read(id: EntityId<T>, executor: Executor? = null, config: CommConfig? = null) = comm.read(id, executor, config)
 
-    suspend fun delete(id: EntityId<T>) = comm.delete(id)
+    suspend fun delete(id: EntityId<T>, executor: Executor? = null, config: CommConfig? = null) = comm.delete(id, executor, config)
 
-    suspend fun all() = comm.all()
+    suspend fun all(executor: Executor? = null, config: CommConfig? = null) = comm.all(executor, config)
 
-    suspend fun allAsMap() = comm.all().associateBy { it.id }
+    suspend fun allAsMap(executor: Executor? = null, config: CommConfig? = null) = comm.all(executor, config).associateBy { it.id }
 
     abstract fun serializer(): KSerializer<T>
 
-    suspend fun upload(bo : T, data: Any, callback: (bo : T, state: BlobCreateState, uploaded: Long) -> Unit) =
-        comm.upload(bo, data, callback)
+    suspend fun upload(bo : T, data: Any, executor: Executor? = null, config: CommConfig? = null, callback: (bo : T, state: BlobCreateState, uploaded: Long) -> Unit) =
+        comm.upload(bo, data, executor, config, callback)
 
-    suspend fun download(id : EntityId<T>) =
-        comm.download(id)
+    suspend fun download(id : EntityId<T>, executor: Executor? = null, config: CommConfig? = null) =
+        comm.download(id, executor, config)
 
-    suspend fun byReference(reference : EntityId<RT>?, disposition : String? = null) =
-        comm.byReference(reference, disposition)
-
-    @Deprecated("EOL: 2021.7.1  -  use byReference instead", ReplaceWith("byReference(reference)"), level = DeprecationLevel.ERROR)
-    suspend fun listByReference(reference : EntityId<RT>) =
-        byReference(reference)
+    suspend fun byReference(reference : EntityId<RT>?, disposition : String? = null, executor: Executor? = null, config: CommConfig? = null) =
+        comm.byReference(reference, disposition, executor, config)
 
 }

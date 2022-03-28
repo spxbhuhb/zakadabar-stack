@@ -12,13 +12,17 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import zakadabar.core.comm.CommBase.Companion.baseUrl
+import zakadabar.core.authorize.Executor
 import zakadabar.core.comm.CommBase.Companion.client
 import zakadabar.core.comm.CommBase.Companion.onError
+import zakadabar.core.comm.CommConfig
+import zakadabar.core.comm.CommConfig.Companion.merge
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.util.PublicApi
+import zakadabar.lib.blobs.business.BlobBlBase
 import zakadabar.lib.blobs.data.BlobBo
+import zakadabar.lib.blobs.data.BlobBoCompanion
 import zakadabar.lib.blobs.data.BlobCreateState
 
 /**
@@ -31,16 +35,23 @@ import zakadabar.lib.blobs.data.BlobCreateState
  */
 @PublicApi
 open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
-    private val namespace: String,
+    private val companion: BlobBoCompanion<T, RT>,
     private val serializer: KSerializer<T>
 ) : BlobCommInterface<T,RT> {
 
     @PublicApi
-    override suspend fun create(bo: T): T {
+    override suspend fun create(bo: T, executor: Executor?, config: CommConfig?): T {
         require(bo.id.isEmpty()) { "id is empty in $bo" }
 
+        CommConfig.localEntityBl<T>(companion.boNamespace, config, companion.commConfig)?.let {
+            requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
+            return it.createWrapper(executor, bo)
+        }
+
+        val url = merge("/blob/meta", companion.boNamespace, config, companion.commConfig)
+
         val text = try {
-            client.post<String>("$baseUrl/api/$namespace/blob/meta") {
+            client.post<String>(url) {
                 header("Content-Type", "application/json")
                 body = Json.encodeToString(serializer, bo)
             }
@@ -53,9 +64,17 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
     }
 
     @PublicApi
-    override suspend fun read(id: EntityId<T>): T {
+    override suspend fun read(id: EntityId<T>, executor: Executor?, config: CommConfig?): T {
+
+        CommConfig.localEntityBl<T>(companion.boNamespace, config, companion.commConfig)?.let {
+            requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
+            return it.readWrapper(executor, id)
+        }
+
+        val url = merge("/blob/meta/$id", companion.boNamespace, config, companion.commConfig)
+
         val text = try {
-            client.get<String>("$baseUrl/api/$namespace/blob/meta/$id")
+            client.get<String>(url)
         } catch (ex: Exception) {
             onError(ex)
             throw ex
@@ -65,11 +84,18 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
     }
 
     @PublicApi
-    override suspend fun update(bo: T): T {
+    override suspend fun update(bo: T, executor: Executor?, config: CommConfig?): T {
         require(! bo.id.isEmpty()) { "ID of the $bo is 0 " }
 
+        CommConfig.localEntityBl<T>(companion.boNamespace, config, companion.commConfig)?.let {
+            requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
+            return it.updateWrapper(executor, bo)
+        }
+
+        val url = merge("/blob/meta/${bo.id}", companion.boNamespace, config, companion.commConfig)
+
         val text = try {
-            client.patch<String>("$baseUrl/api/$namespace/blob/meta/${bo.id}") {
+            client.patch<String>(url) {
                 header("Content-Type", "application/json")
                 body = Json.encodeToString(serializer, bo)
             }
@@ -82,9 +108,17 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
     }
 
     @PublicApi
-    override suspend fun all(): List<T> {
+    override suspend fun all(executor: Executor?, config: CommConfig?): List<T> {
+
+        val url = merge("/blob/meta", companion.boNamespace, config, companion.commConfig)
+
+        CommConfig.localEntityBl<T>(companion.boNamespace, config, companion.commConfig)?.let {
+            requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
+            return it.listWrapper(executor)
+        }
+
         val text = try {
-            client.get<String>("$baseUrl/api/$namespace/blob/meta")
+            client.get<String>(url)
         } catch (ex: Exception) {
             onError(ex)
             throw ex
@@ -94,9 +128,17 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
     }
 
     @PublicApi
-    override suspend fun delete(id: EntityId<T>) {
+    override suspend fun delete(id: EntityId<T>, executor: Executor?, config: CommConfig?) {
+
+        CommConfig.localEntityBl<T>(companion.boNamespace, config, companion.commConfig)?.let {
+            requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
+            return it.deleteWrapper(executor, id)
+        }
+
+        val url = merge("/blob/meta/$id", companion.boNamespace, config, companion.commConfig)
+
         try {
-            client.delete<Unit>("$baseUrl/api/$namespace/blob/meta/$id")
+            client.delete<Unit>(url)
         } catch (ex: Exception) {
             onError(ex)
             throw ex
@@ -104,10 +146,10 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
     }
 
     @PublicApi
-    override suspend fun upload(bo : T, data: Any) : T {
+    override suspend fun upload(bo : T, data: Any, executor: Executor?, config: CommConfig?) : T {
         val channel = Channel<Boolean>()
 
-        upload(bo, data) { _, state, _ ->
+        upload(bo, data, executor, config) { _, state, _ ->
             GlobalScope.launch(Dispatchers.Default) {
                 when (state) {
                     BlobCreateState.Error -> channel.send(false)
@@ -123,15 +165,17 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
     }
 
     @PublicApi
-    override suspend fun upload(bo : T, data: Any, callback: (bo: T, state: BlobCreateState, uploaded: Long) -> Unit) : T {
+    override suspend fun upload(bo : T, data: Any, executor: Executor?, config: CommConfig?, callback: (bo: T, state: BlobCreateState, uploaded: Long) -> Unit) : T {
         require(data is ByteArray)
 
         callback(bo, BlobCreateState.Starting, 0)
 
         GlobalScope.launch(Dispatchers.Default) {
 
+            val url = merge("/blob/content/${bo.id}", companion.boNamespace, config, companion.commConfig)
+
             try {
-                client.post<String>("$baseUrl/api/$namespace/blob/content/${bo.id}") {
+                client.post<String>(url) {
                     body = ByteArrayContent(data)
                 }
 
@@ -150,9 +194,19 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
     }
 
     @PublicApi
-    override suspend fun download(id: EntityId<T>): ByteArray {
+    override suspend fun download(id: EntityId<T>, executor: Executor?, config: CommConfig?): ByteArray {
+
+        CommConfig.localEntityBl<T>(companion.boNamespace, config, companion.commConfig)?.let {
+            requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
+            @Suppress("UNCHECKED_CAST")
+            it as BlobBlBase<T,RT>
+            return it.readContent(executor, id) {  }.first
+        }
+
+        val url = merge("/blob/content/$id", companion.boNamespace, config, companion.commConfig)
+
         return try {
-            client.get("$baseUrl/api/$namespace/blob/content/$id")
+            client.get(url)
         } catch (ex: Exception) {
             onError(ex)
             throw ex
@@ -160,10 +214,12 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
     }
 
     @PublicApi
-    override suspend fun byReference(reference: EntityId<RT>?, disposition : String?): List<T> {
+    override suspend fun byReference(reference: EntityId<RT>?, disposition : String?, executor: Executor?, config: CommConfig?): List<T> {
         val q = disposition?.let { "?disposition=$it" } ?: ""
+
+        val url = merge("/blob/list/${if (reference == null) "" else "/$reference"}$q", companion.boNamespace, config, companion.commConfig)
         val text = try {
-            client.get<String>("$baseUrl/api/$namespace/blob/list/${if (reference == null) "" else "/$reference"}$q")
+            client.get<String>(url)
         } catch (ex: Exception) {
             onError(ex)
             throw ex

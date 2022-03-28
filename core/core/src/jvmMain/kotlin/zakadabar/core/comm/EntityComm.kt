@@ -13,34 +13,34 @@ import zakadabar.core.comm.CommBase.Companion.onError
 import zakadabar.core.comm.CommConfig.Companion.localEntityBl
 import zakadabar.core.comm.CommConfig.Companion.merge
 import zakadabar.core.data.EntityBo
+import zakadabar.core.data.EntityBoCompanion
 import zakadabar.core.data.EntityId
 import zakadabar.core.util.PublicApi
 
 /**
  * REST communication functions for entities.
  *
- * @property  namespace    Namespace of the entity this comm handles.
+ * @property  companion    The companion object for this entity BO.
  *
  * @property  serializer   The serializer to serialize/deserialize objects
  *                         sent/received.
  */
 @PublicApi
 open class EntityComm<T : EntityBo<T>>(
-    val namespace: String,
-    val serializer: KSerializer<T>,
-    val config: CommConfig?
+    val companion: EntityBoCompanion<T>,
+    val serializer: KSerializer<T>
 ) : EntityCommInterface<T> {
 
     @PublicApi
     override suspend fun create(bo: T, executor: Executor?, config: CommConfig?): T {
         require(bo.id.isEmpty()) { "id is empty in $bo" }
 
-        localEntityBl<T>(namespace, config, this.config)?.let {
+        localEntityBl<T>(companion.boNamespace, config, companion.commConfig)?.let {
             requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
             return it.createWrapper(executor, bo)
         }
 
-        val url = merge("/entity", namespace, config, this.config)
+        val url = merge("/entity", companion.boNamespace, config, companion.commConfig)
 
         val text = try {
             client.post<String>(url) {
@@ -58,12 +58,12 @@ open class EntityComm<T : EntityBo<T>>(
     @PublicApi
     override suspend fun read(id: EntityId<T>, executor: Executor?, config: CommConfig?): T {
 
-        localEntityBl<T>(namespace, config, this.config)?.let {
+        localEntityBl<T>(companion.boNamespace, config, companion.commConfig)?.let {
             requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
             return it.readWrapper(executor, id)
         }
 
-        val url = merge("/entity/$id", namespace, config, this.config)
+        val url = merge("/entity/$id", companion.boNamespace, config, companion.commConfig)
 
         val text = try {
             client.get<String>(url)
@@ -79,12 +79,12 @@ open class EntityComm<T : EntityBo<T>>(
     override suspend fun update(bo: T, executor: Executor?, config: CommConfig?): T {
         require(! bo.id.isEmpty()) { "ID of the $bo is 0 " }
 
-        localEntityBl<T>(namespace, config, this.config)?.let {
+        localEntityBl<T>(companion.boNamespace, config, companion.commConfig)?.let {
             requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
             return it.updateWrapper(executor, bo)
         }
 
-        val url = merge("/entity/${bo.id}", namespace, config, this.config)
+        val url = merge("/entity/${bo.id}", companion.boNamespace, config, companion.commConfig)
 
         val text = try {
             client.patch<String>(url) {
@@ -102,12 +102,12 @@ open class EntityComm<T : EntityBo<T>>(
     @PublicApi
     override suspend fun all(executor: Executor?, config: CommConfig?): List<T> {
 
-        localEntityBl<T>(namespace, config, this.config)?.let {
+        localEntityBl<T>(companion.boNamespace, config, companion.commConfig)?.let {
             requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
             return it.listWrapper(executor)
         }
 
-        val url = merge("/entity", namespace, config, this.config)
+        val url = merge("/entity", companion.boNamespace, config, companion.commConfig)
 
         val text = try {
             client.get<String>(url)
@@ -122,12 +122,12 @@ open class EntityComm<T : EntityBo<T>>(
     @PublicApi
     override suspend fun delete(id: EntityId<T>, executor: Executor?, config: CommConfig?) {
 
-        localEntityBl<T>(namespace, config, this.config)?.let {
+        localEntityBl<T>(companion.boNamespace, config, companion.commConfig)?.let {
             requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
             return it.deleteWrapper(executor, id)
         }
 
-        val url = merge("/entity/$id", namespace, config, this.config)
+        val url = merge("/entity/$id", companion.boNamespace, config, companion.commConfig)
 
         try {
             client.delete<Unit>(url)

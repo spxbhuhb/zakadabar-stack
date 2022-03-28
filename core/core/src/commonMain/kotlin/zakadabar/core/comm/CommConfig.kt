@@ -37,7 +37,7 @@ data class CommConfig(
          * Access to this variable is thread safe, [configLock] is used to
          * synchronize get and set.
          */
-        var commConfig = CommConfig()
+        var global = CommConfig()
             get() = configLock.use { field }
             set(value) = configLock.use { field = value }
 
@@ -48,7 +48,7 @@ data class CommConfig(
         fun isLocal(call: CommConfig?, bo: CommConfig?): Boolean {
             if (call != null) return call.local
             if (bo != null) return bo.local
-            return commConfig.local
+            return global.local
         }
 
         /**
@@ -83,10 +83,10 @@ data class CommConfig(
          */
         fun merge(function: String, namespace: String, call: CommConfig?, bo: CommConfig?): String {
 
-            val callBase = call?.baseUrl ?: bo?.baseUrl ?: commConfig.baseUrl ?: ""
+            val callBase = call?.baseUrl ?: bo?.baseUrl ?: global.baseUrl ?: ""
             val callNamespace = call?.namespace ?: bo?.namespace ?: namespace
 
-            return "${callBase}/api/${callNamespace}/$function"
+            return "${callBase}/api/${callNamespace}$function"
         }
     }
 }

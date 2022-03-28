@@ -25,13 +25,13 @@ In these examples:
 
 ### Entity Crud
 
-| Operation | Method | URL | Programmatic Access |
-| ---- | --- | --- | --- |
-| All | GET | `/api/{namespace}/entity` | `SimpleBo.all()` |
-| Create | POST | `/api/{namespace}/entity` | `bo.create()` |
-| Read | GET | `/api/{namespace}/entity/12` | `SimpleBo.read(12)`
-| Update | PATCH | `/api/{namespace}/entity/12` | `bo.update()` |
-| Delete | DELETE | `/api/{namespace}/entity/12` | `SimpleBo.delete(12)` |
+| Operation | Method | URL                          | Programmatic Access   |
+|-----------|--------|------------------------------|-----------------------|
+| All       | GET    | `/api/{namespace}/entity`    | `SimpleBo.all()`      |
+| Create    | POST   | `/api/{namespace}/entity`    | `bo.create()`         |
+| Read      | GET    | `/api/{namespace}/entity/12` | `SimpleBo.read(12)`   |
+| Update    | PATCH  | `/api/{namespace}/entity/12` | `bo.update()`         |
+| Delete    | DELETE | `/api/{namespace}/entity/12` | `SimpleBo.delete(12)` |
 
 ### Queries
 
@@ -61,14 +61,14 @@ Programmatic Access:
 
 Blobs are handled by the [lib:blobs](../libraries/blobs/Introduction.md) library module.
 
-| Operation | Method | URL | Programmatic Access |
-| ---- | --- | --- | --- |
-| Create | POST | `/api/simple/blob/meta` | `bo.create()` |
-| Create Content | POST | `/api/simple/blob/content/23` | `TestBlobBo.upload(...)` |
-| Read | GET | `/api/simple/blob/meta/23` | `TestBlobBo.read(blobId)` |
-| Read Content | GET | `/api/simple/blob/content/23` | |
-| Update | PATCH | `/api/simple/blob/meta/23` | `bo.update()` |
-| Delete | DELETE | `/api/simple/blob/meta/23` | `TestBlobBo.delete(23)` |
+| Operation      | Method | URL                           | Programmatic Access       |
+|----------------|--------|-------------------------------|---------------------------|
+| Create         | POST   | `/api/simple/blob/meta`       | `bo.create()`             |
+| Create Content | POST   | `/api/simple/blob/content/23` | `TestBlobBo.upload(...)`  |
+| Read           | GET    | `/api/simple/blob/meta/23`    | `TestBlobBo.read(blobId)` |
+| Read Content   | GET    | `/api/simple/blob/content/23` |                           |
+| Update         | PATCH  | `/api/simple/blob/meta/23`    | `bo.update()`             |
+| Delete         | DELETE | `/api/simple/blob/meta/23`    | `TestBlobBo.delete(23)`   |
 
 #### Query Blobs by Reference
 
@@ -98,16 +98,16 @@ View name is the `viewBame` of the [routing target](../browser/structure/Routing
 
 ### Crud
 
-| View | URL |
-| ---- | --- |
-| Create | `/hu-HU/Simple/create` |
-| Read | `/hu-HU/Simple/read?id=12` |
+| View   | URL                          |
+|--------|------------------------------|
+| Create | `/hu-HU/Simple/create`       |
+| Read   | `/hu-HU/Simple/read?id=12`   |
 | Update | `/hu-HU/Simple/update?id=12` |
 | Delete | `/hu-HU/Simple/delete?id=12` |
 
 ### Listing and queries
 
-| View | URL |
-| ---- | --- |
-| All | `/hu-HU/Simple/all` |
+| View  | URL                                             |
+|-------|-------------------------------------------------|
+| All   | `/hu-HU/Simple/all`                             |
 | Query | `/hu-HU/Simple/QueryExample?q={"name":"dinky"}` |

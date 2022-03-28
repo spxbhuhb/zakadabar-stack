@@ -67,15 +67,7 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
     suspend fun readContent(call: ApplicationCall) {
         val blobId = call.parameters["blobId"]?.let { EntityId<T>(it) } ?: throw BadRequestException("missing blob id")
 
-        val executor = call.executor()
-
-        val (bytes, mimeType) = pa.withTransaction {
-            val bo = pa.read(blobId)
-
-            authorizer.authorizeRead(executor, bo.id)
-
-            auditor.auditRead(executor, bo.id)
-
+        val (bytes, mimeType) = readContent(call.executor(), blobId) { bo ->
             call.response.header(
                 HttpHeaders.ContentDisposition,
                 ContentDisposition.Attachment
@@ -83,18 +75,26 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
                     .withParameter(ContentDisposition.Parameters.Size, bo.size.toString())
                     .toString()
             )
-
-            pa.readContent(bo.id) to bo.mimeType
         }
 
         call.respondBytes(bytes, ContentType.parse(mimeType))
     }
 
+    fun readContent(executor: Executor, blobId: EntityId<T>, callback : (T) -> Unit): Pair<ByteArray, String> =
+        pa.withTransaction {
+            val bo = pa.read(blobId)
+
+            authorizer.authorizeRead(executor, bo.id)
+
+            auditor.auditRead(executor, bo.id)
+
+            callback(bo)
+
+            pa.readContent(bo.id) to bo.mimeType
+        }
 
     suspend fun writeContent(call: ApplicationCall) {
         val blobId = call.parameters["blobId"]?.let { EntityId<T>(it) } ?: throw BadRequestException("missing blob id")
-
-        val executor = call.executor()
 
         val headers = call.request.headers
         val length = headers["Content-Length"]?.toIntOrNull() ?: throw BadRequestException("missing content length")
@@ -102,22 +102,23 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
         val bytes = ByteArray(length)
         call.receiveChannel().readFully(bytes, 0, length)
 
-        pa.withTransaction {
-            val bo = pa.read(blobId)
-
-            authorizer.authorizeCreate(executor, bo)
-
-            bo.size = length.toLong()
-            pa.update(bo)
-
-            pa.writeContent(blobId, bytes)
-
-            auditor.auditUpdate(executor, bo)
-        }
+        writeContent(call.executor(), blobId, length.toLong(), bytes)
 
         call.respond(HttpStatusCode.OK, "received")
     }
 
+    fun writeContent(executor: Executor, blobId: EntityId<T>, length : Long, bytes : ByteArray) = pa.withTransaction {
+        val bo = pa.read(blobId)
+
+        authorizer.authorizeCreate(executor, bo)
+
+        bo.size = length
+        pa.update(bo)
+
+        pa.writeContent(blobId, bytes)
+
+        auditor.auditUpdate(executor, bo)
+    }
 
     suspend fun byReference(call: ApplicationCall) {
         val referenceId = call.parameters["referenceId"]?.let { EntityId<T>(it) }

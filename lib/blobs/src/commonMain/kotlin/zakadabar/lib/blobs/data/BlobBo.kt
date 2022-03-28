@@ -3,6 +3,8 @@
  */
 package zakadabar.lib.blobs.data
 
+import zakadabar.core.authorize.Executor
+import zakadabar.core.comm.CommConfig
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.schema.BoSchema
@@ -25,9 +27,9 @@ interface BlobBo<T : BlobBo<T,RT>, RT : EntityBo<RT>> : EntityBo<T> {
      * @param   data   ByteArray for JVM, Blob for JavaScript.
      */
     @Suppress("UNCHECKED_CAST")
-    suspend fun upload(data : Any) = comm().upload(this as T, data)
+    suspend fun upload(data : Any, executor: Executor? = null, config: CommConfig? = null) = comm().upload(this as T, data, executor, config)
 
-    suspend fun download() = comm().download(id)
+    suspend fun download(executor: Executor? = null, config: CommConfig? = null) = comm().download(id, executor, config)
 
     override fun schema() = BoSchema {
         + ::disposition max 200
