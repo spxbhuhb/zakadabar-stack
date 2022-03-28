@@ -25,6 +25,11 @@ object DefaultLayout : ZkDefaultLayout(spanHeader = true) {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        console.log(activeMediaSize)
+    }
+
     class PilotTitle : ZkAppTitle(
         application.serverDescription.name,
         contextElements = emptyList()

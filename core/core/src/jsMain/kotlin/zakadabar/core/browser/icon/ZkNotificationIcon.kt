@@ -5,7 +5,8 @@ import zakadabar.core.browser.sidebar.zkSideBarStyles
 import zakadabar.core.resource.ZkIconSource
 
 open class ZkNotificationIcon(
-    val icon: ZkIconSource
+    val icon: ZkIconSource,
+    val iconSize: Int = 18,
 ) : ZkElement() {
 
     val iconDiv = ZkElement()
@@ -16,7 +17,7 @@ open class ZkNotificationIcon(
         +div {
 
             +div {
-                +ZkIcon(icon, size = zkSideBarStyles.iconSize) css zkSideBarStyles.icon
+                +ZkIcon(icon, size = iconSize) css zkSideBarStyles.icon
                 + iconDiv
             } css zkIconStyles.notificationIconContainer
         }
@@ -30,6 +31,9 @@ open class ZkNotificationIcon(
         iconDiv.clear()
         iconDiv += ZkElement(
             +div {
+                style {
+                    left = "${iconSize * 0.6}px"
+                }
                 if (count != 0) + ZkNotificationCountDot(count)
             } css zkIconStyles.notificationIconStyle)
     }
