@@ -4,6 +4,7 @@
 package zakadabar.core.comm
 
 import kotlinx.serialization.KSerializer
+import zakadabar.core.authorize.Executor
 
 interface ActionCommInterface {
     /**
@@ -21,7 +22,8 @@ interface ActionCommInterface {
      * @param   request              The action parameters to send.
      * @param   requestSerializer    Serializer for the request.
      * @param   responseSerializer   Serializer for the response.
-     * @param   baseUrl              Server url to use instead of default base URL.
+     * @param   executor             The executor of the call (used by local calls to authorize the call).
+     * @param   config               Configuration for the communication, uses class or global defaults (in that order) when null.
      *
      * @return  The response sent by the server.
      *
@@ -31,7 +33,8 @@ interface ActionCommInterface {
         request: REQUEST,
         requestSerializer: KSerializer<REQUEST>,
         responseSerializer: KSerializer<RESPONSE>,
-        baseUrl : String? = null
+        executor: Executor? = null,
+        config: CommConfig ? = null
     ): RESPONSE
 
     /**
@@ -49,7 +52,8 @@ interface ActionCommInterface {
      * @param   request              The action parameters to send.
      * @param   requestSerializer    Serializer for the request.
      * @param   responseSerializer   Serializer for the response.
-     * @param   baseUrl              Server url to use instead of default base URL.
+     * @param   executor             The executor of the call (used by local calls to authorize the call).
+     * @param   config               Configuration for the communication, uses class or global defaults (in that order) when null.
      *
      * @return  The response sent by the server or null.
      *
@@ -59,6 +63,7 @@ interface ActionCommInterface {
         request: REQUEST,
         requestSerializer: KSerializer<REQUEST>,
         responseSerializer: KSerializer<RESPONSE>,
-        baseUrl : String? = null
+        executor: Executor? = null,
+        config: CommConfig ? = null
     ): RESPONSE?
 }

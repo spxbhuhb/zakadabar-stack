@@ -7,8 +7,11 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
-import zakadabar.core.comm.CommBase.Companion.baseUrl
+import zakadabar.core.authorize.Executor
 import zakadabar.core.comm.CommBase.Companion.client
+import zakadabar.core.comm.CommConfig.Companion.localCommonBl
+import zakadabar.core.comm.CommConfig.Companion.merge
+import zakadabar.core.data.BaseBo
 import zakadabar.core.data.QueryBoCompanion
 import zakadabar.core.util.PublicApi
 
@@ -19,13 +22,32 @@ import zakadabar.core.util.PublicApi
  */
 @PublicApi
 open class QueryComm(
-    private val companion: QueryBoCompanion
+    val companion: QueryBoCompanion,
+    val config : CommConfig?
 ) : QueryCommInterface {
 
-    override suspend fun <RQ : Any, RS : Any?> queryOrNull(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<RS>): RS? {
+    override suspend fun <RQ : Any, RS : Any?> queryOrNull(
+        request: RQ,
+        requestSerializer: KSerializer<RQ>,
+        responseSerializer: KSerializer<RS>,
+        executor: Executor?,
+        config : CommConfig?
+    ): RS? {
+
+        localCommonBl(companion.boNamespace, config, this.config)?.let {
+            requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
+
+            val func =  it.router.funcForQuery(request as BaseBo)
+
+            @Suppress("UNCHECKED_CAST") // router register methods should ensure that this is right
+            return it.queryWrapper(executor, func, request) as RS?
+        }
+
         val q = Json.encodeToString(requestSerializer, request).encodeURLPath()
 
-        val text = client.get<String>("${baseUrl}/api/${companion.boNamespace}/query/${request::class.simpleName}?q=${q}")
+        val url = merge("/query/${request::class.simpleName}?q=${q}", companion.boNamespace, config, this.config)
+
+        val text = client.get<String>(url)
 
         return if (text == "null") {
             null
@@ -35,8 +57,14 @@ open class QueryComm(
     }
 
     @PublicApi
-    override suspend fun <RQ : Any, RS : Any> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<RS>): RS {
-        return queryOrNull(request, requestSerializer, responseSerializer) ?: throw NoSuchElementException()
+    override suspend fun <RQ : Any, RS : Any> query(
+        request: RQ,
+        requestSerializer: KSerializer<RQ>,
+        responseSerializer: KSerializer<RS>,
+        executor: Executor?,
+        config : CommConfig?
+    ): RS {
+        return queryOrNull(request, requestSerializer, responseSerializer, executor, config) ?: throw NoSuchElementException()
     }
 
 }

@@ -4,8 +4,8 @@
 package zakadabar.core.route
 
 import zakadabar.core.authorize.Executor
-import zakadabar.core.data.BaseBo
 import zakadabar.core.data.ActionBo
+import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.QueryBo
 import kotlin.reflect.KClass
@@ -36,4 +36,15 @@ class EmptyRouter<T : EntityBo<T>> : BusinessLogicRouter<T> {
         throw IllegalArgumentException("EmptyRouter cannot route queries")
     }
 
+    override fun funcForAction(
+        actionBo : BaseBo
+    ) : (Executor, BaseBo) -> Any? {
+        throw IllegalArgumentException("EmptyRouter cannot route actions")
+    }
+
+    override fun funcForQuery(
+        queryBo : BaseBo
+    ) : (Executor, BaseBo) -> Any? {
+        throw IllegalArgumentException("EmptyRouter cannot route queries")
+    }
 }

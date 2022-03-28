@@ -4,16 +4,18 @@
 package zakadabar.core.data
 
 import zakadabar.core.comm.ActionCommInterface
+import zakadabar.core.comm.CommConfig
 import zakadabar.core.comm.makeActionComm
 
 abstract class ActionBoCompanion(
-    val boNamespace: String
+    val boNamespace: String,
+    val commConfig : CommConfig? = null
 ) {
 
     private var _comm: ActionCommInterface? = null
 
     private fun makeComm(): ActionCommInterface {
-        val nc = makeActionComm(this)
+        val nc = makeActionComm(this, commConfig)
         _comm = nc
         return nc
     }

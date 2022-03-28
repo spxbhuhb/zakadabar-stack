@@ -12,4 +12,4 @@ import zakadabar.core.data.EntityBoCompanion
  * that means JavaScript has a proper implementation, Java has an empty one.
  * Technically it would be possible to have a Java client.
  */
-expect fun <T : EntityBo<T>> makeEntityComm(companion: EntityBoCompanion<T>): EntityCommInterface<T>
+expect fun <T : EntityBo<T>> makeEntityComm(companion: EntityBoCompanion<T>, config: CommConfig?): EntityCommInterface<T>

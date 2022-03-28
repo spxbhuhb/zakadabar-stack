@@ -9,6 +9,8 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
+import zakadabar.core.authorize.Executor
+import zakadabar.core.comm.CommConfig.Companion.merge
 import zakadabar.core.data.ActionBoCompanion
 import zakadabar.core.util.PublicApi
 
@@ -19,7 +21,8 @@ import zakadabar.core.util.PublicApi
  */
 @PublicApi
 open class ActionComm(
-    val companion: ActionBoCompanion
+    val companion: ActionBoCompanion,
+    val config : CommConfig?
 ) : CommBase(), ActionCommInterface {
 
     @PublicApi
@@ -27,7 +30,8 @@ open class ActionComm(
         request: REQUEST,
         requestSerializer: KSerializer<REQUEST>,
         responseSerializer: KSerializer<RESPONSE>,
-        baseUrl : String?
+        executor: Executor?,
+        config: CommConfig?
     ): RESPONSE? {
 
         val headers = Headers()
@@ -42,9 +46,9 @@ open class ActionComm(
             body = body
         )
 
+        val url = merge("/action/${request::class.simpleName}", companion.boNamespace, config, this.config)
+
         val response = commBlock {
-            val base = baseUrl?.trim('/') ?: "/api/${companion.boNamespace}"
-            val url = "$base/action/${request::class.simpleName}"
             val responsePromise = window.fetch(url, requestInit)
             checkStatus(responsePromise.await())
         }
@@ -64,9 +68,10 @@ open class ActionComm(
         request: REQUEST,
         requestSerializer: KSerializer<REQUEST>,
         responseSerializer: KSerializer<RESPONSE>,
-        baseUrl : String?
+        executor: Executor?,
+        config: CommConfig?
     ): RESPONSE {
-        return actionOrNull(request, requestSerializer, responseSerializer)!!
+        return actionOrNull(request, requestSerializer, responseSerializer, executor, config)!!
     }
 
 }

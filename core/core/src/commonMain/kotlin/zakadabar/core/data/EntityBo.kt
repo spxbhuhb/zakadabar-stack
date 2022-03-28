@@ -3,8 +3,9 @@
  */
 package zakadabar.core.data
 
+import zakadabar.core.authorize.Executor
+import zakadabar.core.comm.CommConfig
 import zakadabar.core.comm.EntityCommInterface
-import zakadabar.core.data.BaseBo
 
 @Suppress("UNCHECKED_CAST")
 interface EntityBo<T> : BaseBo {
@@ -15,15 +16,15 @@ interface EntityBo<T> : BaseBo {
 
     fun comm(): EntityCommInterface<T>
 
-    suspend fun create() = comm().create(this as T)
+    suspend fun create(executor : Executor? = null, config : CommConfig? = null) = comm().create(this as T, executor, config)
 
-    suspend fun update() = comm().update(this as T)
+    suspend fun update(executor : Executor? = null, config : CommConfig? = null) = comm().update(this as T, executor, config)
 
-    suspend fun update(func : T.() -> Unit) {
+    suspend fun update(executor : Executor? = null, config : CommConfig? = null, func : T.() -> Unit) {
         (this as T).func()
-        update()
+        update(executor, config)
     }
 
-    suspend fun delete() = comm().delete(id)
+    suspend fun delete(executor : Executor? = null, config : CommConfig? = null) = comm().delete(id, executor, config)
 
 }

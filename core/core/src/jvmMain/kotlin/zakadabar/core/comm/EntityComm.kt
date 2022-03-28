@@ -7,9 +7,11 @@ import io.ktor.client.request.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import zakadabar.core.comm.CommBase.Companion.baseUrl
+import zakadabar.core.authorize.Executor
 import zakadabar.core.comm.CommBase.Companion.client
 import zakadabar.core.comm.CommBase.Companion.onError
+import zakadabar.core.comm.CommConfig.Companion.localEntityBl
+import zakadabar.core.comm.CommConfig.Companion.merge
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.util.PublicApi
@@ -24,16 +26,24 @@ import zakadabar.core.util.PublicApi
  */
 @PublicApi
 open class EntityComm<T : EntityBo<T>>(
-    private val namespace: String,
-    private val serializer: KSerializer<T>
+    val namespace: String,
+    val serializer: KSerializer<T>,
+    val config: CommConfig?
 ) : EntityCommInterface<T> {
 
     @PublicApi
-    override suspend fun create(bo: T): T {
+    override suspend fun create(bo: T, executor: Executor?, config: CommConfig?): T {
         require(bo.id.isEmpty()) { "id is empty in $bo" }
 
+        localEntityBl<T>(namespace, config, this.config)?.let {
+            requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
+            return it.createWrapper(executor, bo)
+        }
+
+        val url = merge("/entity", namespace, config, this.config)
+
         val text = try {
-            client.post<String>("$baseUrl/api/$namespace/entity") {
+            client.post<String>(url) {
                 header("Content-Type", "application/json")
                 body = Json.encodeToString(serializer, bo)
             }
@@ -46,9 +56,17 @@ open class EntityComm<T : EntityBo<T>>(
     }
 
     @PublicApi
-    override suspend fun read(id: EntityId<T>): T {
+    override suspend fun read(id: EntityId<T>, executor: Executor?, config: CommConfig?): T {
+
+        localEntityBl<T>(namespace, config, this.config)?.let {
+            requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
+            return it.readWrapper(executor, id)
+        }
+
+        val url = merge("/entity/$id", namespace, config, this.config)
+
         val text = try {
-            client.get<String>("$baseUrl/api/$namespace/entity/$id")
+            client.get<String>(url)
         } catch (ex: Exception) {
             onError(ex)
             throw ex
@@ -58,11 +76,18 @@ open class EntityComm<T : EntityBo<T>>(
     }
 
     @PublicApi
-    override suspend fun update(bo: T): T {
+    override suspend fun update(bo: T, executor: Executor?, config: CommConfig?): T {
         require(! bo.id.isEmpty()) { "ID of the $bo is 0 " }
 
+        localEntityBl<T>(namespace, config, this.config)?.let {
+            requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
+            return it.updateWrapper(executor, bo)
+        }
+
+        val url = merge("/entity/${bo.id}", namespace, config, this.config)
+
         val text = try {
-            client.patch<String>("$baseUrl/api/$namespace/entity/${bo.id}") {
+            client.patch<String>(url) {
                 header("Content-Type", "application/json")
                 body = Json.encodeToString(serializer, bo)
             }
@@ -75,9 +100,17 @@ open class EntityComm<T : EntityBo<T>>(
     }
 
     @PublicApi
-    override suspend fun all(): List<T> {
+    override suspend fun all(executor: Executor?, config: CommConfig?): List<T> {
+
+        localEntityBl<T>(namespace, config, this.config)?.let {
+            requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
+            return it.listWrapper(executor)
+        }
+
+        val url = merge("/entity", namespace, config, this.config)
+
         val text = try {
-            client.get<String>("$baseUrl/api/$namespace/entity")
+            client.get<String>(url)
         } catch (ex: Exception) {
             onError(ex)
             throw ex
@@ -87,9 +120,17 @@ open class EntityComm<T : EntityBo<T>>(
     }
 
     @PublicApi
-    override suspend fun delete(id: EntityId<T>) {
+    override suspend fun delete(id: EntityId<T>, executor: Executor?, config: CommConfig?) {
+
+        localEntityBl<T>(namespace, config, this.config)?.let {
+            requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
+            return it.deleteWrapper(executor, id)
+        }
+
+        val url = merge("/entity/$id", namespace, config, this.config)
+
         try {
-            client.delete<Unit>("$baseUrl/api/$namespace/entity/$id")
+            client.delete<Unit>(url)
         } catch (ex: Exception) {
             onError(ex)
             throw ex

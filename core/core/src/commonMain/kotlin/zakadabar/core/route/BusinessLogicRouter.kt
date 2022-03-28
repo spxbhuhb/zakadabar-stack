@@ -31,4 +31,22 @@ interface BusinessLogicRouter<T : BaseBo> {
         actionData : String
     ) : Pair<(Executor, BaseBo) -> Any?,BaseBo>
 
+    /**
+     * Finds the function to execute for the given action BO.
+     *
+     * @throws NotImplementedError if no such action is known
+     */
+    fun funcForAction(
+        actionBo : BaseBo
+    ) : (Executor, BaseBo) -> Any?
+
+    /**
+     * Finds the function to execute for the given query BO.
+     *
+     * @throws NotImplementedError if no such query is known
+     */
+    fun funcForQuery(
+        queryBo : BaseBo
+    ) : (Executor, BaseBo) -> Any?
+
 }

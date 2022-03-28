@@ -6,8 +6,12 @@ package zakadabar.core.comm
 import io.ktor.client.request.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
+import zakadabar.core.authorize.Executor
 import zakadabar.core.comm.CommBase.Companion.client
+import zakadabar.core.comm.CommConfig.Companion.localCommonBl
+import zakadabar.core.comm.CommConfig.Companion.merge
 import zakadabar.core.data.ActionBoCompanion
+import zakadabar.core.data.BaseBo
 import zakadabar.core.util.PublicApi
 
 /**
@@ -17,7 +21,8 @@ import zakadabar.core.util.PublicApi
  */
 @PublicApi
 open class ActionComm(
-    private val companion: ActionBoCompanion
+    val companion: ActionBoCompanion,
+    val config : CommConfig?
 ) : ActionCommInterface {
 
     @PublicApi
@@ -25,15 +30,26 @@ open class ActionComm(
         request: REQUEST,
         requestSerializer: KSerializer<REQUEST>,
         responseSerializer: KSerializer<RESPONSE>,
-        baseUrl : String?
+        executor: Executor?,
+        config: CommConfig?
     ): RESPONSE? {
-        val base = baseUrl?.trim('/') ?: CommBase.baseUrl + "/api/${companion.boNamespace}"
-        val url = "$base/action/${request::class.simpleName}"
+
+        localCommonBl(companion.boNamespace, config, this.config)?.let {
+            requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
+
+            val func =  it.router.funcForQuery(request as BaseBo)
+
+            @Suppress("UNCHECKED_CAST") // router register methods should ensure that this is right
+            return it.actionWrapper(executor, func, request) as RESPONSE?
+        }
+
+        val url = merge("/action/${request::class.simpleName}", companion.boNamespace, config, this.config)
 
         val text = client.post<String>(url) {
             header("Content-Type", "application/json; charset=UTF-8")
             body = Json.encodeToString(requestSerializer, request)
         }
+
         return if (text == "null") {
             null
         } else {
@@ -46,9 +62,10 @@ open class ActionComm(
         request: REQUEST,
         requestSerializer: KSerializer<REQUEST>,
         responseSerializer: KSerializer<RESPONSE>,
-        baseUrl : String?
+        executor: Executor?,
+        config: CommConfig?
     ): RESPONSE {
-        return actionOrNull(request, requestSerializer, responseSerializer, baseUrl)!!
+        return actionOrNull(request, requestSerializer, responseSerializer, executor, config)!!
     }
 
 }

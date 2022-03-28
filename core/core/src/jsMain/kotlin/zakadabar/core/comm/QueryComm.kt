@@ -7,9 +7,11 @@ import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
-import zakadabar.core.browser.util.encodeURIComponent
+import zakadabar.core.authorize.Executor
+import zakadabar.core.comm.CommConfig.Companion.merge
 import zakadabar.core.data.QueryBoCompanion
 import zakadabar.core.util.PublicApi
+import zakadabar.core.util.encodeURIComponent
 
 /**
  * Communication functions for records.
@@ -18,16 +20,25 @@ import zakadabar.core.util.PublicApi
  */
 @PublicApi
 open class QueryComm(
-    val companion: QueryBoCompanion
+    val companion: QueryBoCompanion,
+    val config : CommConfig?
 ) : CommBase(), QueryCommInterface {
 
     @PublicApi
-    override suspend fun <RQ : Any, RS : Any?> queryOrNull(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<RS>): RS? {
+    override suspend fun <RQ : Any, RS : Any?> queryOrNull(
+        request: RQ,
+        requestSerializer: KSerializer<RQ>,
+        responseSerializer: KSerializer<RS>,
+        executor: Executor?,
+        config: CommConfig?
+    ): RS? {
 
         val q = encodeURIComponent(Json.encodeToString(requestSerializer, request))
 
+        val url = merge("/query/${request::class.simpleName}?q=${q}", companion.boNamespace, config, this.config)
+
         val response = commBlock {
-            val responsePromise = window.fetch("/api/${companion.boNamespace}/query/${request::class.simpleName}?q=${q}")
+            val responsePromise = window.fetch(url)
             checkStatus(responsePromise.await())
         }
 
@@ -42,8 +53,14 @@ open class QueryComm(
     }
 
     @PublicApi
-    override suspend fun <RQ : Any, RS : Any> query(request: RQ, requestSerializer: KSerializer<RQ>, responseSerializer: KSerializer<RS>): RS {
-        return queryOrNull(request, requestSerializer, responseSerializer) ?: throw NoSuchElementException()
+    override suspend fun <RQ : Any, RS : Any> query(
+        request: RQ,
+        requestSerializer: KSerializer<RQ>,
+        responseSerializer: KSerializer<RS>,
+        executor: Executor?,
+        config: CommConfig?
+    ): RS {
+        return queryOrNull(request, requestSerializer, responseSerializer, executor, config) ?: throw NoSuchElementException()
     }
 
 

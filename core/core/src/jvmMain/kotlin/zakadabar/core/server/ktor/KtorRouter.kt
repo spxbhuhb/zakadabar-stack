@@ -12,11 +12,11 @@ import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.serializer
 import zakadabar.core.authorize.Executor
 import zakadabar.core.business.BusinessLogicCommon
+import zakadabar.core.data.ActionBo
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.QueryBo
 import zakadabar.core.route.BusinessLogicRouter
 import zakadabar.core.server.server
-import zakadabar.core.data.BaseBo
-import zakadabar.core.data.ActionBo
-import zakadabar.core.data.QueryBo
 import zakadabar.core.util.PublicApi
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
@@ -97,6 +97,30 @@ open class KtorRouter<T : BaseBo>(
         val aObj = Json.decodeFromString(serializer(actionClass.createType()), actionData) as BaseBo
 
         return actionFunc to aObj
+    }
+
+    override fun funcForAction(
+        actionBo : BaseBo
+    ) : (Executor, BaseBo) -> Any? {
+
+        val actionType = actionBo::class.simpleName
+
+        val (_, actionFunc) = actionClassList.firstOrNull { it.first.simpleName == actionType }
+            ?: throw NotImplementedError("no action found for action type '$actionType'")
+
+        return actionFunc
+    }
+
+    override fun funcForQuery(
+        queryBo : BaseBo
+    ) : (Executor, BaseBo) -> Any? {
+
+        val queryType = queryBo::class.simpleName
+
+        val (_, queryFunc) = queryClassList.firstOrNull { it.first.simpleName == queryType }
+            ?: throw NotImplementedError("no query found for query type '$queryType'")
+
+        return queryFunc
     }
 
     private suspend fun query(call: ApplicationCall, queryClass: KClass<out BaseBo>, queryFunc: (Executor, BaseBo) -> Any?) {

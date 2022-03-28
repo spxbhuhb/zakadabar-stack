@@ -8,4 +8,4 @@ import zakadabar.core.data.QueryBoCompanion
 /**
  * Global function to make a [QueryCommInterface].
  */
-expect fun makeQueryComm(companion: QueryBoCompanion): QueryCommInterface
+expect fun makeQueryComm(companion: QueryBoCompanion, config: CommConfig?): QueryCommInterface

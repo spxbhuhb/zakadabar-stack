@@ -8,4 +8,4 @@ import zakadabar.core.data.ActionBoCompanion
 /**
  * Global function to make a [ActionCommInterface].
  */
-expect fun makeActionComm(companion: ActionBoCompanion): ActionCommInterface
+expect fun makeActionComm(companion: ActionBoCompanion, config: CommConfig?): ActionCommInterface

@@ -4,17 +4,20 @@
 package zakadabar.core.data
 
 import kotlinx.serialization.KSerializer
+import zakadabar.core.authorize.Executor
+import zakadabar.core.comm.CommConfig
 import zakadabar.core.comm.EntityCommInterface
 import zakadabar.core.comm.makeEntityComm
 
 abstract class EntityBoCompanion<T : EntityBo<T>>(
-    val boNamespace: String
+    val boNamespace: String,
+    val commConfig : CommConfig? = null
 ) {
 
     private var _comm: EntityCommInterface<T>? = null
 
     private fun makeComm(): EntityCommInterface<T> {
-        val nc = makeEntityComm(this)
+        val nc = makeEntityComm(this,commConfig)
         _comm = nc
         return nc
     }
@@ -27,11 +30,11 @@ abstract class EntityBoCompanion<T : EntityBo<T>>(
 
     abstract fun serializer(): KSerializer<T>
 
-    suspend fun read(id: EntityId<T>) = comm.read(id)
+    suspend fun read(id: EntityId<T>, executor : Executor? = null, config : CommConfig? = null) = comm.read(id, executor, config)
 
-    suspend fun delete(id: EntityId<T>) = comm.delete(id)
+    suspend fun delete(id: EntityId<T>, executor : Executor? = null, config : CommConfig? = null) = comm.delete(id, executor, config)
 
-    suspend fun all() = comm.all()
+    suspend fun all(executor : Executor? = null, config : CommConfig? = null) = comm.all(executor, config)
 
-    suspend fun allAsMap() = comm.all().associateBy { it.id }
+    suspend fun allAsMap(executor : Executor? = null, config : CommConfig? = null) = comm.all(executor, config).associateBy { it.id }
 }

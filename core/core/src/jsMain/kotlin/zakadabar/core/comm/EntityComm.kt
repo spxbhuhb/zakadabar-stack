@@ -10,6 +10,8 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
+import zakadabar.core.authorize.Executor
+import zakadabar.core.comm.CommConfig.Companion.merge
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.util.PublicApi
@@ -25,10 +27,11 @@ import zakadabar.core.util.PublicApi
 @PublicApi
 open class EntityComm<T : EntityBo<T>>(
     val namespace: String,
-    val serializer: KSerializer<T>
+    val serializer: KSerializer<T>,
+    val config: CommConfig?
 ) : CommBase(), EntityCommInterface<T> {
 
-    override suspend fun create(bo: T): T {
+    override suspend fun create(bo: T, executor: Executor?, config: CommConfig?): T {
         if (! bo.id.isEmpty()) throw RuntimeException("id is not empty in $bo")
 
         val headers = Headers()
@@ -43,11 +46,11 @@ open class EntityComm<T : EntityBo<T>>(
             body = body
         )
 
-        return sendAndReceive("/api/$namespace/entity", requestInit)
+        return sendAndReceive(config, "/entity", requestInit)
     }
 
     @PublicApi
-    override suspend fun read(id: EntityId<T>): T {
+    override suspend fun read(id: EntityId<T>, executor: Executor?, config: CommConfig?): T {
 
         val headers = Headers()
 
@@ -56,11 +59,11 @@ open class EntityComm<T : EntityBo<T>>(
             headers = headers,
         )
 
-        return sendAndReceive("/api/$namespace/entity/$id", requestInit)
+        return sendAndReceive(config, "/entity/$id", requestInit)
     }
 
     @PublicApi
-    override suspend fun update(bo: T): T {
+    override suspend fun update(bo: T, executor: Executor?, config: CommConfig?): T {
         if (bo.id.isEmpty()) throw RuntimeException("ID of the $bo is empty")
 
         val headers = Headers()
@@ -75,13 +78,16 @@ open class EntityComm<T : EntityBo<T>>(
             body = body
         )
 
-        return sendAndReceive("/api/$namespace/entity/${bo.id}", requestInit)
+        return sendAndReceive(config, "/entity/${bo.id}", requestInit)
     }
 
     @PublicApi
-    override suspend fun all(): List<T> {
+    override suspend fun all(executor: Executor?, config: CommConfig?): List<T> {
+
+        val url = merge("/entity", namespace, config, this.config)
+
         val response = commBlock {
-            val responsePromise = window.fetch("/api/$namespace/entity")
+            val responsePromise = window.fetch(url)
             checkStatus(responsePromise.await())
         }
 
@@ -92,16 +98,22 @@ open class EntityComm<T : EntityBo<T>>(
     }
 
     @PublicApi
-    override suspend fun delete(id: EntityId<T>) {
+    override suspend fun delete(id: EntityId<T>, executor: Executor?, config: CommConfig?) {
+
+        val url = merge("/entity/$id", namespace, config, this.config)
+
         commBlock {
-            val responsePromise = window.fetch("/api/$namespace/entity/$id", RequestInit(method = "DELETE"))
+            val responsePromise = window.fetch(url, RequestInit(method = "DELETE"))
             checkStatus(responsePromise.await())
         }
     }
 
-    protected suspend fun sendAndReceive(path: String, requestInit: RequestInit): T {
+    protected suspend fun sendAndReceive(config: CommConfig?, path: String, requestInit: RequestInit): T {
+
+        val url = merge(path, namespace, config, this.config)
+
         val response = commBlock {
-            val responsePromise = window.fetch(path, requestInit)
+            val responsePromise = window.fetch(url, requestInit)
             checkStatus(responsePromise.await())
         }
 

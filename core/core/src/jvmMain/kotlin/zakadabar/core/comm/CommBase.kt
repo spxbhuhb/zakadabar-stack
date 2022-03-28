@@ -5,13 +5,19 @@ package zakadabar.core.comm
 
 import io.ktor.client.*
 import io.ktor.client.features.cookies.*
+import zakadabar.core.comm.CommConfig.Companion.commConfig
 import zakadabar.core.util.PublicApi
 
 @PublicApi
 open class CommBase {
 
     companion object {
-        lateinit var baseUrl: String
+        @Deprecated("use commConfig instead")
+        var baseUrl
+            get() = commConfig.baseUrl
+            set(value) {
+                commConfig = commConfig.copy(baseUrl = value)
+            }
 
         var client = httpClient()
 
@@ -27,6 +33,9 @@ open class CommBase {
                 storage = AcceptAllCookiesStorage()
             }
         }
+
+
+
     }
 
 }
