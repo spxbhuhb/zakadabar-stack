@@ -16,7 +16,14 @@ are the places worth to check. If you extended them you may have to apply the ch
 - `CommConfig` class to store global configuration parameters and provide helper functions
 - `commConfig` property (null by default) to constructor of `ActionBoCompanion`, `EntityBoCompanion`, `QueryBoCompanion`
 - `executor` and `config` optional parameter for all comm methods
-
+- `AccountPublicV2` contains the UUID of the account, decided to keep the original as it is to avoid compatibility problems
+- `AccountBlProvider` new functions: 
+  - `anonymousV2`
+  - `readPublicV2`
+  - `autheticateV2`
+  - `executorFor(String)` - dangerous, avoids authentication
+  - `executorFor(UUID)` - dangerous, avoids authentication
+  
 **changed**
 
 - `Executor` now contains the UUID of the account **low** (add the UUID if you manually create an executor)
@@ -30,3 +37,9 @@ are the places worth to check. If you extended them you may have to apply the ch
 **added**
 
 - `shell` language
+
+## Lib:Schedule
+
+**changed**
+
+- major refactor, works with authentication/multiple workers

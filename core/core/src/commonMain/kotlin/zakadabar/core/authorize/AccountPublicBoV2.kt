@@ -13,6 +13,11 @@ import zakadabar.core.util.UUID
  * Actual content should depend on the user who requests the information. For
  * example, id and names are OK to display for public, email is not.
  *
+ * **This class is basically the same as [AccountPublicBo] but it also contains
+ * the [accountUuid].**
+ *
+ * I decided to keep both to avoid compatibility problems with existing applications.
+ *
  * @property  accountId         Id of the account entity.
  * @property  accountUuid       UUID of the account entity.
  * @property  accountName       Name of the account.

@@ -295,10 +295,9 @@ open class ZkForm<T : BaseBo>(
                         @Suppress("UNCHECKED_CAST")
                         onCreateSuccess(created as T)
 
+                        resetTouched()
                         if (goBackAfterCreate) {
                             onBack()
-                        } else {
-                            resetTouched()
                         }
                     }
                     ZkElementMode.Read -> {
