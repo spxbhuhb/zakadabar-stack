@@ -121,12 +121,19 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
     }
 
     suspend fun byReference(call: ApplicationCall) {
-        val referenceId = call.parameters["referenceId"]?.let { EntityId<T>(it) }
+        val referenceId = call.parameters["referenceId"]?.let { EntityId<RT>(it) }
         val disposition = call.parameters["disposition"]
 
-        val executor = call.executor()
+        val result = byReference(call.executor(), referenceId, disposition)
 
-        val result = pa.withTransaction {
+        // Without Any the compiler throws an exception because non-reified
+        // types with recursive bounds are not supported yet.
+
+        call.respond(result as Any)
+    }
+
+    fun byReference(executor: Executor, referenceId: EntityId<RT>?, disposition: String?): List<T> =
+        pa.withTransaction {
 
             // FIXME this should use the authorizer of the reference
 
@@ -137,13 +144,7 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
             pa.byReference(referenceId, disposition)
         }
 
-        // Without Any the compiler throws an exception because non-reified
-        // types with recursive bounds are not supported yet.
-
-        call.respond(result as Any)
-    }
-
-    /**
+        /**
      * List blobs with the given reference and entity id.
      *
      * @param  entityId  The reference to list the blobs for,

@@ -6,7 +6,6 @@ package zakadabar.lib.blobs.comm
 import io.ktor.client.request.*
 import io.ktor.http.content.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.serialization.KSerializer
@@ -16,6 +15,7 @@ import zakadabar.core.authorize.Executor
 import zakadabar.core.comm.CommBase.Companion.client
 import zakadabar.core.comm.CommBase.Companion.onError
 import zakadabar.core.comm.CommConfig
+import zakadabar.core.comm.CommConfig.Companion.commScope
 import zakadabar.core.comm.CommConfig.Companion.merge
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
@@ -28,7 +28,7 @@ import zakadabar.lib.blobs.data.BlobCreateState
 /**
  * REST communication functions for entities.
  *
- * @property  namespace    Namespace of the entity this comm handles.
+ * @property  companion    Companion object that belongs to the BO.
  *
  * @property  serializer   The serializer to serialize/deserialize objects
  *                         sent/received.
@@ -150,7 +150,7 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
         val channel = Channel<Boolean>()
 
         upload(bo, data, executor, config) { _, state, _ ->
-            GlobalScope.launch(Dispatchers.Default) {
+            commScope.launch(Dispatchers.Default) {
                 when (state) {
                     BlobCreateState.Error -> channel.send(false)
                     BlobCreateState.Done -> channel.send(true)
@@ -170,7 +170,17 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
 
         callback(bo, BlobCreateState.Starting, 0)
 
-        GlobalScope.launch(Dispatchers.Default) {
+        CommConfig.localEntityBl<T>(companion.boNamespace, config, companion.commConfig)?.let {
+            requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
+            @Suppress("UNCHECKED_CAST")
+            it as BlobBlBase<T,RT>
+            it.writeContent(executor, bo.id, data.size.toLong(), data)
+            callback(bo, BlobCreateState.Done, data.size.toLong())
+            bo.size = data.size.toLong()
+            return bo
+        }
+
+        commScope.launch(Dispatchers.Default) {
 
             val url = merge("/blob/content/${bo.id}", companion.boNamespace, config, companion.commConfig)
 
@@ -217,7 +227,15 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
     override suspend fun byReference(reference: EntityId<RT>?, disposition : String?, executor: Executor?, config: CommConfig?): List<T> {
         val q = disposition?.let { "?disposition=$it" } ?: ""
 
+        CommConfig.localEntityBl<T>(companion.boNamespace, config, companion.commConfig)?.let {
+            requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
+            @Suppress("UNCHECKED_CAST")
+            it as BlobBlBase<T,RT>
+            return it.byReference(executor, reference, disposition)
+        }
+
         val url = merge("/blob/list/${if (reference == null) "" else "/$reference"}$q", companion.boNamespace, config, companion.commConfig)
+
         val text = try {
             client.get<String>(url)
         } catch (ex: Exception) {

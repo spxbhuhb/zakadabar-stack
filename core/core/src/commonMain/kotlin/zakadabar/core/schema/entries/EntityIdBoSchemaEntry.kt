@@ -63,12 +63,6 @@ class EntityIdBoSchemaEntry<T : Any>(
     }
 
     @PublicApi
-    @Deprecated("EOL: 2021.7.1  -  use '?' in the field declaration", level = DeprecationLevel.ERROR)
-    infix fun empty(validValue: Boolean): EntityIdBoSchemaEntry<T> {
-        throw NotImplementedError()
-    }
-
-    @PublicApi
     infix fun default(value: EntityId<T>): EntityIdBoSchemaEntry<T> {
         defaultValue = value
         return this

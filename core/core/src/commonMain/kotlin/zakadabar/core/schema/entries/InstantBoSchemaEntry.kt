@@ -133,7 +133,7 @@ class InstantBoSchemaEntry(
     }
 
     override fun setDefault() {
-        kProperty.set(defaultValue ?: Clock.System.now())
+        kProperty.set(defaultValue)
     }
 
     override fun decodeFromText(text : String?) : Instant {

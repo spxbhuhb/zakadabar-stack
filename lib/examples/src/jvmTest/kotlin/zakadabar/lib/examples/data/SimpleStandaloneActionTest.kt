@@ -8,13 +8,13 @@ import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
 import zakadabar.core.authorize.BusinessLogicAuthorizer
-import zakadabar.lib.examples.backend.data.SimpleStandaloneActionBl
-import zakadabar.core.server.Server
 import zakadabar.core.authorize.Executor
-import zakadabar.core.server.server
-import zakadabar.core.data.BaseBo
-import zakadabar.core.comm.CommBase
+import zakadabar.core.comm.CommConfig
 import zakadabar.core.data.ActionBo
+import zakadabar.core.data.BaseBo
+import zakadabar.core.server.Server
+import zakadabar.core.server.server
+import zakadabar.lib.examples.backend.data.SimpleStandaloneActionBl
 import kotlin.test.assertEquals
 
 class SimpleStandaloneActionTest {
@@ -45,7 +45,7 @@ class SimpleStandaloneActionTest {
     @Test
     fun testSimpleStandaloneAction() {
         runBlocking {
-            CommBase.baseUrl = "http://127.0.0.1:8888"
+            CommConfig.global = CommConfig(baseUrl =  "http://127.0.0.1:8888")
             assertEquals("test action", SimpleStandaloneAction(name = "ize").execute().reason)
         }
     }

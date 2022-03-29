@@ -13,8 +13,8 @@ import zakadabar.lib.blobs.browser.blobStyles
 
 class ZkFullScreenImageView(
     val url: String,
+    var deleteButton: Boolean = true,
     val onDeleteImage: (preview: ZkFullScreenImageView) -> Unit,
-    val deleteButton: Boolean = true
 ) : ZkElement() {
 
     override fun onCreate() {

@@ -5,7 +5,6 @@ package zakadabar.lib.blobs.comm
 
 import kotlinx.browser.window
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.await
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
@@ -21,6 +20,7 @@ import org.w3c.xhr.XMLHttpRequest
 import zakadabar.core.authorize.Executor
 import zakadabar.core.comm.CommBase
 import zakadabar.core.comm.CommConfig
+import zakadabar.core.comm.CommConfig.Companion.commScope
 import zakadabar.core.comm.CommConfig.Companion.merge
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
@@ -135,7 +135,7 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
         val channel = Channel<Boolean>()
 
         upload(bo, data, executor, config) { _, state, _ ->
-            GlobalScope.launch(Dispatchers.Default) {
+            commScope.launch(Dispatchers.Default) {
                 when (state) {
                     BlobCreateState.Error -> channel.send(false)
                     BlobCreateState.Done -> channel.send(true)

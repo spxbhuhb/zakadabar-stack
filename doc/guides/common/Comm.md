@@ -80,7 +80,7 @@ method. Check [TestAction](/core/core/src/jvmTest/kotlin/zakadabar/core/comm/Tes
 
 ### Local Calls
 
-<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="JVM Only">
+<div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="JVM Only">
 
 Local calls work only on JVM. Support could be added for Javascript easily, but I don't
 see the need at the moment.

@@ -5,13 +5,17 @@ package zakadabar.core.server
 
 import zakadabar.core.authorize.BusinessLogicAuthorizer
 import zakadabar.core.authorize.Executor
-import zakadabar.core.business.QueryBusinessLogicBase
+import zakadabar.core.business.BusinessLogicCommon
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.QueryBo
 
-class ServerDescriptionBl : QueryBusinessLogicBase<ServerDescriptionQuery, ServerDescriptionBo>(
-    queryBoClass = ServerDescriptionQuery::class
-) {
+class ServerDescriptionBl : BusinessLogicCommon<BaseBo>() {
+
+    override val namespace = ServerDescriptionQuery.boNamespace
+
+    override val router = router {
+        query(ServerDescriptionQuery::class, ::serverDescriptionQuery)
+    }
 
     override val authorizer = object : BusinessLogicAuthorizer<BaseBo> {
         override fun authorizeQuery(executor: Executor, queryBo: QueryBo<*>) {
@@ -19,7 +23,7 @@ class ServerDescriptionBl : QueryBusinessLogicBase<ServerDescriptionQuery, Serve
         }
     }
 
-    override fun execute(executor: Executor, bo: ServerDescriptionQuery): ServerDescriptionBo =
+    fun serverDescriptionQuery(executor: Executor, bo: ServerDescriptionQuery): ServerDescriptionBo =
         server.description
 
 }

@@ -4,6 +4,11 @@
 package zakadabar.lib.examples.frontend
 
 import io.ktor.client.features.*
+import zakadabar.core.comm.CommBase
+import zakadabar.core.comm.CommConfig
+import zakadabar.core.data.EntityId
+import zakadabar.core.data.Secret
+import zakadabar.core.util.default
 import zakadabar.lib.accounts.data.AccountPrivateBo
 import zakadabar.lib.accounts.data.LoginAction
 import zakadabar.lib.accounts.data.LogoutAction
@@ -11,13 +16,9 @@ import zakadabar.lib.accounts.data.SessionBo
 import zakadabar.lib.examples.data.builtin.BuiltinBo
 import zakadabar.lib.examples.data.builtin.ExampleEnum
 import zakadabar.lib.examples.data.builtin.ExampleReferenceBo
-import zakadabar.core.util.default
-import zakadabar.core.comm.CommBase
-import zakadabar.core.data.Secret
-import zakadabar.core.data.EntityId
 
 suspend fun main() {
-    CommBase.baseUrl = "http://localhost:8080"
+    CommConfig.global = CommConfig(baseUrl = "http://localhost:8080")
     crud()
     login()
     errorHandling()

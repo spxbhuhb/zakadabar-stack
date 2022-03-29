@@ -3,6 +3,7 @@
  */
 package zakadabar.core.comm
 
+import kotlinx.serialization.Serializable
 import zakadabar.core.business.BusinessLogicCommon
 import zakadabar.core.business.EntityBusinessLogicCommon
 import zakadabar.core.data.BaseBo
@@ -20,6 +21,7 @@ import zakadabar.core.util.use
  * @property  local       Locate and use a local Business Logic for the call, do not go over HTTP.
  *
  */
+@Serializable
 data class CommConfig(
     val baseUrl: String? = null,
     val namespace: String? = null,
@@ -29,6 +31,16 @@ data class CommConfig(
 
     companion object {
 
+        /**
+         * Coroutine scope for comm coroutines.
+         */
+        var commScope = makeCommScope()
+
+        /**
+         * This lock is used when comm config instances are replaced. The reason
+         * for the lock is to make sure that multithreaded platforms perform the
+         * necessary synchronization.
+         */
         var configLock = Lock()
 
         /**
@@ -66,7 +78,7 @@ data class CommConfig(
 
         /**
          * Finds a common BL for the given namespace. Common BL covers action and query, for entities
-         * use [findLocalEntity] instead.
+         * use [localEntityBl] instead.
          *
          * @throws NoSuchElementException when there is no module for the given namespace
          */

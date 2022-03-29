@@ -10,14 +10,15 @@ import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
+import zakadabar.core.authorize.UnsafeAuthorizer
+import zakadabar.core.comm.CommBase
+import zakadabar.core.comm.CommConfig
+import zakadabar.core.data.EntityId
+import zakadabar.core.server.Server
+import zakadabar.core.server.server
 import zakadabar.lib.blobs.data.BlobCreateState
 import zakadabar.lib.blobs.data.url
 import zakadabar.lib.examples.backend.blob.TestBlobBl
-import zakadabar.core.server.Server
-import zakadabar.core.authorize.UnsafeAuthorizer
-import zakadabar.core.server.server
-import zakadabar.core.comm.CommBase
-import zakadabar.core.data.EntityId
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -44,7 +45,7 @@ class TestBlobTest {
     @Test
     fun testCreate() {
         runBlocking {
-            CommBase.baseUrl = "http://127.0.0.1:8888"
+            CommConfig.global = CommConfig(baseUrl = "http://127.0.0.1:8888")
 
             val contentText = "almafa"
             val contentBytes = contentText.encodeToByteArray()
@@ -65,7 +66,7 @@ class TestBlobTest {
 
             assertTrue(channel.receive())
 
-            val readBack = CommBase.client.get<ByteArray>("${CommBase.baseUrl}/${bo.url}")
+            val readBack = CommBase.client.get<ByteArray>("${CommConfig.global.baseUrl}/${bo.url}")
 
             assertEquals(contentText, readBack.decodeToString())
 

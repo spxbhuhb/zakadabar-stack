@@ -12,7 +12,7 @@ The JVM client offers the very same interface as the browser client. The only
 difference is that the JVM client has to set the URL:
 
 ```kotlin
-CommBase.baseUrl = "http://localhost:8080"
+CommConfig.global = CommConfig(baseUrl = "http://localhost:8080")
 ```
 
 ## Guides

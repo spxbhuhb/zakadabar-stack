@@ -8,6 +8,7 @@ import zakadabar.cookbook.entity.builtin.ExampleBo
 import zakadabar.cookbook.entity.builtin.ExampleEnum
 import zakadabar.cookbook.entity.builtin.ExampleReferenceBo
 import zakadabar.core.comm.CommBase
+import zakadabar.core.comm.CommConfig
 import zakadabar.core.data.EntityId
 import zakadabar.core.data.Secret
 import zakadabar.core.util.default
@@ -17,7 +18,7 @@ import zakadabar.lib.accounts.data.LogoutAction
 import zakadabar.lib.accounts.data.SessionBo
 
 suspend fun main() {
-    CommBase.baseUrl = "http://localhost:8080"
+    CommConfig.global = CommConfig(baseUrl = "http://localhost:8080")
     crud()
     login()
     errorHandling()

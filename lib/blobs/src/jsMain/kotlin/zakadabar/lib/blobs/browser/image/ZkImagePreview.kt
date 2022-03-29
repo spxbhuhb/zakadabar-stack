@@ -18,6 +18,7 @@ open class ZkImagePreview<BT : BlobBo<BT, *>>(
     progress: Long? = null,
     size: Int = 200,
     private val showMeta: Boolean = false,
+    private val deleteButton : Boolean = true,
     onDelete: suspend (preview: ZkBlobFieldEntry<BT>) -> Boolean = { false }
 ) : ZkBlobFieldEntry<BT>(
     bo, createState, progress, size, onDelete
@@ -51,7 +52,7 @@ open class ZkImagePreview<BT : BlobBo<BT, *>>(
                 }
 
                 on(buildPoint, "click") { _ ->
-                    ZkFullScreenImageView(bo.url) {
+                    ZkFullScreenImageView(bo.url, deleteButton) {
                         io {
                             val deleted = onDelete(this@ZkImagePreview)
                             if (deleted) it.hide()

@@ -11,13 +11,21 @@ are the places worth to check. If you extended them you may have to apply the ch
 
 **added**
 
-- `CommConfig` class to store configuration parameters
-- `config` parameter to `ActionCommInterface`, `EntityCommInterface`, `QueryCommInterface`
-- `config` parameter to constructor of `ActionBoCompanion`, `EntityBoCompanion`, `QueryBoCompanion`
-- 
-
+- option for local communication (no HTTP/Ktor) inside the same VM
+- option to specify communication overrides (baseUrl, namespace, etc.) per call or per class
+- `CommConfig` class to store global configuration parameters and provide helper functions
+- `commConfig` property (null by default) to constructor of `ActionBoCompanion`, `EntityBoCompanion`, `QueryBoCompanion`
+- `executor` and `config` optional parameter for all comm methods
 
 **changed**
 
-- `ActionCommInterface.action` replace `baseUrl` with `config` **low**
-- `QueryCommInterface.query` add `config` parameter
+- `CommBase.baseUrl` is now deprecated, replace with `CommConfig.global = CommConfig("https:/...")`
+- `BlobComm.upload` now has additional parameters **very low** (pass callback as named parameter)
+- `ZkFullScreenImageView` has a `deleteButton` constructor parameter **very low** (add the parameter to the call)
+- `ZkImagePreview` has a `deleteButton` constructor parameter **very low** (add the parameter to the call)
+
+## Lib:Markdown
+
+**added**
+
+- `shell` language

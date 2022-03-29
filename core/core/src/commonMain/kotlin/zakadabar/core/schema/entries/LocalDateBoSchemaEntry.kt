@@ -16,7 +16,10 @@
  */
 package zakadabar.core.schema.entries
 
-import kotlinx.datetime.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import zakadabar.core.schema.BoPropertyConstraintImpl
 import zakadabar.core.schema.BoSchemaEntry
 import zakadabar.core.schema.BoSchemaEntryExtension
@@ -132,7 +135,7 @@ class LocalDateBoSchemaEntry(
     }
 
     override fun setDefault() {
-        kProperty.set(defaultValue ?: Clock.System.todayAt(TimeZone.currentSystemDefault()))
+        kProperty.set(defaultValue)
     }
 
     override fun decodeFromText(text: String?): LocalDate {

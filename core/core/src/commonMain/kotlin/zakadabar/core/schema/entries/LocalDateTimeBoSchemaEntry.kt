@@ -135,7 +135,7 @@ class LocalDateTimeBoSchemaEntry(
     }
 
     override fun setDefault() {
-        kProperty.set(defaultValue ?: Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()))
+        kProperty.set(defaultValue)
     }
 
     override fun decodeFromText(text: String?): LocalDateTime {

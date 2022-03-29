@@ -12,7 +12,7 @@ import zakadabar.core.util.PublicApi
 open class CommBase {
 
     companion object {
-        @Deprecated("use commConfig instead")
+        @Deprecated("use CommConfig.global instead")
         var baseUrl
             get() = global.baseUrl
             set(value) {

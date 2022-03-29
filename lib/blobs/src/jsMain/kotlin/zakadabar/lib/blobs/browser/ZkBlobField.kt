@@ -28,7 +28,6 @@ import zakadabar.core.browser.field.ZkFieldBase
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.modal.ZkConfirmDialog
 import zakadabar.core.browser.util.io
-import zakadabar.core.browser.util.newInstance
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.resource.ZkFlavour
@@ -37,6 +36,7 @@ import zakadabar.core.resource.css.AlignItems
 import zakadabar.core.resource.localizedStrings
 import zakadabar.core.schema.ValidityReport
 import zakadabar.core.text.capitalized
+import zakadabar.core.util.newInstance
 import zakadabar.lib.blobs.browser.image.ZkImagePreview
 import zakadabar.lib.blobs.comm.BlobCommInterface
 import zakadabar.lib.blobs.data.BlobBo
@@ -188,7 +188,7 @@ abstract class ZkBlobField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
                         updateDropArea()
 
                         io { // this second IO block is here, so the the upload will be launched in the background
-                            comm.upload(bo, file, entry::update)
+                            comm.upload(bo, file, callback = entry::update)
                         }
                     }
                 }

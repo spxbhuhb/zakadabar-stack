@@ -3,7 +3,8 @@
  */
 package zakadabar.lib.accounts.server.ktor
 
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -17,11 +18,13 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.slf4j.LoggerFactory
-import zakadabar.lib.accounts.data.ModuleSettings
 import zakadabar.core.server.Server
 import zakadabar.core.setting.setting
+import zakadabar.lib.accounts.data.ModuleSettings
 
 object SessionMaintenanceTask {
+
+    private val sessionMaintenanceScope = CoroutineScope(Dispatchers.IO)
 
     private val settings by setting<ModuleSettings>()
 
@@ -36,9 +39,9 @@ object SessionMaintenanceTask {
     private var trackerRunning = false
 
     fun start() {
-        GlobalScope.launch { updateJob() }
-        GlobalScope.launch { expireJob() }
-        GlobalScope.launch { trackerMaintenanceJob() }
+        sessionMaintenanceScope.launch(Dispatchers.IO) { updateJob() }
+        sessionMaintenanceScope.launch(Dispatchers.IO) { expireJob() }
+        sessionMaintenanceScope.launch(Dispatchers.IO) { trackerMaintenanceJob() }
     }
 
     private suspend fun updateJob() {

@@ -14,7 +14,7 @@ import zakadabar.android.jdbc.zklite.connectSqlite
 import zakadabar.android.jdbc.zklite.databasesPath
 import zakadabar.cookbook.entity.builtin.ExamplePa
 import zakadabar.cookbook.sqlite.bundle.ExampleBundle
-import zakadabar.core.comm.CommBase
+import zakadabar.core.comm.CommConfig
 import zakadabar.core.util.default
 import zakadabar.lib.accounts.persistence.AccountPrivateExposedTableCommon
 import zakadabar.lib.blobs.persistence.sqlite.deployBundle
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         val tv: TextView = findViewById(R.id.text_view)
         tv.text = "Loading"
 
-        CommBase.baseUrl = "http://10.0.2.2:8080"
+        CommConfig.global = CommConfig(baseUrl = "http://10.0.2.2:8080")
 
         val db = exposed()
 

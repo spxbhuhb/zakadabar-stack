@@ -7,7 +7,7 @@ import zakadabar.core.authorize.AppRolesBase
 import zakadabar.core.authorize.RoleBlProvider
 import zakadabar.core.authorize.SimpleRoleAuthorizerProvider
 import zakadabar.core.authorize.appRoles
-import zakadabar.core.comm.CommBase
+import zakadabar.core.comm.CommConfig
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.log.Slf4jLogger
@@ -21,7 +21,7 @@ import zakadabar.core.testing.TestCompanionBase.MockRoleBlProvider
  * Helper class for unit tests. Starts a Ktor server with an
  * test settings.
  *
- * Sets [CommBase.baseUrl] to [baseUrl].
+ * Sets [CommConfig.baseUrl] to [baseUrl].
  *
  * @param   gracePeriodMillis   Grace period for ktor shutdown, default is 0.
  * @param   timeoutMillis       Ktor shutdown timeout, default is 2000.
@@ -68,7 +68,7 @@ open class TestCompanionBase(
             modules += MockRoleBlProvider
         }
 
-        CommBase.baseUrl = baseUrl
+        CommConfig.global = CommConfig(baseUrl)
 
         addModules()
 
