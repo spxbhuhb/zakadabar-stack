@@ -8,12 +8,13 @@ import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
 import zakadabar.core.business.EntityBusinessLogicBase
-import zakadabar.core.persistence.EmptyPersistenceApi
-import zakadabar.core.server.server
-import zakadabar.core.testing.TestCompanionBase
 import zakadabar.core.data.EmptyEntityBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.exception.Forbidden
+import zakadabar.core.persistence.EmptyPersistenceApi
+import zakadabar.core.server.server
+import zakadabar.core.testing.TestCompanionBase
+import zakadabar.core.util.UUID
 import kotlin.test.assertFailsWith
 
 object Roles : AppRolesBase() {
@@ -68,8 +69,8 @@ class SimpleRoleAuthorizerProviderTest {
 
         val testRoleId = server.first<RoleBlProvider>().getByName(Roles.testRole)
 
-        val siteMember = Executor(EntityId(1), false, listOf(testRoleId), listOf(Roles.testRole))
-        val anonymous = Executor(EntityId(2), true, emptyList(), emptyList())
+        val siteMember = Executor(EntityId(1), UUID.NIL, false, listOf(testRoleId), listOf(Roles.testRole))
+        val anonymous = Executor(EntityId(2), UUID.NIL, true, emptyList(), emptyList())
 
         WithDefault.authorizer.authorizeRead(siteMember, EntityId(1))
         WithDefault.authorizer.authorizeUpdate(siteMember, EmptyEntityBo)

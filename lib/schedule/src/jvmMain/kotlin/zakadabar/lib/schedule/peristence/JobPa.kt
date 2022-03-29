@@ -25,6 +25,7 @@ open class JobPa(
     override fun ResultRow.toBo() = Job(
         id = this[table.id].entityId(),
         status = this[table.status],
+        createdBy = this[table.createdBy].toStackUuid(),
         createdAt = this[table.createdAt].toKotlinInstant(),
         completedAt = this[table.completedAt]?.toKotlinInstant(),
         startAt = this[table.startAt]?.toKotlinInstant(),
@@ -32,7 +33,7 @@ open class JobPa(
         actionNamespace = this[table.actionNamespace],
         actionType = this[table.actionType],
         actionData = this[table.actionData],
-        node = this[table.node]?.toStackUuid(),
+        worker = this[table.node]?.toStackUuid(),
         failCount = this[table.failCount],
         lastFailedAt = this[table.lastFailedAt]?.toKotlinInstant(),
         lastFailMessage = this[table.lastFailMessage],
@@ -47,6 +48,7 @@ open class JobPa(
 
     override fun UpdateBuilder<*>.fromBo(bo: Job) {
         this[table.status] = bo.status
+        this[table.createdBy] = bo.createdBy.toJavaUuid()
         this[table.createdAt] = bo.createdAt.toJavaInstant()
         this[table.completedAt] = bo.completedAt?.toJavaInstant()
         this[table.startAt] = bo.startAt?.toJavaInstant()
@@ -54,7 +56,7 @@ open class JobPa(
         this[table.actionNamespace] = bo.actionNamespace
         this[table.actionType] = bo.actionType
         this[table.actionData] = bo.actionData
-        this[table.node] = bo.node?.toJavaUuid()
+        this[table.node] = bo.worker?.toJavaUuid()
         this[table.failCount] = bo.failCount
         this[table.lastFailedAt] = bo.lastFailedAt?.toJavaInstant()
         this[table.lastFailMessage] = bo.lastFailMessage

@@ -10,8 +10,11 @@ class SubscriptionTable : ExposedPaTable<Subscription>(
     tableName = "schedule_subscription"
 ) {
 
-    val nodeUrl = text("node_address")
     val nodeId = uuid("node_id")
+    val nodeBaseUrl = text("node_base_url").nullable()
+    val nodeNamespace = text("node_namespace").nullable()
+    val nodeFullUrl = text("node_full_url").nullable()
+    val nodeLocal = bool("node_local").default(false)
     val actionNamespace = text("action_namespace").nullable()
     val actionType = text("action_type").nullable()
 

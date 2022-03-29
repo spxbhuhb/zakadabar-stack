@@ -13,6 +13,7 @@ class JobTable : ExposedPaTable<Job>(
 ) {
 
     val status = enumerationByName("status", 20, JobStatus::class)
+    val createdBy = uuid("created_by")
     val createdAt = timestamp("created_at")
     val completedAt = timestamp("completed_at").nullable()
     val startAt = timestamp("start_at").nullable()

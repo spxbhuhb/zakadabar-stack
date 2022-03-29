@@ -7,6 +7,7 @@ package zakadabar.core.server.ktor
 
 import io.ktor.auth.*
 import zakadabar.core.data.EntityId
+import zakadabar.core.util.UUID
 
 class EmptyAuthenticationProvider internal constructor(configuration: Configuration) : AuthenticationProvider(configuration) {
     class Configuration internal constructor(name: String?) : AuthenticationProvider.Configuration(name)
@@ -17,7 +18,7 @@ fun Authentication.Configuration.configureEmpty(name: String? = null) {
     val provider = AuthenticationProvider(EmptyAuthenticationProvider.Configuration(name))
 
     provider.pipeline.intercept(AuthenticationPipeline.RequestAuthentication) { context ->
-        context.principal(KtorExecutor(EntityId("anonymous"), true, emptyList(), emptyList()))
+        context.principal(KtorExecutor(EntityId("anonymous"), UUID.NIL, true, emptyList(), emptyList()))
     }
 
     register(provider)

@@ -4,6 +4,8 @@
 package zakadabar.lib.schedule.data
 
 import kotlinx.serialization.Serializable
+import zakadabar.core.authorize.Executor
+import zakadabar.core.comm.CommConfig
 import zakadabar.core.data.ActionBo
 import zakadabar.core.data.ActionBoCompanion
 import zakadabar.core.data.ActionStatus
@@ -20,7 +22,8 @@ class JobSuccess(
 
     companion object : ActionBoCompanion(Job.boNamespace)
 
-    override suspend fun execute() = comm.action(this, serializer(), ActionStatus.serializer())
+    override suspend fun execute(executor: Executor?, callConfig : CommConfig?) =
+        comm.action(this, serializer(), ActionStatus.serializer(), executor, callConfig)
 
     override fun schema() = BoSchema {
         + ::jobId

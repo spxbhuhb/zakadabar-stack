@@ -4,6 +4,7 @@
 package zakadabar.lib.schedule.data
 
 import kotlinx.serialization.Serializable
+import zakadabar.core.comm.CommConfig
 import zakadabar.core.data.BaseBo
 import zakadabar.core.schema.BoSchema
 import zakadabar.core.util.UUID
@@ -11,29 +12,25 @@ import zakadabar.core.util.UUID
 /**
  * Settings for a worker.
  *
- * @param  dispatcherUrl    URL of the dispatcher.
- * @param  nodeUrl          The root URL of the node that creates the subscription.
- * @param  nodeId           The ID of the node that creates this subscription.
+ * @param  workerId         The ID of the node that creates this subscription.
+ * @param  scheduleAccount  Account for worker - dispatcher communication.
+ * @param  dispatcherComm   Communication configuration to reach the dispatcher.
+ * @param  workerComm       Communication configuration to reach the worker.
  * @param  actionNamespace  Filters the jobs this subscription applies to.
- * @param  actionType       Filters the jobs this subscription appies to.
+ * @param  actionType       Filters the jobs this subscription applies to.
  */
 @Serializable
 class WorkerSettings(
 
-    var dispatcherUrl: String? = null,
-    var nodeUrl: String? = null,
-    var nodeId: UUID = UUID(),
+    var workerId: UUID = UUID(),
+    val scheduleAccount: String,
+    var dispatcherComm: CommConfig = CommConfig(local = true),
+    var workerComm : CommConfig = CommConfig(local = true),
     var actionNamespace: String? = null,
     var actionType: String? = null
 
 ) : BaseBo {
 
-    override fun schema() = BoSchema {
-        + ::dispatcherUrl default dispatcherUrl
-        + ::nodeUrl default nodeUrl
-        + ::nodeId default nodeId
-        + ::actionNamespace default actionNamespace
-        + ::actionType default actionType
-    }
+    override fun schema() = BoSchema.NO_VALIDATION
 
 }

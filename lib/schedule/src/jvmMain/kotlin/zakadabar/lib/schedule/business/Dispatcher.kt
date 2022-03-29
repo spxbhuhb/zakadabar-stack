@@ -8,6 +8,7 @@ import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
+import zakadabar.core.comm.CommConfig
 import zakadabar.core.data.EntityId
 import zakadabar.core.util.UUID
 import zakadabar.core.util.fork
@@ -26,6 +27,7 @@ class Dispatcher(
     @Serializable
     class JobEntry(
         val id: EntityId<Job>,
+        val createdBy : UUID,
         val startAt: Instant?,
         val actionNamespace: String,
         val actionType: String,
@@ -35,8 +37,8 @@ class Dispatcher(
     @Serializable
     class SubscriptionEntry(
         val id: EntityId<Subscription>,
-        val nodeUrl: String,
         val nodeId: UUID,
+        val nodeComm : CommConfig,
         var reuse: Boolean
     )
 
@@ -72,12 +74,13 @@ class Dispatcher(
      * [Job.startAt]
      */
     fun onJobCreate(event: JobCreateEvent) {
-        addJobEntry(event, event.actionData, event.startAt) // calls pushJobs
+        addJobEntry(event, event.createdBy, event.actionData, event.startAt) // calls pushJobs
     }
 
-    fun addJobEntry(event: JobEvent, actionData: String, startAt: Instant?) {
+    fun addJobEntry(event: JobEvent, createdBy: UUID, actionData: String, startAt: Instant?) {
         val entry = JobEntry(
             event.jobId,
+            createdBy,
             startAt,
             event.actionNamespace,
             event.actionType,
@@ -117,9 +120,9 @@ class Dispatcher(
     }
 
     fun onJobFail(event: JobFailEvent) {
-        takeRunEntry(event.jobId)
-        if (event.retryAt != null) {
-            addJobEntry(event, event.actionData, event.retryAt) // calls pushJobs
+        val runEntry = takeRunEntry(event.jobId)
+        if (event.retryAt != null && runEntry != null) {
+            addJobEntry(event, runEntry.job.createdBy, event.actionData, event.retryAt) // calls pushJobs
         }
     }
 
@@ -144,8 +147,8 @@ class Dispatcher(
     fun onSubscriptionCreate(event: SubscriptionCreateEvent) {
         idleSubscriptions += SubscriptionEntry(
             id = event.subscriptionId,
-            nodeUrl = event.nodeUrl,
             nodeId = event.nodeId,
+            nodeComm = event.nodeComm,
             reuse = true
         )
         pushJobs()
@@ -197,13 +200,16 @@ class Dispatcher(
 
         jobBl.assignNode(job.id, subscription.nodeId)
 
+        val executor = jobBl.accountBl.executorFor(job.createdBy)
+
         try {
             PushJob(
                 jobId = job.id,
                 actionNamespace = job.actionNamespace,
                 actionType = job.actionType,
                 actionData = job.actionData
-            ).execute(baseUrl = subscription.nodeUrl)
+            ).execute(executor, subscription.nodeComm)
+
         } catch (ex: Exception) {
             jobBl.alarmSupport.create(ex)
             events.send(

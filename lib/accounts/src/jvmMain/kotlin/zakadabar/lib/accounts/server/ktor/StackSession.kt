@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityId
+import zakadabar.core.util.UUID
 
 /**
  * Session data class passed to Ktor.
@@ -17,6 +18,7 @@ import zakadabar.core.data.EntityId
 @Serializable
 data class StackSession(
     val account: EntityId<out BaseBo>,
+    val accountUuid : UUID,
     val anonymous: Boolean,
     val roleIds: List<EntityId<out BaseBo>>,
     val roleNames: List<String>,

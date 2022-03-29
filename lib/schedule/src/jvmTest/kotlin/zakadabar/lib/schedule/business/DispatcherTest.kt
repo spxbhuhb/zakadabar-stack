@@ -11,27 +11,23 @@ import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
 import zakadabar.core.module.modules
-import zakadabar.core.testing.TestCompanionBase
 import zakadabar.core.util.default
+import zakadabar.lib.accounts.testing.AuthTestCompanionBase
 import zakadabar.lib.schedule.data.Job
 import zakadabar.lib.schedule.data.JobStatus
 import kotlin.test.assertTrue
 
 class DispatcherTest {
 
-    companion object : TestCompanionBase() {
+    companion object : AuthTestCompanionBase() {
 
         override fun addModules() {
+            super.addModules()
             zakadabar.lib.schedule.install()
             modules += WorkerBl()
             modules += WorkerBl("worker1")
             modules += WorkerBl("worker2")
             modules += ActionBl()
-        }
-
-        override fun onAfterStarted() {
-            // this code runs after the server has been started
-            // optional
         }
 
         @BeforeClass

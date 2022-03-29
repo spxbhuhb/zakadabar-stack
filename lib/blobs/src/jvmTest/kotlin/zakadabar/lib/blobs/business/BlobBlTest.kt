@@ -14,6 +14,7 @@ import zakadabar.core.comm.CommConfig
 import zakadabar.core.data.EntityId
 import zakadabar.core.server.server
 import zakadabar.core.testing.TestCompanionBase
+import zakadabar.core.util.UUID
 import kotlin.test.assertEquals
 
 class BlobBlTest {
@@ -77,7 +78,7 @@ class BlobBlTest {
 
         clearDb()
 
-        val executor = Executor(EntityId("0"),true, emptyList(), emptyList())
+        val executor = Executor(EntityId("0"), UUID.NIL, true, emptyList(), emptyList())
         CommConfig.global = CommConfig(local = true)
 
         val contentText = "almafa"
@@ -109,7 +110,7 @@ class BlobBlTest {
 
         clearDb()
 
-        val executor = Executor(EntityId("0"),true, emptyList(), emptyList())
+        val executor = Executor(EntityId("0"), UUID.NIL, true, emptyList(), emptyList())
         val config = CommConfig(local = true)
 
         val contentText = "almafa"

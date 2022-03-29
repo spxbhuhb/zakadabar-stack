@@ -1,0 +1,5 @@
+dispatcherComm:
+  local: true
+workerComm:
+  local: true
+scheduleAccount: "so"

@@ -4,6 +4,7 @@
 package zakadabar.lib.schedule.business
 
 import kotlinx.datetime.Instant
+import zakadabar.core.comm.CommConfig
 import zakadabar.core.data.EntityId
 import zakadabar.core.util.UUID
 import zakadabar.lib.schedule.data.Job
@@ -26,7 +27,8 @@ open class JobCreateEvent(
     override val actionType: String,
     override val jobId: EntityId<Job>,
     override val specific: Boolean,
-    val actionData : String,
+    val createdBy : UUID,
+    val actionData: String,
     val startAt: Instant?
 ) : JobEvent
 
@@ -43,7 +45,7 @@ open class JobFailEvent(
     override val jobId: EntityId<Job>,
     override val specific: Boolean,
     val retryAt: Instant?,
-    val actionData : String
+    val actionData: String
 ) : JobEvent
 
 open class JobCancelEvent(
@@ -63,9 +65,9 @@ open class RequestJobCancelEvent(
 open class SubscriptionCreateEvent(
     override val actionNamespace: String?,
     override val actionType: String?,
-    var subscriptionId: EntityId<Subscription>,
-    var nodeUrl: String,
-    var nodeId: UUID,
+    val subscriptionId: EntityId<Subscription>,
+    val nodeId: UUID,
+    val nodeComm: CommConfig
 ) : DispatcherEvent
 
 open class SubscriptionDeleteEvent(

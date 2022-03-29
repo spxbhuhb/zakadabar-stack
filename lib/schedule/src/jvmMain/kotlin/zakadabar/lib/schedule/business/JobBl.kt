@@ -8,10 +8,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
+import zakadabar.core.authorize.AccountBlProvider
 import zakadabar.core.authorize.Executor
 import zakadabar.core.business.EntityBusinessLogicBase
 import zakadabar.core.data.ActionStatus
 import zakadabar.core.data.EntityId
+import zakadabar.core.module.module
 import zakadabar.core.util.Lock
 import zakadabar.core.util.UUID
 import zakadabar.core.util.fork
@@ -52,6 +54,8 @@ open class JobBl(
     protected val pendingDispatchers = mutableListOf<Dispatcher>()
 
     protected lateinit var periodic: kotlinx.coroutines.Job
+
+    val accountBl by module<AccountBlProvider>()
 
     override val authorizer by provider()
 
@@ -118,12 +122,15 @@ open class JobBl(
     }
 
     override fun create(executor: Executor, bo: Job): Job {
+        bo.createdBy = executor.accountUuid
+
         return super.create(executor, bo)
             .also {
                 JobCreateEvent(
                     jobId = it.id,
                     startAt = it.startAt,
                     specific = it.specific,
+                    createdBy = executor.accountUuid,
                     actionNamespace = it.actionNamespace,
                     actionType = it.actionType,
                     actionData = it.actionData

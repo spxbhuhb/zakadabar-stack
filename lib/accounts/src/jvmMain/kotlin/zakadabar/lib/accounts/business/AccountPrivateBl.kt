@@ -36,6 +36,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     open val credentialsPa = AccountCredentialsExposedPa()
 
     private lateinit var anonymous: AccountPublicBo
+    private lateinit var anonymousV2: AccountPublicBoV2
 
     private val roleBl by module<RoleBl>()
 
@@ -106,7 +107,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
 
         pa.withTransaction {
 
-            val executor = Executor(so.id, false, emptyList(), emptyList())
+            val executor = Executor(so.id, so.uuid, false, emptyList(), emptyList())
 
             auditor.auditCreate(executor, so)
             auditor.auditCreate(executor, anonymous)
@@ -138,8 +139,11 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     }
 
     override fun onModuleStart() {
-        anonymous = pa.withTransaction {
-            pa.readByName("anonymous").toPublic()
+         pa.withTransaction {
+            pa.readByName("anonymous").also {
+                anonymous = it.toPublic()
+                anonymousV2 = it.toPublicV2()
+            }
         }
         super.onModuleStart() // this has to be last, so authorizer will find roles after db init
     }
@@ -357,6 +361,12 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
         return account.toPublic()
     }
 
+    override fun authenticateV2(executor: Executor, accountName: String, password: Secret): AccountPublicBoV2 {
+        val account = pa.readByNameOrNull(accountName) ?: throw Unauthorized("UnknownAccount")
+        authenticate(executor, account.id, password.value)
+        return account.toPublicV2()
+    }
+
     open fun AccountPrivateBo.toPublic() = AccountPublicBo(
         accountId = EntityId(id),
         accountName = accountName,
@@ -367,14 +377,54 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
         locale = locale
     )
 
+    open fun AccountPrivateBo.toPublicV2() = AccountPublicBoV2(
+        accountId = EntityId(id),
+        accountUuid = uuid,
+        accountName = accountName,
+        fullName = fullName,
+        email = if (settings.emailInAccountPublic) email else null,
+        phone = if (settings.phoneInAccountPublic) phone else null,
+        theme = theme,
+        locale = locale
+    )
+
     override fun anonymous() = anonymous
 
+    override fun anonymousV2() = anonymousV2
+
     override fun readPublic(account: EntityId<out BaseBo>) = pa.read(EntityId(account)).toPublic()
+
+    override fun readPublicV2(account: EntityId<out BaseBo>) = pa.read(EntityId(account)).toPublicV2()
 
     override fun roles(accountId: EntityId<out BaseBo>): List<Pair<EntityId<out BaseBo>, String>> {
         return roleBl.rolesOf(EntityId(accountId))
     }
 
+    override fun executorFor(name : String) : Executor =
+        pa.withTransaction { executorFor(pa.readByName(name)) }
+
+    override fun executorFor(uuid : UUID) : Executor =
+        pa.withTransaction { executorFor(pa.readByUuid(uuid)) }
+
+    open fun executorFor(account : AccountPrivateBo) : Executor {
+        val roleIds = mutableListOf<EntityId<out BaseBo>>()
+        val roleNames = mutableListOf<String>()
+
+        roles(account.id).forEach {
+            roleIds += it.first
+            roleNames += it.second
+        }
+
+        return Executor(
+            account.id,
+            account.uuid,
+            account.id == anonymous.accountId,
+            roleIds,
+            roleNames
+        )
+    }
+
     open fun byName(accountName: String) = pa.readByName(accountName)
+
 
 }

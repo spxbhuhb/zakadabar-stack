@@ -77,7 +77,7 @@ zakadabar.lib.accounts.install()
 
 #### configure settings
 
-For customized settings create a 'lib.account.yaml' file in your settings directory, 
+For customized settings create a 'lib.accounts.yaml' file in your settings directory, 
 check [ModuleSettings](/lib/accounts/src/commonMain/kotlin/zakadabar/lib/accounts/data/ModuleSettings.kt)
 for description of parameters.
 

@@ -23,7 +23,7 @@ import zakadabar.core.util.UUID
  *  @param  actionNamespace  Namespace of the action that performs this job.
  *  @param  actionType       Type of the action that performs this job.
  *  @param  actionData       JSON data of the action that performs this job.
- *  @param  node             The node this job runs or will run on.
+ *  @param  worker           The worker this job runs or will run on.
  *  @param  failCount        Number of failed run attempts.
  *  @param  lastFailData     JSON data that belongs to the fail policy and contains
  *                           details about the last failure.
@@ -37,6 +37,7 @@ class Job(
 
     override var id : EntityId<Job>,
     var status : JobStatus,
+    var createdBy : UUID,
     var createdAt : Instant,
     var startAt : Instant?,
     var completedAt : Instant?,
@@ -44,7 +45,7 @@ class Job(
     var actionNamespace : String,
     var actionType : String,
     var actionData : String,
-    var node : UUID?,
+    var worker : UUID?,
     var failCount: Int,
     var lastFailedAt: Instant?,
     var lastFailMessage : String?,
@@ -66,6 +67,7 @@ class Job(
     override fun schema() = BoSchema {
         + ::id
         + ::status default JobStatus.Pending
+        + ::createdBy
         + ::createdAt
         + ::startAt
         + ::completedAt
@@ -73,7 +75,7 @@ class Job(
         + ::actionNamespace blank false min 1 max 100
         + ::actionType blank false min 1 max 100
         + ::actionData blank false
-        + ::node
+        + ::worker
         + ::failCount
         + ::lastFailedAt
         + ::lastFailMessage

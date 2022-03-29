@@ -28,8 +28,8 @@ open class SubscriptionBl : EntityBusinessLogicBase<Subscription>(
                     actionNamespace = it.actionNamespace,
                     actionType = it.actionType,
                     subscriptionId = it.id,
-                    nodeUrl = it.nodeUrl,
-                    nodeId = it.nodeId
+                    nodeId = it.nodeId,
+                    nodeComm = it.nodeComm
                 ).dispatch()
             }
 

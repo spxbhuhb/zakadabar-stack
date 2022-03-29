@@ -15,6 +15,7 @@ import zakadabar.core.data.EntityId
 import zakadabar.core.data.create
 import zakadabar.core.server.server
 import zakadabar.core.testing.TestCompanionBase
+import zakadabar.core.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -63,8 +64,8 @@ class CommTest {
 
         TestBo.all().also {
             assertEquals(2, it.size)
-            assertEquals(1, it.filter { entry -> entry.name == "test-name"}.size)
-            assertEquals(1, it.filter { entry -> entry.name == "test-name-2"}.size)
+            assertEquals(1, it.filter { entry -> entry.name == "test-name" }.size)
+            assertEquals(1, it.filter { entry -> entry.name == "test-name-2" }.size)
             assertTrue(it[0].id != it[1].id)
         }
 
@@ -99,7 +100,7 @@ class CommTest {
 
     @Test
     fun `local BL call test - global config`() = runBlocking {
-        val executor = Executor(EntityId("0"),true, emptyList(), emptyList())
+        val executor = Executor(EntityId("0"), UUID.NIL, true, emptyList(), emptyList())
 
         transaction {
             TestTable.deleteAll()
@@ -124,8 +125,8 @@ class CommTest {
 
         TestBo.all(executor).also {
             assertEquals(2, it.size)
-            assertEquals(1, it.filter { entry -> entry.name == "test-name"}.size)
-            assertEquals(1, it.filter { entry -> entry.name == "test-name-2"}.size)
+            assertEquals(1, it.filter { entry -> entry.name == "test-name" }.size)
+            assertEquals(1, it.filter { entry -> entry.name == "test-name-2" }.size)
             assertTrue(it[0].id != it[1].id)
         }
 
@@ -160,7 +161,7 @@ class CommTest {
 
     @Test
     fun `local BL call test - call config`() = runBlocking {
-        val executor = Executor(EntityId("0"),true, emptyList(), emptyList())
+        val executor = Executor(EntityId("0"), UUID.NIL, true, emptyList(), emptyList())
 
         transaction {
             TestTable.deleteAll()
@@ -189,8 +190,8 @@ class CommTest {
 
         TestBo.all(executor, callConfig).also {
             assertEquals(2, it.size)
-            assertEquals(1, it.filter { entry -> entry.name == "test-name"}.size)
-            assertEquals(1, it.filter { entry -> entry.name == "test-name-2"}.size)
+            assertEquals(1, it.filter { entry -> entry.name == "test-name" }.size)
+            assertEquals(1, it.filter { entry -> entry.name == "test-name-2" }.size)
             assertTrue(it[0].id != it[1].id)
         }
 

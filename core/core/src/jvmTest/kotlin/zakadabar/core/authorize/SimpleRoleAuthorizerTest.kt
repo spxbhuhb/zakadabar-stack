@@ -8,12 +8,13 @@ import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
 import zakadabar.core.business.EntityBusinessLogicBase
-import zakadabar.core.persistence.EmptyPersistenceApi
-import zakadabar.core.server.server
-import zakadabar.core.testing.TestCompanionBase
 import zakadabar.core.data.EmptyEntityBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.exception.Forbidden
+import zakadabar.core.persistence.EmptyPersistenceApi
+import zakadabar.core.server.server
+import zakadabar.core.testing.TestCompanionBase
+import zakadabar.core.util.UUID
 import kotlin.test.assertFailsWith
 
 internal object WithPublic : EntityBusinessLogicBase<EmptyEntityBo>(EmptyEntityBo::class) {
@@ -49,8 +50,8 @@ class SimpleRoleAuthorizerTest {
 
         val withPublic = server.first<WithPublic>()
 
-        val siteMember = Executor(EntityId(1), false, emptyList(), emptyList())
-        val anonymous = Executor(EntityId(2), true, emptyList(), emptyList())
+        val siteMember = Executor(EntityId(1), UUID.NIL, false, emptyList(), emptyList())
+        val anonymous = Executor(EntityId(2), UUID.NIL, true, emptyList(), emptyList())
 
         with(withPublic.authorizer) {
             authorizeList(anonymous)

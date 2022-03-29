@@ -6,14 +6,15 @@ package zakadabar.lib.schedule.business
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
+import zakadabar.core.authorize.AccountBlProvider
 import zakadabar.core.authorize.Executor
 import zakadabar.core.business.ActionBusinessLogicWrapper
 import zakadabar.core.business.BusinessLogicCommon
 import zakadabar.core.data.ActionStatus
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityId
+import zakadabar.core.module.module
 import zakadabar.core.module.modules
-import zakadabar.core.server.server
 import zakadabar.core.setting.setting
 import zakadabar.core.util.Lock
 import zakadabar.core.util.default
@@ -37,28 +38,35 @@ open class WorkerBl(
 
     open val settings by setting<WorkerSettings>(name)
 
+    open val accountBl by module<AccountBlProvider>()
+
     val lock = Lock()
 
     var job: kotlinx.coroutines.Job? = null
 
     var subscription: Subscription? = null
 
+    lateinit var executor : Executor
+
     override fun onAfterOpen() {
         super.onAfterOpen()
+
+        executor = accountBl.executorFor(settings.scheduleAccount)
+
         runBlocking {
             subscription = default<Subscription> {
-                nodeUrl = settings.nodeUrl ?: ("http://127.0.0.1:${server.settings.ktor.port}/api/" + namespace)
-                nodeId = settings.nodeId
+                nodeId = settings.workerId
+                nodeComm = settings.workerComm.copy(namespace = namespace)
                 actionNamespace = settings.actionNamespace
                 actionType = settings.actionType
-            }.create()
+            }.create(executor, settings.dispatcherComm)
         }
     }
 
     override fun onBeforeClose() {
         super.onBeforeClose()
         runBlocking {
-            subscription?.delete()
+            subscription?.delete(executor, settings.dispatcherComm)
         }
     }
 
@@ -99,7 +107,7 @@ open class WorkerBl(
                     Json.encodeToString(serializer(response::class.createType()), response)
                 }
 
-                JobSuccess(jobId, responseData).execute()
+                JobSuccess(jobId, responseData).execute(this@WorkerBl.executor, settings.dispatcherComm)
 
             } catch (ex: JobFailException) {
 
@@ -108,23 +116,23 @@ open class WorkerBl(
                     lastFailMessage = ex.message,
                     lastFailData = ex.failData,
                     retryAt = ex.retryAt
-                ).execute()
+                ).execute(this@WorkerBl.executor, settings.dispatcherComm)
 
             } catch (ex: Exception) {
 
-                ex.printStackTrace()
+                logger.error("job (id: ${jobId}) has failed", ex)
 
                 JobFail(
                     jobId,
                     lastFailMessage = ex.stackTraceToString(),
                     lastFailData = null,
                     retryAt = null
-                ).execute()
+                ).execute(this@WorkerBl.executor, settings.dispatcherComm)
 
-            }
-
-            lock.use {
-                job = null
+            } finally {
+                lock.use {
+                    job = null
+                }
             }
         }
     }

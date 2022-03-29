@@ -25,6 +25,8 @@ open class AccountPrivateExposedPa(
 
     open fun readByNameOrNull(name: String) = table.select { table.accountName eq name }.firstOrNull()?.toBo()
 
+    open fun readByUuid(uuid: UUID) = table.select { table.uuid eq uuid.toJavaUuid() }.first().toBo()
+
     open fun accountListSecure(states: AccountStateExposedTable): List<AccountListSecureEntry> =
         table
             .join(states, JoinType.INNER) { table.id eq states.entityId }

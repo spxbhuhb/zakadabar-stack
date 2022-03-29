@@ -12,7 +12,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.core.authorize.AccountBlProvider
-import zakadabar.core.authorize.AccountPublicBo
+import zakadabar.core.authorize.AccountPublicBoV2
 import zakadabar.core.authorize.BusinessLogicAuthorizer
 import zakadabar.core.authorize.Executor
 import zakadabar.core.business.EntityBusinessLogicBase
@@ -157,11 +157,11 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
             roleNames += it.second
         }
 
-        return StackSession(account.accountId, accountBl.anonymous().accountId == account.accountId, roleIds, roleNames)
+        return StackSession(account.accountId, account.accountUuid, accountBl.anonymous().accountId == account.accountId, roleIds, roleNames)
     }
 
-    private fun authenticate(executor: Executor, accountName: String, password: Secret): AccountPublicBo =
-        accountBl.authenticate(executor, accountName, password)
+    private fun authenticate(executor: Executor, accountName: String, password: Secret): AccountPublicBoV2 =
+        accountBl.authenticateV2(executor, accountName, password)
 
     @Suppress("UNUSED_PARAMETER") // action is needed here because of route mapping
     private fun logoutAction(executor: Executor, action: LogoutAction): ActionStatus {
@@ -172,11 +172,11 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 
         val old = call.sessions.get<StackSession>() !!
 
-        val anonymous = accountBl.anonymous()
+        val anonymous = accountBl.anonymousV2()
 
         auditor.auditCustom(executor) { "logout accountId=${old.account}" }
 
-        call.sessions.set(StackSession(anonymous.accountId, true, emptyList(), emptyList()))
+        call.sessions.set(StackSession(anonymous.accountId, anonymous.accountUuid, true, emptyList(), emptyList()))
 
         return ActionStatus(success = true)
 

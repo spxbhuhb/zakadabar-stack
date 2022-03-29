@@ -19,6 +19,7 @@ are the places worth to check. If you extended them you may have to apply the ch
 
 **changed**
 
+- `Executor` now contains the UUID of the account **low** (add the UUID if you manually create an executor)
 - `CommBase.baseUrl` is now deprecated, replace with `CommConfig.global = CommConfig("https:/...")`
 - `BlobComm.upload` now has additional parameters **very low** (pass callback as named parameter)
 - `ZkFullScreenImageView` has a `deleteButton` constructor parameter **very low** (add the parameter to the call)

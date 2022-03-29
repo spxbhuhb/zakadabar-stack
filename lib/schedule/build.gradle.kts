@@ -37,6 +37,7 @@ kotlin {
 
     sourceSets["commonMain"].dependencies {
         implementation(project(":core:core"))
+        implementation(project(":lib:accounts"))
     }
 
     sourceSets["commonTest"].dependencies {
