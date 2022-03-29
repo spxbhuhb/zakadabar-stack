@@ -69,7 +69,13 @@ The default job store uses SQL to store the jobs.
 **backend**
 
 1. add the dispatcher modules to your server configuration, for details see [Modules](../../common/Modules.md)
-1. add a worker module(s) to your server configuration, for details see [Modules](../../common/Modules.md)
+2. add a worker module(s) to your server configuration, for details see [Modules](../../common/Modules.md)
+3. add configuration files for the workers, name of the configuration file has to be <worker-name.yaml> (check)
+
+**frontend**
+
+For administrative purposes, you can add [JobCrud](/lib/schedule/src/jsMain/kotlin/zakadabar/lib/schedule/JobCrud.kt) to your
+browser frontend.
 
 ### Common
 
@@ -81,7 +87,7 @@ implementation("hu.simplexion.zakadabar:schedule:$stackVersion")
 
 ### Backend
 
-#### add module
+#### Add Module
 
 ```kotlin
 zakadabar.lib.schedule.install()
@@ -89,11 +95,31 @@ modules += WorkerBl("worker1")
 modules += WorkerBl("worker2")
 ```
 
+#### Set Configuration Files
+
+The example file below (named `worker1.yaml` as it is for `worker1`) is for a single node configuration. In this case
+the dispatcher and the worker are on the same node.
+
+The `local: true` means that the worker and the dispatcher runs in the same VM and there is no need for HTTP/HTTPS.
+At the moment this is the only supported option. See [Comm](/doc/guides/common/Comm.md) for details.
+
+`scheduleAccount` is the account used:
+- by the workers to send job statuses to the dispatcher
+- by the dispatcher to push jobs to the worker
+
+```text
+dispatcherComm:
+  local: true
+workerComm:
+  local: true
+scheduleAccount: "so"
+```
+
 ## Database
 
 The module uses SQL for data persistence. At first run it creates these SQL objects automatically.
 
-| Table | Content |
-| --- | --- |
-| `schedule_job` | Jobs. |
+| Table                   | Content        |
+|-------------------------|----------------|
+| `schedule_job`          | Jobs.          |
 | `schedule_subscription` | Subscriptions. |

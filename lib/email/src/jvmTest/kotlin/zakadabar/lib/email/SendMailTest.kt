@@ -3,25 +3,36 @@
  */
 package zakadabar.lib.email
 
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
 import org.subethamail.wiser.Wiser
-import zakadabar.core.testing.TestCompanionBase
+import zakadabar.core.module.modules
+import zakadabar.lib.accounts.testing.AuthTestCompanionBase
+import zakadabar.lib.schedule.business.WorkerBl
+import zakadabar.lib.schedule.data.Job
+import zakadabar.lib.schedule.data.JobStatus
 import javax.mail.Part
 import javax.mail.internet.MimeMultipart
 import javax.mail.util.SharedByteArrayInputStream
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
+import kotlin.test.fail
 
 class SendMailTest {
 
-    companion object : TestCompanionBase() {
+    companion object : AuthTestCompanionBase() {
 
         val wiser = Wiser()
 
         override fun addModules() {
+            super.addModules()
+
+            zakadabar.lib.schedule.install()
+            modules += WorkerBl("worker1")
+
             install()
         }
 
@@ -138,6 +149,42 @@ class SendMailTest {
         assertEquals("a2.bin", part.fileName)
         assertEquals(Part.ATTACHMENT, part.disposition)
         assertContentEquals(a2, (part.content as SharedByteArrayInputStream).readAllBytes())
+
+    }
+
+    @Test
+    fun `send as a Job`() = runBlocking {
+
+        wiser.messages.clear()
+
+        val jobId = sendMail("noreply@simplexion.hu", "Subject", "Content")
+
+        val startTime = System.nanoTime()
+        while (System.nanoTime() - startTime < 3_000_000_000) {
+            val job = Job.read(jobId)
+            when (job.status) {
+                JobStatus.Succeeded -> break
+                JobStatus.Running -> delay(10)
+                JobStatus.Pending -> delay(10)
+                JobStatus.Cancelled -> fail("job status is Cancelled")
+                JobStatus.Failed -> fail("job status is Failed, message: ${job.lastFailMessage}, data: ${job.lastFailData}")
+            }
+        }
+
+        assertEquals(1, wiser.messages.size)
+
+        val message = wiser.messages.first()
+        val mimeMessage = message.mimeMessage
+        val content = mimeMessage.content as MimeMultipart
+
+        assertEquals("Subject", mimeMessage.subject)
+        assertEquals(1, content.count)
+
+        val part = content.getBodyPart(0)
+
+        assertEquals("text/plain; charset=UTF-8", part.contentType)
+        assertEquals("Content", part.content)
+
 
     }
 

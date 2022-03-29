@@ -26,15 +26,15 @@ suspend fun sendMail(
     content: String,
     contentMimeType: String = "text/plain",
     attachments: List<Triple<ByteArray,String,String>> = emptyList()
-) {
+) : EntityId<Job> {
 
     val id = buildMail(recipients, subject, content, contentMimeType, attachments)
 
-    default<Job> {
+    return default<Job> {
         actionNamespace = Process.boNamespace
         actionType = Process::class.simpleName!!
         actionData = Json.encodeToString(Process.serializer(), Process(id))
-    }.create()
+    }.create().id
 
 }
 

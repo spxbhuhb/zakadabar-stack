@@ -4,6 +4,8 @@
 package zakadabar.lib.email
 
 import zakadabar.core.authorize.Executor
+import zakadabar.core.authorize.SimpleRoleAuthorizer
+import zakadabar.core.authorize.appRoles
 import zakadabar.core.business.EntityBusinessLogicBase
 import zakadabar.core.data.ActionStatus
 import zakadabar.core.module.module
@@ -27,12 +29,10 @@ open class MailBl : EntityBusinessLogicBase<Mail>(
 
     val partBl by module<MailPartBl>()
 
-    override val authorizer by provider() // FIXME change default provider of MailBl
-
-//    = SimpleRoleAuthorizer {
-//        allReads = appRoles.securityOfficer
-//        allWrites = appRoles.securityOfficer
-//    }
+    override val authorizer = SimpleRoleAuthorizer<Mail> {
+        allReads = appRoles.securityOfficer
+        allWrites = appRoles.securityOfficer
+    }
 
     override val router = router {
         action(Process::class, ::process)
@@ -53,7 +53,7 @@ open class MailBl : EntityBusinessLogicBase<Mail>(
 
         } catch (ex : Exception) {
             mail.status = MailStatus.RetryWait
-            ex.printStackTrace() // FIXME log mail send errors through a logger
+            logger.error("failed to send mail", ex)
             ActionStatus(false)
         }
     }

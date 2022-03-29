@@ -16,7 +16,12 @@ E-mail sending library. This library depends on the [Schedule](../schedule/Intro
 
 1. add the module to your server configuration, for details see [Modules](../../common/Modules.md)
 2. add settings to configure the SMTP server access
- 
+
+**frontend**
+
+For administrative purposes, you can add [MailCrud](/lib/email/src/jsMain/kotlin/zakadabar/lib/email/MailCrud.kt) to your
+browser frontend.
+
 ### Common
 
 #### gradle
@@ -32,6 +37,8 @@ implementation("hu.simplexion.zakadabar:email:$stackVersion")
 
 ```kotlin
 zakadabar.lib.schedule.install()
+modules += WorkerBl("worker1")
+
 zakadabar.lib.email.install()
 ```
 
@@ -51,11 +58,13 @@ tls: true
 auth: true
 ```
 
+Don't forget to create the `worker1.yaml` file as written in [Schedule: Introduction](../schedule/Introduction.md).
+
 ## Database
 
 The module uses SQL for data persistence. At first run it creates these SQL objects automatically.
 
-| Table | Content |
-| --- | --- |
-| `mail` | E-mails. |
+| Table       | Content     |
+|-------------|-------------|
+| `mail`      | E-mails.    |
 | `mail_part` | Body parts. |

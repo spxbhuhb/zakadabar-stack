@@ -12,6 +12,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import org.khronos.webgl.Int8Array
+import org.khronos.webgl.Uint8Array
 import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
 import org.w3c.files.Blob
@@ -156,7 +157,14 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
         config: CommConfig?,
         callback: (bo: T, state: BlobCreateState, uploaded: Long) -> Unit
     ) : T {
-        require(data is Blob)
+        require(data is Blob || data is ByteArray) { "the data is not a Blob" }
+
+        val (blob, size) = if (data is Blob) {
+            data to data.size.toLong()
+        } else {
+            data as ByteArray
+            Uint8Array(data.toTypedArray()) to data.size.toLong()
+        }
 
         val req = XMLHttpRequest()
 
@@ -165,7 +173,7 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
         req.addEventListener("progress", { callback(bo, BlobCreateState.Progress, (it as ProgressEvent).loaded.toLong()) })
         req.addEventListener("error", { callback(bo, BlobCreateState.Error, 0) })
         req.addEventListener("abort", { callback(bo, BlobCreateState.Abort, 0) })
-        req.addEventListener("load", { callback(bo, BlobCreateState.Done, data.size.toLong()) })
+        req.addEventListener("load", { callback(bo, BlobCreateState.Done, size) })
 
         val url = merge("/blob/content/${bo.id}", companion.boNamespace, config, companion.commConfig)
 
@@ -174,7 +182,7 @@ open class BlobComm<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
         req.setRequestHeader("Content-Disposition", """attachment; filename*=utf-8"${encodeURIComponent(bo.name)}"""")
         req.send(data)
 
-        bo.size = data.size.toLong()
+        bo.size = size
 
         return bo
     }

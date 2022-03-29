@@ -48,6 +48,8 @@ kotlin {
         api(project(":lib:i18n"))
         api(project(":lib:blobs"))
         api(project(":lib:examples"))
+        api(project(":lib:email"))
+        api(project(":lib:schedule"))
         implementation("com.h2database:h2:${Versions.h2}")
     }
 }

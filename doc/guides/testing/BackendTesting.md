@@ -172,6 +172,20 @@ class MyBlTest {
 
 ### Troubleshooting
 
+If you don't see output/error of your test, add this to `build.gradle.kts`:
+
+```kotlin
+tasks.withType<Test> {
+    testLogging {
+        events(TestLogEvent.STANDARD_OUT, TestLogEvent.STANDARD_ERROR, TestLogEvent.FAILED)
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
+    }
+}
+```
+
 This usually means that [Configuration Files](#configuration-files) are missing:
 
 ```text
@@ -180,5 +194,21 @@ FAILURE: Build failed with an exception.
 Execution failed for task ':core:jvmTest'.
 > Process 'Gradle Test Executor 1' finished with non-zero exit value 1
   This problem might be caused by incorrect test process configuration.
+ 
 ```
 
+This means that `super.addModules()` is missing when you use `AuthTestCompanionBase`:
+
+```text
+io.ktor.client.features.ClientRequestException: Client request(http://127.0.0.1:8888/api/zkl-session/action/LoginAction) invalid: 404 Not Found. Text: ""
+	at io.ktor.client.features.DefaultResponseValidationKt$addDefaultResponseValidation$1$1.invokeSuspend(DefaultResponseValidation.kt:47)
+	...
+```
+
+This means that `template/test/lib.accounts.yaml` is missing when you use `AuthTestCompanionBase`:
+
+```text
+io.ktor.client.features.ClientRequestException: Client request(http://127.0.0.1:8888/api/zkl-session/action/LoginAction) invalid: 401 Unauthorized. Text: "{}"
+	at io.ktor.client.features.DefaultResponseValidationKt$addDefaultResponseValidation$1$1.invokeSuspend(DefaultResponseValidation.kt:47)
+	...
+```

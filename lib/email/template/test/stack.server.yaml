@@ -1,10 +1,11 @@
 database:
   driverClassName: org.h2.Driver
-  jdbcUrl: "jdbc:h2:mem:"
+  jdbcUrl: "jdbc:h2:mem:test"
   # Use this to save the DB for inspection. Remember to delete it before runs!
-  #  jdbcUrl: "jdbc:h2:./app/var/db"
+  # jdbcUrl: "jdbc:h2:./app/var/db"
   username: test
   password: Almafa.12
+  debugSql: true
 
 traceRouting: false
 staticResources: ./var/static

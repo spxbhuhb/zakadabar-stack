@@ -4,11 +4,13 @@
 package zakadabar.lib.demo.backend
 
 import zakadabar.core.authorize.SimpleRoleAuthorizerProvider
+import zakadabar.core.module.modules
 import zakadabar.core.route.RoutedModule
 import zakadabar.core.server.server
 import zakadabar.core.util.PublicApi
 import zakadabar.lib.examples.backend.builtin.BuiltinBl
 import zakadabar.lib.examples.backend.builtin.ExampleReferenceBl
+import zakadabar.lib.schedule.business.WorkerBl
 
 @PublicApi
 object Module : RoutedModule {
@@ -26,6 +28,11 @@ object Module : RoutedModule {
 
         server += ExampleReferenceBl()
         server += BuiltinBl()
+
+        zakadabar.lib.schedule.install()
+        modules += WorkerBl("worker1")
+
+        zakadabar.lib.email.install()
     }
 
 }

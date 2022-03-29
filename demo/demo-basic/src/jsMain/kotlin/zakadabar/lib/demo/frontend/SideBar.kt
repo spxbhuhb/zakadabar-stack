@@ -15,10 +15,12 @@ import zakadabar.lib.accounts.browser.roles.Roles
 import zakadabar.lib.accounts.data.LogoutAction
 import zakadabar.lib.demo.frontend.pages.DemoCrud
 import zakadabar.lib.demo.resources.strings
+import zakadabar.lib.email.MailCrud
 import zakadabar.lib.examples.frontend.crud.BuiltinCrud
 import zakadabar.lib.examples.frontend.crud.ExampleReferenceCrud
 import zakadabar.lib.i18n.browser.LocaleCrud
 import zakadabar.lib.i18n.browser.TranslationCrud
+import zakadabar.lib.schedule.JobCrud
 
 class SideBar : ZkSideBar() {
 
@@ -46,6 +48,9 @@ class SideBar : ZkSideBar() {
                 + item<LocaleCrud>()
                 + item<TranslationCrud>()
             }
+
+            + item<MailCrud>()
+            + item<JobCrud>()
         }
 
         ifNotAnonymous {

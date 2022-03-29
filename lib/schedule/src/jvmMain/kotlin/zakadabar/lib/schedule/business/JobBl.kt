@@ -10,6 +10,7 @@ import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
 import zakadabar.core.authorize.AccountBlProvider
 import zakadabar.core.authorize.Executor
+import zakadabar.core.authorize.SimpleRoleAuthorizer
 import zakadabar.core.business.EntityBusinessLogicBase
 import zakadabar.core.data.ActionStatus
 import zakadabar.core.data.EntityId
@@ -57,19 +58,18 @@ open class JobBl(
 
     val accountBl by module<AccountBlProvider>()
 
-    override val authorizer by provider()
+    override val authorizer = SimpleRoleAuthorizer<Job> {
+        all = adminRole
+        create = createRole
+        update = createRole
 
-//        SimpleRoleAuthorizer<Job> {
-//        all = adminRole
-//        update = createRole
-//
-//        action(JobSuccess::class, workerRole)
-//        action(JobFail::class, workerRole)
-//        action(JobProgress::class, workerRole)
-//        action(JobCancel::class, workerRole)
-//
-//        action(RequestJobCancel::class, adminRole)
-//    }
+        action(JobSuccess::class, workerRole)
+        action(JobFail::class, workerRole)
+        action(JobProgress::class, workerRole)
+        action(JobCancel::class, workerRole)
+
+        action(RequestJobCancel::class, adminRole)
+    }
 
     override val router = router {
         action(JobSuccess::class, ::jobSuccess)
