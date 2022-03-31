@@ -37,6 +37,7 @@ import zakadabar.cookbook.browser.table.inline.TableEditInline
 import zakadabar.cookbook.browser.table.inline.TableEditInlineNoBo
 import zakadabar.cookbook.browser.table.saveElement.TableSaveElement
 import zakadabar.cookbook.browser.table.tableInTab.TableInTab
+import zakadabar.cookbook.browser.table.titleIcon.TableLocalTitleIcon
 import zakadabar.cookbook.resource.strings
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.application
@@ -80,6 +81,7 @@ class Cookbook : CommonModule {
             "TableInTab" -> TableInTab()
             "TableSaveElement" -> TableSaveElement()
             "TableVerticalBorderSome" -> TableVerticalBorderSome()
+            "TableLocalTitleIcon" -> TableLocalTitleIcon()
             "TextHelpModal" -> TextHelpModal()
             "CustomInputFieldForm" -> CustomInputFieldForm()
             "CustomSelectFieldForm" -> CustomSelectFieldForm()

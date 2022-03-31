@@ -4,18 +4,31 @@
 package zakadabar.core.browser.titlebar
 
 import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.icon.ZkIcon
+import zakadabar.core.resource.ZkIconSource
 import zakadabar.core.util.PublicApi
 
 @PublicApi
 open class ZkLocalTitleBar(
     open val text: String,
-    open val contextElements: List<ZkElement> = emptyList()
+    open val contextElements: List<ZkElement> = emptyList(),
+    open val icon: ZkIconSource? = null
 ) : ZkElement() {
 
     override fun onCreate() {
         + zkTitleBarStyles.localTitleBar
 
-        + div { + text }
+        + div {
+            icon?.let {
+                + grid {
+                    + zkTitleBarStyles.localTitleAndIcon
+                    + grid { + ZkIcon(it) }
+                    + grid { + text }
+                }
+            } ?: run {
+                + text
+            }
+        }
         + row {
             contextElements.forEach {
                 + it marginRight 10

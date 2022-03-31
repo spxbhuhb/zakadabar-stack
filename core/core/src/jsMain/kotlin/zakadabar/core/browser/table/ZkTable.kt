@@ -34,6 +34,7 @@ import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.data.QueryBo
+import zakadabar.core.resource.ZkIconSource
 import zakadabar.core.resource.localizedStrings
 import zakadabar.core.schema.BoSchema
 import zakadabar.core.util.PublicApi
@@ -96,6 +97,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     var runQueryOnResume = true
 
     var counter = false
+
+    var icon: ZkIconSource? = null
 
     open val rowHeight
         get() = styles.rowHeight
@@ -262,7 +265,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     override fun buildLocalTitleBar(contextElements: List<ZkElement>): ZkElement? =
         if (addLocalTitle) {
-            ZkLocalTitleBar(titleText ?: localizedStrings.getNormalized(this::class.simpleName ?: ""), titleActions() + contextElements)
+            ZkLocalTitleBar(titleText ?: localizedStrings.getNormalized(this::class.simpleName ?: ""), titleActions() + contextElements, icon)
         } else {
             null
         }
