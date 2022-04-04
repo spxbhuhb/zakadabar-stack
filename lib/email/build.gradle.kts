@@ -49,7 +49,7 @@ kotlin {
     }
 
     sourceSets["jvmMain"].dependencies {
-        implementation("javax.mail:mail:${Versions.javamail}")
+        implementation("com.sun.mail:javax.mail:${Versions.javamail}")
     }
 
     sourceSets["jvmTest"].dependencies {

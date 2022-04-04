@@ -4,6 +4,8 @@
 package zakadabar.cookbook
 
 import org.w3c.dom.HTMLElement
+import zakadabar.cookbook.blob.attachment.AttachmentsField
+import zakadabar.cookbook.blob.image.ImagesField
 import zakadabar.cookbook.browser.crud.basic.BasicCrud
 import zakadabar.cookbook.browser.field.all.AllPropFields
 import zakadabar.cookbook.browser.field.all.AllPropFieldsWithLabel
@@ -87,6 +89,8 @@ class Cookbook : CommonModule {
             "AllValueFieldsIo" -> AllValueFieldsIo()
             "SelectWithFilter" -> SelectWithFilter()
             "FormInModalOpen" -> FormInModalOpen()
+            "AttachmentsField" -> AttachmentsField()
+            "ImagesField" -> ImagesField()
 
             else -> null
 

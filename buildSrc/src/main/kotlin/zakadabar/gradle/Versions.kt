@@ -23,7 +23,7 @@ object Versions {
     const val h2 = "1.4.200"
     const val sqliteJdbc = "3.36.0.1"
 
-    const val javamail = "1.5.0-b01"
+    const val javamail = "1.6.2"
 
     const val highlightJs = "10.7.2"
     const val markdown = "0.2.4"

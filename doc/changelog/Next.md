@@ -43,3 +43,8 @@ are the places worth to check. If you extended them you may have to apply the ch
 **changed**
 
 - major refactor, works with authentication/multiple workers
+
+## Cookbook
+
+- added `Upload And Download Attachments` recipe
+- added `Upload and Download Images` recipe

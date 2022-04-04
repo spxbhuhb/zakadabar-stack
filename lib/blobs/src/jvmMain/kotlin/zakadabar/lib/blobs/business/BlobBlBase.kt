@@ -59,12 +59,12 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
         }
     }
 
-    override fun create(executor: Executor, bo: T): T {
+    open override fun create(executor: Executor, bo: T): T {
         bo.size = 0 // there is no data uploaded yet
         return super.create(executor, bo)
     }
 
-    suspend fun readContent(call: ApplicationCall) {
+    open suspend fun readContent(call: ApplicationCall) {
         val blobId = call.parameters["blobId"]?.let { EntityId<T>(it) } ?: throw BadRequestException("missing blob id")
 
         val (bytes, mimeType) = readContent(call.executor(), blobId) { bo ->
@@ -80,7 +80,7 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
         call.respondBytes(bytes, ContentType.parse(mimeType))
     }
 
-    fun readContent(executor: Executor, blobId: EntityId<T>, callback : (T) -> Unit): Pair<ByteArray, String> =
+    open fun readContent(executor: Executor, blobId: EntityId<T>, callback : (T) -> Unit): Pair<ByteArray, String> =
         pa.withTransaction {
             val bo = pa.read(blobId)
 
@@ -93,7 +93,7 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
             pa.readContent(bo.id) to bo.mimeType
         }
 
-    suspend fun writeContent(call: ApplicationCall) {
+    open suspend fun writeContent(call: ApplicationCall) {
         val blobId = call.parameters["blobId"]?.let { EntityId<T>(it) } ?: throw BadRequestException("missing blob id")
 
         val headers = call.request.headers
@@ -107,7 +107,7 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
         call.respond(HttpStatusCode.OK, "received")
     }
 
-    fun writeContent(executor: Executor, blobId: EntityId<T>, length : Long, bytes : ByteArray) = pa.withTransaction {
+    open fun writeContent(executor: Executor, blobId: EntityId<T>, length : Long, bytes : ByteArray) = pa.withTransaction {
         val bo = pa.read(blobId)
 
         authorizer.authorizeCreate(executor, bo)
@@ -120,7 +120,7 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
         auditor.auditUpdate(executor, bo)
     }
 
-    suspend fun byReference(call: ApplicationCall) {
+    open suspend fun byReference(call: ApplicationCall) {
         val referenceId = call.parameters["referenceId"]?.let { EntityId<RT>(it) }
         val disposition = call.parameters["disposition"]
 
@@ -132,7 +132,7 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
         call.respond(result as Any)
     }
 
-    fun byReference(executor: Executor, referenceId: EntityId<RT>?, disposition: String?): List<T> =
+    open fun byReference(executor: Executor, referenceId: EntityId<RT>?, disposition: String?): List<T> =
         pa.withTransaction {
 
             // FIXME this should use the authorizer of the reference

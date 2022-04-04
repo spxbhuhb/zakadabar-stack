@@ -4,7 +4,6 @@
 package zakadabar.site.backend
 
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.cookbook.entity.builtin.ExampleBl
 import zakadabar.cookbook.entity.builtin.ExampleReferenceBl
 import zakadabar.cookbook.entity.builtin.ExampleReferenceBo
 import zakadabar.core.authorize.SimpleRoleAuthorizerProvider
@@ -34,9 +33,7 @@ object Module : RoutedModule {
         server += BuiltinBl()
         server += zakadabar.lib.examples.backend.builtin.ExampleReferenceBl()
 
-        // these are from the cookbook
-        server += ExampleReferenceBl()
-        server += ExampleBl()
+        zakadabar.cookbook.install()
     }
 
     override fun onModuleStart() {

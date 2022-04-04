@@ -50,8 +50,8 @@ implementation("hu.simplexion.zakadabar:blobs:$blobsVersion")
 ```kotlin
 import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobBoCompanion
-import zakadabar.stack.data.BaseBo
-import zakadabar.stack.data.entity.EntityId
+import zakadabar.core.data.EntityId
+import zakadabar.core.data.EmptyEntityBo
 import kotlinx.serialization.Serializable
 
 // FIXME replace EmptyEntityBo with your referenced BO
@@ -77,7 +77,7 @@ class TestBlob(
 **business logic**
 
 ```kotlin
-import zakadabar.stack.data.entity.EmptyEntityBo
+import zakadabar.core.data.EmptyEntityBo
 
 // FIXME replace EmptyEntityBo with your referenced BO
 class TestBlobBl : BlobBlBase<TestBlob, EmptyEntityBo>(
@@ -102,8 +102,8 @@ may be referenced by these blobs. If you do not plan on using references
 
 ```kotlin
 import org.jetbrains.exposed.dao.id.LongIdTable
-import zakadabar.stack.backend.util.default
-import zakadabar.stack.data.entity.EmptyEntityBo
+import zakadabar.core.util.default
+import zakadabar.core.data.EmptyEntityBo
 
 // FIXME replace EmptyEntityBo with your reference BO
 class TestBlobExposedPa : BlobExposedPa<TestBlob, EmptyEntityBo>(
