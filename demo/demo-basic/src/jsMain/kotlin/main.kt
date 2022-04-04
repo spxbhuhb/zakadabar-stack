@@ -5,10 +5,10 @@
 
 import zakadabar.core.browser.application.ZkApplication
 import zakadabar.core.browser.application.application
-import zakadabar.core.browser.theme.ZkGreenBlueTheme
 import zakadabar.core.browser.util.io
 import zakadabar.core.resource.initTheme
 import zakadabar.lib.demo.frontend.Routing
+import zakadabar.lib.demo.frontend.resources.AppLightTheme
 import zakadabar.lib.demo.resources.strings
 
 fun main() {
@@ -26,7 +26,7 @@ fun main() {
 
             initSession()
 
-            initTheme(ZkGreenBlueTheme())
+            initTheme(AppLightTheme())
 
             initLocale(strings)
 

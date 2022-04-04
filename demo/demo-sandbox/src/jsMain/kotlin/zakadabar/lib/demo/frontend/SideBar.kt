@@ -15,6 +15,7 @@ import zakadabar.lib.accounts.browser.login.Login
 import zakadabar.lib.accounts.browser.roles.Roles
 import zakadabar.lib.accounts.data.LogoutAction
 import zakadabar.lib.demo.frontend.pages.DemoCrud
+import zakadabar.lib.demo.frontend.pages.TableSandbox
 import zakadabar.lib.demo.resources.strings
 import zakadabar.lib.i18n.browser.LocaleCrud
 import zakadabar.lib.i18n.browser.TranslationCrud
@@ -23,6 +24,8 @@ class SideBar : ZkSideBar() {
 
     override fun onCreate() {
         super.onCreate()
+
+        + item<TableSandbox>()
 
         ifAnonymous {
             + item<Login>()

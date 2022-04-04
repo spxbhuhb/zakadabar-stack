@@ -3,7 +3,6 @@
  */
 package zakadabar.lib.demo.frontend
 
-import zakadabar.lib.demo.resources.strings
 import zakadabar.core.browser.layout.ZkDefaultLayout
 import zakadabar.core.browser.theme.ZkBuiltinDarkTheme
 import zakadabar.core.browser.theme.ZkBuiltinLightTheme
@@ -12,6 +11,8 @@ import zakadabar.core.browser.theme.ZkThemeRotate
 import zakadabar.core.browser.titlebar.ZkAppHandle
 import zakadabar.core.browser.titlebar.ZkAppTitleBar
 import zakadabar.core.resource.ZkIcons
+import zakadabar.lib.demo.frontend.resources.AppLightTheme
+import zakadabar.lib.demo.resources.strings
 
 object DefaultLayout : ZkDefaultLayout(spanHeader = false) {
 
@@ -26,6 +27,7 @@ object DefaultLayout : ZkDefaultLayout(spanHeader = false) {
         titleBar.globalElements += ZkThemeRotate(
             ZkIcons.darkMode to ZkBuiltinDarkTheme(),
             ZkIcons.lightMode to ZkBuiltinLightTheme(),
+            ZkIcons.globe to AppLightTheme(),
             ZkIcons.leaf to ZkGreenBlueTheme()
         )
     }
