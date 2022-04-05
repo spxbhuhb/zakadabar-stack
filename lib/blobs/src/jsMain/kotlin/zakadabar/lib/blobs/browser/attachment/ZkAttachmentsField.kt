@@ -46,6 +46,7 @@ import kotlin.reflect.KClass
  * @param   disposition      Disposition of images, saved to the `disposition` field of the image.
  * @param   blobClass        The class of blob instances. When no special initialization is needed,
  *                           the field can create the blobs by itself from this class.
+ * @param   hideUpload       Function to decide if the upload area is hidden or nor. Default returns with "false".
  * @param   makeBlobCb       Callback function to make a blob instance.
  */
 open class ZkAttachmentsField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
@@ -55,9 +56,10 @@ open class ZkAttachmentsField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
     blobCountMax: Int? = null,
     disposition: String? = null,
     blobClass: KClass<BT>? = null,
+    hideUpload : () -> Boolean = { false },
     makeBlobCb: ((File) -> BT)? = null
 ) : ZkBlobField<T,BT>(
-    form, comm, reference, blobCountMax, disposition, blobClass, makeBlobCb
+    form, comm, reference, blobCountMax, disposition, blobClass, hideUpload, makeBlobCb
 ) {
 
     override var valueOrNull: Unit?

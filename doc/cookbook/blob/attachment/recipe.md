@@ -13,10 +13,13 @@ tags:
 
 This recipe shows how to use blob fields to upload and download attachments.
 
-You can use any entity (a BO that extends EntityBo, see [Data](/doc/guides/common/Data.md)) as the
-reference for the attachment. The referenced entity is the one you attach files to.
+Use [ZkAttachmentField.kt](/lib/blobs/src/jsMain/kotlin/zakadabar/lib/blobs/browser/attachment/ZkAttachmentsField.kt)
+in a form to add upload functionality.
 
 <div data-zk-enrich="AttachmentsField"></div>
+
+You can use any entity (a BO that extends EntityBo, see [Data](/doc/guides/common/Data.md)) as the
+reference for the attachment. The referenced entity is the one you attach files to.
 
 ## Guides
 
