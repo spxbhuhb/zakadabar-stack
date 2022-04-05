@@ -51,6 +51,7 @@ kotlin {
         implementation(project(":lib:examples"))
         implementation(project(":lib:bender"))
         implementation(project(":lib:markdown"))
+        implementation(project(":lib:lucene"))
         implementation(project(":cookbook"))
     }
     

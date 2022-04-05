@@ -32,6 +32,7 @@ class Routing : ZkAppRouting(DefaultLayout, Landing) {
         + BuildAndRelease
         + AllGuides
         + ArgPage()
+        + Search
     }
 
 }

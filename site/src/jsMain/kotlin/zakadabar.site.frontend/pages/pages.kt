@@ -4,13 +4,16 @@
 package zakadabar.site.frontend.pages
 
 import zakadabar.core.browser.ZkElement
+import zakadabar.core.browser.ZkElementMode
 import zakadabar.core.browser.application.application
+import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.page.ZkPage
 import zakadabar.core.browser.page.ZkPathPage
 import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.util.io
 import zakadabar.lib.bender.ClassGenerator
 import zakadabar.lib.bender.frontend.Bender
+import zakadabar.lib.lucene.data.LuceneQuery
 import zakadabar.lib.markdown.browser.MarkdownPage
 import zakadabar.lib.markdown.browser.MarkdownPathPage
 import zakadabar.lib.markdown.browser.MarkdownView
@@ -131,4 +134,37 @@ object AllGuides : ZkPathPage(layout = PrintLayout) {
         }
     }
 
+}
+
+object Search : ZkPage() {
+
+    val results = ZkElement()
+
+    class Form : ZkForm<LuceneQuery>() {
+
+        override fun onCreate() {
+            super.onCreate()
+
+            build {
+                + bo::query submitOnEnter true
+            }
+        }
+
+        override fun submit() {
+            io {
+                results.clear()
+                bo.execute().forEach {
+                    results.apply { + it.path }
+                }
+            }
+        }
+    }
+
+    override fun onCreate() {
+        + Form().apply {
+            bo = LuceneQuery()
+            mode = ZkElementMode.Query
+        }
++ results
+    }
 }

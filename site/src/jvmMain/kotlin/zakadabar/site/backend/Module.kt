@@ -10,28 +10,30 @@ import zakadabar.core.authorize.SimpleRoleAuthorizerProvider
 import zakadabar.core.data.EntityId
 import zakadabar.core.module.modules
 import zakadabar.core.route.RoutedModule
-import zakadabar.core.server.server
 import zakadabar.core.server.util.ContentBackend
 import zakadabar.core.util.PublicApi
 import zakadabar.lib.examples.backend.builtin.BuiltinBl
 import zakadabar.lib.examples.backend.data.SimpleExampleBl
+import zakadabar.lib.lucene.business.LuceneBl
 import zakadabar.site.backend.business.RecipeBl
 
 @PublicApi
 object Module : RoutedModule {
 
     override fun onModuleLoad() {
-        server += ContentBackend("content")
-        server += RecipeBl()
+        modules += ContentBackend("content")
+        modules += RecipeBl()
 
-        server += SimpleRoleAuthorizerProvider {
+        modules += SimpleRoleAuthorizerProvider {
             all = PUBLIC
         }
 
         // these are from lib:examples
-        server += SimpleExampleBl()
-        server += BuiltinBl()
-        server += zakadabar.lib.examples.backend.builtin.ExampleReferenceBl()
+        modules += SimpleExampleBl()
+        modules += BuiltinBl()
+        modules += zakadabar.lib.examples.backend.builtin.ExampleReferenceBl()
+
+        modules += LuceneBl()
 
         zakadabar.cookbook.install()
     }

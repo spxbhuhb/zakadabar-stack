@@ -58,6 +58,7 @@ class SideBar : ZkSideBar() {
                 + item(Versioning)
                 + item(LegalNotices)
                 + item(Credits)
+                + item(Search)
             }
         }
     }
