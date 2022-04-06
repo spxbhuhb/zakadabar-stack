@@ -170,6 +170,25 @@ class MyBlTest {
 }
 ```
 
+### Convenience Executors
+
+`TestCompanionBase` defines three `Executors` for convenient backend testing:
+
+- `mockAnonymous`
+- `mockLoggedIn`
+- `mockSo`
+
+You can pass these as the first parameter when you call BL functions directly;
+
+```kotlin
+@Test
+fun `index and search`() = runBlocking {
+    val bl = modules.first<LuceneBl>()
+
+    bl.updateIndex(mockSo, UpdateIndex())
+}
+```
+
 ### Troubleshooting
 
 If you don't see output/error of your test, add this to `build.gradle.kts`:

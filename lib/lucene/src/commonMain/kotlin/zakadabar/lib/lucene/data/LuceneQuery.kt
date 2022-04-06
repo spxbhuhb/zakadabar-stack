@@ -12,10 +12,13 @@ import zakadabar.core.data.QueryBoCompanion
 import zakadabar.core.schema.BoSchema
 
 
+/**
+ * Perform a search with Lucene.
+ */
 @Serializable
 class LuceneQuery(
 
-    var field: String = "content",
+    var field: String = "contents",
     var query: String = "",
     var hitsPerPage: Int = 10,
     var knnVectors : Int = 0

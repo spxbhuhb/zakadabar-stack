@@ -8,6 +8,10 @@ import zakadabar.core.data.BaseBo
 import zakadabar.core.schema.BoSchema
 
 
+/**
+ * @param index Path to the index directory Lucene uses.
+ * @param docs  Path to the directory that contains documents to index.
+ */
 @Serializable
 class LuceneSettings(
 

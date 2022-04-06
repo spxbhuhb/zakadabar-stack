@@ -14,7 +14,6 @@ import zakadabar.core.server.util.ContentBackend
 import zakadabar.core.util.PublicApi
 import zakadabar.lib.examples.backend.builtin.BuiltinBl
 import zakadabar.lib.examples.backend.data.SimpleExampleBl
-import zakadabar.lib.lucene.business.LuceneBl
 import zakadabar.site.backend.business.RecipeBl
 
 @PublicApi
@@ -33,8 +32,7 @@ object Module : RoutedModule {
         modules += BuiltinBl()
         modules += zakadabar.lib.examples.backend.builtin.ExampleReferenceBl()
 
-        modules += LuceneBl()
-
+        zakadabar.lib.lucene.install()
         zakadabar.cookbook.install()
     }
 

@@ -23,6 +23,10 @@ are the places worth to check. If you extended them you may have to apply the ch
   - `autheticateV2`
   - `executorFor(String)` - dangerous, avoids authentication
   - `executorFor(UUID)` - dangerous, avoids authentication
+- `TestCompanionBase` mock executors for convenience
+  - `mockAnonymous`
+  - `mockLoggedIn`
+  - `mockSo`
   
 **changed**
 
@@ -44,7 +48,15 @@ are the places worth to check. If you extended them you may have to apply the ch
 
 - major refactor, works with authentication/multiple workers
 
+## Lib:Lucene
+
+**added**
+
+- very basic indexing and query based on the Lucene demo
+
 ## Cookbook
 
-- added `Upload And Download Attachments` recipe
-- added `Upload and Download Images` recipe
+**added**
+
+- `Upload And Download Attachments` recipe
+- `Upload and Download Images` recipe

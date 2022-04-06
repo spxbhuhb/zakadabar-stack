@@ -8,6 +8,12 @@ import zakadabar.core.data.BaseBo
 import zakadabar.core.schema.BoSchema
 
 
+/**
+ * A hit from the Lucene index.
+ *
+ * @param  path  Path to the document, relative to the documents root directory.
+ * @param  title First line of the document.
+ */
 @Serializable
 class LuceneQueryResult(
 

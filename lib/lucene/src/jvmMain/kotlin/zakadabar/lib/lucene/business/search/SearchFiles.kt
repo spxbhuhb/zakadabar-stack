@@ -122,9 +122,7 @@ object SearchFiles {
                 break
             }
         }
-        if (vectorDict != null) {
-            vectorDict.close()
-        }
+        vectorDict?.close()
         reader.close()
     }
 
@@ -179,8 +177,6 @@ object SearchFiles {
         // FIXME check details of paging, check 'main' about how to do it
 
         val hits = searcher.search(query, 5 * hitsPerPage)
-        println("query: $query")
-        println("size: ${hits.scoreDocs.size}")
 
         return hits.scoreDocs.map {
             val doc = searcher.doc(it.doc)

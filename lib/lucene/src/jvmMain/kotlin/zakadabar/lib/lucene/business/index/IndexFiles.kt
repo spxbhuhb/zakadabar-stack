@@ -31,16 +31,19 @@ import zakadabar.lib.lucene.business.index.knn.DemoEmbeddings
 import zakadabar.lib.lucene.business.index.knn.KnnVectorDict
 import zakadabar.lib.lucene.business.index.knn.KnnVectorDict.Companion.build
 import java.io.BufferedReader
+import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
 import java.nio.file.*
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.*
+import kotlin.io.path.name
 import kotlin.system.exitProcess
 
 class IndexFiles private constructor(
-    private val vectorDict: KnnVectorDict?
+    private val vectorDict: KnnVectorDict?,
+    val docsRoot: Path
 ) : AutoCloseable {
 
     // Calculates embedding vectors for KnnVector search
@@ -66,6 +69,10 @@ class IndexFiles private constructor(
                 path,
                 object : SimpleFileVisitor<Path>() {
                     override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+
+                        // Index only Markdown documents
+                        if (!file.name.endsWith(".md")) return FileVisitResult.CONTINUE
+
                         try {
                             indexDoc(writer, file, attrs.lastModifiedTime().toMillis())
                         } catch (ignore: IOException) {
@@ -83,57 +90,56 @@ class IndexFiles private constructor(
     /** Indexes a single document  */
     @Throws(IOException::class)
     fun indexDoc(writer: IndexWriter, file: Path, lastModified: Long) {
-        Files.newInputStream(file).use { stream ->
-            // make a new, empty document
-            val doc = Document()
+        val bytes = Files.readAllBytes(file)
+        fun ByteArray.reader() = BufferedReader(InputStreamReader(ByteArrayInputStream(this), StandardCharsets.UTF_8))
 
-            // Add the path of the file as a field named "path".  Use a
-            // field that is indexed (i.e. searchable), but don't tokenize
-            // the field into separate words and don't index term frequency
-            // or positional information:
-            val pathField: Field = StringField("path", file.toString(), Field.Store.YES)
-            doc.add(pathField)
+        val relPath = docsRoot.relativize(file).toString()
 
-            // Add the last modified date of the file a field named "modified".
-            // Use a LongPoint that is indexed (i.e. efficiently filterable with
-            // PointRangeQuery).  This indexes to milli-second resolution, which
-            // is often too fine.  You could instead create a number based on
-            // year/month/day/hour/minutes/seconds, down the resolution you require.
-            // For example the long value 2011021714 would mean
-            // February 17, 2011, 2-3 PM.
-            doc.add(LongPoint("modified", lastModified))
+        // make a new, empty document
+        val doc = Document()
 
-            // Add the contents of the file to a field named "contents".  Specify a Reader,
-            // so that the text of the file is tokenized and indexed, but not stored.
-            // Note that FileReader expects the file to be in UTF-8 encoding.
-            // If that's not the case searching for special characters will fail.
+        // Add the path of the file as a field named "path".  Use a
+        // field that is indexed (i.e. searchable), but don't tokenize
+        // the field into separate words and don't index term frequency
+        // or positional information:
+        doc.add(StringField("path", relPath, Field.Store.YES))
+
+        // Add the last modified date of the file a field named "modified".
+        // Use a LongPoint that is indexed (i.e. efficiently filterable with
+        // PointRangeQuery).  This indexes to milli-second resolution, which
+        // is often too fine.  You could instead create a number based on
+        // year/month/day/hour/minutes/seconds, down the resolution you require.
+        // For example the long value 2011021714 would mean
+        // February 17, 2011, 2-3 PM.
+        doc.add(LongPoint("modified", lastModified))
+
+        // Add the contents of the file to a field named "contents".  Specify a Reader,
+        // so that the text of the file is tokenized and indexed, but not stored.
+        // Note that FileReader expects the file to be in UTF-8 encoding.
+        // If that's not the case searching for special characters will fail.
+        doc.add(TextField("contents", bytes.reader()))
+
+        // Let's say that title is the first line.
+        // TODO refine title extraction
+        doc.add(StringField("title", bytes.reader().readLine(), Field.Store.YES))
+
+        demoEmbeddings?.let {
+            val vector = it.computeEmbedding(bytes.reader())
             doc.add(
-                TextField(
-                    "contents",
-                    BufferedReader(InputStreamReader(stream, StandardCharsets.UTF_8))
-                )
+                KnnVectorField("contents-vector", vector, VectorSimilarityFunction.DOT_PRODUCT)
             )
-            demoEmbeddings?.let {
-                Files.newInputStream(file).use { `in` ->
-                    val vector = it.computeEmbedding(
-                        BufferedReader(InputStreamReader(`in`, StandardCharsets.UTF_8))
-                    )
-                    doc.add(
-                        KnnVectorField("contents-vector", vector, VectorSimilarityFunction.DOT_PRODUCT)
-                    )
-                }
-            }
-            if (writer.config.openMode == OpenMode.CREATE) {
-                // New index, so we just add the document (no old document can be there):
-                println("adding $file")
-                writer.addDocument(doc)
-            } else {
-                // Existing index (an old copy of this document may have been indexed) so
-                // we use updateDocument instead to replace the old one matching the exact
-                // path, if present:
-                println("updating $file")
-                writer.updateDocument(Term("path", file.toString()), doc)
-            }
+        }
+
+        if (writer.config.openMode == OpenMode.CREATE) {
+            // New index, so we just add the document (no old document can be there):
+            println("adding $file")
+            writer.addDocument(doc)
+        } else {
+            // Existing index (an old copy of this document may have been indexed) so
+            // we use updateDocument instead to replace the old one matching the exact
+            // path, if present:
+            println("updating $file")
+            writer.updateDocument(Term("path", relPath), doc)
         }
     }
 
@@ -214,7 +220,7 @@ class IndexFiles private constructor(
                     vectorDictSize = vectorDictInstance.ramBytesUsed()
                 }
                 try {
-                    IndexWriter(dir, iwc).use { writer -> IndexFiles(vectorDictInstance).use { indexFiles -> indexFiles.indexDocs(writer, docDir) } }
+                    IndexWriter(dir, iwc).use { writer -> IndexFiles(vectorDictInstance, docDir).use { indexFiles -> indexFiles.indexDocs(writer, docDir) } }
                 } finally {
                     IOUtils.close(vectorDictInstance)
                 }
