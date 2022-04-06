@@ -71,6 +71,7 @@ open class JobBl(
         action(JobCancel::class, workerRole)
 
         action(RequestJobCancel::class, adminRole)
+        query(JobSummary::class, adminRole)
     }
 
     override val router = router {
@@ -80,6 +81,7 @@ open class JobBl(
         action(JobCancel::class, ::jobCancel)
 
         action(RequestJobCancel::class, ::requestJobCancel)
+        query(JobSummary::class, ::jobSummary)
     }
 
     val Job.completed
@@ -274,6 +276,9 @@ open class JobBl(
         ).dispatch()
 
     }
+
+    open fun jobSummary(executor: Executor, query : JobSummary) : List<JobSummaryEntry> =
+        pa.jobSummary()
 
     open fun assignNode(jobId: EntityId<Job>, node: UUID) {
         pa.withTransaction {
