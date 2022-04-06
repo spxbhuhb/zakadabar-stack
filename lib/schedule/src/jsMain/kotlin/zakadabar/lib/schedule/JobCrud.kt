@@ -38,6 +38,8 @@ class JobForm : ZkForm<Job>() {
                 + bo::actionData
                 + bo::worker
                 + bo::failCount
+                + bo::retryCount
+                + bo::retryInterval
                 + bo::lastFailedAt
                 + bo::lastFailMessage
                 + bo::lastFailData
@@ -76,6 +78,8 @@ class JobTable : ZkTable<Job>() {
         + Job::actionData
         + Job::worker
         + Job::failCount
+        + Job::retryCount
+        + Job::retryInterval
         + Job::lastFailedAt
         + Job::lastFailMessage
         + Job::lastFailData

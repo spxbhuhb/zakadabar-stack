@@ -124,6 +124,7 @@ class Dispatcher(
         if (event.retryAt != null && runEntry != null) {
             addJobEntry(event, runEntry.job.createdBy, event.actionData, event.retryAt) // calls pushJobs
         }
+        pushJobs()
     }
 
     fun onRequestJobCancel(event: RequestJobCancelEvent) {

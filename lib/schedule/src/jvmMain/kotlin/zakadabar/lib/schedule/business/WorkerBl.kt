@@ -10,7 +10,6 @@ import zakadabar.core.authorize.AccountBlProvider
 import zakadabar.core.authorize.Executor
 import zakadabar.core.business.ActionBusinessLogicWrapper
 import zakadabar.core.business.BusinessLogicCommon
-import zakadabar.core.data.ActionStatus
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.module.module
@@ -24,10 +23,10 @@ import zakadabar.lib.schedule.data.*
 import kotlin.reflect.full.createType
 
 open class WorkerBl(
-    name : String = "schedule.worker"
+    name: String = "schedule.worker"
 ) : BusinessLogicCommon<BaseBo>() {
 
-    override val namespace : String = name
+    override val namespace: String = name
 
     override val authorizer by provider()
 
@@ -46,7 +45,7 @@ open class WorkerBl(
 
     var subscription: Subscription? = null
 
-    lateinit var executor : Executor
+    lateinit var executor: Executor
 
     override fun onAfterOpen() {
         super.onAfterOpen()
@@ -70,7 +69,7 @@ open class WorkerBl(
         }
     }
 
-    open fun pushJob(executor: Executor, action: PushJob): ActionStatus {
+    open fun pushJob(executor: Executor, action: PushJob) {
         val module = modules.firstOrNull<BusinessLogicCommon<*>> { it.namespace == action.actionNamespace }
             ?: throw NotImplementedError("no module found for namespace '${action.actionNamespace}'")
 
@@ -83,11 +82,9 @@ open class WorkerBl(
                 ActionExecution(action.jobId, executor, module, actionFunc, actionData).execute()
             }
         }
-
-        return ActionStatus()
     }
 
-    open fun requestJobCancel(executor: Executor, requestJobCancel: RequestJobCancel): ActionStatus {
+    open fun requestJobCancel(executor: Executor, requestJobCancel: RequestJobCancel) {
         TODO("Not yet implemented")
     }
 
@@ -107,9 +104,13 @@ open class WorkerBl(
                     Json.encodeToString(serializer(response::class.createType()), response)
                 }
 
+                lock.use { job = null }
+
                 JobSuccess(jobId, responseData).execute(this@WorkerBl.executor, settings.dispatcherComm)
 
             } catch (ex: JobFailException) {
+
+                lock.use { job = null }
 
                 JobFail(
                     jobId,
@@ -122,6 +123,8 @@ open class WorkerBl(
 
                 logger.error("job (id: ${jobId}) has failed", ex)
 
+                lock.use { job = null }
+
                 JobFail(
                     jobId,
                     lastFailMessage = ex.stackTraceToString(),
@@ -129,13 +132,8 @@ open class WorkerBl(
                     retryAt = null
                 ).execute(this@WorkerBl.executor, settings.dispatcherComm)
 
-            } finally {
-                lock.use {
-                    job = null
-                }
             }
         }
     }
-
 
 }

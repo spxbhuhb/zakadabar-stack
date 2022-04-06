@@ -4,11 +4,11 @@
 package zakadabar.lib.schedule.data
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 import zakadabar.core.authorize.Executor
 import zakadabar.core.comm.CommConfig
 import zakadabar.core.data.ActionBo
 import zakadabar.core.data.ActionBoCompanion
-import zakadabar.core.data.ActionStatus
 import zakadabar.core.data.EntityId
 import zakadabar.core.schema.BoSchema
 
@@ -18,12 +18,12 @@ class JobSuccess(
     var jobId : EntityId<Job>,
     var responseData : String?
 
-) : ActionBo<ActionStatus> {
+) : ActionBo<Unit> {
 
     companion object : ActionBoCompanion(Job.boNamespace)
 
     override suspend fun execute(executor: Executor?, callConfig : CommConfig?) =
-        comm.action(this, serializer(), ActionStatus.serializer(), executor, callConfig)
+        comm.action(this, serializer(), Unit.serializer(), executor, callConfig)
 
     override fun schema() = BoSchema {
         + ::jobId

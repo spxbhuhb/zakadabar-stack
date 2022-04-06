@@ -34,6 +34,8 @@ suspend fun sendMail(
         actionNamespace = Process.boNamespace
         actionType = Process::class.simpleName!!
         actionData = Json.encodeToString(Process.serializer(), Process(id))
+        retryCount = 5
+        retryInterval = 3600
     }.create().id
 
 }

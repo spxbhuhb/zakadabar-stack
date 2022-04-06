@@ -23,6 +23,8 @@ class JobTable : ExposedPaTable<Job>(
     val actionData = text("action_data")
     val node = uuid("node").nullable()
     val failCount = integer("fail_count")
+    val retryCount = integer("retry_count").default(0)
+    val retryInterval = integer("retry_interval").default(0)
     val lastFailedAt = timestamp("last_failed_at").nullable()
     val lastFailMessage = text("last_fail_message").nullable()
     val lastFailData = text("last_fail_data").nullable()

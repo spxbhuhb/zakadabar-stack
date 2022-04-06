@@ -7,7 +7,6 @@ import zakadabar.core.authorize.Executor
 import zakadabar.core.authorize.SimpleRoleAuthorizer
 import zakadabar.core.authorize.appRoles
 import zakadabar.core.business.EntityBusinessLogicBase
-import zakadabar.core.data.ActionStatus
 import zakadabar.core.module.module
 import zakadabar.core.setting.setting
 import java.util.*
@@ -38,23 +37,26 @@ open class MailBl : EntityBusinessLogicBase<Mail>(
         action(Process::class, ::process)
     }
 
-    open fun process(executor: Executor, action: Process): ActionStatus {
+    open fun process(executor: Executor, action: Process) {
 
         val mail = pa.read(action.mail)
 
-        return try {
+        try {
+            if (mail.status == MailStatus.Sent) return
 
-            if (mail.status != MailStatus.Sent) {
-                send(mail)
-                mail.status = MailStatus.Sent
-            }
+            send(mail)
 
-            ActionStatus(true)
+            mail.status = MailStatus.Sent
+            pa.update(mail)
 
         } catch (ex : Exception) {
+
             mail.status = MailStatus.RetryWait
+            pa.update(mail)
+
             logger.error("failed to send mail", ex)
-            ActionStatus(false)
+            throw ex
+
         }
     }
 

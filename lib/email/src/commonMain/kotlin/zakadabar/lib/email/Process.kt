@@ -4,9 +4,11 @@
 package zakadabar.lib.email
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
+import zakadabar.core.authorize.Executor
+import zakadabar.core.comm.CommConfig
 import zakadabar.core.data.ActionBo
 import zakadabar.core.data.ActionBoCompanion
-import zakadabar.core.data.ActionStatus
 import zakadabar.core.data.EntityId
 
 /**
@@ -19,10 +21,11 @@ import zakadabar.core.data.EntityId
  */
 @Serializable
 class Process(
-    var mail : EntityId<Mail>
-) : ActionBo<ActionStatus> {
+    var mail: EntityId<Mail>
+) : ActionBo<Unit> {
 
-    override suspend fun execute() = comm.action(this, serializer(), ActionStatus.serializer())
+    override suspend fun execute(executor: Executor?, callConfig: CommConfig?) =
+        comm.action(this, serializer(), Unit.serializer(), executor, callConfig)
 
     companion object : ActionBoCompanion(Mail.boNamespace)
 
