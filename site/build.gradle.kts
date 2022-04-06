@@ -63,6 +63,7 @@ kotlin {
 
 tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
     // seems like this does not work - minimize()
+    mergeServiceFiles()
 }
 
 apply(plugin = "zk-sync-build-info")
