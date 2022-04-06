@@ -68,6 +68,7 @@ class SiteMarkdownContext(
             dest.startsWith("/site/") -> resolveToStringSafe(github, dest.trim('/'))
             dest.startsWith("/doc/guides/") -> resolveToStringSafe("/${application.locale}/Documentation/guides/", dest.substringAfter("/guides/").trim('/'))
             dest.startsWith("/doc/cookbook/") -> resolveToStringSafe("/${application.locale}/Cookbook/", dest.substringAfter("/cookbook/"))
+            dest.startsWith("/doc/changelog/") -> resolveToStringSafe("/${application.locale}/ChangeLog/", dest.substringAfter("/changelog/"))
             dest.endsWith(".png") -> resolveToStringSafe("/api/$contentNamespace/$path", dest.trim('/'))
             dest.endsWith(".jpg") -> resolveToStringSafe("/api/$contentNamespace/$path", dest.trim('/'))
             else -> baseURI?.resolveToStringSafe(dest) ?: dest
