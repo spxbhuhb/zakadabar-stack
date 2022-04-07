@@ -3,7 +3,12 @@
  */
 package zakadabar.core.util
 
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 const val versionMask = 0xffff0fff.toInt()
 const val version = 0x00004000
@@ -12,7 +17,7 @@ const val variant = 0x80000000.toInt()
 
 val hexChars = arrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f')
 
-@Serializable
+@Serializable(with = UUIDStringSerializer::class)
 class UUID : Comparable<UUID> {
 
     companion object {
@@ -125,4 +130,12 @@ class UUID : Comparable<UUID> {
 
         return lsbl.compareTo(other.lsbl)
     }
+}
+
+object UUIDStringSerializer : KSerializer<UUID> {
+    override val descriptor = PrimitiveSerialDescriptor("UUID", PrimitiveKind.STRING)
+
+    override fun deserialize(decoder: Decoder) = UUID(decoder.decodeString())
+
+    override fun serialize(encoder: Encoder, value: UUID) = encoder.encodeString(value.toString())
 }

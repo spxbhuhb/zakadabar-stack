@@ -3,9 +3,8 @@
  */
 package zakadabar.lib.schedule.business
 
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.trySendBlocking
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
@@ -19,9 +18,9 @@ import zakadabar.core.data.EntityId
 import zakadabar.core.module.module
 import zakadabar.core.util.Lock
 import zakadabar.core.util.UUID
-import zakadabar.core.util.fork
 import zakadabar.core.util.use
 import zakadabar.lib.schedule.data.*
+import zakadabar.lib.schedule.data.Job
 import zakadabar.lib.schedule.peristence.JobPa
 import kotlin.coroutines.coroutineContext
 
@@ -45,6 +44,8 @@ open class JobBl(
     protected val dispatcherLock = Lock()
 
     protected val pendingCheckEvent = PendingCheckEvent()
+
+    protected val localScope = CoroutineScope(Dispatchers.IO)
 
     @Serializable
     data class DispatcherKey( // data class, so hash and equals uses fields
@@ -89,7 +90,7 @@ open class JobBl(
 
     override fun onModuleStart() {
         super.onModuleStart()
-        periodic = fork { run() }
+        periodic = localScope.launch { run() }
     }
 
     override fun onInitializeDb() {
@@ -100,8 +101,10 @@ open class JobBl(
     }
 
     override fun onModuleStop() {
-        periodic.cancel()
-        // TODO stop and join dispatchers
+        localScope.cancel()
+        dispatchers.values.forEach {
+            it.localScope.cancel()
+        }
         super.onModuleStop()
     }
 

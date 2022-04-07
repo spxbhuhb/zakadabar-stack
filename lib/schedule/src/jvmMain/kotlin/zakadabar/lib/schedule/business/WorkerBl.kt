@@ -3,6 +3,9 @@
  */
 package zakadabar.lib.schedule.business
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
@@ -17,7 +20,6 @@ import zakadabar.core.module.modules
 import zakadabar.core.setting.setting
 import zakadabar.core.util.Lock
 import zakadabar.core.util.default
-import zakadabar.core.util.fork
 import zakadabar.core.util.use
 import zakadabar.lib.schedule.data.*
 import kotlin.reflect.full.createType
@@ -40,6 +42,8 @@ open class WorkerBl(
     open val accountBl by module<AccountBlProvider>()
 
     val lock = Lock()
+
+    val localScope = CoroutineScope(Dispatchers.IO)
 
     var job: kotlinx.coroutines.Job? = null
 
@@ -78,7 +82,7 @@ open class WorkerBl(
         check(job == null) { "this worker already executes a job" }
 
         lock.use {
-            job = fork {
+            job = localScope.launch {
                 ActionExecution(action.jobId, executor, module, actionFunc, actionData).execute()
             }
         }
