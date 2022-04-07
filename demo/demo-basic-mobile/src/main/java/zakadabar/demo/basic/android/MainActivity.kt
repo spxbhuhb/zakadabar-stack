@@ -9,9 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
+import zakadabar.android.jdbc.zklite.ZkLiteDriver
 import zakadabar.android.jdbc.zklite.connectSqlite
 import zakadabar.core.comm.CommConfig
+import zakadabar.core.util.UUID
 import zakadabar.core.util.default
+import zakadabar.lib.accounts.persistence.AccountPrivateExposedPa
 import zakadabar.lib.accounts.persistence.AccountPrivateExposedTableCommon
 import zakadabar.lib.demo.backend.DemoBlobExposedPa
 import zakadabar.lib.demo.backend.DemoBlobExposedPaTable
@@ -34,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         val tv: TextView = findViewById(R.id.text_view)
         tv.text = "Hello World!"
 
+        ZkLiteDriver.useByteArrayBlob = true
         CommConfig.global = CommConfig(baseUrl = "http://10.0.0.2:8080")
         val db = exposed()
 
@@ -53,6 +57,34 @@ class MainActivity : AppCompatActivity() {
                 DemoBlobExposedPaTable
             )
         }
+
+        val accountPa = AccountPrivateExposedPa()
+
+        val accountCreated = accountPa.withTransaction {
+            accountPa.create(default {
+                accountName = "an"
+                fullName = "fn"
+                email = "a@b.c"
+                phone = null
+                theme = null
+                locale = "en"
+                uuid = UUID()
+            })
+        }
+
+        accountPa.withTransaction {
+            accountPa.list().forEach {
+                println("list: ====== ${it.uuid}")
+            }
+        }
+
+        println("uuid: ======== ${accountCreated.uuid}")
+
+        val accountReadBack = accountPa.withTransaction {
+            accountPa.read(accountCreated.id)
+        }
+
+        println("${accountCreated.uuid} == ${accountReadBack.uuid}")
 
         val pa = DemoExposedPaGen()
 

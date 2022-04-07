@@ -51,10 +51,14 @@ implementation(project(":demo:demo-sandbox")) {
 Initialization: 
 
 ```kotlin
+ZkLiteDriver.useByteArrayBlob = true
 Database.connectSqlite(this, "test")
 ```
 
 After initialization, the usual Exposed functions are available.
+
+Note the `useByteArrayBlob` setting. This is necessary to handle UUID data types
+with the Exposed / ZkLite / SQLite combination.
 
 Also, business logics and persistence apis are available from the
 main project. 
