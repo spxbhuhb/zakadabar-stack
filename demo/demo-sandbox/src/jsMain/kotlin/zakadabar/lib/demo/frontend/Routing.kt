@@ -15,7 +15,7 @@ class Routing : ZkAppRouting(DefaultLayout, Home) {
         + Home
         + DemoCrud()
 
-        + TableSandbox()
+        + TableSandbox<Int>()
         + ExampleBundleCrud()
 
         zakadabar.lib.accounts.browser.install(this)

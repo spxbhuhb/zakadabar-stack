@@ -25,7 +25,7 @@ class SideBar : ZkSideBar() {
     override fun onCreate() {
         super.onCreate()
 
-        + item<TableSandbox>()
+        + item<TableSandbox<Int>>()
 
         ifAnonymous {
             + item<Login>()
