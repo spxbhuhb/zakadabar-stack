@@ -21,39 +21,12 @@ open class SandboxStyles : ZkTableStyles() {
 
 }
 
-//[Log] scrollTop: 12951 scrollLeft: 0
-//[Log] scrollTop: 12874 scrollLeft: 0
-//[Log] scrollTop: 12798 scrollLeft: 0
-//[Log] scrollTop: 12605 scrollLeft: 0
-//[Log] scrollTop: 11837 scrollLeft: 0
-//[Log] scrollTop: 10453 scrollLeft: 0
-//[Log] scrollTop: 9800 scrollLeft: 0
-//[Log] scrollTop: 9339 scrollLeft: 0
-//[Log] scrollTop: 9070 scrollLeft: 0
-//[Log] scrollTop: 8878 scrollLeft: 0
-//[Log] scrollTop: 8801 scrollLeft: 0
-//[Log] scrollTop: 8762 scrollLeft: 0
+// tests:
+// - use page down from top to bottom and back
+// - use wheel from top to bottom and back
+// - document.getElementById('zk-45').scrollTop = 8000, scroll down/up
+// - document.getElementById('zk-45').scrollTop = 8000, document.getElementById('zk-45').scrollTop = 16000, scroll down/up
 
-//[Log] scrollTop: 8647 scrollLeft: 0
-//[Log] scrollTop: 8570 scrollLeft: 0
-//[Log] scrollTop: 8455 scrollLeft: 0
-//[Log] scrollTop: 8032 scrollLeft: 0
-//[Log] scrollTop: 7725 scrollLeft: 0
-//[Log] scrollTop: 7417 scrollLeft: 0
-//[Log] scrollTop: 6725 scrollLeft: 0
-//[Log] scrollTop: 6264 scrollLeft: 0
-//[Log] scrollTop: 5765 scrollLeft: 0
-//[Log] scrollTop: 5111 scrollLeft: 0
-//[Log] scrollTop: 4881 scrollLeft: 0
-//[Log] scrollTop: 4727 scrollLeft: 0
-//[Log] scrollTop: 4612 scrollLeft: 0
-//[Log] scrollTop: 4496 scrollLeft: 0
-//[Log] scrollTop: 4381 scrollLeft: 0
-//[Log] scrollTop: 4266 scrollLeft: 0
-//[Log] scrollTop: 4189 scrollLeft: 0
-//[Log] scrollTop: 4151 scrollLeft: 0
-//[Log] scrollTop: 4074 scrollLeft: 0
-//[Log] scrollTop: 4035 scrollLeft: 0
 
 class TableSandbox<T> : ZkPage() {
 
@@ -215,10 +188,10 @@ class TableSandbox<T> : ZkPage() {
 
         when {
             // above attached rows, no attached row on screen
-            scrollTop + viewHeight < topBoundary -> fullEmptyAbove()
+            scrollTop + viewHeight < topBoundary -> fullEmpty(scrollTop, attachedHeight)
 
             // below attached rows, no attached row on screen
-            scrollTop > bottomBoundary -> fullEmptyBelow(scrollTop, attachedHeight)
+            scrollTop > bottomBoundary -> fullEmpty(scrollTop, attachedHeight)
 
             // above attached rows, EMPTY area between attached rows and scrollTop
             scrollTop < topBoundary -> partialEmptyAbove(scrollTop, attachedHeight)
@@ -233,12 +206,8 @@ class TableSandbox<T> : ZkPage() {
 
     var trace = true
 
-    fun fullEmptyAbove() {
-        if (trace) println("fullEmptyAbove")
-    }
-
-    fun fullEmptyBelow(scrollTop: Double, originalAttachedHeight: Double) {
-        if (trace) println("fullEmptyBelow")
+    fun fullEmpty(scrollTop: Double, originalAttachedHeight: Double) {
+        if (trace) println("fullEmpty")
 
         removeAllAttached()
 
