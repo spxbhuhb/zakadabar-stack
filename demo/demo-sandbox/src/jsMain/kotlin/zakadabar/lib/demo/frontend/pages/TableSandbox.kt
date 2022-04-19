@@ -11,6 +11,8 @@ import zakadabar.core.browser.page.ZkPage
 import zakadabar.core.browser.table.ZkTableStyles
 import zakadabar.core.resource.css.cssStyleSheet
 import zakadabar.core.resource.css.px
+import kotlin.math.max
+import kotlin.math.min
 
 var styles by cssStyleSheet(SandboxStyles())
 
@@ -76,6 +78,8 @@ class TableSandbox<T> : ZkPage() {
     val columnNumber = 10
 
     val ROW_INDEX = "zkri"
+    val addAboveCount = (window.outerHeight / estimatedRowHeight).toInt()
+    val addBelowCount = addAboveCount
 
     override fun onCreate() {
         estimatedTotalHeight = data.size * estimatedRowHeight
@@ -115,24 +119,32 @@ class TableSandbox<T> : ZkPage() {
             }
         }
 
+        firstAttachedRowIndex = 0
+        attachedRowCount = addAboveCount
+
         val topPlaceHolderRow = tableBodyElement.appendChild(document.createElement("tr"))
         repeat(columnNumber) {
-            (topPlaceHolderRow.appendChild(document.createElement("td")) as HTMLTableCellElement).style.minHeight = (20 * estimatedRowHeight).px
+            topPlaceHolderRow.appendChild(document.createElement("td")).also { cell ->
+                cell as HTMLTableCellElement
+                cell.style.border = "none"
+            }
         }
+
+        adjustTopPlaceHolder()
 
         val bottomPlaceHolderRow = tableBodyElement.appendChild(document.createElement("tr"))
         repeat(columnNumber) {
-            (bottomPlaceHolderRow.appendChild(document.createElement("td")) as HTMLTableCellElement).style.minHeight =
-                ((data.size - firstAttachedRowIndex - attachedRowCount) * estimatedRowHeight).px
+            bottomPlaceHolderRow.appendChild(document.createElement("td")).also { cell ->
+                cell as HTMLTableCellElement
+                cell.style.border = "none"
+            }
         }
 
-        firstAttachedRowIndex = 20
-        attachedRowCount = 20
+        adjustBottomPlaceHolder()
 
-        (firstAttachedRowIndex..firstAttachedRowIndex + attachedRowCount).forEach {
+        (firstAttachedRowIndex until attachedRowCount).forEach {
             attachRow(it)
         }
-
     }
 
     /**
@@ -203,11 +215,20 @@ class TableSandbox<T> : ZkPage() {
         if (trace) println("scrollTop: $scrollTop viewHeight: $viewHeight attachedHeight: $attachedHeight topBoundary: $topBoundary, bottomBoundary: $bottomBoundary")
 
         when {
-            scrollTop + viewHeight < topBoundary -> fullEmptyAbove() // above attached rows, no attached row on screen
-            scrollTop > bottomBoundary -> fullEmptyBelow() // below attached rows, no attached row on screen
-            scrollTop < topBoundary -> partialEmptyAbove() // above attached rows, EMPTY area between attached rows and scrollTop
-            topBoundary < scrollTop - viewHeight && scrollTop - viewHeight < bottomBoundary -> partialEmptyBelow() // below attached rows, EMPTY area between attached rows and scrollTop
-            else -> noEmpty() // there is no empty area
+            // above attached rows, no attached row on screen
+            scrollTop + viewHeight < topBoundary -> fullEmptyAbove()
+
+            // below attached rows, no attached row on screen
+            scrollTop > bottomBoundary -> fullEmptyBelow()
+
+            // above attached rows, EMPTY area between attached rows and scrollTop
+            scrollTop < topBoundary -> partialEmptyAbove(scrollTop, attachedHeight)
+
+            // below attached rows, EMPTY area between attached rows and scrollTop
+            scrollTop < bottomBoundary && bottomBoundary < scrollTop + viewHeight -> partialEmptyBelow(attachedHeight)
+
+            // there is no empty area
+            else -> noEmpty()
         }
     }
 
@@ -221,26 +242,79 @@ class TableSandbox<T> : ZkPage() {
         if (trace) println("fullEmptyBelow")
     }
 
-    fun partialEmptyAbove() {
+    fun partialEmptyAbove(scrollTop: Double, originalAttachedHeight: Double) {
         if (trace) println("partialEmptyAbove")
 
-        firstAttachedRowIndex = 0
-        attachedRowCount = 40
+        // Calculate the number of rows to attach, update fields, attach the rows
 
-        (0..19).forEach {
+        val originalFirstAttachedRowIndex = firstAttachedRowIndex
+        val originalAttachedRowCount = attachedRowCount
+
+        firstAttachedRowIndex = max(originalFirstAttachedRowIndex - addAboveCount, 0)
+        attachedRowCount = originalAttachedRowCount + (originalFirstAttachedRowIndex - firstAttachedRowIndex)
+
+        (firstAttachedRowIndex until originalAttachedRowCount).forEach {
             attachRow(it)
         }
 
-        var topPlaceHolderCell = tableBodyElement.firstElementChild?.firstElementChild as HTMLTableCellElement?
-        while (topPlaceHolderCell != null) {
-            topPlaceHolderCell.style.minHeight = 0.px
-            topPlaceHolderCell.style.height = 0.px
-            topPlaceHolderCell = topPlaceHolderCell.nextElementSibling as HTMLTableCellElement?
+        // Calculate new attached height, so we can adjust the scroll top. This adjustment is
+        // necessary because the actual height of the attached rows may be different from
+        // the estimated row height. This difference would cause the rows already shown to
+        // change position on the screen, we don't want that.
+
+        val newAttachedHeight = attachedHeight()
+
+        val estimatedAddition = (originalFirstAttachedRowIndex - firstAttachedRowIndex) * estimatedRowHeight
+        val actualAddition = newAttachedHeight - originalAttachedHeight
+
+        contentContainer.element.scrollTop = scrollTop + (actualAddition - estimatedAddition)
+
+        adjustTopPlaceHolder()
+
+        if (trace) println("newAttachedHeight: $newAttachedHeight oldAttachedHeight: $originalAttachedHeight actualAddition : $actualAddition estimatedAddition : $estimatedAddition")
+
+    }
+
+    fun adjustTopPlaceHolder() {
+        var placeHolderCell = tableBodyElement.firstElementChild?.firstElementChild as HTMLTableCellElement?
+        val placeHolderHeight = (estimatedRowHeight * firstAttachedRowIndex).px
+        while (placeHolderCell != null) {
+            placeHolderCell.style.minHeight = placeHolderHeight
+            placeHolderCell.style.height = placeHolderHeight
+            placeHolderCell = placeHolderCell.nextElementSibling as HTMLTableCellElement?
         }
     }
 
-    fun partialEmptyBelow() {
+    fun partialEmptyBelow(originalAttachedHeight: Double) {
         if (trace) println("partialEmptyBelow")
+
+        // Calculate the number of rows to attach, update fields, attach the rows
+
+        val originalAttachedRowCount = attachedRowCount
+
+        attachedRowCount = min(attachedRowCount + addBelowCount, data.size)
+
+        val start = firstAttachedRowIndex + originalAttachedRowCount
+        val end = firstAttachedRowIndex + attachedRowCount
+
+        (start until end).forEach {
+            attachRow(it)
+        }
+
+        adjustBottomPlaceHolder()
+
+        if (trace) println("newAttachedRowCount: $attachedRowCount originalAttachedRowCount: $originalAttachedRowCount")
+
+    }
+
+    fun adjustBottomPlaceHolder() {
+        var placeHolderCell = tableBodyElement.lastElementChild?.firstElementChild as HTMLTableCellElement?
+        val placeHolderHeight = (estimatedRowHeight * (data.size - (firstAttachedRowIndex + attachedRowCount))).px
+        while (placeHolderCell != null) {
+            placeHolderCell.style.minHeight = placeHolderHeight
+            placeHolderCell.style.height = placeHolderHeight
+            placeHolderCell = placeHolderCell.nextElementSibling as HTMLTableCellElement?
+        }
     }
 
     fun noEmpty() {
@@ -262,10 +336,10 @@ class TableSandbox<T> : ZkPage() {
     }
 
     fun attachedHeight(): Double {
-        val first = firstAttachedRowIndex
-        val last = first + attachedRowCount
+        val start = firstAttachedRowIndex
+        val end = start + attachedRowCount
 
-        return (first..last).sumOf { index ->
+        return (start until end).sumOf { index ->
             renderStates[index] !!.let { state ->
                 state.height ?: state.element !!.element.firstElementChild !!.getBoundingClientRect().height.also { state.height = it }
             }
