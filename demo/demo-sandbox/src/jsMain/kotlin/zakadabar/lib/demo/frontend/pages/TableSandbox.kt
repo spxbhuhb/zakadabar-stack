@@ -11,6 +11,7 @@ import zakadabar.core.browser.page.ZkPage
 import zakadabar.core.browser.table.ZkTableStyles
 import zakadabar.core.resource.css.cssStyleSheet
 import zakadabar.core.resource.css.px
+import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 
@@ -142,9 +143,7 @@ class TableSandbox<T> : ZkPage() {
 
         adjustBottomPlaceHolder()
 
-        (firstAttachedRowIndex until attachedRowCount).forEach {
-            attachRow(it)
-        }
+        attach(firstAttachedRowIndex, attachedRowCount)
     }
 
     /**
@@ -212,14 +211,14 @@ class TableSandbox<T> : ZkPage() {
         val topBoundary = estimatedRowHeight * topRowCount     // offset to the start of the first rendered row
         val bottomBoundary = topBoundary + attachedHeight      // offset to the end of the last rendered row
 
-        if (trace) println("scrollTop: $scrollTop viewHeight: $viewHeight attachedHeight: $attachedHeight topBoundary: $topBoundary, bottomBoundary: $bottomBoundary")
+        //if (trace) println("scrollTop: $scrollTop viewHeight: $viewHeight attachedHeight: $attachedHeight topBoundary: $topBoundary, bottomBoundary: $bottomBoundary")
 
         when {
             // above attached rows, no attached row on screen
             scrollTop + viewHeight < topBoundary -> fullEmptyAbove()
 
             // below attached rows, no attached row on screen
-            scrollTop > bottomBoundary -> fullEmptyBelow()
+            scrollTop > bottomBoundary -> fullEmptyBelow(scrollTop, attachedHeight)
 
             // above attached rows, EMPTY area between attached rows and scrollTop
             scrollTop < topBoundary -> partialEmptyAbove(scrollTop, attachedHeight)
@@ -238,8 +237,40 @@ class TableSandbox<T> : ZkPage() {
         if (trace) println("fullEmptyAbove")
     }
 
-    fun fullEmptyBelow() {
+    fun fullEmptyBelow(scrollTop: Double, originalAttachedHeight: Double) {
         if (trace) println("fullEmptyBelow")
+
+        removeAllAttached()
+
+        val currentTotalHeight = data.size * estimatedRowHeight - (attachedRowCount * estimatedRowHeight) + originalAttachedHeight
+        val scrollPercentage = scrollTop / currentTotalHeight
+        firstAttachedRowIndex = floor(data.size * scrollPercentage).toInt()
+        attachedRowCount = min(data.size - firstAttachedRowIndex, addBelowCount)
+
+        println("currentTotalHeight: $currentTotalHeight  scrollTop: $scrollTop firstAttachedRowIndex: $firstAttachedRowIndex attachedRowCount: $attachedRowCount")
+
+        attach(firstAttachedRowIndex, attachedRowCount)
+
+        adjustTopPlaceHolder()
+        adjustBottomPlaceHolder()
+        contentContainer.element.scrollTo(0.0, firstAttachedRowIndex * estimatedRowHeight)
+    }
+
+    fun attach(start : Int, count : Int) {
+        (start until start + count).forEach {
+            attachRow(it)
+        }
+    }
+
+    fun removeAllAttached() {
+        val start = firstAttachedRowIndex
+        val end = start + attachedRowCount
+
+        (start until end).forEach { index ->
+            renderStates[index] !!.let { state ->
+                state.element !!.element.remove()
+            }
+        }
     }
 
     fun partialEmptyAbove(scrollTop: Double, originalAttachedHeight: Double) {
@@ -253,9 +284,7 @@ class TableSandbox<T> : ZkPage() {
         firstAttachedRowIndex = max(originalFirstAttachedRowIndex - addAboveCount, 0)
         attachedRowCount = originalAttachedRowCount + (originalFirstAttachedRowIndex - firstAttachedRowIndex)
 
-        (firstAttachedRowIndex until originalAttachedRowCount).forEach {
-            attachRow(it)
-        }
+        attach(firstAttachedRowIndex, attachedRowCount - originalAttachedRowCount)
 
         // Calculate new attached height, so we can adjust the scroll top. This adjustment is
         // necessary because the actual height of the attached rows may be different from
@@ -292,14 +321,9 @@ class TableSandbox<T> : ZkPage() {
 
         val originalAttachedRowCount = attachedRowCount
 
-        attachedRowCount = min(attachedRowCount + addBelowCount, data.size)
+        attachedRowCount = min(attachedRowCount + addBelowCount, data.size - firstAttachedRowIndex) // FIXME check boundaries
 
-        val start = firstAttachedRowIndex + originalAttachedRowCount
-        val end = firstAttachedRowIndex + attachedRowCount
-
-        (start until end).forEach {
-            attachRow(it)
-        }
+        attach(firstAttachedRowIndex + originalAttachedRowCount, attachedRowCount - originalAttachedRowCount)
 
         adjustBottomPlaceHolder()
 
@@ -318,7 +342,7 @@ class TableSandbox<T> : ZkPage() {
     }
 
     fun noEmpty() {
-        if (trace) println("noEmpty")
+        //if (trace) println("noEmpty")
     }
 
 
@@ -329,7 +353,7 @@ class TableSandbox<T> : ZkPage() {
         val containerHeight = contentContainer.element.getBoundingClientRect().height
         val headerHeight = tableElement.firstElementChild?.firstElementChild?.getBoundingClientRect()?.height ?: styles.rowHeight.toDouble()
 
-        if (trace) println("contentContainer height: $containerHeight thead height: $headerHeight")
+        // if (trace) println("contentContainer height: $containerHeight thead height: $headerHeight")
 
         // TODO subtract footer if needed
         return containerHeight - headerHeight
