@@ -35,6 +35,7 @@ import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.data.QueryBo
+import zakadabar.core.resource.css.ZkCssStyleRule
 import zakadabar.core.resource.css.px
 import zakadabar.core.resource.localizedStrings
 import zakadabar.core.schema.BoSchema
@@ -100,6 +101,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     var runQueryOnResume = true
 
     var counter = false
+
+    var fixRowHeight = true
 
     open val rowHeight
         get() = styles.rowHeight
@@ -406,7 +409,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     open fun render() {
         firstAttachedRowIndex = 0
-        attachedRowCount = addAboveCount
+        attachedRowCount = min(filteredData.size, addBelowCount)
 
         redraw()
     }
@@ -498,8 +501,11 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
         element = ZkElement(document.createElement("tr") as HTMLElement) build {
 
+            val css : ZkCssStyleRule = if (fixRowHeight) styles.fixHeight else styles.variableHeight
+
             for (column in columns) {
-                + td {
+                + td(styles.cell) {
+                    + css
                     column.render(this, index, row.data)
                 }
             }

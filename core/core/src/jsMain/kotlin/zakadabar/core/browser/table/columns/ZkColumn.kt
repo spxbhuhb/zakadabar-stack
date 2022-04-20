@@ -166,6 +166,8 @@ open class ZkColumn<T : BaseBo>(
 
             table.tableElement.width = sumWidth.px
             table.tableElement.style.setProperty("grid-template-columns", template)
+
+            table.fullData.forEach { it.height = null }
         }
     }
 

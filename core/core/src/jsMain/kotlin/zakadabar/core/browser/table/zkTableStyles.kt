@@ -184,23 +184,29 @@ open class ZkTableStyles : ZkFieldStyles() {
     }
 
     @PublicApi
-    open val cell by cssClass({ ".$table td" }) {
-        + Overflow.hidden
-        + WhiteSpace.nowrap
+    open val cell by cssClass {
         + Display.flex
         + AlignItems.center
         + BoxSizing.borderBox
 
         zIndex = 20.zIndex
-
-        height = rowHeight.px
-
         paddingLeft = 10.px
-        textOverflow = "ellipsis"
+
         color = textColor
         fill = textColor
         borderBottom = "1px solid $rowBorderColor"
         backgroundColor = oddRowBackground
+    }
+
+    open val fixHeight by cssClass {
+        height = rowHeight.px
+        textOverflow = "ellipsis"
+        + Overflow.hidden
+        + WhiteSpace.nowrap
+    }
+
+    open val variableHeight by cssClass {
+        minHeight = rowHeight.px
     }
 
     @PublicApi
