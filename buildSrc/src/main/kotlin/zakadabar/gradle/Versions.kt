@@ -9,7 +9,7 @@ object Versions {
     val isSnapshot = zakadabar.contains("SNAPSHOT")
 
     const val kotlin = "1.6.10"
-    const val ktor = "1.6.5"
+    const val ktor = "1.6.8"
     const val coroutines = "1.5.2"
     const val serialization = "1.3.1"
     const val datetime = "0.2.1"
