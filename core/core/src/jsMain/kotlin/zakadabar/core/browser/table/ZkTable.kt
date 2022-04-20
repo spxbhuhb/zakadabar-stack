@@ -1,6 +1,8 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
+@file:Suppress("PropertyName")
+
 package zakadabar.core.browser.table
 
 import kotlinx.browser.document
@@ -26,7 +28,6 @@ import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.titlebar.ZkAppTitleProvider
 import zakadabar.core.browser.titlebar.ZkLocalTitleBar
 import zakadabar.core.browser.titlebar.ZkLocalTitleProvider
-import zakadabar.core.browser.util.Areas
 import zakadabar.core.browser.util.downloadCsv
 import zakadabar.core.browser.util.getDatasetEntry
 import zakadabar.core.browser.util.io
@@ -34,10 +35,13 @@ import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.data.QueryBo
+import zakadabar.core.resource.css.px
 import zakadabar.core.resource.localizedStrings
 import zakadabar.core.schema.BoSchema
 import zakadabar.core.util.PublicApi
 import zakadabar.core.util.UUID
+import kotlin.math.floor
+import kotlin.math.max
 import kotlin.math.min
 import kotlin.reflect.KProperty1
 
@@ -110,6 +114,10 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             return (if (titleText.isNullOrEmpty()) "content" else titleText) + ".csv"
         }
 
+    open var counterBar = ZkCounterBar("")
+
+    var trace = false
+
     // -------------------------------------------------------------------------
     //  ZkFieldBackend
     // -------------------------------------------------------------------------
@@ -132,13 +140,11 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     //  DOM
     // -------------------------------------------------------------------------
 
-    private lateinit var areas: Areas // areas for intersection observer
-
     lateinit var contentContainer: ZkElement
 
     lateinit var tableElement: HTMLTableElement
 
-    val tbody = document.createElement("tbody") as HTMLTableSectionElement
+    val tableBodyElement = document.createElement("tbody") as HTMLTableSectionElement
 
     // gap before the first row, used to virtualize rows
 
@@ -148,8 +154,21 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     var contentScrollTop: Double = 0.0
     var contentScrollLeft: Double = 0.0
 
-    protected var firstShownRow = Int.MAX_VALUE
-    protected var lastShownRow = - 1
+    // Reference: http://www.html5rocks.com/en/tutorials/speed/animations/
+    var lastKnownScrollPosition = 0.0
+    var ticking = false
+
+    var firstAttachedRowIndex = 0
+    var attachedRowCount = 0
+
+    open val ROW_ID = "rid"
+    open val ROW_INDEX = "ridx"
+
+    open val addAboveCount: Int
+        get() = window.outerHeight / rowHeight
+
+    open val addBelowCount: Int
+        get() = window.outerHeight / rowHeight
 
     // -------------------------------------------------------------------------
     //  State -- data of the table, search text, preloaded data
@@ -163,8 +182,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     open var searchText: String? = null
 
-    open var counterBar = ZkCounterBar("")
     open var allCount: Int? = null // if the full data size of the very first query is not equal to all count, it is possible to set here
+
     open var needToSetAllCounter = true
 
     // -------------------------------------------------------------------------
@@ -188,25 +207,18 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
         + zke(styles.contentContainer) {
 
-            + div {
-                areas = Areas(element.id, ::onAreasChange, buildPoint, 0).apply { onCreate() }
-            }
-
             + table(styles.table) {
                 buildPoint.style.cssText = inlineCss()
                 + thead {
                     + styles.noSelect
                     columns.forEach { + it }
                 }
-                + tbody
+                + tableBodyElement
             }.also {
                 tableElement = it
             }
 
-            on("scroll") {
-                contentScrollTop = this.element.scrollTop
-                contentScrollLeft = this.element.scrollLeft
-            }
+            on("scroll") { onScroll() }
 
         }.also {
             contentContainer = it
@@ -250,10 +262,6 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     }
 
-    override fun onDestroy() {
-        areas.onDestroy()
-    }
-
     override fun setAppTitleBar(contextElements: List<ZkElement>) {
         if (! setAppTitle) return
 
@@ -280,7 +288,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     open fun setCounter() {
 
-        if (needToSetAllCounter && allCount == null && ::fullData.isInitialized && fullData.isNotEmpty()){
+        if (needToSetAllCounter && allCount == null && ::fullData.isInitialized && fullData.isNotEmpty()) {
             allCount = fullData.size
             needToSetAllCounter = false
         }
@@ -323,6 +331,21 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     open fun onDblClick(event: Event) {
         event.preventDefault()
         getRowId(event)?.let { onDblClick(it) }
+    }
+
+    open fun onScroll() {
+        contentScrollTop = contentContainer.element.scrollTop
+        contentScrollLeft = contentContainer.element.scrollLeft
+
+        lastKnownScrollPosition = contentContainer.element.scrollTop.let { if (it < 0) 0.0 else it } // Safari may have negative scrollTop
+
+        if (! ticking) {
+            window.requestAnimationFrame {
+                onScroll(lastKnownScrollPosition)
+                ticking = false
+            }
+            ticking = true
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -382,33 +405,10 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     """.trimIndent()
 
     open fun render() {
-        build {
-            tbody.clear()
+        firstAttachedRowIndex = 0
+        attachedRowCount = addAboveCount
 
-            // clear all cached row renders as sorting calls render and
-            // it may change the column index
-
-            for (row in fullData) {
-                row.element = null
-            }
-
-            this.buildPoint = tbody
-
-            firstShownRow = Int.MAX_VALUE
-            lastShownRow = - 1
-
-            val height = (filteredData.size + 1) * rowHeight
-            areas.adjustAreas(height.toFloat())
-            areas.start = 0f
-            areas.end = areas.areaHeight * areas.activeAreas.size
-            areas.element.scrollTop = 0.0
-
-            + placeHolderRow
-
-            onAreasChange()
-
-            if (counter) setCounter()
-        }
+        redraw()
     }
 
     /**
@@ -417,107 +417,267 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      * Sets scroll position to the latest known value
      */
     fun redraw(): ZkTable<T> {
-        // clear the body of the table
-
-        tbody.clear()
-        + placeHolderRow
-
-        // clear all cached renders
 
         for (row in fullData) {
             row.element = null
         }
 
-        for (index in firstShownRow..lastShownRow) {
-            tbody.appendChild(
-                getRowElement(index, filteredData[index])
-            )
-        }
-
         window.requestAnimationFrame {
+
+            tableBodyElement.clear()
+
+            addPlaceHolderRow()
+            adjustTopPlaceHolder()
+
+            addPlaceHolderRow()
+            adjustBottomPlaceHolder()
+
+            attach(firstAttachedRowIndex, attachedRowCount)
+
+            if (counter) setCounter()
+
             contentContainer.element.scrollTo(contentScrollLeft, contentScrollTop)
+
         }
 
         return this
     }
 
-    open fun onAreasChange() {
-
-        // First and last row to show on the screen. Added [min] to lastRowIndex
-        // because when the last area is shown the index would equal to the number
-        // of rows (generates IndexOutOfBounds).
-
-        val firstRowIndex = (areas.start / rowHeight).toInt()
-        val lastRowIndex = min((areas.end / rowHeight).toInt(), filteredData.size - 1)
-
-        // The placeholder fills the gap between the start of the table and
-        // the first row shown.
-
-        placeHolderCell.style.cssText = """
-            height: ${firstRowIndex * rowHeight}px;
-            grid-column: 1 / span ${columns.size};
-            background: transparent;
-            padding: 0;
-            border: 0; 
-        """.trimIndent()
-
-        // Remove all rows that became hidden.
-
-        for (index in firstShownRow..lastShownRow) {
-            if (index < firstRowIndex || index > lastRowIndex) {
-                filteredData[index].element?.remove()
+    /**
+     * Adds a placeholder row (top or bottom). These rows change in height so
+     * the scrollbar reacts as if all rows would be rendered.
+     */
+    fun addPlaceHolderRow() {
+        val row = tableBodyElement.appendChild(document.createElement("tr"))
+        repeat(columns.size) {
+            row.appendChild(document.createElement("td")).also { cell ->
+                cell as HTMLTableCellElement
+                cell.style.border = "none"
             }
         }
-
-        // Add all new rows.
-
-        val anchor = placeHolderRow.nextSibling
-
-        for (index in firstRowIndex..lastRowIndex) {
-            val element = getRowElement(index, filteredData[index])
-
-            if (index < firstShownRow) {
-                tbody.insertBefore(element, anchor)
-                continue
-            }
-
-            if (index > lastShownRow) {
-                tbody.appendChild(element)
-                continue
-            }
-        }
-
-        firstShownRow = firstRowIndex
-        lastShownRow = lastRowIndex
     }
 
     /**
-     * Get the [HTMLTableRowElement] that belongs to the given index in filtered
-     * data.
-     *
-     * Creates a [ZkTableRow] if missing, creates an [HTMLTableRowElement]
-     * and renders the row is missing.
+     * Attaches a row to the table. Attached rows are not necessarily visible for
+     * the user (they may be scrolled out) but they are added to the DOM.
      */
-    open fun getRowElement(index: Int, row: ZkTableRow<T>): HTMLTableRowElement {
+    fun attachRow(index: Int) {
+        // Get the state of the row or create a new one if it doesn't exist yet
+        val rowState = filteredData[index]
 
-        var element = row.element
-
-        if (element == null) {
-
-            element = tr {
-                buildPoint.dataset["rid"] = getRowId(row.data)
-
-                for (column in columns) {
-                    + td {
-                        column.render(this, index, row.data)
+        // Render and attach the row
+        rowState.apply {
+            render(index, this).also {
+                var row = tableBodyElement.firstElementChild as HTMLTableRowElement?
+                var added = false
+                while (row != null) {
+                    val ridx = row.dataset[ROW_INDEX]?.toInt()
+                    if (ridx != null && ridx > index) {
+                        tableBodyElement.insertBefore(it.element, row)
+                        added = true
+                        break
                     }
+                    row = row.nextElementSibling as HTMLTableRowElement?
+                }
+
+                if (! added) {
+                    tableBodyElement.insertBefore(it.element, tableBodyElement.lastElementChild)
+                }
+            }
+        }
+    }
+
+    /**
+     * Renders the row. Caches the result and returns with it for subsequent calls
+     * on the same row.
+     *
+     * @param index Index of the row in state.rowStates
+     */
+    fun ZkTableRow<T>.render(index: Int, row: ZkTableRow<T>): ZkElement {
+        element?.let { return it }
+
+        element = ZkElement(document.createElement("tr") as HTMLElement) build {
+
+            for (column in columns) {
+                + td {
+                    column.render(this, index, row.data)
                 }
             }
 
-            row.element = element
+            element.dataset[ROW_ID] = getRowId(row.data)
+            element.dataset[ROW_INDEX] = index.toString()
         }
 
-        return element
+        return element !!
+    }
+
+    /**
+     * Calculates the empty area shown on the screen and calls the appropriate function
+     * to fill it.
+     */
+    fun onScroll(scrollTop: Double) {
+        val viewHeight = viewHeight() // height of the area that shows rows
+        val attachedHeight = attachedHeight()
+
+        val topRowCount = firstAttachedRowIndex
+
+        val topBoundary = rowHeight * topRowCount     // offset to the start of the first rendered row
+        val bottomBoundary = topBoundary + attachedHeight      // offset to the end of the last rendered row
+
+        //if (trace) println("scrollTop: $scrollTop viewHeight: $viewHeight attachedHeight: $attachedHeight topBoundary: $topBoundary, bottomBoundary: $bottomBoundary")
+
+        when {
+            // above attached rows, no attached row on screen
+            scrollTop + viewHeight < topBoundary -> fullEmpty(scrollTop, attachedHeight)
+
+            // below attached rows, no attached row on screen
+            scrollTop > bottomBoundary -> fullEmpty(scrollTop, attachedHeight)
+
+            // above attached rows, EMPTY area between attached rows and scrollTop
+            scrollTop < topBoundary -> partialEmptyAbove(scrollTop, attachedHeight)
+
+            // below attached rows, EMPTY area between attached rows and scrollTop
+            scrollTop < bottomBoundary && bottomBoundary < scrollTop + viewHeight -> partialEmptyBelow()
+
+            // there is no empty area
+            else -> noEmpty()
+        }
+    }
+
+    fun fullEmpty(scrollTop: Double, originalAttachedHeight: Double) {
+        if (trace) println("fullEmpty")
+
+        removeAllAttached()
+
+        val currentTotalHeight = filteredData.size * rowHeight - (attachedRowCount * rowHeight) + originalAttachedHeight
+        val scrollPercentage = scrollTop / currentTotalHeight
+        firstAttachedRowIndex = floor(filteredData.size * scrollPercentage).toInt()
+        attachedRowCount = min(filteredData.size - firstAttachedRowIndex, addBelowCount)
+
+        if (trace) println("currentTotalHeight: $currentTotalHeight  scrollTop: $scrollTop firstAttachedRowIndex: $firstAttachedRowIndex attachedRowCount: $attachedRowCount")
+
+        attach(firstAttachedRowIndex, attachedRowCount)
+
+        adjustTopPlaceHolder()
+        adjustBottomPlaceHolder()
+        contentContainer.element.scrollTo(0.0, firstAttachedRowIndex * rowHeight.toDouble())
+    }
+
+    fun attach(start: Int, count: Int) {
+        (start until start + count).forEach {
+            attachRow(it)
+        }
+    }
+
+    fun removeAllAttached() {
+        val start = firstAttachedRowIndex
+        val end = start + attachedRowCount
+
+        (start until end).forEach { index ->
+            filteredData[index].let { state ->
+                state.element !!.element.remove()
+            }
+        }
+    }
+
+    fun partialEmptyAbove(scrollTop: Double, originalAttachedHeight: Double) {
+        if (trace) println("partialEmptyAbove")
+
+        // Calculate the number of rows to attach, update fields, attach the rows
+
+        val originalFirstAttachedRowIndex = firstAttachedRowIndex
+        val originalAttachedRowCount = attachedRowCount
+
+        firstAttachedRowIndex = max(originalFirstAttachedRowIndex - addAboveCount, 0)
+        attachedRowCount = originalAttachedRowCount + (originalFirstAttachedRowIndex - firstAttachedRowIndex)
+
+        attach(firstAttachedRowIndex, attachedRowCount - originalAttachedRowCount)
+
+        // Calculate new attached height, so we can adjust the scroll top. This adjustment is
+        // necessary because the actual height of the attached rows may be different from
+        // the estimated row height. This difference would cause the rows already shown to
+        // change position on the screen, we don't want that.
+
+        val newAttachedHeight = attachedHeight()
+
+        val estimatedAddition = (originalFirstAttachedRowIndex - firstAttachedRowIndex) * rowHeight
+        val actualAddition = newAttachedHeight - originalAttachedHeight
+
+        contentContainer.element.scrollTop = scrollTop + (actualAddition - estimatedAddition)
+
+        adjustTopPlaceHolder()
+
+        if (trace) println("newAttachedHeight: $newAttachedHeight oldAttachedHeight: $originalAttachedHeight actualAddition : $actualAddition estimatedAddition : $estimatedAddition")
+
+    }
+
+    fun adjustTopPlaceHolder() {
+        var placeHolderCell = tableBodyElement.firstElementChild?.firstElementChild as HTMLTableCellElement?
+        val placeHolderHeight = (rowHeight * firstAttachedRowIndex).px
+        while (placeHolderCell != null) {
+            placeHolderCell.style.minHeight = placeHolderHeight
+            placeHolderCell.style.height = placeHolderHeight
+            placeHolderCell = placeHolderCell.nextElementSibling as HTMLTableCellElement?
+        }
+    }
+
+    fun partialEmptyBelow() {
+        if (trace) println("partialEmptyBelow")
+
+        // Calculate the number of rows to attach, update fields, attach the rows
+
+        val originalAttachedRowCount = attachedRowCount
+
+        attachedRowCount = min(attachedRowCount + addBelowCount, filteredData.size - firstAttachedRowIndex)
+
+        attach(firstAttachedRowIndex + originalAttachedRowCount, attachedRowCount - originalAttachedRowCount)
+
+        adjustBottomPlaceHolder()
+
+        if (trace) println("newAttachedRowCount: $attachedRowCount originalAttachedRowCount: $originalAttachedRowCount")
+
+    }
+
+    fun adjustBottomPlaceHolder() {
+        var placeHolderCell = tableBodyElement.lastElementChild?.firstElementChild as HTMLTableCellElement?
+        val placeHolderHeight = (rowHeight * (filteredData.size - (firstAttachedRowIndex + attachedRowCount))).px
+        while (placeHolderCell != null) {
+            placeHolderCell.style.minHeight = placeHolderHeight
+            placeHolderCell.style.height = placeHolderHeight
+            placeHolderCell = placeHolderCell.nextElementSibling as HTMLTableCellElement?
+        }
+    }
+
+    fun noEmpty() {
+        if (trace) println("noEmpty")
+    }
+
+
+    /**
+     * @return Height of the area that shows rows.
+     */
+    fun viewHeight(): Double {
+        val containerHeight = contentContainer.element.getBoundingClientRect().height
+        val headerHeight = tableElement.firstElementChild?.firstElementChild?.getBoundingClientRect()?.height ?: styles.rowHeight.toDouble()
+
+        // if (trace) println("contentContainer height: $containerHeight thead height: $headerHeight")
+
+        // TODO subtract footer if needed
+        return containerHeight - headerHeight
+    }
+
+    /**
+     * @return Height of the currently attached rows (in pixels).
+     */
+    fun attachedHeight(): Double {
+        val start = firstAttachedRowIndex
+        val end = start + attachedRowCount
+
+        return (start until end).sumOf { index ->
+            filteredData[index].let { state ->
+                state.height ?: state.element !!.element.firstElementChild !!.getBoundingClientRect().height.also { state.height = it }
+            }
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -852,7 +1012,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         }
     }
 
-    fun index(builder: (ZkElement.(index: Int,) -> Unit)? = null): ZkIndexColumn<T> {
+    fun index(builder: (ZkElement.(index: Int) -> Unit)? = null): ZkIndexColumn<T> {
         return if (builder != null) {
             ZkIndexColumn(this@ZkTable, builder)
         } else {
@@ -883,6 +1043,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     /**
      * Marks the column as exportable or non-exportable.
      */
+    @PublicApi
     infix fun ZkColumn<T>.exportable(isExportable: Boolean): ZkColumn<T> {
         this.exportable = isExportable
         return this

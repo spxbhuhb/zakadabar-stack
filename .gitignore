@@ -127,3 +127,4 @@ Thumbs.db
 **/build
 /local.properties
 /kotlin-js-store/yarn.lock
+/lib/lucene/app/var/index/

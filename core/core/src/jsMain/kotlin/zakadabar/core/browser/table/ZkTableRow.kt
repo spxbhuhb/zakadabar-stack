@@ -3,10 +3,11 @@
  */
 package zakadabar.core.browser.table
 
-import org.w3c.dom.HTMLTableRowElement
+import zakadabar.core.browser.ZkElement
 
 class ZkTableRow<T>(
     var data: T,
-    var element: HTMLTableRowElement? = null,
+    var element: ZkElement? = null,
+    var height: Double? = null,
     var searchData: Array<String>? = null
 )
