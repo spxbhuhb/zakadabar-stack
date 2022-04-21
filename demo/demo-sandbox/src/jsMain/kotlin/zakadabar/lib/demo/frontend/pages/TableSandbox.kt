@@ -120,10 +120,34 @@ class TableSandbox<T> : ZkPage() {
     }
 
     /**
+     * Renders the row. Caches the result and returns with it for subsequent calls
+     * on the same row.
+     *
+     * @param index Index of the row in state.rowStates
+     */
+    fun RowState.render(index: Int): ZkElement {
+        element?.let { return it }
+
+        element = ZkElement(document.createElement("tr") as HTMLElement) build {
+
+            repeat(columnNumber) {
+                + td {
+                    height = (50.0 + (index % 20) * 2).px
+                    + "cell ${data[index]}:$it"
+                }
+            }
+
+            element.dataset[ROW_INDEX] = index.toString()
+        }
+
+        return element !!
+    }
+
+    /**
      * Attaches a row to the table. Attached rows are not necessarily visible for
      * the user (they may be scrolled out) but they are added to the DOM.
      */
-    fun attachRow(index: Int) {
+    fun attach(index: Int) {
         // Get the state of the row or create a new one if it doesn't exist yet
         val rowState = renderStates[index] ?: RowState().also { renderStates[index] = it }
 
@@ -150,28 +174,74 @@ class TableSandbox<T> : ZkPage() {
         }
     }
 
-    /**
-     * Renders the row. Caches the result and returns with it for subsequent calls
-     * on the same row.
-     *
-     * @param index Index of the row in state.rowStates
-     */
-    fun RowState.render(index: Int): ZkElement {
-        element?.let { return it }
-
-        element = ZkElement(document.createElement("tr") as HTMLElement) build {
-
-            repeat(columnNumber) {
-                + td {
-                    height = (50.0 + (index % 20) * 2).px
-                    + "cell ${data[index]}:$it"
-                }
-            }
-
-            element.dataset[ROW_INDEX] = index.toString()
+    fun attach(start : Int, count : Int) {
+        (start until start + count).forEach {
+            attach(it)
         }
+    }
 
-        return element !!
+    fun remove(index : Int) : Double {
+        return renderStates[index] !!.let { state ->
+            state.element !!.element.remove()
+            state.height!!
+        }
+    }
+
+    fun remove(start: Int, end : Int) : Double {
+        return (start until end).sumOf { offset -> remove(offset) }
+    }
+
+    fun removeAll() {
+        val start = firstAttachedRowIndex
+        val end = start + attachedRowCount
+
+        (start until end).forEach { index ->
+            remove(index)
+        }
+    }
+
+    fun adjustTopPlaceHolder() {
+        var placeHolderCell = tableBodyElement.firstElementChild?.firstElementChild as HTMLTableCellElement?
+        val placeHolderHeight = (estimatedRowHeight * firstAttachedRowIndex).px
+        while (placeHolderCell != null) {
+            placeHolderCell.style.minHeight = placeHolderHeight
+            placeHolderCell.style.height = placeHolderHeight
+            placeHolderCell = placeHolderCell.nextElementSibling as HTMLTableCellElement?
+        }
+    }
+
+    fun adjustBottomPlaceHolder() {
+        var placeHolderCell = tableBodyElement.lastElementChild?.firstElementChild as HTMLTableCellElement?
+        val placeHolderHeight = (estimatedRowHeight * (data.size - (firstAttachedRowIndex + attachedRowCount))).px
+        while (placeHolderCell != null) {
+            placeHolderCell.style.minHeight = placeHolderHeight
+            placeHolderCell.style.height = placeHolderHeight
+            placeHolderCell = placeHolderCell.nextElementSibling as HTMLTableCellElement?
+        }
+    }
+
+    /**
+     * Calculates height of the area that shows rows.
+     */
+    fun viewHeight(): Double {
+        val containerHeight = contentContainer.element.getBoundingClientRect().height
+        val headerHeight = tableElement.firstElementChild?.firstElementChild?.getBoundingClientRect()?.height ?: styles.rowHeight.toDouble()
+
+        // if (trace) println("contentContainer height: $containerHeight thead height: $headerHeight")
+
+        // TODO subtract footer if needed
+        return containerHeight - headerHeight
+    }
+
+    fun attachedHeight(): Double {
+        val start = firstAttachedRowIndex
+        val end = start + attachedRowCount
+
+        return (start until end).sumOf { index ->
+            renderStates[index] !!.let { state ->
+                state.height ?: state.element !!.element.firstElementChild !!.getBoundingClientRect().height.also { state.height = it }
+            }
+        }
     }
 
     fun onScroll(scrollTop: Double) {
@@ -197,7 +267,7 @@ class TableSandbox<T> : ZkPage() {
             scrollTop < topBoundary -> partialEmptyAbove(scrollTop, attachedHeight)
 
             // below attached rows, EMPTY area between attached rows and scrollTop
-            scrollTop < bottomBoundary && bottomBoundary < scrollTop + viewHeight -> partialEmptyBelow(attachedHeight)
+            scrollTop < bottomBoundary && bottomBoundary < scrollTop + viewHeight -> partialEmptyBelow(scrollTop, attachedHeight)
 
             // there is no empty area
             else -> noEmpty()
@@ -209,7 +279,7 @@ class TableSandbox<T> : ZkPage() {
     fun fullEmpty(scrollTop: Double, originalAttachedHeight: Double) {
         if (trace) println("fullEmpty")
 
-        removeAllAttached()
+        removeAll()
 
         val currentTotalHeight = data.size * estimatedRowHeight - (attachedRowCount * estimatedRowHeight) + originalAttachedHeight
         val scrollPercentage = scrollTop / currentTotalHeight
@@ -223,23 +293,6 @@ class TableSandbox<T> : ZkPage() {
         adjustTopPlaceHolder()
         adjustBottomPlaceHolder()
         contentContainer.element.scrollTo(0.0, firstAttachedRowIndex * estimatedRowHeight)
-    }
-
-    fun attach(start : Int, count : Int) {
-        (start until start + count).forEach {
-            attachRow(it)
-        }
-    }
-
-    fun removeAllAttached() {
-        val start = firstAttachedRowIndex
-        val end = start + attachedRowCount
-
-        (start until end).forEach { index ->
-            renderStates[index] !!.let { state ->
-                state.element !!.element.remove()
-            }
-        }
     }
 
     fun partialEmptyAbove(scrollTop: Double, originalAttachedHeight: Double) {
@@ -271,19 +324,24 @@ class TableSandbox<T> : ZkPage() {
 
         if (trace) println("newAttachedHeight: $newAttachedHeight oldAttachedHeight: $originalAttachedHeight actualAddition : $actualAddition estimatedAddition : $estimatedAddition")
 
-    }
+        // Remove rows from the bottom if there are too many attached
 
-    fun adjustTopPlaceHolder() {
-        var placeHolderCell = tableBodyElement.firstElementChild?.firstElementChild as HTMLTableCellElement?
-        val placeHolderHeight = (estimatedRowHeight * firstAttachedRowIndex).px
-        while (placeHolderCell != null) {
-            placeHolderCell.style.minHeight = placeHolderHeight
-            placeHolderCell.style.height = placeHolderHeight
-            placeHolderCell = placeHolderCell.nextElementSibling as HTMLTableCellElement?
+        val limit = addBelowCount * 3
+
+        if (attachedRowCount > limit) {
+
+            remove(firstAttachedRowIndex + limit, firstAttachedRowIndex + attachedRowCount)
+
+            attachedRowCount = limit
+
+            adjustBottomPlaceHolder()
+
+            if (trace) println("limit adjustment: start: ${firstAttachedRowIndex + limit} end: ${firstAttachedRowIndex + attachedRowCount} limit : $limit estimatedAddition : $estimatedAddition")
         }
+
     }
 
-    fun partialEmptyBelow(originalAttachedHeight: Double) {
+    fun partialEmptyBelow(scrollTop: Double, originalAttachedHeight: Double) {
         if (trace) println("partialEmptyBelow")
 
         // Calculate the number of rows to attach, update fields, attach the rows
@@ -298,15 +356,31 @@ class TableSandbox<T> : ZkPage() {
 
         if (trace) println("newAttachedRowCount: $attachedRowCount originalAttachedRowCount: $originalAttachedRowCount")
 
-    }
+        // Remove rows from the top if there are too many attached
 
-    fun adjustBottomPlaceHolder() {
-        var placeHolderCell = tableBodyElement.lastElementChild?.firstElementChild as HTMLTableCellElement?
-        val placeHolderHeight = (estimatedRowHeight * (data.size - (firstAttachedRowIndex + attachedRowCount))).px
-        while (placeHolderCell != null) {
-            placeHolderCell.style.minHeight = placeHolderHeight
-            placeHolderCell.style.height = placeHolderHeight
-            placeHolderCell = placeHolderCell.nextElementSibling as HTMLTableCellElement?
+        val limit = addAboveCount * 3
+
+        if (attachedRowCount > limit) {
+            val start = firstAttachedRowIndex
+            val end =  firstAttachedRowIndex + attachedRowCount - limit
+
+            val actualRemoval = remove(start, end)
+
+            firstAttachedRowIndex = end
+            attachedRowCount = limit
+
+            // Calculate new attached height, so we can adjust the scroll top. This adjustment is
+            // necessary because the actual height of the removed rows may be different from
+            // the estimated row height. This difference would cause the rows still shown to
+            // change position on the screen, we don't want that.
+
+            val estimatedRemoval = (end - start) * estimatedRowHeight
+
+            contentContainer.element.scrollTop = scrollTop - (actualRemoval - estimatedRemoval)
+
+            adjustTopPlaceHolder()
+
+            if (trace) println("limit adjustment: start: $start end: $end limit : $limit estimatedRemoval : $estimatedRemoval actualRemoval: $actualRemoval")
         }
     }
 
@@ -314,30 +388,6 @@ class TableSandbox<T> : ZkPage() {
         //if (trace) println("noEmpty")
     }
 
-
-    /**
-     * Calculates height of the area that shows rows.
-     */
-    fun viewHeight(): Double {
-        val containerHeight = contentContainer.element.getBoundingClientRect().height
-        val headerHeight = tableElement.firstElementChild?.firstElementChild?.getBoundingClientRect()?.height ?: styles.rowHeight.toDouble()
-
-        // if (trace) println("contentContainer height: $containerHeight thead height: $headerHeight")
-
-        // TODO subtract footer if needed
-        return containerHeight - headerHeight
-    }
-
-    fun attachedHeight(): Double {
-        val start = firstAttachedRowIndex
-        val end = start + attachedRowCount
-
-        return (start until end).sumOf { index ->
-            renderStates[index] !!.let { state ->
-                state.height ?: state.element !!.element.firstElementChild !!.getBoundingClientRect().height.also { state.height = it }
-            }
-        }
-    }
 }
 
 class RowState {
