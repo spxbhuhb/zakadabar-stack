@@ -36,6 +36,7 @@ import zakadabar.cookbook.browser.table.export.headers.TableExportHeaders
 import zakadabar.cookbook.browser.table.indexColumn.TableIndexColumn
 import zakadabar.cookbook.browser.table.inline.TableEditInline
 import zakadabar.cookbook.browser.table.inline.TableEditInlineNoBo
+import zakadabar.cookbook.browser.table.multiLevel.TableMultiLevel
 import zakadabar.cookbook.browser.table.saveElement.TableSaveElement
 import zakadabar.cookbook.browser.table.tableInTab.TableInTab
 import zakadabar.cookbook.browser.table.variableHeight.TableVariableHeight
@@ -93,6 +94,8 @@ class Cookbook : CommonModule {
             "AttachmentsField" -> AttachmentsField()
             "ImagesField" -> ImagesField()
             "TableVariableHeight" -> TableVariableHeight()
+            "TableMultiLevel" -> TableMultiLevel()
+
 
             else -> null
 

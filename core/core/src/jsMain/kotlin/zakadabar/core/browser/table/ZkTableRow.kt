@@ -6,8 +6,11 @@ package zakadabar.core.browser.table
 import zakadabar.core.browser.ZkElement
 
 class ZkTableRow<T>(
+    var index : Int,
     var data: T,
-    var element: ZkElement? = null,
-    var height: Double? = null,
-    var searchData: Array<String>? = null
-)
+) {
+    var element: ZkElement? = null
+    var height: Double? = null
+    var level = 0
+    var levelState: ZkRowLevelState = ZkRowLevelState.Single
+}

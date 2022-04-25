@@ -103,6 +103,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     var counter = false
 
     var fixRowHeight = true
+    var multiLevel = false
 
     open val rowHeight
         get() = styles.rowHeight
@@ -119,7 +120,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     open var counterBar = ZkCounterBar("")
 
-    var trace = false
+    var traceScroll = false
+    var traceMultiLevel = true
 
     // -------------------------------------------------------------------------
     //  ZkFieldBackend
@@ -164,8 +166,14 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     var firstAttachedRowIndex = 0
     var attachedRowCount = 0
 
-    open val ROW_ID = "rid"
-    open val ROW_INDEX = "ridx"
+    /** HTMLElement.dataset key to store the ID of the row, never changes, calculated by [getRowId]  */
+    open val ROW_ID = "zkrid"
+
+    /** HTMLElement.dataset key to store the index of the row, the index shows the row index in [renderData] */
+    open val ROW_INDEX = "zkridx"
+
+    /** HTMLElement.dataset key to indicte that this is a level toggle for a multi-level row */
+    open val LEVEL_TOGGLE = "zklt"
 
     open val addAboveCount: Int
         get() = window.outerHeight / rowHeight
@@ -177,9 +185,16 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     //  State -- data of the table, search text, preloaded data
     // -------------------------------------------------------------------------
 
+    /** All the data behind the table (visible and hidden together). */
     lateinit var fullData: List<ZkTableRow<T>>
 
+    /** Filtered [fullData] (if there is a filter, equals to [fullData] otherwise).
+     *  contains all child rows in case of multi-level table.
+     */
     open lateinit var filteredData: List<ZkTableRow<T>>
+
+    /** The data to show to the user, filtered and may be closed (for multi-level tables). */
+    open lateinit var renderData: MutableList<ZkTableRow<T>>
 
     val preloads = mutableListOf<ZkTablePreload<*>>()
 
@@ -314,10 +329,17 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         val target = event.target
         if (target !is HTMLElement) return null
 
-        return target.getDatasetEntry("rid")
+        return target.getDatasetEntry(ROW_ID)
     }
 
     open fun onClick(event: Event) {
+        val target = event.target
+
+        if (target is HTMLElement && target.getDatasetEntry(LEVEL_TOGGLE) != null) {
+            toggleMultiLevelRow(renderData[target.getDatasetEntry(ROW_INDEX) !!.toInt()])
+            return
+        }
+
         if (oneClick) getRowId(event)?.let { onDblClick(it) }
     }
 
@@ -369,7 +391,9 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
                 it.job.join()
             }
 
-            fullData = data.map { ZkTableRow(it) }
+            fullData = data.mapIndexed { index, bo -> ZkTableRow(index, bo) }
+
+            buildMultiLevelState()
 
             columns.forEach { it.onTableSetData() }
 
@@ -382,6 +406,29 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         }
 
         return this
+    }
+
+    /**
+     * Builds the states for multi level rows if multi level option is enabled.
+     * By default, all top-level rows are closed.
+     */
+    open fun buildMultiLevelState() {
+        if (! multiLevel) return
+
+        var previousLevel = 0
+        check(getRowLevel(fullData[0]) == 0) { "the first row must be level 0" }
+
+        fullData.forEachIndexed { index, row ->
+
+            val level = getRowLevel(row)
+
+            if (previousLevel < level) {
+                fullData[index - 1].levelState = ZkRowLevelState.Closed
+            }
+
+            row.level = level
+            previousLevel = level
+        }
     }
 
     /**
@@ -409,7 +456,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     open fun render() {
         firstAttachedRowIndex = 0
-        attachedRowCount = min(filteredData.size, addBelowCount)
+        attachedRowCount = min(renderData.size, addBelowCount)
 
         redraw()
     }
@@ -471,7 +518,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
         element = ZkElement(document.createElement("tr") as HTMLElement) build {
 
-            val css : ZkCssStyleRule = if (fixRowHeight) styles.fixHeight else styles.variableHeight
+            val css: ZkCssStyleRule = if (fixRowHeight) styles.fixHeight else styles.variableHeight
 
             for (column in columns) {
                 + td(styles.cell) {
@@ -497,7 +544,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      */
     fun attach(index: Int) {
         // Get the state of the row or create a new one if it doesn't exist yet
-        val rowState = filteredData[index]
+        val rowState = renderData[index]
 
         // Render and attach the row
         rowState.apply {
@@ -527,14 +574,14 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         }
     }
 
-    fun remove(index : Int) : Double {
-        return filteredData[index].let { state ->
+    fun remove(index: Int): Double {
+        return renderData[index].let { state ->
             state.element !!.element.remove()
-            state.height!!
+            state.height !!
         }
     }
 
-    fun remove(start: Int, end : Int) : Double {
+    fun remove(start: Int, end: Int): Double {
         return (start until end).sumOf { offset -> remove(offset) }
     }
 
@@ -559,7 +606,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     fun adjustBottomPlaceHolder() {
         var placeHolderCell = tableBodyElement.lastElementChild?.firstElementChild as HTMLTableCellElement?
-        val placeHolderHeight = (rowHeight * (filteredData.size - (firstAttachedRowIndex + attachedRowCount))).px
+        val placeHolderHeight = (rowHeight * (renderData.size - (firstAttachedRowIndex + attachedRowCount))).px
         while (placeHolderCell != null) {
             placeHolderCell.style.minHeight = placeHolderHeight
             placeHolderCell.style.height = placeHolderHeight
@@ -588,7 +635,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         val end = start + attachedRowCount
 
         return (start until end).sumOf { index ->
-            filteredData[index].let { state ->
+            renderData[index].let { state ->
                 state.height ?: state.element !!.element.firstElementChild !!.getBoundingClientRect().height.also { state.height = it }
             }
         }
@@ -632,16 +679,16 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     }
 
     fun fullEmpty(scrollTop: Double, originalAttachedHeight: Double) {
-        if (trace) println("fullEmpty")
+        if (traceScroll) println("fullEmpty")
 
         removeAll()
 
-        val currentTotalHeight = filteredData.size * rowHeight - (attachedRowCount * rowHeight) + originalAttachedHeight
+        val currentTotalHeight = renderData.size * rowHeight - (attachedRowCount * rowHeight) + originalAttachedHeight
         val scrollPercentage = scrollTop / currentTotalHeight
-        firstAttachedRowIndex = floor(filteredData.size * scrollPercentage).toInt()
-        attachedRowCount = min(filteredData.size - firstAttachedRowIndex, addBelowCount)
+        firstAttachedRowIndex = floor(renderData.size * scrollPercentage).toInt()
+        attachedRowCount = min(renderData.size - firstAttachedRowIndex, addBelowCount)
 
-        if (trace) println("currentTotalHeight: $currentTotalHeight  scrollTop: $scrollTop firstAttachedRowIndex: $firstAttachedRowIndex attachedRowCount: $attachedRowCount")
+        if (traceScroll) println("currentTotalHeight: $currentTotalHeight  scrollTop: $scrollTop firstAttachedRowIndex: $firstAttachedRowIndex attachedRowCount: $attachedRowCount")
 
         attach(firstAttachedRowIndex, attachedRowCount)
 
@@ -651,7 +698,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     }
 
     fun partialEmptyAbove(scrollTop: Double, originalAttachedHeight: Double) {
-        if (trace) println("partialEmptyAbove")
+        if (traceScroll) println("partialEmptyAbove")
 
         // Calculate the number of rows to attach, update fields, attach the rows
 
@@ -677,7 +724,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
         adjustTopPlaceHolder()
 
-        if (trace) println("newAttachedHeight: $newAttachedHeight oldAttachedHeight: $originalAttachedHeight actualAddition : $actualAddition estimatedAddition : $estimatedAddition")
+        if (traceScroll) println("newAttachedHeight: $newAttachedHeight oldAttachedHeight: $originalAttachedHeight actualAddition : $actualAddition estimatedAddition : $estimatedAddition")
 
         // Remove rows from the bottom if there are too many attached
 
@@ -691,24 +738,24 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
             adjustBottomPlaceHolder()
 
-            if (trace) println("limit adjustment: start: ${firstAttachedRowIndex + limit} end: ${firstAttachedRowIndex + attachedRowCount} limit : $limit estimatedAddition : $estimatedAddition")
+            if (traceScroll) println("limit adjustment: start: ${firstAttachedRowIndex + limit} end: ${firstAttachedRowIndex + attachedRowCount} limit : $limit estimatedAddition : $estimatedAddition")
         }
     }
 
     fun partialEmptyBelow(scrollTop: Double) {
-        if (trace) println("partialEmptyBelow")
+        if (traceScroll) println("partialEmptyBelow")
 
         // Calculate the number of rows to attach, update fields, attach the rows
 
         val originalAttachedRowCount = attachedRowCount
 
-        attachedRowCount = min(attachedRowCount + addBelowCount, filteredData.size - firstAttachedRowIndex)
+        attachedRowCount = min(attachedRowCount + addBelowCount, renderData.size - firstAttachedRowIndex)
 
         attach(firstAttachedRowIndex + originalAttachedRowCount, attachedRowCount - originalAttachedRowCount)
 
         adjustBottomPlaceHolder()
 
-        if (trace) println("newAttachedRowCount: $attachedRowCount originalAttachedRowCount: $originalAttachedRowCount")
+        if (traceScroll) println("newAttachedRowCount: $attachedRowCount originalAttachedRowCount: $originalAttachedRowCount")
 
         // Remove rows from the top if there are too many attached
 
@@ -716,7 +763,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
         if (attachedRowCount > limit) {
             val start = firstAttachedRowIndex
-            val end =  firstAttachedRowIndex + attachedRowCount - limit
+            val end = firstAttachedRowIndex + attachedRowCount - limit
 
             val actualRemoval = remove(start, end)
 
@@ -734,12 +781,12 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
             adjustTopPlaceHolder()
 
-            if (trace) println("limit adjustment: start: $start end: $end limit : $limit estimatedRemoval : $estimatedRemoval actualRemoval: $actualRemoval")
+            if (traceScroll) println("limit adjustment: start: $start end: $end limit : $limit estimatedRemoval : $estimatedRemoval actualRemoval: $actualRemoval")
         }
     }
 
     fun noEmpty() {
-        if (trace) println("noEmpty")
+        if (traceScroll) println("noEmpty")
     }
 
     // -------------------------------------------------------------------------
@@ -849,14 +896,69 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      */
     open fun filter() {
 
-        if (searchText == null) {
+        // when there is no filter return with all the data
+        // multi-level table needs special processing because of the hidden
+        // rows, so check for that also
+
+        if (searchText == null && !multiLevel) {
             filteredData = fullData
+            renderData = filteredData.toMutableList()
             return
         }
 
         val lc = searchText?.lowercase()
 
-        filteredData = fullData.filter { filterRow(it.data, lc) }
+        // when not multi-level, perform single filtering
+
+        if (!multiLevel) {
+            filteredData = fullData.filter { filterRow(it.data, lc) }
+            renderData = filteredData.toMutableList()
+            return
+        }
+
+        // multi-level rows need special filtering:
+        // - a top level row matches: add it and add all children
+        // - a child row matches: add the top level row and all the children
+
+        val filterResult = mutableListOf<ZkTableRow<T>>()
+        val renderResult = mutableListOf<ZkTableRow<T>>()
+        var index = 0
+
+        while (index < fullData.size) {
+            val row = fullData[index]
+            var match = (searchText == null || filterRow(row.data,lc))
+
+            if (row.levelState == ZkRowLevelState.Single) {
+                println("$index ${row.levelState} ${row.level}")
+                if (match) {
+                    filterResult += row
+                    renderResult += row
+                }
+                index += 1
+                continue
+            }
+
+            val children = getChildren(fullData, index, row.level)
+
+            if (! match) match = (children.firstOrNull { filterRow(it.data, lc) } != null)
+
+            if (match) {
+                filterResult += row
+                filterResult += children
+                renderResult += row
+                println("$index ${row.levelState} ${row.level} ${children.size}")
+                if (row.levelState == ZkRowLevelState.Open) {
+                    renderResult += children
+                }
+            }
+
+            index += 1 + children.size
+        }
+
+        filteredData = filterResult
+        renderData = renderResult
+
+        if (traceMultiLevel) println("filter: filteredData.size = ${filteredData.size}  renderData.size = ${renderData.size}")
     }
 
     /**
@@ -868,6 +970,78 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             if (it.matches(row, text)) return true
         }
         return false
+    }
+
+    /**
+     * Get the level of the row. Override for multi level tables. Level 0
+     * means that the row is always shown (if not filtered out).
+     */
+    open fun getRowLevel(row : ZkTableRow<T>): Int {
+        return 0
+    }
+
+    open fun toggleMultiLevelRow(row: ZkTableRow<T>) {
+        if (row.levelState == ZkRowLevelState.Closed) {
+            openMultiLevelRow(row)
+        } else {
+            closeMultiLevelRow(row)
+        }
+    }
+
+    /**
+     * When opening a multi-level row, we have to add the child rows from [filteredData]
+     * to [renderData].
+     */
+    open fun openMultiLevelRow(row: ZkTableRow<T>) {
+
+        if (traceMultiLevel) println("openMultiLevel ${row.index}")
+
+        val renderIndex = renderData.indexOf(row)
+        val children = getChildren(filteredData, filteredData.indexOf(row), row.level)
+
+        renderData.addAll(renderIndex + 1, children)
+
+        row.levelState = ZkRowLevelState.Open
+
+        attachedRowCount += children.size
+
+        redraw() // FIXME this may not cover the whole area - maybe
+    }
+
+    open fun closeMultiLevelRow(row: ZkTableRow<T>) {
+
+        if (traceMultiLevel) println("closeMultiLevel ${row.index}")
+
+        val renderIndex = renderData.indexOf(row)
+        val children = getChildren(filteredData, filteredData.indexOf(row), row.level)
+
+        repeat(children.size) {
+            renderData.removeAt(renderIndex + 1)
+        }
+
+        row.levelState = ZkRowLevelState.Closed
+
+        attachedRowCount -= children.size
+
+        redraw() // FIXME this may not cover the whole area - maybe
+    }
+
+    open fun getChildren(from : List<ZkTableRow<T>>, fromIndex : Int, level : Int) : List<ZkTableRow<T>> {
+        var index = fromIndex + 1
+        val children = mutableListOf<ZkTableRow<T>>()
+
+        while (index < from.size) {
+            val next = from[index]
+
+            if (next.level > level) {
+                children += next
+                index ++
+            } else {
+                break
+            }
+        }
+
+        return children
     }
 
     // -------------------------------------------------------------------------

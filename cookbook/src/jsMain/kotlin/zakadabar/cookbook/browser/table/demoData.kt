@@ -7,6 +7,7 @@ import zakadabar.cookbook.cookbookStyles
 import zakadabar.cookbook.entity.builtin.ExampleBo
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.data.EntityId
+import zakadabar.core.resource.css.ZkCssStyleRule
 import zakadabar.core.util.default
 import zakadabar.core.util.fourRandomInt
 import kotlin.math.min
@@ -25,9 +26,9 @@ fun ZkTable<ExampleBo>.demoData() {
 
 }
 
-fun ZkTable<ExampleBo>.demoDataLong() {
+fun ZkTable<ExampleBo>.demoDataLong(css : ZkCssStyleRule = cookbookStyles.smallInlineTable) {
 
-    + cookbookStyles.smallInlineTable
+    + css
 
     val template = default<ExampleBo> { }
 

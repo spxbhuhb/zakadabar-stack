@@ -17,10 +17,10 @@ feel free to open an issue.
 
 ## News
 
-2022.3.21 minor improvements and bug fixes, listed in changelog
+2022.4.25 major rework of table virtualization
 
-- table counter (filtered rows / all rows)
-- stacking modals (open modal from a modal)
+**NOTE** Be careful wit 2022.4.25, i contains a major `ZkTable` change (changed virtualization
+method, added variable row height and multi-level row support).
 
 ----
 
@@ -50,7 +50,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation("hu.simplexion.zakadabar:core:2022.3.21")
+                implementation("hu.simplexion.zakadabar:core:<version>")
             }
         }
     }
