@@ -109,6 +109,7 @@ class SiteMarkdownContext(
             "IconExamples" -> IconExamples(htmlElement)
 
             "Note" -> ZkNote(htmlElement, flavour) {
+                element.style.margin = "auto"
                 title = htmlElement.dataset["zkTitle"]
                 content = zke { innerHTML = htmlElement.innerHTML }
                 htmlElement.innerHTML = ""

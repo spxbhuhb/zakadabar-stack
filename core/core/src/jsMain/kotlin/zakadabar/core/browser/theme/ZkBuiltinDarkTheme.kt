@@ -14,6 +14,9 @@ open class ZkBuiltinDarkTheme : ZkTheme {
 
     companion object {
         const val NAME = "zakadabar.stack.theme.dark"
+        init {
+            zkHtmlStyles.attachOnRefresh = true
+        }
     }
 
     override val name = NAME

@@ -521,7 +521,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             val css: ZkCssStyleRule = if (fixRowHeight) styles.fixHeight else styles.variableHeight
 
             for (column in columns) {
-                + td(styles.cell) {
+                + ZkElement(document.createElement("td") as HTMLElement) build {
+                    + styles.cell
                     + css
                     column.render(this, index, row.data)
                 }
@@ -1023,7 +1024,15 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
         attachedRowCount -= children.size
 
-        redraw() // FIXME this may not cover the whole area - maybe
+        // When there are many children, we may have to put back non-children rows
+        // at close. Otherwise, there could be an empty area under the closed
+        // row.
+
+        if (attachedRowCount - (renderIndex - firstAttachedRowIndex) < addBelowCount) {
+            attachedRowCount += addBelowCount
+        }
+
+        redraw()
     }
 
     open fun getChildren(from : List<ZkTableRow<T>>, fromIndex : Int, level : Int) : List<ZkTableRow<T>> {

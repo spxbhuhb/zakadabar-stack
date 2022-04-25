@@ -2,8 +2,6 @@
 
 * CSS grid for layout
 * virtualization
-  * intersection observer based
-  * up to 100.000 rows, see [performance](#Performance)
 * search and sort a bit slow for 100.000 rows, but it's acceptable for now
 * features:
   * automatic header text translation based on property name
@@ -12,6 +10,8 @@
   * search (type into search field and Enter or click the icon)
   * CSV export
   * preload data dependencies before render
+  * variable row height
+  * multi-level rows
   
 ## Write a Table
 
@@ -253,6 +253,82 @@ Use the `custom` function to add a column:
 
 Example: [Custom Table Column](/doc/cookbook/browser/table/customColumn/recipe.md)
 
+## Variable Row Height
+
+To have variable row heights, set `fixedRowHeight` to `false` in `onConfigure`:
+
+```kotlin
+override fun onConfigure() {
+    fixedRowHeight = false
+}
+```
+
+Example: [Variable Table Row Height](/doc/cookbook/browser/table/variableHeight/recipe.md)
+
+## Multi Level Rows
+
+Multi-level rows provide a way to group and hide rows based on a parent-child
+relationship. The user can see a small icon when child rows exist and 
+click on the icon to display / hide the children.
+
+<div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Work in Progress">
+
+This function is under development at the moment. Most notably, sorting does not
+work when multi level is enabled.
+
+Also, as of now, this function is tested only for 2 levels.
+
+</div>
+
+<div data-zk-enrich="TableMultiLevel"></div>
+
+To have row groups:
+
+- set  `multiLevel` to `true` in `onConfigure`
+- add a `ZkLevelColumn` column to the table
+- override the `getRowLevel` function
+
+```kotlin
+override fun onConfigure() {
+    multiLevel = true
+    + ZkLevelColumn(this)
+}
+
+override fun getRowLevel(row : ZkTableRow<T>): Int {
+    return 0    
+}
+```
+
+Example: [Multi Level Rows](/doc/cookbook/browser/table/multiLevel/recipe.md)
+
+Top-most row level is. Rows with non-zero level are hidden under the top
+level row by default.
+
+The list passed to `setData` has to contain rows in proper order, child rows
+have to follow the parent row. For example:
+
+```text
+row-1
+row-1-1
+row-1-2
+row-2
+row-2-1
+```
+
+`ZkTableRow` contains the current state of the row. It is passed to `getRowLevel`,
+there are two properties you might want to use:
+
+- `index`: index of the row in `ZkTable.fullData`
+- `data`: the row BO
+
+Styling:
+
+- `ZkTableStyles.multiLevelColor` specifies the background color child rows use in the level column
+- `ZkTableStyles.multiLevelBorder` specifies the right border child rows use in the level column.
+- `ZkTable.multiLevelOpen` is the style added to the level column of open rows
+- `ZkTable.multiLevelClosed` is the style added to the level column of closed rows 
+- `ZkTable.multiLevelSingle` is the style added to the level column of single (without children) rows
+
 ## Preload
 
 Preload is for situations when you don't want to build the actual row content on server side but compose it on client
@@ -374,16 +450,3 @@ object Table : ZkPage() {
 This table contains 10.000 generated rows.
 
 <div data-zk-enrich="TableBigExample"></div>
-
-## Performance
-
-The table should work properly up to 100.000 rows.
-
-With 1.000.000:
-
-* rendering is slowed down because the intersection observer has to handle large number of areas
-* Safari lags big time
-* Firefox shows 426086 as last row
-
-The solution for these would be to use fewer areas and improve row position handling. However, in that case the
-scrollbar position problems might arise.

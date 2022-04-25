@@ -5,6 +5,7 @@
 package zakadabar.cookbook.browser.table.variableHeight
 
 import zakadabar.cookbook.browser.table.demoDataLong
+import zakadabar.cookbook.cookbookStyles
 import zakadabar.cookbook.entity.builtin.ExampleBo
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.browser.toast.toastSuccess
@@ -33,7 +34,7 @@ class TableVariableHeight : ZkTable<ExampleBo>() {
 
     override fun onCreate() {
         super.onCreate()
-        demoDataLong()
+        demoDataLong(css = cookbookStyles.inlineTable)
     }
 
     override fun getRowId(row: ExampleBo) =

@@ -11,15 +11,14 @@ import zakadabar.core.data.BaseBo
 import zakadabar.core.resource.ZkIconSource
 import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.css.em
-import zakadabar.core.resource.theme
 
 open class ZkLevelColumn<T : BaseBo>(
     table: ZkTable<T>,
-    val openIcon : ZkIconSource = ZkIcons.arrowRight,
-    val closeIcon : ZkIconSource = ZkIcons.arrowDropDown
+    val openIcon: ZkIconSource = ZkIcons.arrowRight,
+    val closeIcon: ZkIconSource = ZkIcons.arrowDropDown
 ) : ZkColumn<T>(table) {
 
-    override var max = 2.em
+    override var max = 2.7.em
 
     override var exportable: Boolean = false
 
@@ -29,6 +28,7 @@ open class ZkLevelColumn<T : BaseBo>(
 
         with(cell) {
             + zke {
+
                 when (levelState) {
                     ZkRowLevelState.Single -> null
                     ZkRowLevelState.Open -> closeIcon.svg(24)
@@ -43,8 +43,16 @@ open class ZkLevelColumn<T : BaseBo>(
                 }
             }
 
-            if (levelState == ZkRowLevelState.Single && rowState.level != 0) {
-                element.style.backgroundColor = theme.secondaryColor
+            if (rowState.level != 0) {
+                + table.styles.multiLevelSingle
+            }
+
+            if (rowState.level == 0) {
+                if (levelState == ZkRowLevelState.Open) {
+                    + table.styles.multiLevelOpen
+                } else {
+                    + table.styles.multiLevelClosed
+                }
             }
         }
     }

@@ -14,6 +14,9 @@ open class ZkBuiltinLightTheme : ZkTheme {
 
     companion object {
         const val NAME = "zakadabar.stack.theme.light"
+        init {
+            zkHtmlStyles.attachOnRefresh = true
+        }
     }
 
     override val name = NAME

@@ -6,6 +6,7 @@ package zakadabar.core.browser.table
 import zakadabar.core.browser.field.ZkFieldStyles
 import zakadabar.core.resource.css.*
 import zakadabar.core.util.PublicApi
+import zakadabar.core.util.alpha
 
 var zkTableStyles by cssStyleSheet(ZkTableStyles())
 
@@ -24,6 +25,8 @@ open class ZkTableStyles : ZkFieldStyles() {
     open var actionTextColor by cssParameter { theme.primaryColor }
     open var controlColor by cssParameter { theme.primaryColor }
     open var rowHeight by cssParameter { 42 }
+    open var multiLevelColor by cssParameter { theme.disabledColor.alpha(0.2) }
+    open var multiLevelBorder by cssParameter { theme.fixBorder }
 
     override var fieldHeight by cssParameter { 32 }
 
@@ -272,4 +275,14 @@ open class ZkTableStyles : ZkFieldStyles() {
         + Cursor.pointer
     }
 
+    open val multiLevelOpen by cssClass {
+    }
+
+    open val multiLevelClosed by cssClass {
+    }
+
+    open val multiLevelSingle by cssClass {
+        backgroundColor = multiLevelColor
+        borderRight = multiLevelBorder
+    }
 }
