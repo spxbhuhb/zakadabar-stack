@@ -3,15 +3,18 @@
  */
 package zakadabar.lib.schedule.business
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import zakadabar.core.comm.CommConfig
 import zakadabar.core.data.EntityId
+import zakadabar.core.module.module
 import zakadabar.core.util.UUID
-import zakadabar.core.util.fork
 import zakadabar.lib.schedule.data.Job
 import zakadabar.lib.schedule.data.PushJob
 import zakadabar.lib.schedule.data.Subscription
@@ -22,12 +25,16 @@ class Dispatcher(
 ) {
     val events = Channel<DispatcherEvent>(UNLIMITED)
 
-    var coroutine = fork { run() }
+    val localScope = CoroutineScope(Dispatchers.IO)
+
+    var coroutine = localScope.launch { run() }
+
+    val subsciptionBl by module<SubscriptionBl>()
 
     @Serializable
     class JobEntry(
         val id: EntityId<Job>,
-        val createdBy : UUID,
+        val createdBy: UUID,
         val startAt: Instant?,
         val actionNamespace: String,
         val actionType: String,
@@ -38,7 +45,7 @@ class Dispatcher(
     class SubscriptionEntry(
         val id: EntityId<Subscription>,
         val nodeId: UUID,
-        val nodeComm : CommConfig,
+        val nodeComm: CommConfig,
         var reuse: Boolean
     )
 
@@ -56,15 +63,19 @@ class Dispatcher(
     suspend fun run() {
         for (event in events) {
             jobBl.logger.debug("dispatcher event: $event")
-            when (event) {
-                is PendingCheckEvent -> onPendingCheck()
-                is JobCreateEvent -> onJobCreate(event)
-                is JobSuccessEvent -> onJobSuccess(event)
-                is JobFailEvent -> onJobFail(event)
-                is RequestJobCancelEvent -> onRequestJobCancel(event)
-                is SubscriptionCreateEvent -> onSubscriptionCreate(event)
-                is SubscriptionDeleteEvent -> onSubscriptionDelete(event)
-                is PushFailEvent -> onPushFail(event)
+            try {
+                when (event) {
+                    is PendingCheckEvent -> onPendingCheck()
+                    is JobCreateEvent -> onJobCreate(event)
+                    is JobSuccessEvent -> onJobSuccess(event)
+                    is JobFailEvent -> onJobFail(event)
+                    is RequestJobCancelEvent -> onRequestJobCancel(event)
+                    is SubscriptionCreateEvent -> onSubscriptionCreate(event)
+                    is SubscriptionDeleteEvent -> onSubscriptionDelete(event)
+                    is PushFailEvent -> onPushFail(event)
+                }
+            } catch (ex: Exception) {
+                jobBl.logger.error("dispatcher error (event=$event)", ex)
             }
         }
     }
@@ -124,6 +135,7 @@ class Dispatcher(
         if (event.retryAt != null && runEntry != null) {
             addJobEntry(event, runEntry.job.createdBy, event.actionData, event.retryAt) // calls pushJobs
         }
+        pushJobs()
     }
 
     fun onRequestJobCancel(event: RequestJobCancelEvent) {
@@ -131,13 +143,13 @@ class Dispatcher(
 
         pendingJobs.indexOfFirst { it.id == id }.takeIf { it != - 1 }?.also {
             pendingJobs.removeAt(it)
-            fork { jobBl.jobCancel(id) }
+            localScope.launch { jobBl.jobCancel(id) }
             return
         }
 
         runnableJobs.indexOfFirst { it.id == id }.takeIf { it != - 1 }?.also {
             runnableJobs.removeAt(it)
-            fork { jobBl.jobCancel(id) }
+            localScope.launch { jobBl.jobCancel(id) }
             return
         }
 
@@ -190,7 +202,7 @@ class Dispatcher(
         while (idleSubscriptions.isNotEmpty() && runnableJobs.isNotEmpty()) {
             val entry = RunEntry(runnableJobs.removeAt(0), idleSubscriptions.removeAt(0))
             runningJobs += entry
-            fork { pushJob(entry) }
+            localScope.launch { pushJob(entry) }
         }
     }
 
@@ -226,9 +238,12 @@ class Dispatcher(
     }
 
     fun onPushFail(event: PushFailEvent) {
-        // do not reuse this subscription
         // FIXME what if the error is because of the job
         val entry = takeRunEntry(event.jobId, false) ?: return
+
+        // do not reuse this subscription, delete from DB
+        subsciptionBl.pa.delete(entry.subscription.id)
+
         runnableJobs.add(0, entry.job)
         pushJobs()
     }

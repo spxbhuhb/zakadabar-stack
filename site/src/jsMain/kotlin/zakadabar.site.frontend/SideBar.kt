@@ -31,8 +31,9 @@ class SideBar : ZkSideBar() {
             }
 
             + section(strings.tools) {
-                + item(BenderPage, text = strings.bender)
+                + item(Search)
                 + item<Cookbook>()
+                + item(BenderPage, text = strings.bender)
             }
 
             + section(strings.documentation) {

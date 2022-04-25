@@ -26,6 +26,7 @@ include("lib:blobs")
 include("lib:email")
 include("lib:examples")
 include("lib:i18n")
+include("lib:lucene")
 include("lib:markdown")
 include("lib:schedule")
 

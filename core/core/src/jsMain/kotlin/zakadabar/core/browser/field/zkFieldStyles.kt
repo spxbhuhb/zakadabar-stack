@@ -13,6 +13,11 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
 
     open var fieldHeight by cssParameter { 38 }
 
+    /**
+     * Indent of the selected entry and the popup from the left part of the field.
+     */
+    open var indent by cssParameter { 8 }
+
     // -------------------------------------------------------------------------
     // Field Base
     // -------------------------------------------------------------------------
@@ -233,7 +238,7 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         maxWidth = 100.percent
         minHeight = fieldHeight.px
         borderBottom = "1px solid ${theme.borderColor}"
-        paddingLeft = 8.px
+        paddingLeft = indent.px
 
         on(":hover") {
             color = theme.hoverTextColor

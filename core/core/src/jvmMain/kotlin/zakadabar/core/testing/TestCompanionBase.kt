@@ -3,10 +3,7 @@
  */
 package zakadabar.core.testing
 
-import zakadabar.core.authorize.AppRolesBase
-import zakadabar.core.authorize.RoleBlProvider
-import zakadabar.core.authorize.SimpleRoleAuthorizerProvider
-import zakadabar.core.authorize.appRoles
+import zakadabar.core.authorize.*
 import zakadabar.core.comm.CommConfig
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityId
@@ -16,6 +13,7 @@ import zakadabar.core.route.RoutedModule
 import zakadabar.core.server.Server
 import zakadabar.core.server.server
 import zakadabar.core.testing.TestCompanionBase.MockRoleBlProvider
+import zakadabar.core.util.UUID
 
 /**
  * Helper class for unit tests. Starts a Ktor server with an
@@ -49,6 +47,10 @@ open class TestCompanionBase(
     open fun onAfterStarted() {
 
     }
+
+    val mockAnonymous = Executor(EntityId(0), UUID.NIL, true, emptyList(), emptyList())
+    val mockLoggedIn = Executor(EntityId(0), UUID.NIL, false, emptyList(), emptyList())
+    val mockSo = Executor(EntityId(0), UUID.NIL, false, listOf(EntityId(0)), listOf("security-officer"))
 
     open fun setup() {
         modules.logger = Slf4jLogger("modules") // replace the stdout logger with LOGBack

@@ -25,6 +25,8 @@ import zakadabar.core.util.UUID
  *  @param  actionData       JSON data of the action that performs this job.
  *  @param  worker           The worker this job runs or will run on.
  *  @param  failCount        Number of failed run attempts.
+ *  @param  retryCount       Number of retry attempts to perfom if the job fails.
+ *  @param  retryInterval    Interval between retries, seconds.
  *  @param  lastFailData     JSON data that belongs to the fail policy and contains
  *                           details about the last failure.
  *  @param  deleteOnSuccess  Delete this job if it finishes successfully.
@@ -47,6 +49,8 @@ class Job(
     var actionData : String,
     var worker : UUID?,
     var failCount: Int,
+    var retryCount: Int,
+    var retryInterval: Int,
     var lastFailedAt: Instant?,
     var lastFailMessage : String?,
     var lastFailData : String?,
@@ -77,6 +81,8 @@ class Job(
         + ::actionData blank false
         + ::worker
         + ::failCount
+        + ::retryCount
+        + ::retryInterval
         + ::lastFailedAt
         + ::lastFailMessage
         + ::lastFailData

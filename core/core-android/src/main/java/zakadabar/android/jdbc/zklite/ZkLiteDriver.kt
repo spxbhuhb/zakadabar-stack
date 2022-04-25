@@ -43,6 +43,20 @@ class ZkLiteDriver : Driver {
         var driverName = "SQLite JDBC" // Exposed fails without this
         var databaseProductName = "SQLite for Android"
 
+        /**
+         * When true [ZkLiteResultSet.getObject] returns with a [ByteArray] instead
+         * of a [ZkLiteBlob].
+         *
+         * Default is false (returns with ZkLiteBlob).
+         *
+         * The default behaviour of the SQLDroid driver (on which this ZkLite driver based on)
+         * is to return with [ZkLiteBlob].
+         *
+         * This flag was introduced to let Exposed handle UUID data types without the need
+         * of a modified SQLite dialect.
+         */
+        var useByteArrayBlob = false
+
         init {
             DriverManager.registerDriver(ZkLiteDriver())
         }

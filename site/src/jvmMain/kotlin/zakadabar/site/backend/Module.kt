@@ -6,37 +6,44 @@ package zakadabar.site.backend
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.cookbook.entity.builtin.ExampleReferenceBl
 import zakadabar.cookbook.entity.builtin.ExampleReferenceBo
+import zakadabar.core.authorize.AccountBlProvider
 import zakadabar.core.authorize.SimpleRoleAuthorizerProvider
 import zakadabar.core.data.EntityId
 import zakadabar.core.module.modules
 import zakadabar.core.route.RoutedModule
-import zakadabar.core.server.server
 import zakadabar.core.server.util.ContentBackend
 import zakadabar.core.util.PublicApi
 import zakadabar.lib.examples.backend.builtin.BuiltinBl
 import zakadabar.lib.examples.backend.data.SimpleExampleBl
+import zakadabar.lib.lucene.business.LuceneBl
+import zakadabar.lib.lucene.data.UpdateIndex
 import zakadabar.site.backend.business.RecipeBl
 
 @PublicApi
 object Module : RoutedModule {
 
     override fun onModuleLoad() {
-        server += ContentBackend("content")
-        server += RecipeBl()
+        modules += ContentBackend("content")
+        modules += RecipeBl()
 
-        server += SimpleRoleAuthorizerProvider {
+        modules += SimpleRoleAuthorizerProvider {
             all = PUBLIC
         }
 
         // these are from lib:examples
-        server += SimpleExampleBl()
-        server += BuiltinBl()
-        server += zakadabar.lib.examples.backend.builtin.ExampleReferenceBl()
+        modules += SimpleExampleBl()
+        modules += BuiltinBl()
+        modules += zakadabar.lib.examples.backend.builtin.ExampleReferenceBl()
 
+        zakadabar.lib.accounts.install()
+        zakadabar.lib.lucene.install()
         zakadabar.cookbook.install()
     }
 
     override fun onModuleStart() {
+
+        // Create example BOs, so CRUDs will contains some data
+
         transaction {
             val pa = modules.first<ExampleReferenceBl>().pa
 
@@ -46,5 +53,15 @@ object Module : RoutedModule {
                 }
             }
         }
+
+    }
+
+    override fun onAfterOpen() {
+        super.onAfterOpen()
+
+        // Perform a Lucene index update
+
+        val executor = modules.first<AccountBlProvider>().executorFor("so")
+        modules.first<LuceneBl>().updateIndex(executor, UpdateIndex())
     }
 }

@@ -43,6 +43,11 @@ interface AccountBlProvider {
     /**
      * Get an [Executor] for the account with the given UUID.
      *
+     * **This function DOES NOT WORK on Android!**
+     *
+     * I think it is because the SQLite Driver + Exposed combination does not compare
+     * BLOBs/ByteArrays properly.
+     *
      * **Use with care, bypasses authentication!**
      */
     fun executorFor(uuid : UUID) : Executor {

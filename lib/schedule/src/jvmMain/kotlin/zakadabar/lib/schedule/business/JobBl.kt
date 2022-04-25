@@ -3,23 +3,24 @@
  */
 package zakadabar.lib.schedule.business
 
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.trySendBlocking
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.Instant
+import kotlinx.datetime.plus
 import kotlinx.serialization.Serializable
 import zakadabar.core.authorize.AccountBlProvider
 import zakadabar.core.authorize.Executor
 import zakadabar.core.authorize.SimpleRoleAuthorizer
 import zakadabar.core.business.EntityBusinessLogicBase
-import zakadabar.core.data.ActionStatus
 import zakadabar.core.data.EntityId
 import zakadabar.core.module.module
 import zakadabar.core.util.Lock
 import zakadabar.core.util.UUID
-import zakadabar.core.util.fork
 import zakadabar.core.util.use
 import zakadabar.lib.schedule.data.*
+import zakadabar.lib.schedule.data.Job
 import zakadabar.lib.schedule.peristence.JobPa
 import kotlin.coroutines.coroutineContext
 
@@ -43,6 +44,8 @@ open class JobBl(
     protected val dispatcherLock = Lock()
 
     protected val pendingCheckEvent = PendingCheckEvent()
+
+    protected val localScope = CoroutineScope(Dispatchers.IO)
 
     @Serializable
     data class DispatcherKey( // data class, so hash and equals uses fields
@@ -69,6 +72,7 @@ open class JobBl(
         action(JobCancel::class, workerRole)
 
         action(RequestJobCancel::class, adminRole)
+        query(JobSummary::class, adminRole)
     }
 
     override val router = router {
@@ -78,6 +82,7 @@ open class JobBl(
         action(JobCancel::class, ::jobCancel)
 
         action(RequestJobCancel::class, ::requestJobCancel)
+        query(JobSummary::class, ::jobSummary)
     }
 
     val Job.completed
@@ -85,12 +90,21 @@ open class JobBl(
 
     override fun onModuleStart() {
         super.onModuleStart()
-        periodic = fork { run() }
+        periodic = localScope.launch { run() }
+    }
+
+    override fun onInitializeDb() {
+        super.onInitializeDb()
+        pa.readPendingJobs().forEach {
+            it.dispatch()
+        }
     }
 
     override fun onModuleStop() {
-        periodic.cancel()
-        // TODO stop and join dispatchers
+        localScope.cancel()
+        dispatchers.values.forEach {
+            it.localScope.cancel()
+        }
         super.onModuleStop()
     }
 
@@ -105,18 +119,18 @@ open class JobBl(
         }
     }
 
-    fun removePending(dispatcher : Dispatcher) {
+    fun removePending(dispatcher: Dispatcher) {
         dispatcherLock.use {
             pendingDispatchers.removeAll { it == dispatcher }
         }
     }
 
-    fun addPending(dispatcher : Dispatcher) {
+    fun addPending(dispatcher: Dispatcher) {
         dispatcherLock.use {
             pendingDispatchers
                 .indexOf(dispatcher)
                 .let {
-                    if (it == -1) pendingDispatchers.add(dispatcher)
+                    if (it == - 1) pendingDispatchers.add(dispatcher)
                 }
         }
     }
@@ -148,7 +162,7 @@ open class JobBl(
         // no need to notify the dispatcher, succeeded or failed jobs are not in it
     }
 
-    open fun jobSuccess(executor: Executor, action: JobSuccess): ActionStatus {
+    open fun jobSuccess(executor: Executor, action: JobSuccess) {
         val job = pa.read(action.jobId)
 
         check(! job.completed) { "job has been already completed" }
@@ -166,10 +180,9 @@ open class JobBl(
             specific = job.specific
         ).dispatch()
 
-        return ActionStatus()
     }
 
-    open fun jobProgress(executor: Executor, action: JobProgress): ActionStatus {
+    open fun jobProgress(executor: Executor, action: JobProgress) {
         val job = pa.read(action.jobId)
 
         check(! job.completed) { "job has been already completed" }
@@ -181,24 +194,39 @@ open class JobBl(
 
         pa.update(job)
 
-        return ActionStatus()
     }
 
-    open fun jobFail(executor: Executor, action: JobFail): ActionStatus {
+    open fun jobFail(executor: Executor, action: JobFail) {
         val job = pa.read(action.jobId)
 
         check(! job.completed) { "job has been already completed" }
 
-        if (action.retryAt == null) {
-            job.status = JobStatus.Failed
-        } else {
-            job.status = JobStatus.Pending
-            job.startAt = action.retryAt
-        }
+        val now = Clock.System.now()
 
         job.failCount ++
         job.progress = 0.0
+        job.lastFailedAt = now
+        job.lastFailMessage = action.lastFailMessage
         job.lastFailData = action.lastFailData
+
+        // retry = 0, fail = 1 -> no retry
+        // retry = 1, fail = 1 -> retry
+        // retry = 1, fail = 2 -> no retry
+        // retry = 2, fail = 1 -> retry
+        // retry = 2, fail = 2 -> retry
+        // retry = 2, fail = 3 -> no retry
+
+        var retryAt : Instant? = null
+
+        if (job.retryCount < job.failCount) {
+            // no retry
+            job.status = JobStatus.Failed
+        } else {
+            // retry
+            job.status = JobStatus.Pending
+            retryAt = action.retryAt ?: now.plus(job.retryInterval, DateTimeUnit.SECOND)
+            job.startAt = retryAt // so, system restart won't start the job immediately
+        }
 
         pa.update(job)
 
@@ -207,17 +235,16 @@ open class JobBl(
             actionType = job.actionType,
             jobId = job.id,
             specific = job.specific,
-            retryAt = action.retryAt,
+            retryAt = retryAt,
             actionData = job.actionData
         ).dispatch()
 
-        return ActionStatus()
     }
 
-    open fun jobCancel(executor: Executor, action: JobCancel): ActionStatus =
+    open fun jobCancel(executor: Executor, action: JobCancel) =
         jobCancel(action.jobId)
 
-    open fun jobCancel(id: EntityId<Job>): ActionStatus {
+    open fun jobCancel(id: EntityId<Job>) {
 
         pa.withTransaction { // jobCancel is called from Dispatchers, so we need a transaction
 
@@ -237,10 +264,9 @@ open class JobBl(
             ).dispatch()
         }
 
-        return ActionStatus()
     }
 
-    open fun requestJobCancel(executor: Executor, action: RequestJobCancel): ActionStatus {
+    open fun requestJobCancel(executor: Executor, action: RequestJobCancel) {
         val job = pa.read(action.jobId)
 
         check(! job.completed) { "job has been already completed" }
@@ -252,8 +278,10 @@ open class JobBl(
             specific = job.specific
         ).dispatch()
 
-        return ActionStatus()
     }
+
+    open fun jobSummary(executor: Executor, query : JobSummary) : List<JobSummaryEntry> =
+        pa.jobSummary()
 
     open fun assignNode(jobId: EntityId<Job>, node: UUID) {
         pa.withTransaction {

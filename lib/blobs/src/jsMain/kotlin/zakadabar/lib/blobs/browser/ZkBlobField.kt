@@ -61,6 +61,7 @@ import kotlin.reflect.KClass
  * @param   disposition      Disposition of images, saved to the `disposition` field of the image.
  * @param   blobClass        The class of blob instances. When no special initialization is needed,
  *                           the field can create the blobs by itself from this class.
+ * @param   hideUpload       Function to decide if the upload area is hidden or nor. Default returns with "false".
  * @param   makeBlobCb       Callback function to make a blob instance.
  */
 abstract class ZkBlobField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
@@ -70,10 +71,9 @@ abstract class ZkBlobField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
     open val blobCountMax: Int? = null,
     open val disposition: String? = null,
     open val blobClass: KClass<BT>? = null,
-    @Deprecated("EOL: 2021.8.1  -  use blobClass or makeBlobCb instead")
-    open val make: ((File) -> BT)? = null,
-    open val makeBlobCb: ((File) -> BT)? = make
-) : ZkFieldBase<Unit,ZkBlobField<T,BT>>(
+    open val hideUpload: () -> Boolean = { false },
+    open val makeBlobCb: ((File) -> BT)? = null
+) : ZkFieldBase<Unit, ZkBlobField<T, BT>>(
     context = form,
     propName = ""
 ) {
@@ -94,26 +94,29 @@ abstract class ZkBlobField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
                 }
             }
 
-            droparea = zke {
+            if (! hideUpload()) {
+                droparea = zke {
 
-                + div(blobStyles.imageDropArea) {
-                    + column(blobStyles.imageDropAreaMessage) {
-                        + AlignItems.center
-                        + ZkButton(ZkIcons.cloudUpload, flavour = ZkFlavour.Custom) marginBottom 10
-                        + div {
-                            buildPoint.style.whiteSpace = "nowrap"
-                            + localizedStrings.dropFilesHere
+                    + div(blobStyles.imageDropArea) {
+                        + column(blobStyles.imageDropAreaMessage) {
+                            + AlignItems.center
+                            + ZkButton(ZkIcons.cloudUpload, flavour = ZkFlavour.Custom) marginBottom 10
+                            + div {
+                                buildPoint.style.whiteSpace = "nowrap"
+                                + localizedStrings.dropFilesHere
+                            }
                         }
                     }
-                }
 
-                on("drop", ::onDrop)
-                on("dragover", ::onDragOver)
+                    on("drop", ::onDrop)
+                    on("dragover", ::onDragOver)
 
-            } marginRight 10 marginBottom 10
+                } marginRight 10 marginBottom 10
 
-            + droparea
-            updateDropArea()
+
+                + droparea
+                updateDropArea()
+            }
         }
     }
 
@@ -196,11 +199,17 @@ abstract class ZkBlobField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
         }
     }
 
+    /**
+     * Checks if the current state of the field allows upload. Do not
+     * confuse with [hideUpload] that completely disables the upload
+     * functionality.
+     */
     open fun allowUpload(): Boolean {
         return blobCountMax?.let { max -> max - childElements.count { it is ZkBlobFieldEntry<*> } > 0 } ?: true
     }
 
     open fun updateDropArea() {
+        if (hideUpload()) return
         if (allowUpload()) {
             droparea.show()
         } else {

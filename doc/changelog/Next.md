@@ -6,45 +6,31 @@ This page contains the changes included in the next release.
 not major modifications and in most cases they should not break anything. Notes after the marker
 are the places worth to check. If you extended them you may have to apply the change to your own class also.
 
-
 ## Core
 
 **added**
 
-- option for local communication (no HTTP/Ktor) inside the same VM
-- option to specify communication overrides (baseUrl, namespace, etc.) per call or per class
-- `CommConfig` class to store global configuration parameters and provide helper functions
-- `commConfig` property (null by default) to constructor of `ActionBoCompanion`, `EntityBoCompanion`, `QueryBoCompanion`
-- `executor` and `config` optional parameter for all comm methods
-- `AccountPublicV2` contains the UUID of the account, decided to keep the original as it is to avoid compatibility problems
-- `AccountBlProvider` new functions: 
-  - `anonymousV2`
-  - `readPublicV2`
-  - `autheticateV2`
-  - `executorFor(String)` - dangerous, avoids authentication
-  - `executorFor(UUID)` - dangerous, avoids authentication
-  
+- `dropColumnIfExists` convenience method for Exposed tables
+
 **changed**
 
-- `Executor` now contains the UUID of the account **low** (add the UUID if you manually create an executor)
-- `CommBase.baseUrl` is now deprecated, replace with `CommConfig.global = CommConfig("https:/...")`
-- `BlobComm.upload` now has additional parameters **very low** (pass callback as named parameter)
-- `ZkFullScreenImageView` has a `deleteButton` constructor parameter **very low** (add the parameter to the call)
-- `ZkImagePreview` has a `deleteButton` constructor parameter **very low** (add the parameter to the call)
+- select field dropdown width is now aligned with field width #102
+- `UUID` now uses a string serializer instead of the default
 
-## Lib:Markdown
+**removed**
+
+- `zakadabar.core.util.fork` function (create a CoroutineScope and use launch)
+
+## Lib: Schedule
+
+**fixed**
+
+- loading UUID from the Yaml configuration file now works for string UUID
+- subscription persistence handling problems
+- DB upgrade problem with the `node_address` column
+
+## Android
 
 **added**
 
-- `shell` language
-
-## Lib:Schedule
-
-**changed**
-
-- major refactor, works with authentication/multiple workers
-
-## Cookbook
-
-- added `Upload And Download Attachments` recipe
-- added `Upload and Download Images` recipe
+- `ZkLiteDriver.useByteArrayBlob` when `true` the ResultSet returns with ByteArray instead of ZkLiteBlob

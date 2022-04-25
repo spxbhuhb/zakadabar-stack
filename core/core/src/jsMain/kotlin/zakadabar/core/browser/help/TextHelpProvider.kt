@@ -5,16 +5,16 @@ package zakadabar.core.browser.help
 
 import org.w3c.dom.HTMLElement
 import zakadabar.core.browser.modal.modalMessage
+import zakadabar.core.browser.util.io
 import zakadabar.core.module.CommonModule
 import zakadabar.core.resource.localized
 import zakadabar.core.resource.localizedStrings
-import zakadabar.core.util.fork
 
 open class TextHelpProvider : CommonModule, HelpProvider {
 
     override fun showHelp(anchorElement: HTMLElement, args: Any) {
         val content = args.toString().localized
-        fork {
+        io {
             modalMessage(localizedStrings.helpTitle, content)
         }
     }

@@ -10,9 +10,8 @@ import com.zaxxer.hikari.HikariDataSource
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.statements.jdbc.JdbcConnectionImpl
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
@@ -68,6 +67,25 @@ object Sql : SqlProvider {
         if (noDbSchemaUpdate) return
         transaction {
             SchemaUtils.createMissingTablesAndColumns(*tables.toTypedArray())
+        }
+    }
+
+    /**
+     * Drop the given column from the table if it exists. As of now, Exposed does
+     * not support "IF EXIST".
+     */
+    fun Transaction.dropColumnIfExists(table : Table, column : String) {
+        if (this.connection is JdbcConnectionImpl) {
+            this.connection.metadata {
+                val columns = columns(table)[table] ?: emptyList()
+                if (columns.find { it.name.lowercase() == "node_address" } != null) {
+                    Column<String>(table, "node_address", TextColumnType())
+                        .dropStatement()
+                        .forEach { statement ->
+                            exec(statement)
+                        }
+                }
+            }
         }
     }
 }

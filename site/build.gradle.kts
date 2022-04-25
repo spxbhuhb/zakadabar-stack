@@ -51,6 +51,7 @@ kotlin {
         implementation(project(":lib:examples"))
         implementation(project(":lib:bender"))
         implementation(project(":lib:markdown"))
+        implementation(project(":lib:lucene"))
         implementation(project(":cookbook"))
     }
     
@@ -62,6 +63,7 @@ kotlin {
 
 tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
     // seems like this does not work - minimize()
+    mergeServiceFiles()
 }
 
 apply(plugin = "zk-sync-build-info")

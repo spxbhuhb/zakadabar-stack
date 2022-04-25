@@ -4,10 +4,12 @@
 package zakadabar.lib.schedule.peristence
 
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import zakadabar.core.comm.CommConfig
 import zakadabar.core.persistence.exposed.ExposedPaBase
 import zakadabar.core.persistence.exposed.entityId
+import zakadabar.core.util.UUID
 import zakadabar.core.util.toJavaUuid
 import zakadabar.core.util.toStackUuid
 import zakadabar.lib.schedule.data.Subscription
@@ -36,4 +38,9 @@ open class SubscriptionPa : ExposedPaBase<Subscription, SubscriptionTable>(
         this[table.actionNamespace] = bo.actionNamespace
         this[table.actionType] = bo.actionType
     }
+
+    fun delete(uuid : UUID) =
+        table
+            .deleteWhere { table.nodeId eq uuid.toJavaUuid() }
+
 }

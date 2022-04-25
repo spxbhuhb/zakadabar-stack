@@ -11,6 +11,21 @@ internal val strings = SiteStrings()
 
 class SiteStrings : ExamplesStrings() {
 
+    val searchTermNeeded by "Please type in a search term."
+    val searchInfo by """
+        The search function is under development. It should work, mostly.
+        <br>
+        <br>
+        Use `*` at the end of the term for partial search. For example `auth*` looks
+        for everything that starts with `auth`. 
+        <br>
+        <br>
+    """.trimIndent()
+    val status by "Status"
+    val results by "Results"
+    val recipies by "Recipies"
+    val guides by "Guides"
+    val changelog by "Changelog"
     val projectStatus by "Project Status"
     val designDecisions by "Design Decisions"
     val servicesAndSupport by "Services And Support"

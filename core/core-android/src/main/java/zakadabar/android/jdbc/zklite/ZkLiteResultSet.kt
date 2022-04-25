@@ -363,7 +363,7 @@ class ZkLiteResultSet(
         lastColumnRead = colID
         val newIndex = ci(colID)
         return when (c.getType(newIndex)) {
-            4 -> ZkLiteBlob(c.getBlob(newIndex)) //CONVERT TO BYTE[] OBJECT
+            4 -> if (ZkLiteDriver.useByteArrayBlob) c.getBlob(newIndex) else ZkLiteBlob(c.getBlob(newIndex)) //CONVERT TO BYTE[] OBJECT
             2 -> c.getFloat(newIndex)
             1 -> c.getLong(newIndex)
             3 -> c.getString(newIndex)

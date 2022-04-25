@@ -17,6 +17,7 @@ import zakadabar.core.browser.popup.ZkPopUp
 import zakadabar.core.browser.util.minusAssign
 import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.ZkIcons
+import zakadabar.core.resource.css.px
 import zakadabar.core.resource.localizedStrings
 
 open class DropdownRenderer<VT, FT : ZkSelectBaseV2<VT, FT>>(
@@ -217,8 +218,7 @@ open class DropdownRenderer<VT, FT : ZkSelectBaseV2<VT, FT>>(
             }
         }
 
-        popup.element.style.height = "auto"
-        popup.element.style.maxHeight = "auto"
+        popup.setStyles()
         popup.align(selectedOption.element, context.styles.fieldHeight * 5)
     }
 
@@ -241,12 +241,16 @@ open class DropdownRenderer<VT, FT : ZkSelectBaseV2<VT, FT>>(
     open fun toggleItems() {
         if (field.readOnly) return
 
-        popup.element.style.height = "auto"
-        popup.element.style.maxHeight = "auto"
-
+        popup.setStyles()
         popup.toggle(selectedOption.element, context.styles.fieldHeight * 5)
 
         focus()
+    }
+
+    fun ZkPopUp.setStyles() {
+        element.style.height = "auto"
+        element.style.maxHeight = "auto"
+        element.style.width = (container.getBoundingClientRect().width - context.styles.indent * 2).px
     }
 
     open fun focus() {

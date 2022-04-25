@@ -51,6 +51,7 @@ class SideBar : ZkSideBar() {
 
             + item<MailCrud>()
             + item<JobCrud>()
+            + item<JobSummary>()
         }
 
         ifNotAnonymous {

@@ -20,6 +20,7 @@ class Routing : ZkAppRouting(DefaultLayout, Home) {
         + ExampleReferenceCrud()
         + MailCrud()
         + JobCrud()
+        + JobSummary
 
         zakadabar.lib.accounts.browser.install(this)
         zakadabar.lib.i18n.browser.install(this)
