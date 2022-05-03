@@ -440,7 +440,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      *
      * @param  query  The query to execute
      */
-    fun setData(query: QueryBo<List<T>>) {
+    open fun setData(query: QueryBo<List<T>>) {
         io {
             setData(query.execute())
         }
@@ -466,7 +466,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      * Deletes all cached row renders.
      * Sets scroll position to the latest known value
      */
-    fun redraw(): ZkTable<T> {
+    open fun redraw(): ZkTable<T> {
 
         for (row in fullData) {
             row.element = null
@@ -497,7 +497,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      * Adds a placeholder row (top or bottom). These rows change in height so
      * the scrollbar reacts as if all rows would be rendered.
      */
-    fun addPlaceHolderRow() {
+    open fun addPlaceHolderRow() {
         val row = tableBodyElement.appendChild(document.createElement("tr"))
         repeat(columns.size) {
             row.appendChild(document.createElement("td")).also { cell ->
@@ -513,7 +513,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      *
      * @param index Index of the row in state.rowStates
      */
-    fun ZkTableRow<T>.render(index: Int, row: ZkTableRow<T>): ZkElement {
+    open fun ZkTableRow<T>.render(index: Int, row: ZkTableRow<T>): ZkElement {
         element?.let { return it }
 
         element = ZkElement(document.createElement("tr") as HTMLElement) build {
@@ -901,7 +901,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         // multi-level table needs special processing because of the hidden
         // rows, so check for that also
 
-        if (searchText == null && !multiLevel) {
+        if (searchText == null && ! multiLevel) {
             filteredData = fullData
             renderData = filteredData.toMutableList()
             return
@@ -911,7 +911,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
         // when not multi-level, perform single filtering
 
-        if (!multiLevel) {
+        if (! multiLevel) {
             filteredData = fullData.filter { filterRow(it.data, lc) }
             renderData = filteredData.toMutableList()
             return
@@ -927,7 +927,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
         while (index < fullData.size) {
             val row = fullData[index]
-            var match = (searchText == null || filterRow(row.data,lc))
+            var match = (searchText == null || filterRow(row.data, lc))
 
             if (row.levelState == ZkRowLevelState.Single) {
                 println("$index ${row.levelState} ${row.level}")
@@ -977,7 +977,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      * Get the level of the row. Override for multi level tables. Level 0
      * means that the row is always shown (if not filtered out).
      */
-    open fun getRowLevel(row : ZkTableRow<T>): Int {
+    open fun getRowLevel(row: ZkTableRow<T>): Int {
         return 0
     }
 
@@ -1035,7 +1035,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         redraw()
     }
 
-    open fun getChildren(from : List<ZkTableRow<T>>, fromIndex : Int, level : Int) : List<ZkTableRow<T>> {
+    open fun getChildren(from: List<ZkTableRow<T>>, fromIndex: Int, level: Int): List<ZkTableRow<T>> {
         var index = fromIndex + 1
         val children = mutableListOf<ZkTableRow<T>>()
 
@@ -1051,6 +1051,80 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         }
 
         return children
+    }
+
+    // -------------------------------------------------------------------------
+    //  Sorting
+    // -------------------------------------------------------------------------
+
+    open fun <R : Comparable<R>> sort(ascending: Boolean, comparison: (row: ZkTableRow<T>) -> R?) {
+        fullData = if (! multiLevel) {
+            if (ascending) {
+                fullData.sortedBy(comparison)
+            } else {
+                fullData.sortedByDescending(comparison)
+            }
+        } else {
+            multiSort(fullData, ascending, comparison)
+        }
+    }
+
+    /**
+     * Utility class for multi-level sorting. Contains the children of the
+     * row, so they will move together when sorted.
+     */
+    class SortEntry<T : BaseBo>(
+        val row: ZkTableRow<T>,
+        val children: List<ZkTableRow<T>>
+    )
+
+    /**
+     * Sort a multi-level list of rows. Calls itself recursively for lower levels.
+     */
+    open fun <R : Comparable<R>> multiSort(data: List<ZkTableRow<T>>, ascending: Boolean, comparison: (row: ZkTableRow<T>) -> R?): List<ZkTableRow<T>> {
+
+        // Do not perform sorting when the data contains a single row.
+        if (data.size == 1) return data
+
+        // Collect top level rows into a list of SortEntry objects. All lower level rows
+        // are stored in SortEntry.children. Thus, we can sort the top level and lower
+        // level rows will move with their parents.
+
+        // Call multiSort recursively on children, so they are also sorted.
+
+        val top = mutableListOf<SortEntry<T>>()
+        var index = 0
+
+        while (index < data.size) {
+            val row = data[index]
+
+            if (row.levelState == ZkRowLevelState.Single) {
+                top += SortEntry(row, emptyList())
+            } else {
+                val children = getChildren(data, index, row.level)
+                top += SortEntry(row, multiSort(children, ascending, comparison))
+                index += children.size
+            }
+
+            index += 1
+        }
+
+        // Sort the top level rows and merge all rows together to get the result.
+
+        val sortedTop = if (ascending) {
+            top.sortedBy { comparison(it.row) }
+        } else {
+            top.sortedByDescending { comparison(it.row) }
+        }
+
+        val result = mutableListOf<ZkTableRow<T>>()
+
+        sortedTop.forEach {
+            result += it.row
+            result += it.children
+        }
+
+        return result
     }
 
     // -------------------------------------------------------------------------

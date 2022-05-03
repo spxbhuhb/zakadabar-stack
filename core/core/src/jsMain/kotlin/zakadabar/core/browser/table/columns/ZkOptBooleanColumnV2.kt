@@ -30,11 +30,7 @@ open class ZkOptBooleanColumnV2<T : BaseBo>(
     }
 
     override fun sort() {
-        table.fullData = if (sortAscending) {
-            table.fullData.sortedBy { getter(it.data) }
-        } else {
-            table.fullData.sortedByDescending { getter(it.data) }
-        }
+        table.sort(sortAscending) { getter(it.data) }
     }
 
     override fun exportCsv(row: T): String =

@@ -43,11 +43,7 @@ class ZkBooleanExtensionColumn<T : BaseBo>(
     }
 
     override fun sort() {
-        table.fullData = if (sortAscending) {
-            table.fullData.sortedBy { values[table.getRowId(it.data)] ?: false }
-        } else {
-            table.fullData.sortedByDescending { values[table.getRowId(it.data)] ?: false }
-        }
+        table.sort(sortAscending) { values[table.getRowId(it.data)] ?: false }
     }
 
     override fun exportCsv(row: T): String =

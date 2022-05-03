@@ -35,11 +35,7 @@ class ZkStringExtensionColumn<T : BaseBo>(
     }
 
     override fun sort() {
-        table.fullData = if (sortAscending) {
-            table.fullData.sortedBy { values[table.getRowId(it.data)] ?: "" }
-        } else {
-            table.fullData.sortedByDescending { values[table.getRowId(it.data)] ?: "" }
-        }
+        table.sort(sortAscending) { values[table.getRowId(it.data)] ?: "" }
     }
 
     override fun exportCsv(row: T): String =

@@ -20,11 +20,7 @@ open class ZkOptEnumColumnV2<T : BaseBo, E : Enum<E>>(
     }
 
     override fun sort() {
-        table.fullData = if (sortAscending) {
-            table.fullData.sortedBy { format(it.data) }
-        } else {
-            table.fullData.sortedByDescending { format(it.data) }
-        }
+        table.sort(sortAscending) { format(it.data) }
     }
 
     override fun matches(row: T, string: String?): Boolean {
