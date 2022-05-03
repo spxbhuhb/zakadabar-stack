@@ -19,7 +19,7 @@ object Versions {
     const val kaml = "0.19.0"
 
     const val hikari = "3.4.5"
-    const val postgresql = "42.2.14"
+    const val postgresql = "42.3.4"
     const val h2 = "1.4.200"
     const val sqliteJdbc = "3.36.0.1"
 
