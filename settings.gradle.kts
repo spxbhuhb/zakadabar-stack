@@ -12,9 +12,9 @@ pluginManagement {
     }
 }
 
-include("plugin:reactive:reactive-ir-core")
-include("plugin:reactive:reactive-ir-plugin")
-include("plugin:reactive:reactive-ir-plugin-gradle")
+include("plugin:reactive:reactive-core")
+include("plugin:reactive:reactive-kotlin-plugin")
+include("plugin:reactive:reactive-gradle-plugin")
 
 include("core:core")
 include("core:core-android")
