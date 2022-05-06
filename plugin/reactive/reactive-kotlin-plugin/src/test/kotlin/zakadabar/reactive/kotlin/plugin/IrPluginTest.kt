@@ -24,13 +24,25 @@ import kotlin.test.assertEquals
 val small = """
     import zakadabar.reactive.core.Reactive
 
+    class Ize {
+    
+    }
+
+    fun aa(ize : Ize) {
+        bb(ize)
+    }
+
+    fun bb(ize : Ize) {
+    
+    }
+
     fun d() { 
         c(12)
         c(13)
     }
 
     @Reactive
-    fun c(a : Int, td : Int = 20) { 
+    fun c(a : Int) { 
         println("called c(" + a.toString() + ")")
     }
 

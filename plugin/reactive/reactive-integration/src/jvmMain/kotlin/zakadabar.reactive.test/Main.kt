@@ -4,6 +4,8 @@
 
 import zakadabar.reactive.core.Reactive
 
+
+@Reactive
 fun d() {
     c(12)
     c(13)

@@ -53,7 +53,7 @@ open class ReactiveState(
     }
 }
 
-fun optimize0(callSiteOffset: Int, parentState: ReactiveState): Boolean {
+fun optimize(callSiteOffset: Int, parentState: ReactiveState): Boolean {
     val key = callSiteOffset.toString()
     val state = parentState.get(key)
 
@@ -67,7 +67,7 @@ fun optimize0(callSiteOffset: Int, parentState: ReactiveState): Boolean {
     return true
 }
 
-fun optimize1(callSiteOffset: Int, parentState: ReactiveState, p0: Any?): Boolean {
+fun optimize(callSiteOffset: Int, parentState: ReactiveState, p0: Any?): Boolean {
     val key = callSiteOffset.toString()
     val state = parentState.get(key)
 
@@ -89,8 +89,12 @@ fun optimize1(callSiteOffset: Int, parentState: ReactiveState, p0: Any?): Boolea
     return false
 }
 
+fun lastChildCurrentToFuture(parentState : ReactiveState) {
+    parentState.lastChildCurrentToFuture()
+}
+
 fun A(callSiteOffset: Int, parentState: ReactiveState) {
-    if (optimize0(callSiteOffset, parentState)) return
+    if (optimize(callSiteOffset, parentState)) return
 
     parentState.future.last().handle = "A"
 
@@ -98,7 +102,7 @@ fun A(callSiteOffset: Int, parentState: ReactiveState) {
 }
 
 fun B(value: Int, callSiteOffset: Int, parentState: ReactiveState) {
-    if (optimize1(callSiteOffset, parentState, value)) return
+    if (optimize(callSiteOffset, parentState, value)) return
 
     parentState.future.last().handle = "B: $value"
 

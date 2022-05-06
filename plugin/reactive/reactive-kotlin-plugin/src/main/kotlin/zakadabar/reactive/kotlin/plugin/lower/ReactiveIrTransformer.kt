@@ -21,13 +21,14 @@ import org.jetbrains.kotlin.ir.expressions.IrBlockBody
 import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.impl.IrCallImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
 import org.jetbrains.kotlin.ir.interpreter.toIrConst
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.types.defaultType
+import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.copyTypeAndValueArgumentsFrom
 import org.jetbrains.kotlin.ir.util.statements
 import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 
 class ReactiveIrTransformer(
@@ -41,12 +42,29 @@ class ReactiveIrTransformer(
     val intClass = context.symbols.int
     val intType = intClass.defaultType
 
-    val funWhatever = context
-        .referenceFunctions(FqName.ROOT.child(Name.identifier("whatever")))
-        .single {
-            val parameters = it.owner.valueParameters
-            parameters.size == 1 && parameters[0].type == intType
-        }
+    // Find variants of the optimize function
+
+    val funOptimizeVariants = context.referenceFunctions(FqName.fromSegments(listOf("zakadabar", "reactive", "core", "optimize")))
+    fun funOptimizeWithParams(count: Int) = funOptimizeVariants.single { it.owner.valueParameters.size == 2 + count }
+
+    val funOptimize = arrayOf(
+        funOptimizeWithParams(0),
+        funOptimizeWithParams(1)
+    )
+
+    // Find the lastChildCurrentToFuture function
+
+    val funLastChildCurrentToFuture = context
+        .referenceFunctions(FqName.fromSegments(listOf("zakadabar", "reactive", "core", "lastChildCurrentToFuture")))
+        .single { it.owner.valueParameters.size == 1 }
+
+    // Find the ReactiveState type
+
+    val reactiveStateType = context
+        .referenceClass(FqName.fromSegments(listOf("zakadabar", "reactive", "core", "ReactiveState"))) !!
+        .typeWith()
+
+    var currentReactiveScope : IrFunction? = null
 
     /**
      * Adds a new parameter "callSiteOffset" to all reactive functions. This makes
@@ -67,13 +85,19 @@ class ReactiveIrTransformer(
      * ```
      */
     override fun visitFunctionNew(declaration: IrFunction): IrStatement {
-        if (!isReactive(declaration)) return super.visitFunctionNew(declaration)
+        if (! isReactive(declaration)) return super.visitFunctionNew(declaration)
 
         declaration.addValueParameter("callSiteOffset", context.irBuiltIns.intType)
+        declaration.addValueParameter("parentState", context.irBuiltIns.intType)
+        //declaration.addValueParameter("parentState", reactiveStateType.typeWith())
 
         declaration.body = irReactive(declaration)
 
-        return super.visitFunctionNew(declaration)
+        val oldScope = currentReactiveScope
+        currentReactiveScope = declaration
+        val statement = super.visitFunctionNew(declaration)
+        currentReactiveScope = oldScope
+        return statement
     }
 
     /**
@@ -84,30 +108,41 @@ class ReactiveIrTransformer(
     private fun irReactive(
         function: IrFunction,
     ): IrBlockBody {
-        return DeclarationIrBuilder(context, function.symbol).irBlockBody {
-            +irReactiveEnter(function)
-            for (statement in function.body!!.statements) +statement
-        }
+        return DeclarationIrBuilder(context, function.symbol)
+            .irBlockBody {
+                + irReactiveEnter(function)
+                for (statement in function.body !!.statements) + statement
+            }
     }
 
     /**
      * Builds pre-processing code for functions marked with the "Reactive" annotation.
      * For now, it calls the "whatever" function with the call site as the first parameter.
      */
-    private fun IrBuilderWithScope.irReactiveEnter(
-        function: IrFunction
-    ): IrCall {
-        return irCall(funWhatever)
-            .also { call ->
-                call.putValueArgument(0, irGet(function.valueParameters.last()))
-            }
+    private fun IrBuilderWithScope.irReactiveEnter(function: IrFunction): IrCall {
+        val parameters = function.valueParameters
+        val originalParameterCount = parameters.size - 2 // callSiteOffset and parentState
+
+        require(originalParameterCount <= funOptimize.size) { "reactive compiler plugin parameter number limit is ${funOptimize.size}, cannot compile ${function.name} with $originalParameterCount parameters" }
+
+        val call = irCall(funOptimize[originalParameterCount])
+
+        call.putValueArgument(0, irGet(parameters[parameters.size - 2]))
+        call.putValueArgument(1, irGet(parameters.last()))
+
+        for (i in 2 until parameters.size) {
+            call.putValueArgument(i, irGet(parameters[i-2]))
+        }
+
+        return call
     }
+
 
     /**
      * Adds the call site offset to a reactive function call.
      */
     override fun visitCall(expression: IrCall): IrExpression {
-        if (!isReactive(expression)) return super.visitCall(expression)
+        if (! isReactive(expression)) return super.visitCall(expression)
 
         return IrCallImpl(
             expression.startOffset,
@@ -115,7 +150,7 @@ class ReactiveIrTransformer(
             expression.type,
             expression.symbol,
             expression.typeArgumentsCount,
-            expression.valueArgumentsCount + 1,
+            expression.valueArgumentsCount + 2,
             expression.origin,
             expression.superQualifierSymbol
         ).also {
@@ -124,12 +159,22 @@ class ReactiveIrTransformer(
                 index = expression.valueArgumentsCount,
                 expression.startOffset.toIrConst(intType)
             )
+            it.putValueArgument(
+                index = expression.valueArgumentsCount + 1,
+                IrGetValueImpl(
+                    expression.startOffset,
+                    expression.endOffset,
+                    reactiveStateType,
+                    currentReactiveScope!!.valueParameters.last().symbol,
+                    expression.origin
+                )
+            )
         }
     }
 
     private fun isReactive(declaration: IrClass): Boolean =
         declaration.kind == ClassKind.CLASS &&
-            declaration.isAnnotatedWithReactive()
+                declaration.isAnnotatedWithReactive()
 
     private fun isReactive(declaration: IrFunction): Boolean =
         declaration.isAnnotatedWithReactive()
