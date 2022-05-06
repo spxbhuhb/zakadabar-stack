@@ -12,6 +12,10 @@ pluginManagement {
     }
 }
 
+include("plugin:reactive:reactive-ir-core")
+include("plugin:reactive:reactive-ir-plugin")
+include("plugin:reactive:reactive-ir-plugin-gradle")
+
 include("core:core")
 include("core:core-android")
 
@@ -37,5 +41,3 @@ include("demo:demo-sandbox")
 include("demo:demo-sandbox-mobile")
 
 include("site")
-
-//include("upgrade:2021-6-to-2021-7")

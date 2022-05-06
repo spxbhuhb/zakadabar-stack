@@ -60,6 +60,8 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ```
 
+[kotlin-ir-plugin-template](https://github.com/bnorm/kotlin-ir-plugin-template) (by Brian Norman, Apache 2.0)
+
 ## Lib: Email
 
 *Testing*
