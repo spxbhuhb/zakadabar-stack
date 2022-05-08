@@ -3,23 +3,23 @@
  */
 
 import zakadabar.reactive.core.Reactive
+import zakadabar.reactive.core.ReactiveContext
+import zakadabar.reactive.core.ReactiveState
 
 
 @Reactive
-fun d() {
-    c(12)
-    c(13)
+fun d(callSiteOffset : Int, parentState : ReactiveState) {
+    c(14)
+    c(15)
 }
 
 @Reactive
-fun c(a : Int, td : Int = 20) {
-    println("called c(" + a.toString() + ")")
-}
-
-fun whatever(callSiteOffset : Int) {
-    println("called whatever: " + callSiteOffset)
+fun c(a : Int) {
+    println("called c($a)")
 }
 
 fun main() {
-    d()
+    ReactiveState(ReactiveContext(), "<root>", "<root>", emptyArray()).apply {
+        d(0, this)
+    }
 }

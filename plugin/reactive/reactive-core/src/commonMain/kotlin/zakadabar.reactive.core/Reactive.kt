@@ -8,21 +8,22 @@ annotation class Reactive
 open class ReactiveContext {
 
     fun clear(state: ReactiveState) {
-        println("clear: ${state.handle}")
+        println("clear: ${state.owner}")
     }
 
     fun add(childState: ReactiveState) {
-        println("add: ${childState.handle}")
+        println("add: ${childState.owner}")
     }
 
     fun remove(childState: ReactiveState) {
-        println("remove: ${childState.handle}")
+        println("remove: ${childState.owner}")
     }
 }
 
 open class ReactiveState(
     val reactiveContext: ReactiveContext,
     val key: String,
+    val owner: String,
     var receivedValues: Array<Any?>
 ) {
     var handle: Any? = null
@@ -53,40 +54,38 @@ open class ReactiveState(
     }
 }
 
-fun optimize(callSiteOffset: Int, parentState: ReactiveState): Boolean {
+fun optimize(owner : String, callSiteOffset: Int, parentState: ReactiveState): ReactiveState? {
     val key = callSiteOffset.toString()
     val state = parentState.get(key)
 
-    if (state == null) {
-        parentState.put(ReactiveState(parentState.reactiveContext, key, emptyArray()))
-        return false // new state -> have to render
+    if (state == null) { // new state -> have to render
+        return ReactiveState(parentState.reactiveContext, key, owner, emptyArray()).also { parentState.put(it) }
     }
 
     // already has a state with no parameters -> don't have to render
     parentState.put(state)
-    return true
+    return null
 }
 
-fun optimize(callSiteOffset: Int, parentState: ReactiveState, p0: Any?): Boolean {
+fun optimize(owner : String, callSiteOffset: Int, parentState: ReactiveState, p0: Any?): ReactiveState? {
     val key = callSiteOffset.toString()
     val state = parentState.get(key)
 
-    if (state == null) {
-        parentState.put(ReactiveState(parentState.reactiveContext, key, arrayOf(p0)))
-        return false // new state -> have to render
+    if (state == null) { // new state -> have to render
+        return ReactiveState(parentState.reactiveContext, key, owner, arrayOf(p0)).also { parentState.put(it) }
     }
 
     // already has a state compare values with previous ones
     parentState.put(state)
 
     if (state.receivedValues[0] == p0) {
-        return true // same state, don't have to render
+        return null // same state, don't have to render
     }
 
     // different values, have to render, copy new values into the state
     state.future.clear()
     state.receivedValues = arrayOf(p0)
-    return false
+    return state
 }
 
 fun lastChildCurrentToFuture(parentState : ReactiveState) {
@@ -94,7 +93,7 @@ fun lastChildCurrentToFuture(parentState : ReactiveState) {
 }
 
 fun A(callSiteOffset: Int, parentState: ReactiveState) {
-    if (optimize(callSiteOffset, parentState)) return
+    if (optimize("A", callSiteOffset, parentState) == null) return
 
     parentState.future.last().handle = "A"
 
@@ -102,7 +101,7 @@ fun A(callSiteOffset: Int, parentState: ReactiveState) {
 }
 
 fun B(value: Int, callSiteOffset: Int, parentState: ReactiveState) {
-    if (optimize(callSiteOffset, parentState, value)) return
+    if (optimize("A", callSiteOffset, parentState, value) == null) return
 
     parentState.future.last().handle = "B: $value"
 
@@ -111,7 +110,7 @@ fun B(value: Int, callSiteOffset: Int, parentState: ReactiveState) {
 
 
 fun main() {
-    val rootState = ReactiveState(ReactiveContext(), "root", emptyArray())
+    val rootState = ReactiveState(ReactiveContext(), "root", "root", emptyArray())
 
     println("---- start ----")
 

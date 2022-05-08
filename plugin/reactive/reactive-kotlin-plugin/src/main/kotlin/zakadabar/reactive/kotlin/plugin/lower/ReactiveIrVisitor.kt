@@ -29,9 +29,6 @@ class ReactiveIrVisitor(
     }
 
     override fun visitFunction(declaration: IrFunction) {
-        println("===============   reactive function ==== visit before super ==== : ${declaration.name}")
-        println(declaration.dump())
-
         super.visitFunction(declaration)
         if (! isReactive(declaration)) return
 

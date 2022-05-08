@@ -9,15 +9,15 @@ import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
 import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.extensions.AnnotationBasedExtension
 import org.jetbrains.kotlin.ir.IrStatement
-import org.jetbrains.kotlin.ir.builders.IrBuilderWithScope
+import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
+import org.jetbrains.kotlin.ir.builders.*
 import org.jetbrains.kotlin.ir.builders.declarations.addValueParameter
-import org.jetbrains.kotlin.ir.builders.irBlockBody
-import org.jetbrains.kotlin.ir.builders.irCall
-import org.jetbrains.kotlin.ir.builders.irGet
+import org.jetbrains.kotlin.ir.builders.declarations.buildVariable
 import org.jetbrains.kotlin.ir.declarations.IrClass
+import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrFunction
+import org.jetbrains.kotlin.ir.declarations.IrVariable
 import org.jetbrains.kotlin.ir.descriptors.toIrBasedDescriptor
-import org.jetbrains.kotlin.ir.expressions.IrBlockBody
 import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.impl.IrCallImpl
@@ -25,10 +25,14 @@ import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
 import org.jetbrains.kotlin.ir.interpreter.toIrConst
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.types.defaultType
+import org.jetbrains.kotlin.ir.types.isInt
+import org.jetbrains.kotlin.ir.types.makeNullable
 import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.copyTypeAndValueArgumentsFrom
 import org.jetbrains.kotlin.ir.util.statements
+import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 
 class ReactiveIrTransformer(
@@ -41,11 +45,17 @@ class ReactiveIrTransformer(
 
     val intClass = context.symbols.int
     val intType = intClass.defaultType
+    val unitType = context.irBuiltIns.unitType
+
+    // Number of synthetic parameters for each modified function
+
+    val reactiveSyntheticParameterCount = 2
+    val optimizeSyntheticParameterCount = 3
 
     // Find variants of the optimize function
 
     val funOptimizeVariants = context.referenceFunctions(FqName.fromSegments(listOf("zakadabar", "reactive", "core", "optimize")))
-    fun funOptimizeWithParams(count: Int) = funOptimizeVariants.single { it.owner.valueParameters.size == 2 + count }
+    fun funOptimizeWithParams(count: Int) = funOptimizeVariants.single { it.owner.valueParameters.size == optimizeSyntheticParameterCount + count }
 
     val funOptimize = arrayOf(
         funOptimizeWithParams(0),
@@ -63,8 +73,6 @@ class ReactiveIrTransformer(
     val reactiveStateType = context
         .referenceClass(FqName.fromSegments(listOf("zakadabar", "reactive", "core", "ReactiveState"))) !!
         .typeWith()
-
-    var currentReactiveScope : IrFunction? = null
 
     /**
      * Adds a new parameter "callSiteOffset" to all reactive functions. This makes
@@ -87,88 +95,123 @@ class ReactiveIrTransformer(
     override fun visitFunctionNew(declaration: IrFunction): IrStatement {
         if (! isReactive(declaration)) return super.visitFunctionNew(declaration)
 
-        declaration.addValueParameter("callSiteOffset", context.irBuiltIns.intType)
-        declaration.addValueParameter("parentState", context.irBuiltIns.intType)
-        //declaration.addValueParameter("parentState", reactiveStateType.typeWith())
+        // When the original function already has the reactive parameters we do not have
+        // to add them again.
 
-        declaration.body = irReactive(declaration)
+        if (!hasReactiveParameters(declaration)) {
+            declaration.addValueParameter("\$callSiteOffset", context.irBuiltIns.intType)
+            declaration.addValueParameter("\$parentState", reactiveStateType)
+        }
 
-        val oldScope = currentReactiveScope
-        currentReactiveScope = declaration
-        val statement = super.visitFunctionNew(declaration)
-        currentReactiveScope = oldScope
-        return statement
-    }
+        // Create a new body for the function with reactive code before and after the
+        // original body. "buildState" is the state that belongs to the function. It
+        // is returned by "optimize" and is passed to all reactive function calls.
 
-    /**
-     * Modifies a function marked with "Reactive" such a way that it first executes
-     * some statements (build by [irReactiveEnter]) and then executes the original
-     * statements.
-     */
-    private fun irReactive(
-        function: IrFunction,
-    ): IrBlockBody {
-        return DeclarationIrBuilder(context, function.symbol)
-            .irBlockBody {
-                + irReactiveEnter(function)
-                for (statement in function.body !!.statements) + statement
+        var buildState : IrVariable? = null
+
+        declaration.body = DeclarationIrBuilder(context, declaration.symbol).irBlockBody {
+
+            buildState = irReactiveEnter(declaration)
+            for (statement in declaration.body !!.statements) + statement
+            + irReactiveLeave(declaration)
+
+        }
+
+        // Transform all reactive calls: add the call site and the current build state
+        // to the call.
+
+        declaration.transformChildren(object : IrElementTransformerVoid() {
+
+            override fun visitCall(expression: IrCall): IrExpression {
+                if (! isReactive(expression)) return super.visitCall(expression)
+
+                // When the original function declaration has the reactive parameters the call
+                // already contains those, so there is no need to add them again.
+
+                if (hasReactiveParameters(expression.symbol.owner)) return super.visitCall(expression)
+
+                return IrCallImpl(
+                    expression.startOffset,
+                    expression.endOffset,
+                    expression.type,
+                    expression.symbol,
+                    expression.typeArgumentsCount,
+                    expression.valueArgumentsCount + reactiveSyntheticParameterCount,
+                    expression.origin,
+                    expression.superQualifierSymbol
+                ).also {
+                    it.copyTypeAndValueArgumentsFrom(expression)
+                    it.putValueArgument(
+                        index = expression.valueArgumentsCount,
+                        expression.startOffset.toIrConst(intType)
+                    )
+                    it.putValueArgument(
+                        index = expression.valueArgumentsCount + 1,
+                        IrGetValueImpl(
+                            UNDEFINED_OFFSET,
+                            UNDEFINED_OFFSET,
+                            buildState!!.symbol
+                        )
+                    )
+                }
+
             }
+        }, null)
+
+        return super.visitFunctionNew(declaration)
     }
 
     /**
-     * Builds pre-processing code for functions marked with the "Reactive" annotation.
-     * For now, it calls the "whatever" function with the call site as the first parameter.
+     * Builds the code executed before the original body of the reactive function is
+     * executed:
+     *
+     * - calls the optimize function
+     * - if optimize
+     *   - returns with null: the old render is still valid, so the original body won't be executed
+     *   - returns with a state: the state is saved and the original body will be executed
      */
-    private fun IrBuilderWithScope.irReactiveEnter(function: IrFunction): IrCall {
+    private fun IrBlockBodyBuilder.irReactiveEnter(function: IrFunction) : IrVariable {
         val parameters = function.valueParameters
-        val originalParameterCount = parameters.size - 2 // callSiteOffset and parentState
+        val originalParameterCount = parameters.size - reactiveSyntheticParameterCount
 
         require(originalParameterCount <= funOptimize.size) { "reactive compiler plugin parameter number limit is ${funOptimize.size}, cannot compile ${function.name} with $originalParameterCount parameters" }
 
-        val call = irCall(funOptimize[originalParameterCount])
+        val call = irCall(funOptimize[originalParameterCount]).apply {
+            putValueArgument(0, function.name.asString().toIrConst(context.irBuiltIns.stringType))
+            putValueArgument(1, irGet(parameters[parameters.size - 2]))
+            putValueArgument(2, irGet(parameters.last()))
 
-        call.putValueArgument(0, irGet(parameters[parameters.size - 2]))
-        call.putValueArgument(1, irGet(parameters.last()))
-
-        for (i in 2 until parameters.size) {
-            call.putValueArgument(i, irGet(parameters[i-2]))
+            var idx = 0
+            while (idx < parameters.size - reactiveSyntheticParameterCount) {
+                putValueArgument(idx + optimizeSyntheticParameterCount, irGet(parameters[idx + reactiveSyntheticParameterCount]))
+                idx++
+            }
         }
 
-        return call
+        val buildState = buildVariable(
+            scope.getLocalDeclarationParent(), function.startOffset, function.endOffset,
+            IrDeclarationOrigin.IR_TEMPORARY_VARIABLE, Name.identifier("\$buildState"),
+            reactiveStateType.makeNullable()
+        ).apply {
+            initializer = call
+        }
+
+        + buildState
+        + irIfNull(unitType, irGet(buildState), irReturnUnit(), irUnit())
+
+        return buildState
     }
 
-
     /**
-     * Adds the call site offset to a reactive function call.
+     * Builds code to execute after the original body of the reactive function is executed.
+     *
+     * - calls the "lastChildCurrentToFuture" function with the parent state
      */
-    override fun visitCall(expression: IrCall): IrExpression {
-        if (! isReactive(expression)) return super.visitCall(expression)
+    private fun IrBuilderWithScope.irReactiveLeave(function: IrFunction): IrCall {
+        val parameters = function.valueParameters
 
-        return IrCallImpl(
-            expression.startOffset,
-            expression.endOffset,
-            expression.type,
-            expression.symbol,
-            expression.typeArgumentsCount,
-            expression.valueArgumentsCount + 2,
-            expression.origin,
-            expression.superQualifierSymbol
-        ).also {
-            it.copyTypeAndValueArgumentsFrom(expression)
-            it.putValueArgument(
-                index = expression.valueArgumentsCount,
-                expression.startOffset.toIrConst(intType)
-            )
-            it.putValueArgument(
-                index = expression.valueArgumentsCount + 1,
-                IrGetValueImpl(
-                    expression.startOffset,
-                    expression.endOffset,
-                    reactiveStateType,
-                    currentReactiveScope!!.valueParameters.last().symbol,
-                    expression.origin
-                )
-            )
+        return irCall(funLastChildCurrentToFuture).apply {
+            putValueArgument(0, irGet(parameters.last()))
         }
     }
 
@@ -190,4 +233,15 @@ class ReactiveIrTransformer(
 
     private fun IrFunction.isAnnotatedWithReactive(): Boolean =
         toIrBasedDescriptor().hasSpecialAnnotation(null)
+
+    private fun hasReactiveParameters(declaration: IrFunction): Boolean {
+        val parameters = declaration.valueParameters
+
+        if (parameters.size < 2) return false
+        if (! parameters[parameters.size - 2].type.isInt()) return false
+        if (parameters.last().type != reactiveStateType) return false
+
+        return true
+    }
+
 }

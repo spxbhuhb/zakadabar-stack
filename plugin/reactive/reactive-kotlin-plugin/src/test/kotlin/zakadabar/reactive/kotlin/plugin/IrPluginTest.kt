@@ -23,20 +23,13 @@ import kotlin.test.assertEquals
 
 val small = """
     import zakadabar.reactive.core.Reactive
+    import zakadabar.reactive.core.ReactiveState
+    import zakadabar.reactive.core.ReactiveContext
+    import zakadabar.reactive.core.optimize
 
-    class Ize {
-    
-    }
 
-    fun aa(ize : Ize) {
-        bb(ize)
-    }
-
-    fun bb(ize : Ize) {
-    
-    }
-
-    fun d() { 
+    @Reactive
+    fun d(callSiteOffset : Int, parentState : ReactiveState) { 
         c(12)
         c(13)
     }
@@ -46,13 +39,26 @@ val small = """
         println("called c(" + a.toString() + ")")
     }
 
-    fun whatever(callSiteOffset : Int) { 
-         println("called whatever: " + callSiteOffset)
-    }
-
     fun main() {
-        d()
+        ReactiveState(ReactiveContext(), "<root>", "<root>", emptyArray()).apply {
+            d(0, this)
+        }
     }
+""".trimIndent()
+
+val dump = """
+import zakadabar.reactive.core.ReactiveState
+import zakadabar.reactive.core.optimize
+import zakadabar.reactive.core.lastChildCurrentToFuture
+
+fun B(value: Int, callSiteOffset: Int, parentState: ReactiveState) {
+    val myState = optimize(callSiteOffset, parentState, value)
+    if (myState == null) return
+
+    parentState.future.last().handle = "B"
+
+    lastChildCurrentToFuture(parentState)
+}
 """.trimIndent()
 
 val small2 = """

@@ -14,10 +14,10 @@ internal class ReactiveIrGenerationExtension(
 ) : IrGenerationExtension {
 
     override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
-        println("================  BEFORE  ================")
-        moduleFragment.accept(ReactiveIrVisitor(pluginContext, annotations), null)
+//        println("================  BEFORE  ================")
+//        moduleFragment.accept(ReactiveIrVisitor(pluginContext, annotations), null)
         moduleFragment.transform(ReactiveIrTransformer(pluginContext, annotations), null)
-        println("================  AFTER  ================")
+//        println("================  AFTER  ================")
         moduleFragment.accept(ReactiveIrVisitor(pluginContext, annotations), null)
 //        println(moduleFragment.dump())
     }
