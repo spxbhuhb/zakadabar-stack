@@ -4,6 +4,7 @@
 package zakadabar.lib.markdown.browser
 
 import zakadabar.core.resource.css.*
+import zakadabar.softui.browser.theme.base.Colors
 
 val markdownStyles by cssStyleSheet(MarkdownStyles())
 
@@ -12,7 +13,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     open var codeBorderColor: String? = null
     open var highlightUrl = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/idea.min.css"
 
-    open var defaultWidth by cssParameter { 600 }
+    open var defaultWidth by cssParameter { 800 }
 
     init {
         hljs.registerLanguage("kotlin", hljsKotlin)
@@ -266,7 +267,8 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         paddingLeft = 4.px
         paddingRight = 4.px
         borderRadius = 2.px
-        backgroundColor = theme.blockBackgroundColor
+//        backgroundColor = theme.blockBackgroundColor
+        backgroundColor = Colors.light.main
     }
 
     @Suppress("unused") // used implicitly by the browser
@@ -290,8 +292,8 @@ open class MarkdownStyles : ZkCssStyleSheet() {
             borderTopLeftRadius = 0.px
             borderBottomLeftRadius = 0.px
         }
-        backgroundColor = theme.blockBackgroundColor
-
+//        backgroundColor = theme.blockBackgroundColor
+        backgroundColor = Colors.light.main
         minWidth = (defaultWidth - 34).px
     }
 

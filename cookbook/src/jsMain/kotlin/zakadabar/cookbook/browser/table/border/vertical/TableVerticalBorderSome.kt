@@ -11,6 +11,7 @@ import zakadabar.core.browser.table.ZkTableStyles
 import zakadabar.core.resource.css.cssStyleSheet
 import zakadabar.core.resource.css.em
 import zakadabar.core.resource.css.fr
+import zakadabar.core.resource.css.px
 import zakadabar.core.util.PublicApi
 
 class ExampleStyles : ZkTableStyles() {
@@ -48,6 +49,7 @@ class TableVerticalBorderSome : ZkTable<ExampleBo>() {
 
     override fun onCreate() {
         super.onCreate()
+        height = 400.px
         demoData()
     }
 

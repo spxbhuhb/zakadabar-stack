@@ -29,6 +29,7 @@ include("lib:i18n")
 include("lib:lucene")
 include("lib:markdown")
 include("lib:schedule")
+include("lib:softui")
 
 include("demo:demo-basic")
 include("demo:demo-basic-mobile")

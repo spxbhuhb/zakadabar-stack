@@ -80,7 +80,7 @@ This page shows the browser frontend components included with the stack.
 
 <div data-zk-enrich="TabContainerExample"></div>
 
-# Table [documentation](/doc/guides/browser/builtin/Tables.md) [source code](/lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/note/NoteBasicExamples.kt)
+# Table [documentation](/doc/guides/browser/builtin/Tables.md) [source code](/lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/table/TableExample.kt)
 
 <div data-zk-enrich="TableExample"></div>
 

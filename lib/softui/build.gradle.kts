@@ -5,6 +5,7 @@
 import zakadabar.gradle.Versions
 import zakadabar.gradle.config
 import zakadabar.gradle.isPublishing
+import zakadabar.gradle.manifestAndDokka
 
 plugins {
     kotlin("multiplatform")
@@ -25,7 +26,6 @@ noArg {
 kotlin {
 
     jvm {
-        withJava()
         compilations.all {
             kotlinOptions.jvmTarget = "1.8"
         }
@@ -37,19 +37,19 @@ kotlin {
 
     sourceSets["commonMain"].dependencies {
         implementation(project(":core:core"))
-        implementation(project(":lib:softui"))
     }
 
-    sourceSets["jsMain"].dependencies {
-        implementation(npm("highlight.js", Versions.highlightJs))
-        api("org.jetbrains:markdown:${Versions.markdown}")
+    sourceSets["commonTest"].dependencies {
+        implementation(kotlin("test-common"))
+        implementation(kotlin("test-annotations-common"))
+        implementation(kotlin("test-junit"))
     }
+
 }
-
 
 if (project.isPublishing) {
 
-    zakadabar.gradle.manifestAndDokka(tasks)
+    manifestAndDokka(tasks)
 
     signing { config(publishing.publications) }
 
@@ -57,7 +57,7 @@ if (project.isPublishing) {
         config(project)
 
         publications.withType<MavenPublication>().all {
-            config(tasks["javadocJar"], "Zakadabar Lib Markdown")
+            config(tasks["javadocJar"], "Zakadabar Lib SoftUI")
         }
     }
 

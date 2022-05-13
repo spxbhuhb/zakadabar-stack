@@ -3,6 +3,7 @@
  */
 package zakadabar.site.frontend.resources
 
+import zakadabar.core.browser.theme.softui.components.suiTheme
 import zakadabar.core.resource.css.*
 
 val siteStyles by cssStyleSheet(SiteStyles())
@@ -62,6 +63,23 @@ class SiteStyles : ZkCssStyleSheet() {
 
     val cookbookCardTitle by cssClass {
         fontWeight = 500.weight
+    }
+
+    val headerContent by cssClass {
+        + Display.flex
+        + JustifyContent.spaceBetween
+        + AlignItems.center
+
+        width = 100.percent
+        paddingLeft = 150.px
+        paddingRight = 150.px
+        fontWeight = 600.weight
+        fontSize = 16.px
+    }
+
+    val headerLink by cssClass {
+        + TextTransform.uppercase
+        color = suiTheme.colorOnImage
     }
 
 }

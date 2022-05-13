@@ -3,25 +3,21 @@
  */
 package zakadabar.site.frontend
 
+import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.application
-import zakadabar.core.browser.layout.ZkDefaultLayout
-import zakadabar.core.browser.titlebar.ZkAppHandle
 import zakadabar.core.browser.titlebar.ZkAppTitle
-import zakadabar.core.browser.titlebar.ZkAppTitleBar
-import zakadabar.site.frontend.components.HeaderActions
-import zakadabar.site.frontend.components.SiteLogo
-import zakadabar.site.frontend.pages.Landing
+import zakadabar.site.frontend.resources.siteStyles
+import zakadabar.softui.browser.layout.SuiDefaultLayout
 
-object DefaultLayout : ZkDefaultLayout(spanHeader = true) {
+object DefaultLayout : SuiDefaultLayout() {
 
     override fun onCreate() {
         super.onCreate()
 
-        appHandle = ZkAppHandle(SiteLogo(), onIconClick = ::onToggleSideBar, target = Landing)
-        sideBar = SideBar()
+        header = SiteHeader()
+        //header.globalElements += HeaderActions()
 
-        titleBar = ZkAppTitleBar(::onToggleSideBar, fixTitle = PilotTitle())
-        titleBar.globalElements += HeaderActions()
+        sideBar = SideBar()
 
     }
 
@@ -35,4 +31,38 @@ object DefaultLayout : ZkDefaultLayout(spanHeader = true) {
             }
         }
     }
+
+    class SiteHeader : ZkElement() {
+        override fun onCreate() {
+            super.onCreate()
+
+            + siteStyles.headerContent
+
+            + div {
+                + siteStyles.headerLink
+                + "Zakadabar"
+            }
+
+            + div {
+                + siteStyles.headerLink
+                + application.serverDescription.version
+            }
+
+            + div {
+                + siteStyles.headerLink
+                + "Welcome"
+            }
+
+            + div {
+                + siteStyles.headerLink
+                + "Documentation"
+            }
+
+            + div {
+                + siteStyles.headerLink
+                + "Github"
+            }
+        }
+    }
 }
+

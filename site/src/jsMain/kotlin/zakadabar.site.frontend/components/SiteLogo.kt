@@ -3,12 +3,10 @@
  */
 package zakadabar.site.frontend.components
 
-import kotlinx.browser.window
-import kotlinx.coroutines.await
-import zakadabar.site.frontend.resources.siteStyles
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.util.io
 import zakadabar.core.browser.util.plusAssign
+import zakadabar.site.frontend.resources.siteStyles
 
 class SiteLogo : ZkElement() {
 
@@ -16,7 +14,8 @@ class SiteLogo : ZkElement() {
         classList += siteStyles.logo
         io {
             // "fill" from CSS works only for inline SVG, it doesn't work for <img>
-            element.innerHTML = window.fetch("/zakadabar.svg").await().text().await()
+            // element.innerHTML = window.fetch("/zakadabar.svg").await().text().await()
+            element.innerHTML = "Zakadabar"
         }
     }
 }
