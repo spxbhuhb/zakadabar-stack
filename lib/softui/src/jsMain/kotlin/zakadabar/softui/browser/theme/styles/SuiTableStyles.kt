@@ -9,7 +9,7 @@ import zakadabar.core.resource.css.*
 import zakadabar.softui.browser.theme.base.Borders
 import zakadabar.softui.browser.theme.base.BoxShadows
 
-class TableStyles : ZkTableStyles() {
+class SuiTableStyles : ZkTableStyles() {
 
     override var tableBackgroundColor by cssParameter { suiTheme.blockBackgroundColor }
     override var headerBackground by cssParameter { suiTheme.blockBackgroundColor }
@@ -41,13 +41,13 @@ class TableStyles : ZkTableStyles() {
     }
 
     override val leftBottomCellOfTable by cssClass({ ".$table tr:last-child(2) td:first-child" }) {
-        if (this@TableStyles.border != null) {
+        if (this@SuiTableStyles.border != null) {
             borderBottomLeftRadius = Borders.borderRadius.md
         }
     }
 
     override val rightBottomCellOfTable by cssClass({ ".$table tr:last-child(2) td:last-child" }) {
-        if (this@TableStyles.border != null) {
+        if (this@SuiTableStyles.border != null) {
             borderBottomRightRadius = Borders.borderRadius.md
         }
     }

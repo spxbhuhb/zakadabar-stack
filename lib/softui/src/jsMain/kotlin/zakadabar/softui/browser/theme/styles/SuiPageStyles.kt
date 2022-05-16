@@ -8,7 +8,7 @@ package zakadabar.softui.browser.theme.styles
 import zakadabar.core.browser.page.ZkPageStyles
 import zakadabar.core.resource.css.*
 
-class PageStyles : ZkPageStyles() {
+class SuiPageStyles : ZkPageStyles() {
 
     override val fixed by cssClass {
         + Position.relative

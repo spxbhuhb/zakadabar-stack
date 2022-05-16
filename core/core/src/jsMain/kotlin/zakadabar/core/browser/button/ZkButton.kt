@@ -110,8 +110,6 @@ open class ZkButton(
             else -> buildCombined()
         }
 
-        if (!fill && !border) classList += zkButtonStyles.noShadow
-
         if (element is HTMLAnchorElement) {
             element.href = url ?: ""
         }
@@ -194,30 +192,37 @@ open class ZkButton(
             ZkFlavour.Primary -> {
                 classList += if (fill) zkButtonStyles.primaryFill else zkButtonStyles.primaryNoFill
                 classList += if (border) zkButtonStyles.primaryBorder else zkButtonStyles.primaryNoBorder
+                if (fill || border) classList += zkButtonStyles.shadow
             }
             ZkFlavour.Secondary -> {
                 classList += if (fill) zkButtonStyles.secondaryFill else zkButtonStyles.secondaryNoFill
                 classList += if (border) zkButtonStyles.secondaryBorder else zkButtonStyles.secondaryNoBorder
+                if (fill || border) classList += zkButtonStyles.shadow
             }
             ZkFlavour.Success -> {
                 classList += if (fill) zkButtonStyles.successFill else zkButtonStyles.successNoFill
                 classList += if (border) zkButtonStyles.successBorder else zkButtonStyles.successNoBorder
+                if (fill || border) classList += zkButtonStyles.shadow
             }
             ZkFlavour.Warning -> {
                 classList += if (fill) zkButtonStyles.warningFill else zkButtonStyles.warningNoFill
                 classList += if (border) zkButtonStyles.warningBorder else zkButtonStyles.warningNoBorder
+                if (fill || border) classList += zkButtonStyles.shadow
             }
             ZkFlavour.Danger -> {
                 classList += if (fill) zkButtonStyles.dangerFill else zkButtonStyles.dangerNoFill
                 classList += if (border) zkButtonStyles.dangerBorder else zkButtonStyles.dangerNoBorder
+                if (fill || border) classList += zkButtonStyles.shadow
             }
             ZkFlavour.Info -> {
                 classList += if (fill) zkButtonStyles.infoFill else zkButtonStyles.infoNoFill
                 classList += if (border) zkButtonStyles.infoBorder else zkButtonStyles.infoNoBorder
+                if (fill || border) classList += zkButtonStyles.shadow
             }
             ZkFlavour.Disabled -> {
                 classList += if (fill) zkButtonStyles.disabledFill else zkButtonStyles.disabledNoFill
                 classList += if (border) zkButtonStyles.disabledBorder else zkButtonStyles.disabledNoBorder
+                if (fill || border) classList += zkButtonStyles.shadow
             }
             ZkFlavour.Custom -> Unit
         }

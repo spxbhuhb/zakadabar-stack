@@ -35,7 +35,6 @@ open class SuiButtonStyles : ZkCssStyleSheet(), ButtonStyleSpec {
         fontWeight = 400.weight
 
         borderRadius = Borders.borderRadius.md
-        boxShadow = BoxShadows.md
         paddingLeft = 10.px
         paddingRight = 10.px
 
@@ -62,8 +61,6 @@ open class SuiButtonStyles : ZkCssStyleSheet(), ButtonStyleSpec {
         width = "max-content"
 
         borderRadius = Borders.borderRadius.md
-        boxShadow = BoxShadows.md
-
         paddingRight = 10.px
 
         fontSize = 12.px
@@ -88,16 +85,14 @@ open class SuiButtonStyles : ZkCssStyleSheet(), ButtonStyleSpec {
         width = buttonHeight.px
         height = buttonHeight.px
 
-        boxShadow = BoxShadows.md
-
         on(":focus") {
             outline = "1px solid ${theme.infoColor}"
             styles["outline-offset"] = "4px"
         }
     }
 
-    override val noShadow by cssClass {
-        boxShadow = "none"
+    override val shadow by cssClass {
+        boxShadow = BoxShadows.md
     }
 
     override val square by cssClass {

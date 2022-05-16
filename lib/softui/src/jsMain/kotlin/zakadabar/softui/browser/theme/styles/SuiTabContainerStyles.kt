@@ -9,7 +9,7 @@ import zakadabar.core.resource.css.*
 import zakadabar.softui.browser.theme.base.Borders
 import zakadabar.softui.browser.theme.base.BoxShadows
 
-class TabContainerStyles : ZkTabContainerStyles() {
+class SuiTabContainerStyles : ZkTabContainerStyles() {
 
     override var labelTextColor by cssParameter { theme.textColor }
     override var labelBackgroundColor by cssParameter { theme.blockBackgroundColor }

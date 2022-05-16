@@ -12,11 +12,11 @@ import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.util.minusAssign
 import zakadabar.core.browser.util.plusAssign
-import zakadabar.softui.browser.theme.styles.LayoutStyles
+import zakadabar.softui.browser.theme.styles.SuiLayoutStyles
 import zakadabar.softui.browser.theme.styles.layoutStyles
 
 open class SuiDefaultLayout(
-    open val styles : LayoutStyles = layoutStyles
+    open val styles : SuiLayoutStyles = layoutStyles
 ) : ZkAppLayout("default") {
 
     open var header = ZkElement()

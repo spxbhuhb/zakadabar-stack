@@ -6,6 +6,7 @@ package zakadabar.softui.browser
 import zakadabar.core.browser.button.zkButtonStyles
 import zakadabar.core.browser.field.zkFieldStyles
 import zakadabar.core.browser.form.zkFormStyles
+import zakadabar.core.browser.note.zkNoteStyles
 import zakadabar.core.browser.page.zkPageStyles
 import zakadabar.core.browser.sidebar.zkSideBarStyles
 import zakadabar.core.browser.tabcontainer.zkTabContainerStyles
@@ -15,13 +16,14 @@ import zakadabar.core.browser.toast.zkToastStyles
 import zakadabar.softui.browser.theme.styles.*
 
 fun install() {
-    zkFormStyles = FormStyles()
-    zkTitleBarStyles = TitleBarStyles()
-    zkTabContainerStyles = TabContainerStyles()
+    zkFormStyles = SuiFormStyles()
+    zkTitleBarStyles = SuiTitleBarStyles()
+    zkTabContainerStyles = SuiTabContainerStyles()
     zkButtonStyles = SuiButtonStyles()
-    zkSideBarStyles = SideBarStyles()
-    zkPageStyles = PageStyles()
-    zkTableStyles = TableStyles()
+    zkSideBarStyles = SuiSideBarStyles()
+    zkPageStyles = SuiPageStyles()
+    zkTableStyles = SuiTableStyles()
     zkToastStyles = SuiToastStyles()
-    zkFieldStyles = FieldStyles()
+    zkFieldStyles = SuiFieldStyles()
+    zkNoteStyles = SuiNoteStyles()
 }

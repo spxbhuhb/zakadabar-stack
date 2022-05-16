@@ -1,22 +1,45 @@
 /*
- * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright © 2020-2022, Simplexion, Hungary. All rights reserved.
+ * Unauthorized use of this code or any part of this code in any form, via any medium, is strictly prohibited.
+ * Proprietary and confidential.
  */
 package zakadabar.softui.browser.theme.styles
 
-import zakadabar.core.browser.field.ZkFieldStyles
+import zakadabar.core.browser.form.ZkFormStyles
+import zakadabar.core.browser.theme.softui.components.suiTheme
 import zakadabar.core.resource.ZkColors
 import zakadabar.core.resource.css.*
 import zakadabar.core.util.alpha
 import zakadabar.softui.browser.theme.base.Borders
+import zakadabar.softui.browser.theme.base.BoxShadows
+import zakadabar.softui.browser.theme.base.Typography
+import zakadabar.softui.browser.theme.base.pxToRem
 
-open class FieldStyles : ZkFieldStyles() {
+class SuiFormStyles : ZkFormStyles() {
 
-    override var fieldHeight by cssParameter { 38 }
+    override val section by cssClass {
+        + Display.flex
+        + FlexDirection.column
+        + Position.relative
 
-    /**
-     * Indent of the selected entry and the popup from the left part of the field.
-     */
-    override var indent by cssParameter { 8 }
+        marginBottom = (theme.spacingStep / 2).px
+        minWidth = 0.px
+        styles["word-wrap"] = "break-word"
+        backgroundColor = theme.blockBackgroundColor
+        styles["background-clip"] = "border-box"
+        border = suiTheme.sectionBorder
+        borderRadius = Borders.borderRadius.xl
+        boxShadow = BoxShadows.xxl
+        padding = 20.px
+    }
+
+    override val sectionTitle by cssClass {
+        fontSize = pxToRem(16)
+        lineHeight = "1.625"
+        fontFamily = Typography.baseProperties.fontFamily
+        color = suiTheme.headerTagColor
+        fontWeight = Typography.baseProperties.fontWeightMedium
+    }
 
     // -------------------------------------------------------------------------
     // Field Base
@@ -33,10 +56,10 @@ open class FieldStyles : ZkFieldStyles() {
 
         + Cursor.default
 
-        fontSize = 90.percent
+        fontSize = 14.px
         fontWeight = 400.weight
 
-        color = theme.textColor
+        color = suiTheme.headerTagColor
         height = fieldHeight.px
         paddingRight = 8.px
     }
@@ -60,7 +83,6 @@ open class FieldStyles : ZkFieldStyles() {
     // -------------------------------------------------------------------------
     // Text
     // -------------------------------------------------------------------------
-
     override fun ZkCssStyleRule.fieldDefault() {
         + Display.block
         + BoxSizing.borderBox
@@ -104,7 +126,6 @@ open class FieldStyles : ZkFieldStyles() {
 
         on(":focus") {
             border = "1px solid ${theme.infoColor}"
-            borderRadius = theme.cornerRadius.px
             outline = "none"
         }
 
@@ -209,6 +230,7 @@ open class FieldStyles : ZkFieldStyles() {
 
         outline = "none"
         boxShadow = "0 0 32px 12px rgba(0, 0, 0, 0.4) "
+        borderRadius = Borders.borderRadius.md
     }
 
     override val selectOptionFilter by cssClass {

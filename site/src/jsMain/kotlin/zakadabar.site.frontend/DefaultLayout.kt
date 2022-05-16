@@ -6,6 +6,7 @@ package zakadabar.site.frontend
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.application
 import zakadabar.core.browser.titlebar.ZkAppTitle
+import zakadabar.site.frontend.components.HeaderActions
 import zakadabar.site.frontend.resources.siteStyles
 import zakadabar.softui.browser.layout.SuiDefaultLayout
 
@@ -62,6 +63,9 @@ object DefaultLayout : SuiDefaultLayout() {
                 + siteStyles.headerLink
                 + "Github"
             }
+
+            + HeaderActions()
+
         }
     }
 }

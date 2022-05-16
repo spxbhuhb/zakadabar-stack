@@ -33,10 +33,13 @@ open class SuiToastStyles : ZkCssStyleSheet(), ToastStyleSpec {
         + Display.flex
         + FlexDirection.row
         + AlignItems.center
+
         borderRadius = Borders.borderRadius.md
         boxShadow = BoxShadows.md
         minHeight = 52.px
         minWidth = 400.px
+
+        fontSize = 14.px
 
         small {
             minWidth = 100.vw

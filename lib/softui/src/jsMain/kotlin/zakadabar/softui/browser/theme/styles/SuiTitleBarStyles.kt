@@ -8,7 +8,7 @@ import zakadabar.core.browser.titlebar.ZkTitleBarStyles
 import zakadabar.core.resource.css.*
 import zakadabar.softui.browser.theme.base.Borders
 
-open class TitleBarStyles : ZkTitleBarStyles() {
+open class SuiTitleBarStyles : ZkTitleBarStyles() {
 
     override var appHandleText by cssParameter { suiTheme.colorOnImage }
     override var appTitleBarText by cssParameter { suiTheme.headerTagColor }
@@ -31,14 +31,7 @@ open class TitleBarStyles : ZkTitleBarStyles() {
             borderRadius = Borders.borderRadius.md
         }
 
-        fontWeight = 500.weight
-        fontSize = 120.percent
-
-//        boxShadow = BoxShadows.md
-//        color = suiTheme.colorOnImage
-//        fill = suiTheme.colorOnImage
-//        backgroundImage = suiTheme.backgroundImage
-
+        fontSize = 14.px
         color = suiTheme.headerTagColor
     }
 
@@ -55,12 +48,11 @@ open class TitleBarStyles : ZkTitleBarStyles() {
         + FlexDirection.row
         + AlignItems.center
 
-        fontWeight = 500.weight
         width = "calc(100$ - ${theme.spacingStep / 2}px)"
         minHeight = appTitleBarHeight.px
         maxHeight = appTitleBarHeight.px
         borderBottom = appTitleBarBorder
-        fontSize = 16.px
+        fontSize = 14.px
 
         large {
             borderRadius = Borders.borderRadius.md

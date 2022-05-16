@@ -12,7 +12,7 @@ import zakadabar.softui.browser.theme.base.Borders
 import zakadabar.softui.browser.theme.base.BoxShadows
 import zakadabar.softui.browser.theme.base.Colors
 
-open class SideBarStyles : ZkSideBarStyles() {
+open class SuiSideBarStyles : ZkSideBarStyles() {
 
     override var backgroundColor by cssParameter { suiTheme.backgroundColor }
     override var textColor by cssParameter { Colors.grey.g600 }
@@ -34,9 +34,9 @@ open class SideBarStyles : ZkSideBarStyles() {
 
         padding = (theme.spacingStep / 2).px
 
-        fontSize = this@SideBarStyles.fontSize
+        fontSize = this@SuiSideBarStyles.fontSize
 
-        backgroundColor = this@SideBarStyles.backgroundColor
+        backgroundColor = this@SuiSideBarStyles.backgroundColor
 //        backgroundImage = suiTheme.backgroundImage
 //        backgroundSize = "cover"
 
@@ -45,7 +45,7 @@ open class SideBarStyles : ZkSideBarStyles() {
 
         boxShadow = BoxShadows.md
 
-        color = this@SideBarStyles.textColor
+        color = this@SuiSideBarStyles.textColor
 
         small {
             padding = 0.px
@@ -73,7 +73,7 @@ open class SideBarStyles : ZkSideBarStyles() {
 
         hover {
             backgroundColor = theme.hoverBackgroundColor
-            color = this@SideBarStyles.hoverTextColor
+            color = this@SuiSideBarStyles.hoverTextColor
             borderRadius = Borders.borderRadius.md
         }
     }
@@ -112,7 +112,7 @@ open class SideBarStyles : ZkSideBarStyles() {
 
         hover {
             backgroundColor = theme.hoverBackgroundColor
-            color = this@SideBarStyles.hoverTextColor
+            color = this@SuiSideBarStyles.hoverTextColor
             borderRadius = Borders.borderRadius.md
         }
 
@@ -129,8 +129,8 @@ open class SideBarStyles : ZkSideBarStyles() {
 
         fontSize = 14.px
 
-        fill = this@SideBarStyles.textColor
-        color = this@SideBarStyles.textColor
+        fill = this@SuiSideBarStyles.textColor
+        color = this@SuiSideBarStyles.textColor
 
     }
 

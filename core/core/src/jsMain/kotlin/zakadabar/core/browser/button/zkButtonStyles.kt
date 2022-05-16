@@ -86,8 +86,8 @@ open class ZkButtonStyles : ZkCssStyleSheet(), ButtonStyleSpec {
         borderRadius = (buttonHeight / 2).px
     }
 
-    override val noShadow by cssClass {
-        boxShadow = "none !important"
+    override val shadow by cssClass {
+        boxShadow = theme.boxShadow
     }
 
     override val primaryFill by cssClass {

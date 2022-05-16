@@ -138,7 +138,7 @@ account = EntityId(publicBo.id)
 
 ## Manual Authorization Checks
 
-<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Authorizer Are Preferred">
+<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Authorizers Are Preferred">
 
 While these methods are supported, it is better to use the [Authorizer](../../backend/Authorizer.md)
 of business logics. The reason is that the authorizer is a single point of authorization

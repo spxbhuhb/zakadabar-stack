@@ -7,10 +7,10 @@ import kotlinx.browser.document
 import org.w3c.dom.HTMLElement
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.icon.ZkIcon
+import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.ZkFlavour
 import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.css.ZkCssStyleRule
-import zakadabar.core.browser.util.plusAssign
 
 open class ZkNote(
     val flavour: ZkFlavour = ZkFlavour.Info,
@@ -117,6 +117,8 @@ open class ZkNote(
                 + finalIcon css zkNoteStyles.titleIcon
                 + titleContainer
             }
+
+            + div(zkNoteStyles.separator) {  }
 
             + contentContainer css zkNoteStyles.contentOuter
 

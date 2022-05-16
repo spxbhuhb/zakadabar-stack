@@ -5,9 +5,7 @@ package zakadabar.softui.browser.theme.styles
 
 import zakadabar.core.resource.css.*
 
-val layoutStyles by cssStyleSheet(LayoutStyles())
-
-open class LayoutStyles : ZkCssStyleSheet() {
+open class SuiLayoutStyles : ZkCssStyleSheet() {
 
     open val defaultLayoutSmall by cssClass {
         + Display.flex
@@ -37,7 +35,7 @@ open class LayoutStyles : ZkCssStyleSheet() {
         + Display.flex
         + AlignItems.center
         width = 100.percent
-        minHeight = 110.px
+        minHeight = 60.px
         marginBottom = 20.px
         background = "radial-gradient(circle, rgba(38,83,152,1) 0%, rgba(38,83,152,1) 47%, rgba(5,36,55,1) 100%)"
     }

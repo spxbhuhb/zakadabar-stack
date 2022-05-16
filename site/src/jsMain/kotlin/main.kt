@@ -10,8 +10,9 @@ import zakadabar.core.browser.util.io
 import zakadabar.core.module.modules
 import zakadabar.core.resource.initTheme
 import zakadabar.site.frontend.Routing
+import zakadabar.site.frontend.resources.SiteSuiDarkTheme
+import zakadabar.site.frontend.resources.SiteSuiLightTheme
 import zakadabar.site.resources.strings
-import zakadabar.softui.browser.theme.SoftUiLightTheme
 
 fun main() {
 
@@ -27,7 +28,7 @@ fun main() {
 
             initSession()
 
-            initTheme(SoftUiLightTheme())
+            initTheme(SiteSuiLightTheme(), SiteSuiDarkTheme())
 
             initLocale(strings, defaultLocale = "en")
 

@@ -15,7 +15,7 @@ interface ButtonStyleSpec : CssStyleSpec {
     val icon: ZkCssStyleRule
     val square: ZkCssStyleRule
     val round: ZkCssStyleRule
-    val noShadow: ZkCssStyleRule
+    val shadow: ZkCssStyleRule
     val primaryFill: ZkCssStyleRule
     val primaryNoFill: ZkCssStyleRule
     val primaryBorder: ZkCssStyleRule
