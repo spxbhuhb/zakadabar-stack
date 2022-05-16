@@ -9,8 +9,6 @@ import zakadabar.core.resource.css.*
 import zakadabar.core.util.alpha
 import zakadabar.softui.browser.theme.base.Borders
 
-var fieldStyles by cssStyleSheet(FieldStyles())
-
 open class FieldStyles : ZkFieldStyles() {
 
     override var fieldHeight by cssParameter { 38 }

@@ -1,13 +1,16 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.core.browser.toast
+package zakadabar.softui.browser.theme.styles
 
+import zakadabar.core.browser.toast.ToastStyleSpec
 import zakadabar.core.resource.css.*
+import zakadabar.softui.browser.theme.base.Borders
+import zakadabar.softui.browser.theme.base.BoxShadows
+import zakadabar.softui.browser.theme.base.Colors
+import zakadabar.softui.browser.theme.base.linearGradient
 
-var zkToastStyles : ToastStyleSpec by cssStyleSheet(ZkToastStyles())
-
-open class ZkToastStyles : ZkCssStyleSheet(), ToastStyleSpec {
+open class SuiToastStyles : ZkCssStyleSheet(), ToastStyleSpec {
 
     override val appToastContainer by cssClass {
         + Position.fixed
@@ -21,7 +24,7 @@ open class ZkToastStyles : ZkCssStyleSheet(), ToastStyleSpec {
     }
 
     override val toastOuter by cssClass {
-        backgroundColor = theme.backgroundColor
+        backgroundColor = "transparent"
         marginRight = 10.px
         marginBottom = 10.px
     }
@@ -30,8 +33,14 @@ open class ZkToastStyles : ZkCssStyleSheet(), ToastStyleSpec {
         + Display.flex
         + FlexDirection.row
         + AlignItems.center
-        boxShadow = theme.boxShadow
-        borderRadius = 2.px
+        borderRadius = Borders.borderRadius.md
+        boxShadow = BoxShadows.md
+        minHeight = 52.px
+        minWidth = 400.px
+
+        small {
+            minWidth = 100.vw
+        }
     }
 
     override val iconContainer by cssClass {
@@ -41,13 +50,14 @@ open class ZkToastStyles : ZkCssStyleSheet(), ToastStyleSpec {
         + AlignItems.center
         + AlignSelf.stretch
 
+        marginLeft = 8.px
         width = 32.px
     }
 
     override val text by cssClass {
         paddingTop = 8.px
         paddingBottom = 8.px
-        paddingLeft = 10.px
+        paddingLeft = 8.px
         paddingRight = 10.px
         flexGrow = 1.0
     }
@@ -56,68 +66,69 @@ open class ZkToastStyles : ZkCssStyleSheet(), ToastStyleSpec {
      * For the close icon.
      */
     override val closeIcon by cssClass {
-        fill = theme.textColor
+        fill = Colors.white.main
         marginRight = 6.px
     }
 
     override val primaryInner by cssClass {
-        border = "1px solid ${theme.primaryColor}"
-        backgroundColor = theme.primaryColor + "20"
+        border = "1px solid ${Colors.alertColors.primary.border}"
+        color = theme.primaryPair
+        backgroundImage = linearGradient(Colors.alertColors.primary.main, Colors.alertColors.primary.state)
     }
 
     override val primaryIcon by cssClass {
-        backgroundColor = theme.primaryColor
         fill = theme.primaryPair
     }
 
     override val secondaryInner by cssClass {
-        border = "1px solid ${theme.secondaryColor}"
-        backgroundColor = theme.secondaryColor + "20"
+        border = "1px solid ${Colors.alertColors.secondary.border}"
+        color = theme.secondaryPair
+        backgroundImage = linearGradient(Colors.alertColors.secondary.main, Colors.alertColors.secondary.state)
     }
 
     override val secondaryIcon by cssClass {
-        backgroundColor = theme.secondaryColor
         fill = theme.secondaryPair
     }
 
     override val successInner by cssClass {
-        border = "1px solid ${theme.successColor}"
-        backgroundColor = theme.successColor + "20"
+        border = "1px solid ${Colors.alertColors.success.border}"
+        color = theme.successPair
+        backgroundImage = linearGradient(Colors.alertColors.success.main, Colors.alertColors.success.state)
     }
 
     override val successIcon by cssClass {
-        backgroundColor = theme.successColor
         fill = theme.successPair
     }
 
     override val warningInner by cssClass {
-        border = "1px solid ${theme.warningColor}"
-        backgroundColor = theme.warningColor + "20"
+        border = "1px solid ${Colors.alertColors.warning.border}"
+        color = theme.warningPair
+        backgroundImage = linearGradient(Colors.alertColors.warning.main, Colors.alertColors.warning.state)
     }
 
     override val warningIcon by cssClass {
-        backgroundColor = theme.warningColor
         fill = theme.warningPair
     }
 
     override val dangerInner by cssClass {
-        border = "1px solid ${theme.dangerColor}"
-        backgroundColor = theme.dangerColor + "20"
+        border = "1px solid ${Colors.alertColors.danger.border}"
+        color = theme.dangerPair
+        backgroundImage = linearGradient(Colors.alertColors.danger.main, Colors.alertColors.danger.state)
     }
 
     override val dangerIcon by cssClass {
-        backgroundColor = theme.dangerColor
         fill = theme.dangerPair
     }
 
     override val infoInner by cssClass {
-        border = "1px solid ${theme.infoColor}"
-        backgroundColor = theme.infoColor + "20"
+        border = "1px solid ${Colors.alertColors.info.border}"
+        color = theme.infoPair
+        backgroundImage = linearGradient(Colors.alertColors.info.main, Colors.alertColors.info.state)
     }
 
     override val infoIcon by cssClass {
-        backgroundColor = theme.infoColor
         fill = theme.infoPair
     }
+
 
 }

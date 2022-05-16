@@ -5,12 +5,12 @@
  */
 package zakadabar.softui.browser.theme.styles
 
-import zakadabar.core.browser.button.ZkButtonStyles
+import zakadabar.core.browser.button.ButtonStyleSpec
 import zakadabar.core.resource.css.*
 import zakadabar.softui.browser.theme.base.Borders
 import zakadabar.softui.browser.theme.base.BoxShadows
 
-class ButtonStyles : ZkButtonStyles() {
+open class SuiButtonStyles : ZkCssStyleSheet(), ButtonStyleSpec {
 
     override val iconSize by cssParameter { 20 }
     override val buttonHeight by cssParameter { 30 }
@@ -96,7 +96,7 @@ class ButtonStyles : ZkButtonStyles() {
         }
     }
 
-    val combinedIcon by cssRule(".$combined .$icon") {
+    override val noShadow by cssClass {
         boxShadow = "none"
     }
 
@@ -130,10 +130,6 @@ class ButtonStyles : ZkButtonStyles() {
         border = "1px solid transparent"
     }
 
-    val primaryNoShadow by cssRule(".$primaryNoFill.$primaryNoBorder") {
-        boxShadow = "none"
-    }
-
     override val secondaryFill by cssClass {
         backgroundColor = theme.secondaryColor
         color = theme.secondaryPair
@@ -153,10 +149,6 @@ class ButtonStyles : ZkButtonStyles() {
         // I used this way to ensure that the bordered and non-bordered
         // buttons have the same dimensions by default
         border = "1px solid transparent"
-    }
-
-    val secondaryNoShadow by cssRule(".$secondaryNoFill.$secondaryNoBorder") {
-        boxShadow = "none"
     }
 
     override val successFill by cssClass {
@@ -181,10 +173,6 @@ class ButtonStyles : ZkButtonStyles() {
     override val successNoBorder by cssClass {
         border = "1px solid transparent"
     }
-
-    open val successNoShadow by cssRule(".$successNoFill.$successNoBorder") {
-        boxShadow = "none"
-    }
     
     override val warningFill by cssClass {
         backgroundColor = theme.warningColor
@@ -203,10 +191,6 @@ class ButtonStyles : ZkButtonStyles() {
 
     override val warningNoBorder by cssClass {
         border = "1px solid transparent"
-    }
-
-    val warningNoShadow by cssRule(".$warningNoFill.$warningNoBorder") {
-        boxShadow = "none"
     }
 
     override val dangerFill by cssClass {
@@ -228,10 +212,6 @@ class ButtonStyles : ZkButtonStyles() {
         border = "1px solid transparent"
     }
 
-    val dangerNoShadow by cssRule(".$dangerNoFill.$dangerNoBorder") {
-        boxShadow = "none"
-    }
-
     override val infoFill by cssClass {
         backgroundColor = theme.infoColor
         color = theme.infoPair
@@ -249,10 +229,6 @@ class ButtonStyles : ZkButtonStyles() {
 
     override val infoNoBorder by cssClass {
         border = "1px solid transparent"
-    }
-
-    val infoNoShadow by cssRule(".$infoNoFill.$infoNoBorder") {
-        boxShadow = "none"
     }
 
     override val disabledFill by cssClass {
@@ -274,7 +250,4 @@ class ButtonStyles : ZkButtonStyles() {
         border = "1px solid transparent"
     }
 
-    val disabledNoShadow by cssRule(".$disabledNoFill.$disabledNoBorder") {
-        boxShadow = "none"
-    }
 }

@@ -23,7 +23,7 @@ import kotlin.reflect.KProperty
  * solution. We can go with this for now and then figure out how to resolve
  * this conflict.
  */
-open class ZkCssStyleSheet {
+open class ZkCssStyleSheet : CssStyleSpec {
 
     companion object {
         var nextId = 0
@@ -35,7 +35,7 @@ open class ZkCssStyleSheet {
          */
         var shortNames = false
 
-        val styleSheets = mutableListOf<ZkCssStyleSheet>()
+        val styleSheets = mutableListOf<CssStyleSpec>()
     }
 
     val id = nextId ++
@@ -44,7 +44,7 @@ open class ZkCssStyleSheet {
      * When true, the next refresh attaches this style sheet.
      * Style sheets have to wait until the application is set.
      */
-    open var attachOnRefresh = false
+    override var attachOnRefresh = false
 
     val element = document.createElement("style")
 
@@ -73,7 +73,7 @@ open class ZkCssStyleSheet {
     /**
      * Reset all the parameters to their initial value.
      */
-    fun resetParameters() {
+    override fun resetParameters() {
         parameters.forEach { it.reset() }
     }
 
@@ -85,7 +85,7 @@ open class ZkCssStyleSheet {
 
     }
 
-    fun attach() {
+    override fun attach() {
 
         if (document.getElementById(element.id) != null) {
             refresh()
@@ -109,7 +109,7 @@ open class ZkCssStyleSheet {
         refresh()
     }
 
-    fun detach() {
+    override fun detach() {
         element.remove()
         styleSheets -= this
     }
@@ -124,12 +124,12 @@ open class ZkCssStyleSheet {
         element.innerHTML = rules.map { it.value.compile() }.joinToString("\n")
     }
 
-    fun onThemeChange() {
+    override fun onThemeChange() {
         attach()
     }
 }
 
-fun <S : ZkCssStyleSheet> cssStyleSheet(sheet: S) = CssStyleSheetDelegate(sheet)
+fun <S : CssStyleSpec> cssStyleSheet(sheet: S) = CssStyleSheetDelegate(sheet)
 
 /**
  * Handles the style sheets. Initial attach is delayed until the theme is
@@ -138,13 +138,13 @@ fun <S : ZkCssStyleSheet> cssStyleSheet(sheet: S) = CssStyleSheetDelegate(sheet)
  * method of the application will run a refresh and that refresh attaches
  * the sheet.
  */
-class CssStyleSheetDelegate<S : ZkCssStyleSheet>(
+class CssStyleSheetDelegate<S : CssStyleSpec>(
     protected var sheet: S?
 ) {
 
     init {
         sheet?.let {
-            styleSheets.add(it)
+            styleSheets.add(it as ZkCssStyleSheet)
             if (themeIsInitialized) {
                 it.attach()
             } else {
@@ -167,7 +167,7 @@ class CssStyleSheetDelegate<S : ZkCssStyleSheet>(
         sheet?.detach()
 
         sheet = value
-        styleSheets.add(value)
+        styleSheets.add(value as ZkCssStyleSheet)
 
         if (themeIsInitialized) {
             theme.onResume() // FIXME make this sheet specific

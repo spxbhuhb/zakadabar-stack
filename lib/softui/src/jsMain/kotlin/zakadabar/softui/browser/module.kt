@@ -18,10 +18,10 @@ fun install() {
     zkFormStyles = FormStyles()
     zkTitleBarStyles = TitleBarStyles()
     zkTabContainerStyles = TabContainerStyles()
-    zkButtonStyles = ButtonStyles()
+    zkButtonStyles = SuiButtonStyles()
     zkSideBarStyles = SideBarStyles()
     zkPageStyles = PageStyles()
     zkTableStyles = TableStyles()
-    zkToastStyles = ToastStyles()
+    zkToastStyles = SuiToastStyles()
     zkFieldStyles = FieldStyles()
 }

@@ -221,7 +221,7 @@ object Colors {
             const val border = "#fef1c2"
         }
 
-        object error {
+        object danger {
             const val main = "#ea0606"
             const val state = "#ff3d59"
             const val border = "#f9b4b4"

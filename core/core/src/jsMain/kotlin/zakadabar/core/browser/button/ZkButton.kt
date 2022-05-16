@@ -110,6 +110,8 @@ open class ZkButton(
             else -> buildCombined()
         }
 
+        if (!fill && !border) classList += zkButtonStyles.noShadow
+
         if (element is HTMLAnchorElement) {
             element.href = url ?: ""
         }

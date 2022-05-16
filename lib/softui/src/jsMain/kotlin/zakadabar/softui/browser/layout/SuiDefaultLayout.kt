@@ -12,11 +12,11 @@ import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.util.minusAssign
 import zakadabar.core.browser.util.plusAssign
-import zakadabar.softui.browser.theme.styles.SuiLayoutStyles
-import zakadabar.softui.browser.theme.styles.suiLayoutStyles
+import zakadabar.softui.browser.theme.styles.LayoutStyles
+import zakadabar.softui.browser.theme.styles.layoutStyles
 
 open class SuiDefaultLayout(
-    open val styles : SuiLayoutStyles = suiLayoutStyles
+    open val styles : LayoutStyles = layoutStyles
 ) : ZkAppLayout("default") {
 
     open var header = ZkElement()
@@ -49,13 +49,13 @@ open class SuiDefaultLayout(
     override fun onCreate() {
         super.onCreate()
 
-        headerContainer css suiLayoutStyles.headerContainer build { + header }
+        headerContainer css layoutStyles.headerContainer build { + header }
 
-        sideBarContainer css suiLayoutStyles.sideBarContainer build {
+        sideBarContainer css layoutStyles.sideBarContainer build {
             + sideBar
         }
 
-        popupSidebarContainer css suiLayoutStyles.popupSideBarContainer
+        popupSidebarContainer css layoutStyles.popupSideBarContainer
 
         on(window, "resize") {
             if (lifeCycleState != ZkElementState.Resumed) return@on
@@ -80,11 +80,11 @@ open class SuiDefaultLayout(
         }
 
         if (activeMediaSize != MediaSize.Uninitialized) {
-            classList -= suiLayoutStyles.defaultLayoutLarge
-            classList -= suiLayoutStyles.defaultLayoutSmall
+            classList -= layoutStyles.defaultLayoutLarge
+            classList -= layoutStyles.defaultLayoutSmall
 
-            contentContainer.classList -= suiLayoutStyles.contentContainerSmall
-            contentContainer.classList -= suiLayoutStyles.contentContainerLarge
+            contentContainer.classList -= layoutStyles.contentContainerSmall
+            contentContainer.classList -= layoutStyles.contentContainerLarge
 
             this -= headerContainer
             this -= sideBarContainer
@@ -105,8 +105,8 @@ open class SuiDefaultLayout(
     }
 
     open fun resumeSmall() {
-        classList += suiLayoutStyles.defaultLayoutSmall
-        contentContainer.classList += suiLayoutStyles.contentContainerSmall
+        classList += layoutStyles.defaultLayoutSmall
+        contentContainer.classList += layoutStyles.contentContainerSmall
 
         + headerContainer
         + contentContainer
@@ -120,8 +120,8 @@ open class SuiDefaultLayout(
     }
 
     open fun resumeLarge() {
-        classList += suiLayoutStyles.defaultLayoutLarge
-        contentContainer.classList += suiLayoutStyles.contentContainerLarge
+        classList += layoutStyles.defaultLayoutLarge
+        contentContainer.classList += layoutStyles.contentContainerLarge
 
         + headerContainer css zkLayoutStyles.grow gridColumn "1 / span 3"
         + sideBarContainer gridRow 2 gridColumn 1

@@ -5,9 +5,9 @@ package zakadabar.softui.browser.theme.styles
 
 import zakadabar.core.resource.css.*
 
-val suiLayoutStyles by cssStyleSheet(SuiLayoutStyles())
+val layoutStyles by cssStyleSheet(LayoutStyles())
 
-open class SuiLayoutStyles : ZkCssStyleSheet() {
+open class LayoutStyles : ZkCssStyleSheet() {
 
     open val defaultLayoutSmall by cssClass {
         + Display.flex
