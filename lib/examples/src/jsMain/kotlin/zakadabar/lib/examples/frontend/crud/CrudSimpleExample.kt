@@ -4,18 +4,18 @@
 package zakadabar.lib.examples.frontend.crud
 
 import org.w3c.dom.HTMLElement
-import zakadabar.lib.examples.data.SimpleExampleAction
-import zakadabar.lib.examples.data.SimpleExampleBo
-import zakadabar.lib.examples.data.SimpleExampleQuery
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.button.buttonPrimary
 import zakadabar.core.browser.crud.ZkInlineCrud
 import zakadabar.core.browser.input.ZkTextInput
 import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.browser.note.noteSecondary
-import zakadabar.core.resource.css.px
 import zakadabar.core.browser.util.io
 import zakadabar.core.browser.util.marginBottom
+import zakadabar.core.resource.css.px
+import zakadabar.lib.examples.data.SimpleExampleAction
+import zakadabar.lib.examples.data.SimpleExampleBo
+import zakadabar.lib.examples.data.SimpleExampleQuery
 
 class SimpleExampleInlineCrud : ZkInlineCrud<SimpleExampleBo>() {
     init {
@@ -40,8 +40,7 @@ class CrudSimpleExample(
         } marginBottom 10
 
         + div {
-            height = 400.px
-            + zkLayoutStyles.fixBorder
+            buildPoint.style.maxHeight = 400.px
             + SimpleExampleInlineCrud().apply { openAll() }
         } marginBottom 10
 

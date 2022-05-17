@@ -3,11 +3,12 @@
  */
 package zakadabar.lib.examples.frontend.crud
 
-import zakadabar.lib.examples.data.SimpleExampleBo
 import zakadabar.core.browser.crud.ZkCrudTarget
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.resource.css.px
 import zakadabar.core.resource.localized
+import zakadabar.lib.examples.data.SimpleExampleBo
 
 
 /**
@@ -56,6 +57,8 @@ class SimpleExampleTable : ZkTable<SimpleExampleBo>() {
         add = true
         search = true
         export = true
+
+        height = 400.px
 
         + SimpleExampleBo::id // record id and opt record id is not supported yet
         + SimpleExampleBo::name

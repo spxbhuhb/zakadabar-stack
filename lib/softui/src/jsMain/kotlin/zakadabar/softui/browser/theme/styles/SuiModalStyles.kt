@@ -1,13 +1,13 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.core.browser.modal
+package zakadabar.softui.browser.theme.styles
 
+import zakadabar.core.browser.modal.ModalStyleSpec
 import zakadabar.core.resource.css.*
+import zakadabar.softui.browser.theme.base.Borders
 
-var zkModalStyles : ModalStyleSpec by cssStyleSheet(ZkModalStyles())
-
-open class ZkModalStyles : ZkCssStyleSheet(), ModalStyleSpec {
+open class SuiModalStyles : ZkCssStyleSheet(), ModalStyleSpec {
 
     override val modalContainer by cssClass {
         position = "fixed"
@@ -25,6 +25,7 @@ open class ZkModalStyles : ZkCssStyleSheet(), ModalStyleSpec {
     override val modal by cssClass {
         background = theme.backgroundColor
         border = theme.border
+        borderRadius = Borders.borderRadius.md
     }
 
     override val title by cssClass {

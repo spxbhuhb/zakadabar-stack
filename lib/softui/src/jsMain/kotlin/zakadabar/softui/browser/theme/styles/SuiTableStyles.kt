@@ -9,7 +9,7 @@ import zakadabar.core.resource.css.*
 import zakadabar.softui.browser.theme.base.Borders
 import zakadabar.softui.browser.theme.base.BoxShadows
 
-class SuiTableStyles : ZkTableStyles() {
+open class SuiTableStyles : ZkTableStyles() {
 
     override var tableBackgroundColor by cssParameter { suiTheme.blockBackgroundColor }
     override var headerBackground by cssParameter { suiTheme.blockBackgroundColor }

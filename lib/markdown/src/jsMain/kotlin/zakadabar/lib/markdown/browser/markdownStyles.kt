@@ -4,7 +4,8 @@
 package zakadabar.lib.markdown.browser
 
 import zakadabar.core.resource.css.*
-import zakadabar.softui.browser.theme.base.Colors
+import zakadabar.softui.browser.theme.base.Borders
+import zakadabar.softui.browser.theme.base.BoxShadows
 
 val markdownStyles by cssStyleSheet(MarkdownStyles())
 
@@ -43,6 +44,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         //maxWidth = 600.px
         flexGrow = 1.0
         margin = "auto"
+        maxWidth = defaultWidth.px
 
 //        small {
 //            marginLeft = 0
@@ -267,18 +269,14 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         paddingLeft = 4.px
         paddingRight = 4.px
         borderRadius = 2.px
-//        backgroundColor = theme.blockBackgroundColor
-        backgroundColor = Colors.light.main
+        backgroundColor = theme.blockBackgroundColor
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val codeBlockContainer by cssRule(".$content pre") {
         + Position.relative
-        width = "max-content"
-        maxWidth = 90.percent
-        marginLeft = "auto"
-        marginRight = "auto"
         paddingRight = 34.px
+        width = 100.percent
     }
     
     @Suppress("unused") // used implicitly by the browser
@@ -287,14 +285,15 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         paddingLeft = theme.spacingStep.px
         lineHeight = (13 * 1.4).px
         marginBottom = theme.spacingStep.px
-        this@MarkdownStyles.codeBorderColor?.let {
-            borderLeft = "2px solid $it"
-            borderTopLeftRadius = 0.px
-            borderBottomLeftRadius = 0.px
-        }
-//        backgroundColor = theme.blockBackgroundColor
-        backgroundColor = Colors.light.main
-        minWidth = (defaultWidth - 34).px
+//        this@MarkdownStyles.codeBorderColor?.let {
+//            borderLeft = "2px solid $it"
+//            borderTopLeftRadius = 0.px
+//            borderBottomLeftRadius = 0.px
+//        }
+        borderRadius = Borders.borderRadius.md
+        boxShadow = BoxShadows.md
+        backgroundColor = theme.blockBackgroundColor
+        width = "calc(100% - 34px)"
     }
 
     // -------------------------------------------------------------------------
@@ -307,6 +306,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         top = 0.px
         background = theme.backgroundColor
         backgroundColor = theme.blockBackgroundColor
+        boxShadow = BoxShadows.md
     }
 
     open val codeCopyIcon by cssClass {

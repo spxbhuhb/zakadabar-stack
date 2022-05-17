@@ -13,8 +13,9 @@ import zakadabar.core.resource.css.em
 import zakadabar.core.resource.css.fr
 import zakadabar.core.resource.css.px
 import zakadabar.core.util.PublicApi
+import zakadabar.softui.browser.theme.styles.SuiTableStyles
 
-class ExampleStyles : ZkTableStyles() {
+class ExampleStyles : SuiTableStyles() {
 
     // We don't want to rewrite the whole cell class, it is better to
     // use onConfigure and change these rules.

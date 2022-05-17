@@ -3,19 +3,18 @@
  */
 package zakadabar.softui.browser.theme.styles
 
-import zakadabar.core.browser.tabcontainer.ZkTabContainerStyles
-import zakadabar.core.browser.theme.softui.components.suiTheme
+import zakadabar.core.browser.tabcontainer.TabContainerStyleSpec
 import zakadabar.core.resource.css.*
 import zakadabar.softui.browser.theme.base.Borders
 import zakadabar.softui.browser.theme.base.BoxShadows
 
-class SuiTabContainerStyles : ZkTabContainerStyles() {
+class SuiTabContainerStyles : ZkCssStyleSheet(), TabContainerStyleSpec {
 
     override var labelTextColor by cssParameter { theme.textColor }
     override var labelBackgroundColor by cssParameter { theme.blockBackgroundColor }
     override var labelHeight by cssParameter { 32 }
-    override var activeLabelTextColor by cssParameter { suiTheme.colorOnImage }
-    override var activeLabelBackgroundColor by cssParameter { theme.infoColor }
+    override var activeLabelTextColor by cssParameter { theme.primaryPair }
+    override var activeLabelBackgroundColor by cssParameter { theme.primaryColor }
     override var labelBottomBorder by cssParameter { "none" }
     override var tabBackgroundColor by cssParameter { theme.backgroundColor }
 
@@ -63,11 +62,7 @@ class SuiTabContainerStyles : ZkTabContainerStyles() {
 
     override val activeLabel by cssClass {
         color = activeLabelTextColor
-        borderLeft = "1px solid $backgroundColor"
-        borderRight = borderLeft
-        borderTop = borderLeft
-
-        backgroundImage = "linear-gradient(310deg, rgba(20, 23, 39, 0.8), rgba(58, 65, 111, 0.8)), url(\"/curved14.12c9ea54425c4f1bc1d7.jpg\")"
+        backgroundColor = this@SuiTabContainerStyles.activeLabelBackgroundColor
         boxShadow = BoxShadows.md
 
         on(":first-child") {
@@ -91,5 +86,11 @@ class SuiTabContainerStyles : ZkTabContainerStyles() {
         + BoxSizing.borderBox
         flexGrow = 1.0
         + OverflowY.auto
+    }
+
+    override val border by cssClass {
+    }
+
+    override val padding by cssClass {
     }
 }

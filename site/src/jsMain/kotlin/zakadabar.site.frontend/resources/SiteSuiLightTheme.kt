@@ -5,6 +5,7 @@ package zakadabar.site.frontend.resources
 
 import zakadabar.lib.markdown.browser.markdownStyles
 import zakadabar.softui.browser.theme.SoftUiLightTheme
+import zakadabar.softui.browser.theme.base.Colors
 
 class SiteSuiLightTheme : SoftUiLightTheme() {
 
@@ -13,6 +14,8 @@ class SiteSuiLightTheme : SoftUiLightTheme() {
     }
 
     override val name = NAME
+
+    override var backgroundColor = Colors.grey.g100
 
     override fun onResume() {
         super.onResume()

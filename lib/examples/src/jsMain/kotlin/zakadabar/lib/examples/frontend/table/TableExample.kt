@@ -5,7 +5,6 @@ package zakadabar.lib.examples.frontend.table
 
 import org.w3c.dom.HTMLElement
 import zakadabar.core.browser.ZkElement
-import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.browser.toast.toastSuccess
 import zakadabar.core.data.BaseBo
@@ -66,8 +65,6 @@ class TableExample(
         style {
             height = "200px" // because table shrinks
         }
-
-        + zkLayoutStyles.fixBorder
 
         val data = listOf(
             TableExampleDto("Rose", "rosa", 341, true),
