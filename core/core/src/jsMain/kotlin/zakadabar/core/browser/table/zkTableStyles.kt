@@ -96,15 +96,25 @@ open class ZkTableStyles : ZkFieldStyles() {
 
     open val sortSign by cssClass {
         + BoxSizing.borderBox
-        + Position.absolute
+        + Position.sticky
         top = 0.px
         right = 10.px
         bottom = 0.px
     }
 
+    open val sortSignContainer by cssClass {
+        + BoxSizing.borderBox
+        + Position.absolute
+        top = 0.px
+        right = 10.px
+        bottom = 0.px
+        background = theme.backgroundColor
+        margin = 8.px
+        padding = 8.px
+        border = "1px solid ${theme.primaryColor}"
+    }
+
     open val sortedDescending by cssClass {
-        marginTop = 16.px
-        marginRight = 12.px
         width = 0.px
         height = 0.px
         borderLeft = "6px solid transparent"
@@ -113,8 +123,6 @@ open class ZkTableStyles : ZkFieldStyles() {
     }
 
     open val sortedAscending by cssClass {
-        marginTop = 16.px
-        marginRight = 12.px
         width = 0.px
         height = 0.px
         borderLeft = "6px solid transparent"
