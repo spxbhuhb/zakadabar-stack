@@ -57,7 +57,7 @@ interface ZkFieldContext {
 
     val addLabel: Boolean
 
-    val styles: ZkFieldStyles
+    val styles: FieldStyleSpec
 
     fun validate()
 

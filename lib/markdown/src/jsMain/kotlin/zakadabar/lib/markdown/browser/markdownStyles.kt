@@ -35,6 +35,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         + Display.flex
         + FlexDirection.row
         + JustifyContent.center
+        maxWidth = 100.percent
     }
 
     val content by cssClass {
@@ -275,12 +276,14 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     @Suppress("unused") // used implicitly by the browser
     open val codeBlockContainer by cssRule(".$content pre") {
         + Position.relative
+        + BoxSizing.borderBox
         paddingRight = 34.px
         width = 100.percent
     }
     
     @Suppress("unused") // used implicitly by the browser
     open val codeBlock by cssRule(".$content pre > code") {
+        + BoxSizing.borderBox
         padding = 12.px
         paddingLeft = theme.spacingStep.px
         lineHeight = (13 * 1.4).px
@@ -293,7 +296,8 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         borderRadius = Borders.borderRadius.md
         boxShadow = BoxShadows.md
         backgroundColor = theme.blockBackgroundColor
-        width = "calc(100% - 34px)"
+        width = 100.percent
+        marginRight = 0.px
     }
 
     // -------------------------------------------------------------------------

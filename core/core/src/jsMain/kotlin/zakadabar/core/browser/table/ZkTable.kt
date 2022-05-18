@@ -225,6 +225,12 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
         + zke(styles.contentContainer) {
 
+            if (addLocalTitle) {
+                + styles.withTitle
+            } else {
+                + styles.withoutTitle
+            }
+
             + table(styles.table) {
                 buildPoint.style.cssText = inlineCss()
                 + thead {
@@ -503,6 +509,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             row.appendChild(document.createElement("td")).also { cell ->
                 cell as HTMLTableCellElement
                 cell.style.border = "none"
+                cell.style.padding = 0.px
             }
         }
     }

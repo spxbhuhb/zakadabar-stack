@@ -6,8 +6,8 @@ package zakadabar.cookbook.browser.table.border.vertical
 
 import zakadabar.cookbook.browser.table.demoData
 import zakadabar.cookbook.entity.builtin.ExampleBo
+import zakadabar.core.browser.table.TableStyleSpec
 import zakadabar.core.browser.table.ZkTable
-import zakadabar.core.browser.table.ZkTableStyles
 import zakadabar.core.resource.css.cssStyleSheet
 import zakadabar.core.resource.css.em
 import zakadabar.core.resource.css.fr
@@ -29,15 +29,21 @@ class ExampleStyles : SuiTableStyles() {
 
     @PublicApi
     val lastHeaderCell by cssClass({ ".$table th:last-child"}) {
-        borderRight = theme.fixBorder
+        borderRight = "none"
     }
+
+    @PublicApi
+    val lastRowCell by cssClass({ ".$table td:last-child"}) {
+        borderRight = "none"
+    }
+
 }
 
 val exampleStyles by cssStyleSheet(ExampleStyles())
 
-class TableVerticalBorderSome : ZkTable<ExampleBo>() {
+class TableVerticalBorderScroll : ZkTable<ExampleBo>() {
 
-    override var styles: ZkTableStyles = exampleStyles
+    override var styles : TableStyleSpec = exampleStyles
 
     override fun onConfigure() {
         super.onConfigure()
@@ -52,6 +58,33 @@ class TableVerticalBorderSome : ZkTable<ExampleBo>() {
         super.onCreate()
         height = 400.px
         demoData()
+    }
+
+    override fun getRowId(row: ExampleBo) =
+        row.id.toString()
+
+    override fun onDblClick(id: String) = Unit
+
+}
+
+
+class TableVerticalBorderNoScroll : ZkTable<ExampleBo>() {
+
+    override var styles : TableStyleSpec = exampleStyles
+
+    override fun onConfigure() {
+        super.onConfigure()
+
+        + ExampleBo::stringValue size 10.em
+        + ExampleBo::booleanValue size 1.fr
+
+        + actions()
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        height = 400.px
+        demoData(4)
     }
 
     override fun getRowId(row: ExampleBo) =

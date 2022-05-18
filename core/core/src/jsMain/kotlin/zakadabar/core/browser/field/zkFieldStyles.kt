@@ -7,27 +7,27 @@ import zakadabar.core.resource.ZkColors
 import zakadabar.core.resource.css.*
 import zakadabar.core.util.alpha
 
-var zkFieldStyles by cssStyleSheet(ZkFieldStyles())
+var zkFieldStyles : FieldStyleSpec by cssStyleSheet(ZkFieldStyles())
 
-open class ZkFieldStyles : ZkCssStyleSheet() {
+open class ZkFieldStyles : ZkCssStyleSheet(), FieldStyleSpec {
 
-    open var fieldHeight by cssParameter { 38 }
+    override var fieldHeight by cssParameter { 38 }
 
     /**
      * Indent of the selected entry and the popup from the left part of the field.
      */
-    open var indent by cssParameter { 8 }
+    override var indent by cssParameter { 8 }
 
     // -------------------------------------------------------------------------
     // Field Base
     // -------------------------------------------------------------------------
 
-    open val fieldContainer by cssClass {
+    override val fieldContainer by cssClass {
         + BoxSizing.borderBox
         + Display.contents
     }
 
-    open val fieldLabel by cssClass {
+    override val fieldLabel by cssClass {
         + Display.flex
         + AlignItems.center
 
@@ -41,17 +41,17 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         paddingRight = 8.px
     }
 
-    open val mandatoryMark by cssClass {
+    override val mandatoryMark by cssClass {
         color = ZkColors.Red.c400
     }
 
-    open val fieldValue by cssClass {
+    override val fieldValue by cssClass {
         minHeight = fieldHeight.px
         color = theme.inputTextColor
         width = 100.percent
     }
 
-    open val fieldError by cssClass {
+    override val fieldError by cssClass {
         color = ZkColors.Gray.c700
         fontSize = 90.percent
         borderBottom = "1px solid ${ZkColors.Gray.c600}"
@@ -123,7 +123,7 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
 
     }
 
-    open val disabledString by cssClass {
+    override val disabledString by cssClass {
         fieldDefault()
 
         // https://stackoverflow.com/questions/262158/disabled-input-text-color-on-ios
@@ -136,12 +136,12 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         outline = "none"
     }
 
-    open val text by cssClass {
+    override val text by cssClass {
         fieldDefault()
         decorators()
     }
 
-    open val textarea by cssClass {
+    override val textarea by cssClass {
         fieldDefault()
         decorators()
     }
@@ -150,7 +150,7 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
     // Selects
     // -------------------------------------------------------------------------
 
-    open val selectContainer by cssClass {
+    override val selectContainer by cssClass {
         + Position.relative
         + Display.flex
         + FlexDirection.row
@@ -166,7 +166,7 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         decorators()
     }
 
-    open val selectedOption by cssClass {
+    override val selectedOption by cssClass {
         fieldDefault()
 
         // these have to be after fieldDefault
@@ -191,12 +191,12 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         }
     }
 
-    open val disabledSelect by cssClass {
+    override val disabledSelect by cssClass {
         backgroundColor = theme.disabledInputBackgroundColor
         color = theme.disabledInputTextColor
     }
 
-    open val selectOptionPopup by cssClass {
+    override val selectOptionPopup by cssClass {
         + Position.fixed
 
         + Display.flex
@@ -211,11 +211,11 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         boxShadow = "0 0 32px 12px rgba(0, 0, 0, 0.4) "
     }
 
-    open val selectOptionFilter by cssClass {
+    override val selectOptionFilter by cssClass {
         marginBottom = 10.px
     }
 
-    open val selectOptionList by cssClass {
+    override val selectOptionList by cssClass {
 
         + OverflowY.auto
         + OverflowX.hidden
@@ -228,7 +228,7 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         backgroundColor = theme.inputBackgroundColor
     }
 
-    open val selectEntry by cssClass {
+    override val selectEntry by cssClass {
         + Display.flex
         + AlignItems.center
         + Cursor.pointer
@@ -246,13 +246,13 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         }
     }
 
-    open val selected by cssClass {
+    override val selected by cssClass {
         color = ZkColors.white
         backgroundColor = theme.infoColor
     }
 
 
-    open val radioGroupContainer by cssClass {
+    override val radioGroupContainer by cssClass {
         fieldDefault()
         decorators()
 
@@ -261,7 +261,7 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
         + FlexDirection.column
     }
 
-    open val radioGroupItem by cssClass {
+    override val radioGroupItem by cssClass {
         height = fieldHeight.px
     }
 
@@ -269,7 +269,7 @@ open class ZkFieldStyles : ZkCssStyleSheet() {
     // Boolean
     // -------------------------------------------------------------------------
 
-    open val booleanField by cssClass {
+    override val booleanField by cssClass {
         + Display.flex
         + AlignItems.center
 

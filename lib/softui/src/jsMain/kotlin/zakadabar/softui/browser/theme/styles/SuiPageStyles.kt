@@ -26,9 +26,9 @@ class SuiPageStyles : ZkPageStyles() {
      */
 
     override val scrollable by cssClass {
-        marginRight = (theme.spacingStep / 2).px
         maxHeight = 100.percent
         + OverflowY.auto
+        + OverflowX.hidden
     }
 
 }

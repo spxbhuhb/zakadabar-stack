@@ -10,10 +10,7 @@ import zakadabar.core.browser.page.ZkPathPage
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.browser.util.io
 import zakadabar.core.data.EntityId
-import zakadabar.core.resource.css.OverflowY
-import zakadabar.core.resource.css.em
-import zakadabar.core.resource.css.fr
-import zakadabar.core.resource.css.percent
+import zakadabar.core.resource.css.*
 import zakadabar.lib.markdown.browser.MarkdownView
 import zakadabar.site.cookbook.GetContent
 import zakadabar.site.frontend.SiteMarkdownContext
@@ -24,6 +21,8 @@ object Cookbook : ZkPathPage() {
 
     override fun onResume() {
         super.onResume()
+
+        + Position.relative
 
         if (path.isEmpty()) {
             + zkLayoutStyles.grid1
@@ -51,9 +50,6 @@ object Cookbook : ZkPathPage() {
     class Table : ZkTable<Recipe>() {
 
         override fun onConfigure() {
-
-            + zkLayoutStyles.fixBorder
-            + zkLayoutStyles.roundBorder
 
             + OverflowY.auto
             height = 100.percent

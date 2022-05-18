@@ -27,7 +27,7 @@ open class ZkLevelColumn<T : BaseBo>(
         val levelState = rowState.levelState
 
         with(cell) {
-            + zke {
+            + zke(table.styles.multiLevelContainer) {
 
                 when (levelState) {
                     ZkRowLevelState.Single -> null

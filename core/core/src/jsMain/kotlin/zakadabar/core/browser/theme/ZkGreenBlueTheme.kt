@@ -9,6 +9,7 @@ import zakadabar.core.browser.tabcontainer.zkTabContainerStyles
 import zakadabar.core.browser.table.zkTableStyles
 import zakadabar.core.browser.titlebar.zkTitleBarStyles
 import zakadabar.core.resource.ZkColors
+import zakadabar.core.resource.theme
 import zakadabar.core.util.after
 import zakadabar.core.util.alpha
 

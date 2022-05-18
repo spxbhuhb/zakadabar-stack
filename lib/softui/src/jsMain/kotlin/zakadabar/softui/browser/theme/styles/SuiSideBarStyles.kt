@@ -14,13 +14,13 @@ import zakadabar.softui.browser.theme.base.Colors
 
 open class SuiSideBarStyles : ZkSideBarStyles() {
 
-    override var backgroundColor by cssParameter { suiTheme.backgroundColor }
+    override var backgroundColor by cssParameter { theme.backgroundColor }
     override var textColor by cssParameter { Colors.grey.g600 }
     override var itemMinHeight by cssParameter { 36 }
     override var fontSize by cssParameter { "80%" }
     override var iconSize by cssParameter { 18 }
     override var hoverTextColor by cssParameter { theme.hoverTextColor }
-    override var sectionBackgroundColor by cssParameter { theme.blockBackgroundColor }
+    override var sectionBackgroundColor by cssParameter { theme.backgroundColor }
     override var sectionTextColor by cssParameter { suiTheme.textColor }
     override var sectionBorderColor by cssParameter { theme.borderColor }
 
