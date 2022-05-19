@@ -10,11 +10,25 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.browser.table.zkTableStyles
 import zakadabar.core.browser.util.minusAssign
 import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.data.BaseBo
 import zakadabar.core.resource.css.px
 import kotlin.math.max
+
+open class SortSign<T: BaseBo>(val table: ZkTable<T>): ZkElement() {
+
+    var sign: ZkElement = zke {  } css table.styles.sortSign
+    var container: ZkElement = zke {  }
+
+    override fun onCreate() {
+        super.onCreate()
+
+        + container
+        container += sign
+    }
+}
 
 open class ZkColumn<T : BaseBo>(
     val table: ZkTable<T>
@@ -31,7 +45,7 @@ open class ZkColumn<T : BaseBo>(
     open var exportable = true
 
     open var label: String = ""
-    var sortSign = ZkElement() css table.styles.sortSign
+    var sortSign = SortSign(table)
 
     var beingResized = false
     var beenResized = false
@@ -79,12 +93,13 @@ open class ZkColumn<T : BaseBo>(
             it.sortSign.hide()
         }
 
+        sortSign.container.classList += table.styles.sortSignContainer
         if (sortAscending) {
-            sortSign.classList -= table.styles.sortedDescending
-            sortSign.classList += table.styles.sortedAscending
+            sortSign.sign.classList -= table.styles.sortedDescending
+            sortSign.sign.classList += table.styles.sortedAscending
         } else {
-            sortSign.classList += table.styles.sortedDescending
-            sortSign.classList -= table.styles.sortedAscending
+            sortSign.sign.classList += table.styles.sortedDescending
+            sortSign.sign.classList -= table.styles.sortedAscending
         }
 
         sortSign.show()
