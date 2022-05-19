@@ -280,7 +280,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         paddingRight = 34.px
         width = 100.percent
     }
-    
+
     @Suppress("unused") // used implicitly by the browser
     open val codeBlock by cssRule(".$content pre > code") {
         + BoxSizing.borderBox
@@ -311,13 +311,15 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         background = theme.backgroundColor
         backgroundColor = theme.blockBackgroundColor
         boxShadow = BoxShadows.md
+        borderRadius = Borders.borderRadius.md
     }
 
     open val codeCopyIcon by cssClass {
         + Cursor.pointer
         padding = 6.px
-        borderRadius = 2.px
-
+        borderRadius = Borders.borderRadius.md
+        color = theme.textColor
+        fill = theme.textColor
         hover {
             backgroundColor = theme.hoverBackgroundColor
         }

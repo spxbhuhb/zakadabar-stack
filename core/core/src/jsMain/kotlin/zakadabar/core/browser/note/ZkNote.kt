@@ -68,6 +68,7 @@ open class ZkNote(
 
         val finalIcon: ZkElement
         val finalInnerClass: ZkCssStyleRule
+        val finalSeparatorClass : ZkCssStyleRule
         val finalTitleClass: ZkCssStyleRule
 
         when (flavour) {
