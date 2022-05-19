@@ -420,6 +420,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      */
     open fun buildMultiLevelState() {
         if (! multiLevel) return
+        if (fullData.isEmpty()) return
 
         var previousLevel = 0
         check(getRowLevel(fullData[0]) == 0) { "the first row must be level 0" }
