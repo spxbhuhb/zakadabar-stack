@@ -112,15 +112,28 @@ open class SuiTableStyles : SuiFieldStyles(), TableStyleSpec {
 
     override val sortSign by cssClass {
         + BoxSizing.borderBox
-        + Position.absolute
+        + Position.sticky
         top = 0.px
-        right = 10.px
+        right = 0.px
         bottom = 0.px
     }
 
+    override val sortSignContainer by cssClass {
+        + BoxSizing.borderBox
+        + Position.absolute
+        + Display.flex
+        + AlignItems.center
+
+        top = 0.px
+        right = 0.px
+        bottom = 0.px
+        background = headerBackground
+        minHeight = 20.px
+        padding = 8.px
+        border = "1px solid ${theme.secondaryPair}"
+    }
+
     override val sortedDescending by cssClass {
-        marginTop = 16.px
-        marginRight = 12.px
         width = 0.px
         height = 0.px
         borderLeft = "6px solid transparent"
@@ -129,8 +142,6 @@ open class SuiTableStyles : SuiFieldStyles(), TableStyleSpec {
     }
 
     override val sortedAscending by cssClass {
-        marginTop = 16.px
-        marginRight = 12.px
         width = 0.px
         height = 0.px
         borderLeft = "6px solid transparent"

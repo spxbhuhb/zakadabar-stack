@@ -28,15 +28,18 @@ interface TableStyleSpec : FieldStyleSpec {
 
     val outerContainer: ZkCssStyleRule
     val contentContainer: ZkCssStyleRule
+
     /** Added to the content container when localTitle is true. */
-    val withTitle : ZkCssStyleRule
+    val withTitle: ZkCssStyleRule
+
     /** Added to the content container when localTitle is false. */
-    val withoutTitle : ZkCssStyleRule
+    val withoutTitle: ZkCssStyleRule
     val resizeHandle: ZkCssStyleRule
     val beingResized: ZkCssStyleRule
     val otherBeingResized: ZkCssStyleRule
     val noSelect: ZkCssStyleRule
     val sortSign: ZkCssStyleRule
+    val sortSignContainer: ZkCssStyleRule
     val sortedDescending: ZkCssStyleRule
     val sortedAscending: ZkCssStyleRule
     val table: ZkCssStyleRule
@@ -45,7 +48,7 @@ interface TableStyleSpec : FieldStyleSpec {
     val row: ZkCssStyleRule
     val hoverOverRow: ZkCssStyleRule
     val headerCell: ZkCssStyleRule
-    val headerCellFixHeight : ZkCssStyleRule
+    val headerCellFixHeight: ZkCssStyleRule
     val resizeHandleOn: ZkCssStyleRule
     val cell: ZkCssStyleRule
     val fixHeight: ZkCssStyleRule
