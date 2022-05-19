@@ -30,6 +30,13 @@ open class ZkPropOptLocalDateField(
     getter = { prop.get().toString() }
 ) {
 
+    override fun onCreate() {
+        super.onCreate()
+        if (context.styles.useNativeDateInput) {
+            input.type = "date"
+        }
+    }
+
     override var valueOrNull : LocalDate?
         get() = input.value.toLocalDateOrNull
         set(value) {

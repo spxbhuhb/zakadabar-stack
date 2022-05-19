@@ -15,6 +15,12 @@ interface FieldStyleSpec : CssStyleSpec {
      */
     var indent: Int
 
+    /**
+     * When true, date editor fields use the native date editor provided
+     * by the browser.
+     */
+    var useNativeDateInput : Boolean
+
     // -------------------------------------------------------------------------
     // Field Base
     // -------------------------------------------------------------------------

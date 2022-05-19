@@ -12,11 +12,8 @@ var zkFieldStyles : FieldStyleSpec by cssStyleSheet(ZkFieldStyles())
 open class ZkFieldStyles : ZkCssStyleSheet(), FieldStyleSpec {
 
     override var fieldHeight by cssParameter { 38 }
-
-    /**
-     * Indent of the selected entry and the popup from the left part of the field.
-     */
     override var indent by cssParameter { 8 }
+    override var useNativeDateInput by cssParameter { false }
 
     // -------------------------------------------------------------------------
     // Field Base
