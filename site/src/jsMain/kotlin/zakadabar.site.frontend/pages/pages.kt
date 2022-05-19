@@ -175,7 +175,7 @@ object Search : ZkPage(css = zkPageStyles.scrollable) {
             io {
                 results.clear()
 
-                val context = SiteMarkdownContext("","")
+                val context = SiteMarkdownContext("", "")
 
                 val cookbook = mutableListOf<LuceneQueryResult>()
                 val guides = mutableListOf<LuceneQueryResult>()
@@ -190,16 +190,16 @@ object Search : ZkPage(css = zkPageStyles.scrollable) {
                     }
                 }
 
-                fun ZkElement.addResult(result : LuceneQueryResult) {
+                fun ZkElement.addResult(result: LuceneQueryResult) {
                     + div {
-                            + ZkButton(
-                                text = result.title.trim('#').trim(' '),
-                                url = context.makeUrl("/doc/" + result.path),
-                                flavour = ZkFlavour.Info,
-                                fill = false,
-                                border = false
-                            )
-                        }
+                        + ZkButton(
+                            text = result.title.trim('#').trim(' '),
+                            url = context.makeUrl("/doc/" + result.path),
+                            flavour = ZkFlavour.Primary,
+                            fill = false,
+                            border = false
+                        )
+                    }
                 }
 
                 cookbook.sortBy { it.title }
@@ -208,11 +208,11 @@ object Search : ZkPage(css = zkPageStyles.scrollable) {
 
                 results.apply {
                     + h3 { + strings.recipies }
-                    cookbook.forEach { this.addResult(it)}
+                    cookbook.forEach { this.addResult(it) }
                     + h3 { + strings.guides }
-                    guides.forEach { this.addResult(it)}
+                    guides.forEach { this.addResult(it) }
                     + h3 { + strings.changelog }
-                    changelog.forEach { this.addResult(it)}
+                    changelog.forEach { this.addResult(it) }
                 }
 
             }

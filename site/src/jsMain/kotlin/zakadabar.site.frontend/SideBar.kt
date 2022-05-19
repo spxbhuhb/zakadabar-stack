@@ -8,6 +8,7 @@ import kotlinx.coroutines.await
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.sidebar.ZkSideBar
 import zakadabar.core.browser.util.io
+import zakadabar.core.resource.ZkIcons
 import zakadabar.core.text.MarkdownNav
 import zakadabar.site.frontend.cookbook.Cookbook
 import zakadabar.site.frontend.pages.*
@@ -23,20 +24,20 @@ class SideBar : ZkSideBar() {
             val changeLogSource = window.fetch("/api/content/changelog/TOC.md").await().text().await()
             val upgradeSource = window.fetch("/api/content/upgrade/TOC.md").await().text().await()
 
-            + section(strings.Welcome) {
+            + section(ZkIcons.home, strings.Welcome) {
                 + item(Welcome)
                 + item(GetStarted)
                 + item(ShowCase)
                 + item(GetHelp)
             }
 
-            + section(strings.tools) {
+            + section(ZkIcons.settings, strings.tools) {
                 + item(Search)
                 + item<Cookbook>()
                 + item(BenderPage, text = strings.bender)
             }
 
-            + section(strings.documentation) {
+            + section(ZkIcons.description, strings.documentation) {
                 MarkdownNav().parse(docSource).forEach {
                     + it.doc()
                 }
@@ -44,7 +45,7 @@ class SideBar : ZkSideBar() {
                 + item(FAQ)
             }
 
-            + section(strings.other) {
+            + section(ZkIcons.info, strings.other) {
                 + group(text = strings.changeLog) {
                     MarkdownNav().parse(changeLogSource).forEach {
                         + it.changelog()

@@ -3,8 +3,11 @@
  */
 package zakadabar.site.frontend.resources
 
+import zakadabar.core.browser.titlebar.zkTitleBarStyles
 import zakadabar.lib.markdown.browser.markdownStyles
 import zakadabar.softui.browser.theme.SoftUiDarkTheme
+import zakadabar.softui.browser.theme.base.Colors
+import zakadabar.softui.browser.theme.styles.suiLayoutStyles
 
 class SiteSuiDarkTheme : SoftUiDarkTheme() {
 
@@ -16,6 +19,16 @@ class SiteSuiDarkTheme : SoftUiDarkTheme() {
 
     override fun onResume() {
         super.onResume()
+
+        with(suiLayoutStyles) {
+            headerBackground = backgroundColor
+        }
+
+        with(zkTitleBarStyles) {
+            appHandleText = Colors.white.main
+            appTitleBarText = Colors.white.main
+        }
+
         with(markdownStyles) {
             codeBorderColor = borderColor
             highlightUrl = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/obsidian.min.css"

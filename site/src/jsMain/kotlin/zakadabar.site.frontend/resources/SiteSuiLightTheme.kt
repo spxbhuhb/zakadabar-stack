@@ -3,9 +3,12 @@
  */
 package zakadabar.site.frontend.resources
 
+import zakadabar.core.browser.titlebar.zkTitleBarStyles
+import zakadabar.core.util.alpha
 import zakadabar.lib.markdown.browser.markdownStyles
 import zakadabar.softui.browser.theme.SoftUiLightTheme
 import zakadabar.softui.browser.theme.base.Colors
+import zakadabar.softui.browser.theme.styles.suiLayoutStyles
 
 class SiteSuiLightTheme : SoftUiLightTheme() {
 
@@ -19,6 +22,18 @@ class SiteSuiLightTheme : SoftUiLightTheme() {
 
     override fun onResume() {
         super.onResume()
+
+        with(suiLayoutStyles) {
+            headerBackground = backgroundColor
+
+            val color = Colors.dark.main
+            separatorImage = "linear-gradient(to right, ${color.alpha(0.0)}, ${color.alpha(0.5)}, ${color.alpha(0.0)})"
+        }
+
+        with (zkTitleBarStyles) {
+            appHandleText = Colors.dark.main
+            appTitleBarText = Colors.dark.main
+        }
 
         with(markdownStyles) {
             codeBorderColor = borderColor

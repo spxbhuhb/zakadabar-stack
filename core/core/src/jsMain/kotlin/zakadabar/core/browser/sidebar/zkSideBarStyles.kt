@@ -147,24 +147,4 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         paddingLeft = 0.px
     }
 
-    open val minimizedSectionContainer by cssClass {
-        + Display.flex
-        + FlexDirection.row
-    }
-
-    open val minimizedSection by cssClass {
-        + Display.flex
-        + JustifyContent.center
-        + AlignItems.center
-
-        + Cursor.pointer
-
-        width = 28.px
-        height = 28.px
-        fontWeight = 500.weight
-        fontSize = 125.percent
-        backgroundColor = theme.blockBackgroundColor
-        borderBottom = theme.fixBorder
-        marginBottom = 6.px
-    }
 }

@@ -5,4 +5,4 @@ package zakadabar.softui.browser.theme.styles
 
 import zakadabar.core.resource.css.cssStyleSheet
 
-val layoutStyles by cssStyleSheet(SuiLayoutStyles())
+val suiLayoutStyles by cssStyleSheet(SuiLayoutStyles())

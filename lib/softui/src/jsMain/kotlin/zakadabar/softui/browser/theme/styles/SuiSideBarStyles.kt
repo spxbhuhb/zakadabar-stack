@@ -32,8 +32,6 @@ open class SuiSideBarStyles : ZkSideBarStyles() {
         height = 100.percent
         minWidth = 240.px
 
-        padding = (theme.spacingStep / 2).px
-
         fontSize = this@SuiSideBarStyles.fontSize
 
         backgroundColor = this@SuiSideBarStyles.backgroundColor
@@ -69,7 +67,7 @@ open class SuiSideBarStyles : ZkSideBarStyles() {
 
         minHeight = itemMinHeight.px
         paddingRight = 8.px
-        paddingLeft = 20.px
+        paddingLeft = 26.px
 
         hover {
             backgroundColor = theme.hoverBackgroundColor
@@ -88,6 +86,7 @@ open class SuiSideBarStyles : ZkSideBarStyles() {
         + Display.flex
         + JustifyContent.center
         + AlignItems.center
+        + Position.relative
 
         fill = suiTheme.headerTagColor
         width = 28.px + "!important"
@@ -135,6 +134,7 @@ open class SuiSideBarStyles : ZkSideBarStyles() {
     }
 
     override val groupArrow by cssClass {
+        marginLeft = 6.px
         width = 20.px
     }
 
@@ -148,7 +148,7 @@ open class SuiSideBarStyles : ZkSideBarStyles() {
         marginTop = theme.spacingStep.px
 
         paddingRight = 8.px
-        paddingLeft = 20.px
+        paddingLeft = 2.px
 
         + TextTransform.uppercase
 
@@ -174,27 +174,6 @@ open class SuiSideBarStyles : ZkSideBarStyles() {
 
     override val sectionContent by cssClass {
         paddingLeft = 0.px
-    }
-
-    override val minimizedSectionContainer by cssClass {
-        + Display.flex
-        + FlexDirection.row
-    }
-
-    override val minimizedSection by cssClass {
-        + Display.flex
-        + JustifyContent.center
-        + AlignItems.center
-
-        + Cursor.pointer
-
-        width = 28.px
-        height = 28.px
-        fontWeight = 500.weight
-        fontSize = 125.percent
-        backgroundColor = theme.blockBackgroundColor
-        borderBottom = theme.fixBorder
-        marginBottom = 6.px
     }
 
 }

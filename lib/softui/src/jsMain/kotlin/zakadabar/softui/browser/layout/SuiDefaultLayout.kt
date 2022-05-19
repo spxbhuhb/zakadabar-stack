@@ -13,10 +13,10 @@ import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.util.minusAssign
 import zakadabar.core.browser.util.plusAssign
 import zakadabar.softui.browser.theme.styles.SuiLayoutStyles
-import zakadabar.softui.browser.theme.styles.layoutStyles
+import zakadabar.softui.browser.theme.styles.suiLayoutStyles
 
 open class SuiDefaultLayout(
-    open val styles : SuiLayoutStyles = layoutStyles
+    open val styles : SuiLayoutStyles = suiLayoutStyles
 ) : ZkAppLayout("default") {
 
     open var header = ZkElement()
@@ -43,19 +43,22 @@ open class SuiDefaultLayout(
     var activeMediaSize = MediaSize.Uninitialized
 
     protected var headerContainer = ZkElement()
+    protected var separatorContainer = ZkElement()
     protected var sideBarContainer = ZkElement()
     protected var popupSidebarContainer = ZkElement()
 
     override fun onCreate() {
         super.onCreate()
 
-        headerContainer css layoutStyles.headerContainer build { + header }
+        headerContainer css styles.headerContainer build { + header }
 
-        sideBarContainer css layoutStyles.sideBarContainer build {
+        separatorContainer css styles.separator
+
+        sideBarContainer css styles.sideBarContainer build {
             + sideBar
         }
 
-        popupSidebarContainer css layoutStyles.popupSideBarContainer
+        popupSidebarContainer css styles.popupSideBarContainer
 
         on(window, "resize") {
             if (lifeCycleState != ZkElementState.Resumed) return@on
@@ -69,7 +72,6 @@ open class SuiDefaultLayout(
 
     override fun onResume() {
         application.onTitleChange = ::onTitleChange
-        //header.title = application.title
         popupSidebarContainer.hide()
 
         val mediaSize = if (window.innerWidth < 800) MediaSize.Small else MediaSize.Large
@@ -80,13 +82,14 @@ open class SuiDefaultLayout(
         }
 
         if (activeMediaSize != MediaSize.Uninitialized) {
-            classList -= layoutStyles.defaultLayoutLarge
-            classList -= layoutStyles.defaultLayoutSmall
+            classList -= suiLayoutStyles.defaultLayoutLarge
+            classList -= suiLayoutStyles.defaultLayoutSmall
 
-            contentContainer.classList -= layoutStyles.contentContainerSmall
-            contentContainer.classList -= layoutStyles.contentContainerLarge
+            contentContainer.classList -= suiLayoutStyles.contentContainerSmall
+            contentContainer.classList -= suiLayoutStyles.contentContainerLarge
 
             this -= headerContainer
+            this -= separatorContainer
             this -= sideBarContainer
             this -= contentContainer
             this -= popupSidebarContainer
@@ -105,10 +108,11 @@ open class SuiDefaultLayout(
     }
 
     open fun resumeSmall() {
-        classList += layoutStyles.defaultLayoutSmall
-        contentContainer.classList += layoutStyles.contentContainerSmall
+        classList += suiLayoutStyles.defaultLayoutSmall
+        contentContainer.classList += suiLayoutStyles.contentContainerSmall
 
         + headerContainer
+        + separatorContainer
         + contentContainer
 
         + popupSidebarContainer build {
@@ -120,12 +124,13 @@ open class SuiDefaultLayout(
     }
 
     open fun resumeLarge() {
-        classList += layoutStyles.defaultLayoutLarge
-        contentContainer.classList += layoutStyles.contentContainerLarge
+        classList += suiLayoutStyles.defaultLayoutLarge
+        contentContainer.classList += suiLayoutStyles.contentContainerLarge
 
         + headerContainer css zkLayoutStyles.grow gridColumn "1 / span 3"
-        + sideBarContainer gridRow 2 gridColumn 1
-        + contentContainer gridRow 2 gridColumn 3
+        + separatorContainer gridRow 2 gridColumn "1 / span 3"
+        + sideBarContainer gridRow 3 gridColumn 1
+        + contentContainer gridRow 3 gridColumn 3
 
         sideBarContainer.show()
         //header.handleContainer.hide()

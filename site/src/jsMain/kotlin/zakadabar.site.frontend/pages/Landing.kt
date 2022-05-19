@@ -3,19 +3,18 @@
  */
 package zakadabar.site.frontend.pages
 
-import zakadabar.site.frontend.components.DeveloperLogo
-import zakadabar.site.frontend.components.HeaderActions
-import zakadabar.site.frontend.components.SiteLogo
-import zakadabar.site.frontend.resources.landingStyles
-import zakadabar.site.resources.strings
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.button.ZkButton
 import zakadabar.core.browser.button.buttonCustom
 import zakadabar.core.browser.layout.ZkFullScreenLayout
 import zakadabar.core.browser.page.ZkPage
-import zakadabar.core.resource.ZkFlavour
 import zakadabar.core.browser.util.marginBottom
 import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.resource.ZkFlavour
+import zakadabar.site.frontend.components.DeveloperLogo
+import zakadabar.site.frontend.resources.landingStyles
+import zakadabar.site.frontend.resources.siteStyles
+import zakadabar.site.resources.strings
 
 object Landing : ZkPage(ZkFullScreenLayout) {
 
@@ -23,8 +22,10 @@ object Landing : ZkPage(ZkFullScreenLayout) {
         classList += landingStyles.landing
 
         + div(landingStyles.header) {
-            + SiteLogo()
-            + HeaderActions() marginRight 20
+            + div {
+                + siteStyles.siteName
+                + "Zakadabar"
+            }
         }
 
         + column(landingStyles.content) {

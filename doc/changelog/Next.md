@@ -19,9 +19,19 @@ are the places worth to check. If you extended them you may have to apply the ch
 - `ZkCssStyleSheet` now implements `CssStyleSpec`
 - `zk*Styles` now implement the appropriate style interface **low**
 - `ZkAttachmentsField` and `ZkImagesField` now allows click on the area to select files #103
+- `List<T>.by` now uses `LocaleAwareComparator`
 
 **fixed**
 
 - empty multi-level table bugfix #104
 - `ZkAttachmentsField` and `ZkImagesField` now refuses multi-upload when it would go over maximum allowed entries
 
+**removed**
+
+- minimized section function from `ZkSideBar`
+
+## Lib: SoftUi
+
+**added**
+
+- new UI theme inspired by [Soft UI](https://www.creative-tim.com/product/soft-ui-dashboard-react) from [Creative Tim](https://www.creative-tim.com/)

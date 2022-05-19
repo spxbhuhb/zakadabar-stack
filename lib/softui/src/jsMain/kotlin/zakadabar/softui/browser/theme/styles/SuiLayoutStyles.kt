@@ -7,6 +7,10 @@ import zakadabar.core.resource.css.*
 
 open class SuiLayoutStyles : ZkCssStyleSheet() {
 
+    open var headerBackground by cssParameter { "radial-gradient(circle, rgba(38,83,152,1) 0%, rgba(38,83,152,1) 47%, rgba(5,36,55,1) 100%)" }
+    open var headerSeparator by cssParameter { true }
+    open var separatorImage by cssParameter { "linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0))" }
+
     open val defaultLayoutSmall by cssClass {
         + Display.flex
         + FlexDirection.column
@@ -23,7 +27,7 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
         + BoxSizing.borderBox
 
         gridTemplateColumns = "max-content 10px 1fr"
-        gridTemplateRows = "max-content 1fr"
+        gridTemplateRows = "max-content min-content 1fr"
 
         height = 100.percent
         width = 100.percent
@@ -36,8 +40,14 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
         + AlignItems.center
         width = 100.percent
         minHeight = 60.px
-        marginBottom = 20.px
-        background = "radial-gradient(circle, rgba(38,83,152,1) 0%, rgba(38,83,152,1) 47%, rgba(5,36,55,1) 100%)"
+        marginBottom = if (headerSeparator) 0.px else 20.px
+        background = headerBackground
+    }
+
+    open val separator by cssClass {
+        height = if (headerSeparator) 1.px else 0.px
+        marginBottom = if (headerSeparator) 20.px else 0.px
+        backgroundImage = separatorImage
     }
 
     open val sideBarContainer by cssClass {

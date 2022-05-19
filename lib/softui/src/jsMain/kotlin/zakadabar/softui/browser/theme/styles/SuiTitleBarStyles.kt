@@ -3,7 +3,6 @@
  */
 package zakadabar.softui.browser.theme.styles
 
-import zakadabar.core.browser.theme.softui.components.suiTheme
 import zakadabar.core.browser.titlebar.TitleBarStyleSpec
 import zakadabar.core.resource.css.*
 import zakadabar.softui.browser.theme.base.Borders
@@ -12,11 +11,11 @@ open class SuiTitleBarStyles : ZkCssStyleSheet(), TitleBarStyleSpec {
 
     override var appTitleBarHeight by cssParameter { 44 }
     override var appHandleBackground by cssParameter { theme.backgroundColor }
-    override var appHandleText by cssParameter { suiTheme.colorOnImage }
+    override var appHandleText by cssParameter { theme.textColor }
     override var appHandleBorder by cssParameter { theme.border }
 
     override var appTitleBarBackground by cssParameter { theme.backgroundColor }
-    override var appTitleBarText by cssParameter { suiTheme.headerTagColor }
+    override var appTitleBarText by cssParameter { theme.textColor }
     override var appTitleBarBorder by cssParameter { theme.border }
 
     override var localTitleBarBackground by cssParameter { theme.blockBackgroundColor }
@@ -43,13 +42,13 @@ open class SuiTitleBarStyles : ZkCssStyleSheet(), TitleBarStyleSpec {
         }
 
         fontSize = 14.px
-        color = suiTheme.headerTagColor
+        color = appHandleText
     }
 
 
     override val appHandleButton by cssClass {
         background = "transparent !important"
-        fill = "${suiTheme.colorOnImage} !important"
+        fill = "$appHandleText !important"
         marginLeft = (theme.spacingStep / 2).px
         marginRight = (theme.spacingStep / 2).px
     }
@@ -70,15 +69,7 @@ open class SuiTitleBarStyles : ZkCssStyleSheet(), TitleBarStyleSpec {
             borderRadius = Borders.borderRadius.md
         }
 
-//        backgroundColor = theme.blockBackgroundColor
-//        boxShadow = BoxShadows.md
-        color = suiTheme.headerTagColor
-
-//        backgroundImage = suiTheme.backgroundImage
-//        backgroundSize = "cover"
-//        boxShadow = BoxShadows.md
-//        color = suiTheme.colorOnImage
-
+        color = appHandleText
     }
 
     /**
