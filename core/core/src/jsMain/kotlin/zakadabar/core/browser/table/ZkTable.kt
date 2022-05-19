@@ -248,11 +248,11 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             contentContainer = it
         }
 
+        if (counter) + counterBar
+
         on("mousedown", ::onMouseDown)
         on("dblclick", ::onDblClick)
         on("click", ::onClick)
-
-        if (counter) + counterBar
     }
 
     override fun onResume() {

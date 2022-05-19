@@ -4,6 +4,7 @@
 package zakadabar.softui.browser
 
 import zakadabar.core.browser.button.zkButtonStyles
+import zakadabar.core.browser.counterbar.zkCounterBarStyles
 import zakadabar.core.browser.field.zkFieldStyles
 import zakadabar.core.browser.form.zkFormStyles
 import zakadabar.core.browser.modal.zkModalStyles
@@ -28,4 +29,5 @@ fun install() {
     zkFieldStyles = SuiFieldStyles()
     zkNoteStyles = SuiNoteStyles()
     zkModalStyles = SuiModalStyles()
+    zkCounterBarStyles = SuiCounterBarStyles()
 }
