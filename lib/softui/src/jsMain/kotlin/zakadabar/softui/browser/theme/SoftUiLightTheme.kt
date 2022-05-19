@@ -30,7 +30,7 @@ open class SoftUiLightTheme : ZkBuiltinLightTheme(), SuiTheme {
 
     override var backgroundColor = Colors.white.main
 
-    override var primaryColor = Colors.dark.main
+    override var primaryColor = Colors.primary.main
     override var primaryPair = Colors.white.main
     override var secondaryColor = Colors.secondary.main
     override var secondaryPair = ZkColors.white

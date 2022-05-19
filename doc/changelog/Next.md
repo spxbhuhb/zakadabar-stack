@@ -17,4 +17,10 @@ are the places worth to check. If you extended them you may have to apply the ch
 
 - `ZkCssStyleSheet` now implements `CssStyleSpec`
 - `zk*Styles` now implement the appropriate style interface **low**
+- `ZkAttachmentsField` and `ZkImagesField` now allows click on the area to select files #103
+
+**fixed**
+
+- empty multi-level table bugfix #104
+- `ZkAttachmentsField` and `ZkImagesField` now refuses multi-upload when it would go over maximum allowed entries
 

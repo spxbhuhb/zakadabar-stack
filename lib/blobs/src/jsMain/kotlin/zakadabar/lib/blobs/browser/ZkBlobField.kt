@@ -16,11 +16,15 @@
  */
 package zakadabar.lib.blobs.browser
 
+import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.DragEvent
+import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.HTMLLabelElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.get
 import org.w3c.files.File
+import org.w3c.files.get
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.ZkElementMode
 import zakadabar.core.browser.button.ZkButton
@@ -63,6 +67,7 @@ import kotlin.reflect.KClass
  *                           the field can create the blobs by itself from this class.
  * @param   hideUpload       Function to decide if the upload area is hidden or nor. Default returns with "false".
  * @param   makeBlobCb       Callback function to make a blob instance.
+ * @param   maxBlobSize
  */
 abstract class ZkBlobField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
     val form: ZkForm<T>,
@@ -79,6 +84,7 @@ abstract class ZkBlobField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
 ) {
 
     open lateinit var droparea: ZkElement
+    open lateinit var inputField: HTMLInputElement
 
     override var readOnly = form.readOnly
 
@@ -95,7 +101,21 @@ abstract class ZkBlobField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
             }
 
             if (! hideUpload()) {
-                droparea = zke {
+                droparea = ZkElement(document.createElement("label") as HTMLLabelElement) build {
+
+                    + (document.createElement("input") as HTMLInputElement).apply {
+                        id = "${this@ZkBlobField.id}-input"
+                        type = "file"
+                        multiple = true
+                        style.display = "none"
+
+                        inputField = this
+
+                        addEventListener("click", { value = "" })
+                        addEventListener("change", ::onFileSelect)
+                    }
+
+                    (element as HTMLLabelElement).htmlFor = "${this@ZkBlobField.id}-input"
 
                     + div(blobStyles.imageDropArea) {
                         + column(blobStyles.imageDropAreaMessage) {
@@ -163,38 +183,50 @@ abstract class ZkBlobField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
         event.stopPropagation()
         event.preventDefault()
 
-        if (! allowUpload()) {
-            window.alert(localizedStrings.cannotAddMore)
-            return
-        }
-
         if (event !is DragEvent) return
 
         val dataTransfer = event.dataTransfer ?: return
 
+        if (! allowUpload(dataTransfer.items.length)) {
+            window.alert(localizedStrings.cannotAddMore)
+            return
+        }
+
         for (index in 0..dataTransfer.items.length) {
+            dataTransfer.items[index]?.let { item ->
+                if (item.kind == "file") item.getAsFile()?.upload()
+            }
+        }
+    }
 
-            val item = dataTransfer.items[index] ?: continue
+    @Suppress("UNUSED_PARAMETER")
+    fun onFileSelect(event: Event) {
+        inputField.files?.let { files ->
 
-            when (item.kind) {
-                "file" -> {
-                    val file = item.getAsFile() ?: continue
+            if (! allowUpload(files.length)) {
+                window.alert(localizedStrings.cannotAddMore)
+                return
+            }
 
-                    // template::class(EntityId(), null, "", file.name, file.type, file.size.toLong())
-                    io {
-                        val bo = makeBlob(file).create()
+            for (index in 0..files.length) {
+                files[index]?.upload()
+            }
+        }
+    }
 
-                        val entry = makeEntry(bo, BlobCreateState.Starting)
+    fun File.upload() {
+        io {
+            // this creates the blob BO on the server
+            val bo = makeBlob(this).create()
 
-                        // this will insert after the first thumbnail or at the beginning
-                        insertAfter(entry, find<ZkBlobFieldEntry<*>>().lastOrNull())
-                        updateDropArea()
+            val entry = makeEntry(bo, BlobCreateState.Starting)
 
-                        io { // this second IO block is here, so the the upload will be launched in the background
-                            comm.upload(bo, file, callback = entry::update)
-                        }
-                    }
-                }
+            // this will insert after the first thumbnail or at the beginning
+            insertAfter(entry, find<ZkBlobFieldEntry<*>>().lastOrNull())
+            updateDropArea()
+
+            io { // this second IO block is here, so the upload will be launched in the background
+                comm.upload(bo, this, callback = entry::update)
             }
         }
     }
@@ -204,8 +236,8 @@ abstract class ZkBlobField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
      * confuse with [hideUpload] that completely disables the upload
      * functionality.
      */
-    open fun allowUpload(): Boolean {
-        return blobCountMax?.let { max -> max - childElements.count { it is ZkBlobFieldEntry<*> } > 0 } ?: true
+    open fun allowUpload(toUpload : Int = 0): Boolean {
+        return blobCountMax?.let { max -> max - childElements.count { it is ZkBlobFieldEntry<*> } - toUpload > 0 } ?: true
     }
 
     open fun updateDropArea() {

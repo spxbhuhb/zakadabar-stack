@@ -76,7 +76,7 @@ open class SuiToastStyles : ZkCssStyleSheet(), ToastStyleSpec {
     override val primaryInner by cssClass {
         border = "1px solid ${Colors.alertColors.dark.border}"
         color = theme.primaryPair
-        backgroundImage = linearGradient(Colors.alertColors.dark.main, Colors.alertColors.dark.state)
+        backgroundImage = linearGradient(Colors.alertColors.primary.main, Colors.alertColors.primary.state)
     }
 
     override val primaryIcon by cssClass {
