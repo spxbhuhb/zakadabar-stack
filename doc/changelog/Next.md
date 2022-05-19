@@ -13,6 +13,7 @@ are the places worth to check. If you extended them you may have to apply the ch
 - style specification interfaces, extended by style classes
 - option to use the native, browser supplied date editor for LocalDate fields #107
 - `LocaleAwareComparator` for locale aware text comparison #105
+- `ZkTable.fixedHeaderHeight` to enable non-fixed header height #106
 
 **changed**
 

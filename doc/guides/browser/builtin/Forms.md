@@ -367,6 +367,22 @@ Use the `newSecret` configuration function to set autocomplete of secret fields 
 + bo::password newSecret true
 ```
 
+#### Date Input
+
+You can use the HTML5 date picker by setting 
+`zkFormStyles.useNativeDateInput` to `true` during application startup in
+the `onResume` function of the theme.
+
+See [Write a theme](../structure/ThemesCss.md#Write-a-theme) for more information.
+
+This is a global setting that is applied to all `LocalDate` fields.
+
+<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Light & Dark">
+On this site the native input is enabled in the light theme and is disabled
+in the dark theme. You have to refresh the page after theme switch to reload
+this setting.
+</div>
+
 ### Manual Create
 
 You can create fields instances manually and add them to the form. Depending on
@@ -521,3 +537,5 @@ class FormFieldsDefault : ZkElement() {
 Use [ZkImageField](/lib/blobs/src/jsMain/kotlin/zakadabar/lib/blobs/browser/image/ZkImagesField.kt) 
 and [ZkAttachmentsField](/lib/blobs/src/jsMain/kotlin/zakadabar/lib/blobs/browser/attachment/ZkAttachmentsField.kt) 
 to provide image or attachment handling.
+
+You can find examples in the Cookbook.

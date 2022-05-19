@@ -174,14 +174,15 @@ open class SuiTableStyles : SuiFieldStyles(), TableStyleSpec {
     override val headerCell by cssClass({ ".$table th" }) {
         + Position.sticky
         + Overflow.hidden
-        + WhiteSpace.nowrap
         + TextAlign.left
         + Display.flex
         + AlignItems.center
         + Cursor.pointer
         + BoxSizing.borderBox
 
-        height = rowHeight.px
+        minHeight = rowHeight.px
+        paddingTop = 8.px
+        paddingBottom = 8.px
         top = 0.px
 
         zIndex = 30.zIndex
@@ -195,6 +196,11 @@ open class SuiTableStyles : SuiFieldStyles(), TableStyleSpec {
 
         color = headerText
         borderBottom = headerBottomBorder
+    }
+
+    override val headerCellFixHeight by cssClass {
+        + WhiteSpace.nowrap
+        maxHeight = rowHeight.px
     }
 
     @PublicApi

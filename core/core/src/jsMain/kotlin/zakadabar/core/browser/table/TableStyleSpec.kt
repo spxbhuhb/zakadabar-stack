@@ -45,6 +45,7 @@ interface TableStyleSpec : FieldStyleSpec {
     val row: ZkCssStyleRule
     val hoverOverRow: ZkCssStyleRule
     val headerCell: ZkCssStyleRule
+    val headerCellFixHeight : ZkCssStyleRule
     val resizeHandleOn: ZkCssStyleRule
     val cell: ZkCssStyleRule
     val fixHeight: ZkCssStyleRule

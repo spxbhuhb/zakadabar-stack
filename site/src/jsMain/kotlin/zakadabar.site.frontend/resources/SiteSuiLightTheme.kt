@@ -3,6 +3,7 @@
  */
 package zakadabar.site.frontend.resources
 
+import zakadabar.core.browser.form.zkFormStyles
 import zakadabar.core.browser.titlebar.zkTitleBarStyles
 import zakadabar.core.util.alpha
 import zakadabar.lib.markdown.browser.markdownStyles
@@ -38,6 +39,10 @@ class SiteSuiLightTheme : SoftUiLightTheme() {
         with(markdownStyles) {
             codeBorderColor = borderColor
             highlightUrl = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/idea.min.css"
+        }
+
+        with (zkFormStyles) {
+            useNativeDateInput = true
         }
     }
 

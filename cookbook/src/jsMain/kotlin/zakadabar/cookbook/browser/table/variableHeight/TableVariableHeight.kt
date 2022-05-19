@@ -18,8 +18,9 @@ class TableVariableHeight : ZkTable<ExampleBo>() {
         super.onConfigure()
 
         fixRowHeight = false
+        fixHeaderHeight = false
 
-        + ExampleBo::stringValue size 1.fr
+        + ExampleBo::stringValue size 1.fr label "this is a long label to test long labels... imho it is not a good idea to use table header labels that span rows... or... is it?"
         + ExampleBo::booleanValue size 3.em
 
         + actions {

@@ -103,6 +103,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     var counter = false
 
     var fixRowHeight = true
+    var fixHeaderHeight = true
     var multiLevel = false
 
     open val rowHeight
@@ -235,7 +236,11 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
                 buildPoint.style.cssText = inlineCss()
                 + thead {
                     + styles.noSelect
-                    columns.forEach { + it }
+                    columns.forEach {
+                        + it.apply {
+                            if (fixHeaderHeight) + styles.headerCellFixHeight
+                        }
+                    }
                 }
                 + tableBodyElement
             }.also {

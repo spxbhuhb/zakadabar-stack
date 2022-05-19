@@ -189,6 +189,11 @@ open class ZkTableStyles : ZkFieldStyles(), TableStyleSpec {
         borderBottom = headerBottomBorder
     }
 
+    override val headerCellFixHeight by cssClass {
+        + WhiteSpace.nowrap
+        maxHeight = rowHeight.px
+    }
+
     @PublicApi
     override val resizeHandleOn by cssClass({ ".$table th:hover .$resizeHandle" }) {
         opacity = 1.opacity
