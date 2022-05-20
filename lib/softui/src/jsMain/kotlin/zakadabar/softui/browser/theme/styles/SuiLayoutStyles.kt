@@ -26,7 +26,7 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
         + Display.grid
         + BoxSizing.borderBox
 
-        gridTemplateColumns = "max-content 10px 1fr"
+        gridTemplateColumns = "max-content 20px 1fr"
         gridTemplateRows = "max-content min-content 1fr"
 
         height = 100.percent

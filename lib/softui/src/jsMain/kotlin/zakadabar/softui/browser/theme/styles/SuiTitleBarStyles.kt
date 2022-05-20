@@ -45,7 +45,6 @@ open class SuiTitleBarStyles : ZkCssStyleSheet(), TitleBarStyleSpec {
         color = appHandleText
     }
 
-
     override val appHandleButton by cssClass {
         background = "transparent !important"
         fill = "$appHandleText !important"

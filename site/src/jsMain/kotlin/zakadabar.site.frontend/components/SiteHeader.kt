@@ -6,6 +6,7 @@ package zakadabar.site.frontend.components
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.application
 import zakadabar.core.browser.theme.ZkThemeRotate
+import zakadabar.core.browser.titlebar.zkTitleBarStyles
 import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.css.px
 import zakadabar.site.frontend.resources.SiteSuiDarkTheme
@@ -18,6 +19,7 @@ class SiteHeader : ZkElement() {
         super.onCreate()
 
         + siteStyles.headerContent
+        + zkTitleBarStyles.appTitleBar
 
         + div {
             + siteStyles.siteName

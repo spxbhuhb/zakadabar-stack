@@ -5,19 +5,19 @@ package zakadabar.softui.browser.theme
 
 import zakadabar.core.browser.layout.zkScrollBarStyles
 import zakadabar.core.browser.sidebar.zkSideBarStyles
-import zakadabar.core.browser.theme.ZkBuiltinLightTheme
+import zakadabar.core.browser.theme.ZkBuiltinDarkTheme
 import zakadabar.core.browser.theme.softui.components.SuiTheme
+import zakadabar.core.browser.titlebar.zkTitleBarStyles
 import zakadabar.core.resource.ZkColors
-import zakadabar.core.util.after
 import zakadabar.core.util.alpha
 import zakadabar.softui.browser.theme.base.Borders
 import zakadabar.softui.browser.theme.base.Colors
 import zakadabar.softui.browser.theme.base.rgba
 
-open class SoftUiLightTheme : ZkBuiltinLightTheme(), SuiTheme {
+open class SuiDarkTheme : ZkBuiltinDarkTheme(), SuiTheme {
 
     companion object {
-        const val NAME = "app-light"
+        const val NAME = "app-dark"
     }
 
     override val name = NAME
@@ -26,9 +26,9 @@ open class SoftUiLightTheme : ZkBuiltinLightTheme(), SuiTheme {
     override var fontSize = "16px"
     override var fontWeight = "400"
 
-    override var textColor = Colors.grey.g800
+    override var textColor = Colors.grey.g200
 
-    override var backgroundColor = Colors.white.main
+    override var backgroundColor = Colors.black.main
 
     override var primaryColor = Colors.primary.main
     override var primaryPair = Colors.white.main
@@ -37,7 +37,7 @@ open class SoftUiLightTheme : ZkBuiltinLightTheme(), SuiTheme {
     override var successColor = Colors.success.main
     override var successPair = Colors.white.main
     override var warningColor = Colors.warning.main
-    override var warningPair by after { textColor }
+    override var warningPair = Colors.dark.main
     override var dangerColor = Colors.error.main
     override var dangerPair = ZkColors.white
     override var infoColor = Colors.info.main
@@ -45,8 +45,8 @@ open class SoftUiLightTheme : ZkBuiltinLightTheme(), SuiTheme {
     override var disabledColor = Colors.light.main
     override var disabledPair = Colors.dark.main
 
-    override var blockBackgroundColor = Colors.white.main
-    override val headerTagColor = Colors.dark.main
+    override var blockBackgroundColor = Colors.grey.g800
+    override val headerTagColor = Colors.light.main
     override val backgroundImage = "linear-gradient(310deg, rgba(20, 23, 39, 0.8), rgba(58, 65, 111, 0.8)), url(\"/curved14.12c9ea54425c4f1bc1d7.jpg\")"
     override val colorOnImage = Colors.light.main
     override val sectionBorder = "${Borders.borderWidth.b0} solid ${rgba(Colors.black.main, 0.125)}"
@@ -63,8 +63,14 @@ open class SoftUiLightTheme : ZkBuiltinLightTheme(), SuiTheme {
 
     override fun onResume() {
 
+        with(zkTitleBarStyles) {
+            appHandleText = Colors.white.main
+            appTitleBarText = Colors.white.main
+        }
+
         with(zkSideBarStyles) {
             iconSize = 18
+            textColor = Colors.grey.g300
         }
 
         with(zkScrollBarStyles) {

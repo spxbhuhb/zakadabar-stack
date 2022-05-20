@@ -4,14 +4,10 @@
 package zakadabar.site.frontend.resources
 
 import zakadabar.core.browser.form.zkFormStyles
-import zakadabar.core.browser.titlebar.zkTitleBarStyles
-import zakadabar.core.util.alpha
 import zakadabar.lib.markdown.browser.markdownStyles
-import zakadabar.softui.browser.theme.SoftUiLightTheme
-import zakadabar.softui.browser.theme.base.Colors
-import zakadabar.softui.browser.theme.styles.suiLayoutStyles
+import zakadabar.softui.browser.theme.SuiLightTheme
 
-class SiteSuiLightTheme : SoftUiLightTheme() {
+class SiteSuiLightTheme : SuiLightTheme() {
 
     companion object {
         const val NAME = "site-light"
@@ -19,22 +15,8 @@ class SiteSuiLightTheme : SoftUiLightTheme() {
 
     override val name = NAME
 
-    override var backgroundColor = Colors.grey.g100
-
     override fun onResume() {
         super.onResume()
-
-        with(suiLayoutStyles) {
-            headerBackground = backgroundColor
-
-            val color = Colors.dark.main
-            separatorImage = "linear-gradient(to right, ${color.alpha(0.0)}, ${color.alpha(0.5)}, ${color.alpha(0.0)})"
-        }
-
-        with (zkTitleBarStyles) {
-            appHandleText = Colors.dark.main
-            appTitleBarText = Colors.dark.main
-        }
 
         with(markdownStyles) {
             codeBorderColor = borderColor

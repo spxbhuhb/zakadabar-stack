@@ -31,8 +31,16 @@ are the places worth to check. If you extended them you may have to apply the ch
 
 - minimized section function from `ZkSideBar`
 
+## Lib: Markdown
+
+- default maximum width of the markdown view is now 800px
+
 ## Lib: SoftUi
 
 **added**
 
 - new UI theme inspired by [Soft UI](https://www.creative-tim.com/product/soft-ui-dashboard-react) from [Creative Tim](https://www.creative-tim.com/)
+
+## Site
+
+- switched to Soft UI

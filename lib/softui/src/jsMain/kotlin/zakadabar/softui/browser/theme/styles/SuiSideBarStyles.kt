@@ -10,12 +10,11 @@ import zakadabar.core.browser.theme.softui.components.suiTheme
 import zakadabar.core.resource.css.*
 import zakadabar.softui.browser.theme.base.Borders
 import zakadabar.softui.browser.theme.base.BoxShadows
-import zakadabar.softui.browser.theme.base.Colors
 
 open class SuiSideBarStyles : ZkSideBarStyles() {
 
     override var backgroundColor by cssParameter { theme.backgroundColor }
-    override var textColor by cssParameter { Colors.grey.g600 }
+    override var textColor by cssParameter { theme.textColor }
     override var itemMinHeight by cssParameter { 36 }
     override var fontSize by cssParameter { "80%" }
     override var iconSize by cssParameter { 18 }
