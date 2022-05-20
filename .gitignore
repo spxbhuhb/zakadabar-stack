@@ -128,3 +128,4 @@ Thumbs.db
 /local.properties
 /kotlin-js-store/yarn.lock
 /lib/lucene/app/var/index/
+/.idea/kotlinScripting.xml
