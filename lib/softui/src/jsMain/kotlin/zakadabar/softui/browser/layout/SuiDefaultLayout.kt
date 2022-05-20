@@ -8,7 +8,6 @@ import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.ZkElementState
 import zakadabar.core.browser.application.ZkAppLayout
 import zakadabar.core.browser.application.application
-import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.util.minusAssign
 import zakadabar.core.browser.util.plusAssign
@@ -16,7 +15,7 @@ import zakadabar.softui.browser.theme.styles.SuiLayoutStyles
 import zakadabar.softui.browser.theme.styles.suiLayoutStyles
 
 open class SuiDefaultLayout(
-    open val styles : SuiLayoutStyles = suiLayoutStyles
+    open val styles: SuiLayoutStyles = suiLayoutStyles
 ) : ZkAppLayout("default") {
 
     open var header = ZkElement()
@@ -32,7 +31,6 @@ open class SuiDefaultLayout(
             field = value
             sideBarContainer += field
         }
-
 
     enum class MediaSize {
         Uninitialized,
@@ -120,20 +118,18 @@ open class SuiDefaultLayout(
         }
 
         popupSidebarContainer.hide()
-        //header.handleContainer.show()
     }
 
     open fun resumeLarge() {
         classList += suiLayoutStyles.defaultLayoutLarge
         contentContainer.classList += suiLayoutStyles.contentContainerLarge
 
-        + headerContainer css zkLayoutStyles.grow gridColumn "1 / span 3"
+        + headerContainer gridRow 1 gridColumn "1 / span 3"
         + separatorContainer gridRow 2 gridColumn "1 / span 3"
         + sideBarContainer gridRow 3 gridColumn 1
         + contentContainer gridRow 3 gridColumn 3
 
         sideBarContainer.show()
-        //header.handleContainer.hide()
     }
 
     override fun onPause() {
@@ -148,7 +144,6 @@ open class SuiDefaultLayout(
     open fun onToggleSideBar() {
         if (activeMediaSize == MediaSize.Large) {
             sideBarContainer.toggle()
-            //header.handleContainer.toggle()
         } else {
             popupSidebarContainer.toggle()
         }

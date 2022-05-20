@@ -4,10 +4,13 @@
 package zakadabar.softui.browser.theme.styles
 
 import zakadabar.core.resource.css.*
+import zakadabar.softui.browser.theme.base.Colors
+import zakadabar.softui.browser.theme.base.linearGradient
 
 open class SuiLayoutStyles : ZkCssStyleSheet() {
 
-    open var headerBackground by cssParameter { "radial-gradient(circle, rgba(38,83,152,1) 0%, rgba(38,83,152,1) 47%, rgba(5,36,55,1) 100%)" }
+    open var headerHeight by cssParameter { 80 }
+    open var headerBackground by cssParameter { linearGradient(Colors.alertColors.info.state, Colors.alertColors.info.main) }
     open var headerSeparator by cssParameter { true }
     open var separatorImage by cssParameter { "linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0))" }
 
@@ -27,7 +30,7 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
         + BoxSizing.borderBox
 
         gridTemplateColumns = "max-content 20px 1fr"
-        gridTemplateRows = "max-content min-content 1fr"
+        gridTemplateRows = "${headerHeight}px min-content 1fr"
 
         height = 100.percent
         width = 100.percent
@@ -39,9 +42,13 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
         + Display.flex
         + AlignItems.center
         width = 100.percent
-        minHeight = 60.px
+        minHeight = headerHeight.px
         marginBottom = if (headerSeparator) 0.px else 20.px
         background = headerBackground
+
+        medium {
+            minHeight = (headerHeight/2).px
+        }
     }
 
     open val separator by cssClass {
@@ -72,6 +79,10 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
         on(":hover::-webkit-scrollbar") {
             width = 4.px
         }
+
+        medium {
+            marginLeft = 20.px
+        }
     }
 
     open val popupSideBarContainer by cssClass {
@@ -80,8 +91,9 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
 
         zIndex = 100.zIndex
 
+        top = (headerHeight/2).px
         width = 100.percent
-        maxHeight = 100.percent
+        maxHeight = "calc(100% - ${headerHeight/2}px)"
 
         background = theme.backgroundColor
 
@@ -101,7 +113,8 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
         height = 100.percent
         maxHeight = 100.percent
         + OverflowY.hidden
-        paddingLeft = 10.px
+        paddingLeft = 20.px
+        paddingRight = 20.px
     }
 
 }

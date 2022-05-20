@@ -5,10 +5,11 @@ package zakadabar.site.frontend.components
 
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.application
+import zakadabar.core.browser.icon.ZkIcon
 import zakadabar.core.browser.theme.ZkThemeRotate
-import zakadabar.core.browser.titlebar.zkTitleBarStyles
 import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.css.px
+import zakadabar.site.frontend.DefaultLayout
 import zakadabar.site.frontend.resources.SiteSuiDarkTheme
 import zakadabar.site.frontend.resources.SiteSuiLightTheme
 import zakadabar.site.frontend.resources.siteStyles
@@ -19,7 +20,14 @@ class SiteHeader : ZkElement() {
         super.onCreate()
 
         + siteStyles.headerContent
-        + zkTitleBarStyles.appTitleBar
+
+        + div {
+            + siteStyles.sideBarToggle
+            + ZkIcon(ZkIcons.notes)
+            on("click") {
+               DefaultLayout.onToggleSideBar()
+            }
+        }
 
         + div {
             + siteStyles.siteName

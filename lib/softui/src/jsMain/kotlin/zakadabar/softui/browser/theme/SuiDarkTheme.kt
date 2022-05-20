@@ -9,7 +9,6 @@ import zakadabar.core.browser.theme.ZkBuiltinDarkTheme
 import zakadabar.core.browser.theme.softui.components.SuiTheme
 import zakadabar.core.browser.titlebar.zkTitleBarStyles
 import zakadabar.core.resource.ZkColors
-import zakadabar.core.util.alpha
 import zakadabar.softui.browser.theme.base.Borders
 import zakadabar.softui.browser.theme.base.Colors
 import zakadabar.softui.browser.theme.base.rgba
@@ -23,7 +22,7 @@ open class SuiDarkTheme : ZkBuiltinDarkTheme(), SuiTheme {
     override val name = NAME
 
     override var fontFamily = "'Open Sans'"
-    override var fontSize = "16px"
+    override var fontSize = "14px"
     override var fontWeight = "400"
 
     override var textColor = Colors.grey.g200
@@ -74,8 +73,9 @@ open class SuiDarkTheme : ZkBuiltinDarkTheme(), SuiTheme {
         }
 
         with(zkScrollBarStyles) {
-            thumbColor = textColor.alpha(0.5)
-            trackColor = backgroundColor
+            enabled = false
+//            thumbColor = textColor.alpha(0.5)
+//            trackColor = backgroundColor
         }
 
     }

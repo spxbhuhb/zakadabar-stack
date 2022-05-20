@@ -14,7 +14,8 @@ class SiteStyles : ZkCssStyleSheet() {
     val headerContent by cssClass {
         + Display.grid
         width = 100.percent
-        gridTemplateColumns = "max-content min-content 1fr max-content"
+        gridTemplateColumns = "max-content max-content min-content 1fr max-content"
+        color = theme.infoPair
     }
 
     val siteName by cssClass {
@@ -38,6 +39,13 @@ class SiteStyles : ZkCssStyleSheet() {
 
     val headerLink by cssClass {
         fontSize = 14.px
+    }
+
+    val sideBarToggle by cssClass {
+        + AlignSelf.center
+        paddingLeft = 20.px
+        fill = theme.infoPair
+        + Cursor.pointer
     }
 
     val developerLogo by cssClass {
