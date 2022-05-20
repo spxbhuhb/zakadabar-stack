@@ -34,9 +34,20 @@ open class ZkPropOptLocalDateField(
         get() = input.value.toLocalDateOrNull
         set(value) {
             prop.set(value!!)
-            input.value = value.localized
+            if (context.styles.useNativeDateInput) {
+                input.value = value.toString()
+            } else {
+                input.value = value.localized
+            }
             invalidInput = false
         }
+
+    override fun onCreate() {
+        super.onCreate()
+        if (context.styles.useNativeDateInput) {
+            input.type = "date"
+        }
+    }
 
     override fun setBackingValue(value: String) {
         val iv = input.value.toLocalDateOrNull

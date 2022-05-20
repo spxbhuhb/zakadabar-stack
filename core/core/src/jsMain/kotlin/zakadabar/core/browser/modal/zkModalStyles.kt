@@ -5,11 +5,11 @@ package zakadabar.core.browser.modal
 
 import zakadabar.core.resource.css.*
 
-var zkModalStyles by cssStyleSheet(ZkModalStyles())
+var zkModalStyles : ModalStyleSpec by cssStyleSheet(ZkModalStyles())
 
-open class ZkModalStyles : ZkCssStyleSheet() {
+open class ZkModalStyles : ZkCssStyleSheet(), ModalStyleSpec {
 
-    open val modalContainer by cssClass {
+    override val modalContainer by cssClass {
         position = "fixed"
         top = 0.px
         left = 0.px
@@ -22,22 +22,22 @@ open class ZkModalStyles : ZkCssStyleSheet() {
         zIndex = 1900.zIndex
     }
 
-    open val modal by cssClass {
+    override val modal by cssClass {
         background = theme.backgroundColor
         border = theme.border
     }
 
-    open val title by cssClass {
+    override val title by cssClass {
         paddingLeft = theme.spacingStep.px
         paddingRight = theme.spacingStep.px
         borderBottom = theme.border
     }
 
-    open val content by cssClass {
+    override val content by cssClass {
         padding = theme.spacingStep.px
     }
 
-    open val buttons by cssClass {
+    override val buttons by cssClass {
         + Display.flex
         + FlexDirection.row
         + JustifyContent.spaceAround

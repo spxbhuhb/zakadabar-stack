@@ -6,29 +6,29 @@ package zakadabar.core.browser.titlebar
 import zakadabar.core.resource.css.*
 import zakadabar.core.util.alpha
 
-var zkTitleBarStyles by cssStyleSheet(ZkTitleBarStyles())
+var zkTitleBarStyles : TitleBarStyleSpec by cssStyleSheet(ZkTitleBarStyles())
 
-open class ZkTitleBarStyles : ZkCssStyleSheet() {
+open class ZkTitleBarStyles : ZkCssStyleSheet(), TitleBarStyleSpec {
 
-    open var appTitleBarHeight by cssParameter { 44 }
-    open var appHandleBackground by cssParameter { theme.backgroundColor }
-    open var appHandleText by cssParameter { theme.textColor }
-    open var appHandleBorder by cssParameter { theme.border }
+    override var appTitleBarHeight by cssParameter { 44 }
+    override var appHandleBackground by cssParameter { theme.backgroundColor }
+    override var appHandleText by cssParameter { theme.textColor }
+    override var appHandleBorder by cssParameter { theme.border }
 
-    open var appTitleBarBackground by cssParameter { theme.backgroundColor }
-    open var appTitleBarText by cssParameter { theme.textColor }
-    open var appTitleBarBorder by cssParameter { theme.border }
+    override var appTitleBarBackground by cssParameter { theme.backgroundColor }
+    override var appTitleBarText by cssParameter { theme.textColor }
+    override var appTitleBarBorder by cssParameter { theme.border }
 
-    open var localTitleBarBackground by cssParameter { theme.textColor.alpha(0.1) }
-    open var localTitleBarHeight by cssParameter { 32 }
-    open var localTitleBarBorder by cssParameter { theme.fixBorder }
-    open var localTitleBarText by cssParameter { theme.textColor }
+    override var localTitleBarBackground by cssParameter { theme.textColor.alpha(0.1) }
+    override var localTitleBarHeight by cssParameter { 32 }
+    override var localTitleBarBorder by cssParameter { theme.fixBorder }
+    override var localTitleBarText by cssParameter { theme.textColor }
 
     /**
      * Application handle, the button and application name at the top left.
      * [appHandleContainer] is the style for the whole container.
      */
-    open val appHandleContainer by cssClass {
+    override val appHandleContainer by cssClass {
         + BoxSizing.borderBox
 
         + Display.flex
@@ -55,7 +55,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
     /**
      * Style for the button (a hamburger menu) in the application handle.
      */
-    open val appHandleButton by cssClass {
+    override val appHandleButton by cssClass {
         background = "transparent !important"
         fill = "$appHandleText !important"
         marginLeft = (theme.spacingStep / 2).px
@@ -65,7 +65,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
     /**
      * Style for the application title bar. This is the title bar above the content.
      */
-    open val appTitleBar by cssClass {
+    override val appTitleBar by cssClass {
         + BoxSizing.borderBox
         + Display.flex
         + FlexDirection.row
@@ -85,7 +85,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
      * When the side bar is closed a button is shown in the application title
      * bar that opens the sidebar again.
      */
-    open val sidebarHandle by cssClass {
+    override val sidebarHandle by cssClass {
         + Display.flex
         + AlignItems.center
         + JustifyContent.center
@@ -100,7 +100,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
     /**
      * Container for the title in the application title bar.
      */
-    open val titleContainer by cssClass {
+    override val titleContainer by cssClass {
         marginLeft = theme.spacingStep.px
         + AlignItems.center
     }
@@ -108,7 +108,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
     /**
      * Container for the context elements in the application title bar.
      */
-    open val contextElementContainer by cssClass {
+    override val contextElementContainer by cssClass {
         + Display.flex
         + FlexDirection.row
         + AlignItems.center
@@ -117,14 +117,14 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
     /**
      * Container for the global elements in the application title bar.
      */
-    open val globalElementContainer by cssClass {
+    override val globalElementContainer by cssClass {
         + Display.flex
         + FlexDirection.row
         + AlignItems.center
         paddingRight = 10.px
     }
 
-    open val iconButton by cssClass {
+    override val iconButton by cssClass {
         fill = "$appTitleBarText !important"
         backgroundColor = "transparent !important"
     }
@@ -132,7 +132,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet() {
     /**
      * Style for the application title bar. This is the title bar above the content.
      */
-    open val localTitleBar by cssClass {
+    override val localTitleBar by cssClass {
         + BoxSizing.borderBox
 
         + Display.flex

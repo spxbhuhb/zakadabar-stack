@@ -16,7 +16,6 @@ import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.resource.ZkIconSource
 import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.localizedStrings
-import zakadabar.core.util.after
 
 /**
  * A group of sidebar entries. Supports open and close.
@@ -45,9 +44,8 @@ open class ZkSideBarGroup(
 
     open var open = false
 
-    open val openIcon = ZkIcon(ZkIcons.arrowRight, 18)
-    open val closeIcon by after { if (section) ZkIcon(ZkIcons.horizontalRule, 18) else ZkIcon(ZkIcons.arrowDropDown, 18) }
-
+    open lateinit var openIcon: ZkElement
+    open lateinit var closeIcon: ZkElement
     open lateinit var textElement: ZkElement
 
     constructor(
@@ -74,6 +72,14 @@ open class ZkSideBarGroup(
 
     override fun onCreate() {
 
+        if (sideBar?.arrowAfter != true) {
+            openIcon = ZkIcon(ZkIcons.arrowRight, 18)
+            closeIcon = ZkIcon(ZkIcons.arrowDropDown, 18)
+        } else {
+            openIcon = ZkIcon(ZkIcons.arrowDropDown, 18)
+            closeIcon = ZkIcon(ZkIcons.arrowRight, 18)
+        }
+
         if (url == null) {
             textElement = ZkElement(document.createElement("div") as HTMLElement)
         } else {
@@ -94,20 +100,31 @@ open class ZkSideBarGroup(
         + zkLayoutStyles.column
 
         + div(zkSideBarStyles.groupTitle) {
-            + div(zkSideBarStyles.groupArrow) {
-                + openIcon
-                + closeIcon.hide()
-                on("click", ::onHandleGroupClick)
-            }
+
+            if (sideBar?.arrowAfter != true) arrow()
+
             icon?.let {
                 + ZkIcon(icon) css zkSideBarStyles.icon
             }
+
             + textElement css zkLayoutStyles.grow
+
+            if (sideBar?.arrowAfter == true) arrow()
+
             on("click", ::onNavigate)
         }
+
         + zke(zkSideBarStyles.groupContent) {
             if (! section) hide()
             builder()
+        }
+    }
+
+    open fun arrow() {
+        + div(zkSideBarStyles.groupArrow) {
+            + openIcon
+            + closeIcon.hide()
+            on("click", ::onHandleGroupClick)
         }
     }
 
@@ -119,8 +136,6 @@ open class ZkSideBarGroup(
                     + ZkIcon(icon).on("click", ::onNavigate) css zkSideBarStyles.icon
                 }
                 + textElement.on("click", ::onNavigate) css zkLayoutStyles.grow
-                + closeIcon css zkSideBarStyles.sectionCloseIcon
-                closeIcon.on("click", ::onHandleSectionClick)
             }
             + zke(zkSideBarStyles.sectionContent) {
                 builder()
@@ -145,29 +160,6 @@ open class ZkSideBarGroup(
         }
     }
 
-    open fun onHandleSectionClick(event: Event) {
-        if (open) {
-            minimize()
-        } else {
-            restore()
-        }
-    }
-
-    open fun minimize() {
-        if (open) {
-            this.hide()
-            ZkSidebarMinimizedSection(this.text.substring(0, 1), this).run()
-            open = false
-        }
-    }
-
-    open fun restore() {
-        if (! open) {
-            this.show()
-            open = true
-        }
-    }
-
     open fun onNavigate(event: Event) {
         if (! section) onHandleGroupClick(event)
 
@@ -180,6 +172,5 @@ open class ZkSideBarGroup(
             }
         }
     }
-
 
 }

@@ -4,13 +4,12 @@
 package zakadabar.core.browser.tabcontainer
 
 import zakadabar.core.browser.ZkElement
-import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.localizedStrings
 import zakadabar.core.util.PublicApi
 
 open class ZkTabContainer(
-    open val styles: ZkTabContainerStyles = zkTabContainerStyles,
+    open val styles: TabContainerStyleSpec = zkTabContainerStyles,
     val builder: (ZkTabContainer.() -> Unit)? = null
 ) : ZkElement() {
 
@@ -33,8 +32,8 @@ open class ZkTabContainer(
         return if (scroll || border || pad) {
             TabItem(this, zke {
                 if (scroll) + styles.scrolledContent
-                if (border) + zkLayoutStyles.fixBorder
-                if (pad) + zkLayoutStyles.p1
+                if (border) + styles.border
+                if (pad) + styles.padding
                 builder()
             }, title)
         } else {
@@ -47,8 +46,8 @@ open class ZkTabContainer(
         return if (scroll || border || pad) {
             TabItem(this, element build {
                 if (scroll) + styles.scrolledContent
-                if (border) + zkLayoutStyles.fixBorder
-                if (pad) + zkLayoutStyles.p1
+                if (border) + styles.border
+                if (pad) + styles.padding
             }, title ?: localizedStrings.getNormalized(element))
         } else {
             TabItem(this, element, title)

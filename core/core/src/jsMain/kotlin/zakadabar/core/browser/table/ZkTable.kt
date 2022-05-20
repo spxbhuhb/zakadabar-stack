@@ -103,6 +103,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     var counter = false
 
     var fixRowHeight = true
+    var fixHeaderHeight = true
     var multiLevel = false
 
     open val rowHeight
@@ -225,11 +226,21 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
         + zke(styles.contentContainer) {
 
+            if (addLocalTitle) {
+                + styles.withTitle
+            } else {
+                + styles.withoutTitle
+            }
+
             + table(styles.table) {
                 buildPoint.style.cssText = inlineCss()
                 + thead {
                     + styles.noSelect
-                    columns.forEach { + it }
+                    columns.forEach {
+                        + it.apply {
+                            if (fixHeaderHeight) + styles.headerCellFixHeight
+                        }
+                    }
                 }
                 + tableBodyElement
             }.also {
@@ -242,11 +253,11 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             contentContainer = it
         }
 
+        if (counter) + counterBar
+
         on("mousedown", ::onMouseDown)
         on("dblclick", ::onDblClick)
         on("click", ::onClick)
-
-        if (counter) + counterBar
     }
 
     override fun onResume() {
@@ -414,6 +425,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      */
     open fun buildMultiLevelState() {
         if (! multiLevel) return
+        if (fullData.isEmpty()) return
 
         var previousLevel = 0
         check(getRowLevel(fullData[0]) == 0) { "the first row must be level 0" }
@@ -503,6 +515,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
             row.appendChild(document.createElement("td")).also { cell ->
                 cell as HTMLTableCellElement
                 cell.style.border = "none"
+                cell.style.padding = 0.px
             }
         }
     }

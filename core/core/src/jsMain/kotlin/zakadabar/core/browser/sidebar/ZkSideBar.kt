@@ -10,10 +10,9 @@ import zakadabar.core.resource.ZkIconSource
 
 open class ZkSideBar : ZkElement() {
 
-    open val minimizedSections = ZkElement()
+    open var arrowAfter : Boolean = false
 
     override fun onCreate() {
-        + minimizedSections css zkSideBarStyles.minimizedSectionContainer
         + zkSideBarStyles.sidebar
     }
 

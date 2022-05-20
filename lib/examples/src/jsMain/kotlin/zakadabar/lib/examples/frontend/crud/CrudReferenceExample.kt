@@ -5,7 +5,6 @@ package zakadabar.lib.examples.frontend.crud
 
 import org.w3c.dom.HTMLElement
 import zakadabar.core.browser.ZkElement
-import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.resource.css.px
 
 class CrudReferenceExample(
@@ -16,8 +15,7 @@ class CrudReferenceExample(
         super.onCreate()
 
         height = 400.px
-        + zkLayoutStyles.fixBorder
-        
+
         + ExampleReferenceInlineCrud().apply { openAll() }
     }
 }

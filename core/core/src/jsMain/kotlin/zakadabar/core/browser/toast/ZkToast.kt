@@ -110,7 +110,13 @@ open class ZkToast(
 
             content?.let { + it marginRight 16 }
 
-            + ZkButton(ZkIcons.close, flavour = ZkFlavour.Custom, onClick = { application.toasts -= this }) css zkToastStyles.closeIcon
+            + ZkButton(
+                ZkIcons.close,
+                flavour = ZkFlavour.Custom,
+                fill = false,
+                border = false,
+                onClick = { application.toasts -= this }
+            ) css zkToastStyles.closeIcon
 
         }
     }

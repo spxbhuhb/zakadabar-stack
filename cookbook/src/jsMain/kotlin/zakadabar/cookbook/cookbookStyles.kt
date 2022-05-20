@@ -13,12 +13,12 @@ open class CookbookStyles : ZkCssStyleSheet() {
 
     val smallInlineTable by cssClass {
         height = 200.px
-        border = theme.fixBorder
+        border = theme.cornerRadius.px
     }
 
     val inlineTable by cssClass {
         height = 400.px
-        border = theme.fixBorder
+        border = theme.cornerRadius.px
     }
 
     val inlineForm by cssClass {

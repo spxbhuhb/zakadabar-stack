@@ -4,6 +4,8 @@
 package zakadabar.lib.markdown.browser
 
 import zakadabar.core.resource.css.*
+import zakadabar.softui.browser.theme.base.Borders
+import zakadabar.softui.browser.theme.base.BoxShadows
 
 val markdownStyles by cssStyleSheet(MarkdownStyles())
 
@@ -12,7 +14,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     open var codeBorderColor: String? = null
     open var highlightUrl = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/idea.min.css"
 
-    open var defaultWidth by cssParameter { 600 }
+    open var defaultWidth by cssParameter { 800 }
 
     init {
         hljs.registerLanguage("kotlin", hljsKotlin)
@@ -33,6 +35,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         + Display.flex
         + FlexDirection.row
         + JustifyContent.center
+        maxWidth = 100.percent
     }
 
     val content by cssClass {
@@ -42,6 +45,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         //maxWidth = 600.px
         flexGrow = 1.0
         margin = "auto"
+        maxWidth = defaultWidth.px
 
 //        small {
 //            marginLeft = 0
@@ -272,27 +276,28 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     @Suppress("unused") // used implicitly by the browser
     open val codeBlockContainer by cssRule(".$content pre") {
         + Position.relative
-        width = "max-content"
-        maxWidth = 90.percent
-        marginLeft = "auto"
-        marginRight = "auto"
+        + BoxSizing.borderBox
         paddingRight = 34.px
+        width = 100.percent
     }
-    
+
     @Suppress("unused") // used implicitly by the browser
     open val codeBlock by cssRule(".$content pre > code") {
+        + BoxSizing.borderBox
         padding = 12.px
         paddingLeft = theme.spacingStep.px
         lineHeight = (13 * 1.4).px
         marginBottom = theme.spacingStep.px
-        this@MarkdownStyles.codeBorderColor?.let {
-            borderLeft = "2px solid $it"
-            borderTopLeftRadius = 0.px
-            borderBottomLeftRadius = 0.px
-        }
+//        this@MarkdownStyles.codeBorderColor?.let {
+//            borderLeft = "2px solid $it"
+//            borderTopLeftRadius = 0.px
+//            borderBottomLeftRadius = 0.px
+//        }
+        borderRadius = Borders.borderRadius.md
+        boxShadow = BoxShadows.md
         backgroundColor = theme.blockBackgroundColor
-
-        minWidth = (defaultWidth - 34).px
+        width = 100.percent
+        marginRight = 0.px
     }
 
     // -------------------------------------------------------------------------
@@ -305,13 +310,16 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         top = 0.px
         background = theme.backgroundColor
         backgroundColor = theme.blockBackgroundColor
+        boxShadow = BoxShadows.md
+        borderRadius = Borders.borderRadius.md
     }
 
     open val codeCopyIcon by cssClass {
         + Cursor.pointer
         padding = 6.px
-        borderRadius = 2.px
-
+        borderRadius = Borders.borderRadius.md
+        color = theme.textColor
+        fill = theme.textColor
         hover {
             backgroundColor = theme.hoverBackgroundColor
         }

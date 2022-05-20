@@ -19,7 +19,6 @@ package zakadabar.core.browser.field
 import kotlinx.datetime.LocalDate
 import zakadabar.core.resource.localized
 import zakadabar.core.resource.toLocalDateOrNull
-import kotlin.reflect.KMutableProperty0
 
 open class ZkValueLocalDateField(
     context : ZkFieldContext,
@@ -36,9 +35,20 @@ open class ZkValueLocalDateField(
     override var valueOrNull : LocalDate?
         get() = input.value.toLocalDateOrNull
         set(value) {
-            input.value = value!!.localized
+            if (context.styles.useNativeDateInput) {
+                input.value = value.toString()
+            } else {
+                input.value = value!!.localized
+            }
             invalidInput = false
         }
+
+    override fun onCreate() {
+        super.onCreate()
+        if (context.styles.useNativeDateInput) {
+            input.type = "date"
+        }
+    }
 
     override fun setBackingValue(value: String) {
         val iv = input.value.toLocalDateOrNull

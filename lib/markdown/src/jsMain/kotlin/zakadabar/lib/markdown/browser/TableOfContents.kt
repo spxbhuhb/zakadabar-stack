@@ -99,12 +99,12 @@ class TableOfContents(
 
             if (it.isIntersecting) {
                 tocElement.dataset["active"] = "true"
-                tocElement.scrollIntoView(
-                    object {
-                        val block = "nearest"
-                        val inline = "nearest"
-                    }.asDynamic()
-                )
+//                tocElement.scrollIntoView(
+//                    object {
+//                        val block = "nearest"
+//                        val inline = "nearest"
+//                    }.asDynamic()
+//                )
 
                 val id = target.id
                 if (id.isNotEmpty()) {

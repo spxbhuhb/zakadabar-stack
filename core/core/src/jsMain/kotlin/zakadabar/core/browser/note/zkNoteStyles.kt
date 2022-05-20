@@ -5,24 +5,24 @@ package zakadabar.core.browser.note
 
 import zakadabar.core.resource.css.*
 
-var zkNoteStyles by cssStyleSheet(ZkNoteStyles())
+var zkNoteStyles : NoteStyleSpec by cssStyleSheet(ZkNoteStyles())
 
-open class ZkNoteStyles : ZkCssStyleSheet() {
+open class ZkNoteStyles : ZkCssStyleSheet(), NoteStyleSpec {
 
-    open val noteOuter by cssClass {
+    override val noteOuter by cssClass {
         backgroundColor = theme.backgroundColor
         marginRight = 10.px
         marginBottom = 10.px
     }
 
-    open val noteInner by cssClass {
+    override val noteInner by cssClass {
         + Display.flex
         + FlexDirection.column
         boxShadow = theme.boxShadow
         borderRadius = 2.px
     }
 
-    open val titleOuter by cssClass {
+    override val titleOuter by cssClass {
         + Display.flex
         + FlexDirection.row
         + AlignItems.center
@@ -33,12 +33,12 @@ open class ZkNoteStyles : ZkCssStyleSheet() {
         paddingRight = 10.px
     }
 
-    open val titleIcon by cssClass {
+    override val titleIcon by cssClass {
         marginLeft = 8.px
         marginRight = 8.px
     }
 
-    open val contentOuter by cssClass {
+    override val contentOuter by cssClass {
         paddingTop = 8.px
         paddingBottom = 8.px
         paddingLeft = 10.px
@@ -46,67 +46,71 @@ open class ZkNoteStyles : ZkCssStyleSheet() {
         flexGrow = 1.0
     }
 
-    open val primaryInner by cssClass {
+    override val separator by cssClass {
+        + Display.none
+    }
+
+    override val primaryInner by cssClass {
         border = "1px solid ${theme.primaryColor}"
         backgroundColor = theme.primaryColor + "20"
     }
 
-    open val primaryTitle by cssClass {
+    override val primaryTitle by cssClass {
         backgroundColor = theme.primaryColor
         color = theme.primaryPair
         fill = theme.primaryPair
     }
 
-    open val secondaryInner by cssClass {
+    override val secondaryInner by cssClass {
         border = "1px solid ${theme.secondaryColor}"
         backgroundColor = theme.secondaryColor + "20"
     }
 
-    open val secondaryTitle by cssClass {
+    override val secondaryTitle by cssClass {
         backgroundColor = theme.secondaryColor
         color = theme.secondaryPair
         fill = theme.secondaryPair
     }
 
-    open val successInner by cssClass {
+    override val successInner by cssClass {
         border = "1px solid ${theme.successColor}"
         backgroundColor = theme.successColor + "20"
     }
 
-    open val successTitle by cssClass {
+    override val successTitle by cssClass {
         backgroundColor = theme.successColor
         color = theme.successPair
         fill = theme.successPair
     }
 
-    open val warningInner by cssClass {
+    override val warningInner by cssClass {
         border = "1px solid ${theme.warningColor}"
         backgroundColor = theme.warningColor + "20"
     }
 
-    open val warningTitle by cssClass {
+    override val warningTitle by cssClass {
         backgroundColor = theme.warningColor
         color = theme.warningPair
         fill = theme.warningPair
     }
 
-    open val dangerInner by cssClass {
+    override val dangerInner by cssClass {
         border = "1px solid ${theme.dangerColor}"
         backgroundColor = theme.dangerColor + "20"
     }
 
-    open val dangerTitle by cssClass {
+    override val dangerTitle by cssClass {
         backgroundColor = theme.dangerColor
         color = theme.dangerPair
         fill = theme.dangerPair
     }
 
-    open val infoInner by cssClass {
+    override val infoInner by cssClass {
         border = "1px solid ${theme.infoColor}"
         backgroundColor = theme.infoColor + "20"
     }
 
-    open val infoTitle by cssClass {
+    override val infoTitle by cssClass {
         backgroundColor = theme.infoColor
         color = theme.infoPair
         fill = theme.infoPair

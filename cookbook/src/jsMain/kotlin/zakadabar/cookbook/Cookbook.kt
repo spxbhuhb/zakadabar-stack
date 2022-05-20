@@ -27,7 +27,8 @@ import zakadabar.cookbook.browser.sidebar.icons.SideBarWithIcons
 import zakadabar.cookbook.browser.tabcontainer.background.TabContainerBackground
 import zakadabar.cookbook.browser.table.action.TableCustomActions
 import zakadabar.cookbook.browser.table.basic.BasicTable
-import zakadabar.cookbook.browser.table.border.vertical.TableVerticalBorderSome
+import zakadabar.cookbook.browser.table.border.vertical.TableVerticalBorderNoScroll
+import zakadabar.cookbook.browser.table.border.vertical.TableVerticalBorderScroll
 import zakadabar.cookbook.browser.table.counter.TableWithCounter
 import zakadabar.cookbook.browser.table.customColumn.TableCustomColumn
 import zakadabar.cookbook.browser.table.export.filename.TableExportFileName
@@ -81,7 +82,8 @@ class Cookbook : CommonModule {
             "TableWithCounter" -> TableWithCounter()
             "TableInTab" -> TableInTab()
             "TableSaveElement" -> TableSaveElement()
-            "TableVerticalBorderSome" -> TableVerticalBorderSome()
+            "TableVerticalBorderScroll" -> TableVerticalBorderScroll()
+            "TableVerticalBorderNoScroll" -> TableVerticalBorderNoScroll()
             "TextHelpModal" -> TextHelpModal()
             "CustomInputFieldForm" -> CustomInputFieldForm()
             "CustomSelectFieldForm" -> CustomSelectFieldForm()

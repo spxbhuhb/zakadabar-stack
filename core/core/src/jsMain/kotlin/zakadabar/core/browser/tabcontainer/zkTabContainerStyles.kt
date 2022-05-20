@@ -5,31 +5,31 @@ package zakadabar.core.browser.tabcontainer
 
 import zakadabar.core.resource.css.*
 
-var zkTabContainerStyles by cssStyleSheet(ZkTabContainerStyles())
+var zkTabContainerStyles : TabContainerStyleSpec by cssStyleSheet(ZkTabContainerStyles())
 
-open class ZkTabContainerStyles : ZkCssStyleSheet() {
+open class ZkTabContainerStyles : ZkCssStyleSheet(), TabContainerStyleSpec {
 
-    open var labelTextColor by cssParameter { theme.secondaryPair }
-    open var labelBackgroundColor by cssParameter { theme.secondaryColor }
-    open var labelHeight by cssParameter { 32 }
-    open var activeLabelTextColor by cssParameter { theme.infoPair }
-    open var activeLabelBackgroundColor by cssParameter { theme.infoColor }
-    open var labelBottomBorder by cssParameter { "none" }
-    open var tabBackgroundColor by cssParameter { theme.backgroundColor }
+    override var labelTextColor by cssParameter { theme.secondaryPair }
+    override var labelBackgroundColor by cssParameter { theme.secondaryColor }
+    override var labelHeight by cssParameter { 32 }
+    override var activeLabelTextColor by cssParameter { theme.infoPair }
+    override var activeLabelBackgroundColor by cssParameter { theme.infoColor }
+    override var labelBottomBorder by cssParameter { "none" }
+    override var tabBackgroundColor by cssParameter { theme.backgroundColor }
 
-    open val container by cssClass {
+    override val container by cssClass {
         + Position.relative
         + Display.flex
         + FlexDirection.column
     }
 
-    open val labels by cssClass {
+    override val labels by cssClass {
         + Display.flex
         + FlexDirection.row
         borderBottom = labelBottomBorder
     }
 
-    open val label by cssClass {
+    override val label by cssClass {
         + BoxSizing.borderBox
         + Display.flex
         + FlexDirection.column
@@ -56,7 +56,7 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
         }
     }
 
-    open val activeLabel by cssClass {
+    override val activeLabel by cssClass {
         backgroundColor = activeLabelBackgroundColor
         color = activeLabelTextColor
         borderLeft = "1px solid $backgroundColor"
@@ -68,7 +68,7 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
         }
     }
 
-    open val contentContainer by cssClass {
+    override val contentContainer by cssClass {
         + Position.relative
         + Display.flex
         flex = "1 1"
@@ -78,9 +78,17 @@ open class ZkTabContainerStyles : ZkCssStyleSheet() {
         if (tabBackgroundColor.isNotEmpty()) { backgroundColor = tabBackgroundColor }
     }
 
-    open val scrolledContent by cssClass {
+    override val scrolledContent by cssClass {
         + BoxSizing.borderBox
         flexGrow = 1.0
         + OverflowY.auto
+    }
+
+    override val border by cssClass {
+        border = theme.fixBorder
+    }
+
+    override val padding by cssClass {
+        padding = theme.spacingStep.px
     }
 }

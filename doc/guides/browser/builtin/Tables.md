@@ -11,6 +11,7 @@
   * CSV export
   * preload data dependencies before render
   * variable row height
+  * content dependent header height
   * multi-level rows
   
 ## Write a Table
@@ -264,6 +265,19 @@ override fun onConfigure() {
 ```
 
 Example: [Variable Table Row Height](/doc/cookbook/browser/table/variableHeight/recipe.md)
+
+## Content Dependent Header Height
+
+To have content dependent header height, set `fixedHeaderHeight` to `false` in `onConfigure`:
+
+```kotlin
+override fun onConfigure() {
+  fixedHeaderHeight = false
+}
+```
+
+Example: [Variable Table Row Height](/doc/cookbook/browser/table/variableHeight/recipe.md)
+
 
 ## Multi Level Rows
 
