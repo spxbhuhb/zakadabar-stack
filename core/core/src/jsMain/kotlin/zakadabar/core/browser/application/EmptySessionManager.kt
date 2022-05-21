@@ -4,8 +4,8 @@
 package zakadabar.core.browser.application
 
 import zakadabar.core.authorize.AccountPublicBo
-import zakadabar.core.server.ServerDescriptionQuery
 import zakadabar.core.data.EntityId
+import zakadabar.core.server.ServerDescriptionQuery
 
 /**
  * This session manager is for applications that does not use sessions.
@@ -32,8 +32,6 @@ class EmptySessionManager : ZkSessionManager {
     }
 
     override suspend fun renew() {
-        // should never reach this point as there is no session manager and
-        // the server will never return with 440 Login Timeout
-        throw NotImplementedError()
+        // when there are sessions, but they are not used there is no need for renew
     }
 }

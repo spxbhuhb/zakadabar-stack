@@ -10,11 +10,14 @@ import zakadabar.core.browser.theme.ZkThemeRotate
 import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.css.px
 import zakadabar.site.frontend.DefaultLayout
+import zakadabar.site.frontend.pages.Landing
 import zakadabar.site.frontend.resources.SiteSuiDarkTheme
 import zakadabar.site.frontend.resources.SiteSuiLightTheme
 import zakadabar.site.frontend.resources.siteStyles
 
-class SiteHeader : ZkElement() {
+class SiteHeader(
+    val sideBarToggle: Boolean = true
+) : ZkElement() {
 
     override fun onCreate() {
         super.onCreate()
@@ -22,16 +25,21 @@ class SiteHeader : ZkElement() {
         + siteStyles.headerContent
 
         + div {
-            + siteStyles.sideBarToggle
-            + ZkIcon(ZkIcons.notes)
-            on("click") {
-               DefaultLayout.onToggleSideBar()
+            if (sideBarToggle) {
+                + siteStyles.sideBarToggle
+                + ZkIcon(ZkIcons.notes)
+                on("click") {
+                    DefaultLayout.onToggleSideBar()
+                }
             }
         }
 
         + div {
             + siteStyles.siteName
             + "Zakadabar"
+            on("click") {
+                Landing.open()
+            }
         }
 
         + div {

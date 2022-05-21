@@ -56,6 +56,8 @@
         * [Introduction](./libraries/i18n/Introduction.md)
     * [Schedule]()
         * [Introduction](./libraries/schedule/Introduction.md)
+    * [Soft UI]()
+      * [Introduction](./libraries/softui/Introduction.md)
 * [Testing]()
     * [Backend Testing](./testing/BackendTesting.md)
 * [Tools]()

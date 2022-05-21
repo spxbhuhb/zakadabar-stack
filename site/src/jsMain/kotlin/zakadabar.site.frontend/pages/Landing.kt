@@ -12,20 +12,18 @@ import zakadabar.core.browser.util.marginBottom
 import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.resource.ZkFlavour
 import zakadabar.site.frontend.components.DeveloperLogo
+import zakadabar.site.frontend.components.SiteHeader
 import zakadabar.site.frontend.resources.landingStyles
-import zakadabar.site.frontend.resources.siteStyles
 import zakadabar.site.resources.strings
+import zakadabar.softui.browser.theme.styles.suiLayoutStyles
 
 object Landing : ZkPage(ZkFullScreenLayout) {
 
     override fun onCreate() {
         classList += landingStyles.landing
 
-        + div(landingStyles.header) {
-            + div {
-                + siteStyles.siteName
-                + "Zakadabar"
-            }
+        + div(suiLayoutStyles.headerContainer) {
+            + SiteHeader(false)
         }
 
         + column(landingStyles.content) {

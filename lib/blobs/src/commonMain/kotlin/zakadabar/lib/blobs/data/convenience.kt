@@ -3,15 +3,16 @@
  */
 package zakadabar.lib.blobs.data
 
+import zakadabar.core.authorize.Executor
 import zakadabar.core.data.EntityBo
 import zakadabar.core.util.default
 
-suspend inline fun <reified T : BlobBo<T, RT>, reified RT : EntityBo<RT>> BlobBoCompanion<T, RT>.create(content: ByteArray, func: T.() -> Unit): T {
+suspend inline fun <reified T : BlobBo<T, RT>, reified RT : EntityBo<RT>> BlobBoCompanion<T, RT>.create(content: ByteArray, executor : Executor? = null, func: T.() -> Unit): T {
     return default<T> {
         func()
     }
-        .create()
-        .upload(content)
+        .create(executor)
+        .upload(content, executor)
 }
 
 /**

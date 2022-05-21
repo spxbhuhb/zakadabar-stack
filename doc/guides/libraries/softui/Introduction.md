@@ -2,6 +2,16 @@
 
 A UI theme inspired by [Soft UI](https://www.creative-tim.com/product/soft-ui-dashboard-react) from [Creative Tim](https://www.creative-tim.com/)
 
+<div data-zk-enrich="Note" data-zk-flavour="Warning" data-zk-title="Mixing Zk and Sui themes">
+
+If you want to change between Zk and Sui themes on the same page, you have to refresh the page
+after the theme change.
+
+The "in-place" theme switch works only when the themes use the same styles which is not true between
+Zk and Sui, therefore the switch does not work without refresh.
+
+</div>
+
 ## Setup
 
 **common**

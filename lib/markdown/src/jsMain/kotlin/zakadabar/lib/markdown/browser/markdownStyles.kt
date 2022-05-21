@@ -78,7 +78,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         paddingTop = (theme.spacingStep / 2).px
         paddingBottom = (theme.spacingStep / 2).px
 
-        fontSize = 80.percent
+        fontSize = 12.px
 
         small {
             + Display.none // TODO markdown toc on small displays

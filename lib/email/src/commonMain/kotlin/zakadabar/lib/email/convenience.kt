@@ -4,6 +4,7 @@
 package zakadabar.lib.email
 
 import kotlinx.serialization.json.Json
+import zakadabar.core.authorize.Executor
 import zakadabar.core.data.EntityId
 import zakadabar.core.data.create
 import zakadabar.core.util.PublicApi
@@ -25,10 +26,11 @@ suspend fun sendMail(
     subject: String,
     content: String,
     contentMimeType: String = "text/plain",
-    attachments: List<Triple<ByteArray,String,String>> = emptyList()
+    attachments: List<Triple<ByteArray,String,String>> = emptyList(),
+    executor : Executor? = null
 ) : EntityId<Job> {
 
-    val id = buildMail(recipients, subject, content, contentMimeType, attachments)
+    val id = buildMail(recipients, subject, content, contentMimeType, attachments, executor)
 
     return default<Job> {
         actionNamespace = Process.boNamespace
@@ -36,7 +38,7 @@ suspend fun sendMail(
         actionData = Json.encodeToString(Process.serializer(), Process(id))
         retryCount = 5
         retryInterval = 3600
-    }.create().id
+    }.create(executor = executor).id
 
 }
 
@@ -57,15 +59,16 @@ suspend fun buildMail(
     subject: String,
     content: String,
     contentMimeType: String = "text/plain",
-    attachments: List<Triple<ByteArray,String,String>> = emptyList()
+    attachments: List<Triple<ByteArray, String, String>> = emptyList(),
+    executor: Executor? = null
 ) : EntityId<Mail> {
 
-    val mail = Mail.create {
+    val mail = Mail.create(executor = executor) {
         this.recipients = recipients
         this.subject = subject
     }
 
-    MailPart.create(content.encodeToByteArray()) {
+    MailPart.create(content.encodeToByteArray(), executor) {
         id = EntityId()
         disposition = "body"
         name = "body"
@@ -74,7 +77,7 @@ suspend fun buildMail(
     }
 
     attachments.forEach {
-        MailPart.create(it.first) {
+        MailPart.create(it.first, executor) {
             id = EntityId()
             name = it.second
             reference = mail.id
@@ -82,7 +85,7 @@ suspend fun buildMail(
         }
     }
 
-    mail.update {
+    mail.update(executor) {
         status = MailStatus.SendWait
     }
 

@@ -13,19 +13,24 @@ are the places worth to check. If you extended them you may have to apply the ch
 - style specification interfaces, extended by style classes
 - option to use the native, browser supplied date editor for LocalDate fields #107
 - `LocaleAwareComparator` for locale aware text comparison #105
-- `ZkTable.fixedHeaderHeight` to enable non-fixed header height #106
+- `ZkTable.fixHeaderHeight` to enable non-fixed header height #106
+- `ZkSideBar.arrowAfter` option to put the open/close arrow after the sidebar
 
 **changed**
 
 - `ZkCssStyleSheet` now implements `CssStyleSpec`
-- `zk*Styles` now implement the appropriate style interface **low**
+- `zk*Styles` now implement a style spec interface **low**
 - `ZkAttachmentsField` and `ZkImagesField` now allows click on the area to select files #103
 - `List<T>.by` now uses `LocaleAwareComparator`
+- `ZkNote` DOM: separator between the title and the content
+- `ZkTable` sort sign now has non-transparent background
+- `executor` parameter for mail convenience functions to make server side use easier
 
 **fixed**
 
 - empty multi-level table bugfix #104
 - `ZkAttachmentsField` and `ZkImagesField` now refuses multi-upload when it would go over maximum allowed entries
+- empty opening page because of response code 440 when EmptySessionManager is used
 
 **removed**
 
@@ -34,6 +39,7 @@ are the places worth to check. If you extended them you may have to apply the ch
 ## Lib: Markdown
 
 - default maximum width of the markdown view is now 800px
+- change TOC font size from 80% to 12px
 
 ## Lib: SoftUi
 

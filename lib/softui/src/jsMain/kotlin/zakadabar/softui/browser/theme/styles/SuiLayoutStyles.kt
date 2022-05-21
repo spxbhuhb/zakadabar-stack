@@ -9,7 +9,8 @@ import zakadabar.softui.browser.theme.base.linearGradient
 
 open class SuiLayoutStyles : ZkCssStyleSheet() {
 
-    open var headerHeight by cssParameter { 80 }
+    open var largeHeaderHeight by cssParameter { 60 }
+    open var mediumHeaderHeight by cssParameter { 40 }
     open var headerBackground by cssParameter { linearGradient(Colors.alertColors.info.state, Colors.alertColors.info.main) }
     open var headerSeparator by cssParameter { true }
     open var separatorImage by cssParameter { "linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0))" }
@@ -30,7 +31,7 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
         + BoxSizing.borderBox
 
         gridTemplateColumns = "max-content 20px 1fr"
-        gridTemplateRows = "${headerHeight}px min-content 1fr"
+        gridTemplateRows = "${largeHeaderHeight}px min-content 1fr"
 
         height = 100.percent
         width = 100.percent
@@ -42,12 +43,12 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
         + Display.flex
         + AlignItems.center
         width = 100.percent
-        minHeight = headerHeight.px
+        minHeight = largeHeaderHeight.px
         marginBottom = if (headerSeparator) 0.px else 20.px
         background = headerBackground
 
         medium {
-            minHeight = (headerHeight/2).px
+            minHeight = mediumHeaderHeight.px
         }
     }
 
@@ -91,9 +92,9 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
 
         zIndex = 100.zIndex
 
-        top = (headerHeight/2).px
+        top = (largeHeaderHeight/2).px
         width = 100.percent
-        maxHeight = "calc(100% - ${headerHeight/2}px)"
+        maxHeight = "calc(100% - ${largeHeaderHeight/2}px)"
 
         background = theme.backgroundColor
 
