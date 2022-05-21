@@ -29,6 +29,7 @@ open class ZkSideBarItem(
     val icon: ZkIconSource? = null,
     val url: String? = null,
     val capitalize: Boolean = true,
+    val sideBar : ZkSideBar? = null,
     val onClick: (() -> Unit)? = null
 ) : ZkElement() {
 
@@ -47,11 +48,15 @@ open class ZkSideBarItem(
         onClick = onClick
     )
 
+    open lateinit var styles : SideBarStyleSpec
+    
     open val localNav
         get() = url == null || (! url.startsWith("https://") && ! url.startsWith("http://"))
 
     override fun onCreate() {
-        + zkSideBarStyles.item
+        styles = sideBar?.styles ?: zkSideBarStyles
+
+        + styles.item
 
         if (url == null) {
             textElement = document.createElement("div") as HTMLElement
@@ -60,11 +65,11 @@ open class ZkSideBarItem(
             url.let { (textElement as HTMLAnchorElement).href = it }
         }
 
-        textElement.classList += zkSideBarStyles.itemText
+        textElement.classList += styles.itemText
         textElement.innerText = if (capitalize) text.capitalized() else text
 
         icon?.let {
-            + ZkIcon(icon, size = zkSideBarStyles.iconSize) css zkSideBarStyles.icon
+            + ZkIcon(icon, size = styles.iconSize) css styles.icon
         }
 
         + textElement

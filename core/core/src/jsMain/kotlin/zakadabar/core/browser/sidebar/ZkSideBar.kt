@@ -8,12 +8,23 @@ import zakadabar.core.browser.application.ZkAppRouting
 import zakadabar.core.browser.application.target
 import zakadabar.core.resource.ZkIconSource
 
-open class ZkSideBar : ZkElement() {
+open class ZkSideBar(
+    val styles : SideBarStyleSpec = zkSideBarStyles
+) : ZkElement() {
 
+    /**
+     * When true, the group open/close arrows are after the group name. Default is false.
+     */
     open var arrowAfter : Boolean = false
 
+    /**
+     * When true, only click on the arrow opens and closes the group, otherwise click on title
+     * also works. Default is false.
+     */
+    open var arrowOpen : Boolean = false
+
     override fun onCreate() {
-        + zkSideBarStyles.sidebar
+        + styles.sidebar
     }
 
     inline fun <reified T : ZkAppRouting.ZkTarget> item(subPath : String? = null, text : String? = null) =
@@ -26,10 +37,10 @@ open class ZkSideBar : ZkElement() {
         ZkSideBarItem(target, icon, subPath, text)
 
     open fun item(text: String, capitalize: Boolean = true, onClick: (() -> Unit)? = null) =
-        ZkSideBarItem(text, null, null, capitalize, onClick)
+        ZkSideBarItem(text, null, null, capitalize, this, onClick)
 
     open fun item(icon : ZkIconSource, text: String, capitalize: Boolean = true, onClick: (() -> Unit)? = null) =
-        ZkSideBarItem(text, icon, null, capitalize, onClick)
+        ZkSideBarItem(text, icon, null, capitalize, this, onClick)
 
     inline fun <reified T : ZkAppRouting.ZkTarget> section(text : String? = null, noinline builder: ZkElement.() -> Unit) =
         ZkSideBarGroup(target<T>(), text = text, section = true, builder = builder, sideBar = this)

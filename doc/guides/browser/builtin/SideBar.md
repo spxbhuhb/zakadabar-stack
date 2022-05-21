@@ -58,12 +58,44 @@ in the future to make the application mode dynamic.
 
 </div>
 
-## Icons
+## Customization
+
+The example below shows the effect of customization functions:
+
+<div data-zk-enrich="SideBarCombinedExample"></div>
+
+### Open And Close Icons
+
+To replace the open and close icons, you set the appropriate properties of the sidebar styles.
+This can be done globally from the theme or per sidebar instance by passing a specific style.
+
+Global settings (from `ZkTheme.onResume`, see [Themes, Css](../structure/ThemesCss.md)).
+
+```text
+with (zkSideBarStyles) {
+    groupOpenIcon = ZkIcons.arrowRight
+    groupCloseIcon = ZkIcons.arrowDropDown
+    afterGroupOpenIcon = ZkIcons.arrowDropDown
+    afterGroupCloseIcon = ZkIcons.arrowDropUp
+}
+```
+
+### Icons
 
 All `group` and `item` builders have a version with a [ZkIconSource](/core/core/src/jsMain/kotlin/zakadabar/core/resource/ZkIconSource.kt)
 as first parameter. These versions add an icon before the text.
 
 Example: [SideBar With Icons](/doc/cookbook/browser/sidebar/icons/recipe.md)
+
+### Arrow After
+
+Set `arrowAfter` of `ZkSideBar` to `true` to place the group open arrows after the sidebar.
+
+### Arrow After
+
+Set `arrowOpen` of `ZkSideBar` to `true` to open/close groups only when the use clicks on the arrow.
+
+When the user clicks on the text, the navigation happens, but the group does not open/close.
 
 ## Sections
 

@@ -15,6 +15,9 @@ are the places worth to check. If you extended them you may have to apply the ch
 - `LocaleAwareComparator` for locale aware text comparison #105
 - `ZkTable.fixHeaderHeight` to enable non-fixed header height #106
 - `ZkSideBar.arrowAfter` option to put the open/close arrow after the sidebar
+- `ZkSideBar.arrowOpen` option to open/close groups only when clicked on arrow, but not for title
+- option to change sidebar open/close arrow icons
+- `ZkSideBar.styles` property to customize styles per instance
 
 **changed**
 
@@ -25,6 +28,7 @@ are the places worth to check. If you extended them you may have to apply the ch
 - `ZkNote` DOM: separator between the title and the content
 - `ZkTable` sort sign now has non-transparent background
 - `executor` parameter for mail convenience functions to make server side use easier
+- `ZkSideBarItem` now has a `sideBar` parameter **low**
 
 **fixed**
 

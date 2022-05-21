@@ -5,13 +5,19 @@
  */
 package zakadabar.softui.browser.theme.styles
 
-import zakadabar.core.browser.sidebar.ZkSideBarStyles
+import zakadabar.core.browser.sidebar.SideBarStyleSpec
 import zakadabar.core.browser.theme.softui.components.suiTheme
+import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.css.*
 import zakadabar.softui.browser.theme.base.Borders
 import zakadabar.softui.browser.theme.base.BoxShadows
 
-open class SuiSideBarStyles : ZkSideBarStyles() {
+open class SuiSideBarStyles : SideBarStyleSpec, ZkCssStyleSheet() {
+
+    override var groupOpenIcon by cssParameter { ZkIcons.arrowRight }
+    override var groupCloseIcon by cssParameter { ZkIcons.arrowDropDown }
+    override var afterGroupOpenIcon by cssParameter { ZkIcons.arrowDropDown }
+    override var afterGroupCloseIcon by cssParameter { ZkIcons.arrowDropUp }
 
     override var backgroundColor by cssParameter { theme.backgroundColor }
     override var textColor by cssParameter { theme.textColor }
@@ -96,7 +102,7 @@ open class SuiSideBarStyles : ZkSideBarStyles() {
         boxShadow = BoxShadows.md
     }
 
-    override fun ZkCssStyleRule.title() {
+    fun ZkCssStyleRule.title() {
         + BoxSizing.borderBox
 
         + Display.flex

@@ -14,7 +14,6 @@ import zakadabar.core.browser.application.application
 import zakadabar.core.browser.icon.ZkIcon
 import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.resource.ZkIconSource
-import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.localizedStrings
 
 /**
@@ -44,6 +43,8 @@ open class ZkSideBarGroup(
 
     open var open = false
 
+    open lateinit var styles : SideBarStyleSpec
+    
     open lateinit var openIcon: ZkElement
     open lateinit var closeIcon: ZkElement
     open lateinit var textElement: ZkElement
@@ -72,12 +73,14 @@ open class ZkSideBarGroup(
 
     override fun onCreate() {
 
+        styles = sideBar?.styles ?: zkSideBarStyles
+        
         if (sideBar?.arrowAfter != true) {
-            openIcon = ZkIcon(ZkIcons.arrowRight, 18)
-            closeIcon = ZkIcon(ZkIcons.arrowDropDown, 18)
+            openIcon = ZkIcon(styles.groupOpenIcon, 18)
+            closeIcon = ZkIcon(styles.groupCloseIcon, 18)
         } else {
-            openIcon = ZkIcon(ZkIcons.arrowDropDown, 18)
-            closeIcon = ZkIcon(ZkIcons.arrowRight, 18)
+            openIcon = ZkIcon(styles.afterGroupOpenIcon, 18)
+            closeIcon = ZkIcon(styles.afterGroupCloseIcon, 18)
         }
 
         if (url == null) {
@@ -99,12 +102,16 @@ open class ZkSideBarGroup(
     open fun buildGroup() {
         + zkLayoutStyles.column
 
-        + div(zkSideBarStyles.groupTitle) {
+        + div(styles.groupTitle) {
 
-            if (sideBar?.arrowAfter != true) arrow()
+            if (sideBar?.arrowAfter != true) {
+                arrow()
+            } else {
+                + div { + styles.groupArrow } // so the indentation is OK
+            }
 
             icon?.let {
-                + ZkIcon(icon) css zkSideBarStyles.icon
+                + ZkIcon(icon) css styles.icon
             }
 
             + textElement css zkLayoutStyles.grow
@@ -114,14 +121,14 @@ open class ZkSideBarGroup(
             on("click", ::onNavigate)
         }
 
-        + zke(zkSideBarStyles.groupContent) {
+        + zke(styles.groupContent) {
             if (! section) hide()
             builder()
         }
     }
 
     open fun arrow() {
-        + div(zkSideBarStyles.groupArrow) {
+        + div(styles.groupArrow) {
             + openIcon
             + closeIcon.hide()
             on("click", ::onHandleGroupClick)
@@ -131,13 +138,13 @@ open class ZkSideBarGroup(
     open fun buildSection() {
         open = true
         + column {
-            + div(zkSideBarStyles.sectionTitle) {
+            + div(styles.sectionTitle) {
                 icon?.let {
-                    + ZkIcon(icon).on("click", ::onNavigate) css zkSideBarStyles.icon
+                    + ZkIcon(icon).on("click", ::onNavigate) css styles.icon
                 }
                 + textElement.on("click", ::onNavigate) css zkLayoutStyles.grow
             }
-            + zke(zkSideBarStyles.sectionContent) {
+            + zke(styles.sectionContent) {
                 builder()
             }
         }
@@ -148,12 +155,12 @@ open class ZkSideBarGroup(
         event.stopPropagation()
 
         open = if (open) {
-            get<ZkElement>(zkSideBarStyles.groupContent).hide()
+            get<ZkElement>(styles.groupContent).hide()
             closeIcon.hide()
             openIcon.show()
             false
         } else {
-            get<ZkElement>(zkSideBarStyles.groupContent).show()
+            get<ZkElement>(styles.groupContent).show()
             openIcon.hide()
             closeIcon.show()
             true
@@ -161,7 +168,7 @@ open class ZkSideBarGroup(
     }
 
     open fun onNavigate(event: Event) {
-        if (! section) onHandleGroupClick(event)
+        if (! section && sideBar?.arrowOpen != true) onHandleGroupClick(event)
 
         if (localNav) {
             event.preventDefault()
