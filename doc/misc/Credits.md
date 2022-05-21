@@ -73,3 +73,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 * [JetBrains Markdown](https://github.com/JetBrains/markdown) (by Jetbrains, Apache 2.0)
 * [JetBrains Mono](https://www.jetbrains.com/lp/mono/) (by JetBrains, SIL Open Font License 1.1)
 * [highlight.js](https://highlightjs.org) (by multiple contributors, BSD-3-Clause License)
+
+## Lib: SoftUi
+
+* [Soft UI](https://www.creative-tim.com/product/soft-ui-dashboard-react) (by Creative Tim, MIT License)
+* [Open Sans](https://fonts.google.com/specimen/Open+Sans) (by Steve Matteson, Apache 2.0)
