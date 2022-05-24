@@ -23,6 +23,45 @@ open class SuiTitleBarStyles : ZkCssStyleSheet(), TitleBarStyleSpec {
     override var localTitleBarBorder by cssParameter { theme.fixBorder }
     override var localTitleBarText by cssParameter { theme.textColor }
 
+     open val appHeader by cssClass {
+        + Display.grid
+        width = 100.percent
+        height = 100.percent
+        gridTemplateColumns = "max-content 1fr max-content"
+        color = theme.infoPair
+    }
+
+    open val appHeaderText by cssClass {
+        fontSize = 14.px
+    }
+
+    override val appTitleBar by cssClass {
+        + BoxSizing.borderBox
+        + Display.flex
+        + FlexDirection.row
+        + AlignItems.center
+        + JustifyContent.spaceBetween
+        + FlexWrap.wrap
+
+        width = 100.percent
+        height = 100.percent
+        color = theme.textColor
+        paddingLeft = 20.px
+        paddingRight = 20.px
+        paddingTop = 6.px
+        paddingBottom = 12.px
+    }
+
+
+    /**
+     * Container for the title in the application title bar.
+     */
+    override val titleContainer by cssClass {
+        + Display.flex
+        fontSize = 24.px
+        fontWeight = 400.weight
+    }
+
     override val appHandleContainer by cssClass {
         + BoxSizing.borderBox
 
@@ -52,47 +91,17 @@ open class SuiTitleBarStyles : ZkCssStyleSheet(), TitleBarStyleSpec {
         marginRight = (theme.spacingStep / 2).px
     }
 
-    override val appTitleBar by cssClass {
-        + BoxSizing.borderBox
-        + Display.flex
-        + FlexDirection.row
-        + AlignItems.center
-
-        width = "calc(100$ - ${theme.spacingStep / 2}px)"
-        minHeight = appTitleBarHeight.px
-        maxHeight = appTitleBarHeight.px
-        borderBottom = appTitleBarBorder
-        fontSize = 14.px
-
-        large {
-            borderRadius = Borders.borderRadius.md
-        }
-
-        color = appHandleText
-    }
 
     /**
      * When the side bar is closed a button is shown in the application title
      * bar that opens the sidebar again.
      */
     override val sidebarHandle by cssClass {
-        + Display.flex
-        + AlignItems.center
-        + JustifyContent.center
-
-        minHeight = appTitleBarHeight.px
-        marginLeft = (theme.spacingStep / 2).px
-
-        background = "transparent !important"
-        fill = "$appTitleBarText !important"
-    }
-
-    /**
-     * Container for the title in the application title bar.
-     */
-    override val titleContainer by cssClass {
-        marginLeft = theme.spacingStep.px
-        + AlignItems.center
+        + AlignSelf.center
+        paddingLeft = 20.px
+        paddingRight = 20.px
+        fill = theme.infoPair
+        + Cursor.pointer
     }
 
     /**

@@ -3,16 +3,12 @@
  */
 package zakadabar.lib.demo.frontend
 
-import zakadabar.lib.demo.resources.strings
-import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.browser.page.ZkPage
 
 object Home : ZkPage() {
 
     override fun onCreate() {
-        + div(zkLayoutStyles.p1) {
-            + strings.home
-        }
+        + "This is the home page of this demo."
     }
 
 }

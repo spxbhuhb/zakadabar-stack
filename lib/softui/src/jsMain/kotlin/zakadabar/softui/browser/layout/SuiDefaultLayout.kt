@@ -13,12 +13,14 @@ import zakadabar.core.browser.util.minusAssign
 import zakadabar.core.browser.util.plusAssign
 import zakadabar.softui.browser.theme.styles.SuiLayoutStyles
 import zakadabar.softui.browser.theme.styles.suiLayoutStyles
+import zakadabar.softui.browser.titlebar.SuiAppHeader
+import zakadabar.softui.browser.titlebar.SuiAppTitleBar
 
 open class SuiDefaultLayout(
     open val styles: SuiLayoutStyles = suiLayoutStyles
 ) : ZkAppLayout("default") {
 
-    open var header = ZkElement()
+    open var header = SuiAppHeader()
         set(value) {
             headerContainer -= field
             field = value
@@ -42,6 +44,7 @@ open class SuiDefaultLayout(
 
     protected var headerContainer = ZkElement()
     protected var separatorContainer = ZkElement()
+    protected var pageTitleContainer = SuiAppTitleBar()
     protected var sideBarContainer = ZkElement()
     protected var popupSidebarContainer = ZkElement()
 
@@ -89,6 +92,7 @@ open class SuiDefaultLayout(
             this -= headerContainer
             this -= separatorContainer
             this -= sideBarContainer
+            this -= pageTitleContainer
             this -= contentContainer
             this -= popupSidebarContainer
             popupSidebarContainer -= sideBarContainer
@@ -109,9 +113,10 @@ open class SuiDefaultLayout(
         classList += suiLayoutStyles.defaultLayoutSmall
         contentContainer.classList += suiLayoutStyles.contentContainerSmall
 
-        + headerContainer
-        + separatorContainer
-        + contentContainer
+        + headerContainer gridRow 1
+        + separatorContainer gridRow 2
+        + pageTitleContainer gridRow 3
+        + contentContainer gridRow 4
 
         + popupSidebarContainer build {
             + sideBarContainer
@@ -124,21 +129,17 @@ open class SuiDefaultLayout(
         classList += suiLayoutStyles.defaultLayoutLarge
         contentContainer.classList += suiLayoutStyles.contentContainerLarge
 
-        + headerContainer gridRow 1 gridColumn "1 / span 3"
-        + separatorContainer gridRow 2 gridColumn "1 / span 3"
-        + sideBarContainer gridRow 3 gridColumn 1
-        + contentContainer gridRow 3 gridColumn 3
+        + headerContainer gridRow 1 gridColumn "1 / span 4"
+        + separatorContainer gridRow 2 gridColumn "1 / span 4"
+        + sideBarContainer gridRow "3 / span 4" gridColumn 1
+        + pageTitleContainer gridRow 3 gridColumn 3
+        + contentContainer gridRow 4 gridColumn 3
 
         sideBarContainer.show()
     }
 
-    override fun onPause() {
-        //header.title = null
-        super.onPause()
-    }
-
     protected fun onTitleChange(newTitle: ZkAppTitle) {
-        //this.header.title = newTitle
+        pageTitleContainer.title  = newTitle
     }
 
     open fun onToggleSideBar() {

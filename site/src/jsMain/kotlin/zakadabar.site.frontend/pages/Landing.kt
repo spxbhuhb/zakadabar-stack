@@ -23,7 +23,7 @@ object Landing : ZkPage(ZkFullScreenLayout) {
         classList += landingStyles.landing
 
         + div(suiLayoutStyles.headerContainer) {
-            + SiteHeader(false)
+            + SiteHeader()
         }
 
         + column(landingStyles.content) {

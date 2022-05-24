@@ -39,6 +39,7 @@ open class SuiTableStyles : SuiFieldStyles(), TableStyleSpec {
         + Display.flex
         + FlexDirection.column
         width = 100.percent
+        height = 100.percent
         boxShadow = BoxShadows.md
         borderRadius = Borders.borderRadius.md
         backgroundColor = tableBackgroundColor

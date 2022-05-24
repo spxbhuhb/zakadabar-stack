@@ -10,7 +10,7 @@ import zakadabar.core.browser.util.io
 import zakadabar.core.resource.localized
 import zakadabar.lib.accounts.browser.accounts.Account
 import zakadabar.lib.accounts.browser.accounts.AccountSecure
-import zakadabar.lib.accounts.browser.login.Login
+import zakadabar.lib.accounts.browser.login.LoginV2
 import zakadabar.lib.accounts.browser.roles.Roles
 import zakadabar.lib.accounts.data.LogoutAction
 import zakadabar.lib.demo.frontend.pages.DemoCrud
@@ -22,13 +22,14 @@ import zakadabar.lib.i18n.browser.LocaleCrud
 import zakadabar.lib.i18n.browser.TranslationCrud
 import zakadabar.lib.schedule.JobCrud
 
+
 class SideBar : ZkSideBar() {
 
     override fun onCreate() {
         super.onCreate()
 
         ifAnonymous {
-            + item<Login>()
+            + item<LoginV2>(text = strings.login)
         }
 
         ifNotAnonymous {

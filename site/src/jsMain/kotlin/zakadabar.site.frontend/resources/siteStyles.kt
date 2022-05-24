@@ -26,11 +26,6 @@ class SiteStyles : ZkCssStyleSheet() {
         marginRight = 40.px
     }
 
-    val version by cssClass {
-        + AlignSelf.center
-        fontSize = 14.px
-    }
-
     val headerLinks by cssClass {
         + Display.flex
         + JustifyContent.spaceEvenly

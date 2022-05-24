@@ -3,58 +3,43 @@
  */
 package zakadabar.site.frontend.components
 
-import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.application
-import zakadabar.core.browser.icon.ZkIcon
 import zakadabar.core.browser.theme.ZkThemeRotate
+import zakadabar.core.browser.util.marginRight
 import zakadabar.core.resource.ZkIcons
+import zakadabar.core.resource.css.AlignSelf
+import zakadabar.core.resource.css.Display
 import zakadabar.core.resource.css.px
-import zakadabar.site.frontend.DefaultLayout
 import zakadabar.site.frontend.pages.Landing
-import zakadabar.site.frontend.resources.SiteSuiDarkTheme
-import zakadabar.site.frontend.resources.SiteSuiLightTheme
-import zakadabar.site.frontend.resources.siteStyles
+import zakadabar.softui.browser.theme.SuiDarkTheme
+import zakadabar.softui.browser.theme.SuiLightTheme
+import zakadabar.softui.browser.titlebar.SuiAppHeader
 
 class SiteHeader(
-    val sideBarToggle: Boolean = true
-) : ZkElement() {
+    onToggleSideBar: () -> Unit = { },
+) : SuiAppHeader(onToggleSideBar) {
 
     override fun onCreate() {
         super.onCreate()
 
-        + siteStyles.headerContent
+        titleContainer += zke {
+            + Display.flex
+            + AlignSelf.center
 
-        + div {
-            if (sideBarToggle) {
-                + siteStyles.sideBarToggle
-                + ZkIcon(ZkIcons.notes)
-                on("click") {
-                    DefaultLayout.onToggleSideBar()
-                }
-            }
-        }
+            element.style.fontSize = 14.px
 
-        + div {
-            + siteStyles.siteName
-            + "Zakadabar"
+            + div { + "Zakadabar" } marginRight 20.px
+            + application.serverDescription.version
+
             on("click") {
                 Landing.open()
             }
         }
 
-        + div {
-            + siteStyles.version
-            + application.serverDescription.version
-        }
-
-        + div {
-            // placeholder in the middle
-        }
-
-        + ZkThemeRotate(
-            ZkIcons.darkMode to SiteSuiDarkTheme(),
-            ZkIcons.lightMode to SiteSuiLightTheme()
-        ) marginRight 20.px
+        globalElements += ZkThemeRotate(
+            ZkIcons.darkMode to SuiDarkTheme(),
+            ZkIcons.lightMode to SuiLightTheme()
+        )
     }
 
 }

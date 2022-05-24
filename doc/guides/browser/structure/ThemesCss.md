@@ -96,22 +96,6 @@ class ExampleThemeGreen : ZkBuiltinLightTheme() {
 }
 ```
 
-### Change The Theme [source code](/lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/theme/ThemeExample.kt)
-
-Assign a theme instance to `theme` to set the active theme.
-
-```kotlin
-theme = ZkBuildinLightTheme()
-```
-
-These two are somewhat simple examples, for example they don't set markdown colors properly:
-
-<div data-zk-enrich="ThemeExample"></div>
-
-This is a fine-tuned example, that can be used to replace one of the default themes in production:
-
-<div data-zk-enrich="ThemeShowCase"></div>
-
 ## CSS
 
 * CSS style sheets are written in Kotlin.

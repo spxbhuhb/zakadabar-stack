@@ -8,16 +8,19 @@ package zakadabar.softui.browser.theme.styles
 import zakadabar.core.browser.page.ZkPageStyles
 import zakadabar.core.resource.css.*
 
-class SuiPageStyles : ZkPageStyles() {
+open class SuiPageStyles : ZkPageStyles() {
+
+    open var fixedPaddingBottom by cssParameter { 20 }
 
     override val fixed by cssClass {
+        + BoxSizing.borderBox
         + Position.relative
         + Overflow.hidden
-
-        marginTop = (theme.spacingStep / 2).px
-
         height = 100.percent
         maxHeight = 100.percent
+        paddingLeft = 20.px
+        paddingRight = 20.px
+        paddingBottom = fixedPaddingBottom.px
     }
 
     /**
@@ -29,6 +32,10 @@ class SuiPageStyles : ZkPageStyles() {
         maxHeight = 100.percent
         + OverflowY.auto
         + OverflowX.hidden
+    }
+
+    override val content by cssClass {
+
     }
 
 }

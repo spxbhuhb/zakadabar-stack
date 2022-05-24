@@ -50,6 +50,7 @@ kotlin {
         api(project(":lib:examples"))
         api(project(":lib:email"))
         api(project(":lib:schedule"))
+        api(project(":lib:softui"))
         implementation("com.h2database:h2:${Versions.h2}")
     }
 }

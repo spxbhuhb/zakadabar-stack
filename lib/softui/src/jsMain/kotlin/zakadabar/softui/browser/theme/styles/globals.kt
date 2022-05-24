@@ -3,6 +3,10 @@
  */
 package zakadabar.softui.browser.theme.styles
 
+import zakadabar.core.browser.titlebar.zkTitleBarStyles
 import zakadabar.core.resource.css.cssStyleSheet
 
-val suiLayoutStyles by cssStyleSheet(SuiLayoutStyles())
+var suiLayoutStyles by cssStyleSheet(SuiLayoutStyles())
+
+val suiTitleBarStyles
+   get() = zkTitleBarStyles as SuiTitleBarStyles

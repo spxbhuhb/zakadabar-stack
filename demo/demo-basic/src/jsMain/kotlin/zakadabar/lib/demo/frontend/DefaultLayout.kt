@@ -3,33 +3,44 @@
  */
 package zakadabar.lib.demo.frontend
 
-import zakadabar.core.browser.layout.ZkDefaultLayout
-import zakadabar.core.browser.theme.ZkBuiltinDarkTheme
-import zakadabar.core.browser.theme.ZkBuiltinLightTheme
-import zakadabar.core.browser.theme.ZkGreenBlueTheme
+import zakadabar.core.browser.application.application
 import zakadabar.core.browser.theme.ZkThemeRotate
-import zakadabar.core.browser.titlebar.ZkAppHandle
-import zakadabar.core.browser.titlebar.ZkAppTitleBar
 import zakadabar.core.resource.ZkIcons
-import zakadabar.lib.demo.frontend.resources.AppLightTheme
-import zakadabar.lib.demo.resources.strings
+import zakadabar.core.resource.css.AlignSelf
+import zakadabar.core.resource.css.Display
+import zakadabar.core.resource.css.px
+import zakadabar.softui.browser.layout.SuiDefaultLayout
+import zakadabar.softui.browser.theme.SuiDarkTheme
+import zakadabar.softui.browser.theme.SuiLightTheme
+import zakadabar.softui.browser.titlebar.SuiAppHeader
 
-object DefaultLayout : ZkDefaultLayout(spanHeader = false) {
+object DefaultLayout : SuiDefaultLayout() {
 
     override fun onCreate() {
         super.onCreate()
 
-        appHandle = ZkAppHandle(zke { + strings.home }, onIconClick = ::onToggleSideBar, target = Home)
+        header = SuiAppHeader(::onToggleSideBar).apply {
+
+            globalElements += ZkThemeRotate(
+                ZkIcons.darkMode to SuiDarkTheme(),
+                ZkIcons.lightMode to SuiLightTheme()
+            )
+
+            titleContainer += zke {
+                + Display.flex
+                + AlignSelf.center
+
+                element.style.fontSize = 14.px
+
+                + application.serverDescription.name
+
+                on("click") {
+                    Home.open()
+                }
+            }
+        }
+
         sideBar = SideBar()
-
-        titleBar = ZkAppTitleBar(::onToggleSideBar)
-
-        titleBar.globalElements += ZkThemeRotate(
-            ZkIcons.darkMode to ZkBuiltinDarkTheme(),
-            ZkIcons.lightMode to ZkBuiltinLightTheme(),
-            ZkIcons.globe to AppLightTheme(),
-            ZkIcons.leaf to ZkGreenBlueTheme()
-        )
     }
 
 }
