@@ -46,10 +46,16 @@ open class SuiTitleBarStyles : ZkCssStyleSheet(), TitleBarStyleSpec {
         width = 100.percent
         height = 100.percent
         color = theme.textColor
-        paddingLeft = 20.px
-        paddingRight = 20.px
         paddingTop = 6.px
         paddingBottom = 12.px
+
+        paddingLeft = 20.px
+        paddingRight = 20.px
+
+        medium {
+            paddingLeft = 10.px
+            paddingRight = 10.px
+        }
     }
 
 

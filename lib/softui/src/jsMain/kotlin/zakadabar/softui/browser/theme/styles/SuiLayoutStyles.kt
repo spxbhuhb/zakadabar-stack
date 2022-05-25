@@ -91,9 +91,9 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
 
         zIndex = 100.zIndex
 
-        top = (largeHeaderHeight/2).px
+        top = mediumHeaderHeight.px
         width = 100.percent
-        maxHeight = "calc(100% - ${largeHeaderHeight/2}px)"
+        maxHeight = "calc(100% - ${mediumHeaderHeight}px)"
 
         background = theme.backgroundColor
 
@@ -114,8 +114,6 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
         height = 100.percent
         maxHeight = 100.percent
         + OverflowY.hidden
-        paddingLeft = 20.px
-        paddingRight = 20.px
     }
 
 }

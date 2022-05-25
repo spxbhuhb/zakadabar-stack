@@ -60,3 +60,39 @@ fun main() {
 
 }
 ```
+
+## Default Layout
+
+The [SuiDefaultLayout](/lib/softui/src/jsMain/kotlin/zakadabar/softui/browser/layout/SuiDefaultLayout.kt)
+class provides the default layout for the theme. The structure of the layout is shown below.
+
+<div data-zk-enrich="Note" data-zk-flavour="Success" data-zk-title="">
+
+The theme uses box shadows, so you have to give enough space around the components
+or the shadows will be clipped.
+
+</div>
+
+![Layout](sui_default_layout.png)
+
+## App Title Bar
+
+The app title bar (class [SuiAppTitleBar](/lib/softui/src/jsMain/kotlin/zakadabar/softui/browser/titlebar/SuiAppTitleBar.kt) is between the header and the content area.
+This bar contains the page title and the context actions (if there are any).
+
+Padding of the title bar follows the page padding: 
+
+- 20 pixels for large screens,
+- 8 pixels for medium and small screens.
+
+## Page Padding
+
+Page styles `SuiPageStyles.fixed` and `SuiPageStyles.scollable` add padding to let the
+box shadows shown.
+
+The padding is:
+
+- 20 pixels for large screens,
+- 8 pixels for medium and small screens.
+
+

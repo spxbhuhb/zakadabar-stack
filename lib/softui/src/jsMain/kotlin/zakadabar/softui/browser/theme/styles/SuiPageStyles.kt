@@ -10,7 +10,17 @@ import zakadabar.core.resource.css.*
 
 open class SuiPageStyles : ZkPageStyles() {
 
-    open var fixedPaddingBottom by cssParameter { 20 }
+    fun ZkCssStyleRule.padding(large : String, small : String) {
+        paddingLeft = large
+        paddingRight = large
+        paddingBottom = large
+
+        medium {
+            paddingLeft = small
+            paddingRight = small
+            paddingBottom = small
+        }
+    }
 
     override val fixed by cssClass {
         + BoxSizing.borderBox
@@ -18,9 +28,8 @@ open class SuiPageStyles : ZkPageStyles() {
         + Overflow.hidden
         height = 100.percent
         maxHeight = 100.percent
-        paddingLeft = 20.px
-        paddingRight = 20.px
-        paddingBottom = fixedPaddingBottom.px
+
+        padding(20.px, 10.px)
     }
 
     /**
@@ -29,9 +38,12 @@ open class SuiPageStyles : ZkPageStyles() {
      */
 
     override val scrollable by cssClass {
+        + BoxSizing.borderBox
         maxHeight = 100.percent
         + OverflowY.auto
         + OverflowX.hidden
+
+        padding(20.px, 10.px)
     }
 
     override val content by cssClass {
