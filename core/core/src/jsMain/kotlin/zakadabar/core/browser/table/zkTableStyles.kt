@@ -174,7 +174,6 @@ open class ZkTableStyles : ZkFieldStyles(), TableStyleSpec {
     override val headerCell by cssClass({ ".$table th" }) {
         + Position.sticky
         + Overflow.hidden
-        + WhiteSpace.nowrap
         + TextAlign.left
         + Display.flex
         + AlignItems.center
