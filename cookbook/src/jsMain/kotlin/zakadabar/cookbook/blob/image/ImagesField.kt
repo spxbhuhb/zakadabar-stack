@@ -22,7 +22,7 @@ class ImagesField : ZkElement() {
                     this@Form,
                     comm = ImageBlob.comm,
                     reference = bo.id,
-                    blobCountMax = 2,
+                    blobCountMax = 1,
                     disposition = "image-blob-test",
                     blobClass = ImageBlob::class
                 )
