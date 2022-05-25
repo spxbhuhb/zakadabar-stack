@@ -237,12 +237,12 @@ abstract class ZkBlobField<T : EntityBo<T>, BT : BlobBo<BT, T>>(
      * functionality.
      */
     open fun allowUpload(toUpload : Int = 0): Boolean {
-        return blobCountMax?.let { max -> max - childElements.count { it is ZkBlobFieldEntry<*> } - toUpload > 0 } ?: true
+        return blobCountMax?.let { max -> max - childElements.count { it is ZkBlobFieldEntry<*> } - toUpload >= 0 } ?: true
     }
 
     open fun updateDropArea() {
         if (hideUpload()) return
-        if (allowUpload()) {
+        if (allowUpload(1)) {
             droparea.show()
         } else {
             droparea.hide()
