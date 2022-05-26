@@ -17,6 +17,13 @@ tags:
 
 ## Browser
 
+<div data-zk-enrich="Note" data-zk-flavour="Success" data-zk-title="Font Download">
+
+You can use the [Google Webfonts Helper](https://google-webfonts-helper.herokuapp.com/fonts) to get font files
+together with the CSS to use.
+
+</div>
+
 1. Create the directory `jsMain/resources/fonts`
 1. Copy your font files into this directory.
 1. Add the font styles:
