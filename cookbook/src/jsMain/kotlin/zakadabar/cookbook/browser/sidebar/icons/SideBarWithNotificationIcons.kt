@@ -23,11 +23,14 @@ class SideBarWithNotificationIcons : ZkSideBar() {
             text = "Title 1",
             ni = ni1
         ) { toastSuccess { "Click on 1" } }
+
         ni1.redrawIcon(2)
+
         + itemWithNotification(
             text = "Title 2",
             ni = ni2
         ) { toastSuccess { "Click on 2" } }
+
         ni2.redrawIcon(19)
     }
 

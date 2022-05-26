@@ -1,3 +1,6 @@
+/*
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ */
 package zakadabar.core.browser.icon
 
 import zakadabar.core.browser.ZkElement
@@ -9,18 +12,14 @@ open class ZkNotificationIcon(
     val iconSize: Int = 18,
 ) : ZkElement() {
 
-    val iconDiv = ZkElement()
+    val iconElement =  ZkIcon(icon, size = iconSize)
 
     override fun onCreate() {
         super.onCreate()
 
-        +div {
+        + zkIconStyles.notificationIconContainer
 
-            +div {
-                +ZkIcon(icon, size = iconSize) css zkSideBarStyles.icon
-                + iconDiv
-            } css zkIconStyles.notificationIconContainer
-        }
+        + iconElement css zkSideBarStyles.icon
     }
 
     /**
@@ -28,13 +27,7 @@ open class ZkNotificationIcon(
      * @param count will be the number in the dot, if it is 0, the dot won't show up
      * */
     open fun redrawIcon(count: Int) {
-        iconDiv.clear()
-        iconDiv += ZkElement(
-            +div {
-                style {
-                    left = "${iconSize * 0.6}px"
-                }
-                if (count != 0) + ZkNotificationCountDot(count)
-            } css zkIconStyles.notificationIconStyle)
+        iconElement -= ZkNotificationCountDot::class
+        iconElement += ZkNotificationCountDot(count) css zkIconStyles.notificationIconStyle
     }
 }

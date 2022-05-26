@@ -155,7 +155,7 @@ open class ZkTitleBarStyles : ZkCssStyleSheet(), TitleBarStyleSpec {
         color = localTitleBarText
     }
 
-    open val localTitleAndIcon by cssClass {
+    override val localTitleAndIcon by cssClass {
         gridTemplateColumns = "24px 1fr"
         gap = 8.px
         gridAutoRows = "max-content"

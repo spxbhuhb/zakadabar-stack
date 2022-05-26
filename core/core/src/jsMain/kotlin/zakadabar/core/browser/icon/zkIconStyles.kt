@@ -54,8 +54,8 @@ open class ZkIconStyles : ZkCssStyleSheet() {
 
     open val notificationIconStyle by cssClass {
         position = "absolute"
-        top = "0"
-//        left = 11.px
+        top = 0.px
+        right = 0.px
     }
 
     open val notificationIconContainer by cssClass {

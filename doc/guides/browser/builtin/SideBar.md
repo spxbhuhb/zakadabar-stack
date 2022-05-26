@@ -91,11 +91,19 @@ Example: [SideBar With Icons](/doc/cookbook/browser/sidebar/icons/recipe.md)
 
 Set `arrowAfter` of `ZkSideBar` to `true` to place the group open arrows after the sidebar.
 
-### Arrow After
+### Arrow Open
 
 Set `arrowOpen` of `ZkSideBar` to `true` to open/close groups only when the use clicks on the arrow.
 
 When the user clicks on the text, the navigation happens, but the group does not open/close.
+
+### Icon With a Notification
+
+To add a counter to a sidebar icon, use the `itemWithNotification` helper.
+
+<div data-zk-enrich="SideBarWithNotificationIcons"></div>
+
+Recipe: [SideBar With Notification Icons](/doc/cookbook/browser/sidebar/icons/recipe.md)
 
 ## Sections
 
