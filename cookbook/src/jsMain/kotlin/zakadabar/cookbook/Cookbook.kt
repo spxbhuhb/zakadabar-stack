@@ -27,6 +27,7 @@ import zakadabar.cookbook.browser.sidebar.SideBarCombinedExample
 import zakadabar.cookbook.browser.sidebar.arrowAfter.SideBarArrowAfter
 import zakadabar.cookbook.browser.sidebar.arrowOpen.SideBarArrowOpen
 import zakadabar.cookbook.browser.sidebar.icons.SideBarWithIcons
+import zakadabar.cookbook.browser.sidebar.icons.SideBarWithNotificationIcons
 import zakadabar.cookbook.browser.tabcontainer.background.TabContainerBackground
 import zakadabar.cookbook.browser.table.action.TableCustomActions
 import zakadabar.cookbook.browser.table.basic.BasicTable
@@ -43,6 +44,7 @@ import zakadabar.cookbook.browser.table.inline.TableEditInlineNoBo
 import zakadabar.cookbook.browser.table.multiLevel.TableMultiLevel
 import zakadabar.cookbook.browser.table.saveElement.TableSaveElement
 import zakadabar.cookbook.browser.table.tableInTab.TableInTab
+import zakadabar.cookbook.browser.table.titleIcon.TableLocalTitleIcon
 import zakadabar.cookbook.browser.table.variableHeight.TableVariableHeight
 import zakadabar.cookbook.resource.strings
 import zakadabar.core.browser.ZkElement
@@ -74,6 +76,7 @@ class Cookbook : CommonModule {
             "SideBarArrowOpen" -> SideBarArrowOpen()
             "SideBarCombinedExample" -> SideBarCombinedExample()
             "SideBarWithIcons" -> SideBarWithIcons()
+            "SideBarWithNotificationIcons" -> SideBarWithNotificationIcons()
             "StringSelectFilter" -> StringSelectFilter()
             "SubmitOnEnter" -> SubmitOnEnter()
             "TabContainerBackground" -> TabContainerBackground()
@@ -90,6 +93,7 @@ class Cookbook : CommonModule {
             "TableSaveElement" -> TableSaveElement()
             "TableVerticalBorderScroll" -> TableVerticalBorderScroll()
             "TableVerticalBorderNoScroll" -> TableVerticalBorderNoScroll()
+            "TableLocalTitleIcon" -> TableLocalTitleIcon()
             "TextHelpModal" -> TextHelpModal()
             "CustomInputFieldForm" -> CustomInputFieldForm()
             "CustomSelectFieldForm" -> CustomSelectFieldForm()

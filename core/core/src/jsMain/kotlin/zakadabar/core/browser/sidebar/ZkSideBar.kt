@@ -6,6 +6,8 @@ package zakadabar.core.browser.sidebar
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.ZkAppRouting
 import zakadabar.core.browser.application.target
+import zakadabar.core.browser.icon.ZkNotificationCountDot
+import zakadabar.core.browser.icon.ZkNotificationIcon
 import zakadabar.core.resource.ZkIconSource
 
 open class ZkSideBar(
@@ -41,6 +43,12 @@ open class ZkSideBar(
 
     open fun item(icon : ZkIconSource, text: String, capitalize: Boolean = true, onClick: (() -> Unit)? = null) =
         ZkSideBarItem(text, icon, null, capitalize, this, onClick)
+
+    open fun itemWithNotification(target : ZkAppRouting.ZkTarget, subPath : String? = null, text : String, ni: ZkNotificationIcon) =
+        ZkSideBarItemWithNotification(target, ni, text, subPath )
+
+    open fun itemWithNotification(text : String, ni: ZkNotificationIcon, onClick: (() -> Unit)? = null) =
+        ZkSideBarItemWithNotification(text, ni, onClick = onClick)
 
     inline fun <reified T : ZkAppRouting.ZkTarget> section(text : String? = null, noinline builder: ZkElement.() -> Unit) =
         ZkSideBarGroup(target<T>(), text = text, section = true, builder = builder, sideBar = this)

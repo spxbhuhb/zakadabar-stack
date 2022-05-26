@@ -161,4 +161,11 @@ open class SuiTitleBarStyles : ZkCssStyleSheet(), TitleBarStyleSpec {
         borderTopLeftRadius = Borders.borderRadius.md
         borderTopRightRadius = Borders.borderRadius.md
     }
+
+    override val localTitleAndIcon by cssClass {
+        marginTop = 4.px
+        gridTemplateColumns = "24px 1fr"
+        gap = 8.px
+        gridAutoRows = "max-content"
+    }
 }

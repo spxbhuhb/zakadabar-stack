@@ -186,6 +186,18 @@ Example: [Vertical Table Cell Border](/doc/cookbook/browser/table/border/vertica
 
 <div data-zk-enrich="TableVerticalBorderSome"></div>
 
+### Title With an Icon
+
+To add icon to the local title of the table, use  `icon` configuration variable.
+
+```text
+icon = ZkIcons.description
+```
+
+Recipe: [Table Local Title with Icon](/doc/cookbook/browser/table/titleIcon/recipe.md)
+
+<div data-zk-enrich="TableLocalTitleIcon"></div>
+
 ## Extension Columns
 
 Extension columns make it possible to add editable columns to the table without having
@@ -277,7 +289,6 @@ override fun onConfigure() {
 ```
 
 Example: [Variable Table Row Height](/doc/cookbook/browser/table/variableHeight/recipe.md)
-
 
 ## Multi Level Rows
 

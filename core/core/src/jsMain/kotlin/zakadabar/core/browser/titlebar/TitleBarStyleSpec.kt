@@ -66,4 +66,5 @@ interface TitleBarStyleSpec : CssStyleSpec {
      */
     val localTitleBar: ZkCssStyleRule
 
+    val localTitleAndIcon: ZkCssStyleRule
 }
