@@ -5,8 +5,10 @@ package zakadabar.lib.demo.frontend
 
 import kotlinx.browser.window
 import zakadabar.core.authorize.appRoles
+import zakadabar.core.browser.icon.ZkNotificationIcon
 import zakadabar.core.browser.sidebar.ZkSideBar
 import zakadabar.core.browser.util.io
+import zakadabar.core.resource.iconSource
 import zakadabar.core.resource.localized
 import zakadabar.lib.accounts.browser.accounts.Account
 import zakadabar.lib.accounts.browser.accounts.AccountSecure

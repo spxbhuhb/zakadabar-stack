@@ -4,10 +4,8 @@
 package zakadabar.core.browser.icon
 
 import org.w3c.dom.HTMLElement
-import zakadabar.core.resource.css.BoxSizing
-import zakadabar.core.resource.css.ZkCssStyleSheet
-import zakadabar.core.resource.css.cssStyleSheet
-import zakadabar.core.resource.css.px
+import zakadabar.core.resource.ZkColors
+import zakadabar.core.resource.css.*
 
 var zkIconStyles by cssStyleSheet(ZkIconStyles())
 
@@ -43,6 +41,33 @@ open class ZkIconStyles : ZkCssStyleSheet() {
         + BoxSizing.borderBox
         width = 24.px
         height = 24.px
+    }
+
+    open val notificationCounterText by cssClass {
+        + JustifyContent.center
+        + JustifySelf.center
+        + Display.grid
+        fontSize = 65.percent
+        fontWeight = 100.percent
+        color = ZkColors.white
+    }
+
+    open val notificationIconStyle by cssClass {
+        position = "absolute"
+        top = "0"
+//        left = 11.px
+    }
+
+    open val notificationIconContainer by cssClass {
+        position = "relative"
+    }
+
+    open val notificationCountDotContainer by cssClass {
+        alignItems = "center"
+        borderRadius = 24.px
+        backgroundColor = zakadabar.core.resource.theme.dangerColor
+        fontWeight = 20.percent
+        height = 10.px
     }
 
 }
