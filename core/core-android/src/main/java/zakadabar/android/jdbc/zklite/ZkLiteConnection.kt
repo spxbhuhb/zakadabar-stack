@@ -59,14 +59,14 @@ open class ZkLiteConnection(url: String, info: Properties?) : Connection {
     }
 
     override fun close() {
-        Log.v("ZkLiteConnection.close(): " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
+        ZkLiteLog.v("ZkLiteConnection.close(): " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
 
         // FIXME check for duplicated close
 
         synchronized(dbMap) {
             clientMap.remove(this)
             if (! clientMap.containsValue(db)) {
-                Log.i("ZkLiteConnection.close(): " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this + " Closing the database since since last connection was closed.")
+                ZkLiteLog.i("ZkLiteConnection.close(): " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this + " Closing the database since since last connection was closed.")
                 setAutoCommit(true)
                 db.close()
                 dbMap.remove(db.dbQname)
@@ -80,9 +80,9 @@ open class ZkLiteConnection(url: String, info: Properties?) : Connection {
             throw java.sql.SQLException("database in auto-commit mode")
         }
         db.setTransactionSuccessful()
-        Log.d("END TRANSACTION  (commit) " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
+        ZkLiteLog.d("END TRANSACTION  (commit) " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
         db.endTransaction()
-        Log.d("BEGIN TRANSACTION (after commit) " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
+        ZkLiteLog.d("BEGIN TRANSACTION (after commit) " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
         db.beginTransaction()
     }
 
@@ -133,7 +133,7 @@ open class ZkLiteConnection(url: String, info: Properties?) : Connection {
 
     override fun getWarnings(): SQLWarning? {
         // TODO: Is this a sufficient implementation? (If so, delete comment and logging)
-        Log.e(
+        ZkLiteLog.e(
             " ********************* not implemented @ " + fileName + " line "
                     + lineNumber
         )
@@ -218,9 +218,9 @@ open class ZkLiteConnection(url: String, info: Properties?) : Connection {
         if (autoCommit) {
             throw java.sql.SQLException("database in auto-commit mode")
         }
-        Log.d("END TRANSACTION (rollback) " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
+        ZkLiteLog.d("END TRANSACTION (rollback) " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
         db.endTransaction()
-        Log.d("BEGIN TRANSACTION (after rollback) " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
+        ZkLiteLog.d("BEGIN TRANSACTION (after rollback) " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
         db.beginTransaction()
     }
 
@@ -237,11 +237,11 @@ open class ZkLiteConnection(url: String, info: Properties?) : Connection {
         if (autoCommit) {
             if (db.inTransaction()) { // to be on safe side.
                 db.setTransactionSuccessful()
-                Log.d("END TRANSACTION (autocommit on) " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
+                ZkLiteLog.d("END TRANSACTION (autocommit on) " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
                 db.endTransaction()
             }
         } else {
-            Log.d("BEGIN TRANSACTION (autocommit off) " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
+            ZkLiteLog.d("BEGIN TRANSACTION (autocommit off) " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
             db.beginTransaction()
         }
     }
@@ -465,8 +465,8 @@ open class ZkLiteConnection(url: String, info: Properties?) : Connection {
     }
 
     init {
-        Log.v("ZkLiteConnection: " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
-        Log.v("New sqlite jdbc from url '$url', '$info'")
+        ZkLiteLog.v("ZkLiteConnection: " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this)
+        ZkLiteLog.v("New sqlite jdbc from url '$url', '$info'")
         this.url = url
         // Make a filename from url
         var dbQname = url.substring(ZkLiteDriver.zkLitePrefix.length)
@@ -495,15 +495,15 @@ open class ZkLiteConnection(url: String, info: Properties?) : Connection {
                         timeout = optionValue
                         retryInterval = optionValue
                     }
-                    Log.v("Timeout: $timeout")
+                    ZkLiteLog.v("Timeout: $timeout")
                 } catch (nfe: NumberFormatException) {
                     // print and ignore
-                    Log.e("Error Parsing URL \"$url\" Timeout String \"$optionValueString\" is not a valid long", nfe)
+                    ZkLiteLog.e("Error Parsing URL \"$url\" Timeout String \"$optionValueString\" is not a valid long", nfe)
                 }
                 options = options.substring(optionEnd + 1)
             }
         }
-        Log.v("opening database $dbQname")
+        ZkLiteLog.v("opening database $dbQname")
         ensureDbFileCreation(dbQname)
         var flags = (android.database.sqlite.SQLiteDatabase.CREATE_IF_NECESSARY
                 or android.database.sqlite.SQLiteDatabase.OPEN_READWRITE
@@ -513,21 +513,21 @@ open class ZkLiteConnection(url: String, info: Properties?) : Connection {
                 try {
                     flags = info.getProperty(ZkLiteDriver.DATABASE_FLAGS).toInt()
                 } catch (nfe: NumberFormatException) {
-                    Log.e("Error Parsing DatabaseFlags \"" + info.getProperty(ZkLiteDriver.DATABASE_FLAGS) + " not a number ", nfe)
+                    ZkLiteLog.e("Error Parsing DatabaseFlags \"" + info.getProperty(ZkLiteDriver.DATABASE_FLAGS) + " not a number ", nfe)
                 }
             } else if (info.getProperty(ZkLiteDriver.ADDITONAL_DATABASE_FLAGS) != null) {
                 try {
                     val extraFlags = info.getProperty(ZkLiteDriver.ADDITONAL_DATABASE_FLAGS).toInt()
                     flags = flags or extraFlags
                 } catch (nfe: NumberFormatException) {
-                    Log.e("Error Parsing DatabaseFlags \"" + info.getProperty(ZkLiteDriver.ADDITONAL_DATABASE_FLAGS) + " not a number ", nfe)
+                    ZkLiteLog.e("Error Parsing DatabaseFlags \"" + info.getProperty(ZkLiteDriver.ADDITONAL_DATABASE_FLAGS) + " not a number ", nfe)
                 }
             }
         }
         synchronized(dbMap) {
             var cdb = dbMap[dbQname]
             if (cdb == null) {
-                Log.i("ZkLiteConnection: " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this + " Opening new database: " + dbQname)
+                ZkLiteLog.i("ZkLiteConnection: " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + this + " Opening new database: " + dbQname)
                 cdb = ZkLiteDatabase(dbQname, timeout, retryInterval, flags)
                 dbMap[dbQname] = cdb
             }

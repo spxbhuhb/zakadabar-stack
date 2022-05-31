@@ -91,7 +91,7 @@ class ZkLiteResultSet(
 
     override fun clearWarnings() {
         // TODO: Evaluate if implementation is sufficient (if so, delete comment and log)
-        Log.e(" ********************* not implemented @ " + fileName + " line " + lineNumber)
+        ZkLiteLog.e(" ********************* not implemented @ " + fileName + " line " + lineNumber)
     }
 
     override fun close() {
@@ -500,7 +500,7 @@ class ZkLiteResultSet(
 
     override fun getTimestamp(colID: Int, cal: Calendar): Timestamp? {
         // TODO Implement with Calendar
-        Log.e(" ********************* not implemented correctly - Calendar is ignored. @ " + fileName + " line " + lineNumber)
+        ZkLiteLog.e(" ********************* not implemented correctly - Calendar is ignored. @ " + fileName + " line " + lineNumber)
         return getTimestamp(colID)
     }
 

@@ -80,7 +80,7 @@ class ZkLiteDriver : Driver {
 
     override fun getPropertyInfo(url: String, info: Properties): Array<DriverPropertyInfo> {
         // TODO Evaluate if implementation is sufficient (if so, delete comment and log)
-        Log.e(" ********************* not implemented @ $fileName line $lineNumber")
+        ZkLiteLog.e(" ********************* not implemented @ $fileName line $lineNumber")
         return emptyArray()
     }
 

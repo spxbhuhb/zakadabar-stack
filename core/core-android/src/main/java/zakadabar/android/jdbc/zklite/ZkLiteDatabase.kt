@@ -72,13 +72,13 @@ class ZkLiteDatabase(
      * @throws SQLException
      */
     fun rawQuery(sql: String?, makeArgListQueryString: Array<String?>?): Cursor {
-        Log.v("SQLiteDatabase rawQuery: " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + sql)
+        ZkLiteLog.v("SQLiteDatabase rawQuery: " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + sql)
         val queryStart = System.currentTimeMillis()
         var delta: Long
         do {
             delta = try {
                 val cursor = sqliteDatabase !!.rawQuery(sql, makeArgListQueryString)
-                Log.v("SQLiteDatabase rawQuery OK: " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + sql)
+                ZkLiteLog.v("SQLiteDatabase rawQuery OK: " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + sql)
                 return cursor
             } catch (e: SQLiteException) {
                 if (isLockedException(e)) {
@@ -95,13 +95,13 @@ class ZkLiteDatabase(
      * @throws SQLException
      */
     fun execSQL(sql: String?, makeArgListQueryObject: Array<Any?>?) {
-        Log.v("SQLiteDatabase execSQL: " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + sql)
+        ZkLiteLog.v("SQLiteDatabase execSQL: " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + sql)
         val timeNow = System.currentTimeMillis()
         var delta: Long
         do {
             delta = try {
                 sqliteDatabase !!.execSQL(sql, makeArgListQueryObject)
-                Log.v("SQLiteDatabase execSQL OK: " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + sql)
+                ZkLiteLog.v("SQLiteDatabase execSQL OK: " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + sql)
                 return
             } catch (e: SQLiteException) {
                 if (isLockedException(e)) {
@@ -118,13 +118,13 @@ class ZkLiteDatabase(
      * @throws SQLException
      */
     fun execSQL(sql: String) {
-        Log.v("SQLiteDatabase execSQL: " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + sql)
+        ZkLiteLog.v("SQLiteDatabase execSQL: " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + sql)
         val timeNow = System.currentTimeMillis()
         var delta: Long
         do {
             delta = try {
                 sqliteDatabase !!.execSQL(sql)
-                Log.v("SQLiteDatabase execSQL OK: " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + sql)
+                ZkLiteLog.v("SQLiteDatabase execSQL OK: " + Thread.currentThread().id + " \"" + Thread.currentThread().name + "\" " + sql)
                 return
             } catch (e: SQLiteException) {
                 if (isLockedException(e)) {

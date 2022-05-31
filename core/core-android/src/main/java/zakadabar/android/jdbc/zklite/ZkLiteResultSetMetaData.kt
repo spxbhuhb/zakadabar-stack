@@ -105,7 +105,7 @@ class ZkLiteResultSetMetaData(cursor: Cursor?) : ResultSetMetaData {
 
     override fun isDefinitelyWritable(column: Int): Boolean {
         // TODO Evaluate if this is a sufficient implementation (if so, delete comment and log)
-        Log.e(
+        ZkLiteLog.e(
             " ********************* not implemented @ " + fileName + " line "
                     + lineNumber
         )
@@ -118,7 +118,7 @@ class ZkLiteResultSetMetaData(cursor: Cursor?) : ResultSetMetaData {
 
     override fun isReadOnly(column: Int): Boolean {
         // TODO Evaluate if the implementation is sufficient (if so, delete comment and log)
-        Log.e(
+        ZkLiteLog.e(
             " ********************* not implemented @ " + fileName + " line "
                     + lineNumber
         )
@@ -127,7 +127,7 @@ class ZkLiteResultSetMetaData(cursor: Cursor?) : ResultSetMetaData {
 
     override fun isSearchable(column: Int): Boolean {
         // TODO Evaluate if the implementation is sufficient (if so, delete comment and log)
-        Log.e(
+        ZkLiteLog.e(
             " ********************* not implemented @ " + fileName + " line "
                     + lineNumber
         )
@@ -136,7 +136,7 @@ class ZkLiteResultSetMetaData(cursor: Cursor?) : ResultSetMetaData {
 
     override fun isSigned(column: Int): Boolean {
         // TODO Evaluate if the implementation is sufficient (if so, delete comment and log)
-        Log.e(
+        ZkLiteLog.e(
             " ********************* not implemented @ " + fileName + " line "
                     + lineNumber
         )
@@ -145,7 +145,7 @@ class ZkLiteResultSetMetaData(cursor: Cursor?) : ResultSetMetaData {
 
     override fun isWritable(column: Int): Boolean {
         // TODO Evaluate if the implementation is sufficient (if so, delete comment and log)
-        Log.e(
+        ZkLiteLog.e(
             " ********************* not implemented @ " + fileName + " line "
                     + lineNumber
         )
