@@ -60,13 +60,35 @@ in the future to make the application mode dynamic.
 
 ## Customization
 
-The example below shows the effect of customization functions:
+### Icons
+
+All `group` and `item` builders have a version with a [ZkIconSource](/core/core/src/jsMain/kotlin/zakadabar/core/resource/ZkIconSource.kt)
+as first parameter. These versions add an icon before the text.
+
+Recipe: [SideBar With Icons](/doc/cookbook/browser/sidebar/icons/recipe.md)
+
+<div data-zk-enrich="SideBarWithIcons"></div>
+
+### Icon With a Notification
+
+To add a counter to a sidebar icon, use the `itemWithNotification` helper.
+
+<div data-zk-enrich="SideBarWithNotificationIcons"></div>
+
+Recipe: [SideBar With Notification Icons](/doc/cookbook/browser/sidebar/icons/recipe.md)
+
+### Open And Close Arrows
+
+There are a number of options to change the appearance and behaviour of the open and close arrows.
+This example belows shows a number of these (except the different icons).
 
 <div data-zk-enrich="SideBarCombinedExample"></div>
 
-### Open And Close Icons
+Recipe: [SideBar Arrow Options](/doc/cookbook/browser/sidebar/arrows/recipe.md)
 
-To replace the open and close icons, you set the appropriate properties of the sidebar styles.
+#### Arrow Icon
+
+To replace the open and close arrows, you set the appropriate properties of the sidebar styles.
 This can be done globally from the theme or per sidebar instance by passing a specific style.
 
 Global settings (from `ZkTheme.onResume`, see [Themes, Css](../structure/ThemesCss.md)).
@@ -80,30 +102,25 @@ with (zkSideBarStyles) {
 }
 ```
 
-### Icons
+#### Arrow Size
 
-All `group` and `item` builders have a version with a [ZkIconSource](/core/core/src/jsMain/kotlin/zakadabar/core/resource/ZkIconSource.kt)
-as first parameter. These versions add an icon before the text.
+To change the size of open and close arrows, use the `arrowSize` property of `ZkSideBar`.
 
-Example: [SideBar With Icons](/doc/cookbook/browser/sidebar/icons/recipe.md)
-
-### Arrow After
+#### Arrow After
 
 Set `arrowAfter` of `ZkSideBar` to `true` to place the group open arrows after the sidebar.
 
-### Arrow Open
+#### Arrow Open
 
-Set `arrowOpen` of `ZkSideBar` to `true` to open/close groups only when the use clicks on the arrow.
+Set `arrowOpen` of `ZkSideBar` to `true` to open groups only when the use clicks on the arrow.
 
-When the user clicks on the text, the navigation happens, but the group does not open/close.
+When the user clicks on the text, the navigation happens, but the group does not open.
 
-### Icon With a Notification
+#### Arrow Close
 
-To add a counter to a sidebar icon, use the `itemWithNotification` helper.
+Set `arrowClose` of `ZkSideBar` to `true` to close groups only when the use clicks on the arrow.
 
-<div data-zk-enrich="SideBarWithNotificationIcons"></div>
-
-Recipe: [SideBar With Notification Icons](/doc/cookbook/browser/sidebar/icons/recipe.md)
+When the user clicks on the text, the navigation happens, but the group does not close.
 
 ## Sections
 

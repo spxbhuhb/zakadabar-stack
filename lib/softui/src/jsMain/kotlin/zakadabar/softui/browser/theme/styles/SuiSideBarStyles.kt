@@ -139,8 +139,10 @@ open class SuiSideBarStyles : SideBarStyleSpec, ZkCssStyleSheet() {
     }
 
     override val groupArrow by cssClass {
-        marginLeft = 6.px
-        width = 20.px
+        + Display.flex
+        + JustifyContent.center
+        + AlignItems.center
+        width = 26.px
     }
 
     override val groupContent by cssClass {

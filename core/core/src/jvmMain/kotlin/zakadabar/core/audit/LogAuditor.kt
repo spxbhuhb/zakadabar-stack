@@ -7,11 +7,8 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import org.slf4j.LoggerFactory
 import zakadabar.core.authorize.Executor
-import zakadabar.core.data.BaseBo
-import zakadabar.core.data.ActionBo
-import zakadabar.core.data.EntityBo
-import zakadabar.core.data.EntityId
-import zakadabar.core.data.QueryBo
+import zakadabar.core.data.*
+import zakadabar.core.server.server
 import kotlin.reflect.full.createType
 
 /**
@@ -31,11 +28,15 @@ open class LogAuditor<T : BaseBo>(
     override var includeData: Boolean = true
 
     override fun auditList(executor: Executor) {
-        logger.info("${executor.accountId}: LIST")
+        if (server.settings.logReads) {
+            logger.info("${executor.accountId}: LIST")
+        }
     }
 
     override fun auditRead(executor: Executor, entityId: EntityId<T>) {
-        logger.info("${executor.accountId}: READ $entityId")
+        if (server.settings.logReads) {
+            logger.info("${executor.accountId}: READ $entityId")
+        }
     }
 
     override fun auditCreate(executor: Executor, entity: T) {
@@ -65,8 +66,10 @@ open class LogAuditor<T : BaseBo>(
     }
 
     override fun auditQuery(executor: Executor, bo: QueryBo<*>) {
-        val text = if (includeData) Json.encodeToString(serializer(bo::class.createType()), bo) else ""
-        logger.info("${executor.accountId}: QUERY ${bo::class.simpleName} // $text")
+        if (server.settings.logReads) {
+            val text = if (includeData) Json.encodeToString(serializer(bo::class.createType()), bo) else ""
+            logger.info("${executor.accountId}: QUERY ${bo::class.simpleName} // $text")
+        }
     }
 
     override fun auditAction(executor: Executor, bo: ActionBo<*>) {

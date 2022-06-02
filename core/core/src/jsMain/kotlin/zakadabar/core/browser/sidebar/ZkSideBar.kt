@@ -6,7 +6,6 @@ package zakadabar.core.browser.sidebar
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.ZkAppRouting
 import zakadabar.core.browser.application.target
-import zakadabar.core.browser.icon.ZkNotificationCountDot
 import zakadabar.core.browser.icon.ZkNotificationIcon
 import zakadabar.core.resource.ZkIconSource
 
@@ -20,10 +19,21 @@ open class ZkSideBar(
     open var arrowAfter : Boolean = false
 
     /**
-     * When true, only click on the arrow opens and closes the group, otherwise click on title
+     * When true, only click on the arrow opens the group, otherwise click on title
      * also works. Default is false.
      */
     open var arrowOpen : Boolean = false
+
+    /**
+     * When true, only click on the arrow closes the group, otherwise click on title
+     * also works. Default is false.
+     */
+    open var arrowClose : Boolean = false
+
+    /**
+     * Sets the size of the open/close arrow of groups.
+     */
+    open var arrowSize : Int = 18
 
     override fun onCreate() {
         + styles.sidebar

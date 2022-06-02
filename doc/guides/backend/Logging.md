@@ -15,10 +15,8 @@ To create your own configuration write a modified logback.xml file, place it in 
 java -Dlogback.configurationFile=etc/logback.xml
 ```
 
-## Switch of Read and Query Logs
+## Switch Off Read and Query Logs
 
-To stop the automatic RecordBackend logging for reads and queries:
-
-```kotlin
-Server.logReads = false
-```
+To stop the automatic logging of lists, reads and queries, change the `logReads` 
+setting in the server settings file. For more information see
+[Introduction: Settings](Introduction.md#Settings)

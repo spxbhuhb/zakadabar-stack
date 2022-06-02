@@ -136,6 +136,7 @@ open class ZkButton(
 
     open fun onClick(event: Event) {
         if (localNav) {
+            element.focus()
             event.preventDefault()
             if (onClick != null) {
                 onClick?.invoke()

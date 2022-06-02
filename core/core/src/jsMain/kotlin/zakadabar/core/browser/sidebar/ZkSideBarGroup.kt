@@ -43,8 +43,8 @@ open class ZkSideBarGroup(
 
     open var open = false
 
-    open lateinit var styles : SideBarStyleSpec
-    
+    open lateinit var styles: SideBarStyleSpec
+
     open lateinit var openIcon: ZkElement
     open lateinit var closeIcon: ZkElement
     open lateinit var textElement: ZkElement
@@ -74,13 +74,15 @@ open class ZkSideBarGroup(
     override fun onCreate() {
 
         styles = sideBar?.styles ?: zkSideBarStyles
-        
+
+        val arrowSize = sideBar?.arrowSize ?: 18
+
         if (sideBar?.arrowAfter != true) {
-            openIcon = ZkIcon(styles.groupOpenIcon, 18)
-            closeIcon = ZkIcon(styles.groupCloseIcon, 18)
+            openIcon = ZkIcon(styles.groupOpenIcon, arrowSize)
+            closeIcon = ZkIcon(styles.groupCloseIcon, arrowSize)
         } else {
-            openIcon = ZkIcon(styles.afterGroupOpenIcon, 18)
-            closeIcon = ZkIcon(styles.afterGroupCloseIcon, 18)
+            openIcon = ZkIcon(styles.afterGroupOpenIcon, arrowSize)
+            closeIcon = ZkIcon(styles.afterGroupCloseIcon, arrowSize)
         }
 
         if (url == null) {
@@ -168,7 +170,14 @@ open class ZkSideBarGroup(
     }
 
     open fun onNavigate(event: Event) {
-        if (! section && sideBar?.arrowOpen != true) onHandleGroupClick(event)
+        if (! section) {
+            if (
+                (! open && sideBar?.arrowClose == false) ||
+                (open && sideBar?.arrowOpen == false)
+            ) {
+                onHandleGroupClick(event)
+            }
+        }
 
         if (localNav) {
             event.preventDefault()

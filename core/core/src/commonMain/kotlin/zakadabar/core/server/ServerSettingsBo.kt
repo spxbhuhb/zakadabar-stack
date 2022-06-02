@@ -18,6 +18,7 @@ class ServerSettingsBo(
     var traceRouting: Boolean = false,
     var staticResources: String = "./var/static",
     var apiCacheControl: String = "no-cache, no-store",
+    var logReads : Boolean = true,
     var ktor: KtorSettingsBo = KtorSettingsBo(),
     var modules: List<String> = emptyList()
 
@@ -32,6 +33,7 @@ class ServerSettingsBo(
         + ::staticResources default staticResources envVar "ZK_STATIC_RESOURCES"
         + ::apiCacheControl default apiCacheControl
         + ::ktor
+        + ::logReads default true
         // + ::modules
     }
 
