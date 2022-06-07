@@ -8,6 +8,7 @@ import zakadabar.core.authorize.appRoles
 import zakadabar.core.server.server
 import zakadabar.lib.accounts.business.AccountPrivateBl
 import zakadabar.lib.accounts.business.KtorSessionBl
+import zakadabar.lib.accounts.business.PermissionBl
 import zakadabar.lib.accounts.business.RoleBl
 
 /**
@@ -26,5 +27,6 @@ fun install(
     server += accountPrivateBl
     server += RoleBl()
     server += KtorSessionBl()
+    server += PermissionBl()
 
 }

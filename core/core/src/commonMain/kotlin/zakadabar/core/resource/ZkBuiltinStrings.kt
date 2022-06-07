@@ -99,6 +99,8 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val passwordChangeInvalid by "Invalid fields, cannot change password yet."
     open val role by "Role"
     open val roles by "Roles"
+    open val permission by "Permission"
+    open val permissions by "Permissions"
     open val sessionRenew by "Your session has been expired. Please log in again to continue."
     open val sessionRenewError by "An error happened during session renewal. You have been logged out, please log in again to continue."
     open val setting by "Setting"
