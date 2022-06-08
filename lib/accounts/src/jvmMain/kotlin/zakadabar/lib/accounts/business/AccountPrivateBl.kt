@@ -152,7 +152,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
                     permissionBl.getByName(permissionName)
                     return@forEach // when exists we don't want to re-create it
                 } catch (ex: NoSuchElementException) {
-                    // this is fine, we have to create the role
+                    // this is fine, we have to create the permission
                 }
 
                 val bo = permissionBl.create(executor, PermissionBo(EntityId(), permissionName, permissionName))
