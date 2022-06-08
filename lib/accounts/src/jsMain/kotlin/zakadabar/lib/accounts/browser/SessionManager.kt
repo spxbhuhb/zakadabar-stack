@@ -35,7 +35,7 @@ class SessionManager : ZkSessionManager {
     override suspend fun init() {
         io { renewTask() }
         val session = SessionBo.read(EntityId("current"))
-        application.executor = ZkExecutor(session.account, session.anonymous, session.roles)
+        application.executor = ZkExecutor(session.account, session.anonymous, session.roles, session.permissions)
         application.serverDescription = session.serverDescription
     }
 

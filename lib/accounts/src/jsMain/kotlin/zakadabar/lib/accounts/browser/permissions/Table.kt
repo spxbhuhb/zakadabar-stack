@@ -17,7 +17,7 @@ class Table : ZkTable<PermissionBo>() {
         search = true
         export = true
 
-        titleText = localizedStrings.roles
+        titleText = localizedStrings.permissions
         crud = target<Permissions>()
 
         + PermissionBo::id

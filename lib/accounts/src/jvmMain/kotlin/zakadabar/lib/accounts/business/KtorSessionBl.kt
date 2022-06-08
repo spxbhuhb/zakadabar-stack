@@ -112,16 +112,19 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
                 account = anonymous,
                 anonymous = true,
                 roles = emptyList(),
+                permissions = emptyList(),
                 serverDescription = serverDescription
             )
         } else {
             val account = accountBl.readPublic(session.account)
             val roles = accountBl.roles(account.accountId)
+            val permissions = accountBl.permissions(account.accountId)
             SessionBo(
                 id = EntityId("current"),
                 account = account,
                 anonymous = false,
                 roles = roles.map { it.second },
+                permissions = permissions.map { it.second },
                 serverDescription = serverDescription
             )
         }

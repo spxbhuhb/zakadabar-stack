@@ -29,6 +29,6 @@ class RoleBo(
     override fun schema() = BoSchema {
         + ::id
         + ::name min 1 max 50 blank false
-        + ::description
+        + ::description min 1
     }
 }

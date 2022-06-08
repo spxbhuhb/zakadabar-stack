@@ -11,6 +11,7 @@ import zakadabar.core.authorize.appRoles
 import zakadabar.core.authorize.SimpleRoleAuthorizer
 import zakadabar.core.business.EntityBusinessLogicBase
 import zakadabar.core.data.ActionStatus
+import zakadabar.core.data.EntityId
 import zakadabar.core.setting.setting
 import zakadabar.lib.accounts.persistence.PermissionExposedPa
 
@@ -61,11 +62,11 @@ open class PermissionBl : EntityBusinessLogicBase<PermissionBo>(
 //    // -------------------------------------------------------------------------
 //    // Internal
 //    // -------------------------------------------------------------------------
-//
-//    fun rolesOf(accountId: EntityId<AccountPrivateBl>) = pa.withTransaction {
-//        pa.rolesOf(accountId)
-//    }
-//
+
+    fun permissionsOf(accountId: EntityId<AccountPrivateBl>) = pa.withTransaction {
+        pa.permissionsOf(accountId)
+    }
+
 //    override fun getByName(name: String) = pa.withTransaction {
 //        pa.readByName(name).id
 //    }

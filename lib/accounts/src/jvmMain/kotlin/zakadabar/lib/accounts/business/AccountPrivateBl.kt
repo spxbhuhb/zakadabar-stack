@@ -39,6 +39,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     private lateinit var anonymousV2: AccountPublicBoV2
 
     private val roleBl by module<RoleBl>()
+    private val permissionBl by module<PermissionBl>()
 
     @Suppress("LeakingThis") // this is fine here as authorizer not called during init
     override val authorizer = AccountPrivateBlAuthorizer(this)
@@ -398,6 +399,10 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
 
     override fun roles(accountId: EntityId<out BaseBo>): List<Pair<EntityId<out BaseBo>, String>> {
         return roleBl.rolesOf(EntityId(accountId))
+    }
+
+    override fun permissions(accountId: EntityId<out BaseBo>): List<Pair<EntityId<out BaseBo>, String>> {
+        return permissionBl.permissionsOf(EntityId(accountId))
     }
 
     override fun executorFor(name : String) : Executor =

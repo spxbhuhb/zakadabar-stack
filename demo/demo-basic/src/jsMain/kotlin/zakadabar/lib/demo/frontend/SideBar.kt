@@ -5,6 +5,7 @@ package zakadabar.lib.demo.frontend
 
 import kotlinx.browser.window
 import zakadabar.core.authorize.appRoles
+import zakadabar.core.browser.application.application
 import zakadabar.core.browser.sidebar.ZkSideBar
 import zakadabar.core.browser.util.io
 import zakadabar.core.resource.localized

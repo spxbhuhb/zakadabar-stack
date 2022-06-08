@@ -31,6 +31,8 @@ interface AccountBlProvider {
 
     fun roles(accountId: EntityId<out BaseBo>): List<Pair<EntityId<out BaseBo>, String>>
 
+    fun permissions(accountId: EntityId<out BaseBo>): List<Pair<EntityId<out BaseBo>, String>>
+
     /**
      * Get an [Executor] for the account with the given name.
      *

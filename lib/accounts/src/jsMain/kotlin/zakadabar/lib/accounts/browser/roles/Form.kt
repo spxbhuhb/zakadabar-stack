@@ -28,7 +28,7 @@ class Form : ZkForm<RoleBo>() {
                 ZkCheckboxListItem(
                     p.id,
                     p.description?.let { localizedStrings.getNormalized(it) } ?: p.name,
-                    rolePermissions.firstOrNull { ur -> ur.role == p.id } != null
+                    rolePermissions.firstOrNull { ur -> ur.permission == p.id } != null
                 )
             }
             build(bo.description, localizedStrings.role, css = zkFormStyles.onePanel, addButtons = false) {
@@ -37,8 +37,10 @@ class Form : ZkForm<RoleBo>() {
                     + bo::name
                     + bo::description
                 }
-                + section(localizedStrings.permissions) {
-                    + ZkCheckboxList(items)
+                if (items.isNotEmpty()) {
+                    + section(localizedStrings.permissions) {
+                        + ZkCheckboxList(items)
+                    }
                 }
             }
             + ZkFormButtons(this@Form, ::onExecute)
@@ -54,6 +56,7 @@ class Form : ZkForm<RoleBo>() {
                 } else {
                     bo.update()
                 }
+                bo.id = role.id
                 items.forEach {
                     if (it.selected) {
                         addPermission(it.value)
@@ -63,6 +66,8 @@ class Form : ZkForm<RoleBo>() {
                 }
                 rolePermissions =  PermissionsByRole(role.id).execute()
                 onSubmitSuccess()
+                resetTouched()
+                onBack()
             } catch (ex: Exception) {
                 console.log(ex)
                 onSubmitError(ex)

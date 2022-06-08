@@ -17,11 +17,11 @@ class PermissionBo(
 
     override var id: EntityId<PermissionBo>,
     var name: String,
-    var description: String?
+    var description: String
 
 ) : EntityBo<PermissionBo> {
 
-    companion object : EntityBoCompanion<PermissionBo>("zkl-right")
+    companion object : EntityBoCompanion<PermissionBo>("zkl-permission")
 
     override fun getBoNamespace() = boNamespace
     override fun comm() = comm
@@ -29,6 +29,6 @@ class PermissionBo(
     override fun schema() = BoSchema {
         + ::id
         + ::name min 1 max 50 blank false
-        + ::description
+        + ::description min 1
     }
 }

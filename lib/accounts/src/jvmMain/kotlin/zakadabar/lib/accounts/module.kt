@@ -3,7 +3,9 @@
  */
 package zakadabar.lib.accounts
 
+import zakadabar.core.authorize.AppPermissionsBase
 import zakadabar.core.authorize.AppRolesBase
+import zakadabar.core.authorize.appPermissions
 import zakadabar.core.authorize.appRoles
 import zakadabar.core.server.server
 import zakadabar.lib.accounts.business.AccountPrivateBl
@@ -19,10 +21,12 @@ import zakadabar.lib.accounts.business.RoleBl
  */
 fun install(
     roles: AppRolesBase = AppRolesBase(),
+    permissions: AppPermissionsBase = AppPermissionsBase(),
     accountPrivateBl: AccountPrivateBl = AccountPrivateBl()
 ) {
 
     appRoles = roles
+    appPermissions = permissions
 
     server += accountPrivateBl
     server += RoleBl()

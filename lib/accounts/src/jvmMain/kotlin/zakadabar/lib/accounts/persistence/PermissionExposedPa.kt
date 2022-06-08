@@ -32,7 +32,7 @@ open class PermissionExposedPa(
         Sql.tables += rolePermissionTable
     }
 
-    fun rightsOf(accountId: EntityId<AccountPrivateBl>) =
+    fun permissionsOf(accountId: EntityId<AccountPrivateBl>) =
         table
             .join(
                 joinType = JoinType.INNER,
@@ -119,7 +119,7 @@ open class PermissionExposedTable : ExposedPaTable<PermissionBo>(
     tableName = "permission"
 ) {
     val name = varchar("name", 50).index()
-    val description = text("description").nullable()
+    val description = text("description")
 }
 
 object RolePermissionExposedTableCommon : RolePermissionExposedTable()
