@@ -50,8 +50,8 @@ class SimpleRoleAuthorizerTest {
 
         val withPublic = server.first<WithPublic>()
 
-        val siteMember = Executor(EntityId(1), UUID.NIL, false, emptyList(), emptyList())
-        val anonymous = Executor(EntityId(2), UUID.NIL, true, emptyList(), emptyList())
+        val siteMember = Executor(EntityId(1), UUID.NIL, false, emptyList(), emptyList(), emptyList(), emptyList())
+        val anonymous = Executor(EntityId(2), UUID.NIL, true, emptyList(), emptyList(), emptyList(), emptyList())
 
         with(withPublic.authorizer) {
             authorizeList(anonymous)

@@ -22,6 +22,8 @@ data class StackSession(
     val anonymous: Boolean,
     val roleIds: List<EntityId<out BaseBo>>,
     val roleNames: List<String>,
+    val permissionIds: List<EntityId<out BaseBo>>,
+    val permissionNames: List<String>
 )
 
 object StackSessionSerializer : SessionSerializer<StackSession> {

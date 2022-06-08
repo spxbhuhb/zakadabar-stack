@@ -27,7 +27,7 @@ fun Authentication.Configuration.configureSession(name: String? = null) {
     val accountBl by module<AccountBlProvider>()
 
     val executor = accountBl.anonymousV2().let {
-        KtorExecutor(it.accountId, it.accountUuid, true, emptyList(), emptyList())
+        KtorExecutor(it.accountId, it.accountUuid, true, emptyList(), emptyList(), emptyList(), emptyList())
     }
 
     val provider = AuthenticationProvider(SessionAuthenticationProvider.Configuration(name))
@@ -37,7 +37,7 @@ fun Authentication.Configuration.configureSession(name: String? = null) {
         // when there is a session, use it
 
         call.sessions.get<StackSession>()?.let {
-            context.principal(KtorExecutor(it.account, it.accountUuid, it.anonymous, it.roleIds, it.roleNames))
+            context.principal(KtorExecutor(it.account, it.accountUuid, it.anonymous, it.roleIds, it.roleNames, it.permissionIds, it.permissionNames))
             return@intercept
         }
 
@@ -48,16 +48,24 @@ fun Authentication.Configuration.configureSession(name: String? = null) {
         credentials?.let {
             transaction {
                 val session = sessionBl.login(executor, LoginAction(credentials.name, Secret(credentials.password)))
-                context.principal(KtorExecutor(session.account, session.accountUuid, session.anonymous, session.roleIds, session.roleNames))
+                context.principal(KtorExecutor(
+                    session.account, session.accountUuid, session.anonymous,
+                    session.roleIds, session.roleNames,
+                    session.permissionIds, session.permissionNames
+                ))
             }
             return@intercept
         }
 
         val anonymous = accountBl.anonymousV2()
-        val session = StackSession(anonymous.accountId, anonymous.accountUuid, true, emptyList(), emptyList())
+        val session = StackSession(anonymous.accountId, anonymous.accountUuid, true, emptyList(), emptyList(), emptyList(), emptyList())
 
         call.sessions.set(session)
-        context.principal(KtorExecutor(session.account, session.accountUuid, session.anonymous, session.roleIds, session.roleNames))
+        context.principal(KtorExecutor(
+            session.account, session.accountUuid, session.anonymous,
+            session.roleIds, session.roleNames,
+            session.permissionIds, session.permissionNames
+        ))
 
         if (call.attributes.getOrNull(LoginTimeoutKey) == true) {
             server.onLoginTimeout(call)

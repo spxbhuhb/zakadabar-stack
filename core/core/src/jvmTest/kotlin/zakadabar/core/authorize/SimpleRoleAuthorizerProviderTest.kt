@@ -69,8 +69,8 @@ class SimpleRoleAuthorizerProviderTest {
 
         val testRoleId = server.first<RoleBlProvider>().getByName(Roles.testRole)
 
-        val siteMember = Executor(EntityId(1), UUID.NIL, false, listOf(testRoleId), listOf(Roles.testRole))
-        val anonymous = Executor(EntityId(2), UUID.NIL, true, emptyList(), emptyList())
+        val siteMember = Executor(EntityId(1), UUID.NIL, false, listOf(testRoleId), listOf(Roles.testRole), emptyList(), emptyList() )
+        val anonymous = Executor(EntityId(2), UUID.NIL, true, emptyList(), emptyList(), emptyList(), emptyList())
 
         WithDefault.authorizer.authorizeRead(siteMember, EntityId(1))
         WithDefault.authorizer.authorizeUpdate(siteMember, EmptyEntityBo)

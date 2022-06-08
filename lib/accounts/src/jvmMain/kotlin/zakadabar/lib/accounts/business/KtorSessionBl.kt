@@ -154,13 +154,23 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 
         val roleIds = mutableListOf<EntityId<out BaseBo>>()
         val roleNames = mutableListOf<String>()
+        val permissionIds = mutableListOf<EntityId<out BaseBo>>()
+        val permissionNames = mutableListOf<String>()
 
         accountBl.roles(account.accountId).forEach {
             roleIds += it.first
             roleNames += it.second
         }
+        accountBl.permissions(account.accountId).forEach {
+            permissionIds += it.first
+            permissionNames += it.second
+        }
 
-        return StackSession(account.accountId, account.accountUuid, accountBl.anonymous().accountId == account.accountId, roleIds, roleNames)
+        return StackSession(
+            account.accountId, account.accountUuid, accountBl.anonymous().accountId == account.accountId,
+            roleIds, roleNames,
+            permissionIds, permissionNames
+        )
     }
 
     private fun authenticate(executor: Executor, accountName: String, password: Secret): AccountPublicBoV2 =
@@ -179,7 +189,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 
         auditor.auditCustom(executor) { "logout accountId=${old.account}" }
 
-        call.sessions.set(StackSession(anonymous.accountId, anonymous.accountUuid, true, emptyList(), emptyList()))
+        call.sessions.set(StackSession(anonymous.accountId, anonymous.accountUuid, true, emptyList(), emptyList(), emptyList(), emptyList()))
 
         return ActionStatus(success = true)
 

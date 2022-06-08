@@ -100,7 +100,7 @@ class CommTest {
 
     @Test
     fun `local BL call test - global config`() = runBlocking {
-        val executor = Executor(EntityId("0"), UUID.NIL, true, emptyList(), emptyList())
+        val executor = Executor(EntityId("0"), UUID.NIL, true, emptyList(), emptyList(), emptyList(), emptyList())
 
         transaction {
             TestTable.deleteAll()
@@ -161,7 +161,7 @@ class CommTest {
 
     @Test
     fun `local BL call test - call config`() = runBlocking {
-        val executor = Executor(EntityId("0"), UUID.NIL, true, emptyList(), emptyList())
+        val executor = Executor(EntityId("0"), UUID.NIL, true, emptyList(), emptyList(), emptyList(), emptyList())
 
         transaction {
             TestTable.deleteAll()

@@ -24,6 +24,8 @@ open class Executor(
     val anonymous: Boolean,
     val roleIds: List<EntityId<out BaseBo>>,
     val roleNames: List<String>,
+    val permissionIds: List<EntityId<out BaseBo>>,
+    val permissionNames: List<String>
 
     ) {
 
@@ -36,6 +38,17 @@ open class Executor(
     fun hasOneOfRoles(roleNames: Array<out String>): Boolean {
         roleNames.forEach {
             if (it in this.roleNames) return true
+        }
+        return false
+    }
+
+    fun hasPermission(permissionName: String) = permissionName in permissionNames
+
+    fun hasPermission(permissionId: EntityId<out BaseBo>) = permissionId in permissionIds
+
+    fun hasOneOfPermissions(permissionNames: Array<out String>): Boolean {
+        permissionNames.forEach {
+            if (it in this.permissionNames) return true
         }
         return false
     }

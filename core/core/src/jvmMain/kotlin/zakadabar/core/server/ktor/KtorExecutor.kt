@@ -18,4 +18,6 @@ class KtorExecutor(
     anonymous: Boolean,
     roleIds: List<EntityId<out BaseBo>>,
     roleNames: List<String>,
-) : Executor(accountId, uuid, anonymous, roleIds, roleNames), Principal
+    permissionIds: List<EntityId<out BaseBo>>,
+    permissionNames: List<String>
+) : Executor(accountId, uuid, anonymous, roleIds, roleNames, permissionIds, permissionNames), Principal

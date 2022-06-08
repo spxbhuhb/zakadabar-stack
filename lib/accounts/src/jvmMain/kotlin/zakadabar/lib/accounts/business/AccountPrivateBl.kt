@@ -108,7 +108,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
 
         pa.withTransaction {
 
-            val executor = Executor(so.id, so.uuid, false, emptyList(), emptyList())
+            val executor = Executor(so.id, so.uuid, false, emptyList(), emptyList(), emptyList(), emptyList())
 
             auditor.auditCreate(executor, so)
             auditor.auditCreate(executor, anonymous)
@@ -140,7 +140,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
 
         pa.withTransaction {
 
-            val executor = Executor(so.id, so.uuid, false, emptyList(), emptyList())
+            val executor = Executor(so.id, so.uuid, false, emptyList(), emptyList(), emptyList(), emptyList())
 
             auditor.auditCreate(executor, so)
             auditor.auditCreate(executor, anonymous)
@@ -436,10 +436,17 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     open fun executorFor(account : AccountPrivateBo) : Executor {
         val roleIds = mutableListOf<EntityId<out BaseBo>>()
         val roleNames = mutableListOf<String>()
+        val permissionIds = mutableListOf<EntityId<out BaseBo>>()
+        val permissionNames =  mutableListOf<String>()
 
         roles(account.id).forEach {
             roleIds += it.first
             roleNames += it.second
+        }
+
+        permissions(account.id).forEach {
+            permissionIds += it.first
+            permissionNames += it.second
         }
 
         return Executor(
@@ -447,7 +454,9 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
             account.uuid,
             account.id == anonymous.accountId,
             roleIds,
-            roleNames
+            roleNames,
+            permissionIds,
+            permissionNames
         )
     }
 
