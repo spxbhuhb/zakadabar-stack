@@ -137,6 +137,28 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
                 }
             }
         }
+
+        pa.withTransaction {
+
+            val executor = Executor(so.id, so.uuid, false, emptyList(), emptyList())
+
+            auditor.auditCreate(executor, so)
+            auditor.auditCreate(executor, anonymous)
+
+            appPermissions.map.forEach {
+                val permissionName = it.value
+
+                try {
+                    permissionBl.getByName(permissionName)
+                    return@forEach // when exists we don't want to re-create it
+                } catch (ex: NoSuchElementException) {
+                    // this is fine, we have to create the role
+                }
+
+                val bo = permissionBl.create(executor, PermissionBo(EntityId(), permissionName, permissionName))
+                permissionBl.auditor.auditCreate(executor, bo)
+            }
+        }
     }
 
     override fun onModuleStart() {

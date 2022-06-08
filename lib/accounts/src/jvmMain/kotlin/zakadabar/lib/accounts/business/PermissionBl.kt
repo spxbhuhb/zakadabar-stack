@@ -67,9 +67,9 @@ open class PermissionBl : EntityBusinessLogicBase<PermissionBo>(
         pa.permissionsOf(accountId)
     }
 
-//    override fun getByName(name: String) = pa.withTransaction {
-//        pa.readByName(name).id
-//    }
+    fun getByName(name: String) = pa.withTransaction {
+        pa.readByName(name).id
+    }
 
 
 }

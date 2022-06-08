@@ -32,6 +32,8 @@ open class PermissionExposedPa(
         Sql.tables += rolePermissionTable
     }
 
+    fun readByName(name: String) = table.select { table.name eq name }.first().toBo()
+
     fun permissionsOf(accountId: EntityId<AccountPrivateBl>) =
         table
             .join(
