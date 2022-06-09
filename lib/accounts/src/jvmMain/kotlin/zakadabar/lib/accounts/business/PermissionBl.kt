@@ -6,6 +6,7 @@
 package zakadabar.lib.accounts.business
 
 import zakadabar.core.authorize.Executor
+import zakadabar.core.authorize.PermissionBlProvider
 import zakadabar.lib.accounts.data.*
 import zakadabar.core.authorize.appRoles
 import zakadabar.core.authorize.SimpleRoleAuthorizer
@@ -15,7 +16,7 @@ import zakadabar.core.data.EntityId
 import zakadabar.core.setting.setting
 import zakadabar.lib.accounts.persistence.PermissionExposedPa
 
-open class PermissionBl : EntityBusinessLogicBase<PermissionBo>(
+open class PermissionBl : PermissionBlProvider, EntityBusinessLogicBase<PermissionBo>(
     boClass = PermissionBo::class
 ) {
 
@@ -67,7 +68,7 @@ open class PermissionBl : EntityBusinessLogicBase<PermissionBo>(
         pa.permissionsOf(accountId)
     }
 
-    fun getByName(name: String) = pa.withTransaction {
+    override fun getByName(name: String) = pa.withTransaction {
         pa.readByName(name).id
     }
 

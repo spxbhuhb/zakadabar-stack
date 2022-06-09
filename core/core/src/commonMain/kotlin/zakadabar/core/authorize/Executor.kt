@@ -3,6 +3,7 @@
  */
 package zakadabar.core.authorize
 
+import kotlinx.serialization.Serializable
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.util.UUID
@@ -18,7 +19,6 @@ import zakadabar.core.util.UUID
  * @property  isLoggedIn   True when the executor is logged in (not anonymous).
  */
 open class Executor(
-
     val accountId: EntityId<out BaseBo>,
     val accountUuid : UUID,
     val anonymous: Boolean,
@@ -26,7 +26,6 @@ open class Executor(
     val roleNames: List<String>,
     val permissionIds: List<EntityId<out BaseBo>>,
     val permissionNames: List<String>
-
     ) {
 
     val isLoggedIn = ! anonymous
@@ -52,5 +51,4 @@ open class Executor(
         }
         return false
     }
-
 }

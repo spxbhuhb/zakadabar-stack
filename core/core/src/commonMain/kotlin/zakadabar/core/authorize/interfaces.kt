@@ -12,6 +12,10 @@ interface RoleBlProvider {
     fun getByName(name: String): EntityId<out BaseBo>
 }
 
+interface PermissionBlProvider {
+    fun getByName(name: String): EntityId<out BaseBo>
+}
+
 interface AccountBlProvider {
     fun anonymous(): AccountPublicBo
     fun readPublic(account: EntityId<out BaseBo>): AccountPublicBo

@@ -40,3 +40,14 @@ fun authorize(authorized: Boolean) {
     if (! authorized) throw Forbidden()
 }
 
+@PublicApi
+fun authorizeByPermission(executor: Executor, permissionName: String) {
+    if (! executor.hasPermission(permissionName)) throw Forbidden()
+}
+
+@PublicApi
+fun authorizeByPermission(executor: Executor, permissionId: EntityId<out BaseBo>) {
+    if (! executor.hasPermission(permissionId)) throw Forbidden()
+}
+
+
