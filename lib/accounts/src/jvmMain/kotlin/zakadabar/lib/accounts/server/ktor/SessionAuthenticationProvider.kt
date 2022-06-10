@@ -27,7 +27,7 @@ fun Authentication.Configuration.configureSession(name: String? = null) {
     val accountBl by module<AccountBlProvider>()
 
     val executor = accountBl.anonymousV2().let {
-        KtorExecutor(it.accountId, it.accountUuid, true, emptyList(), emptyList(), emptyList(), emptyList())
+        KtorExecutor(it.accountId, it.accountUuid, true, emptySet(), emptySet(), emptySet(), emptySet())
     }
 
     val provider = AuthenticationProvider(SessionAuthenticationProvider.Configuration(name))
@@ -58,7 +58,7 @@ fun Authentication.Configuration.configureSession(name: String? = null) {
         }
 
         val anonymous = accountBl.anonymousV2()
-        val session = StackSession(anonymous.accountId, anonymous.accountUuid, true, emptyList(), emptyList(), emptyList(), emptyList())
+        val session = StackSession(anonymous.accountId, anonymous.accountUuid, true, emptySet(), emptySet(), emptySet(), emptySet())
 
         call.sessions.set(session)
         context.principal(KtorExecutor(

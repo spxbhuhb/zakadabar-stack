@@ -48,9 +48,9 @@ open class TestCompanionBase(
 
     }
 
-    val mockAnonymous = Executor(EntityId(0), UUID.NIL, true, emptyList(), emptyList(), emptyList(), emptyList())
-    val mockLoggedIn = Executor(EntityId(0), UUID.NIL, false, emptyList(), emptyList(), emptyList(), emptyList())
-    val mockSo = Executor(EntityId(0), UUID.NIL, false, listOf(EntityId(0)), listOf("security-officer"), emptyList(), emptyList())
+    val mockAnonymous = Executor(EntityId(0), UUID.NIL, true, emptySet(), emptySet(), emptySet(), emptySet())
+    val mockLoggedIn = Executor(EntityId(0), UUID.NIL, false, emptySet(), emptySet(), emptySet(), emptySet())
+    val mockSo = Executor(EntityId(0), UUID.NIL, false, setOf(EntityId(0)), setOf("security-officer"), emptySet(), emptySet())
 
     open fun setup() {
         modules.logger = Slf4jLogger("modules") // replace the stdout logger with LOGBack

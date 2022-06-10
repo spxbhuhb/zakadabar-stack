@@ -25,8 +25,8 @@ class EmptySessionManager : ZkSessionManager {
                 locale = ""
             ),
             anonymous = true,
-            roles = emptyList(),
-            permissions = emptyList()
+            roles = emptySet(),
+            permissions = emptySet()
         )
 
         application.serverDescription = ServerDescriptionQuery().execute()

@@ -9,8 +9,8 @@ import zakadabar.core.util.PublicApi
 class ZkExecutor(
     val account: AccountPublicBo,
     val anonymous: Boolean,
-    val roles: List<String>,
-    var permissions: List<String>
+    val roles: Set<String>,
+    var permissions: Set<String>
 ) {
 
     @PublicApi

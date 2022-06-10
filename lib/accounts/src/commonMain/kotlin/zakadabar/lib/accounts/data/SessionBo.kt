@@ -18,8 +18,8 @@ class SessionBo(
     override var id: EntityId<SessionBo>,
     val account: AccountPublicBo,
     val anonymous: Boolean,
-    val roles: List<String>,
-    val permissions: List<String>,
+    val roles: Set<String>,
+    val permissions: Set<String>,
     val serverDescription: ServerDescriptionBo
 
 ) : EntityBo<SessionBo> {

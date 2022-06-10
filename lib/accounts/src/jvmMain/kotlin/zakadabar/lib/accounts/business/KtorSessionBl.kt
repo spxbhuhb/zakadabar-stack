@@ -111,8 +111,8 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
                 id = EntityId("current"),
                 account = anonymous,
                 anonymous = true,
-                roles = emptyList(),
-                permissions = emptyList(),
+                roles = emptySet(),
+                permissions = emptySet(),
                 serverDescription = serverDescription
             )
         } else {
@@ -123,8 +123,8 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
                 id = EntityId("current"),
                 account = account,
                 anonymous = false,
-                roles = roles.map { it.second },
-                permissions = permissions.map { it.second },
+                roles = roles.map { it.second }.toSet(),
+                permissions = permissions.map { it.second }.toSet(),
                 serverDescription = serverDescription
             )
         }
@@ -152,10 +152,10 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 
         val account = authenticate(executor, action.accountName, action.password)
 
-        val roleIds = mutableListOf<EntityId<out BaseBo>>()
-        val roleNames = mutableListOf<String>()
-        val permissionIds = mutableListOf<EntityId<out BaseBo>>()
-        val permissionNames = mutableListOf<String>()
+        val roleIds = mutableSetOf<EntityId<out BaseBo>>()
+        val roleNames = mutableSetOf<String>()
+        val permissionIds = mutableSetOf<EntityId<out BaseBo>>()
+        val permissionNames = mutableSetOf<String>()
 
         accountBl.roles(account.accountId).forEach {
             roleIds += it.first
@@ -189,7 +189,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 
         auditor.auditCustom(executor) { "logout accountId=${old.account}" }
 
-        call.sessions.set(StackSession(anonymous.accountId, anonymous.accountUuid, true, emptyList(), emptyList(), emptyList(), emptyList()))
+        call.sessions.set(StackSession(anonymous.accountId, anonymous.accountUuid, true, emptySet(), emptySet(), emptySet(), emptySet()))
 
         return ActionStatus(success = true)
 
