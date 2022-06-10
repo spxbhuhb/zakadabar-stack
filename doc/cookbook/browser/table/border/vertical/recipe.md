@@ -14,7 +14,13 @@ tags:
 1. Use `onConfigure` or override the `cell` class and add a new `lastHeaderCell` class.
 1. Apply your new style in the given scope (see below).
 
-<div data-zk-enrich="TableVerticalBorderSome"></div>
+With scroll:
+
+<div data-zk-enrich="TableVerticalBorderScroll"></div>
+
+Without scroll:
+
+<div data-zk-enrich="TableVerticalBorderNoScroll"></div>
 
 ## Scope
 
@@ -22,13 +28,13 @@ tags:
 
 Assign an instance of your new table style sheet to `zkTableStyles` during application startup.
 
-See [TableVerticalBorderSome](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/table/border/vertical/TableVerticalBorderSome.kt),
+See [TableVerticalBorder](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/table/border/vertical/TableVerticalBorder.kt),
 but instead of declaring the style variable `exampleStyles`, change `zkTableStyles.`
 
 ### For Some Tables
 
 Override the `styles` variable of the table with your extended style or change it in `onConfigure` as in
-[TableVerticalBorderSome](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/table/border/vertical/TableVerticalBorderSome.kt).
+[TableVerticalBorder](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/table/border/vertical/TableVerticalBorder.kt).
 
 ## Guides
 
@@ -37,4 +43,4 @@ Override the `styles` variable of the table with your extended style or change i
 
 ## Code
 
-- [TableVerticalBorderSome](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/table/border/vertical/TableVerticalBorderSome.kt)
+- [TableVerticalBorder](/cookbook/src/jsMain/kotlin/zakadabar/cookbook/browser/table/border/vertical/TableVerticalBorder.kt)

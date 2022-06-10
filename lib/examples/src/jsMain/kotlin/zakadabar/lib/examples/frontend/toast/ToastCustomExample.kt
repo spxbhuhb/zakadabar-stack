@@ -33,7 +33,7 @@ class ToastCustomExample(
             }
             val customIcon by cssClass {
                 backgroundColor = ZkColors.Zakadabar.navCyan
-                fill = ZkColors.Zakadabar.gray8
+                fill = ZkColors.Zakadabar.gray1
             }
         }
     }

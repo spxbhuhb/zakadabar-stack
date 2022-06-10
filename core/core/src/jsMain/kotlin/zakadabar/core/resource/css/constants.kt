@@ -37,6 +37,12 @@ object FlexDirection {
     val row = CssValueConst("flex-direction", "row")
 }
 
+object FlexWrap {
+    val nowrap = CssValueConst("flex-wrap", "nowrap")
+    val wrap = CssValueConst("flex-wrap", "wrap")
+    val wrapReverse = CssValueConst("flex-wrap", "wrap-reverse")
+}
+
 object AlignItems {
     val flexStart = CssValueConst("align-items", "flex-start")
     val flexEnd = CssValueConst("align-items", "flex-end")

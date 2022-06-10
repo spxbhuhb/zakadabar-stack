@@ -58,12 +58,69 @@ in the future to make the application mode dynamic.
 
 </div>
 
-## Icons
+## Customization
+
+### Icons
 
 All `group` and `item` builders have a version with a [ZkIconSource](/core/core/src/jsMain/kotlin/zakadabar/core/resource/ZkIconSource.kt)
 as first parameter. These versions add an icon before the text.
 
-Example: [SideBar With Icons](/doc/cookbook/browser/sidebar/icons/recipe.md)
+Recipe: [SideBar With Icons](/doc/cookbook/browser/sidebar/icons/recipe.md)
+
+<div data-zk-enrich="SideBarWithIcons"></div>
+
+### Icon With a Notification
+
+To add a counter to a sidebar icon, use the `itemWithNotification` helper.
+
+<div data-zk-enrich="SideBarWithNotificationIcons"></div>
+
+Recipe: [SideBar With Notification Icons](/doc/cookbook/browser/sidebar/icons/recipe.md)
+
+### Open And Close Arrows
+
+There are a number of options to change the appearance and behaviour of the open and close arrows.
+This example belows shows a number of these (except the different icons).
+
+<div data-zk-enrich="SideBarCombinedExample"></div>
+
+Recipe: [SideBar Arrow Options](/doc/cookbook/browser/sidebar/arrows/recipe.md)
+
+#### Arrow Icon
+
+To replace the open and close arrows, you set the appropriate properties of the sidebar styles.
+This can be done globally from the theme or per sidebar instance by passing a specific style.
+
+Global settings (from `ZkTheme.onResume`, see [Themes, Css](../structure/ThemesCss.md)).
+
+```text
+with (zkSideBarStyles) {
+    groupOpenIcon = ZkIcons.arrowRight
+    groupCloseIcon = ZkIcons.arrowDropDown
+    afterGroupOpenIcon = ZkIcons.arrowDropDown
+    afterGroupCloseIcon = ZkIcons.arrowDropUp
+}
+```
+
+#### Arrow Size
+
+To change the size of open and close arrows, use the `arrowSize` property of `ZkSideBar`.
+
+#### Arrow After
+
+Set `arrowAfter` of `ZkSideBar` to `true` to place the group open arrows after the sidebar.
+
+#### Arrow Open
+
+Set `arrowOpen` of `ZkSideBar` to `true` to open groups only when the use clicks on the arrow.
+
+When the user clicks on the text, the navigation happens, but the group does not open.
+
+#### Arrow Close
+
+Set `arrowClose` of `ZkSideBar` to `true` to close groups only when the use clicks on the arrow.
+
+When the user clicks on the text, the navigation happens, but the group does not close.
 
 ## Sections
 

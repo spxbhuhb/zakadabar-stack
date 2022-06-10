@@ -6,15 +6,37 @@ package zakadabar.core.browser.sidebar
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.application.ZkAppRouting
 import zakadabar.core.browser.application.target
+import zakadabar.core.browser.icon.ZkNotificationIcon
 import zakadabar.core.resource.ZkIconSource
 
-open class ZkSideBar : ZkElement() {
+open class ZkSideBar(
+    val styles : SideBarStyleSpec = zkSideBarStyles
+) : ZkElement() {
 
-    open val minimizedSections = ZkElement()
+    /**
+     * When true, the group open/close arrows are after the group name. Default is false.
+     */
+    open var arrowAfter : Boolean = false
+
+    /**
+     * When true, only click on the arrow opens the group, otherwise click on title
+     * also works. Default is false.
+     */
+    open var arrowOpen : Boolean = false
+
+    /**
+     * When true, only click on the arrow closes the group, otherwise click on title
+     * also works. Default is false.
+     */
+    open var arrowClose : Boolean = false
+
+    /**
+     * Sets the size of the open/close arrow of groups.
+     */
+    open var arrowSize : Int = 18
 
     override fun onCreate() {
-        + minimizedSections css zkSideBarStyles.minimizedSectionContainer
-        + zkSideBarStyles.sidebar
+        + styles.sidebar
     }
 
     inline fun <reified T : ZkAppRouting.ZkTarget> item(subPath : String? = null, text : String? = null) =
@@ -27,10 +49,16 @@ open class ZkSideBar : ZkElement() {
         ZkSideBarItem(target, icon, subPath, text)
 
     open fun item(text: String, capitalize: Boolean = true, onClick: (() -> Unit)? = null) =
-        ZkSideBarItem(text, null, null, capitalize, onClick)
+        ZkSideBarItem(text, null, null, capitalize, this, onClick)
 
     open fun item(icon : ZkIconSource, text: String, capitalize: Boolean = true, onClick: (() -> Unit)? = null) =
-        ZkSideBarItem(text, icon, null, capitalize, onClick)
+        ZkSideBarItem(text, icon, null, capitalize, this, onClick)
+
+    open fun itemWithNotification(target : ZkAppRouting.ZkTarget, subPath : String? = null, text : String, ni: ZkNotificationIcon) =
+        ZkSideBarItemWithNotification(target, ni, text, subPath )
+
+    open fun itemWithNotification(text : String, ni: ZkNotificationIcon, onClick: (() -> Unit)? = null) =
+        ZkSideBarItemWithNotification(text, ni, onClick = onClick)
 
     inline fun <reified T : ZkAppRouting.ZkTarget> section(text : String? = null, noinline builder: ZkElement.() -> Unit) =
         ZkSideBarGroup(target<T>(), text = text, section = true, builder = builder, sideBar = this)

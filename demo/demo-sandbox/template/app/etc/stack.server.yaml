@@ -9,6 +9,7 @@ database:
   debugSql: false
 
 traceRouting: false
+logReads: false
 
 staticResources: ./var/static
 

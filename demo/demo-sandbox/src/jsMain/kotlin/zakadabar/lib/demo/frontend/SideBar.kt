@@ -22,6 +22,8 @@ import zakadabar.lib.i18n.browser.TranslationCrud
 
 class SideBar : ZkSideBar() {
 
+    override var arrowSize = 22
+
     override fun onCreate() {
         super.onCreate()
 

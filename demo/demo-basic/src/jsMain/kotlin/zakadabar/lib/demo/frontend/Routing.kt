@@ -11,6 +11,7 @@ import zakadabar.lib.examples.frontend.crud.BuiltinCrud
 import zakadabar.lib.examples.frontend.crud.ExampleReferenceCrud
 import zakadabar.lib.schedule.JobCrud
 
+
 class Routing : ZkAppRouting(DefaultLayout, Home) {
 
     init {
@@ -22,7 +23,7 @@ class Routing : ZkAppRouting(DefaultLayout, Home) {
         + JobCrud()
         + JobSummary
 
-        zakadabar.lib.accounts.browser.install(this)
+        zakadabar.lib.accounts.browser.installV2(this)
         zakadabar.lib.i18n.browser.install(this)
     }
 

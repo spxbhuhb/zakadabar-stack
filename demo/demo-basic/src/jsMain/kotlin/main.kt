@@ -8,8 +8,8 @@ import zakadabar.core.browser.application.application
 import zakadabar.core.browser.util.io
 import zakadabar.core.resource.initTheme
 import zakadabar.lib.demo.frontend.Routing
-import zakadabar.lib.demo.frontend.resources.AppLightTheme
 import zakadabar.lib.demo.resources.strings
+import zakadabar.softui.browser.theme.SuiLightTheme
 
 fun main() {
 
@@ -19,6 +19,7 @@ fun main() {
     
     zakadabar.lib.accounts.browser.install(application)
     zakadabar.lib.i18n.browser.install(application)
+    zakadabar.softui.browser.install()
 
     io {
 
@@ -26,7 +27,7 @@ fun main() {
 
             initSession()
 
-            initTheme(AppLightTheme())
+            initTheme(SuiLightTheme())
 
             initLocale(strings)
 

@@ -23,11 +23,14 @@ import zakadabar.cookbook.browser.form.select.radio.RadioGroupSelect
 import zakadabar.cookbook.browser.form.submit.enter.SubmitOnEnter
 import zakadabar.cookbook.browser.help.TextHelpModal
 import zakadabar.cookbook.browser.navigation.direction.NavigationDirection
+import zakadabar.cookbook.browser.sidebar.arrow.SideBarCombinedExample
 import zakadabar.cookbook.browser.sidebar.icons.SideBarWithIcons
+import zakadabar.cookbook.browser.sidebar.icons.SideBarWithNotificationIcons
 import zakadabar.cookbook.browser.tabcontainer.background.TabContainerBackground
 import zakadabar.cookbook.browser.table.action.TableCustomActions
 import zakadabar.cookbook.browser.table.basic.BasicTable
-import zakadabar.cookbook.browser.table.border.vertical.TableVerticalBorderSome
+import zakadabar.cookbook.browser.table.border.vertical.TableVerticalBorderNoScroll
+import zakadabar.cookbook.browser.table.border.vertical.TableVerticalBorderScroll
 import zakadabar.cookbook.browser.table.counter.TableWithCounter
 import zakadabar.cookbook.browser.table.customColumn.TableCustomColumn
 import zakadabar.cookbook.browser.table.export.filename.TableExportFileName
@@ -39,6 +42,7 @@ import zakadabar.cookbook.browser.table.inline.TableEditInlineNoBo
 import zakadabar.cookbook.browser.table.multiLevel.TableMultiLevel
 import zakadabar.cookbook.browser.table.saveElement.TableSaveElement
 import zakadabar.cookbook.browser.table.tableInTab.TableInTab
+import zakadabar.cookbook.browser.table.titleIcon.TableLocalTitleIcon
 import zakadabar.cookbook.browser.table.variableHeight.TableVariableHeight
 import zakadabar.cookbook.resource.strings
 import zakadabar.core.browser.ZkElement
@@ -66,7 +70,9 @@ class Cookbook : CommonModule {
             "FieldUpdateForm" -> FieldUpdateForm()
             "NavigationDirection" -> NavigationDirection()
             "RadioGroupSelect" -> RadioGroupSelect()
+            "SideBarCombinedExample" -> SideBarCombinedExample()
             "SideBarWithIcons" -> SideBarWithIcons()
+            "SideBarWithNotificationIcons" -> SideBarWithNotificationIcons()
             "StringSelectFilter" -> StringSelectFilter()
             "SubmitOnEnter" -> SubmitOnEnter()
             "TabContainerBackground" -> TabContainerBackground()
@@ -81,7 +87,9 @@ class Cookbook : CommonModule {
             "TableWithCounter" -> TableWithCounter()
             "TableInTab" -> TableInTab()
             "TableSaveElement" -> TableSaveElement()
-            "TableVerticalBorderSome" -> TableVerticalBorderSome()
+            "TableVerticalBorderScroll" -> TableVerticalBorderScroll()
+            "TableVerticalBorderNoScroll" -> TableVerticalBorderNoScroll()
+            "TableLocalTitleIcon" -> TableLocalTitleIcon()
             "TextHelpModal" -> TextHelpModal()
             "CustomInputFieldForm" -> CustomInputFieldForm()
             "CustomSelectFieldForm" -> CustomSelectFieldForm()

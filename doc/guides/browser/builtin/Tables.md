@@ -11,6 +11,7 @@
   * CSV export
   * preload data dependencies before render
   * variable row height
+  * content dependent header height
   * multi-level rows
   
 ## Write a Table
@@ -185,6 +186,18 @@ Example: [Vertical Table Cell Border](/doc/cookbook/browser/table/border/vertica
 
 <div data-zk-enrich="TableVerticalBorderSome"></div>
 
+### Title With an Icon
+
+To add icon to the local title of the table, use  `icon` configuration variable.
+
+```text
+icon = ZkIcons.description
+```
+
+Recipe: [Table Local Title with Icon](/doc/cookbook/browser/table/titleIcon/recipe.md)
+
+<div data-zk-enrich="TableLocalTitleIcon"></div>
+
 ## Extension Columns
 
 Extension columns make it possible to add editable columns to the table without having
@@ -260,6 +273,18 @@ To have variable row heights, set `fixedRowHeight` to `false` in `onConfigure`:
 ```kotlin
 override fun onConfigure() {
     fixedRowHeight = false
+}
+```
+
+Example: [Variable Table Row Height](/doc/cookbook/browser/table/variableHeight/recipe.md)
+
+## Content Dependent Header Height
+
+To have content dependent header height, set `fixedHeaderHeight` to `false` in `onConfigure`:
+
+```kotlin
+override fun onConfigure() {
+  fixedHeaderHeight = false
 }
 ```
 

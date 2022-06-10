@@ -5,7 +5,7 @@
 package zakadabar.core.browser.tabcontainer
 
 fun tabContainer(
-    styles: ZkTabContainerStyles = zkTabContainerStyles,
+    styles: TabContainerStyleSpec = zkTabContainerStyles,
     builder: (ZkTabContainer.() -> Unit)? = null
 ) =
     ZkTabContainer(styles, builder)

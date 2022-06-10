@@ -10,15 +10,15 @@ import zakadabar.core.browser.util.io
 import zakadabar.core.module.modules
 import zakadabar.core.resource.initTheme
 import zakadabar.site.frontend.Routing
-import zakadabar.site.frontend.resources.SiteBlueTheme
-import zakadabar.site.frontend.resources.SiteDarkTheme
-import zakadabar.site.frontend.resources.SiteGreenBlueTheme
-import zakadabar.site.frontend.resources.SiteLightTheme
+import zakadabar.site.frontend.resources.SiteSuiDarkTheme
+import zakadabar.site.frontend.resources.SiteSuiLightTheme
 import zakadabar.site.resources.strings
 
 fun main() {
 
     application = ZkApplication()
+
+    zakadabar.softui.browser.install()
 
     modules += Cookbook()
 
@@ -28,7 +28,7 @@ fun main() {
 
             initSession()
 
-            initTheme(SiteDarkTheme(), SiteLightTheme(), SiteGreenBlueTheme(), SiteBlueTheme())
+            initTheme(SiteSuiLightTheme(), SiteSuiDarkTheme())
 
             initLocale(strings, defaultLocale = "en")
 

@@ -53,7 +53,7 @@ class ZkLiteStatement(private var sqldroidConnection: ZkLiteConnection) : Statem
     @Throws(SQLException::class)
     override fun clearWarnings() {
         // TODO Evaluate if the implementation is sufficient (if so, delete comment and log)
-        Log.e(" ********************* not implemented @ " + fileName + " line " + lineNumber)
+        ZkLiteLog.e(" ********************* not implemented @ " + fileName + " line " + lineNumber)
     }
 
     @Throws(SQLException::class)
@@ -184,7 +184,7 @@ class ZkLiteStatement(private var sqldroidConnection: ZkLiteConnection) : Statem
     override fun getMaxRows(): Int {
         // TODO: return rs.getMaxRows()
         // TODO: Avoid NPE for rs
-        Log.e(
+        ZkLiteLog.e(
             " ********************* not implemented @ " + fileName + " line "
                     + lineNumber
         )
@@ -244,7 +244,7 @@ class ZkLiteStatement(private var sqldroidConnection: ZkLiteConnection) : Statem
     @Throws(SQLException::class)
     override fun getWarnings(): SQLWarning? {
         // TODO Evaluate if the implementation is sufficient (if so, delete comment and log)
-        Log.e(
+        ZkLiteLog.e(
             " ********************* not implemented @ " + fileName + " line "
                     + lineNumber
         )

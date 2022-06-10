@@ -4,12 +4,12 @@
 package zakadabar.lib.examples.frontend.table
 
 import org.w3c.dom.HTMLElement
-import zakadabar.core.data.BaseBo
-import zakadabar.core.schema.BoSchema
 import zakadabar.core.browser.ZkElement
-import zakadabar.core.browser.layout.zkLayoutStyles
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.browser.toast.toastSuccess
+import zakadabar.core.data.BaseBo
+import zakadabar.core.resource.css.px
+import zakadabar.core.schema.BoSchema
 
 
 class ExampleTable : ZkTable<TableExampleDto>() {
@@ -66,8 +66,6 @@ class TableExample(
             height = "200px" // because table shrinks
         }
 
-        + zkLayoutStyles.fixBorder
-
         val data = listOf(
             TableExampleDto("Rose", "rosa", 341, true),
             TableExampleDto("Lily", "lilium", 384, false),
@@ -79,7 +77,9 @@ class TableExample(
         // Add the table and set the data. It is not important to use these
         // together, you can add the table and set the data later.
 
-        + ExampleTable().setData(data)
+        + ExampleTable().setData(data).apply {
+            height = 200.px
+        }
     }
 
 }

@@ -15,6 +15,8 @@ The stack contains a dynamic theme and style system.
     * Color constants, palettes from Material Colors and the Zakadabar palette
 * [zkHtmlStyles](/core/core/src/jsMain/kotlin/zakadabar/core/browser/theme/zkHtmlStyles.kt)
     * global HTML styles (on "body", "a" etc. tags)
+* [CssStyleSpec](/core/core/src/jsMain/kotlin/zakadabar/core/resource/css/CssStyleSpec.kt)
+    * interface to be implemented by style specifications
 
 ## Theme
 
@@ -27,9 +29,10 @@ The stack contains a dynamic theme and style system.
     * **does not** change the DOM (except the `zk-styles` node under `body`)
 * Built-in themes:
     * [ZkBuiltinLightTheme](/core/core/src/jsMain/kotlin/zakadabar/core/browser/theme/ZkBuiltinLightTheme.kt)
-        - light theme
     * [ZkBuiltinDarkTheme](/core/core/src/jsMain/kotlin/zakadabar/core/browser/theme/ZkBuiltinDarkTheme.kt)
-        - dark theme
+* Themes from the [Soft UI](/doc/guides/libraries/softui/Introduction.md) library:
+    * [SuiLightTheme](/lib/softui/src/jsMain/kotlin/zakadabar/softui/browser/theme/SuiLightTheme.kt)
+    * [SuiDarkTheme](/lib/softui/src/jsMain/kotlin/zakadabar/softui/browser/theme/SuiDarkTheme.kt)
 
 ### Initial Theme Selection
 
@@ -92,22 +95,6 @@ class ExampleThemeGreen : ZkBuiltinLightTheme() {
     }
 }
 ```
-
-### Change The Theme [source code](/lib/examples/src/jsMain/kotlin/zakadabar/lib/examples/frontend/theme/ThemeExample.kt)
-
-Assign a theme instance to `theme` to set the active theme.
-
-```kotlin
-theme = ZkBuildinLightTheme()
-```
-
-These two are somewhat simple examples, for example they don't set markdown colors properly:
-
-<div data-zk-enrich="ThemeExample"></div>
-
-This is a fine-tuned example, that can be used to replace one of the default themes in production:
-
-<div data-zk-enrich="ThemeShowCase"></div>
 
 ## CSS
 

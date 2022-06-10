@@ -37,6 +37,7 @@ kotlin {
                 implementation(project(":lib:blobs"))
                 implementation(project(":lib:schedule"))
                 implementation(project(":lib:email"))
+                implementation(project(":lib:softui"))
             }
         }
 

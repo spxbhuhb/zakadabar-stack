@@ -5,7 +5,7 @@ package zakadabar.android.jdbc.zklite
 
 import android.util.Log
 
-object Log {
+object ZkLiteLog {
     var LEVEL = Log.WARN
     var LOG: ILog = AndroidLog()
     fun d(message: String?) {

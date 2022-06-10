@@ -14,6 +14,7 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.server.netty.*
+import io.ktor.util.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import zakadabar.core.authorize.LoginTimeout
@@ -26,6 +27,8 @@ import zakadabar.core.server.ktor.configBuilders
 import zakadabar.core.server.ktor.features
 import zakadabar.core.setting.SettingBl
 import zakadabar.core.setting.SettingProvider
+import zakadabar.core.util.Lock
+import zakadabar.core.util.use
 import java.lang.Thread.sleep
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -79,14 +82,16 @@ open class Server(
 ) : CliktCommand() {
 
     companion object {
+        val shutdownLock = Lock()
+
         /**
          * When true the server is shutting down and background tasks should stop.
          * TODO replace shutdown flag with an event driven system
          */
         var shutdown: Boolean = false
-            get() = synchronized(field) { field }
+            get() = shutdownLock.use { field }
             set(value) {
-                synchronized(field) { field = value }
+                shutdownLock.use { field = value }
             }
 
         lateinit var staticRoot: String

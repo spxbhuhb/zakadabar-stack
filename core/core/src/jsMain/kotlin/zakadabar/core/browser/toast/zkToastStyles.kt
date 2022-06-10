@@ -5,14 +5,11 @@ package zakadabar.core.browser.toast
 
 import zakadabar.core.resource.css.*
 
-var zkToastStyles by cssStyleSheet(ZkToastStyles())
+var zkToastStyles : ToastStyleSpec by cssStyleSheet(ZkToastStyles())
 
-open class ZkToastStyles : ZkCssStyleSheet() {
+open class ZkToastStyles : ZkCssStyleSheet(), ToastStyleSpec {
 
-    /**
-     * Style for [ZkToastContainer].
-     */
-    open val appToastContainer by cssClass {
+    override val appToastContainer by cssClass {
         + Position.fixed
         + Display.flex
         + FlexDirection.column
@@ -23,16 +20,13 @@ open class ZkToastStyles : ZkCssStyleSheet() {
         zIndex = 2200.zIndex
     }
 
-    open val toastOuter by cssClass {
+    override val toastOuter by cssClass {
         backgroundColor = theme.backgroundColor
         marginRight = 10.px
         marginBottom = 10.px
     }
 
-    /**
-     * Style for one toast.
-     */
-    open val toastInner by cssClass {
+    override val toastInner by cssClass {
         + Display.flex
         + FlexDirection.row
         + AlignItems.center
@@ -40,10 +34,7 @@ open class ZkToastStyles : ZkCssStyleSheet() {
         borderRadius = 2.px
     }
 
-    /**
-     * For the icon at the left side of the toast.
-     */
-    open val iconContainer by cssClass {
+    override val iconContainer by cssClass {
         + Display.flex
         + FlexDirection.row
         + JustifyContent.center
@@ -53,10 +44,7 @@ open class ZkToastStyles : ZkCssStyleSheet() {
         width = 32.px
     }
 
-    /**
-     * For the text of the toast.
-     */
-    open val text by cssClass {
+    override val text by cssClass {
         paddingTop = 8.px
         paddingBottom = 8.px
         paddingLeft = 10.px
@@ -67,67 +55,67 @@ open class ZkToastStyles : ZkCssStyleSheet() {
     /**
      * For the close icon.
      */
-    open val closeIcon by cssClass {
+    override val closeIcon by cssClass {
         fill = theme.textColor
         marginRight = 6.px
     }
 
-    open val primaryInner by cssClass {
+    override val primaryInner by cssClass {
         border = "1px solid ${theme.primaryColor}"
         backgroundColor = theme.primaryColor + "20"
     }
 
-    open val primaryIcon by cssClass {
+    override val primaryIcon by cssClass {
         backgroundColor = theme.primaryColor
         fill = theme.primaryPair
     }
 
-    open val secondaryInner by cssClass {
+    override val secondaryInner by cssClass {
         border = "1px solid ${theme.secondaryColor}"
         backgroundColor = theme.secondaryColor + "20"
     }
 
-    open val secondaryIcon by cssClass {
+    override val secondaryIcon by cssClass {
         backgroundColor = theme.secondaryColor
         fill = theme.secondaryPair
     }
 
-    open val successInner by cssClass {
+    override val successInner by cssClass {
         border = "1px solid ${theme.successColor}"
         backgroundColor = theme.successColor + "20"
     }
 
-    open val successIcon by cssClass {
+    override val successIcon by cssClass {
         backgroundColor = theme.successColor
         fill = theme.successPair
     }
 
-    open val warningInner by cssClass {
+    override val warningInner by cssClass {
         border = "1px solid ${theme.warningColor}"
         backgroundColor = theme.warningColor + "20"
     }
 
-    open val warningIcon by cssClass {
+    override val warningIcon by cssClass {
         backgroundColor = theme.warningColor
         fill = theme.warningPair
     }
 
-    open val dangerInner by cssClass {
+    override val dangerInner by cssClass {
         border = "1px solid ${theme.dangerColor}"
         backgroundColor = theme.dangerColor + "20"
     }
 
-    open val dangerIcon by cssClass {
+    override val dangerIcon by cssClass {
         backgroundColor = theme.dangerColor
         fill = theme.dangerPair
     }
 
-    open val infoInner by cssClass {
+    override val infoInner by cssClass {
         border = "1px solid ${theme.infoColor}"
         backgroundColor = theme.infoColor + "20"
     }
 
-    open val infoIcon by cssClass {
+    override val infoIcon by cssClass {
         backgroundColor = theme.infoColor
         fill = theme.infoPair
     }

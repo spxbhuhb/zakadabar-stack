@@ -11,14 +11,36 @@ class SiteStyles : ZkCssStyleSheet() {
 
     val developerLogoUrl: String = "/simplexion_logo.svg"
 
-    val logo by cssClass {
-        + Cursor.pointer
-        height = 22.px
-        fill = theme.textColor
+    val headerContent by cssClass {
+        + Display.grid
+        width = 100.percent
+        gridTemplateColumns = "max-content max-content min-content 1fr max-content"
+        color = theme.infoPair
     }
 
-    val headerActions by cssClass {
+    val siteName by cssClass {
+        + AlignSelf.center
+        + Cursor.pointer
+        fontSize = 14.px
+        marginLeft = 40.px
+        marginRight = 40.px
+    }
+
+    val headerLinks by cssClass {
+        + Display.flex
+        + JustifyContent.spaceEvenly
         + AlignItems.center
+    }
+
+    val headerLink by cssClass {
+        fontSize = 14.px
+    }
+
+    val sideBarToggle by cssClass {
+        + AlignSelf.center
+        paddingLeft = 20.px
+        fill = theme.infoPair
+        + Cursor.pointer
     }
 
     val developerLogo by cssClass {
@@ -30,17 +52,6 @@ class SiteStyles : ZkCssStyleSheet() {
     val title by cssClass {
         + JustifyContent.spaceAround
         + AlignItems.center
-    }
-
-    val alphaStyle by cssClass {
-        backgroundColor = theme.warningColor
-        color = theme.warningPair
-        fontSize = 75.percent
-        fontFamily = "'JetBrains Mono', fixed"
-        marginLeft = 10.px
-        padding = "2px 6px 2px 6px"
-        borderRadius = theme.cornerRadius.px
-        + Cursor.pointer
     }
 
     val cookbook by cssClass {

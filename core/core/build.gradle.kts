@@ -74,7 +74,7 @@ kotlin {
                 api("io.ktor:ktor-serialization:${Versions.ktor}")
                 api("io.ktor:ktor-client-serialization:${Versions.ktor}")
                 api("io.ktor:ktor-client-cio:${Versions.ktor}") // TODO check if we want this one (CIO) or another
-                api("ch.qos.logback:logback-classic:1.2.3")
+                api("ch.qos.logback:logback-classic:${Versions.logback}")
                 api("org.jetbrains.exposed:exposed-core:${Versions.exposed}")
                 api("org.jetbrains.exposed:exposed-dao:${Versions.exposed}")
                 api("org.jetbrains.exposed:exposed-jdbc:${Versions.exposed}")

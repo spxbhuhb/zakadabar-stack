@@ -16,6 +16,7 @@ class LandingStyles : ZkCssStyleSheet() {
         width = 100.percent
         height = 100.percent
         backgroundColor = theme.backgroundColor
+        padding = 0.px + "!important"
     }
 
     val header by cssClass {

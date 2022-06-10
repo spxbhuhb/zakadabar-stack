@@ -13,10 +13,10 @@ import zakadabar.core.browser.misc.NYI
 import zakadabar.core.browser.page.zkPageStyles
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.browser.util.io
-import zakadabar.core.browser.util.newInstance
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityBoCompanion
 import zakadabar.core.data.EntityId
+import zakadabar.core.util.newInstance
 import kotlin.reflect.KClass
 
 /**

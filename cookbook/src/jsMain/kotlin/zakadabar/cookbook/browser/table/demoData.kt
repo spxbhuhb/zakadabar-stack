@@ -12,13 +12,13 @@ import zakadabar.core.util.default
 import zakadabar.core.util.fourRandomInt
 import kotlin.math.min
 
-fun ZkTable<ExampleBo>.demoData() {
+fun ZkTable<ExampleBo>.demoData(count : Int = 50) {
 
     + cookbookStyles.smallInlineTable
 
     val template = default<ExampleBo> { }
 
-    val data = (1..50).map {
+    val data = (1..count).map {
         template.copy(id = EntityId(it.toLong()), stringValue = "row $it", booleanValue = (it % 2 == 0))
     }
 

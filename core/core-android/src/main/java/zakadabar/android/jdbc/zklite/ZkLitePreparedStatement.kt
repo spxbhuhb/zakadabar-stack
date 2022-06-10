@@ -123,7 +123,7 @@ class ZkLitePreparedStatement(
     @Throws(SQLException::class)
     override fun clearWarnings() {
         // TODO: Evaluate if implementation is sufficient (if so, delete comment and log)
-        Log.e(
+        ZkLiteLog.e(
             " ********************* not implemented @ "
                     + fileName + " line "
                     + lineNumber
@@ -377,7 +377,7 @@ class ZkLitePreparedStatement(
 
     @Throws(SQLException::class)
     override fun getWarnings(): SQLWarning? {
-        Log.e(
+        ZkLiteLog.e(
             " ********************* not implemented @ "
                     + fileName + " line "
                     + lineNumber
@@ -818,7 +818,7 @@ class ZkLitePreparedStatement(
 //    }
 
     init {
-        Log.v("new SqlDroid prepared statement from $sqldroid")
+        ZkLiteLog.v("new SqlDroid prepared statement from $sqldroid")
         sqldroidConnection = sqldroid
         db = sqldroid.db
         sQL = sql

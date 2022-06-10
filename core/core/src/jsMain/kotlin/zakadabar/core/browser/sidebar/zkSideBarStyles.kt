@@ -3,23 +3,29 @@
  */
 package zakadabar.core.browser.sidebar
 
+import zakadabar.core.resource.ZkIcons
 import zakadabar.core.resource.css.*
 
-var zkSideBarStyles by cssStyleSheet(ZkSideBarStyles())
+var zkSideBarStyles : SideBarStyleSpec by cssStyleSheet(ZkSideBarStyles())
 
-open class ZkSideBarStyles : ZkCssStyleSheet() {
+open class ZkSideBarStyles : SideBarStyleSpec, ZkCssStyleSheet() {
 
-    open var backgroundColor by cssParameter { theme.backgroundColor }
-    open var textColor by cssParameter { theme.textColor }
-    open var itemMinHeight by cssParameter { 28 }
-    open var fontSize by cssParameter { "80%" }
-    open var iconSize by cssParameter { 18 }
-    open var hoverTextColor by cssParameter { theme.hoverTextColor }
-    open var sectionBackgroundColor by cssParameter { theme.blockBackgroundColor }
-    open var sectionTextColor by cssParameter { theme.textColor }
-    open var sectionBorderColor by cssParameter { theme.borderColor }
+    override var groupOpenIcon by cssParameter { ZkIcons.arrowRight }
+    override var groupCloseIcon by cssParameter { ZkIcons.arrowDropDown }
+    override var afterGroupOpenIcon by cssParameter { ZkIcons.arrowDropDown }
+    override var afterGroupCloseIcon by cssParameter { ZkIcons.arrowDropUp }
 
-    open val sidebar by cssClass {
+    override var backgroundColor by cssParameter { theme.backgroundColor }
+    override var textColor by cssParameter { theme.textColor }
+    override var itemMinHeight by cssParameter { 28 }
+    override var fontSize by cssParameter { "80%" }
+    override var iconSize by cssParameter { 18 }
+    override var hoverTextColor by cssParameter { theme.hoverTextColor }
+    override var sectionBackgroundColor by cssParameter { theme.blockBackgroundColor }
+    override var sectionTextColor by cssParameter { theme.textColor }
+    override var sectionBorderColor by cssParameter { theme.borderColor }
+
+    override val sidebar by cssClass {
         + BoxSizing.borderBox
         + OverflowY.auto
 
@@ -39,7 +45,7 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         }
     }
 
-    open val item by cssClass {
+    override val item by cssClass {
         + BoxSizing.borderBox
 
         + Display.flex
@@ -60,12 +66,12 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         }
     }
 
-    open val itemText by cssClass {
+    override val itemText by cssClass {
         flexGrow = 1.0
         color = "inherit"
     }
 
-    open val icon by cssClass {
+    override val icon by cssClass {
         fill = this@ZkSideBarStyles.textColor
         width = iconSize.px
         height = iconSize.px
@@ -95,7 +101,7 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         }
     }
 
-    open val groupTitle by cssClass {
+    override val groupTitle by cssClass {
         title()
 
         paddingRight = 8.px
@@ -106,15 +112,15 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
 
     }
 
-    open val groupArrow by cssClass {
+    override val groupArrow by cssClass {
         width = 20.px
     }
 
-    open val groupContent by cssClass {
+    override val groupContent by cssClass {
         paddingLeft = 20.px
     }
 
-    open val sectionTitle by cssClass {
+    override val sectionTitle by cssClass {
         title()
 
         marginTop = theme.spacingStep.px
@@ -135,7 +141,7 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         }
     }
 
-    open val sectionCloseIcon by cssClass {
+    override val sectionCloseIcon by cssClass {
         opacity = 0.opacity
 
         hover {
@@ -143,28 +149,8 @@ open class ZkSideBarStyles : ZkCssStyleSheet() {
         }
     }
 
-    open val sectionContent by cssClass {
+    override val sectionContent by cssClass {
         paddingLeft = 0.px
     }
 
-    open val minimizedSectionContainer by cssClass {
-        + Display.flex
-        + FlexDirection.row
-    }
-
-    open val minimizedSection by cssClass {
-        + Display.flex
-        + JustifyContent.center
-        + AlignItems.center
-
-        + Cursor.pointer
-
-        width = 28.px
-        height = 28.px
-        fontWeight = 500.weight
-        fontSize = 125.percent
-        backgroundColor = theme.blockBackgroundColor
-        borderBottom = theme.fixBorder
-        marginBottom = 6.px
-    }
 }

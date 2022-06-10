@@ -34,7 +34,7 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val deleteFail by "Delete failed."
     open val deleteSuccess by "Delete success."
     open val details by "Details"
-    open val dropFilesHere by "Drop files here."
+    open val dropFilesHere by "Drop files here or click to select."
     open val edit by "Edit"
     open val execute by "execute"
     open val falseText by "False"
