@@ -36,7 +36,6 @@ open class PermissionBl : PermissionBlProvider, EntityBusinessLogicBase<Permissi
         action(AddPermission::class, ::addPermission)
         action(RemovePermission::class, ::removePermission)
         query(PermissionsByRole::class, ::permissionsByRole)
-//        query(RolesByAccount::class, ::rolesByAccount)
     }
 //
 //    // -------------------------------------------------------------------------

@@ -82,7 +82,7 @@ class Form : ZkForm<RoleBo>() {
 
     private suspend fun removePermission(permissionId: EntityId<PermissionBo>) {
         rolePermissions.forEach {
-            if (it.role != permissionId) return@forEach
+            if (it.permission != permissionId) return@forEach
             RemovePermission(bo.id, permissionId).execute()
         }
     }
