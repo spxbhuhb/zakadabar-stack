@@ -11,9 +11,11 @@ Accounts is a module to add basic user account support to the application. It in
     * List accounts.
     * Add new account, update existing ones.
     * Grant and revoke roles.
+    * Grant and revoke permissions.
     * Change password on any accounts.
     * Lock and unlock accounts.
     * List, add and change roles.
+    * List, add and change permissions.
     
 ## Setup
 
@@ -25,9 +27,10 @@ To use accounts in your application:
 
 **backend**
 
-1. (optional) define additional roles
-1. add the module to your server configuration, for details see [Modules](../../common/Modules.md)
-1. configure settings, for more information, for details see [Settings](../../backend/Settings.md)
+2. (optional) define additional permissions
+3. (optional) define additional roles
+4. add the module to your server configuration, for details see [Modules](../../common/Modules.md)
+5. configure settings, for more information, for details see [Settings](../../backend/Settings.md)
 
 **frontend**
 
@@ -55,6 +58,19 @@ For additional roles, extend the RolesBase class and pass it for install (see be
 object Roles : AppRolesBase() {
     val myRole1 by "my-role-1"
     val myRole2 by "my-role-2"
+}
+```
+
+#### additional permissions
+
+There is no permission by default. All application can work only with roles, without using permissions.
+
+For additional permissions, extend the PermissionsBase class and pass it for install (see below):
+
+```kotlin
+object Permissions : AppPermissionsBase() {
+    val myPermission1 by "my-permission-1"
+    val myPermission2 by "my-permission-2"
 }
 ```
 
@@ -115,10 +131,15 @@ ifAnonymous {
   + item<Login>()
 }
 
+withPermission(Permissions.myPermission1) {
+    // add items here..
+}
+
 withRole(appRoles.securityOfficer) {
   + group(translate<Accounts>()) {
     + item<Accounts>()
     + item<Roles>()
+    + item<Permissions>()
   }
 }
 
@@ -145,6 +166,8 @@ objects automatically.
 | `account_credential` | Account credentials. |
 | `role` | Roles defined in the system. |
 | `role_grant` | Account - role pairs. |
+| `permission`| Permissions defined in the system. |
+| `role_permission`| Role - permission pairs. |
 | `session` | Client session data. |
 
 Two accounts are automatically created:
