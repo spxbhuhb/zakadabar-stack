@@ -81,6 +81,7 @@ If you have additional roles and/or extended AccountPrivateBl:
 ```kotlin
 zakadabar.lib.accounts.install(
     roles = Roles,
+    permissions = Permissions,
     accountPrivateBl = MyAccountPrivateBl()
 )
 ```

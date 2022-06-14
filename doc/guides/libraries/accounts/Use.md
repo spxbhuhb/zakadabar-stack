@@ -47,7 +47,8 @@ Use the `executor` global value. It is an instance of [ZkExecutor](/core/core/sr
 class ZkExecutor(
     val account: AccountPublicDto,
     val anonymous: Boolean,
-    val roles: List<String>
+    val roles: Set<String>,
+    val permissions: Set<String>
 )
 ```
 
@@ -70,6 +71,10 @@ This call sets the `executor` property of `ZkApplication`. For details see: [Use
 if (hasRole("role-name")) {
     TODO()
 }
+
+if (hasPermission("permission-name")) {
+    TODO()
+}
 ```
 
 [ZkElement](/core/core/src/jsMain/kotlin/zakadabar/core/browser/ZkElement.kt):
@@ -90,6 +95,15 @@ withRole("role-name") {
 withoutRole("role-name") {
     TODO()
 }
+
+withPermission("permission-name") {
+    TODO()
+}
+
+withoutPermission("permission-name") {
+    TODO()
+}
+
 ```
 
 ## Get Account of the User on the Backend
@@ -101,8 +115,10 @@ an [Executor](/core/core/src/commonMain/kotlin/zakadabar/core/authorize/Executor
 open class Executor internal constructor(
 
     val accountId: Long,
-    val roleIds: List<RecordId<RoleDto>>,
-    private val roleNames: List<String>
+    val roleIds: Set<EntityId<out BaseBo>>,
+    val roleNames: Set<String>,
+    val permissionIds: Set<EntityId<out BaseBo>>,
+    val permissionNames: Set<String>
 
 ) : Principal {
 
@@ -111,6 +127,12 @@ open class Executor internal constructor(
     fun hasRole(roleId: RecordId<RoleDto>): Boolean
 
     fun hasOneOfRoles(roleNames: Array<out String>): Boolean
+
+    fun hasPermission(permissionName: String): Boolean
+
+    fun hasPermission(permissionId: EntityId<out BaseBo>): Boolean
+
+    fun hasOneOfPermissions(permissionNames: Array<out String>): Boolean
 
 }
 ```
@@ -122,12 +144,13 @@ in business logic modules.
 
 ## Foreign Keys (Exposed)
 
-To have foreign keys referencing accounts or roles, use AccountPrivateBo and RoleBo
+To have foreign keys referencing accounts, roles or permissions, use AccountPrivateBo, RoleBo and PermissionBo
 in your BO definition. These will generate the following code:
 
 ```kotlin
     internal val account = reference("account", AccountPrivateExposedTableCommon)
     internal val role = reference("role", RoleExposedTableCommon)
+    internal val permission = reference("permission", PermissionExposedTableCommon)
 ```
 
 To set the entity id of an `AccountPriveteBo` field from an `AccountPublicBo` field:
@@ -151,6 +174,8 @@ the interface (which role is needed for example).
 [authorize.kt](/core/core/src/commonMain/kotlin/zakadabar/core/authorize/authorize.kt)
 
 ```kotlin
+
+//authorize by role
 authorize(executor, "role-name") // throws Unauthorized when doesn't have the role
 
 authorize(executor, 1L) // throws Unauthorized when doesn't have the role with the given role id
@@ -162,6 +187,12 @@ authorize(executor) { // throws Unauthorized when the check returns with false
 }
 
 authorize(true) // throws Unauthorized when the parameter is false, use this to enable public access
+
+//authorize by permission
+authorizeByPermission(executor, "permission-name") //throws Unauthorized when doesn't have the permission
+
+authorizeByPermission(executor, 1L) //throws Unauthorized when doesn't have the permission with the given permission id
+
 ```
 
 ## Get Account in Custom Backends

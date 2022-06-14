@@ -26,10 +26,7 @@ open class PermissionBl : PermissionBlProvider, EntityBusinessLogicBase<Permissi
 
     override val authorizer = SimpleRoleAuthorizer<PermissionBo> {
         all = appRoles.securityOfficer
-        action(GrantRole::class, appRoles.securityOfficer)
-        action(RevokeRole::class, appRoles.securityOfficer)
-        query(AccountsByRole::class, LOGGED_IN)
-        query(RolesByAccount::class, appRoles.securityOfficer)
+        query(PermissionsByRole::class, LOGGED_IN)
     }
 
     override val router = router {
