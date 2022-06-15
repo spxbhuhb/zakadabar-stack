@@ -30,8 +30,8 @@ open class PermissionBl : PermissionBlProvider, EntityBusinessLogicBase<Permissi
     }
 
     override val router = router {
-        action(AddPermission::class, ::addPermission)
-        action(RemovePermission::class, ::removePermission)
+        action(GrantPermission::class, ::grantPermission)
+        action(RevokePermission::class, ::revokePermission)
         query(PermissionsByRole::class, ::permissionsByRole)
     }
 //
@@ -46,12 +46,12 @@ open class PermissionBl : PermissionBlProvider, EntityBusinessLogicBase<Permissi
 //    // Actions
 //    // -------------------------------------------------------------------------
 
-    internal fun addPermission(executor: Executor, action: AddPermission): ActionStatus {
+    internal fun grantPermission(executor: Executor, action: GrantPermission): ActionStatus {
         pa.addPermission(RolePermissionBo(action.role, action.permission))
         return ActionStatus()
     }
 
-    private fun removePermission(executor: Executor, action: RemovePermission): ActionStatus {
+    private fun revokePermission(executor: Executor, action: RevokePermission): ActionStatus {
         pa.removePermission(RolePermissionBo(action.role, action.permission))
         return ActionStatus()
     }

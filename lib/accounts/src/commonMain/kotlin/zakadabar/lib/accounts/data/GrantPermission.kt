@@ -10,14 +10,13 @@ import zakadabar.core.data.ActionStatus
 import zakadabar.core.data.EntityId
 
 /**
- * Revoke a role from an account.
+ * Grant a role for an account.
  *
- * @param  account   The account to revoke the role from.
- * @param  role      The role to revoke.
+ * @param  account   The account to grant the role for.
+ * @param  role      The role to grant.
  */
 @Serializable
-class RemovePermission(
-
+class GrantPermission(
     var role : EntityId<RoleBo>,
     var permission: EntityId<PermissionBo>
 
