@@ -34,14 +34,15 @@ import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtModifierListOwner
+import zakadabar.reactive.kotlin.plugin.ReactivePluginContext
 
 class ReactiveIrTransformer(
     private val context: IrPluginContext,
-    private val annotations: List<String>
+    private val configuration: ReactivePluginContext
 ) : IrElementTransformerVoidWithContext(), AnnotationBasedExtension {
 
     override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?): List<String> =
-        annotations
+        configuration.annotations
 
     val intClass = context.symbols.int
     val intType = intClass.defaultType

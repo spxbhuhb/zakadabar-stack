@@ -15,14 +15,15 @@ import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.util.dump
 import org.jetbrains.kotlin.ir.visitors.IrElementVisitorVoid
 import org.jetbrains.kotlin.psi.KtModifierListOwner
+import zakadabar.reactive.kotlin.plugin.ReactivePluginContext
 
 class ReactiveIrVisitor(
     private val context: IrPluginContext,
-    private val annotations: List<String>
+    private val configuration: ReactivePluginContext
 ) : AnnotationBasedExtension, IrElementVisitorVoid {
 
     override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?): List<String> =
-        annotations
+        configuration.annotations
 
     override fun visitElement(element: IrElement) {
         element.acceptChildren(this, null)
@@ -32,8 +33,7 @@ class ReactiveIrVisitor(
         super.visitFunction(declaration)
         if (! isReactive(declaration)) return
 
-        println("===============   reactive function: ${declaration.name.identifier}")
-        println(declaration.dump())
+
     }
 
     override fun visitCall(expression: IrCall) {

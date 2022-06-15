@@ -21,29 +21,82 @@ import com.tschuchort.compiletesting.SourceFile
 import org.junit.Test
 import kotlin.test.assertEquals
 
-val small = """
+val basic = """
     import zakadabar.reactive.core.Reactive
     import zakadabar.reactive.core.ReactiveState
     import zakadabar.reactive.core.ReactiveContext
     import zakadabar.reactive.core.optimize
 
-
     @Reactive
-    fun d(callSiteOffset : Int, parentState : ReactiveState) { 
-        c(12)
-        c(13)
+    fun d() { 
+        c(12) 
     }
 
     @Reactive
     fun c(a : Int) { 
         println("called c(" + a.toString() + ")")
     }
+""".trimIndent()
 
-    fun main() {
-        ReactiveState(ReactiveContext(), "<root>", "<root>", emptyArray()).apply {
-            d(0, this)
+val ifElseSlotsOnBoth = """
+    import zakadabar.reactive.core.Reactive
+    import zakadabar.reactive.core.ReactiveState
+    import zakadabar.reactive.core.ReactiveContext
+    import zakadabar.reactive.core.optimize
+
+    @Reactive
+    fun d() {
+        if (12 == 13) c(12) else c(13)
+    }
+
+    @Reactive
+    fun e() {
+        if (11 == 12) {
+            c(12)
+        } else {
+            c(13)
         }
     }
+
+    @Reactive
+    fun c(a : Int) { 
+        println("called c(" + a.toString() + ")")
+    }
+""".trimIndent()
+
+val whileLoop = """
+    import zakadabar.reactive.core.Reactive
+    import zakadabar.reactive.core.ReactiveState
+    import zakadabar.reactive.core.ReactiveContext
+    import zakadabar.reactive.core.optimize
+
+    @Reactive
+    fun d() {
+        var i = 0
+        while (i < 10) {
+            i++
+            c(i)
+        }
+    }
+
+    @Reactive
+    fun c(a : Int) { 
+        println("called c(" + a.toString() + ")")
+    }
+""".trimIndent()
+
+val closure = """
+    fun d() { 
+        var i = 0
+        class A {
+           fun a() {
+               i = 2
+               println(i)
+           }
+        }
+        A().a()
+    }
+
 """.trimIndent()
 
 val dump = """
@@ -122,16 +175,55 @@ val big = """
     val a2 = A("CS1", "CS2", null, null, s7 = a())
 """
 
+val run = """
+    import zakadabar.reactive.core.Reactive
+    import zakadabar.reactive.core.ReactiveState
+    import zakadabar.reactive.core.ReactiveContext
+    import zakadabar.reactive.core.optimize
+
+    @Reactive
+    fun d(callSiteOffset : Int, parentState : ReactiveState) { 
+        c(12) 
+        c(13)
+    }
+
+    @Reactive
+    fun c(a : Int) { 
+        println("called c(" + a.toString() + ")")
+    }
+
+    fun main() {
+        ReactiveState(ReactiveContext(), "<root>", "<root>", emptyArray()).apply {
+            d(0, this)
+        }
+    }
+""".trimIndent()
+
 class IrPluginTest {
 
+    fun compile(source : String) {
+        val result = compile(SourceFile.kotlin("pluginTest.kt", source))
+        assertEquals(KotlinCompilation.ExitCode.OK, result.exitCode)
+    }
+
     @Test
-    fun `IR plugin success`() {
+    fun basic() = compile(basic)
+
+    @Test
+    fun `if else - slots on both branches`() = compile(ifElseSlotsOnBoth)
+
+    @Test
+    fun `while loop`() = compile(whileLoop)
+
+    @Test
+    fun closure() = compile(closure)
+
+    // @Test
+    fun run() {
 
         println("%%%%%%%%%%%%%%%%  compile  %%%%%%%%%%%%%%%%")
 
-        val result = compile(
-            sourceFile = SourceFile.kotlin("pluginTest.kt", small)
-        )
+        val result = compile(SourceFile.kotlin("pluginTest.kt", run))
         assertEquals(KotlinCompilation.ExitCode.OK, result.exitCode)
 
         println("%%%%%%%%%%%%%%%%  execute  %%%%%%%%%%%%%%%%")
@@ -139,7 +231,7 @@ class IrPluginTest {
         with(result.classLoader.loadClass("PluginTestKt")) {
             this.declaredMethods.forEach {
                 if (it.name == "main" && it.parameters.isEmpty()) {
-                   it.invoke(this)
+                    it.invoke(this)
                 }
             }
         }
@@ -147,20 +239,12 @@ class IrPluginTest {
     }
 }
 
-fun compile(
-    sourceFiles: List<SourceFile>
-): KotlinCompilation.Result {
+fun compile(vararg sourceFiles: SourceFile): KotlinCompilation.Result {
     return KotlinCompilation().apply {
         // workingDir = File("/Users/tiz/src/kotlin-compiler-plugin-poc/plugin-test")
-        sources = sourceFiles
+        sources = sourceFiles.toList()
         useIR = true
         compilerPlugins = listOf(ReactiveComponentRegistrar())
         inheritClassPath = true
     }.compile()
-}
-
-fun compile(
-    sourceFile: SourceFile
-): KotlinCompilation.Result {
-    return compile(listOf(sourceFile))
 }

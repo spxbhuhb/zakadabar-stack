@@ -31,7 +31,12 @@ kotlin {
     }
 
     sourceSets {
-        val commonMain by getting {
+        commonTest {
+            dependencies {
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+                implementation(kotlin("test-junit"))
+            }
         }
     }
 }

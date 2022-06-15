@@ -11,18 +11,25 @@ import org.jetbrains.kotlin.config.CompilerConfiguration
 
 class ReactiveCommandLineProcessor : CommandLineProcessor {
     companion object {
-        val ANNOTATION_OPTION = CliOption(
+        val OPTION_ANNOTATION = CliOption(
             "annotation", "<fqname>", "Annotation qualified names",
+            required = false, allowMultipleOccurrences = true
+        )
+        val OPTION_DUMP = CliOption(
+            "dump", "string", "Dump data at specified points of plugin run(before, after, rcd).",
             required = false, allowMultipleOccurrences = true
         )
         const val PLUGIN_ID = "zakadabar.reactive"
     }
 
     override val pluginId = PLUGIN_ID
-    override val pluginOptions = listOf(ANNOTATION_OPTION)
+    override val pluginOptions = listOf(OPTION_ANNOTATION, OPTION_DUMP)
 
-    override fun processOption(option: AbstractCliOption, value: String, configuration: CompilerConfiguration) = when (option) {
-        ANNOTATION_OPTION -> configuration.appendList(ReactiveConfigurationKeys.ANNOTATION, value)
-        else -> throw CliOptionProcessingException("Unknown option: ${option.optionName}")
+    override fun processOption(option: AbstractCliOption, value: String, configuration: CompilerConfiguration) {
+        return when (option) {
+            OPTION_ANNOTATION -> configuration.appendList(ReactiveConfigurationKeys.ANNOTATION, value)
+            OPTION_DUMP -> configuration.appendList(ReactiveConfigurationKeys.DUMP, value)
+            else -> throw CliOptionProcessingException("Unknown option: ${option.optionName}")
+        }
     }
 }

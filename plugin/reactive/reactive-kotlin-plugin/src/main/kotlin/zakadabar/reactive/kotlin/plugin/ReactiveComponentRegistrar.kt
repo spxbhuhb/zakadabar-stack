@@ -12,6 +12,8 @@ import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.extensions.StorageComponentContainerContributor
 import zakadabar.reactive.kotlin.plugin.ReactiveConfigurationKeys.ANNOTATION
+import zakadabar.reactive.kotlin.plugin.ReactivePluginContext.Companion.DUMP_BEFORE
+import zakadabar.reactive.kotlin.plugin.ReactivePluginContext.Companion.DUMP_RCD
 
 /**
  * Registers the extensions into the compiler.
@@ -21,22 +23,26 @@ class ReactiveComponentRegistrar : ComponentRegistrar {
 
     override fun registerProjectComponents(project: MockProject, configuration: CompilerConfiguration) {
 
+
         val annotations = configuration.get(ANNOTATION).orEmpty().toMutableList()
         if (annotations.isEmpty()) annotations += "zakadabar.reactive.core.Reactive"
 
-        registerReactiveComponents(project, annotations, configuration.getBoolean(JVMConfigurationKeys.IR))
+//        val dump = configuration.get(DUMP).orEmpty()
+        val dump = listOf(DUMP_BEFORE, DUMP_RCD)
+
+        registerReactiveComponents(project, ReactivePluginContext(annotations, dump), configuration.getBoolean(JVMConfigurationKeys.IR))
     }
 
-    fun registerReactiveComponents(project: Project, annotations: List<String>, useIr: Boolean) {
+    fun registerReactiveComponents(project: Project, configuration: ReactivePluginContext, useIr: Boolean) {
 
         StorageComponentContainerContributor.registerExtension(
             project,
-            ReactiveComponentContainerContributor(annotations, useIr)
+            ReactiveComponentContainerContributor(configuration.annotations, useIr)
         )
         
         IrGenerationExtension.registerExtension(
             project,
-            ReactiveIrGenerationExtension(annotations)
+            ReactiveIrGenerationExtension(configuration)
         )
 
     }

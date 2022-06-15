@@ -7,7 +7,8 @@ package zakadabar.reactive.kotlin.plugin
 import org.jetbrains.kotlin.config.CompilerConfigurationKey
 
 object ReactiveConfigurationKeys {
-    val ANNOTATION: CompilerConfigurationKey<List<String>> =
-        CompilerConfigurationKey.create("annotation qualified name")
+    val ANNOTATION: CompilerConfigurationKey<List<String>> = CompilerConfigurationKey.create("annotation qualified name")
+    val DUMP: CompilerConfigurationKey<List<String>> = CompilerConfigurationKey.create("data dump points")
+
 }
 
