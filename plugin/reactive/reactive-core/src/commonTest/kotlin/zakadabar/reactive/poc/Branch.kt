@@ -3,98 +3,79 @@
  */
 package zakadabar.reactive.poc
 
-import zakadabar.reactive.core.Component
+import zakadabar.reactive.core.ReactiveComponent
 
-fun Branch(num: Int) {
-    when (num) {
-        1 -> Text("one")
-        2 -> Text("two")
+fun Branch(value: Int) {
+    when (value) {
+        1 -> Primitive(value + 1)
+        2 -> Primitive(value + 2)
     }
 }
 
-fun ReactiveBranch(num: Int): Component {
+class ReactiveBranch(
+    var value: Int
+) : ReactiveComponent() {
 
-    var num0 = num
+    var branch0index = - 1
+    var branch0: ReactiveComponent? = null
 
-    var dirty0 = 0
-    val self0 = Component()
-
-    var branch0: Component? = null
-    var branch0idx = - 1
-
-    val branch0funs = arrayOf(
-        fun(): Component {
-            val self1 = Component()
-
-            var text0: Text? = null
-
-            self1.c = {
-                text0 = Text("one")
-            }
-
-            self1.p = {
-                text0!!.setValue("one")
-            }
-
-            return self1
-        },
-        fun(): Component {
-            val self1 = Component()
-
-            var text0: Text? = null
-
-            self1.c = {
-                text0 = Text("two")
-            }
-
-            self1.p = {
-                text0!!.setValue("one")
-            }
-
-            return self1
-        }
-    )
-
-    fun branch0select() : Int {
-        return when (num0) {
-            1 -> 0
-            2 -> 1
-            else -> -1
-        }
+    init {
+        branch0patch()
     }
 
-    self0.c = {
-        branch0idx = branch0select()
-        if (branch0idx != -1) {
-            branch0 = branch0funs[branch0idx]()
-            branch0!!.c()
-        }
-    }
-
-    self0.p = { dirty ->
-        dirty0 = dirty
-        if (dirty and 1 != 0) {
-            val branch0future = branch0select()
-            if (branch0future == branch0idx) {
-                branch0?.p?.invoke(0)
+    fun branch0patch() {
+        when (value) {
+            1 -> if (branch0index == 0) {
+                branch0?.patch(dirty)
             } else {
-                // unmount, destroy
-                branch0idx = branch0future
-                if (branch0idx != -1) {
-                    branch0 = branch0funs[branch0idx]()
-                    branch0!!.c()
-                    // mount
-                }
+                branch0?.dispose()
+                branch0 = ReactiveBlock0()
+                branch0index = 0
+            }
+            2 -> if (branch0index == 1) {
+                branch0?.patch(dirty)
+            } else {
+                branch0?.dispose()
+                branch0 = ReactiveBlock1()
+                branch0index = 1
+            }
+            else -> if (branch0index != - 1) {
+                branch0?.dispose()
+                branch0 = null
+                branch0index = -1
             }
         }
     }
 
-    self0.s = { mask, value ->
-        when (mask) {
-            1 -> num0 = value as Int
+    inner class ReactiveBlock0 : ReactiveComponent() {
+        val primitive0 = ReactivePrimitive(value)
+        override fun patch(mask: Array<Int>) {
+            dirty = mask
+            val d0 = this@ReactiveBranch.dirty[0]
+            if (d0 and 1 != 0) {
+                primitive0.value = value + 1
+                primitive0.patch(arrayOf(1))
+            }
         }
-        self0.p(mask)
     }
 
-    return self0
+    inner class ReactiveBlock1 : ReactiveComponent() {
+        val primitive0 = ReactivePrimitive(value)
+        override fun patch(mask: Array<Int>) {
+            dirty = mask
+            val d0 = this@ReactiveBranch.dirty[0]
+            if (d0 and 1 != 0) {
+                primitive0.value = value + 2
+                primitive0.patch(arrayOf(1))
+            }
+        }
+    }
+
+    override fun patch(mask: Array<Int>) {
+        dirty = mask
+        if (mask[0] and 1 != 0) {
+            branch0patch()
+        }
+    }
+
 }

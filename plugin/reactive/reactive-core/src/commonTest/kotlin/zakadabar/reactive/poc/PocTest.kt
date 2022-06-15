@@ -8,19 +8,24 @@ import kotlin.test.Test
 class PocTest {
 
     @Test
-    fun buttonTest() {
-        val component = ReactiveButton("label", "icon")
-        component.c()
-        component.s(1, "label2")
+    fun higherOrderTest() {
+        val c = ReactiveHigherOrderCall(1) // should print 2
+        c.value = 2
+        c.patch(arrayOf(1)) // should print 3
     }
 
     @Test
     fun branchTest() {
-        val component = ReactiveBranch(1)
-        component.c()
-        component.s(1, 1)
-        component.s(1, 2)
-        component.s(1, 3)
-        component.s(1, 1)
+        val c = ReactiveBranch(1)
+
+        fun v(value : Int) {
+            c.value = value
+            c.patch(arrayOf(1))
+        }
+
+        v(1)
+        v(2)
+        v(3)
+        v(1)
     }
 }

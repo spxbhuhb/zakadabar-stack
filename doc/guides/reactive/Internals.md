@@ -2,11 +2,60 @@
 
 ## Transform Algorithm
 
-The transformation between an original function and a reactive function
-replaces the function body with a new one. The new body is built as follows:
+The `reactive` plugin:
 
-1. add parameter variables
-2. add framework variables
+- creates a reactive component class for each function annotated with `@Reactive`
+- creates a reactive data class for each class annotated with `@Reactive`
+- transforms the calls to reactive functions into the component management code
+
+### Reactive Component Classes
+
+The plugin creates a class named `Reactive$<name-of-function>` for each function
+annotated with `@Reactive`.
+
+Also, each call to reactive functions creates a reactive component instance (a
+child component). The parent component manages the child:
+
+- create it during initialization of the parent
+- patch it when necessary
+- dispose it when the parent component is disposed
+
+The plugin generates the code for child component management.
+
+```kotlin
+@Reactive
+fun A(value : Int) {
+    B(value + 2) // B is also a reactive component    
+}
+
+@Reactive
+fun B(value : Int) {
+    // ...
+}
+```
+
+is transformed into:
+
+```kotlin
+class ReactiveA(
+    var value : Int
+) : ReactiveComponent() {
+
+    val b0 = ReactiveB(value + 2)
+
+    override fun patch(mask : Array<Int>) {
+        dirty = mask // save the mask for higher-order functions (more about this below)
+        if (mask[0] and 1 != 0) { // if A.value has been changed
+            b0.value = value + 2 // calculate and set B.value
+            b0.patch(arrayOf(1)) // patch B, so it will apply the new value wherever it is necessary
+        }
+    }
+    
+    override fun dispose() {
+        b0.dispose()
+    }
+}
+```
 
 ### Parameter Variables
 
