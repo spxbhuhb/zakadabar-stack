@@ -63,9 +63,9 @@ object Roles : AppRolesBase() {
 
 #### additional permissions
 
-There is no permission by default. All application can work only with roles, without using permissions.
+There are no permissions by default. The application can work with roles only, without using permissions.
 
-For additional permissions, extend the PermissionsBase class and pass it for install (see below):
+To add permissions, extend the PermissionsBase class and pass it for install (see below):
 
 ```kotlin
 object Permissions : AppPermissionsBase() {

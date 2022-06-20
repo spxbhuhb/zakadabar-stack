@@ -11,7 +11,7 @@ of the methods to kick off full processing.
 
 </div>
 
-<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="RoleBlProvider">
+<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Providers">
 
 Most of these examples use `SimpleRoleAuthorizer`. This authorizer needs a backend
 module that implements `RoleBlProvider`. For example,
@@ -22,7 +22,6 @@ this interface. If you do not use `Lib: Accounts`, you have to add a module that
 
 To authorize by permissions, use `SimplePermissionAuthorizer` with `SimplePermissionAuthorizationBo`. 
 This authorizer needs a backend module that implements `PermissionBlProvider`.
-
 
 </div>
 
@@ -143,7 +142,7 @@ override val authorizer: BusinessLogicAuthorizer<TestBlob> = SimpleRoleAuthorize
 }
 ```
 
-## SimpleRoleAuthorizer
+## SimplePermissionAuthorizer
 
 [SimplePermissionAuthorizer](/core/core/src/commonMain/kotlin/zakadabar/core/authorize/SimplePermissionAuthorizer.kt) uses permissions to make the authorization decisions. 
 To set up, assign permission names to operations.
@@ -160,7 +159,7 @@ To set up, assign permission names to operations.
     })
 ```
 
-SimplePermissionAuthorizer also support `PUBLIC` and `LOGGED_IN`.
+SimplePermissionAuthorizer also supports `PUBLIC` and `LOGGED_IN` (see above).
 
 ## Write an Authorizer
 
