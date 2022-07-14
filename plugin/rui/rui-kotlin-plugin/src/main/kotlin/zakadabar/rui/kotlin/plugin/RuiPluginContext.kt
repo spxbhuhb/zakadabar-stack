@@ -5,7 +5,9 @@ package zakadabar.rui.kotlin.plugin
 
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.ir.IrElement
+import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.util.dump
+import org.jetbrains.kotlin.ir.util.fqNameWhenAvailable
 import zakadabar.rui.kotlin.plugin.data.RuiCompilation
 
 class RuiPluginContext(
@@ -24,10 +26,17 @@ class RuiPluginContext(
         if (point in dumpPoints) println(data.dump())
     }
 
+    fun dumpBoundary(declaration: IrFunction, boundary: Int) {
+        if (DUMP_BOUNDARY in dumpPoints) {
+            println("${declaration.fqNameWhenAvailable} BOUNDARY = $boundary")
+        }
+    }
+
     companion object {
         const val DUMP_BEFORE = "before"
         const val DUMP_AFTER = "after"
         const val DUMP_RCD = "rcd"
+        const val DUMP_BOUNDARY = "boundary"
     }
 
 }

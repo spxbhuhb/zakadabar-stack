@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package zakadabar.reactive.kotlin.plugin
+package zakadabar.rui.kotlin.plugin
 
 import com.tschuchort.compiletesting.KotlinCompilation
 import com.tschuchort.compiletesting.SourceFile
@@ -23,26 +23,28 @@ import java.io.File
 import kotlin.test.assertEquals
 
 val basic = """
-    import zakadabar.reactive.core.Reactive
-    import zakadabar.reactive.core.ReactiveComponent
+    import zakadabar.rui.core.Rui
+    import zakadabar.rui.core.RuiComponentBase
 
-    @Reactive
-    fun Text() { 
-       var count = 0
+    @Rui
+    fun Text(p1 : Int) { 
+       var bb = 0
+       var count = bb
+       println(bb)
     }
  
-    class ReactiveTextManual : ReactiveComponent() {
-        var a = 0
-        var count : Int
-        init {
-            count = 0
-        }
-        
-        inner class ReactiveTextManualInner : ReactiveComponent() {
-            init {
-                count = 1
-            }
-        }
+    class ReactiveTextManual(
+       var p1 : Int
+    ) : RuiComponentBase() {
+
+       var bb : Int
+       var count : Int
+       
+       init {
+           bb = 0
+           count = bb
+           println(bb)
+       }
     }
 """.trimIndent()
 
@@ -205,7 +207,7 @@ val boundary = """
     import zakadabar.rui.core.Rui
     
     @Rui
-    fun Text() { }
+    fun Text(a : Int) { }
     
     @Rui
     fun Stuff() {

@@ -1,13 +1,18 @@
-# Reactive: Introduction
+# Rui: Introduction
+
+Rui, short for reactive UI, is a Kotlin compiler plugin that you may use to easily
+build error-free user interfaces.
+
+Rui is inspired by [Svelte](https://svelte.io), but it is not a port of Svelte.
 
 ## Basics: Components
 
-The basic building blocks of a Reactive application are components. The 
+The basic building blocks of a Rui application are components. The 
 following code defines the "HelloWorld" component which simply displays the
 text "Hello World!".
 
 ```kotlin
-@Reactive
+@Rui
 fun HelloWorld() {
     Text("Hello World!")
 }
@@ -21,7 +26,7 @@ updates the UI to reflect the change.
 Defined variables are part of the component state, and they are *reactive by default*.
 
 ```kotlin
-@Reactive
+@Rui
 fun Counter() {
     var count = 0
     Button { "Click count: $count" } onClick { count++ }
@@ -38,7 +43,7 @@ You can add parameters to the component. Parameters are parts of the
 component state.
 
 ```kotlin
-@Reactive
+@Rui
 fun Counter(label : String) {
     var count = 0
     Button { "$label: $count" } onClick { count++ }
@@ -48,16 +53,16 @@ fun Counter(label : String) {
 ## Basics: Nesting
 
 Components may contain other components, letting you build complex UI
-structures. When `count` of the parent component changes Reactive
+structures. When `count` of the parent component changes Rui
 automatically updates the child component.
 
 ```kotlin
-@Reactive
+@Rui
 fun Child(count : Int) {
     Text("Click count: $count")
 }
 
-@Reactive
+@Rui
 fun Parent() {
     var count = 0
     Child(count) onClick { count++ }
@@ -69,7 +74,7 @@ fun Parent() {
 You can use the standard Kotlin `if` and `when` to decide what to display.
 
 ```kotlin
-@Reactive
+@Rui
 fun Counter() {
     var count = 0
     Button { "click count: $count" } onClick { count ++ }
@@ -80,7 +85,7 @@ fun Counter() {
 ```
 
 ```kotlin
-@Reactive
+@Rui
 fun Counter() {
     var count = 0
     when (count) {
@@ -97,7 +102,7 @@ fun Counter() {
 You can use the standard Kotlin `for` loops.
 
 ```kotlin
-@Reactive
+@Rui
 fun Counter() {
     var count = 0
     Button { "click count: $count" } onClick { count ++ }
@@ -123,7 +128,7 @@ tells the compiler that the variable is not part of the component state,
 it is used only temporarily.
 
 ```kotlin
-@Reactive
+@Rui
 fun Counter() {
     var count = 0
     Button { "click count: $count" } onClick { count ++ }
@@ -143,14 +148,14 @@ Higher order components have a function parameter which in turn is another
 component.
 
 ```kotlin
-@Reactive
-fun Wrapper(@Reactive block : () -> Unit) {
+@Rui
+fun Wrapper(@Rui block : () -> Unit) {
     Text("before the block")
     block()
     Text("after the block")
 }
 
-@Reactive
+@Rui
 fun Counter() {
     var count = 0
     Wrapper {
@@ -170,7 +175,7 @@ component has to support the transformation (more about that later).
 This outer transform sets the `name` state variable of `Wrapper` to "Wrapped Block".
 
 ```kotlin
-@Reactive
+@Rui
 fun Use() {
     Wrapper {  } name "Wrapped Block"
 }
@@ -179,7 +184,7 @@ fun Use() {
 This inner transform sets the `name` state variable of `Wrapper` to "Wrapped block".
 
 ```kotlin
-@Reactive
+@Rui
 fun Use() {
     Wrapper {
         name = "Wrapped Block"
@@ -208,7 +213,7 @@ To write an outer transform for a component:
 3. define the transform function (`CompTransformScope.value`)
 
 ```kotlin
-@Reactive
+@Rui
 fun Comp() : CompTransformScope {
     var name = "block"
     Text("the name is $name")
@@ -236,8 +241,8 @@ To make an inner transform for a component:
 3. add the transformed variable into the transform scope (`CompTransformScope.name`)
 
 ```kotlin
-@Reactive
-fun Comp(@Reactive block : CompTransformScope.() -> Unit) {
+@Rui
+fun Comp(@Rui block : CompTransformScope.() -> Unit) {
     var name = "block"
     Text("before the $block")
     CompTransformScope.block()

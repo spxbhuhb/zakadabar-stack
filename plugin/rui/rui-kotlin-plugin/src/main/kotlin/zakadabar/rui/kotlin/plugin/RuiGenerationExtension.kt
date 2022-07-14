@@ -14,9 +14,10 @@ internal class RuiGenerationExtension(
 ) : IrGenerationExtension {
 
     override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
+        ruiPluginContext.irPluginContext = pluginContext
         ruiPluginContext.dump(DUMP_BEFORE, moduleFragment)
 
-        moduleFragment.accept(RuiFunctionVisitor(pluginContext, ruiPluginContext), null)
+        moduleFragment.accept(RuiFunctionVisitor(ruiPluginContext), null)
 
 //        reactiveContext.irPluginContext = pluginContext
 //

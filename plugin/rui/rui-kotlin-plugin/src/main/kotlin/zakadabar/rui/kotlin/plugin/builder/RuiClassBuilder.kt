@@ -4,7 +4,6 @@
 package zakadabar.rui.kotlin.plugin.builder
 
 import org.jetbrains.kotlin.backend.common.deepCopyWithVariables
-import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.backend.common.ir.addFakeOverrides
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
 import org.jetbrains.kotlin.descriptors.ClassKind
@@ -17,6 +16,7 @@ import org.jetbrains.kotlin.ir.builders.irSetField
 import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.declarations.impl.IrFactoryImpl
 import org.jetbrains.kotlin.ir.expressions.IrBlockBody
+import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
 import org.jetbrains.kotlin.ir.expressions.impl.IrCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrDelegatingConstructorCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
@@ -27,40 +27,42 @@ import org.jetbrains.kotlin.ir.types.IrType
 import org.jetbrains.kotlin.ir.types.IrTypeSystemContextImpl
 import org.jetbrains.kotlin.ir.types.impl.IrSimpleTypeImpl
 import org.jetbrains.kotlin.ir.types.typeWith
-import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
-import org.jetbrains.kotlin.ir.util.constructors
-import org.jetbrains.kotlin.ir.util.defaultType
-import org.jetbrains.kotlin.ir.util.parentAsClass
+import org.jetbrains.kotlin.ir.util.*
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
+import org.jetbrains.kotlin.util.capitalizeDecapitalize.capitalizeAsciiOnly
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
-import zakadabar.rui.kotlin.plugin.data.RuiFunction
 import zakadabar.rui.kotlin.plugin.data.RuiVariable
 
 class RuiClassBuilder(
-    private val context: IrPluginContext,
-    configuration: RuiPluginContext
+    private val ruiContext: RuiPluginContext,
+    val original : IrFunction,
+    val boundary : Int
 ) {
 
-    val data = configuration.controlData
+    val irContext = ruiContext.irPluginContext
+    val irFactory = irContext.irFactory
 
-    val unitType = context.irBuiltIns.unitType
+    val unitType = irContext.irBuiltIns.unitType
 
-    val irFactory = IrFactoryImpl
-
-    val ruiComponentClass = context.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "core", "ReactiveComponent"))) !!
+    val ruiComponentClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "core", "RuiComponentBase"))) !!
     val ruiComponentType = ruiComponentClass.typeWith()
 
-    fun buildRuiClass(file: IrFile, rFunction: RuiFunction): IrClass {
+    lateinit var irClass : IrClass
+
+    val properties = mutableMapOf<String, IrProperty>()
+
+    fun build(builders : RuiClassBuilder.() -> Unit): IrClass {
         return IrFactoryImpl.buildClass {
 
             kind = ClassKind.CLASS
-            name = Name.identifier(rFunction.className)
+            name = Name.identifier("Rui" + original.name.identifier.capitalizeAsciiOnly())
 
         }.apply {
 
-            parent = file
+            irClass = this
+            parent = original.file
             superTypes = listOf(ruiComponentType)
 
             declareThisReceiverParameter(
@@ -68,22 +70,19 @@ class RuiClassBuilder(
                 thisOrigin = IrDeclarationOrigin.INSTANCE_RECEIVER
             )
 
-            addConstructor()
+            builders()
 
-            addVariables(rFunction)
-
-            addInitializer(rFunction)
-
-            addFakeOverrides(IrTypeSystemContextImpl(context.irBuiltIns))
+            irClass.addFakeOverrides(IrTypeSystemContextImpl(irContext.irBuiltIns))
         }
     }
 
-    internal fun IrClass.addConstructor() {
-        val clazz = this
-        addConstructor {
+    internal fun addConstructor() : IrConstructor {
+
+        irClass.addConstructor {
             isPrimary = true
-            returnType = clazz.typeWith()
+            returnType = irClass.typeWith()
         }.apply {
+
             body = irFactory.createBlockBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET).apply {
 
                 statements += IrDelegatingConstructorCallImpl.fromSymbolOwner(
@@ -96,29 +95,26 @@ class RuiClassBuilder(
                 statements += IrInstanceInitializerCallImpl(
                     SYNTHETIC_OFFSET,
                     SYNTHETIC_OFFSET,
-                    clazz.symbol,
+                    irClass.symbol,
                     unitType
                 )
             }
+
+            return this
         }
     }
 
-    internal fun IrClass.addInitializer(rFunction: RuiFunction) {
-        declarations += irFactory.createAnonymousInitializer(
+    internal fun addInitializer() : IrAnonymousInitializer {
+        irFactory.createAnonymousInitializer(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
             origin = IrDeclarationOrigin.DEFINED,
             symbol = IrAnonymousInitializerSymbolImpl(),
             isStatic = false
         ).apply {
-            parent = this@addInitializer
-
-            body = irFactory.createBlockBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET).apply {
-
-                rFunction.variables.forEach { (_, rVariable) ->
-                    addVariableInitializer(this@addInitializer, rVariable)
-                }
-                
-            }
+            parent = irClass
+            irClass.declarations += this
+            body = irFactory.createBlockBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET)
+            return this
         }
     }
 
@@ -158,16 +154,12 @@ class RuiClassBuilder(
         }
     }
 
-    internal fun IrClass.addVariables(rFunction: RuiFunction) {
-        rFunction.variables.forEach {
-            addVariable(this, it.value)
-        }
-    }
+    /**
+     * Adds a top-level variable
+     */
+    internal fun addProperty(irVariable: IrVariable) : IrProperty {
 
-    internal fun addVariable(irClass: IrClass, rVariable: RuiVariable) {
-        val irVariable = rVariable.irVariable
-
-        rVariable.field = irFactory.buildField {
+        val field = irFactory.buildField {
             name = irVariable.name
             type = irVariable.type
             origin = IrDeclarationOrigin.PROPERTY_BACKING_FIELD
@@ -176,13 +168,45 @@ class RuiClassBuilder(
             parent = irClass
         }
 
-        rVariable.property = irClass.addProperty {
+        irClass.addProperty {
             name = irVariable.name
             isVar = true
         }.apply {
-            backingField = rVariable.field
-            addDefaultGetter(irClass, context.irBuiltIns)
-            addDefaultSetter(rVariable.field)
+            parent = irClass
+            backingField = field
+            addDefaultGetter(irClass, irContext.irBuiltIns)
+            addDefaultSetter(field)
+            properties[name.identifier] = this
+            return this
+        }
+
+    }
+
+    internal fun addProperty(irValueParameter: IrValueParameter) {
+
+        val field = irFactory.buildField {
+            name = irValueParameter.name
+            type = irValueParameter.type
+            origin = IrDeclarationOrigin.PROPERTY_BACKING_FIELD
+            visibility = DescriptorVisibilities.PRIVATE
+        }.apply {
+            parent = irClass
+            initializer = irFactory.createExpressionBody(
+                SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+                IrGetValueImpl(
+                    SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, irValueParameter.symbol, IrStatementOrigin.INITIALIZE_PROPERTY_FROM_PARAMETER
+                )
+            )
+        }
+
+        irClass.addProperty {
+            name = irValueParameter.name
+            isVar = true
+        }.apply {
+            backingField = field
+            addDefaultGetter(irClass, irContext.irBuiltIns)
+            addDefaultSetter(field)
+            properties[name.identifier] = this
         }
 
     }
@@ -212,7 +236,7 @@ class RuiClassBuilder(
                 type = field.type
             }
 
-            body = DeclarationIrBuilder(context, this.symbol).irBlockBody {
+            body = DeclarationIrBuilder(irContext, this.symbol).irBlockBody {
                 + irSetField(
                     receiver = irGet(receiver),
                     field = field,

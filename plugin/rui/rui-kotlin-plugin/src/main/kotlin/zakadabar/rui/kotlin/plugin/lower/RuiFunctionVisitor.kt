@@ -3,23 +3,24 @@
  */
 package zakadabar.rui.kotlin.plugin.lower
 
-import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.ir.IrElement
-import org.jetbrains.kotlin.ir.declarations.*
+import org.jetbrains.kotlin.ir.declarations.IrFunction
+import org.jetbrains.kotlin.ir.util.dump
+import org.jetbrains.kotlin.ir.util.fqNameWhenAvailable
 import org.jetbrains.kotlin.ir.visitors.IrElementVisitorVoid
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
+import zakadabar.rui.kotlin.plugin.builder.RuiClassBuilder
 
 /**
- * Creates the RUI component class from a function annotated with [RuiComponent].
+ * Creates the RUI component class for each function annotated with Rui.
  */
 class RuiFunctionVisitor(
-    private val context: IrPluginContext,
-    private val configuration: RuiPluginContext
+    private val ruiContext: RuiPluginContext
 ) : RuiAnnotationBasedExtension, IrElementVisitorVoid {
 
     override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?): List<String> =
-        configuration.annotations
+        ruiContext.annotations
 
     override fun visitElement(element: IrElement) {
         element.acceptChildren(this, null)
@@ -27,13 +28,29 @@ class RuiFunctionVisitor(
 
     override fun visitFunction(declaration: IrFunction) {
         if (declaration.isAnnotatedWithRui()) {
-            RuiBoundaryVisitor(context, configuration).findBoundary(declaration).also { renderStart ->
-                println("==== ${declaration.symbol} BOUNDARY ====")
-                println("    renderStart: $renderStart")
-            }
-
+            buildRuiClass(declaration)
         }
         super.visitFunction(declaration)
+    }
+
+    private fun buildRuiClass(declaration: IrFunction) {
+        RuiClassBuilder(
+            ruiContext,
+            declaration,
+            RuiBoundaryVisitor(ruiContext).findBoundary(declaration)
+        ).build {
+            if (boundary != 0) {
+                RuiStateDefinitionTransformer(ruiContext, this).buildStateDefinition()
+            }
+            if (boundary != -1) {
+                RuiRenderingVisitor(ruiContext, this).buildFunctions()
+            }
+        }.also {
+            println("==== GENERATED CLASS: ${it.fqNameWhenAvailable} ====")
+            println(it.dump())
+        }
+
+
     }
 
 }

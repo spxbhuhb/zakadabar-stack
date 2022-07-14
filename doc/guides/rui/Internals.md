@@ -2,11 +2,17 @@
 
 ## Transform Algorithm
 
-The `reactive` plugin:
+The `rui` plugin creates a rui component class for each function annotated with `@Rui`.
 
-- creates a reactive component class for each function annotated with `@Reactive`
-- creates a reactive data class for each class annotated with `@Reactive`
-- transforms the calls to reactive functions into the component management code
+Transformation starts with `RuiFunctionTransformer`. The transformer:
+
+1. Creates a `RuiClassBuilder`. This builder creates new `IrClass` named `Rui<funcition-name>` that extends `RuiComponentBase`.
+2. Runs `RuiBoundaryVisitor` to find the boundary between the state definition and the rendering parts of the original function.
+3. Runs `RuiStateDefinitionVisitor` to transform the state definition into state variables and a constructor.
+4. Runs `RuiRenderingVisitor` to transform the rendering into slots, create, patch and destroy functions.
+
+
+## OBSOLETED
 
 ### Reactive Component Classes
 

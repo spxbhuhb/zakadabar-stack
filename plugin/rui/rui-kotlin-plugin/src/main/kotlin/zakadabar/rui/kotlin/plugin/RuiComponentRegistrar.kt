@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.extensions.StorageComponentContainerContributor
 import zakadabar.rui.kotlin.plugin.RuiConfigurationKeys.ANNOTATION
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_BEFORE
+import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_BOUNDARY
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_RCD
 
 /**
@@ -28,21 +29,21 @@ class RuiComponentRegistrar : ComponentRegistrar {
         if (annotations.isEmpty()) annotations += "zakadabar.rui.core.Rui"
 
 //        val dump = configuration.get(DUMP).orEmpty()
-        val dump = listOf(DUMP_BEFORE, DUMP_RCD)
+        val dump = listOf(DUMP_BEFORE, DUMP_RCD, DUMP_BOUNDARY)
 
-        registerRuiComponents(project, zakadabar.rui.kotlin.plugin.RuiPluginContext(annotations, dump), configuration.getBoolean(JVMConfigurationKeys.IR))
+        registerRuiComponents(project, RuiPluginContext(annotations, dump), configuration.getBoolean(JVMConfigurationKeys.IR))
     }
 
-    fun registerRuiComponents(project: Project, configuration: zakadabar.rui.kotlin.plugin.RuiPluginContext, useIr: Boolean) {
+    fun registerRuiComponents(project: Project, configuration: RuiPluginContext, useIr: Boolean) {
 
         StorageComponentContainerContributor.registerExtension(
             project,
-            zakadabar.rui.kotlin.plugin.RuiComponentContainerContributor(configuration.annotations, useIr)
+            RuiComponentContainerContributor(configuration.annotations, useIr)
         )
         
         IrGenerationExtension.registerExtension(
             project,
-            zakadabar.rui.kotlin.plugin.RuiGenerationExtension(configuration)
+            RuiGenerationExtension(configuration)
         )
 
     }

@@ -3,7 +3,6 @@
  */
 package zakadabar.rui.kotlin.plugin.lower
 
-import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.ir.IrElement
 import org.jetbrains.kotlin.ir.declarations.IrAnonymousInitializer
 import org.jetbrains.kotlin.ir.declarations.IrField
@@ -16,12 +15,11 @@ import org.jetbrains.kotlin.psi.KtModifierListOwner
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
 
 class RuiDebugVisitor(
-    private val context: IrPluginContext,
-    private val configuration: RuiPluginContext
+    private val ruiContext: RuiPluginContext
 ) : RuiAnnotationBasedExtension, IrElementVisitorVoid {
 
     override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?): List<String> =
-        configuration.annotations
+        ruiContext.annotations
 
     override fun visitElement(element: IrElement) {
         element.acceptChildren(this, null)

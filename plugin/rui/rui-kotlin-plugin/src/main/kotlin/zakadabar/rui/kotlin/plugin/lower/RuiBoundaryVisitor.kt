@@ -3,7 +3,6 @@
  */
 package zakadabar.rui.kotlin.plugin.lower
 
-import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.ir.IrElement
 import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.expressions.IrCall
@@ -15,36 +14,41 @@ import zakadabar.rui.kotlin.plugin.RuiPluginContext
 
 /**
  * Finds the boundary between state definition and rendering parts of a RUI function.
- *
  * Entry point is [findBoundary].
- *
  */
 class RuiBoundaryVisitor(
-    private val context: IrPluginContext,
-    private val configuration: RuiPluginContext
+    private val ruiContext: RuiPluginContext
 ) : RuiAnnotationBasedExtension, IrElementVisitorVoid {
 
     var found: Boolean = false
 
     override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?): List<String> =
-        configuration.annotations
+        ruiContext.annotations
 
     /**
      * Finds the boundary between state definition and rendering parts of a RUI function.
      *
      * @return  Index of the first rendering statement in the function's
-     *          statement list or -1 if there is no rendering part.
+     *          statement list or the size of the list if there is no rendering part.
      */
     fun findBoundary(declaration: IrFunction): Int {
-        requireNotNull(declaration.body) { "only functions with block body are allowed" }
-            .statements
-            .forEachIndexed { index, irStatement ->
+
+        declaration.body?.statements?.let { statements ->
+
+            statements.forEachIndexed { index, irStatement ->
                 irStatement.acceptVoid(this)
                 if (found) {
+                    ruiContext.dumpBoundary(declaration, index)
                     return index
                 }
             }
-        return - 1
+
+            ruiContext.dumpBoundary(declaration, statements.size)
+            return statements.size
+
+        }
+
+        throw IllegalStateException("function has no body (maybe it's an expression function)")
     }
 
     override fun visitElement(element: IrElement) {
