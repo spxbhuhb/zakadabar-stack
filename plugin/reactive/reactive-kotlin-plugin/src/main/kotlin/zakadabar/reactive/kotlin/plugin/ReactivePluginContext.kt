@@ -6,7 +6,7 @@ package zakadabar.reactive.kotlin.plugin
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.ir.IrElement
 import org.jetbrains.kotlin.ir.util.dump
-import zakadabar.reactive.kotlin.plugin.lower.ReactiveControlData
+import zakadabar.reactive.kotlin.plugin.data.ReactiveCompilation
 
 class ReactivePluginContext(
     val annotations : List<String>,
@@ -14,13 +14,13 @@ class ReactivePluginContext(
 ) {
 
     lateinit var irPluginContext: IrPluginContext
-    val controlData = ReactiveControlData()
+    val controlData = ReactiveCompilation()
 
     fun dump(point : String, element : IrElement) {
         if (point in dumpPoints) println(element.dump())
     }
 
-    fun dump(point : String, data : ReactiveControlData) {
+    fun dump(point : String, data : ReactiveCompilation) {
         if (point in dumpPoints) println(data.dump())
     }
 

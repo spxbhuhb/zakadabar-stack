@@ -6,10 +6,7 @@ package zakadabar.reactive.kotlin.plugin
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
-import zakadabar.reactive.kotlin.plugin.ReactivePluginContext.Companion.DUMP_AFTER
 import zakadabar.reactive.kotlin.plugin.ReactivePluginContext.Companion.DUMP_BEFORE
-import zakadabar.reactive.kotlin.plugin.ReactivePluginContext.Companion.DUMP_RCD
-import zakadabar.reactive.kotlin.plugin.lower.ReactiveIrAnalyser
 
 internal class ReactiveIrGenerationExtension(
     private val reactiveContext: ReactivePluginContext
@@ -18,17 +15,17 @@ internal class ReactiveIrGenerationExtension(
     override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
         reactiveContext.dump(DUMP_BEFORE, moduleFragment)
 
-        reactiveContext.irPluginContext = pluginContext
-
-        moduleFragment.accept(ReactiveIrAnalyser(reactiveContext), reactiveContext.controlData)
-
-        reactiveContext.dump(DUMP_RCD, reactiveContext.controlData)
-
-        // moduleFragment.transform(ReactiveIrTransformer(pluginContext, configuration), controlData)
-
-        // moduleFragment.accept(ReactiveIrVisitor(pluginContext, configuration), controlData)
-
-        reactiveContext.dump(DUMP_AFTER, moduleFragment)
+//        reactiveContext.irPluginContext = pluginContext
+//
+//        moduleFragment.accept(TopLevelVisitor(reactiveContext), reactiveContext.controlData)
+//
+//        reactiveContext.dump(DUMP_RCD, reactiveContext.controlData)
+//
+//        moduleFragment.transform(ReactiveIrTransformer(pluginContext, reactiveContext), null)
+//
+//        moduleFragment.accept(ReactiveIrDebugVisitor(pluginContext, reactiveContext), null)
+//
+//        reactiveContext.dump(DUMP_AFTER, moduleFragment)
     }
 
 }

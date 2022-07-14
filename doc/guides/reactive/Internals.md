@@ -168,3 +168,113 @@ So, the block passed to C can actually check:
 
 Then it has to update the appropriate 
 
+
+#### IR
+
+```kotlin
+import zakadabar.reactive.core.ReactiveComponent
+
+class ReactivePrimitive(
+    var value: Int
+) : ReactiveComponent() {
+
+    init {
+        println("================    Primitive.init: " + value)
+    }
+
+    override fun patch(mask: Array<Int>) {
+        println("================    Primitive.patch: " + mask[0] + " " + value)
+    }
+}
+```
+
+```text
+MODULE_FRAGMENT name:<main>
+  FILE fqName:<root> fileName:/Users/tiz/src/zakadabar-stack/plugin/reactive/reactive-kotlin-plugin/./tmp/sources/pluginTest.kt
+  
+    CLASS CLASS name:ReactiveText modality:FINAL visibility:public superTypes:[zakadabar.reactive.core.ReactiveComponent]
+  
+      $this: VALUE_PARAMETER INSTANCE_RECEIVER name:<this> type:<root>.ReactiveText
+  
+      CONSTRUCTOR visibility:public <> () returnType:<root>.ReactiveText [primary]
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> () [primary] declared in zakadabar.reactive.core.ReactiveComponent'
+          INSTANCE_INITIALIZER_CALL classDescriptor='CLASS CLASS name:ReactiveText modality:FINAL visibility:public superTypes:[zakadabar.reactive.core.ReactiveComponent]'
+  
+      PROPERTY FAKE_OVERRIDE name:dirty visibility:public modality:OPEN [fake_override,var]
+        overridden:
+          public open dirty: kotlin.Array<kotlin.Int> [var]
+        FUN FAKE_OVERRIDE name:<get-dirty> visibility:public modality:OPEN <> ($this:zakadabar.reactive.core.ReactiveComponent) returnType:kotlin.Array<kotlin.Int> [fake_override]
+          correspondingProperty: PROPERTY FAKE_OVERRIDE name:dirty visibility:public modality:OPEN [fake_override,var]
+          overridden:
+            public open fun <get-dirty> (): kotlin.Array<kotlin.Int> declared in zakadabar.reactive.core.ReactiveComponent
+          $this: VALUE_PARAMETER name:<this> type:zakadabar.reactive.core.ReactiveComponent
+        FUN FAKE_OVERRIDE name:<set-dirty> visibility:public modality:OPEN <> ($this:zakadabar.reactive.core.ReactiveComponent, <set-?>:kotlin.Array<kotlin.Int>) returnType:kotlin.Unit [fake_override]
+          correspondingProperty: PROPERTY FAKE_OVERRIDE name:dirty visibility:public modality:OPEN [fake_override,var]
+          overridden:
+            public open fun <set-dirty> (<set-?>: kotlin.Array<kotlin.Int>): kotlin.Unit declared in zakadabar.reactive.core.ReactiveComponent
+          $this: VALUE_PARAMETER name:<this> type:zakadabar.reactive.core.ReactiveComponent
+          VALUE_PARAMETER name:<set-?> index:0 type:kotlin.Array<kotlin.Int>
+          
+      FUN FAKE_OVERRIDE name:dispose visibility:public modality:OPEN <> ($this:zakadabar.reactive.core.ReactiveComponent) returnType:kotlin.Unit [fake_override]
+        overridden:
+          public open fun dispose (): kotlin.Unit declared in zakadabar.reactive.core.ReactiveComponent
+        $this: VALUE_PARAMETER name:<this> type:zakadabar.reactive.core.ReactiveComponent
+        
+      FUN FAKE_OVERRIDE name:equals visibility:public modality:OPEN <> ($this:kotlin.Any, other:kotlin.Any?) returnType:kotlin.Boolean [fake_override,operator]
+        overridden:
+          public open fun equals (other: kotlin.Any?): kotlin.Boolean [fake_override,operator] declared in zakadabar.reactive.core.ReactiveComponent
+        $this: VALUE_PARAMETER name:<this> type:kotlin.Any
+        VALUE_PARAMETER name:other index:0 type:kotlin.Any?
+        
+      FUN FAKE_OVERRIDE name:hashCode visibility:public modality:OPEN <> ($this:kotlin.Any) returnType:kotlin.Int [fake_override]
+        overridden:
+          public open fun hashCode (): kotlin.Int [fake_override] declared in zakadabar.reactive.core.ReactiveComponent
+        $this: VALUE_PARAMETER name:<this> type:kotlin.Any
+        
+      FUN FAKE_OVERRIDE name:patch visibility:public modality:OPEN <> ($this:zakadabar.reactive.core.ReactiveComponent, mask:kotlin.Array<kotlin.Int>) returnType:kotlin.Unit [fake_override]
+        overridden:
+          public open fun patch (mask: kotlin.Array<kotlin.Int>): kotlin.Unit declared in zakadabar.reactive.core.ReactiveComponent
+        $this: VALUE_PARAMETER name:<this> type:zakadabar.reactive.core.ReactiveComponent
+        VALUE_PARAMETER name:mask index:0 type:kotlin.Array<kotlin.Int>
+        
+      FUN FAKE_OVERRIDE name:toString visibility:public modality:OPEN <> ($this:kotlin.Any) returnType:kotlin.String [fake_override]
+        overridden:
+          public open fun toString (): kotlin.String [fake_override] declared in zakadabar.reactive.core.ReactiveComponent
+        $this: VALUE_PARAMETER name:<this> type:kotlin.Any
+
+```
+
+
+ANONYMOUS_INITIALIZER isStatic=false
+BLOCK_BODY
+CALL 'public final fun <set-count> (<set-?>: kotlin.Int): kotlin.Unit declared in <root>.ReactiveTextManual' type=kotlin.Unit origin=EQ
+$this: GET_VAR '<this>: <root>.ReactiveTextManual declared in <root>.ReactiveTextManual' type=<root>.ReactiveTextManual origin=null
+<set-?>: CONST Int type=kotlin.Int value=0
+
+```text
+
+    VAR name:count type:kotlin.Int [var]
+          CONST Int type=kotlin.Int value=0
+          
+    PROPERTY name:count visibility:public modality:FINAL [var]
+        FIELD PROPERTY_BACKING_FIELD name:count type:kotlin.Int visibility:private
+          EXPRESSION_BODY
+            CONST Int type=kotlin.Int value=0
+        FUN DEFAULT_PROPERTY_ACCESSOR name:<get-count> visibility:public modality:FINAL <> ($this:<root>.ReactiveTextManual) returnType:kotlin.Int
+          correspondingProperty: PROPERTY name:count visibility:public modality:FINAL [var]
+          $this: VALUE_PARAMETER name:<this> type:<root>.ReactiveTextManual
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from='public final fun <get-count> (): kotlin.Int declared in <root>.ReactiveTextManual'
+              GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:count type:kotlin.Int visibility:private' type=kotlin.Int origin=null
+                receiver: GET_VAR '<this>: <root>.ReactiveTextManual declared in <root>.ReactiveTextManual.<get-count>' type=<root>.ReactiveTextManual origin=null
+        FUN DEFAULT_PROPERTY_ACCESSOR name:<set-count> visibility:public modality:FINAL <> ($this:<root>.ReactiveTextManual, <set-?>:kotlin.Int) returnType:kotlin.Unit
+          correspondingProperty: PROPERTY name:count visibility:public modality:FINAL [var]
+          $this: VALUE_PARAMETER name:<this> type:<root>.ReactiveTextManual
+          VALUE_PARAMETER name:<set-?> index:0 type:kotlin.Int
+          BLOCK_BODY
+            SET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:count type:kotlin.Int visibility:private' type=kotlin.Unit origin=null
+              receiver: GET_VAR '<this>: <root>.ReactiveTextManual declared in <root>.ReactiveTextManual.<set-count>' type=<root>.ReactiveTextManual origin=null
+              value: GET_VAR '<set-?>: kotlin.Int declared in <root>.ReactiveTextManual.<set-count>' type=kotlin.Int origin=null
+
+```

@@ -19,22 +19,30 @@ package zakadabar.reactive.kotlin.plugin
 import com.tschuchort.compiletesting.KotlinCompilation
 import com.tschuchort.compiletesting.SourceFile
 import org.junit.Test
+import java.io.File
 import kotlin.test.assertEquals
 
 val basic = """
     import zakadabar.reactive.core.Reactive
-    import zakadabar.reactive.core.ReactiveState
-    import zakadabar.reactive.core.ReactiveContext
-    import zakadabar.reactive.core.optimize
+    import zakadabar.reactive.core.ReactiveComponent
 
     @Reactive
-    fun d() { 
-        c(12) 
+    fun Text() { 
+       var count = 0
     }
-
-    @Reactive
-    fun c(a : Int) { 
-        println("called c(" + a.toString() + ")")
+ 
+    class ReactiveTextManual : ReactiveComponent() {
+        var a = 0
+        var count : Int
+        init {
+            count = 0
+        }
+        
+        inner class ReactiveTextManualInner : ReactiveComponent() {
+            init {
+                count = 1
+            }
+        }
     }
 """.trimIndent()
 
@@ -100,18 +108,12 @@ val closure = """
 """.trimIndent()
 
 val dump = """
-import zakadabar.reactive.core.ReactiveState
-import zakadabar.reactive.core.optimize
-import zakadabar.reactive.core.lastChildCurrentToFuture
+import zakadabar.reactive.core.ReactiveComponent
 
-fun B(value: Int, callSiteOffset: Int, parentState: ReactiveState) {
-    val myState = optimize(callSiteOffset, parentState, value)
-    if (myState == null) return
-
-    parentState.future.last().handle = "B"
-
-    lastChildCurrentToFuture(parentState)
+class ReactiveText : ReactiveComponent() {
+    
 }
+
 """.trimIndent()
 
 val small2 = """
@@ -201,7 +203,7 @@ val run = """
 
 class IrPluginTest {
 
-    fun compile(source : String) {
+    fun compile(source: String) {
         val result = compile(SourceFile.kotlin("pluginTest.kt", source))
         assertEquals(KotlinCompilation.ExitCode.OK, result.exitCode)
     }
@@ -217,6 +219,9 @@ class IrPluginTest {
 
     @Test
     fun closure() = compile(closure)
+
+    @Test
+    fun dump() = compile(dump)
 
     // @Test
     fun run() {
@@ -241,10 +246,20 @@ class IrPluginTest {
 
 fun compile(vararg sourceFiles: SourceFile): KotlinCompilation.Result {
     return KotlinCompilation().apply {
-        // workingDir = File("/Users/tiz/src/kotlin-compiler-plugin-poc/plugin-test")
+        workingDir = File("./tmp")
         sources = sourceFiles.toList()
         useIR = true
         compilerPlugins = listOf(ReactiveComponentRegistrar())
         inheritClassPath = true
     }.compile()
+        .apply {
+            println("======== Compiled files ========")
+            this.compiledClassAndResourceFiles.forEach {
+                println(it)
+            }
+            println("======== Generated files ========")
+            this.generatedFiles.forEach {
+                println(it)
+            }
+        }
 }
