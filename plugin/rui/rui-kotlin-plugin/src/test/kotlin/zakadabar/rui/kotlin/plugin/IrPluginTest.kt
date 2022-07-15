@@ -29,21 +29,33 @@ val basic = """
     @Rui
     fun Text(p1 : Int) { 
        var bb = 0
-       var count = bb
        println(bb)
+       if (bb == 1) {
+          var bb = "hello"
+          println(bb)
+       } else {
+           println(bb)
+       }
+       fun onClick() {
+           bb = 1
+       }
     }
  
     class ReactiveTextManual(
        var p1 : Int
     ) : RuiComponentBase() {
 
-       var bb : Int
-       var count : Int
+       var bb : Int = 0
+       //var count : Int
        
        init {
-           bb = 0
-           count = bb
-           println(bb)
+           var bb = "hello"
+           //count = bb
+           //println(bb)
+           fun onClick() {
+               this.bb = 1
+               invalidate(0)
+           }
        }
     }
 """.trimIndent()

@@ -3,7 +3,6 @@
  */
 package zakadabar.rui.kotlin.plugin.builder
 
-import org.jetbrains.kotlin.backend.common.deepCopyWithVariables
 import org.jetbrains.kotlin.backend.common.ir.addFakeOverrides
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
 import org.jetbrains.kotlin.descriptors.ClassKind
@@ -15,12 +14,11 @@ import org.jetbrains.kotlin.ir.builders.irGet
 import org.jetbrains.kotlin.ir.builders.irSetField
 import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.declarations.impl.IrFactoryImpl
-import org.jetbrains.kotlin.ir.expressions.IrBlockBody
 import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
-import org.jetbrains.kotlin.ir.expressions.impl.IrCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrDelegatingConstructorCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrInstanceInitializerCallImpl
+import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.impl.IrAnonymousInitializerSymbolImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrValueParameterSymbolImpl
 import org.jetbrains.kotlin.ir.types.IrType
@@ -33,12 +31,14 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.util.capitalizeDecapitalize.capitalizeAsciiOnly
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
-import zakadabar.rui.kotlin.plugin.data.RuiVariable
 
+/**
+ * Represents the building process of one Rui class.
+ */
 class RuiClassBuilder(
     private val ruiContext: RuiPluginContext,
-    val original : IrFunction,
-    val boundary : Int
+    val original: IrFunction,
+    val boundary: Int
 ) {
 
     val irContext = ruiContext.irPluginContext
@@ -49,11 +49,28 @@ class RuiClassBuilder(
     val ruiComponentClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "core", "RuiComponentBase"))) !!
     val ruiComponentType = ruiComponentClass.typeWith()
 
-    lateinit var irClass : IrClass
+    lateinit var irClass: IrClass
+    lateinit var constructor: IrConstructor
+    lateinit var initializer: IrAnonymousInitializer
+    lateinit var invalidate: IrSimpleFunctionSymbol
 
-    val properties = mutableMapOf<String, IrProperty>()
+    /**
+     * Variables that define the state of the component. These come from two sources:
+     * parameters and top-level variables of the original function. Each variable
+     * has an `index` that is the bit number in `dirty`.
+     *
+     * Key of the map is the property identifier.
+     *
+     * To add a property, use [addStateVariable], to get one use [getStateVariable].
+     */
+    private val stateVariables = mutableMapOf<String, RuiStateVariable>()
 
-    fun build(builders : RuiClassBuilder.() -> Unit): IrClass {
+    class RuiStateVariable(
+        val irProperty: IrProperty,
+        val index: Int
+    )
+
+    fun build(builders: RuiClassBuilder.() -> Unit): IrClass {
         return IrFactoryImpl.buildClass {
 
             kind = ClassKind.CLASS
@@ -70,63 +87,67 @@ class RuiClassBuilder(
                 thisOrigin = IrDeclarationOrigin.INSTANCE_RECEIVER
             )
 
-            builders()
+            declareConstructor()
+
+            declareInitializer()
 
             irClass.addFakeOverrides(IrTypeSystemContextImpl(irContext.irBuiltIns))
+
+            getInvalidate()
+
+            builders()
         }
     }
 
-    internal fun addConstructor() : IrConstructor {
+    internal fun getInvalidate() {
+        invalidate = irClass.declarations
+            .first { it is IrOverridableMember && it.name.identifier == "invalidate" }
+            .symbol as IrSimpleFunctionSymbol
+    }
 
-        irClass.addConstructor {
-            isPrimary = true
-            returnType = irClass.typeWith()
-        }.apply {
+    internal fun declareConstructor() {
 
-            body = irFactory.createBlockBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET).apply {
+        constructor =
 
-                statements += IrDelegatingConstructorCallImpl.fromSymbolOwner(
-                    SYNTHETIC_OFFSET,
-                    SYNTHETIC_OFFSET,
-                    ruiComponentType,
-                    ruiComponentClass.constructors.first()
-                )
+            irClass.addConstructor {
+                isPrimary = true
+                returnType = irClass.typeWith()
+            }.apply {
 
-                statements += IrInstanceInitializerCallImpl(
-                    SYNTHETIC_OFFSET,
-                    SYNTHETIC_OFFSET,
-                    irClass.symbol,
-                    unitType
-                )
+                body = irFactory.createBlockBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET).apply {
+
+                    statements += IrDelegatingConstructorCallImpl.fromSymbolOwner(
+                        SYNTHETIC_OFFSET,
+                        SYNTHETIC_OFFSET,
+                        ruiComponentType,
+                        ruiComponentClass.constructors.first()
+                    )
+
+                    statements += IrInstanceInitializerCallImpl(
+                        SYNTHETIC_OFFSET,
+                        SYNTHETIC_OFFSET,
+                        irClass.symbol,
+                        unitType
+                    )
+                }
+
             }
-
-            return this
-        }
     }
 
-    internal fun addInitializer() : IrAnonymousInitializer {
-        irFactory.createAnonymousInitializer(
-            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            origin = IrDeclarationOrigin.DEFINED,
-            symbol = IrAnonymousInitializerSymbolImpl(),
-            isStatic = false
-        ).apply {
-            parent = irClass
-            irClass.declarations += this
-            body = irFactory.createBlockBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET)
-            return this
-        }
-    }
+    internal fun declareInitializer() {
 
-    private fun IrBlockBody.addVariableInitializer(irClass: IrClass, rVariable: RuiVariable) {
-        val irVariable = rVariable.irVariable
+        initializer =
 
-        statements += IrCallImpl.fromSymbolOwner(
-            irVariable.startOffset, irVariable.endOffset, rVariable.property.setter!!.symbol
-        ).apply {
-            dispatchReceiver = IrGetValueImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, irClass.thisReceiver!!.symbol)
-            putValueArgument(0, irVariable.initializer!!.deepCopyWithVariables())
-        }
+            irFactory.createAnonymousInitializer(
+                SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+                origin = IrDeclarationOrigin.DEFINED,
+                symbol = IrAnonymousInitializerSymbolImpl(),
+                isStatic = false
+            ).apply {
+                parent = irClass
+                irClass.declarations += this
+                body = irFactory.createBlockBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET)
+            }
     }
 
     internal fun IrClass.declareThisReceiverParameter(
@@ -136,28 +157,28 @@ class RuiClassBuilder(
         endOffset: Int = this.endOffset,
         name: Name = SpecialNames.THIS
     ) {
-        thisReceiver = irFactory.createValueParameter(
-            startOffset,
-            endOffset,
-            thisOrigin,
-            IrValueParameterSymbolImpl(),
-            name,
-            UNDEFINED_PARAMETER_INDEX,
-            thisType,
-            varargElementType = null,
-            isCrossinline = false,
-            isNoinline = false,
-            isHidden = false,
-            isAssignable = false
-        ).apply {
-            this.parent = this@declareThisReceiverParameter
-        }
+
+        thisReceiver =
+
+            irFactory.createValueParameter(
+                startOffset,
+                endOffset,
+                thisOrigin,
+                IrValueParameterSymbolImpl(),
+                name,
+                UNDEFINED_PARAMETER_INDEX,
+                thisType,
+                varargElementType = null,
+                isCrossinline = false,
+                isNoinline = false,
+                isHidden = false,
+                isAssignable = false
+            ).apply {
+                this.parent = this@declareThisReceiverParameter
+            }
     }
 
-    /**
-     * Adds a top-level variable
-     */
-    internal fun addProperty(irVariable: IrVariable) : IrProperty {
+    internal fun addStateVariable(irVariable: IrVariable): IrProperty {
 
         val field = irFactory.buildField {
             name = irVariable.name
@@ -176,13 +197,13 @@ class RuiClassBuilder(
             backingField = field
             addDefaultGetter(irClass, irContext.irBuiltIns)
             addDefaultSetter(field)
-            properties[name.identifier] = this
+            stateVariables[name.identifier] = RuiStateVariable(this, stateVariables.size)
             return this
         }
 
     }
 
-    internal fun addProperty(irValueParameter: IrValueParameter) {
+    internal fun addStateVariable(irValueParameter: IrValueParameter) {
 
         val field = irFactory.buildField {
             name = irValueParameter.name
@@ -206,10 +227,12 @@ class RuiClassBuilder(
             backingField = field
             addDefaultGetter(irClass, irContext.irBuiltIns)
             addDefaultSetter(field)
-            properties[name.identifier] = this
+            stateVariables[name.identifier] = RuiStateVariable(this, stateVariables.size)
         }
 
     }
+
+    internal fun getStateVariable(identifier: String) = stateVariables[identifier]
 
     internal fun IrProperty.addDefaultSetter(field: IrField) {
         val prop = this

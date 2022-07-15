@@ -9,8 +9,15 @@ package zakadabar.rui.core
 open class RuiComponentBase {
 
     open var dirty = arrayOf(0)
-
     open fun patch(mask: Array<Int>) {}
     open fun dispose() {}
 
+    /**
+     * Invalidates one state variable by its index.
+     */
+    open fun invalidate(index : Int) {
+        val arrayIndex = index / 32
+        val bitIndex = index % 32
+        dirty[arrayIndex] = dirty[arrayIndex] or bitIndex
+    }
 }
