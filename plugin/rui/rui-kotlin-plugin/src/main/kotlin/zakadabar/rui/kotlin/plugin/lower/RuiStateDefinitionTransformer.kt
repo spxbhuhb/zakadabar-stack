@@ -13,10 +13,9 @@ import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrSetFieldImpl
 import org.jetbrains.kotlin.ir.transformStatement
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
-import org.jetbrains.kotlin.ir.util.statements
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
-import zakadabar.rui.kotlin.plugin.builder.RuiClassBuilder
+import zakadabar.rui.kotlin.plugin.builder.RuiClassCompilation
 import zakadabar.rui.kotlin.plugin.util.Stack
 import zakadabar.rui.kotlin.plugin.util.peek
 import zakadabar.rui.kotlin.plugin.util.pop
@@ -39,20 +38,143 @@ import zakadabar.rui.kotlin.plugin.util.push
  */
 class RuiStateDefinitionTransformer(
     private val ruiContext: RuiPluginContext,
-    private val builder: RuiClassBuilder
+    private val compilation: RuiClassCompilation
 ) : IrElementTransformerVoidWithContext(), RuiAnnotationBasedExtension {
 
     override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?): List<String> =
         ruiContext.annotations
 
-    val irContext = ruiContext.irPluginContext
-
-    val unitType = irContext.irBuiltIns.unitType
-    val intType = irContext.irBuiltIns.intType
-
-    val irClass = builder.irClass
+    val irClass = compilation.irClass
     val thisReceiver = irClass.thisReceiver?.symbol ?: throw IllegalStateException("generated class receiver is null")
-    val original = builder.original
+    val original = compilation.original
+
+    fun buildStateDefinition() {
+
+        // parameters of the function into constructor parameters and properties
+
+        original.valueParameters.forEach { original ->
+            compilation.constructor.addValueParameter {
+                name = original.name
+                type = original.type
+                varargElementType = original.varargElementType
+            }.also { new ->
+                compilation.addStateVariable(new)
+            }
+        }
+
+        // statements of the function into properties and statements in constructor
+
+        compilation.originalStatements.let { statements ->
+            statements
+                .subList(0, compilation.boundary)
+                .forEach { irStatement ->
+                    when (irStatement) {
+                        is IrVariable -> addStateVariable(irStatement)
+                        else -> compilation.initializer.body.statements += irStatement.transformStatement(this)
+                    }
+                }
+        }
+    }
+
+    override fun visitVariable(declaration: IrVariable): IrStatement {
+        blockStack.peek().variables += declaration.name.identifier
+        return super.visitVariable(declaration)
+    }
+
+    /**
+     * Adds a class property and initializer for this variable.
+     *
+     * Transforms the initializer code as it may contain references to other
+     * variables processed before.
+     */
+    private fun addStateVariable(irVariable: IrVariable) {
+        blockStack[0].variables += irVariable.name.identifier
+
+        compilation.addStateVariable(irVariable).also { property ->
+
+            irVariable.initializer?.let {
+
+                val field = checkNotNull(property.backingField)
+
+                compilation.initializer.body.statements += IrSetFieldImpl(
+                    SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+                    symbol = field.symbol,
+                    type = field.type,
+                    receiver = irGetReceiver(),
+                    value = it.transform(this, null),
+                    origin = IrStatementOrigin.INITIALIZE_FIELD
+                )
+            }
+        }
+
+    }
+
+    override fun visitBlock(expression: IrBlock): IrExpression {
+        blockStack.push(BlockStackEntry())
+        val result = super.visitBlock(expression)
+        blockStack.pop()
+        return result
+    }
+
+    /**
+     * Replaces local variable access with class property access.
+     *
+     * Replaces only top level function variables. Others (one defined in a block)
+     * are not reactive, and should not be replaced.
+     */
+    override fun visitGetValue(expression: IrGetValue): IrExpression {
+
+        val name = expression.symbol.owner.name.identifier
+
+        if (! name.isStateVariable()) return super.visitGetValue(expression)
+
+        val stateVariable = compilation.getStateVariable(name) ?: throw IllegalStateException("missing state variable $name in ${original.name}")
+
+        IrCallImpl(
+            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+            expression.type,
+            stateVariable.irProperty.getter !!.symbol,
+            0, 0,
+        ).apply {
+            dispatchReceiver = irGetReceiver()
+            return this
+        }
+    }
+
+    /**
+     * Replaces local variable change with class property change.
+     *
+     * Replaces only top level function variables. Others (one defined in a block)
+     * are not reactive, and should not be replaced.
+     */
+    override fun visitSetValue(expression: IrSetValue): IrExpression {
+
+        val name = expression.symbol.owner.name.identifier
+
+        if (! name.isStateVariable()) return super.visitSetValue(expression)
+
+        val stateVariable = compilation.getStateVariable(name) ?: throw IllegalStateException("missing state variable $name in ${original.name}")
+
+        val property = stateVariable.irProperty
+        val field = property.backingField !!
+
+        IrCallImpl(
+            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+            field.type,
+            property.setter !!.symbol,
+            0, 1
+        ).apply {
+
+            dispatchReceiver = irGetReceiver()
+            putValueArgument(0, expression.value)
+
+            return this
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Block stack
+    // -------------------------------------------------------------------------
 
     /**
      * This stack is used to keep track of variable declarations. Only top level
@@ -95,133 +217,9 @@ class RuiStateDefinitionTransformer(
         val variables: MutableList<String> = mutableListOf()
     )
 
-    /**
-     * Processes the state definition part of the original function code.
-     */
-    fun buildStateDefinition() {
-
-        // parameters of the function into constructor parameters and properties
-
-        original.valueParameters.forEach { original ->
-            builder.constructor.addValueParameter {
-                name = original.name
-                type = original.type
-                varargElementType = original.varargElementType
-            }.also { new ->
-                builder.addStateVariable(new)
-            }
-        }
-
-        // statements of the function into properties and statements in constructor
-
-        original.body?.statements?.let { statements ->
-            statements
-                .subList(0, builder.boundary)
-                .forEach { irStatement ->
-                    when (irStatement) {
-                        is IrVariable -> addStateVariable(irStatement)
-                        else -> builder.initializer.body.statements += irStatement.transformStatement(this)
-                    }
-                }
-        }
-    }
-
-    override fun visitVariable(declaration: IrVariable): IrStatement {
-        blockStack.peek().variables += declaration.name.identifier
-        return super.visitVariable(declaration)
-    }
-
-    /**
-     * Adds a class property and initializer for this variable.
-     *
-     * Transforms the initializer code as it may contain references to other
-     * variables processed before.
-     */
-    private fun addStateVariable(irVariable: IrVariable) {
-        blockStack[0].variables += irVariable.name.identifier
-
-        builder.addStateVariable(irVariable).also { property ->
-
-            irVariable.initializer?.let {
-
-                val field = checkNotNull(property.backingField)
-
-                builder.initializer.body.statements += IrSetFieldImpl(
-                    SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-                    symbol = field.symbol,
-                    type = field.type,
-                    receiver = irGetReceiver(),
-                    value = it.transform(this, null),
-                    origin = IrStatementOrigin.INITIALIZE_FIELD
-                )
-            }
-        }
-
-    }
-
-    override fun visitBlock(expression: IrBlock): IrExpression {
-        blockStack.push(BlockStackEntry())
-        val result = super.visitBlock(expression)
-        blockStack.pop()
-        return result
-    }
-
-
-    /**
-     * Replaces local variable access with class property access.
-     *
-     * Replaces only top level function variables. Others (one defined in a block)
-     * are not reactive, and should not be replaced.
-     */
-    override fun visitGetValue(expression: IrGetValue): IrExpression {
-
-        val name = expression.symbol.owner.name.identifier
-
-        if (! name.isStateVariable()) return super.visitGetValue(expression)
-
-        val stateVariable = builder.getStateVariable(name) ?: throw IllegalStateException("missing state variable $name in ${original.name}")
-
-        IrCallImpl(
-            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            expression.type,
-            stateVariable.irProperty.getter !!.symbol,
-            0, 0,
-        ).apply {
-            dispatchReceiver = irGetReceiver()
-            return this
-        }
-    }
-
-    /**
-     * Replaces local variable change with class property change.
-     *
-     * Replaces only top level function variables. Others (one defined in a block)
-     * are not reactive, and should not be replaced.
-     */
-    override fun visitSetValue(expression: IrSetValue): IrExpression {
-
-        val name = expression.symbol.owner.name.identifier
-
-        if (! name.isStateVariable()) return super.visitSetValue(expression)
-
-        val stateVariable = builder.getStateVariable(name) ?: throw IllegalStateException("missing state variable $name in ${original.name}")
-
-        val property = stateVariable.irProperty
-        val field = property.backingField !!
-
-        IrCallImpl(
-            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            field.type,
-            property.setter !!.symbol,
-            0, 1
-        ).apply {
-
-            dispatchReceiver = irGetReceiver()
-            putValueArgument(0, expression.value)
-
-            return this
-        }
-    }
+    // -------------------------------------------------------------------------
+    // Build utilities
+    // -------------------------------------------------------------------------
 
     fun irGetReceiver() = IrGetValueImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, thisReceiver)
 

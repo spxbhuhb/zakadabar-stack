@@ -5,10 +5,14 @@ package zakadabar.rui.kotlin.plugin
 
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.ir.IrElement
+import org.jetbrains.kotlin.ir.declarations.IrClass
 import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.util.dump
 import org.jetbrains.kotlin.ir.util.fqNameWhenAvailable
-import zakadabar.rui.kotlin.plugin.data.RuiCompilation
+import org.jetbrains.kotlin.ir.util.kotlinFqName
+import org.jetbrains.kotlin.name.FqName
+import zakadabar.rui.kotlin.plugin.builder.RuiClassCompilation
+import zakadabar.rui.kotlin.plugin.lower.toRuiClassName
 
 class RuiPluginContext(
     val annotations : List<String>,
@@ -16,14 +20,18 @@ class RuiPluginContext(
 ) {
 
     lateinit var irPluginContext: IrPluginContext
-    val controlData = RuiCompilation()
+
+    val classBuilders = mutableMapOf<String, RuiClassCompilation>()
+
+    fun ruiClassFor(irFunction : IrFunction) : IrClass {
+        val segments = irFunction.kotlinFqName.pathSegments()
+        segments[segments.lastIndex] = segments.last().toRuiClassName()
+        val classFqName = FqName.fromSegments(segments.map { it.toString() })
+        return checkNotNull(classBuilders[classFqName.asString()]?.irClass) { "missing Rui class for ${irFunction.symbol}" }
+    }
 
     fun dump(point : String, element : IrElement) {
         if (point in dumpPoints) println(element.dump())
-    }
-
-    fun dump(point : String, data : RuiCompilation) {
-        if (point in dumpPoints) println(data.dump())
     }
 
     fun dumpBoundary(declaration: IrFunction, boundary: Int) {

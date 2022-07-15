@@ -6,7 +6,9 @@ package zakadabar.rui.kotlin.plugin
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
+import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_AFTER
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_BEFORE
+import zakadabar.rui.kotlin.plugin.lower.RuiCompilationPhase
 import zakadabar.rui.kotlin.plugin.lower.RuiFunctionVisitor
 
 internal class RuiGenerationExtension(
@@ -17,7 +19,9 @@ internal class RuiGenerationExtension(
         ruiPluginContext.irPluginContext = pluginContext
         ruiPluginContext.dump(DUMP_BEFORE, moduleFragment)
 
-        moduleFragment.accept(RuiFunctionVisitor(ruiPluginContext), null)
+        moduleFragment.accept(RuiFunctionVisitor(ruiPluginContext, RuiCompilationPhase.StateDefinition), null)
+
+        moduleFragment.accept(RuiFunctionVisitor(ruiPluginContext, RuiCompilationPhase.Rendering), null)
 
 //        reactiveContext.irPluginContext = pluginContext
 //
@@ -29,7 +33,7 @@ internal class RuiGenerationExtension(
 //
 //        moduleFragment.accept(ReactiveIrDebugVisitor(pluginContext, reactiveContext), null)
 //
-//        reactiveContext.dump(DUMP_AFTER, moduleFragment)
+        ruiPluginContext.dump(DUMP_AFTER, moduleFragment)
     }
 
 }

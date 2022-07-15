@@ -26,37 +26,27 @@ val basic = """
     import zakadabar.rui.core.Rui
     import zakadabar.rui.core.RuiComponentBase
 
-    @Rui
-    fun Text(p1 : Int) { 
-       var bb = 0
-       println(bb)
-       if (bb == 1) {
-          var bb = "hello"
-          println(bb)
-       } else {
-           println(bb)
-       }
-       fun onClick() {
-           bb = 1
-       }
-    }
+//    @Rui
+//    fun Text(p1 : Int) { 
+//       var bb = 0
+//       println(bb)
+//       if (bb == 1) {
+//          var bb = "hello"
+//          println(bb)
+//       } else {
+//           println(bb)
+//       }
+//       fun onClick() {
+//           bb = 1
+//       }
+//        Text(1)
+//    }
  
-    class ReactiveTextManual(
-       var p1 : Int
-    ) : RuiComponentBase() {
+    class ReactiveTextManual : RuiComponentBase() {
 
-       var bb : Int = 0
-       //var count : Int
-       
-       init {
-           var bb = "hello"
-           //count = bb
-           //println(bb)
-           fun onClick() {
-               this.bb = 1
-               invalidate(0)
-           }
-       }
+        override fun create() {
+        }
+        
     }
 """.trimIndent()
 

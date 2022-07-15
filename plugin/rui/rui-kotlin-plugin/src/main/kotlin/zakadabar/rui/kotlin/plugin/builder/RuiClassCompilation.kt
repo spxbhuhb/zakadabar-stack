@@ -5,6 +5,7 @@ package zakadabar.rui.kotlin.plugin.builder
 
 import org.jetbrains.kotlin.backend.common.ir.addFakeOverrides
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
+import org.jetbrains.kotlin.backend.jvm.functionByName
 import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.descriptors.DescriptorVisibilities
 import org.jetbrains.kotlin.descriptors.Modality
@@ -13,29 +14,27 @@ import org.jetbrains.kotlin.ir.builders.irBlockBody
 import org.jetbrains.kotlin.ir.builders.irGet
 import org.jetbrains.kotlin.ir.builders.irSetField
 import org.jetbrains.kotlin.ir.declarations.*
-import org.jetbrains.kotlin.ir.declarations.impl.IrFactoryImpl
 import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
 import org.jetbrains.kotlin.ir.expressions.impl.IrDelegatingConstructorCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrInstanceInitializerCallImpl
+import org.jetbrains.kotlin.ir.symbols.IrClassSymbol
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.impl.IrAnonymousInitializerSymbolImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrValueParameterSymbolImpl
-import org.jetbrains.kotlin.ir.types.IrType
-import org.jetbrains.kotlin.ir.types.IrTypeSystemContextImpl
+import org.jetbrains.kotlin.ir.types.*
 import org.jetbrains.kotlin.ir.types.impl.IrSimpleTypeImpl
-import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.*
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
-import org.jetbrains.kotlin.util.capitalizeDecapitalize.capitalizeAsciiOnly
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
+import zakadabar.rui.kotlin.plugin.lower.toRuiClassName
 
 /**
- * Represents the building process of one Rui class.
+ * Represents the compilation of one Rui class.
  */
-class RuiClassBuilder(
+class RuiClassCompilation(
     private val ruiContext: RuiPluginContext,
     val original: IrFunction,
     val boundary: Int
@@ -52,7 +51,12 @@ class RuiClassBuilder(
     lateinit var irClass: IrClass
     lateinit var constructor: IrConstructor
     lateinit var initializer: IrAnonymousInitializer
+    lateinit var create: IrFunction
+    lateinit var patch: IrFunction
+    lateinit var dispose: IrFunction
     lateinit var invalidate: IrSimpleFunctionSymbol
+
+    val originalStatements = checkNotNull(original.body?.statements) { "only block functions are allowed" }
 
     /**
      * Variables that define the state of the component. These come from two sources:
@@ -70,39 +74,84 @@ class RuiClassBuilder(
         val index: Int
     )
 
-    fun build(builders: RuiClassBuilder.() -> Unit): IrClass {
-        return IrFactoryImpl.buildClass {
+    /**
+     * Slots that define the rendering of the component.
+     *
+     * Key of the map is the slot name, generated from the name of the
+     * called function.
+     *
+     * To add a slot, use [addComponentSlot].
+     */
+    private val componentSlots = mutableMapOf<String, RuiComponentSlot>()
 
-            kind = ClassKind.CLASS
-            name = Name.identifier("Rui" + original.name.identifier.capitalizeAsciiOnly())
+    class RuiComponentSlot(
+        val irProperty: IrProperty,
+        val index: Int,
+        val referencedClass: IrClassSymbol
+    )
 
-        }.apply {
+    fun build(builders: RuiClassCompilation.() -> Unit) {
 
-            irClass = this
-            parent = original.file
-            superTypes = listOf(ruiComponentType)
+        irClass =
 
-            declareThisReceiverParameter(
-                thisType = IrSimpleTypeImpl(symbol, false, emptyList(), emptyList()),
-                thisOrigin = IrDeclarationOrigin.INSTANCE_RECEIVER
-            )
+            irContext.irFactory.buildClass {
 
-            declareConstructor()
+                kind = ClassKind.CLASS
+                name = original.name.toRuiClassName()
 
-            declareInitializer()
+            }.apply {
 
-            irClass.addFakeOverrides(IrTypeSystemContextImpl(irContext.irBuiltIns))
+                irClass = this
+                parent = original.file
+                superTypes = listOf(ruiComponentType)
 
-            getInvalidate()
+                declareThisReceiverParameter(
+                    thisType = IrSimpleTypeImpl(symbol, false, emptyList(), emptyList()),
+                    thisOrigin = IrDeclarationOrigin.INSTANCE_RECEIVER
+                )
 
-            builders()
-        }
+                declareConstructor()
+
+                declareInitializer()
+
+                declareOverrides()
+
+                irClass.addFakeOverrides(IrTypeSystemContextImpl(irContext.irBuiltIns))
+
+                getInvalidate()
+
+                builders()
+            }
+
+        ruiContext.classBuilders[irClass.kotlinFqName.asString()] = this
     }
 
-    internal fun getInvalidate() {
-        invalidate = irClass.declarations
-            .first { it is IrOverridableMember && it.name.identifier == "invalidate" }
-            .symbol as IrSimpleFunctionSymbol
+    internal fun IrClass.declareThisReceiverParameter(
+        thisType: IrType,
+        thisOrigin: IrDeclarationOrigin,
+        startOffset: Int = this.startOffset,
+        endOffset: Int = this.endOffset,
+        name: Name = SpecialNames.THIS
+    ) {
+
+        thisReceiver =
+
+            irFactory.createValueParameter(
+                startOffset,
+                endOffset,
+                thisOrigin,
+                IrValueParameterSymbolImpl(),
+                name,
+                UNDEFINED_PARAMETER_INDEX,
+                thisType,
+                varargElementType = null,
+                isCrossinline = false,
+                isNoinline = false,
+                isHidden = false,
+                isAssignable = false
+            ).apply {
+                this.parent = this@declareThisReceiverParameter
+            }
     }
 
     internal fun declareConstructor() {
@@ -150,33 +199,33 @@ class RuiClassBuilder(
             }
     }
 
-    internal fun IrClass.declareThisReceiverParameter(
-        thisType: IrType,
-        thisOrigin: IrDeclarationOrigin,
-        startOffset: Int = this.startOffset,
-        endOffset: Int = this.endOffset,
-        name: Name = SpecialNames.THIS
-    ) {
-
-        thisReceiver =
-
-            irFactory.createValueParameter(
-                startOffset,
-                endOffset,
-                thisOrigin,
-                IrValueParameterSymbolImpl(),
-                name,
-                UNDEFINED_PARAMETER_INDEX,
-                thisType,
-                varargElementType = null,
-                isCrossinline = false,
-                isNoinline = false,
-                isHidden = false,
-                isAssignable = false
-            ).apply {
-                this.parent = this@declareThisReceiverParameter
-            }
+    internal fun declareOverrides() {
+        create = declareOverride("create")
+        patch = declareOverride("patch")
+        dispose = declareOverride("dispose")
     }
+
+    private fun declareOverride(funName: String) : IrFunction {
+        return irFactory.addFunction(irClass) {
+            name = Name.identifier(funName)
+            visibility = DescriptorVisibilities.PUBLIC
+            modality = Modality.OPEN
+            returnType = unitType
+        }.apply {
+            overriddenSymbols = listOf(ruiComponentClass.functionByName(funName))
+            irFactory.createBlockBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET)
+        }
+    }
+
+    internal fun getInvalidate() {
+        invalidate = irClass.declarations
+            .first { it is IrOverridableMember && it.name.identifier == "invalidate" }
+            .symbol as IrSimpleFunctionSymbol
+    }
+
+    // -------------------------------------------------------------------------
+    // State variables
+    // -------------------------------------------------------------------------
 
     internal fun addStateVariable(irVariable: IrVariable): IrProperty {
 
@@ -267,6 +316,45 @@ class RuiClassBuilder(
                 )
             }
         }
+    }
+
+    // -------------------------------------------------------------------------
+    // Component slots
+    // -------------------------------------------------------------------------
+
+    internal fun addComponentSlot(classFqName: String) : RuiComponentSlot {
+
+        val fqName = FqName(classFqName)
+        // FIXME this is confused because I don't know how to register a class into the IR context
+        val referencedClass = irContext.referenceClass(fqName)
+            ?: ruiContext.classBuilders[classFqName]?.irClass?.symbol
+            ?: throw IllegalStateException("missing Rui class for $classFqName")
+
+        val field = irFactory.buildField {
+            name = Name.identifier("${fqName.shortName()}\$${componentSlots.size}")
+            type = referencedClass.defaultType.makeNullable()
+            origin = IrDeclarationOrigin.PROPERTY_BACKING_FIELD
+            visibility = DescriptorVisibilities.PRIVATE
+        }.apply {
+            parent = irClass
+        }
+
+        val property = irClass.addProperty {
+            this.name = field.name
+            isVar = true
+        }.apply {
+            backingField = field
+            addDefaultGetter(irClass, irContext.irBuiltIns)
+            addDefaultSetter(field)
+        }
+
+        val slot = RuiComponentSlot(property, componentSlots.size, referencedClass)
+        componentSlots[property.name.identifier] = slot
+
+        return slot
+    }
+
+    fun addCreateStatement() {
     }
 
 }

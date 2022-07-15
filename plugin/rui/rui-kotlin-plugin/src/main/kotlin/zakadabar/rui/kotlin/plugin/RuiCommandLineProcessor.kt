@@ -24,14 +24,14 @@ class RuiCommandLineProcessor : CommandLineProcessor {
 
     override val pluginId = zakadabar.rui.kotlin.plugin.RuiCommandLineProcessor.Companion.PLUGIN_ID
     override val pluginOptions = listOf(
-        zakadabar.rui.kotlin.plugin.RuiCommandLineProcessor.Companion.OPTION_ANNOTATION,
-        zakadabar.rui.kotlin.plugin.RuiCommandLineProcessor.Companion.OPTION_DUMP
+        OPTION_ANNOTATION,
+        OPTION_DUMP
     )
 
     override fun processOption(option: AbstractCliOption, value: String, configuration: CompilerConfiguration) {
         return when (option) {
-            zakadabar.rui.kotlin.plugin.RuiCommandLineProcessor.Companion.OPTION_ANNOTATION -> configuration.appendList(zakadabar.rui.kotlin.plugin.RuiConfigurationKeys.ANNOTATION, value)
-            zakadabar.rui.kotlin.plugin.RuiCommandLineProcessor.Companion.OPTION_DUMP -> configuration.appendList(zakadabar.rui.kotlin.plugin.RuiConfigurationKeys.DUMP, value)
+            OPTION_ANNOTATION -> configuration.appendList(RuiConfigurationKeys.ANNOTATION, value)
+            OPTION_DUMP -> configuration.appendList(RuiConfigurationKeys.DUMP, value)
             else -> throw CliOptionProcessingException("Unknown option: ${option.optionName}")
         }
     }
