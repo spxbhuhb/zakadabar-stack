@@ -11,7 +11,7 @@ open class RuiComponentBase {
     open var dirty = arrayOf(0)
 
     open fun create() {}
-    open fun patch(mask: Array<Int>) {}
+    open fun patch() {}
     open fun dispose() {}
 
     /**

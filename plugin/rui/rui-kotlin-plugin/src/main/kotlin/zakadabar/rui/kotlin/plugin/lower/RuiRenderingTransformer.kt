@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrLoop
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
-import zakadabar.rui.kotlin.plugin.builder.RuiClassCompilation
+import zakadabar.rui.kotlin.plugin.builder.RuiClass
 
 /**
  * Builds the rendering part of the component. This consists of defining the
@@ -21,16 +21,16 @@ import zakadabar.rui.kotlin.plugin.builder.RuiClassCompilation
  */
 class RuiRenderingTransformer(
     private val ruiContext: RuiPluginContext,
-    private val compilation: RuiClassCompilation
+    private val ruiClass: RuiClass
 ) : IrElementTransformerVoidWithContext(), RuiAnnotationBasedExtension {
 
     override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?): List<String> =
         ruiContext.annotations
 
     fun buildRendering() {
-        compilation.originalStatements.let { statements ->
+        ruiClass.originalStatements.let { statements ->
             statements
-                .subList(compilation.boundary, compilation.originalStatements.size)
+                .subList(ruiClass.boundary, ruiClass.originalStatements.size)
                 .forEach { irStatement ->
                     when (irStatement) {
                         is IrCall -> addCallStatement(irStatement)
@@ -46,7 +46,7 @@ class RuiRenderingTransformer(
         // TODO this exception should be a normal compilation error
         if (! irFunction.isAnnotatedWithRui()) throw IllegalStateException("non-Rui call in rendering")
 
-        compilation.addComponentSlot(irFunction.name.toRuiClassName().asString())
+        ruiClass.addComponentSlot(irCall)
     }
 
     private fun addBranchStatement(irStatement: IrBranch) {

@@ -20,20 +20,11 @@ import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages
 import org.jetbrains.kotlin.diagnostics.rendering.DiagnosticFactoryToRendererMap
 
 object DefaultErrorMessagesRui : DefaultErrorMessages.Extension {
+
     private val MAP = DiagnosticFactoryToRendererMap("AnnotationProcessing")
     override fun getMap() = MAP
 
     init {
-        MAP.put(ErrorsRui.NO_SDCP_FUNCION_IN_SUPERCLASS, "Sensible defaults function was not found in the superclass")
-        MAP.put(
-            ErrorsRui.SDCP_ON_INNER_CLASS,
-            "Sensible defaults function generation for inner classes is deprecated and will be prohibited soon"
-        )
-        MAP.put(ErrorsRui.SDCP_ON_INNER_CLASS_ERROR, "Sensible defaults function generation is not possible for inner classes")
-        MAP.put(
-            ErrorsRui.SDCP_ON_LOCAL_CLASS,
-            "Sensible defaults function generation for local classes is deprecated and will be prohibited soon"
-        )
-        MAP.put(ErrorsRui.SDCP_ON_LOCAL_CLASS_ERROR, "Sensible defaults function generation is not possible for local classes")
+        MAP.put(ErrorsRui.RUI_ON_INLINE_FUNCTION, "Rui annotation is not allowed on inline functions.")
     }
 }

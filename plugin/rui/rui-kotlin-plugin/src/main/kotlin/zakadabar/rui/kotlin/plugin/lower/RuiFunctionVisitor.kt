@@ -11,7 +11,8 @@ import org.jetbrains.kotlin.ir.expressions.impl.IrBlockBodyImpl
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
-import zakadabar.rui.kotlin.plugin.builder.RuiClassCompilation
+import zakadabar.rui.kotlin.plugin.builder.RuiClass
+import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RUI_IR_MISSING_FUNCTION_BODY
 
 /**
  * Calls the appropriate transformer to:
@@ -27,27 +28,33 @@ class RuiFunctionVisitor(
     private val phase: RuiCompilationPhase
 ) : IrElementTransformerVoidWithContext(), RuiAnnotationBasedExtension {
 
+    val generatedClasses = mutableListOf<RuiClass>()
+
     override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?): List<String> =
         ruiContext.annotations
 
     override fun visitFileNew(declaration: IrFile): IrFile {
+        generatedClasses.clear()
+
         val result = super.visitFileNew(declaration)
 
-        if (phase == RuiCompilationPhase.StateDefinition) {
-            result.declarations
-                .filter { it is IrFunction && it.isAnnotatedWithRui() }
-                .forEach {
-                    result.addChild(ruiContext.ruiClassFor(it as IrFunction))
-                }
+        generatedClasses.forEach {
+            it.finalize()
+            result.addChild(it.irClass)
         }
-
-        declaration.metadata
 
         return result
     }
 
     override fun visitFunctionNew(declaration: IrFunction): IrFunction {
         if (! declaration.isAnnotatedWithRui()) {
+            return declaration
+        }
+
+        if (declaration.body == null) {
+            if (phase == RuiCompilationPhase.StateDefinition) {
+                RUI_IR_MISSING_FUNCTION_BODY.report(ruiContext, declaration)
+            }
             return declaration
         }
 
@@ -61,14 +68,9 @@ class RuiFunctionVisitor(
 
     private fun stateDefinition(declaration: IrFunction) {
 
-        RuiClassCompilation(
-            ruiContext,
-            declaration,
-            RuiBoundaryVisitor(ruiContext).findBoundary(declaration)
-        ).build {
-
-            RuiStateDefinitionTransformer(ruiContext, this).buildStateDefinition()
-
+        RuiClass(ruiContext, declaration).also {
+            generatedClasses += it
+            ruiContext.ruiClasses[it.fqName] = it
         }
 
         // replace the body of the original function with an empty one
@@ -78,10 +80,12 @@ class RuiFunctionVisitor(
 
     private fun rendering(declaration: IrFunction) {
 
-        val builder = ruiContext.classBuilders[declaration.name.toRuiClassName().asString()]
-            ?: throw IllegalStateException("builder is missing for ${declaration.name.toRuiClassName()}")
+        val ruiClassName = declaration.toRuiClassFqName()
 
-        RuiRenderingTransformer(ruiContext, builder).buildRendering()
+        ruiContext.ruiClasses[ruiClassName]
+            ?.transformRendering()
+            ?: throw IllegalStateException("missing Rui class: $ruiClassName")
+
     }
 
 

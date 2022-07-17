@@ -17,6 +17,8 @@ internal class RuiGenerationExtension(
 
     override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
         ruiPluginContext.irPluginContext = pluginContext
+        ruiPluginContext.diagnosticReporter = pluginContext.createDiagnosticReporter(RuiCommandLineProcessor.PLUGIN_ID)
+
         ruiPluginContext.dump(DUMP_BEFORE, moduleFragment)
 
         moduleFragment.accept(RuiFunctionVisitor(ruiPluginContext, RuiCompilationPhase.StateDefinition), null)

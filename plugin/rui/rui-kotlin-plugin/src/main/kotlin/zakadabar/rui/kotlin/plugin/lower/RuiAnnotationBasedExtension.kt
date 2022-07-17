@@ -19,13 +19,15 @@ interface RuiAnnotationBasedExtension : AnnotationBasedExtension {
     fun isRui(declaration: IrFunction): Boolean =
         declaration.isAnnotatedWithRui()
 
-    fun isRui(declaration: IrSimpleFunctionSymbol): Boolean =
-        declaration.owner.isAnnotatedWithRui()
+    fun isRui(symbol: IrSimpleFunctionSymbol): Boolean =
+        symbol.owner.isAnnotatedWithRui()
 
     fun IrClass.isAnnotatedWithRui(): Boolean =
         toIrBasedDescriptor().hasSpecialAnnotation(null)
 
     fun IrFunction.isAnnotatedWithRui(): Boolean =
         toIrBasedDescriptor().hasSpecialAnnotation(null)
+
+
 
 }
