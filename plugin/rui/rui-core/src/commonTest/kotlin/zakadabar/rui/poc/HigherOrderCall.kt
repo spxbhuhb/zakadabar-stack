@@ -19,7 +19,7 @@ class RuiHigherOrderCallBase(
 
     inner class RuiBlock0Base : RuiComponentBase() {
 
-        var primitive0 = RuiPrimitiveBase(value + 1)
+        var primitive0 = RuiPrimitive(value + 1)
 
         override fun patch(mask : Array<Int>) {
             dirty = mask

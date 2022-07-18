@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.impl.IrAnonymousInitializerSymbolImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrValueParameterSymbolImpl
 import org.jetbrains.kotlin.ir.types.IrTypeSystemContextImpl
+import org.jetbrains.kotlin.ir.types.defaultType
 import org.jetbrains.kotlin.ir.types.impl.IrSimpleTypeImpl
 import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.*
@@ -90,6 +91,8 @@ class RuiClass(
         create = buildRuiOverride("create")
         patch = buildRuiOverride("patch")
         dispose = buildRuiOverride("dispose")
+
+        addPatchParameter()
 
         irClass.addFakeOverrides(IrTypeSystemContextImpl(irContext.irBuiltIns))
 
@@ -183,6 +186,10 @@ class RuiClass(
             overriddenSymbols = listOf(ruiComponentClass.functionByName(funName))
             body = irFactory.createBlockBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET)
         }
+    }
+
+    private fun addPatchParameter() {
+        patch.addValueParameter("mask", irBuiltIns.intArray.defaultType, IrDeclarationOrigin.DEFINED)
     }
 
     fun finalize() {

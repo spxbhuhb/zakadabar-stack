@@ -16,11 +16,13 @@ class PocTest {
 
     @Test
     fun branchTest() {
-        val c = RuiBranchBase(1)
+        val c = RuiBranchPoc(1)
+        c.create()
 
         fun v(value : Int) {
             c.value = value
-            c.patch(arrayOf(1))
+            c.dirty = 1
+            c.patch()
         }
 
         v(1)

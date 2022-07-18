@@ -3,13 +3,14 @@
  */
 package zakadabar.rui.poc
 
+import zakadabar.rui.core.RuiBlock
 import zakadabar.rui.core.RuiComponentBase
 
 fun Primitive(value: Int) {
     // this is just a mock primitive, that prints out happenings
 }
 
-class RuiPrimitiveBase(
+class RuiPrimitive(
     var value: Int
 ) : RuiComponentBase() {
 
@@ -19,5 +20,18 @@ class RuiPrimitiveBase(
 
     override fun patch(mask: Array<Int>) {
         println("================    Primitive.patch: ${mask[0]} $value")
+    }
+}
+
+class RuiPrimitiveBlock(
+    var value: Int
+) : RuiBlock() {
+
+    init {
+        println("================    Primitive.init: $value")
+    }
+
+    override var patch = {
+        println("================    Primitive.patch: $value")
     }
 }

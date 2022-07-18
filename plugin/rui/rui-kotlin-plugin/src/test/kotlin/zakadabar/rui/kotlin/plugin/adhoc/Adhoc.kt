@@ -1,25 +1,15 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.rui.poc
+package zakadabar.rui.kotlin.plugin.adhoc
 
 import zakadabar.rui.core.RuiBlock
 import zakadabar.rui.core.RuiBranch
 import zakadabar.rui.core.RuiFunWrapper
 import zakadabar.rui.core.ruiEmptyBlockFunc
+import zakadabar.rui.kotlin.plugin.RuiPrimitiveBlock
 
-fun Branch(value: Int) {
-    val v2 = 12
-    // ---- boundary ----
-    Primitive(v2)
-    when (value) {
-        1 -> Primitive(value + 10)
-        2 -> Primitive(value + 20)
-    }
-}
-
-
-class RuiBranchPoc(
+class RuiBranchPocTest(
     // state variables from function parameters
     var value: Int
 ) : RuiBlock() {
