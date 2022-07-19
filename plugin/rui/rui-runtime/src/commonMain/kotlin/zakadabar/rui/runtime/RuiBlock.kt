@@ -7,7 +7,6 @@ package zakadabar.rui.runtime
  * Represents one inner block in the rendering of a Rui function.
  */
 open class RuiBlock {
-    open var dirty : Int = 0
 
     open var create : () -> Unit = {  }
     open var patch : () -> Unit = {  }

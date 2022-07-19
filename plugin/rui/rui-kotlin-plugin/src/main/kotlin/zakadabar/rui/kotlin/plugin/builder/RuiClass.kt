@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.ir.expressions.IrWhen
 import org.jetbrains.kotlin.ir.expressions.impl.IrDelegatingConstructorCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrInstanceInitializerCallImpl
+import org.jetbrains.kotlin.ir.symbols.IrSymbol
 import org.jetbrains.kotlin.ir.symbols.impl.IrAnonymousInitializerSymbolImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrValueParameterSymbolImpl
 import org.jetbrains.kotlin.ir.types.IrTypeSystemContextImpl
@@ -26,6 +27,7 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.SpecialNames
 import zakadabar.rui.kotlin.plugin.RuiGenerationExtension
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
+import zakadabar.rui.kotlin.plugin.rendering.RuiBlockTransformer
 import zakadabar.rui.kotlin.plugin.state.definition.RuiBoundaryVisitor
 import zakadabar.rui.kotlin.plugin.state.definition.RuiFunctionVisitor
 import zakadabar.rui.kotlin.plugin.state.definition.RuiStateVariableTransformer
@@ -75,7 +77,7 @@ class RuiClass(
     // the generated IR class
 
     val name: String
-    val fqName : FqName
+    val fqName: FqName
     val irClass: IrClass
 
     // the generated IR functions in the IR class
@@ -90,6 +92,8 @@ class RuiClass(
     val renderingSlots = mutableMapOf<String, RuiRenderingSlot>()
     val dirtyMasks = mutableListOf<RuiDirtyMask>()
     val blocks = mutableListOf<RuiBlock>()
+
+    val symbolMap = mutableMapOf<IrSymbol, RuiElement>()
 
     // IR shortcuts
 
@@ -199,22 +203,25 @@ class RuiClass(
     }
 
     fun build() {
+        if (boundary < originalStatements.size) {
+            RuiBlockTransformer(ruiContext, this).transform(originalStatements.subList(boundary, originalStatements.size))
+        }
+
         // The initializer has to be the last, so it will be able to access all properties
         irClass.declarations += initializer
     }
 
-    internal fun addStateVariable(irVariable: IrVariable): RuiStateVariable {
-        return RuiStateVariable(this, stateVariables.size, irVariable).also {
-            stateVariables[it.originalName] = it
-            addDirtyMask(it)
-        }
-    }
+    internal fun addStateVariable(irVariable: IrVariable): RuiStateVariable =
+        RuiStateVariable(this, stateVariables.size, irVariable).add()
 
-    internal fun addStateVariable(irValueParameter: IrValueParameter): RuiStateVariable {
-        return RuiStateVariable(this, stateVariables.size, irValueParameter).also {
-            stateVariables[it.originalName] = it
-            addDirtyMask(it)
-        }
+    internal fun addStateVariable(irValueParameter: IrValueParameter): RuiStateVariable =
+        RuiStateVariable(this, stateVariables.size, irValueParameter).add()
+
+    private fun RuiStateVariable.add(): RuiStateVariable {
+        this@RuiClass.stateVariables[originalName] = this
+        this@RuiClass.symbolMap[getter.symbol] = this
+        this@RuiClass.addDirtyMask(this)
+        return this
     }
 
     /**
@@ -229,20 +236,23 @@ class RuiClass(
 
     internal fun getStateVariable(identifier: String) = stateVariables[identifier]
 
+    internal fun stateVariableByGetterOrNull(symbol: IrSymbol): RuiStateVariable? =
+        symbolMap[symbol]?.let { if (it is RuiStateVariable && it.getter.symbol == symbol) it else null }
+
     internal fun addBlock(irCall: IrCall): RuiBlock {
-        return RuiCallBlock(this, "\$block${blocks.size}", irCall).also {
+        return RuiCall(this, blocks.size, irCall).also {
             blocks += it
         }
     }
 
     internal fun addBlock(irWhen: IrWhen): RuiBlock {
-        return RuiBranchBlock(this, "\$block${blocks.size}", irWhen).also {
+        return RuiWhen(this, blocks.size, irWhen).also {
             blocks += it
         }
     }
 
     internal fun addBlock(irLoop: IrLoop): RuiBlock {
-        return RuiLoopBlock(this, "\$block${blocks.size}", irLoop).also {
+        return RuiLoop(this, blocks.size, irLoop).also {
             blocks += it
         }
     }
@@ -250,11 +260,12 @@ class RuiClass(
     fun irGetReceiver() = IrGetValueImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, thisReceiver.symbol)
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
-       visitor.visitClass(this, data)
+        visitor.visitClass(this, data)
 
     override fun <D> acceptChildren(visitor: RuiElementVisitor<Unit, D>, data: D) {
         stateVariables.values.forEach { it.accept(visitor, data) }
         renderingSlots.values.forEach { it.accept(visitor, data) }
         dirtyMasks.forEach { it.accept(visitor, data) }
+        blocks.forEach { it.accept(visitor, data) }
     }
 }

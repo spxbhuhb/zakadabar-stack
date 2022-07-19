@@ -22,7 +22,6 @@ import org.jetbrains.kotlin.diagnostics.Severity
 import org.jetbrains.kotlin.ir.IrElement
 import org.jetbrains.kotlin.ir.IrFileEntry
 import org.jetbrains.kotlin.ir.declarations.IrFunction
-import org.jetbrains.kotlin.ir.expressions.IrBlock
 import org.jetbrains.kotlin.ir.util.IrMessageLogger
 import org.jetbrains.kotlin.ir.util.file
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
@@ -52,8 +51,8 @@ object ErrorsRui {
             report(ruiContext, declaration.file.fileEntry, declaration.startOffset)
         }
 
-        fun report(ruiClass: RuiClass, declaration: IrBlock) {
-            report(ruiClass.ruiContext, ruiClass.original.file.fileEntry, declaration.startOffset)
+        fun report(ruiClass: RuiClass, element: IrElement) {
+            report(ruiClass.ruiContext, ruiClass.original.file.fileEntry, element.startOffset)
         }
 
         fun report(ruiContext: RuiPluginContext, fileEntry: IrFileEntry, offset: Int) {

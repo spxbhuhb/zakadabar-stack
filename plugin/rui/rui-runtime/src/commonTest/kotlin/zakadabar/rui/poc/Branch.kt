@@ -4,8 +4,8 @@
 package zakadabar.rui.poc
 
 import zakadabar.rui.runtime.RuiBlock
-import zakadabar.rui.runtime.RuiBranch
 import zakadabar.rui.runtime.RuiFunWrapper
+import zakadabar.rui.runtime.RuiWhen
 import zakadabar.rui.runtime.ruiEmptyBlockFunc
 
 fun Branch(value: Int) {
@@ -32,7 +32,7 @@ class RuiBranchPoc(
 
         val primitive0 = RuiPrimitiveBlock(v2)
 
-        val branch0 = RuiBranch {
+        val branch0 = RuiWhen {
             when (value) {
                 1 -> block0func
                 2 -> block1func

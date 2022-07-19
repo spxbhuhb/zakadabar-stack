@@ -5,10 +5,12 @@ package zakadabar.rui.kotlin.plugin.builder
 
 abstract class RuiBlock(
     val ruiClass: RuiClass,
-    val name : String
+    val index: Int
 ) : RuiElement {
     val dependencies = mutableListOf<Int>()
     val renderingSlots = mutableMapOf<String, RuiRenderingSlot>()
+
+    val name : String = "block$index\$"
 
     abstract fun transform()
 

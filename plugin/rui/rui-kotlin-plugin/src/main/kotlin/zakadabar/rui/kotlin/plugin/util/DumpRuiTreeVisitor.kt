@@ -27,8 +27,8 @@ class DumpRuiTreeVisitor(
 
     override fun visitStateVariable(ruiStateVariable: RuiStateVariable) {
         indented {
-            with (ruiStateVariable) {
-                println { "STATE VARIABLE index:$index name:$name" }
+            with(ruiStateVariable) {
+                println { "STATE_VARIABLE index:$index name:$name" }
             }
             super.visitStateVariable(ruiStateVariable)
         }
@@ -37,7 +37,7 @@ class DumpRuiTreeVisitor(
     override fun visitDirtyMask(ruiDirtyMask: RuiDirtyMask) {
         indented {
             with(ruiDirtyMask) {
-                println { "DIRTY MASK index:$index"}
+                println { "DIRTY_MASK index:$index name:$name" }
             }
             super.visitDirtyMask(ruiDirtyMask)
         }
@@ -46,45 +46,60 @@ class DumpRuiTreeVisitor(
     override fun visitRenderingSlot(ruiRenderingSlot: RuiRenderingSlot) {
         indented {
             with(ruiRenderingSlot) {
-                println { "RENDERING SLOT index:$index name:$name"}
+                println { "RENDERING_SLOT index:$index name:$name" }
             }
             super.visitRenderingSlot(ruiRenderingSlot)
         }
     }
 
-    override fun visitCallBlock(ruiCallBlock: RuiCallBlock) {
+    override fun visitCall(ruiCall: RuiCall) {
         indented {
-            with(ruiCallBlock) {
-                println { "CALL BLOCK name:$name"}
+            with(ruiCall) {
+                println { "BLOCK type:CALL index:$index name:$name targetRuiClass:$targetRuiClass" }
             }
-            super.visitCallBlock(ruiCallBlock)
+            super.visitCall(ruiCall)
         }
     }
 
     override fun visitCallParameter(ruiCallParameter: RuiCallParameter) {
         indented {
             with(ruiCallParameter) {
-                println { "CALL PARAMETER dependencies:${dependencies.joinToString(", ") { it.toString() }}" }
+                println { "PARAMETER index:$index ${dependencies.withLabel("dependencies")}" }
             }
             super.visitCallParameter(ruiCallParameter)
         }
     }
 
-    override fun visitBranchBlock(ruiBranchBlock: RuiBranchBlock) {
+    override fun visitWhen(ruiWhen: RuiWhen) {
         indented {
-            with(ruiBranchBlock) {
-                println { "BRANCH BLOCK name:$name"}
+            with(ruiWhen) {
+                println { "BLOCK type:WHEN index:$index name:$name" }
             }
-            super.visitBranchBlock(ruiBranchBlock)
+            super.visitWhen(ruiWhen)
         }
     }
 
-    override fun visitLoopBlock(ruiLoopBlock: RuiLoopBlock) {
+    override fun visitBranch(ruiBranch: RuiBranch) {
         indented {
-            with(ruiLoopBlock) {
-                println { "LOOP BLOCK name:$name"}
+            with(ruiBranch) {
+                println {
+                    listOf(
+                        "BRANCH index:$index",
+                        conditionDependencies.withLabel("conditionDependencies"),
+                        bodyDependencies.withLabel("bodyDependencies")
+                    ).joinToString(" ")
+                }
+                super.visitBranch(ruiBranch)
             }
-            super.visitLoopBlock(ruiLoopBlock)
+        }
+    }
+
+    override fun visitLoop(ruiLoop: RuiLoop) {
+        indented {
+            with(ruiLoop) {
+                println { "BLOCK type:LOOP index:$index name:$name" }
+            }
+            super.visitLoop(ruiLoop)
         }
     }
 
@@ -97,5 +112,8 @@ class DumpRuiTreeVisitor(
         body()
         printer.popIndent()
     }
+
+    fun List<Int>.withLabel(label: String) =
+        "$label:[${this.joinToString(", ") { it.toString() }}]"
 
 }

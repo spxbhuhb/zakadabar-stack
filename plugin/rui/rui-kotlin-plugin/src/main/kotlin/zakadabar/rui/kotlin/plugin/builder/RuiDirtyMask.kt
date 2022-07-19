@@ -9,6 +9,8 @@ class RuiDirtyMask(
     val index : Int
 ) : RuiElement {
 
+    val name = "\$dirty$index"
+
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
         visitor.visitDirtyMask(this, data)
 

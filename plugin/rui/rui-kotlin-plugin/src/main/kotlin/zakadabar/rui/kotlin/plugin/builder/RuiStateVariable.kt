@@ -30,7 +30,7 @@ class RuiStateVariable private constructor(
     override val name: String
 ) : RuiPropertyBase(ruiClass, index) {
 
-    constructor(ruiClass: RuiClass, index: Int, irVariable: IrVariable) : this(ruiClass, index, irVariable.name.identifier, "${irVariable.name}$index") {
+    constructor(ruiClass: RuiClass, index: Int, irVariable: IrVariable) : this(ruiClass, index, irVariable.name.identifier, "${irVariable.name}\$") {
         buildField(irVariable.type)
         buildProperty()
 

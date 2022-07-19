@@ -28,9 +28,9 @@ internal class RuiGenerationExtension(
         }
 
         if (DUMP_RUI_TREE in ruiPluginContext.dumpPoints) {
-            ruiPluginContext.ruiClasses.forEach {
-                println("==== RUI TREE ====")
-                println(it.value.dump())
+            println("RUI CLASSES")
+            ruiPluginContext.ruiClasses.values.filter { ! it.name.matches("RuiP\\d+".toRegex()) }.forEach {
+                println(it.dump())
             }
         }
 

@@ -4,29 +4,31 @@
 package zakadabar.rui.kotlin.plugin.builder
 
 import org.jetbrains.kotlin.ir.expressions.IrCall
+import org.jetbrains.kotlin.ir.visitors.acceptVoid
 import zakadabar.rui.kotlin.plugin.rendering.RuiDependencyVisitor
+import zakadabar.rui.kotlin.plugin.state.definition.toRuiClassFqName
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
-class RuiCallBlock(
+class RuiCall(
     ruiClass: RuiClass,
-    name: String,
+    index: Int,
     val irCall: IrCall
-) : RuiBlock(ruiClass, name) {
+) : RuiBlock(ruiClass, index) {
 
+    val targetRuiClass = irCall.symbol.owner.toRuiClassFqName()
     val callParameters = mutableListOf<RuiCallParameter>()
 
     override fun transform() {
         for (i in 0 until irCall.valueArgumentsCount) {
-            callParameters += RuiCallParameter(
-                index = i,
-                irExpression = irCall.getValueArgument(i)!!,
-                dependencies = RuiDependencyVisitor(ruiClass).dependencies
-            )
+            val expression = irCall.getValueArgument(i)!!
+            val visitor = RuiDependencyVisitor(ruiClass).apply { expression.acceptVoid(this) }
+
+            callParameters += RuiCallParameter(i, expression, visitor.dependencies)
         }
     }
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
-        visitor.visitCallBlock(this, data)
+        visitor.visitCall(this, data)
 
     override fun <D> acceptChildren(visitor: RuiElementVisitor<Unit, D>, data: D) {
         callParameters.forEach { it.accept(visitor, data) }

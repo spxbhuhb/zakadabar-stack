@@ -32,6 +32,15 @@ class SuccessesTest {
     @Test
     fun stateVariableShadow() = compile("StateVariableShadow.kt")
 
+    @Test
+    fun variables() = compile("Variables.kt")
+
+    @Test
+    fun manyVariables() = compile("ManyVariables.kt")
+
+    @Test
+    fun basic() = compile("Basic.kt")
+
     fun compile(fileName: String, dumpResult : Boolean = false) {
         val result = KotlinCompilation()
             .apply {

@@ -22,16 +22,19 @@ interface RuiElementVisitorVoid<out R> : RuiElementVisitor<R, Nothing?> {
     fun visitRenderingSlot(ruiRenderingSlot: RuiRenderingSlot) = visitElement(ruiRenderingSlot)
     override fun visitRenderingSlot(ruiRenderingSlot: RuiRenderingSlot, data: Nothing?) = visitRenderingSlot(ruiRenderingSlot)
 
-    fun visitCallBlock(ruiCallBlock: RuiCallBlock) = visitElement(ruiCallBlock)
-    override fun visitCallBlock(ruiCallBlock: RuiCallBlock, data: Nothing?) = visitCallBlock(ruiCallBlock)
+    fun visitCall(ruiCall: RuiCall) = visitElement(ruiCall)
+    override fun visitCall(ruiCall: RuiCall, data: Nothing?) = visitCall(ruiCall)
 
     fun visitCallParameter(ruiCallParameter: RuiCallParameter) = visitElement(ruiCallParameter)
     override fun visitCallParameter(ruiCallParameter: RuiCallParameter, data: Nothing?) = visitCallParameter(ruiCallParameter)
 
-    fun visitBranchBlock(ruiBranchBlock: RuiBranchBlock) = visitElement(ruiBranchBlock)
-    override fun visitBranchBlock(ruiBranchBlock: RuiBranchBlock, data: Nothing?) = visitBranchBlock(ruiBranchBlock)
+    fun visitWhen(ruiWhen: RuiWhen) = visitElement(ruiWhen)
+    override fun visitWhen(ruiWhen: RuiWhen, data: Nothing?) = visitWhen(ruiWhen)
 
-    fun visitLoopBlock(ruiLoopBlock: RuiLoopBlock) = visitElement(ruiLoopBlock)
-    override fun visitLoopBlock(ruiLoopBlock: RuiLoopBlock, data: Nothing?) = visitLoopBlock(ruiLoopBlock)
+    fun visitBranch(ruiBranch: RuiBranch) = visitElement(ruiBranch)
+    override fun visitBranch(ruiBranch: RuiBranch, data: Nothing?) = visitBranch(ruiBranch)
+
+    fun visitLoop(ruiLoop: RuiLoop) = visitElement(ruiLoop)
+    override fun visitLoop(ruiLoop: RuiLoop, data: Nothing?) = visitLoop(ruiLoop)
 
 }

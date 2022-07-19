@@ -11,9 +11,21 @@ fun P0() {
 
 }
 
+@Rui
+fun P1(p0: Int) {
+
+}
+
+@Rui
+fun P2(p0: Int, p1: Int) {
+
+}
+
 class RuiPrimitiveBlock(
     var value: Int
 ) : RuiBlock() {
+
+    var dirty0 = 0
 
     init {
         println("================    Primitive.init: $value")
@@ -21,5 +33,9 @@ class RuiPrimitiveBlock(
 
     override var patch = {
         println("================    Primitive.patch: $value")
+    }
+
+    fun invalidate0(index: Int) {
+
     }
 }

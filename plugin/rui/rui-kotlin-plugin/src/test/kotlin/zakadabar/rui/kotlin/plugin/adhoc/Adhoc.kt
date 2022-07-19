@@ -5,8 +5,8 @@ package zakadabar.rui.kotlin.plugin.adhoc
 
 import zakadabar.rui.kotlin.plugin.RuiPrimitiveBlock
 import zakadabar.rui.runtime.RuiBlock
-import zakadabar.rui.runtime.RuiBranch
 import zakadabar.rui.runtime.RuiFunWrapper
+import zakadabar.rui.runtime.RuiWhen
 import zakadabar.rui.runtime.ruiEmptyBlockFunc
 
 class RuiBranchPocTest(
@@ -17,42 +17,33 @@ class RuiBranchPocTest(
     // state variables from top-level declarations
     var v2 = 12
 
-    init {
-        // top-level blocks from rendering
+    var dirty0 = 0
 
-        val primitive0 = RuiPrimitiveBlock(v2)
+    // CALL BLOCK --------------------------------------------
 
-        val branch0 = RuiBranch {
-            when (value) {
-                1 -> block0func
-                2 -> block1func
-                else -> ruiEmptyBlockFunc
-            }
+    val block0 = RuiPrimitiveBlock(value + 10)
+
+    fun block0patch() {
+        if (dirty0 and 1 != 0) {
+            block0.value = value + 10
+            block0.invalidate0(1)
         }
-
-        // lifecycle
-
-        fun create() {
-            primitive0.create()
-            branch0.create()
+        if (block0.dirty0 != 0) {
+            block0.patch()
         }
-
-        fun patch() {
-            if (dirty and 1 != 0) {
-                branch0.patch()
-            }
-            dirty = 0
-        }
-
-        fun dispose() {
-            primitive0.dispose()
-            branch0.dispose()
-        }
-
-        set(::create, ::patch, ::dispose)
     }
 
-    val block0func = RuiFunWrapper {
+    // BRANCH BLOCK --------------------------------------------
+
+    val block1 = RuiWhen {
+        when (value) {
+            1 -> block2func
+            2 -> block3func
+            else -> ruiEmptyBlockFunc
+        }
+    }
+
+    val block2func = RuiFunWrapper {
         val primitive0 = RuiPrimitiveBlock(value + 10)
 
         fun create() {
@@ -61,7 +52,7 @@ class RuiBranchPocTest(
 
         fun patch() {
             primitive0.value = value + 10
-            primitive0.dirty = 1
+            primitive0.invalidate0(1)
             primitive0.patch()
         }
 
@@ -72,7 +63,7 @@ class RuiBranchPocTest(
         RuiBlock().set(::create, ::patch, ::dispose)
     }
 
-    val block1func = RuiFunWrapper {
+    val block3func = RuiFunWrapper {
         val primitive0 = RuiPrimitiveBlock(value + 20)
 
         fun create() {
@@ -81,7 +72,7 @@ class RuiBranchPocTest(
 
         fun patch() {
             primitive0.value = value + 20
-            primitive0.dirty = 1
+            primitive0.dirty0 = 1
             primitive0.patch()
         }
 
@@ -92,4 +83,29 @@ class RuiBranchPocTest(
         RuiBlock().set(::create, ::patch, ::dispose)
     }
 
+    // Component lifecycle
+
+    fun create0() {
+        block0.create()
+        block1.create()
+    }
+
+    fun patch0() {
+        if (dirty0 and 1 != 0) {
+            block0patch()
+        }
+        if (dirty0 and 1 != 0) {
+            block1.patch()
+        }
+        dirty0 = 0
+    }
+
+    fun dispose0() {
+        block0.dispose()
+        block1.dispose()
+    }
+
+    init {
+        set(::create0, ::patch0, ::dispose0)
+    }
 }

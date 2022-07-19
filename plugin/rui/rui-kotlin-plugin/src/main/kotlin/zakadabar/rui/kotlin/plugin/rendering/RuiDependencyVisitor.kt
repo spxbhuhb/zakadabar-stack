@@ -11,7 +11,7 @@ import zakadabar.rui.kotlin.plugin.builder.RuiClass
 import zakadabar.rui.kotlin.plugin.util.RuiAnnotationBasedExtension
 
 class RuiDependencyVisitor(
-    private val ruiClass : RuiClass
+    private val ruiClass: RuiClass
 ) : RuiAnnotationBasedExtension, IrElementVisitorVoid {
 
     val dependencies = mutableListOf<Int>()
@@ -23,11 +23,13 @@ class RuiDependencyVisitor(
         element.acceptChildren(this, null)
     }
 
+    /**
+     * State variable reads are calls to the getter.
+     */
     override fun visitCall(expression: IrCall) {
-        ruiClass.stateVariables.values.firstOrNull { it.irProperty.getter!!.symbol == expression.symbol }
-            ?.let {
-                dependencies += it.index
-            }
+        ruiClass.stateVariableByGetterOrNull(expression.symbol)?.let {
+            dependencies += it.index
+        }
         super.visitCall(expression)
     }
 
