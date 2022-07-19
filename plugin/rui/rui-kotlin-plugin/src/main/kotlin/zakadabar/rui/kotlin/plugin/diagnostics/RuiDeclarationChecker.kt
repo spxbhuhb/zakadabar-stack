@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.resolve.checkers.DeclarationChecker
 import org.jetbrains.kotlin.resolve.checkers.DeclarationCheckerContext
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RUI_ON_INLINE_FUNCTION
-import zakadabar.rui.kotlin.plugin.lower.RuiAnnotationBasedExtension
+import zakadabar.rui.kotlin.plugin.util.RuiAnnotationBasedExtension
 
 internal class RuiDeclarationChecker(
     private val annotations: List<String>,

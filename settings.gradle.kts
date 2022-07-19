@@ -12,7 +12,7 @@ pluginManagement {
     }
 }
 
-include("plugin:rui:rui-core")
+include("plugin:rui:rui-runtime")
 include("plugin:rui:rui-kotlin-plugin")
 include("plugin:rui:rui-gradle-plugin")
 

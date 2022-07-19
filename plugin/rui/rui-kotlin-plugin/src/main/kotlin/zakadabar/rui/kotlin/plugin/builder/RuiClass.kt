@@ -4,57 +4,90 @@
 package zakadabar.rui.kotlin.plugin.builder
 
 import org.jetbrains.kotlin.backend.common.ir.addFakeOverrides
-import org.jetbrains.kotlin.backend.jvm.functionByName
 import org.jetbrains.kotlin.descriptors.ClassKind
-import org.jetbrains.kotlin.descriptors.DescriptorVisibilities
 import org.jetbrains.kotlin.descriptors.Modality
-import org.jetbrains.kotlin.ir.builders.declarations.*
+import org.jetbrains.kotlin.ir.builders.declarations.UNDEFINED_PARAMETER_INDEX
+import org.jetbrains.kotlin.ir.builders.declarations.addConstructor
+import org.jetbrains.kotlin.ir.builders.declarations.buildClass
 import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.impl.IrDelegatingConstructorCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrInstanceInitializerCallImpl
-import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.impl.IrAnonymousInitializerSymbolImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrValueParameterSymbolImpl
 import org.jetbrains.kotlin.ir.types.IrTypeSystemContextImpl
-import org.jetbrains.kotlin.ir.types.defaultType
 import org.jetbrains.kotlin.ir.types.impl.IrSimpleTypeImpl
 import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.*
 import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
+import zakadabar.rui.kotlin.plugin.RuiGenerationExtension
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
-import zakadabar.rui.kotlin.plugin.lower.RuiBoundaryVisitor
-import zakadabar.rui.kotlin.plugin.lower.RuiRenderingTransformer
-import zakadabar.rui.kotlin.plugin.lower.RuiStateVariableTransformer
-import zakadabar.rui.kotlin.plugin.lower.toRuiClassName
+import zakadabar.rui.kotlin.plugin.state.definition.RuiBoundaryVisitor
+import zakadabar.rui.kotlin.plugin.state.definition.RuiFunctionVisitor
+import zakadabar.rui.kotlin.plugin.state.definition.RuiStateVariableTransformer
+import zakadabar.rui.kotlin.plugin.state.definition.toRuiClassName
 
 /**
- * Represents the compilation of one Rui class.
+ * Represents the compilation of one Rui component. The source of the compilation
+ * is the function annotated with `@Rui`. The result of the compilation is an IR
+ * class that extends `RuiBlock`.
+ *
+ * [RuiClass] stores the all the information needed to compile the IR class:
+ *
+ * - [stateVariables]
+ * - [initializer] (state initialization)
+ * - [renderingSlots]
+ * - [dirtyMasks]
+ *
+ * The compilation is a multiphase process.
+ *
+ * The "State Definition" phase:
+ *
+ * 1. [RuiGenerationExtension] runs a [RuiFunctionVisitor] on the module fragment
+ * 1. [RuiFunctionVisitor] creates the [RuiClass] instance
+ * 1. [RuiClass] finds the [boundary] between the state definition and rendering part
+ * 1. `init` of [RuiClass] creates the [IrClass] and the basic class functions
+ * 1. `init` of [RuiClass] runs a [RuiStateVariableTransformer] to build the state definition
+ * 1. [RuiStateVariableTransformer] creates [stateVariables] for function parameters and top-level variable declarations
+ * 1. [RuiStateVariableTransformer] transforms function parameter and top-level variable accesses/changes into state variable getter/setter calls
+ * 1. during state variable processing [dirtyMasks] are created as needed
+ * 1. [RuiFunctionVisitor] adds the [RuiClass] instance to [RuiPluginContext.ruiClasses]
+ *
+ * The "Rendering" phase:
+ *
+ * 1. [RuiGenerationExtension] calls [build] for each instance in [RuiPluginContext.ruiClasses]
  */
 class RuiClass(
     val ruiContext: RuiPluginContext,
     val original: IrFunction
 ) {
 
+    // data from the original function
+
     val originalStatements = checkNotNull(original.body?.statements) { "missing function body" }
     val boundary = RuiBoundaryVisitor(ruiContext).findBoundary(original)
+
+    // the generated IR class
 
     val name: String
     val fqName : FqName
     val irClass: IrClass
+
+    // the generated IR functions in the IR class
+
     val constructor: IrConstructor
     val initializer: IrAnonymousInitializer
     val thisReceiver: IrValueParameter
-    val create: IrFunction
-    val patch: IrFunction
-    val dispose: IrFunction
-    val invalidate: IrSimpleFunctionSymbol
+
+    // parts of the generated Rui component
 
     val stateVariables = mutableMapOf<String, RuiStateVariable>()
-    val componentSlots = mutableMapOf<String, RuiComponentSlot>()
+    val renderingSlots = mutableMapOf<String, RuiRenderingSlot>()
+    val dirtyMasks = mutableListOf<RuiDirtyMask>()
+
+    // IR shortcuts
 
     val irContext = ruiContext.irPluginContext
     val irFactory = irContext.irFactory
@@ -62,7 +95,9 @@ class RuiClass(
 
     val unitType = irBuiltIns.unitType
 
-    val ruiComponentClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "core", "RuiComponentBase"))) !!
+    // references to the Rui runtime
+
+    val ruiComponentClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiBlock"))) !!
     val ruiComponentType = ruiComponentClass.typeWith()
 
     init {
@@ -88,17 +123,10 @@ class RuiClass(
         thisReceiver = buildThisReceiver()
         constructor = buildConstructor()
         initializer = buildInitializer()
-        create = buildRuiOverride("create")
-        patch = buildRuiOverride("patch")
-        dispose = buildRuiOverride("dispose")
-
-        addPatchParameter()
 
         irClass.addFakeOverrides(IrTypeSystemContextImpl(irContext.irBuiltIns))
 
-        invalidate = findInvalidate()
-
-        transformStateDefinition()
+        RuiStateVariableTransformer(ruiContext, this).buildStateDefinition()
     }
 
     private fun buildThisReceiver(): IrValueParameter {
@@ -148,16 +176,6 @@ class RuiClass(
             )
         }
 
-        original.valueParameters.forEach { old ->
-            constructor.addValueParameter {
-                name = old.name
-                type = old.type
-                varargElementType = old.varargElementType
-            }.also { new ->
-                addStateVariable(new)
-            }
-        }
-
         return constructor
     }
 
@@ -176,59 +194,41 @@ class RuiClass(
         return initializer
     }
 
-    private fun buildRuiOverride(funName: String): IrFunction {
-        return irFactory.addFunction(irClass) {
-            name = Name.identifier(funName)
-            visibility = DescriptorVisibilities.PUBLIC
-            modality = Modality.OPEN
-            returnType = unitType
-        }.apply {
-            overriddenSymbols = listOf(ruiComponentClass.functionByName(funName))
-            body = irFactory.createBlockBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET)
-        }
-    }
-
-    private fun addPatchParameter() {
-        patch.addValueParameter("mask", irBuiltIns.intArray.defaultType, IrDeclarationOrigin.DEFINED)
-    }
-
-    fun finalize() {
-        // have to add initializer last, so it will be able to access all properties
+    fun build() {
+        // The initializer has to be the last, so it will be able to access all properties
         irClass.declarations += initializer
-    }
-
-    private fun findInvalidate(): IrSimpleFunctionSymbol {
-        return irClass.declarations
-            .first { it is IrOverridableMember && it.name.identifier == "invalidate" }
-            .symbol as IrSimpleFunctionSymbol
     }
 
     internal fun addStateVariable(irVariable: IrVariable): RuiStateVariable {
         return RuiStateVariable(this, stateVariables.size, irVariable).also {
             stateVariables[it.originalName] = it
+            addDirtyMask(it)
         }
     }
 
     internal fun addStateVariable(irValueParameter: IrValueParameter): RuiStateVariable {
         return RuiStateVariable(this, stateVariables.size, irValueParameter).also {
             stateVariables[it.originalName] = it
+            addDirtyMask(it)
         }
+    }
+
+    /**
+     * Adds a new [RuiDirtyMask] if there are not enough masks already for this
+     * variable index.
+     */
+    fun addDirtyMask(ruiStateVariable: RuiStateVariable) {
+        val maskNumber = ruiStateVariable.index / 32
+        if (dirtyMasks.size > maskNumber) return
+        dirtyMasks += RuiDirtyMask(maskNumber)
     }
 
     internal fun getStateVariable(identifier: String) = stateVariables[identifier]
 
-    internal fun addComponentSlot(irCall: IrCall): RuiComponentSlot {
-        return RuiComponentSlot(this, componentSlots.size, irCall).also {
-            componentSlots[it.name] = it
+    internal fun addRenderingSlot(irCall: IrCall): RuiRenderingSlot {
+        return RuiRenderingSlot(this, renderingSlots.size, irCall).also {
+            renderingSlots[it.name] = it
         }
-    }
-
-    fun transformStateDefinition() {
-        RuiStateVariableTransformer(ruiContext, this).buildStateDefinition()
-    }
-
-    fun transformRendering() {
-        RuiRenderingTransformer(ruiContext, this).buildRendering()
     }
 
     fun irGetReceiver() = IrGetValueImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, thisReceiver.symbol)

@@ -3,8 +3,8 @@
  */
 package zakadabar.rui.kotlin.plugin
 
-import zakadabar.rui.core.Rui
-import zakadabar.rui.core.RuiBlock
+import zakadabar.rui.runtime.Rui
+import zakadabar.rui.runtime.RuiBlock
 
 @Rui
 fun P0() {

@@ -8,8 +8,7 @@ import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_AFTER
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_BEFORE
-import zakadabar.rui.kotlin.plugin.lower.RuiCompilationPhase
-import zakadabar.rui.kotlin.plugin.lower.RuiFunctionVisitor
+import zakadabar.rui.kotlin.plugin.state.definition.RuiFunctionVisitor
 
 internal class RuiGenerationExtension(
     private val ruiPluginContext: RuiPluginContext
@@ -21,20 +20,12 @@ internal class RuiGenerationExtension(
 
         ruiPluginContext.dump(DUMP_BEFORE, moduleFragment)
 
-        moduleFragment.accept(RuiFunctionVisitor(ruiPluginContext, RuiCompilationPhase.StateDefinition), null)
+        moduleFragment.accept(RuiFunctionVisitor(ruiPluginContext), null)
 
-        moduleFragment.accept(RuiFunctionVisitor(ruiPluginContext, RuiCompilationPhase.Rendering), null)
+        ruiPluginContext.ruiClasses.forEach {
+            it.value.build()
+        }
 
-//        reactiveContext.irPluginContext = pluginContext
-//
-//        moduleFragment.accept(TopLevelVisitor(reactiveContext), reactiveContext.controlData)
-//
-//        reactiveContext.dump(DUMP_RCD, reactiveContext.controlData)
-//
-//        moduleFragment.transform(ReactiveIrTransformer(pluginContext, reactiveContext), null)
-//
-//        moduleFragment.accept(ReactiveIrDebugVisitor(pluginContext, reactiveContext), null)
-//
         ruiPluginContext.dump(DUMP_AFTER, moduleFragment)
     }
 

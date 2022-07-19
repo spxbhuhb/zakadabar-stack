@@ -3,7 +3,7 @@
  */
 package zakadabar.rui.kotlin.plugin.successes
 
-import zakadabar.rui.core.Rui
+import zakadabar.rui.runtime.Rui
 
 @Suppress("unused", "TestFunctionName")
 @Rui

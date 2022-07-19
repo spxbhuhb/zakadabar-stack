@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.diagnostics.Severity
 import org.jetbrains.kotlin.ir.IrElement
 import org.jetbrains.kotlin.ir.IrFileEntry
 import org.jetbrains.kotlin.ir.declarations.IrFunction
+import org.jetbrains.kotlin.ir.expressions.IrBlock
 import org.jetbrains.kotlin.ir.util.IrMessageLogger
 import org.jetbrains.kotlin.ir.util.file
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
@@ -32,6 +33,7 @@ object ErrorsRui {
 
     val RUI_IR_RENDERING_VARIABLE = RuiIrError(1, "Declaration of state variables in rendering part is not allowed.")
     val RUI_IR_MISSING_FUNCTION_BODY = RuiIrError(2, "Rui annotation is not allowed on functions without block body.")
+    val RUI_IR_INVALID_RENDERING_STATEMENT = RuiIrError(3, "Statement is not allowed in the rendering part.")
 
     class RuiIrError(
         val id: Int,
@@ -48,6 +50,10 @@ object ErrorsRui {
 
         fun report(ruiContext: RuiPluginContext, declaration: IrFunction) {
             report(ruiContext, declaration.file.fileEntry, declaration.startOffset)
+        }
+
+        fun report(ruiClass: RuiClass, declaration: IrBlock) {
+            report(ruiClass.ruiContext, ruiClass.original.file.fileEntry, declaration.startOffset)
         }
 
         fun report(ruiContext: RuiPluginContext, fileEntry: IrFileEntry, offset: Int) {

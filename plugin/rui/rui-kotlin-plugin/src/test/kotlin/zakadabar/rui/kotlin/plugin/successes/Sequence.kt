@@ -3,8 +3,8 @@
  */
 package zakadabar.rui.kotlin.plugin.successes
 
-import zakadabar.rui.core.Rui
 import zakadabar.rui.kotlin.plugin.P0
+import zakadabar.rui.runtime.Rui
 
 @Rui
 fun Sequence() {
