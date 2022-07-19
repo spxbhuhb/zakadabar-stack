@@ -8,6 +8,7 @@ import org.jetbrains.kotlin.ir.declarations.IrVariable
 import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
 import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
+import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
 /**
  * Variable in the component state. A state variable is generated for each:
@@ -51,4 +52,9 @@ class RuiStateVariable private constructor(
                 )
             )
     }
+
+    override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
+        visitor.visitStateVariable(this, data)
+    override fun <D> acceptChildren(visitor: RuiElementVisitor<Unit, D>, data: D) = Unit
+
 }

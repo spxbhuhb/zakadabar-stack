@@ -12,9 +12,7 @@ import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.extensions.StorageComponentContainerContributor
 import zakadabar.rui.kotlin.plugin.RuiConfigurationKeys.ANNOTATION
-import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_AFTER
-import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_BEFORE
-import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_BOUNDARY
+import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_RUI_TREE
 
 /**
  * Registers the extensions into the compiler.
@@ -26,10 +24,11 @@ class RuiComponentRegistrar : ComponentRegistrar {
 
 
         val annotations = configuration.get(ANNOTATION).orEmpty().toMutableList()
-        if (annotations.isEmpty()) annotations += "zakadabar.rui.core.Rui"
+        if (annotations.isEmpty()) annotations += "zakadabar.rui.runtime.Rui"
 
 //        val dump = configuration.get(DUMP).orEmpty()
-        val dump = listOf(DUMP_BEFORE, DUMP_AFTER, DUMP_BOUNDARY)
+//        val dump = listOf(DUMP_BEFORE, DUMP_AFTER, DUMP_RUI_TREE)
+        val dump = listOf(DUMP_RUI_TREE)
 
         registerRuiComponents(project, RuiPluginContext(annotations, dump), configuration.getBoolean(JVMConfigurationKeys.IR))
     }

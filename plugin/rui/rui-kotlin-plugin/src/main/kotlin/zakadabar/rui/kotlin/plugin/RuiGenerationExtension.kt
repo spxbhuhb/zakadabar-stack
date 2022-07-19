@@ -8,6 +8,7 @@ import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_AFTER
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_BEFORE
+import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_RUI_TREE
 import zakadabar.rui.kotlin.plugin.state.definition.RuiFunctionVisitor
 
 internal class RuiGenerationExtension(
@@ -24,6 +25,13 @@ internal class RuiGenerationExtension(
 
         ruiPluginContext.ruiClasses.forEach {
             it.value.build()
+        }
+
+        if (DUMP_RUI_TREE in ruiPluginContext.dumpPoints) {
+            ruiPluginContext.ruiClasses.forEach {
+                println("==== RUI TREE ====")
+                println(it.value.dump())
+            }
         }
 
         ruiPluginContext.dump(DUMP_AFTER, moduleFragment)

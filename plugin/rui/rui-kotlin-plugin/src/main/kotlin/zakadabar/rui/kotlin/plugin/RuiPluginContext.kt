@@ -36,6 +36,7 @@ class RuiPluginContext(
         const val DUMP_BEFORE = "before"
         const val DUMP_AFTER = "after"
         const val DUMP_BOUNDARY = "boundary"
+        const val DUMP_RUI_TREE = "rui-tree"
     }
 
 }

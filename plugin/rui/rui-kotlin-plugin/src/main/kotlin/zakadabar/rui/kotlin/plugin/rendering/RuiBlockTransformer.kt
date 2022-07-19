@@ -23,9 +23,9 @@ class RuiBlockTransformer(
         for (i in expression.statements.indices) {
             val statement = expression.statements[i]
             when (statement) {
-                is IrCall -> {}
-                is IrWhen -> {}
-                is IrWhileLoop -> {}
+                is IrCall -> ruiClass.addBlock(statement).transform()
+                is IrWhen -> ruiClass.addBlock(statement).transform()
+                is IrWhileLoop -> ruiClass.addBlock(statement).transform()
                 else -> RUI_IR_INVALID_RENDERING_STATEMENT.report(ruiClass, expression)
             }
         }

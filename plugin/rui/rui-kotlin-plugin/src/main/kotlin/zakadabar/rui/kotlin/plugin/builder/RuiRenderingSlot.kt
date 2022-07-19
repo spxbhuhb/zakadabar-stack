@@ -6,6 +6,7 @@ package zakadabar.rui.kotlin.plugin.builder
 import org.jetbrains.kotlin.ir.builders.declarations.*
 import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.expressions.IrCall
+import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
 /**
  * A slot in component rendering. A component slot is generated for each:
@@ -34,4 +35,8 @@ class RuiRenderingSlot private constructor(
         buildProperty()
     }
 
+    override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
+        visitor.visitRenderingSlot(this, data)
+
+    override fun <D> acceptChildren(visitor: RuiElementVisitor<Unit, D>, data: D) = Unit
 }

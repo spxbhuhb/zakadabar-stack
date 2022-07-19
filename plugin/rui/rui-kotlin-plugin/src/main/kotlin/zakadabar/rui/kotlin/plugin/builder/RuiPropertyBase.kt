@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.name.Name
 abstract class RuiPropertyBase(
     val ruiClass: RuiClass,
     val index: Int
-) {
+) : RuiElement {
 
     abstract val name : String
 
