@@ -22,19 +22,28 @@ interface RuiElementVisitorVoid<out R> : RuiElementVisitor<R, Nothing?> {
     fun visitRenderingSlot(ruiRenderingSlot: RuiRenderingSlot) = visitElement(ruiRenderingSlot)
     override fun visitRenderingSlot(ruiRenderingSlot: RuiRenderingSlot, data: Nothing?) = visitRenderingSlot(ruiRenderingSlot)
 
-    fun visitCall(ruiCall: RuiCall) = visitElement(ruiCall)
-    override fun visitCall(ruiCall: RuiCall, data: Nothing?) = visitCall(ruiCall)
+    fun visitStatement(statement: RuiStatement) = visitElement(statement)
+    override fun visitStatement(statement: RuiStatement, data: Nothing?) = visitStatement(statement)
 
-    fun visitCallParameter(ruiCallParameter: RuiCallParameter) = visitElement(ruiCallParameter)
-    override fun visitCallParameter(ruiCallParameter: RuiCallParameter, data: Nothing?) = visitCallParameter(ruiCallParameter)
+    fun visitBlock(statement: RuiBlock) = visitElement(statement)
+    override fun visitBlock(statement: RuiBlock, data: Nothing?) = visitBlock(statement)
 
-    fun visitWhen(ruiWhen: RuiWhen) = visitElement(ruiWhen)
-    override fun visitWhen(ruiWhen: RuiWhen, data: Nothing?) = visitWhen(ruiWhen)
+    fun visitCall(statement: RuiCall) = visitElement(statement)
+    override fun visitCall(statement: RuiCall, data: Nothing?) = visitCall(statement)
 
-    fun visitBranch(ruiBranch: RuiBranch) = visitElement(ruiBranch)
-    override fun visitBranch(ruiBranch: RuiBranch, data: Nothing?) = visitBranch(ruiBranch)
+    fun visitWhen(statement: RuiWhen) = visitElement(statement)
+    override fun visitWhen(statement: RuiWhen, data: Nothing?) = visitWhen(statement)
 
-    fun visitLoop(ruiLoop: RuiLoop) = visitElement(ruiLoop)
-    override fun visitLoop(ruiLoop: RuiLoop, data: Nothing?) = visitLoop(ruiLoop)
+    fun visitForLoop(statement: RuiForLoop) = visitElement(statement)
+    override fun visitForLoop(statement: RuiForLoop, data: Nothing?) = visitForLoop(statement)
+
+    fun visitExpression(expression: RuiExpression) = visitElement(expression)
+    override fun visitExpression(expression: RuiExpression, data: Nothing?) = visitExpression(expression)
+
+    fun visitDeclaration(declaration: RuiDeclaration) = visitElement(declaration)
+    override fun visitDeclaration(declaration: RuiDeclaration, data: Nothing?) = visitDeclaration(declaration)
+
+    fun visitBranch(branch: RuiBranch) = visitElement(branch)
+    override fun visitBranch(branch: RuiBranch, data: Nothing?) = visitBranch(branch)
 
 }

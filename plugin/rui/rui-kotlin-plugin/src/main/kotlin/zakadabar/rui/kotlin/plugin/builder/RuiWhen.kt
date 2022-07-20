@@ -4,30 +4,15 @@
 package zakadabar.rui.kotlin.plugin.builder
 
 import org.jetbrains.kotlin.ir.expressions.IrWhen
-import org.jetbrains.kotlin.ir.visitors.acceptVoid
-import zakadabar.rui.kotlin.plugin.rendering.RuiDependencyVisitor
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
 class RuiWhen(
     ruiClass: RuiClass,
     index: Int,
     val irWhen: IrWhen
-) : RuiBlock(ruiClass, index) {
+) : RuiStatement(ruiClass, index) {
 
     val branches = mutableListOf<RuiBranch>()
-
-    override fun transform() {
-        irWhen.branches.forEach { irBranch ->
-            branches += RuiBranch(
-                index = 0,
-                irBranch.condition,
-                RuiDependencyVisitor(ruiClass).apply { irBranch.condition.acceptVoid(this) }.dependencies,
-                irBranch.result,
-                RuiDependencyVisitor(ruiClass).apply { irBranch.result.acceptVoid(this) }.dependencies,
-            )
-        }
-
-    }
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
         visitor.visitWhen(this, data)

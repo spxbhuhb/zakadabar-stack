@@ -8,13 +8,14 @@ import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.visitors.IrElementVisitorVoid
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import zakadabar.rui.kotlin.plugin.builder.RuiClass
+import zakadabar.rui.kotlin.plugin.builder.RuiStateVariable
 import zakadabar.rui.kotlin.plugin.util.RuiAnnotationBasedExtension
 
 class RuiDependencyVisitor(
     private val ruiClass: RuiClass
 ) : RuiAnnotationBasedExtension, IrElementVisitorVoid {
 
-    val dependencies = mutableListOf<Int>()
+    var dependencies = mutableListOf<RuiStateVariable>()
 
     override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?): List<String> =
         ruiClass.ruiContext.annotations
@@ -28,10 +29,11 @@ class RuiDependencyVisitor(
      */
     override fun visitCall(expression: IrCall) {
         ruiClass.stateVariableByGetterOrNull(expression.symbol)?.let {
-            dependencies += it.index
+            dependencies += it
         }
         super.visitCall(expression)
     }
-
-
 }
+
+fun IrElement.dependencies(ruiClass: RuiClass) =
+    RuiDependencyVisitor(ruiClass).also { this.accept(it, null) }.dependencies

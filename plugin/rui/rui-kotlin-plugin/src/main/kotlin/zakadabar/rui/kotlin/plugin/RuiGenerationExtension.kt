@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_AFTER
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_BEFORE
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_RUI_TREE
+import zakadabar.rui.kotlin.plugin.rendering.RuiRenderingCompiler
 import zakadabar.rui.kotlin.plugin.state.definition.RuiFunctionVisitor
 
 internal class RuiGenerationExtension(
@@ -23,9 +24,7 @@ internal class RuiGenerationExtension(
 
         moduleFragment.accept(RuiFunctionVisitor(ruiPluginContext), null)
 
-        ruiPluginContext.ruiClasses.forEach {
-            it.value.build()
-        }
+        RuiRenderingCompiler(ruiPluginContext).compileClasses()
 
         if (DUMP_RUI_TREE in ruiPluginContext.dumpPoints) {
             println("RUI CLASSES")

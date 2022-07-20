@@ -38,15 +38,10 @@ class RuiBoundaryVisitor(
 
             statements.forEachIndexed { index, irStatement ->
                 irStatement.acceptVoid(this)
-                if (found) {
-                    ruiContext.dumpBoundary(declaration, index)
-                    return index
-                }
+                if (found) return index
             }
 
-            ruiContext.dumpBoundary(declaration, statements.size)
             return statements.size
-
         }
 
         throw IllegalStateException("function has no body (maybe it's an expression function)")

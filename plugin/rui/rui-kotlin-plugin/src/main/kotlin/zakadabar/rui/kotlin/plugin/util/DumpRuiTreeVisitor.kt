@@ -52,56 +52,60 @@ class DumpRuiTreeVisitor(
         }
     }
 
-    override fun visitCall(ruiCall: RuiCall) {
+    override fun visitCall(statement: RuiCall) {
         indented {
-            with(ruiCall) {
-                println { "BLOCK type:CALL index:$index name:$name targetRuiClass:$targetRuiClass" }
+            with(statement) {
+                println { "BLOCK type:CALL index:$index name:$name targetRuiClass:<$targetRuiClass>" }
             }
-            super.visitCall(ruiCall)
+            super.visitCall(statement)
         }
     }
 
-    override fun visitCallParameter(ruiCallParameter: RuiCallParameter) {
+    override fun visitWhen(statement: RuiWhen) {
         indented {
-            with(ruiCallParameter) {
-                println { "PARAMETER index:$index ${dependencies.withLabel("dependencies")}" }
-            }
-            super.visitCallParameter(ruiCallParameter)
-        }
-    }
-
-    override fun visitWhen(ruiWhen: RuiWhen) {
-        indented {
-            with(ruiWhen) {
+            with(statement) {
                 println { "BLOCK type:WHEN index:$index name:$name" }
             }
-            super.visitWhen(ruiWhen)
+            super.visitWhen(statement)
         }
     }
 
-    override fun visitBranch(ruiBranch: RuiBranch) {
+    override fun visitForLoop(statement: RuiForLoop) {
         indented {
-            with(ruiBranch) {
-                println {
-                    listOf(
-                        "BRANCH index:$index",
-                        conditionDependencies.withLabel("conditionDependencies"),
-                        bodyDependencies.withLabel("bodyDependencies")
-                    ).joinToString(" ")
-                }
-                super.visitBranch(ruiBranch)
+            with(statement) {
+                println { "BLOCK type:FOR_LOOP index:$index name:$name" }
             }
+            super.visitForLoop(statement)
         }
     }
 
-    override fun visitLoop(ruiLoop: RuiLoop) {
+    override fun visitBranch(branch: RuiBranch) {
         indented {
-            with(ruiLoop) {
-                println { "BLOCK type:LOOP index:$index name:$name" }
+            with(branch) {
+                println { "BRANCH index:$index" }
             }
-            super.visitLoop(ruiLoop)
+            super.visitBranch(branch)
         }
     }
+
+    override fun visitExpression(expression: RuiExpression) {
+        indented {
+            with(expression) {
+                println { "EXPRESSION index:$index ${expression.dependencies.withLabel("dependencies")}" }
+            }
+            super.visitExpression(expression)
+        }
+    }
+
+    override fun visitDeclaration(declaration: RuiDeclaration) {
+        indented {
+            with(declaration) {
+                println { "DECLARATION index:$index ${declaration.dependencies.withLabel("dependencies")}" }
+            }
+            super.visitDeclaration(declaration)
+        }
+    }
+
 
     private inline fun println(body: () -> String) {
         printer.println(body())
@@ -113,7 +117,7 @@ class DumpRuiTreeVisitor(
         printer.popIndent()
     }
 
-    fun List<Int>.withLabel(label: String) =
-        "$label:[${this.joinToString(", ") { it.toString() }}]"
+    fun List<RuiStateVariable>.withLabel(label: String) =
+        "$label:[${this.joinToString(", ") { it.index.toString() }}]"
 
 }

@@ -10,9 +10,6 @@ import org.jetbrains.kotlin.ir.builders.declarations.UNDEFINED_PARAMETER_INDEX
 import org.jetbrains.kotlin.ir.builders.declarations.addConstructor
 import org.jetbrains.kotlin.ir.builders.declarations.buildClass
 import org.jetbrains.kotlin.ir.declarations.*
-import org.jetbrains.kotlin.ir.expressions.IrCall
-import org.jetbrains.kotlin.ir.expressions.IrLoop
-import org.jetbrains.kotlin.ir.expressions.IrWhen
 import org.jetbrains.kotlin.ir.expressions.impl.IrDelegatingConstructorCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrInstanceInitializerCallImpl
@@ -27,7 +24,6 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.SpecialNames
 import zakadabar.rui.kotlin.plugin.RuiGenerationExtension
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
-import zakadabar.rui.kotlin.plugin.rendering.RuiBlockTransformer
 import zakadabar.rui.kotlin.plugin.state.definition.RuiBoundaryVisitor
 import zakadabar.rui.kotlin.plugin.state.definition.RuiFunctionVisitor
 import zakadabar.rui.kotlin.plugin.state.definition.RuiStateVariableTransformer
@@ -91,9 +87,11 @@ class RuiClass(
     val stateVariables = mutableMapOf<String, RuiStateVariable>()
     val renderingSlots = mutableMapOf<String, RuiRenderingSlot>()
     val dirtyMasks = mutableListOf<RuiDirtyMask>()
-    val blocks = mutableListOf<RuiBlock>()
+    val blocks = mutableListOf<RuiStatement>()
 
     val symbolMap = mutableMapOf<IrSymbol, RuiElement>()
+
+    lateinit var rootBlock : RuiBlock
 
     // IR shortcuts
 
@@ -203,10 +201,6 @@ class RuiClass(
     }
 
     fun build() {
-        if (boundary < originalStatements.size) {
-            RuiBlockTransformer(ruiContext, this).transform(originalStatements.subList(boundary, originalStatements.size))
-        }
-
         // The initializer has to be the last, so it will be able to access all properties
         irClass.declarations += initializer
     }
@@ -239,24 +233,6 @@ class RuiClass(
     internal fun stateVariableByGetterOrNull(symbol: IrSymbol): RuiStateVariable? =
         symbolMap[symbol]?.let { if (it is RuiStateVariable && it.getter.symbol == symbol) it else null }
 
-    internal fun addBlock(irCall: IrCall): RuiBlock {
-        return RuiCall(this, blocks.size, irCall).also {
-            blocks += it
-        }
-    }
-
-    internal fun addBlock(irWhen: IrWhen): RuiBlock {
-        return RuiWhen(this, blocks.size, irWhen).also {
-            blocks += it
-        }
-    }
-
-    internal fun addBlock(irLoop: IrLoop): RuiBlock {
-        return RuiLoop(this, blocks.size, irLoop).also {
-            blocks += it
-        }
-    }
-
     fun irGetReceiver() = IrGetValueImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, thisReceiver.symbol)
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
@@ -266,6 +242,6 @@ class RuiClass(
         stateVariables.values.forEach { it.accept(visitor, data) }
         renderingSlots.values.forEach { it.accept(visitor, data) }
         dirtyMasks.forEach { it.accept(visitor, data) }
-        blocks.forEach { it.accept(visitor, data) }
+        rootBlock.accept(visitor, data)
     }
 }

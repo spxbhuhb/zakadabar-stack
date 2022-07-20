@@ -3,19 +3,22 @@
  */
 package zakadabar.rui.kotlin.plugin.builder
 
-import org.jetbrains.kotlin.ir.expressions.IrExpression
+import org.jetbrains.kotlin.ir.expressions.IrBranch
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
 class RuiBranch(
+    val ruiClass: RuiClass,
     val index : Int,
-    val condition: IrExpression,
-    val conditionDependencies : MutableList<Int>,
-    val body : IrExpression,
-    val bodyDependencies: MutableList<Int>
+    val irBranch: IrBranch,
+    val condition : RuiExpression,
+    val result: RuiExpression
 ) : RuiElement {
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
         visitor.visitBranch(this, data)
 
-    override fun <D> acceptChildren(visitor: RuiElementVisitor<Unit, D>, data: D) = Unit
+    override fun <D> acceptChildren(visitor: RuiElementVisitor<Unit, D>, data: D) {
+        condition.accept(visitor, data)
+        result.accept(visitor, data)
+    }
 }

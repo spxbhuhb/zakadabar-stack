@@ -6,18 +6,23 @@ package zakadabar.rui.kotlin.plugin.builder
 import org.jetbrains.kotlin.ir.expressions.IrBlock
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
-class RuiBlock(
+class RuiForLoop(
     ruiClass: RuiClass,
-    index : Int,
-    val irBlock : IrBlock
+    index: Int,
+    val irBlock: IrBlock,
+    var iterator: RuiDeclaration,
+    val condition: RuiExpression,
+    val loopVariable: RuiDeclaration,
+    val body: RuiStatement,
 ) : RuiStatement(ruiClass, index) {
 
-    val statements = mutableListOf<RuiStatement>()
-
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
-        visitor.visitBlock(this, data)
+        visitor.visitForLoop(this, data)
 
     override fun <D> acceptChildren(visitor: RuiElementVisitor<Unit, D>, data: D) {
-        statements.forEach { it.accept(visitor, data) }
+        iterator.accept(visitor, data)
+        condition.accept(visitor, data)
+        loopVariable.accept(visitor, data)
+        body.accept(visitor, data)
     }
 }

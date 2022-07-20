@@ -6,6 +6,7 @@ package zakadabar.rui.kotlin.plugin.state.definition
 import org.jetbrains.kotlin.backend.common.IrElementTransformerVoidWithContext
 import org.jetbrains.kotlin.ir.IrStatement
 import org.jetbrains.kotlin.ir.builders.declarations.addValueParameter
+import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrVariable
 import org.jetbrains.kotlin.ir.expressions.IrBlock
 import org.jetbrains.kotlin.ir.expressions.IrExpression
@@ -81,7 +82,11 @@ class RuiStateVariableTransformer(
     override fun visitVariable(declaration: IrVariable): IrStatement {
         blockStack.peek().variables += declaration.name.identifier
 
-        RUI_IR_RENDERING_VARIABLE.check(ruiClass, declaration) { currentStatementIndex < ruiClass.boundary }
+        RUI_IR_RENDERING_VARIABLE.check(ruiClass, declaration) {
+            currentStatementIndex < ruiClass.boundary ||
+                    declaration.origin == IrDeclarationOrigin.FOR_LOOP_ITERATOR ||
+                    declaration.origin == IrDeclarationOrigin.FOR_LOOP_VARIABLE
+        }
 
         return super.visitVariable(declaration)
     }

@@ -30,9 +30,15 @@ import zakadabar.rui.kotlin.plugin.builder.RuiClass
 object ErrorsRui {
     // These errors are used by the IR transformation
 
+    // IMPORTANT: DO NOT ADD AUTOMATIC ID GENERATION! error ids should not change over time
     val RUI_IR_RENDERING_VARIABLE = RuiIrError(1, "Declaration of state variables in rendering part is not allowed.")
     val RUI_IR_MISSING_FUNCTION_BODY = RuiIrError(2, "Rui annotation is not allowed on functions without block body.")
     val RUI_IR_INVALID_RENDERING_STATEMENT = RuiIrError(3, "Statement is not allowed in the rendering part.")
+    val RIU_IR_RENDERING_NO_LOOP_BODY = RuiIrError(4, "Statement is not allowed in the rendering part.")
+    val RIU_IR_RENDERING_NON_RUI_CALL = RuiIrError(5, "Calls to non-Rui functions is not allowed in the rendering part.")
+    val RUI_IR_MISSING_EXPRESSION_ARGUMENT = RuiIrError(6, "Missing expression argument. Most probably this is a plugin bug, please open an issue for this on GitHub.")
+    val RUI_IR_RENDERING_INVALID_LOOP_BODY = RuiIrError(7, "This loop body is not allowed in the rendering part.")
+    val RUI_IR_RENDERING_INVALID_DECLARATION = RuiIrError(8, "This declaration is not allowed in the rendering part.")
 
     class RuiIrError(
         val id: Int,
@@ -51,8 +57,9 @@ object ErrorsRui {
             report(ruiContext, declaration.file.fileEntry, declaration.startOffset)
         }
 
-        fun report(ruiClass: RuiClass, element: IrElement) {
+        fun report(ruiClass: RuiClass, element: IrElement): Nothing? {
             report(ruiClass.ruiContext, ruiClass.original.file.fileEntry, element.startOffset)
+            return null
         }
 
         fun report(ruiContext: RuiPluginContext, fileEntry: IrFileEntry, offset: Int) {
@@ -61,8 +68,8 @@ object ErrorsRui {
                 toMessage(),
                 IrMessageLogger.Location(
                     fileEntry.name,
-                    fileEntry.getLineNumber(offset),
-                    fileEntry.getColumnNumber(offset)
+                    fileEntry.getLineNumber(offset) + 1,
+                    fileEntry.getColumnNumber(offset) + 1
                 )
             )
         }
