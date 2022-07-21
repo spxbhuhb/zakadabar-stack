@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.util.IrMessageLogger
 import org.jetbrains.kotlin.ir.util.file
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
-import zakadabar.rui.kotlin.plugin.builder.RuiClass
+import zakadabar.rui.kotlin.plugin.model.RuiClass
 
 object ErrorsRui {
     // These errors are used by the IR transformation
@@ -50,7 +50,7 @@ object ErrorsRui {
 
         fun check(ruiClass: RuiClass, element: IrElement, check: () -> Boolean) {
             if (check()) return
-            report(ruiClass.ruiContext, ruiClass.original.file.fileEntry, element.startOffset)
+            report(ruiClass.ruiContext, ruiClass.irFunction.file.fileEntry, element.startOffset)
         }
 
         fun report(ruiContext: RuiPluginContext, declaration: IrFunction) {
@@ -58,7 +58,7 @@ object ErrorsRui {
         }
 
         fun report(ruiClass: RuiClass, element: IrElement): Nothing? {
-            report(ruiClass.ruiContext, ruiClass.original.file.fileEntry, element.startOffset)
+            report(ruiClass.ruiContext, ruiClass.irFunction.file.fileEntry, element.startOffset)
             return null
         }
 

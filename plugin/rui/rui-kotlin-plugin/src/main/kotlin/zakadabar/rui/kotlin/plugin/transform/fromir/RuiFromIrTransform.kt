@@ -1,29 +1,33 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.rui.kotlin.plugin.rendering
+package zakadabar.rui.kotlin.plugin.transform.fromir
 
 import org.jetbrains.kotlin.ir.IrElement
-import org.jetbrains.kotlin.ir.declarations.IrDeclaration
-import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
-import org.jetbrains.kotlin.ir.declarations.IrValueDeclaration
-import org.jetbrains.kotlin.ir.declarations.IrVariable
+import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.expressions.*
 import org.jetbrains.kotlin.ir.expressions.impl.IrBlockImpl
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.psi.KtModifierListOwner
-import zakadabar.rui.kotlin.plugin.builder.*
+import zakadabar.rui.kotlin.plugin.RuiPluginContext
+import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RIU_IR_RENDERING_NON_RUI_CALL
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RUI_IR_INVALID_RENDERING_STATEMENT
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RUI_IR_MISSING_EXPRESSION_ARGUMENT
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RUI_IR_RENDERING_INVALID_DECLARATION
+import zakadabar.rui.kotlin.plugin.model.*
 import zakadabar.rui.kotlin.plugin.util.RuiAnnotationBasedExtension
 
 class RuiFromIrTransform(
-    private val ruiClass: RuiClass,
+    val ruiContext : RuiPluginContext
 ) : RuiAnnotationBasedExtension {
 
-    var index = 0
+    lateinit var ruiClass : RuiClass
+
+    var stateVariableIndex = 0
+        get() = field ++
+
+    var blockIndex = 0
         get() = field ++
 
     override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?): List<String> =
@@ -35,10 +39,54 @@ class RuiFromIrTransform(
         return visitor.dependencies
     }
 
-    fun transformClass(ruiClass: RuiClass) {
+    fun transform(irFunction : IrFunction) : RuiClass {
+        stateVariableIndex = 0
+        blockIndex = 0
+
+        ruiClass = RuiClass(ruiContext, irFunction)
+
+        collectStateVariables()
+        transformRoot()
+
+        return ruiClass
+    }
+
+    fun collectStateVariables() {
+
+        ruiClass.irFunction.valueParameters.forEach { valueParameter ->
+            RuiPublicStateVariable(ruiClass, stateVariableIndex, valueParameter).also {
+                ruiClass.stateVariables[it.name] = it
+            }
+        }
+
+        ruiClass.originalStatements.forEachIndexed { statementIndex, irStatement ->
+
+            if (irStatement !is IrVariable) return@forEachIndexed
+
+            if (statementIndex >= ruiClass.boundary) {
+                ErrorsRui.RUI_IR_RENDERING_VARIABLE.report(ruiClass, irStatement)
+                return@forEachIndexed
+            }
+
+            RuiPrivateStateVariable(ruiClass, stateVariableIndex, irStatement).also {
+                ruiClass.stateVariables[it.originalName] = it // TODO think about name shadowing
+                //  this@RuiClass.symbolMap[getter.symbol] = this
+                addDirtyMask(it)
+            }
+
+        }
+    }
+
+    fun addDirtyMask(ruiStateVariable: RuiStateVariable) {
+        val maskNumber = ruiStateVariable.index / 32
+        if (ruiClass.dirtyMasks.size > maskNumber) return
+        ruiClass.dirtyMasks += RuiDirtyMask(maskNumber)
+    }
+
+    fun transformRoot() {
         val statements = ruiClass.originalStatements
 
-        val irBlock = IrBlockImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, ruiClass.irContext.irBuiltIns.unitType)
+        val irBlock = IrBlockImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, ruiContext.irPluginContext.irBuiltIns.unitType)
         irBlock.statements.addAll(statements.subList(ruiClass.boundary, statements.size))
 
         ruiClass.rootBlock = transformBlock(irBlock)
@@ -46,14 +94,14 @@ class RuiFromIrTransform(
 
     fun transformBlock(expression: IrBlock): RuiBlock {
 
-        val ruiBlock = RuiBlock(ruiClass, index, expression)
+        val ruiBlock = RuiBlock(ruiClass, blockIndex, expression)
 
         expression.statements.forEach { statement ->
             when (statement) {
 
                 is IrBlock -> {
                     when (statement.origin) {
-                        IrStatementOrigin.FOR_LOOP -> transformForBlock(statement)
+                        IrStatementOrigin.FOR_LOOP -> transformForLoop(statement)
                         else -> RUI_IR_INVALID_RENDERING_STATEMENT.report(ruiClass, statement)
                     }
                 }
@@ -71,7 +119,7 @@ class RuiFromIrTransform(
         return ruiBlock
     }
 
-    fun transformForBlock(statement: IrBlock): RuiForLoop? {
+    fun transformForLoop(statement: IrBlock): RuiForLoop? {
 
         // BLOCK type=kotlin.Unit origin=FOR_LOOP
         //          VAR FOR_LOOP_ITERATOR name:tmp0_iterator type:kotlin.collections.IntIterator [val]
@@ -116,7 +164,7 @@ class RuiFromIrTransform(
         val loopVariable = transformDeclaration(irLoopVariable) ?: return null
 
         return RuiForLoop(
-            ruiClass, index, statement,
+            ruiClass, blockIndex, statement,
             iterator,
             condition,
             loopVariable,
@@ -130,7 +178,7 @@ class RuiFromIrTransform(
             return RIU_IR_RENDERING_NON_RUI_CALL.report(ruiClass, statement)
         }
 
-        val ruiCall = RuiCall(ruiClass, index, statement)
+        val ruiCall = RuiCall(ruiClass, blockIndex, statement)
 
         for (index in 0 until statement.valueArgumentsCount) {
 
@@ -138,7 +186,7 @@ class RuiFromIrTransform(
                 ?: return RUI_IR_MISSING_EXPRESSION_ARGUMENT.report(ruiClass, statement)
 
             ruiCall.valueArguments += RuiExpression(
-                ruiClass, index,
+                ruiClass,
                 expression,
                 expression.dependencies()
             )
@@ -148,7 +196,7 @@ class RuiFromIrTransform(
     }
 
     fun transformWhen(statement: IrWhen): RuiWhen {
-        val ruiWhen = RuiWhen(ruiClass, index, statement)
+        val ruiWhen = RuiWhen(ruiClass, blockIndex, statement)
 
         statement.branches.forEach { irBranch ->
             ruiWhen.branches += transformBranch(irBranch)
@@ -157,40 +205,22 @@ class RuiFromIrTransform(
         return ruiWhen
     }
 
-//    fun transformLoop(statement: IrLoop): RuiForLoop? {
-//
-//        val irBody = statement.body
-//
-//        val ruiBody = when (irBody) {
-//            is IrBlock -> transformBlock(irBody)
-//            is IrCall -> transformCall(irBody)
-//            is IrWhen -> transformWhen(irBody)
-//            is IrLoop -> transformLoop(irBody)
-//            null -> RIU_IR_RENDERING_NO_LOOP_BODY.report(ruiClass, statement)
-//            else -> RUI_IR_RENDERING_INVALID_LOOP_BODY.report(ruiClass, statement)
-//        } ?: return null
-//
-//        val condition = transformExpression(statement.condition)
-//
-//        return RuiForLoop(ruiClass, index, statement, ruiBody?, condition)
-//    }
-
     fun transformBranch(branch: IrBranch): RuiBranch {
         return RuiBranch(
-            ruiClass, index,
+            ruiClass, blockIndex,
             branch,
-            RuiExpression(ruiClass, index, branch.condition, branch.condition.dependencies()),
-            RuiExpression(ruiClass, index, branch.result, branch.result.dependencies()),
+            RuiExpression(ruiClass, branch.condition, branch.condition.dependencies()),
+            RuiExpression(ruiClass, branch.result, branch.result.dependencies()),
         )
     }
 
     fun transformExpression(expression: IrExpression): RuiExpression {
-        return RuiExpression(ruiClass, index, expression, expression.dependencies())
+        return RuiExpression(ruiClass, expression, expression.dependencies())
     }
 
     fun transformDeclaration(declaration: IrDeclaration): RuiDeclaration? =
         when (declaration) {
-            is IrValueDeclaration -> RuiDeclaration(ruiClass, index, declaration, declaration.dependencies())
+            is IrValueDeclaration -> RuiDeclaration(ruiClass, declaration, declaration.dependencies())
             else -> RUI_IR_RENDERING_INVALID_DECLARATION.report(ruiClass, declaration)
         }
 

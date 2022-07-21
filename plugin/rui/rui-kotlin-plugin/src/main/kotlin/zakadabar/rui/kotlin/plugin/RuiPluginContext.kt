@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.ir.IrElement
 import org.jetbrains.kotlin.ir.util.IrMessageLogger
 import org.jetbrains.kotlin.ir.util.dump
 import org.jetbrains.kotlin.name.FqName
-import zakadabar.rui.kotlin.plugin.builder.RuiClass
+import zakadabar.rui.kotlin.plugin.model.RuiClass
 
 class RuiPluginContext(
     val annotations : List<String>,

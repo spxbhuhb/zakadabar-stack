@@ -1,43 +1,41 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.rui.kotlin.plugin.state.definition
+package zakadabar.rui.kotlin.plugin.transform
 
 import org.jetbrains.kotlin.backend.common.IrElementTransformerVoidWithContext
 import org.jetbrains.kotlin.backend.common.ir.addChild
-import org.jetbrains.kotlin.ir.declarations.IrFile
 import org.jetbrains.kotlin.ir.declarations.IrFunction
+import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
 import org.jetbrains.kotlin.ir.expressions.impl.IrBlockBodyImpl
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
+import org.jetbrains.kotlin.ir.util.file
+import org.jetbrains.kotlin.ir.util.kotlinFqName
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
-import zakadabar.rui.kotlin.plugin.builder.RuiClass
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RUI_IR_MISSING_FUNCTION_BODY
+import zakadabar.rui.kotlin.plugin.model.RuiClass
+import zakadabar.rui.kotlin.plugin.transform.fromir.RuiFromIrTransform
 import zakadabar.rui.kotlin.plugin.util.RuiAnnotationBasedExtension
 
 class RuiFunctionVisitor(
     private val ruiContext: RuiPluginContext
 ) : IrElementTransformerVoidWithContext(), RuiAnnotationBasedExtension {
 
-    /**
-     * Contains the classes generated during by the visitor. Needed to make sure
-     * there is no ConcurrentModificationException during visits.
-     */
-    val generatedClasses = mutableListOf<RuiClass>()
+    val ruiClasses = mutableListOf<RuiClass>()
 
     override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?): List<String> =
         ruiContext.annotations
 
-    override fun visitFileNew(declaration: IrFile): IrFile {
-        generatedClasses.clear()
+    fun transform(moduleFragment: IrModuleFragment) {
+        ruiClasses.clear()
 
-        val result = super.visitFileNew(declaration)
+        moduleFragment.accept(this, null)
 
-        generatedClasses.forEach {
-            result.addChild(it.irClass)
+        ruiClasses.forEach {
+            ruiContext.ruiClasses[it.irClass.kotlinFqName] = it
+            it.irFunction.file.addChild(it.irClass)
         }
-
-        return result
     }
 
     override fun visitFunctionNew(declaration: IrFunction): IrFunction {
@@ -50,10 +48,7 @@ class RuiFunctionVisitor(
             return declaration
         }
 
-        RuiClass(ruiContext, declaration).also {
-            generatedClasses += it
-            ruiContext.ruiClasses[it.fqName] = it
-        }
+        ruiClasses += RuiFromIrTransform(ruiContext).transform(declaration)
 
         // replace the body of the original function with an empty one
         declaration.body = IrBlockBodyImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET)

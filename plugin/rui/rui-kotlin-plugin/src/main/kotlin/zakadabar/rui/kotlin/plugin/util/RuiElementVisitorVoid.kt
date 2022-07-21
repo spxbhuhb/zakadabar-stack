@@ -3,7 +3,7 @@
  */
 package zakadabar.rui.kotlin.plugin.util
 
-import zakadabar.rui.kotlin.plugin.builder.*
+import zakadabar.rui.kotlin.plugin.model.*
 
 interface RuiElementVisitorVoid<out R> : RuiElementVisitor<R, Nothing?> {
 

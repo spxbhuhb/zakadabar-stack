@@ -9,8 +9,7 @@ import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_AFTER
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_BEFORE
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_RUI_TREE
-import zakadabar.rui.kotlin.plugin.rendering.RuiRenderingCompiler
-import zakadabar.rui.kotlin.plugin.state.definition.RuiFunctionVisitor
+import zakadabar.rui.kotlin.plugin.transform.RuiFunctionVisitor
 
 internal class RuiGenerationExtension(
     private val ruiPluginContext: RuiPluginContext
@@ -22,13 +21,11 @@ internal class RuiGenerationExtension(
 
         ruiPluginContext.dump(DUMP_BEFORE, moduleFragment)
 
-        moduleFragment.accept(RuiFunctionVisitor(ruiPluginContext), null)
-
-        RuiRenderingCompiler(ruiPluginContext).compileClasses()
+        RuiFunctionVisitor(ruiPluginContext).transform(moduleFragment)
 
         if (DUMP_RUI_TREE in ruiPluginContext.dumpPoints) {
             println("RUI CLASSES")
-            ruiPluginContext.ruiClasses.values.filter { ! it.name.matches("RuiP\\d+".toRegex()) }.forEach {
+            ruiPluginContext.ruiClasses.values.filter { ! it.irClass.name.identifier.matches("RuiP\\d+".toRegex()) }.forEach {
                 println(it.dump())
             }
         }

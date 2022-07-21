@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.rui.kotlin.plugin.builder
+package zakadabar.rui.kotlin.plugin.transform.builders
 
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
 import org.jetbrains.kotlin.descriptors.DescriptorVisibilities
@@ -10,40 +10,74 @@ import org.jetbrains.kotlin.ir.builders.declarations.*
 import org.jetbrains.kotlin.ir.builders.irBlockBody
 import org.jetbrains.kotlin.ir.builders.irGet
 import org.jetbrains.kotlin.ir.builders.irSetField
-import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
-import org.jetbrains.kotlin.ir.declarations.IrField
-import org.jetbrains.kotlin.ir.declarations.IrProperty
-import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
+import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrExpression
+import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
 import org.jetbrains.kotlin.ir.expressions.impl.IrCallImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
 import org.jetbrains.kotlin.ir.types.IrType
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.ir.util.defaultType
 import org.jetbrains.kotlin.ir.util.parentAsClass
 import org.jetbrains.kotlin.name.Name
+import zakadabar.rui.kotlin.plugin.RuiPluginContext
+import zakadabar.rui.kotlin.plugin.model.RuiPrivateStateVariable
+import zakadabar.rui.kotlin.plugin.model.RuiPublicStateVariable
+import zakadabar.rui.kotlin.plugin.model.RuiStateVariable
 
-/**
- * Base class for properties (state variables and component slots) added to a [RuiClass].
- */
-abstract class RuiPropertyBase(
-    val ruiClass: RuiClass,
-    val index: Int
-) : RuiElement {
+class RuiStateVariableBuilder(
+    override val ruiContext: RuiPluginContext,
+    val ruiClassBuilder: RuiClassBuilder,
+    val ruiStateVariable: RuiStateVariable
+) : RuiBuilder {
 
-    abstract val name : String
+    val irClass
+        get() = ruiClassBuilder.irClass
 
     lateinit var field: IrField
     lateinit var irProperty: IrProperty
     lateinit var getter: IrSimpleFunction
     lateinit var setter: IrSimpleFunction
 
-    fun buildField(irType : IrType) {
-        val factory = ruiClass.irFactory
-        val irClass = ruiClass.irClass
+    fun build() {
+        when (ruiStateVariable) {
+            is RuiPrivateStateVariable -> build(ruiStateVariable.irVariable)
+            is RuiPublicStateVariable -> build(ruiStateVariable.irValueParameter)
+        }
+    }
 
-        field = factory.buildField {
-            name = Name.identifier(this@RuiPropertyBase.name)
+    fun build(irValueParameter: IrValueParameter) {
+        buildField(irValueParameter.type)
+        buildProperty()
+
+        field.initializer = irFactory
+            .createExpressionBody(
+                SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+                IrGetValueImpl(
+                    SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, irValueParameter.symbol, IrStatementOrigin.INITIALIZE_PROPERTY_FROM_PARAMETER
+                )
+            )
+
+        ruiClassBuilder.constructor.addValueParameter {
+            name = irValueParameter.name
+            type = irValueParameter.type
+            varargElementType = irValueParameter.varargElementType
+        }
+    }
+
+    fun build(irVariable: IrVariable) {
+        buildField(irVariable.type)
+        buildProperty()
+
+        irVariable.initializer?.let { initializer ->
+            field.initializer = irFactory.createExpressionBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, initializer)
+        }
+    }
+
+    fun buildField(irType: IrType) {
+        field = irFactory.buildField {
+            name = Name.identifier(ruiStateVariable.name)
             type = irType
             origin = IrDeclarationOrigin.PROPERTY_BACKING_FIELD
             visibility = DescriptorVisibilities.PRIVATE
@@ -53,34 +87,30 @@ abstract class RuiPropertyBase(
     }
 
     fun buildProperty() {
-        val irClass = ruiClass.irClass
-
         irProperty = irClass.addProperty {
-            name = Name.identifier(this@RuiPropertyBase.name)
+            name = Name.identifier(ruiStateVariable.name)
             isVar = true
         }.apply {
             parent = irClass
             backingField = field
-            addDefaultGetter(irClass, ruiClass.irBuiltIns)
+            addDefaultGetter(irClass, irBuiltIns)
         }
 
         addDefaultSetter()
 
-        getter = irProperty.getter!!
-        setter = irProperty.setter!!
+        getter = irProperty.getter !!
+        setter = irProperty.setter !!
     }
 
     fun addDefaultSetter() {
 
-        val factory = ruiClass.irFactory
-
-        irProperty.setter = factory.buildFun {
+        irProperty.setter = irFactory.buildFun {
 
             origin = IrDeclarationOrigin.DEFAULT_PROPERTY_ACCESSOR
             name = Name.identifier("set-" + field.name.identifier)
             visibility = DescriptorVisibilities.PUBLIC
             modality = Modality.FINAL
-            returnType = ruiClass.unitType
+            returnType = irBuiltIns.unitType
 
         }.apply {
 
@@ -96,7 +126,7 @@ abstract class RuiPropertyBase(
                 type = field.type
             }
 
-            body = DeclarationIrBuilder(ruiClass.irContext, this.symbol).irBlockBody {
+            body = DeclarationIrBuilder(irContext, this.symbol).irBlockBody {
                 + irSetField(
                     receiver = irGet(receiver),
                     field = field,
@@ -106,26 +136,29 @@ abstract class RuiPropertyBase(
         }
     }
 
-    fun irGetValue() : IrCall {
+    fun irGetValue(): IrCall {
         return IrCallImpl(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
             field.type,
             getter.symbol,
             0, 0
         ).apply {
-            dispatchReceiver = ruiClass.irGetReceiver()
+            dispatchReceiver = irGetReceiver()
         }
     }
 
-    fun irSetValue(value : IrExpression) : IrCall {
+    fun irSetValue(value: IrExpression): IrCall {
         return IrCallImpl(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
             field.type,
             setter.symbol,
             0, 1
         ).apply {
-            dispatchReceiver = ruiClass.irGetReceiver()
+            dispatchReceiver = irGetReceiver()
             putValueArgument(0, value)
         }
     }
+
+    fun irGetReceiver() = IrGetValueImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, irClass.thisReceiver !!.symbol)
+
 }

@@ -3,7 +3,7 @@
  */
 package zakadabar.rui.kotlin.plugin.util
 
-import zakadabar.rui.kotlin.plugin.builder.*
+import zakadabar.rui.kotlin.plugin.model.*
 
 interface RuiElementVisitor<out R, in D> {
     fun visitElement(element: RuiElement, data: D): R

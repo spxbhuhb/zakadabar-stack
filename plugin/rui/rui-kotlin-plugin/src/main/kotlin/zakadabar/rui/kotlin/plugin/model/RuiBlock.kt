@@ -1,23 +1,23 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.rui.kotlin.plugin.builder
+package zakadabar.rui.kotlin.plugin.model
 
-import org.jetbrains.kotlin.ir.expressions.IrWhen
+import org.jetbrains.kotlin.ir.expressions.IrBlock
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
-class RuiWhen(
+class RuiBlock(
     ruiClass: RuiClass,
-    index: Int,
-    val irWhen: IrWhen
+    index : Int,
+    val irBlock : IrBlock
 ) : RuiStatement(ruiClass, index) {
 
-    val branches = mutableListOf<RuiBranch>()
+    val statements = mutableListOf<RuiStatement>()
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
-        visitor.visitWhen(this, data)
+        visitor.visitBlock(this, data)
 
     override fun <D> acceptChildren(visitor: RuiElementVisitor<Unit, D>, data: D) {
-        branches.forEach { it.accept(visitor, data) }
+        statements.forEach { it.accept(visitor, data) }
     }
 }

@@ -11,6 +11,36 @@ Transformation starts with `RuiFunctionTransformer`. The transformer:
 3. Runs `RuiStateDefinitionVisitor` to transform the state definition into state variables and a constructor.
 4. Runs `RuiRenderingVisitor` to transform the rendering into slots, create, patch and destroy functions.
 
+/**
+* Represents the compilation of one Rui component. The source of the compilation
+* is the function annotated with `@Rui`. The result of the compilation is an IR
+* class that extends `RuiBlock`.
+*
+* [RuiClass] stores the all the information needed to compile the IR class:
+*
+* - [stateVariables]
+* - [initializer] (state initialization)
+* - [renderingSlots]
+* - [dirtyMasks]
+*
+* The compilation is a multiphase process.
+*
+* The "State Definition" phase:
+*
+* 1. [RuiGenerationExtension] runs a [RuiFunctionVisitor] on the module fragment
+* 1. [RuiFunctionVisitor] creates the [RuiClass] instance
+* 1. [RuiClass] finds the [boundary] between the state definition and rendering part
+* 1. `init` of [RuiClass] creates the [IrClass] and the basic class functions
+* 1. `init` of [RuiClass] runs a [RuiStateVariableTransformer] to build the state definition
+* 1. [RuiStateVariableTransformer] creates [stateVariables] for function parameters and top-level variable declarations
+* 1. [RuiStateVariableTransformer] transforms function parameter and top-level variable accesses/changes into state variable getter/setter calls
+* 1. during state variable processing [dirtyMasks] are created as needed
+* 1. [RuiFunctionVisitor] adds the [RuiClass] instance to [RuiPluginContext.ruiClasses]
+*
+* The "Rendering" phase:
+*
+* 1. [RuiGenerationExtension] calls [build] for each instance in [RuiPluginContext.ruiClasses]
+     */
 
 ## OBSOLETED
 

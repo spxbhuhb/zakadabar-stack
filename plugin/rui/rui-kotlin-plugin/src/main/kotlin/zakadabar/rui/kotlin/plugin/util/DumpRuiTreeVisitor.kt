@@ -4,7 +4,7 @@
 package zakadabar.rui.kotlin.plugin.util
 
 import org.jetbrains.kotlin.utils.Printer
-import zakadabar.rui.kotlin.plugin.builder.*
+import zakadabar.rui.kotlin.plugin.model.*
 
 class DumpRuiTreeVisitor(
     out: Appendable
