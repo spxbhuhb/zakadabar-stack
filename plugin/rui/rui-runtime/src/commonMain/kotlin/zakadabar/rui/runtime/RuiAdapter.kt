@@ -3,5 +3,7 @@
  */
 package zakadabar.rui.runtime
 
-val ruiEmptyBlockFunc = RuiFunWrapper { ruiEmptyBlock }
-val ruiEmptyBlock = RuiFragment()
+interface RuiAdapter {
+    fun insert(fragment: RuiFragment)
+    fun remove(fragment: RuiFragment)
+}

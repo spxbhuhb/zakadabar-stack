@@ -16,7 +16,7 @@ class RuiExternalStateVariable(
     override val originalName = irValueParameter.name.identifier
     override val name = originalName
 
-    override val builder = RuiStateVariableBuilder(ruiClass.ruiContext, ruiClass.builder, this)
+    override val builder = RuiStateVariableBuilder(ruiClass.builder, this)
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
         visitor.visitExternalStateVariable(this, data)

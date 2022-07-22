@@ -4,7 +4,7 @@
 package zakadabar.rui.kotlin.plugin
 
 import zakadabar.rui.runtime.Rui
-import zakadabar.rui.runtime.RuiBlock
+import zakadabar.rui.runtime.RuiFragment
 
 @Rui
 fun P0() {
@@ -21,9 +21,9 @@ fun P2(p0: Int, p1: Int) {
 
 }
 
-class RuiPrimitiveBlock(
+class RuiPrimitiveFragment(
     var value: Int
-) : RuiBlock() {
+) : RuiFragment() {
 
     var dirty0 = 0
 

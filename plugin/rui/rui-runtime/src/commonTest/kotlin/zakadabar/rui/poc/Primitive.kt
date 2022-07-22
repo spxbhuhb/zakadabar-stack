@@ -3,8 +3,8 @@
  */
 package zakadabar.rui.poc
 
-import zakadabar.rui.runtime.RuiBlock
 import zakadabar.rui.runtime.RuiComponentBase
+import zakadabar.rui.runtime.RuiFragment
 
 fun Primitive(value: Int) {
     // this is just a mock primitive, that prints out happenings
@@ -23,9 +23,9 @@ class RuiPrimitive(
     }
 }
 
-class RuiPrimitiveBlock(
+class RuiPrimitiveFragment(
     var value: Int
-) : RuiBlock() {
+) : RuiFragment() {
 
     init {
         println("================    Primitive.init: $value")

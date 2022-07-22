@@ -3,7 +3,7 @@
  */
 package zakadabar.rui.poc
 
-import zakadabar.rui.runtime.RuiBlock
+import zakadabar.rui.runtime.RuiFragment
 import zakadabar.rui.runtime.RuiFunWrapper
 import zakadabar.rui.runtime.RuiWhen
 import zakadabar.rui.runtime.ruiEmptyBlockFunc
@@ -22,7 +22,7 @@ fun Branch(value: Int) {
 class RuiBranchPoc(
     // state variables from function parameters
     var value: Int
-) : RuiBlock() {
+) : RuiFragment() {
 
     // state variables from top-level declarations
     var v2 = 12
@@ -30,7 +30,7 @@ class RuiBranchPoc(
     init {
         // top-level blocks from rendering
 
-        val primitive0 = RuiPrimitiveBlock(v2)
+        val primitive0 = RuiPrimitiveFragment(v2)
 
         val branch0 = RuiWhen {
             when (value) {
@@ -63,7 +63,7 @@ class RuiBranchPoc(
     }
 
     val block0func = RuiFunWrapper {
-        val primitive0 = RuiPrimitiveBlock(value + 10)
+        val primitive0 = RuiPrimitiveFragment(value + 10)
 
         fun create() {
             primitive0.create()
@@ -79,11 +79,11 @@ class RuiBranchPoc(
             primitive0.dispose()
         }
 
-        RuiBlock().set(::create, ::patch, ::dispose)
+        RuiFragment().set(::create, ::patch, ::dispose)
     }
 
     val block1func = RuiFunWrapper {
-        val primitive0 = RuiPrimitiveBlock(value + 20)
+        val primitive0 = RuiPrimitiveFragment(value + 20)
 
         fun create() {
             primitive0.create()
@@ -99,7 +99,7 @@ class RuiBranchPoc(
             primitive0.dispose()
         }
 
-        RuiBlock().set(::create, ::patch, ::dispose)
+        RuiFragment().set(::create, ::patch, ::dispose)
     }
 
 }

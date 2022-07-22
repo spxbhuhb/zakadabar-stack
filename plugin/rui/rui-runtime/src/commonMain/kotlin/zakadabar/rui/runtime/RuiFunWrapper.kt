@@ -3,4 +3,4 @@
  */
 package zakadabar.rui.runtime
 
-class RuiFunWrapper(val func: () -> RuiBlock)
+class RuiFunWrapper(val func: () -> RuiFragment)

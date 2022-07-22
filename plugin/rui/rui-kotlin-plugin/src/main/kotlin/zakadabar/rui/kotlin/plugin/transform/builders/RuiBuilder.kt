@@ -7,7 +7,13 @@ import zakadabar.rui.kotlin.plugin.RuiPluginContext
 
 interface RuiBuilder {
 
-    val ruiContext : RuiPluginContext
+    val ruiClassBuilder: RuiClassBuilder
+
+    val ruiContext: RuiPluginContext
+        get() = ruiClassBuilder.ruiContext
+
+    val irClass
+        get() = ruiClassBuilder.irClass
 
     val irContext
         get() = ruiContext.irPluginContext

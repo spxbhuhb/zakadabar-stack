@@ -8,6 +8,7 @@ import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.ir.builders.declarations.UNDEFINED_PARAMETER_INDEX
 import org.jetbrains.kotlin.ir.builders.declarations.addConstructor
+import org.jetbrains.kotlin.ir.builders.declarations.addValueParameter
 import org.jetbrains.kotlin.ir.builders.declarations.buildClass
 import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.expressions.impl.IrDelegatingConstructorCallImpl
@@ -22,6 +23,7 @@ import org.jetbrains.kotlin.ir.util.constructors
 import org.jetbrains.kotlin.ir.util.file
 import org.jetbrains.kotlin.ir.util.kotlinFqName
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
 import zakadabar.rui.kotlin.plugin.model.RuiClass
@@ -32,6 +34,8 @@ class RuiClassBuilder(
     val ruiClass : RuiClass,
 ) : RuiBuilder {
 
+    override val ruiClassBuilder  = this
+
     val irFunction = ruiClass.irFunction
 
     val name: String
@@ -41,10 +45,13 @@ class RuiClassBuilder(
     val initializer: IrAnonymousInitializer
     val thisReceiver: IrValueParameter
 
-    val ruiComponentClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiBlock"))) !!
-    val ruiComponentType = ruiComponentClass.typeWith()
+    val ruiFragmentClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiFragment"))) !!
+    val ruiFragmentType = ruiFragmentClass.typeWith()
 
-    val irClass: IrClass = irFactory.buildClass {
+    val ruiAdapterClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiAdapter"))) !!
+    val ruiAdapterType = ruiAdapterClass.typeWith()
+
+    override val irClass: IrClass = irFactory.buildClass {
         startOffset = irFunction.startOffset
         endOffset = irFunction.endOffset
         origin = IrDeclarationOrigin.DEFINED
@@ -57,7 +64,7 @@ class RuiClassBuilder(
     init {
 
         irClass.parent = irFunction.file
-        irClass.superTypes = listOf(ruiComponentType)
+        irClass.superTypes = listOf(ruiFragmentType)
         irClass.metadata = irFunction.metadata
 
         name = irClass.name.identifier
@@ -91,6 +98,17 @@ class RuiClassBuilder(
         return thisReceiver
     }
 
+    /**
+     * Creates a primary constructor with a standard body (super class constructor call
+     * and initializer call).
+     *
+     * Adds value parameters to the constructor:
+     *
+     * - `adapter` with type `RuiAdapter`
+     * - `anchor` with type `RuiFragment`
+     *
+     * Later `RuiStateTransformer` adds parameters from the original function.
+     */
     private fun buildConstructor(): IrConstructor {
 
         val constructor = irClass.addConstructor {
@@ -103,8 +121,8 @@ class RuiClassBuilder(
             statements += IrDelegatingConstructorCallImpl.fromSymbolOwner(
                 SYNTHETIC_OFFSET,
                 SYNTHETIC_OFFSET,
-                ruiComponentType,
-                ruiComponentClass.constructors.first()
+                ruiFragmentType,
+                ruiFragmentClass.constructors.first()
             )
 
             statements += IrInstanceInitializerCallImpl(
@@ -115,7 +133,24 @@ class RuiClassBuilder(
             )
         }
 
+        constructor.addValueParameter {
+            name = Name.identifier("\$adapter")
+            type = ruiAdapterType
+        }.addAsProperty()
+
+        constructor.addValueParameter {
+            name = Name.identifier("\$anchor")
+            type = ruiFragmentType
+        }.addAsProperty()
+
         return constructor
+    }
+
+    private fun IrValueParameter.addAsProperty() {
+        RuiPropertyBuilder(this.name.identifier, this@RuiClassBuilder).apply {
+            buildField(this@addAsProperty.type)
+            buildProperty()
+        }
     }
 
     private fun buildInitializer(): IrAnonymousInitializer {

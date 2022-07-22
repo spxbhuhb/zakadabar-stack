@@ -3,8 +3,8 @@
  */
 package zakadabar.rui.kotlin.plugin.adhoc
 
-import zakadabar.rui.kotlin.plugin.RuiPrimitiveBlock
-import zakadabar.rui.runtime.RuiBlock
+import zakadabar.rui.kotlin.plugin.RuiPrimitiveFragment
+import zakadabar.rui.runtime.RuiFragment
 import zakadabar.rui.runtime.RuiFunWrapper
 import zakadabar.rui.runtime.RuiWhen
 import zakadabar.rui.runtime.ruiEmptyBlockFunc
@@ -12,7 +12,7 @@ import zakadabar.rui.runtime.ruiEmptyBlockFunc
 class RuiBranchPocTest(
     // state variables from function parameters
     var value: Int
-) : RuiBlock() {
+) : RuiFragment() {
 
     // state variables from top-level declarations
     var v2 = 12
@@ -21,7 +21,7 @@ class RuiBranchPocTest(
 
     // CALL BLOCK --------------------------------------------
 
-    val block0 = RuiPrimitiveBlock(value + 10)
+    val block0 = RuiPrimitiveFragment(value + 10)
 
     fun block0patch() {
         if (dirty0 and 1 != 0) {
@@ -44,7 +44,7 @@ class RuiBranchPocTest(
     }
 
     val block2func = RuiFunWrapper {
-        val primitive0 = RuiPrimitiveBlock(value + 10)
+        val primitive0 = RuiPrimitiveFragment(value + 10)
 
         fun create() {
             primitive0.create()
@@ -60,11 +60,11 @@ class RuiBranchPocTest(
             primitive0.dispose()
         }
 
-        RuiBlock().set(::create, ::patch, ::dispose)
+        RuiFragment().set(::create, ::patch, ::dispose)
     }
 
     val block3func = RuiFunWrapper {
-        val primitive0 = RuiPrimitiveBlock(value + 20)
+        val primitive0 = RuiPrimitiveFragment(value + 20)
 
         fun create() {
             primitive0.create()
@@ -80,7 +80,7 @@ class RuiBranchPocTest(
             primitive0.dispose()
         }
 
-        RuiBlock().set(::create, ::patch, ::dispose)
+        RuiFragment().set(::create, ::patch, ::dispose)
     }
 
     // Component lifecycle

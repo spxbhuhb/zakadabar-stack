@@ -3,7 +3,7 @@
  */
 package zakadabar.rui.runtime
 
-class RuiWhen(val select: () -> RuiFunWrapper) : RuiBlock() {
+class RuiWhen(val select: () -> RuiFunWrapper) : RuiFragment() {
     var blockFun = ruiEmptyBlockFunc
     var block = ruiEmptyBlock
 
