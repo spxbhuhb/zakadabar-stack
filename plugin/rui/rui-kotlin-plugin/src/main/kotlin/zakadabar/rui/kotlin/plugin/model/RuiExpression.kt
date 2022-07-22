@@ -6,9 +6,10 @@ package zakadabar.rui.kotlin.plugin.model
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
-class RuiExpression(
+open class RuiExpression(
     val ruiClass: RuiClass,
     val irExpression : IrExpression,
+    val origin : RuiExpressionOrigin,
     val dependencies : List<RuiStateVariable>
 ) : RuiElement {
 

@@ -3,7 +3,7 @@
  */
 package zakadabar.rui.kotlin.plugin.model
 
-import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
+import zakadabar.rui.kotlin.plugin.transform.builders.RuiStateVariableBuilder
 
 interface RuiStateVariable : RuiElement {
 
@@ -12,9 +12,6 @@ interface RuiStateVariable : RuiElement {
     val originalName : String
     val name : String
 
-    override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
-        visitor.visitStateVariable(this, data)
-
-    override fun <D> acceptChildren(visitor: RuiElementVisitor<Unit, D>, data: D) = Unit
+    val builder : RuiStateVariableBuilder
 
 }

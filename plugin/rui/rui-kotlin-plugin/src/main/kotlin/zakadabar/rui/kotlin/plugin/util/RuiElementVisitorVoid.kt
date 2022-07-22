@@ -13,14 +13,17 @@ interface RuiElementVisitorVoid<out R> : RuiElementVisitor<R, Nothing?> {
     fun visitClass(ruiClass: RuiClass) = visitElement(ruiClass)
     override fun visitClass(ruiClass: RuiClass, data: Nothing?) = visitClass(ruiClass)
 
-    fun visitStateVariable(ruiStateVariable: RuiStateVariable) = visitElement(ruiStateVariable)
-    override fun visitStateVariable(ruiStateVariable: RuiStateVariable, data: Nothing?) = visitStateVariable(ruiStateVariable)
+    fun visitStateVariable(stateVariable: RuiStateVariable) = visitElement(stateVariable)
+    override fun visitStateVariable(stateVariable: RuiStateVariable, data: Nothing?) = visitStateVariable(stateVariable)
 
-    fun visitDirtyMask(ruiDirtyMask: RuiDirtyMask) = visitElement(ruiDirtyMask)
-    override fun visitDirtyMask(ruiDirtyMask: RuiDirtyMask, data: Nothing?) = visitDirtyMask(ruiDirtyMask)
+    fun visitExternalStateVariable(stateVariable: RuiExternalStateVariable) = visitElement(stateVariable)
+    override fun visitExternalStateVariable(stateVariable: RuiExternalStateVariable, data: Nothing?) = visitExternalStateVariable(stateVariable)
 
-    fun visitRenderingSlot(ruiRenderingSlot: RuiRenderingSlot) = visitElement(ruiRenderingSlot)
-    override fun visitRenderingSlot(ruiRenderingSlot: RuiRenderingSlot, data: Nothing?) = visitRenderingSlot(ruiRenderingSlot)
+    fun visitInternalStateVariable(stateVariable: RuiInternalStateVariable) = visitElement(stateVariable)
+    override fun visitInternalStateVariable(stateVariable: RuiInternalStateVariable, data: Nothing?) = visitInternalStateVariable(stateVariable)
+
+    fun visitDirtyMask(dirtyMask: RuiDirtyMask) = visitElement(dirtyMask)
+    override fun visitDirtyMask(dirtyMask: RuiDirtyMask, data: Nothing?) = visitDirtyMask(dirtyMask)
 
     fun visitStatement(statement: RuiStatement) = visitElement(statement)
     override fun visitStatement(statement: RuiStatement, data: Nothing?) = visitStatement(statement)
@@ -39,6 +42,9 @@ interface RuiElementVisitorVoid<out R> : RuiElementVisitor<R, Nothing?> {
 
     fun visitExpression(expression: RuiExpression) = visitElement(expression)
     override fun visitExpression(expression: RuiExpression, data: Nothing?) = visitExpression(expression)
+
+    fun visitValueArgument(valueArgument: RuiValueArgument) = visitExpression(valueArgument)
+    override fun visitValueArgument(valueArgument: RuiValueArgument, data : Nothing?) = visitValueArgument(valueArgument)
 
     fun visitDeclaration(declaration: RuiDeclaration) = visitElement(declaration)
     override fun visitDeclaration(declaration: RuiDeclaration, data: Nothing?) = visitDeclaration(declaration)

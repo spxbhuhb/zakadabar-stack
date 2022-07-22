@@ -10,7 +10,6 @@ import org.jetbrains.kotlin.ir.expressions.impl.IrBlockImpl
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
-import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RIU_IR_RENDERING_NON_RUI_CALL
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RUI_IR_INVALID_RENDERING_STATEMENT
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RUI_IR_MISSING_EXPRESSION_ARGUMENT
@@ -19,13 +18,11 @@ import zakadabar.rui.kotlin.plugin.model.*
 import zakadabar.rui.kotlin.plugin.util.RuiAnnotationBasedExtension
 
 class RuiFromIrTransform(
-    val ruiContext : RuiPluginContext
+    val ruiContext : RuiPluginContext,
+    val irFunction: IrFunction
 ) : RuiAnnotationBasedExtension {
 
     lateinit var ruiClass : RuiClass
-
-    var stateVariableIndex = 0
-        get() = field ++
 
     var blockIndex = 0
         get() = field ++
@@ -39,48 +36,14 @@ class RuiFromIrTransform(
         return visitor.dependencies
     }
 
-    fun transform(irFunction : IrFunction) : RuiClass {
-        stateVariableIndex = 0
-        blockIndex = 0
-
+    fun transform() : RuiClass {
         ruiClass = RuiClass(ruiContext, irFunction)
 
-        collectStateVariables()
+        RuiStateTransformer(ruiContext, ruiClass).transform()
+
         transformRoot()
 
         return ruiClass
-    }
-
-    fun collectStateVariables() {
-
-        ruiClass.irFunction.valueParameters.forEach { valueParameter ->
-            RuiPublicStateVariable(ruiClass, stateVariableIndex, valueParameter).also {
-                ruiClass.stateVariables[it.name] = it
-            }
-        }
-
-        ruiClass.originalStatements.forEachIndexed { statementIndex, irStatement ->
-
-            if (irStatement !is IrVariable) return@forEachIndexed
-
-            if (statementIndex >= ruiClass.boundary) {
-                ErrorsRui.RUI_IR_RENDERING_VARIABLE.report(ruiClass, irStatement)
-                return@forEachIndexed
-            }
-
-            RuiPrivateStateVariable(ruiClass, stateVariableIndex, irStatement).also {
-                ruiClass.stateVariables[it.originalName] = it // TODO think about name shadowing
-                //  this@RuiClass.symbolMap[getter.symbol] = this
-                addDirtyMask(it)
-            }
-
-        }
-    }
-
-    fun addDirtyMask(ruiStateVariable: RuiStateVariable) {
-        val maskNumber = ruiStateVariable.index / 32
-        if (ruiClass.dirtyMasks.size > maskNumber) return
-        ruiClass.dirtyMasks += RuiDirtyMask(maskNumber)
     }
 
     fun transformRoot() {
@@ -147,7 +110,7 @@ class RuiFromIrTransform(
         check(irIterator is IrValueDeclaration && irIterator.origin == IrDeclarationOrigin.FOR_LOOP_ITERATOR)
         check(loop is IrWhileLoop && loop.origin == IrStatementOrigin.FOR_LOOP_INNER_WHILE)
 
-        val condition = transformExpression(loop.condition)
+        val condition = transformExpression(loop.condition, RuiExpressionOrigin.FOR_LOOP_CONDITION)
 
         val body = loop.body
 
@@ -160,8 +123,8 @@ class RuiFromIrTransform(
         check(irLoopVariable is IrVariable)
         check(block is IrBlock && block.origin == null)
 
-        val iterator = transformDeclaration(irIterator) ?: return null
-        val loopVariable = transformDeclaration(irLoopVariable) ?: return null
+        val iterator = transformDeclaration(irIterator, RuiDeclarationOrigin.FOR_LOOP_ITERATOR) ?: return null
+        val loopVariable = transformDeclaration(irLoopVariable, RuiDeclarationOrigin.FOR_LOOP_VARIABLE) ?: return null
 
         return RuiForLoop(
             ruiClass, blockIndex, statement,
@@ -185,11 +148,7 @@ class RuiFromIrTransform(
             val expression = statement.getValueArgument(index)
                 ?: return RUI_IR_MISSING_EXPRESSION_ARGUMENT.report(ruiClass, statement)
 
-            ruiCall.valueArguments += RuiExpression(
-                ruiClass,
-                expression,
-                expression.dependencies()
-            )
+            ruiCall.valueArguments += transformValueArgument(index, expression)
         }
 
         return ruiCall
@@ -209,18 +168,22 @@ class RuiFromIrTransform(
         return RuiBranch(
             ruiClass, blockIndex,
             branch,
-            RuiExpression(ruiClass, branch.condition, branch.condition.dependencies()),
-            RuiExpression(ruiClass, branch.result, branch.result.dependencies()),
+            transformExpression(branch.condition, RuiExpressionOrigin.BRANCH_CONDITION),
+            transformExpression(branch.result, RuiExpressionOrigin.BRANCH_RESULT),
         )
     }
 
-    fun transformExpression(expression: IrExpression): RuiExpression {
-        return RuiExpression(ruiClass, expression, expression.dependencies())
+    fun transformValueArgument(index : Int, expression: IrExpression): RuiExpression {
+        return RuiValueArgument(ruiClass, index, expression, expression.dependencies())
     }
 
-    fun transformDeclaration(declaration: IrDeclaration): RuiDeclaration? =
+    fun transformExpression(expression: IrExpression, origin : RuiExpressionOrigin): RuiExpression {
+        return RuiExpression(ruiClass, expression, origin, expression.dependencies())
+    }
+
+    fun transformDeclaration(declaration: IrDeclaration, origin : RuiDeclarationOrigin): RuiDeclaration? =
         when (declaration) {
-            is IrValueDeclaration -> RuiDeclaration(ruiClass, declaration, declaration.dependencies())
+            is IrValueDeclaration -> RuiDeclaration(ruiClass, declaration, origin, declaration.dependencies())
             else -> RUI_IR_RENDERING_INVALID_DECLARATION.report(ruiClass, declaration)
         }
 

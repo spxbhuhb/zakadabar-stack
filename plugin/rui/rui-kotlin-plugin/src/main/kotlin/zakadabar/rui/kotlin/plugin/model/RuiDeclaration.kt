@@ -9,6 +9,7 @@ import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 class RuiDeclaration(
     val ruiClass: RuiClass,
     val irDeclaration : IrDeclaration,
+    val origin : RuiDeclarationOrigin,
     val dependencies : List<RuiStateVariable>
 ) : RuiElement {
 

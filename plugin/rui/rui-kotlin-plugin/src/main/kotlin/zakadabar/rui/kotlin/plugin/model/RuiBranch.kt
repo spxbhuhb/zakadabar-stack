@@ -14,6 +14,8 @@ class RuiBranch(
     val result: RuiExpression
 ) : RuiElement {
 
+    val name = "\$fragment$index"
+
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
         visitor.visitBranch(this, data)
 

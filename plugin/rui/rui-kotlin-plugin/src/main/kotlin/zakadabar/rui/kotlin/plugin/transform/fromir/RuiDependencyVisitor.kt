@@ -34,6 +34,3 @@ class RuiDependencyVisitor(
         super.visitCall(expression)
     }
 }
-
-fun IrElement.dependencies(ruiClass: RuiClass) =
-    RuiDependencyVisitor(ruiClass).also { this.accept(it, null) }.dependencies

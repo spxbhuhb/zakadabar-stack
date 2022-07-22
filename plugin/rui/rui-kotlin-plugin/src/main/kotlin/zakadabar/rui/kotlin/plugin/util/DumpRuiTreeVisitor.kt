@@ -19,43 +19,43 @@ class DumpRuiTreeVisitor(
     override fun visitClass(ruiClass: RuiClass) {
         indented {
             with(ruiClass) {
-                println { "CLASS name:$name boundary:$boundary" }
+                println { "CLASS name:${irClass.name} boundary:$boundary" }
             }
             super.visitClass(ruiClass)
         }
     }
 
-    override fun visitStateVariable(ruiStateVariable: RuiStateVariable) {
+    override fun visitExternalStateVariable(stateVariable: RuiExternalStateVariable) {
         indented {
-            with(ruiStateVariable) {
-                println { "STATE_VARIABLE index:$index name:$name" }
+            with(stateVariable) {
+                println { "EXTERNAL_STATE_VARIABLE index:$index name:$name" }
             }
-            super.visitStateVariable(ruiStateVariable)
+            super.visitStateVariable(stateVariable)
         }
     }
 
-    override fun visitDirtyMask(ruiDirtyMask: RuiDirtyMask) {
+    override fun visitInternalStateVariable(stateVariable: RuiInternalStateVariable) {
         indented {
-            with(ruiDirtyMask) {
+            with(stateVariable) {
+                println { "INTERNAL_STATE_VARIABLE index:$index name:$name" }
+            }
+            super.visitStateVariable(stateVariable)
+        }
+    }
+
+    override fun visitDirtyMask(dirtyMask: RuiDirtyMask) {
+        indented {
+            with(dirtyMask) {
                 println { "DIRTY_MASK index:$index name:$name" }
             }
-            super.visitDirtyMask(ruiDirtyMask)
-        }
-    }
-
-    override fun visitRenderingSlot(ruiRenderingSlot: RuiRenderingSlot) {
-        indented {
-            with(ruiRenderingSlot) {
-                println { "RENDERING_SLOT index:$index name:$name" }
-            }
-            super.visitRenderingSlot(ruiRenderingSlot)
+            super.visitDirtyMask(dirtyMask)
         }
     }
 
     override fun visitCall(statement: RuiCall) {
         indented {
             with(statement) {
-                println { "BLOCK type:CALL index:$index name:$name targetRuiClass:<$targetRuiClass>" }
+                println { "CALL index:$index name:$name type:<$targetRuiClass>" }
             }
             super.visitCall(statement)
         }
@@ -64,7 +64,7 @@ class DumpRuiTreeVisitor(
     override fun visitWhen(statement: RuiWhen) {
         indented {
             with(statement) {
-                println { "BLOCK type:WHEN index:$index name:$name" }
+                println { "WHEN index:$index name:$name" }
             }
             super.visitWhen(statement)
         }
@@ -73,7 +73,7 @@ class DumpRuiTreeVisitor(
     override fun visitForLoop(statement: RuiForLoop) {
         indented {
             with(statement) {
-                println { "BLOCK type:FOR_LOOP index:$index name:$name" }
+                println { "FOR_LOOP index:$index name:$name" }
             }
             super.visitForLoop(statement)
         }
@@ -82,7 +82,7 @@ class DumpRuiTreeVisitor(
     override fun visitBranch(branch: RuiBranch) {
         indented {
             with(branch) {
-                println { "BRANCH index:$index" }
+                println { "BRANCH index:$index name:$name" }
             }
             super.visitBranch(branch)
         }
@@ -91,16 +91,24 @@ class DumpRuiTreeVisitor(
     override fun visitExpression(expression: RuiExpression) {
         indented {
             with(expression) {
-                println { "EXPRESSION index:$index ${expression.dependencies.withLabel("dependencies")}" }
+                println { "$origin ${dependencies.withLabel("dependencies")}" }
             }
             super.visitExpression(expression)
+        }
+    }
+
+    override fun visitValueArgument(valueArgument: RuiValueArgument) {
+        indented {
+            with(valueArgument) {
+                println { "$origin $index ${dependencies.withLabel("dependencies")}" }
+            }
         }
     }
 
     override fun visitDeclaration(declaration: RuiDeclaration) {
         indented {
             with(declaration) {
-                println { "DECLARATION index:$index ${declaration.dependencies.withLabel("dependencies")}" }
+                println { "$origin ${dependencies.withLabel("dependencies")}" }
             }
             super.visitDeclaration(declaration)
         }

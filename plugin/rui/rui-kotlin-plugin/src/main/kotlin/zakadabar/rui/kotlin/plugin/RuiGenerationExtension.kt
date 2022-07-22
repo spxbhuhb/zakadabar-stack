@@ -9,28 +9,32 @@ import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_AFTER
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_BEFORE
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_RUI_TREE
-import zakadabar.rui.kotlin.plugin.transform.RuiFunctionVisitor
+import zakadabar.rui.kotlin.plugin.transform.fromir.RuiFunctionVisitor
+import zakadabar.rui.kotlin.plugin.transform.toir.RuiClassTransform
 
 internal class RuiGenerationExtension(
-    private val ruiPluginContext: RuiPluginContext
+    private val ruiContext: RuiPluginContext
 ) : IrGenerationExtension {
 
     override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
-        ruiPluginContext.irPluginContext = pluginContext
-        ruiPluginContext.diagnosticReporter = pluginContext.createDiagnosticReporter(RuiCommandLineProcessor.PLUGIN_ID)
+        ruiContext.irPluginContext = pluginContext
+        ruiContext.diagnosticReporter = pluginContext.createDiagnosticReporter(RuiCommandLineProcessor.PLUGIN_ID)
 
-        ruiPluginContext.dump(DUMP_BEFORE, moduleFragment)
+        ruiContext.dump(DUMP_BEFORE, moduleFragment)
 
-        RuiFunctionVisitor(ruiPluginContext).transform(moduleFragment)
+        RuiFunctionVisitor(ruiContext).also {
+            moduleFragment.accept(it, null)
+            RuiClassTransform(ruiContext, it.ruiClasses).transform()
+        }
 
-        if (DUMP_RUI_TREE in ruiPluginContext.dumpPoints) {
+        if (DUMP_RUI_TREE in ruiContext.dumpPoints) {
             println("RUI CLASSES")
-            ruiPluginContext.ruiClasses.values.filter { ! it.irClass.name.identifier.matches("RuiP\\d+".toRegex()) }.forEach {
+            ruiContext.ruiClasses.values.filter { ! it.irClass.name.identifier.matches("RuiP\\d+".toRegex()) }.forEach {
                 println(it.dump())
             }
         }
 
-        ruiPluginContext.dump(DUMP_AFTER, moduleFragment)
+        ruiContext.dump(DUMP_AFTER, moduleFragment)
     }
 
 }

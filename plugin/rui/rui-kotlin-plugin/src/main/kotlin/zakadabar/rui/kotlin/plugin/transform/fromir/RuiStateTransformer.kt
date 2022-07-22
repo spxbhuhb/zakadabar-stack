@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.rui.kotlin.plugin.transform.toir
+package zakadabar.rui.kotlin.plugin.transform.fromir
 
 import org.jetbrains.kotlin.backend.common.IrElementTransformerVoidWithContext
 import org.jetbrains.kotlin.ir.IrStatement
@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.ir.expressions.IrSetValue
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RUI_IR_RENDERING_VARIABLE
-import zakadabar.rui.kotlin.plugin.model.RuiClass
+import zakadabar.rui.kotlin.plugin.model.*
 import zakadabar.rui.kotlin.plugin.util.*
 
 /**
@@ -54,7 +54,15 @@ class RuiStateTransformer(
 
     var currentStatementIndex = 0
 
+    var stateVariableIndex = 0
+        get() = field ++
+
     val blockStack: Stack<BlockStackEntry> = mutableListOf(BlockStackEntry(true))
+
+    class BlockStackEntry(
+        val top: Boolean = false,
+        val variables: MutableList<String> = mutableListOf()
+    )
 
     fun String.isStateVariable(): Boolean {
         for (i in blockStack.indices.reversed()) {
@@ -66,19 +74,31 @@ class RuiStateTransformer(
         return false // this is some global variable
     }
 
-    class BlockStackEntry(
-        val top: Boolean = false,
-        val variables: MutableList<String> = mutableListOf()
-    )
-
     fun transform() {
-        val root = blockStack[0]
 
-        ruiClass.stateVariables.forEach { (_, value) ->
-            root.variables += value.originalName
+        ruiClass.irFunction.valueParameters.forEach { valueParameter ->
+            RuiExternalStateVariable(ruiClass, stateVariableIndex, valueParameter).also {
+                register(it)
+            }
         }
 
-        ruiClass.originalStatements.forEachIndexed {index, statement ->
+        ruiClass.originalStatements.forEachIndexed { statementIndex, irStatement ->
+
+            if (irStatement !is IrVariable) return@forEachIndexed
+
+            if (statementIndex >= ruiClass.boundary) {
+                RUI_IR_RENDERING_VARIABLE.report(ruiClass, irStatement)
+                return@forEachIndexed
+            }
+
+            RuiInternalStateVariable(ruiClass, stateVariableIndex, irStatement).also {
+                register(it)
+                addDirtyMask(it)
+            }
+
+        }
+
+        ruiClass.originalStatements.forEachIndexed { index, statement ->
             currentStatementIndex = index
             if (index < ruiClass.boundary) {
                 ruiClass.initializerStatements += statement.transform(this, null) as IrStatement
@@ -86,6 +106,19 @@ class RuiStateTransformer(
                 ruiClass.renderingStatements += statement.transform(this, null) as IrStatement
             }
         }
+    }
+
+    fun register(it: RuiStateVariable) {
+        val root = blockStack[0]
+        ruiClass.stateVariables[it.originalName] = it
+        root.variables += it.originalName
+        ruiClass.symbolMap[it.builder.getter.symbol] = it
+    }
+
+    fun addDirtyMask(it: RuiStateVariable) {
+        val maskNumber = it.index / 32
+        if (ruiClass.dirtyMasks.size > maskNumber) return
+        ruiClass.dirtyMasks += RuiDirtyMask(maskNumber)
     }
 
     override fun visitVariable(declaration: IrVariable): IrStatement {
@@ -114,7 +147,7 @@ class RuiStateTransformer(
         if (! name.isStateVariable()) return super.visitGetValue(expression)
 
         return ruiClass.stateVariables[name]
-            ?.irGetValue()
+            ?.builder?.irGetValue()
             ?: throw IllegalStateException("missing state variable $name in ${ruiClass.irFunction.name}")
     }
 
@@ -131,7 +164,7 @@ class RuiStateTransformer(
         if (! name.isStateVariable()) return super.visitSetValue(expression)
 
         return ruiClass.stateVariables[name]
-            ?.irSetValue(expression.value)
+            ?.builder?.irSetValue(expression.value)
             ?: throw IllegalStateException("missing state variable $name in ${ruiClass.irFunction.name}")
     }
 

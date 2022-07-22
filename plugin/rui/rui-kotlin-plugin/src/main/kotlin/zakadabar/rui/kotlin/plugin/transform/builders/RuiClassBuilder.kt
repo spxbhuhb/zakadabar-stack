@@ -25,8 +25,7 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.SpecialNames
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
 import zakadabar.rui.kotlin.plugin.model.RuiClass
-import zakadabar.rui.kotlin.plugin.state.definition.RuiStateVariableVisitor
-import zakadabar.rui.kotlin.plugin.state.definition.toRuiClassName
+import zakadabar.rui.kotlin.plugin.util.toRuiClassName
 
 class RuiClassBuilder(
     override val ruiContext: RuiPluginContext,
@@ -67,10 +66,6 @@ class RuiClassBuilder(
         thisReceiver = buildThisReceiver()
         constructor = buildConstructor()
         initializer = buildInitializer()
-
-        irClass.addFakeOverrides(IrTypeSystemContextImpl(irContext.irBuiltIns))
-
-        RuiStateVariableVisitor(ruiContext, this).buildStateDefinition()
     }
 
     private fun buildThisReceiver(): IrValueParameter {
@@ -116,7 +111,7 @@ class RuiClassBuilder(
                 SYNTHETIC_OFFSET,
                 SYNTHETIC_OFFSET,
                 irClass.symbol,
-                unitType
+                irBuiltIns.unitType
             )
         }
 
@@ -138,9 +133,10 @@ class RuiClassBuilder(
         return initializer
     }
 
-    fun build() {
+    fun finalize() {
         // The initializer has to be the last, so it will be able to access all properties
         irClass.declarations += initializer
+        irClass.addFakeOverrides(IrTypeSystemContextImpl(irContext.irBuiltIns))
     }
 
 }

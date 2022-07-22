@@ -3,13 +3,7 @@
  */
 package zakadabar.rui.kotlin.plugin.model
 
-abstract class RuiStatement(
-    val ruiClass: RuiClass,
-    val index: Int,
-) : RuiElement {
-
-    val name : String = "\$fragment$index"
-
-    fun transform() { }
-
+enum class RuiDeclarationOrigin {
+    FOR_LOOP_ITERATOR,
+    FOR_LOOP_VARIABLE
 }

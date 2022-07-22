@@ -22,8 +22,8 @@ import org.jetbrains.kotlin.ir.util.defaultType
 import org.jetbrains.kotlin.ir.util.parentAsClass
 import org.jetbrains.kotlin.name.Name
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
-import zakadabar.rui.kotlin.plugin.model.RuiPrivateStateVariable
-import zakadabar.rui.kotlin.plugin.model.RuiPublicStateVariable
+import zakadabar.rui.kotlin.plugin.model.RuiExternalStateVariable
+import zakadabar.rui.kotlin.plugin.model.RuiInternalStateVariable
 import zakadabar.rui.kotlin.plugin.model.RuiStateVariable
 
 class RuiStateVariableBuilder(
@@ -40,10 +40,10 @@ class RuiStateVariableBuilder(
     lateinit var getter: IrSimpleFunction
     lateinit var setter: IrSimpleFunction
 
-    fun build() {
+    init {
         when (ruiStateVariable) {
-            is RuiPrivateStateVariable -> build(ruiStateVariable.irVariable)
-            is RuiPublicStateVariable -> build(ruiStateVariable.irValueParameter)
+            is RuiInternalStateVariable -> build(ruiStateVariable.irVariable)
+            is RuiExternalStateVariable -> build(ruiStateVariable.irValueParameter)
         }
     }
 
@@ -51,19 +51,19 @@ class RuiStateVariableBuilder(
         buildField(irValueParameter.type)
         buildProperty()
 
-        field.initializer = irFactory
-            .createExpressionBody(
-                SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-                IrGetValueImpl(
-                    SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, irValueParameter.symbol, IrStatementOrigin.INITIALIZE_PROPERTY_FROM_PARAMETER
-                )
-            )
-
-        ruiClassBuilder.constructor.addValueParameter {
+        val constructorParameter = ruiClassBuilder.constructor.addValueParameter {
             name = irValueParameter.name
             type = irValueParameter.type
             varargElementType = irValueParameter.varargElementType
         }
+
+        field.initializer = irFactory
+            .createExpressionBody(
+                SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+                IrGetValueImpl(
+                    SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, constructorParameter.symbol, IrStatementOrigin.INITIALIZE_PROPERTY_FROM_PARAMETER
+                )
+            )
     }
 
     fun build(irVariable: IrVariable) {

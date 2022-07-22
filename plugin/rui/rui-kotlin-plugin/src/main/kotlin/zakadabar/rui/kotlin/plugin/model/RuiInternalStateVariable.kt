@@ -4,19 +4,22 @@
 package zakadabar.rui.kotlin.plugin.model
 
 import org.jetbrains.kotlin.ir.declarations.IrVariable
+import zakadabar.rui.kotlin.plugin.transform.builders.RuiStateVariableBuilder
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
-class RuiPrivateStateVariable(
+class RuiInternalStateVariable(
     override val ruiClass: RuiClass,
     override val index: Int,
     val irVariable : IrVariable,
 ) : RuiStateVariable {
 
     override val originalName = irVariable.name.identifier
-    override val name = "originalName\$"
+    override val name = "$originalName\$"
+
+    override val builder = RuiStateVariableBuilder(ruiClass.ruiContext, ruiClass.builder, this)
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
-        visitor.visitStateVariable(this, data)
+        visitor.visitInternalStateVariable(this, data)
 
     override fun <D> acceptChildren(visitor: RuiElementVisitor<Unit, D>, data: D) = Unit
 

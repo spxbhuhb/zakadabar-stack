@@ -9,7 +9,8 @@ class RuiToIrTransform(
     private val ruiClass: RuiClass,
 ) {
 
-    fun transformClass(ruiClass: RuiClass) {
+    fun transform() {
+        ruiClass.builder.finalize()
     }
 
     fun transformBlock(ruiBlock: RuiBlock) {

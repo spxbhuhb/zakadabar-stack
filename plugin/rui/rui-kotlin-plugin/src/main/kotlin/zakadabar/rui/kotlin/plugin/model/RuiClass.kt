@@ -4,11 +4,11 @@
 package zakadabar.rui.kotlin.plugin.model
 
 import org.jetbrains.kotlin.ir.IrStatement
-import org.jetbrains.kotlin.ir.declarations.IrClass
 import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.symbols.IrSymbol
 import org.jetbrains.kotlin.ir.util.statements
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
+import zakadabar.rui.kotlin.plugin.transform.builders.RuiClassBuilder
 import zakadabar.rui.kotlin.plugin.transform.fromir.RuiBoundaryVisitor
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
@@ -24,17 +24,25 @@ class RuiClass(
     val initializerStatements = mutableListOf<IrStatement>()
     val renderingStatements = mutableListOf<IrStatement>()
 
-    lateinit var irClass: IrClass
-
     val stateVariables = mutableMapOf<String, RuiStateVariable>()
     val dirtyMasks = mutableListOf<RuiDirtyMask>()
 
-    val symbolMap = mutableMapOf<IrSymbol, RuiElement>()
-
     lateinit var rootBlock: RuiBlock
 
-//    internal fun stateVariableByGetterOrNull(symbol: IrSymbol): RuiStateVariable? =
-//        symbolMap[symbol]?.let { if (it is RuiStateVariable && it.getter.symbol == symbol) it else null }
+    val symbolMap = mutableMapOf<IrSymbol, RuiElement>()
+
+    val builder = RuiClassBuilder(ruiContext, this)
+
+    val irClass
+        get() = builder.irClass
+
+    internal fun stateVariableByGetterOrNull(symbol: IrSymbol): RuiStateVariable? =
+        symbolMap[symbol]?.let {
+            val b1 = (it is RuiStateVariable)
+            it as RuiStateVariable
+            val b2 = (it.builder.getter.symbol == symbol)
+            if (b1 && b2) it else null
+        }
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
         visitor.visitClass(this, data)
