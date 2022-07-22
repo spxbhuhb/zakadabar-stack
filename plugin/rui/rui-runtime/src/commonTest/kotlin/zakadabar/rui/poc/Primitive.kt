@@ -27,6 +27,12 @@ class RuiPrimitiveFragment(
     var value: Int
 ) : RuiFragment() {
 
+    var dirty0 = 0
+
+    fun invalidate0(mask : Int) {
+        dirty0 = dirty0 and mask
+    }
+
     init {
         println("================    Primitive.init: $value")
     }

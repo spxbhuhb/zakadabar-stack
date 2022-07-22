@@ -27,6 +27,12 @@ class RuiBranchPoc(
     // state variables from top-level declarations
     var v2 = 12
 
+    var dirty0 = 0
+
+    fun invalidate0(mask : Int) {
+        dirty0 = dirty0 and mask
+    }
+
     init {
         // top-level blocks from rendering
 
@@ -48,10 +54,10 @@ class RuiBranchPoc(
         }
 
         fun patch() {
-            if (dirty and 1 != 0) {
+            if (dirty0 and 1 != 0) {
                 branch0.patch()
             }
-            dirty = 0
+            dirty0 = 0
         }
 
         fun dispose() {
@@ -71,7 +77,7 @@ class RuiBranchPoc(
 
         fun patch() {
             primitive0.value = value + 10
-            primitive0.dirty = 1
+            primitive0.invalidate0(1)
             primitive0.patch()
         }
 
@@ -91,7 +97,7 @@ class RuiBranchPoc(
 
         fun patch() {
             primitive0.value = value + 20
-            primitive0.dirty = 1
+            primitive0.dirty0 = 1
             primitive0.patch()
         }
 

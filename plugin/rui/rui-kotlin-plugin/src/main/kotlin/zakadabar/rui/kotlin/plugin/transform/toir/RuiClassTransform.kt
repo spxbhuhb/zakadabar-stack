@@ -21,7 +21,7 @@ class RuiClassTransform(
 
     fun transform() {
         ruiClasses.forEach {
-            RuiToIrTransform(it).transform()
+            it.builder.build()
             it.irFunction.file.addChild(it.irClass)
         }
     }

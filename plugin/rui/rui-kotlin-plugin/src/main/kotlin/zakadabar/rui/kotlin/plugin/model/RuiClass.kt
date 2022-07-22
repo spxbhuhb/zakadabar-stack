@@ -31,7 +31,7 @@ class RuiClass(
 
     val symbolMap = mutableMapOf<IrSymbol, RuiElement>()
 
-    val builder = RuiClassBuilder(ruiContext, this)
+    val builder = RuiClassBuilder(this)
 
     val irClass
         get() = builder.irClass

@@ -3,6 +3,8 @@
  */
 package zakadabar.rui.kotlin.plugin.model
 
+import zakadabar.rui.kotlin.plugin.transform.builders.RuiBuilder
+
 abstract class RuiStatement(
     val ruiClass: RuiClass,
     val index: Int,
@@ -10,6 +12,6 @@ abstract class RuiStatement(
 
     val name : String = "\$fragment$index"
 
-    fun transform() { }
+    abstract val builder : RuiBuilder
 
 }

@@ -4,6 +4,7 @@
 package zakadabar.rui.kotlin.plugin.model
 
 import org.jetbrains.kotlin.ir.expressions.IrBlock
+import zakadabar.rui.kotlin.plugin.transform.builders.RuiBuilder
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
 class RuiForLoop(
@@ -15,6 +16,9 @@ class RuiForLoop(
     val loopVariable: RuiDeclaration,
     val body: RuiStatement,
 ) : RuiStatement(ruiClass, index) {
+
+    override val builder: RuiBuilder
+        get() = TODO("Not yet implemented")
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
         visitor.visitForLoop(this, data)

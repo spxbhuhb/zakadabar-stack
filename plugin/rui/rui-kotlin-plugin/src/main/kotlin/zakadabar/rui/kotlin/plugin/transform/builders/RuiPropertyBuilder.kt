@@ -25,23 +25,26 @@ import org.jetbrains.kotlin.ir.util.parentAsClass
 import org.jetbrains.kotlin.name.Name
 
 open class RuiPropertyBuilder(
-    override val ruiClassBuilder: RuiClassBuilder
+    override val ruiClassBuilder: RuiClassBuilder,
+    val name: Name,
+    val type: IrType,
+    val isVar : Boolean = true
 ) : RuiBuilder {
 
-    lateinit var name : Name
-    lateinit var field: IrField
+    lateinit var irField: IrField
     lateinit var irProperty: IrProperty
     lateinit var getter: IrSimpleFunction
     lateinit var setter: IrSimpleFunction
 
-    constructor(name : String, ruiClassBuilder: RuiClassBuilder) : this(ruiClassBuilder) {
-        this.name = Name.identifier(name)
+    init {
+        initField()
+        initProperty()
     }
 
-    fun buildField(irType: IrType) {
-        field = irFactory.buildField {
+    fun initField() {
+        irField = irFactory.buildField {
             name = this@RuiPropertyBuilder.name
-            type = irType
+            type = this@RuiPropertyBuilder.type
             origin = IrDeclarationOrigin.PROPERTY_BACKING_FIELD
             visibility = DescriptorVisibilities.PRIVATE
         }.apply {
@@ -49,20 +52,22 @@ open class RuiPropertyBuilder(
         }
     }
 
-    fun buildProperty() {
+    fun initProperty() {
         irProperty = irClass.addProperty {
             name = this@RuiPropertyBuilder.name
             isVar = true
         }.apply {
             parent = irClass
-            backingField = field
+            backingField = irField
             addDefaultGetter(irClass, irBuiltIns)
         }
 
-        addDefaultSetter()
-
         getter = irProperty.getter !!
-        setter = irProperty.setter !!
+
+        if (isVar) {
+            addDefaultSetter()
+            setter = irProperty.setter !!
+        }
     }
 
     fun addDefaultSetter() {
@@ -70,7 +75,7 @@ open class RuiPropertyBuilder(
         irProperty.setter = irFactory.buildFun {
 
             origin = IrDeclarationOrigin.DEFAULT_PROPERTY_ACCESSOR
-            name = Name.identifier("set-" + field.name.identifier)
+            name = Name.identifier("set-" + irField.name.identifier)
             visibility = DescriptorVisibilities.PUBLIC
             modality = Modality.FINAL
             returnType = irBuiltIns.unitType
@@ -86,13 +91,13 @@ open class RuiPropertyBuilder(
 
             val value = addValueParameter {
                 name = Name.identifier("set-?")
-                type = field.type
+                type = irField.type
             }
 
             body = DeclarationIrBuilder(irContext, this.symbol).irBlockBody {
                 + irSetField(
                     receiver = irGet(receiver),
-                    field = field,
+                    field = irField,
                     value = irGet(value)
                 )
             }
@@ -102,26 +107,26 @@ open class RuiPropertyBuilder(
     fun irGetValue(): IrCall {
         return IrCallImpl(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            field.type,
+            irField.type,
             getter.symbol,
             0, 0
         ).apply {
-            dispatchReceiver = irGetReceiver()
+            dispatchReceiver = irThisReceiver()
         }
     }
 
     fun irSetValue(value: IrExpression): IrCall {
         return IrCallImpl(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            field.type,
+            irField.type,
             setter.symbol,
             0, 1
         ).apply {
-            dispatchReceiver = irGetReceiver()
+            dispatchReceiver = irThisReceiver()
             putValueArgument(0, value)
         }
     }
 
-    fun irGetReceiver() = IrGetValueImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, irClass.thisReceiver !!.symbol)
+    fun irThisReceiver() = IrGetValueImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, irClass.thisReceiver !!.symbol)
 
 }

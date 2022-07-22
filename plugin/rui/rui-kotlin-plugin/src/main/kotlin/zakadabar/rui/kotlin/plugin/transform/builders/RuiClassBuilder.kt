@@ -25,16 +25,17 @@ import org.jetbrains.kotlin.ir.util.kotlinFqName
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
-import zakadabar.rui.kotlin.plugin.RuiPluginContext
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.util.toRuiClassName
 
 class RuiClassBuilder(
-    override val ruiContext: RuiPluginContext,
-    val ruiClass : RuiClass,
+    val ruiClass: RuiClass
 ) : RuiBuilder {
 
-    override val ruiClassBuilder  = this
+    override val ruiClassBuilder = this
+
+    override val ruiContext
+        get() = this.ruiClass.ruiContext
 
     val irFunction = ruiClass.irFunction
 
@@ -44,6 +45,9 @@ class RuiClassBuilder(
     val constructor: IrConstructor
     val initializer: IrAnonymousInitializer
     val thisReceiver: IrValueParameter
+
+    lateinit var adapterPropertyBuilder: RuiPropertyBuilder
+    lateinit var anchorPropertyBuilder: RuiPropertyBuilder
 
     val ruiFragmentClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiFragment"))) !!
     val ruiFragmentType = ruiFragmentClass.typeWith()
@@ -70,12 +74,12 @@ class RuiClassBuilder(
         name = irClass.name.identifier
         fqName = irClass.kotlinFqName
 
-        thisReceiver = buildThisReceiver()
-        constructor = buildConstructor()
-        initializer = buildInitializer()
+        thisReceiver = initThisReceiver()
+        constructor = initConstructor()
+        initializer = initInitializer()
     }
 
-    private fun buildThisReceiver(): IrValueParameter {
+    private fun initThisReceiver(): IrValueParameter {
 
         val thisReceiver = irFactory.createValueParameter(
             SYNTHETIC_OFFSET,
@@ -109,7 +113,7 @@ class RuiClassBuilder(
      *
      * Later `RuiStateTransformer` adds parameters from the original function.
      */
-    private fun buildConstructor(): IrConstructor {
+    private fun initConstructor(): IrConstructor {
 
         val constructor = irClass.addConstructor {
             isPrimary = true
@@ -136,24 +140,21 @@ class RuiClassBuilder(
         constructor.addValueParameter {
             name = Name.identifier("\$adapter")
             type = ruiAdapterType
-        }.addAsProperty()
+        }.also {
+            adapterPropertyBuilder = RuiPropertyBuilder(this, it.name, it.type, isVar = false)
+        }
 
         constructor.addValueParameter {
             name = Name.identifier("\$anchor")
             type = ruiFragmentType
-        }.addAsProperty()
+        }.also {
+            anchorPropertyBuilder = RuiPropertyBuilder(this, it.name, it.type, isVar = false)
+        }
 
         return constructor
     }
 
-    private fun IrValueParameter.addAsProperty() {
-        RuiPropertyBuilder(this.name.identifier, this@RuiClassBuilder).apply {
-            buildField(this@addAsProperty.type)
-            buildProperty()
-        }
-    }
-
-    private fun buildInitializer(): IrAnonymousInitializer {
+    private fun initInitializer(): IrAnonymousInitializer {
 
         val initializer = irFactory.createAnonymousInitializer(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
@@ -168,7 +169,12 @@ class RuiClassBuilder(
         return initializer
     }
 
-    fun finalize() {
+    override fun build() {
+
+        ruiClass.rootBlock.statements.forEach {
+            it.builder.build()
+        }
+
         // The initializer has to be the last, so it will be able to access all properties
         irClass.declarations += initializer
         irClass.addFakeOverrides(IrTypeSystemContextImpl(irContext.irBuiltIns))

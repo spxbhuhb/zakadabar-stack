@@ -4,6 +4,7 @@
 package zakadabar.rui.kotlin.plugin.model
 
 import org.jetbrains.kotlin.ir.expressions.IrCall
+import zakadabar.rui.kotlin.plugin.transform.builders.RuiCallBuilder
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 import zakadabar.rui.kotlin.plugin.util.toRuiClassFqName
 
@@ -15,6 +16,8 @@ class RuiCall(
 
     val targetRuiClass = irCall.symbol.owner.toRuiClassFqName()
     val valueArguments = mutableListOf<RuiExpression>()
+
+    override val builder = RuiCallBuilder(ruiClass.builder, this)
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
         visitor.visitCall(this, data)

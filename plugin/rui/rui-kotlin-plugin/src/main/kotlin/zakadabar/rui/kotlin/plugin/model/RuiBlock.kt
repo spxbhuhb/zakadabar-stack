@@ -4,6 +4,7 @@
 package zakadabar.rui.kotlin.plugin.model
 
 import org.jetbrains.kotlin.ir.expressions.IrBlock
+import zakadabar.rui.kotlin.plugin.transform.builders.RuiBuilder
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
 class RuiBlock(
@@ -13,6 +14,9 @@ class RuiBlock(
 ) : RuiStatement(ruiClass, index) {
 
     val statements = mutableListOf<RuiStatement>()
+
+    override val builder: RuiBuilder
+        get() = TODO("Not yet implemented")
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
         visitor.visitBlock(this, data)

@@ -118,7 +118,7 @@ class RuiStateTransformer(
     fun addDirtyMask(it: RuiStateVariable) {
         val maskNumber = it.index / 32
         if (ruiClass.dirtyMasks.size > maskNumber) return
-        ruiClass.dirtyMasks += RuiDirtyMask(maskNumber)
+        ruiClass.dirtyMasks += RuiDirtyMask(ruiClass, maskNumber)
     }
 
     override fun visitVariable(declaration: IrVariable): IrStatement {

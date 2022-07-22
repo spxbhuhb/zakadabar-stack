@@ -4,9 +4,8 @@
 package zakadabar.rui.kotlin.plugin
 
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
-import org.jetbrains.kotlin.ir.IrElement
+import org.jetbrains.kotlin.backend.jvm.functionByName
 import org.jetbrains.kotlin.ir.util.IrMessageLogger
-import org.jetbrains.kotlin.ir.util.dump
 import org.jetbrains.kotlin.name.FqName
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 
@@ -20,9 +19,9 @@ class RuiPluginContext(
 
     val ruiClasses = mutableMapOf<FqName, RuiClass>()
 
-    fun dump(point : String, element : IrElement) {
-        if (point in dumpPoints) println(element.dump())
-    }
+    val not = lazy { irPluginContext.referenceClass(FqName("kotlin.Boolean"))!!.functionByName("not") }
+    val eqeq = lazy { irPluginContext.referenceClass(FqName("kotlin.internal.ir"))!!.functionByName("EQEQ") }
+    val and = lazy { irPluginContext.referenceClass(FqName("kotlin.Boolean"))!!.functionByName("not") }
 
     companion object {
         const val DUMP_BEFORE = "before"

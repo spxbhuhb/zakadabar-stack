@@ -39,6 +39,9 @@ object ErrorsRui {
     val RUI_IR_MISSING_EXPRESSION_ARGUMENT = RuiIrError(6, "Missing expression argument. Most probably this is a plugin bug, please open an issue for this on GitHub.")
     val RUI_IR_RENDERING_INVALID_LOOP_BODY = RuiIrError(7, "This loop body is not allowed in the rendering part.")
     val RUI_IR_RENDERING_INVALID_DECLARATION = RuiIrError(8, "This declaration is not allowed in the rendering part.")
+    val RUI_IR_MISSING_RUI_CLASS = RuiIrError(9, "Missing Rui class.")
+    val RUI_IR_MISSING_RUI_FUNCTION = RuiIrError(10, "Missing Rui function.")
+
 
     class RuiIrError(
         val id: Int,

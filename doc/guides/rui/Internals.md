@@ -1,5 +1,12 @@
 # Internals
 
+## Conventions
+
+### Builders
+
+`init*` functions run when the builder instance is created
+`build*` functions run when the `build` function of the builder instance is called
+
 ## Transform Algorithm
 
 The `rui` plugin creates a rui component class for each function annotated with `@Rui`.
