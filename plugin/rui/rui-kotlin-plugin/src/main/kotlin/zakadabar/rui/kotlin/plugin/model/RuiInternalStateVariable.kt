@@ -14,7 +14,7 @@ class RuiInternalStateVariable(
 ) : RuiStateVariable {
 
     override val originalName = irVariable.name.identifier
-    override val name = "$originalName\$"
+    override val name = irVariable.name
 
     override val builder = RuiStateVariableBuilder.builderFor(this)
 

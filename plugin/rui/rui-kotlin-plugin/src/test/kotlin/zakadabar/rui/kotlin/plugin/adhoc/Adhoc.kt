@@ -27,7 +27,7 @@ fun Basic(i : Int) {
 //            fragment0.invalidate0(1)
 //        }
 //
-//        fragment0.patch()
+//        fragment0.ruiPatch()
 //    }
 //}
 

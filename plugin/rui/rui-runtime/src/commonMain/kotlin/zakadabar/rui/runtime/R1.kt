@@ -18,13 +18,13 @@ class RuiR1(
         println("================    Primitive.init: $value")
     }
 
-    override var patch = {
+    override var ruiPatch = {
         println("================    Primitive.patch: $value")
     }
 
     var dirty0 = 0
 
-    fun invalidate0(mask: Int) {
+    fun ruiInvalidate0(mask: Int) {
         dirty0 = dirty0 or mask
     }
 

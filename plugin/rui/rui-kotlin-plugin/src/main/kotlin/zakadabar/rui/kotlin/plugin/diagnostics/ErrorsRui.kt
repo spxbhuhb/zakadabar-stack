@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.ir.util.IrMessageLogger
 import org.jetbrains.kotlin.ir.util.file
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
 import zakadabar.rui.kotlin.plugin.model.RuiClass
+import zakadabar.rui.kotlin.plugin.transform.builders.RuiClassBuilder
 
 object ErrorsRui {
     // These errors are used by the IR transformation
@@ -41,11 +42,11 @@ object ErrorsRui {
     val RUI_IR_RENDERING_INVALID_DECLARATION = RuiIrError(8, "This declaration is not allowed in the rendering part.")
     val RUI_IR_MISSING_RUI_CLASS = RuiIrError(9, "Missing Rui class.")
     val RUI_IR_MISSING_RUI_FUNCTION = RuiIrError(10, "Missing Rui function.")
-
+    val RUI_IR_INVALID_EXTERNAL_CLASS = RuiIrError(11, "Invalid external class.")
 
     class RuiIrError(
         val id: Int,
-        val message: String
+        val message: String,
     ) {
         fun toMessage(): String {
             return "${id.toString().padStart(4, '0')}  $message"
@@ -58,6 +59,11 @@ object ErrorsRui {
 
         fun report(ruiContext: RuiPluginContext, declaration: IrFunction) {
             report(ruiContext, declaration.file.fileEntry, declaration.startOffset)
+        }
+
+        fun report(ruiClassBuilder: RuiClassBuilder, element: IrElement): Nothing? {
+            report(ruiClassBuilder.ruiContext, ruiClassBuilder.ruiClass.irFunction.file.fileEntry, element.startOffset)
+            return null
         }
 
         fun report(ruiClass: RuiClass, element: IrElement): Nothing? {

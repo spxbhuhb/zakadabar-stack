@@ -14,7 +14,7 @@ class RuiExternalStateVariable(
 ) : RuiStateVariable {
 
     override val originalName = irValueParameter.name.identifier
-    override val name = originalName
+    override val name = irValueParameter.name
 
     override val builder = RuiStateVariableBuilder.builderFor(this)
 

@@ -3,6 +3,7 @@
  */
 package zakadabar.rui.kotlin.plugin.model
 
+import org.jetbrains.kotlin.name.Name
 import zakadabar.rui.kotlin.plugin.transform.builders.RuiStateVariableBuilder
 
 interface RuiStateVariable : RuiElement {
@@ -10,7 +11,7 @@ interface RuiStateVariable : RuiElement {
     val ruiClass: RuiClass
     val index: Int
     val originalName : String
-    val name : String
+    val name : Name
 
     val builder : RuiStateVariableBuilder
 

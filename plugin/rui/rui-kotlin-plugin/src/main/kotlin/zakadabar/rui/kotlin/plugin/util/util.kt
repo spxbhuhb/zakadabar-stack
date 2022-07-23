@@ -3,8 +3,8 @@
  */
 package zakadabar.rui.kotlin.plugin.util
 
+import org.jetbrains.kotlin.ir.IrElement
 import org.jetbrains.kotlin.ir.declarations.IrFunction
-import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.util.kotlinFqName
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
@@ -17,12 +17,18 @@ fun Name.toRuiClassName(): Name {
     return Name.identifier("Rui" + identifier.capitalizeAsciiOnly())
 }
 
+fun Name.isSynthetic() = identifier.startsWith('$') || identifier.endsWith('$')
+
 fun IrFunction.toRuiClassFqName(): FqName {
     return (kotlinFqName.parentOrNull() ?: FqName.ROOT).child(name.toRuiClassName())
 }
 
-class RuiCompilationException(error: ErrorsRui.RuiIrError, ruiClass: RuiClass, irCall: IrCall) : Exception() {
+class RuiCompilationException(
+    val error: ErrorsRui.RuiIrError,
+    ruiClass: RuiClass? = null,
+    irElement : IrElement? = null
+) : Exception() {
     init {
-        error.report(ruiClass, irCall)
+        if (ruiClass != null && irElement != null) error.report(ruiClass, irElement)
     }
 }

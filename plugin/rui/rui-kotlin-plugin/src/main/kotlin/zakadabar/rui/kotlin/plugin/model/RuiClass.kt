@@ -38,10 +38,7 @@ class RuiClass(
 
     internal fun stateVariableByGetterOrNull(symbol: IrSymbol): RuiStateVariable? =
         symbolMap[symbol]?.let {
-            val b1 = (it is RuiStateVariable)
-            it as RuiStateVariable
-            val b2 = (it.builder.getter.symbol == symbol)
-            if (b1 && b2) it else null
+            if (it is RuiStateVariable && it.builder.getter.symbol == symbol) it else null
         }
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =

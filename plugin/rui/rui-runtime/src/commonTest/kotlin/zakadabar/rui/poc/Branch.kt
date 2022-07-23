@@ -49,20 +49,20 @@ class RuiBranchPoc(
         // lifecycle
 
         fun create() {
-            primitive0.create()
-            branch0.create()
+            primitive0.ruiCreate()
+            branch0.ruiCreate()
         }
 
         fun patch() {
             if (dirty0 and 1 != 0) {
-                branch0.patch()
+                branch0.ruiPatch()
             }
             dirty0 = 0
         }
 
         fun dispose() {
-            primitive0.dispose()
-            branch0.dispose()
+            primitive0.ruiDispose()
+            branch0.ruiDispose()
         }
 
         set(::create, ::patch, ::dispose)
@@ -72,17 +72,17 @@ class RuiBranchPoc(
         val primitive0 = RuiPrimitiveFragment(value + 10)
 
         fun create() {
-            primitive0.create()
+            primitive0.ruiCreate()
         }
 
         fun patch() {
             primitive0.value = value + 10
             primitive0.invalidate0(1)
-            primitive0.patch()
+            primitive0.ruiPatch()
         }
 
         fun dispose() {
-            primitive0.dispose()
+            primitive0.ruiDispose()
         }
 
         RuiFragment().set(::create, ::patch, ::dispose)
@@ -92,17 +92,17 @@ class RuiBranchPoc(
         val primitive0 = RuiPrimitiveFragment(value + 20)
 
         fun create() {
-            primitive0.create()
+            primitive0.ruiCreate()
         }
 
         fun patch() {
             primitive0.value = value + 20
             primitive0.dirty0 = 1
-            primitive0.patch()
+            primitive0.ruiPatch()
         }
 
         fun dispose() {
-            primitive0.dispose()
+            primitive0.ruiDispose()
         }
 
         RuiFragment().set(::create, ::patch, ::dispose)

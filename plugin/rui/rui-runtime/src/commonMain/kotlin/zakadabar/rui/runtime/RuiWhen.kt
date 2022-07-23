@@ -7,25 +7,25 @@ class RuiWhen(val select: () -> RuiFunWrapper) : RuiFragment() {
     var blockFun = ruiEmptyBlockFunc
     var block = ruiEmptyBlock
 
-    override var create = {
+    override var ruiCreate = {
         blockFun = select()
         block = blockFun.func()
-        block.create()
+        block.ruiCreate()
     }
 
-    override var patch = {
+    override var ruiPatch = {
         val newBlockFun = select()
         if (newBlockFun == blockFun) {
-            block.patch()
+            block.ruiPatch()
         } else {
-            block.dispose()
+            block.ruiDispose()
             blockFun = newBlockFun
             block = blockFun.func()
-            block.create()
+            block.ruiCreate()
         }
     }
 
-    override var dispose = {
-        block.dispose()
+    override var ruiDispose = {
+        block.ruiDispose()
     }
 }

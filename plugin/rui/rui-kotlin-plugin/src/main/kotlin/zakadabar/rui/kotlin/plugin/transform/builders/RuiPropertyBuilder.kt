@@ -104,14 +104,14 @@ open class RuiPropertyBuilder(
         }
     }
 
-    fun irGetValue(): IrCall {
+    fun irGetValue(receiver : IrExpression = irThisReceiver()): IrCall {
         return IrCallImpl(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
             irField.type,
             getter.symbol,
             0, 0
         ).apply {
-            dispatchReceiver = irThisReceiver()
+            dispatchReceiver = receiver
         }
     }
 

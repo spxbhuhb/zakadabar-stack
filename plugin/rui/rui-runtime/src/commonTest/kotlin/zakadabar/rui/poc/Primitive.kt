@@ -37,7 +37,7 @@ class RuiPrimitiveFragment(
         println("================    Primitive.init: $value")
     }
 
-    override var patch = {
+    override var ruiPatch = {
         println("================    Primitive.patch: $value")
     }
 }

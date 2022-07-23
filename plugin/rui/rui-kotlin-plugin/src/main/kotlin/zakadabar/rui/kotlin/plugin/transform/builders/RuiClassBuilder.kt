@@ -138,14 +138,14 @@ class RuiClassBuilder(
         }
 
         constructor.addValueParameter {
-            name = Name.identifier("\$adapter")
+            name = Name.identifier("ruiAdapter")
             type = ruiAdapterType
         }.also {
             adapterPropertyBuilder = RuiPropertyBuilder(this, it.name, it.type, isVar = false)
         }
 
         constructor.addValueParameter {
-            name = Name.identifier("\$anchor")
+            name = Name.identifier("ruiAnchor")
             type = ruiFragmentType
         }.also {
             anchorPropertyBuilder = RuiPropertyBuilder(this, it.name, it.type, isVar = false)

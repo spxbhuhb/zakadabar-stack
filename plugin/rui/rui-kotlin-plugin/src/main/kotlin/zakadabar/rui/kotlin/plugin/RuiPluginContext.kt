@@ -8,6 +8,7 @@ import org.jetbrains.kotlin.backend.jvm.functionByName
 import org.jetbrains.kotlin.ir.util.IrMessageLogger
 import org.jetbrains.kotlin.name.FqName
 import zakadabar.rui.kotlin.plugin.model.RuiClass
+import zakadabar.rui.kotlin.plugin.transform.RuiSymbolMap
 
 class RuiPluginContext(
     val annotations : List<String>,
@@ -18,6 +19,8 @@ class RuiPluginContext(
     lateinit var diagnosticReporter : IrMessageLogger
 
     val ruiClasses = mutableMapOf<FqName, RuiClass>()
+
+    val ruiSymbolMap = RuiSymbolMap(this)
 
     val not = lazy { irPluginContext.referenceClass(FqName("kotlin.Boolean"))!!.functionByName("not") }
     val eqeq = lazy { irPluginContext.referenceClass(FqName("kotlin.internal.ir"))!!.functionByName("EQEQ") }

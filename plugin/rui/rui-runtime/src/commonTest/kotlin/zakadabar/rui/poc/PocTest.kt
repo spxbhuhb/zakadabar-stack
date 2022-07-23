@@ -17,12 +17,12 @@ class PocTest {
     @Test
     fun branchTest() {
         val c = RuiBranchPoc(1)
-        c.create()
+        c.ruiCreate()
 
         fun v(value : Int) {
             c.value = value
             c.dirty = 1
-            c.patch()
+            c.ruiPatch()
         }
 
         v(1)

@@ -12,7 +12,7 @@ class RuiDirtyMask(
     val index : Int
 ) : RuiElement {
 
-    val name = Name.identifier("\$dirty$index")
+    val name = Name.identifier("ruiDirty$index")
 
     val builder = RuiPropertyBuilder(ruiClass.builder, name, ruiClass.builder.irBuiltIns.intType)
 

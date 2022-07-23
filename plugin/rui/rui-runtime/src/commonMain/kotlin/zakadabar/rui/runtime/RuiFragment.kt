@@ -8,14 +8,14 @@ package zakadabar.rui.runtime
  */
 open class RuiFragment {
 
-    open var create : () -> Unit = {  }
-    open var patch : () -> Unit = {  }
-    open var dispose : () -> Unit = {  }
+    open var ruiCreate : () -> Unit = {  }
+    open var ruiPatch : () -> Unit = {  }
+    open var ruiDispose : () -> Unit = {  }
 
     fun set(create : () -> Unit, patch : () -> Unit, dispose : () -> Unit) : RuiFragment {
-        this.create = create
-        this.patch = patch
-        this.dispose = dispose
+        this.ruiCreate = create
+        this.ruiPatch = patch
+        this.ruiDispose = dispose
         return this
     }
 }

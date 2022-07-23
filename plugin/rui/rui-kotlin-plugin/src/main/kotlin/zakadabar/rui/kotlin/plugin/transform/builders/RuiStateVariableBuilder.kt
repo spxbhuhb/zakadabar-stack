@@ -26,7 +26,7 @@ class RuiStateVariableBuilder private constructor(
             RuiStateVariableBuilder(
                 ruiStateVariable.ruiClass.builder,
                 ruiStateVariable,
-                ruiStateVariable.irValueParameter.name,
+                ruiStateVariable.name,
                 ruiStateVariable.irValueParameter.type
             ).apply {
                 initExternal(ruiStateVariable)
@@ -37,7 +37,7 @@ class RuiStateVariableBuilder private constructor(
             RuiStateVariableBuilder(
                 ruiStateVariable.ruiClass.builder,
                 ruiStateVariable,
-                ruiStateVariable.irVariable.name,
+                ruiStateVariable.name,
                 ruiStateVariable.irVariable.type
             ).apply {
                 initInternal(ruiStateVariable)
@@ -70,7 +70,7 @@ class RuiStateVariableBuilder private constructor(
 
     }
 
-    fun irIsDirty() : IrExpression {
+    fun irIsDirty(receiver : IrExpression) : IrExpression {
         val variableIndex = ruiStateVariable.index
         val maskIndex = variableIndex / 32
         val bitIndex = variableIndex % 32
@@ -78,7 +78,7 @@ class RuiStateVariableBuilder private constructor(
         val mask = ruiClassBuilder.ruiClass.dirtyMasks[maskIndex]
 
         return irNotEqual(
-            irAnd(mask.builder.irGetValue(), irConst(bitIndex)),
+            irAnd(mask.builder.irGetValue(receiver), irConst(bitIndex)),
             irConst(0)
         )
     }
