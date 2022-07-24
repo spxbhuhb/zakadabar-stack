@@ -46,7 +46,6 @@ class SuccessesTest {
             .apply {
                 workingDir = File("./tmp")
                 sources = listOf(
-                    SourceFile.fromPath(File(sourceDir, "../util.kt")),
                     SourceFile.fromPath(File(sourceDir, fileName))
                 )
                 useIR = true

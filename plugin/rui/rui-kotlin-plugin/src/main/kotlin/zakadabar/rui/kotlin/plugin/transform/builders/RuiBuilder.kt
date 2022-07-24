@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.ir.ObsoleteDescriptorBasedAPI
 import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrFunction
+import org.jetbrains.kotlin.ir.declarations.IrProperty
 import org.jetbrains.kotlin.ir.declarations.IrValueDeclaration
 import org.jetbrains.kotlin.ir.declarations.impl.IrVariableImpl
 import org.jetbrains.kotlin.ir.expressions.*
@@ -41,6 +42,7 @@ import org.jetbrains.kotlin.ir.types.IrType
 import org.jetbrains.kotlin.ir.types.classOrNull
 import org.jetbrains.kotlin.ir.types.classifierOrFail
 import org.jetbrains.kotlin.ir.types.typeWith
+import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.ir.util.functions
 import org.jetbrains.kotlin.ir.util.getPrimitiveArrayElementType
 import org.jetbrains.kotlin.name.Name
@@ -62,7 +64,7 @@ interface RuiBuilder {
         get() = ruiClassBuilder.irClass
 
     val irContext
-        get() = ruiContext.irPluginContext
+        get() = ruiContext.irContext
 
     val irFactory
         get() = irContext.irFactory
@@ -448,6 +450,20 @@ interface RuiBuilder {
 
     fun irGet(variable: IrValueDeclaration): IrExpression {
         return irGet(variable.type, variable.symbol)
+    }
+
+    fun irThisReceiver() = IrGetValueImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, irClass.thisReceiver !!.symbol)
+
+    // TODO tipsy coding, review all the !!
+    fun IrProperty.irGet(receiver : IrExpression = irThisReceiver()): IrCall {
+        return IrCallImpl(
+            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+            this.backingField!!.type,
+            getter!!.symbol,
+            0, 0
+        ).apply {
+            dispatchReceiver = receiver
+        }
     }
 
     fun irIf(condition: IrExpression, body: IrExpression): IrExpression {

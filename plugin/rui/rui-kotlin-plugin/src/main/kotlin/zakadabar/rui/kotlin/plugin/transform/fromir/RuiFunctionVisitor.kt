@@ -4,6 +4,8 @@
 package zakadabar.rui.kotlin.plugin.transform.fromir
 
 import org.jetbrains.kotlin.backend.common.IrElementTransformerVoidWithContext
+import org.jetbrains.kotlin.ir.IrStatement
+import org.jetbrains.kotlin.ir.declarations.IrClass
 import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.expressions.impl.IrBlockBodyImpl
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
@@ -22,6 +24,10 @@ class RuiFunctionVisitor(
 
     override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?): List<String> =
         ruiContext.annotations
+
+    override fun visitClassNew(declaration: IrClass): IrStatement {
+        return super.visitClassNew(declaration)
+    }
 
     override fun visitFunctionNew(declaration: IrFunction): IrFunction {
         if (! declaration.isAnnotatedWithRui()) {

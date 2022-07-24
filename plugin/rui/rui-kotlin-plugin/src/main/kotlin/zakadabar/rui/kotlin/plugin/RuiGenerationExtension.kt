@@ -14,12 +14,18 @@ import zakadabar.rui.kotlin.plugin.transform.fromir.RuiFunctionVisitor
 import zakadabar.rui.kotlin.plugin.transform.toir.RuiClassTransform
 
 internal class RuiGenerationExtension(
-    private val ruiContext: RuiPluginContext
+    val annotations: List<String>,
+    val dumpPoints: List<String>
 ) : IrGenerationExtension {
 
     override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
-        ruiContext.irPluginContext = pluginContext
-        ruiContext.diagnosticReporter = pluginContext.createDiagnosticReporter(RuiCommandLineProcessor.PLUGIN_ID)
+
+        val ruiContext = RuiPluginContext(
+            pluginContext,
+            annotations,
+            dumpPoints,
+            pluginContext.createDiagnosticReporter(RuiCommandLineProcessor.PLUGIN_ID)
+        )
 
         if (DUMP_BEFORE in ruiContext.dumpPoints) {
             println("DUMP BEFORE")

@@ -32,19 +32,19 @@ class RuiComponentRegistrar : ComponentRegistrar {
 //        val dump = listOf(DUMP_BEFORE, DUMP_AFTER, DUMP_RUI_TREE)
         val dump = listOf(DUMP_BEFORE, DUMP_AFTER, DUMP_RUI_TREE)
 
-        registerRuiComponents(project, RuiPluginContext(annotations, dump), configuration.getBoolean(JVMConfigurationKeys.IR))
+        registerRuiComponents(project, annotations, dump, configuration.getBoolean(JVMConfigurationKeys.IR))
     }
 
-    fun registerRuiComponents(project: Project, configuration: RuiPluginContext, useIr: Boolean) {
+    fun registerRuiComponents(project: Project, annotations: List<String>, dump: List<String>, useIr: Boolean) {
 
         StorageComponentContainerContributor.registerExtension(
             project,
-            RuiComponentContainerContributor(configuration.annotations, useIr)
+            RuiComponentContainerContributor(annotations, useIr)
         )
-        
+
         IrGenerationExtension.registerExtension(
             project,
-            RuiGenerationExtension(configuration)
+            RuiGenerationExtension(annotations, dump)
         )
 
     }

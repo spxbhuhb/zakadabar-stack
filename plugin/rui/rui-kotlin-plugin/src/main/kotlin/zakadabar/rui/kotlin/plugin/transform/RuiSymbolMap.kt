@@ -28,7 +28,7 @@ class RuiSymbolMap(
 
     private fun loadClass(fqName: FqName): RuiClassSymbols {
         val irClass = ruiContext.ruiClasses[fqName]?.irClass
-            ?: ruiContext.irPluginContext.referenceClass(fqName)?.owner
+            ?: ruiContext.irContext.referenceClass(fqName)?.owner
 
         if (irClass == null) throw RuiCompilationException(RUI_IR_MISSING_RUI_CLASS)
 
@@ -95,7 +95,7 @@ class RuiClassSymbols(
 
     private fun property(indices: List<String>, it: IrProperty) {
         val name = it.name.identifier
-        val index = indices.indexOf(name) - RUI_CLASS_SYNTHETIC_ARGUMENTS
+        val index = indices.indexOf(name) - RUI_CLASS_RUI_ARGUMENTS
 
         if (index >= 0) {
             stateVariables += RuiStateVariableSymbol(index, it)

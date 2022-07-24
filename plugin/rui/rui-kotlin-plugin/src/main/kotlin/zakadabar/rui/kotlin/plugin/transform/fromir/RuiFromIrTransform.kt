@@ -49,7 +49,7 @@ class RuiFromIrTransform(
     fun transformRoot() {
         val statements = ruiClass.originalStatements
 
-        val irBlock = IrBlockImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, ruiContext.irPluginContext.irBuiltIns.unitType)
+        val irBlock = IrBlockImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, ruiContext.irContext.irBuiltIns.unitType)
         irBlock.statements.addAll(statements.subList(ruiClass.boundary, statements.size))
 
         ruiClass.rootBlock = transformBlock(irBlock)

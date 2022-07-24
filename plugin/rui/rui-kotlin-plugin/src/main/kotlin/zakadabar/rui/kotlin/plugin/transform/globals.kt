@@ -3,4 +3,13 @@
  */
 package zakadabar.rui.kotlin.plugin.transform
 
-const val RUI_CLASS_SYNTHETIC_ARGUMENTS = 2
+/**
+ * Number of Rui related constructor arguments.
+ *
+ * 1. ruiAdapter
+ * 2. ruiAnchor
+ * 3. ruiPatchState
+ */
+const val RUI_CLASS_RUI_ARGUMENTS = 3
+
+const val RUI_CLASS_PATCH_STATE_INDEX = 2

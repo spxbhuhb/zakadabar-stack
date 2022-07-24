@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.ir.util.defaultType
 import org.jetbrains.kotlin.name.Name
 import zakadabar.rui.kotlin.plugin.model.RuiCall
 import zakadabar.rui.kotlin.plugin.model.RuiExpression
-import zakadabar.rui.kotlin.plugin.transform.RUI_CLASS_SYNTHETIC_ARGUMENTS
+import zakadabar.rui.kotlin.plugin.transform.RUI_CLASS_RUI_ARGUMENTS
 import zakadabar.rui.kotlin.plugin.transform.RuiClassSymbols
 import zakadabar.rui.kotlin.plugin.transform.toir.RuiReceiverTransform
 import zakadabar.rui.kotlin.plugin.util.RuiCompilationException
@@ -45,7 +45,7 @@ class RuiCallBuilder(
         }
     }
 
-    val fragmentProperty = RuiPropertyBuilder(ruiClassBuilder, Name.identifier(ruiCall.name), ruiClassBuilder.ruiFragmentType, false)
+    val fragmentProperty = RuiPropertyBuilder(ruiClassBuilder, Name.identifier(ruiCall.name), ruiContext.ruiFragmentType, false)
 
     fun buildFragment() {
         irFactory.createExpressionBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET) {
@@ -54,12 +54,12 @@ class RuiCallBuilder(
                 symbolMap.defaultType,
                 symbolMap.primaryConstructor.symbol,
                 0, 0,
-                ruiCall.valueArguments.size + RUI_CLASS_SYNTHETIC_ARGUMENTS // +2 = adapter + anchor
+                ruiCall.valueArguments.size + RUI_CLASS_RUI_ARGUMENTS // +2 = adapter + anchor
             ).also { constructorCall ->
-                constructorCall.putValueArgument(0, ruiClassBuilder.adapterPropertyBuilder.irGetValue())
-                constructorCall.putValueArgument(1, ruiClassBuilder.anchorPropertyBuilder.irGetValue())
+                constructorCall.putValueArgument(0, ruiClassBuilder.adapterProperty.irGet())
+                constructorCall.putValueArgument(1, ruiClassBuilder.anchorProperty.irGet())
                 ruiCall.valueArguments.forEachIndexed { index, ruiExpression ->
-                    constructorCall.putValueArgument(index + RUI_CLASS_SYNTHETIC_ARGUMENTS, ruiExpression.irExpression)
+                    constructorCall.putValueArgument(index + RUI_CLASS_RUI_ARGUMENTS, ruiExpression.irExpression)
                 }
             }
         }.also {
