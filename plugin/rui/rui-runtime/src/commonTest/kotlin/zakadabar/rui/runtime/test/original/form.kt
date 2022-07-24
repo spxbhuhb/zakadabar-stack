@@ -3,7 +3,7 @@
  */
 @file:Suppress("TestFunctionName")
 
-package zakadabar.rui.poc
+package zakadabar.rui.runtime.test.original
 
 import kotlin.reflect.KProperty0
 

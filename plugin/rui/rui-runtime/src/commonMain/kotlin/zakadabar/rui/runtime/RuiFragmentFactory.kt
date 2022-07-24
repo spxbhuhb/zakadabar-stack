@@ -3,10 +3,6 @@
  */
 package zakadabar.rui.runtime
 
-interface RuiAdapter {
-    fun insert(fragment: RuiFragment)
-    fun remove(fragment: RuiFragment)
-
-    val emptyFragmentFactory : RuiFragmentFactory
-
-}
+class RuiFragmentFactory(
+    val func: (ruiAdapter : RuiAdapter, ruiAnchor : RuiFragment?) -> RuiFragment
+)

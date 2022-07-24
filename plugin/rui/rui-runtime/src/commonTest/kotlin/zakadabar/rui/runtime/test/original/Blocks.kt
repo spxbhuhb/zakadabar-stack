@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.rui.poc
+package zakadabar.rui.runtime.test.original
 
 fun Text(content: String) {
     // this is just a mock primitive, that prints out happenings

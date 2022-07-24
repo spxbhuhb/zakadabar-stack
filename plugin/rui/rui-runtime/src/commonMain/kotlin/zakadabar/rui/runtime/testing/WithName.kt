@@ -1,6 +1,8 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.rui.runtime
+package zakadabar.rui.runtime.testing
 
-class RuiFunWrapper(val func: () -> RuiFragment)
+interface WithName {
+    val name : String
+}

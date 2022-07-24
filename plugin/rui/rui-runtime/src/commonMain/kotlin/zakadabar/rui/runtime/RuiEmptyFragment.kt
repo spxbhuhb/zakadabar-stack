@@ -3,5 +3,7 @@
  */
 package zakadabar.rui.runtime
 
-val ruiEmptyBlockFunc = RuiFunWrapper { ruiEmptyBlock }
-val ruiEmptyBlock = RuiFragment()
+class RuiEmptyFragment(
+    ruiAdapter: RuiAdapter,
+    ruiAnchor : RuiFragment?
+) : RuiFragment(ruiAdapter, ruiAnchor, {  })

@@ -3,11 +3,11 @@
  */
 package zakadabar.rui.kotlin.plugin.successes
 
-import zakadabar.rui.kotlin.plugin.P0
 import zakadabar.rui.runtime.Rui
+import zakadabar.rui.runtime.testing.T0
 
 @Rui
 fun Sequence() {
-    P0()
-    P0()
+    T0()
+    T0()
 }

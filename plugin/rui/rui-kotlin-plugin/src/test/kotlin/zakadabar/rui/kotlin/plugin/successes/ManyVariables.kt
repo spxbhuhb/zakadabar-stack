@@ -3,8 +3,8 @@
  */
 package zakadabar.rui.kotlin.plugin.successes
 
-import zakadabar.rui.kotlin.plugin.P1
 import zakadabar.rui.runtime.Rui
+import zakadabar.rui.runtime.testing.T1
 
 @Rui
 fun ManyVariables(
@@ -42,5 +42,5 @@ fun ManyVariables(
     i31 : Int,
     i32 : Int
 ) {
-    P1(i12)
+    T1(i12)
 }

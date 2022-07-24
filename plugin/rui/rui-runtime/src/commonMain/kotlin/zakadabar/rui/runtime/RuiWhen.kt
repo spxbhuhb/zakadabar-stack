@@ -3,29 +3,33 @@
  */
 package zakadabar.rui.runtime
 
-class RuiWhen(val select: () -> RuiFunWrapper) : RuiFragment() {
-    var blockFun = ruiEmptyBlockFunc
-    var block = ruiEmptyBlock
+open class RuiWhen(
+    adapter: RuiAdapter,
+    anchor: RuiFragment?,
+    val select: () -> RuiFragmentFactory
+) : RuiFragment(adapter, anchor, {  }) {
 
-    override var ruiCreate = {
-        blockFun = select()
-        block = blockFun.func()
-        block.ruiCreate()
+    var fragmentFactory = select()
+    var fragment = fragmentFactory.func(ruiAdapter, ruiAnchor)
+
+    override fun ruiCreate() {
+        fragment.ruiCreate()
     }
 
-    override var ruiPatch = {
-        val newBlockFun = select()
-        if (newBlockFun == blockFun) {
-            block.ruiPatch()
+    override fun ruiPatchRender() {
+        val newFactory = select()
+        if (newFactory == fragmentFactory) {
+            fragment.ruiPatchState(fragment)
+            fragment.ruiPatchRender()
         } else {
-            block.ruiDispose()
-            blockFun = newBlockFun
-            block = blockFun.func()
-            block.ruiCreate()
+            fragment.ruiDispose()
+            fragmentFactory = newFactory
+            fragment = fragmentFactory.func(ruiAdapter, ruiAnchor)
+            fragment.ruiCreate()
         }
     }
 
-    override var ruiDispose = {
-        block.ruiDispose()
+    override fun ruiDispose() {
+        fragment.ruiDispose()
     }
 }

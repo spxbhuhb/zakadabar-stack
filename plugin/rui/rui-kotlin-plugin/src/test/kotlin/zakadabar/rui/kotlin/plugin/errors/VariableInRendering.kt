@@ -3,12 +3,12 @@
  */
 package zakadabar.rui.kotlin.plugin.errors
 
-import zakadabar.rui.kotlin.plugin.P0
 import zakadabar.rui.runtime.Rui
+import zakadabar.rui.runtime.testing.T0
 
 @Rui
 fun VariableInRendering() {
-    P0()
+    T0()
     var i = 0 // error 0001 : variable declaration is not allowed in rendering
-    P0()
+    T0()
 }
