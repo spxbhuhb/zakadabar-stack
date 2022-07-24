@@ -4,13 +4,13 @@
 package zakadabar.rui.kotlin.plugin
 
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
+import org.jetbrains.kotlin.backend.jvm.functionByName
 import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.IrMessageLogger
 import org.jetbrains.kotlin.ir.util.primaryConstructor
 import org.jetbrains.kotlin.name.FqName
 import zakadabar.rui.kotlin.plugin.model.RuiClass
-import zakadabar.rui.kotlin.plugin.transform.RUI_CLASS_PATCH_STATE_INDEX
-import zakadabar.rui.kotlin.plugin.transform.RuiSymbolMap
+import zakadabar.rui.kotlin.plugin.transform.*
 
 class RuiPluginContext(
     val irContext: IrPluginContext,
@@ -29,6 +29,10 @@ class RuiPluginContext(
 
     val ruiFragmentClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiFragment"))) !!
     val ruiFragmentType = ruiFragmentClass.typeWith()
+
+    val ruiCreate = ruiFragmentClass.functionByName(RUI_FUN_CREATE)
+    val ruiPatchRender = ruiFragmentClass.functionByName(RUI_FUN_PATCH_RENDER)
+    val ruiDispose = ruiFragmentClass.functionByName(RUI_FUN_DISPOSE)
 
     val ruiAdapterClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiAdapter"))) !!
     val ruiAdapterType = ruiAdapterClass.typeWith()

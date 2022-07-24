@@ -54,18 +54,15 @@ class RuiClassSymbols(
 
     private val invalidateFunctions: List<IrSimpleFunctionSymbol>
 
-    lateinit var createProperty: IrProperty
-    lateinit var patchProperty: IrProperty
-    lateinit var disposeProperty: IrProperty
+    lateinit var create: IrSimpleFunction
+    lateinit var patchRender: IrSimpleFunction
+    lateinit var dispose: IrSimpleFunction
 
     val defaultType
         get() = irClass.defaultType
 
     val primaryConstructor
         get() = irClass.primaryConstructor ?: throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS)
-
-    val patch: IrSimpleFunctionSymbol
-        get() = patchProperty.getter?.symbol ?: throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS)
 
     init {
 
@@ -77,19 +74,28 @@ class RuiClassSymbols(
 
         irClass.declarations.forEach {
             when {
-                it is IrSimpleFunction && it.name.identifier.startsWith("ruiInvalidate") -> {
-                    invalidate += it
-                }
-                it is IrProperty && ! it.name.isSynthetic() -> {
-                    property(indices, it)
-                }
+                it is IrSimpleFunction -> function(invalidate, it)
+                it is IrProperty && ! it.name.isSynthetic() -> property(indices, it)
             }
         }
 
         invalidateFunctions = invalidate.sortedBy { it.name }.map { it.symbol }
 
-        if (! ::createProperty.isInitialized || ! ::patchProperty.isInitialized || ! ::disposeProperty.isInitialized) {
+        if (! ::create.isInitialized || ! ::patchRender.isInitialized || ! ::dispose.isInitialized) {
             throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS)
+        }
+    }
+
+    private fun function(invalidate: MutableList<IrSimpleFunction>, it: IrSimpleFunction) {
+        if (it.name.identifier.startsWith(RUI_INVALIDATE)) {
+            invalidate += it
+            return
+        }
+
+        when (it.name.identifier) {
+            RUI_FUN_CREATE -> create = it
+            RUI_FUN_PATCH_RENDER -> patchRender = it
+            RUI_FUN_DISPOSE -> dispose = it
         }
     }
 
@@ -100,12 +106,6 @@ class RuiClassSymbols(
         if (index >= 0) {
             stateVariables += RuiStateVariableSymbol(index, it)
             return
-        }
-
-        when (name) {
-            "ruiCreate" -> createProperty = it
-            "ruiPatch" -> patchProperty = it
-            "ruiDispose" -> disposeProperty = it
         }
     }
 

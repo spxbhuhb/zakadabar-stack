@@ -4,6 +4,7 @@
 package zakadabar.rui.kotlin.plugin.model
 
 import org.jetbrains.kotlin.ir.expressions.IrBlock
+import zakadabar.rui.kotlin.plugin.transform.RUI_BLOCK
 import zakadabar.rui.kotlin.plugin.transform.builders.RuiBuilder
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
@@ -12,6 +13,8 @@ class RuiBlock(
     index : Int,
     val irBlock : IrBlock
 ) : RuiStatement(ruiClass, index) {
+
+    override val name = "$RUI_BLOCK$index"
 
     val statements = mutableListOf<RuiStatement>()
 

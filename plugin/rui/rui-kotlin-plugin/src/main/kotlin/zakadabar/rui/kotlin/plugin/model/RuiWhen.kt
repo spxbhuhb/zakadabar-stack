@@ -4,6 +4,7 @@
 package zakadabar.rui.kotlin.plugin.model
 
 import org.jetbrains.kotlin.ir.expressions.IrWhen
+import zakadabar.rui.kotlin.plugin.transform.RUI_WHEN
 import zakadabar.rui.kotlin.plugin.transform.builders.RuiBuilder
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
@@ -12,6 +13,8 @@ class RuiWhen(
     index: Int,
     val irWhen: IrWhen
 ) : RuiStatement(ruiClass, index) {
+
+    override val name = "$RUI_WHEN$index"
 
     val branches = mutableListOf<RuiBranch>()
 

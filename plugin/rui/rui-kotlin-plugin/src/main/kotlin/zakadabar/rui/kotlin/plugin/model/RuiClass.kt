@@ -27,7 +27,7 @@ class RuiClass(
     val stateVariables = mutableMapOf<String, RuiStateVariable>()
     val dirtyMasks = mutableListOf<RuiDirtyMask>()
 
-    lateinit var rootBlock: RuiBlock
+    lateinit var rootBlock: RuiStatement
 
     val symbolMap = mutableMapOf<IrSymbol, RuiElement>()
 

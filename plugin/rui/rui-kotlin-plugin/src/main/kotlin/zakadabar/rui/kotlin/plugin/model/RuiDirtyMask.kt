@@ -4,7 +4,8 @@
 package zakadabar.rui.kotlin.plugin.model
 
 import org.jetbrains.kotlin.name.Name
-import zakadabar.rui.kotlin.plugin.transform.builders.RuiPropertyBuilder
+import zakadabar.rui.kotlin.plugin.transform.RUI_DIRTY
+import zakadabar.rui.kotlin.plugin.transform.builders.RuiDirtyMaskBuilder
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
 class RuiDirtyMask(
@@ -12,9 +13,9 @@ class RuiDirtyMask(
     val index : Int
 ) : RuiElement {
 
-    val name = Name.identifier("ruiDirty$index")
+    val name = Name.identifier("$RUI_DIRTY$index")
 
-    val builder = RuiPropertyBuilder(ruiClass.builder, name, ruiClass.builder.irBuiltIns.intType)
+    val builder = RuiDirtyMaskBuilder(ruiClass.builder, this)
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
         visitor.visitDirtyMask(this, data)

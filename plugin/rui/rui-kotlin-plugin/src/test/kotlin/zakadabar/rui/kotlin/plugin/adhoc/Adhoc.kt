@@ -8,7 +8,6 @@ import zakadabar.rui.runtime.testing.T1
 
 @Rui
 fun Basic(i : Int) {
-    val i2 = 12
     T1(i)
 }
 
@@ -51,20 +50,20 @@ fun Basic(i : Int) {
 //    }
 //
 //    val ruiBranch4 = RuiFragmentFactory { adapter, anchor ->
-//        RuiTestFragment(adapter, anchor, {
-//            it as RuiTestFragment
+//        RuiT1(adapter, anchor, {
+//            it as RuiT1
 //            if (ruiDirty0 and 1 != 0) {
-//                it.value = value + 20
+//                it.p0 = value + 20
 //                it.ruiInvalidate0(1)
 //            }
 //        }, value + 20)
 //    }
 //
 //    val ruiBranch3 = RuiFragmentFactory { adapter, anchor ->
-//        RuiTestFragment(adapter, anchor, {
-//            it as RuiTestFragment
+//        RuiT1(adapter, anchor, {
+//            it as RuiT1
 //            if (ruiDirty0 and 1 != 0) {
-//                it.value = value + 10
+//                it.p0 = value + 10
 //                it.ruiInvalidate0(1)
 //            }
 //        }, value + 10)
@@ -78,10 +77,10 @@ fun Basic(i : Int) {
 //        }
 //    }
 //
-//    val ruiTestFragment1 = RuiTestFragment(ruiAdapter, ruiAnchor, {
-//        it as RuiTestFragment
+//    val ruiTestFragment1 = RuiT1(ruiAdapter, ruiAnchor, {
+//        it as RuiT1
 //        if (ruiDirty0 and 1 != 0) {
-//            it.value = value
+//            it.p0 = value
 //            it.ruiInvalidate0(1)
 //        }
 //    }, value)

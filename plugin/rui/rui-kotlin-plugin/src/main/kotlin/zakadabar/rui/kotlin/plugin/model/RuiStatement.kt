@@ -10,7 +10,7 @@ abstract class RuiStatement(
     val index: Int,
 ) : RuiElement {
 
-    val name : String = "ruiFragment$index"
+    abstract val name : String
 
     abstract val builder : RuiBuilder
 

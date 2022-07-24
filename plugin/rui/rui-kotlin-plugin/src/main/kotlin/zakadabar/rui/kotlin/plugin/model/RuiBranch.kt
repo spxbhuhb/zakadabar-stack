@@ -4,6 +4,7 @@
 package zakadabar.rui.kotlin.plugin.model
 
 import org.jetbrains.kotlin.ir.expressions.IrBranch
+import zakadabar.rui.kotlin.plugin.transform.RUI_BRANCH
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
 class RuiBranch(
@@ -14,7 +15,7 @@ class RuiBranch(
     val result: RuiExpression
 ) : RuiElement {
 
-    val name = "ruiFragment$index"
+    val name = "$RUI_BRANCH$index"
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
         visitor.visitBranch(this, data)

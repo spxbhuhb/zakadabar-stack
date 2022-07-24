@@ -5,6 +5,7 @@ package zakadabar.rui.kotlin.plugin.transform.toir
 
 import org.jetbrains.kotlin.backend.common.IrElementTransformerVoidWithContext
 import org.jetbrains.kotlin.backend.common.ir.addChild
+import org.jetbrains.kotlin.ir.util.dumpKotlinLike
 import org.jetbrains.kotlin.ir.util.file
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
@@ -21,8 +22,9 @@ class RuiClassTransform(
 
     fun transform() {
         ruiClasses.forEach {
-            it.builder.build()
+            it.builder.buildClass()
             it.irFunction.file.addChild(it.irClass)
+            println(it.irClass.dumpKotlinLike())
         }
     }
 }

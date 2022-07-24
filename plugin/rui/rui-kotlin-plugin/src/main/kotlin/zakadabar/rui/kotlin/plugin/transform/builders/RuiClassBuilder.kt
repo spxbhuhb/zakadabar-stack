@@ -6,13 +6,11 @@ package zakadabar.rui.kotlin.plugin.transform.builders
 import org.jetbrains.kotlin.backend.common.ir.addFakeOverrides
 import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.descriptors.Modality
-import org.jetbrains.kotlin.ir.builders.declarations.UNDEFINED_PARAMETER_INDEX
-import org.jetbrains.kotlin.ir.builders.declarations.addConstructor
-import org.jetbrains.kotlin.ir.builders.declarations.addValueParameter
-import org.jetbrains.kotlin.ir.builders.declarations.buildClass
+import org.jetbrains.kotlin.ir.builders.declarations.*
 import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.expressions.impl.IrDelegatingConstructorCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrInstanceInitializerCallImpl
+import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.impl.IrAnonymousInitializerSymbolImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrValueParameterSymbolImpl
 import org.jetbrains.kotlin.ir.types.IrTypeSystemContextImpl
@@ -23,6 +21,9 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
 import zakadabar.rui.kotlin.plugin.model.RuiClass
+import zakadabar.rui.kotlin.plugin.transform.RUI_FUN_CREATE
+import zakadabar.rui.kotlin.plugin.transform.RUI_FUN_DISPOSE
+import zakadabar.rui.kotlin.plugin.transform.RUI_FUN_PATCH_RENDER
 import zakadabar.rui.kotlin.plugin.util.toRuiClassName
 
 class RuiClassBuilder(
@@ -43,8 +44,12 @@ class RuiClassBuilder(
     val initializer: IrAnonymousInitializer
     val thisReceiver: IrValueParameter
 
-    lateinit var adapterProperty: IrProperty
-    lateinit var anchorProperty: IrProperty
+    lateinit var adapter: IrValueParameter
+    lateinit var anchor: IrValueParameter
+
+    val create: IrSimpleFunction
+    val patchRender: IrSimpleFunction
+    val dispose: IrSimpleFunction
 
     override val irClass: IrClass = irFactory.buildClass {
         startOffset = irFunction.startOffset
@@ -69,9 +74,11 @@ class RuiClassBuilder(
         constructor = initConstructor()
         initializer = initInitializer()
 
-        irClass.addFakeOverrides(IrTypeSystemContextImpl(irContext.irBuiltIns))
+        create = initRuiFunction(RUI_FUN_CREATE, ruiContext.ruiCreate)
+        patchRender = initRuiFunction(RUI_FUN_PATCH_RENDER, ruiContext.ruiPatchRender)
+        dispose = initRuiFunction(RUI_FUN_DISPOSE, ruiContext.ruiDispose)
 
-        initInheritedProperties()
+        irClass.addFakeOverrides(IrTypeSystemContextImpl(irContext.irBuiltIns))
     }
 
     private fun initThisReceiver(): IrValueParameter {
@@ -116,12 +123,12 @@ class RuiClassBuilder(
             returnType = irClass.typeWith()
         }
 
-        val ruiAdapter = constructor.addValueParameter {
+        adapter = constructor.addValueParameter {
             name = Name.identifier("ruiAdapter")
             type = ruiContext.ruiAdapterType
         }
 
-        val ruiAnchor = constructor.addValueParameter {
+        anchor = constructor.addValueParameter {
             name = Name.identifier("ruiAnchor")
             type = ruiContext.ruiFragmentType
         }
@@ -141,8 +148,8 @@ class RuiClassBuilder(
                 typeArgumentsCount = 0,
                 valueArgumentsCount = 3
             ).also {
-                it.putValueArgument(0, irGet(ruiAdapter))
-                it.putValueArgument(1, irGet(ruiAnchor))
+                it.putValueArgument(0, irGet(adapter))
+                it.putValueArgument(1, irGet(anchor))
                 it.putValueArgument(2, irGet(ruiStatePatch))
             }
 
@@ -172,19 +179,46 @@ class RuiClassBuilder(
         return initializer
     }
 
-    private fun initInheritedProperties() {
-        adapterProperty = irClass.properties.first { it.name.identifier == "ruiAdapter" }
-        anchorProperty = irClass.properties.first { it.name.identifier == "ruiAnchor" }
-    }
+    private fun initRuiFunction(functionName: String, overrides: IrSimpleFunctionSymbol): IrSimpleFunction =
+        irFactory.buildFun {
+            name = Name.identifier(functionName)
+            returnType = irBuiltIns.unitType
+            modality = Modality.OPEN
+        }.also { function ->
 
-    override fun build() {
+            function.overriddenSymbols = listOf(overrides)
+            function.parent = irClass
 
-//        ruiClass.rootBlock.statements.forEach {
-//            it.builder.build()
-//        }
+            function.addDispatchReceiver {
+                type = irClass.defaultType
+            }
+
+            irClass.declarations += function
+        }
+
+    fun buildClass() {
+
+        ruiClass.dirtyMasks.forEach {
+            it.builder.build()
+        }
+
+        val rootBuilder = ruiClass.rootBlock.builder as RuiFragmentBuilder
+        rootBuilder.build()
+
+        buildRuiCall(create, rootBuilder, rootBuilder.symbolMap.create)
+        buildRuiCall(patchRender, rootBuilder, rootBuilder.symbolMap.patchRender)
+        buildRuiCall(dispose, rootBuilder, rootBuilder.symbolMap.dispose)
 
         // The initializer has to be the last, so it will be able to access all properties
         irClass.declarations += initializer
     }
 
+    fun buildRuiCall(function: IrSimpleFunction, rootBuilder: RuiFragmentBuilder, callee: IrSimpleFunction) {
+        function.body = irFactory.createBlockBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET).apply {
+            statements += irCall(
+                callee.symbol,
+                dispatchReceiver = rootBuilder.propertyBuilder.irGetValue(receiver = function.irGetReceiver())
+            )
+        }
+    }
 }

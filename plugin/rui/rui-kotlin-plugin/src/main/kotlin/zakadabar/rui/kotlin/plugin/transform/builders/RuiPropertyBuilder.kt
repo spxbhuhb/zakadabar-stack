@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.ir.declarations.IrProperty
 import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
 import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrExpression
+import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
 import org.jetbrains.kotlin.ir.expressions.impl.IrCallImpl
 import org.jetbrains.kotlin.ir.types.IrType
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
@@ -108,20 +109,21 @@ open class RuiPropertyBuilder(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
             irField.type,
             getter.symbol,
-            0, 0
+            0, 0,
+            origin = IrStatementOrigin.GET_PROPERTY
         ).apply {
             dispatchReceiver = receiver
         }
     }
 
-    fun irSetValue(value: IrExpression): IrCall {
+    fun irSetValue(value: IrExpression, receiver : IrExpression = irThisReceiver()): IrCall {
         return IrCallImpl(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
             irField.type,
             setter.symbol,
             0, 1
         ).apply {
-            dispatchReceiver = irThisReceiver()
+            dispatchReceiver = receiver
             putValueArgument(0, value)
         }
     }

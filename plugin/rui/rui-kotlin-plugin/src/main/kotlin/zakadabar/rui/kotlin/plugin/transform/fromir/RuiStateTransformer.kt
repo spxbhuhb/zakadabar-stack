@@ -79,6 +79,7 @@ class RuiStateTransformer(
         ruiClass.irFunction.valueParameters.forEach { valueParameter ->
             RuiExternalStateVariable(ruiClass, stateVariableIndex, valueParameter).also {
                 register(it)
+                addDirtyMask(it)
             }
         }
 

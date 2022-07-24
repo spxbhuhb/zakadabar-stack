@@ -3,35 +3,42 @@
  */
 package zakadabar.rui.kotlin.plugin.transform.builders
 
+import org.jetbrains.kotlin.backend.common.deepCopyWithVariables
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
-import org.jetbrains.kotlin.ir.builders.declarations.addDispatchReceiver
+import org.jetbrains.kotlin.ir.builders.declarations.addValueParameter
 import org.jetbrains.kotlin.ir.builders.declarations.buildFun
 import org.jetbrains.kotlin.ir.builders.irBlockBody
+import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
+import org.jetbrains.kotlin.ir.declarations.IrValueDeclaration
+import org.jetbrains.kotlin.ir.declarations.IrValueParameter
+import org.jetbrains.kotlin.ir.expressions.IrBody
 import org.jetbrains.kotlin.ir.expressions.IrExpression
+import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
 import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionExpressionImpl
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
-import org.jetbrains.kotlin.ir.util.defaultType
 import org.jetbrains.kotlin.name.Name
 import zakadabar.rui.kotlin.plugin.model.RuiCall
 import zakadabar.rui.kotlin.plugin.model.RuiExpression
 import zakadabar.rui.kotlin.plugin.transform.RUI_CLASS_RUI_ARGUMENTS
 import zakadabar.rui.kotlin.plugin.transform.RuiClassSymbols
-import zakadabar.rui.kotlin.plugin.transform.toir.RuiReceiverTransform
 import zakadabar.rui.kotlin.plugin.util.RuiCompilationException
 
 class RuiCallBuilder(
     override val ruiClassBuilder: RuiClassBuilder,
     val ruiCall: RuiCall
-) : RuiBuilder {
+) : RuiFragmentBuilder {
 
     // we have to initialize this in build, after all other classes in the module are registered
-    lateinit var symbolMap: RuiClassSymbols
+    override lateinit var symbolMap: RuiClassSymbols
+
+    override lateinit var propertyBuilder : RuiPropertyBuilder
 
     override fun build() {
         withSymbolMap {
-            buildFragment()
-            buildPatch()
+            propertyBuilder = RuiPropertyBuilder(ruiClassBuilder, Name.identifier(ruiCall.name), symbolMap.defaultType, false)
+            buildInitializer()
         }
     }
 
@@ -45,9 +52,7 @@ class RuiCallBuilder(
         }
     }
 
-    val fragmentProperty = RuiPropertyBuilder(ruiClassBuilder, Name.identifier(ruiCall.name), ruiContext.ruiFragmentType, false)
-
-    fun buildFragment() {
+    fun buildInitializer() {
         irFactory.createExpressionBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET) {
             this.expression = IrConstructorCallImpl(
                 SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
@@ -56,92 +61,97 @@ class RuiCallBuilder(
                 0, 0,
                 ruiCall.valueArguments.size + RUI_CLASS_RUI_ARGUMENTS // +2 = adapter + anchor
             ).also { constructorCall ->
-                constructorCall.putValueArgument(0, ruiClassBuilder.adapterProperty.irGet())
-                constructorCall.putValueArgument(1, ruiClassBuilder.anchorProperty.irGet())
+
+                constructorCall.putValueArgument(0, irGet(ruiClassBuilder.adapter))
+                constructorCall.putValueArgument(1, irGet(ruiClassBuilder.anchor))
+                constructorCall.putValueArgument(2, buildPatchStateVariable())
+
                 ruiCall.valueArguments.forEachIndexed { index, ruiExpression ->
                     constructorCall.putValueArgument(index + RUI_CLASS_RUI_ARGUMENTS, ruiExpression.irExpression)
                 }
             }
         }.also {
-            fragmentProperty.irField.initializer = it
+            propertyBuilder.irField.initializer = it
         }
     }
 
-    fun buildPatch() {
-        irFactory.buildFun {
-            name = Name.identifier("${ruiCall.name}Patch")
+    fun buildPatchStateVariable(): IrExpression {
+        val function = irFactory.buildFun {
+            name = Name.special("<anonymous>")
+            origin = IrDeclarationOrigin.LOCAL_FUNCTION_FOR_LAMBDA
             returnType = irBuiltIns.unitType
         }.also { function ->
 
-            function.parent = irClass
+            function.parent = propertyBuilder.irField
 
-            function.addDispatchReceiver {
-                type = irClass.defaultType
+            val patchStateIt = function.addValueParameter {
+                name = Name.identifier("it")
+                type = ruiContext.ruiFragmentType
             }
 
-            function.body = try {
+            function.body = buildPatchStateBody(function, patchStateIt)
+        }
 
-                DeclarationIrBuilder(irContext, function.symbol).irBlockBody {
-                    ruiCall.valueArguments.mapIndexedNotNull { index, ruiExpression ->
-                        buildPatch(function, index, ruiExpression)
-                    }.forEach { + it }
-                    + irCallPatch(function)
-                }
+        return IrFunctionExpressionImpl(
+            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+            ruiContext.ruiPatchStateType,
+            function,
+            IrStatementOrigin.LAMBDA
+        )
+    }
 
-            } catch (ex: RuiCompilationException) {
-                ex.error.report(ruiClassBuilder, ruiCall.irCall)
-                DeclarationIrBuilder(irContext, function.symbol).irBlockBody { }
+    private fun buildPatchStateBody(function: IrSimpleFunction, patchStateIt: IrValueParameter): IrBody? {
+        return try {
+
+            DeclarationIrBuilder(irContext, function.symbol).irBlockBody {
+
+                + irAs(symbolMap.defaultType, irGet(patchStateIt))
+
+                ruiCall.valueArguments.mapIndexedNotNull { index, ruiExpression ->
+                    buildPatchStateVariable(patchStateIt, index, ruiExpression)
+                }.forEach { + it }
             }
 
-            ruiClassBuilder.irClass.declarations += function
+        } catch (ex: RuiCompilationException) {
+            ex.error.report(ruiClassBuilder, ruiCall.irCall)
+            DeclarationIrBuilder(irContext, function.symbol).irBlockBody { }
         }
     }
 
-    fun IrSimpleFunction.irGetReceiver() =
-        irGet(irClass.defaultType, this.dispatchReceiverParameter!!.symbol)
 
-    fun buildPatch(function : IrSimpleFunction, index: Int, ruiExpression: RuiExpression): IrExpression? {
+    fun buildPatchStateVariable(patchStateIt: IrValueDeclaration, index: Int, ruiExpression: RuiExpression): IrExpression? {
         // constants, globals, etc. have no dependencies, no need to patch them
         if (ruiExpression.dependencies.isEmpty()) return null
 
         return irIf(
-            buildCondition(function, ruiExpression),
-            buildPatchResult(function, index, ruiExpression)
+            buildCondition(ruiExpression),
+            buildPatchResult(patchStateIt, index, ruiExpression)
         )
     }
 
-    fun buildCondition(function : IrSimpleFunction, ruiExpression: RuiExpression): IrExpression {
+    fun buildCondition(ruiExpression: RuiExpression): IrExpression {
         val dependencies = ruiExpression.dependencies
-        var result = dependencies[0].builder.irIsDirty(function.irGetReceiver())
+        var result = dependencies[0].builder.irIsDirty(irThisReceiver())
         for (i in 1 until dependencies.size) {
-            result = irOrOr(result, dependencies[i].builder.irIsDirty(function.irGetReceiver()))
+            result = irOrOr(result, dependencies[i].builder.irIsDirty(irThisReceiver()))
         }
         return result
     }
 
-    private fun buildPatchResult(function : IrSimpleFunction, index: Int, ruiExpression: RuiExpression): IrExpression {
+    private fun buildPatchResult(patchStateIt: IrValueDeclaration, index: Int, ruiExpression: RuiExpression): IrExpression {
         return irBlock(
             statements = listOf(
                 irCall(
                     symbolMap.setterFor(index), null,
-                    fragmentProperty.irGetValue(function.irGetReceiver()), null,
-                    RuiReceiverTransform(ruiClassBuilder, irClass, function).copyAndTransform(ruiExpression.irExpression)
+                    irImplicitAs(symbolMap.defaultType, irGet(patchStateIt)), null,
+                    ruiExpression.irExpression.deepCopyWithVariables()
                 ),
                 irCall(
                     symbolMap.getInvalidate(index / 32), null,
-                    fragmentProperty.irGetValue(function.irGetReceiver()), null,
+                    irImplicitAs(symbolMap.defaultType, irGet(patchStateIt)), null,
                     irConst(1 shl (index % 32))
                 )
             )
         )
     }
-
-    fun irCallPatch(function : IrSimpleFunction): IrExpression =
-        irCall(
-            irBuiltIns.functionN(0).defaultType.unaryOperator(Name.identifier("invoke")),
-            dispatchReceiver = irCall(
-                symbolMap.patch,
-                dispatchReceiver = fragmentProperty.irGetValue(function.irGetReceiver())
-            )
-        )
 }
