@@ -3,7 +3,7 @@
  */
 plugins {
     kotlin("multiplatform") version "1.6.20"
-    id("zakadabar-reactive") version "2022.5.4-SNAPSHOT"
+    id("zakadabar-rui") version "2022.5.4-SNAPSHOT"
 }
 
 repositories {

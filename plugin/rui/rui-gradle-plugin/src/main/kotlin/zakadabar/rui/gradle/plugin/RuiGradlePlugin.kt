@@ -54,7 +54,7 @@ class RuiGradlePlugin : KotlinCompilerPluginSupportPlugin {
     kotlinCompilation.dependencies {
       // "hu.simplexion.zakadabar:rui-core:2022.5.4-SNAPSHOT"
       // FIXME implementation("${BuildConfig.KOTLIN_PLUGIN_GROUP}:${BuildConfig.KOTLIN_PLUGIN_NAME}:${BuildConfig.KOTLIN_PLUGIN_VERSION}")
-      implementation("hu.simplexion.zakadabar:rui-core:2022.5.4-SNAPSHOT")
+      implementation("hu.simplexion.zakadabar:rui-runtime:2022.5.4-SNAPSHOT")
     }
 
     val extension = project.extensions.getByType(RuiGradleExtension::class.java)

@@ -4,10 +4,8 @@
 package zakadabar.rui.runtime
 
 class RuiForLoop(
-    adapter: RuiAdapter,
-    anchor: RuiFragment,
-    val factory: RuiFragmentFactory
-) : RuiFragment(adapter, anchor, {  }) {
+    adapter: RuiAdapter
+) : RuiFragment(adapter) {
 
     val fragments = mutableListOf<RuiFragment>()
 
@@ -15,7 +13,7 @@ class RuiForLoop(
 
     }
 
-    override fun ruiPatchRender() {
+    override fun ruiPatch() {
 
     }
 

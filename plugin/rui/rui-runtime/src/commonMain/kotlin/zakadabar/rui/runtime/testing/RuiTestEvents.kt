@@ -9,7 +9,9 @@ enum class RuiTestEvents {
 
     Init,
     Create,
-    PatchRender,
+    Mount,
+    Patch,
+    Unmount,
     Dispose,
 
     Invalidate

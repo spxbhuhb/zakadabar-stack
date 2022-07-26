@@ -20,7 +20,7 @@ object RuiTestAdapter : RuiAdapter {
     }
 
     override val emptyFragmentFactory = RuiFragmentFactory { adapter: RuiAdapter, anchor: RuiFragment? ->
-        RuiTestEmptyFragment(adapter, anchor) { }
+        RuiTestEmptyFragment(adapter)
     }
 
     fun clear() {

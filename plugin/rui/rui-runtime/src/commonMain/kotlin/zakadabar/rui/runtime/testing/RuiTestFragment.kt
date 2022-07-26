@@ -4,15 +4,14 @@
 package zakadabar.rui.runtime.testing
 
 import zakadabar.rui.runtime.RuiAdapter
+import zakadabar.rui.runtime.RuiAnchor
 import zakadabar.rui.runtime.RuiFragment
 
 
-class RuiTestFragment(
+open class RuiTestFragment(
     ruiAdapter: RuiAdapter,
-    ruiAnchor: RuiFragment?,
-    ruiPatchState: (it: RuiFragment) -> Unit,
     var value: Int
-) : RuiFragment(ruiAdapter, ruiAnchor, ruiPatchState), WithName {
+) : RuiFragment(ruiAdapter), WithName {
 
     override val name = "FRAGMENT"
 
@@ -31,9 +30,18 @@ class RuiTestFragment(
         RuiTestEvents.Create.report(this, "value=$value")
     }
 
-    override fun ruiPatchRender() {
-        RuiTestEvents.PatchRender.report(this, "dirty=$ruiDirty0 value=$value")
+    override fun ruiMount(anchor : RuiAnchor) {
+        RuiTestEvents.Mount.report(this, "anchor=$anchor")
+        super.ruiCreate()
+    }
+
+    override fun ruiPatch() {
+        RuiTestEvents.Patch.report(this, "dirty=$ruiDirty0 value=$value")
         ruiDirty0 = 0
+    }
+
+    override fun ruiUnmount() {
+        RuiTestEvents.Unmount.report(this)
     }
 
     override fun ruiDispose() {

@@ -18,7 +18,7 @@ class ManualTest {
         fun v(value : Int) {
             c.value = value
             c.ruiInvalidate0(1)
-            c.ruiPatchRender()
+            c.ruiPatch()
         }
 
         v(1)

@@ -3,6 +3,5 @@
  */
 package zakadabar.rui.runtime
 
-open class RuiEmptyFragment(
-    ruiAdapter: RuiAdapter
-) : RuiFragment(ruiAdapter)
+interface RuiAnchor {
+}

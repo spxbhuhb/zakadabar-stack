@@ -94,7 +94,7 @@ class RuiClassSymbols(
 
         when (it.name.identifier) {
             RUI_FUN_CREATE -> create = it
-            RUI_FUN_PATCH_RENDER -> patchRender = it
+            RUI_FUN_PATCH -> patchRender = it
             RUI_FUN_DISPOSE -> dispose = it
         }
     }

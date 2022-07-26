@@ -4,13 +4,12 @@
 package zakadabar.rui.runtime.testing
 
 import zakadabar.rui.runtime.RuiAdapter
+import zakadabar.rui.runtime.RuiAnchor
 import zakadabar.rui.runtime.RuiFragment
 
 open class RuiTestEmptyFragment(
-    ruiAdapter: RuiAdapter,
-    ruiAnchor: RuiFragment?,
-    ruiPatchState : (it : RuiFragment) -> Unit
-) : RuiFragment(ruiAdapter, ruiAnchor, ruiPatchState), WithName {
+    ruiAdapter: RuiAdapter
+) : RuiFragment(ruiAdapter), WithName {
 
     override val name = "EMPTY"
 
@@ -23,8 +22,17 @@ open class RuiTestEmptyFragment(
         RuiTestEvents.Create.report(this)
     }
 
-    override fun ruiPatchRender() {
-        RuiTestEvents.PatchRender.report(this)
+    override fun ruiMount(anchor : RuiAnchor) {
+        RuiTestEvents.Mount.report(this, "anchor=$anchor")
+        super.ruiCreate()
+    }
+
+    override fun ruiPatch() {
+        RuiTestEvents.Patch.report(this)
+    }
+
+    override fun ruiUnmount() {
+        RuiTestEvents.Unmount.report(this)
     }
 
     override fun ruiDispose() {

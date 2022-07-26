@@ -7,10 +7,12 @@ import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.backend.jvm.functionByName
 import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.IrMessageLogger
-import org.jetbrains.kotlin.ir.util.primaryConstructor
 import org.jetbrains.kotlin.name.FqName
 import zakadabar.rui.kotlin.plugin.model.RuiClass
-import zakadabar.rui.kotlin.plugin.transform.*
+import zakadabar.rui.kotlin.plugin.transform.RUI_FUN_CREATE
+import zakadabar.rui.kotlin.plugin.transform.RUI_FUN_DISPOSE
+import zakadabar.rui.kotlin.plugin.transform.RUI_FUN_PATCH
+import zakadabar.rui.kotlin.plugin.transform.RuiSymbolMap
 
 class RuiPluginContext(
     val irContext: IrPluginContext,
@@ -31,13 +33,13 @@ class RuiPluginContext(
     val ruiFragmentType = ruiFragmentClass.typeWith()
 
     val ruiCreate = ruiFragmentClass.functionByName(RUI_FUN_CREATE)
-    val ruiPatchRender = ruiFragmentClass.functionByName(RUI_FUN_PATCH_RENDER)
+    val ruiPatchRender = ruiFragmentClass.functionByName(RUI_FUN_PATCH)
     val ruiDispose = ruiFragmentClass.functionByName(RUI_FUN_DISPOSE)
 
     val ruiAdapterClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiAdapter"))) !!
     val ruiAdapterType = ruiAdapterClass.typeWith()
 
-    val ruiPatchStateType = ruiFragmentClass.owner.primaryConstructor!!.valueParameters[RUI_CLASS_PATCH_STATE_INDEX].type
+    val ruiPatchStateType = irContext.irBuiltIns.unitType // ruiFragmentClass.owner.primaryConstructor!!.valueParameters[RUI_CLASS_PATCH_STATE_INDEX].type
 
     companion object {
         const val DUMP_BEFORE = "before"

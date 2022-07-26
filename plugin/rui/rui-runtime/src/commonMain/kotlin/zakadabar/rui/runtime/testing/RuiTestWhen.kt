@@ -4,15 +4,12 @@
 package zakadabar.rui.runtime.testing
 
 import zakadabar.rui.runtime.RuiAdapter
-import zakadabar.rui.runtime.RuiFragment
-import zakadabar.rui.runtime.RuiFragmentFactory
+import zakadabar.rui.runtime.RuiAnchor
 import zakadabar.rui.runtime.RuiWhen
 
-open class RuiTestWhen(
-    adapter: RuiAdapter,
-    anchor: RuiFragment?,
-    select: () -> RuiFragmentFactory
-) : RuiWhen(adapter, anchor, select), WithName {
+abstract class RuiTestWhen(
+    adapter: RuiAdapter
+) : RuiWhen(adapter), WithName {
 
     override val name = "WHEN"
 
@@ -26,9 +23,19 @@ open class RuiTestWhen(
         super.ruiCreate()
     }
 
-    override fun ruiPatchRender() {
-        RuiTestEvents.PatchRender.report(this)
-        super.ruiPatchRender()
+    override fun ruiMount(anchor : RuiAnchor) {
+        RuiTestEvents.Mount.report(this, "anchor=$anchor")
+        super.ruiCreate()
+    }
+
+    override fun ruiPatch() {
+        RuiTestEvents.Patch.report(this)
+        super.ruiPatch()
+    }
+
+    override fun ruiUnmount() {
+        RuiTestEvents.Unmount.report(this)
+        super.ruiUnmount()
     }
 
     override fun ruiDispose() {

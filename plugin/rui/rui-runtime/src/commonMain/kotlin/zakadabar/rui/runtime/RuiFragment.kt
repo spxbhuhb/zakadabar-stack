@@ -7,13 +7,13 @@ package zakadabar.rui.runtime
  * Represents one inner block in the rendering of a Rui function.
  */
 open class RuiFragment(
-    val ruiAdapter : RuiAdapter,
-    val ruiAnchor : RuiFragment?,
-    val ruiPatchState : (it : RuiFragment) -> Unit
+    val ruiAdapter : RuiAdapter
 ) {
 
     open fun ruiCreate() {  }
-    open fun ruiPatchRender() {  }
+    open fun ruiMount(anchor : RuiAnchor) {  }
+    open fun ruiPatch() {  }
+    open fun ruiUnmount() {  }
     open fun ruiDispose() {  }
 
 }

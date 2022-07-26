@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.name.SpecialNames
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.transform.RUI_FUN_CREATE
 import zakadabar.rui.kotlin.plugin.transform.RUI_FUN_DISPOSE
-import zakadabar.rui.kotlin.plugin.transform.RUI_FUN_PATCH_RENDER
+import zakadabar.rui.kotlin.plugin.transform.RUI_FUN_PATCH
 import zakadabar.rui.kotlin.plugin.util.toRuiClassName
 
 class RuiClassBuilder(
@@ -75,7 +75,7 @@ class RuiClassBuilder(
         initializer = initInitializer()
 
         create = initRuiFunction(RUI_FUN_CREATE, ruiContext.ruiCreate)
-        patchRender = initRuiFunction(RUI_FUN_PATCH_RENDER, ruiContext.ruiPatchRender)
+        patchRender = initRuiFunction(RUI_FUN_PATCH, ruiContext.ruiPatchRender)
         dispose = initRuiFunction(RUI_FUN_DISPOSE, ruiContext.ruiDispose)
 
         irClass.addFakeOverrides(IrTypeSystemContextImpl(irContext.irBuiltIns))

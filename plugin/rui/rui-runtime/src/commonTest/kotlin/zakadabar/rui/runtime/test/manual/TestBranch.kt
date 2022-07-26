@@ -3,18 +3,15 @@
  */
 package zakadabar.rui.runtime.test.manual
 
+import zakadabar.rui.runtime.RuiBlock
 import zakadabar.rui.runtime.RuiFragment
-import zakadabar.rui.runtime.RuiFragmentFactory
 import zakadabar.rui.runtime.testing.*
 
 class TestBranch(
     // state variables from function parameters
     var value: Int,
     override val name: String = "BRANCH"
-) : RuiFragment(RuiTestAdapter, null, { }), WithName {
-
-    // state variables from top-level declarations
-    var v2 = 12
+) : RuiBlock(RuiTestAdapter), WithName {
 
     var ruiDirty0 = 0
 
@@ -30,62 +27,62 @@ class TestBranch(
 
     override fun ruiCreate() {
         RuiTestEvents.Create.report(this)
-        ruiBlock0.ruiCreate()
+        super.ruiCreate()
     }
 
-    override fun ruiPatchRender() {
-        RuiTestEvents.PatchRender.report(this)
-        ruiBlock0.ruiPatchRender()
+    override fun ruiPatch() {
+        RuiTestEvents.Patch.report(this)
+        if (ruiDirty0 and 1 != 0) {
+            ruiTestFragment0.value = value
+            ruiTestFragment0.ruiInvalidate0(1)
+        }
+        super.ruiPatch()
     }
 
     override fun ruiDispose() {
         RuiTestEvents.Dispose.report(this)
-        ruiBlock0.ruiDispose()
+        super.ruiPatch()
     }
 
-    val ruiBranch4 = RuiFragmentFactory { adapter, anchor ->
-        RuiTestFragment(adapter, anchor, {
-            it as RuiTestFragment
+    val ruiTestFragment0 = RuiTestFragment(ruiAdapter, value)
+
+    val ruiBranch3 = object : RuiTestFragment(ruiAdapter, value + 10) {
+        override fun ruiPatch() {
             if (ruiDirty0 and 1 != 0) {
-                it.value = value + 20
-                it.ruiInvalidate0(1)
+                this.value = this@TestBranch.value + 10
+                ruiInvalidate0(1)
             }
-        }, value + 20)
-    }
-
-    val ruiBranch3 = RuiFragmentFactory { adapter, anchor ->
-        RuiTestFragment(adapter, anchor, {
-            it as RuiTestFragment
-            if (ruiDirty0 and 1 != 0) {
-                it.value = value + 10
-                it.ruiInvalidate0(1)
-            }
-        }, value + 10)
-    }
-
-    val ruiWhen2 = RuiTestWhen(ruiAdapter, ruiAnchor) {
-        when (value) {
-            1 -> ruiBranch3
-            2 -> ruiBranch4
-            else -> ruiAdapter.emptyFragmentFactory
+            super.ruiPatch()
         }
     }
 
-    val ruiTestFragment1 = RuiTestFragment(ruiAdapter, ruiAnchor, {
-        it as RuiTestFragment
-        if (ruiDirty0 and 1 != 0) {
-            it.value = value
-            it.ruiInvalidate0(1)
+    val ruiBranch4 = object : RuiTestFragment(ruiAdapter, value + 20) {
+        override fun ruiPatch() {
+            if (ruiDirty0 and 1 != 0) {
+                this.value = this@TestBranch.value + 20
+                ruiInvalidate0(1)
+            }
+            super.ruiPatch()
         }
-    }, value)
+    }
 
-    val ruiBlock0 = RuiTestBlock(
-        ruiAdapter,
-        ruiAnchor,
-        arrayOf(
-            ruiTestFragment1,
-            ruiWhen2
-        )
+    val ruiBranch5 = RuiTestEmptyFragment(ruiAdapter)
+
+    val ruiWhen0 = object : RuiTestWhen(ruiAdapter) {
+
+        override var ruiFragment = ruiSelect()
+
+        override fun ruiSelect(): RuiFragment =
+            when (value) {
+                1 -> ruiBranch3
+                2 -> ruiBranch4
+                else -> ruiBranch5
+            }
+    }
+
+    override val fragments: Array<RuiFragment> = arrayOf(
+        ruiTestFragment0,
+        ruiWhen0
     )
 
 }

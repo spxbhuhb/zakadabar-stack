@@ -5,6 +5,7 @@ package zakadabar.rui.runtime.testing
 
 import zakadabar.rui.runtime.Rui
 import zakadabar.rui.runtime.RuiAdapter
+import zakadabar.rui.runtime.RuiAnchor
 import zakadabar.rui.runtime.RuiFragment
 
 @Rui
@@ -12,10 +13,8 @@ fun T0() { }
 
 @Suppress("unused")
 open class RuiT0(
-    ruiAdapter: RuiAdapter,
-    ruiAnchor: RuiFragment?,
-    ruiPatchState : (it : RuiFragment) -> Unit
-) : RuiFragment(ruiAdapter, ruiAnchor, ruiPatchState), WithName {
+    ruiAdapter: RuiAdapter
+) : RuiFragment(ruiAdapter), WithName {
 
     override val name = "T0"
 
@@ -28,8 +27,17 @@ open class RuiT0(
         RuiTestEvents.Create.report(this)
     }
 
-    override fun ruiPatchRender() {
-        RuiTestEvents.PatchRender.report(this)
+    override fun ruiMount(anchor : RuiAnchor) {
+        RuiTestEvents.Mount.report(this, "anchor=$anchor")
+        super.ruiCreate()
+    }
+
+    override fun ruiPatch() {
+        RuiTestEvents.Patch.report(this)
+    }
+
+    override fun ruiUnmount() {
+        RuiTestEvents.Unmount.report(this)
     }
 
     override fun ruiDispose() {
@@ -43,10 +51,8 @@ fun T1(p0 : Int) { }
 @Suppress("unused")
 class RuiT1(
     ruiAdapter: RuiAdapter,
-    ruiAnchor: RuiFragment?,
-    ruiPatchState: (it: RuiFragment) -> Unit,
     var p0: Int
-) : RuiFragment(ruiAdapter, ruiAnchor, ruiPatchState), WithName {
+) : RuiFragment(ruiAdapter), WithName {
 
     override val name = "T1"
 
@@ -66,9 +72,18 @@ class RuiT1(
         RuiTestEvents.Create.report(this, "value=$p0")
     }
 
-    override fun ruiPatchRender() {
-        RuiTestEvents.PatchRender.report(this, "dirty=$ruiDirty0 value=$p0")
+    override fun ruiMount(anchor : RuiAnchor) {
+        RuiTestEvents.Mount.report(this, "anchor=$anchor")
+        super.ruiCreate()
+    }
+
+    override fun ruiPatch() {
+        RuiTestEvents.Patch.report(this, "dirty=$ruiDirty0 value=$p0")
         ruiDirty0 = 0
+    }
+
+    override fun ruiUnmount() {
+        RuiTestEvents.Unmount.report(this)
     }
 
     override fun ruiDispose() {

@@ -10,14 +10,14 @@ package zakadabar.rui.kotlin.plugin.transform
  * 2. ruiAnchor
  * 3. ruiPatchState
  */
-const val RUI_CLASS_RUI_ARGUMENTS = 3
+const val RUI_CLASS_RUI_ARGUMENTS = 1
 
 const val RUI_CLASS_PATCH_STATE_INDEX = 2
 
 const val RUI_PARAMETER_MASK = "mask"
 
 const val RUI_FUN_CREATE = "ruiCreate"
-const val RUI_FUN_PATCH_RENDER = "ruiPatchRender"
+const val RUI_FUN_PATCH = "ruiPatch"
 const val RUI_FUN_DISPOSE = "ruiDispose"
 
 const val RUI_INVALIDATE = "ruiInvalidate"

@@ -86,7 +86,7 @@ object ErrorsRui {
 
     // These errors are used by declaration checkers
 
-    val RUI_ON_INLINE_FUNCTION = DiagnosticFactory0.create<PsiElement>(Severity.ERROR)
+    val RUI_ON_INLINE_FUNCTION = DiagnosticFactory0.create<PsiElement>(Severity.ERROR).apply { initializeName("inline") }
 
     init {
         Errors.Initializer.initializeFactoryNamesAndDefaultErrorMessages(ErrorsRui::class.java, DefaultErrorMessagesRui)
