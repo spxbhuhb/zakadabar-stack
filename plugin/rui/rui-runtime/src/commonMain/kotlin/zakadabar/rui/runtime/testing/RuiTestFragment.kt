@@ -32,7 +32,6 @@ open class RuiTestFragment(
 
     override fun ruiMount(anchor : RuiAnchor) {
         RuiTestEvents.Mount.report(this, "anchor=$anchor")
-        super.ruiCreate()
     }
 
     override fun ruiPatch() {

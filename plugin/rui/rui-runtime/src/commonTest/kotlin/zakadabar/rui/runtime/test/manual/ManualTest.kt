@@ -16,7 +16,7 @@ class ManualTest {
         c.ruiCreate()
 
         fun v(value : Int) {
-            c.value = value
+            c.v0 = value
             c.ruiInvalidate0(1)
             c.ruiPatch()
         }

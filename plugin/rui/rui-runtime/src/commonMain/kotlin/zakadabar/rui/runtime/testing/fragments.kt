@@ -29,7 +29,6 @@ open class RuiT0(
 
     override fun ruiMount(anchor : RuiAnchor) {
         RuiTestEvents.Mount.report(this, "anchor=$anchor")
-        super.ruiCreate()
     }
 
     override fun ruiPatch() {
@@ -49,7 +48,7 @@ open class RuiT0(
 fun T1(p0 : Int) { }
 
 @Suppress("unused")
-class RuiT1(
+open class RuiT1(
     ruiAdapter: RuiAdapter,
     var p0: Int
 ) : RuiFragment(ruiAdapter), WithName {
@@ -74,7 +73,6 @@ class RuiT1(
 
     override fun ruiMount(anchor : RuiAnchor) {
         RuiTestEvents.Mount.report(this, "anchor=$anchor")
-        super.ruiCreate()
     }
 
     override fun ruiPatch() {
@@ -88,5 +86,58 @@ class RuiT1(
 
     override fun ruiDispose() {
         RuiTestEvents.Dispose.report(this)
+    }
+}
+
+@Rui
+fun H1(@Rui builder : () -> Unit) {
+    builder()
+}
+
+@Suppress("unused")
+open class RuiH1(
+    ruiAdapter: RuiAdapter,
+    @Rui builder : (ruiAdapter : RuiAdapter) -> RuiFragment
+) : RuiC1(ruiAdapter), WithName {
+
+    override val name = "H1"
+
+    override val fragment0 = builder(ruiAdapter)
+
+    init {
+        @Suppress("LeakingThis")
+        RuiTestEvents.Init.report(this)
+    }
+}
+
+@Suppress("unused")
+abstract class RuiC1(
+    ruiAdapter: RuiAdapter,
+) : RuiFragment(ruiAdapter) {
+
+    abstract val fragment0 : RuiFragment
+
+    override fun ruiCreate() {
+        RuiTestEvents.Create.report(this)
+        fragment0.ruiCreate()
+    }
+
+    override fun ruiMount(anchor : RuiAnchor) {
+        fragment0.ruiMount(anchor)
+    }
+
+    override fun ruiPatch() {
+        RuiTestEvents.Patch.report(this)
+        fragment0.ruiPatch()
+    }
+
+    override fun ruiUnmount() {
+        RuiTestEvents.Unmount.report(this)
+        fragment0.ruiUnmount()
+    }
+
+    override fun ruiDispose() {
+        RuiTestEvents.Dispose.report(this)
+        fragment0.ruiDispose()
     }
 }

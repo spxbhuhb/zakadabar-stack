@@ -3,6 +3,37 @@
  */
 package zakadabar.rui.runtime.test.original
 
+import zakadabar.rui.runtime.testing.T0
+import zakadabar.rui.runtime.testing.T1
+
+fun Statements(
+    s0 : Int
+) {
+    {
+        T0()
+        T1(s0)
+    }
+
+    if (s0 == 1) T1(s0)
+
+    if (s0 == 1) {
+        T1(s0)
+    }
+
+    if (s0 == 1) T1(s0) else T1(s0)
+
+    when {
+        s0 == 1 -> T1(s0)
+        else -> T1(s0)
+    }
+
+    for (i in 1..10) {
+        T1(s0 + i)
+    }
+
+
+}
+
 fun Text(content: String) {
     // this is just a mock primitive, that prints out happenings
 }

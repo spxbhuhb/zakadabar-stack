@@ -61,7 +61,7 @@ class RuiDirtyMaskBuilder(
     private fun buildInvalidateBody(function: IrSimpleFunction, receiver: IrValueParameter, mask: IrValueParameter): IrBody =
         DeclarationIrBuilder(irContext, function.symbol).irBlockBody {
             + propertyBuilder.irSetValue(
-                irAnd(
+                irOr(
                     propertyBuilder.irGetValue(irGet(receiver)),
                     irGet(mask)
                 ),

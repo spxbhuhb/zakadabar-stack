@@ -4,8 +4,8 @@
 package zakadabar.rui.runtime
 
 class RuiForLoop(
-    adapter: RuiAdapter
-) : RuiFragment(adapter) {
+    ruiAdapter: RuiAdapter,
+) : RuiFragment(ruiAdapter) {
 
     val fragments = mutableListOf<RuiFragment>()
 
