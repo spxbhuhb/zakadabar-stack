@@ -3,8 +3,9 @@
  */
 package zakadabar.rui.runtime.test.manual
 
-import zakadabar.rui.runtime.RuiAdapter
+import zakadabar.rui.runtime.RuiBlock
 import zakadabar.rui.runtime.RuiFragment
+import zakadabar.rui.runtime.RuiLoop
 import zakadabar.rui.runtime.testing.RuiC1
 import zakadabar.rui.runtime.testing.RuiT1
 import zakadabar.rui.runtime.testing.RuiTestAdapter
@@ -22,49 +23,34 @@ class TestForLoop(
         ruiDirty0 = ruiDirty0 or mask
     }
 
-    inner class RuiLambda1(ruiAdapter: RuiAdapter, v0: Int) : RuiT1(ruiAdapter, v0)
+    override val fragment0 = object : RuiLoop<Int>(ruiAdapter) {
 
-    inner class RuiForLoop1(ruiAdapter: RuiAdapter) : RuiFragment(ruiAdapter) {
+        override fun makeIterator(): Iterator<Int> = IntRange(0, 10).iterator()
 
-        val fragments = mutableListOf<RuiLambda1>()
+        override fun makeFragment() = object : RuiBlock(ruiAdapter) {
 
-        override fun ruiCreate() {
-            for (i in 1..10) {
-                fragments.add(RuiLambda1(ruiAdapter, i))
-            }
-        }
+            val ruiT10 = RuiT1(ruiAdapter, loopVariable!!)
+            val ruiT01 = RuiT1(ruiAdapter, v0)
 
-        @Suppress("UseWithIndex")
-        override fun ruiPatch() {
-            var index = 0
-            for (i in 1..10) {
-                if (index >= fragments.size) {
-                    val f = RuiLambda1(ruiAdapter, i)
-                    fragments.add(f)
-                    f.ruiCreate()
-                } else {
-                    val f = fragments[i]
-                    f.p0 = i
-                    f.ruiInvalidate0(1)
-                    f.ruiPatch()
+            override val fragments: Array<RuiFragment> = arrayOf(
+                ruiT10,
+                ruiT01
+            )
+
+            override fun ruiPatch() {
+                if (ruiT10.p0 != loopVariable) {
+                    ruiT10.p0 = loopVariable!!
+                    ruiT10.ruiInvalidate0(1)
                 }
-                index ++
+                if (ruiDirty0 and 1 != 0) {
+                    ruiT01.p0 = v0
+                    ruiT01.ruiInvalidate0(1)
+                }
+                super.ruiPatch()
             }
-            while (index < fragments.size) {
-                val f = fragments.removeLast()
-                f.ruiUnmount()
-                f.ruiDispose()
-                index ++
-            }
+
         }
 
-        override fun ruiDispose() {
-            for (f in fragments) {
-                f.ruiDispose()
-            }
-        }
     }
-
-    override val fragment0 = RuiForLoop1(ruiAdapter)
 
 }

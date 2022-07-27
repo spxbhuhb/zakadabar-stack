@@ -18,28 +18,6 @@ class TestBranch(
         ruiDirty0 = ruiDirty0 or mask
     }
 
-    val ruiBranch3 = object : RuiT1(ruiAdapter, v0 + 10) {
-        override fun ruiPatch() {
-            if (ruiDirty0 and 1 != 0) {
-                this.p0 = this@TestBranch.v0 + 10
-                ruiInvalidate0(1)
-            }
-            super.ruiPatch()
-        }
-    }
-
-    val ruiBranch4 = object : RuiT1(ruiAdapter, v0 + 20) {
-        override fun ruiPatch() {
-            if (ruiDirty0 and 1 != 0) {
-                this.p0 = this@TestBranch.v0 + 20
-                ruiInvalidate0(1)
-            }
-            super.ruiPatch()
-        }
-    }
-
-    val ruiBranch5 = RuiTestEmptyFragment(ruiAdapter)
-
     override val fragment0 = object : RuiTestWhen(ruiAdapter) {
 
         override var ruiFragment = ruiSelect()
@@ -50,6 +28,29 @@ class TestBranch(
                 2 -> ruiBranch4
                 else -> ruiBranch5
             }
+
+        val ruiBranch3 = object : RuiT1(ruiAdapter, v0 + 10) {
+            override fun ruiPatch() {
+                if (ruiDirty0 and 1 != 0) {
+                    this.p0 = v0 + 10
+                    ruiInvalidate0(1)
+                }
+                super.ruiPatch()
+            }
+        }
+
+        val ruiBranch4 = object : RuiT1(ruiAdapter, v0 + 20) {
+            override fun ruiPatch() {
+                if (ruiDirty0 and 1 != 0) {
+                    this.p0 = v0 + 20
+                    ruiInvalidate0(1)
+                }
+                super.ruiPatch()
+            }
+        }
+
+        val ruiBranch5 = RuiTestEmptyFragment(ruiAdapter)
+
     }
 
 }

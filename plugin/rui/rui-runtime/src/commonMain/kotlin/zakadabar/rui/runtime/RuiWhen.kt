@@ -7,9 +7,9 @@ abstract class RuiWhen(
     adapter: RuiAdapter
 ) : RuiFragment(adapter) {
 
-    abstract var ruiFragment : RuiFragment
+    abstract var ruiFragment: RuiFragment
 
-    abstract fun ruiSelect() : RuiFragment
+    abstract fun ruiSelect(): RuiFragment
 
     override fun ruiCreate() {
         ruiFragment.ruiCreate()
@@ -37,4 +37,5 @@ abstract class RuiWhen(
     override fun ruiDispose() {
         ruiFragment.ruiDispose()
     }
+
 }

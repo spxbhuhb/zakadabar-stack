@@ -30,7 +30,6 @@ class TestBlock(
         )
 
         override fun ruiPatch() {
-            RuiTestEvents.Patch.report(this)
             if (ruiDirty0 and 1 != 0) {
                 ruiT10.p0 = v0
                 ruiT10.ruiInvalidate0(1)

@@ -15,7 +15,7 @@ abstract class RuiBlock(
         }
     }
 
-    override fun ruiMount(anchor : RuiAnchor) {
+    override fun ruiMount(anchor: RuiAnchor) {
         for (i in fragments.indices) {
             fragments[i].ruiMount(anchor)
         }
@@ -38,4 +38,5 @@ abstract class RuiBlock(
             fragments[i].ruiDispose()
         }
     }
+
 }
