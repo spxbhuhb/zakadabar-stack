@@ -15,7 +15,7 @@ class RuiDirtyMask(
 
     val name = Name.identifier("$RUI_DIRTY$index")
 
-    val builder = RuiDirtyMaskBuilder(ruiClass.builder, this)
+    val builder = RuiDirtyMaskBuilder(ruiClass, this)
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
         visitor.visitDirtyMask(this, data)

@@ -17,62 +17,67 @@ import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
 import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionExpressionImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrSetFieldImpl
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.name.Name
+import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui
 import zakadabar.rui.kotlin.plugin.model.RuiCall
+import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.model.RuiExpression
-import zakadabar.rui.kotlin.plugin.transform.RUI_CLASS_RUI_ARGUMENTS
+import zakadabar.rui.kotlin.plugin.transform.RUI_FRAGMENT_ARGUMENT_COUNT
+import zakadabar.rui.kotlin.plugin.transform.RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER
+import zakadabar.rui.kotlin.plugin.transform.RUI_FRAGMENT_ARGUMENT_INDEX_PATCH_EXTERNAL
 import zakadabar.rui.kotlin.plugin.transform.RuiClassSymbols
 import zakadabar.rui.kotlin.plugin.util.RuiCompilationException
 
 class RuiCallBuilder(
-    override val ruiClassBuilder: RuiClassBuilder,
+    override val ruiClass: RuiClass,
     val ruiCall: RuiCall
 ) : RuiFragmentBuilder {
 
     // we have to initialize this in build, after all other classes in the module are registered
     override lateinit var symbolMap: RuiClassSymbols
 
-    override lateinit var propertyBuilder : RuiPropertyBuilder
+    override lateinit var propertyBuilder: RuiPropertyBuilder
 
     override fun build() {
-        withSymbolMap {
-            propertyBuilder = RuiPropertyBuilder(ruiClassBuilder, Name.identifier(ruiCall.name), symbolMap.defaultType, false)
-            buildInitializer()
-        }
-    }
+        symbolMap = ruiContext.ruiSymbolMap.getSymbolMap(ruiCall.targetRuiClass)
 
-    fun withSymbolMap(func: () -> Unit) {
-        try {
-            symbolMap = ruiContext.ruiSymbolMap.getSymbolMap(ruiCall.targetRuiClass)
-            func()
-        } catch (ex: RuiCompilationException) {
-            ex.error.report(ruiClassBuilder, ruiCall.irCall)
+        if (! symbolMap.valid) {
+            ErrorsRui.RUI_IR_INVALID_EXTERNAL_CLASS.report(ruiClass, ruiCall.irCall)
             return
         }
+
+        propertyBuilder = RuiPropertyBuilder(ruiClass, Name.identifier(ruiCall.name), symbolMap.defaultType, isVar = false)
+        buildInitializer()
     }
 
     fun buildInitializer() {
-        irFactory.createExpressionBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET) {
-            this.expression = IrConstructorCallImpl(
-                SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-                symbolMap.defaultType,
-                symbolMap.primaryConstructor.symbol,
-                0, 0,
-                ruiCall.valueArguments.size + RUI_CLASS_RUI_ARGUMENTS // +2 = adapter + anchor
-            ).also { constructorCall ->
+        if (! symbolMap.valid) return
 
-                constructorCall.putValueArgument(0, irGet(ruiClassBuilder.adapter))
-                constructorCall.putValueArgument(1, irGet(ruiClassBuilder.anchor))
-                constructorCall.putValueArgument(2, buildPatchStateVariable())
+        val value = IrConstructorCallImpl(
+            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+            symbolMap.defaultType,
+            symbolMap.primaryConstructor.symbol,
+            0, 0,
+            ruiCall.valueArguments.size + RUI_FRAGMENT_ARGUMENT_COUNT // +2 = adapter + external patch
+        ).also { constructorCall ->
 
-                ruiCall.valueArguments.forEachIndexed { index, ruiExpression ->
-                    constructorCall.putValueArgument(index + RUI_CLASS_RUI_ARGUMENTS, ruiExpression.irExpression)
-                }
+            constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, irGet(ruiClassBuilder.adapter))
+            constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_PATCH_EXTERNAL, buildPatchStateVariable())
+
+            ruiCall.valueArguments.forEachIndexed { index, ruiExpression ->
+                constructorCall.putValueArgument(index + RUI_FRAGMENT_ARGUMENT_COUNT, ruiExpression.irExpression)
             }
-        }.also {
-            propertyBuilder.irField.initializer = it
         }
+
+        ruiClassBuilder.initializer.body.statements += IrSetFieldImpl(
+            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+            propertyBuilder.irField.symbol,
+            receiver = ruiClassBuilder.irThisReceiver(),
+            value = value,
+            propertyBuilder.irField.type
+        )
     }
 
     fun buildPatchStateVariable(): IrExpression {
@@ -94,7 +99,7 @@ class RuiCallBuilder(
 
         return IrFunctionExpressionImpl(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            ruiContext.ruiPatchStateType,
+            ruiContext.ruiExternalPatchType,
             function,
             IrStatementOrigin.LAMBDA
         )

@@ -13,7 +13,6 @@ import org.jetbrains.kotlin.ir.util.primaryConstructor
 import org.jetbrains.kotlin.name.FqName
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RUI_IR_INVALID_EXTERNAL_CLASS
-import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RUI_IR_MISSING_RUI_CLASS
 import zakadabar.rui.kotlin.plugin.util.RuiCompilationException
 import zakadabar.rui.kotlin.plugin.util.isSynthetic
 
@@ -23,14 +22,20 @@ class RuiSymbolMap(
 
     private val classSymbolMaps = mutableMapOf<FqName, RuiClassSymbols>()
 
+    private val invalid = RuiClassSymbols(ruiContext.ruiFragmentClass.owner, false)
+
     fun getSymbolMap(fqName: FqName): RuiClassSymbols =
         classSymbolMaps[fqName] ?: loadClass(fqName)
 
     private fun loadClass(fqName: FqName): RuiClassSymbols {
-        val irClass = ruiContext.ruiClasses[fqName]?.irClass
-            ?: ruiContext.irContext.referenceClass(fqName)?.owner
+        val irClass = try {
+            ruiContext.ruiClasses[fqName]?.irClass
+                ?: ruiContext.irContext.referenceClass(fqName)?.owner
+        } catch (ex: RuiCompilationException) {
+            return invalid
+        }
 
-        if (irClass == null) throw RuiCompilationException(RUI_IR_MISSING_RUI_CLASS)
+        if (irClass == null) return invalid
 
         return RuiClassSymbols(irClass).also {
             classSymbolMaps[fqName] = it
@@ -48,7 +53,8 @@ class RuiSymbolMap(
  *
  */
 class RuiClassSymbols(
-    val irClass: IrClass
+    val irClass: IrClass,
+    var valid: Boolean = true
 ) {
     private val stateVariables = mutableListOf<RuiStateVariableSymbol>()
 
@@ -93,15 +99,15 @@ class RuiClassSymbols(
         }
 
         when (it.name.identifier) {
-            RUI_FUN_CREATE -> create = it
-            RUI_FUN_PATCH -> patchRender = it
-            RUI_FUN_DISPOSE -> dispose = it
+            RUI_CREATE -> create = it
+            RUI_PATCH -> patchRender = it
+            RUI_DISPOSE -> dispose = it
         }
     }
 
     private fun property(indices: List<String>, it: IrProperty) {
         val name = it.name.identifier
-        val index = indices.indexOf(name) - RUI_CLASS_RUI_ARGUMENTS
+        val index = indices.indexOf(name) - RUI_FRAGMENT_ARGUMENT_COUNT
 
         if (index >= 0) {
             stateVariables += RuiStateVariableSymbol(index, it)

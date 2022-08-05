@@ -11,15 +11,15 @@ import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.IrGetValue
 import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
 import org.jetbrains.kotlin.psi.KtModifierListOwner
+import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.transform.builders.RuiBuilder
-import zakadabar.rui.kotlin.plugin.transform.builders.RuiClassBuilder
 import zakadabar.rui.kotlin.plugin.util.RuiAnnotationBasedExtension
 
 /**
  * Transforms `this` references into an inner scope.
  */
 class RuiReceiverTransform(
-    override val ruiClassBuilder: RuiClassBuilder,
+    override val ruiClass: RuiClass,
     private val fromReceiver: IrClass,
     private val toReceiver : IrSimpleFunction
 ) : IrElementTransformerVoidWithContext(), RuiAnnotationBasedExtension, RuiBuilder {

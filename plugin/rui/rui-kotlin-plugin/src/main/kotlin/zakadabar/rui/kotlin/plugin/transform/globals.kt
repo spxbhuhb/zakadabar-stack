@@ -7,21 +7,25 @@ package zakadabar.rui.kotlin.plugin.transform
  * Number of Rui related constructor arguments.
  *
  * 1. ruiAdapter
- * 2. ruiAnchor
- * 3. ruiPatchState
+ * 2. ruiPatchExternal
  */
-const val RUI_CLASS_RUI_ARGUMENTS = 1
+const val RUI_FRAGMENT_ARGUMENT_COUNT = 2
+const val RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER = 0
+const val RUI_FRAGMENT_ARGUMENT_INDEX_PATCH_EXTERNAL = 1
 
-const val RUI_CLASS_PATCH_STATE_INDEX = 2
-
-const val RUI_PARAMETER_MASK = "mask"
-
-const val RUI_FUN_CREATE = "ruiCreate"
-const val RUI_FUN_PATCH = "ruiPatch"
-const val RUI_FUN_DISPOSE = "ruiDispose"
+const val RUI_CREATE = "ruiCreate"
+const val RUI_MOUNT = "ruiMount"
+const val RUI_PATCH = "ruiPatch"
+const val RUI_UNMOUNT = "ruiUnmount"
+const val RUI_DISPOSE = "ruiDispose"
 
 const val RUI_INVALIDATE = "ruiInvalidate"
 const val RUI_DIRTY = "ruiDirty"
+
+const val RUI_ADAPTER = "ruiAdapter"
+const val RUI_PATCH_EXTERNAL = "ruiPatchExternal"
+const val RUI_ANCHOR = "ruiAnchor"
+const val RUI_MASK = "mask"
 
 const val RUI_BLOCK = "ruiBlock"
 const val RUI_BRANCH = "ruiBranch"

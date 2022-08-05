@@ -21,7 +21,7 @@ class RuiCall(
 
     val valueArguments = mutableListOf<RuiExpression>()
 
-    override val builder = RuiCallBuilder(ruiClass.builder, this)
+    override val builder = RuiCallBuilder(ruiClass, this)
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
         visitor.visitCall(this, data)

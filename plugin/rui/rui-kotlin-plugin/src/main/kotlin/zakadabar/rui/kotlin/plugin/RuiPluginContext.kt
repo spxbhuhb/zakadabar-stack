@@ -9,9 +9,9 @@ import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.IrMessageLogger
 import org.jetbrains.kotlin.name.FqName
 import zakadabar.rui.kotlin.plugin.model.RuiClass
-import zakadabar.rui.kotlin.plugin.transform.RUI_FUN_CREATE
-import zakadabar.rui.kotlin.plugin.transform.RUI_FUN_DISPOSE
-import zakadabar.rui.kotlin.plugin.transform.RUI_FUN_PATCH
+import zakadabar.rui.kotlin.plugin.transform.RUI_CREATE
+import zakadabar.rui.kotlin.plugin.transform.RUI_DISPOSE
+import zakadabar.rui.kotlin.plugin.transform.RUI_PATCH
 import zakadabar.rui.kotlin.plugin.transform.RuiSymbolMap
 
 class RuiPluginContext(
@@ -25,21 +25,17 @@ class RuiPluginContext(
 
     val ruiSymbolMap = RuiSymbolMap(this)
 
-//    val not by lazy { irContext.referenceClass(FqName("kotlin.Boolean")) !!.functionByName("not") }
-//    val eqeq by lazy { irContext.referenceClass(FqName("kotlin.internal.ir")) !!.functionByName("EQEQ") }
-//    val and = lazy { irContext.referenceClass(FqName("kotlin.Boolean")) !!.functionByName("not") }
-
     val ruiFragmentClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiFragment"))) !!
     val ruiFragmentType = ruiFragmentClass.typeWith()
-
-    val ruiCreate = ruiFragmentClass.functionByName(RUI_FUN_CREATE)
-    val ruiPatchRender = ruiFragmentClass.functionByName(RUI_FUN_PATCH)
-    val ruiDispose = ruiFragmentClass.functionByName(RUI_FUN_DISPOSE)
 
     val ruiAdapterClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiAdapter"))) !!
     val ruiAdapterType = ruiAdapterClass.typeWith()
 
-    val ruiPatchStateType = irContext.irBuiltIns.unitType // ruiFragmentClass.owner.primaryConstructor!!.valueParameters[RUI_CLASS_PATCH_STATE_INDEX].type
+    val ruiCreate = ruiFragmentClass.functionByName(RUI_CREATE)
+    val ruiPatchRender = ruiFragmentClass.functionByName(RUI_PATCH)
+    val ruiDispose = ruiFragmentClass.functionByName(RUI_DISPOSE)
+
+    val ruiExternalPatchType = irContext.irBuiltIns.unitType // ruiFragmentClass.owner.primaryConstructor!!.valueParameters[RUI_CLASS_PATCH_STATE_INDEX].type
 
     companion object {
         const val DUMP_BEFORE = "before"

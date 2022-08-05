@@ -10,21 +10,22 @@ import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
 import org.jetbrains.kotlin.ir.types.IrType
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.name.Name
+import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.model.RuiExternalStateVariable
 import zakadabar.rui.kotlin.plugin.model.RuiInternalStateVariable
 import zakadabar.rui.kotlin.plugin.model.RuiStateVariable
 
 class RuiStateVariableBuilder private constructor(
-    ruiClassBuilder: RuiClassBuilder,
+    ruiClass: RuiClass,
     val ruiStateVariable: RuiStateVariable,
     name: Name,
     type: IrType
-) : RuiPropertyBuilder(ruiClassBuilder, name, type) {
+) : RuiPropertyBuilder(ruiClass, name, type) {
 
     companion object {
         fun builderFor(ruiStateVariable: RuiExternalStateVariable) =
             RuiStateVariableBuilder(
-                ruiStateVariable.ruiClass.builder,
+                ruiStateVariable.ruiClass,
                 ruiStateVariable,
                 ruiStateVariable.name,
                 ruiStateVariable.irValueParameter.type
@@ -35,7 +36,7 @@ class RuiStateVariableBuilder private constructor(
 
         fun builderFor(ruiStateVariable: RuiInternalStateVariable) =
             RuiStateVariableBuilder(
-                ruiStateVariable.ruiClass.builder,
+                ruiStateVariable.ruiClass,
                 ruiStateVariable,
                 ruiStateVariable.name,
                 ruiStateVariable.irVariable.type

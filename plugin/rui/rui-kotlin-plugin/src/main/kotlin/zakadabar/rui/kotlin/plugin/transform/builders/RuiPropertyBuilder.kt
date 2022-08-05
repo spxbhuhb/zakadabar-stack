@@ -23,9 +23,10 @@ import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.ir.util.defaultType
 import org.jetbrains.kotlin.ir.util.parentAsClass
 import org.jetbrains.kotlin.name.Name
+import zakadabar.rui.kotlin.plugin.model.RuiClass
 
 open class RuiPropertyBuilder(
-    override val ruiClassBuilder: RuiClassBuilder,
+    override val ruiClass: RuiClass,
     val name: Name,
     val type: IrType,
     val isVar : Boolean = true

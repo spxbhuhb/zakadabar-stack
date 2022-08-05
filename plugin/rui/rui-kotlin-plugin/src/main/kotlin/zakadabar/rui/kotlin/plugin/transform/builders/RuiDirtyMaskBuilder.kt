@@ -14,16 +14,17 @@ import org.jetbrains.kotlin.ir.declarations.IrValueParameter
 import org.jetbrains.kotlin.ir.expressions.IrBody
 import org.jetbrains.kotlin.ir.util.defaultType
 import org.jetbrains.kotlin.name.Name
+import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.model.RuiDirtyMask
 import zakadabar.rui.kotlin.plugin.transform.RUI_INVALIDATE
-import zakadabar.rui.kotlin.plugin.transform.RUI_PARAMETER_MASK
+import zakadabar.rui.kotlin.plugin.transform.RUI_MASK
 
 class RuiDirtyMaskBuilder(
-    override val ruiClassBuilder: RuiClassBuilder,
+    override val ruiClass: RuiClass,
     val ruiDirtyMask: RuiDirtyMask
 ) : RuiBuilder {
 
-    val propertyBuilder = RuiPropertyBuilder(ruiClassBuilder, ruiDirtyMask.name, irBuiltIns.intType)
+    val propertyBuilder = RuiPropertyBuilder(ruiClass, ruiDirtyMask.name, irBuiltIns.intType)
 
     fun build() {
         buildInitializer()
@@ -48,7 +49,7 @@ class RuiDirtyMaskBuilder(
             }
 
             val mask = function.addValueParameter {
-                name = Name.identifier(RUI_PARAMETER_MASK)
+                name = Name.identifier(RUI_MASK)
                 type = irBuiltIns.intType
             }
 

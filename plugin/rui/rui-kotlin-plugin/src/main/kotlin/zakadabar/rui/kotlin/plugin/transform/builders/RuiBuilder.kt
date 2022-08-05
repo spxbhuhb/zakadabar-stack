@@ -46,6 +46,7 @@ import org.jetbrains.kotlin.ir.util.getPrimitiveArrayElementType
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.util.OperatorNameConventions
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
+import zakadabar.rui.kotlin.plugin.model.RuiClass
 
 /**
  * Rui access and IR utilities. IR build utilities were copied shamelessly from
@@ -53,7 +54,10 @@ import zakadabar.rui.kotlin.plugin.RuiPluginContext
  */
 interface RuiBuilder {
 
+    val ruiClass : RuiClass
+
     val ruiClassBuilder: RuiClassBuilder
+        get() = ruiClass.builder
 
     val ruiContext: RuiPluginContext
         get() = ruiClassBuilder.ruiContext

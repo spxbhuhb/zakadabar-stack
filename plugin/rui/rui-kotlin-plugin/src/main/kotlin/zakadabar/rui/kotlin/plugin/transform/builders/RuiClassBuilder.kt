@@ -21,19 +21,12 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
 import zakadabar.rui.kotlin.plugin.model.RuiClass
-import zakadabar.rui.kotlin.plugin.transform.RUI_FUN_CREATE
-import zakadabar.rui.kotlin.plugin.transform.RUI_FUN_DISPOSE
-import zakadabar.rui.kotlin.plugin.transform.RUI_FUN_PATCH
+import zakadabar.rui.kotlin.plugin.transform.*
 import zakadabar.rui.kotlin.plugin.util.toRuiClassName
 
 class RuiClassBuilder(
-    val ruiClass: RuiClass
+    override val ruiClass: RuiClass
 ) : RuiBuilder {
-
-    override val ruiClassBuilder = this
-
-    override val ruiContext
-        get() = this.ruiClass.ruiContext
 
     val irFunction = ruiClass.irFunction
 
@@ -45,7 +38,6 @@ class RuiClassBuilder(
     val thisReceiver: IrValueParameter
 
     lateinit var adapter: IrValueParameter
-    lateinit var anchor: IrValueParameter
 
     val create: IrSimpleFunction
     val patchRender: IrSimpleFunction
@@ -74,9 +66,9 @@ class RuiClassBuilder(
         constructor = initConstructor()
         initializer = initInitializer()
 
-        create = initRuiFunction(RUI_FUN_CREATE, ruiContext.ruiCreate)
-        patchRender = initRuiFunction(RUI_FUN_PATCH, ruiContext.ruiPatchRender)
-        dispose = initRuiFunction(RUI_FUN_DISPOSE, ruiContext.ruiDispose)
+        create = initRuiFunction(RUI_CREATE, ruiContext.ruiCreate)
+        patchRender = initRuiFunction(RUI_PATCH, ruiContext.ruiPatchRender)
+        dispose = initRuiFunction(RUI_DISPOSE, ruiContext.ruiDispose)
 
         irClass.addFakeOverrides(IrTypeSystemContextImpl(irContext.irBuiltIns))
     }
@@ -111,10 +103,9 @@ class RuiClassBuilder(
      * Adds value parameters to the constructor:
      *
      * - `ruiAdapter` with type `RuiAdapter`
-     * - `ruiAnchor` with type `RuiFragment`
-     * - `ruiStatePatch` with type `(it : RuiFragment) -> Unit`
+     * - `ruiExternalPatch` with type `(it : RuiFragment) -> Unit`
      *
-     * Later `RuiStateTransformer` adds parameters from the original function.
+     * Later, `RuiStateTransformer` adds parameters from the original function.
      */
     private fun initConstructor(): IrConstructor {
 
@@ -124,18 +115,13 @@ class RuiClassBuilder(
         }
 
         adapter = constructor.addValueParameter {
-            name = Name.identifier("ruiAdapter")
+            name = Name.identifier(RUI_ADAPTER)
             type = ruiContext.ruiAdapterType
         }
 
-        anchor = constructor.addValueParameter {
-            name = Name.identifier("ruiAnchor")
-            type = ruiContext.ruiFragmentType
-        }
-
-        val ruiStatePatch = constructor.addValueParameter {
-            name = Name.identifier("ruiPatchState")
-            type = ruiContext.ruiPatchStateType
+        val ruiExternalPatch = constructor.addValueParameter {
+            name = Name.identifier(RUI_PATCH_EXTERNAL)
+            type = ruiContext.ruiExternalPatchType
         }
 
         constructor.body = irFactory.createBlockBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET).apply {
@@ -146,11 +132,10 @@ class RuiClassBuilder(
                 ruiContext.ruiFragmentType,
                 ruiContext.ruiFragmentClass.constructors.first(),
                 typeArgumentsCount = 0,
-                valueArgumentsCount = 3
+                valueArgumentsCount = RUI_FRAGMENT_ARGUMENT_COUNT
             ).also {
-                it.putValueArgument(0, irGet(adapter))
-                it.putValueArgument(1, irGet(anchor))
-                it.putValueArgument(2, irGet(ruiStatePatch))
+                it.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, irGet(adapter))
+                it.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_PATCH_EXTERNAL, irGet(ruiExternalPatch))
             }
 
             statements += IrInstanceInitializerCallImpl(
@@ -175,6 +160,13 @@ class RuiClassBuilder(
 
         initializer.parent = irClass
         initializer.body = irFactory.createBlockBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET)
+
+        // State initialisation must precede fragment initialisation, so the fragments
+        // will get initialized state variable values in their constructor.
+        // Individual fragment builders will append their own initialisation code
+        // after the state is properly initialized.
+
+        initializer.body.statements += ruiClass.initializerStatements
 
         return initializer
     }
