@@ -7,7 +7,7 @@ import zakadabar.rui.runtime.RuiAdapter
 import zakadabar.rui.runtime.RuiFragment
 import zakadabar.rui.runtime.RuiFragmentFactory
 
-object RuiTestAdapter : RuiAdapter {
+class RuiTestAdapter : RuiAdapter {
 
     val events = mutableListOf<RuiTestEvent>()
 

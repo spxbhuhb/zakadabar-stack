@@ -3,62 +3,60 @@
  */
 package zakadabar.rui.kotlin.plugin.adhoc
 
-import zakadabar.rui.runtime.RuiAdapter
-import zakadabar.rui.runtime.RuiBlock
-import zakadabar.rui.runtime.RuiFragment
-import zakadabar.rui.runtime.testing.*
+import zakadabar.rui.runtime.Rui
+import zakadabar.rui.runtime.rui
+import zakadabar.rui.runtime.testing.T0
+import zakadabar.rui.runtime.testing.T1
 
-//@Rui
-//fun Basic(i : Int) {
-//    T1(i)
+//@Suppress("UNUSED_PARAMETER")
+//fun rui(@RuiRoot block : (ruiAdapter : RuiAdapter) -> Unit) {
+//    block(RuiAdapterRegistry.adapterFor())
 //}
 
-class RuiOptimizedBlock(
-    ruiAdapter: RuiAdapter,
-    override val fragments: Array<RuiFragment>,
-    val patch: () -> Unit
-) : RuiBlock(ruiAdapter) {
-    override fun ruiPatch() {
-        patch()
-        super.ruiPatch()
-    }
+fun test() {
+    rui { Basic(12) }
 }
 
-@Suppress("JoinDeclarationAndAssignment", "unused")
-class OptimizedBlock(
-    override val name: String = "<root>"
-) : RuiC1(RuiTestAdapter), WithName {
-
-    var v0 = 1
-
-    var ruiDirty0 = 0
-
-    fun ruiInvalidate0(mask: Int) {
-        ruiDirty0 = ruiDirty0 or mask
-    }
-
-    // -------------------------------------------------------------------------
-
-    val ruiB0T10: RuiT1
-    val ruiB0T01: RuiT0
-    override val fragment0: RuiOptimizedBlock
-
-    init {
-        ruiB0T10 = RuiT1(ruiAdapter, v0)
-        ruiB0T01 = RuiT0(ruiAdapter)
-        fragment0 = RuiOptimizedBlock(
-            ruiAdapter,
-            arrayOf(ruiB0T10, ruiB0T01)
-        ) {
-            if (ruiDirty0 and 1 != 0) {
-                ruiB0T10.p0 = v0
-                ruiB0T10.ruiInvalidate0(1)
-                ruiB0T10.ruiPatch()
-            }
-        }
-    }
-
-    // -------------------------------------------------------------------------
-
-
+@Rui
+fun Basic(i : Int) {
+    T1(i)
+    T0()
 }
+
+//
+//@Suppress("JoinDeclarationAndAssignment", "unused")
+//class TestBlock(
+//    override val name: String = "<root>"
+//) : RuiC1(RuiTestAdapter, { }), WithName {
+//
+//    var v0 = 1
+//
+//    var ruiDirty0 = 0
+//
+//    fun ruiInvalidate0(mask: Int) {
+//        ruiDirty0 = ruiDirty0 or mask
+//    }
+//
+//    val ruiT10 : RuiT1
+//    val ruiT01 : RuiT0
+//    override val fragment0 : RuiFragment
+//
+//    init {
+//        ruiT10 = RuiT1(ruiAdapter, {
+//            it as RuiT1
+//            if (ruiDirty0 and 1 != 0) {
+//                it.p0 = v0
+//                it.ruiInvalidate0(1)
+//            }
+//        }, v0)
+//
+//        ruiT01 = RuiT0(ruiAdapter) { }
+//
+//        fragment0 = RuiBlock(
+//            ruiAdapter,
+//            ruiT10,
+//            ruiT01
+//        )
+//    }
+//
+//}

@@ -19,7 +19,7 @@ import zakadabar.rui.kotlin.plugin.util.RuiAnnotationBasedExtension
 
 class RuiFromIrTransform(
     val ruiContext : RuiPluginContext,
-    val irFunction: IrFunction
+    val irFunction: IrFunction,
 ) : RuiAnnotationBasedExtension {
 
     lateinit var ruiClass : RuiClass

@@ -5,10 +5,12 @@ package zakadabar.rui.runtime.testing
 
 import zakadabar.rui.runtime.RuiAdapter
 import zakadabar.rui.runtime.RuiBlock
+import zakadabar.rui.runtime.RuiFragment
 
 abstract class RuiTestBlock(
-    adapter: RuiAdapter
-) : RuiBlock(adapter), WithName {
+    adapter: RuiAdapter,
+    vararg fragments : RuiFragment
+) : RuiBlock(adapter, *fragments), WithName {
 
     override val name = "BLOCK"
 

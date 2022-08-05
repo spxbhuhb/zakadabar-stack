@@ -5,11 +5,14 @@ package zakadabar.rui.runtime.testing
 
 import zakadabar.rui.runtime.RuiAdapter
 import zakadabar.rui.runtime.RuiAnchor
+import zakadabar.rui.runtime.RuiFragment
 import zakadabar.rui.runtime.RuiWhen
 
 abstract class RuiTestWhen(
-    adapter: RuiAdapter
-) : RuiWhen(adapter), WithName {
+    adapter: RuiAdapter,
+    ruiPatchState : (it : RuiFragment) -> Unit,
+    ruiSelect : () -> RuiFragment
+) : RuiWhen(adapter, ruiPatchState, ruiSelect), WithName {
 
     override val name = "WHEN"
 

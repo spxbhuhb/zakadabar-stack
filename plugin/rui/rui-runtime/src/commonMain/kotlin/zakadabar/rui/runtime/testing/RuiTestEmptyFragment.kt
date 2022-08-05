@@ -9,7 +9,7 @@ import zakadabar.rui.runtime.RuiFragment
 
 open class RuiTestEmptyFragment(
     ruiAdapter: RuiAdapter
-) : RuiFragment(ruiAdapter), WithName {
+) : RuiFragment(ruiAdapter, {  }), WithName {
 
     override val name = "EMPTY"
 

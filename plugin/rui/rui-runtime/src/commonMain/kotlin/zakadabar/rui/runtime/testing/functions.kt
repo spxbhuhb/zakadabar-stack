@@ -6,5 +6,7 @@ package zakadabar.rui.runtime.testing
 import zakadabar.rui.runtime.RuiFragment
 
 fun RuiTestEvents.report(fragment: RuiFragment, vararg arguments : Any) {
-    RuiTestAdapter.events += RuiTestEvent(this, fragment, *arguments)
+    (fragment.ruiAdapter as RuiTestAdapter).events += RuiTestEvent(this, fragment, *arguments).also {
+        println(it.dump())
+    }
 }

@@ -10,8 +10,9 @@ import zakadabar.rui.runtime.RuiFragment
 
 open class RuiTestFragment(
     ruiAdapter: RuiAdapter,
+    ruiPatchState : (it : RuiFragment) -> Unit,
     var value: Int
-) : RuiFragment(ruiAdapter), WithName {
+) : RuiFragment(ruiAdapter, ruiPatchState), WithName {
 
     override val name = "FRAGMENT"
 

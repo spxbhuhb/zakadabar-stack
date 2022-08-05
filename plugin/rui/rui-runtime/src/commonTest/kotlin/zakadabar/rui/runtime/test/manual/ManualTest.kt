@@ -3,16 +3,13 @@
  */
 package zakadabar.rui.runtime.test.manual
 
-import zakadabar.rui.runtime.testing.RuiTestAdapter
 import kotlin.test.Test
 
 class ManualTest {
 
     @Test
     fun branchTest() {
-        RuiTestAdapter.clear()
-
-        val c = TestBranch(1, "<root>")
+        val c = TestBranch("<root>")
         c.ruiCreate()
 
         fun v(value : Int) {
@@ -25,7 +22,5 @@ class ManualTest {
         v(2)
         v(3)
         v(1)
-
-        RuiTestAdapter.printDump()
     }
 }

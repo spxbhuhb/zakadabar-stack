@@ -5,6 +5,7 @@ package zakadabar.rui.kotlin.plugin.transform.builders
 
 import org.jetbrains.kotlin.backend.common.deepCopyWithVariables
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
+import org.jetbrains.kotlin.descriptors.DescriptorVisibilities
 import org.jetbrains.kotlin.ir.builders.declarations.addValueParameter
 import org.jetbrains.kotlin.ir.builders.declarations.buildFun
 import org.jetbrains.kotlin.ir.builders.irBlockBody
@@ -26,7 +27,7 @@ import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.model.RuiExpression
 import zakadabar.rui.kotlin.plugin.transform.RUI_FRAGMENT_ARGUMENT_COUNT
 import zakadabar.rui.kotlin.plugin.transform.RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER
-import zakadabar.rui.kotlin.plugin.transform.RUI_FRAGMENT_ARGUMENT_INDEX_PATCH_EXTERNAL
+import zakadabar.rui.kotlin.plugin.transform.RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH
 import zakadabar.rui.kotlin.plugin.transform.RuiClassSymbols
 import zakadabar.rui.kotlin.plugin.util.RuiCompilationException
 
@@ -64,7 +65,7 @@ class RuiCallBuilder(
         ).also { constructorCall ->
 
             constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, irGet(ruiClassBuilder.adapter))
-            constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_PATCH_EXTERNAL, buildPatchStateVariable())
+            constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH, buildExternalPatch())
 
             ruiCall.valueArguments.forEachIndexed { index, ruiExpression ->
                 constructorCall.putValueArgument(index + RUI_FRAGMENT_ARGUMENT_COUNT, ruiExpression.irExpression)
@@ -76,25 +77,26 @@ class RuiCallBuilder(
             propertyBuilder.irField.symbol,
             receiver = ruiClassBuilder.irThisReceiver(),
             value = value,
-            propertyBuilder.irField.type
+            irBuiltIns.unitType
         )
     }
 
-    fun buildPatchStateVariable(): IrExpression {
+    fun buildExternalPatch(): IrExpression {
         val function = irFactory.buildFun {
             name = Name.special("<anonymous>")
             origin = IrDeclarationOrigin.LOCAL_FUNCTION_FOR_LAMBDA
             returnType = irBuiltIns.unitType
         }.also { function ->
 
-            function.parent = propertyBuilder.irField
+            function.parent = irClass
+            function.visibility = DescriptorVisibilities.LOCAL
 
             val patchStateIt = function.addValueParameter {
                 name = Name.identifier("it")
                 type = ruiContext.ruiFragmentType
             }
 
-            function.body = buildPatchStateBody(function, patchStateIt)
+            function.body = buildExternalPatchBody(function, patchStateIt)
         }
 
         return IrFunctionExpressionImpl(
@@ -105,7 +107,7 @@ class RuiCallBuilder(
         )
     }
 
-    private fun buildPatchStateBody(function: IrSimpleFunction, patchStateIt: IrValueParameter): IrBody? {
+    private fun buildExternalPatchBody(function: IrSimpleFunction, patchStateIt: IrValueParameter): IrBody? {
         return try {
 
             DeclarationIrBuilder(irContext, function.symbol).irBlockBody {
@@ -113,7 +115,7 @@ class RuiCallBuilder(
                 + irAs(symbolMap.defaultType, irGet(patchStateIt))
 
                 ruiCall.valueArguments.mapIndexedNotNull { index, ruiExpression ->
-                    buildPatchStateVariable(patchStateIt, index, ruiExpression)
+                    buildVariablePatch(patchStateIt, index, ruiExpression)
                 }.forEach { + it }
             }
 
@@ -124,7 +126,7 @@ class RuiCallBuilder(
     }
 
 
-    fun buildPatchStateVariable(patchStateIt: IrValueDeclaration, index: Int, ruiExpression: RuiExpression): IrExpression? {
+    fun buildVariablePatch(patchStateIt: IrValueDeclaration, index: Int, ruiExpression: RuiExpression): IrExpression? {
         // constants, globals, etc. have no dependencies, no need to patch them
         if (ruiExpression.dependencies.isEmpty()) return null
 

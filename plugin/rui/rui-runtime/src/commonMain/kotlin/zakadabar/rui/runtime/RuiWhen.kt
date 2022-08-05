@@ -3,13 +3,17 @@
  */
 package zakadabar.rui.runtime
 
-abstract class RuiWhen(
-    adapter: RuiAdapter
-) : RuiFragment(adapter) {
+open class RuiWhen(
+    adapter: RuiAdapter,
+    ruiPatchState : (it : RuiFragment) -> Unit,
+    val ruiSelect : () -> RuiFragment
+) : RuiFragment(adapter, ruiPatchState) {
 
-    abstract var ruiFragment: RuiFragment
+    var ruiFragment: RuiFragment
 
-    abstract fun ruiSelect(): RuiFragment
+    init {
+        ruiFragment = ruiSelect()
+    }
 
     override fun ruiCreate() {
         ruiFragment.ruiCreate()

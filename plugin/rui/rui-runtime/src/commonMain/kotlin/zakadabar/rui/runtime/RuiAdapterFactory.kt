@@ -3,6 +3,6 @@
  */
 package zakadabar.rui.runtime
 
-open class RuiEmptyFragment(
-    ruiAdapter: RuiAdapter
-) : RuiFragment(ruiAdapter, {  })
+abstract class RuiAdapterFactory {
+    abstract fun accept(vararg args : Any?) : RuiAdapter?
+}

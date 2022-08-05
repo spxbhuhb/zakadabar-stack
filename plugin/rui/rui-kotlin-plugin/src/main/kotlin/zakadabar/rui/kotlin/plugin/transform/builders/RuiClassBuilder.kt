@@ -20,13 +20,20 @@ import org.jetbrains.kotlin.ir.util.*
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
+import zakadabar.rui.kotlin.plugin.RuiPluginContext
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.transform.*
-import zakadabar.rui.kotlin.plugin.util.toRuiClassName
+import zakadabar.rui.kotlin.plugin.util.toRuiClassFqName
 
 class RuiClassBuilder(
     override val ruiClass: RuiClass
 ) : RuiBuilder {
+
+    override val ruiClassBuilder: RuiClassBuilder
+        get() = this
+
+    override val ruiContext: RuiPluginContext
+        get() = ruiClass.ruiContext
 
     val irFunction = ruiClass.irFunction
 
@@ -47,7 +54,7 @@ class RuiClassBuilder(
         startOffset = irFunction.startOffset
         endOffset = irFunction.endOffset
         origin = IrDeclarationOrigin.DEFINED
-        name = irFunction.name.toRuiClassName()
+        name = irFunction.toRuiClassFqName().shortName()
         kind = ClassKind.CLASS
         visibility = irFunction.visibility
         modality = Modality.OPEN
@@ -120,7 +127,7 @@ class RuiClassBuilder(
         }
 
         val ruiExternalPatch = constructor.addValueParameter {
-            name = Name.identifier(RUI_PATCH_EXTERNAL)
+            name = Name.identifier(RUI_EXTERNAL_PATCH)
             type = ruiContext.ruiExternalPatchType
         }
 
@@ -135,7 +142,7 @@ class RuiClassBuilder(
                 valueArgumentsCount = RUI_FRAGMENT_ARGUMENT_COUNT
             ).also {
                 it.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, irGet(adapter))
-                it.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_PATCH_EXTERNAL, irGet(ruiExternalPatch))
+                it.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH, irGet(ruiExternalPatch))
             }
 
             statements += IrInstanceInitializerCallImpl(

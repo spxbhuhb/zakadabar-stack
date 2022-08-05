@@ -5,6 +5,7 @@ package zakadabar.rui.kotlin.plugin.util
 
 import org.jetbrains.kotlin.ir.IrElement
 import org.jetbrains.kotlin.ir.declarations.IrFunction
+import org.jetbrains.kotlin.ir.util.isAnonymousFunction
 import org.jetbrains.kotlin.ir.util.kotlinFqName
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
@@ -13,20 +14,21 @@ import org.jetbrains.kotlin.util.capitalizeDecapitalize.capitalizeAsciiOnly
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 
-fun Name.toRuiClassName(): Name {
-    return Name.identifier("Rui" + identifier.capitalizeAsciiOnly())
-}
-
 fun Name.isSynthetic() = identifier.startsWith('$') || identifier.endsWith('$')
 
 fun IrFunction.toRuiClassFqName(): FqName {
-    return (kotlinFqName.parentOrNull() ?: FqName.ROOT).child(name.toRuiClassName())
+    val parent = kotlinFqName.parentOrNull() ?: FqName.ROOT
+    return when {
+        this.isAnonymousFunction -> parent.child(Name.identifier("RuiRoot${this.startOffset}"))
+        this.name.asString() == "<anonymous>" -> parent.child(Name.identifier("RuiRoot${this.startOffset}"))
+        else -> parent.child(Name.identifier("Rui" + name.identifier.capitalizeAsciiOnly()))
+    }
 }
 
 class RuiCompilationException(
     val error: ErrorsRui.RuiIrError,
     ruiClass: RuiClass? = null,
-    irElement : IrElement? = null
+    irElement: IrElement? = null
 ) : Exception() {
     init {
         if (ruiClass != null && irElement != null) error.report(ruiClass, irElement)

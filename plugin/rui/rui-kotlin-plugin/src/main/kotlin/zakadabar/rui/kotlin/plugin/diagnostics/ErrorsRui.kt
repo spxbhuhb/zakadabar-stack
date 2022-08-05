@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.diagnostics.Severity
 import org.jetbrains.kotlin.ir.IrElement
 import org.jetbrains.kotlin.ir.IrFileEntry
 import org.jetbrains.kotlin.ir.declarations.IrFunction
+import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.util.IrMessageLogger
 import org.jetbrains.kotlin.ir.util.file
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
@@ -43,6 +44,7 @@ object ErrorsRui {
     val RUI_IR_MISSING_RUI_CLASS = RuiIrError(9, "Missing Rui class.")
     val RUI_IR_MISSING_RUI_FUNCTION = RuiIrError(10, "Missing Rui function.")
     val RUI_IR_INVALID_EXTERNAL_CLASS = RuiIrError(11, "Invalid external class.")
+    val RUI_IR_INTERNAL_PLUGIN_ERROR = RuiIrError(1, "Internal plugin error: ")
 
     class RuiIrError(
         val id: Int,
@@ -71,10 +73,14 @@ object ErrorsRui {
             return null
         }
 
-        fun report(ruiContext: RuiPluginContext, fileEntry: IrFileEntry, offset: Int) {
+        fun report(ruiContext: RuiPluginContext, irCall: IrCall, additionalInfo: String = "") {
+            report(ruiContext, irCall.symbol.owner.file.fileEntry, irCall.startOffset, additionalInfo)
+        }
+
+        fun report(ruiContext: RuiPluginContext, fileEntry: IrFileEntry, offset: Int, additionalInfo: String = "") {
             ruiContext.diagnosticReporter.report(
                 IrMessageLogger.Severity.ERROR,
-                toMessage(),
+                toMessage() + " " + additionalInfo,
                 IrMessageLogger.Location(
                     fileEntry.name,
                     fileEntry.getLineNumber(offset) + 1,

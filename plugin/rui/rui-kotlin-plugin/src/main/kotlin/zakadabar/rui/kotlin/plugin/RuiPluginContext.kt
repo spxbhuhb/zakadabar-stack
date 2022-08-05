@@ -7,12 +7,10 @@ import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.backend.jvm.functionByName
 import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.IrMessageLogger
+import org.jetbrains.kotlin.ir.util.primaryConstructor
 import org.jetbrains.kotlin.name.FqName
 import zakadabar.rui.kotlin.plugin.model.RuiClass
-import zakadabar.rui.kotlin.plugin.transform.RUI_CREATE
-import zakadabar.rui.kotlin.plugin.transform.RUI_DISPOSE
-import zakadabar.rui.kotlin.plugin.transform.RUI_PATCH
-import zakadabar.rui.kotlin.plugin.transform.RuiSymbolMap
+import zakadabar.rui.kotlin.plugin.transform.*
 
 class RuiPluginContext(
     val irContext: IrPluginContext,
@@ -23,19 +21,22 @@ class RuiPluginContext(
 
     val ruiClasses = mutableMapOf<FqName, RuiClass>()
 
-    val ruiSymbolMap = RuiSymbolMap(this)
-
     val ruiFragmentClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiFragment"))) !!
     val ruiFragmentType = ruiFragmentClass.typeWith()
 
     val ruiAdapterClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiAdapter"))) !!
     val ruiAdapterType = ruiAdapterClass.typeWith()
 
+    val ruiAdapterRegistryClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiAdapterRegistry"))) !!
+    val ruiAdapterRegistryType = ruiAdapterRegistryClass.typeWith()
+
     val ruiCreate = ruiFragmentClass.functionByName(RUI_CREATE)
     val ruiPatchRender = ruiFragmentClass.functionByName(RUI_PATCH)
     val ruiDispose = ruiFragmentClass.functionByName(RUI_DISPOSE)
 
-    val ruiExternalPatchType = irContext.irBuiltIns.unitType // ruiFragmentClass.owner.primaryConstructor!!.valueParameters[RUI_CLASS_PATCH_STATE_INDEX].type
+    val ruiExternalPatchType = ruiFragmentClass.owner.primaryConstructor!!.valueParameters[RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH].type
+
+    val ruiSymbolMap = RuiSymbolMap(this)
 
     companion object {
         const val DUMP_BEFORE = "before"

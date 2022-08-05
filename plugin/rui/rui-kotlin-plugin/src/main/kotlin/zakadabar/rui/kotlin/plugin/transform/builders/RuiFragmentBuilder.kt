@@ -7,8 +7,10 @@ import zakadabar.rui.kotlin.plugin.transform.RuiClassSymbols
 
 interface RuiFragmentBuilder : RuiBuilder {
 
-    val symbolMap : RuiClassSymbols
-    val propertyBuilder : RuiPropertyBuilder
+    val symbolMap: RuiClassSymbols
+        get() = throw IllegalStateException()
+
+    val propertyBuilder: RuiPropertyBuilder
 
     /**
      * Builds the fragment. Runs after all classes in the module fragment are

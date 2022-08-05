@@ -3,6 +3,8 @@
  */
 package zakadabar.rui.kotlin.plugin.transform
 
+import org.jetbrains.kotlin.name.FqName
+
 /**
  * Number of Rui related constructor arguments.
  *
@@ -11,7 +13,10 @@ package zakadabar.rui.kotlin.plugin.transform
  */
 const val RUI_FRAGMENT_ARGUMENT_COUNT = 2
 const val RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER = 0
-const val RUI_FRAGMENT_ARGUMENT_INDEX_PATCH_EXTERNAL = 1
+const val RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH = 1
+
+const val RUI_BLOCK_ARGUMENT_COUNT = 2
+const val RUI_BLOCK_ARGUMENT_INDEX_FRAGMENTS = 1
 
 const val RUI_CREATE = "ruiCreate"
 const val RUI_MOUNT = "ruiMount"
@@ -23,7 +28,7 @@ const val RUI_INVALIDATE = "ruiInvalidate"
 const val RUI_DIRTY = "ruiDirty"
 
 const val RUI_ADAPTER = "ruiAdapter"
-const val RUI_PATCH_EXTERNAL = "ruiPatchExternal"
+const val RUI_EXTERNAL_PATCH = "ruiExternalPatch"
 const val RUI_ANCHOR = "ruiAnchor"
 const val RUI_MASK = "mask"
 
@@ -32,3 +37,6 @@ const val RUI_BRANCH = "ruiBranch"
 const val RUI_CALL = "ruiCall"
 const val RUI_FOR_LOOP = "ruiForLoop"
 const val RUI_WHEN = "ruiWhen"
+
+val RUI_BLOCK_CLASS = FqName("zakadabar.rui.runtime.RuiBlock")
+val RUI_ENTRY_FUNCTION = FqName("zakadabar.rui.runtime.rui")

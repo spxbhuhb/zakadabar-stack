@@ -7,35 +7,39 @@ import zakadabar.rui.runtime.RuiBlock
 import zakadabar.rui.runtime.RuiFragment
 import zakadabar.rui.runtime.testing.*
 
+@Suppress("JoinDeclarationAndAssignment", "unused")
 class TestBlock(
     override val name: String = "<root>"
-) : RuiC1(RuiTestAdapter), WithName {
+) : RuiC1(RuiTestAdapter(), { }), WithName {
 
     var v0 = 1
 
     var ruiDirty0 = 0
 
-    fun ruiInvalidate0(mask : Int) {
+    fun ruiInvalidate0(mask: Int) {
         ruiDirty0 = ruiDirty0 or mask
     }
 
-    override val fragment0 = object : RuiBlock(ruiAdapter) {
+    val ruiT10 : RuiT1
+    val ruiT01 : RuiT0
+    override val fragment0 : RuiFragment
 
-        val ruiT10 = RuiT1(ruiAdapter, v0)
-        val ruiT01 = RuiT0(ruiAdapter)
+    init {
+        ruiT10 = RuiT1(ruiAdapter, {
+            it as RuiT1
+            if (ruiDirty0 and 1 != 0) {
+                it.p0 = v0
+                it.ruiInvalidate0(1)
+            }
+        }, v0)
 
-        override val fragments: Array<RuiFragment> = arrayOf(
+        ruiT01 = RuiT0(ruiAdapter) { }
+
+        fragment0 = RuiBlock(
+            ruiAdapter,
             ruiT10,
             ruiT01
         )
-
-        override fun ruiPatch() {
-            if (ruiDirty0 and 1 != 0) {
-                ruiT10.p0 = v0
-                ruiT10.ruiInvalidate0(1)
-                ruiT10.ruiPatch()
-            }
-        }
     }
 
 }

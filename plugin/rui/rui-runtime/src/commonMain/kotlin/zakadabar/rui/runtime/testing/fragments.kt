@@ -13,8 +13,9 @@ fun T0() { }
 
 @Suppress("unused")
 open class RuiT0(
-    ruiAdapter: RuiAdapter
-) : RuiFragment(ruiAdapter), WithName {
+    ruiAdapter: RuiAdapter,
+    ruiPatchState : (it : RuiFragment) -> Unit
+) : RuiFragment(ruiAdapter, ruiPatchState), WithName {
 
     override val name = "T0"
 
@@ -45,13 +46,16 @@ open class RuiT0(
 }
 
 @Rui
-fun T1(p0 : Int) { }
+fun T1(p0 : Int) {
+    println("===== $$$$$ ###### TEST NOW WHAT?")
+}
 
 @Suppress("unused")
 open class RuiT1(
     ruiAdapter: RuiAdapter,
+    ruiPatchState : (it : RuiFragment) -> Unit,
     var p0: Int
-) : RuiFragment(ruiAdapter), WithName {
+) : RuiFragment(ruiAdapter, ruiPatchState), WithName {
 
     override val name = "T1"
 
@@ -97,8 +101,9 @@ fun H1(@Rui builder : () -> Unit) {
 @Suppress("unused")
 open class RuiH1(
     ruiAdapter: RuiAdapter,
+    ruiPatchState : (it : RuiFragment) -> Unit,
     @Rui builder : (ruiAdapter : RuiAdapter) -> RuiFragment
-) : RuiC1(ruiAdapter), WithName {
+) : RuiC1(ruiAdapter, ruiPatchState), WithName {
 
     override val name = "H1"
 
@@ -113,7 +118,8 @@ open class RuiH1(
 @Suppress("unused")
 abstract class RuiC1(
     ruiAdapter: RuiAdapter,
-) : RuiFragment(ruiAdapter) {
+    ruiPatchState : (it : RuiFragment) -> Unit
+) : RuiFragment(ruiAdapter, ruiPatchState) {
 
     abstract val fragment0 : RuiFragment
 

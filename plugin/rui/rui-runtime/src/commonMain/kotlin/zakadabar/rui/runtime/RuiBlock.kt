@@ -3,11 +3,10 @@
  */
 package zakadabar.rui.runtime
 
-abstract class RuiBlock(
-    adapter: RuiAdapter
-) : RuiFragment(adapter) {
-
-    abstract val fragments: Array<RuiFragment>
+open class RuiBlock(
+    adapter: RuiAdapter,
+    vararg val fragments: RuiFragment
+) : RuiFragment(adapter, {  }) {
 
     override fun ruiCreate() {
         for (i in fragments.indices) {

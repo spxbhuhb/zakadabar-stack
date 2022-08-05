@@ -3,12 +3,18 @@
  */
 package zakadabar.rui.runtime.test.manual
 
+import zakadabar.rui.runtime.RuiEmptyFragment
 import zakadabar.rui.runtime.RuiFragment
-import zakadabar.rui.runtime.testing.*
+import zakadabar.rui.runtime.RuiWhen
+import zakadabar.rui.runtime.testing.RuiC1
+import zakadabar.rui.runtime.testing.RuiT1
+import zakadabar.rui.runtime.testing.RuiTestAdapter
+import zakadabar.rui.runtime.testing.WithName
 
+@Suppress("JoinDeclarationAndAssignment")
 class TestBranch(
     override val name: String = "<root>"
-) : RuiC1(RuiTestAdapter), WithName {
+) : RuiC1(RuiTestAdapter(), { }), WithName {
 
     var v0: Int = 1
 
@@ -18,39 +24,42 @@ class TestBranch(
         ruiDirty0 = ruiDirty0 or mask
     }
 
-    override val fragment0 = object : RuiTestWhen(ruiAdapter) {
+    val ruiBranch3: RuiT1
+    val ruiBranch4: RuiT1
+    val ruiBranch5: RuiEmptyFragment
 
-        override var ruiFragment = ruiSelect()
+    override val fragment0: RuiFragment
 
-        override fun ruiSelect(): RuiFragment =
-            when (v0) {
-                1 -> ruiBranch3
-                2 -> ruiBranch4
-                else -> ruiBranch5
+    init {
+        ruiBranch3 = RuiT1(ruiAdapter, {
+            it as RuiT1
+            if (ruiDirty0 and 1 != 0) {
+                it.p0 = v0 + 10
+                it.ruiInvalidate0(1)
             }
+            super.ruiPatch()
+        }, v0 + 10)
 
-        val ruiBranch3 = object : RuiT1(ruiAdapter, v0 + 10) {
-            override fun ruiPatch() {
-                if (ruiDirty0 and 1 != 0) {
-                    this.p0 = v0 + 10
-                    ruiInvalidate0(1)
+        ruiBranch4 = RuiT1(ruiAdapter, {
+            it as RuiT1
+            if (ruiDirty0 and 1 != 0) {
+                it.p0 = v0 + 20
+                it.ruiInvalidate0(1)
+            }
+        }, v0 + 20)
+
+        ruiBranch5 = RuiEmptyFragment(ruiAdapter)
+
+        fragment0 = RuiWhen(
+            ruiAdapter,
+            { },
+            {
+                when (v0) {
+                    1 -> ruiBranch3
+                    2 -> ruiBranch4
+                    else -> ruiBranch5
                 }
-                super.ruiPatch()
             }
-        }
-
-        val ruiBranch4 = object : RuiT1(ruiAdapter, v0 + 20) {
-            override fun ruiPatch() {
-                if (ruiDirty0 and 1 != 0) {
-                    this.p0 = v0 + 20
-                    ruiInvalidate0(1)
-                }
-                super.ruiPatch()
-            }
-        }
-
-        val ruiBranch5 = RuiTestEmptyFragment(ruiAdapter)
-
+        )
     }
-
 }

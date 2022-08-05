@@ -8,7 +8,7 @@ import zakadabar.rui.runtime.testing.*
 
 class TestHigherOrder(
     override val name: String = "<root>"
-) : RuiC1(RuiTestAdapter), WithName {
+) : RuiC1(RuiTestAdapter(), {  }), WithName {
 
     var v0 = 1
 
@@ -18,8 +18,8 @@ class TestHigherOrder(
         ruiDirty0 = ruiDirty0 or mask
     }
 
-    inner class RuiLambda1(ruiAdapter: RuiAdapter) : RuiT0(ruiAdapter)
+    inner class RuiLambda1(ruiAdapter: RuiAdapter) : RuiT0(ruiAdapter, {})
 
-    override val fragment0 = RuiH1(ruiAdapter) { ruiAdapter -> RuiLambda1(ruiAdapter) }
+    override val fragment0 = RuiH1(ruiAdapter, {  }) { ruiAdapter -> RuiLambda1(ruiAdapter) }
 
 }

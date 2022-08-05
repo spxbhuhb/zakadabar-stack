@@ -5,8 +5,10 @@ package zakadabar.rui.kotlin.plugin
 
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
+import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
 import org.jetbrains.kotlin.ir.util.dump
+import org.jetbrains.kotlin.ir.util.dumpKotlinLike
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_AFTER
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_BEFORE
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_RUI_TREE
@@ -46,8 +48,14 @@ internal class RuiGenerationExtension(
 
         if (DUMP_AFTER in ruiContext.dumpPoints) {
             println("DUMP AFTER")
-            ruiContext.ruiClasses.values.filter { ! it.irClass.name.identifier.matches("RuiP\\d+".toRegex()) }.forEach {
-                println(it.irClass.dump())
+//            ruiContext.ruiClasses.values.filter { ! it.irClass.name.identifier.matches("RuiP\\d+".toRegex()) }.forEach {
+//                println(it.irClass.dump())
+//            }
+            println(moduleFragment.dump())
+            moduleFragment.files.forEach {
+                it.declarations.forEach {
+                    if (it is IrFunction) println(it.dumpKotlinLike())
+                }
             }
         }
     }

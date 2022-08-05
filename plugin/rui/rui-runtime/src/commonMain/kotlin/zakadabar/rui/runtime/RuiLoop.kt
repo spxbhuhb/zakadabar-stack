@@ -3,17 +3,16 @@
  */
 package zakadabar.rui.runtime
 
-abstract class RuiLoop<T>(
+class RuiLoop<T>(
     ruiAdapter: RuiAdapter,
-) : RuiFragment(ruiAdapter) {
+    ruiPatchState : (it : RuiFragment) -> Unit,
+    val makeIterator : () -> Iterator<T>,
+    val makeFragment : () -> RuiFragment
+) : RuiFragment(ruiAdapter, ruiPatchState) {
 
     var loopVariable : T? = null
 
     val fragments = mutableListOf<RuiFragment>()
-
-    abstract fun makeFragment() :RuiFragment
-
-    abstract fun makeIterator() : Iterator<T>
 
     override fun ruiCreate() {
         for (loopVariable in makeIterator()) {
