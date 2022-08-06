@@ -9,10 +9,11 @@ import org.jetbrains.kotlin.ir.util.dumpKotlinLike
 import org.jetbrains.kotlin.ir.util.file
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
+import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_KOTLIN_LIKE
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.util.RuiAnnotationBasedExtension
 
-class RuiClassTransform(
+class RuiToIrTransform(
     private val ruiContext: RuiPluginContext,
     val ruiClasses : List<RuiClass>
 ) : IrElementTransformerVoidWithContext(), RuiAnnotationBasedExtension {
@@ -22,9 +23,11 @@ class RuiClassTransform(
 
     fun transform() {
         ruiClasses.forEach {
-            it.builder.buildClass()
+            it.builder.build()
             it.irFunction.file.addChild(it.irClass)
-            println(it.irClass.dumpKotlinLike())
+            if (DUMP_KOTLIN_LIKE in ruiContext.dumpPoints) {
+                println(it.irClass.dumpKotlinLike())
+            }
         }
     }
 }

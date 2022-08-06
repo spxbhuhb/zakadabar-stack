@@ -42,6 +42,7 @@ class RuiPluginContext(
         const val DUMP_BEFORE = "before"
         const val DUMP_AFTER = "after"
         const val DUMP_RUI_TREE = "rui-tree"
+        const val DUMP_KOTLIN_LIKE = "kotlin-like"
     }
 
 }

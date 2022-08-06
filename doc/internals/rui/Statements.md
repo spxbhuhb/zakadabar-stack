@@ -6,6 +6,7 @@ A Rui rendering consists of rendering statements. Statement types:
 * When
 * Loop
 * Call
+* Higher-order Calls
 
 Processing the statements has two phases:
 
@@ -14,6 +15,16 @@ Processing the statements has two phases:
 
 Lowering may change the type of the statement. Most notably, a block that
 contains a single statement is lowered into that statement.
+
+## Scopes
+
+Loops and higher order calls define a new "scope". This is because these two
+may execute the block or function more than once. This is trivial for loops,
+but also, higher order calls may use the passed function more than once.
+
+From compilation point of view, a new scope needs a new class to contain
+the fragments inside the scope. These must not be mixed with the fragments
+of the outer scope.
 
 ## Block
 

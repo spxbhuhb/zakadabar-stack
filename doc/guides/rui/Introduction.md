@@ -1,6 +1,6 @@
 # Rui: Introduction
 
-Rui, short for reactive UI, is a Kotlin compiler plugin that you may use to easily
+Rui, short for Reactive UI, is a Kotlin compiler plugin that you may use to easily
 build error-free user interfaces.
 
 Rui is inspired by [Svelte](https://svelte.io), but it is not a port of Svelte.
@@ -24,12 +24,13 @@ Each component has a *state*. When this state changes the component automaticall
 updates the UI to reflect the change. 
 
 Defined variables are part of the component state, and they are *reactive by default*.
+We call these *internal state variables*.
 
 ```kotlin
 @Rui
 fun Counter() {
-    var count = 0
-    Button { "Click count: $count" } onClick { count++ }
+    var counter = 0
+    Button { "Click count: $counter" } onClick { counter++ }
 }
 ```
 
@@ -40,32 +41,90 @@ the `counter` has been changed and updates the UI.
 ## Basics: Parameters
 
 You can add parameters to the component. Parameters are parts of the
-component state.
+component state. We call these *external state variables*.
+
+You cannot change the external state variables from the inside of
+the component. However, it may happen that the parameter changes
+on the outside. In that case the component updates the UI automatically.
 
 ```kotlin
 @Rui
 fun Counter(label : String) {
-    var count = 0
-    Button { "$label: $count" } onClick { count++ }
+    var counter = 0
+    Button { "$label: $counter" } onClick { counter++ }
+}
+```
+
+## Basics: Boundary
+
+Rui components have two main areas: *state initialization* and *rendering*.
+These are separated by the *boundary*. 
+
+Above the boundary, you initialize the component state. This is a one-time
+operation, executed when the component is initialized.
+
+Below the boundary, you define how to render the component. This part
+is executed whenever the state changes.
+
+**Very important** you cannot define variables, functions etc. in the 
+*rendering* (except in event handlers, see later). This is a design decision we've 
+made to avoid confusion.
+
+Rui automatically finds the *boundary*: the first call to another Rui component
+function marks the *boundary*.
+
+```kotlin
+@Rui
+fun Counter() {
+    var counter = 0
+    // ---- boundary ----
+    Button { "Click count: $counter" } onClick { counter++ }
+}
+```
+
+## Basics: Event Handlers
+
+*Event handlers* are functions called when something happens: user input,
+completion of a launched co-routine etc.
+
+Event handlers may change state variables and these changes result in a UI update.
+
+You can define event handlers as local functions or as lambdas. Rui recognizes
+when a block changes a state variable and automatically updates the UI.
+
+The handlers in this example are equivalent. Note that whichever button you
+click, labels of all show the new counter value.
+
+```kotlin
+@Rui
+fun Counter() {
+    var counter = 0
+    
+    fun increment() {
+        counter++
+    }
+    
+    Button { "Click count: $counter" } onClick ::increment
+    Button { "Click count: $counter" } onClick { counter++ }
 }
 ```
 
 ## Basics: Nesting
 
 Components may contain other components, letting you build complex UI
-structures. When `count` of the parent component changes Rui
+structures. When `counter` of the parent component changes the child
 automatically updates the child component.
 
 ```kotlin
 @Rui
-fun Child(count : Int) {
-    Text("Click count: $count")
+fun Child(counter : Int) {
+    Text("Click count: $counter")
 }
 
 @Rui
 fun Parent() {
-    var count = 0
-    Child(count) onClick { count++ }
+    var counter = 0
+    Child(counter) onClick { counter++ }
 }
 ```
 

@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.ir.types.makeNullable
 import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.ir.util.defaultType
+import org.jetbrains.kotlin.ir.util.dumpKotlinLike
 import org.jetbrains.kotlin.ir.util.kotlinFqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtModifierListOwner
@@ -33,9 +34,6 @@ import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RUI_IR_MISSING_FUNCTION
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.transform.RUI_ENTRY_FUNCTION
 import zakadabar.rui.kotlin.plugin.util.RuiAnnotationBasedExtension
-import kotlin.collections.List
-import kotlin.collections.mutableListOf
-import kotlin.collections.plusAssign
 import kotlin.collections.set
 
 class RuiFunctionVisitor(
@@ -128,6 +126,10 @@ class RuiFunctionVisitor(
                 call.putValueArgument(1, buildExternalPatch(block.function.symbol))
             }
 
+        }
+
+        if (RuiPluginContext.DUMP_KOTLIN_LIKE in ruiContext.dumpPoints) {
+            println(block.function.dumpKotlinLike())
         }
 
         return expression

@@ -195,7 +195,7 @@ class RuiClassBuilder(
             irClass.declarations += function
         }
 
-    fun buildClass() {
+    fun build() {
 
         ruiClass.dirtyMasks.forEach {
             it.builder.build()
