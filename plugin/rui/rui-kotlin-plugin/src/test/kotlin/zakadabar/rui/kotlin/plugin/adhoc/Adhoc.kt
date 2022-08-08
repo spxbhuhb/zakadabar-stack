@@ -4,7 +4,6 @@
 package zakadabar.rui.kotlin.plugin.adhoc
 
 import zakadabar.rui.runtime.Rui
-import zakadabar.rui.runtime.rui
 import zakadabar.rui.runtime.testing.T0
 import zakadabar.rui.runtime.testing.T1
 
@@ -13,13 +12,19 @@ import zakadabar.rui.runtime.testing.T1
 //    block(RuiAdapterRegistry.adapterFor())
 //}
 
-fun test() {
-    rui { Basic(12) }
-}
-
 @Rui
 fun Basic(i : Int) {
-    T1(i)
+    var i2 = 1
+
+    fun na() {
+
+    }
+
+    fun ca() {
+        i2++
+    }
+
+    T1(i2)
     T0()
 }
 

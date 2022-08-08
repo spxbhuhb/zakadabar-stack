@@ -37,6 +37,9 @@ class RunTest {
     @Test
     fun basic() = compile("Basic.kt", true)
 
+    @Test
+    fun eventHandler() = compile("EventHandler.kt", true)
+
     fun compile(fileName: String, dumpResult : Boolean = false) {
 
         // The test source codes are compiled before the tests run. That compilation does not apply
@@ -67,7 +70,7 @@ class RunTest {
 
         with(result.classLoader.loadClass("zakadabar.rui.kotlin.plugin.run.gen.${fileName.replace(".kt", "Kt")}")) {
             this.declaredMethods.forEach {
-                if (it.name == "test" && it.parameters.isEmpty()) {
+                if (it.annotations.firstOrNull { it.annotationClass.simpleName == "RuiTest" } != null) {
                     it.invoke(this)
                 }
             }

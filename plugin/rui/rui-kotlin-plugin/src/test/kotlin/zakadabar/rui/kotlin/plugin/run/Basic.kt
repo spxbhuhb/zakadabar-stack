@@ -3,10 +3,12 @@
  */
 package zakadabar.rui.kotlin.plugin.run
 
+import zakadabar.rui.kotlin.plugin.RuiTest
 import zakadabar.rui.runtime.Rui
 import zakadabar.rui.runtime.rui
 import zakadabar.rui.runtime.testing.T1
 
+@RuiTest
 fun test() {
     rui {
         call(10)

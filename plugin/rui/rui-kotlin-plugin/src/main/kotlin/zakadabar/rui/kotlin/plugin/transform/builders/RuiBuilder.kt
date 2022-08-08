@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.declarations.impl.IrVariableImpl
 import org.jetbrains.kotlin.ir.expressions.*
 import org.jetbrains.kotlin.ir.expressions.impl.*
+import org.jetbrains.kotlin.ir.interpreter.toIrConst
 import org.jetbrains.kotlin.ir.symbols.IrFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.IrReturnTargetSymbol
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
@@ -43,6 +44,7 @@ import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.ir.util.defaultType
 import org.jetbrains.kotlin.ir.util.functions
 import org.jetbrains.kotlin.ir.util.getPrimitiveArrayElementType
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.util.OperatorNameConventions
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
@@ -54,7 +56,7 @@ import zakadabar.rui.kotlin.plugin.model.RuiClass
  */
 interface RuiBuilder {
 
-    val ruiClass : RuiClass
+    val ruiClass: RuiClass
 
     val ruiClassBuilder: RuiClassBuilder
         get() = ruiClass.builder
@@ -599,4 +601,22 @@ interface RuiBuilder {
             argument
         )
     }
+
+    val funPrintln
+        get() = irContext.referenceFunctions(FqName("kotlin.io.println"))
+            .single {
+                val parameters = it.owner.valueParameters
+                parameters.size == 1 && parameters[0].type == irBuiltIns.anyNType
+            }
+
+    fun irPrintln(s: String) =
+        irCall(funPrintln).also { call ->
+            call.putValueArgument(0, s.toIrConst(irBuiltIns.stringType))
+        }
+
+    fun irPrintln(expression: IrExpression) =
+        irCall(funPrintln).also { call ->
+            call.putValueArgument(0, expression)
+        }
+
 }

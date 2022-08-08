@@ -43,8 +43,8 @@ object ErrorsRui {
     val RUI_IR_RENDERING_INVALID_DECLARATION = RuiIrError(8, "This declaration is not allowed in the rendering part.")
     val RUI_IR_MISSING_RUI_CLASS = RuiIrError(9, "Missing Rui class.")
     val RUI_IR_MISSING_RUI_FUNCTION = RuiIrError(10, "Missing Rui function.")
-    val RUI_IR_INVALID_EXTERNAL_CLASS = RuiIrError(11, "Invalid external class.")
-    val RUI_IR_INTERNAL_PLUGIN_ERROR = RuiIrError(1, "Internal plugin error: ")
+    val RUI_IR_INVALID_EXTERNAL_CLASS = RuiIrError(11, "Invalid external class: ")
+    val RUI_IR_INTERNAL_PLUGIN_ERROR = RuiIrError(12, "Internal plugin error: ")
 
     class RuiIrError(
         val id: Int,
@@ -63,13 +63,13 @@ object ErrorsRui {
             report(ruiContext, declaration.file.fileEntry, declaration.startOffset)
         }
 
-        fun report(ruiClassBuilder: RuiClassBuilder, element: IrElement): Nothing? {
-            report(ruiClassBuilder.ruiContext, ruiClassBuilder.ruiClass.irFunction.file.fileEntry, element.startOffset)
+        fun report(ruiClassBuilder: RuiClassBuilder, element: IrElement, additionalInfo : String = ""): Nothing? {
+            report(ruiClassBuilder.ruiContext, ruiClassBuilder.ruiClass.irFunction.file.fileEntry, element.startOffset, additionalInfo)
             return null
         }
 
-        fun report(ruiClass: RuiClass, element: IrElement): Nothing? {
-            report(ruiClass.ruiContext, ruiClass.irFunction.file.fileEntry, element.startOffset)
+        fun report(ruiClass: RuiClass, element: IrElement, additionalInfo : String = ""): Nothing? {
+            report(ruiClass.ruiContext, ruiClass.irFunction.file.fileEntry, element.startOffset, additionalInfo)
             return null
         }
 

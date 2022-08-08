@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.extensions.StorageComponentContainerContributor
 import zakadabar.rui.kotlin.plugin.RuiConfigurationKeys.ANNOTATION
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_AFTER
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_BEFORE
+import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_KOTLIN_LIKE
 import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_RUI_TREE
 
 /**
@@ -30,7 +31,7 @@ class RuiComponentRegistrar : ComponentRegistrar {
 
 //        val dump = configuration.get(DUMP).orEmpty()
 //        val dump = listOf(DUMP_BEFORE, DUMP_AFTER, DUMP_RUI_TREE)
-        val dump = listOf(DUMP_BEFORE, DUMP_AFTER, DUMP_RUI_TREE)
+        val dump = listOf(DUMP_BEFORE, DUMP_AFTER, DUMP_RUI_TREE, DUMP_KOTLIN_LIKE)
 
         registerRuiComponents(project, annotations, dump, configuration.getBoolean(JVMConfigurationKeys.IR))
     }

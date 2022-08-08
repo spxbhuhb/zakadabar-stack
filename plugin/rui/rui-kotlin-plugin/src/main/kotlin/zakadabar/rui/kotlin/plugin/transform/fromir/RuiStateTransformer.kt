@@ -4,18 +4,19 @@
 package zakadabar.rui.kotlin.plugin.transform.fromir
 
 import org.jetbrains.kotlin.backend.common.IrElementTransformerVoidWithContext
+import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
 import org.jetbrains.kotlin.ir.IrStatement
-import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
-import org.jetbrains.kotlin.ir.declarations.IrVariable
-import org.jetbrains.kotlin.ir.expressions.IrBlock
-import org.jetbrains.kotlin.ir.expressions.IrExpression
-import org.jetbrains.kotlin.ir.expressions.IrGetValue
-import org.jetbrains.kotlin.ir.expressions.IrSetValue
+import org.jetbrains.kotlin.ir.builders.*
+import org.jetbrains.kotlin.ir.declarations.*
+import org.jetbrains.kotlin.ir.expressions.*
+import org.jetbrains.kotlin.ir.interpreter.toIrConst
+import org.jetbrains.kotlin.ir.util.statements
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RUI_IR_RENDERING_VARIABLE
 import zakadabar.rui.kotlin.plugin.model.*
 import zakadabar.rui.kotlin.plugin.util.*
+import kotlin.collections.set
 
 /**
  * Transforms state variable accesses from the original code into property
@@ -43,14 +44,23 @@ import zakadabar.rui.kotlin.plugin.util.*
  * As only variables declared at the top level block are moved into state
  * variables, we can check the stack if the given variable is a local
  * one or not.
+ *
+ * @property  skipParameters  Skip the first N parameter of the original function when
+ *                            converting the function parameters into external state variables.
+ *                            Used for entry points when the first parameter is the adapter.
  */
 class RuiStateTransformer(
     private val ruiContext: RuiPluginContext,
-    private val ruiClass: RuiClass
+    private val ruiClass: RuiClass,
+    private val skipParameters : Int
 ) : IrElementTransformerVoidWithContext(), RuiAnnotationBasedExtension {
 
     override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?): List<String> =
         ruiContext.annotations
+
+    val irContext = ruiContext.irContext
+
+    val irBuiltIns = irContext.irBuiltIns
 
     var currentStatementIndex = 0
 
@@ -59,8 +69,21 @@ class RuiStateTransformer(
 
     val blockStack: Stack<BlockStackEntry> = mutableListOf(BlockStackEntry(true))
 
+    var lastPop: BlockStackEntry = blockStack[0]
+
+    val rendering
+        get() = currentStatementIndex > ruiClass.boundary
+
+    /**
+     * @property  top                   True means first block, the original function itself.
+     * @property  stateVariableChange   True means that this block does change state variables.
+     * @property  functionOrLambda      True means that this block is part of a function or lambda declaration.
+     * @property  variables             Names of variables declared in this block.
+     */
     class BlockStackEntry(
         val top: Boolean = false,
+        var stateVariableChange: Boolean = false,
+        var functionOrLambda: Boolean = false,
         val variables: MutableList<String> = mutableListOf()
     )
 
@@ -76,36 +99,45 @@ class RuiStateTransformer(
 
     fun transform() {
 
-        ruiClass.irFunction.valueParameters.forEach { valueParameter ->
+        ruiClass.irFunction.valueParameters.forEachIndexed { index, valueParameter ->
+
+            if (index < skipParameters) return@forEachIndexed
+
             RuiExternalStateVariable(ruiClass, stateVariableIndex, valueParameter).also {
                 register(it)
                 addDirtyMask(it)
             }
         }
 
-        ruiClass.originalStatements.forEachIndexed { statementIndex, irStatement ->
+        ruiClass.originalStatements.forEachIndexed { index, irStatement ->
 
-            if (irStatement !is IrVariable) return@forEachIndexed
+            currentStatementIndex = index
 
-            if (statementIndex >= ruiClass.boundary) {
-                RUI_IR_RENDERING_VARIABLE.report(ruiClass, irStatement)
-                return@forEachIndexed
+            if (irStatement is IrVariable) {
+                transformStateVariable(irStatement)
+            } else {
+                transformNotVariable(irStatement)
             }
+        }
+    }
 
-            RuiInternalStateVariable(ruiClass, stateVariableIndex, irStatement).also {
-                register(it)
-                addDirtyMask(it)
-            }
-
+    fun transformStateVariable(irStatement: IrVariable) {
+        if (currentStatementIndex >= ruiClass.boundary) {
+            RUI_IR_RENDERING_VARIABLE.report(ruiClass, irStatement)
+            return
         }
 
-        ruiClass.originalStatements.forEachIndexed { index, statement ->
-            currentStatementIndex = index
-            if (index < ruiClass.boundary) {
-                ruiClass.initializerStatements += statement.transform(this, null) as IrStatement
-            } else {
-                ruiClass.renderingStatements += statement.transform(this, null) as IrStatement
-            }
+        RuiInternalStateVariable(ruiClass, stateVariableIndex, irStatement).also {
+            register(it)
+            addDirtyMask(it)
+        }
+    }
+
+    fun transformNotVariable(irStatement : IrStatement) {
+        if (currentStatementIndex < ruiClass.boundary) {
+            ruiClass.initializerStatements += irStatement.transform(this, null) as IrStatement
+        } else {
+            ruiClass.renderingStatements += irStatement.transform(this, null) as IrStatement
         }
     }
 
@@ -134,10 +166,47 @@ class RuiStateTransformer(
         return super.visitVariable(declaration)
     }
 
+    override fun visitFunctionNew(declaration: IrFunction): IrStatement {
+        val transformed = super.visitFunctionNew(declaration) as IrFunction
+
+        if (! lastPop.stateVariableChange) return transformed
+
+        val ps = parentScope
+
+        when {
+            ps == null -> return irPatch(transformed)
+            ps.irElement is IrProperty -> TODO()
+            ps.irElement is IrClass -> TODO()
+            else -> return transformed
+        }
+    }
+
+    fun irPatch(function: IrFunction): IrFunction {
+        val body = function.body ?: return function
+
+        function.body = DeclarationIrBuilder(irContext, function.symbol).irBlockBody {
+            for (statement in body.statements) + statement
+            + irCallOp(
+                ruiClass.builder.patch.symbol,
+                ruiClass.builder.irBuiltIns.unitType,
+                ruiClass.builder.irThisReceiver()
+            )
+        }
+
+        return function
+    }
+
     override fun visitBlock(expression: IrBlock): IrExpression {
         blockStack.push(BlockStackEntry())
         val result = super.visitBlock(expression)
-        blockStack.pop()
+        lastPop = blockStack.pop()
+        return result
+    }
+
+    override fun visitBlockBody(body: IrBlockBody): IrBody {
+        blockStack.push(BlockStackEntry())
+        val result = super.visitBlockBody(body)
+        lastPop = blockStack.pop()
         return result
     }
 
@@ -164,9 +233,48 @@ class RuiStateTransformer(
 
         if (! name.isStateVariable()) return super.visitSetValue(expression)
 
-        return ruiClass.stateVariables[name]
-            ?.builder?.irSetValue(expression.value)
-            ?: throw IllegalStateException("missing state variable $name in ${ruiClass.irFunction.name}")
+        if (currentScope == null) return super.visitSetValue(expression)
+
+        // Sets all but the top entries in the block stack as state variable
+        // changing block.
+
+        var idx = blockStack.lastIndex
+        while (idx > 0) {
+            blockStack[idx].stateVariableChange = true
+            idx --
+        }
+
+        return DeclarationIrBuilder(irContext, currentScope !!.scope.scopeOwnerSymbol).irComposite {
+            val stateVariable = ruiClass.stateVariables[name] ?: throw IllegalStateException("missing state variable $name in ${ruiClass.irFunction.name}")
+
+            if (ruiContext.withTrace) {
+                + stateVariable.builder.irSetValue(traceStateChange(expression, stateVariable))
+            } else {
+                + stateVariable.builder.irSetValue(expression.value)
+            }
+
+            + irCallOp(
+                ruiClass.dirtyMasks[stateVariable.index / 32].builder.invalidate,
+                irBuiltIns.unitType,
+                ruiClass.builder.irThisReceiver(),
+                (stateVariableIndex % 32).toIrConst(irBuiltIns.intType)
+            )
+        }
+    }
+
+    fun IrBlockBuilder.traceStateChange(expression : IrSetValue, stateVariable : RuiStateVariable) : IrExpression {
+        val newValue = irTemporary(expression.value)
+
+        val concat = irConcat()
+        concat.addArgument(irString(traceLabel(ruiClass.name, "state change")))
+        concat.addArgument(irString(" ${stateVariable.name}: "))
+        concat.addArgument(stateVariable.builder.irGetValue(ruiClass.builder.irThisReceiver()))
+        concat.addArgument(irString(" ⇢ "))
+        concat.addArgument(irGet(newValue))
+
+        + ruiClass.builder.irPrintln(concat)
+
+        return irGet(newValue)
     }
 
 }

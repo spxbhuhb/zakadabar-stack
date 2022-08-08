@@ -28,9 +28,19 @@ fun IrFunction.toRuiClassFqName(): FqName {
 class RuiCompilationException(
     val error: ErrorsRui.RuiIrError,
     ruiClass: RuiClass? = null,
-    irElement: IrElement? = null
+    irElement: IrElement? = null,
+    val additionalInfo: String = ""
 ) : Exception() {
     init {
-        if (ruiClass != null && irElement != null) error.report(ruiClass, irElement)
+        if (ruiClass != null && irElement != null) error.report(ruiClass, irElement, additionalInfo)
     }
 }
+
+val Any.traceName
+    get() = "[${this.toString().padEnd(30)}]"
+
+val Any.tracePoint
+    get() = "  ${this.toString().padEnd(20)}  |"
+
+fun traceLabel(name : Any, point : Any) =
+    name.traceName + point.tracePoint

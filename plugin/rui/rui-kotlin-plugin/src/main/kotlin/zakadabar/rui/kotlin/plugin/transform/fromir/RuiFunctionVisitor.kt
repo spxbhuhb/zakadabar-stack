@@ -5,27 +5,23 @@ package zakadabar.rui.kotlin.plugin.transform.fromir
 
 import org.jetbrains.kotlin.backend.common.IrElementTransformerVoidWithContext
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
-import org.jetbrains.kotlin.backend.jvm.functionByName
 import org.jetbrains.kotlin.descriptors.DescriptorVisibilities
-import org.jetbrains.kotlin.ir.IrStatement
 import org.jetbrains.kotlin.ir.builders.declarations.addValueParameter
 import org.jetbrains.kotlin.ir.builders.declarations.buildFun
 import org.jetbrains.kotlin.ir.builders.irBlockBody
-import org.jetbrains.kotlin.ir.declarations.IrClass
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrFunction
+import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
 import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.IrFunctionExpression
 import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
-import org.jetbrains.kotlin.ir.expressions.impl.*
+import org.jetbrains.kotlin.ir.expressions.impl.IrBlockBodyImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionExpressionImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
-import org.jetbrains.kotlin.ir.types.makeNullable
-import org.jetbrains.kotlin.ir.types.typeWith
-import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
-import org.jetbrains.kotlin.ir.util.defaultType
-import org.jetbrains.kotlin.ir.util.dumpKotlinLike
-import org.jetbrains.kotlin.ir.util.kotlinFqName
+import org.jetbrains.kotlin.ir.util.*
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
@@ -49,12 +45,11 @@ class RuiFunctionVisitor(
     override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?): List<String> =
         ruiContext.annotations
 
-    override fun visitClassNew(declaration: IrClass): IrStatement {
-        return super.visitClassNew(declaration)
-    }
-
+    /**
+     * Transforms a function annotated with `@Rui` into a Rui component class.
+     */
     override fun visitFunctionNew(declaration: IrFunction): IrFunction {
-        if (!declaration.isAnnotatedWithRui()) {
+        if (! declaration.isAnnotatedWithRui()) {
             return super.visitFunctionNew(declaration) as IrFunction
         }
 
@@ -63,7 +58,7 @@ class RuiFunctionVisitor(
             return super.visitFunctionNew(declaration) as IrFunction
         }
 
-        RuiFromIrTransform(ruiContext, declaration).transform().also {
+        RuiFromIrTransform(ruiContext, declaration, 0).transform().also {
             ruiClasses += it
             ruiContext.ruiClasses[it.irClass.kotlinFqName] = it
         }
@@ -74,47 +69,54 @@ class RuiFunctionVisitor(
         return declaration
     }
 
+    /**
+     * Transforms Rui entry points (calls to the function `rui`) into a
+     * Rui root class and modifies the last parameter of the function (which
+     * has to be a lambda) so it gets an adapter and creates a new instance
+     * of the root class.
+     */
     override fun visitCall(expression: IrCall): IrExpression {
         if (expression.symbol.owner.kotlinFqName != RUI_ENTRY_FUNCTION) {
             return super.visitCall(expression)
         }
 
-        if (expression.valueArgumentsCount == 0) {
-            ErrorsRui.RUI_IR_INTERNAL_PLUGIN_ERROR.report(ruiContext, expression, "${expression.symbol} value arguments count == 0")
+        fun report(message: String): IrExpression {
+            ErrorsRui.RUI_IR_INTERNAL_PLUGIN_ERROR.report(ruiContext, currentFile.fileEntry, expression.startOffset, message)
             return super.visitCall(expression)
+        }
+
+        if (expression.valueArgumentsCount == 0) {
+            return report("${expression.symbol} value arguments count == 0")
         }
 
         val block = expression.getValueArgument(expression.valueArgumentsCount - 1)
 
         if (block !is IrFunctionExpression) {
-            ErrorsRui.RUI_IR_INTERNAL_PLUGIN_ERROR.report(ruiContext, expression, "${expression.symbol} last parameter is not a function expression")
-            return super.visitCall(expression)
+            return report("${expression.symbol} last parameter is not a function expression")
         }
 
-        val ruiClass : RuiClass
+        val function = block.function
 
-        RuiFromIrTransform(ruiContext, block.function).transform().also {
+        if (function.valueParameters.isEmpty()) {
+            return report("${expression.symbol} does not have RuiAdapter as first parameter")
+        }
+
+        val adapter = function.valueParameters.first()
+
+        if (adapter.type != ruiContext.ruiAdapterType && !adapter.type.superTypes().contains(ruiContext.ruiAdapterType)) {
+            return report("${expression.symbol} first parameter is not a RuiAdapter")
+        }
+
+        val ruiClass: RuiClass
+
+        // skip the ruiAdapter function parameter
+        RuiFromIrTransform(ruiContext, function, skipParameters = 1).transform().also {
             ruiClasses += it
             ruiContext.ruiClasses[it.irClass.kotlinFqName] = it
             ruiClass = it
         }
 
-        block.function.body = IrBlockBodyImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET).also {
-
-            val adapterFor = IrCallImpl(
-                SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-                ruiContext.ruiAdapterType,
-                ruiContext.ruiAdapterRegistryClass.functionByName("adapterFor"),
-                0, 1
-            ).also { call ->
-                call.dispatchReceiver = IrGetObjectValueImpl(
-                    SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-                    ruiContext.ruiAdapterRegistryType,
-                    ruiContext.ruiAdapterRegistryClass
-                )
-                call.putValueArgument(0, buildAdapterVarArg())
-            }
-
+        function.body = IrBlockBodyImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET).also {
 
             it.statements += IrConstructorCallImpl(
                 SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
@@ -122,8 +124,8 @@ class RuiFunctionVisitor(
                 ruiClass.builder.constructor.symbol,
                 0, 0, 2
             ).also { call ->
-                call.putValueArgument(0, adapterFor)
-                call.putValueArgument(1, buildExternalPatch(block.function.symbol))
+                call.putValueArgument(0, buildGetAdapter(function))
+                call.putValueArgument(1, buildExternalPatch(function.symbol))
             }
 
         }
@@ -135,14 +137,11 @@ class RuiFunctionVisitor(
         return expression
     }
 
-    fun buildAdapterVarArg(): IrExpression {
-        return IrVarargImpl(
+    private fun buildGetAdapter(function: IrSimpleFunction): IrExpression =
+        IrGetValueImpl(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            irBuiltIns.arrayClass.typeWith(irBuiltIns.anyType.makeNullable()),
-            ruiContext.ruiFragmentType,
+            function.valueParameters.first().symbol
         )
-        // TODO copy arguments from the original function call
-    }
 
     fun buildExternalPatch(parent: IrSimpleFunctionSymbol): IrExpression {
         val function = irFactory.buildFun {
@@ -154,7 +153,7 @@ class RuiFunctionVisitor(
             function.parent = parent.owner
             function.visibility = DescriptorVisibilities.LOCAL
 
-            val patchStateIt = function.addValueParameter {
+            function.addValueParameter {
                 name = Name.identifier("it")
                 type = ruiContext.ruiFragmentType
             }

@@ -14,8 +14,8 @@ fun T0() { }
 @Suppress("unused")
 open class RuiT0(
     ruiAdapter: RuiAdapter,
-    ruiPatchState : (it : RuiFragment) -> Unit
-) : RuiFragment(ruiAdapter, ruiPatchState), WithName {
+    ruiExternalPatch : (it : RuiFragment) -> Unit
+) : RuiFragment(ruiAdapter, ruiExternalPatch), WithName {
 
     override val name = "T0"
 
@@ -53,9 +53,9 @@ fun T1(p0 : Int) {
 @Suppress("unused")
 open class RuiT1(
     ruiAdapter: RuiAdapter,
-    ruiPatchState : (it : RuiFragment) -> Unit,
+    ruiExternalPatch : (it : RuiFragment) -> Unit,
     var p0: Int
-) : RuiFragment(ruiAdapter, ruiPatchState), WithName {
+) : RuiFragment(ruiAdapter, ruiExternalPatch), WithName {
 
     override val name = "T1"
 
@@ -101,9 +101,9 @@ fun H1(@Rui builder : () -> Unit) {
 @Suppress("unused")
 open class RuiH1(
     ruiAdapter: RuiAdapter,
-    ruiPatchState : (it : RuiFragment) -> Unit,
+    ruiExternalPatch : (it : RuiFragment) -> Unit,
     @Rui builder : (ruiAdapter : RuiAdapter) -> RuiFragment
-) : RuiC1(ruiAdapter, ruiPatchState), WithName {
+) : RuiC1(ruiAdapter, ruiExternalPatch), WithName {
 
     override val name = "H1"
 
@@ -118,8 +118,8 @@ open class RuiH1(
 @Suppress("unused")
 abstract class RuiC1(
     ruiAdapter: RuiAdapter,
-    ruiPatchState : (it : RuiFragment) -> Unit
-) : RuiFragment(ruiAdapter, ruiPatchState) {
+    ruiExternalPatch : (it : RuiFragment) -> Unit
+) : RuiFragment(ruiAdapter, ruiExternalPatch) {
 
     abstract val fragment0 : RuiFragment
 
@@ -146,4 +146,36 @@ abstract class RuiC1(
         RuiTestEvents.Dispose.report(this)
         fragment0.ruiDispose()
     }
+}
+
+@Rui
+fun EH1(p0 : Int, eventHandler : (np0: Int) -> Unit) { }
+
+@Suppress("unused")
+class RuiEH1(
+    ruiAdapter: RuiAdapter,
+    ruiExternalPatch : (it : RuiFragment) -> Unit,
+    var p0 : Int,
+    var eventHandler: (np0 : Int) -> Unit,
+) : RuiFragment(ruiAdapter, ruiExternalPatch), WithName {
+
+    override val name = "EH1"
+
+    init {
+        if (ruiAdapter is RuiTestAdapter) {
+            ruiAdapter.fragments += this
+        }
+    }
+
+    var ruiDirty0 = 0
+
+    @Suppress("unused")
+    fun ruiInvalidate0(mask: Int) {
+        ruiDirty0 = ruiDirty0 or mask
+    }
+
+    override fun ruiPatch() {
+        ruiExternalPatch(this)
+    }
+
 }

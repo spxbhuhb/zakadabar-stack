@@ -4,8 +4,11 @@
 package zakadabar.rui.kotlin.plugin.transform.builders
 
 import org.jetbrains.kotlin.backend.common.ir.addFakeOverrides
+import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
 import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.descriptors.Modality
+import org.jetbrains.kotlin.ir.IrStatement
+import org.jetbrains.kotlin.ir.builders.*
 import org.jetbrains.kotlin.ir.builders.declarations.*
 import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.expressions.impl.IrDelegatingConstructorCallImpl
@@ -23,7 +26,7 @@ import org.jetbrains.kotlin.name.SpecialNames
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.transform.*
-import zakadabar.rui.kotlin.plugin.util.toRuiClassFqName
+import zakadabar.rui.kotlin.plugin.util.traceLabel
 
 class RuiClassBuilder(
     override val ruiClass: RuiClass
@@ -47,14 +50,14 @@ class RuiClassBuilder(
     lateinit var adapter: IrValueParameter
 
     val create: IrSimpleFunction
-    val patchRender: IrSimpleFunction
+    val patch: IrSimpleFunction
     val dispose: IrSimpleFunction
 
     override val irClass: IrClass = irFactory.buildClass {
         startOffset = irFunction.startOffset
         endOffset = irFunction.endOffset
         origin = IrDeclarationOrigin.DEFINED
-        name = irFunction.toRuiClassFqName().shortName()
+        name = ruiClass.name
         kind = ClassKind.CLASS
         visibility = irFunction.visibility
         modality = Modality.OPEN
@@ -74,7 +77,7 @@ class RuiClassBuilder(
         initializer = initInitializer()
 
         create = initRuiFunction(RUI_CREATE, ruiContext.ruiCreate)
-        patchRender = initRuiFunction(RUI_PATCH, ruiContext.ruiPatchRender)
+        patch = initRuiFunction(RUI_PATCH, ruiContext.ruiPatch)
         dispose = initRuiFunction(RUI_DISPOSE, ruiContext.ruiDispose)
 
         irClass.addFakeOverrides(IrTypeSystemContextImpl(irContext.irBuiltIns))
@@ -168,13 +171,6 @@ class RuiClassBuilder(
         initializer.parent = irClass
         initializer.body = irFactory.createBlockBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET)
 
-        // State initialisation must precede fragment initialisation, so the fragments
-        // will get initialized state variable values in their constructor.
-        // Individual fragment builders will append their own initialisation code
-        // after the state is properly initialized.
-
-        initializer.body.statements += ruiClass.initializerStatements
-
         return initializer
     }
 
@@ -197,15 +193,18 @@ class RuiClassBuilder(
 
     fun build() {
 
-        ruiClass.dirtyMasks.forEach {
-            it.builder.build()
-        }
+        // State initialisation must precede fragment initialisation, so the fragments
+        // will get initialized values in their constructor.
+        // Individual fragment builders will append their own initialisation code
+        // after the state is properly initialized.
+
+        initializer.body.statements += ruiClass.initializerStatements
 
         val rootBuilder = ruiClass.rootBlock.builder as RuiFragmentBuilder
         rootBuilder.build()
 
         buildRuiCall(create, rootBuilder, rootBuilder.symbolMap.create)
-        buildRuiCall(patchRender, rootBuilder, rootBuilder.symbolMap.patchRender)
+        buildRuiCall(patch, rootBuilder, rootBuilder.symbolMap.patch)
         buildRuiCall(dispose, rootBuilder, rootBuilder.symbolMap.dispose)
 
         // The initializer has to be the last, so it will be able to access all properties
@@ -213,11 +212,33 @@ class RuiClassBuilder(
     }
 
     fun buildRuiCall(function: IrSimpleFunction, rootBuilder: RuiFragmentBuilder, callee: IrSimpleFunction) {
-        function.body = irFactory.createBlockBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET).apply {
-            statements += irCall(
+        function.body = DeclarationIrBuilder(irContext, function.symbol).irBlockBody {
+            + traceRuiCall(function)
+            + irCall(
                 callee.symbol,
                 dispatchReceiver = rootBuilder.propertyBuilder.irGetValue(receiver = function.irGetReceiver())
             )
         }
     }
+
+    private fun IrBlockBodyBuilder.traceRuiCall(function: IrSimpleFunction) : IrStatement {
+        val name = function.name.identifier
+
+        return when {
+            name.startsWith("ruiPatch") -> {
+                val concat = irConcat()
+                concat.addArgument(irString(traceLabel(ruiClass.name, "patch")))
+
+                ruiClass.dirtyMasks.forEach {
+                    concat.addArgument(irString(" ${it.name}: "))
+                    concat.addArgument(it.builder.propertyBuilder.irGetValue(irGet(function.dispatchReceiverParameter!!)))
+                }
+
+                ruiClass.builder.irPrintln(concat)
+            }
+            else -> irPrintln(traceLabel(ruiClass.name, function.name.identifier.substring(3).lowercase()))
+        }
+
+    }
+
 }

@@ -11,11 +11,14 @@ import zakadabar.rui.kotlin.plugin.RuiPluginContext
 import zakadabar.rui.kotlin.plugin.transform.builders.RuiClassBuilder
 import zakadabar.rui.kotlin.plugin.transform.fromir.RuiBoundaryVisitor
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
+import zakadabar.rui.kotlin.plugin.util.toRuiClassFqName
 
 class RuiClass(
     val ruiContext: RuiPluginContext,
     val irFunction: IrFunction,
 ) : RuiElement {
+
+    val name = irFunction.toRuiClassFqName().shortName()
 
     val boundary = RuiBoundaryVisitor(ruiContext).findBoundary(irFunction)
 

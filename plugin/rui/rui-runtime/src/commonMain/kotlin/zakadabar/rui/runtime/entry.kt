@@ -3,9 +3,22 @@
  */
 package zakadabar.rui.runtime
 
-annotation class RuiRoot
+/**
+ * Entry point of a Rui component tree.
+ *
+ * **IMPORTANT** variables declared outside the block are **NOT** reactive
+ */
+fun rui(block : (ruiAdapter : RuiAdapter) -> Unit) {
+    block(RuiAdapterRegistry.adapterFor())
+}
 
-@Suppress("UNUSED_PARAMETER")
-fun rui(block : () -> Unit) {
-    block()
+/**
+ * Entry point of a Rui component tree with a specific adapter. The adapter
+ * registry is not accessed in this case but the components will use the
+ * adapter passed.
+ *
+ * **IMPORTANT** variables declared outside the block are **NOT** reactive
+ */
+fun rui(ruiAdapter : RuiAdapter, block : (ruiAdapter : RuiAdapter) -> Unit) {
+    block(ruiAdapter)
 }

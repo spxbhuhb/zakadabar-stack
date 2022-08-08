@@ -32,6 +32,7 @@ class RuiSymbolMap(
             ruiContext.ruiClasses[fqName]?.irClass
                 ?: ruiContext.irContext.referenceClass(fqName)?.owner
         } catch (ex: RuiCompilationException) {
+            ex.printStackTrace()
             return invalid
         }
 
@@ -61,20 +62,18 @@ class RuiClassSymbols(
     private val invalidateFunctions: List<IrSimpleFunctionSymbol>
 
     lateinit var create: IrSimpleFunction
-    lateinit var patchRender: IrSimpleFunction
+    lateinit var patch: IrSimpleFunction
     lateinit var dispose: IrSimpleFunction
 
     val defaultType
         get() = irClass.defaultType
 
     val primaryConstructor
-        get() = irClass.primaryConstructor ?: throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS)
+        get() = irClass.primaryConstructor ?: throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS, additionalInfo = "missing primary constructor")
 
     init {
 
-        val constructor = irClass.primaryConstructor ?: throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS)
-
-        val indices = constructor.valueParameters.map { it.name.identifier }
+        val indices = primaryConstructor.valueParameters.map { it.name.identifier }
 
         val invalidate = mutableListOf<IrSimpleFunction>()
 
@@ -87,8 +86,10 @@ class RuiClassSymbols(
 
         invalidateFunctions = invalidate.sortedBy { it.name }.map { it.symbol }
 
-        if (! ::create.isInitialized || ! ::patchRender.isInitialized || ! ::dispose.isInitialized) {
-            throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS)
+        stateVariables.sortBy { it.index }
+
+        if (! ::create.isInitialized || ! ::patch.isInitialized || ! ::dispose.isInitialized) {
+            throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS, additionalInfo = "default Rui method(s) missing")
         }
     }
 
@@ -100,7 +101,7 @@ class RuiClassSymbols(
 
         when (it.name.identifier) {
             RUI_CREATE -> create = it
-            RUI_PATCH -> patchRender = it
+            RUI_PATCH -> patch = it
             RUI_DISPOSE -> dispose = it
         }
     }
@@ -115,21 +116,26 @@ class RuiClassSymbols(
         }
     }
 
+    fun getterFor(index: Int): IrSimpleFunctionSymbol =
+        getStateVariable(index).property.getter?.symbol
+            ?: throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS, additionalInfo = "no getter for $index")
+
     fun setterFor(index: Int): IrSimpleFunctionSymbol =
-        getStateVariable(index).property.setter?.symbol ?: throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS)
+        getStateVariable(index).property.setter?.symbol
+            ?: throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS, additionalInfo = "no setter for $index")
 
     fun getStateVariable(index: Int): RuiStateVariableSymbol =
         if (stateVariables.size > index) {
             stateVariables[index]
         } else {
-            throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS)
+            throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS, additionalInfo = "no state variable for $index")
         }
 
     fun getInvalidate(index: Int): IrFunctionSymbol =
         if (invalidateFunctions.size > index) {
             invalidateFunctions[index]
         } else {
-            throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS)
+            throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS, additionalInfo = "no state variable for $index")
         }
 
 }

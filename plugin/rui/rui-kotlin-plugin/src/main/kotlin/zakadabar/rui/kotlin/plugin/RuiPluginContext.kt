@@ -16,7 +16,8 @@ class RuiPluginContext(
     val irContext: IrPluginContext,
     val annotations: List<String>,
     val dumpPoints: List<String>,
-    val diagnosticReporter: IrMessageLogger
+    val diagnosticReporter: IrMessageLogger,
+    val withTrace : Boolean = false
 ) {
 
     val ruiClasses = mutableMapOf<FqName, RuiClass>()
@@ -31,7 +32,7 @@ class RuiPluginContext(
     val ruiAdapterRegistryType = ruiAdapterRegistryClass.typeWith()
 
     val ruiCreate = ruiFragmentClass.functionByName(RUI_CREATE)
-    val ruiPatchRender = ruiFragmentClass.functionByName(RUI_PATCH)
+    val ruiPatch = ruiFragmentClass.functionByName(RUI_PATCH)
     val ruiDispose = ruiFragmentClass.functionByName(RUI_DISPOSE)
 
     val ruiExternalPatchType = ruiFragmentClass.owner.primaryConstructor!!.valueParameters[RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH].type

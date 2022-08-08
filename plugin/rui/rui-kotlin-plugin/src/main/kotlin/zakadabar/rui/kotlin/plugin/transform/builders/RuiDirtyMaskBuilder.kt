@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.ir.builders.irBlockBody
 import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
 import org.jetbrains.kotlin.ir.declarations.IrValueParameter
 import org.jetbrains.kotlin.ir.expressions.IrBody
+import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.util.defaultType
 import org.jetbrains.kotlin.name.Name
 import zakadabar.rui.kotlin.plugin.model.RuiClass
@@ -25,41 +26,44 @@ class RuiDirtyMaskBuilder(
 ) : RuiBuilder {
 
     val propertyBuilder = RuiPropertyBuilder(ruiClass, ruiDirtyMask.name, irBuiltIns.intType)
+    val invalidate: IrSimpleFunctionSymbol
 
-    fun build() {
-        buildInitializer()
-        buildInvalidate()
+    init {
+        initInitializer()
+        invalidate = initInvalidate()
     }
 
-    fun buildInitializer() {
+    fun initInitializer() {
         propertyBuilder.irField.initializer = irFactory.createExpressionBody(irConst(0))
     }
 
-    fun buildInvalidate() {
-        irFactory.buildFun {
-            name = Name.identifier(RUI_INVALIDATE + ruiDirtyMask.index)
-            returnType = irBuiltIns.unitType
-            modality = Modality.OPEN
-        }.also { function ->
+    fun initInvalidate(): IrSimpleFunctionSymbol {
+        return irFactory
+            .buildFun {
+                name = Name.identifier(RUI_INVALIDATE + ruiDirtyMask.index)
+                returnType = irBuiltIns.unitType
+                modality = Modality.OPEN
+            }.also { function ->
 
-            function.parent = irClass
+                function.parent = irClass
 
-            val receiver = function.addDispatchReceiver {
-                type = irClass.defaultType
+                val receiver = function.addDispatchReceiver {
+                    type = irClass.defaultType
+                }
+
+                val mask = function.addValueParameter {
+                    name = Name.identifier(RUI_MASK)
+                    type = irBuiltIns.intType
+                }
+
+                function.body = initInvalidateBody(function, receiver, mask)
+
+                irClass.declarations += function
             }
-
-            val mask = function.addValueParameter {
-                name = Name.identifier(RUI_MASK)
-                type = irBuiltIns.intType
-            }
-
-            function.body = buildInvalidateBody(function, receiver, mask)
-
-            irClass.declarations += function
-        }
+            .symbol
     }
 
-    private fun buildInvalidateBody(function: IrSimpleFunction, receiver: IrValueParameter, mask: IrValueParameter): IrBody =
+    private fun initInvalidateBody(function: IrSimpleFunction, receiver: IrValueParameter, mask: IrValueParameter): IrBody =
         DeclarationIrBuilder(irContext, function.symbol).irBlockBody {
             + propertyBuilder.irSetValue(
                 irOr(

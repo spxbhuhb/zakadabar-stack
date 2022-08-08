@@ -29,7 +29,7 @@ class RuiBlockBuilder(
         symbolMap = ruiContext.ruiSymbolMap.getSymbolMap(RUI_BLOCK_CLASS)
 
         if (! symbolMap.valid) {
-            ErrorsRui.RUI_IR_INVALID_EXTERNAL_CLASS.report(ruiClass, ruiBlock.irBlock)
+            ErrorsRui.RUI_IR_INVALID_EXTERNAL_CLASS.report(ruiClass, ruiBlock.irBlock, additionalInfo = "invalid symbol map for $RUI_BLOCK_CLASS")
             return
         }
 

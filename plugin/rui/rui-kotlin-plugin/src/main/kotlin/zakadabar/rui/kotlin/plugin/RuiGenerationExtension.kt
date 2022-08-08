@@ -24,7 +24,8 @@ internal class RuiGenerationExtension(
             pluginContext,
             annotations,
             dumpPoints,
-            pluginContext.createDiagnosticReporter(RuiCommandLineProcessor.PLUGIN_ID)
+            pluginContext.createDiagnosticReporter(RuiCommandLineProcessor.PLUGIN_ID),
+            withTrace = true
         )
 
         if (DUMP_BEFORE in ruiContext.dumpPoints) {

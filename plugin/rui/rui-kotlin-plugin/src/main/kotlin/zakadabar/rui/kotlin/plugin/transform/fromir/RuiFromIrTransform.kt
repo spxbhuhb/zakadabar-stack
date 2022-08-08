@@ -20,6 +20,7 @@ import zakadabar.rui.kotlin.plugin.util.RuiAnnotationBasedExtension
 class RuiFromIrTransform(
     val ruiContext : RuiPluginContext,
     val irFunction: IrFunction,
+    val skipParameters : Int
 ) : RuiAnnotationBasedExtension {
 
     lateinit var ruiClass : RuiClass
@@ -39,7 +40,7 @@ class RuiFromIrTransform(
     fun transform() : RuiClass {
         ruiClass = RuiClass(ruiContext, irFunction)
 
-        RuiStateTransformer(ruiContext, ruiClass).transform()
+        RuiStateTransformer(ruiContext, ruiClass, skipParameters).transform()
 
         transformRoot()
 

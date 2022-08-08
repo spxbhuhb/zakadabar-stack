@@ -79,7 +79,7 @@ class RuiStateVariableBuilder private constructor(
         val mask = ruiClassBuilder.ruiClass.dirtyMasks[maskIndex]
 
         return irNotEqual(
-            irAnd(mask.builder.propertyBuilder.irGetValue(receiver), irConst(bitIndex)),
+            irAnd(mask.builder.propertyBuilder.irGetValue(receiver), irConst(1 shl bitIndex)),
             irConst(0)
         )
     }

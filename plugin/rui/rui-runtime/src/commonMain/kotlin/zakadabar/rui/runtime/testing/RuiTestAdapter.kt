@@ -11,6 +11,8 @@ class RuiTestAdapter : RuiAdapter {
 
     val events = mutableListOf<RuiTestEvent>()
 
+    val fragments = mutableListOf<RuiFragment>()
+
     override fun insert(fragment: RuiFragment) {
         events += RuiTestEvent(RuiTestEvents.Insert, fragment)
     }
