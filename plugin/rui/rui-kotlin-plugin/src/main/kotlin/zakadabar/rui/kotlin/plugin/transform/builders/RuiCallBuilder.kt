@@ -6,14 +6,10 @@ package zakadabar.rui.kotlin.plugin.transform.builders
 import org.jetbrains.kotlin.backend.common.deepCopyWithVariables
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
 import org.jetbrains.kotlin.descriptors.DescriptorVisibilities
-import org.jetbrains.kotlin.ir.IrStatement
 import org.jetbrains.kotlin.ir.builders.*
 import org.jetbrains.kotlin.ir.builders.declarations.addValueParameter
 import org.jetbrains.kotlin.ir.builders.declarations.buildFun
-import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
-import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
-import org.jetbrains.kotlin.ir.declarations.IrValueDeclaration
-import org.jetbrains.kotlin.ir.declarations.IrValueParameter
+import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.expressions.IrBody
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
@@ -113,16 +109,13 @@ class RuiCallBuilder(
         return try {
 
             DeclarationIrBuilder(irContext, function.symbol).irBlockBody {
-
-                if (ruiContext.withTrace) {
-                    traceExternalPatch()
-                }
+                traceExternalPatch()
 
                 + irAs(symbolMap.defaultType, irGet(externalPatchIt))
 
-                ruiCall.valueArguments.mapIndexedNotNull { index, ruiExpression ->
+                ruiCall.valueArguments.forEachIndexed { index, ruiExpression ->
                     buildVariablePatch(externalPatchIt, index, ruiExpression)
-                }.forEach { + it }
+                }
             }
 
         } catch (ex: RuiCompilationException) {
@@ -132,6 +125,8 @@ class RuiCallBuilder(
     }
 
     fun IrBlockBodyBuilder.traceExternalPatch() {
+
+        if (! ruiContext.withTrace) return
 
         val concat = irConcat()
         concat.addArgument(irString(traceLabel(ruiCall.name, "external patch")))
@@ -144,11 +139,11 @@ class RuiCallBuilder(
         + ruiClass.builder.irPrintln(concat)
     }
 
-    fun IrBlockBodyBuilder.buildVariablePatch(externalPatchIt: IrValueDeclaration, index: Int, ruiExpression: RuiExpression): IrExpression? {
+    fun IrBlockBodyBuilder.buildVariablePatch(externalPatchIt: IrValueDeclaration, index: Int, ruiExpression: RuiExpression) {
         // constants, globals, etc. have no dependencies, no need to patch them
-        if (ruiExpression.dependencies.isEmpty()) return null
+        if (ruiExpression.dependencies.isEmpty()) return
 
-        return irIf(
+        + irIf(
             buildCondition(ruiExpression),
             buildPatchResult(externalPatchIt, index, ruiExpression)
         )
@@ -163,52 +158,54 @@ class RuiCallBuilder(
         return result
     }
 
-    private fun IrBlockBodyBuilder.buildPatchResult(externalPatchIt: IrValueDeclaration, index: Int, ruiExpression: RuiExpression): IrExpression {
-        val statements = mutableListOf<IrStatement>()
+    private fun IrBlockBodyBuilder.buildPatchResult(externalPatchIt: IrValueDeclaration, index: Int, ruiExpression: RuiExpression) : IrExpression {
+        return irBlock {
+            val traceData = traceStateChangeBefore(externalPatchIt, index)
 
-        val value = if (ruiContext.withTrace) {
-            traceStateChange(externalPatchIt, ruiExpression.irExpression.deepCopyWithVariables(), index)  // TODO check what deepCopyWithVariables exactly does
-        } else {
-            ruiExpression.irExpression.deepCopyWithVariables() // TODO check what deepCopyWithVariables exactly does
+            // TODO decide if this irTemporary has a real undesired effect (it is here solely because of trace)
+            // TODO check what deepCopyWithVariables exactly does
+            val newValue = irTemporary(ruiExpression.irExpression.deepCopyWithVariables())
+
+            // set the state variable in the child fragment
+            + irCall(
+                symbolMap.setterFor(index),
+                origin = null,
+                dispatchReceiver = irImplicitAs(symbolMap.defaultType, irGet(externalPatchIt)),
+                extensionReceiver = null,
+                irGet(newValue)
+            )
+
+            // call invalidate of the child fragment
+            + irCall(
+                symbolMap.getInvalidate(index / 32), null,
+                irImplicitAs(symbolMap.defaultType, irGet(externalPatchIt)), null,
+                irConst(1 shl (index % 32))
+            )
+
+            traceStateChangeAfter(externalPatchIt, index, traceData, newValue)
         }
-
-        // set the state variable in the child fragment
-        statements += irCall(
-            symbolMap.setterFor(index), null,
-            irImplicitAs(symbolMap.defaultType, irGet(externalPatchIt)), null,
-            value
-        )
-
-        // call invalidate of the child fragment
-        statements += irCall(
-            symbolMap.getInvalidate(index / 32), null,
-            irImplicitAs(symbolMap.defaultType, irGet(externalPatchIt)), null,
-            irConst(1 shl (index % 32))
-        )
-
-        return irBlock(statements = statements)
     }
 
-    fun IrBlockBodyBuilder.traceStateChange(externalPatchIt: IrValueDeclaration, expression : IrExpression, index : Int) : IrExpression {
-        val stateVariable = symbolMap.getStateVariable(index).property.name
+    fun IrBlockBuilder.traceStateChangeBefore(externalPatchIt: IrValueDeclaration, index: Int): IrVariable? {
 
-        val oldValue = irCall(
-            symbolMap.getterFor(index), null,
-            irImplicitAs(symbolMap.defaultType, irGet(externalPatchIt))
-        )
+        if (!ruiContext.withTrace) return null
 
-        val newValue = irTemporary(expression)
+        return irTemporary(irTraceGet(index, irImplicitAs(symbolMap.defaultType, irGet(externalPatchIt))))
+    }
+
+    fun IrBlockBuilder.traceStateChangeAfter(externalPatchIt: IrValueDeclaration, index: Int, traceData: IrVariable?, newValue : IrVariable) {
+        if (traceData == null) return
+
+        val property = symbolMap.getStateVariable(index).property
 
         val concat = irConcat()
         concat.addArgument(irString(traceLabel(ruiCall.name, "state change")))
-        concat.addArgument(irString(" $stateVariable: "))
-        concat.addArgument(oldValue)
+        concat.addArgument(irString(" ${property.name}: "))
+        concat.addArgument(irGet(traceData))
         concat.addArgument(irString(" ⇢ "))
         concat.addArgument(irGet(newValue))
 
-        + ruiClass.builder.irPrintln(concat)
-
-        return irGet(newValue)
+        + irPrintln(concat)
     }
 
 }

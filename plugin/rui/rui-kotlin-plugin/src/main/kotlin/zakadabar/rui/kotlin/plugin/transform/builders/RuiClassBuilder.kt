@@ -7,7 +7,6 @@ import org.jetbrains.kotlin.backend.common.ir.addFakeOverrides
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
 import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.descriptors.Modality
-import org.jetbrains.kotlin.ir.IrStatement
 import org.jetbrains.kotlin.ir.builders.*
 import org.jetbrains.kotlin.ir.builders.declarations.*
 import org.jetbrains.kotlin.ir.declarations.*
@@ -193,6 +192,8 @@ class RuiClassBuilder(
 
     fun build() {
 
+        traceInit()
+
         // State initialisation must precede fragment initialisation, so the fragments
         // will get initialized values in their constructor.
         // Individual fragment builders will append their own initialisation code
@@ -211,9 +212,14 @@ class RuiClassBuilder(
         irClass.declarations += initializer
     }
 
+    fun traceInit() {
+        if (!ruiContext.withTrace) return
+        initializer.body.statements += irPrintln(traceLabel(ruiClass.name, "init"))
+    }
+
     fun buildRuiCall(function: IrSimpleFunction, rootBuilder: RuiFragmentBuilder, callee: IrSimpleFunction) {
         function.body = DeclarationIrBuilder(irContext, function.symbol).irBlockBody {
-            + traceRuiCall(function)
+            traceRuiCall(function)
             + irCall(
                 callee.symbol,
                 dispatchReceiver = rootBuilder.propertyBuilder.irGetValue(receiver = function.irGetReceiver())
@@ -221,20 +227,23 @@ class RuiClassBuilder(
         }
     }
 
-    private fun IrBlockBodyBuilder.traceRuiCall(function: IrSimpleFunction) : IrStatement {
+    private fun IrBlockBodyBuilder.traceRuiCall(function: IrSimpleFunction) {
+
+        if (!ruiContext.withTrace) return
+
         val name = function.name.identifier
 
-        return when {
+        + when {
             name.startsWith("ruiPatch") -> {
                 val concat = irConcat()
                 concat.addArgument(irString(traceLabel(ruiClass.name, "patch")))
 
                 ruiClass.dirtyMasks.forEach {
                     concat.addArgument(irString(" ${it.name}: "))
-                    concat.addArgument(it.builder.propertyBuilder.irGetValue(irGet(function.dispatchReceiverParameter!!)))
+                    concat.addArgument(it.builder.propertyBuilder.irGetValue(irGet(function.dispatchReceiverParameter !!)))
                 }
 
-                ruiClass.builder.irPrintln(concat)
+                irPrintln(concat)
             }
             else -> irPrintln(traceLabel(ruiClass.name, function.name.identifier.substring(3).lowercase()))
         }

@@ -3,6 +3,10 @@
  */
 package zakadabar.rui.kotlin.plugin.transform.builders
 
+import org.jetbrains.kotlin.ir.builders.IrBlockBuilder
+import org.jetbrains.kotlin.ir.builders.irGetField
+import org.jetbrains.kotlin.ir.builders.irString
+import org.jetbrains.kotlin.ir.expressions.IrExpression
 import zakadabar.rui.kotlin.plugin.transform.RuiClassSymbols
 
 interface RuiFragmentBuilder : RuiBuilder {
@@ -21,4 +25,8 @@ interface RuiFragmentBuilder : RuiBuilder {
         throw NotImplementedError()
     }
 
+    fun IrBlockBuilder.irTraceGet(index : Int, receiver : IrExpression) : IrExpression =
+        symbolMap.getStateVariable(index).property.backingField
+            ?.let { irGetField(receiver, it) }
+            ?: irString("?")
 }

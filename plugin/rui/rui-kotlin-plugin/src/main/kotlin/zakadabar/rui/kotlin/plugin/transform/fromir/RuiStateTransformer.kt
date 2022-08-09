@@ -52,7 +52,7 @@ import kotlin.collections.set
 class RuiStateTransformer(
     private val ruiContext: RuiPluginContext,
     private val ruiClass: RuiClass,
-    private val skipParameters : Int
+    private val skipParameters: Int
 ) : IrElementTransformerVoidWithContext(), RuiAnnotationBasedExtension {
 
     override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?): List<String> =
@@ -133,7 +133,7 @@ class RuiStateTransformer(
         }
     }
 
-    fun transformNotVariable(irStatement : IrStatement) {
+    fun transformNotVariable(irStatement: IrStatement) {
         if (currentStatementIndex < ruiClass.boundary) {
             ruiClass.initializerStatements += irStatement.transform(this, null) as IrStatement
         } else {
@@ -247,11 +247,9 @@ class RuiStateTransformer(
         return DeclarationIrBuilder(irContext, currentScope !!.scope.scopeOwnerSymbol).irComposite {
             val stateVariable = ruiClass.stateVariables[name] ?: throw IllegalStateException("missing state variable $name in ${ruiClass.irFunction.name}")
 
-            if (ruiContext.withTrace) {
-                + stateVariable.builder.irSetValue(traceStateChange(expression, stateVariable))
-            } else {
-                + stateVariable.builder.irSetValue(expression.value)
-            }
+            val traceData = traceStateChangeBefore(stateVariable)
+
+            + stateVariable.builder.irSetValue(expression.value)
 
             + irCallOp(
                 ruiClass.dirtyMasks[stateVariable.index / 32].builder.invalidate,
@@ -259,22 +257,32 @@ class RuiStateTransformer(
                 ruiClass.builder.irThisReceiver(),
                 (stateVariableIndex % 32).toIrConst(irBuiltIns.intType)
             )
+
+            traceStateChangeAfter(stateVariable, traceData)
         }
     }
 
-    fun IrBlockBuilder.traceStateChange(expression : IrSetValue, stateVariable : RuiStateVariable) : IrExpression {
-        val newValue = irTemporary(expression.value)
+    fun IrBlockBuilder.traceStateChangeBefore(stateVariable: RuiStateVariable): IrVariable? {
+        if (! ruiContext.withTrace) return null
+
+        return irTemporary(irTraceGet(stateVariable, ruiClass.builder.irThisReceiver()))
+    }
+
+    fun IrBlockBuilder.traceStateChangeAfter(stateVariable: RuiStateVariable, traceData: IrVariable?) {
+        if (traceData == null) return
 
         val concat = irConcat()
         concat.addArgument(irString(traceLabel(ruiClass.name, "state change")))
         concat.addArgument(irString(" ${stateVariable.name}: "))
-        concat.addArgument(stateVariable.builder.irGetValue(ruiClass.builder.irThisReceiver()))
+        concat.addArgument(irGet(traceData))
         concat.addArgument(irString(" ⇢ "))
-        concat.addArgument(irGet(newValue))
+        concat.addArgument(irTraceGet(stateVariable, ruiClass.builder.irThisReceiver()))
 
         + ruiClass.builder.irPrintln(concat)
-
-        return irGet(newValue)
     }
 
+    fun IrBlockBuilder.irTraceGet(stateVariable: RuiStateVariable, receiver : IrExpression) : IrExpression =
+        stateVariable.builder.irProperty.backingField
+            ?.let { irGetField(receiver, it) }
+            ?: irString("?")
 }
