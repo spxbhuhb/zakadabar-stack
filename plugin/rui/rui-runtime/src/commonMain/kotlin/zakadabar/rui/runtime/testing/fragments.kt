@@ -174,8 +174,4 @@ class RuiEH1(
         ruiDirty0 = ruiDirty0 or mask
     }
 
-    override fun ruiPatch() {
-        ruiExternalPatch(this)
-    }
-
 }

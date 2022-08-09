@@ -220,6 +220,11 @@ class RuiClassBuilder(
     fun buildRuiCall(function: IrSimpleFunction, rootBuilder: RuiFragmentBuilder, callee: IrSimpleFunction) {
         function.body = DeclarationIrBuilder(irContext, function.symbol).irBlockBody {
             traceRuiCall(function)
+
+            if (callee.name.identifier == RUI_PATCH) {
+                rootBuilder.irCallExternalPatch(function, this)
+            }
+
             + irCall(
                 callee.symbol,
                 dispatchReceiver = rootBuilder.propertyBuilder.irGetValue(receiver = function.irGetReceiver())

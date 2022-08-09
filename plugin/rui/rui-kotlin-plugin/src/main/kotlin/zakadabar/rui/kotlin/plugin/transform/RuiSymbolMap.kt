@@ -61,6 +61,9 @@ class RuiClassSymbols(
 
     private val invalidateFunctions: List<IrSimpleFunctionSymbol>
 
+    lateinit var externalPatch: IrProperty
+    lateinit var externalPatchGetter: IrSimpleFunction
+
     lateinit var create: IrSimpleFunction
     lateinit var patch: IrSimpleFunction
     lateinit var dispose: IrSimpleFunction
@@ -88,8 +91,12 @@ class RuiClassSymbols(
 
         stateVariables.sortBy { it.index }
 
+        if (! ::externalPatch.isInitialized ) {
+            throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS, additionalInfo = "missing $RUI_EXTERNAL_PATCH property")
+        }
+
         if (! ::create.isInitialized || ! ::patch.isInitialized || ! ::dispose.isInitialized) {
-            throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS, additionalInfo = "default Rui method(s) missing")
+            throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS, additionalInfo = "missing default Rui method(s)")
         }
     }
 
@@ -110,15 +117,17 @@ class RuiClassSymbols(
         val name = it.name.identifier
         val index = indices.indexOf(name) - RUI_FRAGMENT_ARGUMENT_COUNT
 
+        if (name == RUI_EXTERNAL_PATCH) {
+            externalPatch = it
+            externalPatchGetter = it.getter ?: throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS, additionalInfo = "missing $RUI_EXTERNAL_PATCH getter")
+            return
+        }
+
         if (index >= 0) {
             stateVariables += RuiStateVariableSymbol(index, it)
             return
         }
     }
-
-    fun getterFor(index: Int): IrSimpleFunctionSymbol =
-        getStateVariable(index).property.getter?.symbol
-            ?: throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS, additionalInfo = "no getter for $index")
 
     fun setterFor(index: Int): IrSimpleFunctionSymbol =
         getStateVariable(index).property.setter?.symbol

@@ -15,8 +15,11 @@ import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
 import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionExpressionImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrSetFieldImpl
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
+import org.jetbrains.kotlin.ir.util.defaultType
+import org.jetbrains.kotlin.ir.util.functions
 import org.jetbrains.kotlin.name.Name
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui
 import zakadabar.rui.kotlin.plugin.model.RuiCall
@@ -158,7 +161,7 @@ class RuiCallBuilder(
         return result
     }
 
-    private fun IrBlockBodyBuilder.buildPatchResult(externalPatchIt: IrValueDeclaration, index: Int, ruiExpression: RuiExpression) : IrExpression {
+    private fun IrBlockBodyBuilder.buildPatchResult(externalPatchIt: IrValueDeclaration, index: Int, ruiExpression: RuiExpression): IrExpression {
         return irBlock {
             val traceData = traceStateChangeBefore(externalPatchIt, index)
 
@@ -188,12 +191,12 @@ class RuiCallBuilder(
 
     fun IrBlockBuilder.traceStateChangeBefore(externalPatchIt: IrValueDeclaration, index: Int): IrVariable? {
 
-        if (!ruiContext.withTrace) return null
+        if (! ruiContext.withTrace) return null
 
         return irTemporary(irTraceGet(index, irImplicitAs(symbolMap.defaultType, irGet(externalPatchIt))))
     }
 
-    fun IrBlockBuilder.traceStateChangeAfter(externalPatchIt: IrValueDeclaration, index: Int, traceData: IrVariable?, newValue : IrVariable) {
+    fun IrBlockBuilder.traceStateChangeAfter(externalPatchIt: IrValueDeclaration, index: Int, traceData: IrVariable?, newValue: IrVariable) {
         if (traceData == null) return
 
         val property = symbolMap.getStateVariable(index).property
@@ -206,6 +209,30 @@ class RuiCallBuilder(
         concat.addArgument(irGet(newValue))
 
         + irPrintln(concat)
+    }
+
+    override fun irCallExternalPatch(function : IrFunction, builder: IrBlockBodyBuilder) {
+        builder.run {
+            // FIXME check receiver logic when having deeper structures
+            val fragment = irTemporary(
+                irGet(
+                    propertyBuilder.type,
+                    IrGetValueImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, function.dispatchReceiverParameter!!.symbol),
+                    propertyBuilder.getter.symbol
+                )
+            )
+
+            val function1Type = irBuiltIns.functionN(1)
+            val invoke = function1Type.functions.first { it.name.identifier == "invoke" }.symbol
+
+            + irCallOp(
+                invoke,
+                type = irBuiltIns.unitType,
+                dispatchReceiver = irCallOp(symbolMap.externalPatchGetter.symbol, function1Type.defaultType, irGet(fragment)),
+                origin = IrStatementOrigin.INVOKE,
+                argument = irGet(fragment)
+            )
+        }
     }
 
 }
