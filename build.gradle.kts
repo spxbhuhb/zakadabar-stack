@@ -3,9 +3,9 @@
  */
 
 plugins {
-    kotlin("multiplatform") version "1.6.20" apply false
-    kotlin("plugin.serialization") version "1.6.20" apply false
-    id("org.jetbrains.kotlin.plugin.noarg") version "1.6.20" apply false
+    kotlin("multiplatform") version "1.7.10" apply false
+    kotlin("plugin.serialization") version "1.7.10" apply false
+    id("org.jetbrains.kotlin.plugin.noarg") version "1.7.10" apply false
     id("org.jetbrains.dokka") version "1.4.32" apply false
     id("com.github.johnrengelman.shadow") version "7.0.0" apply false
     signing
