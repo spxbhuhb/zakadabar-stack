@@ -9,7 +9,7 @@ import zakadabar.softui.browser.layout.SuiDefaultLayout
 object DefaultLayout : SuiDefaultLayout() {
     override fun onCreate() {
         super.onCreate()
-        header = SiteHeader()
+        header = SiteHeader { onToggleSideBar() }
         sideBar = SideBar()
         pageTitleContainer.hide()
     }
