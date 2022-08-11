@@ -23,7 +23,8 @@ import zakadabar.lib.markdown.browser.flavour.ZkMarkdownContext
 open class MarkdownView(
     private val sourceUrl: String? = null,
     private val sourceText: String? = null,
-    private val context: ZkMarkdownContext = ZkMarkdownContext()
+    private val context: ZkMarkdownContext = ZkMarkdownContext(),
+    private val preprocess : (it : String) -> String = { it.replace("\r\n", "\n") }
 ) : ZkElement() {
 
     lateinit var source: String
@@ -38,7 +39,7 @@ open class MarkdownView(
 
             val flavour = ZkFlavourDescriptor(context)
             source = sourceText ?: window.fetch(sourceUrl).await().text().await()
-            parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(source)
+            parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(preprocess(source))
 
             val html = HtmlGenerator(source, parsedTree, flavour).generateHtml()
 
