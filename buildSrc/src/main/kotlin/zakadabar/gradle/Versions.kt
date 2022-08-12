@@ -10,7 +10,7 @@ object Versions {
 
     const val kotlin = "1.7.0"
     const val ktor = "1.6.8"
-    const val coroutines = "1.5.2"
+    const val coroutines = "1.6.4"
     const val serialization = "1.3.1"
     const val datetime = "0.2.1"
     const val exposed = "0.31.1"

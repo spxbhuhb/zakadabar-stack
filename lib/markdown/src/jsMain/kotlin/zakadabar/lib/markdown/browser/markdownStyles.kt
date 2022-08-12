@@ -138,6 +138,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         maxWidth = defaultWidth.px
         marginLeft = "auto"
         marginRight = "auto"
+        marginBottom = 20.px
     }
 
     @Suppress("unused") // used implicitly by the browser
@@ -201,14 +202,16 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     @Suppress("unused") // used implicitly by the browser
     open val ul by cssRule(".$content ul") {
         maxWidth = defaultWidth.px
-        margin = "auto"
+        margin = "1em 0"
+        padding = "0 0 0 40px"
         marginBlockEnd = theme.spacingStep.px
     }
 
     @Suppress("unused") // used implicitly by the browser
     open val ol by cssRule(".$content ol") {
         maxWidth = defaultWidth.px
-        margin = "auto"
+        margin = "1em 0"
+        padding = "0 0 0 40px"
         marginBlockEnd = theme.spacingStep.px
     }
 
@@ -236,6 +239,9 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     @Suppress("unused") // used implicitly by the browser
     open val img by cssRule(".$content img") {
         maxWidth = 100.percent
+        paddingTop = 20.px
+        paddingBottom = 10.px
+        margin = "auto"
     }
 
     @Suppress("unused") // used implicitly by the browser
@@ -246,12 +252,25 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     open val table by cssRule(".$content > table") {
         border = "1px solid ${theme.borderColor}"
         borderCollapse = "collapse"
+        borderRadius = 2.px
         overflow = "auto"
         marginTop = 10.px
         marginBottom = 10.px
         maxWidth = 90.percent
-        marginLeft = "auto"
         marginRight = "auto"
+    }
+
+    @Suppress("unused") // used implicitly by the browser
+    open val th by cssRule(".$content > table th") {
+        border = "1px solid ${theme.borderColor}"
+        textAlign = "left"
+        fontWeight = "600"
+        fontSize = "85%"
+        +TextTransform.uppercase
+        paddingTop = 4.px
+        paddingBottom = 4.px
+        paddingLeft = 8.px
+        paddingRight = 8.px
     }
 
     @Suppress("unused") // used implicitly by the browser

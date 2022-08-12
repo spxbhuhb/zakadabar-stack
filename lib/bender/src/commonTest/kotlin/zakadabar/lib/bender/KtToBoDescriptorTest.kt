@@ -65,6 +65,7 @@ internal class KtToBoDescriptorTest {
             is InstantBoConstraint -> TODO()
             is LongBoConstraint -> TODO()
             is StringBoConstraint -> TODO()
+            else -> TODO()
         }
     }
 }

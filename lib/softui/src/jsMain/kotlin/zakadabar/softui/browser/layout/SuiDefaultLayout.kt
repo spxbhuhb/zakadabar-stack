@@ -11,6 +11,7 @@ import zakadabar.core.browser.application.application
 import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.util.minusAssign
 import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.util.PublicApi
 import zakadabar.softui.browser.theme.styles.SuiLayoutStyles
 import zakadabar.softui.browser.theme.styles.suiLayoutStyles
 import zakadabar.softui.browser.titlebar.SuiAppHeader
@@ -73,6 +74,7 @@ open class SuiDefaultLayout(
 
     override fun onResume() {
         application.onTitleChange = ::onTitleChange
+        onTitleChange(null)
         popupSidebarContainer.hide()
 
         val mediaSize = if (window.innerWidth < 800) MediaSize.Small else MediaSize.Large
@@ -138,10 +140,11 @@ open class SuiDefaultLayout(
         sideBarContainer.show()
     }
 
-    protected fun onTitleChange(newTitle: ZkAppTitle) {
+    protected fun onTitleChange(newTitle: ZkAppTitle?) {
         pageTitleContainer.title  = newTitle
     }
 
+    @PublicApi
     open fun onToggleSideBar() {
         if (activeMediaSize == MediaSize.Large) {
             sideBarContainer.toggle()
