@@ -20,7 +20,9 @@ import zakadabar.lib.lucene.data.*
 import java.nio.file.Files
 import java.nio.file.Paths
 
-class LuceneBl : BusinessLogicCommon<BaseBo>() {
+class LuceneBl(
+    val mapResult : (executor : Executor, result : LuceneQueryResult) -> LuceneQueryResult? = { _,r -> r }
+) : BusinessLogicCommon<BaseBo>() {
 
     override val namespace = luceneBasic
 
@@ -50,7 +52,9 @@ class LuceneBl : BusinessLogicCommon<BaseBo>() {
      */
     @Suppress("UNUSED_PARAMETER")
     fun luceneQuery(executor: Executor, luceneQuery: LuceneQuery): List<LuceneQueryResult> =
-        SearchFiles.search(luceneQuery, settings)
+        SearchFiles
+            .search(luceneQuery, settings)
+            .mapNotNull { mapResult(executor, it) }
 
     /**
      * Launches [index] when it is not running. If it is running, sets [indexingNeeded]

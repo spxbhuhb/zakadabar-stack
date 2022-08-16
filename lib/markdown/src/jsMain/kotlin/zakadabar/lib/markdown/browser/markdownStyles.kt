@@ -15,6 +15,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
     open var highlightUrl = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/idea.min.css"
 
     open var defaultWidth by cssParameter { 800 }
+    open var minTableWidth by cssParameter { 800.px }
 
     init {
         hljs.registerLanguage("kotlin", hljsKotlin)
@@ -256,6 +257,7 @@ open class MarkdownStyles : ZkCssStyleSheet() {
         overflow = "auto"
         marginTop = 10.px
         marginBottom = 10.px
+        minWidth = minTableWidth
         maxWidth = 90.percent
         marginRight = "auto"
     }

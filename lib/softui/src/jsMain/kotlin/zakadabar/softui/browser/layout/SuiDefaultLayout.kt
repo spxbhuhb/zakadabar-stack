@@ -141,7 +141,7 @@ open class SuiDefaultLayout(
     }
 
     protected fun onTitleChange(newTitle: ZkAppTitle?) {
-        pageTitleContainer.title  = newTitle
+        pageTitleContainer.onTitleChange(newTitle)
     }
 
     @PublicApi

@@ -38,3 +38,39 @@ override fun onInstallStatic(route: Any) {
     }
 }
 ```
+
+## Authorising Static Resources
+
+When you want to authorize use of the static resources, you can use a Ktor interceptor.
+
+```kotlin
+class DocFilesModule(
+    private val namespace: String
+) : RoutedModule {
+
+    val settings by setting<Settings>(namespace)
+
+    val publicPathPattern = Regex("/api/content/[a-z]{2}/(welcome|hardware|software)/.*")
+
+    override fun onInstallStatic(route: Any) {
+        route as Route
+        with(route) {
+            static("/api/$namespace") {
+
+                intercept(ApplicationCallPipeline.Call) {
+                    val protected = ! call.request.path().matches(publicPathPattern)
+                    if (protected && ! call.executor().hasRole(PortalRoles.simplexionDeveloper)) {
+                        throw Unauthorized()
+                    } else {
+                        proceed()
+                    }
+                }
+
+                staticRootFolder = File(settings.root)
+                files(".")
+            }
+        }
+    }
+}
+```
+

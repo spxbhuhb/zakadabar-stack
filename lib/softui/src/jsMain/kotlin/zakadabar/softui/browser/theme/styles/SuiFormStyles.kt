@@ -15,7 +15,10 @@ import zakadabar.softui.browser.theme.base.BoxShadows
 import zakadabar.softui.browser.theme.base.Typography
 import zakadabar.softui.browser.theme.base.pxToRem
 
-class SuiFormStyles : ZkFormStyles() {
+open class SuiFormStyles : ZkFormStyles() {
+
+    open var fieldPadding by cssParameter { ".6em 1.4em .5em .4em" }
+    open var hoverColor by cssParameter { theme.infoColor.alpha(0.1) }
 
     override val section by cssClass {
         + Display.flex
@@ -91,7 +94,7 @@ class SuiFormStyles : ZkFormStyles() {
         fontSize = theme.fontSize
         fontWeight = 300.weight
         lineHeight = "1.3"
-        padding = ".6em 1.4em .5em .4em"
+        padding = fieldPadding
         width = 100.percent
         maxWidth = 100.percent
         margin = 0.px
@@ -121,7 +124,7 @@ class SuiFormStyles : ZkFormStyles() {
 
         on(":hover:not(:disabled):not(:focus)") {
             color = theme.hoverTextColor
-            backgroundColor = theme.infoColor.alpha(0.1)
+            backgroundColor = hoverColor
         }
 
         on(":focus") {
