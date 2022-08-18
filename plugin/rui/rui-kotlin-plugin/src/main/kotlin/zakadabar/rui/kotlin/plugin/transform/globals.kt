@@ -18,6 +18,13 @@ const val RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH = 1
 const val RUI_BLOCK_ARGUMENT_COUNT = 2
 const val RUI_BLOCK_ARGUMENT_INDEX_FRAGMENTS = 1
 
+/**
+ * Bridge type parameter for classes.
+ */
+const val RUI_FRAGMENT_TYPE_INDEX_BRIDGE = 0
+
+const val RUI_BT = "BT" // type parameter for fragment, Bridge Type
+
 const val RUI_CREATE = "ruiCreate"
 const val RUI_MOUNT = "ruiMount"
 const val RUI_PATCH = "ruiPatch"

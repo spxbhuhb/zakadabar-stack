@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
-    <list size="2">
+    <list size="3">
       <item index="0" class="java.lang.String" itemvalue="zakadabar.core.util.PublicApi" />
       <item index="1" class="java.lang.String" itemvalue="zakadabar.rui.runtime.Rui" />
+      <item index="2" class="java.lang.String" itemvalue="zakadabar.rui.runtime.RuiPublicApi" />
     </list>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />

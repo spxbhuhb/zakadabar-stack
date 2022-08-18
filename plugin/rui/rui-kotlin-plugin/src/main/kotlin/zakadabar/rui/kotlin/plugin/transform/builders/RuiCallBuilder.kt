@@ -15,20 +15,15 @@ import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
 import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionExpressionImpl
-import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrSetFieldImpl
+import org.jetbrains.kotlin.ir.types.defaultType
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
-import org.jetbrains.kotlin.ir.util.defaultType
-import org.jetbrains.kotlin.ir.util.functions
 import org.jetbrains.kotlin.name.Name
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui
 import zakadabar.rui.kotlin.plugin.model.RuiCall
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.model.RuiExpression
-import zakadabar.rui.kotlin.plugin.transform.RUI_FRAGMENT_ARGUMENT_COUNT
-import zakadabar.rui.kotlin.plugin.transform.RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER
-import zakadabar.rui.kotlin.plugin.transform.RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH
-import zakadabar.rui.kotlin.plugin.transform.RuiClassSymbols
+import zakadabar.rui.kotlin.plugin.transform.*
 import zakadabar.rui.kotlin.plugin.util.RuiCompilationException
 import zakadabar.rui.kotlin.plugin.util.traceLabel
 
@@ -61,10 +56,12 @@ class RuiCallBuilder(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
             symbolMap.defaultType,
             symbolMap.primaryConstructor.symbol,
-            0, 0,
+            typeArgumentsCount = 1, // bridge type
+            constructorTypeArgumentsCount = 0,
             ruiCall.valueArguments.size + RUI_FRAGMENT_ARGUMENT_COUNT // +2 = adapter + external patch
         ).also { constructorCall ->
 
+            constructorCall.putTypeArgument(RUI_FRAGMENT_TYPE_INDEX_BRIDGE, classBoundBridgeType.defaultType)
             constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, irGet(ruiClassBuilder.adapter))
             constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH, buildExternalPatch())
 
@@ -94,7 +91,7 @@ class RuiCallBuilder(
 
             val externalPatchIt = function.addValueParameter {
                 name = Name.identifier("it")
-                type = ruiContext.ruiFragmentType
+                type = classBoundFragmentType
             }
 
             function.body = buildExternalPatchBody(function, externalPatchIt)
@@ -102,7 +99,7 @@ class RuiCallBuilder(
 
         return IrFunctionExpressionImpl(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            ruiContext.ruiExternalPatchType,
+            classBoundExternalPatchType,
             function,
             IrStatementOrigin.LAMBDA
         )
@@ -185,7 +182,7 @@ class RuiCallBuilder(
                 irConst(1 shl (index % 32))
             )
 
-            traceStateChangeAfter(externalPatchIt, index, traceData, newValue)
+            traceStateChangeAfter(index, traceData, newValue)
         }
     }
 
@@ -196,7 +193,7 @@ class RuiCallBuilder(
         return irTemporary(irTraceGet(index, irImplicitAs(symbolMap.defaultType, irGet(externalPatchIt))))
     }
 
-    fun IrBlockBuilder.traceStateChangeAfter(externalPatchIt: IrValueDeclaration, index: Int, traceData: IrVariable?, newValue: IrVariable) {
+    fun IrBlockBuilder.traceStateChangeAfter(index: Int, traceData: IrVariable?, newValue: IrVariable) {
         if (traceData == null) return
 
         val property = symbolMap.getStateVariable(index).property
@@ -209,30 +206,6 @@ class RuiCallBuilder(
         concat.addArgument(irGet(newValue))
 
         + irPrintln(concat)
-    }
-
-    override fun irCallExternalPatch(function : IrFunction, builder: IrBlockBodyBuilder) {
-        builder.run {
-            // FIXME check receiver logic when having deeper structures
-            val fragment = irTemporary(
-                irGet(
-                    propertyBuilder.type,
-                    IrGetValueImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, function.dispatchReceiverParameter!!.symbol),
-                    propertyBuilder.getter.symbol
-                )
-            )
-
-            val function1Type = irBuiltIns.functionN(1)
-            val invoke = function1Type.functions.first { it.name.identifier == "invoke" }.symbol
-
-            + irCallOp(
-                invoke,
-                type = irBuiltIns.unitType,
-                dispatchReceiver = irCallOp(symbolMap.externalPatchGetter.symbol, function1Type.defaultType, irGet(fragment)),
-                origin = IrStatementOrigin.INVOKE,
-                argument = irGet(fragment)
-            )
-        }
     }
 
 }

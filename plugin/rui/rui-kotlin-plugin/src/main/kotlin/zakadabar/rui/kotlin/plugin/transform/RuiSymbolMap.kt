@@ -22,7 +22,8 @@ class RuiSymbolMap(
 
     private val classSymbolMaps = mutableMapOf<FqName, RuiClassSymbols>()
 
-    private val invalid = RuiClassSymbols(ruiContext.ruiFragmentClass.owner, false)
+    private val invalid : RuiClassSymbols// FIXME= RuiClassSymbols(ruiContext.ruiFragmentClass.owner, false)
+        get() = TODO()
 
     fun getSymbolMap(fqName: FqName): RuiClassSymbols =
         classSymbolMaps[fqName] ?: loadClass(fqName)
@@ -65,8 +66,11 @@ class RuiClassSymbols(
     lateinit var externalPatchGetter: IrSimpleFunction
 
     lateinit var create: IrSimpleFunction
+    lateinit var mount: IrSimpleFunction
     lateinit var patch: IrSimpleFunction
     lateinit var dispose: IrSimpleFunction
+    lateinit var unmount: IrSimpleFunction
+
 
     val defaultType
         get() = irClass.defaultType
@@ -91,11 +95,17 @@ class RuiClassSymbols(
 
         stateVariables.sortBy { it.index }
 
-        if (! ::externalPatch.isInitialized ) {
+        if (! ::externalPatch.isInitialized) {
             throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS, additionalInfo = "missing $RUI_EXTERNAL_PATCH property")
         }
 
-        if (! ::create.isInitialized || ! ::patch.isInitialized || ! ::dispose.isInitialized) {
+        if (
+            ! ::create.isInitialized ||
+            ! ::mount.isInitialized ||
+            ! ::patch.isInitialized ||
+            ! ::mount.isInitialized ||
+            ! ::dispose.isInitialized
+        ) {
             throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS, additionalInfo = "missing default Rui method(s)")
         }
     }
@@ -108,7 +118,9 @@ class RuiClassSymbols(
 
         when (it.name.identifier) {
             RUI_CREATE -> create = it
+            RUI_MOUNT -> mount = it
             RUI_PATCH -> patch = it
+            RUI_UNMOUNT -> unmount = it
             RUI_DISPOSE -> dispose = it
         }
     }

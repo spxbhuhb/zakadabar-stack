@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionExpressionImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
+import org.jetbrains.kotlin.ir.types.classifierOrNull
 import org.jetbrains.kotlin.ir.util.*
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtModifierListOwner
@@ -103,8 +104,12 @@ class RuiFunctionVisitor(
 
         val adapter = function.valueParameters.first()
 
-        if (adapter.type != ruiContext.ruiAdapterType && !adapter.type.superTypes().contains(ruiContext.ruiAdapterType)) {
-            return report("${expression.symbol} first parameter is not a RuiAdapter")
+        val classifier = ruiContext.ruiAdapterType.classifierOrNull
+
+        if (adapter.type.classifierOrNull != classifier) {
+            if (adapter.type.superTypes().firstOrNull { it.classifierOrNull == classifier } == null) {
+                return report("${expression.symbol} first parameter is not a RuiAdapter")
+            }
         }
 
         val ruiClass: RuiClass
@@ -125,7 +130,7 @@ class RuiFunctionVisitor(
                 0, 0, 2
             ).also { call ->
                 call.putValueArgument(0, buildGetAdapter(function))
-                call.putValueArgument(1, buildExternalPatch(function.symbol))
+                call.putValueArgument(1, buildExternalPatch(ruiClass, function.symbol))
             }
 
         }
@@ -143,7 +148,7 @@ class RuiFunctionVisitor(
             function.valueParameters.first().symbol
         )
 
-    fun buildExternalPatch(parent: IrSimpleFunctionSymbol): IrExpression {
+    fun buildExternalPatch(ruiClass: RuiClass, parent: IrSimpleFunctionSymbol): IrExpression {
         val function = irFactory.buildFun {
             name = Name.special("<anonymous>")
             origin = IrDeclarationOrigin.LOCAL_FUNCTION_FOR_LAMBDA
@@ -163,7 +168,7 @@ class RuiFunctionVisitor(
 
         return IrFunctionExpressionImpl(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            ruiContext.ruiExternalPatchType,
+            ruiClass.builder.classBoundExternalPatchType,
             function,
             IrStatementOrigin.LAMBDA
         )

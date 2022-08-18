@@ -3,25 +3,27 @@
  */
 package zakadabar.rui.kotlin.plugin.transform.builders
 
-import org.jetbrains.kotlin.backend.common.ir.addFakeOverrides
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
 import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.ir.builders.*
 import org.jetbrains.kotlin.ir.builders.declarations.*
 import org.jetbrains.kotlin.ir.declarations.*
+import org.jetbrains.kotlin.ir.declarations.impl.IrTypeParameterImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrDelegatingConstructorCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrInstanceInitializerCallImpl
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.impl.IrAnonymousInitializerSymbolImpl
+import org.jetbrains.kotlin.ir.symbols.impl.IrTypeParameterSymbolImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrValueParameterSymbolImpl
-import org.jetbrains.kotlin.ir.types.IrTypeSystemContextImpl
+import org.jetbrains.kotlin.ir.types.defaultType
 import org.jetbrains.kotlin.ir.types.impl.IrSimpleTypeImpl
 import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.*
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
+import org.jetbrains.kotlin.types.Variance
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.transform.*
@@ -48,8 +50,13 @@ class RuiClassBuilder(
 
     lateinit var adapter: IrValueParameter
 
+    val adapterPropertyBuilder : RuiPropertyBuilder
+    val externalPatchPropertyBuilder : RuiPropertyBuilder
+
     val create: IrSimpleFunction
+    val mount: IrSimpleFunction
     val patch: IrSimpleFunction
+    val unmount: IrSimpleFunction
     val dispose: IrSimpleFunction
 
     override val irClass: IrClass = irFactory.buildClass {
@@ -63,23 +70,47 @@ class RuiClassBuilder(
     }
 
     init {
+        initTypeParameters()
 
         irClass.parent = irFunction.file
-        irClass.superTypes = listOf(ruiContext.ruiFragmentType)
+        irClass.superTypes = listOf(ruiContext.ruiFragmentClass.typeWith(irClass.typeParameters.first().defaultType))
         irClass.metadata = irFunction.metadata
 
         name = irClass.name.identifier
         fqName = irClass.kotlinFqName
 
         thisReceiver = initThisReceiver()
+
+        adapterPropertyBuilder = RuiPropertyBuilder(ruiClass, Name.identifier(RUI_ADAPTER), classBoundAdapterType, isVar = false)
+        externalPatchPropertyBuilder = RuiPropertyBuilder(ruiClass, Name.identifier(RUI_EXTERNAL_PATCH), classBoundExternalPatchType, isVar = false)
+
         constructor = initConstructor()
         initializer = initInitializer()
 
         create = initRuiFunction(RUI_CREATE, ruiContext.ruiCreate)
+        mount = initRuiFunction(RUI_MOUNT, ruiContext.ruiMount)
         patch = initRuiFunction(RUI_PATCH, ruiContext.ruiPatch)
         dispose = initRuiFunction(RUI_DISPOSE, ruiContext.ruiDispose)
+        unmount = initRuiFunction(RUI_UNMOUNT, ruiContext.ruiUnmount)
+    }
 
-        irClass.addFakeOverrides(IrTypeSystemContextImpl(irContext.irBuiltIns))
+    private fun initTypeParameters() {
+        irClass.typeParameters = listOf(
+            IrTypeParameterImpl(
+                SYNTHETIC_OFFSET,
+                SYNTHETIC_OFFSET,
+                IrDeclarationOrigin.BRIDGE_SPECIAL,
+                IrTypeParameterSymbolImpl(),
+                Name.identifier(RUI_BT),
+                index = 0,
+                isReified = false,
+                variance = Variance.IN_VARIANCE,
+                factory = irFactory
+            ).also {
+                it.parent = irClass
+                it.superTypes = listOf(irBuiltIns.anyNType)
+            }
+        )
     }
 
     private fun initThisReceiver(): IrValueParameter {
@@ -130,7 +161,7 @@ class RuiClassBuilder(
 
         val ruiExternalPatch = constructor.addValueParameter {
             name = Name.identifier(RUI_EXTERNAL_PATCH)
-            type = ruiContext.ruiExternalPatchType
+            type = classBoundExternalPatchType
         }
 
         constructor.body = irFactory.createBlockBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET).apply {
@@ -138,14 +169,14 @@ class RuiClassBuilder(
             statements += IrDelegatingConstructorCallImpl.fromSymbolOwner(
                 SYNTHETIC_OFFSET,
                 SYNTHETIC_OFFSET,
-                ruiContext.ruiFragmentType,
-                ruiContext.ruiFragmentClass.constructors.first(),
+                irBuiltIns.anyType,
+                irBuiltIns.anyClass.constructors.first(),
                 typeArgumentsCount = 0,
-                valueArgumentsCount = RUI_FRAGMENT_ARGUMENT_COUNT
-            ).also {
-                it.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, irGet(adapter))
-                it.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH, irGet(ruiExternalPatch))
-            }
+                valueArgumentsCount = 0
+            )
+
+            statements += adapterPropertyBuilder.irSetValue(irGet(adapter))
+            statements += externalPatchPropertyBuilder.irSetValue(irGet(ruiExternalPatch))
 
             statements += IrInstanceInitializerCallImpl(
                 SYNTHETIC_OFFSET,
@@ -187,6 +218,13 @@ class RuiClassBuilder(
                 type = irClass.defaultType
             }
 
+            if (functionName == RUI_MOUNT || functionName == RUI_UNMOUNT) {
+                function.addValueParameter {
+                    name = Name.identifier("bridge")
+                    type = ruiContext.ruiBridgeType
+                }
+            }
+
             irClass.declarations += function
         }
 
@@ -205,7 +243,9 @@ class RuiClassBuilder(
         rootBuilder.build()
 
         buildRuiCall(create, rootBuilder, rootBuilder.symbolMap.create)
+        buildRuiCall(mount, rootBuilder, rootBuilder.symbolMap.mount)
         buildRuiCall(patch, rootBuilder, rootBuilder.symbolMap.patch)
+        buildRuiCall(unmount, rootBuilder, rootBuilder.symbolMap.unmount)
         buildRuiCall(dispose, rootBuilder, rootBuilder.symbolMap.dispose)
 
         // The initializer has to be the last, so it will be able to access all properties
@@ -213,7 +253,7 @@ class RuiClassBuilder(
     }
 
     fun traceInit() {
-        if (!ruiContext.withTrace) return
+        if (! ruiContext.withTrace) return
         initializer.body.statements += irPrintln(traceLabel(ruiClass.name, "init"))
     }
 
@@ -221,20 +261,24 @@ class RuiClassBuilder(
         function.body = DeclarationIrBuilder(irContext, function.symbol).irBlockBody {
             traceRuiCall(function)
 
-            if (callee.name.identifier == RUI_PATCH) {
-                rootBuilder.irCallExternalPatch(function, this)
-            }
+            val symbolMap = rootBuilder.symbolMap
 
-            + irCall(
-                callee.symbol,
-                dispatchReceiver = rootBuilder.propertyBuilder.irGetValue(receiver = function.irGetReceiver())
-            )
+            when (callee.name.identifier) {
+                RUI_CREATE -> rootBuilder.irRuiCall(symbolMap.create, function, this)
+                RUI_MOUNT -> rootBuilder.irRuiCallWithBridge(symbolMap.mount, function, this)
+                RUI_PATCH -> {
+                    rootBuilder.irCallExternalPatch(function, this)
+                    rootBuilder.irRuiCall(symbolMap.patch, function, this)
+                }
+                RUI_UNMOUNT -> rootBuilder.irRuiCallWithBridge(symbolMap.unmount, function, this)
+                RUI_DISPOSE -> rootBuilder.irRuiCall(symbolMap.dispose, function, this)
+            }
         }
     }
 
     private fun IrBlockBodyBuilder.traceRuiCall(function: IrSimpleFunction) {
 
-        if (!ruiContext.withTrace) return
+        if (! ruiContext.withTrace) return
 
         val name = function.name.identifier
 

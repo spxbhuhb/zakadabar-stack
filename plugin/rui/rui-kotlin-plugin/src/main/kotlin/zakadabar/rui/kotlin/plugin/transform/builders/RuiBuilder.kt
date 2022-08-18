@@ -5,6 +5,10 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
+
+/*
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ */
 /*
  * Copyright 2020 The Android Open Source Project
  *
@@ -36,10 +40,7 @@ import org.jetbrains.kotlin.ir.symbols.IrReturnTargetSymbol
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.IrValueSymbol
 import org.jetbrains.kotlin.ir.symbols.impl.IrVariableSymbolImpl
-import org.jetbrains.kotlin.ir.types.IrType
-import org.jetbrains.kotlin.ir.types.classOrNull
-import org.jetbrains.kotlin.ir.types.classifierOrFail
-import org.jetbrains.kotlin.ir.types.typeWith
+import org.jetbrains.kotlin.ir.types.*
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.ir.util.defaultType
 import org.jetbrains.kotlin.ir.util.functions
@@ -75,6 +76,18 @@ interface RuiBuilder {
 
     val irBuiltIns
         get() = irContext.irBuiltIns
+
+    val classBoundBridgeType: IrTypeParameter
+        get() = irClass.typeParameters.first()
+
+    val classBoundFragmentType: IrType
+        get() = ruiContext.ruiFragmentClass.typeWith(classBoundBridgeType.defaultType)
+
+    val classBoundExternalPatchType: IrType
+        get() = irBuiltIns.functionN(1).typeWith(classBoundFragmentType, irBuiltIns.unitType)
+
+    val classBoundAdapterType: IrType
+        get() = ruiContext.ruiAdapterClass.typeWith(classBoundBridgeType.defaultType)
 
     // set the bit at a certain index
     fun Int.withBit(index: Int, value: Boolean): Int {
