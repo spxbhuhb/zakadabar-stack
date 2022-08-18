@@ -7,18 +7,13 @@ import zakadabar.rui.runtime.RuiFragment
 
 class RuiTestEvent(
     val type: RuiTestEvents,
-    val fragment: RuiFragment,
+    val fragment: RuiFragment<*>,
     vararg val arguments : Any
 ) {
 
     fun dump() : String {
-        val name = if (fragment is WithName) {
-            fragment.name
-        } else {
-            fragment::class.simpleName ?: ""
-        }
-
-        return "${type.name.padEnd(15, ' ')}${name.padEnd(20, ' ') ?: ""} ${arguments.joinToString(" ")}"
+        val name = fragment::class.simpleName ?: ""
+        return "${type.name.padEnd(15, ' ')}${name.padEnd(20, ' ')} ${arguments.joinToString(" ")}"
     }
 
 }

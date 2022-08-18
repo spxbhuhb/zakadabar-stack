@@ -3,21 +3,32 @@
  */
 package zakadabar.rui.runtime
 
-class RuiLoop<T>(
-    ruiAdapter: RuiAdapter,
-    ruiPatchState : (it : RuiFragment) -> Unit,
-    val makeIterator : () -> Iterator<T>,
-    val makeFragment : () -> RuiFragment
-) : RuiFragment(ruiAdapter, ruiPatchState) {
+class RuiLoop<BT,IT>(
+    override val ruiAdapter: RuiAdapter<BT>,
+    override val ruiExternalPatch: (it: RuiFragment<BT>) -> Unit,
+    val makeIterator : () -> Iterator<IT>,
+    val makeFragment : () -> RuiFragment<BT>
+) : RuiFragment<BT> {
 
-    var loopVariable : T? = null
+    var loopVariable : IT? = null
 
-    val fragments = mutableListOf<RuiFragment>()
+    val fragments = mutableListOf<RuiFragment<BT>>()
+
+    lateinit var placeholder: RuiBridge<BT>
 
     override fun ruiCreate() {
         for (loopVariable in makeIterator()) {
             this.loopVariable = loopVariable
             fragments.add(makeFragment())
+        }
+    }
+
+    override fun ruiMount(bridge: RuiBridge<BT>) {
+        placeholder = ruiAdapter.createPlaceholder()
+        bridge.add(placeholder)
+
+        for (fragment in fragments) {
+            fragment.ruiMount(placeholder)
         }
     }
 
@@ -30,7 +41,7 @@ class RuiLoop<T>(
                 val f = makeFragment()
                 fragments.add(f)
                 f.ruiCreate()
-                // FIXME f.ruiMount()
+                f.ruiMount(placeholder)
             } else {
                 fragments[index].ruiPatch()
             }
@@ -38,10 +49,17 @@ class RuiLoop<T>(
         }
         while (index < fragments.size) {
             val f = fragments.removeLast()
-            f.ruiUnmount()
+            f.ruiUnmount(placeholder)
             f.ruiDispose()
             index ++
         }
+    }
+
+    override fun ruiUnmount(bridge : RuiBridge<BT>) {
+        for (fragment in fragments) {
+            fragment.ruiUnmount(placeholder)
+        }
+        bridge.remove(placeholder)
     }
 
     override fun ruiDispose() {

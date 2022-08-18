@@ -4,38 +4,46 @@
 package zakadabar.rui.runtime.testing
 
 import zakadabar.rui.runtime.RuiAdapter
-import zakadabar.rui.runtime.RuiAnchor
+import zakadabar.rui.runtime.RuiBridge
 import zakadabar.rui.runtime.RuiFragment
 
 open class RuiTestEmptyFragment(
-    ruiAdapter: RuiAdapter
-) : RuiFragment(ruiAdapter, {  }), WithName {
+    override val ruiAdapter: RuiAdapter<TestNode>,
+    override val ruiExternalPatch: (it: RuiFragment<TestNode>) -> Unit = {  }
+) : RuiFragment<TestNode>, RuiBridge<TestNode> {
 
-    override val name = "EMPTY"
+    override val receiver = TestNode()
 
-    init {
-        @Suppress("LeakingThis")
-        RuiTestEvents.Init.report(this)
+    override fun remove(child: RuiBridge<TestNode>) {
+        throw IllegalStateException("There should be no children for a empty fragment.")
+    }
+
+    override fun replace(oldChild: RuiBridge<TestNode>, newChild: RuiBridge<TestNode>) {
+        throw IllegalStateException("There should be no children for a empty fragment.")
+    }
+
+    override fun add(child: RuiBridge<TestNode>) {
+        throw IllegalStateException("There should be no children for a empty fragment.")
+    }
+
+    override fun ruiMount(bridge: RuiBridge<TestNode>) {
+        bridge.add(this)
     }
 
     override fun ruiCreate() {
-        RuiTestEvents.Create.report(this)
-    }
 
-    override fun ruiMount(anchor : RuiAnchor) {
-        RuiTestEvents.Mount.report(this, "anchor=$anchor")
-        super.ruiCreate()
     }
 
     override fun ruiPatch() {
-        RuiTestEvents.Patch.report(this)
+
     }
 
-    override fun ruiUnmount() {
-        RuiTestEvents.Unmount.report(this)
+    override fun ruiUnmount(bridge : RuiBridge<TestNode>) {
+
     }
 
     override fun ruiDispose() {
-        RuiTestEvents.Dispose.report(this)
+
     }
+
 }

@@ -8,7 +8,7 @@ package zakadabar.rui.runtime
  *
  * **IMPORTANT** variables declared outside the block are **NOT** reactive
  */
-fun rui(block : (ruiAdapter : RuiAdapter) -> Unit) {
+fun rui(block : (ruiAdapter : RuiAdapter<*>) -> Unit) {
     block(RuiAdapterRegistry.adapterFor())
 }
 
@@ -19,6 +19,6 @@ fun rui(block : (ruiAdapter : RuiAdapter) -> Unit) {
  *
  * **IMPORTANT** variables declared outside the block are **NOT** reactive
  */
-fun rui(ruiAdapter : RuiAdapter, block : (ruiAdapter : RuiAdapter) -> Unit) {
+fun <BT> rui(ruiAdapter : RuiAdapter<BT>, block : (ruiAdapter : RuiAdapter<BT>) -> Unit) {
     block(ruiAdapter)
 }

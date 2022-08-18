@@ -12,7 +12,7 @@ object RuiAdapterRegistry {
     }
 
     @Suppress("unused") // used by generated code
-    fun adapterFor(vararg args : Any?) : RuiAdapter {
+    fun adapterFor(vararg args : Any?) : RuiAdapter<*> {
         for (factory in factories) {
             factory.accept(*args)?.let {
                 return it

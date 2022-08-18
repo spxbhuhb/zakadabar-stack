@@ -3,14 +3,18 @@
  */
 package zakadabar.rui.runtime.test.manual
 
+import zakadabar.rui.runtime.testing.RuiTestBridge
 import kotlin.test.Test
 
 class ManualTest {
 
     @Test
     fun branchTest() {
-        val c = TestBranch("<root>")
+        val root = RuiTestBridge()
+
+        val c = Branch()
         c.ruiCreate()
+        c.ruiMount(root)
 
         fun v(value : Int) {
             c.v0 = value

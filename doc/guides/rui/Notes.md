@@ -1,0 +1,37 @@
+# Notes
+
+## Bridge dependent and bridge independent fragments
+
+A bridge independent fragment is one that does not depend on the actual type
+its bridge uses. On the other hand, a bridge dependent fragment is one
+that uses the bridge in some very specific manner.
+
+For example `RuiBlock` is a bridge independent fragment. It does not care
+about what goes on, it just has a few children, and they will handle the
+bridging themselves.
+
+`Text` fragments are typically bridge dependent because each platform has its
+own way to add constant text to the UI. In browsers for example you use 
+`document.createTextNode`.
+
+Bridge independent fragments use type parameter for the bridge receiver type:
+
+```kotlin
+open class RuiBlock<BT>(
+    override val ruiAdapter: RuiAdapter<BT>,
+    vararg val fragments: RuiFragment<BT>
+) : RuiFragment<BT> {
+    // ...
+}
+```
+
+
+## Placeholders
+
+A placeholder is an anchor the fragment uses to add/remove its children. We cannot 
+just add and then replace fragments because it is possible that the selected 
+fragment is a block or a loop. Those add an unknown number of children, thus simple
+replace is impossible. For browsers the placeholder may be a simple `Node` 
+(Svelte uses a `Text`), for Android an actual Placeholder view exists.
+
+Placeholders are created by the `RuiAdapter.createPlaceholder` function.

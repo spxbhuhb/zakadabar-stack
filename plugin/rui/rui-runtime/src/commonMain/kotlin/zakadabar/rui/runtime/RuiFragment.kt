@@ -18,16 +18,18 @@ package zakadabar.rui.runtime
  * The parameter of [ruiExternalPatch] is the fragment itself. I've decided to go with a
  * parameter instead of an extension function to make code generation easier (I think it
  * is easier this way, isn't it?)
+ *
+ * @param BT Bridge type.
  */
-open class RuiFragment(
-    val ruiAdapter : RuiAdapter,
-    val ruiExternalPatch : (it : RuiFragment) -> Unit
-) {
+interface RuiFragment<BT> {
 
-    open fun ruiCreate() {  }
-    open fun ruiMount(anchor : RuiAnchor) {  }
-    open fun ruiPatch() {  }
-    open fun ruiUnmount() {  }
-    open fun ruiDispose() {  }
+    val ruiAdapter : RuiAdapter<BT>
+    val ruiExternalPatch : (it : RuiFragment<BT>) -> Unit
+
+    fun ruiCreate()
+    fun ruiMount(bridge : RuiBridge<BT>)
+    fun ruiPatch()
+    fun ruiUnmount(bridge: RuiBridge<BT>)
+    fun ruiDispose()
 
 }

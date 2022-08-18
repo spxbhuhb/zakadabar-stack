@@ -4,9 +4,6 @@
 package zakadabar.rui.runtime.testing
 
 enum class RuiTestEvents {
-    Insert,
-    Remove,
-
     Init,
     Create,
     Mount,

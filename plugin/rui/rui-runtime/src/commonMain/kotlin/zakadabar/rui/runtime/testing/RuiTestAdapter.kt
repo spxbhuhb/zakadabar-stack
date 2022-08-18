@@ -4,28 +4,20 @@
 package zakadabar.rui.runtime.testing
 
 import zakadabar.rui.runtime.RuiAdapter
+import zakadabar.rui.runtime.RuiBridge
 import zakadabar.rui.runtime.RuiFragment
-import zakadabar.rui.runtime.RuiFragmentFactory
 
-class RuiTestAdapter : RuiAdapter {
+open class RuiTestAdapter : RuiAdapter<TestNode> {
 
     val events = mutableListOf<RuiTestEvent>()
 
-    val fragments = mutableListOf<RuiFragment>()
+    val fragments = mutableListOf<RuiFragment<TestNode>>()
 
-    override fun insert(fragment: RuiFragment) {
-        events += RuiTestEvent(RuiTestEvents.Insert, fragment)
+    override fun createPlaceholder(): RuiBridge<TestNode> {
+        return RuiTestBridge()
     }
 
-    override fun remove(fragment: RuiFragment) {
-        events += RuiTestEvent(RuiTestEvents.Remove, fragment)
-    }
-
-    override val emptyFragmentFactory = RuiFragmentFactory { adapter: RuiAdapter, anchor: RuiFragment? ->
-        RuiTestEmptyFragment(adapter)
-    }
-
-    fun clear() {
+    open fun clear() {
         events.clear()
     }
 

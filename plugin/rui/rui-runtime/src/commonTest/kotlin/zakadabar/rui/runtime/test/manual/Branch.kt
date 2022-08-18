@@ -3,15 +3,14 @@
  */
 package zakadabar.rui.runtime.test.manual
 
-import zakadabar.rui.runtime.RuiAdapter
 import zakadabar.rui.runtime.RuiFragment
+import zakadabar.rui.runtime.RuiFragmentFactory
 import zakadabar.rui.runtime.RuiWhen
 import zakadabar.rui.runtime.testing.*
 
+
 @Suppress("JoinDeclarationAndAssignment", "unused")
-class NonOptimizedBranch(
-    override val name: String = "<root>"
-) : RuiC1(RuiTestAdapter), WithName {
+class Branch: RuiC1(RuiTestAdapter(), { }) {
 
     var v0: Int = 1
 
@@ -21,97 +20,45 @@ class NonOptimizedBranch(
         ruiDirty0 = ruiDirty0 or mask
     }
 
-    override val fragment0 = object : RuiTestWhen(ruiAdapter) {
+    val ruiBranch3: RuiFragmentFactory<TestNode, RuiT1<TestNode>>
+    val ruiBranch4: RuiFragmentFactory<TestNode, RuiT1<TestNode>>
+    val ruiBranch5: RuiFragmentFactory<TestNode, RuiTestEmptyFragment>
 
-        override var ruiFragment = ruiSelect()
-
-        override fun ruiSelect(): RuiFragment =
-            when (v0) {
-                1 -> ruiBranch3
-                2 -> ruiBranch4
-                else -> ruiBranch5
-            }
-
-        val ruiBranch3 = object : RuiT1(ruiAdapter, v0 + 10) {
-            override fun ruiPatch() {
-                if (ruiDirty0 and 1 != 0) {
-                    this.p0 = v0 + 10
-                    ruiInvalidate0(1)
-                }
-                super.ruiPatch()
-            }
-        }
-
-        val ruiBranch4 = object : RuiT1(ruiAdapter, v0 + 20) {
-            override fun ruiPatch() {
-                if (ruiDirty0 and 1 != 0) {
-                    this.p0 = v0 + 20
-                    ruiInvalidate0(1)
-                }
-                super.ruiPatch()
-            }
-        }
-
-        val ruiBranch5 = RuiTestEmptyFragment(ruiAdapter)
-
-    }
-
-}
-
-class RuiFragmentAndPatch<T : RuiFragment>(
-    val fragment: T,
-    val patch: (fragment: T) -> Unit
-)
-
-class RuiOptimizedWhen(
-    ruiAdapter: RuiAdapter,
-    val select: () -> RuiFragmentAndPatch<*>
-) : RuiWhen(ruiAdapter) {
-    override var ruiFragment: RuiFragment
-        get() = TODO("Not yet implemented")
-        set(value) {}
-
-    override fun ruiSelect(): RuiFragment {
-        TODO("Not yet implemented")
-    }
-}
-
-@Suppress("JoinDeclarationAndAssignment", "unused")
-class OptimizedBranch(
-    override val name: String = "<root>"
-) : RuiC1(RuiTestAdapter), WithName {
-
-    var v0: Int = 1
-
-    var ruiDirty0 = 0
-
-    fun ruiInvalidate0(mask: Int) {
-        ruiDirty0 = ruiDirty0 or mask
-    }
-
-    val ruiBranch3: RuiFragmentAndPatch<RuiT1>
-    val ruiBranch4: RuiFragmentAndPatch<RuiT1>
-    val ruiBranch5: RuiFragmentAndPatch<RuiTestEmptyFragment>
-    override val fragment0: RuiOptimizedWhen
+    override val fragment0: RuiFragment<TestNode>
 
     init {
-        ruiBranch3 = RuiFragmentAndPatch(RuiT1(ruiAdapter, v0 + 10)) {
-            if (ruiDirty0 and 1 != 0) {
-                it.p0 = v0 + 10
-                ruiInvalidate0(1)
-            }
+        ruiBranch3 = RuiFragmentFactory {
+            RuiT1(
+                ruiAdapter,
+                {
+                    it as RuiT1
+                    if (ruiDirty0 and 1 != 0) {
+                        it.p0 = v0 + 10
+                        ruiInvalidate0(1)
+                    }
+                },
+                v0 + 10
+            )
         }
 
-        ruiBranch4 = RuiFragmentAndPatch(RuiT1(ruiAdapter, v0 + 20)) {
-            if (ruiDirty0 and 1 != 0) {
-                it.p0 = v0 + 20
-                ruiInvalidate0(1)
-            }
+        ruiBranch4 = RuiFragmentFactory {
+            RuiT1(
+                ruiAdapter,
+                {
+                    it as RuiT1
+                    if (ruiDirty0 and 1 != 0) {
+                        it.p0 = v0 + 20
+                        ruiInvalidate0(1)
+                    }
+                },
+                v0 + 20
+            )
         }
 
-        ruiBranch5 = RuiFragmentAndPatch(RuiTestEmptyFragment(ruiAdapter)) {  }
 
-        fragment0 = RuiOptimizedWhen(ruiAdapter) {
+        ruiBranch5 = RuiFragmentFactory { RuiTestEmptyFragment(ruiAdapter) }
+
+        fragment0 = RuiWhen(ruiAdapter) {
             when (v0) {
                 1 -> ruiBranch3
                 2 -> ruiBranch4

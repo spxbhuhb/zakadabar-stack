@@ -32,9 +32,7 @@ fun eventHandlerTest() {
 fun eventHandlerFragment() {
     var i = 0
 
-    fun eventHandler(ni : Int) {
-        i = ni
+    EH1(i + 1) {
+        i = it
     }
-
-    EH1(i, ::eventHandler)
 }

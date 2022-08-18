@@ -3,6 +3,10 @@
  */
 package zakadabar.rui.runtime
 
-class RuiFragmentFactory(
-    val func: (ruiAdapter : RuiAdapter, ruiAnchor : RuiFragment?) -> RuiFragment
+/**
+ * Produces fragment. Branches, loops and higher-order functions get fragment factories
+ * to produce the necessary fragments on-demand.
+ */
+class RuiFragmentFactory<AT, FT : RuiFragment<AT>>(
+    val builder: () -> FT
 )

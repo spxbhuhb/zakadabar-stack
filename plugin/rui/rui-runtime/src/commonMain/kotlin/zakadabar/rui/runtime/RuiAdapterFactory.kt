@@ -4,5 +4,5 @@
 package zakadabar.rui.runtime
 
 abstract class RuiAdapterFactory {
-    abstract fun accept(vararg args : Any?) : RuiAdapter?
+    abstract fun accept(vararg args : Any?) : RuiAdapter<*>?
 }

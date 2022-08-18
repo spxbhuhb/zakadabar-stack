@@ -9,9 +9,7 @@ import zakadabar.rui.runtime.RuiLoop
 import zakadabar.rui.runtime.testing.*
 
 @Suppress("unused")
-class TestForLoop(
-    override val name: String = "<root>"
-) : RuiC1(RuiTestAdapter(), { }), WithName {
+class TestForLoop : RuiC1(RuiTestAdapter(), { }) {
 
     var v0 = 1
 
@@ -21,7 +19,7 @@ class TestForLoop(
         ruiDirty0 = ruiDirty0 or mask
     }
 
-    override val fragment0: RuiFragment
+    override val fragment0: RuiFragment<TestNode>
 
     init {
         fragment0 = RuiLoop(

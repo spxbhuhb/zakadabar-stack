@@ -5,19 +5,17 @@ package zakadabar.rui.runtime.testing
 
 import zakadabar.rui.runtime.Rui
 import zakadabar.rui.runtime.RuiAdapter
-import zakadabar.rui.runtime.RuiAnchor
+import zakadabar.rui.runtime.RuiBridge
 import zakadabar.rui.runtime.RuiFragment
 
 @Rui
 fun T0() { }
 
 @Suppress("unused")
-open class RuiT0(
-    ruiAdapter: RuiAdapter,
-    ruiExternalPatch : (it : RuiFragment) -> Unit
-) : RuiFragment(ruiAdapter, ruiExternalPatch), WithName {
-
-    override val name = "T0"
+open class RuiT0<BT>(
+    override val ruiAdapter: RuiAdapter<BT>,
+    override val ruiExternalPatch : (it : RuiFragment<BT>) -> Unit
+) : RuiFragment<BT> {
 
     init {
         @Suppress("LeakingThis")
@@ -28,15 +26,15 @@ open class RuiT0(
         RuiTestEvents.Create.report(this)
     }
 
-    override fun ruiMount(anchor : RuiAnchor) {
-        RuiTestEvents.Mount.report(this, "anchor=$anchor")
+    override fun ruiMount(bridge : RuiBridge<BT>) {
+        RuiTestEvents.Mount.report(this, "anchor=$bridge")
     }
 
     override fun ruiPatch() {
         RuiTestEvents.Patch.report(this)
     }
 
-    override fun ruiUnmount() {
+    override fun ruiUnmount(bridge : RuiBridge<BT>) {
         RuiTestEvents.Unmount.report(this)
     }
 
@@ -46,18 +44,17 @@ open class RuiT0(
 }
 
 @Rui
+@Suppress("unused", "FunctionName")
 fun T1(p0 : Int) {
     println("===== $$$$$ ###### TEST NOW WHAT?")
 }
 
 @Suppress("unused")
-open class RuiT1(
-    ruiAdapter: RuiAdapter,
-    ruiExternalPatch : (it : RuiFragment) -> Unit,
+open class RuiT1<BT>(
+    override val ruiAdapter: RuiAdapter<BT>,
+    override val ruiExternalPatch : (it : RuiFragment<BT>) -> Unit,
     var p0: Int
-) : RuiFragment(ruiAdapter, ruiExternalPatch), WithName {
-
-    override val name = "T1"
+) : RuiFragment<BT> {
 
     var ruiDirty0 = 0
 
@@ -75,8 +72,8 @@ open class RuiT1(
         RuiTestEvents.Create.report(this, "value=$p0")
     }
 
-    override fun ruiMount(anchor : RuiAnchor) {
-        RuiTestEvents.Mount.report(this, "anchor=$anchor")
+    override fun ruiMount(bridge : RuiBridge<BT>) {
+        RuiTestEvents.Mount.report(this, "anchor=$bridge")
     }
 
     override fun ruiPatch() {
@@ -84,7 +81,7 @@ open class RuiT1(
         ruiDirty0 = 0
     }
 
-    override fun ruiUnmount() {
+    override fun ruiUnmount(bridge : RuiBridge<BT>) {
         RuiTestEvents.Unmount.report(this)
     }
 
@@ -99,15 +96,17 @@ fun H1(@Rui builder : () -> Unit) {
 }
 
 @Suppress("unused")
-open class RuiH1(
-    ruiAdapter: RuiAdapter,
-    ruiExternalPatch : (it : RuiFragment) -> Unit,
-    @Rui builder : (ruiAdapter : RuiAdapter) -> RuiFragment
-) : RuiC1(ruiAdapter, ruiExternalPatch), WithName {
-
-    override val name = "H1"
+class RuiH1(
+    override val ruiAdapter: RuiAdapter<TestNode>,
+    override val ruiExternalPatch : (it : RuiFragment<TestNode>) -> Unit,
+    @Rui builder : (ruiAdapter : RuiAdapter<TestNode>) -> RuiFragment<TestNode>
+) : RuiC1(ruiAdapter, ruiExternalPatch) {
 
     override val fragment0 = builder(ruiAdapter)
+
+    override fun ruiMount(bridge: RuiBridge<TestNode>) {
+        fragment0.ruiMount(bridge)
+    }
 
     init {
         @Suppress("LeakingThis")
@@ -117,19 +116,19 @@ open class RuiH1(
 
 @Suppress("unused")
 abstract class RuiC1(
-    ruiAdapter: RuiAdapter,
-    ruiExternalPatch : (it : RuiFragment) -> Unit
-) : RuiFragment(ruiAdapter, ruiExternalPatch) {
+    override val ruiAdapter: RuiAdapter<TestNode>,
+    override val ruiExternalPatch : (it : RuiFragment<TestNode>) -> Unit
+) : RuiFragment<TestNode> {
 
-    abstract val fragment0 : RuiFragment
+    abstract val fragment0 : RuiFragment<TestNode>
 
     override fun ruiCreate() {
         RuiTestEvents.Create.report(this)
         fragment0.ruiCreate()
     }
 
-    override fun ruiMount(anchor : RuiAnchor) {
-        fragment0.ruiMount(anchor)
+    override fun ruiMount(bridge : RuiBridge<TestNode>) {
+        fragment0.ruiMount(bridge)
     }
 
     override fun ruiPatch() {
@@ -137,9 +136,9 @@ abstract class RuiC1(
         fragment0.ruiPatch()
     }
 
-    override fun ruiUnmount() {
+    override fun ruiUnmount(bridge : RuiBridge<TestNode>) {
         RuiTestEvents.Unmount.report(this)
-        fragment0.ruiUnmount()
+        fragment0.ruiUnmount(bridge)
     }
 
     override fun ruiDispose() {
@@ -149,17 +148,16 @@ abstract class RuiC1(
 }
 
 @Rui
+@Suppress("unused", "FunctionName")
 fun EH1(p0 : Int, eventHandler : (np0: Int) -> Unit) { }
 
 @Suppress("unused")
 class RuiEH1(
-    ruiAdapter: RuiAdapter,
-    ruiExternalPatch : (it : RuiFragment) -> Unit,
+    override val ruiAdapter: RuiAdapter<TestNode>,
+    override val ruiExternalPatch : (it : RuiFragment<TestNode>) -> Unit,
     var p0 : Int,
     var eventHandler: (np0 : Int) -> Unit,
-) : RuiFragment(ruiAdapter, ruiExternalPatch), WithName {
-
-    override val name = "EH1"
+) : RuiFragment<TestNode> {
 
     init {
         if (ruiAdapter is RuiTestAdapter) {
@@ -172,6 +170,25 @@ class RuiEH1(
     @Suppress("unused")
     fun ruiInvalidate0(mask: Int) {
         ruiDirty0 = ruiDirty0 or mask
+    }
+
+    override fun ruiCreate() {
+        RuiTestEvents.Create.report(this)
+    }
+
+    override fun ruiMount(bridge : RuiBridge<TestNode>) {
+    }
+
+    override fun ruiPatch() {
+        RuiTestEvents.Patch.report(this)
+    }
+
+    override fun ruiUnmount(bridge : RuiBridge<TestNode>) {
+        RuiTestEvents.Unmount.report(this)
+    }
+
+    override fun ruiDispose() {
+        RuiTestEvents.Dispose.report(this)
     }
 
 }

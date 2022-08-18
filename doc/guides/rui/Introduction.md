@@ -68,7 +68,7 @@ is executed whenever the state changes.
 
 **Very important** you cannot define variables, functions etc. in the 
 *rendering* (except in event handlers, see later). This is a design decision we've 
-made to avoid confusion.
+made to avoid confusion. The compiler will report an error if you try to do so.
 
 Rui automatically finds the *boundary*: the first call to another Rui component
 function marks the *boundary*.
@@ -223,7 +223,7 @@ fun Counter() {
 }
 ```
 
-## Transforms: Intro
+## Transforms: Introduction
 
 Transforms are little helper functions that let you change the state of a 
 component with clear, easy to read code.

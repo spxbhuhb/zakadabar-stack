@@ -8,7 +8,7 @@ import zakadabar.rui.runtime.RuiAdapterFactory
 
 object RuiTestAdapterFactory : RuiAdapterFactory() {
 
-    override fun accept(vararg args: Any?): RuiAdapter {
+    override fun accept(vararg args: Any?): RuiAdapter<TestNode> {
         return RuiTestAdapter()
     }
 
