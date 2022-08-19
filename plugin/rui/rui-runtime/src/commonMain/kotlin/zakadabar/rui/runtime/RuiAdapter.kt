@@ -4,5 +4,8 @@
 package zakadabar.rui.runtime
 
 interface RuiAdapter<BT> {
+
+    val rootBridge : RuiBridge<BT>
+
     fun createPlaceholder() : RuiBridge<BT>
 }

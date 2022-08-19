@@ -20,10 +20,12 @@ import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.ir.util.defaultType
 import org.jetbrains.kotlin.ir.util.dumpKotlinLike
+import org.jetbrains.kotlin.ir.util.getPropertyGetter
 import org.jetbrains.kotlin.name.Name
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.model.RuiEntryPoint
+import zakadabar.rui.kotlin.plugin.transform.RUI_ROOT_BRIDGE
 
 class RuiEntryPointBuilder(
     override val ruiClassBuilder: RuiClassBuilder,
@@ -34,18 +36,37 @@ class RuiEntryPointBuilder(
         get() = ruiEntryPoint.irFunction
 
     fun build() {
-        ruiEntryPoint.irFunction.body = IrBlockBodyImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET).also {
+        ruiEntryPoint.irFunction.body = IrBlockBodyImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET).apply {
 
-            it.statements += IrConstructorCallImpl(
+            val instance = IrConstructorCallImpl(
                 SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
                 ruiClass.irClass.defaultType,
                 ruiClass.builder.constructor.symbol,
                 0, 0, 2
             ).also { call ->
-                call.putValueArgument(0, buildGetAdapter(function))
+                call.putValueArgument(0, irGetAdapter(function))
                 call.putValueArgument(1, buildExternalPatch(ruiClass, function.symbol))
             }
 
+            val root = irTemporary(instance, "root").also { it.parent = ruiEntryPoint.irFunction }
+
+            statements += root
+
+            statements += irCall(
+                ruiClass.builder.create.symbol,
+                dispatchReceiver = irGet(root)
+            )
+
+            statements += irCall(
+                ruiClass.builder.mount.symbol,
+                dispatchReceiver = irGet(root),
+                args = arrayOf(
+                    irCall(
+                        ruiContext.ruiAdapterClass.getPropertyGetter(RUI_ROOT_BRIDGE) !!.owner.symbol,
+                        dispatchReceiver = irGetAdapter(function)
+                    )
+                )
+            )
         }
 
         if (RuiPluginContext.DUMP_KOTLIN_LIKE in ruiContext.dumpPoints) {
@@ -54,7 +75,7 @@ class RuiEntryPointBuilder(
     }
 
 
-    private fun buildGetAdapter(function: IrSimpleFunction): IrExpression =
+    private fun irGetAdapter(function: IrSimpleFunction): IrExpression =
         IrGetValueImpl(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
             function.valueParameters.first().symbol

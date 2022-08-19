@@ -9,6 +9,8 @@ import zakadabar.rui.runtime.RuiFragment
 
 open class RuiTestAdapter : RuiAdapter<TestNode> {
 
+    override val rootBridge = RuiTestBridge()
+
     val events = mutableListOf<RuiTestEvent>()
 
     val fragments = mutableListOf<RuiFragment<TestNode>>()

@@ -11,6 +11,8 @@ import zakadabar.rui.runtime.RuiBridge
  * The default adapter for W3C DOM nodes used in browsers.
  */
 class RuiDOMAdapter : RuiAdapter<Node> {
+
+    override val rootBridge = RuiDOMPlaceholder()
     override fun createPlaceholder(): RuiBridge<Node> {
         return RuiDOMPlaceholder()
     }

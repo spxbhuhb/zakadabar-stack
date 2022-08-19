@@ -24,6 +24,7 @@ const val RUI_BLOCK_ARGUMENT_INDEX_FRAGMENTS = 1
 const val RUI_FRAGMENT_TYPE_INDEX_BRIDGE = 0
 
 const val RUI_BT = "BT" // type parameter for fragment, Bridge Type
+const val RUI_ROOT_BRIDGE = "rootBridge" // property name of the root bridge in the adapter
 
 const val RUI_CREATE = "ruiCreate"
 const val RUI_MOUNT = "ruiMount"
