@@ -69,9 +69,9 @@ class RunTest {
         if (dumpResult) println(result.dump())
 
         with(result.classLoader.loadClass("zakadabar.rui.kotlin.plugin.run.gen.${fileName.replace(".kt", "Kt")}")) {
-            this.declaredMethods.forEach {
-                if (it.annotations.firstOrNull { it.annotationClass.simpleName == "RuiTest" } != null) {
-                    it.invoke(this)
+            this.declaredMethods.forEach { method ->
+                if (method.annotations.firstOrNull { it.annotationClass.simpleName == "RuiTest" } != null) {
+                    method.invoke(this)
                 }
             }
         }

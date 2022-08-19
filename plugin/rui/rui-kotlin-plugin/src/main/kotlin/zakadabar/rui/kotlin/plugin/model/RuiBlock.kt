@@ -18,7 +18,7 @@ class RuiBlock(
 
     val statements = mutableListOf<RuiStatement>()
 
-    override val builder = RuiBlockBuilder(ruiClass, this)
+    override val builder = RuiBlockBuilder(ruiClass.builder, this)
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
         visitor.visitBlock(this, data)

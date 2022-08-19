@@ -15,17 +15,16 @@ import org.jetbrains.kotlin.ir.expressions.IrBody
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.util.defaultType
 import org.jetbrains.kotlin.name.Name
-import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.model.RuiDirtyMask
 import zakadabar.rui.kotlin.plugin.transform.RUI_INVALIDATE
 import zakadabar.rui.kotlin.plugin.transform.RUI_MASK
 
 class RuiDirtyMaskBuilder(
-    override val ruiClass: RuiClass,
+    override val ruiClassBuilder: RuiClassBuilder,
     val ruiDirtyMask: RuiDirtyMask
 ) : RuiBuilder {
 
-    val propertyBuilder = RuiPropertyBuilder(ruiClass, ruiDirtyMask.name, irBuiltIns.intType)
+    val propertyBuilder = RuiPropertyBuilder(ruiClassBuilder, ruiDirtyMask.name, irBuiltIns.intType)
     val invalidate: IrSimpleFunctionSymbol
 
     init {

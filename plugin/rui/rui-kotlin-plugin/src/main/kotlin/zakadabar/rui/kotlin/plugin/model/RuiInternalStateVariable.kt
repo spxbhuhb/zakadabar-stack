@@ -16,7 +16,7 @@ class RuiInternalStateVariable(
     override val originalName = irVariable.name.identifier
     override val name = irVariable.name
 
-    override val builder = RuiStateVariableBuilder.builderFor(this)
+    override val builder = RuiStateVariableBuilder.builderFor(ruiClass.builder, this)
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
         visitor.visitInternalStateVariable(this, data)

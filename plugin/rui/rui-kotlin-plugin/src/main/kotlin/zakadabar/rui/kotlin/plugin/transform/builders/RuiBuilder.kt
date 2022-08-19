@@ -57,10 +57,10 @@ import zakadabar.rui.kotlin.plugin.model.RuiClass
  */
 interface RuiBuilder {
 
-    val ruiClass: RuiClass
-
     val ruiClassBuilder: RuiClassBuilder
-        get() = ruiClass.builder
+
+    val ruiClass: RuiClass
+        get() = ruiClassBuilder.ruiClass
 
     val ruiContext: RuiPluginContext
         get() = ruiClassBuilder.ruiContext

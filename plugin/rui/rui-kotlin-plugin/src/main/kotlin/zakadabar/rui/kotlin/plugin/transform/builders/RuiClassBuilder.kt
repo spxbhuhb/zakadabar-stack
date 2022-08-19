@@ -48,10 +48,11 @@ class RuiClassBuilder(
     val initializer: IrAnonymousInitializer
     val thisReceiver: IrValueParameter
 
-    lateinit var adapter: IrValueParameter
+    private lateinit var adapterConstructorParameter: IrValueParameter
+    private lateinit var externalPatchConstructorParameter: IrValueParameter
 
-    val adapterPropertyBuilder : RuiPropertyBuilder
-    val externalPatchPropertyBuilder : RuiPropertyBuilder
+    val adapterPropertyBuilder: RuiPropertyBuilder
+    val externalPatchPropertyBuilder: RuiPropertyBuilder
 
     val create: IrSimpleFunction
     val mount: IrSimpleFunction
@@ -80,11 +81,11 @@ class RuiClassBuilder(
         fqName = irClass.kotlinFqName
 
         thisReceiver = initThisReceiver()
-
-        adapterPropertyBuilder = RuiPropertyBuilder(ruiClass, Name.identifier(RUI_ADAPTER), classBoundAdapterType, isVar = false)
-        externalPatchPropertyBuilder = RuiPropertyBuilder(ruiClass, Name.identifier(RUI_EXTERNAL_PATCH), classBoundExternalPatchType, isVar = false)
-
         constructor = initConstructor()
+
+        adapterPropertyBuilder = initAdapterProperty()
+        externalPatchPropertyBuilder = initExternalPatchProperty()
+
         initializer = initInitializer()
 
         create = initRuiFunction(RUI_CREATE, ruiContext.ruiCreate)
@@ -136,6 +137,16 @@ class RuiClassBuilder(
         return thisReceiver
     }
 
+    private fun initAdapterProperty(): RuiPropertyBuilder =
+        RuiPropertyBuilder(ruiClassBuilder, Name.identifier(RUI_ADAPTER), classBoundAdapterType, isVar = false).also {
+            it.irField.initializer = irFactory.createExpressionBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, irGet(adapterConstructorParameter))
+        }
+
+    private fun initExternalPatchProperty(): RuiPropertyBuilder =
+        RuiPropertyBuilder(ruiClassBuilder, Name.identifier(RUI_EXTERNAL_PATCH), classBoundExternalPatchType, isVar = false).also {
+            it.irField.initializer = irFactory.createExpressionBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, irGet(externalPatchConstructorParameter))
+        }
+
     /**
      * Creates a primary constructor with a standard body (super class constructor call
      * and initializer call).
@@ -154,12 +165,12 @@ class RuiClassBuilder(
             returnType = irClass.typeWith()
         }
 
-        adapter = constructor.addValueParameter {
+        adapterConstructorParameter = constructor.addValueParameter {
             name = Name.identifier(RUI_ADAPTER)
             type = ruiContext.ruiAdapterType
         }
 
-        val ruiExternalPatch = constructor.addValueParameter {
+        externalPatchConstructorParameter = constructor.addValueParameter {
             name = Name.identifier(RUI_EXTERNAL_PATCH)
             type = classBoundExternalPatchType
         }
@@ -174,9 +185,6 @@ class RuiClassBuilder(
                 typeArgumentsCount = 0,
                 valueArgumentsCount = 0
             )
-
-            statements += adapterPropertyBuilder.irSetValue(irGet(adapter))
-            statements += externalPatchPropertyBuilder.irSetValue(irGet(ruiExternalPatch))
 
             statements += IrInstanceInitializerCallImpl(
                 SYNTHETIC_OFFSET,

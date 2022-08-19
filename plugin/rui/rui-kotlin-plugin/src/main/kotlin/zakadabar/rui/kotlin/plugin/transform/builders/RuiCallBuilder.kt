@@ -21,14 +21,13 @@ import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.name.Name
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui
 import zakadabar.rui.kotlin.plugin.model.RuiCall
-import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.model.RuiExpression
 import zakadabar.rui.kotlin.plugin.transform.*
 import zakadabar.rui.kotlin.plugin.util.RuiCompilationException
 import zakadabar.rui.kotlin.plugin.util.traceLabel
 
 class RuiCallBuilder(
-    override val ruiClass: RuiClass,
+    override val ruiClassBuilder: RuiClassBuilder,
     val ruiCall: RuiCall
 ) : RuiFragmentBuilder {
 
@@ -45,7 +44,7 @@ class RuiCallBuilder(
             return
         }
 
-        propertyBuilder = RuiPropertyBuilder(ruiClass, Name.identifier(ruiCall.name), symbolMap.defaultType, isVar = false)
+        propertyBuilder = RuiPropertyBuilder(ruiClassBuilder, Name.identifier(ruiCall.name), symbolMap.defaultType, isVar = false)
         buildInitializer()
     }
 
@@ -62,7 +61,7 @@ class RuiCallBuilder(
         ).also { constructorCall ->
 
             constructorCall.putTypeArgument(RUI_FRAGMENT_TYPE_INDEX_BRIDGE, classBoundBridgeType.defaultType)
-            constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, irGet(ruiClassBuilder.adapter))
+            constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, ruiClassBuilder.adapterPropertyBuilder.irGetValue())
             constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH, buildExternalPatch())
 
             ruiCall.valueArguments.forEachIndexed { index, ruiExpression ->

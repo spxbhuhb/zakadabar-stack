@@ -12,11 +12,10 @@ import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.name.Name
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui
 import zakadabar.rui.kotlin.plugin.model.RuiBlock
-import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.transform.*
 
 class RuiBlockBuilder(
-    override val ruiClass: RuiClass,
+    override val ruiClassBuilder: RuiClassBuilder,
     val ruiBlock: RuiBlock
 ) : RuiFragmentBuilder {
 
@@ -37,7 +36,7 @@ class RuiBlockBuilder(
             (it.builder as RuiFragmentBuilder).build()
         }
 
-        propertyBuilder = RuiPropertyBuilder(ruiClass, Name.identifier(ruiBlock.name), symbolMap.defaultType, isVar = false)
+        propertyBuilder = RuiPropertyBuilder(ruiClassBuilder, Name.identifier(ruiBlock.name), symbolMap.defaultType, isVar = false)
 
         buildAndAddInitializer()
     }
@@ -53,7 +52,7 @@ class RuiBlockBuilder(
             RUI_BLOCK_ARGUMENT_COUNT // adapter, array of fragments
         ).also { constructorCall ->
 
-            constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, irGet(ruiClassBuilder.adapter))
+            constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, ruiClassBuilder.adapterPropertyBuilder.irGetValue())
             constructorCall.putValueArgument(RUI_BLOCK_ARGUMENT_INDEX_FRAGMENTS, buildFragmentVarArg())
 
         }
