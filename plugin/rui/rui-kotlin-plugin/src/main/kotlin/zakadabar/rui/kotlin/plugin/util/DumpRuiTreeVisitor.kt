@@ -16,6 +16,15 @@ class DumpRuiTreeVisitor(
         element.acceptChildren(this, null)
     }
 
+    override fun visitEntryPoint(ruiEntryPoint: RuiEntryPoint) {
+        indented {
+            with(ruiEntryPoint) {
+                println { "ENTRY_POINT class:${ruiEntryPoint.ruiClass.name}" }
+            }
+            super.visitEntryPoint(ruiEntryPoint)
+        }
+    }
+
     override fun visitClass(ruiClass: RuiClass) {
         indented {
             with(ruiClass) {

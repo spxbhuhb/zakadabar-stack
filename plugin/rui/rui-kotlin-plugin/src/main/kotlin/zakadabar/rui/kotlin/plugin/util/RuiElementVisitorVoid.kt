@@ -10,6 +10,9 @@ interface RuiElementVisitorVoid<out R> : RuiElementVisitor<R, Nothing?> {
     fun visitElement(element: RuiElement): R
     override fun visitElement(element: RuiElement, data: Nothing?) = visitElement(element)
 
+    fun visitEntryPoint(ruiEntryPoint: RuiEntryPoint) = visitElement(ruiEntryPoint)
+    override fun visitEntryPoint(ruiEntryPoint: RuiEntryPoint, data: Nothing?) = visitEntryPoint(ruiEntryPoint)
+
     fun visitClass(ruiClass: RuiClass) = visitElement(ruiClass)
     override fun visitClass(ruiClass: RuiClass, data: Nothing?) = visitClass(ruiClass)
 

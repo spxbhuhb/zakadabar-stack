@@ -258,6 +258,10 @@ class RuiClassBuilder(
 
         // The initializer has to be the last, so it will be able to access all properties
         irClass.declarations += initializer
+
+        if (RuiPluginContext.DUMP_KOTLIN_LIKE in ruiContext.dumpPoints) {
+            println(irClass.dumpKotlinLike())
+        }
     }
 
     fun traceInit() {

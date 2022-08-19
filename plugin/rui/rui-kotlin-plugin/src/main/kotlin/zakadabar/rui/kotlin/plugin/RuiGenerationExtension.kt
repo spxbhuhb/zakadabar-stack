@@ -35,7 +35,7 @@ internal class RuiGenerationExtension(
 
         RuiFunctionVisitor(ruiContext).also {
             moduleFragment.accept(it, null)
-            RuiToIrTransform(ruiContext, it.ruiClasses).transform()
+            RuiToIrTransform(ruiContext, it.ruiClasses, it.ruiEntryPoints).transform()
         }
 
         if (DUMP_RUI_TREE in ruiContext.dumpPoints) {

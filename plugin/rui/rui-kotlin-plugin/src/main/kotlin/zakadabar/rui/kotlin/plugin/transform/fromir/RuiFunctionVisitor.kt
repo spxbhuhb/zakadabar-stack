@@ -4,31 +4,21 @@
 package zakadabar.rui.kotlin.plugin.transform.fromir
 
 import org.jetbrains.kotlin.backend.common.IrElementTransformerVoidWithContext
-import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
-import org.jetbrains.kotlin.descriptors.DescriptorVisibilities
-import org.jetbrains.kotlin.ir.builders.declarations.addValueParameter
-import org.jetbrains.kotlin.ir.builders.declarations.buildFun
-import org.jetbrains.kotlin.ir.builders.irBlockBody
-import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrFunction
-import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
 import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.IrFunctionExpression
-import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
 import org.jetbrains.kotlin.ir.expressions.impl.IrBlockBodyImpl
-import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
-import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionExpressionImpl
-import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
-import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.types.classifierOrNull
-import org.jetbrains.kotlin.ir.util.*
-import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
+import org.jetbrains.kotlin.ir.util.kotlinFqName
+import org.jetbrains.kotlin.ir.util.superTypes
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RUI_IR_MISSING_FUNCTION_BODY
 import zakadabar.rui.kotlin.plugin.model.RuiClass
+import zakadabar.rui.kotlin.plugin.model.RuiEntryPoint
 import zakadabar.rui.kotlin.plugin.transform.RUI_ENTRY_FUNCTION
 import zakadabar.rui.kotlin.plugin.util.RuiAnnotationBasedExtension
 import kotlin.collections.set
@@ -38,10 +28,9 @@ class RuiFunctionVisitor(
 ) : IrElementTransformerVoidWithContext(), RuiAnnotationBasedExtension {
 
     val ruiClasses = mutableListOf<RuiClass>()
+    val ruiEntryPoints = mutableListOf<RuiEntryPoint>()
 
     val irBuiltIns = ruiContext.irContext.irBuiltIns
-
-    val irFactory = ruiContext.irContext.irFactory
 
     override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?): List<String> =
         ruiContext.annotations
@@ -121,57 +110,12 @@ class RuiFunctionVisitor(
             ruiClass = it
         }
 
-        function.body = IrBlockBodyImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET).also {
-
-            it.statements += IrConstructorCallImpl(
-                SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-                ruiClass.irClass.defaultType,
-                ruiClass.builder.constructor.symbol,
-                0, 0, 2
-            ).also { call ->
-                call.putValueArgument(0, buildGetAdapter(function))
-                call.putValueArgument(1, buildExternalPatch(ruiClass, function.symbol))
-            }
-
-        }
-
-        if (RuiPluginContext.DUMP_KOTLIN_LIKE in ruiContext.dumpPoints) {
-            println(block.function.dumpKotlinLike())
+        RuiEntryPoint(ruiClass, function).also {
+            ruiEntryPoints += it
+            ruiContext.ruiEntryPoints += it
         }
 
         return expression
-    }
-
-    private fun buildGetAdapter(function: IrSimpleFunction): IrExpression =
-        IrGetValueImpl(
-            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            function.valueParameters.first().symbol
-        )
-
-    fun buildExternalPatch(ruiClass: RuiClass, parent: IrSimpleFunctionSymbol): IrExpression {
-        val function = irFactory.buildFun {
-            name = Name.special("<anonymous>")
-            origin = IrDeclarationOrigin.LOCAL_FUNCTION_FOR_LAMBDA
-            returnType = irBuiltIns.unitType
-        }.also { function ->
-
-            function.parent = parent.owner
-            function.visibility = DescriptorVisibilities.LOCAL
-
-            function.addValueParameter {
-                name = Name.identifier("it")
-                type = ruiContext.ruiFragmentType
-            }
-
-            function.body = DeclarationIrBuilder(ruiContext.irContext, function.symbol).irBlockBody { }
-        }
-
-        return IrFunctionExpressionImpl(
-            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            ruiClass.builder.classBoundExternalPatchType,
-            function,
-            IrStatementOrigin.LAMBDA
-        )
     }
 
 }

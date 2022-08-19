@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.ir.types.defaultType
 import org.jetbrains.kotlin.ir.util.IrMessageLogger
 import org.jetbrains.kotlin.name.FqName
 import zakadabar.rui.kotlin.plugin.model.RuiClass
+import zakadabar.rui.kotlin.plugin.model.RuiEntryPoint
 import zakadabar.rui.kotlin.plugin.transform.*
 
 class RuiPluginContext(
@@ -20,6 +21,7 @@ class RuiPluginContext(
 ) {
 
     val ruiClasses = mutableMapOf<FqName, RuiClass>()
+    val ruiEntryPoints = mutableListOf<RuiEntryPoint>()
 
     val ruiFragmentClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiFragment"))) !!
     val ruiFragmentType = ruiFragmentClass.defaultType

@@ -8,6 +8,8 @@ import zakadabar.rui.kotlin.plugin.model.*
 interface RuiElementVisitor<out R, in D> {
     fun visitElement(element: RuiElement, data: D): R
 
+    fun visitEntryPoint(ruiEntryPoint: RuiEntryPoint, data: D) = visitElement(ruiEntryPoint, data)
+
     fun visitClass(ruiClass: RuiClass, data: D) = visitElement(ruiClass, data)
 
     fun visitStateVariable(stateVariable: RuiStateVariable, data : D) = visitElement(stateVariable, data)
