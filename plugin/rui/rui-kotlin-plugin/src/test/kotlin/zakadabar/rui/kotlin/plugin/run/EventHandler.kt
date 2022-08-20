@@ -9,7 +9,6 @@ import zakadabar.rui.runtime.rui
 import zakadabar.rui.runtime.testing.EH1
 import zakadabar.rui.runtime.testing.RuiEH1
 import zakadabar.rui.runtime.testing.RuiTestAdapter
-import kotlin.test.assertTrue
 
 @Suppress("unused")
 @RuiTest
@@ -20,7 +19,7 @@ fun eventHandlerTest() {
         eventHandlerFragment()
     }
 
-    assertTrue(adapter.fragments.isNotEmpty())
+    val rootNode = adapter.rootBridge.receiver
 
     val eh1 = adapter.fragments.first() as RuiEH1
     eh1.eventHandler(12)

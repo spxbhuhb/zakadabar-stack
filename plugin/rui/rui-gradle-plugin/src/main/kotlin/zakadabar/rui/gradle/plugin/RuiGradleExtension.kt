@@ -17,8 +17,13 @@
 package zakadabar.rui.gradle.plugin
 
 import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.ListProperty
+import org.gradle.api.provider.Property
 
 open class RuiGradleExtension(objects: ObjectFactory) {
-//  val stringProperty: Property<String> = objects.property(String::class.java)
-//  val fileProperty: RegularFileProperty = objects.fileProperty()
+    val annotations: ListProperty<String> = objects.listProperty(String::class.java)
+    val dumpPoints: ListProperty<String> = objects.listProperty(String::class.java)
+    val trace: Property<Boolean> = objects.property(Boolean::class.java)
+    val exportState: Property<Boolean> = objects.property(Boolean::class.java)
+    val importState: Property<Boolean> = objects.property(Boolean::class.java)
 }

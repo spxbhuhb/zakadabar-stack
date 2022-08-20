@@ -6,7 +6,6 @@ import zakadabar.gradle.Versions
 plugins {
     kotlin("jvm")
     kotlin("kapt")
-    id("com.github.gmazzo.buildconfig")
 }
 
 group = "hu.simplexion.zakadabar"
@@ -21,12 +20,8 @@ dependencies {
     testImplementation(kotlin("test-junit"))
     testImplementation("org.jetbrains.kotlin:kotlin-compiler-embeddable")
     testImplementation("com.github.tschuchortdev:kotlin-compile-testing:1.4.8")
-    testImplementation(project(":plugin:rui:rui-runtime"))
-}
 
-buildConfig {
-    packageName("zakadabar.rui.kotlin.plugin")
-    buildConfigField("String", "KOTLIN_PLUGIN_ID", "\"zakadabar-rui\"")
+    implementation(project(":plugin:rui:rui-runtime"))
 }
 
 tasks.test {

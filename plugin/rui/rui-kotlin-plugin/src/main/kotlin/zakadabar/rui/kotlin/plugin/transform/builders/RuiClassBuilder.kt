@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.types.Variance
+import zakadabar.rui.kotlin.plugin.RuiDumpPoint
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.transform.*
@@ -259,7 +260,7 @@ class RuiClassBuilder(
         // The initializer has to be the last, so it will be able to access all properties
         irClass.declarations += initializer
 
-        if (RuiPluginContext.DUMP_KOTLIN_LIKE in ruiContext.dumpPoints) {
+        RuiDumpPoint.KotlinLike.dump(ruiContext) {
             println(irClass.dumpKotlinLike())
         }
     }

@@ -22,48 +22,61 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerPluginSupportPlugin
 import org.jetbrains.kotlin.gradle.plugin.SubpluginArtifact
 import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
+import zakadabar.rui.runtime.Plugin.GRADLE_EXTENSION_NAME
+import zakadabar.rui.runtime.Plugin.KOTLIN_PLUGIN_NAME
+import zakadabar.rui.runtime.Plugin.OPTION_NAME_ANNOTATION
+import zakadabar.rui.runtime.Plugin.OPTION_NAME_DUMP_POINT
+import zakadabar.rui.runtime.Plugin.OPTION_NAME_EXPORT_STATE
+import zakadabar.rui.runtime.Plugin.OPTION_NAME_IMPORT_STATE
+import zakadabar.rui.runtime.Plugin.OPTION_NAME_TRACE
+import zakadabar.rui.runtime.Plugin.PLUGIN_GROUP
+import zakadabar.rui.runtime.Plugin.PLUGIN_ID
+import zakadabar.rui.runtime.Plugin.PLUGIN_VERSION
+import zakadabar.rui.runtime.Plugin.RUNTIME_NAME
 
 @Suppress("unused")
 class RuiGradlePlugin : KotlinCompilerPluginSupportPlugin {
 
-  override fun apply(target: Project): Unit = with(target) {
-    extensions.create("zakadabar.rui", RuiGradleExtension::class.java)
-  }
-
-  override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean = true
-
-  override fun getCompilerPluginId(): String = BuildConfig.KOTLIN_PLUGIN_ID
-
-  override fun getPluginArtifact(): SubpluginArtifact = SubpluginArtifact(
-    groupId = BuildConfig.KOTLIN_PLUGIN_GROUP,
-    artifactId = BuildConfig.KOTLIN_PLUGIN_NAME,
-    version = BuildConfig.KOTLIN_PLUGIN_VERSION
-  )
-
-  override fun getPluginArtifactForNative(): SubpluginArtifact = SubpluginArtifact(
-    groupId = BuildConfig.KOTLIN_PLUGIN_GROUP,
-    artifactId = BuildConfig.KOTLIN_PLUGIN_NAME + "-native",
-    version = BuildConfig.KOTLIN_PLUGIN_VERSION
-  )
-
-  override fun applyToCompilation(
-    kotlinCompilation: KotlinCompilation<*>
-  ): Provider<List<SubpluginOption>> {
-    val project = kotlinCompilation.target.project
-
-    kotlinCompilation.dependencies {
-      // "hu.simplexion.zakadabar:rui-core:2022.5.4-SNAPSHOT"
-      // FIXME implementation("${BuildConfig.KOTLIN_PLUGIN_GROUP}:${BuildConfig.KOTLIN_PLUGIN_NAME}:${BuildConfig.KOTLIN_PLUGIN_VERSION}")
-      implementation("hu.simplexion.zakadabar:rui-runtime:2022.5.4-SNAPSHOT")
+    override fun apply(target: Project): Unit = with(target) {
+        extensions.create(GRADLE_EXTENSION_NAME, RuiGradleExtension::class.java)
     }
 
-    val extension = project.extensions.getByType(RuiGradleExtension::class.java)
+    override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean =
+        kotlinCompilation.target.project.plugins.hasPlugin(RuiGradlePlugin::class.java)
 
-    return project.provider {
-      listOf(
-//        SubpluginOption(key = "string", value = extension.stringProperty.get()),
-//        SubpluginOption(key = "file", value = extension.fileProperty.get().asFile.path),
-      )
+    override fun getCompilerPluginId(): String = PLUGIN_ID
+
+    override fun getPluginArtifact(): SubpluginArtifact = SubpluginArtifact(
+        groupId = PLUGIN_GROUP,
+        artifactId = KOTLIN_PLUGIN_NAME,
+        version = PLUGIN_VERSION
+    )
+
+    override fun getPluginArtifactForNative(): SubpluginArtifact = SubpluginArtifact(
+        groupId = PLUGIN_GROUP,
+        artifactId = "$KOTLIN_PLUGIN_NAME-native",
+        version = PLUGIN_VERSION
+    )
+
+    override fun applyToCompilation(
+        kotlinCompilation: KotlinCompilation<*>
+    ): Provider<List<SubpluginOption>> {
+        val project = kotlinCompilation.target.project
+
+        kotlinCompilation.dependencies {
+            implementation("$PLUGIN_GROUP:$RUNTIME_NAME:$PLUGIN_VERSION")
+        }
+
+        val extension = project.extensions.getByType(RuiGradleExtension::class.java)
+
+        val options = mutableListOf<SubpluginOption>()
+
+        extension.annotations.get().forEach { options += SubpluginOption(key = OPTION_NAME_ANNOTATION, value = it) }
+        extension.dumpPoints.get().forEach { options += SubpluginOption(key = OPTION_NAME_DUMP_POINT, value = it) }
+        options += SubpluginOption(key = OPTION_NAME_TRACE, extension.trace.get().toString())
+        options += SubpluginOption(key = OPTION_NAME_EXPORT_STATE, extension.exportState.get().toString())
+        options += SubpluginOption(key = OPTION_NAME_IMPORT_STATE, extension.importState.get().toString())
+
+        return project.provider { options }
     }
-  }
 }

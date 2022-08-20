@@ -12,42 +12,58 @@ import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.extensions.StorageComponentContainerContributor
 import zakadabar.rui.kotlin.plugin.RuiConfigurationKeys.ANNOTATION
-import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_AFTER
-import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_BEFORE
-import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_KOTLIN_LIKE
-import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_RUI_TREE
+import zakadabar.rui.kotlin.plugin.RuiConfigurationKeys.DUMP
+import zakadabar.rui.kotlin.plugin.RuiConfigurationKeys.EXPORT_STATE
+import zakadabar.rui.kotlin.plugin.RuiConfigurationKeys.IMPORT_STATE
+import zakadabar.rui.kotlin.plugin.RuiConfigurationKeys.TRACE
+import zakadabar.rui.runtime.Plugin.RUI_ANNOTATION
 
 /**
  * Registers the extensions into the compiler.
  */
 @AutoService(ComponentRegistrar::class)
-class RuiComponentRegistrar : ComponentRegistrar {
+class RuiComponentRegistrar(
+    val dumpPoints: List<RuiDumpPoint> = emptyList(),
+    val trace: Boolean = false,
+    val exportState: Boolean = false,
+    val importState: Boolean = false
+) : ComponentRegistrar {
 
     override fun registerProjectComponents(project: MockProject, configuration: CompilerConfiguration) {
 
+        val annotations = configuration.get(ANNOTATION).let { if (it != null && it.isNotEmpty()) it else listOf(RUI_ANNOTATION) }
+        val dumpPoints = configuration.get(DUMP) ?: dumpPoints
+        val trace = configuration.get(TRACE) ?: trace
+        val exportState = configuration.get(EXPORT_STATE) ?: exportState
+        val importState = configuration.get(IMPORT_STATE) ?: importState
 
-        val annotations = configuration.get(ANNOTATION).orEmpty().toMutableList()
-        if (annotations.isEmpty()) annotations += "zakadabar.rui.runtime.Rui"
+        val options = RuiOptions(annotations, dumpPoints, trace, exportState, importState)
 
-//        val dump = configuration.get(DUMP).orEmpty()
-//        val dump = listOf(DUMP_BEFORE, DUMP_AFTER, DUMP_RUI_TREE)
-        val dump = listOf(DUMP_BEFORE, DUMP_AFTER, DUMP_RUI_TREE, DUMP_KOTLIN_LIKE)
-
-        registerRuiComponents(project, annotations, dump, configuration.getBoolean(JVMConfigurationKeys.IR))
+        registerRuiComponents(project, options, configuration.getBoolean(JVMConfigurationKeys.IR))
     }
 
-    fun registerRuiComponents(project: Project, annotations: List<String>, dump: List<String>, useIr: Boolean) {
+    fun registerRuiComponents(project: Project, options: RuiOptions, useIr: Boolean) {
 
         StorageComponentContainerContributor.registerExtension(
             project,
-            RuiComponentContainerContributor(annotations, useIr)
+            RuiComponentContainerContributor(options.annotations, useIr)
         )
 
         IrGenerationExtension.registerExtension(
             project,
-            RuiGenerationExtension(annotations, dump)
+            RuiGenerationExtension(options)
         )
 
+    }
+
+    companion object {
+        fun withAll() =
+            RuiComponentRegistrar(
+                RuiDumpPoint.values().toList(),
+                trace = true,
+                exportState = true,
+                importState = true
+            )
     }
 
 }

@@ -32,4 +32,7 @@ interface RuiFragment<BT> {
     fun ruiUnmount(bridge: RuiBridge<BT>)
     fun ruiDispose()
 
+    fun ruiExportState() : Array<Any?> = TODO()
+    fun ruiImportState(state : Array<Any?>) : Unit = TODO()
+
 }

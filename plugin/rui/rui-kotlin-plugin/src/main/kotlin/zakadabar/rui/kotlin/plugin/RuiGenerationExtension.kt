@@ -7,28 +7,23 @@ import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
 import org.jetbrains.kotlin.ir.util.dump
-import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_AFTER
-import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_BEFORE
-import zakadabar.rui.kotlin.plugin.RuiPluginContext.Companion.DUMP_RUI_TREE
 import zakadabar.rui.kotlin.plugin.transform.fromir.RuiFunctionVisitor
 import zakadabar.rui.kotlin.plugin.transform.toir.RuiToIrTransform
+import zakadabar.rui.runtime.Plugin.PLUGIN_ID
 
 internal class RuiGenerationExtension(
-    val annotations: List<String>,
-    val dumpPoints: List<String>
+    val options: RuiOptions
 ) : IrGenerationExtension {
 
     override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
 
         val ruiContext = RuiPluginContext(
             pluginContext,
-            annotations,
-            dumpPoints,
-            pluginContext.createDiagnosticReporter(RuiCommandLineProcessor.PLUGIN_ID),
-            withTrace = true
+            options,
+            pluginContext.createDiagnosticReporter(PLUGIN_ID),
         )
 
-        if (DUMP_BEFORE in ruiContext.dumpPoints) {
+        RuiDumpPoint.Before.dump(ruiContext) {
             println("DUMP BEFORE")
             println(moduleFragment.dump())
         }
@@ -38,14 +33,14 @@ internal class RuiGenerationExtension(
             RuiToIrTransform(ruiContext, it.ruiClasses, it.ruiEntryPoints).transform()
         }
 
-        if (DUMP_RUI_TREE in ruiContext.dumpPoints) {
+        RuiDumpPoint.RuiTree.dump(ruiContext) {
             println("RUI CLASSES")
             ruiContext.ruiClasses.values.forEach {
                 println(it.dump())
             }
         }
 
-        if (DUMP_AFTER in ruiContext.dumpPoints) {
+        RuiDumpPoint.After.dump(ruiContext) {
             println("DUMP AFTER")
             println(moduleFragment.dump())
         }

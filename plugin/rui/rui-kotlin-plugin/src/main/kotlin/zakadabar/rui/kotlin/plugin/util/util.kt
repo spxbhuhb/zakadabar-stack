@@ -44,3 +44,11 @@ val Any.tracePoint
 
 fun traceLabel(name : Any, point : Any) =
     name.traceName + point.tracePoint
+
+fun String.camelToSnakeCase(): String {
+    var s = ""
+    this.toCharArray().forEach {
+        s += if (it in 'A'..'Z') "_${it.lowercaseChar()}" else it.toString()
+    }
+    return s.trimStart('_')
+}

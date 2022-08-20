@@ -12,6 +12,7 @@ plugins {
     id("org.jetbrains.dokka")
     signing
     `maven-publish`
+    id("com.github.gmazzo.buildconfig")
 }
 
 group = "hu.simplexion.zakadabar"
@@ -40,6 +41,11 @@ kotlin {
             }
         }
     }
+}
+
+buildConfig {
+    packageName("zakadabar.rui.runtime")
+    buildConfigField("String", "PLUGIN_VERSION", "\"${project.version}\"")
 }
 
 if (project.isPublishing) {

@@ -11,29 +11,32 @@ import org.jetbrains.kotlin.name.FqName
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.model.RuiEntryPoint
 import zakadabar.rui.kotlin.plugin.transform.*
+import zakadabar.rui.runtime.Plugin.RUI_ADAPTER_CLASS
+import zakadabar.rui.runtime.Plugin.RUI_BRIDGE_CLASS
+import zakadabar.rui.runtime.Plugin.RUI_FRAGMENT_CLASS
 
 class RuiPluginContext(
     val irContext: IrPluginContext,
-    val annotations: List<String>,
-    val dumpPoints: List<String>,
-    val diagnosticReporter: IrMessageLogger,
-    val withTrace : Boolean = false
+    options: RuiOptions,
+    val diagnosticReporter: IrMessageLogger
 ) {
+    val annotations = options.annotations
+    val dumpPoints = options.dumpPoints
+    val withTrace = options.withTrace
+    val exportState = options.exportState
+    val importState = options.importState
 
     val ruiClasses = mutableMapOf<FqName, RuiClass>()
     val ruiEntryPoints = mutableListOf<RuiEntryPoint>()
 
-    val ruiFragmentClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiFragment"))) !!
+    val ruiFragmentClass = requireNotNull(irContext.referenceClass(FqName.fromSegments(RUI_FRAGMENT_CLASS))) { "missing class: ${RUI_FRAGMENT_CLASS.joinToString { "." }}" }
     val ruiFragmentType = ruiFragmentClass.defaultType
 
-    val ruiAdapterClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiAdapter"))) !!
+    val ruiAdapterClass = requireNotNull(irContext.referenceClass(FqName.fromSegments(RUI_ADAPTER_CLASS))) { "missing class: ${RUI_FRAGMENT_CLASS.joinToString { "." }}" }
     val ruiAdapterType = ruiAdapterClass.defaultType
 
-    val ruiBridgeClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiBridge"))) !!
+    val ruiBridgeClass = requireNotNull(irContext.referenceClass(FqName.fromSegments(RUI_BRIDGE_CLASS))) { "missing class: ${RUI_BRIDGE_CLASS.joinToString { "." }}" }
     val ruiBridgeType = ruiBridgeClass.defaultType
-
-    val ruiAdapterRegistryClass = irContext.referenceClass(FqName.fromSegments(listOf("zakadabar", "rui", "runtime", "RuiAdapterRegistry"))) !!
-    val ruiAdapterRegistryType = ruiAdapterRegistryClass.defaultType
 
     val ruiCreate = ruiFragmentClass.functionByName(RUI_CREATE)
     val ruiMount = ruiFragmentClass.functionByName(RUI_MOUNT)
@@ -42,12 +45,4 @@ class RuiPluginContext(
     val ruiUnmount = ruiFragmentClass.functionByName(RUI_UNMOUNT)
 
     val ruiSymbolMap = RuiSymbolMap(this)
-
-    companion object {
-        const val DUMP_BEFORE = "before"
-        const val DUMP_AFTER = "after"
-        const val DUMP_RUI_TREE = "rui-tree"
-        const val DUMP_KOTLIN_LIKE = "kotlin-like"
-    }
-
 }

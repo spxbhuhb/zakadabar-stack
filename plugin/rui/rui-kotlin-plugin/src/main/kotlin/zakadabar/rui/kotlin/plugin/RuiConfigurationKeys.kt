@@ -7,8 +7,10 @@ package zakadabar.rui.kotlin.plugin
 import org.jetbrains.kotlin.config.CompilerConfigurationKey
 
 object RuiConfigurationKeys {
-    val ANNOTATION: CompilerConfigurationKey<List<String>> = CompilerConfigurationKey.create("annotation qualified name")
-    val DUMP: CompilerConfigurationKey<List<String>> = CompilerConfigurationKey.create("data dump points")
-
+    val ANNOTATION: CompilerConfigurationKey<List<String>> = CompilerConfigurationKey.create("qualified annotation name")
+    val DUMP: CompilerConfigurationKey<List<RuiDumpPoint>> = CompilerConfigurationKey.create("points where the compiler plugin should dump it's progress")
+    val TRACE: CompilerConfigurationKey<Boolean> = CompilerConfigurationKey.create("add trace output to the generated code")
+    val EXPORT_STATE: CompilerConfigurationKey<Boolean> = CompilerConfigurationKey.create("generate state export functions")
+    val IMPORT_STATE: CompilerConfigurationKey<Boolean> = CompilerConfigurationKey.create("generate state import functions")
 }
 
