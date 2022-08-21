@@ -4,16 +4,18 @@
 package zakadabar.rui.test
 
 import zakadabar.rui.runtime.Rui
+import zakadabar.rui.runtime.rui
 import zakadabar.rui.runtime.testing.RuiTestAdapter
 import zakadabar.rui.runtime.testing.T1
 
 
 @Rui
-fun R1(value : Int) {
+fun R1(value: Int) {
     T1(12)
 }
 
-fun  main() {
+fun main() {
+    rui(RuiTestAdapter()) {
         R1(12)
-    RuiTestAdapter.printDump()
+    }
 }

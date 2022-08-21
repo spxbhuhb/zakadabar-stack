@@ -23,8 +23,9 @@ open class RuiBlock<BT>(
     }
 
     override fun ruiPatch() {
-        for (i in fragments.indices) {
-            fragments[i].ruiPatch()
+        for (fragment in fragments) {
+            fragment.ruiExternalPatch(fragment)
+            fragment.ruiPatch()
         }
     }
 

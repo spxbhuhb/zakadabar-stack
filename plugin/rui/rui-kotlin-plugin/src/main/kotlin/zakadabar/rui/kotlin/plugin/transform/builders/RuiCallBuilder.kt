@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.ir.builders.declarations.buildFun
 import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.expressions.IrBody
 import org.jetbrains.kotlin.ir.expressions.IrExpression
+import org.jetbrains.kotlin.ir.expressions.IrFunctionExpression
 import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
 import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionExpressionImpl
@@ -141,6 +142,10 @@ class RuiCallBuilder(
     fun IrBlockBodyBuilder.buildVariablePatch(externalPatchIt: IrValueDeclaration, index: Int, ruiExpression: RuiExpression) {
         // constants, globals, etc. have no dependencies, no need to patch them
         if (ruiExpression.dependencies.isEmpty()) return
+
+        // lambdas and anonymous functions cannot change and cannot be patched
+        // FIXME check if lambda and anonymous func results in IrFunctionExpression
+        if (ruiExpression.irExpression is IrFunctionExpression) return
 
         + irIf(
             buildCondition(ruiExpression),

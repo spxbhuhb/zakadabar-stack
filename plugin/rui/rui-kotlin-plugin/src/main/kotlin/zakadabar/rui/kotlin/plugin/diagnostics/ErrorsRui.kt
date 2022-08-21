@@ -59,8 +59,8 @@ object ErrorsRui {
             report(ruiClass.ruiContext, ruiClass.irFunction.file.fileEntry, element.startOffset)
         }
 
-        fun report(ruiContext: RuiPluginContext, declaration: IrFunction) {
-            report(ruiContext, declaration.file.fileEntry, declaration.startOffset)
+        fun report(ruiContext: RuiPluginContext, declaration: IrFunction, additionalInfo : String = "") {
+            report(ruiContext, declaration.file.fileEntry, declaration.startOffset, additionalInfo)
         }
 
         fun report(ruiClassBuilder: RuiClassBuilder, element: IrElement, additionalInfo : String = ""): Nothing? {

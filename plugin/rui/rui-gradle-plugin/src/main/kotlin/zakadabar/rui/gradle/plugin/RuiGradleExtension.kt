@@ -16,6 +16,7 @@
 
 package zakadabar.rui.gradle.plugin
 
+import org.gradle.api.Action
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
@@ -23,7 +24,10 @@ import org.gradle.api.provider.Property
 open class RuiGradleExtension(objects: ObjectFactory) {
     val annotations: ListProperty<String> = objects.listProperty(String::class.java)
     val dumpPoints: ListProperty<String> = objects.listProperty(String::class.java)
-    val trace: Property<Boolean> = objects.property(Boolean::class.java)
-    val exportState: Property<Boolean> = objects.property(Boolean::class.java)
-    val importState: Property<Boolean> = objects.property(Boolean::class.java)
+    val trace: Property<Boolean> = objects.property(Boolean::class.java).also { it.set(false) }
+    val exportState: Property<Boolean> = objects.property(Boolean::class.java).also { it.set(false) }
+    val importState: Property<Boolean> = objects.property(Boolean::class.java).also { it.set(false) }
 }
+
+fun org.gradle.api.Project.rui(configure: Action<RuiGradleExtension>): Unit =
+    (this as org.gradle.api.plugins.ExtensionAware).extensions.configure("rui", configure)

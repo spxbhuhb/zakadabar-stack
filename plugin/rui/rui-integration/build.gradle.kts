@@ -3,7 +3,7 @@
  */
 plugins {
     kotlin("multiplatform") version "1.6.20"
-    id("zakadabar-rui") version "2022.5.4-SNAPSHOT"
+    id("zakadabar-rui") version "2022.6.2"
 }
 
 repositories {
@@ -20,7 +20,7 @@ kotlin {
     }
     js(IR) {
         browser()
-        nodejs()
+        binaries.executable()
     }
     sourceSets {
         val commonMain by getting {
@@ -43,4 +43,16 @@ kotlin {
             }
         }
     }
+}
+
+// Fixes webpack-cli incompatibility by pinning the newest version.
+rootProject.extensions.configure<org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension> {
+    versions.webpackCli.version = "4.10.0"
+}
+
+rui {
+    dumpPoints.set(listOf("before", "after", "rui-tree", "kotlin-like"))
+    trace.set(true)
+    exportState.set(true)
+    importState.set(true)
 }

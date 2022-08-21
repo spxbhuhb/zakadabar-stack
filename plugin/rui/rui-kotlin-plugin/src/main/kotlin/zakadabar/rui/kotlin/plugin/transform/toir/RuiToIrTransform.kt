@@ -8,6 +8,7 @@ import org.jetbrains.kotlin.backend.common.ir.addChild
 import org.jetbrains.kotlin.ir.util.file
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
+import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RUI_IR_INTERNAL_PLUGIN_ERROR
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.model.RuiEntryPoint
 import zakadabar.rui.kotlin.plugin.util.RuiAnnotationBasedExtension
@@ -24,7 +25,11 @@ class RuiToIrTransform(
     fun transform() {
 
         ruiClasses.forEach {
-            it.builder.build()
+            try {
+                it.builder.build()
+            } catch (ex : Exception) {
+                RUI_IR_INTERNAL_PLUGIN_ERROR.report(ruiContext, it.irFunction, ex.stackTraceToString())
+            }
             it.irFunction.file.addChild(it.irClass)
         }
 

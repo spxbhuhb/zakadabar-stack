@@ -3,22 +3,28 @@
  */
 package zakadabar.rui.runtime.dom.html
 
+import kotlinx.browser.document
+import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.Node
+import org.w3c.dom.events.MouseEvent
 import zakadabar.rui.runtime.Rui
 import zakadabar.rui.runtime.RuiAdapter
 import zakadabar.rui.runtime.RuiFragment
 import zakadabar.rui.runtime.RuiPublicApi
 
 @Rui
-fun Text(content : String) { }
+fun Button(title: String, onClick: () -> Unit) {
+}
 
-class RuiText(
+@RuiPublicApi
+class RuiButton(
     ruiAdapter: RuiAdapter<Node>,
-    ruiExternalPatch : (it : RuiFragment<Node>) -> Unit,
-    var content : String
+    ruiExternalPatch: (it: RuiFragment<Node>) -> Unit,
+    var label: String,
+    var onClick: (MouseEvent) -> Unit
 ) : LeafNode(ruiAdapter, ruiExternalPatch) {
 
-    override val receiver = org.w3c.dom.Text()
+    override val receiver = document.createElement("button") as HTMLButtonElement
 
     var ruiDirty0 = 0
 
@@ -28,12 +34,16 @@ class RuiText(
     }
 
     override fun ruiCreate() {
-        receiver.data = content
+        receiver.innerText = label
+        receiver.onclick = onClick
     }
 
     override fun ruiPatch() {
         if (ruiDirty0 and 1 != 0) {
-            receiver.data = content
+            receiver.innerText = label
+        }
+        if (ruiDirty0 and 2 != 0) {
+            receiver.onclick = onClick
         }
     }
 

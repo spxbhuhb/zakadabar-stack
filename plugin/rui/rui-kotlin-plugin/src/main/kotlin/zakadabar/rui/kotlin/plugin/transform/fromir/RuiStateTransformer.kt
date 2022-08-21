@@ -160,7 +160,8 @@ class RuiStateTransformer(
         RUI_IR_RENDERING_VARIABLE.check(ruiClass, declaration) {
             currentStatementIndex < ruiClass.boundary ||
                     declaration.origin == IrDeclarationOrigin.FOR_LOOP_ITERATOR ||
-                    declaration.origin == IrDeclarationOrigin.FOR_LOOP_VARIABLE
+                    declaration.origin == IrDeclarationOrigin.FOR_LOOP_VARIABLE ||
+                    declaration.origin == IrDeclarationOrigin.IR_TEMPORARY_VARIABLE
         }
 
         return super.visitVariable(declaration)
@@ -181,6 +182,9 @@ class RuiStateTransformer(
         }
     }
 
+    /**
+     * Adds a call to the patch function as the last statement of the function body.
+     */
     fun irPatch(function: IrFunction): IrFunction {
         val body = function.body ?: return function
 
@@ -262,10 +266,91 @@ class RuiStateTransformer(
         }
     }
 
+    // eventHandler: FUN_EXPR type=kotlin.Function1<@[ParameterName(name = 'np0')] kotlin.Int, kotlin.Unit> origin=LAMBDA
+    //                FUN LOCAL_FUNCTION_FOR_LAMBDA name:<anonymous> visibility:local modality:FINAL <> (it:kotlin.Int) returnType:kotlin.Unit
+    //                  VALUE_PARAMETER name:it index:0 type:kotlin.Int
+    //                  BLOCK_BODY
+    //                    SET_VAR 'var i: kotlin.Int [var] declared in zakadabar.rui.kotlin.plugin.run.gen.eventHandlerFragment' type=kotlin.Unit origin=EQ
+    //                      GET_VAR 'it: kotlin.Int declared in zakadabar.rui.kotlin.plugin.run.gen.eventHandlerFragment.<anonymous>' type=kotlin.Int origin=null
+
+
+    // eventHandler: FUN_EXPR type=kotlin.Function1<@[ParameterName(name = 'np0')] kotlin.Int, kotlin.Unit> origin=LAMBDA
+    //                    FUN LOCAL_FUNCTION_FOR_LAMBDA name:<anonymous> visibility:local modality:FINAL <> (it:kotlin.Int) returnType:kotlin.Unit
+    //                      VALUE_PARAMETER name:it index:0 type:kotlin.Int
+    //                      BLOCK_BODY
+    //                        COMPOSITE type=kotlin.Unit origin=null
+    //                          VAR IR_TEMPORARY_VARIABLE name:tmp0 type:kotlin.Int [val]
+    //                            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:i type:kotlin.Int visibility:private' type=kotlin.Int origin=null
+    //                              receiver: GET_VAR '<this>: zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment origin=null
+    //                          CALL 'public final fun set-i (set-?: kotlin.Int): kotlin.Unit declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=kotlin.Int origin=null
+    //                            $this: GET_VAR '<this>: zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment origin=null
+    //                            set-?: GET_VAR 'it: kotlin.Int declared in zakadabar.rui.kotlin.plugin.run.gen.eventHandlerFragment.<anonymous>' type=kotlin.Int origin=null
+    //                          CALL 'public open fun ruiInvalidate0 (mask: kotlin.Int): kotlin.Unit declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=kotlin.Unit origin=null
+    //                            $this: GET_VAR '<this>: zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment origin=null
+    //                            mask: CONST Int type=kotlin.Int value=1
+    //                          CALL 'public final fun println (message: kotlin.Any?): kotlin.Unit [inline] declared in kotlin.io.ConsoleKt' type=kotlin.Unit origin=null
+    //                            message: STRING_CONCATENATION type=kotlin.String
+    //                              CONST String type=kotlin.String value="[RuiEventHandlerFragment       ]  state change          |"
+    //                              CONST String type=kotlin.String value=" i: "
+    //                              GET_VAR 'val tmp0: kotlin.Int [val] declared in zakadabar.rui.kotlin.plugin.run.gen.eventHandlerFragment.<anonymous>' type=kotlin.Int origin=null
+    //                              CONST String type=kotlin.String value=" ⇢ "
+    //                              GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:i type:kotlin.Int visibility:private' type=kotlin.Int origin=null
+    //                                receiver: GET_VAR '<this>: zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment origin=null
+    //                        CALL 'public open fun ruiPatch (): kotlin.Unit declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=kotlin.Unit origin=null
+    //                          $this: GET_VAR '<this>: zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment origin=null
+
+
+    // eventHandler: FUN_EXPR type=kotlin.Function1<@[ParameterName(name = 'np0')] kotlin.Int, kotlin.Unit> origin=LAMBDA
+    //                FUN LOCAL_FUNCTION_FOR_LAMBDA name:<anonymous> visibility:local modality:FINAL <> (it:kotlin.Int) returnType:kotlin.Unit
+    //                  VALUE_PARAMETER name:it index:0 type:kotlin.Int
+    //                  BLOCK_BODY
+    //                    TYPE_OP type=kotlin.Unit origin=IMPLICIT_COERCION_TO_UNIT typeOperand=kotlin.Unit
+    //                      BLOCK type=kotlin.Int origin=POSTFIX_INCR
+    //                        VAR IR_TEMPORARY_VARIABLE name:tmp0 type:kotlin.Int [val]
+    //                          GET_VAR 'var i: kotlin.Int [var] declared in zakadabar.rui.kotlin.plugin.run.gen.eventHandlerFragment' type=kotlin.Int origin=POSTFIX_INCR
+    //                        SET_VAR 'var i: kotlin.Int [var] declared in zakadabar.rui.kotlin.plugin.run.gen.eventHandlerFragment' type=kotlin.Unit origin=POSTFIX_INCR
+    //                          CALL 'public final fun inc (): kotlin.Int [operator] declared in kotlin.Int' type=kotlin.Int origin=POSTFIX_INCR
+    //                            $this: GET_VAR 'val tmp0: kotlin.Int [val] declared in zakadabar.rui.kotlin.plugin.run.gen.eventHandlerFragment.<anonymous>' type=kotlin.Int origin=null
+    //                        GET_VAR 'val tmp0: kotlin.Int [val] declared in zakadabar.rui.kotlin.plugin.run.gen.eventHandlerFragment.<anonymous>' type=kotlin.Int origin=null
+
+    // eventHandler: FUN_EXPR type=kotlin.Function1<@[ParameterName(name = 'np0')] kotlin.Int, kotlin.Unit> origin=LAMBDA
+    //                    FUN LOCAL_FUNCTION_FOR_LAMBDA name:<anonymous> visibility:local modality:FINAL <> (it:kotlin.Int) returnType:kotlin.Unit
+    //                      VALUE_PARAMETER name:it index:0 type:kotlin.Int
+    //                      BLOCK_BODY
+    //                        TYPE_OP type=kotlin.Unit origin=IMPLICIT_COERCION_TO_UNIT typeOperand=kotlin.Unit
+    //                          BLOCK type=kotlin.Int origin=POSTFIX_INCR
+    //                            VAR IR_TEMPORARY_VARIABLE name:tmp0 type:kotlin.Int [val]
+    //                              CALL 'public final fun <get-i> (): kotlin.Int declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=kotlin.Int origin=GET_PROPERTY
+    //                                $this: GET_VAR '<this>: zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment origin=null
+    //                            COMPOSITE type=kotlin.Unit origin=null
+    //                              VAR IR_TEMPORARY_VARIABLE name:tmp0 type:kotlin.Int [val]
+    //                                GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:i type:kotlin.Int visibility:private' type=kotlin.Int origin=null
+    //                                  receiver: GET_VAR '<this>: zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment origin=null
+    //                              CALL 'public final fun set-i (set-?: kotlin.Int): kotlin.Unit declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=kotlin.Int origin=null
+    //                                $this: GET_VAR '<this>: zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment origin=null
+    //                                set-?: CALL 'public final fun inc (): kotlin.Int [operator] declared in kotlin.Int' type=kotlin.Int origin=POSTFIX_INCR
+    //                                  $this: GET_VAR 'val tmp0: kotlin.Int [val] declared in zakadabar.rui.kotlin.plugin.run.gen.eventHandlerFragment.<anonymous>' type=kotlin.Int origin=null
+    //                              CALL 'public open fun ruiInvalidate0 (mask: kotlin.Int): kotlin.Unit declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=kotlin.Unit origin=null
+    //                                $this: GET_VAR '<this>: zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment origin=null
+    //                                mask: CONST Int type=kotlin.Int value=1
+    //                              CALL 'public final fun println (message: kotlin.Any?): kotlin.Unit [inline] declared in kotlin.io.ConsoleKt' type=kotlin.Unit origin=null
+    //                                message: STRING_CONCATENATION type=kotlin.String
+    //                                  CONST String type=kotlin.String value="[RuiEventHandlerFragment       ]  state change          |"
+    //                                  CONST String type=kotlin.String value=" i: "
+    //                                  GET_VAR 'val tmp0: kotlin.Int [val] declared in zakadabar.rui.kotlin.plugin.run.gen.eventHandlerFragment.<anonymous>' type=kotlin.Int origin=null
+    //                                  CONST String type=kotlin.String value=" ⇢ "
+    //                                  GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:i type:kotlin.Int visibility:private' type=kotlin.Int origin=null
+    //                                    receiver: GET_VAR '<this>: zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment origin=null
+    //                            GET_VAR 'val tmp0: kotlin.Int [val] declared in zakadabar.rui.kotlin.plugin.run.gen.eventHandlerFragment.<anonymous>' type=kotlin.Int origin=null
+    //                        CALL 'public open fun ruiPatch (): kotlin.Unit declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=kotlin.Unit origin=null
+    //                          $this: GET_VAR '<this>: zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment declared in zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment' type=zakadabar.rui.kotlin.plugin.run.gen.RuiEventHandlerFragment origin=null
+
+
     fun IrBlockBuilder.traceStateChangeBefore(stateVariable: RuiStateVariable): IrVariable? {
         if (! ruiContext.withTrace) return null
 
         return irTemporary(irTraceGet(stateVariable, ruiClass.builder.irThisReceiver()))
+            .also { it.parent = currentFunction!!.irElement as IrFunction }
     }
 
     fun IrBlockBuilder.traceStateChangeAfter(stateVariable: RuiStateVariable, traceData: IrVariable?) {

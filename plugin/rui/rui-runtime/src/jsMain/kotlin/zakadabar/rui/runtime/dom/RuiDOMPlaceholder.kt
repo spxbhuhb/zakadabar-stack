@@ -11,15 +11,15 @@ class RuiDOMPlaceholder : RuiBridge<Node> {
     override val receiver = org.w3c.dom.Text()
 
     override fun remove(child: RuiBridge<Node>) {
-        throw IllegalStateException()
+        receiver.parentNode?.removeChild(child.receiver)
     }
 
     override fun replace(oldChild: RuiBridge<Node>, newChild: RuiBridge<Node>) {
-        throw IllegalStateException()
+        receiver.parentNode?.replaceChild(newChild.receiver, oldChild.receiver)
     }
 
     override fun add(child: RuiBridge<Node>) {
-        throw IllegalStateException()
+        receiver.parentNode?.appendChild(child.receiver)
     }
 
 }

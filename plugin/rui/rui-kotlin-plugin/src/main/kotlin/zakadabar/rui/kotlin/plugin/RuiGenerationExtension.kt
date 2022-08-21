@@ -16,7 +16,6 @@ internal class RuiGenerationExtension(
 ) : IrGenerationExtension {
 
     override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
-
         val ruiContext = RuiPluginContext(
             pluginContext,
             options,
