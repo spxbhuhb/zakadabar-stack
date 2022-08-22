@@ -5,7 +5,7 @@ package zakadabar.rui.kotlin.plugin.model
 
 import org.jetbrains.kotlin.ir.expressions.IrBlock
 import zakadabar.rui.kotlin.plugin.RUI_FOR_LOOP
-import zakadabar.rui.kotlin.plugin.transform.builders.RuiBuilder
+import zakadabar.rui.kotlin.plugin.transform.builders.RuiFragmentBuilder
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
 class RuiForLoop(
@@ -20,7 +20,7 @@ class RuiForLoop(
 
     override val name = "$RUI_FOR_LOOP$index"
 
-    override val builder: RuiBuilder
+    override val builder: RuiFragmentBuilder
         get() = TODO("Not yet implemented")
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =

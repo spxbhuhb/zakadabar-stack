@@ -8,4 +8,9 @@ interface RuiAdapter<BT> {
     val rootBridge : RuiBridge<BT>
 
     fun createPlaceholder() : RuiBridge<BT>
+
+    fun trace(name : String, point : String, vararg data : Any?) {
+        // FIXME should we escape the data string? think about security
+        println("[ ${name.padEnd(30)} ]  ${point.padEnd(20)}  |  ${data.joinToString(" ") { it.toString() }}")
+    }
 }

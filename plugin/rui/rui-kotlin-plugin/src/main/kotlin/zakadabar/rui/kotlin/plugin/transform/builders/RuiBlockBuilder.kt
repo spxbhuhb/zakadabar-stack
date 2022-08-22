@@ -5,19 +5,15 @@ package zakadabar.rui.kotlin.plugin.transform.builders
 
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
-import org.jetbrains.kotlin.ir.expressions.impl.IrSetFieldImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrVarargImpl
 import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
-import org.jetbrains.kotlin.name.Name
 import zakadabar.rui.kotlin.plugin.RUI_BLOCK_ARGUMENT_COUNT
 import zakadabar.rui.kotlin.plugin.RUI_BLOCK_ARGUMENT_INDEX_FRAGMENTS
 import zakadabar.rui.kotlin.plugin.RUI_FQN_BLOCK_CLASS
 import zakadabar.rui.kotlin.plugin.RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER
-import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui
 import zakadabar.rui.kotlin.plugin.model.RuiBlock
 import zakadabar.rui.kotlin.plugin.transform.RuiClassSymbols
-import zakadabar.rui.runtime.Plugin.RUI_BLOCK_CLASS
 
 class RuiBlockBuilder(
     override val ruiClassBuilder: RuiClassBuilder,
@@ -27,49 +23,23 @@ class RuiBlockBuilder(
     // we have to initialize this in build, after all other classes in the module are registered
     override lateinit var symbolMap: RuiClassSymbols
 
-    override lateinit var propertyBuilder: RuiPropertyBuilder
+    override fun irNewInstance(): IrExpression =
+        tryBuild(ruiBlock.irBlock) {
+            symbolMap = ruiContext.ruiSymbolMap.getSymbolMap(RUI_FQN_BLOCK_CLASS)
 
-    override fun build() {
-        symbolMap = ruiContext.ruiSymbolMap.getSymbolMap(RUI_FQN_BLOCK_CLASS)
+            IrConstructorCallImpl(
+                SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+                symbolMap.defaultType,
+                symbolMap.primaryConstructor.symbol,
+                0, 0,
+                RUI_BLOCK_ARGUMENT_COUNT // adapter, array of fragments
+            ).also { constructorCall ->
 
-        if (! symbolMap.valid) {
-            ErrorsRui.RUI_IR_INVALID_EXTERNAL_CLASS.report(ruiClass, ruiBlock.irBlock, additionalInfo = "invalid symbol map for $RUI_BLOCK_CLASS")
-            return
+                constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, ruiClassBuilder.adapterPropertyBuilder.irGetValue())
+                constructorCall.putValueArgument(RUI_BLOCK_ARGUMENT_INDEX_FRAGMENTS, buildFragmentVarArg())
+
+            }
         }
-
-        ruiBlock.statements.forEach {
-            (it.builder as RuiFragmentBuilder).build()
-        }
-
-        propertyBuilder = RuiPropertyBuilder(ruiClassBuilder, Name.identifier(ruiBlock.name), symbolMap.defaultType, isVar = false)
-
-        buildAndAddInitializer()
-    }
-
-    fun buildAndAddInitializer() {
-        if (! symbolMap.valid) return
-
-        val value = IrConstructorCallImpl(
-            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            symbolMap.defaultType,
-            symbolMap.primaryConstructor.symbol,
-            0, 0,
-            RUI_BLOCK_ARGUMENT_COUNT // adapter, array of fragments
-        ).also { constructorCall ->
-
-            constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, ruiClassBuilder.adapterPropertyBuilder.irGetValue())
-            constructorCall.putValueArgument(RUI_BLOCK_ARGUMENT_INDEX_FRAGMENTS, buildFragmentVarArg())
-
-        }
-
-        ruiClassBuilder.initializer.body.statements += IrSetFieldImpl(
-            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            propertyBuilder.irField.symbol,
-            receiver = ruiClassBuilder.irThisReceiver(),
-            value = value,
-            irBuiltIns.unitType
-        )
-    }
 
     fun buildFragmentVarArg(): IrExpression {
         return IrVarargImpl(
@@ -77,9 +47,8 @@ class RuiBlockBuilder(
             irBuiltIns.arrayClass.typeWith(ruiContext.ruiFragmentType),
             ruiContext.ruiFragmentType,
         ).also { vararg ->
-            ruiBlock.statements.forEach {
-                val builder = it.builder as RuiFragmentBuilder
-                vararg.addElement(builder.propertyBuilder.irGetValue(irThisReceiver()))
+            ruiBlock.statements.forEach { statement ->
+                vararg.addElement(statement.builder.irNewInstance())
             }
         }
     }

@@ -31,6 +31,7 @@ class RuiPluginContext(
 
     val ruiAdapterClass = requireNotNull(irContext.referenceClass(RUI_FQN_ADAPTER_CLASS)) { "missing class: ${RUI_FQN_FRAGMENT_CLASS.asString()}" }
     val ruiAdapterType = ruiAdapterClass.defaultType
+    val ruiAdapterTrace = ruiAdapterClass.functionByName(RUI_ADAPTER_TRACE)
 
     val ruiBridgeClass = requireNotNull(irContext.referenceClass(RUI_FQN_BRIDGE_CLASS)) { "missing class: ${RUI_FQN_BRIDGE_CLASS.asString()}" }
     val ruiBridgeType = ruiBridgeClass.defaultType

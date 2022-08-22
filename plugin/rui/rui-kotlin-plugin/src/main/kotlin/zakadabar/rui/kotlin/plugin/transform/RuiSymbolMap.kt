@@ -22,22 +22,14 @@ class RuiSymbolMap(
 
     private val classSymbolMaps = mutableMapOf<FqName, RuiClassSymbols>()
 
-    private val invalid : RuiClassSymbols// FIXME= RuiClassSymbols(ruiContext.ruiFragmentClass.owner, false)
-        get() = TODO()
-
     fun getSymbolMap(fqName: FqName): RuiClassSymbols =
         classSymbolMaps[fqName] ?: loadClass(fqName)
 
     private fun loadClass(fqName: FqName): RuiClassSymbols {
-        val irClass = try {
+        val irClass =
             ruiContext.ruiClasses[fqName]?.irClass
                 ?: ruiContext.irContext.referenceClass(fqName)?.owner
-        } catch (ex: RuiCompilationException) {
-            ex.printStackTrace()
-            return invalid
-        }
-
-        if (irClass == null) return invalid
+                ?: throw RuiCompilationException(RUI_IR_INVALID_EXTERNAL_CLASS, additionalInfo = "missing class: ${fqName.asString()}")
 
         return RuiClassSymbols(irClass).also {
             classSymbolMaps[fqName] = it
@@ -70,7 +62,6 @@ class RuiClassSymbols(
     lateinit var patch: IrSimpleFunction
     lateinit var dispose: IrSimpleFunction
     lateinit var unmount: IrSimpleFunction
-
 
     val defaultType
         get() = irClass.defaultType

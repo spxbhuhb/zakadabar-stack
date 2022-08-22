@@ -3,7 +3,7 @@
  */
 package zakadabar.rui.kotlin.plugin.model
 
-import zakadabar.rui.kotlin.plugin.transform.builders.RuiBuilder
+import zakadabar.rui.kotlin.plugin.transform.builders.RuiFragmentBuilder
 
 abstract class RuiStatement(
     val ruiClass: RuiClass,
@@ -12,6 +12,6 @@ abstract class RuiStatement(
 
     abstract val name : String
 
-    abstract val builder : RuiBuilder
+    abstract val builder : RuiFragmentBuilder
 
 }

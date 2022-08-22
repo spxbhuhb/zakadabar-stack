@@ -29,6 +29,6 @@ fun eventHandlerTest() {
 
 @Rui
 fun eventHandlerFragment() {
-    var i = 0
+    var i = 12
     EH1(i + 1) { i++ }
 }

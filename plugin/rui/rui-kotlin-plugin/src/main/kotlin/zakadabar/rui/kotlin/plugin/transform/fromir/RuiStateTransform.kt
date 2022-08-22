@@ -356,14 +356,12 @@ class RuiStateTransform(
     fun IrBlockBuilder.traceStateChangeAfter(stateVariable: RuiStateVariable, traceData: IrVariable?) {
         if (traceData == null) return
 
-        val concat = irConcat()
-        concat.addArgument(irString(traceLabel(ruiClass.name, "state change")))
-        concat.addArgument(irString(" ${stateVariable.name}: "))
-        concat.addArgument(irGet(traceData))
-        concat.addArgument(irString(" ⇢ "))
-        concat.addArgument(irTraceGet(stateVariable, ruiClass.builder.irThisReceiver()))
-
-        + ruiClass.builder.irPrintln(concat)
+        ruiClass.builder.irTrace("state change", listOf(
+            irString("${stateVariable.name}:"),
+            irGet(traceData),
+            irString(" ⇢ "),
+            irTraceGet(stateVariable, ruiClass.builder.irThisReceiver())
+        ))
     }
 
     fun IrBlockBuilder.irTraceGet(stateVariable: RuiStateVariable, receiver : IrExpression) : IrExpression =

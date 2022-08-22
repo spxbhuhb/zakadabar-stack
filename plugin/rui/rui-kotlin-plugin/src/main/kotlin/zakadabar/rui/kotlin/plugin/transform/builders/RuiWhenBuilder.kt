@@ -5,28 +5,31 @@ package zakadabar.rui.kotlin.plugin.transform.builders
 
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
 import org.jetbrains.kotlin.descriptors.DescriptorVisibilities
-import org.jetbrains.kotlin.ir.builders.*
-import org.jetbrains.kotlin.ir.builders.declarations.addValueParameter
+import org.jetbrains.kotlin.descriptors.Modality
+import org.jetbrains.kotlin.ir.builders.IrBlockBodyBuilder
 import org.jetbrains.kotlin.ir.builders.declarations.buildFun
+import org.jetbrains.kotlin.ir.builders.irBlockBody
+import org.jetbrains.kotlin.ir.builders.irBranch
+import org.jetbrains.kotlin.ir.builders.irReturn
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
 import org.jetbrains.kotlin.ir.expressions.IrBody
 import org.jetbrains.kotlin.ir.expressions.IrConst
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
-import org.jetbrains.kotlin.ir.expressions.impl.*
-import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
+import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionExpressionImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrVarargImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrWhenImpl
 import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
+import org.jetbrains.kotlin.ir.util.constructors
 import org.jetbrains.kotlin.name.Name
 import zakadabar.rui.kotlin.plugin.*
-import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui
 import zakadabar.rui.kotlin.plugin.model.RuiBranch
-import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.model.RuiWhen
 import zakadabar.rui.kotlin.plugin.transform.RuiClassSymbols
 import zakadabar.rui.kotlin.plugin.util.RuiCompilationException
-import zakadabar.rui.runtime.Plugin.RUI_WHEN_CLASS
 
 class RuiWhenBuilder(
     override val ruiClassBuilder: RuiClassBuilder,
@@ -36,55 +39,30 @@ class RuiWhenBuilder(
     // we have to initialize this in build, after all other classes in the module are registered
     override lateinit var symbolMap: RuiClassSymbols
 
-    override lateinit var propertyBuilder: RuiPropertyBuilder
+    override fun irNewInstance(): IrExpression =
+        tryBuild(ruiWhen.irWhen) {
+            symbolMap = ruiContext.ruiSymbolMap.getSymbolMap(RUI_FQN_WHEN_CLASS)
 
-    override fun build() {
-        symbolMap = ruiContext.ruiSymbolMap.getSymbolMap(RUI_FQN_WHEN_CLASS)
+            IrConstructorCallImpl(
+                SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+                symbolMap.defaultType,
+                symbolMap.primaryConstructor.symbol,
+                0, 0,
+                RUI_WHEN_ARGUMENT_COUNT // adapter, select, array of fragments
+            ).also { constructorCall ->
 
-        if (! symbolMap.valid) {
-            ErrorsRui.RUI_IR_INVALID_EXTERNAL_CLASS.report(ruiClass, ruiWhen.irWhen, additionalInfo = "invalid symbol map for $RUI_WHEN_CLASS")
-            return
+                constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, ruiClassBuilder.adapterPropertyBuilder.irGetValue())
+                constructorCall.putValueArgument(RUI_WHEN_ARGUMENT_INDEX_SELECT, buildSelect())
+                constructorCall.putValueArgument(RUI_WHEN_ARGUMENT_INDEX_FRAGMENTS, buildFragmentVarArg())
+
+            }
         }
-
-        ruiWhen.branches.forEach {
-            buildBranch(it)
-        }
-
-        propertyBuilder = RuiPropertyBuilder(ruiClassBuilder, Name.identifier(ruiWhen.name), symbolMap.defaultType, isVar = false)
-
-        buildAndAddInitializer()
-    }
-
-    fun buildAndAddInitializer() {
-        if (! symbolMap.valid) return
-
-        val value = IrConstructorCallImpl(
-            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            symbolMap.defaultType,
-            symbolMap.primaryConstructor.symbol,
-            0, 0,
-            RUI_WHEN_ARGUMENT_COUNT // adapter, select, array of fragments
-        ).also { constructorCall ->
-
-            constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, ruiClassBuilder.adapterPropertyBuilder.irGetValue())
-            constructorCall.putValueArgument(RUI_WHEN_ARGUMENT_INDEX_SELECT, buildSelect())
-            constructorCall.putValueArgument(RUI_WHEN_ARGUMENT_INDEX_FRAGMENTS, buildFragmentVarArg())
-
-        }
-
-        ruiClassBuilder.initializer.body.statements += IrSetFieldImpl(
-            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            propertyBuilder.irField.symbol,
-            receiver = ruiClassBuilder.irThisReceiver(),
-            value = value,
-            irBuiltIns.unitType
-        )
-    }
 
     fun buildSelect(): IrExpression {
         val function = irFactory.buildFun {
             name = Name.special("<anonymous>")
             origin = IrDeclarationOrigin.LOCAL_FUNCTION_FOR_LAMBDA
+            modality = Modality.FINAL
             returnType = irBuiltIns.intType
         }.also { function ->
 
@@ -96,19 +74,19 @@ class RuiWhenBuilder(
 
         return IrFunctionExpressionImpl(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            classBoundExternalPatchType,
+            irBuiltIns.functionN(0).typeWith(irBuiltIns.intType),
             function,
             IrStatementOrigin.LAMBDA
         )
     }
 
-    private fun buildSelectBody(function: IrSimpleFunction): IrBody? {
+    private fun buildSelectBody(function: IrSimpleFunction): IrBody {
         return try {
 
             DeclarationIrBuilder(irContext, function.symbol).irBlockBody {
                 + irReturn(
                     if (ruiWhen.irSubject == null) {
-                        buildWhen()
+                        buildSelectWhen()
                     } else {
                         TODO("when with subject")
                     }
@@ -121,7 +99,7 @@ class RuiWhenBuilder(
         }
     }
 
-    fun IrBlockBodyBuilder.buildWhen(): IrExpression {
+    fun IrBlockBodyBuilder.buildSelectWhen(): IrExpression {
         val branches = ruiWhen.branches.mapIndexed { index, branch ->
             irBranch(branch.condition.irExpression, irConst(index))
         }.toMutableList()
@@ -139,92 +117,53 @@ class RuiWhenBuilder(
             }
         }
 
-        return irWhen(
+        return IrWhenImpl(
+            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
             irBuiltIns.intType,
-            branches
-        )
+            IrStatementOrigin.WHEN
+        ).also {
+            it.branches.addAll(branches)
+        }
     }
 
     fun buildFragmentVarArg(): IrExpression {
         return IrVarargImpl(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            irBuiltIns.arrayClass.typeWith(ruiContext.ruiFragmentType),
-            ruiContext.ruiFragmentType,
+            irBuiltIns.arrayClass.typeWith(ruiContext.ruiFragmentFactoryType),
+            ruiContext.ruiFragmentFactoryType,
         ).also { vararg ->
             ruiWhen.branches.forEach {
-                val builder = it.result.builder as RuiFragmentBuilder
-                vararg.addElement(builder.propertyBuilder.irGetValue(irThisReceiver()))
+                vararg.addElement(buildBranchFactory(it))
             }
         }
     }
 
-    fun buildBranch(branch: RuiBranch) {
-
-//            ruiEntryPoint.irFunction.body = IrBlockBodyImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET).apply {
-//
-//                val instance = IrConstructorCallImpl(
-//                    SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-//                    ruiClass.irClass.defaultType,
-//                    ruiClass.builder.constructor.symbol,
-//                    0, 0, 2
-//                ).also { call ->
-//                    call.putValueArgument(0, irGetAdapter(function))
-//                    call.putValueArgument(1, buildExternalPatch(ruiClass, function.symbol))
-//                }
-//
-//                val root = irTemporary(instance, "root").also { it.parent = ruiEntryPoint.irFunction }
-//
-//                statements += root
-//
-//                statements += irCall(
-//                    ruiClass.builder.create.symbol,
-//                    dispatchReceiver = irGet(root)
-//                )
-//
-//                statements += irCall(
-//                    ruiClass.builder.mount.symbol,
-//                    dispatchReceiver = irGet(root),
-//                    args = arrayOf(
-//                        irCall(
-//                            ruiContext.ruiAdapterClass.getPropertyGetter(RUI_ROOT_BRIDGE) !!.owner.symbol,
-//                            dispatchReceiver = irGetAdapter(function)
-//                        )
-//                    )
-//                )
-//            }
-//
-//            RuiDumpPoint.KotlinLike.dump(ruiContext) {
-//                println(function.dumpKotlinLike())
-//            }
-    }
-
-    private fun irGetAdapter(function: IrSimpleFunction): IrExpression =
-        IrGetValueImpl(
+    fun buildBranchFactory(branch: RuiBranch): IrExpression =
+        IrConstructorCallImpl(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            function.valueParameters.first().symbol
-        )
+            ruiContext.ruiFragmentFactoryType,
+            ruiContext.ruiFragmentFactoryClass.constructors.first(),
+            0, 0, 1
+        ).also { call ->
+            call.putValueArgument(0, buildFactoryLambda(branch))
+        }
 
-    fun buildExternalPatch(ruiClass: RuiClass, parent: IrSimpleFunctionSymbol): IrExpression {
+    fun buildFactoryLambda(branch: RuiBranch): IrExpression {
         val function = irFactory.buildFun {
             name = Name.special("<anonymous>")
             origin = IrDeclarationOrigin.LOCAL_FUNCTION_FOR_LAMBDA
-            returnType = irBuiltIns.unitType
+            returnType = ruiContext.ruiFragmentType
         }.also { function ->
-
-            function.parent = parent.owner
+            function.parent = irClass
             function.visibility = DescriptorVisibilities.LOCAL
-
-            function.addValueParameter {
-                name = Name.identifier("it")
-                type = ruiContext.ruiFragmentType
+            function.body = DeclarationIrBuilder(ruiContext.irContext, function.symbol).irBlockBody {
+                + irReturn(branch.result.builder.irNewInstance())
             }
-
-            function.body = DeclarationIrBuilder(ruiContext.irContext, function.symbol).irBlockBody { }
         }
 
         return IrFunctionExpressionImpl(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            ruiClass.builder.classBoundExternalPatchType,
+            irBuiltIns.functionN(0).typeWith(ruiContext.ruiFragmentType),
             function,
             IrStatementOrigin.LAMBDA
         )

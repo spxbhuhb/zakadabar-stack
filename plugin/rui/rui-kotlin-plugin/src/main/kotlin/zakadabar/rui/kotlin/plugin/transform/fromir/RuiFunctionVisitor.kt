@@ -14,12 +14,12 @@ import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.ir.util.kotlinFqName
 import org.jetbrains.kotlin.ir.util.superTypes
 import org.jetbrains.kotlin.psi.KtModifierListOwner
+import zakadabar.rui.kotlin.plugin.RUI_FQN_ENTRY_FUNCTION
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui.RUI_IR_MISSING_FUNCTION_BODY
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.model.RuiEntryPoint
-import zakadabar.rui.kotlin.plugin.transform.RUI_ENTRY_FUNCTION
 import zakadabar.rui.kotlin.plugin.util.RuiAnnotationBasedExtension
 import kotlin.collections.set
 
@@ -66,7 +66,7 @@ class RuiFunctionVisitor(
      * of the root class.
      */
     override fun visitCall(expression: IrCall): IrExpression {
-        if (expression.symbol.owner.kotlinFqName != RUI_ENTRY_FUNCTION) {
+        if (expression.symbol.owner.kotlinFqName != RUI_FQN_ENTRY_FUNCTION) {
             return super.visitCall(expression)
         }
 

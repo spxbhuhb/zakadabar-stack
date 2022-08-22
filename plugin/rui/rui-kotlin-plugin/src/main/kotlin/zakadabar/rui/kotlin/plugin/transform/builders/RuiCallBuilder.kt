@@ -16,7 +16,6 @@ import org.jetbrains.kotlin.ir.expressions.IrFunctionExpression
 import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
 import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionExpressionImpl
-import org.jetbrains.kotlin.ir.expressions.impl.IrSetFieldImpl
 import org.jetbrains.kotlin.ir.types.defaultType
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.name.Name
@@ -24,12 +23,10 @@ import zakadabar.rui.kotlin.plugin.RUI_FRAGMENT_ARGUMENT_COUNT
 import zakadabar.rui.kotlin.plugin.RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER
 import zakadabar.rui.kotlin.plugin.RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH
 import zakadabar.rui.kotlin.plugin.RUI_FRAGMENT_TYPE_INDEX_BRIDGE
-import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui
 import zakadabar.rui.kotlin.plugin.model.RuiCall
 import zakadabar.rui.kotlin.plugin.model.RuiExpression
 import zakadabar.rui.kotlin.plugin.transform.RuiClassSymbols
 import zakadabar.rui.kotlin.plugin.util.RuiCompilationException
-import zakadabar.rui.kotlin.plugin.util.traceLabel
 
 class RuiCallBuilder(
     override val ruiClassBuilder: RuiClassBuilder,
@@ -39,49 +36,29 @@ class RuiCallBuilder(
     // we have to initialize this in build, after all other classes in the module are registered
     override lateinit var symbolMap: RuiClassSymbols
 
-    override lateinit var propertyBuilder: RuiPropertyBuilder
+    override fun irNewInstance(): IrExpression =
+        tryBuild(ruiCall.irCall) {
+            symbolMap = ruiContext.ruiSymbolMap.getSymbolMap(ruiCall.targetRuiClass)
 
-    override fun build() {
-        symbolMap = ruiContext.ruiSymbolMap.getSymbolMap(ruiCall.targetRuiClass)
+            IrConstructorCallImpl(
+                SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+                symbolMap.defaultType,
+                symbolMap.primaryConstructor.symbol,
+                typeArgumentsCount = 1, // bridge type
+                constructorTypeArgumentsCount = 0,
+                ruiCall.valueArguments.size + RUI_FRAGMENT_ARGUMENT_COUNT // +2 = adapter + external patch
+            ).also { constructorCall ->
 
-        if (! symbolMap.valid) {
-            ErrorsRui.RUI_IR_INVALID_EXTERNAL_CLASS.report(ruiClass, ruiCall.irCall, additionalInfo = "invalid symbol map for ${ruiCall.targetRuiClass}")
-            return
-        }
+                constructorCall.putTypeArgument(RUI_FRAGMENT_TYPE_INDEX_BRIDGE, classBoundBridgeType.defaultType)
+                constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, ruiClassBuilder.adapterPropertyBuilder.irGetValue())
+                constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH, buildExternalPatch())
 
-        propertyBuilder = RuiPropertyBuilder(ruiClassBuilder, Name.identifier(ruiCall.name), symbolMap.defaultType, isVar = false)
-        buildInitializer()
-    }
-
-    fun buildInitializer() {
-        if (! symbolMap.valid) return
-
-        val value = IrConstructorCallImpl(
-            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            symbolMap.defaultType,
-            symbolMap.primaryConstructor.symbol,
-            typeArgumentsCount = 1, // bridge type
-            constructorTypeArgumentsCount = 0,
-            ruiCall.valueArguments.size + RUI_FRAGMENT_ARGUMENT_COUNT // +2 = adapter + external patch
-        ).also { constructorCall ->
-
-            constructorCall.putTypeArgument(RUI_FRAGMENT_TYPE_INDEX_BRIDGE, classBoundBridgeType.defaultType)
-            constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, ruiClassBuilder.adapterPropertyBuilder.irGetValue())
-            constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH, buildExternalPatch())
-
-            ruiCall.valueArguments.forEachIndexed { index, ruiExpression ->
-                constructorCall.putValueArgument(index + RUI_FRAGMENT_ARGUMENT_COUNT, ruiExpression.irExpression)
+                ruiCall.valueArguments.forEachIndexed { index, ruiExpression ->
+                    constructorCall.putValueArgument(index + RUI_FRAGMENT_ARGUMENT_COUNT, ruiExpression.irExpression)
+                }
             }
         }
 
-        ruiClassBuilder.initializer.body.statements += IrSetFieldImpl(
-            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            propertyBuilder.irField.symbol,
-            receiver = ruiClassBuilder.irThisReceiver(),
-            value = value,
-            irBuiltIns.unitType
-        )
-    }
 
     fun buildExternalPatch(): IrExpression {
         val function = irFactory.buildFun {
@@ -132,15 +109,15 @@ class RuiCallBuilder(
 
         if (! ruiContext.withTrace) return
 
-        val concat = irConcat()
-        concat.addArgument(irString(traceLabel(ruiCall.name, "external patch")))
+        val args = mutableListOf<IrExpression>()
 
         ruiClass.dirtyMasks.forEach {
-            concat.addArgument(irString(" ${ruiClass.name}.${it.name}: "))
-            concat.addArgument(it.builder.propertyBuilder.irGetValue(ruiClass.builder.irThisReceiver()))
+            args += irString("${it.name}:")
+            args += it.builder.propertyBuilder.irGetValue(ruiClass.builder.irThisReceiver())
         }
 
-        + ruiClass.builder.irPrintln(concat)
+        ruiClassBuilder.irTrace(ruiClass.builder.irThisReceiver(), "external patch", args)
+
     }
 
     fun IrBlockBodyBuilder.buildVariablePatch(externalPatchIt: IrValueDeclaration, index: Int, ruiExpression: RuiExpression) {
@@ -206,14 +183,12 @@ class RuiCallBuilder(
 
         val property = symbolMap.getStateVariable(index).property
 
-        val concat = irConcat()
-        concat.addArgument(irString(traceLabel(ruiCall.name, "state change")))
-        concat.addArgument(irString(" ${property.name}: "))
-        concat.addArgument(irGet(traceData))
-        concat.addArgument(irString(" ⇢ "))
-        concat.addArgument(irGet(newValue))
-
-        + irPrintln(concat)
+        ruiClassBuilder.irTrace("state change", listOf(
+            irString("${property.name}:"),
+            irGet(traceData),
+            irString(" ⇢ "),
+            irGet(newValue)
+        ))
     }
 
 }

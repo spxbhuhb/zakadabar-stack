@@ -23,6 +23,11 @@ const val RUI_WHEN_ARGUMENT_COUNT = 3
 const val RUI_WHEN_ARGUMENT_INDEX_SELECT = 1
 const val RUI_WHEN_ARGUMENT_INDEX_FRAGMENTS = 2
 
+const val RUI_TRACE_ARGUMENT_COUNT = 3
+const val RUI_TRACE_ARGUMENT_NAME = 0
+const val RUI_TRACE_ARGUMENT_POINT = 1
+const val RUI_TRACE_ARGUMENT_DATA = 2
+
 /**
  * Bridge type parameter for classes.
  */
@@ -30,6 +35,8 @@ const val RUI_FRAGMENT_TYPE_INDEX_BRIDGE = 0
 
 const val RUI_BT = "BT" // type parameter for fragment, Bridge Type
 const val RUI_ROOT_BRIDGE = "rootBridge" // property name of the root bridge in the adapter
+
+const val RUI_ADAPTER_TRACE = "trace" // name of the trace function in the adapter class
 
 const val RUI_CREATE = "ruiCreate"
 const val RUI_MOUNT = "ruiMount"
@@ -42,7 +49,7 @@ const val RUI_DIRTY = "ruiDirty"
 
 const val RUI_ADAPTER = "ruiAdapter"
 const val RUI_EXTERNAL_PATCH = "ruiExternalPatch"
-const val RUI_ANCHOR = "ruiAnchor"
+const val RUI_FRAGMENT = "ruiFragment"
 const val RUI_MASK = "mask"
 
 const val RUI_BLOCK = "ruiBlock"

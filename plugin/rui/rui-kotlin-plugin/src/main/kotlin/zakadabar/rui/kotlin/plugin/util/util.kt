@@ -27,12 +27,25 @@ fun IrFunction.toRuiClassFqName(): FqName {
 
 class RuiCompilationException(
     val error: ErrorsRui.RuiIrError,
-    ruiClass: RuiClass? = null,
-    irElement: IrElement? = null,
+    var ruiClass: RuiClass? = null,
+    var irElement: IrElement? = null,
     val additionalInfo: String = ""
 ) : Exception() {
+
+    var reported = false
+
     init {
-        if (ruiClass != null && irElement != null) error.report(ruiClass, irElement, additionalInfo)
+        report()
+    }
+
+    fun report() {
+        if (reported) return
+        ruiClass?.let { c ->
+            irElement?.let { e ->
+                error.report(c, e, additionalInfo)
+                reported = true
+            }
+        }
     }
 }
 
@@ -42,7 +55,7 @@ val Any.traceName
 val Any.tracePoint
     get() = "  ${this.toString().padEnd(20)}  |"
 
-fun traceLabel(name : Any, point : Any) =
+fun traceLabel(name: Any, point: Any) =
     name.traceName + point.tracePoint
 
 fun String.camelToSnakeCase(): String {

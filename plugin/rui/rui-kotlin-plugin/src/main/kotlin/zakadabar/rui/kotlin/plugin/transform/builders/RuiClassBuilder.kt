@@ -6,12 +6,14 @@ package zakadabar.rui.kotlin.plugin.transform.builders
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
 import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.descriptors.Modality
+import org.jetbrains.kotlin.ir.IrStatement
 import org.jetbrains.kotlin.ir.builders.*
 import org.jetbrains.kotlin.ir.builders.declarations.*
 import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.declarations.impl.IrTypeParameterImpl
-import org.jetbrains.kotlin.ir.expressions.impl.IrDelegatingConstructorCallImpl
-import org.jetbrains.kotlin.ir.expressions.impl.IrInstanceInitializerCallImpl
+import org.jetbrains.kotlin.ir.expressions.IrExpression
+import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
+import org.jetbrains.kotlin.ir.expressions.impl.*
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.impl.IrAnonymousInitializerSymbolImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrTypeParameterSymbolImpl
@@ -26,7 +28,6 @@ import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.types.Variance
 import zakadabar.rui.kotlin.plugin.*
 import zakadabar.rui.kotlin.plugin.model.RuiClass
-import zakadabar.rui.kotlin.plugin.util.traceLabel
 
 class RuiClassBuilder(
     override val ruiClass: RuiClass
@@ -52,6 +53,7 @@ class RuiClassBuilder(
 
     val adapterPropertyBuilder: RuiPropertyBuilder
     val externalPatchPropertyBuilder: RuiPropertyBuilder
+    val fragmentPropertyBuilder: RuiPropertyBuilder
 
     val create: IrSimpleFunction
     val mount: IrSimpleFunction
@@ -84,6 +86,7 @@ class RuiClassBuilder(
 
         adapterPropertyBuilder = initAdapterProperty()
         externalPatchPropertyBuilder = initExternalPatchProperty()
+        fragmentPropertyBuilder = initFragmentProperty()
 
         initializer = initInitializer()
 
@@ -139,12 +142,17 @@ class RuiClassBuilder(
     private fun initAdapterProperty(): RuiPropertyBuilder =
         RuiPropertyBuilder(ruiClassBuilder, Name.identifier(RUI_ADAPTER), classBoundAdapterType, isVar = false).also {
             it.irField.initializer = irFactory.createExpressionBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, irGet(adapterConstructorParameter))
+            // FIXME add overridden info
         }
 
     private fun initExternalPatchProperty(): RuiPropertyBuilder =
         RuiPropertyBuilder(ruiClassBuilder, Name.identifier(RUI_EXTERNAL_PATCH), classBoundExternalPatchType, isVar = false).also {
             it.irField.initializer = irFactory.createExpressionBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, irGet(externalPatchConstructorParameter))
+            // FIXME add overridden info
         }
+
+    private fun initFragmentProperty(): RuiPropertyBuilder =
+        RuiPropertyBuilder(ruiClassBuilder, Name.identifier(RUI_FRAGMENT), ruiContext.ruiFragmentType, isVar = false)
 
     /**
      * Creates a primary constructor with a standard body (super class constructor call
@@ -246,8 +254,10 @@ class RuiClassBuilder(
 
         initializer.body.statements += ruiClass.initializerStatements
 
-        val rootBuilder = ruiClass.rootBlock.builder as RuiFragmentBuilder
-        rootBuilder.build()
+        val rootBuilder = ruiClass.rootBlock.builder
+        fragmentPropertyBuilder.irField.initializer = IrExpressionBodyImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET) {
+            expression = rootBuilder.irNewInstance()
+        }
 
         buildRuiCall(create, rootBuilder, rootBuilder.symbolMap.create)
         buildRuiCall(mount, rootBuilder, rootBuilder.symbolMap.mount)
@@ -265,7 +275,7 @@ class RuiClassBuilder(
 
     fun traceInit() {
         if (! ruiContext.withTrace) return
-        initializer.body.statements += irPrintln(traceLabel(ruiClass.name, "init"))
+        initializer.body.statements += irTrace("init", emptyList())
     }
 
     fun buildRuiCall(function: IrSimpleFunction, rootBuilder: RuiFragmentBuilder, callee: IrSimpleFunction) {
@@ -275,14 +285,14 @@ class RuiClassBuilder(
             val symbolMap = rootBuilder.symbolMap
 
             when (callee.name.identifier) {
-                RUI_CREATE -> rootBuilder.irRuiCall(symbolMap.create, function, this)
-                RUI_MOUNT -> rootBuilder.irRuiCallWithBridge(symbolMap.mount, function, this)
+                RUI_CREATE -> irRuiCall(symbolMap.create, function, this)
+                RUI_MOUNT -> irRuiCallWithBridge(symbolMap.mount, function, this)
                 RUI_PATCH -> {
-                    rootBuilder.irCallExternalPatch(function, this)
-                    rootBuilder.irRuiCall(symbolMap.patch, function, this)
+                    irCallExternalPatch(function, this)
+                    irRuiCall(symbolMap.patch, function, this)
                 }
-                RUI_UNMOUNT -> rootBuilder.irRuiCallWithBridge(symbolMap.unmount, function, this)
-                RUI_DISPOSE -> rootBuilder.irRuiCall(symbolMap.dispose, function, this)
+                RUI_UNMOUNT -> irRuiCallWithBridge(symbolMap.unmount, function, this)
+                RUI_DISPOSE -> irRuiCall(symbolMap.dispose, function, this)
             }
         }
     }
@@ -295,19 +305,131 @@ class RuiClassBuilder(
 
         + when {
             name.startsWith("ruiPatch") -> {
-                val concat = irConcat()
-                concat.addArgument(irString(traceLabel(ruiClass.name, "patch")))
+
+                val args = mutableListOf<IrExpression>()
 
                 ruiClass.dirtyMasks.forEach {
-                    concat.addArgument(irString(" ${it.name}: "))
-                    concat.addArgument(it.builder.propertyBuilder.irGetValue(irGet(function.dispatchReceiverParameter !!)))
+                    args += irString("${it.name}:")
+                    args += it.builder.propertyBuilder.irGetValue(irGet(function.dispatchReceiverParameter !!))
                 }
 
-                irPrintln(concat)
+                irTrace(function, "patch", args)
+
             }
-            else -> irPrintln(traceLabel(ruiClass.name, function.name.identifier.substring(3).lowercase()))
+            else -> irTrace(function, function.name.identifier.substring(3).lowercase(), emptyList())
         }
 
     }
 
+    /**
+     * Fetch the instance of this fragment.
+     */
+    fun IrBlockBodyBuilder.irGetFragment(scope: IrSimpleFunction): IrExpression {
+        // FIXME check receiver logic when having deeper structures
+        return irGet(
+            fragmentPropertyBuilder.type,
+            IrGetValueImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, scope.dispatchReceiverParameter !!.symbol),
+            fragmentPropertyBuilder.getter.symbol
+        )
+    }
+
+    /**
+     * Call a Rui function of this fragment.
+     *
+     * @param scope The function we call from,
+     */
+    fun irRuiCall(callee: IrSimpleFunction, scope: IrSimpleFunction, builder: IrBlockBodyBuilder) {
+        builder.run {
+            + irCallOp(
+                callee.symbol,
+                type = irBuiltIns.unitType,
+                dispatchReceiver = irGetFragment(scope)
+            )
+        }
+    }
+
+    /**
+     * Call a Rui function of this fragment.
+     *
+     * @param scope The function we call from,
+     */
+    fun irRuiCallWithBridge(callee: IrSimpleFunction, scope: IrSimpleFunction, builder: IrBlockBodyBuilder) {
+        builder.run {
+            + irCallOp(
+                callee.symbol,
+                type = irBuiltIns.unitType,
+                dispatchReceiver = irGetFragment(scope),
+                argument = irGet(scope.valueParameters.first())
+            )
+        }
+    }
+
+    /**
+     * Call the external patch of this fragment. This is somewhat complex because the function
+     * is stored in a variable. So, we have to:
+     *
+     * 1. fetch the fragment itself
+     * 1. fetch the function from the variable in the fragment
+     * 1. call the function with the fragment as dispatch receiver
+     */
+    fun irCallExternalPatch(function: IrSimpleFunction, builder: IrBlockBodyBuilder) {
+        builder.run {
+
+            val function1Type = irBuiltIns.functionN(1)
+            val invoke = function1Type.functions.first { it.name.identifier == "invoke" }.symbol
+
+            val fragment = irTemporary(irGetFragment(function))
+            val rootBuilder = ruiClass.rootBlock.builder as RuiFragmentBuilder
+
+            + irCallOp(
+                invoke,
+                type = irBuiltIns.unitType,
+                dispatchReceiver = irCallOp(rootBuilder.symbolMap.externalPatchGetter.symbol, function1Type.defaultType, irGet(fragment)),
+                origin = IrStatementOrigin.INVOKE,
+                argument = irGet(fragment)
+            )
+        }
+    }
+
+    fun irTrace(point: String, parameters: List<IrExpression>): IrStatement {
+        return irTrace(irGet(thisReceiver), point, parameters)
+    }
+
+    fun irTrace(function: IrFunction, point : String, parameters: List<IrExpression>): IrStatement {
+        return irTrace(irGet(function.dispatchReceiverParameter!!), point, parameters)
+    }
+
+    fun irTrace(fragment: IrExpression, point: String, parameters: List<IrExpression>) : IrStatement {
+        return irTraceDirect(ruiClassBuilder.adapterPropertyBuilder.irGetValue(fragment), point, parameters)
+    }
+
+    /**
+     * @param dispatchReceiver The `RuiAdapter` instance to use for the trace.
+     */
+    fun irTraceDirect(dispatchReceiver: IrExpression, point: String, parameters: List<IrExpression>): IrStatement {
+        return IrCallImpl(
+            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+            irBuiltIns.unitType,
+            ruiContext.ruiAdapterTrace,
+            typeArgumentsCount = 0,
+            RUI_TRACE_ARGUMENT_COUNT,
+        ).also {
+            it.dispatchReceiver = dispatchReceiver
+            it.putValueArgument(RUI_TRACE_ARGUMENT_NAME, irConst(ruiClass.name.identifier))
+            it.putValueArgument(RUI_TRACE_ARGUMENT_POINT, irConst(point))
+            it.putValueArgument(RUI_TRACE_ARGUMENT_DATA, buildTraceVarArg(parameters))
+        }
+    }
+
+    fun buildTraceVarArg(parameters: List<IrExpression>): IrExpression {
+        return IrVarargImpl(
+            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+            irBuiltIns.arrayClass.typeWith(irBuiltIns.anyNType),
+            ruiContext.ruiFragmentType,
+        ).also { vararg ->
+            parameters.forEach {
+                vararg.addElement(it)
+            }
+        }
+    }
 }

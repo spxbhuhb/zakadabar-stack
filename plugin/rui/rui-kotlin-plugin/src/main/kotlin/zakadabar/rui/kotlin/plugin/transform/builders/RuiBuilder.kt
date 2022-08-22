@@ -9,6 +9,10 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
+
+/*
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ */
 /*
  * Copyright 2020 The Android Open Source Project
  *
@@ -27,6 +31,7 @@
 
 package zakadabar.rui.kotlin.plugin.transform.builders
 
+import org.jetbrains.kotlin.ir.IrElement
 import org.jetbrains.kotlin.ir.IrStatement
 import org.jetbrains.kotlin.ir.ObsoleteDescriptorBasedAPI
 import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
@@ -50,6 +55,7 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.util.OperatorNameConventions
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
 import zakadabar.rui.kotlin.plugin.model.RuiClass
+import zakadabar.rui.kotlin.plugin.util.RuiCompilationException
 
 /**
  * Rui access and IR utilities. IR build utilities were copied shamelessly from
@@ -88,6 +94,15 @@ interface RuiBuilder {
 
     val classBoundAdapterType: IrType
         get() = ruiContext.ruiAdapterClass.typeWith(classBoundBridgeType.defaultType)
+
+    fun tryBuild(source: IrElement, block: () -> IrExpression): IrExpression =
+        try {
+            block()
+        } catch (ex: RuiCompilationException) {
+            if (ex.ruiClass == null) ex.ruiClass = ruiClass
+            if (ex.irElement == null) ex.irElement = source
+            throw ex
+        }
 
     // set the bit at a certain index
     fun Int.withBit(index: Int, value: Boolean): Int {
