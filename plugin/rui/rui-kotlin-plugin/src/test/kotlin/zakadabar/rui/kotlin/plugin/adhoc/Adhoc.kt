@@ -3,13 +3,6 @@
  */
 package zakadabar.rui.kotlin.plugin.adhoc
 
-import zakadabar.rui.runtime.RuiAdapter
-import zakadabar.rui.runtime.RuiBlock
-import zakadabar.rui.runtime.RuiBridge
-import zakadabar.rui.runtime.RuiFragment
-import zakadabar.rui.runtime.testing.RuiT0
-import zakadabar.rui.runtime.testing.RuiT1
-
 //@Suppress("UNUSED_PARAMETER")
 //fun rui(@RuiRoot block : (ruiAdapter : RuiAdapter) -> Unit) {
 //    block(RuiAdapterRegistry.adapterFor())
@@ -31,59 +24,86 @@ import zakadabar.rui.runtime.testing.RuiT1
 //    T0()
 //}
 
-class Block<BT>(
-    override val ruiAdapter : RuiAdapter<BT>,
-    override val ruiExternalPatch: (it: RuiFragment<BT>) -> Unit
-) : RuiFragment<BT> {
+fun a(b : Int) {
+    if (b == 8) Unit
 
-    var v0 = 1
+    if (b == 9) Unit else Unit
 
-    var ruiDirty0 = 0
-
-    fun ruiInvalidate0(mask: Int) {
-        ruiDirty0 = ruiDirty0 or mask
+    when {
+        b == 1 -> Unit
+        b == 2 -> Unit
     }
 
-    val ruiB0T10: RuiT1<BT>
-    val ruiB0T01: RuiT0<BT>
-    val fragment0: RuiBlock<BT>
-
-    init {
-        ruiB0T10 = RuiT1(ruiAdapter, {
-            it as RuiT1
-            if (ruiDirty0 and 1 != 0) {
-                it.p0 = v0
-                it.ruiInvalidate0(1)
-                it.ruiPatch()
-            }
-        }, v0)
-
-        ruiB0T01 = RuiT0(ruiAdapter, {})
-        fragment0 = RuiBlock(
-            ruiAdapter,
-            ruiB0T10,
-            ruiB0T01
-        )
+    when {
+        b == 3 -> Unit
+        b == 4 -> Unit
+        else -> Unit
     }
 
-    override fun ruiCreate() {
-        TODO("Not yet implemented")
-    }
-
-    override fun ruiPatch() {
-        TODO("Not yet implemented")
-    }
-
-    override fun ruiDispose() {
-        TODO("Not yet implemented")
-    }
-
-    override fun ruiUnmount(bridge: RuiBridge<BT>) {
-        TODO("Not yet implemented")
-    }
-
-    override fun ruiMount(bridge: RuiBridge<BT>) {
-        TODO("Not yet implemented")
+    when (b) {
+        5 -> Unit
     }
 
 }
+//class Branch : RuiC1(RuiTestAdapter(), { }) {
+//
+//    var v0: Int = 1
+//
+//    var ruiDirty0 = 0
+//
+//    fun ruiInvalidate0(mask: Int) {
+//        ruiDirty0 = ruiDirty0 or mask
+//    }
+//
+//    val ruiBranch3: RuiFragmentFactory<TestNode, RuiT1<TestNode>>
+//    val ruiBranch4: RuiFragmentFactory<TestNode, RuiT1<TestNode>>
+//    val ruiBranch5: RuiFragmentFactory<TestNode, RuiPlaceholder<TestNode>>
+//
+//    override val fragment0: RuiFragment<TestNode>
+//
+//    init {
+//        ruiBranch3 = RuiFragmentFactory {
+//            RuiT1(
+//                ruiAdapter,
+//                {
+//                    it as RuiT1
+//                    if (ruiDirty0 and 1 != 0) {
+//                        it.p0 = v0 + 10
+//                        ruiInvalidate0(1)
+//                    }
+//                },
+//                v0 + 10
+//            )
+//        }
+//
+//        ruiBranch4 = RuiFragmentFactory {
+//            RuiT1(
+//                ruiAdapter,
+//                {
+//                    it as RuiT1
+//                    if (ruiDirty0 and 1 != 0) {
+//                        it.p0 = v0 + 20
+//                        ruiInvalidate0(1)
+//                    }
+//                },
+//                v0 + 20
+//            )
+//        }
+//
+//        ruiBranch5 = RuiFragmentFactory { RuiPlaceholder(ruiAdapter) }
+//
+//        fragment0 = RuiWhen(
+//            ruiAdapter,
+//            {
+//                when (v0) {
+//                    1 -> 0
+//                    2 -> 1
+//                    else -> 2
+//                }
+//            },
+//            ruiBranch3,
+//            ruiBranch4,
+//            ruiBranch5
+//        )
+//    }
+//}

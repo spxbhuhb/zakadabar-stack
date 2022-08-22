@@ -5,47 +5,48 @@ package zakadabar.rui.runtime
 
 open class RuiWhen<BT>(
     override val ruiAdapter: RuiAdapter<BT>,
-    val ruiSelect: () -> RuiFragmentFactory<BT, out RuiFragment<BT>>
+    val ruiSelect: () -> Int,
+    vararg val factories: RuiFragmentFactory<BT, out RuiFragment<BT>>
 ) : RuiFragment<BT> {
 
     override val ruiExternalPatch: (it: RuiFragment<BT>) -> Unit = { }
 
     lateinit var placeholder: RuiBridge<BT>
 
-    var branch: RuiFragmentFactory<BT, out RuiFragment<BT>> = ruiSelect()
-    var fragment: RuiFragment<BT> = branch.builder()
+    var branch = ruiSelect()
+    var fragment: RuiFragment<BT>? = if (branch == -1) null else factories[branch].builder()
 
     override fun ruiCreate() {
-        fragment.ruiCreate()
+        fragment?.ruiCreate()
     }
 
     override fun ruiMount(bridge: RuiBridge<BT>) {
         placeholder = ruiAdapter.createPlaceholder()
         bridge.add(placeholder)
 
-        fragment.ruiMount(placeholder)
+        fragment?.ruiMount(placeholder)
     }
 
     override fun ruiPatch() {
         val newBranch = ruiSelect()
         if (newBranch == branch) {
-            fragment.ruiPatch()
+            fragment?.ruiPatch()
         } else {
-            fragment.ruiUnmount(placeholder)
-            fragment.ruiDispose()
-            fragment = branch.builder()
-            fragment.ruiCreate()
-            fragment.ruiMount(placeholder)
+            fragment?.ruiUnmount(placeholder)
+            fragment?.ruiDispose()
+            fragment = if (branch == -1) null else factories[branch].builder()
+            fragment?.ruiCreate()
+            fragment?.ruiMount(placeholder)
         }
     }
 
     override fun ruiUnmount(bridge: RuiBridge<BT>) {
-        fragment.ruiUnmount(placeholder)
+        fragment?.ruiUnmount(placeholder)
         bridge.remove(placeholder)
     }
 
     override fun ruiDispose() {
-        fragment.ruiDispose()
+        fragment?.ruiDispose()
     }
 
 }

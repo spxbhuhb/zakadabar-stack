@@ -18,12 +18,12 @@ import zakadabar.rui.kotlin.plugin.model.*
 import zakadabar.rui.kotlin.plugin.util.RuiAnnotationBasedExtension
 
 class RuiFromIrTransform(
-    val ruiContext : RuiPluginContext,
+    val ruiContext: RuiPluginContext,
     val irFunction: IrFunction,
-    val skipParameters : Int
+    val skipParameters: Int
 ) : RuiAnnotationBasedExtension {
 
-    lateinit var ruiClass : RuiClass
+    lateinit var ruiClass: RuiClass
 
     var blockIndex = 0
         get() = field ++
@@ -37,10 +37,10 @@ class RuiFromIrTransform(
         return visitor.dependencies
     }
 
-    fun transform() : RuiClass {
+    fun transform(): RuiClass {
         ruiClass = RuiClass(ruiContext, irFunction)
 
-        RuiStateTransformer(ruiContext, ruiClass, skipParameters).transform()
+        RuiStateTransform(ruiContext, ruiClass, skipParameters).transform()
 
         transformRoot()
 
@@ -70,17 +70,15 @@ class RuiFromIrTransform(
 
         expression.statements.forEach { statement ->
             when (statement) {
-
                 is IrBlock -> {
                     when (statement.origin) {
                         IrStatementOrigin.FOR_LOOP -> transformForLoop(statement)
+                        IrStatementOrigin.WHEN -> transformWhen(statement)
                         else -> RUI_IR_INVALID_RENDERING_STATEMENT.report(ruiClass, statement)
                     }
                 }
-
                 is IrCall -> transformCall(statement)
                 is IrWhen -> transformWhen(statement)
-                //is IrLoop -> transformLoop(statement)
                 else -> RUI_IR_INVALID_RENDERING_STATEMENT.report(ruiClass, statement)
 
             }?.let {
@@ -135,12 +133,15 @@ class RuiFromIrTransform(
         val iterator = transformDeclaration(irIterator, RuiDeclarationOrigin.FOR_LOOP_ITERATOR) ?: return null
         val loopVariable = transformDeclaration(irLoopVariable, RuiDeclarationOrigin.FOR_LOOP_VARIABLE) ?: return null
 
+        val rendering = transformRenderingExpression(block, RuiExpressionOrigin.FOR_LOOP_BODY)
+            ?: return null
+
         return RuiForLoop(
             ruiClass, blockIndex, statement,
             iterator,
             condition,
             loopVariable,
-            transformBlock(block)
+            rendering
         )
     }
 
@@ -163,34 +164,71 @@ class RuiFromIrTransform(
         return ruiCall
     }
 
-    fun transformWhen(statement: IrWhen): RuiWhen {
-        val ruiWhen = RuiWhen(ruiClass, blockIndex, statement)
+    /**
+     * Transforms a `when` with a subject variable like:
+     *
+     * ```kotlin
+     * when (b) {
+     *   // ...
+     * }
+     * ```
+     */
+    fun transformWhen(statement: IrBlock): RuiWhen? {
+        // TODO convert checks into non-exception throwing, but contracting functions
+        check(statement.statements.size == 2)
+
+        val subject = statement.statements[0]
+        val evaluation = statement.statements[1]
+
+        check(subject is IrVariable)
+        check(evaluation is IrWhen && evaluation.origin == IrStatementOrigin.WHEN)
+
+        return transformWhen(evaluation, subject)
+    }
+
+    fun transformWhen(statement: IrWhen, subject : IrVariable? = null): RuiWhen? {
+        val ruiWhen = RuiWhen(ruiClass, blockIndex, subject, statement)
 
         statement.branches.forEach { irBranch ->
-            ruiWhen.branches += transformBranch(irBranch)
+            ruiWhen.branches += transformBranch(irBranch) ?: return null
         }
 
         return ruiWhen
     }
 
-    fun transformBranch(branch: IrBranch): RuiBranch {
+    fun transformBranch(branch: IrBranch): RuiBranch? {
+        val rendering = transformRenderingExpression(branch.result, RuiExpressionOrigin.BRANCH_RESULT)
+            ?: return null
+
         return RuiBranch(
             ruiClass, blockIndex,
             branch,
             transformExpression(branch.condition, RuiExpressionOrigin.BRANCH_CONDITION),
-            transformExpression(branch.result, RuiExpressionOrigin.BRANCH_RESULT),
+            rendering,
         )
     }
 
-    fun transformValueArgument(index : Int, expression: IrExpression): RuiExpression {
+    fun transformValueArgument(index: Int, expression: IrExpression): RuiExpression {
         return RuiValueArgument(ruiClass, index, expression, expression.dependencies())
     }
 
-    fun transformExpression(expression: IrExpression, origin : RuiExpressionOrigin): RuiExpression {
+    fun transformExpression(expression: IrExpression, origin: RuiExpressionOrigin): RuiExpression {
         return RuiExpression(ruiClass, expression, origin, expression.dependencies())
     }
 
-    fun transformDeclaration(declaration: IrDeclaration, origin : RuiDeclarationOrigin): RuiDeclaration? =
+    fun transformRenderingExpression(expression: IrExpression, origin: RuiExpressionOrigin): RuiStatement? {
+        return when (expression) {
+            is IrCall -> transformCall(expression)
+            is IrBlock -> transformBlock(expression)
+            is IrWhen -> transformWhen(expression)
+            else -> {
+                RUI_IR_RENDERING_INVALID_DECLARATION.report(ruiClass, expression)
+                null
+            }
+        }
+    }
+
+    fun transformDeclaration(declaration: IrDeclaration, origin: RuiDeclarationOrigin): RuiDeclaration? =
         when (declaration) {
             is IrValueDeclaration -> RuiDeclaration(ruiClass, declaration, origin, declaration.dependencies())
             else -> RUI_IR_RENDERING_INVALID_DECLARATION.report(ruiClass, declaration)

@@ -5,12 +5,16 @@ package zakadabar.rui.runtime.test.manual
 
 import zakadabar.rui.runtime.RuiFragment
 import zakadabar.rui.runtime.RuiFragmentFactory
+import zakadabar.rui.runtime.RuiPlaceholder
 import zakadabar.rui.runtime.RuiWhen
-import zakadabar.rui.runtime.testing.*
+import zakadabar.rui.runtime.testing.RuiC1
+import zakadabar.rui.runtime.testing.RuiT1
+import zakadabar.rui.runtime.testing.RuiTestAdapter
+import zakadabar.rui.runtime.testing.TestNode
 
 
 @Suppress("JoinDeclarationAndAssignment", "unused")
-class Branch: RuiC1(RuiTestAdapter(), { }) {
+class Branch : RuiC1(RuiTestAdapter(), { }) {
 
     var v0: Int = 1
 
@@ -22,7 +26,7 @@ class Branch: RuiC1(RuiTestAdapter(), { }) {
 
     val ruiBranch3: RuiFragmentFactory<TestNode, RuiT1<TestNode>>
     val ruiBranch4: RuiFragmentFactory<TestNode, RuiT1<TestNode>>
-    val ruiBranch5: RuiFragmentFactory<TestNode, RuiTestEmptyFragment>
+    val ruiBranch5: RuiFragmentFactory<TestNode, RuiPlaceholder<TestNode>>
 
     override val fragment0: RuiFragment<TestNode>
 
@@ -55,17 +59,20 @@ class Branch: RuiC1(RuiTestAdapter(), { }) {
             )
         }
 
+        ruiBranch5 = RuiFragmentFactory { RuiPlaceholder(ruiAdapter) }
 
-        ruiBranch5 = RuiFragmentFactory { RuiTestEmptyFragment(ruiAdapter) }
-
-        fragment0 = RuiWhen(ruiAdapter) {
-            when (v0) {
-                1 -> ruiBranch3
-                2 -> ruiBranch4
-                else -> ruiBranch5
-            }
-        }
+        fragment0 = RuiWhen(
+            ruiAdapter,
+            {
+                when (v0) {
+                    1 -> 0
+                    2 -> 1
+                    else -> 2
+                }
+            },
+            ruiBranch3,
+            ruiBranch4,
+            ruiBranch5
+        )
     }
-
 }
-

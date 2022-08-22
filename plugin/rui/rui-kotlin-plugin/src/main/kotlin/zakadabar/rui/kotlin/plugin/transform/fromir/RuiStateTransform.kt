@@ -49,7 +49,7 @@ import kotlin.collections.set
  *                            converting the function parameters into external state variables.
  *                            Used for entry points when the first parameter is the adapter.
  */
-class RuiStateTransformer(
+class RuiStateTransform(
     private val ruiContext: RuiPluginContext,
     private val ruiClass: RuiClass,
     private val skipParameters: Int

@@ -4,7 +4,7 @@
 package zakadabar.rui.kotlin.plugin.model
 
 import org.jetbrains.kotlin.name.Name
-import zakadabar.rui.kotlin.plugin.transform.RUI_DIRTY
+import zakadabar.rui.kotlin.plugin.RUI_DIRTY
 import zakadabar.rui.kotlin.plugin.transform.builders.RuiDirtyMaskBuilder
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 

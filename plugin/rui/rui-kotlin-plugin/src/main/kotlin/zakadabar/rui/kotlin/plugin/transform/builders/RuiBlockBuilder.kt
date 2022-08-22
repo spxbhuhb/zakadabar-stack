@@ -10,9 +10,14 @@ import org.jetbrains.kotlin.ir.expressions.impl.IrVarargImpl
 import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.name.Name
+import zakadabar.rui.kotlin.plugin.RUI_BLOCK_ARGUMENT_COUNT
+import zakadabar.rui.kotlin.plugin.RUI_BLOCK_ARGUMENT_INDEX_FRAGMENTS
+import zakadabar.rui.kotlin.plugin.RUI_FQN_BLOCK_CLASS
+import zakadabar.rui.kotlin.plugin.RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui
 import zakadabar.rui.kotlin.plugin.model.RuiBlock
-import zakadabar.rui.kotlin.plugin.transform.*
+import zakadabar.rui.kotlin.plugin.transform.RuiClassSymbols
+import zakadabar.rui.runtime.Plugin.RUI_BLOCK_CLASS
 
 class RuiBlockBuilder(
     override val ruiClassBuilder: RuiClassBuilder,
@@ -25,7 +30,7 @@ class RuiBlockBuilder(
     override lateinit var propertyBuilder: RuiPropertyBuilder
 
     override fun build() {
-        symbolMap = ruiContext.ruiSymbolMap.getSymbolMap(RUI_BLOCK_CLASS)
+        symbolMap = ruiContext.ruiSymbolMap.getSymbolMap(RUI_FQN_BLOCK_CLASS)
 
         if (! symbolMap.valid) {
             ErrorsRui.RUI_IR_INVALID_EXTERNAL_CLASS.report(ruiClass, ruiBlock.irBlock, additionalInfo = "invalid symbol map for $RUI_BLOCK_CLASS")

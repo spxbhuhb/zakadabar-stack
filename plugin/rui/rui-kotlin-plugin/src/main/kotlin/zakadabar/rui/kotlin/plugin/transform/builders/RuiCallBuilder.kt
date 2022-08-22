@@ -20,10 +20,14 @@ import org.jetbrains.kotlin.ir.expressions.impl.IrSetFieldImpl
 import org.jetbrains.kotlin.ir.types.defaultType
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.name.Name
+import zakadabar.rui.kotlin.plugin.RUI_FRAGMENT_ARGUMENT_COUNT
+import zakadabar.rui.kotlin.plugin.RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER
+import zakadabar.rui.kotlin.plugin.RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH
+import zakadabar.rui.kotlin.plugin.RUI_FRAGMENT_TYPE_INDEX_BRIDGE
 import zakadabar.rui.kotlin.plugin.diagnostics.ErrorsRui
 import zakadabar.rui.kotlin.plugin.model.RuiCall
 import zakadabar.rui.kotlin.plugin.model.RuiExpression
-import zakadabar.rui.kotlin.plugin.transform.*
+import zakadabar.rui.kotlin.plugin.transform.RuiClassSymbols
 import zakadabar.rui.kotlin.plugin.util.RuiCompilationException
 import zakadabar.rui.kotlin.plugin.util.traceLabel
 

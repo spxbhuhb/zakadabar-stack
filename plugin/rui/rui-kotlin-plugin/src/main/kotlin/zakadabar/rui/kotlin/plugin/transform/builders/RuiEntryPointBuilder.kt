@@ -22,10 +22,10 @@ import org.jetbrains.kotlin.ir.util.defaultType
 import org.jetbrains.kotlin.ir.util.dumpKotlinLike
 import org.jetbrains.kotlin.ir.util.getPropertyGetter
 import org.jetbrains.kotlin.name.Name
+import zakadabar.rui.kotlin.plugin.RUI_ROOT_BRIDGE
 import zakadabar.rui.kotlin.plugin.RuiDumpPoint
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.model.RuiEntryPoint
-import zakadabar.rui.kotlin.plugin.transform.RUI_ROOT_BRIDGE
 
 class RuiEntryPointBuilder(
     override val ruiClassBuilder: RuiClassBuilder,

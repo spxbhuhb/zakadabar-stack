@@ -8,5 +8,6 @@ enum class RuiExpressionOrigin {
     BRANCH_CONDITION,
     BRANCH_RESULT,
     FOR_LOOP_CONDITION,
+    FOR_LOOP_BODY,
 
 }

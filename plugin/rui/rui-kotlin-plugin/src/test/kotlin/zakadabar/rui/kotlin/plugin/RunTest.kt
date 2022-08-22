@@ -40,6 +40,9 @@ class RunTest {
     @Test
     fun eventHandler() = compile("EventHandler.kt", true)
 
+    @Test
+    fun ifWithoutElse() = compile("IfWithoutElse.kt", true)
+
     fun compile(fileName: String, dumpResult : Boolean = false) {
 
         // The test source codes are compiled before the tests run. That compilation does not apply

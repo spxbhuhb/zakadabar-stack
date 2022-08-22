@@ -4,7 +4,7 @@
 package zakadabar.rui.kotlin.plugin.model
 
 import org.jetbrains.kotlin.ir.expressions.IrBranch
-import zakadabar.rui.kotlin.plugin.transform.RUI_BRANCH
+import zakadabar.rui.kotlin.plugin.RUI_BRANCH
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
 class RuiBranch(
@@ -12,7 +12,7 @@ class RuiBranch(
     val index : Int,
     val irBranch: IrBranch,
     val condition : RuiExpression,
-    val result: RuiExpression
+    val result: RuiStatement
 ) : RuiElement {
 
     val name = "$RUI_BRANCH$index"

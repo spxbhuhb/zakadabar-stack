@@ -15,9 +15,9 @@ import org.jetbrains.kotlin.ir.expressions.IrBody
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.util.defaultType
 import org.jetbrains.kotlin.name.Name
+import zakadabar.rui.kotlin.plugin.RUI_INVALIDATE
+import zakadabar.rui.kotlin.plugin.RUI_MASK
 import zakadabar.rui.kotlin.plugin.model.RuiDirtyMask
-import zakadabar.rui.kotlin.plugin.transform.RUI_INVALIDATE
-import zakadabar.rui.kotlin.plugin.transform.RUI_MASK
 
 class RuiDirtyMaskBuilder(
     override val ruiClassBuilder: RuiClassBuilder,

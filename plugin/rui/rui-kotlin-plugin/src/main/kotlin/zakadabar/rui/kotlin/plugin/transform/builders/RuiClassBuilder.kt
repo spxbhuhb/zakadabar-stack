@@ -24,10 +24,8 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.types.Variance
-import zakadabar.rui.kotlin.plugin.RuiDumpPoint
-import zakadabar.rui.kotlin.plugin.RuiPluginContext
+import zakadabar.rui.kotlin.plugin.*
 import zakadabar.rui.kotlin.plugin.model.RuiClass
-import zakadabar.rui.kotlin.plugin.transform.*
 import zakadabar.rui.kotlin.plugin.util.traceLabel
 
 class RuiClassBuilder(

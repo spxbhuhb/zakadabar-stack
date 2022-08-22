@@ -4,7 +4,7 @@
 package zakadabar.rui.kotlin.plugin.model
 
 import org.jetbrains.kotlin.ir.expressions.IrCall
-import zakadabar.rui.kotlin.plugin.transform.RUI_CALL
+import zakadabar.rui.kotlin.plugin.RUI_CALL
 import zakadabar.rui.kotlin.plugin.transform.builders.RuiCallBuilder
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 import zakadabar.rui.kotlin.plugin.util.toRuiClassFqName

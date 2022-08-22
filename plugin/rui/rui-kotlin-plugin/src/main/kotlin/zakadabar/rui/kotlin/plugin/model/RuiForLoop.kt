@@ -4,7 +4,7 @@
 package zakadabar.rui.kotlin.plugin.model
 
 import org.jetbrains.kotlin.ir.expressions.IrBlock
-import zakadabar.rui.kotlin.plugin.transform.RUI_FOR_LOOP
+import zakadabar.rui.kotlin.plugin.RUI_FOR_LOOP
 import zakadabar.rui.kotlin.plugin.transform.builders.RuiBuilder
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 

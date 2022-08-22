@@ -3,14 +3,16 @@
  */
 package zakadabar.rui.kotlin.plugin.model
 
+import org.jetbrains.kotlin.ir.declarations.IrVariable
 import org.jetbrains.kotlin.ir.expressions.IrWhen
-import zakadabar.rui.kotlin.plugin.transform.RUI_WHEN
-import zakadabar.rui.kotlin.plugin.transform.builders.RuiBuilder
+import zakadabar.rui.kotlin.plugin.RUI_WHEN
+import zakadabar.rui.kotlin.plugin.transform.builders.RuiWhenBuilder
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
 
 class RuiWhen(
     ruiClass: RuiClass,
     index: Int,
+    val irSubject : IrVariable?,
     val irWhen: IrWhen
 ) : RuiStatement(ruiClass, index) {
 
@@ -18,8 +20,7 @@ class RuiWhen(
 
     val branches = mutableListOf<RuiBranch>()
 
-    override val builder: RuiBuilder
-        get() = TODO("Not yet implemented")
+    override val builder = RuiWhenBuilder(ruiClass.builder, this)
 
     override fun <R, D> accept(visitor: RuiElementVisitor<R, D>, data: D): R =
         visitor.visitWhen(this, data)
