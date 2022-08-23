@@ -162,7 +162,7 @@ class RuiEH1(
 ) {
 
     init {
-        ruiAdapter.trace(traceName, "init")
+        ruiAdapter.trace(traceName, "init", "p0:", p0)
         if (ruiAdapter is RuiTestAdapter) {
             ruiAdapter.fragments += this
         }
@@ -171,7 +171,7 @@ class RuiEH1(
     var ruiDirty0 = 0
 
     override fun ruiCreate() {
-        ruiAdapter.trace(traceName, "create", "p0:", p0)
+        ruiAdapter.trace(traceName, "create")
     }
 
     @Suppress("unused")

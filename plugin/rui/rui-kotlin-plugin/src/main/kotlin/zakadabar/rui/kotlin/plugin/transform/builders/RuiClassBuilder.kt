@@ -247,17 +247,15 @@ class RuiClassBuilder(
 
         traceInit()
 
+        val rootBuilder = ruiClass.rootBlock.builder
+
         // State initialisation must precede fragment initialisation, so the fragments
         // will get initialized values in their constructor.
         // Individual fragment builders will append their own initialisation code
         // after the state is properly initialized.
 
         initializer.body.statements += ruiClass.initializerStatements
-
-        val rootBuilder = ruiClass.rootBlock.builder
-        fragmentPropertyBuilder.irField.initializer = IrExpressionBodyImpl(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET) {
-            expression = rootBuilder.irNewInstance()
-        }
+        initializer.body.statements += fragmentPropertyBuilder.irSetField(rootBuilder.irNewInstance())
 
         buildRuiCall(create, rootBuilder, rootBuilder.symbolMap.create)
         buildRuiCall(mount, rootBuilder, rootBuilder.symbolMap.mount)
@@ -275,7 +273,22 @@ class RuiClassBuilder(
 
     fun traceInit() {
         if (! ruiContext.withTrace) return
-        initializer.body.statements += irTrace("init", emptyList())
+
+        val args = mutableListOf<IrExpression>()
+
+        DeclarationIrBuilder(irContext, initializer.symbol).apply {
+
+            constructor.valueParameters.forEach {
+                val name = it.name.identifier
+
+                if (name != RUI_ADAPTER && name != RUI_EXTERNAL_PATCH) {
+                    args += irString("${it.name}:")
+                    args += irGet(it)
+                }
+            }
+        }
+
+        initializer.body.statements += irTrace("init", args)
     }
 
     fun buildRuiCall(function: IrSimpleFunction, rootBuilder: RuiFragmentBuilder, callee: IrSimpleFunction) {
@@ -395,11 +408,11 @@ class RuiClassBuilder(
         return irTrace(irGet(thisReceiver), point, parameters)
     }
 
-    fun irTrace(function: IrFunction, point : String, parameters: List<IrExpression>): IrStatement {
-        return irTrace(irGet(function.dispatchReceiverParameter!!), point, parameters)
+    fun irTrace(function: IrFunction, point: String, parameters: List<IrExpression>): IrStatement {
+        return irTrace(irGet(function.dispatchReceiverParameter !!), point, parameters)
     }
 
-    fun irTrace(fragment: IrExpression, point: String, parameters: List<IrExpression>) : IrStatement {
+    fun irTrace(fragment: IrExpression, point: String, parameters: List<IrExpression>): IrStatement {
         return irTraceDirect(ruiClassBuilder.adapterPropertyBuilder.irGetValue(fragment), point, parameters)
     }
 
