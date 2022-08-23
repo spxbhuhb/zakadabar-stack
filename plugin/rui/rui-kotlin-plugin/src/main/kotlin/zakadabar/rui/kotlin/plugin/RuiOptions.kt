@@ -6,6 +6,7 @@ package zakadabar.rui.kotlin.plugin
 class RuiOptions(
     val annotations: List<String>,
     val dumpPoints: List<RuiDumpPoint>,
+    val rootNameStrategy : RuiRootNameStrategy,
     val withTrace : Boolean,
     val exportState : Boolean,
     val importState : Boolean

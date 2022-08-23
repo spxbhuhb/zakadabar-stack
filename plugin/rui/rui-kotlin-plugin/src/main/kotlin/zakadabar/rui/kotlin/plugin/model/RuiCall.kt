@@ -5,9 +5,9 @@ package zakadabar.rui.kotlin.plugin.model
 
 import org.jetbrains.kotlin.ir.expressions.IrCall
 import zakadabar.rui.kotlin.plugin.RUI_CALL
+import zakadabar.rui.kotlin.plugin.toRuiClassFqName
 import zakadabar.rui.kotlin.plugin.transform.builders.RuiCallBuilder
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
-import zakadabar.rui.kotlin.plugin.util.toRuiClassFqName
 
 class RuiCall(
     ruiClass: RuiClass,
@@ -17,7 +17,7 @@ class RuiCall(
 
     override val name = "$RUI_CALL$index"
 
-    val targetRuiClass = irCall.symbol.owner.toRuiClassFqName()
+    val targetRuiClass = irCall.symbol.owner.toRuiClassFqName(ruiClass.ruiContext)
 
     val valueArguments = mutableListOf<RuiExpression>()
 

@@ -3,15 +3,18 @@
  */
 package zakadabar.rui.kotlin.plugin.run
 
+import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstance
 import zakadabar.rui.kotlin.plugin.RuiTest
+import zakadabar.rui.kotlin.plugin.RuiTestDumpResult
+import zakadabar.rui.kotlin.plugin.RuiTestResult
 import zakadabar.rui.runtime.Rui
 import zakadabar.rui.runtime.rui
 import zakadabar.rui.runtime.testing.EH1
 import zakadabar.rui.runtime.testing.RuiEH1
 import zakadabar.rui.runtime.testing.RuiTestAdapter
 
-@Suppress("unused")
 @RuiTest
+@RuiTestDumpResult
 fun eventHandlerTest() {
     val adapter = RuiTestAdapter()
 
@@ -19,12 +22,7 @@ fun eventHandlerTest() {
         eventHandlerFragment()
     }
 
-    val rootNode = adapter.rootBridge.receiver
-
-    val eh1 = adapter.fragments.first() as RuiEH1
-    eh1.eventHandler(12)
-
-    // TODO check test results with asserts
+    adapter.fragments.firstIsInstance<RuiEH1>().eventHandler(12)
 }
 
 @Rui
@@ -32,3 +30,19 @@ fun eventHandlerFragment() {
     var i = 12
     EH1(i + 1) { i++ }
 }
+
+@RuiTestResult
+fun eventHandlerTestResult() : String = """
+[ RuiRoot                        ]  init                  |  
+[ RuiEventHandlerFragment        ]  init                  |  
+[ RuiEH1                         ]  init                  |  p0: 13
+[ RuiRoot                        ]  create                |  
+[ RuiEventHandlerFragment        ]  create                |  
+[ RuiEH1                         ]  create                |  
+[ RuiRoot                        ]  mount                 |  
+[ RuiEventHandlerFragment        ]  mount                 |  
+[ RuiEH1                         ]  mount                 |  bridge: 1
+[ RuiEventHandlerFragment        ]  patch                 |  ruiDirty0: 1
+[ RuiEH1                         ]  invalidate            |  mask: 1 ruiDirty0: 0
+[ RuiEH1                         ]  patch                 |  ruiDirty0: 1 p0: 14
+""".trimIndent()

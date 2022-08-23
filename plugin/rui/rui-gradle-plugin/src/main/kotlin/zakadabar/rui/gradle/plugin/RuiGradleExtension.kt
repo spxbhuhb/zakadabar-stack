@@ -24,6 +24,7 @@ import org.gradle.api.provider.Property
 open class RuiGradleExtension(objects: ObjectFactory) {
     val annotations: ListProperty<String> = objects.listProperty(String::class.java)
     val dumpPoints: ListProperty<String> = objects.listProperty(String::class.java)
+    val rootNameStrategy: ListProperty<String> = objects.listProperty(String::class.java)
     val trace: Property<Boolean> = objects.property(Boolean::class.java).also { it.set(false) }
     val exportState: Property<Boolean> = objects.property(Boolean::class.java).also { it.set(false) }
     val importState: Property<Boolean> = objects.property(Boolean::class.java).also { it.set(false) }

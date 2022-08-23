@@ -15,6 +15,7 @@ import zakadabar.rui.kotlin.plugin.RuiConfigurationKeys.ANNOTATION
 import zakadabar.rui.kotlin.plugin.RuiConfigurationKeys.DUMP
 import zakadabar.rui.kotlin.plugin.RuiConfigurationKeys.EXPORT_STATE
 import zakadabar.rui.kotlin.plugin.RuiConfigurationKeys.IMPORT_STATE
+import zakadabar.rui.kotlin.plugin.RuiConfigurationKeys.ROOT_NAME_STRATEGY
 import zakadabar.rui.kotlin.plugin.RuiConfigurationKeys.TRACE
 import zakadabar.rui.runtime.Plugin.RUI_ANNOTATION
 
@@ -24,6 +25,7 @@ import zakadabar.rui.runtime.Plugin.RUI_ANNOTATION
 @AutoService(ComponentRegistrar::class)
 class RuiComponentRegistrar(
     val dumpPoints: List<RuiDumpPoint> = emptyList(),
+    val rootNameStrategy: RuiRootNameStrategy = RuiRootNameStrategy.StartOffset,
     val trace: Boolean = false,
     val exportState: Boolean = false,
     val importState: Boolean = false
@@ -33,11 +35,12 @@ class RuiComponentRegistrar(
 
         val annotations = configuration.get(ANNOTATION).let { if (it != null && it.isNotEmpty()) it else listOf(RUI_ANNOTATION) }
         val dumpPoints = configuration.get(DUMP) ?: dumpPoints
+        val rootNameStrategy = configuration.get(ROOT_NAME_STRATEGY) ?: rootNameStrategy
         val trace = configuration.get(TRACE) ?: trace
         val exportState = configuration.get(EXPORT_STATE) ?: exportState
         val importState = configuration.get(IMPORT_STATE) ?: importState
 
-        val options = RuiOptions(annotations, dumpPoints, trace, exportState, importState)
+        val options = RuiOptions(annotations, dumpPoints, rootNameStrategy, trace, exportState, importState)
 
         registerRuiComponents(project, options, configuration.getBoolean(JVMConfigurationKeys.IR))
     }
@@ -60,6 +63,7 @@ class RuiComponentRegistrar(
         fun withAll() =
             RuiComponentRegistrar(
                 RuiDumpPoint.values().toList(),
+                RuiRootNameStrategy.NoPostfix,
                 trace = true,
                 exportState = true,
                 importState = true

@@ -130,3 +130,4 @@ Thumbs.db
 /lib/lucene/app/var/index/
 /plugin/reactive/reactive-ir-integration/kotlin-js-store/
 /.idea/kotlinScripting.xml
+/plugin/rui/rui-integration/kotlin-js-store/yarn.lock

@@ -19,6 +19,7 @@ class RuiPluginContext(
 ) {
     val annotations = options.annotations
     val dumpPoints = options.dumpPoints
+    val rootNameStrategy = options.rootNameStrategy
     val withTrace = options.withTrace
     val exportState = options.exportState
     val importState = options.importState

@@ -20,6 +20,7 @@ import com.tschuchort.compiletesting.KotlinCompilation
 import com.tschuchort.compiletesting.SourceFile
 import org.junit.Test
 import zakadabar.rui.runtime.RuiAdapterRegistry
+import zakadabar.rui.runtime.testing.RuiTestAdapter
 import zakadabar.rui.runtime.testing.RuiTestAdapterFactory
 import java.io.File
 import java.nio.file.Files
@@ -43,12 +44,15 @@ class RunTest {
     @Test
     fun ifWithoutElse() = compile("IfWithoutElse.kt", true)
 
+    @Test
+    fun blockAsRoot() = compile("BlockAsRoot.kt", true)
+
     fun compile(fileName: String, dumpResult : Boolean = false) {
 
-        // The test source codes are compiled before the tests run. That compilation does not apply
-        // the plugin, but the generates the class files. Those class files do not contain the
-        // functionality added by the plugin, but those are the class files the class loader below
-        // would load if not for the machination with the package and source file name.
+        // The test source codes are compiled by the IDE before the tests run. That compilation
+        // does not apply the plugin, but the generates the class files. Those class files do not
+        // contain the functionality added by the plugin, but those are the class files the class
+        // loader below would load if not for the machination with the package and source file name.
 
         val sourceCode = Files
             .readAllBytes(Paths.get(sourceDir, fileName))
@@ -72,10 +76,27 @@ class RunTest {
 
         if (dumpResult) println(result.dump())
 
+        val expectedResults = mutableMapOf<String,String>()
+
         with(result.classLoader.loadClass("zakadabar.rui.kotlin.plugin.run.gen.${fileName.replace(".kt", "Kt")}")) {
+
+            this.declaredMethods.forEach { method ->
+                if (method.annotations.firstOrNull { it.annotationClass.simpleName == "RuiTestResult" } != null) {
+                    expectedResults[method.name.dropLast(6)] = (method.invoke(this) as String).replace("\r\n", "\n")
+                }
+            }
+
             this.declaredMethods.forEach { method ->
                 if (method.annotations.firstOrNull { it.annotationClass.simpleName == "RuiTest" } != null) {
+                    RuiTestAdapter.lastTrace.clear()
                     method.invoke(this)
+                    val actual = RuiTestAdapter.lastTrace.joinToString("\n")
+                    assertEquals(expectedResults[method.name], actual, "unexpected output for ${method.name}")
+                    if (method.annotations.firstOrNull { it.annotationClass.simpleName == "RuiTestDumpResult" } != null) {
+                        println("======== Results for ${method.name} ========")
+                        println(actual)
+                        println("========\n")
+                    }
                 }
             }
         }

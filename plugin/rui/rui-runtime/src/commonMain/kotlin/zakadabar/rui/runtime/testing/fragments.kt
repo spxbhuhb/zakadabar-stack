@@ -38,8 +38,7 @@ open class RuiTracingFragment<BT>(
 }
 
 @Rui
-fun T0() {
-}
+fun T0() { }
 
 @Suppress("unused")
 open class RuiT0<BT>(
@@ -52,9 +51,7 @@ open class RuiT0<BT>(
 
 @Rui
 @Suppress("unused", "FunctionName")
-fun T1(p0: Int) {
-    println("===== $$$$$ ###### TEST NOW WHAT?")
-}
+fun T1(p0: Int) { }
 
 @Suppress("unused")
 open class RuiT1<BT>(
@@ -103,52 +100,52 @@ class RuiH1(
     override val fragment0 = builder(ruiAdapter)
 
     override fun ruiMount(bridge: RuiBridge<TestNode>) {
+        super.ruiMount(bridge)
         fragment0.ruiMount(bridge)
     }
 
     init {
-        @Suppress("LeakingThis")
-        RuiTestEvents.Init.report(this)
+        ruiAdapter.trace(traceName, "init")
     }
 }
 
 @Suppress("unused")
 abstract class RuiC1(
-    override val ruiAdapter: RuiAdapter<TestNode>,
-    override val ruiExternalPatch: (it: RuiFragment<TestNode>) -> Unit
-) : RuiFragment<TestNode> {
+    ruiAdapter: RuiAdapter<TestNode>,
+    ruiExternalPatch: (it: RuiFragment<TestNode>) -> Unit
+) : RuiTracingFragment<TestNode>(ruiAdapter, ruiExternalPatch) {
 
     abstract val fragment0: RuiFragment<TestNode>
 
     override fun ruiCreate() {
-        RuiTestEvents.Create.report(this)
+        super.ruiCreate()
         fragment0.ruiCreate()
     }
 
     override fun ruiMount(bridge: RuiBridge<TestNode>) {
+        super.ruiMount(bridge)
         fragment0.ruiMount(bridge)
     }
 
     override fun ruiPatch() {
-        RuiTestEvents.Patch.report(this)
+        super.ruiPatch()
         fragment0.ruiPatch()
     }
 
     override fun ruiUnmount(bridge: RuiBridge<TestNode>) {
-        RuiTestEvents.Unmount.report(this)
         fragment0.ruiUnmount(bridge)
+        super.ruiUnmount(bridge)
     }
 
     override fun ruiDispose() {
-        RuiTestEvents.Dispose.report(this)
         fragment0.ruiDispose()
+        super.ruiDispose()
     }
 }
 
 @Rui
 @Suppress("unused", "FunctionName")
-fun EH1(p0: Int, eventHandler: (np0: Int) -> Unit) {
-}
+fun EH1(p0: Int, eventHandler: (np0: Int) -> Unit) { }
 
 @Suppress("unused")
 class RuiEH1(

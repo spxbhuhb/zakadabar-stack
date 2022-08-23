@@ -28,6 +28,7 @@ import zakadabar.rui.runtime.Plugin.OPTION_NAME_ANNOTATION
 import zakadabar.rui.runtime.Plugin.OPTION_NAME_DUMP_POINT
 import zakadabar.rui.runtime.Plugin.OPTION_NAME_EXPORT_STATE
 import zakadabar.rui.runtime.Plugin.OPTION_NAME_IMPORT_STATE
+import zakadabar.rui.runtime.Plugin.OPTION_NAME_ROOT_NAME_STRATEGY
 import zakadabar.rui.runtime.Plugin.OPTION_NAME_TRACE
 import zakadabar.rui.runtime.Plugin.PLUGIN_GROUP
 import zakadabar.rui.runtime.Plugin.PLUGIN_ID
@@ -73,6 +74,7 @@ class RuiGradlePlugin : KotlinCompilerPluginSupportPlugin {
 
         extension.annotations.get().forEach { options += SubpluginOption(key = OPTION_NAME_ANNOTATION, value = it) }
         extension.dumpPoints.get().forEach { options += SubpluginOption(key = OPTION_NAME_DUMP_POINT, value = it) }
+        options += SubpluginOption(key = OPTION_NAME_ROOT_NAME_STRATEGY, extension.rootNameStrategy.get().toString())
         options += SubpluginOption(key = OPTION_NAME_TRACE, extension.trace.get().toString())
         options += SubpluginOption(key = OPTION_NAME_EXPORT_STATE, extension.exportState.get().toString())
         options += SubpluginOption(key = OPTION_NAME_IMPORT_STATE, extension.importState.get().toString())

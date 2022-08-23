@@ -12,6 +12,7 @@ import zakadabar.rui.runtime.Plugin.OPTION_NAME_ANNOTATION
 import zakadabar.rui.runtime.Plugin.OPTION_NAME_DUMP_POINT
 import zakadabar.rui.runtime.Plugin.OPTION_NAME_EXPORT_STATE
 import zakadabar.rui.runtime.Plugin.OPTION_NAME_IMPORT_STATE
+import zakadabar.rui.runtime.Plugin.OPTION_NAME_ROOT_NAME_STRATEGY
 import zakadabar.rui.runtime.Plugin.OPTION_NAME_TRACE
 import zakadabar.rui.runtime.Plugin.PLUGIN_ID
 
@@ -25,6 +26,10 @@ class RuiCommandLineProcessor : CommandLineProcessor {
         val OPTION_DUMP = CliOption(
             OPTION_NAME_DUMP_POINT, "string", "Dump data at specified points of plugin run (${RuiDumpPoint.optionValues().joinToString { ", " }}).",
             required = false, allowMultipleOccurrences = true
+        )
+        val OPTION_ROOT_NAME_STRATEGY = CliOption(
+            OPTION_NAME_ROOT_NAME_STRATEGY, "string", "Select root name strategy (${RuiRootNameStrategy.optionValues().joinToString { ", " }}",
+            required = false, allowMultipleOccurrences = false
         )
         val OPTION_TRACE = CliOption(
             OPTION_NAME_TRACE, "boolean", "Add trace output to the generated code.",
@@ -46,6 +51,7 @@ class RuiCommandLineProcessor : CommandLineProcessor {
     override val pluginOptions = listOf(
         OPTION_ANNOTATION,
         OPTION_DUMP,
+        OPTION_ROOT_NAME_STRATEGY,
         OPTION_TRACE,
         OPTION_EXPORT_STATE,
         OPTION_IMPORT_STATE
@@ -55,6 +61,7 @@ class RuiCommandLineProcessor : CommandLineProcessor {
         when (option) {
             OPTION_ANNOTATION -> configuration.appendList(RuiConfigurationKeys.ANNOTATION, value)
             OPTION_DUMP -> configuration.appendList(RuiConfigurationKeys.DUMP, value.toDumpPoint())
+            OPTION_ROOT_NAME_STRATEGY -> configuration.put(RuiConfigurationKeys.ROOT_NAME_STRATEGY, value.toRootNameStrategy())
             OPTION_TRACE -> configuration.put(RuiConfigurationKeys.TRACE, value.toBooleanStrictOrNull() ?: false)
             OPTION_EXPORT_STATE -> configuration.put(RuiConfigurationKeys.EXPORT_STATE, value.toBooleanStrictOrNull() ?: false)
             OPTION_IMPORT_STATE -> configuration.put(RuiConfigurationKeys.IMPORT_STATE, value.toBooleanStrictOrNull() ?: false)
@@ -64,5 +71,8 @@ class RuiCommandLineProcessor : CommandLineProcessor {
 
     private fun String.toDumpPoint(): RuiDumpPoint =
         RuiDumpPoint.fromOption(this) ?: throw CliOptionProcessingException("Unknown dump point: $this")
+
+    private fun String.toRootNameStrategy(): RuiRootNameStrategy =
+        RuiRootNameStrategy.fromOption(this) ?: throw CliOptionProcessingException("Unknown root name strategy: $this")
 }
 

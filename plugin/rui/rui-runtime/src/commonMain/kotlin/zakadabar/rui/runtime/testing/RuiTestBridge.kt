@@ -5,7 +5,9 @@ package zakadabar.rui.runtime.testing
 
 import zakadabar.rui.runtime.RuiBridge
 
-class RuiTestBridge : RuiBridge<TestNode> {
+class RuiTestBridge(
+    val id : Int
+) : RuiBridge<TestNode> {
 
     override val receiver = TestNode()
 

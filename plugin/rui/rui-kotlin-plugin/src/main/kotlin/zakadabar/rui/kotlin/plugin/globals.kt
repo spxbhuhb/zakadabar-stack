@@ -3,7 +3,14 @@
  */
 package zakadabar.rui.kotlin.plugin
 
+import org.jetbrains.kotlin.ir.declarations.IrFunction
+import org.jetbrains.kotlin.ir.util.file
+import org.jetbrains.kotlin.ir.util.isAnonymousFunction
+import org.jetbrains.kotlin.ir.util.kotlinFqName
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.parentOrNull
+import org.jetbrains.kotlin.util.capitalizeDecapitalize.capitalizeAsciiOnly
 import zakadabar.rui.runtime.Plugin
 
 /**
@@ -32,6 +39,8 @@ const val RUI_TRACE_ARGUMENT_DATA = 2
  * Bridge type parameter for classes.
  */
 const val RUI_FRAGMENT_TYPE_INDEX_BRIDGE = 0
+
+const val RUI_ROOT_CLASS_PREFIX = "RuiRoot"
 
 const val RUI_BT = "BT" // type parameter for fragment, Bridge Type
 const val RUI_ROOT_BRIDGE = "rootBridge" // property name of the root bridge in the adapter
@@ -65,3 +74,17 @@ val RUI_FQN_BRIDGE_CLASS = FqName.fromSegments(Plugin.RUI_BRIDGE_CLASS)
 val RUI_FQN_BLOCK_CLASS = FqName.fromSegments(Plugin.RUI_BLOCK_CLASS)
 val RUI_FQN_WHEN_CLASS = FqName.fromSegments(Plugin.RUI_WHEN_CLASS)
 val RUI_FQN_ENTRY_FUNCTION = FqName.fromSegments(Plugin.RUI_ENTRY_FUNCTION)
+
+fun IrFunction.toRuiClassFqName(ruiContext : RuiPluginContext): FqName {
+    val parent = kotlinFqName.parentOrNull() ?: FqName.ROOT
+    return when {
+        isAnonymousFunction ||  name.asString() == "<anonymous>" -> {
+            val postfix = when (ruiContext.rootNameStrategy) {
+                RuiRootNameStrategy.StartOffset -> this.file.fqName.shortName().identifier + startOffset.toString()
+                RuiRootNameStrategy.NoPostfix -> ""
+            }
+            parent.child(Name.identifier("$RUI_ROOT_CLASS_PREFIX$postfix"))
+        }
+        else -> parent.child(Name.identifier("Rui" + name.identifier.capitalizeAsciiOnly()))
+    }
+}

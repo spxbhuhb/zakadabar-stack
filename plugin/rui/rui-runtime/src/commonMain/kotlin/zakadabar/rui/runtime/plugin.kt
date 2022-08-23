@@ -6,6 +6,7 @@ package zakadabar.rui.runtime
 object Plugin {
     const val OPTION_NAME_ANNOTATION = "rui-annotation"
     const val OPTION_NAME_DUMP_POINT = "rui-dump-point"
+    const val OPTION_NAME_ROOT_NAME_STRATEGY = "rui-root-name-strategy"
     const val OPTION_NAME_TRACE = "rui-trace"
     const val OPTION_NAME_EXPORT_STATE = "rui-export-state"
     const val OPTION_NAME_IMPORT_STATE = "rui-import-state"

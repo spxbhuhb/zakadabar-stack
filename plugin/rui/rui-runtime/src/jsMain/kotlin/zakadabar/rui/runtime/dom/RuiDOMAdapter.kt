@@ -24,6 +24,10 @@ class RuiDOMAdapter(
         return RuiDOMPlaceholder()
     }
 
+    override fun newId(): Int {
+        TODO("Not yet implemented")
+    }
+
     companion object {
         init {
             RuiAdapterRegistry.register(RuiDOMAdapterFactory)

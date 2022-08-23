@@ -8,17 +8,17 @@ import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.symbols.IrSymbol
 import org.jetbrains.kotlin.ir.util.statements
 import zakadabar.rui.kotlin.plugin.RuiPluginContext
+import zakadabar.rui.kotlin.plugin.toRuiClassFqName
 import zakadabar.rui.kotlin.plugin.transform.builders.RuiClassBuilder
 import zakadabar.rui.kotlin.plugin.transform.fromir.RuiBoundaryVisitor
 import zakadabar.rui.kotlin.plugin.util.RuiElementVisitor
-import zakadabar.rui.kotlin.plugin.util.toRuiClassFqName
 
 class RuiClass(
     val ruiContext: RuiPluginContext,
     val irFunction: IrFunction,
 ) : RuiElement {
 
-    val name = irFunction.toRuiClassFqName().shortName()
+    val name = irFunction.toRuiClassFqName(ruiContext).shortName()
 
     val boundary = RuiBoundaryVisitor(ruiContext).findBoundary(irFunction)
 
