@@ -34,6 +34,7 @@ open class RuiWhen<BT>(
         } else {
             fragment?.ruiUnmount(placeholder)
             fragment?.ruiDispose()
+            branch = newBranch
             fragment = if (branch == -1) null else factories[branch].builder()
             fragment?.ruiCreate()
             fragment?.ruiMount(placeholder)

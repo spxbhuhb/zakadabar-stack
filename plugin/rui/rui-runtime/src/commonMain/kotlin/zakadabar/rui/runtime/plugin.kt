@@ -28,7 +28,7 @@ object Plugin {
     val RUI_FRAGMENT_FACTORY_CLASS = listOf("zakadabar", "rui", "runtime", "RuiFragmentFactory")
     val RUI_ADAPTER_CLASS = listOf("zakadabar", "rui", "runtime", "RuiAdapter")
     val RUI_BRIDGE_CLASS = listOf("zakadabar", "rui", "runtime", "RuiBridge")
-    val RUI_BLOCK_CLASS = listOf("zakadabar", "rui", "runtime", "RuiBridge")
+    val RUI_BLOCK_CLASS = listOf("zakadabar", "rui", "runtime", "RuiBlock")
     val RUI_WHEN_CLASS = listOf("zakadabar", "rui", "runtime", "RuiWhen")
     val RUI_FOR_LOOP_CLASS = listOf("zakadabar", "rui", "runtime", "RuiForLoop")
     val RUI_ENTRY_FUNCTION = listOf("zakadabar", "rui", "runtime", "rui")

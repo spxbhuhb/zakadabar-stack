@@ -9,8 +9,8 @@ import zakadabar.rui.kotlin.plugin.RuiTestDumpResult
 import zakadabar.rui.kotlin.plugin.RuiTestResult
 import zakadabar.rui.runtime.Rui
 import zakadabar.rui.runtime.rui
-import zakadabar.rui.runtime.testing.EH1
-import zakadabar.rui.runtime.testing.RuiEH1
+import zakadabar.rui.runtime.testing.EH1A
+import zakadabar.rui.runtime.testing.RuiEH1A
 import zakadabar.rui.runtime.testing.RuiTestAdapter
 
 @RuiTest
@@ -22,27 +22,27 @@ fun eventHandlerTest() {
         eventHandlerFragment()
     }
 
-    adapter.fragments.firstIsInstance<RuiEH1>().eventHandler(12)
+    adapter.fragments.firstIsInstance<RuiEH1A>().eventHandler(12)
 }
 
 @Rui
 fun eventHandlerFragment() {
     var i = 12
-    EH1(i + 1) { i++ }
+    EH1A(i + 1) { i++ }
 }
 
 @RuiTestResult
 fun eventHandlerTestResult() : String = """
 [ RuiRoot                        ]  init                  |  
 [ RuiEventHandlerFragment        ]  init                  |  
-[ RuiEH1                         ]  init                  |  p0: 13
+[ RuiEH1A                        ]  init                  |  p0: 13
 [ RuiRoot                        ]  create                |  
 [ RuiEventHandlerFragment        ]  create                |  
-[ RuiEH1                         ]  create                |  
+[ RuiEH1A                        ]  create                |  
 [ RuiRoot                        ]  mount                 |  
 [ RuiEventHandlerFragment        ]  mount                 |  
-[ RuiEH1                         ]  mount                 |  bridge: 1
+[ RuiEH1A                        ]  mount                 |  bridge: 1
 [ RuiEventHandlerFragment        ]  patch                 |  ruiDirty0: 1
-[ RuiEH1                         ]  invalidate            |  mask: 1 ruiDirty0: 0
-[ RuiEH1                         ]  patch                 |  ruiDirty0: 1 p0: 14
+[ RuiEH1A                        ]  invalidate            |  mask: 1 ruiDirty0: 0
+[ RuiEH1A                        ]  patch                 |  ruiDirty0: 1 p0: 14
 """.trimIndent()

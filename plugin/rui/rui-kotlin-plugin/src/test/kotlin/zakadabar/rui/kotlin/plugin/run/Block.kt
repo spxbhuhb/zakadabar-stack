@@ -4,30 +4,36 @@
 package zakadabar.rui.kotlin.plugin.run
 
 import zakadabar.rui.kotlin.plugin.RuiTest
-import zakadabar.rui.kotlin.plugin.RuiTestDumpResult
 import zakadabar.rui.kotlin.plugin.RuiTestResult
+import zakadabar.rui.runtime.Rui
 import zakadabar.rui.runtime.rui
 import zakadabar.rui.runtime.testing.T1
 
 @RuiTest
-@RuiTestDumpResult
-fun blockInRoot() {
+fun blockTest() {
     rui {
-        T1(10)
-        T1(11)
+        block(10)
     }
 }
 
+@Rui
+fun block(i : Int) {
+    T1(i + 1)
+    T1(i + 2)
+}
 
 @RuiTestResult
-fun blockInRootResult() : String = """
+fun blockTestResult() : String = """
 [ RuiRoot                        ]  init                  |  
+[ RuiBlock                       ]  init                  |  i: 10
 [ RuiT1                          ]  init                  |  
 [ RuiT1                          ]  init                  |  
 [ RuiRoot                        ]  create                |  
-[ RuiT1                          ]  create                |  p0: 10
+[ RuiBlock                       ]  create                |  
 [ RuiT1                          ]  create                |  p0: 11
+[ RuiT1                          ]  create                |  p0: 12
 [ RuiRoot                        ]  mount                 |  
+[ RuiBlock                       ]  mount                 |  
 [ RuiT1                          ]  mount                 |  bridge: 1
 [ RuiT1                          ]  mount                 |  bridge: 1
 """.trimIndent()

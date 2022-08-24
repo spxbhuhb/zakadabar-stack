@@ -145,10 +145,51 @@ abstract class RuiC1(
 
 @Rui
 @Suppress("unused", "FunctionName")
-fun EH1(p0: Int, eventHandler: (np0: Int) -> Unit) { }
+fun EH1A(p0: Int, eventHandler: (np0: Int) -> Unit) { }
 
 @Suppress("unused")
-class RuiEH1(
+class RuiEH1A(
+    ruiAdapter: RuiAdapter<TestNode>,
+    ruiExternalPatch: (it: RuiFragment<TestNode>) -> Unit,
+    var p0: Int,
+    var eventHandler: (np0: Int) -> Unit,
+) : RuiTracingFragment<TestNode>(
+    ruiAdapter,
+    ruiExternalPatch
+) {
+
+    init {
+        ruiAdapter.trace(traceName, "init", "p0:", p0)
+        if (ruiAdapter is RuiTestAdapter) {
+            ruiAdapter.fragments += this
+        }
+    }
+
+    var ruiDirty0 = 0
+
+    override fun ruiCreate() {
+        ruiAdapter.trace(traceName, "create")
+    }
+
+    @Suppress("unused")
+    fun ruiInvalidate0(mask: Int) {
+        ruiAdapter.trace(traceName, "invalidate", "mask:", mask, "ruiDirty0:", ruiDirty0)
+        ruiDirty0 = ruiDirty0 or mask
+    }
+
+    override fun ruiPatch() {
+        ruiAdapter.trace(traceName, "patch", "ruiDirty0:", ruiDirty0, "p0:", p0)
+        ruiDirty0 = 0
+    }
+
+}
+
+@Rui
+@Suppress("unused", "FunctionName")
+fun EH1B(p0: Int, eventHandler: (np0: Int) -> Unit) { }
+
+@Suppress("unused")
+class RuiEH1B(
     ruiAdapter: RuiAdapter<TestNode>,
     ruiExternalPatch: (it: RuiFragment<TestNode>) -> Unit,
     var p0: Int,
