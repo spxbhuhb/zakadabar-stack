@@ -11,19 +11,14 @@ import org.jetbrains.kotlin.ir.builders.declarations.buildFun
 import org.jetbrains.kotlin.ir.builders.irBlockBody
 import org.jetbrains.kotlin.ir.builders.irBranch
 import org.jetbrains.kotlin.ir.builders.irReturn
-import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
-import org.jetbrains.kotlin.ir.expressions.IrBody
-import org.jetbrains.kotlin.ir.expressions.IrConst
-import org.jetbrains.kotlin.ir.expressions.IrExpression
-import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
+import org.jetbrains.kotlin.ir.expressions.*
 import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
-import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionExpressionImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionReferenceImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrVarargImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrWhenImpl
 import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
-import org.jetbrains.kotlin.ir.util.constructors
 import org.jetbrains.kotlin.name.Name
 import zakadabar.rui.kotlin.plugin.*
 import zakadabar.rui.kotlin.plugin.model.RuiBranch
@@ -39,29 +34,20 @@ class RuiWhenBuilder(
     // we have to initialize this in build, after all other classes in the module are registered
     override lateinit var symbolMap: RuiClassSymbols
 
-    override fun irNewInstance(): IrExpression =
-        tryBuild(ruiWhen.irWhen) {
-            symbolMap = ruiContext.ruiSymbolMap.getSymbolMap(RUI_FQN_WHEN_CLASS)
+    private lateinit var select: IrSimpleFunction
+    private var branches = mutableListOf<IrSimpleFunction>()
 
-            IrConstructorCallImpl(
-                SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-                symbolMap.defaultType,
-                symbolMap.primaryConstructor.symbol,
-                0, 0,
-                RUI_WHEN_ARGUMENT_COUNT // adapter, select, array of fragments
-            ).also { constructorCall ->
-
-                constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, ruiClassBuilder.adapterPropertyBuilder.irGetValue())
-                constructorCall.putValueArgument(RUI_WHEN_ARGUMENT_INDEX_SELECT, buildSelect())
-                constructorCall.putValueArgument(RUI_WHEN_ARGUMENT_INDEX_FRAGMENTS, buildFragmentVarArg())
-
-            }
+    override fun buildDeclarations() {
+        irClass.declarations += irSelect()
+        ruiWhen.branches.forEach { branch ->
+            branch.result.builder.buildDeclarations()
+            irClass.declarations += irBranch(branch)
         }
+    }
 
-    fun buildSelect(): IrExpression {
-        val function = irFactory.buildFun {
-            name = Name.special("<anonymous>")
-            origin = IrDeclarationOrigin.LOCAL_FUNCTION_FOR_LAMBDA
+    private fun irSelect(): IrSimpleFunction =
+        irFactory.buildFun {
+            name = Name.identifier("$RUI_SELECT${ruiWhen.irWhen.startOffset}")
             modality = Modality.FINAL
             returnType = irBuiltIns.intType
         }.also { function ->
@@ -69,24 +55,18 @@ class RuiWhenBuilder(
             function.parent = irClass
             function.visibility = DescriptorVisibilities.LOCAL
 
-            function.body = buildSelectBody(function)
+            function.body = irSelectBody(function)
+
+            select = function
         }
 
-        return IrFunctionExpressionImpl(
-            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            irBuiltIns.functionN(0).typeWith(irBuiltIns.intType),
-            function,
-            IrStatementOrigin.LAMBDA
-        )
-    }
-
-    private fun buildSelectBody(function: IrSimpleFunction): IrBody {
+    private fun irSelectBody(function: IrSimpleFunction): IrBody {
         return try {
 
             DeclarationIrBuilder(irContext, function.symbol).irBlockBody {
                 + irReturn(
                     if (ruiWhen.irSubject == null) {
-                        buildSelectWhen()
+                        irSelectWhen()
                     } else {
                         TODO("when with subject")
                     }
@@ -99,7 +79,7 @@ class RuiWhenBuilder(
         }
     }
 
-    fun IrBlockBodyBuilder.buildSelectWhen(): IrExpression {
+    private fun IrBlockBodyBuilder.irSelectWhen(): IrExpression {
         val branches = ruiWhen.branches.mapIndexed { index, branch ->
             irBranch(branch.condition.irExpression, irConst(index))
         }.toMutableList()
@@ -126,46 +106,73 @@ class RuiWhenBuilder(
         }
     }
 
-    fun buildFragmentVarArg(): IrExpression {
-        return IrVarargImpl(
-            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            irBuiltIns.arrayClass.typeWith(ruiContext.ruiFragmentFactoryType),
-            ruiContext.ruiFragmentFactoryType,
-        ).also { vararg ->
-            ruiWhen.branches.forEach {
-                vararg.addElement(buildBranchFactory(it))
-            }
-        }
-    }
-
-    fun buildBranchFactory(branch: RuiBranch): IrExpression =
-        IrConstructorCallImpl(
-            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            ruiContext.ruiFragmentFactoryType,
-            ruiContext.ruiFragmentFactoryClass.constructors.first(),
-            0, 0, 1
-        ).also { call ->
-            call.putValueArgument(0, buildFactoryLambda(branch))
-        }
-
-    fun buildFactoryLambda(branch: RuiBranch): IrExpression {
-        val function = irFactory.buildFun {
-            name = Name.special("<anonymous>")
-            origin = IrDeclarationOrigin.LOCAL_FUNCTION_FOR_LAMBDA
-            returnType = ruiContext.ruiFragmentType
+    private fun irBranch(branch: RuiBranch): IrSimpleFunction =
+        irFactory.buildFun {
+            name = Name.special("$RUI_BRANCH${branch.irBranch.startOffset}")
+            modality = Modality.FINAL
+            returnType = classBoundFragmentType
         }.also { function ->
             function.parent = irClass
             function.visibility = DescriptorVisibilities.LOCAL
             function.body = DeclarationIrBuilder(ruiContext.irContext, function.symbol).irBlockBody {
                 + irReturn(branch.result.builder.irNewInstance())
             }
+            branches += function
         }
 
-        return IrFunctionExpressionImpl(
+    override fun irNewInstance(): IrExpression =
+        tryBuild(ruiWhen.irWhen) {
+            symbolMap = ruiContext.ruiSymbolMap.getSymbolMap(RUI_FQN_WHEN_CLASS)
+
+            IrConstructorCallImpl(
+                SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+                symbolMap.defaultType,
+                symbolMap.primaryConstructor.symbol,
+                0, 0,
+                RUI_WHEN_ARGUMENT_COUNT // adapter, select, array of fragments
+            ).also { constructorCall ->
+
+                constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, ruiClassBuilder.adapterPropertyBuilder.irGetValue())
+                constructorCall.putValueArgument(RUI_WHEN_ARGUMENT_INDEX_SELECT, irSelectReference())
+                constructorCall.putValueArgument(RUI_WHEN_ARGUMENT_INDEX_FRAGMENTS, irBuilderVarargs())
+
+            }
+        }
+
+    fun irSelectReference(): IrExpression {
+        val functionType = irBuiltIns.functionN(0).typeWith(irBuiltIns.intType)
+
+        return IrFunctionReferenceImpl.fromSymbolOwner(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            irBuiltIns.functionN(0).typeWith(ruiContext.ruiFragmentType),
-            function,
-            IrStatementOrigin.LAMBDA
+            functionType,
+            select.symbol,
+            typeArgumentsCount = 0,
+            reflectionTarget = null
         )
     }
+
+    fun irBuilderVarargs(): IrExpression {
+        return IrVarargImpl(
+            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+            irBuiltIns.arrayClass.typeWith(),
+            classBoundFragmentType,
+        ).also { vararg ->
+            branches.forEach {
+                vararg.addElement(irBranchReference(it))
+            }
+        }
+    }
+
+    private fun irBranchReference(it: IrSimpleFunction): IrVarargElement {
+        val functionType = irBuiltIns.functionN(0).typeWith(classBoundFragmentType)
+
+        return IrFunctionReferenceImpl.fromSymbolOwner(
+            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+            functionType,
+            select.symbol,
+            typeArgumentsCount = 0,
+            reflectionTarget = null
+        )
+    }
+
 }

@@ -7,6 +7,8 @@ class RuiPlaceholder<BT>(
     override val ruiAdapter: RuiAdapter<BT>
 ) : RuiFragment<BT> {
 
+    override val ruiParent = null
+
     override val ruiExternalPatch: (it: RuiFragment<BT>) -> Unit = { }
 
     val bridge = ruiAdapter.createPlaceholder()

@@ -24,6 +24,7 @@ package zakadabar.rui.runtime
 interface RuiFragment<BT> {
 
     val ruiAdapter : RuiAdapter<BT>
+    val ruiParent : RuiFragment<BT>?
     val ruiExternalPatch : (it : RuiFragment<BT>) -> Unit
 
     fun ruiCreate()

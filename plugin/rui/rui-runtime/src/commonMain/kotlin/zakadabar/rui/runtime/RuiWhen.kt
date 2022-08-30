@@ -6,15 +6,16 @@ package zakadabar.rui.runtime
 open class RuiWhen<BT>(
     override val ruiAdapter: RuiAdapter<BT>,
     val ruiSelect: () -> Int,
-    vararg val factories: RuiFragmentFactory<BT, out RuiFragment<BT>>
+    vararg val factories: () -> RuiFragment<BT>
 ) : RuiFragment<BT> {
 
+    override val ruiParent = null
     override val ruiExternalPatch: (it: RuiFragment<BT>) -> Unit = { }
 
     lateinit var placeholder: RuiBridge<BT>
 
     var branch = ruiSelect()
-    var fragment: RuiFragment<BT>? = if (branch == -1) null else factories[branch].builder()
+    var fragment: RuiFragment<BT>? = if (branch == -1) null else factories[branch]()
 
     override fun ruiCreate() {
         fragment?.ruiCreate()
@@ -35,7 +36,7 @@ open class RuiWhen<BT>(
             fragment?.ruiUnmount(placeholder)
             fragment?.ruiDispose()
             branch = newBranch
-            fragment = if (branch == -1) null else factories[branch].builder()
+            fragment = if (branch == -1) null else factories[branch]()
             fragment?.ruiCreate()
             fragment?.ruiMount(placeholder)
         }

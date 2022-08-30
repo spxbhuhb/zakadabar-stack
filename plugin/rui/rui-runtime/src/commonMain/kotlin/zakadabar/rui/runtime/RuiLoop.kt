@@ -5,10 +5,12 @@ package zakadabar.rui.runtime
 
 class RuiLoop<BT,IT>(
     override val ruiAdapter: RuiAdapter<BT>,
-    override val ruiExternalPatch: (it: RuiFragment<BT>) -> Unit,
     val makeIterator : () -> Iterator<IT>,
     val makeFragment : () -> RuiFragment<BT>
 ) : RuiFragment<BT> {
+
+    override val ruiParent = null
+    override val ruiExternalPatch: (it: RuiFragment<BT>) -> Unit = { }
 
     var loopVariable : IT? = null
 

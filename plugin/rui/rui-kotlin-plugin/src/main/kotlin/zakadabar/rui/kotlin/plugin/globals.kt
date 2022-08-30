@@ -19,9 +19,10 @@ import zakadabar.rui.runtime.Plugin
  * 1. ruiAdapter
  * 2. ruiPatchExternal
  */
-const val RUI_FRAGMENT_ARGUMENT_COUNT = 2
+const val RUI_FRAGMENT_ARGUMENT_COUNT = 3
 const val RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER = 0
-const val RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH = 1
+const val RUI_FRAGMENT_ARGUMENT_INDEX_PARENT = 1
+const val RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH = 2
 
 const val RUI_BLOCK_ARGUMENT_COUNT = 2
 const val RUI_BLOCK_ARGUMENT_INDEX_FRAGMENTS = 1
@@ -57,6 +58,7 @@ const val RUI_INVALIDATE = "ruiInvalidate"
 const val RUI_DIRTY = "ruiDirty"
 
 const val RUI_ADAPTER = "ruiAdapter"
+const val RUI_PARENT = "ruiParent"
 const val RUI_EXTERNAL_PATCH = "ruiExternalPatch"
 const val RUI_FRAGMENT = "ruiFragment"
 const val RUI_MASK = "mask"
@@ -67,7 +69,9 @@ const val RUI_CALL = "ruiCall"
 const val RUI_FOR_LOOP = "ruiForLoop"
 const val RUI_WHEN = "ruiWhen"
 
-val RUI_FQN_FRAGMENT_FACTORY_CLASS = FqName.fromSegments(Plugin.RUI_FRAGMENT_FACTORY_CLASS)
+const val RUI_SELECT = "ruiSelect"
+const val RUI_EXTERNAL_PATCH_OF_CHILD = "ruiEp"
+
 val RUI_FQN_FRAGMENT_CLASS = FqName.fromSegments(Plugin.RUI_FRAGMENT_CLASS)
 val RUI_FQN_ADAPTER_CLASS = FqName.fromSegments(Plugin.RUI_ADAPTER_CLASS)
 val RUI_FQN_BRIDGE_CLASS = FqName.fromSegments(Plugin.RUI_BRIDGE_CLASS)

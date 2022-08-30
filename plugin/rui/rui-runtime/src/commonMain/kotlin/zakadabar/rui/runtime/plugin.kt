@@ -25,7 +25,6 @@ object Plugin {
     const val RUI_ANNOTATION = "zakadabar.rui.runtime.Rui"
 
     val RUI_FRAGMENT_CLASS = listOf("zakadabar", "rui", "runtime", "RuiFragment")
-    val RUI_FRAGMENT_FACTORY_CLASS = listOf("zakadabar", "rui", "runtime", "RuiFragmentFactory")
     val RUI_ADAPTER_CLASS = listOf("zakadabar", "rui", "runtime", "RuiAdapter")
     val RUI_BRIDGE_CLASS = listOf("zakadabar", "rui", "runtime", "RuiBridge")
     val RUI_BLOCK_CLASS = listOf("zakadabar", "rui", "runtime", "RuiBlock")

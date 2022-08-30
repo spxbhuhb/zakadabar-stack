@@ -7,6 +7,8 @@ import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.backend.jvm.functionByName
 import org.jetbrains.kotlin.ir.types.defaultType
 import org.jetbrains.kotlin.ir.util.IrMessageLogger
+import org.jetbrains.kotlin.ir.util.functions
+import org.jetbrains.kotlin.ir.util.properties
 import org.jetbrains.kotlin.name.FqName
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.model.RuiEntryPoint
@@ -37,14 +39,23 @@ class RuiPluginContext(
     val ruiBridgeClass = requireNotNull(irContext.referenceClass(RUI_FQN_BRIDGE_CLASS)) { "missing class: ${RUI_FQN_BRIDGE_CLASS.asString()}" }
     val ruiBridgeType = ruiBridgeClass.defaultType
 
-    val ruiFragmentFactoryClass = requireNotNull(irContext.referenceClass(RUI_FQN_FRAGMENT_FACTORY_CLASS)) { "missing class: ${RUI_FQN_FRAGMENT_FACTORY_CLASS.asString()}" }
-    val ruiFragmentFactoryType = ruiFragmentFactoryClass.defaultType
+    val ruiAdapter = property(RUI_ADAPTER)
+    val ruiParent = property(RUI_PARENT)
+    val ruiExternalPatch = property(RUI_EXTERNAL_PATCH)
 
-    val ruiCreate = ruiFragmentClass.functionByName(RUI_CREATE)
-    val ruiMount = ruiFragmentClass.functionByName(RUI_MOUNT)
-    val ruiPatch = ruiFragmentClass.functionByName(RUI_PATCH)
-    val ruiDispose = ruiFragmentClass.functionByName(RUI_DISPOSE)
-    val ruiUnmount = ruiFragmentClass.functionByName(RUI_UNMOUNT)
+    val ruiCreate = function(RUI_CREATE)
+    val ruiMount = function(RUI_MOUNT)
+    val ruiPatch = function(RUI_PATCH)
+    val ruiDispose = function(RUI_DISPOSE)
+    val ruiUnmount = function(RUI_UNMOUNT)
 
     val ruiSymbolMap = RuiSymbolMap(this)
+
+    private fun property(name: String) =
+        ruiFragmentClass.owner.properties.filter { it.name.asString() == name }.map { it.symbol }.toList()
+
+    private fun function(name: String) =
+       listOf(ruiFragmentClass.functions.single { it.owner.name.asString() == name })
+
 }
+

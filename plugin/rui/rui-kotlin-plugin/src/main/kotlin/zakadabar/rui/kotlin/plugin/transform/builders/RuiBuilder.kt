@@ -95,7 +95,7 @@ interface RuiBuilder {
     val classBoundAdapterType: IrType
         get() = ruiContext.ruiAdapterClass.typeWith(classBoundBridgeType.defaultType)
 
-    fun tryBuild(source: IrElement, block: () -> IrExpression): IrExpression =
+    fun <T> tryBuild(source: IrElement, block: () -> T): T =
         try {
             block()
         } catch (ex: RuiCompilationException) {

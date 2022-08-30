@@ -23,23 +23,30 @@ class RuiBlockBuilder(
     // we have to initialize this in build, after all other classes in the module are registered
     override lateinit var symbolMap: RuiClassSymbols
 
-    override fun irNewInstance(): IrExpression =
+    override fun buildDeclarations() {
         tryBuild(ruiBlock.irBlock) {
             symbolMap = ruiContext.ruiSymbolMap.getSymbolMap(RUI_FQN_BLOCK_CLASS)
 
-            IrConstructorCallImpl(
-                SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-                symbolMap.defaultType,
-                symbolMap.primaryConstructor.symbol,
-                0, 0,
-                RUI_BLOCK_ARGUMENT_COUNT // adapter, array of fragments
-            ).also { constructorCall ->
-
-                constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, ruiClassBuilder.adapterPropertyBuilder.irGetValue())
-                constructorCall.putValueArgument(RUI_BLOCK_ARGUMENT_INDEX_FRAGMENTS, buildFragmentVarArg())
-
+            ruiBlock.statements.forEach {
+                it.builder.buildDeclarations()
             }
         }
+    }
+
+    override fun irNewInstance(): IrExpression =
+        IrConstructorCallImpl(
+            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+            symbolMap.defaultType,
+            symbolMap.primaryConstructor.symbol,
+            0, 0,
+            RUI_BLOCK_ARGUMENT_COUNT // adapter, array of fragments
+        ).also { constructorCall ->
+
+            constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, ruiClassBuilder.adapterPropertyBuilder.irGetValue())
+            constructorCall.putValueArgument(RUI_BLOCK_ARGUMENT_INDEX_FRAGMENTS, buildFragmentVarArg())
+
+        }
+
 
     fun buildFragmentVarArg(): IrExpression {
         return IrVarargImpl(

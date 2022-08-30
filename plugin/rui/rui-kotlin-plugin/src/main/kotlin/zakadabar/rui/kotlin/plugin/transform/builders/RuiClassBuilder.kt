@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.ir.symbols.impl.IrTypeParameterSymbolImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrValueParameterSymbolImpl
 import org.jetbrains.kotlin.ir.types.defaultType
 import org.jetbrains.kotlin.ir.types.impl.IrSimpleTypeImpl
+import org.jetbrains.kotlin.ir.types.makeNullable
 import org.jetbrains.kotlin.ir.types.typeWith
 import org.jetbrains.kotlin.ir.util.*
 import org.jetbrains.kotlin.name.FqName
@@ -49,9 +50,11 @@ class RuiClassBuilder(
     val thisReceiver: IrValueParameter
 
     private lateinit var adapterConstructorParameter: IrValueParameter
+    private lateinit var parentConstructorParameter: IrValueParameter
     private lateinit var externalPatchConstructorParameter: IrValueParameter
 
     val adapterPropertyBuilder: RuiPropertyBuilder
+    val parentPropertyBuilder: RuiPropertyBuilder
     val externalPatchPropertyBuilder: RuiPropertyBuilder
     val fragmentPropertyBuilder: RuiPropertyBuilder
 
@@ -85,6 +88,7 @@ class RuiClassBuilder(
         constructor = initConstructor()
 
         adapterPropertyBuilder = initAdapterProperty()
+        parentPropertyBuilder = initParentProperty()
         externalPatchPropertyBuilder = initExternalPatchProperty()
         fragmentPropertyBuilder = initFragmentProperty()
 
@@ -142,17 +146,24 @@ class RuiClassBuilder(
     private fun initAdapterProperty(): RuiPropertyBuilder =
         RuiPropertyBuilder(ruiClassBuilder, Name.identifier(RUI_ADAPTER), classBoundAdapterType, isVar = false).also {
             it.irField.initializer = irFactory.createExpressionBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, irGet(adapterConstructorParameter))
-            // FIXME add overridden info
+            it.irProperty.overriddenSymbols = ruiContext.ruiAdapter
+        }
+
+    private fun initParentProperty(): RuiPropertyBuilder =
+        RuiPropertyBuilder(ruiClassBuilder, Name.identifier(RUI_PARENT), classBoundFragmentType.makeNullable(), isVar = false).also {
+            it.irField.initializer = irFactory.createExpressionBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, irGet(parentConstructorParameter))
+            it.irProperty.overriddenSymbols = ruiContext.ruiParent
         }
 
     private fun initExternalPatchProperty(): RuiPropertyBuilder =
         RuiPropertyBuilder(ruiClassBuilder, Name.identifier(RUI_EXTERNAL_PATCH), classBoundExternalPatchType, isVar = false).also {
             it.irField.initializer = irFactory.createExpressionBody(SYNTHETIC_OFFSET, SYNTHETIC_OFFSET, irGet(externalPatchConstructorParameter))
-            // FIXME add overridden info
+            it.irProperty.overriddenSymbols = ruiContext.ruiExternalPatch
         }
 
     private fun initFragmentProperty(): RuiPropertyBuilder =
         RuiPropertyBuilder(ruiClassBuilder, Name.identifier(RUI_FRAGMENT), ruiContext.ruiFragmentType, isVar = false)
+    // TODO add overridden when if the class extends RuiGeneratedFragment
 
     /**
      * Creates a primary constructor with a standard body (super class constructor call
@@ -175,6 +186,11 @@ class RuiClassBuilder(
         adapterConstructorParameter = constructor.addValueParameter {
             name = Name.identifier(RUI_ADAPTER)
             type = ruiContext.ruiAdapterType
+        }
+
+        parentConstructorParameter = constructor.addValueParameter {
+            name = Name.identifier(RUI_PARENT)
+            type = classBoundFragmentType
         }
 
         externalPatchConstructorParameter = constructor.addValueParameter {
@@ -219,14 +235,14 @@ class RuiClassBuilder(
         return initializer
     }
 
-    private fun initRuiFunction(functionName: String, overrides: IrSimpleFunctionSymbol): IrSimpleFunction =
+    private fun initRuiFunction(functionName: String, overrides: List<IrSimpleFunctionSymbol>): IrSimpleFunction =
         irFactory.buildFun {
             name = Name.identifier(functionName)
             returnType = irBuiltIns.unitType
             modality = Modality.OPEN
         }.also { function ->
 
-            function.overriddenSymbols = listOf(overrides)
+            function.overriddenSymbols = overrides
             function.parent = irClass
 
             function.addDispatchReceiver {
@@ -245,23 +261,25 @@ class RuiClassBuilder(
 
     fun build() {
 
-        traceInit()
-
         val rootBuilder = ruiClass.rootBlock.builder
 
-        // State initialisation must precede fragment initialisation, so the fragments
-        // will get initialized values in their constructor.
-        // Individual fragment builders will append their own initialisation code
-        // after the state is properly initialized.
-
-        initializer.body.statements += ruiClass.initializerStatements
-        initializer.body.statements += fragmentPropertyBuilder.irSetField(rootBuilder.irNewInstance())
+        rootBuilder.buildDeclarations()
 
         buildRuiCall(create, rootBuilder, rootBuilder.symbolMap.create)
         buildRuiCall(mount, rootBuilder, rootBuilder.symbolMap.mount)
         buildRuiCall(patch, rootBuilder, rootBuilder.symbolMap.patch)
         buildRuiCall(unmount, rootBuilder, rootBuilder.symbolMap.unmount)
         buildRuiCall(dispose, rootBuilder, rootBuilder.symbolMap.dispose)
+
+        // State initialisation must precede fragment initialisation, so the fragments
+        // will get initialized values in their constructor.
+        // Individual fragment builders will append their own initialisation code
+        // after the state is properly initialized.
+
+        traceInit()
+
+        initializer.body.statements += ruiClass.initializerStatements
+        initializer.body.statements += fragmentPropertyBuilder.irSetField(rootBuilder.irNewInstance())
 
         // The initializer has to be the last, so it will be able to access all properties
         irClass.declarations += initializer

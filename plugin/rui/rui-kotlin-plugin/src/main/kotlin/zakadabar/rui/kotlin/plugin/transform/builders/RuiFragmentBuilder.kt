@@ -15,6 +15,15 @@ interface RuiFragmentBuilder : RuiBuilder {
         get() = throw IllegalStateException()
 
     /**
+     * Add functions and properties used by this fragment. These depend on the
+     * fragment type. External patch, select for branches, builders for loops and
+     * higher-order functions etc.
+     */
+    fun buildDeclarations() {
+        throw NotImplementedError()
+    }
+
+    /**
      * Create a new instance of the fragment. Called from `RuiClass.build` after
      * all classes in the IR ModuleFragment are transformed into RuiClass. This
      * ensures that references to other Rui classes can be resolved properly.

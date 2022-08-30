@@ -22,8 +22,7 @@ import org.jetbrains.kotlin.ir.util.defaultType
 import org.jetbrains.kotlin.ir.util.dumpKotlinLike
 import org.jetbrains.kotlin.ir.util.getPropertyGetter
 import org.jetbrains.kotlin.name.Name
-import zakadabar.rui.kotlin.plugin.RUI_ROOT_BRIDGE
-import zakadabar.rui.kotlin.plugin.RuiDumpPoint
+import zakadabar.rui.kotlin.plugin.*
 import zakadabar.rui.kotlin.plugin.model.RuiClass
 import zakadabar.rui.kotlin.plugin.model.RuiEntryPoint
 
@@ -42,10 +41,12 @@ class RuiEntryPointBuilder(
                 SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
                 ruiClass.irClass.defaultType,
                 ruiClass.builder.constructor.symbol,
-                0, 0, 2
+                0, 0,
+                RUI_FRAGMENT_ARGUMENT_COUNT
             ).also { call ->
-                call.putValueArgument(0, irGetAdapter(function))
-                call.putValueArgument(1, buildExternalPatch(ruiClass, function.symbol))
+                call.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, irGetAdapter(function))
+                call.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_PARENT, irNull())
+                call.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_EXTERNAL_PATCH, irExternalPatch(ruiClass, function.symbol))
             }
 
             val root = irTemporary(instance, "root").also { it.parent = ruiEntryPoint.irFunction }
@@ -81,7 +82,7 @@ class RuiEntryPointBuilder(
             function.valueParameters.first().symbol
         )
 
-    fun buildExternalPatch(ruiClass: RuiClass, parent: IrSimpleFunctionSymbol): IrExpression {
+    fun irExternalPatch(ruiClass: RuiClass, parent: IrSimpleFunctionSymbol): IrExpression {
         val function = irFactory.buildFun {
             name = Name.special("<anonymous>")
             origin = IrDeclarationOrigin.LOCAL_FUNCTION_FOR_LAMBDA
