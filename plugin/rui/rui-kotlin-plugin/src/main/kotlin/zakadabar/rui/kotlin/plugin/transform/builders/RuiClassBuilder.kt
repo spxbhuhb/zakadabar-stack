@@ -190,7 +190,7 @@ class RuiClassBuilder(
 
         parentConstructorParameter = constructor.addValueParameter {
             name = Name.identifier(RUI_PARENT)
-            type = classBoundFragmentType
+            type = classBoundFragmentType.makeNullable()
         }
 
         externalPatchConstructorParameter = constructor.addValueParameter {
@@ -410,7 +410,7 @@ class RuiClassBuilder(
             val invoke = function1Type.functions.first { it.name.identifier == "invoke" }.symbol
 
             val fragment = irTemporary(irGetFragment(function))
-            val rootBuilder = ruiClass.rootBlock.builder as RuiFragmentBuilder
+            val rootBuilder = ruiClass.rootBlock.builder
 
             + irCallOp(
                 invoke,

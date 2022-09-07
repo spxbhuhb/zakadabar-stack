@@ -73,7 +73,7 @@ class RunTest {
                         SourceFile.kotlin(fileName, sourceCode)
                     )
                     useIR = true
-                    compilerPlugins = listOf(RuiComponentRegistrar(trace = true, rootNameStrategy = RuiRootNameStrategy.NoPostfix))
+                    compilerPlugins = listOf(RuiComponentRegistrar.withAll())
                     commandLineProcessors = listOf(RuiCommandLineProcessor())
                     inheritClassPath = true
                 }

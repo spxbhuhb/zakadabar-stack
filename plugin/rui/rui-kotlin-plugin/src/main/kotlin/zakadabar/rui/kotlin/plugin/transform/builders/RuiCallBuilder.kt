@@ -27,7 +27,6 @@ import zakadabar.rui.kotlin.plugin.*
 import zakadabar.rui.kotlin.plugin.model.RuiCall
 import zakadabar.rui.kotlin.plugin.model.RuiExpression
 import zakadabar.rui.kotlin.plugin.transform.RuiClassSymbols
-import zakadabar.rui.kotlin.plugin.util.RuiCompilationException
 
 class RuiCallBuilder(
     override val ruiClassBuilder: RuiClassBuilder,
@@ -54,7 +53,6 @@ class RuiCallBuilder(
 
             function.parent = irClass
             function.visibility = DescriptorVisibilities.LOCAL
-
             function.dispatchReceiverParameter = irClass.thisReceiver
 
             val externalPatchIt = function.addValueParameter {
@@ -67,24 +65,16 @@ class RuiCallBuilder(
             externalPatch = function
         }
 
-    private fun irExternalPatchBody(function: IrSimpleFunction, externalPatchIt: IrValueParameter): IrBody? {
-        return try {
+    private fun irExternalPatchBody(function: IrSimpleFunction, externalPatchIt: IrValueParameter): IrBody? =
+        DeclarationIrBuilder(irContext, function.symbol).irBlockBody {
+            traceExternalPatch()
 
-            DeclarationIrBuilder(irContext, function.symbol).irBlockBody {
-                traceExternalPatch()
+            + irAs(symbolMap.defaultType, irGet(externalPatchIt))
 
-                + irAs(symbolMap.defaultType, irGet(externalPatchIt))
-
-                ruiCall.valueArguments.forEachIndexed { index, ruiExpression ->
-                    irVariablePatch(externalPatchIt, index, ruiExpression)
-                }
+            ruiCall.valueArguments.forEachIndexed { index, ruiExpression ->
+                irVariablePatch(externalPatchIt, index, ruiExpression)
             }
-
-        } catch (ex: RuiCompilationException) {
-            ex.error.report(ruiClassBuilder, ruiCall.irCall, additionalInfo = ex.additionalInfo)
-            DeclarationIrBuilder(irContext, function.symbol).irBlockBody { }
         }
-    }
 
     private fun IrBlockBodyBuilder.traceExternalPatch() {
 
@@ -198,7 +188,7 @@ class RuiCallBuilder(
     fun irExternalPatchReference(): IrExpression {
         val functionType = irBuiltIns.functionN(1).typeWith(
             classBoundFragmentType,
-            irBuiltIns.intType
+            irBuiltIns.unitType
         )
 
         return IrFunctionReferenceImpl.fromSymbolOwner(
@@ -206,8 +196,10 @@ class RuiCallBuilder(
             functionType,
             externalPatch.symbol,
             typeArgumentsCount = 0,
-            reflectionTarget = null // FIXME ask what IrFunctionReferenceImpl.reflectionTarget is
-        )
+            reflectionTarget = externalPatch.symbol
+        ).also {
+            it.dispatchReceiver = irThisReceiver()
+        }
     }
 
 }

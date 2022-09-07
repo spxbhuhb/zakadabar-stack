@@ -24,7 +24,6 @@ import zakadabar.rui.kotlin.plugin.*
 import zakadabar.rui.kotlin.plugin.model.RuiBranch
 import zakadabar.rui.kotlin.plugin.model.RuiWhen
 import zakadabar.rui.kotlin.plugin.transform.RuiClassSymbols
-import zakadabar.rui.kotlin.plugin.util.RuiCompilationException
 
 class RuiWhenBuilder(
     override val ruiClassBuilder: RuiClassBuilder,
@@ -38,10 +37,15 @@ class RuiWhenBuilder(
     private var branches = mutableListOf<IrSimpleFunction>()
 
     override fun buildDeclarations() {
-        irClass.declarations += irSelect()
-        ruiWhen.branches.forEach { branch ->
-            branch.result.builder.buildDeclarations()
-            irClass.declarations += irBranch(branch)
+        tryBuild(ruiWhen.irWhen) {
+            symbolMap = ruiContext.ruiSymbolMap.getSymbolMap(RUI_FQN_WHEN_CLASS)
+
+            irClass.declarations += irSelect()
+
+            ruiWhen.branches.forEach { branch ->
+                branch.result.builder.buildDeclarations()
+                irClass.declarations += irBranch(branch)
+            }
         }
     }
 
@@ -54,30 +58,23 @@ class RuiWhenBuilder(
 
             function.parent = irClass
             function.visibility = DescriptorVisibilities.LOCAL
+            function.dispatchReceiverParameter = irClass.thisReceiver
 
             function.body = irSelectBody(function)
 
             select = function
         }
 
-    private fun irSelectBody(function: IrSimpleFunction): IrBody {
-        return try {
-
-            DeclarationIrBuilder(irContext, function.symbol).irBlockBody {
-                + irReturn(
-                    if (ruiWhen.irSubject == null) {
-                        irSelectWhen()
-                    } else {
-                        TODO("when with subject")
-                    }
-                )
-            }
-
-        } catch (ex: RuiCompilationException) {
-            ex.error.report(ruiClassBuilder, ruiWhen.irWhen, additionalInfo = ex.additionalInfo)
-            DeclarationIrBuilder(irContext, function.symbol).irBlockBody { }
+    private fun irSelectBody(function: IrSimpleFunction): IrBody =
+        DeclarationIrBuilder(irContext, function.symbol).irBlockBody {
+            + irReturn(
+                if (ruiWhen.irSubject == null) {
+                    irSelectWhen()
+                } else {
+                    TODO("when with subject")
+                }
+            )
         }
-    }
 
     private fun IrBlockBodyBuilder.irSelectWhen(): IrExpression {
         val branches = ruiWhen.branches.mapIndexed { index, branch ->
@@ -108,35 +105,35 @@ class RuiWhenBuilder(
 
     private fun irBranch(branch: RuiBranch): IrSimpleFunction =
         irFactory.buildFun {
-            name = Name.special("$RUI_BRANCH${branch.irBranch.startOffset}")
+            name = Name.identifier("$RUI_BRANCH${branch.irBranch.result.startOffset}")
             modality = Modality.FINAL
             returnType = classBoundFragmentType
         }.also { function ->
+
             function.parent = irClass
             function.visibility = DescriptorVisibilities.LOCAL
+            function.dispatchReceiverParameter = irClass.thisReceiver
+
             function.body = DeclarationIrBuilder(ruiContext.irContext, function.symbol).irBlockBody {
                 + irReturn(branch.result.builder.irNewInstance())
             }
+
             branches += function
         }
 
     override fun irNewInstance(): IrExpression =
-        tryBuild(ruiWhen.irWhen) {
-            symbolMap = ruiContext.ruiSymbolMap.getSymbolMap(RUI_FQN_WHEN_CLASS)
+        IrConstructorCallImpl(
+            SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
+            symbolMap.defaultType,
+            symbolMap.primaryConstructor.symbol,
+            0, 0,
+            RUI_WHEN_ARGUMENT_COUNT // adapter, select, array of fragments
+        ).also { constructorCall ->
 
-            IrConstructorCallImpl(
-                SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-                symbolMap.defaultType,
-                symbolMap.primaryConstructor.symbol,
-                0, 0,
-                RUI_WHEN_ARGUMENT_COUNT // adapter, select, array of fragments
-            ).also { constructorCall ->
+            constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, ruiClassBuilder.adapterPropertyBuilder.irGetValue())
+            constructorCall.putValueArgument(RUI_WHEN_ARGUMENT_INDEX_SELECT, irSelectReference())
+            constructorCall.putValueArgument(RUI_WHEN_ARGUMENT_INDEX_FRAGMENTS, irBuilderVarargs())
 
-                constructorCall.putValueArgument(RUI_FRAGMENT_ARGUMENT_INDEX_ADAPTER, ruiClassBuilder.adapterPropertyBuilder.irGetValue())
-                constructorCall.putValueArgument(RUI_WHEN_ARGUMENT_INDEX_SELECT, irSelectReference())
-                constructorCall.putValueArgument(RUI_WHEN_ARGUMENT_INDEX_FRAGMENTS, irBuilderVarargs())
-
-            }
         }
 
     fun irSelectReference(): IrExpression {
@@ -147,14 +144,16 @@ class RuiWhenBuilder(
             functionType,
             select.symbol,
             typeArgumentsCount = 0,
-            reflectionTarget = null
-        )
+            reflectionTarget = select.symbol
+        ).also {
+            it.dispatchReceiver = irThisReceiver()
+        }
     }
 
     fun irBuilderVarargs(): IrExpression {
         return IrVarargImpl(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
-            irBuiltIns.arrayClass.typeWith(),
+            irBuiltIns.arrayClass.typeWith(classBoundFragmentType),
             classBoundFragmentType,
         ).also { vararg ->
             branches.forEach {
@@ -169,10 +168,12 @@ class RuiWhenBuilder(
         return IrFunctionReferenceImpl.fromSymbolOwner(
             SYNTHETIC_OFFSET, SYNTHETIC_OFFSET,
             functionType,
-            select.symbol,
+            it.symbol,
             typeArgumentsCount = 0,
-            reflectionTarget = null
-        )
+            reflectionTarget = it.symbol
+        ).also {
+            it.dispatchReceiver = irThisReceiver()
+        }
     }
 
 }
