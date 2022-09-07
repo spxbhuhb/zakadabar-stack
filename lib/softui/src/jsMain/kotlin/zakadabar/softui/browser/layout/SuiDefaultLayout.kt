@@ -11,6 +11,7 @@ import zakadabar.core.browser.application.application
 import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.util.minusAssign
 import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.resource.css.px
 import zakadabar.core.util.PublicApi
 import zakadabar.softui.browser.theme.styles.SuiLayoutStyles
 import zakadabar.softui.browser.theme.styles.suiLayoutStyles
@@ -18,8 +19,13 @@ import zakadabar.softui.browser.titlebar.SuiAppHeader
 import zakadabar.softui.browser.titlebar.SuiAppTitleBar
 
 open class SuiDefaultLayout(
-    open val styles: SuiLayoutStyles = suiLayoutStyles
+    open val styles: SuiLayoutStyles = suiLayoutStyles,
+    open val resizeSidebar: Boolean = false
 ) : ZkAppLayout("default") {
+
+    companion object {
+        const val SUI_SIDEBAR_WIDTH = "sui-sidebar-width"
+    }
 
     open var header = SuiAppHeader()
         set(value) {
@@ -35,6 +41,12 @@ open class SuiDefaultLayout(
             sideBarContainer += field
         }
 
+    open var sidebarWidth = application.loadState(SUI_SIDEBAR_WIDTH)?.toDoubleOrNull() ?: Double.NaN
+        set(value) {
+            field = value
+            setGridColumns()
+        }
+
     enum class MediaSize {
         Uninitialized,
         Small,
@@ -45,6 +57,7 @@ open class SuiDefaultLayout(
 
     protected var headerContainer = ZkElement()
     protected var separatorContainer = ZkElement()
+    lateinit var slider: ZkElement
     protected var pageTitleContainer = SuiAppTitleBar()
     protected var sideBarContainer = ZkElement()
     protected var popupSidebarContainer = ZkElement()
@@ -61,6 +74,8 @@ open class SuiDefaultLayout(
         }
 
         popupSidebarContainer css styles.popupSideBarContainer
+
+        slider = if (resizeSidebar) SuiLayoutSlider(this) else ZkElement()
 
         on(window, "resize") {
             if (lifeCycleState != ZkElementState.Resumed) return@on
@@ -131,9 +146,12 @@ open class SuiDefaultLayout(
         classList += suiLayoutStyles.defaultLayoutLarge
         contentContainer.classList += suiLayoutStyles.contentContainerLarge
 
+        setGridColumns()
+
         + headerContainer gridRow 1 gridColumn "1 / span 4"
         + separatorContainer gridRow 2 gridColumn "1 / span 4"
-        + sideBarContainer gridRow "3 / span 4" gridColumn 1
+        + sideBarContainer gridRow "2 / span 4" gridColumn 1
+        + slider gridRow "2 / span 4" gridColumn 2
         + pageTitleContainer gridRow 3 gridColumn 3
         + contentContainer gridRow 4 gridColumn 3
 
@@ -151,5 +169,17 @@ open class SuiDefaultLayout(
         } else {
             popupSidebarContainer.toggle()
         }
+    }
+
+    open fun setGridColumns() {
+        val sidebar = when {
+            !resizeSidebar -> "max-content"
+            sidebarWidth.isNaN() ->  240.px
+            else -> sidebarWidth.px
+        }
+
+        val middle = if (resizeSidebar) styles.gridSliderWidth else styles.gridMiddleWidth
+
+        gridTemplateColumns = "$sidebar ${middle}px 1fr ${styles.contentRightMargin.px}"
     }
 }

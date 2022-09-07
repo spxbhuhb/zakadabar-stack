@@ -293,4 +293,17 @@ open class ZkApplication {
 
     fun back() = window.history.back()
 
+    /**
+     * Save a value into the local storage of the web browser.
+     */
+    fun saveState(key : String, value : String) {
+        window.localStorage["zk-$key"] = value
+    }
+
+    /**
+     * Load a value from the local storage of the web browser.
+     */
+    fun loadState(key : String) : String? {
+        return window.localStorage["zk-$key"]
+    }
 }

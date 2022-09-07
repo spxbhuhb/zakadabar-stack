@@ -85,6 +85,8 @@ open class SuiSideBarStyles : SideBarStyleSpec, ZkCssStyleSheet() {
         flexGrow = 1.0
         color = "inherit"
         fontSize = 14.px
+        + WhiteSpace.nowrap
+        + TextOverflow.ellipsis
     }
 
     override val icon by cssClass {

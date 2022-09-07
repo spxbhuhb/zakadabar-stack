@@ -6,6 +6,7 @@ package zakadabar.softui.browser.theme.styles
 import zakadabar.core.resource.css.*
 import zakadabar.softui.browser.theme.base.Colors
 import zakadabar.softui.browser.theme.base.linearGradient
+
 open class SuiLayoutStyles : ZkCssStyleSheet() {
 
     open var largeHeaderHeight by cssParameter { 60 }
@@ -13,6 +14,7 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
     open var headerBottomMargin by cssParameter { 10 }
     open var sideBarLeftMargin by cssParameter { 20 }
     open var gridMiddleWidth by cssParameter { 0 }
+    open var gridSliderWidth by cssParameter { 6 }
     open var contentRightMargin by cssParameter { 0 }
     open var headerBackground by cssParameter { linearGradient(Colors.alertColors.info.state, Colors.alertColors.info.main) }
     open var headerSeparator by cssParameter { true }
@@ -34,7 +36,6 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
 
     open val defaultLayoutLarge by cssClass {
         common()
-        gridTemplateColumns = "max-content ${gridMiddleWidth}px 1fr ${contentRightMargin.px}"
         gridTemplateRows = "${largeHeaderHeight}px min-content max-content 1fr"
     }
 
@@ -114,6 +115,26 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
         height = 100.percent
         maxHeight = 100.percent
         + OverflowY.hidden
+    }
+
+    open val sliderContainer by cssClass {
+        + BoxSizing.borderBox
+        + Cursor.colResize
+
+        height = 100.percent
+        width = "calc(100% - 3px)"
+        marginLeft = 3.px
+
+        on(":hover") {
+            backgroundColor = theme.infoColor
+        }
+    }
+
+    open val noSelect by cssClass {
+        styles["-webkit-user-select"] = "none"
+        styles["-moz-user-select"] = "none"
+        styles["-ms-user-select"] = "none"
+        styles["user-select"] = "none"
     }
 
 }
