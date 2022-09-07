@@ -14,7 +14,7 @@ import kotlin.math.min
 
 open class SuiLayoutSlider(
     val layout: SuiDefaultLayout,
-    var minSize: Double = Double.NaN,
+    var minSize: Double = layout.styles.sidebarMinWidth,
     val maxSize: Double = Double.POSITIVE_INFINITY,
 ) : ZkElement() {
 
@@ -58,10 +58,6 @@ open class SuiLayoutSlider(
     }
 
     protected fun onSliderMove(delta: Double) {
-        if (minSize.isNaN()) {
-            minSize = layout.sideBar.element.getBoundingClientRect().width
-        }
-
         val current = if (layout.sidebarWidth.isNaN()) {
             layout.sideBar.element.getBoundingClientRect().width
         } else {

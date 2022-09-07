@@ -29,13 +29,15 @@ open class SuiSideBarStyles : SideBarStyleSpec, ZkCssStyleSheet() {
     override var sectionTextColor by cssParameter { suiTheme.textColor }
     override var sectionBorderColor by cssParameter { theme.borderColor }
 
+    var sidebarMinWidth by cssParameter { 240 }
+
     override val sidebar by cssClass {
         + Position.relative
         + BoxSizing.borderBox
         + OverflowY.auto
 
         height = 100.percent
-        minWidth = 240.px
+        minWidth = sidebarMinWidth.px
 
         fontSize = this@SuiSideBarStyles.fontSize
 
@@ -70,6 +72,7 @@ open class SuiSideBarStyles : SideBarStyleSpec, ZkCssStyleSheet() {
 
         + Cursor.pointer
 
+        maxWidth = 100.percent
         minHeight = itemMinHeight.px
         paddingRight = 8.px
         paddingLeft = 26.px
@@ -85,6 +88,8 @@ open class SuiSideBarStyles : SideBarStyleSpec, ZkCssStyleSheet() {
         flexGrow = 1.0
         color = "inherit"
         fontSize = 14.px
+
+        + Overflow.hidden
         + WhiteSpace.nowrap
         + TextOverflow.ellipsis
     }
@@ -114,6 +119,7 @@ open class SuiSideBarStyles : SideBarStyleSpec, ZkCssStyleSheet() {
 
         + Cursor.pointer
 
+        maxWidth = 100.percent
         minHeight = itemMinHeight.px
 
         hover {

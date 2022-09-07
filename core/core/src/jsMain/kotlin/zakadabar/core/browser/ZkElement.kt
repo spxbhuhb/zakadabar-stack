@@ -680,9 +680,10 @@ open class ZkElement(
         childElements -= child
         child.element.remove()
 
-        child.onPause()
-
-        child.lifeCycleState = ZkElementState.Created
+        if (child.lifeCycleState != ZkElementState.Initialized) {
+            child.onPause()
+            child.lifeCycleState = ZkElementState.Created
+        }
     }
 
     /**

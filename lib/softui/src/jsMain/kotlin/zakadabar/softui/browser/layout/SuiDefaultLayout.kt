@@ -44,6 +44,7 @@ open class SuiDefaultLayout(
     open var sidebarWidth = application.loadState(SUI_SIDEBAR_WIDTH)?.toDoubleOrNull() ?: Double.NaN
         set(value) {
             field = value
+            application.saveState(SUI_SIDEBAR_WIDTH, value.toString())
             setGridColumns()
         }
 
@@ -110,6 +111,7 @@ open class SuiDefaultLayout(
             this -= separatorContainer
             this -= sideBarContainer
             this -= pageTitleContainer
+            this -= slider
             this -= contentContainer
             this -= popupSidebarContainer
             popupSidebarContainer -= sideBarContainer
@@ -130,6 +132,8 @@ open class SuiDefaultLayout(
         classList += suiLayoutStyles.defaultLayoutSmall
         contentContainer.classList += suiLayoutStyles.contentContainerSmall
 
+        setGridColumns()
+
         + headerContainer gridRow 1
         + separatorContainer gridRow 2
         + pageTitleContainer gridRow 3
@@ -148,12 +152,12 @@ open class SuiDefaultLayout(
 
         setGridColumns()
 
-        + headerContainer gridRow 1 gridColumn "1 / span 4"
-        + separatorContainer gridRow 2 gridColumn "1 / span 4"
-        + sideBarContainer gridRow "2 / span 4" gridColumn 1
-        + slider gridRow "2 / span 4" gridColumn 2
-        + pageTitleContainer gridRow 3 gridColumn 3
-        + contentContainer gridRow 4 gridColumn 3
+        + headerContainer gridRow 1 gridColumn "1 / span 5"
+        + separatorContainer gridRow 2 gridColumn "1 / span 5"
+        + sideBarContainer gridRow "2 / span 4" gridColumn 2
+        + slider gridRow "2 / span 4" gridColumn 3
+        + pageTitleContainer gridRow 3 gridColumn 4
+        + contentContainer gridRow 4 gridColumn 4
 
         sideBarContainer.show()
     }
@@ -166,20 +170,45 @@ open class SuiDefaultLayout(
     open fun onToggleSideBar() {
         if (activeMediaSize == MediaSize.Large) {
             sideBarContainer.toggle()
+            slider.toggle()
+            setGridColumns()
         } else {
             popupSidebarContainer.toggle()
         }
     }
 
     open fun setGridColumns() {
-        val sidebar = when {
-            !resizeSidebar -> "max-content"
-            sidebarWidth.isNaN() ->  240.px
-            else -> sidebarWidth.px
+        when (activeMediaSize) {
+            MediaSize.Large -> setGridColumnsLarge()
+            MediaSize.Small -> setGridColumnsSmall()
+            else -> return
+        }
+    }
+
+    open fun setGridColumnsLarge() {
+        val leftMargin = when {
+            ! resizeSidebar -> styles.sideBarLeftMargin
+            sideBarContainer.isShown() -> styles.sideBarLeftMargin
+            else -> 0
         }
 
-        val middle = if (resizeSidebar) styles.gridSliderWidth else styles.gridMiddleWidth
+        val sidebar = when {
+            ! resizeSidebar -> "max-content"
+            sidebarWidth.isNaN() -> if (sideBarContainer.isShown()) 240.px else 0.px
+            else -> if (sideBarContainer.isShown()) sidebarWidth.px else 0.px
+        }
 
-        gridTemplateColumns = "$sidebar ${middle}px 1fr ${styles.contentRightMargin.px}"
+        val sliderOrSerparator = when {
+            ! resizeSidebar -> styles.gridMiddleWidth
+            sideBarContainer.isShown() -> styles.gridSliderWidth
+            else -> 0
+        }
+
+        gridTemplateColumns = "${leftMargin}px $sidebar ${sliderOrSerparator}px 1fr ${styles.contentRightMargin.px}"
     }
+
+    open fun setGridColumnsSmall() {
+        gridTemplateColumns = "1fr"
+    }
+
 }

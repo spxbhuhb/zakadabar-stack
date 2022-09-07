@@ -20,6 +20,8 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
     open var headerSeparator by cssParameter { true }
     open var separatorImage by cssParameter { "linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0))" }
 
+    var sidebarMinWidth by cssParameter { 240.0 }
+
     open fun ZkCssStyleRule.common() {
         + Display.grid
         + BoxSizing.borderBox
@@ -59,8 +61,7 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
     }
 
     open val sideBarContainer by cssClass {
-        marginLeft = sideBarLeftMargin.px
-        minWidth = 220.px
+        minWidth = sidebarMinWidth.px
         maxHeight = 100.percent
         + OverflowY.auto
         borderRight = theme.border
@@ -115,6 +116,7 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
         height = 100.percent
         maxHeight = 100.percent
         + OverflowY.hidden
+        gridTemplateRows = "${mediumHeaderHeight}px min-content min-content 1fr"
     }
 
     open val sliderContainer by cssClass {
@@ -124,6 +126,7 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
         height = 100.percent
         width = "calc(100% - 3px)"
         marginLeft = 3.px
+        borderRight = "1px solid " + theme.borderColor
 
         on(":hover") {
             backgroundColor = theme.infoColor
@@ -131,6 +134,7 @@ open class SuiLayoutStyles : ZkCssStyleSheet() {
     }
 
     open val noSelect by cssClass {
+        styles["cursor"] = "col-resize !important"
         styles["-webkit-user-select"] = "none"
         styles["-moz-user-select"] = "none"
         styles["-ms-user-select"] = "none"
