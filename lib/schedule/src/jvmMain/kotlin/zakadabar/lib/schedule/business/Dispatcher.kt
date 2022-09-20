@@ -62,7 +62,6 @@ class Dispatcher(
 
     suspend fun run() {
         for (event in events) {
-            jobBl.logger.debug("dispatcher event: $event")
             try {
                 when (event) {
                     is PendingCheckEvent -> onPendingCheck()
