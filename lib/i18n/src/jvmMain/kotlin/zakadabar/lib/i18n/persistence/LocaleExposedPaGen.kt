@@ -53,7 +53,7 @@ object LocaleExposedTableGen : ExposedPaTable<LocaleBo>(
     tableName = "locale"
 ) {
 
-    internal val name = varchar("name", 100)
+    internal val name = varchar("name", 100).uniqueIndex()
     internal val description = text("description")
     internal val status = enumerationByName("status", 20, LocaleStatus::class)
 

@@ -55,4 +55,8 @@ object TranslationExposedTableGen : ExposedPaTable<TranslationBo>(
     internal val locale = reference("locale", LocaleExposedTableGen)
     internal val value = text("value")
 
+    init {
+        uniqueIndex(locale, key)
+    }
+
 }

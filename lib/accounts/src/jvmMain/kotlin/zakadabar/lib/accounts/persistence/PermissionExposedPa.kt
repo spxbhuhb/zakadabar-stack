@@ -120,7 +120,7 @@ object PermissionExposedTableCommon : PermissionExposedTable()
 open class PermissionExposedTable : ExposedPaTable<PermissionBo>(
     tableName = "permission"
 ) {
-    val name = varchar("name", 50).index()
+    val name = varchar("name", 50).uniqueIndex()
     val description = text("description")
 }
 
