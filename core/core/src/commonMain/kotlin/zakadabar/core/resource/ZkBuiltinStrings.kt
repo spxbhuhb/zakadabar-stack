@@ -81,6 +81,7 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val basics by "Basics"
     open val fullName by "Full Name"
     open val locales by "Locales"
+    open val locale by "Locale"
     open val login by "Login"
     open val loginFail by "Login failed."
     open val loginFailCount by "Failed logins"
