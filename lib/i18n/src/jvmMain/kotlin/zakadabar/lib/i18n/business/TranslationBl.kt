@@ -34,7 +34,7 @@ class TranslationBl : EntityBusinessLogicBase<TranslationBo>(
     }
 
     @Suppress("UNUSED_PARAMETER") // used fro mapping
-    private fun translationsByLocale(executor: Executor, query: TranslationsByLocale): List<StringPair> {
+    fun translationsByLocale(executor: Executor, query: TranslationsByLocale): List<StringPair> {
         val localeId = localeBl.byName(query.locale)?.id ?: return emptyList()
         return pa.translationsByLocale(localeId)
     }
