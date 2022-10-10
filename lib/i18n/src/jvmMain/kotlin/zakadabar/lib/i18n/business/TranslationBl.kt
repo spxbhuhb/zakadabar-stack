@@ -26,11 +26,10 @@ class TranslationBl : EntityBusinessLogicBase<TranslationBo>(
     private val localeBl by module<LocaleBl>()
 
     override val authorizer by provider {
-        if (this is SimpleRoleAuthorizer) {
-            allReads = LOGGED_IN
-            allWrites = appRoles.securityOfficer
-            query(TranslationsMap::class, PUBLIC)
-        }
+        this as SimpleRoleAuthorizer
+        allReads = LOGGED_IN
+        allWrites = appRoles.securityOfficer
+        query(TranslationsMap::class, PUBLIC)
     }
 
     override val router = router {
@@ -44,10 +43,10 @@ class TranslationBl : EntityBusinessLogicBase<TranslationBo>(
         return pa.translationsByLocale(localeId)
     }
 
-    fun translationsMap(executor: Executor, bo: TranslationsMap): Map<String, Map<String,String>> {
+    fun translationsMap(executor: Executor, bo: TranslationsMap): Map<String, Map<String, String>> {
         val allLocales = localePa.list().associateBy { it.id }
         val allTranslations = pa.list()
-        val translationMap : MutableMap<String, MutableMap<String,String>> = mutableMapOf()
+        val translationMap: MutableMap<String, MutableMap<String, String>> = mutableMapOf()
 
         allTranslations.forEach { t ->
             allLocales[t.locale]?.let { l ->
