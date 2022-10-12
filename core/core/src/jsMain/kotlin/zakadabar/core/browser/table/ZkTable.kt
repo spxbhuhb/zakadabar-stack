@@ -7,9 +7,7 @@ package zakadabar.core.browser.table
 
 import kotlinx.browser.document
 import kotlinx.browser.window
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.*
 import kotlinx.dom.clear
 import org.w3c.dom.*
 import org.w3c.dom.events.Event
@@ -38,6 +36,7 @@ import zakadabar.core.data.QueryBo
 import zakadabar.core.resource.css.ZkCssStyleRule
 import zakadabar.core.resource.css.px
 import zakadabar.core.resource.ZkIconSource
+import zakadabar.core.resource.localized
 import zakadabar.core.resource.localizedStrings
 import zakadabar.core.schema.BoSchema
 import zakadabar.core.util.PublicApi
@@ -89,24 +88,24 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
     override var titleText: String? = null
     override var titleElement: ZkAppTitle? = null
 
-    var add = false
-    var search = false
+    var add = zkDefaultTableParameters.add
+    var search = zkDefaultTableParameters.search
 
-    var export = false
-    var exportFiltered = false
-    var exportHeaders = false
+    var export = zkDefaultTableParameters.export
+    var exportFiltered = zkDefaultTableParameters.exportFiltered
+    var exportHeaders = zkDefaultTableParameters.exportHeaders
 
     var oneClick = false
 
     var firstOnResume = true
     var runQueryOnResume = true
 
-    var counter = false
+    var counter = zkDefaultTableParameters.counter
 
     var icon: ZkIconSource? = null
 
-    var fixRowHeight = true
-    var fixHeaderHeight = true
+    var fixRowHeight = zkDefaultTableParameters.fixRowHeight
+    var fixHeaderHeight = zkDefaultTableParameters.fixHeaderHeight
     var multiLevel = false
 
     open val rowHeight
@@ -118,8 +117,9 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     open val exportFileName: String
         get() {
-            val titleText = titleElement?.text
-            return (if (titleText.isNullOrEmpty()) "content" else titleText) + ".csv"
+            val titleText = titleText ?: this::class.simpleName?.localized
+            val time = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).toString()
+            return (if (titleText.isNullOrEmpty()) "content" else titleText) + "_$time" + ".csv"
         }
 
     open var counterBar = ZkCounterBar("")

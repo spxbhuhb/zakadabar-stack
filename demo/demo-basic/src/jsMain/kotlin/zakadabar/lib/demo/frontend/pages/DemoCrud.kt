@@ -67,9 +67,9 @@ class DemoTable : ZkTable<DemoBo>() {
 
         titleText = localized<DemoTable>()
 
-        add = true
-        search = true
-        export = true
+//        add = true
+//        search = true
+//        export = true
 
         + DemoBo::id
         + DemoBo::name
