@@ -26,10 +26,12 @@ class TranslationBl : EntityBusinessLogicBase<TranslationBo>(
     private val localeBl by module<LocaleBl>()
 
     override val authorizer by provider {
-        this as SimpleRoleAuthorizer
-        allReads = LOGGED_IN
-        allWrites = appRoles.securityOfficer
-        query(TranslationsMap::class, PUBLIC)
+        if (this is SimpleRoleAuthorizer) {
+            allReads = LOGGED_IN
+            allWrites = appRoles.securityOfficer
+            query(TranslationsByLocale::class, PUBLIC)
+            query(TranslationsMap::class, PUBLIC)
+        }
     }
 
     override val router = router {

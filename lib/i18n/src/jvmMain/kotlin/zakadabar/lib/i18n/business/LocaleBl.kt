@@ -22,17 +22,19 @@ class LocaleBl : EntityBusinessLogicBase<LocaleBo>(
     override val pa = LocaleExposedPa()
 
     override val authorizer by provider {
-        this as SimpleRoleAuthorizer
-        allReads = LOGGED_IN
-        allWrites = appRoles.securityOfficer
-        query(LocalesByStatus::class, PUBLIC) // query locales to change language before login
+        if (this is SimpleRoleAuthorizer) {
+            allReads = PUBLIC
+            allWrites = appRoles.securityOfficer
+            query(LocalesByStatus::class, PUBLIC)
+        }
+
     }
 
     override val router = router {
         query(LocalesByStatus::class, ::localesByStatus)
     }
 
-    fun byName(name : String) = pa.byName(name)
+    fun byName(name: String) = pa.byName(name)
 
     fun localesByStatus(executor: Executor, bo: LocalesByStatus) = pa.byStatus(bo.status)
 
