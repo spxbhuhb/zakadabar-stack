@@ -13,7 +13,8 @@ data class KtorSettingsBo(
 
     var port: Int = 8080,
     var portCookie: Boolean = false,
-    var websocket: WebSocketSettingsBo = WebSocketSettingsBo()
+    var websocket: WebSocketSettingsBo = WebSocketSettingsBo(),
+    var engine: String = "io.ktor.server.netty.Netty"
 
 ) : BaseBo {
 
@@ -21,6 +22,7 @@ data class KtorSettingsBo(
         + ::port default port envVar "ZK_KTOR_PORT"
         + ::portCookie default portCookie envVar "ZK_KTOR_PORT_COOKIE"
         + ::websocket
+        + ::engine default engine envVar "ZK_KTOR_ENGINE"
     }
 
 }

@@ -13,8 +13,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
-import io.ktor.server.netty.*
-import io.ktor.util.*
+import io.ktor.server.engine.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import zakadabar.core.authorize.LoginTimeout
@@ -136,7 +135,7 @@ open class Server(
     val modules
         get() = zakadabar.core.module.modules
 
-    lateinit var ktorServer: NettyApplicationEngine
+    lateinit var ktorServer: ApplicationEngine
 
     operator fun plusAssign(module: CommonModule) {
         this.modules += module
@@ -231,7 +230,7 @@ open class Server(
         modules.afterOpen()
     }
 
-    open fun onBuildServer() = KtorServerBuilder(settings, modules).build() //  build the Ktor server instance
+    open fun onBuildServer() : ApplicationEngine = KtorServerBuilder(settings, modules).build() //  build the Ktor server instance
 
     fun shutdown(gracePeriodMillis : Long = 0, timeoutMillis : Long = 2000) {
         modules.beforeClose()

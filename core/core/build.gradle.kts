@@ -67,7 +67,8 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 api("io.ktor:ktor-server-core:${Versions.ktor}")
-                implementation("io.ktor:ktor-server-netty:${Versions.ktor}")
+                implementation("io.ktor:ktor-server-host-common:${Versions.ktor}")
+                runtimeOnly("io.ktor:ktor-server-netty:${Versions.ktor}")
                 implementation("io.ktor:ktor-server-sessions:${Versions.ktor}")
                 api("io.ktor:ktor-websockets:${Versions.ktor}")
                 api("io.ktor:ktor-auth:${Versions.ktor}")
