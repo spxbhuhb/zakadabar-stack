@@ -168,6 +168,21 @@ To change the name of the generated file, override the getter of the `exportFile
 
 Example: [Table Export File Name](/doc/cookbook/browser/table/export/filename/recipe.md)
 
+#### Change default customization parameters
+
+To change default customization, create a subclass of `ZkDefaultTableParameters` and override the following parameters:
+- `add`
+- `export`
+- `search`
+- `exportFiltered`
+- `exportHeaders`
+- `counter`
+- `fixRowHeight`
+- `fixHeaderHeight`
+
+Then change the value of `zkDefaultTableParameters` to your class object in `main.kt`.
+
+
 ### Styling
 
 The `styles` property of `ZkTable` contains the style sheet that table instance
