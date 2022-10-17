@@ -13,12 +13,12 @@ pluginManagement {
 }
 
 include("core:core")
-//include("core:core-android")
+include("core:core-android")
 
 include("cookbook")
 
-//include("exp:content")
-//include("exp:liveview")
+include("exp:content")
+include("exp:liveview")
 
 include("lib:accounts")
 include("lib:bender")
@@ -32,10 +32,10 @@ include("lib:schedule")
 include("lib:softui")
 
 include("demo:demo-basic")
-//include("demo:demo-basic-mobile")
-//include("demo:demo-content")
-//include("demo:demo-sandbox")
-//include("demo:demo-sandbox-mobile")
+include("demo:demo-basic-mobile")
+include("demo:demo-content")
+include("demo:demo-sandbox")
+include("demo:demo-sandbox-mobile")
 
 include("site")
 
