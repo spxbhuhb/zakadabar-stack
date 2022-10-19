@@ -13,3 +13,10 @@ are the places worth to check. If you extended them you may have to apply the ch
 **fixed**
 
 - SQL transaction conflict of multiple logins on the same account at the same time
+
+## Core
+
+**added**
+
+- `KtorSettingsBo.engine` Ktor engine setting. Passed to ktor embeddedServer. Default is "io.ktor.server.netty.Netty"
+- `ZK_KTOR_ENGINE` environment variable to set KtorSettingsBo.engine 
