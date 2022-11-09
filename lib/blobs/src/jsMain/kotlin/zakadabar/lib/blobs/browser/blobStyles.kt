@@ -5,9 +5,9 @@ package zakadabar.lib.blobs.browser
 
 import zakadabar.core.resource.css.*
 
-val blobStyles by cssStyleSheet(BlobStyles())
+var blobStyles by cssStyleSheet(BlobStyles())
 
-class BlobStyles : ZkCssStyleSheet() {
+open class BlobStyles : ZkCssStyleSheet() {
 
     val attachmentField by cssClass {
         + Display.grid
