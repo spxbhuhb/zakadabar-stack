@@ -27,7 +27,7 @@ abstract class EntityBoCompanion<T : EntityBo<T>>(
         return nc
     }
 
-    var comm: EntityCommInterface<T>
+    open var comm: EntityCommInterface<T>
         get() = _comm ?: makeComm()
         set(value) {
             _comm = value

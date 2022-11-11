@@ -4,6 +4,7 @@
 package zakadabar.cookbook
 
 import zakadabar.cookbook.blob.attachment.AttachmentBlobBl
+import zakadabar.cookbook.blob.crud.CrudBlobBl
 import zakadabar.cookbook.blob.image.ImageBlobBl
 import zakadabar.cookbook.entity.builtin.ExampleBl
 import zakadabar.cookbook.entity.builtin.ExampleReferenceBl
@@ -14,4 +15,5 @@ fun install() {
     modules += ExampleBl()
     modules += AttachmentBlobBl()
     modules += ImageBlobBl()
+    modules += CrudBlobBl()
 }

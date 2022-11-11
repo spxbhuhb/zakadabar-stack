@@ -5,6 +5,7 @@ package zakadabar.cookbook
 
 import org.w3c.dom.HTMLElement
 import zakadabar.cookbook.blob.attachment.AttachmentsField
+import zakadabar.cookbook.blob.crud.BlobCrud
 import zakadabar.cookbook.blob.image.ImagesField
 import zakadabar.cookbook.browser.crud.basic.BasicCrud
 import zakadabar.cookbook.browser.field.all.AllPropFields
@@ -103,6 +104,7 @@ class Cookbook : CommonModule {
             "ImagesField" -> ImagesField()
             "TableVariableHeight" -> TableVariableHeight()
             "TableMultiLevel" -> TableMultiLevel()
+            "BlobCrud" -> BlobCrud()
 
 
             else -> null

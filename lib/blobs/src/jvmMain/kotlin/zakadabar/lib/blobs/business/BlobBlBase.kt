@@ -20,6 +20,7 @@ import zakadabar.core.util.PublicApi
 import zakadabar.core.util.after
 import zakadabar.lib.blobs.data.BlobBo
 import zakadabar.lib.blobs.data.BlobBoCompanion
+import zakadabar.lib.blobs.data.BlobBoCompanionV2
 import zakadabar.lib.blobs.persistence.BlobExposedPa
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObject
@@ -34,8 +35,13 @@ abstract class BlobBlBase<T : BlobBo<T, RT>, RT : EntityBo<RT>>(
     boClass
 ) {
 
-    override val namespace
-        get() = (boClass.companionObject !!.objectInstance as BlobBoCompanion<*, *>).boNamespace
+    override val namespace : String
+        get() {
+            val obj = boClass.companionObject !!.objectInstance
+            if (obj is BlobBoCompanion<*, *>) return obj.boNamespace
+            if (obj is BlobBoCompanionV2<*, *>) return obj.boNamespace
+            throw IllegalStateException("unknown blob companion class")
+        }
 
     override val router: BusinessLogicRouter<T> by after {
         object : KtorEntityRouter<T>(this) {

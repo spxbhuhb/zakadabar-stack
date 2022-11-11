@@ -12,6 +12,7 @@ import zakadabar.core.util.use
 import zakadabar.lib.blobs.comm.BlobCommInterface
 import zakadabar.lib.blobs.comm.makeBlobComm
 
+@Deprecated("user BlobBoCompanionV2 instead", replaceWith = ReplaceWith("BlobBoCompanionV2", imports = arrayOf("zakadabar.lib.blobs.data.BlobBoCompanionV2")))
 abstract class BlobBoCompanion<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
     val boNamespace: String,
     commConfig : CommConfig? = null
