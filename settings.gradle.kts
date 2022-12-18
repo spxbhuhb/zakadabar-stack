@@ -30,6 +30,7 @@ include("lib:lucene")
 include("lib:markdown")
 include("lib:schedule")
 include("lib:softui")
+include("lib:xlsx")
 
 include("demo:demo-basic")
 include("demo:demo-basic-mobile")

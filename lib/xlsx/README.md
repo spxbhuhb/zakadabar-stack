@@ -1,0 +1,1 @@
+Multiplatform Xlxs spreadsheet generator module
