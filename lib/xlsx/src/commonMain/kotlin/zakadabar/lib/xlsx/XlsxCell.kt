@@ -5,7 +5,7 @@ package zakadabar.lib.xlsx
 
 data class XlsxCell(val coordinate: XlsxCoordinate) : Comparable<XlsxCell> {
 
-    private var raw : String? = null // internal string representation
+    private var raw : String? = null
 
     override fun compareTo(other: XlsxCell): Int = coordinate.compareTo(other.coordinate)
 

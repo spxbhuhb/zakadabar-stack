@@ -3,39 +3,39 @@
  */
 package zakadabar.lib.xlsx.dom
 
-fun SimpleDomElement.toXml() : String {
-    val sb = StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>")
-    appendTo(sb)
-    return sb.toString()
+fun SimpleDomElement.toXml() : ByteArray {
+    val sb = StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n")
+    sb.appendXml(this)
+    return sb.toString().encodeToByteArray()
+}
+private fun Appendable.appendXml(dom: SimpleDomElement) {
+    append('<').append(dom.name)
+    appendAttributes(dom)
+    if (dom.isEmpty()) {
+        append("/>")
+    } else {
+        append('>')
+        appendText(dom)
+        appendChildNodes(dom)
+        append("</").append(dom.name).append('>')
+    }
 }
 
-fun List<SimpleDomElement>.appendTo(sb: StringBuilder, level: Int) = forEach { it.appendTo(sb, level) }
-
-fun SimpleDomElement.appendTo(sb: StringBuilder, level: Int = 0) {
-    val indent = CharArray(1 + 2 * level) { if (it == 0) '\n' else ' ' }
-
-    sb.append(indent).append('<').append(name)
-
-    attributes.forEach {
-        sb.append(' ').append(it.key).append('=').append('"').append(it.value).append('"')
-    }
-
-    if (text.isNullOrBlank() && childNodes.isEmpty()) sb.append("/>")
-    else {
-        sb.append('>').appendEscaped(text ?: "")
-
-        childNodes.appendTo(sb, level + 1)
-
-        if (childNodes.isNotEmpty()) sb.append(indent)
-
-        sb.append("</").append(name).append('>')
-    }
-
+private fun Appendable.appendChildNodes(dom: SimpleDomElement) {
+    dom.childNodes.forEach(::appendXml)
 }
-
-private fun StringBuilder.appendEscaped(s: String) = append(s
-    .replace("&","&amp;")
-    .replace("<","&lt;")
-    .replace(">","&gt;")
-)
-
+private fun Appendable.appendAttributes(dom: SimpleDomElement) {
+    dom.attributes.forEach {
+        append(' ').append(it.key).append("=\"").append(it.value).append('"')
+    }
+}
+private fun Appendable.appendText(dom: SimpleDomElement) {
+    dom.text?.forEach { char->
+        when(char) {
+            '&' -> append("&amp;")
+            '<' -> append("&lt;")
+            '>' -> append("&gt;")
+            else -> append(char)
+        }
+    }
+}

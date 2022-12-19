@@ -26,7 +26,7 @@ class SharedStrings : SimpleDomElement("sst"), Part {
 
         val strId = strings.getOrPut(str) {
 
-            childNodes += SimpleDomElement.of("si").also {
+            childNodes += of("si").also {
                 it += SimpleDomElement("t", str)
             }
 

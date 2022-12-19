@@ -9,13 +9,17 @@ class WorkSheet(sheetId: Int) : SimpleDomElement("worksheet"), Part {
     override val contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"
     override val relType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet"
 
-    val sheetData = of("sheetData")
+    private val sheetData = of("sheetData")
 
     init {
         attributes["xmlns"] = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
 
         childNodes += sheetData
 
+    }
+
+    fun addRow(row: Row) {
+        sheetData += row
     }
 
 }

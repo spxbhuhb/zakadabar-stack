@@ -14,6 +14,8 @@ open class SimpleDomElement(
         childNodes += child
     }
 
+    fun isEmpty() : Boolean = childNodes.isEmpty() && text == null
+
     companion object {
 
         fun of(name: String, vararg attributes : Pair<String, String>) = SimpleDomElement(name).also {

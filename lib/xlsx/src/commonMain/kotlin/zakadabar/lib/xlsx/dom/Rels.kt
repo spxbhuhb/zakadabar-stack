@@ -9,17 +9,15 @@ class Rels(val root : String = "/", ref: String = "") : SimpleDomElement("Relati
     override val contentType = ""
     override val relType = ""
 
-    private var relId = 0
-
     init {
         attributes["xmlns"] = "http://schemas.openxmlformats.org/package/2006/relationships"
     }
 
     fun addRel(rel: Part) : String {
 
-        val relId = "rId${++relId}"
+        val relId = "rId${childNodes.size + 1}"
 
-        childNodes += of("Relationship" ,
+        childNodes += of("Relationship",
             "Id" to relId,
             "Type" to rel.relType,
             "Target"  to rel.partName.substringAfter(root)

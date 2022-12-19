@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.xlsx
 
-import zakadabar.lib.xlsx.dom.toFileContainer
+import zakadabar.lib.xlsx.dom.toContentMap
 import kotlin.test.Test
 
 class XlsxDocumentTest {
@@ -35,7 +35,7 @@ class XlsxDocumentTest {
 
         xlsx += sheet2
 
-        val fc = xlsx.toFileContainer()
-        fc.saveZip("build/test.xlsx")
+        val fc = xlsx.toContentMap()
+        fc.saveXlsx("build/test.xlsx")
     }
 }

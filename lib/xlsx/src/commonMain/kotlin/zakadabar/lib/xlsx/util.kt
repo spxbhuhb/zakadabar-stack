@@ -26,7 +26,10 @@ fun Int.toXlsxColumnLetter() : String {
 
 fun XlsxCoordinate.next() = XlsxCoordinate(rowNumber, colNumber + 1)
 
-expect fun FileContainer.saveZip(name: String, contentType: String = "application/zip")
+typealias ContentMap = HashMap<String, ()->ByteArray>
+
+fun ContentMap.saveXlsx(name: String) = saveZip(name, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+expect fun ContentMap.saveZip(name: String, contentType: String = "application/zip")
 
 fun XlsxSheet.addCell(coord: XlsxCoordinate, data: String) {
     this += XlsxCell(coord).apply {

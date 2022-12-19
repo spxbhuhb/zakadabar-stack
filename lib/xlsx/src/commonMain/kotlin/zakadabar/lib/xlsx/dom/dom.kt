@@ -5,26 +5,24 @@ package zakadabar.lib.xlsx.dom
 
 import zakadabar.lib.xlsx.*
 
-fun XlsxCell.toDom(sharedStrings : SharedStrings) : SimpleDomElement {
-    val c = SimpleDomElement.of("c", "r" to coordinate.coordinate, "t" to "s")
-    //type handling!!
-
+fun XlsxCell.toDom(sharedStrings : SharedStrings) : Cell {
+    //TODO: type handling!!
     val str = asString() ?: ""
     val strId = sharedStrings.add(str)
+    val value = strId.toString()
 
-    c.childNodes += SimpleDomElement("v",  strId.toString())
-    return c
+    return Cell(coordinate.coordinate, value, "s")
 }
 
-fun XlsxRow.toDom(sharedStrings : SharedStrings) : SimpleDomElement {
-    val r = SimpleDomElement.of("row", "r" to rowNumber.toString())
-    cells.forEach { r += it.toDom(sharedStrings) }
+fun XlsxRow.toDom(sharedStrings : SharedStrings) : Row {
+    val r = Row(rowNumber)
+    cells.asSequence().map{ it.toDom(sharedStrings) }.forEach(r::addCell)
     return r
 }
 
 fun XlsxSheet.toDom(sheetId: Int, sharedStrings : SharedStrings) : WorkSheet {
     val ws = WorkSheet(sheetId)
-    rows.forEach { ws.sheetData += it.toDom(sharedStrings) }
+    rows.asSequence().map{ it.toDom(sharedStrings) }.forEach(ws::addRow)
     return ws
 }
 
@@ -43,16 +41,18 @@ internal fun XlsxDocument.toXlsxFile() : XlsxFile {
     return xlsx
 }
 
-internal fun XlsxFile.toFileContainer() : FileContainer {
-    val fc = FileContainer()
+val Part.content : ByteArray get() = when(this) {
+    is SimpleDomElement -> toXml()
+    else -> throw IllegalStateException("Content not supported: ${this::class}")
+}
 
-    content.forEach { part->
-        (part as? SimpleDomElement)?.toXml()?.let {
-            fc.add(part.partName.substringAfter('/'), it.encodeToByteArray())
-        }
+internal fun XlsxFile.toContentMap() : ContentMap {
+    val fc = ContentMap()
+    content.forEach {
+        val path = it.partName.substringAfter('/')
+        fc[path] = { it.content }
     }
-
     return fc
 }
 
-fun XlsxDocument.toFileContainer() : FileContainer = toXlsxFile().toFileContainer()
+fun XlsxDocument.toContentMap() : ContentMap = toXlsxFile().toContentMap()

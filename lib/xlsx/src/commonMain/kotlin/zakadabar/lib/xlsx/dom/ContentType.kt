@@ -5,7 +5,7 @@ package zakadabar.lib.xlsx.dom
 
 class ContentType : SimpleDomElement("Types"), Part {
 
-    override val partName = "[Content_Types].xml"
+    override val partName = "/[Content_Types].xml"
     override val contentType = ""
     override val relType = ""
 

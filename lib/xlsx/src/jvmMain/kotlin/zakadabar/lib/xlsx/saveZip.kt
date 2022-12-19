@@ -7,20 +7,17 @@ import java.io.FileOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
-actual fun FileContainer.saveZip(name: String, contentType: String) {
-
+actual fun ContentMap.saveZip(name: String, contentType: String) {
     ZipOutputStream(FileOutputStream(name)).use { zip ->
 
         zip.setLevel(9)
 
-        forEachSorted {
-            when(it) {
-                is FileContainer.DirectoryEntry -> zip.putNextEntry(ZipEntry("${it.path}/"))
-                is FileContainer.FileEntry -> {
-                    zip.putNextEntry(ZipEntry(it.path))
-                    zip.write(it.content)
-                }
-            }
+        forEach {
+            val path = it.key
+            val content = it.value()
+
+            zip.putNextEntry(ZipEntry(path))
+            zip.write(content)
             zip.closeEntry()
         }
 
