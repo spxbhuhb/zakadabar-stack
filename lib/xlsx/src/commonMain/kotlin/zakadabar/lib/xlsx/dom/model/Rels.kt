@@ -1,9 +1,12 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.xlsx.dom
+package zakadabar.lib.xlsx.dom.model
 
-class Rels(val root : String = "/", ref: String = "") : SimpleDomElement("Relationships"), Part {
+import zakadabar.lib.xlsx.dom.Part
+import zakadabar.lib.xlsx.dom.SimpleDomElement
+
+internal class Rels(val root : String = "/", ref: String = "") : SimpleDomElement("Relationships"), Part {
 
     override val partName = "${root}_rels/$ref.rels"
     override val contentType = ""

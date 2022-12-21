@@ -3,30 +3,60 @@
  */
 package zakadabar.lib.xlsx.dom
 
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import zakadabar.lib.xlsx.*
+import zakadabar.lib.xlsx.dom.model.*
+import zakadabar.lib.xlsx.dom.model.Cell
+import zakadabar.lib.xlsx.dom.model.SharedStrings
+import zakadabar.lib.xlsx.dom.model.WorkSheet
+import zakadabar.lib.xlsx.model.XlsxCell
+import zakadabar.lib.xlsx.model.XlsxDocument
+import zakadabar.lib.xlsx.model.XlsxSheet
 
-fun XlsxCell.toDom(sharedStrings : SharedStrings) : Cell {
-    //TODO: type handling!!
-    val str = asString() ?: ""
-    val strId = sharedStrings.add(str)
-    val value = strId.toString()
+internal fun XlsxCell.toDom(sharedStrings : SharedStrings) : Cell? {
 
-    return Cell(coordinate.coordinate, value, "s")
+    if (isEmpty()) return null
+
+    val coord = coordinate.coordinate
+    val formatCode = format.ordinal
+
+    return when(val v = value) {
+        null -> null
+        is String -> {
+            val sharedStringId = sharedStrings.add(v)
+            Cell(coord, sharedStringId, "s", formatCode)
+        }
+        is Boolean -> Cell(coord, if (v) "1" else "0", "b", formatCode)
+        is Number -> Cell(coord, v, null, formatCode)
+        is LocalDate -> Cell(coord, v.toInternal(), null, formatCode)
+        is LocalDateTime -> Cell(coord, v.toInternal(), null, formatCode)
+        is Instant -> Cell(coord, v.toInternal(), null, formatCode)
+        else -> Cell(coord, v, "str", formatCode)
+    }
+
 }
 
-fun XlsxRow.toDom(sharedStrings : SharedStrings) : Row {
-    val r = Row(rowNumber)
-    cells.asSequence().map{ it.toDom(sharedStrings) }.forEach(r::addCell)
-    return r
-}
-
-fun XlsxSheet.toDom(sheetId: Int, sharedStrings : SharedStrings) : WorkSheet {
+internal fun XlsxSheet.toDom(sheetId: Int, sharedStrings : SharedStrings) : WorkSheet {
     val ws = WorkSheet(sheetId)
-    rows.asSequence().map{ it.toDom(sharedStrings) }.forEach(ws::addRow)
+
+    var row : Row? = null
+
+    cells.forEach {
+        if (row?.rowNumber != it.coordinate.rowNumber) {
+            row = Row(it.coordinate.rowNumber).apply(ws::addRow)
+        }
+
+        it.toDom(sharedStrings)?.let { cell->
+            row!!.addCell(cell)
+        }
+    }
+
     return ws
 }
 
-operator fun XlsxFile.plusAssign(sheet: XlsxSheet) {
+internal fun XlsxFile.add(sheet: XlsxSheet) {
     val sheetId = workBook.nextSheetId()
     val ws = sheet.toDom(sheetId, sharedStrings)
     val workBookRelId = workBookRels.addRel(ws)
@@ -35,13 +65,9 @@ operator fun XlsxFile.plusAssign(sheet: XlsxSheet) {
     content.add(ws)
 }
 
-internal fun XlsxDocument.toXlsxFile() : XlsxFile {
-    val xlsx = XlsxFile()
-    sheets.forEach { xlsx += it }
-    return xlsx
-}
+internal fun XlsxDocument.toXlsxFile() = XlsxFile().apply { sheets.forEach(::add) }
 
-val Part.content : ByteArray get() = when(this) {
+internal val Part.content : ByteArray get() = when(this) {
     is SimpleDomElement -> toXml()
     else -> throw IllegalStateException("Content not supported: ${this::class}")
 }
@@ -50,9 +76,8 @@ internal fun XlsxFile.toContentMap() : ContentMap {
     val fc = ContentMap()
     content.forEach {
         val path = it.partName.substringAfter('/')
-        fc[path] = { it.content }
+        fc[path] = it::content
     }
     return fc
 }
 
-fun XlsxDocument.toContentMap() : ContentMap = toXlsxFile().toContentMap()

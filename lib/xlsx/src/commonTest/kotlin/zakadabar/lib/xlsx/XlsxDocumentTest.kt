@@ -3,7 +3,10 @@
  */
 package zakadabar.lib.xlsx
 
-import zakadabar.lib.xlsx.dom.toContentMap
+import kotlinx.datetime.*
+import setRow
+import zakadabar.lib.xlsx.model.XlsxDocument
+import zakadabar.lib.xlsx.model.XlsxSheet
 import kotlin.test.Test
 
 class XlsxDocumentTest {
@@ -17,21 +20,20 @@ class XlsxDocumentTest {
 
         val sheet1 = XlsxSheet("Stuff Members")
 
-        sheet1.addCell("A1", "name")
-        sheet1.addCell("B1", "birth")
-        sheet1.addCell("C1", "height")
+        sheet1.setRow("A1", listOf("name", "birth", "height", "dead"))
 
-        (2..10_000).forEach {row->
-            sheet1.addCell(XlsxCoordinate(row, 1), "Laci")
-            sheet1.addCell(XlsxCoordinate(row, 2), "1971.07.27")
-            sheet1.addCell(XlsxCoordinate(row, 3), "${row / 2.0}")
+        (2..10_000).forEach { row->
+            sheet1[1, row].value = "Laci"
+            sheet1[2, row].value = Clock.System.now()
+            sheet1[3, row].value = row / 2.0
+            sheet1[4, row].value = row % 2 == 0
         }
 
         xlsx += sheet1
 
         val sheet2 = XlsxSheet("Summary")
-        sheet2.addCell("A1", "summary")
-        sheet2.addCell("B1", "none")
+        sheet2["A1"].value = "summary"
+        sheet2["B1"].value = "none"
 
         xlsx += sheet2
 

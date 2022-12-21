@@ -3,7 +3,11 @@
  */
 package zakadabar.lib.xlsx
 
-fun String.toXlsxColumnNumber() : Int {
+import zakadabar.lib.xlsx.dom.toContentMap
+import zakadabar.lib.xlsx.dom.toXlsxFile
+import zakadabar.lib.xlsx.model.XlsxDocument
+
+internal fun String.toXlsxColumnNumber() : Int {
     var col = 0
     var n = length
     var k = 1
@@ -14,7 +18,7 @@ fun String.toXlsxColumnNumber() : Int {
     return col
 }
 
-fun Int.toXlsxColumnLetter() : String {
+internal fun Int.toXlsxColumnLetter() : String {
     var k = this
     val col = StringBuilder()
     while(k-- > 0) {
@@ -24,17 +28,9 @@ fun Int.toXlsxColumnLetter() : String {
     return col.toString()
 }
 
-fun XlsxCoordinate.next() = XlsxCoordinate(rowNumber, colNumber + 1)
-
 typealias ContentMap = HashMap<String, ()->ByteArray>
 
 fun ContentMap.saveXlsx(name: String) = saveZip(name, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 expect fun ContentMap.saveZip(name: String, contentType: String = "application/zip")
 
-fun XlsxSheet.addCell(coord: XlsxCoordinate, data: String) {
-    this += XlsxCell(coord).apply {
-        set(data)
-    }
-}
-fun XlsxSheet.addCell(coord: String, data: String) = addCell(XlsxCoordinate(coord), data)
-
+fun XlsxDocument.toContentMap() : ContentMap = toXlsxFile().toContentMap()

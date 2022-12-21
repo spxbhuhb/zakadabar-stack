@@ -1,19 +1,22 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.xlsx
+package zakadabar.lib.xlsx.model
 
-class XlsxCoordinate : Comparable<XlsxCoordinate> {
+import zakadabar.lib.xlsx.toXlsxColumnLetter
+import zakadabar.lib.xlsx.toXlsxColumnNumber
+
+class XlsxCoordinate {
 
     val coordinate: String
     val rowNumber: Int
     val colNumber: Int
     val colLetter: String
 
-    constructor(rowNumber : Int, colNumber : Int) {
+    constructor(columnNumber : Int, rowNumber : Int) {
         this.rowNumber = rowNumber
-        this.colNumber = colNumber
-        this.colLetter = colNumber.toXlsxColumnLetter()
+        this.colNumber = columnNumber
+        this.colLetter = columnNumber.toXlsxColumnLetter()
         this.coordinate = "$colLetter$rowNumber"
 
         validate()
@@ -36,16 +39,7 @@ class XlsxCoordinate : Comparable<XlsxCoordinate> {
     override fun hashCode(): Int = coordinate.hashCode()
 
     override fun equals(other: Any?): Boolean {
-        val o = other as? XlsxCoordinate ?: return false
-        return rowNumber == o.rowNumber && colNumber == o.colNumber
-    }
-
-    override fun compareTo(other: XlsxCoordinate): Int = when {
-        rowNumber > other.rowNumber -> 1
-        rowNumber < other.rowNumber -> -1
-        colNumber > other.colNumber -> 1
-        colNumber < other.colNumber -> -1
-        else -> 0
+        return other is XlsxCoordinate && rowNumber == other.rowNumber && colNumber == other.colNumber
     }
 
     private fun validate() {

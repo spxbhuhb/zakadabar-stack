@@ -3,6 +3,7 @@
  */
 package zakadabar.lib.xlsx
 
+import zakadabar.lib.xlsx.model.XlsxCoordinate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -39,21 +40,11 @@ class XlsxCoordTest {
 
     @Test
     fun testAA1_2() {
-        val c = XlsxCoordinate(1,27)
+        val c = XlsxCoordinate(27,1)
 
         assertEquals("AA", c.colLetter)
         assertEquals("AA1", c.coordinate)
 
     }
-
-    @Test
-    fun testNextZ() {
-        val c = XlsxCoordinate("Z10").next()
-
-        assertEquals("AA", c.colLetter)
-        assertEquals("AA10", c.coordinate)
-
-    }
-
 
 }
