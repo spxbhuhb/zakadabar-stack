@@ -4,6 +4,7 @@
 package zakadabar.lib.xlsx.model
 
 import kotlinx.datetime.*
+import zakadabar.lib.xlsx.conf.XlsxNumberFormat
 
 class XlsxCell internal constructor(
     val sheet : XlsxSheet,
@@ -13,19 +14,21 @@ class XlsxCell internal constructor(
     var value: Any? = null
         set(v) {
             field = v
-            format = calcFormat()
+            numberFormat = calcNumberFormat().ordinal
         }
 
-    var format: XlsxCellFormat = XlsxCellFormat.GENERAL
+    var numberFormat: Int = XlsxNumberFormat.GENERAL.ordinal
 
-    private fun calcFormat() : XlsxCellFormat = when(value) {
-        is String -> XlsxCellFormat.GENERAL
-        is Boolean -> XlsxCellFormat.GENERAL
-        is Number -> XlsxCellFormat.GENERAL
-        is LocalDate -> XlsxCellFormat.DATE
-        is LocalDateTime -> XlsxCellFormat.DATETIME
-        is Instant -> XlsxCellFormat.TIMESTAMP
-        else -> XlsxCellFormat.GENERAL
+    private fun calcNumberFormat() : XlsxNumberFormat {
+
+        val conf = sheet.doc.conf
+
+        return when(value) {
+            is LocalDate ->  conf.dateFormat
+            is LocalDateTime -> conf.dateTimeFormat
+            is Instant -> conf.instantFormat
+            else -> XlsxNumberFormat.GENERAL
+        }
     }
 
     override fun toString() : String = asString() ?: ""

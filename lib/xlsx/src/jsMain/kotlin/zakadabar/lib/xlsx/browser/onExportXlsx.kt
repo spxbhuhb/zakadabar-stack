@@ -4,38 +4,31 @@
 package zakadabar.lib.xlsx.browser
 
 import setRow
-import zakadabar.core.browser.button.ZkButton
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.data.BaseBo
-import zakadabar.core.resource.ZkFlavour
-import zakadabar.core.resource.ZkIcons
 import zakadabar.lib.xlsx.model.XlsxDocument
 import zakadabar.lib.xlsx.model.XlsxSheet
 import zakadabar.lib.xlsx.saveXlsx
 import zakadabar.lib.xlsx.toContentMap
 
-open class ZkExportXlsxAction(
-    onExecute: () -> Unit
-) : ZkButton(ZkIcons.xlsx, ZkFlavour.Primary, buttonSize = 24, iconSize = 18, round = true, onClick = onExecute)
-
-
-fun <T: BaseBo> ZkTable<T>.onExportXlsx() {
+fun <T: BaseBo> ZkTable<T>.onExportXlsx(title: String = titleText ?: "Export data") {
 
     val xlsxFileName = exportFileName.replace(".csv", ".xlsx")
 
     val xlsx = XlsxDocument()
-    val sheet = XlsxSheet(xlsxFileName)
+    val sheet = XlsxSheet(title)
     xlsx += sheet
 
     val data = if (exportFiltered) filteredData else fullData
     val columns = columns.filter { it.exportable }
 
+    var rowIndex = 0
+
     if (exportHeaders) {
         val header = columns.map { it.exportCsvHeader() }
         sheet.setRow("A1", header)
+        rowIndex++
     }
-
-    var rowIndex = 0
 
     data.forEach { row ->
         columns.forEachIndexed { colIndex, zkColumn ->
@@ -49,6 +42,3 @@ fun <T: BaseBo> ZkTable<T>.onExportXlsx() {
     content.saveXlsx(xlsxFileName)
 
 }
-
-
-

@@ -21,24 +21,37 @@ import zakadabar.lib.xlsx.model.XlsxSheet
 
 internal fun XlsxCell.toDom(sharedStrings : SharedStrings) : Cell? {
 
+    val conf = sheet.doc.conf
+    val strings = conf.strings
+    val timeZone = conf.timeZone
     val coord = coordinate.coordinate
-    val formatCode = format.ordinal
-    val timeZone = sheet.doc.timeZone
 
     return when(val v = value) {
         null -> null
         is String -> {
             val sharedStringId = sharedStrings.addString(v)
-            Cell(coord, sharedStringId, "s", formatCode)
+            Cell(coord, sharedStringId, Cell.Type.SHARED_STRING, numberFormat)
         }
-        is Boolean -> Cell(coord, if (v) "1" else "0", "b", formatCode)
-        is Number -> Cell(coord, v, null, formatCode)
-        is LocalDate -> Cell(coord, v.toInternal(), null, formatCode)
-        is LocalDateTime -> Cell(coord, v.toInternal(), null, formatCode)
-        is Instant -> Cell(coord, v.toInternal(timeZone), null, formatCode)
-        else -> Cell(coord, v, "str", formatCode)
+        is Enum<*> -> {
+            val str = if (conf.localizedEnums) strings.getNormalized(v.name) else v.name
+            val sharedStringId = sharedStrings.addString(str)
+            Cell(coord, sharedStringId, Cell.Type.SHARED_STRING, numberFormat)
+        }
+        is Boolean -> {
+            if (conf.localizedBooleans) {
+                val str = if (v) strings.trueText else strings.falseText
+                val sharedStringId = sharedStrings.addString(str)
+                Cell(coord, sharedStringId, Cell.Type.SHARED_STRING, numberFormat)
+            } else {
+                Cell(coord, if (v) "1" else "0", Cell.Type.BOOLEAN, numberFormat)
+            }
+        }
+        is Number -> Cell(coord, v, Cell.Type.NORMAL, numberFormat)
+        is LocalDate -> Cell(coord, v.toInternal(), Cell.Type.NORMAL, numberFormat)
+        is LocalDateTime -> Cell(coord, v.toInternal(), Cell.Type.NORMAL, numberFormat)
+        is Instant -> Cell(coord, v.toInternal(timeZone), Cell.Type.NORMAL, numberFormat)
+        else -> Cell(coord, v, Cell.Type.STRING, numberFormat)
     }
-
 }
 
 internal fun XlsxSheet.toDom(sheetId: Int, sharedStrings : SharedStrings) : WorkSheet {

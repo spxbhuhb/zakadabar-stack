@@ -6,9 +6,9 @@ package zakadabar.lib.xlsx.internal.model
 import zakadabar.lib.xlsx.dom.*
 import zakadabar.lib.xlsx.internal.putCount
 
-internal class SharedStrings : Node("sst", arrayOf(
-    "xmlns" to "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
-)), Part {
+internal class SharedStrings : Node("sst",
+"xmlns" to "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+), Part {
 
     override val partName = "/xl/sharedStrings.xml"
     override val contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml"
@@ -20,7 +20,9 @@ internal class SharedStrings : Node("sst", arrayOf(
 
         val strId = strings.getOrPut(str) {
 
-            add("si").add("t", str)
+            + Node("si") {
+                + Node("t", str)
+            }
 
             putCount() - 1
 

@@ -6,23 +6,28 @@ package zakadabar.lib.xlsx.dom
 open class Node (
     val name : String,
     val text : String?,
-    attributes : Array<out Pair<String, String>>? = null
+    vararg attributes : Pair<String, String>
 ) {
     val attributes = mutableMapOf<String, String>()
     val elements = mutableListOf<Node>()
 
     init {
-        attributes?.let(this.attributes::putAll)
+        this.attributes.putAll(attributes)
     }
 
     constructor(
         name: String,
-        attributes : Array<out Pair<String, String>>? = null,
-        builder : (()->Unit)? = null
-    ) : this(name, null, attributes) {
-        builder?.invoke()
+        vararg attributes : Pair<String, String>,
+        builder : (Node.()->Unit)? = null
+    ) : this(name, null, *attributes) {
+        builder?.invoke(this)
     }
 
     fun isEmpty() : Boolean = elements.isEmpty() && text == null
+
+    operator fun plusAssign(el: Node) {
+        elements += el
+    }
+    operator fun <T: Node> T.unaryPlus() : T = also(this@Node.elements::add)
 
 }

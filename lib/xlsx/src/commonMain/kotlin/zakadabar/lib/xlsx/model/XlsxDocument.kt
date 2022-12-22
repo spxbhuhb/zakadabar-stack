@@ -3,11 +3,9 @@
  */
 package zakadabar.lib.xlsx.model
 
-import kotlinx.datetime.TimeZone
+import zakadabar.lib.xlsx.conf.XlsxConfiguration
 
-class XlsxDocument {
-
-    var timeZone : TimeZone = TimeZone.currentSystemDefault()
+class XlsxDocument(val conf: XlsxConfiguration = XlsxConfiguration()) {
 
     private val _sheets = mutableMapOf<String, XlsxSheet>()
 

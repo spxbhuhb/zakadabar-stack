@@ -5,18 +5,26 @@ package zakadabar.lib.xlsx.internal.model
 
 import zakadabar.lib.xlsx.dom.*
 
-internal class Cell(r: String, v: Any, t: String?, s: Int) : Node("c") {
+internal class Cell(r: String, v: Any, t: Type, s: Int) : Node("c") {
+
+    enum class Type(val code: String?) {
+        NORMAL(null),
+        SHARED_STRING("s"),
+        STRING("str"),
+        BOOLEAN("b"),
+        ISO_DATE("d")
+    }
 
     init {
         attributes["r"] = r // coordinate eg: B5
 
-        t?.let { attributes["t"] = t } // type: default is normal
+        t.code?.let { attributes["t"] = it } // type: default is normal
 
         if (s != 0) { // numeric format index default: 0
             attributes["s"] = s.toString()
         }
 
-        add("v", v.toString())
+        + Node("v", v.toString())
     }
 
 }

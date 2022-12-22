@@ -11,6 +11,6 @@ internal class Row(val rowNumber: Int) : Node("row") {
         attributes["r"] = rowNumber.toString()
     }
 
-    fun addCell(cell: Cell) = add(cell)
+    fun addCell(cell: Cell) = + cell
 
 }

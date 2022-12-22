@@ -5,9 +5,9 @@ package zakadabar.lib.xlsx.internal.model
 
 import zakadabar.lib.xlsx.dom.*
 
-internal class ContentType : Node("Types", arrayOf(
-    "xmlns" to "http://schemas.openxmlformats.org/package/2006/content-types"
-)), Part {
+internal class ContentType : Node("Types",
+"xmlns" to "http://schemas.openxmlformats.org/package/2006/content-types"
+), Part {
 
     override val partName = "/[Content_Types].xml"
     override val contentType = ""
@@ -18,8 +18,8 @@ internal class ContentType : Node("Types", arrayOf(
         addDefault("xml", "application/xml")
     }
 
-    fun addDefault(extension: String, contentType: String) = add("Default" ,"Extension" to extension, "ContentType" to contentType)
+    fun addDefault(extension: String, contentType: String) = + Node("Default" ,"Extension" to extension, "ContentType" to contentType)
 
-    fun addPart(part: Part) = add("Override" , "PartName" to part.partName, "ContentType" to part.contentType)
+    fun addPart(part: Part) = + Node("Override" , "PartName" to part.partName, "ContentType" to part.contentType)
 
 }

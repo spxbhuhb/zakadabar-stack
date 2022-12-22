@@ -5,22 +5,22 @@ package zakadabar.lib.xlsx.internal.model
 
 import zakadabar.lib.xlsx.dom.*
 
-internal class WorkBook : Node("workbook", arrayOf(
-    "xmlns" to "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+internal class WorkBook : Node("workbook",
+"xmlns" to "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
     "xmlns:r" to "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
-)), Part {
+), Part {
 
     override val partName = "/xl/workbook.xml"
     override val contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"
     override val relType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"
 
-    val sheets = add("sheets")
+    val sheets = + Node("sheets")
 
     fun nextSheetId() = sheets.elements.size + 1
 
     fun addSheet(sheetId : Int, relId: String, title: String) {
 
-        sheets.add("sheet" ,
+        sheets += Node("sheet" ,
             "name" to title,
             "sheetId" to sheetId.toString(),
             "r:id" to relId

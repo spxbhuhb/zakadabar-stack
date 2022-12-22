@@ -5,9 +5,9 @@ package zakadabar.lib.xlsx.internal.model
 
 import zakadabar.lib.xlsx.dom.*
 
-internal class Rels(val root : String = "/", ref: String = "") : Node("Relationships", arrayOf(
-    "xmlns" to "http://schemas.openxmlformats.org/package/2006/relationships"
-)), Part {
+internal class Rels(val root : String = "/", ref: String = "") : Node("Relationships",
+"xmlns" to "http://schemas.openxmlformats.org/package/2006/relationships"
+), Part {
 
     override val partName = "${root}_rels/$ref.rels"
     override val contentType = ""
@@ -17,7 +17,7 @@ internal class Rels(val root : String = "/", ref: String = "") : Node("Relations
 
         val relId = "rId${elements.size + 1}"
 
-        add("Relationship",
+        + Node("Relationship",
             "Id" to relId,
             "Type" to rel.relType,
             "Target"  to rel.partName.substringAfter(root)
