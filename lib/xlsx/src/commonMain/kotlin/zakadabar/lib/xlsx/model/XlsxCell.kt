@@ -4,9 +4,11 @@
 package zakadabar.lib.xlsx.model
 
 import kotlinx.datetime.*
-import zakadabar.lib.xlsx.XlsxCellFormat
 
-class XlsxCell(val coordinate: XlsxCoordinate) {
+class XlsxCell internal constructor(
+    val sheet : XlsxSheet,
+    val coordinate: XlsxCoordinate
+) {
 
     var value: Any? = null
         set(v) {
@@ -27,10 +29,6 @@ class XlsxCell(val coordinate: XlsxCoordinate) {
     }
 
     override fun toString() : String = asString() ?: ""
-
-    fun isEmpty() : Boolean = value == null
-
-    fun isNotEmpty() = !isEmpty()
 
     fun asString() : String? = when(val v = value) {
         null -> null

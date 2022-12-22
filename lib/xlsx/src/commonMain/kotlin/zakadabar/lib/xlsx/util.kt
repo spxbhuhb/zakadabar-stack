@@ -3,8 +3,8 @@
  */
 package zakadabar.lib.xlsx
 
-import zakadabar.lib.xlsx.dom.toContentMap
-import zakadabar.lib.xlsx.dom.toXlsxFile
+import zakadabar.lib.xlsx.internal.toContentMap
+import zakadabar.lib.xlsx.internal.toXlsxFile
 import zakadabar.lib.xlsx.model.XlsxDocument
 
 internal fun String.toXlsxColumnNumber() : Int {

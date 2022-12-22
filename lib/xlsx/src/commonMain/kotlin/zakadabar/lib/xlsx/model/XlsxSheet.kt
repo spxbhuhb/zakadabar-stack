@@ -5,6 +5,8 @@ package zakadabar.lib.xlsx.model
 
 data class XlsxSheet(val title : String) {
 
+    lateinit var doc : XlsxDocument
+
     private val data = mutableMapOf<Int, MutableMap<Int, XlsxCell>>()
 
     val cells : Sequence<XlsxCell> get() = data.entries
@@ -16,12 +18,16 @@ data class XlsxSheet(val title : String) {
                 .sortedBy { it.key }
                 .map { it.value }
         }
-    operator fun get(coordinate: XlsxCoordinate) : XlsxCell = data
+
+    operator fun get(colNumber: Int, rowNumber: Int) : XlsxCell = data
+        .getOrPut(rowNumber) { mutableMapOf() }
+        .getOrPut(colNumber) { XlsxCell(this, XlsxCoordinate(colNumber, rowNumber)) }
+
+   operator fun get(coordinate: XlsxCoordinate) : XlsxCell = data
         .getOrPut(coordinate.rowNumber) { mutableMapOf() }
-        .getOrPut(coordinate.colNumber) { XlsxCell(coordinate) }
+        .getOrPut(coordinate.colNumber) { XlsxCell(this, coordinate) }
 
     operator fun get(coordinate: String) = get(XlsxCoordinate(coordinate))
-    operator fun get(columnNumber: Int, rowNumber: Int) = get(XlsxCoordinate(columnNumber, rowNumber))
 
 
 }

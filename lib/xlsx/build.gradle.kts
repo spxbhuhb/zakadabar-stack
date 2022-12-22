@@ -32,7 +32,11 @@ kotlin {
     }
 
     js(BOTH) {
-        nodejs()
+        nodejs {
+            testTask {
+                enabled = false
+            }
+        }
     }
 
     sourceSets["commonMain"].dependencies {

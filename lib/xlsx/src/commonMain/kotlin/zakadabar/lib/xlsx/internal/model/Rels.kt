@@ -1,26 +1,23 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.xlsx.dom.model
+package zakadabar.lib.xlsx.internal.model
 
-import zakadabar.lib.xlsx.dom.Part
-import zakadabar.lib.xlsx.dom.SimpleDomElement
+import zakadabar.lib.xlsx.dom.*
 
-internal class Rels(val root : String = "/", ref: String = "") : SimpleDomElement("Relationships"), Part {
+internal class Rels(val root : String = "/", ref: String = "") : Node("Relationships", arrayOf(
+    "xmlns" to "http://schemas.openxmlformats.org/package/2006/relationships"
+)), Part {
 
     override val partName = "${root}_rels/$ref.rels"
     override val contentType = ""
     override val relType = ""
 
-    init {
-        attributes["xmlns"] = "http://schemas.openxmlformats.org/package/2006/relationships"
-    }
-
     fun addRel(rel: Part) : String {
 
-        val relId = "rId${childNodes.size + 1}"
+        val relId = "rId${elements.size + 1}"
 
-        childNodes += of("Relationship",
+        add("Relationship",
             "Id" to relId,
             "Type" to rel.relType,
             "Target"  to rel.partName.substringAfter(root)

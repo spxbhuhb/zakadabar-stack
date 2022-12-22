@@ -15,6 +15,7 @@ class XlsxDocument {
 
     operator fun plusAssign(sheet: XlsxSheet) {
         _sheets[sheet.title] = sheet
+        sheet.doc = this
     }
 
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.xlsx.dom
+package zakadabar.lib.xlsx.internal
 
 import kotlinx.datetime.*
 
@@ -23,4 +23,4 @@ internal fun LocalDateTime.toInternal() : Double {
     return datePart + timePart
 }
 
-internal fun Instant.toInternal() : Double = toLocalDateTime(TimeZone.currentSystemDefault()).toInternal()
+internal fun Instant.toInternal(tz: TimeZone) : Double = toLocalDateTime(tz).toInternal()

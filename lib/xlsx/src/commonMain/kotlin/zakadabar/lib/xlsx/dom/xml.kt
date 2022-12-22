@@ -3,12 +3,12 @@
  */
 package zakadabar.lib.xlsx.dom
 
-fun SimpleDomElement.toXml() : ByteArray {
+fun Node.toXml() : ByteArray {
     val sb = StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n")
     sb.appendXml(this)
     return sb.toString().encodeToByteArray()
 }
-private fun Appendable.appendXml(dom: SimpleDomElement) {
+private fun Appendable.appendXml(dom: Node) {
     append('<').append(dom.name)
     appendAttributes(dom)
     if (dom.isEmpty()) {
@@ -21,15 +21,15 @@ private fun Appendable.appendXml(dom: SimpleDomElement) {
     }
 }
 
-private fun Appendable.appendChildNodes(dom: SimpleDomElement) {
-    dom.childNodes.forEach(::appendXml)
+private fun Appendable.appendChildNodes(dom: Node) {
+    dom.elements.forEach(::appendXml)
 }
-private fun Appendable.appendAttributes(dom: SimpleDomElement) {
+private fun Appendable.appendAttributes(dom: Node) {
     dom.attributes.forEach {
         append(' ').append(it.key).append("=\"").append(it.value).append('"')
     }
 }
-private fun Appendable.appendText(dom: SimpleDomElement) {
+private fun Appendable.appendText(dom: Node) {
     dom.text?.forEach { char->
         when(char) {
             '&' -> append("&amp;")
