@@ -14,12 +14,12 @@ import zakadabar.lib.xlsx.internal.model.Part
 import zakadabar.lib.xlsx.internal.model.Row
 import zakadabar.lib.xlsx.internal.model.SharedStrings
 import zakadabar.lib.xlsx.internal.model.WorkSheet
-import zakadabar.lib.xlsx.internal.model.XlsxFile
+import zakadabar.lib.xlsx.internal.model.File
 import zakadabar.lib.xlsx.model.XlsxCell
 import zakadabar.lib.xlsx.model.XlsxDocument
 import zakadabar.lib.xlsx.model.XlsxSheet
 
-internal fun XlsxCell.toDom(sharedStrings : SharedStrings) : Cell? {
+private fun XlsxCell.toDom(sharedStrings : SharedStrings) : Cell? {
 
     val conf = sheet.doc.conf
     val strings = conf.strings
@@ -54,7 +54,7 @@ internal fun XlsxCell.toDom(sharedStrings : SharedStrings) : Cell? {
     }
 }
 
-internal fun XlsxSheet.toDom(sheetId: Int, sharedStrings : SharedStrings) : WorkSheet {
+private fun XlsxSheet.toDom(sheetId: Int, sharedStrings : SharedStrings) : WorkSheet {
     val ws = WorkSheet(sheetId)
 
     var row : Row? = null
@@ -71,8 +71,8 @@ internal fun XlsxSheet.toDom(sheetId: Int, sharedStrings : SharedStrings) : Work
     return ws
 }
 
-internal fun XlsxDocument.toXlsxFile() : XlsxFile {
-    val f = XlsxFile()
+internal fun XlsxDocument.toXlsxFile() : File {
+    val f = File()
     sheets.forEach { xs->
         val sheetId = f.workBook.nextSheetId()
         val ws = xs.toDom(sheetId, f.sharedStrings)
@@ -81,12 +81,12 @@ internal fun XlsxDocument.toXlsxFile() : XlsxFile {
     return f
 }
 
-internal val Part.content : ByteArray get() = when(this) {
+private val Part.content : ByteArray get() = when(this) {
     is Node -> toXml()
     else -> throw IllegalStateException("Content not supported: ${this::class}")
 }
 
-internal fun XlsxFile.toContentMap() : ContentMap {
+internal fun File.toContentMap() : ContentMap {
     val cm = ContentMap()
     content.forEach {
         val path = it.partName.substringAfter('/')
@@ -96,7 +96,8 @@ internal fun XlsxFile.toContentMap() : ContentMap {
 }
 
 internal fun Node.putCount() : Int {
-    val count = elements.size
+    val count = childNodes.size
     attributes["count"] = count.toString()
     return count
 }
+

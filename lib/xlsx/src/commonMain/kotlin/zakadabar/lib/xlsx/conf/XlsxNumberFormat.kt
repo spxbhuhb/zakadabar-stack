@@ -4,8 +4,8 @@
 package zakadabar.lib.xlsx.conf
 
 enum class XlsxNumberFormat(
-    val formatCode: String?,
-    val numFmtId: Int? = null
+    internal val formatCode: String?,
+    internal val numFmtId: Int? = null
 ) {
     GENERAL(null, 0),// general must be the 1st!
     BUILT_IN_DATE(null, 14),

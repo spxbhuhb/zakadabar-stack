@@ -15,7 +15,7 @@ internal class Rels(val root : String = "/", ref: String = "") : Node("Relations
 
     fun addRel(rel: Part) : String {
 
-        val relId = "rId${elements.size + 1}"
+        val relId = "rId${childNodes.size + 1}"
 
         + Node("Relationship",
             "Id" to relId,

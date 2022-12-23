@@ -8,29 +8,29 @@ fun Node.toXml() : ByteArray {
     sb.appendXml(this)
     return sb.toString().encodeToByteArray()
 }
-private fun Appendable.appendXml(dom: Node) {
-    append('<').append(dom.name)
-    appendAttributes(dom)
-    if (dom.isEmpty()) {
+private fun Appendable.appendXml(node: Node) {
+    append('<').append(node.name)
+    appendAttributes(node)
+    if (node.isEmpty()) {
         append("/>")
     } else {
         append('>')
-        appendText(dom)
-        appendChildNodes(dom)
-        append("</").append(dom.name).append('>')
+        appendText(node)
+        appendChildNodes(node)
+        append("</").append(node.name).append('>')
     }
 }
 
-private fun Appendable.appendChildNodes(dom: Node) {
-    dom.elements.forEach(::appendXml)
+private fun Appendable.appendChildNodes(node: Node) {
+    node.childNodes.forEach(::appendXml)
 }
-private fun Appendable.appendAttributes(dom: Node) {
-    dom.attributes.forEach {
+private fun Appendable.appendAttributes(node: Node) {
+    node.attributes.forEach {
         append(' ').append(it.key).append("=\"").append(it.value).append('"')
     }
 }
-private fun Appendable.appendText(dom: Node) {
-    dom.text?.forEach { char->
+private fun Appendable.appendText(node: Node) {
+    node.text?.forEach { char ->
         when(char) {
             '&' -> append("&amp;")
             '<' -> append("&lt;")

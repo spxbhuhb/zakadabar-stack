@@ -3,17 +3,16 @@
  */
 package zakadabar.lib.xlsx.internal.model
 
-internal class XlsxFile {
-
+internal class File {
 
     val content = mutableListOf<Part>()
 
-    val contentType = ContentType().also(content::add)
-    val rels = Rels().also(content::add)
-    val workBookRels = Rels("/xl/", "workbook.xml").also(content::add)
-    val workBook = WorkBook().also(content::add)
-    val sharedStrings = SharedStrings().also(content::add)
-    val styles = Styles().also(content::add)
+    val contentType = + ContentType()
+    val rels = + Rels()
+    val workBookRels = + Rels("/xl/", "workbook.xml")
+    val workBook = + WorkBook()
+    val sharedStrings = + SharedStrings()
+    val styles = + Styles()
 
     init {
 
@@ -34,6 +33,6 @@ internal class XlsxFile {
         contentType.addPart(ws)
         content.add(ws)
     }
-
+    private operator fun <T: Part> T.unaryPlus() : T = also(content::add)
 
 }

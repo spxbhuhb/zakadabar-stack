@@ -8,12 +8,8 @@ open class Node (
     val text : String?,
     vararg attributes : Pair<String, String>
 ) {
-    val attributes = mutableMapOf<String, String>()
-    val elements = mutableListOf<Node>()
-
-    init {
-        this.attributes.putAll(attributes)
-    }
+    val attributes = mutableMapOf(*attributes)
+    val childNodes = mutableListOf<Node>()
 
     constructor(
         name: String,
@@ -23,11 +19,10 @@ open class Node (
         builder?.invoke(this)
     }
 
-    fun isEmpty() : Boolean = elements.isEmpty() && text == null
+    fun isEmpty() : Boolean = childNodes.isEmpty() && text == null
 
-    operator fun plusAssign(el: Node) {
-        elements += el
-    }
-    operator fun <T: Node> T.unaryPlus() : T = also(this@Node.elements::add)
+    operator fun plusAssign(n: Node) { childNodes += n }
+
+    operator fun <T: Node> T.unaryPlus() : T = also(this@Node.childNodes::add)
 
 }

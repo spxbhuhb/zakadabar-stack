@@ -13,10 +13,8 @@ import kotlin.js.json
 actual fun ContentMap.saveZip(name: String, contentType: String) {
     val zip = JSZip()
 
-    forEach {
-        val path = it.key
-        val content = it.value()
-        zip.file(path, content.toUint8Array(), json("binary" to true) )
+    forEach { (path,content) ->
+        zip.file(path, content().toUint8Array(), json("binary" to true) )
     }
 
     zip.generateAsync<Blob>(json(
@@ -31,10 +29,8 @@ actual fun ContentMap.saveZip(name: String, contentType: String) {
 @JsModule("jszip")
 @JsNonModule
 private external class JSZip {
-
     fun file(path: String, content: Uint8Array, options: Json) : Unit = definedExternally
     fun <T> generateAsync(options: Json) : Promise<T> = definedExternally
-
 }
 
 private fun ByteArray.toUint8Array() = Uint8Array(size).also {
@@ -42,4 +38,3 @@ private fun ByteArray.toUint8Array() = Uint8Array(size).also {
         it[i] = byte
     }
 }
-

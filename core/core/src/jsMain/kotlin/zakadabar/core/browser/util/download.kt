@@ -11,7 +11,7 @@ import org.w3c.files.Blob
 import org.w3c.files.BlobPropertyBag
 
 fun downloadCsv(filename: String, content: String) {
-    val bom = Uint8Array(byteArrayOf(0xef.toByte(), 0xbb.toByte(), 0xbf.toByte()).toTypedArray())
+    val bom = Uint8Array(arrayOf(0xef.toByte(), 0xbb.toByte(), 0xbf.toByte()))
     val blob = Blob(arrayOf(bom, content), BlobPropertyBag(type = "text/csv;charset=utf-8;"))
     downloadBlob(filename, blob)
 }

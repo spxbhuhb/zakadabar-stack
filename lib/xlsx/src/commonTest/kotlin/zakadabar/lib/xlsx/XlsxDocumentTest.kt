@@ -5,6 +5,7 @@ package zakadabar.lib.xlsx
 
 import kotlinx.datetime.*
 import setRow
+import toContentMap
 import zakadabar.lib.xlsx.model.XlsxDocument
 import zakadabar.lib.xlsx.model.XlsxSheet
 import kotlin.test.Test
@@ -23,7 +24,7 @@ class XlsxDocumentTest {
 
         sheet1.setRow("A1", listOf("name", "birth", "height", "dead"))
 
-        (2..10_000).forEach { row->
+        (2..10).forEach { row->
             sheet1[1, row].value = "Laci"
             sheet1[2, row].value = Clock.System.now()
             sheet1[3, row].value = row / 2.0

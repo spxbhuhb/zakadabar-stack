@@ -4,20 +4,20 @@
 package zakadabar.lib.xlsx
 
 import java.io.FileOutputStream
+import java.io.OutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
-actual fun ContentMap.saveZip(name: String, contentType: String) {
-    ZipOutputStream(FileOutputStream(name)).use { zip ->
+actual fun ContentMap.saveZip(name: String, contentType: String) = writeTo(FileOutputStream(name))
+
+fun ContentMap.writeTo(os: OutputStream) {
+    ZipOutputStream(os).use { zip ->
 
         zip.setLevel(9)
 
-        forEach {
-            val path = it.key
-            val content = it.value()
-
+        forEach { (path, content) ->
             zip.putNextEntry(ZipEntry(path))
-            zip.write(content)
+            zip.write(content())
             zip.closeEntry()
         }
 

@@ -1,5 +1,11 @@
+import zakadabar.lib.xlsx.ContentMap
+import zakadabar.lib.xlsx.internal.toContentMap
+import zakadabar.lib.xlsx.internal.toXlsxFile
 import zakadabar.lib.xlsx.model.XlsxCoordinate
+import zakadabar.lib.xlsx.model.XlsxDocument
 import zakadabar.lib.xlsx.model.XlsxSheet
+
+fun XlsxDocument.toContentMap() : ContentMap = toXlsxFile().toContentMap()
 
 fun XlsxSheet.setCell(coord: String, value: Any?) {
     this[coord].value = value

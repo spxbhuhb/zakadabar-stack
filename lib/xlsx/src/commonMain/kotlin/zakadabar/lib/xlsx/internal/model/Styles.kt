@@ -79,7 +79,7 @@ internal class Styles : Node("styleSheet",
     }
 
     fun addCustomNumFmt(formatCode: String) : Int {
-        val numFmtId = CUSTOM_NUM_FORMAT_ID_BASE + numFmts.elements.size
+        val numFmtId = CUSTOM_NUM_FORMAT_ID_BASE + numFmts.childNodes.size
         addNumFmt(numFmtId, formatCode)
         return addCellXf(numFmtId)
     }

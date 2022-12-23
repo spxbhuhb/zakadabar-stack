@@ -16,7 +16,7 @@ internal class WorkBook : Node("workbook",
 
     val sheets = + Node("sheets")
 
-    fun nextSheetId() = sheets.elements.size + 1
+    fun nextSheetId() = sheets.childNodes.size + 1
 
     fun addSheet(sheetId : Int, relId: String, title: String) {
 

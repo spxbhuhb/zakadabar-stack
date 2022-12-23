@@ -4,41 +4,44 @@
 package zakadabar.lib.xlsx.browser
 
 import setRow
+import toContentMap
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.data.BaseBo
+import zakadabar.lib.xlsx.conf.XlsxConfiguration
 import zakadabar.lib.xlsx.model.XlsxDocument
 import zakadabar.lib.xlsx.model.XlsxSheet
 import zakadabar.lib.xlsx.saveXlsx
-import zakadabar.lib.xlsx.toContentMap
 
-fun <T: BaseBo> ZkTable<T>.onExportXlsx(title: String = titleText ?: "Export data") {
+fun <T: BaseBo> ZkTable<T>.onExportXlsx(
+    title: String = titleText ?: "Export data",
+    config: XlsxConfiguration = XlsxConfiguration()
+) {
 
-    val xlsxFileName = exportFileName.replace(".csv", ".xlsx")
-
-    val xlsx = XlsxDocument()
+    val doc = XlsxDocument(config)
     val sheet = XlsxSheet(title)
-    xlsx += sheet
+    doc += sheet
 
     val data = if (exportFiltered) filteredData else fullData
     val columns = columns.filter { it.exportable }
 
-    var rowIndex = 0
+    var rowOffset = 1
 
     if (exportHeaders) {
         val header = columns.map { it.exportCsvHeader() }
         sheet.setRow("A1", header)
-        rowIndex++
+        rowOffset++
     }
 
-    data.forEach { row ->
-        columns.forEachIndexed { colIndex, zkColumn ->
-            val cell = sheet[1 + colIndex, 1 + rowIndex]
-            cell.value = zkColumn.exportCsv(row.data)
+    data.forEachIndexed { ri, row ->
+        columns.forEachIndexed { ci, column ->
+            val cell = sheet[1 + ci, rowOffset + ri]
+            cell.value = column.export(row.data)
         }
-        rowIndex++
     }
 
-    val content = xlsx.toContentMap()
+    val content = doc.toContentMap()
+
+    val xlsxFileName = exportFileName.replace(".csv", ".xlsx")
     content.saveXlsx(xlsxFileName)
 
 }

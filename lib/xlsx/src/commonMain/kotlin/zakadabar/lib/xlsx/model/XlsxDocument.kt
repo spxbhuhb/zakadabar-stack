@@ -7,12 +7,10 @@ import zakadabar.lib.xlsx.conf.XlsxConfiguration
 
 class XlsxDocument(val conf: XlsxConfiguration = XlsxConfiguration()) {
 
-    private val _sheets = mutableMapOf<String, XlsxSheet>()
-
-    val sheets : List<XlsxSheet> get() = _sheets.values.toList()
+    val sheets = mutableListOf<XlsxSheet>()
 
     operator fun plusAssign(sheet: XlsxSheet) {
-        _sheets[sheet.title] = sheet
+        sheets += sheet
         sheet.doc = this
     }
 
