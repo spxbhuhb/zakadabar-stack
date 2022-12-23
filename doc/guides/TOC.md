@@ -58,6 +58,8 @@
         * [Introduction](./libraries/schedule/Introduction.md)
     * [Soft UI]()
       * [Introduction](./libraries/softui/Introduction.md)
+  * [Xlsx]()
+      * [Introduction](./libraries/xlsx/Introduction.md)
 * [Testing]()
     * [Backend Testing](./testing/BackendTesting.md)
 * [Tools]()
