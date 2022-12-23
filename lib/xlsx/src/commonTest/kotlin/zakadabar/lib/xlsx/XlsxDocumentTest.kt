@@ -31,15 +31,16 @@ class XlsxDocumentTest {
             sheet1[4, row].value = row % 2 == 0
         }
 
-
         val sheet2 = XlsxSheet("Summary")
         xlsx += sheet2
 
         sheet2["A1"].value = "summary"
         sheet2["B1"].value = "none"
 
-
         val fc = xlsx.toContentMap()
         fc.saveXlsx("build/test.xlsx")
+
     }
+
+
 }
