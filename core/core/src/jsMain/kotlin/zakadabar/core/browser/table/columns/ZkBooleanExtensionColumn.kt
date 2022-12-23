@@ -49,4 +49,6 @@ class ZkBooleanExtensionColumn<T : BaseBo>(
     override fun exportCsv(row: T): String =
         if (values[table.getRowId(row)] == true) localizedStrings.trueText else localizedStrings.falseText
 
+    override fun exportRaw(row: T): Any? = values[table.getRowId(row)]
+
 }

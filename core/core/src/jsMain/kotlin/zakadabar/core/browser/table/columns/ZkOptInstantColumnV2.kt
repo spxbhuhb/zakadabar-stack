@@ -37,4 +37,5 @@ open class ZkOptInstantColumnV2<T : BaseBo>(
         return getter(row)?.localized ?: return ""
     }
 
+    override fun exportRaw(row: T): Any? = getter(row)
 }

@@ -33,4 +33,6 @@ open class ZkEnumColumnV2<T : BaseBo, E : Enum<E>>(
     }
 
     open fun format(row: T) = localizedStrings.getNormalized(getter(row).name)
+    override fun exportRaw(row: T): Any? = getter(row)
+
 }

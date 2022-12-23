@@ -39,4 +39,6 @@ open class ZkOptBooleanColumnV2<T : BaseBo>(
             true -> localizedStrings.trueText
             false -> localizedStrings.falseText
         }
+
+    override fun exportRaw(row: T): Any? = getter(row)
 }

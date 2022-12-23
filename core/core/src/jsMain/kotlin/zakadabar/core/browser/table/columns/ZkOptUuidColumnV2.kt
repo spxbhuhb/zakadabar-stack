@@ -32,4 +32,5 @@ open class ZkOptUuidColumnV2<T : BaseBo>(
         return getter(row)?.toString() ?: ""
     }
 
+    override fun exportRaw(row: T): Any? = getter(row)
 }

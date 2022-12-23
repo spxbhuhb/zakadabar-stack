@@ -39,5 +39,6 @@ open class ZkEntityIdColumnV2<T : BaseBo, IT>(
     override fun exportCsv(row: T): String {
         return getter(row).toString()
     }
+    override fun exportRaw(row: T): Any? = getter(row)
 
 }

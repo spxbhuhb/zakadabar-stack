@@ -35,7 +35,7 @@ fun <T: BaseBo> ZkTable<T>.onExportXlsx(
     data.forEachIndexed { ri, row ->
         columns.forEachIndexed { ci, column ->
             val cell = sheet[1 + ci, rowOffset + ri]
-            cell.value = column.export(row.data)
+            cell.value = column.exportRaw(row.data)
         }
     }
 

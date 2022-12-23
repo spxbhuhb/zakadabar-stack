@@ -31,4 +31,5 @@ open class ZkStringColumnV2<T : BaseBo>(
         return "\"${getter(row).replace("\"", "\"\"")}\""
     }
 
+    override fun exportRaw(row: T): Any? = getter(row)
 }
