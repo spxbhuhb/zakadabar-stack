@@ -7,7 +7,6 @@ import kotlinx.datetime.*
 import setRow
 import toContentMap
 import zakadabar.lib.xlsx.model.XlsxDocument
-import zakadabar.lib.xlsx.model.XlsxSheet
 import kotlin.test.Test
 
 class XlsxDocumentTest {
@@ -15,30 +14,22 @@ class XlsxDocumentTest {
     @Test
     fun testWriteFile() {
 
-        println("Hello Test")
+        val doc = XlsxDocument()
+        val sheet = doc["T2 Database"]
 
-        val xlsx = XlsxDocument()
+        sheet.columns["A"].width = 15.0
+        sheet.columns["B"].width = 11.4
 
-        val sheet1 = XlsxSheet("Stuff Members")
-        xlsx += sheet1
+        sheet["A1"].value = "Name"
+        sheet["B1"].value = "Date of birth"
+        sheet["C1"].value = "Still alive"
 
-        sheet1.setRow("A1", listOf("name", "birth", "height", "dead"))
+        sheet.setRow("A2", listOf("John Connor", LocalDate(1985, 2, 28), true))
+        sheet.setRow("A3", listOf("Sarah Connor", LocalDate(1964, 8, 13), true))
 
-        (2..10).forEach { row->
-            sheet1[1, row].value = "Laci"
-            sheet1[2, row].value = Clock.System.now()
-            sheet1[3, row].value = row / 2.0
-            sheet1[4, row].value = row % 2 == 0
-        }
+        val content = doc.toContentMap()
 
-        val sheet2 = XlsxSheet("Summary")
-        xlsx += sheet2
-
-        sheet2["A1"].value = "summary"
-        sheet2["B1"].value = "none"
-
-        val fc = xlsx.toContentMap()
-        fc.saveXlsx("build/test.xlsx")
+        content.saveXlsx("build/terminator.xlsx")
 
     }
 

@@ -9,7 +9,6 @@ import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.data.BaseBo
 import zakadabar.lib.xlsx.conf.XlsxConfiguration
 import zakadabar.lib.xlsx.model.XlsxDocument
-import zakadabar.lib.xlsx.model.XlsxSheet
 import zakadabar.lib.xlsx.saveXlsx
 
 fun <T: BaseBo> ZkTable<T>.onExportXlsx(
@@ -18,8 +17,7 @@ fun <T: BaseBo> ZkTable<T>.onExportXlsx(
 ) {
 
     val doc = XlsxDocument(config)
-    val sheet = XlsxSheet(title)
-    doc += sheet
+    val sheet = doc[title]
 
     val data = if (exportFiltered) filteredData else fullData
     val columns = columns.filter { it.exportable }

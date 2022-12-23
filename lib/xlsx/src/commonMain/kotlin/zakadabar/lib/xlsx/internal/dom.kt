@@ -57,6 +57,10 @@ private fun XlsxCell.toDom(sharedStrings : SharedStrings) : Cell? {
 private fun XlsxSheet.toDom(sheetId: Int, sharedStrings : SharedStrings) : WorkSheet {
     val ws = WorkSheet(sheetId)
 
+    columns.data.forEach { (cn, column) ->
+        column.width?.let { ws.addColumnWidth(cn, it) }
+    }
+
     var row : Row? = null
 
     cells.forEach { xc->

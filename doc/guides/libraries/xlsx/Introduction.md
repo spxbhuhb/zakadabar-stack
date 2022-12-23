@@ -37,8 +37,7 @@ implementation("hu.simplexion.zakadabar:xlsx:$contentVersion")
 ### General example
 ```kotlin
     val doc = XlsxDocument()
-    val sheet1 = XlsxSheet("Stuff Members")
-    doc += sheet1
+    val sheet1 = doc["Stuff Members"]
     
     // set header line
     sheet1.setRow("A1", listOf("name", "birth", "height", "dead"))
@@ -51,8 +50,7 @@ implementation("hu.simplexion.zakadabar:xlsx:$contentVersion")
         sheet1[4, row].value = row % 2 == 0
     }
 
-    val sheet2 = XlsxSheet("Summary")
-    doc += sheet2
+    val sheet2 = doc["Summary"]
 
     sheet2["A1"].value = "summary"
     sheet2["A2"].value = 8

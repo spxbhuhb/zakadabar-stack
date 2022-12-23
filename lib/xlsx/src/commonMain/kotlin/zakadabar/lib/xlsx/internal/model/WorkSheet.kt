@@ -13,10 +13,19 @@ internal class WorkSheet(sheetId: Int) : Node("worksheet",
     override val contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"
     override val relType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet"
 
+    private val cols = + Node("cols")
     private val sheetData = + Node("sheetData")
 
     fun addRow(row: Row) {
         sheetData += row
+    }
+    fun addColumnWidth(colNumber: Int, width: Double) {
+        cols += Node(name="col",
+            "min" to "$colNumber",
+            "max" to "$colNumber",
+            "width" to "$width",
+            "customWidth" to "1"
+        )
     }
 
 }

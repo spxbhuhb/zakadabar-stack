@@ -4,6 +4,7 @@ import zakadabar.lib.xlsx.internal.toXlsxFile
 import zakadabar.lib.xlsx.model.XlsxCoordinate
 import zakadabar.lib.xlsx.model.XlsxDocument
 import zakadabar.lib.xlsx.model.XlsxSheet
+import zakadabar.lib.xlsx.toColumnNumber
 
 fun XlsxDocument.toContentMap() : ContentMap = toXlsxFile().toContentMap()
 

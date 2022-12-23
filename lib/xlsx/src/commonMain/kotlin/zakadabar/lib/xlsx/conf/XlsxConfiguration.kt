@@ -13,7 +13,6 @@ data class XlsxConfiguration(
     var timeZone : TimeZone = TimeZone.currentSystemDefault(),
     var localizedEnums : Boolean = false,
     var localizedBooleans : Boolean = false,
-    var wrapTexts : Boolean = true,
     var dateFormat : XlsxNumberFormat = XlsxNumberFormat.BUILT_IN_DATE,
     var dateTimeFormat : XlsxNumberFormat = XlsxNumberFormat.BUILT_IN_DATETIME,
     var instantFormat : XlsxNumberFormat = XlsxNumberFormat.ISO_DATETIME_MILLISEC

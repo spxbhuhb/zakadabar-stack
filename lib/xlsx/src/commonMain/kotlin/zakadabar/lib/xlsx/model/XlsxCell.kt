@@ -24,7 +24,7 @@ class XlsxCell internal constructor(
         val conf = sheet.doc.conf
 
         return when(value) {
-            is LocalDate ->  conf.dateFormat
+            is LocalDate -> conf.dateFormat
             is LocalDateTime -> conf.dateTimeFormat
             is Instant -> conf.instantFormat
             else -> XlsxNumberFormat.GENERAL

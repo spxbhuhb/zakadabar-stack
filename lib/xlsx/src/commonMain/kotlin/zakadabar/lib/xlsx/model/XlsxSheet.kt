@@ -3,11 +3,15 @@
  */
 package zakadabar.lib.xlsx.model
 
-data class XlsxSheet(val title : String) {
+import zakadabar.lib.xlsx.toColumnNumber
 
-    lateinit var doc : XlsxDocument
+data class XlsxSheet internal constructor(
+    val title : String,
+    val doc: XlsxDocument
+) {
 
     private val data = mutableMapOf<Int, MutableMap<Int, XlsxCell>>()
+    val columns = Columns()
 
     val cells : Sequence<XlsxCell> get() = data.entries
         .asSequence()
@@ -29,5 +33,14 @@ data class XlsxSheet(val title : String) {
 
     operator fun get(coordinate: String) = get(XlsxCoordinate(coordinate))
 
+    class Columns {
+
+        internal val data = mutableMapOf<Int, Column>()
+        operator fun get(columnNumber: Int) : Column = data.getOrPut(columnNumber, ::Column)
+        operator fun get(columnLetter: String) : Column = get(columnLetter.toColumnNumber())
+
+    }
+
+    data class Column(var width: Double?= null)
 
 }

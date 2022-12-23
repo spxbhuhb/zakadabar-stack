@@ -3,6 +3,9 @@
  */
 package zakadabar.lib.xlsx.model
 
+import zakadabar.lib.xlsx.toColumnLetter
+import zakadabar.lib.xlsx.toColumnNumber
+
 class XlsxCoordinate {
 
     val coordinate: String
@@ -13,7 +16,7 @@ class XlsxCoordinate {
     constructor(columnNumber : Int, rowNumber : Int) {
         this.rowNumber = rowNumber
         this.colNumber = columnNumber
-        this.colLetter = columnNumber.toXlsxColumnLetter()
+        this.colLetter = columnNumber.toColumnLetter()
         this.coordinate = "$colLetter$rowNumber"
 
         validate()
@@ -26,7 +29,7 @@ class XlsxCoordinate {
         this.coordinate = coordinate
         this.colLetter = g[1]
         this.rowNumber = g[2].toInt()
-        this.colNumber = colLetter.toXlsxColumnNumber()
+        this.colNumber = colLetter.toColumnNumber()
 
         validate()
     }
@@ -46,27 +49,5 @@ class XlsxCoordinate {
     companion object {
         private val splitter = "([A-Z]+)([0-9]+)".toRegex()
     }
-
-    private fun String.toXlsxColumnNumber() : Int {
-        var col = 0
-        var n = length
-        var k = 1
-        while(--n >= 0) {
-            col += (1 + this[n].code - 65) * k
-            k *= 26
-        }
-        return col
-    }
-
-    private fun Int.toXlsxColumnLetter() : String {
-        var k = this
-        val col = StringBuilder()
-        while(k-- > 0) {
-            col.insert(0, (k % 26 + 65).toChar())
-            k /= 26
-        }
-        return col.toString()
-    }
-
 
 }
