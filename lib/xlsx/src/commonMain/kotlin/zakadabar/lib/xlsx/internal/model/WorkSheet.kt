@@ -20,12 +20,16 @@ internal class WorkSheet(sheetId: Int) : Node("worksheet",
         sheetData += row
     }
     fun addColumnWidth(colNumber: Int, width: Double) {
-        cols += Node(name="col",
+        cols += Node("col",
             "min" to "$colNumber",
             "max" to "$colNumber",
             "width" to "$width",
             "customWidth" to "1"
         )
+    }
+
+    fun clean() {
+        if (cols.isEmpty()) childNodes -= cols
     }
 
 }

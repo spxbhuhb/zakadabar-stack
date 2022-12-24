@@ -1,18 +1,17 @@
-import zakadabar.lib.xlsx.ContentMap
+import zakadabar.lib.xlsx.generateZip
 import zakadabar.lib.xlsx.internal.toContentMap
 import zakadabar.lib.xlsx.internal.toXlsxFile
 import zakadabar.lib.xlsx.model.XlsxCoordinate
 import zakadabar.lib.xlsx.model.XlsxDocument
 import zakadabar.lib.xlsx.model.XlsxSheet
-import zakadabar.lib.xlsx.toColumnNumber
 
-fun XlsxDocument.toContentMap() : ContentMap = toXlsxFile().toContentMap()
-
-fun XlsxSheet.setCell(coord: String, value: Any?) {
-    this[coord].value = value
+fun XlsxDocument.buildFileContent(content: ByteArray.()->Unit) {
+    val f = toXlsxFile()
+    val cm = f.toContentMap()
+    cm.generateZip(content)
 }
 
-fun XlsxSheet.setRow(coord: String, values: Iterable<Any?>) {
+fun XlsxSheet.fillRow(coord: String, values: Iterable<Any?>) {
 
     val c = XlsxCoordinate(coord)
 
@@ -26,7 +25,7 @@ fun XlsxSheet.setRow(coord: String, values: Iterable<Any?>) {
 
 }
 
-fun XlsxSheet.setTable(coord: String, table: Iterable<Iterable<Any?>>) {
+fun XlsxSheet.fillTable(coord: String, table: Iterable<Iterable<Any?>>) {
 
     val c = XlsxCoordinate(coord)
 
@@ -42,3 +41,4 @@ fun XlsxSheet.setTable(coord: String, table: Iterable<Iterable<Any?>>) {
     }
 
 }
+

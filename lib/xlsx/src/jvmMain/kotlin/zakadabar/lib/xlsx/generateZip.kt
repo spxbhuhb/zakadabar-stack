@@ -3,14 +3,13 @@
  */
 package zakadabar.lib.xlsx
 
-import java.io.FileOutputStream
-import java.io.OutputStream
+import java.io.ByteArrayOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
-actual fun ContentMap.saveZip(name: String, contentType: String) = writeTo(FileOutputStream(name))
+actual fun ContentMap.generateZip(content: ByteArray.() -> Unit) {
+    val os = ByteArrayOutputStream()
 
-fun ContentMap.writeTo(os: OutputStream) {
     ZipOutputStream(os).use { zip ->
 
         zip.setLevel(9)
@@ -22,5 +21,7 @@ fun ContentMap.writeTo(os: OutputStream) {
         }
 
     }
+
+    content(os.toByteArray())
 
 }

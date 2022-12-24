@@ -3,18 +3,32 @@
  */
 package zakadabar.lib.xlsx.browser
 
-import setRow
-import toContentMap
+import buildFileContent
+import fillRow
+import org.w3c.files.Blob
+import org.w3c.files.BlobPropertyBag
 import zakadabar.core.browser.table.ZkTable
+import zakadabar.core.browser.util.downloadBlob
 import zakadabar.core.data.BaseBo
 import zakadabar.lib.xlsx.conf.XlsxConfiguration
 import zakadabar.lib.xlsx.model.XlsxDocument
-import zakadabar.lib.xlsx.saveXlsx
 
 fun <T: BaseBo> ZkTable<T>.onExportXlsx(
     title: String = titleText ?: "Export data",
     config: XlsxConfiguration = XlsxConfiguration()
 ) {
+
+    val doc = toXlsxDocument(title, config)
+
+    doc.buildFileContent {
+        val xlsxFileName = exportFileName.replace(".csv", ".xlsx")
+        val blob = toBlob("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        downloadBlob(xlsxFileName, blob)
+    }
+
+}
+
+fun <T: BaseBo> ZkTable<T>.toXlsxDocument(title: String, config: XlsxConfiguration) : XlsxDocument {
 
     val doc = XlsxDocument(config)
     val sheet = doc[title]
@@ -26,7 +40,7 @@ fun <T: BaseBo> ZkTable<T>.onExportXlsx(
 
     if (exportHeaders) {
         val header = columns.map { it.exportCsvHeader() }
-        sheet.setRow("A1", header)
+        sheet.fillRow("A1", header)
         rowOffset++
     }
 
@@ -37,9 +51,8 @@ fun <T: BaseBo> ZkTable<T>.onExportXlsx(
         }
     }
 
-    val content = doc.toContentMap()
-
-    val xlsxFileName = exportFileName.replace(".csv", ".xlsx")
-    content.saveXlsx(xlsxFileName)
-
+    return doc
 }
+
+private fun ByteArray.toBlob(contentType: String) : Blob = Blob(arrayOf(this), BlobPropertyBag(type = contentType))
+

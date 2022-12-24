@@ -5,7 +5,7 @@ package zakadabar.lib.xlsx.internal.model
 
 import zakadabar.lib.xlsx.dom.*
 
-internal class Cell(r: String, v: Any, t: Type, s: Int) : Node("c") {
+internal class Cell(reference: String, value: Any, type: Type, numberFormat: Int) : Node("c") {
 
     enum class Type(val code: String?) {
         NORMAL(null),
@@ -16,15 +16,15 @@ internal class Cell(r: String, v: Any, t: Type, s: Int) : Node("c") {
     }
 
     init {
-        attributes["r"] = r // coordinate eg: B5
+        attributes["r"] = reference // coordinate eg: B5
 
-        t.code?.let { attributes["t"] = it } // type: default is normal
+        type.code?.let { attributes["t"] = it } // type: default is normal
 
-        if (s != 0) { // numeric format index default: 0
-            attributes["s"] = s.toString()
+        if (numberFormat != 0) { // numeric format index default: 0
+            attributes["s"] = numberFormat.toString()
         }
 
-        + Node("v", v.toString())
+        + Node("v", value.toString())
     }
 
 }

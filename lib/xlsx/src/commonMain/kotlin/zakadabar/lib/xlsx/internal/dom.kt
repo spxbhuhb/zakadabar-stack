@@ -7,6 +7,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import zakadabar.lib.xlsx.*
+import zakadabar.lib.xlsx.conf.XlsxFormats.*
 import zakadabar.lib.xlsx.dom.Node
 import zakadabar.lib.xlsx.dom.toXml
 import zakadabar.lib.xlsx.internal.model.Cell
@@ -30,27 +31,27 @@ private fun XlsxCell.toDom(sharedStrings : SharedStrings) : Cell? {
         null -> null
         is String -> {
             val sharedStringId = sharedStrings.addString(v)
-            Cell(coord, sharedStringId, Cell.Type.SHARED_STRING, numberFormat)
+            Cell(coord, sharedStringId, Cell.Type.SHARED_STRING, numberFormat.xfId)
         }
         is Enum<*> -> {
             val str = if (conf.localizedEnums) strings.getNormalized(v.name) else v.name
             val sharedStringId = sharedStrings.addString(str)
-            Cell(coord, sharedStringId, Cell.Type.SHARED_STRING, numberFormat)
+            Cell(coord, sharedStringId, Cell.Type.SHARED_STRING, numberFormat.xfId)
         }
         is Boolean -> {
             if (conf.localizedBooleans) {
                 val str = if (v) strings.trueText else strings.falseText
                 val sharedStringId = sharedStrings.addString(str)
-                Cell(coord, sharedStringId, Cell.Type.SHARED_STRING, numberFormat)
+                Cell(coord, sharedStringId, Cell.Type.SHARED_STRING, numberFormat.xfId)
             } else {
-                Cell(coord, if (v) "1" else "0", Cell.Type.BOOLEAN, numberFormat)
+                Cell(coord, if (v) "1" else "0", Cell.Type.BOOLEAN, numberFormat.xfId)
             }
         }
-        is Number -> Cell(coord, v, Cell.Type.NORMAL, numberFormat)
-        is LocalDate -> Cell(coord, v.toInternal(), Cell.Type.NORMAL, numberFormat)
-        is LocalDateTime -> Cell(coord, v.toInternal(), Cell.Type.NORMAL, numberFormat)
-        is Instant -> Cell(coord, v.toInternal(timeZone), Cell.Type.NORMAL, numberFormat)
-        else -> Cell(coord, v, Cell.Type.STRING, numberFormat)
+        is Number -> Cell(coord, v, Cell.Type.NORMAL, numberFormat.xfId)
+        is LocalDate -> Cell(coord, v.toInternal(), Cell.Type.NORMAL, numberFormat.xfId)
+        is LocalDateTime -> Cell(coord, v.toInternal(), Cell.Type.NORMAL, numberFormat.xfId)
+        is Instant -> Cell(coord, v.toInternal(timeZone), Cell.Type.NORMAL, numberFormat.xfId)
+        else -> Cell(coord, v, Cell.Type.STRING, numberFormat.xfId)
     }
 }
 
@@ -72,16 +73,27 @@ private fun XlsxSheet.toDom(sheetId: Int, sharedStrings : SharedStrings) : WorkS
         row?.addCell(cell)
     }
 
+    ws.clean()
+
     return ws
 }
 
 internal fun XlsxDocument.toXlsxFile() : File {
     val f = File()
+
+    conf.formats.numberFormats.forEach { format ->
+        when(format) {
+            is BuiltInNumberFormat -> f.styles.addCellXf(format.numFmtId)
+            is CustomNumberFormat -> f.styles.addCustomNumFmt(format.formatCode)
+        }
+    }
+
     sheets.forEach { xs->
         val sheetId = f.workBook.nextSheetId()
         val ws = xs.toDom(sheetId, f.sharedStrings)
         f.addWorkSeet(sheetId, xs.title, ws)
     }
+
     return f
 }
 

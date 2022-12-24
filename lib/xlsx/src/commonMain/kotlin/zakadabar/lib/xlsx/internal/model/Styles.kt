@@ -3,7 +3,6 @@
  */
 package zakadabar.lib.xlsx.internal.model
 
-import zakadabar.lib.xlsx.conf.XlsxNumberFormat
 import zakadabar.lib.xlsx.dom.*
 import zakadabar.lib.xlsx.internal.putCount
 
@@ -30,11 +29,8 @@ internal class Styles : Node("styleSheet",
         addBorder()
         addCellStyleXf(0)
         addCellStyle("normal", "0", "0")
-        addNumberFormats()
 
     }
-
-
 
     fun addNumFmt(numFmtId: Int, formatCode: String) : Int {
         numFmts += Node("numFmt", "numFmtId" to numFmtId.toString(), "formatCode" to formatCode)
@@ -87,13 +83,6 @@ internal class Styles : Node("styleSheet",
     private fun addXf(xfs: Node, numFmtId: Int) : Int {
         xfs += Node("xf", "numFmtId" to numFmtId.toString())
         return xfs.putCount() - 1
-    }
-
-    private fun addNumberFormats() {
-        XlsxNumberFormat.values().forEach {
-            it.numFmtId?.let(::addCellXf)
-            it.formatCode?.let(::addCustomNumFmt)
-        }
     }
 
     companion object {

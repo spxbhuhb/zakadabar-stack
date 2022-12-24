@@ -4,25 +4,27 @@
 package zakadabar.lib.xlsx
 
 import org.khronos.webgl.Uint8Array
+import org.khronos.webgl.get
 import org.khronos.webgl.set
-import org.w3c.files.Blob
-import zakadabar.core.browser.util.downloadBlob
 import kotlin.js.Json
 import kotlin.js.Promise
 import kotlin.js.json
-actual fun ContentMap.saveZip(name: String, contentType: String) {
+
+internal actual fun ContentMap.generateZip(content: ByteArray.() -> Unit) {
     val zip = JSZip()
 
     forEach { (path,content) ->
         zip.file(path, content().toUint8Array(), json("binary" to true) )
     }
 
-    zip.generateAsync<Blob>(json(
-        "type" to "blob",
-        "mimeType" to contentType,
+    val options = json("level" to 9)
+
+    zip.generateAsync<Uint8Array>(json(
+        "type" to "uint8array",
+//        "mimeType" to contentType,
         "compression" to "DEFLATE",
-        "compressionOptions" to json("level" to 9)
-    )).then { downloadBlob(name, it) }
+        "compressionOptions" to options
+    )).then { content(it.toByteArray()) }
 
 }
 
@@ -34,7 +36,10 @@ private external class JSZip {
 }
 
 private fun ByteArray.toUint8Array() = Uint8Array(size).also {
-    forEachIndexed { i, byte ->
-        it[i] = byte
-    }
+    for(i in 0..size) it[i] = this[i]
 }
+
+private fun Uint8Array.toByteArray() = ByteArray(length).also {
+    for(i in 0..length) it[i] = this[i]
+}
+

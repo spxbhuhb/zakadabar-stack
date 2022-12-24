@@ -36,12 +36,6 @@ class XlsxCoordinate {
 
     override fun toString() = coordinate
 
-    override fun hashCode(): Int = coordinate.hashCode()
-
-    override fun equals(other: Any?): Boolean {
-        return other is XlsxCoordinate && rowNumber == other.rowNumber && colNumber == other.colNumber
-    }
-
     private fun validate() {
         if (rowNumber < 1 || colNumber < 1) throw IllegalArgumentException("not valid coordinate: $coordinate")
     }
