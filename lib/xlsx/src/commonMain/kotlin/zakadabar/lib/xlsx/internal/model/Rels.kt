@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.xlsx.internal.model
 
-import zakadabar.lib.xlsx.dom.*
+import zakadabar.lib.xlsx.internal.dom.Node
 
 internal class Rels(val root : String = "/", ref: String = "") : Node("Relationships",
 "xmlns" to "http://schemas.openxmlformats.org/package/2006/relationships"

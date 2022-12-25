@@ -6,17 +6,33 @@ package zakadabar.lib.xlsx.model
 import kotlinx.datetime.*
 import zakadabar.lib.xlsx.conf.XlsxFormats.NumberFormat
 
+/**
+ * Cell object, value and format holder.
+ */
 class XlsxCell internal constructor(
     val sheet : XlsxSheet,
     val coordinate: XlsxCoordinate
 ) {
 
+    /**
+     * Value in cell
+     * Recognized types: Boolean, Number, Enum, LocalDate, LocalDateTime, Instant, String.
+     *
+     * Other types converted into String by toString() method.
+     */
     var value: Any? = null
         set(v) {
             field = v
             numberFormat = calcNumberFormat()
         }
 
+    /**
+     * Nummeric format in the cell
+     *
+     * Customizable via Configuration object
+     *
+     * set automatic by value
+     */
     lateinit var numberFormat: NumberFormat
 
     private fun calcNumberFormat() : NumberFormat {
@@ -31,14 +47,26 @@ class XlsxCell internal constructor(
         }
     }
 
+    /**
+     * String representation of a cell
+     */
     override fun toString() : String = asString() ?: ""
 
+    /**
+     * like toString() but when cell is empty, returns null
+     */
     fun asString() : String? = when(val v = value) {
         null -> null
         is String -> v
         else -> v.toString()
     }
 
+    /**
+     * extract Boolean value
+     * null if empty
+     * try to parse in case of String type
+     * @throws NumberFormatException when cell is not a boolean cell
+     */
     fun asBoolean() : Boolean? = when(val v = value) {
         null -> null
         is Boolean -> v
@@ -47,6 +75,12 @@ class XlsxCell internal constructor(
         else -> throw NumberFormatException("$coordinate is not a boolean")
     }
 
+    /**
+     * extract Long value
+     * null if empty
+     * try to parse in case of String type
+     * @throws NumberFormatException when cell is not a number
+     */
     fun asLong() : Long? = when(val v = value) {
         null -> null
         is Long -> v
@@ -56,6 +90,12 @@ class XlsxCell internal constructor(
         else -> throw NumberFormatException("$coordinate is not a number")
     }
 
+    /**
+     * extract Double value
+     * null if empty
+     * try to parse in case of String type
+     * @throws NumberFormatException when cell is not a number
+     */
     fun asDouble() : Double? = when(val v = value) {
         null -> null
         is Double -> v
@@ -65,6 +105,12 @@ class XlsxCell internal constructor(
         else -> throw NumberFormatException("$coordinate is not a number")
     }
 
+    /**
+     * extract LocalDate value
+     * null if empty
+     * try to parse in case of String type
+     * @throws NumberFormatException when cell is not a date
+     */
     fun asDate() : LocalDate? = when (val v = value) {
         null -> null
         is LocalDate -> v
@@ -73,6 +119,12 @@ class XlsxCell internal constructor(
         else -> throw NumberFormatException("$coordinate is not a date")
     }
 
+    /**
+     * extract LocalDateTime value
+     * null if empty
+     * try to parse in case of String type
+     * @throws NumberFormatException when cell is not a date
+     */
     fun asDateTime() : LocalDateTime? = when (val v = value) {
         null -> null
         is LocalDateTime -> v

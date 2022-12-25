@@ -1,10 +1,8 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.xlsx
+package zakadabar.lib.xlsx.internal
 
-import zakadabar.lib.xlsx.internal.toContentMap
-import zakadabar.lib.xlsx.internal.toXlsxFile
 import zakadabar.lib.xlsx.model.XlsxDocument
 
 internal fun String.toColumnNumber() : Int {

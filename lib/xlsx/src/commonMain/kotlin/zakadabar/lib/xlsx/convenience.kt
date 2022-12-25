@@ -2,8 +2,14 @@ import zakadabar.lib.xlsx.model.XlsxCoordinate
 import zakadabar.lib.xlsx.model.XlsxDocument
 import zakadabar.lib.xlsx.model.XlsxSheet
 
+/**
+ * Save or download xlsx file.
+ */
 expect fun XlsxDocument.save(fileName: String)
 
+/**
+ * fill a row width list, started at specified coordinate
+ */
 fun XlsxSheet.fillRow(coord: String, values: Iterable<Any?>) {
 
     val c = XlsxCoordinate(coord)
@@ -18,6 +24,9 @@ fun XlsxSheet.fillRow(coord: String, values: Iterable<Any?>) {
 
 }
 
+/**
+ * fill a table width list of lists, started at specified coordinate
+ */
 fun XlsxSheet.fillTable(coord: String, table: Iterable<Iterable<Any?>>) {
 
     val c = XlsxCoordinate(coord)

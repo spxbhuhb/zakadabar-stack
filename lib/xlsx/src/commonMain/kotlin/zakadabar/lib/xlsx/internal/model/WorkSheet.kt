@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.xlsx.internal.model
 
-import zakadabar.lib.xlsx.dom.*
+import zakadabar.lib.xlsx.internal.dom.Node
 
 internal class WorkSheet(sheetId: Int) : Node("worksheet",
 "xmlns" to "http://schemas.openxmlformats.org/spreadsheetml/2006/main"

@@ -4,6 +4,9 @@
 import zakadabar.lib.xlsx.browser.downloadXlsX
 import zakadabar.lib.xlsx.model.XlsxDocument
 
+/**
+ * Download xlsx file.
+ */
 actual fun XlsxDocument.save(fileName: String) {
     downloadXlsX(fileName, this)
 }

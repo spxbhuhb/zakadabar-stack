@@ -6,10 +6,9 @@ package zakadabar.lib.xlsx.internal
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
-import zakadabar.lib.xlsx.*
 import zakadabar.lib.xlsx.conf.XlsxFormats.*
-import zakadabar.lib.xlsx.dom.Node
-import zakadabar.lib.xlsx.dom.toXml
+import zakadabar.lib.xlsx.internal.dom.Node
+import zakadabar.lib.xlsx.internal.dom.toXml
 import zakadabar.lib.xlsx.internal.model.Cell
 import zakadabar.lib.xlsx.internal.model.Part
 import zakadabar.lib.xlsx.internal.model.Row

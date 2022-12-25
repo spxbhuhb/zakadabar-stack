@@ -3,8 +3,8 @@
  */
 package zakadabar.lib.xlsx.model
 
-import zakadabar.lib.xlsx.toColumnLetter
-import zakadabar.lib.xlsx.toColumnNumber
+import zakadabar.lib.xlsx.internal.toColumnLetter
+import zakadabar.lib.xlsx.internal.toColumnNumber
 
 class XlsxCoordinate {
 

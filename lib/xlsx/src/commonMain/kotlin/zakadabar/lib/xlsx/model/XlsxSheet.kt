@@ -3,7 +3,16 @@
  */
 package zakadabar.lib.xlsx.model
 
-import zakadabar.lib.xlsx.toColumnNumber
+import zakadabar.lib.xlsx.internal.toColumnNumber
+
+/**
+ * Xlsx Sheet object within a Document
+ *
+ *
+ * @property columns WorkSheet Columnet settings
+ * @property cells ordered list of used cells
+ *
+ */
 
 data class XlsxSheet internal constructor(
     val name : String,
@@ -11,8 +20,15 @@ data class XlsxSheet internal constructor(
 ) {
 
     private val data = mutableMapOf<Int, MutableMap<Int, XlsxCell>>()
+
+    /**
+     * Colum related settings
+     */
     val columns = Columns()
 
+    /**
+     * Ordered list of used cells
+     */
     val cells : Sequence<XlsxCell> get() = data.entries
         .asSequence()
         .sortedBy { it.key }
@@ -27,14 +43,23 @@ data class XlsxSheet internal constructor(
         validateName()
     }
 
+    /**
+     * Access a cell object by numeric coordinates.
+     * column first then row.
+     * numbers start at 1
+     */
     operator fun get(colNumber: Int, rowNumber: Int) : XlsxCell = data
         .getOrPut(rowNumber) { mutableMapOf() }
         .getOrPut(colNumber) { XlsxCell(this, XlsxCoordinate(colNumber, rowNumber)) }
 
-   operator fun get(coordinate: XlsxCoordinate) : XlsxCell = data
+   internal operator fun get(coordinate: XlsxCoordinate) : XlsxCell = data
         .getOrPut(coordinate.rowNumber) { mutableMapOf() }
         .getOrPut(coordinate.colNumber) { XlsxCell(this, coordinate) }
 
+    /**
+     * Access a cell object by text coordinate
+     * eg: A2, BA34, Q4
+     */
     operator fun get(coordinate: String) = get(XlsxCoordinate(coordinate))
 
     private fun validateName() {
@@ -43,15 +68,34 @@ data class XlsxSheet internal constructor(
         if (BANNED_CHARS.containsMatchIn(name)) throw IllegalArgumentException("Worksheet name contains illegal characters. $name")
     }
 
+    /**
+     * Column settings container
+     */
     class Columns {
 
         internal val data = mutableMapOf<Int, Column>()
+
+        /**
+         * Access Column settings by number (first column is 1)
+         */
         operator fun get(columnNumber: Int) : Column = data.getOrPut(columnNumber, ::Column)
+
+        /**
+         * Access Column settings by letter (first column is A)
+         */
         operator fun get(columnLetter: String) : Column = get(columnLetter.toColumnNumber())
 
     }
 
-    data class Column(var width: Double?= null)
+    /**
+     * a Column settings
+     */
+    data class Column(
+        /**
+         * custom Column width
+         */
+        var width: Double?= null
+    )
 
 
     companion object {
