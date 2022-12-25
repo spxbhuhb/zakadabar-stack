@@ -31,6 +31,5 @@ internal class SharedStrings : Node("sst",
         return strId
     }
 
-
 }
 

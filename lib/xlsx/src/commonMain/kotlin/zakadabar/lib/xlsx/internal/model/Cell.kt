@@ -18,7 +18,9 @@ internal class Cell(reference: String, value: Any, type: Type, numberFormat: Int
     init {
         attributes["r"] = reference // coordinate eg: B5
 
-        type.code?.let { attributes["t"] = it } // type: default is normal
+        if (type.code != null) { // type: default is normal
+            attributes["t"] = type.code
+        }
 
         if (numberFormat != 0) { // numeric format index default: 0
             attributes["s"] = numberFormat.toString()

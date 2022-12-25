@@ -3,6 +3,6 @@
  */
 package zakadabar.lib.xlsx
 
-internal typealias ContentMap = HashMap<String, ()->ByteArray>
-internal expect fun ContentMap.generateZip(content: ByteArray.() -> Unit)
+internal typealias ContentMap = HashMap<String, ()->Any>
+internal expect fun ContentMap.generateZip(zipContent: ByteArray.() -> Unit)
 

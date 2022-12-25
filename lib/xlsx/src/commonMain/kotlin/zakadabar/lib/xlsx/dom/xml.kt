@@ -3,39 +3,47 @@
  */
 package zakadabar.lib.xlsx.dom
 
-fun Node.toXml() : ByteArray {
-    val sb = StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n")
-    sb.appendXml(this)
-    return sb.toString().encodeToByteArray()
-}
-private fun Appendable.appendXml(node: Node) {
-    append('<').append(node.name)
-    appendAttributes(node)
-    if (node.isEmpty()) {
-        append("/>")
-    } else {
-        append('>')
-        appendText(node)
-        appendChildNodes(node)
-        append("</").append(node.name).append('>')
-    }
-}
+fun Node.toXml() = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n$xml"
 
-private fun Appendable.appendChildNodes(node: Node) {
-    node.childNodes.forEach(::appendXml)
-}
-private fun Appendable.appendAttributes(node: Node) {
-    node.attributes.forEach {
-        append(' ').append(it.key).append("=\"").append(it.value).append('"')
+private val XML_CHARS = "[&<>'\"]".toRegex()
+
+private fun String.escapeXml() = replace(XML_CHARS) {
+    when(it.value) {
+        "&" -> "&amp;"
+        "<" -> "&lt;"
+        ">" -> "&gt;"
+        "'" -> "&apos;"
+        "\"" -> "&quot;"
+        else -> it.value
     }
 }
-private fun Appendable.appendText(node: Node) {
-    node.text?.forEach { char ->
-        when(char) {
-            '&' -> append("&amp;")
-            '<' -> append("&lt;")
-            '>' -> append("&gt;")
-            else -> append(char)
+private val Node.xml : String
+    get() {
+        return if (attributes.isEmpty()) {
+            if (childNodes.isNotEmpty()) "<$name>$xmlChildNodes</$name>"
+            else if (text != null) "<$name>${text.escapeXml()}</$name>"
+            else "<$name/>"
+        } else {
+            if (childNodes.isNotEmpty()) "<$name$xmlAttributes>$xmlChildNodes</$name>"
+            else if (text != null) "<$name$xmlAttributes>${text.escapeXml()}</$name>"
+            else "<$name$xmlAttributes/>"
         }
     }
-}
+
+private val Node.xmlAttributes : CharSequence
+    get() {
+        val sb = StringBuilder()
+        for((key, value) in attributes) {
+            sb.append(" $key=\"${value.escapeXml()}\"")
+        }
+        return sb
+    }
+
+private val Node.xmlChildNodes : CharSequence
+    get() {
+        val sb = StringBuilder()
+        for (n in childNodes) {
+            sb.append(n.xml)
+        }
+        return sb
+    }

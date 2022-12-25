@@ -3,6 +3,10 @@
  */
 package zakadabar.lib.xlsx
 
+import zakadabar.lib.xlsx.internal.toContentMap
+import zakadabar.lib.xlsx.internal.toXlsxFile
+import zakadabar.lib.xlsx.model.XlsxDocument
+
 internal fun String.toColumnNumber() : Int {
     var col = 0
     var n = length
@@ -22,4 +26,10 @@ internal fun Int.toColumnLetter() : String {
         k /= 26
     }
     return col.toString()
+}
+
+internal fun XlsxDocument.buildFileContent(zipContent: ByteArray.()->Unit) {
+    val f = toXlsxFile()
+    val cm = f.toContentMap()
+    cm.generateZip(zipContent)
 }

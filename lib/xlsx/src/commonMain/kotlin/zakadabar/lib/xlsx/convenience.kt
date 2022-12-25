@@ -1,15 +1,8 @@
-import zakadabar.lib.xlsx.generateZip
-import zakadabar.lib.xlsx.internal.toContentMap
-import zakadabar.lib.xlsx.internal.toXlsxFile
 import zakadabar.lib.xlsx.model.XlsxCoordinate
 import zakadabar.lib.xlsx.model.XlsxDocument
 import zakadabar.lib.xlsx.model.XlsxSheet
 
-fun XlsxDocument.buildFileContent(content: ByteArray.()->Unit) {
-    val f = toXlsxFile()
-    val cm = f.toContentMap()
-    cm.generateZip(content)
-}
+expect fun XlsxDocument.save(fileName: String)
 
 fun XlsxSheet.fillRow(coord: String, values: Iterable<Any?>) {
 
@@ -18,8 +11,8 @@ fun XlsxSheet.fillRow(coord: String, values: Iterable<Any?>) {
     val rn = c.rowNumber
     var cn = c.colNumber
 
-    values.forEach {
-        this[cn, rn].value = it
+    for(v in values) {
+        this[cn, rn].value = v
         cn++
     }
 
@@ -31,14 +24,13 @@ fun XlsxSheet.fillTable(coord: String, table: Iterable<Iterable<Any?>>) {
 
     var rn = c.rowNumber
 
-    table.forEach { row->
+    for(row in table) {
         var cn = c.colNumber
-        row.forEach {
-            this[cn, rn].value = it
+        for(v in row) {
+            this[cn, rn].value = v
             cn++
         }
         rn++
     }
 
 }
-

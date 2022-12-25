@@ -18,10 +18,10 @@ internal class WorkBook : Node("workbook",
 
     fun nextSheetId() = sheets.childNodes.size + 1
 
-    fun addSheet(sheetId : Int, relId: String, title: String) {
+    fun addSheet(sheetId : Int, relId: String, name: String) {
 
         sheets += Node("sheet" ,
-            "name" to title,
+            "name" to name,
             "sheetId" to sheetId.toString(),
             "r:id" to relId
         )

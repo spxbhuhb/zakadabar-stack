@@ -91,13 +91,13 @@ internal fun XlsxDocument.toXlsxFile() : File {
     sheets.forEach { xs->
         val sheetId = f.workBook.nextSheetId()
         val ws = xs.toDom(sheetId, f.sharedStrings)
-        f.addWorkSeet(sheetId, xs.title, ws)
+        f.addWorkSeet(sheetId, xs.name, ws)
     }
 
     return f
 }
 
-private val Part.content : ByteArray get() = when(this) {
+private fun Part.content() : Any = when(this) {
     is Node -> toXml()
     else -> throw IllegalStateException("Content not supported: ${this::class}")
 }

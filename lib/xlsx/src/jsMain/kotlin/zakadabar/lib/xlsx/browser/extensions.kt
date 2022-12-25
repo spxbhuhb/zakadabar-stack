@@ -3,35 +3,33 @@
  */
 package zakadabar.lib.xlsx.browser
 
-import buildFileContent
 import fillRow
+import kotlinx.datetime.Clock
 import org.w3c.files.Blob
 import org.w3c.files.BlobPropertyBag
+import save
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.browser.util.downloadBlob
 import zakadabar.core.data.BaseBo
+import zakadabar.lib.xlsx.buildFileContent
 import zakadabar.lib.xlsx.conf.XlsxConfiguration
 import zakadabar.lib.xlsx.model.XlsxDocument
 
-fun <T: BaseBo> ZkTable<T>.onExportXlsx(
-    title: String = titleText ?: "Export data",
-    config: XlsxConfiguration = XlsxConfiguration()
-) {
+private const val XLSX_CONTENT_TYPE  = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
-    val doc = toXlsxDocument(title, config)
-
-    doc.buildFileContent {
-        val xlsxFileName = exportFileName.replace(".csv", ".xlsx")
-        val blob = toBlob("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-        downloadBlob(xlsxFileName, blob)
-    }
-
+fun <T: BaseBo> ZkTable<T>.onExportXlsx() {
+    val xlsxFileName = exportFileName.replace(".csv", ".xlsx")
+    val doc = toXlsxDocument()
+    doc.save(xlsxFileName)
 }
 
-fun <T: BaseBo> ZkTable<T>.toXlsxDocument(title: String, config: XlsxConfiguration) : XlsxDocument {
+fun <T: BaseBo> ZkTable<T>.toXlsxDocument(
+    title: String  = titleText ?: "Export data",
+    config: XlsxConfiguration = XlsxConfiguration()
+) : XlsxDocument {
 
     val doc = XlsxDocument(config)
-    val sheet = doc[title]
+    val sheet = doc.newSheet(title)
 
     val data = if (exportFiltered) filteredData else fullData
     val columns = columns.filter { it.exportable }
@@ -54,5 +52,11 @@ fun <T: BaseBo> ZkTable<T>.toXlsxDocument(title: String, config: XlsxConfigurati
     return doc
 }
 
-private fun ByteArray.toBlob(contentType: String) : Blob = Blob(arrayOf(this), BlobPropertyBag(type = contentType))
-
+fun downloadXlsX(fileName: String, doc: XlsxDocument) {
+    console.log("${Clock.System.now()} $fileName download triggered")
+    doc.buildFileContent {
+        val blob = Blob(arrayOf(this), BlobPropertyBag(XLSX_CONTENT_TYPE))
+        downloadBlob(fileName, blob)
+        console.log("${Clock.System.now()} $fileName download completed")
+    }
+}

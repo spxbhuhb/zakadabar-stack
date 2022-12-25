@@ -11,6 +11,13 @@ class XlsxDocument(val conf: XlsxConfiguration = XlsxConfiguration()) {
 
     val sheets : List<XlsxSheet> get() = _sheets.values.toList()
 
-    operator fun get(title: String) : XlsxSheet = _sheets.getOrPut(title) { XlsxSheet(title, this) }
+    operator fun get(title: String) : XlsxSheet? = _sheets[title]
+
+    fun newSheet(title: String) : XlsxSheet {
+        if (_sheets.containsKey(title)) throw IllegalStateException("Sheet $title exists")
+        val sheet = XlsxSheet(title, this)
+        _sheets[title] = sheet
+        return sheet
+    }
 
 }

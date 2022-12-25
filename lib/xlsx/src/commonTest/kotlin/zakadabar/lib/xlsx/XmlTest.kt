@@ -3,16 +3,18 @@
  */
 package zakadabar.lib.xlsx
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import zakadabar.lib.xlsx.dom.Node
 import zakadabar.lib.xlsx.dom.toXml
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 
 class XmlTest {
 
     @Test
     fun testSimpleXml() {
-
         val doc = Node("foo", "id" to "1") {
             + Node("bars") {
                 + Node("bar", "name" to "Name1")
@@ -23,7 +25,6 @@ class XmlTest {
         val xml = doc.toXml()
 
         val ref = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<foo id=\"1\"><bars><bar name=\"Name1\"/><bar/></bars></foo>"
-        assertContentEquals(ref.encodeToByteArray(), xml)
-
+        assertEquals(ref, xml)
     }
 }

@@ -3,25 +3,33 @@
  */
 package zakadabar.lib.xlsx
 
+import kotlinx.coroutines.runBlocking
 import java.io.ByteArrayOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
-actual fun ContentMap.generateZip(content: ByteArray.() -> Unit) {
+internal actual fun ContentMap.generateZip(zipContent: ByteArray.() -> Unit) {
     val os = ByteArrayOutputStream()
 
     ZipOutputStream(os).use { zip ->
 
         zip.setLevel(9)
 
-        forEach { (path, content) ->
+        for( (path, content) in this) {
+            val data = runBlocking { content() }
+
             zip.putNextEntry(ZipEntry(path))
-            zip.write(content())
+            when(data) {
+                is String -> zip.write(data.encodeToByteArray())
+                is ByteArray -> zip.write(data)
+                else -> IllegalArgumentException("Content not supported: ${data::class}")
+            }
+
             zip.closeEntry()
         }
 
     }
 
-    content(os.toByteArray())
+    zipContent(os.toByteArray())
 
 }
