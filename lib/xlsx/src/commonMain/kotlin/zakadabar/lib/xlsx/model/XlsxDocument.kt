@@ -7,7 +7,7 @@ import zakadabar.lib.xlsx.conf.XlsxConfiguration
 
 /**
  * Xlsx top-level object,
- * represent a file
+ * represents a file
  *
  * @property  sheets WorkSheet in xlsx file.
  * @param conf Configuration object to customize

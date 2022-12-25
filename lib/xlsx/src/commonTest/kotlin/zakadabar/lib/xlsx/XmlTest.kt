@@ -3,12 +3,9 @@
  */
 package zakadabar.lib.xlsx
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import zakadabar.lib.xlsx.internal.dom.Node
 import zakadabar.lib.xlsx.internal.dom.toXml
 import kotlin.test.Test
-import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 class XmlTest {

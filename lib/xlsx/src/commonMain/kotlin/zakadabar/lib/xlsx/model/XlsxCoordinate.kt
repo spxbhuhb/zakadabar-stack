@@ -6,6 +6,9 @@ package zakadabar.lib.xlsx.model
 import zakadabar.lib.xlsx.internal.toColumnLetter
 import zakadabar.lib.xlsx.internal.toColumnNumber
 
+/**
+ * Immutable object, to hold a coordinate within a sheet
+ */
 class XlsxCoordinate {
 
     val coordinate: String

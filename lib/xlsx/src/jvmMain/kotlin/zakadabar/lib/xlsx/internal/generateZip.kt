@@ -22,7 +22,7 @@ internal actual fun ContentMap.generateZip(zipContent: ByteArray.() -> Unit) {
             when(data) {
                 is String -> zip.write(data.encodeToByteArray())
                 is ByteArray -> zip.write(data)
-                else -> IllegalArgumentException("Content not supported: ${data::class}")
+                else -> throw IllegalArgumentException("Content not supported: ${data::class}")
             }
 
             zip.closeEntry()
