@@ -11,9 +11,9 @@ class XlsxFormats {
     val BUILT_IN_DATE by lazy { BuiltInNumberFormat(14) }
     val BUILT_IN_DATETIME by lazy { BuiltInNumberFormat(22) }
     val ISO_DATE by lazy { CustomNumberFormat("yyyy-mm-dd") }
-    val ISO_DATETIME_MIN by lazy { CustomNumberFormat("yyyy-mm-dd hh:mm") }
-    val ISO_DATETIME_SEC by lazy { CustomNumberFormat("yyyy-mm-dd hh:mm:ss") }
-    val ISO_DATETIME_MILLISEC by lazy { CustomNumberFormat("yyyy-mm-dd hh:mm:ss.000") }
+    val ISO_DATETIME_MIN by lazy { CustomNumberFormat("yyyy-mm-dd\\Thh:mm") }
+    val ISO_DATETIME_SEC by lazy { CustomNumberFormat("yyyy-mm-dd\\Thh:mm:ss") }
+    val ISO_DATETIME_MILLISEC by lazy { CustomNumberFormat("yyyy-mm-dd\\Thh:mm:ss.000") }
 
     abstract inner class NumberFormat {
         val xfId = numberFormats.size

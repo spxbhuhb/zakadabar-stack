@@ -6,7 +6,9 @@ package zakadabar.lib.xlsx
 import kotlinx.datetime.*
 import fillRow
 import save
+import zakadabar.lib.xlsx.conf.XlsxConfiguration
 import zakadabar.lib.xlsx.model.XlsxDocument
+import kotlin.random.Random
 import kotlin.test.Test
 
 class XlsxDocumentTest {
@@ -14,11 +16,16 @@ class XlsxDocumentTest {
     @Test
     fun testWriteFile() {
 
-        val doc = XlsxDocument()
-        val sheet = doc.newSheet("T2 Database C&A")
+        val cfg = XlsxConfiguration()
+        val roundedAndThousandSeparatedNumberFormat = cfg.formats.CustomNumberFormat("#,##0.000")
 
-        sheet.columns["A"].width = 15.0
-        sheet.columns["B"].width = 11.4
+        val doc = XlsxDocument(cfg)
+
+
+        val sheet = doc.newSheet("T2 Database & Task")
+
+        sheet.columns["A"].width = 18.5
+        sheet.columns["B"].width = 12.5
 
         sheet["A1"].value = "Name"
         sheet["B1"].value = "Date of birth"
@@ -26,6 +33,20 @@ class XlsxDocumentTest {
 
         sheet.fillRow("A2", listOf("John Connor", LocalDate(1985, 2, 28), true))
         sheet.fillRow("A3", listOf("Sarah Connor", LocalDate(1964, 8, 13), true))
+
+
+        val summary = doc.newSheet("Summary")
+
+        summary.columns["A"].width = 18.2
+        summary.columns["B"].width = 22.5
+
+        summary["A1"].value = "Mission start"
+        summary["B1"].value = Clock.System.now()
+
+        summary["A2"].value = "Population to examine"
+        summary["B2"].value = Random.nextDouble(9_000_000_000.0, 20_000_000_000.0)
+        summary["B2"].numberFormat = roundedAndThousandSeparatedNumberFormat
+
 
         doc.save("build/terminator.xlsx")
 

@@ -6,9 +6,9 @@ A module to generate xlsx spreadsheet files with multiplatform capability.
 - extra light API
 - it works both jvm and js platforms
 - more worksheet in a file
-- cell indexing with excel-like letter-number coordinates "A1", "BC23" or coordinate numbers [5,2]
+- cell indexing with excel-like letter-number coordinates ["A1"], ["BC23"] or with numeric coordinates [5,2]
 - customizable date formats (minute, second or milliseconds precision)
-- easy ZkTable content exporting instead of csv
+- easy ZkTable content exporting
 - on-demand enum and boolean localization
 - auto number-format applying for Boolean, Number and Date types
 
@@ -36,11 +36,24 @@ implementation("hu.simplexion.zakadabar:xlsx:$contentVersion")
 
 ### General example
 ```kotlin
-    val doc = XlsxDocument()
-    val sheet1 = doc["Stuff Members"]
+
+    val cfg = XlsxConfiguration()
+    // put custom settings here
+    // cfg.dateFormat = cfg.formats.ISO_DATE
+    // cfg.localizedEnums = true
+    // ...
     
+    val doc = XlsxDocument(cfg)
+    
+    // Create a new Worksheet
+    val sheet1 = doc.newSheet("Stuff Members")
+
+    // adjust column width
+    sheet1.columns["A"].width = 15.0
+    sheet1.columns["B"].width = 11.4
+
     // set header line
-    sheet1.setRow("A1", listOf("name", "birth", "height", "dead"))
+    sheet1.fillRow("A1", listOf("name", "birth", "height", "dead"))
     
     // set data records
     (2..10).forEach { row->
@@ -50,7 +63,8 @@ implementation("hu.simplexion.zakadabar:xlsx:$contentVersion")
         sheet1[4, row].value = row % 2 == 0
     }
 
-    val sheet2 = doc["Summary"]
+    // create another Worksheet
+    val sheet2 = doc.newSheet("Summary")
 
     sheet2["A1"].value = "summary"
     sheet2["A2"].value = 8
@@ -61,56 +75,65 @@ implementation("hu.simplexion.zakadabar:xlsx:$contentVersion")
     sheet2["C1"].value = "timestamp"
     sheet2["C2"].value = Clock.System.now()
 
-    val content = doc.toContentMap()
-    // in js trigger a download via browser
-    // in jvm save a file to filesystem
-    content.saveXlsx("test.xlsx")
+    // saving as easy as pie
+    doc.save("test.xlsx")
 
     // in jvm the content can be written directly into java.io.OutputStream
-    // content.writeTo(anArbitraryOutputStream)
+    // doc.writeTo(anArbitraryOutputStream)
     
 ```
 
 ### Browser
 
-There is a convenient extension function: onExportXlsx to generate and download ZkTable content in the browser.
-
-
 ##### ZkTable csv download replacement
 
+There is a convenient extension function: onExportXlsx to generate and download ZkTable content in the browser.
 
 ```kotlin
     import zakadabar.lib.xlsx.browser.onExportXlsx
 
     class ...Table : ZkTable<...Bo>() {
 
-        override fun onExportCsv() = onExportXlsx("Data sheet")
+        override fun onExportCsv() = onExportXlsx()
         
     }
 ```
 
 ##### Customization
 
-via XlsxConfiguration class
+write own onExportXlsx function
 
 ```kotlin
-    override fun onExportCsv() {
-        val cfg = XlsxConfiguration().apply {
-            localizedEnums = true
-            instantFormat = XlsxNumberFormat.ISO_DATETIME_MIN
-        }
+    fun onExportXlsx() {
+    
+        // the customization instance
+        val cfg = XlsxConfiguration()
+
+        // create custom date format
+        val customDateFormat = cfg.formats.CustomNumberFormat("yyyy. mm. dd. hh:mm")
+        cfg.dateTimeFormat = customDateFormat
+        cfg.instantFormat = customDateFormat
+
+        // create custom number format
+        val roundedAndThousandSeparatedNumberFormat = cfg.formats.CustomNumberFormat("#,##0.000")
         
-        onExportXlsx("Customized data sheet", cfg)
-    }
-```
+        // create document with custom configuration
+        val doc = toXlsxDocument("Sheet 1", cfg)
+    
+        // access sheet
+        val sheet = doc.sheets.first()
+    
+        // apply number format on a cell
+        sheet["B3"].numberFormat = roundedAndThousandSeparatedNumberFormat
 
-directly in XlsxDocument
-```kotlin
-    val cfg = XlsxConfiguration().apply {
-        ...
-    }
+        // other operations here
+        // adjusting column width adding more Worksheets, etc.
 
-    val doc = XlsxDocument(cfg)
+        // in the browser the xlsx file will be downloaded
+        // there is exportXlsxFileName property as kotlin extension
+        doc.save(exportXlsxFileName)
+    
+    }
 ```
 
 ## Restrictions
@@ -124,7 +147,7 @@ directly in XlsxDocument
 - Instant (with configurable TimeZone)
 
 Boolean and Enum types can be localized, controlled by configuration parameter.
-Any other types converted into String via toString() method
+Any other unknown types converted into String via toString() method
 
 ### Supported Number Formats
 - general (unformatted)
@@ -134,6 +157,7 @@ Any other types converted into String via toString() method
 - ISO-8601 date and time with minute precision
 - ISO-8601 date and time with second precision
 - ISO-8601 date and time with millisecond precision
+- any other custom format can be created by xlsx format code
 
 ## References
 
