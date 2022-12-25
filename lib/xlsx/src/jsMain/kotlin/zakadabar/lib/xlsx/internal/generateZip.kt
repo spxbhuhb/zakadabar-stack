@@ -17,14 +17,11 @@ internal actual fun ContentMap.generateZip(zipContent: ByteArray.() -> Unit) {
         zip.file(path, blob, json("binary" to true))
     }
 
-    zip.generateAsync(
-        json(
-            "type" to "blob",
-            "compression" to "DEFLATE",
-            "compressionOptions" to json("level" to 9)
-        )
-    ).then(zipContent)
-
+    zip.generateAsync(json(
+        "type" to "blob",
+        "compression" to "DEFLATE",
+        "compressionOptions" to json("level" to 9)
+    )).then(zipContent)
 }
 
 @JsModule("jszip")

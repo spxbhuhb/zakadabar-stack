@@ -3,7 +3,6 @@
  */
 package zakadabar.lib.xlsx.internal
 
-import kotlinx.coroutines.runBlocking
 import java.io.ByteArrayOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
@@ -15,10 +14,11 @@ internal actual fun ContentMap.generateZip(zipContent: ByteArray.() -> Unit) {
 
         zip.setLevel(9)
 
-        for( (path, content) in this) {
-            val data = runBlocking { content() }
+        for((path, content) in this) {
+            val data = content()
 
             zip.putNextEntry(ZipEntry(path))
+
             when(data) {
                 is String -> zip.write(data.encodeToByteArray())
                 is ByteArray -> zip.write(data)
