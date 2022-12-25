@@ -18,15 +18,11 @@ import zakadabar.lib.xlsx.model.XlsxDocument
 private const val XLSX_CONTENT_TYPE  = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
 fun <T: BaseBo> ZkTable<T>.onExportXlsx() {
-    val xlsxFileName = exportFileName.replace(".csv", ".xlsx")
-    val doc = toXlsxDocument()
-    doc.save(xlsxFileName)
+    val doc = toXlsxDocument("Data export", XlsxConfiguration())
+    doc.save(exportXlsxFileName)
 }
 
-fun <T: BaseBo> ZkTable<T>.toXlsxDocument(
-    title: String  = titleText ?: "Export data",
-    config: XlsxConfiguration = XlsxConfiguration()
-) : XlsxDocument {
+fun <T: BaseBo> ZkTable<T>.toXlsxDocument(title: String, config: XlsxConfiguration) : XlsxDocument {
 
     val doc = XlsxDocument(config)
     val sheet = doc.newSheet(title)
@@ -34,23 +30,30 @@ fun <T: BaseBo> ZkTable<T>.toXlsxDocument(
     val data = if (exportFiltered) filteredData else fullData
     val columns = columns.filter { it.exportable }
 
-    var rowOffset = 1
+    var rowIndex = 1
 
     if (exportHeaders) {
         val header = columns.map { it.exportCsvHeader() }
         sheet.fillRow("A1", header)
-        rowOffset++
+        rowIndex++
     }
 
-    data.forEachIndexed { ri, row ->
-        columns.forEachIndexed { ci, column ->
-            val cell = sheet[1 + ci, rowOffset + ri]
-            cell.value = column.exportRaw(row.data)
+    for(row in data) {
+        var columnIndex = 1
+        for(column in columns) {
+            val value = column.exportRaw(row.data)
+            val cell = sheet[columnIndex, rowIndex]
+            cell.value = value
+            columnIndex++
         }
+        rowIndex++
     }
 
     return doc
 }
+
+val <T: BaseBo> ZkTable<T>.exportXlsxFileName : String
+    get() = exportFileName.replace(".csv", ".xlsx")
 
 fun downloadXlsX(fileName: String, doc: XlsxDocument) {
     console.log("${Clock.System.now()} $fileName download triggered")

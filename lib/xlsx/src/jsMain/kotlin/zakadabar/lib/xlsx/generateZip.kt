@@ -17,7 +17,7 @@ internal actual fun ContentMap.generateZip(zipContent: ByteArray.() -> Unit) {
         zip.file(path, blob, json("binary" to true))
     }
 
-    zip.generateAsync<ByteArray>(
+    zip.generateAsync(
         json(
             "type" to "blob",
             "compression" to "DEFLATE",
@@ -31,5 +31,5 @@ internal actual fun ContentMap.generateZip(zipContent: ByteArray.() -> Unit) {
 @JsNonModule
 private external class JSZip {
     fun file(path: String, content: Blob, options: Json) : Unit = definedExternally
-    fun <T> generateAsync(options: Json) : Promise<T> = definedExternally
+    fun generateAsync(options: Json) : Promise<ByteArray> = definedExternally
 }
