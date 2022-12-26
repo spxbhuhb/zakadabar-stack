@@ -5,8 +5,6 @@ package zakadabar.lib.xlsx.browser
 
 import fillRow
 import kotlinx.datetime.Clock
-import org.w3c.files.Blob
-import org.w3c.files.BlobPropertyBag
 import save
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.browser.util.downloadBlob

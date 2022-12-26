@@ -10,9 +10,7 @@ import java.io.OutputStream
  * Save xlsx file.
  */
 actual fun XlsxDocument.save(fileName: String) {
-    FileOutputStream(fileName).use {
-        writeTo(it)
-    }
+    FileOutputStream(fileName).use(::writeTo)
 }
 
 /**

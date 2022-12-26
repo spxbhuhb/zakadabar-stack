@@ -3,6 +3,8 @@
  */
 package zakadabar.lib.xlsx.internal
 
+import kotlinx.datetime.Clock
+import org.khronos.webgl.ArrayBuffer
 import org.w3c.files.Blob
 import kotlin.js.Json
 import kotlin.js.Promise
@@ -18,8 +20,8 @@ internal actual fun ContentMap.generateZip(zipContent: Any) {
     for ((path, content) in this) {
         val b = StringBuilder()
         content(b::append)
-        val blob = Blob(arrayOf(b))
-        zip.file(path, blob, json("binary" to true))
+        val data = b.toString()
+        zip.file(path, data, json("binary" to false))
     }
 
     zip.generateAsync<Blob>(json(
