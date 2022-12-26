@@ -8,7 +8,7 @@ import zakadabar.lib.xlsx.model.XlsxSheet
 expect fun XlsxDocument.save(fileName: String)
 
 /**
- * fill a row width list, started at specified coordinate
+ * fill a row with the list, started at specified coordinate
  */
 fun XlsxSheet.fillRow(coord: String, values: Iterable<Any?>) {
 
@@ -25,7 +25,7 @@ fun XlsxSheet.fillRow(coord: String, values: Iterable<Any?>) {
 }
 
 /**
- * fill a table width list of lists, started at specified coordinate
+ * fill a table with list of lists, started at specified coordinate
  */
 fun XlsxSheet.fillTable(coord: String, table: Iterable<Iterable<Any?>>) {
 

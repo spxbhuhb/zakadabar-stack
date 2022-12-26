@@ -3,41 +3,47 @@
  */
 package zakadabar.lib.xlsx.internal
 
-import kotlinx.datetime.Clock
-import org.khronos.webgl.ArrayBuffer
-import org.w3c.files.Blob
 import kotlin.js.Json
-import kotlin.js.Promise
 import kotlin.js.json
 
-internal actual fun ContentMap.generateZip(zipContent: Any) {
-
-    val bc = (zipContent as? BlobConsumer)
-        ?: throw IllegalArgumentException("Output type not supported : ${zipContent::class.simpleName}")
+/**
+ * generate and write zip data to OutputStream
+ * uses JSZip nodejs library
+ */
+internal actual fun ContentMap.generateZip(zipStream: OutputStream) {
 
     val zip = JSZip()
 
+    // generating xml data and put them into zip
     for ((path, content) in this) {
         val b = StringBuilder()
-        content(b::append)
+        content(b::append) // collect xml data into a string
         val data = b.toString()
         zip.file(path, data, json("binary" to false))
     }
 
-    zip.generateAsync<Blob>(json(
-        "type" to "blob",
-        "mimeType" to bc.contentType,
+    // generating zip content
+    zip.generateInternalStream(json(
+        "type" to "arraybuffer", // ArrayBuffer as same as ByteArray, but with different name
         "compression" to "DEFLATE",
-        "compressionOptions" to json("level" to 9)
-    )).then(bc.blob)
-}
+        "compressionOptions" to json("level" to 9),
+        "streamFiles" to true
+    )).on("data") { data, _ ->
+        @Suppress("UnsafeCastFromDynamic")
+        zipStream.write(data) // do not cast!
+    }.on("error") { e->
+        console.error("Error in zip process", e)
+    }.on("end") {
+        zipStream.close()
+    }.resume()
 
-internal class BlobConsumer(val contentType: String, val blob: Blob.()->Unit)
+}
 
 @JsModule("jszip")
 @JsNonModule
 private external class JSZip {
     fun <T> file(path: String, content: T, options: Json) : Unit = definedExternally
-    fun <T> generateAsync(options: Json) : Promise<T> = definedExternally
+    fun generateInternalStream(options: Json) : dynamic = definedExternally
 
 }
+

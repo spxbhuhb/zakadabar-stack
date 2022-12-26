@@ -3,16 +3,15 @@
  */
 package zakadabar.lib.xlsx.internal
 
-import java.io.OutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
-internal actual fun ContentMap.generateZip(zipContent: Any) {
+/**
+ * write content into java.io.OutputStream
+ */
+internal actual fun ContentMap.generateZip(zipStream: OutputStream) {
 
-    val os = (zipContent as? OutputStream)
-        ?: throw IllegalArgumentException("Output type not supported : ${zipContent::class.simpleName}")
-
-    ZipOutputStream(os).use { zip ->
+    ZipOutputStream(zipStream).use { zip ->
 
         zip.setLevel(9)
 
@@ -20,7 +19,7 @@ internal actual fun ContentMap.generateZip(zipContent: Any) {
 
         for((path, content) in this) {
             zip.putNextEntry(ZipEntry(path))
-            content(writer::write)
+            content(writer::write) // write xml parts directly to the Stream
             writer.flush()
             zip.closeEntry()
         }
@@ -28,3 +27,4 @@ internal actual fun ContentMap.generateZip(zipContent: Any) {
     }
 
 }
+

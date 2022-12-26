@@ -5,6 +5,16 @@ package zakadabar.lib.xlsx.internal
 
 import kotlinx.datetime.*
 
+/*
+ * Useful dat conversion utils handling excel's date store format
+ * a date sore in excel:
+ * whole part: elapsed days from 1900-01-01
+ * fraction part: fraction of a day
+ * excel not storing timezone data, so every dat act LocalDate/Time
+ */
+
+
+
 private val timeBase = LocalDate(1900, 1, 1)
 
 // excel drives me mad. thinks 1900-02-29 is a valid date, but actually it's not

@@ -3,5 +3,13 @@
  */
 package zakadabar.lib.xlsx.internal
 
+/**
+ * it stores path, and file content for zip packaging
+ */
 internal typealias ContentMap = HashMap<String, ((String)->Unit) -> Unit>
-internal expect fun ContentMap.generateZip(zipContent: Any)
+
+/**
+ * compress data and write it into the stream
+ */
+internal expect fun ContentMap.generateZip(zipStream: OutputStream)
+

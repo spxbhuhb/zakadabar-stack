@@ -3,6 +3,20 @@
  */
 package zakadabar.lib.xlsx.internal.dom
 
+/**
+ * Simple Dom Node implementation
+ *
+ * create text node:
+ * @constructor(name, text, attributes)
+ *
+ * create node with children
+ * @constructor(name, attributes, builder)
+ *
+ * + Node("foo") {
+ *   + Node("bar")
+ * }
+ *
+ */
 internal open class Node (
     val name : String,
     val text : String?,

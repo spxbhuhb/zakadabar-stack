@@ -5,15 +5,24 @@ package zakadabar.lib.xlsx.browser
 
 import fillRow
 import kotlinx.datetime.Clock
+import org.w3c.files.Blob
+import org.w3c.files.BlobPropertyBag
 import save
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.browser.util.downloadBlob
 import zakadabar.core.data.BaseBo
 import zakadabar.lib.xlsx.internal.buildFileContent
 import zakadabar.lib.xlsx.conf.XlsxConfiguration
-import zakadabar.lib.xlsx.internal.BlobConsumer
+import zakadabar.lib.xlsx.internal.OutputStream
 import zakadabar.lib.xlsx.model.XlsxDocument
 
+/*
+    Extension and help methods for Browser
+ */
+
+/**
+ * xlsx content type for downloading
+ */
 private const val XLSX_CONTENT_TYPE  = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
 /**
@@ -71,10 +80,15 @@ val <T: BaseBo> ZkTable<T>.exportXlsxFileName : String
  * Browser helper method to download an XlsxDocument via javascript Blob object
  */
 fun downloadXlsX(fileName: String, doc: XlsxDocument) {
+
     console.log("${Clock.System.now()} $fileName download triggered")
 
-    doc.buildFileContent(BlobConsumer(XLSX_CONTENT_TYPE){
-        downloadBlob(fileName, this)
-        console.log("${Clock.System.now()} $fileName download completed")
+    val blobParts = mutableListOf<ByteArray>()
+
+    doc.buildFileContent(OutputStream(blobParts::add) {
+        val blob = Blob(blobParts.toTypedArray(), BlobPropertyBag(XLSX_CONTENT_TYPE))
+        downloadBlob(fileName, blob)
+        console.log("${Clock.System.now()} $fileName download completed, size: ${blob.size}")
     })
+
 }

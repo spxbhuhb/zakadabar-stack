@@ -26,7 +26,10 @@ internal fun Int.toColumnLetter() : String {
     return col.toString()
 }
 
-internal fun XlsxDocument.buildFileContent(zipContent: Any) {
+/**
+ * Convert public model to internal dom, then write it into stream
+ */
+internal fun XlsxDocument.buildFileContent(zipContent: OutputStream) {
     val f = toXlsxFile()
     val c = f.toContentMap()
     c.generateZip(zipContent)

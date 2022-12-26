@@ -19,6 +19,10 @@ import zakadabar.lib.xlsx.model.XlsxCell
 import zakadabar.lib.xlsx.model.XlsxDocument
 import zakadabar.lib.xlsx.model.XlsxSheet
 
+/*
+ * This file contains internal conversion functions from public model to internal dom model
+ */
+
 private fun XlsxCell.toDom(sharedStrings : SharedStrings) : Cell? {
 
     val conf = sheet.doc.conf
