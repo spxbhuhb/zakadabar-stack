@@ -19,9 +19,11 @@ class XmlTest {
             }
         }
 
-        val xml = doc.toXml()
+        val sb = StringBuilder()
+        doc.toXml(sb::append)
+        val xml = sb.toString()
 
-        val ref = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<foo id=\"1\"><bars><bar name=\"Name1\"/><bar/></bars></foo>"
+        val ref  = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<foo id=\"1\"><bars><bar name=\"Name1\"/><bar/></bars></foo>"
         assertEquals(ref, xml)
     }
 }

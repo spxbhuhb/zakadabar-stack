@@ -13,6 +13,7 @@ import zakadabar.core.browser.util.downloadBlob
 import zakadabar.core.data.BaseBo
 import zakadabar.lib.xlsx.internal.buildFileContent
 import zakadabar.lib.xlsx.conf.XlsxConfiguration
+import zakadabar.lib.xlsx.internal.BlobConsumer
 import zakadabar.lib.xlsx.model.XlsxDocument
 
 private const val XLSX_CONTENT_TYPE  = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -73,9 +74,9 @@ val <T: BaseBo> ZkTable<T>.exportXlsxFileName : String
  */
 fun downloadXlsX(fileName: String, doc: XlsxDocument) {
     console.log("${Clock.System.now()} $fileName download triggered")
-    doc.buildFileContent {
-        val blob = Blob(arrayOf(this), BlobPropertyBag(XLSX_CONTENT_TYPE))
-        downloadBlob(fileName, blob)
+
+    doc.buildFileContent(BlobConsumer(XLSX_CONTENT_TYPE){
+        downloadBlob(fileName, this)
         console.log("${Clock.System.now()} $fileName download completed")
-    }
+    })
 }

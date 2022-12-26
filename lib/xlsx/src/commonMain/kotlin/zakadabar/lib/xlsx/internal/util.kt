@@ -26,8 +26,8 @@ internal fun Int.toColumnLetter() : String {
     return col.toString()
 }
 
-internal fun XlsxDocument.buildFileContent(zipContent: ByteArray.()->Unit) {
+internal fun XlsxDocument.buildFileContent(zipContent: Any) {
     val f = toXlsxFile()
-    val cm = f.toContentMap()
-    cm.generateZip(zipContent)
+    val c = f.toContentMap()
+    c.generateZip(zipContent)
 }

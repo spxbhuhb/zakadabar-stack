@@ -3,38 +3,47 @@
  */
 package zakadabar.lib.xlsx.internal.dom
 
-internal fun Node.toXml() = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n$xml"
+internal fun Node.toXml(append: (String)->Unit) {
+    append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n")
+    xml(append)
+}
 
-private val Node.xml : String
-    get() {
-        return if (attributes.isEmpty()) {
-            if (childNodes.isNotEmpty()) "<$name>$xmlChildNodes</$name>"
-            else if (text != null) "<$name>${text.xml}</$name>"
-            else "<$name/>"
-        } else {
-            if (childNodes.isNotEmpty()) "<$name$xmlAttributes>$xmlChildNodes</$name>"
-            else if (text != null) "<$name$xmlAttributes>${text.xml}</$name>"
-            else "<$name$xmlAttributes/>"
-        }
+private fun Node.xml(append: (String)->Unit) {
+    append("<")
+    append(name)
+    xmlAttributes(append)
+    if (text != null) {
+        append(">")
+        append(text.xml)
+        append("</")
+        append(name)
+        append(">")
+    } else if (childNodes.isNotEmpty()) {
+        append(">")
+        xmlChildNodes(append)
+        append("</")
+        append(name)
+        append(">")
+    } else {
+        append("/>")
     }
+}
 
-private val Node.xmlAttributes : CharSequence
-    get() {
-        val sb = StringBuilder()
-        for((key, value) in attributes) {
-            sb.append(" $key=\"${value.xml}\"")
-        }
-        return sb
+private fun Node.xmlAttributes(append: (String)->Unit) {
+    for((key, value) in attributes) {
+        append(" ")
+        append(key)
+        append("=\"")
+        append(value.xml)
+        append("\"")
     }
+}
 
-private val Node.xmlChildNodes : CharSequence
-    get() {
-        val sb = StringBuilder()
-        for (n in childNodes) {
-            sb.append(n.xml)
-        }
-        return sb
+private fun Node.xmlChildNodes(append: (String)->Unit) {
+    for (n in childNodes) {
+        n.xml(append)
     }
+}
 
 private val XML_CHARS = "[&<>'\"]".toRegex()
 

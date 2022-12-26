@@ -3,33 +3,28 @@
  */
 package zakadabar.lib.xlsx.internal
 
-import java.io.ByteArrayOutputStream
+import java.io.OutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
-internal actual fun ContentMap.generateZip(zipContent: ByteArray.() -> Unit) {
-    val os = ByteArrayOutputStream()
+internal actual fun ContentMap.generateZip(zipContent: Any) {
+
+    val os = (zipContent as? OutputStream)
+        ?: throw IllegalArgumentException("Output type not supported : ${zipContent::class.simpleName}")
 
     ZipOutputStream(os).use { zip ->
 
         zip.setLevel(9)
 
+        val writer = zip.bufferedWriter()
+
         for((path, content) in this) {
-            val data = content()
-
             zip.putNextEntry(ZipEntry(path))
-
-            when(data) {
-                is String -> zip.write(data.encodeToByteArray())
-                is ByteArray -> zip.write(data)
-                else -> throw IllegalArgumentException("Content not supported: ${data::class}")
-            }
-
+            content(writer::write)
+            writer.flush()
             zip.closeEntry()
         }
 
     }
-
-    zipContent(os.toByteArray())
 
 }

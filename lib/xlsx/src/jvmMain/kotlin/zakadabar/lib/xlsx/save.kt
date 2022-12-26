@@ -3,23 +3,19 @@
  */
 import zakadabar.lib.xlsx.internal.buildFileContent
 import zakadabar.lib.xlsx.model.XlsxDocument
-import java.io.File
+import java.io.FileOutputStream
 import java.io.OutputStream
 
 /**
  * Save xlsx file.
  */
 actual fun XlsxDocument.save(fileName: String) {
-    buildFileContent {
-        File(fileName).writeBytes(this)
+    FileOutputStream(fileName).use {
+        writeTo(it)
     }
 }
 
 /**
  * Generate XlsxFile and Write it to the OutputStream
  */
-fun XlsxDocument.writeTo(os: OutputStream) {
-    buildFileContent {
-        os.write(this)
-    }
-}
+fun XlsxDocument.writeTo(os: OutputStream) = buildFileContent(os)

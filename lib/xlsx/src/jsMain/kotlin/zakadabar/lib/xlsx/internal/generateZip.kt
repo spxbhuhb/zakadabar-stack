@@ -8,25 +8,34 @@ import kotlin.js.Json
 import kotlin.js.Promise
 import kotlin.js.json
 
-internal actual fun ContentMap.generateZip(zipContent: ByteArray.() -> Unit) {
+internal actual fun ContentMap.generateZip(zipContent: Any) {
+
+    val bc = (zipContent as? BlobConsumer)
+        ?: throw IllegalArgumentException("Output type not supported : ${zipContent::class.simpleName}")
+
     val zip = JSZip()
 
     for ((path, content) in this) {
-        val data = content()
-        val blob = Blob(arrayOf(data))
+        val b = StringBuilder()
+        content(b::append)
+        val blob = Blob(arrayOf(b))
         zip.file(path, blob, json("binary" to true))
     }
 
-    zip.generateAsync(json(
+    zip.generateAsync<Blob>(json(
         "type" to "blob",
+        "mimeType" to bc.contentType,
         "compression" to "DEFLATE",
         "compressionOptions" to json("level" to 9)
-    )).then(zipContent)
+    )).then(bc.blob)
 }
+
+internal class BlobConsumer(val contentType: String, val blob: Blob.()->Unit)
 
 @JsModule("jszip")
 @JsNonModule
 private external class JSZip {
-    fun file(path: String, content: Blob, options: Json) : Unit = definedExternally
-    fun generateAsync(options: Json) : Promise<ByteArray> = definedExternally
+    fun <T> file(path: String, content: T, options: Json) : Unit = definedExternally
+    fun <T> generateAsync(options: Json) : Promise<T> = definedExternally
+
 }

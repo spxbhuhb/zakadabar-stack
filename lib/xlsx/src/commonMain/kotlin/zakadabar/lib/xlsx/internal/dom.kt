@@ -96,9 +96,11 @@ internal fun XlsxDocument.toXlsxFile() : File {
     return f
 }
 
-private fun Part.content() : Any = when(this) {
-    is Node -> toXml()
-    else -> throw IllegalStateException("Content not supported: ${this::class}")
+private fun Part.content(append: (String)->Unit) {
+    when (this) {
+        is Node -> toXml(append)
+        else -> throw IllegalStateException("Content not supported: ${this::class}")
+    }
 }
 
 internal fun File.toContentMap() : ContentMap {

@@ -21,7 +21,6 @@ class XlsxDocumentTest {
 
         val doc = XlsxDocument(cfg)
 
-
         val sheet = doc.newSheet("T2 Database & Task")
 
         sheet.columns["A"].width = 18.5
@@ -33,6 +32,14 @@ class XlsxDocumentTest {
 
         sheet.fillRow("A2", listOf("John Connor", LocalDate(1985, 2, 28), true))
         sheet.fillRow("A3", listOf("Sarah Connor", LocalDate(1964, 8, 13), true))
+
+
+        for(i in 8..100_000) {
+            sheet[1,i].value = "Alma-$i"
+            sheet[2,i].value = i % 2 == 0
+            sheet[3,i].value = Clock.System.now()
+        }
+
 
 
         val summary = doc.newSheet("Summary")
