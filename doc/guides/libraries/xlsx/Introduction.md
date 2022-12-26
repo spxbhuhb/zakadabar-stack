@@ -8,15 +8,18 @@ A module to generate xlsx spreadsheet files with multiplatform capability.
 - more worksheet in a file
 - cell indexing with excel-like letter-number coordinates ["A1"], ["BC23"] or with numeric coordinates [5,2]
 - customizable date formats (minute, second or milliseconds precision)
-- easy ZkTable content exporting
-- on-demand enum and boolean localization
+- customizable numeric formats
+- ZkTable content exporting
+- enum and boolean localization
 - auto number-format applying for Boolean, Number and Date types
+- customizable column widths 
 
 ## Restrictions
 - no formulas
 - no charts
 - no extra formatting (colors, borders, alignments)
 - no extra content (images, links, embedded media)
+- no macros
 
 
 ## Setup
@@ -136,7 +139,7 @@ write own onExportXlsx function
     }
 ```
 
-## Restrictions
+
 ### Supported Value Types
 - Boolean
 - Enum<*>
@@ -146,8 +149,9 @@ write own onExportXlsx function
 - LocalDateTime
 - Instant (with configurable TimeZone)
 
-Boolean and Enum types can be localized, controlled by configuration parameter.
-Any other unknown types converted into String via toString() method
+Boolean and Enum types can be localized by configuration.
+
+Any other types converted into String via toString() method.
 
 ### Supported Number Formats
 - general (unformatted)
@@ -157,11 +161,12 @@ Any other unknown types converted into String via toString() method
 - ISO-8601 date and time with minute precision
 - ISO-8601 date and time with second precision
 - ISO-8601 date and time with millisecond precision
-- any other custom format can be created by xlsx format code
+
+Moreover any other custom format can be created by xlsx format code
 
 ## References
 
-- [Structure of a SpreadsheetML document](https://learn.microsoft.com/en-us/office/open-xml/structure-of-a-spreadsheetml-document)
+- [Structure of a SpreadsheetML document](https://learn.microsoft.com/en-us/office/open-xml/structure-of-a-spreadsheetml-document) - Microsoft
 
 - [ECMA-376](https://www.ecma-international.org/publications-and-standards/standards/ecma-376/) Office Open XML file formats
 

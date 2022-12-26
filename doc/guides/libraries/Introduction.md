@@ -9,3 +9,4 @@ you add them to your configuration, they are ready-to-go.
 * [Accounts](./accounts/Introduction.md) - account, role and permission management, login
 * [Blobs](./blobs/Introduction.md) - images, files, binary content
 * [I18N](./i18n/Introduction.md) - internationalization, locales, translations
+* [xlsx](./xlsx/Introduction.md) - xlsx spreadsheet files
