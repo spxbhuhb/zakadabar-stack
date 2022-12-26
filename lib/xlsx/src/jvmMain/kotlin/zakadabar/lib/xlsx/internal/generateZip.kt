@@ -3,15 +3,16 @@
  */
 package zakadabar.lib.xlsx.internal
 
+import java.io.OutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
 /**
  * write content into java.io.OutputStream
  */
-internal actual fun ContentMap.generateZip(zipStream: OutputStream) {
+internal actual fun <T> ContentMap.generateZip(writer: ContentWriter<T>) {
 
-    ZipOutputStream(zipStream).use { zip ->
+    ZipOutputStream(writer.out).use { zip ->
 
         zip.setLevel(9)
 
@@ -28,3 +29,7 @@ internal actual fun ContentMap.generateZip(zipStream: OutputStream) {
 
 }
 
+/**
+ * write xlsx zip data
+ */
+internal actual class ContentWriter<T>(val out: OutputStream)

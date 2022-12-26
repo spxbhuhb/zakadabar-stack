@@ -3,6 +3,7 @@
  */
 package zakadabar.lib.xlsx.internal
 
+import org.khronos.webgl.ArrayBuffer
 import kotlin.js.Json
 import kotlin.js.json
 
@@ -10,9 +11,9 @@ import kotlin.js.json
  * generate and write zip data to OutputStream
  * uses JSZip nodejs library
  */
-internal actual fun ContentMap.generateZip(zipStream: OutputStream) {
+internal actual fun <T> ContentMap.generateZip(writer: ContentWriter<T>) {
 
-    val zip = JSZip()
+    val zip = JSZip<String, ArrayBuffer>()
 
     // generating xml data and put them into zip
     for ((path, content) in this) {
@@ -24,26 +25,42 @@ internal actual fun ContentMap.generateZip(zipStream: OutputStream) {
 
     // generating zip content
     zip.generateInternalStream(json(
-        "type" to "arraybuffer", // ArrayBuffer as same as ByteArray, but with different name
+        "type" to "arraybuffer",
         "compression" to "DEFLATE",
         "compressionOptions" to json("level" to 9),
         "streamFiles" to true
-    )).on("data") { data, _ ->
-        @Suppress("UnsafeCastFromDynamic")
-        zipStream.write(data) // do not cast!
-    }.on("error") { e->
+    )).on<T, dynamic>("data") { data, _ ->
+        writer.out(data)
+    }.on<Error>("error") { e->
         console.error("Error in zip process", e)
     }.on("end") {
-        zipStream.close()
+        writer.close()
     }.resume()
 
 }
 
+/**
+ * write xlsx zip data
+ */
+internal actual class ContentWriter<T>(val out: (T)->Unit, val close: ()->Unit)
+
 @JsModule("jszip")
 @JsNonModule
-private external class JSZip {
-    fun <T> file(path: String, content: T, options: Json) : Unit = definedExternally
-    fun generateInternalStream(options: Json) : dynamic = definedExternally
+private external class JSZip<I, O> {
+    fun file(path: String, content: I, options: Json) : Unit = definedExternally
+    fun generateInternalStream(options: Json) : StreamHelper<O> = definedExternally
 
 }
+
+
+@JsModule("jszip")
+@JsNonModule
+private external class StreamHelper<T> {
+    fun <E,M> on(event: String, callback: (E, M)->Unit) : StreamHelper<T> = definedExternally
+    fun <E> on(event: String, callback: (E)->Unit) : StreamHelper<T> = definedExternally
+    fun on(event: String, callback: ()->Unit) : StreamHelper<T> = definedExternally
+    fun resume() : StreamHelper<T> = definedExternally
+
+}
+
 

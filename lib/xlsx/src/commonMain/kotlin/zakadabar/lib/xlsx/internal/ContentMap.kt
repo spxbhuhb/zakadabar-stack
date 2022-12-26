@@ -11,5 +11,9 @@ internal typealias ContentMap = HashMap<String, ((String)->Unit) -> Unit>
 /**
  * compress data and write it into the stream
  */
-internal expect fun ContentMap.generateZip(zipStream: OutputStream)
+internal expect fun <T> ContentMap.generateZip(writer: ContentWriter<T>)
 
+/**
+ * write xlsx zip data
+ */
+internal expect class ContentWriter<T>
