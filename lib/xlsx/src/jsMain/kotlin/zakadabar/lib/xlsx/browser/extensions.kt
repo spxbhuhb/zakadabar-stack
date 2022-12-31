@@ -5,7 +5,7 @@ package zakadabar.lib.xlsx.browser
 
 import fillRow
 import kotlinx.datetime.Clock
-import org.khronos.webgl.ArrayBuffer
+import org.khronos.webgl.Uint8Array
 import org.w3c.files.Blob
 import org.w3c.files.BlobPropertyBag
 import save
@@ -84,7 +84,7 @@ fun downloadXlsX(fileName: String, doc: XlsxDocument) {
 
     console.log("${Clock.System.now()} $fileName download triggered")
 
-    val blobParts = mutableListOf<ArrayBuffer>()
+    val blobParts = mutableListOf<Uint8Array>()
 
     doc.buildFileContent(ContentWriter(blobParts::add) {
         val blob = Blob(blobParts.toTypedArray(), BlobPropertyBag(XLSX_CONTENT_TYPE))

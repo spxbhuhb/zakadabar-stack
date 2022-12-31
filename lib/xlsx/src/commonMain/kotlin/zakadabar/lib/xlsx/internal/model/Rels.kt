@@ -5,23 +5,24 @@ package zakadabar.lib.xlsx.internal.model
 
 import zakadabar.lib.xlsx.internal.dom.Node
 
-internal class Rels(val root : String = "/", ref: String = "") : Node("Relationships",
-"xmlns" to "http://schemas.openxmlformats.org/package/2006/relationships"
-), Part {
+internal class Rels(val root : String = "/", ref: String = "") : Node( "Relationships"), Part {
 
     override val partName = "${root}_rels/$ref.rels"
     override val contentType = ""
     override val relType = ""
 
+    init {
+        this["xmlns"] = "http://schemas.openxmlformats.org/package/2006/relationships"
+    }
     fun addRel(rel: Part) : String {
 
-        val relId = "rId${childNodes.size + 1}"
+        val relId = "rId${size + 1}"
 
-        + Node("Relationship",
-            "Id" to relId,
-            "Type" to rel.relType,
-            "Target"  to rel.partName.substringAfter(root)
-        )
+        + Node("Relationship") {
+            this["Id"] = relId
+            this["Type"] = rel.relType
+            this["Target"] = rel.partName.substringAfter(root)
+        }
 
         return relId
     }

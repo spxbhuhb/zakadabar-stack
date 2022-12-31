@@ -7,36 +7,37 @@ package zakadabar.lib.xlsx.internal.dom
  * Simple Dom Node implementation
  *
  * create text node:
- * @constructor(name, text, attributes)
+ * @constructor(name, text, builder)
  *
- * create node with children
- * @constructor(name, attributes, builder)
  *
  * + Node("foo") {
+ *   this["attr"] = "value"
  *   + Node("bar")
  * }
  *
  */
-internal open class Node (
-    val name : String,
-    val text : String?,
-    vararg attributes : Pair<String, String>
+internal open class Node(
+    val name: String,
+    val text: String? = null,
+    builder: (Node.() -> Unit)? = null
 ) {
-    val attributes = mutableMapOf(*attributes)
+    val attributes = mutableMapOf<String, String>()
     val childNodes = mutableListOf<Node>()
+    val size: Int get() = childNodes.size
 
-    constructor(
-        name: String,
-        vararg attributes : Pair<String, String>,
-        builder : (Node.()->Unit)? = null
-    ) : this(name, null, *attributes) {
+    init {
         builder?.invoke(this)
     }
 
     fun isEmpty() : Boolean = childNodes.isEmpty() && text == null
 
+    operator fun set(key : String, value : String) { attributes[key] = value }
+
     operator fun plusAssign(n: Node) { childNodes += n }
 
+    operator fun minusAssign(n: Node) { childNodes -= n }
+
     operator fun <T: Node> T.unaryPlus() : T = also(this@Node.childNodes::add)
+
 
 }

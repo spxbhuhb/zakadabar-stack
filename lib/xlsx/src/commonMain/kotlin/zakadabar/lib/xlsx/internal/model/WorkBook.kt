@@ -5,10 +5,7 @@ package zakadabar.lib.xlsx.internal.model
 
 import zakadabar.lib.xlsx.internal.dom.Node
 
-internal class WorkBook : Node("workbook",
-"xmlns" to "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-    "xmlns:r" to "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
-), Part {
+internal class WorkBook : Node("workbook"), Part {
 
     override val partName = "/xl/workbook.xml"
     override val contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"
@@ -16,15 +13,20 @@ internal class WorkBook : Node("workbook",
 
     val sheets = + Node("sheets")
 
-    fun nextSheetId() = sheets.childNodes.size + 1
+    init {
+        this["xmlns"] = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+        this["xmlns:r"] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+    }
+
+    fun nextSheetId() = sheets.size + 1
 
     fun addSheet(sheetId : Int, relId: String, name: String) {
 
-        sheets += Node("sheet" ,
-            "name" to name,
-            "sheetId" to sheetId.toString(),
-            "r:id" to relId
-        )
+        sheets += Node("sheet") {
+            this["name"] = name
+            this["sheetId"] = sheetId.toString()
+            this["r:id"] = relId
+        }
 
     }
 

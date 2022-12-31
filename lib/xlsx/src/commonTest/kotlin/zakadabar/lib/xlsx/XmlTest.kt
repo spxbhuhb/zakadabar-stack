@@ -12,9 +12,12 @@ class XmlTest {
 
     @Test
     fun testSimpleXml() {
-        val doc = Node("foo", "id" to "1") {
+        val doc = Node("foo") {
+            this["id"] = "1"
             + Node("bars") {
-                + Node("bar", "name" to "Name1")
+                + Node("bar") {
+                    this["name"] = "Name1"
+                }
                 + Node("bar")
             }
         }
@@ -23,7 +26,7 @@ class XmlTest {
         doc.toXml(sb::append)
         val xml = sb.toString()
 
-        val ref  = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<foo id=\"1\"><bars><bar name=\"Name1\"/><bar/></bars></foo>"
+        val ref  = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><foo id=\"1\"><bars><bar name=\"Name1\"/><bar/></bars></foo>"
         assertEquals(ref, xml)
     }
 }

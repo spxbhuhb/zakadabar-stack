@@ -3,6 +3,8 @@
  */
 package zakadabar.lib.xlsx.internal.dom
 
+import zakadabar.lib.xlsx.internal.Appender
+
 /**
  * This file contains conversion functions to max Xml text from Node data
  */
@@ -11,15 +13,15 @@ package zakadabar.lib.xlsx.internal.dom
  * Convert Node to Xml string, and write xml data to the specified appender
  * includes xml header
  */
-internal fun Node.toXml(append: (String)->Unit) {
-    append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n")
+internal fun Node.toXml(append: Appender) {
+    append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>")
     xml(append)
 }
 
 /**
  * A node's xml data without xml header
  */
-private fun Node.xml(append: (String)->Unit) {
+private fun Node.xml(append: Appender) {
     append("<")
     append(name)
     xmlAttributes(append)
@@ -40,12 +42,13 @@ private fun Node.xml(append: (String)->Unit) {
     }
 }
 
+
 /**
  * a node attributzes in xml
  *
  * at1="v1" at2="v2"
  */
-private fun Node.xmlAttributes(append: (String)->Unit) {
+private fun Node.xmlAttributes(append: Appender) {
     for((key, value) in attributes) {
         append(" ")
         append(key)
@@ -58,7 +61,7 @@ private fun Node.xmlAttributes(append: (String)->Unit) {
 /**
  * A Node children xml data
  */
-private fun Node.xmlChildNodes(append: (String)->Unit) {
+private fun Node.xmlChildNodes(append: Appender) {
     for (n in childNodes) {
         n.xml(append)
     }

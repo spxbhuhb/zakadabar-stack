@@ -16,12 +16,12 @@ internal actual fun <T> ContentMap.generateZip(writer: ContentWriter<T>) {
 
         zip.setLevel(9)
 
-        val writer = zip.bufferedWriter()
+        val w = zip.bufferedWriter()
 
         for((path, content) in this) {
             zip.putNextEntry(ZipEntry(path))
-            content(writer::write) // write xml parts directly to the Stream
-            writer.flush()
+            content(w::write)
+            w.flush()
             zip.closeEntry()
         }
 

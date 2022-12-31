@@ -100,7 +100,7 @@ internal fun XlsxDocument.toXlsxFile() : File {
     return f
 }
 
-private fun Part.content(append: (String)->Unit) {
+private fun Part.content(append: Appender) {
     when (this) {
         is Node -> toXml(append)
         else -> throw IllegalStateException("Content not supported: ${this::class}")
@@ -117,8 +117,7 @@ internal fun File.toContentMap() : ContentMap {
 }
 
 internal fun Node.putCount() : Int {
-    val count = childNodes.size
-    attributes["count"] = count.toString()
-    return count
+    this["count"] = size.toString()
+    return size
 }
 

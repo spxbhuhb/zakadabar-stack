@@ -16,14 +16,14 @@ internal class Cell(reference: String, value: Any, type: Type, numberFormat: Int
     }
 
     init {
-        attributes["r"] = reference // coordinate eg: B5
+        this["r"] = reference // coordinate eg: B5
 
         if (type.code != null) { // type: default is normal
-            attributes["t"] = type.code
+            this["t"] = type.code
         }
 
         if (numberFormat != 0) { // numeric format index default: 0
-            attributes["s"] = numberFormat.toString()
+            this["s"] = numberFormat.toString()
         }
 
         + Node("v", value.toString())

@@ -3,8 +3,8 @@
  */
 package zakadabar.lib.xlsx.internal
 
-import org.khronos.webgl.ArrayBuffer
 import kotlin.js.Json
+import kotlin.js.Promise
 import kotlin.js.json
 
 /**
@@ -13,19 +13,20 @@ import kotlin.js.json
  */
 internal actual fun <T> ContentMap.generateZip(writer: ContentWriter<T>) {
 
-    val zip = JSZip<String, ArrayBuffer>()
+    val zip = JSZip<Promise<String>, T>()
 
     // generating xml data and put them into zip
     for ((path, content) in this) {
-        val b = StringBuilder()
-        content(b::append) // collect xml data into a string
-        val data = b.toString()
-        zip.file(path, data, json("binary" to false))
+        val p = Promise { resolve, _ ->
+            val xml = buildString { content(::append) }
+            resolve(xml)
+        }
+        zip.file(path, p, json("binary" to false))
     }
 
     // generating zip content
     zip.generateInternalStream(json(
-        "type" to "arraybuffer",
+        "type" to "uint8array",
         "compression" to "DEFLATE",
         "compressionOptions" to json("level" to 9),
         "streamFiles" to true
@@ -36,7 +37,6 @@ internal actual fun <T> ContentMap.generateZip(writer: ContentWriter<T>) {
     }.on("end") {
         writer.close()
     }.resume()
-
 }
 
 /**

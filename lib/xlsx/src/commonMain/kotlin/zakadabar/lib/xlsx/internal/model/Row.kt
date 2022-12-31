@@ -8,7 +8,7 @@ import zakadabar.lib.xlsx.internal.dom.Node
 internal class Row(val rowNumber: Int) : Node("row") {
 
     init {
-        attributes["r"] = rowNumber.toString()
+        this["r"] = rowNumber.toString()
     }
 
     fun addCell(cell: Cell) = + cell

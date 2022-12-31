@@ -3,10 +3,13 @@
  */
 package zakadabar.lib.xlsx.internal
 
+
+
+internal typealias Appender = (String)->Unit
 /**
  * it stores path, and file content for zip packaging
  */
-internal typealias ContentMap = HashMap<String, ((String)->Unit) -> Unit>
+internal typealias ContentMap = HashMap<String, (Appender) -> Unit>
 
 /**
  * compress data and write it into the stream

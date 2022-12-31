@@ -5,9 +5,7 @@ package zakadabar.lib.xlsx.internal.model
 
 import zakadabar.lib.xlsx.internal.dom.Node
 
-internal class WorkSheet(sheetId: Int) : Node("worksheet",
-"xmlns" to "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
-), Part {
+internal class WorkSheet(sheetId: Int) : Node("worksheet"), Part {
 
     override val partName = "/xl/worksheets/sheet$sheetId.xml"
     override val contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"
@@ -16,20 +14,24 @@ internal class WorkSheet(sheetId: Int) : Node("worksheet",
     private val cols = + Node("cols")
     private val sheetData = + Node("sheetData")
 
+    init {
+        this["xmlns"] = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+    }
+
     fun addRow(row: Row) {
         sheetData += row
     }
     fun addColumnWidth(colNumber: Int, width: Double) {
-        cols += Node("col",
-            "min" to "$colNumber",
-            "max" to "$colNumber",
-            "width" to "$width",
-            "customWidth" to "1"
-        )
+        cols += Node("col") {
+            this["min"] = colNumber.toString()
+            this["max"] = colNumber.toString()
+            this["width"] = width.toString()
+            this["customWidth"] = "1"
+        }
     }
 
     fun clean() {
-        if (cols.isEmpty()) childNodes -= cols
+        if (cols.isEmpty()) this -= cols
     }
 
 }
