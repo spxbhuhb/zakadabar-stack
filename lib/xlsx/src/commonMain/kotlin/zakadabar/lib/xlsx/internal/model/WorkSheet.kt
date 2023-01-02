@@ -11,6 +11,7 @@ internal class WorkSheet(sheetId: Int) : Node("worksheet"), Part {
     override val contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"
     override val relType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet"
 
+    private val dimension = + Node("dimension")
     private val cols = + Node("cols")
     private val sheetData = + Node("sheetData")
 
@@ -21,6 +22,7 @@ internal class WorkSheet(sheetId: Int) : Node("worksheet"), Part {
     fun addRow(row: Row) {
         sheetData += row
     }
+
     fun addColumnWidth(colNumber: Int, width: Double) {
         cols += Node("col") {
             this["min"] = colNumber.toString()
@@ -30,7 +32,18 @@ internal class WorkSheet(sheetId: Int) : Node("worksheet"), Part {
         }
     }
 
+    /**
+     * add dimension tag to document
+     */
+    fun addDimension(ref: String) {
+        dimension["ref"] = ref
+    }
+
+    /**
+     * remove non-used, empty tags
+     */
     fun clean() {
+        if (dimension.attributes.isEmpty()) this -= dimension
         if (cols.isEmpty()) this -= cols
     }
 

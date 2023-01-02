@@ -29,26 +29,39 @@ data class XlsxSheet internal constructor(
     /**
      * Ordered list of used cells
      */
-    val cells : Sequence<XlsxCell> get() = data.entries
-        .asSequence()
-        .sortedBy { it.key }
-        .flatMap { row->
-            row.value.entries
-                .asSequence()
-                .sortedBy { it.key }
-                .map { it.value }
-        }
+    val cells : Sequence<XlsxCell>
+        get() = data
+            .asSequence()
+            .sortedBy { it.key }
+            .flatMap { row->
+                row.value
+                    .asSequence()
+                    .sortedBy { it.key }
+                    .map { it.value }
+            }
 
+    /**
+     * first row containing data
+     */
     val minRowNumber : Int
-        get() = data.keys.min()
+        get() = data.asSequence().minOf { it.key }
+    /**
+     * last row containing data
+     */
     val maxRowNumber : Int
-        get() = data.keys.max()
+        get() = data.asSequence().maxOf { it.key }
 
+    /**
+     * first column containing data (A=1, B=2, ...)
+     */
     val minColumnNumber: Int
-        get() = data.values.flatMap { it.keys }.max()
+        get() = data.asSequence().map { it.value }.flatMap { it.keys }.min()
 
+    /**
+     * last column containing data (A=1, B=2, ...)
+     */
     val maxColumnNumber: Int
-        get() = data.values.flatMap { it.keys }.max()
+        get() = data.asSequence().map { it.value }.flatMap { it.keys }.max()
 
     init {
         validateName()

@@ -76,6 +76,13 @@ private fun XlsxSheet.toDom(sheetId: Int, sharedStrings : SharedStrings) : WorkS
         row?.addCell(cell)
     }
 
+    try {
+        val dim = "${minColumnNumber.toColumnLetter()}$minRowNumber:${maxColumnNumber.toColumnLetter()}$maxRowNumber"
+        ws.addDimension(dim)
+    } catch(ex: NoSuchElementException) {
+        // empty data
+    }
+
     ws.clean()
 
     return ws
