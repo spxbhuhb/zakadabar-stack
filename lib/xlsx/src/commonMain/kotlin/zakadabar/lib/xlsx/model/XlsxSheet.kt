@@ -19,6 +19,9 @@ data class XlsxSheet internal constructor(
     val doc: XlsxDocument
 ) {
 
+    /**
+     * key: rowNumber, columnNumber
+     */
     private val data = mutableMapOf<Int, MutableMap<Int, XlsxCell>>()
 
     /**
@@ -45,6 +48,7 @@ data class XlsxSheet internal constructor(
      */
     val minRowNumber : Int
         get() = data.asSequence().minOf { it.key }
+
     /**
      * last row containing data
      */

@@ -16,6 +16,9 @@ import zakadabar.lib.xlsx.conf.XlsxConfiguration
 
 class XlsxDocument(val conf: XlsxConfiguration = XlsxConfiguration()) {
 
+    /**
+     * key: sheet name
+     */
     private val _sheets = mutableMapOf<String, XlsxSheet>()
 
     /**
