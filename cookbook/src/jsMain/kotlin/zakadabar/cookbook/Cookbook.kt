@@ -36,6 +36,8 @@ import zakadabar.cookbook.browser.table.customColumn.TableCustomColumn
 import zakadabar.cookbook.browser.table.export.filename.TableExportFileName
 import zakadabar.cookbook.browser.table.export.filtered.TableExportFiltered
 import zakadabar.cookbook.browser.table.export.headers.TableExportHeaders
+import zakadabar.cookbook.browser.table.export.xlsx.XlsxTableExport
+import zakadabar.cookbook.browser.table.export.xlsx.XlsxTableExportWithConfig
 import zakadabar.cookbook.browser.table.indexColumn.TableIndexColumn
 import zakadabar.cookbook.browser.table.inline.TableEditInline
 import zakadabar.cookbook.browser.table.inline.TableEditInlineNoBo
@@ -103,6 +105,8 @@ class Cookbook : CommonModule {
             "ImagesField" -> ImagesField()
             "TableVariableHeight" -> TableVariableHeight()
             "TableMultiLevel" -> TableMultiLevel()
+            "XlsxTableExport" -> XlsxTableExport()
+            "XlsxTableExportWithConfig" -> XlsxTableExportWithConfig()
 
 
             else -> null

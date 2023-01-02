@@ -39,6 +39,17 @@ data class XlsxSheet internal constructor(
                 .map { it.value }
         }
 
+    val minRowNumber : Int
+        get() = data.keys.min()
+    val maxRowNumber : Int
+        get() = data.keys.max()
+
+    val minColumnNumber: Int
+        get() = data.values.flatMap { it.keys }.max()
+
+    val maxColumnNumber: Int
+        get() = data.values.flatMap { it.keys }.max()
+
     init {
         validateName()
     }
