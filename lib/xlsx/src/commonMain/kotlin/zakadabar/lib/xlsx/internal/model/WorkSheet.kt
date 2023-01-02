@@ -43,7 +43,7 @@ internal class WorkSheet(sheetId: Int) : Node("worksheet"), Part {
      * remove non-used, empty tags
      */
     fun clean() {
-        if (dimension.attributes.isEmpty()) this -= dimension
+        if (dimension.hasNoAttribute()) this -= dimension
         if (cols.isEmpty()) this -= cols
     }
 

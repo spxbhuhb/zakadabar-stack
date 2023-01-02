@@ -30,6 +30,7 @@ internal open class Node(
     }
 
     fun isEmpty() : Boolean = childNodes.isEmpty() && text == null
+    fun hasNoAttribute() : Boolean = attributes.isEmpty()
 
     operator fun set(key : String, value : String) { attributes[key] = value }
 
