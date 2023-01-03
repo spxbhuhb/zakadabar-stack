@@ -117,9 +117,8 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     open val exportFileName: String
         get() {
-            val titleText = titleText ?: this::class.simpleName?.localized
-            val prefix = if (titleText.isNullOrBlank()) "content" else titleText
-            val time = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).toString()
+            val prefix = (titleText ?: this::class.simpleName?.localized ?: "").ifBlank { "content" }
+            val time = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
             return "${prefix}_$time".replace("\\W".toRegex(), "_") + ".csv"
         }
 
