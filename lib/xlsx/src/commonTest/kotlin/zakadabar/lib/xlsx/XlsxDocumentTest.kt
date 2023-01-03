@@ -55,7 +55,7 @@ class XlsxDocumentTest {
         summary["B1"].value = Clock.System.now()
 
         summary["A2"].value = "Population to examine"
-        summary["B2"].value = Random.nextDouble(9_000_000_000.0, 20_000_000_000.0)
+        summary["B2"].value = Random.nextDouble(9_000.0, 20_000.0)
         summary["B2"].numberFormat = roundedAndThousandSeparatedNumberFormat
 
 

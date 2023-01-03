@@ -11,7 +11,7 @@ internal class WorkBook : Node("workbook"), Part {
     override val contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"
     override val relType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"
 
-    val sheets = + Node("sheets")
+    val sheets = + node("sheets")
 
     init {
         this["xmlns"] = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
@@ -22,7 +22,7 @@ internal class WorkBook : Node("workbook"), Part {
 
     fun addSheet(sheetId : Int, relId: String, name: String) {
 
-        sheets += Node("sheet") {
+        sheets += node("sheet") {
             this["name"] = name
             this["sheetId"] = sheetId.toString()
             this["r:id"] = relId

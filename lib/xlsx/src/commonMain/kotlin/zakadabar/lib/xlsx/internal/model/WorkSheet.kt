@@ -11,9 +11,9 @@ internal class WorkSheet(sheetId: Int) : Node("worksheet"), Part {
     override val contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"
     override val relType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet"
 
-    private val dimension = + Node("dimension")
-    private val cols = + Node("cols")
-    private val sheetData = + Node("sheetData")
+    private val dimension = + node("dimension")
+    private val cols = + node("cols")
+    private val sheetData = + node("sheetData")
 
     init {
         this["xmlns"] = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
@@ -24,7 +24,7 @@ internal class WorkSheet(sheetId: Int) : Node("worksheet"), Part {
     }
 
     fun addColumnWidth(colNumber: Int, width: Double) {
-        cols += Node("col") {
+        cols += node("col") {
             this["min"] = colNumber.toString()
             this["max"] = colNumber.toString()
             this["width"] = width.toString()

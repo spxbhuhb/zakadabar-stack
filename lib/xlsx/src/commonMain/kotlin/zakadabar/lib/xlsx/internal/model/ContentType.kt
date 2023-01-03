@@ -18,12 +18,12 @@ internal class ContentType : Node( "Types"), Part {
         addDefault("xml", "application/xml")
     }
 
-    fun addDefault(extension: String, contentType: String) = + Node( "Default") {
+    fun addDefault(extension: String, contentType: String) = + node( "Default") {
         this["Extension"] = extension
         this["ContentType"] = contentType
     }
 
-    fun addPart(part: Part) = + Node("Override") {
+    fun addPart(part: Part) = + node("Override") {
         this["PartName"] = part.partName
         this["ContentType"] = part.contentType
     }

@@ -5,6 +5,7 @@ package zakadabar.lib.xlsx.internal.model
 
 import zakadabar.lib.xlsx.internal.dom.Node
 
+
 internal class Rels(val root : String = "/", ref: String = "") : Node( "Relationships"), Part {
 
     override val partName = "${root}_rels/$ref.rels"
@@ -18,7 +19,7 @@ internal class Rels(val root : String = "/", ref: String = "") : Node( "Relation
 
         val relId = "rId${size + 1}"
 
-        + Node("Relationship") {
+        + node("Relationship") {
             this["Id"] = relId
             this["Type"] = rel.relType
             this["Target"] = rel.partName.substringAfter(root)

@@ -26,7 +26,7 @@ internal class Cell(reference: String, value: Any, type: Type, numberFormat: Int
             this["s"] = numberFormat.toString()
         }
 
-        + Node("v", value.toString())
+        + node("v", value.toString())
     }
 
 }

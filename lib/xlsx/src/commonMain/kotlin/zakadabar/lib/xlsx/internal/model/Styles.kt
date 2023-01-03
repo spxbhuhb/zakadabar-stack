@@ -12,13 +12,13 @@ internal class Styles : Node("styleSheet"), Part {
     override val contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"
     override val relType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles"
 
-    val numFmts = + Node("numFmts")
-    val fonts = + Node("fonts")
-    val fills = + Node("fills")
-    val borders = + Node("borders")
-    val cellStyleXfs = + Node("cellStyleXfs")
-    val cellXfs = + Node("cellXfs")
-    val cellStyles = + Node("cellStyles")
+    val numFmts = + node("numFmts")
+    val fonts = + node("fonts")
+    val fills = + node("fills")
+    val borders = + node("borders")
+    val cellStyleXfs = + node("cellStyleXfs")
+    val cellXfs = + node("cellXfs")
+    val cellStyles = + node("cellStyles")
 
     init {
         this["xmlns"] =  "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
@@ -32,7 +32,7 @@ internal class Styles : Node("styleSheet"), Part {
     }
 
     fun addNumFmt(numFmtId: Int, formatCode: String) : Int {
-        numFmts += Node("numFmt") {
+        numFmts += node("numFmt") {
             this["numFmtId"] = numFmtId.toString()
             this["formatCode"] = formatCode
         }
@@ -40,20 +40,20 @@ internal class Styles : Node("styleSheet"), Part {
     }
 
     fun addFont(sz: String, colorTheme: String, name: String, family: String, scheme: String) : Int {
-        fonts += Node("font") {
-            + Node("sz") {
+        fonts += node("font") {
+            + node("sz") {
                 this["val"] = sz
             }
-            + Node("color") {
+            + node("color") {
                 this["theme"] = colorTheme
             }
-            + Node("name") {
+            + node("name") {
                 this["val"] =  name
             }
-            + Node("family") {
+            + node("family") {
                 this["val"] = family
             }
-            + Node("scheme") {
+            + node("scheme") {
                 this["val"] = scheme
             }
         }
@@ -61,8 +61,8 @@ internal class Styles : Node("styleSheet"), Part {
     }
 
     fun addPatternFill(patternType: String) : Int {
-        fills += Node("fill") {
-            + Node("patternFill") {
+        fills += node("fill") {
+            + node("patternFill") {
                 this["patternType"] = patternType
             }
         }
@@ -70,12 +70,12 @@ internal class Styles : Node("styleSheet"), Part {
     }
 
     fun addBorder() : Int {
-        borders += Node("border") {
-            + Node("left")
-            + Node("right")
-            + Node("top")
-            + Node("bottom")
-            + Node("diagonal")
+        borders += node("border") {
+            + node("left")
+            + node("right")
+            + node("top")
+            + node("bottom")
+            + node("diagonal")
         }
         return borders.putCount() -1
     }
@@ -84,7 +84,7 @@ internal class Styles : Node("styleSheet"), Part {
     fun addCellXf(numFmtId: Int) : Int = addXf(cellXfs, numFmtId)
 
     fun addCellStyle(name: String, xfId: String, builtinId: String) : Int {
-        cellStyles += Node("cellStyle") {
+        cellStyles += node("cellStyle") {
             this["name"] = name
             this["xfId"] = xfId
             this["builtinId"] = builtinId
@@ -99,7 +99,7 @@ internal class Styles : Node("styleSheet"), Part {
     }
 
     private fun addXf(xfs: Node, numFmtId: Int) : Int {
-        xfs += Node("xf") {
+        xfs += node("xf") {
             this["numFmtId"] = numFmtId.toString()
         }
         return xfs.putCount() - 1

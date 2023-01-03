@@ -47,17 +47,21 @@ class XlsxFormats {
 
     abstract inner class NumberFormat {
         val xfId = numberFormats.size
-        init { numberFormats += this }
     }
 
     /**
      * Create new NUmberFormat from Built-in set
      */
-    inner class BuiltInNumberFormat(val numFmtId: Int) : NumberFormat()
+    inner class BuiltInNumberFormat(val numFmtId: Int) : NumberFormat() {
+        init { numberFormats += this }
+    }
 
     /**
      * Create new NumberFormat from custom format String
      */
-    inner class CustomNumberFormat(val formatCode: String) : NumberFormat()
+    inner class CustomNumberFormat(val formatCode: String) : NumberFormat() {
+        init { numberFormats += this }
+
+    }
 
 }

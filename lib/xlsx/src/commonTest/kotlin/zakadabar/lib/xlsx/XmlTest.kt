@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.xlsx
 
-import zakadabar.lib.xlsx.internal.dom.Node
+import zakadabar.lib.xlsx.internal.dom.Node.Companion.node
 import zakadabar.lib.xlsx.internal.dom.toXml
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -12,13 +12,13 @@ class XmlTest {
 
     @Test
     fun testSimpleXml() {
-        val doc = Node("foo") {
+        val doc = node("foo") {
             this["id"] = "1"
-            + Node("bars") {
-                + Node("bar") {
+            + node("bars") {
+                + node("bar") {
                     this["name"] = "Name1"
                 }
-                + Node("bar")
+                + node("bar")
             }
         }
 

@@ -16,18 +16,13 @@ package zakadabar.lib.xlsx.internal.dom
  * }
  *
  */
-internal open class Node(
+internal open class Node protected constructor(
     val name: String,
     val text: String? = null,
-    builder: (Node.() -> Unit)? = null
 ) {
     val attributes = mutableMapOf<String, String>()
     val childNodes = mutableListOf<Node>()
     val size: Int get() = childNodes.size
-
-    init {
-        builder?.invoke(this)
-    }
 
     fun isEmpty() : Boolean = childNodes.isEmpty() && text == null
     fun hasNoAttribute() : Boolean = attributes.isEmpty()
@@ -40,5 +35,13 @@ internal open class Node(
 
     operator fun <T: Node> T.unaryPlus() : T = also(this@Node.childNodes::add)
 
+    companion object {
+        fun node(
+            name: String,
+            text: String? = null,
+            builder: (Node.() -> Unit)? = null
+        ) = Node(name, text).also { builder?.invoke(it) }
 
+    }
 }
+

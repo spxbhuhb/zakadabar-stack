@@ -22,8 +22,8 @@ internal class SharedStrings : Node("sst"), Part {
 
         val strId = strings.getOrPut(str) {
 
-            + Node("si") {
-                + Node("t", str)
+            + node("si") {
+                + node("t", str)
             }
 
             putCount() - 1
