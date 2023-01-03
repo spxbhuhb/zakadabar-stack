@@ -19,7 +19,7 @@ class XlsxDocumentTest {
         val cfg = XlsxConfiguration()
 
         cfg.localizedBooleans = false
-        val roundedAndThousandSeparatedNumberFormat = cfg.formats.CustomNumberFormat("#,##0.000")
+        val roundedAndThousandSeparatedNumberFormat = cfg.formats.newCustomNumberFormat("#,##0.000")
 
         val doc = XlsxDocument(cfg)
 
@@ -34,17 +34,6 @@ class XlsxDocumentTest {
 
         sheet.fillRow("A2", listOf("John Connor", LocalDate(1985, 2, 28), true))
         sheet.fillRow("A3", listOf("Sarah Connor", LocalDate(1964, 8, 13), true))
-
-
-        /*
-        // bulk test
-        for(i in 8..100_000) {
-            sheet[1,i].value = "ŐŰÉÁÚÓÜÖ-$i"
-            sheet[2,i].value = i % 2 == 0
-            sheet[3,i].value = Clock.System.now()
-        }
-        */
-
 
         val summary = doc.newSheet("Summary")
 

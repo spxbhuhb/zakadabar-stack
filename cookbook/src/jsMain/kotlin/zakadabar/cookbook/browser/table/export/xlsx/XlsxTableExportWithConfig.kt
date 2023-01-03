@@ -47,7 +47,9 @@ class XlsxTableExportWithConfig :  ZkTable<ExampleBo>() {
         val secundumPrecisionDateFormat = cfg.formats.ISO_DATETIME_SEC
         cfg.dateTimeFormat = secundumPrecisionDateFormat
 
-        val customDecimalFormat = cfg.formats.CustomNumberFormat("#,##0.00")
+        val customDecimalFormat = cfg.formats.newCustomNumberFormat("#,##0.00")
+
+        cfg.localizedBooleans = true
 
         val sheetName = "Daily report"
 

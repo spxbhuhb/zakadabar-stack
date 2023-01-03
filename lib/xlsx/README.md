@@ -6,6 +6,7 @@
 - XlsxSheet
 - XlsxCell
 - XlsxCoordinate
+- XlsxCellFormat
 
 ### Customization
 - XlsxConfiguration

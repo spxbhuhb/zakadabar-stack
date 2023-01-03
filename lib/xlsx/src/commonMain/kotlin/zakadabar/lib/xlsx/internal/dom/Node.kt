@@ -7,13 +7,7 @@ package zakadabar.lib.xlsx.internal.dom
  * Simple Dom Node implementation
  *
  * create text node:
- * @constructor(name, text, builder)
- *
- *
- * + Node("foo") {
- *   this["attr"] = "value"
- *   + Node("bar")
- * }
+ * @constructor(name, text)
  *
  */
 internal open class Node protected constructor(
@@ -36,11 +30,25 @@ internal open class Node protected constructor(
     operator fun <T: Node> T.unaryPlus() : T = also(this@Node.childNodes::add)
 
     companion object {
+
+        /**
+         * create a new Node object
+         *
+         *      node("foo") {
+         *          this["attr"] = "value"
+         *          + node("bar", "text")
+         *      }
+         *
+         */
         fun node(
             name: String,
             text: String? = null,
             builder: (Node.() -> Unit)? = null
-        ) = Node(name, text).also { builder?.invoke(it) }
+        ) : Node {
+            val n = Node(name, text)
+            builder?.invoke(n)
+            return n
+        }
 
     }
 }

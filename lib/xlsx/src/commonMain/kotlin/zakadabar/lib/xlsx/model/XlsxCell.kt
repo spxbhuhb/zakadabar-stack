@@ -4,7 +4,6 @@
 package zakadabar.lib.xlsx.model
 
 import kotlinx.datetime.*
-import zakadabar.lib.xlsx.conf.XlsxFormats.NumberFormat
 
 /**
  * Cell object, value and format holder.
@@ -33,9 +32,9 @@ class XlsxCell internal constructor(
      *
      * set automatic by value
      */
-    lateinit var numberFormat: NumberFormat
+    lateinit var numberFormat: XlsxCellFormat
 
-    private fun calcNumberFormat() : NumberFormat {
+    private fun calcNumberFormat() : XlsxCellFormat {
 
         val conf = sheet.doc.conf
 

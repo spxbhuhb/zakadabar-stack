@@ -6,6 +6,7 @@ package zakadabar.lib.xlsx.conf
 import kotlinx.datetime.TimeZone
 import zakadabar.core.resource.ZkBuiltinStrings
 import zakadabar.core.resource.localizedStrings
+import zakadabar.lib.xlsx.model.XlsxCellFormat
 
 /**
  * Xlsx customizable settings holder
@@ -17,8 +18,8 @@ data class XlsxConfiguration(
      *
      * creating new format:
      *
-     *  val customFormat1 = formats.CustomNumberFormat(formatCode)
-     *  val customFormat2 = formats.BuiltInNumberFormat(numFmtId)
+     *  val customFormat1 = formats.newCustomNumberFormat(formatCode)
+     *  val customFormat2 = formats.newBuiltInNumberFormat(numFmtId)
      *
      */
     val formats: XlsxFormats = XlsxFormats(),
@@ -55,20 +56,20 @@ data class XlsxConfiguration(
      *
      *  default: formats.BUILT_IN_DATE
      */
-    var dateFormat : XlsxFormats.NumberFormat = formats.BUILT_IN_DATE,
+    var dateFormat : XlsxCellFormat = formats.BUILT_IN_DATE,
 
     /**
      *  date format for LocalDateTime
      *
      *  default: formats.BUILT_IN_DATETIME
      */
-    var dateTimeFormat : XlsxFormats.NumberFormat = formats.BUILT_IN_DATETIME,
+    var dateTimeFormat : XlsxCellFormat = formats.BUILT_IN_DATETIME,
 
     /**
      *  date format for Instant
      *
      *  default: formats.ISO_DATETIME_MILLISEC
      */
-    var instantFormat : XlsxFormats.NumberFormat = formats.ISO_DATETIME_MILLISEC
+    var instantFormat : XlsxCellFormat = formats.ISO_DATETIME_MILLISEC
 
 )
