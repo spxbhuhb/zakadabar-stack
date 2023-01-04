@@ -43,4 +43,6 @@ class ZkStringExtensionColumn<T : BaseBo>(
             it ?: ""
         }
 
+    override fun exportRaw(row: T): Any? = values[table.getRowId(row)]
+
 }

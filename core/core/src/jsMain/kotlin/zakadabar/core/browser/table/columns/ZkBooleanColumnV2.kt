@@ -32,4 +32,5 @@ open class ZkBooleanColumnV2<T : BaseBo>(
     override fun exportCsv(row: T): String =
         if (getter(row)) localizedStrings.trueText else localizedStrings.falseText
 
+    override fun exportRaw(row: T) : Any? = getter(row)
 }

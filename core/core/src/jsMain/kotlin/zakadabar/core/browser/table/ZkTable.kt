@@ -117,9 +117,9 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
     open val exportFileName: String
         get() {
-            val titleText = titleText ?: this::class.simpleName?.localized
-            val time = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).toString()
-            return (if (titleText.isNullOrEmpty()) "content" else titleText.replace("\\W".toRegex(), "_")) + "_$time" + ".csv"
+            val prefix = (titleText ?: this::class.simpleName?.localized ?: "").ifBlank { "content" }
+            val time = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            return "${prefix}_$time".replace("\\W".toRegex(), "_") + ".csv"
         }
 
     open var counterBar = ZkCounterBar("")
