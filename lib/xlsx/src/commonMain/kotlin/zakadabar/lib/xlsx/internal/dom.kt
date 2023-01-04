@@ -6,15 +6,9 @@ package zakadabar.lib.xlsx.internal
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
-import zakadabar.lib.xlsx.conf.XlsxFormats.*
 import zakadabar.lib.xlsx.internal.dom.Node
 import zakadabar.lib.xlsx.internal.dom.toXml
-import zakadabar.lib.xlsx.internal.model.Cell
-import zakadabar.lib.xlsx.internal.model.Part
-import zakadabar.lib.xlsx.internal.model.Row
-import zakadabar.lib.xlsx.internal.model.SharedStrings
-import zakadabar.lib.xlsx.internal.model.WorkSheet
-import zakadabar.lib.xlsx.internal.model.File
+import zakadabar.lib.xlsx.internal.model.*
 import zakadabar.lib.xlsx.model.XlsxCell
 import zakadabar.lib.xlsx.model.XlsxDocument
 import zakadabar.lib.xlsx.model.XlsxSheet
@@ -101,7 +95,7 @@ internal fun XlsxDocument.toXlsxFile() : File {
     sheets.forEach { xs->
         val sheetId = f.workBook.nextSheetId()
         val ws = xs.toDom(sheetId, f.sharedStrings)
-        f.addWorkSeet(sheetId, xs.name, ws)
+        f.addWorkSheet(sheetId, xs.name, ws)
     }
 
     return f

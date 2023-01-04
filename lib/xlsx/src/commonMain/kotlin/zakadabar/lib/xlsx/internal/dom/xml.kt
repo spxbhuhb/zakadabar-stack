@@ -44,7 +44,7 @@ private fun Node.xml(append: Appender) {
 
 
 /**
- * a node attributzes in xml
+ * a node attributes in xml
  *
  * at1="v1" at2="v2"
  */

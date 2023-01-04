@@ -27,7 +27,7 @@ internal class File {
 
     }
 
-    fun addWorkSeet(sheetId: Int, name: String, ws: WorkSheet) {
+    fun addWorkSheet(sheetId: Int, name: String, ws: WorkSheet) {
         val workBookRelId = workBookRels.addRel(ws)
         workBook.addSheet(sheetId, workBookRelId, name)
         contentType.addPart(ws)
