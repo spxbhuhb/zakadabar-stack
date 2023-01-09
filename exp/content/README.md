@@ -1,1 +1,0 @@
-A small module to manage and display content on a web site.

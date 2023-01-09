@@ -3,10 +3,10 @@
  */
 package zakadabar.core.server.ktor
 
-import io.ktor.application.*
+import io.ktor.server.application.*
 import io.ktor.util.*
 
-class TestFeature(configuration: Configuration) {
+class TestPlugin(configuration: Configuration) {
 
     val value = configuration.value
 
@@ -15,16 +15,16 @@ class TestFeature(configuration: Configuration) {
     }
 
     /**
-     * Installable feature for [TestFeature].
+     * Installable feature for [TestPlugin].
      */
-    companion object Feature : ApplicationFeature<ApplicationCallPipeline, Configuration, TestFeature> {
+    companion object Feature : BaseApplicationPlugin<ApplicationCallPipeline, Configuration, TestPlugin> {
 
-        override val key = AttributeKey<TestFeature>("TestFeature")
+        override val key = AttributeKey<TestPlugin>("TestPlugin")
 
-        override fun install(pipeline: ApplicationCallPipeline, configure: Configuration.() -> Unit): TestFeature {
+        override fun install(pipeline: ApplicationCallPipeline, configure: Configuration.() -> Unit): TestPlugin {
             val configuration = Configuration().apply(configure)
 
-            val feature = TestFeature(configuration)
+            val feature = TestPlugin(configuration)
 
             pipeline.intercept(ApplicationCallPipeline.Call) {  }
 

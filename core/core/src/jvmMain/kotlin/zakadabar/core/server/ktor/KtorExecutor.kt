@@ -3,8 +3,8 @@
  */
 package zakadabar.core.server.ktor
 
-import io.ktor.application.*
-import io.ktor.auth.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import zakadabar.core.authorize.Executor
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityId

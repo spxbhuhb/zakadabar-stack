@@ -7,6 +7,6 @@ import kotlinx.datetime.Instant
 
 class SessionCacheEntry(
     val sessionId: String,
-    val sessionData: ByteArray,
+    val sessionData: String,
     val createdAt: Instant
 )

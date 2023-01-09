@@ -4,6 +4,7 @@
 package zakadabar.core.comm
 
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
@@ -30,13 +31,13 @@ open class QueryComm(
         requestSerializer: KSerializer<RQ>,
         responseSerializer: KSerializer<RS>,
         executor: Executor?,
-        config : CommConfig?
+        config: CommConfig?
     ): RS? {
 
         localCommonBl(companion.boNamespace, config, companion.commConfig)?.let {
             requireNotNull(executor) { "for local calls the executor parameter is mandatory" }
 
-            val func =  it.router.funcForQuery(request as BaseBo)
+            val func = it.router.funcForQuery(request as BaseBo)
 
             @Suppress("UNCHECKED_CAST") // router register methods should ensure that this is right
             return it.queryWrapper(executor, func, request) as RS?
@@ -44,9 +45,9 @@ open class QueryComm(
 
         val q = Json.encodeToString(requestSerializer, request).encodeURLPath()
 
-        val url = merge("/query/${request::class.simpleName}?q=${q}", companion.boNamespace, config, companion.commConfig)
+        val path = merge("/query/${request::class.simpleName}?q=${q}", companion.boNamespace, config, companion.commConfig)
 
-        val text = client.get<String>(url)
+        val text = client.get { url(path) }.bodyAsText()
 
         return if (text == "null") {
             null
@@ -61,7 +62,7 @@ open class QueryComm(
         requestSerializer: KSerializer<RQ>,
         responseSerializer: KSerializer<RS>,
         executor: Executor?,
-        config : CommConfig?
+        config: CommConfig?
     ): RS {
         return queryOrNull(request, requestSerializer, responseSerializer, executor, config) ?: throw NoSuchElementException()
     }

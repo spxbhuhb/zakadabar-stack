@@ -26,7 +26,7 @@ class XlsxTableExportWithConfig :  ZkTable<ExampleBo>() {
         + ExampleBo::doubleValue size 4.em
         + ExampleBo::localDateValue size 6.6.em
         + ExampleBo::localDateTimeValue size 10.1.em
-        + ExampleBo::instantValue size 10.1.em
+        + ExampleBo::instantValue
     }
 
     override fun onCreate() {

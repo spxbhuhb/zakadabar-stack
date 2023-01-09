@@ -3,7 +3,7 @@
  */
 package zakadabar.core.server.ktor
 
-import io.ktor.application.*
+import io.ktor.server.application.*
 import io.ktor.util.*
 
 class TestFeature2(configuration: Configuration) {
@@ -17,7 +17,7 @@ class TestFeature2(configuration: Configuration) {
     /**
      * Installable feature for [TestFeature2].
      */
-    companion object Feature : ApplicationFeature<ApplicationCallPipeline, Configuration, TestFeature2> {
+    companion object Feature : BaseApplicationPlugin<ApplicationCallPipeline, Configuration, TestFeature2> {
 
         override val key = AttributeKey<TestFeature2>("TestFeature2")
 

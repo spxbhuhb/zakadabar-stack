@@ -3,7 +3,7 @@
  */
 package zakadabar.core.server.ktor
 
-import io.ktor.application.*
+import io.ktor.server.application.*
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
@@ -17,7 +17,7 @@ class KtorFeatureInstallTest {
     companion object : TestCompanionBase() {
 
         override fun addModules() {
-            server += TestFeature
+            server += TestPlugin
 
             server += TestFeature2 {
                 value = "world"
@@ -36,10 +36,10 @@ class KtorFeatureInstallTest {
 
     @Test
     fun testFeatureInstall() {
-        val tf = server.ktorServer.application.featureOrNull(TestFeature)
+        val tf = server.ktorServer.application.pluginOrNull(TestPlugin)
         assertNotNull(tf)
 
-        val tf2 = server.ktorServer.application.featureOrNull(TestFeature2)
+        val tf2 = server.ktorServer.application.pluginOrNull(TestFeature2)
         assertNotNull(tf2)
         assertEquals("world", tf2.value)
 

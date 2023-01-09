@@ -27,7 +27,7 @@ kotlin {
         }
     }
 
-    js(BOTH) {
+    js(IR) {
         nodejs()
     }
 

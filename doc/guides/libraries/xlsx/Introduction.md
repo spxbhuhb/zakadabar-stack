@@ -32,7 +32,7 @@ To use this module in your application:
 **gradle**
 
 ```kotlin
-implementation("hu.simplexion.zakadabar:xlsx:$contentVersion")
+implementation("hu.simplexion.zakadabar:xlsx:$stackVersion")
 ```
 
 ## Use
@@ -95,7 +95,7 @@ There is a convenient extension function: onExportXlsx to generate and download 
 ```kotlin
     import zakadabar.lib.xlsx.browser.onExportXlsx
 
-    class ...Table : ZkTable<...Bo>() {
+    class ExampleTable : ZkTable<ExampleBo>() {
 
         override fun onExportCsv() = onExportXlsx()
         

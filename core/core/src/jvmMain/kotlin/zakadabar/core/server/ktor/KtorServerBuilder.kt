@@ -3,18 +3,22 @@
  */
 package zakadabar.core.server.ktor
 
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.features.*
 import io.ktor.http.*
-import io.ktor.http.cio.websocket.*
 import io.ktor.http.content.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
 import io.ktor.serialization.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.engine.*
-import io.ktor.sessions.*
+import io.ktor.server.http.content.*
+import io.ktor.server.plugins.compression.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.statuspages.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
+import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
@@ -89,29 +93,29 @@ open class KtorServerBuilder(
 
     open fun Application.statusPages() {
         install(StatusPages) {
-            exception<LoginTimeout> {
+            exception<LoginTimeout> { call, _ ->
                 call.respond(HttpStatusCode(440, "Login Timeout"))
             }
-            exception<EntityNotFoundException> {
+            exception<EntityNotFoundException> { call, _ ->
                 call.respond(HttpStatusCode.NotFound)
             }
-            exception<Forbidden> {
+            exception<Forbidden> { call, _ ->
                 if (call.principal<KtorExecutor>()?.anonymous != false) {
                     call.respond(HttpStatusCode.Unauthorized, UnauthorizedData())
                 } else {
                     call.respond(HttpStatusCode.Forbidden)
                 }
             }
-            exception<Unauthorized> {
-                call.respond(HttpStatusCode.Unauthorized, it.data)
+            exception<Unauthorized> { call, ex ->
+                call.respond(HttpStatusCode.Unauthorized, ex.data)
             }
-            exception<DataConflict> {
-                call.respond(HttpStatusCode.Conflict, it.message)
+            exception<DataConflict> { call, ex ->
+                call.respond(HttpStatusCode.Conflict, ex.message)
             }
-            exception<BadRequest> {
-                call.respond(HttpStatusCode.BadRequest, it.validityReport)
+            exception<BadRequest> { call, ex ->
+                call.respond(HttpStatusCode.BadRequest, ex.validityReport)
             }
-            status(HttpStatusCode.NotFound) {
+            status(HttpStatusCode.NotFound) { call, _ ->
                 val uri = call.request.uri
                 // this check is here so we will redirect only when needed
                 // api not found has to go directly to the browser, check

@@ -7,14 +7,14 @@ import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
-import zakadabar.lib.accounts.testing.AuthTestCompanionBase
-import zakadabar.lib.accounts.data.AccountPrivateBo
-import zakadabar.lib.accounts.data.LoginAction
-import zakadabar.lib.accounts.data.LogoutAction
-import zakadabar.lib.accounts.data.httpClientWithAuth
 import zakadabar.core.comm.CommBase
 import zakadabar.core.comm.CommBase.Companion.httpClient
 import zakadabar.core.data.Secret
+import zakadabar.lib.accounts.comm.httpClientWithAuth
+import zakadabar.lib.accounts.data.AccountPrivateBo
+import zakadabar.lib.accounts.data.LoginAction
+import zakadabar.lib.accounts.data.LogoutAction
+import zakadabar.lib.accounts.testing.AuthTestCompanionBase
 
 class KtorSessionBlTest {
 

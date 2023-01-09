@@ -5,21 +5,18 @@
 
 package zakadabar.core.server.ktor
 
-import io.ktor.auth.*
+import io.ktor.server.auth.*
 import zakadabar.core.data.EntityId
 import zakadabar.core.util.UUID
 
-class EmptyAuthenticationProvider internal constructor(configuration: Configuration) : AuthenticationProvider(configuration) {
-    class Configuration internal constructor(name: String?) : AuthenticationProvider.Configuration(name)
-}
+class EmptyAuthenticationProvider internal constructor(configuration: Config) : AuthenticationProvider(configuration) {
+    class Configuration internal constructor(name: String?) : Config(name)
 
-fun Authentication.Configuration.configureEmpty(name: String? = null) {
-
-    val provider = AuthenticationProvider(EmptyAuthenticationProvider.Configuration(name))
-
-    provider.pipeline.intercept(AuthenticationPipeline.RequestAuthentication) { context ->
+    override suspend fun onAuthenticate(context: AuthenticationContext) {
         context.principal(KtorExecutor(EntityId("anonymous"), UUID.NIL, true, emptySet(), emptySet(), emptySet(), emptySet()))
     }
+}
 
-    register(provider)
+fun AuthenticationConfig.configureEmpty(name: String? = null) {
+    register(EmptyAuthenticationProvider(EmptyAuthenticationProvider.Configuration(name)))
 }

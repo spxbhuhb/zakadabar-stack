@@ -4,6 +4,6 @@
 package zakadabar.core.server.ktor
 
 
-val features = mutableListOf<KtorFeatureWithConfig<*>>()
+val features = mutableListOf<KtorPluginWithConfig<*>>()
 
 val configBuilders = mutableListOf<KtorConfigBuilder>()

@@ -1,1 +1,0 @@
-Live view renders web pages from a page model.

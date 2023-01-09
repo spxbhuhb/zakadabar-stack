@@ -3,11 +3,11 @@
  */
 package zakadabar.lib.accounts.business
 
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.sessions.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.sessions.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -195,7 +195,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 
     }
 
-    override fun configure(conf: Sessions.Configuration) {
+    override fun configure(conf: SessionsConfig) {
         with(conf) {
             val sessionType = StackSession::class
 
@@ -203,20 +203,20 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
                 if (portCookie) "ZKL_SESSION_$port" else "ZKL_SESSION"
             }
 
-            @Suppress("DEPRECATION") // as in Ktor code
-            val builder = CookieIdSessionBuilder(sessionType).apply {
+            cookie<StackSession>(name, SessionStorageSql) {
                 cookie.path = "/"
+                val transport = SessionTransportCookie(name, this.cookie, this.transformers)
+                val tracker = RenewableSessionTrackerById(sessionType, StackSessionSerializer, SessionStorageSql, this.sessionIdProvider)
+
+                val provider = SessionProvider(name, sessionType, transport, tracker)
+                register(provider)
             }
-            val transport = SessionTransportCookie(name, builder.cookie, builder.transformers)
-            val tracker = RenewableSessionTrackerById(sessionType, StackSessionSerializer, SessionStorageSql, builder.sessionIdProvider)
-            val provider = SessionProvider(name, sessionType, transport, tracker)
-            register(provider)
 
             SessionMaintenanceTask.start()
         }
     }
 
-    override fun configure(conf: Authentication.Configuration) {
+    override fun configure(conf: AuthenticationConfig) {
         conf.configureSession()
     }
 

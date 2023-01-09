@@ -1,19 +1,18 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
-package zakadabar.lib.accounts.backend
+package zakadabar.lib.accounts.business
 
-import io.ktor.client.features.*
+import io.ktor.client.plugins.*
 import io.ktor.http.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import zakadabar.lib.accounts.business.AccountPrivateBl
+import zakadabar.core.data.Secret
+import zakadabar.core.server.server
+import zakadabar.core.util.UUID
 import zakadabar.lib.accounts.data.AccountPrivateBo
 import zakadabar.lib.accounts.data.CreateAccount
 import zakadabar.lib.accounts.data.LoginAction
 import zakadabar.lib.accounts.data.LogoutAction
-import zakadabar.core.server.server
-import zakadabar.core.data.Secret
-import zakadabar.core.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue

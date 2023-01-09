@@ -4,12 +4,12 @@
 package zakadabar.gradle
 
 object Versions {
-    const val zakadabar = "2023.1.2-SNAPSHOT"
+    const val zakadabar = "2023.1.4"
 
     val isSnapshot = zakadabar.contains("SNAPSHOT")
 
-    const val kotlin = "1.7.0"
-    const val ktor = "1.6.8"
+    const val kotlin = "1.8.0"
+    const val ktor = "2.2.1"
     const val coroutines = "1.6.4"
     const val serialization = "1.3.1"
     const val datetime = "0.2.1"

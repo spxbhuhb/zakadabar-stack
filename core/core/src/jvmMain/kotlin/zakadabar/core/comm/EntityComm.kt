@@ -4,6 +4,7 @@
 package zakadabar.core.comm
 
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
@@ -40,13 +41,14 @@ open class EntityComm<T : EntityBo<T>>(
             return it.createWrapper(executor, bo)
         }
 
-        val url = merge("/entity", companion.boNamespace, config, companion.commConfig)
+        val path = merge("/entity", companion.boNamespace, config, companion.commConfig)
 
         val text = try {
-            client.post<String>(url) {
+            client.post {
+                url(path)
                 header("Content-Type", "application/json")
-                body = Json.encodeToString(serializer, bo)
-            }
+                setBody(Json.encodeToString(serializer, bo))
+            }.bodyAsText()
         } catch (ex: Exception) {
             onError(ex)
             throw ex
@@ -63,10 +65,10 @@ open class EntityComm<T : EntityBo<T>>(
             return it.readWrapper(executor, id)
         }
 
-        val url = merge("/entity/$id", companion.boNamespace, config, companion.commConfig)
+        val path = merge("/entity/$id", companion.boNamespace, config, companion.commConfig)
 
         val text = try {
-            client.get<String>(url)
+            client.get { url(path) }.bodyAsText()
         } catch (ex: Exception) {
             onError(ex)
             throw ex
@@ -84,13 +86,14 @@ open class EntityComm<T : EntityBo<T>>(
             return it.updateWrapper(executor, bo)
         }
 
-        val url = merge("/entity/${bo.id}", companion.boNamespace, config, companion.commConfig)
+        val path = merge("/entity/${bo.id}", companion.boNamespace, config, companion.commConfig)
 
         val text = try {
-            client.patch<String>(url) {
+            client.patch {
+                url(path)
                 header("Content-Type", "application/json")
-                body = Json.encodeToString(serializer, bo)
-            }
+                setBody(Json.encodeToString(serializer, bo))
+            }.bodyAsText()
         } catch (ex: Exception) {
             onError(ex)
             throw ex
@@ -107,10 +110,10 @@ open class EntityComm<T : EntityBo<T>>(
             return it.listWrapper(executor)
         }
 
-        val url = merge("/entity", companion.boNamespace, config, companion.commConfig)
+        val path = merge("/entity", companion.boNamespace, config, companion.commConfig)
 
         val text = try {
-            client.get<String>(url)
+            client.get { url(path) }.bodyAsText()
         } catch (ex: Exception) {
             onError(ex)
             throw ex
@@ -127,10 +130,10 @@ open class EntityComm<T : EntityBo<T>>(
             return it.deleteWrapper(executor, id)
         }
 
-        val url = merge("/entity/$id", companion.boNamespace, config, companion.commConfig)
+        val path = merge("/entity/$id", companion.boNamespace, config, companion.commConfig)
 
         try {
-            client.delete<Unit>(url)
+            client.delete { url(path) }
         } catch (ex: Exception) {
             onError(ex)
             throw ex

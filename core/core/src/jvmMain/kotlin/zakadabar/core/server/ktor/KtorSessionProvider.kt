@@ -3,10 +3,10 @@
  */
 package zakadabar.core.server.ktor
 
-import io.ktor.auth.*
-import io.ktor.sessions.*
+import io.ktor.server.auth.*
+import io.ktor.server.sessions.*
 
 interface KtorSessionProvider {
-    fun configure(conf : Sessions.Configuration)
-    fun configure(conf : Authentication.Configuration)
+    fun configure(conf : SessionsConfig)
+    fun configure(conf : AuthenticationConfig)
 }

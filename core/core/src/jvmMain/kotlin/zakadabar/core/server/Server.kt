@@ -10,10 +10,10 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.file
-import io.ktor.application.*
 import io.ktor.http.*
-import io.ktor.request.*
+import io.ktor.server.application.*
 import io.ktor.server.engine.*
+import io.ktor.server.request.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import zakadabar.core.authorize.LoginTimeout

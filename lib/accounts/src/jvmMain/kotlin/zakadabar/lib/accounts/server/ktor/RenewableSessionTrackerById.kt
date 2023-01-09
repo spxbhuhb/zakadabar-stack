@@ -5,10 +5,9 @@
 
 package zakadabar.lib.accounts.server.ktor
 
-import io.ktor.application.*
-import io.ktor.sessions.*
+import io.ktor.server.application.*
+import io.ktor.server.sessions.*
 import io.ktor.util.*
-import io.ktor.utils.io.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.datetime.Clock
@@ -39,7 +38,7 @@ internal val expiredToNew = mutableMapOf<String, ExpiredToNewEntry>() // TODO th
 class RenewableSessionTrackerById<S : Any>(
     private val type: KClass<S>,
     private val serializer: SessionSerializer<S>,
-    private val storage: SessionStorage,
+    private val storage: SessionStorageSql,
     val sessionIdProvider: () -> String
 ) : SessionTracker<S> {
 
@@ -64,18 +63,13 @@ class RenewableSessionTrackerById<S : Any>(
         return null
     }
 
-    private suspend fun read(sessionId: String) = storage.read(sessionId) { channel ->
-        val text = channel.readUTF8Line() ?: throw IllegalStateException("Failed to read stored session from $channel")
-        serializer.deserialize(text)
-    }
+    private suspend fun read(sessionId: String) =
+        serializer.deserialize(storage.read(sessionId))
 
     override suspend fun store(call: ApplicationCall, value: S): String {
         val sessionId = call.attributes.computeIfAbsent(SessionIdKey, sessionIdProvider)
         val serialized = serializer.serialize(value)
-        storage.write(sessionId) { channel ->
-            channel.writeStringUtf8(serialized)
-            channel.close()
-        }
+        storage.write(sessionId, serialized)
         return sessionId
     }
 

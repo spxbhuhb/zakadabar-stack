@@ -4,7 +4,7 @@
 package zakadabar.core.comm
 
 import io.ktor.client.*
-import io.ktor.client.features.cookies.*
+import io.ktor.client.plugins.cookies.*
 import zakadabar.core.comm.CommConfig.Companion.global
 import zakadabar.core.util.PublicApi
 

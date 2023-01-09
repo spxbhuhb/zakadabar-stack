@@ -27,7 +27,7 @@ kotlin {
         }
     }
 
-    js(BOTH) {
+    js(IR) {
         nodejs {
             testTask {
                 enabled = false // complains about missing DOM, TODO fix that, maybe, I'm not sure that I want the dependency
@@ -67,14 +67,20 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 api("io.ktor:ktor-server-core:${Versions.ktor}")
-                implementation("io.ktor:ktor-server-host-common:${Versions.ktor}")
+                api("io.ktor:ktor-server-compression:${Versions.ktor}")
+                api("io.ktor:ktor-server-status-pages:${Versions.ktor}")
+                api("io.ktor:ktor-server-host-common:${Versions.ktor}")
+                api("io.ktor:ktor-server-sessions:${Versions.ktor}")
+                api("io.ktor:ktor-server-websockets:${Versions.ktor}")
+                api("io.ktor:ktor-server-auth:${Versions.ktor}")
+                api("io.ktor:ktor-server-content-negotiation:${Versions.ktor}")
+                api("io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}")
+
                 runtimeOnly("io.ktor:ktor-server-netty:${Versions.ktor}")
-                implementation("io.ktor:ktor-server-sessions:${Versions.ktor}")
-                api("io.ktor:ktor-websockets:${Versions.ktor}")
-                api("io.ktor:ktor-auth:${Versions.ktor}")
-                api("io.ktor:ktor-serialization:${Versions.ktor}")
+
                 api("io.ktor:ktor-client-serialization:${Versions.ktor}")
                 api("io.ktor:ktor-client-cio:${Versions.ktor}") // TODO check if we want this one (CIO) or another
+
                 api("ch.qos.logback:logback-classic:${Versions.logback}")
                 api("org.jetbrains.exposed:exposed-core:${Versions.exposed}")
                 api("org.jetbrains.exposed:exposed-dao:${Versions.exposed}")

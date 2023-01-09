@@ -5,9 +5,8 @@
 
 package zakadabar.lib.accounts.server.ktor
 
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.sessions.*
+import io.ktor.server.auth.*
+import io.ktor.server.sessions.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.core.authorize.AccountBlProvider
 import zakadabar.core.data.Secret
@@ -17,11 +16,9 @@ import zakadabar.core.server.server
 import zakadabar.lib.accounts.business.KtorSessionBl
 import zakadabar.lib.accounts.data.LoginAction
 
-class SessionAuthenticationProvider internal constructor(configuration: Configuration) : AuthenticationProvider(configuration) {
-    class Configuration internal constructor(name: String?) : AuthenticationProvider.Configuration(name)
-}
+class SessionAuthenticationProvider internal constructor(configuration: Config) : AuthenticationProvider(configuration) {
 
-fun Authentication.Configuration.configureSession(name: String? = null) {
+    class Configuration internal constructor(name: String?) : Config(name)
 
     val sessionBl by module<KtorSessionBl>()
     val accountBl by module<AccountBlProvider>()
@@ -30,15 +27,14 @@ fun Authentication.Configuration.configureSession(name: String? = null) {
         KtorExecutor(it.accountId, it.accountUuid, true, emptySet(), emptySet(), emptySet(), emptySet())
     }
 
-    val provider = AuthenticationProvider(SessionAuthenticationProvider.Configuration(name))
+    override suspend fun onAuthenticate(context: AuthenticationContext) {
 
-    provider.pipeline.intercept(AuthenticationPipeline.RequestAuthentication) { context ->
+        val call = context.call
 
         // when there is a session, use it
-
         call.sessions.get<StackSession>()?.let {
             context.principal(KtorExecutor(it.account, it.accountUuid, it.anonymous, it.roleIds, it.roleNames, it.permissionIds, it.permissionNames))
-            return@intercept
+            return
         }
 
         // when there are credentials in the request, authenticate by those credentials
@@ -54,7 +50,7 @@ fun Authentication.Configuration.configureSession(name: String? = null) {
                     session.permissionIds, session.permissionNames
                 ))
             }
-            return@intercept
+            return
         }
 
         val anonymous = accountBl.anonymousV2()
@@ -70,7 +66,11 @@ fun Authentication.Configuration.configureSession(name: String? = null) {
         if (call.attributes.getOrNull(LoginTimeoutKey) == true) {
             server.onLoginTimeout(call)
         }
+
     }
 
-    register(provider)
+}
+
+fun AuthenticationConfig.configureSession(name: String? = null) {
+    register(SessionAuthenticationProvider(SessionAuthenticationProvider.Configuration(name)))
 }

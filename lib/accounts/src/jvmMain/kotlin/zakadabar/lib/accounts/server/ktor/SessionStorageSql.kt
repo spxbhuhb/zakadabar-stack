@@ -3,10 +3,7 @@
  */
 package zakadabar.lib.accounts.server.ktor
 
-import io.ktor.sessions.*
-import io.ktor.utils.io.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import io.ktor.server.sessions.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.datetime.*
@@ -16,16 +13,14 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-import zakadabar.lib.accounts.data.ModuleSettings
 import zakadabar.core.setting.setting
-import java.io.ByteArrayOutputStream
-import kotlin.coroutines.coroutineContext
+import zakadabar.lib.accounts.data.ModuleSettings
 
 /**
  * A Ktor session storage with SQL backend. It saves/loads [StackSession] objects
  * into/from [SessionTable].
  *
- * This implementation is really far from good but I got feed up with Ktor session
+ * This implementation is really far from good, but I got feed up with Ktor session
  * handling and went for a "just works" solution.
  */
 object SessionStorageSql : SessionStorage {
@@ -54,7 +49,7 @@ object SessionStorageSql : SessionStorage {
         }
     }
 
-    override suspend fun <R> read(id: String, consumer: suspend (ByteReadChannel) -> R): R {
+    override suspend fun read(id: String): String {
 
         // check the cache first, return with the cached content if there is one
         val cached = mutex.withLock {
@@ -62,7 +57,7 @@ object SessionStorageSql : SessionStorage {
         }
 
         if (cached != null) {
-            return consumer(ByteReadChannel(cached.sessionData))
+            return cached.sessionData
         }
 
         // check SQL, in case of server restart
@@ -72,7 +67,7 @@ object SessionStorageSql : SessionStorage {
                 .map {
                     SessionCacheEntry(
                         id,
-                        it[SessionTable.content].bytes,
+                        it[SessionTable.content].bytes.decodeToString(),
                         it[SessionTable.lastAccess].toKotlinInstant()
                     )
                 }
@@ -84,11 +79,11 @@ object SessionStorageSql : SessionStorage {
             cache[id] = sendForUpdate(entry) !! // cannot be null at this point
         }
 
-        return consumer(ByteReadChannel(entry.sessionData))
+        return entry.sessionData
     }
 
     private suspend fun sendForUpdate(entry: SessionCacheEntry?): SessionCacheEntry? {
-        if (entry == null) return entry
+        if (entry == null) return null
 
         val now = Clock.System.now()
         val cutoff = now.minus(settings.updateDelay, DateTimeUnit.SECOND)
@@ -103,60 +98,43 @@ object SessionStorageSql : SessionStorage {
         return entry
     }
 
-    override suspend fun write(id: String, provider: suspend (ByteWriteChannel) -> Unit) {
-        provider(CoroutineScope(Dispatchers.IO).reader(coroutineContext, autoFlush = true) {
-            val content = channel.readAvailable()
+    override suspend fun write(id: String, value: String) {
 
-            // I'm not sure this covers all the corner cases when the SQL update is not successful
-            // TODO think about session SQL consistency
+        // I'm not sure this covers all the corner cases when the SQL update is not successful
+        // TODO think about session SQL consistency
 
-            mutex.withLock {
-                val cached = cache[id]
+        mutex.withLock {
+            val cached = cache[id]
 
-                if (cached != null) {
-                    // if the new value is the same as the cached one, simply skip write
-                    if (cached.sessionData.contentEquals(content)) return@reader
+            if (cached != null) {
+                // if the new value is the same as the cached one, simply skip write
+                if (cached.sessionData == value) return
 
-                    // save the new value into the cache, this will prevent other writes
-                    cache[id] = SessionCacheEntry(id, content, cached.createdAt)
-                }
+                // save the new value into the cache, this will prevent other writes
+                cache[id] = SessionCacheEntry(id, value, cached.createdAt)
             }
-
-            // TODO use upsert. It is not supported out-of-the-box by exposed so, I went for a manual check.
-
-            val now = Clock.System.now().toJavaInstant()
-
-            transaction {
-
-                val session = SessionTable.select { SessionTable.id eq id }.firstOrNull()
-
-                if (session == null) {
-                    SessionTable.insert {
-                        it[SessionTable.id] = id
-                        it[SessionTable.content] = ExposedBlob(content)
-                        it[lastAccess] = now
-                    }
-                } else {
-                    SessionTable.update({ SessionTable.id eq id }) {
-                        it[SessionTable.content] = ExposedBlob(content)
-                        it[lastAccess] = now
-                    }
-                }
-            }
-
-        }.channel)
-    }
-
-    private suspend fun ByteReadChannel.readAvailable(): ByteArray {
-        val data = ByteArrayOutputStream()
-        val temp = ByteArray(1024)
-        while (! isClosedForRead) {
-            val read = readAvailable(temp)
-            if (read <= 0) break
-            @Suppress("BlockingMethodInNonBlockingContext") // it is a friggin byte array
-            data.write(temp, 0, read)
         }
-        return data.toByteArray()
-    }
 
+        // TODO use upsert. It is not supported out-of-the-box by exposed so, I went for a manual check.
+
+        val now = Clock.System.now().toJavaInstant()
+
+        transaction {
+
+            val session = SessionTable.select { SessionTable.id eq id }.firstOrNull()
+
+            if (session == null) {
+                SessionTable.insert {
+                    it[SessionTable.id] = id
+                    it[content] = ExposedBlob(value.encodeToByteArray())
+                    it[lastAccess] = now
+                }
+            } else {
+                SessionTable.update({ SessionTable.id eq id }) {
+                    it[content] = ExposedBlob(value.encodeToByteArray())
+                    it[lastAccess] = now
+                }
+            }
+        }
+    }
 }

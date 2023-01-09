@@ -3,7 +3,7 @@
  */
 package zakadabar.lib.accounts.server.ktor
 
-import io.ktor.sessions.*
+import io.ktor.server.sessions.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import zakadabar.core.data.BaseBo

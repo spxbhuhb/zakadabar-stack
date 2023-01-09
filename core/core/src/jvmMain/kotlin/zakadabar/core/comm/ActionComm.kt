@@ -4,6 +4,7 @@
 package zakadabar.core.comm
 
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import zakadabar.core.authorize.Executor
@@ -42,12 +43,13 @@ open class ActionComm(
             return it.actionWrapper(executor, func, request) as RESPONSE?
         }
 
-        val url = merge("/action/${request::class.simpleName}", companion.boNamespace, config, companion.commConfig)
+        val path = merge("/action/${request::class.simpleName}", companion.boNamespace, config, companion.commConfig)
 
-        val text = client.post<String>(url) {
+        val text = client.post {
+            url(path)
             header("Content-Type", "application/json; charset=UTF-8")
-            body = Json.encodeToString(requestSerializer, request)
-        }
+            setBody(Json.encodeToString(requestSerializer, request))
+        }.bodyAsText()
 
         return if (text == "null") {
             null

@@ -3,12 +3,12 @@
  */
 package zakadabar.core.server.ktor
 
-import io.ktor.application.*
-import io.ktor.features.*
 import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.plugins.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import zakadabar.core.business.EntityBusinessLogicCommon
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId

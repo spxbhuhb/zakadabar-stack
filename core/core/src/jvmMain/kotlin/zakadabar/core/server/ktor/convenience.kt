@@ -3,18 +3,18 @@
  */
 package zakadabar.core.server.ktor
 
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.routing.*
 import zakadabar.core.server.Server
 
 interface KtorConfigBuilder
 
 class KtorAuthConfig(
-    val build : (Authentication.Configuration.() -> Unit)
+    val build : (AuthenticationConfig.() -> Unit)
 ) : KtorConfigBuilder {
 
-    fun runBuild(config : Authentication.Configuration) {
+    fun runBuild(config : AuthenticationConfig) {
         config.build()
     }
 
@@ -30,16 +30,16 @@ class KtorRouteConfig(
 
 }
 
-class KtorFeatureWithConfig<B : Any>(
-    val feature : ApplicationFeature<Application, B, *>,
+class KtorPluginWithConfig<B : Any>(
+    val feature : BaseApplicationPlugin<Application, B, *>,
     val config : (B.() -> Unit)?
 )
 
-operator fun Server.plusAssign(feature : ApplicationFeature<Application, Any, *>) {
-    features += KtorFeatureWithConfig(feature) { }
+operator fun Server.plusAssign(feature : BaseApplicationPlugin<Application, Any, *>) {
+    features += KtorPluginWithConfig(feature) { }
 }
 
-operator fun Server.plusAssign(feature : KtorFeatureWithConfig<*>) {
+operator fun Server.plusAssign(feature : KtorPluginWithConfig<*>) {
     features += feature
 }
 
@@ -47,5 +47,5 @@ operator fun Server.plusAssign(configBuilder :KtorConfigBuilder) {
     configBuilders += configBuilder
 }
 
-operator fun <B : Any, F : ApplicationFeature<Application, B, *>> F.invoke(config : B.() -> Unit) =
-    KtorFeatureWithConfig(this, config)
+operator fun <B : Any, F : BaseApplicationPlugin<Application, B, *>> F.invoke(config : B.() -> Unit) =
+    KtorPluginWithConfig(this, config)

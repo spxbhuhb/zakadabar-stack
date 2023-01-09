@@ -4,7 +4,7 @@
 
 package zakadabar.lib.accounts.business
 
-import io.ktor.features.*
+import io.ktor.server.plugins.*
 import kotlinx.datetime.Clock
 import zakadabar.core.authorize.*
 import zakadabar.core.business.EntityBusinessLogicBase
