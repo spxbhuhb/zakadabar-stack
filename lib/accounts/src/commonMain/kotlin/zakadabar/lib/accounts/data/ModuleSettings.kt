@@ -68,7 +68,11 @@ class ModuleSettings(
      * When true phone numbers are put into AccountPublicBo objects.
      * Default is false.
      */
-    var phoneInAccountPublic: Boolean = false
+    var phoneInAccountPublic: Boolean = false,
+
+
+    var oauth : List<OauthSettings>?
+
 
 ) : BaseBo {
 
@@ -86,3 +90,15 @@ class ModuleSettings(
     }
 
 }
+
+@Serializable
+data class OauthSettings(
+    var name: String,
+    var displayHtml : String,
+    var authorizeUrl : String,
+    var accessTokenUrl : String ,
+    var clientId : String,
+    var clientSecret : String,
+    var defaultScopes : List<String>,
+    var jwksUrl : String
+)
