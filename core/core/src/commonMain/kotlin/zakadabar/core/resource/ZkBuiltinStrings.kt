@@ -87,6 +87,7 @@ open class ZkBuiltinStrings : ZkStringStore() {
     open val loginFailCount by "Failed logins"
     open val loginLocked by "Login has failed because the account is locked."
     open val loginMissingRole by "Login has failed because the account does not have the necessary role to log in."
+    open val loginWith by "Login with"
     open val logout by "Logout"
     open val password by "Password"
     open val newPassword by "New Password"

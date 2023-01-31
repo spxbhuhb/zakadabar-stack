@@ -71,7 +71,7 @@ class ModuleSettings(
     var phoneInAccountPublic: Boolean = false,
 
 
-    var oauth : List<OauthSettings>?
+    var oauth : List<OauthSettings>? = null
 
 
 ) : BaseBo {
@@ -93,12 +93,16 @@ class ModuleSettings(
 
 @Serializable
 data class OauthSettings(
-    var name: String,
-    var displayHtml : String,
+    var name : String,
+    var displayName : String,
+    var svgIcon : String? = null,
     var authorizeUrl : String,
-    var accessTokenUrl : String ,
+    var accessTokenUrl : String,
     var clientId : String,
-    var clientSecret : String,
-    var defaultScopes : List<String>,
-    var jwksUrl : String
+    var clientSecret : String? = null,
+    var defaultScopes : List<String>? = null,
+    var autoRegister : Boolean = false,
+    var jwksUrl : String? = null,
+    var externalApps : List<String>? = null,
+    var trustAllCerts : Boolean = false
 )
