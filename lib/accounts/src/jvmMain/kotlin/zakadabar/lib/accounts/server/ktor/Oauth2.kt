@@ -76,15 +76,8 @@ class Oauth2(oauth: OauthSettings, callback: (OauthSettings, DecodedJWT)->StackS
                 val app = call.request.queryParameters[APP_PARAM]
 
                 val url = when {
-
                     app == null -> "/"
-
-                    oauth.externalApps?.contains(app) == true -> {
-                        val sessionKey = call.sessions.findName(StackSession::class)
-                        val sessionId = call.request.cookies[sessionKey]
-                        "$app?$APP_SESSION_KEY=$sessionKey&$APP_SESSION_ID=$sessionId"
-                    }
-
+                    oauth.containsApp(app) -> "$app?$SESSION_KEY=${call.sessionKey}&$SESSION_ID=${call.sessionId}"
                     else -> throw Forbidden()
                 }
 
@@ -96,11 +89,15 @@ class Oauth2(oauth: OauthSettings, callback: (OauthSettings, DecodedJWT)->StackS
     companion object {
         const val ROOT = "/api/auth"
         const val APP_PARAM = "app"
-        const val APP_SESSION_KEY = "sessionKey"
-        const val APP_SESSION_ID = "sessionId"
+        const val SESSION_KEY = "sessionKey"
+        const val SESSION_ID = "sessionId"
 
         val OauthSettings.login : String get() = "$ROOT/$name/login"
         val OauthSettings.callback : String get() = "$ROOT/$name/callback"
+        fun OauthSettings.containsApp(app: String) = externalApps?.contains(app) == true
+
+        private val ApplicationCall.sessionKey : String get() = sessions.findName(StackSession::class)
+        private val ApplicationCall.sessionId : String? get() = request.cookies[sessionKey]
 
         @Suppress("CustomX509TrustManager")
         private object EmptyX509TrustManager: X509TrustManager {

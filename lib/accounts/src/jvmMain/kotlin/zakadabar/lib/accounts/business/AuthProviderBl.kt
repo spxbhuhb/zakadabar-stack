@@ -24,7 +24,7 @@ import zakadabar.lib.accounts.server.ktor.Oauth2.Companion.login
 import zakadabar.lib.accounts.server.ktor.StackSession
 import java.util.*
 
-class AuthProviderBl() : BusinessLogicCommon<AuthProviderBo>() {
+class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
 
     override val namespace: String = AuthProviderBo.boNamespace
 

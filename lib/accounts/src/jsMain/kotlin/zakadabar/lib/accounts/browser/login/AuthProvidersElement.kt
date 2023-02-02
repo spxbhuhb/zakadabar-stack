@@ -27,16 +27,17 @@ open class AuthProvidersElement : ZkElement() {
                     + localizedStrings.loginWith
                 } marginBottom 10
 
-                val groupedProviders = providers.groupBy { it.svgIcon != null }
+                val (hasNoIcon, hasIcon) = providers.partition { it.svgIcon == null }
+
                 // with icon, next to each other
                 + row {
                     + JustifyContent.center
-                    groupedProviders[true]?.forEach {
+                    hasIcon.forEach {
                         + getProviderIconButton(it)
                     }
                 }
                 // no icon, under each other
-                groupedProviders[false]?.forEach {
+                hasNoIcon.forEach {
                     + row {
                         + JustifyContent.center
                         + getProviderTextButton(it)
