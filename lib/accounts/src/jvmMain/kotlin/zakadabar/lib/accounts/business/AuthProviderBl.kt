@@ -19,6 +19,10 @@ import zakadabar.core.setting.setting
 import zakadabar.core.server.server
 import zakadabar.core.util.toStackUuid
 import zakadabar.lib.accounts.data.*
+import zakadabar.lib.accounts.jwt.email
+import zakadabar.lib.accounts.jwt.name
+import zakadabar.lib.accounts.jwt.roles
+import zakadabar.lib.accounts.jwt.upn
 import zakadabar.lib.accounts.server.ktor.Oauth2
 import zakadabar.lib.accounts.server.ktor.Oauth2.Companion.login
 import zakadabar.lib.accounts.server.ktor.StackSession
@@ -42,11 +46,6 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
         query(AuthProviderList::class, ::authProviderList)
     }
 
-    companion object {
-        const val JWT_CLAIM_EMAIL = "email"
-        const val JWT_CLAIM_ROLES = "roles"
-        const val JWT_CLAIM_NAME = "name"
-    }
     override fun onModuleStart() {
         super.onModuleStart()
 
@@ -54,7 +53,7 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
 
             println("Register Oauth: ${oauth.name} - ${oauth.displayName}")
 
-            val handler = Oauth2(oauth, ::callback)
+            val handler = Oauth2(oauth) { callback(oauth, it) }
 
             server += handler.authConfig
             server += handler.routeConfig
@@ -64,6 +63,9 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
     }
 
     private fun callback(oauth: OauthSettings, jwt: DecodedJWT) : StackSession {
+        println(jwt.subject)
+        println(jwt.claims)
+
         val account = jwt.toAccount()
 
         val executor : Executor = try {
@@ -73,7 +75,7 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
             else throw Unauthorized("account not found: $account.accountName")
         }
 
-        syncRoles(executor.accountId, jwt.roles)
+        jwt.roles?.let { syncRoles(executor.accountId, it) }
 
         return executor.toSession()
     }
@@ -108,20 +110,12 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
     private fun DecodedJWT.toAccount() = AccountPublicBoV2(
         accountId = EntityId(),
         accountUuid = UUID.randomUUID().toStackUuid(),
-        accountName = getClaim(JWT_CLAIM_EMAIL).asString(),
-        fullName = getClaim(JWT_CLAIM_NAME).asString(),
-        email = getClaim(JWT_CLAIM_EMAIL).asString(),
+        accountName = upn ?: email ?: "",
+        fullName = name ?: email ?: "",
+        email = email,
         phone = null,
         theme = null,
         locale = ""
     )
-    private val DecodedJWT.roles : Set<String> get() {
-        val roles = getClaim(JWT_CLAIM_ROLES).asList(String::class.java)
-        return roles.map {
-            //TODO: role mapping!
-            it
-        }.toSet()
-    }
-
 
 }

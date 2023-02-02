@@ -18,11 +18,12 @@ import zakadabar.core.exception.Unauthorized
 import zakadabar.core.server.ktor.KtorAuthConfig
 import zakadabar.core.server.ktor.KtorRouteConfig
 import zakadabar.lib.accounts.data.OauthSettings
+import zakadabar.lib.accounts.jwt.JwtDecoder
 import java.security.cert.X509Certificate
 import javax.net.ssl.X509TrustManager
 import java.net.URL
 
-class Oauth2(oauth: OauthSettings, callback: (OauthSettings, DecodedJWT)->StackSession) {
+class Oauth2(oauth: OauthSettings, callback: (DecodedJWT)->StackSession) {
 
     val configName = "auth-oauth-${oauth.name}"
 
@@ -65,11 +66,15 @@ class Oauth2(oauth: OauthSettings, callback: (OauthSettings, DecodedJWT)->StackS
             get(oauth.login) {/* auto redirect to authorizeUrl by ktor */}
             get(oauth.callback) {
                 val principal = call.principal() as? OAuthAccessTokenResponse.OAuth2 ?: throw Unauthorized("no token")
-                val jwtBlob = principal.accessToken
+                val jwtBlob = principal.idToken ?: throw Unauthorized("no id_token")
+
+                println("accessToken:\n${principal.accessToken}")
+                println("idToken:\n$jwtBlob")
+
                 val jwksUrl = oauth.jwksUrl?.let(::URL)
                 val jwt = JwtDecoder(jwksUrl).decode(jwtBlob)
 
-                val session = callback(oauth, jwt)
+                val session = callback(jwt)
 
                 call.sessions.set(session)
 
@@ -98,6 +103,7 @@ class Oauth2(oauth: OauthSettings, callback: (OauthSettings, DecodedJWT)->StackS
 
         private val ApplicationCall.sessionKey : String get() = sessions.findName(StackSession::class)
         private val ApplicationCall.sessionId : String? get() = request.cookies[sessionKey]
+        private val OAuthAccessTokenResponse.OAuth2.idToken : String? get() = extraParameters["id_token"]
 
         @Suppress("CustomX509TrustManager")
         private object EmptyX509TrustManager: X509TrustManager {
