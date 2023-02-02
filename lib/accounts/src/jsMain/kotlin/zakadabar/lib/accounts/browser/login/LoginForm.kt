@@ -63,22 +63,10 @@ class LoginForm(
             } else {
                 + div { }
             }
-            + ZkButton(localizedStrings.login) { this@LoginForm.submit() }
+            + ZkButton(localizedStrings.login) { this@LoginForm.submit() } marginBottom 10
         }
 
-        io {
-            val providers = AuthProviderList().execute()
-            if (providers.isNotEmpty()) {
-
-                + div { + localizedStrings.loginWith }
-
-                providers.forEach {
-                    + row {
-                        + ZkButton(it.displayName) { window.location.href = it.loginPath }
-                    }
-                }
-            }
-        }
+        + AuthProvidersElement()
 
     }
 

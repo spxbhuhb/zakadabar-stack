@@ -13,7 +13,7 @@ pluginManagement {
 }
 
 include("core:core")
-include("core:core-android")
+//include("core:core-android")
 
 include("cookbook")
 
@@ -33,10 +33,10 @@ include("lib:softui")
 include("lib:xlsx")
 
 include("demo:demo-basic")
-include("demo:demo-basic-mobile")
-include("demo:demo-content")
-include("demo:demo-sandbox")
-include("demo:demo-sandbox-mobile")
+//include("demo:demo-basic-mobile")
+//include("demo:demo-content")
+//include("demo:demo-sandbox")
+//include("demo:demo-sandbox-mobile")
 
 include("site")
 
