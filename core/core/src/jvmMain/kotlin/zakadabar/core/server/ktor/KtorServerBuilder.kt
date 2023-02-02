@@ -40,9 +40,32 @@ open class KtorServerBuilder(
 
     fun build() : ApplicationEngine = embeddedServer(
         factory = Class.forName(config.ktor.engine).kotlin.objectInstance as ApplicationEngineFactory<*, *>,
-        port = config.ktor.port,
-        module = Application::myApplicationModule
-    )
+        port = config.ktor.port
+    ) {
+
+        if (config.xForwardedHeaderSupport) {
+            install(XForwardedHeaderSupport)
+        }
+
+        features.forEach {
+            @Suppress("UNCHECKED_CAST")
+            install(it.feature, it.config as (Any.() -> Unit))
+        }
+
+        install(ContentNegotiation) {
+            json(Json)
+        }
+
+        install(Compression) {
+
+        }
+
+        session()
+        websockets()
+        statusPages()
+        routing()
+
+    }
 
     open fun Application.session() {
         val sessionBl = server.firstOrNull<KtorSessionProvider>()
@@ -163,28 +186,4 @@ open class KtorServerBuilder(
         }
     }
 
-}
-
-fun Application.myApplicationModule() {
-    if (config.xForwardedHeaderSupport) {
-        install(XForwardedHeaderSupport)
-    }
-
-    features.forEach {
-        @Suppress("UNCHECKED_CAST")
-        install(it.feature, it.config as (Any.() -> Unit))
-    }
-
-    install(ContentNegotiation) {
-        json(Json)
-    }
-
-    install(Compression) {
-
-    }
-
-    session()
-    websockets()
-    statusPages()
-    routing()
 }
