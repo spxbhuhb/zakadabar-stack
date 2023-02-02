@@ -73,9 +73,7 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
             else throw Unauthorized("account not found: $account.accountName")
         }
 
-        val roles = jwt.roles
-
-        syncRoles(executor.accountId, roles)
+        syncRoles(executor.accountId, jwt.roles)
 
         return executor.toSession()
     }
