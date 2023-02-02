@@ -3,39 +3,30 @@
  */
 package zakadabar.lib.accounts.business
 
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.features.*
-import io.ktor.http.*
-import io.ktor.response.*
-import io.ktor.routing.*
-import io.ktor.sessions.*
+import com.auth0.jwt.interfaces.DecodedJWT
 import zakadabar.core.authorize.AccountBlProvider
+import zakadabar.core.authorize.AccountPublicBoV2
 import zakadabar.core.authorize.BusinessLogicAuthorizer
 import zakadabar.core.authorize.Executor
 import zakadabar.core.business.BusinessLogicCommon
+import zakadabar.core.data.BaseBo
+import zakadabar.core.data.EntityId
 import zakadabar.core.data.QueryBo
-import zakadabar.core.exception.Forbidden
 import zakadabar.core.exception.Unauthorized
 import zakadabar.core.module.module
-import zakadabar.core.server.ktor.KtorAuthConfig
-import zakadabar.core.server.ktor.KtorRouteConfig
 import zakadabar.core.server.ktor.plusAssign
 import zakadabar.core.setting.setting
 import zakadabar.core.server.server
+import zakadabar.core.util.toStackUuid
 import zakadabar.lib.accounts.data.*
-import zakadabar.lib.accounts.server.ktor.JwtDecoder
+import zakadabar.lib.accounts.server.ktor.Oauth2
+import zakadabar.lib.accounts.server.ktor.Oauth2.Companion.login
 import zakadabar.lib.accounts.server.ktor.StackSession
-import java.net.URL
-import java.security.cert.X509Certificate
-import javax.net.ssl.X509TrustManager
+import java.util.*
 
-class AuthProviderBl(
+class AuthProviderBl() : BusinessLogicCommon<AuthProviderBo>() {
+
     override val namespace: String = AuthProviderBo.boNamespace
-) : BusinessLogicCommon<AuthProviderBo>() {
-
 
     private val settings by setting<ModuleSettings>()
 
@@ -51,9 +42,11 @@ class AuthProviderBl(
         query(AuthProviderList::class, ::authProviderList)
     }
 
-    private val OauthSettings.login : String get() = "/api/auth/$name/login"
-    private val OauthSettings.callback : String get() = "/api/auth/$name/callback"
-
+    companion object {
+        const val JWT_CLAIM_EMAIL = "email"
+        const val JWT_CLAIM_ROLES = "roles"
+        const val JWT_CLAIM_NAME = "name"
+    }
     override fun onModuleStart() {
         super.onModuleStart()
 
@@ -61,91 +54,38 @@ class AuthProviderBl(
 
             println("Register Oauth: ${oauth.name} - ${oauth.displayName}")
 
-            val configName = "auth-oauth-${oauth.name}"
+            val handler = Oauth2(oauth, ::callback)
 
-            val httpClient = HttpClient(CIO) {
-                engine {
-                    https {
-                        if (oauth.trustAllCerts) {
-                            trustManager = EmptyX509TrustManager
-                        }
-                    }
-                }
-                developmentMode = false
-            }
-
-            server += KtorAuthConfig {
-                oauth(configName) {
-                    client = httpClient
-                    urlProvider = {
-                        val params = request.queryParameters["app"]?.let { "?app=$it" } ?: ""
-                        with(request.origin) {
-                            "$scheme://$host:$port${oauth.callback}$params"
-                        }
-                    }
-                    providerLookup = {
-                        OAuthServerSettings.OAuth2ServerSettings(
-                            name = oauth.name,
-                            authorizeUrl = oauth.authorizeUrl,
-                            accessTokenUrl = oauth.accessTokenUrl,
-                            requestMethod = HttpMethod.Post,
-                            clientId = oauth.clientId,
-                            clientSecret = oauth.clientSecret ?: "",
-                            defaultScopes = oauth.defaultScopes ?: emptyList(),
-                        )
-                    }
-                }
-            }
-
-            server += KtorRouteConfig {
-                authenticate(configName) {
-                    get(oauth.login) { /* auto redirect to authorizeUrl by ktor */}
-                    get(oauth.callback) {
-                        val principal = call.principal() as? OAuthAccessTokenResponse.OAuth2 ?: throw Unauthorized("no token")
-                        val jwtBlob = principal.accessToken
-                        val jwksUrl = oauth.jwksUrl?.let(::URL)
-                        val jwt = JwtDecoder(jwksUrl).decode(jwtBlob)
-
-                        println(jwt.claims)
-
-                        val accountName = jwt.getClaim("email").asString()
-                        val roles = jwt.getClaim("roles").asArray(String::class.java)
-
-                        val executor : Executor = try {
-                            accountBl.executorFor(accountName)
-                        } catch(ex: Exception) {
-                            if (oauth.autoRegister) register()
-                            else throw Unauthorized("account not found: $accountName")
-                        }
-
-                        println("Executor: ${executor.accountId}")
-                        //TODO: sync roles
-
-                        call.sessions.set(executor.toSession())
-
-                        val sessionKey = call.sessions.findName(StackSession::class)
-                        val sessionId = call.request.cookies[sessionKey]
-
-                        val app = call.request.queryParameters["app"]
-
-                        if (app == null) {
-                            call.respondRedirect("/")
-                        } else if (oauth.externalApps?.contains(app) == true) {
-                            call.respondRedirect("$app?sessionKey=$sessionKey&sessionId=$sessionId")
-                        } else {
-                            throw Forbidden()
-                        }
-
-                    }
-                }
-            }
+            server += handler.authConfig
+            server += handler.routeConfig
 
         }
 
     }
 
-    private fun register() : Executor {
+    private fun callback(oauth: OauthSettings, jwt: DecodedJWT) : StackSession {
+        val account = jwt.toAccount()
+
+        val executor : Executor = try {
+            accountBl.executorFor(account.accountName)
+        } catch(ex: Exception) {
+            if (oauth.autoRegister) register(account)
+            else throw Unauthorized("account not found: $account.accountName")
+        }
+
+        val roles = jwt.roles
+
+        syncRoles(executor.accountId, roles)
+
+        return executor.toSession()
+    }
+
+    private fun register(account: AccountPublicBoV2) : Executor {
         TODO("not implemented yet")
+    }
+
+    private fun syncRoles(accountId:  EntityId<out BaseBo>, roles: Set<String>) {
+
     }
 
     private fun authProviderList(executor: Executor, query: AuthProviderList) : List<AuthProviderBo> {
@@ -167,10 +107,23 @@ class AuthProviderBl(
         permissionNames = permissionNames
     )
 
-    private object EmptyX509TrustManager: X509TrustManager {
-        override fun checkClientTrusted(p0: Array<out X509Certificate>, p1: String) = Unit
-        override fun checkServerTrusted(p0: Array<out X509Certificate>, p1: String) = Unit
-        override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
+    private fun DecodedJWT.toAccount() = AccountPublicBoV2(
+        accountId = EntityId(),
+        accountUuid = UUID.randomUUID().toStackUuid(),
+        accountName = getClaim(JWT_CLAIM_EMAIL).asString(),
+        fullName = getClaim(JWT_CLAIM_NAME).asString(),
+        email = getClaim(JWT_CLAIM_EMAIL).asString(),
+        phone = null,
+        theme = null,
+        locale = ""
+    )
+    private val DecodedJWT.roles : Set<String> get() {
+        val roles = getClaim(JWT_CLAIM_ROLES).asList(String::class.java)
+        return roles.map {
+            //TODO: role mapping!
+            it
+        }.toSet()
     }
+
 
 }

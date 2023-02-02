@@ -4,6 +4,7 @@
 package zakadabar.core.server.ktor
 
 import io.ktor.application.*
+import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -39,28 +40,9 @@ open class KtorServerBuilder(
 
     fun build() : ApplicationEngine = embeddedServer(
         factory = Class.forName(config.ktor.engine).kotlin.objectInstance as ApplicationEngineFactory<*, *>,
-        port = config.ktor.port
-    ) {
-
-        features.forEach {
-            @Suppress("UNCHECKED_CAST")
-            install(it.feature, it.config as (Any.() -> Unit))
-        }
-
-        install(ContentNegotiation) {
-            json(Json)
-        }
-
-        install(Compression) {
-
-        }
-
-        session()
-        websockets()
-        statusPages()
-        routing()
-
-    }
+        port = config.ktor.port,
+        module = Application::myApplicationModule
+    )
 
     open fun Application.session() {
         val sessionBl = server.firstOrNull<KtorSessionProvider>()
@@ -181,4 +163,28 @@ open class KtorServerBuilder(
         }
     }
 
+}
+
+fun Application.myApplicationModule() {
+    if (config.xForwardedHeaderSupport) {
+        install(XForwardedHeaderSupport)
+    }
+
+    features.forEach {
+        @Suppress("UNCHECKED_CAST")
+        install(it.feature, it.config as (Any.() -> Unit))
+    }
+
+    install(ContentNegotiation) {
+        json(Json)
+    }
+
+    install(Compression) {
+
+    }
+
+    session()
+    websockets()
+    statusPages()
+    routing()
 }

@@ -27,8 +27,6 @@ fun install(
     appRoles = roles
     appPermissions = permissions
 
-    server += XForwardedHeaderSupport
-
     server += accountPrivateBl
     server += RoleBl()
     server += KtorSessionBl()
