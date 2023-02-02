@@ -9,7 +9,7 @@ import zakadabar.core.schema.BoSchema
 import zakadabar.core.setting.envVar
 
 @Serializable
-class ServerSettexitingsBo(
+class ServerSettingsBo(
 
     var settingsDirectory: String = "",
     var serverName: String = "",
