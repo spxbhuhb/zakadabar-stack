@@ -4,11 +4,11 @@
 package zakadabar.lib.accounts.business
 
 import com.auth0.jwt.interfaces.DecodedJWT
-import zakadabar.core.authorize.AccountBlProvider
 import zakadabar.core.authorize.AccountPublicBoV2
 import zakadabar.core.authorize.BusinessLogicAuthorizer
 import zakadabar.core.authorize.Executor
 import zakadabar.core.business.BusinessLogicCommon
+import zakadabar.core.data.Secret
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.data.QueryBo
@@ -34,7 +34,7 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
 
     private val settings by setting<ModuleSettings>()
 
-    private val accountBl by module<AccountBlProvider>()
+    private val accountBl by module<AccountPrivateBl>()
 
     override val authorizer = object : BusinessLogicAuthorizer<AuthProviderBo> {
         override fun authorizeQuery(executor: Executor, queryBo: QueryBo<*>) {
@@ -81,7 +81,23 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
     }
 
     private fun register(account: AccountPublicBoV2) : Executor {
-        TODO("not implemented yet")
+        accountBl.pa.withTransaction {
+            accountBl.createRecords(
+                CreateAccount(
+                    credentials = Secret("BUMM"),
+                    accountName = account.accountName,
+                    fullName = account.fullName,
+                    email = account.email ?: "",
+                    phone = account.phone,
+                    theme = account.theme,
+                    locale = account.locale,
+                    validated = true,
+                    locked = false,
+                    roles = emptyList() //TODO!!
+                )
+            )
+        }
+        return accountBl.executorFor(account.accountName)
     }
 
     private fun syncRoles(accountId:  EntityId<out BaseBo>, roles: Set<String>) {

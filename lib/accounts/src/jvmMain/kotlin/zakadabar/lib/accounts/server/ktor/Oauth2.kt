@@ -78,7 +78,10 @@ class Oauth2(oauth: OauthSettings, callback: (DecodedJWT)->StackSession) {
 
                 call.sessions.set(session)
 
+                println("session: $session")
+
                 val app = call.request.queryParameters[APP_PARAM]
+                println("app: $app")
 
                 val url = when {
                     app == null -> "/"
@@ -86,6 +89,7 @@ class Oauth2(oauth: OauthSettings, callback: (DecodedJWT)->StackSession) {
                     else -> throw Forbidden()
                 }
 
+                println("url: $url")
                 call.respondRedirect(url)
             }
         }
