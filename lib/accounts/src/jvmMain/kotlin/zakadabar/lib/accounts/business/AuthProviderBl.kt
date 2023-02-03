@@ -4,7 +4,6 @@
 package zakadabar.lib.accounts.business
 
 import com.auth0.jwt.interfaces.DecodedJWT
-import zakadabar.core.authorize.AccountPublicBoV2
 import zakadabar.core.authorize.BusinessLogicAuthorizer
 import zakadabar.core.authorize.Executor
 import zakadabar.core.business.BusinessLogicCommon
@@ -17,16 +16,13 @@ import zakadabar.core.module.module
 import zakadabar.core.server.ktor.plusAssign
 import zakadabar.core.setting.setting
 import zakadabar.core.server.server
-import zakadabar.core.util.toStackUuid
 import zakadabar.lib.accounts.data.*
-import zakadabar.lib.accounts.jwt.email
-import zakadabar.lib.accounts.jwt.name
-import zakadabar.lib.accounts.jwt.roles
-import zakadabar.lib.accounts.jwt.upn
+import zakadabar.lib.accounts.jwt.*
 import zakadabar.lib.accounts.server.ktor.Oauth2
 import zakadabar.lib.accounts.server.ktor.Oauth2.Companion.login
 import zakadabar.lib.accounts.server.ktor.StackSession
-import java.util.*
+import kotlin.NoSuchElementException
+import kotlin.random.Random
 
 class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
 
@@ -66,42 +62,41 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
         println(jwt.subject)
         println(jwt.claims)
 
-        val account = jwt.toAccount()
-
-        val executor : Executor = try {
-            accountBl.executorFor(account.accountName)
-        } catch(ex: Exception) {
-            if (oauth.autoRegister) register(account)
-            else throw Unauthorized("account not found: $account.accountName")
+        var executor = try {
+           accountBl.executorFor(jwt.accountName)
+        } catch (ex: NoSuchElementException) {
+            if (oauth.autoRegister) register(jwt)
+            else throw Unauthorized("account not found: $jwt.accountName")
         }
 
-        jwt.roles?.let { syncRoles(executor.accountId, it) }
+        executor = jwt.roles?.let { syncRoles(executor, it) } ?: executor
 
         return executor.toSession()
     }
 
-    private fun register(account: AccountPublicBoV2) : Executor {
-        accountBl.pa.withTransaction {
+    private fun register(jwt: DecodedJWT) : Executor {
+        val account = accountBl.pa.withTransaction {
             accountBl.createRecords(
                 CreateAccount(
-                    credentials = Secret("BUMM"),
-                    accountName = account.accountName,
-                    fullName = account.fullName,
-                    email = account.email ?: "",
-                    phone = account.phone,
-                    theme = account.theme,
-                    locale = account.locale,
+                    credentials = Secret.random(),
+                    accountName = jwt.accountName,
+                    fullName = jwt.fullName,
+                    email = jwt.email ?: "noreply@localhost",
+                    phone = null,
+                    theme = null,
+                    locale = "",
                     validated = true,
                     locked = false,
-                    roles = emptyList() //TODO!!
+                    roles = emptyList()
                 )
             )
         }
-        return accountBl.executorFor(account.accountName)
+        return accountBl.executorFor(account)
     }
 
-    private fun syncRoles(accountId:  EntityId<out BaseBo>, roles: Set<String>) {
+    private fun syncRoles(executor:  Executor, roles: Set<String>) : Executor {
 
+        return executor
     }
 
     private fun authProviderList(executor: Executor, query: AuthProviderList) : List<AuthProviderBo> {
@@ -122,16 +117,9 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
         permissionIds = permissionIds,
         permissionNames = permissionNames
     )
+    private val DecodedJWT.accountName : String get() = upn ?: email ?: subject
 
-    private fun DecodedJWT.toAccount() = AccountPublicBoV2(
-        accountId = EntityId(),
-        accountUuid = UUID.randomUUID().toStackUuid(),
-        accountName = upn ?: email ?: "",
-        fullName = name ?: email ?: "",
-        email = email,
-        phone = null,
-        theme = null,
-        locale = ""
-    )
+    private val DecodedJWT.fullName : String get() = name ?: cn ?: accountName
 
+    private fun Secret.Companion.random() = Secret(String(Random.nextBytes(47), Charsets.ISO_8859_1))
 }
