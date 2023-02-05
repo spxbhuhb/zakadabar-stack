@@ -99,10 +99,18 @@ data class OauthSettings(
     var authorizeUrl : String,
     var accessTokenUrl : String,
     var clientId : String,
-    var clientSecret : String? = null,
-    var defaultScopes : List<String>? = null,
+    var clientSecret : String?,
+    var scopes : List<String>,
+    var claims: AccountClaims,
     var autoRegister : Boolean = false,
     var jwksUrl : String? = null,
     var externalApps : List<String>? = null,
     var trustAllCerts : Boolean = false
+)
+
+@Serializable
+data class AccountClaims(
+    var accountName: String,
+    var fullName: String,
+    var email: String
 )

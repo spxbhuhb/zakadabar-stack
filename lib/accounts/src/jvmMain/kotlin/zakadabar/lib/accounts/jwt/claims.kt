@@ -5,16 +5,6 @@ package zakadabar.lib.accounts.jwt
 
 import com.auth0.jwt.interfaces.DecodedJWT
 
-val DecodedJWT.upn : String? get() = getString("upn")
+fun DecodedJWT.getString(name: String) : String? = getClaim(name).asString()
 
-val DecodedJWT.name : String? get() = getString("name")
-
-val DecodedJWT.cn : String? get() = getString("commonname")
-
-val DecodedJWT.email : String? get() = getString("email")
-
-val DecodedJWT.roles : Set<String>? get() = getArray("roles")?.toSet()
-
-private fun DecodedJWT.getString(name: String) : String? = getClaim(name).asString()
-
-private fun DecodedJWT.getArray(name: String) : Array<String>? = getClaim(name).asArray(String::class.java)
+inline fun <reified T> DecodedJWT.getList(name: String) : List<T>? = getClaim(name).asList(T::class.java)

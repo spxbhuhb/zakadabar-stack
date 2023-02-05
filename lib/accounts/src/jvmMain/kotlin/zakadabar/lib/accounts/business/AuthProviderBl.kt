@@ -3,13 +3,10 @@
  */
 package zakadabar.lib.accounts.business
 
-import com.auth0.jwt.interfaces.DecodedJWT
 import zakadabar.core.authorize.BusinessLogicAuthorizer
 import zakadabar.core.authorize.Executor
 import zakadabar.core.business.BusinessLogicCommon
 import zakadabar.core.data.Secret
-import zakadabar.core.data.BaseBo
-import zakadabar.core.data.EntityId
 import zakadabar.core.data.QueryBo
 import zakadabar.core.exception.Unauthorized
 import zakadabar.core.module.module
@@ -42,6 +39,8 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
         query(AuthProviderList::class, ::authProviderList)
     }
 
+    var callback : ((Executor, Oauth2.Token) -> Unit)? = null
+
     override fun onModuleStart() {
         super.onModuleStart()
 
@@ -49,7 +48,7 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
 
             println("Register Oauth: ${oauth.name} - ${oauth.displayName}")
 
-            val handler = Oauth2(oauth) { callback(oauth, it) }
+            val handler = Oauth2(oauth, ::callback)
 
             server += handler.authConfig
             server += handler.routeConfig
@@ -58,30 +57,42 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
 
     }
 
-    private fun callback(oauth: OauthSettings, jwt: DecodedJWT) : StackSession {
-        println(jwt.subject)
-        println(jwt.claims)
+    private fun callback(token: Oauth2.Token) : StackSession {
+
+        val oauth = token.oauth
+        val idToken = token.idToken
+
+        val accountName = idToken.getString(oauth.claims.accountName) ?: throw Unauthorized("missing claim: ${oauth.claims.accountName}")
+
+        println("Incoming account: $accountName")
+        println("Claims: ${idToken.claims}")
 
         var executor = try {
-           accountBl.executorFor(jwt.accountName)
+           accountBl.executorFor(accountName)
         } catch (ex: NoSuchElementException) {
-            if (oauth.autoRegister) register(jwt)
-            else throw Unauthorized("account not found: $jwt.accountName")
+            if (oauth.autoRegister) register(token)
+            else throw Unauthorized("account not found: $accountName")
         }
 
-        executor = jwt.roles?.let { syncRoles(executor, it) } ?: executor
+        callback?.invoke(executor, token)
+
+        executor = accountBl.executorFor(accountName)
 
         return executor.toSession()
     }
 
-    private fun register(jwt: DecodedJWT) : Executor {
+    private fun register(token: Oauth2.Token) : Executor {
+        val oauth = token.oauth
+        val idToken = token.idToken
+        val claims = oauth.claims
+
         val account = accountBl.pa.withTransaction {
             accountBl.createRecords(
                 CreateAccount(
                     credentials = Secret.random(),
-                    accountName = jwt.accountName,
-                    fullName = jwt.fullName,
-                    email = jwt.email ?: "noreply@localhost",
+                    accountName = idToken.getString(claims.accountName)!!,
+                    fullName = idToken.getString(claims.fullName)!!,
+                    email = idToken.getString(claims.email) ?: "noreply@localhost",
                     phone = null,
                     theme = null,
                     locale = "",
@@ -92,11 +103,6 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
             )
         }
         return accountBl.executorFor(account)
-    }
-
-    private fun syncRoles(executor:  Executor, roles: Set<String>) : Executor {
-
-        return executor
     }
 
     private fun authProviderList(executor: Executor, query: AuthProviderList) : List<AuthProviderBo> {
@@ -117,9 +123,7 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
         permissionIds = permissionIds,
         permissionNames = permissionNames
     )
-    private val DecodedJWT.accountName : String get() = upn ?: email ?: subject
-
-    private val DecodedJWT.fullName : String get() = name ?: cn ?: accountName
 
     private fun Secret.Companion.random() = Secret(String(Random.nextBytes(47), Charsets.ISO_8859_1))
+
 }

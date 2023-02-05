@@ -23,7 +23,7 @@ import java.security.cert.X509Certificate
 import javax.net.ssl.X509TrustManager
 import java.net.URL
 
-class Oauth2(oauth: OauthSettings, callback: (DecodedJWT)->StackSession) {
+class Oauth2(oauth: OauthSettings, callback: (Token)->StackSession) {
 
     val configName = "auth-oauth-${oauth.name}"
 
@@ -55,7 +55,7 @@ class Oauth2(oauth: OauthSettings, callback: (DecodedJWT)->StackSession) {
                     requestMethod = HttpMethod.Post,
                     clientId = oauth.clientId,
                     clientSecret = oauth.clientSecret ?: "",
-                    defaultScopes = oauth.defaultScopes ?: emptyList(),
+                    defaultScopes = oauth.scopes,
                 )
             }
         }
@@ -66,15 +66,15 @@ class Oauth2(oauth: OauthSettings, callback: (DecodedJWT)->StackSession) {
             get(oauth.login) {/* auto redirect to authorizeUrl by ktor */}
             get(oauth.callback) {
                 val principal = call.principal() as? OAuthAccessTokenResponse.OAuth2 ?: throw Unauthorized("no token")
-                val jwtBlob = principal.idToken ?: throw Unauthorized("no id_token")
+                val idTokenBlob = principal.idToken ?: throw Unauthorized("no id_token")
 
                 println("accessToken:\n${principal.accessToken}")
-                println("idToken:\n$jwtBlob")
+                println("idToken:\n$idTokenBlob")
 
-                val jwksUrl = oauth.jwksUrl?.let(::URL)
-                val jwt = JwtDecoder(jwksUrl).decode(jwtBlob)
+                val jwksUrl = if (oauth.trustAllCerts) null else oauth.jwksUrl?.let(::URL)
+                val idToken = JwtDecoder(jwksUrl).decode(idTokenBlob)
 
-                val session = callback(jwt)
+                val session = callback(Token(oauth, principal.accessToken, idToken))
 
                 call.sessions.set(session)
 
@@ -117,6 +117,12 @@ class Oauth2(oauth: OauthSettings, callback: (DecodedJWT)->StackSession) {
         }
 
     }
+
+    data class Token(
+        val oauth: OauthSettings,
+        val accessToken: String,
+        val idToken : DecodedJWT
+    )
 
 }
 
