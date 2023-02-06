@@ -46,7 +46,7 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
 
         settings.oauth?.forEach { oauth->
 
-            println("Register Oauth: ${oauth.name} - ${oauth.displayName}")
+            logger.info("Register Oauth: ${oauth.name} - ${oauth.displayName}")
 
             val handler = Oauth2(oauth, ::callback)
 
@@ -59,19 +59,19 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
 
     private fun callback(token: Oauth2.Token) : StackSession {
 
-        val oauth = token.oauth
+        val oauth = token.authSettings
         val idToken = token.idToken
 
         val accountName = idToken.getString(oauth.claims.accountName) ?: throw Unauthorized("missing claim: ${oauth.claims.accountName}")
 
-        println("Incoming account: $accountName")
-        println("Claims: ${idToken.claims}")
+        logger.debug("Incoming account: $accountName")
+        logger.debug("Claims: ${idToken.claims}")
 
         var executor = try {
            accountBl.executorFor(accountName)
         } catch (ex: NoSuchElementException) {
             if (oauth.autoRegister) register(token)
-            else throw Unauthorized("account not found: $accountName")
+            else throw Unauthorized("Account not found: $accountName")
         }
 
         callback?.invoke(executor, token)
@@ -82,7 +82,7 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
     }
 
     private fun register(token: Oauth2.Token) : Executor {
-        val oauth = token.oauth
+        val oauth = token.authSettings
         val idToken = token.idToken
         val claims = oauth.claims
 

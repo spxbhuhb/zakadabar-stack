@@ -50,9 +50,9 @@ class Oauth2(oauth: OauthSettings, callback: (Token)->StackSession) {
             providerLookup = {
                 OAuthServerSettings.OAuth2ServerSettings(
                     name = oauth.name,
-                    authorizeUrl = oauth.authorizeUrl,
-                    accessTokenUrl = oauth.accessTokenUrl,
-                    requestMethod = HttpMethod.Post,
+                    authorizeUrl = oauth.authorizationEndpoint,
+                    accessTokenUrl = oauth.tokenEndpoint,
+                    requestMethod = HttpMethod(oauth.tokenRequestMethod),
                     clientId = oauth.clientId,
                     clientSecret = oauth.clientSecret ?: "",
                     defaultScopes = oauth.scopes,
@@ -66,22 +66,19 @@ class Oauth2(oauth: OauthSettings, callback: (Token)->StackSession) {
             get(oauth.login) {/* auto redirect to authorizeUrl by ktor */}
             get(oauth.callback) {
                 val principal = call.principal() as? OAuthAccessTokenResponse.OAuth2 ?: throw Unauthorized("no token")
-                val idTokenBlob = principal.idToken ?: throw Unauthorized("no id_token")
+                val idTokenBlob = principal.idToken ?: throw Unauthorized("no $ID_TOKEN")
 
-                println("accessToken:\n${principal.accessToken}")
-                println("idToken:\n$idTokenBlob")
+                //println("accessToken:\n${principal.accessToken}")
+                //println("idToken:\n$idTokenBlob")
 
-                val jwksUrl = if (oauth.trustAllCerts) null else oauth.jwksUrl?.let(::URL)
-                val idToken = JwtDecoder(jwksUrl).decode(idTokenBlob)
+                val jwksUri = if (oauth.trustAllCerts) null else oauth.jwksUri?.let(::URL)
+                val idToken = JwtDecoder(jwksUri).decode(idTokenBlob)
 
                 val session = callback(Token(oauth, principal.accessToken, idToken))
 
                 call.sessions.set(session)
 
-                println("session: $session")
-
                 val app = call.request.queryParameters[APP_PARAM]
-                println("app: $app")
 
                 val url = when {
                     app == null -> "/"
@@ -89,7 +86,6 @@ class Oauth2(oauth: OauthSettings, callback: (Token)->StackSession) {
                     else -> throw Forbidden()
                 }
 
-                println("url: $url")
                 call.respondRedirect(url)
             }
         }
@@ -100,6 +96,7 @@ class Oauth2(oauth: OauthSettings, callback: (Token)->StackSession) {
         const val APP_PARAM = "app"
         const val SESSION_KEY = "sessionKey"
         const val SESSION_ID = "sessionId"
+        const val ID_TOKEN = "id_token"
 
         val OauthSettings.login : String get() = "$ROOT/$name/login"
         val OauthSettings.callback : String get() = "$ROOT/$name/callback"
@@ -107,7 +104,7 @@ class Oauth2(oauth: OauthSettings, callback: (Token)->StackSession) {
 
         private val ApplicationCall.sessionKey : String get() = sessions.findName(StackSession::class)
         private val ApplicationCall.sessionId : String? get() = request.cookies[sessionKey]
-        private val OAuthAccessTokenResponse.OAuth2.idToken : String? get() = extraParameters["id_token"]
+        private val OAuthAccessTokenResponse.OAuth2.idToken : String? get() = extraParameters[ID_TOKEN]
 
         @Suppress("CustomX509TrustManager")
         private object EmptyX509TrustManager: X509TrustManager {
@@ -119,7 +116,7 @@ class Oauth2(oauth: OauthSettings, callback: (Token)->StackSession) {
     }
 
     data class Token(
-        val oauth: OauthSettings,
+        val authSettings: OauthSettings,
         val accessToken: String,
         val idToken : DecodedJWT
     )
