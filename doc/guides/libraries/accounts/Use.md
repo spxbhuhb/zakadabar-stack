@@ -39,6 +39,9 @@ CommBase.client = httpClientWithAuth("so", "so")
 AccountPrivateBo.all()
 ```
 
+## OAuth2 authentication
+For details see: [Oauth](./Oauth.md)
+
 ## Use on the Frontend
 
 Use the `executor` global value. It is an instance of [ZkExecutor](/core/core/src/jsMain/kotlin/zakadabar/core/browser/application/ZkExecutor.kt):
