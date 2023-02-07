@@ -12,10 +12,11 @@ import zakadabar.core.resource.css.JustifyContent
 import zakadabar.core.resource.css.TextAlign
 import zakadabar.core.resource.iconSource
 import zakadabar.core.resource.localizedStrings
+import zakadabar.lib.accounts.data.ZK_AUTH_LOGGED_IN_JS
 import zakadabar.lib.accounts.data.AuthProviderBo
 import zakadabar.lib.accounts.data.AuthProviderList
 
-open class AuthProvidersElement : ZkElement() {
+open class AuthProvidersElement(val onSuccess: () -> Unit) : ZkElement() {
 
     override fun onCreate() {
         super.onCreate()
@@ -50,7 +51,7 @@ open class AuthProvidersElement : ZkElement() {
     private fun getProviderIconButton(apb: AuthProviderBo): ZkElement {
         val icon by iconSource(apb.svgIcon !!)
         return ZkButton(iconSource = icon, buttonSize = 48, round = true, fill = false, border = false) {
-            window.location.href = apb.loginPath
+            openAuthPopup(apb)
         } marginRight 5 marginLeft 5
     }
 
@@ -62,21 +63,18 @@ open class AuthProvidersElement : ZkElement() {
             round = true,
             capitalize = false
         ) {
-            val x = js("window.event.screenX")
-            val y = js("window.event.screenY")
-            val popup = window.open(apb.loginPath, "popup", "popup=yes,top=$y,screenY=$y,left=$x,screenX=$x,width=300,height=350")
-            var timer : Int = -1
-            timer = window.setInterval({
-                when {
-                    popup == null -> return@setInterval
-                    popup.closed -> window.clearInterval(timer)
-                    popup.window.location.href.endsWith("/") -> {
-                        popup.close()
-                        window.location.href = "/"
-                    }
-                }
-            }, 1000)
+            openAuthPopup(apb)
         } marginBottom 10
+    }
+
+    private fun openAuthPopup(apb: AuthProviderBo) {
+        val x = js("window.event.screenX")
+        val y = js("window.event.screenY")
+        val popup = window.open(apb.loginPath, "popup", "popup=yes,top=$y,left=$x,width=300,height=350")
+        window.asDynamic()[ZK_AUTH_LOGGED_IN_JS] = {
+            popup?.close()
+            onSuccess()
+        }
     }
 
 }

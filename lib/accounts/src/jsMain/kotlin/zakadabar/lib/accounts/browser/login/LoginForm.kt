@@ -64,7 +64,7 @@ class LoginForm(
             + ZkButton(localizedStrings.login) { this@LoginForm.submit() } marginBottom 10
         }
 
-        + AuthProvidersElement()
+        + AuthProvidersElement(onSuccess)
 
     }
 

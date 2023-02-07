@@ -17,7 +17,7 @@ import zakadabar.core.exception.Forbidden
 import zakadabar.core.exception.Unauthorized
 import zakadabar.core.server.ktor.KtorAuthConfig
 import zakadabar.core.server.ktor.KtorRouteConfig
-import zakadabar.lib.accounts.data.OauthSettings
+import zakadabar.lib.accounts.data.*
 import zakadabar.lib.accounts.jwt.JwtDecoder
 import java.security.cert.X509Certificate
 import javax.net.ssl.X509TrustManager
@@ -80,13 +80,12 @@ class Oauth2(oauth: OauthSettings, callback: (Token)->StackSession) {
 
                 val app = call.request.queryParameters[APP_PARAM]
 
-                val url = when {
-                    app == null -> "/"
-                    oauth.containsApp(app) -> "$app?$SESSION_KEY=${call.sessionKey}&$SESSION_ID=${call.sessionId}"
+                when {
+                    app == null -> call.respondText("<script>window.opener.$ZK_AUTH_LOGGED_IN_JS()</script>", ContentType.Text.Html)
+                    oauth.containsApp(app) -> call.respondRedirect("$app?$SESSION_KEY=${call.sessionKey}&$SESSION_ID=${call.sessionId}")
                     else -> throw Forbidden()
                 }
 
-                call.respondRedirect(url)
             }
         }
     }

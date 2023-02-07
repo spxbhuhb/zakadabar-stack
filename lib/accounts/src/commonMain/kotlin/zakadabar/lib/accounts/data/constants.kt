@@ -7,3 +7,5 @@ package zakadabar.lib.accounts.data
 object CredentialTypes {
     const val password = "password"
 }
+
+const val ZK_AUTH_LOGGED_IN_JS = "zkLoggedIn"
