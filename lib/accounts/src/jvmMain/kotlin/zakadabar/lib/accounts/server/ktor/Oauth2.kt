@@ -103,7 +103,7 @@ class Oauth2(oauth: OauthSettings, callback: (Token)->StackSession) {
         fun OauthSettings.containsApp(app: String) = externalApps?.contains(app) == true
 
         private val ApplicationCall.sessionKey : String get() = sessions.findName(StackSession::class)
-        private val ApplicationCall.sessionId : String? get() = request.cookies[sessionKey]
+        private val ApplicationCall.sessionId : String? get() = response.cookies[sessionKey]?.value
         private val OAuthAccessTokenResponse.OAuth2.idToken : String? get() = extraParameters[ID_TOKEN]
 
         @Suppress("CustomX509TrustManager")
