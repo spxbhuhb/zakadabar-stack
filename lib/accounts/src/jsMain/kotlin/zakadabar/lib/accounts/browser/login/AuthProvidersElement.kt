@@ -62,7 +62,21 @@ open class AuthProvidersElement : ZkElement() {
             round = true,
             capitalize = false
         ) {
-            window.location.href = apb.loginPath
+            val x = js("window.event.screenX")
+            val y = js("window.event.screenY")
+            val popup = window.open(apb.loginPath, "popup", "popup=yes,top=$y,screenY=$y,left=$x,screenX=$x,width=300,height=350")
+            var timer : Int = -1
+            timer = window.setInterval({
+                when {
+                    popup == null -> return@setInterval
+                    popup.closed -> window.clearInterval(timer)
+                    popup.window.location.href.endsWith("/") -> {
+                        popup.close()
+                        window.location.href = "/"
+                    }
+                }
+            }, 1000)
         } marginBottom 10
     }
+
 }
