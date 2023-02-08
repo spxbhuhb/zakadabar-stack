@@ -6,6 +6,7 @@ package zakadabar.lib.accounts.business
 import zakadabar.core.authorize.BusinessLogicAuthorizer
 import zakadabar.core.authorize.Executor
 import zakadabar.core.business.BusinessLogicCommon
+import zakadabar.core.data.EntityId
 import zakadabar.core.data.Secret
 import zakadabar.core.data.QueryBo
 import zakadabar.core.exception.Unauthorized
@@ -64,8 +65,8 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
 
         val accountName = idToken.getString(oauth.claims.accountName) ?: throw Unauthorized("missing claim: ${oauth.claims.accountName}")
 
-        logger.debug("Incoming account: $accountName")
-        logger.debug("Claims: ${idToken.claims}")
+        //logger.debug("Incoming account: $accountName")
+        //logger.debug("Claims: ${idToken.claims}")
 
         var executor = try {
            accountBl.executorFor(accountName)
@@ -77,6 +78,10 @@ class AuthProviderBl : BusinessLogicCommon<AuthProviderBo>() {
         callback?.invoke(executor, token)
 
         executor = accountBl.executorFor(accountName)
+
+        accountBl.pa.withTransaction {
+            accountBl.authenticate(executor, EntityId(executor.accountId), "", false, oauth.name)
+        }
 
         return executor.toSession()
     }

@@ -74,9 +74,6 @@ class Oauth2(oauth: OauthSettings, callback: (Token)->StackSession) {
                 val principal = call.principal() as? OAuthAccessTokenResponse.OAuth2 ?: throw Unauthorized("no token")
                 val idTokenBlob = principal.idToken ?: throw Unauthorized("no $ID_TOKEN")
 
-                //println("accessToken:\n${principal.accessToken}")
-                //println("idToken:\n$idTokenBlob")
-
                 val jwksUri = if (oauth.trustAllCerts) null else oauth.jwksUri?.let(::URL)
                 val idToken = JwtDecoder(jwksUri).decode(idTokenBlob)
 

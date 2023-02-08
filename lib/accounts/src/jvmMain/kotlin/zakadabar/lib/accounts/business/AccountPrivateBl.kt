@@ -339,17 +339,23 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
      * @param   executor   The executor of the authentication.
      * @param   accountId  The account id to authenticate.
      * @param   password   The password to authenticate with.
+     * @param   checkCredentials true, if need to check password
+     * @param   source  The authentication source if not locally managed
      *
-     * @throws  NoSuchElementException   When the account does not exists.
+     * @throws  NoSuchElementException   When the account does not exist.
      * @throws  Unauthorized             When the login fails.
      */
-    open fun authenticate(executor: Executor, accountId: EntityId<AccountPrivateBo>, password: String) {
+    open fun authenticate(executor: Executor, accountId: EntityId<AccountPrivateBo>, password: String, checkCredentials : Boolean = true, source : String? = null) {
+
+        val validCredentials = if (checkCredentials) {
+            val credentials = credentialsPa.read(accountId, CredentialTypes.password)
+            BCrypt.checkpw(password, credentials.value.value)
+        } else true
 
         lockState(accountId)
 
         try {
             val state = statePa.readOrNull(accountId)
-            val credentials = credentialsPa.read(accountId, CredentialTypes.password)
 
             val result = when {
                 state == null -> throw Unauthorized("NoState")
@@ -357,7 +363,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
                 state.locked -> Unauthorized("Locked", UnauthorizedData(true))
                 state.expired -> Unauthorized("Expired")
                 state.anonymized -> Unauthorized("Anonymized")
-                ! BCrypt.checkpw(password, credentials.value.value) -> Unauthorized("InvalidCredentials")
+                !validCredentials -> Unauthorized("InvalidCredentials")
                 else -> null
             }
 
@@ -380,7 +386,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
 
             state.loginFailCount = 0
 
-            auditor.auditCustom(executor) { ("login success accountId=${accountId}") }
+            auditor.auditCustom(executor) { "login success accountId=${accountId}" + (source?.let { " source=$it" } ?: "")  }
 
             statePa.update(state)
 
