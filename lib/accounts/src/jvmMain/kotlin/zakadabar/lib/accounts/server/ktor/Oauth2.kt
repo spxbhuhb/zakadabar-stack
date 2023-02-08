@@ -42,7 +42,13 @@ class Oauth2(oauth: OauthSettings, callback: (Token)->StackSession) {
         oauth(configName) {
             client = httpClient
             urlProvider = {
-                val params = request.queryParameters[APP_PARAM]?.let { "?$APP_PARAM=$it" } ?: ""
+                val app = request.queryParameters[APP_PARAM]
+
+                val params = app?.let {
+                    if (oauth.containsApp(app)) "?$APP_PARAM=$app"
+                    else throw Forbidden()
+                } ?: ""
+
                 with(request.origin) {
                     "$scheme://$host:$port${oauth.callback}$params"
                 }
