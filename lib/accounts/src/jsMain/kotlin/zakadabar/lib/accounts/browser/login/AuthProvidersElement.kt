@@ -4,6 +4,7 @@
 package zakadabar.lib.accounts.browser.login
 
 import kotlinx.browser.window
+import org.w3c.dom.Window
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.button.ZkButton
 import zakadabar.core.browser.util.io
@@ -16,7 +17,17 @@ import zakadabar.lib.accounts.data.ZK_AUTH_LOGGED_IN_JS
 import zakadabar.lib.accounts.data.AuthProviderBo
 import zakadabar.lib.accounts.data.AuthProviderList
 
-open class AuthProvidersElement(val onSuccess: () -> Unit) : ZkElement() {
+open class AuthProvidersElement(onSuccess: () -> Unit) : ZkElement() {
+
+    private var loginPopup : Window? = null
+
+    init {
+        /* global js function called by popup code */
+        window.asDynamic()[ZK_AUTH_LOGGED_IN_JS] = {
+            closeLoginPopup()
+            onSuccess()
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -48,10 +59,15 @@ open class AuthProvidersElement(val onSuccess: () -> Unit) : ZkElement() {
         }
     }
 
+    override fun onPause() {
+        closeLoginPopup()
+        super.onPause()
+    }
+
     private fun getProviderIconButton(apb: AuthProviderBo): ZkElement {
         val icon by iconSource(apb.svgIcon !!)
         return ZkButton(iconSource = icon, buttonSize = 48, round = true, fill = false, border = false) {
-            openAuthPopup(apb)
+            openLoginPopup(apb)
         } marginRight 5 marginLeft 5
     }
 
@@ -63,18 +79,24 @@ open class AuthProvidersElement(val onSuccess: () -> Unit) : ZkElement() {
             round = true,
             capitalize = false
         ) {
-            openAuthPopup(apb)
+            openLoginPopup(apb)
         } marginBottom 10
     }
 
-    private fun openAuthPopup(apb: AuthProviderBo) {
+    private fun openLoginPopup(apb: AuthProviderBo) {
+        // at mouse click position
         val x = js("window.event.screenX")
         val y = js("window.event.screenY")
-        val popup = window.open(apb.loginPath, "popup", "popup=yes,top=$y,left=$x,width=300,height=350")
-        window.asDynamic()[ZK_AUTH_LOGGED_IN_JS] = {
-            popup?.close()
-            onSuccess()
-        }
+        loginPopup = window.open(
+            apb.loginPath,
+            "zkAuthLogin",
+            "popup=yes,top=$y,left=$x,width=630,height=630"
+        )
+    }
+
+    private fun closeLoginPopup() {
+        loginPopup?.close()
+        loginPopup = null
     }
 
 }
