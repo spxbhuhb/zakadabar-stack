@@ -126,7 +126,7 @@ data class OauthSettings(
     /**
      * JWKS uri for JWT cert validation
      */
-    var jwksUri : String? = null,
+    var jwksUri : String,
 
     /**
      * clientId from Auth Vendor
@@ -156,13 +156,8 @@ data class OauthSettings(
     /**
      * allowed external app urls, eg. Android deep links
      */
-    var externalApps : List<String>? = null,
+    var externalApps : List<String>? = null
 
-    /**
-     * Disable cert validation in oauth requests.
-     * Using carefully and local-testing purpose only.
-     */
-    var trustAllCerts : Boolean = false
 )
 
 @Serializable

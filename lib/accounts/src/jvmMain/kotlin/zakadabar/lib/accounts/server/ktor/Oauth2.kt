@@ -7,7 +7,6 @@ import com.auth0.jwt.interfaces.DecodedJWT
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.client.*
-import io.ktor.client.engine.cio.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.response.*
@@ -19,28 +18,15 @@ import zakadabar.core.server.ktor.KtorAuthConfig
 import zakadabar.core.server.ktor.KtorRouteConfig
 import zakadabar.lib.accounts.data.*
 import zakadabar.lib.accounts.jwt.JwtDecoder
-import java.security.cert.X509Certificate
-import javax.net.ssl.X509TrustManager
 import java.net.URL
 
 class Oauth2(oauth: OauthSettings, callback: (Token)->StackSession) {
 
     val configName = "auth-oauth-${oauth.name}"
 
-    val httpClient = HttpClient(CIO) {
-        engine {
-            https {
-                if (oauth.trustAllCerts) {
-                    trustManager = EmptyX509TrustManager
-                }
-            }
-        }
-        developmentMode = false
-    }
-
     val authConfig = KtorAuthConfig {
         oauth(configName) {
-            client = httpClient
+            client = HttpClient()
             urlProvider = {
                 val app = request.queryParameters[APP_PARAM]
 
@@ -74,7 +60,7 @@ class Oauth2(oauth: OauthSettings, callback: (Token)->StackSession) {
                 val principal = call.principal() as? OAuthAccessTokenResponse.OAuth2 ?: throw Unauthorized("no token")
                 val idTokenBlob = principal.idToken ?: throw Unauthorized("no $ID_TOKEN")
 
-                val jwksUri = if (oauth.trustAllCerts) null else oauth.jwksUri?.let(::URL)
+                val jwksUri = URL(oauth.jwksUri)
                 val idToken = JwtDecoder(jwksUri).decode(idTokenBlob)
 
                 val session = callback(Token(oauth, principal.accessToken, idToken))
@@ -107,13 +93,6 @@ class Oauth2(oauth: OauthSettings, callback: (Token)->StackSession) {
         private val ApplicationCall.sessionKey : String get() = sessions.findName(StackSession::class)
         private val ApplicationCall.sessionId : String? get() = response.cookies[sessionKey]?.value
         private val OAuthAccessTokenResponse.OAuth2.idToken : String? get() = extraParameters[ID_TOKEN]
-
-        @Suppress("CustomX509TrustManager")
-        private object EmptyX509TrustManager: X509TrustManager {
-            override fun checkClientTrusted(p0: Array<out X509Certificate>, p1: String) = Unit
-            override fun checkServerTrusted(p0: Array<out X509Certificate>, p1: String) = Unit
-            override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
-        }
 
     }
 
