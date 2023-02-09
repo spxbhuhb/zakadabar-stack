@@ -85,8 +85,8 @@ open class AuthProvidersElement(onSuccess: () -> Unit) : ZkElement() {
 
     private fun openLoginPopup(apb: AuthProviderBo) {
         // at mouse click position
-        val x = js("window.event.screenX")
-        val y = js("window.event.screenY")
+        val x = js("event.screenX")
+        val y = js("event.screenY")
         loginPopup = window.open(
             apb.loginPath,
             "zkAuthLogin",

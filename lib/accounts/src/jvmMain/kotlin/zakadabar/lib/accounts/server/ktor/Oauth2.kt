@@ -70,7 +70,7 @@ class Oauth2(oauth: OauthSettings, callback: (Token)->StackSession) {
                 val app = call.request.queryParameters[APP_PARAM]
 
                 when {
-                    app == null -> call.respondText("<script>window.opener.$ZK_AUTH_LOGGED_IN_JS()</script>", ContentType.Text.Html)
+                    app == null -> call.respondText("<script>opener.$ZK_AUTH_LOGGED_IN_JS()</script>", ContentType.Text.Html)
                     oauth.containsApp(app) -> call.respondRedirect("$app?$SESSION_KEY=${call.sessionKey}&$SESSION_ID=${call.sessionId}")
                     else -> throw Forbidden()
                 }
