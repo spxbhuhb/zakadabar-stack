@@ -1,16 +1,18 @@
-# OAuth2 authentication
+# OAuth2 Authentication
 
 This lib supports Oauth2 authentication method with id_token processing.
 
-## configure settings
+## Settings
 
-Config section is in the 'lib.accounts.yaml' under the optional 'oauth' key
+Config section is in `lib.accounts.yaml` under the optional `oauth` key. See
+[ModuleSettings](/lib/accounts/src/commonMain/kotlin/zakadabar/lib/accounts/data/ModuleSettings.kt)
+for general information.
 
-### Oauth2 related parameters
+- multiple providers are allowed
+- claims are mapped to local db AccountPrivate fields
 
-For details see [ModuleSettings](/lib/accounts/src/commonMain/kotlin/zakadabar/lib/accounts/data/ModuleSettings.kt)
+Sample yaml section using google's provider:
 
-sample yaml section using google's provider
 ```yaml
 oauth:
   - 
@@ -31,10 +33,10 @@ oauth:
       fullName: name
       email: email
 ```
-- multiple providers are allowed
-- claims are mapped to local db AccountPrivate fields
 
-### login and callback endpoints
+### Login And Callback Endpoints
+
+Login endpoint:
 
     /api/auth/<name>/login
 
@@ -42,13 +44,14 @@ Browser redirects to provider's authorizationEndpoint.
 
     /api/auth/<name>/callback
 
-Provider redirects back here after authentication.
+The provider redirects back here after authentication.
+
 Callback URL with full protocol and host declaration must be registered as allowed redirect_url in the provider.
 After successful authentication a session created for authenticated user and the browser redirects again to the root page.
 
-### external app (android app) using this provider
+### Using From External App (Android)
 
-login syntax:
+Login syntax:
 
     /api/auth/<name>/login?app=<external-app-link>
 
@@ -59,8 +62,9 @@ After successful authentication the app with following parameter syntax will ope
 Inside the app using sessionKey as cookie name and sessionId as cookie value allows communication in authorized session.
 The external-app-link must be in the configuration yaml externalApps list. It can be app-link or deep-link.
 
-### Extra validations
-If the project requires additional checking, there is a callback option
+### Extra Validations
+
+If the project requires additional checking, there is a callback option:
 
 ```kotlin
     val authBl by module<AuthProviderBl>()
@@ -72,4 +76,4 @@ If the project requires additional checking, there is a callback option
     }
 ```
 
-This callback be called after processing request and before creating authenticated session. 
+This callback is called after oauth processing and before creating authenticated session. 
