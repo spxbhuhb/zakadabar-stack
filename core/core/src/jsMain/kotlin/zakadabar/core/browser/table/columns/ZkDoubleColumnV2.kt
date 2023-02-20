@@ -33,4 +33,5 @@ open class ZkDoubleColumnV2<T : BaseBo>(
 
     open fun format(row: T) = getter(row).toString()
 
+    override fun exportRaw(row: T): Any? = getter(row)
 }

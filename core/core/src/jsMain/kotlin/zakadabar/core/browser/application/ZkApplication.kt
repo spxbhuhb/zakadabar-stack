@@ -21,6 +21,7 @@ import zakadabar.core.resource.*
 import zakadabar.core.server.ServerDescriptionBo
 import zakadabar.core.text.TranslationProvider
 import zakadabar.core.text.capitalized
+import zakadabar.core.util.PublicApi
 
 /**
  * The application itself, initialized in main.kt.
@@ -167,16 +168,19 @@ open class ZkApplication {
         window.dispatchEvent(Event(navStateChangeEvent))
     }
 
+    @PublicApi
     suspend fun initSession() {
         sessionManager = modules.firstOrNull() ?: EmptySessionManager()
         sessionManager.init()
     }
 
+    @PublicApi
     fun initRouting(routing: ZkAppRouting) {
         this.routing = routing
         routing.init()
     }
 
+    @PublicApi
     suspend fun initLocale(store: ZkBuiltinStrings, defaultLocale: String? = null) {
         val path = decodeURIComponent(window.location.pathname).trim('/')
 
@@ -289,4 +293,17 @@ open class ZkApplication {
 
     fun back() = window.history.back()
 
+    /**
+     * Save a value into the local storage of the web browser.
+     */
+    fun saveState(key : String, value : String) {
+        window.localStorage["zk-$key"] = value
+    }
+
+    /**
+     * Load a value from the local storage of the web browser.
+     */
+    fun loadState(key : String) : String? {
+        return window.localStorage["zk-$key"]
+    }
 }

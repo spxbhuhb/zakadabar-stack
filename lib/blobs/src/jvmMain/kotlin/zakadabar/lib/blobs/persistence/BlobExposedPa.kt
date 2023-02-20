@@ -44,7 +44,16 @@ abstract class BlobExposedPa<T : BlobBo<T,RT>, RT : EntityBo<RT>>(
 
     open fun byReference(id: EntityId<*>?, disposition : String? = null) : List<T> {
 
-        val select = table.select { table.reference eq id?.toLong() }
+        val select = table
+            .slice(
+                table.id,
+                table.reference,
+                table.disposition,
+                table.name,
+                table.mimeType,
+                table.size
+            )
+            .select { table.reference eq id?.toLong() }
 
         disposition?.let { select.andWhere { table.disposition like disposition } }
 

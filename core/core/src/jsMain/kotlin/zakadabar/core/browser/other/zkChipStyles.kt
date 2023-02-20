@@ -20,6 +20,7 @@ open class ZkChipStyles : ZkCssStyleSheet() {
         width = "fit-content"
         height = 32.px
         borderRadius = 16.px
+        whiteSpace = "nowrap"
     }
 
     open val icon by cssClass {
@@ -47,10 +48,12 @@ open class ZkChipStyles : ZkCssStyleSheet() {
 
     open val textLeftPaddingNoIcon by cssClass {
         paddingLeft = 12.px
+        whiteSpace = "nowrap"
     }
 
     open val textRightPaddingNoCancel by cssClass {
         paddingRight = 12.px
+        whiteSpace = "nowrap"
     }
 
     open val primaryFill by cssClass {

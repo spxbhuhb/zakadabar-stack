@@ -10,7 +10,6 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.table.ZkTable
-import zakadabar.core.browser.table.zkTableStyles
 import zakadabar.core.browser.util.minusAssign
 import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.data.BaseBo
@@ -30,7 +29,7 @@ open class SortSign<T: BaseBo>(val table: ZkTable<T>): ZkElement() {
     }
 }
 
-open class ZkColumn<T : BaseBo>(
+abstract class ZkColumn<T : BaseBo>(
     val table: ZkTable<T>
 ) : ZkElement(
     element = document.createElement("th") as HTMLElement
@@ -216,6 +215,10 @@ open class ZkColumn<T : BaseBo>(
 
     open fun exportCsv(row: T): String {
         return ""
+    }
+
+    open fun exportRaw(row: T) : Any? {
+        return null
     }
 
 }

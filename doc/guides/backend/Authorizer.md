@@ -11,7 +11,7 @@ of the methods to kick off full processing.
 
 </div>
 
-<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="RoleBlProvider">
+<div data-zk-enrich="Note" data-zk-flavour="Info" data-zk-title="Providers">
 
 Most of these examples use `SimpleRoleAuthorizer`. This authorizer needs a backend
 module that implements `RoleBlProvider`. For example,
@@ -19,6 +19,9 @@ module that implements `RoleBlProvider`. For example,
 [Lib: Accounts](/doc/guides/libraries/accounts/Introduction.md) implements
 this interface. If you do not use `Lib: Accounts`, you have to add a module that implements
 `RoleBlProvider` or your server won't start.
+
+To authorize by permissions, use `SimplePermissionAuthorizer` with `SimplePermissionAuthorizationBo`. 
+This authorizer needs a backend module that implements `PermissionBlProvider`.
 
 </div>
 
@@ -67,6 +70,7 @@ server += SimpleRoleAuthorizerProvider {
 ## Built-in Authorizers
 
 - [SimpleRoleAuthorizer](/core/core/src/commonMain/kotlin/zakadabar/core/authorize/SimpleRoleAuthorizer.kt)  - Role-based authorization, see below.
+- [SimplePermissionAuthorizer](/core/core/src/commonMain/kotlin/zakadabar/core/authorize/SimplePermissionAuthorizer.kt) - Permission-based authorization.
 - [EmptyAuthorizer](/core/core/src/commonMain/kotlin/zakadabar/core/authorize/EmptyAuthorizer.kt) - Denies everything.
 - [UnsafeAuthorizer](/core/core/src/commonMain/kotlin/zakadabar/core/authorize/UnsafeAuthorizer.kt) - Allows everything. Must be explicitly enabled at server startup.
 
@@ -137,6 +141,25 @@ override val authorizer: BusinessLogicAuthorizer<TestBlob> = SimpleRoleAuthorize
     allWrites = StackRoles.siteMember
 }
 ```
+
+## SimplePermissionAuthorizer
+
+[SimplePermissionAuthorizer](/core/core/src/commonMain/kotlin/zakadabar/core/authorize/SimplePermissionAuthorizer.kt) uses permissions to make the authorization decisions. 
+To set up, assign permission names to operations.
+
+```kotlin
+ override val authorizer = SimplePermissionAuthorizer<MyBo>(
+    default<SimplePermissionAuthorizationBo>().apply {
+        read = "my-permission-1"
+        list = "my-permission-1"
+        update = "my-permission-2"
+        create = "my-permission-2"
+        query = "my-permission-1"
+        action = "my-permission-2"
+    })
+```
+
+SimplePermissionAuthorizer also supports `PUBLIC` and `LOGGED_IN` (see above).
 
 ## Write an Authorizer
 

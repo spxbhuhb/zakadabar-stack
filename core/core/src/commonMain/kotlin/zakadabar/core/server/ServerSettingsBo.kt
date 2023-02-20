@@ -20,7 +20,8 @@ class ServerSettingsBo(
     var apiCacheControl: String = "no-cache, no-store",
     var logReads : Boolean = true,
     var ktor: KtorSettingsBo = KtorSettingsBo(),
-    var modules: List<String> = emptyList()
+    var modules: List<String> = emptyList(),
+    var xForwardedHeaderSupport: Boolean = true
 
 ) : BaseBo {
 
@@ -35,6 +36,7 @@ class ServerSettingsBo(
         + ::ktor
         + ::logReads default true
         // + ::modules
+        + ::xForwardedHeaderSupport default xForwardedHeaderSupport envVar "ZK_X_FORWARDED_HEADER_SUPPORT"
     }
 
 }

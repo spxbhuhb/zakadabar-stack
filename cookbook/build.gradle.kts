@@ -38,6 +38,7 @@ kotlin {
                 implementation(project(":lib:schedule"))
                 implementation(project(":lib:email"))
                 implementation(project(":lib:softui"))
+                implementation(project(":lib:xlsx"))
             }
         }
 

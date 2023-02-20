@@ -12,6 +12,7 @@ import zakadabar.lib.accounts.browser.accounts.Account
 import zakadabar.lib.accounts.browser.accounts.AccountSecure
 import zakadabar.lib.accounts.browser.login.Login
 import zakadabar.lib.accounts.browser.login.LoginV2
+import zakadabar.lib.accounts.browser.permissions.Permissions
 import zakadabar.lib.accounts.browser.roles.Roles
 
 /**
@@ -22,19 +23,22 @@ import zakadabar.lib.accounts.browser.roles.Roles
  * @param  account        Account self-management for individual users.
  * @param  accountSecure  Account management CRUD for security officers.
  * @param  roles          Role management CRUD for security officers.
+ * @param  permissions    Permissions management CRUD for security officers.
  */
 fun install(
     routing: ZkAppRouting,
     login: Login = Login(),
     account: Account = Account(),
     accountSecure: AccountSecure = AccountSecure(),
-    roles: Roles = Roles()
+    roles: Roles = Roles(),
+    permissions: Permissions = Permissions()
 ) {
     with(routing) {
         + login
         + account
         + accountSecure
         + roles
+        + permissions
     }
 }
 
@@ -46,19 +50,22 @@ fun install(
  * @param  account        Account self-management for individual users.
  * @param  accountSecure  Account management CRUD for security officers.
  * @param  roles          Role management CRUD for security officers.
+ * @param  permissions    Permissions management CRUD for security officers.
  */
 fun installV2(
     routing: ZkAppRouting,
     login: ZkAppRouting.ZkTarget = LoginV2(),
     account: Account = Account(),
     accountSecure: AccountSecure = AccountSecure(),
-    roles: Roles = Roles()
+    roles: Roles = Roles(),
+    permissions: Permissions = Permissions()
 ) {
     with(routing) {
         + login
         + account
         + accountSecure
         + roles
+        + permissions
     }
 }
 

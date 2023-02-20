@@ -8,6 +8,7 @@ import zakadabar.core.browser.crud.ZkCrudTarget
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.resource.localized
+import zakadabar.core.resource.localizedStrings
 import zakadabar.lib.i18n.data.LocaleBo
 import zakadabar.lib.i18n.data.TranslationBo
 
@@ -53,19 +54,16 @@ class TranslationForm : ZkForm<TranslationBo>() {
  */
 class TranslationTable : ZkTable<TranslationBo>() {
 
+    val locales by preload { LocaleBo.allAsMap() }
     override fun onConfigure() {
 
         crud = target<TranslationCrud>()
 
         titleText = localized<TranslationTable>()
 
-        add = true
-        search = true
-        export = true
-
-        // TranslationBo::id // record id and opt record id is not supported yet
+        + TranslationBo::id // record id and opt record id is not supported yet
         + TranslationBo::key
-        // TranslationBo::locale // record id and opt record id is not supported yet
+        + optString { locales[locale]?.name } label localizedStrings.locale
         + TranslationBo::value
 
         + actions()

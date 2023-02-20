@@ -4,6 +4,7 @@
 package zakadabar.core.server.ktor
 
 import io.ktor.application.*
+import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -14,7 +15,6 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.serialization.*
 import io.ktor.server.engine.*
-import io.ktor.server.netty.*
 import io.ktor.sessions.*
 import io.ktor.websocket.*
 import kotlinx.serialization.json.Json
@@ -38,7 +38,14 @@ open class KtorServerBuilder(
     open val modules: ModuleStore,
 ) {
 
-    fun build() = embeddedServer(Netty, port = config.ktor.port) {
+    fun build() : ApplicationEngine = embeddedServer(
+        factory = Class.forName(config.ktor.engine).kotlin.objectInstance as ApplicationEngineFactory<*, *>,
+        port = config.ktor.port
+    ) {
+
+        if (config.xForwardedHeaderSupport) {
+            install(XForwardedHeaderSupport)
+        }
 
         features.forEach {
             @Suppress("UNCHECKED_CAST")

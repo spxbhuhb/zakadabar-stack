@@ -13,7 +13,8 @@ if (config.devServer) {
         proxy: {
             '/api/': {  // proxy to the development backend
                 target: 'http://localhost:8080',
-                secure: 'false'
+                secure: 'false',
+                xfwd: true // add X-Forwarded-* headers to inner request
             },
             '/content/': {  // proxy to the development backend
                 target: 'http://localhost:8080',

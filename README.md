@@ -17,18 +17,23 @@ feel free to open an issue.
 
 ## News
 
-2022.4.25 major rework of table virtualization
+Development of the current functionality is a bit slow as we work on the next big step: a declarative
+and reactive UI inspired by Svelte.
 
-**NOTE** Be careful wit 2022.4.25, i contains a major `ZkTable` change (changed virtualization
-method, added variable row height and multi-level row support).
+This is a bit complex as it involves writing a Kotlin compiler plugin. We are almost there (actually,
+the plugin works, we just have to finish it). If you would like to have a preview you can check the `rui`
+branch, there are some preliminary docs and of course the source code of the plugin with a few tests.
 
-----
+This change won't affect the current UI much. You will be able to use it as before and mix it with the
+new one.
 
-2021.12.26 uses Kotlin 1.6.10 and Kotin/Js successfully compiles for IR. This 
-gives us the possibility to add IR compiler plugins which will be the next step.
+We would like to release production ready version of the new UI, called Rui, by the end of the year.
 
-As of now the Kotlin/Js target is BOTH, I plan to switch this to IR only by end
-of March.
+## Upcoming
+
+Apart Rui, we plan to add a fancy new function to the website: a breaking change database.
+This will let you list and export the breaking changes between two distant versions, so you will
+be able to upgrade to a new version easily.
 
 ## Documentation
 

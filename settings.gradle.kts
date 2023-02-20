@@ -34,6 +34,7 @@ include("plugin:rui:rui-gradle-plugin")
 //include("lib:markdown")
 //include("lib:schedule")
 //include("lib:softui")
+//include("lib:xlsx")
 //
 //include("demo:demo-basic")
 //include("demo:demo-basic-mobile")
@@ -42,3 +43,5 @@ include("plugin:rui:rui-gradle-plugin")
 //include("demo:demo-sandbox-mobile")
 //
 //include("site")
+
+//include("upgrade:2021-6-to-2021-7")

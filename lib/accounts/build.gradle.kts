@@ -47,6 +47,7 @@ kotlin {
 
     sourceSets["jvmMain"].dependencies {
         api("io.ktor:ktor-client-auth:${Versions.ktor}")
+        api("io.ktor:ktor-auth-jwt:${Versions.ktor}")
     }
 
     sourceSets["jvmTest"].dependencies {

@@ -12,6 +12,10 @@ interface RoleBlProvider {
     fun getByName(name: String): EntityId<out BaseBo>
 }
 
+interface PermissionBlProvider {
+    fun getByName(name: String): EntityId<out BaseBo>
+}
+
 interface AccountBlProvider {
     fun anonymous(): AccountPublicBo
     fun readPublic(account: EntityId<out BaseBo>): AccountPublicBo
@@ -30,6 +34,8 @@ interface AccountBlProvider {
     }
 
     fun roles(accountId: EntityId<out BaseBo>): List<Pair<EntityId<out BaseBo>, String>>
+
+    fun permissions(accountId: EntityId<out BaseBo>): List<Pair<EntityId<out BaseBo>, String>>
 
     /**
      * Get an [Executor] for the account with the given name.

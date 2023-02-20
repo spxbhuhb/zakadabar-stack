@@ -19,7 +19,7 @@ fun ZkTable<ExampleBo>.demoData(count : Int = 50) {
     val template = default<ExampleBo> { }
 
     val data = (1..count).map {
-        template.copy(id = EntityId(it.toLong()), stringValue = "row $it", booleanValue = (it % 2 == 0))
+        template.copy(id = EntityId(it.toLong()), stringValue = "row $it", booleanValue = (it % 2 == 0), doubleValue = it / 10.0)
     }
 
     setData(data)

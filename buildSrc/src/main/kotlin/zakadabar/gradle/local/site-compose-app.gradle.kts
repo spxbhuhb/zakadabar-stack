@@ -49,10 +49,15 @@ val copyAppUsr by tasks.registering(Copy::class) {
     include("LICENSE.txt")
 }
 
+val copyDoc by tasks.registering(Copy::class) {
+    from("${rootProject.projectDir}/doc")
+    into("$distDir/var/static/doc")
+}
+
 val zkBuild by tasks.registering(Zip::class) {
     group = "zakadabar"
 
-    dependsOn(tasks["shadowJar"], copyAppStruct, copyAppLib, copyAppStatic, copyAppIndex, copyAppUsr)
+    dependsOn(tasks["shadowJar"], copyAppStruct, copyAppLib, copyAppStatic, copyAppIndex, copyAppUsr, copyDoc)
 
     archiveFileName.set("${project.name}-${project.version}-server.zip")
     destinationDirectory.set(file("$buildDir/app"))

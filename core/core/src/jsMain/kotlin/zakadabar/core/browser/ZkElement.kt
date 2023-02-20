@@ -680,9 +680,10 @@ open class ZkElement(
         childElements -= child
         child.element.remove()
 
-        child.onPause()
-
-        child.lifeCycleState = ZkElementState.Created
+        if (child.lifeCycleState != ZkElementState.Initialized) {
+            child.onPause()
+            child.lifeCycleState = ZkElementState.Created
+        }
     }
 
     /**
@@ -1263,6 +1264,16 @@ open class ZkElement(
 
     /**
      * Execute the builder function when the user **has**
+     * the given permission.
+     */
+    @PublicApi
+    fun withPermission(permission: String, builder: ZkElement.() -> Unit) {
+        if (permission !in application.executor.permissions) return
+        this.builder()
+    }
+
+    /**
+     * Execute the builder function when the user **has**
      * the given role.
      */
     @PublicApi
@@ -1276,12 +1287,36 @@ open class ZkElement(
     }
 
     /**
+     * Execute the builder function when the user **has**
+     * the given permission.
+     */
+    @PublicApi
+    fun withOneOfPermissions(vararg permissions: String, builder: ZkElement.() -> Unit) {
+        permissions.forEach {
+            if (it in application.executor.permissions) {
+                this.builder()
+                return
+            }
+        }
+    }
+
+    /**
      * Execute the builder function when the user **does not have**
      * the given role.
      */
     @PublicApi
     fun withoutRole(role: String, builder: ZkElement.() -> Unit) {
         if (role in application.executor.roles) return
+        this.builder()
+    }
+
+    /**
+     * Execute the builder function when the user **does not have**
+     * the given permission.
+     */
+    @PublicApi
+    fun withoutPermission(permission: String, builder: ZkElement.() -> Unit) {
+        if (permission in application.executor.permissions) return
         this.builder()
     }
 

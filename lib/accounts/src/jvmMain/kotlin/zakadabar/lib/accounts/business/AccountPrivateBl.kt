@@ -24,6 +24,8 @@ import zakadabar.lib.accounts.data.*
 import zakadabar.lib.accounts.persistence.AccountCredentialsExposedPa
 import zakadabar.lib.accounts.persistence.AccountPrivateExposedPa
 import zakadabar.lib.accounts.persistence.AccountStateExposedPa
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     boClass = AccountPrivateBo::class,
@@ -39,9 +41,13 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     private lateinit var anonymousV2: AccountPublicBoV2
 
     private val roleBl by module<RoleBl>()
+    private val permissionBl by module<PermissionBl>()
 
     @Suppress("LeakingThis") // this is fine here as authorizer not called during init
     override val authorizer = AccountPrivateBlAuthorizer(this)
+
+    private val authenticateLock = ReentrantLock()
+    private val authenticateInProgress = mutableSetOf<EntityId<AccountPrivateBo>>()
 
     override val router = router {
         query(CheckName::class, ::checkName)
@@ -107,7 +113,7 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
 
         pa.withTransaction {
 
-            val executor = Executor(so.id, so.uuid, false, emptyList(), emptyList())
+            val executor = Executor(so.id, so.uuid, false, emptySet(), emptySet(), emptySet(), emptySet())
 
             auditor.auditCreate(executor, so)
             auditor.auditCreate(executor, anonymous)
@@ -136,16 +142,35 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
                 }
             }
         }
-    }
 
-    override fun onModuleStart() {
-         pa.withTransaction {
-            pa.readByName("anonymous").also {
-                anonymous = it.toPublic()
-                anonymousV2 = it.toPublicV2()
+        pa.withTransaction {
+
+            val executor = Executor(so.id, so.uuid, false, emptySet(), emptySet(), emptySet(), emptySet())
+
+            auditor.auditCreate(executor, so)
+            auditor.auditCreate(executor, anonymous)
+
+            appPermissions.map.forEach {
+                val permissionName = it.value
+
+                try {
+                    permissionBl.getByName(permissionName)
+                    return@forEach // when exists we don't want to re-create it
+                } catch (ex: NoSuchElementException) {
+                    // this is fine, we have to create the permission
+                }
+
+                val bo = permissionBl.create(executor, PermissionBo(EntityId(), permissionName, permissionName))
+                permissionBl.auditor.auditCreate(executor, bo)
             }
         }
-        super.onModuleStart() // this has to be last, so authorizer will find roles after db init
+
+        pa.withTransaction {
+            pa.readByName("anonymous").also {
+                this.anonymous = it.toPublic()
+                this.anonymousV2 = it.toPublicV2()
+            }
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -153,7 +178,6 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
     // -------------------------------------------------------------------------
 
     open fun checkName(executor: Executor, query: CheckName): CheckNameResult {
-
         return try {
             CheckNameResult(
                 accountId = EntityId(pa.readByName(query.accountName).id)
@@ -309,50 +333,89 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
      * Perform password based authentication. Increments success/fail counters according
      * to the result. Locks the account if login fails surpass [ModuleSettings.maxFailedLogins].
      *
+     * Account state is locked (per account) during authentication to prevent SQL transaction
+     * conflict and accidental overwrites of state data.
+     *
      * @param   executor   The executor of the authentication.
      * @param   accountId  The account id to authenticate.
      * @param   password   The password to authenticate with.
+     * @param   checkCredentials true, if need to check password
+     * @param   source  The authentication source if not locally managed
      *
-     * @throws  NoSuchElementException   When the account does not exists.
+     * @throws  NoSuchElementException   When the account does not exist.
      * @throws  Unauthorized             When the login fails.
      */
-    open fun authenticate(executor: Executor, accountId: EntityId<AccountPrivateBo>, password: String) {
+    open fun authenticate(executor: Executor, accountId: EntityId<AccountPrivateBo>, password: String, checkCredentials : Boolean = true, source : String? = null) {
 
-        val state = statePa.readOrNull(accountId)
-        val credentials = credentialsPa.read(accountId, CredentialTypes.password)
+        val validCredentials = if (checkCredentials) {
+            val credentials = credentialsPa.read(accountId, CredentialTypes.password)
+            BCrypt.checkpw(password, credentials.value.value)
+        } else true
 
-        val result = when {
-            state == null -> throw Unauthorized("NoState")
-            ! state.validated -> Unauthorized("NotValidated")
-            state.locked -> Unauthorized("Locked", UnauthorizedData(true))
-            state.expired -> Unauthorized("Expired")
-            state.anonymized -> Unauthorized("Anonymized")
-            ! BCrypt.checkpw(password, credentials.value.value) -> Unauthorized("InvalidCredentials")
-            else -> null
-        }
+        lockState(accountId)
 
-        if (result != null) {
-            state.loginFailCount ++
-            state.lastLoginFail = Clock.System.now()
-            state.locked = state.locked || (state.loginFailCount > settings.maxFailedLogins)
+        try {
+            val state = statePa.readOrNull(accountId)
+
+            val result = when {
+                state == null -> throw Unauthorized("NoState")
+                ! state.validated -> Unauthorized("NotValidated")
+                state.locked -> Unauthorized("Locked", UnauthorizedData(true))
+                state.expired -> Unauthorized("Expired")
+                state.anonymized -> Unauthorized("Anonymized")
+                !validCredentials -> Unauthorized("InvalidCredentials")
+                else -> null
+            }
+
+            if (result != null) {
+                state.loginFailCount ++
+                state.lastLoginFail = Clock.System.now()
+                state.locked = state.locked || (state.loginFailCount > settings.maxFailedLogins)
+
+                statePa.update(state)
+                pa.commit()
+
+                auditor.auditCustom(executor) { "login fail accountId=${accountId} reason=${result.reason}" }
+                pa.commit() // the two commits are intentional, we don't want to lose the locking mechanism in case audit fails
+
+                throw result
+            }
+
+            state.lastLoginSuccess = Clock.System.now()
+            state.loginSuccessCount ++
+
+            state.loginFailCount = 0
+
+            auditor.auditCustom(executor) { "login success accountId=${accountId}" + (source?.let { " source=$it" } ?: "")  }
 
             statePa.update(state)
-            pa.commit()
 
-            auditor.auditCustom(executor) { "login fail accountId=${accountId} reason=${result.reason}" }
-            pa.commit() // the two commits are intentional, we don't want to loose the locking mechanism in case audit fails
-
-            throw result
+        } finally {
+            releaseState(accountId)
         }
+    }
 
-        state.lastLoginSuccess = Clock.System.now()
-        state.loginSuccessCount ++
+    fun lockState(accountId: EntityId<AccountPrivateBo>) {
+        var success = false
+        for (tryNumber in 1..5) {
+            success = authenticateLock.withLock {
+                if (accountId in authenticateInProgress) {
+                    Thread.sleep(100)
+                    false
+                } else {
+                    authenticateInProgress += accountId
+                    true
+                }
+            }
+            if (success) break
+        }
+        if (!success) throw RuntimeException("couldn't lock account state in 5 tries")
+    }
 
-        state.loginFailCount = 0
-
-        auditor.auditCustom(executor) { ("login success accountId=${accountId}") }
-
-        statePa.update(state)
+    fun releaseState(accountId: EntityId<AccountPrivateBo>) {
+        authenticateLock.withLock {
+            authenticateInProgress -= accountId
+        }
     }
 
     override fun authenticate(executor: Executor, accountName: String, password: Secret): AccountPublicBo {
@@ -400,19 +463,30 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
         return roleBl.rolesOf(EntityId(accountId))
     }
 
-    override fun executorFor(name : String) : Executor =
+    override fun permissions(accountId: EntityId<out BaseBo>): List<Pair<EntityId<out BaseBo>, String>> {
+        return permissionBl.permissionsOf(EntityId(accountId))
+    }
+
+    override fun executorFor(name: String): Executor =
         pa.withTransaction { executorFor(pa.readByName(name)) }
 
-    override fun executorFor(uuid : UUID) : Executor =
+    override fun executorFor(uuid: UUID): Executor =
         pa.withTransaction { executorFor(pa.readByUuid(uuid)) }
 
-    open fun executorFor(account : AccountPrivateBo) : Executor {
-        val roleIds = mutableListOf<EntityId<out BaseBo>>()
-        val roleNames = mutableListOf<String>()
+    open fun executorFor(account: AccountPrivateBo): Executor {
+        val roleIds = mutableSetOf<EntityId<out BaseBo>>()
+        val roleNames = mutableSetOf<String>()
+        val permissionIds = mutableSetOf<EntityId<out BaseBo>>()
+        val permissionNames = mutableSetOf<String>()
 
         roles(account.id).forEach {
             roleIds += it.first
             roleNames += it.second
+        }
+
+        permissions(account.id).forEach {
+            permissionIds += it.first
+            permissionNames += it.second
         }
 
         return Executor(
@@ -420,7 +494,9 @@ open class AccountPrivateBl : EntityBusinessLogicBase<AccountPrivateBo>(
             account.uuid,
             account.id == anonymous.accountId,
             roleIds,
-            roleNames
+            roleNames,
+            permissionIds,
+            permissionNames
         )
     }
 

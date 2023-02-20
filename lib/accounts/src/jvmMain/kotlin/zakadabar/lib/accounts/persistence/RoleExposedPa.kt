@@ -117,7 +117,7 @@ object RoleExposedTableCommon : RoleExposedTable()
 open class RoleExposedTable : ExposedPaTable<RoleBo>(
     tableName = "role"
 ) {
-    val name = varchar("name", 50).index()
+    val name = varchar("name", 50).uniqueIndex()
     val description = text("description")
 }
 

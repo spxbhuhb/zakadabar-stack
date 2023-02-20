@@ -91,6 +91,7 @@ variables into server settings (see [Settings](./Settings.md) for details).
 - ZK_EXTERNAL_SERVER_URL  
 - ZK_KTOR_PORT
 - ZK_KTOR_PORT_COOKIE
+- ZK_KTOR_ENGINE
 
 ## Startup Sequence
 

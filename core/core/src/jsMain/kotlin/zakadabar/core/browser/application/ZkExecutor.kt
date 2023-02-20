@@ -9,11 +9,15 @@ import zakadabar.core.util.PublicApi
 class ZkExecutor(
     val account: AccountPublicBo,
     val anonymous: Boolean,
-    val roles: List<String>
+    val roles: Set<String>,
+    var permissions: Set<String>
 ) {
 
     @PublicApi
     fun hasRole(role : String) = role in roles
+
+    @PublicApi
+    fun hasPermission(permission : String) = permission in permissions
 
     /**
      * Execute the builder function when the user **has**
@@ -22,6 +26,16 @@ class ZkExecutor(
     @PublicApi
     fun withRole(role: String, builder: () -> Unit) {
         if (role !in roles) return
+        builder()
+    }
+
+    /**
+     * Execute the builder function when the user **has**
+     * the given permission.
+     */
+    @PublicApi
+    fun withPermission(permission: String, builder: () -> Unit) {
+        if (permission !in permissions) return
         builder()
     }
 

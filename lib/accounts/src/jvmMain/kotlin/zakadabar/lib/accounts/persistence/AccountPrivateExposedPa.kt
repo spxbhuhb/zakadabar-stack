@@ -136,7 +136,7 @@ open class AccountPrivateExposedTable : ExposedPaTable<AccountPrivateBo>(
     tableName = "account_private"
 ) {
 
-    val accountName = varchar("account_name", 50)
+    val accountName = varchar("account_name", 50).uniqueIndex()
     val fullName = varchar("full_name", 100)
     val email = varchar("email", 50)
     val phone = varchar("phone", 20).nullable()

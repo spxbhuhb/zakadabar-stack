@@ -3,9 +3,13 @@
  */
 package zakadabar.lib.lucene
 
+import zakadabar.core.authorize.Executor
 import zakadabar.core.module.modules
 import zakadabar.lib.lucene.business.LuceneBl
+import zakadabar.lib.lucene.data.LuceneQueryResult
 
-fun install() {
-    modules += LuceneBl()
+fun install(
+    mapResult: (executor: Executor, result: LuceneQueryResult) -> LuceneQueryResult? = { _, r -> r }
+) {
+    modules += LuceneBl(mapResult)
 }

@@ -111,17 +111,20 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
                 id = EntityId("current"),
                 account = anonymous,
                 anonymous = true,
-                roles = emptyList(),
+                roles = emptySet(),
+                permissions = emptySet(),
                 serverDescription = serverDescription
             )
         } else {
             val account = accountBl.readPublic(session.account)
             val roles = accountBl.roles(account.accountId)
+            val permissions = accountBl.permissions(account.accountId)
             SessionBo(
                 id = EntityId("current"),
                 account = account,
                 anonymous = false,
-                roles = roles.map { it.second },
+                roles = roles.map { it.second }.toSet(),
+                permissions = permissions.map { it.second }.toSet(),
                 serverDescription = serverDescription
             )
         }
@@ -149,15 +152,25 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 
         val account = authenticate(executor, action.accountName, action.password)
 
-        val roleIds = mutableListOf<EntityId<out BaseBo>>()
-        val roleNames = mutableListOf<String>()
+        val roleIds = mutableSetOf<EntityId<out BaseBo>>()
+        val roleNames = mutableSetOf<String>()
+        val permissionIds = mutableSetOf<EntityId<out BaseBo>>()
+        val permissionNames = mutableSetOf<String>()
 
         accountBl.roles(account.accountId).forEach {
             roleIds += it.first
             roleNames += it.second
         }
+        accountBl.permissions(account.accountId).forEach {
+            permissionIds += it.first
+            permissionNames += it.second
+        }
 
-        return StackSession(account.accountId, account.accountUuid, accountBl.anonymous().accountId == account.accountId, roleIds, roleNames)
+        return StackSession(
+            account.accountId, account.accountUuid, accountBl.anonymous().accountId == account.accountId,
+            roleIds, roleNames,
+            permissionIds, permissionNames
+        )
     }
 
     private fun authenticate(executor: Executor, accountName: String, password: Secret): AccountPublicBoV2 =
@@ -176,7 +189,7 @@ class KtorSessionBl : EntityBusinessLogicBase<SessionBo>(
 
         auditor.auditCustom(executor) { "logout accountId=${old.account}" }
 
-        call.sessions.set(StackSession(anonymous.accountId, anonymous.accountUuid, true, emptyList(), emptyList()))
+        call.sessions.set(StackSession(anonymous.accountId, anonymous.accountUuid, true, emptySet(), emptySet(), emptySet(), emptySet()))
 
         return ActionStatus(success = true)
 

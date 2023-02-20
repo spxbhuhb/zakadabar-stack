@@ -11,14 +11,21 @@ import zakadabar.core.browser.application.application
 import zakadabar.core.browser.titlebar.ZkAppTitle
 import zakadabar.core.browser.util.minusAssign
 import zakadabar.core.browser.util.plusAssign
+import zakadabar.core.resource.css.px
+import zakadabar.core.util.PublicApi
 import zakadabar.softui.browser.theme.styles.SuiLayoutStyles
 import zakadabar.softui.browser.theme.styles.suiLayoutStyles
 import zakadabar.softui.browser.titlebar.SuiAppHeader
 import zakadabar.softui.browser.titlebar.SuiAppTitleBar
 
 open class SuiDefaultLayout(
-    open val styles: SuiLayoutStyles = suiLayoutStyles
+    open val styles: SuiLayoutStyles = suiLayoutStyles,
+    open val resizeSidebar: Boolean = false
 ) : ZkAppLayout("default") {
+
+    companion object {
+        const val SUI_SIDEBAR_WIDTH = "sui-sidebar-width"
+    }
 
     open var header = SuiAppHeader()
         set(value) {
@@ -34,6 +41,13 @@ open class SuiDefaultLayout(
             sideBarContainer += field
         }
 
+    open var sidebarWidth = application.loadState(SUI_SIDEBAR_WIDTH)?.toDoubleOrNull() ?: Double.NaN
+        set(value) {
+            field = value
+            application.saveState(SUI_SIDEBAR_WIDTH, value.toString())
+            setGridColumns()
+        }
+
     enum class MediaSize {
         Uninitialized,
         Small,
@@ -44,6 +58,7 @@ open class SuiDefaultLayout(
 
     protected var headerContainer = ZkElement()
     protected var separatorContainer = ZkElement()
+    lateinit var slider: ZkElement
     protected var pageTitleContainer = SuiAppTitleBar()
     protected var sideBarContainer = ZkElement()
     protected var popupSidebarContainer = ZkElement()
@@ -61,6 +76,8 @@ open class SuiDefaultLayout(
 
         popupSidebarContainer css styles.popupSideBarContainer
 
+        slider = if (resizeSidebar) SuiLayoutSlider(this) else ZkElement()
+
         on(window, "resize") {
             if (lifeCycleState != ZkElementState.Resumed) return@on
             val mediaSize = if (window.innerWidth < 800) MediaSize.Small else MediaSize.Large
@@ -73,6 +90,7 @@ open class SuiDefaultLayout(
 
     override fun onResume() {
         application.onTitleChange = ::onTitleChange
+        onTitleChange(null)
         popupSidebarContainer.hide()
 
         val mediaSize = if (window.innerWidth < 800) MediaSize.Small else MediaSize.Large
@@ -93,6 +111,7 @@ open class SuiDefaultLayout(
             this -= separatorContainer
             this -= sideBarContainer
             this -= pageTitleContainer
+            this -= slider
             this -= contentContainer
             this -= popupSidebarContainer
             popupSidebarContainer -= sideBarContainer
@@ -113,6 +132,8 @@ open class SuiDefaultLayout(
         classList += suiLayoutStyles.defaultLayoutSmall
         contentContainer.classList += suiLayoutStyles.contentContainerSmall
 
+        setGridColumns()
+
         + headerContainer gridRow 1
         + separatorContainer gridRow 2
         + pageTitleContainer gridRow 3
@@ -129,24 +150,65 @@ open class SuiDefaultLayout(
         classList += suiLayoutStyles.defaultLayoutLarge
         contentContainer.classList += suiLayoutStyles.contentContainerLarge
 
-        + headerContainer gridRow 1 gridColumn "1 / span 4"
-        + separatorContainer gridRow 2 gridColumn "1 / span 4"
-        + sideBarContainer gridRow "3 / span 4" gridColumn 1
-        + pageTitleContainer gridRow 3 gridColumn 3
-        + contentContainer gridRow 4 gridColumn 3
+        setGridColumns()
+
+        + headerContainer gridRow 1 gridColumn "1 / span 5"
+        + separatorContainer gridRow 2 gridColumn "1 / span 5"
+        + sideBarContainer gridRow "2 / span 4" gridColumn 2
+        + slider gridRow "2 / span 4" gridColumn 3
+        + pageTitleContainer gridRow 3 gridColumn 4
+        + contentContainer gridRow 4 gridColumn 4
 
         sideBarContainer.show()
     }
 
-    protected fun onTitleChange(newTitle: ZkAppTitle) {
-        pageTitleContainer.title  = newTitle
+    protected fun onTitleChange(newTitle: ZkAppTitle?) {
+        pageTitleContainer.onTitleChange(newTitle)
     }
 
+    @PublicApi
     open fun onToggleSideBar() {
         if (activeMediaSize == MediaSize.Large) {
             sideBarContainer.toggle()
+            slider.toggle()
+            setGridColumns()
         } else {
             popupSidebarContainer.toggle()
         }
     }
+
+    open fun setGridColumns() {
+        when (activeMediaSize) {
+            MediaSize.Large -> setGridColumnsLarge()
+            MediaSize.Small -> setGridColumnsSmall()
+            else -> return
+        }
+    }
+
+    open fun setGridColumnsLarge() {
+        val leftMargin = when {
+            ! resizeSidebar -> styles.sideBarLeftMargin
+            sideBarContainer.isShown() -> styles.sideBarLeftMargin
+            else -> 0
+        }
+
+        val sidebar = when {
+            ! resizeSidebar -> "max-content"
+            sidebarWidth.isNaN() -> if (sideBarContainer.isShown()) 240.px else 0.px
+            else -> if (sideBarContainer.isShown()) sidebarWidth.px else 0.px
+        }
+
+        val sliderOrSerparator = when {
+            ! resizeSidebar -> styles.gridMiddleWidth
+            sideBarContainer.isShown() -> styles.gridSliderWidth
+            else -> 0
+        }
+
+        gridTemplateColumns = "${leftMargin}px $sidebar ${sliderOrSerparator}px 1fr ${styles.contentRightMargin.px}"
+    }
+
+    open fun setGridColumnsSmall() {
+        gridTemplateColumns = "1fr"
+    }
+
 }

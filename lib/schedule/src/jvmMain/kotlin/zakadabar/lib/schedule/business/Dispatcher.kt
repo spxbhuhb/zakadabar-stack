@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
+import org.jetbrains.exposed.sql.transactions.transaction
 import zakadabar.core.comm.CommConfig
 import zakadabar.core.data.EntityId
 import zakadabar.core.module.module
@@ -62,7 +63,6 @@ class Dispatcher(
 
     suspend fun run() {
         for (event in events) {
-            jobBl.logger.debug("dispatcher event: $event")
             try {
                 when (event) {
                     is PendingCheckEvent -> onPendingCheck()
@@ -242,7 +242,9 @@ class Dispatcher(
         val entry = takeRunEntry(event.jobId, false) ?: return
 
         // do not reuse this subscription, delete from DB
-        subsciptionBl.pa.delete(entry.subscription.id)
+        transaction {
+            subsciptionBl.pa.delete(entry.subscription.id)
+        }
 
         runnableJobs.add(0, entry.job)
         pushJobs()

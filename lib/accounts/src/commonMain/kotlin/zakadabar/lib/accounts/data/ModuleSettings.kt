@@ -68,7 +68,11 @@ class ModuleSettings(
      * When true phone numbers are put into AccountPublicBo objects.
      * Default is false.
      */
-    var phoneInAccountPublic: Boolean = false
+    var phoneInAccountPublic: Boolean = false,
+
+
+    var oauth : List<OauthSettings>? = null
+
 
 ) : BaseBo {
 
@@ -86,3 +90,96 @@ class ModuleSettings(
     }
 
 }
+
+@Serializable
+data class OauthSettings(
+    /**
+     * an arbitrary unique string, appears in part of URL
+     */
+    var name : String,
+
+    /**
+     * appears as button or link text
+     */
+    var displayName : String,
+
+    /**
+     * appears as icon
+     */
+    var svgIcon : String? = null,
+
+    /**
+     * Oauth Endpoint for login screen
+     */
+    var authorizationEndpoint : String,
+
+    /**
+     * Endpoint to acquire accessToken or idToken
+     */
+    var tokenEndpoint : String,
+
+    /**
+     * POST or GET for token endpoint
+     */
+    var tokenRequestMethod: String,
+
+    /**
+     * JWKS uri for JWT cert validation
+     */
+    var jwksUri : String,
+
+    /**
+     * clientId from Auth Vendor
+     */
+    var clientId : String,
+
+    /**
+     * clientSecret from Auth Vendor
+     */
+    var clientSecret : String?,
+
+    /**
+     * required login scope eg: openid, email, profile, etc
+     */
+    var scopes : List<String>,
+
+    /**
+     * JWT claim mapping for AccountPrivate
+     */
+    var claims: AccountClaims,
+
+    /**
+     * if true, the authenticated user automatically created in local db
+     */
+    var autoRegister : Boolean = false,
+
+    /**
+     * allowed external app urls, eg. Android deep links
+     */
+    var externalApps : List<String>? = null
+
+)
+
+@Serializable
+data class AccountClaims(
+    /**
+     * claim name, holds local accountName
+     * eg.: "upn", "unique_name", "email"
+     * it depends on vendor's settings
+     */
+    var accountName: String,
+
+    /**
+     * clame name, holds user full name
+     * eg.: "name", "commonname"
+     * it depends on vendor's settings
+     */
+    var fullName: String,
+
+    /**
+     * claim name, holds user email address
+     * almost always is "email"
+     * it depends on vendor's settings
+     */
+    var email: String
+)

@@ -20,8 +20,10 @@ data class StackSession(
     val account: EntityId<out BaseBo>,
     val accountUuid : UUID,
     val anonymous: Boolean,
-    val roleIds: List<EntityId<out BaseBo>>,
-    val roleNames: List<String>,
+    val roleIds: Set<EntityId<out BaseBo>>,
+    val roleNames: Set<String>,
+    val permissionIds: Set<EntityId<out BaseBo>> = emptySet(),
+    val permissionNames: Set<String> = emptySet()
 )
 
 object StackSessionSerializer : SessionSerializer<StackSession> {

@@ -78,7 +78,7 @@ class BlobBlTest {
 
         clearDb()
 
-        val executor = Executor(EntityId("0"), UUID.NIL, true, emptyList(), emptyList())
+        val executor = Executor(EntityId("0"), UUID.NIL, true, emptySet(), emptySet(), emptySet(), emptySet())
         CommConfig.global = CommConfig(local = true)
 
         val contentText = "almafa"
@@ -110,7 +110,7 @@ class BlobBlTest {
 
         clearDb()
 
-        val executor = Executor(EntityId("0"), UUID.NIL, true, emptyList(), emptyList())
+        val executor = Executor(EntityId("0"), UUID.NIL, true, emptySet(), emptySet(), emptySet(), emptySet())
         val config = CommConfig(local = true)
 
         val contentText = "almafa"

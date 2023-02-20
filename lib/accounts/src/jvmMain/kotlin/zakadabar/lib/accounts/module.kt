@@ -3,12 +3,14 @@
  */
 package zakadabar.lib.accounts
 
+import io.ktor.features.*
+import zakadabar.core.authorize.AppPermissionsBase
 import zakadabar.core.authorize.AppRolesBase
+import zakadabar.core.authorize.appPermissions
 import zakadabar.core.authorize.appRoles
+import zakadabar.core.server.ktor.plusAssign
 import zakadabar.core.server.server
-import zakadabar.lib.accounts.business.AccountPrivateBl
-import zakadabar.lib.accounts.business.KtorSessionBl
-import zakadabar.lib.accounts.business.RoleBl
+import zakadabar.lib.accounts.business.*
 
 /**
  * @param   roles  Hard-coded roles this application handles. During application
@@ -18,13 +20,17 @@ import zakadabar.lib.accounts.business.RoleBl
  */
 fun install(
     roles: AppRolesBase = AppRolesBase(),
+    permissions: AppPermissionsBase = AppPermissionsBase(),
     accountPrivateBl: AccountPrivateBl = AccountPrivateBl()
 ) {
 
     appRoles = roles
+    appPermissions = permissions
 
     server += accountPrivateBl
     server += RoleBl()
     server += KtorSessionBl()
+    server += PermissionBl()
+    server += AuthProviderBl()
 
 }

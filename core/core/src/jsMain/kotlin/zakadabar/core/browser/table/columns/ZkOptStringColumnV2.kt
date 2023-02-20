@@ -30,4 +30,6 @@ open class ZkOptStringColumnV2<T : BaseBo>(
     override fun exportCsv(row: T): String {
         return "\"${(getter(row) ?: "").replace("\"", "\"\"")}\""
     }
+
+    override fun exportRaw(row: T): Any? = getter(row)
 }

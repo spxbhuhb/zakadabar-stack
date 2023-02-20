@@ -59,10 +59,6 @@ class LocaleTable : ZkTable<LocaleBo>() {
 
         titleText = localized<LocaleTable>()
 
-        add = true
-        search = true
-        export = true
-
         + LocaleBo::id
         + LocaleBo::name
         + LocaleBo::description

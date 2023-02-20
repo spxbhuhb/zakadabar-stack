@@ -35,11 +35,11 @@
       <jdbc-url>jdbc:h2:./demo/demo-sandbox/app/var/db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="H2 - basic" uuid="6725fece-025b-4693-bb67-280a3785e4ce">
+    <data-source source="LOCAL" name="H2 - basic" uuid="15d7cb04-6772-464a-b914-5125d75896bd">
       <driver-ref>h2.unified</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.h2.Driver</jdbc-driver>
-      <jdbc-url>jdbc:h2:./demo/demo-basic/app/var/db</jdbc-url>
+      <jdbc-url>jdbc:h2:./app/var/db;AUTO_SERVER=TRUE</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

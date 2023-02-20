@@ -6,10 +6,10 @@ package zakadabar.site.frontend
 import zakadabar.site.frontend.components.SiteHeader
 import zakadabar.softui.browser.layout.SuiDefaultLayout
 
-object DefaultLayout : SuiDefaultLayout() {
+object DefaultLayout : SuiDefaultLayout(resizeSidebar = true) {
     override fun onCreate() {
         super.onCreate()
-        header = SiteHeader()
+        header = SiteHeader { onToggleSideBar() }
         sideBar = SideBar()
         pageTitleContainer.hide()
     }

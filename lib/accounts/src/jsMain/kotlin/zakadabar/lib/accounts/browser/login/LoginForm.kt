@@ -61,8 +61,11 @@ class LoginForm(
             } else {
                 + div { }
             }
-            + ZkButton(localizedStrings.login) { this@LoginForm.submit() }
+            + ZkButton(localizedStrings.login) { this@LoginForm.submit() } marginBottom 10
         }
+
+        + AuthProvidersElement(onSuccess)
+
     }
 
     override fun onResume() {

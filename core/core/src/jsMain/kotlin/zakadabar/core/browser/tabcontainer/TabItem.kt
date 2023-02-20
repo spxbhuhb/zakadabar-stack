@@ -8,8 +8,8 @@ import zakadabar.core.browser.ZkElement
 open class TabItem(
     container: ZkTabContainer,
     val content: ZkElement,
-    val title: String? = null,
+    var title: String? = null,
     label: ZkTabLabel? = null
 ) {
-    val label: ZkTabLabel = label ?: ZkTabLabel(container, this)
+    var label: ZkTabLabel = label ?: ZkTabLabel(container, this)
 }

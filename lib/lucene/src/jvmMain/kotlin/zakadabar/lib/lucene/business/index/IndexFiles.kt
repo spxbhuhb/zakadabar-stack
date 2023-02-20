@@ -1,6 +1,10 @@
 /*
  * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
+
+/*
+ * Copyright © 2020-2021, Simplexion, Hungary and contributors. Use of this source code is governed by the Apache 2.0 license.
+ */
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -38,6 +42,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.*
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.*
+import kotlin.io.path.fileSize
 import kotlin.io.path.name
 import kotlin.system.exitProcess
 
@@ -71,7 +76,10 @@ class IndexFiles private constructor(
                     override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
 
                         // Index only Markdown documents
-                        if (!file.name.endsWith(".md")) return FileVisitResult.CONTINUE
+                        if (! file.name.endsWith(".md")) return FileVisitResult.CONTINUE
+
+                        // Skip empty files
+                        if (file.fileSize() == 0L) return FileVisitResult.CONTINUE
 
                         try {
                             indexDoc(writer, file, attrs.lastModifiedTime().toMillis())

@@ -37,9 +37,20 @@ open class ZkValueLocalDateTimeField(
     override var valueOrNull : LocalDateTime?
         get() = input.value.toLocalDateTimeOrNull
         set(value) {
-            input.value = value!!.localized
+            if (context.styles.useNativeDateInput) {
+                input.value = value.toString()
+            } else {
+                input.value = value!!.localized
+            }
             invalidInput = false
         }
+
+    override fun onCreate() {
+        super.onCreate()
+        if (context.styles.useNativeDateInput) {
+            input.type = "datetime-local"
+        }
+    }
 
     override fun setBackingValue(value: String) {
         val iv = input.value.toLocalDateTimeOrNull

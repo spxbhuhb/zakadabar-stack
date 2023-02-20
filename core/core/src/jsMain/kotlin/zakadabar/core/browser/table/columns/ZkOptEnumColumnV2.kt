@@ -36,4 +36,6 @@ open class ZkOptEnumColumnV2<T : BaseBo, E : Enum<E>>(
         getter(row)?.let {
             localizedStrings.getNormalized(it.name)
         } ?: ""
+
+    override fun exportRaw(row: T): Any? = getter(row)
 }

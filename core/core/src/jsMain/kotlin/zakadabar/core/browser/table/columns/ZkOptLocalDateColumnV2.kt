@@ -36,4 +36,6 @@ open class ZkOptLocalDateColumnV2<T : BaseBo>(
     open fun format(row: T): String {
         return getter(row)?.localized ?: return ""
     }
+
+    override fun exportRaw(row: T): Any? = getter(row)
 }
