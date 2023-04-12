@@ -8,32 +8,21 @@ Zakadabar is a multiplatform application development library.
 
 ## Status
 
-We use software built on Zakadabar in production, with happy customers. It is not perfect nor complete,
-there are areas in need of refactoring, some others are a bit confused. That said, it works, we've been
-able to ship quality software based on it.
+**IMPORTANT** 
 
-It is under continuous development, we add features as needed for our projects. If you need something
-feel free to open an issue.
+I plan to introduce breaking changes in the next few months. As far as I know, no-one else uses the
+project in production besides us, so this should not cause any problems.
+
+If it is a problem for you, let me know, and I'll try to take that into account.
 
 ## News
 
-Development of the current functionality is a bit slow as we work on the next big step: a declarative
-and reactive UI inspired by Svelte.
+I've shelved the declarative and reactive ui development for now as workload is high on other areas.
+I want to completely abandon the project, but I won't be able to work on it in the first half of 
+the year for sure.
 
-This is a bit complex as it involves writing a Kotlin compiler plugin. We are almost there (actually,
-the plugin works, we just have to finish it). If you would like to have a preview you can check the `rui`
-branch, there are some preliminary docs and of course the source code of the plugin with a few tests.
-
-This change won't affect the current UI much. You will be able to use it as before and mix it with the
-new one.
-
-We would like to release production ready version of the new UI, called Rui, by the end of the year.
-
-## Upcoming
-
-Apart Rui, we plan to add a fancy new function to the website: a breaking change database.
-This will let you list and export the breaking changes between two distant versions, so you will
-be able to upgrade to a new version easily.
+What I really would like to do, and it seems to be not that hard is to bring in the Material 3 design.
+SoftUI is not really far from it, so it should be easy. Only if I would have a reactive UI. :D
 
 ## Documentation
 
