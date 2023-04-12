@@ -61,6 +61,10 @@ class TranslationTable : ZkTable<TranslationBo>() {
 
         titleText = localized<TranslationTable>()
 
+        add = true
+        search = true
+        export = true
+
         + TranslationBo::id // record id and opt record id is not supported yet
         + TranslationBo::key
         + optString { locales[locale]?.name } label localizedStrings.locale
