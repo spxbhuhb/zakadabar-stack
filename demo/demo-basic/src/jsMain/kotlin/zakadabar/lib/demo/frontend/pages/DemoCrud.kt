@@ -3,21 +3,15 @@
  */
 package zakadabar.lib.demo.frontend.pages
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import zakadabar.core.browser.application.target
 import zakadabar.core.browser.crud.ZkCrudTarget
 import zakadabar.core.browser.form.ZkForm
 import zakadabar.core.browser.table.ZkTable
-import zakadabar.core.browser.toast.toastInfo
 import zakadabar.core.data.EntityId
 import zakadabar.core.resource.localized
-import zakadabar.core.util.UUID
 import zakadabar.lib.blobs.browser.image.ZkImagesField
 import zakadabar.lib.demo.data.DemoBlob
 import zakadabar.lib.demo.data.DemoBo
-import zakadabar.lib.demo.enums.Test
 
 /**
  * CRUD target for [DemoBo].

@@ -3,20 +3,14 @@
  */
 package zakadabar.core.browser.table.columns
 
-import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.data.BaseBo
+import zakadabar.core.resource.localized
 
 open class ZkOptIntColumnV2<T : BaseBo>(
     table: ZkTable<T>,
     val getter : (T) -> Int?
 ) : ZkColumn<T>(table) {
-
-    override fun render(cell: ZkElement, index: Int, row: T) {
-        with(cell) {
-            + format(row)
-        }
-    }
 
     override fun sort() {
         table.sort(sortAscending) { getter(it.data) }
@@ -31,7 +25,7 @@ open class ZkOptIntColumnV2<T : BaseBo>(
         return format(row)
     }
 
-    open fun format(row: T) = getter(row)?.toString() ?: ""
+    override fun format(row: T) = getter(row)?.localized ?: ""
 
     override fun exportRaw(row: T): Any? = getter(row)
 

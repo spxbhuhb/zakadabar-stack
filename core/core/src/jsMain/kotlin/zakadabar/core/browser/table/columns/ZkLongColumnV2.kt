@@ -3,7 +3,6 @@
  */
 package zakadabar.core.browser.table.columns
 
-import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.data.BaseBo
 
@@ -11,12 +10,6 @@ open class ZkLongColumnV2<T : BaseBo>(
     table: ZkTable<T>,
     val getter : (T) -> Long
 ) : ZkColumn<T>(table) {
-
-    override fun render(cell: ZkElement, index: Int, row: T) {
-        with(cell) {
-            + format(row)
-        }
-    }
 
     override fun sort() {
         table.sort(sortAscending) { getter(it.data) }
@@ -31,7 +24,7 @@ open class ZkLongColumnV2<T : BaseBo>(
         return format(row)
     }
 
-    open fun format(row: T) = getter(row).toString()
+    override fun format(row: T) = getter(row).toString()
 
     override fun exportRaw(row: T): Any? = getter(row)
 

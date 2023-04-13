@@ -254,11 +254,13 @@ To include all possible referenced entities:
 To add a select for `String` and `String?` fields, use the `asSelect` 
 transform function.
 
-The block after `query` is a suspend function that is used to get the
-items to shown in the select.
+You can use `options` to set the values when the stored and the displayed values are the same.
+You can use `options2` to set the values when the stored and displayed values are different.
 
 ```kotlin
 + bo::stringSelectValue.asSelect() options { listOf("option 1", "option 2", "option3") }
+
++ bo::stringSelectValue.asSelect() options2 { listOf("o1" to "option 1", "o2" to "option 2") }
 ```
 
 #### Select With Radio Buttons

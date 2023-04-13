@@ -17,7 +17,10 @@ import zakadabar.core.browser.toast.ZkToastContainer
 import zakadabar.core.browser.util.decodeURIComponent
 import zakadabar.core.browser.util.io
 import zakadabar.core.module.modules
-import zakadabar.core.resource.*
+import zakadabar.core.resource.ZkBuiltinStrings
+import zakadabar.core.resource.ZkStringStore
+import zakadabar.core.resource.localizedStrings
+import zakadabar.core.resource.setLocalizedFormats
 import zakadabar.core.server.ServerDescriptionBo
 import zakadabar.core.text.TranslationProvider
 import zakadabar.core.text.capitalized
@@ -203,7 +206,7 @@ open class ZkApplication {
         modules.firstOrNull<TranslationProvider>()?.translate(store, locale)
 
         localizedStrings = store
-        localizedFormats = BuiltinLocalizedFormats()
+        setLocalizedFormats(locale)
     }
 
     /**

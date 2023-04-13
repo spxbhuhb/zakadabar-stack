@@ -16,10 +16,10 @@ import zakadabar.core.data.BaseBo
 import zakadabar.core.resource.css.px
 import kotlin.math.max
 
-open class SortSign<T: BaseBo>(val table: ZkTable<T>): ZkElement() {
+open class SortSign<T : BaseBo>(val table: ZkTable<T>) : ZkElement() {
 
-    var sign: ZkElement = zke {  } css table.styles.sortSign
-    var container: ZkElement = zke {  }
+    var sign: ZkElement = zke { } css table.styles.sortSign
+    var container: ZkElement = zke { }
 
     override fun onCreate() {
         super.onCreate()
@@ -52,6 +52,10 @@ abstract class ZkColumn<T : BaseBo>(
 
     var sortAscending = false
 
+    open var renderer: ZkElement.(row: T) -> Unit = {row ->
+        + format(row)
+    }
+
     override fun onCreate() {
         + label
         + sortSign
@@ -73,7 +77,7 @@ abstract class ZkColumn<T : BaseBo>(
     }
 
     open fun render(cell: ZkElement, index: Int, row: T) {
-
+        cell.renderer(row)
     }
 
     open fun onClick(event: Event) {
@@ -147,7 +151,7 @@ abstract class ZkColumn<T : BaseBo>(
     val mouseMoveWrapper = { event: Event -> onMouseMove(event) }
 
     open fun onMouseMove(event: Event) {
-        if (!beingResized) return
+        if (! beingResized) return
 
         event as MouseEvent
         event.preventDefault() // prevents text select during column resize
@@ -196,6 +200,13 @@ abstract class ZkColumn<T : BaseBo>(
     }
 
     /**
+     * Converts the cell value into a string.
+     */
+    open fun format(row: T): String {
+        return ""
+    }
+
+    /**
      * Sorts the table data by this column.
      */
     open fun sort() {
@@ -217,7 +228,7 @@ abstract class ZkColumn<T : BaseBo>(
         return ""
     }
 
-    open fun exportRaw(row: T) : Any? {
+    open fun exportRaw(row: T): Any? {
         return null
     }
 

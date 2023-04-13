@@ -8,4 +8,11 @@ import zakadabar.core.resource.ZkStringStore
 
 interface TranslationProvider : CommonModule {
     suspend fun <T : ZkStringStore> translate(store : T, locale : String) : T
+
+    /**
+     * List the locales known by the system. First element of the list is the
+     * locale name, second is the description. Description should be shown
+     * to the user, name should be set in the account.
+     */
+    suspend fun getLocales() : List<Pair<String,String>>
 }

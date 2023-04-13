@@ -3,7 +3,6 @@
  */
 package zakadabar.core.browser.table.columns
 
-import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityId
@@ -15,12 +14,6 @@ open class ZkEntityIdColumnV2<T : BaseBo, IT>(
 ) : ZkColumn<T>(table) {
 
     override var max = 8.em
-
-    override fun render(cell: ZkElement, index: Int, row: T) {
-        with(cell) {
-            + "# ${getter(row)}"
-        }
-    }
 
     infix fun build(builder: ZkEntityIdColumnV2<T, IT>.() -> Unit): ZkEntityIdColumnV2<T, IT> {
         this.builder()
@@ -39,6 +32,10 @@ open class ZkEntityIdColumnV2<T : BaseBo, IT>(
     override fun exportCsv(row: T): String {
         return getter(row).toString()
     }
+
     override fun exportRaw(row: T): Any? = getter(row)
 
+    override fun format(row: T): String {
+        return "# ${getter(row)}"
+    }
 }

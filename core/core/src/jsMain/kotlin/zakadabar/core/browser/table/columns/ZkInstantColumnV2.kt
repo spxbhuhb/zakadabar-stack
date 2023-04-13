@@ -4,7 +4,6 @@
 package zakadabar.core.browser.table.columns
 
 import kotlinx.datetime.Instant
-import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.data.BaseBo
 import zakadabar.core.resource.localized
@@ -13,12 +12,6 @@ open class ZkInstantColumnV2<T : BaseBo>(
     table: ZkTable<T>,
     val getter : (T) -> Instant
 ) : ZkColumn<T>(table) {
-
-    override fun render(cell: ZkElement, index: Int, row: T) {
-        with(cell) {
-            + format(row)
-        }
-    }
 
     override fun sort() {
         table.sort(sortAscending) { getter(it.data) }
@@ -33,7 +26,7 @@ open class ZkInstantColumnV2<T : BaseBo>(
         return getter(row).localized
     }
 
-    open fun format(row: T): String {
+    override fun format(row: T): String {
         return getter(row).localized
     }
 

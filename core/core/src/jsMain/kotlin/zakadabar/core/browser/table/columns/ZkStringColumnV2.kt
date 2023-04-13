@@ -3,7 +3,6 @@
  */
 package zakadabar.core.browser.table.columns
 
-import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.data.BaseBo
 
@@ -11,12 +10,6 @@ open class ZkStringColumnV2<T : BaseBo>(
     table: ZkTable<T>,
     val getter : (T) -> String
 ) : ZkColumn<T>(table) {
-
-    override fun render(cell: ZkElement, index: Int, row: T) {
-        with(cell) {
-            + getter(row)
-        }
-    }
 
     override fun sort() {
         table.sort(sortAscending) { getter(it.data) }
@@ -30,6 +23,8 @@ open class ZkStringColumnV2<T : BaseBo>(
     override fun exportCsv(row: T): String {
         return "\"${getter(row).replace("\"", "\"\"")}\""
     }
+
+    override fun format(row: T) : String = getter(row)
 
     override fun exportRaw(row: T): Any? = getter(row)
 }

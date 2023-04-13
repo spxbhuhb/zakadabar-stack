@@ -33,9 +33,9 @@ import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.data.QueryBo
+import zakadabar.core.resource.ZkIconSource
 import zakadabar.core.resource.css.ZkCssStyleRule
 import zakadabar.core.resource.css.px
-import zakadabar.core.resource.ZkIconSource
 import zakadabar.core.resource.localized
 import zakadabar.core.resource.localizedStrings
 import zakadabar.core.schema.BoSchema
@@ -1285,7 +1285,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         ZkLocalDateColumnV2(this@ZkTable) { row -> this.get(row) }
             .add(this)
 
-    @PublicApi
+    @PublicApi // TODO remove public api from everywhere, there should be a test for each method
     fun optLocalDate(getter: T.() -> LocalDate?): ZkOptLocalDateColumnV2<T> =
         ZkOptLocalDateColumnV2(this@ZkTable, getter)
 
@@ -1293,6 +1293,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         ZkOptLocalDateColumnV2(this@ZkTable) { row -> this.get(row) }
             .add(this)
 
+    @PublicApi
     fun localDateTime(getter: T.() -> LocalDateTime): ZkLocalDateTimeColumnV2<T> =
         ZkLocalDateTimeColumnV2(this@ZkTable, getter)
 
@@ -1372,6 +1373,14 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
      */
     infix fun ZkColumn<T>.label(text: String): ZkColumn<T> {
         this.label = text
+        return this
+    }
+
+    /**
+     * Set a render.
+     */
+    infix fun ZkColumn<T>.renderer(renderer : ZkElement.(row: T) -> Unit): ZkColumn<T> {
+        this.renderer = renderer
         return this
     }
 

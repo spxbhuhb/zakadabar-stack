@@ -17,11 +17,9 @@ open class ZkBooleanColumnV2<T : BaseBo>(
 
     override var max = 3.em
 
-    override fun render(cell: ZkElement, index: Int, row: T) {
-        with(cell) {
-            + div {
-                buildPoint.innerHTML = if (getter(row)) ZkIcons.check.svg(18) else ZkIcons.close.svg(18)
-            }
+    override var renderer: ZkElement.(row: T) -> Unit = { row ->
+        + div {
+            buildPoint.innerHTML = if (getter(row)) ZkIcons.check.svg(18) else ZkIcons.close.svg(18)
         }
     }
 
@@ -32,5 +30,5 @@ open class ZkBooleanColumnV2<T : BaseBo>(
     override fun exportCsv(row: T): String =
         if (getter(row)) localizedStrings.trueText else localizedStrings.falseText
 
-    override fun exportRaw(row: T) : Any? = getter(row)
+    override fun exportRaw(row: T): Any? = getter(row)
 }

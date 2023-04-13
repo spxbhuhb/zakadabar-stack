@@ -27,7 +27,9 @@ import zakadabar.core.browser.toast.toastWarning
 import zakadabar.core.browser.util.io
 import zakadabar.core.browser.util.plusAssign
 import zakadabar.core.data.EntityId
+import zakadabar.core.module.modules
 import zakadabar.core.resource.localizedStrings
+import zakadabar.core.text.TranslationProvider
 import zakadabar.core.util.default
 import zakadabar.lib.accounts.data.*
 
@@ -45,6 +47,13 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
 
     private lateinit var systemRoles: List<RoleBo>
     private lateinit var userRoles: List<RoleGrantBo>
+    private lateinit var locales: List<Pair<String, String>>
+
+    val defaultLocale
+        get() = application.serverDescription.defaultLocale
+
+    val defaultLocaleList
+        get() = listOf(defaultLocale to defaultLocale)
 
     private lateinit var accountState: AccountStateBo
 
@@ -54,6 +63,11 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
         titleText = if (mode == ZkElementMode.Create) localizedStrings.account else bo.accountName
 
         io {
+            locales = modules.firstOrNull<TranslationProvider>()
+                ?.getLocales()
+                ?.let { it.ifEmpty { defaultLocaleList } }
+                ?: defaultLocaleList
+
             if (mode == ZkElementMode.Create) {
 
                 systemRoles = RoleBo.all()
@@ -91,7 +105,9 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
         }
 
         override fun onConfigure() {
-            bo = default { }
+            bo = default {
+                locale = defaultLocale
+            }
             mode = ZkElementMode.Action
             setAppTitle = false
         }
@@ -125,6 +141,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                 + ::fullName
                 + ::email
                 + ::phone
+                + ::locale.asSelect() options2 { locales }
             }
         }
 
@@ -160,8 +177,6 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
         }
 
         override suspend fun onSubmitStart() {
-            // TODO replace this with a select of locales
-            bo.locale = application.serverDescription.defaultLocale
             bo.roles = items.mapNotNull { if (it.selected) it.value else null }
 
             if (bo.accountName.isEmpty()) {
@@ -245,6 +260,7 @@ class Form : ZkElement(), ZkCrudEditor<AccountPrivateBo>, ZkAppTitleProvider {
                 + ::fullName
                 + ::email
                 + ::phone
+                + ::locale.asSelect() options2 { locales }
                 + ::uuid readOnly true
             }
         }

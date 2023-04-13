@@ -6,6 +6,8 @@ package zakadabar.core.resource
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import zakadabar.core.resource.locales.DefaultLocalizedFormats
+import zakadabar.core.resource.locales.HuLocalizedFormats
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty
 
@@ -18,6 +20,20 @@ var localizedStrings: ZkBuiltinStrings = ZkBuiltinStrings()
         field = value
     }
 
+// this is for legacy applications
+var skipLocaleFormats = false
+
+fun setLocalizedFormats(locale : String) {
+    if (skipLocaleFormats) {
+        localizedFormats = DefaultLocalizedFormats
+        return
+    }
+
+    localizedFormats = when (locale.lowercase()) {
+        "hu" -> HuLocalizedFormats
+        else -> DefaultLocalizedFormats
+    }
+}
 /**
  * Stores an instance that is able to format and parse different data types
  * according to the current locale.
@@ -49,6 +65,21 @@ inline val KClass<*>.localized
  */
 inline val KMutableProperty<*>.localized
     get() = localizedStrings.getNormalized(this.name)
+
+// ---- Int ----
+
+inline val Int.localized: String
+    get() = localizedFormats.format(this)
+
+// ---- Int ----
+
+inline val Long.localized: String
+    get() = localizedFormats.format(this)
+
+// ---- Double ----
+
+inline val Double.localized: String
+    get() = localizedFormats.format(this)
 
 // ---- Instant ----
 

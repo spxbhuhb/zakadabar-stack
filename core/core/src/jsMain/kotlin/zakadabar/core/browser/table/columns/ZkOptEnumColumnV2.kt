@@ -3,7 +3,6 @@
  */
 package zakadabar.core.browser.table.columns
 
-import zakadabar.core.browser.ZkElement
 import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.data.BaseBo
 import zakadabar.core.resource.localizedStrings
@@ -12,12 +11,6 @@ open class ZkOptEnumColumnV2<T : BaseBo, E : Enum<E>>(
     table: ZkTable<T>,
     val getter : (T) -> E?
 ) : ZkColumn<T>(table) {
-
-    override fun render(cell: ZkElement, index: Int, row: T) {
-        with(cell) {
-            + format(row)
-        }
-    }
 
     override fun sort() {
         table.sort(sortAscending) { format(it.data) }
@@ -32,7 +25,7 @@ open class ZkOptEnumColumnV2<T : BaseBo, E : Enum<E>>(
         return "\"${format(row).replace("\"", "\"\"")}\""
     }
 
-    open fun format(row: T) =
+    override fun format(row: T) =
         getter(row)?.let {
             localizedStrings.getNormalized(it.name)
         } ?: ""

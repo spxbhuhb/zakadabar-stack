@@ -7,8 +7,10 @@ import zakadabar.core.browser.table.ZkTable
 import zakadabar.core.data.BaseBo
 import zakadabar.core.data.EntityId
 import zakadabar.core.resource.localizedStrings
+import zakadabar.core.util.PublicApi
 import kotlin.reflect.KProperty1
 
+@PublicApi
 open class ZkEntityIdColumn<T : BaseBo, IT>(
     table: ZkTable<T>,
     val prop: KProperty1<T, EntityId<IT>>
