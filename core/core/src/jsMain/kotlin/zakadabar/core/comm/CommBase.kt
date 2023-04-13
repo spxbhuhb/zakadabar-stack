@@ -6,11 +6,11 @@ package zakadabar.core.comm
 import kotlinx.coroutines.await
 import kotlinx.serialization.json.Json
 import org.w3c.fetch.Response
+import zakadabar.core.browser.application.application
+import zakadabar.core.browser.toast.toastDanger
 import zakadabar.core.exception.DataConflict
 import zakadabar.core.exception.Unauthorized
 import zakadabar.core.exception.UnauthorizedData
-import zakadabar.core.browser.application.application
-import zakadabar.core.browser.toast.toastDanger
 import zakadabar.core.resource.localizedStrings
 
 /**
@@ -19,9 +19,12 @@ import zakadabar.core.resource.localizedStrings
 abstract class CommBase {
 
     companion object {
+
+        var json = Json { allowSpecialFloatingPointValues = true }
+
         /**
          * Called then the server responds with HTTP status 440 Login Timeout.
-         * The default implementation creates and runs a [RenewLoginDialog].
+         * The default implementation creates and runs a RenewLoginDialog.
          */
         var onLoginTimeout: suspend () -> Unit = {
             application.sessionManager.renew()
@@ -80,7 +83,7 @@ abstract class CommBase {
         if (code >= 400) {
             when (code) {
                 400 -> throw IllegalArgumentException()
-                401 -> throw Unauthorized(data = Json.decodeFromString(UnauthorizedData.serializer(), response.text().await()))
+                401 -> throw Unauthorized(data = json.decodeFromString(UnauthorizedData.serializer(), response.text().await()))
                 403 -> throw Forbidden()
                 404 -> throw NoSuchElementException()
                 409 -> throw DataConflict(response.text().await())

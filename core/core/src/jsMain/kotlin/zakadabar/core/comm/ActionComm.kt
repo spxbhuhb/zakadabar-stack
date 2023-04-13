@@ -6,7 +6,6 @@ package zakadabar.core.comm
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.Json
 import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
 import zakadabar.core.authorize.Executor
@@ -37,7 +36,7 @@ open class ActionComm(
 
         headers.append("content-type", "application/json; charset=UTF-8")
 
-        val body = Json.encodeToString(requestSerializer, request)
+        val body = json.encodeToString(requestSerializer, request)
 
         val requestInit = RequestInit(
             method = "POST",
@@ -58,7 +57,7 @@ open class ActionComm(
         return if (text == "null") {
             null
         } else {
-            Json.decodeFromString(responseSerializer, text)
+            json.decodeFromString(responseSerializer, text)
         }
     }
 

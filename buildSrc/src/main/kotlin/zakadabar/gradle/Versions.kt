@@ -4,7 +4,7 @@
 package zakadabar.gradle
 
 object Versions {
-    const val zakadabar = "2023.4.12"
+    const val zakadabar = "2023.4.13-SNAPSHOT"
 
     val isSnapshot = zakadabar.contains("SNAPSHOT")
 

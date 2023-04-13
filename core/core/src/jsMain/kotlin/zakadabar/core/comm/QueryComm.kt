@@ -6,7 +6,6 @@ package zakadabar.core.comm
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.Json
 import zakadabar.core.authorize.Executor
 import zakadabar.core.comm.CommConfig.Companion.merge
 import zakadabar.core.data.QueryBoCompanion
@@ -32,7 +31,7 @@ open class QueryComm(
         config: CommConfig?
     ): RS? {
 
-        val q = encodeURIComponent(Json.encodeToString(requestSerializer, request))
+        val q = encodeURIComponent(json.encodeToString(requestSerializer, request))
 
         val url = merge("/query/${request::class.simpleName}?q=${q}", companion.boNamespace, config, companion.commConfig)
 
@@ -47,7 +46,7 @@ open class QueryComm(
         return if (text == "null") {
             null
         } else {
-            Json.decodeFromString(responseSerializer, text)
+            json.decodeFromString(responseSerializer, text)
         }
     }
 

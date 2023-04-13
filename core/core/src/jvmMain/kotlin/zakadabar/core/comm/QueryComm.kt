@@ -6,9 +6,9 @@ package zakadabar.core.comm
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.Json
 import zakadabar.core.authorize.Executor
 import zakadabar.core.comm.CommBase.Companion.client
+import zakadabar.core.comm.CommBase.Companion.json
 import zakadabar.core.comm.CommConfig.Companion.localCommonBl
 import zakadabar.core.comm.CommConfig.Companion.merge
 import zakadabar.core.data.BaseBo
@@ -42,7 +42,7 @@ open class QueryComm(
             return it.queryWrapper(executor, func, request) as RS?
         }
 
-        val q = Json.encodeToString(requestSerializer, request).encodeURLPath()
+        val q = json.encodeToString(requestSerializer, request).encodeURLPath()
 
         val url = merge("/query/${request::class.simpleName}?q=${q}", companion.boNamespace, config, companion.commConfig)
 
@@ -51,7 +51,7 @@ open class QueryComm(
         return if (text == "null") {
             null
         } else {
-            Json.decodeFromString(responseSerializer, text)
+            json.decodeFromString(responseSerializer, text)
         }
     }
 

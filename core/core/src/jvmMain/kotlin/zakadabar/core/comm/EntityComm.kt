@@ -6,9 +6,9 @@ package zakadabar.core.comm
 import io.ktor.client.request.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.json.Json
 import zakadabar.core.authorize.Executor
 import zakadabar.core.comm.CommBase.Companion.client
+import zakadabar.core.comm.CommBase.Companion.json
 import zakadabar.core.comm.CommBase.Companion.onError
 import zakadabar.core.comm.CommConfig.Companion.localEntityBl
 import zakadabar.core.comm.CommConfig.Companion.merge
@@ -45,14 +45,14 @@ open class EntityComm<T : EntityBo<T>>(
         val text = try {
             client.post<String>(url) {
                 header("Content-Type", "application/json")
-                body = Json.encodeToString(serializer, bo)
+                body = json.encodeToString(serializer, bo)
             }
         } catch (ex: Exception) {
             onError(ex)
             throw ex
         }
 
-        return Json.decodeFromString(serializer, text)
+        return json.decodeFromString(serializer, text)
     }
 
     @PublicApi
@@ -72,7 +72,7 @@ open class EntityComm<T : EntityBo<T>>(
             throw ex
         }
 
-        return Json.decodeFromString(serializer, text)
+        return json.decodeFromString(serializer, text)
     }
 
     @PublicApi
@@ -89,14 +89,14 @@ open class EntityComm<T : EntityBo<T>>(
         val text = try {
             client.patch<String>(url) {
                 header("Content-Type", "application/json")
-                body = Json.encodeToString(serializer, bo)
+                body = json.encodeToString(serializer, bo)
             }
         } catch (ex: Exception) {
             onError(ex)
             throw ex
         }
 
-        return Json.decodeFromString(serializer, text)
+        return json.decodeFromString(serializer, text)
     }
 
     @PublicApi
@@ -116,7 +116,7 @@ open class EntityComm<T : EntityBo<T>>(
             throw ex
         }
 
-        return Json.decodeFromString(ListSerializer(serializer), text)
+        return json.decodeFromString(ListSerializer(serializer), text)
     }
 
     @PublicApi

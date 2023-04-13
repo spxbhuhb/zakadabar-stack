@@ -7,7 +7,6 @@ import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.json.Json
 import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
 import zakadabar.core.authorize.Executor
@@ -38,7 +37,7 @@ open class EntityComm<T : EntityBo<T>>(
 
         headers.append("content-type", "application/json; charset=UTF-8")
 
-        val body = Json.encodeToString(serializer, bo)
+        val body = json.encodeToString(serializer, bo)
 
         val requestInit = RequestInit(
             method = "POST",
@@ -70,7 +69,7 @@ open class EntityComm<T : EntityBo<T>>(
 
         headers.append("content-type", "application/json; charset=UTF-8")
 
-        val body = Json.encodeToString(serializer, bo)
+        val body = json.encodeToString(serializer, bo)
 
         val requestInit = RequestInit(
             method = "PATCH",
@@ -94,7 +93,7 @@ open class EntityComm<T : EntityBo<T>>(
         val textPromise = response.text()
         val text = textPromise.await()
 
-        return Json.decodeFromString(ListSerializer(serializer), text)
+        return json.decodeFromString(ListSerializer(serializer), text)
     }
 
     @PublicApi
@@ -120,7 +119,7 @@ open class EntityComm<T : EntityBo<T>>(
         val textPromise = response.text()
         val text = textPromise.await()
 
-        return Json.decodeFromString(serializer, text)
+        return json.decodeFromString(serializer, text)
     }
 
 }

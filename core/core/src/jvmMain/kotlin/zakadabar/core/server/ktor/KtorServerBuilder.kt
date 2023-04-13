@@ -4,7 +4,6 @@
 package zakadabar.core.server.ktor
 
 import io.ktor.application.*
-import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -20,6 +19,7 @@ import io.ktor.websocket.*
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 import zakadabar.core.authorize.LoginTimeout
+import zakadabar.core.comm.CommBase
 import zakadabar.core.exception.*
 import zakadabar.core.module.ModuleStore
 import zakadabar.core.route.RoutedModule
@@ -36,9 +36,10 @@ import java.time.Duration
 open class KtorServerBuilder(
     open val config: ServerSettingsBo,
     open val modules: ModuleStore,
+    open val json: Json = CommBase.json // using JSON from CommBase ensures that the settings are the same both sides
 ) {
 
-    fun build() : ApplicationEngine = embeddedServer(
+    fun build(): ApplicationEngine = embeddedServer(
         factory = Class.forName(config.ktor.engine).kotlin.objectInstance as ApplicationEngineFactory<*, *>,
         port = config.ktor.port
     ) {
@@ -53,7 +54,7 @@ open class KtorServerBuilder(
         }
 
         install(ContentNegotiation) {
-            json(Json)
+            json(this@KtorServerBuilder.json)
         }
 
         install(Compression) {
@@ -87,7 +88,7 @@ open class KtorServerBuilder(
                         configured = true
                     }
                 }
-                if (!configured) configureEmpty()
+                if (! configured) configureEmpty()
             }
         }
     }

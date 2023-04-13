@@ -5,6 +5,7 @@ package zakadabar.core.comm
 
 import io.ktor.client.*
 import io.ktor.client.features.cookies.*
+import kotlinx.serialization.json.Json
 import zakadabar.core.comm.CommConfig.Companion.global
 import zakadabar.core.util.PublicApi
 
@@ -18,6 +19,12 @@ open class CommBase {
             set(value) {
                 global = global.copy(baseUrl = value)
             }
+
+        /**
+         * The Json serializer to use. This is referenced both from the Comm classes
+         * and the KtorServerBuilder, so changing here changes server behaviour as well.
+         */
+        var json = Json { allowSpecialFloatingPointValues = true }
 
         var client = httpClient()
 
