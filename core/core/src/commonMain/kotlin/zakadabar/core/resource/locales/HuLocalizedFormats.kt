@@ -3,6 +3,7 @@
  */
 package zakadabar.core.resource.locales
 
+import kotlinx.datetime.*
 import zakadabar.core.resource.AbstractLocalizedFormats
 import zakadabar.core.resource.LocalizationConfig
 
@@ -11,4 +12,20 @@ object HuLocalizedFormats : AbstractLocalizedFormats(
         thousandSeparator = ".",
         decimalSeparator = ","
     )
-)
+) {
+
+    override fun format(value: Instant): String {
+        val local = value.toLocalDateTime(TimeZone.currentSystemDefault()).toString()
+        return local.substring(0, 10).replace("-", ".") + ". " + local.substring(11, 19)
+    }
+
+    override fun format(value: LocalDate): String {
+        return value.toString().replace("-", ".") + "."
+    }
+
+    override fun format(value: LocalDateTime): String {
+        val local = value.toString()
+        return local.substring(0, 10).replace("-", ".") + ". " + local.substring(11, 19)
+    }
+
+}

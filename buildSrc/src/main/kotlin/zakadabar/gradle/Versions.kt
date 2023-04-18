@@ -12,7 +12,7 @@ object Versions {
     const val ktor = "1.6.8"
     const val coroutines = "1.6.4"
     const val serialization = "1.3.1"
-    const val datetime = "0.2.1"
+    const val datetime = "0.4.0"
     const val exposed = "0.31.1"
 
     const val clikt = "3.4.2"

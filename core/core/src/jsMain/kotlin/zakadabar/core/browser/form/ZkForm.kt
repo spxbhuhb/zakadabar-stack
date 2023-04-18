@@ -867,13 +867,7 @@ open class ZkForm<T : BaseBo>(
     }
 
     @Suppress("UNCHECKED_CAST")
-    infix fun <FT : ZkSelectBaseV2<String, FT>> ZkSelectBaseV2<String, FT>.options2(block: () -> List<Pair<String,String>>): FT {
-        fetch = { block() }
-        return this as FT
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    infix fun <FT : ZkSelectBaseV2<String?, FT>> ZkSelectBaseV2<String?, FT>.options2(block: () -> List<Pair<String,String>>): FT {
+    infix fun <VT, FT : ZkSelectBaseV2<VT, FT>> ZkSelectBaseV2<VT, FT>.options2(block: () -> List<Pair<VT, String>>): FT {
         fetch = { block() }
         return this as FT
     }
