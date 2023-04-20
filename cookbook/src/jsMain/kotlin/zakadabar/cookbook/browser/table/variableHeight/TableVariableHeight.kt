@@ -35,7 +35,7 @@ class TableVariableHeight : ZkTable<ExampleBo>() {
 
     override fun onCreate() {
         super.onCreate()
-        demoDataLong(css = cookbookStyles.inlineTable)
+        demoDataLong(css = cookbookStyles.inlineTable, 2000)
     }
 
     override fun getRowId(row: ExampleBo) =

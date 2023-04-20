@@ -26,7 +26,7 @@ fun ZkTable<ExampleBo>.demoData(count : Int = 50) {
 
 }
 
-fun ZkTable<ExampleBo>.demoDataLong(css : ZkCssStyleRule = cookbookStyles.smallInlineTable) {
+fun ZkTable<ExampleBo>.demoDataLong(css : ZkCssStyleRule = cookbookStyles.smallInlineTable, count : Int = 50) {
 
     + css
 
@@ -34,7 +34,7 @@ fun ZkTable<ExampleBo>.demoDataLong(css : ZkCssStyleRule = cookbookStyles.smallI
 
     val source = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 
-    val data = (1..50).map {
+    val data = (1..count).map {
         val stringValue = source.substring(0, min(source.length, fourRandomInt()[0] % source.length))
         template.copy(id = EntityId(it.toLong()), stringValue = "row $it $stringValue", booleanValue = (it % 2 == 0))
     }

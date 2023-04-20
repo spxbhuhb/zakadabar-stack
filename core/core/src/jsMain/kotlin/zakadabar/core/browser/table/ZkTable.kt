@@ -675,7 +675,7 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
         val topBoundary = rowHeight * topRowCount     // offset to the start of the first rendered row
         val bottomBoundary = topBoundary + attachedHeight      // offset to the end of the last rendered row
 
-        //if (trace) println("scrollTop: $scrollTop viewHeight: $viewHeight attachedHeight: $attachedHeight topBoundary: $topBoundary, bottomBoundary: $bottomBoundary")
+        if (traceScroll) println("scrollTop: $scrollTop viewHeight: $viewHeight attachedHeight: $attachedHeight topBoundary: $topBoundary, bottomBoundary: $bottomBoundary")
 
         when {
             // above attached rows, no attached row on screen
@@ -794,7 +794,9 @@ open class ZkTable<T : BaseBo> : ZkElement(), ZkAppTitleProvider, ZkLocalTitlePr
 
             val estimatedRemoval = (end - start) * rowHeight
 
-            contentContainer.element.scrollTop = scrollTop - (actualRemoval - estimatedRemoval)
+            if (actualRemoval - estimatedRemoval > 0.5) {
+                contentContainer.element.scrollTop = scrollTop - (actualRemoval - estimatedRemoval)
+            }
 
             adjustTopPlaceHolder()
 
