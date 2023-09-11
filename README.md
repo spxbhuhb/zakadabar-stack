@@ -10,19 +10,9 @@ Zakadabar is a multiplatform application development library.
 
 **IMPORTANT** 
 
-I plan to introduce breaking changes in the next few months. As far as I know, no-one else uses the
-project in production besides us, so this should not cause any problems.
+Zakadabar is in maintenance-only mode.
 
-If it is a problem for you, let me know, and I'll try to take that into account.
-
-## News
-
-I've shelved the declarative and reactive ui development for now as workload is high on other areas.
-I want to completely abandon the project, but I won't be able to work on it in the first half of 
-the year for sure.
-
-What I really would like to do, and it seems to be not that hard is to bring in the Material 3 design.
-SoftUI is not really far from it, so it should be easy. Only if I would have a reactive UI. :D
+I am working on the next generation: [Z2](https://github.com/spxbhuhb/z2)
 
 ## Documentation
 
