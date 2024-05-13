@@ -12,11 +12,11 @@ Zakadabar is a multiplatform application development library.
 
 Zakadabar is in maintenance-only mode.
 
-I am working on the next generation: [Z2](https://github.com/spxbhuhb/z2)
+I am working on the next generation: [Adaptive](https://github.com/spxbhuhb/adaptive)
 
 ## Documentation
 
-Please visit [zakadabar.io](https://zakadabar.io).
+Please check the doc directory.
 
 ## Gradle
 
