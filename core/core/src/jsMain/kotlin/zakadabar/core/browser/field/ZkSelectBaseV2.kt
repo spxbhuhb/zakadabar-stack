@@ -16,6 +16,7 @@
  */
 package zakadabar.core.browser.field
 
+import org.w3c.dom.svg.SVGSymbolElement
 import zakadabar.core.browser.field.select.SelectRenderer
 import zakadabar.core.browser.util.io
 
@@ -38,8 +39,23 @@ abstract class ZkSelectBaseV2<VT, FT : ZkSelectBaseV2<VT, FT>>(
 
     var filter = false
 
-    infix fun filter(value : Boolean) {
+    infix fun filter(value : Boolean) : ZkSelectBaseV2<VT, FT> {
         filter = value
+        return this
+    }
+
+    var filterAfterChars = 0
+
+    infix fun filterAfterChars(value : Int) : ZkSelectBaseV2<VT, FT> {
+        filterAfterChars = value
+        return this
+    }
+
+    var filterAfterEnter = false
+
+    infix fun filterAfterEnter(value : Boolean) : ZkSelectBaseV2<VT, FT> {
+        filterAfterEnter = value
+        return this
     }
 
     var fetch: (suspend () -> List<Pair<VT, String>>)? = null

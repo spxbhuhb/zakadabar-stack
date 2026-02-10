@@ -39,6 +39,8 @@ abstract class ZkStringBaseV2<VT, FT : ZkStringBaseV2<VT,FT>>(
 
     open var submitOnEnter : Boolean = false
 
+    open var onEnter : ((value : String) -> Unit)? = null
+
     abstract fun setBackingValue(value: String)
 
     override fun buildFieldValue() {
@@ -65,7 +67,10 @@ abstract class ZkStringBaseV2<VT, FT : ZkStringBaseV2<VT,FT>>(
 
         on("keydown") { event ->
             event as KeyboardEvent
-            if (submitOnEnter && event.key == "Enter") context.submit()
+            if (event.key == "Enter") {
+                onEnter?.invoke(input.value)
+                if (submitOnEnter) context.submit()
+            }
         }
 
         focusEvents(input)

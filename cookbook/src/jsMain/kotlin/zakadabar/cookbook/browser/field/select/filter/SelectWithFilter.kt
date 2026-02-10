@@ -28,9 +28,9 @@ open class SelectWithFilter : ZkForm<ExampleBo>() {
 
         + section {
 
-            + bo::recordSelectValue query ::queryRecords saveAs ::recordSelectField filter true
+            + bo::recordSelectValue query ::queryRecords saveAs ::recordSelectField filter true filterAfterChars 5 filterAfterEnter true
 
-            + bo::stringSelectValue.asSelect() query { options }
+            + bo::stringSelectValue.asSelect() query { options } filter true filterAfterChars 5 filterAfterEnter true
         }
     }
 

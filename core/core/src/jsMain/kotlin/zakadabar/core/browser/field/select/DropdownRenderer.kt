@@ -73,7 +73,8 @@ open class DropdownRenderer<VT, FT : ZkSelectBaseV2<VT, FT>>(
         ZkValueStringField(STANDALONE_NOLABEL, "", { "" }).apply {
             + context.styles.selectOptionFilter
             this.onFocusOut { event, _ -> onFocusOut(event) }
-            this.onChange { filterValue -> onFilterChange(filterValue) }
+            this.onChange { filterValue -> onFilterChange(filterValue, false) }
+            this.onEnter = { filterValue -> onFilterChange(filterValue, true) }
         }
 
     /**
@@ -224,7 +225,15 @@ open class DropdownRenderer<VT, FT : ZkSelectBaseV2<VT, FT>>(
 
     override fun focusValue() = toggleItems()
 
-    open fun onFilterChange(filterValue: String) {
+    open fun onFilterChange(filterValue: String, fromEnter : Boolean) {
+        val byChars = field.filterAfterChars == 0 || filterValue.length >= field.filterAfterChars
+        val byEnter = ! field.filterAfterEnter || fromEnter
+
+        if (!byChars && !byEnter) {
+            console.log("skipping filter - ${filterValue.length} < ${field.filterAfterChars} && $fromEnter")
+            return
+        }
+
         val lowercaseFilterValue = filterValue.lowercase()
 
         filteredItems = if (lowercaseFilterValue.isEmpty()) {
