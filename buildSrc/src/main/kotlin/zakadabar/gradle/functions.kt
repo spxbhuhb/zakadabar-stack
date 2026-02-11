@@ -62,11 +62,12 @@ fun PublishingExtension.config(project: Project) {
             name = "MavenCentral"
             url = if (Versions.isSnapshot) {
                 //project.uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-                project.uri("http://10.173.2.72:8081/repository/maven-releases/")
+                project.uri("http://10.173.2.72:8081/repository/maven-snapshots/")
             } else {
                 //project.uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-                project.uri("http://10.173.2.72:8081/repository/maven-snapshots/")
+                project.uri("http://10.173.2.72:8081/repository/maven-releases/")
             }
+            isAllowInsecureProtocol = true
             credentials {
                 username = (project.properties["zk.publish.username"] ?: System.getenv("ZK_PUBLISH_USERNAME")).toString()
                 password = (project.properties["zk.publish.password"] ?: System.getenv("ZK_PUBLISH_PASSWORD")).toString()
